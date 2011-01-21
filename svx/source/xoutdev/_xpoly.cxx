@@ -52,10 +52,6 @@ DBG_NAME(XPolyPolygon);
 |*
 |*    ImpXPolygon::ImpXPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT _nResize )
@@ -74,10 +70,6 @@ ImpXPolygon::ImpXPolygon( USHORT nInitSize, USHORT _nResize )
 /*************************************************************************
 |*
 |*    ImpXPolygon::ImpXPolygon()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -105,10 +97,6 @@ ImpXPolygon::ImpXPolygon( const ImpXPolygon& rImpXPoly )
 |*
 |*    ImpXPolygon::~ImpXPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 ImpXPolygon::~ImpXPolygon()
@@ -122,9 +110,6 @@ ImpXPolygon::~ImpXPolygon()
 /*************************************************************************
 |*
 |*    ImpXPolygon::operator==()
-|*
-|*    Ersterstellung    Joe 26-09-95
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -148,8 +133,6 @@ bool ImpXPolygon::operator==(const ImpXPolygon& rImpXPoly) const
 |*    Damit wird verhindert, dass bei XPoly[n] = XPoly[0] durch ein
 |*    Resize der fuer den rechten Ausdruck verwendete Point-Array
 |*    vorzeitig geloescht wird.
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -208,10 +191,6 @@ void ImpXPolygon::Resize( USHORT nNewSize, BOOL bDeletePoints )
 |*
 |*    ImpXPolygon::InsertSpace()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  29.03.95 ESO
-|*
 *************************************************************************/
 
 void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
@@ -245,10 +224,6 @@ void ImpXPolygon::InsertSpace( USHORT nPos, USHORT nCount )
 |*
 |*    ImpXPolygon::Remove()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.94 ESO
-|*
 *************************************************************************/
 
 void ImpXPolygon::Remove( USHORT nPos, USHORT nCount )
@@ -276,10 +251,6 @@ void ImpXPolygon::Remove( USHORT nPos, USHORT nCount )
 |*
 |*    XPolygon::XPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 XPolygon::XPolygon( USHORT nSize, USHORT nResize )
@@ -291,10 +262,6 @@ XPolygon::XPolygon( USHORT nSize, USHORT nResize )
 /*************************************************************************
 |*
 |*    XPolygon::XPolygon()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -310,8 +277,6 @@ XPolygon::XPolygon( const XPolygon& rXPoly )
 |*    XPolygon::XPolygon()
 |*
 |*    XPolygon aus einem Standardpolygon erstellen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -335,8 +300,6 @@ XPolygon::XPolygon( const Polygon& rPoly )
 |*    XPolygon::XPolygon()
 |*
 |*    Rechteck (auch mit abgerundeten Ecken) als Bezierpolygon erzeugen
-|*    Ersterstellung    09.01.95 ESO
-|*    Letzte Aenderung  09.01.95 ESO
 |*
 *************************************************************************/
 
@@ -405,8 +368,6 @@ XPolygon::XPolygon(const Rectangle& rRect, long nRx, long nRy)
 |*    XPolygon::XPolygon()
 |*
 |*    Ellipsen(bogen) als Bezierpolygon erzeugen
-|*    Ersterstellung    09.01.95
-|*    Letzte Aenderung  09.01.95
 |*
 *************************************************************************/
 
@@ -455,10 +416,6 @@ XPolygon::XPolygon(const Point& rCenter, long nRx, long nRy,
 |*
 |*    XPolygon::~XPolygon()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 XPolygon::~XPolygon()
@@ -475,8 +432,6 @@ XPolygon::~XPolygon()
 |*    XPolygon::CheckReference()
 |*
 |*    Referenzzaehler desImpXPoly pruefen und ggf. von diesem abkoppeln
-|*    Ersterstellung    17.01.95 ESO
-|*    Letzte Aenderung  17.01.95 ESO
 |*
 *************************************************************************/
 
@@ -493,10 +448,6 @@ void XPolygon::CheckReference()
 |*
 |*    XPolygon::SetSize()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::SetSize( USHORT nNewSize )
@@ -509,10 +460,6 @@ void XPolygon::SetSize( USHORT nNewSize )
 |*
 |*    XPolygon::GetSize()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 USHORT XPolygon::GetSize() const
@@ -524,10 +471,6 @@ USHORT XPolygon::GetSize() const
 /*************************************************************************
 |*
 |*    XPolygon::SetPointCount()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -552,10 +495,6 @@ void XPolygon::SetPointCount( USHORT nPoints )
 |*
 |*    XPolygon::GetPointCount()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
-|*
 *************************************************************************/
 
 USHORT XPolygon::GetPointCount() const
@@ -567,10 +506,6 @@ USHORT XPolygon::GetPointCount() const
 /*************************************************************************
 |*
 |*    XPolygon::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -586,10 +521,6 @@ void XPolygon::Insert( USHORT nPos, const Point& rPt, XPolyFlags eFlags )
 /*************************************************************************
 |*
 |*    XPolygon::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
 |*
 *************************************************************************/
 
@@ -614,10 +545,6 @@ void XPolygon::Insert( USHORT nPos, const XPolygon& rXPoly )
 |*
 |*    XPolygon::Insert()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::Insert( USHORT nPos, const Polygon& rPoly )
@@ -640,10 +567,6 @@ void XPolygon::Insert( USHORT nPos, const Polygon& rPoly )
 |*
 |*    XPolygon::Remove()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  08.11.94
-|*
 *************************************************************************/
 
 void XPolygon::Remove( USHORT nPos, USHORT nCount )
@@ -655,10 +578,6 @@ void XPolygon::Remove( USHORT nPos, USHORT nCount )
 /*************************************************************************
 |*
 |*    XPolygon::Move()
-|*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  09.11.94
 |*
 *************************************************************************/
 
@@ -682,10 +601,6 @@ void XPolygon::Move( long nHorzMove, long nVertMove )
 /*************************************************************************
 |*
 |*    XPolygon::GetBoundRect()
-|*
-|*    Beschreibung
-|*    Ersterstellung    09.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -715,10 +630,6 @@ Rectangle XPolygon::GetBoundRect() const
 |*
 |*    XPolygon::operator[]()
 |*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95
-|*
 *************************************************************************/
 
 const Point& XPolygon::operator[]( USHORT nPos ) const
@@ -732,10 +643,6 @@ const Point& XPolygon::operator[]( USHORT nPos ) const
 /*************************************************************************
 |*
 |*    XPolygon::operator[]()
-|*
-|*    Beschreibung
-|*    Ersterstellung    08.11.94
-|*    Letzte Aenderung  12.01.95 ESO
 |*
 *************************************************************************/
 
@@ -760,8 +667,6 @@ Point& XPolygon::operator[]( USHORT nPos )
 |*    XPolygon::operator=()
 |*
 |*    Beschreibung      Zuweisungsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -785,8 +690,6 @@ XPolygon& XPolygon::operator=( const XPolygon& rXPoly )
 |*    XPolygon::operator==()
 |*
 |*    Beschreibung      Gleichheitsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  Joe 26.09.95
 |*
 *************************************************************************/
 
@@ -802,8 +705,6 @@ BOOL XPolygon::operator==( const XPolygon& rXPoly ) const
 |*    XPolygon::operator!=()
 |*
 |*    Beschreibung      Ungleichheitsoperator
-|*    Ersterstellung    ESO 22.11.94
-|*    Letzte Aenderung  Joe 26.09.95
 |*
 *************************************************************************/
 
@@ -819,8 +720,6 @@ BOOL XPolygon::operator!=( const XPolygon& rXPoly ) const
 |*    XPolygon::GetFlags()
 |*
 |*    Flags fuer den Punkt an der Position nPos zurueckgeben
-|*    Ersterstellung    ESO 11.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -835,8 +734,6 @@ XPolyFlags XPolygon::GetFlags( USHORT nPos ) const
 |*    XPolygon::SetFlags()
 |*
 |*    Flags fuer den Punkt an der Position nPos setzen
-|*    Ersterstellung    ESO 11.11.94
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -852,8 +749,6 @@ void XPolygon::SetFlags( USHORT nPos, XPolyFlags eFlags )
 |*    XPolygon::IsControl()
 |*
 |*    Kurzform zur Abfrage des CONTROL-Flags
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 12.01.95
 |*
 *************************************************************************/
 
@@ -867,8 +762,6 @@ BOOL XPolygon::IsControl(USHORT nPos) const
 |*    XPolygon::IsSmooth()
 |*
 |*    Kurzform zur Abfrage von SMOOTH- und SYMMTR-Flag
-|*    Ersterstellung    ESO 18.04.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 *************************************************************************/
 
@@ -883,8 +776,6 @@ BOOL XPolygon::IsSmooth(USHORT nPos) const
 |*    XPolygon::CalcDistance()
 |*
 |*    Abstand zwischen zwei Punkten berechnen
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 *************************************************************************/
 
@@ -902,8 +793,6 @@ double XPolygon::CalcDistance(USHORT nP1, USHORT nP2)
 |*    XPolygon::SubdivideBezier()
 |*
 |*    Bezierkurve unterteilen
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 *************************************************************************/
 
@@ -1030,8 +919,6 @@ BOOL XPolygon::CheckAngles(USHORT& nStart, USHORT nEnd, USHORT& nA1, USHORT& nA2
 |*     Pnt    = der zu modifizierende Punkt
 |*    Wenn Center am Anfang bzw. Ende des Polygons liegt, wird Pnt
 |*    auf die entgegengesetzte Seite verlegt
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 \************************************************************************/
 
@@ -1077,8 +964,6 @@ void XPolygon::CalcSmoothJoin(USHORT nCenter, USHORT nDrag, USHORT nPnt)
 |*     Center = End- bzw. Anfangspunkt der Bezierkurven
 |*     Prev   = vorheriger Zugpunkt
 |*     Next   = naechster Zugpunkt
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 18.04.95
 |*
 \************************************************************************/
 
@@ -1115,8 +1000,6 @@ void XPolygon::CalcTangent(USHORT nCenter, USHORT nPrev, USHORT nNext)
 |*    XPolygon::PointsToBezier()
 |*
 |*    wandelt vier Polygonpunkte in eine Bezierkurve durch diese Punkte um
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 09.01.95
 |*
 \************************************************************************/
 
@@ -1193,8 +1076,6 @@ void XPolygon::PointsToBezier(USHORT nFirst)
 |*    XPolygon::Translate()
 |*
 |*    Polygon auf den uebergebenen Punkt verschieben
-|*    Ersterstellung    ESO 17.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1215,8 +1096,6 @@ void XPolygon::Translate(const Point& rTrans)
 |*
 |*    Alle Punkte um den Punkt rCenter drehen, Sinus und Cosinus
 |*    muessen uebergeben werden
-|*    Ersterstellung    ESO 09.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1266,8 +1145,6 @@ void XPolygon::Rotate(const Point& rCenter, double fSin, double fCos)
 |*
 |*    Alle Punkte um den Punkt rCenter mit dem Winkel nAngle drehen
 |*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*    Ersterstellung    ESO 17.01.95
-|*    Letzte Aenderung  ESO 17.01.95
 |*
 *************************************************************************/
 
@@ -1289,8 +1166,6 @@ void XPolygon::Rotate(const Point& rCenter, USHORT nAngle)
 |*    XPolygon::Scale()
 |*
 |*    XPolygon in X- und/oder Y-Richtung skalieren
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1315,8 +1190,6 @@ void XPolygon::Scale(double fSx, double fSy)
 |*
 |*    XPolygon in X-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-Y-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1342,8 +1215,6 @@ void XPolygon::SlantX(long nYRef, double fSin, double fCos)
 |*
 |*    XPolygon in Y-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-X-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -1374,8 +1245,6 @@ void XPolygon::SlantY(long nXRef, double fSin, double fCos)
 |*    1: rechts oben     |    |
 |*    2: rechts unten    3----2
 |*    3: links unten
-|*    Ersterstellung    ESO 07.07.95
-|*    Letzte Aenderung  ESO 07.07.95
 |*
 *************************************************************************/
 
@@ -1507,8 +1376,6 @@ XPolygon::XPolygon(const basegfx::B2DPolygon& rPolygon)
 |*    ImpXPolyPolygon::ImpXPolyPolygon()
 |*
 |*    Beschreibung      Erzeugt das XPolygon-Array
-|*    Ersterstellung    CL 09.11.94
-|*    Letzte Aenderung  MM 09.11.94
 |*
 *************************************************************************/
 
@@ -1528,8 +1395,6 @@ ImpXPolyPolygon::ImpXPolyPolygon( const ImpXPolyPolygon& rImpXPolyPoly ) :
 |*    ImpXPolyPolygon::~ImpXPolyPolygon()
 |*
 |*    Beschreibung      Loescht das Polygon-Array
-|*    Ersterstellung    CL 09.06.93
-|*    Letzte Aenderung  CL 09.06.93
 |*
 *************************************************************************/
 
@@ -1543,9 +1408,6 @@ ImpXPolyPolygon::~ImpXPolyPolygon()
 /*************************************************************************
 |*
 |*    ImpXPolyPolygon::operator==()
-|*
-|*    Ersterstellung    Joe 26-09-95
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -1567,10 +1429,6 @@ bool ImpXPolyPolygon::operator==(const ImpXPolyPolygon& rImpXPolyPoly) const
 |*
 |*    XPolyPolygon::XPolyPolygon()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolyPolygon::XPolyPolygon( USHORT /* nInitSize */, USHORT /* nResize */ )
@@ -1584,10 +1442,6 @@ XPolyPolygon::XPolyPolygon( USHORT /* nInitSize */, USHORT /* nResize */ )
 |*
 |*    XPolyPolygon::XPolyPolygon()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
@@ -1600,10 +1454,6 @@ XPolyPolygon::XPolyPolygon( const XPolygon& rXPoly )
 /*************************************************************************
 |*
 |*    XPolyPolygon::XPolyPolygon()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1619,8 +1469,6 @@ XPolyPolygon::XPolyPolygon( const XPolyPolygon& rXPolyPoly )
 |*    XPolyPolygon::XPolyPolygon()
 |*
 |*    XPolyPolygon aus einen Standard-PolyPolygon erzeugen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1638,10 +1486,6 @@ XPolyPolygon::XPolyPolygon( const PolyPolygon& rPolyPoly )
 |*
 |*    XPolyPolygon::~XPolyPolygon()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolyPolygon::~XPolyPolygon()
@@ -1658,8 +1502,6 @@ XPolyPolygon::~XPolyPolygon()
 |*    XPolygon::CheckReference()
 |*
 |*    Referenzzaehler desImpXPolyPoly pruefen und ggf. von diesem abkoppeln
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1675,10 +1517,6 @@ void XPolyPolygon::CheckReference()
 /*************************************************************************
 |*
 |*    XPolyPolygon::Insert()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1701,8 +1539,6 @@ void XPolyPolygon::Insert( const XPolygon& rXPoly, USHORT nPos )
 |*    XPolyPolygon::Insert()
 |*
 |*    saemtliche XPolygone aus einem XPolyPolygon einfuegen
-|*    Ersterstellung    18.01.95 ESO
-|*    Letzte Aenderung  18.01.95 ESO
 |*
 *************************************************************************/
 
@@ -1730,10 +1566,6 @@ void XPolyPolygon::Insert( const XPolyPolygon& rXPolyPoly, USHORT nPos )
 |*
 |*    XPolyPolygon::Remove()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolygon XPolyPolygon::Remove( USHORT nPos )
@@ -1753,10 +1585,6 @@ XPolygon XPolyPolygon::Remove( USHORT nPos )
 |*
 |*    XPolyPolygon::Replace()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
@@ -1775,10 +1603,6 @@ XPolygon XPolyPolygon::Replace( const XPolygon& rXPoly, USHORT nPos )
 |*
 |*    XPolyPolygon::GetObject()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 const XPolygon& XPolyPolygon::GetObject( USHORT nPos ) const
@@ -1790,10 +1614,6 @@ const XPolygon& XPolyPolygon::GetObject( USHORT nPos ) const
 /*************************************************************************
 |*
 |*    XPolyPolygon::Clear()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  TH 17.10.94
 |*
 *************************************************************************/
 
@@ -1817,10 +1637,6 @@ void XPolyPolygon::Clear()
 |*
 |*    XPolyPolygon::Count()
 |*
-|*    Beschreibung
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
-|*
 *************************************************************************/
 
 USHORT XPolyPolygon::Count() const
@@ -1832,10 +1648,6 @@ USHORT XPolyPolygon::Count() const
 /*************************************************************************
 |*
 |*    XPolyPolygon::Move()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 04.10.94
-|*    Letzte Aenderung  TH 04.10.94
 |*
 *************************************************************************/
 
@@ -1860,10 +1672,6 @@ void XPolyPolygon::Move( long nHorzMove, long nVertMove )
 |*
 |*    XPolyPolygon::GetBoundRect()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 04.10.94
-|*    Letzte Aenderung  TH 04.10.94
-|*
 *************************************************************************/
 
 Rectangle XPolyPolygon::GetBoundRect() const
@@ -1885,10 +1693,6 @@ Rectangle XPolyPolygon::GetBoundRect() const
 |*
 |*    XPolyPolygon::operator[]()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    TH 28.10.94
-|*    Letzte Aenderung  TH 28.10.94
-|*
 *************************************************************************/
 
 XPolygon& XPolyPolygon::operator[]( USHORT nPos )
@@ -1900,10 +1704,6 @@ XPolygon& XPolyPolygon::operator[]( USHORT nPos )
 /*************************************************************************
 |*
 |*    XPolyPolygon::operator=()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL 27.01.93
-|*    Letzte Aenderung  CL 27.01.93
 |*
 *************************************************************************/
 
@@ -1925,10 +1725,6 @@ XPolyPolygon& XPolyPolygon::operator=( const XPolyPolygon& rXPolyPoly )
 |*
 |*    XPolyPolygon::operator==()
 |*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL  27.01.93
-|*    Letzte Aenderung  Joe 27.01.93
-|*
 *************************************************************************/
 
 BOOL XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
@@ -1941,10 +1737,6 @@ BOOL XPolyPolygon::operator==( const XPolyPolygon& rXPolyPoly ) const
 /*************************************************************************
 |*
 |*    XPolyPolygon::operator!=()
-|*
-|*    Beschreibung      POLY.SDW
-|*    Ersterstellung    CL  27.01.93
-|*    Letzte Aenderung  Joe 27.01.93
 |*
 *************************************************************************/
 
@@ -1959,8 +1751,6 @@ BOOL XPolyPolygon::operator!=( const XPolyPolygon& rXPolyPoly ) const
 |*    XPolyPolygon::Translate()
 |*
 |*    Alle Polygone auf den uebergebenen Punkt verschieben
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -1978,8 +1768,6 @@ void XPolyPolygon::Translate(const Point& rTrans)
 |*
 |*    Alle Polygone um den Punkt rCenter drehen, Sinus und Cosinus
 |*    muessen uebergeben werden
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -2012,8 +1800,6 @@ void XPolyPolygon::Rotate20()
 |*
 |*    Alle Poylgone um den Punkt rCenter mit dem Winkel nAngle drehen
 |*    Winkel in 10tel Grad, Wertebereich 0 - 3600
-|*    Ersterstellung    ESO 25.01.95
-|*    Letzte Aenderung  ESO 25.01.95
 |*
 *************************************************************************/
 
@@ -2035,8 +1821,6 @@ void XPolyPolygon::Rotate(const Point& rCenter, USHORT nAngle)
 |*    XPolyPolygon::Scale()
 |*
 |*    Alle Polygone in X- und/oder Y-Richtung skalieren
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2054,8 +1838,6 @@ void XPolyPolygon::Scale(double fSx, double fSy)
 |*
 |*    Alle Polygone in X-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-Y-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2073,8 +1855,6 @@ void XPolyPolygon::SlantX(long nYRef, double fSin, double fCos)
 |*
 |*    Alle Polygone in Y-Richtung um einen beliebigen Winkel kippen,
 |*    bezogen auf eine Referenz-X-Koordinate
-|*    Ersterstellung    ESO 01.02.95
-|*    Letzte Aenderung  ESO 01.02.95
 |*
 *************************************************************************/
 
@@ -2097,8 +1877,6 @@ void XPolyPolygon::SlantY(long nXRef, double fSin, double fCos)
 |*    1: rechts oben     |    |
 |*    2: rechts unten    3----2
 |*    3: links unten
-|*    Ersterstellung    ESO 07.07.95
-|*    Letzte Aenderung  ESO 07.07.95
 |*
 *************************************************************************/
 

@@ -138,10 +138,6 @@ char CommandLineSyntax[] =
 |*
 |*    Init()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 15.12.94
-|*    Letzte Aenderung  MM 15.12.94
-|*
 *************************************************************************/
 void Init()
 {

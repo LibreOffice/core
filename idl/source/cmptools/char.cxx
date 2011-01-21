@@ -71,10 +71,6 @@ static unsigned char EqualTab[ 256 ] = {
 |*
 |*    RscChar::GetTable()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.08.91
-|*    Letzte Aenderung  MM 08.08.91
-|*
 *************************************************************************/
 Table *         pCharTable  = NULL;
 unsigned char * pChange     = EqualTab;

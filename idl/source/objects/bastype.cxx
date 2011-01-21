@@ -77,10 +77,6 @@ static BOOL ReadRangeSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm,
 |*    SvUINT32::Read()
 |*    SvUINT32::Write()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 UINT32 SvUINT32::Read( SvStream & rStm )
 {
@@ -96,10 +92,6 @@ void SvUINT32::Write( SvStream & rStm, UINT32 nVal )
 |*
 |*    SvStream& operator << ( SvBOOL )
 |*    SvStream& operator >> ( SvBOOL )
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvBOOL & rb )
@@ -128,10 +120,6 @@ SvStream& operator >> (SvStream & rStm, SvBOOL & rb )
 |*
 |*    SvStream& operator << ( SvVersion )
 |*    SvStream& operator >> ( SvVersion )
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvVersion & r )
@@ -179,10 +167,6 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
 /*************************************************************************
 |*
 |*    SvBOOL::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
@@ -387,10 +371,6 @@ BOOL SvNumberIdentifier::ReadSvIdl( SvIdlDataBase & rBase,
 |*    SvStream& operator << ( SvNumberIdentifier )
 |*    SvStream& operator >> ( SvNumberIdentifier )
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 SvStream& operator << (SvStream & rStm, const SvNumberIdentifier & r )
 {
@@ -411,10 +391,6 @@ SvStream& operator >> (SvStream & rStm, SvNumberIdentifier & r )
 /*************************************************************************
 |*
 |*    SvString::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
@@ -448,10 +424,6 @@ BOOL SvString::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
 |*
 |*    SvString::WriteSvIdl()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 BOOL SvString::WriteSvIdl( SvStringHashEntry * pName, SvStream & rOutStm,
                            USHORT /*nTab */ )
@@ -478,10 +450,6 @@ SvStream& operator >> (SvStream & rStm, SvString & r )
 |*
 |*    SvHelpText::ReadSvIdl()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 BOOL SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 {
@@ -491,10 +459,6 @@ BOOL SvHelpText::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 /*************************************************************************
 |*
 |*    SvHelpText::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, USHORT nTab )
@@ -506,10 +470,6 @@ BOOL SvHelpText::WriteSvIdl( SvIdlDataBase &, SvStream & rOutStm, USHORT nTab )
 /*************************************************************************
 |*
 |*    SvUUId::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
@@ -543,10 +503,6 @@ BOOL SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 |*
 |*    SvMetaObject::WriteSvIdl()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 BOOL SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
@@ -561,10 +517,6 @@ BOOL SvUUId::WriteSvIdl( SvStream & rOutStm )
 /*************************************************************************
 |*
 |*    SvVersion::ReadSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvVersion::ReadSvIdl( SvTokenStream & rInStm )
@@ -594,10 +546,6 @@ BOOL SvVersion::ReadSvIdl( SvTokenStream & rInStm )
 /*************************************************************************
 |*
 |*    SvVersion::WriteSvIdl()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvVersion::WriteSvIdl( SvStream & rOutStm )

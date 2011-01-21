@@ -97,10 +97,6 @@ IdlDll::~IdlDll()
 |*
 |*    SvGlobalHashNames::SvGlobalHashNames()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 08.08.91
-|*    Letzte Aenderung  MM 08.08.91
-|*
 *************************************************************************/
 inline SvStringHashEntry * INS( const ByteString & rName )
 {

@@ -116,10 +116,6 @@ SvMetaTypeMemberList & SvIdlDataBase::GetTypeList()
 |*
 |*    SvIdlDataBase::GetModuleInfo()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 13.12.94
-|*    Letzte Aenderung  MM 13.12.94
-|*
 *************************************************************************/
 SvMetaModule * SvIdlDataBase::GetModule( const ByteString & rName )
 {

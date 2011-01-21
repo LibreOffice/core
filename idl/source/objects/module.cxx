@@ -45,10 +45,6 @@ SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 |*
 |*    SvMetaModule::SvMetaModule()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 SvMetaModule::SvMetaModule()
 #ifdef IDL_COMPILER
@@ -69,10 +65,6 @@ SvMetaModule::SvMetaModule( const String & rIdlFileName, BOOL bImp )
 /*************************************************************************
 |*
 |*    SvMetaModule::Load()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 #define MODULE_VER      0x0001
@@ -113,10 +105,6 @@ void SvMetaModule::Load( SvPersistStream & rStm )
 |*
 |*    SvMetaModule::Save()
 |*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
-|*
 *************************************************************************/
 void SvMetaModule::Save( SvPersistStream & rStm )
 {
@@ -152,10 +140,6 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 /*************************************************************************
 |*
 |*    SvMetaModule::SetName()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 12.12.94
-|*    Letzte Aenderung  MM 12.12.94
 |*
 *************************************************************************/
 BOOL SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )

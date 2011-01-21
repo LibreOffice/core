@@ -61,10 +61,6 @@ using namespace ::com::sun::star;
 |*
 |*    XOBitmap::XOBitmap()
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
-|*
 *************************************************************************/
 
 XOBitmap::XOBitmap() :
@@ -78,10 +74,6 @@ XOBitmap::XOBitmap() :
 /*************************************************************************
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
-|*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -97,10 +89,6 @@ XOBitmap::XOBitmap( const Bitmap& rBmp, XBitmapStyle eInStyle ) :
 /*************************************************************************
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
-|*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -118,10 +106,6 @@ XOBitmap::XOBitmap( const GraphicObject& rGraphicObject, XBitmapStyle eInStyle )
 |*    XOBitmap::XOBitmap( USHORT* pArray, const Color& aPixelColor,
 |*          const Color& aBckgrColor, const Size& rSize = Size( 8, 8 ),
 |*          XBitmapStyle eStyle = XBITMAP_TILE )
-|*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -154,10 +138,6 @@ XOBitmap::XOBitmap( const USHORT* pArray, const Color& rPixelColor,
 |*
 |*    XOBitmap::XOBitmap( const XOBitmap& rXBmp )
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
-|*
 *************************************************************************/
 
 XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
@@ -187,10 +167,6 @@ XOBitmap::XOBitmap( const XOBitmap& rXBmp ) :
 |*
 |*    XOBitmap::XOBitmap( Bitmap aBitmap, XBitmapStyle eStyle = XBITMAP_TILE )
 |*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
-|*
 *************************************************************************/
 
 XOBitmap::~XOBitmap()
@@ -202,10 +178,6 @@ XOBitmap::~XOBitmap()
 /*************************************************************************
 |*
 |*    XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
-|*
-|*    Beschreibung
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
@@ -235,10 +207,6 @@ XOBitmap& XOBitmap::operator=( const XOBitmap& rXBmp )
 /*************************************************************************
 |*
 |*    int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
-|*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -271,10 +239,6 @@ int XOBitmap::operator==( const XOBitmap& rXOBitmap ) const
 |*
 |*    void SetPixelArray( const USHORT* pArray )
 |*
-|*    Beschreibung
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
-|*
 *************************************************************************/
 
 void XOBitmap::SetPixelArray( const USHORT* pArray )
@@ -301,10 +265,6 @@ void XOBitmap::SetPixelArray( const USHORT* pArray )
 |*
 |*    Bitmap XOBitmap::GetBitmap()
 |*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
-|*
 *************************************************************************/
 
 Bitmap XOBitmap::GetBitmap() const
@@ -315,10 +275,6 @@ Bitmap XOBitmap::GetBitmap() const
 /*************************************************************************
 |*
 |*    Bitmap XOBitmap::GetGraphicObject()
-|*
-|*    Beschreibung
-|*    Ersterstellung
-|*    Letzte Aenderung
 |*
 *************************************************************************/
 
@@ -336,8 +292,6 @@ const GraphicObject& XOBitmap::GetGraphicObject() const
 |*
 |*    Beschreibung      Umwandlung der Bitmap in Array, Hinter- u.
 |*                      Vordergrundfarbe
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
@@ -382,8 +336,6 @@ void XOBitmap::Bitmap2Array()
 |*
 |*    Beschreibung      Umwandlung des Arrays, Hinter- u.
 |*                      Vordergrundfarbe in eine Bitmap
-|*    Ersterstellung    27.07.95
-|*    Letzte Aenderung  27.07.95
 |*
 *************************************************************************/
 
@@ -423,10 +375,6 @@ TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 |*    XFillBitmapItem::XFillBitmapItem(long nIndex,
 |*                                   const Bitmap& rTheBitmap)
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  17.11.94
-|*
 *************************************************************************/
 
 XFillBitmapItem::XFillBitmapItem(long nIndex,
@@ -441,10 +389,6 @@ XFillBitmapItem::XFillBitmapItem(long nIndex,
 |*    XFillBitmapItem::XFillBitmapItem(const XubString& rName,
 |*                                 const Bitmap& rTheBitmap)
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  17.11.94
-|*
 *************************************************************************/
 
 XFillBitmapItem::XFillBitmapItem(const XubString& rName,
@@ -458,10 +402,6 @@ XFillBitmapItem::XFillBitmapItem(const XubString& rName,
 |*
 |*    XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem)
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  17.11.94
-|*
 *************************************************************************/
 
 XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem) :
@@ -473,10 +413,6 @@ XFillBitmapItem::XFillBitmapItem(const XFillBitmapItem& rItem) :
 /*************************************************************************
 |*
 |*    XFillBitmapItem::XFillBitmapItem(SvStream& rIn)
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  26.07.94
 |*
 *************************************************************************/
 
@@ -563,10 +499,6 @@ XFillBitmapItem::XFillBitmapItem( SfxItemPool* /*pPool*/)
 |*
 |*    XFillBitmapItem::Clone(SfxItemPool* pPool) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  17.11.94
-|*
 *************************************************************************/
 
 SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
@@ -577,10 +509,6 @@ SfxPoolItem* XFillBitmapItem::Clone(SfxItemPool* /*pPool*/) const
 /*************************************************************************
 |*
 |*    int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 
@@ -594,10 +522,6 @@ int XFillBitmapItem::operator==(const SfxPoolItem& rItem) const
 |*
 |*    SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, USHORT nVer) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  17.11.94
-|*
 *************************************************************************/
 
 SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, USHORT nVer) const
@@ -608,10 +532,6 @@ SfxPoolItem* XFillBitmapItem::Create(SvStream& rIn, USHORT nVer) const
 /*************************************************************************
 |*
 |*    SfxPoolItem* XFillBitmapItem::Store(SvStream& rOut) const
-|*
-|*    Beschreibung
-|*    Ersterstellung    17.11.94
-|*    Letzte Aenderung  26.07.94
 |*
 *************************************************************************/
 
@@ -660,10 +580,6 @@ SvStream& XFillBitmapItem::Store( SvStream& rOut, USHORT nItemVersion ) const
 |*
 |*    const Bitmap& XFillBitmapItem::GetValue(const XBitmapTable* pTable) const
 |*
-|*    Beschreibung
-|*    Ersterstellung    15.11.94
-|*    Letzte Aenderung  26.07.94
-|*
 *************************************************************************/
 
 const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) const // GetValue -> GetBitmapValue
@@ -678,10 +594,6 @@ const XOBitmap& XFillBitmapItem::GetBitmapValue(const XBitmapTable* pTable) cons
 /*************************************************************************
 |*
 |*    USHORT XFillBitmapItem::GetVersion() const
-|*
-|*    Beschreibung
-|*    Ersterstellung    26.07.95
-|*    Letzte Aenderung  26.07.95
 |*
 *************************************************************************/
 

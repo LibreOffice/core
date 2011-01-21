@@ -40,10 +40,6 @@
 |*
 |*    TextRanger::TextRanger()
 |*
-|*    Beschreibung
-|*    Ersterstellung    20.01.97
-|*    Letzte Aenderung  20.01.97 AMA
-|*
 *************************************************************************/
 
 #ifdef WIN
@@ -106,10 +102,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 |*
 |*    TextRanger::~TextRanger()
 |*
-|*    Beschreibung
-|*    Ersterstellung    20.01.97
-|*    Letzte Aenderung  20.01.97 AMA
-|*
 *************************************************************************/
 
 TextRanger::~TextRanger()
@@ -141,10 +133,6 @@ void TextRanger::SetVertical( BOOL bNew )
 /*************************************************************************
 |*
 |*    SvxBoundArgs
-|*
-|*    Beschreibung
-|*    Ersterstellung    20.01.97
-|*    Letzte Aenderung  20.01.97 AMA
 |*
 *************************************************************************/
 
