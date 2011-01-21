@@ -131,7 +131,7 @@ testcase tSmokeTest
                 ' If macro fails for whatever reason, a message comes up
                 Kontext
                 if active.exists() then
-                    warnlog "#i87290# " + active.getText
+                    warnlog "Macro failed " + active.getText
                     active.ok
                     call hCloseDocument()
                     goto endsub
