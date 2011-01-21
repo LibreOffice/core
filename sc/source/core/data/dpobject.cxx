@@ -2580,16 +2580,18 @@ ULONG ScDPObject::RefreshCache()
     CreateObjects();
     ULONG nErrId = 0;
     if ( pSheetDesc)
-        nErrId =  pSheetDesc->CheckValidate( pDoc );
+        nErrId =  pSheetDesc->CheckSourceRange( pDoc );
     if ( nErrId == 0 )
     {
+        // First remove the old cache if exists.
         ScDPCollection* pDPCollection = pDoc->GetDPCollection();
         long nOldId = GetCacheId();
         long nNewId = pDPCollection->GetNewDPObjectCacheId();
         if ( nOldId >= 0 )
             pDPCollection->RemoveDPObjectCache( nOldId );
 
-        ScDPTableDataCache* pCache  = NULL;
+        // Create a new cache.
+        ScDPTableDataCache* pCache = NULL;
         if ( pSheetDesc )
             pCache = pSheetDesc->CreateCache( pDoc, nNewId );
         else if ( pImpDesc )
@@ -2598,7 +2600,7 @@ ULONG ScDPObject::RefreshCache()
         if ( pCache == NULL )
         {
             //cache failed
-            DBG_ASSERT( pCache , " pCache == NULL" );
+            DBG_ASSERT( pCache , "pCache == NULL" );
             return STR_ERR_DATAPILOTSOURCE;
         }
 
@@ -2608,7 +2610,7 @@ ULONG ScDPObject::RefreshCache()
         size_t nCount = pDPCollection->GetCount();
         for (size_t i=0; i<nCount; ++i)
         { //set new cache id
-            if ( (*pDPCollection)[i]->GetCacheId() == nOldId  )
+            if ( (*pDPCollection)[i]->GetCacheId() == nOldId )
             {
                 (*pDPCollection)[i]->SetCacheId( nNewId );
                 (*pDPCollection)[i]->SetRefresh();

@@ -279,7 +279,7 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID 
         if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
             return pCache;
 
-        ULONG nErrId = CheckValidate( pDoc );
+        ULONG nErrId = CheckSourceRange( pDoc );
         if ( !nErrId )
         {
             pCache = new ScDPTableDataCache( pDoc );
@@ -301,6 +301,7 @@ ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc 
 {
     return pDoc->GetDPCollection()->GetUsedDPObjectCache( aSourceRange );
 }
+
 ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
 {
     ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
@@ -320,30 +321,24 @@ long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
         return pCache->GetId();
 }
 
-ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
+ULONG ScSheetSourceDesc::CheckSourceRange( ScDocument* pDoc ) const
 {
-    ScRange aSrcRange( aSourceRange);
-    if ( !pDoc )
+    const ScRange& aSrcRange = GetSourceRange();
+    if (!pDoc)
         return STR_ERR_DATAPILOTSOURCE;
-    for(USHORT i= aSrcRange.aStart.Col();i <= aSrcRange.aEnd.Col();i++)
+
+    const ScAddress& s = aSrcRange.aStart();
+    const ScAddress& e = aSrcRange.aEnd();
+    for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
     {
-        if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
-            i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
+        if (pDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
             return STR_PIVOT_FIRSTROWEMPTYERR;
     }
-    if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
-    {
+
+    if (pDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
         return STR_PIVOT_ONLYONEROWERR;
-    }
+
     return 0;
 }
-
-// -----------------------------------------------------------------------
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

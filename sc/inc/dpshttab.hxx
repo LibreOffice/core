@@ -65,7 +65,16 @@ struct ScSheetSourceDesc
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
     ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
-    ULONG CheckValidate( ScDocument* pDoc ) const;
+
+    /**
+     * Check the sanity of the data source range.
+     *
+     * @param pDoc document instance.
+     *
+     * @return 0 if the source range is sane, otherwise an error message ID is
+     *         returned.
+     */
+    ULONG CheckSourceRange( ScDocument* pDoc ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
     ScDPTableDataCache* GetExistDPObjectCache ( ScDocument* pDoc ) const;
     long GetCacheId( ScDocument* pDoc, long nID ) const;
