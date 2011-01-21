@@ -58,6 +58,17 @@ public:
     SC_DLLPUBLIC ScSheetSourceDesc(ScDocument* pDoc);
 
     SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
+
+    /**
+     * Get the range that contains the source data.  In case the source data
+     * is referred to via a range name, it returns the range that the range
+     * name points to.
+     *
+     * <i>Note that currently only a single range is supported; if the
+     * range name contains multiple ranges, only the first range is used.</i>
+     *
+     * @return source range.
+     */
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
     void SetRangeName(const ::rtl::OUString& rName);
     const ::rtl::OUString& GetRangeName() const;

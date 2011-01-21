@@ -247,9 +247,16 @@ void ScDPLayoutDlg::Init(bool bNewOutput)
     {
         aEdInPos.Enable();
         aRbInPos.Enable();
-        aOldRange = xDlgDPObject->GetSheetDesc()->GetSourceRange();
-        aOldRange.Format( inString, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
-        aEdInPos.SetText(inString);
+        const ScSheetSourceDesc* p = xDlgDPObject->GetSheetDesc();
+        OUString aRangeName = p->GetRangeName();
+        if (aRangeName.getLength())
+            aEdInPos.SetText(aRangeName);
+        else
+        {
+            aOldRange = p->GetSourceRange();
+            aOldRange.Format( inString, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention() );
+            aEdInPos.SetText(inString);
+        }
     }
     else
     {
