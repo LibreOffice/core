@@ -9178,7 +9178,7 @@ String Window::GetAccessibleName() const
             case WINDOW_LISTBOX:
             case WINDOW_MULTILISTBOX:
             case WINDOW_TREELISTBOX:
-
+            case WINDOW_METRICBOX:
             {
                 Window *pLabel = GetAccessibleRelationLabeledBy();
                 if ( pLabel && pLabel != this )
