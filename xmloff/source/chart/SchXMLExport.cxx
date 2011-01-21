@@ -588,24 +588,20 @@ OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )
     return aResult.makeStringAndClear();
 }
 
-OUString lcl_getLabelString( const Reference< chart2::data::XDataSequence > & xLabelSeq )
+void lcl_getLabelStringSequence( Sequence< OUString >& rOutLabels, const Reference< chart2::data::XDataSequence > & xLabelSeq )
 {
-    Sequence< OUString > aLabels;
-
     uno::Reference< chart2::data::XTextualDataSequence > xTextualDataSequence( xLabelSeq, uno::UNO_QUERY );
     if( xTextualDataSequence.is())
     {
-        aLabels = xTextualDataSequence->getTextualData();
+        rOutLabels = xTextualDataSequence->getTextualData();
     }
     else if( xLabelSeq.is())
     {
         Sequence< uno::Any > aAnies( xLabelSeq->getData());
-        aLabels.realloc( aAnies.getLength());
+        rOutLabels.realloc( aAnies.getLength());
         for( sal_Int32 i=0; i<aAnies.getLength(); ++i )
-            aAnies[i] >>= aLabels[i];
+            aAnies[i] >>= rOutLabels[i];
     }
-
-    return lcl_flattenStringSequence( aLabels );
 }
 
 sal_Int32 lcl_getMaxSequenceLength(
@@ -788,14 +784,20 @@ lcl_TableData lcl_getDataForLocalTable(
         Sequence< OUString > aSimpleCategories;
         if( xComplexDescriptionAccess.is() )
         {
+            //categories
             if( bSeriesFromColumns )
+            {
                 aSimpleCategories = xComplexDescriptionAccess->getRowDescriptions();
+                aResult.aComplexRowDescriptions = xComplexDescriptionAccess->getComplexRowDescriptions();
+            }
             else
+            {
                 aSimpleCategories = xComplexDescriptionAccess->getColumnDescriptions();
-
-            aResult.aComplexColumnDescriptions = xComplexDescriptionAccess->getComplexColumnDescriptions();
-            aResult.aComplexRowDescriptions = xComplexDescriptionAccess->getComplexRowDescriptions();
+                aResult.aComplexColumnDescriptions = xComplexDescriptionAccess->getComplexColumnDescriptions();
+            }
         }
+
+        //series values and series labels
 
         SchXMLExportHelper_Impl::tDataSequenceCont::size_type nNumSequences = aSequencesToExport.size();
         SchXMLExportHelper_Impl::tDataSequenceCont::const_iterator aBegin( aSequencesToExport.begin());
@@ -825,6 +827,7 @@ lcl_TableData lcl_getDataForLocalTable(
 
         tStringVector& rCategories = bSeriesFromColumns ? aResult.aRowDescriptions    : aResult.aColumnDescriptions;
         tStringVector& rLabels     = bSeriesFromColumns ? aResult.aColumnDescriptions : aResult.aRowDescriptions;
+        Sequence< Sequence< OUString > >& rComplexLabels = bSeriesFromColumns ? aResult.aComplexColumnDescriptions : aResult.aComplexRowDescriptions;//#i116544#
 
         //categories
         lcl_SequenceToVector( aSimpleCategories, rCategories );
@@ -844,16 +847,21 @@ lcl_TableData lcl_getDataForLocalTable(
         for( ; aIt != aEnd; ++aIt, ++nSeqIdx )
         {
             OUString aRange;
+            Sequence< OUString >& rCurrentComplexLabel = rComplexLabels[nSeqIdx];
             if( aIt->first.is())
             {
-                rLabels[nSeqIdx] = lcl_getLabelString( aIt->first );
+                lcl_getLabelStringSequence( rCurrentComplexLabel, aIt->first );
+                rLabels[nSeqIdx] = lcl_flattenStringSequence( rCurrentComplexLabel );
                 aRange = aIt->first->getSourceRangeRepresentation();
                 if( xRangeConversion.is())
                     aRange = xRangeConversion->convertRangeToXML( aRange );
             }
             else if( aIt->second.is())
-                rLabels[nSeqIdx] = lcl_flattenStringSequence(
+            {
+                rCurrentComplexLabel.realloc(1);
+                rLabels[nSeqIdx] = rCurrentComplexLabel[0] = lcl_flattenStringSequence(
                     aIt->second->generateLabel( chart2::data::LabelOrigin_SHORT_SIDE ));
+            }
             if( bSeriesFromColumns )
                 aResult.aColumnDescriptions_Ranges.push_back( aRange );
             else
