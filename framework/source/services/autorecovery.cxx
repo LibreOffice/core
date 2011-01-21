@@ -249,103 +249,6 @@ static const sal_Int32       GIVE_UP_RETRY                          =   1; // in
 #endif
 
 //-----------------------------------------------
-// TODO debug - remove it!
-class DbgListener : private ThreadHelpBase
-                  , public  ::cppu::OWeakObject
-                  , public  css::frame::XStatusListener
-{
-    public:
-
-        FWK_DECLARE_XINTERFACE
-
-        DbgListener()
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::ctor()\n\n")
-        }
-
-        virtual ~DbgListener()
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::dtor()\n\n")
-        }
-
-        void startListening(const css::uno::Reference< css::frame::XDispatch >& xBroadcaster)
-        {
-            ::rtl::OUStringBuffer sMsg1(256);
-            sMsg1.appendAscii("//**********************************************************************************\n");
-            sMsg1.appendAscii("start listening\n{\n");
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg1.makeStringAndClear()))
-
-            ++m_refCount;
-
-            css::util::URL aURL;
-            aURL.Complete = ::rtl::OUString();
-            xBroadcaster->addStatusListener(static_cast< css::frame::XStatusListener* >(this), aURL);
-
-            --m_refCount;
-
-            ::rtl::OUStringBuffer sMsg2(256);
-            sMsg2.appendAscii("}\nstart listening\n");
-            sMsg2.appendAscii("//**********************************************************************************\n");
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg2.makeStringAndClear()))
-        }
-
-        virtual void SAL_CALL disposing(const css::lang::EventObject&)
-            throw(css::uno::RuntimeException)
-        {
-            WRITE_LOGFILE("autorecovery_states.txt", "\n\nDbgListener::dtor()\n\n")
-        }
-
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-            throw(css::uno::RuntimeException)
-        {
-            ::rtl::OUStringBuffer sMsg(256);
-
-            sMsg.appendAscii("//**********************************************************************************\n");
-
-            sMsg.appendAscii("FeatureURL = \"");
-            sMsg.append     (aEvent.FeatureURL.Complete);
-            sMsg.appendAscii("\"\n");
-
-            sMsg.appendAscii("State = [");
-            sal_Int32 nState = -1;
-            aEvent.State >>= nState;
-            if (nState==-1)
-            {
-                sMsg.appendAscii("?-");
-                sMsg.append     (::rtl::OUString::valueOf(nState));
-                sMsg.appendAscii("-? ");
-            }
-            if (nState==0)
-                sMsg.appendAscii("UNKNOWN ");
-            if ((nState & 1)==1)
-                sMsg.appendAscii("MODIFIED ");
-            if ((nState & 2)==2)
-                sMsg.appendAscii("TRYIT ");
-            if ((nState & 4)==4)
-                sMsg.appendAscii("HANDLED ");
-            if ((nState & 8)==8)
-                sMsg.appendAscii("POSTPONED ");
-            if ((nState & 16)==16)
-                sMsg.appendAscii("INCOMPLETE ");
-            if ((nState & 32)==32)
-                sMsg.appendAscii("DAMAGED ");
-            sMsg.appendAscii("]\n");
-/*
-            sMsg.appendAscii("IsEnabled = \"");
-            sMsg.append     (::rtl::OUString::valueOf(aEvent.IsEnabled));
-            sMsg.appendAscii("\"\n");
-
-            sMsg.appendAscii("Requery = \"");
-            sMsg.append     (::rtl::OUString::valueOf(aEvent.Requery));
-            sMsg.appendAscii("\"\n");
-*/
-            sMsg.appendAscii("\n");
-
-            WRITE_LOGFILE("autorecovery_states.txt", U2B(sMsg.makeStringAndClear()))
-        }
-};
-
-//-----------------------------------------------
 class CacheLockGuard
 {
     private:
@@ -505,11 +408,6 @@ void DispatchParams::forget()
 };
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_1(DbgListener                                 ,
-                    OWeakObject                                 ,
-                    DIRECT_INTERFACE(css::frame::XStatusListener))
-
-//-----------------------------------------------
 DEFINE_XINTERFACE_10(AutoRecovery                                                               ,
                      OWeakObject                                                                ,
                      DIRECT_INTERFACE (css::lang::XTypeProvider                                ),
@@ -556,10 +454,6 @@ DEFINE_INIT_SERVICE(
                         // establish callback for our internal used timer.
                         // Note: Its only active, if the timer will be started ...
                         m_aTimer.SetTimeoutHdl(LINK(this, AutoRecovery, implts_timerExpired));
-/*
-                        DbgListener* pListener = new DbgListener();
-                        pListener->startListening(this);
-*/
                     }
                    )
 
