@@ -44,19 +44,31 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimension;
 class ScDPItemData;
 
+/**
+ * This class contains authoritative information on the internal reference
+ * used as the data source for datapilot table.  <i>The range name takes
+ * precedence over the source range when it's non-empty.</i>  When the range
+ * name is empty, the source range gets used.
+ */
 struct ScSheetSourceDesc
 {
     ScRange         aSourceRange;
+    ::rtl::OUString maRangeName;
     ScQueryParam    aQueryParam;
 
-    BOOL operator== ( const ScSheetSourceDesc& rOther ) const
-        { return aSourceRange == rOther.aSourceRange &&
-                 aQueryParam  == rOther.aQueryParam; }
+    void SetSourceRange(const ScRange& rRange);
+    const ScRange& GetSourceRange() const;
+    void SetRangeName(const ::rtl::OUString& rName);
+    const ::rtl::OUString& GetRangeName() const;
+    void SetQueryParam(const ScQueryParam& rParam);
+    const ScQueryParam& GetQueryParam() const;
+
+    bool operator== ( const ScSheetSourceDesc& rOther ) const;
     ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
-    ULONG CheckValidate( ScDocument* pDoc  ) const;
+    ULONG CheckValidate( ScDocument* pDoc ) const;
     ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
-    ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
-    long    GetCacheId( ScDocument* pDoc, long nID ) const;
+    ScDPTableDataCache* GetExistDPObjectCache ( ScDocument* pDoc ) const;
+    long GetCacheId( ScDocument* pDoc, long nID ) const;
 };
 
 // --------------------------------------------------------------------

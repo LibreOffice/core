@@ -447,7 +447,7 @@ void ScXMLDataPilotTableContext::EndElement()
                 {
                     ScSheetSourceDesc aSheetDesc;
                     aSheetDesc.aSourceRange = aSourceCellRangeAddress;
-                    aSheetDesc.aQueryParam = aSourceQueryParam;
+                    aSheetDesc.SetQueryParam(aSourceQueryParam);
                     pDPObject->SetSheetDesc(aSheetDesc);
                 }
             }

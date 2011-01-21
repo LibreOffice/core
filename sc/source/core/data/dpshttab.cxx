@@ -53,6 +53,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 using ::std::vector;
 using ::std::hash_map;
 using ::std::hash_set;
@@ -61,7 +62,7 @@ using ::std::hash_set;
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
     ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
-    aQuery ( rDesc.aQueryParam  ),
+    aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
@@ -232,6 +233,43 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
     return aCacheTable;
 }
 
+void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
+{
+    aSourceRange = rRange;
+    maRangeName = OUString(); // overwrite existing range name if any.
+}
+
+const ScRange& ScSheetSourceDesc::GetSourceRange() const
+{
+    return aSourceRange;
+}
+
+void ScSheetSourceDesc::SetRangeName(const OUString& rName)
+{
+    maRangeName = rName;
+}
+
+const OUString& ScSheetSourceDesc::GetRangeName() const
+{
+    return maRangeName;
+}
+
+void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
+{
+    aQueryParam = rParam;
+}
+
+const ScQueryParam& ScSheetSourceDesc::GetQueryParam() const
+{
+    return aQueryParam;
+}
+
+bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
+{
+    return aSourceRange == rOther.aSourceRange &&
+        maRangeName == rOther.maRangeName &&
+        aQueryParam  == rOther.aQueryParam;
+}
 
 ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
 {

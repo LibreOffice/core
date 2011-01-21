@@ -210,7 +210,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             DBG_ASSERT(pDesc, "no sheet source for filter button");
             if (pDesc)
             {
-                aQueryParam = pDesc->aQueryParam;
+                aQueryParam = pDesc->GetQueryParam();
                 nSrcTab = pDesc->aSourceRange.aStart.Tab();
             }
 
@@ -232,7 +232,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
                     aNewDesc = *pDesc;
 
                 const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+                aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );
