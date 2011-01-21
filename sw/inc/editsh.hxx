@@ -232,7 +232,7 @@ public:
     BOOL DelINetAttrWithText();
 
     // If Cursor is at the end of a character style in which the DontExpand-flag
-       is not yet set, the latter will be set (==> return TRUE).
+    // is not yet set, the latter will be set (==> return TRUE).
     BOOL DontExpandFmt();
 
     // Apply / remove attributes.
@@ -584,7 +584,7 @@ public:
     void SetGraphicPolygon( const PolyPolygon *pPoly );
 
     // If there's an automatic, not manipulated polygon at the selected
-        notxtnode, it has to be deleted, e.g. cause the object has changed.
+    // notxtnode, it has to be deleted, e.g. cause the object has changed.
     void ClearAutomaticContour();
 
     // Returns the size of a graphic in Twips if cursor is in a graphic.
