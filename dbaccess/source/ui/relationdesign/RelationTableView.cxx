@@ -28,33 +28,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-
 #include "RelationTableView.hxx"
-
-
 #include "JoinExchange.hxx"
-
-
 #include <comphelper/extract.hxx>
-
-
 #include "browserids.hxx"
-
-
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-
-
 #include <com/sun/star/sdbc/XConnection.hpp>
-
-
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-
-
 #include <com/sun/star/sdbcx/KeyType.hpp>
-
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
