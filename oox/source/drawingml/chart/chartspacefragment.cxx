@@ -26,19 +26,22 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspacefragment.hxx"
+
 #include "oox/drawingml/shapepropertiescontext.hxx"
 #include "oox/drawingml/textbodycontext.hxx"
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareacontext.hxx"
 #include "oox/drawingml/chart/titlecontext.hxx"
 
-using ::rtl::OUString;
-using ::oox::core::ContextHandlerRef;
-using ::oox::core::XmlFilterBase;
-
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::oox::core;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -77,6 +80,9 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                     return new TextBodyContext( *this, mrModel.mxTextProp.create() );
                 case C_TOKEN( userShapes ):
                     mrModel.maDrawingPath = getFragmentPathFromRelId( rAttribs.getString( R_TOKEN( id ), OUString() ) );
+                    return 0;
+                case C_TOKEN( pivotSource ):
+                    mrModel.mbPivotChart = true;
                     return 0;
             }
         break;
@@ -124,4 +130,3 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

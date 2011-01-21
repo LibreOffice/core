@@ -26,14 +26,17 @@
  ************************************************************************/
 
 #include "oox/core/relations.hxx"
+
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
-
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
@@ -68,7 +71,7 @@ const Relation* Relations::getRelationFromRelId( const OUString& rId ) const
 const Relation* Relations::getRelationFromFirstType( const OUString& rType ) const
 {
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( aIt->second.maType == rType )
+        if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
             return &aIt->second;
     return 0;
 }
@@ -77,7 +80,7 @@ RelationsRef Relations::getRelationsFromType( const OUString& rType ) const
 {
     RelationsRef xRelations( new Relations( maFragmentPath ) );
     for( const_iterator aIt = begin(), aEnd = end(); aIt != aEnd; ++aIt )
-        if( aIt->second.maType == rType )
+        if( aIt->second.maType.equalsIgnoreAsciiCase( rType ) )
             (*xRelations)[ aIt->first ] = aIt->second;
     return xRelations;
 }
@@ -143,4 +146,3 @@ OUString Relations::getFragmentPathFromFirstType( const OUString& rType ) const
 
 } // namespace core
 } // namespace oox
-

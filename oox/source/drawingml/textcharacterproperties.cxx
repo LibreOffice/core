@@ -33,8 +33,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
+#include "oox/token/tokens.hxx"
 
 using ::rtl::OUString;
 using ::oox::core::XmlFilterBase;

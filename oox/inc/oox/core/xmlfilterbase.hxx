@@ -28,16 +28,16 @@
 #ifndef OOX_CORE_XMLFILTERBASE_HXX
 #define OOX_CORE_XMLFILTERBASE_HXX
 
+#include <com/sun/star/text/XText.hpp>
+#include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/text/XTextField.hpp>
 #include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
-#include "oox/drawingml/table/tablestylelist.hxx"
 #include "oox/core/filterbase.hxx"
 #include "oox/core/relations.hxx"
-#include <oox/dllapi.h>
-#include <com/sun/star/text/XTextField.hpp>
-#include <com/sun/star/text/XTextCursor.hpp>
-#include <com/sun/star/text/XText.hpp>
+#include "oox/drawingml/table/tablestylelist.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -46,9 +46,11 @@ namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XFastDocumentHandler; } }
 } } }
 
-namespace oox { namespace drawingml { class Theme; } }
-namespace oox { namespace drawingml { namespace chart { class ChartConverter; } } }
-namespace oox { namespace vml { class Drawing; } }
+namespace oox {
+    namespace drawingml { class Theme; }
+    namespace drawingml { namespace chart { class ChartConverter; } }
+    namespace vml { class Drawing; }
+}
 
 namespace sax_fastparser {
     class FastSerializerHelper;
@@ -60,6 +62,8 @@ namespace oox {
 namespace core {
 
 class FragmentHandler;
+
+// ============================================================================
 
 struct TextField {
     com::sun::star::uno::Reference< com::sun::star::text::XText > xText;
@@ -76,7 +80,8 @@ class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
     explicit            XmlFilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual             ~XmlFilterBase();
 
@@ -222,4 +227,3 @@ typedef ::rtl::Reference< XmlFilterBase > XmlFilterRef;
 } // namespace oox
 
 #endif
-

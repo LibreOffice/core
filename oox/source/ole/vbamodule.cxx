@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/ole/vbamodule.hxx"
+
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
@@ -36,17 +37,20 @@
 #include "oox/ole/vbahelper.hxx"
 #include "oox/ole/vbainputstream.hxx"
 
-using ::rtl::OUString;
-using ::rtl::OUStringBuffer;
+namespace oox {
+namespace ole {
+
+// ============================================================================
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::vba;
 using namespace ::com::sun::star::uno;
 
-namespace oox {
-namespace ole {
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 // ============================================================================
 

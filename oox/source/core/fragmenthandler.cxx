@@ -26,19 +26,19 @@
  ************************************************************************/
 
 #include "oox/core/fragmenthandler.hxx"
-#include "oox/core/xmlfilterbase.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::com::sun::star::xml::sax::XLocator;
+#include "oox/core/xmlfilterbase.hxx"
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -139,4 +139,3 @@ const RecordInfo* FragmentHandler::getRecordInfos() const
 
 } // namespace core
 } // namespace oox
-

@@ -28,9 +28,9 @@
 #ifndef OOX_DRAWINGML_CHART_MODELBASE_HXX
 #define OOX_DRAWINGML_CHART_MODELBASE_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/helper.hxx"
-#include "tokens.hxx"
+#include "oox/helper/refmap.hxx"
+#include "oox/helper/refvector.hxx"
 
 namespace oox { class AttributeList; }
 
@@ -138,4 +138,3 @@ struct LayoutModel
 } // namespace oox
 
 #endif
-

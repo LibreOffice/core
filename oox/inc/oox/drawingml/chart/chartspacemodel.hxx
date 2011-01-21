@@ -63,6 +63,7 @@ struct ChartSpaceModel
     bool                mbAutoTitleDel;     /// True = automatic title deleted manually.
     bool                mbPlotVisOnly;      /// True = plot visible cells in a sheet only.
     bool                mbShowLabelsOverMax;/// True = show labels over chart maximum.
+    bool                mbPivotChart;       /// True = pivot chart.
 
     explicit            ChartSpaceModel();
                         ~ChartSpaceModel();
@@ -75,4 +76,3 @@ struct ChartSpaceModel
 } // namespace oox
 
 #endif
-

@@ -27,17 +27,12 @@
 
 #include "hyperlinkcontext.hxx"
 
-#include <rtl/ustring.hxx>
-
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
 
 #include "oox/helper/propertymap.hxx"
 #include "oox/core/relations.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/embeddedwavaudiofile.hxx"
-#include "properties.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -53,7 +48,7 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
     , maProperties(aProperties)
 {
     OUString sURL, sHref;
-    OUString aRelId = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_id );
+    OUString aRelId = xAttributes->getOptionalValue( R_TOKEN( id ) );
     if ( aRelId.getLength() )
     {
         OSL_TRACE("OOX: URI rId %s", ::rtl::OUStringToOString (aRelId, RTL_TEXTENCODING_UTF8).pData->buffer);
@@ -64,10 +59,10 @@ HyperLinkContext::HyperLinkContext( ContextHandler& rParent,
             sURL = getFilter().getAbsoluteUrl( sHref );
         }
     }
-    OUString sTooltip = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tooltip );
+    OUString sTooltip = xAttributes->getOptionalValue( R_TOKEN( tooltip ) );
     if ( sTooltip.getLength() )
         maProperties[ PROP_Representation ] <<= sTooltip;
-    OUString sFrame = xAttributes->getOptionalValue( NMSP_RELATIONSHIPS|XML_tgtFrame );
+    OUString sFrame = xAttributes->getOptionalValue( R_TOKEN( tgtFrame ) );
     if( sFrame.getLength() )
         maProperties[ PROP_TargetFrame ] <<= sFrame;
     OUString aAction = xAttributes->getOptionalValue( XML_action );
@@ -164,9 +159,9 @@ Reference< XFastContextHandler > HyperLinkContext::createFastChildContext(
     Reference< XFastContextHandler > xRet;
     switch( aElement )
     {
-    case NMSP_DRAWINGML|XML_extLst:
+    case A_TOKEN( extLst ):
         return xRet;
-    case NMSP_DRAWINGML|XML_snd:
+    case A_TOKEN( snd ):
         EmbeddedWAVAudioFile aAudio;
         getEmbeddedWAVAudioFile( getRelations(), xAttribs, aAudio );
         break;

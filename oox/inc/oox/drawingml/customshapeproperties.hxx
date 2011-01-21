@@ -28,13 +28,7 @@
 #ifndef OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 #define OOX_DRAWINGML_CUSTOMSHAPEPROPERTIES_HXX
 
-#include "oox/helper/propertymap.hxx"
-#include "oox/drawingml/color.hxx"
-#include "oox/core/xmlfilterbase.hxx"
-#include <com/sun/star/graphic/XGraphic.hpp>
 #include <boost/shared_ptr.hpp>
-#include "oox/helper/helper.hxx"
-#include "tokens.hxx"
 #include <vector>
 #include <map>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
@@ -45,11 +39,15 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeTextFrame.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeAdjustmentValue.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeTextPathMode.hpp>
-#ifndef __com_sun_star_beans_PropertyValues_hpp__
 #include <com/sun/star/beans/PropertyValues.hpp>
-#endif
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
+#include "oox/core/xmlfilterbase.hxx"
+#include "oox/drawingml/color.hxx"
+#include "oox/helper/helper.hxx"
+#include "oox/helper/propertymap.hxx"
+#include "oox/token/tokens.hxx"
 
 namespace oox { namespace drawingml {
 

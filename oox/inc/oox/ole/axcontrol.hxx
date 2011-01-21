@@ -30,6 +30,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/binarystreambase.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/ole/axbinaryreader.hxx"
 #include "oox/ole/olehelper.hxx"
 
@@ -37,6 +38,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
     namespace container { class XIndexContainer; }
     namespace drawing { class XDrawPage; }
+    namespace frame { class XModel; }
     namespace form { class XFormsSupplier; }
     namespace lang { class XMultiServiceFactory; }
 } } }
@@ -55,6 +57,9 @@ namespace ole {
 const sal_Char* const COMCTL_GUID_SCROLLBAR_60      = "{FE38753A-44A3-11D1-B5B7-0000C09000C4}";
 const sal_Char* const COMCTL_GUID_PROGRESSBAR_50    = "{0713E8D2-850A-101B-AFC0-4210102A8DA7}";
 const sal_Char* const COMCTL_GUID_PROGRESSBAR_60    = "{35053A22-8589-11D1-B16A-00C0F0283628}";
+
+const sal_uInt16 COMCTL_VERSION_50          = 5;
+const sal_uInt16 COMCTL_VERSION_60          = 6;
 
 // ----------------------------------------------------------------------------
 
@@ -77,6 +82,28 @@ const sal_uInt32 AX_SYSCOLOR_WINDOWTEXT     = 0x80000008;
 const sal_uInt32 AX_SYSCOLOR_BUTTONFACE     = 0x8000000F;
 const sal_uInt32 AX_SYSCOLOR_BUTTONTEXT     = 0x80000012;
 
+const sal_uInt32 AX_FLAGS_ENABLED           = 0x00000002;
+const sal_uInt32 AX_FLAGS_LOCKED            = 0x00000004;
+const sal_uInt32 AX_FLAGS_OPAQUE            = 0x00000008;
+const sal_uInt32 AX_FLAGS_COLUMNHEADS       = 0x00000400;
+const sal_uInt32 AX_FLAGS_ENTIREROWS        = 0x00000800;
+const sal_uInt32 AX_FLAGS_EXISTINGENTRIES   = 0x00001000;
+const sal_uInt32 AX_FLAGS_CAPTIONLEFT       = 0x00002000;
+const sal_uInt32 AX_FLAGS_EDITABLE          = 0x00004000;
+const sal_uInt32 AX_FLAGS_IMEMODE_MASK      = 0x00078000;
+const sal_uInt32 AX_FLAGS_DRAGENABLED       = 0x00080000;
+const sal_uInt32 AX_FLAGS_ENTERASNEWLINE    = 0x00100000;
+const sal_uInt32 AX_FLAGS_KEEPSELECTION     = 0x00200000;
+const sal_uInt32 AX_FLAGS_TABASCHARACTER    = 0x00400000;
+const sal_uInt32 AX_FLAGS_WORDWRAP          = 0x00800000;
+const sal_uInt32 AX_FLAGS_BORDERSSUPPRESSED = 0x02000000;
+const sal_uInt32 AX_FLAGS_SELECTLINE        = 0x04000000;
+const sal_uInt32 AX_FLAGS_SINGLECHARSELECT  = 0x08000000;
+const sal_uInt32 AX_FLAGS_AUTOSIZE          = 0x10000000;
+const sal_uInt32 AX_FLAGS_HIDESELECTION     = 0x20000000;
+const sal_uInt32 AX_FLAGS_MAXLENAUTOTAB     = 0x40000000;
+const sal_uInt32 AX_FLAGS_MULTILINE         = 0x80000000;
+
 const sal_Int32 AX_BORDERSTYLE_NONE         = 0;
 const sal_Int32 AX_BORDERSTYLE_SINGLE       = 1;
 
@@ -96,6 +123,26 @@ const sal_Int32 AX_PICALIGN_CENTER          = 2;
 const sal_Int32 AX_PICALIGN_BOTTOMLEFT      = 3;
 const sal_Int32 AX_PICALIGN_BOTTOMRIGHT     = 4;
 
+const sal_Int32 AX_DISPLAYSTYLE_TEXT        = 1;
+const sal_Int32 AX_DISPLAYSTYLE_LISTBOX     = 2;
+const sal_Int32 AX_DISPLAYSTYLE_COMBOBOX    = 3;
+const sal_Int32 AX_DISPLAYSTYLE_CHECKBOX    = 4;
+const sal_Int32 AX_DISPLAYSTYLE_OPTBUTTON   = 5;
+const sal_Int32 AX_DISPLAYSTYLE_TOGGLE      = 6;
+const sal_Int32 AX_DISPLAYSTYLE_DROPDOWN    = 7;
+
+const sal_Int32 AX_SELCTION_SINGLE          = 0;
+const sal_Int32 AX_SELCTION_MULTI           = 1;
+const sal_Int32 AX_SELCTION_EXTENDED        = 2;
+
+const sal_Int32 AX_SHOWDROPBUTTON_NEVER     = 0;
+const sal_Int32 AX_SHOWDROPBUTTON_FOCUS     = 1;
+const sal_Int32 AX_SHOWDROPBUTTON_ALWAYS    = 2;
+
+const sal_Int32 AX_SCROLLBAR_NONE           = 0x00;
+const sal_Int32 AX_SCROLLBAR_HORIZONTAL     = 0x01;
+const sal_Int32 AX_SCROLLBAR_VERTICAL       = 0x02;
+
 // ----------------------------------------------------------------------------
 
 /** Enumerates all UNO API control types supported by these filters. */
@@ -107,6 +154,7 @@ enum ApiControlType
     API_CONTROL_CHECKBOX,
     API_CONTROL_RADIOBUTTON,
     API_CONTROL_EDIT,
+    API_CONTROL_NUMERIC,
     API_CONTROL_LISTBOX,
     API_CONTROL_COMBOBOX,
     API_CONTROL_SPINBUTTON,
@@ -147,6 +195,7 @@ class ControlConverter
 {
 public:
     explicit            ControlConverter(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
     virtual             ~ControlConverter();
@@ -179,11 +228,24 @@ public:
                             PropertyMap& rPropMap,
                             bool bHorizontal ) const;
 
+    /** Converts the vertical alignment to UNO properties. */
+    void                convertVerticalAlign(
+                            PropertyMap& rPropMap,
+                            sal_Int32 nVerticalAlign ) const;
+
     /** Converts common scrollbar settings to UNO properties. */
     void                convertScrollBar(
                             PropertyMap& rPropMap,
                             sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
                             sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const;
+
+    /** Binds the passed control model to the passed data sources. The
+        implementation will check which source types are supported. */
+    void                bindToSources(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ::rtl::OUString& rCtrlSource,
+                            const ::rtl::OUString& rRowSource,
+                            sal_Int32 nRefSheet = 0 ) const;
 
     // ActiveX (Forms 2.0) specific conversion --------------------------------
 
@@ -238,7 +300,10 @@ public:
                             sal_Int32 nOrientation ) const;
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
     const GraphicHelper& mrGraphicHelper;
+    mutable PropertySet maAddressConverter;
+    mutable PropertySet maRangeConverter;
     bool                mbDefaultColorBgr;
 };
 
@@ -275,8 +340,10 @@ public:
     /** Converts the control size to UNO properties. */
     void                convertSize( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-protected:
+public: // direct access needed for legacy VML drawing controls
     AxPairData          maSize;         /// Size of the control in 1/100 mm.
+
+protected:
     bool                mbAwtModel;     /// True = AWT control model, false = form component.
 };
 
@@ -396,8 +463,10 @@ public:
     /** Returns the font height in points. */
     inline sal_Int16    getFontHeight() const { return maFontData.getHeightPoints(); }
 
-protected:
+public: // direct access needed for legacy VML drawing controls
     AxFontData          maFontData;         /// The font settings.
+
+private:
     bool                mbSupportsAlign;    /// True = UNO model supports Align property.
 };
 
@@ -416,13 +485,14 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-private:
+public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      /// Binary picture stream.
     ::rtl::OUString     maCaption;          /// Visible caption of the button.
     sal_uInt32          mnTextColor;        /// Text color.
     sal_uInt32          mnBackColor;        /// Fill color.
     sal_uInt32          mnFlags;            /// Various flags.
     sal_uInt32          mnPicturePos;       /// Position of the picture relative to text.
+    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
     bool                mbFocusOnClick;     /// True = take focus on click.
 };
 
@@ -440,7 +510,7 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-private:
+public: // direct access needed for legacy VML drawing controls
     ::rtl::OUString     maCaption;          /// Visible caption of the button.
     sal_uInt32          mnTextColor;        /// Text color.
     sal_uInt32          mnBackColor;        /// Fill color.
@@ -448,6 +518,7 @@ private:
     sal_uInt32          mnBorderColor;      /// Flat border color.
     sal_Int32           mnBorderStyle;      /// Flat border style.
     sal_Int32           mnSpecialEffect;    /// 3D border effect.
+    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
 };
 
 // ============================================================================
@@ -490,7 +561,7 @@ public:
     virtual bool        importBinaryModel( BinaryInputStream& rInStrm );
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-protected:
+public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      /// Binary picture stream.
     ::rtl::OUString     maCaption;          /// Visible caption of the button.
     ::rtl::OUString     maValue;            /// Current value of the control.
@@ -510,6 +581,7 @@ protected:
     sal_Int32           mnMaxLength;        /// Maximum character count.
     sal_Int32           mnPasswordChar;     /// Password character in edit fields.
     sal_Int32           mnListRows;         /// Number of rows in dropdown box.
+    sal_Int32           mnVerticalAlign;    /// Vertical alignment (legacy VML drawing controls only).
 };
 
 // ============================================================================
@@ -565,6 +637,18 @@ public:
 
 // ============================================================================
 
+/** Model for a numeric field (legacy drawing controls only). */
+class AxNumericFieldModel : public AxMorphDataModelBase
+{
+public:
+    explicit            AxNumericFieldModel();
+
+    virtual ApiControlType getControlType() const;
+    virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
+};
+
+// ============================================================================
+
 /** Model for a Forms 2.0 list box. */
 class AxListBoxModel : public AxMorphDataModelBase
 {
@@ -601,7 +685,7 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-private:
+public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       /// Button arrow color.
     sal_uInt32          mnBackColor;        /// Fill color.
     sal_uInt32          mnFlags;            /// Various flags.
@@ -627,7 +711,7 @@ public:
     virtual ApiControlType getControlType() const;
     virtual void        convertProperties( PropertyMap& rPropMap, const ControlConverter& rConv ) const;
 
-private:
+public: // direct access needed for legacy VML drawing controls
     sal_uInt32          mnArrowColor;       /// Button arrow color.
     sal_uInt32          mnBackColor;        /// Fill color.
     sal_uInt32          mnFlags;            /// Various flags.
@@ -691,7 +775,7 @@ public:
         model from the 'f' stream. */
     bool                importClassTable( BinaryInputStream& rInStrm, AxClassTable& orClassTable );
 
-protected:
+public: // direct access needed for legacy VML drawing controls
     StreamDataSequence  maPictureData;      /// Binary picture stream.
     ::rtl::OUString     maCaption;          /// Visible caption of the form.
     AxPairData          maLogicalSize;      /// Logical form size (scroll area).
@@ -776,14 +860,27 @@ class EmbeddedControl
 {
 public:
     explicit            EmbeddedControl( const ::rtl::OUString& rName );
-                        ~EmbeddedControl();
+    virtual             ~EmbeddedControl();
+
+    /** Creates and returns the internal control model of the specified type. */
+    template< typename ModelType >
+    inline ModelType&   createModel();
+
+    /** Creates and returns the internal control model of the specified type. */
+    template< typename ModelType, typename ParamType >
+    inline ModelType&   createModel( const ParamType& rParam );
 
     /** Creates and returns the internal control model according to the passed
         MS class identifier. */
-    ControlModelRef     createModel( const ::rtl::OUString& rClassId );
+    ControlModelBase*   createModelFromGuid( const ::rtl::OUString& rClassId );
 
     /** Returns true, if the internal control model exists. */
     inline bool         hasModel() const { return mxModel.get() != 0; }
+    /** Returns read-only access to the internal control model. */
+    inline const ControlModelBase* getModel() const { return mxModel.get(); }
+    /** Returns read/write access to the internal control model. */
+    inline ControlModelBase* getModel() { return mxModel.get(); }
+
     /** Returns the UNO service name needed to construct the control model. */
     ::rtl::OUString     getServiceName() const;
 
@@ -797,32 +894,54 @@ private:
     ::rtl::OUString     maName;             /// Name of the control.
 };
 
+// ----------------------------------------------------------------------------
+
+template< typename ModelType >
+inline ModelType& EmbeddedControl::createModel()
+{
+    ::boost::shared_ptr< ModelType > xModel( new ModelType );
+    mxModel = xModel;
+    xModel->setFormComponentMode();
+    return *xModel;
+}
+
+template< typename ModelType, typename ParamType >
+inline ModelType& EmbeddedControl::createModel( const ParamType& rParam )
+{
+    ::boost::shared_ptr< ModelType > xModel( new ModelType( rParam ) );
+    mxModel = xModel;
+    xModel->setFormComponentMode();
+    return *xModel;
+}
+
 // ============================================================================
 
 /** A wrapper for a control form embedded directly in a draw page. */
-class EmbeddedForm : public ControlConverter
+class EmbeddedForm
 {
 public:
     explicit            EmbeddedForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
 
-    /** Converts the passed ActiveX control and inserts it into the form.
+    /** Converts the passed control and inserts the control model into the form.
         @return  The API control model, if conversion was successful. */
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >
-                        convertAndInsert( const EmbeddedControl& rControl );
+                        convertAndInsert( const EmbeddedControl& rControl, sal_Int32& rnCtrlIndex );
+
+    /** Returns the XIndexContainer interface of the UNO control form, if existing. */
+    inline ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
+                        getXForm() const { return mxFormIC; }
 
 private:
-    /** Tries to insert the passed control model into the form. */
-    bool                insertControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel );
-
     /** Creates the form that will hold the form controls. */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
-                        createForm();
+                        createXForm();
 
 private:
+    ControlConverter    maControlConv;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxModelFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormsSupplier > mxFormsSupp;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer > mxFormIC;
