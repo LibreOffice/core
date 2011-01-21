@@ -123,10 +123,6 @@ SvPasteObjectDialog::~SvPasteObjectDialog()
 
 /*************************************************************************
 |*    SvPasteObjectDialog::Insert()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  KA 16.03.2001
 *************************************************************************/
 void SvPasteObjectDialog::Insert( SotFormatStringId nFormat, const String& rFormatName )
 {

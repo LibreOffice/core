@@ -141,10 +141,6 @@ SvBaseLinksDlg::~SvBaseLinksDlg()
 
 /*************************************************************************
 |*    SvBaseLinksDlg::Handler()
-|*
-|*    Beschreibung
-|*    Ersterstellung    MM 14.06.94
-|*    Letzte Aenderung  JP 30.05.95
 *************************************************************************/
 IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
 {
