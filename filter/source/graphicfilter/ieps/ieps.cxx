@@ -62,9 +62,6 @@
 |*                      gabewert ist die Adresse an der die Zeichekette gefunden
 |*                      wurde oder NULL
 |*
-|*    Ersterstellung    SJ 04.03.98 ( und das an meinem Geburtstag )
-|*    Letzte Aenderung  SJ 04.03.98
-|*
 *************************************************************************/
 
 static BYTE* ImplSearchEntry( BYTE* pSource, BYTE* pDest, ULONG nComp, ULONG nSize )
