@@ -94,7 +94,7 @@ static sal_Char const DbgTrace_LeaveMeth[]  = "Leave method from class ";
 struct PBlock
 {
     void*       aData[PBLOCKCOUNT];
-    USHORT      nCount;
+    sal_uInt16      nCount;
     PBlock*     pPrev;
     PBlock*     pNext;
 };
@@ -111,10 +111,10 @@ public:
                 ~PointerList();
 
     void        Add( const void* p );
-    BOOL        Remove( const void* p );
+    sal_Bool        Remove( const void* p );
 
     const void* Get( sal_uIntPtr nPos ) const;
-    BOOL        IsIn( const void* p ) const;
+    sal_Bool        IsIn( const void* p ) const;
     sal_uIntPtr       Count() const { return nCount; }
 };
 
@@ -141,14 +141,14 @@ struct XtorType
     sal_uIntPtr                   nMaxCount;
     sal_uIntPtr                   nStatics;
     sal_Char                aName[DBG_MAXNAME+1];
-    BOOL                    bTest;
+    sal_Bool                    bTest;
     PointerList             aThisList;
 };
 
 struct DebugData
 {
     DbgData                 aDbgData;
-    USHORT                  bInit;
+    sal_uInt16                  bInit;
     DbgPrintLine            pDbgPrintMsgBox;
     DbgPrintLine            pDbgPrintWindow;
     DbgPrintLine            pDbgPrintTestTool;
@@ -162,8 +162,8 @@ struct DebugData
     bool                    bOslIsHooked;
 
     DebugData()
-        :bInit( FALSE )
-        ,pDbgPrintMsgBox( FALSE )
+        :bInit( sal_False )
+        ,pDbgPrintMsgBox( sal_False )
         ,pDbgPrintWindow( NULL )
         ,pDbgPrintTestTool( NULL )
         ,pProfList( NULL )
@@ -173,14 +173,14 @@ struct DebugData
         ,bOslIsHooked( false )
     {
         aDbgData.nTestFlags = DBG_TEST_RESOURCE | DBG_TEST_MEM_INIT;
-        aDbgData.bOverwrite = TRUE;
+        aDbgData.bOverwrite = sal_True;
         aDbgData.nTraceOut = DBG_OUT_NULL;
         aDbgData.nWarningOut = DBG_OUT_NULL;
         aDbgData.nErrorOut = DBG_OUT_MSGBOX;
         aDbgData.bMemInit = 0x77;
         aDbgData.bMemBound = 0x55;
         aDbgData.bMemFree = 0x33;
-        aDbgData.bHookOSLAssert = TRUE;
+        aDbgData.bHookOSLAssert = sal_True;
         aDbgData.aDebugName[0] = 0;
         aDbgData.aInclFilter[0] = 0;
         aDbgData.aExclFilter[0] = 0;
@@ -201,7 +201,7 @@ static DebugData aDebugData;
 
 static sal_Char aCurPath[260];
 
-static int bDbgImplInMain = FALSE;
+static int bDbgImplInMain = sal_False;
 
 // =======================================================================
 
@@ -210,7 +210,7 @@ static CRITICAL_SECTION aImplCritDbgSection;
 #elif defined( OS2 )
 static HMTX             hImplCritDbgSection = 0;
 #endif
-static BOOL             bImplCritDbgSectionInit = FALSE;
+static sal_Bool             bImplCritDbgSectionInit = sal_False;
 
 // -----------------------------------------------------------------------
 
@@ -219,9 +219,9 @@ void ImplDbgInitLock()
 #if defined( WNT )
     InitializeCriticalSection( &aImplCritDbgSection );
 #elif defined( OS2 )
-    DosCreateMutexSem( NULL, &hImplCritDbgSection, 0, FALSE );
+    DosCreateMutexSem( NULL, &hImplCritDbgSection, 0, sal_False );
 #endif
-    bImplCritDbgSectionInit = TRUE;
+    bImplCritDbgSectionInit = sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -233,7 +233,7 @@ void ImplDbgDeInitLock()
 #elif defined( OS2 )
     DosCloseMutexSem( hImplCritDbgSection );
 #endif
-    bImplCritDbgSectionInit = FALSE;
+    bImplCritDbgSectionInit = sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -279,7 +279,7 @@ void DbgImpMemoryInfo( sal_Char* pBuf );
 
 // =======================================================================
 
-static BOOL ImplActivateDebugger( const sal_Char* pMsg )
+static sal_Bool ImplActivateDebugger( const sal_Char* pMsg )
 {
 #if defined( WNT )
     static sal_Char aImplDbgOutBuf[DBG_BUF_MAXLEN];
@@ -287,16 +287,16 @@ static BOOL ImplActivateDebugger( const sal_Char* pMsg )
     strcat( aImplDbgOutBuf, "\r\n" );
     OutputDebugString( aImplDbgOutBuf );
     DebugBreak();
-    return TRUE;
+    return sal_True;
 #else
     (void) pMsg; // avoid warning about unused parameter
-    return FALSE;
+    return sal_False;
 #endif
 }
 
 // -----------------------------------------------------------------------
 
-static BOOL ImplCoreDump()
+static sal_Bool ImplCoreDump()
 {
 #if defined( WNT )
     DebugBreak();
@@ -304,7 +304,7 @@ static BOOL ImplCoreDump()
     long* pTemp = 0;
     *pTemp = 0xCCCC;
 #endif
-    return TRUE;
+    return sal_True;
 }
 
 // =======================================================================
@@ -424,7 +424,7 @@ namespace
         };
         lcl_writeConfigString( _pFile, _pKeyName, names[ _nValue ] );
     }
-    void lcl_writeHexByte( FILETYPE _pFile, const sal_Char* _pKeyName, BYTE _nValue )
+    void lcl_writeHexByte( FILETYPE _pFile, const sal_Char* _pKeyName, sal_uInt8 _nValue )
     {
         sal_Char buf[RTL_STR_MAX_VALUEOFINT32];
         rtl_String* stringData = NULL;
@@ -469,7 +469,7 @@ namespace
         sal_Char aBuf[2];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
-            *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? TRUE : FALSE;
+            *_out_pnValue = strcmp( aBuf, "1" ) == 0 ? sal_True : sal_False;
     }
     void lcl_tryReadOutputChannel( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uIntPtr* _out_pnValue )
     {
@@ -501,12 +501,12 @@ namespace
             else
                 *_out_pnAllFlags &= ~_nCheckFlag;
     }
-    void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, BYTE* _out_pnValue )
+    void lcl_tryReadHexByte( const sal_Char* _pLine, size_t _nLineLen, const sal_Char* _pKeyName, sal_uInt8* _out_pnValue )
     {
         sal_Char aBuf[3];
         size_t nValueLen = lcl_tryReadConfigString( _pLine, _nLineLen, _pKeyName, aBuf, sizeof( aBuf ) );
         if ( nValueLen )
-            *_out_pnValue = (BYTE)rtl_str_toInt32( aBuf, 16 );
+            *_out_pnValue = (sal_uInt8)rtl_str_toInt32( aBuf, 16 );
     }
 }
 
@@ -552,7 +552,7 @@ void PointerList::Add( const void* p )
         pLast          = pBlock;
     }
 
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while ( pBlock->aData[i] )
         i++;
 
@@ -563,15 +563,15 @@ void PointerList::Add( const void* p )
 
 // -----------------------------------------------------------------------
 
-BOOL PointerList::Remove( const void* p )
+sal_Bool PointerList::Remove( const void* p )
 {
     if ( !p )
-       return FALSE;
+       return sal_False;
 
     PBlock* pBlock = pFirst;
     while ( pBlock )
     {
-        USHORT i = 0;
+        sal_uInt16 i = 0;
         while ( i < PBLOCKCOUNT )
         {
             if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
@@ -593,7 +593,7 @@ BOOL PointerList::Remove( const void* p )
                     delete pBlock;
                 }
 
-                return TRUE;
+                return sal_True;
             }
             i++;
         }
@@ -601,7 +601,7 @@ BOOL PointerList::Remove( const void* p )
         pBlock = pBlock->pNext;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -615,7 +615,7 @@ const void* PointerList::Get( sal_uIntPtr nPos ) const
     sal_uIntPtr   nStart = 0;
     while ( pBlock )
     {
-        USHORT i = 0;
+        sal_uInt16 i = 0;
         while ( i < PBLOCKCOUNT )
         {
             if ( pBlock->aData[i] )
@@ -636,26 +636,26 @@ const void* PointerList::Get( sal_uIntPtr nPos ) const
 
 // -----------------------------------------------------------------------
 
-BOOL PointerList::IsIn( const void* p ) const
+sal_Bool PointerList::IsIn( const void* p ) const
 {
     if ( !p )
-       return FALSE;
+       return sal_False;
 
     PBlock* pBlock = pFirst;
     while ( pBlock )
     {
-        USHORT i = 0;
+        sal_uInt16 i = 0;
         while ( i < PBLOCKCOUNT )
         {
             if ( ((sal_uIntPtr)p) == ((sal_uIntPtr)pBlock->aData[i]) )
-                return TRUE;
+                return sal_True;
             i++;
         }
 
         pBlock = pBlock->pNext;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -723,7 +723,7 @@ static DebugData* GetDebugData()
 {
     if ( !aDebugData.bInit )
     {
-        aDebugData.bInit = TRUE;
+        aDebugData.bInit = sal_True;
 
         // Default Debug-Namen setzen
         DbgGetLogFileName( aDebugData.aDbgData.aDebugName );
@@ -838,7 +838,7 @@ inline DebugData* ImplGetDebugData()
 
 static FILETYPE ImplDbgInitFile()
 {
-    static BOOL bFileInit = FALSE;
+    static sal_Bool bFileInit = sal_False;
 
     sal_Char aBuf[4096];
     getcwd( aBuf, sizeof( aBuf ) );
@@ -849,7 +849,7 @@ static FILETYPE ImplDbgInitFile()
 
     if ( !bFileInit )
     {
-        bFileInit = TRUE;
+        bFileInit = sal_True;
 
         if ( pData->aDbgData.bOverwrite )
             pDebugFile = FileOpen( pData->aDbgData.aDebugName, "w" );
@@ -928,7 +928,7 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
         if ( pTok[nTok] == ';' )
         {
             if ( nTok && ImplStrSearch( pTok, nTok, pMsg, nMsgLen ) )
-                return TRUE;
+                return sal_True;
 
             pTok += nTok+1;
             nTok = 0;
@@ -938,9 +938,9 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
     }
 
     if ( nTok && ImplStrSearch( pTok, nTok, pMsg, nMsgLen ) )
-        return TRUE;
+        return sal_True;
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -948,14 +948,14 @@ static int ImplDbgFilter( const sal_Char* pFilter, const sal_Char* pMsg,
 extern "C"
 void SAL_CALL dbg_printOslDebugMessage( const sal_Char * pszFileName, sal_Int32 nLine, const sal_Char * pszMessage )
 {
-    DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (USHORT)nLine );
+    DbgOut( pszMessage ? pszMessage : "assertion failed!", DBG_OUT_ERROR, pszFileName, (sal_uInt16)nLine );
 }
 
 // -----------------------------------------------------------------------
 
 static void DebugInit()
 {
-    bDbgImplInMain = TRUE;
+    bDbgImplInMain = sal_True;
     ImplDbgInitLock();
 
     DebugData* pData = GetDebugData();
@@ -978,7 +978,7 @@ static void DebugDeInit()
     if( pData->bOslIsHooked )
     {
         osl_setDetailedDebugMessageFunc( pData->pOldDebugMessageFunc );
-        pData->bOslIsHooked = FALSE;
+        pData->bOslIsHooked = sal_False;
     }
 
     // Statistik-Ausgaben immer in File
@@ -1026,7 +1026,7 @@ static void DebugDeInit()
         pData->pXtorList = NULL;
     }
 
-    // Alles auf FALSE setzen, damit globale Variablen nicht das
+    // Alles auf sal_False setzen, damit globale Variablen nicht das
     // System zum Abstuerzen bringt. Dabei muessen aber die
     // Memory-Flags erhalten bleiben, da sonst new/delete in globalen
     // Variablen abstuerzen, da die Pointeranpassung dann nicht mehr richtig
@@ -1145,19 +1145,19 @@ static void DebugXTorInfo( sal_Char* pBuf )
 }
 
 // -----------------------------------------------------------------------
-BOOL ImplDbgFilterMessage( const sal_Char* pMsg )
+sal_Bool ImplDbgFilterMessage( const sal_Char* pMsg )
 {
     DebugData*  pData = GetDebugData();
-    if ( !ImplDbgFilter( pData->aDbgData.aInclFilter, pMsg, TRUE ) )
-        return TRUE;
-    if ( ImplDbgFilter( pData->aDbgData.aExclFilter, pMsg, FALSE ) )
-        return TRUE;
-    return FALSE;
+    if ( !ImplDbgFilter( pData->aDbgData.aInclFilter, pMsg, sal_True ) )
+        return sal_True;
+    if ( ImplDbgFilter( pData->aDbgData.aExclFilter, pMsg, sal_False ) )
+        return sal_True;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-void* DbgFunc( USHORT nAction, void* pParam )
+void* DbgFunc( sal_uInt16 nAction, void* pParam )
 {
     DebugData* pDebugData = ImplGetDebugData();
 
@@ -1283,7 +1283,7 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 break;
 
             case DBG_FUNC_ALLERROROUT:
-                return (void*)(sal_uIntPtr)TRUE;
+                return (void*)(sal_uIntPtr)sal_True;
 
             case DBG_FUNC_SETTESTSOLARMUTEX:
                 pDebugData->pDbgTestSolarMutex = (DbgTestSolarMutexProc)(long)pParam;
@@ -1304,12 +1304,12 @@ void* DbgFunc( USHORT nAction, void* pParam )
                 if( pDebugData->bOslIsHooked && ! pData->bHookOSLAssert )
                 {
                     osl_setDetailedDebugMessageFunc( pDebugData->pOldDebugMessageFunc );
-                    pDebugData->bOslIsHooked = FALSE;
+                    pDebugData->bOslIsHooked = sal_False;
                 }
                 else if( ! pDebugData->bOslIsHooked && pData->bHookOSLAssert )
                 {
                     pDebugData->pOldDebugMessageFunc = osl_setDetailedDebugMessageFunc( &dbg_printOslDebugMessage );
-                    pDebugData->bOslIsHooked = TRUE;
+                    pDebugData->bOslIsHooked = sal_True;
                 }
             }
             break;
@@ -1330,7 +1330,7 @@ DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc )
 
 // -----------------------------------------------------------------------
 
-void DbgProf( USHORT nAction, DbgDataType* pDbgData )
+void DbgProf( sal_uInt16 nAction, DbgDataType* pDbgData )
 {
     // Ueberhaupt Profiling-Test an
     DebugData* pData = ImplGetDebugData();
@@ -1423,7 +1423,7 @@ void DbgProf( USHORT nAction, DbgDataType* pDbgData )
 
 // -----------------------------------------------------------------------
 
-void DbgXtor( DbgDataType* pDbgData, USHORT nAction, const void* pThis,
+void DbgXtor( DbgDataType* pDbgData, sal_uInt16 nAction, const void* pThis,
               DbgUsr fDbgUsr )
 {
     DebugData* pData = ImplGetDebugData();
@@ -1449,19 +1449,19 @@ void DbgXtor( DbgDataType* pDbgData, USHORT nAction, const void* pThis,
         pXtorData->nDtorCalls   = 0;
         pXtorData->nMaxCount    = 0;
         pXtorData->nStatics     = 0;
-        pXtorData->bTest        = TRUE;
+        pXtorData->bTest        = sal_True;
         pData->pXtorList->Add( (void*)pXtorData );
 
-        if ( !ImplDbgFilter( pData->aDbgData.aInclClassFilter, pXtorData->aName, TRUE ) )
-            pXtorData->bTest = FALSE;
-        if ( ImplDbgFilter( pData->aDbgData.aExclClassFilter, pXtorData->aName, FALSE ) )
-            pXtorData->bTest = FALSE;
+        if ( !ImplDbgFilter( pData->aDbgData.aInclClassFilter, pXtorData->aName, sal_True ) )
+            pXtorData->bTest = sal_False;
+        if ( ImplDbgFilter( pData->aDbgData.aExclClassFilter, pXtorData->aName, sal_False ) )
+            pXtorData->bTest = sal_False;
     }
     if ( !pXtorData->bTest )
         return;
 
     sal_Char    aBuf[DBG_BUF_MAXLEN];
-    USHORT      nAct = nAction & ~DBG_XTOR_DTOROBJ;
+    sal_uInt16      nAct = nAction & ~DBG_XTOR_DTOROBJ;
 
     // Trace (Enter)
     if ( (pData->aDbgData.nTestFlags & DBG_TEST_XTOR_TRACE) &&
@@ -1608,12 +1608,12 @@ void DbgXtor( DbgDataType* pDbgData, USHORT nAction, const void* pThis,
 
 // -----------------------------------------------------------------------
 
-void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT nLine )
+void DbgOut( const sal_Char* pMsg, sal_uInt16 nDbgOut, const sal_Char* pFile, sal_uInt16 nLine )
 {
-    static BOOL bIn = FALSE;
+    static sal_Bool bIn = sal_False;
     if ( bIn )
         return;
-    bIn = TRUE;
+    bIn = sal_True;
 
     DebugData*  pData = GetDebugData();
     sal_Char const *   pStr;
@@ -1640,13 +1640,13 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     if ( nOut == DBG_OUT_NULL )
     {
-        bIn = FALSE;
+        bIn = sal_False;
         return;
     }
 
     if ( ImplDbgFilterMessage( pMsg ) )
     {
-        bIn = FALSE;
+        bIn = sal_False;
         return;
     }
 
@@ -1684,7 +1684,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
         // Line in String umwandeln und dranhaengen
         sal_Char    aLine[9];
         sal_Char*   pLine = &aLine[7];
-        USHORT      i;
+        sal_uInt16      i;
         memset( aLine, 0, sizeof( aLine ) );
         do
         {
@@ -1754,7 +1754,7 @@ void DbgOut( const sal_Char* pMsg, USHORT nDbgOut, const sal_Char* pFile, USHORT
 
     ImplDbgUnlock();
 
-    bIn = FALSE;
+    bIn = sal_False;
 }
 
 void DbgPrintShell(char const * message) {
@@ -1766,7 +1766,7 @@ void DbgPrintShell(char const * message) {
 
 // -----------------------------------------------------------------------
 
-void DbgOutTypef( USHORT nDbgOut, const sal_Char* pFStr, ... )
+void DbgOutTypef( sal_uInt16 nDbgOut, const sal_Char* pFStr, ... )
 {
     va_list pList;
 
