@@ -90,6 +90,8 @@ public:
 
     void ChangeModel( SdrModel* pNewModel );
 
+    void UpdateOutliner();
+
 private:
     SVX_DLLPRIVATE SvxTextEditSource( SvxTextEditSourceImpl* pImpl );
 
