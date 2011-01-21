@@ -203,7 +203,6 @@ static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON(RTL_CONSTASCII_USTRINGPARAM
 static const ::rtl::OUString PROP_PROGRESS(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
 static const ::rtl::OUString PROP_SAVEPATH(RTL_CONSTASCII_USTRINGPARAM("SavePath"));
 static const ::rtl::OUString PROP_ENTRY_ID(RTL_CONSTASCII_USTRINGPARAM("EntryID"));
-static const ::rtl::OUString PROP_DBG_MAKE_IT_FASTER(RTL_CONSTASCII_USTRINGPARAM("DBGMakeItFaster"));
 static const ::rtl::OUString PROP_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
 
 static const ::rtl::OUString OPERATION_START(RTL_CONSTASCII_USTRINGPARAM("start"));
