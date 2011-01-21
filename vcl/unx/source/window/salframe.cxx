@@ -3588,9 +3588,7 @@ long X11SalFrame::HandleFocusEvent( XFocusChangeEvent *pEvent )
 
         if( FocusIn == pEvent->type )
         {
-#ifndef _USE_PRINT_EXTENSION_
             vcl_sal::PrinterUpdate::update();
-#endif
             mbInputFocus = True;
             ImplSVData* pSVData = ImplGetSVData();
 

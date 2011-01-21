@@ -3339,7 +3339,9 @@ void GtkSalFrame::IMHandler::updateIMSpotLocation()
     aArea.y = aPosEvent.mnY;
     aArea.width = aPosEvent.mnWidth;
     aArea.height = aPosEvent.mnHeight;
+    m_pFrame->getDisplay()->GetXLib()->PushXErrorLevel( true );
     gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
+    m_pFrame->getDisplay()->GetXLib()->PopXErrorLevel();
 }
 
 void GtkSalFrame::IMHandler::setInputContext( SalInputContext* )

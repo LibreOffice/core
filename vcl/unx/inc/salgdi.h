@@ -28,18 +28,15 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-
-// -=-= exports -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-class   SalFontCacheItem;
-
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "salstd.hxx"
 #include "vcl/salgdi.hxx"
 #include "vcl/salgtype.hxx"
 #include "tools/fract.hxx"
 #include "vcl/dllapi.h"
+#include <vcl/vclenum.hxx>
+#include <vcl/sallayout.hxx>
 #include <deque>
-#include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct  ImplFontMetricData;
@@ -100,7 +97,6 @@ protected:
     Pixel           nPenPixel_;
 
     GC              pFontGC_;       // Font attributes
-    ExtendedFontStructRef   mXFont[ MAX_FALLBACK ];
     ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
     SalColor        nTextColor_;
@@ -185,7 +181,7 @@ protected:
                                 const SalBitmap  &rTransparentBitmap,
                                 SalColor          nTransparentColor );
 
-    GC                      SelectFont();
+    GC                      GetFontGC();
     bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
     void                    drawMaskedBitmap( const SalTwoRect* pPosAry,
@@ -193,9 +189,6 @@ protected:
                                               const SalBitmap& rTransparentBitmap );
 
 protected:
-    void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
-                                const sal_Unicode* pStr, int nLength );
-
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );
@@ -386,19 +379,8 @@ inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 
 #ifdef DBG_UTIL
 #define stderr0( s )            fprintf( stderr, s )
-#define stderr1( s, a )         fprintf( stderr, s, a )
-#define stderr2( s, a, b )      fprintf( stderr, s, a, b )
-#define stderr3( s, a, b, c )   fprintf( stderr, s, a, b, c )
-#define stdass0( b )            (void)( !(b) \
-                                        ? fprintf( stderr, "\"%s\" (%s line %d)\n", \
-                                                    #b, __FILE__, __LINE__ ) \
-                                        : 0 )
 #else
 #define stderr0( s )            ;
-#define stderr1( s, a )     ;
-#define stderr2( s, a, b )  ;
-#define stderr3( s, a, b, c )   ;
-#define stdass0( b )            ;
 #endif
 
 #endif // _SV_SALGDI_H

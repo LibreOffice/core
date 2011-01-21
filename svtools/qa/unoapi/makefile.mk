@@ -1,8 +1,7 @@
 #*************************************************************************
-#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
-# Copyright 2009 by Sun Microsystems, Inc.
+#
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,32 +13,36 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
-#
-#*************************************************************************
+#***********************************************************************/
 
-$(eval $(call gb_AllLangResTarget_AllLangResTarget,tk))
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
 
-$(eval $(call gb_AllLangResTarget_set_reslocation,tk,toolkit))
+PRJ = ../..
+PRJNAME = svtools
+TARGET = qa_unoapi
 
-$(eval $(call gb_AllLangResTarget_add_srs,tk,\
-    toolkit/awt \
-))
+.IF "$(OOO_JUNIT_JAR)" != ""
+PACKAGE = org/openoffice/svtools/qa/unoapi
+JAVATESTFILES = Test.java
+JAVAFILES = $(JAVATESTFILES)
+JARFILES = OOoRunner.jar ridl.jar test.jar
+EXTRAJARFILES = $(OOO_JUNIT_JAR)
+.END
 
-$(eval $(call gb_SrsTarget_SrsTarget,toolkit/awt))
+.INCLUDE: settings.mk
+.INCLUDE: target.mk
+.INCLUDE: installationtest.mk
 
-$(eval $(call gb_SrsTarget_set_include,toolkit/awt,\
-    $$(INCLUDE) \
-    -I$(SRCDIR)/toolkit/source/awt \
-))
+ALLTAR : javatest
 
-$(eval $(call gb_SrsTarget_add_files,toolkit/awt,\
-    toolkit/source/awt/xthrobber.src \
-))
+.END

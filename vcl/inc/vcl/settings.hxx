@@ -423,10 +423,6 @@ private:
     sal_uLong                           mnOptions;
     sal_uInt16                          mnScreenZoom;
     sal_uInt16                          mnScreenFontZoom;
-    sal_uInt16                          mnRadioButtonStyle;
-    sal_uInt16                          mnCheckBoxStyle;
-    sal_uInt16                          mnPushButtonStyle;
-    sal_uInt16                          mnTabControlStyle;
     sal_uInt16                          mnHighContrast;
     sal_uInt16                          mnUseSystemUIFonts;
     sal_uInt16                          mnAutoMnemonic;
@@ -457,11 +453,6 @@ private:
 #define STYLE_OPTION_SPINARROW      ((sal_uLong)0x00000080)
 #define STYLE_OPTION_SPINUPDOWN     ((sal_uLong)0x00000100)
 #define STYLE_OPTION_NOMNEMONICS    ((sal_uLong)0x00000200)
-#define STYLE_OPTION_WINSTYLE       ((sal_uLong)0x00010000)
-#define STYLE_OPTION_OS2STYLE       ((sal_uLong)0x00020000)
-#define STYLE_OPTION_MACSTYLE       ((sal_uLong)0x00040000)
-#define STYLE_OPTION_UNIXSTYLE      ((sal_uLong)0x00080000)
-#define STYLE_OPTION_SYSTEMSTYLE    ((sal_uLong)0x000F0000)
 #define STYLE_OPTION_HIDEDISABLED   ((sal_uLong)0x00100000)
 
 #define DRAGFULL_OPTION_WINDOWMOVE  ((sal_uLong)0x00000001)
@@ -488,28 +479,8 @@ private:
 
 #define DISPLAY_OPTION_AA_DISABLE   ((sal_uLong)0x00000001)
 
-#define STYLE_RADIOBUTTON_WIN       ((sal_uInt16)0x0001)
-#define STYLE_RADIOBUTTON_OS2       ((sal_uInt16)0x0002)
-#define STYLE_RADIOBUTTON_MAC       ((sal_uInt16)0x0003)
-#define STYLE_RADIOBUTTON_UNIX      ((sal_uInt16)0x0004)
-#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0005)
-#define STYLE_RADIOBUTTON_STYLE     ((sal_uInt16)0x000F)
-
-#define STYLE_CHECKBOX_WIN          ((sal_uInt16)0x0001)
-#define STYLE_CHECKBOX_OS2          ((sal_uInt16)0x0002)
-#define STYLE_CHECKBOX_MAC          ((sal_uInt16)0x0003)
-#define STYLE_CHECKBOX_UNIX         ((sal_uInt16)0x0004)
-#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0005)
-#define STYLE_CHECKBOX_STYLE        ((sal_uInt16)0x000F)
-
-#define STYLE_PUSHBUTTON_WIN        ((sal_uInt16)0x0001)
-#define STYLE_PUSHBUTTON_OS2        ((sal_uInt16)0x0002)
-#define STYLE_PUSHBUTTON_MAC        ((sal_uInt16)0x0003)
-#define STYLE_PUSHBUTTON_UNIX       ((sal_uInt16)0x0004)
-#define STYLE_PUSHBUTTON_STYLE      ((sal_uInt16)0x000F)
-
-#define STYLE_TABCONTROL_SINGLELINE ((sal_uInt16)0x0001)
-#define STYLE_TABCONTROL_COLOR      ((sal_uInt16)0x0002)
+#define STYLE_RADIOBUTTON_MONO      ((sal_uInt16)0x0001) // legacy
+#define STYLE_CHECKBOX_MONO         ((sal_uInt16)0x0001) // legacy
 
 #define STYLE_TOOLBAR_ICONSIZE_UNKNOWN      ((sal_uLong)0)
 #define STYLE_TOOLBAR_ICONSIZE_SMALL        ((sal_uLong)1)
@@ -813,23 +784,6 @@ public:
     const Font&                     GetIconFont() const
                                         { return mpData->maIconFont; }
 
-    void                            SetRadioButtonStyle( sal_uInt16 nStyle )
-                                        { CopyData(); mpData->mnRadioButtonStyle = nStyle; }
-    sal_uInt16                          GetRadioButtonStyle() const
-                                        { return mpData->mnRadioButtonStyle; }
-    void                            SetCheckBoxStyle( sal_uInt16 nStyle )
-                                        { CopyData(); mpData->mnCheckBoxStyle = nStyle; }
-    sal_uInt16                          GetCheckBoxStyle() const
-                                        { return mpData->mnCheckBoxStyle; }
-    void                            SetPushButtonStyle( sal_uInt16 nStyle )
-                                        { CopyData(); mpData->mnPushButtonStyle = nStyle; }
-    sal_uInt16                          GetPushButtonStyle() const
-                                        { return mpData->mnPushButtonStyle; }
-    void                            SetTabControlStyle( sal_uInt16 nStyle )
-                                        { CopyData(); mpData->mnTabControlStyle = nStyle; }
-    sal_uInt16                          GetTabControlStyle() const
-                                        { return mpData->mnTabControlStyle; }
-
     void                            SetBorderSize( long nSize )
                                         { CopyData(); mpData->mnBorderSize = nSize; }
     long                            GetBorderSize() const
@@ -971,10 +925,6 @@ public:
                                         { CopyData(); mpData->maWorkspaceGradient = rWall; }
 
     void                            SetStandardStyles();
-    void                            SetStandardWinStyles();
-    void                            SetStandardOS2Styles();
-    void                            SetStandardMacStyles();
-    void                            SetStandardUnixStyles();
 
     const StyleSettings&            operator =( const StyleSettings& rSet );
 

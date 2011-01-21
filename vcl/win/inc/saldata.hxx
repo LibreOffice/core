@@ -33,6 +33,8 @@
 #include <vcl/salwtype.hxx>
 #include <wincomp.hxx>
 
+#include "osl/module.h"
+
 #include <set>  // for hMenu validation
 #include <map>
 
@@ -45,6 +47,8 @@ class WinSalPrinter;
 class Font;
 struct HDCCache;
 struct TempFontItem;
+
+typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(WIN_BOOL*);
 
 // --------------------
 // - Standard-Defines -
@@ -130,13 +134,16 @@ public:
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
-    sal_Bool                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    sal_Bool                mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    sal_Bool                mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
 
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
-    std::map< UINT,sal_uInt16 > maVKMap;      // map some dynamic VK_* entries
+    std::map< UINT,USHORT > maVKMap;      // map some dynamic VK_* entries
+    oslModule               maDwmLib;
+    DwmIsCompositionEnabled_ptr mpDwmIsCompositionEnabled;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
@@ -154,10 +161,9 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
-    BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
-    BOOL                mbW40;                  // Is System-Version >= 4.0
-    BOOL                mbWXP;                  // Windows XP
-    BOOL                mbWPrinter;             // true: use unicode printer functions
+    BOOL                    mbW40;                  // Is System-Version >= 4.0
+    BOOL                    mbWXP;                  // Windows XP
+    BOOL                    mbWPrinter;             // true: use unicode printer functions
                                                     // false: use anis compat printer functions
     OSVERSIONINFO           maVersionInfo;
 };

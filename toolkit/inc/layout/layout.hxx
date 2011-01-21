@@ -38,9 +38,9 @@
 #include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/combobox.h>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <vcl/lstbox.h>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 class Button;
 class ComboBox;

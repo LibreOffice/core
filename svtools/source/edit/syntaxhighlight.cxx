@@ -344,7 +344,7 @@ LetterTable::LetterTable( void )
     IsLetterTab[0xFC] = true;   // ?, SMALL LETTER U WITH DIAERESIS
     IsLetterTab[0xFD] = true;   // ?, SMALL LETTER Y WITH ACUTE ACCENT
     IsLetterTab[0xFE] = true;   // ?, SMALL LETTER THORN
-    IsLetterTab[0xFF] = true;   // ÿ , SMALL LETTER Y WITH DIAERESIS
+    IsLetterTab[0xFF] = true;   // ï¿½ , SMALL LETTER Y WITH DIAERESIS
 }
 
 bool LetterTable::isLetterUnicode( sal_Unicode c )
@@ -523,7 +523,7 @@ sal_Bool SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 c = getChar();  // '/' entfernen
 
                 // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                sal_Unicode cPeek = peekChar();
+                sal_Unicode cPeek = c;
                 while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == sal_False )
                 {
                     getChar();

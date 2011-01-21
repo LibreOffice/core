@@ -57,10 +57,10 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/colrdlg.src \
     svtools/source/dialogs/filedlg2.src \
     svtools/source/dialogs/formats.src \
-    svtools/source/dialogs/printdlg.src \
     svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
+    svtools/source/filter.vcl/filter/exportdialog.src \
     svtools/source/java/javaerror.src \
     svtools/source/misc/ehdl.src \
     svtools/source/misc/helpagent.src \
@@ -68,6 +68,7 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/misc/langtab.src \
     svtools/source/misc/undo.src \
     svtools/source/plugapp/testtool.src \
+    svtools/source/toolpanel/toolpanel.src \
 ))
 
 

@@ -56,6 +56,20 @@ $(eval $(call gb_Executable_add_exception_objects,sspretty,\
 ))
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Executable_add_linked_libs,sspretty,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Executable_add_linked_libs,sspretty,\
     kernel32 \
     msvcrt \
@@ -63,6 +77,7 @@ $(eval $(call gb_Executable_add_linked_libs,sspretty,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 
 ifeq ($(OS),LINUX)

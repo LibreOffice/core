@@ -78,7 +78,6 @@ public:
                        ~Button();
 
     virtual void        Click();
-    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
 
     void                SetClickHdl( const Link& rLink ) { maClickHdl = rLink; }
     const Link&         GetClickHdl() const { return maClickHdl; }

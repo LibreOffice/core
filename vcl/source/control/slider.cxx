@@ -713,13 +713,6 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
                 mnMouseOff = rMousePos.X()-aCenterPos.X();
             else
                 mnMouseOff = rMousePos.Y()-aCenterPos.Y();
-
-            // Im OS2-Look geben wir den Thumb gedrueckt aus
-            if ( GetSettings().GetStyleSettings().GetOptions() & STYLE_OPTION_OS2STYLE )
-            {
-                mnStateFlags |= SLIDER_STATE_THUMB_DOWN;
-                ImplDraw( SLIDER_DRAW_THUMB );
-            }
         }
         else if ( ImplIsPageUp( rMousePos ) )
         {

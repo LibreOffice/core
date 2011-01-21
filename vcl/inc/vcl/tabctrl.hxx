@@ -63,13 +63,9 @@ private:
     long                mnMaxPageWidth;
     sal_uInt16              mnActPageId;
     sal_uInt16              mnCurPageId;
-    sal_uInt16              mnFirstPagePos;
-    sal_uInt16              mnLastFirstPagePos;
     sal_Bool                mbFormat;
     sal_Bool                mbRestoreHelpId;
     sal_Bool                mbRestoreUnqId;
-    sal_Bool                mbSingleLine;
-    sal_Bool                mbScroll;
     sal_Bool                mbSmallInvalidate;
     sal_Bool                mbExtraSpace;
     Link                maActivateHdl;
@@ -78,22 +74,17 @@ private:
     using Control::ImplInitSettings;
     SAL_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
-    SAL_DLLPRIVATE void         ImplScrollBtnsColor();
-    SAL_DLLPRIVATE void         ImplSetScrollBtnsState();
-    SAL_DLLPRIVATE void         ImplPosScrollBtns();
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
     SAL_DLLPRIVATE Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE sal_Bool         ImplPosCurTabPage();
     SAL_DLLPRIVATE void         ImplActivateTabPage( sal_Bool bNext );
-    SAL_DLLPRIVATE void         ImplSetFirstPagePos( sal_uInt16 nPagePos );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
-    DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
 
@@ -155,9 +146,6 @@ public:
 
     void                SetCurPageId( sal_uInt16 nPageId );
     sal_uInt16              GetCurPageId() const;
-
-    void                SetFirstPageId( sal_uInt16 nPageId );
-    sal_uInt16              GetFirstPageId() const { return GetPageId( mnFirstPagePos ); }
 
     void                SelectTabPage( sal_uInt16 nPageId );
 

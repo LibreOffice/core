@@ -60,15 +60,12 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace com::sun::star::beans;
 
-#define HELPID_PREFIX ".HelpId:vcl:PrintDialog"
-#define SMHID2( a, b ) SetHelpId( rtl::OString( HELPID_PREFIX ":" a ":" b ) )
-#define SMHID1( a ) SetHelpId( rtl::OString( HELPID_PREFIX  ":" a  ) )
-
 PrintDialog::PrintPreviewWindow::PrintPreviewWindow( Window* i_pParent, const ResId& i_rId )
     : Window( i_pParent, i_rId )
     , maOrigSize( 10, 10 )
     , maPageVDev( *this )
     , maToolTipString( String( VclResId( SV_PRINT_PRINTPREVIEW_TXT ) ) )
+    , mbGreyscale( false )
     , maHorzDim( this, WB_HORZ | WB_CENTER  )
     , maVertDim( this, WB_VERT | WB_VCENTER )
 {
@@ -269,6 +266,11 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         maPageVDev.Erase();
         maPageVDev.Push();
         maPageVDev.SetMapMode( MAP_100TH_MM );
+        ULONG nOldDrawMode = maPageVDev.GetDrawMode();
+        if( mbGreyscale )
+            maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
+                                    ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |
+                                      DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
         aMtf.WindStart();
         aMtf.Scale( fScale, fScale );
         aMtf.WindStart();
@@ -278,6 +280,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         SetMapMode( MAP_PIXEL );
         maPageVDev.SetMapMode( MAP_PIXEL );
         DrawOutDev( aOffset, maPreviewSize, Point( 0, 0 ), aVDevSize, maPageVDev );
+        maPageVDev.SetDrawMode( nOldDrawMode );
 
         DecorationView aVw( this );
         Rectangle aFrame( aOffset + Point( -1, -1 ), Size( maPreviewSize.Width() + 2, maPreviewSize.Height() + 2 ) );
@@ -309,7 +312,8 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
                                                   const Size& i_rOrigSize,
                                                   const rtl::OUString& i_rReplacement,
                                                   sal_Int32 i_nDPIX,
-                                                  sal_Int32 i_nDPIY
+                                                  sal_Int32 i_nDPIY,
+                                                  bool i_bGreyscale
                                                  )
 {
     rtl::OUStringBuffer aBuf( 256 );
@@ -323,6 +327,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
 
     maOrigSize = i_rOrigSize;
     maReplacementString = i_rReplacement;
+    mbGreyscale = i_bGreyscale;
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
     maPageVDev.EnableOutput( sal_True );
 
@@ -468,28 +473,6 @@ PrintDialog::NUpTabPage::NUpTabPage( Window* i_pParent, const ResId& rResId )
     // set precision
     maPageMarginEdt.SetDecimalDigits( nDigits );
     maSheetMarginEdt.SetDecimalDigits( nDigits );
-
-    SMHID1( "NUpPage" );
-    maNupLine.SMHID2("NUpPage", "Layout");
-    maBrochureBtn.SMHID2("NUpPage", "Brochure" );
-    maPagesBtn.SMHID2( "NUpPage", "PagesPerSheet" );
-    maPagesBoxTitleTxt.SMHID2( "NUpPage", "PagesPerSheetLabel" );
-    maNupPagesBox.SMHID2( "NUpPage", "PagesPerSheetBox" );
-    maNupNumPagesTxt.SMHID2( "NUpPage", "Columns" );
-    maNupColEdt.SMHID2( "NUpPage", "ColumnsBox" );
-    maNupTimesTxt.SMHID2( "NUpPage", "Rows" );
-    maNupRowsEdt.SMHID2( "NUpPage", "RowsBox" );
-    maPageMarginTxt1.SMHID2( "NUpPage", "PageMargin" );
-    maPageMarginEdt.SMHID2( "NUpPage", "PageMarginBox" );
-    maPageMarginTxt2.SMHID2( "NUpPage", "PageMarginCont" );
-    maSheetMarginTxt1.SMHID2( "NUpPage", "SheetMargin" );
-    maSheetMarginEdt.SMHID2( "NUpPage", "SheetMarginBox" );
-    maSheetMarginTxt2.SMHID2( "NUpPage", "SheetMarginCont" );
-    maNupOrientationTxt.SMHID2( "NUpPage", "Orientation" );
-    maNupOrientationBox.SMHID2( "NUpPage", "OrientationBox" );
-    maNupOrderTxt.SMHID2( "NUpPage", "Order" );
-    maNupOrderBox.SMHID2( "NUpPage", "OrderBox" );
-    maBorderCB.SMHID2( "NUpPage", "BorderBox" );
 
     setupLayout();
 }
@@ -638,24 +621,6 @@ PrintDialog::JobTabPage::JobTabPage( Window* i_pParent, const ResId& rResId )
 {
     FreeResource();
 
-    SMHID1( "JobPage" );
-    maPrinterFL.SMHID2( "JobPage", "Printer" );
-    maPrinters.SMHID2( "JobPage", "PrinterList" );
-    maDetailsBtn.SMHID2( "JobPage", "DetailsBtn" );
-    maStatusLabel.SMHID2( "JobPage", "StatusLabel" );
-    maStatusTxt.SMHID2( "JobPage", "StatusText" );
-    maLocationLabel.SMHID2( "JobPage", "LocationLabel" );
-    maLocationTxt.SMHID2( "JobPage", "LocationText" );
-    maCommentLabel.SMHID2( "JobPage", "CommentLabel" );
-    maCommentTxt.SMHID2( "JobPage", "CommentText" );
-    maSetupButton.SMHID2( "JobPage", "Properties" );
-    maCopies.SMHID2( "JobPage", "CopiesLine" );
-    maCopySpacer.SMHID2( "JobPage", "CopySpacer" );
-    maCopyCount.SMHID2( "JobPage", "CopiesText" );
-    maCopyCountField.SMHID2( "JobPage", "Copies" );
-    maCollateBox.SMHID2( "JobPage", "Collate" );
-    maCollateImage.SMHID2( "JobPage", "CollateImage" );
-
     maCopySpacer.Show();
     maStatusTxt.Show();
     maCommentTxt.Show();
@@ -779,11 +744,6 @@ PrintDialog::OutputOptPage::OutputOptPage( Window* i_pParent, const ResId& i_rRe
     , maReverseOrderBox( this, VclResId( SV_PRINT_OPT_REVERSE ) )
 {
     FreeResource();
-    SMHID1( "OptPage" );
-    maOptionsLine.SMHID2( "OptPage", "Options" );
-    maToFileBox.SMHID2( "OptPage", "ToFile" );
-    maCollateSingleJobsBox.SMHID2( "OptPage", "SingleJobs" );
-    maReverseOrderBox.SMHID2( "OptPage", "Reverse" );
 
     setupLayout();
 }
@@ -875,9 +835,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     // init reverse print
     maOptionsPage.maReverseOrderBox.Check( maPController->getReversePrint() );
 
-    // get the first page
-    preparePreview( true, true );
-
     // fill printer listbox
     const std::vector< rtl::OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< rtl::OUString >::const_iterator it = rQueues.begin();
@@ -908,6 +865,12 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
             maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
     }
+    // not printing to file
+    maPController->resetPrinterOptions( false );
+
+    // get the first page
+    preparePreview( true, true );
+
     // update the text fields for the printer
     updatePrinterText();
 
@@ -994,18 +957,6 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
             SetOutputSizePixel( aOutSize );
         }
     }
-
-    // set HelpIDs
-    SMHID1( "Dialog" );
-    maOKButton.SMHID1( "OK" );
-    maCancelButton.SMHID1( "Cancel" );
-    maHelpButton.SMHID1( "Help" );
-    maPreviewWindow.SMHID1( "Preview" );
-    maNumPagesText.SMHID1( "NumPagesText" );
-    maPageEdit.SMHID1( "PageEdit" );
-    maForwardBtn.SMHID1( "ForwardBtn" );
-    maBackwardBtn.SMHID1( "BackwardBtn" );
-    maTabCtrl.SMHID1( "TabPages" );
 
     // append further tab pages
     if( mbShowLayoutPage )
@@ -1104,6 +1055,11 @@ void PrintDialog::readFromSettings()
         }
     }
     maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+    if( maOptionsPage.maToFileBox.IsChecked() )
+    {
+        maPController->resetPrinterOptions( true );
+        preparePreview( true, true );
+    }
 }
 
 void PrintDialog::storeToSettings()
@@ -1144,39 +1100,18 @@ bool PrintDialog::isSingleJobs()
     return maOptionsPage.maCollateSingleJobsBox.IsChecked();
 }
 
-static void setSmartId( Window* i_pWindow, const char* i_pType, sal_Int32 i_nId = -1, const rtl::OUString& i_rPropName = rtl::OUString() )
+void setHelpId( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpIds, sal_Int32 i_nIndex )
 {
-    rtl::OStringBuffer aBuf( 256 );
-    aBuf.append( HELPID_PREFIX );
-    if( i_rPropName.getLength() )
-    {
-        aBuf.append( ':' );
-        aBuf.append( rtl::OUStringToOString( i_rPropName, RTL_TEXTENCODING_UTF8 ) );
-    }
-    if( i_pType )
-    {
-        aBuf.append( ':' );
-        aBuf.append( i_pType );
-    }
-    if( i_nId >= 0 )
-    {
-        aBuf.append( ':' );
-        aBuf.append( i_nId );
-    }
-    i_pWindow->SetHelpId( aBuf.makeStringAndClear() );
+    if( i_nIndex >= 0 && i_nIndex < i_rHelpIds.getLength() )
+        i_pWindow->SetHelpId( rtl::OUStringToOString( i_rHelpIds.getConstArray()[i_nIndex], RTL_TEXTENCODING_UTF8 ) );
 }
 
-static void setHelpText( Window* /*i_pWindow*/, const Sequence< rtl::OUString >& /*i_rHelpTexts*/, sal_Int32 /*i_nIndex*/ )
+static void setHelpText( Window* i_pWindow, const Sequence< rtl::OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
 {
     // without a help text set and the correct smartID,
     // help texts will be retrieved from the online help system
-
-    // passed help texts for optional UI is used only for native dialogs which currently
-    // cannot access the same (rather implicit) mechanism
-    #if 0
     if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
-    #endif
 }
 
 void updateMaxSize( const Size& i_rCheckSize, Size& o_rMaxSize )
@@ -1213,6 +1148,7 @@ void PrintDialog::setupOptionalUI()
         Sequence< rtl::OUString > aChoices;
         Sequence< sal_Bool > aChoicesDisabled;
         Sequence< rtl::OUString > aHelpTexts;
+        Sequence< rtl::OUString > aHelpIds;
         sal_Int64 nMinValue = 0, nMaxValue = 0;
         sal_Int32 nCurHelpText = 0;
         rtl::OUString aGroupingHint;
@@ -1284,6 +1220,18 @@ void PrintDialog::setupOptionalUI()
                     {
                         aHelpTexts.realloc( 1 );
                         *aHelpTexts.getArray() = aHelpText;
+                    }
+                }
+            }
+            else if( rEntry.Name.equalsAscii( "HelpId" ) )
+            {
+                if( ! (rEntry.Value >>= aHelpIds ) )
+                {
+                    rtl::OUString aHelpId;
+                    if( (rEntry.Value >>= aHelpId) )
+                    {
+                        aHelpIds.realloc( 1 );
+                        *aHelpIds.getArray() = aHelpId;
                     }
                 }
             }
@@ -1359,7 +1307,7 @@ void PrintDialog::setupOptionalUI()
             maTabCtrl.SetTabPage( nOptPageId, pNewGroup );
 
             // set help id
-            setSmartId( pNewGroup, "TabPage", nOptPageId );
+            setHelpId( pNewGroup, aHelpIds, 0 );
             // set help text
             setHelpText( pNewGroup, aHelpTexts, 0 );
 
@@ -1390,7 +1338,7 @@ void PrintDialog::setupOptionalUI()
                 pNewSub->Show();
 
                 // set help id
-                setSmartId( pNewSub, "FixedLine", sal_Int32( nCurSubGroup++ ) );
+                setHelpId( pNewSub, aHelpIds, 0 );
                 // set help text
                 setHelpText( pNewSub, aHelpTexts, 0 );
                 // add group to current column
@@ -1470,7 +1418,7 @@ void PrintDialog::setupOptionalUI()
                 maControlToPropertyMap[pNewBox] = aPropertyName;
 
                 // set help id
-                setSmartId( pNewBox, "CheckBox", -1, aPropertyName );
+                setHelpId( pNewBox, aHelpIds, 0 );
                 // set help text
                 setHelpText( pNewBox, aHelpTexts, 0 );
 
@@ -1493,9 +1441,10 @@ void PrintDialog::setupOptionalUI()
                     pHeading->Show();
 
                     // set help id
-                    setSmartId( pHeading, "FixedText", -1, aPropertyName );
+                    setHelpId( pHeading, aHelpIds, nCurHelpText );
                     // set help text
-                    setHelpText( pHeading, aHelpTexts, nCurHelpText++ );
+                    setHelpText( pHeading, aHelpTexts, nCurHelpText );
+                    nCurHelpText++;
                     // add fixed text to current column
                     pCurColumn->addWindow( pHeading );
                     // add an indent to the current column
@@ -1531,9 +1480,10 @@ void PrintDialog::setupOptionalUI()
                     maControlToNumValMap[pBtn] = m;
 
                     // set help id
-                    setSmartId( pBtn, "RadioButton", m, aPropertyName );
+                    setHelpId( pBtn, aHelpIds, nCurHelpText );
                     // set help text
-                    setHelpText( pBtn, aHelpTexts, nCurHelpText++ );
+                    setHelpText( pBtn, aHelpTexts, nCurHelpText );
+                    nCurHelpText++;
                     // add the radio button to the column
                     pLabel->setLabel( pBtn );
                 }
@@ -1556,9 +1506,6 @@ void PrintDialog::setupOptionalUI()
                     maControls.push_front( pHeading );
                     pHeading->SetText( aText );
                     pHeading->Show();
-
-                    // set help id
-                    setSmartId( pHeading, "FixedText", -1, aPropertyName );
 
                     // add to row
                     pLabel = new vcl::LabeledElement( pFieldColumn.get(), 2 );
@@ -1586,7 +1533,7 @@ void PrintDialog::setupOptionalUI()
                     pList->Show();
 
                     // set help id
-                    setSmartId( pList, "ListBox", -1, aPropertyName );
+                    setHelpId( pList, aHelpIds, 0 );
                     // set help text
                     setHelpText( pList, aHelpTexts, 0 );
 
@@ -1619,7 +1566,7 @@ void PrintDialog::setupOptionalUI()
                     pField->Show();
 
                     // set help id
-                    setSmartId( pField, "NumericField", -1, aPropertyName );
+                    setHelpId( pField, aHelpIds, 0 );
                     // set help text
                     setHelpText( pField, aHelpTexts, 0 );
 
@@ -1646,7 +1593,7 @@ void PrintDialog::setupOptionalUI()
                     pField->Show();
 
                     // set help id
-                    setSmartId( pField, "Edit", -1, aPropertyName );
+                    setHelpId( pField, aHelpIds, 0 );
                     // set help text
                     setHelpText( pField, aHelpTexts, 0 );
 
@@ -1936,7 +1883,8 @@ void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 
         Size aCurPageSize = aPrt->PixelToLogic( aPrt->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) );
         maPreviewWindow.setPreview( aMtf, aCurPageSize, nPages > 0 ? rtl::OUString() : maNoPageStr,
-                                    aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY()
+                                    aPrt->ImplGetDPIX(), aPrt->ImplGetDPIY(),
+                                    aPrt->GetPrinterOptions().IsConvertToGreyscales()
                                    );
 
         maForwardBtn.Enable( mnCurPage < nPages-1 );
@@ -2127,6 +2075,7 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
         String aNewPrinter( pBox->GetSelectEntry() );
         // set new printer
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
+        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         // update text fields
         updatePrinterText();
     }
@@ -2157,8 +2106,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            // FIXME: find out proper help URL and use here
-            pHelp->Start( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ), GetParent() );
+            pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:OK" ) ), &maOKButton );
         }
     }
     else if( pButton == &maForwardBtn )
@@ -2172,7 +2120,9 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     else if( pButton == &maOptionsPage.maToFileBox )
     {
         maOKButton.SetText( maOptionsPage.maToFileBox.IsChecked() ? maPrintToFileText : maPrintText );
+        maPController->resetPrinterOptions( maOptionsPage.maToFileBox.IsChecked() );
         getLayout()->resize();
+        preparePreview( true, true );
     }
     else if( pButton == &maNUpPage.maBrochureBtn )
     {

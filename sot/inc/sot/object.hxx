@@ -381,22 +381,17 @@ SotFactory * ClassName::pFactory = NULL;                                   \
 #pragma warning(disable: 4250)
 #endif
 
-class SvAggregateMemberList;
 struct IUnknown;
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
 friend class SotFactory;
 friend class SvObject;
-    SvAggregateMemberList * pAggList; // fuer Aggregation, erstes ist das MainObj
-    sal_uInt16      nStrongLockCount;
-    sal_uInt16      nOwnerLockCount;
-    sal_Bool        bOwner:1,
-                bSVObject:1,        // Ist Proxy, dann sal_True wenn andere Seite SV ist
-                bInClose:1;         // sal_True, im DoClose
+    sal_uInt16  nStrongLockCount;
+    sal_uInt16  nOwnerLockCount;
+    sal_Bool    bOwner:1,
+                bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
+                bInClose:1;         // TRUE, im DoClose
 
-    void *      DownAggCast( const SotFactory * pFact );
-    void        RemoveInterface( sal_uLong );
-    void        RemoveInterface( SotObject * );
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:
 #else
@@ -414,25 +409,10 @@ public:
     virtual IUnknown *  GetInterface( const SvGlobalName & );
 
     sal_Bool                Owner() const { return bOwner; }
-    sal_Bool                IsSvObject() const;
 
-    // Methoden fuer die Aggregation (siehe OLE2-Spec)
-    sal_Bool                ShouldDelete();
-    virtual void        QueryDelete();
-    SvAggregateMemberList & GetAggList();
-    void                AddInterface( SotObject * );
-    void                AddInterface( SotFactory * );
-    virtual SotObjectRef CreateAggObj( const SotFactory * );
-    void *              AggCast( const SotFactory * pFact );
-    void *              CastAndAddRef( const SotFactory * pFact );
-    SotObject *         GetMainObj() const;
+    void*               CastAndAddRef( const SotFactory * pFact );
 
-                        // !!! Read the Manual !!!
-    virtual sal_uInt16      FuzzyLock( sal_Bool bLock, sal_Bool bIntern, sal_Bool bClose );
-    void                Lock( sal_Bool bLock )
-                        {
-                            FuzzyLock( bLock, sal_True, sal_True );
-                        }
+    sal_uInt16              Lock( sal_Bool bLock ); // affects nStrongLockCount
     sal_uInt16              GetOwnerLockCount() const { return nOwnerLockCount; }
     sal_uInt16              GetStrongLockCount() const { return nStrongLockCount; }
 
@@ -449,18 +429,6 @@ private:
 
 //==================class SotObjectRef======================================
 SV_IMPL_REF(SotObject)
-
-inline SotObjectRef::SotObjectRef( SotObject * pObjP, SvCastEnum )
-{
-    if( pObjP )
-    {
-        pObj = (SotObject *)pObjP->AggCast( SotObject::ClassFactory() );
-        if( pObj )
-            pObj->AddRef();
-    }
-    else
-        pObj = NULL;
-}
 
 //==================class SotObject*List====================================
 SV_DECL_REF_LIST(SotObject,SotObject*)
