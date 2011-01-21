@@ -96,8 +96,6 @@
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
-#define MAP_LEN(x) x, sizeof(x) - 1
-
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
