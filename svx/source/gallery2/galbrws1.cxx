@@ -42,6 +42,7 @@
 #include "gallery.hrc"
 #include <algorithm>
 #include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 //CHINA001 #include <svx/dialogs.hrc> //CHINA001
