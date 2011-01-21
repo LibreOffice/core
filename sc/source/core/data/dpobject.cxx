@@ -2585,7 +2585,7 @@ ULONG ScDPObject::RefreshCache()
     CreateObjects();
     ULONG nErrId = 0;
     if ( pSheetDesc)
-        nErrId =  pSheetDesc->CheckSourceRange( pDoc );
+        nErrId =  pSheetDesc->CheckSourceRange();
     if ( nErrId == 0 )
     {
         // First remove the old cache if exists.
@@ -2598,9 +2598,9 @@ ULONG ScDPObject::RefreshCache()
         // Create a new cache.
         ScDPTableDataCache* pCache = NULL;
         if ( pSheetDesc )
-            pCache = pSheetDesc->CreateCache( pDoc, nNewId );
+            pCache = pSheetDesc->CreateCache(nNewId);
         else if ( pImpDesc )
-            pCache = pImpDesc->CreateCache( pDoc, nNewId );
+            pCache = pImpDesc->CreateCache(pDoc, nNewId);
 
         if ( pCache == NULL )
         {

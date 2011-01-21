@@ -61,12 +61,12 @@ using ::std::hash_set;
 // -----------------------------------------------------------------------
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
+    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ), // DataPilot Migration - Cache&&Performance
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
+    aCacheTable( pD, rDesc.GetCacheId(nCacheId))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
@@ -279,65 +279,65 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
+ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
 {
-    if (!pDoc)
+    if (!mpDoc)
         return NULL;
 
-    ScDPTableDataCache* pCache = GetExistDPObjectCache( pDoc );
+    ScDPTableDataCache* pCache = GetExistDPObjectCache();
     if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
         return pCache;
 
-    ULONG nErrId = CheckSourceRange( pDoc );
+    ULONG nErrId = CheckSourceRange();
     if (nErrId)
     {
         DBG_ERROR( "Error Create Cache\n" );
         return NULL;
     }
 
-    pCache = new ScDPTableDataCache( pDoc );
+    pCache = new ScDPTableDataCache(mpDoc);
 
-    pCache->InitFromDoc( pDoc, GetSourceRange() );
+    pCache->InitFromDoc(mpDoc, GetSourceRange());
     pCache->SetId( nID );
-    pDoc->GetDPCollection()->AddDPObjectCache( pCache );
+    mpDoc->GetDPCollection()->AddDPObjectCache(pCache);
 
-    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
+    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId());
 
     return pCache;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
+ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache () const
 {
-    return pDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
+    return mpDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+ScDPTableDataCache* ScSheetSourceDesc::GetCache(long nID) const
 {
-    if (!pDoc)
+    if (!mpDoc)
         return NULL;
 
-    ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
+    ScDPTableDataCache* pCache = mpDoc->GetDPCollection()->GetDPObjectCache(nID);
     if (NULL == pCache)
-        pCache = GetExistDPObjectCache( pDoc );
+        pCache = GetExistDPObjectCache();
 
     if (NULL == pCache)
-        pCache = CreateCache( pDoc );
+        pCache = CreateCache();
 
     return pCache;
 }
 
-long ScSheetSourceDesc::GetCacheId( ScDocument* pDoc, long nID ) const
+long ScSheetSourceDesc::GetCacheId(long nID) const
 {
-    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
+    ScDPTableDataCache* pCache = GetCache(nID);
     if ( NULL == pCache )
         return -1;
     else
         return pCache->GetId();
 }
 
-ULONG ScSheetSourceDesc::CheckSourceRange( ScDocument* pDoc ) const
+ULONG ScSheetSourceDesc::CheckSourceRange() const
 {
-    if (!pDoc)
+    if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
     const ScRange& aSrcRange = GetSourceRange();
@@ -345,11 +345,11 @@ ULONG ScSheetSourceDesc::CheckSourceRange( ScDocument* pDoc ) const
     const ScAddress& e = aSrcRange.aEnd;
     for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
     {
-        if (pDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
+        if (mpDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
             return STR_PIVOT_FIRSTROWEMPTYERR;
     }
 
-    if (pDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
+    if (mpDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
         return STR_PIVOT_ONLYONEROWERR;
 
     return 0;

@@ -65,7 +65,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
+    ScDPTableDataCache* CreateCache(long nID = -1) const;
 
     /**
      * Check the sanity of the data source range.
@@ -75,10 +75,10 @@ public:
      * @return 0 if the source range is sane, otherwise an error message ID is
      *         returned.
      */
-    ULONG CheckSourceRange( ScDocument* pDoc ) const;
-    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
-    ScDPTableDataCache* GetExistDPObjectCache ( ScDocument* pDoc ) const;
-    long GetCacheId( ScDocument* pDoc, long nID ) const;
+    ULONG CheckSourceRange() const;
+    ScDPTableDataCache* GetCache(long nID) const;
+    ScDPTableDataCache* GetExistDPObjectCache () const;
+    long GetCacheId(long nID) const;
 
 private:
     ScRange         maSourceRange;
