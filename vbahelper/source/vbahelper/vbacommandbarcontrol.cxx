@@ -78,10 +78,10 @@ ScVbaCommandBarControl::setOnAction( const ::rtl::OUString& _onaction ) throw (u
 {
     // get the current model
     uno::Reference< frame::XModel > xModel( pCBarHelper->getModel() );
-    VBAMacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
-    if ( aResolvedMacro.IsResolved() )
+    MacroResolvedInfo aResolvedMacro = ooo::vba::resolveVBAMacro( getSfxObjShell( xModel ), _onaction, true );
+    if ( aResolvedMacro.mbFound )
     {
-        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.ResolvedMacro() );
+        rtl::OUString aCommandURL = ooo::vba::makeMacroURL( aResolvedMacro.msResolvedMacro );
         OSL_TRACE(" ScVbaCommandBarControl::setOnAction: %s", rtl::OUStringToOString( aCommandURL, RTL_TEXTENCODING_UTF8 ).getStr() );
         setPropertyValue( m_aPropertyValues, rtl::OUString::createFromAscii("CommandURL"), uno::makeAny( aCommandURL ) );
         ApplyChange();

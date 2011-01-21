@@ -276,8 +276,8 @@ sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         aGridItem.nFldDrawX    = (sal_uInt32) nX;
         aGridItem.nFldDrawY    = (sal_uInt32) nY;
-        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue());
-        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue());
+        aGridItem.nFldDivisionX = static_cast<long>(aNumFldDivisionX.GetValue()-1);
+        aGridItem.nFldDivisionY = static_cast<long>(aNumFldDivisionY.GetValue()-1);
 
         rCoreSet.Put( aGridItem );
     }
@@ -303,12 +303,8 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
         SetMetricValue( aMtrFldDrawX , pGridAttr->nFldDrawX, eUnit );
         SetMetricValue( aMtrFldDrawY , pGridAttr->nFldDrawY, eUnit );
 
-//      sal_uInt32 nFineX = pGridAttr->nFldDivisionX;
-//      sal_uInt32 nFineY = pGridAttr->nFldDivisionY;
-//      aNumFldDivisionX.SetValue( nFineX ? (pGridAttr->nFldDrawX / nFineX - 1) : 0 );
-//      aNumFldDivisionY.SetValue( nFineY ? (pGridAttr->nFldDrawY / nFineY - 1) : 0 );
-        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX );
-        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY );
+        aNumFldDivisionX.SetValue( pGridAttr->nFldDivisionX+1 );
+        aNumFldDivisionY.SetValue( pGridAttr->nFldDivisionY+1 );
     }
 
     ChangeGridsnapHdl_Impl( &aCbxUseGridsnap );

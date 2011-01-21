@@ -34,59 +34,10 @@
 #include <vcl/print.hxx>
 #endif
 
-class SfxFont;
 class SfxTabPage;
 class SfxItemSet;
 
 struct SfxPrinter_Impl;
-
-#define SFX_RANGE_NOTSET    ((sal_uInt16)0xFFFF)
-
-// class SfxFontSizeInfo -------------------------------------------------
-
-class SfxFontSizeInfo
-{
-private:
-    static sal_uInt16           pStaticSizes[];
-    Size*                   pSizes;
-    sal_uInt16                  nSizes;
-    sal_Bool                    bScalable;
-
-public:
-    SfxFontSizeInfo( const SfxFont& rFont, const OutputDevice& rDevice );
-    ~SfxFontSizeInfo();
-
-    sal_Bool                    HasSize(const Size &rSize) const;
-    sal_Bool                    IsScalable() const { return bScalable; }
-
-    sal_uInt16                  SizeCount() const { return nSizes; }
-    const Size&             GetSize( sal_uInt16 nNo ) const
-                            { return pSizes[nNo]; }
-};
-
-// class SfxFont ---------------------------------------------------------
-
-class SFX2_DLLPUBLIC SfxFont
-{
-private:
-    String                  aName;
-    FontFamily              eFamily;
-    FontPitch               ePitch;
-    CharSet                 eCharSet;
-
-    SfxFont&                operator=(const SfxFont& rFont); // not implemented
-
-public:
-    SfxFont( const FontFamily eFam,
-             const String& aName,
-             const FontPitch eFontPitch = PITCH_DONTKNOW,
-             const CharSet eFontCharSet = RTL_TEXTENCODING_DONTKNOW );
-    // ZugriffsMethoden:
-    inline const String&    GetName() const { return aName; }
-    inline FontFamily       GetFamily() const { return eFamily; }
-    inline FontPitch        GetPitch() const { return ePitch; }
-    inline CharSet          GetCharSet() const { return eCharSet; }
-};
 
 // class SfxPrinter ------------------------------------------------------
 
@@ -125,19 +76,8 @@ public:
     const SfxItemSet&       GetOptions() const { return *pOptions; }
     void                    SetOptions( const SfxItemSet &rNewOptions );
 
-    void                    EnableRange( sal_uInt16 nRange );
-    void                    DisableRange( sal_uInt16 nRange );
-    sal_Bool                    IsRangeEnabled( sal_uInt16 nRange ) const;
-
     sal_Bool                    IsKnown() const { return bKnown; }
     sal_Bool                    IsOriginal() const { return bKnown; }
-
-        using OutputDevice::GetFont;
-    sal_uInt16                  GetFontCount();
-    const SfxFont*          GetFont( sal_uInt16 nNo ) const;
-    const SfxFont*          GetFontByName( const String &rFontName );
-
-    sal_Bool                    InitJob( Window* pUIParent, sal_Bool bAskAboutTransparentObjects );
 };
 
 #endif

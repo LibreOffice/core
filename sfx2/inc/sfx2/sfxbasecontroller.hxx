@@ -66,7 +66,6 @@
 // Some defines to write better code :-)
 #define REFERENCE               ::com::sun::star::uno::Reference
 #define ANY                     ::com::sun::star::uno::Any
-#define SEQUENCE                ::com::sun::star::uno::Sequence
 #define XDISPATCH               ::com::sun::star::frame::XDispatch
 #define DISPATCHDESCRIPTOR      ::com::sun::star::frame::DispatchDescriptor
 #define XMODEL                  ::com::sun::star::frame::XModel
@@ -304,7 +303,7 @@ public:
         @onerror    -
     */
 
-    virtual SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
+    virtual ::com::sun::star::uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL queryDispatches( const ::com::sun::star::uno::Sequence< DISPATCHDESCRIPTOR >& seqDescriptor ) throw( RUNTIMEEXCEPTION ) ;
 
     //____________________________________________________________________________________________________
     //  XControllerBorder

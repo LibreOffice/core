@@ -626,7 +626,7 @@ sal_Bool Gallery::CreateTheme( const String& rThemeName, sal_uInt32 nNumFrom )
 
     if( !HasTheme( rThemeName ) && ( GetUserURL().GetProtocol() != INET_PROT_NOT_VALID ) )
     {
-        nLastFileNumber=nNumFrom > nLastFileNumber ? nNumFrom : ++nLastFileNumber;
+        nLastFileNumber = nNumFrom > nLastFileNumber ? nNumFrom : nLastFileNumber + 1;
         GalleryThemeEntry* pNewEntry = new GalleryThemeEntry( GetUserURL(), rThemeName,
                                                               nLastFileNumber,
                                                               sal_False, sal_False, sal_True, 0, sal_False );

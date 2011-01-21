@@ -119,7 +119,6 @@ public:
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
-class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {
