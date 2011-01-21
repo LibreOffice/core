@@ -31,7 +31,7 @@
 gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER)
 
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
-$(call gb_JunitTest_get_clean_target,%) : $(call gb_LinkTarget_get_clean_target,$(call gb_Library_get_linktargetname,%))
+$(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,$(1)))
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $@ $@.log)
 

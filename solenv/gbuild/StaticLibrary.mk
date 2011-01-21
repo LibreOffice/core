@@ -35,10 +35,11 @@
 #  gb_StaticLibrary_FILENAMES
 #  gb_StaticLibrary_TARGETS
 
+gb_StaticLibrary_get_linktargetname = StaticLibrary/$(call gb_StaticLibrary_get_filename,$(1))
 
 # EVIL: gb_StaticLibrary and gb_Library need the same deliver rule because they are indistinguishable on windows
 .PHONY : $(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT)
-$(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) : $(call gb_LinkTarget_get_clean_target,$(call gb_StaticLibrary_get_linktargetname,%$(gb_StaticLibrary_PLAINEXT)))
+$(WORKDIR)/Clean/OutDir/lib/%$(gb_StaticLibrary_PLAINEXT) :
     $(call gb_Helper_abbreviate_dirs,\
         rm -f $(OUTDIR)/lib/$*$(gb_StaticLibrary_PLAINEXT) \
             $(AUXTARGETS))
@@ -55,7 +56,7 @@ $$(eval $$(call gb_Output_info,Currently known static libraries are: $(sort $(gb
 $$(eval $$(call gb_Output_error,Static library $(1) must be registered in Repository.mk))
 endif
 $(call gb_StaticLibrary_get_target,$(1)) : AUXTARGETS :=
-$(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(call gb_StaticLibrary_get_filename,$(1))))
+$(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(1)))
 
 endef
 
@@ -67,6 +68,7 @@ $(call gb_LinkTarget_set_defs,$(2),\
     $(gb_StaticLibrary_DEFS) \
 )
 $(call gb_StaticLibrary_get_target,$(1)) : $(call gb_LinkTarget_get_target,$(2))
+$(call gb_StaticLibrary_get_clean_target,$(1)) : $(call gb_LinkTarget_get_clean_target,$(2))
 $(call gb_StaticLibrary_StaticLibrary_platform,$(1),$(2))
 $$(eval $$(call gb_Module_register_target,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_StaticLibrary_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(call gb_LinkTarget_get_target,$(2)))
@@ -74,7 +76,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_StaticLibrary_get_target,$(1)),$(cal
 endef
 
 define gb_StaticLibrary_forward_to_Linktarget
-gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_StaticLibrary_get_linktargetname,$$(call gb_StaticLibrary_get_filename,$$(1))),$$(2),$$(3))
+gb_StaticLibrary_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_StaticLibrary_get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
 
