@@ -45,6 +45,8 @@
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "dpglobal.hxx"
+#include "rangenam.hxx"
+
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
@@ -61,7 +63,7 @@ using ::std::hash_set;
 // -----------------------------------------------------------------------
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ), // DataPilot Migration - Cache&&Performance
+    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ),
     aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
@@ -247,7 +249,28 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
     if (maRangeName.getLength())
     {
         // Obtain the source range from the range name first.
+        maSourceRange = ScRange();
+        ScRangeName* pRangeName = mpDoc->GetRangeName();
+        do
+        {
+            if (!pRangeName)
+                break;
 
+            OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
+            USHORT n;
+            if (!pRangeName->SearchNameUpper(aUpper, n))
+                break;
+
+            // range name found.  Fow now, we only use the first token and
+            // ignore the rest.
+            ScRangeData* pData = (*pRangeName)[n];
+            ScRange aRange;
+            if (!pData->IsReference(aRange))
+                break;
+
+            maSourceRange = aRange;
+        }
+        while (false);
     }
     return maSourceRange;
 }
@@ -306,7 +329,7 @@ ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
     return pCache;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache () const
+ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache() const
 {
     return mpDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
 }

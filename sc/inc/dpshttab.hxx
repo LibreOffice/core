@@ -77,11 +77,11 @@ public:
      */
     ULONG CheckSourceRange() const;
     ScDPTableDataCache* GetCache(long nID) const;
-    ScDPTableDataCache* GetExistDPObjectCache () const;
+    ScDPTableDataCache* GetExistDPObjectCache() const;
     long GetCacheId(long nID) const;
 
 private:
-    ScRange         maSourceRange;
+    mutable ScRange maSourceRange;
     ::rtl::OUString maRangeName;
     ScQueryParam    maQueryParam;
     ScDocument*     mpDoc;
