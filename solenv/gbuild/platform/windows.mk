@@ -278,7 +278,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     unset INCLUDE && \
     $(gb_CXX) \
-        $(DEFS) $(CXXFLAGS) \
+        $(DEFS) $(CXXFLAGS) -Fd$(PDBFILE)\
         $(PCHFLAGS) \
         -I$(dir $(3)) \
         $(INCLUDE_STL) $(INCLUDE) \
@@ -291,8 +291,7 @@ endef
 # PrecompiledHeader class
 
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-                                       -Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
-                                       -Fd$(call gb_PrecompiledHeader_get_target,$(1)).pdb
+                                       -Fp$(call gb_PrecompiledHeader_get_target,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_PrecompiledHeader__command_deponcompile
@@ -322,19 +321,18 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
     unset INCLUDE && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(4) $(5) -Fd$(PDBFILE) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
 # NoexPrecompiledHeader class
 
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
-                                           -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
-                                           -Fd$(call gb_NoexPrecompiledHeader_get_target,$(1)).pdb
+                                           -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_NoexPrecompiledHeader__command_deponcompile
@@ -364,11 +362,11 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
     unset INCLUDE && \
     $(gb_CXX) \
-        $(4) $(5) \
+        $(4) $(5) -Fd$(PDBFILE) \
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj)
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 endef
 
@@ -477,8 +475,12 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
     $(patsubst %.dll,%.pdb,$(3)) \
+    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
     $(patsubst %.dll,%.ilk,$(3)) \
 )
+
+$(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
 
 endef
 
@@ -488,6 +490,7 @@ $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
+    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
     $(patsubst %.dll,%.pdb,$(3)) \
     $(patsubst %.dll,%.ilk,$(3)) \
 )
@@ -504,6 +507,9 @@ $(call gb_Library_get_clean_target,$(1)) : AUXTARGETS +=  \
 endif
 
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
+
+$(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
 
 endef
 
@@ -526,7 +532,15 @@ gb_StaticLibrary_FILENAMES := \
 
 gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(gb_StaticLibrary_FILENAMES))
 
-gb_StaticLibrary_StaticLibrary_platform =
+define gb_StaticLibrary_StaticLibrary_platform
+$(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
+
+$(call gb_LinkTarget_set_auxtargets,$(2),\
+    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
+)
+
+endef
 
 # Executable class
 
@@ -537,12 +551,16 @@ gb_Executable_get_rpath :=
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
+    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
     $(call gb_LinkTarget_get_target,$(2)).manifest \
 )
 
 $(call gb_Executable_get_target,$(1)) \
 $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable_get_target,$(1)).manifest
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest)
+
+$(call gb_LinkTarget_get_target,$(2)) \
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
 
 endef
 

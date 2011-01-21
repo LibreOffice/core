@@ -241,7 +241,7 @@ define gb_LinkTarget__get_external_headers_check
 ifneq ($$(SELF),$$*)
 $$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
 endif
-$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@)
+$$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@ && mkdir -p $(call gb_LinkTarget_get_target,)pdb/$$(dir $$*))
 
 endef
 
@@ -317,6 +317,8 @@ $(call gb_LinkTarget_get_target,$(1)) : TARGETTYPE :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_NAME :=
 $(call gb_LinkTarget_get_target,$(1)) : PCHOBJS :=
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PDBFILE :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 ifneq ($(wildcard $(call gb_LinkTarget_get_dep_target,$(1))),)
