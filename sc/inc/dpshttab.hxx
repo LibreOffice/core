@@ -70,7 +70,7 @@ public:
      * @return source range.
      */
     SC_DLLPUBLIC const ScRange& GetSourceRange() const;
-    void SetRangeName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC void SetRangeName(const ::rtl::OUString& rName);
     const ::rtl::OUString& GetRangeName() const;
     bool HasRangeName() const;
     void SetQueryParam(const ScQueryParam& rParam);

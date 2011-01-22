@@ -169,6 +169,8 @@ public:
     /** Returns the data source range read from the DCONREF record. */
     inline const ScRange& GetSourceRange() const { return maSrcRange; }
 
+    const ::rtl::OUString& GetSourceRangeName() const { return maSrcRangeName; }
+
     /** Returns the number of pivot cache fields. */
     sal_uInt16          GetFieldCount() const;
     /** Returns read-only access to a pivot cache field. */
@@ -182,10 +184,16 @@ public:
     void                ReadSxvs( XclImpStream& rStrm );
     /** Reads a DCONREF record containing the source range of the pivot cache. */
     void                ReadDconref( XclImpStream& rStrm );
+    /**
+     * Read DECONNAME record which contains the defined name of the source
+     * range.
+     */
+    void                ReadDConName( XclImpStream& rStrm );
     /** Reads the entire pivot cache stream. Uses decrypter from passed stream. */
     void                ReadPivotCacheStream( XclImpStream& rStrm );
 
     bool                IsRefreshOnLoad() const;
+    bool                IsValid() const;
 
 private:
     typedef ::std::vector< XclImpPCFieldRef > XclImpPCFieldVec;
@@ -195,6 +203,7 @@ private:
     ScRange             maSrcRange;         /// Source range in the spreadsheet.
     String              maUrl;              /// URL of the source data.
     String              maTabName;          /// Sheet name of the source data.
+    ::rtl::OUString     maSrcRangeName;     /// Name of the source data range.
     sal_uInt16          mnStrmId;           /// Pivot cache stream identifier.
     sal_uInt16          mnSrcType;          /// Source data type.
     bool                mbSelfRef;          /// true = Source data from own document.
@@ -413,6 +422,7 @@ public:
     void                ReadSxvs( XclImpStream& rStrm );
     /** Reads a DCONREF record containing the source range of a pivot cache. */
     void                ReadDconref( XclImpStream& rStrm );
+    void                ReadDConName( XclImpStream& rStrm );
 
     // pivot table records ----------------------------------------------------
 
