@@ -91,7 +91,7 @@ published interface XExtendedStorageStream
     /** allows to set password to the stream.
 
         <p>
-        This interface must be supported by a stream with readwrite access
+        This interface must be supported by a stream with read-write access
         to allow to set a password that should be used next time the
         stream is stored if the encryption is supported.
         </p>

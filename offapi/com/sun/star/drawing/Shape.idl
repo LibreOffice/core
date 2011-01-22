@@ -179,7 +179,7 @@ published service Shape
     /** this property lets you get and set the transformation matrix
         for this shape.
 
-        The transformation is a 3x3 homogen matrix and can contain
+        The transformation is a 3x3 homogeneous matrix and can contain
         translation, rotation, shearing and scaling.
      */
     [optional, property] com::sun::star::drawing::HomogenMatrix3 Transformation;

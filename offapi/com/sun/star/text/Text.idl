@@ -111,7 +111,7 @@ published service Text
         <LI><P>boolean MergeLastPara        </P></LI>
         <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
         <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
-            (contains the same properties except for the RedlineSuccessorData</P></LI>
+            (contains the same properties except for the RedlineSuccessorData)</P></LI>
     </UL>
      @see EndRedline
      */
@@ -132,7 +132,7 @@ published service Text
         <LI><P>boolean MergeLastPara        </P></LI>
         <LI><P>[maybevoid] com::sun::star::text::XText RedlineText  (maybevoid)</P></LI>
         <LI><P>com::sun::star::beans::PropertyValues RedlineSuccessorData
-            (contains the same properties except for the RedlineSuccessorData</P></LI>
+            (contains the same properties except for the RedlineSuccessorData)</P></LI>
     </UL>
      @see StartRedline
      */

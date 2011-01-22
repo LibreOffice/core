@@ -36,15 +36,15 @@
  module com {  module sun {  module star {  module embed {
 
 //============================================================================
-/** provides access to a vcl window implementation.
+/** provides access to a VCL window implementation.
  */
 published interface XWindowSupplier: com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
-    /** allows to get access to a vcl window implementation.
+    /** allows to get access to a VCL window implementation.
 
         @return
-            vcl window implementation
+            VCL window implementation
      */
     ::com::sun::star::awt::XWindow getWindow();
 };

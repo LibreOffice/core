@@ -70,7 +70,7 @@ module com {  module sun {  module star {  module view {
 
 //=============================================================================
 
-/** This componend integrates a view to a <type>DrawPage</type>s or
+/** This component integrates a view to a <type>DrawPage</type>s or
     <type>MasterPage</type> from a <type>DrawingDocument</type>.
  */
 published service DrawingDocumentDrawView
@@ -126,7 +126,7 @@ published service DrawingDocumentDrawView
 
     //-------------------------------------------------------------------------
 
-    /** If the view is in masterpage mode, the view shows the masterpages
+    /** If the view is in master page mode, the view shows the master pages
         of this model.
      */
     [property] boolean IsMasterPageMode;

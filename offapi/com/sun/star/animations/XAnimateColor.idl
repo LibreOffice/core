@@ -52,7 +52,7 @@ interface XAnimateColor : XAnimate
 {
     /** defines the color space which is used to perform the interpolation.
         <br>
-        @see <const>AnimateColorSpace</const>
+        @see <const>AnimationColorSpace</const>
     */
     [attribute] short ColorInterpolation;
 

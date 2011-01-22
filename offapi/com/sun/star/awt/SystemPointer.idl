@@ -64,7 +64,7 @@ published constants SystemPointer
 
     //-------------------------------------------------------------------------
 
-    /** specifies a mouse pointer for online help.
+    /** specifies a mouse pointer for on-line help.
      */
     const long HELP = 4;
 

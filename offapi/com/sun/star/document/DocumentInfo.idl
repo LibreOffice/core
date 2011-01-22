@@ -69,7 +69,7 @@
     <p>
     Contrary to the service <type>StandaloneDocumentInfo</type> the document - which
     contains such informations - must be loaded completely. As a result of that this
-    DocumengInfo service is available on an open document via the interface
+    DocumentInfo service is available on an open document via the interface
     <type>XDocumentInfoSupplier</type> only.
     </p>
 

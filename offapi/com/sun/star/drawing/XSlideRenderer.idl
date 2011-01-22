@@ -74,7 +74,7 @@ interface XSlideRenderer
             memory consumption and longer runtime.
             This value is an attempt to provide some antialiasing and so to
             provide more readable slide previews.  May become obsolete in
-            the future when true antialiasing suppport will be integrated.
+            the future when true antialiasing support will be integrated.
     */
     com::sun::star::awt::XBitmap createPreview (
         [in] XDrawPage xSlide,

@@ -35,7 +35,7 @@
 //=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::DrawViewMode
-/** This enumeration specifies the viewmode of a view in a presentation
+/** This enumeration specifies the view mode of a view in a presentation
     document.
 
     @deprecated

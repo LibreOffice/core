@@ -59,7 +59,7 @@ module com { module sun { module star { module document {
 interface XScriptInvocationContext
 {
     /** denotes the document which contains the scripts which are to be invoked from
-    the component implementing the XScriptInvocationContext inteface.
+    the component implementing the XScriptInvocationContext interface.
     */
     [attribute, readonly] XEmbeddedScripts ScriptContainer;
 };

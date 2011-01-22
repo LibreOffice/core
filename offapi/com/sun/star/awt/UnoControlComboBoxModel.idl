@@ -221,7 +221,7 @@ published service UnoControlComboBoxModel
 
     /** defines how the mouse wheel can be used to scroll through the control's content.
 
-        <p>Usually, the mouse wheel scrool through the control's entry list. Using this property,
+        <p>Usually, the mouse wheel scroll through the control's entry list. Using this property,
         and one of the <type>MouseWheelBehavior</type> constants, you can control under which circumstances
         this is possible.</p>
     */

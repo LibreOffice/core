@@ -57,7 +57,7 @@ module com {  module sun {  module star {  module embed {
     the required actions to let the frame be closed using
     <type scope="com::sun::star::util">XCloseable</type>::close( true ). Thus
     in case there is a code that prevents closing of the frame the code
-    avtomatically becomes the owner of the frame.
+    automatically becomes the owner of the frame.
     </p>
 
     <p>

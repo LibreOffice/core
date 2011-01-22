@@ -51,7 +51,7 @@ published enum ColorMode
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: value com::sun::star::drawing::ColorMode::GREYS
-    /** the graphic is rendered in greyscales on the output device,
+    /** the graphic is rendered in grayscale on the output device,
      */
     GREYS,
 

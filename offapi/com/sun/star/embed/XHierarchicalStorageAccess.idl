@@ -163,7 +163,7 @@ published interface XHierarchicalStorageAccess
             can be a combination of <type>ElementModes</type> values
 
         @param sPassword
-            this parameter allowes to specify a reading password for the
+            this parameter allows to specify a reading password for the
             stream, the password must be a correct one, otherwise an
             exception will be thrown
 
@@ -203,7 +203,7 @@ published interface XHierarchicalStorageAccess
             the path to the element to remove
 
         @throws ::com::sun::star::embed::InvalidStorageException
-            this storage is in invalid state for eny reason
+            this storage is in invalid state for any reason
 
         @throws ::com::sun::star::lang::IllegalArgumentException
             an illegal argument is provided

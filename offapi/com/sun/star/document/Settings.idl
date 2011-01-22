@@ -277,7 +277,7 @@ published service Settings
 
     // Writer, maybe later other applications, too
     //-------------------------------------------------------------------------
-    /** layout engine should add value of a Font's 'external leading'
+    /** layout engine should add value of a Font's "external leading"
      * attribute to the line spacing.
      */
     [optional, property] boolean AddExternalLeading;

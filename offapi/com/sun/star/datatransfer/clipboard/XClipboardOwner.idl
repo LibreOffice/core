@@ -51,7 +51,7 @@ module com { module sun { module star { module datatransfer { module clipboard {
 published interface XClipboardOwner: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** Notifies the tranferable object source that it is no longer the owner of
+    /** Notifies the transferable object source that it is no longer the owner of
         the clipboard.
 
         @param xClipboard

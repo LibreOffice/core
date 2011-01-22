@@ -48,7 +48,7 @@
     <p>
     <h4>The Column Model</h4>
     <p>The horizontal structure of the grid is defined by the <type>XGridColumnModel</type> implemented in <type>DefaultGridColumnModel</type>
-    The <type>XGridColumn</type> implemented in <typeGridColumn</type> describes the properties and behavior of a single column. Use the <member>XGridColumnModel::addColumn()</member> to add a column to the column model.
+    The <type>XGridColumn</type> implemented in <type>GridColumn</type> describes the properties and behavior of a single column. Use the <member>XGridColumnModel::addColumn()</member> to add a column to the column model.
     </p>
     <p>
     <h4>The Data Model</h4>

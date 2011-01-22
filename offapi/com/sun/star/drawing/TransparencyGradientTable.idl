@@ -47,7 +47,7 @@
 */
 published service TransparencyGradientTable
 {
-    /** this container lets you access the <typeu scope="com::sun::star::awt">Gradient</type>s that
+    /** this container lets you access the <type scope="com::sun::star::awt">Gradient</type>s that
         are indexed with a name.
 
         <p>Note: You can add new entries for later use, but you cannot

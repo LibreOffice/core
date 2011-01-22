@@ -84,7 +84,7 @@ published service GroupAccess
  a view of the tree as a hierarchy of properties and subproperties.
 
  <p>This view is meaningful only for a static fragment of the hierarchy
- Objects' properties may change, but not which properties they have.
+ Object's properties may change, but not which properties they have.
  Therefore, dynamic elements of the hierarchy (see <type>SetAccess</type>)
  do not implement service <type>PropertyHierarchy</type>.
  </p>

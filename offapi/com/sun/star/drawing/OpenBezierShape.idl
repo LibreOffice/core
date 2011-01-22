@@ -58,7 +58,7 @@
 
 //=============================================================================
 
-/** This service is for an open bezier shape.
+/** This service is for an open Bezier shape.
  */
 published service OpenBezierShape
 {

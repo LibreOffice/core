@@ -53,7 +53,7 @@ enum BorderType
 
 /** Paint the border around a rectangular region, typically a pane.
 
-    <p>Calling objects have to be able to derive inner bounding boxs of the
+    <p>Calling objects have to be able to derive inner bounding boxes of the
     border from the outer ones and inner ones from outer ones.  This
     conversion and the painting of the border involves three rectangles.
     The inner and outer bounding box of the border.  This is a logical
@@ -87,7 +87,7 @@ interface XPaneBorderPainter
         [in] ::com::sun::star::awt::Rectangle aRectangle,
         [in] BorderType eBorderType);
 
-    /** Shring the given rectangle by the size of the specified part of the
+    /** Shrink the given rectangle by the size of the specified part of the
         border.  This method can be used to convert an outer bounding box
         into the center box or the inner bounding box.
         @param sPaneBorderStyleName
@@ -132,11 +132,11 @@ interface XPaneBorderPainter
         [in] ::com::sun::star::awt::Rectangle aRepaintArea,
         [in] string sTitle);
 
-    /** Paint the border around a pane where the border includes a callout
+    /** Paint the border around a pane where the border includes a call out
         that is anchored at the given point.  Most arguments have the same
         meaning as in the <method>paintBorder</method>.
         @param aCalloutAnchor
-            The anchor point of the callout.  It is usually located outside
+            The anchor point of the call out.  It is usually located outside
             the border.
     */
     void paintBorderWithCallout (
@@ -147,10 +147,10 @@ interface XPaneBorderPainter
         [in] string sTitle,
         [in] ::com::sun::star::awt::Point aCalloutAnchor);
 
-    /** Return the offset of a callout anchor with respect to the outer
-        border.  This value is used when the callout is realized by a fixed
+    /** Return the offset of a call out anchor with respect to the outer
+        border.  This value is used when the call out is realized by a fixed
         bitmap in order to determine the size and/or location of the outer
-        border for a given callout.
+        border for a given call out.
     */
     ::com::sun::star::awt::Point getCalloutOffset (
         [in] string sPaneBorderStyleName);

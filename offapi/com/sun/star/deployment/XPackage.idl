@@ -75,7 +75,7 @@ interface XPackage
         In case of <FALSE/> or in case of an exception, the package must be removed
         completely.
         After return of this function no code from the extension may be used
-        anymore, so that the extension can be safely removed from the harddisk.
+        anymore, so that the extension can be safely removed from the hard disk.
 
         @param xCmdEnv
                command environment for error handling and other interaction.

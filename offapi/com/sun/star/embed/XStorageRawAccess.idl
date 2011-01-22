@@ -86,7 +86,7 @@ published interface XStorageRawAccess
 
         <p>
         This method returns a stream from the package as it is stored there,
-        without any decompression/decription and etc. This method can be
+        without any decompression/description and etc. This method can be
         helpful to check file consistency, for example by signing.
         </p>
 
@@ -126,11 +126,11 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not reccomended to
+        storage stream to another without decryption. It is not recommended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format. If the
         method is used outside of storage implementation the user code is
-        resposible to get sure that the raw format of source and target
+        responsible to get sure that the raw format of source and target
         storages is the same.
         </p>
 
@@ -179,7 +179,7 @@ published interface XStorageRawAccess
         header.
 
         <p>
-        This method allows to insert a stream retrived by
+        This method allows to insert a stream retrieved by
         <method>XStorageRawAccess::getRawEncrStreamElement()</method> into a
         storage.
         </p>
@@ -187,7 +187,7 @@ published interface XStorageRawAccess
         <p>
         This method allows to transport encrypted streams without decryption.
         Mainly this method is introduced to allow to copy one encrypted
-        storage stream to another without decryption. It is not reccomended to
+        storage stream to another without decryption. It is not recommended to
         use this method outside of storage implementation since different
         storages implementation could have different encryption format.
         </p>

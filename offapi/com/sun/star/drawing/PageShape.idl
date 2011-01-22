@@ -42,7 +42,7 @@
 /** This service is for a page shape.
     A page shape displays a preview of another page. These shapes
     are used inside notes pages to preview the corresponding
-    drawing page. Theyre also used in the handout page to preview
+    drawing page. They're also used in the handout page to preview
     the printing position and order of pages
  */
 published service PageShape

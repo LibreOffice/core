@@ -72,7 +72,7 @@ published service LayerUpdateMerger
             data source and an <type>XLayerHandler</type> object to receive the
             updated data.
         </p>
-        <p> Implementations can provide more arguments to finetune the behavior.
+        <p> Implementations can provide more arguments to fine tune the behavior.
             Such arguments are provided as
             <type scope="com::sun::star::beans">NamedValue</type>.
             Implementations should support the following named arguments:

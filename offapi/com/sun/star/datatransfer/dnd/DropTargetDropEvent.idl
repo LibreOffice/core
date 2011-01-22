@@ -73,13 +73,13 @@ published struct DropTargetDropEvent: com::sun::star::datatransfer::dnd::DropTar
     byte DropAction;
 
     //-------------------------------------------------------------------------
-    /** The cursor's current x location within the windows' coordinates.
+    /** The cursor's current x location within the window's coordinates.
      */
 
     long LocationX;
 
     //-------------------------------------------------------------------------
-    /** The cursor's current y location within the windows' coordinates.
+    /** The cursor's current y location within the window's coordinates.
      */
 
     long LocationY;

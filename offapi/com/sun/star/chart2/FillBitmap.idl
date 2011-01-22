@@ -72,7 +72,7 @@ struct FillBitmap
     com::sun::star::awt::Point aOffset;
 
     /** Every second line (X) / row (Y) of tiles is moved the given
-        percent of the witdh of the bitmap.
+        percent of the width of the bitmap.
     */
     com::sun::star::awt::Point aPositionOffset;
 

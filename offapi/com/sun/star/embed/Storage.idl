@@ -116,7 +116,7 @@ published service Storage
                 In case a storage object is disposed all the elements
                 ( substorages and substreams ) retrieved from the
                 object are disposed. If the storage was opened in
-                read-write mode all noncommited changes will be lost.
+                read-write mode all non-commited changes will be lost.
                 </p>
             </dd>
             <dt>interface <type>XStorage</type></dt>
@@ -130,7 +130,7 @@ published service Storage
                         </p>
 
                         <p>
-                        If the child stream is an encrypted one a corect
+                        If the child stream is an encrypted one a correct
                         common storage password should be set through
                         <type>XEncryptionProtectedSource</type> interface to
                         this storage or to a one of storages in parent
@@ -181,7 +181,7 @@ published service Storage
                         </p>
 
                         <p>
-                        If the child stream is an encrypted one a corect
+                        If the child stream is an encrypted one a correct
                         common storage password should be set through
                         <type>XEncryptionProtectedSource</type> interface to
                         this storage or to a one of storages in parent
@@ -316,7 +316,7 @@ published service Storage
         Usually means that the document validity is questionable, although
         the package itself is not corrupted. The decision about document
         validity in this case is in application hands. It is up to user of
-        the storage to deside whether he accepts the fallback approach for
+        the storage to decide whether he accepts the fallback approach for
         an implementation of this service, outputs a warning or an error.
         </p>
      */
@@ -346,11 +346,11 @@ published service Storage
     [property, optional, readonly] boolean HasEncryptedEntries;
 
     // -----------------------------------------------------------------------
-    /** allows to detect if the storage contains nonencrypted entries.
+    /** allows to detect if the storage contains non-encrypted entries.
 
         <p>
         In case it is set to <TRUE/> the storage itself and/or a tree of
-        substorages contains nonencrypted streams. Usually in case this
+        substorages contains non-encrypted streams. Usually in case this
         property is supported the implementation supports
         <type>XEncryptionProtectedSource</type> interface.
         </p>

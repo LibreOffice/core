@@ -44,11 +44,11 @@ interface XPackageInformationProvider
                the unique identifier of an extension. The service looks for
                an installed package with the given id and returns the URL to
                the root of the package. If the service can not find a matching
-               package, an emty string will be returned.
+               package, an empty string will be returned.
     */
     string getPackageLocation( [in] string extensionId );
 
-    /** check if there are updates available for an extention.
+    /** check if there are updates available for an extension.
 
         @param extensionId
                the unique identifier of an extension. When the extensionId is empty,
@@ -61,7 +61,7 @@ interface XPackageInformationProvider
     */
     sequence< sequence< string > > isUpdateAvailable( [in] string extensionId );
 
-    /** returns a list of all installed extention with their version.
+    /** returns a list of all installed extension with their version.
     */
     sequence< sequence< string > > getExtensionList();
 };

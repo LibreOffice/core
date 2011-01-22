@@ -59,7 +59,7 @@ interface XChartTypeContainer : com::sun::star::uno::XInterface
     void addChartType( [in] XChartType aChartType )
         raises( com::sun::star::lang::IllegalArgumentException );
 
-    /** removes one data deries from the chart type container.
+    /** removes one data series from the chart type container.
      */
     void removeChartType( [in] XChartType aChartType )
         raises( com::sun::star::container::NoSuchElementException );

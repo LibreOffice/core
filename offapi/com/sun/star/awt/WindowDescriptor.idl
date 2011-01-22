@@ -60,7 +60,7 @@ published struct WindowDescriptor
 
     /** specifies the name of the component service.
 
-        <p>A zero length name means that the vcl creates a blank top,
+        <p>A zero length name means that the VCL creates a blank top,
         a container, or a simple window.
         The following service names are defined:<br/>
         <ul>

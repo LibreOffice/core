@@ -61,7 +61,7 @@ published service UnoControlFormattedFieldModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the horiztonal alignment of the text in the control.
+    /** specifies the horizontal alignment of the text in the control.
 
         <pre>
         0: left

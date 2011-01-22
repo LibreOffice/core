@@ -66,8 +66,8 @@ interface XPackageRegistry
         The implementation must ensure that there is only one instance of
         <type>XPackage</type> for the same <code>url</code> at any
         time. Therefore calling <member>bindPackage</member> again with the same
-        <code>url</code> but different <code>mediaType<code> (the exeption is,
-        if previsously an empty string was proveded to cause the determination
+        <code>url</code> but different <code>mediaType<code> (the exception is,
+        if previously an empty string was provided to cause the determination
         of the media type) or <code>removed</code> parameters will cause an
         exception. An <type
         scope="com::sun::star::lang">IllegalArgumentException</type> will be
@@ -86,7 +86,7 @@ interface XPackageRegistry
                media type of package, empty string if to be detected
         @param removed
 
-        @para unfulfilledPrerequisites
+        @param unfulfilledPrerequisites
               has a value other null if the extension could not be installed previously
               because <member>XPackage::checkPrerequisites</member> failed.
 

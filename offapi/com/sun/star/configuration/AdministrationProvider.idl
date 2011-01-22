@@ -41,7 +41,7 @@ module com { module sun { module star { module configuration {
 
 //=============================================================================
 /** manages one, or more, complete sets of configuration data for
- administrative puposes and serves as a factory for objects that
+ administrative purposes and serves as a factory for objects that
  provide access to subsets of these shared configurations.
 
  <p>Shared sets of configuration data usually serve to provide defaults,
@@ -51,7 +51,7 @@ module com { module sun { module star { module configuration {
  </p>
  <p>Many aspects of the supported behavior depend strongly on the underlying
  data store and on the administrative structures it defines. With some data
- stores this service also enables access to individual users' configuration
+ stores this service also enables access to individual user's configuration
  data by an administrator.
  </p>
  <p>On the other hand, in the simplest model there is only a single layer of
@@ -127,7 +127,7 @@ published service AdministrationProvider
  accept a single argument named <code>nodepath</code> of type <atom>string</atom>.
  This argument must contain the absolute path to an element of the
  configuration. The view that is selected consists of the named element and
- all its decendants. The administrative entity is the default for the
+ all its descendants. The administrative entity is the default for the
  <type>AdministrationProvider</type>. Usually this is the largest entity
  encompassing all entities accessible from this instance. In other words this
  can be used to influence as global a scope as possible.

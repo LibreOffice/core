@@ -45,19 +45,19 @@ module com {  module sun {  module star {  module awt {  module grid {
  */
 interface XGridColumn
 {
-    /** Specifies the an idendifier of the colomn.**/
+    /** Specifies the identifier of the column.**/
     [attribute] any Identifier;
 
-    /** Specifies the default column witdth. **/
+    /** Specifies the default column width. **/
     [attribute] long ColumnWidth;
 
-    /** Specifies the preferred column witdth. **/
+    /** Specifies the preferred column width. **/
     [attribute] long PreferredWidth;
 
-    /** Specifies the min column witdth. **/
+    /** Specifies the min column width. **/
     [attribute] long MinWidth;
 
-    /** Specifies the max column witdth. **/
+    /** Specifies the max column width. **/
     [attribute] long MaxWidth;
 
     /** Specifies whether column has fixed size or not. **/
@@ -73,7 +73,7 @@ interface XGridColumn
      */
     [attribute] ::com::sun::star::style::HorizontalAlignment HorizontalAlign;
 
-    /** A title is displayed in the colum header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
+    /** A title is displayed in the column header row if <method>UnoControlGridModel::ShowRowHeader</method> is set to <true/>**/
     [attribute] string Title;
 
     /** Adds a listener for the <type>GridColumnEvent</type> posted after the grid changes.

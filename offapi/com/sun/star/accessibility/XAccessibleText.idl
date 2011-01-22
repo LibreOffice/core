@@ -210,7 +210,7 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
         characters in the text or the height of the preceding character, its
         width being at least one pixel so that the bounding box is not
         degenerate.<br>
-        Note that the index 'length' is not always valid.  Whether it is
+        Note that the index "length" is not always valid.  Whether it is
         or not is implementation dependent.  It typically is when text is
         editable or otherwise when on the screen the caret can be placed
         behind the text.  You can be sure that the index is valid after you
@@ -316,7 +316,7 @@ published interface XAccessibleText : ::com::sun::star::uno::XInterface
             The first character of the new selection.
             The valid range is 0..length.
 
-        @parm nEndIndex
+        @param nEndIndex
             The position after the last character of the new selection.
             The valid range is 0..length.
 

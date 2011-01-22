@@ -40,7 +40,7 @@ module com { module sun { module star { module embed {
 published constants EmbedVerbs
 {
     //------------------------------------------------------------------------
-    /** lets the object do default activation, as by doubleclick.
+    /** lets the object do default activation, as by double-click.
      */
     const long MS_OLEVERB_PRIMARY = 0;
 

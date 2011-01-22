@@ -38,7 +38,7 @@
 module com {  module sun {  module star {  module document {
 
 //=============================================================================
-//gives access to vba method input/output parameters
+//gives access to VBA method input/output parameters
 //
 //some OO objects need to implement this interface to support the passing of input/output parameters
 //for certain VBA events

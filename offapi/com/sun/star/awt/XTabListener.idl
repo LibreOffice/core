@@ -85,7 +85,7 @@ interface XTabListener : com::sun::star::lang::XEventListener
     void activated( [in] long ID );
 
     //-------------------------------------------------------------------------
-    /** a tab was deactivated, because another tab becames the new active state.
+    /** a tab was deactivated, because another tab became the new active state.
      */
     void deactivated( [in] long ID );
 };

@@ -97,7 +97,7 @@ published interface XEmbeddedObject
     // INTERFACES
     //
     //------------------------------------------------------------------------
-    /** represents common visualisation functionality for embedded objects.
+    /** represents common visualization functionality for embedded objects.
      */
     interface XVisualObject;
 

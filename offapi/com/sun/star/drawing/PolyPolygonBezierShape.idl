@@ -63,7 +63,7 @@
 //=============================================================================
 
 // DocMerge from xml: service com::sun::star::drawing::PolyPolygonBezierShape
-/** This service specifies a polypolygon bezier shape.
+/** This service specifies a polypolygon Bezier shape.
  */
 published service PolyPolygonBezierShape
 {

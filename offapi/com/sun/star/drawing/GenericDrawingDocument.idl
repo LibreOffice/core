@@ -219,7 +219,7 @@ service GenericDrawingDocument
 
     //-------------------------------------------------------------------------
 
-    /** if this document is an ole client, this is the current visible area
+    /** if this document is an OLE client, this is the current visible area
         in 100th mm
     */
     [property] com::sun::star::awt::Rectangle VisibleArea;

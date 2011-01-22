@@ -94,7 +94,7 @@ published service AccessibleIconChoiceControl
            <li><const scope="com::sun::star::accessibility"
                >AccessibleStateType::MANAGES_DESCENDANTS</const> is always set. Children are transient.</li>
            <li><const scope="com::sun::star::accessibility"
-               >AccessibleStateType::MULTI_SELECTABLE</const> is set when mutli selection is enabled.</li>
+               >AccessibleStateType::MULTI_SELECTABLE</const> is set when multi selection is enabled.</li>
            </ul>
            </li>
        </ul>

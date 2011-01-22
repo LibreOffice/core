@@ -94,7 +94,7 @@ service EnhancedCustomShapeGeometry
     */
     [optional, property] sequence<::com::sun::star::beans::PropertyValue> Path;
 
-    /** This property sequence is including the textpath description, the properties
+    /** This property sequence is including the text path description, the properties
         are as same as specified in the service com::sun::star:drawing::EnhancedCustomShapeTextPath
     */
     [optional, property] sequence<::com::sun::star::beans::PropertyValue> TextPath;

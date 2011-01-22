@@ -50,7 +50,7 @@ published interface XMouseListener: com::sun::star::lang::XEventListener
 
     /** is invoked when a mouse button has been pressed on a window.
 
-        <p>Since mouse presses are usually also used to indicate requests for popup menus
+        <p>Since mouse presses are usually also used to indicate requests for pop-up menus
         (also known as context menus) on objects, you might receive two events
         for a single mouse press: For example, if, on your operating system,
         pressing the right mouse button indicates the request for a context menu,

@@ -53,7 +53,7 @@
  module com {  module sun {  module star {  module embed {
 
 //=============================================================================
-/** represents common visualisation functionality for embedded objects.
+/** represents common visualization functionality for embedded objects.
  */
 published interface XVisualObject: ::com::sun::star::uno::XInterface
 {
@@ -122,7 +122,7 @@ published interface XVisualObject: ::com::sun::star::uno::XInterface
     /** retrieves visual representation of the object in preferable format.
 
         <p>
-        If the object persistance entry contains cached visual representation
+        If the object persistence entry contains cached visual representation
         then it can be retrieved by using this method even in loaded state.
         </p>
 

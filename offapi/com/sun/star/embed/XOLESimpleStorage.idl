@@ -55,7 +55,7 @@ module com { module sun { module star { module embed {
 
     <p>
     This is a simple container allowing the access to OLE storages. The
-    subcomponents are either OLE storages themself or streams.
+    subcomponents are either OLE storages themselves or streams.
     </p>
 */
 published interface XOLESimpleStorage
@@ -72,7 +72,7 @@ published interface XOLESimpleStorage
     interface ::com::sun::star::container::XNameContainer;
 
     //------------------------------------------------------------------------
-    /** interface <type>XComponent</type> allows to exclicitly free resources
+    /** interface <type>XComponent</type> allows to explicitly free resources
         and break cyclic references.
     */
     interface ::com::sun::star::lang::XComponent;
@@ -81,7 +81,7 @@ published interface XOLESimpleStorage
     /** interface <type>XTransactedObject</type> allows transacted access to
         an object.
 
-        <p>The storages are always opened in transdacted mode, the
+        <p>The storages are always opened in transacted mode, the
         <type>XTransactedObject</type> interface allows to commit the storage.
         </p>
     */

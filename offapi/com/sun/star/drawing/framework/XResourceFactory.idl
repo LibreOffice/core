@@ -53,7 +53,7 @@ interface XResourceFactory
 {
     /** Create a resource for the given <type>XResourceId</type> object.
         @param xResourceId
-            The resourc URL of this id specifies the type of resource to
+            The resource URL of this id specifies the type of resource to
             create.  The anchor can be used to obtain the associated object
             from the configuration controller.  For example, when a view is
             created, then the new object can be initialized with the pane
@@ -64,7 +64,7 @@ interface XResourceFactory
             Returns a resource object that has been just created or was
             taken from a cache.  When the requested resource can not be
             created then an empty reference is returned.  A later call may
-            be successfull.  This, for example, can be the case with SFX
+            be successful.  This, for example, can be the case with SFX
             based side panes.  They are not available right after the
             creation of a new application frame.
         @throws InvalidArgumentException

@@ -272,7 +272,7 @@ published service MediaDescriptor
         The implemented API provides a default implementation for it that can handle many situations.
         If no InteractionHandler is set, a suitable exception is thrown.
         It is not allowed to keep a reference to this object, even not in the loaded
-        or stored components' copy of the MediaDescriptor provided by its arguments attribute.
+        or stored component's copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */
     [optional,property] com::sun::star::task::XInteractionHandler InteractionHandler;
@@ -281,8 +281,8 @@ published service MediaDescriptor
     /** jump to a marked position after loading
 
         <p>
-        This is the same as the text behind a '#' in a http URL. But
-        this syntax with a '#' is not specified in most URL schemas.
+        This is the same as the text behind a "#" in a http URL. But
+        this syntax with a "#" is not specified in most URL schemas.
         </p>
      */
     [optional,property] string JumpMark;
@@ -466,7 +466,7 @@ published service MediaDescriptor
         Object implementing the <type scope="com::sun::star::task">XStatusIndicator</type>
         interface that can be used to give status information (text or progress) for the task.
         The office provides a default implementation for it. It is not allowed to keep
-        a reference to this object, even not in the loaded or stored components'
+        a reference to this object, even not in the loaded or stored component's
         copy of the MediaDescriptor provided by its arguments attribute.
         </p>
      */

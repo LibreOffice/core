@@ -94,13 +94,13 @@
 //============================================================================
 /** This is a temporary interface that is introduced to temporarily optimize
     the document storing process. PLEASE DO NOT USE IT, it might change in any
-    time and will be depricated soon!
+    time and will be deprecated soon!
     Another solution will be introduced as final one.
  */
 published interface XOptimizedStorage
 {
     // -----------------------------------------------------------------------
-    /** allows to insert a raw stream representing nonencrypted stream with
+    /** allows to insert a raw stream representing non-encrypted stream with
         header.
      */
     void insertRawNonEncrStreamElementDirect(

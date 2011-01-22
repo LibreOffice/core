@@ -72,7 +72,7 @@ interface XDataSeries : ::com::sun::star::uno::XInterface
      */
     void resetDataPoint( [in] long nIndex );
 
-    /** all data point formattings are cleared
+    /** all data point formatting are cleared
      */
     void resetAllDataPoints();
 };

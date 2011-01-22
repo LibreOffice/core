@@ -58,7 +58,7 @@ published service UnoControlFixedTextModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the horiztonal alignment of the text in the control.
+    /** specifies the horizontal alignment of the text in the control.
 
         <pre>
         0: left

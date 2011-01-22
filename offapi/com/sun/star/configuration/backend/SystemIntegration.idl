@@ -57,7 +57,7 @@ service SystemIntegration
        allows initialization of backend data sources
 
        <p>no parameters need to be passed as backends are initialized
-          using the service registration database 'services.rdb'.
+          using the service registration database "services.rdb".
        </p>
 
     */

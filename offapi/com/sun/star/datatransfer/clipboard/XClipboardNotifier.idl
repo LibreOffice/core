@@ -37,7 +37,7 @@
 module com { module sun { module star { module datatransfer { module clipboard {
 
 //=============================================================================
-/** Provides the ability to request notifiations on clipboard content changes.
+/** Provides the ability to request notifications on clipboard content changes.
 
     @see com::sun::star::datatransfer::clipboard::XClipboardListener
 */

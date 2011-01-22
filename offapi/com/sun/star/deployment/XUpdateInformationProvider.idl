@@ -57,7 +57,7 @@ interface XUpdateInformationProvider
                a repository and its mirrors.
         @param extensionId
                the unique identifier of an extension. If it is not empty and
-               the update document is an atom feed, only items whose 'term'
+               the update document is an atom feed, only items whose "term"
                attribute of the atom:category tag matches extensionId are returned.
 
     */
@@ -66,7 +66,7 @@ interface XUpdateInformationProvider
         [in] string extensionId
     ) raises ( com::sun::star::uno::Exception );
 
-    /** interrupts a getUpdateInformation call and let's it return immediatly.
+    /** interrupts a getUpdateInformation call and let's it return immediately.
     */
     void cancel();
 
@@ -93,7 +93,7 @@ interface XUpdateInformationProvider
                a repository and its mirrors.
         @param extensionId
                the unique identifier of an extension. If it is not empty and
-               the update document is an atom feed, only items whose 'term'
+               the update document is an atom feed, only items whose "term"
                attribute of the atom:category tag matches extensionId are returned.
 
         @returns

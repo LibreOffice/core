@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module drawing {
     graphic object shapes shapes com.sun.star.drawing.GraphicObjectShape and
     com.sun.star.presentation.GraphicObjectShape.
 
-    <p>It differs from the included <type>AccessibleShape</type> 'base'
+    <p>It differs from the included <type>AccessibleShape</type> "base"
     service by the additional support of the
     <type
     scope="::com::sun::star::accessibility">XAccessibleImage</type>

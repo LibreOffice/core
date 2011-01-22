@@ -184,7 +184,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
         dependent.</p>
 
         @return
-            Returns allways a valid reference to an
+            Returns always a valid reference to an
             <type>XAccessibleTable</type> object.
     */
     XAccessibleTable getAccessibleRowHeaders ();
@@ -196,7 +196,7 @@ published interface XAccessibleTable : ::com::sun::star::uno::XInterface
         dependent.</p>
 
         @return
-            Returns allways a valid reference to an
+            Returns always a valid reference to an
             <type>XAccessibleTable</type> object.
     */
     XAccessibleTable getAccessibleColumnHeaders ();

@@ -48,14 +48,14 @@ published enum ChartAxisMarkPosition
     //-------------------------------------------------------------------------
 
     /** The interval marks are drawn at the axis line.
-    This makes a difference to 'AT_LABELS' only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
+    This makes a difference to "AT_LABELS" only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
      */
     AT_AXIS,
 
     //-------------------------------------------------------------------------
 
     /** Interval marks are drawn at the axis line and also besides the axis labels.
-    This makes a difference to 'AT_LABELS' only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
+    This makes a difference to "AT_LABELS" only when the labels are not placed near the axis (@see ChartAxisLabelPosition).
      */
     AT_LABELS_AND_AXIS
 };

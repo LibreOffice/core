@@ -35,7 +35,7 @@
 //=============================================================================
 
 // DocMerge from xml: enum com::sun::star::drawing::PolygonFlags
-/** defines how a bezier curve goes through a point.
+/** defines how a Bezier curve goes through a point.
  */
 published enum PolygonFlags
 {

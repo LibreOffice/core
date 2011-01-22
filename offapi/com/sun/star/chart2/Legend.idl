@@ -70,7 +70,7 @@ service Legend
      */
     [property] LegendExpansion Expansion;
 
-    /** Determines, whether the legend should be redered by the view.
+    /** Determines, whether the legend should be rendered by the view.
      */
     [property] boolean Show;
 

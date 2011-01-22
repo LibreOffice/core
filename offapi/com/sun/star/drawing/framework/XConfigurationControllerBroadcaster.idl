@@ -61,7 +61,7 @@ interface XConfigurationControllerBroadcaster
             will be called for all types of event.
         @param aUserData
             Arbitrary data that is passed to the listener when it is called
-            for the specified event type.  When one listener is regisered
+            for the specified event type.  When one listener is registered
             for more than one event type then different user data objects
             may be given as well.  Supplying unique integer values allows
             the listener to use a switch statement to distinguish between

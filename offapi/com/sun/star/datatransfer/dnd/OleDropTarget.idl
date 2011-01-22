@@ -62,7 +62,7 @@ module com { module sun { module star { module datatransfer { module dnd {
 published service OleDropTarget
 {
     //-------------------------------------------------------------------------
-    /** Used to provide data to other applications via Ole Drap & Drop protocol.
+    /** Used to provide data to other applications via Ole Drag & Drop protocol.
     */
     interface XDropTarget;
 

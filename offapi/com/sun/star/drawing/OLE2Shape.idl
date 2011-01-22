@@ -44,7 +44,7 @@
 module com { module sun { module star { module drawing {
 
 //=============================================================================
-/** This service is for an ole shape.
+/** This service is for an OLE shape.
 */
 published service OLE2Shape
 {
@@ -67,7 +67,7 @@ published service OLE2Shape
     //-------------------------------------------------------------------------
 
     /** This is the model for the OLE2 inside this shape.
-        <p>This property returns an empty reference if the ole2 is not an
+        <p>This property returns an empty reference if the OLE2 is not an
         Office component.
 
     */
