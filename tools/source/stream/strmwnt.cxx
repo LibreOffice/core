@@ -177,9 +177,17 @@ SvFileStream::~SvFileStream()
 |*
 *************************************************************************/
 
-ULONG SvFileStream::GetFileHandle() const
+sal_uInt32 SvFileStream::GetFileHandle() const
 {
-    return (ULONG)pInstanceData->hFile;
+    // Note that this method is broken on 64-bit as it would return
+    // only the lower 32 bits of a file handle. (As such, it might be
+    // that on 64-bit Windows, even in a 64-bit process, the upper 32
+    // bits of handles are always zero? But surely we should not rely
+    // on that.) On the other hand, this method is private in
+    // SvFileStream and isn't used anywhere for Windows. So make sure
+    // it doesn't get used in the future either, just abort().
+    abort( );
+    return 0;
 }
 
 /*************************************************************************
