@@ -43,8 +43,12 @@
   #define SAL_TYPES_SIZEOFSHORT     2
   #define SAL_TYPES_SIZEOFINT       4
   #define SAL_TYPES_SIZEOFLONG      4
-  #define SAL_TYPES_SIZEOFLONGLONG      8
-  #define SAL_TYPES_SIZEOFPOINTER       4
+  #define SAL_TYPES_SIZEOFLONGLONG  8
+  #ifdef _WIN64
+    #define SAL_TYPES_SIZEOFPOINTER 8
+  #else
+    #define SAL_TYPES_SIZEOFPOINTER 4
+  #endif
 #endif
 
 #ifdef __cplusplus
