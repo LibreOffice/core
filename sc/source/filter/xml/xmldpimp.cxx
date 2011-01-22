@@ -447,7 +447,11 @@ void ScXMLDataPilotTableContext::EndElement()
             if (bSourceCellRange)
             {
                 ScSheetSourceDesc aSheetDesc(pDoc);
-                aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
+                if (sSourceRangeName.getLength())
+                    // Range name takes precedence.
+                    aSheetDesc.SetRangeName(sSourceRangeName);
+                else
+                    aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
                 aSheetDesc.SetQueryParam(aSourceQueryParam);
                 pDPObject->SetSheetDesc(aSheetDesc);
             }
@@ -855,6 +859,9 @@ ScXMLSourceCellRangeContext::ScXMLSourceCellRangeContext( ScXMLImport& rImport,
                 if (ScRangeStringConverter::GetRangeFromString( aSourceRangeAddress, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset ))
                     pDataPilotTable->SetSourceCellRangeAddress(aSourceRangeAddress);
             }
+            break;
+            case XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME:
+                pDataPilotTable->SetSourceRangeName(sValue);
             break;
         }
     }

@@ -1430,7 +1430,8 @@ const SvXMLTokenMap& ScXMLImport::GetDataPilotTableSourceCellRangeAttrTokenMap()
     {
         static SvXMLTokenMapEntry aDataPilotTableSourceCellRangeAttrTokenMap[] =
         {
-            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS,      XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS},
+            { XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS },
+            { XML_NAMESPACE_TABLE, XML_NAME, XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME },
             XML_TOKEN_MAP_END
         };
 
