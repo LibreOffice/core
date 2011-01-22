@@ -79,15 +79,12 @@ static USHORT pRanges[] =
 };
 
 /*************************************************************************
-#*  Methode:        SvxNumberPreviewImpl                    Datum:02.10.97
+#*  Methode:        SvxNumberPreviewImpl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberPreview
-#*
 #*  Funktion:   Konstruktor der Klasse SvxNumberPreviewImpl
-#*
 #*  Input:      Fenster, Resource-ID
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -106,15 +103,12 @@ SvxNumberPreviewImpl::SvxNumberPreviewImpl( Window* pParent, const ResId& rResId
 }
 
 /*************************************************************************
-#*  Methode:        SvxNumberPreviewImpl                    Datum:02.10.97
+#*  Methode:        SvxNumberPreviewImpl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberPreview
-#*
 #*  Funktion:   Destruktor der Klasse SvxNumberPreviewImpl
-#*
 #*  Input:      ---
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -124,15 +118,12 @@ SvxNumberPreviewImpl::~SvxNumberPreviewImpl()
 }
 
 /*************************************************************************
-#*  Methode:        NotifyChange                            Datum:02.10.97
+#*  Methode:        NotifyChange
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberPreviewImpl
-#*
 #*  Funktion:   Funktion fuer das Aendern des Preview- Strings
-#*
 #*  Input:      String, Farbe
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -149,15 +140,12 @@ void SvxNumberPreviewImpl::NotifyChange( const String& rPrevStr,
 }
 
 /*************************************************************************
-#*  Methode:        Paint                                   Datum:02.10.97
+#*  Methode:        Paint
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberPreviewImpl
-#*
 #*  Funktion:   Funktion fuer das neu zeichnen des Fensters.
-#*
 #*  Input:      ---
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -378,15 +366,12 @@ void SvxNumberFormatTabPage::Init_Impl()
 }
 
 /*************************************************************************
-#*  Methode:        GetRanges                               Datum:02.10.97
+#*  Methode:        GetRanges
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Liefert Bereichsangaben zurueck.
-#*
 #*  Input:      ---
-#*
 #*  Output:     Bereich
 #*
 #************************************************************************/
@@ -398,15 +383,12 @@ USHORT* SvxNumberFormatTabPage::GetRanges()
 
 
 /*************************************************************************
-#*  Methode:        Create                                  Datum:02.10.97
+#*  Methode:        Create
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Erzeugt eine neue Zahlenformat- Seite.
-#*
 #*  Input:      Fenster, SfxItemSet
-#*
 #*  Output:     neue TabPage
 #*
 #************************************************************************/
@@ -419,16 +401,13 @@ SfxTabPage* SvxNumberFormatTabPage::Create( Window* pParent,
 
 
 /*************************************************************************
-#*  Methode:        Reset                                   Datum:02.10.97
+#*  Methode:        Reset
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Die Attribute des Dialogs werden mit Hilfe
 #*              des Itemsets neu eingestellt.
-#*
 #*  Input:      SfxItemSet
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -499,7 +478,6 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
             bOneAreaFlag= pBoolItem->GetValue();
         }
     }
-    //bOneAreaFlag=TRUE; //@@ Debug-Test
 
     eState = rSet.GetItemState( GetWhich( SID_ATTR_NUMBERFORMAT_SOURCE ) );
 
@@ -637,16 +615,13 @@ void SvxNumberFormatTabPage::Reset( const SfxItemSet& rSet )
 }
 
 /*************************************************************************
-#*  Methode:        Obstructing                             Datum:02.10.97
+#*  Methode:        Obstructing
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Sperren der Controls mit Ausnahme von Kategoriewechsel
 #*              und direkter Eingabe.
-#*
 #*  Input:      ---
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -719,15 +694,12 @@ void SvxNumberFormatTabPage::EnableBySourceFormat_Impl()
 
 
 /*************************************************************************
-#*  Methode:    HideLanguage                                Datum:14.05.98
+#*  Methode:    HideLanguage
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Versteckt die Spracheinstellung:
-#*
 #*  Input:      BOOL nFlag
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -752,17 +724,14 @@ void SvxNumberFormatTabPage::HideLanguage(BOOL nFlag)
 }
 
 /*************************************************************************
-#*  Methode:        FillItemSet                             Datum:02.10.97
+#*  Methode:        FillItemSet
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Stellt die Attribute im ItemSet ein,
 #*              sowie in der DocShell den numItem, wenn
 #*              bNumItemFlag nicht gesetzt ist.
-#*
 #*  Input:      SfxItemSet
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -871,18 +840,6 @@ BOOL SvxNumberFormatTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
 
 int SvxNumberFormatTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
-/*  if ( (ULONG_MAX != nInitFormat) && _pSet )
-    {
-        const ULONG  nCurKey    = pNumFmtShell->GetCurNumFmtKey();
-        const USHORT nWhich     = GetWhich( SID_ATTR_NUMBERFORMAT_VALUE );
-        SfxItemState eItemState = GetItemSet().GetItemState( nWhich, FALSE );
-
-        if ( (nInitFormat == nCurKey) && (SFX_ITEM_DEFAULT == eItemState) )
-            _pSet->ClearItem( nWhich );
-        else
-            _pSet->Put( SfxUInt32Item( nWhich, nCurKey ) );
-    }
- */
     if ( _pSet )
         FillItemSet( *_pSet );
     return LEAVE_PAGE;
@@ -967,15 +924,12 @@ void SvxNumberFormatTabPage::FillFormatListBox_Impl( SvxDelStrgs& rEntries )
 
 
 /*************************************************************************
-#*  Methode:        DeleteEntryList_Impl                    Datum:02.10.97
+#*  Methode:        DeleteEntryList_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Loescht eine SvStrings- Liste
-#*
 #*  Input:      String-liste
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -988,19 +942,16 @@ void SvxNumberFormatTabPage::DeleteEntryList_Impl( SvxDelStrgs& rEntries )
 
 
 /*************************************************************************
-#*  Methode:        UpdateOptions_Impl                      Datum:02.10.97
+#*  Methode:        UpdateOptions_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Stellt je nach eingestelltem Format die Options-
 #*              attribute neu ein.
-#*
 #*  Input:      Flag, ob sich die Kategorie geaendert hat.
-#*
 #*  Output:     ---
 #*
-#***?********************************************************************/
+#************************************************************************/
 
 void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*/ )
 {
@@ -1081,10 +1032,6 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
             aEdLeadZeroes.Enable();
             aBtnNegRed.Enable();
             aBtnThousand.Enable();
-            /*
-            aEdDecimals  .SetValue( nDecimals );
-            aEdLeadZeroes.SetValue( nZeroes );
-            */
             aEdDecimals  .SetText( UniString::CreateFromInt32( nDecimals ) );
             aEdLeadZeroes.SetText( UniString::CreateFromInt32( nZeroes ) );
             aBtnNegRed   .Check( bNegRed );
@@ -1116,17 +1063,14 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
 
 
 /*************************************************************************
-#*  Methode:        UpdateFormatListBox_Impl                Datum:02.10.97
+#*  Methode:        UpdateFormatListBox_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Aktualisiert die Format- Listbox und zusaetzlich
 #*              wird abhaengig vom bUpdateEdit- Flag der String
 #*              in der Editbox geaendert.
-#*
 #*  Input:      Flags fuer Kategorie und Editbox
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1247,17 +1191,14 @@ void SvxNumberFormatTabPage::UpdateFormatListBox_Impl
 
 
 /*************************************************************************
-#*  Handle:     DoubleClickHdl_Impl                         Datum:02.10.97
+#*  Handle:     DoubleClickHdl_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Bei einem Doppelklick in die Format- Listbox
 #*              wird der Wert uebernommen und der OK-Button
 #*              ausgeloest
-#*
 #*  Input:      Pointer auf Listbox
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1285,17 +1226,14 @@ IMPL_LINK( SvxNumberFormatTabPage, DoubleClickHdl_Impl, SvxFontListBox*, pLb )
 
 
 /*************************************************************************
-#*  Methode:    SelFormatHdl_Impl                           Datum:02.10.97
+#*  Methode:    SelFormatHdl_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Wird aufgerufen, wenn sich die Sprache, die Kategorie
 #*              oder das Format aendert. Dem entsprechend werden die
 #*              Einstellungen geaendert.
-#*
 #*  Input:      Pointer auf Listbox
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1391,9 +1329,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         }
         UpdateOptions_Impl( FALSE );
 
-        //-------
         return 0;
-        //-------
     }
 
     //--------------------------------------------------------------------
@@ -1404,9 +1340,7 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         EditHdl_Impl( NULL );
         UpdateOptions_Impl( FALSE );
 
-        //-------
         return 0;
-        //-------
     }
 
     //--------------------------------------------------------------------
@@ -1416,26 +1350,21 @@ IMPL_LINK( SvxNumberFormatTabPage, SelFormatHdl_Impl, void *, pLb )
         UpdateFormatListBox_Impl( FALSE, TRUE );
         EditHdl_Impl( &aEdFormat );
 
-        //-------
         return 0;
-        //-------
     }
     return 0;
 }
 
 
 /*************************************************************************
-#*  Methode:    ClickHdl_Impl, ImageButton* pIB             Datum:02.10.97
+#*  Methode:    ClickHdl_Impl, ImageButton* pIB
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Wenn, der Hinzufuegen- oder Entfernen- Button
 #*              wird diese Funktion aufgerufen und die Zahlenformat-
 #*              Liste den entsprechend geaendert.
-#*
 #*  Input:      Toolbox- Button
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1517,7 +1446,6 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
                     aLbFormat.SelectEntryPos( (USHORT)nFmtLbSelPos );
                     aEdFormat.SetText( aFormat );
 
-                    //aEdComment.SetText(String()); //@@ ???
                     aEdComment.SetText(aLbCategory.GetEntry(1));    //String fuer Benutzerdefiniert
                                                                     //holen
                     ChangePreviewText( (USHORT)nFmtLbSelPos );
@@ -1596,16 +1524,13 @@ IMPL_LINK( SvxNumberFormatTabPage, ClickHdl_Impl, ImageButton*, pIB)
 
 
 /*************************************************************************
-#*  Methode:    EditHdl_Impl                                Datum:02.10.97
+#*  Methode:    EditHdl_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Wenn der Eintrag im Eingabefeld geaendert wird,
 #*              so wird die Vorschau aktualisiert und
-#*
 #*  Input:      Pointer auf Editbox
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1624,7 +1549,6 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
     else
     {
         String aFormat = aEdFormat.GetText();
-        //aFtComment.SetText(String());
         MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat, &nCurKey ) )
@@ -1670,15 +1594,12 @@ IMPL_LINK( SvxNumberFormatTabPage, EditHdl_Impl, Edit*, pEdFormat )
 
 
 /*************************************************************************
-#*  Methode:        NotifyChange                            Datum:02.10.97
+#*  Methode:        NotifyChange
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Fuehrt Aenderungen in den Zahlen- Attributen durch.
-#*
 #*  Input:      Options- Controls
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1708,7 +1629,6 @@ IMPL_LINK( SvxNumberFormatTabPage, OptHdl_Impl, void *, pOptCtrl )
                                   (USHORT)aLbFormat.GetSelectEntryPos() );
 
         aEdFormat.SetText( aFormat );
-        //aFtComment.SetText(String());
         MakePreviewText( aFormat );
 
         if ( pNumFmtShell->FindEntry( aFormat ) )
@@ -1737,15 +1657,12 @@ IMPL_LINK( SvxNumberFormatTabPage, TimeHdl_Impl, Timer*, EMPTYARG)
 
 
 /*************************************************************************
-#*  Methode:    LostFocusHdl_Impl                           Datum:30.10.97
+#*  Methode:    LostFocusHdl_Impl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Fuehrt Aenderungen in den Zahlen- Attributen durch.
-#*
 #*  Input:      Options- Controls
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1771,15 +1688,12 @@ IMPL_LINK( SvxNumberFormatTabPage, LostFocusHdl_Impl, Edit *, pEd)
 }
 
 /*************************************************************************
-#*  Methode:        NotifyChange                            Datum:02.10.97
+#*  Methode:        NotifyChange
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Fuehrt Aenderungen in den Zahlen- Attributen durch.
-#*
 #*  Input:      Options- Controls
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
@@ -1848,15 +1762,12 @@ long SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
     return SfxTabPage::PreNotify( rNEvt );
 }
 /*************************************************************************
-#*  Methode:    SetOkHdl                                    Datum:01.11.97
+#*  Methode:    SetOkHdl
 #*------------------------------------------------------------------------
 #*
 #*  Klasse:     SvxNumberFormatTabPage
-#*
 #*  Funktion:   Setzt den OkHandler neu.
-#*
 #*  Input:      Neuer OkHandler
-#*
 #*  Output:     ---
 #*
 #************************************************************************/
