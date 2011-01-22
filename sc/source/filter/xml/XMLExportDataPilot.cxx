@@ -844,8 +844,19 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
         if ((*pDPs)[i]->IsSheetData())
         {
             const ScSheetSourceDesc* pSheetSource = (*pDPs)[i]->GetSheetDesc();
-            rtl::OUString sCellRangeAddress;
-            ScRangeStringConverter::GetStringFromRange( sCellRangeAddress, pSheetSource->GetSourceRange(), pDoc, ::formula::FormulaGrammar::CONV_OOO );
+
+            if (rExport.getDefaultVersion() == SvtSaveOptions::ODFVER_LATEST)
+            {
+                if (pSheetSource->HasRangeName())
+                    rExport.AddAttribute(
+                        XML_NAMESPACE_TABLE, XML_NAME, pSheetSource->GetRangeName());
+            }
+
+            OUString sCellRangeAddress;
+            ScRangeStringConverter::GetStringFromRange(
+                sCellRangeAddress, pSheetSource->GetSourceRange(), pDoc,
+                ::formula::FormulaGrammar::CONV_OOO);
+
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_CELL_RANGE_ADDRESS, sCellRangeAddress);
             SvXMLElementExport aElemSCR(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_CELL_RANGE, sal_True, sal_True);
             rExport.CheckAttrList();
