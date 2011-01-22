@@ -47,6 +47,7 @@
 #undef UINT64
 #undef INT32
 #undef UINT32
+#undef ULONG
 #endif
 #undef Folder
 #undef GradientStyle_RECT

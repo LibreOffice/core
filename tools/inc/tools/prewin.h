@@ -37,6 +37,7 @@
 #define UINT64       WIN_UINT64
 #define INT32        WIN_INT32
 #define UINT32       WIN_UINT32
+#define ULONG        WIN_ULONG
 #endif
 
 #define Rectangle    BLA_Rectangle
