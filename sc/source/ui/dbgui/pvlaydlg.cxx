@@ -1451,6 +1451,7 @@ void ScDPLayoutDlg::UpdateSrcRange()
     }
 
     xDlgDPObject->SetSheetDesc(inSheet);
+    xDlgDPObject->RefreshCache();
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
     xDlgDPObject->FillLabelData(thePivotData);
 
