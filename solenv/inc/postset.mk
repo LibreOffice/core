@@ -61,7 +61,6 @@ fa \
 fi \
 fr \
 ga \
-gd \
 gl \
 gu \
 he \
@@ -72,7 +71,6 @@ id \
 is \
 it \
 ja \
-ky \
 ka \
 kk \
 km \
@@ -100,7 +98,6 @@ ns \
 om \
 oc \
 or \
-pap \
 pa-IN \
 pl \
 pt \
@@ -122,7 +119,6 @@ st \
 sv \
 sw-TZ \
 te \
-ti \
 ta \
 th \
 tn \
