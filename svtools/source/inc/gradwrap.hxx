@@ -34,9 +34,6 @@
 |*
 |*  class GradientWrapper
 |*
-|*  Ersterstellung:     KA 24.11.95
-|*  letzte Aenderung:   KA 24.11.95
-|*
 |*  Zeck:   dient beim MetaFile-Export dazu, die eigentliche Berechungs-
 |*          funktionalitaet zu kapseln. Das Schreiben der Records fuer
 |*          die unterschiedlichen File-Formate geschieht ueber LinkHandler.

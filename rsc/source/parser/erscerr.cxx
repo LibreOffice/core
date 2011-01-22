@@ -74,10 +74,6 @@ void RscError::StdOut( const char * pStr, const RscVerbosity _verbosityLevel )
 |*
 |*    RscError::StdErr();
 |*
-|*    Beschreibung
-|*    Ersterstellung    PL 11/07/2001
-|*    Letzte Aenderung  PL 11/07/2001
-|*
 *************************************************************************/
 void RscError::StdErr( const char * pStr )
 {
@@ -110,10 +106,6 @@ void RscError::StdLstOut( const char * pStr ){
 /*************************************************************************
 |*
 |*    RscError::StdLstErr();
-|*
-|*    Beschreibung
-|*    Ersterstellung    PL 11/07/2001
-|*    Letzte Aenderung  PL 11/07/2001
 |*
 *************************************************************************/
 void RscError::StdLstErr( const char * pStr ){

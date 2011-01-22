@@ -369,21 +369,11 @@ void ColorMixingControl::Initialize()
         InsertItem( i, aColor, aStr );
     }
 
-    /*maColor[ 0 ] = Color( COL_LIGHTRED );
-    maColor[ 1 ] = Color( COL_LIGHTGREEN );
-    maColor[ 2 ] = Color( COL_YELLOW );
-    maColor[ 3 ] = Color( COL_LIGHTBLUE );*/
-
     SetColor( CMC_TOPLEFT, Color( COL_LIGHTRED ) );
     SetColor( CMC_BOTTOMRIGHT, Color( COL_LIGHTBLUE ) );
 
     SetColor( CMC_TOPRIGHT, Color( COL_LIGHTGREEN ) );
     SetColor( CMC_BOTTOMLEFT, Color( COL_YELLOW ) );
-
-    /*FillColumn( 0 );
-    FillColumn( mnColumns - 1 );
-    for( i = 0; i < mnRows; i++ )
-        FillRow( i );*/
 }
 
 // -----------------------------------------------------------------------
@@ -537,9 +527,6 @@ CMCPosition ColorMixingControl::GetCMCPosition() const
 |*
 |*    ColorHSB::ColorHSB()
 |*
-|*    Beschreibung       RGB nach HSB
-|*    Ersterstellung     SOH 02.10.97
-|*
 **************************************************************************/
 
 ColorHSB::ColorHSB( const Color& rColor )
@@ -605,9 +592,6 @@ ColorHSB::ColorHSB( const Color& rColor )
 /**************************************************************************
 |*
 |*    ColorHSB::GetRGB()
-|*
-|*    Beschreibung       HSB nach RGB
-|*    Ersterstellung     SOH 02.10.97
 |*
 **************************************************************************/
 
