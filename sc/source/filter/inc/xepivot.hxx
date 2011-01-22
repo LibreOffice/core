@@ -224,6 +224,7 @@ private:
 
     /** Writes the DCONREF record containing the source range. */
     void                WriteDconref( XclExpStream& rStrm ) const;
+    /** DCONNAME record contains range name source. */
     void                WriteDConName( XclExpStream& rStrm ) const;
 
     /** Creates the pivot cache storage stream and writes the cache. */
