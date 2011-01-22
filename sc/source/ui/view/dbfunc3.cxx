@@ -738,15 +738,11 @@ ULONG  ScDBFunc::RecalcPivotTable()
                                                   GetViewData()->GetTabNo() );
     if ( pDPObj )
     {
-        //ScDBDocFunc aFunc( *pDocSh );
-        //aFunc.DataPilotUpdate( pDPObj, pDPObj, TRUE, FALSE );
-        //CursorPosChanged();      // shells may be switched
-        ULONG nErrId = RefreshDPObject( pDPObj, pDoc, pDocSh, TRUE, FALSE );//pDPObj->RefreshCache();
+        ULONG nErrId = RefreshDPObject( pDPObj, pDoc, pDocSh, TRUE, FALSE );
         if ( nErrId == 0 )
         {
             // There is no undo for the refresh of the cache table, but the undo history for cell changes
             // remains valid and should be preserved, so the history isn't cleared here.
-            //GetViewData()->GetDocShell()->GetUndoManager()->Clear();
         }
         else if (nErrId <= USHRT_MAX)
             ErrorMessage(static_cast<USHORT>(nErrId));
