@@ -137,7 +137,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #endif /* OSL_DEBUG_LEVEL */
 
-#if OSL_DEBUG_LEVEL > 1
+#if OSL_DEBUG_LEVEL > 2
 
 #define _OSL_TRACE                  _OSL_GLOBAL osl_trace
 
