@@ -601,7 +601,6 @@ void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon
         }
     }
 }
-// <--
 
 //----------------------------------------------------------------------
 void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
@@ -658,9 +657,6 @@ void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) cons
         }
     }
 }
-// <--
-//----------------------------------------------------------------------
-
 
 //----------------------------------------------------------------------
 void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& rPropSet,
@@ -828,7 +824,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -861,7 +856,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -896,7 +890,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -935,7 +928,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -969,7 +961,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -1002,7 +993,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -1056,7 +1046,6 @@ uno::Sequence< uno::Type > SAL_CALL SvxShape::_getTypes()
                     *pTypes++ = ::getCppuType((const uno::Reference< lang::XComponent >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0);
-//                  *pTypes++ = ::getCppuType((const uno::Reference< beans::XTolerantMultiPropertySet >*)0);
                     *pTypes++ = ::getCppuType((const uno::Reference< beans::XPropertyState >*)0);
                     *pTypes++ = beans::XMultiPropertyStates::static_type();
                     *pTypes++ = ::getCppuType((const uno::Reference< drawing::XGluePointsSupplier >*)0);
@@ -1107,13 +1096,6 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxShape::getImplementationId()
 Reference< uno::XInterface > SvxShape_NewInstance()
 {
     return uno::Reference< uno::XInterface >(static_cast< OWeakObject* >( new SvxShape() ) );
-}
-
-//----------------------------------------------------------------------
-
-void SvxShape::onUserCall(SdrUserCallType /*_eUserCall*/, const Rectangle& /*_rNewBoundRect*/ )
-{
-    // obsolete, not called anymore
 }
 
 //----------------------------------------------------------------------
@@ -1722,193 +1704,6 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
 
 //----------------------------------------------------------------------
 
-// static
-/* os: unused function
-   uno::Any SAL_CALL SvxShape::GetFillAttributeByName(
-    const ::rtl::OUString& rPropertyName, const ::rtl::OUString& rName, SdrModel* pModel )
-{
-    uno::Any aResult;
-    DBG_ASSERT( pModel, "Invalid Model in GetFillAttributeByName()" );
-    if( ! pModel )
-        return aResult;
-
-    sal_Int16 nWhich = SvxUnoGetWhichIdForNamedProperty( rPropertyName );
-
-    // search pool for item
-    const SfxItemPool& rPool = pModel->GetItemPool();
-
-    const String aSearchName( rName );
-    const USHORT nCount = rPool.GetItemCount((USHORT)nWhich);
-    const NameOrIndex *pItem = 0;
-    bool bFound = false;
-
-    for( USHORT nSurrogate = 0; ! bFound && nSurrogate < nCount; nSurrogate++ )
-    {
-        pItem = (NameOrIndex*)rPool.GetItem((USHORT)nWhich, nSurrogate);
-        if( pItem && ( pItem->GetName() == aSearchName ) )
-        {
-            bFound = true;
-        }
-    }
-
-    // check the property lists that are loaded for the model for items that
-    // support such.
-    String aStrName;
-    SvxUnogetInternalNameForItem( nWhich, rName, aStrName );
-
-    switch( nWhich )
-    {
-        case XATTR_FILLBITMAP:
-        {
-            XFillBitmapItem aBmpItem;
-            if( ! bFound )
-            {
-                XBitmapList* pBitmapList = pModel->GetBitmapList();
-
-                if( !pBitmapList )
-                    break;
-
-                long nPos = ((XPropertyList*)pBitmapList)->Get(aStrName);
-                if( nPos == -1 )
-                    break;
-
-                XBitmapEntry* pEntry = pBitmapList->GetBitmap( nPos );
-                aBmpItem.SetWhich( XATTR_FILLBITMAP );
-                aBmpItem.SetName( rName );
-                aBmpItem.SetBitmapValue( pEntry->GetXBitmap() );
-                pItem = & aBmpItem;
-            }
-            DBG_ASSERT( pItem, "Invalid Item" );
-            if( pItem )
-                pItem->QueryValue( aResult ); // default: XBitmap. MID_GRAFURL instead?
-        }
-        break;
-
-        case XATTR_FILLGRADIENT:
-        {
-            XFillGradientItem aGrdItem;
-            if( ! bFound )
-            {
-                XGradientList* pGradientList = pModel->GetGradientList();
-
-                if( !pGradientList )
-                    break;
-
-                long nPos = ((XPropertyList*)pGradientList)->Get(aStrName);
-                if( nPos == -1 )
-                    break;
-
-                XGradientEntry* pEntry = pGradientList->GetGradient( nPos );
-                aGrdItem.SetWhich( XATTR_FILLGRADIENT );
-                aGrdItem.SetName( rName );
-                aGrdItem.SetGradientValue( pEntry->GetGradient() );
-                pItem = & aGrdItem;
-            }
-            DBG_ASSERT( pItem, "Invalid Item" );
-            if( pItem )
-                pItem->QueryValue( aResult, MID_FILLGRADIENT );
-        }
-        break;
-
-        case XATTR_FILLHATCH:
-        {
-            XFillHatchItem aHatchItem;
-            if( ! bFound )
-            {
-                XHatchList* pHatchList = pModel->GetHatchList();
-
-                if( !pHatchList )
-                    break;
-
-                long nPos = ((XPropertyList*)pHatchList)->Get(aStrName);
-                if( nPos == -1 )
-                    break;
-
-                XHatchEntry* pEntry = pHatchList->GetHatch( nPos );
-                aHatchItem.SetWhich( XATTR_FILLHATCH );
-                aHatchItem.SetName( rName );
-                aHatchItem.SetHatchValue( pEntry->GetHatch() );
-                pItem = & aHatchItem;
-            }
-            DBG_ASSERT( pItem, "Invalid Item" );
-            if( pItem )
-                pItem->QueryValue( aResult, MID_FILLHATCH );
-        }
-        break;
-
-        case XATTR_LINEEND:
-        case XATTR_LINESTART:
-        {
-            if( ! bFound )
-            {
-                XLineEndList* pLineEndList = pModel->GetLineEndList();
-
-                if( !pLineEndList )
-                    break;
-
-                long nPos = ((XPropertyList*)pLineEndList)->Get(aStrName);
-                if( nPos == -1 )
-                    break;
-
-                XLineEndEntry* pEntry = pLineEndList->GetLineEnd( nPos );
-                if( nWhich == XATTR_LINEEND )
-                {
-                    XLineEndItem aLEItem;
-                    aLEItem.SetWhich( XATTR_LINEEND );
-                    aLEItem.SetName( rName );
-                    aLEItem.SetLineEndValue( pEntry->GetLineEnd() );
-                    aLEItem.QueryValue( aResult );
-                }
-                else
-                {
-                    XLineStartItem aLSItem;
-                    aLSItem.SetWhich( XATTR_LINESTART );
-                    aLSItem.SetName( rName );
-                    aLSItem.SetLineStartValue( pEntry->GetLineEnd() );
-                    aLSItem.QueryValue( aResult );
-                }
-            }
-            else
-            {
-                DBG_ASSERT( pItem, "Invalid Item" );
-                if( pItem )
-                    pItem->QueryValue( aResult );
-            }
-        }
-        break;
-
-        case XATTR_LINEDASH:
-        {
-            XLineDashItem aDashItem;
-            if( ! bFound )
-            {
-                XDashList* pDashList = pModel->GetDashList();
-
-                if( !pDashList )
-                    break;
-
-                long nPos = ((XPropertyList*)pDashList)->Get(aStrName);
-                if( nPos == -1 )
-                    break;
-
-                XDashEntry* pEntry = pDashList->GetDash( nPos );
-                aDashItem.SetWhich( XATTR_LINEDASH );
-                aDashItem.SetName( rName );
-                aDashItem.SetDashValue( pEntry->GetDash() );
-                pItem = & aDashItem;
-            }
-            DBG_ASSERT( pItem, "Invalid Item" );
-            if( pItem )
-                pItem->QueryValue( aResult, MID_LINEDASH );
-        }
-        break;
-    }
-
-    return aResult;
-} */
-
-//----------------------------------------------------------------------
-
 void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const uno::Any& rVal )
     throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -2356,9 +2151,6 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
         case SFX_ITEM_DEFAULT:
             eState = beans::PropertyState_DEFAULT_VALUE;
             break;
-//      case SFX_ITEM_UNKNOWN:
-//      case SFX_ITEM_DONTCARE:
-//      case SFX_ITEM_DISABLED:
         default:
             eState = beans::PropertyState_AMBIGUOUS_VALUE;
             break;
@@ -2835,13 +2627,6 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
 {
     switch( pProperty->nWID )
     {
-/*
-    case OWN_ATTR_HASLEVELS:
-    {
-        rValue <<= SvxTextEditSource::hasLevels( mpObj.get() );
-        break;
-    }
-*/
     case OWN_ATTR_CAPTION_POINT:
     {
         Point aVclPoint = ((SdrCaptionObj*)mpObj.get())->GetTailPos();
@@ -3519,9 +3304,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_GroupServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_GroupServices, 2,
@@ -3529,7 +3311,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                               sUNO_service_drawing_Shape );
 
                         pSeq = &SvxShape_GroupServices;
-                    }
                 }
 
                 return *pSeq;
@@ -3539,9 +3320,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_CustomShapeServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_CustomShapeServices, 13,
@@ -3561,7 +3339,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
                         pSeq = &SvxShape_CustomShapeServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3570,9 +3347,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_LineServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_LineServices,14,
@@ -3595,7 +3369,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_LineServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3605,9 +3378,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_RectServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_RectServices,14,
@@ -3628,8 +3398,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
                         pSeq = &SvxShape_RectServices;
-                    }
-
                 }
                 return *pSeq;
             }
@@ -3642,9 +3410,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_CircServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_CircServices,14,
@@ -3667,7 +3432,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_CircServices;
-                    }
                 }
 
                 return *pSeq;
@@ -3679,9 +3443,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_PathServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_PathServices,14,
                             sUNO_service_drawing_PolyLineShape,
@@ -3703,7 +3464,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_ShadowProperties,
                             sUNO_service_drawing_RotationDescriptor);
                         pSeq = &SvxShape_PathServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3714,9 +3474,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_PolyServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_PolyServices,15,
                             sUNO_service_drawing_PolyPolygonShape,
@@ -3740,7 +3497,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_PolyServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3751,9 +3507,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_FreeLineServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeLineServices,15,
@@ -3778,7 +3531,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_FreeLineServices;
-                    }
                 }
 
                 return *pSeq;
@@ -3790,9 +3542,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_FreeFillServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_FreeFillServices,15,
                             sUNO_service_drawing_ClosedBezierShape,
@@ -3816,7 +3565,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_FreeFillServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3828,9 +3576,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_TextServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_TextServices,14,
                             sUNO_service_drawing_TextShape,
@@ -3852,7 +3597,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_TextServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3862,9 +3606,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_GrafServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_GrafServices, 12,
                             sUNO_service_drawing_GraphicObjectShape,
@@ -3884,7 +3625,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_GrafServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -3894,9 +3634,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_Ole2Services;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_Ole2Services, 2,
@@ -3904,7 +3641,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape);
 
                         pSeq = &SvxShape_Ole2Services;
-                    }
                 }
                 return *pSeq;
             }
@@ -3914,9 +3650,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_CaptionServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_CaptionServices,14,
@@ -3939,7 +3672,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_CaptionServices;
-                    }
                 }
 
                 return *pSeq;
@@ -3950,9 +3682,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_PageServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_PageServices, 2,
@@ -3960,7 +3689,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape );
 
                         pSeq = &SvxShape_PageServices;
-                    }
                 }
 
                 return *pSeq;
@@ -3971,9 +3699,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_MeasureServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_MeasureServices,15,
                             sUNO_service_drawing_MeasureShape,
@@ -3997,7 +3722,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_MeasureServices;
-                    }
                 }
 
                 return *pSeq;
@@ -4008,9 +3732,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_FrameServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_FrameServices, 2,
@@ -4018,7 +3739,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape );
 
                         pSeq = &SvxShape_FrameServices;
-                    }
                 }
 
                 return *pSeq;
@@ -4029,16 +3749,12 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard _aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_UnoServices;
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
                             sUNO_service_drawing_ControlShape,
                             sUNO_service_drawing_Shape );
 
                         pSeq = &SvxShape_UnoServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -4048,9 +3764,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_EdgeServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_EdgeServices,15,
@@ -4074,7 +3787,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_RotationDescriptor);
 
                         pSeq = &SvxShape_EdgeServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -4083,9 +3795,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                 static uno::Sequence< OUString > *pSeq = 0;
                 if( 0 == pSeq )
                 {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-                    {
                         static uno::Sequence< OUString > SvxShape_MediaServices;
 
                         comphelper::ServiceInfoHelper::addToSequence( SvxShape_MediaServices, 2,
@@ -4093,7 +3802,6 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
                             sUNO_service_drawing_Shape);
 
                         pSeq = &SvxShape_MediaServices;
-                    }
                 }
                 return *pSeq;
             }
@@ -4108,16 +3816,12 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
         static uno::Sequence< OUString > *pSeq = 0;
         if( 0 == pSeq )
         {
-//                  ::SolarMutexGuard aGuard;
-//                  if( 0 == pSeq )
-            {
                 static uno::Sequence< OUString > SvxShape_UnoServices;
                 comphelper::ServiceInfoHelper::addToSequence( SvxShape_UnoServices, 2,
                     sUNO_service_drawing_ControlShape,
                     sUNO_service_drawing_Shape );
 
                 pSeq = &SvxShape_UnoServices;
-            }
         }
         return *pSeq;
     }
