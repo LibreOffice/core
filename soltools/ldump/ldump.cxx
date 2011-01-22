@@ -211,8 +211,10 @@ bool LibDump::Dump()
             //fprintf( stderr, "Gefundenen Prefix : %s %d \n", aTmpBuf, nPreLen );
             // den ersten _ raus
             nLen = (int) strlen(aName);
+#ifndef _WIN64
             if (aName[0] == '_')
                 strcpy( aBuf , &aName[1] );
+#endif
             strncpy ( aTmpBuf, aBuf, (size_t) nPreLen );
             aTmpBuf[nPreLen] = '\0';
             if ( !strcmp( aTmpBuf, cAPrefix ))
@@ -220,13 +222,13 @@ bool LibDump::Dump()
                 if ( bLdump3 ) {
                     int nChar = '@';
                     char *pNeu = strchr( aBuf, nChar );
-                    int nPos = pNeu - aBuf + 1;
+                    size_t nPos = pNeu - aBuf + 1;
                     if ( nPos > 0 )
                     {
                         char aOldBuf[MAX_MAN];
                         strcpy( aOldBuf, aBuf );
                         char pChar[MAX_MAN];
-                        strncpy( pChar, aBuf, (size_t) (nPos -1) );
+                        strncpy( pChar, aBuf, nPos - 1 );
                         pChar[nPos-1] = '\0';
                         strcpy( aBuf, pChar );
                         strcat( aBuf, "=" );
