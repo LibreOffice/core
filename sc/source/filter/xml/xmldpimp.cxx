@@ -398,90 +398,90 @@ void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveGroupDimension& aGrou
 
 void ScXMLDataPilotTableContext::EndElement()
 {
-    if (bTargetRangeAddress)
+    if (!bTargetRangeAddress)
+        return;
+
+    pDPObject->SetName(sDataPilotTableName);
+    pDPObject->SetTag(sApplicationData);
+    pDPObject->SetOutRange(aTargetRangeAddress);
+    pDPObject->SetHeaderLayout(bHeaderGridLayout);
+    switch (nSourceType)
     {
-        pDPObject->SetName(sDataPilotTableName);
-        pDPObject->SetTag(sApplicationData);
-        pDPObject->SetOutRange(aTargetRangeAddress);
-        pDPObject->SetHeaderLayout(bHeaderGridLayout);
-        switch (nSourceType)
+        case SQL :
         {
-            case SQL :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_SQL;
-                aImportDesc.bNative = bIsNative;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case TABLE :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_TABLE;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case QUERY :
-            {
-                ScImportSourceDesc aImportDesc;
-                aImportDesc.aDBName = sDatabaseName;
-                aImportDesc.aObject = sSourceObject;
-                aImportDesc.nType = sheet::DataImportMode_QUERY;
-                pDPObject->SetImportDesc(aImportDesc);
-            }
-            break;
-            case SERVICE :
-            {
-                ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
-                                    sServiceUsername, sServicePassword);
-                pDPObject->SetServiceData(aServiceDesk);
-            }
-            break;
-            case CELLRANGE :
-            {
-                if (bSourceCellRange)
-                {
-                    ScSheetSourceDesc aSheetDesc(pDoc);
-                    aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
-                    aSheetDesc.SetQueryParam(aSourceQueryParam);
-                    pDPObject->SetSheetDesc(aSheetDesc);
-                }
-            }
-            break;
+            ScImportSourceDesc aImportDesc;
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_SQL;
+            aImportDesc.bNative = bIsNative;
+            pDPObject->SetImportDesc(aImportDesc);
         }
-
-        pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
-        pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
-        if (maRowGrandTotal.maDisplayName.getLength())
-            // TODO: Right now, we only support one grand total name for both
-            // column and row totals.  Take the value from the row total for
-            // now.
-            pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
-
-        pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
-        pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
-        pDPSave->SetFilterButton(bShowFilter);
-        pDPSave->SetDrillDown(bDrillDown);
-        if (pDPDimSaveData)
-            pDPSave->SetDimensionData(pDPDimSaveData);
-        pDPObject->SetSaveData(*pDPSave);
-        if (pDoc)
+        break;
+        case TABLE :
         {
-            ScDPCollection* pDPCollection = pDoc->GetDPCollection();
-
-            // #i94570# Names have to be unique, or the tables can't be accessed by API.
-            if ( pDPCollection->GetByName(pDPObject->GetName()) )
-                pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
-
-            pDPObject->SetAlive(sal_True);
-            pDPCollection->InsertNewTable(pDPObject);
+            ScImportSourceDesc aImportDesc;
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_TABLE;
+            pDPObject->SetImportDesc(aImportDesc);
         }
-        SetButtons();
+        break;
+        case QUERY :
+        {
+            ScImportSourceDesc aImportDesc;
+            aImportDesc.aDBName = sDatabaseName;
+            aImportDesc.aObject = sSourceObject;
+            aImportDesc.nType = sheet::DataImportMode_QUERY;
+            pDPObject->SetImportDesc(aImportDesc);
+        }
+        break;
+        case SERVICE :
+        {
+            ScDPServiceDesc aServiceDesk(sServiceName, sServiceSourceName, sServiceSourceObject,
+                                sServiceUsername, sServicePassword);
+            pDPObject->SetServiceData(aServiceDesk);
+        }
+        break;
+        case CELLRANGE :
+        {
+            if (bSourceCellRange)
+            {
+                ScSheetSourceDesc aSheetDesc(pDoc);
+                aSheetDesc.SetSourceRange(aSourceCellRangeAddress);
+                aSheetDesc.SetQueryParam(aSourceQueryParam);
+                pDPObject->SetSheetDesc(aSheetDesc);
+            }
+        }
+        break;
     }
+
+    pDPSave->SetRowGrand(maRowGrandTotal.mbVisible);
+    pDPSave->SetColumnGrand(maColGrandTotal.mbVisible);
+    if (maRowGrandTotal.maDisplayName.getLength())
+        // TODO: Right now, we only support one grand total name for both
+        // column and row totals.  Take the value from the row total for
+        // now.
+        pDPSave->SetGrandTotalName(maRowGrandTotal.maDisplayName);
+
+    pDPSave->SetIgnoreEmptyRows(bIgnoreEmptyRows);
+    pDPSave->SetRepeatIfEmpty(bIdentifyCategories);
+    pDPSave->SetFilterButton(bShowFilter);
+    pDPSave->SetDrillDown(bDrillDown);
+    if (pDPDimSaveData)
+        pDPSave->SetDimensionData(pDPDimSaveData);
+    pDPObject->SetSaveData(*pDPSave);
+    if (pDoc)
+    {
+        ScDPCollection* pDPCollection = pDoc->GetDPCollection();
+
+        // #i94570# Names have to be unique, or the tables can't be accessed by API.
+        if ( pDPCollection->GetByName(pDPObject->GetName()) )
+            pDPObject->SetName( String() );     // ignore the invalid name, create a new name in AfterXMLLoading
+
+        pDPObject->SetAlive(sal_True);
+        pDPCollection->InsertNewTable(pDPObject);
+    }
+    SetButtons();
 }
 
 void ScXMLDataPilotTableContext::SetGrandTotal(
