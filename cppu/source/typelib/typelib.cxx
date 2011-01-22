@@ -29,6 +29,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppu.hxx"
 
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
+
 #include <hash_map>
 #include <list>
 #include <set>
@@ -335,7 +339,21 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         delete pWeakMap;
         pWeakMap = 0;
     }
+#ifndef CPPU_LEAK_STATIC_DATA
 #if OSL_DEBUG_LEVEL > 1
+#define MYASSERT(x) if (x != 0) fprintf(stderr, "### "#x" = %d, should be zero!!!\n", x);
+    MYASSERT (nTypeDescriptionCount );
+    MYASSERT( nCompoundTypeDescriptionCount );
+    MYASSERT( nUnionTypeDescriptionCount );
+    MYASSERT( nIndirectTypeDescriptionCount );
+    MYASSERT( nArrayTypeDescriptionCount );
+    MYASSERT( nEnumTypeDescriptionCount );
+    MYASSERT( nInterfaceMethodTypeDescriptionCount );
+    MYASSERT( nInterfaceAttributeTypeDescriptionCount );
+    MYASSERT( nInterfaceTypeDescriptionCount );
+    MYASSERT( nTypeDescriptionReferenceCount );
+#undef MYASSERT
+
     OSL_ASSERT( nTypeDescriptionCount == 0 );
     OSL_ASSERT( nCompoundTypeDescriptionCount == 0 );
     OSL_ASSERT( nUnionTypeDescriptionCount == 0 );
@@ -351,6 +369,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 #endif
     delete pCallbacks;
     pCallbacks = 0;
+#endif // CPPU_LEAK_STATIC_DATA
 
     if( pMutex )
     {
