@@ -1588,7 +1588,7 @@ void ScDataPilotFilterDescriptor::GetData( ScQueryParam& rParam ) const
     {
         ScDPObject* pDPObj = pParent->GetDPObject();
         if (pDPObj && pDPObj->IsSheetData())
-            rParam = pDPObj->GetSheetDesc()->aQueryParam;
+            rParam = pDPObj->GetSheetDesc()->GetQueryParam();
     }
 }
 
@@ -1599,10 +1599,10 @@ void ScDataPilotFilterDescriptor::PutData( const ScQueryParam& rParam )
         ScDPObject* pDPObj = pParent->GetDPObject();
         if (pDPObj)
         {
-            ScSheetSourceDesc aSheetDesc;
+            ScSheetSourceDesc aSheetDesc(pParent->GetDocShell()->GetDocument());
             if (pDPObj->IsSheetData())
                 aSheetDesc = *pDPObj->GetSheetDesc();
-            aSheetDesc.aQueryParam = rParam;
+            aSheetDesc.SetQueryParam(rParam);
             pDPObj->SetSheetDesc(aSheetDesc);
             pParent->SetDPObject(pDPObj);
         }

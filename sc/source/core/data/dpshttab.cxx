@@ -45,6 +45,8 @@
 #include "dpobject.hxx"
 #include "globstr.hrc"
 #include "dpglobal.hxx"
+#include "rangenam.hxx"
+
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
@@ -53,6 +55,7 @@
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 using ::std::vector;
 using ::std::hash_map;
 using ::std::hash_set;
@@ -60,12 +63,12 @@ using ::std::hash_set;
 // -----------------------------------------------------------------------
 
 ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , long nCacheId) :
-    ScDPTableData(pD, rDesc.GetCacheId( pD, nCacheId) ), // DataPilot Migration - Cache&&Performance
-    aQuery ( rDesc.aQueryParam  ),
+    ScDPTableData(pD, rDesc.GetCacheId(nCacheId) ),
+    aQuery ( rDesc.GetQueryParam() ),
     pSpecial(NULL),
     bIgnoreEmptyRows( FALSE ),
     bRepeatIfEmpty(FALSE),
-    aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
+    aCacheTable( pD, rDesc.GetCacheId(nCacheId))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
     pSpecial = new bool[nEntryCount];
@@ -232,80 +235,152 @@ const ScDPCacheTable& ScSheetDPData::GetCacheTable() const
     return aCacheTable;
 }
 
+ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
+    mpDoc(pDoc) {}
 
-ScDPTableDataCache* ScSheetSourceDesc::CreateCache( ScDocument* pDoc , long nID ) const
+void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 {
-    if ( pDoc )
+    maSourceRange = rRange;
+    maRangeName = OUString(); // overwrite existing range name if any.
+}
+
+const ScRange& ScSheetSourceDesc::GetSourceRange() const
+{
+    if (maRangeName.getLength())
     {
-        ScDPTableDataCache* pCache =  GetExistDPObjectCache( pDoc );
-        if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
-            return pCache;
-
-        ULONG nErrId = CheckValidate( pDoc );
-        if ( !nErrId )
+        // Obtain the source range from the range name first.
+        maSourceRange = ScRange();
+        ScRangeName* pRangeName = mpDoc->GetRangeName();
+        do
         {
-            pCache = new ScDPTableDataCache( pDoc );
+            if (!pRangeName)
+                break;
 
-            pCache->InitFromDoc( pDoc, aSourceRange );
-            pCache->SetId( nID );
-            pDoc->GetDPCollection()->AddDPObjectCache( pCache );
+            OUString aUpper = ScGlobal::pCharClass->upper(maRangeName);
+            USHORT n;
+            if (!pRangeName->SearchNameUpper(aUpper, n))
+                break;
 
-            DBG_TRACE1("Create a cache id = %d \n", pCache->GetId() );
+            // range name found.  Fow now, we only use the first token and
+            // ignore the rest.
+            ScRangeData* pData = (*pRangeName)[n];
+            ScRange aRange;
+            if (!pData->IsReference(aRange))
+                break;
+
+            maSourceRange = aRange;
         }
-        else
-            DBG_ERROR( "\n Error Create Cache" );
-        return pCache;
+        while (false);
     }
-    return NULL;
+    return maSourceRange;
 }
 
-ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache ( ScDocument* pDoc  ) const
+void ScSheetSourceDesc::SetRangeName(const OUString& rName)
 {
-    return pDoc->GetDPCollection()->GetUsedDPObjectCache( aSourceRange );
+    maRangeName = rName;
 }
-ScDPTableDataCache* ScSheetSourceDesc::GetCache( ScDocument* pDoc, long nID ) const
+
+const OUString& ScSheetSourceDesc::GetRangeName() const
 {
-    ScDPTableDataCache* pCache = pDoc->GetDPCollection()->GetDPObjectCache( nID );
-    if ( NULL == pCache && pDoc )
-        pCache = GetExistDPObjectCache( pDoc );
-    if ( NULL == pCache )
-        pCache = CreateCache( pDoc );
+    return maRangeName;
+}
+
+bool ScSheetSourceDesc::HasRangeName() const
+{
+    return maRangeName.getLength() > 0;
+}
+
+void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
+{
+    maQueryParam = rParam;
+}
+
+const ScQueryParam& ScSheetSourceDesc::GetQueryParam() const
+{
+    return maQueryParam;
+}
+
+bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
+{
+    return maSourceRange == rOther.maSourceRange &&
+        maRangeName == rOther.maRangeName &&
+        maQueryParam  == rOther.maQueryParam;
+}
+
+ScDPTableDataCache* ScSheetSourceDesc::CreateCache(long nID) const
+{
+    if (!mpDoc)
+        return NULL;
+
+    ScDPTableDataCache* pCache = GetExistDPObjectCache();
+    if ( pCache && ( nID < 0 || nID == pCache->GetId() ) )
+        return pCache;
+
+    ULONG nErrId = CheckSourceRange();
+    if (nErrId)
+    {
+        DBG_ERROR( "Error Create Cache\n" );
+        return NULL;
+    }
+
+    pCache = new ScDPTableDataCache(mpDoc);
+
+    pCache->InitFromDoc(mpDoc, GetSourceRange());
+    pCache->SetId( nID );
+    mpDoc->GetDPCollection()->AddDPObjectCache(pCache);
+
+    DBG_TRACE1("Create a cache id = %d \n", pCache->GetId());
+
     return pCache;
 }
 
-long ScSheetSourceDesc:: GetCacheId( ScDocument* pDoc, long nID ) const
+ScDPTableDataCache* ScSheetSourceDesc::GetExistDPObjectCache() const
 {
-    ScDPTableDataCache* pCache = GetCache( pDoc,  nID);
+    return mpDoc->GetDPCollection()->GetUsedDPObjectCache( GetSourceRange() );
+}
+
+ScDPTableDataCache* ScSheetSourceDesc::GetCache(long nID) const
+{
+    if (!mpDoc)
+        return NULL;
+
+    ScDPTableDataCache* pCache = mpDoc->GetDPCollection()->GetDPObjectCache(nID);
+    if (NULL == pCache)
+        pCache = GetExistDPObjectCache();
+
+    if (NULL == pCache)
+        pCache = CreateCache();
+
+    return pCache;
+}
+
+long ScSheetSourceDesc::GetCacheId(long nID) const
+{
+    ScDPTableDataCache* pCache = GetCache(nID);
     if ( NULL == pCache )
         return -1;
     else
         return pCache->GetId();
 }
 
-ULONG ScSheetSourceDesc::CheckValidate( ScDocument* pDoc ) const
+ULONG ScSheetSourceDesc::CheckSourceRange() const
 {
-    ScRange aSrcRange( aSourceRange);
-    if ( !pDoc )
+    if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
-    for(USHORT i= aSrcRange.aStart.Col();i <= aSrcRange.aEnd.Col();i++)
+
+    const ScRange& aSrcRange = GetSourceRange();
+    const ScAddress& s = aSrcRange.aStart;
+    const ScAddress& e = aSrcRange.aEnd;
+    for (SCCOL nCol = aSrcRange.aStart.Col(); nCol <= e.Col(); ++nCol)
     {
-        if ( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(),
-            i, aSrcRange.aStart.Row(),i, aSrcRange.aStart.Row()))
+        if (mpDoc->IsBlockEmpty(s.Tab(), nCol, s.Row(), nCol, s.Row()))
             return STR_PIVOT_FIRSTROWEMPTYERR;
     }
-    if( pDoc->IsBlockEmpty( aSrcRange.aStart.Tab(), aSrcRange.aStart.Col(), aSrcRange.aStart.Row()+1, aSrcRange.aEnd.Col(), aSrcRange.aEnd.Row() ) )
-    {
+
+    if (mpDoc->IsBlockEmpty(s.Tab(), s.Col(), s.Row()+1, e.Col(), e.Row()))
         return STR_PIVOT_ONLYONEROWERR;
-    }
+
     return 0;
 }
-
-// -----------------------------------------------------------------------
-
-
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -44,19 +44,59 @@ namespace com { namespace sun { namespace star { namespace sheet {
 class ScDPDimension;
 class ScDPItemData;
 
-struct ScSheetSourceDesc
+/**
+ * This class contains authoritative information on the internal reference
+ * used as the data source for datapilot table.  <i>The range name takes
+ * precedence over the source range when it's non-empty.</i>  When the range
+ * name is empty, the source range gets used.
+ */
+class ScSheetSourceDesc
 {
-    ScRange         aSourceRange;
-    ScQueryParam    aQueryParam;
+    ScSheetSourceDesc(); // disabled
 
-    BOOL operator== ( const ScSheetSourceDesc& rOther ) const
-        { return aSourceRange == rOther.aSourceRange &&
-                 aQueryParam  == rOther.aQueryParam; }
-    ScDPTableDataCache* CreateCache( ScDocument* pDoc, long nID = -1) const;
-    ULONG CheckValidate( ScDocument* pDoc  ) const;
-    ScDPTableDataCache* GetCache( ScDocument* pDoc, long nID ) const;
-    ScDPTableDataCache*  GetExistDPObjectCache ( ScDocument* pDoc  ) const;
-    long    GetCacheId( ScDocument* pDoc, long nID ) const;
+public:
+    SC_DLLPUBLIC ScSheetSourceDesc(ScDocument* pDoc);
+
+    SC_DLLPUBLIC void SetSourceRange(const ScRange& rRange);
+
+    /**
+     * Get the range that contains the source data.  In case the source data
+     * is referred to via a range name, it returns the range that the range
+     * name points to.
+     *
+     * <i>Note that currently only a single range is supported; if the
+     * range name contains multiple ranges, only the first range is used.</i>
+     *
+     * @return source range.
+     */
+    SC_DLLPUBLIC const ScRange& GetSourceRange() const;
+    SC_DLLPUBLIC void SetRangeName(const ::rtl::OUString& rName);
+    SC_DLLPUBLIC const ::rtl::OUString& GetRangeName() const;
+    bool HasRangeName() const;
+    void SetQueryParam(const ScQueryParam& rParam);
+    const ScQueryParam& GetQueryParam() const;
+
+    bool operator== ( const ScSheetSourceDesc& rOther ) const;
+    ScDPTableDataCache* CreateCache(long nID = -1) const;
+
+    /**
+     * Check the sanity of the data source range.
+     *
+     * @param pDoc document instance.
+     *
+     * @return 0 if the source range is sane, otherwise an error message ID is
+     *         returned.
+     */
+    ULONG CheckSourceRange() const;
+    ScDPTableDataCache* GetCache(long nID) const;
+    ScDPTableDataCache* GetExistDPObjectCache() const;
+    long GetCacheId(long nID) const;
+
+private:
+    mutable ScRange maSourceRange;
+    ::rtl::OUString maRangeName;
+    ScQueryParam    maQueryParam;
+    ScDocument*     mpDoc;
 };
 
 // --------------------------------------------------------------------

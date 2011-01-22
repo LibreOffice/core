@@ -640,7 +640,8 @@ XclExpPivotCache::XclExpPivotCache( const XclExpRoot& rRoot, const ScDPObject& r
             maDocSrcRange: Range used to get source data from Calc document.
                 This range may be shorter than maExpSrcRange to improve export
                 performance (#i22541#). */
-        maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->aSourceRange;
+        maOrigSrcRange = maExpSrcRange = maDocSrcRange = pSrcDesc->GetSourceRange();
+        maSrcRangeName = pSrcDesc->GetRangeName();
 
         // internal sheet data only
         SCTAB nScTab = maExpSrcRange.aStart.Tab();
@@ -717,7 +718,7 @@ bool XclExpPivotCache::HasEqualDataSource( const ScDPObject& rDPObj ) const
         compare the ScSheetSourceDesc. Later, there should be done more complicated
         comparisons regarding the source type of rDPObj and this cache. */
     if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
-        return pSrcDesc->aSourceRange == maOrigSrcRange;
+        return pSrcDesc->GetSourceRange() == maOrigSrcRange;
     return false;
 }
 
@@ -728,8 +729,14 @@ void XclExpPivotCache::Save( XclExpStream& rStrm )
     XclExpUInt16Record( EXC_ID_SXIDSTM, maPCInfo.mnStrmId ).Save( rStrm );
     // SXVS
     XclExpUInt16Record( EXC_ID_SXVS, EXC_SXVS_SHEET ).Save( rStrm );
-    // DCONREF
-    WriteDconref( rStrm );
+
+    if (maSrcRangeName.getLength())
+        // DCONNAME
+        WriteDConName(rStrm);
+    else
+        // DCONREF
+        WriteDconref(rStrm);
+
     // create the pivot cache storage stream
     WriteCacheStream();
 }
@@ -852,6 +859,14 @@ void XclExpPivotCache::WriteDconref( XclExpStream& rStrm ) const
             << static_cast< sal_uInt8 >( maExpSrcRange.aEnd.Col() )
             << aRef
             << sal_uInt8( 0 );
+    rStrm.EndRecord();
+}
+
+void XclExpPivotCache::WriteDConName( XclExpStream& rStrm ) const
+{
+    XclExpString aName(maSrcRangeName);
+    rStrm.StartRecord(EXC_ID_DCONNAME, aName.GetSize() + 2);
+    rStrm << aName << sal_uInt16(0);
     rStrm.EndRecord();
 }
 

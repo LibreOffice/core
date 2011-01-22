@@ -659,6 +659,22 @@ void XclImpPivotCache::ReadDconref( XclImpStream& rStrm )
         GetAddressConverter().ConvertRange( maSrcRange, aXclRange, 0, 0, true );
 }
 
+void XclImpPivotCache::ReadDConName( XclImpStream& rStrm )
+{
+    maSrcRangeName = rStrm.ReadUniString();
+
+    // This 2-byte value equals the length of string that follows, or if 0 it
+    // indicates that the name has a workbook scope.  For now, we only support
+    // internal defined name with a workbook scope.
+    sal_uInt16 nFlag;
+    rStrm >> nFlag;
+    mbSelfRef = (nFlag == 0);
+
+    if (!mbSelfRef)
+        // External name is not supported yet.
+        maSrcRangeName = OUString();
+}
+
 void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 {
     if( (mnSrcType != EXC_SXVS_SHEET) && (mnSrcType != EXC_SXVS_EXTERN) )
@@ -672,18 +688,21 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 
     if( mbSelfRef )
     {
-        // try to find internal sheet containing the source data
-        nScTab = GetTabInfo().GetScTabFromXclName( maTabName );
-        if( rDoc.HasTable( nScTab ) )
+        if (!maSrcRangeName.getLength())
         {
-            // set sheet index to source range
-            maSrcRange.aStart.SetTab( nScTab );
-            maSrcRange.aEnd.SetTab( nScTab );
-        }
-        else
-        {
-            // create dummy sheet for deleted internal sheet
-            bGenerateSource = true;
+            // try to find internal sheet containing the source data
+            nScTab = GetTabInfo().GetScTabFromXclName( maTabName );
+            if( rDoc.HasTable( nScTab ) )
+            {
+                // set sheet index to source range
+                maSrcRange.aStart.SetTab( nScTab );
+                maSrcRange.aEnd.SetTab( nScTab );
+            }
+            else
+            {
+                // create dummy sheet for deleted internal sheet
+                bGenerateSource = true;
+            }
         }
     }
     else
@@ -854,6 +873,14 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
 bool XclImpPivotCache::IsRefreshOnLoad() const
 {
     return static_cast<bool>(maPCInfo.mnFlags & 0x0004);
+}
+
+bool XclImpPivotCache::IsValid() const
+{
+    if (maSrcRangeName.getLength())
+        return true;
+
+    return maSrcRange.IsValid();
 }
 
 // ============================================================================
@@ -1346,7 +1373,7 @@ void XclImpPivotTable::ReadSxViewEx9( XclImpStream& rStrm )
 
 void XclImpPivotTable::Convert()
 {
-    if( !mxPCache || !mxPCache->GetSourceRange().IsValid() )
+    if( !mxPCache || !mxPCache->IsValid() )
         return;
 
     ScDPSaveData aSaveData;
@@ -1395,8 +1422,14 @@ void XclImpPivotTable::Convert()
     // *** insert into Calc document ***
 
     // create source descriptor
-    ScSheetSourceDesc aDesc;
-    aDesc.aSourceRange = mxPCache->GetSourceRange();
+    ScSheetSourceDesc aDesc(GetDocPtr());
+    const OUString& rSrcName = mxPCache->GetSourceRangeName();
+    if (rSrcName.getLength())
+        // Range name is the data source.
+        aDesc.SetRangeName(rSrcName);
+    else
+        // Normal cell range.
+        aDesc.SetSourceRange(mxPCache->GetSourceRange());
 
     // adjust output range to include the page fields
     ScRange aOutRange( maOutScRange );
@@ -1556,6 +1589,12 @@ void XclImpPivotTableManager::ReadDconref( XclImpStream& rStrm )
 {
     if( !maPCaches.empty() )
         maPCaches.back()->ReadDconref( rStrm );
+}
+
+void XclImpPivotTableManager::ReadDConName( XclImpStream& rStrm )
+{
+    if( !maPCaches.empty() )
+        maPCaches.back()->ReadDConName( rStrm );
 }
 
 // pivot table records --------------------------------------------------------

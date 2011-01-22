@@ -276,11 +276,14 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
 
     //  make valid QueryParam
 
-    pSheetDesc->aQueryParam.nCol1 = pSheetDesc->aSourceRange.aStart.Col();
-    pSheetDesc->aQueryParam.nRow1 = pSheetDesc->aSourceRange.aStart.Row();
-    pSheetDesc->aQueryParam.nCol2 = pSheetDesc->aSourceRange.aEnd.Col();
-    pSheetDesc->aQueryParam.nRow2 = pSheetDesc->aSourceRange.aEnd.Row();;
-    pSheetDesc->aQueryParam.bHasHeader = TRUE;
+    const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+    ScQueryParam aParam = pSheetDesc->GetQueryParam();
+    aParam.nCol1 = rSrcRange.aStart.Col();
+    aParam.nRow1 = rSrcRange.aStart.Row();
+    aParam.nCol2 = rSrcRange.aEnd.Col();
+    aParam.nRow2 = rSrcRange.aEnd.Row();;
+    aParam.bHasHeader = true;
+    pSheetDesc->SetQueryParam(aParam);
 
     InvalidateSource();     // new source must be created
 }
@@ -421,7 +424,7 @@ ScDPTableData* ScDPObject::GetTableData()
             if (!pSheetDesc)
             {
                 DBG_ERROR("no source descriptor");
-                pSheetDesc = new ScSheetSourceDesc;     // dummy defaults
+                pSheetDesc = new ScSheetSourceDesc(pDoc);     // dummy defaults
             }
             pData.reset(new ScSheetDPData(pDoc, *pSheetDesc, GetCacheId()));
         }
@@ -695,12 +698,13 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
 
     if ( pSheetDesc )
     {
-        nCol1 = pSheetDesc->aSourceRange.aStart.Col();
-        nRow1 = pSheetDesc->aSourceRange.aStart.Row();
-        nTab1 = pSheetDesc->aSourceRange.aStart.Tab();
-        nCol2 = pSheetDesc->aSourceRange.aEnd.Col();
-        nRow2 = pSheetDesc->aSourceRange.aEnd.Row();
-        nTab2 = pSheetDesc->aSourceRange.aEnd.Tab();
+        const ScRange& rSrcRange = pSheetDesc->GetSourceRange();
+        nCol1 = rSrcRange.aStart.Col();
+        nRow1 = rSrcRange.aStart.Row();
+        nTab1 = rSrcRange.aStart.Tab();
+        nCol2 = rSrcRange.aEnd.Col();
+        nRow2 = rSrcRange.aEnd.Row();
+        nTab2 = rSrcRange.aEnd.Tab();
 
         eRes = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                 rRange.aStart.Col(), rRange.aStart.Row(), rRange.aStart.Tab(),
@@ -708,22 +712,23 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
                 nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( eRes != UR_NOTHING )
         {
-            ScSheetSourceDesc aNewDesc;
-            aNewDesc.aSourceRange = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+            ScSheetSourceDesc aNewDesc(pDoc);
+            aNewDesc.SetSourceRange(ScRange(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2));
 
-            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->aSourceRange.aStart.Col();
-            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->aSourceRange.aStart.Row();
+            SCsCOL nDiffX = nCol1 - (SCsCOL) pSheetDesc->GetSourceRange().aStart.Col();
+            SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->GetSourceRange().aStart.Row();
 
-            aNewDesc.aQueryParam = pSheetDesc->aQueryParam;
-            aNewDesc.aQueryParam.nCol1 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol1 + nDiffX );
-            aNewDesc.aQueryParam.nCol2 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol2 + nDiffX );
-            aNewDesc.aQueryParam.nRow1 += nDiffY;   //! used?
-            aNewDesc.aQueryParam.nRow2 += nDiffY;   //! used?
-            SCSIZE nEC = aNewDesc.aQueryParam.GetEntryCount();
+            ScQueryParam aParam = pSheetDesc->GetQueryParam();
+            aParam.nCol1 = sal::static_int_cast<SCCOL>( aParam.nCol1 + nDiffX );
+            aParam.nCol2 = sal::static_int_cast<SCCOL>( aParam.nCol2 + nDiffX );
+            aParam.nRow1 += nDiffY; //! used?
+            aParam.nRow2 += nDiffY; //! used?
+            SCSIZE nEC = aParam.GetEntryCount();
             for (SCSIZE i=0; i<nEC; i++)
-                if (aNewDesc.aQueryParam.GetEntry(i).bDoQuery)
-                    aNewDesc.aQueryParam.GetEntry(i).nField += nDiffX;
+                if (aParam.GetEntry(i).bDoQuery)
+                    aParam.GetEntry(i).nField += nDiffX;
 
+            aNewDesc.SetQueryParam(aParam);
             SetSheetDesc( aNewDesc );       // allocates new pSheetDesc
         }
     }
@@ -736,7 +741,7 @@ BOOL ScDPObject::RefsEqual( const ScDPObject& r ) const
 
     if ( pSheetDesc && r.pSheetDesc )
     {
-        if ( pSheetDesc->aSourceRange != r.pSheetDesc->aSourceRange )
+        if ( pSheetDesc->GetSourceRange() != r.pSheetDesc->GetSourceRange() )
             return FALSE;
     }
     else if ( pSheetDesc || r.pSheetDesc )
@@ -1859,7 +1864,7 @@ BOOL ScDPObject::FillOldParam(ScPivotParam& rParam, BOOL bForFile) const
         // in old file format, columns are within document, not within source range
 
         DBG_ASSERT( pSheetDesc, "FillOldParam: bForFile, !pSheetDesc" );
-        nColAdd = pSheetDesc->aSourceRange.aStart.Col();
+        nColAdd = pSheetDesc->GetSourceRange().aStart.Col();
     }
 
     bool bAddData = ( lcl_GetDataGetOrientation( xSource ) == sheet::DataPilotFieldOrientation_HIDDEN );
@@ -2580,25 +2585,27 @@ ULONG ScDPObject::RefreshCache()
     CreateObjects();
     ULONG nErrId = 0;
     if ( pSheetDesc)
-        nErrId =  pSheetDesc->CheckValidate( pDoc );
+        nErrId =  pSheetDesc->CheckSourceRange();
     if ( nErrId == 0 )
     {
+        // First remove the old cache if exists.
         ScDPCollection* pDPCollection = pDoc->GetDPCollection();
         long nOldId = GetCacheId();
         long nNewId = pDPCollection->GetNewDPObjectCacheId();
         if ( nOldId >= 0 )
             pDPCollection->RemoveDPObjectCache( nOldId );
 
-        ScDPTableDataCache* pCache  = NULL;
+        // Create a new cache.
+        ScDPTableDataCache* pCache = NULL;
         if ( pSheetDesc )
-            pCache = pSheetDesc->CreateCache( pDoc, nNewId );
+            pCache = pSheetDesc->CreateCache(nNewId);
         else if ( pImpDesc )
-            pCache = pImpDesc->CreateCache( pDoc, nNewId );
+            pCache = pImpDesc->CreateCache(pDoc, nNewId);
 
         if ( pCache == NULL )
         {
             //cache failed
-            DBG_ASSERT( pCache , " pCache == NULL" );
+            DBG_ASSERT( pCache , "pCache == NULL" );
             return STR_ERR_DATAPILOTSOURCE;
         }
 
@@ -2608,7 +2615,7 @@ ULONG ScDPObject::RefreshCache()
         size_t nCount = pDPCollection->GetCount();
         for (size_t i=0; i<nCount; ++i)
         { //set new cache id
-            if ( (*pDPCollection)[i]->GetCacheId() == nOldId  )
+            if ( (*pDPCollection)[i]->GetCacheId() == nOldId )
             {
                 (*pDPCollection)[i]->SetCacheId( nNewId );
                 (*pDPCollection)[i]->SetRefresh();
@@ -2689,7 +2696,7 @@ ScDPTableDataCache* ScDPCollection::GetUsedDPObjectCache ( const ScRange& rRange
     for (size_t i=maTables.size(); i > 0 ; --i)
     {
         if ( const ScSheetSourceDesc* pUsedSheetDesc = maTables[i-1].GetSheetDesc() )
-            if ( rRange == pUsedSheetDesc->aSourceRange )
+            if ( rRange == pUsedSheetDesc->GetSourceRange() )
             {
                 long nID = maTables[i-1].GetCacheId();
                 if ( nID >= 0 )

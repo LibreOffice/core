@@ -75,6 +75,12 @@ class ScDPObject;
 
 class ScDPLayoutDlg : public ScAnyRefDlg
 {
+    /** data source type */
+    enum DataSrcType {
+        SRC_REF,     /// range reference
+        SRC_NAME,    /// range name
+        SRC_INVALID  /// invalid range
+    };
 public:
                             ScDPLayoutDlg(
                                 SfxBindings* pB,
@@ -180,7 +186,6 @@ private:
     ScViewData*             pViewData;
     ScDocument*             pDoc;
     bool                    bRefInputMode;
-    bool                    mbValidSrcRange;
 
 private:
     void                    Init            (bool bNewOutput);

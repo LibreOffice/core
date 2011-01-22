@@ -106,6 +106,7 @@ class ScXMLDataPilotTableContext : public SvXMLImportContext
     rtl::OUString   sServiceUsername;
     rtl::OUString   sServicePassword;
     rtl::OUString   sButtons;
+    rtl::OUString   sSourceRangeName;
     ScRange         aSourceCellRangeAddress;
     ScRange         aTargetRangeAddress;
     ScRange         aFilterSourceRange;
@@ -157,6 +158,7 @@ public:
     void SetServiceSourceObject(const rtl::OUString& sValue) { sServiceSourceObject = sValue; }
     void SetServiceUsername(const rtl::OUString& sValue) { sServiceUsername = sValue; }
     void SetServicePassword(const rtl::OUString& sValue) { sServicePassword = sValue; }
+    void SetSourceRangeName(const rtl::OUString& sValue) { sSourceRangeName = sValue; bSourceCellRange = true; }
     void SetSourceCellRangeAddress(const ScRange& aValue) { aSourceCellRangeAddress = aValue; bSourceCellRange = sal_True; }
     void SetSourceQueryParam(const ScQueryParam& aValue) { aSourceQueryParam = aValue; }
 //  void SetFilterUseRegularExpressions(const sal_Bool bValue) { aSourceQueryParam.bRegExp = bValue; }

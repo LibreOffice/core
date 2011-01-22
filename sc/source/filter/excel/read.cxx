@@ -1020,6 +1020,7 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_SXIDSTM:        rPTableMgr.ReadSxidstm( maStrm );   break;
                     case EXC_ID_SXVS:           rPTableMgr.ReadSxvs( maStrm );      break;
                     case EXC_ID_DCONREF:        rPTableMgr.ReadDconref( maStrm );   break;
+                    case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
                 }
 
             }

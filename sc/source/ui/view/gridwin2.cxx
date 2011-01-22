@@ -210,8 +210,8 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             DBG_ASSERT(pDesc, "no sheet source for filter button");
             if (pDesc)
             {
-                aQueryParam = pDesc->aQueryParam;
-                nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                aQueryParam = pDesc->GetQueryParam();
+                nSrcTab = pDesc->GetSourceRange().aStart.Tab();
             }
 
             SfxItemSet aArgSet( pViewData->GetViewShell()->GetPool(),
@@ -227,12 +227,12 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             DBG_ASSERT(pDlg, "Dialog create fail!");
             if ( pDlg->Execute() == RET_OK )
             {
-                ScSheetSourceDesc aNewDesc;
+                ScSheetSourceDesc aNewDesc(pDoc);
                 if (pDesc)
                     aNewDesc = *pDesc;
 
                 const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+                aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
                 ScDPObject aNewObj( *pDPObj );
                 aNewObj.SetSheetDesc( aNewDesc );

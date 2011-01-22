@@ -115,8 +115,8 @@ void ScPivotShell::Execute( SfxRequest& rReq )
                 DBG_ASSERT( pDesc, "no sheet source for DP filter dialog" );
                 if( pDesc )
                 {
-                    aQueryParam = pDesc->aQueryParam;
-                    nSrcTab = pDesc->aSourceRange.aStart.Tab();
+                    aQueryParam = pDesc->GetQueryParam();
+                    nSrcTab = pDesc->GetSourceRange().aStart.Tab();
                 }
 
                 ScViewData* pViewData = pViewShell->GetViewData();
@@ -134,12 +134,12 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 
                 if( pDlg->Execute() == RET_OK )
                 {
-                    ScSheetSourceDesc aNewDesc;
+                    ScSheetSourceDesc aNewDesc(pViewData->GetDocument());
                     if( pDesc )
                         aNewDesc = *pDesc;
 
                     const ScQueryItem& rQueryItem = pDlg->GetOutputItem();
-                    aNewDesc.aQueryParam = rQueryItem.GetQueryData();
+                    aNewDesc.SetQueryParam(rQueryItem.GetQueryData());
 
                     ScDPObject aNewObj( *pDPObj );
                     aNewObj.SetSheetDesc( aNewDesc );

@@ -707,7 +707,7 @@ CellRangeAddress SAL_CALL ScDataPilotDescriptorBase::getSourceRange()
 
     CellRangeAddress aRet;
     if (pDPObject->IsSheetData())
-        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->aSourceRange );
+        ScUnoConversion::FillApiRange( aRet, pDPObject->GetSheetDesc()->GetSourceRange() );
     return aRet;
 }
 
@@ -719,10 +719,13 @@ void SAL_CALL ScDataPilotDescriptorBase::setSourceRange( const CellRangeAddress&
     if (!pDPObject)
         throw RuntimeException();
 
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocShell->GetDocument());
     if (pDPObject->IsSheetData())
         aSheetDesc = *pDPObject->GetSheetDesc();
-    ScUnoConversion::FillScRange( aSheetDesc.aSourceRange, aSourceRange );
+
+    ScRange aRange;
+    ScUnoConversion::FillScRange(aRange, aSourceRange);
+    aSheetDesc.SetSourceRange(aRange);
     pDPObject->SetSheetDesc( aSheetDesc );
     SetDPObject( pDPObject );
 }
@@ -1415,7 +1418,7 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
     aSaveData.SetIgnoreEmptyRows( sal_False );
     aSaveData.SetRepeatIfEmpty( sal_False );
     mpDPObject->SetSaveData(aSaveData);
-    ScSheetSourceDesc aSheetDesc;
+    ScSheetSourceDesc aSheetDesc(pDocSh ? pDocSh->GetDocument() : NULL);
     mpDPObject->SetSheetDesc(aSheetDesc);
     mpDPObject->GetSource();
 }

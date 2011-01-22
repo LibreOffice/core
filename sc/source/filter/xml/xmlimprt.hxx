@@ -530,7 +530,8 @@ enum ScXMLDataPilotTableSourceCellRangeElemTokens
 
 enum ScXMLDataPilotTableSourceCellRangeAttrTokens
 {
-    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_CELL_RANGE_ADDRESS,
+    XML_TOK_SOURCE_CELL_RANGE_ATTR_NAME
 };
 
 enum ScXMLDataPilotFieldAttrTokens
