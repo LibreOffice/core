@@ -28,7 +28,7 @@
 PRJ=..$/..$/..
 
 PRJNAME=bridges
-TARGET=msci_uno
+TARGET=mscx_uno
 LIBTARGET=no
 ENABLE_EXCEPTIONS=TRUE
 
