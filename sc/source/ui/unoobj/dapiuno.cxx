@@ -1695,7 +1695,7 @@ BOOL lcl_GetFieldDataByName( ScDPObject* pDPObj, const OUString& rFieldName, ScF
     // The name "Data" always refers to the data layout field.
     rFieldId.maFieldName = rFieldName;
     rFieldId.mnFieldIdx = 0;
-    rFieldId.mbDataLayout = rFieldName.equalsAscii( SC_DATALAYOUT_NAME );
+    rFieldId.mbDataLayout = rFieldName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_DATALAYOUT_NAME ) );
 
     pDPObj->GetSource();    // IsDimNameInUse doesn't update source data
 
@@ -3425,11 +3425,11 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const OUString& aPropertyNam
                 if (pMember)
                 {
                     bool bGetNewIndex = false;
-                    if ( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                         pMember->SetShowDetails(cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                         pMember->SetIsVisible(!cppu::any2bool(aValue));
-                    else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                    else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                     {
                         sal_Int32 nNewPos = 0;
                         if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
@@ -3475,7 +3475,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                 Reference< XNamed > xMember( xMembersIndex->getByIndex( mnIndex ), UNO_QUERY );
                 String sName( xMember->getName() );
                 ScDPSaveMember* pMember = pDim->GetExistingMemberByName( sName );
-                if( aPropertyName.equalsAscii( SC_UNONAME_SHOWDETAIL ) )
+                if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_SHOWDETAIL ) ) )
                 {
                     if (pMember && pMember->HasShowDetails())
                     {
@@ -3490,7 +3490,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= true;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_ISHIDDEN ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISHIDDEN ) ) )
                 {
                     if (pMember && pMember->HasIsVisible())
                     {
@@ -3505,7 +3505,7 @@ Any SAL_CALL ScDataPilotItemObj::getPropertyValue( const OUString& aPropertyName
                             aRet <<= false;
                     }
                 }
-                else if ( aPropertyName.equalsAscii( SC_UNONAME_POS ) )
+                else if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_POS ) ) )
                 {
                     aRet <<= mnIndex;
                 }

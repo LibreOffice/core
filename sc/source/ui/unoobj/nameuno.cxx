@@ -382,7 +382,7 @@ void SAL_CALL ScNamedRangeObj::setPropertyValue(
                         uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    if ( rPropertyName.equalsAscii( SC_UNONAME_ISSHAREDFMLA ) )
+    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISSHAREDFMLA ) ) )
     {
         bool bIsShared = false;
         if( aValue >>= bIsShared )
@@ -399,21 +399,21 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& rPrope
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
-    if ( rPropertyName.equalsAscii( SC_UNO_LINKDISPBIT ) )
+    if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNO_LINKDISPBIT ) ) )
     {
         //  no target bitmaps for individual entries (would be all equal)
         // ScLinkTargetTypeObj::SetLinkTargetBitmap( aRet, SC_LINKTARGETTYPE_RANGENAME );
     }
-    else if ( rPropertyName.equalsAscii( SC_UNO_LINKDISPNAME ) )
+    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNO_LINKDISPNAME ) ) )
         aRet <<= rtl::OUString( aName );
-    else if ( rPropertyName.equalsAscii( SC_UNONAME_TOKENINDEX ) )
+    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_TOKENINDEX ) ) )
     {
         // get index for use in formula tokens (read-only)
         ScRangeData* pData = GetRangeData_Impl();
         if (pData)
             aRet <<= static_cast<sal_Int32>(pData->GetIndex());
     }
-    else if ( rPropertyName.equalsAscii( SC_UNONAME_ISSHAREDFMLA ) )
+    else if ( rPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_ISSHAREDFMLA ) ) )
     {
         if( ScRangeData* pData = GetRangeData_Impl() )
             aRet <<= static_cast< bool >( pData->HasType( RT_SHARED ) );
@@ -433,8 +433,8 @@ rtl::OUString SAL_CALL ScNamedRangeObj::getImplementationName() throw(uno::Runti
 sal_Bool SAL_CALL ScNamedRangeObj::supportsService( const rtl::OUString& rServiceName )
                                                     throw(uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SCNAMEDRANGEOBJ_SERVICE ) ||
-           rServiceName.equalsAscii( SCLINKTARGET_SERVICE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCNAMEDRANGEOBJ_SERVICE ) ) ||
+           rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SCLINKTARGET_SERVICE ) );
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangeObj::getSupportedServiceNames()
@@ -730,7 +730,7 @@ void SAL_CALL ScNamedRangesObj::setPropertyValue(
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    if (rPropertyName.equalsAscii(SC_UNO_MODIFY_BROADCAST))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SC_UNO_MODIFY_BROADCAST)))
     {
         aValue >>= mbModifyAndBroadcast;
     }
@@ -741,7 +741,7 @@ Any SAL_CALL ScNamedRangesObj::getPropertyValue( const rtl::OUString& rPropertyN
                         uno::RuntimeException)
 {
     Any aRet;
-    if (rPropertyName.equalsAscii(SC_UNO_MODIFY_BROADCAST))
+    if (rPropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(SC_UNO_MODIFY_BROADCAST)))
     {
         aRet <<= mbModifyAndBroadcast;
     }

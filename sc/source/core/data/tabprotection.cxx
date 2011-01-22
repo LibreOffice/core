@@ -93,9 +93,9 @@ OUString ScPassHashHelper::getHashURI(ScPasswordHash eHash)
 
 ScPasswordHash ScPassHashHelper::getHashTypeFromURI(const OUString& rURI)
 {
-    if (rURI.equalsAscii(URI_SHA1))
+    if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_SHA1)))
         return PASSHASH_SHA1;
-    else if (rURI.equalsAscii(URI_XLS_LEGACY))
+    else if (rURI.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URI_XLS_LEGACY)))
         return PASSHASH_XL;
     return PASSHASH_UNSPECIFIED;
 }

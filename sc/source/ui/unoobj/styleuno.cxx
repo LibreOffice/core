@@ -1972,7 +1972,7 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
     SolarMutexGuard aGuard;
     uno::Any aAny;
 
-    if ( aPropertyName.equalsAscii( SC_UNONAME_DISPNAME ) )      // read-only
+    if ( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_UNONAME_DISPNAME ) ) )      // read-only
     {
         //  core always has the display name
         SfxStyleSheetBase* pStyle = GetStyle_Impl();
