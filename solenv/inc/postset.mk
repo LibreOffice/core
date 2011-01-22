@@ -88,7 +88,6 @@ mai \
 mk \
 mn \
 mni \
-ms \
 ml \
 mr \
 my \
@@ -104,7 +103,6 @@ or \
 pap \
 pa-IN \
 pl \
-ps \
 pt \
 pt-BR \
 ro \
@@ -132,7 +130,6 @@ tr \
 ts \
 tg \
 ug \
-ur \
 uk \
 uz \
 ve \
