@@ -80,6 +80,8 @@
 #include <utlui.hrc>
 #endif
 
+#include "access.hrc"
+
 #include <unomid.h>
 
 
@@ -934,8 +936,8 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
     aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
 
-    aContentTree.SetAccessibleName(SW_RESSTR(ST_TL_CONTENT));
-    aGlobalTree.SetAccessibleName(SW_RESSTR(ST_TL_GLOBAL));
+    aContentTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
+    aGlobalTree.SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
     aDocListBox.SetAccessibleName(aStatusArr[3]);
 }
 

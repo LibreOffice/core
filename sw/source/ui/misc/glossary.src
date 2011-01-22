@@ -29,6 +29,8 @@
 #include "glossary.hrc"
 #include "cmdid.h"
 #include "helpid.h"
+#include "access.hrc"
+
  // #define DLG_GLOSSARY 256
 ModalDialog DLG_GLOSSARY
 {
@@ -289,7 +291,7 @@ String STR_GLOSSARY
     Text [ en-US ] = "AutoText :" ;
 };
 /*IAccessibility2 Implementation 2009-----*/
-String STR_SW_CATEGORY
+String STR_ACCESS_SW_CATEGORY
 {
     Text [ en-US ] = "Category" ;
 };

@@ -786,10 +786,3 @@ InfoBox MSG_WRONG_TABLENAME
 {
     Message [ en-US ] = "The name of the table must not contain spaces." ;
 };
-
-//IAccessibility2 Impplementaton 2009-----
-String STR_COLUMN_WIDTH
-{
-    Text [ en-US ] = "Column %1 Width" ;
-};
-//-----IAccessibility2 Impplementaton 2009

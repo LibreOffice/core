@@ -53,6 +53,8 @@
 #include <fmtrowsplt.hxx>
 #include <svx/htmlmode.hxx>
 
+#include "access.hrc"
+
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>
 #endif
@@ -994,7 +996,7 @@ IMPL_LINK( SwTableColumnPage, AutoClickHdl, CheckBox *, pBox )
         pTextArr[i]->SetText( sEntry );
 //IAccessibility2 Impplementaton 2009-----
         //added by menghu for SODC_5143,12/12/2006
-        String sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH );
+        String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH);
         sColumnWidth.SearchAndReplace( DEFINE_CONST_UNICODE("%1"), sIndex );
         pFieldArr[i]->SetAccessibleName( sColumnWidth );
         //end of SODC_5143

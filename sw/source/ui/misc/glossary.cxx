@@ -91,6 +91,8 @@
 #include <swmodule.hxx>
 #include <sfx2/filedlghelper.hxx>
 
+#include "access.hrc"
+
 #define LONG_LENGTH 60
 #define SHORT_LENGTH 30
 
@@ -298,7 +300,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );
-    aCategoryBox.SetAccessibleName(SW_RES(STR_SW_CATEGORY));
+    aCategoryBox.SetAccessibleName(SW_RES(STR_ACCESS_SW_CATEGORY));
     aCategoryBox.SetAccessibleRelationLabeledBy(&aInsertTipCB);
 
     Init();

@@ -68,6 +68,8 @@
 #include <docary.hxx>
 #include <pagedesc.hxx>
 
+#include "access.hrc"
+
 #define FRAME_FORMAT_WIDTH 1000
 
 // sw/inc/fmtclds.hxx
@@ -931,19 +933,19 @@ void SwColumnPage::SetLabels( USHORT nVis )
     String tmp3(sLbl2);
     sLbl2.Insert(sLbl, sLbl2.Len() - 1);
     aLbl3.SetText(sLbl2);
-    String sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    String sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
     sColumnWidth.SearchAndReplaceAscii("%1", tmp1);
     aEd1.SetAccessibleName(sColumnWidth);
 
-    sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
     sColumnWidth.SearchAndReplaceAscii("%1", tmp2);
     aEd2.SetAccessibleName(sColumnWidth);
 
-    sColumnWidth = SW_RESSTR( STR_COLUMN_WIDTH ) ;
+    sColumnWidth = SW_RESSTR( STR_ACCESS_COLUMN_WIDTH ) ;
     sColumnWidth.SearchAndReplaceAscii("%1", tmp3);
     aEd3.SetAccessibleName(sColumnWidth);
 
-    String sDist = SW_RESSTR( STR_PAGESETUP_SPACING ) ;
+    String sDist = SW_RESSTR( STR_ACCESS_PAGESETUP_SPACING ) ;
     String sDist1 = sDist;
     sDist1.SearchAndReplaceAscii("%1", tmp1);
     sDist1.SearchAndReplaceAscii("%2", tmp2);
