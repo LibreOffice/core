@@ -101,65 +101,56 @@ static void cpp_call(
     sal_Int32 nParams, typelib_MethodParameter * pParams,
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
-    // max space for: [complex ret ptr], values|ptr ...
-    // (but will be used less - some of the values will be in pGPR and pFPR)
-    sal_uInt64 *pStack = (sal_uInt64 *) alloca( (nParams + 3) * sizeof(sal_uInt64) );
-    sal_uInt64 *pStackStart = pStack;
+    const int MAXPARAMS = 20;
 
-    // Parameters to be passed in registers stored here
-    sal_uInt64 pGPR[4];
-    sal_uInt32 nGPR = 0;
-    double pFPR[4];
-    sal_uInt32 nFPR = 0;
-
-    if (nParams > 20)
+    if (nParams > MAXPARAMS)
     {
+        // We have a hard limit on the number of parameters so that we
+        // don't need any assembler stuff but can call the function
+        // using normal C++.
 
+        // What is the proper way to abort with at least some
+        // information given to the user?
+        abort();
     }
 
+    // table with optional complex return value ptr, this pointer, and the parameters
+    union {
+        sal_Int64 i;
+        void *p;
+        double d;
+    } aCppParams[MAXPARAMS+2], uRetVal;
+    int nCppParamIndex = 0;
 
-    char * pCppStack        = (char *)alloca( sizeof(sal_Int64) + (nParams * sizeof(sal_Int64)) );
-    char * pCppStackStart   = pCppStack;
-
-    // Return
+    // Return type
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
-
     bool bSimpleReturn = true;
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
-        {
-            pCppReturn = pUnoReturn; // direct way for simple types
-        }
-        else
+        if (pReturnTypeDescr->nSize > 8)
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack
-                = (bridges::cpp_uno::shared::relatesToInterfaceType(
-                       pReturnTypeDescr )
-                   ? alloca( pReturnTypeDescr->nSize )
-                   : pUnoReturn); // direct way
-            pCppStack += sizeof(void *);
+            bSimpleReturn = false;
+            aCppParams[nCppParamIndex++].p = alloca( pReturnTypeDescr->nSize );
         }
     }
 
-    // stack space
+    // "this"
+    sal_Int64 * pCppThis = (sal_Int64 *) (pThis->getCppI()) + aVtableSlot.offset;
+    aCppParams[nCppParamIndex++].p = pCppThis;
 
-    OSL_ENSURE( sizeof(void *) == sizeof(sal_Int64), "### unexpected size!" );
-    // args
-    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
-    // indizes of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
-    // type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
+    // Indexes of values this have to be converted (interface conversion cpp<=>uno)
+    int pTempCppIndexes[MAXPARAMS];
+    int pTempIndexes[MAXPARAMS];
+    int nTempIndexes = 0;
 
-    sal_Int32 nTempIndizes = 0;
+    // Type descriptions for reconversions
+    typelib_TypeDescription *pTempParamTypeDescr[MAXPARAMS];
 
-    for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
+    for ( int nPos = 0; nPos < nParams; ++nPos )
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
         typelib_TypeDescription * pParamTypeDescr = 0;
@@ -169,19 +160,9 @@ static void cpp_call(
             && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
             ::uno_copyAndConvertData(
-                pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
+                aCppParams[nCppParamIndex++].p, pUnoArgs[nPos], pParamTypeDescr,
                 pThis->getBridge()->getUno2Cpp() );
 
-            switch (pParamTypeDescr->eTypeClass)
-            {
-            case typelib_TypeClass_HYPER:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-            case typelib_TypeClass_DOUBLE:
-                pCppStack += sizeof(sal_Int64); // extra qword
-                break;
-            default:
-                break;
-            }
             // no longer needed
             TYPELIB_DANGER_RELEASE( pParamTypeDescr );
         }
@@ -191,44 +172,77 @@ static void cpp_call(
             {
                 // cpp out is constructed mem, uno out is not!
                 ::uno_constructData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    aCppParams[nCppParamIndex].p = alloca( pParamTypeDescr->nSize ),
                     pParamTypeDescr );
-                pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
+
+                pTempCppIndexes[nTempIndexes] = nCppParamIndex;
+                pTempIndexes[nTempIndexes] = nPos;
+
                 // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                pTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
+
+                nCppParamIndex++;
             }
             // is in/inout
             else if (bridges::cpp_uno::shared::relatesToInterfaceType(
                          pParamTypeDescr ))
             {
                 ::uno_copyAndConvertData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    aCppParams[nCppParamIndex].p = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr,
                     pThis->getBridge()->getUno2Cpp() );
 
-                pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                pTempCppIndexes[nTempIndexes] = nCppParamIndex;
+                pTempIndexes[nTempIndexes] = nPos;
+
                 // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                pTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
+
+                nCppParamIndex++;
             }
             else // direct way
             {
-                *(void **)pCppStack = pCppArgs[nPos] = pUnoArgs[nPos];
+                aCppParams[nCppParamIndex++].p = pUnoArgs[nPos];
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
         }
-        pCppStack += sizeof(sal_Int64); // standard parameter length
     }
 
     __try
     {
-        // pCppI is mscx this pointer
-        callVirtualMethod(
-            reinterpret_cast< void ** >(pThis->getCppI()) + aVtableSlot.offset,
-            aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr->eTypeClass,
-            (sal_Int64 *)pCppStackStart,
-            (pCppStack - pCppStackStart) / sizeof(sal_Int64) );
+        // The first real parameter is always a pointer: either the
+        // address of where to store a complex return value or "this".
+
+        // The Windows x64 calling convention is very regular and
+        // elegant (even if perhaps then slightly slower than the
+        // Linux x64 one): The first four parameters, never more, are
+        // passed in registers, as long as they are a qword ins size
+        // or less. (If larger, a pointer to a temp copy is passed, so
+        // it's equivalent anyway.) Floating point values are passed
+        // in XMM0..3 register, others in RCX, RDX, R8, R9. Now, the
+        // nice thing for us is that for varargs functions,
+        // floating-point parameters among the four first ones are
+        // always passed *both* in XMM and integer registers. So we
+        // don't need to bother here calling the method different ways
+        // depending on what types of parameters it actually expects,
+        // just pretend parameters 3..4 are doubles and they will be
+        // passed both in XMM and integer registers, callee will find
+        // them where it expects. (The callee is not actually varargs,
+        // of course.)
+
+        sal_Int64 (*pMethod)(sal_Int64, ...) =
+            (sal_Int64 (*)(sal_Int64, ...))
+            (((sal_Int64 *)pCppThis) + aVtableSlot.index);
+
+        // Pass parameters 2..4 as double so that it gets put in both XMM and integer
+        // registers per the
+        uRetVal.i =
+            pMethod (aCppParams[0].i, aCppParams[1].d, aCppParams[2].d, aCppParams[3].d,
+                     aCppParams[4].i, aCppParams[5].i, aCppParams[6].i, aCppParams[7].i,
+                     aCppParams[8].i, aCppParams[9].i, aCppParams[10].i, aCppParams[11].i,
+                     aCppParams[12].i, aCppParams[13].i, aCppParams[14].i, aCppParams[15].i,
+                     aCppParams[16].i, aCppParams[17].i, aCppParams[18].i, aCppParams[19].i );
     }
     __except (CPPU_CURRENT_NAMESPACE::mscx_filterCppException(
                   GetExceptionInformation(),
@@ -236,14 +250,14 @@ static void cpp_call(
    {
         // *ppUnoExc was constructed by filter function
         // temporary params
-        while (nTempIndizes--)
+        while (nTempIndexes--)
         {
-            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            int nCppIndex = pTempCppIndexes[nTempIndexes];
             // destroy temp cpp param => cpp: every param was constructed
             ::uno_destructData(
-                pCppArgs[nIndex], ppTempParamTypeDescr[nTempIndizes],
+                aCppParams[nCppIndex].p, pTempParamTypeDescr[nTempIndexes],
                 cpp_release );
-            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+            TYPELIB_DANGER_RELEASE( pTempParamTypeDescr[nTempIndexes] );
         }
         // return type
         if (pReturnTypeDescr)
@@ -257,12 +271,13 @@ static void cpp_call(
     // NO exception occurred
     *ppUnoExc = 0;
 
-    // reconvert temporary params
-    while (nTempIndizes--)
+    // Reconvert temporary params
+    while (nTempIndexes--)
     {
-        sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+        int nCppIndex = pTempCppIndexes[nTempIndexes];
+        int nIndex = pTempIndexes[nTempIndexes];
         typelib_TypeDescription * pParamTypeDescr =
-            ppTempParamTypeDescr[nTempIndizes];
+            pTempParamTypeDescr[nTempIndexes];
 
         if (pParams[nIndex].bIn)
         {
@@ -271,30 +286,30 @@ static void cpp_call(
                 ::uno_destructData(
                     pUnoArgs[nIndex], pParamTypeDescr, 0 ); // destroy uno value
                 ::uno_copyAndConvertData(
-                    pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                    pUnoArgs[nIndex], aCppParams[nCppIndex].p, pParamTypeDescr,
                     pThis->getBridge()->getCpp2Uno() );
             }
         }
         else // pure out
         {
             ::uno_copyAndConvertData(
-                pUnoArgs[nIndex], pCppArgs[nIndex], pParamTypeDescr,
+                pUnoArgs[nIndex], aCppParams[nCppIndex].p, pParamTypeDescr,
                 pThis->getBridge()->getCpp2Uno() );
         }
         // destroy temp cpp param => cpp: every param was constructed
         ::uno_destructData(
-            pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+            aCppParams[nCppIndex].p, pParamTypeDescr, cpp_release );
 
         TYPELIB_DANGER_RELEASE( pParamTypeDescr );
     }
     // return value
-    if (pCppReturn && pUnoReturn != pCppReturn)
+    if (!bSimpleReturn)
     {
         ::uno_copyAndConvertData(
-            pUnoReturn, pCppReturn, pReturnTypeDescr,
+            pUnoReturn, uRetVal.p, pReturnTypeDescr,
             pThis->getBridge()->getCpp2Uno() );
         ::uno_destructData(
-            pCppReturn, pReturnTypeDescr, cpp_release );
+            aCppParams[0].p, pReturnTypeDescr, cpp_release );
     }
     // return type
     if (pReturnTypeDescr)

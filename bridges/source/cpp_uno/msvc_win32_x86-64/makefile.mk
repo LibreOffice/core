@@ -54,8 +54,7 @@ SLOFILES= \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/dllinit.obj		\
-    $(SLO)$/except.obj		\
-    $(SLO)$/asmbits.obj
+    $(SLO)$/except.obj
 
 NOOPTFILES= \
     $(SLO)$/except.obj

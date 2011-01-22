@@ -264,10 +264,26 @@ void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
 }
 
 
+#if 0
+
 // These are machine code snippets in asmbits.asm
 
 extern void *copyConstruct;
 extern void *destruct;
+
+#else
+
+static void whatthefuck_copyctor(sal_Int64 i, ...)
+{
+
+}
+
+static void whatthefuck_dtor(sal_Int64 i, ...)
+{
+
+}
+
+#endif
 
 //==================================================================================================
 struct ExceptionType
@@ -284,7 +300,11 @@ struct ExceptionType
         , _n2( -1 )
         , _n3( 0 )
         , _n4( pTypeDescr->nSize )
+#if 0
         , _pCopyCtor( new ObjectFunction( pTypeDescr, copyConstruct ) )
+#else
+        , _pCopyCtor( (ObjectFunction*) whatthefuck_copyctor )
+#endif
         , _n5( 0 )
         { _pTypeInfo = mscx_getRTTI( pTypeDescr->pTypeName ); }
     inline ~ExceptionType() throw ()
@@ -305,7 +325,11 @@ struct RaiseInfo
 //__________________________________________________________________________________________________
 RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     : _n0( 0 )
+#if 0
     , _pDtor( new ObjectFunction( pTypeDescr, destruct ) )
+#else
+    , _pDtor( (ObjectFunction*) whatthefuck_dtor )
+#endif
     , _n2( 0 )
     , _n3( 0 )
     , _n4( 0 )

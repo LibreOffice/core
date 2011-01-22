@@ -362,6 +362,8 @@ extern void *cpp_vtable_call;
 //==================================================================================================
 int const codeSnippetSize = 28;
 
+#if 0
+
 unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset)
 {
@@ -382,6 +384,8 @@ unsigned char * codeSnippet(
     OSL_ASSERT(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
 }
+
+#endif
 
 }
 
@@ -420,6 +424,17 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     return slots + slotCount;
 }
 
+#if 0
+
+#else
+
+static void whatthefuck(sal_Int64 i, ...)
+{
+
+}
+
+#endif
+
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code,
     typelib_InterfaceTypeDescription const *, sal_Int32 functionOffset,
@@ -428,8 +443,12 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     (*slots) -= functionCount;
     Slot * s = *slots;
     for (sal_Int32 i = 0; i < functionCount; ++i) {
+#if 0
         (s++)->fn = code;
         code = codeSnippet(code, functionOffset++, vtableOffset);
+#else
+        (s++)->fn = whatthefuck;
+#endif
     }
     return code;
 }

@@ -110,7 +110,7 @@ extrn cpp_mediate:   proc
 
 ; So instead of generating jumps into here, we should just make the
 ; C++ code copy the machine code that these three "naked" functions
-; compile after the snippet it is generating. Of course, that means
+; compile to after the snippet it is generating. Of course, that means
 ; the code here needs to be position independent, or (eek) that we
 ; would need to come up with some home-brewed minimal relocation
 ; mechanism.
