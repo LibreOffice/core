@@ -362,6 +362,7 @@ void ScDPLayoutDlg::InitWndSelect( const vector<ScDPLabelDataRef>& rLabels )
         aSelectArr.push_back(p);
     }
     aWndSelect.ResetScrollBar();
+    aWndSelect.Paint(Rectangle());
 }
 
 //----------------------------------------------------------------------------
@@ -1451,12 +1452,9 @@ void ScDPLayoutDlg::UpdateSrcRange()
     }
 
     xDlgDPObject->SetSheetDesc(inSheet);
-    xDlgDPObject->RefreshCache();
     xDlgDPObject->FillOldParam( thePivotData, FALSE );
     xDlgDPObject->FillLabelData(thePivotData);
 
-    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
-    pTabViewShell->SetDialogDPObject(xDlgDPObject.get());
     aLabelDataArr.clear();
     aWndSelect.ClearFields();
     aWndData.ClearFields();
@@ -1763,6 +1761,9 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
     SetDispatcherLock( FALSE );
     SwitchToDocument();
+
+    ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
+    pTabViewShell->SetDialogDPObject(xDlgDPObject.get());
 
     //  #95513# don't hide the dialog before executing the slot, instead it is used as
     //  parent for message boxes in ScTabViewShell::GetDialogParent
