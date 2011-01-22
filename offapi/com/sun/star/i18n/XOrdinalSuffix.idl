@@ -47,7 +47,7 @@ module com { module sun { module star { module i18n {
     change without notice and should not be used outside the OOo core.
     The current version is a draft and works only for English language
     locales. Future enhancements adding functionality for other locales
-    should use the 'ordinal' RuleBasedNumberFormat of the ICU if
+    should use the "ordinal" RuleBasedNumberFormat of the ICU if
     possible, see
     http://icu.sourceforge.net/apiref/icu4c/classRuleBasedNumberFormat.html
     which might make it necessary to change the interface.

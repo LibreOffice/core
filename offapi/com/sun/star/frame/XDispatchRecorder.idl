@@ -130,7 +130,7 @@ published interface XDispatchRecorder: com::sun::star::uno::XInterface
 
         <p>
         This method must be used before <member>endRecording()</member> is called!
-        Otherwhise the macro will be relased.
+        Otherwise the macro will be released.
         </p>
 
         @returns

@@ -68,7 +68,7 @@ interface XProofreader: com::sun::star::linguistic2::XSupportedLocales
 {
 
     //-------------------------------------------------------------------------
-    /** whether is the text checked by the spellchecker
+    /** whether is the text checked by the spell checker
 
         @returns true if it is also a spell checker
     */

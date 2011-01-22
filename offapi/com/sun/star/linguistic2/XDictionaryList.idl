@@ -46,7 +46,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** is used to manage and maintain a list of dictionaries.
 
-    <P>A dictionary-list may be given to a spellchecker or hyphenator
+    <P>A dictionary-list may be given to a spell checker or hyphenator
     service implementation on their creation in order to supply a set
     of dictionaries and additional information to be used for
     those purposes.</P>
@@ -191,7 +191,7 @@ published interface XDictionaryList : com::sun::star::uno::XInterface
 
          <P>There should be one matching endCollectEvents call for every
          beginCollectEvents call. Usually you will group these around
-         some code where you do not wish to get notfied of every single
+         some code where you do not wish to get notified of every single
          event.</P>
 
         @returns

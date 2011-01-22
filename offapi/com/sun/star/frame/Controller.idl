@@ -98,7 +98,7 @@ published service Controller
 
     //-------------------------------------------------------------------------
     /** this interface enables the controller to get interceptors registered that
-        change context menue or prevent them from beeing executed
+        change context menus or prevent them from being executed
 
         <p>
         Don't mix it with <type>XDispatchProviderInterception</type> which

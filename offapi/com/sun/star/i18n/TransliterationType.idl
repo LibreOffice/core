@@ -56,8 +56,8 @@ published constants TransliterationType
     const short ONE_TO_ONE         = 1;
 
     /** A transliteration module can have attribute NUMERIC if it
-        tranliterates numbers in different languages like chinese
-        numbers to arabic numbers and vice versa. This mapping need not
+        transliterates numbers in different languages like Chinese
+        numbers to Arabic numbers and vice versa. This mapping need not
         be one to one, it should be primarily used by number formatting
         and parsing methods. */
     const short NUMERIC            = 2;
@@ -66,7 +66,7 @@ published constants TransliterationType
         both one to one mapping and handles number also. */
     const short ONE_TO_ONE_NUMERIC = 3;
 
-    /** With a transliterator IGNORE case, the regular
+    /** With a transliteration IGNORE case, the regular
         expression A-Z can be transformed to a-z, for example. */
     const short IGNORE             = 4;
 

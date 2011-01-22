@@ -58,7 +58,7 @@ published struct Calendar
     short                       MinimumNumberOfDaysForFirstWeek;
     /// if this is the default calendar for a given locale.
     boolean                     Default;
-    /// the name of the calendar, for example, <b>gregorian</b>.
+    /// the name of the calendar, for example, <b>Gregorian</b>.
     string                      Name;
 };
 

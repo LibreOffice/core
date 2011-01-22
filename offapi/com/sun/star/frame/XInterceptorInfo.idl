@@ -56,12 +56,12 @@ published interface XInterceptorInfo: com::sun::star::uno::XInterface
     /** returns the URL list for interception.
 
         <p>
-        Wildcards inside the URL's are allowed to register the interceptor for
-        URL's too, which can have optional arguments (e.g. "..#.." or "..?..").
+        Wildcards inside the URLs are allowed to register the interceptor for
+        URLs too, which can have optional arguments (e.g. "..#.." or "..?..").
         </p>
 
         @return
-            a list of URL's wich are handled by this interceptor
+            a list of URLs which are handled by this interceptor
      */
     sequence< string > getInterceptedURLs();
 };

@@ -42,7 +42,7 @@ module com {  module sun {  module star {  module frame {
 published constants CommandGroup
 {
     //-------------------------------------------------------------------------
-    /** specifies interal commands.
+    /** specifies internal commands.
      */
     const short INTERNAL = 0;
 

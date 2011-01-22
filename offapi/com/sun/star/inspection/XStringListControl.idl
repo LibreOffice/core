@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module inspection {
 
 //-----------------------------------------------------------------------------
 /** defines the interface for an <type>XPropertyControl</type> which, additionally
-    to the basic behaviour, supports a list of strings interpreted as possible
+    to the basic behavior, supports a list of strings interpreted as possible
     property values.
 
     <p>A control which would canonically implement this interface is a list box control:

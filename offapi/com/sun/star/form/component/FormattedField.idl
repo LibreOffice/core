@@ -47,7 +47,7 @@
 //=============================================================================
 
 /** This service specifies the control model of an edit field for entering text which can be
-    (nearly) arbirtrarily formatted.
+    (nearly) arbitrarily formatted.
 
     @see com::sun::star::util::XNumberFormatsSupplier
  */

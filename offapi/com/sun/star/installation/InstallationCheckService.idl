@@ -41,7 +41,7 @@ module com { module sun { module star { module installation {
 
     <p>This implementation only checks the fonts "StarBats" and "StarMath".
     When running under Win32 the methods check and checkWithDialog will try to
-    fix any missing RegistryKey of fonts which still reside in the font directory.
+    fix any missing Registry Key of fonts which still reside in the font directory.
     If fixing is possible the methods returns TRUE.</p>
     @version 1.0
     @author Berndt Reinhold

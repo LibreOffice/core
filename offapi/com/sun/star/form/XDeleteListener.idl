@@ -48,7 +48,7 @@
     <p> "approveDelete" may be used to abort a deletion of the current data
     record.</p>
 
-    <p>Please do <em><b>not</b></em> use anymore, this interface is superseeded
+    <p>Please do <em><b>not</b></em> use anymore, this interface is superseded
     by <type scope="com::sun::star::form">XConfirmDeleteListener</type>.</p>
 
     @deprecated

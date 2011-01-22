@@ -58,7 +58,7 @@ published interface XSynchronousFrameLoader: com::sun::star::uno::XInterface
     /** starts the loading of the specified resource into the specified <type>Frame</type>.
 
         @param Descriptor
-            describes the ressource which should be loaded
+            describes the resource which should be loaded
             It use a <type scope="com::sun::star::document">MediaDescriptor</type> for that.
 
         @param Frame

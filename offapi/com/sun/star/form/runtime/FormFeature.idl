@@ -54,12 +54,12 @@ constants FormFeature
         including the potentially active insertion row.
 
         <p>This is not strictly an operation you can do on a form, but rather a
-        state you can retrieve (and display to the user) using the <type>XFormOperations</type>'
+        state you can retrieve (and display to the user) using the <type>XFormOperations</type>'s
         respective methods.</p>
 
         <p>The state obtained here is a string, not a number. This is because in an UI
         form, the fact that the current record count is not yet known (since not all
-        records have been visited, yet) is indicated by an asterik (<code>*</code>) besides
+        records have been visited, yet) is indicated by an asterisk (<code>*</code>) besides
         the record count.</p>
     */
     const short TotalRecords        = 2;
@@ -84,7 +84,7 @@ constants FormFeature
     */
     const short SaveRecordChanges   = 8;
 
-    /** revertsall changes in the form's current record, including changes in the current
+    /** reverts all changes in the form's current record, including changes in the current
         control which had not yet been committed to the form
     */
     const short UndoRecordChanges   = 9;
@@ -124,9 +124,9 @@ constants FormFeature
     */
     const short ToggleApplyFilter   = 17;
 
-    /** removes all filter and sort criterions put on the form.
+    /** removes all filter and sort criteria put on the form.
 
-        <p>Note that this does not apply to criterios which are part of the form's
+        <p>Note that this does not apply to criteria which are part of the form's
         data source. That is, if you bind the form to the SQL command <code>SELECT * FROM
         Articles WHERE Price &gt; 100</code>, then the <code>Price &gt; 100</code> filter
         will not be removed.</p>
@@ -136,7 +136,7 @@ constants FormFeature
     */
     const short RemoveFilterAndSort = 18;
 
-    /** refreshs the current control
+    /** refreshes the current control
 
         <p>Basically, this means calling XRefreshable::refresh on the current control, if it supports
         this interface.</p>

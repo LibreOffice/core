@@ -62,7 +62,7 @@ interface XPrimitive2D : ::com::sun::star::uno::XInterface
         ::com::sun::star::geometry::RealRectangle2D Viewport
 
         Defines the visible part of the view in world coordinates. May be used
-        to optimize decompositions, e.g. for 3d scenes only the visible part
+        to optimize decompositions, e.g. for 3D scenes only the visible part
         needs to be created. If not given, an empty Viewport is implied which
         means all is visible.
 

@@ -41,16 +41,16 @@ module com { module sun { module star { module linguistic2 {
 
 //=============================================================================
 /** Gives access to the results of failed
-    spellchecking attempts and may provide spelling alternatives.
+    spell checking attempts and may provide spelling alternatives.
 
     <P>This is used by the
     <member scope="com::sun::star::linguistic2">XSpellChecker::spell</member>
     function when the word was not found to be correct.
     Suggestions for other words to be used may be provided along with
-    a failure-type that may specifiy why the word was not correct.
+    a failure-type that may specify why the word was not correct.
     </P>
 
-    @see    <tyoe scope="com::sun::star::linguistic2">SpellFailure</type>
+    @see    <type scope="com::sun::star::linguistic2">SpellFailure</type>
 */
 published interface XSpellAlternatives : com::sun::star::uno::XInterface
 {
@@ -71,9 +71,9 @@ published interface XSpellAlternatives : com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
     /**
         @returns
-            the type (reason) for spellchecking to have failed verification.
+            the type (reason) for spell checking to have failed verification.
 
-    @see    <tyoe scope="com::sun::star::linguistic2">SpellFailure</type>
+    @see    <type scope="com::sun::star::linguistic2">SpellFailure</type>
     */
     short getFailureType();
 

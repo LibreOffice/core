@@ -49,7 +49,7 @@ published service InteractionGridControl
 
     /** allows access to the UI features of the control
 
-        <p>Though concret implementations of the service may offer different sets of aspects which can be customized,
+        <p>Though concrete implementations of the service may offer different sets of aspects which can be customized,
         the following commands have, if supported, a defined meaning:
         <dl>
             <dt>.uno:GridSlots/BrowserAttribs</dt><dd> (interactively) customize the overall appearance of the grid (font etc.)</dd>

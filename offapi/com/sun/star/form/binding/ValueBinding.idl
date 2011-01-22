@@ -112,7 +112,7 @@ service ValueBinding
         the <type>ValueBinding</type> for whatever reasons (e.g. because the data model
         which the binding reflected died). For this reason, a <type>ValueBinding</type>
         must offer a possibility to be obsoleted by it's owner, and to notify this
-        obsoletion to other interested parties, such as <type>XBindableValue</type>s.</p>
+        obsoleteness to other interested parties, such as <type>XBindableValue</type>s.</p>
     */
     interface com::sun::star::lang::XComponent;
 };

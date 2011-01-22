@@ -44,7 +44,7 @@ module com { module sun { module star { module linguistic2 {
 /** is the list of personal dictionaries.
 
      <P>The active dictionaries of this list will be used for
-     spellchecking and hyphenation.</P>
+     spell checking and hyphenation.</P>
 
     @see <type scope="com::sun::star::linguistic2">XDictionary</type>
     @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>

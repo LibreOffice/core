@@ -57,7 +57,7 @@
 /** is an abstract service for specialized <type>FormControlModel</type>s
     which are data aware and thus can be bound to a data source.
 
-    <p>The connection between a data-aware control model and a form which's data the
+    <p>The connection between a data-aware control model and a form whose data the
     control should display is made by parentship relations. The parent of a data-aware
     control model (see <type scope="com::sun::star::container">XChild</type>, inherited
     via the <type>FormControlModel</type> and <type>FormComponent</type> services) has
@@ -89,13 +89,13 @@ published service DataAwareControlModel
 
         <p>In the context of a control model which is data-aware, the semantics of <em>default value</em>
         (see <type>XReset</type>) is as follows:<br/>
-        If (and only if) the control is valid bound to a column of it's <typee scope="com::sun::star::form::component">DataForm</type>, and the form
+        If (and only if) the control is valid bound to a column of it's <type scope="com::sun::star::form::component">DataForm</type>, and the form
         is not positioned on a new record (see <member scope="com::sun::star::sdb">RowSet::IsNew</member>), then
         <member>XReset::reset</member> does not reset the model's value to it's default value, but uses the
         underlying column value.<br/>
         In all other cases, the model is reset to the default value as specified by the respective property.</p>
 
-        <p>For an example, have a look at the <type scope="com::sun::star::form::component">TextField</type>. It inherites
+        <p>For an example, have a look at the <type scope="com::sun::star::form::component">TextField</type>. It inherits
         the <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property from the underlying
         service, and additionally specifies the <member scope="com::sun::star::form::component">TextField::DefaultText</member>.
         </p>
@@ -157,7 +157,7 @@ published service DataAwareControlModel
         with the latter describing the content of the former. For instance, you may have a
         <type scope="com::sun::star::form::component">TextField</type>, which is bound to the e-mail
         column of your data source. Then you will probably add a
-        <type scope="com::sun::star::form::component">FixedText</type> which's label is "E-Mail",
+        <type scope="com::sun::star::form::component">FixedText</type> whose label is "E-Mail",
         and associate it with the TextField by setting it as <member>LabelControl</member>.<br/>
         Now if you imagine a component offering data search in a form, this component will examine
         the <member>LabelControl</member> property, find the <type scope="com::sun::star::form::component">FixedText</type>,
@@ -177,8 +177,8 @@ published service DataAwareControlModel
                 is required. Which kind of service is in the request depends on the type of the control model.<br/>
 
                 For instance, text fields (<type scope="com::sun::star::form::component">TextField</type>) can be
-                labelled by label controls only (<type scope="com::sun::star::form::component">FixedText</type>),
-                and radio buttons (<type scope="com::sun::star::form::component">RadioButton</type>) can be labelled
+                labeled by label controls only (<type scope="com::sun::star::form::component">FixedText</type>),
+                and radio buttons (<type scope="com::sun::star::form::component">RadioButton</type>) can be labeled
                 by group boxes (<type scope="com::sun::star::form::component">GroupBox</type>) only.
             </li>
         </ul>

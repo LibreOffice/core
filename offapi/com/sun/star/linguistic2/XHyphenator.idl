@@ -28,7 +28,7 @@
 #define __com_sun_star_linguistic2_XHyphenator_idl__
 
 
-#ifndef __com_sun_star_lang_Localeidl__
+#ifndef __com_sun_star_lang_Locale_idl__
 #include <com/sun/star/lang/Locale.idl>
 #endif
 
@@ -87,7 +87,7 @@ published interface XHyphenator : com::sun::star::linguistic2::XSupportedLocales
     /** tries to find a valid hyphenation position relative
         to the beginning of a word.
 
-        <P>Note: Some languages, for example arabic, are written from right
+        <P>Note: Some languages, for example Arabic, are written from right
         to left.</P>
 
         @returns

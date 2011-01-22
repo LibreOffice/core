@@ -58,7 +58,7 @@
     data binding, it's layout, and it's event binding</p>
 
     <p>For using a PropertyBrowserController, you need to
-    <ul><li>instatiate it at a service factory of your choice</li>
+    <ul><li>instantiate it at a service factory of your choice</li>
         <li>attach it to an empty frame of your choice</li>
         <li>set the IntrospectedObject property to the control model which you wish to analyze</li>
     </ul>
@@ -110,7 +110,7 @@ published service PropertyBrowserController
         The appearance of the visual component created by the controller is that 3 tab pages, one for
         each group, are displayed (of course if the control does not support any aspects of a given group,
         the group is omitted).<br/>
-        With this property, it can be controller which page is currently acticve.</p>
+        With this property, it can be controller which page is currently active.</p>
 
         <p>Valid values are (this list may be extended in the future):
         <ul><li>Generic</li>
@@ -131,7 +131,7 @@ published service PropertyBrowserController
     */
     interface com::sun::star::beans::XPropertySet;
 
-    /** allows to access the properties via indicies
+    /** allows to access the properties via indices
     */
     interface com::sun::star::beans::XFastPropertySet;
 

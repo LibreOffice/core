@@ -112,7 +112,7 @@ service StatusbarController
 
         <p>
         A status bar controller instance is ready for use after this call has
-        been made the first time. The status bar implementation guarentees that
+        been made the first time. The status bar implementation guarantees that
         the controller's item window has been added to the status bar and its
         reference is held by it.
         </p>
@@ -126,7 +126,7 @@ service StatusbarController
         <p>
         Mostly used by a status bar implementation to forward information to
         and request services from a status bar controller component. This
-        interface must be useable after
+        interface must be usable after
         <member scope="com::sun::star::lang">XInitialitation::initialize</member>
         has been called.  The behavior of the interface is undefined if the
         controller component hasn't been initialized.

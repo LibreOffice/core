@@ -70,7 +70,7 @@ published service SynchronousFrameLoader
         <p>
         Concrete implementations should use it to get her own configuration data
         directly after creation by the <type>FrameLoaderFactory</type>.
-        Otherwhise they must use normal configuration api to do so.
+        Otherwise they must use normal configuration API to do so.
         </p>
      */
     [optional] interface com::sun::star::lang::XInitialization;
@@ -86,7 +86,7 @@ published service SynchronousFrameLoader
         used on service <type>FrameLoaderFactory</type> to get further informations about this loader.
         Setting of this name by calling <member scope="com::sun::star::container">XNamed::setName()</member> must be
         forwarded to same factory service. He should decide, if it's allowed or not.
-        The reason: prevent code against name ambigities.
+        The reason: prevent code against name ambiguities.
         </p>
      */
      [optional] interface com::sun::star::container::XNamed;

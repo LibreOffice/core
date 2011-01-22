@@ -113,7 +113,7 @@ published service GridControl
 
     /** allows to create column models to be inserted into the control model.
 
-        <p>Note that the object returned by the <membere scope="com::sun::star::form">XGridColumnFactory::createColumn</member>
+        <p>Note that the object returned by the <member scope="com::sun::star::form">XGridColumnFactory::createColumn</member>
         method is not part of the grid control, yet. It needs to be inserted using any of the
         container interfaces.</p>
 
@@ -125,11 +125,11 @@ published service GridControl
     /** gives access to the currently selection.
 
         <p>In a grid control, single columns can be selected (at most one at a time).<br/>
-        For various unfortunate reaons, this selection is an aspect of the model, not of the
+        For various unfortunate reasons, this selection is an aspect of the model, not of the
         control as you would expect.</p>
 
         <p>This interface is deprecated, new implementations should not use it anymore, as it is to
-        be superseeded by a solution which is bound to the control, not the model.</p>
+        be superseded by a solution which is bound to the control, not the model.</p>
 
         @deprecated
     */

@@ -71,7 +71,7 @@ struct LineDescriptor
     */
     string HelpURL;
 
-    /** detetrmines whether a button exists which can be used for a more complex, interactive
+    /** determines whether a button exists which can be used for a more complex, interactive
         property value input.
 
         <p>If no image for the primary button is specified, but a primary button is present,
@@ -121,7 +121,7 @@ struct LineDescriptor
     */
     com::sun::star::graphic::XGraphic PrimaryButtonImage;
 
-    /** detetrmines whether a secondary button exists which can be used for a more complex, interactive
+    /** determines whether a secondary button exists which can be used for a more complex, interactive
         property value input.
 
         <p>A secondary button subordinated to the primary button. If no primary button exists

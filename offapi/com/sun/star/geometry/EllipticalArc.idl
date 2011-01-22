@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module geometry {
 /** This structure specifies an arbitrary elliptical arc.<p>
 
     This structure contains all parameters necessary to specify
-    arbitrary elliptical arcs. The parameters are modelled closely
+    arbitrary elliptical arcs. The parameters are modeled closely
     after the <a href="www.w3c.org">SVG</a> specification.<p>
 
     As with the parameters below, there are mostly four different

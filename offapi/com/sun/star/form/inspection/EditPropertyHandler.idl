@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module form { module inspection {
 //=============================================================================
 
 /** implements a property handler for use with an <type scope="com::sun::star::inspection">ObjectInspector</type>
-    which provides convinience wrappers for some properties existing at a form component
+    which provides convenience wrappers for some properties existing at a form component
     derived from <type scope="com::sun::star::awt">UnoControlEditModel</type>.
 
     <p>First, the handler supersedes the HScroll and the VScroll properties of a <type scope="com::sun::star::awt">UnoControlEditModel</type>

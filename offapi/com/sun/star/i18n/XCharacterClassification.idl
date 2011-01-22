@@ -156,7 +156,7 @@ published interface XCharacterClassification : com::sun::star::uno::XInterface
 
         @returns
             A filled <type>ParseResult</type> structure. If no
-            unambigous token could be parsed,
+            unambiguous token could be parsed,
             <member>ParseResult::TokenType</member> will be set to
             <b>0</b> (zero), other fields will contain the values parsed
             so far.

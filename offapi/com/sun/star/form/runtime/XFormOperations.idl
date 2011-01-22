@@ -79,7 +79,7 @@ interface XFeatureInvalidation;
     When the user just entered some data into one of the form fields, but did not yet
     leave this field, then the data is not yet committed to the form, not to talk
     about being committed to the underlying database. So, before everything else,
-    you would nee to obtain the active control of the form, and commit it.<br/>
+    you would need to obtain the active control of the form, and commit it.<br/>
     <em>Now</em> you're done ...</p>
 
     <p>As another example, consider that you want to delete the current record from the
@@ -123,7 +123,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         evaluating to <TRUE/>.<p>
 
         @param Feature
-            the feature whose state is to be determimed. Must be one of the <type>FormFeature</type>
+            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
             constants.<br/>
             An invalid value here will be silently ignored, and simply return a <type>FeatureState</type>
             indicating <em>disabled</em> with a <NULL/> state.</p>
@@ -138,7 +138,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
         <member>FeatureState::Enabled</member> member.</p>
 
         @param Feature
-            the feature whose state is to be determimed. Must be one of the <type>FormFeature</type>
+            the feature whose state is to be determined. Must be one of the <type>FormFeature</type>
             constants.<br/>
             An invalid value here will be silently ignored, and simply return <FALSE/>.
     */
@@ -153,11 +153,11 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
             constants.
 
         @throws ::com::sun::star::lang::IllegalArgumentException
-            if the given Feature is unknown, not executable, or striclty requires arguments
+            if the given Feature is unknown, not executable, or strictly requires arguments
             to be executed.
 
         @throws ::com::sun::star::sdbc::SQLException
-            if a database access erorr occurs
+            if a database access error occurs
 
         @throws ::com::sun::star::lang::WrappedTargetException
             if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
@@ -190,7 +190,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
             if the given arguments are not sufficient to execute the feature
 
         @throws ::com::sun::star::sdbc::SQLException
-            if a database access erorr occurs
+            if a database access error occurs
 
         @throws ::com::sun::star::lang::WrappedTargetException
             if an exception is caught which is no <type scope="com::sun::star::uno">RuntimeException</type>
@@ -216,7 +216,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
             case if the record or the active control of the form were modified.
 
         @throws ::com::sun::star::sdbc::SQLException
-            if a database access erorr occurs
+            if a database access error occurs
     */
     boolean         commitCurrentRecord(
                         [out] boolean RecordInserted
@@ -226,7 +226,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
     /** commits the current control of our controller
 
         @throws ::com::sun::star::sdbc::SQLException
-            if a database access erorr occurs
+            if a database access error occurs
     */
     boolean         commitCurrentControl(
                     )
@@ -234,7 +234,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
     /** determines whether the form is currently positioned on the insertion row
 
-        <p>This is a convenience method only. Calling it es equivalent to examing the
+        <p>This is a convenience method only. Calling it is equivalent to examining the
         <member scope="com::sun::star::sdb">RowSet::IsNew</member> property of the form.</p>
 
         @throws ::com::sun::star::lang::WrappedTargetException
@@ -246,7 +246,7 @@ interface XFormOperations : ::com::sun::star::lang::XComponent
 
     /** determines whether the current row of the form is modified
 
-        <p>This is a convenience method only. Calling it es equivalent to examing the
+        <p>This is a convenience method only. Calling it is equivalent to examining the
         <member scope="com::sun::star::sdb">RowSet::IsModified</member> property of the form.</p>
 
         @throws ::com::sun::star::lang::WrappedTargetException

@@ -56,7 +56,7 @@ module com {  module sun {  module star {  module frame {
     bar controller can be added to a Statusbar and provide information or
     functions with a more sophisticated user interface.<br/>
     A typical example for status bar controller is a zoom chooser. It shows
-    the current zoom and provides general zoom levels on a popup menu
+    the current zoom and provides general zoom levels on a pop-up menu
     that can be activated by a mouse action for context menus.
     <p>
 

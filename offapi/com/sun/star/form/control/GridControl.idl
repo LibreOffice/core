@@ -125,7 +125,7 @@ published service GridControl
 
     /** is used to switch the operating modes of the control.
 
-        <p>Besides the normal opreration mode (which is used to display the database form's data) the control may
+        <p>Besides the normal operation mode (which is used to display the database form's data) the control may
         for instance support a filter mode.</p>
     */
     [optional] interface com::sun::star::util::XModeSelector;
@@ -142,9 +142,9 @@ published service GridControl
     /** allows external components to register dispatchers for some common form actions.
 
         <p>A grid control can contain own UI elements for traveling within the database form it belongs to (This
-        concept seems to make sense, as a grid control - in opposite to other data aware controls - displayes
+        concept seems to make sense, as a grid control - in opposite to other data aware controls - displays
         not only one record at a time, but a larger number of records of the database form.)<br/>
-        With the help of this interface, external components which wish to handle such travelings themself can
+        With the help of this interface, external components which wish to handle such travelings themselves can
         register interceptors for the actions in question.</p>
 
         <p>Usual URLs to use include

@@ -44,7 +44,7 @@
 
 /** provides functionality to reset components to some default values.
 
-    <p>The semantincs of <em>default value</em> depends on the providing service.</p>
+    <p>The semantics of <em>default value</em> depends on the providing service.</p>
  */
 published interface XReset: com::sun::star::uno::XInterface
 {

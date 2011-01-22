@@ -46,7 +46,7 @@
 
 //=============================================================================
 
-/** sepecifies the control model for a field which can be used to input time values.
+/** specifies the control model for a field which can be used to input time values.
  */
 published service TimeField
 {

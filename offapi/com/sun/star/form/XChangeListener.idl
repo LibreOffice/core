@@ -57,7 +57,7 @@ published interface XChangeListener: com::sun::star::lang::XEventListener
     /** is invoked when the data of a component has been changed.
 
         @param rEvent
-            A dedscriptor specifying the source of the event.
+            A descriptor specifying the source of the event.
      */
     [oneway] void changed( [in] com::sun::star::lang::EventObject rEvent );
 

@@ -38,7 +38,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** represents a linguistic service event.
 
-    <P>This type of event may be broadcast by a spellchecker or
+    <P>This type of event may be broadcast by a spell checker or
     hyphenator service implementation to inform its listeners (clients)
     that the results of previous function calls may be different now.
     It is possible to suggest that hyphenation should be done again

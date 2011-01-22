@@ -47,7 +47,7 @@ published enum FormSubmitMethod
 
     //-------------------------------------------------------------------------
 
-    /** speficies to send the input information in a data body.
+    /** specifies to send the input information in a data body.
     */
     POST
 

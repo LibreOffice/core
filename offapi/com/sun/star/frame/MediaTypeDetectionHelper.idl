@@ -45,7 +45,7 @@ published service MediaTypeDetectionHelper
     /** provides a mapping from <atom>string<atom> to <atom>string<atom>
 
         <p>
-        Order of given and their returned coressponding strings is important.
+        Order of given and their returned corresponding strings is important.
         Don't pack or optimize it. Every item of [in] list must match
         to an item of [out] list.
         </p>

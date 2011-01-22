@@ -61,7 +61,7 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
         the first interceptor in the chain of registered interceptors.
 
         @param Interceptor
-            the interceptor which whish to be registered
+            the interceptor which wishes to be registered
 
         @see XDispatchProviderInterception::releaseDispatchProviderInterceptor()
      */
@@ -76,7 +76,7 @@ published interface XDispatchProviderInterception: com::sun::star::uno::XInterfa
         </p>
 
         @param Interceptor
-            the interceptor which whish to be unregistered
+            the interceptor which wishes to be unregistered
 
         @see XDispatchProviderInterception::registerDispatchProviderInterceptor()
      */

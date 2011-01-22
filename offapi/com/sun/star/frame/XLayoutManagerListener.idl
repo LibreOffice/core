@@ -39,7 +39,7 @@ module com {  module sun {  module star {  module frame {
 /** makes it possible to receive events from a layout manager.
 
     <p>Events are provided <strong>only</strong> for notification
-    purposes only.  All operations are handled interally by the
+    purposes only.  All operations are handled internally by the
     layout manager component, so that GUI layout works properly
     regardless of whether a component registers such a listener
     or not.</p>

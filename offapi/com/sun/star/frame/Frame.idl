@@ -71,9 +71,9 @@
 /** represents the environment for a desktop component
 
     <p>
-    Frames are the anchors for the office components and they are the components' link
-    to the outside world. They create a skeleton for the whole office api infrastructure
-    by building frame hierarchys. These hierarchies contains all currently loaded
+    Frames are the anchors for the office components and they are the component's link
+    to the outside world. They create a skeleton for the whole office API infrastructure
+    by building frame hierarchies. These hierarchies contains all currently loaded
     documents and make it possible to walk during these trees.
     A special service <type>Desktop</type> can(!) combine different of such trees
     to a global one which life time will be controlled by it.
@@ -135,7 +135,7 @@ published service Frame
     /** supports interception mechanism for dispatched URLs
 
         <p>
-        Registered objects can intercept, supress or deroute dispatched URLs.
+        Registered objects can intercept, suppress or reroute dispatched URLs.
         If they support another interface too (<type>XInterceptorInfo</type>)
         it's possible to perform it by directly calling of right interceptor without
         using list of all registered ones.
@@ -174,7 +174,7 @@ published service Frame
         The supplier contains a dispatch recorder and provide the functionality
         to use it for any dispatch object from outside which supports the interface
         <type>XDispatch</type>. A supplier is available only, if recording was enabled.
-        That means: if somewhere whish to enable recoding on a frame he must set
+        That means: if someone wishes to enable recoding on a frame he must set
         a supplier with a recorder object inside of it. Every user of dispatches
         has to check then if such supplier is available at this frame property.
         If value of this property is <NULL/> he must call <member>XDispatch::dispatch()</member>
@@ -185,7 +185,7 @@ published service Frame
 
         <p>
         Note:<br>
-        It's not recommended to cache an already getted supplier. Because there exist
+        It's not recommended to cache an already gotten supplier. Because there exist
         no possibility to check for enabled/disabled recording then.
         </p>
 

@@ -49,7 +49,7 @@ module com {  module sun {  module star {  module form { module binding {
     content of the controls associated with this model. For instance, for an
     <type scope="com::sun::star::form::component">TextField</type>, this would be the
     <member scope="com::sun::star::awt">UnoControlEditModel::Text</member> property of the base
-    service. Similarily, a <type scope="com::sun::star::form::component">CheckBox</type> has
+    service. Similarly, a <type scope="com::sun::star::form::component">CheckBox</type> has
     a property <member scope="com::sun::star::awt">UnoControlCheckBoxModel::State</member>, which
     reflects the current check state.</p>
 
@@ -95,7 +95,7 @@ module com {  module sun {  module star {  module form { module binding {
                 Note that this restriction is inherited from the <type>BindableControlModel</type>.
             </li>
             <li><b>Cloning</b><br/>
-                <type scope="com::sun::star::form">FormControlModel</type>s support cloning themself
+                <type scope="com::sun::star::form">FormControlModel</type>s support cloning themselves
                 via the <type scope="com::sun::star::util">XCloneable</type> interface which they
                 inherit from the <type scope="com::sun::star::awt">UnoControlModel</type> service.</br>
                 When a <type>BindableDataAwareControlModel</type> is cloned while it has an active

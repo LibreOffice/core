@@ -69,7 +69,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param nStartPos
             The start position in aText for the conversion
         @param nLength
-            The length of the partion in aText for the conversion
+            The length of the portion in aText for the conversion
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType
@@ -103,7 +103,7 @@ published interface XTextConversion : ::com::sun::star::uno::XInterface
         @param nStartPos
             The start position in aText for the conversion
         @param nLength
-            The length of the partion in aText for the conversion
+            The length of the portion in aText for the conversion
         @param aLocal
             Locale the conversion is referring to.
         @param nTextConversionType

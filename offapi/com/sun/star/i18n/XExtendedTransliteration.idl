@@ -47,7 +47,7 @@ module com { module sun { module star { module i18n {
     additional functionality for character to character and
     string to string without offset parameter transliteration. These
     should be used for performance reason if their full-blown
-    counterparts aren't neded.  </p>
+    counterparts aren't needed.  </p>
 
      @since OOo 1.1.2
  */
@@ -56,7 +56,7 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
     //------------------------------------------------------------------------
     /** Transliterate a substring. The functionality is the same as
         <member scope="::com::sun::star::i18n">XTransliteration::transliterate()</member>
-        but omits the offset prameter to improve performance.
+        but omits the offset parameter to improve performance.
 
         @param aStr
             The input string.
@@ -65,7 +65,7 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
             Start position within aStr from where transliteration starts.
 
         @param nCount
-            Number of codepoints to be transliterated.
+            Number of code points to be transliterated.
 
      */
     string  transliterateString2String( [in] string aStr,
@@ -84,7 +84,7 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
     /** Transliterate a character to a character.
 
         <p> If the output contains multiple characters, for example when
-        transliterating German sharp 's' (the one that looks like a
+        transliterating German sharp "s" (the one that looks like a
         Greek Beta) to upper case "SS", MultipleCharsOutputException
         will be thrown, the caller must catch the exception and then
         call
