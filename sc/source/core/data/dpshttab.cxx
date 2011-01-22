@@ -285,6 +285,11 @@ const OUString& ScSheetSourceDesc::GetRangeName() const
     return maRangeName;
 }
 
+bool ScSheetSourceDesc::HasRangeName() const
+{
+    return maRangeName.getLength() > 0;
+}
+
 void ScSheetSourceDesc::SetQueryParam(const ScQueryParam& rParam)
 {
     maQueryParam = rParam;
