@@ -125,8 +125,10 @@ RSCDEFS+=-DFULL_DESK
 CFLAGSEXCEPTIONS=-EHa
 CFLAGS_NO_EXCEPTIONS=
 
+.IF "$(CL_X64)" == ""
 # enable boost support for __cdecl (SAL_CALL) C++-UNO interface methods
 CDEFS+=-DBOOST_MEM_FN_ENABLE_CDECL
+.ENDIF
 
 # with the current debug switches PCH won't work
 # anyway. so keep the existing .pch intact and don't
