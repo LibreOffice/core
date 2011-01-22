@@ -26,13 +26,8 @@
  *
  ************************************************************************/
 
-/* NAME $Id: mzstring.cpp,v 1.5 2008-06-04 10:02:20 vg Exp $
- * PURPOSE
+/* PURPOSE
  *   supposed to be used instead of std::string
- * NOTES
- *
- * HISTORY
- *        frog - Oct 8, 1998: Created.
  */
 
 #ifdef __GNUG__

@@ -29,14 +29,6 @@
 #ifndef _DRAWING_H_
 #define _DRAWING_H_
 
-/* NAME
- *
- * NOTES
- *
- * HISTORY
- *   frog - Jan 11, 1999: Created.
- *   frog - Nov 20, 2000: remove display function, only needed loading object from binary
- */
 #include "precompile.h"
 
 #include <math.h>
@@ -193,10 +185,6 @@ static bool SkipUnusedField(void)
 #define HDOFILE_HAS_NEXT    0x01
 #define HDOFILE_HAS_CHILD   0x02
 
-/**
- * 공통 헤더를 읽어드린다.
- * 개체종류/연결정보/상대위치/개체크기/절대위치/차지영역/기본속성/회전속성/그라데이션/비트맵패턴
- */
 static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
 {
     uint size, property_size, common_size;
@@ -432,85 +420,6 @@ HWPDODefaultFunc(int , HWPDrawingObject * , int cmd, void *, int)
 }
 
 
-// arrow polygon
-
-/* os 06.09.2005: unused function
-static void
-calcArrowPolygonPts(long lWidth, ZZPoint * arrowPt,
-ZZPoint * boxPt, int x1, int y1, int x2, int y2)
-{
-    long lLength = lWidth;
-    int dx, dy;
-
-#if 0
-    if (gc->lineWidth > ONE_MILI)
-        lWidth = lLength = DRPX2(gc->lineWidth) * 2;
-    else
-        lWidth = lLength = DRPX2(ARROW_WIDTH);
-#endif
-
-    dx = x1 - x2;
-    dy = y1 - y2;
-
-    if (dx == 0)
-    {
-        arrowPt[0].x = x1;
-        boxPt[3].x = boxPt[0].x = arrowPt[1].x = x1 + lWidth;
-        boxPt[2].x = boxPt[1].x = arrowPt[2].x = x1 - lWidth;
-        if (y1 > y2)
-        {
-            boxPt[2].y = boxPt[3].y = y1 + lLength * 2 / 3;
-            arrowPt[0].y = y1 + lLength * 3 / 2;
-            boxPt[0].y = boxPt[1].y = arrowPt[1].y = arrowPt[2].y = y1 - lLength;
-        }
-        else
-        {
-            boxPt[0].y = boxPt[1].y = y1 - lLength * 2 / 3;
-            arrowPt[0].y = y1 - lLength * 3 / 2;
-            boxPt[2].y = boxPt[3].y = arrowPt[1].y = arrowPt[2].y = y1 + lLength;
-        }
-        return;
-    }
-
-    double rSlope, rRadians;
-    long DX1, DY1, DX2, DY2;
-
-    rSlope = (double) dy / (double) dx;
-    rRadians = atan(rSlope);
-    DX1 = (long) (lLength * cos(rRadians) + 0.5);
-    DY1 = (long) (lLength * sin(rRadians) + 0.5);
-    DX2 = (long) (lWidth * sin(rRadians) + 0.5);
-    DY2 = (long) (lWidth * cos(rRadians) + 0.5);
-
-    if (dx > 0)
-    {
-        arrowPt[0].x = (int) (x1 + cos(rRadians) * lLength * 3 / 2);
-        arrowPt[0].y = (int) (y1 + sin(rRadians) * lLength * 3 / 2);
-        boxPt[0].x = arrowPt[1].x = x1 - DX1 - DX2;
-        boxPt[0].y = arrowPt[1].y = y1 - DY1 + DY2;
-        boxPt[1].x = arrowPt[2].x = x1 - DX1 + DX2;
-        boxPt[1].y = arrowPt[2].y = y1 - DY1 - DY2;
-        boxPt[2].x = arrowPt[0].x - DX1 + DX2;
-        boxPt[2].y = arrowPt[0].y - DY1 - DY2;
-        boxPt[3].x = arrowPt[0].x - DX1 - DX2;
-        boxPt[3].y = arrowPt[0].y - DY1 + DY2;
-    }
-    else
-    {
-        arrowPt[0].x = (int) (x1 - cos(rRadians) * lLength * 3 / 2);
-        arrowPt[0].y = (int) (y1 - sin(rRadians) * lLength * 3 / 2);
-        boxPt[0].x = arrowPt[1].x = x1 + DX1 - DX2;
-        boxPt[0].y = arrowPt[1].y = y1 + DY1 + DY2;
-        boxPt[1].x = arrowPt[2].x = x1 + DX1 + DX2;
-        boxPt[1].y = arrowPt[2].y = y1 + DY1 - DY2;
-        boxPt[3].x = arrowPt[0].x + DX1 - DX2;
-        boxPt[3].y = arrowPt[0].y + DY1 + DY2;
-        boxPt[2].x = arrowPt[0].x + DX1 + DX2;
-        boxPt[2].y = arrowPt[0].y + DY1 - DY2;
-    }
-}
-*/
-
 static int
 HWPDOLineFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
@@ -580,7 +489,6 @@ int cmd, void *argp, int argv)
 static int
 HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
-// TRACE("arc");
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -602,7 +510,6 @@ HWPDOArcFunc(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 static int
 HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
 {
-// TRACE("arc2");
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -613,56 +520,6 @@ HWPDOArc2Func(int type, HWPDrawingObject * hdo, int cmd, void *argp, int argv)
     return true;
 }
 
-
-// freeform
-
-#define SPLINE_NSTEP    100
-#define SPLINE_UNIT 20
-#define SPLINE_UNIT2    40
-#define SPLINE_UNIT3    60
-
-/* os 06.09.2005: unused function
-static int getBlend(int alpha)
-{
-    static bool first = true;
-    static char isCached[SPLINE_NSTEP];
-    static int blend[SPLINE_NSTEP];
-    double ntheta;
-
-    if (first)
-    {
-        memset(isCached, 0, sizeof(char) * SPLINE_NSTEP);
-
-        first = FALSE;
-    }
-    if ((alpha < -SPLINE_UNIT2) || (alpha > SPLINE_UNIT2))
-        return 0;
-
-    if (!isCached[alpha + SPLINE_UNIT2])
-    {
-        isCached[alpha + SPLINE_UNIT2] = TRUE;
-        ntheta = (double) alpha / SPLINE_UNIT;
-
-        if ((alpha < -SPLINE_UNIT) || (alpha > SPLINE_UNIT))
-        {
-            ntheta = (ntheta > 1) ? (2 - ntheta) : (2 + ntheta);
-            blend[alpha + SPLINE_UNIT2] =
-                (int) (1000 * ntheta * ntheta * ntheta / 6.);
-        }
-        else if (alpha <= 0)
-            blend[alpha + SPLINE_UNIT2] =
-                    (int) (1000 *
-                    (4 - 6 * ntheta * ntheta -
-                    3 * ntheta * ntheta * ntheta) / 6);
-        else
-            blend[alpha + SPLINE_UNIT2] =
-                (int) (1000 *
-                (4 - 6 * ntheta * ntheta +
-                3 * ntheta * ntheta * ntheta) / 6);
-    }
-    return blend[alpha + SPLINE_UNIT2];
-}
-*/
 
 static int
 HWPDOFreeFormFunc(int type, HWPDrawingObject * hdo,
@@ -751,9 +608,6 @@ static int
 HWPDOTextBoxFunc(int type, HWPDrawingObject * hdo,
 int cmd, void *argp, int argv)
 {
-// TRACE("textbox");
-//    hunit sx, sy, xs, ys;
-
     switch (cmd)
     {
         case OBJFUNC_LOAD:
@@ -784,8 +638,6 @@ int cmd, void *argp, int argv)
     return HWPDODefaultFunc(type, hdo, cmd, argp, argv);
 }
 
-
-/* HWPDrawObject 멤버 함수 */
 
 HWPDrawingObject::HWPDrawingObject()
 {

@@ -26,15 +26,6 @@
  *
  ************************************************************************/
 
-/* NAME
- * PURPOSE
- *
- * NOTES
- *
- * HISTORY
- *        frog - Aug 6, 1998: Created.
- */
-
 #include "precompile.h"
 
 #ifdef __GNUG__
