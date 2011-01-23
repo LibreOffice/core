@@ -84,7 +84,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
 
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
-            $(OBJ)$/libutil.obj  \
             $(OBJ)$/semaphor.obj \
             $(OBJ)$/socket.obj   \
             $(OBJ)$/interlck.obj \
@@ -97,7 +96,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/profile.obj  \
             $(OBJ)$/time.obj     \
             $(OBJ)$/signal.obj   \
-            $(OBJ)$/pipeimpl.obj \
             $(OBJ)$/pipe.obj     \
             $(OBJ)$/util.obj     \
             $(OBJ)$/file.obj\
@@ -114,5 +112,3 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-
-

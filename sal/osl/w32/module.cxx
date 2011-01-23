@@ -189,73 +189,6 @@ osl_getAsciiFunctionSymbol( oslModule Module, const sal_Char *pSymbol )
 #undef LPMODULEENTRY32
 #endif
 
-typedef HANDLE (WINAPI *CreateToolhelp32Snapshot_PROC)( DWORD dwFlags, DWORD th32ProcessID );
-typedef BOOL (WINAPI *Module32First_PROC)( HANDLE   hSnapshot, LPMODULEENTRY32 lpme32 );
-typedef BOOL (WINAPI *Module32Next_PROC)( HANDLE    hSnapshot, LPMODULEENTRY32 lpme32 );
-
-static sal_Bool SAL_CALL _osl_addressGetModuleURL_Windows( void *pv, rtl_uString **pustrURL )
-{
-    sal_Bool    bSuccess        = sal_False;    /* Assume failure */
-    HMODULE     hModKernel32    = GetModuleHandleA( "KERNEL32.DLL" );
-
-    if ( hModKernel32 )
-    {
-        CreateToolhelp32Snapshot_PROC   lpfnCreateToolhelp32Snapshot = (CreateToolhelp32Snapshot_PROC)GetProcAddress( hModKernel32, "CreateToolhelp32Snapshot" );
-        Module32First_PROC              lpfnModule32First = (Module32First_PROC)GetProcAddress( hModKernel32, "Module32First" );
-        Module32Next_PROC               lpfnModule32Next = (Module32Next_PROC)GetProcAddress( hModKernel32, "Module32Next" );
-
-        if ( lpfnCreateToolhelp32Snapshot && lpfnModule32First && lpfnModule32Next )
-        {
-            HANDLE  hModuleSnap = NULL;
-            DWORD   dwProcessId = GetCurrentProcessId();
-
-            // Take a snapshot of all modules in the specified process.
-
-            hModuleSnap = lpfnCreateToolhelp32Snapshot(TH32CS_SNAPMODULE, dwProcessId );
-
-            if ( INVALID_HANDLE_VALUE != hModuleSnap )
-            {
-                MODULEENTRY32   me32    = {0};
-
-                // Fill the size of the structure before using it.
-
-                me32.dwSize = sizeof(MODULEENTRY32);
-
-                // Walk the module list of the process, and find the module of
-                // interest. Then copy the information to the buffer pointed
-                // to by lpMe32 so that it can be returned to the caller.
-
-                if ( lpfnModule32First(hModuleSnap, &me32) )
-                {
-                    do
-                    {
-                        if ( (BYTE *)pv >= (BYTE *)me32.hModule && (BYTE *)pv < (BYTE *)me32.hModule + me32.modBaseSize )
-                        {
-                            rtl_uString *ustrSysPath = NULL;
-
-                            rtl_string2UString( &ustrSysPath, me32.szExePath, strlen(me32.szExePath), osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
-                            OSL_ASSERT(ustrSysPath != NULL);
-                            osl_getFileURLFromSystemPath( ustrSysPath, pustrURL );
-                            rtl_uString_release( ustrSysPath );
-
-                            bSuccess = sal_True;
-                        }
-
-                    } while ( !bSuccess && lpfnModule32Next( hModuleSnap, &me32 ) );
-                }
-
-
-                // Do not forget to clean up the snapshot object.
-
-                CloseHandle (hModuleSnap);
-            }
-
-        }
-    }
-
-    return  bSuccess;
-}
-
 /***************************************************************************************/
 /* Implementation for Windows NT, 2K and XP (2K and XP could use the above method too) */
 /***************************************************************************************/
@@ -455,10 +388,7 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
 sal_Bool SAL_CALL osl_getModuleURLFromAddress( void *pv, rtl_uString **pustrURL )
 {
     /* Use ..._NT first because ..._NT4 is much slower */
-    if ( IS_NT )
-        return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
-    else
-        return _osl_addressGetModuleURL_Windows( pv, pustrURL );
+    return _osl_addressGetModuleURL_NT( pv, pustrURL ) || _osl_addressGetModuleURL_NT4( pv, pustrURL );
 }
 
 /*****************************************************************************/
