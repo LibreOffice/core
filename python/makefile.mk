@@ -133,13 +133,19 @@ BUILD_DIR=PC/VS7.1
 BUILD_DIR=PC/VC6
 .ENDIF
 
+.IF "$(CPU)" == "I"
+ARCH=Win32
+.ELSE
+ARCH=x64
+.ENDIF
+
 # Build python executable and then runs a minimal script. Running the minimal script
 # ensures that certain *.pyc files are generated which would otherwise be created on
 # solver during registration in insetoo_native
 .IF "$(CCNUMVER)" >= "001600000000"
 BUILD_ACTION=MSBuild.exe pcbuild.sln /t:Build /p:Configuration=Release /ToolsVersion:4.0
 .ELSE
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|Win32"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe pcbuild.sln "Release|$(ARCH)"
 .ENDIF
 .ENDIF
 .ENDIF
