@@ -25,10 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
-#define _USE_32BIT_TIME_T
-#endif
-
 #include        <stdio.h>
 #ifdef UNX
 #include        <stdlib.h>
@@ -467,7 +463,7 @@ void initdefines()
         register char           *tp;
         register DEFBUF         *dp;
         int                     i;
-        long                    tvec;
+        time_t                  tvec;
 
 #if !defined( ZTC ) && !defined( WNT ) && !defined(BLC) && !defined(G3)
         extern char             *ctime();
@@ -505,9 +501,9 @@ void initdefines()
             dp = defendel("__DATE__", FALSE);
             dp->repl = tp = getmem(27);
             dp->nargs = DEF_NOARGS;
-            time( (time_t*)&tvec);
+            time( &tvec);
             *tp++ = '"';
-            strcpy(tp, ctime((const time_t*)&tvec));
+            strcpy(tp, ctime(&tvec));
             tp[24] = '"';                       /* Overwrite newline    */
 #endif
         }
