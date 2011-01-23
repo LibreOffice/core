@@ -32,6 +32,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <hash_map> /* std::hashmap*/
+#include <vector>
 
 class GSILine;
 
@@ -40,10 +41,9 @@ typedef USHORT TokenId;
 #define TOK_INVALIDPOS  USHORT( 0xFFFF )
 
 class ParserMessage;
+typedef ::std::vector< ParserMessage* > Impl_ParserMessageList;
 
-DECLARE_LIST( Impl_ParserMessageList, ParserMessage* )
 class ParserMessageList;
-
 
 struct equalByteString{
         bool operator()( const ByteString& rKey1, const ByteString& rKey2 ) const {
@@ -123,13 +123,21 @@ explicit    TokenInfo( TokenId pnId, USHORT nP, String paStr, ParserMessageList 
 };
 
 
-class ParserMessageList : public Impl_ParserMessageList
+class ParserMessageList
 {
+private:
+    Impl_ParserMessageList maList;
+
 public:
+    ~ParserMessageList() { clear(); }
     void AddError( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
     void AddWarning( USHORT nErrorNr, ByteString aErrorText, const TokenInfo &rTag );
 
     BOOL HasErrors();
+    bool empty() const { return maList.empty(); }
+    size_t size() const { return maList.size(); }
+    ParserMessage* operator [] ( size_t i ) { return ( i < maList.size() ) ? maList[ i ] : NULL; }
+    void clear();
 };
 
 
@@ -217,62 +225,42 @@ public:
 
 #define TAG_UNKNOWN_TAG             ( TAG_GROUP_MULTI << TAG_GROUPSHIFT | 0x800 )
 
-DECLARE_LIST( TokenListImpl, TokenInfo* )
+typedef ::std::vector< TokenInfo* > TokenListImpl;
 
-class TokenList : private TokenListImpl
+class TokenList
 {
 private:
-
+    TokenListImpl maList;
     TokenList&   operator =( const TokenList& rList );
-//                { TokenListImpl::operator =( rList ); return *this; }
-
 
 public:
-    using TokenListImpl::Count;
+    TokenList() {};
+    ~TokenList(){ clear(); };
 
-
-    TokenList() : TokenListImpl(){};
-    ~TokenList(){ Clear(); };
-
-    void        Clear()
+    size_t size() const { return maList.size(); }
+    void clear()
         {
-            for ( ULONG i = 0 ; i < Count() ; i++ )
-                delete TokenListImpl::GetObject( i );
-            TokenListImpl::Clear();
+            for ( size_t i = 0 ; i < maList.size() ; i++ )
+                delete maList[ i ];
+            maList.clear();
         }
-    void        Insert( TokenInfo p, ULONG nIndex = LIST_APPEND )
-        { TokenListImpl::Insert( new TokenInfo(p), nIndex ); }
-/*    TokenInfo     Remove( ULONG nIndex )
+
+    void insert( TokenInfo p, size_t nIndex = LIST_APPEND )
         {
-            TokenInfo aT = GetObject( nIndex );
-            delete TokenListImpl::GetObject( nIndex );
-            TokenListImpl::Remove( nIndex );
-            return aT;
-        }*/
-//    TokenInfo     Remove( TokenInfo p ){ return Remove( GetPos( p ) ); }
-//    TokenInfo     GetCurObject() const { return *TokenListImpl::GetCurObject(); }
-    TokenInfo&      GetObject( ULONG nIndex ) const
-        {
-//          if ( TokenListImpl::GetObject(nIndex) )
-                return *TokenListImpl::GetObject(nIndex);
-//          else
-//              return TokenInfo();
+            if ( nIndex < maList.size() ) {
+                TokenListImpl::iterator it = maList.begin();
+                ::std::advance( it, nIndex );
+                maList.insert( it, new TokenInfo(p) );
+            } else {
+                maList.push_back( new TokenInfo(p) );
+            }
         }
-/*    ULONG     GetPos( const TokenInfo p ) const
+    TokenInfo& operator [] ( size_t nIndex ) const
         {
-            for ( ULONG i = 0 ; i < Count() ; i++ )
-                if ( p == GetObject( i ) )
-                    return i;
-            return LIST_ENTRY_NOTFOUND;
-        }*/
+            return *maList[ nIndex ];
+        }
 
     TokenList( const TokenList& rList );
-/*      {
-            for ( ULONG i = 0 ; i < rList.Count() ; i++ )
-            {
-                Insert( rList.GetObject( i ), LIST_APPEND );
-            }
-        }*/
 };
 
 class ParserMessage
@@ -363,8 +351,6 @@ class TokenParser
 public:
     TokenParser();
     void Parse( const String &aCode, ParserMessageList* pList );
-//  ParserMessageList& GetErrors(){ return aErrorList; }
-//  BOOL HasErrors(){ return ( aErrorList.Count() > 0 ); }
     TokenList& GetTokenList(){ return aParser.GetTokenList(); }
 };
 
@@ -381,14 +367,8 @@ public:
     void CheckReference( GSILine *aReference );
     void CheckTestee( GSILine *aTestee, BOOL bHasSourceLine, BOOL bFixTags );
 
-//  ParserMessageList& GetReferenceErrors(){ return aReferenceParser.GetErrors(); }
-//  BOOL HasReferenceErrors(){ return aReferenceParser.HasErrors(); }
-
-//  ParserMessageList& GetTesteeErrors(){ return aTesteeParser.GetErrors(); }
-//  BOOL HasTesteeErrors(){ return aTesteeParser.HasErrors(); }
-
     ParserMessageList& GetCompareWarnings(){ return aCompareWarningList; }
-    BOOL HasCompareWarnings(){ return ( aCompareWarningList.Count() > 0 ); }
+    BOOL HasCompareWarnings(){ return ( !aCompareWarningList.empty() ); }
 
     String GetFixedTestee(){ return aFixedTestee; }
 };

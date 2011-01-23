@@ -375,10 +375,9 @@ void GSIBlock::PrintList( ParserMessageList *pList, ByteString aPrefix,
     GSILine *pLine )
 /*****************************************************************************/
 {
-    ULONG i;
-    for ( i = 0 ; i < pList->Count() ; i++ )
+    for ( size_t i = 0 ; i < pList->size() ; i++ )
     {
-        ParserMessage *pMsg = pList->GetObject( i );
+        ParserMessage *pMsg = (*pList)[ i ];
         ByteString aContext;
         if ( bPrintContext )
         {

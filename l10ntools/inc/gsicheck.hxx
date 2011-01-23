@@ -76,7 +76,7 @@ public:
           void        SetTitle( ByteString &aNew ) { aTitle = aNew; ReassembleLine(); }
 
     ParserMessageList* GetMessageList() { return &aMessages; };
-    BOOL HasMessages(){ return ( aMessages.Count() > 0 ); };
+    BOOL HasMessages(){ return ( !aMessages.empty() ); };
 
     BOOL IsOK() const { return bOK; }
     void NotOK();
