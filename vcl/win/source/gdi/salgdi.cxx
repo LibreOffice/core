@@ -621,7 +621,7 @@ void ImplClearHDCCache( SalData* pData )
 // Make sure pWinPointAry and pWinFlagAry are big enough
 void ImplPreparePolyDraw( bool                      bCloseFigures,
                           ULONG                     nPoly,
-                          const ULONG*              pPoints,
+                          const sal_uInt32*         pPoints,
                           const SalPoint* const*    pPtAry,
                           const BYTE* const*        pFlgAry,
                           POINT*                    pWinPointAry,
@@ -632,7 +632,7 @@ void ImplPreparePolyDraw( bool                      bCloseFigures,
     {
         const POINT* pCurrPoint = reinterpret_cast<const POINT*>( *pPtAry++ );
         const BYTE* pCurrFlag = *pFlgAry++;
-        const ULONG nCurrPoints = *pPoints++;
+        const sal_uInt32 nCurrPoints = *pPoints++;
         const bool bHaveFlagArray( pCurrFlag );
         ULONG nCurrPoint;
 
@@ -1459,7 +1459,8 @@ sal_Bool WinSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAr
         pWinFlagAry = aStackAry2;
     }
 
-    ImplPreparePolyDraw(true, 1, &nPoints, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
+    sal_uInt32 nPoints_i32(nPoints);
+    ImplPreparePolyDraw(true, 1, &nPoints_i32, &pPtAry, &pFlgAry, pWinPointAry, pWinFlagAry);
 
     sal_Bool bRet( sal_False );
 
@@ -1497,7 +1498,7 @@ sal_Bool WinSalGraphics::drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt
                 "WinSalGraphics::DrawPolyPolygonBezier(): POINT != SalPoint" );
 
     ULONG nCurrPoly, nTotalPoints;
-    const ULONG* pCurrPoints = pPoints;
+    const sal_uInt32* pCurrPoints = pPoints;
     for( nCurrPoly=0, nTotalPoints=0; nCurrPoly<nPoly; ++nCurrPoly )
         nTotalPoints += *pCurrPoints++;
 

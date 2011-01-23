@@ -6292,12 +6292,12 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             break;
 #if WINVER >= 0x0500
         case WM_IME_REQUEST:
-            if ( PtrToInt( wParam ) == IMR_RECONVERTSTRING )
+            if ( (sal_uIntPtr)( wParam ) == IMR_RECONVERTSTRING )
             {
                 nRet = ImplHandleIMEReconvertString( hWnd, lParam );
                 rDef = FALSE;
             }
-        else if( PtrToInt( wParam ) == IMR_CONFIRMRECONVERTSTRING )
+        else if( (sal_uIntPtr)( wParam ) == IMR_CONFIRMRECONVERTSTRING )
         {
         nRet = ImplHandleIMEConfirmReconvertString( hWnd, lParam );
         rDef = FALSE;
