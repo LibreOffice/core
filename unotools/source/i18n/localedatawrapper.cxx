@@ -1400,18 +1400,14 @@ sal_Unicode* LocaleDataWrapper::ImplAddFormatNum( sal_Unicode* pBuf,
     sal_Unicode* pNumBuf;
     USHORT  nNumLen;
     USHORT  i = 0;
-    BOOL    bNeg;
 
     // negative number
     if ( nNumber < 0 )
     {
         nNumber *= -1;
-        bNeg = TRUE;
         *pBuf = '-';
         pBuf++;
     }
-    else
-        bNeg = FALSE;
 
     // convert number
     pNumBuf = ImplAddUNum( aNumBuf, (sal_uInt64)nNumber );
