@@ -353,7 +353,11 @@ MT=mt.exe
 MTFLAGS=$(NOLOGO)
 
 
+.IF "$(CL_X64)" == ""
 DLLPOSTFIX=mi
+.ELSE
+DLLPOSTFIX=mx
+.ENDIF
 PCHPOST=.pch
 
 CSC*=$(FLIPCMD) csc
