@@ -27,8 +27,9 @@
  ************************************************************************/
 // local includes
 #include "export.hxx"
+#include <vector>
 
-DECLARE_LIST( LngLineList, ByteString * )
+typedef ::std::vector< ByteString* > LngLineList;
 
 #define LNG_OK              0x0000
 #define LNG_FILE_NOTFOUND   0x0001
