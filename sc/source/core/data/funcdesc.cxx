@@ -71,6 +71,7 @@ public:
 
 //========================================================================
 // class ScFuncDesc:
+//========================================================================
 
 ScFuncDesc::ScFuncDesc() :
         pFuncName       (NULL),
@@ -86,14 +87,10 @@ ScFuncDesc::ScFuncDesc() :
         bHasSuppressedArgs(false)
 {}
 
-//------------------------------------------------------------------------
-
 ScFuncDesc::~ScFuncDesc()
 {
     Clear();
 }
-
-//------------------------------------------------------------------------
 
 void ScFuncDesc::Clear()
 {
@@ -127,8 +124,6 @@ void ScFuncDesc::Clear()
     bIncomplete = false;
     bHasSuppressedArgs = false;
 }
-
-//------------------------------------------------------------------------
 
 ::rtl::OUString ScFuncDesc::GetParamList() const
 {
@@ -193,8 +188,6 @@ void ScFuncDesc::Clear()
     return aSig.makeStringAndClear();
 }
 
-//------------------------------------------------------------------------
-
 ::rtl::OUString ScFuncDesc::getSignature() const
 {
     ::rtl::OUStringBuffer aSig;
@@ -217,8 +210,6 @@ void ScFuncDesc::Clear()
     }
     return aSig.makeStringAndClear();
 }
-
-//------------------------------------------------------------------------
 
 ::rtl::OUString ScFuncDesc::getFormula( const ::std::vector< ::rtl::OUString >& _aArguments ) const
 {
@@ -257,8 +248,6 @@ void ScFuncDesc::Clear()
     return aFormula.makeStringAndClear();
 }
 
-//------------------------------------------------------------------------
-
 sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
@@ -278,8 +267,6 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
     return nCount;
 }
 
-//------------------------------------------------------------------------
-
 ::rtl::OUString ScFuncDesc::getFunctionName() const
 {
     ::rtl::OUString sRet;
@@ -287,12 +274,12 @@ sal_uInt16 ScFuncDesc::GetSuppressedArgCount() const
         sRet = *pFuncName;
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionCategory* ScFuncDesc::getCategory() const
 {
     return ScGlobal::GetStarCalcFunctionMgr()->getCategory(nCategory);
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString ScFuncDesc::getDescription() const
 {
     ::rtl::OUString sRet;
@@ -300,14 +287,12 @@ const formula::IFunctionCategory* ScFuncDesc::getCategory() const
         sRet = *pFuncDesc;
     return sRet;
 }
-// -----------------------------------------------------------------------------
-// GetSuppressedArgCount
+
 xub_StrLen ScFuncDesc::getSuppressedArgumentCount() const
 {
     return GetSuppressedArgCount();
 }
-// -----------------------------------------------------------------------------
-//
+
 void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArguments) const
 {
     if (!bHasSuppressedArgs || !pDefArgFlags)
@@ -326,7 +311,7 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
             _rArguments.push_back(i);
     }
 }
-// -----------------------------------------------------------------------------
+
 void ScFuncDesc::initArgumentInfo()  const
 {
     // get the full argument description
@@ -352,36 +337,31 @@ void ScFuncDesc::initArgumentInfo()  const
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 long ScFuncDesc::getHelpId() const
 {
     return (long)nHelpId;
 }
-// -----------------------------------------------------------------------------
 
-// parameter
 sal_uInt32 ScFuncDesc::getParameterCount() const
 {
     return nArgCount;
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString ScFuncDesc::getParameterName(sal_uInt32 _nPos) const
 {
     return *(ppDefArgNames[_nPos]);
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString ScFuncDesc::getParameterDescription(sal_uInt32 _nPos) const
 {
     return *(ppDefArgDescs[_nPos]);
 }
-// -----------------------------------------------------------------------------
+
 bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
 {
     return pDefArgFlags[_nPos].bOptional;
 }
-// -----------------------------------------------------------------------------
-
-
 
 //===================================================================
 // class ScFunctionList:
@@ -565,8 +545,6 @@ ScFunctionList::ScFunctionList() :
     }
 }
 
-//------------------------------------------------------------------------
-
 ScFunctionList::~ScFunctionList()
 {
     const ScFuncDesc* pDesc = First();
@@ -577,27 +555,23 @@ ScFunctionList::~ScFunctionList()
     }
 }
 
-
-
-
-// -----------------------------------------------------------------------------
 sal_uInt32 ScFunctionCategory::getCount() const
 {
     return m_pCategory->Count();
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
 {
     return m_pMgr;
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString ScFunctionCategory::getName() const
 {
     if ( !m_sName.getLength() )
         m_sName = ScFunctionMgr::GetCategoryName(m_nCategory+1);
     return m_sName;
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
     const ScFuncDesc* pDesc = NULL;
@@ -606,22 +580,21 @@ const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 
         ;
     return pDesc;
 }
-// -----------------------------------------------------------------------------
+
 sal_uInt32 ScFunctionCategory::getNumber() const
 {
     return m_nCategory;
 }
-// -----------------------------------------------------------------------------
-
 
 //========================================================================
 // class ScFunctionMgr:
+//========================================================================
 
 ScFunctionMgr::ScFunctionMgr() :
     pFuncList( ScGlobal::GetStarCalcFunctionList() ),
     pCurCatList( NULL )
 {
-    DBG_ASSERT( pFuncList, "Funktionsliste nicht gefunden." );
+    DBG_ASSERT( pFuncList, "Functionlist not found." );
     sal_uInt32 nCount = pFuncList->GetCount();
     ScFuncDesc* pDesc;
     List* pRootList;
@@ -639,7 +612,6 @@ ScFunctionMgr::ScFunctionMgr() :
         for (nTmpCnt = 0; nTmpCnt < n; nTmpCnt++)
         {
             // it's case sensitiv, but special characters have to be put the right place
-
             const ScFuncDesc* pTmpDesc = static_cast<const ScFuncDesc*>(
                 pRootList->GetObject(nTmpCnt));
             if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
@@ -651,21 +623,17 @@ ScFunctionMgr::ScFunctionMgr() :
     for ( n=0; n<nCount; n++ ) // copy to group list
     {
         pDesc = static_cast<ScFuncDesc*>(pRootList->GetObject(n));
-        DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unbekannte Kategorie");
+        DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
             aCatLists[pDesc->nCategory]->Insert(static_cast<void*>(pDesc), LIST_APPEND);
     }
 }
-
-//------------------------------------------------------------------------
 
 ScFunctionMgr::~ScFunctionMgr()
 {
     for (sal_uInt16 i = 0; i < MAX_FUNCCAT; ++i)
         delete aCatLists[i];
 }
-
-//------------------------------------------------------------------------
 
 const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
 {
@@ -677,8 +645,6 @@ const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
     return pDesc;
 }
 
-//------------------------------------------------------------------------
-
 const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 {
     const ScFuncDesc* pDesc;
@@ -687,8 +653,6 @@ const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
             break;
     return pDesc;
 }
-
-//------------------------------------------------------------------------
 
 const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
@@ -706,8 +670,6 @@ const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
     }
 }
 
-//------------------------------------------------------------------------
-
 const ScFuncDesc* ScFunctionMgr::Next() const
 {
     if ( pCurCatList )
@@ -715,10 +677,12 @@ const ScFuncDesc* ScFunctionMgr::Next() const
     else
         return NULL;
 }
+
 sal_uInt32 ScFunctionMgr::getCount() const
 {
     return MAX_FUNCCAT - 1;
 }
+
 const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategory) const
 {
     formula::IFunctionCategory* pRet = NULL;
@@ -728,12 +692,12 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     }
     return pRet;
 }
-// -----------------------------------------------------------------------------
+
 const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const ::rtl::OUString& _sFunctionName) const
 {
     return Get(_sFunctionName);
 }
-// -----------------------------------------------------------------------------
+
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
@@ -746,7 +710,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
             _rLastRUFunctions.push_back( Get( pLRUListIds[i] ) );
     }
 }
-// -----------------------------------------------------------------------------
+
 ::rtl::OUString ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
 {
     if ( _nCategoryNumber > SC_FUNCGROUP_COUNT )
@@ -758,6 +722,7 @@ void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return ResId::toString(ScResId(static_cast<sal_uInt16>(_nCategoryNumber)));
 }
+
 sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToken _eToken) const
 {
     switch(_eToken)
@@ -775,6 +740,10 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
     }
     return 0;
 }
+
+//========================================================================
+// class ScFuncRes:
+//========================================================================
 
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
@@ -845,8 +814,6 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
 
     FreeResource();
 }
-
-//------------------------------------------------------------------------
 
 sal_uInt16 ScFuncRes::GetNum()
 {
