@@ -298,7 +298,7 @@ int GetError()
 CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 {
     CfgStackData *pD = new CfgStackData( rTag, rId );
-    Insert( pD, LIST_APPEND );
+    maList.push_back( pD );
     return pD;
 }
 
@@ -310,19 +310,20 @@ CfgStackData* CfgStack::Push( const ByteString &rTag, const ByteString &rId )
 CfgStack::~CfgStack()
 /*****************************************************************************/
 {
-    for ( ULONG i = 0; i < Count(); i++ )
-        delete GetObject( i );
+    for ( size_t i = 0, n = maList.size(); i < n; i++ )
+        delete maList[ i ];
+    maList.clear();
 }
 
 /*****************************************************************************/
-ByteString CfgStack::GetAccessPath( ULONG nPos )
+ByteString CfgStack::GetAccessPath( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = Count() - 1;
+        nPos = maList.size() - 1;
 
     ByteString sReturn;
-    for ( ULONG i = 0; i <= nPos; i++ ) {
+    for ( size_t i = 0; i <= nPos; i++ ) {
         if ( i )
             sReturn += ".";
         sReturn += GetStackData( i )->GetIdentifier();
@@ -332,13 +333,13 @@ ByteString CfgStack::GetAccessPath( ULONG nPos )
 }
 
 /*****************************************************************************/
-CfgStackData *CfgStack::GetStackData( ULONG nPos )
+CfgStackData *CfgStack::GetStackData( size_t nPos )
 /*****************************************************************************/
 {
     if ( nPos == LIST_APPEND )
-        nPos = Count() - 1;
+        nPos = maList.size() - 1;
 
-    return GetObject( nPos );
+    return maList[  nPos ];
 }
 
 //
@@ -662,12 +663,12 @@ void CfgExport::WorkOnRessourceEnd()
 
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.Count() == 1 ) {
+            if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
             ByteString sTimeStamp( Export::GetTimeStamp());
@@ -760,12 +761,12 @@ void CfgMerge::WorkOnText(
         if ( !pResData ) {
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
-            if ( aStack.Count() == 1 ) {
+            if ( aStack.size() == 1 ) {
                 sGroupId = sLocalId;
                 sLocalId = "";
             }
             else {
-                sGroupId = aStack.GetAccessPath( aStack.Count() - 2 );
+                sGroupId = aStack.GetAccessPath( aStack.size() - 2 );
             }
 
             ByteString sPlatform( "" );
@@ -806,10 +807,10 @@ void CfgMerge::Output( const ByteString& rOutput )
         pOutputStream->Write( rOutput.GetBuffer(), rOutput.Len());
 }
 
-ULONG CfgStack::Push( CfgStackData *pStackData )
+size_t CfgStack::Push( CfgStackData *pStackData )
 {
-    Insert( pStackData, LIST_APPEND );
-    return Count() - 1;
+    maList.push_back( pStackData );
+    return maList.size() - 1;
 }
 
 /*****************************************************************************/
