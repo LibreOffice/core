@@ -2587,6 +2587,7 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
         sal_Bool bOpen( sal_False );
         bOpen = DoSaveCompleted( pMediumTmp );
         DBG_ASSERT(bOpen,"Fehlerbehandlung fuer DoSaveCompleted nicht implementiert");
+        (void)bOpen;
     }
     else
     {
@@ -2915,6 +2916,7 @@ sal_Bool SfxObjectShell::PreDoSaveAs_Impl
                 BOOL bRet( FALSE );
                 bRet = DoSaveCompleted( pMedium );
                 DBG_ASSERT( bRet, "Error in DoSaveCompleted, can't be handled!");
+                (void)bRet;
             }
 
             // TODO/LATER: disconnect the new file from the storage for the case when pure saving is done

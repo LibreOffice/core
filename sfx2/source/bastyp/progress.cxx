@@ -366,8 +366,6 @@ BOOL SfxProgress::SetState
 
     if( pImp->pActiveProgress ) return TRUE;
 
-    // neuen Wert "ubernehmen
-    BOOL bOver=FALSE;
     nVal = nNewVal;
 
     // neuer Range?
@@ -376,7 +374,6 @@ BOOL SfxProgress::SetState
         DBG( DbgOutf( "SfxProgress: range changed from %lu to %lu",
                       pImp->nMax, nNewRange ) );
         pImp->nMax = nNewRange;
-        bOver = TRUE;
     }
 
     if ( !pImp->xStatusInd.is() )

@@ -823,11 +823,8 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
 
     SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
     BOOL bReArrange = FALSE;
-    SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
     if ( pImp->bSplitable )
     {
-        eIdent = SFX_CHILDWIN_SPLITWINDOW;
-
         // Wenn sich das Alignment "andert und das Fenster befindet sich
         // im angedockten Zustand in einem SplitWindow, mu\s umgemeldet werden
         // Wenn neu angedockt wird, machen PrepareToggleFloatingMode()

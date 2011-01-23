@@ -188,7 +188,6 @@ public:
     void                SetDataAvailableLink( const Link& rLink );
     Link                GetDataAvailableLink( ) const;
 
-    sal_uInt32          GetMIMEAndRedirect( String& );
     sal_uInt32          GetErrorCode() const;
     sal_uInt32          GetError() const
                         { return ERRCODE_TOERROR(GetErrorCode()); }

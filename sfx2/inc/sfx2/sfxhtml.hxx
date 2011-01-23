@@ -99,12 +99,6 @@ protected:
     void StartFileDownload( const String& rURL, int nToken,
                             SfxObjectShell *pSh=0 );
 
-    // Ermittelnd des MIME-Types eines zuvor downloadeten Files. Kann nur
-    // unmittelbar vor FinishFileDownload aufgerufen werden, nie aber
-    // danach.
-
-    BOOL GetFileDownloadMIME( String& rMime );
-
     // Beenden eines asynchronen File-Downloads. Gibt TRUE zurueck, wenn
     // der Download geklappt hat. Das gelesene File befindet sich dann in
     // dem uebergeben String.

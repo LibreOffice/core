@@ -388,7 +388,6 @@ void SfxStateCache::SetVisibleState( BOOL bShow )
 {
     SfxItemState        eState( SFX_ITEM_AVAILABLE );
     const SfxPoolItem*  pState( NULL );
-    sal_Bool            bNotify( sal_False );
     sal_Bool            bDeleteItem( sal_False );
 
     if ( bShow != bItemVisible )
@@ -405,7 +404,6 @@ void SfxStateCache::SetVisibleState( BOOL bShow )
                 pState = pLastItem;
 
             eState = eLastState;
-            bNotify = ( pState != 0 );
         }
         else
         {

@@ -2077,7 +2077,7 @@ void CustomPropertiesWindow::AddLine( const ::rtl::OUString& sName, Any& rAny )
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleWrapper = aSysLocale.GetLocaleData();
     pNewLine->m_aNameBox.SetText( sName );
-    sal_Int32 nType = CUSTOM_TYPE_UNKNOWN;
+    sal_IntPtr nType = CUSTOM_TYPE_UNKNOWN;
     String sValue;
 
     if ( rAny >>= nTmpValue )

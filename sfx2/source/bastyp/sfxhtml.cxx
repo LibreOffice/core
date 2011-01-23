@@ -288,12 +288,6 @@ void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
     }
 }
 
-BOOL SfxHTMLParser::GetFileDownloadMIME( String& rMIME )
-{
-    return pDLMedium && pDLMedium->GetErrorCode()==0 &&
-           pDLMedium->GetMIMEAndRedirect(rMIME)==0;
-}
-
 BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
 {
     String aStr;
@@ -314,17 +308,6 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
         xub_StrLen nLen = aStream.Tell() < STRING_MAXLEN
                         ? (xub_StrLen)aStream.Tell()
                         : STRING_MAXLEN;
-
-        // TODO: untested!!!
-        rtl_TextEncoding eEnc =
-            GetExtendedCompatibilityTextEncoding( RTL_TEXTENCODING_ISO_8859_1 );
-        String sMime;
-        if( pDLMedium->GetMIMEAndRedirect( sMime ) == 0 )
-        {
-            rtl_TextEncoding eMimeEnc = GetEncodingByMIME( sMime );
-            if( RTL_TEXTENCODING_DONTKNOW != eMimeEnc )
-                eEnc = eMimeEnc;
-        }
 
         ByteString sBuffer;
         sal_Char* pBuffer = sBuffer.AllocBuffer(nLen);

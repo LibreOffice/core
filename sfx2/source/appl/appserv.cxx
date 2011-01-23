@@ -335,7 +335,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SAVEDOCS:
         {
             BOOL bOK = TRUE;
-            BOOL bTmpDone = TRUE;
             for ( SfxObjectShell *pObjSh = SfxObjectShell::GetFirst();
                   pObjSh;
                   pObjSh = SfxObjectShell::GetNext( *pObjSh ) )
@@ -345,7 +344,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 {
                     pObjSh->ExecuteSlot( aReq );
                     SfxBoolItem *pItem = PTR_CAST( SfxBoolItem, aReq.GetReturnValue() );
-                    bTmpDone = aReq.IsDone();
                     if ( !pItem || !pItem->GetValue() )
                         bOK = FALSE;
                 }

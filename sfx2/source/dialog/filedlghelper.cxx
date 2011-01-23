@@ -2298,30 +2298,9 @@ void FileDialogHelper_Impl::SetContext( FileDialogHelper::Context _eNewContext )
 {
     meContext = _eNewContext;
 
-    sal_Int32       nNewHelpId = 0;
-    OUString        aConfigId;
-
-    switch( _eNewContext )
-    {
-// #104952# dependency to SVX not allowed! When used again, another solution has to be found
-//      case FileDialogHelper::SW_INSERT_GRAPHIC:
-//      case FileDialogHelper::SC_INSERT_GRAPHIC:
-//      case FileDialogHelper::SD_INSERT_GRAPHIC:       nNewHelpId = SID_INSERT_GRAPHIC;        break;
-        case FileDialogHelper::SW_INSERT_SOUND:
-        case FileDialogHelper::SC_INSERT_SOUND:
-        case FileDialogHelper::SD_INSERT_SOUND:         nNewHelpId = SID_INSERT_SOUND;          break;
-        case FileDialogHelper::SW_INSERT_VIDEO:
-        case FileDialogHelper::SC_INSERT_VIDEO:
-        case FileDialogHelper::SD_INSERT_VIDEO:         nNewHelpId = SID_INSERT_VIDEO;          break;
-              default: break;
-    }
-
     const OUString* pConfigId = GetLastFilterConfigId( _eNewContext );
     if( pConfigId )
         LoadLastUsedFilter( *pConfigId );
-
-//  if( nNewHelpId )
-//      this->setDialogHelpId( nNewHelpId );
 }
 
 // ------------------------------------------------------------------------

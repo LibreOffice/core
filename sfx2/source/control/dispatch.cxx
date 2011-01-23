@@ -1112,7 +1112,6 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, SfxPoolItem **pArgs
             eCall = SFX_CALLMODE_ASYNCHRON;
         else if ( pSlot->GetMode() & SFX_SLOT_ASYNCHRON )
             eCall = SFX_CALLMODE_ASYNCHRON;
-        sal_Bool bDone = sal_False;
         if ( pArgs && *pArgs )
         {
             SfxAllItemSet aSet( pShell->GetPool() );
@@ -1120,13 +1119,11 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, SfxPoolItem **pArgs
                 MappedPut_Impl( aSet, **pArg );
             SfxRequest aReq( nSlot, eCall, aSet );
             _Execute( *pShell, *pSlot, aReq, eCall );
-            bDone = aReq.IsDone();
         }
         else
         {
             SfxRequest aReq( nSlot, eCall, pShell->GetPool() );
             _Execute( *pShell, *pSlot, aReq, eCall );
-            bDone = aReq.IsDone();
         }
     }
 
@@ -1169,10 +1166,8 @@ sal_uInt16 SfxDispatcher::ExecuteFunction( sal_uInt16 nSlot, const SfxItemSet& r
             eCall = SFX_CALLMODE_ASYNCHRON;
         else if ( pSlot->GetMode() & SFX_SLOT_ASYNCHRON )
             eCall = SFX_CALLMODE_ASYNCHRON;
-        sal_Bool bDone = sal_False;
-            SfxRequest aReq( nSlot, eCall, rArgs );
-            _Execute( *pShell, *pSlot, aReq, eCall );
-            bDone = aReq.IsDone();
+        SfxRequest aReq( nSlot, eCall, rArgs );
+        _Execute( *pShell, *pSlot, aReq, eCall );
     }
 
     return nRet;

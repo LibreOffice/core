@@ -490,34 +490,6 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-BOOL UseStandardPrinter_Impl( Window* /*pParent*/, SfxPrinter* pDocPrinter )
-{
-    // Optionen abfragen, ob gewarnt werden soll (Doc uebersteuert App)
-    BOOL bWarn = FALSE;
-    const SfxItemSet *pDocOptions = &pDocPrinter->GetOptions();
-    if ( pDocOptions )
-    {
-        USHORT nWhich = pDocOptions->GetPool()->GetWhich(SID_PRINTER_NOTFOUND_WARN);
-        const SfxBoolItem* pBoolItem = NULL;
-        pDocPrinter->GetOptions().GetItemState( nWhich, FALSE, (const SfxPoolItem**) &pBoolItem );
-        if ( pBoolItem )
-            bWarn = pBoolItem->GetValue();
-    }
-/*
-    // ggf. den User fragen
-    if ( bWarn )
-    {
-        // Geht nicht mehr ohne OrigJobSetup!
-        String aTmp( SfxResId( STR_PRINTER_NOTAVAIL ) );
-        QueryBox aBox( pParent, WB_OK_CANCEL | WB_DEF_OK, aTmp );
-        return RET_OK == aBox.Execute();
-    }
-*/
-    // nicht gewarnt => einfach so den StandardDrucker nehmen
-    return TRUE;
-}
-//-------------------------------------------------------------------------
-
 SfxPrinter* SfxViewShell::SetPrinter_Impl( SfxPrinter *pNewPrinter )
 
 /*  Interne Methode zum Setzen der Unterschiede von 'pNewPrinter' zum
@@ -822,13 +794,6 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 }
                 else
                     ErrorBox( NULL, WB_OK | WB_DEF_OK, String( SfxResId( STR_NODEFPRINTER ) ) ).Execute();
-            }
-
-            if ( !pPrinter->IsOriginal() && rReq.GetArgs() && !UseStandardPrinter_Impl( NULL, pPrinter ) )
-            {
-                // printer is not available, but standard printer should not be used
-                rReq.SetReturnValue(SfxBoolItem(0,FALSE));
-                break;
             }
 
             // FIXME: printer isn't used for printing anymore!

@@ -743,7 +743,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
         sal_Bool bSuccess = sal_False;
-        sal_Bool bFailure = sal_False;
         const SfxPoolItem* pItem = NULL;
         SfxShell* pShell( 0 );
         // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
@@ -784,7 +783,6 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         pDispatcher->GetBindings()->Execute_Impl( aReq, pSlot, pShell );
                         pItem = aReq.GetReturnValue();
                         bSuccess = aReq.IsDone() || pItem != NULL;
-                        bFailure = aReq.IsCancelled();
                         if ( bVBARequest )
                         {
                             SFX_REQUEST_ARG( aReq, pDlgRet, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
@@ -834,11 +832,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             ::com::sun::star::frame::DispatchResultEvent aEvent;
             if ( bSuccess )
                 aEvent.State = com::sun::star::frame::DispatchResultState::SUCCESS;
-//            else if ( bFailure )
             else
                 aEvent.State = com::sun::star::frame::DispatchResultState::FAILURE;
-//            else
-//                aEvent.State = com::sun::star::frame::DispatchResultState::DONTKNOW;
 
             aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )

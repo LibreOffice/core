@@ -616,7 +616,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
     SfxViewFrame *pFrame = SfxObjectShell::Current() == this
         ? SfxViewFrame::Current() : SfxViewFrame::GetFirst( this );
 
-    sal_Bool bClose = sal_False;
     if ( bUI && IsModified() && pFrame )
     {
         // minimierte restoren
@@ -663,8 +662,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
 
             if ( !pPoolItem || pPoolItem->ISA(SfxVoidItem) || ( pPoolItem->ISA(SfxBoolItem) && !( (const SfxBoolItem*) pPoolItem )->GetValue() ) )
                 return sal_False;
-            else
-                bClose = sal_True;
         }
         else if ( RET_CANCEL == nRet )
             // abgebrochen
@@ -672,11 +669,6 @@ sal_uInt16 SfxObjectShell::PrepareClose
         else if ( RET_NEWTASK == nRet )
         {
             return RET_NEWTASK;
-        }
-        else
-        {
-            // Bei Nein nicht noch Informationlost
-            bClose = sal_True;
         }
     }
 

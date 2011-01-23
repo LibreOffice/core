@@ -2358,7 +2358,8 @@ void SfxMedium::GetMedium_Impl()
 
         pImp->bDownloadDone = sal_True;
         pImp->aDoneLink.ClearPendingCall();
-        pImp->aDoneLink.Call( (void*) GetError() );
+        sal_uIntPtr nError = GetError();
+        pImp->aDoneLink.Call( (void*)nError );
     }
 }
 
@@ -2967,12 +2968,10 @@ SfxMedium::SfxMedium( const ::com::sun::star::uno::Sequence< ::com::sun::star::b
         aFilterName = pFilterNameItem->GetValue();
     pFilter = SFX_APP()->GetFilterMatcher().GetFilter4FilterName( aFilterName );
 
-    sal_Bool bSalvage = sal_False;
     SFX_ITEMSET_ARG( pSet, pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
     if( pSalvageItem )
     {
         // QUESTION: there is some treatment of Salvage in Init_Impl; align!
-        bSalvage = sal_True;
         if ( pSalvageItem->GetValue().Len() )
         {
             // if an URL is provided in SalvageItem that means that the FileName refers to a temporary file
@@ -3094,39 +3093,6 @@ const INetURLObject& SfxMedium::GetURLObject() const
 const String& SfxMedium::GetPreRedirectedURL() const
 {
     return pImp->aPreRedirectionURL;
-}
-//----------------------------------------------------------------
-
-sal_uInt32 SfxMedium::GetMIMEAndRedirect( String& /*rName*/ )
-{
-/* dv !!!! not needed any longer ?
-    INetProtocol eProt = GetURLObject().GetProtocol();
-    if( eProt == INET_PROT_FTP && SvBinding::ShouldUseFtpProxy( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) ) )
-    {
-        Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_IS_FOLDER ) );
-        sal_Bool bIsFolder = FALSE;
-        if ( ( aAny >>= bIsFolder ) && bIsFolder )
-            return ERRCODE_NONE;
-    }
-
-    GetMedium_Impl();
-    if( !eError && pImp->xBinding.Is() )
-    {
-        eError = pImp->xBinding->GetMimeType( rName );
-
-        // Wir koennen keine Parameter wie CharSets usw.
-        rName = rName.GetToken( 0, ';' );
-        if( !eError )
-        {
-            if( !pImp->aPreRedirectionURL.Len() )
-                pImp->aPreRedirectionURL = aLogicName;
-            SetName( pImp->xBinding->GetRedirectedURL() );
-        }
-        pImp->aExpireTime = pImp->xBinding->GetExpireDateTime();
-    }
-    return eError;
-*/
-    return 0;
 }
 
 //----------------------------------------------------------------

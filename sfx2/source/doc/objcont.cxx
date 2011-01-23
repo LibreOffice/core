@@ -683,7 +683,6 @@ BOOL SfxObjectShell::Print
             SetOrganizerSearchMask(pStylePool);
             SfxStyleSheetIterator* pIter = pStylePool->CreateIterator(
                 pStylePool->GetSearchFamily(), pStylePool->GetSearchMask() );
-            USHORT nStyles = pIter->Count();
             SfxStyleSheetBase *pStyle = pIter->First();
             if ( !pStyle )
                 return TRUE;
@@ -713,7 +712,6 @@ BOOL SfxObjectShell::Print
             aOutPos.Y() += nTextHeight;
             aOutPos.Y() += nTextHeight/2;
             aFont.SetSize(Size(0, 35)); // 10pt
-            nStyles = 1;
             while(pStyle)
             {
                 // print template name
