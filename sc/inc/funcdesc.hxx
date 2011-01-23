@@ -253,21 +253,44 @@ private:
 
 /**
   Category of spreadsheet functions.
+
+  Contains the name, index and function manager of a category,
+  as well as a list of functions in the category
 */
 class ScFunctionCategory : public formula::IFunctionCategory
 {
-    ScFunctionMgr* m_pMgr;
-    List* m_pCategory;
-    mutable ::rtl::OUString m_sName;
-    sal_uInt32 m_nCategory;
 public:
-    ScFunctionCategory(ScFunctionMgr* _pMgr,List* _pCategory,sal_uInt32 _nCategory) : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
+    ScFunctionCategory(ScFunctionMgr* _pMgr,List* _pCategory,sal_uInt32 _nCategory)
+            : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
-    virtual sal_uInt32                          getCount() const;
-    virtual const formula::IFunctionManager*        getFunctionManager() const;
-    virtual const formula::IFunctionDescription*    getFunction(sal_uInt32 _nPos) const;
-    virtual sal_uInt32                          getNumber() const;
-    virtual ::rtl::OUString                     getName() const;
+
+    /**
+      @return count of functions in this category
+    */
+    virtual sal_uInt32 getCount() const;
+    virtual const formula::IFunctionManager* getFunctionManager() const;
+
+    /**
+      Gives the _nPos'th function in this category.
+
+      @param _nPos
+      position of function in this category.
+
+      @return function at the _nPos postion in this category, null if _nPos out of bounds.
+    */
+    virtual const formula::IFunctionDescription* getFunction(sal_uInt32 _nPos) const;
+
+    /**
+      @return index number of this category.
+    */
+    virtual sal_uInt32 getNumber() const;
+    virtual ::rtl::OUString getName() const;
+
+private:
+    ScFunctionMgr* m_pMgr; /**< function manager for this category */
+    List* m_pCategory; /**< list of functions in this category */
+    mutable ::rtl::OUString m_sName; /**< name of this category */
+    sal_uInt32 m_nCategory; /**< index number of this category */
 };
 
 #define SC_FUNCGROUP_COUNT  ID_FUNCTION_GRP_ADDINS
