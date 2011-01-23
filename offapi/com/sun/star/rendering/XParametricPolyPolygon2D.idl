@@ -61,8 +61,8 @@ interface XParametricPolyPolygon2D : ::com::sun::star::uno::XInterface
 
         @param t
         Parameter value in the range [0,1]. During painting, this
-        range is sweeped through starting from 0. When using such a
-        parametric polypolygon for gradients, the area covered by the
+        range is swept through starting from 0. When using such a
+        parametric poly-polygon for gradients, the area covered by the
         returned XPolyPolygon2D should be monotonically decreasing
         with t (unless singularities in e.g. the resulting gradient
         are desired).

@@ -51,7 +51,7 @@ interface XSlideShowListener : ::com::sun::star::animations::XAnimationListener
     /** Notify that a new slide starts to become visible. */
     void slideTransitionStarted();
 
-    /** Notify that the slide transtion of the current slide ended. */
+    /** Notify that the slide transition of the current slide ended. */
     void slideTransitionEnded();
 
     /** Notify that the last animation from the main sequence

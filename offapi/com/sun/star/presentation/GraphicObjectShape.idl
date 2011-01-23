@@ -45,7 +45,7 @@
 /** This service is implemented by the graphic presentation shape.
 
     <p>Presentation shapes can be used in a presentation
-    page layouts and theire position and size is by default set
+    page layouts and their position and size is by default set
     by the presentation shapes on the <type scope="com::sun::star::drawing">MasterPage</type>.
  */
 published service GraphicObjectShape

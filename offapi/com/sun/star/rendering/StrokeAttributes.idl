@@ -62,7 +62,7 @@ struct StrokeAttributes
         This attribute is only used when
         <member>StrokeAttributes::JoinType</member> is set to
         <member>PathJoinType::MITER</member>. Should the length of a
-        corner's diagonal exceed this limit, a bevelled join is used
+        corner's diagonal exceed this limit, a beveled join is used
         instead. This value must be positive (or 0.0, which is
         equivalent to setting
         <member>StrokeAttributes::JoinType</member> to
@@ -80,9 +80,9 @@ struct StrokeAttributes
     /** Array of ink on and off lengths, measured in user coordinate
         space.<p>
 
-        The first element specifies the length of the first 'on'
+        The first element specifies the length of the first "on"
         segment of the dashing, the second element the length of the
-        first 'off' segment, and so forth. Give zero elements here for
+        first "off" segment, and so forth. Give zero elements here for
         solid strokes. This array always have an even number of
         elements, with zero, as usual, counting as even
         here. Furthermore, each entry in this array must have a value
@@ -101,7 +101,7 @@ struct StrokeAttributes
         always equal
         <member>StrokeAttributes::StrokeWidth</member>. The first
         element specifies the width of the rightmost line, when
-        travelling from the start point of the path to the end
+        traveling from the start point of the path to the end
         point. The second element specifies the space between the
         first line and the second line, and so forth. If the array
         ends with a spacing, this spacing is included in the total

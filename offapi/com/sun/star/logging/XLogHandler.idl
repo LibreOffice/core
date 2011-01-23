@@ -46,7 +46,7 @@ module com { module sun { module star { module logging {
 
 //=============================================================================
 
-/** provides possibilites to send <type>LogRecord</type>s to an arbitrary output
+/** provides possibilities to send <type>LogRecord</type>s to an arbitrary output
     channel.
 
     @see XLogger

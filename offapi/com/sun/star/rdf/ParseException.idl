@@ -38,7 +38,7 @@
 module com {   module sun {   module star {   module rdf {
 
 //=============================================================================
-/** represents an error condition that is signalled on parsing an RDF file.
+/** represents an error condition that is signaled on parsing an RDF file.
 
     @since OOo 3.0
 

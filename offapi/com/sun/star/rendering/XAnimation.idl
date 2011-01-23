@@ -67,7 +67,7 @@ interface XAnimation : ::com::sun::star::uno::XInterface
 
         Note that it is perfectly legal to e.g. map t in a nonlinear
         fashion to internal frames, for example to achieve
-        acceleration or decceleration effects. It is required that the
+        acceleration or deceleration effects. It is required that the
         render method has const semantics, i.e. when called with the
         same parameter set, identical output must be generated. This
         is because e.g. a Sprite might decide arbitrarily to render an

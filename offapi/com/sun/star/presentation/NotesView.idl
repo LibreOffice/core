@@ -37,7 +37,7 @@
 
 //=============================================================================
 
-/** This componend integrates a view to a handout page inside a presentation
+/** This component integrates a view to a handout page inside a presentation
     document into the desktop.
 
     @since OOo 1.1.2

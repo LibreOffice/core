@@ -90,7 +90,7 @@ interface XSmtpService: ::com::sun::star::mail::XMailService {
         @throws com::sun::star::datatransfer::UnsupportedFlavorException
         is thrown when the body of the mail message is provided in an
         unsupported mime content type or may be thrown if one of the file
-        attachments specifies an unspupported mime content type.
+        attachments specifies an unsupported mime content type.
 
         @see com::sun::star::mail::XMailMessage
         @see com::sun::star::io::NotConnectedException

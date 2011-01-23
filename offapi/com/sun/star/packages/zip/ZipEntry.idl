@@ -75,7 +75,7 @@ published struct ZipEntry
     long nTime;
 
     //-------------------------------------------------------------------------
-    /** crc-32 of entry data
+    /** CRC-32 of entry data
      */
     long nCrc;
 

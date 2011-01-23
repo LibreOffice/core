@@ -92,7 +92,7 @@ interface XDataSinkEncrSupport: com::sun::star::uno::XInterface
     In case stream is not encrypted an exception will be thrown.
     <p>
         The difference of raw stream is that it contains header for encrypted data,
-    so an encrypted stream can be copyed from one PackageStream to
+    so an encrypted stream can be copied from one PackageStream to
     another one without decryption.
     </p>
 

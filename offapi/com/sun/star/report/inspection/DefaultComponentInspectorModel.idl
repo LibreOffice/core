@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module report { module inspection {
     <p>A <type>DefaultComponentInspectorModel</type> provides the following handlers by default:
     <ul><li><type>GeometryHandler</type></li>
         <li><type>ReportComponentHandler</type></li>
-        <li><typescope="com::sun::star::form::inspection">EditPropertyHandler</type></li>
+        <li><type scope="com::sun::star::form::inspection">EditPropertyHandler</type></li>
     </ul></p>
 
     @see com::sun::star::inspection::XObjectInspectorModel::HandlerFactories

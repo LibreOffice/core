@@ -51,10 +51,10 @@
 
 module com {  module sun {  module star {  module presentation {
 
-/** View interface to display slideshow presentations on.<p>
+/** View interface to display slide show presentations on.<p>
 
     This interface provides the necessary methods to enable an
-    XSlideShow interface to display a presentation. The slideshow can
+    XSlideShow interface to display a presentation. The slide show can
     be displayed simultaneously on multiple views<p>
 
     @since OOo 2.4
@@ -73,8 +73,8 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
 
     /** This method clears the whole view area.
 
-        The slideshow uses this method to fully erase the view
-        content. Since the slideshow has no notion of view size, this
+        The slide show uses this method to fully erase the view
+        content. Since the slide show has no notion of view size, this
         is the only reliable way to wholly clear the view.
      */
     void clear();
@@ -91,7 +91,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
         blow this up to the desired device pixel size (640 times 480,
         or whatever size the output view has). Furthermore, the aspect
         ratio of the scaling should match that of the slides
-        (otherwise, the slides will be scaled anisotrophically).
+        (otherwise, the slides will be scaled anisotropically).
      */
     ::com::sun::star::geometry::AffineMatrix2D getTransformation();
 
@@ -176,7 +176,7 @@ interface XSlideShowView : ::com::sun::star::uno::XInterface
     void setMouseCursor( [in] short nPointerShape );
 
     /** Get rectangle defining area inside of canvas device which
-    this slideshow view uses.
+    this slide show view uses.
     */
     ::com::sun::star::awt::Rectangle getCanvasArea();
 };

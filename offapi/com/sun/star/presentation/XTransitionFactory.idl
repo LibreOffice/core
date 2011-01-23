@@ -44,7 +44,7 @@ module presentation {
 interface XTransition;
 interface XSlideShowView;
 
-/** TransitionFactory interface to request optional custom Transition instances for slideshow transitions.<p>
+/** TransitionFactory interface to request optional custom Transition instances for slide show transitions.<p>
 
     This interface provides the necessary methods to query and create optional transition effects for a SlideShow<p>
 
@@ -65,7 +65,7 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
         Subtype for the transition (@see ::com::sun::star::animation::TransitionSubType)
 
         @param view
-        Slideshow view to display on
+        Slide show view to display on
 
         @param leavingBitmap
         Bitmap of the slide that's going to leave the screen
@@ -75,7 +75,7 @@ interface XTransitionFactory : ::com::sun::star::uno::XInterface
 
         @param slideOffset
         Offset in pixel from the top, left edge of the view, such that the
-        slide displays similar to normal slideshow
+        slide displays similar to normal slide show
      */
     XTransition createTransition( [in] short                                 transitionType,
                                   [in] short                                 transitionSubType,

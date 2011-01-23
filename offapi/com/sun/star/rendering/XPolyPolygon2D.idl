@@ -58,7 +58,7 @@ interface XPolyPolygon2D : ::com::sun::star::uno::XInterface
         that they participate in mutual fill rule calculations like
         the polygons inside a single poly-polygon do. When rendering
         such a poly-polygon without transparency, it will look like the
-        constituing poly-polygons rendered separately on top of
+        constituting poly-polygons rendered separately on top of
         another. Alas, when rendering with transparency, separate
         rendering will combine the alpha of overlapping areas, whereas
         addPolyPolygon results in constant alpha, regardless how many

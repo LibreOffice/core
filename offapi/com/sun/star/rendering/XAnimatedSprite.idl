@@ -176,7 +176,7 @@ interface XAnimatedSprite : XSprite
         [0,1] range.
 
         @param bUpdateAnimation
-        Whether this method should implicitely call
+        Whether this method should implicitly call
         <member>XSpriteCanvas::updateAnimation</member> or not.
 
         @throws <type>com::sun::star::lang::IllegalArgumentException</type>

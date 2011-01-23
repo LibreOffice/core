@@ -42,8 +42,8 @@ interface XCsvLogFormatter;
     The sequence number, the thread ID, the time of the logged event,
     the source class/method name will get logged alongside the message, if this
     is not disabled. The Formatter also supports logging an arbitrary number of
-    userdefined columns. If the Formatter is configured to have more than one
-    (userdefined) column the data to log has to be preformatted with the
+    user-defined columns. If the Formatter is configured to have more than one
+    (user-defined) column the data to log has to be preformatted with the
     formatMultiColumn method.</p>
 
     @since OOo 3.0

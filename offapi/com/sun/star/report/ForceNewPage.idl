@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-/** Specifies if the section will be printed on an separte page.
+/** Specifies if the section will be printed on an separate page.
     <p>This does not apply to page header or page footer.</p>
     @see XSection
  */

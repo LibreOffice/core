@@ -95,7 +95,7 @@ published enum ClickAction
 
     //-------------------------------------------------------------------------
 
-    /** An ole verb is performed on this object.
+    /** An OLE verb is performed on this object.
      */
     VERB,
 

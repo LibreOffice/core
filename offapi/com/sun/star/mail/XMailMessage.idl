@@ -90,12 +90,12 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     void addCcRecipient([in] string sRecipientAddress);
 
     /**
-        Add an Bcc recipients e-mail address to the list of recipients of this mail message.
+        Add an BCC recipients e-mail address to the list of recipients of this mail message.
         If the e-mail address doesn't conform to <a href="http://www.ietf.org/rfc/rfc822.txt">RFC&nbsp;822</a>
         sending the mail message will fail.
 
         @param sRecipientAddress
-        [in] the e-mail address of the Bcc recipient.
+        [in] the e-mail address of the BCC recipient.
     */
     void addBccRecipient([in] string sRecipientAddress);
 
@@ -112,7 +112,7 @@ interface XMailMessage: ::com::sun::star::uno::XInterface {
     sequence<string> getCcRecipients();
 
     /**
-        Return a sequence of the e-mail addresses of all the Bcc recipients
+        Return a sequence of the e-mail addresses of all the BCC recipients
         of this mail message.
     */
     sequence<string> getBccRecipients();

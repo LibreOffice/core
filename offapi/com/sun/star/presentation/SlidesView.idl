@@ -57,7 +57,7 @@
 
 //=============================================================================
 
-/** This componend integrates a slides view to a presentation
+/** This component integrates a slides view to a presentation
     document into the desktop.
 
     In a slides view, the pages of a presentation document are displayed

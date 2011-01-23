@@ -57,11 +57,11 @@
 
 //=============================================================================
 
-/** This componend integrates an outline view to a presentation
+/** This component integrates an outline view to a presentation
     document into the desktop.
 
     In an outline view, the textual contents of presentation text objects
-    from all presentation pages are presentet as a continous outline text.
+    from all presentation pages are presented as a continuous outline text.
 
     @since OOo 1.1.2
  */

@@ -47,7 +47,7 @@ struct AnimationAttributes
     /** Repeat mode of the animation sequence.<p>
 
         This value determines how the [0,1] parameter space of the animation
-        should be sweeped through. Permissible values are given in
+        should be swept through. Permissible values are given in
         <type>AnimationRepeat</type>.<p>
 
         @see AnimationRepeat.
@@ -56,7 +56,7 @@ struct AnimationAttributes
 
     //-------------------------------------------------------------------------
 
-    /** Size of the untrasnformed animation sequence.<p>
+    /** Size of the untransformed animation sequence.<p>
 
         This value specifies the size of the animation when rendered
         with the identity view transform. This permits

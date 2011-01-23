@@ -67,8 +67,8 @@ constants FileFormat
     /// <a href="http://www.wiwiss.fu-berlin.de/suhl/bizer/TriG/Spec/">TriG</a>
     const short TRIG        = 3;    // "application/x-trig";
 
-    /// <a href="http://sw.nokia.com/trix/TriX.html">TriX</a>
-    const short TRIX        = 4;    // "if only the damn server were up i'd know";
+    /// <a href="http://sw.nokia.com/trix/">TriX</a>
+    const short TRIX        = 4;    // "if only the damn server were up I'd know";
 
     /// <a href="http://www.dajobe.org/2004/01/turtle/">Turtle</a>
     const short TURTLE      = 5;    // "application/turtle";

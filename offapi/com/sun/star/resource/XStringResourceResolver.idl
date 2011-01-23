@@ -64,7 +64,7 @@ interface XStringResourceResolver: com::sun::star::util::XModifyBroadcaster
 {
     /**
         Resolves the passed ResoureID for the current locale. This
-        locale is set during initalisation of the object implementing
+        locale is set during initialization of the object implementing
         this interface or - in case that also the interface
         <type scope="com::sun::star::resource">XStringResourceManager</type>
         is supported - by using the <code>XStringResourceManager::setLocale</code>

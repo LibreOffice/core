@@ -63,7 +63,7 @@
 //=============================================================================
 
 /** This service is for a polygon shape.
-    <p>A polypolygon has 2 or more straight lines, with the first and
+    <p>A poly-polygon has 2 or more straight lines, with the first and
     last point connected by a straight line.</p>
  */
 published service PolyPolygonShape
