@@ -28,14 +28,16 @@
 -perl util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
 -perl util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
 +%1 util\mkfiles.pl >MINFO
-+%1 util\mk1mf.pl no-asm VC-WIN32 >ms\nt.mak
-+%1 util\mk1mf.pl dll no-asm VC-WIN32 >ms\ntdll.mak
- if x%OSVERSION% == x goto skipce
++if %2 == VC-WIN32 goto not64a
++perl ms\uplink.pl win64a > ms\uptable.asm
++ml64 -c -Foms\uptable.obj ms\uptable.asm
++:not64a
++%1 util\mk1mf.pl no-asm %2 >ms\nt.mak
++%1 util\mk1mf.pl dll no-asm %2 >ms\ntdll.mak
+-if x%OSVERSION% == x goto skipce
 -perl util\mk1mf.pl no-asm VC-CE >ms\ce.mak
 -perl util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
-+%1 util\mk1mf.pl no-asm VC-CE >ms\ce.mak
-+%1 util\mk1mf.pl dll no-asm VC-CE >ms\cedll.mak
- :skipce
+-:skipce
  
 -perl util\mkdef.pl 32 libeay > ms\libeay32.def
 -perl util\mkdef.pl 32 ssleay > ms\ssleay32.def
@@ -132,3 +134,12 @@
  
  sub do_lib_rule
  	{
+--- misc/build/openssl-0.9.8o/ms/uplink.c
++++ misc/build/openssl-0.9.8o/ms/uplink.c
+@@ -1,5 +1,6 @@
+ #if (defined(_WIN64) || defined(_WIN32_WCE)) && !defined(UNICODE)
+ #define UNICODE
++#define _CRT_NON_CONFORMING_SWPRINTFS
+ #endif
+ #if defined(UNICODE) && !defined(_UNICODE)
+ #define _UNICODE

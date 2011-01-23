@@ -152,8 +152,13 @@ OUT2BIN += out/libeay32.dll
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
         CONFIGURE_ACTION=$(PERL) configure
-        CONFIGURE_FLAGS=VC-WIN32 no-idea
-        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+.IF "$(CPU") == "I"
+        OPENSSL_PLATFORM=VC-WIN32
+.ELSE
+        OPENSSL_PLATFORM=VC-WIN64A
+.ENDIF
+        CONFIGURE_FLAGS=$(OPENSSL_PLATFORM) no-idea
+        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL))) $(OPENSSL_PLATFORM)" && nmake -f ms/ntdll.mak
 
         OUT2LIB = out32dll$/ssleay32.lib
         OUT2LIB += out32dll$/libeay32.lib
