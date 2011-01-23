@@ -397,32 +397,25 @@ OslStream::~OslStream()
 ULONG OslStream::GetData( void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesRead = nSize;
-    osl::FileBase::RC nRet = osl::FileBase::E_None;
-    nRet = maFile.read( pData, nBytesRead, nBytesRead );
+    maFile.read( pData, nBytesRead, nBytesRead );
     return (ULONG)nBytesRead;
 }
 
 ULONG OslStream::PutData( const void* pData, ULONG nSize )
 {
     sal_uInt64 nBytesWritten;
-    osl::FileBase::RC nRet = osl::FileBase::E_None;
-    nRet = maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
+    maFile.write( pData, (sal_uInt64)nSize, nBytesWritten );
     return (ULONG)nBytesWritten;
 }
 
 ULONG OslStream::SeekPos( ULONG nPos )
 {
-    osl::FileBase::RC nRet;
     if( nPos == STREAM_SEEK_TO_END )
-    {
-        nRet = maFile.setPos( Pos_End, 0 );
-    }
+        maFile.setPos( Pos_End, 0 );
     else
-    {
-        nRet = maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
-    }
-    sal_uInt64 nRealPos;
-    nRet = maFile.getPos( nRealPos );
+        maFile.setPos( Pos_Absolut, (sal_uInt64)nPos );
+    sal_uInt64 nRealPos(0);
+    maFile.getPos( nRealPos );
     return sal::static_int_cast<ULONG>(nRealPos);
 }
 
@@ -432,8 +425,7 @@ void OslStream::FlushData()
 
 void OslStream::SetSize( ULONG nSize )
 {
-    osl::FileBase::RC nRet = osl::FileBase::E_None;
-    nRet = maFile.setSize( (sal_uInt64)nSize );
+    maFile.setSize( (sal_uInt64)nSize );
 }
 
 #endif

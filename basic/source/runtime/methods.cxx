@@ -946,9 +946,9 @@ RTLFUNC(FileLen)
             nLen = aStat.GetSize();
 #else
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aStr ), aItem );
+            DirectoryItem::get( getFullPathUNC( aStr ), aItem );
             FileStatus aFileStatus( FileStatusMask_FileSize );
-            nRet = aItem.getFileStatus( aFileStatus );
+            aItem.getFileStatus( aFileStatus );
             nLen = (INT32)aFileStatus.getFileSize();
 #endif
         }
@@ -3112,9 +3112,9 @@ RTLFUNC(GetAttr)
         // --> UCB
         {
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
+            DirectoryItem::get( getFullPathUNC( rPar.Get(1)->GetString() ), aItem );
             FileStatus aFileStatus( FileStatusMask_Attributes | FileStatusMask_Type );
-            nRet = aItem.getFileStatus( aFileStatus );
+            aItem.getFileStatus( aFileStatus );
             sal_uInt64 nAttributes = aFileStatus.getAttributes();
             sal_Bool bReadOnly = (nAttributes & Attribute_ReadOnly) != 0;
 
@@ -3172,9 +3172,9 @@ RTLFUNC(FileDateTime)
             aDate = Date( aStat.DateModified() );
 #else
             DirectoryItem aItem;
-            FileBase::RC nRet = DirectoryItem::get( getFullPathUNC( aPath ), aItem );
+            DirectoryItem::get( getFullPathUNC( aPath ), aItem );
             FileStatus aFileStatus( FileStatusMask_ModifyTime );
-            nRet = aItem.getFileStatus( aFileStatus );
+            aItem.getFileStatus( aFileStatus );
             TimeValue aTimeVal = aFileStatus.getModifyTime();
             oslDateTime aDT;
             osl_getDateTimeFromTimeValue( &aTimeVal, &aDT );
