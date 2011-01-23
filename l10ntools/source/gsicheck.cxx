@@ -198,7 +198,6 @@ GSILine::GSILine( const ByteString &rLine, ULONG nLine )
         }
         if ( nPos != STRING_NOTFOUND )
         {
-//          ByteString aStatus = sTmp.Copy( nStart, nPos - nStart );     // ext int ...
             nStart = nPos + 4;  // + length of the delemiter
         }
         if ( nPos != STRING_NOTFOUND )
@@ -306,8 +305,9 @@ GSIBlock::~GSIBlock()
     delete pSourceLine;
     delete pReferenceLine;
 
-    for ( ULONG i = 0; i < Count(); i++ )
-        delete ( GetObject( i ));
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+        delete maList[ i ];
+    maList.clear();
 }
 
 /*****************************************************************************/
@@ -332,20 +332,19 @@ void GSIBlock::InsertLine( GSILine* pLine, ByteString aSourceLang)
 
     if ( aSourceLang.Len() ) // only check blockstructure if source lang is given
     {
-        ULONG nPos = 0;
-        while ( nPos < Count() )
+        for ( size_t nPos = 0, n = maList.size(); nPos < n; ++nPos )
         {
-            if ( GetObject( nPos )->GetLanguageId().Equals( pLine->GetLanguageId() ) )
+            if ( maList[ nPos ]->GetLanguageId().Equals( pLine->GetLanguageId() ) )
             {
                 PrintError( "Translation Language entry double. Checking both.", "File format", "", pLine->GetLineNumber(), pLine->GetUniqId() );
                 bHasBlockError = TRUE;
-                GetObject( nPos )->NotOK();
+                maList[ nPos ]->NotOK();
                 pLine->NotOK();
             }
             nPos++;
         }
     }
-    Insert( pLine, LIST_APPEND );
+    maList.push_back( pLine );
 }
 
 /*****************************************************************************/
@@ -613,7 +612,7 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
             if ( pSourceLine )
                 pSource = pSourceLine;
             else
-                pSource = GetObject( 0 );   // get some other line
+                pSource = maList.empty() ? NULL : maList[ 0 ];   // get some other line
             if ( pSource )
                 PrintError( "No reference line found. Entry is new in source file", "File format", "", pSource->GetLineNumber(), pSource->GetUniqId() );
             else
@@ -637,21 +636,21 @@ BOOL GSIBlock::CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags 
     if ( pSourceLine )
         bHasError |= !TestUTF8( pSourceLine, bFixTags );
 
-    ULONG i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        aTester.CheckTestee( GetObject( i ), pSourceLine != NULL, bFixTags );
-        if ( GetObject( i )->HasMessages() || aTester.HasCompareWarnings() )
+        GSILine* pItem = maList[ i ];
+        aTester.CheckTestee( pItem, pSourceLine != NULL, bFixTags );
+        if ( pItem->HasMessages() || aTester.HasCompareWarnings() )
         {
-            if ( GetObject( i )->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
-                GetObject( i )->NotOK();
+            if ( pItem->HasMessages() || aTester.GetCompareWarnings().HasErrors() )
+                pItem->NotOK();
             bHasError = TRUE;
-            PrintList( GetObject( i )->GetMessageList(), "Translation", GetObject( i ) );
-            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Mismatch", GetObject( i ) );
+            PrintList( pItem->GetMessageList(), "Translation", pItem );
+            PrintList( &(aTester.GetCompareWarnings()), "Translation Tag Mismatch", pItem );
         }
-        bHasError |= !TestUTF8( GetObject( i ), bFixTags );
+        bHasError |= !TestUTF8( pItem, bFixTags );
         if ( pSourceLine )
-            bHasError |= HasSuspiciousChars( GetObject( i ), pSourceLine );
+            bHasError |= HasSuspiciousChars( pItem, pSourceLine );
     }
 
     return bHasError || bHasBlockError;
@@ -664,14 +663,14 @@ void GSIBlock::WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine  )
 
     BOOL bHasError = FALSE;
     BOOL bCopyAll = ( !pSourceLine && bRequireSourceLine ) || ( pSourceLine && !pSourceLine->IsOK() && !bCheckTranslationLang ) || bHasBlockError;
-    ULONG i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( !GetObject( i )->IsOK() || bCopyAll )
+        GSILine* pItem = maList[ i ];
+        if ( !pItem->IsOK() || bCopyAll )
         {
             bHasError = TRUE;
             aErrOut.LazyOpen();
-            aErrOut.WriteLine( *GetObject( i ) );
+            aErrOut.WriteLine( *pItem );
         }
     }
 
@@ -688,18 +687,18 @@ void GSIBlock::WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine )
         return;
 
     BOOL bHasOK = FALSE;
-    ULONG i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( ( GetObject( i )->IsOK() || bCheckSourceLang ) && !bHasBlockError )
+        GSILine* pItem = maList[ i ];
+        if ( ( pItem->IsOK() || bCheckSourceLang ) && !bHasBlockError )
         {
             bHasOK = TRUE;
             aOkOut.LazyOpen();
-            aOkOut.WriteLine( *GetObject( i ) );
+            aOkOut.WriteLine( *pItem );
         }
     }
 
-    if ( ( pSourceLine && pSourceLine->IsOK() && ( Count() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
+    if ( ( pSourceLine && pSourceLine->IsOK() && ( !maList.empty() || !bCheckTranslationLang ) ) || ( bHasOK && bCheckTranslationLang ) )
     {
         aOkOut.LazyOpen();
         aOkOut.WriteLine( *pSourceLine );
@@ -712,14 +711,14 @@ void GSIBlock::WriteFixed( LazySvFileStream &aFixOut, BOOL /*bRequireSourceLine*
         return;
 
     BOOL bHasFixes = FALSE;
-    ULONG i;
-    for ( i = 0; i < Count(); i++ )
+    for ( size_t i = 0, n = maList.size(); i < n; ++i )
     {
-        if ( GetObject( i )->IsFixed() )
+        GSILine* pItem = maList[ i ];
+        if ( pItem->IsFixed() )
         {
             bHasFixes = TRUE;
             aFixOut.LazyOpen();
-            aFixOut.WriteLine( *GetObject( i ) );
+            aFixOut.WriteLine( *pItem );
         }
     }
 
@@ -1115,8 +1114,6 @@ int _cdecl main( int argc, char *argv[] )
                                 }
                                 else if ( pReferenceLine->GetUniqId() > aId )
                                 {
-//                                    if ( pGSILine->GetLanguageId() == aSourceLang )
-//                                      PrintError( "No reference line found. Entry is new in source file", "File format", "", bPrintContext, pGSILine->GetLineNumber(), aId );
                                     bContinueSearching = FALSE;
                                 }
                                 else

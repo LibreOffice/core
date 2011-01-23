@@ -30,6 +30,7 @@
 #define _GSICHECK_HXX_
 
 #include "tagtest.hxx"
+#include <vector>
 
 //
 // class GSILine
@@ -88,13 +89,14 @@ public:
 // class GSIBlock
 //
 
-DECLARE_LIST( GSIBlock_Impl, GSILine * )
+typedef ::std::vector< GSILine* > GSIBlock_Impl;
 
 class LazySvFileStream;
 
-class GSIBlock : public GSIBlock_Impl
+class GSIBlock
 {
 private:
+    GSIBlock_Impl maList;
     GSILine *pSourceLine;
     GSILine *pReferenceLine;
     void PrintList( ParserMessageList *pList, ByteString aPrefix, GSILine *pLine );
