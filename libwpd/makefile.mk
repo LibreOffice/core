@@ -41,8 +41,8 @@ TARGET=wpd
     @echo "Using system libwpd..."
 .ENDIF
 
-TARFILE_NAME=libwpd-0.9.0
-TARFILE_MD5=86e390f015e505dd71a66f0123c62f09
+TARFILE_NAME=libwpd-0.9.1
+TARFILE_MD5=5ff846847dab351604ad859e2fd4ed3c
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/lib
 
