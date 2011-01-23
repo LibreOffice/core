@@ -68,10 +68,12 @@
 #pragma warning( disable: 4917 )
 #endif
 
+#define ULONG WIN_ULONG
 #include <GdiPlus.h>
 #include <GdiPlusEnums.h>
 #include <GdiPlusColor.h>
 #include <Shlobj.h>
+#undef ULONG
 
 #if defined _MSC_VER
 #pragma warning(pop)
