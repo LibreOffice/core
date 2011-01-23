@@ -34,9 +34,6 @@
 #include <l10ntools/directory.hxx>
 #endif
 
-
-// #define MERGE_SOURCE_LANGUAGES <- To merge en-US and de resource
-
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/stream.hxx>
@@ -104,22 +101,29 @@ typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
-
-DECLARE_LIST( ExportListBase, ExportListEntry * )
+typedef ::std::vector< ExportListEntry* > ExportListBase;
 
 //
 // class ExportList
 //
 
-class ExportList : public ExportListBase
+class ExportList
 {
 private:
+    ExportListBase maList;
     ULONG nSourceLanguageListEntryCount;
 
 public:
-    ExportList() : ExportListBase() { nSourceLanguageListEntryCount = 0; }
+    ExportList() { nSourceLanguageListEntryCount = 0; }
     ULONG GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
     void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
+    size_t size() const { return maList.size(); }
+    void push_back( ExportListEntry* item ) { maList.push_back( item ); }
+
+    ExportListEntry* operator [] ( size_t i )
+        {
+            return ( i < maList.size() ) ? maList[ i ] : NULL;
+        }
 };
 
 #define REFID_NONE 0xFFFF
