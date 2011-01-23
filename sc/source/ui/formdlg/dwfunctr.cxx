@@ -203,20 +203,9 @@ ScFunctionDockWin::~ScFunctionDockWin()
 
 void ScFunctionDockWin::InitLRUList()
 {
-    const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
-    USHORT nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (USHORT)LRU_MAX );
-    USHORT* pLRUListIds = rAppOpt.GetLRUFuncList();
+    ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
+    pFuncMgr->fillLastRecentlyUsedFunctions(aLRUList);
 
-    USHORT i;
-    for ( i=0; i<LRU_MAX; i++ )
-        aLRUList[i] = NULL;
-
-    if ( pLRUListIds )
-    {
-        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
-        for ( i=0; i<nLRUFuncCount; i++ )
-            aLRUList[i] = pFuncMgr->Get( pLRUListIds[i] );
-    }
 
     USHORT  nSelPos   = aCatBox.GetSelectEntryPos();
 
@@ -827,11 +816,11 @@ void ScFunctionDockWin::UpdateFunctionList()
     }
     else // LRU-Liste
     {
-        for ( USHORT i=0; i<LRU_MAX && aLRUList[i]; i++ )
+        for(::std::vector<const formula::IFunctionDescription*>::iterator iter=aLRUList.begin();iter!=aLRUList.end();++iter)
         {
-            const ScFuncDesc* pDesc = aLRUList[i];
+            const formula::IFunctionDescription* pDesc = *iter;
             pAllFuncList->SetEntryData(
-                    pAllFuncList->InsertEntry( *(pDesc->pFuncName) ),
+                    pAllFuncList->InsertEntry(pDesc->getFunctionName()),
                     (void*)pDesc );
         }
     }

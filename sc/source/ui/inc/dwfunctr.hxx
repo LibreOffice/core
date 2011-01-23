@@ -43,9 +43,6 @@
 #include "privsplt.hxx"
 #include "funcdesc.hxx"
 
-#ifndef LRU_MAX
-#define LRU_MAX 10
-#endif
 /*************************************************************************
 |*
 |* Ableitung vom SfxChildWindow als "Behaelter" fuer Controller
@@ -96,7 +93,7 @@ private:
     String**            pArgArr;
 
 
-    const ScFuncDesc*   aLRUList[LRU_MAX];
+    ::std::vector< const formula::IFunctionDescription*> aLRUList;
 
     void            UpdateFunctionList();
     void            UpdateLRUList();

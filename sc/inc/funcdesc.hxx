@@ -42,6 +42,7 @@
 #include <rtl/ustring.hxx>
 
 #define MAX_FUNCCAT 12  /* maximum number of categories for functions */
+#define LRU_MAX 10 /* maximal number of last recently used functions */
 
 class ScFuncDesc;
 class ScFunctionList;

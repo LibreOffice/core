@@ -736,8 +736,6 @@ const formula::IFunctionDescription* ScFunctionMgr::getFunctionByName(const ::rt
 // -----------------------------------------------------------------------------
 void ScFunctionMgr::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& _rLastRUFunctions) const
 {
-#define LRU_MAX 10
-
     const ScAppOptions& rAppOpt = SC_MOD()->GetAppOptions();
     sal_uInt16 nLRUFuncCount = Min( rAppOpt.GetLRUFuncListCount(), (sal_uInt16)LRU_MAX );
     sal_uInt16* pLRUListIds = rAppOpt.GetLRUFuncList();
