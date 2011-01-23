@@ -220,9 +220,9 @@ void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 
 Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
 {
-    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
 #ifdef DBG_UTIL
     sal_Bool bFound = sal_False;
+    ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
     for(aListIter = pMgrImpl->aItemList.begin(); aListIter != pMgrImpl->aItemList.end(); ++aListIter)
     {
         ConfigItemListEntry_Impl& rEntry = *aListIter;
