@@ -399,7 +399,7 @@ IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
             pWindow->Command( aCEvt );
             if( aDel.IsDead() )
                 return 0;
-            mnRepaintTime = Max( Time::GetSystemTicks() - nTime, 1UL );
+            mnRepaintTime = Max( Time::GetSystemTicks() - nTime, (ULONG)1 );
             ImplRecalcScrollValues();
         }
     }
