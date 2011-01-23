@@ -90,3 +90,14 @@
  #ifdef Z_PREFIX
  #  define deflateInit_          z_deflateInit_
  #  define deflate               z_deflate
+--- misc/zlib-1.2.3/zutil.h
++++ misc/build/zlib-1.2.3/zutil.h
+@@ -175,7 +175,7 @@
+ 
+          /* functions */
+ 
+-#if defined(STDC99) || (defined(__TURBOC__) && __TURBOC__ >= 0x550)
++#if defined(STDC99) || (defined(__TURBOC__) && __TURBOC__ >= 0x550) || defined(_MSC_VER)
+ #  ifndef HAVE_VSNPRINTF
+ #    define HAVE_VSNPRINTF
+ #  endif
