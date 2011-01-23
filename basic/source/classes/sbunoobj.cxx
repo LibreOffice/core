@@ -620,7 +620,6 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
     Type aType = aValue.getValueType();
     TypeClass eTypeClass = aType.getTypeClass();
 
-    sal_Int32 indicesIndex = indices.getLength() -1;
     sal_Int32 dimCopy = dimension;
 
     if ( eTypeClass == TypeClass_SEQUENCE )
@@ -645,7 +644,6 @@ static void implSequenceToMultiDimArray( SbxDimArray*& pArray, Sequence< sal_Int
                     sizes.realloc( sizes.getLength() + 1 );
                     sizes[ sizes.getLength() - 1 ] = nLen;
                     indices.realloc( indices.getLength() + 1 );
-                    indicesIndex = indices.getLength() - 1;
                 }
             }
 
