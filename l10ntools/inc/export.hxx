@@ -286,7 +286,7 @@ public:
 #define MERGE_MODE_NORMAL           0x0000
 #define MERGE_MODE_LIST             0x0001
 
-DECLARE_LIST( ResStack, ResData * )
+typedef ::std::vector< ResData* > ResStack;
 // forwards
 class WordTransformer;
 class ParserQueue;
@@ -306,7 +306,7 @@ private:
 
     BOOL bDefine;                       // cur. res. in a define?
     BOOL bNextMustBeDefineEOL;          // define but no \ at lineend
-    ULONG nLevel;                       // res. recursiv? how deep?
+    size_t nLevel;                      // res. recursiv? how deep?
     USHORT nList;                       // cur. res. is String- or FilterList
     ByteString nListLang;
     ULONG nListIndex;
