@@ -39,8 +39,6 @@
 
 #include "XmlFilterAdaptor.hxx"
 
-
-
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
