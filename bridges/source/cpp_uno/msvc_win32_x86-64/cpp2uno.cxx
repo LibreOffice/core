@@ -430,7 +430,7 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
 
 static void whatthefuck(sal_Int64 i, ...)
 {
-
+    MessageBoxA (NULL, "Shit!", "whatthefuck in cpp2uno.cxx", MB_OK);
 }
 
 #endif

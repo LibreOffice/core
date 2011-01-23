@@ -275,12 +275,12 @@ extern void *destruct;
 
 static void whatthefuck_copyctor(sal_Int64 i, ...)
 {
-
+    MessageBoxA (NULL, "Shit!", "whatthefuck_copyctor in except.cxx", MB_OK);
 }
 
 static void whatthefuck_dtor(sal_Int64 i, ...)
 {
-
+    MessageBoxA (NULL, "Shit!", "whatthefuck_dtor in except.cxx", MB_OK);
 }
 
 #endif

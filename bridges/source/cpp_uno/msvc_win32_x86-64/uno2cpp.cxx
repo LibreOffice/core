@@ -41,6 +41,10 @@
 
 #include "mscx.hxx"
 
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
@@ -102,6 +106,8 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc ) throw ()
 {
     const int MAXPARAMS = 20;
+
+    MessageBoxA (NULL, "Whoa!", "cpp_call in uno2cpp.cxx", MB_OK);
 
     if (nParams > MAXPARAMS)
     {
