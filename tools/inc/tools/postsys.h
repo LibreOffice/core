@@ -34,6 +34,7 @@
 #undef PolyPolygon
 #undef Polygon
 #undef Rectangle
+#undef ULONG
 #undef BYTE
 #undef BOOL
 #undef DELETE

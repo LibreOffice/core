@@ -35,6 +35,7 @@
 
 #define BOOL         WIN_BOOL
 #define BYTE         WIN_BYTE
+#define ULONG        WIN_ULONG
 
 #define Rectangle    BLA_Rectangle
 #define Polygon      BLA_Polygon
