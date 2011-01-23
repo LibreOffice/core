@@ -33,6 +33,7 @@
 #ifdef _MSC_VER
 #pragma warning(push, 1) /* disable warnings within system headers */
 #endif
+#include <curl/curl.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
