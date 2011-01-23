@@ -552,7 +552,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                                        sal_uInt32 nCvtFlags,
                                        sal_uInt32 *pInfo )
 {
-    OSL_ENSURE(rtl_isOctetTextEncoding(eTextEncoding),
+    OSL_ENSURE(nLen == 0 || rtl_isOctetTextEncoding(eTextEncoding),
                "rtl_string2UString_status() - Wrong TextEncoding" );
 
     if ( !nLen )
