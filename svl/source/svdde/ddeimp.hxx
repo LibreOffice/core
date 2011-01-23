@@ -156,11 +156,11 @@ struct DdeInstData
     DdeConnections* pConnections;
     // Server
     long            hCurConvSvr;
-    ULONG           hDdeInstSvr;
+    DWORD           hDdeInstSvr;
     short           nInstanceSvr;
     DdeServices*    pServicesSvr;
     // Client
-    ULONG           hDdeInstCli;
+    DWORD           hDdeInstCli;
     short           nInstanceCli;
 };
 
