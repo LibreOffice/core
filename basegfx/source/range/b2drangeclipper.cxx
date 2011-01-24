@@ -600,7 +600,6 @@ namespace basegfx
             std::vector<B2DRange>::const_reverse_iterator aCurrRectR=rRanges.rbegin();
             std::vector<B2VectorOrientation>::const_reverse_iterator aCurrOrientationR=rOrientations.rbegin();
             const std::vector<B2DRange>::const_reverse_iterator aEndR=rRanges.rend();
-            const std::vector<B2VectorOrientation>::const_reverse_iterator aEndOrientationR=rOrientations.rend();
             while( aCurrRectR != aEndR )
             {
                 const B2DRectangle& rCurrRect( *aCurrRectR++ );
