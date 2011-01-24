@@ -158,6 +158,8 @@ SvPersistStream& operator >> ( SvPersistStream & rStm,
                 aStr += ByteString::CreateFromInt64(nObjLen);
                 DBG_ERROR( aStr.GetBuffer() );
             }
+#else
+            (void)nObjLen;
 #endif
     return rStm;
 }
@@ -762,6 +764,8 @@ UINT32 SvPersistStream::ReadObj
                 aStr += ByteString::CreateFromInt32( nClassId );
                 aStr += " registered";
                 DBG_WARNING( aStr.GetBuffer() );
+#else
+                (void)nObjLen;
 #endif
                 SetError( ERRCODE_IO_NOFACTORY );
                 return 0;
@@ -881,7 +885,7 @@ SvStream& operator >>
         {
             SvPersistBase * pEle;
             // Lesen, ohne in die Tabellen einzutragen
-            UINT32 nId = rThis.ReadObj( pEle, FALSE );
+            sal_uIntPtr nId = rThis.ReadObj( pEle, FALSE );
             if( rThis.GetError() )
                 break;
 

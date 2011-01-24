@@ -2173,6 +2173,7 @@ basegfx::B2DPolygon Polygon::getB2DPolygon() const
 
                 // assert invalid polygons
                 OSL_ENSURE(bControlA == bControlB, "Polygon::getB2DPolygon: Invalid source polygon (!)");
+                (void)bControlB;
 
                 if(a < nCount)
                 {

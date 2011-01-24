@@ -104,8 +104,6 @@ SAL_IMPLEMENT_MAIN()
     printf("rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c)\n");
     printf("{\n");
 
-    bool bFirstOutput = true;
-
     sal_Unicode c = 0;
     while (c < 0xFFFF)
     {
@@ -134,7 +132,6 @@ SAL_IMPLEMENT_MAIN()
         sal_Unicode cEnd = c;
         printf("    if (c < 0x%x)\n", c);
         printf("        return %s;\n", aConverters[nMostCapable].getName());
-        bFirstOutput = false;
         while(c < 0xFFFF)
         {
             bool bNothingCapable = true;
