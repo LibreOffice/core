@@ -382,6 +382,7 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
+gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
@@ -398,7 +399,8 @@ $(call gb_Helper_abbreviate_dirs_native,\
         @$${RESPONSEFILE} \
         $(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib))) \
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_filename,$(lib))) \
-        $(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)) && rm $${RESPONSEFILE})
+        $(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
+    $(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
 
@@ -475,12 +477,12 @@ $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
     $(patsubst %.dll,%.pdb,$(3)) \
-    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
+    $(call gb_LinkTarget_get_pdbfile,$(2)) \
     $(patsubst %.dll,%.ilk,$(3)) \
 )
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
 endef
 
@@ -490,7 +492,7 @@ $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.lib,%.exp,$(call gb_LinkTarget_get_target,$(2))) \
     $(3).manifest \
-    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
+    $(call gb_LinkTarget_get_pdbfile,$(2)) \
     $(patsubst %.dll,%.pdb,$(3)) \
     $(patsubst %.dll,%.ilk,$(3)) \
 )
@@ -509,7 +511,7 @@ endif
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/bin/$(notdir $(3)),$(3))
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
 endef
 
@@ -534,10 +536,10 @@ gb_StaticLibrary_FILENAMES := $(patsubst salcpprt:salcpprt%,salcpprt:cpprtl%,$(g
 
 define gb_StaticLibrary_StaticLibrary_platform
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
 $(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
+    $(call gb_LinkTarget_get_pdbfile,$(2)) \
 )
 
 endef
@@ -551,7 +553,7 @@ gb_Executable_get_rpath :=
 define gb_Executable_Executable_platform
 $(call gb_LinkTarget_set_auxtargets,$(2),\
     $(patsubst %.exe,%.pdb,$(call gb_LinkTarget_get_target,$(2))) \
-    $(call gb_LinkTarget_get_target,)pdb/$(2).pdb \
+    $(call gb_LinkTarget_get_pdbfile,$(2)) \
     $(call gb_LinkTarget_get_target,$(2)).manifest \
 )
 
@@ -560,7 +562,7 @@ $(call gb_Executable_get_clean_target,$(1)) : AUXTARGETS := $(call gb_Executable
 $(call gb_Deliver_add_deliverable,$(call gb_Executable_get_target,$(1)).manifest,$(call gb_LinkTarget_get_target,$(2)).manifest)
 
 $(call gb_LinkTarget_get_target,$(2)) \
-$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_target,)/pdb/$(2).pdb
+$(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_get_pdbfile,$(2))
 
 endef
 
