@@ -69,8 +69,8 @@ namespace toolkit
         ,m_nDataColumnIndex( i_copySource.m_nDataColumnIndex )
         ,m_nColumnWidth( i_copySource.m_nColumnWidth )
         ,m_nMaxWidth( i_copySource.m_nMaxWidth )
-        ,m_nFlexibility( i_copySource.m_nFlexibility )
         ,m_nMinWidth( i_copySource.m_nMinWidth )
+        ,m_nFlexibility( i_copySource.m_nFlexibility )
         ,m_bResizeable( i_copySource.m_bResizeable )
         ,m_eHorizontalAlign( i_copySource.m_eHorizontalAlign )
     {
