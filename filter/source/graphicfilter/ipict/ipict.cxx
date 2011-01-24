@@ -814,13 +814,11 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     else if ( nPixelSize == 16 )
     {
         BYTE    nByteCountAsByte, nFlagCounterByte;
-        USHORT  nByteCount, nCount, nDestBPL,nD;
+        USHORT  nByteCount, nCount, nD;
         ULONG   nSrcBitsPos;
 
         if ( nRowBytes < 2 * nWidth )
             BITMAPERROR;
-
-        nDestBPL = ( ( 3 * nWidth ) + 0x0003 ) & 0xfffc;
 
         for ( ny = 0; ny < nHeight; ny++ )
         {
