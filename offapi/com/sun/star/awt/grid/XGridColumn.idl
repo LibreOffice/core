@@ -29,6 +29,7 @@
 
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/style/HorizontalAlignment.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 #include <com/sun/star/awt/grid/XGridColumnListener.idl>
 #include <com/sun/star/util/XCloneable.idl>
 
@@ -51,23 +52,49 @@ interface XGridColumn
     */
     interface ::com::sun::star::util::XCloneable;
 
-    /** Specifies the an idendifier of the colomn.**/
+    /** specifies an identifier of the column
+
+        <p>This identifier will not be evaluated by the grid control, or its model. It is merely for clients
+        to identify particular columns.</p>
+    */
     [attribute] any Identifier;
 
-    /** Specifies the default column witdth. **/
+    /** specifies the current width of the column.
+    */
     [attribute] long ColumnWidth;
 
-    /** Specifies the preferred column witdth. **/
-    [attribute] long PreferredWidth;
-
-    /** Specifies the min column witdth. **/
+    /** specifies the minimal width the column can have.
+    */
     [attribute] long MinWidth;
 
-    /** Specifies the max column witdth. **/
+    /** specifies the maximal width the column can have.
+    */
     [attribute] long MaxWidth;
 
-    /** Specifies whether column has fixed size or not. **/
+    /** controls whether or not the column's width is fixed or not.
+
+        <p>If this is <TRUE/>, the user can interactively change the column's width. Also, the column is subject to
+        auto-resizing, if its <member>Flexibility</member> attribute is greater <code>0</code>.</p>
+    */
     [attribute] boolean Resizeable;
+
+    /** specifies the flexibility of the column when it is automatically resized due to the grid control as a whole
+        being resized.
+
+        <p>Specify <code>0</code> here if you do not want the column to be resized automatically.</p>
+
+        <p>If a column has a flexibility greater than 0, it is set in relationship to the flexibility of all
+        other such columns, and the respective widths of the columns are changed in the same relationship.</p>
+
+        <p>Note that a column's flexibility is ignored if its <member>Resizeable</member> attribute is
+        <FALSE/>.</p>
+
+        <p>A column's flexibility cannot be negative, attempts to set a negative value will raise an exception.</p>
+    */
+    [attribute] long Flexibility
+    {
+        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+    };
 
     /** Specifies the horizontal alignment of the content in the control.
      */
