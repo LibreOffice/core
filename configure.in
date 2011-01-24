@@ -2232,18 +2232,16 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
                                 printf (\"%04d\",vertoken[[i]] )
                             }
                             }"`
-            AC_MSG_RESULT([found Compiler version $CCNUMVER.])
             if test "$CCNUMVER" -ge "001600000000"; then
                 COMEX=13
                 MSVSVER=2010
-                AC_MSG_RESULT([found MSVS 2010.])
             elif test "$CCNUMVER" -ge "001500000000"; then
                 COMEX=12
                 MSVSVER=2008
-                AC_MSG_RESULT([found MSVS 2008.])
             else
                 AC_MSG_ERROR([Compiler too old. Use Microsoft Visual Studio 2008 or 2010.])
             fi
+            AC_MSG_RESULT([found compiler version $CCNUMVER (MSVS $MSVSVER).])
         else
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
         fi
