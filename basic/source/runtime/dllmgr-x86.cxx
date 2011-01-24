@@ -50,8 +50,6 @@
 
 /* Open issues:
 
-   Only 32-bit Windows for now.
-
    Missing support for functions returning structs (see TODO in call()).
 
    Missing support for additional data types (64 bit integers, Any, ...; would
@@ -63,8 +61,6 @@
    signature from the Declare statement, so that it could convert the passed
    variables accordingly.
 */
-
-#if defined WNT // only 32-bit Windows, actually
 
 extern "C" {
 
@@ -718,21 +714,6 @@ SbError SbiDllMgr::Call(
 void SbiDllMgr::FreeDll(rtl::OUString const & library) {
     impl_->dlls.erase(library);
 }
-
-#else
-
-struct SbiDllMgr::Impl {};
-
-SbError SbiDllMgr::Call(
-    rtl::OUString const &, rtl::OUString const &, SbxArray *, SbxVariable &,
-    bool)
-{
-    return ERRCODE_BASIC_NOT_IMPLEMENTED;
-}
-
-void SbiDllMgr::FreeDll(rtl::OUString const &) {}
-
-#endif
 
 SbiDllMgr::SbiDllMgr(): impl_(new Impl) {}
 
