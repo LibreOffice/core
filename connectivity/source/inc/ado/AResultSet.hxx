@@ -79,7 +79,7 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>        m_xMetaData;
             ::std::vector<OLEVariant>       m_aBookmarks;
             OLEVariant                      m_aValue;
-            sal_Int32                       m_nRowPos;
+            ADO_LONGPTR                     m_nRowPos;
             sal_Bool                        m_bWasNull;
             sal_Bool                        m_bEOF;
             sal_Bool                        m_bOnFirstAfterOpen;

@@ -336,7 +336,7 @@ namespace connectivity
              sal_Bool Cancel() const;
              sal_Int32 get_State( );
              sal_Bool Supports( /* [in] */ CursorOptionEnum CursorOptions);
-            PositionEnum get_AbsolutePosition();
+            PositionEnum_Param get_AbsolutePosition();
              void GetDataSource(IUnknown** pIUnknown) const ;
              void PutRefDataSource(IUnknown* pIUnknown);
              void GetBookmark(VARIANT& var);
@@ -358,9 +358,9 @@ namespace connectivity
              sal_Bool CancelUpdate();
              WpADOProperties get_Properties() const;
              sal_Bool NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset);
-             sal_Bool get_RecordCount(sal_Int32 &_nRet) const;
-             sal_Bool get_MaxRecords(sal_Int32 &_nRet) const;
-             sal_Bool put_MaxRecords(sal_Int32 _nRet);
+             sal_Bool get_RecordCount(ADO_LONGPTR &_nRet) const;
+             sal_Bool get_MaxRecords(ADO_LONGPTR &_nRet) const;
+             sal_Bool put_MaxRecords(ADO_LONGPTR _nRet);
              sal_Bool get_CursorType(CursorTypeEnum &_nRet) const;
              sal_Bool put_CursorType(CursorTypeEnum _nRet);
              sal_Bool get_LockType(LockTypeEnum &_nRet) const;
