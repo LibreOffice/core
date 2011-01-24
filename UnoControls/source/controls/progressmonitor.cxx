@@ -732,11 +732,6 @@ void ProgressMonitor::impl_recalcLayout ()
     sal_Int32   nWidth_ProgressBar      ;
     sal_Int32   nHeight_ProgressBar     ;
 
-    sal_Int32   nX_3DLine               ;
-    sal_Int32   nY_3DLine               ;
-    sal_Int32   nWidth_3DLine           ;
-    sal_Int32   nHeight_3DLine          ;
-
     sal_Int32   nX_Text_Top             ;
     sal_Int32   nY_Text_Top             ;
     sal_Int32   nWidth_Text_Top         ;
@@ -818,12 +813,6 @@ void ProgressMonitor::impl_recalcLayout ()
     nY_Text_Bottom          =   nY_Topic_Bottom                                                 ;
     nWidth_Text_Bottom      =   nWidth_Text_Top                                                 ;
     nHeight_Text_Bottom     =   nHeight_Topic_Bottom                                            ;
-
-    // Oriented by progressbar.
-    nX_3DLine               =   nX_Topic_Top                                                    ;
-    nY_3DLine               =   nY_Topic_Bottom+nHeight_Topic_Bottom+(PROGRESSMONITOR_FREEBORDER/2)             ;
-    nWidth_3DLine           =   nWidth_ProgressBar                                              ;
-    nHeight_3DLine          =   1                                                               ;   // Height for ONE line ! (But we paint two lines!)
 
     // Oriented by progressbar.
     nX_Button               =   nX_ProgressBar+nWidth_ProgressBar-nWidth_Button                 ;
