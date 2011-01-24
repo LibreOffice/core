@@ -274,7 +274,7 @@ sal_Bool SAL_CALL uno_type_equalData(
 {
     return _equalData(
         pVal1, pVal1Type, 0,
-        pVal2, pVal2Type, 0,
+        pVal2, pVal2Type,
         queryInterface, release );
 }
 //##################################################################################################
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL uno_equalData(
 {
     return _equalData(
         pVal1, pVal1TD->pWeakRef, pVal1TD,
-        pVal2, pVal2TD->pWeakRef, pVal2TD,
+        pVal2, pVal2TD->pWeakRef,
         queryInterface, release );
 }
 //##################################################################################################

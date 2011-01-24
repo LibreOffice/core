@@ -303,7 +303,7 @@ inline sal_Bool _equalData(
     void * pDest,
     typelib_TypeDescriptionReference * pDestType, typelib_TypeDescription * pDestTypeDescr,
     void * pSource,
-    typelib_TypeDescriptionReference * pSourceType, typelib_TypeDescription * pSourceTypeDescr,
+    typelib_TypeDescriptionReference * pSourceType,
     uno_QueryInterfaceFunc queryInterface, uno_ReleaseFunc release )
     SAL_THROW( () )
 {
@@ -316,7 +316,6 @@ inline sal_Bool _equalData(
     }
     while (typelib_TypeClass_ANY == (eSourceTypeClass = pSourceType->eTypeClass))
     {
-        pSourceTypeDescr = 0;
         pSourceType = ((uno_Any *)pSource)->pType;
         pSource = ((uno_Any *)pSource)->pData;
     }
