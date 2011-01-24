@@ -152,7 +152,7 @@ OUT2BIN += out/libeay32.dll
 
         #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
         CONFIGURE_ACTION=$(PERL) configure
-.IF "$(CPU") == "I"
+.IF "$(CPU)" == "I"
         OPENSSL_PLATFORM=VC-WIN32
 .ELSE
         OPENSSL_PLATFORM=VC-WIN64A
