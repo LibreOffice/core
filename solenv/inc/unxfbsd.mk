@@ -148,8 +148,8 @@ LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS)
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPGUI= -Wl,-export-dynamic
+LINKFLAGSAPPCUI= -Wl,-export-dynamic
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared

@@ -176,9 +176,9 @@ LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-l
 .ENDIF
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+LINKFLAGSAPPGUI= -Wl,-export-dynamic \
     -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
-LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
+LINKFLAGSAPPCUI= -Wl,-export-dynamic \
     -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
 
 # linker flags for linking shared libraries
