@@ -360,17 +360,9 @@ namespace DOM
         return Reference< XDocument >(static_cast< CDocument* >(CNode::get((xmlNodePtr)pDoc)));
     }
 
-    Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& is)
+    Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& /*is*/)
         throw (RuntimeException, SAXParseException, IOException)
     {
-        // if there is an encoding specified in the input source, use it
-        xmlCharEncoding enc = XML_CHAR_ENCODING_NONE;
-        if (is.sEncoding.getLength() > 0) {
-            OString oEncstr = OUStringToOString(is.sEncoding, RTL_TEXTENCODING_UTF8);
-            char *encstr = (char*) oEncstr.getStr();
-            enc = xmlParseCharEncoding(encstr);
-        }
-
         // set up parser context
         xmlParserCtxtPtr ctxt = xmlNewParserCtxt();
         // register error functions to prevent errors being printed
