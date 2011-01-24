@@ -130,9 +130,9 @@ MACHINE=X64
 .ENDIF
 
 .IF "$(debug)"==""
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
 .ELSE
-BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
+BUILD_ACTION=nmake -f Makefile.vc9 cfg=debug-dll EXCFLAGS=$(EXCFLAGS) MACHINE=$(MACHINE)
 .ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
