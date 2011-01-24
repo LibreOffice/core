@@ -281,17 +281,6 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
                 rHyphInf.SetNoLang( sal_False );
                 rHyphInf.SetCheck( sal_True );
             }
-#ifdef DEBUGGY
-            if( OPTDBG( rInf ) )
-            {
-                OSL_ENSURE( aSelTxt == aHyphWord,
-                        "!SwTxtFormatter::Hyphenate: different words, different planets" );
-                aDbstream << "Diff: \"" << aSelTxt.GetStr() << "\" != \""
-                          << aHyphWord.GetStr() << "\"" << endl;
-                OSL_ENSURE( bRet, "!SwTxtFormatter::Hyphenate: three of a perfect pair" );
-                aDbstream << "Hyphenate: ";
-            }
-#endif
         }
     }
     return bRet;
