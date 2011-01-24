@@ -208,7 +208,7 @@ public:
 
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
-    BOOL                FillOldParam(ScPivotParam& rParam, BOOL bForFile) const;
+    BOOL                FillOldParam(ScPivotParam& rParam) const;
     BOOL                FillLabelData(ScPivotParam& rParam);
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource);
 
@@ -251,14 +251,14 @@ public:
                         CreateSource( const ScDPServiceDesc& rDesc );
 
     static void         ConvertOrientation( ScDPSaveData& rSaveData,
-                            PivotField* pFields, SCSIZE nCount, USHORT nOrient,
+                            const ScPivotFieldVector& rFields, USHORT nOrient,
                             ScDocument* pDoc, SCROW nRow, SCTAB nTab,
                             const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource,
-                            BOOL bOldDefaults,
-                            PivotField* pRefColFields = NULL, SCSIZE nRefColCount = 0,
-                            PivotField* pRefRowFields = NULL, SCSIZE nRefRowCount = 0,
-                            PivotField* pRefPageFields = NULL, SCSIZE nRefPageCount = 0 );
+                            bool bOldDefaults,
+                            const ScPivotFieldVector* pRefColFields = 0,
+                            const ScPivotFieldVector* pRefRowFields = 0,
+                            const ScPivotFieldVector* pRefPageFields = 0 );
 
     static bool         IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags );
 };

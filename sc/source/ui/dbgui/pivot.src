@@ -160,17 +160,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         MapUnit = MAP_APPFONT ;
         Delta = 90 ;
     };
-    Window WND_FIELD
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 36 , 12 ) ;
-    };
-    Window WND_FIELD_SPACE
-    {
-        Pos = MAP_APPFONT ( 0 , 0 ) ;
-        Size = MAP_APPFONT ( 2 , 2 ) ;
-    };
     FixedLine FL_OUTPUT
     {
         Pos = MAP_APPFONT ( 6 , 190 ) ;
