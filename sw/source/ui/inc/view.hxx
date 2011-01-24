@@ -353,7 +353,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
     // Methoden fuers Printing
-    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = FALSE );
+    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung
