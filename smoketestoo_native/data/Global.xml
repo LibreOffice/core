@@ -35,7 +35,7 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocCut = 1, cDocPaste = 2, cDocSaveOpen8 = 3, cDocSaveOpenXML = 4, cDocSaveOpen50 = 5, cDocClose = 6, cDocWrite = 7
+global const cDocNew = 0, cDocCut = 1, cDocPaste = 2, cDocSaveOpen8 = 3, cDocSaveOpenXML = 4, cDocOpen50 = 5, cDocClose = 6, cDocWrite = 7
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cLogfileFailed = 255
@@ -83,7 +83,7 @@ Global const cUserFieldTestWriter = &quot;Writer&quot;, cUserFieldTestCalc = &qu
 Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;Math&quot;, cUserFieldTestChart = &quot;Chart&quot;
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
-Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpenSave50 = &quot;SaveOpen50&quot;, cUserFieldTestCut = &quot;Cut&quot;
+Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpen50 = &quot;Open50&quot;, cUserFieldTestCut = &quot;Cut&quot;
 Global const cUserFieldTestPaste = &quot;Paste&quot;, cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
@@ -100,7 +100,7 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean, bMakeSaveOpen50Test as boolean, bMakeCutTest as boolean
+Global bMakeSaveOpenXMLTest as boolean, bMakeOpen50Test as boolean, bMakeCutTest as boolean
 Global bMakePasteTest as boolean, bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean
 
@@ -162,7 +162,7 @@ Sub CreateStatusTable
     tableColums(cDocPaste) = &quot;paste&quot;
     tableColums(cDocSaveOpen8) = &quot;V8.0&quot;
     tableColums(cDocSaveOpenXML) = &quot;XML&quot;
-    tableColums(cDocSaveOpen50) = &quot;V5.0&quot;
+    tableColums(cDocOpen50) = &quot;V5.0&quot;
 &apos;  tableColums(cDocClose) = &quot;close&quot;
 
     aDoc = gOutPutDoc
@@ -507,7 +507,7 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutPutDoc)
-    SetUserFieldState (cUserFieldTestOpenSave50, -(gOptionsDialog.getControl(&quot;cbSaveOpen50Test&quot;).getState), gOutPutDoc)
+    SetUserFieldState (cUserFieldTestOpen50, -(gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestCut, -(gOptionsDialog.getControl(&quot;cbCutTest&quot;).getState), gOutPutDoc)
     SetUserFieldState (cUserFieldTestPaste, -(gOptionsDialog.getControl(&quot;cbPasteTest&quot;).getState), gOutPutDoc)
@@ -527,7 +527,7 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)))
-    gOptionsDialog.getControl(&quot;cbSaveOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave50, gOutPutDoc)))
+    gOptionsDialog.getControl(&quot;cbOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbCutTest&quot;).setState( -( GetUserFieldState (cUserFieldTestCut, gOutPutDoc)))
     gOptionsDialog.getControl(&quot;cbPasteTest&quot;).setState( -( GetUserFieldState (cUserFieldTestPaste, gOutPutDoc)))
@@ -547,7 +547,7 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutPutDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutPutDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutPutDoc)
-    bMakeSaveOpen50Test = GetUserFieldState (cUserFieldTestOpenSave50, gOutPutDoc)
+    bMakeOpen50Test = GetUserFieldState (cUserFieldTestOpen50, gOutPutDoc)
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutPutDoc)
     bMakeCutTest = GetUserFieldState (cUserFieldTestCut, gOutPutDoc)
     bMakePasteTest = GetUserFieldState (cUserFieldTestPaste, gOutPutDoc)
@@ -574,9 +574,9 @@ Sub SetDefaultOptions
     bMakeSaveOpenXMLTest = true
     REM Disable StarOffice 5.0 tests in case binfilter has not been included
     if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        bMakeSaveOpen50Test = false
+        bMakeOpen50Test = false
     else
-        bMakeSaveOpen50Test = true
+        bMakeOpen50Test = true
     End If
     bMakeSaveOpen8Test = true
     bMakeCutTest = true
@@ -620,7 +620,7 @@ Function StartTestWithDefaultOptions
     action(cDocPaste) = &quot;paste&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
-    action(cDocSaveOpen50) = &quot;V5.0&quot;
+    action(cDocOpen50) = &quot;V5.0&quot;
     dim baseAction(5) as string
     baseAction(cDBService) = &quot;services&quot;
     baseAction(cDBOpen) = &quot;open&quot;

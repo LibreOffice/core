@@ -42,7 +42,7 @@
   <dlg:checkbox dlg:id="cbMathTest" dlg:tab-index="7" dlg:left="126" dlg:top="91" dlg:width="80" dlg:height="8" dlg:value="Math" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbChartTest" dlg:tab-index="8" dlg:left="126" dlg:top="105" dlg:width="80" dlg:height="8" dlg:value="Chart" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbSaveOpenXMLTest" dlg:tab-index="9" dlg:left="19" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Save / Open XML" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbSaveOpen50Test" dlg:tab-index="10" dlg:left="19" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Save / Open V5.0" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbOpen50Test" dlg:tab-index="10" dlg:left="19" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Open V5.0" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbCutTest" dlg:tab-index="11" dlg:left="19" dlg:top="77" dlg:width="80" dlg:height="8" dlg:value="Cut" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbPasteTest" dlg:tab-index="12" dlg:left="19" dlg:top="91" dlg:width="80" dlg:height="8" dlg:value="Paste" dlg:checked="false"/>
   <dlg:checkbox dlg:id="cbTerminateAfterTest" dlg:tab-index="13" dlg:disabled="true" dlg:left="19" dlg:top="174" dlg:width="190" dlg:height="8" dlg:value="Terminate Office after test" dlg:checked="false"/>

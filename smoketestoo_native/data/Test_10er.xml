@@ -39,7 +39,7 @@ const cTempFileName = &quot;ttt&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
 const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
-const cMessageSaveOpen50Doc = &quot;Save/Open Document 5.0&quot;
+const cMessageOpen50Doc = &quot;Open Document 5.0&quot;
 const cMessageNewDoc = &quot;New Document&quot;
 const cMessageCloseDoc = &quot;Close Document&quot;
 const cMessageCutObj = &quot;Cut Object&quot;
@@ -306,16 +306,13 @@ Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
     if bMakeSaveOpenXMLTest then
         sWriteStr = sWriteStr + &quot;, save XML&quot;
     end if
-    if bMakeSaveOpen50Test then
-        sWriteStr = sWriteStr + &quot;, save 5.0&quot;
-    end if
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, open 8.0&quot;
     end if
     if bMakeSaveOpenXMLTest then
         sWriteStr = sWriteStr + &quot;, open XML&quot;
     end if
-    if bMakeSaveOpen50Test then
+    if bMakeOpen50Test then
         sWriteStr = sWriteStr + &quot;, open 5.0&quot;
     end if
     end if
@@ -377,11 +374,7 @@ Sub MakeDocTest (FilterType as Integer)
             sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFltXML)
             SaveDoc (sFileNameXML, oDoc, GetDocFilter(FilterType or cFltXML))
         end if
-        nCurrentAction = cDocSaveOpen50
-        if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
-            sFileName50 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt50)
-            SaveDoc (sFileName50, oDoc, GetDocFilter(FilterType or cFlt50))
-        end if
+        nCurrentAction = cDocOpen50
 &apos;      oDoc.dispose
         nCurrentAction = cDocClose
         oDoc.close (true)
@@ -421,14 +414,16 @@ Sub MakeDocTest (FilterType as Integer)
             end If
         end if
 
-        nCurrentAction = cDocSaveOpen50
-        if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
+        nCurrentAction = cDocOpen50
+        if bMakeOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
+            SOLARSRC = ConvertToURL(Environ(&quot;SOLARSRC&quot;))
+            sFileName50 = SOLARSRC+&quot;/qadevOOo/testdocs/&quot;+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt50)
             oDoc = LoadDoc (sFileName50)
 
 &apos;          oDoc = Documents.open(sFileName)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, FileChannel)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, MainFileChannel)
-            SetStatus (FilterType, cDocSaveOpen50, not IsNull (oDoc))
+            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSave50Doc, FileChannel)
+            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageOpen50Doc, MainFileChannel)
+            SetStatus (FilterType, cDocOpen50, not IsNull (oDoc))
 
             if not IsNull (oDoc) then
 &apos;              oDoc.dispose
@@ -682,8 +677,8 @@ Function GetErrorMessageOnAction (nAction as Integer) as String
             GetErrorMessageOnAction = cMessageSaveOpen8Doc
         case cDocSaveOpenXML
             GetErrorMessageOnAction = cMessageSaveOpenXMLDoc
-        case cDocSaveOpen50
-            GetErrorMessageOnAction = cMessageSaveOpen50Doc
+        case cDocOpen50
+            GetErrorMessageOnAction = cMessageOpen50Doc
         case cDocClose
             GetErrorMessageOnAction = cMessageCloseDoc
         case else
