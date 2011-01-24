@@ -379,9 +379,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
         for( ; pNewRedl && n < pRedlineTbl->Count(); bDec ? n : ++n )
         {
             bDec = false;
-#ifdef DVO_TEST
-            _CHECK_REDLINE( this )
-#endif
 
             SwRedline* pRedl = (*pRedlineTbl)[ n ];
             SwPosition* pRStt = pRedl->Start(),
