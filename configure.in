@@ -5809,7 +5809,7 @@ if test \( "$_os" = "WINNT" \) ; then
     # Remove a possible trailing backslash
     DIRECTXSDK_HOME=`echo $DIRECTXSDK_HOME | $SED 's/\/$//'`
 
-    if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" ; then
+    if test -f "$DIRECTXSDK_HOME/Include/ddraw.h" -o -f "$DIRECTXSDK_HOME/Include/d3d9.h" ; then
         HAVE_DIRECTXSDK_H="yes"
     else
         HAVE_DIRECTXSDK_H="no"
@@ -5820,7 +5820,7 @@ if test \( "$_os" = "WINNT" \) ; then
     else
         DIRECTXSDK_LIB="$DIRECTXSDK_HOME/lib"
     fi
-    if test -f "$DIRECTXSDK_LIB/ddraw.lib" ; then
+    if test -f "$DIRECTXSDK_LIB/ddraw.lib" -o -f "$DIRECTXSDK_LIB/d3d9.lib" ; then
         HAVE_DIRECTXSDK_LIB="yes"
     else
         HAVE_DIRECTXSDK_LIB="no"
