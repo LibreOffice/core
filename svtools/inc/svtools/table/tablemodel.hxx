@@ -239,43 +239,41 @@ namespace svt { namespace table
         */
         virtual void        setResizable( bool _bResizable ) = 0;
 
+        /** denotes the relative flexibility of the column
+
+            This flexibility is taken into account when a table control auto-resizes its columns, because the available
+            space changed. In this case, the columns grow or shrink according to their flexibility.
+
+            A value of 0 means the column is not auto-resized at all.
+        */
         virtual sal_Int32   getFlexibility() const = 0;
+
+        /** sets a new flexibility value for the column
+
+            @see getFlexibility
+        */
         virtual void        setFlexibility( sal_Int32 const i_flexibility ) = 0;
 
-        /** returns the width of the column, in 1/100 millimeters
+        /** returns the width of the column, in app-font unitss
 
             The returned value must be a positive ->TableMetrics value.
-
-            It can also be COLWIDTH_FIT_TO_VIEW, to indicate that the width of the column
-            should automatically be adjusted to completely fit the view. For instance, a
-            model's last column could return this value, to indicate that it is to occupy
-            all horizontal space remaining in the view, after all other columns have been
-            layouted.
-
-            If there is more than one column with width COLWIDTH_FIT_TO_VIEW in a model,
-            they're all layouted equal-width.
-
-            If the columns with a real width (i.e. other than COLWIDTH_FIT_TO_VIEW) are,
-            in sum, wider than the view, then the view is free to choose a real width for any
-            columns which return COLWIDTH_FIT_TO_VIEW here.
 
             @see setWidth
             @see getMinWidth
             @see getMaxWidth
-            @see COLWIDTH_FIT_TO_VIEW
         */
         virtual TableMetrics    getWidth() const = 0;
 
         /** sets a new width for the column
 
             @param _nWidth
-                the new width, in 1/100 millimeters
+                the new width, app-font units
 
             @see getWidth
         */
         virtual void            setWidth( TableMetrics _nWidth ) = 0;
 
-        /** returns the minimum width of the column, in 1/100 millimeters, or 0 if the column
+        /** returns the minimum width of the column, in app-font units, or 0 if the column
             does not have a minimal width
 
             @see setMinWidth
@@ -284,7 +282,7 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMinWidth() const = 0;
 
-        /** sets the minimum width of the column, in 1/100 millimeters
+        /** sets the minimum width of the column, in app-font units
 
             @see getMinWidth
             @see setMaxWidth
@@ -292,7 +290,7 @@ namespace svt { namespace table
         */
         virtual void            setMinWidth( TableMetrics _nMinWidth ) = 0;
 
-        /** returns the maximum width of the column, in 1/100 millimeters, or 0 if the column
+        /** returns the maximum width of the column, in app-font units, or 0 if the column
             does not have a minimal width
 
             @see setMaxWidth
@@ -301,7 +299,7 @@ namespace svt { namespace table
         */
         virtual TableMetrics    getMaxWidth() const = 0;
 
-        /** sets the maximum width of the column, in 1/100 millimeters
+        /** sets the maximum width of the column, in app-font units
 
             @see getMaxWidth
             @see setMinWidth
@@ -309,8 +307,14 @@ namespace svt { namespace table
         */
         virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
 
+        /** retrieves the horizontal alignment to be used for content in this cell
+        */
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
+
+        /** sets a new the horizontal alignment to be used for content in this cell
+        */
         virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) = 0;
+
         /// deletes the column model instance
         virtual ~IColumnModel() { }
     };
@@ -382,7 +386,7 @@ namespace svt { namespace table
         /** determines the height of rows in the table.
 
             @return
-                the logical height of rows in the table, in 1/100 millimeters. The height must be
+                the logical height of rows in the table, in app-font units. The height must be
                 greater 0.
         */
         virtual TableMetrics    getRowHeight() const = 0;
@@ -393,7 +397,7 @@ namespace svt { namespace table
             returned <FALSE/>.
 
             @return
-                the logical height of the column header row, in 1/100 millimeters.
+                the logical height of the column header row, in app-font units.
                 Must be greater than 0.
         */
         virtual TableMetrics    getColumnHeaderHeight() const = 0;
@@ -404,7 +408,7 @@ namespace svt { namespace table
             returned <FALSE/>.
 
             @return
-                the logical width of the row header column, in 1/100 millimeters.
+                the logical width of the row header column, in app-font units.
                 Must be greater than 0.
         */
         virtual TableMetrics    getRowHeaderWidth() const = 0;

@@ -373,9 +373,6 @@ namespace svt { namespace table
 
         /** updates ->m_aColumnWidthsPixel with the current pixel widths of all model columns
 
-            The method takes into account the current zoom factor and map mode of the table
-            control, plus any possible COLWIDTH_FIT_TO_VIEW widths in the model columns.
-
             The method is not bound to the classes public invariants, as it's used in
             situations where the they must not necessarily be fullfilled.
 

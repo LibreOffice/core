@@ -166,6 +166,7 @@ namespace svt { namespace table
             ||  i_event.AttributeName.equalsAscii( "MinWidth" )
             ||  i_event.AttributeName.equalsAscii( "PreferredWidth" )
             ||  i_event.AttributeName.equalsAscii( "Resizeable" )
+            ||  i_event.AttributeName.equalsAscii( "Flexibility" )
             )
             nChangedAttributes |= COL_ATTRS_WIDTH;
 
