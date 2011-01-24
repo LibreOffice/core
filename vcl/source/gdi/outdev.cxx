@@ -1863,7 +1863,7 @@ void OutputDevice::SetTriangleClipRegion( const PolyPolygon &rPolyPolygon )
     // play nice with the rest of the system and provide an old-style region.
     // the rest of this method does not rely on this.
     maRegion = Region::GetRegionFromPolyPolygon( LogicToPixel(rPolyPolygon) );
-    maRegion.Move(offset_x,offset_x);
+    maRegion.Move(offset_x,offset_y);
 
     // feed region to metafile
     if ( mpMetaFile )
