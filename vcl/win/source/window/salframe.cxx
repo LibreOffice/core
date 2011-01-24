@@ -500,45 +500,31 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
     }
 
     // create frame
-    if ( aSalShlData.mbWNT )
+    LPCWSTR pClassName;
+    if ( bSubFrame )
     {
-        LPCWSTR pClassName;
-        if ( bSubFrame )
-        {
-            if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
-                pClassName = SAL_SUBFRAME_CLASSNAMEW;
-            else
-                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
-        }
+        if ( nSalFrameStyle & (SAL_FRAME_STYLE_MOVEABLE|SAL_FRAME_STYLE_NOSHADOW) ) // check if shadow not wanted
+            pClassName = SAL_SUBFRAME_CLASSNAMEW;
         else
-        {
-            if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
-                pClassName = SAL_FRAME_CLASSNAMEW;
-            else
-                pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
-        }
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, pInst->mhInst, (void*)pFrame );
-        if( !hWnd )
-            ImplWriteLastError( GetLastError(), "CreateWindowEx" );
-#if OSL_DEBUG_LEVEL > 1
-        // set transparency value
-        if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
-            lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
-#endif
+            pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;    // undecorated floaters will get shadow on XP
     }
     else
     {
-        LPCSTR pClassName;
-        if ( bSubFrame )
-            pClassName = SAL_SUBFRAME_CLASSNAMEA;
+        if ( nSalFrameStyle & SAL_FRAME_STYLE_MOVEABLE )
+            pClassName = SAL_FRAME_CLASSNAMEW;
         else
-            pClassName = SAL_FRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, pInst->mhInst, (void*)pFrame );
+            pClassName = SAL_TMPSUBFRAME_CLASSNAMEW;
     }
+    hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                            hWndParent, 0, pInst->mhInst, (void*)pFrame );
+    if( !hWnd )
+        ImplWriteLastError( GetLastError(), "CreateWindowEx" );
+#if OSL_DEBUG_LEVEL > 1
+    // set transparency value
+    if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
+        lpfnSetLayeredWindowAttributes( hWnd, 0, 230, 0x00000002 /*LWA_ALPHA*/ );
+#endif
     if ( !hWnd )
     {
         delete pFrame;
@@ -609,22 +595,10 @@ HWND ImplSalReCreateHWND( HWND hWndParent, HWND oldhWnd, BOOL bAsChild )
         nExSysStyle = 0;
     }
 
-    HWND hWnd = NULL;
-    if ( aSalShlData.mbWNT )
-    {
-        LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
-        hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
-    else
-    {
-        LPCSTR pClassName = SAL_SUBFRAME_CLASSNAMEA;
-        hWnd = CreateWindowExA( nExSysStyle, pClassName, "", nSysStyle,
-                                CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
-                                hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
-    }
-    return hWnd;
+    LPCWSTR pClassName = SAL_SUBFRAME_CLASSNAMEW;
+    return CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
+                            CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
+                            hWndParent, 0, hInstance, (void*)GetWindowPtr( oldhWnd ) );
 }
 
 // =======================================================================
@@ -1342,37 +1316,7 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
     }
     else
     {
-        // See also Bug #91813# and #68467#
-        if ( pFrame->mbFullScreen &&
-             pFrame->mbPresentation &&
-             (aSalShlData.mnVersion < 500) &&
-             !::GetParent( hWnd ) )
-        {
-            // Damit im Impress-Player in der Taskleiste nicht durch
-            // einen Windows-Fehler hin- und wieder mal ein leerer
-            // Button stehen bleibt, muessen wir hier die Taskleiste
-            // etwas austricksen. Denn wenn wir im FullScreenMode sind
-            // und das Fenster hiden kommt Windows anscheinend etwas aus
-            // dem tritt und somit minimieren wir das Fenster damit es
-            // nicht flackert
-            ANIMATIONINFO aInfo;
-            aInfo.cbSize = sizeof( aInfo );
-            SystemParametersInfo( SPI_GETANIMATION, 0, &aInfo, 0 );
-            if ( aInfo.iMinAnimate )
-            {
-                int nOldAni = aInfo.iMinAnimate;
-                aInfo.iMinAnimate = 0;
-                SystemParametersInfo( SPI_SETANIMATION, 0, &aInfo, 0 );
-                ShowWindow( pFrame->mhWnd, SW_SHOWMINNOACTIVE );
-                aInfo.iMinAnimate = nOldAni;
-                SystemParametersInfo( SPI_SETANIMATION, 0, &aInfo, 0 );
-            }
-            else
-                ShowWindow( hWnd, SW_SHOWMINNOACTIVE );
-            ShowWindow( hWnd, SW_HIDE );
-        }
-        else
-            ShowWindow( hWnd, SW_HIDE );
+        ShowWindow( hWnd, SW_HIDE );
     }
 }
 
@@ -2527,52 +2471,23 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
     int nKeyLen = 0;
     if ( lParam )
     {
-        if ( aSalShlData.mbWNT )
+        nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
+        // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
+        // fall back to the ANSI version instead
+        DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
+        if( nKeyLen > nMaxKeyLen )
+            nKeyLen = 0;
+        else if( nKeyLen > 0 )
         {
-            nKeyLen = GetKeyNameTextW( lParam, aKeyBuf, nMaxKeyLen );
-            // #i12401# the current unicows.dll has a bug in CharUpperBuffW, which corrupts the stack
-            // fall back to the ANSI version instead
-            DBG_ASSERT( nKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-            if( nKeyLen > nMaxKeyLen )
-                nKeyLen = 0;
-            else if( nKeyLen > 0 )
+            // Capitalize just the first letter of key names
+            CharLowerBuffW( aKeyBuf, nKeyLen );
+
+            bool bUpper = true;
+            for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
             {
-                // Capitalize just the first letter of key names
-                CharLowerBuffW( aKeyBuf, nKeyLen );
-
-                bool bUpper = true;
-                for( WCHAR *pW=aKeyBuf, *pE=pW+nKeyLen; pW < pE; ++pW )
-                {
-                    if( bUpper )
-                        CharUpperBuffW( pW, 1 );
-                    bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
-                }
-            }
-        }
-        else // !mbWnt
-        {
-            sal_Char aAnsiKeyBuf[ nMaxKeyLen ];
-            int nAnsiKeyLen = GetKeyNameTextA( lParam, aAnsiKeyBuf, nMaxKeyLen );
-            DBG_ASSERT( nAnsiKeyLen <= nMaxKeyLen, "Invalid key name length!" );
-            if( nAnsiKeyLen > nMaxKeyLen )
-                nAnsiKeyLen = 0;
-            else if( nAnsiKeyLen > 0 )
-            {
-                // Capitalize just the first letter of key names
-                // TODO: check MCBS key names
-                CharLowerBuffA( aAnsiKeyBuf, nAnsiKeyLen );
-
-                bool bUpper = true;
-                for( sal_Char *pA=aAnsiKeyBuf, *pE=pA+nAnsiKeyLen; pA < pE; ++pA )
-                {
-                    if( bUpper )
-                        CharUpperBuffA( pA, 1 );
-                    bUpper = (*pA=='+') || (*pA=='-') || (*pA==' ') || (*pA=='.');
-                }
-
-                // Convert to Unicode and copy the data in the Unicode Buffer
-                nKeyLen = MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED,
-                    aAnsiKeyBuf, nAnsiKeyLen, aKeyBuf, nMaxKeyLen );
+                if( bUpper )
+                    CharUpperBuffW( pW, 1 );
+                bUpper = (*pW=='+') || (*pW=='-') || (*pW==' ') || (*pW=='.');
             }
         }
     }
@@ -2923,11 +2838,8 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSettings.SetTitleHeight( GetSystemMetrics( SM_CYCAPTION ) );
         aStyleSettings.SetActiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_ACTIVEBORDER ) ) );
         aStyleSettings.SetDeactiveBorderColor( ImplWinColorToSal( GetSysColor( COLOR_INACTIVEBORDER ) ) );
-        if ( aSalShlData.mnVersion >= 410 )
-        {
-            aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
-            aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
-        }
+        aStyleSettings.SetActiveColor2( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTACTIVECAPTION ) ) );
+        aStyleSettings.SetDeactiveColor( ImplWinColorToSal( GetSysColor( COLOR_GRADIENTINACTIVECAPTION ) ) );
         aStyleSettings.SetFaceColor( ImplWinColorToSal( GetSysColor( COLOR_3DFACE ) ) );
         aStyleSettings.SetInactiveTabColor( aStyleSettings.GetFaceColor() );
         aStyleSettings.SetLightColor( ImplWinColorToSal( GetSysColor( COLOR_3DHILIGHT ) ) );
@@ -3026,39 +2938,19 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     Font    aAppFont = aStyleSettings.GetAppFont();
     Font    aIconFont = aStyleSettings.GetIconFont();
     HDC     hDC = GetDC( 0 );
-    if ( aSalShlData.mbWNT )
+    NONCLIENTMETRICSW aNonClientMetrics;
+    aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
+    if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
     {
-        NONCLIENTMETRICSW aNonClientMetrics;
-        aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-        if ( SystemParametersInfoW( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-        {
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
-            ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
+        ImplSalUpdateStyleFontW( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
 
-            LOGFONTW aLogFont;
-            if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
-        }
-    }
-    else
-    {
-        NONCLIENTMETRICSA aNonClientMetrics;
-        aNonClientMetrics.cbSize = sizeof( aNonClientMetrics );
-        if ( SystemParametersInfoA( SPI_GETNONCLIENTMETRICS, sizeof( aNonClientMetrics ), &aNonClientMetrics, 0 ) )
-        {
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMenuFont, aMenuFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfCaptionFont, aTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfSmCaptionFont, aFloatTitleFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfStatusFont, aHelpFont );
-            ImplSalUpdateStyleFontA( hDC, aNonClientMetrics.lfMessageFont, aAppFont );
-
-            LOGFONTA aLogFont;
-            if ( SystemParametersInfoA( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
-                ImplSalUpdateStyleFontA( hDC, aLogFont, aIconFont );
-        }
+        LOGFONTW aLogFont;
+        if ( SystemParametersInfoW( SPI_GETICONTITLELOGFONT, 0, &aLogFont, 0 ) )
+            ImplSalUpdateStyleFontW( hDC, aLogFont, aIconFont );
     }
 
     // get screen font resolution to calculate toolbox item size
@@ -3680,30 +3572,10 @@ static void ImplUpdateInputLang( WinSalFrame* pFrame )
         bLanguageChange = TRUE;
     }
 
-    // If we are on Windows NT we use Unicode FrameProcs and so we
-    // get Unicode charcodes directly from Windows
-    // no need to set up a code page
-    if ( aSalShlData.mbWNT )
-        return;
-
-    if ( !nLang )
-    {
-        pFrame->mnInputLang     = 0;
-        pFrame->mnInputCodePage = GetACP();
-    }
-    else if ( bLanguageChange )
-    {
-        sal_Char aBuf[10];
-        if ( GetLocaleInfoA( MAKELCID( nLang, SORT_DEFAULT ), LOCALE_IDEFAULTANSICODEPAGE,
-                             aBuf, sizeof(aBuf) ) > 0 )
-        {
-            pFrame->mnInputCodePage = ImplStrToNum( aBuf );
-            if ( !pFrame->mnInputCodePage )
-                pFrame->mnInputCodePage = GetACP();
-        }
-        else
-            pFrame->mnInputCodePage = GetACP();
-    }
+    // We are on Windows NT so we use Unicode FrameProcs and get
+    // Unicode charcodes directly from Windows no need to set up a
+    // code page
+    return;
 }
 
 
@@ -3711,31 +3583,9 @@ static sal_Unicode ImplGetCharCode( WinSalFrame* pFrame, WPARAM nCharCode )
 {
     ImplUpdateInputLang( pFrame );
 
-    // If we are on Windows NT we use Unicode FrameProcs and so we
+    // We are on Windows NT so we use Unicode FrameProcs and we
     // get Unicode charcodes directly from Windows
-    if ( aSalShlData.mbWNT )
-        return (sal_Unicode)nCharCode;
-
-    sal_Char    aCharBuf[2];
-    int         nCharLen;
-    WCHAR       c;
-    if ( nCharCode > 0xFF )
-    {
-        aCharBuf[0] = (sal_Char)(nCharCode>>8);
-        aCharBuf[1] = (sal_Char)nCharCode;
-        nCharLen = 2;
-    }
-    else
-    {
-        aCharBuf[0] = (sal_Char)nCharCode;
-        nCharLen = 1;
-    }
-    if ( ::MultiByteToWideChar( pFrame->mnInputCodePage,
-                                MB_PRECOMPOSED,
-                                aCharBuf, nCharLen, &c, 1 ) )
-        return (sal_Unicode)c;
-    else
-        return (sal_Unicode)nCharCode;
+    return (sal_Unicode)nCharCode;
 }
 
 // -----------------------------------------------------------------------
@@ -4541,16 +4391,8 @@ static void ImplHandleSettingsChangeMsg( HWND hWnd, UINT nMsg,
     {
         if ( lParam )
         {
-            if ( aSalShlData.mbWNT )
-            {
-                if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
-                    nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
-            else
-            {
-                if ( stricmp( (const char*)lParam, "devices" ) == 0 )
-                    nSalEvent = SALEVENT_PRINTERCHANGED;
-            }
+            if ( ImplSalWICompareAscii( (const wchar_t*)lParam, "devices" ) == 0 )
+                nSalEvent = SALEVENT_PRINTERCHANGED;
         }
     }
 

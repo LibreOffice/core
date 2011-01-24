@@ -58,9 +58,11 @@
 
 #define USE_UNISCRIBE
 #ifdef USE_UNISCRIBE
+#define ULONG WIN_ULONG
 #include <Usp10.h>
 #include <ShLwApi.h>
 #include <winver.h>
+#undef ULONG
 #endif // USE_UNISCRIBE
 
 #include <hash_map>
@@ -246,22 +248,11 @@ HFONT WinLayout::DisableFontScaling() const
         return 0;
 
     HFONT hHugeFont = 0;
-    if( aSalShlData.mbWNT )
-    {
-        LOGFONTW aLogFont;
-        ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
-        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
-        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
-        hHugeFont = ::CreateFontIndirectW( &aLogFont);
-    }
-    else
-    {
-        LOGFONTA aLogFont;
-        ::GetObjectA( mhFont, sizeof(LOGFONTA), &aLogFont);
-        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
-        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
-        hHugeFont = ::CreateFontIndirectA( &aLogFont);
-    }
+    LOGFONTW aLogFont;
+    ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+    aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
+    aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
+    hHugeFont = ::CreateFontIndirectW( &aLogFont);
 
     if( !hHugeFont )
         return 0;
@@ -674,7 +665,7 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 
      // #108267#, limit the number of glyphs to avoid paint errors
     UINT limitedGlyphCount = Min( 8192, mnGlyphCount );
-    if( mnDrawOptions || aSalShlData.mbWNT )
+    if( mnDrawOptions )
     {
         // #108267#, break up into glyph portions of a limited size required by Win32 API
         const unsigned int maxGlyphCount = 8192;

@@ -1343,54 +1343,23 @@ int CALLBACK SalEnumQueryFontProcExW( const ENUMLOGFONTEXW*,
 
 // -----------------------------------------------------------------------
 
-int CALLBACK SalEnumQueryFontProcExA( const ENUMLOGFONTEXA*,
-                                      const NEWTEXTMETRICEXA*,
-                                      DWORD, LPARAM lParam )
-{
-    *((bool*)(void*)lParam) = true;
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 bool ImplIsFontAvailable( HDC hDC, const UniString& rName )
 {
     bool bAvailable = false;
 
-    if ( aSalShlData.mbWNT )
-    {
-        // Test, if Font available
-        LOGFONTW aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
+    // Test, if Font available
+    LOGFONTW aLogFont;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
 
-        UINT nNameLen = rName.Len();
-        if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
-            nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
-        memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
-        aLogFont.lfFaceName[nNameLen] = 0;
+    UINT nNameLen = rName.Len();
+    if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+        nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+    memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+    aLogFont.lfFaceName[nNameLen] = 0;
 
-        EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
-                             (LPARAM)(void*)&bAvailable, 0 );
-    }
-    else
-    {
-        ByteString aTemp = ImplSalGetWinAnsiString( rName );
-
-        // Test, if Font available
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-
-        UINT nNameLen = aTemp.Len();
-        if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
-            nNameLen = sizeof( aLogFont.lfFaceName )-1;
-        memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen );
-        aLogFont.lfFaceName[nNameLen] = 0;
-
-        EnumFontFamiliesExA( hDC, &aLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
-                             (LPARAM)(void*)&bAvailable, 0 );
-    }
+    EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
+                         (LPARAM)(void*)&bAvailable, 0 );
 
     return bAvailable;
 }
@@ -1470,80 +1439,6 @@ void ImplGetLogFontFromFontSelect( HDC hDC,
 
 // -----------------------------------------------------------------------
 
-static void ImplGetLogFontFromFontSelect( HDC hDC,
-                                   const ImplFontSelectData* pFont,
-                                   LOGFONTA& rLogFont,
-                                   bool /*bTestVerticalAvail*/ )
-{
-    ByteString aName;
-    if( pFont->mpFontData )
-        aName = ImplSalGetWinAnsiString( pFont->mpFontData->maName );
-    else
-        aName = ImplSalGetWinAnsiString( pFont->maName.GetToken( 0 ) );
-
-    int nNameLen = aName.Len();
-    if( nNameLen > LF_FACESIZE )
-        nNameLen = LF_FACESIZE;
-    memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen );
-    if( nNameLen < LF_FACESIZE )
-        rLogFont.lfFaceName[nNameLen] = '\0';
-
-    if( !pFont->mpFontData )
-    {
-        rLogFont.lfCharSet = pFont->IsSymbolFont() ? SYMBOL_CHARSET : DEFAULT_CHARSET;
-        rLogFont.lfPitchAndFamily = ImplPitchToWin( pFont->mePitch )
-                                  | ImplFamilyToWin( pFont->meFamily );
-    }
-    else
-    {
-        const ImplWinFontData* pWinFontData = static_cast<const ImplWinFontData*>( pFont->mpFontData );
-        rLogFont.lfCharSet        = pWinFontData->GetCharSet();
-        rLogFont.lfPitchAndFamily = pWinFontData->GetPitchAndFamily();
-    }
-
-    rLogFont.lfWeight           = ImplWeightToWin( pFont->meWeight );
-    rLogFont.lfHeight           = (LONG)-pFont->mnHeight;
-    rLogFont.lfWidth            = (LONG)pFont->mnWidth;
-    rLogFont.lfUnderline        = 0;
-    rLogFont.lfStrikeOut        = 0;
-    rLogFont.lfItalic           = (pFont->meItalic) != ITALIC_NONE;
-    rLogFont.lfEscapement       = pFont->mnOrientation;
-    rLogFont.lfOrientation      = rLogFont.lfEscapement; // ignored by W98
-    rLogFont.lfClipPrecision    = CLIP_DEFAULT_PRECIS;
-    rLogFont.lfQuality          = DEFAULT_QUALITY;
-    rLogFont.lfOutPrecision     = OUT_TT_PRECIS;
-    if( pFont->mnOrientation )
-        rLogFont.lfClipPrecision |= CLIP_LH_ANGLES;
-
-    // disable antialiasing if requested
-    if( pFont->mbNonAntialiased )
-        rLogFont.lfQuality = NONANTIALIASED_QUALITY;
-
-    // select vertical mode if requested and available
-    if( pFont->mbVertical && nNameLen )
-    {
-        // vertical fonts start with an '@'
-        memmove( &rLogFont.lfFaceName[1], &rLogFont.lfFaceName[0],
-                    sizeof(rLogFont.lfFaceName)-sizeof(rLogFont.lfFaceName[0]) );
-        rLogFont.lfFaceName[0] = '@';
-
-        // check availability of vertical mode for this font
-        bool bAvailable = false;
-        EnumFontFamiliesExA( hDC, &rLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
-                         (LPARAM)&bAvailable, 0 );
-
-        if( !bAvailable )
-        {
-            // restore non-vertical name if vertical mode is not supported
-            memcpy( rLogFont.lfFaceName, aName.GetBuffer(), nNameLen );
-            if( nNameLen < LF_FACESIZE )
-                rLogFont.lfFaceName[nNameLen] = '\0';
-        }
-    }
-}
-
-// -----------------------------------------------------------------------
-
 HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont )
 {
     HFONT hNewFont = 0;
@@ -1553,122 +1448,62 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
         // only required for virtual devices, see below for details
         hdcScreen = GetDC(0);
 
-    if( aSalShlData.mbWNT )
+    LOGFONTW aLogFont;
+    ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
+
+    // on the display we prefer Courier New when Courier is a
+    // bitmap only font and we need to stretch or rotate it
+    if( mbScreen
+    &&  (i_pFont->mnWidth != 0
+      || i_pFont->mnOrientation != 0
+      || i_pFont->mpFontData == NULL
+      || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
+    && !bImplSalCourierScalable
+    && bImplSalCourierNew
+    && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
+        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
+
+    // #i47675# limit font requests to MAXFONTHEIGHT
+    // TODO: share MAXFONTHEIGHT font instance
+    if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
+    &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
     {
-        LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
-
-        // on the display we prefer Courier New when Courier is a
-        // bitmap only font and we need to stretch or rotate it
-        if( mbScreen
-        &&  (i_pFont->mnWidth != 0
-          || i_pFont->mnOrientation != 0
-          || i_pFont->mpFontData == NULL
-          || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
-        && !bImplSalCourierScalable
-        && bImplSalCourierNew
-        && (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
-            lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
-
-        // #i47675# limit font requests to MAXFONTHEIGHT
-        // TODO: share MAXFONTHEIGHT font instance
-        if( (-aLogFont.lfHeight <= MAXFONTHEIGHT)
-        &&  (+aLogFont.lfWidth <= MAXFONTHEIGHT) )
-        {
-            o_rFontScale = 1.0;
-        }
-        else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
-        {
-            o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-            aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
-        }
-        else // #i95867# also limit font widths
-        {
-            o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
-            aLogFont.lfWidth = +MAXFONTHEIGHT;
-            aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
-        }
-
-        hNewFont = ::CreateFontIndirectW( &aLogFont );
-        if( hdcScreen )
-        {
-            // select font into screen hdc first to get an antialiased font
-            // see knowledge base article 305290:
-            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-            SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
-        }
-        o_rOldFont = ::SelectFont( mhDC, hNewFont );
-
-        TEXTMETRICW aTextMetricW;
-        if( !::GetTextMetricsW( mhDC, &aTextMetricW ) )
-        {
-            // the selected font doesn't work => try a replacement
-            // TODO: use its font fallback instead
-            lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
-            aLogFont.lfPitchAndFamily = FIXED_PITCH;
-            HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
-            SelectFont( mhDC, hNewFont2 );
-            DeleteFont( hNewFont );
-            hNewFont = hNewFont2;
-        }
+        o_rFontScale = 1.0;
     }
-    else
+    else if( -aLogFont.lfHeight >= +aLogFont.lfWidth )
     {
-        if( !mpLogFont )
-             // mpLogFont is needed for getting the kerning pairs
-             // TODO: get them from somewhere else
-            mpLogFont = new LOGFONTA;
-        LOGFONTA& aLogFont = *mpLogFont;
-        ImplGetLogFontFromFontSelect( mhDC, i_pFont, aLogFont, true );
+        o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
+        aLogFont.lfHeight = -MAXFONTHEIGHT;
+        aLogFont.lfWidth = FRound( aLogFont.lfWidth / o_rFontScale );
+    }
+    else // #i95867# also limit font widths
+    {
+        o_rFontScale = +aLogFont.lfWidth / (float)MAXFONTHEIGHT;
+        aLogFont.lfWidth = +MAXFONTHEIGHT;
+        aLogFont.lfHeight = FRound( aLogFont.lfHeight / o_rFontScale );
+    }
 
-        // on the display we prefer Courier New when Courier is a
-        // bitmap only font and we need to stretch or rotate it
-        if( mbScreen
-        &&  (i_pFont->mnWidth != 0
-          || i_pFont->mnOrientation != 0
-          || i_pFont->mpFontData == NULL
-          || (i_pFont->mpFontData->GetHeight() != i_pFont->mnHeight))
-        && !bImplSalCourierScalable
-        && bImplSalCourierNew
-        && (stricmp( aLogFont.lfFaceName, "Courier" ) == 0) )
-            strncpy( aLogFont.lfFaceName, "Courier New", 11 );
+    hNewFont = ::CreateFontIndirectW( &aLogFont );
+    if( hdcScreen )
+    {
+        // select font into screen hdc first to get an antialiased font
+        // see knowledge base article 305290:
+        // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
+        SelectFont( hdcScreen, SelectFont( hdcScreen , hNewFont ) );
+    }
+    o_rOldFont = ::SelectFont( mhDC, hNewFont );
 
-        // limit font requests to MAXFONTHEIGHT to work around driver problems
-        // TODO: share MAXFONTHEIGHT font instance
-        if( -aLogFont.lfHeight <= MAXFONTHEIGHT )
-            o_rFontScale = 1.0;
-        else
-        {
-            o_rFontScale = -aLogFont.lfHeight / (float)MAXFONTHEIGHT;
-            aLogFont.lfHeight = -MAXFONTHEIGHT;
-            aLogFont.lfWidth = static_cast<LONG>( aLogFont.lfWidth / o_rFontScale );
-        }
-
-        hNewFont = ::CreateFontIndirectA( &aLogFont );
-        if( hdcScreen )
-        {
-            // select font into screen hdc first to get an antialiased font
-            // see knowledge base article 305290:
-            // "PRB: Fonts Not Drawn Antialiased on Device Context for DirectDraw Surface"
-            ::SelectFont( hdcScreen, ::SelectFont( hdcScreen , hNewFont ) );
-        }
-        o_rOldFont = ::SelectFont( mhDC, hNewFont );
-
-        TEXTMETRICA aTextMetricA;
-        // when the font doesn't work try a replacement
-        if ( !::GetTextMetricsA( mhDC, &aTextMetricA ) )
-        {
-            // the selected font doesn't work => try a replacement
-            // TODO: use its font fallback instead
-            LOGFONTA aTempLogFont = aLogFont;
-            strncpy( aTempLogFont.lfFaceName, "Courier New", 11 );
-            aTempLogFont.lfPitchAndFamily = FIXED_PITCH;
-            HFONT hNewFont2 = CreateFontIndirectA( &aTempLogFont );
-            ::SelectFont( mhDC, hNewFont2 );
-            ::DeleteFont( hNewFont );
-            hNewFont = hNewFont2;
-        }
+    TEXTMETRICW aTextMetricW;
+    if( !::GetTextMetricsW( mhDC, &aTextMetricW ) )
+    {
+        // the selected font doesn't work => try a replacement
+        // TODO: use its font fallback instead
+        lstrcpynW( aLogFont.lfFaceName, L"Courier New", 11 );
+        aLogFont.lfPitchAndFamily = FIXED_PITCH;
+        HFONT hNewFont2 = CreateFontIndirectW( &aLogFont );
+        SelectFont( mhDC, hNewFont2 );
+        DeleteFont( hNewFont );
+        hNewFont = hNewFont2;
     }
 
     if( hdcScreen )
@@ -1756,18 +1591,9 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     // temporarily change the HDC to the font in the fallback level
     HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
 
-    if ( aSalShlData.mbWNT )
-    {
-        wchar_t aFaceName[LF_FACESIZE+60];
-        if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-            pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
-    }
-    else
-    {
-        char aFaceName[LF_FACESIZE+60];
-        if( ::GetTextFaceA( mhDC, sizeof(aFaceName), aFaceName ) )
-            pMetric->maName = ImplSalGetUniString( aFaceName );
-    }
+    wchar_t aFaceName[LF_FACESIZE+60];
+    if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
+        pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
 
     // get the font metric
     TEXTMETRICA aWinMetric;
@@ -1831,11 +1657,6 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
 
         pMetric->mnAscent   += nHalfTmpExtLeading;
         pMetric->mnDescent  += nOtherHalfTmpExtLeading;
-
-        // #109280# HACK korean only: increase descent for wavelines and impr
-        if( !aSalShlData.mbWNT )
-            if( mpWinFontData[nFallbackLevel]->SupportsKorean() )
-                pMetric->mnDescent += pMetric->mnExtLeading;
     }
 
     pMetric->mnMinKashida = GetMinKashidaWidth();
@@ -1989,45 +1810,21 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
         }
         mnFontKernPairCount = 0;
 
-        if ( aSalShlData.mbWNT )
+        KERNINGPAIR* pPairs = NULL;
+        int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
+        if( nCount )
         {
-            KERNINGPAIR* pPairs = NULL;
-            int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
-            if( nCount )
-            {
 #ifdef GCP_KERN_HACK
-                pPairs = new KERNINGPAIR[ nCount+1 ];
-                mpFontKernPairs = pPairs;
-                mnFontKernPairCount = nCount;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
+            pPairs = new KERNINGPAIR[ nCount+1 ];
+            mpFontKernPairs = pPairs;
+            mnFontKernPairCount = nCount;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
 #else // GCP_KERN_HACK
-                pPairs = pKernPairs;
-                nCount = (nCount < nPairs) : nCount : nPairs;
-                ::GetKerningPairsW( mhDC, nCount, pPairs );
-                return nCount;
+            pPairs = pKernPairs;
+            nCount = (nCount < nPairs) : nCount : nPairs;
+            ::GetKerningPairsW( mhDC, nCount, pPairs );
+            return nCount;
 #endif // GCP_KERN_HACK
-            }
-        }
-        else
-        {
-            if ( !mnFontCharSetCount )
-                ImplGetAllFontCharSets( this );
-
-            if ( mnFontCharSetCount <= 1 )
-                ImplAddKerningPairs( this );
-            else
-            {
-                // Query All Kerning Pairs from all possible CharSets
-                for ( BYTE i = 0; i < mnFontCharSetCount; i++ )
-                {
-                    mpLogFont->lfCharSet = mpFontCharSets[i];
-                    HFONT hNewFont = CreateFontIndirectA( mpLogFont );
-                    HFONT hOldFont = SelectFont( mhDC, hNewFont );
-                    ImplAddKerningPairs( this );
-                    SelectFont( mhDC, hOldFont );
-                    DeleteFont( hNewFont );
-                }
-            }
         }
 
         mbFontKernInit = FALSE;
@@ -2259,19 +2056,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
         }
         else
         {
-            if( aSalShlData.mbWNT )
-                ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
-            else
-            {
-                // poor man's string conversion because converter is gone
-                int nLen = p->maFontFilePath.getLength();
-                char* pNameA = new char[ nLen + 1 ];
-                for( int i = 0; i < nLen; ++i )
-                    pNameA[i] = (char)(p->maFontFilePath.getStr())[i];
-                pNameA[ nLen ] = 0;
-                ::RemoveFontResourceA( pNameA );
-                delete[] pNameA;
-            }
+            ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
         }
 
         rSalData.mpTempFontItem = p->mpNextItem;
@@ -2413,14 +2198,6 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
         return false;
 
     UINT nPreferedCharSet = DEFAULT_CHARSET;
-    if ( !aSalShlData.mbWNT )
-    {
-        // for W98 guess charset preference from active codepage
-        CHARSETINFO aCharSetInfo;
-        DWORD nCP = GetACP();
-        if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
-            nPreferedCharSet = aCharSetInfo.ciCharset;
-    }
 
     // create matching FontData struct
     aDFA.mbSymbolFlag = false; // TODO: how to know it without accessing the font?
@@ -2525,24 +2302,12 @@ void WinSalGraphics::GetDevFontList( ImplDevFontList* pFontList )
     if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
         aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
 
-    if ( aSalShlData.mbWNT )
-    {
-        LOGFONTW aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontW = &aLogFont;
-        EnumFontFamiliesExW( mhDC, &aLogFont,
-            (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
-    }
-    else
-    {
-        LOGFONTA aLogFont;
-        memset( &aLogFont, 0, sizeof( aLogFont ) );
-        aLogFont.lfCharSet = DEFAULT_CHARSET;
-        aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( mhDC, &aLogFont,
-            (FONTENUMPROCA)SalEnumFontsProcExA, (LPARAM)(void*)&aInfo, 0 );
-    }
+    LOGFONTW aLogFont;
+    memset( &aLogFont, 0, sizeof( aLogFont ) );
+    aLogFont.lfCharSet = DEFAULT_CHARSET;
+    aInfo.mpLogFontW = &aLogFont;
+    EnumFontFamiliesExW( mhDC, &aLogFont,
+        (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
 
     // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
     // um in SetFont() evt. Courier auf Courier New zu mappen
@@ -2582,10 +2347,7 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
     aGM.gmptGlyphOrigin.x = aGM.gmptGlyphOrigin.y = 0;
     aGM.gmBlackBoxX = aGM.gmBlackBoxY = 0;
     DWORD nSize = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
+    nSize = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGM, 0, NULL, &aMat );
 
     if( nSize == GDI_ERROR )
         return false;
@@ -2621,10 +2383,7 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
 
     GLYPHMETRICS aGlyphMetrics;
     DWORD nSize1 = GDI_ERROR;
-    if ( aSalShlData.mbWNT )
-        nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
-    else if( (nGGOFlags & GGO_GLYPH_INDEX) || (nIndex <= 255) )
-        nSize1 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
+    nSize1 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags, &aGlyphMetrics, 0, NULL, &aMat );
 
     if( !nSize1 )       // blank glyphs are ok
         bRet = TRUE;
@@ -2632,12 +2391,8 @@ BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
     {
         BYTE*   pData = new BYTE[ nSize1 ];
         DWORD   nSize2;
-        if ( aSalShlData.mbWNT )
-            nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
-        else
-            nSize2 = ::GetGlyphOutlineA( hDC, nIndex, nGGOFlags,
-                &aGlyphMetrics, nSize1, pData, &aMat );
+        nSize2 = ::GetGlyphOutlineW( hDC, nIndex, nGGOFlags,
+                                     &aGlyphMetrics, nSize1, pData, &aMat );
 
         if( nSize1 == nSize2 )
         {

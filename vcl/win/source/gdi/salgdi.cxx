@@ -479,11 +479,8 @@ void ImplUpdateSysColorEntries()
     // create new sys color list
     ImplInsertSysColorEntry( COLOR_ACTIVEBORDER );
     ImplInsertSysColorEntry( COLOR_INACTIVEBORDER );
-    if( aSalShlData.mnVersion >= 410 )
-    {
-        ImplInsertSysColorEntry( COLOR_GRADIENTACTIVECAPTION );
-        ImplInsertSysColorEntry( COLOR_GRADIENTINACTIVECAPTION );
-    }
+    ImplInsertSysColorEntry( COLOR_GRADIENTACTIVECAPTION );
+    ImplInsertSysColorEntry( COLOR_GRADIENTINACTIVECAPTION );
     ImplInsertSysColorEntry( COLOR_3DFACE );
     ImplInsertSysColorEntry( COLOR_3DHILIGHT );
     ImplInsertSysColorEntry( COLOR_3DLIGHT );

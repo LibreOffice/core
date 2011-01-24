@@ -1715,15 +1715,12 @@ ULONG WinSalInfoPrinter::GetCapabilities( const ImplJobSetup* pSetupData, USHORT
                 return nRet;
             return 0;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
-            if ( aSalShlData.mbW40 )
+            nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
+            if ( nRet && (nRet != GDI_ERROR) )
             {
-                nRet = ImplDeviceCaps( this, DC_COLLATE, NULL, pSetupData );
+                nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
                 if ( nRet && (nRet != GDI_ERROR) )
-                {
-                    nRet = ImplDeviceCaps( this, DC_COPIES, NULL, pSetupData );
-                    if ( nRet && (nRet != GDI_ERROR) )
-                         return nRet;
-                }
+                    return nRet;
             }
             return 0;
 
@@ -1840,14 +1837,11 @@ static LPDEVMODEA ImplSalSetCopies( LPDEVMODEA pDevMode, ULONG nCopies, BOOL bCo
         pDevMode = pNewDevMode;
         pDevMode->dmFields |= DM_COPIES;
         pDevMode->dmCopies  = (short)(USHORT)nCopies;
-        if ( aSalShlData.mbW40 )
-        {
-            pDevMode->dmFields |= DM_COLLATE;
-            if ( bCollate )
-                pDevMode->dmCollate = DMCOLLATE_TRUE;
-            else
-                pDevMode->dmCollate = DMCOLLATE_FALSE;
-        }
+        pDevMode->dmFields |= DM_COLLATE;
+        if ( bCollate )
+            pDevMode->dmCollate = DMCOLLATE_TRUE;
+        else
+            pDevMode->dmCollate = DMCOLLATE_FALSE;
     }
 
     return pNewDevMode;
@@ -1866,14 +1860,11 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, ULONG nCopies, BOOL bCo
         pDevMode = pNewDevMode;
         pDevMode->dmFields |= DM_COPIES;
         pDevMode->dmCopies  = (short)(USHORT)nCopies;
-        if ( aSalShlData.mbW40 )
-        {
-            pDevMode->dmFields |= DM_COLLATE;
-            if ( bCollate )
-                pDevMode->dmCollate = DMCOLLATE_TRUE;
-            else
-                pDevMode->dmCollate = DMCOLLATE_FALSE;
-        }
+        pDevMode->dmFields |= DM_COLLATE;
+        if ( bCollate )
+            pDevMode->dmCollate = DMCOLLATE_TRUE;
+        else
+            pDevMode->dmCollate = DMCOLLATE_FALSE;
     }
 
     return pNewDevMode;
