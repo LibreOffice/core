@@ -123,6 +123,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ooopathutils \
     salcpprt \
     zlib \
+    vclmain \
 ))
 
 # vim: set noet sw=4 ts=4:
