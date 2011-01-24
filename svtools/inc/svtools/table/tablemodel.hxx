@@ -223,7 +223,7 @@ namespace svt { namespace table
         */
         virtual void        setHelpText( const String& i_helpText ) = 0;
 
-        /** determines whether the column can be resized
+        /** determines whether the column can be interactively resized
 
             @see getMinWidth
             @see getMaxWidth
@@ -238,6 +238,9 @@ namespace svt { namespace table
             @see getWidth
         */
         virtual void        setResizable( bool _bResizable ) = 0;
+
+        virtual sal_Int32   getFlexibility() const = 0;
+        virtual void        setFlexibility( sal_Int32 const i_flexibility ) = 0;
 
         /** returns the width of the column, in 1/100 millimeters
 
@@ -305,23 +308,6 @@ namespace svt { namespace table
             @see setWidth
         */
         virtual void            setMaxWidth( TableMetrics _nMaxWidth ) = 0;
-
-        /** returns the preferred width of the column,  or 0 if the column
-            does not have a preferred width.
-
-            @see setMaxWidth
-            @see getMinWidth
-            @see getWidth
-        */
-        virtual TableMetrics    getPreferredWidth() const = 0;
-
-         /** sets the preferred width of the column, to be used when user resizes column
-
-            @see getMaxWidth
-            @see setMinWidth
-            @see setWidth
-        */
-        virtual void            setPreferredWidth( TableMetrics _nPrefWidth ) = 0;
 
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign() = 0;
         virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign) = 0;

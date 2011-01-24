@@ -117,8 +117,12 @@ namespace svt { namespace table
 
         /// the number of columns in the table control. Cached model value.
         TableSize               m_nColumnCount;
+
         /// the number of rows in the table control. Cached model value.
         TableSize               m_nRowCount;
+
+        /// denotes whether or not the columns fitted into the available width, last time we checked
+        long                    m_bColumnsFit;
 
         ColPos                  m_nCurColumn;
         RowPos                  m_nCurRow;
@@ -147,7 +151,6 @@ namespace svt { namespace table
         TableFunctionSet*       m_pTableFunctionSet;
         //part of selection engine
         RowPos                  m_nAnchor;
-        bool                    m_bResizingGrid;
         bool                    m_bUpdatingColWidths;
 
         Link                    m_aSelectHdl;
@@ -375,8 +378,12 @@ namespace svt { namespace table
 
             The method is not bound to the classes public invariants, as it's used in
             situations where the they must not necessarily be fullfilled.
+
+            @param i_assumeInflexibleColumnsUpToIncluding
+                the index of a column up to which all columns should be considered as inflexible, or
+                <code>COL_INVALID</code>.
         */
-        void        impl_ni_updateColumnWidths();
+        void        impl_ni_updateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding = COL_INVALID );
 
         /** updates the scrollbars of the control
 

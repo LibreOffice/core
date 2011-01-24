@@ -233,7 +233,9 @@ namespace toolkit
                 colTitle.appendAscii( "Column " );
                 colTitle.append( i + 1 );
                 pGridColumn->setTitle( colTitle.makeStringAndClear() );
-                pGridColumn->setPreferredWidth( 80 /* APPFONT */ );
+                pGridColumn->setColumnWidth( 80 /* APPFONT */ );
+                pGridColumn->setFlexibility( 1 );
+                pGridColumn->setResizeable( sal_True );
                 pGridColumn->setDataColumnIndex( i );
 
                 ContainerEvent aEvent;

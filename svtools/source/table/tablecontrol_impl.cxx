@@ -52,6 +52,8 @@
 
 #include <functional>
 
+#define MIN_COLUMN_WIDTH_PIXEL  4
+
 //......................................................................................................................
 namespace svt { namespace table
 {
@@ -67,21 +69,21 @@ namespace svt { namespace table
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
     namespace AccessibleTableModelChangeType = ::com::sun::star::accessibility::AccessibleTableModelChangeType;
 
-    //====================================================================
-    //= TempHideCursor
-    //====================================================================
-    class TempHideCursor
+    //==================================================================================================================
+    //= SuppressCursor
+    //==================================================================================================================
+    class SuppressCursor
     {
     private:
         ITableControl&  m_rTable;
 
     public:
-        TempHideCursor( ITableControl& _rTable )
+        SuppressCursor( ITableControl& _rTable )
             :m_rTable( _rTable )
         {
             m_rTable.hideCursor();
         }
-        ~TempHideCursor()
+        ~SuppressCursor()
         {
             m_rTable.showCursor();
         }
@@ -425,6 +427,7 @@ namespace svt { namespace table
         ,m_nRowHeaderWidthPixel ( 0                             )
         ,m_nColumnCount         ( 0                             )
         ,m_nRowCount            ( 0                             )
+        ,m_bColumnsFit          ( true                          )
         ,m_nCurColumn           ( COL_INVALID                   )
         ,m_nCurRow              ( ROW_INVALID                   )
         ,m_nLeftColumn          ( 0                             )
@@ -438,7 +441,6 @@ namespace svt { namespace table
         ,m_aSelectedRows        (                               )
         ,m_pTableFunctionSet    ( new TableFunctionSet( this  ) )
         ,m_nAnchor              ( -1                            )
-        ,m_bResizingGrid        ( false                         )
         ,m_bUpdatingColWidths   ( false                         )
         ,m_pAccessibleTable     ( NULL                          )
 #if DBG_UTIL
@@ -469,7 +471,7 @@ namespace svt { namespace table
     {
         DBG_CHECK_ME();
 
-        TempHideCursor aHideCursor( *this );
+        SuppressCursor aHideCursor( *this );
 
         if ( !!m_pModel )
             m_pModel->removeTableModelListener( shared_from_this() );
@@ -681,7 +683,10 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::tableMetricsChanged()
     {
+        long const oldRowHeaderWidthPixel = m_nRowHeaderWidthPixel;
         impl_ni_updateCachedTableMetrics();
+        if ( oldRowHeaderWidthPixel != m_nRowHeaderWidthPixel )
+            impl_ni_updateColumnWidths();
         impl_ni_updateScrollbars();
         m_rAntiImpl.Invalidate();
     }
@@ -712,7 +717,7 @@ namespace svt { namespace table
         {
             if ( !m_bUpdatingColWidths )
             {
-                impl_ni_updateColumnWidths();
+                impl_ni_updateColumnWidths( i_column );
                 impl_ni_updateScrollbars();
             }
 
@@ -804,7 +809,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void TableControl_Impl::impl_ni_updateColumnWidths()
+    void TableControl_Impl::impl_ni_updateColumnWidths( ColPos const i_assumeInflexibleColumnsUpToIncluding )
     {
         ENSURE_OR_RETURN_VOID( !m_bUpdatingColWidths, "TableControl_Impl::impl_ni_updateColumnWidths: recursive call detected!" );
 
@@ -821,95 +826,223 @@ namespace svt { namespace table
 
         m_aColumnWidths.reserve( colCount );
 
-        std::vector<sal_Int32> aPrePixelWidths(0);
-        long accumulatedPixelWidth = 0;
-        int lastResizableCol = COL_INVALID;
-        double gridWidth = m_rAntiImpl.GetOutputSizePixel().Width();
-        if ( m_pModel->hasRowHeaders() && ( gridWidth != 0 ) )
+        // the available horizontal space
+        long gridWidthPixel = m_rAntiImpl.GetOutputSizePixel().Width();
+        if ( m_pModel->hasRowHeaders() && ( gridWidthPixel != 0 ) )
         {
-#if OSL_DEBUG_LEVEL > 0
-            const TableMetrics rowHeaderWidth = m_pModel->getRowHeaderWidth();
-            const long rowHeaderWidthPixel = m_rAntiImpl.LogicToPixel( Size( rowHeaderWidth, 0 ), MAP_APPFONT ).Width();
-            OSL_ENSURE( rowHeaderWidthPixel == m_nRowHeaderWidthPixel,
-                "TableControl_Impl::impl_ni_updateColumnWidths: cached row header width is not correct anymore!" );
-#endif
-            accumulatedPixelWidth += m_nRowHeaderWidthPixel;
-            gridWidth -= m_nRowHeaderWidthPixel;
+            gridWidthPixel -= m_nRowHeaderWidthPixel;
+        }
+        if ( m_pModel->getVerticalScrollbarVisibility() != ScrollbarShowNever )
+        {
+            long nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
+            gridWidthPixel -= nScrollbarMetrics;
         }
 
-        double colWidthsSum = 0.0;
-        double colWithoutFixedWidthsSum = 0.0;
-        double minColWithoutFixedSum = 0.0;
+        // TODO: shouldn't we take the visibility of the vertical scroll bar into account here, too?
+        long const gridWidthAppFont = m_rAntiImpl.PixelToLogic( Size( gridWidthPixel, 0 ), MAP_APPFONT ).Width();
 
+        // determine the accumulated current width of all columns
         for ( ColPos col = 0; col < colCount; ++col )
         {
             const PColumnModel pColumn = m_pModel->getColumnModel( col );
-            ENSURE_OR_CONTINUE( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
+            ENSURE_OR_THROW( !!pColumn, "invalid column returned by the model!" );
 
-            TableMetrics colWidth = 0;
-            const TableMetrics colPrefWidth = pColumn->getPreferredWidth();
-            const bool bResizable = pColumn->isResizable();
+        }
 
-            if ( colPrefWidth != 0)
+        // collect some meta data for our columns:
+        // - their current (appt-font) metrics
+        long accumulatedCurrentWidth = 0;
+        ::std::vector< long > currentColWidths;
+        currentColWidths.reserve( colCount );
+        // - their effective minimal and maximal width (app-font!)
+        typedef ::std::vector< ::std::pair< long, long > >   ColumnLimits;
+        ColumnLimits effectiveColumnLimits;
+        effectiveColumnLimits.reserve( colCount );
+        long accumulatedMinWidth = 0;
+        long accumulatedMaxWidth = 0;
+        // - their relative flexibility
+        ::std::vector< ::sal_Int32 > columnFlexibilities;
+        columnFlexibilities.reserve( colCount );
+        long flexibilityDenominator = 0;
+        for ( ColPos col = 0; col < colCount; ++col )
+        {
+            PColumnModel const pColumn = m_pModel->getColumnModel( col );
+            ENSURE_OR_THROW( !!pColumn, "invalid column returned by the model!" );
+
+            // current width
+            TableMetrics const currentWidth = pColumn->getWidth();
+            currentColWidths.push_back( currentWidth );
+
+            // accumulated width
+            accumulatedCurrentWidth += currentWidth;
+
+            // flexibility
+            ::sal_Int32 flexibility = pColumn->getFlexibility();
+            OSL_ENSURE( flexibility >= 0, "TableControl_Impl::impl_ni_updateColumnWidths: a column's flexibility should be non-negative." );
+            if  (   ( flexibility < 0 )                                 // normalization
+                ||  ( !pColumn->isResizable() )                         // column not resizeable => no auto-resize
+                ||  ( col <= i_assumeInflexibleColumnsUpToIncluding )   // column shall be treated as inflexible => respec this
+                )
+                flexibility = 0;
+
+            // min/max width
+            long effectiveMin = currentWidth, effectiveMax = currentWidth;
+            // if the column is not flexible, it will not be asked for min/max, but we assume the current width as limit then
+            if ( flexibility > 0 )
             {
-                if ( m_bResizingGrid )
-                {
-                    colWidth = pColumn->getWidth();
-                    pColumn->setPreferredWidth(0);
-                }
+                long const minWidth = pColumn->getMinWidth();
+                if ( minWidth > 0 )
+                    effectiveMin = minWidth;
                 else
+                    effectiveMin = MIN_COLUMN_WIDTH_PIXEL;
+
+                long const maxWidth = pColumn->getMaxWidth();
+                OSL_ENSURE( minWidth <= maxWidth, "TableControl_Impl::impl_ni_updateColumnWidths: pretty undecided 'bout its width limits, this column!" );
+                if ( ( maxWidth > 0 ) && ( maxWidth >= minWidth ) )
+                    effectiveMax = maxWidth;
+                else
+                    effectiveMax = gridWidthAppFont; // TODO: any better guess here?
+
+                if ( effectiveMin == effectiveMax )
+                    // if the min and the max are identical, this implies no flexibility at all
+                    flexibility = 0;
+            }
+
+            columnFlexibilities.push_back( flexibility );
+            flexibilityDenominator += flexibility;
+
+            effectiveColumnLimits.push_back( ::std::pair< long, long >( effectiveMin, effectiveMax ) );
+            accumulatedMinWidth += effectiveMin;
+            accumulatedMaxWidth += effectiveMax;
+        }
+
+        ::std::vector< long > newWidths( currentColWidths );
+        if ( flexibilityDenominator == 0 )
+        {
+            // no column is flexible => don't adjust anything
+        }
+        else if ( gridWidthAppFont > accumulatedCurrentWidth )
+        {   // we have space to give away ...
+            long distributeAppFontUnits = gridWidthAppFont - accumulatedCurrentWidth;
+            if ( gridWidthAppFont > accumulatedMaxWidth )
+            {
+                // ... but the column's maximal widths are still less than we have
+                // => set them all to max
+                for ( size_t i = 0; i < size_t( colCount ); ++i )
                 {
-                    colWidth = colPrefWidth;
-                    pColumn->setWidth( colPrefWidth );
+                    newWidths[i] = effectiveColumnLimits[i].second;
                 }
             }
             else
-                colWidth = pColumn->getWidth();
-
-            const long pixelWidth = m_rAntiImpl.LogicToPixel( Size( colWidth, 0 ), MAP_APPFONT ).Width();
-            if ( bResizable && colPrefWidth == 0 )
             {
-                colWithoutFixedWidthsSum += pixelWidth;
-                lastResizableCol = col;
+                bool startOver = false;
+                do
+                {
+                    startOver = false;
+                    // distribute the remaining space amongst all columns with a positive flexibility
+                    for ( size_t i=0; i<newWidths.size() && !startOver; ++i )
+                    {
+                        long const columnFlexibility = columnFlexibilities[i];
+                        if ( columnFlexibility == 0 )
+                            continue;
+
+                        long newColWidth = currentColWidths[i] + columnFlexibility * distributeAppFontUnits / flexibilityDenominator;
+
+                        if ( newColWidth > effectiveColumnLimits[i].second )
+                        {   // that was too much, we hit the col's maximum
+                            // set the new width to exactly this maximum
+                            newColWidth = effectiveColumnLimits[i].second;
+                            // adjust the flexibility denominator ...
+                            flexibilityDenominator -= columnFlexibility;
+                            columnFlexibilities[i] = 0;
+                            // ... and the remaining width ...
+                            long const difference = newColWidth - currentColWidths[i];
+                            distributeAppFontUnits -= difference;
+                            // ... this way, we ensure that the width not taken up by this column is consumed by the other
+                            // flexible ones (if there are some)
+
+                            // and start over with the first column, since there might be earlier columns which need
+                            // to be recalculated now
+                            startOver = true;
+                        }
+
+                        newWidths[i] = newColWidth;
+                    }
+                }
+                while ( startOver );
             }
-            colWidthsSum += pixelWidth;
-            aPrePixelWidths.push_back( pixelWidth );
+        }
+        else if ( gridWidthAppFont < accumulatedCurrentWidth )
+        {   // we need to take away some space from the columns which allow it ...
+            long takeAwayAppFontUnits = accumulatedCurrentWidth - gridWidthAppFont;
+            if ( gridWidthAppFont < accumulatedMinWidth )
+            {
+                // ... but the column's minimal widths are still more than we have
+                // => set them all to min
+                for ( size_t i = 0; i < size_t( colCount ); ++i )
+                {
+                    newWidths[i] = effectiveColumnLimits[i].first;
+                }
+            }
+            else
+            {
+                bool startOver = false;
+                do
+                {
+                    startOver = false;
+                    // take away the space we need from the columns with a positive flexibility
+                    for ( size_t i=0; i<newWidths.size() && !startOver; ++i )
+                    {
+                        long const columnFlexibility = columnFlexibilities[i];
+                        if ( columnFlexibility == 0 )
+                            continue;
+
+                        long newColWidth = currentColWidths[i] - columnFlexibility * takeAwayAppFontUnits / flexibilityDenominator;
+
+                        if ( newColWidth < effectiveColumnLimits[i].first )
+                        {   // that was too much, we hit the col's minimum
+                            // set the new width to exactly this minimum
+                            newColWidth = effectiveColumnLimits[i].first;
+                            // adjust the flexibility denominator ...
+                            flexibilityDenominator -= columnFlexibility;
+                            columnFlexibilities[i] = 0;
+                            // ... and the remaining width ...
+                            long const difference = currentColWidths[i] - newColWidth;
+                            takeAwayAppFontUnits -= difference;
+
+                            // and start over with the first column, since there might be earlier columns which need
+                            // to be recalculated now
+                            startOver = true;
+                        }
+
+                        newWidths[i] = newColWidth;
+                    }
+                }
+                while ( startOver );
+            }
         }
 
-        double gridWidthWithoutFixed = gridWidth - colWidthsSum + colWithoutFixedWidthsSum;
-        double scalingFactor = 1.0;
-        if ( m_bResizingGrid )
+        // now that we have calculated the app-font widths, get the actual pixels
+        long accumulatedWidthPixel = m_nRowHeaderWidthPixel;
+        for ( ColPos col = 0; col < colCount; ++col )
         {
-            if ( gridWidthWithoutFixed > ( minColWithoutFixedSum + colWidthsSum - colWithoutFixedWidthsSum ) )
-                scalingFactor = gridWidthWithoutFixed / colWithoutFixedWidthsSum;
-        }
-        else
-        {
-            if ( colWidthsSum < gridWidthWithoutFixed )
-            {
-                if ( colWithoutFixedWidthsSum > 0 )
-                    scalingFactor = gridWidthWithoutFixed / colWithoutFixedWidthsSum;
-            }
-        }
-        for ( ColPos i = 0; i < colCount; ++i )
-        {
-            const PColumnModel pColumn = m_pModel->getColumnModel( i );
-            ENSURE_OR_CONTINUE( !!pColumn, "TableControl_Impl::impl_ni_updateColumnWidths: invalid column returned by the model!" );
-
-            if ( pColumn->isResizable() && ( pColumn->getPreferredWidth() == 0 ) )
-            {
-                aPrePixelWidths[i] *= scalingFactor;
-                const TableMetrics logicColWidth = m_rAntiImpl.PixelToLogic( Size( aPrePixelWidths[i], 0 ), MAP_APPFONT ).Width();
-                pColumn->setWidth( logicColWidth );
-            }
-
-            const long columnStart = accumulatedPixelWidth;
-            const long columnEnd = columnStart + aPrePixelWidths[i];
+            long const colWidth = m_rAntiImpl.LogicToPixel( Size( newWidths[col], 0 ), MAP_APPFONT ).Width();
+            const long columnStart = accumulatedWidthPixel;
+            const long columnEnd = columnStart + colWidth;
             m_aColumnWidths.push_back( MutableColumnMetrics( columnStart, columnEnd ) );
-            accumulatedPixelWidth = columnEnd;
+            accumulatedWidthPixel = columnEnd;
         }
 
-        // care for the horizontal scroll position (as indicated by m_nLeftColumn)
+        // if the column resizing happened to leave some space at the right, but there are columns
+        // scrolled out to the left, scroll them in
+        while   (   ( m_nLeftColumn > 0 )
+                &&  ( accumulatedWidthPixel - m_aColumnWidths[ m_nLeftColumn - 1 ].getStart() <= gridWidthPixel )
+                )
+        {
+            --m_nLeftColumn;
+        }
+
+        // now adjust the column metrics, since they currently ignore the horizontal scroll position
         if ( m_nLeftColumn > 0 )
         {
             const long offsetPixel = m_aColumnWidths[ 0 ].getStart() - m_aColumnWidths[ m_nLeftColumn ].getStart();
@@ -919,29 +1052,6 @@ namespace svt { namespace table
                  )
             {
                 colPos->move( offsetPixel );
-            }
-        }
-
-        const long freeSpaceRight = gridWidth - m_aColumnWidths[ colCount-1 ].getEnd();
-        if  (   ( freeSpaceRight > 0 )
-            &&  ( lastResizableCol != COL_INVALID )
-            &&  ( lastResizableCol >= m_nLeftColumn )
-            )
-        {
-            // make the last resizable column wider
-            MutableColumnMetrics& rResizeColInfo( m_aColumnWidths[ lastResizableCol ] );
-            rResizeColInfo.setEnd( rResizeColInfo.getEnd() + freeSpaceRight );
-
-            // update the column model
-            const TableMetrics logicColWidth = m_rAntiImpl.PixelToLogic( Size( rResizeColInfo.getWidth(), 0 ), MAP_APPFONT ).Width();
-            const PColumnModel pColumn = m_pModel->getColumnModel( lastResizableCol );
-            pColumn->setWidth( logicColWidth );
-
-            // update all other columns after the resized one
-            ColPos adjustColumn = lastResizableCol;
-            while ( ++adjustColumn < colCount )
-            {
-                m_aColumnWidths[ adjustColumn ].move( freeSpaceRight );
             }
         }
     }
@@ -1055,12 +1165,10 @@ namespace svt { namespace table
     //------------------------------------------------------------------------------------------------------------------
     void TableControl_Impl::impl_ni_updateScrollbars()
     {
-        TempHideCursor aHideCursor( *this );
+        SuppressCursor aHideCursor( *this );
 
         // the width/height of a scrollbar, needed several times below
-        long nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
-        if ( m_rAntiImpl.IsZoom() )
-            nScrollbarMetrics = (long)( nScrollbarMetrics * (double)m_rAntiImpl.GetZoom() );
+        long const nScrollbarMetrics = m_rAntiImpl.GetSettings().GetStyleSettings().GetScrollBarSize();
 
         // determine the playground for the data cells (excluding headers)
         // TODO: what if the control is smaller than needed for the headers/scrollbars?
@@ -1198,32 +1306,10 @@ namespace svt { namespace table
     void TableControl_Impl::onResize()
     {
         DBG_CHECK_ME();
-        if ( m_nRowCount != 0 )
-        {
-            if ( m_nColumnCount != 0 )
-            {
-                impl_ni_updateColumnWidths();
-                impl_ni_updateScrollbars();
-                checkCursorPosition();
-                m_bResizingGrid = true;
-            }
-        }
-        else
-        {
-            // In the case that column headers are defined but data hasn't yet been set,
-            // only column headers will be shown
-            if ( m_pModel->hasColumnHeaders() )
-            {
-                if ( m_nColHeaderHeightPixel > 1 )
-                {
-                    m_pDataWindow->SetSizePixel( m_rAntiImpl.GetOutputSizePixel() );
-                    // update column widths to fit in grid
-                    impl_ni_updateColumnWidths();
-                    m_bResizingGrid = true;
-                }
-            }
-            impl_ni_updateScrollbars();
-        }
+
+        impl_ni_updateColumnWidths();
+        impl_ni_updateScrollbars();
+        checkCursorPosition();
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -1249,9 +1335,9 @@ namespace svt { namespace table
         // draw the header column area
         if ( m_pModel->hasColumnHeaders() )
         {
-            TableRowGeometry aHeaderRow( *this, Rectangle( Point( 0, 0 ),
+            TableRowGeometry const aHeaderRow( *this, Rectangle( Point( 0, 0 ),
                 aAllCellsWithHeaders.BottomRight() ), ROW_COL_HEADERS );
-            Rectangle aColRect(aHeaderRow.getRect());
+            Rectangle const aColRect(aHeaderRow.getRect());
             pRenderer->PaintHeaderArea(
                 *m_pDataWindow, aColRect, true, false, rStyle
             );
@@ -2066,7 +2152,7 @@ namespace svt { namespace table
             return false;
         }
 
-        TempHideCursor aHideCursor( *this );
+        SuppressCursor aHideCursor( *this );
         m_nCurColumn = _nColumn;
         m_nCurRow = _nRow;
 
@@ -2083,7 +2169,7 @@ namespace svt { namespace table
                  && ( _nRow >= 0 ) && ( _nRow < m_nRowCount ),
                  "TableControl_Impl::ensureVisible: invalid coordinates!" );
 
-        TempHideCursor aHideCursor( *this );
+        SuppressCursor aHideCursor( *this );
 
         if ( _nColumn < m_nLeftColumn )
             impl_scrollColumns( _nColumn - m_nLeftColumn );
@@ -2133,7 +2219,7 @@ namespace svt { namespace table
         if ( m_nTopRow != nOldTopRow )
         {
             DBG_SUSPEND_INV( INV_SCROLL_POSITION );
-            TempHideCursor aHideCursor( *this );
+            SuppressCursor aHideCursor( *this );
             // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
             // Same for onEndScroll
@@ -2189,7 +2275,7 @@ namespace svt { namespace table
         if ( m_nLeftColumn != nOldLeftColumn )
         {
             DBG_SUSPEND_INV( INV_SCROLL_POSITION );
-            TempHideCursor aHideCursor( *this );
+            SuppressCursor aHideCursor( *this );
             // TODO: call a onStartScroll at our listener (or better an own onStartScroll,
             // which hides the cursor and then calls the listener)
             // Same for onEndScroll

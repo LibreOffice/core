@@ -72,14 +72,14 @@ namespace svt { namespace table
         virtual void            setHelpText( const String& i_helpText );
         virtual bool            isResizable() const;
         virtual void            setResizable( bool _bResizable );
+        virtual sal_Int32       getFlexibility() const;
+        virtual void            setFlexibility( sal_Int32 const i_flexibility );
         virtual TableMetrics    getWidth() const;
         virtual void            setWidth( TableMetrics _nWidth );
         virtual TableMetrics    getMinWidth() const;
         virtual void            setMinWidth( TableMetrics _nMinWidth );
         virtual TableMetrics    getMaxWidth() const;
         virtual void            setMaxWidth( TableMetrics _nMaxWidth );
-        virtual TableMetrics    getPreferredWidth() const;
-        virtual void            setPreferredWidth( TableMetrics _nPrefWidth );
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
         virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
 

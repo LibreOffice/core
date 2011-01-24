@@ -60,14 +60,14 @@ public:
     virtual void SAL_CALL setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumnWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getPreferredWidth() throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPreferredWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getMaxWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getMinWidth() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL getResizeable() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setResizeable(::sal_Bool the_value) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getFlexibility() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getTitle() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getHelpText() throw (::com::sun::star::uno::RuntimeException);
@@ -123,9 +123,9 @@ private:
     sal_Int32                                       m_nIndex;
     sal_Int32                                       m_nDataColumnIndex;
     sal_Int32                                       m_nColumnWidth;
-    sal_Int32                                       m_nPreferredWidth;
     sal_Int32                                       m_nMaxWidth;
     sal_Int32                                       m_nMinWidth;
+    sal_Int32                                       m_nFlexibility;
     sal_Bool                                        m_bResizeable;
     ::rtl::OUString                                 m_sTitle;
     ::rtl::OUString                                 m_sHelpText;

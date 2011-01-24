@@ -52,9 +52,9 @@ namespace toolkit
         ,m_nIndex(-1)
         ,m_nDataColumnIndex(-1)
         ,m_nColumnWidth(4)
-        ,m_nPreferredWidth(0)
         ,m_nMaxWidth(0)
         ,m_nMinWidth(0)
+        ,m_nFlexibility(1)
         ,m_bResizeable(true)
         ,m_eHorizontalAlign( HorizontalAlignment_LEFT )
     {
@@ -68,8 +68,8 @@ namespace toolkit
         ,m_nIndex( -1 )
         ,m_nDataColumnIndex( i_copySource.m_nDataColumnIndex )
         ,m_nColumnWidth( i_copySource.m_nColumnWidth )
-        ,m_nPreferredWidth( i_copySource.m_nPreferredWidth )
         ,m_nMaxWidth( i_copySource.m_nMaxWidth )
+        ,m_nFlexibility( i_copySource.m_nFlexibility )
         ,m_nMinWidth( i_copySource.m_nMinWidth )
         ,m_bResizeable( i_copySource.m_bResizeable )
         ,m_eHorizontalAlign( i_copySource.m_eHorizontalAlign )
@@ -123,19 +123,6 @@ namespace toolkit
     void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
     {
         impl_set( m_nColumnWidth, value, "ColumnWidth" );
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    ::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
-    {
-        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
-        return m_nPreferredWidth;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-    {
-        impl_set( m_nPreferredWidth, value, "PreferredWidth" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -201,6 +188,21 @@ namespace toolkit
     void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
     {
         impl_set( m_bResizeable, value, "Resizeable" );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getFlexibility() throw (RuntimeException)
+    {
+        ::comphelper::ComponentGuard aGuard( *this, rBHelper );
+        return m_nFlexibility;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setFlexibility( ::sal_Int32 i_value ) throw (IllegalArgumentException, RuntimeException)
+    {
+        if ( i_value < 0 )
+            throw IllegalArgumentException( ::rtl::OUString(), *this, 1 );
+        impl_set( m_nFlexibility, i_value, "Flexibility" );
     }
 
     //------------------------------------------------------------------------------------------------------------------
