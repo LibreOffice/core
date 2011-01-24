@@ -166,18 +166,6 @@ static const MSOStyleNameTable aMSOStyleNameTable[] =
     { 0, 0, 0 }
 };
 
-#ifdef FUTURE // seems this isn't used
-static uno::Sequence< rtl::OUString > getStyleTypes()
-{
-    uno::Sequence< rtl::OUString > aRet(3);
-    rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ParagraphStyles") );
-    pArray[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CharacterStyles") );
-    pArray[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NumberingStyles") );
-    return aRet;
-}
-#endif
-
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > StyleEnumeration_BASE;
 typedef ::cppu::WeakImplHelper3< container::XNameAccess, container::XIndexAccess, container::XEnumerationAccess > StyleCollectionHelper_BASE;
 
