@@ -32,22 +32,6 @@
 #include <rscdef.hxx>
 #include <rscall.h>
 
-/****************** C L A S S E S ****************************************/
-class RscTypCont;
-
-/*********** R s c I n c o n s i s t e n t *******************************/
-class RscInconsistent {
-public:
-    RscId aFirstId;   //Paar von inkonsistenten Id's
-    RscId aSecondId;
-    RscInconsistent( const RscId & rFirst, const RscId & rSecond ){
-            aFirstId = rFirst;
-            aSecondId = rSecond;
-        };
-};
-
-DECLARE_LIST( RscInconsList, RscInconsistent * )
-
 /******************* O b j N o d e ***************************************/
 class ObjNode : public IdNode{
     RscId       aRscId; // Id der Resource
@@ -76,7 +60,7 @@ public:
                     // get the Object from this Node
                     return( pRscObj );
                 }
-    BOOL        IsConsistent( RscInconsList * pList = NULL );
+    BOOL        IsConsistent();
 };
 
 /******************* R e f N o d e ***************************************/

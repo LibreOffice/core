@@ -596,15 +596,12 @@ void RscIdRange::WriteRcAccess
 |*    RscIdRange::IsConsistent()
 |*
 *************************************************************************/
-BOOL RscIdRange::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+BOOL RscIdRange::IsConsistent( const RSCINST & rInst )
 {
     long nValue = ((RscId *)rInst.pData)->GetNumber();
     if( (nMax >= nValue) && (nMin <= nValue) )
         return TRUE;
     else {
-        if( pList )
-            pList->Insert( new RscInconsistent(
-                *(RscId *)rInst.pData, *(RscId *)rInst.pData ) );
         return FALSE;
     }
 }

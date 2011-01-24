@@ -200,15 +200,6 @@ BOOL RscClass::IsDflt( CLASS_DATA pData, sal_uInt32 nEle )
         bRet = TRUE;
     else
         bRet = FALSE;
-/*  {
-        //Variablenname ist Default
-        RSCINST aTmpI;
-
-        aTmpI = GetInstData( pData, nEle, TRUE );
-        if( aTmpI.IsInst() && !aTmpI.pClass->IsDefault( aTmpI ) )
-            bRet = FALSE;
-    }
-*/
     return bRet;
 }
 
@@ -528,13 +519,13 @@ RSCINST RscClass::GetCopyVar
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL RscClass::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+BOOL RscClass::IsConsistent( const RSCINST & rInst )
 {
     sal_uInt32  i = 0;
     RSCINST aTmpI;
     BOOL    bRet;
 
-    bRet = RscTop::IsConsistent( rInst, pList );
+    bRet = RscTop::IsConsistent( rInst );
 
     for( i = 0; i < nEntries; i++ )
     {
@@ -543,7 +534,7 @@ BOOL RscClass::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
             aTmpI = GetInstData( rInst.pData, i, TRUE );
 
             if( aTmpI.IsInst() )
-                if( ! aTmpI.pClass->IsConsistent( aTmpI, pList ) )
+                if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
                     bRet = FALSE;
         }
     };

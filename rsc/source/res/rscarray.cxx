@@ -294,30 +294,30 @@ ERRTYPE RscArray::GetArrayEle
 |*    RscArray::IsConsistent()
 |*
 *************************************************************************/
-static BOOL IsConsistent( RscInstNode * pNode, RscInconsList * pList )
+static BOOL IsConsistent( RscInstNode * pNode )
 {
     BOOL bRet = TRUE;
 
     if( pNode )
     {
-        bRet = pNode->aInst.pClass->IsConsistent( pNode->aInst, pList );
-        if( !IsConsistent( pNode->Left(), pList ) )
+        bRet = pNode->aInst.pClass->IsConsistent( pNode->aInst );
+        if( !IsConsistent( pNode->Left() ) )
             bRet = FALSE;
-        if( !IsConsistent( pNode->Right(), pList ) )
+        if( !IsConsistent( pNode->Right() ) )
             bRet = FALSE;
     }
     return bRet;
 }
 
-BOOL RscArray::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+BOOL RscArray::IsConsistent( const RSCINST & rInst )
 {
     RscArrayInst * pClassData;
     BOOL    bRet;
 
-    bRet = RscTop::IsConsistent( rInst, pList );
+    bRet = RscTop::IsConsistent( rInst );
 
     pClassData = (RscArrayInst *)(rInst.pData + nOffInstData);
-    if( !::IsConsistent( pClassData->pNode, pList ) )
+    if( !::IsConsistent( pClassData->pNode ) )
         bRet = FALSE;
 
     return( bRet );

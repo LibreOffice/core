@@ -530,12 +530,12 @@ ERRTYPE RscMgr::WriteCxx( const RSCINST & rInst, FILE * fOutput,
 |*    RscArray::IsConsistent()
 |*
 *************************************************************************/
-BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
+BOOL RscMgr::IsConsistent( const RSCINST & rInst )
 {
     BOOL    bRet;
     RscMgrInst * pClassData;
 
-    bRet = RscClass::IsConsistent( rInst, pList );
+    bRet = RscClass::IsConsistent( rInst );
 
     pClassData = (RscMgrInst *)(rInst.pData + RscClass::Size());
     if( pClassData->aRefId.IsId() &&
@@ -543,10 +543,6 @@ BOOL RscMgr::IsConsistent( const RSCINST & rInst, RscInconsList * pList )
         || (pClassData->aRefId.GetNumber() > 0x7FFF)
         || IsToDeep( rInst ).IsError()) )
     {
-        if( pList )
-            pList->Insert(
-                new RscInconsistent( pClassData->aRefId,
-                                     pClassData->aRefId ) );
         bRet = FALSE;
     }
 

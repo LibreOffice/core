@@ -152,29 +152,23 @@ sal_uInt32 ObjNode::GetId() const
 |*    ObjNode::IsConsistent()
 |*
 *************************************************************************/
-BOOL ObjNode::IsConsistent( RscInconsList * pList )
+BOOL ObjNode::IsConsistent()
 {
     BOOL bRet = TRUE;
 
     if( (long)aRscId > 0x7FFF || (long)aRscId < 1 )
     {
         bRet = FALSE;
-        if( pList )
-            pList->Insert( new RscInconsistent( aRscId, aRscId ) );
     }
     else
     {
         if( Left() )
         {
-            if( !((ObjNode *)Left())->IsConsistent( pList ) )
+            if( !((ObjNode *)Left())->IsConsistent() )
                 bRet = FALSE;
             if( ((ObjNode *)Left())->aRscId >= aRscId )
             {
                 bRet = FALSE;
-                if( pList )
-                    pList->Insert(
-                        new RscInconsistent( ((ObjNode *)Left())->GetRscId(),
-                                             GetRscId() ) );
             }
         };
         if( Right() )
@@ -182,12 +176,8 @@ BOOL ObjNode::IsConsistent( RscInconsList * pList )
             if( ((ObjNode *)Right())->aRscId <= aRscId )
             {
                 bRet = FALSE;
-                if( pList )
-                    pList->Insert(
-                        new RscInconsistent( GetRscId(),
-                                             ((ObjNode *)Right())->GetRscId() ) );
             }
-            if( !((ObjNode *)Right())->IsConsistent( pList ) )
+            if( !((ObjNode *)Right())->IsConsistent() )
                 bRet = FALSE;
         };
     };

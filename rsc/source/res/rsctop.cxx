@@ -518,11 +518,10 @@ void    RscTop::Destroy( const RSCINST & rInst ){
 |*    RscTop::IsConsistent()
 |*
 *************************************************************************/
-BOOL    RscTop::IsConsistent( const RSCINST & rInst,
-                              RscInconsList * pList )
+BOOL    RscTop::IsConsistent( const RSCINST & rInst )
 {
     if( pSuperClass )
-        return pSuperClass->IsConsistent( rInst, pList );
+        return pSuperClass->IsConsistent( rInst );
     else
         return TRUE;
 }

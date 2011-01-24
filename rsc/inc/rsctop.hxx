@@ -191,8 +191,7 @@ public:
     virtual void    Destroy( const RSCINST & rInst );
 
                     // prueft auf konsistenz
-    virtual BOOL    IsConsistent( const RSCINST & rInst,
-                                  RscInconsList * pList = NULL );
+    virtual BOOL    IsConsistent( const RSCINST & rInst );
 
                     // Alles auf Default setzen
     virtual void    SetToDefault( const RSCINST & rInst );

@@ -72,8 +72,7 @@ public:
                                     RscTypCont * pTC, const RscId & rId );
     ERRTYPE         WriteCxx( const RSCINST & rInst, FILE * fOutput,
                               RscTypCont * pTC, const RscId & rId );
-    BOOL            IsConsistent( const RSCINST & rInst,
-                                  RscInconsList * pList = NULL );
+    BOOL            IsConsistent( const RSCINST & rInst );
     ERRTYPE         GetRef( const RSCINST & rInst, RscId * );
     ERRTYPE         SetRef( const RSCINST & rInst, const RscId & rRefId );
 };

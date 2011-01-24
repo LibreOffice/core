@@ -977,56 +977,55 @@ void RscTypCont :: Delete( ULONG lFileKey ){
 |*    RscTypCont :: MakeConsistent()
 |*
 *************************************************************************/
-BOOL IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop,
-                       RscInconsList * pList )
+BOOL IsInstConsistent( ObjNode * pObjNode, RscTop * pRscTop )
 {
     BOOL bRet = TRUE;
 
     if( pObjNode ){
         RSCINST aTmpI;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop, pList ) )
+        if( ! IsInstConsistent( (ObjNode*)pObjNode->Left(), pRscTop ) )
             bRet = FALSE;
 
         aTmpI.pClass = pRscTop;
         aTmpI.pData = pObjNode->GetRscObj();
-        if( ! aTmpI.pClass->IsConsistent( aTmpI, pList ) )
+        if( ! aTmpI.pClass->IsConsistent( aTmpI ) )
             bRet = FALSE;
 
-        if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop, pList ) )
+        if( ! IsInstConsistent( (ObjNode*)pObjNode->Right(), pRscTop ) )
             bRet = FALSE;
     };
 
     return( bRet );
 }
 
-BOOL MakeConsistent( RscTop * pRscTop, RscInconsList * pList )
+BOOL MakeConsistent( RscTop * pRscTop )
 {
     BOOL bRet = TRUE;
 
     if( pRscTop ){
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Left(), pList ) )
+        if( ! ::MakeConsistent( (RscTop*)pRscTop->Left() ) )
             bRet = FALSE;
 
         if( pRscTop->GetObjNode() ){
             if( ! pRscTop->GetObjNode()->IsConsistent() ){
                 pRscTop->GetObjNode()->OrderTree();
-                if( ! pRscTop->GetObjNode()->IsConsistent( pList ) )
+                if( ! pRscTop->GetObjNode()->IsConsistent() )
                     bRet = FALSE;
             }
-            if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop, pList ) )
+            if( ! IsInstConsistent( pRscTop->GetObjNode(), pRscTop ) )
                 bRet = FALSE;
         }
 
-        if( ! ::MakeConsistent( (RscTop*)pRscTop->Right(), pList ) )
+        if( ! ::MakeConsistent( (RscTop*)pRscTop->Right() ) )
             bRet = FALSE;
     };
 
     return bRet;
 }
 
-BOOL RscTypCont :: MakeConsistent( RscInconsList * pList ){
-    return( ::MakeConsistent( pRoot, pList ) );
+BOOL RscTypCont :: MakeConsistent(){
+    return( ::MakeConsistent( pRoot ) );
 }
 
 sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )

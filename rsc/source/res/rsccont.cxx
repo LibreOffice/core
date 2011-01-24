@@ -598,12 +598,12 @@ else
 |*    RscBaseCont::IsConsistent()
 |*
 *************************************************************************/
-BOOL RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList ){
+BOOL RscBaseCont::IsConsistent( const RSCINST & rInst ) {
     sal_uInt32  i = 0;
     RscBaseContInst * pClassData;
     BOOL    bRet;
 
-    bRet = RscTop::IsConsistent( rInst, pList );
+    bRet = RscTop::IsConsistent( rInst );
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
@@ -614,23 +614,15 @@ BOOL RscBaseCont::IsConsistent( const RSCINST & rInst, RscInconsList * pList ){
             if( (INT32)pClassData->pEntries[ i ].aName > 0x7FFF
               || (INT32)pClassData->pEntries[ i ].aName < 1 ){
                 bRet = FALSE;
-                if( pList )
-                    pList->Insert( new RscInconsistent(
-                        pClassData->pEntries[ i ].aName,
-                        pClassData->pEntries[ i ].aName ) );
             }
             else if( SearchElePos( rInst, pClassData->pEntries[ i ].aName,
                 pClassData->pEntries[ i ].aInst.pClass, i +1 ).IsInst() )
             {
                  bRet = FALSE;
-                 if( pList )
-                     pList->Insert( new RscInconsistent(
-                         pClassData->pEntries[ i    ].aName,
-                         pClassData->pEntries[ i +1 ].aName ) );
              };
         }
         if( ! pClassData->pEntries[ i ].aInst.pClass->
-              IsConsistent( pClassData->pEntries[ i ].aInst, pList ) )
+              IsConsistent( pClassData->pEntries[ i ].aInst ) )
             bRet = FALSE;
     };
 

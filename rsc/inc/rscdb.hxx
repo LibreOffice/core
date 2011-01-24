@@ -353,7 +353,7 @@ public:
     void        WriteSyntax( FILE * fOutput );
     void        WriteRcCtor( FILE * fOutput );
     void        FillNameIdList( REResourceList * pList, ULONG lFileKey );
-    BOOL        MakeConsistent( RscInconsList * pList );
+    BOOL        MakeConsistent();
     sal_uInt32      PutTranslatorKey( sal_uInt64 nKey );
     void        IncFilePos( ULONG nOffset ){ nFilePos += nOffset; }
 };

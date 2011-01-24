@@ -164,7 +164,7 @@ public:
                               RscTypCont * pTC, sal_uInt32 nTab, const char * );
     ERRTYPE         WriteRc( const RSCINST &, RscWriteRc & aMem,
                              RscTypCont * pTC, sal_uInt32, BOOL bExtra );
-    BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
+    BOOL            IsConsistent( const RSCINST & rInst );
     void            WriteRcAccess( FILE * fOutput, RscTypCont * pTC,
                                     const char * );
 

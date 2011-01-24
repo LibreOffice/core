@@ -93,7 +93,7 @@ public:
                     // Gibt die Groesse der Klasse in Bytes
     sal_uInt32          Size(){ return( nSize ); };
 
-    BOOL            IsConsistent( const RSCINST & rInst, RscInconsList * pList );
+    BOOL            IsConsistent( const RSCINST & rInst );
     virtual void    SetToDefault( const RSCINST & rInst );
     BOOL            IsDefault( const RSCINST & rInst );
     BOOL            IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef );
