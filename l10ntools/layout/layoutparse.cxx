@@ -45,11 +45,15 @@ LayoutXMLFile::SearchL10NElements( XMLParentNode* pCur, int )
 
     /* Recurse int children, SearchL10NElements does not do that for us.  */
     if ( XMLChildNodeList* lst = pCur->GetChildList() )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
-            if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_ELEMENT )
-                HandleElement( ( XMLElement* )lst->GetObject( i ) );
-            else if ( lst->GetObject( i )->GetNodeType() == XML_NODE_TYPE_COMMENT )
-                lst->Remove( i-- );
+        for ( size_t i = 0; i < lst->size(); i++ )
+            if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_ELEMENT )
+                HandleElement( ( XMLElement* )(*lst)[ i ] );
+            else if ( (*lst)[ i ]->GetNodeType() == XML_NODE_TYPE_COMMENT ) {
+                XMLChildNodeList::iterator it = lst->begin();
+                ::std::advance( it, i );
+                lst->erase( it );
+                i--;
+            }
 }
 
 std::vector<XMLAttribute*>

@@ -133,7 +133,7 @@ public:
     virtual ~XMLChildNode(){};
 };
 
-DECLARE_LIST( XMLChildNodeList, XMLChildNode * )
+typedef ::std::vector< XMLChildNode* > XMLChildNodeList;
 
 //-------------------------------------------------------------------------
 
@@ -144,9 +144,9 @@ class XMLData;
 class XMLParentNode : public XMLChildNode
 {
 private:
-    XMLChildNodeList *pChildList;
+    XMLChildNodeList* pChildList;
     static int dbgcnt;
-    //int         nParentPos;
+
 protected:
     XMLParentNode( XMLParentNode *pPar )
                 : XMLChildNode( pPar ), pChildList( NULL )
@@ -173,11 +173,11 @@ public:
     );
 
     void AddChild(
-        XMLChildNode *pChild , int pos  /// the new child
+        XMLChildNode *pChild , size_t pos   /// the new child
     );
 
     virtual int GetPosition( ByteString id );
-    int RemoveChild( XMLElement *pRefElement );
+    size_t RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChilds();
 
     /// returns a child element which matches the given one

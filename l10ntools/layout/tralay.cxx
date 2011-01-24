@@ -214,7 +214,6 @@ translateElement( XMLElement* element, ByteString const& lang,
             {
                 ByteString translation;
                 entry->GetText( translation, STRING_TYP_TEXT, lang, true );
-    //            ByteString original = removeContent( element );
                 if ( !translation.Len() )
                     translation = BSTRING( ( *i )->GetValue() );
                 delete translateAttribute( attributes, **i , STRING( translation ) );
@@ -250,17 +249,23 @@ static void make_directory( ByteString const& name )
 static void insertMarker( XMLParentNode *p, ByteString const& file )
 {
     if ( XMLChildNodeList* lst = p->GetChildList() )
-        if ( lst->Count() )
+        if ( !lst->empty() )
         {
-            ULONG i = 1;
+            size_t i = 1;
             // Skip newline, if possible.
-            if ( lst->Count() > 1
-                 && lst->GetObject( 2 )->GetNodeType() == XML_NODE_TYPE_DEFAULT )
+            if ( lst->size() > 2
+                 && (*lst)[ 2 ]->GetNodeType() == XML_NODE_TYPE_DEFAULT )
                 i++;
             OUString marker = OUString(RTL_CONSTASCII_USTRINGPARAM("\n    NOTE: This file has been generated automagically by transex3/layout/tralay,\n          from source template: "))
                 + STRING( file )
                 + OUString(RTL_CONSTASCII_USTRINGPARAM(".\n          Do not edit, changes will be lost.\n"));
-            lst->Insert( new XMLComment( marker, 0 ), i );
+            if ( i < lst->size() ) {
+                XMLChildNodeList::iterator it = lst->begin();
+                ::std::advance( it, i );
+                lst->insert( it, new XMLComment( marker, 0 ) );
+            } else {
+                lst->push_back( new XMLComment( marker, 0 ) );
+            }
         }
 }
 
