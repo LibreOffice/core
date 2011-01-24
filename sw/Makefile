@@ -24,44 +24,15 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=sw
-TARGET=test-bigptrarray
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-ENABLE_EXCEPTIONS=TRUE
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-
-CFLAGSCXX += $(CPPUNIT_CFLAGS)
-
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl
-
-.IF "$(GUI)" == "WNT"
-    CFLAGS+=/Ob1
-.ENDIF
-
-SHL1OBJS=$(SLO)$/Test-BigPtrArray.obj \
-    $(SLO)$/bparr.obj
-
-SHL1TARGET=$(TARGET)
-SHL1STDLIBS=$(SALLIB) $(TOOLSLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
-
-SHL1IMPLIB= i$(SHL1TARGET)
-
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME    =$(SHL1TARGET)
-
-# DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = export.map
-
-# END ------------------------------------------------------------------
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-.INCLUDE : _cppunit.mk
+# vim: set noet sw=4 ts=4:

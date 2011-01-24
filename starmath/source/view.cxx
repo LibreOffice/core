@@ -738,10 +738,6 @@ SFX_IMPL_INTERFACE(SmViewShell, SfxViewShell, SmResId(0))
     SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_TOOLS | SFX_VISIBILITY_STANDARD |
                                 SFX_VISIBILITY_FULLSCREEN | SFX_VISIBILITY_SERVER,
                                 SmResId(RID_MATH_TOOLBOX ));
-    //Dummy-Objectbar, damit es bei aktivieren nicht staendig zuppelt.
-// Wegen #58705# entfernt (RID wurde nirgends verwendet)
-//  SFX_OBJECTBAR_REGISTRATION( SFX_OBJECTBAR_OBJECT | SFX_VISIBILITY_SERVER,
-//                              SmResId(RID_DRAW_OBJECTBAR) );
 
     SFX_CHILDWINDOW_REGISTRATION(SID_TASKPANE);
     SFX_CHILDWINDOW_REGISTRATION(SmToolBoxWrapper::GetChildWindowId());
@@ -1160,7 +1156,7 @@ void SmViewShell::Impl_Print(
     rOutDev.Pop();
 }
 
-USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/, PrintDialog * /*pPrintDialog*/)
+USHORT SmViewShell::Print(SfxProgress & /*rProgress*/, BOOL /*bIsAPI*/)
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmViewShell::Print" );
     DBG_ASSERT( 0, "SmViewShell::Print: no longer used with new UI print dialog. Should be removed!!" );
