@@ -342,9 +342,9 @@ namespace dxcanvas
                     boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
 
                     const Gdiplus::Color aFillColor(
-                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha) ),
-                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha) ),
-                        static_cast<BYTE>( basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha) ) );
+                        static_cast<WIN_BYTE>( basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha) ),
+                        static_cast<WIN_BYTE>( basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha) ),
+                        static_cast<WIN_BYTE>( basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha) ) );
 
                     aFillBrush.SetColor( aFillColor );
                     aCurrPath.Reset(); aCurrPath.StartFigure();

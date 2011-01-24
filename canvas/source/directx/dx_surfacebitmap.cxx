@@ -370,7 +370,7 @@ namespace dxcanvas
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                aSurfaceDesc.lPitch,
                                                nFormat,
-                                               (BYTE *)aSurfaceDesc.lpSurface ));
+                                               (WIN_BYTE *)aSurfaceDesc.lpSurface ));
 
             // unlock the directx surface
             mpSurface->Unlock(NULL);
@@ -387,7 +387,7 @@ namespace dxcanvas
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
-                                                (BYTE *)aLockedRect.pBits ));
+                                                (WIN_BYTE *)aLockedRect.pBits ));
 
             mpSurface->UnlockRect();
         }
@@ -560,7 +560,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 return uno::Sequence< sal_Int8 >();
 
-            sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
+            sal_uInt8 *pSrc = (sal_uInt8 *)((((WIN_BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
@@ -576,7 +576,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 return uno::Sequence< sal_Int8 >();
 
-            sal_uInt8 *pSrc = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
+            sal_uInt8 *pSrc = (sal_uInt8 *)((((WIN_BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt8 *pDst = (sal_uInt8 *)aRes.getArray();
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
@@ -643,7 +643,7 @@ namespace dxcanvas
                 throw uno::RuntimeException();
 
             sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
-            sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
+            sal_uInt8 *pDst = (sal_uInt8 *)((((WIN_BYTE *)aSurfaceDesc.lpSurface)+(rect.Y1*aSurfaceDesc.lPitch))+rect.X1);
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
@@ -660,7 +660,7 @@ namespace dxcanvas
                 throw uno::RuntimeException();
 
             sal_uInt8 *pSrc = (sal_uInt8 *)data.getConstArray();
-            sal_uInt8 *pDst = (sal_uInt8 *)((((BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
+            sal_uInt8 *pDst = (sal_uInt8 *)((((WIN_BYTE *)aLockedRect.pBits)+(rect.Y1*aLockedRect.Pitch))+rect.X1);
             sal_uInt32 nSegmentSizeInBytes = nWidth<<4;
             for(sal_uInt32 y=0; y<nHeight; ++y)
             {
@@ -722,7 +722,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
+            sal_uInt32 *pDst = (sal_uInt32 *)((((WIN_BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
             *pDst = aColor.GetValue();
             mpSurface->Unlock(NULL);
 #else
@@ -731,7 +731,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
+            sal_uInt32 *pDst = (sal_uInt32 *)((((WIN_BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             *pDst = aColor.GetValue();
             mpSurface->UnlockRect();
 #endif
@@ -780,7 +780,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
+            sal_uInt32 *pDst = (sal_uInt32 *)((((WIN_BYTE *)aSurfaceDesc.lpSurface)+(pos.Y*aSurfaceDesc.lPitch))+pos.X);
             Gdiplus::Color aColor(*pDst);
             mpSurface->Unlock(NULL);
 #else
@@ -789,7 +789,7 @@ namespace dxcanvas
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
 
-            sal_uInt32 *pDst = (sal_uInt32 *)((((BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
+            sal_uInt32 *pDst = (sal_uInt32 *)((((WIN_BYTE *)aLockedRect.pBits)+(pos.Y*aLockedRect.Pitch))+pos.X);
             Gdiplus::Color aColor(*pDst);
             mpSurface->UnlockRect();
 #endif
