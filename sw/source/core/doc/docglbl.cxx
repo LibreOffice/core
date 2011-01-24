@@ -87,23 +87,6 @@ BOOL SwDoc::GenerateHTMLDoc( const String& rPath, int nOutlineLevel )
 BOOL SwDoc::GenerateHTMLDoc( const String& rPath,
                                 const SwTxtFmtColl* pSplitColl )
 {
-#ifdef JP_TEST
-    if( !pSplitColl )
-    {
-        BYTE nLvl = 1;
-        const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
-        for( USHORT n = rFmtColls.Count(); n; )
-            if( nLvl == rFmtColls[ --n ]->GetAttrOutlineLevel() -1 )//<-end,zhaojianwei 0814
-            {
-                pSplitColl = rFmtColls[ n ];
-                break;
-            }
-
-        if( !pSplitColl )
-            pSplitColl = GetTxtCollFromPool( RES_POOLCOLL_HEADLINE2 );
-    }
-#endif
-
     return SplitDoc( SPLITDOC_TO_HTML, rPath, pSplitColl );
 }
 
