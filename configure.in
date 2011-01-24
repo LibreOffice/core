@@ -5155,7 +5155,7 @@ if test "$enable_nss_module" != "no"; then
       AC_MSG_CHECKING([for Mozilla build tooling])
       if test -z "$MOZILLABUILD" ; then
 AC_MSG_ERROR([Mozilla build tooling not found.
-Use the --with-mozilla-build option after installling the tools obtained
+Use the --with-mozilla-build option after installing the tools obtained
 from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
       else
          if test \( "$WITH_MINGW" = "yes" \) ; then
