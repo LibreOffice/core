@@ -388,6 +388,7 @@ define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
+    rm -f $(1) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) $(PCHOBJS)" > $${RESPONSEFILE} && \
