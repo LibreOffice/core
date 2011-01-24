@@ -217,6 +217,14 @@ using namespace connectivity;
 %token <pParseNode> SQL_TOKEN_VALUE SQL_TOKEN_CURRENT_CATALOG SQL_TOKEN_CURRENT_DEFAULT_TRANSFORM_GROUP SQL_TOKEN_CURRENT_PATH SQL_TOKEN_CURRENT_ROLE SQL_TOKEN_CURRENT_SCHEMA SQL_TOKEN_CURRENT_USER
 %token <pParseNode> SQL_TOKEN_SESSION_USER SQL_TOKEN_SYSTEM_USER SQL_TOKEN_VARCHAR SQL_TOKEN_VARBINARY SQL_TOKEN_VARYING SQL_TOKEN_OBJECT SQL_TOKEN_NCLOB SQL_TOKEN_NATIONAL
 %token <pParseNode> SQL_TOKEN_LARGE SQL_TOKEN_CLOB SQL_TOKEN_BLOB SQL_TOKEN_BIGINT SQL_TOKEN_BINARY SQL_TOKEN_WITHOUT SQL_TOKEN_BOOLEAN SQL_TOKEN_INTERVAL
+// window function
+%token <pParseNode> SQL_TOKEN_OVER SQL_TOKEN_ROW_NUMBER SQL_TOKEN_NTILE SQL_TOKEN_LEAD SQL_TOKEN_LAG SQL_TOKEN_RESPECT SQL_TOKEN_IGNORE SQL_TOKEN_NULLS 
+%token <pParseNode> SQL_TOKEN_FIRST_VALUE SQL_TOKEN_LAST_VALUE SQL_TOKEN_NTH_VALUE SQL_TOKEN_FIRST SQL_TOKEN_LAST
+%token <pParseNode> SQL_TOKEN_EXCLUDE SQL_TOKEN_OTHERS SQL_TOKEN_TIES SQL_TOKEN_FOLLOWING SQL_TOKEN_UNBOUNDED SQL_TOKEN_PRECEDING SQL_TOKEN_RANGE SQL_TOKEN_ROWS
+%token <pParseNode> SQL_TOKEN_PARTITION SQL_TOKEN_WINDOW SQL_TOKEN_NO
+// LIMIT and OFFSEt
+%token <pParseNode> SQL_TOKEN_LIMIT SQL_TOKEN_OFFSET SQL_TOKEN_NEXT SQL_TOKEN_ONLY
+
 	/* operators */
 %left SQL_TOKEN_NAME
 %left <pParseNode> SQL_TOKEN_OR
@@ -271,7 +279,7 @@ using namespace connectivity;
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
-%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument date_function_3Argument
+%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument 
 %type <pParseNode> all query_primary sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
@@ -286,6 +294,16 @@ using namespace connectivity;
 %type <pParseNode> binary_string_type numeric_type boolean_type datetime_type interval_type opt_paren_precision paren_char_length opt_paren_char_large_length paren_character_large_object_length
 %type <pParseNode> large_object_length opt_multiplier character_large_object_type national_character_large_object_type binary_large_object_string_type opt_with_or_without_time_zone
 %type <pParseNode> approximate_numeric_type exact_numeric_type opt_paren_precision_scale
+/* window function rules */
+%type <pParseNode> window_function window_function_type ntile_function number_of_tiles lead_or_lag_function lead_or_lag lead_or_lag_extent offset default_expression null_treatment
+%type <pParseNode> first_or_last_value_function first_or_last_value nth_value_function nth_row from_first_or_last window_name_or_specification in_line_window_specification opt_lead_or_lag_function
+%type <pParseNode> opt_null_treatment opt_from_first_or_last simple_value_specification dynamic_parameter_specification window_name window_clause window_definition_list window_definition
+%type <pParseNode> new_window_name window_specification_details existing_window_name window_partition_clause window_partition_column_reference_list window_partition_column_reference window_frame_clause
+%type <pParseNode> window_frame_units window_frame_extent window_frame_start window_frame_preceding window_frame_between window_frame_bound_1 window_frame_bound_2 window_frame_bound window_frame_following window_frame_exclusion
+%type <pParseNode> opt_window_frame_clause opt_window_partition_clause opt_existing_window_name window_specification opt_window_frame_exclusion opt_window_clause opt_offset
+%type <pParseNode> opt_fetch_first_row_count fetch_first_clause offset_row_count fetch_first_row_count first_or_next row_or_rows opt_result_offset_clause result_offset_clause
+/* LIMIT and OFFSET */
+%type <pParseNode> opt_limit_offset_clause limit_offset_clause opt_fetch_first_clause
 %%
 
 /* Parse Tree an OSQLParser zurueckliefern
@@ -920,19 +938,89 @@ selection:
 		}
 	|	scalar_exp_commalist
 	;
+opt_result_offset_clause:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	result_offset_clause
+	;	
+result_offset_clause:
+	SQL_TOKEN_OFFSET offset_row_count row_or_rows
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
+opt_fetch_first_row_count:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	fetch_first_row_count
+	;
+first_or_next:
+		SQL_TOKEN_FIRST 
+	|	SQL_TOKEN_NEXT
+	;
+row_or_rows:
+		SQL_TOKEN_ROW 
+	|	SQL_TOKEN_ROWS
+	;
+opt_fetch_first_clause:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	fetch_first_clause
+	;
+fetch_first_clause:
+	SQL_TOKEN_FETCH first_or_next opt_fetch_first_row_count row_or_rows SQL_TOKEN_ONLY
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+		$$->append($4);
+		$$->append($5);
+	}
+	;
+offset_row_count:
+	literal
+	;
+fetch_first_row_count:
+	literal
+	;
 
+opt_limit_offset_clause:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	limit_offset_clause
+	;
+opt_offset:
+		/* empty */ {$$ = SQL_NEW_RULE;}
+	|	SQL_TOKEN_OFFSET SQL_TOKEN_INTNUM
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+limit_offset_clause:
+	SQL_TOKEN_LIMIT SQL_TOKEN_INTNUM opt_offset
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
 table_exp:
-		from_clause
-		opt_where_clause
-		opt_group_by_clause
-		opt_having_clause
-		opt_order_by_clause
-			{$$ = SQL_NEW_RULE;
+		from_clause opt_where_clause opt_group_by_clause opt_having_clause opt_window_clause opt_order_by_clause opt_limit_offset_clause opt_result_offset_clause opt_fetch_first_clause
+		{
+			$$ = SQL_NEW_RULE;
 			$$->append($1);
 			$$->append($2);
 			$$->append($3);
 			$$->append($4);
-			$$->append($5);}
+			$$->append($5);
+			$$->append($6);
+			$$->append($7);
+			$$->append($8);
+			$$->append($9);
+		}
 	;
 
 from_clause:
@@ -1851,10 +1939,10 @@ function_name12:
 	;
 function_name23:
 		SQL_TOKEN_LOCATE
+	|	SQL_TOKEN_DATEDIFF
 	;
 function_name3:
 		string_function_3Argument
-	|	date_function_3Argument
 	;
 function_name:
 		string_function
@@ -1912,8 +2000,6 @@ date_function_1Argument:
 	|	SQL_TOKEN_TIMEVALUE
 	|	SQL_TOKEN_DATEVALUE
 	;
-date_function_3Argument:
-	SQL_TOKEN_DATEDIFF
 	
 date_function:
 		SQL_TOKEN_TIMESTAMPADD        
@@ -1950,6 +2036,362 @@ numeric_function_2Argument:
 numeric_function:
 		SQL_TOKEN_RAND            
 	|	SQL_TOKEN_TRUNCATE
+	;
+	
+window_function:
+	window_function_type SQL_TOKEN_OVER window_name_or_specification
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+	}
+	;
+window_function_type :
+		rank_function_type '(' ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	|	SQL_TOKEN_ROW_NUMBER '(' ')'
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+		}
+	| general_set_fct
+	| ntile_function
+	| lead_or_lag_function
+	| first_or_last_value_function
+	| nth_value_function
+;
+ntile_function :
+	SQL_TOKEN_NTILE '(' number_of_tiles ')'
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+dynamic_parameter_specification:
+	parameter
+	;
+simple_value_specification:
+	literal
+	;
+number_of_tiles :
+		simple_value_specification
+	|	dynamic_parameter_specification
+	;
+opt_lead_or_lag_function:
+	/* empty */      {$$ = SQL_NEW_RULE;}
+	| ',' offset 
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append($2);
+		}
+	| ',' offset ',' default_expression
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append($2);
+			$$->append($3 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append($4);
+		}
+	;
+opt_null_treatment:
+		/* empty */      {$$ = SQL_NEW_RULE;}
+	|	null_treatment
+	;
+	
+lead_or_lag_function:
+	lead_or_lag '(' lead_or_lag_extent opt_lead_or_lag_function ')'	opt_null_treatment
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4);
+			$$->append($5 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($6);
+	}
+	;
+lead_or_lag:
+		SQL_TOKEN_LEAD 
+	|	SQL_TOKEN_LAG
+	;
+lead_or_lag_extent:
+	value_exp
+	;
+offset:
+	SQL_TOKEN_INTNUM
+	;
+default_expression:
+	value_exp
+	;
+null_treatment:
+		SQL_TOKEN_RESPECT SQL_TOKEN_NULLS 
+	|	SQL_TOKEN_IGNORE SQL_TOKEN_NULLS
+	;
+first_or_last_value_function:
+	first_or_last_value '(' value_exp ')' opt_null_treatment
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($5);
+	}
+	;
+first_or_last_value :
+		SQL_TOKEN_FIRST_VALUE 
+	|	SQL_TOKEN_LAST_VALUE
+	;
+opt_from_first_or_last:
+		/* empty */      {$$ = SQL_NEW_RULE;}
+	|	from_first_or_last
+	;
+nth_value_function:
+	SQL_TOKEN_NTH_VALUE '(' value_exp ',' nth_row ')' opt_from_first_or_last opt_null_treatment
+	{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2 = newNode("(", SQL_NODE_PUNCTUATION));
+			$$->append($3);
+			$$->append($4 = newNode(",", SQL_NODE_PUNCTUATION));
+			$$->append($5);
+			$$->append($6 = newNode(")", SQL_NODE_PUNCTUATION));
+			$$->append($7);
+			$$->append($8);
+	}
+	;
+nth_row:
+		simple_value_specification
+	|	dynamic_parameter_specification
+	;
+from_first_or_last:
+		SQL_TOKEN_FROM SQL_TOKEN_FIRST
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_FROM SQL_TOKEN_LAST
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	;
+window_name:
+	SQL_TOKEN_NAME
+	;
+window_name_or_specification:
+		window_name
+	|	in_line_window_specification
+	;
+in_line_window_specification: 
+	window_specification
+	;
+opt_window_clause:
+		/* empty */      {$$ = SQL_NEW_RULE;}
+	|	window_clause
+	;
+window_clause:
+	SQL_TOKEN_WINDOW window_definition_list
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+window_definition_list:
+		window_definition_list ',' window_definition
+			{$1->append($3);
+			$$ = $1;}
+	|	window_definition
+			{$$ = SQL_NEW_COMMALISTRULE;
+			$$->append($1);}
+	;
+window_definition:
+	new_window_name SQL_TOKEN_AS window_specification
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
+new_window_name:
+	window_name
+	;
+window_specification:
+	'(' window_specification_details ')'
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1 = newNode("(", SQL_NODE_PUNCTUATION));
+		$$->append($2);
+		$$->append($3 = newNode(")", SQL_NODE_PUNCTUATION));
+	}
+	;
+opt_existing_window_name:
+		/* empty */      {$$ = SQL_NEW_RULE;}
+	|	existing_window_name
+	;
+opt_window_partition_clause:	
+	/* empty */      {$$ = SQL_NEW_RULE;}
+	|	window_partition_clause
+	;
+opt_window_frame_clause:	
+	/* empty */      {$$ = SQL_NEW_RULE;}
+	|	window_frame_clause
+	;
+window_specification_details:
+	opt_existing_window_name
+	opt_window_partition_clause
+	opt_order_by_clause
+	opt_window_frame_clause
+	;
+existing_window_name:
+	window_name
+	;
+window_partition_clause:
+	SQL_TOKEN_PARTITION SQL_TOKEN_BY window_partition_column_reference_list
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}
+	;
+window_partition_column_reference_list:
+	window_partition_column_reference_list ',' window_partition_column_reference
+			{$1->append($3);
+			$$ = $1;}
+	|	window_partition_column_reference
+			{$$ = SQL_NEW_COMMALISTRULE;
+			$$->append($1);}
+	;
+window_partition_column_reference:
+	column_ref opt_collate_clause
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+opt_window_frame_exclusion:
+	/* empty */      {$$ = SQL_NEW_RULE;}
+	|	window_frame_exclusion
+	;
+window_frame_clause:
+	window_frame_units window_frame_extent opt_window_frame_exclusion
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+	}	
+	;
+window_frame_units:
+		SQL_TOKEN_ROWS
+	|	SQL_TOKEN_RANGE
+	;
+window_frame_extent:
+		window_frame_start
+	|	window_frame_between
+	;
+window_frame_start:
+		SQL_TOKEN_UNBOUNDED SQL_TOKEN_PRECEDING
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}	
+	|	window_frame_preceding
+	|	SQL_TOKEN_CURRENT SQL_TOKEN_ROW
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}	
+	;
+window_frame_preceding:
+	unsigned_value_spec SQL_TOKEN_PRECEDING
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+window_frame_between:
+	SQL_TOKEN_BETWEEN window_frame_bound_1 SQL_TOKEN_AND window_frame_bound_2
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+		$$->append($3);
+		$$->append($4);
+	}
+	;
+window_frame_bound_1:
+	window_frame_bound
+	;
+window_frame_bound_2:
+	window_frame_bound
+	;
+window_frame_bound:
+	window_frame_start
+	| SQL_TOKEN_UNBOUNDED SQL_TOKEN_FOLLOWING
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	| window_frame_following
+	;
+window_frame_following:
+	unsigned_value_spec SQL_TOKEN_FOLLOWING
+	{
+		$$ = SQL_NEW_RULE;
+		$$->append($1);
+		$$->append($2);
+	}
+	;
+window_frame_exclusion:
+		SQL_TOKEN_EXCLUDE SQL_TOKEN_CURRENT SQL_TOKEN_ROW
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
+	|	SQL_TOKEN_EXCLUDE SQL_TOKEN_GROUP
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_EXCLUDE SQL_TOKEN_TIES
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
+	|	SQL_TOKEN_EXCLUDE SQL_TOKEN_NO SQL_TOKEN_OTHERS
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+			$$->append($3);
+		}
 	;
 op_parameter:
 		{$$ = SQL_NEW_RULE;}
@@ -2005,11 +2447,16 @@ odbc_fct_spec:
 			$$->append($1);
 			$$->append($2);
 		}
+	|	SQL_TOKEN_FN set_fct_spec
+		{
+			$$ = SQL_NEW_RULE;
+			$$->append($1);
+			$$->append($2);
+		}
 	;
 
 odbc_fct_type:
-		SQL_TOKEN_FN
-	| 	SQL_TOKEN_D
+		SQL_TOKEN_D
 	| 	SQL_TOKEN_T
 	| 	SQL_TOKEN_TS
 	;
@@ -2315,6 +2762,7 @@ value_exp_primary:
 	  | set_fct_spec
 	  | scalar_subquery
 	  | case_expression
+	  | window_function
 	  | '(' value_exp ')'
 		{
 			$$ = SQL_NEW_RULE;
