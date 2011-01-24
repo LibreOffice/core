@@ -33,13 +33,6 @@
 
 #include <vcl/svapp.hxx>
 
-#if defined( WNT ) && defined( erBEEP )
-#include <svwin.h>
-#define erBEEPER() Beep( 666, 66 )
-#else
-#define erBEEPER()
-#endif
-
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "bcaslot.hxx"
@@ -453,7 +446,6 @@ void ScDocument::TrackFormulas( ULONG nHintId )
 
     if ( pFormulaTrack )
     {
-        erBEEPER();
         // outside the loop, check if any sheet has a "calculate" event script
         bool bCalcEvent = HasAnySheetEventScript( SC_SHEETEVENT_CALCULATE, true );
         SvtBroadcaster* pBC;
