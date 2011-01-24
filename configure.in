@@ -5939,8 +5939,7 @@ if test "$_os" = "WINNT" ; then
         NSIS_PATH="$nsistest"
     fi
     if test -z "$NSIS_PATH"; then
-        AC_MSG_WARN([NSIS not found, no self contained installer will be build.])
-        echo "NSIS not found, no self contained installer will be build." >> warn
+        AC_MSG_RESULT([NSIS not found, no self contained installer will be build.])
     else
         NSIS_PATH=`cygpath -d "$NSIS_PATH"`
         NSIS_PATH=`cygpath -u "$NSIS_PATH"`
