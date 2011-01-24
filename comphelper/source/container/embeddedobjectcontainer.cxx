@@ -1136,6 +1136,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
     }
 
     OSL_ENSURE( bFound, "Object not found for removal!" );
+    (void)bFound;
     if ( xPersist.is() )
     {
         // remove replacement image (if there is one)
