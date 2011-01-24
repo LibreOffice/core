@@ -221,6 +221,7 @@ include $(foreach class, \
     Executable \
     SdiTarget \
     Package \
+    CustomTarget \
     PrecompiledHeaders \
     CppunitTest \
     JavaClassSet \
@@ -232,5 +233,7 @@ include $(foreach class, \
 ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)
 endif
+
+export gb_AWK
 
 # vim: set noet sw=4 ts=4:
