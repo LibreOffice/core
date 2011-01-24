@@ -178,7 +178,7 @@ void SwAddressControl_Impl::SetData(SwCSVData& rDBData)
     Link aEditModifyLink = LINK(this, SwAddressControl_Impl, EditModifyHdl_Impl);
     Edit* pLastEdit = 0;
     sal_Int32 nVisibleLines = 0;
-    sal_Int32 nLines = 0;
+    sal_uIntPtr nLines = 0;
     for(aHeaderIter = m_pData->aDBColumnHeaders.begin();
                 aHeaderIter != m_pData->aDBColumnHeaders.end();
                 ++aHeaderIter, nEDYPos += m_nLineHeight, nFTYPos += m_nLineHeight, nLines++)

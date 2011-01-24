@@ -242,7 +242,6 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     // Alignment:
-    sal_Bool bPlus = sal_False;
     OutputDevice* pOut = GetInfo().GetOut();
     Point aPnt1( nTmpLeft, GetInfo().GetPos().Y() );
     if ( aPnt1.X() < rPaint.Left() )
@@ -254,10 +253,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     if ( aPnt2.X() > rPaint.Right() )
         aPnt2.X() = rPaint.Right();
     if ( aPnt2.Y() > rPaint.Bottom() )
-    {
         aPnt2.Y() = rPaint.Bottom();
-        bPlus = sal_True;
-    }
 
     const SwRect aLineRect( aPnt1, aPnt2 );
 

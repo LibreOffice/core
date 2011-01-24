@@ -1319,7 +1319,7 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
 
         sal_Bool bSelectedFrame = ( pWrtShell->GetSelFrmType() != FRMTYPE_NONE ),
-                 bGotViewLeft = sal_False, bGotViewTop = sal_False, bGotVisibleLeft = sal_False,
+                 bGotVisibleLeft = sal_False,
                  bGotVisibleTop = sal_False, bGotVisibleRight = sal_False,
                  bGotVisibleBottom = sal_False, bGotZoomType = sal_False,
                  bGotZoomFactor = sal_False, bGotIsSelectedFrame = sal_False,
@@ -1331,13 +1331,11 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             {
                pValue->Value >>= nX;
                nX = MM100_TO_TWIP( nX );
-               bGotViewLeft = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ViewTop" ) ) )
             {
                pValue->Value >>= nY;
                nY = MM100_TO_TWIP( nY );
-               bGotViewTop = sal_True;
             }
             else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "VisibleLeft" ) ) )
             {

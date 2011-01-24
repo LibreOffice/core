@@ -1158,9 +1158,9 @@ void SwEditWin::ChangeDrawing( BYTE nDir )
             {
                 // Check if object is anchored as character and move direction
                 BOOL bDummy;
-                const bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
-                const bool bHoriMove = !bVertAnchor == !( nDir % 2 );
-                const bool bMoveAllowed =
+                bool bVertAnchor = rSh.IsFrmVertical( TRUE, bDummy );
+                bool bHoriMove = !bVertAnchor == !( nDir % 2 );
+                bool bMoveAllowed =
                     !bHoriMove || (rSh.GetAnchorId() != FLY_AS_CHAR);
                 if ( bMoveAllowed )
                 {
