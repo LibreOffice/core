@@ -224,7 +224,6 @@ void Pre_dtorTree( RscTop * pRscTop ){
 }
 
 RscTypCont :: ~RscTypCont(){
-    RscTop  *       pRscTmp;
     RscSysEntry   * pSysEntry;
 
     // Alle Unterbaeume loeschen
@@ -234,11 +233,8 @@ RscTypCont :: ~RscTypCont(){
 
     // Alle Klassen noch gueltig, jeweilige Instanzen freigeben
     // BasisTypen
-    pRscTmp = aBaseLst.First();
-    while( pRscTmp ){
-        pRscTmp->Pre_dtor();
-        pRscTmp = aBaseLst.Next();
-    };
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
+        aBaseLst[ i ]->Pre_dtor();
     aBool.Pre_dtor();
     aShort.Pre_dtor();
     aUShort.Pre_dtor();
@@ -256,9 +252,9 @@ RscTypCont :: ~RscTypCont(){
     delete aVersion.pClass;
     DestroyTree( pRoot );
 
-    while( NULL != (pRscTmp = aBaseLst.Remove()) ){
-        delete pRscTmp;
-    };
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
+        delete aBaseLst[ i ];
+    aBaseLst.clear();
 
     while( NULL != (pSysEntry = aSysLst.Remove()) ){
         delete pSysEntry;
@@ -309,12 +305,11 @@ RscTop * RscTypCont::SearchType( Atom nId )
     ELSE_IF( aLangString )
     ELSE_IF( aLangShort )
 
-    RscTop * pEle = aBaseLst.First();
-    while( pEle )
+    for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
     {
+        RscTop* pEle = aBaseLst[ i ];
         if( pEle->GetId() == nId )
             return pEle;
-        pEle = aBaseLst.Next();
     }
     return NULL;
 }
@@ -921,8 +916,8 @@ ERRTYPE RscTypCont::WriteCxx( FILE * fOutput, ULONG nFileKey,
 *************************************************************************/
 void RscTypCont::WriteSyntax( FILE * fOutput )
 {
-    for( sal_uInt32 i = 0; i < aBaseLst.Count(); i++ )
-        aBaseLst.GetObject( i )->WriteSyntaxHeader( fOutput, this );
+    for( size_t i = 0; i < aBaseLst.size(); i++ )
+        aBaseLst[ i ]->WriteSyntaxHeader( fOutput, this );
     RscEnumerateRef aEnumRef( this, pRoot, fOutput );
     aEnumRef.WriteSyntax();
 }

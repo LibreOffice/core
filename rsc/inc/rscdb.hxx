@@ -57,7 +57,7 @@ struct WriteRcContext
 
 /****************** R s c T y p C o n ************************************/
 // Liste die alle Basistypen enthaelt
-DECLARE_LIST( RscBaseList, RscTop * )
+typedef ::std::vector< RscTop* > RscBaseList;
 
 // Tabelle fuer Systemabhaengige Resourcen
 struct RscSysEntry
@@ -332,7 +332,7 @@ public:
     ByteString      GetSysSearchPath() const { return aSysSearchPath; }
     void        InsertType( RscTop * pType )
                 {
-                    aBaseLst.Insert( pType, LIST_APPEND );
+                    aBaseLst.push_back( pType );
                 }
     RscTop  *   SearchType( Atom nTypId );
     RscTop  *   Search( Atom typ );
