@@ -670,7 +670,6 @@ void OApplicationController::askToReconnect()
 void OApplicationController::onDocumentOpened( const ::rtl::OUString& _rName, const sal_Int32 _nType,
         const ElementOpenMode _eMode, const Reference< XComponent >& _xDocument, const Reference< XComponent >& _rxDefinition )
 {
-    OSL_PRECOND( _xDocument.is(), "OApplicationController::onDocumentOpened: illegal document!" );
     if ( !_xDocument.is() )
         return;
 
