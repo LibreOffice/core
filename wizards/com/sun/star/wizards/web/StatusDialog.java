@@ -84,11 +84,11 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_CLOSEABLE, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MOVEABLE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    Boolean.FALSE, new Integer(6 + 25 + (b ? 27 : 7)), hid, Boolean.TRUE, "StatusDialog", new Integer(102), new Integer(52), new Integer(0), res[0], new Integer(width)
+                    Boolean.FALSE, new Integer(6 + 25 + (b ? 27 : 7)), hid, Boolean.TRUE, "StatusDialog", 102, 52, 0, res[0], new Integer(width)
                 });
 
         short tabstop = 1;
@@ -100,7 +100,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                 },
                 new Object[]
                 {
-                    new Integer(8), taskName, new Integer(6), new Integer(6), new Short(tabstop++), new Integer(width * 2 / 3)
+                    8, taskName, 6, 6, new Short(tabstop++), new Integer(width * 2 / 3)
                 });
         lblCounter = insertLabel("lblCounter",
                 new String[]
@@ -109,7 +109,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                 },
                 new Object[]
                 {
-                    new Integer(8), "", new Integer(width * 2 / 3), new Integer(6), new Short(tabstop++), new Integer(width / 3 - 4)
+                    8, "", new Integer(width * 2 / 3), 6, new Short(tabstop++), new Integer(width / 3 - 4)
                 });
         progressBar = insertProgressBar("progress",
                 new String[]
@@ -118,7 +118,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                 },
                 new Object[]
                 {
-                    new Integer(10), new Integer(6), new Integer(16), new Short(tabstop++), new Integer(width - 12)
+                    10, 6, 16, new Short(tabstop++), new Integer(width - 12)
                 });
 
 
@@ -131,7 +131,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
                     },
                     new Object[]
                     {
-                        new Integer(14), res[1], new Integer(width / 2 - 20), new Integer(6 + 25 + 7), new Short(tabstop++), new Integer(40)
+                        14, res[1], new Integer(width / 2 - 20), new Integer(6 + 25 + 7), new Short(tabstop++), 40
                     });
         }
 
@@ -245,7 +245,7 @@ public class StatusDialog extends UnoDialog2 implements TaskListener
         try
         {
             this.parent = parent_;
-            Helper.setUnoPropertyValue(this.xDialogModel, "Title", title);
+            Helper.setUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_TITLE, title);
             try
             {
                 //TODO change this to another execute dialog method.
