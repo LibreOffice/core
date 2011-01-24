@@ -70,7 +70,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
             $(SLO)$/profile.obj  \
             $(SLO)$/time.obj     \
             $(SLO)$/signal.obj   \
-            $(SLO)$/pipeimpl.obj \
             $(SLO)$/pipe.obj     \
             $(SLO)$/util.obj     \
             $(SLO)$/file.obj\
