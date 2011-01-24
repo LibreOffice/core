@@ -595,7 +595,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
     XMLElement*   pXMLElement = NULL;
        PFormEntrys   *pEntrys    = NULL;
     XMLData       *data       = NULL;
-    XMLParentNode *parent     = NULL;
 
     String        sNewdata;
     ByteString sLId;
@@ -615,7 +614,6 @@ void HelpParser::ProcessHelp( LangHashMap* aLangHM , const ByteString& sCur , Re
         }
         if( pXMLElement != NULL )
         {
-            parent  = pXMLElement->GetParent();
             sLId    = pXMLElement->GetOldref();
             pResData->sId     =  sLId;
 

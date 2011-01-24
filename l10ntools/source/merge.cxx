@@ -402,7 +402,6 @@ void MergeDataFile::InsertEntry(
 /*****************************************************************************/
 {
     MergeData *pData;
-    BOOL bFound = FALSE;
 
     // uniquify the filename to save memory.
     ByteStringHashMap::const_iterator fit = aFilenames.find (rInFilename);
@@ -425,7 +424,6 @@ void MergeDataFile::InsertEntry(
         aMap.insert( MergeDataHashMap::value_type( sKey, pData ) );
     }
 
-    bFound = FALSE;
     PFormEntrys *pFEntrys = 0;
 
     // search for PFormEntrys
