@@ -141,14 +141,6 @@ enum SchXMLAxisAttrTokenMap
     XML_TOK_AXIS_STYLE_NAME
 };
 
-enum SchXMLLegendAttrMap
-{
-    XML_TOK_LEGEND_POSITION,
-    XML_TOK_LEGEND_X,
-    XML_TOK_LEGEND_Y,
-    XML_TOK_LEGEND_STYLE_NAME
-};
-
 enum SchXMLAutoStyleAttrMap
 {
     XML_TOK_AS_FAMILY,

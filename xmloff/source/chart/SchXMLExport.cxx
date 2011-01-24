@@ -35,6 +35,8 @@
 #include "SchXMLSeriesHelper.hxx"
 #include "ColorPropertySet.hxx"
 #include "SchXMLTools.hxx"
+#include "SchXMLEnumConverter.hxx"
+
 #include <tools/debug.hxx>
 #include <rtl/logfile.hxx>
 #include <comphelper/processfactory.hxx>
@@ -66,7 +68,7 @@
 
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
@@ -1416,69 +1418,50 @@ void SchXMLExportHelper_Impl::parseDocument( Reference< chart::XChartDocument >&
             Reference< beans::XPropertySet > xProp( rChartDoc->getLegend(), uno::UNO_QUERY );
             if( xProp.is())
             {
-                chart::ChartLegendPosition aLegendPos = chart::ChartLegendPosition_NONE;
+                // export legend anchor position
                 try
                 {
-                    Any aAny( xProp->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))));
-                    aAny >>= aLegendPos;
+                    Any aAny( xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Alignment" ))));
+                    if( SchXMLEnumConverter::getLegendPositionConverter().exportXML( msString, aAny, mrExport.GetMM100UnitConverter() ) )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
                 }
                 catch( beans::UnknownPropertyException & )
                 {
                     DBG_WARNING( "Property Align not found in ChartLegend" );
                 }
 
-                switch( aLegendPos )
+                // export absolute legend position
+                Reference< drawing::XShape > xLegendShape( xProp, uno::UNO_QUERY );
+                addPosition( xLegendShape );
+
+                // export legend size
+                const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
+                if( xLegendShape.is() && nCurrentODFVersion >= SvtSaveOptions::ODFVER_012 && nCurrentODFVersion == SvtSaveOptions::ODFVER_LATEST )//do not export legend-expansion to ODF 1.0 and export size only if extensions are enabled //#i28670# todo: change this dependent on fileformat evolution
                 {
-                    case chart::ChartLegendPosition_LEFT:
-//                      msString = GetXMLToken(XML_LEFT);
-                        // #i35421# change left->start (not clear why this was done)
-                        msString = GetXMLToken(XML_START);
-                        break;
-                    case chart::ChartLegendPosition_RIGHT:
-//                      msString = GetXMLToken(XML_RIGHT);
-                        // #i35421# change right->end (not clear why this was done)
-                        msString = GetXMLToken(XML_END);
-                        break;
-                    case chart::ChartLegendPosition_TOP:
-                        msString = GetXMLToken(XML_TOP);
-                        break;
-                    case chart::ChartLegendPosition_BOTTOM:
-                        msString = GetXMLToken(XML_BOTTOM);
-                        break;
-                    case chart::ChartLegendPosition_NONE:
-                    case chart::ChartLegendPosition_MAKE_FIXED_SIZE:
-                        // nothing
-                        break;
+                    try
+                    {
+                        chart::ChartLegendExpansion nLegendExpansion = chart::ChartLegendExpansion_HIGH;
+                        OUString aExpansionString;
+                        Any aAny( xProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "Expansion" ))));
+                        bool bHasExpansion = (aAny >>= nLegendExpansion);
+                        if( bHasExpansion && SchXMLEnumConverter::getLegendExpansionConverter().exportXML( aExpansionString, aAny, mrExport.GetMM100UnitConverter() ) )
+                        {
+                            mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION, aExpansionString );
+                            if( nLegendExpansion == chart::ChartLegendExpansion_CUSTOM)
+                            {
+                                awt::Size aSize( xLegendShape->getSize() );
+                                addSize( aSize, true );
+                                rtl::OUStringBuffer aAspectRatioString;
+                                SvXMLUnitConverter::convertDouble(aAspectRatioString, double(aSize.Width)/double(aSize.Height));
+                                mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION_ASPECT_RATIO, aAspectRatioString.makeStringAndClear() );
+                            }
+                        }
+                    }
+                    catch( beans::UnknownPropertyException & )
+                    {
+                        DBG_WARNING( "Property Expansion not found in ChartLegend" );
+                    }
                 }
-
-                // export anchor position
-                if( msString.getLength())
-                    mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_LEGEND_POSITION, msString );
-
-                // export absolute position
-                msString = OUString();
-                Reference< drawing::XShape > xShape( xProp, uno::UNO_QUERY );
-                if( xShape.is())
-                    addPosition( xShape );
-
-                // export size
-                chart2::LegendExpansion aLegendExpansion = chart2::LegendExpansion_HIGH;
-                try
-                {
-                    Any aAny( xProp->getPropertyValue(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM( "Expansion" ))));
-                    bool bHasExpansion = (aAny >>= aLegendExpansion);
-                    //todo
-                    //if (bHasExpansion)
-                    //   mrExport.AddAttribute( XML_NAMESPACE_STYLE, XML_LEGEND_EXPANSION,  );
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_WARNING( "Property Expansion not found in ChartLegend" );
-                }
-
-
             }
 
             // write style name
