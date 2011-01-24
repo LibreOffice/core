@@ -352,8 +352,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
 
         case SID_TWAIN_SELECT:
         {
-            BOOL bDone = FALSE;
-
             if( mxScannerManager.is() )
             {
                 try
@@ -364,7 +362,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
                     if( aContexts.getLength() )
                     {
                         ::com::sun::star::scanner::ScannerContext aContext( aContexts.getConstArray()[ 0 ] );
-                        bDone = mxScannerManager->configureScanner( aContext );
+                        mxScannerManager->configureScanner( aContext );
                     }
                 }
                 catch(...)

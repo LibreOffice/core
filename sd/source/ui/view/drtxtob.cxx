@@ -168,7 +168,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 {
     SfxWhichIter        aIter( rSet );
     USHORT              nWhich = aIter.FirstWhich();
-    BOOL                bTemplate = FALSE;
     SfxItemSet          aAttrSet( mpView->GetDoc()->GetPool() );
     SvtLanguageOptions  aLangOpt;
     sal_Bool            bDisableParagraphTextDirection = !aLangOpt.IsCTLFontEnabled();
@@ -236,7 +235,6 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     rSet.Put( SfxTemplateItem( nWhich, String() ) );
                 }
-                bTemplate = TRUE;
             }
             break;
 

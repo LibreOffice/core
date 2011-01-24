@@ -1384,7 +1384,6 @@ void PowerPointExport::WriteTextStyleLevel( FSHelperPtr pFS, int nInstance, int 
     OSL_ASSERT( nLevel >= 0 && nLevel < 5 );
     OSL_ASSERT( nInstance >= 0 && nInstance < 9 );
 
-    PPTExCharLevel rCharLevel = mpStyleSheet->GetCharSheet( nInstance ).maCharLevel[ nLevel ];
     PPTExParaLevel rParaLevel = mpStyleSheet->GetParaSheet( nInstance ).maParaLevel[ nLevel ];
 
     pFS->startElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ],

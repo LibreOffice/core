@@ -93,7 +93,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
     if( NULL == pSelectedPage )
     {
         SdPage* pPage = NULL;
-        USHORT nSelectedPage = 0;
         USHORT nPageCnt = (USHORT) mpDoc->GetSdPageCount(PK_STANDARD);
 
         for (USHORT i = 0; i < nPageCnt; i++)
@@ -101,10 +100,7 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
             pPage = mpDoc->GetSdPage(i, PK_STANDARD);
 
             if ( pPage->IsSelected() )
-            {
-                nSelectedPage = i;
                 pSelectedPage = pPage;
-            }
         }
 
         if( NULL == pSelectedPage )
