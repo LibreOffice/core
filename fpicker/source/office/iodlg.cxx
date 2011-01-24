@@ -1048,7 +1048,7 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
                     return 0;
             }
 
-#if defined( UNX ) || defined( FS_PRIV_DEBUG )
+#if defined( UNX )
             if ( ( 1 == aText.Len() ) && ( '~' == aText.GetBuffer()[0] ) )
             {
                 // go to the home directory
