@@ -43,7 +43,7 @@ class IntlWrapper;
 class SW_DLLPUBLIC SwFmtCharFmt: public SfxPoolItem, public SwClient
 {
     friend class SwTxtCharFmt;
-    SwTxtCharFmt* pTxtAttr;     // mein TextAttribut
+    SwTxtCharFmt* pTxtAttr;     // My text attribute.
 
 public:
     SwFmtCharFmt() : pTxtAttr(0) {}
@@ -73,7 +73,7 @@ public:
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-    // an das SwTxtCharFmt weiterleiten (vom SwClient)
+    // Pass to SwTxtCharFmt (from SwClient).
     virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL    GetInfo( SfxPoolItem& rInfo ) const;
 

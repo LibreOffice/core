@@ -101,16 +101,15 @@ namespace svx
 #define GOTOOBJ_GOTO_ANY        (USHORT) 31
 
 //! values can be combined via logival or
-#define FLYPROTECT_CONTENT      (USHORT)  1     // kann verodert werden!
+#define FLYPROTECT_CONTENT      (USHORT)  1
 #define FLYPROTECT_SIZE         (USHORT)  2
 #define FLYPROTECT_POS          (USHORT)  4
-#define FLYPROTECT_PARENT       (USHORT)  8     // nur Parents untersuchen
-#define FLYPROTECT_FIXED        (USHORT) 16     // nur nicht aufhebbarer Schutz
-                                                // z.B. durch OLE-Server, gilt auch
-                                                // fuer Dialog
+#define FLYPROTECT_PARENT       (USHORT)  8     // Check only parents.
+#define FLYPROTECT_FIXED        (USHORT) 16     // Only protection that cannot be withdrawn
+                                                // e.g. by OLE-server; also relevant for dialog.
 
-
-enum ObjCntType     //Fuer das Ermitteln des Cntnts per Positon (D&D)
+// For figuring out contents by position (D&D)
+enum ObjCntType
 {
     OBJCNT_NONE,
     OBJCNT_FLY,
@@ -121,26 +120,24 @@ enum ObjCntType     //Fuer das Ermitteln des Cntnts per Positon (D&D)
     OBJCNT_URLBUTTON,
 
     OBJCNT_GROUPOBJ,
-    OBJCNT_DONTCARE     // nicht bestimmbar - unterschiedliche Objecte selektiert
+    OBJCNT_DONTCARE     // Not determinable - different objects are selected.
 };
 
-//fuer GetAnyCurRect
+//For GetAnyCurRect
 enum CurRectType
 {
-    RECT_PAGE,                  //Rect der aktuellen Seite.
-    RECT_PAGE_CALC,             //... Seite wird ggf. Formatiert
-    RECT_PAGE_PRT,              //Rect der aktuellen PrtArea der Seite
-    RECT_FRM,                   //Rect des aktuellen Rahmen
-    RECT_FLY_EMBEDDED,          //Rect des aktuellen FlyFrm
-    RECT_FLY_PRT_EMBEDDED,      //Rect der PrtArea des FlyFrm
-    RECT_SECTION,               //Rect des aktuellen Bereichs
-    RECT_OUTTABSECTION,         //Rect des aktuellen Bereichs,
-                                // aber ausserhalb der Tabelle
-    RECT_SECTION_PRT,           //Rect der aktuellen PrtArea des Bereichs
-    RECT_OUTTABSECTION_PRT,     //Rect der aktuellen PrtArea des Bereichs,
-                                // aber ausserhalb der Tabelle
-    RECT_HEADERFOOTER,          //Rect des aktuellen Headers/Footer
-    RECT_HEADERFOOTER_PRT,      //Rect der PrtArea des aktuellen Headers/Footers
+    RECT_PAGE,                  // Rect of current page.
+    RECT_PAGE_CALC,             // ... page will be formated if required.
+    RECT_PAGE_PRT,              // Rect of current PrtArea of page.
+    RECT_FRM,                   // Rect of current frame.
+    RECT_FLY_EMBEDDED,          // Rect of current FlyFrm.
+    RECT_FLY_PRT_EMBEDDED,      // Rect of PrtArea of FlyFrm
+    RECT_SECTION,               // Rect of current section.
+    RECT_OUTTABSECTION,         // Rect of current section but outside of table.
+    RECT_SECTION_PRT,           // Rect of current PrtArea of section.
+    RECT_OUTTABSECTION_PRT,     // Rect of current PrtArea of section but outside table.
+    RECT_HEADERFOOTER,          // Rect of current header/footer
+    RECT_HEADERFOOTER_PRT,      // Rect of PrtArea of current headers/footers
 
     RECT_PAGES_AREA             //Rect covering the pages area
 };
@@ -190,7 +187,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     SW_DLLPRIVATE SwFlyFrm *FindFlyFrm() const;
     SW_DLLPRIVATE SwFlyFrm *FindFlyFrm( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >&  ) const;
 
-    //Actions fuer alle Shells beenden und ChangeLink rufen.
+    // Terminate actions for all shells and call ChangeLink.
     SW_DLLPRIVATE void EndAllActionAndCall();
 
     SW_DLLPRIVATE void ScrollTo( const Point &rPt );
@@ -201,7 +198,7 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
     // Returns a cell frame that is 'close' to rPt.
     SW_DLLPRIVATE const SwFrm *GetBox( const Point &rPt, bool* pbRow = 0, bool* pbCol = 0 ) const;
 
-    //0 == in keiner Spalte
+    // 0 == not in any column.
     SW_DLLPRIVATE USHORT _GetCurColNum( const SwFrm *pFrm,
                           SwGetCurColNumPara* pPara ) const;
 
@@ -212,13 +209,13 @@ class SW_DLLPUBLIC SwFEShell : public SwEditShell
 
     SW_DLLPRIVATE ObjCntType GetObjCntType( const SdrObject& rObj ) const;
 
-    // Methoden fuers kopieren von DrawObjecten
+    // Methods for copying of draw objects.
     SW_DLLPRIVATE BOOL CopyDrawSel( SwFEShell* pDestShell, const Point& rSttPt,
                                 const Point& rInsPt, BOOL bIsMove,
                                 BOOL bSelectInsert );
 
-    // get list of marked SdrObjects;
-    // helper method for GetSelFrmType, IsSelContainsControl
+    // Get list of marked SdrObjects;
+    // helper method for GetSelFrmType, IsSelContainsControl.
     SW_DLLPRIVATE const SdrMarkList* _GetMarkList() const;
 
     SW_DLLPRIVATE BOOL CheckHeadline( bool bRepeat ) const;
@@ -234,39 +231,40 @@ public:
     SwFEShell( SwEditShell& rShell, Window *pWin );
     virtual ~SwFEShell();
 
-    // Copy und Paste Methoden fuer das interne Clipboard
+    // Copy and Paste methods for internal clipboard.
     BOOL Copy( SwDoc* pClpDoc, const String* pNewClpTxt = 0 );
     BOOL Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames = sal_False);
-    //paste some pages into another doc - used in mailmerge
+
+    //Paste some pages into another doc - used in mailmerge.
     BOOL PastePages( SwFEShell& rToFill, USHORT nStartPage, USHORT nEndPage);
-    // Copy-Methode fuer Drag&Drop
+
+    // Copy-Method for Drag&Drop
     BOOL Copy( SwFEShell*, const Point& rSttPt, const Point& rInsPt,
                 BOOL bIsMove = FALSE, BOOL bSelectInsert = TRUE );
 
     void SelectFlyFrm( SwFlyFrm& rFrm, BOOL bNew = FALSE );
 
-    // befindet sich der selektierte Rahmen innerhalb eines anderen?
+    // Is selected frame within another frame?
     const SwFrmFmt* IsFlyInFly();
 
-//SS fuer DrawObjekte und Rahmen-----------------------------
 
-    //Wenn ein Objekt angegeben wurde, so wird genau diese Markiert (anstatt
-    //ueber die Position zu suchen.
+    // If an object as been given, exactly this object is selected
+    // (instead of searching over position).
     BOOL SelectObj( const Point& rSelPt, BYTE nFlag = 0, SdrObject *pObj = 0 );
     void DelSelectedObj();
 
-    //Selektion nach oben unten bewegen (Z-Order).
-    //TRUE  == ganz nach oben/unten
-    //FALSE == einen ueberholen
+    // Move selection upwards or downwards (Z-Order).
+    // TRUE = to top or bottom.
+    // FALSE = run past one other.
     void SelectionToTop   ( BOOL bTop = TRUE );
     void SelectionToBottom( BOOL bBottom = TRUE );
 
-    short GetLayerId() const;   //1 Heaven, 0 Hell, -1 Uneindeutig
-    void  SelectionToHeaven();  //Ueber dem Dokument
-    void  SelectionToHell();    //Unter dem Dokument
+    short GetLayerId() const;   // 1 Heaven, 0 Hell, -1 Ambiguous.
+    void  SelectionToHeaven();  // Above document.
+    void  SelectionToHell();    // Below document.
 
-    // folgende zwei Methoden returnen den enum SdrHdlKind, um sich ein
-    // includen von SVDRAW.HXX zu ersparen als int deklariert.
+    // The following two methods return enum SdrHdlKind.
+    // Declared as int in order to spare including SVDRAW.HXX.
     bool IsObjSelectable( const Point& rPt );
     int IsInsideSelectedObj( const Point& rPt );    //!! returns enum values
 
@@ -282,10 +280,10 @@ public:
     // sophisticated one day.
     bool IsDirectlyInSection() const;
 
-    //Returnwerte siehe oben FrmType.
-    //pPt: Crsr bzw. DocPos; bStopAtFly: Bei Flys anhalten oder ueber den Anchor weitergehen
-    // Obgleich (0,TRUE) eine Art Standard ist, sind die Parameter nicht defaultet, damit
-    // bei jeder Benutzung insbesondere das bStopAtFly bewusst genutzt wird.
+    // For return valies see above FrmType.
+    // pPt: Cursr or DocPos respectively; bStopAtFly: Stop at flys or continue over anchor.
+    // Although (0,TRUE) is kind of a standard, the parameters are not defaulted here
+    // in order to force more conscious use especially of bStopAtFly.
     USHORT GetFrmType( const Point *pPt, BOOL bStopAtFly ) const;
     USHORT GetSelFrmType() const;               //Selektion (Drawing)
 
@@ -297,9 +295,10 @@ public:
     ObjCntType GetObjCntType( const Point &rPt, SdrObject *&rpObj ) const;
     ObjCntType GetObjCntTypeOfSelection( SdrObject** ppObj = 0 ) const;
 
-    //Zum Anpassen der PosAttr bei Ankerwechseln.
+    // For adjustment of PosAttr when anchor changes.
     SwRect  GetObjRect() const;
-    //Zum Verschieben von Flys mit der Tastatur
+
+    // For moving flys with keyboard.
     SwRect  GetFlyRect() const;
     // i#17567 - adjustments to allow negative vertical positions for fly frames anchored
     //          to paragraph or to character.
@@ -315,7 +314,7 @@ public:
                         Point* _opRef = NULL,
                         Size* _opPercent = NULL ) const;
 
-    // Groesse von Drawobjekten setzen
+    // Set size of draw objects.
     void SetObjRect( const SwRect& rRect );
 
     long BeginDrag( const Point *pPt, BOOL bProp );
@@ -323,31 +322,31 @@ public:
     long EndDrag  ( const Point *pPt, BOOL bProp );
     void BreakDrag();
 
-    //Methoden fuer die Statuszeile.
-    Point GetAnchorObjDiff() const; //Abstand zum Anker
-    Point GetObjAbsPos()     const; //Absolute Position
-    Size  GetObjSize()       const; //Groesse, ggf. die umschliessende
+    //Methods for status line.
+    Point GetAnchorObjDiff() const;
+    Point GetObjAbsPos()     const;
+    Size  GetObjSize()       const;
 
-    //SS fuer die BriefUmschlaege: hole alle Seitengebundenen Objekte
-    //und setze diese auf eine neue Seite.
+    // SS for envelopes: get all page-bound objects and set them to new page.
     void GetPageObjs( SvPtrarr& rFillArr );
     void SetPageObjsNewPage( SvPtrarr& rFillArr, int nOffset = 1 );
 
-    // zeige die aktuelle Selektion an ( ggfs. den Rahmen/DrawObject)
+    // Show current selection (frame / draw object as required).
     virtual void MakeSelVisible();
 
-    // returne das FrmFmt von dem evt. unter dem Point stehenden Object.
-    // Das Object wird nicht selektiert!
+    // Return FrmFmt of object that may be under Point.
+    // Object does not become selected!
     const SwFrmFmt* GetFmtFromObj( const Point& rPt, SwRect** pRectToFill = 0 ) const;
-    // returns a format too, if the point is over the text of any fly
+
+    // Returns a format too, if the point is over the text of any fly.
     const SwFrmFmt* GetFmtFromAnyObj( const Point& rPt ) const;
 
-    //Welcher Schutz ist am selektierten Objekt gesetzt?
-    //!! returns several flags in BYTE
+    // Which Protection is set at selected object?
+    //!! Returns several flags in BYTE.
     BYTE IsSelObjProtected( USHORT /*FLYPROTECT_...*/ eType ) const;
 
-    //Liefert neben der Grafik in rName bei gelinkten Grafiken den Namen mit
-    //Pfad und sonst den Grafiknamen. rbLink ist TRU bei gelinkten Grafiken.
+    // Deliver graphic in rName besides graphic name. If graphic is
+    // linked give name with path. rbLink is TRUE if graphic is linked.
     const Graphic *GetGrfAtPos( const Point &rDocPos,
                                 String &rName, BOOL &rbLink ) const;
 
@@ -356,7 +355,6 @@ public:
     const String GetObjDescription() const;
     void SetObjDescription( const String& rDescription );
 
-//SS fuer Rahmen --------------------------------------------
 
     BOOL IsFrmSelected() const;
     BOOL GetFlyFrmAttr( SfxItemSet &rSet ) const;
@@ -366,85 +364,84 @@ public:
                          SwFrmFmt *pParent = 0 );
     void SetFlyPos( const Point &rAbsPos);
     Point FindAnchorPos( const Point &rAbsPos, BOOL bMoveIt = FALSE );
-    // determines whether a frame or its environment is vertically formatted and right-to-left
+
+    // Determines whether a frame or its environment is vertically formatted and right-to-left.
     BOOL IsFrmVertical(BOOL bEnvironment, BOOL& bRightToLeft) const;
 
-    SwFrmFmt* GetCurFrmFmt() const; //Wenn Rahmen, dann Rahmenvorlage, sonst 0
-    void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //Wenn Rahmen, dann Rahmenvorlage setzen
+    SwFrmFmt* GetCurFrmFmt() const; //If frame then frame style, else 0.
+    void SetFrmFmt( SwFrmFmt *pFmt, BOOL bKeepOrient = FALSE, Point* pDocPos = 0 ); //If frame then set frame style.
     const SwFlyFrm *GetCurrFlyFrm() const { return FindFlyFrm(); }
 
-    // finde/loeschen den Fly, in dem der Cursor steht
+    // Find/delete fly containing the cursor.
     SwFrmFmt* WizzardGetFly();
 
-    //Selebstaendiges selektieren von Flys
+    // Independent selecting of flys.
     BOOL GotoNextFly( USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY )
                                 { return GotoObj( TRUE, eType ); }
     BOOL GotoPrevFly( USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_FLY_ANY)
                                 { return GotoObj( FALSE, eType); }
 
-    //iterieren ueber Flys - fuer Basic-Collections
+   // Iterate over flys  - for Basic-collections.
     USHORT GetFlyCount( FlyCntType eType = FLYCNTTYPE_ALL ) const;
     const SwFrmFmt* GetFlyNum(USHORT nIdx, FlyCntType eType = FLYCNTTYPE_ALL) const;
 
-    //Wenn ein fly selectiert ist, zieht er den Crsr in den ersten CntntFrm
+    // If a fly is selected, it draws cursor into the first CntntFrm.
     const SwFrmFmt* SelFlyGrabCrsr();
 
     //Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
     const SwFrmFmt* GetFlyFrmFmt() const;
           SwFrmFmt* GetFlyFrmFmt();
 
-    //OLE, Server fordert neue Groesse an, die gewuenschten Werte werden
-    //als Rahmenattribute eingestellt. Wenn die Werte nicht erlaubt sind,
-    //so wird von der Formatierung geclippt und eine Scalierung eingestellt.
-    //siehe CalcAndSetScale().
+    // OLE. Server requires new size. Desired values are adjusted as frame attributes.
+    // If the values are not allowed, the formating clips and determines scaling.
+    // See CalcAndSetScale().
     // The return value is the applied size.
     Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
     //The layout has been changed, so the active object has to be moved after that
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
 
-    //Der Client fuer das OleObject muss bezueglich der Scalierung auf dem
-    //neuesten Stand gehalten werden. Impl in der WrtShell.
-    //Wird ein Pointer auf eine Size uebergeben, so ist diese die aktuelle
-    //Core-Groesse des Objectes. Anderfalls wird die Groesse per GetCurFlyRect()
-    //besorgt.
+    // Client for OleObject has to be up-to-date regarding scaling.
+    // Implemented in WrtShell.
+    // If a pointer is passed on a size, this is the object's current core-size.
+    // Else the size is provided via GetCurFlyRect().
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
                                   const SwRect *pFlyFrmRect = 0 ) = 0;
 
-    //Objekte mit ActivateWhenVisible werden beim Paint Connected.
-    //gerufen von notxtfrm::Paint, impl in wrtsh
+    // Connect objects with ActivateWhenVisible at Paint.
+    // Called by notxtfrm::Paint, implemented in wrtsh.
     virtual void ConnectObj( svt::EmbeddedObjectRef&,
                              const SwRect &rPrt,
                              const SwRect &rFrm ) = 0;
 
-    //Sichbaren Bereich auf das Object setzen, wenn es noch nicht sichtbar ist.
+    // Set visible range on object, if it is not yet visible.
     void MakeObjVisible( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& ) const;
 
-    // check resize of OLE-Object
+    // Check resize of OLE-Object.
     BOOL IsCheckForOLEInCaption() const         { return bCheckForOLEInCaption; }
     void SetCheckForOLEInCaption( BOOL bFlag )  { bCheckForOLEInCaption = bFlag; }
 
-    // setze am selektierten FlyFrame einen Namen
+    // Set name at selected FlyFrame.
     void SetFlyName( const String& rName );
     const String& GetFlyName() const;
 
-    // erezeuge eindeutige Namen fuer Rahmen
+    // Created unique name for frame.
     String GetUniqueGrfName() const;
     String GetUniqueOLEName() const;
     String GetUniqueFrameName() const;
 
-    // springe zum benannten Rahmen (Grafik/OLE)
+    // Jump to named Fly (graphic/OLE).
     BOOL GotoFly( const String& rName, FlyCntType eType = FLYCNTTYPE_ALL,
                     BOOL bSelFrame = TRUE );
-    // steht an der Position eine Grafik mit einer URL ?
+
+    // Position is a graphic with URL?
     const SwFrmFmt* IsURLGrfAtPos( const Point& rPt, String* pURL = 0,
                                     String *pTargetFrameName = 0,
                                     String *pURLDescription = 0 ) const;
 
-    //Fuer das Chain wird immer der durch das Format spezifizierte Fly
-    //mit dem durch den Point getroffenen verbunden.
-    //In rRect wird das Rect des Flys geliefert (fuer Highlight desselben)
+    // For Chain always connect Fly specified by format with that hit by point.
+    // rRect contains rect of Fly (for its highlight).
     int Chainable( SwRect &rRect, const SwFrmFmt &rSource, const Point &rPt ) const;
     int Chain( SwFrmFmt &rSource, const Point &rPt );
     int Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest );
@@ -454,38 +451,33 @@ public:
 
     Size GetGraphicDefaultSize() const;
 
-//SS fuer DrawObjekte ---------------------
-
-    //Temporaer um Bug zu umgehen.
+    // Temporary work around for bug.
     void CheckUnboundObjects();
 
-    //Achtung: Uneindeutikeiten bei Mehrfachselektionen.
+    // Attention: Ambiguities if multiple selections.
     BOOL GetObjAttr( SfxItemSet &rSet ) const;
     BOOL SetObjAttr( const SfxItemSet &rSet );
 
     const SdrObject* GetBestObject( BOOL bNext, USHORT eType = GOTOOBJ_DRAW_ANY, BOOL bFlat = TRUE, const ::svx::ISdrObjectFilter* pFilter = NULL );
     BOOL GotoObj( BOOL bNext, USHORT /*GOTOOBJ_...*/ eType = GOTOOBJ_DRAW_ANY);
 
-    //Setzen vom DragMode (z.B. Rotate), tut nix bei Rahmenselektion.
+    // Set DragMode (e.g. Rotae), but do nothing when frame is selected.
     void SetDragMode( UINT16 eSdrDragMode );
 
-    USHORT IsObjSelected() const;   //Liefert gleich die Anzahl der Objekte,
-                                    //zaehlt aber nicht die Objekte in Gruppen.
+    USHORT IsObjSelected() const;   // Returns object count, but doesn't count the objects in groups.
     sal_Bool IsObjSelected( const SdrObject& rObj ) const;
 
-    void EndTextEdit();             //Loescht ggf. das Objekt.
+    void EndTextEdit();             // Deletes object if required.
 
-    //Ankertyp des selektierten Objektes, -1 bei Uneindeutigkeit oder
-    //Rahmenselektion; FLY_AT_PAGE bzw. FLY_AT_PARA aus frmatr.hxx sonst.
+    // Anchor type of selected object, -1 if ambiguous or in case of frame selection.
+    // Else FLY_AT_PAGE or FLY_AT_PARA resp. from frmatr.hxx.
     short GetAnchorId() const;
 
-    //Erzeugen von DrawObjekten, beim Begin wird der Objekttyp mitgegeben.
-    //Beim End kann ein Cmd mitgegeben werden, hier ist ggf.
-    //SDRCREATE_RESTRAINTEND fuer Ende oder SDRCREATE_NEXTPOINT fuer ein
-    //Polygon relevant. Nach dem RESTRAINTEND ist das Objekt erzeugt und
-    //selektiert.
-    //Mit BreakCreate wird der Vorgang abgebrochen, dann ist kein Objekt
-    //mehr selektiert.
+    // Process of creating draw objects. At the beginning object type is passed.
+    // At the end a Cmd can be passed. Here, SDRCREATE_RESTRAINTEND for end
+    // or SDRCREATE_NEXTPOINT for a polygon may be relevant.
+    // After RESTRAINTEND the object is created and selected.
+    // BreakCreate interrupts the process. In this case no object is selected.
     BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Point &rPos );
     BOOL BeginCreate( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, UINT32 eObjInventor, const Point &);
     void MoveCreate ( const Point &rPos );
@@ -500,26 +492,26 @@ public:
     BOOL EndMark  ();
     void BreakMark();
 
-    //Gruppe erzeugen, aufloesen, nix bei Rahmenselektion.
-    BOOL IsGroupSelected();     //Kann auch eine Mischselektion sein!
-    void GroupSelection();      //Hinterher ist die Gruppe selektiert.
-    void UnGroupSelection();    //Die Einzelobjekte sind Selektiert
-                                //Es koennen noch immer Gruppen dabei sein.
+    // Create and destroy group, don't when frame is selected.
+    BOOL IsGroupSelected();     // Can be a mixed selection!
+    void GroupSelection();      // Afterwards the group is selected.
+    void UnGroupSelection();    // The individual objects are selected, but
+                                // it is possible that there are groups included.
 
     bool IsGroupAllowed() const;
 
-    void MirrorSelection( BOOL bHorizontal );   //Bei FALSE Vertikal
+    void MirrorSelection( BOOL bHorizontal );   //Vertical if FALSE.
 
-    //frmatr.hxx. Hier kein enum wg. Abhaengigkeiten
-    //Der BOOL ist nur fuer internen Gebrauch! Anker wird nur - anhand der
-    //aktuellen Dokumentposition - neu gesetzt aber nicht umgesetzt.
+    // frmatr.hxx. Here no enum because of dependencies.
+    // BOOL value only for internal use! Anchor is newly set according
+    // to current document position. Anchor is not re-set.
     void ChgAnchor( int eAnchorId, BOOL bSameOnly = FALSE,
                                    BOOL bPosCorr = TRUE );
 
     BOOL SetDrawingAttr( SfxItemSet &rSet );
 
-    // hole die selectierten DrawObj als Grafik (MetaFile/Bitmap)
-    // Return-Wert besagt ob konvertiert wurde!!
+    // Get selected DrawObj as graphics (MetaFile/Bitmap).
+    // Return value indicates if it was converted.
     BOOL GetDrawObjGraphic( ULONG nFmt, Graphic& rGrf ) const;
 
     void Paste( SvStream& rStm, USHORT nAction, const Point* pPt = 0 );
@@ -536,26 +528,26 @@ public:
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
 
-    // Insertion of a drawing object which have to be already inserted in the DrawModel
+    // Insertion of a drawing object which have to be already inserted in the DrawModel.
     void InsertDrawObj( SdrObject& rDrawObj,
                         const Point& rInsertPosition );
 
     BOOL ReplaceSdrObj( const String& rGrfName, const String& rFltName,
                         const Graphic* pGrf = 0 );
 
-//------------------------------------------
 
-    //Auskunft ueber naechstliegenden Inhalt zum uebergebenen Point
+
+    // Provide information about content situated closes to given Point.
     Point GetCntntPos( const Point& rPoint, BOOL bNext ) const;
 
-    //convert document position into position relative to the current page
+    // Convert document position into position relative to the current page.
     Point GetRelativePagePosition(const Point& rDocPos);
 
-    //Layout-Selektion Hiden/Zeigen und aufruf an die CrsrSh weiterreichen.
+    // Hide or show layout-selection and pass call to CrsrSh.
     void ShLooseFcs();
     void ShGetFcs( BOOL bUpdate = TRUE );
 
-    //PageDescriptor-Schnittstelle
+    // PageDescriptor-interface
     void   ChgCurPageDesc( const SwPageDesc& );
     USHORT GetCurPageDesc( const BOOL bCalcFrm = TRUE ) const;
     USHORT GetMousePageDesc( const Point &rPt ) const;
@@ -575,8 +567,8 @@ public:
                                  const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& =
                                  ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >() ) const;
 
-    //Seitennummer der Seite in der der Point liegt, 0 wenn keine
-    //getroffen ist.
+
+    // Page number of the page containing Point, O if no page.
     USHORT GetPageNumber( const Point &rPoint ) const;
     BOOL GetPageNumber( long nYPos, BOOL bAtCrsrPos, USHORT& rPhyNum, USHORT& rVirtNum, String &rDisplay ) const;
 
@@ -584,43 +576,42 @@ public:
                 const SfxItemSet* pFlyAttrSet = 0,
                 const SfxItemSet* pGrfAttrSet = 0,
                 SwFrmFmt* = 0 );
-    BOOL    FinishOLEObj();                             // Server wird beendet
+    BOOL    FinishOLEObj(); //Shutdown server.
 
-    //Attribute der Tabelle besorgen/setzen.
     void GetTblAttr( SfxItemSet & ) const;
     void SetTblAttr( const SfxItemSet & );
 
-    //Tabelle vollstaendig selektiert?
     BOOL HasWholeTabSelection() const;
-    //Ist der Inhalt einer Tabellenzelle oder mindestens eine Tabellenzelle
-    //vollstaendig selektiert ist
+
+    // Is content of a table cell or at least a table cell completely selected?
     BOOL HasBoxSelection() const;
 
     BOOL InsertRow( USHORT nCnt, BOOL bBehind );
-    BOOL InsertCol( USHORT nCnt, BOOL bBehind );  // 0 == am Ende
+    BOOL InsertCol( USHORT nCnt, BOOL bBehind );  // 0 == at the end.
     BOOL DeleteCol();
     BOOL DeleteRow();
 
-    BOOL DeleteTblSel();        //Aktuelle Selektion, ggf. die ganze Tabelle.
+    BOOL DeleteTblSel();        // Current selection, may be whole table.
 
-    USHORT MergeTab();          //Merged selektierte Tabellenteile zusammen
-                                //Fehler ueber enum zurueck
-    // Zelle Vertikal oder Horizontal splitten.
+    USHORT MergeTab();          // Merge selected parts of table.
+                                // Return error via enum.
+
+    // Split cell vertically or horizontally.
     BOOL SplitTab( BOOL nVert = TRUE, USHORT nCnt = 1, BOOL bSameHeight = FALSE );
-    BOOL Sort(const SwSortOptions&);    //Sortieren.
+    BOOL Sort(const SwSortOptions&);
 
     void SetRowHeight( const SwFmtFrmSize &rSz );
-    //Der Pointer muss vom Aufrufer zerstoert werden wenn != 0
+
+    // Pointer must be detroyed by caller != 0.
     void GetRowHeight( SwFmtFrmSize *&rpSz ) const;
 
     void SetRowSplit( const SwFmtRowSplit &rSz );
     void GetRowSplit( SwFmtRowSplit *&rpSz ) const;
 
     void   SetBoxAlign( USHORT nOrient );
-    USHORT GetBoxAlign() const;         //USHRT_MAX fuer uneindeutig!
+    USHORT GetBoxAlign() const;         // USHRT_MAX if ambiguous.
 
-    //Ausgleichen der Zeilenhoehen. Mit bTstOnly festellen ob mehr als eine
-    //Zeile markiert ist.
+    // Adjustment of Rowheights. Determine via bTstOnly if more than one row is selected.
     BOOL BalanceRowHeight( BOOL bTstOnly );
 
     void SetTabBorders( const SfxItemSet& rSet );
@@ -631,16 +622,16 @@ public:
     void GetTabBackground( SvxBrushItem &rToFill ) const;
 
     void SetBoxBackground( const SvxBrushItem &rNew );
-    BOOL GetBoxBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
+    BOOL GetBoxBackground( SvxBrushItem &rToFill ) const; //FALSE ambiguous.
 
     void SetBoxDirection( const SvxFrameDirectionItem& rNew );
-    BOOL GetBoxDirection( SvxFrameDirectionItem& rToFill ) const; //FALSE uneindeutig
+    BOOL GetBoxDirection( SvxFrameDirectionItem& rToFill ) const; //FALSE ambiguous.
 
     void SetRowBackground( const SvxBrushItem &rNew );
-    BOOL GetRowBackground( SvxBrushItem &rToFill ) const; //FALSE uneindeutig
+    BOOL GetRowBackground( SvxBrushItem &rToFill ) const; //FALSE ambiguous.
 
     BYTE WhichMouseTabCol( const Point &rPt ) const;
-    void GetTabCols( SwTabCols &rToFill ) const; //Spalten- und Randinfo.
+    void GetTabCols( SwTabCols &rToFill ) const; // Info about columns and margins.
     void SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly = TRUE );
     void GetMouseTabCols( SwTabCols &rToFill, const Point &rPt ) const;
     void SetMouseTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
@@ -654,10 +645,10 @@ public:
     void GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const;
     void SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const Point &rPt );
 
-    void ProtectCells();    //Falls eine Tabselektion besteht, wird sie ver-
-                            // nichtet, wenn der Cursor nicht in Readonly darf
-    void UnProtectCells();  // auf die Tabellenselektin
-    void UnProtectTbls();   //bei allen Tabellen in der Selektion den Schutz aufheben
+    void ProtectCells();    // If a table selection exists it is destroyed in case
+                            // cursor is not allowed in readonly.
+    void UnProtectCells();  // Refers to table selection.
+    void UnProtectTbls();   // Unprotect all tables in selection.
     BOOL HasTblAnyProtection( const String* pTblName = 0,
                                 BOOL* pFullTblProtection = 0 );
     BOOL CanUnProtectCells() const;
@@ -665,63 +656,63 @@ public:
     USHORT GetRowsToRepeat() const;
     void SetRowsToRepeat( USHORT nNumOfRows );
     USHORT GetVirtPageNum( const BOOL bCalcFrm = TRUE );
-    //returns the number of table rows currently selected
-    //if the selection start at the top of the table
+
+    //Returns the number of table rows currently selected
+    //if the selection start at the top of the table.
     USHORT    GetRowSelectionFromTop() const;
 
     BOOL IsInRepeatedHeadline() const { return CheckHeadline( true ); }
     BOOL IsInHeadline() const { return CheckHeadline( false ); }
 
-    //Stellt die Breiten der Zellen so ein, dass der Inhalt moeglichst
-    //nicht umgebrochen werden muss.
-    //bBalance sorgt fuer einen Ausgleich der markierten Spalten.
+    // Adjusts cell widths in such a way, that their content
+    // does not need to be wrapped (if possible).
+    // bBalance provides for adjustment of selected columns.
     void AdjustCellWidth( BOOL bBalance = FALSE );
-    //Nicht erlaubt, wenn nur  leere Zellen selektiert sind.
+
+    // Not allowed if only empty cells are selected.
     BOOL IsAdjustCellWidthAllowed( BOOL bBalance = FALSE ) const;
 
-    //Ausgleich der Zellenbreiten, mit bTstOnly feststellen, ob mehr als
-    //eine Zelle markiert ist.
+    // Adjustment of cell-widths; determine via bTstOnly if more than one cell is selected.
     BOOL BalanceCellWidth( BOOL bTstOnly );
 
-        // AutoFormat fuer die Tabelle/TabellenSelection
+    // AutoFormat for table/ table selection.
     BOOL SetTableAutoFmt( const SwTableAutoFmt& rNew );
-        // Erfrage wie attributiert ist
+
     BOOL GetTableAutoFmt( SwTableAutoFmt& rGet );
-        // aender eine  Zellenbreite/-Hoehe/Spaltenbreite/Zeilenhoehe
+
     BOOL SetColRowWidthHeight( USHORT eType, USHORT nDiff = 283 );
-        // Autosumme
+
     BOOL GetAutoSum( String& rFml ) const;
 
-    //Phy:  Tatsaechliche Seitenanzahl.
-    //Virt: Vom User evtl. gesetzten Offset mit einbeziehen.
+    // Phy: real page count.
+    // Virt: consider offset that may have been set by user.
     USHORT  GetPhyPageNum();
 
-    // Setzt an der aktuellen Postion einen neuen Page Offset
     void SetNewPageOffset( USHORT nOffset );
-    void SetPageOffset( USHORT nOffset );   //Aendert den letzten Page Offset
-    USHORT GetPageOffset() const;           //Liefert den letzten Page Offset
+    void SetPageOffset( USHORT nOffset );   //Changes last page offset.
+    USHORT GetPageOffset() const;           //Returns last page offset.
 
-    //SS fuer Beschriftungen
     void InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
                       const String& rNumberSeparator,
                       const BOOL bBefore, const USHORT nId,
                       const String& rCharacterStyle,
                       const BOOL bCpyBrd = TRUE );
 
-    //Das Lineal will auch noch etwas von uns wissen.
-    USHORT GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == in keiner Spalte
+    // The ruler needs some information too.
+    USHORT GetCurColNum( SwGetCurColNumPara* pPara = 0 ) const; //0 == not in any column.
     USHORT GetCurMouseColNum( const Point &rPt,
                             SwGetCurColNumPara* pPara = 0 ) const;
-    USHORT GetCurTabColNum() const;     //0 == in keiner Tabelle
+    USHORT GetCurTabColNum() const;     //0 == not in any table.
     USHORT GetCurMouseTabColNum( const Point &rPt ) const;
-    USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // aktuelle aeussere Spalte
+    USHORT GetCurOutColNum( SwGetCurColNumPara* pPara = 0 ) const;  // Current outer column.
 
     BOOL IsTableRightToLeft() const;
     BOOL IsMouseTableRightToLeft( const Point &rPt ) const;
     BOOL IsTableVertical() const;
 
     BOOL IsLastCellInRow() const;
-    // Die Breite des aktuellen Bereichs fuer Spaltendialog
+
+    // Width of current range for column-dialog.
     long GetSectionWidth( SwFmt& rFmt ) const;
 
     void GetConnectableFrmFmts
