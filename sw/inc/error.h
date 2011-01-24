@@ -31,18 +31,16 @@
 
 #define ERR_SWGBASE 25000
 
-/*** Error Codes **********************************************************/
+// Error Codes.
 #define ERR_VAR_IDX                 (ERR_SWGBASE+ 0)
 #define ERR_OUTOFSCOPE              (ERR_SWGBASE+ 1)
 
-/* Error Codes fuer Numerierungsregeln */
 #define ERR_NUMLEVEL                (ERR_SWGBASE+ 2)
 
-/* Error Codes fuer TxtNode */
+// Error Codes for TxtNode.
 #define ERR_NOHINTS                 (ERR_SWGBASE+ 3)
 
-// von _START bis _END sind in der COREDL.DLL entsprechende Strings
-// abgelegt, die erfragt werden koennen.
+// Strings to be queried are in COREDL.DLL from _START to _END.
 #define ERR_SWGMSG_START            (ERR_VAR_IDX)
 #define ERR_SWGMSG_END              (ERR_NOHINTS)
 

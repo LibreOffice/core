@@ -36,7 +36,7 @@
 
 #define INVALID_INDEX STRING_NOTFOUND
 
-// Maximale Anzahl von Indizies im IndexArray (zum Abtesten auf Ueberlaeufe)
+// Maximal count of indices in IndexArray (for testing on overflows).
 class SwIndex;
 class SwIndexReg;
 struct SwPosition;
@@ -61,7 +61,7 @@ class SW_DLLPUBLIC SwIndex
     SwIndex *pNext, *pPrev;
 
     SwIndex& ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue );
-    void Remove();                  // Ausketten
+    void Remove();
 
 public:
     explicit SwIndex(SwIndexReg *const pReg, xub_StrLen const nIdx = 0);
@@ -99,15 +99,12 @@ public:
     INLINE SwIndex& operator=( xub_StrLen );
     SwIndex& operator=( const SwIndex & );
 
-    // gebe den Wert vom Index als xub_StrLen zurueck
     xub_StrLen GetIndex() const { return nIndex; }
 
-    // ermoeglicht Zuweisungen ohne Erzeugen eines temporaeren
-    // Objektes
+    // Assignments without creating a temporary object.
     SwIndex &Assign(SwIndexReg *,xub_StrLen);
 
-        // Herausgabe des Pointers auf das IndexArray,
-        // (fuers RTTI am SwIndexReg)
+    // Returns pointer to IndexArray (for RTTI at SwIndexReg).
     const SwIndexReg* GetIdxReg() const { return pArray; }
 };
 
@@ -120,9 +117,8 @@ class SwIndexReg
 
     const SwIndex *pFirst, *pLast, *pMiddle;
 
-    // ein globales Array, in das Indizies verschoben werden, die mal
-    // temporaer "ausgelagert" werden muessen; oder die zum Zeitpunkt des
-    // anlegens kein gueltiges Array kennen (SwPaM/SwPosition!)
+    // A global array for holding indices that need to be "swapped" temporarily
+    // or do not know a valid array (SwPaM/SwPosition!).
     friend void _InitCore();
     friend void _FinitCore();
     static SwIndexReg* pEmptyIndexArray;

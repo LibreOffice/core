@@ -43,11 +43,10 @@ class SwFmtFld;
 class _SetGetExpFlds;
 class SwEditShell;
 
-// Vorwaertsdeklaration: besorge den "Body-TextNode", fuer Exp.Fld in Fly's
-//                      Header/Footers/Footnodes
+// Forward declaration: get "BodyTxtNode" for exp.fld in Fly's headers/footers/footnotes.
 const SwTxtNode* GetBodyTxtNode( const SwDoc& pDoc, SwPosition& rPos,
                                  const SwFrm& rFrm );
-// Wandlung Address -> Adressen
+
 void ReplacePoint(String& sTmpName, BOOL bWithCommandType = FALSE);
 
 struct _SeqFldLstElem
@@ -70,26 +69,17 @@ public:
     BOOL SeekEntry( const _SeqFldLstElem& , USHORT* pPos = 0 );
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Ausdruck
- --------------------------------------------------------------------*/
-
 class SwGetExpFieldType : public SwValueFieldType
 {
 public:
         SwGetExpFieldType(SwDoc* pDoc);
         virtual SwFieldType*    Copy() const;
 
-        // ueberlagert, weil das Get-Field nicht veraendert werden kann
-        // und dann auch nicht aktualisiert werden muss. Aktualisierung
-        // erfolgt beim Aendern von Set-Werten !
+        // Overlay, because get-field cannot be changed and therefore
+        // does not need to be updated. Update at changing of set-values!
 
         virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung: GetExperession
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwGetExpField : public SwFormulaField
 {
@@ -112,17 +102,19 @@ public:
     inline const String&        GetExpStr() const;
     inline void                 ChgExpStr(const String& rExpand);
 
-    // wird von der Formatierung abgefragt
+    // Called by formating.
     inline BOOL                 IsInBodyTxt() const;
-    // wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+
+    // Set by UpdateExpFlds where node position is known.
     inline void                 ChgBodyTxtFlag( BOOL bIsInBody );
-    // fuer Felder in Header/Footer/Footnotes/Flys:
-    // (wird nur von der Formatierung aufgerufen!!)
+
+    // For fields in header/footer/footnotes/flys:
+    // Only called by formating!!
     void                        ChangeExpansion( const SwFrm&, const SwTxtFld& );
 
     virtual String              GetCntnt(BOOL bName = FALSE) const;
 
-    // Die Formel aendern
+    // Change formula.
     virtual String              GetPar2() const;
     virtual void                SetPar2(const String& rStr);
 
@@ -142,18 +134,13 @@ inline void SwGetExpField::ChgExpStr(const String& rExpand)
 inline const String& SwGetExpField::GetExpStr() const
     { return sExpand;   }
 
-// wird von der Formatierung abgefragt
+// Called by formating.
 inline BOOL SwGetExpField::IsInBodyTxt() const
     { return bIsInBodyTxt; }
 
-// wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+// Set by UpdateExpFlds where node position is known.
 inline void SwGetExpField::ChgBodyTxtFlag( BOOL bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: Ausdruck setzen
- --------------------------------------------------------------------*/
 
 class SwSetExpField;
 
@@ -181,8 +168,7 @@ public:
     BOOL                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( BOOL b )    { bDeleted = b; }
 
-    // ueberlagert, weil das Set-Field selbst dafuer sorgt, das
-    // es aktualisiert wird.
+    // Overlay, because set-field takes care for its being updated by itself.
     virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
     inline const String&    GetSetRefName() const;
 
@@ -191,14 +177,15 @@ public:
     USHORT GetSeqFldList( SwSeqFldList& rList );
     String MakeSeqName( USHORT nSeqNo );
 
-    // Seqencefelder ggfs. Kapitelweise numerieren
+    // Number sequence fields chapterwise if required.
     const String& GetDelimiter() const      { return sDelim; }
     void SetDelimiter( const String& s )    { sDelim = s; }
     BYTE GetOutlineLvl() const              { return nLevel; }
     void SetOutlineLvl( BYTE n )            { nLevel = n; }
     void SetChapter( SwSetExpField& rFld, const SwNode& rNd );
-    // Member nur fuers SwDoc::UpdateExpFld - wird nur waehrend der Laufzeit
-    // von SequencefeldTypen benoetigt!!!
+
+    // Member only for SwDoc::UpdateExpFld.
+    // It is needed only at runtime of sequence field types!
     const SwNode* GetOutlineChgNd() const   { return pOutlChgNd; }
     void SetOutlineChgNd( const SwNode* p ) { pOutlChgNd = p; }
 
@@ -218,10 +205,6 @@ inline USHORT SwSetExpFieldType::GetType() const
 inline const String& SwSetExpFieldType::GetSetRefName() const
     { return sName; }
 
-
-/*--------------------------------------------------------------------
-    Beschreibung: Ausdruck
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwSetExpField : public SwFormulaField
 {
@@ -256,14 +239,14 @@ public:
 
     inline BOOL                 IsSequenceFld() const;
 
-    // fuer SequenceFelder - logische Nummer
+    // Logical number, sequence fields.
     inline void                 SetSeqNumber( USHORT n )    { nSeqNo = n; }
     inline USHORT               GetSeqNumber() const        { return nSeqNo; }
 
-    // Der Name nur erfragen
+    // Query name only.
     virtual const String&       GetPar1()   const;
 
-    // Die Formel
+    // Query formula.
     virtual String              GetPar2()   const;
     virtual void                SetPar2(const String& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
@@ -291,9 +274,6 @@ inline BOOL SwSetExpField::GetInputFlag() const
 inline BOOL SwSetExpField::IsSequenceFld() const
     { return 0 != (nsSwGetSetExpType::GSE_SEQ & ((SwSetExpFieldType*)GetTyp())->GetType()); }
 
-/*--------------------------------------------------------------------
-    Beschreibung: Eingabe im Text/Variable setzen
- --------------------------------------------------------------------*/
 
 class SwInputFieldType : public SwFieldType
 {
@@ -306,9 +286,6 @@ public:
     SwDoc* GetDoc() const { return pDoc; }
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Eingabefeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwInputField : public SwField
 {
@@ -318,7 +295,7 @@ class SW_DLLPUBLIC SwInputField : public SwField
     String  aToolTip;
     USHORT  nSubType;
 public:
-    // Direkte Eingabe ueber Dialog alten Wert loeschen
+    // Direct input via dialog; delete old value.
     SwInputField(SwInputFieldType*, const String& rContent ,
                  const String& rPrompt, USHORT nSubType = 0,
                  ULONG nFmt = 0);
@@ -366,12 +343,11 @@ public:
     void        PushCrsr();
     void        PopCrsr();
 
-    // vergleiche TmpLst mit akt Feldern. Alle neue kommen in die SortLst
-    // damit sie geupdatet werden koennen. Returnt die Anzahl.
-    // (Fuer Textbausteine: nur seine Input-Felder aktualisieren)
+    // Put all that are new into SortLst for updating. Returns count.
+    // (For Glossary: only update its input-fields).
+    // Compare TmpLst with current fields.
     USHORT      BuildSortLst();
 
-    // Alle unselektierten Felder aus Liste entfernen
     void        RemoveUnselectedFlds();
 
 private:
@@ -380,11 +356,7 @@ private:
     SvPtrarr        aTmpLst;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Tabellen-Formelfeld
-                  (Implementierung steht in tblcalc.cxx)
- --------------------------------------------------------------------*/
-
+// Implementation in tblcalc.cxx.
 class SwTblFieldType : public SwValueFieldType
 {
 public:
@@ -398,7 +370,7 @@ class SwTblField : public SwValueField, public SwTableFormula
     String      sExpand;
     USHORT      nSubType;
 
-    // suche den TextNode, in dem das Feld steht
+    // Search TextNode containing the field.
     virtual const SwNode* GetNodeOfFormula() const;
 
 public:
@@ -414,11 +386,11 @@ public:
     const String&       GetExpStr() const               { return sExpand; }
     void                ChgExpStr(const String& rStr)   { sExpand = rStr; }
 
-    // berechne sich selbst
     void                CalcField( SwTblCalcPara& rCalcPara );
 
     virtual String      GetCntnt(BOOL bName = FALSE) const;
-    // Die Formel
+
+    // The formula.
     virtual String      GetPar2()   const;
     virtual void        SetPar2(const String& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;

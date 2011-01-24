@@ -34,19 +34,19 @@
 #include <sal/types.h>
 #include "swdllapi.h"
 
-extern BOOL bAssert;                // TRUE, wenn eine ASSERT Box hochkam
+extern BOOL bAssert;                // TRUE, if an ASSERT Box popped up.
 
 
 // -----------------------------------------------------------------------
-// Ausgabe einer Fehlermeldung inkl. Dateiname und Zeilennummer
-// wo der Fehler auftrat.
-// Die Funktion darf nicht direkt benutzt werden!
+// Return an error message including file name and line number indicating
+// where the error occured.
+// The function may not be used directly!
 // -----------------------------------------------------------------------
 SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char* );
 
 // -----------------------------------------------------------------------
-// Prueft ob die angegebene Bedingung wahr ist, wenn nicht wird eine
-// Fehlermeldung die ueber die ID Identifiziert wird, ausgegeben.
+// Check if the given condition is true. If not, an error message,
+// identified via the ID, will be returned.
 // -----------------------------------------------------------------------
 #define ASSERT_ID( cond, id ) \
     if( !(cond) ) { \
@@ -56,8 +56,7 @@ SW_DLLPUBLIC void AssertFail( USHORT, const sal_Char* );
 
 
 // -----------------------------------------------------------------------
-// Beim Bilden der Produktversion werden alle Debug-Utilities automatisch
-// ignoriert
+// When building for production all debugging utilities are ignored automatically.
 // -----------------------------------------------------------------------
 #else
 #define ASSERT_ID( cond, id )       ;
