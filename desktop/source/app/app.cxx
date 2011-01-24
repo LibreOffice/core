@@ -1988,7 +1988,7 @@ void Desktop::doShutdown()
     FlushConfiguration();
     // The acceptors in the AcceptorMap must be released (in DeregisterServices)
     // with the solar mutex unlocked, to avoid deadlock:
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     DeregisterServices();
     Application::AcquireSolarMutex(nAcquireCount);
     tools::DeInitTestToolLib();
