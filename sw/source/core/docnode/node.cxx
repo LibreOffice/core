@@ -1012,9 +1012,6 @@ SwCntntNode::SwCntntNode( const SwNodeIndex &rWhere, const BYTE nNdType,
     SwNode( rWhere, nNdType ),
     pCondColl( 0 ),
     mbSetModifyAtAttr( false )
-#ifdef OLD_INDEX
-    ,SwIndexReg(2)
-#endif
 {
 }
 
