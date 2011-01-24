@@ -111,7 +111,7 @@ ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
 //-----------------------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
 {
-    sal_uLong nReturn = --m_nRefCount;
+    ULONG nReturn = --m_nRefCount;
     if ( m_nRefCount == 0 )
         delete this;
 
