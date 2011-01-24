@@ -827,13 +827,6 @@ SAL_CALL osl_mapFile(
         return osl_File_E_OVERFLOW;
     SIZE_T const nLength = sal::static_int_cast< SIZE_T >(uLength);
 
-    OSVERSIONINFO osinfo;
-    osinfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-    (void)::GetVersionEx(&osinfo);
-
-    if (VER_PLATFORM_WIN32_NT != osinfo.dwPlatformId)
-        return osl_File_E_NOSYS; // Unsupported
-
     FileMapping aMap( ::CreateFileMapping (pImpl->m_hFile, NULL, SEC_COMMIT | PAGE_READONLY, 0, 0, NULL) );
     if (!IsValidHandle(aMap.m_handle))
         return oslTranslateFileError( GetLastError() );
