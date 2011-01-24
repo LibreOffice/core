@@ -187,7 +187,7 @@ public class DBMetaData
             }
             catch (Exception e)
             {
-                e.printStackTrace(System.out);
+                Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             }
         }
         return oNumberFormatter;
@@ -215,9 +215,9 @@ public class DBMetaData
             xNameAccess = UnoRuntime.queryInterface( XNameAccess.class, xDatabaseContext );
             DataSourceNames = xNameAccess.getElementNames();
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
     }
 
@@ -326,9 +326,9 @@ public class DBMetaData
 // TODO: Performance leak getColumns() take very long.
                 xColumns = UnoRuntime.queryInterface( XNameAccess.class, xCommandCols.getColumns() );
             }
-            catch (Exception exception)
+            catch (Exception e)
             {
-                exception.printStackTrace(System.out);
+                Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             }
         }
         public XNameAccess getColumns()
@@ -357,7 +357,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         return bHasEscapeProcessing;
     }
@@ -453,7 +453,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return - 1;
         }
     }
@@ -507,7 +507,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
     }
 
@@ -530,7 +530,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         return isSQL92CheckEnabled;
     }
@@ -579,9 +579,9 @@ public class DBMetaData
                 xModel = xDocu.getDatabaseDocument();
             }
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
     }
 
@@ -596,9 +596,9 @@ public class DBMetaData
         try
         {
             XConnection xConnection = null;
-            if (Properties.hasPropertyValue(curproperties, "ActiveConnection"))
+            if (Properties.hasPropertyValue(curproperties, PropertyNames.ACTIVE_CONNECTION))
             {
-                xConnection = UnoRuntime.queryInterface( XConnection.class, Properties.getPropertyValue( curproperties, "ActiveConnection" ) );
+                xConnection = UnoRuntime.queryInterface( XConnection.class, Properties.getPropertyValue( curproperties, PropertyNames.ACTIVE_CONNECTION ) );
                 if (xConnection != null)
                 {
                     com.sun.star.container.XChild child = UnoRuntime.queryInterface( com.sun.star.container.XChild.class, xConnection );
@@ -653,15 +653,15 @@ public class DBMetaData
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         catch (UnknownPropertyException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         catch (WrappedTargetException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
 
         return false;
@@ -684,7 +684,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
     }
@@ -703,7 +703,7 @@ public class DBMetaData
             getDataSourceInterfaces();
             if (bPasswordIsRequired == false)
             {
-                DBConnection = _dataSource.getConnection("", "");
+                DBConnection = _dataSource.getConnection(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
                 bgetConnection = true;
             }
             else
@@ -746,11 +746,11 @@ public class DBMetaData
             }
             return bgetConnection;
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
             String sMsgConnectionImpossible = oResource.getResText(RID_DB_COMMON + 35);
             showMessageBox("ErrorBox", VclWindowPeerAttribute.OK, sMsgConnectionImpossible);
-            exception.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
     }
@@ -767,7 +767,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return 0;
         }
     }
@@ -784,7 +784,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return 0;
         }
     }
@@ -816,7 +816,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
     }
@@ -852,7 +852,7 @@ public class DBMetaData
             XPropertySet xPSet = UnoRuntime.queryInterface( XPropertySet.class, oQuery );
 
             String s = _oSQLQueryComposer.m_xQueryAnalyzer.getQuery();
-            xPSet.setPropertyValue("Command", s);
+            xPSet.setPropertyValue(PropertyNames.COMMAND, s);
 
             XNameContainer xNameCont = UnoRuntime.queryInterface( XNameContainer.class, xQueryDefs );
             m_connectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY, _QueryName);
@@ -877,13 +877,13 @@ public class DBMetaData
             }
             exception.printStackTrace(System.out);
         }
-        catch (SQLException exception)
+        catch (SQLException e)
         {
-            callSQLErrorMessageDialog(exception, null);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         return false;
     }
@@ -949,7 +949,7 @@ public class DBMetaData
 
             NamedValueCollection creationArgs = new NamedValueCollection();
             creationArgs.put( PropertyNames.PROPERTY_NAME, basename );
-            creationArgs.put( "URL", documentURL );
+            creationArgs.put( PropertyNames.URL, documentURL );
             creationArgs.put( "AsTemplate", i_createTemplate );
             XMultiServiceFactory xDocMSF = UnoRuntime.queryInterface( XMultiServiceFactory.class, _xDocNameAccess );
             Object oDBDocument = xDocMSF.createInstanceWithArguments( "com.sun.star.sdb.DocumentDefinition", creationArgs.getPropertyValues() );
@@ -962,7 +962,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
     }
 
@@ -992,7 +992,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
         }
         return sColValues;
     }
@@ -1006,7 +1006,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return null;
         }
     }
@@ -1020,7 +1020,7 @@ public class DBMetaData
         }
         catch (SQLException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return null;
         }
     }
@@ -1041,7 +1041,7 @@ public class DBMetaData
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger( DBMetaData.class.getName() ).log( Level.SEVERE, null, e );
             return false;
         }
     }

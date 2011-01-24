@@ -371,7 +371,7 @@ public class PropertySetHelper
      */
     public void showProperties()
     {
-        String sName = "";
+        String sName = PropertyNames.EMPTY_STRING;
 
         if (m_xPropertySet != null)
         {

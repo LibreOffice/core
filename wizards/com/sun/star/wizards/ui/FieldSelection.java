@@ -317,7 +317,7 @@ public class FieldSelection
             Object btnmoveup = CurUnoDialog.insertButton("cmdMoveUp" + sIncSuffix, SOCMDMOVEUP, new ActionListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -327,7 +327,7 @@ public class FieldSelection
             Object btnmovedown = CurUnoDialog.insertButton("cmdMoveDown" + sIncSuffix, SOCMDMOVEDOWN, new ActionListenerImpl(),
                     new String[]
                     {
-                        PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -336,8 +336,8 @@ public class FieldSelection
 
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveselected, AccessTextMoveSelected);
             CurUnoDialog.getPeerConfiguration().setAccessibleName(btnremoveselected, AccessTextRemoveSelected);
-            CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, "", "~"));
-            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelectedFieldsListBox, JavaTools.replaceSubString(slblSelFields, "", "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xFieldsListBox, JavaTools.replaceSubString(slblFields, PropertyNames.EMPTY_STRING, "~"));
+            CurUnoDialog.getPeerConfiguration().setAccessibleName(xSelectedFieldsListBox, JavaTools.replaceSubString(slblSelFields, PropertyNames.EMPTY_STRING, "~"));
             if (btnmoveall != null)
             {
                 CurUnoDialog.getPeerConfiguration().setAccessibleName(btnmoveall, AccessTextMoveAll);
@@ -402,7 +402,7 @@ public class FieldSelection
             String NeighborItem = NewItemList[iSelIndex + iNeighbor];
             NewItemList[iSelIndex + iNeighbor] = CurItem;
             NewItemList[iSelIndex] = NeighborItem;
-            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", NewItemList);
+            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, NewItemList);
             xSelectedFieldsListBox.selectItem(CurItem, true);
             if (xFieldSelection != null)
             {
@@ -497,10 +497,10 @@ public class FieldSelection
         try
         {
             toggleListboxControls(Boolean.FALSE);
-            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", new String[]
+            CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, new String[]
                     {
                     });
-            CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", new String[]
+            CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, new String[]
                     {
                     });
         }
@@ -670,14 +670,14 @@ public class FieldSelection
 
     public String[] getSelectedFieldNames()
     {
-        return (String[]) CurUnoDialog.getControlProperty("lstSelFields" + sIncSuffix, "StringItemList");
+        return (String[]) CurUnoDialog.getControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST);
     }
 
     public void setSelectedFieldNames(String[] _sfieldnames)
     {
-        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, _sfieldnames);
         String[] sleftboxfieldnames = JavaTools.removefromList(xFieldsListBox.getItems(), _sfieldnames);
-        CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, "StringItemList", sleftboxfieldnames);
+        CurUnoDialog.setControlProperty("lstFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, sleftboxfieldnames);
     }
 
     public void setModified(boolean _bModified)
@@ -692,6 +692,6 @@ public class FieldSelection
 
     public void changeSelectedFieldNames(String[] _sfieldnames)
     {
-        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, "StringItemList", _sfieldnames);
+        CurUnoDialog.setControlProperty("lstSelFields" + sIncSuffix, PropertyNames.STRING_ITEM_LIST, _sfieldnames);
     }
 }

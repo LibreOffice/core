@@ -210,7 +210,7 @@ public class PrimaryKeyHandler implements XFieldSelectionListener
             }
         }
         String selfield = lstSinglePrimeKey.getSelectedItem();
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lstSinglePrimeKey), "StringItemList", fieldnames);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lstSinglePrimeKey), PropertyNames.STRING_ITEM_LIST, fieldnames);
         if (selfield != null)
         {
             if (JavaTools.FieldInList(fieldnames, selfield) > -1)

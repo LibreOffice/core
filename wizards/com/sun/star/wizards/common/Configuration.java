@@ -97,7 +97,7 @@ public abstract class Configuration
         Object o = getNode(name, parent);
         if (AnyConverter.isVoid(o))
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         return (String) o;
     }
@@ -213,7 +213,7 @@ public abstract class Configuration
 
     public static String getOfficeLocaleString(XMultiServiceFactory xMSF)
     {
-        String sLocale = "";
+        String sLocale = PropertyNames.EMPTY_STRING;
         try
         {
             Locale aLocLocale = new Locale();

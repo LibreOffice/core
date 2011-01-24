@@ -76,7 +76,7 @@ public class GridControl extends Shape
                 FieldColumn curfieldcolumn = fieldcolumns[i];
                 if (curfieldcolumn.getFieldType() == DataType.TIMESTAMP)
                 {
-                    TimeStampControl oControl = new TimeStampControl(new Resource(_xMSF, "", "dbw"), this, curfieldcolumn);
+                    TimeStampControl oControl = new TimeStampControl(new Resource(_xMSF, PropertyNames.EMPTY_STRING, "dbw"), this, curfieldcolumn);
                 }
                 else
                 {

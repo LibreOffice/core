@@ -50,6 +50,7 @@ import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.text.ViewHandler;
 import com.sun.star.wizards.ui.PathSelection;
@@ -172,7 +173,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
             // synchronize GUI and CGAgenda object.
             makeDA();
-            if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase("")) {myPathSelection.initializePath();}
+            if(myPathSelection.xSaveTextBox.getText().equalsIgnoreCase(PropertyNames.EMPTY_STRING)) {myPathSelection.initializePath();}
 
             executeDialog(agendaTemplate.xFrame);
             removeTerminateListener();
@@ -212,7 +213,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
     private void initializePaths() {
         try {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
+            sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         } catch (NoValidPathException e) {
             e.printStackTrace();
@@ -221,14 +222,14 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
 
     private void checkSavePath() {
         if (agenda.cp_TemplatePath == null ||
-                agenda.cp_TemplatePath.equals("") ||
+                agenda.cp_TemplatePath.equals(PropertyNames.EMPTY_STRING) ||
                 !getFileAccess().exists(FileAccess.getParentDir(agenda.cp_TemplatePath),false) ||
                 !getFileAccess().isDirectory(FileAccess.getParentDir(agenda.cp_TemplatePath )))
             {
                 try  {
                     agenda.cp_TemplatePath =
                         FileAccess.connectURLs(
-                            FileAccess.getOfficePath(xMSF, "Work", "", "") ,
+                            FileAccess.getOfficePath(xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING) ,
                             resources.resDefaultFilename
                         );
                 }
@@ -243,7 +244,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     private void makeDA() {
 
-        setControlProperty("listPageDesign", "StringItemList", agendaTemplates[0]);
+        setControlProperty("listPageDesign", PropertyNames.STRING_ITEM_LIST, agendaTemplates[0]);
 
         checkSavePath();
         //setFilename(agenda.cp_TemplatePath);
@@ -420,7 +421,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
      */
     private void setFilename(String url) {
         try {
-            String path = getFileAccess().getPath(url,"");
+            String path = getFileAccess().getPath(url,PropertyNames.EMPTY_STRING);
             Helper.setUnoPropertyValue( getModel(myPathSelection.xSaveTextBox), "Text", path);
         }
         catch (Exception ex) {
@@ -463,7 +464,7 @@ public class AgendaWizardDialogImpl extends AgendaWizardDialog
         try {
             FileAccess fileAccess = new FileAccess(xMSF);
             sPath = myPathSelection.getSelectedPath();
-            if (sPath.equals("")) {
+            if (sPath.equals(PropertyNames.EMPTY_STRING)) {
                 myPathSelection.triggerPathPicker();
                 sPath = myPathSelection.getSelectedPath();
             }
