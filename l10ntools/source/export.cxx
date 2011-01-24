@@ -35,6 +35,7 @@
 #include "tokens.h"
 #include "utf8conv.hxx"
 #include <iostream>
+#include <vector>
 
 extern "C" { int yyerror( char * ); }
 extern "C" { int YYWarning( char * ); }
@@ -55,7 +56,7 @@ Export *pExport = 0L;
 #define STATE_LANGUAGES 0X000B
 
 // set of global variables
-DECLARE_LIST( FileList, ByteString * )
+typedef ::std::vector< ByteString* > FileList;
 FileList aInputFileList;
 BOOL bEnableExport;
 BOOL bMergeMode;
@@ -151,7 +152,7 @@ extern char *GetOutputFile( int argc, char* argv[])
                     return NULL;    // no valid command line
                 }
                 case STATE_INPUT: {
-                    aInputFileList.Insert( new ByteString( argv[ i ]), LIST_APPEND );
+                    aInputFileList.push_back( new ByteString( argv[ i ] ) );
                     bInput = TRUE; // min. one source file found
                 }
                 break;
@@ -219,7 +220,7 @@ int EndExport()
 
 extern const char* getFilename()
 {
-    return (*(aInputFileList.GetObject( 0 ))).GetBuffer();
+    return (*(aInputFileList[ 0 ])).GetBuffer();
 }
 /*****************************************************************************/
 extern FILE *GetNextFile()
@@ -233,14 +234,14 @@ extern FILE *GetNextFile()
         aTemp.Kill();
     }
 
-    while ( aInputFileList.Count()) {
-        ByteString sFileName( *(aInputFileList.GetObject( 0 )));
+    while ( !aInputFileList.empty() ) {
+        ByteString sFileName( *(aInputFileList[ 0 ]) );
 
         ByteString sOrigFile( sFileName );
 
         sFileName = Export::GetNativeFile( sFileName );
-        delete aInputFileList.GetObject(( ULONG ) 0 );
-        aInputFileList.Remove(( ULONG ) 0 );
+        delete aInputFileList[ 0 ];
+        aInputFileList.erase( aInputFileList.begin() );
 
         if ( sFileName == "" ) {
             fprintf( stderr, "ERROR: Could not precompile File %s\n",
