@@ -1964,24 +1964,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             // Update aller Indizies
             Update( rDestStart, nLen, FALSE, TRUE );
         }
-#ifdef CUTNOEXPAND
-        else
-            // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
-            if ( 0 < nLen && 0 < nInitSize && m_pSwpHints )
-            {
-                // check if there was the end of an attribute at the insertion
-                // position: if it is not a field, it must be expanded
-                for ( USHORT n = 0; n < m_pSwpHints->Count(); n++ )
-                {
-                    SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(n);
-                    const xub_StrLen * const pEndIdx = pHt->GetEnd();
-                    if ( pEndIdx  && (*pEndIdx == nInitSize) )
-                    {
-                        *pEndIdx = *pEndIdx + nLen;
-                    }
-                }
-            }
-#endif
+
         CHECK_SWPHINTS(this);
 
         Update( rStart, nLen, TRUE, TRUE );
@@ -2023,24 +2006,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             // Update aller Indizies
             pDest->Update( rDestStart, nLen, FALSE, TRUE);
         }
-#ifdef CUTNOEXPAND
-        else
-            // wird am Ende eingefuegt, nur die Attribut-Indizies verschieben
-            if ( 0 < nLen && 0 < nInitSize && pDest->m_pSwpHints )
-            {
-                // check if there was the end of an attribute at the insertion
-                // position: if it is not a field, it must be expanded
-                for ( USHORT n = 0; n < pDest->m_pSwpHints->Count(); n++ )
-                {
-                    SwTxtAttr * const pHt = pDest->m_pSwpHints->GetTextHint(n);
-                    const xub_StrLen * const pEndIdx = pHt->GetEnd();
-                    if ( pEndIdx  && (*pEndIdx == nInitSize) )
-                    {
-                        *pEndIdx = *pEndIdx + nLen;
-                    }
-                }
-            }
-#endif
+
         CHECK_SWPHINTS(pDest);
 
         const xub_StrLen nEnd = rStart.GetIndex() + nLen;
