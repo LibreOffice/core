@@ -791,11 +791,6 @@ void ScTextWnd::Resize()
         long nDiff =  aSize.Height()
                     - LogicToPixel( Size( 0, GetTextHeight() ) ).Height();
 
-#ifdef OS2_DOCH_NICHT
-        nDiff-=2;       // wird durch 2 geteilt
-                        // passt sonst nicht zur normalen Textausgabe
-#endif
-
         aSize.Width() -= 2 * TEXT_STARTPOS - 1;
 
         pEditView->SetOutputArea(
