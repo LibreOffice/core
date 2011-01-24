@@ -520,7 +520,6 @@ namespace /* private */
 
     oslFileError _osl_resolvepath(
         /*inout*/ sal_Unicode* path,
-        /*inout*/ sal_Unicode* current_pos,
         /*inout*/ bool* failed)
     {
         oslFileError ferr = osl_File_E_None;
@@ -537,7 +536,6 @@ namespace /* private */
                 if (!TextToUnicode(resolved_path, strlen(resolved_path), path, PATH_MAX))
                     return oslTranslateFileError(OSL_FET_ERROR, ENAMETOOLONG);
 
-                current_pos = ustrtoend(path) - 1;
             }
             else
             {
@@ -619,7 +617,6 @@ namespace /* private */
                     {
                         ferr = _osl_resolvepath(
                             path_resolved_so_far,
-                            presolvedsf,
                             &realpath_failed);
 
                         if (osl_File_E_None != ferr)
@@ -638,7 +635,6 @@ namespace /* private */
                 {
                     ferr = _osl_resolvepath(
                         path_resolved_so_far,
-                        presolvedsf,
                         &realpath_failed);
 
                     if (osl_File_E_None != ferr)
@@ -664,7 +660,6 @@ namespace /* private */
                 {
                     ferr = _osl_resolvepath(
                         path_resolved_so_far,
-                        presolvedsf,
                         &realpath_failed);
 
                     if (osl_File_E_None != ferr)

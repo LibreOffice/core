@@ -697,8 +697,7 @@ static oslFileError oslDoMoveFile( const sal_Char* pszPath, const sal_Char* pszD
 
     if ( tErr != osl_File_E_None )
     {
-        oslFileError tErrRemove;
-        tErrRemove=osl_psz_removeFile(pszDestPath);
+        osl_psz_removeFile(pszDestPath);
         return tErr;
     }
 
