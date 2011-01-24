@@ -62,14 +62,14 @@ class SVT_DLLPUBLIC SvtTabAppearanceCfg : public utl::ConfigItem
     short           nScaleFactor        ;
     short           nSnapMode           ;
     short           nMiddleMouse;
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     short           nAAMinPixelHeight   ;
 #endif
 
     BOOL            bMenuMouseFollow        ;
     BOOL            bSingleLineTabCtrl      ;
     BOOL            bColoredTabCtrl         ;
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     BOOL            bFontAntialiasing       ;
 #endif
 
@@ -107,7 +107,7 @@ public:
     void        SetSingleLineTabCtrl(BOOL bSet) {bSingleLineTabCtrl = bSet; SetModified();}
     BOOL        IsSingleLineTabCtrl()const {return   bSingleLineTabCtrl;}
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     void        SetFontAntiAliasing( BOOL bSet )    { bFontAntialiasing = bSet; SetModified(); }
     BOOL        IsFontAntiAliasing() const { return bFontAntialiasing; }
 

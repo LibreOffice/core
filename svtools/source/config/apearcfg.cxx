@@ -56,13 +56,13 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     ,nScaleFactor       ( DEFAULT_SCALEFACTOR )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MOUSE_MIDDLE_AUTOSCROLL )
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
     ,bMenuMouseFollow(FALSE)
     ,bSingleLineTabCtrl(FALSE)
     ,bColoredTabCtrl(FALSE)
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     ,bFontAntialiasing  ( TRUE )
 #endif
 {
@@ -89,7 +89,7 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
                     case  5: bColoredTabCtrl = *(sal_Bool*)pValues->getValue(); break; //"Dialog/ColoredTab",
                     case  6: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
                     case  7: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
                     case  8: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
                     case  9: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
 #endif
@@ -118,7 +118,7 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
             ,"Dialog/ColoredTab"                 //  5
             ,"Dialog/MousePositioning"           //  6
             ,"Dialog/MiddleMouseButton"          //  7
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
             ,"FontAntiAliasing/Enabled"         //  8
             ,"FontAntiAliasing/MinPixelHeight"  //  9
 #endif
@@ -153,7 +153,7 @@ void  SvtTabAppearanceCfg::Commit()
             case  5: pValues[nProp].setValue(&bColoredTabCtrl, rType); break; //"Dialog/ColoredTab",
             case  6: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
             case  7: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
             case  8: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
             case  9: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
 #endif
@@ -234,7 +234,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hAppStyle.SetScreenZoom( nScaleFactor );
     hAppStyle.SetScreenFontZoom( nScaleFactor );
 
-#if defined( UNX ) || defined ( FS_PRIV_DEBUG )
+#if defined( UNX )
     // font anti aliasing
     hAppStyle.SetAntialiasingMinPixelHeight( nAAMinPixelHeight );
     hAppStyle.SetDisplayOptions( bFontAntialiasing ? 0 : DISPLAY_OPTION_AA_DISABLE );
