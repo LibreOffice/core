@@ -735,10 +735,8 @@ void OMarkableInputStream::skipBytes(sal_Int32 nBytesToSkip)
         );
 
     // this method is blocking
-    sal_Int32 nRead;
     Sequence<sal_Int8> seqDummy( nBytesToSkip );
-
-    nRead = readBytes( seqDummy , nBytesToSkip );
+    readBytes( seqDummy , nBytesToSkip );
 }
 
 sal_Int32 OMarkableInputStream::available(void) throw (NotConnectedException, RuntimeException)
