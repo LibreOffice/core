@@ -1847,12 +1847,15 @@ private:
 // = UnoControlListBoxModel
 // =====================================================================================================================
 // ---------------------------------------------------------------------------------------------------------------------
-UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XMultiServiceFactory >& i_factory )
+UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XMultiServiceFactory >& i_factory, ConstructorMode const i_mode )
     :UnoControlListBoxModel_Base( i_factory )
     ,m_pData( new UnoControlListBoxModel_Data( *this ) )
     ,m_aItemListListeners( GetMutex() )
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXListBox );
+    if ( i_mode == ConstructDefault )
+    {
+        UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXListBox );
+    }
 }
 // ---------------------------------------------------------------------------------------------------------------------
 UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource )
@@ -1870,6 +1873,7 @@ IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName
 {
     return ::rtl::OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
+
 // ---------------------------------------------------------------------------------------------------------------------
 uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
@@ -2717,7 +2721,7 @@ ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
 UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XMultiServiceFactory >& i_factory )
-    :UnoControlListBoxModel( i_factory )
+    :UnoControlListBoxModel( i_factory, ConstructWithoutProperties )
 {
     UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXComboBox );
 }

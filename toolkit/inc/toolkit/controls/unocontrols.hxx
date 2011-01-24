@@ -732,8 +732,18 @@ typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlModel
                                             >   UnoControlListBoxModel_Base;
 class TOOLKIT_DLLPUBLIC UnoControlListBoxModel : public UnoControlListBoxModel_Base
 {
+protected:
+    enum ConstructorMode
+    {
+        ConstructDefault,
+        ConstructWithoutProperties
+    };
+
 public:
-                        UnoControlListBoxModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
+                        UnoControlListBoxModel(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory,
+                            ConstructorMode const i_mode = ConstructDefault
+                        );
                         UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource );
                         ~UnoControlListBoxModel();
 
