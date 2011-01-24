@@ -210,7 +210,6 @@ testcase tSlideShowInteraction
    setStartCurrentPage(FALSE)   printlog "Set "start with current page to OFF"
 
    printlog "call 'Insert->Slide' three times and name the slides 2, 3, 4 and create a rectangle on it "
-   '///+ we now have 4 slides ?! :-)"
    for i = 2 to 4
       InsertSlide
       sleep 2
