@@ -414,15 +414,6 @@ String ScCompiler::FindAddInFunction( const String& rUpperName, BOOL bLocalFirst
 }
 
 
-#ifdef erDEBUG
-void dbg_call_testcreatemapping()
-{
-    using namespace ::com::sun::star::sheet;
-    ScCompiler::OpCodeMapPtr xMap = ScCompiler::GetOpCodeMap( FormulaLanguage::ODFF);
-    xMap->createSequenceOfAvailableMappings( FormulaMapGroup::FUNCTIONS);
-}
-#endif
-
 //-----------------------------------------------------------------------------
 
 ScCompiler::Convention::~Convention()

@@ -56,11 +56,6 @@ extern const ScFormulaCell* pLastFormulaTreeTop;    // cellform.cxx Err527 WorkA
 
 // STATIC DATA -----------------------------------------------------------
 
-#ifdef erDEBUG
-ULONG erCountBCAInserts = 0;
-ULONG erCountBCAFinds = 0;
-#endif
-
 // -----------------------------------------------------------------------
 
 void ScDocument::StartListeningArea( const ScRange& rRange,

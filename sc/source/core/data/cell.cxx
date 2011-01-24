@@ -1129,101 +1129,8 @@ bool ScFormulaCell::MarkUsedExternalReferences()
 }
 
 
-// FIXME: set to 0
-#define erDEBUGDOT 0
-// If set to 1, write output that's suitable for graphviz tools like dot.
-// Only node1 -> node2 entries are written, you'll have to manually surround
-// the file content with [strict] digraph name { ... }
-// The ``strict'' keyword might be necessary in case of multiple identical
-// paths like they occur in iterations, otherwise dot may consume too much
-// memory when generating the layout, or you'll get unreadable output. On the
-// other hand, information about recurring calculation is lost then.
-// Generates output only if variable nDebug is set in debugger, see below.
-// FIXME: currently doesn't cope with iterations and recursions. Code fragments
-// are a leftover from a previous debug session, meant as a pointer.
-#if erDEBUGDOT
-#include <cstdio>
-using ::std::fopen;
-using ::std::fprintf;
-#include <vector>
-static const char aDebugDotFile[] = "ttt_debug.dot";
-#endif
-
 void ScFormulaCell::Interpret()
 {
-
-#if erDEBUGDOT
-    static int nDebug = 0;
-    static const int erDEBUGDOTRUN = 3;
-    static FILE* pDebugFile = 0;
-    static sal_Int32 nDebugRootCount = 0;
-    static unsigned int nDebugPathCount = 0;
-    static ScAddress aDebugLastPos( ScAddress::INITIALIZE_INVALID);
-    static ScAddress aDebugThisPos( ScAddress::INITIALIZE_INVALID);
-    typedef ::std::vector< ByteString > DebugVector;
-    static DebugVector aDebugVec;
-    class DebugElement
-    {
-        public:
-            static void push( ScFormulaCell* pCell )
-            {
-                aDebugThisPos = pCell->aPos;
-                if (aDebugVec.empty())
-                {
-                    ByteString aR( "root_");
-                    aR += ByteString::CreateFromInt32( ++nDebugRootCount);
-                    aDebugVec.push_back( aR);
-                }
-                String aStr;
-                pCell->aPos.Format( aStr, SCA_VALID | SCA_TAB_3D, pCell->GetDocument(),
-                                    pCell->GetDocument()->GetAddressConvention() );
-                ByteString aB( aStr, RTL_TEXTENCODING_UTF8);
-                aDebugVec.push_back( aB);
-            }
-            static void pop()
-            {
-                aDebugLastPos = aDebugThisPos;
-                if (!aDebugVec.empty())
-                {
-                    aDebugVec.pop_back();
-                    if (aDebugVec.size() == 1)
-                    {
-                        aDebugVec.pop_back();
-                        aDebugLastPos = ScAddress( ScAddress::INITIALIZE_INVALID);
-                    }
-                }
-            }
-            DebugElement( ScFormulaCell* p ) { push(p); }
-            ~DebugElement() { pop(); }
-    };
-    class DebugDot
-    {
-        public:
-            static void out( const char* pColor )
-            {
-                if (nDebug != erDEBUGDOTRUN)
-                    return;
-                char pColorString[256];
-                sprintf( pColorString, (*pColor ?
-                            ",color=\"%s\",fontcolor=\"%s\"" : "%s%s"), pColor,
-                        pColor);
-                size_t n = aDebugVec.size();
-                fprintf( pDebugFile,
-                        "\"%s\" -> \"%s\" [label=\"%u\"%s];  // v:%d\n",
-                        aDebugVec[n-2].GetBuffer(), aDebugVec[n-1].GetBuffer(),
-                        ++nDebugPathCount, pColorString, n-1);
-                fflush( pDebugFile);
-            }
-    };
-    #define erDEBUGDOT_OUT( p )             (DebugDot::out(p))
-    #define erDEBUGDOT_ELEMENT_PUSH( p )    (DebugElement::push(p))
-    #define erDEBUGDOT_ELEMENT_POP()        (DebugElement::pop())
-#else
-    #define erDEBUGDOT_OUT( p )
-    #define erDEBUGDOT_ELEMENT_PUSH( p )
-    #define erDEBUGDOT_ELEMENT_POP()
-#endif
-
     if (!IsDirtyOrInTableOpDirty() || pDocument->GetRecursionHelper().IsInReturn())
         return;     // no double/triple processing
 
@@ -1234,39 +1141,8 @@ void ScFormulaCell::Interpret()
     if ( pDocument->IsInDdeLinkUpdate() )
         return;
 
-#if erDEBUGDOT
-    // set nDebug=1 in debugger to init things
-    if (nDebug == 1)
-    {
-        ++nDebug;
-        pDebugFile = fopen( aDebugDotFile, "a");
-        if (!pDebugFile)
-            nDebug = 0;
-        else
-            nDebug = erDEBUGDOTRUN;
-    }
-    // set nDebug=3 (erDEBUGDOTRUN) in debugger to get any output
-    DebugElement aDebugElem( this);
-    // set nDebug=5 in debugger to close output
-    if (nDebug == 5)
-    {
-        nDebug = 0;
-        fclose( pDebugFile);
-        pDebugFile = 0;
-    }
-#endif
-
     if (bRunning)
     {
-
-#if erDEBUGDOT
-        if (!pDocument->GetRecursionHelper().IsDoingIteration() ||
-                aDebugThisPos != aDebugLastPos)
-            erDEBUGDOT_OUT(aDebugThisPos == aDebugLastPos ? "orange" :
-                    (pDocument->GetRecursionHelper().GetIteration() ? "blue" :
-                     "red"));
-#endif
-
         if (!pDocument->GetDocOptions().IsIter())
         {
             aResult.SetResultError( errCircularReference );
@@ -1289,8 +1165,6 @@ void ScFormulaCell::Interpret()
     if (pDocument->GetRecursionHelper().GetIteration() && nSeenInIteration ==
             pDocument->GetRecursionHelper().GetIteration())
         return ;
-
-    erDEBUGDOT_OUT( pDocument->GetRecursionHelper().GetIteration() ? "magenta" : "");
 
     ScRecursionHelper& rRecursionHelper = pDocument->GetRecursionHelper();
     BOOL bOldRunning = bRunning;

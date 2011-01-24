@@ -7709,26 +7709,6 @@ static bool lcl_LookupQuery( ScAddress & o_rResultPos, ScDocument * pDoc,
     return bFound;
 }
 
-#define erDEBUG_LOOKUPCACHE 0
-#if erDEBUG_LOOKUPCACHE
-#include <cstdio>
-using ::std::fprintf;
-using ::std::fflush;
-static struct LookupCacheDebugCounter
-{
-    unsigned long nMiss;
-    unsigned long nHit;
-    LookupCacheDebugCounter() : nMiss(0), nHit(0) {}
-    ~LookupCacheDebugCounter()
-    {
-        fprintf( stderr, "\nmiss: %lu, hit: %lu, total: %lu, hit/miss: %lu, hit/total %lu%\n",
-                nMiss, nHit, nHit+nMiss, (nMiss>0 ? nHit/nMiss : 0),
-                ((nHit+nMiss)>0 ? (100*nHit)/(nHit+nMiss) : 0));
-        fflush( stderr);
-    }
-} aLookupCacheDebugCounter;
-#endif
-
 bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         const ScQueryParam & rParam ) const
 {
@@ -7751,23 +7731,11 @@ bool ScInterpreter::LookupQueryWithCache( ScAddress & o_rResultPos,
         {
             case ScLookupCache::NOT_CACHED :
             case ScLookupCache::CRITERIA_DIFFERENT :
-#if erDEBUG_LOOKUPCACHE
-                ++aLookupCacheDebugCounter.nMiss;
-#if erDEBUG_LOOKUPCACHE > 1
-                fprintf( stderr, "miss %d,%d,%d\n", (int)aPos.Col(), (int)aPos.Row(), (int)aPos.Tab());
-#endif
-#endif
                 bFound = lcl_LookupQuery( o_rResultPos, pDok, rParam, rEntry);
                 if (eCacheResult == ScLookupCache::NOT_CACHED)
                     rCache.insert( o_rResultPos, aCriteria, aPos, bFound);
                 break;
             case ScLookupCache::FOUND :
-#if erDEBUG_LOOKUPCACHE
-                ++aLookupCacheDebugCounter.nHit;
-#if erDEBUG_LOOKUPCACHE > 1
-                fprintf( stderr, "hit  %d,%d,%d\n", (int)aPos.Col(), (int)aPos.Row(), (int)aPos.Tab());
-#endif
-#endif
                 bFound = true;
                 break;
             case ScLookupCache::NOT_AVAILABLE :
