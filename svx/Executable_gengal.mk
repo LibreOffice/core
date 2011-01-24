@@ -43,6 +43,7 @@ $(eval $(call gb_Executable_add_linked_libs,gengal,\
     tl \
     tl \
     svl \
+    stl \
     comphelper \
     cppu \
     cppuhelper \
@@ -53,6 +54,10 @@ $(eval $(call gb_Executable_add_linked_libs,gengal,\
 
 $(eval $(call gb_Executable_add_exception_objects,gengal,\
     svx/source/gengal/gengal \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,gengal,\
+    vclmain \
 ))
 
 ifeq ($(OS),WNT)
