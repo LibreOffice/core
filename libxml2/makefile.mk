@@ -51,6 +51,7 @@ TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
 PATCH_FILES=libxml2-configure.patch \
             libxml2-mingw.patch \
             libxml2-gnome599717.patch \
+            libxml2-xpath.patch \
             libxml2-global-symbols.patch \
 
 
@@ -64,7 +65,7 @@ xml2_CC+=-shared-libgcc
 .ENDIF
 xml2_LIBS=-lws2_32
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xml2_LIBS+=-lstdc++_s
+xml2_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
