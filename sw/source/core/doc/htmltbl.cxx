@@ -30,11 +30,6 @@
 #include "precompiled_sw.hxx"
 #include "hintids.hxx"
 
-//#define TEST_DELAYED_RESIZE
-
-#ifdef TEST_DELAYED_RESIZE
-#include <vcl/sound.hxx>
-#endif
 #include <vcl/wrkwin.hxx>
 #include <vcl/svapp.hxx>
 #include <sot/storage.hxx>
@@ -457,9 +452,6 @@ SwFrmFmt *SwHTMLTableLayout::FindFlyFrmFmt() const
 
 static void lcl_GetMinMaxSize( ULONG& rMinNoAlignCnts, ULONG& rMaxNoAlignCnts,
                         ULONG& rAbsMinNoAlignCnts,
-#ifdef FIX41370
-                        BOOL& rHR,
-#endif
                         SwTxtNode *pTxtNd, ULONG nIdx, BOOL bNoBreak )
 {
     pTxtNd->GetMinMaxSize( nIdx, rMinNoAlignCnts, rMaxNoAlignCnts,
@@ -485,14 +477,6 @@ static void lcl_GetMinMaxSize( ULONG& rMinNoAlignCnts, ULONG& rMaxNoAlignCnts,
         rMinNoAlignCnts = rMaxNoAlignCnts;
         rAbsMinNoAlignCnts = rMaxNoAlignCnts;
     }
-#ifdef FIX41370
-    else if( pColl && RES_POOLCOLL_HTML_HR==pColl->GetPoolFmtId() )
-    {
-        rHR |= !pTxtNd->HasSwAttrSet() ||
-                SFX_ITEM_SET != pTxtNd->GetpSwAttrSet()
-                                      ->GetItemState( RES_LR_SPACE, FALSE );
-    }
-#endif
 }
 
 void SwHTMLTableLayout::AutoLayoutPass1()
@@ -538,9 +522,6 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                 ULONG nAbsMinNoAlignCell = 0;
                 ULONG nMaxTableCell = 0;
                 ULONG nAbsMinTableCell = 0;
-#ifdef FIX41370
-                BOOL bHR = FALSE;
-#endif
 
                 while( pCnts )
                 {
@@ -561,9 +542,6 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                                 lcl_GetMinMaxSize( nMinNoAlignCnts,
                                                    nMaxNoAlignCnts,
                                                    nAbsMinNoAlignCnts,
-#ifdef FIX41370
-                                                   bHR,
-#endif
                                                    pTxtNd, nIdx,
                                                    pCnts->HasNoBreakTag() );
 
@@ -684,24 +662,6 @@ void SwHTMLTableLayout::AutoLayoutPass1()
                             nAbsMinNoAlignCell = nWidth;
                     }
                 }
-#ifdef FIX41370
-                else if( bHR && nWidth>0 && !bRelWidth )
-                {
-                    // Ein kleiner Hack, um einen Bug in Netscape 4.0
-                    // nachzubilden (siehe #41370#). Wenn eine Zelle eine
-                    // fixe Breite besitzt und gleichzeitig ein HR, wird
-                    // sie nie schmaler als die angegebene Breite.
-                    // (Genaugenomen scheint die Zelle nie schmaler zu werden
-                    // als die HR-Linie, denn wenn man fuer die Linie eine
-                    // Breite angibt, die breiter ist als die der Zelle, dann
-                    // wird die Zelle so breit wie die Linie. Das bekommen wir
-                    // natuerlich nicht hin.)
-                    if( nWidth>nMinNoAlignCell )
-                        nMinNoAlignCell = nWidth;
-                    if( nWidth>nAbsMinNoAlignCell )
-                        nAbsMinNoAlignCell = nWidth;
-                }
-#endif
 
                 // Mindestbreite fuer Inhalt einhalten
                 if( nMinNoAlignCell < MINLAY )
@@ -1802,9 +1762,6 @@ void SwHTMLTableLayout::_Resize( USHORT nAbsAvail, BOOL bRecalc )
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )
 {
-#ifdef TEST_DELAYED_RESIZE
-    Sound::Beep( SOUND_WARNING );
-#endif
     pThis->aResizeTimer.Stop();
     pThis->_Resize( pThis->nDelayedResizeAbsAvail,
                     pThis->bDelayedResizeRecalc );
@@ -1878,9 +1835,6 @@ BOOL SwHTMLTableLayout::Resize( USHORT nAbsAvail, BOOL bRecalc,
         bDelayedResizeRecalc = bRecalc;
         aResizeTimer.SetTimeout( nDelay );
         aResizeTimer.Start();
-#ifdef TEST_DELAYED_RESIZE
-        Sound::Beep( SOUND_DEFAULT );
-#endif
     }
     else
     {

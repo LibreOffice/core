@@ -5273,10 +5273,6 @@ void SwHTMLParser::InsertHorzRule()
         // Sinn. Um zu Vermeiden, dass die Linie bei der Breitenberechnung
         // beruecksichtigt wird, bekommt sie aber trotzdem entsprechendes
         // LRSpace-Item verpasst.
-#ifdef FIX41370
-        const SwFmtColl *pColl = GetCurrFmtColl();
-        SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
-#endif
         if( !pTable )
         {
             // Laenge und Ausrichtung der Linie ueber Absatz-Einzuege "tuerken"
@@ -5288,10 +5284,8 @@ void SwHTMLParser::InsertHorzRule()
 
             if( (long)nWidth < nBrowseWidth )
             {
-#ifndef FIX41370
                 const SwFmtColl *pColl = GetCurrFmtColl();
                 SvxLRSpaceItem aLRItem( pColl->GetLRSpace() );
-#endif
                 long nDist = nBrowseWidth - nWidth;
 
                 switch( eAdjust )
@@ -5310,17 +5304,10 @@ void SwHTMLParser::InsertHorzRule()
                     break;
                 }
 
-#ifndef FIX41370
                 _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aLRItem );
                 aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
-#endif
             }
         }
-
-#ifdef FIX41370
-        _HTMLAttr* pTmp = new _HTMLAttr( *pPam->GetPoint(), aLRItem );
-        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
-#endif
     }
 
     // Bookmarks koennen nicht in Hyperlinks eingefueht werden
