@@ -477,11 +477,9 @@ sal_Bool ScRangeStringConverter::GetAddressFromString(
     {
         if ((rAddress.Parse( sToken, const_cast<ScDocument*>(pDocument), eConv ) & SCA_VALID) == SCA_VALID)
             return true;
-#if CHART_ADDRESS_CONV_WORKAROUND
         ::formula::FormulaGrammar::AddressConvention eConvUI = pDocument->GetAddressConvention();
         if (eConv != eConvUI)
             return ((rAddress.Parse(sToken, const_cast<ScDocument*>(pDocument), eConvUI) & SCA_VALID) == SCA_VALID);
-#endif
     }
     return sal_False;
 }
@@ -508,11 +506,9 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
             if ( aUIString.GetChar(0) == (sal_Unicode) '.' )
                 aUIString.Erase( 0, 1 );
             bResult = ((rRange.aStart.Parse( aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
-#if CHART_ADDRESS_CONV_WORKAROUND
             if (!bResult && eConv != eConv)
                 bResult = ((rRange.aStart.Parse(
                     aUIString, const_cast<ScDocument*>(pDocument), eConv) & SCA_VALID) == SCA_VALID);
-#endif
             rRange.aEnd = rRange.aStart;
         }
         else
@@ -537,7 +533,6 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
                                 eConv) & SCA_VALID) == SCA_VALID) &&
                           ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                 eConv) & SCA_VALID) == SCA_VALID);
-#if CHART_ADDRESS_CONV_WORKAROUND
                 if (!bResult && eConv != eConv)
                 {
                     bResult = ((rRange.aStart.Parse( aUIString.Copy(0, (xub_StrLen)nIndex), const_cast<ScDocument*>(pDocument),
@@ -545,7 +540,6 @@ sal_Bool ScRangeStringConverter::GetRangeFromString(
                               ((rRange.aEnd.Parse( aUIString.Copy((xub_StrLen)nIndex+1), const_cast<ScDocument*>(pDocument),
                                     eConv) & SCA_VALID) == SCA_VALID);
                 }
-#endif
             }
         }
     }
@@ -937,7 +931,6 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
                 // first cell is invalid.
-#if CHART_ADDRESS_CONV_WORKAROUND
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
@@ -945,16 +938,12 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     // first cell is really invalid.
                     continue;
-#else
-                continue;
-#endif
             }
 
             nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
                 // second cell is invalid.
-#if CHART_ADDRESS_CONV_WORKAROUND
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
@@ -962,9 +951,6 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     // second cell is really invalid.
                     continue;
-#else
-                continue;
-#endif
             }
 
             if (aExtInfo1.mnFileId != aExtInfo2.mnFileId || aExtInfo1.mbExternal != aExtInfo2.mbExternal)
@@ -988,13 +974,9 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             USHORT nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
-#if CHART_ADDRESS_CONV_WORKAROUND
                 nRet = aCell.Parse(aToken, pDoc, eConv, &aExtInfo);
                 if ((nRet & SCA_VALID) != SCA_VALID)
                     continue;
-#else
-                continue;
-#endif
             }
 
             // Looks good!
