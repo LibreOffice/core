@@ -168,7 +168,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         {
             ::rtl::OUString sMediaType;
             xStorageProperties->getPropertyValue( INFO_MEDIATYPE ) >>= sMediaType;
-            if ( sMediaType.equalsAscii(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII) || sMediaType.equalsAscii(MIMETYPE_VND_SUN_XML_BASE_ASCII) )
+            if ( sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII)) || sMediaType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(MIMETYPE_VND_SUN_XML_BASE_ASCII)) )
             {
                 if ( bStreamFromDescr && sURL.compareTo( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ), 14 ) != COMPARE_EQUAL )
                 {
