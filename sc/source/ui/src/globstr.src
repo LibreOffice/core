@@ -201,15 +201,15 @@ Resource RID_GLOBSTR
     };
     String STR_UNDO_PIVOT_NEW
     {
-        Text [ en-US ] = "Create DataPilot Table" ;
+        Text [ en-US ] = "Create pivot table" ;
     };
     String STR_UNDO_PIVOT_MODIFY
     {
-        Text [ en-US ] = "Edit DataPilot Table" ;
+        Text [ en-US ] = "Edit pivot table" ;
     };
     String STR_UNDO_PIVOT_DELETE
     {
-        Text [ en-US ] = "Delete DataPilot Table" ;
+        Text [ en-US ] = "Delete pivot table" ;
     };
     String STR_UNDO_CONSOLIDATE
     {
@@ -525,7 +525,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_NODATA
     {
-        Text [ en-US ] = "The DataPilot table must contain at least one entry." ;
+        Text [ en-US ] = "The pivot table must contain at least one entry." ;
     };
     String STR_PIVOT_MOVENOTALLOWED
     {
@@ -533,11 +533,11 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_ERROR
     {
-        Text [ en-US ] = "Error creating the Data Pilot Table." ;
+        Text [ en-US ] = "Error creating the pivot table." ;
     };
     String STR_PIVOT_OVERLAP
     {
-        Text [ en-US ] = "DataPilot tables can not overlap." ;
+        Text [ en-US ] = "Pivot tables can not overlap." ;
     };
     String STR_PIVOT_NOTEMPTY
     {
@@ -549,7 +549,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_PROGRESS
     {
-        Text [ en-US ] = "Create DataPilot Table" ;
+        Text [ en-US ] = "Create Pivot Table" ;
     };
     String STR_PIVOT_TOTAL
     {
@@ -693,7 +693,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_TABLE
     {
-        Text [ en-US ] = "DataPilot" ;
+        Text [ en-US ] = "Pivot Table" ;
     };
      // Text strings for captions of subtotal functions.
     String STR_FUN_TEXT_SUM
@@ -738,7 +738,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_NOTFOUND
     {
-        Text [ en-US ] = "No DataPilot table found at this position." ;
+        Text [ en-US ] = "No pivot table found at this position." ;
     };
     String STR_EMPTYDATA
     {
@@ -1470,27 +1470,27 @@ Resource RID_GLOBSTR
      // Templates for data pilot tables.
     String STR_PIVOT_STYLE_INNER
     {
-        Text [ en-US ] = "DataPilot Value" ;
+        Text [ en-US ] = "Pivot Table Value" ;
     };
     String STR_PIVOT_STYLE_RESULT
     {
-        Text [ en-US ] = "DataPilot Result" ;
+        Text [ en-US ] = "Pivot Table Result" ;
     };
     String STR_PIVOT_STYLE_CATEGORY
     {
-        Text [ en-US ] = "DataPilot Category" ;
+        Text [ en-US ] = "Pivot Table Category" ;
     };
     String STR_PIVOT_STYLE_TITLE
     {
-        Text [ en-US ] = "DataPilot Title" ;
+        Text [ en-US ] = "Pivot Table Title" ;
     };
     String STR_PIVOT_STYLE_FIELDNAME
     {
-        Text [ en-US ] = "DataPilot Field" ;
+        Text [ en-US ] = "Pivot Table Field" ;
     };
     String STR_PIVOT_STYLE_TOP
     {
-        Text [ en-US ] = "DataPilot Corner" ;
+        Text [ en-US ] = "Pivot Table Corner" ;
     };
     String STR_OPERATION_FILTER
     {
@@ -1663,7 +1663,7 @@ Resource RID_GLOBSTR
 
     String STR_ERR_DATAPILOT_INPUT
     {
-        Text[ en-US ] = "You cannot change this part of the DataPilot table.";
+        Text[ en-US ] = "You cannot change this part of the pivot table.";
     };
 
     String STR_RECALC_MANUAL
@@ -1728,7 +1728,7 @@ Resource RID_GLOBSTR
     };
     String STR_ERR_DATAPILOTSOURCE
     {
-        Text [ en-US ] = "DataPilot source data is invalid.";
+        Text [ en-US ] = "Pivot table source data is invalid.";
     };
     String STR_PIVOT_FIRSTROWEMPTYERR
     {
@@ -1736,7 +1736,7 @@ Resource RID_GLOBSTR
     };
     String STR_PIVOT_ONLYONEROWERR
     {
-        Text [ en-US ] = "DataPilot table needs at least two rows of data to create or refresh." ;
+        Text [ en-US ] = "Pivot table needs at least two rows of data to create or refresh." ;
     };
 };
 

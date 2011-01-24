@@ -2495,7 +2495,7 @@ ScDPObject* ScDPCollection::GetByName(const String& rName) const
 
 String ScDPCollection::CreateNewName( USHORT nMin ) const
 {
-    String aBase = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DataPilot"));
+    String aBase( RTL_CONSTASCII_USTRINGPARAM( "PivotTable" ) );
     //! from Resource?
 
     for (USHORT nAdd=0; nAdd<=nCount; nAdd++)   //  nCount+1 tries

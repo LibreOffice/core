@@ -210,7 +210,7 @@ Menu RID_POPUP_TAB
 
 String RID_POPUP_PIVOT
 {
-    Text [ en-US ] = "DataPilot pop-up menu" ;
+    Text [ en-US ] = "Pivot table pop-up menu" ;
 };
 
 Menu RID_POPUP_PIVOT
@@ -221,7 +221,7 @@ Menu RID_POPUP_PIVOT
         {
             Identifier = SID_OPENDLG_PIVOTTABLE ;
             HelpId = CMD_SID_OPENDLG_PIVOTTABLE ;
-            Text [ en-US ] = "~Start..." ;
+            Text [ en-US ] = "~Edit Layout..." ;
         };
         MenuItem
         {

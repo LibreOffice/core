@@ -48,10 +48,6 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 #include "paramisc.hxx"
-// Wang Xu Ming -- 2009-5-18
-// DataPilot Migration
-//#include "dpglobal.hxx"
-// End Comments
 
 #include "sc.hrc"
 #include "globstr.hrc"

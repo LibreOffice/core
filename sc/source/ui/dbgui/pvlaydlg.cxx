@@ -71,12 +71,6 @@ OUString lclGetNameWithoutMnemonic( const FixedText& rFixedText )
     return MnemonicGenerator::EraseAllMnemonicChars( rFixedText.GetText() );
 }
 
-inline bool lclIsInside( const Window& rWindow, const Point& rDialogPos )
-{
-    Rectangle aWindowRect( rWindow.GetPosPixel(), rWindow.GetSizePixel() );
-    return aWindowRect.IsInside( rDialogPos );
-}
-
 } // namespace
 
 // ============================================================================
