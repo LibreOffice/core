@@ -67,29 +67,6 @@ ULONG MA_FASTCALL lcl_FindFtnPos( const SwDoc *pDoc, const SwTxtFtn *pAttr )
 {
     const SwFtnIdxs &rFtnIdxs = pDoc->GetFtnIdxs();
 
-#ifdef MA_DEBUG
-    //Wenn das Array nicht stimmt haben wir ein Problem, denn viele
-    //Ftn-Functions bauen auf dem Array auf.
-    for ( USHORT k = 0; k+1 < rFtnIdxs.Count(); ++k )
-    {
-        SwIndex aIdx1(&pDoc->GetNodes());
-        SwIndex aIdx2(&pDoc->GetNodes());
-        rFtnIdxs[k]->pFtn->  GetTxtNode().GetIndex(aIdx1);
-        rFtnIdxs[k+1]->pFtn->GetTxtNode().GetIndex(aIdx2);
-        if ( aIdx1.GetIndex() > aIdx2.GetIndex() )
-        {
-            OSL_ENSURE( !rFtnIdxs.Count(), "FtnIdxs not up to date" );
-        }
-        else if ( aIdx1.GetIndex() == aIdx2.GetIndex() )
-        {
-            SwTxtFtn *p1 = rFtnIdxs[k];
-            SwTxtFtn *p2 = rFtnIdxs[k+1];
-            OSL_ENSURE( *p1->GetStart() < *p2->GetStart(),
-                    "FtnIdxs not up to date" );
-        }
-    }
-#endif
-
     USHORT nRet;
     SwTxtFtnPtr pBla = (SwTxtFtn*)pAttr;
     if ( rFtnIdxs.Seek_Entry( pBla, &nRet ) )
