@@ -106,11 +106,6 @@ SvxCommonLinguisticControl::SvxCommonLinguisticControl( ModalDialog* _pParent )
     ,aAuditBox      ( this, CUI_RES( GB_AUDIT ) )
 {
     FreeResource();
-
-#ifdef FS_PRIV_DEBUG
-    SetType( WINDOW_TABPAGE );
-#endif
-
     SetPosSizePixel( Point( 0, 0 ), _pParent->GetOutputSizePixel() );
     Show();
 }

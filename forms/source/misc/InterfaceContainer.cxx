@@ -805,18 +805,6 @@ void OInterfaceContainer::approveNewElement( const Reference< XPropertySet >& _r
     Reference< XChild > xChild( _rxObject, UNO_QUERY );
     if ( !xChild.is() || xChild->getParent().is() )
     {
-#ifdef FS_PRIV_DEBUG
-        ::rtl::OUString sChildName, sParentName;
-        Reference< XNamed > xNamed( xChild, UNO_QUERY );
-        if ( xNamed.is() )
-            sChildName = xNamed->getName();
-        if ( xChild.is() )
-        {
-            xNamed = xNamed.query( xChild->getParent() );
-            if ( xNamed.is() )
-                sParentName = xNamed->getName();
-        }
-#endif
         lcl_throwIllegalArgumentException();
     }
 
