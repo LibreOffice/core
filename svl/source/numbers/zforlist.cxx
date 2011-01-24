@@ -426,7 +426,7 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
         // a duplicate. Also won't mix up any LastInsertKey.
         ChangeIntl( eOldLanguage );
         LanguageType eLge = eOldLanguage;   // ConvertMode changes this
-        BOOL bCheck = FALSE;
+        bool bCheck = false;
         SvNumberformat* pNewEntry = new SvNumberformat( aString, pFormatScanner,
             pStringScanner, nCheckPos, eLge );
         if ( nCheckPos != 0 )
@@ -442,9 +442,10 @@ void SvNumberFormatter::ReplaceSystemCL( LanguageType eOldLanguage )
             if ( !aFTable.Insert( nKey, pNewEntry ) )
                 delete pNewEntry;
             else
-                bCheck = TRUE;
+                bCheck = true;
         }
         DBG_ASSERT( bCheck, "SvNumberFormatter::ReplaceSystemCL: couldn't convert" );
+        (void)bCheck;
 
         delete pOldEntry;
     }
@@ -1376,7 +1377,8 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
                     nDefaultFormat = CLOffset + ZF_STANDARD;
             }
         }
-        aDefaultFormatKeys.Insert( nSearch, (void*) nDefaultFormat );
+        sal_uIntPtr nFormat = nDefaultFormat;
+        aDefaultFormatKeys.Insert( nSearch, (void*) nFormat );
     }
     return nDefaultFormat;
 }
@@ -3265,8 +3267,9 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
                     pEntry->SetStandard();
             }
         }
+        sal_uIntPtr nFormat = nDefaultCurrencyFormat;
         aDefaultFormatKeys.Insert( CLOffset + ZF_STANDARD_CURRENCY,
-            (void*) nDefaultCurrencyFormat );
+            (void*) nFormat );
     }
     return nDefaultCurrencyFormat;
 }

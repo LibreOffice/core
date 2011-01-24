@@ -826,6 +826,7 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 
 void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
 {
+#if OSL_DEBUG_LEVEL > 0
     DBG_ASSERT( p, "svl::SfxStyleSheetBasePool::Insert(), no stylesheet?" );
 
     SfxStyleSheetIterator aIter(this, p->GetFamily(), p->GetMask());
@@ -836,6 +837,7 @@ void SfxStyleSheetBasePool::Insert( SfxStyleSheetBase* p )
         pOld = aIter.Find( p->GetParent() );
         DBG_ASSERT( pOld, "svl::SfxStyleSheetBasePool::Insert(), Parent not found!" );
     }
+#endif
     aStyles.push_back( rtl::Reference< SfxStyleSheetBase >( p ) );
     Broadcast( SfxStyleSheetHint( SFX_STYLESHEET_CREATED, *p ) );
 }

@@ -1545,7 +1545,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
         case NUMBERFORMAT_SCIENTIFIC:
         case NUMBERFORMAT_FRACTION:
         {
-            sal_Unicode cThousandFill = ' ';
             while (i < nAnzStrings)
             {
                 // TODO: rechecking eScannedType is unnecessary.
@@ -1743,10 +1742,7 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                                 {
                                     nPos = nPos + sStrArray[i].Len();
                                     if (!bThousand)                 // only once
-                                    {
                                         bThousand = TRUE;
-                                        cThousandFill = sStrArray[i+1].GetChar(0);
-                                    }
                                     // Eat it, will be reinserted at proper
                                     // grouping positions further down.
                                     nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
