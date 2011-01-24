@@ -29,6 +29,8 @@
 #ifndef _KDEFILEPICKER_HXX_
 #define _KDEFILEPICKER_HXX_
 
+#include <cstddef>
+
 #include <kfiledialog.h>
 #include <kfilefiltercombo.h>
 
