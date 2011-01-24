@@ -687,17 +687,6 @@ void SwTxtPainter::PaintDropPortion()
     }
     Point aLineOrigin( GetTopLeft() );
 
-#ifdef NIE
-    // Retusche nachholen...
-    if( nX )
-    {
-        const Point aPoint( Left(), Y() );
-        const Size  aSize( nX - 1, GetDropHeight()+GetDropDescent() );
-        SwRect aRetouche( aPoint, aSize );
-        GetInfo().DrawRect( aRetouche );
-    }
-#endif
-
     aLineOrigin.X() += nX;
     KSHORT nTmpAscent, nTmpHeight;
     CalcAscentAndHeight( nTmpAscent, nTmpHeight );

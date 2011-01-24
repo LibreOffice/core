@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "txatbase.hxx"
 #include "ndhints.hxx"
 #include <txtatr.hxx>
@@ -43,40 +41,7 @@
 _SV_IMPL_SORTAR_ALG( SwpHtStart, SwTxtAttr* )
 _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 
-#ifdef NIE
-
-void DumpHints( const SwpHtStart &rHtStart,
-                const SwpHtEnd &rHtEnd )
-{
-#if OSL_DEBUG_LEVEL > 1
-    aDbstream << "DumpHints:" << endl;
-    (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
-    for( USHORT i = 0; i < rHtStart.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtStart[i];
-        ((((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t').WriteNumber( long( pHt ) )
-                  << '\t').WriteNumber( *pHt->GetStart() );
-        if( pHt->GetEnd() )
-            (aDbstream << " -> " ).WriteNumber( *pHt->GetEnd() );
-        aDbstream << endl;
-    }
-    (aDbstream << "\tEnds:").WriteNumber( rHtEnd.Count() )<< endl;
-    for( i = 0; i < rHtEnd.Count(); ++i )
-    {
-        const SwTxtAttr *pHt = rHtEnd[i];
-        (((aDbstream << '\t').WriteNumber( i )<< " [").WriteNumber( pHt->Which() )
-            << ']' << '\t' ).WriteNumber( long( pHt ) );
-        if( pHt->GetEnd() )
-            (aDbstream << '\t').WriteNumber( *pHt->GetEnd() )<< " <- ";
-        aDbstream.WriteNumber( *pHt->GetStart() )<< endl;
-    }
-    aDbstream << endl;
-#endif
-}
-#else
 inline void DumpHints(const SwpHtStart &, const SwpHtEnd &) { }
-#endif
 
 /*************************************************************************
  *                        inline IsEqual()
@@ -254,12 +219,6 @@ void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 #endif
     m_HintStarts.Insert( pHt );
     m_HintEnds.Insert( pHt );
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
 void SwpHintsArray::DeleteAtPos( const USHORT nPos )
@@ -273,12 +232,6 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
     USHORT nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
 }
 
 #if OSL_DEBUG_LEVEL > 1
@@ -446,13 +399,6 @@ bool SwpHintsArray::Resort()
         const SwTxtAttr *pHt = m_HintStarts[i];
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
-#ifdef NIE
-#if OSL_DEBUG_LEVEL > 1
-//            OSL_ENSURE( bResort, "!Resort/Start: correcting hints-array" );
-            aDbstream << "Resort: Starts" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintStarts.Remove( i );
             m_HintStarts.Insert( pHt );
             pHt = m_HintStarts[i];
@@ -469,12 +415,6 @@ bool SwpHintsArray::Resort()
         const SwTxtAttr *pHt = m_HintEnds[i];
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
-#ifdef NIE
-#if OSL_DEBUG_LEVEL > 1
-            aDbstream << "Resort: Ends" << endl;
-            DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
             m_HintEnds.Remove( i );
             m_HintEnds.Insert( pHt );
             pHt = m_HintEnds[i]; // normalerweise == pLast
@@ -486,12 +426,6 @@ bool SwpHintsArray::Resort()
         }
         pLast = pHt;
     }
-#if OSL_DEBUG_LEVEL > 1
-#ifdef NIE
-    aDbstream << "Resorted:" << endl;
-    DumpHints( m_HintStarts, m_HintEnds );
-#endif
-#endif
     return bResort;
 }
 
