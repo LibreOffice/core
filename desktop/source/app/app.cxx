@@ -822,9 +822,6 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
 {
     if ( aBootstrapStatus != ::utl::Bootstrap::DATA_OK )
     {
-        sal_Bool            bWorkstationInstallation = sal_False;
-        ::rtl::OUString        aBaseInstallURL;
-        ::rtl::OUString        aUserInstallURL;
         ::rtl::OUString        aProductKey;
         ::rtl::OUString        aTemp;
 
@@ -836,16 +833,6 @@ void Desktop::HandleBootstrapPathErrors( ::utl::Bootstrap::Status aBootstrapStat
         aTemp = ::utl::Bootstrap::getProductKey( aProductKey );
         if ( aTemp.getLength() > 0 )
             aProductKey = aTemp;
-
-        ::utl::Bootstrap::PathStatus aBaseInstallStatus = ::utl::Bootstrap::locateBaseInstallation( aBaseInstallURL );
-        ::utl::Bootstrap::PathStatus aUserInstallStatus = ::utl::Bootstrap::locateUserInstallation( aUserInstallURL );
-
-        if (( aBaseInstallStatus == ::utl::Bootstrap::PATH_EXISTS &&
-              aUserInstallStatus == ::utl::Bootstrap::PATH_EXISTS        ))
-        {
-            if ( aBaseInstallURL != aUserInstallURL )
-                bWorkstationInstallation = sal_True;
-        }
 
         OUString        aMessage;
         OUStringBuffer    aBuffer( 100 );

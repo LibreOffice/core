@@ -540,7 +540,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // Seems another office is running. Pipe arguments to it and self terminate
         osl::StreamPipe aStreamPipe(pThread->maPipe.getHandle());
 
-        sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
         if (!(tools::getProcessWorkingDir(cwdUrl) &&
@@ -552,10 +551,6 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         for( sal_uInt32 i=0; i < nCount; i++ )
         {
             rtl_getAppCommandArg( i, &aDummy.pData );
-            if( aDummy.indexOf('-',0) != 0 )
-            {
-                bWaitBeforeClose = sal_True;
-            }
             if (!addArgument(&aArguments, ',', aDummy)) {
                 return IPC_STATUS_BOOTSTRAP_ERROR;
             }
@@ -728,14 +723,12 @@ void SAL_CALL OfficeIPCThread::run()
             }
 
             // handle request for acceptor
-            sal_Bool bAcceptorRequest = sal_False;
             OUString aAcceptString;
             if ( aCmdLineArgs->GetAcceptString(aAcceptString) && Desktop::CheckOEM()) {
                 ApplicationEvent* pAppEvent =
                     new ApplicationEvent( aEmpty, aEmpty,
                                           "ACCEPT", aAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
-                bAcceptorRequest = sal_True;
             }
             // handle acceptor removal
             OUString aUnAcceptString;
@@ -744,7 +737,6 @@ void SAL_CALL OfficeIPCThread::run()
                     new ApplicationEvent( aEmpty, aEmpty,
                                          "UNACCEPT", aUnAcceptString );
                 ImplPostForeignAppEvent( pAppEvent );
-                bAcceptorRequest = sal_True;
             }
 
 #ifndef UNX

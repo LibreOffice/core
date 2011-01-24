@@ -552,12 +552,7 @@ void SplashScreen::Paint( const Rectangle&)
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace, _tlx+_barspace+length, _tly+_barheight-_barspace));
         _vdev.DrawText( Rectangle(_tlx, _tly+_barheight+5, _tlx+_barwidth, _tly+_barheight+5+20), _sProgressText, TEXT_DRAW_CENTER );
     }
-    Size aSize =  GetOutputSizePixel();
-    Size bSize =  _vdev.GetOutputSizePixel();
-    //_vdev.Flush();
-    //_vdev.DrawOutDev(Point(), GetOutputSize(), Point(), GetOutputSize(), *((IntroWindow*)this) );
     DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev.GetOutputSizePixel(), _vdev );
-    //Flush();
 }
 
 

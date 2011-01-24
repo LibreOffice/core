@@ -232,6 +232,7 @@ void Migration::migrateSettingsIfNecessary()
         OSL_ENSURE(sal_False, aMsg.getStr());
     }
     OSL_ENSURE(bResult, "Migration has not been successfull");
+    (void)bResult;
 }
 
 MigrationImpl::MigrationImpl(const uno::Reference< XMultiServiceFactory >& xFactory)

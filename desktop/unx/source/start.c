@@ -592,7 +592,7 @@ show_splash( int status_fd )
 
     int nPercent = 0;
     sal_Bool bFinish = sal_False;
-    ProgressStatus eResult;
+    ProgressStatus eResult = ProgressExit;
 
     /* we want to watch status_fd */
     aPfd.fd = status_fd;
