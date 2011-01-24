@@ -107,7 +107,7 @@ testcase tToolsNumbering12
 				hDeleteFile( ExportFileName ) ' There should never be a reason to overwrite 
 
                 ' Binary export filter was removed
-                if iDocumentType < 3
+                if iDocumentType < 3 then
                     printlog "  - export as: " & ExportFileName
                     Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
                     Call hCloseDocument
