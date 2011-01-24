@@ -41,6 +41,7 @@
  * re-implements the same functionality, based on the STL.
  */
 
+#include <cstddef>
 #include <vector>
 
 template<class T>

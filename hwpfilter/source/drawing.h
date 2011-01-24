@@ -187,7 +187,7 @@ static bool SkipUnusedField(void)
 
 static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
 {
-    uint size, property_size, common_size;
+    uint size, common_size;
 
      if( !hmem )
          return FALSE;
@@ -202,7 +202,6 @@ static bool LoadCommonHeader(HWPDrawingObject * hdo, WORD * link_info)
     }
 
     common_size = HDOFILE_COMMON_SIZE;
-    property_size = 44;
     hdo->type = hmem->read2b();
     *link_info = sal::static_int_cast<WORD>(hmem->read2b());
     hdo->offset.x = hmem->read4b();
