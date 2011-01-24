@@ -25,36 +25,14 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
-#define __com_sun_star_sheet_XSheetFilterDescriptor_idl__
-
-#include <com/sun/star/sheet/TableFilterField.idl>
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_script_NativeObjectWrapper_idl__
+#define __com_sun_star_script_NativeObjectWrapper_idl__
 
 //=============================================================================
-
-module com {  module sun {  module star {  module sheet {
-
-//=============================================================================
-
-/** provides access to a collection of filter conditions (filter fields).
-
-    @see SheetFilterDescriptor
- */
-published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
+module com {  module sun {  module star { module script {
+struct NativeObjectWrapper
 {
-    //-------------------------------------------------------------------------
-
-    /** returns the collection of filter fields.
-     */
-    sequence< TableFilterField > getFilterFields();
-
-    //-------------------------------------------------------------------------
-
-    /** sets a new collection of filter fields.
-     */
-    void setFilterFields( [in] sequence< TableFilterField > aFilterFields );
-
+    any ObjectId;
 };
 
 //=============================================================================
@@ -62,4 +40,3 @@ published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
 }; }; }; };
 
 #endif
-

@@ -27,6 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cppuhelper.hxx"
+
+#include "sal/config.h"
+
+#include <vector>
+
 #include <sal/alloca.h>
 
 #include <osl/diagnose.h>
@@ -45,7 +50,7 @@
 #include <com/sun/star/reflection/XEnumTypeDescription.hpp>
 #include <com/sun/star/reflection/XIndirectTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceMemberTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceAttributeTypeDescription2.hpp>
 #include <com/sun/star/reflection/XMethodParameter.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
@@ -302,7 +307,7 @@ inline static typelib_TypeDescription * createCTD(
 }
 //==================================================================================================
 inline static typelib_TypeDescription * createCTD(
-    const Reference< XInterfaceAttributeTypeDescription > & xAttribute )
+    const Reference< XInterfaceAttributeTypeDescription2 > & xAttribute )
 {
     typelib_TypeDescription * pRet = 0;
     if (xAttribute.is())
@@ -310,14 +315,31 @@ inline static typelib_TypeDescription * createCTD(
         OUString aMemberName( xAttribute->getName() );
         Reference< XTypeDescription > xType( xAttribute->getType() );
         OUString aMemberTypeName( xType->getName() );
-
-        typelib_typedescription_newInterfaceAttribute(
+        std::vector< rtl_uString * > getExc;
+        Sequence< Reference< XCompoundTypeDescription > > getExcs(
+            xAttribute->getGetExceptions() );
+        for (sal_Int32 i = 0; i != getExcs.getLength(); ++i)
+        {
+            OSL_ASSERT( getExcs[i].is() );
+            getExc.push_back( getExcs[i]->getName().pData );
+        }
+        std::vector< rtl_uString * > setExc;
+        Sequence< Reference< XCompoundTypeDescription > > setExcs(
+            xAttribute->getSetExceptions() );
+        for (sal_Int32 i = 0; i != setExcs.getLength(); ++i)
+        {
+            OSL_ASSERT( setExcs[i].is() );
+            setExc.push_back( setExcs[i]->getName().pData );
+        }
+        typelib_typedescription_newExtendedInterfaceAttribute(
             (typelib_InterfaceAttributeTypeDescription **)&pRet,
             xAttribute->getPosition(),
             aMemberName.pData, // name
             (typelib_TypeClass)xType->getTypeClass(),
             aMemberTypeName.pData, // type name
-            xAttribute->isReadOnly() );
+            xAttribute->isReadOnly(),
+            getExc.size(), getExc.empty() ? 0 : &getExc[0],
+            setExc.size(), setExc.empty() ? 0 : &setExc[0] );
     }
     return pRet;
 }
@@ -643,7 +665,7 @@ static typelib_TypeDescription * createCTD(
             pRet = createCTD( Reference< XInterfaceMethodTypeDescription >::query( xType ) );
             break;
         case TypeClass_INTERFACE_ATTRIBUTE:
-            pRet = createCTD( Reference< XInterfaceAttributeTypeDescription >::query( xType ) );
+            pRet = createCTD( Reference< XInterfaceAttributeTypeDescription2 >::query( xType ) );
             break;
         default:
             break;
