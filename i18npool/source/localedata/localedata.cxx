@@ -459,7 +459,7 @@ oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
 #define REF_ERAS 2
 
 Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name,
-        const Locale& rLocale, const Sequence< Calendar >& calendarsSeq, sal_Int16 len, sal_Int16 item)
+        const Locale& rLocale, const Sequence< Calendar >& calendarsSeq, sal_Int16 item)
         throw(RuntimeException)
 {
         if (!ref_name.equals(name)) {
@@ -472,7 +472,6 @@ Sequence< CalendarItem > &LocaleData::getCalendarItemByName(const OUString& name
                 cals = calendarsSeq;
             } else {
                 cals = getAllCalendars(loc);
-                len = sal::static_int_cast<sal_Int16>( cals.getLength() );
             }
             const OUString& id = name.getToken(0, under, index);
             for (index = 0; index < cals.getLength(); index++) {
@@ -520,7 +519,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                 sal_Bool defaultCalendar = sal::static_int_cast<sal_Bool>( allCalendars[offset][0] );
                 offset++;
                 if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    days = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_DAYS);
+                    days = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_DAYS);
                     offset += 2;
                 } else {
                     for(j = 0; j < allCalendars[0][i]; j++) {
@@ -531,7 +530,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                     }
                 }
                 if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    months = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_MONTHS);
+                    months = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_MONTHS);
                     offset += 2;
                 } else {
                     for(j = 0; j < allCalendars[1][i]; j++) {
@@ -542,7 +541,7 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
                     }
                 }
                 if (OUString(allCalendars[offset]).equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ref"))) {
-                    eras = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, i, REF_ERAS);
+                    eras = getCalendarItemByName(OUString(allCalendars[offset+1]), rLocale, calendarsSeq, REF_ERAS);
                     offset += 2;
                 } else {
                     for(j = 0; j < allCalendars[2][i]; j++) {

@@ -132,7 +132,7 @@ private :
         getCalendarItemByName(const rtl::OUString& name,
         const com::sun::star::lang::Locale& rLocale,
         const com::sun::star::uno::Sequence< com::sun::star::i18n::Calendar >& calendarsSeq,
-        sal_Int16 len, sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
+        sal_Int16 item) throw( com::sun::star::uno::RuntimeException );
 };
 
 } } } }

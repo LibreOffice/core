@@ -867,7 +867,6 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
     sal_Int64 value = 0;
     sal_Int32 i, count = 0, len = aNumberString.getLength();
     const sal_Unicode *src = aNumberString.getStr();
-    sal_Bool neg = sal_False;
 
     for (i = 0; i < len; i++) {
         sal_Unicode ch = src[i];
@@ -877,7 +876,7 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
             value = value * 10 + (ch - NUMBER_ZERO);
         }
         else if (isSeparator(ch) && count > 0) continue;
-        else if (isMinus(ch) && count == 0) neg = sal_True;
+        else if (isMinus(ch) && count == 0) continue;
         else break;
     }
 
