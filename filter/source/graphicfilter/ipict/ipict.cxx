@@ -1085,7 +1085,7 @@ void PictReader::ReadHeader()
     sal_Char    sBuf[ 2 ];
     // previous code considers pPict->Tell() as the normal starting position,
     // can we have nStartPos != 0 ?
-    ULONG   nStartPos = pPict->Tell();
+    sal_uLong   nStartPos = pPict->Tell();
     // Standard:
     // a picture file begins by 512 bytes (reserved to the application) followed by the picture data
     // while clipboard, pictures stored in a document often contain only the picture data.
@@ -1151,7 +1151,7 @@ void PictReader::ReadHeader()
         if ( sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = FALSE; return;
+          IsVersion2 = sal_False; return;
         }
         if (sBuf[0] != 0x00) continue; // unrecovable error
         int numZero = 0;
@@ -1169,11 +1169,11 @@ void PictReader::ReadHeader()
         if (sBuf[1] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = FALSE; return;
+          IsVersion2 = sal_False; return;
         }
         if (sBuf[1] != 0x02 ) continue; // not a version 2 file
 
-        IsVersion2=TRUE;
+        IsVersion2=sal_True;
         short   nExtVer, nReserved;
         // 3 Bytes ignored : end of version arg 0x02FF (ie: 0xFF), HeaderOp : 0x0C00
         pPict->SeekRel( 3 );
@@ -1208,7 +1208,7 @@ void PictReader::ReadHeader()
     pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
 
-sal_uLong PictReader::ReadData(USHORT nOpcode)
+sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 {
     sal_uInt16 nUSHORT;
     Point aPoint;
