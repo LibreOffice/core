@@ -244,9 +244,9 @@ protected:
                   const String& rText,
                   sal_uInt16        MaxWidth);
 
-    virtual USHORT Print(SfxProgress &rProgress, sal_Bool bIsAPI);
+    virtual sal_uInt16 Print(SfxProgress &rProgress, sal_Bool bIsAPI);
     virtual SfxPrinter *GetPrinter(sal_Bool bCreate = sal_False);
-    virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
+    virtual sal_uInt16 SetPrinter(SfxPrinter *pNewPrinter,
                               sal_uInt16     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
     sal_Bool        Insert( SfxMedium& rMedium );
