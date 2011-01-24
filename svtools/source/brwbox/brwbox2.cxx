@@ -946,7 +946,6 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
 
     // redraw the invalid fields
-    BOOL bRetouching = FALSE;
     for ( ULONG nRelRow = nRelTopRow;
           nRelRow <= nRelBottomRow && (ULONG)nTopRow+nRelRow < (ULONG)nRowCount;
           ++nRelRow, aPos.Y() += nDataRowHeigt )
@@ -1064,9 +1063,6 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             // skip column
             aPos.X() += pCol->Width();
         }
-
-        if ( nCol == pCols->Count() )
-            bRetouching = TRUE;
 
         // reset auto-highlight
         if ( bRowSelected )

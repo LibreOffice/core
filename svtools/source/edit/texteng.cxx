@@ -2390,7 +2390,6 @@ BOOL TextEngine::CreateLines( ULONG nPara )
     while ( nIndex < pNode->GetText().Len() )
     {
         BOOL bEOL = FALSE;
-        BOOL bEOC = FALSE;
         USHORT nPortionStart = 0;
         USHORT nPortionEnd = 0;
 
@@ -2455,7 +2454,6 @@ BOOL TextEngine::CreateLines( ULONG nPara )
             nPortionStart = nTmpPos;
             nTmpPortion--;
             bEOL = FALSE;
-            bEOC = FALSE;
 
             nTmpWidth -= pPortion->GetWidth();
             if ( pPortion->GetKind() == PORTIONKIND_TAB )
@@ -2467,7 +2465,6 @@ BOOL TextEngine::CreateLines( ULONG nPara )
         else
         {
             bEOL = TRUE;
-            bEOC = TRUE;
             pLine->SetEnd( nPortionEnd );
             DBG_ASSERT( pTEParaPortion->GetTextPortions().Count(), "Keine TextPortions?" );
             pLine->SetEndPortion( (USHORT)pTEParaPortion->GetTextPortions().Count() - 1 );
@@ -2482,7 +2479,6 @@ BOOL TextEngine::CreateLines( ULONG nPara )
         {
             pLine->SetEnd( nPortionStart+1 );
             pLine->SetEndPortion( nTmpPortion-1 );
-            bEOC = FALSE; // wurde oben gesetzt, vielleich mal die if's umstellen?
         }
         else if ( !bEOL )
         {

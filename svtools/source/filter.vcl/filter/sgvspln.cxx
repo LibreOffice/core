@@ -652,7 +652,7 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
                   double* bx, double* cx, double* dx,
                   double* by, double* cy, double* dy)
 {
-    USHORT Error,Marg;
+    USHORT Error;
     USHORT i;
     double deltX,deltY,delt,
            alphX = 0,alphY = 0,
@@ -670,9 +670,8 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
         }
     }
     switch (MargCond) {
-        case 0: Marg=0; break;
+        case 0: break;
         case 1: case 2: {
-            Marg=MargCond;
             alphX=Marg01; betX=MargN1;
             alphY=Marg02; betY=MargN2;
         } break;
@@ -681,7 +680,6 @@ USHORT ParaSpline(USHORT n, double* x, double* y, BYTE MargCond,
             if (y[n]!=y[0]) return 4;
         } break;
         case 4: {
-            Marg=1;
             if (abs(Marg01)>=MAXROOT) {
                 alphX=0.0;
                 alphY=sign(1.0,y[1]-y[0]);
@@ -736,7 +734,7 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
                 double*& cx, double*& cy, double*& dx, double*& dy, double*& T)
 {
     BYTE   Marg;
-    double Marg01,Marg02;
+    double Marg01;
     double MargN1,MargN2;
     USHORT i;
     Point  P0(-32768,-32768);
@@ -775,7 +773,6 @@ BOOL CalcSpline(Polygon& rPoly, BOOL Periodic, USHORT& n,
     T =new double[n+1];
 
     Marg01=0.0;
-    Marg02=0.0;
     MargN1=0.0;
     MargN2=0.0;
     if (n>0) n--; // n Korregieren (Anzahl der Teilpolynome)

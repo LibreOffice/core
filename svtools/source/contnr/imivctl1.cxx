@@ -544,7 +544,6 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
     StopEditTimer();
     aVirtOutputSize.Width() = 0;
     aVirtOutputSize.Height() = 0;
-    BOOL bLockedEntryFound = FALSE;
     const ULONG nCount = aEntries.Count();
     for( ULONG nCur = 0; nCur < nCount; nCur++ )
     {
@@ -557,7 +556,6 @@ void SvxIconChoiceCtrl_Impl::ResetVirtSize()
                 FindBoundingRect( pCur );
             else
                 AdjustVirtSize( pCur->aRect );
-            bLockedEntryFound = TRUE;
         }
         else
             InvalidateBoundingRect( pCur->aRect );
@@ -1212,14 +1210,6 @@ BOOL SvxIconChoiceCtrl_Impl::KeyInput( const KeyEvent& rKEvt )
 
     if( bMod1 )
         nFlags |= F_ADD_MODE;
-    BOOL bDeselectAll = FALSE;
-    if( eSelectionMode != SINGLE_SELECTION )
-    {
-        if( !bMod1 && !bShift )
-            bDeselectAll = TRUE;
-        if( bShift && !bMod1 && !pAnchor )
-            bDeselectAll = TRUE;
-    }
 
     SvxIconChoiceCtrlEntry* pNewCursor;
     SvxIconChoiceCtrlEntry* pOldCursor = pCursor;

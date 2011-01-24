@@ -792,8 +792,7 @@ void BmapType::Draw(OutputDevice& rOut)
             case SGF_BITIMAGE: {
                 GraphicFilter aFlt;
                 Graphic aGrf;
-                USHORT nRet;
-                nRet=aFlt.ImportGraphic(aGrf,aFNam);
+                aFlt.ImportGraphic(aGrf,aFNam);
                 aGrf.Draw(&rOut,Point(Pos1.x,Pos1.y),Size(Pos2.x-Pos1.x,Pos2.y-Pos1.y));
             } break;
             case SGF_SIMPVECT: {

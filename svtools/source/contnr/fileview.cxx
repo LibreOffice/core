@@ -802,7 +802,6 @@ void ViewTabListBox_Impl::Resize()
     if ( mbAutoResize )
     {
         mbResizeDisabled = sal_True;
-        Point aPos = GetPosPixel();
         SetPosSizePixel( Point( 0, aBarSize.Height() ),
                         Size( aBoxSize.Width(), aBoxSize.Height() - aBarSize.Height() ) );
         mbResizeDisabled = sal_False;

@@ -1371,7 +1371,6 @@ void SvTreeListBox::EditedText( const XubString& rStr )
     DBG_CHKTHIS(SvTreeListBox,0);
     if(pEdEntry) // we have to check if this entry is null that means that it is removed while editing
     {
-        Point aPos = GetEntryPosition( pEdEntry );
         if( EditedEntry( pEdEntry, rStr ) )
         {
             ((SvLBoxString*)pEdItem)->SetText( pEdEntry, rStr );
