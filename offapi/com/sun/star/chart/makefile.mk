@@ -72,6 +72,7 @@ IDLFILES=\
     ChartGrid.idl\
     ChartLegend.idl\
     ChartLegendPosition.idl\
+    ChartLegendExpansion.idl \
     ChartLine.idl\
     ChartPieSegmentProperties.idl\
     ChartRegressionCurveType.idl\

@@ -52,7 +52,6 @@ IDLFILES= \
     FillBitmap.idl \
     IncrementData.idl \
     InterpretedData.idl \
-    LegendExpansion.idl \
     LegendPosition.idl \
     LegendSymbolStyle.idl \
     LightSource.idl \
