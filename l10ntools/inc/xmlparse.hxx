@@ -64,7 +64,6 @@ using namespace std;
 #define MAX_LANGUAGES               99
 
 
-//#define TESTDRIVER        /* use xml2gsi testclass */
 //-------------------------------------------------------------------------
 
 /** Holds data of Attributes
@@ -96,7 +95,7 @@ public:
     }
 };
 
-DECLARE_LIST( XMLAttributeList, XMLAttribute * )
+typedef ::std::vector< XMLAttribute* > XMLAttributeList;
 
 //-------------------------------------------------------------------------
 

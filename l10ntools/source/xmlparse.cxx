@@ -240,8 +240,8 @@ XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
                     return ( XMLElement * ) pChild;
 
                 BOOL bMatch = FALSE;
-                for ( ULONG j = 0; j < pList->Count() && bMatch; j++ ) {
-                    XMLAttribute *pAttribute = pList->GetObject( j );
+                for ( size_t j = 0; j < pList->size() && bMatch; j++ ) {
+                    XMLAttribute *pAttribute = (*pList)[ j ];
                     XMLAttribute *pCandidate =
                         (( XMLElement * ) pChild )->GetAttribute(
                             *pAttribute );
@@ -278,7 +278,6 @@ BOOL XMLFile::Write( ByteString &aFilename )
 
             if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
             {                   // I wasn't able to track this down. I think this is an NFS issue .....
-                //cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
                 TimeValue aTime;
                 aTime.Seconds = 3;
                 aTime.Nanosec = 0;
@@ -298,7 +297,6 @@ BOOL XMLFile::Write( ByteString &aFilename )
                 if( aFileStat.GetSize() < 1 )
                 {
                     //retry
-                    //cerr << "WARNING: - helpex - Can't create file " << aFilename.GetBuffer() << " No#" << x << "\n";
                     aTarget.Kill();
                 }
                 else
@@ -344,13 +342,13 @@ BOOL XMLFile::Write( ofstream &rStream , XMLNode *pCur )
                 rStream  << "<";
                 WriteString( rStream, pElement->GetName());
                 if ( pElement->GetAttributeList())
-                    for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ) {
+                    for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ) {
                         rStream << " ";
-                        String sData(*pElement->GetAttributeList()->GetObject( j ));
+                        String sData(* (*pElement->GetAttributeList())[ j ] );
                         xmlutil.QuotHTML( sData );
                         WriteString( rStream , sData );
                         rStream << "=\"";
-                        sData=pElement->GetAttributeList()->GetObject( j )->GetValue();
+                        sData = (*pElement->GetAttributeList())[ j ]->GetValue();
                         xmlutil.QuotHTML(  sData );
                         WriteString( rStream , sData  );
                         rStream << "\"";
@@ -410,12 +408,12 @@ void XMLFile::Print( XMLNode *pCur, USHORT nLevel )
 
                 fprintf( stdout, "<%s", ByteString( pElement->GetName(), RTL_TEXTENCODING_UTF8 ).GetBuffer());
                 if ( pElement->GetAttributeList())
-                    for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
-                        ByteString aAttrName( *pElement->GetAttributeList()->GetObject( j ), RTL_TEXTENCODING_UTF8 );
+                    for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
+                        ByteString aAttrName( *(*pElement->GetAttributeList())[ j ], RTL_TEXTENCODING_UTF8 );
                         if( !aAttrName.EqualsIgnoreCaseAscii( XML_LANG ) ) {
                             fprintf( stdout, " %s=\"%s\"",
                                 aAttrName.GetBuffer(),
-                                ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),
+                                ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),
                                     RTL_TEXTENCODING_UTF8 ).GetBuffer());
                         }
                     }
@@ -470,7 +468,6 @@ XMLFile::XMLFile( const String &rFileName ) // the file name, empty if created f
                   XMLStrings   ( NULL )
 
 {
-//  nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark_value"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
     nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("bookmark"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
     nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("variable"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
     nodes_localize.insert( TagMap::value_type(ByteString(String::CreateFromAscii("paragraph"),RTL_TEXTENCODING_ASCII_US) , TRUE) );
@@ -518,13 +515,13 @@ void XMLFile::InsertL10NElement( XMLElement* pElement ){
     LangHashMap* elem;
 
     if( pElement->GetAttributeList() != NULL ){
-        for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
-            tmpStr=ByteString( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
+        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
+            tmpStr=ByteString( *(*pElement->GetAttributeList())[ j ], RTL_TEXTENCODING_UTF8 );
             if( tmpStr.CompareTo(ID)==COMPARE_EQUAL  ){ // Get the "id" Attribute
-                id = ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
+                id = ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
             }
             if( tmpStr.CompareTo( XML_LANG ) == COMPARE_EQUAL ){    // Get the "xml-lang" Attribute
-                language = ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
+                language = ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
             }
 
         }
@@ -646,20 +643,19 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur , int pos)
                 ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
                 ByteString language,tmpStrVal,oldref;
                 if ( pElement->GetAttributeList()){
-                    for ( ULONG j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
-                        const ByteString tmpStr( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
+                    for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; j++ ){
+                        const ByteString tmpStr( *(*pElement->GetAttributeList())[ j ],RTL_TEXTENCODING_UTF8 );
                         if( tmpStr.CompareTo(THEID)==COMPARE_EQUAL  ){  // Get the "id" Attribute
-                            tmpStrVal=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
-                            //printf("Checking id = %s\n",tmpStrVal.GetBuffer() );
+                            tmpStrVal=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                         if( tmpStr.CompareTo(LOCALIZE)==COMPARE_EQUAL  ){   // Get the "localize" Attribute
                             bInsert=false;
                         }
                         if( tmpStr.CompareTo(XML_LANG)==COMPARE_EQUAL ){    // Get the "xml-lang" Attribute
-                            language=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            language=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                         if( tmpStr.CompareTo(OLDREF)==COMPARE_EQUAL ){  // Get the "oldref" Attribute
-                            oldref=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
+                            oldref=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                         }
                     }
                     pElement->SetLanguageId ( language );
@@ -720,10 +716,10 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                 ByteString sName(pElement->GetName(),RTL_TEXTENCODING_ASCII_US);
                 if( sName.EqualsIgnoreCaseAscii( TOPIC ) ){
                     if ( pElement->GetAttributeList()){
-                        for ( ULONG j = 0 , cnt = pElement->GetAttributeList()->Count(); j < cnt && bInsert; j++ ){
-                            const ByteString tmpStr( *pElement->GetAttributeList()->GetObject( j ),RTL_TEXTENCODING_UTF8 );
+                        for ( size_t j = 0 , cnt = pElement->GetAttributeList()->size(); j < cnt && bInsert; j++ ){
+                            const ByteString tmpStr( *(*pElement->GetAttributeList())[ j ],RTL_TEXTENCODING_UTF8 );
                             if( tmpStr.EqualsIgnoreCaseAscii( STATUS ) ){
-                                ByteString tmpStrVal=ByteString( pElement->GetAttributeList()->GetObject( j )->GetValue(),RTL_TEXTENCODING_UTF8 );
+                                ByteString tmpStrVal=ByteString( (*pElement->GetAttributeList())[ j ]->GetValue(),RTL_TEXTENCODING_UTF8 );
                                 if( !tmpStrVal.EqualsIgnoreCaseAscii( PUBLISH )  &&
                                     !tmpStrVal.EqualsIgnoreCaseAscii( DEPRECATED )){
                                     bStatusExport = false;
@@ -769,8 +765,8 @@ XMLElement::XMLElement(const XMLElement& obj)
 {
     if ( obj.pAttributes ){
         pAttributes = new XMLAttributeList();
-        for ( ULONG i = 0; i < obj.pAttributes->Count(); i++ )
-            AddAttribute( *obj.pAttributes->GetObject( i ) , obj.pAttributes->GetObject( i )->GetValue() );
+        for ( size_t i = 0; i < obj.pAttributes->size(); i++ )
+            AddAttribute( *(*obj.pAttributes)[ i ], (*obj.pAttributes)[ i ]->GetValue() );
     }
 }
 
@@ -789,14 +785,14 @@ XMLElement& XMLElement::operator=(const XMLElement& obj){
         nPos            =obj.nPos;
 
         if ( pAttributes ){
-            for ( ULONG i = 0; i < pAttributes->Count(); i++ )
-                delete pAttributes->GetObject( i );
+            for ( size_t i = 0; i < pAttributes->size(); i++ )
+                delete (*pAttributes)[ i ];
             delete pAttributes;
         }
         if ( obj.pAttributes ){
             pAttributes         =new XMLAttributeList();
-            for ( ULONG i = 0; i < obj.pAttributes->Count(); i++ )
-                AddAttribute( *obj.pAttributes->GetObject( i ) , obj.pAttributes->GetObject( i )->GetValue() );
+            for ( size_t i = 0; i < obj.pAttributes->size(); i++ )
+                AddAttribute( *(*obj.pAttributes)[ i ], (*obj.pAttributes)[ i ]->GetValue() );
         }
     }
     return *this;
@@ -808,7 +804,7 @@ void XMLElement::AddAttribute( const String &rAttribute, const String &rValue )
 {
     if ( !pAttributes )
         pAttributes = new XMLAttributeList();
-    pAttributes->Insert( new XMLAttribute( rAttribute, rValue ), LIST_APPEND );
+    pAttributes->push_back( new XMLAttribute( rAttribute, rValue ) );
 }
 
 /*****************************************************************************/
@@ -817,9 +813,9 @@ void XMLElement::ChangeLanguageTag( const String &rValue ){
     static const String rName = String::CreateFromAscii("xml-lang");
     SetLanguageId( ByteString(rValue,RTL_TEXTENCODING_UTF8) );
     if ( pAttributes ){
-        for ( ULONG i = 0; i < pAttributes->Count(); i++ ){
-            if ( *pAttributes->GetObject( i ) == rName ){
-                pAttributes->GetObject( i )->setValue(rValue);
+        for ( size_t i = 0; i < pAttributes->size(); i++ ){
+            if ( *(*pAttributes)[ i ] == rName ){
+                (*pAttributes)[ i ]->setValue(rValue);
             }
         }
     }
@@ -846,9 +842,9 @@ XMLAttribute *XMLElement::GetAttribute( const String &rName )
 /*****************************************************************************/
 {
     if ( pAttributes )
-        for ( ULONG i = 0; i < pAttributes->Count(); i++ )
-            if ( *pAttributes->GetObject( i ) == rName )
-                return pAttributes->GetObject( i );
+        for ( size_t i = 0; i < pAttributes->size(); i++ )
+            if ( *(*pAttributes)[ i ] == rName )
+                return (*pAttributes)[ i ];
 
     return NULL;
 }
@@ -858,8 +854,8 @@ XMLElement::~XMLElement()
 /*****************************************************************************/
 {
     if ( pAttributes ) {
-        for ( ULONG i = 0; i < pAttributes->Count(); i++ )
-            delete pAttributes->GetObject( i );
+        for ( size_t i = 0; i < pAttributes->size(); i++ )
+            delete (*pAttributes)[ i ];
 
         delete pAttributes;
         pAttributes = NULL;
@@ -924,15 +920,15 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                     buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\<")) );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
-                        for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
+                        for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ ){
 
-                            OUString aAttrName( *pElement->GetAttributeList()->GetObject( j ) );
+                            OUString aAttrName( *(*pElement->GetAttributeList())[ j ] );
                             if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) );
                                 buffer.append( aAttrName );
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
-                                buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
+                                buffer.append( (*pElement->GetAttributeList())[ j ]->GetValue() );
                                 buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
                             }
                         }

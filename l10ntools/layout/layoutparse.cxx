@@ -57,11 +57,11 @@ interestingAttributes( XMLAttributeList* lst )
 {
     std::vector<XMLAttribute*> interesting;
     if ( lst )
-        for ( ULONG i = 0; i < lst->Count(); i++ )
-            if ( lst->GetObject( i )->Equals( STRING( "id" ) ) )
-                interesting.insert( interesting.begin(), lst->GetObject( i ) );
-            else if ( ! BSTRING( *lst->GetObject( i ) ).CompareTo( "_", 1 ) )
-                interesting.push_back( lst->GetObject( i ) );
+        for ( size_t i = 0; i < lst->size(); i++ )
+            if ( (*lst)[ i ]->Equals( STRING( "id" ) ) )
+                interesting.insert( interesting.begin(), (*lst)[ i ] );
+            else if ( ! BSTRING( *(*lst)[ i ]).CompareTo( "_", 1 ) )
+                interesting.push_back( (*lst)[ i ] );
     return interesting;
 }
 

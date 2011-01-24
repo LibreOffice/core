@@ -166,9 +166,9 @@ void TranslateLayout::ParseCommandLine()
 static XMLAttribute*
 findAttribute( XMLAttributeList* lst, String const& name )
 {
-    for ( ULONG i = 0; i < lst->Count(); i++ )
-        if ( lst->GetObject( i )->Equals( name ) )
-            return lst->GetObject( i );
+    for ( size_t i = 0; i < lst->size(); i++ )
+        if ( (*lst)[ i ]->Equals( name ) )
+            return (*lst)[ i ];
     return 0;
 }
 
@@ -177,7 +177,17 @@ translateAttribute( XMLAttributeList* lst,
                     String const& name, String const& translation )
 {
     if ( XMLAttribute* a = findAttribute( lst, name ) )
-        return lst->Replace ( new XMLAttribute( name.Copy( 1 ), translation ), a );
+    {
+        for ( XMLAttributeList::iterator it = lst->begin(); it < lst->end(); ++it )
+        {
+            if ( *it == a )
+            {
+                delete *it;
+                *it = new XMLAttribute( name.Copy( 1 ), translation );
+                return *it;
+            }
+        }
+    }
     return 0;
 }
 
