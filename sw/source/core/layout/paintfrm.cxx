@@ -3085,18 +3085,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 
     DELETEZ( pLines );
 
-#ifdef FRANK_TEST
-    if ( pSh->GetWin() )
-    {
-        Rectangle aRect( aFrm.SVRect() );
-        pSh->GetWin()->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
-        pSh->GetWin()->SetFillColor();
-        pSh->GetWin()->SetLineColor( COL_LIGHTRED );
-        pSh->GetWin()->DrawRect( aRect );
-        pSh->GetWin()->Pop();
-    }
-#endif
-
     if ( bResetRootPaint )
         SwRootFrm::bInPaint = FALSE;
     if ( pStatics )
@@ -3109,39 +3097,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 
     ((SwRootFrm*)this)->SetCallbackActionEnabled( bOldAction );
 }
-
-#ifdef LONG_TABLE_HACK
-
-/*************************************************************************
-|*
-|*  SwRootFrm::HackPrepareLongTblPaint()
-|*
-|*************************************************************************/
-
-void SwRootFrm::HackPrepareLongTblPaint( int nMode )
-{
-    switch ( nMode )
-    {
-        case HACK_TABLEMODE_INIT       : OSL_ENSURE( !pLines, "HackPrepare: already prepared" );
-                                         pLines = new SwLineRects;
-                                         OSL_ENSURE( !pGlobalShell, "old GlobalShell lost" );
-                                         pGlobalShell = GetShell();
-                                         bTableHack = TRUE;
-                                         break;
-        case HACK_TABLEMODE_LOCKLINES  : pLines->LockLines( TRUE ); break;
-        case HACK_TABLEMODE_PAINTLINES : pLines->PaintLines( GetShell()->GetOut() );
-                                         break;
-        case HACK_TABLEMODE_UNLOCKLINES: pLines->LockLines( FALSE ); break;
-        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetShell()->GetOut() );
-                                         DELETEZ( pLines );
-                                         pGlobalShell = 0;
-                                         bTableHack = FALSE;
-                                         break;
-    }
-}
-
-#endif
-
 
 /*************************************************************************
 |*
