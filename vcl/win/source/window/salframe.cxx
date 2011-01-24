@@ -2835,13 +2835,13 @@ static long ImplA2I( const BYTE* pStr )
 }
 
 // -----------------------------------------------------------------------
-static HRESULT WINAPI backwardCompatibleDwmIsCompositionEnabled( WIN_BOOL* pOut )
+static HRESULT WINAPI backwardCompatibleDwmIsCompositionEnabled( BOOL* pOut )
 {
     *pOut = FALSE;
     return S_OK;
 }
 
-static WIN_BOOL ImplDwmIsCompositionEnabled()
+static BOOL ImplDwmIsCompositionEnabled()
 {
     SalData* pSalData = GetSalData();
     if( ! pSalData->mpDwmIsCompositionEnabled )
@@ -2853,7 +2853,7 @@ static WIN_BOOL ImplDwmIsCompositionEnabled()
         if( ! pSalData->mpDwmIsCompositionEnabled ) // something failed
             pSalData->mpDwmIsCompositionEnabled = backwardCompatibleDwmIsCompositionEnabled;
     }
-    WIN_BOOL aResult = FALSE;
+    BOOL aResult = FALSE;
     HRESULT nError = pSalData->mpDwmIsCompositionEnabled( &aResult );
     return nError == S_OK && aResult;
 }

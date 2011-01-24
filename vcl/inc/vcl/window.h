@@ -108,7 +108,7 @@ namespace vcl {
 // - Prototypes -
 // --------------
 
-long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, USHORT nEvent, const void* pEvent );
+long ImplWindowFrameProc( Window* pInst, SalFrame* pFrame, sal_uInt16 nEvent, const void* pEvent );
 
 // -----------
 // - HitTest -

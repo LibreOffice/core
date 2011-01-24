@@ -266,7 +266,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
         maPageVDev.Erase();
         maPageVDev.Push();
         maPageVDev.SetMapMode( MAP_100TH_MM );
-        ULONG nOldDrawMode = maPageVDev.GetDrawMode();
+        sal_uLong nOldDrawMode = maPageVDev.GetDrawMode();
         if( mbGreyscale )
             maPageVDev.SetDrawMode( maPageVDev.GetDrawMode() |
                                     ( DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_GRAYTEXT |

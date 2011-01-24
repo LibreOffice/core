@@ -48,7 +48,7 @@ class Font;
 struct HDCCache;
 struct TempFontItem;
 
-typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(WIN_BOOL*);
+typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(BOOL*);
 
 // --------------------
 // - Standard-Defines -
