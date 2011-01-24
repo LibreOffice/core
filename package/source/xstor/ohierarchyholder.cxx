@@ -192,7 +192,6 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
     }
     else
     {
-        sal_Bool bNewElement = sal_False;
         ::rtl::Reference< OHierarchyElement_Impl > aElement;
         OHierarchyElementList_Impl::iterator aIter = m_aChildren.find( aNextName );
         if ( aIter != m_aChildren.end() )
@@ -200,7 +199,6 @@ void OHierarchyElement_Impl::RemoveStreamHierarchically( OStringList_Impl& aList
 
         if ( !aElement.is() )
         {
-            bNewElement = sal_True;
             uno::Reference< embed::XStorage > xChildStorage = xOwnStor->openStorageElement( aNextName,
                                                                                             embed::ElementModes::READWRITE );
             if ( !xChildStorage.is() )

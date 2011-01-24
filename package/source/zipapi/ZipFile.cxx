@@ -358,6 +358,7 @@ sal_Bool ZipFile::StaticHasValidPassword( const Sequence< sal_Int8 > &aReadBuffe
 
     aDigestResult = rtl_digest_getSHA1 ( aDigest, aDigestSeq.getArray(), RTL_DIGEST_LENGTH_SHA1 );
     OSL_ASSERT ( aDigestResult == rtl_Digest_E_None );
+    (void)aDigestResult;
 
     // If we don't have a digest, then we have to assume that the password is correct
     if (  rData->aDigest.getLength() != 0  &&

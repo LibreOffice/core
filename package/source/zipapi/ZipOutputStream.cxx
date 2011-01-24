@@ -174,6 +174,7 @@ void SAL_CALL ZipOutputStream::closeEntry(  )
                                                  reinterpret_cast < sal_uInt8 * > ( pCurrentEncryptData->aDigest.getArray() ),
                                                  RTL_DIGEST_LENGTH_SHA1 );
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+            (void)aDigestResult;
             rtl_digest_destroySHA1 ( aDigest );
         }
         pCurrentEntry = NULL;
@@ -260,6 +261,7 @@ void ZipOutputStream::doDeflate()
                 mnDigested = mnDigested + nEat;
             }
             OSL_ASSERT( aDigestResult == rtl_Digest_E_None );
+            (void)aDigestResult;
 
             aEncryptionBuffer.realloc ( nLength );
 
@@ -267,6 +269,7 @@ void ZipOutputStream::doDeflate()
             aCipherResult = rtl_cipher_encode ( aCipher, pTmpBuffer,
                                             nLength, reinterpret_cast < sal_uInt8 * > (aEncryptionBuffer.getArray()),  nLength );
             OSL_ASSERT( aCipherResult == rtl_Cipher_E_None );
+            (void)aCipherResult;
 
             aChucker.WriteBytes( aEncryptionBuffer );
             aCRC.update ( aEncryptionBuffer );
