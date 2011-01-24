@@ -35,7 +35,6 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
-
 using namespace com::sun::star::bridge;
 using namespace cppu;
 using namespace std;
@@ -97,8 +96,8 @@ public:
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD_(WIN_ULONG, AddRef)();
+    STDMETHOD_(WIN_ULONG, Release)();
 
     /* IClassFactory methods */
     STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv);
@@ -139,8 +138,8 @@ public:
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD_(WIN_ULONG, AddRef)();
+    STDMETHOD_(WIN_ULONG, Release)();
 
     /* IClassFactory methods */
     STDMETHOD(CreateInstance)(IUnknown FAR* punkOuter, REFIID riid, void FAR* FAR* ppv);
@@ -273,7 +272,5 @@ protected:
 
 } // end namespace
 #endif
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

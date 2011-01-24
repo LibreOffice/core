@@ -154,15 +154,15 @@ STDMETHODIMP ProviderOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* FAR*
     return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::AddRef()
+STDMETHODIMP_(WIN_ULONG) ProviderOleWrapper_Impl::AddRef()
 {
     return osl_incrementInterlockedCount( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) ProviderOleWrapper_Impl::Release()
+STDMETHODIMP_(WIN_ULONG) ProviderOleWrapper_Impl::Release()
 {
     MutexGuard aGuard( Mutex::getGlobalMutex());
-    ULONG refCount = --m_refCount;
+    WIN_ULONG refCount = --m_refCount;
     if (m_refCount == 0)
     {
         delete this;
@@ -300,15 +300,15 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::QueryInterface(REFIID riid, void FAR* F
     return ResultFromScode(E_NOINTERFACE);
 }
 
-STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::AddRef()
+STDMETHODIMP_(WIN_ULONG) OneInstanceOleWrapper_Impl::AddRef()
 {
     return osl_incrementInterlockedCount( &m_refCount);
 }
 
-STDMETHODIMP_(ULONG) OneInstanceOleWrapper_Impl::Release()
+STDMETHODIMP_(WIN_ULONG) OneInstanceOleWrapper_Impl::Release()
 {
     MutexGuard oGuard( Mutex::getGlobalMutex());
-    ULONG refCount = --m_refCount;
+    WIN_ULONG refCount = --m_refCount;
     if ( m_refCount == 0)
     {
         delete this;

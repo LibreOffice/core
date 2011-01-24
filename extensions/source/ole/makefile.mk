@@ -121,7 +121,7 @@ SHL2OBJS=$(REAL_OWNGUID_SLOFILES)
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=$(TARGET).dxp
 
-.ENDIF
+.ENDIF # "$(GUI)" == "WNT" && "$(DISABLE_ATL)"==""
 
 #----------------------------------------------------------------
 

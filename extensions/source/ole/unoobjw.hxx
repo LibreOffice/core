@@ -35,10 +35,7 @@
 #include <com/sun/star/script/InvocationInfo.hpp>
 #include <salhelper/simplereferenceobject.hxx>
 
-#include <tools/presys.h>
 #include "comifaces.hxx"
-#include <tools/postsys.h>
-
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
@@ -130,8 +127,8 @@ public:
 
     /* IUnknown methods */
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR * ppvObj);
-    STDMETHOD_(ULONG, AddRef)();
-    STDMETHOD_(ULONG, Release)();
+    STDMETHOD_(WIN_ULONG, AddRef)();
+    STDMETHOD_(WIN_ULONG, Release)();
 
     /* IDispatch methods */
     STDMETHOD( GetTypeInfoCount )( unsigned int * pctinfo );
@@ -292,8 +289,6 @@ protected:
 
 
 };
-
-
 
 } // end namespace
 
