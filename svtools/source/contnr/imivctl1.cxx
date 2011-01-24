@@ -40,7 +40,7 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/controllayout.hxx>
 
-#include "ivctrl.hxx"
+#include <svtools/ivctrl.hxx>
 #include "imivctl.hxx"
 #include <svtools/svmedit.hxx>
 

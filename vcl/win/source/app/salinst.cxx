@@ -47,7 +47,7 @@
 #include <salobj.h>
 #include <vcl/salsys.hxx>
 #include <saltimer.h>
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <salbmp.h>
 #include <vcl/salimestatus.hxx>
 #include <vcl/timer.hxx>
@@ -434,9 +434,12 @@ SalData::SalData()
     mpFirstIcon = 0;            // icon cache, points to first icon, NULL if none
     mpTempFontItem = 0;
     mbThemeChanged = FALSE;     // true if visual theme was changed: throw away theme handles
+    mbThemeMenuSupport = FALSE;
 
     // init with NULL
     gdiplusToken = 0;
+    maDwmLib     = 0;
+    mpDwmIsCompositionEnabled = 0;
 
     initKeyCodeMap();
 
@@ -503,7 +506,6 @@ SalInstance* CreateSalInstance()
     SalData* pSalData = GetSalData();
 
     // determine the windows version
-    aSalShlData.mbWNT        = 0;
     aSalShlData.mbWXP        = 0;
     aSalShlData.mbWPrinter   = 0;
     WORD nVer = (WORD)GetVersion();
@@ -516,7 +518,6 @@ SalInstance* CreateSalInstance()
     {
         if ( aSalShlData.maVersionInfo.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
-            aSalShlData.mbWNT = 1;
             // Windows XP ?
             if ( aSalShlData.maVersionInfo.dwMajorVersion > 5 ||
                ( aSalShlData.maVersionInfo.dwMajorVersion == 5 && aSalShlData.maVersionInfo.dwMinorVersion >= 1 ) )
@@ -531,8 +532,6 @@ SalInstance* CreateSalInstance()
     // register frame class
     if ( !pSalData->mhPrevInst )
     {
-        if ( aSalShlData.mbWNT )
-        {
             WNDCLASSEXW aWndClassEx;
             aWndClassEx.cbSize          = sizeof( aWndClassEx );
             aWndClassEx.style           = CS_OWNDC;
@@ -568,53 +567,11 @@ SalInstance* CreateSalInstance()
             aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEW;
             if ( !RegisterClassExW( &aWndClassEx ) )
                 return NULL;
-        }
-        else
-        {
-            WNDCLASSEXA aWndClassEx;
-            aWndClassEx.cbSize          = sizeof( aWndClassEx );
-            aWndClassEx.style           = CS_OWNDC;
-            aWndClassEx.lpfnWndProc     = SalFrameWndProcA;
-            aWndClassEx.cbClsExtra      = 0;
-            aWndClassEx.cbWndExtra      = SAL_FRAME_WNDEXTRA;
-            aWndClassEx.hInstance       = pSalData->mhInst;
-            aWndClassEx.hCursor         = 0;
-            aWndClassEx.hbrBackground   = 0;
-            aWndClassEx.lpszMenuName    = 0;
-            aWndClassEx.lpszClassName   = SAL_FRAME_CLASSNAMEA;
-            ImplLoadSalIcon( SAL_RESID_ICON_DEFAULT, aWndClassEx.hIcon, aWndClassEx.hIconSm );
-            if ( !RegisterClassExA( &aWndClassEx ) )
-                return NULL;
-
-            aWndClassEx.hIcon           = 0;
-            aWndClassEx.hIconSm         = 0;
-            aWndClassEx.style          |= CS_SAVEBITS;
-            aWndClassEx.lpszClassName   = SAL_SUBFRAME_CLASSNAMEA;
-            if ( !RegisterClassExA( &aWndClassEx ) )
-                return NULL;
-
-            aWndClassEx.style           = 0;
-            aWndClassEx.lpfnWndProc     = SalComWndProcA;
-            aWndClassEx.cbWndExtra      = 0;
-            aWndClassEx.lpszClassName   = SAL_COM_CLASSNAMEA;
-            if ( !RegisterClassExA( &aWndClassEx ) )
-                return NULL;
-        }
     }
 
-    HWND hComWnd;
-    if ( aSalShlData.mbWNT )
-    {
-        hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
+    HWND hComWnd = CreateWindowExW( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEW,
                                    L"", WS_POPUP, 0, 0, 0, 0, 0, 0,
                                    pSalData->mhInst, NULL );
-    }
-    else
-    {
-        hComWnd = CreateWindowExA( WS_EX_TOOLWINDOW, SAL_COM_CLASSNAMEA,
-                                   "", WS_POPUP, 0, 0, 0, 0, 0, 0,
-                                   pSalData->mhInst, NULL );
-    }
     if ( !hComWnd )
         return NULL;
 
@@ -719,8 +676,12 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
+
             bOneEvent = bWasMsg = true;
         }
         else
@@ -731,8 +692,11 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
         }
     }
 }

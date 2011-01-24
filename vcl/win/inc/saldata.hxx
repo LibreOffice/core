@@ -33,6 +33,8 @@
 #include <vcl/salwtype.hxx>
 #include <wincomp.hxx>
 
+#include "osl/module.h"
+
 #include <set>  // for hMenu validation
 #include <map>
 
@@ -45,6 +47,8 @@ class WinSalPrinter;
 class Font;
 struct HDCCache;
 struct TempFontItem;
+
+typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(WIN_BOOL*);
 
 // --------------------
 // - Standard-Defines -
@@ -131,12 +135,15 @@ public:
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
     BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    BOOL                    mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
 
     std::set< HMENU >       mhMenuSet;              // keeps track of menu handles created by VCL, used by IsKnownMenuHandle()
     std::map< UINT,USHORT > maVKMap;      // map some dynamic VK_* entries
+    oslModule               maDwmLib;
+    DwmIsCompositionEnabled_ptr mpDwmIsCompositionEnabled;
 };
 
 inline void SetSalData( SalData* pData ) { ImplGetSVData()->mpSalData = (void*)pData; }
@@ -154,7 +161,6 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
-    WIN_BOOL                mbWNT;                  // kein W16/W95/W98 sondern ein NT
     WIN_BOOL                mbW40;                  // Is System-Version >= 4.0
     WIN_BOOL                mbWXP;                  // Windows XP
     WIN_BOOL                mbWPrinter;             // true: use unicode printer functions
@@ -213,6 +219,7 @@ void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 ULONG ImplSalReleaseYieldMutex();
 void ImplSalAcquireYieldMutex( ULONG nCount );
+sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg );
 
 // \\WIN\SOURCE\WINDOW\SALFRAME.CXX
 LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );

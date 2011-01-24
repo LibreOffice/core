@@ -45,7 +45,6 @@
 #include "vcl/event.hxx"
 #include "vcl/vclevent.hxx"
 #include "vcl/virdev.hxx"
-#include "vcl/windata.hxx"
 #include "vcl/window.h"
 #include "vcl/wrkwin.hxx"
 #include "vcl/idlemgr.hxx"
