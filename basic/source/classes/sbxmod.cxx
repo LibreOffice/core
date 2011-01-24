@@ -300,9 +300,8 @@ DocObjectWrapper::invoke( const ::rtl::OUString& aFunctionName, const Sequence< 
 
     // call method
     SbxVariableRef xReturn = new SbxVariable;
-    ErrCode nErr = SbxERR_OK;
 
-    nErr = pMethod->Call( xReturn );
+    pMethod->Call( xReturn );
     Any aReturn;
     // get output parameters
     if ( xSbxParams.Is() )

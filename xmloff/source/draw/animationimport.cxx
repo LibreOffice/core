@@ -530,8 +530,8 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
 
         // fill the sequence
         Any* pValues = aValues.getArray();
-        sal_Int32 nIndex, nElement;
-        for( nIndex = 0, nElement = 0; nElements && (nIndex >= 0); nElements-- )
+        sal_Int32 nIndex;
+        for( nIndex = 0; nElements && (nIndex >= 0); nElements-- )
         {
             *pValues++ = convertValue( eAttributeName, rValue.getToken( 0, ';', nIndex ) );
         }

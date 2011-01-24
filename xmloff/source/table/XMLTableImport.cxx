@@ -454,9 +454,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
 
         Reference< XPropertySet > xRowSet( mxRows->getByIndex(mnCurrentRow), UNO_QUERY );
 
-        sal_Int32 nRepeated = 1;
         OUString sStyleName;
-        sal_Bool bVisibility = sal_True;
 
         // read attributes for the table-row
         sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -469,11 +467,7 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
             sal_uInt16 nPrefix2 = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
             if( nPrefix2 == XML_NAMESPACE_TABLE )
             {
-                if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
-                {
-                    nRepeated = sValue.toInt32();
-                }
-                else if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+                if( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
                 {
                     sStyleName = sValue;
                 }
@@ -481,10 +475,16 @@ SvXMLImportContext * XMLTableImportContext::ImportRow( USHORT nPrefix, const OUS
                 {
                     msDefaultCellStyleName = sValue;
                 }
+#if 0
                 else if( IsXMLToken( aLocalName, XML_VISIBILITY ) )
                 {
                     bVisibility = IsXMLToken( sValue, XML_VISIBLE );
                 }
+                else if( IsXMLToken( aLocalName, XML_NUMBER_ROWS_REPEATED ) )
+                {
+                    nRepeated = sValue.toInt32();
+                }
+#endif
             }
             else if ( (XML_NAMESPACE_XML == nPrefix2) &&
                  IsXMLToken(aLocalName, XML_ID)   )

@@ -1454,6 +1454,7 @@ void SdrUndoPage::ImpRemovePage(USHORT nNum)
             pChkPg=rMod.RemovePage(nNum);
         }
         DBG_ASSERT(pChkPg==&mrPage,"SdrUndoPage::ImpRemovePage(): RemovePage!=&mrPage");
+        (void)pChkPg;
     }
 }
 

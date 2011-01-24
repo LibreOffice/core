@@ -338,8 +338,6 @@ ULONG SvTokenStream::GetNumber()
 *************************************************************************/
 BOOL SvTokenStream::MakeToken( SvToken & rToken )
 {
-    USHORT          i;
-
     do
     {
         if( 0 == c )
@@ -412,7 +410,6 @@ BOOL SvTokenStream::MakeToken( SvToken & rToken )
     else if( c == '"' )
     {
         ByteString          aStr;
-        i = 0;
         BOOL bDone = FALSE;
         while( !bDone && !IsEof() && c )
         {

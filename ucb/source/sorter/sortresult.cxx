@@ -1469,7 +1469,7 @@ void SortedResultSet::Initialize(
 
     // insert some dummy entries first and replace then
     // the entries with the right ones
-    sal_uInt32 i;
+    size_t i;
 
     for ( i=1; i<maS2O.Count(); i++ )
         maO2S.Insert( (void*) 0, i );   // Insert( data, pos )

@@ -2359,6 +2359,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     }
 
     DBG_ASSERT(!bEllipticalArc, "XMLIMP: non-interpreted tags in svg:d element!");
+    (void)bEllipticalArc;
 
     if(nNumPolys)
     {
