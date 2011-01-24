@@ -47,7 +47,6 @@ $(call gb_Package_get_clean_target,%) :
         rm -f $(FILES))
 
 $(call gb_Package_get_preparation_target,%) :
-    $(call gb_Output_announce,$*,$(true),PKG,2)
     mkdir -p $(dir $@) && touch $@
 
 $(call gb_Package_get_target,%) :
