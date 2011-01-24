@@ -207,7 +207,8 @@ void Player::setDDrawParams( IDirectDraw* pDDraw, IDirectDrawSurface* pDDrawSurf
 
 long Player::processEvent()
 {
-    long nCode, nParam1, nParam2;
+    long nCode;
+    LONG_PTR nParam1, nParam2;
 
     if( mpME && SUCCEEDED( mpME->GetEvent( &nCode, &nParam1, &nParam2, 0 ) ) )
     {
