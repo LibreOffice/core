@@ -2144,9 +2144,6 @@ short SmSymDefineDialog::Execute()
 void SmSymDefineDialog::SetSymbolSetManager(const SmSymbolManager &rMgr)
 {
     aSymbolMgrCopy = rMgr;
-#ifdef DEBUG
-//        USHORT nS = aSymbolMgrCopy.GetSymbolSetCount();
-#endif
 
     // Das modified Flag der Kopie auf false setzen, damit man spaeter damit
     // testen kann ob sich was geaendert hat.
@@ -2339,7 +2336,7 @@ void SmSymDefineDialog::SetFont(const XubString &rFontName, const XubString &rSt
     if (pSubsetMap)
         delete pSubsetMap;
     pSubsetMap = new SubsetMap( &aFontCharMap );
-    //
+
     aFontsSubsetLB.Clear();
     bool bFirst = true;
     const Subset* pSubset;

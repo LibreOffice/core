@@ -81,10 +81,6 @@
 #include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
 #endif
 
-#ifdef VERT_DISTANCE
-#include <math.h>
-#endif
-
 
 using namespace ::com::sun::star;
 

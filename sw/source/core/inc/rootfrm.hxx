@@ -299,10 +299,6 @@ public:
     void SetBrowseWidth( long n ) { bBrowseWidthValid = TRUE; nBrowseWidth = n;}
     inline void InvalidateBrowseWidth();
 
-#ifdef LONG_TABLE_HACK
-    void HackPrepareLongTblPaint( int nMode );
-#endif
-
     BOOL IsNewLayout() const { return bIsNewLayout; }
     void ResetNewLayout()    { bIsNewLayout = FALSE;}
 
