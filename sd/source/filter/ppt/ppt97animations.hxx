@@ -129,9 +129,6 @@ private: //private methods
     bool HasAfterEffect() const;
     bool HasAfterEffect_ChangeColor() const;
     bool HasAfterEffect_DimAtNextEffect() const;
-#ifdef FUTURE
-    bool HasAfterEffect_DimAfterEffect() const;
-#endif
     bool HasStopPreviousSound() const;
     bool HasReverseOrder() const; //true if the text paragraphs should be animated in reverse order
     sal_Int32 GetParagraphLevel() const; //paragraph level that is animated ( that paragraph and higher levels )
