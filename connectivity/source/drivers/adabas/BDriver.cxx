@@ -28,6 +28,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+#include <tools/solar.h>
+#define ULONG ODBC_ULONG
+#include <odbc/sqltypes.h>
+#undef ULONG
+#undef BOOL
 #include <unotools/tempfile.hxx>
 #include <sal/macros.h>
 #include "adabas/BDriver.hxx"
