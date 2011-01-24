@@ -199,13 +199,13 @@ bool PrinterOptions::ReadFromConfig( bool i_bFile )
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTMODE) >>= nValue )
                                 SetReducedGradientMode( (PrinterGradientMode)nValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDGRADIENTSTEPCOUNT) >>= nValue )
-                                SetReducedGradientStepCount( (USHORT)nValue );
+                                SetReducedGradientStepCount( (sal_uInt16)nValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEBITMAPS) >>= bValue )
                                 SetReduceBitmaps( bValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPMODE) >>= nValue )
                                 SetReducedBitmapMode( (PrinterBitmapMode)nValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPRESOLUTION) >>= nValue )
-                                SetReducedBitmapResolution( (USHORT)nValue );
+                                SetReducedBitmapResolution( (sal_uInt16)nValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_REDUCEDBITMAPINCLUDESTRANSPARENCY) >>= bValue )
                                 SetReducedBitmapIncludesTransparency( bValue );
                             if( xSet->getPropertyValue(PROPERTYNAME_CONVERTTOGREYSCALES) >>= bValue )
