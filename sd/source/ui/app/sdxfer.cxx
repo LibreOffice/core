@@ -599,10 +599,6 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
 
 // -----------------------------------------------------------------------------
 
-/* testcode
-#include <sfx2/docfile.hxx>
-*/
-
 sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject, sal_uInt32 nObjectType, const DataFlavor& )
 {
     sal_Bool bRet = sal_False;
@@ -627,17 +623,6 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                     if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
                         rxOStm->Commit();
                 }
-
-    /* testcode
-                {
-                    const rtl::OUString aURL( RTL_CONSTASCII_USTRINGPARAM( "file:///e:/test.xml" ) );
-                    SfxMedium aMedium( aURL, STREAM_WRITE | STREAM_TRUNC, TRUE );
-                    aMedium.IsRemote();
-                    com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
-                    if( SvxDrawingLayerExport( pDoc, xDocOut, xComponent, (pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? "com.sun.star.comp.Impress.XMLClipboardExporter" : "com.sun.star.comp.DrawingLayer.XMLExporter" ) )
-                        aMedium.Commit();
-                }
-    */
 
                 xComponent->dispose();
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
@@ -736,7 +721,6 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, BOOL bPersist
         if( mpSdViewIntern )
             mpSdViewIntern->HideSdrPage();
 
-        // #116168#
         mpSdDrawDocument->ClearModel(sal_False);
 
         mpPageDocShell = NULL;

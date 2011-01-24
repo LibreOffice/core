@@ -96,7 +96,7 @@ void SdDLL::RegisterFactorys()
 
 void SdDLL::RegisterInterfaces()
 {
-    // Modul
+    // Module
     SfxModule* pMod = SD_MOD();
     SdModule::RegisterInterface(pMod);
 

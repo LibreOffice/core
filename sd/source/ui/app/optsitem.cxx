@@ -351,7 +351,7 @@ SfxPoolItem* SdOptionsLayoutItem::Clone( SfxItemPool* ) const
 int SdOptionsLayoutItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==( rAttr );
-    DBG_ASSERT( bSameType, "SdOptionsLayoutItem::operator==(), differen pool item type!" );
+    DBG_ASSERT( bSameType, "SdOptionsLayoutItem::operator==(), different pool item type!" );
     return bSameType && ( maOptionsLayout == static_cast< const SdOptionsLayoutItem& >( rAttr ).maOptionsLayout );
 }
 
@@ -454,7 +454,7 @@ SfxPoolItem* SdOptionsContentsItem::Clone( SfxItemPool* ) const
 int SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsContentsItem::operator==(), differen pool item type!" );
+    DBG_ASSERT( bSameType, "SdOptionsContentsItem::operator==(), different pool item type!" );
     return bSameType && ( maOptionsContents == static_cast<const SdOptionsContentsItem&>( rAttr ).maOptionsContents );
 }
 
@@ -476,7 +476,6 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
                         B2U( "Office.Draw/Misc" ) :
                         B2U( "Office.Impress/Misc" ) ) :
                       OUString() ),
-    // #97016#
     nDefaultObjectSizeWidth(8000),
     nDefaultObjectSizeHeight(5000),
     bStartWithTemplate( TRUE ),
@@ -494,7 +493,6 @@ SdOptionsMisc::SdOptionsMisc( USHORT nConfigId, BOOL bUseConfig ) :
     bSolidDragging( TRUE ),
     bSolidMarkHdl( TRUE ),
     bSummationOfParagraphs( FALSE ),
-    // #90356#
     bShowUndoDeleteWarning( TRUE ),
     bSlideshowRespectZOrder( TRUE ),
     bShowComments( TRUE ),
@@ -528,11 +526,9 @@ BOOL SdOptionsMisc::operator==( const SdOptionsMisc& rOpt ) const
             IsSummationOfParagraphs() == rOpt.IsSummationOfParagraphs() &&
             IsSolidDragging() == rOpt.IsSolidDragging() &&
             IsSolidMarkHdl() == rOpt.IsSolidMarkHdl() &&
-            // #90356#
             IsShowUndoDeleteWarning() == rOpt.IsShowUndoDeleteWarning() &&
             IsSlideshowRespectZOrder() == rOpt.IsSlideshowRespectZOrder() &&
             GetPrinterIndependentLayout() == rOpt.GetPrinterIndependentLayout() &&
-            // #97016#
             GetDefaultObjectSizeWidth() == rOpt.GetDefaultObjectSizeWidth() &&
             GetDefaultObjectSizeHeight() == rOpt.GetDefaultObjectSizeHeight() &&
 
@@ -562,7 +558,6 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "Preview",
         "ModifyWithAttributes",
         "SimpleHandles",
-        // #97016#
         "DefaultObjectSize/Width",
         "DefaultObjectSize/Height",
 
@@ -574,7 +569,6 @@ void SdOptionsMisc::GetPropNameArray( const char**& ppNames, ULONG& rCount ) con
         "NewDoc/AutoPilot",
         "Start/CurrentPage",
         "Compatibility/AddBetween",
-        // #90356#
         "ShowUndoDeleteWarning",
         "SlideshowRespectZOrder",
 
@@ -602,10 +596,8 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
     if( pValues[6].hasValue() ) SetBigHandles( *(sal_Bool*) pValues[ 6 ].getValue() );
     if( pValues[7].hasValue() ) SetDoubleClickTextEdit( *(sal_Bool*) pValues[ 7 ].getValue() );
     if( pValues[8].hasValue() ) SetClickChangeRotation( *(sal_Bool*) pValues[ 8 ].getValue() );
-    //  if( pValues[9].hasValue() ) SetPreviewQuality( FRound( *(double*) pValues[ 9 ].getValue() ) );
     if( pValues[10].hasValue() ) SetSolidDragging( *(sal_Bool*) pValues[ 10 ].getValue() );
     if( pValues[11].hasValue() ) SetSolidMarkHdl( *(sal_Bool*) pValues[ 11 ].getValue() );
-    // #97016#
     if( pValues[12].hasValue() ) SetDefaultObjectSizeWidth( *(sal_uInt32*) pValues[ 12 ].getValue() );
     if( pValues[13].hasValue() ) SetDefaultObjectSizeHeight( *(sal_uInt32*) pValues[ 13 ].getValue() );
     if( pValues[14].hasValue() ) SetPrinterIndependentLayout( *(sal_uInt16*) pValues[ 14 ].getValue() );
@@ -622,7 +614,6 @@ BOOL SdOptionsMisc::ReadData( const Any* pValues )
             SetStartWithActualPage( *(sal_Bool*) pValues[ 17 ].getValue() );
         if( pValues[18].hasValue() )
             SetSummationOfParagraphs( *(sal_Bool*) pValues[ 18 ].getValue() );
-        // #90356#
         if( pValues[19].hasValue() )
             SetShowUndoDeleteWarning( *(sal_Bool*) pValues[ 19 ].getValue() );
 
@@ -662,7 +653,6 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
     pValues[ 9 ] <<= (double)0;// GetPreviewQuality();
     pValues[ 10 ] <<= IsSolidDragging();
     pValues[ 11 ] <<= IsSolidMarkHdl();
-    // #97016#
     pValues[ 12 ] <<= GetDefaultObjectSizeWidth();
     pValues[ 13 ] <<= GetDefaultObjectSizeHeight();
     pValues[ 14 ] <<= GetPrinterIndependentLayout();
@@ -674,7 +664,6 @@ BOOL SdOptionsMisc::WriteData( Any* pValues ) const
         pValues[ 16 ] <<= IsStartWithTemplate();
         pValues[ 17 ] <<= IsStartWithActualPage();
         pValues[ 18 ] <<= IsSummationOfParagraphs();
-        // #90356#
         pValues[ 19 ] <<= IsShowUndoDeleteWarning();
         pValues[ 20 ] <<= IsSlideshowRespectZOrder();
 
@@ -711,10 +700,8 @@ SdOptionsMiscItem::SdOptionsMiscItem( USHORT _nWhich, SdOptions* pOpts, ::sd::Fr
         maOptionsMisc.SetStartWithTemplate( pOpts->IsStartWithTemplate() );
         maOptionsMisc.SetStartWithActualPage( pOpts->IsStartWithActualPage() );
         maOptionsMisc.SetSummationOfParagraphs( pOpts->IsSummationOfParagraphs() );
-        // #90356#
         maOptionsMisc.SetShowUndoDeleteWarning( pOpts->IsShowUndoDeleteWarning() );
         maOptionsMisc.SetPrinterIndependentLayout( pOpts->GetPrinterIndependentLayout() );
-        // #97016#
         maOptionsMisc.SetDefaultObjectSizeWidth( pOpts->GetDefaultObjectSizeWidth() );
         maOptionsMisc.SetDefaultObjectSizeHeight( pOpts->GetDefaultObjectSizeHeight() );
 
@@ -774,7 +761,7 @@ SfxPoolItem* SdOptionsMiscItem::Clone( SfxItemPool* ) const
 int SdOptionsMiscItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsMiscItem::operator==(), differen pool item type!" );
+    DBG_ASSERT( bSameType, "SdOptionsMiscItem::operator==(), different pool item type!" );
     return bSameType && ( maOptionsMisc == static_cast< const SdOptionsMiscItem& >(rAttr).maOptionsMisc );
 }
 
@@ -799,11 +786,9 @@ void SdOptionsMiscItem::SetOptions( SdOptions* pOpts ) const
         pOpts->SetSummationOfParagraphs( maOptionsMisc.IsSummationOfParagraphs() );
         pOpts->SetSolidDragging( maOptionsMisc.IsSolidDragging() );
         pOpts->SetSolidMarkHdl( maOptionsMisc.IsSolidMarkHdl() );
-        // #90356#
         pOpts->SetShowUndoDeleteWarning( maOptionsMisc.IsShowUndoDeleteWarning() );
         pOpts->SetPrinterIndependentLayout( maOptionsMisc.GetPrinterIndependentLayout() );
         pOpts->SetShowComments( maOptionsMisc.IsShowComments() );
-        // #97016#
         pOpts->SetDefaultObjectSizeWidth( maOptionsMisc.GetDefaultObjectSizeWidth() );
         pOpts->SetDefaultObjectSizeHeight( maOptionsMisc.GetDefaultObjectSizeHeight() );
 
@@ -975,7 +960,7 @@ SfxPoolItem* SdOptionsSnapItem::Clone( SfxItemPool* ) const
 int SdOptionsSnapItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsSnapItem::operator==(), differen pool item type!" );
+    DBG_ASSERT( bSameType, "SdOptionsSnapItem::operator==(), different pool item type!" );
     return bSameType && ( maOptionsSnap == static_cast< const SdOptionsSnapItem& >(rAttr).maOptionsSnap );
 }
 
@@ -1505,7 +1490,7 @@ SfxPoolItem* SdOptionsPrintItem::Clone( SfxItemPool* ) const
 int SdOptionsPrintItem::operator==( const SfxPoolItem& rAttr ) const
 {
     const bool bSameType = SfxPoolItem::operator==(rAttr);
-    DBG_ASSERT( bSameType, "SdOptionsPrintItem::operator==(), differen pool item type!" );
+    DBG_ASSERT( bSameType, "SdOptionsPrintItem::operator==(), different pool item type!" );
     return bSameType && ( maOptionsPrint == static_cast< const SdOptionsPrintItem& >( rAttr ).maOptionsPrint );
 }
 

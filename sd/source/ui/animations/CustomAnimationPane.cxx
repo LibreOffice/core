@@ -754,8 +754,6 @@ void CustomAnimationPane::updateControls()
     mpLBStart->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
 
-//  mpPBPlay->Enable(nSelectionCount > 0);
-
     mpFTProperty->SetText( maStrProperty );
 
     mnPropertyType = nPropertyTypeNone;

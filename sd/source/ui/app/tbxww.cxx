@@ -154,7 +154,6 @@ void SdTbxControl::StateChanged( USHORT nSId,
     if( eState == SFX_ITEM_AVAILABLE )
     {
         TbxImageItem* pItem = PTR_CAST( TbxImageItem, pState );
-        //DBG_ASSERT( pItem, "TbxImageItem erwartet!" );
         // Im StarDesktop kann jetzt auch ein anderes Item ankommen,
         // das nicht ausgewertet werden darf (#33802# und #33838#)
         if( pItem )
@@ -325,9 +324,6 @@ BOOL SdTbxControl::IsCheckable( USHORT nSId )
         case SID_CONNECTOR_LINES_CIRCLE_END:
         case SID_CONNECTOR_LINES_CIRCLES:
 
-
-
-        //case SID_ZOOM_OUT:
             return( TRUE );
     }
     return( FALSE );

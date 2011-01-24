@@ -1024,14 +1024,6 @@ void OutlineToImpressFinalizer::operator() (bool)
         // have any information about a BaseURL!
         if ( pOutlineShell->Read(*mpStream, String(), EE_FORMAT_RTF) == 0 )
         {
-/*
-            sd::OutlineViewPageChangesGuard aGuard( pView );
-
-            // Remove the first empty pages
-            USHORT nPageCount = mrDocument.GetPageCount();
-            mrDocument.RemovePage( --nPageCount );  // notes page
-            mrDocument.RemovePage( --nPageCount );  // standard page
-*/
         }
 
         // Call UpdatePreview once for every slide to resync the

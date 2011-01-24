@@ -405,12 +405,6 @@ void CustomAnimationTriggerEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* 
     if( aSize.Height() < 19 )
         aSize.Height() = 19;
     pViewData->aSize = aSize;
-
-/*
-        SvViewData* pViewData = pView->GetViewData( pEntry );
-        if( pViewData )
-            pViewData->SetSelectable(false);
-*/
 }
 
 // --------------------------------------------------------------------
@@ -689,31 +683,6 @@ void CustomAnimationList::update()
 
 // --------------------------------------------------------------------
 
-/*
-void CustomAnimationList::update( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            CustomAnimationPresetsPtr pPresets = mpController->getPresets();
-            const CustomAnimationPresetPtr pPreset = pPresets->getEffectDescriptor( pEffect->getPresetId() );
-            if( pPreset.get() )
-                pEffect->setName( pPresets->getUINameForPresetId( pPreset->getPresetId() ) );
-            else
-                pEffect->setName( pEffect->getPresetId() );
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
-
-// --------------------------------------------------------------------
-
 void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
 {
     // create a ui description
@@ -762,31 +731,6 @@ void CustomAnimationList::append( CustomAnimationEffectPtr pEffect )
         DBG_ERROR("sd::CustomAnimationList::append(), exception catched!" );
     }
 }
-
-// --------------------------------------------------------------------
-
-/*
-void CustomAnimationList::remove( CustomAnimationEffectPtr pEffect )
-{
-    SvLBoxEntry* pEntry = First();
-    while( pEntry )
-    {
-        if( static_cast< CustomAnimationEffectPtr * >( pEntry->GetUserData() )->get() == pEffect.get() )
-        {
-            GetModel()->Remove( pEntry );
-            if( pEntry == mpLastParentEntry )
-            {
-                mpLastParentEntry = 0;
-                mxLastTargetShape = 0;
-            }
-            break;
-        }
-        pEntry = Next( pEntry );
-    }
-
-    Invalidate();
-}
-*/
 
 // --------------------------------------------------------------------
 

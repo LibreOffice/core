@@ -67,13 +67,7 @@ public:
     /** populates the list with all effects from the given MainSequence */
     void update( MainSequencePtr pMainSequence );
 
-    /** updates the given effect in the list */
-//  void update( CustomAnimationEffectPtr pEffect );
-
     void update();
-
-    /** removes the given effect to the list*/
-//  void remove( CustomAnimationEffectPtr pEffect );
 
     EffectSequence getSelection() const;
 
@@ -91,7 +85,6 @@ public:
 
     virtual void KeyInput( const KeyEvent& rKEvt );
 
-//  virtual SvLBoxEntry* CreateEntry() const;
     virtual void    SetTabs();
 
     virtual void notify_change();

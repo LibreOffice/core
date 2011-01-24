@@ -495,7 +495,6 @@ SlideTransitionPane::SlideTransitionPane(
 
     // update control states before adding handlers
     updateLayout();
-    //    updateSoundList();
     updateControls();
 
     // set handlers
@@ -545,7 +544,6 @@ void SlideTransitionPane::onChangeCurrentPage()
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell
         = ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
-//    DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
     ::boost::shared_ptr<sd::slidesorter::SlideSorterViewShell::PageSelection> pSelection;
 
     if( pSlideSorterViewShell )
@@ -889,7 +887,6 @@ void SlideTransitionPane::updateControlState()
 
     maPB_APPLY_TO_ALL.Enable( mbHasSelection );
     maPB_PLAY.Enable( mbHasSelection );
-//     maPB_SLIDE_SHOW.Enable( TRUE );
     maCB_AUTO_PREVIEW.Enable( mbHasSelection );
 }
 
@@ -1040,9 +1037,7 @@ impl::TransitionEffect SlideTransitionPane::getTransitionEffectFromControls() co
             aResult.mePresChange = PRESCHANGE_AUTO;
             if( maMF_ADVANCE_AUTO_AFTER.IsEnabled())
             {
-//                 sal_uInt16 nDigits = maMF_ADVANCE_AUTO_AFTER.GetDecimalDigits();
                 aResult.mnTime = static_cast<long>(maMF_ADVANCE_AUTO_AFTER.GetValue());
-                // / static_cast< sal_uInt16 >( pow( 10.0, static_cast< double >( nDigits )));
                 aResult.mbTimeAmbiguous = false;
             }
         }

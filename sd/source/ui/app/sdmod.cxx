@@ -173,27 +173,16 @@ void SdModule::FillStatusBar(StatusBar& rStatusBar)
     // Groesse und Position
     rStatusBar.InsertItem( SID_ATTR_SIZE, SvxPosSizeStatusBarControl::GetDefItemWidth(rStatusBar), // vorher 42
                             SIB_IN | SIB_USERDRAW );
-                            // SIB_AUTOSIZE | SIB_LEFT | SIB_OWNERDRAW );
 
     // Massstab
     rStatusBar.InsertItem( SID_ATTR_ZOOM, SvxZoomStatusBarControl::GetDefItemWidth(rStatusBar), SIB_IN | SIB_CENTER );
-/*
-    // Einfuege- / Uberschreibmodus
-    rStatusBar.InsertItem( SID_ATTR_INSERT, TEXT_WIDTH( "EINFG" ),
-                            SIB_IN | SIB_CENTER );
 
-    // Selektionsmodus
-    rStatusBar.InsertItem( SID_STATUS_SELMODE, TEXT_WIDTH( "ERG" ),
-                            SIB_IN | SIB_CENTER );
-*/
     // Dokument geaendert
     rStatusBar.InsertItem( SID_DOC_MODIFIED, SvxModifyControl::GetDefItemWidth(rStatusBar) );
 
     // signatures
     rStatusBar.InsertItem( SID_SIGNATURE, XmlSecStatusBarControl::GetDefItemWidth( rStatusBar ), SIB_USERDRAW );
     rStatusBar.SetHelpId(SID_SIGNATURE, SID_SIGNATURE);
-
-
 
     // Seite
     rStatusBar.InsertItem( SID_STATUS_PAGE, TEXT_WIDTH( String().Fill( 24, 'X' ) ),

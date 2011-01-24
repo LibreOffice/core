@@ -592,7 +592,6 @@ CustomAnimationCreateTabPage* CustomAnimationCreateDialog::getCurrentPage() cons
     case RID_TP_CUSTOMANIMATION_EMPHASIS:   return mpTabPages[EMPHASIS];
     case RID_TP_CUSTOMANIMATION_EXIT:       return mpTabPages[EXIT];
     case RID_TP_CUSTOMANIMATION_MISCEFFECTS:return mpTabPages[MISCEFFECTS];
-    //case RID_TP_CUSTOMANIMATION_MOTIONPATH:
     default:
                                             return mpTabPages[MOTIONPATH];
     }

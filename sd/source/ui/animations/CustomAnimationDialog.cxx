@@ -1205,18 +1205,6 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
     mpCBSmoothStart = new CheckBox( this, SdResId( CB_SMOOTH_START ) );
     mpCBSmoothEnd = new CheckBox( this, SdResId( CB_SMOOTH_END ) );
     mpCBAutoRestart = new CheckBox( this, SdResId( CB_AUTORESTART ) );
-/*
-    mpFLPlay = new FixedLine( this, SdResId( FL_PLAY ) );
-    mpRBFromStart = new RadioButton( this, SdResId( RB_FROM_START ) );
-    mpRBFromLast = new RadioButton( this, SdResId( RB_FROM_LAST ) );
-    mpRBFromTime = new RadioButton( this, SdResId( RB_FROM_TIME ) );
-    mpMFStartTime = new MetricField( this, SdResId( MF_START_TIME ) );
-    mpFLStop = new FixedLine( this, SdResId( FL_STOP ) );
-    mpRBStopOnClick = new RadioButton( this, SdResId( RB_STOP_ON_CLICK ) );
-    mpRBStopOnNextSlide = new RadioButton( this, SdResId( RB_STOP_ON_NEXT_SLIDE ) );
-    mpRBStopAfterSlides = new RadioButton( this, SdResId( RB_STOP_AFTER_N_SLIDES ) );
-    mpMFStopAfterSlides = new MetricField( this, SdResId( MF_STOP_AFTER_SLIDES ) );
-*/
     mpFLEnhancements = new FixedLine( this, SdResId( FL_ENHANCEMENTS ) );
     mpFTSound = new FixedText( this, SdResId( FT_SOUND ) );
     mpLBSound = new ListBox( this, SdResId( LB_SOUND ) );
