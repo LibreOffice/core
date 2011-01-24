@@ -60,9 +60,6 @@ public:
    css::uno::Reference< css::text::XTextDocument > getDocument() { return mxTextDocument; }
 
     virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getXTextRange() throw (css::uno::RuntimeException);
-#ifdef TOMORROW
-    void setXTextRange( const css::uno::Reference< css::text::XTextRange >& xRange ) throw (css::uno::RuntimeException);
-#endif
     css::uno::Reference< css::text::XText > getXText() { return mxText; }
     void setXTextCursor( const css::uno::Reference< css::text::XTextCursor >& xTextCursor ) { mxTextCursor = xTextCursor; }
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::uno::RuntimeException);

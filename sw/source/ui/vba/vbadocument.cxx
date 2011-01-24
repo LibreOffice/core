@@ -236,19 +236,10 @@ SwVbaDocument::TablesOfContents( const uno::Any& index ) throw (uno::RuntimeExce
     return uno::makeAny( xCol );
 }
 
-#ifdef FIELDPATCH
-uno::Any SAL_CALL
-SwVbaDocument::FormFields( const uno::Any& index ) throw (uno::RuntimeException)
-{
-    uno::Reference< XCollection > xCol( new SwVbaFormFields( this, mxContext, getModel() ) );
-    if ( index.hasValue() )
-        return xCol->Item( index, uno::Any() );
-#else
 uno::Any SAL_CALL
 SwVbaDocument::FormFields( const uno::Any& /*index*/ ) throw (uno::RuntimeException)
 {
     uno::Reference< XCollection > xCol;
-#endif
     return uno::makeAny( xCol );
 }
 
