@@ -691,7 +691,6 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     _FndBox aFndBox( 0, 0 );
     aFndBox.SetTableLines( rBoxes, *this );
     aFndBox.DelFrms( *this );
-//  aFndBox.SaveChartData( *this );
 
     SwTableNode* pTblNd = GetTableNode();
     std::vector<SwTableBoxFmt*> aInsFormat( nCnt, 0 );
@@ -772,7 +771,6 @@ BOOL SwTable::NewInsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     aFndBox.MakeFrms( *this );
-//  aFndBox.RestoreChartData( *this );
 #if OSL_DEBUG_LEVEL > 1
     {
         const SwTableBoxes &rTabBoxes = aLines[0]->GetTabBoxes();
@@ -1494,7 +1492,6 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             _FndBox aFndBox( 0, 0 );
             aFndBox.SetTableLines( rBoxes, *this );
             aFndBox.DelFrms( *this );
-//             aFndBox.SaveChartData( *this );
 
             bRet = true;
             SwTableLine *pLine = GetTabLines()[ nRowIdx ];
@@ -1532,7 +1529,6 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                 lcl_ChangeRowSpan( *this, nCnt, --nRowIdx, true );
             //Layout update
             aFndBox.MakeFrms( *this );
-//             aFndBox.RestoreChartData( *this );
         }
         CHECK_TABLE( *this )
     }
@@ -1626,7 +1622,6 @@ void lcl_SearchSelBox( const SwTable &rTable, SwSelBoxes& rBoxes, long nMin, lon
                 bAdd = nLeft <= nMid || nRight - nMax < nMax - nLeft;
             long nRowSpan = pBox->getRowSpan();
             if( bAdd &&
-                //( bColumn || nRowSpan > 0 ) &&
                 ( !bChkProtected ||
                 !pBox->GetFrmFmt()->GetProtect().IsCntntProtected() ) )
             {
@@ -1789,47 +1784,6 @@ void SwTable::CreateSelection( const SwNode* pStartNd, const SwNode* pEndNd,
             lcl_SearchSelBox( *this, rBoxes, nMin, nMax, *aLines[i],
                               bChkProtected, bColumn );
     }
-    /* if( nTop + 1 < nBottom )
-    {
-        long nInnerMin = nUpperMin < nLowerMin ? nLowerMin : nUpperMin;
-        long nInnerMax = nUpperMax < nLowerMax ? nUpperMax : nLowerMax;
-        for( USHORT i = nTop + 1; i < nBottom; ++i )
-            lcl_SearchSelBox( *this, rBoxes, nInnerMin, nInnerMax, *aLines[i],
-                              bChkProtected, bColumn );
-    }
-    if( bCombine ) // => nUpperMin == nLowerMin, nUpperMax == nLowerMax
-    {
-        if( nBottom > nTop )
-            lcl_SearchSelBox( *this, rBoxes, nUpperMin, nUpperMax, *aLines[nTop],
-                              bChkProtected, bColumn );
-        lcl_SearchSelBox( *this, rBoxes, nLowerMin, nLowerMax, *aLines[nBottom],
-                          bChkProtected, bColumn );
-    }
-    else if( aKeepBoxes.Count() )
-    {
-        long nMin = nUpperMin < nLowerMin ? nUpperMin : nLowerMin;
-        long nMax = nUpperMax < nLowerMax ? nLowerMax : nUpperMax;
-        SwSelBoxes aCandidates;
-        for( USHORT i = nTop; i <= nBottom; ++i )
-            lcl_SearchSelBox( *this, aCandidates, nMin, nMax, *aLines[i],
-                              bChkProtected, bColumn );
-        USHORT nOld = 0, nNew = 0;
-        while ( nOld < aKeepBoxes.Count() && nNew < aCandidates.Count() )
-        {
-            const SwTableBox* pPOld = *( aKeepBoxes.GetData() + nOld );
-            SwTableBox* pPNew = *( aCandidates.GetData() + nNew );
-            if( pPOld == pPNew )
-            {   // this box will stay
-                rBoxes.Insert( pPNew );
-                ++nOld;
-                ++nNew;
-            }
-            else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
-                ++nOld;
-            else
-                ++nNew;
-        }
-    } */
     if( bColumn )
     {
         for( USHORT i = nBottom + 1; i < nLines; ++i )
@@ -2213,108 +2167,6 @@ void SwTable::CheckConsistency() const
     bool bEmpty = aRowSpanCells.empty();
     OSL_ENSURE( bEmpty, "Open row span detected" );
 }
-
-#endif
-
-
-#ifdef FINDSTARTENDOFROWSPANCACHE
-/*
- * A small optimization for FindStartEndOfRowSpan START
- *
- * NOTE: Results of some measurement revealed that this cache
- * does not improve performance!
- */
-
-class SwFindRowSpanCache
-{
-private:
-
-    struct SwFindRowSpanCacheObj
-    {
-        const SwTableBox* mpKeyBox;
-        const SwTableBox* mpCacheBox;
-        USHORT mnSteps;
-        bool mbStart;
-
-        SwFindRowSpanCacheObj( const SwTableBox& rKeyBox, const SwTableBox& rCacheBox, USHORT nSteps, bool bStart ) :
-            mpKeyBox( &rKeyBox ), mpCacheBox( &rCacheBox ), mnSteps( nSteps ), mbStart( bStart ) {}
-    };
-
-    std::list< SwFindRowSpanCacheObj > aCache;
-    bool mbUseCache;
-    static SwFindRowSpanCache* mpFindRowSpanCache;
-    SwFindRowSpanCache();
-
-public:
-
-    static SwFindRowSpanCache& getSwFindRowSpanCache();
-    const SwTableBox* FindCachedStartEndOfRowSpan( const SwTableBox& rKeyBox, USHORT nSteps, bool bStart );
-    void SetCachedStartEndOfRowSpan( const SwTableBox& rKeyBox, const SwTableBox& rCacheBox, USHORT nSteps, bool bStart );
-    void SetUseCache( bool bNew );
-};
-
-SwFindRowSpanCache* SwFindRowSpanCache::mpFindRowSpanCache = 0;
-SwFindRowSpanCache& SwFindRowSpanCache::getSwFindRowSpanCache()
-{
-    if ( !mpFindRowSpanCache ) mpFindRowSpanCache = new SwFindRowSpanCache;
-    return *mpFindRowSpanCache;
-}
-
-SwFindRowSpanCache::SwFindRowSpanCache() : mbUseCache( false )
-{
-}
-
-void SwFindRowSpanCache::SetUseCache( bool bNew )
-{
-    mbUseCache = bNew; aCache.clear();
-}
-
-const SwTableBox* SwFindRowSpanCache::FindCachedStartEndOfRowSpan( const SwTableBox& rKeyBox,
-                                                                   USHORT nSteps,
-                                                                   bool bStart )
-{
-    static nCallCount = 0;
-    static nSuccessCount = 0;
-    ++nCallCount;
-
-    if ( !mbUseCache ) return 0;
-
-    const SwTableBox* pRet = 0;
-
-    std::list< SwFindRowSpanCacheObj >::const_iterator aIter;
-    for ( aIter = aCache.begin(); aIter != aCache.end(); ++aIter )
-    {
-        if ( aIter->mpKeyBox == &rKeyBox &&
-             aIter->mnSteps == nSteps &&
-             aIter->mbStart == bStart )
-        {
-            pRet = aIter->mpCacheBox;
-            ++nSuccessCount;
-            break;
-        }
-    }
-
-    return pRet;
-}
-
-const int FindBoxCacheSize = 2;
-
-void SwFindRowSpanCache::SetCachedStartEndOfRowSpan( const SwTableBox& rKeyBox,
-                                                     const SwTableBox& rCacheBox,
-                                                     USHORT nSteps,
-                                                     bool bStart )
-{
-    if ( !mbUseCache ) return;
-
-    const SwFindRowSpanCacheObj aNew( rKeyBox, rCacheBox, nSteps, bStart );
-    aCache.push_front( aNew );
-    if ( aCache.size() > FindBoxCacheSize )
-        aCache.pop_back();
-}
-
-/*
- * A small optimization for FindStartEndOfRowSpan END
- */
 
 #endif
 
