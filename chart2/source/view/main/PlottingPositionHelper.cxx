@@ -611,17 +611,6 @@ drawing::Position3D PolarPlottingPositionHelper::transformAngleRadiusToScene( do
     return transformUnitCircleToScene( fUnitAngleDegree, fUnitRadius, fLogicZ, bDoScaling );
 }
 
-#ifdef NOTYET
-double PolarPlottingPositionHelper::getInnerLogicRadius() const
-{
-    const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
-    if( AxisOrientation_MATHEMATICAL==rScale.Orientation )
-        return rScale.Minimum;
-    else
-        return rScale.Maximum;
-}
-#endif
-
 double PolarPlottingPositionHelper::getOuterLogicRadius() const
 {
     const ExplicitScaleData& rScale = m_bSwapXAndY ? m_aScales[0] : m_aScales[1];
