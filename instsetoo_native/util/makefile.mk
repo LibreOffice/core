@@ -84,9 +84,9 @@ ALLTAR  : $(LOCALPYFILES)
 .ELSE			# "$(GUI)"!="WNT" && "$(EPM)"=="NO" && "$(USE_PACKAGER)"==""
 .IF "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack ooohelppack
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack)
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack ooohelppack sdkoo_en-US ure_en-US
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) sdkoo_en-US ure_en-US
 .ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
