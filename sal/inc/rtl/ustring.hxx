@@ -282,6 +282,8 @@ public:
 
       @return   sal_True if the string is empty;
                 sal_False, otherwise.
+
+      @since LibreOffice 3.4
     */
     sal_Bool isEmpty() const SAL_THROW(())
     {
