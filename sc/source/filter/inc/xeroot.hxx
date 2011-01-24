@@ -168,7 +168,7 @@ private:
     XclExpRootData::XclExpLinkMgrRef GetLocalLinkMgrRef() const;
 
 private:
-    mutable XclExpRootData& mrExpData;      /// Reference to the global export data struct.
+    XclExpRootData& mrExpData;      /// Reference to the global export data struct.
 };
 
 // ============================================================================

@@ -85,7 +85,6 @@ DragMethod_RotateDiagram::DragMethod_RotateDiagram( DrawViewWrapper& rDrawViewWr
     if(pObj && m_pScene)
     {
         m_aReferenceRect = pObj->GetLogicRect();
-        Rectangle aTemp = m_pScene->GetLogicRect();
 
         m_aWireframePolyPolygon = m_pScene->CreateWireframe();
 

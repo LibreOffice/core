@@ -230,7 +230,6 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const ::rtl::OUStr
 void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
@@ -242,7 +241,6 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< ::rtl::O
         catch( beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
-            bUnknownProperty = true;
         }
     }
     //todo: store unknown properties elsewhere

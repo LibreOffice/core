@@ -378,7 +378,6 @@ void ScDrawView::MarkListHasChanged()
 
     SdrOle2Obj* pOle2Obj = NULL;
     SdrGrafObj* pGrafObj = NULL;
-    SdrMediaObj* pMediaObj = NULL;
 
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
@@ -411,7 +410,6 @@ void ScDrawView::MarkListHasChanged()
         }
         else if (pObj->GetObjIdentifier() == OBJ_MEDIA)
         {
-            pMediaObj = (SdrMediaObj*) pObj;
             pViewSh->SetMediaShell(TRUE);
             bSubShellSet = TRUE;
         }

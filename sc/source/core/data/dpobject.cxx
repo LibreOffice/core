@@ -1592,6 +1592,7 @@ void ScDPObject::ToggleDetails(const DataPilotTableHeaderData& rElemDesc, ScDPOb
     }
 
     DBG_ASSERT( bFound, "member not found" );
+    (void)bFound;
 
     //! use Hierarchy and Level in SaveData !!!!
 

@@ -285,7 +285,7 @@ public:
     inline void         IncCurrScTab() { ++mrData.mnScTab; }
 
 private:
-    mutable XclRootData& mrData;        /// Reference to the global data struct.
+    XclRootData& mrData;        /// Reference to the global data struct.
 };
 
 // ============================================================================
