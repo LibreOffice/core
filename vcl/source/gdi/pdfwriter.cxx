@@ -420,6 +420,10 @@ sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
 {
     return ((PDFWriterImpl*)pImplementation)->createLink( rRect, nPageNr );
 }
+sal_Int32 PDFWriter::RegisterDestReference( sal_Int32 nDestId, const Rectangle& rRect, sal_Int32 nPageNr, DestAreaType eType )
+{
+    return ((PDFWriterImpl*)pImplementation)->registerDestReference( nDestId, rRect, nPageNr, eType );
+}
 //--->i56629
 sal_Int32 PDFWriter::CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
