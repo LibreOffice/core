@@ -6060,16 +6060,19 @@ else
   assembler_bin=bin/amd64
 fi
 if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-  AC_MSG_CHECKING([$assembler assembler path])
   if test -n "$with_asm_home"; then
     with_asm_home=`cygpath -u "$with_asm_home"`
   fi
-  if test ! -x "$with_asm_home/$assembler"; then
+  if test -x "$with_asm_home/$assembler"; then
+     AC_MSG_CHECKING([$assembler assembler path])
+     AC_MSG_RESULT([$with_asm_home/$assembler])
+  else
     AC_PATH_PROG(ML_EXE, $assembler)
     if test -z "$ML_EXE"; then
+      AC_MSG_CHECKING([$with_cl_home/$assembler_bin/$assembler])
       if test -x "$with_cl_home/$assembler_bin/$assembler"; then
         with_asm_home=$with_cl_home/$assembler_bin
-        AC_MSG_RESULT([found ($with_asm_home)])
+        AC_MSG_RESULT([found])
       else
         AC_MSG_ERROR([Configure did not find $assembler assembler.])
       fi
@@ -6077,7 +6080,6 @@ if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
        with_asm_home="ASM_IN_PATH"
     fi
   fi
-  AC_MSG_RESULT([$ASM_HOME])
 else
   with_asm_home="NO_ASM_HOME"
 fi
