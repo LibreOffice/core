@@ -32,6 +32,8 @@
 /* ********* Suppress warnings if needed */
 #include "sal/config.h"
 
+#include <cstddef>
+
 #if defined __GNUC__
 #pragma GCC system_header
 #endif
@@ -90,7 +92,6 @@
 #include <kabc/addressee.h>
 #include <kabc/field.h>
 #include <kabc/stdaddressbook.h>
-
 
 #endif
 
