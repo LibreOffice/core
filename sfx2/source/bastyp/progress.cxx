@@ -113,7 +113,7 @@ struct SfxProgress_Impl
 #define aTypeLibInfo aProgressTypeLibImpl
 
 //========================================================================
-extern ULONG Get10ThSec();
+extern sal_uInt32 Get10ThSec();
 
 // -----------------------------------------------------------------------
 
