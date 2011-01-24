@@ -64,12 +64,6 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <boost/shared_ptr.hpp>
 
-//#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
-
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-#include <cellatr.hxx>
-#endif
-
 /*--------------------------------------------------------------------
  --------------------------------------------------------------------*/
 
@@ -126,9 +120,6 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
                         FN_PARAM_TABLE_HEADLINE, FN_PARAM_TABLE_HEADLINE,
                         FN_TABLE_BOX_TEXTDIRECTION, FN_TABLE_BOX_TEXTDIRECTION,
                         FN_TABLE_SET_VERT_ALIGN, FN_TABLE_SET_VERT_ALIGN,
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-                        RES_BOXATR_FORMAT,      RES_BOXATR_FORMAT,
-#endif
                         0);
     }
     else if( nSelectionType & nsSelectionType::SEL_TXT )
@@ -189,11 +180,6 @@ void lcl_getTableAttributes( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetRowSplit(pSplit);
     if(pSplit)
         rSet.Put(*pSplit);
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    rSh.GetTblBoxFormulaAttrs( rSet ); //RES_BOXATR_FORMAT
-#endif
 }
 
 void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
@@ -282,17 +268,6 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
 
     if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, FALSE, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
-
-    //-- numberformat in cells
-#ifdef FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem ))
-    {
-        SfxItemSet aBoxSet( *rSet.GetPool(), RES_BOXATR_FORMAT, RES_BOXATR_FORMAT );
-        aBoxSet.Put( SwTblBoxNumFormat( ((SfxUInt32Item*)pItem)->GetValue() ));
-        rSh.SetTblBoxFormulaAttrs( aBoxSet );
-
-    }
-#endif
 }
 }//end anonymous namespace
 
