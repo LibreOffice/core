@@ -9,6 +9,7 @@
 /*/wntmsc???.pro
 
 /external/*/*.dll
+/external/*/*.txt
 /external/msi/*.exe
 /external/msv*/*.manifest
 /external/vcredist/vcredist_x64.exe
