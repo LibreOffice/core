@@ -29,15 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-// So kann man die Linguistik-Statistik ( (Tmp-Path)\swlingu.stk ) aktivieren:
-//#define LINGU_STATISTIK
-#ifdef LINGU_STATISTIK
-    #include <stdio.h>          // in SwLinguStatistik::DTOR
-    #include <stdlib.h>         // getenv()
-    #include <time.h>           // clock()
-    #include <tools/stream.hxx>
-#endif
-
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <svl/itemiter.hxx>
@@ -1501,78 +1492,6 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     }
     return FALSE;
 }
-
-#ifdef LINGU_STATISTIK
-
-// globale Variable
-SwLinguStatistik aSwLinguStat;
-
-void SwLinguStatistik::Flush()
-{
-    if ( !nWords )
-        return ;
-
-    static char *pLogName = 0;
-    const BOOL bFirstOpen = pLogName ? FALSE : TRUE;
-    if( bFirstOpen )
-    {
-        char *pPath = getenv( "TEMP" );
-        char *pName = "swlingu.stk";
-        if( !pPath )
-            pLogName = pName;
-        else
-        {
-            const int nLen = strlen(pPath);
-            // fuer dieses new wird es kein delete geben.
-            pLogName = new char[nLen + strlen(pName) + 3];
-            if(nLen && (pPath[nLen-1] == '\\') || (pPath[nLen-1] == '/'))
-                snprintf( pLogName, sizeof(pLogName), "%s%s", pPath, pName );
-            else
-                snprintf( pLogName, sizeof(pLogName), "%s/%s", pPath, pName );
-        }
-    }
-    SvFileStream aStream( String::CreateFromAscii(pLogName), (bFirstOpen
-                                        ? STREAM_WRITE | STREAM_TRUNC
-                                        : STREAM_WRITE ));
-
-    if( !aStream.GetError() )
-    {
-        if ( bFirstOpen )
-            aStream << "\nLinguistik-Statistik\n";
-        aStream << endl << ++nFlushCnt << ". Messung\n";
-        aStream << "Rechtschreibung\n";
-        aStream << "gepruefte Worte: \t" << nWords << endl;
-        aStream << "als fehlerhaft erkannt:\t" << nWrong << endl;
-        aStream << "Alternativvorschlaege:\t" << nAlter << endl;
-        if ( nWrong )
-            aStream << "Durchschnitt:\t\t" << nAlter*1.0 / nWrong << endl;
-        aStream << "Dauer (msec):\t\t" << nSpellTime << endl;
-        aStream << "\nThesaurus\n";
-        aStream << "Synonyme gesamt:\t" << nSynonym << endl;
-        if ( nSynonym )
-            aStream << "Synonym-Durchschnitt:\t" <<
-                            nSynonym*1.0 / ( nWords - nNoSynonym ) << endl;
-        aStream << "ohne Synonyme:\t\t" << nNoSynonym << endl;
-        aStream << "Bedeutungen gesamt:\t" << nSynonym << endl;
-        aStream << "keine Bedeutungen:\t"<< nNoSynonym << endl;
-        aStream << "Dauer (msec):\t\t" << nTheTime << endl;
-        aStream << "\nHyphenator\n";
-        aStream << "Trennstellen gesamt:\t" << nHyphens << endl;
-        if ( nHyphens )
-            aStream << "Hyphen-Durchschnitt:\t" <<
-                    nHyphens*1.0 / ( nWords - nNoHyph - nHyphErr ) << endl;
-        aStream << "keine Trennstellen:\t" << nNoHyph << endl;
-        aStream << "Trennung verweigert:\t" << nHyphErr << endl;
-        aStream << "Dauer (msec):\t\t" << nHyphTime << endl;
-        aStream << "---------------------------------------------\n";
-    }
-    nWords = nWrong = nAlter = nSynonym = nNoSynonym =
-    nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
-    nHyphTime = 0;
-    //pThes = NULL;
-}
-
-#endif
 
 struct TransliterationChgData
 {
