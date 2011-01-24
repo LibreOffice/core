@@ -302,7 +302,7 @@ public:
     void            DoRecalc( sal_Bool bApi );
     void            DoHardRecalc( sal_Bool bApi );
 
-    void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = sal_False);
+    void            UpdateOle( const ScViewData* pViewData, sal_Bool bSnapSize = sal_False);
     sal_Bool        IsOle();
 
     void            DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 );

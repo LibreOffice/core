@@ -318,7 +318,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                     ::rtl::OUString aChartName = pSdrOle2Obj->GetPersistName();
                     ScRange aEmptyRange;
                     ScChartListener aSearcher( aChartName, pDocument, aEmptyRange );
-                    USHORT nIndex = 0;
+                    sal_uInt16 nIndex = 0;
                     ScChartListenerCollection* pCollection = pDocument->GetChartListenerCollection();
                     if ( pCollection && pCollection->Search( &aSearcher, nIndex ) )
                     {
@@ -408,7 +408,7 @@ void ScChartHelper::CreateProtectedChartListenersAndNotify( ScDocument* pDoc, Sd
                                 {
                                     ScRange aEmptyRange;
                                     ScChartListener aSearcher( aChartName, pDoc, aEmptyRange );
-                                    USHORT nIndex = 0;
+                                    sal_uInt16 nIndex = 0;
                                     ScChartListenerCollection* pCollection = pDoc->GetChartListenerCollection();
                                     if ( pCollection && !pCollection->Search( &aSearcher, nIndex ) )
                                     {

@@ -426,8 +426,8 @@ sal_Bool __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                 if ( pView && pDocument )
                 {
                     const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
-                    ULONG nMarkCount = rSdrMarkList.GetMarkCount();
-                    for ( ULONG i = 0; i < nMarkCount; ++i )
+                    sal_uLong nMarkCount = rSdrMarkList.GetMarkCount();
+                    for ( sal_uLong i = 0; i < nMarkCount; ++i )
                     {
                         SdrMark* pMark = rSdrMarkList.GetMark( i );
                         SdrObject* pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );

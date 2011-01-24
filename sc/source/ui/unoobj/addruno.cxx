@@ -283,7 +283,7 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr.Append( (sal_Unicode) ':' );
             String aSecond;
-            USHORT nFlags = SCA_VALID;
+            sal_uInt16 nFlags = SCA_VALID;
             if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
                 nFlags |= SCA_TAB_3D;
             aRange.aEnd.Format( aSecond, nFlags, pDoc, eConv );

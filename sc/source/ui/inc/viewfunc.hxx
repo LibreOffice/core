@@ -187,7 +187,7 @@ public:
 
     const SfxStyleSheet*    GetStyleSheetFromMarked();
     void                    SetStyleSheetToMarked( SfxStyleSheet* pStyleSheet,
-                                                        sal_Bool bRecord = TRUE );
+                                                        sal_Bool bRecord = sal_True );
     void                    RemoveStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
     void                    UpdateStyleSheetInUse( const SfxStyleSheetBase* pStyleSheet );
 
