@@ -615,11 +615,7 @@ void SwEditWin::JustifyAreaTimer()
          nDiff = Max(
          Max( aMovePos.Y() - rVisArea.Bottom(), rVisArea.Top() - aMovePos.Y() ),
          Max( aMovePos.X() - rVisArea.Right(),  rVisArea.Left() - aMovePos.X()));
-#ifdef TEST_FOR_BUG91313
-    aTimer.SetTimeout( Max( coMinLen, nTimeout - nDiff) );
-#else
     aTimer.SetTimeout( Max( coMinLen, nTimeout - nDiff*2L) );
-#endif
 }
 
 void SwEditWin::LeaveArea(const Point &rPos)
@@ -3393,20 +3389,7 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
     }
 
     const Point aOldPt( rSh.VisArea().Pos() );
-#ifdef TEST_FOR_BUG91313
-    // n Pixel as FUZZY border
-    SwRect aVis( rSh.VisArea() );
-    Size aFuzzySz( 2, 2 );
-    aFuzzySz = PixelToLogic( aFuzzySz );
-
-    aVis.Top(    aVis.Top()    + aFuzzySz.Height() );
-    aVis.Bottom( aVis.Bottom() - aFuzzySz.Height() );
-    aVis.Left(   aVis.Left()   + aFuzzySz.Width() );
-    aVis.Right(  aVis.Right()  - aFuzzySz.Width() );
-    const BOOL bInsWin = aVis.IsInside( aDocPt );
-#else
     const BOOL bInsWin = rSh.VisArea().IsInside( aDocPt );
-#endif
 
     if( pShadCrsr && !bInsWin )
         delete pShadCrsr, pShadCrsr = 0;
