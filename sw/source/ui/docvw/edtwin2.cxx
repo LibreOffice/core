@@ -512,16 +512,6 @@ void SwEditWin::PrePaint()
 
 void  SwEditWin::Paint(const Rectangle& rRect)
 {
-#if defined(MYDEBUG)
-    // StartUp-Statistik
-    if ( pTickList )
-    {
-        SYSTICK( "Start SwEditWin::Paint" );
-        READ_FIRST_TICKS()
-        FLUSH_TICKS()
-    }
-#endif
-
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
