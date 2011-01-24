@@ -207,7 +207,7 @@ public:
 
     virtual ::com::sun::star::uno::Sequence<
         ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntries(
-            ::com::sun::star::chart2::LegendExpansion eLegendExpansion,
+            ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
             const ::com::sun::star::uno::Reference<

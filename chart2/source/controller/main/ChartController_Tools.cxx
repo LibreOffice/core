@@ -251,7 +251,11 @@ void ChartController::executeDispatch_NewArrangement()
             // legend
             Reference< beans::XPropertyState > xLegendState( xDiagram->getLegend(), uno::UNO_QUERY );
             if( xLegendState.is())
+            {
                 xLegendState->setPropertyToDefault( C2U("RelativePosition"));
+                xLegendState->setPropertyToDefault( C2U("RelativeSize"));
+                xLegendState->setPropertyToDefault( C2U("AnchorPosition"));
+            }
 
             // titles
             for( sal_Int32 eType = TitleHelper::TITLE_BEGIN;

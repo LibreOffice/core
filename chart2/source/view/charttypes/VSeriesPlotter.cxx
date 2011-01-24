@@ -1752,7 +1752,7 @@ bool VSeriesPlotter::shouldSnapRectToUsedArea()
 }
 
 Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
-              LegendExpansion eLegendExpansion
+              ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
@@ -1798,7 +1798,7 @@ Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
                     // If the legend is wide and we have a stacked bar-chart the normal order
                     // is the correct one
                     bool bReverse = false;
-                    if( eLegendExpansion != LegendExpansion_WIDE )
+                    if( eLegendExpansion != ::com::sun::star::chart::ChartLegendExpansion_WIDE )
                     {
                         StackingDirection eStackingDirection( pSeries->getStackingDirection() );
                         bReverse = ( eStackingDirection == StackingDirection_Y_STACKING );

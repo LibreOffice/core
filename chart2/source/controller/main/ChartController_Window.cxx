@@ -875,15 +875,15 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                             m_xUndoManager, getModel() );
 
                         bool bChanged = false;
-                        if ( eObjectType == OBJECTTYPE_LEGEND && eActionType == ActionDescriptionProvider::RESIZE )
+                        if ( eObjectType == OBJECTTYPE_LEGEND )
                             bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
 
                         bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
                                         , getModel()
                                         , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                                         , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
-                        bChanged = bMoved || bChanged;
-                        if( bChanged )
+
+                        if( bMoved || bChanged )
                         {
                             bDraggingDone = true;
                             aUndoGuard.commitAction();

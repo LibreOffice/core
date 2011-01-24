@@ -33,7 +33,7 @@
 #include "ChartModelHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include "chartview/ExplicitValueProvider.hxx"
@@ -85,11 +85,10 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     else if(OBJECTTYPE_LEGEND==eObjectType)
     {
         xObjectProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny(LegendPosition(LegendPosition_CUSTOM)));
-        xObjectProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny(LegendExpansion(LegendExpansion_CUSTOM)));
+        xObjectProp->setPropertyValue( C2U( "Expansion" ), uno::makeAny(::com::sun::star::chart::ChartLegendExpansion_CUSTOM));
         chart2::RelativePosition aRelativePosition;
         chart2::RelativeSize aRelativeSize;
         Point aAnchor = aObjectRect.TopLeft();
-
 
         aRelativePosition.Primary =
             static_cast< double >( aAnchor.X()) /

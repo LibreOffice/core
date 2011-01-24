@@ -172,19 +172,15 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
 
-
                 bool bChanged = false;
-                if ( eObjectType == OBJECTTYPE_LEGEND && (aSelectedSize.Width != aObjectRect.getWidth()
-                      || aSelectedSize.Height != aObjectRect.getHeight()))
-                            bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
+                if ( eObjectType == OBJECTTYPE_LEGEND )
+                    bChanged = DiagramHelper::switchDiagramPositioningToExcludingPositioning( getModel(), false , true );
 
-
-                bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID()
-                            , getModel()
+                bool bMoved = PositionAndSizeHelper::moveObject( m_aSelection.getSelectedCID(), getModel()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
-                bChanged = bMoved || bChanged;
-                if( bChanged )
+
+                if( bMoved || bChanged )
                     aUndoGuard.commitAction();
             }
         }
