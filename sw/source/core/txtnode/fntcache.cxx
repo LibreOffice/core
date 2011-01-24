@@ -1450,21 +1450,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
         else
         {
-//            BOOL bRestore = FALSE;
-//            MapMode aOld( rInf.GetOut().GetMapMode() );
-//                if( rInf.GetZoom().GetNumerator() &&
-//                        rInf.GetZoom() != aOld.GetScaleX() )
-//                {
-//                        MapMode aNew( aOld );
-//                        aNew.SetScaleX( rInf.GetZoom() );
-//                        aNew.SetScaleY( rInf.GetZoom() );
-//                        rInf.GetOut().SetMapMode( aNew );
-//                        bRestore = TRUE;
-//                }
             rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                         rInf.GetIdx(), rInf.GetLen() );
-//            if( bRestore )
-//                rInf.GetOut().SetMapMode( aOld );
         }
 
         //
@@ -1637,11 +1624,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 // linksbuendig zur Druckerposition.
                 if ( nCh == CH_BLANK )
                 {
-#ifdef FONT_TEST_DEBUG
-                    lcl_Pos( 3, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
-#else
                     nScrPos = pKernArray[i-1] + nScr;
-#endif
+
                     if ( cChPrev == CH_BLANK )
                         nSpaceSum += nOtherHalf;
                     if ( i + 1 == nCnt )
@@ -1653,28 +1637,17 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 {
                     if ( cChPrev == CH_BLANK )
                     {
-#ifdef FONT_TEST_DEBUG
-                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
-#else
                         nScrPos = pKernArray[i-1] + nScr;
-#endif
+
                         // kein Pixel geht verloren:
                         nSpaceSum += nOtherHalf;
                     }
                     else if ( cChPrev == '-' )
-#ifdef FONT_TEST_DEBUG
-                        lcl_Pos( 6, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
-#else
                         nScrPos = pKernArray[i-1] + nScr;
-#endif
                     else
                     {
-#ifdef FONT_TEST_DEBUG
-                        lcl_Pos( 0, nScrPos, nScr, pKernArray[i-1], pKernArray[i] );
-#else
                         nScrPos += nScr;
                         nScrPos = ( nMul * nScrPos + pKernArray[i] ) / nDiv;
-#endif
                     }
                 }
                 cChPrev = nCh;
@@ -1786,31 +1759,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             xub_StrLen nOffs = 0;
             xub_StrLen nLen = rInf.GetLen();
-#ifdef COMING_SOON
-            if( aPos.X() < rInf.GetLeft() )
-            {
-                while( nOffs < nLen &&
-                    aPos.X() + pKernArray[ nOffs ] < rInf.GetLeft() )
-                    ++nOffs;
-                if( nOffs < nLen )
-                {
-                    --nLen;
-                    while( nLen > nOffs &&
-                        aPos.X() + pKernArray[ nLen ] > rInf.GetRight() )
-                        --nLen;
-                    ++nLen;
-                    if( nOffs )
-                        --nOffs;
-                }
-                if( nOffs )
-                {
-                    long nDiff = pKernArray[ nOffs - 1 ];
-                    aPos.X() += nDiff;
-                    for( xub_StrLen nX = nOffs; nX < nLen; ++nX )
-                        pKernArray[ nX ] -= nDiff;
-                }
-            }
-#endif
+
             if( nOffs < nLen )
             {
                 // If we paint bullets instead of spaces, we use a copy of
