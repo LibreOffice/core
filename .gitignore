@@ -5,8 +5,8 @@
 # the build directories
 /*/unxlng??
 /*/unxlng??.pro
-/*/wntmsci??
-/*/wntmsci??.pro
+/*/wntmsc???
+/*/wntmsc???.pro
 
 /external/*/*.dll
 /external/msi/*.exe
