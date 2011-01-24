@@ -540,6 +540,7 @@ static void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
     char * p = tmData->tm_zone;
 #else
     char * p = tzname[0];
+    (void)tmData;
 #endif
 
     if (!strcmp(TIMEZONE, p))

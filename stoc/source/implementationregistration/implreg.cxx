@@ -487,14 +487,9 @@ static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                                 const OUString& linkName,
                                 const OUString& linkTarget,
                                 const OUString& implName)
-    // throw ( InvalidRegistryException, RuntimeException )
 {
-    sal_Bool ret = sal_False;
-
     Reference < XRegistryKey > xRootKey;
 
-//      try
-//      {
     xRootKey = xDest->getRootKey();
 
     if (xRootKey->getKeyType(linkName) == RegistryKeyType_LINK)
@@ -507,23 +502,9 @@ static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                 linkName + spool().colon_old ), oldImplName);
         }
     }
-//      }
-//      catch (InvalidRegistryException&)
-//      {
-//      }
 
-//      try
-//      {
     if (xRootKey->isValid())
-    {
-        ret = xRootKey->createLink(linkName, linkTarget);
-    }
-//      }
-//      catch(InvalidRegistryException&)
-//      {
-//      }
-
-//      return ret;
+        xRootKey->createLink(linkName, linkTarget);
 }
 
 //*************************************************************************
@@ -666,7 +647,6 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
                                 const Reference < XRegistryKey >& xKey,
                                 const OUString& implName,
                                 sal_Bool bRegister)
-    // throw ( InvalidRegistryException, RuntimeException )
 {
     sal_Bool hasSubKeys = sal_False;
 
@@ -734,7 +714,6 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
             }
         }
     }
-    return;
 }
 
 //*************************************************************************
