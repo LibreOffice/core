@@ -28,15 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "salgdi.h"
-#include "salframe.h"
-#include "salframeview.h"
-#include "aqua11yfactory.h"
 #include <sal/alloca.h>
-#include "vcl/window.hxx"
 
+#include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
+
+#include "aqua/salinst.h"
+#include "aqua/salgdi.h"
+#include "aqua/salframe.h"
+#include "aqua/salframeview.h"
+#include "aqua/aqua11yfactory.h"
 
 #define WHEEL_EVENT_FACTOR 1.5
 

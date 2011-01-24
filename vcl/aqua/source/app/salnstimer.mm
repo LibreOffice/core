@@ -28,12 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "saltimer.h"
-#include "salnstimer.h"
-#include "salinst.h"
-#include "saldata.hxx"
+#include "aqua/saltimer.h"
+#include "aqua/salnstimer.h"
+#include "aqua/salinst.h"
+#include "aqua/saldata.hxx"
 
-#include "vcl/svdata.hxx"
+#include "svdata.hxx"
 
 @implementation TimerCallbackCaller
 -(void)timerElapsed:(NSTimer*)pTimer

@@ -27,7 +27,7 @@
 
 #pragma once
 
-#include <saldisp.hxx>
+#include <unx/saldisp.hxx>
 
 class KDEXLib : public SalXLib
 {
@@ -46,3 +46,4 @@ class KDEXLib : public SalXLib
 
         void doStartup();
 };
+

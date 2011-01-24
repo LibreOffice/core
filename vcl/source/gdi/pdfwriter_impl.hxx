@@ -37,14 +37,14 @@
 #include "vcl/gradient.hxx"
 #include "vcl/hatch.hxx"
 #include "vcl/wall.hxx"
-#include "vcl/outdata.hxx"
+#include "outdata.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/cipher.h"
 #include "rtl/digest.h"
 #include "com/sun/star/util/XURLTransformer.hpp"
 #include "com/sun/star/lang/Locale.hpp"
 
-#include <vcl/sallayout.hxx>
+#include <sallayout.hxx>
 #include "pdffontcache.hxx"
 
 #include <vector>

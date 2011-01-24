@@ -28,20 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "saldata.hxx"
+#include "aqua/salinst.h"
+#include "aqua/saldata.hxx"
 
-#include "aqua11ywrapper.h"
+#include "aqua/aqua11ywrapper.h"
+#include "aqua/aqua11ylistener.hxx"
+#include "aqua/aqua11yfactory.h"
+#include "aqua/aqua11yfocustracker.hxx"
+
+#include "aqua11yfocuslistener.hxx"
 #include "aqua11yactionwrapper.h"
 #include "aqua11ycomponentwrapper.h"
-#include "aqua11ylistener.hxx"
 #include "aqua11yselectionwrapper.h"
 #include "aqua11ytablewrapper.h"
 #include "aqua11ytextwrapper.h"
 #include "aqua11yvaluewrapper.h"
-#include "aqua11yfactory.h"
-#include "aqua11yfocuslistener.hxx"
-#include "aqua11yfocustracker.hxx"
 #include "aqua11yrolehelper.h"
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>

@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <plugins/gtk/gtkframe.hxx>
+#include <unx/gtk/gtkframe.hxx>
 #include <vcl/window.hxx>
 #include "vcl/popupmenuwindow.hxx"
 

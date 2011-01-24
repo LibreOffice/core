@@ -25,12 +25,14 @@
  *
 ************************************************************************/
 
-#include "vcl/salgdi.hxx"
-#include "saldata.hxx"
-#include "salgdi.h"
-#include "vcl/sallayout.hxx"
-#include "salatsuifontutils.hxx"
 #include "tools/debug.hxx"
+
+#include "aqua/saldata.hxx"
+#include "aqua/salgdi.h"
+#include "aqua/salatsuifontutils.hxx"
+
+#include "sallayout.hxx"
+#include "salgdi.hxx"
 
 #include <math.h>
 

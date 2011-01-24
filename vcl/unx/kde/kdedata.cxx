@@ -45,18 +45,18 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
-#include <plugins/kde/kdedata.hxx>
+#include <unx/kde/kdedata.hxx>
+#include "unx/i18n_im.hxx"
+#include "unx/i18n_xkb.hxx"
+
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/module.h>
 
 #include <tools/debug.hxx>
-#include "i18n_im.hxx"
-#include "i18n_xkb.hxx"
+
 #include <vos/process.hxx>
-#ifndef _VOS_MUTEX_HXX
 #include <vos/mutex.hxx>
-#endif
 
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.

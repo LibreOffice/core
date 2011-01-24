@@ -29,12 +29,14 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdlib.h>
+
 #include <vcl/bmpacc.hxx>
-#include <vcl/impoct.hxx>
 #include <vcl/octree.hxx>
-#include <impvect.hxx>
 #include <vcl/bitmapex.hxx>
 #include <vcl/bitmap.hxx>
+
+#include <impoct.hxx>
+#include <impvect.hxx>
 
 // -----------
 // - Defines -

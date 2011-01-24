@@ -30,8 +30,8 @@
 
 #include <sal/types.h>
 
-#include <vcl/sallayout.hxx>
-#include <vcl/salgdi.hxx>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
 
 namespace vcl
 {

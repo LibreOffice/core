@@ -27,14 +27,15 @@
 
 #include "precompiled_vcl.hxx"
 
+#include "printdlg.hxx"
+#include "svdata.hxx"
+#include "svids.hrc"
+#include "jobset.h"
+
 #include "vcl/print.hxx"
-#include "vcl/prndlg.hxx"
 #include "vcl/dialog.hxx"
 #include "vcl/button.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/svids.hrc"
 #include "vcl/wall.hxx"
-#include "vcl/jobset.h"
 #include "vcl/status.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/arrange.hxx"

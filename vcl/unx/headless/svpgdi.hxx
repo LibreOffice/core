@@ -27,10 +27,11 @@
 
 #ifndef _SVP_SVPGDI_HXX
 
-#include <vcl/salgdi.hxx>
-#include <vcl/sallayout.hxx>
 #include <basebmp/bitmapdevice.hxx>
 #include <basebmp/color.hxx>
+
+#include <salgdi.hxx>
+#include <sallayout.hxx>
 
 class ServerFont;
 

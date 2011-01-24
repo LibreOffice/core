@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
+#include "aqua/salinst.h"
 #include "aqua11ywrapperradiobutton.h"
 #include "aqua11ytextwrapper.h"
 #include "aqua11yvaluewrapper.h"

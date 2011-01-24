@@ -36,12 +36,13 @@
 #include "gcach_ftyp.hxx"
 
 #include "vcl/svapp.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/impfont.hxx"
+
+#include "outfont.hxx"
+#include "impfont.hxx"
 
 #include "tools/poly.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include "basegfx/matrix/b2dhommatrixtools.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "osl/file.hxx"

@@ -34,9 +34,12 @@
 #include "vcl/gdimtf.hxx"
 #include "vcl/metaact.hxx"
 #include "vcl/graph.hxx"
-#include "vcl/svdata.hxx"
+
+#include "svdata.hxx"
+
 #include "unotools/streamwrap.hxx"
 #include "unotools/processfactory.hxx"
+
 #include "comphelper/processfactory.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"

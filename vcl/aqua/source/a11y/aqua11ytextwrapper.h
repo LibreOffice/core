@@ -28,8 +28,8 @@
 #ifndef _SV_AQUA11TEXTWRAPPER_H
 #define _SV_AQUA11TEXTWRAPPER_H
 
-#include "aquavcltypes.h"
-#include "aqua11ywrapper.h"
+#include "aqua/aquavcltypes.h"
+#include "aqua/aqua11ywrapper.h"
 
 @interface AquaA11yTextWrapper : NSObject
 {

@@ -27,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/awt/MouseButton.hpp>
-#include <rtl/unload.h>
+
+#include "rtl/unload.h"
+#include "rtl/ustring.hxx"
 
 #include "comphelper/makesequence.hxx"
 
@@ -38,9 +41,9 @@
 #include "DragSourceContext.hxx"
 #include "aqua_clipboard.hxx"
 #include "DragActionConversion.hxx"
-#include "salframe.h"
 
-#include <rtl/ustring.h>
+#include "aqua/salframe.h"
+
 #include <memory>
 
 

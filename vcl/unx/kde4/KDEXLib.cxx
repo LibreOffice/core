@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <vos/process.hxx>
+
 #include "VCLKDEApplication.hxx"
 
 #define Region QtXRegion
@@ -39,11 +41,10 @@
 
 #include "KDEXLib.hxx"
 
-#include <i18n_im.hxx>
-#include <i18n_xkb.hxx>
+#include <unx/i18n_im.hxx>
+#include <unx/i18n_xkb.hxx>
 
-#include <saldata.hxx>
-#include <vos/process.hxx>
+#include <unx/saldata.hxx>
 
 #include "KDESalDisplay.hxx"
 

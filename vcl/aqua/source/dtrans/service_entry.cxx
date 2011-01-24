@@ -28,13 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "saldata.hxx"
-#include "salinst.h"
+#include "osl/diagnose.h"
+
+#include "vcl/svapp.hxx"
+
+#include "aqua/saldata.hxx"
+#include "aqua/salinst.h"
+
 #include "DragSource.hxx"
 #include "DropTarget.hxx"
 #include "aqua_clipboard.hxx"
-#include "osl/diagnose.h"
-#include "vcl/svapp.hxx"
 
 using namespace ::osl;
 using namespace ::rtl;

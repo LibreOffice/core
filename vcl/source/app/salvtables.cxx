@@ -28,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <vcl/salframe.hxx>
-#include <vcl/salinst.hxx>
-#include <vcl/salvd.hxx>
-#include <vcl/salprn.hxx>
-#include <vcl/saltimer.hxx>
-#include <vcl/salimestatus.hxx>
-#include <vcl/salsys.hxx>
-#include <vcl/salbmp.hxx>
-#include <vcl/salobj.hxx>
-#include <vcl/salmenu.hxx>
+#include <salframe.hxx>
+#include <salinst.hxx>
+#include <salvd.hxx>
+#include <salprn.hxx>
+#include <saltimer.hxx>
+#include <salimestatus.hxx>
+#include <salsys.hxx>
+#include <salbmp.hxx>
+#include <salobj.hxx>
+#include <salmenu.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is

@@ -37,12 +37,15 @@
 
 #include "tools/rc.h"
 #include "tools/resary.hxx"
-#include "vcl/svids.hrc"
+
 #include "vcl/field.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/svdata.hxx"
 #include "vcl/unohelp.hxx"
+
+#include "svids.hrc"
+#include "svdata.hxx"
+
 #include "i18nutil/unicode.hxx"
 
 #include "rtl/math.hxx"

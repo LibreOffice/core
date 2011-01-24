@@ -97,7 +97,6 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/ptrstyle.hxx    \
             $(INC)$/vcl$/prntypes.hxx    \
             $(INC)$/vcl$/print.hxx       \
-            $(INC)$/vcl$/prndlg.hxx      \
             $(INC)$/vcl$/region.hxx      \
             $(INC)$/vcl$/salbtype.hxx    \
             $(INC)$/vcl$/scrbar.hxx      \

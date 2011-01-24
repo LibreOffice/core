@@ -28,10 +28,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
+#include "aqua/salinst.h"
+
 #include "aqua11ytextwrapper.h"
 #include "aqua11ytextattributeswrapper.h"
 #include "aqua11yutil.h"
+
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 

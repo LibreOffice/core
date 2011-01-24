@@ -28,20 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include <svsys.h>
 #include <rtl/process.h>
 #include <rtl/ref.hxx>
+
 #include <tools/rc.h>
-#include <vcl/window.h>
-#include <vcl/salinst.hxx>
-#include <vcl/salframe.hxx>
+
 #include <vcl/window.hxx>
-#include <vcl/salobj.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/unohelp.hxx>
+
+#include <window.h>
+#include <salinst.hxx>
+#include <salframe.hxx>
+#include <salobj.hxx>
+#include <svdata.hxx>
 
 #ifdef SOLAR_JAVA
 #include <jni.h>
@@ -52,8 +54,6 @@
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
-#include <vcl/syschild.hxx>
 
 using namespace ::com::sun::star;
 

@@ -28,9 +28,10 @@
 #include "precompiled_vcl.hxx"
 
 #include "vcl/window.hxx"
-#include "vcl/window.h"
-#include "vcl/svdata.hxx"
 #include "vcl/arrange.hxx"
+
+#include "window.h"
+#include "svdata.hxx"
 
 #include "com/sun/star/beans/PropertyValue.hpp"
 

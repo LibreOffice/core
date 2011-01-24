@@ -28,11 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "saltimer.h"
-#include "salnstimer.h"
-#include "saldata.hxx"
-#include "salframe.h"
-#include "salinst.h"
+#include "aqua/saltimer.h"
+#include "aqua/salnstimer.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salframe.h"
+#include "aqua/salinst.h"
 
 // =======================================================================
 

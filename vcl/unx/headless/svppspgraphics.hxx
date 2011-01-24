@@ -30,8 +30,9 @@
 
 
 #include "vcl/fontmanager.hxx"
-#include "vcl/sallayout.hxx"
-#include "vcl/salgdi.hxx"
+
+#include "sallayout.hxx"
+#include "salgdi.hxx"
 
 namespace psp { struct JobData; class PrinterGfx; }
 

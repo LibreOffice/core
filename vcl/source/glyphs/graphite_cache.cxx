@@ -34,7 +34,7 @@
 #endif
 
 #include <tools/debug.hxx>
-#include <vcl/sallayout.hxx>
+#include <sallayout.hxx>
 
 #include <preextstl.h>
 #include <graphite/GrClient.h>
@@ -42,8 +42,8 @@
 #include <postextstl.h>
 
 #include <rtl/ustring.hxx>
-#include <vcl/graphite_layout.hxx>
-#include <vcl/graphite_cache.hxx>
+#include <graphite_layout.hxx>
+#include <graphite_cache.hxx>
 
 #include "graphite_textsrc.hxx"
 

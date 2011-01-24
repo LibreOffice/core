@@ -29,22 +29,23 @@
 #include "precompiled_vcl.hxx"
 
 #include "tools/rc.h"
+#include "tools/debug.hxx"
 
-#include "vcl/svdata.hxx"
+
 #include "vcl/decoview.hxx"
 #include "vcl/event.hxx"
 #include "vcl/scrbar.hxx"
 #include "vcl/button.hxx"
 #include "vcl/edit.hxx"
-#include "vcl/subedit.hxx"
-#include "vcl/ilstbox.hxx"
 #include "vcl/lstbox.hxx"
 #include "vcl/combobox.hxx"
-#include "vcl/controldata.hxx"
 
-#include "tools/debug.hxx"
+#include "svdata.hxx"
+#include "controldata.hxx"
+#include "subedit.hxx"
+#include "ilstbox.hxx"
+#include "dndevdis.hxx"
 
-#include <vcl/dndevdis.hxx>
 #include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
 // =======================================================================

@@ -28,7 +28,7 @@
 #ifndef _SV_AQUA11ROLEHELPER_H
 #define _SV_AQUA11ROLEHELPER_H
 
-#include "salinst.h"
+#include "aqua/salinst.h"
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 
 @interface AquaA11yRoleHelper : NSObject

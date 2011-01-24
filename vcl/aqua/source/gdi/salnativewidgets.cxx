@@ -25,16 +25,16 @@
  *
  ************************************************************************/
 
-#include "salconst.h"
-#include "salgdi.h"
-#include "salnativewidgets.h"
-#include "saldata.hxx"
-#include "salframe.h"
-
 #include "vcl/salnativewidgets.hxx"
 #include "vcl/decoview.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/timer.hxx"
+
+#include "aqua/salconst.h"
+#include "aqua/salgdi.h"
+#include "aqua/salnativewidgets.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salframe.h"
 
 #include "premac.h"
 #include <Carbon/Carbon.h>

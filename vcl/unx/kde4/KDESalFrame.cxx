@@ -44,13 +44,14 @@
 #include "KDEXLib.hxx"
 #include "KDESalGraphics.hxx"
 
-#include <vcl/settings.hxx>
-#include <vcl/font.hxx>
 #include <tools/color.hxx>
 
-#include <vcl/svdata.hxx>
+#include <vcl/settings.hxx>
+#include <vcl/font.hxx>
 
-#include <pspgraphics.h>
+#include <svdata.hxx>
+
+#include <unx/pspgraphics.h>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -86,12 +87,14 @@ static OUString readEntryUntranslated( KConfigGroup *pGroup, const char *pKey )
     return OUString::createFromAscii( (const char *) pGroup->readEntryUntranslated( pKey ).toAscii() );
 }
 
+#if 0
 /** Helper function to read color from KConfig configuration repository.
 */
 static Color readColor( KConfigGroup *pGroup, const char *pKey )
 {
     return toColor( pGroup->readEntry( pKey, QColor(Qt::white) ) );
 }
+#endif
 
 /** Helper function to add information to Font from QFont.
 

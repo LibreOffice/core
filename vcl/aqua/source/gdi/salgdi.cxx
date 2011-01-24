@@ -28,20 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salconst.h"
-#include "salgdi.h"
-#include "salbmp.h"
-#include "salframe.h"
-#include "salcolorutils.hxx"
-#include "sft.hxx"
-#include "salatsuifontutils.hxx"
-
-#include "vcl/impfont.hxx"
-#include "vcl/fontsubset.hxx"
-#include "vcl/sysdata.hxx"
-#include "vcl/sallayout.hxx"
-#include "vcl/svapp.hxx"
-
 #include "osl/file.hxx"
 #include "osl/process.h"
 
@@ -54,7 +40,23 @@
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 #include "basegfx/matrix/b2dhommatrix.hxx"
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include "basegfx/matrix/b2dhommatrixtools.hxx"
+
+#include "vcl/sysdata.hxx"
+#include "vcl/svapp.hxx"
+
+#include "aqua/salconst.h"
+#include "aqua/salgdi.h"
+#include "aqua/salbmp.h"
+#include "aqua/salframe.h"
+#include "aqua/salcolorutils.hxx"
+#include "aqua/salatsuifontutils.hxx"
+
+#include "fontsubset.hxx"
+#include "impfont.hxx"
+#include "sallayout.hxx"
+#include "sft.hxx"
+
 
 using namespace vcl;
 

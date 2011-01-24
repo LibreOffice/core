@@ -32,25 +32,30 @@
 
 #include "tools/fsys.hxx"
 #include "tools/getprocessworkingdir.hxx"
+#include <tools/solarmutex.hxx>
+
 #include "osl/process.h"
+
 #include "rtl/ustrbuf.hxx"
+
 #include "vcl/svapp.hxx"
-#include "vcl/print.h"
-#include "vcl/salimestatus.hxx"
 #include "vcl/window.hxx"
 #include "vcl/timer.hxx"
-#include "vcl/impbmp.hxx"
 
-#include "saldata.hxx"
-#include "salinst.h"
-#include "salframe.h"
-#include "salobj.h"
-#include "salsys.h"
-#include "salvd.h"
-#include "salbmp.h"
-#include "salprn.h"
-#include "saltimer.h"
-#include "vclnsapp.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salinst.h"
+#include "aqua/salframe.h"
+#include "aqua/salobj.h"
+#include "aqua/salsys.h"
+#include "aqua/salvd.h"
+#include "aqua/salbmp.h"
+#include "aqua/salprn.h"
+#include "aqua/saltimer.h"
+#include "aqua/vclnsapp.h"
+
+#include "print.h"
+#include "impbmp.hxx"
+#include "salimestatus.hxx"
 
 #include <comphelper/processfactory.hxx>
 
@@ -66,7 +71,6 @@
 #import "apple_remote/RemoteMainController.h"
 #include "apple_remote/RemoteControl.h"
 #include "postmac.h"
-#include <tools/solarmutex.hxx>
 
 using namespace std;
 using namespace ::com::sun::star;

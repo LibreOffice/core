@@ -27,8 +27,8 @@
 
 #pragma once
 
-#include <saldisp.hxx>
-#include <salframe.h>
+#include <unx/saldisp.hxx>
+#include <unx/salframe.h>
 
 class KDESalFrame : public X11SalFrame
 {

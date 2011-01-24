@@ -27,10 +27,11 @@
 
 #ifndef _SVP_SVPDUMMIES_HXX
 
-#include <vcl/salobj.hxx>
 #include <vcl/sysdata.hxx>
-#include <vcl/salimestatus.hxx>
-#include <vcl/salsys.hxx>
+
+#include <salobj.hxx>
+#include <salimestatus.hxx>
+#include <salsys.hxx>
 
 class SalGraphics;
 

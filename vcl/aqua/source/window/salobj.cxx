@@ -30,9 +30,9 @@
 
 #include <string.h>
 
-#include "saldata.hxx"
-#include "salobj.h"
-#include "salframe.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salobj.h"
+#include "aqua/salframe.h"
 
 // =======================================================================
 

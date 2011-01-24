@@ -30,8 +30,8 @@
 
 #include <salhelper/refobj.hxx>
 
-#include "keyboardfocuslistener.hxx"
-#include "aquavcltypes.h"
+#include "aqua/keyboardfocuslistener.hxx"
+#include "aqua/aquavcltypes.h"
 
 // #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 

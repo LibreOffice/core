@@ -28,15 +28,18 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "sft.hxx"
+#include "unotools/fontcfg.hxx"
 
 #include "tools/stream.hxx"
 #include "tools/vcompat.hxx"
 #include "tools/debug.hxx"
+
 #include "vcl/font.hxx"
-#include "vcl/impfont.hxx"
-#include "vcl/outfont.hxx"
-#include "unotools/fontcfg.hxx"
+
+#include "impfont.hxx"
+#include "outfont.hxx"
+#include "sft.hxx"
+
 
 #include <algorithm>
 

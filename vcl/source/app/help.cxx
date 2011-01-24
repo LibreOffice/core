@@ -28,15 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "vcl/svdata.hxx"
+#include "tools/debug.hxx"
+#include "tools/time.hxx"
+
 #include "vcl/window.hxx"
 #include "vcl/event.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/wrkwin.hxx"
 #include "vcl/help.hxx"
-#include "vcl/helpwin.hxx"
-#include "tools/debug.hxx"
-#include "tools/time.hxx"
+
+#include "helpwin.hxx"
+#include "svdata.hxx"
 
 // =======================================================================
 

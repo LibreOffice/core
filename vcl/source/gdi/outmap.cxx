@@ -30,25 +30,25 @@
 
 #include <limits.h>
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
 #include <tools/bigint.hxx>
 #include <tools/debug.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/svdata.hxx>
 #include <tools/poly.hxx>
+
+#include <vcl/virdev.hxx>
 #include <vcl/region.hxx>
-#include <vcl/region.h>
-#include <vcl/window.h>
 #include <vcl/wrkwin.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 #include <vcl/lineinfo.hxx>
 #include <vcl/outdev.hxx>
-#include <vcl/outdev.h>
-#include <vcl/salgdi.hxx>
+
+#include <svdata.hxx>
+#include <region.h>
+#include <window.h>
+#include <outdev.h>
+#include <salgdi.hxx>
+
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>

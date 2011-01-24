@@ -29,19 +29,18 @@
 #include "precompiled_vcl.hxx"
 
 #include <tools/ref.hxx>
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
-#include <vcl/salgdi.hxx>
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
 #include <tools/poly.hxx>
+
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/outdata.hxx>
-#include <vcl/outdev.h>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
+
+#include <salgdi.hxx>
+#include <svdata.hxx>
+#include <outdata.hxx>
+#include <outdev.h>
 
 // =======================================================================
 

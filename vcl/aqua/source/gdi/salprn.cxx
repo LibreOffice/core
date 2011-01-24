@@ -28,17 +28,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "salinst.h"
-#include "salprn.h"
-#include "aquaprintview.h"
-#include "salgdi.h"
-#include "saldata.hxx"
-#include "vcl/jobset.h"
-#include "vcl/salptype.hxx"
+#include <boost/bind.hpp>
+
 #include "vcl/print.hxx"
 #include "vcl/unohelp.hxx"
 
-#include <boost/bind.hpp>
+#include "aqua/salinst.h"
+#include "aqua/salprn.h"
+#include "aqua/aquaprintview.h"
+#include "aqua/salgdi.h"
+#include "aqua/saldata.hxx"
+
+#include "jobset.h"
+#include "salptype.hxx"
 
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/container/XNameAccess.hpp"

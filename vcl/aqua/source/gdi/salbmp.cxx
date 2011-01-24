@@ -28,19 +28,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "tools/color.hxx"
-#include "salbmp.h"
-#include "vcl/bitmap.hxx" // for BitmapSystemData
-#include "vcl/salbtype.hxx"
-#include "vcl/bmpfast.hxx"
+#include <boost/bind.hpp>
 
 #include "basebmp/scanlineformats.hxx"
 #include "basebmp/color.hxx"
+
 #include "basegfx/vector/b2ivector.hxx"
 
-#include <boost/bind.hpp>
+#include "tools/color.hxx"
 
-#include "salinst.h"
+#include "vcl/bitmap.hxx" // for BitmapSystemData
+#include "vcl/salbtype.hxx"
+
+#include "aqua/salbmp.h"
+#include "aqua/salinst.h"
+
+#include "bmpfast.hxx"
 
 // =======================================================================
 

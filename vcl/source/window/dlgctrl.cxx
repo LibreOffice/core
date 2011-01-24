@@ -27,15 +27,18 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
+
+#include <svdata.hxx>
+#include <window.h>
+
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
 #include <vcl/tabdlg.hxx>
 #include <vcl/button.hxx>
-#include <vcl/window.h>
 
 #include <vcl/unohelp.hxx>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>

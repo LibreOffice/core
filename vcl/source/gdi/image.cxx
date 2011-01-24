@@ -31,24 +31,21 @@
 #include <boost/scoped_array.hpp>
 
 #include <rtl/logfile.hxx>
+
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
 #include <tools/rc.hxx>
-#ifndef _SV_RESMGR_HXX
 #include <tools/resmgr.hxx>
-#endif
+
 #include <vcl/settings.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
-#ifndef _SV_IMPIMAGETREE_H
-#include <vcl/impimagetree.hxx>
-#endif
-#include <vcl/image.h>
 #include <vcl/image.hxx>
+
+#include <impimagetree.hxx>
+#include <image.h>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>

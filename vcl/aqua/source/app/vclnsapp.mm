@@ -28,18 +28,19 @@
  // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "vclnsapp.h"
-#include "salinst.h"
-#include "saldata.hxx"
-#include "salframe.h"
-#include "salframeview.h"
+#include "rtl/ustrbuf.hxx"
 
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/cmdevt.hxx"
-#include "rtl/ustrbuf.hxx"
 
-#include "vcl/impimagetree.hxx"
+#include "aqua/vclnsapp.h"
+#include "aqua/salinst.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salframe.h"
+#include "aqua/salframeview.h"
+
+#include "impimagetree.hxx"
 
 #include "premac.h"
 #import "Carbon/Carbon.h"

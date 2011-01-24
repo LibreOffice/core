@@ -37,14 +37,10 @@
 #include <cmath>
 #include <limits.h>
 
-#include "vcl/svdata.hxx"
-#include "svsys.h"
-
-#ifdef WNT
-#undef min
-#endif
 #include "tools/debug.hxx"
-#include "vcl/svdata.hxx"
+
+#include "vos/mutex.hxx"
+
 #include "vcl/svapp.hxx"
 #include "vcl/event.hxx"
 #include "vcl/lstbox.hxx"
@@ -57,13 +53,21 @@
 #include "vcl/wrkwin.hxx"
 #include "vcl/sound.hxx"
 #include "vcl/threadex.hxx"
-#include "vcl/dbggui.hxx"
-#include "com/sun/star/i18n/XCharacterClassification.hpp"
+
+#ifdef WNT
+#undef min
+#endif
+#include "svdata.hxx"
+#include "dbggui.hxx"
 
 #include "vcl/unohelp.hxx"
 #include "vcl/unohelp2.hxx"
-#include "vos/mutex.hxx"
-#include "vcl/salinst.hxx"
+
+#include "salinst.hxx"
+#include "svdata.hxx"
+// #include "svsys.h"
+
+#include "com/sun/star/i18n/XCharacterClassification.hpp"
 
 #include <map>
 #include <algorithm>

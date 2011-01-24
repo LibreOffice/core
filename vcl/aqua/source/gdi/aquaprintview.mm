@@ -28,9 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "aquaprintview.h"
-#include "salprn.h"
 #include "vcl/print.hxx"
+
+#include "aqua/aquaprintview.h"
+#include "aqua/salprn.h"
 
 @implementation AquaPrintView
 -(id)initWithController: (vcl::PrinterController*)pController withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter

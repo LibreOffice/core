@@ -28,13 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
-#endif
 #include <vcl/metaact.hxx>
-#include <vcl/salinst.hxx>
-#include <vcl/svdata.hxx>
 #include <vcl/cvtgrf.hxx>
+
+#include <salinst.hxx>
+#include <svdata.hxx>
 
 // --------------
 // - Callback   -

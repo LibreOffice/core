@@ -27,24 +27,27 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/vcompat.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
+#include <tools/stream.hxx>
+
 #include <ucbhelper/content.hxx>
+
 #include <unotools/ucbstreamhelper.hxx>
-#ifndef _UNTOOLS_TEMPFILE_HXX
 #include <unotools/tempfile.hxx>
-#endif
+
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <tools/debug.hxx>
-#include <tools/stream.hxx>
-#include <vcl/impgraph.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/salbtype.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/metaact.hxx>
+
+#include <impgraph.hxx>
+
 #include <com/sun/star/ucb/CommandAbortedException.hpp>
 
 // -----------

@@ -33,18 +33,21 @@
 #include <utility>
 #include <list>
 #include <vector>
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+
 #include <tools/debug.hxx>
+
 #include <vcl/virdev.hxx>
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
-#include <vcl/print.h>
 #include <vcl/salbtype.hxx>
 #include <vcl/print.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/sallayout.hxx>
 #include <vcl/bmpacc.hxx>
+
+#include <print.h>
 
 #include "pdfwriter_impl.hxx"
 

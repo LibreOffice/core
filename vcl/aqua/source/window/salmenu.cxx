@@ -25,21 +25,23 @@
  *
  ************************************************************************/
 
-#include "saldata.hxx"
-#include "salinst.h"
-#include "salmenu.h"
-#include "salnsmenu.h"
-#include "salframe.h"
-#include "salbmp.h"
-#include "vcl/svids.hrc"
+#include "rtl/ustrbuf.hxx"
+
 #include "vcl/cmdevt.hxx"
 #include "vcl/floatwin.hxx"
-#include "vcl/window.h"
 #include "vcl/window.hxx"
 #include "vcl/svapp.hxx"
 
-#include "rtl/ustrbuf.hxx"
-#include "aqua11ywrapper.h"
+#include "aqua/saldata.hxx"
+#include "aqua/salinst.h"
+#include "aqua/salmenu.h"
+#include "aqua/salnsmenu.h"
+#include "aqua/salframe.h"
+#include "aqua/salbmp.h"
+#include "aqua/aqua11ywrapper.h"
+
+#include "svids.hrc"
+#include "window.h"
 
 const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 

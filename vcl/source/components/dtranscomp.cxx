@@ -28,6 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
+#include "vos/mutex.hxx"
+
+#include "osl/mutex.hxx"
+
+#include "vcl/svapp.hxx"
+
+#include "svdata.hxx"
+#include "salinst.hxx"
+
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/lang/XSingleServiceFactory.hpp"
 #include "com/sun/star/lang/XInitialization.hpp"
@@ -40,12 +49,6 @@
 #include "com/sun/star/datatransfer/dnd/XDragSource.hpp"
 #include "com/sun/star/datatransfer/dnd/XDropTarget.hpp"
 #include "com/sun/star/datatransfer/dnd/DNDConstants.hpp"
-
-#include "vcl/svapp.hxx"
-#include "vcl/svdata.hxx"
-#include "vcl/salinst.hxx"
-#include "vos/mutex.hxx"
-#include "osl/mutex.hxx"
 
 #include "cppuhelper/compbase1.hxx"
 #include "cppuhelper/compbase2.hxx"

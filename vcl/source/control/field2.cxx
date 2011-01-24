@@ -29,20 +29,17 @@
 #include "precompiled_vcl.hxx"
 #include <tools/debug.hxx>
 
-#ifndef _SV_RC_H
 #include <tools/rc.h>
-#endif
-#include <vcl/svdata.hxx>
-#ifndef _SV_EVENT_HXX
-#include <vcl/field.hxx>
-#endif
+
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <vcl/event.hxx>
 #include <vcl/field.hxx>
-#include <i18npool/mslangid.hxx>
-
 #include <vcl/unohelp.hxx>
+
+#include <svdata.hxx>
+
+#include <i18npool/mslangid.hxx>
 
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>

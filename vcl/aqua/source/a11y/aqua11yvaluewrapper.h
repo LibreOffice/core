@@ -28,9 +28,9 @@
 #ifndef _SV_AQUA11VALUEWRAPPER_H
 #define _SV_AQUA11VALUEWRAPPER_H
 
-#include "salinst.h"
-#include "aquavcltypes.h"
-#include "aqua11ywrapper.h"
+#include "aqua/salinst.h"
+#include "aqua/aquavcltypes.h"
+#include "aqua/aqua11ywrapper.h"
 
 @interface AquaA11yValueWrapper : NSObject
 {
