@@ -122,6 +122,13 @@ EXCFLAGS="/EHsc /YX"
 .ENDIF
 
 BUILD_DIR=.$/lib
+
+.IF "$(CPU)" == "I"
+MACHINE=X86
+.ELSE
+MACHINE=X64
+.ENDIF
+
 .IF "$(debug)"==""
 BUILD_ACTION=nmake -f Makefile.vc9 cfg=release-dll EXCFLAGS=$(EXCFLAGS)
 .ELSE
