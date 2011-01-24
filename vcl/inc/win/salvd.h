@@ -28,8 +28,7 @@
 #ifndef _SV_SALVD_H
 #define _SV_SALVD_H
 
-#include <vcl/sv.h>
-#include <vcl/salvd.hxx>
+#include <salvd.hxx>
 
 class WinSalGraphics;
 

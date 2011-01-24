@@ -53,6 +53,9 @@
 #include <window.h>
 #include <toolbox.h>
 #include <salframe.hxx>
+#if defined WNT
+#include <svsys.h>
+#endif
 
 #include <string.h>
 #include <vector>

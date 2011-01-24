@@ -28,7 +28,7 @@
 #ifndef _SV_SALSYS_H
 #define _SV_SALSYS_H
 
-#include <vcl/salsys.hxx>
+#include <salsys.hxx>
 
 #include <vector>
 #include <map>

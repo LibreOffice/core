@@ -28,12 +28,12 @@
 #ifndef _SV_SALDATA_HXX
 #define _SV_SALDATA_HXX
 
-#include <vcl/sv.h>
-#include <vcl/svdata.hxx>
-#include <vcl/salwtype.hxx>
-#include <wincomp.hxx>
-
 #include "osl/module.h"
+
+#include <svdata.hxx>
+#include <salwtype.hxx>
+
+#include <win/wincomp.hxx>
 
 #include <set>  // for hMenu validation
 #include <map>

@@ -25,20 +25,28 @@
  *
  ************************************************************************/
 
-#ifndef _SV_SALTIMER_H
-#define _SV_SALTIMER_H
+#ifndef _SV_NATIVEWIDGETS_H
+#define _SV_NATIVEWIDGETS_H
 
-#include <vcl/saltimer.hxx>
 
-class WinSalTimer : public SalTimer
+#ifdef __cplusplus
+
+/* SalControlHandleData:
+ *
+ *   Holds platform specific theming data.
+ */
+
+class SalControlHandleData
 {
-public:
-    WinSalTimer() {}
-    virtual ~WinSalTimer();
+    public:
+        SalControlHandleData( void );
+        ~SalControlHandleData( void );
 
-    // overload all pure virtual methods
-    void            Start( ULONG nMS );
-    void            Stop();
+    public:
+        // nothing needed on Win32
 };
+
+
+#endif  /* __cplusplus */
 
 #endif

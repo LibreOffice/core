@@ -28,21 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "tools/svwin.h"
-
-#include "salgdi.h"
-#include "saldata.hxx"
-// for GetMirroredChar
-#include "sft.hxx"
-
-#include "vcl/sallayout.hxx"
-#include "vcl/svapp.hxx"
-
 #include "rtl/ustring.hxx"
 
 #include "osl/module.h"
 #include "osl/file.h"
 
+#include "tools/svwin.h"
+
+#include "vcl/svapp.hxx"
+
+#include "win/salgdi.h"
+#include "win/saldata.hxx"
+
+// for GetMirroredChar
+#include "sft.hxx"
+#include "sallayout.hxx"
 
 #include <cstdio>
 #include <malloc.h>
@@ -74,9 +74,9 @@ typedef std::set<int> IntSet;
 #include <graphite/GrClient.h>
 #include <graphite/WinFont.h>
 #include <graphite/Segment.h>
-#include <vcl/graphite_layout.hxx>
-#include <vcl/graphite_cache.hxx>
-#include <vcl/graphite_features.hxx>
+#include <graphite_layout.hxx>
+#include <graphite_cache.hxx>
+#include <graphite_features.hxx>
 #endif
 
 #define DROPPED_OUTGLYPH 0xFFFF

@@ -31,25 +31,6 @@
 #include <string.h>
 #include <malloc.h>
 
-#include <tools/prewin.h>
-#include <windows.h>
-#include <tools/postwin.h>
-#include <vcl/sysdata.hxx>
-#include "tools/svwin.h"
-
-#include "wincomp.hxx"
-#include "saldata.hxx"
-#include "salgdi.h"
-
-#include "vcl/svapp.hxx"
-#include "vcl/outfont.hxx"
-#include "vcl/font.hxx"
-#include "vcl/fontsubset.hxx"
-#include "vcl/sallayout.hxx"
-
-#include "vcl/outdev.h"         // for ImplGlyphFallbackFontSubstitution
-#include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
-
 #include "rtl/logfile.hxx"
 #include "rtl/tencinfo.h"
 #include "rtl/textcvt.h"
@@ -62,15 +43,34 @@
 #include "osl/thread.hxx"
 #include "osl/process.h"
 
+#include "basegfx/polygon/b2dpolygon.hxx"
+#include "basegfx/polygon/b2dpolypolygon.hxx"
+#include "basegfx/matrix/b2dhommatrix.hxx"
+#include "basegfx/matrix/b2dhommatrixtools.hxx"
+
+#include "unotools/fontcfg.hxx" // for IMPL_FONT_ATTR_SYMBOL
+
+#include "vcl/font.hxx"
+#include "vcl/svapp.hxx"
+
 #include "tools/poly.hxx"
 #include "tools/debug.hxx"
 #include "tools/stream.hxx"
 
-#include "basegfx/polygon/b2dpolygon.hxx"
-#include "basegfx/polygon/b2dpolypolygon.hxx"
-#include "basegfx/matrix/b2dhommatrix.hxx"
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <tools/prewin.h>
+#include <windows.h>
+#include <tools/postwin.h>
 
+#include <vcl/sysdata.hxx>
+
+#include "win/wincomp.hxx"
+#include "win/saldata.hxx"
+#include "win/salgdi.h"
+
+#include "outfont.hxx"
+#include "fontsubset.hxx"
+#include "sallayout.hxx"
+#include "outdev.h"         // for ImplGlyphFallbackFontSubstitution
 #include "sft.hxx"
 
 #ifdef GCP_KERN_HACK

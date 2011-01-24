@@ -28,8 +28,7 @@
 #ifndef _SV_SALINST_H
 #define _SV_SALINST_H
 
-#include <vcl/sv.h>
-#include <vcl/salinst.hxx>
+#include <salinst.hxx>
 
 namespace vos { class OMutex; }
 

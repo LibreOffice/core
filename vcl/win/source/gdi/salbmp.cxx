@@ -27,13 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+
 #include <tools/svwin.h>
-#include <wincomp.hxx>
-#include <vcl/salbtype.hxx>
-#include <salgdi.h>
-#include <saldata.hxx>
-#include <salbmp.h>
+
 #include <vcl/bitmap.hxx> // for BitmapSystemData
+#include <vcl/salbtype.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/salgdi.h>
+#include <win/saldata.hxx>
+#include <win/salbmp.h>
+
 #include <string.h>
 
 // -----------

@@ -30,16 +30,17 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <tools/svwin.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salgdi.h>
-#include <tools/debug.hxx>
-#include <salframe.h>
-#include <tools/poly.hxx>
-#ifndef _RTL_STRINGBUF_HXX
+
 #include <rtl/strbuf.hxx>
-#endif
+
+#include <tools/svwin.h>
+#include <tools/debug.hxx>
+#include <tools/poly.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salgdi.h>
+#include <win/salframe.h>
 
 using namespace rtl;
 

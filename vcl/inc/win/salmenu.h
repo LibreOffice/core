@@ -28,10 +28,8 @@
 #ifndef _SV_SALMENU_H
 #define _SV_SALMENU_H
 
-#include <vcl/sv.h>
 #include <vcl/bitmap.hxx>
-#include <vcl/salmenu.hxx>
-
+#include <salmenu.hxx>
 
 class WinSalMenu : public SalMenu
 {

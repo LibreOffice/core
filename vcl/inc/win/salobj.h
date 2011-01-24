@@ -28,8 +28,7 @@
 #ifndef _SV_SALOBJ_H
 #define _SV_SALOBJ_H
 
-#include <vcl/sv.h>
-#include <vcl/salobj.hxx>
+#include <salobj.hxx>
 
 // -----------------
 // - SalObjectData -

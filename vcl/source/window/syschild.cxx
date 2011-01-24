@@ -33,6 +33,9 @@
 
 #include <tools/rc.h>
 
+// declare system types in sysdata.hxx
+#include <svsys.h>
+
 #include <vcl/window.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/svapp.hxx>

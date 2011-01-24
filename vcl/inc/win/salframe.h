@@ -28,9 +28,8 @@
 #ifndef _SV_SALFRAME_H
 #define _SV_SALFRAME_H
 
-#include <vcl/sv.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/salframe.hxx>
+#include <salframe.hxx>
 
 class WinSalGraphics;
 

@@ -49,7 +49,6 @@
 #include "vcl/wrkwin.hxx"
 #include "vcl/wall.hxx"
 #include "vcl/gradient.hxx"
-#include "vcl/sysdata.hxx"
 #include "vcl/salctype.hxx"
 #include "vcl/button.hxx"
 #include "vcl/taskpanelist.hxx"
@@ -58,6 +57,10 @@
 #include "vcl/gdimtf.hxx"
 #include "vcl/pdfextoutdevdata.hxx"
 #include "vcl/lazydelete.hxx"
+
+// declare system types in sysdata.hxx
+#include "svsys.h"
+#include "vcl/sysdata.hxx"
 
 #include "salframe.hxx"
 #include "salobj.hxx"
@@ -9676,7 +9679,7 @@ BOOL Window::IsNativeWidgetEnabled() const
 }
 
 #ifdef WNT // see #140456#
-#include <salframe.h>
+#include <win/salframe.h>
 #endif
 
 Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSize,

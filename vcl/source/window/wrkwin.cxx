@@ -33,6 +33,8 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
+// declare system types in sysdata.hxx
+#include <svsys.h>
 #include <vcl/sysdata.hxx>
 
 #include <svdata.hxx>

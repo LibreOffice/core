@@ -28,10 +28,9 @@
 #ifndef _SV_SALBMP_H
 #define _SV_SALBMP_H
 
-#include <wincomp.hxx>
 #include <tools/gen.hxx>
-#include <vcl/sv.h>
-#include <vcl/salbmp.hxx>
+#include <win/wincomp.hxx>
+#include <salbmp.hxx>
 
 // --------------
 // - SalBitmap  -

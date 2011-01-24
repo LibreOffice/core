@@ -28,11 +28,10 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-#include <vcl/sv.h>
-#include <vcl/sallayout.hxx>
-#include <vcl/salgdi.hxx>
-#include <vcl/outfont.hxx>
-#include <vcl/impfont.hxx>
+#include <sallayout.hxx>
+#include <salgdi.hxx>
+#include <outfont.hxx>
+#include <impfont.hxx>
 
 #include "boost/scoped_ptr.hpp"
 #include <hash_set>

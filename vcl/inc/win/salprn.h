@@ -28,8 +28,7 @@
 #ifndef _SV_SALPRN_H
 #define _SV_SALPRN_H
 
-#include <vcl/sv.h>
-#include <vcl/salprn.hxx>
+#include <salprn.hxx>
 
 // -----------------
 // - SalDriverData -

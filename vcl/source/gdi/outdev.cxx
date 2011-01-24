@@ -42,6 +42,8 @@
 #include <vcl/print.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/unowrap.hxx>
+// declare system types in sysdata.hxx
+#include <svsys.h>
 #include <vcl/sysdata.hxx>
 
 #include <salgdi.hxx>

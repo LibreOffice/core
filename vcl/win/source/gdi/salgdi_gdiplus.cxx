@@ -30,11 +30,13 @@
 
 #include <stdio.h>
 #include <string.h>
+
 #include <tools/svwin.h>
-#include <wincomp.hxx>
-#include <saldata.hxx>
-#include <salgdi.h>
 #include <tools/debug.hxx>
+
+#include <win/wincomp.hxx>
+#include <win/saldata.hxx>
+#include <win/salgdi.h>
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))

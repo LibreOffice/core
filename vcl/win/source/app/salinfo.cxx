@@ -46,16 +46,19 @@
 #endif
 #include "tools/postsys.h"
 
-#include "tools/string.hxx"
-#include "salsys.h"
-#include "salframe.h"
-#include "salinst.h"
-#include "saldata.hxx"
+#include "rtl/ustrbuf.hxx"
+
 #include "tools/debug.hxx"
-#include "vcl/svdata.hxx"
+#include "tools/string.hxx"
+
 #include "vcl/window.hxx"
 
-#include "rtl/ustrbuf.hxx"
+#include "win/salsys.h"
+#include "win/salframe.h"
+#include "win/salinst.h"
+#include "win/saldata.hxx"
+
+#include "svdata.hxx"
 
 #include <hash_map>
 

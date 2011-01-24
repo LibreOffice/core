@@ -54,9 +54,6 @@
 #include "vcl/sound.hxx"
 #include "vcl/threadex.hxx"
 
-#ifdef WNT
-#undef min
-#endif
 #include "svdata.hxx"
 #include "dbggui.hxx"
 
@@ -65,7 +62,7 @@
 
 #include "salinst.hxx"
 #include "svdata.hxx"
-// #include "svsys.h"
+#include "svsys.h"
 
 #include "com/sun/star/i18n/XCharacterClassification.hpp"
 
@@ -630,10 +627,9 @@ BOOL DbgWindow::Close()
     // remember window position
     ByteString aState( GetWindowState() );
     DbgData* pData = DbgGetData();
-    strncpy( pData->aDbgWinState,
-         aState.GetBuffer(),
-         std::min( sizeof( pData->aDbgWinState ),
-               size_t(aState.Len() + 1U )) );
+    size_t nCopy = (sizeof( pData->aDbgWinState ) < size_t(aState.Len() + 1U ))
+    ? sizeof( pData->aDbgWinState ) : size_t(aState.Len() + 1U );
+    strncpy( pData->aDbgWinState, aState.GetBuffer(), nCopy );
     pData->aDbgWinState[ sizeof( pData->aDbgWinState ) - 1 ] = 0;
     // and save for next session
     DbgSaveData( *pData );

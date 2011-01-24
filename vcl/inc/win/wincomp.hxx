@@ -31,7 +31,6 @@
 #ifndef _STRING_H
 #include <string.h>
 #endif
-#include <vcl/sv.h>
 
 // ----------
 // - Strict -
