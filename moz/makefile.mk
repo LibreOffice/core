@@ -188,10 +188,14 @@ CXXFLAGS+=-m64
 .ENDIF
 .EXPORT : CXXFLAGS
 .ENDIF          # "$(COMNAME)"=="sunpro5"
-.IF "$(COM)$(OS)$(CPUNAME)" == "GCCLINUXPOWERPC64"
-CXXFLAGS:=-mminimal-toc
-.EXPORT : CXXFLAGS
 .ENDIF
+
+.IF "$(COM)" == "GCC"
+CXXFLAGS+=-fpermissive
+.IF "$(OS)$(CPUNAME)" == "LINUXPOWERPC64"
+CXXFLAGS+=-mminimal-toc
+.ENDIF
+.EXPORT : CXXFLAGS
 .ENDIF
 
 .IF "$(OS)"=="SOLARIS" && "$(CPUNAME)"=="SPARC" && "$(CPU)"=="U"
