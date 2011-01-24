@@ -48,9 +48,6 @@
 #include "refupdat.hxx"
 #endif
 
-#define DEBUG_CHANGETRACK 0
-
-
 class ScBaseCell;
 class ScDocument;
 
@@ -183,9 +180,6 @@ public:
     ScChangeActionLinkEntry*        GetNext()           { return pNext; }
     const ScChangeAction*           GetAction() const   { return pAction; }
     ScChangeAction*                 GetAction()         { return pAction; }
-#if DEBUG_CHANGETRACK
-    String                          ToString() const;
-#endif // DEBUG_CHANGETRACK
 };
 
 // --- ScChangeActionCellListEntry -----------------------------------------
@@ -444,9 +438,6 @@ public:
                                 // only to be used in the XML import
             void                AddDependent( ULONG nActionNumber,
                                         const ScChangeTrack* pTrack );
-#if DEBUG_CHANGETRACK
-            String              ToString( ScDocument* pDoc ) const;
-#endif // DEBUG_CHANGETRACK
 };
 
 
@@ -1350,9 +1341,6 @@ public:
             void                AppendCloned( ScChangeAction* pAppend );
     SC_DLLPUBLIC ScChangeTrack* Clone( ScDocument* pDocument ) const;
             void                MergeActionState( ScChangeAction* pAct, const ScChangeAction* pOtherAct );
-#if DEBUG_CHANGETRACK
-            String              ToString() const;
-#endif // DEBUG_CHANGETRACK
 };
 
 

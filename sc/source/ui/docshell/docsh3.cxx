@@ -80,11 +80,6 @@
 #include "conflictsdlg.hxx"
 #include "globstr.hrc"
 
-#if DEBUG_CHANGETRACK
-#include <stdio.h>
-#endif // DEBUG_CHANGETRACK
-
-
 //------------------------------------------------------------------
 
 //
@@ -1219,15 +1214,6 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         return false;
     }
 
-#if DEBUG_CHANGETRACK
-    ::rtl::OUString aMessage(RTL_CONSTASCII_USTRINGPARAM( "\nbefore merge:\n" ));
-    aMessage += pThisTrack->ToString();
-    ::rtl::OString aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
-    OSL_ENSURE( false, aMsg.getStr() );
-    //fprintf( stdout, "%s ", aMsg.getStr() );
-    //fflush( stdout );
-#endif // DEBUG_CHANGETRACK
-
     // reset show changes
     ScChangeViewSettings aChangeViewSet;
     aChangeViewSet.SetShowChanges( FALSE );
@@ -1395,15 +1381,6 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
         InfoBox aInfoBox( GetActiveDialogParent(), ScGlobal::GetRscString( STR_DOC_UPDATED ) );
         aInfoBox.Execute();
     }
-
-#if DEBUG_CHANGETRACK
-    aMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\nafter merge:\n" ));
-    aMessage += pThisTrack->ToString();
-    aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
-    OSL_ENSURE( false, aMsg.getStr() );
-    //fprintf( stdout, "%s ", aMsg.getStr() );
-    //fflush( stdout );
-#endif // DEBUG_CHANGETRACK
 
     return ( pThisAction != NULL );
 }
