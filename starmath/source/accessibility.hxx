@@ -344,11 +344,6 @@ class SmEditAccessible :
     SmEditAccessible( const SmEditAccessible & );
     SmEditAccessible & operator = ( const SmEditAccessible & );
 
-protected:
-#ifdef TL_NOT_YET_USED
-    SmDocShell *    GetDoc_Impl();
-#endif //TL_NOT_YET_USED
-
 public:
     SmEditAccessible( SmEditWindow *pEditWin );
     virtual ~SmEditAccessible();
