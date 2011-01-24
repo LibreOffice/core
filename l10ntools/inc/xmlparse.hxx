@@ -188,8 +188,6 @@ public:
 
 //-------------------------------------------------------------------------
 
-DECLARE_LIST( XMLStringList, XMLElement* )
-
 /// Mapping numeric Language code <-> XML Element
 typedef std::hash_map< ByteString ,XMLElement* , hashByteString,equalByteString > LangHashMap;
 
