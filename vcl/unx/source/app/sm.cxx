@@ -378,7 +378,8 @@ void SessionManagerClient::SaveYourselfProc(
         SessionManagerClient::saveDone();
         return;
     }
-    Application::PostUserEvent( STATIC_LINK( (void*)(shutdown ? 0xffffffff : 0x0), SessionManagerClient, SaveYourselfHdl ) );
+    sal_uIntPtr nStateVal = shutdown ? 0xffffffff : 0x0;
+    Application::PostUserEvent( STATIC_LINK( (void*)nStateVal, SessionManagerClient, SaveYourselfHdl ) );
     SMprintf( "waiting for save yourself event to be processed\n" );
 #endif
 }

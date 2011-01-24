@@ -578,12 +578,8 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDire
 {
     if( !Validate() || !ValidateMode( m ) )
         return new Storage( pIo, NULL, m );
-    BOOL bSetAutoCommit = FALSE;
     if( bDirect && !pEntry->bDirect )
-    {
-        bSetAutoCommit = TRUE;
         bDirect = FALSE;
-    }
 
     StgDirEntry* p = pIo->pTOC->Find( *pEntry, rName );
     if( !p )

@@ -1226,7 +1226,6 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
     SvFileStream                aOStm( rSrsOutPath.GetFull(), STREAM_WRITE | STREAM_TRUNC );
     ::std::vector< ByteString > aMissingImages;
     FILE*                       pSysListFile = rContext.aOutputSysList.getLength() ? fopen( rContext.aOutputSysList.getStr(), "ab" ) : NULL;
-    bool                        bRet = true;
 
     if( !aIStm.GetError() && !aOStm.GetError() )
     {
@@ -1336,8 +1335,6 @@ void RscCompiler::PreprocessSrsFile( const RscCmdLine::OutputFile& rOutputFile,
                 aOStm.WriteLine( aLine );
         }
     }
-    else
-        bRet = false;
 
     if( aMissingImages.size() > 0 )
     {

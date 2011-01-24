@@ -612,7 +612,6 @@ ERRTYPE RscMgr::SetRef( const RSCINST & rInst, const RscId & rRefId )
     RscMgrInst *    pClassData;
     RscId           aOldId, aId;
     ERRTYPE         aError;
-    RSCINST         aTmpI = rInst;
 
     if( rRefId.IsId() &&
       ((rRefId.GetNumber() < 1) || (rRefId.GetNumber() > 0x7FFF)) )
