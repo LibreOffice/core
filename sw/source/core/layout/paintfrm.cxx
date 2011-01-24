@@ -4156,6 +4156,7 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     const SvxBorderLine* pLeftRightBorder = 0;
     const SvxBorderLine* pTopBorder = rBox.GetTop();
     const SvxBorderLine* pBottomBorder = rBox.GetBottom();
+
     if ( _bLeft )
     {
         pLeftRightBorder = bR2L ? rBox.GetRight() : rBox.GetLeft();
@@ -4190,6 +4191,10 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
     if ( bCnt )
     {
         ::lcl_ExtendLeftAndRight( aRect, _rFrm, _rAttrs, _rRectFn );
+
+        // No Top / bottom borders for joint borders
+        if ( _rAttrs.JoinedWithPrev( _rFrm ) ) pTopBorder = NULL;
+        if ( _rAttrs.JoinedWithNext( _rFrm ) ) pBottomBorder = NULL;
     }
 
     // OD 06.05.2003 #107169# - adjustments for printer output device
