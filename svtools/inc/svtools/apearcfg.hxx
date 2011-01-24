@@ -76,7 +76,7 @@ public:
     virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& _rPropertyNames);
 
     sal_uInt16  GetDragMode  () const { return nDragMode; }
-    void        SetDragMode  ( USHORT nSet );
+    void        SetDragMode  ( sal_uInt16 nSet );
 
     sal_uInt16      GetScaleFactor () const { return nScaleFactor; }
     void        SetScaleFactor ( sal_uInt16 nSet );
