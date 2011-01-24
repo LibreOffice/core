@@ -57,12 +57,6 @@ extern BOOL CheckNodesRange( const SwNodeIndex& rStt,
 SV_DECL_PTRARR(SwSttNdPtrs,SwStartNode*,2,2)
 
 
-//#define JP_DEBUG
-#ifdef JP_DEBUG
-#include "shellio.hxx"
-#endif
-
-
 // Funktion zum bestimmen des hoechsten Levels innerhalb des Bereiches
 
 USHORT HighestLevel( SwNodes & rNodes, const SwNodeRange & rRange );
@@ -914,21 +908,6 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         UpdtOutlineIdx( aRg.aEnd.GetNode() );
         rNodes.UpdtOutlineIdx( aOrigInsPos.aStart.GetNode() );
     }
-
-#ifdef JP_DEBUG
-    {
-extern Writer* GetDebugWriter(const String&);
-
-        Writer* pWriter = GetDebugWriter(aEmptyStr);
-        if( pWriter )
-        {
-            int nError;
-            SvFileStream aStrm( "c:\\$$move.db", STREAM_WRITE );
-            SwWriter aWriter( aStrm, *pMyDoc );
-            aWriter.Write( &nError, pWriter );
-        }
-    }
-#endif
 
     return TRUE;
 }
@@ -2148,22 +2127,6 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
         }
         aRg.aStart++;
     }
-
-
-#ifdef JP_DEBUG
-    {
-extern Writer* GetDebugWriter(const String&);
-
-        Writer* pWriter = GetDebugWriter(aEmptyStr);
-        if( pWriter )
-        {
-            int nError;
-            SvFileStream aStrm( "c:\\$$copy.db", STREAM_WRITE );
-            SwWriter aWriter( aStrm, *pMyDoc );
-            aWriter.Write( &nError, pWriter );
-        }
-    }
-#endif
 }
 
 void SwNodes::_DelDummyNodes( const SwNodeRange& rRg )

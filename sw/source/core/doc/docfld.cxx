@@ -2404,30 +2404,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     }
     nFldLstGetMode = static_cast<BYTE>( eGetMode );
     nNodes = rDoc.GetNodes().Count();
-
-#ifdef JP_DEBUG
-    {
-    SvFileStream sOut( "f:\\x.x", STREAM_STD_WRITE );
-    sOut.Seek( STREAM_SEEK_TO_END );
-    sOut << "------------------" << endl;
-    const _SetGetExpFldPtr* pSortLst = pFldSortLst->GetData();
-    for( USHORT n = pFldSortLst->Count(); n; --n, ++pSortLst )
-    {
-        String sStr( (*pSortLst)->GetNode() );
-        sStr += "\t, ";
-        sStr += (*pSortLst)->GetCntnt();
-        sStr += "\tNode: ";
-        sStr += (*pSortLst)->GetFld()->GetTxtNode().StartOfSectionIndex();
-        sStr += "\tPos: ";
-        sStr += *(*pSortLst)->GetFld()->GetStart();
-        sStr += "\tType: ";
-        sStr += (*pSortLst)->GetFld()->GetFld().GetFld()->GetTyp()->Which();
-
-        sOut << sStr.GetStr() << endl;
-    }
-    }
-#endif
-    // JP_DEBUG
 }
 
 void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
