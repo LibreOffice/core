@@ -171,9 +171,6 @@ void ScTabView::InitBlockMode( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab, nBlockEndX,nBlockEndY, nTab ) );
 
-#ifdef OLD_SELECTION_PAINT
-        InvertBlockMark( nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY );
-#endif
         UpdateSelectionOverlay();
     }
 }
@@ -261,13 +258,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         // Current cursor has moved
 
         SCTAB       nTab = nCurZ;
-
-#ifdef OLD_SELECTION_PAINT
-        SCCOL       nDrawStartCol;
-        SCROW       nDrawStartRow;
-        SCCOL       nDrawEndCol;
-        SCROW       nDrawEndRow;
-#endif
 
         // Set old selection area
         ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldBlockEndX, nOldBlockEndY );
@@ -371,22 +361,6 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
         aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
-#ifdef OLD_SELECTION_PAINT
-        BOOL bCont;
-        BOOL bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
-                                        nDrawEndCol, nDrawEndRow, bCont );
-        if ( bDraw )
-        {
-            HideAllCursors();
-            InvertBlockMark( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-            if (bCont)
-            {
-                aRect.GetContDiff( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-                InvertBlockMark( nDrawStartCol, nDrawStartRow, nDrawEndCol, nDrawEndRow );
-            }
-            ShowAllCursors();
-        }
-#endif
         UpdateSelectionOverlay();
 
         nOldCurX = nCurX;
@@ -929,35 +903,12 @@ void ScTabView::PaintBlock( BOOL bReset )
                     USHORT i;
                     if ( bMulti )
                     {
-#ifdef OLD_SELECTION_PAINT
-                        for (i=0; i<4; i++)
-                            if (pGridWin[i] && pGridWin[i]->IsVisible())
-                                pGridWin[i]->InvertSimple( nBlockStartX, nBlockStartY,
-                                                            nBlockEndX, nBlockEndY,
-                                                            TRUE, TRUE );
-#endif
                         rMark.ResetMark();
                         UpdateSelectionOverlay();
                         bDidReset = TRUE;
                     }
                     else
                     {
-#ifdef OLD_SELECTION_PAINT
-                        // (mis)use InvertBlockMark to remove all of the selection
-                        // -> set bBlockNeg (like when removing parts of a selection)
-                        //    and convert everything to Multi
-
-                        rMark.MarkToMulti();
-                        BOOL bOld = bBlockNeg;
-                        bBlockNeg = TRUE;
-                        // #73130# (negative) MarkArea must be set in case of repaint
-                        rMark.SetMarkArea( ScRange( nBlockStartX,nBlockStartY, nTab,
-                                                    nBlockEndX,nBlockEndY, nTab ) );
-
-                        InvertBlockMark( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
-
-                        bBlockNeg = bOld;
-#endif
                         rMark.ResetMark();
                         UpdateSelectionOverlay();
                         bDidReset = TRUE;
