@@ -386,19 +386,19 @@ void HwpReader::makeMeta()
             rchars((hconv(hwpinfo->summary.keyword[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.keyword[2][0])
+        if (hwpinfo->summary.etc[0][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[0], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[0][0])
+        if (hwpinfo->summary.etc[1][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[1], gstr)));
             rendEl(ascii("meta:keyword"));
         }
-        if (hwpinfo->summary.etc[1][0])
+        if (hwpinfo->summary.etc[2][0])
         {
             rstartEl(ascii("meta:keyword"), rList);
             rchars((hconv(hwpinfo->summary.etc[2], gstr)));
@@ -570,7 +570,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                     {
                         char filename[128];
                         char dirname[128];
-                        int fd, res;
+                        int fd;
 #ifdef _WIN32
                         GetTempPath(sizeof(dirname), dirname);
                         sprintf(filename, "%s%s",dirname, emp->name);
@@ -581,7 +581,7 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                         if( (fd = open( filename , O_CREAT | O_WRONLY , 0666)) >= 0 )
 #endif
                         {
-                            res = write( fd, emp->data, emp->size );
+                            write( fd, emp->data, emp->size );
                             close(fd);
                         }
 #ifdef _WIN32
@@ -3354,18 +3354,14 @@ void HwpReader::makeDateFormat(DateCode * hbox)
     rstartEl(ascii("number:date-style"), rList);
     pList->clear();
 
-    bool is_pm;
     bool add_zero = false;
     int zero_check = 0/*, i=0*/;
     hbox->format[DATE_SIZE -1] = 0;
 
     hchar *fmt = hbox->format[0] ? hbox->format : defaultform;
-//hstr2ksstr(fmt, buf);
 
     for( ; *fmt ; fmt++ )
     {
-        is_pm = (hbox->date[DateCode::HOUR] >= 12 );
-
         if( zero_check == 1 )
         {
             zero_check = 0;
