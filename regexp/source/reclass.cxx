@@ -2773,6 +2773,9 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
     POP_FAILURE_POINT(sdummy, pdummy,
               dummy_low_reg, dummy_high_reg,
               reg_dummy, reg_dummy, reg_info_dummy);
+
+    (void)sdummy;
+    (void)pdummy;
       }
       /* Note fall through.  */
 
