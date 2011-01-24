@@ -310,10 +310,6 @@ void SwLinguIter::_End(bool bRestoreSelection)
     DELETEZ(pCurrX);
 
     pSh = 0;
-
-#ifdef LINGU_STATISTIK
-    aSwLinguStat.Flush();
-#endif
 }
 
 /*************************************************************************
