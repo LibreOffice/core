@@ -1313,7 +1313,7 @@ BOOL ODbaseTable::CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo)
                     {
                         throwInvalidColumnType(STR_INVALID_COLUMN_PRECISION, aName);
                     }
-                    (*m_pFileStream) << (BYTE) Min((ULONG)nPrecision, 255UL);      //Feldlaenge
+                    (*m_pFileStream) << (BYTE) Min((unsigned)nPrecision, 255U);      //Feldlaenge
                     nRecLength = nRecLength + (USHORT)::std::min((USHORT)nPrecision, (USHORT)255UL);
                     (*m_pFileStream) << (BYTE)0;                                                                //Nachkommastellen
                     break;
