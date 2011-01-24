@@ -703,7 +703,7 @@ sal_Bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         mpView->ForceMarkedToAnotherPage();
         mpView->SetCurrentObj(OBJ_TEXT);
 
-        USHORT nDrgLog = USHORT ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
+        sal_uInt16 nDrgLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(DRGPIX,0)).Width() );
 
         if ( mpView->IsRotateAllowed() && mpViewShell->GetFrameView()->IsClickChangeRotation() && (rMEvt.GetClicks() != 2) &&
             !rMEvt.IsShift() && !rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsRight() &&
