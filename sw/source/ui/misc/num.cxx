@@ -205,10 +205,8 @@ void SwNumPositionTabPage::InitControls()
     bool bSameIndentAt = bLabelAlignmentPosAndSpaceModeActive;
 
     const SwNumFmt* aNumFmtArr[MAXLEVEL];
-    const SwFmtVertOrient* pFirstOrient = 0;
     USHORT nMask = 1;
     USHORT nLvl = USHRT_MAX;
-    long nFirstBorderText = 0;
     long nFirstBorderTextRelative = -1;
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
@@ -218,14 +216,6 @@ void SwNumPositionTabPage::InitControls()
             if(USHRT_MAX == nLvl)
             {
                 nLvl = i;
-                if ( !bLabelAlignmentPosAndSpaceModeActive )
-                {
-                    pFirstOrient = aNumFmtArr[nLvl]->GetGraphicOrientation();
-                    nFirstBorderText = nLvl > 0 ?
-                        aNumFmtArr[nLvl]->GetAbsLSpace() + aNumFmtArr[nLvl]->GetFirstLineOffset() -
-                        aNumFmtArr[nLvl - 1]->GetAbsLSpace() + aNumFmtArr[nLvl - 1]->GetFirstLineOffset():
-                            aNumFmtArr[nLvl]->GetAbsLSpace() + aNumFmtArr[nLvl]->GetFirstLineOffset();
-                }
             }
 
             if( i > nLvl)
