@@ -563,7 +563,9 @@ PDFEntry* PDFReader::read( const char* pBuffer, unsigned int nLen )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info<const char*> aInfo =
+        #endif
             boost::spirit::parse( pBuffer,
                                   pBuffer+nLen,
                                   aGrammar,
@@ -641,7 +643,9 @@ PDFEntry* PDFReader::read( const char* pFileName )
 
     try
     {
+        #if OSL_DEBUG_LEVEL > 1
         boost::spirit::parse_info< file_iterator<> > aInfo =
+        #endif
             boost::spirit::parse( file_start,
                                   file_end,
                                   aGrammar,
