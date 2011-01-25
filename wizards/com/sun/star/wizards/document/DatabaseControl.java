@@ -35,6 +35,7 @@ import com.sun.star.drawing.XShapes;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.FieldColumn;
 
 /**
@@ -83,7 +84,7 @@ public class DatabaseControl extends Control
 
             String sGridColumnName = getGridColumnName();
             XPropertySet xPropColumn = _oGridControl.xGridColumnFactory.createColumn(sGridColumnName);
-            xPropColumn.setPropertyValue("Name", sUniqueName);
+            xPropColumn.setPropertyValue(PropertyNames.PROPERTY_NAME, sUniqueName);
             boolean bHidden = false;
             if (_fieldtype == DataType.LONGVARBINARY)  //TODO CONTROLType abfragen!!!!!!
             {
@@ -91,8 +92,8 @@ public class DatabaseControl extends Control
             }
             xPropColumn.setPropertyValue("Hidden", new Boolean(bHidden));
             xPropColumn.setPropertyValue("DataField", sFieldName);
-            xPropColumn.setPropertyValue("Label", _columntitle);
-            xPropColumn.setPropertyValue("Width", new Integer(0));  // Width of column is adjusted to Columname
+            xPropColumn.setPropertyValue(PropertyNames.PROPERTY_LABEL, _columntitle);
+            xPropColumn.setPropertyValue(PropertyNames.PROPERTY_WIDTH, new Integer(0));  // Width of column is adjusted to Columname
 
             XPropertySetInfo xPSI = xPropColumn.getPropertySetInfo();
             if ( xPSI.hasPropertyByName( "MouseWheelBehavior" ) )
@@ -166,7 +167,7 @@ public class DatabaseControl extends Control
         {
             if (getFieldType() == DataType.LONGVARCHAR)
             {
-                // Helper.setUnoPropertyValue(xControlModel, "MultiLine", Boolean.TRUE);
+                // Helper.setUnoPropertyValue(xControlModel, PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
                 final int nMemofieldheight = oFormHandler.getControlReferenceHeight() * 4;
                 return nMemofieldheight;
             }

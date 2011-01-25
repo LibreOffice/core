@@ -35,6 +35,7 @@ import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.NoValidPathException;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XWindow;
@@ -372,13 +373,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void optBusinessLetterItemChanged()
     {
         DataAware.setDataObject(letterDA, myConfig.cp_BusinessLetter, true);
-        setControlProperty("lblBusinessStyle", "Enabled", Boolean.TRUE);
-        setControlProperty("lstBusinessStyle", "Enabled", Boolean.TRUE);
-        setControlProperty("chkBusinessPaper", "Enabled", Boolean.TRUE);
-        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstPrivateStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         lstBusinessStyleItemChanged();
         enableSenderReceiver();
         setPossibleFooter(true);
@@ -391,13 +392,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void optPrivOfficialLetterItemChanged()
     {
         DataAware.setDataObject(letterDA, myConfig.cp_PrivateOfficialLetter, true);
-        setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("chkBusinessPaper", "Enabled", Boolean.FALSE);
-        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.TRUE);
-        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.TRUE);
-        setControlProperty("lblPrivateStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstPrivateStyle", "Enabled", Boolean.FALSE);
+        setControlProperty("lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         lstPrivOfficialStyleItemChanged();
         disableBusinessPaper();
         enableSenderReceiver();
@@ -411,13 +412,13 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void optPrivateLetterItemChanged()
     {
         DataAware.setDataObject(letterDA, myConfig.cp_PrivateLetter, true);
-        setControlProperty("lblBusinessStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstBusinessStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("chkBusinessPaper", "Enabled", Boolean.FALSE);
-        setControlProperty("lblPrivOfficialStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lstPrivOfficialStyle", "Enabled", Boolean.FALSE);
-        setControlProperty("lblPrivateStyle", "Enabled", Boolean.TRUE);
-        setControlProperty("lstPrivateStyle", "Enabled", Boolean.TRUE);
+        setControlProperty("lblBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstBusinessStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("chkBusinessPaper", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lstPrivOfficialStyle", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lstPrivateStyle", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         lstPrivateStyleItemChanged();
         disableBusinessPaper();
         disableSenderReceiver();
@@ -430,27 +431,27 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void optSenderPlaceholderItemChanged()
     {
-        setControlProperty("lblSenderName", "Enabled", Boolean.FALSE);
-        setControlProperty("lblSenderStreet", "Enabled", Boolean.FALSE);
-        setControlProperty("lblPostCodeCity", "Enabled", Boolean.FALSE);
-        setControlProperty("txtSenderName", "Enabled", Boolean.FALSE);
-        setControlProperty("txtSenderStreet", "Enabled", Boolean.FALSE);
-        setControlProperty("txtSenderPostCode", "Enabled", Boolean.FALSE);
-        setControlProperty("txtSenderState", "Enabled", Boolean.FALSE);
-        setControlProperty("txtSenderCity", "Enabled", Boolean.FALSE);
+        setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+        setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         myLetterDoc.fillSenderWithUserData();
     }
 
     public void optSenderDefineItemChanged()
     {
-        setControlProperty("lblSenderName", "Enabled", Boolean.TRUE);
-        setControlProperty("lblSenderStreet", "Enabled", Boolean.TRUE);
-        setControlProperty("lblPostCodeCity", "Enabled", Boolean.TRUE);
-        setControlProperty("txtSenderName", "Enabled", Boolean.TRUE);
-        setControlProperty("txtSenderStreet", "Enabled", Boolean.TRUE);
-        setControlProperty("txtSenderPostCode", "Enabled", Boolean.TRUE);
-        setControlProperty("txtSenderState", "Enabled", Boolean.TRUE);
-        setControlProperty("txtSenderCity", "Enabled", Boolean.TRUE);
+        setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+        setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         txtSenderNameTextChanged();
         txtSenderStreetTextChanged();
         txtSenderPostCodeTextChanged();
@@ -579,14 +580,14 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 numLogoHeight.setValue(0.1);
             }
             BusCompanyLogo = myLetterDoc.new BusinessPaperObject("Company Logo", (int) (numLogoWidth.getValue() * 1000), (int) (numLogoHeight.getValue() * 1000), (int) (numLogoX.getValue() * 1000), (int) (numLogoY.getValue() * 1000));
-            setControlProperty("numLogoHeight", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyLogoHeight", "Enabled", Boolean.TRUE);
-            setControlProperty("numLogoWidth", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyLogoWidth", "Enabled", Boolean.TRUE);
-            setControlProperty("numLogoX", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyLogoX", "Enabled", Boolean.TRUE);
-            setControlProperty("numLogoY", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyLogoY", "Enabled", Boolean.TRUE);
+            setControlProperty("numLogoHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyLogoHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numLogoWidth", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyLogoWidth", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numLogoX", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyLogoX", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numLogoY", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyLogoY", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
             setPossibleLogo(false);
         }
         else
@@ -595,14 +596,14 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             {
                 BusCompanyLogo.removeFrame();
             }
-            setControlProperty("numLogoHeight", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyLogoHeight", "Enabled", Boolean.FALSE);
-            setControlProperty("numLogoWidth", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyLogoWidth", "Enabled", Boolean.FALSE);
-            setControlProperty("numLogoX", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyLogoX", "Enabled", Boolean.FALSE);
-            setControlProperty("numLogoY", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyLogoY", "Enabled", Boolean.FALSE);
+            setControlProperty("numLogoHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyLogoHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numLogoWidth", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyLogoWidth", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numLogoX", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyLogoX", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numLogoY", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyLogoY", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
             setPossibleLogo(true);
         }
     }
@@ -621,14 +622,14 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 numAddressHeight.setValue(0.1);
             }
             BusCompanyAddress = myLetterDoc.new BusinessPaperObject("Company Address", (int) (numAddressWidth.getValue() * 1000), (int) (numAddressHeight.getValue() * 1000), (int) (numAddressX.getValue() * 1000), (int) (numAddressY.getValue() * 1000));
-            setControlProperty("numAddressHeight", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyAddressHeight", "Enabled", Boolean.TRUE);
-            setControlProperty("numAddressWidth", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyAddressWidth", "Enabled", Boolean.TRUE);
-            setControlProperty("numAddressX", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyAddressX", "Enabled", Boolean.TRUE);
-            setControlProperty("numAddressY", "Enabled", Boolean.TRUE);
-            setControlProperty("lblCompanyAddressY", "Enabled", Boolean.TRUE);
+            setControlProperty("numAddressHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numAddressWidth", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numAddressX", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("numAddressY", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            setControlProperty("lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
             if (myLetterDoc.hasElement("Sender Address"))
             {
                 myLetterDoc.switchElement("Sender Address", (false));
@@ -644,14 +645,14 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             {
                 BusCompanyAddress.removeFrame();
             }
-            setControlProperty("numAddressHeight", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyAddressHeight", "Enabled", Boolean.FALSE);
-            setControlProperty("numAddressWidth", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyAddressWidth", "Enabled", Boolean.FALSE);
-            setControlProperty("numAddressX", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyAddressX", "Enabled", Boolean.FALSE);
-            setControlProperty("numAddressY", "Enabled", Boolean.FALSE);
-            setControlProperty("lblCompanyAddressY", "Enabled", Boolean.FALSE);
+            setControlProperty("numAddressHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyAddressHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numAddressWidth", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyAddressWidth", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numAddressX", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyAddressX", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("numAddressY", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblCompanyAddressY", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
             if (myLetterDoc.hasElement("Sender Address"))
             {
                 myLetterDoc.switchElement("Sender Address", (true));
@@ -677,7 +678,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             try
             {
                 xReceiverFrame = TextFrameHandler.getFrameByName("Receiver Address", xTextDocument);
-                Integer FrameWidth = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, "Width");
+                Integer FrameWidth = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, PropertyNames.PROPERTY_WIDTH);
                 int iFrameWidth = FrameWidth.intValue();
                 Integer FrameX = (Integer) Helper.getUnoPropertyValue(xReceiverFrame, "HoriOrientPosition");
                 int iFrameX = FrameX.intValue();
@@ -734,8 +735,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
                 numFooterHeight.setValue(0.1);
             }
             BusFooter = myLetterDoc.new BusinessPaperObject("Footer", (int) myLetterDoc.DocSize.Width, (int) (numFooterHeight.getValue() * 1000), (int) 0, (int) (myLetterDoc.DocSize.Height - (numFooterHeight.getValue() * 1000)));
-            this.setControlProperty("numFooterHeight", "Enabled", Boolean.TRUE);
-            this.setControlProperty("lblFooterHeight", "Enabled", Boolean.TRUE);
+            this.setControlProperty("numFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
+            this.setControlProperty("lblFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
             setPossibleFooter(false);
         }
         else
@@ -744,8 +745,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             {
                 BusFooter.removeFrame();
             }
-            setControlProperty("numFooterHeight", "Enabled", Boolean.FALSE);
-            setControlProperty("lblFooterHeight", "Enabled", Boolean.FALSE);
+            setControlProperty("numFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
+            setControlProperty("lblFooterHeight", PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
             setPossibleFooter(true);
         }
     }
@@ -757,7 +758,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             if (myLetterDoc.hasElement("Company Logo"))
             {
-                boolean logostatus = AnyConverter.toBoolean(getControlProperty("chkUseLogo", "Enabled")) && (chkUseLogo.getState() != 0);
+                boolean logostatus = AnyConverter.toBoolean(getControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED)) && (chkUseLogo.getState() != 0);
                 myLetterDoc.switchElement("Company Logo", logostatus);
             }
         }
@@ -773,7 +774,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             if (myLetterDoc.hasElement("Sender Address Repeated"))
             {
-                boolean rstatus = AnyConverter.toBoolean(getControlProperty("chkUseAddressReceiver", "Enabled")) && (chkUseAddressReceiver.getState() != 0);
+                boolean rstatus = AnyConverter.toBoolean(getControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED)) && (chkUseAddressReceiver.getState() != 0);
                 myLetterDoc.switchElement("Sender Address Repeated", rstatus);
             }
         }
@@ -811,7 +812,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         try
         {
-            boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", "Enabled"));
+            boolean bFooterPossible = (chkUseFooter.getState() != 0) && AnyConverter.toBoolean(getControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED));
 
             if (chkFooterNextPages.getState() != 0)
             {
@@ -826,7 +827,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
             //enable/disable roadmap item for footer page
             XInterface BPaperItem = getRoadmapItemByID(RM_FOOTER);
-            Helper.setUnoPropertyValue(BPaperItem, "Enabled", new Boolean(bFooterPossible));
+            Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, new Boolean(bFooterPossible));
 
         }
         catch (Exception exception)
@@ -847,7 +848,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     private void setPossibleFooter(boolean bState)
     {
-        setControlProperty("chkUseFooter", "Enabled", new Boolean(bState));
+        setControlProperty("chkUseFooter", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
         chkUseFooterItemChanged();
     }
 
@@ -855,7 +856,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         if (myLetterDoc.hasElement("Sender Address Repeated"))
         {
-            setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(bState));
+            setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
             chkUseAddressReceiverItemChanged();
         }
     }
@@ -864,7 +865,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         if (myLetterDoc.hasElement("Company Logo"))
         {
-            setControlProperty("chkUseLogo", "Enabled", new Boolean(bState));
+            setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
             chkUseLogoItemChanged();
         }
     }
@@ -901,7 +902,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     public void txtSenderStateTextChanged()
     {
         TextFieldHandler myFieldHandler = new TextFieldHandler(myLetterDoc.xMSF, xTextDocument);
-        myFieldHandler.changeUserFieldContent("State", txtSenderState.getText());
+        myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, txtSenderState.getText());
     }
 
     public void txtTemplateNameTextChanged()
@@ -916,7 +917,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstSalutation);
         myLetterDoc.switchUserField("Salutation", xTextComponent.getText(), (chkUseSalutation.getState() != 0));
-        setControlProperty("lstSalutation", "Enabled", new Boolean(chkUseSalutation.getState() != 0));
+        setControlProperty("lstSalutation", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseSalutation.getState() != 0));
     }
 
     public void lstSalutationItemChanged()
@@ -933,7 +934,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     {
         XTextComponent xTextComponent = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, lstGreeting);
         myLetterDoc.switchUserField("Greeting", xTextComponent.getText(), (chkUseGreeting.getState() != 0));
-        setControlProperty("lstGreeting", "Enabled", new Boolean(chkUseGreeting.getState() != 0));
+        setControlProperty("lstGreeting", PropertyNames.PROPERTY_ENABLED, new Boolean(chkUseGreeting.getState() != 0));
     }
 
     private void setDefaultForGreetingAndSalutation()
@@ -1008,39 +1009,39 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     private void setPossibleSenderData(boolean bState)
     {
-        setControlProperty("optSenderDefine", "Enabled", new Boolean(bState));
-        setControlProperty("optSenderPlaceholder", "Enabled", new Boolean(bState));
-        setControlProperty("lblSenderAddress", "Enabled", new Boolean(bState));
+        setControlProperty("optSenderDefine", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("optSenderPlaceholder", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+        setControlProperty("lblSenderAddress", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
         if (!bState)
         {
-            setControlProperty("txtSenderCity", "Enabled", new Boolean(bState));
-            setControlProperty("txtSenderName", "Enabled", new Boolean(bState));
-            setControlProperty("txtSenderPostCode", "Enabled", new Boolean(bState));
-            setControlProperty("txtSenderStreet", "Enabled", new Boolean(bState));
-            setControlProperty("txtSenderCity", "Enabled", new Boolean(bState));
-            setControlProperty("txtSenderState", "Enabled", new Boolean(bState));
-            setControlProperty("lblSenderName", "Enabled", new Boolean(bState));
-            setControlProperty("lblSenderStreet", "Enabled", new Boolean(bState));
-            setControlProperty("lblPostCodeCity", "Enabled", new Boolean(bState));
+            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderName", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderPostCode", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderStreet", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("txtSenderState", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("lblSenderName", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("lblSenderStreet", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
+            setControlProperty("lblPostCodeCity", PropertyNames.PROPERTY_ENABLED, new Boolean(bState));
         }
     }
 
     private void enableSenderReceiver()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
-        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
+        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
     }
 
     private void disableSenderReceiver()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_SENDERRECEIVER);
-        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
+        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
     }
 
     private void enableBusinessPaper()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_BUSINESSPAPER);
-        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.TRUE);
+        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.TRUE);
         chkPaperCompanyLogoItemChanged();
         chkPaperCompanyAddressItemChanged();
         chkPaperFooterItemChanged();
@@ -1050,7 +1051,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
     private void disableBusinessPaper()
     {
         XInterface BPaperItem = getRoadmapItemByID(RM_BUSINESSPAPER);
-        Helper.setUnoPropertyValue(BPaperItem, "Enabled", Boolean.FALSE);
+        Helper.setUnoPropertyValue(BPaperItem, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         if (BusCompanyLogo != null)
         {
             BusCompanyLogo.removeFrame();
@@ -1340,11 +1341,11 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
     public void initializeElements()
     {
-        setControlProperty("chkUseLogo", "Enabled", new Boolean(myLetterDoc.hasElement("Company Logo")));
-        setControlProperty("chkUseBendMarks", "Enabled", new Boolean(myLetterDoc.hasElement("Bend Marks")));
-        setControlProperty("chkUseAddressReceiver", "Enabled", new Boolean(myLetterDoc.hasElement("Sender Address Repeated")));
-        setControlProperty("chkUseSubject", "Enabled", new Boolean(myLetterDoc.hasElement("Subject Line")));
-        setControlProperty("chkUseSigns", "Enabled", new Boolean(myLetterDoc.hasElement("Letter Signs")));
+        setControlProperty("chkUseLogo", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Company Logo")));
+        setControlProperty("chkUseBendMarks", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Bend Marks")));
+        setControlProperty("chkUseAddressReceiver", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Sender Address Repeated")));
+        setControlProperty("chkUseSubject", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Subject Line")));
+        setControlProperty("chkUseSigns", PropertyNames.PROPERTY_ENABLED, new Boolean(myLetterDoc.hasElement("Letter Signs")));
         myLetterDoc.updateDateFields();
     }
 

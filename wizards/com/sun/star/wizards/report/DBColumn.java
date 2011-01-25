@@ -451,7 +451,7 @@ public class DBColumn
             {
                 XDependentTextField xDependent = (XDependentTextField) UnoRuntime.queryInterface(XDependentTextField.class, oTextField);
                 XPropertySet xMaster = xDependent.getTextFieldMaster();
-                String UserFieldName = (String) xMaster.getPropertyValue("Name");
+                String UserFieldName = (String) xMaster.getPropertyValue(PropertyNames.PROPERTY_NAME);
                 boolean bIsNameCell = false;
                 if ((UserFieldName.startsWith(CompString)) || (UserFieldName.equals(CurFieldName)))
                 {
