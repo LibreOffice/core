@@ -196,9 +196,8 @@ void SAL_CALL FilePickerListener::fileSelectionChanged( const ::com::sun::star::
             }
         }
     }
-    catch( IllegalArgumentException& ex )
+    catch( IllegalArgumentException&  )
     {
-        ex = ex;
     }
 }
 
