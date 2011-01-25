@@ -308,9 +308,9 @@ static oslSocketDialupImpl* __osl_createSocketDialupImpl (void)
  */
 static void __osl_initSocketDialupImpl (oslSocketDialupImpl *pImpl)
 {
-#ifdef SOCKET_USE_AUTODIAL
     if (pImpl)
     {
+#ifdef SOCKET_USE_AUTODIAL
         HINSTANCE hModule;
 
         EnterCriticalSection (&pImpl->m_hMutex);
@@ -330,10 +330,8 @@ static void __osl_initSocketDialupImpl (oslSocketDialupImpl *pImpl)
         }
 
         LeaveCriticalSection (&pImpl->m_hMutex);
-    }
-#else
-    pImpl = pImpl; /* avoid warnings */
 #endif
+    }
 }
 
 /*

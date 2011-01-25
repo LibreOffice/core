@@ -46,7 +46,7 @@
 /*****************************************************************************/
 /* osl_loadModule */
 /*****************************************************************************/
-oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMode )
+oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
     HINSTANCE hInstance;
 #if OSL_DEBUG_LEVEL < 2
@@ -59,8 +59,6 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 nRtldMod
     RTL_LOGFILE_TRACE1( "{ osl_loadModule start: %S", (LPTSTR)&strModuleName->buffer );
 
     OSL_ASSERT(strModuleName);
-
-    nRtldMode = nRtldMode; /* avoid warnings */
 
     nError = osl_getSystemPathFromFileURL(strModuleName, &Module);
 

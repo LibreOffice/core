@@ -844,15 +844,13 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextNetResource(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint )
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BYTE                buffer[16384];
     LPNETRESOURCEW      lpNetResource = (LPNETRESOURCEW)buffer;
     DWORD               dwError, dwCount, dwBufSize;
-
-    uHint = uHint; /* to get no warning */
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -892,13 +890,11 @@ static oslFileError SAL_CALL osl_getNextNetResource(
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextDrive(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint )
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/ )
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BOOL                fSuccess;
-
-    uHint = uHint; /* avoid warnings */
 
     if ( !pItem )
         return osl_File_E_INVAL;
@@ -936,13 +932,11 @@ static oslFileError SAL_CALL osl_getNextDrive(
 
 //#####################################################
 static oslFileError SAL_CALL osl_getNextFileItem(
-    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 uHint)
+    oslDirectory Directory, oslDirectoryItem *pItem, sal_uInt32 /*uHint*/)
 {
     Directory_Impl      *pDirImpl = (Directory_Impl *)Directory;
     DirectoryItem_Impl  *pItemImpl = NULL;
     BOOL                fFound;
-
-    uHint = uHint; /* avoid warnings */
 
     if ( !pItem )
         return osl_File_E_INVAL;
