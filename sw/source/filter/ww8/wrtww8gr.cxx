@@ -85,13 +85,6 @@
 using namespace ::com::sun::star;
 using namespace nsFieldFlags;
 
-// Damit KA debuggen kann, ohne sich den ganzen Writer zu holen, ist
-// temporaer dieses Debug gesetzt. Ist ausserdem noch das passende IniFlag
-// gesetzt, dann werden in d:\ Hilfsdateien erzeugt.
-// !! sollte demnaechst wieder entfernt werden !!
-// #define DEBUG_KA
-
-
 // ToDo:
 // 5. Die MapModes, die Win nicht kann, umrechnen
 
