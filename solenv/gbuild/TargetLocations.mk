@@ -48,15 +48,19 @@ endef
 gb_AllLangResTarget_get_target = $(WORKDIR)/AllLangRes/$(1)
 gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_ComponentTarget_get_target = $(WORKDIR)/ComponentTarget/$(1).component
+gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
+gb_CustomTarget_get_repo_target = $(WORKDIR)/CustomTarget/$(2)/$(1).done
+gb_CustomTarget_get_target = $(WORKDIR)/CustomTarget/$(1)/done
+gb_CustomTarget_get_workdir = $(WORKDIR)/CustomTarget/$(1)
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_Executable_get_external_headers_target = $(WORKDIR)/ExternalHeaders/Executable/$(1)
 gb_Executable_get_headers_target = $(WORKDIR)/Headers/Executable/$(1)
+gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
 gb_JavaClassSet_get_repo_target = $(WORKDIR)/JavaClassSet/$(2)/$(1).done
 gb_JavaClassSet_get_target = $(WORKDIR)/JavaClassSet/$(1)/done
-gb_JavaClassSet_get_classdir = $(WORKDIR)/JavaClassSet/$(1)
+gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_JunitTest_get_target = $(WORKDIR)/JunitTest/$(1)/done
 gb_JunitTest_get_userdir = $(WORKDIR)/JunitTest/$(1)/user
-gb_JunitTest_get_classsetname = JunitTest/$(1)
 gb_LinkTarget_get_external_headers_target = $(WORKDIR)/ExternalHeaders/$(1)
 gb_LinkTarget_get_headers_target = $(WORKDIR)/Headers/$(1)
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
@@ -66,6 +70,7 @@ gb_Module_get_target = $(WORKDIR)/Module/$(1)
 gb_NoexPrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_NoexPrecompiledHeader_get_target = $(WORKDIR)/NoexPrecompiledHeader/$(gb_NoexPrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
+gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
 gb_PrecompiledHeader_get_dep_target = $(WORKDIR)/Dep/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch.d
 gb_PrecompiledHeader_get_target = $(WORKDIR)/PrecompiledHeader/$(gb_PrecompiledHeader_DEBUGDIR)/$(1).hxx.pch
@@ -75,7 +80,6 @@ gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
 gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
-gb_CppunitTest_get_target = $(WORKDIR)/CppunitTest/$(1).test
 
 define gb_Library_get_external_headers_target
 $(patsubst $(1):%,$(WORKDIR)/ExternalHeaders/Library/%,$(filter $(1):%,$(gb_Library_FILENAMES)))
