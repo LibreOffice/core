@@ -586,17 +586,13 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                         GetArgs()->Get(nSlot));
         if(nFrmType & FRMTYPE_FLY_ANY)
         {
-            sal_Bool bFirstColumn = sal_True;
-            sal_Bool bLastColumn = sal_True;
             if(nFrmType & FRMTYPE_COLUMN)
             {
                 USHORT nCurFrameCol = rSh.GetCurColNum() - 1;
-                bFirstColumn = !nCurFrameCol;
                 const SwFrmFmt* pFmt =  rSh.GetFlyFrmFmt();
                 const SwFmtCol* pCols = &pFmt->GetCol();
                 const SwColumns& rCols = pCols->GetColumns();
                 USHORT nColumnCount = rCols.Count();
-                bLastColumn = nColumnCount == nCurFrameCol + 1;
             }
         }
         aParaMargin.SetRight( aParaMargin.GetRight() - nRightBorderDistance );

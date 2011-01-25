@@ -1367,13 +1367,11 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 {
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
-    USHORT nGridWidth = 0;
     USHORT nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
     {
-        nGridWidth = pGrid->GetBaseHeight();
         nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
     }
@@ -1874,16 +1872,10 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
-    USHORT nGridWidth = 0;
-    USHORT nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
-    {
-        nGridWidth = pGrid->GetBaseHeight();
-        nRubyHeight = pGrid->GetRubyHeight();
         bRubyTop = ! pGrid->GetRubyTextBelow();
-    }
 
     do
     {

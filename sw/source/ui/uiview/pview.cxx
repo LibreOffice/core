@@ -1515,7 +1515,6 @@ IMPL_LINK( SwPagePreView, ScrollHdl, SwScrollbar *, pScrollbar )
         Point aPos = pScrollbar->GetParent()->OutputToScreenPixel(
                                         pScrollbar->GetPosPixel());
         aPos.Y() = pScrollbar->OutputToScreenPixel(pScrollbar->GetPointerPosPixel()).Y();
-        Size aSize = pScrollbar->GetSizePixel();
         Rectangle aRect;
         aRect.Left()    = aPos.X() -8;
         aRect.Right()   = aRect.Left();

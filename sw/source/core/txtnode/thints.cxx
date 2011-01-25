@@ -572,6 +572,7 @@ SwpHints::TryInsertNesting( SwTxtNode & rNode, SwTxtAttrNesting & rNewHint )
                     rNode, **itOther, nNewEnd, nOtherEnd ) );
             bSuccess = TryInsertNesting(rNode, *pOtherRight);
             OSL_ENSURE(bSuccess, "recursive call 2 failed?");
+            (void)bSuccess;
         }
 
     }

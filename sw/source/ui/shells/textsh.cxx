@@ -1130,7 +1130,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         delete pDlg;
     }
 
-    BOOL bFontChanged = FALSE;
     if( aChars.Len() )
     {
         rSh.StartAllAction();
@@ -1163,7 +1162,6 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         // #108876# a font attribute has to be set always due to a guessed script type
         if( aNewFont.GetName().Len() )
         {
-            bFontChanged = TRUE;
             SvxFontItem aNewFontItem( aFont );
             aNewFontItem.GetFamilyName() = aNewFont.GetName();
             aNewFontItem.GetFamily()     = aNewFont.GetFamily();

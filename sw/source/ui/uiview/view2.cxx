@@ -1972,13 +1972,13 @@ long SwView::InsertDoc( USHORT nSlotId, const String& rFileName, const String& r
 
 long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
 {
-    BOOL bInsert = FALSE, bCompare = FALSE, bMerge = FALSE;
+    BOOL bInsert = FALSE, bCompare = FALSE;
     long nFound = 0;
     SwDocShell* pDocSh = GetDocShell();
 
     switch( nSlotId )
     {
-        case SID_DOCUMENT_MERGE:        bMerge = TRUE;      break;
+        case SID_DOCUMENT_MERGE:                            break;
         case SID_DOCUMENT_COMPARE:      bCompare = TRUE;    break;
         case SID_INSERTDOC:             bInsert = TRUE;     break;
 

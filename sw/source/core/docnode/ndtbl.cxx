@@ -1204,12 +1204,10 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     OSL_ENSURE( pNdTbl, "kein Tabellen-Node angelegt."  );
    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
-    BOOL bUseBoxFmt = FALSE;
     if( !pBoxFmt->GetDepends() )
     {
         // die Formate an den Boxen haben schon die richtige Size, es darf
         // also nur noch die richtige Umrandung/AutoFmt gesetzt werden.
-        bUseBoxFmt = TRUE;
         pTableFmt->SetFmtAttr( pBoxFmt->GetFrmSize() );
         delete pBoxFmt;
     }

@@ -120,8 +120,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aBuffer[ nBytesRead + 2 ] = '0';
         }
 
-        BOOL bCR = FALSE, bLF = FALSE, bNoNormalChar = FALSE,
-            bNullChar = FALSE;
+        BOOL bCR = FALSE, bLF = FALSE, bNullChar = FALSE;
         for( USHORT nCnt = 0; nCnt < nBytesRead; ++nCnt )
             switch( aBuffer[ nCnt ] )
             {
@@ -131,9 +130,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 case 0xC:
                 case 0x1A:
                 case 0x9:   break;
-                default:
-                    if( 0x20 > aBuffer[ nCnt ] )
-                        bNoNormalChar = TRUE;
+                default:    break;
             }
 
         if( !bNullChar )
