@@ -457,6 +457,9 @@ process_class_file(const char *pfilename, const struct growable *pfilt)
     printf("Magic: %p\n", (void*)nmagic);
     printf("Major %d, Minor %d\n", nmajor, nminor);
     printf("Const_pool_count %d\n", ncnt);
+#else
+    (void)nmajor;
+    (void)nminor;
 #endif
 
     /* There can be ncount entries in the constant_pool table
