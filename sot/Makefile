@@ -25,34 +25,14 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=sot
-TARGET=base
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# --- Files --------------------------------------------------------
-
-.IF "$(COM)"=="GCC"
-NOOPTFILES=	\
-    $(SLO)$/exchange.obj
-.ENDIF # GCC
-
-SLOFILES=	\
-    $(SLO)$/factory.obj		\
-    $(SLO)$/object.obj		\
-    $(SLO)$/exchange.obj	\
-    $(SLO)$/filelist.obj	\
-    $(SLO)$/formats.obj
-
-EXCEPTIONSFILES=	\
-    $(SLO)$/formats.obj							
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:
