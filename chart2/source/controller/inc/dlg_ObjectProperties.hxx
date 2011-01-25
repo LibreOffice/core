@@ -69,6 +69,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >
         getDocument() const;
 
+    bool IsComplexCategoriesAxis() const;
+
 private:
     rtl::OUString   m_aObjectCID;
     ObjectType      m_eObjectType;
@@ -96,6 +98,8 @@ private:
     ::com::sun::star::uno::Sequence< rtl::OUString > m_aCategories;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument > m_xChartDocument;
+
+    bool m_bComplexCategoriesAxis;
 };
 
 /*************************************************************************
