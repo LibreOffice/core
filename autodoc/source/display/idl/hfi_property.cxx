@@ -329,7 +329,6 @@ HF_IdlCommentedRelationElement::produce_Summary( Environment &   io_env,
 {
     csv_assert( i_commentedRef.Info() );
 
-    const ary::idl::Type_id aType = i_commentedRef.Type();
     const ce_info &         rDocu = *i_commentedRef.Info();
 
     bool bShort = NOT rDocu.Short().IsEmpty();
