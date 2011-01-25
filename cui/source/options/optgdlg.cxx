@@ -1346,7 +1346,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
         seqInstalledLanguages = theNameAccess->getElementNames();
         LanguageType aLang = LANGUAGE_DONTKNOW;
-        for (sal_Int32 i=0; i<seqInstalledLanguages.getLength(); i++)
+        for (sal_IntPtr i=0; i<seqInstalledLanguages.getLength(); i++)
         {
             aLang = MsLangId::convertIsoStringToLanguage(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
@@ -1616,7 +1616,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if ( sOldCurr != sNewCurr )
         pLangConfig->aSysLocaleOptions.SetCurrencyConfigString( sNewCurr );
 
-    BOOL bRet = FALSE;
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
     Reference< XPropertySet > xLinguProp( LinguMgr::GetLinguPropertySet(), UNO_QUERY );
     BOOL bCurrentDocCBChecked = aCurrentDocCB.IsChecked();
@@ -1642,7 +1641,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         {
             rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::LATIN),
                 SID_ATTR_LANGUAGE));
-            bRet = TRUE;
         }
     }
     bValChanged = aAsianLanguageLB.GetSavedValue() != aAsianLanguageLB.GetSelectEntryPos();
@@ -1663,7 +1661,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         {
             rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::ASIAN),
                 SID_ATTR_CHAR_CJK_LANGUAGE));
-            bRet = TRUE;
         }
     }
     bValChanged = aComplexLanguageLB.GetSavedValue() != aComplexLanguageLB.GetSelectEntryPos();
@@ -1684,7 +1681,6 @@ BOOL OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         {
             rSet.Put(SvxLanguageItem(MsLangId::resolveSystemLanguageByScriptType(eSelectLang, ::com::sun::star::i18n::ScriptType::COMPLEX),
                 SID_ATTR_CHAR_CTL_LANGUAGE));
-            bRet = TRUE;
         }
     }
 

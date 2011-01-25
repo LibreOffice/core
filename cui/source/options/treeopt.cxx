@@ -1949,12 +1949,10 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     DBG_ASSERT( sTemp == aFactory, "S H I T!!!" );
 
     // Writer and Writer/Web options
-    sal_Bool bHasAnyFilter = sal_False;
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
         // Textdokument
-        bHasAnyFilter = sal_True;
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
         if (   aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.TextDocument" ) )
             || aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.text.WebDocument" ) )
@@ -2004,7 +2002,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     // Calc options
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
-        bHasAnyFilter = sal_True;
         if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SC_EDITOPTIONS, aOptionsDlgOpt ) )
@@ -2032,7 +2029,6 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
-        bHasAnyFilter = sal_True;
         if ( aFactory.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ))
         {
             if ( !lcl_isOptionHidden( SID_SD_EDITOPTIONS, aOptionsDlgOpt ) )
