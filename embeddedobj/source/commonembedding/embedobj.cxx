@@ -165,7 +165,7 @@ void OCommonEmbeddedObject::StateChangeNotification_Impl( sal_Bool bBeforeChange
 void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 {
     // TODO: may be needs interaction handler to detect wherether the object state
-    //       can be changed even after errors
+    //         can be changed even after errors
 
     if ( m_nObjectState == embed::EmbedStates::LOADED )
     {
@@ -485,14 +485,19 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             {
                 if ( nOldState != m_nObjectState )
                     // notify listeners that the object has changed the state
-                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState ,aGuard);
+                    StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState, aGuard );
 
                 throw;
             }
         }
 
         // notify listeners that the object has changed the state
-        StateChangeNotification_Impl( sal_False, nOldState, nNewState,aGuard );
+        StateChangeNotification_Impl( sal_False, nOldState, nNewState, aGuard );
+
+        // let the object window be shown
+        if ( nNewState == embed::EmbedStates::UI_ACTIVE || nNewState == embed::EmbedStates::INPLACE_ACTIVE )
+            PostEvent_Impl( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OnVisAreaChanged" ) ),
+                                        uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
     }
 }
 
@@ -501,7 +506,6 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -517,7 +521,6 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -538,7 +541,7 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     RTL_LOGFILE_CONTEXT( aLog, "embeddedobj (mv76033) OCommonEmbeddedObject::doVerb" );
 
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -561,7 +564,10 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
         // TODO/LATER: check if the verb is a supported one and if it is produce related operation
     }
     else
+    {
+        aGuard.clear();
         changeState( nNewState );
+    }
 }
 
 //----------------------------------------------
@@ -569,7 +575,6 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSuppor
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -606,7 +611,6 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClie
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
@@ -659,7 +663,6 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
