@@ -95,6 +95,9 @@ XFCell::XFCell(const XFCell& other) : XFContentContainer(other)
 
 XFCell& XFCell::operator=(const XFCell& other)
 {
+    if( this == &other )
+        return *this;
+
     if( m_pSubTable )
         delete m_pSubTable;
 
