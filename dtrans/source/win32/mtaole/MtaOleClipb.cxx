@@ -590,7 +590,7 @@ LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
     else if ( IsWindow( m_hwndNextClipViewer ) )
     {
         // forward the message to the next one
-        DWORD dwResult;
+        DWORD_PTR dwpResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_CHANGECBCHAIN,
@@ -598,7 +598,7 @@ LRESULT CMtaOleClipboard::onChangeCBChain( HWND hWndRemove, HWND hWndNext )
             reinterpret_cast<LPARAM>(hWndNext),
             SMTO_BLOCK,
             MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwResult );
+            &dwpResult );
     }
 
     return 0;
@@ -625,7 +625,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
     // foward the message to the next viewer in the chain
     if ( IsWindow( m_hwndNextClipViewer ) )
     {
-        DWORD dwResult;
+        DWORD_PTR dwpResult;
         SendMessageTimeoutA(
             m_hwndNextClipViewer,
             WM_DRAWCLIPBOARD,
@@ -633,7 +633,7 @@ LRESULT CMtaOleClipboard::onDrawClipboard( )
             static_cast< LPARAM >( 0 ),
             SMTO_BLOCK,
             MAX_CLIPEVENT_PROCESSING_TIME,
-            &dwResult );
+            &dwpResult );
     }
 
     return 0;
