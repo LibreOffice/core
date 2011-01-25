@@ -357,9 +357,11 @@ namespace abp
     //---------------------------------------------------------------------
     ODataSource& ODataSource::operator=( const ODataSource& _rSource )
     {
-        delete m_pImpl;
-        m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
-
+        if( this != &_rSource )
+        {
+            delete m_pImpl;
+            m_pImpl = new ODataSourceImpl( *_rSource.m_pImpl );
+        }
         return *this;
     }
 
