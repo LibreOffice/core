@@ -323,8 +323,6 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
 
 void SpinButton::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
-
     if ( !rKEvt.GetKeyCode().GetModifier() )
     {
         switch ( rKEvt.GetKeyCode().GetCode() )

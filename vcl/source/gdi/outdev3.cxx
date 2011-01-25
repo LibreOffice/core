@@ -4376,7 +4376,6 @@ void OutputDevice::ImplDrawEmphasisMark( long nBaseX, long nX, long nY,
 
 void OutputDevice::ImplDrawEmphasisMarks( SalLayout& rSalLayout )
 {
-    Color               aOldColor       = GetTextColor();
     Color               aOldLineColor   = GetLineColor();
     Color               aOldFillColor   = GetFillColor();
     BOOL                bOldMap         = mbMap;
@@ -4793,7 +4792,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
                         if ( xHyph.is() )
                         {
                             sal_Unicode cAlternateReplChar = 0;
-                            sal_Unicode cAlternateExtraChar = 0;
                             i18n::Boundary aBoundary = xBI->getWordBoundary( aText, nBreakPos, rDefLocale, ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
                 //          sal_uInt16 nWordStart = nBreakPos;
                 //          sal_uInt16 nBreakPos_OLD = nBreakPos;
@@ -4867,8 +4865,6 @@ long OutputDevice::ImplGetTextLines( ImplMultiTextLineInfo& rLineInfo,
 
                                             if ( nTxtEnd > nTxtStart )
                                                 cAlternateReplChar = aAlt.GetChar( nAltStart );
-                                            else
-                                                cAlternateExtraChar = aAlt.GetChar( nAltStart );
 
                                             nBreakPos = nWordStart + nTxtStart;
                                             if ( cAlternateReplChar )

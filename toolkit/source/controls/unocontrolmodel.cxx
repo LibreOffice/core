@@ -438,6 +438,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                                 break;
                         }
                     DBG_ASSERT( bLegacy || pAllCurrencies != pAllCurrenciesEnd, "UnoControlModel::ImplGetDefaultValue: did not find the given bank symbol!" );
+                    (void)bLegacy;
                 }
 
                 aDefault <<= sCurrencySymbol;

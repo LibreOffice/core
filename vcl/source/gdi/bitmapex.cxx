@@ -793,7 +793,6 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
         imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
     }
 
-    Size aBmpSize = aRet.GetSizePixel();
     Size aStdSize( aStandardSize, aStandardSize );
     Rectangle aRect(aEmptyPoint, aStdSize );
 

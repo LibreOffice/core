@@ -51,7 +51,7 @@ namespace utl
 //==================================================================
 typedef ::cppu::WeakImplHelper1 <   stario::XInputStream
                                 > InputStreamWrapper_Base;
-    // needed for some compilers
+// needed for some compilers
 /// helper class for wrapping an SvStream into an <type scope="com.sun.star.io">XInputStream</type>
 class UNOTOOLS_DLLPUBLIC OInputStreamWrapper : public InputStreamWrapper_Base
 {
@@ -68,9 +68,6 @@ public:
     OInputStreamWrapper(SvStream& _rStream);
     OInputStreamWrapper(SvStream* pStream, sal_Bool bOwner=sal_False);
     virtual ~OInputStreamWrapper();
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OInputStreamWrapper, InputStreamWrapper_Base);
 
 // stario::XInputStream
     virtual sal_Int32   SAL_CALL    readBytes(staruno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);
@@ -121,9 +118,6 @@ protected:
 
 public:
     OOutputStreamWrapper(SvStream& _rStream) :rStream(_rStream) { }
-
-// UNO Anbindung
-    DECLARE_UNO3_AGG_DEFAULTS(OOutputStreamWrapper, OutputStreamWrapper_Base);
 
 // stario::XOutputStream
     virtual void SAL_CALL writeBytes(const staruno::Sequence< sal_Int8 >& aData) throw(stario::NotConnectedException, stario::BufferSizeExceededException, staruno::RuntimeException);

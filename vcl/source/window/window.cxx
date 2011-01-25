@@ -1287,7 +1287,10 @@ void Window::ImplLoadRes( const ResId& rResId )
     if ( nObjMask & WINDOW_QUICKTEXT )
         SetQuickHelpText( ReadStringRes() );
     if ( nObjMask & WINDOW_EXTRALONG )
-        SetData( (void*)ReadLongRes() );
+    {
+        sal_uIntPtr nRes = ReadLongRes();
+        SetData( (void*)nRes );
+    }
     if ( nObjMask & WINDOW_UNIQUEID )
         SetUniqueId( (ULONG)ReadLongRes() );
 
@@ -3182,7 +3185,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
 {
     BOOL    bNewPos         = FALSE;
     BOOL    bNewSize        = FALSE;
-    BOOL    bNewWidth       = FALSE;
     BOOL    bCopyBits       = FALSE;
     long    nOldOutOffX     = mnOutOffX;
     long    nOldOutOffY     = mnOutOffY;
@@ -3225,7 +3227,6 @@ void Window::ImplPosSizeWindow( long nX, long nY,
             mnOutWidth = nWidth;
             bNewSize = TRUE;
             bCopyBits = FALSE;
-            bNewWidth = TRUE;
         }
     }
     if ( nFlags & WINDOW_POSSIZE_HEIGHT )
@@ -5941,8 +5942,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
     }
     else
     {
-        BOOL bInvalidate = FALSE;
-
         if ( rRegion.GetType() == REGION_NULL )
         {
             if ( mpWindowImpl->mbWinRegion )
@@ -5950,7 +5949,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
                 mpWindowImpl->maWinRegion = Region( REGION_NULL );
                 mpWindowImpl->mbWinRegion = FALSE;
                 ImplSetClipFlag();
-                bInvalidate = TRUE;
             }
         }
         else
@@ -5958,7 +5956,6 @@ void Window::SetWindowRegionPixel( const Region& rRegion )
             mpWindowImpl->maWinRegion = rRegion;
             mpWindowImpl->mbWinRegion = TRUE;
             ImplSetClipFlag();
-            bInvalidate = TRUE;
         }
 
         if ( IsReallyVisible() )
@@ -9787,9 +9784,6 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
 
     DBG_ASSERT( ! pDev->ImplHasMirroredGraphics(), "PaintToDevice to mirroring graphics" );
     DBG_ASSERT( ! pDev->IsRTLEnabled(), "PaintToDevice to mirroring device" );
-
-
-    Point       aPos  = pDev->LogicToPixel( rPos );
 
     Window* pRealParent = NULL;
     if( ! mpWindowImpl->mbVisible )

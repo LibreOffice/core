@@ -3200,7 +3200,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
         return aRet;
     }
 
-    sal_Int32 nFontObject = 0;
     sal_Int32 nStreamObject = 0;
     sal_Int32 nFontDescriptor = 0;
 
@@ -3654,8 +3653,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
                 "endobj\n\n" );
             if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
                 throw FontException();
-
-            nFontObject = nObject;
 
             aRet[ rEmbed.m_nNormalFontID ] = nObject;
 
@@ -4629,7 +4626,6 @@ we check in the following sequence:
                     bSetRelative = true;
 
                 rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
-                bool bIsURI=false; //URI: 12.6.4.7, URI Actions, URI must be encoded in 7-bit-ASCII
                 if( nSetGoToRMode == 0 )
                 {
                     switch( m_aContext.DefaultLinkAction )
@@ -4638,7 +4634,6 @@ we check in the following sequence:
                     case PDFWriter::URIAction :
                     case PDFWriter::URIActionDestination :
                         aLine.append( "/URI/URI" );
-                        bIsURI=true;
                         break;
                     case PDFWriter::LaunchAction:
 // now:
@@ -4652,7 +4647,6 @@ we check in the following sequence:
                                         eTargetProtocol != INET_PROT_FILE )
                         {
                             aLine.append( "/URI/URI" );
-                            bIsURI=true;
                         }
                         else
                         {

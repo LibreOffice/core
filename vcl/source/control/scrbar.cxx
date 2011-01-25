@@ -245,7 +245,6 @@ void ScrollBar::ImplUpdateRects( BOOL bUpdate )
     }
     else
     {
-        Size aScrBarSize = GetOutputSizePixel();
         if ( GetStyle() & WB_HORZ )
         {
             const long nSpace = maTrackRect.Right() - maTrackRect.Left();

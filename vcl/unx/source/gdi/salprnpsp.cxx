@@ -674,17 +674,6 @@ BOOL PspSalInfoPrinter::SetData(
         // merge papersize if necessary
         if( nSetDataFlags & SAL_JOBSET_PAPERSIZE )
         {
-            int nWidth, nHeight;
-            if( pJobSetup->meOrientation == ORIENTATION_PORTRAIT )
-            {
-                nWidth  = pJobSetup->mnPaperWidth;
-                nHeight = pJobSetup->mnPaperHeight;
-            }
-            else
-            {
-                nWidth  = pJobSetup->mnPaperHeight;
-                nHeight = pJobSetup->mnPaperWidth;
-            }
             String aPaper;
 
             if( pJobSetup->mePaperFormat == PAPER_USER )

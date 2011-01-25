@@ -179,7 +179,6 @@ GraphiteLayout::Glyphs::fill_from(gr::Segment & rSegment, ImplLayoutArgs &rArgs,
     int nChar = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
     glyph_range_t iGlyphs = rSegment.glyphs();
     int nGlyphs = iGlyphs.second - iGlyphs.first;
-    gr::GlyphIterator prevBase = iGlyphs.second;
     float fSegmentAdvance = rSegment.advanceWidth();
     float fMinX = fSegmentAdvance;
     float fMaxX = 0.0f;
@@ -1349,12 +1348,10 @@ void GraphiteLayout::GetCaretPositions( int nArraySize, sal_Int32* pCaretXArray 
                     break;
                 }
             }
-            long nGWidth = gi.mnNewWidth;
             // if no match position at end of cluster
             if (nGlyph == static_cast<int>(mvGlyphs.size()) ||
                 mvGlyphs[nGlyph].IsClusterStart())
             {
-                nGWidth = prevClusterWidth;
                 if (bRtl)
                 {
                     pCaretXArray[i+1] = gi.maLinearPos.X();

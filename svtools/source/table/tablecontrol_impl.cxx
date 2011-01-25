@@ -2005,9 +2005,6 @@ namespace svt { namespace table
     void TableControl_Impl::resizeColumn(const Point& rPoint)
     {
         Pointer aNewPointer(POINTER_ARROW);
-        int headerRowWidth = 0;
-        if(m_pModel->hasRowHeaders())
-            headerRowWidth = m_rAntiImpl.LogicToPixel( Size(m_pModel->getRowHeaderWidth(), 0 ), MAP_APPFONT ).Width();
         int resizingColumn=m_nCurColumn-m_nLeftColumn;
         PColumnModel pColumn = m_pModel->getColumnModel(m_nCurColumn);
         impl_ni_getAccVisibleColWidths();

@@ -1610,8 +1610,6 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
         USHORT nPosSizeFlags = 0;
         long nX         = pState->mnX - (m_pParent ? m_pParent->maGeometry.nX : 0);
         long nY         = pState->mnY - (m_pParent ? m_pParent->maGeometry.nY : 0);
-        long nWidth     = pState->mnWidth;
-        long nHeight    = pState->mnHeight;
         if( pState->mnMask & SAL_FRAMESTATE_MASK_X )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_X;
         else
@@ -1622,12 +1620,8 @@ void GtkSalFrame::SetWindowState( const SalFrameState* pState )
             nY = maGeometry.nY - (m_pParent ? m_pParent->maGeometry.nY : 0);
         if( pState->mnMask & SAL_FRAMESTATE_MASK_WIDTH )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_WIDTH;
-        else
-            nWidth = maGeometry.nWidth;
         if( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
             nPosSizeFlags |= SAL_FRAME_POSSIZE_HEIGHT;
-        else
-            nHeight = maGeometry.nHeight;
         SetPosSize( nX, nY, pState->mnWidth, pState->mnHeight, nPosSizeFlags );
     }
     if( pState->mnMask & SAL_FRAMESTATE_MASK_STATE && ! isChild() )

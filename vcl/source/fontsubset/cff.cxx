@@ -1306,13 +1306,12 @@ void CffSubsetterContext::callType2Subr( bool bGlobal, int nSubrNumber)
     const U8* const pOldReadPtr = mpReadPtr;
     const U8* const pOldReadEnd = mpReadEnd;
 
-    int nLen = 0;
     if( bGlobal ) {
         nSubrNumber += mnGlobalSubrBias;
-        nLen = seekIndexData( mnGlobalSubrBase, nSubrNumber);
+        seekIndexData( mnGlobalSubrBase, nSubrNumber);
     } else {
         nSubrNumber += mpCffLocal->mnLocalSubrBias;
-        nLen = seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
+        seekIndexData( mpCffLocal->mnLocalSubrBase, nSubrNumber);
     }
 
     while( mpReadPtr < mpReadEnd)
@@ -1754,6 +1753,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 assert( nRangeCount <= mnCharStrCount);
                 U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
                 assert( nPrev == 0);
+                (void)nPrev;
                 pReadPtr += 4;
                 // TODO? binary search
                 for( int i = 0; i < nRangeCount; ++i) {

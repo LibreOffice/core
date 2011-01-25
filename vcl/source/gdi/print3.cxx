@@ -76,13 +76,8 @@ class ImplPageCache
     {
         if( maCacheRanking[0] != nLastHit )
         {
-            bool bMove = false;
             for( sal_Int32 i = nCacheSize-1; i > 0; i-- )
-            {
-                if( maCacheRanking[i] == nLastHit )
-                    bMove = true;
                 maCacheRanking[i] = maCacheRanking[i-1];
-            }
             maCacheRanking[0] = nLastHit;
         }
     }

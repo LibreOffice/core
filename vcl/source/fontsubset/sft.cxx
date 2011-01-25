@@ -1333,7 +1333,7 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
     sal_uInt16 * idDelta;
     /* sal_uInt16 * glyphIdArray; */
     sal_uInt16 * idRangeOffset;
-    sal_uInt16 * glyphIndexArray;
+    /*sal_uInt16 * glyphIndexArray;*/
     sal_uInt16  *CMAP4 = (sal_uInt16 *) cmap;
     /* sal_uInt16  GEbinsearch(sal_uInt16 *ar, sal_uInt16 length, sal_uInt16 toSearch); */
 
@@ -1351,7 +1351,7 @@ static sal_uInt32 getGlyph4(const sal_uInt8 *cmap, sal_uInt32 c) {
     }
     idDelta = startCode + segCount;
     idRangeOffset = idDelta + segCount;
-    glyphIndexArray = idRangeOffset + segCount;
+    /*glyphIndexArray = idRangeOffset + segCount;*/
 
     if(Int16FromMOTA(idRangeOffset[i]) != 0) {
         c = Int16FromMOTA(*(&(idRangeOffset[i]) + (Int16FromMOTA(idRangeOffset[i])/2 + (c - Int16FromMOTA(startCode[i])))));

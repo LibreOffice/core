@@ -1095,7 +1095,6 @@ void PrintDialog::setupOptionalUI()
         rOptions[i].Value >>= aOptProp;
 
         // extract ui element
-        bool bEnabled = true;
         rtl::OUString aCtrlType;
         rtl::OUString aText;
         rtl::OUString aPropertyName;
@@ -1133,7 +1132,6 @@ void PrintDialog::setupOptionalUI()
             {
                 sal_Bool bValue = sal_True;
                 rEntry.Value >>= bValue;
-                bEnabled = bValue;
             }
             else if( rEntry.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "GroupingHint" ) ) )
             {

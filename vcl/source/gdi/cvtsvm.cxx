@@ -1380,7 +1380,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
 void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 {
-    ULONG               nPos;
     ULONG               nCountPos;
     Font                aSaveFont;
     const USHORT        nOldFormat = rOStm.GetNumberFormatInt();
@@ -1395,7 +1394,6 @@ void SVMConverter::ImplConvertToSVM1( SvStream& rOStm, GDIMetaFile& rMtf )
 
     //MagicCode schreiben
     rOStm << "SVGDI";                                   // Kennung
-    nPos = rOStm.Tell();
     rOStm << (INT16) 42;                                // HeaderSize
     rOStm << (INT16) 200;                               // VERSION
     rOStm << (INT32) aPrefSize.Width();
