@@ -865,13 +865,13 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
         {
             rtl_uString *pScratch;
             rtl_TextToUnicodeConverter hConverter;
-            sal_Size nDestChars, nSrcBytes;
+            sal_Size nSrcBytes;
             sal_uInt32 nInfo;
 
             pScratch = alloca( sizeof(rtl_uString) + ulen * sizeof (IMPL_RTL_STRCODE) );
 
             hConverter = rtl_createTextToUnicodeConverter( eTextEncoding );
-            nDestChars = rtl_convertTextToUnicode(
+            rtl_convertTextToUnicode(
                 hConverter, 0, str, len, pScratch->buffer, ulen, convertFlags, &nInfo, &nSrcBytes );
             rtl_destroyTextToUnicodeConverter( hConverter );
 
