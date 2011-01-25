@@ -117,7 +117,7 @@ gb_LinkTarget_NOEXCEPTIONFLAGS := \
     
 gb_LinkTarget_LDFLAGS := \
     -Wl,--sysroot=$(SYSBASE) \
-    -Wl,-rpath-link=$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
+    -Wl,-rpath-link,$(SYSBASE)/lib:$(SYSBASE)/usr/lib \
     -Wl,--hash-style=both \
     -Wl,-z,combreloc \
     -Wl,-z,defs \
@@ -309,7 +309,7 @@ gb_Executable_LAYER := \
 
 
 define gb_Executable_get_rpath
--Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Library_get_layer,$(1))) \
+-Wl,-rpath,$(call gb_LinkTarget__get_rpath_for_layer,$(call gb_Executable_get_layer,$(1))) \
 -Wl,-rpath-link,$(gb_Library_OUTDIRLOCATION)
 endef
 
