@@ -30,6 +30,7 @@
 
 #include <tools/unqidx.hxx>
 #include <rsctree.hxx>
+#include <vector>
 
 /****************** C L A S S E S ****************************************/
 class RscExpression;
@@ -152,21 +153,28 @@ public:
     ByteString  GetMacro();
 };
 
-DECLARE_LIST( RscSubDefList, RscDefine * )
+typedef ::std::vector< RscDefine* > RscSubDefList;
 
-class RscDefineList : public RscSubDefList {
+class RscDefineList {
 friend class RscFile;
 friend class RscFileTab;
 private:
+    RscSubDefList   maList;
                 // pExpression wird auf jedenfall Eigentum der Liste
     RscDefine * New( ULONG lFileKey, const ByteString & rDefName,
-                     INT32 lDefId, ULONG lPos );
+                     INT32 lDefId, size_t lPos );
     RscDefine * New( ULONG lFileKey, const ByteString & rDefName,
-                     RscExpression * pExpression, ULONG lPos );
+                     RscExpression * pExpression, size_t lPos );
     BOOL        Befor( const RscDefine * pFree, const RscDefine * pDepend );
     BOOL        Remove( RscDefine * pDef );
-    BOOL        Remove( ULONG nIndex );
+    BOOL        Remove( size_t nIndex );
     BOOL        Remove();
+    size_t      GetPos( RscDefine* item ) {
+                    for ( size_t i = 0, n = maList.size(); i < n; ++i )
+                        if ( maList[ i ] == item )
+                            return i;
+                    return size_t(-1);
+                }
 public:
     void        WriteAll( FILE * fOutput );
 };
@@ -244,9 +252,9 @@ public:
     RscDefine * FindDef( ULONG lKey, const ByteString & );
 
     BOOL        Depend( ULONG lDepend, ULONG lFree );
-    BOOL        TestDef( ULONG lFileKey, ULONG lPos,
+    BOOL        TestDef( ULONG lFileKey, size_t lPos,
                          const RscDefine * pDefDec );
-    BOOL        TestDef( ULONG lFileKey, ULONG lPos,
+    BOOL        TestDef( ULONG lFileKey, size_t lPos,
                          const RscExpression * pExpDec );
 
     RscDefine * NewDef( ULONG lKey, const ByteString & rDefName,

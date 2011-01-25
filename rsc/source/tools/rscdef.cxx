@@ -324,25 +324,38 @@ ByteString RscDefine::GetMacro()
 |*
 *************************************************************************/
 RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
-                                INT32 lDefId, ULONG lPos )
+                                INT32 lDefId, size_t lPos )
 {
     RscDefine * pDef;
 
     pDef = new RscDefine( lFileKey, rDefName, lDefId );
     pDef->IncRef();
-    Insert( pDef, lPos );
+    if ( lPos < maList.size() )
+    {
+        RscSubDefList::iterator it = maList.begin();
+        ::std::advance( it, lPos );
+        maList.insert( it, pDef );
+    } else {
+        maList.push_back( pDef );
+    }
     return pDef;
 }
 
 RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
-                                RscExpression * pExpression, ULONG lPos )
+                                RscExpression * pExpression, size_t lPos )
 {
     RscDefine * pDef;
 
     pDef = new RscDefine( lFileKey, rDefName, pExpression );
     pDef->IncRef();
-    Insert( pDef, lPos );
-
+    if ( lPos < maList.size() )
+    {
+        RscSubDefList::iterator it = maList.begin();
+        ::std::advance( it, lPos );
+        maList.insert( it, pDef );
+    } else {
+        maList.push_back( pDef );
+    }
     return pDef;
 }
 
@@ -351,36 +364,37 @@ RscDefine * RscDefineList::New( ULONG lFileKey, const ByteString & rDefName,
 |*    RscDefineList::Remove()
 |*
 *************************************************************************/
-BOOL RscDefineList::Remove( RscDefine * pDef ){
-    pDef = RscSubDefList::Remove( pDef );
-    if( pDef ){
-        pDef->DefineToNumber();
-        pDef->DecRef();
+BOOL RscDefineList::Remove( RscDefine * pDef ) {
+    for ( RscSubDefList::iterator it = maList.begin(); it < maList.end(); ++it ) {
+        if ( *it == pDef ) {
+            (*it)->DefineToNumber();
+            (*it)->DecRef();
+            maList.erase( it );
+            return TRUE;
+        }
     }
-
-    return( NULL != pDef );
+    return FALSE;
 }
 
-BOOL RscDefineList::Remove( ULONG lIndex ){
-    RscDefine * pDef = RscSubDefList::Remove( lIndex );
-    if( pDef ){
-        pDef->DefineToNumber();
-        pDef->DecRef();
+BOOL RscDefineList::Remove( size_t lIndex ) {
+    if ( lIndex < maList.size() ) {
+        RscSubDefList::iterator it = maList.begin();
+        ::std::advance( it, lIndex );
+        (*it)->DefineToNumber();
+        (*it)->DecRef();
+        maList.erase( it );
+        return TRUE;
     }
-
-    return( NULL != pDef );
+    return FALSE;
 }
 
-BOOL RscDefineList::Remove(){
-    RscDefine * pDef;
+BOOL RscDefineList::Remove() {
+    if ( maList.empty() ) return FALSE;
 
-    pDef = RscSubDefList::Remove( (ULONG)0 );
-
-    if( pDef ){
-        pDef->DefineToNumber();
-        pDef->DecRef();
-    }
-    return( NULL != pDef );
+    maList[ 0 ]->DefineToNumber();
+    maList[ 0 ]->DecRef();
+    maList.erase( maList.begin() );
+    return TRUE;
 }
 
 /*************************************************************************
@@ -391,20 +405,18 @@ BOOL RscDefineList::Remove(){
 BOOL RscDefineList::Befor( const RscDefine * pFree,
                            const RscDefine * pDepend )
 {
-    RscDefine * pDef;
-
-    pDef = First();
-    while( pDef ){
-        if( pDef == pFree ){
-            pDef = Next();
-            while( pDef ){
-                if( pDef == pDepend )
+    size_t i = 0;
+    size_t n = maList.size();
+    while ( i < n ) {
+        if ( maList[ i ] == pFree ) {
+            for ( ++i ; i < n ; ++i ) {
+                if ( maList[ i ] == pDepend ) {
                     return TRUE;
-                pDef = Next();
+                }
             }
         }
-        pDef = Next();
-    };
+        ++i;
+    }
     return FALSE;
 }
 
@@ -415,14 +427,12 @@ BOOL RscDefineList::Befor( const RscDefine * pFree,
 *************************************************************************/
 void RscDefineList::WriteAll( FILE * fOutput )
 {
-    RscDefine * pDefEle = First();
-
-    while( pDefEle )
-    {
+    for ( size_t i = 0, n = maList.size(); i < n; ++i ) {
+        RscDefine* pDefEle = maList[ i ];
         fprintf( fOutput, "#define %s %s\n",
                  pDefEle->GetName().GetBuffer(),
-                 pDefEle->GetMacro().GetBuffer() );
-        pDefEle = Next();
+                 pDefEle->GetMacro().GetBuffer()
+        );
     };
 }
 
@@ -606,7 +616,6 @@ RscFile :: ~RscFile(){
 
     //von hinten nach vorne ist besser wegen der Abhaengigkeiten
     //Objekte zerstoeren sich, wenn Referenzzaehler NULL
-    aDefLst.Last();
     while( aDefLst.Remove() ) ;
 }
 
@@ -862,10 +871,10 @@ BOOL RscFileTab::Depend( ULONG lDepend, ULONG lFree ){
 |*    RscFileTab::TestDef()
 |*
 *************************************************************************/
-BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
+BOOL RscFileTab::TestDef( ULONG lFileKey, size_t lPos,
                           const RscDefine * pDefDec )
 {
-    if( lFileKey == pDefDec->GetFileKey() ){
+    if( lFileKey == pDefDec->GetFileKey() ) {
         RscFile * pFile = GetFile( pDefDec->GetFileKey() );
         if( pFile && (lPos <= pFile->aDefLst.GetPos( (RscDefine *)pDefDec ))
           && (lPos != LIST_APPEND) )
@@ -882,7 +891,7 @@ BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
 |*    RscFileTab::TestDef()
 |*
 *************************************************************************/
-BOOL RscFileTab::TestDef( ULONG lFileKey, ULONG lPos,
+BOOL RscFileTab::TestDef( ULONG lFileKey, size_t lPos,
                           const RscExpression * pExpDec )
 {
     if( !pExpDec )
@@ -1081,12 +1090,11 @@ void RscFileTab :: DeleteFileContext( ULONG lFileKey ){
     if( pFName ){
         RscDefine * pDef;
 
-        pDef = pFName->aDefLst.First();
-        while( pDef ){
+        for ( size_t i = 0, n = pFName->aDefLst.maList.size(); i < n; ++i ) {
+            pDef = pFName->aDefLst.maList[ i ];
             aDefTree.Remove( pDef );
-            pDef = pFName->aDefLst.Next();
         };
-        while( pFName->aDefLst.Remove( (ULONG)0 ) ) ;
+        while( pFName->aDefLst.Remove() ) ;
     }
 }
 
