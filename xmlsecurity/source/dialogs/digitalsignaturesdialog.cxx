@@ -687,7 +687,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             else if (meSignatureMode == SignatureModeMacros
                 && bSigValid && bCertValid)
             {
-                aImage = aImage = maSigsValidImg.GetImage();
+                aImage = maSigsValidImg.GetImage();
             }
 
             SvLBoxEntry* pEntry = maSignaturesLB.InsertEntry( aNullStr, aImage, aImage );
