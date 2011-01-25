@@ -1006,6 +1006,27 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                     if( pImageMap )
                         pObj->InsertUserData( new SdIMapInfo( *pImageMap ) );
 
+                    if ( pObj && pObj->IsChart() )
+                    {
+                        bool bDisableDataTableDialog = false;
+                        svt::EmbeddedObjectRef::TryRunningState( xObj );
+                        uno::Reference< beans::XPropertySet > xProps( xObj->getComponent(), uno::UNO_QUERY );
+                        if ( xProps.is() &&
+                             ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                             bDisableDataTableDialog )
+                        {
+                            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                                uno::makeAny( sal_False ) );
+                            xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                                uno::makeAny( sal_False ) );
+                            uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
+                            if ( xModifiable.is() )
+                            {
+                                xModifiable->setModified( sal_True );
+                            }
+                        }
+                    }
+
                     bReturn = TRUE;
                 }
             }
