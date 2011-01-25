@@ -118,16 +118,6 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
             if( !pNd && nSttNode )
                 pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
 
-            // This code seems to be superfluous because the methods
-            // don't have any known side effects.
-            // ToDo: iasue i83806 should be used to remove this code
-            const SwNumRule* pNdRule;
-            if( pNd )
-                pNdRule = pNd->GetNumRule();
-            else
-                pNdRule = rDoc.FindNumRulePtr( aNumRule.GetName() );
-            // End of ToDo for issue i83806
-
             pHistory->TmpRollback( &rDoc, nLRSavePos );
 
         }
