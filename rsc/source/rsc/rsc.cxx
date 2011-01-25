@@ -667,16 +667,15 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
             fclose( finput );
 
             // Include-Pfad durchsuchen
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
-                pDep = pFName->Next();
             }
 
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 pFNTmp = pTC->aFileTab.GetFile( pDep->GetFileKey() );
                 // Kein Pfad und Include Datei
                 if( pFNTmp && !pFNTmp->bLoaded )
@@ -688,7 +687,6 @@ ERRTYPE RscCompiler :: IncludeParser( ULONG lFileKey )
                     else
                         aError = ERR_OPENFILE;
                 }
-                pDep = pFName->Next();
             };
         };
     };
@@ -718,12 +716,11 @@ ERRTYPE RscCompiler :: ParseOneFile( ULONG lFileKey,
 
         //Include-Dateien vorher lesen
         pFName->bLoaded = TRUE; //Endlos Rekursion vermeiden
-        pDep = pFName->First();
-        while( pDep && aError.IsOk() )
+
+        for ( size_t i = 0; i < pFName->aDepLst.size() && aError.IsOk(); ++i )
         {
+            pDep = pFName->aDepLst[ i ];
             aError = ParseOneFile( pDep->GetFileKey(), pOutputFile, pContext );
-            pFName->Seek( pDep );
-            pDep = pFName->Next();
         }
 
         if( aError.IsError() )

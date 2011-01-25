@@ -606,13 +606,10 @@ RscFile :: RscFile(){
 |*    RscFile::~RscFile()
 |*
 *************************************************************************/
-RscFile :: ~RscFile(){
-    RscDepend * pDep = Remove( (ULONG)0 );
-
-    while( pDep ){
-        delete pDep;
-        pDep = Remove( (ULONG)0 );
-    }
+RscFile :: ~RscFile() {
+    for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
+        delete aDepLst[ i ];
+    aDepLst.clear();
 
     //von hinten nach vorne ist besser wegen der Abhaengigkeiten
     //Objekte zerstoeren sich, wenn Referenzzaehler NULL
@@ -631,19 +628,19 @@ RscFile :: ~RscFile(){
 BOOL RscFile::Depend( ULONG lDepend, ULONG lFree ){
     RscDepend * pDep;
 
-    pDep = Last();
-    while( pDep ){
-        if( pDep->GetFileKey() == lDepend ){
-            while( pDep ){
+    for ( size_t i = aDepLst.size(); i > 0; )
+    {
+        pDep = aDepLst[ --i ];
+        if( pDep->GetFileKey() == lDepend ) {
+            for ( size_t j = i ? --i : 0; j > 0; )
+            {
+                pDep = aDepLst[ --j ];
                 if( pDep->GetFileKey() == lFree )
                     return TRUE;
-                pDep = Prev();
             }
             return FALSE;
         }
-        pDep = Prev();
-    };
-
+    }
     return TRUE;
 }
 
@@ -652,25 +649,25 @@ BOOL RscFile::Depend( ULONG lDepend, ULONG lFree ){
 |*    RscFile::InsertDependFile()
 |*
 *************************************************************************/
-BOOL RscFile :: InsertDependFile( ULONG lIncFile, ULONG lPos )
+BOOL RscFile :: InsertDependFile( ULONG lIncFile, size_t lPos )
 {
-    RscDepend * pDep;
-
-    pDep = First();
-    while( pDep ){
+    for ( size_t i = 0, n = aDepLst.size(); i < n; ++i )
+    {
+        RscDepend* pDep = aDepLst[ i ];
         if( pDep->GetFileKey() == lIncFile )
             return TRUE;
-        pDep = Next();
     }
 
     // Current-Zeiger steht auf letztem Element
-    if( lPos >= Count() ){ //letztes Element muss immer letztes bleiben
+    if( lPos >= aDepLst.size() ) { //letztes Element muss immer letztes bleiben
         // Abhaengigkeit vor der letzten Position eintragen
-        Insert( new RscDepend( lIncFile ) );
+        aDepLst.push_back( new RscDepend( lIncFile ) );
     }
-    else
-        Insert( new RscDepend( lIncFile ), lPos );
-
+    else {
+        RscDependList::iterator it = aDepLst.begin();
+        ::std::advance( it, lPos );
+        aDepLst.insert( it, new RscDepend( lIncFile ) );
+    }
     return TRUE;
 }
 
@@ -681,15 +678,15 @@ BOOL RscFile :: InsertDependFile( ULONG lIncFile, ULONG lPos )
 *************************************************************************/
 void RscFile :: RemoveDependFile( ULONG lDepFile )
 {
-
-    RscDepend * pDep = Last();
-
-    while( pDep ){
-        if( pDep->GetFileKey() == lDepFile ){
-            Remove( pDep );
-            delete pDep;
+    for ( size_t i = aDepLst.size(); i > 0; )
+    {
+        RscDepend* pDep = aDepLst[ --i ];
+        if( pDep->GetFileKey() == lDepFile ) {
+            RscDependList::iterator it = aDepLst.begin();
+            ::std::advance( it, i );
+            delete *it;
+            aDepLst.erase( it );
         }
-        pDep = Prev();
     }
 }
 

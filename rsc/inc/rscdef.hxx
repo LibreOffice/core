@@ -200,10 +200,11 @@ public:
             RscDepend( ULONG lIncKey ){ lKey = lIncKey; };
     ULONG   GetFileKey(){ return lKey; }
 };
-DECLARE_LIST( RscDependList, RscDepend * )
+
+typedef ::std::vector< RscDepend* > RscDependList;
 
 // Tabelle die alle Dateinamen enthaelt
-class RscFile : public RscDependList
+class RscFile
 {
 friend class RscFileTab;
     BOOL            bIncFile;   // Ist es eine Include-Datei
@@ -214,10 +215,11 @@ public:
     ByteString      aFileName;  // Name der Datei
     ByteString      aPathName;  // Pfad und Name der Datei
     RscDefineList   aDefLst;    // Liste der Defines
+    RscDependList   aDepLst;    // List of Depend
 
                     RscFile();
                     ~RscFile();
-    BOOL            InsertDependFile( ULONG lDepFile, ULONG lPos );
+    BOOL            InsertDependFile( ULONG lDepFile, size_t lPos );
     void            RemoveDependFile( ULONG lDepFile );
     BOOL            Depend( ULONG lDepend, ULONG lFree );
     void            SetIncFlag(){ bIncFile = TRUE; };

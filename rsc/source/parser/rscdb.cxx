@@ -436,9 +436,9 @@ void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
         pFName = aFileTab.Get( lFileKey );
         if( pFName )
         {
-            pDep = pFName->First();
-            while( pDep )
+            for ( size_t i = 0, n = pFName->aDepLst.size(); i < n; ++i )
             {
+                pDep = pFName->aDepLst[ i ];
                 if( pDep->GetFileKey() != lFileKey )
                 {
                     pFile = aFileTab.GetFile( pDep->GetFileKey() );
@@ -449,7 +449,6 @@ void RscTypCont :: WriteInc( FILE * fOutput, ULONG lFileKey )
                                  pFile->aFileName.GetBuffer() );
                     }
                 }
-                pDep = pFName->Next();
             };
         };
     };
