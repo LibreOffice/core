@@ -43,7 +43,7 @@
 #include "xecontent.hxx"
 #include "xeescher.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::rtl::OString;
 using ::rtl::OUString;

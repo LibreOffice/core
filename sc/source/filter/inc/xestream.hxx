@@ -37,6 +37,7 @@
 #include <string>
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <oox/token/tokens.hxx>
 #include <sax/fshelper.hxx>
 
 #include "xlstream.hxx"
@@ -306,7 +307,7 @@ public:
 class XclExpXmlStream : public oox::core::XmlFilterBase
 {
 public:
-    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rSMgr, SvStream& rStrm, const XclExpRoot& rRoot );
+    XclExpXmlStream( const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rxContext, SvStream& rStrm, const XclExpRoot& rRoot );
     virtual ~XclExpXmlStream();
 
     /** Returns the filter root data. */
@@ -342,6 +343,7 @@ public:
 
     void Trace( const char* format, ...);
 private:
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
     virtual ::rtl::OUString implGetImplementationName() const;
 
     typedef std::map< ::rtl::OUString,

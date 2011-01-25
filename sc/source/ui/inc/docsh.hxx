@@ -45,7 +45,6 @@
 
 class ScEditEngineDefaulter;
 class FontList;
-class PrintDialog;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
 struct ChartSelectionInfo;
@@ -302,13 +301,6 @@ public:
 
     void            DoRecalc( BOOL bApi );
     void            DoHardRecalc( BOOL bApi );
-
-    bool            CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData,
-                                bool bForceSelected, bool bIsAPI );
-    void            PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData );
-    void            Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
-                            ScMarkData* pMarkData, Window* pDialogParent,
-                            BOOL bForceSelected, BOOL bIsAPI );
 
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();
