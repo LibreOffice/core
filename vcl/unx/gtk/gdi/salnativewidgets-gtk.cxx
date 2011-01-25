@@ -609,7 +609,6 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         )
         )
         return( TRUE );
-
     return( FALSE );
 }
 
@@ -887,7 +886,7 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
     else if( (nType == CTRL_LISTNET) && (nPart == PART_ENTIRE_CONTROL) )
     {
         // don't actually draw anything; gtk treeviews do not draw lines
-        returnVal = true;
+        returnVal = TRUE;
     }
     else if( (nType == CTRL_SLIDER) )
     {
@@ -1228,7 +1227,7 @@ BOOL GtkSalGraphics::NWPaintGTKButton(
         clipRect.height = it->GetHeight();
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
-        gtk_paint_flat_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+        gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                             &clipRect, m_pWindow, "base", x, y, w, h );
 
         if ( (nState & CTRL_STATE_DEFAULT) && (GTK_BUTTON(gWidgetData[m_nScreen].gBtnWidget)->relief == GTK_RELIEF_NORMAL) )
@@ -1624,7 +1623,7 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     style = GTK_WIDGET( scrollbarWidget )->style;
 
     // ----------------- TROUGH
-    gtk_paint_flat_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable,
+    gtk_paint_flat_box( m_pWindow->style, gdkDrawable,
                         GTK_STATE_NORMAL, GTK_SHADOW_NONE, gdkRect,
                         m_pWindow, "base", x, y,
                         w, h );
@@ -1928,7 +1927,7 @@ static void NWPaintOneEditBox(  int nScreen,
     }
     NWSetWidgetState( widget, nState, stateType );
 
-    gtk_paint_flat_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
+    gtk_paint_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
                         gdkRect, pBGWidget, "entry_bg",
                         aEditBoxRect.Left(), aEditBoxRect.Top(),
                         aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
@@ -2181,7 +2180,7 @@ BOOL GtkSalGraphics::NWPaintGTKComboBox( GdkDrawable* gdkDrawable,
                                nState, aValue, rCaption );
 
         // Buttons must paint opaque since some themes have alpha-channel enabled buttons
-        gtk_paint_flat_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+        gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                             &clipRect, m_pWindow, "base",
                             x+(buttonRect.Left() - pixmapRect.Left()),
                             y+(buttonRect.Top() - pixmapRect.Top()),
@@ -2370,8 +2369,8 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
 
             if ( nState & CTRL_STATE_SELECTED )
             {
-                gtk_paint_flat_box( gWidgetData[m_nScreen].gNotebookWidget->style, pixmap, stateType, GTK_SHADOW_NONE, NULL, m_pWindow,
-                    (char *)"base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
+                gtk_paint_flat_box( m_pWindow->style, pixmap, stateType, GTK_SHADOW_NONE, NULL, m_pWindow,
+                    "base", 0, (pixmapRect.GetHeight() - 1), pixmapRect.GetWidth(), 1 );
             }
             break;
 
@@ -2460,7 +2459,7 @@ BOOL GtkSalGraphics::NWPaintGTKListBox( GdkDrawable* gdkDrawable,
         if ( nPart != PART_WINDOW )
         {
             // Listboxes must paint opaque since some themes have alpha-channel enabled bodies
-            gtk_paint_flat_box( gWidgetData[m_nScreen].gBtnWidget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
+            gtk_paint_flat_box( m_pWindow->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
                                 &clipRect, m_pWindow, "base", x, y,
                                 pixmapRect.GetWidth(), pixmapRect.GetHeight() );
             gtk_paint_box( gWidgetData[m_nScreen].gOptionMenuWidget->style, gdkDrawable, stateType, shadowType, &clipRect,
@@ -2703,6 +2702,7 @@ BOOL GtkSalGraphics::NWPaintGTKMenubar(
                            "menubar",
                            x, y, w, h );
         }
+
         else if( nPart == PART_MENU_ITEM )
         {
             if( nState & (CTRL_STATE_SELECTED|CTRL_STATE_ROLLOVER) )
@@ -2731,9 +2731,10 @@ BOOL GtkSalGraphics::NWPaintGTKPopupMenu(
             const OUString& )
 {
     // #i50745# gtk does not draw disabled menu entries (and crux theme
-    // even crashes), draw them using vcl functionality.
-    if( nPart == PART_MENU_ITEM && ! (nState & CTRL_STATE_ENABLED) )
-        return FALSE;
+    // even crashes) in very old (Fedora Core 4 vintage) gtk's
+    if (gtk_major_version <= 2 && gtk_minor_version <= 8 &&
+        nPart == PART_MENU_ITEM && ! (nState & CTRL_STATE_ENABLED) )
+        return TRUE;
 
     GtkStateType    stateType;
     GtkShadowType   shadowType;
