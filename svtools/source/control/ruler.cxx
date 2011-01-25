@@ -193,6 +193,9 @@ ImplRulerData::~ImplRulerData()
 
 ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
 {
+    if( this == &rData )
+        return *this;
+
     delete[] pLines;
     delete[] pArrows;
     delete[] pBorders;
