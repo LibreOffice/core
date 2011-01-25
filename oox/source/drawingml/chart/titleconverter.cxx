@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/titleconverter.hxx"
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XFormattedString.hpp>
@@ -201,6 +201,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 {
     if( rxDiagram.is() ) try
     {
+        namespace cssc = ::com::sun::star::chart;
         namespace cssc2 = ::com::sun::star::chart2;
 
         // create the legend
@@ -214,28 +215,28 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
         // predefined legend position and expansion
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
-        cssc2::LegendExpansion eLegendExpand = cssc2::LegendExpansion_HIGH;
+        cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_HIGH;
         switch( mrModel.mnPosition )
         {
             case XML_l:
                 eLegendPos = cssc2::LegendPosition_LINE_START;
-                eLegendExpand = cssc2::LegendExpansion_HIGH;
+                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
             case XML_r:
                 eLegendPos = cssc2::LegendPosition_LINE_END;
-                eLegendExpand = cssc2::LegendExpansion_HIGH;
+                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
             case XML_t:
                 eLegendPos = cssc2::LegendPosition_PAGE_START;
-                eLegendExpand = cssc2::LegendExpansion_WIDE;
+                eLegendExpand = cssc::ChartLegendExpansion_WIDE;
             break;
             case XML_b:
                 eLegendPos = cssc2::LegendPosition_PAGE_END;
-                eLegendExpand = cssc2::LegendExpansion_WIDE;
+                eLegendExpand = cssc::ChartLegendExpansion_WIDE;
             break;
             case XML_tr:
                 eLegendPos = cssc2::LegendPosition_LINE_END; // top-right not supported
-                eLegendExpand = cssc2::LegendExpansion_HIGH;
+                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
         }
 
@@ -249,11 +250,11 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             // #i71697# it is not possible to set the size directly, do some magic here
             double fRatio = static_cast< double >( aLegendRect.Width ) / aLegendRect.Height;
             if( fRatio > 1.5 )
-                eLegendExpand = cssc2::LegendExpansion_WIDE;
+                eLegendExpand = cssc::ChartLegendExpansion_WIDE;
             else if( fRatio < 0.75 )
-                eLegendExpand = cssc2::LegendExpansion_HIGH;
+                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             else
-                eLegendExpand = cssc2::LegendExpansion_BALANCED;
+                eLegendExpand = cssc::ChartLegendExpansion_BALANCED;
         }
 
         // set position and expansion properties
