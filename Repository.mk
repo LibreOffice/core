@@ -50,6 +50,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwk \
     fwl \
     fwm \
+    i18npaper \
     lng \
     msfilter \
     msword \
@@ -109,6 +110,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     passwordcontainer \
     productregistration \
     vbaswobj \
+    msforms \
 ))
 
 
