@@ -111,6 +111,7 @@ STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 test .PHONY: $(SHL1TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
+    @echo In the environment: STAR_RESOURCEPATH=$$STAR_RESOURCEPATH
     @echo ----------------------------------------------------------
     $(CPPUNITTESTER) $(SHL1TARGETN) -headless -invisible \
         -env:UNO_SERVICES=$(my_file)$(PWD)/$(MISC)/$(TARGET)/services.rdb \
