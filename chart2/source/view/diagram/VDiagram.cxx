@@ -198,8 +198,7 @@ void VDiagram::createShapes_2d()
         m_xWall2D = uno::Reference< drawing::XShape >(
             m_xShapeFactory->createInstance( C2U(
             "com.sun.star.drawing.RectangleShape" ) ), uno::UNO_QUERY );
-        //m_xWall2D->setPosition(m_aAvailablePosIncludingAxes);
-        //m_xWall2D->setSize(m_aAvailableSizeIncludingAxes);
+
         xGroupForWall->add(m_xWall2D);
         uno::Reference< beans::XPropertySet > xProp( m_xWall2D, uno::UNO_QUERY );
         if( xProp.is())
@@ -354,9 +353,7 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                 double fW = rAvailableSize.Width;
                 double fH = rAvailableSize.Height;
 
-//                 double cx = fabs(cos(m_fXAnglePi));
                 double sx = fabs(sin(m_fXAnglePi));
-//                 double cy = fabs(cos(m_fYAnglePi));
                 double sy = fabs(sin(m_fYAnglePi));
                 double cz = fabs(cos(m_fZAnglePi));
                 double sz = fabs(sin(m_fZAnglePi));
@@ -420,20 +417,6 @@ void VDiagram::adjustAspectRatio3d( const awt::Size& rAvailableSize )
                         else
                             fScaleY = 1.0;//looking from top or bottom the height is irrelevant
 
-                        /*
-                        //fW*zoomfactor == fScaleX*cy*cz + fScaleY*sz*cy + fScaleZ*sy*cx;
-                        //fH*zoomfactor == fScaleY*cx*cz + fScaleX*sz*cy + fScaleZ*sx*cz;
-                        //==> fScaleY*(sz*cy*fH -cx*cz*fW) =  fScaleX*(sz*cy*fW - cy*cz*fH) + fScaleZ*(sx*cz*fW - sy*cx*fH);
-                        double fDivide = sz*cy*fH -cx*cz*fW;
-                        if( !::basegfx::fTools::equalZero(fDivide) )
-                        {
-                            fScaleY = ( fScaleX*(sz*cy*fW - cy*cz*fH)
-                                + fScaleZ*(sx*cz*fW - sy*cx*fH) ) / fDivide;
-                            lcl_ensureScaleValue(fScaleY);
-                        }
-                        else
-                            fScaleY = 1.0;//looking from top or bottom hieght is irrelevant
-                        */
                     }
                     else if( fScaleY>0 && fScaleZ>0 )
                     {

@@ -88,25 +88,6 @@ double lcl_CalcViewFontSize(
             if( (xProp->getPropertyValue( C2U( "ReferencePageSize" )) >>= aPropRefSize) &&
                 (aPropRefSize.Height > 0))
             {
-                // todo: find out if asian text is really used
-//         Reference< beans::XPropertySetInfo >xInfo( xProp, uno::UNO_QUERY );
-//         float fFontHeight2 = fFontHeight;
-//         if( xInfo.is() &&
-//             xInfo->hasPropertyByName(C2U("CharHeightAsian")) &&
-//             (xProp->getPropertyValue(C2U("CharHeightAsian")) >>= fFontHeight2) &&
-//             fFontHeight2 > fFontHeight )
-//         {
-//             fFontHeight = fFontHeight2;
-//         }
-
-//         if( xInfo.is() &&
-//             xInfo->hasPropertyByName(C2U("CharHeightComplex")) &&
-//             (xProp->getPropertyValue(C2U("CharHeightComplex")) >>= fFontHeight2) &&
-//             fFontHeight2 > fFontHeight )
-//         {
-//             fFontHeight = fFontHeight2;
-//         }
-
                 fResult = ::chart::RelativeSizeHelper::calculate( fFontHeight, aPropRefSize, rReferenceSize );
             }
         }

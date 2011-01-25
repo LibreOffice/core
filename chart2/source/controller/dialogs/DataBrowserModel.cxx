@@ -228,7 +228,6 @@ bool lcl_ShowCategories( const Reference< chart2::XDiagram > & /* xDiagram */ )
 {
     // show categories for all charts
     return true;
-//     return DiagramHelper::isCategoryDiagram( xDiagram );
 }
 
 bool lcl_ShowCategoriesAsDataLabel( const Reference< chart2::XDiagram > & xDiagram )

@@ -90,8 +90,6 @@ using ::com::sun::star::uno::Sequence;
 using rtl::OUString;
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 VDataSeriesGroup::CachedYValues::CachedYValues()
         : m_bValuesDirty(true)
@@ -144,8 +142,6 @@ sal_Int32 VDataSeriesGroup::getSeriesCount() const
     return m_aSeriesVector.size();
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeModel
@@ -406,7 +402,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     {
         sal_Unicode cDecSeparator = '.';//@todo get this locale dependent
         aNumber = ::rtl::math::doubleToUString( fValue, rtl_math_StringFormat_G /*rtl_math_StringFormat*/
-            , 3/*DecPlaces*/ , cDecSeparator /*,sal_Int32 const * pGroups*/ /*,sal_Unicode cGroupSeparator*/ ,false /*bEraseTrailingDecZeros*/ );
+            , 3/*DecPlaces*/ , cDecSeparator, false /*bEraseTrailingDecZeros*/ );
     }
     return aNumber;
 }
@@ -684,7 +680,7 @@ double lcl_getErrorBarLogicLength(
                 uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
                 if( xErrorBarData.is())
                     fResult = StatisticsHelper::getErrorFromDataSource(
-                        xErrorBarData, nIndex, bPositive /*, true */ /* y-error */ );
+                        xErrorBarData, nIndex, bPositive);
             }
             break;
         }
@@ -1042,7 +1038,6 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
 
             if( bShowCorrCoeff )
             {
-//                 xEquationProperties->getPropertyValue( C2U("Separator")) >>= aSep;
                 aFormula.append( aSep );
             }
         }
@@ -1092,15 +1087,6 @@ void VSeriesPlotter::createRegressionCurveEquationShapes(
             uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
                 xEquationTarget, aFormula.makeStringAndClear(),
                 aNames, aValues, ShapeFactory::makeTransformation( aScreenPosition2D ));
-
-//             // adapt font sizes
-//             awt::Size aOldRefSize;
-//             if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
-//             {
-//                 uno::Reference< beans::XPropertySet > xShapeProp( xTextShape, uno::UNO_QUERY );
-//                 if( xShapeProp.is())
-//                     RelativeSizeHelper::adaptFontSizes( xShapeProp, aOldRefSize, m_aPageReferenceSize );
-//             }
 
             OSL_ASSERT( xTextShape.is());
             if( xTextShape.is())

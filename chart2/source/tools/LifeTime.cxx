@@ -247,7 +247,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
                         ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
             if( pIC )
             {
-                //lang::EventObject aEvent( static_cast< util::XCloseable*>(xCloseable) );
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )
@@ -376,7 +375,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
                         ::getCppuType((const uno::Reference< util::XCloseListener >*)0) );;
             if( pIC )
             {
-                //lang::EventObject aEvent( static_cast< util::XCloseable*>(xCloseable) );
                 lang::EventObject aEvent( xCloseable );
                 ::cppu::OInterfaceIteratorHelper aIt( *pIC );
                 while( aIt.hasMoreElements() )

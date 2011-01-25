@@ -121,9 +121,6 @@ void VCartesianCoordinateSystem::createVAxisList(
 {
     m_aAxisMap.clear();
 
-    //if(!m_xLogicTargetForAxes.is() || !m_xFinalTarget.is() || !m_xCooSysModel.is() )
-    //    return;
-
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
     bool bSwapXAndY = this->getPropertySwapXAndYAxis();
 
@@ -177,18 +174,11 @@ void VCartesianCoordinateSystem::createVAxisList(
                 if( aAxisProperties.m_pExplicitCategoriesProvider->hasComplexCategories() )
                     aAxisProperties.m_bComplexCategories = true;
             }
-            //-------------------
+
             ::boost::shared_ptr< VAxisBase > apVAxis( new VCartesianAxis(aAxisProperties,xNumberFormatsSupplier,nDimensionIndex,nDimensionCount) );
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
             apVAxis->set3DWallPositions( m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
-
-            //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement( nDimensionIndex, nAxisIndex ) );
-            //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
-            //    , this->createCIDForAxis( xAxis, nDimensionIndex, nAxisIndex ) );
-            //if(2==nDimensionCount)
-            //    apVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            //apVAxis->setScales( this->getExplicitScales(nDimensionIndex,nAxisIndex), bSwapXAndY );
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
         }
     }

@@ -307,8 +307,6 @@ void BVector(double x, sal_Int32 n, sal_Int32 k, double *b, const double *t)
 } //  anonymous namespace
 
 //-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 
 void SplineCalculater::CalculateCubicSplines(
     const drawing::PolyPolygonShape3D& rInput
@@ -350,11 +348,6 @@ void SplineCalculater::CalculateCubicSplines(
         for( sal_Int32 nIndex=1; nIndex<=nMaxIndexPoints; nIndex++ )
         {
             // The euclidian distance leads to curve loops for functions having single extreme points
-            //aParameter[nIndex]=aParameter[nIndex-1]+
-            //sqrt( (pOldX[nIndex]-pOldX[nIndex-1])*(pOldX[nIndex]-pOldX[nIndex-1])+
-            //(pOldY[nIndex]-pOldY[nIndex-1])*(pOldY[nIndex]-pOldY[nIndex-1])+
-            //(pOldZ[nIndex]-pOldZ[nIndex-1])*(pOldZ[nIndex]-pOldZ[nIndex-1]));
-
             // use increment of 1 instead
             aParameter[nIndex]=aParameter[nIndex-1]+1;
         }

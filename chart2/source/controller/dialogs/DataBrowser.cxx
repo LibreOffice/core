@@ -1201,8 +1201,6 @@ void DataBrowser::ColumnResized( USHORT nColId )
     SetUpdateMode( bLastUpdateMode );
 }
 
-//  virtual void    MouseMove( const MouseEvent& rEvt );
-
 void DataBrowser::EndScroll()
 {
     BOOL bLastUpdateMode = GetUpdateMode();
@@ -1295,7 +1293,6 @@ IMPL_LINK( DataBrowser, SeriesHeaderGotFocus, impl::SeriesHeaderEdit*, pEdit )
             GoToCell( 0, 0 );
         else
         {
-            //DeactivateCell();
             MakeFieldVisible( GetCurRow(), static_cast< sal_uInt16 >( pEdit->getStartColumn()), true /* bComplete */ );
             ActivateCell();
             m_aCursorMovedHdlLink.Call( this );

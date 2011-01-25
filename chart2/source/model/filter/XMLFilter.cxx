@@ -81,11 +81,9 @@ LOCAL_CONST_STR( sXML_contentStreamName,    "content.xml" );
 LOCAL_CONST_STR( sXML_oldContentStreamName, "Content.xml" );
 
 // soffice 6/7
-// LOCAL_CONST_STR( sXML_export_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaExporter" );
 LOCAL_CONST_STR( sXML_export_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesExporter" );
 LOCAL_CONST_STR( sXML_export_chart_content_service,         "com.sun.star.comp.Chart.XMLContentExporter" );
 
-// LOCAL_CONST_STR( sXML_import_chart_meta_service,            "com.sun.star.comp.Chart.XMLMetaImporter" );
 LOCAL_CONST_STR( sXML_import_chart_styles_service,          "com.sun.star.comp.Chart.XMLStylesImporter" );
 LOCAL_CONST_STR( sXML_import_chart_content_service,         "com.sun.star.comp.Chart.XMLContentImporter" );
 LOCAL_CONST_STR( sXML_import_chart_old_content_service,     "com.sun.star.office.sax.importer.Chart" );
@@ -130,10 +128,6 @@ uno::Reference< embed::XStorage > lcl_getWriteStorage(
                         RTL_CONSTASCII_STRINGPARAM( "Password" ))
                     || rMediaDescriptor[i].Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
-    //                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
-    //                  || rMediaDescriptor[i].Name.equalsAsciiL(
-    //                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
                     )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
@@ -207,10 +201,6 @@ uno::Reference< embed::XStorage > lcl_getReadStorage(
                          RTL_CONSTASCII_STRINGPARAM( "Password" ))
                      || rMediaDescriptor[i].Name.equalsAsciiL(
                          RTL_CONSTASCII_STRINGPARAM( "RepairPackage" ))
-//                  || rMediaDescriptor[i].Name.equalsAsciiL(
-//                      RTL_CONSTASCII_STRINGPARAM( "StatusIndicator" ))
-//                  || rMediaDescriptor[i].Name.equalsAsciiL(
-//                      RTL_CONSTASCII_STRINGPARAM( "Unpacked" ))
                     )
                 {
                     aPropertiesForStorage.push_back( rMediaDescriptor[i] );
@@ -376,8 +366,6 @@ sal_Int32 XMLFilter::impl_Import(
         if( ! xStorage.is())
             return ERRCODE_SFX_GENERAL;
 
-//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
-
         Reference< document::XGraphicObjectResolver > xGraphicObjectResolver;
         uno::Reference< lang::XMultiServiceFactory > xServiceFactory( xFactory, uno::UNO_QUERY);
         if( xServiceFactory.is())
@@ -524,8 +512,6 @@ sal_Int32 XMLFilter::impl_ImportStream(
             if( aParserInput.aInputStream.is())
             {
                 sal_Int32 nArgs = 0;
-                //if( m_xStatusIndicator.is())
-                //    nArgs++;
                 if( xGraphicObjectResolver.is())
                     nArgs++;
                 if( xImportInfo.is())
@@ -534,8 +520,6 @@ sal_Int32 XMLFilter::impl_ImportStream(
                 uno::Sequence< uno::Any > aFilterCompArgs( nArgs );
 
                 nArgs = 0;
-                //if( m_xStatusIndicator.is())
-                //    aFilterCompArgs[ nArgs++ ] <<= m_xStatusIndicator;
                 if( xGraphicObjectResolver.is())
                     aFilterCompArgs[nArgs++] <<= xGraphicObjectResolver;
                 if( xImportInfo.is())
@@ -710,8 +694,6 @@ sal_Int32 XMLFilter::impl_Export(
             if( xGraphicObjectResolver.is())
                 aFilterProperties[ nArgs++ ] <<= xGraphicObjectResolver;
         }
-
-//         bool bOasis = (SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60);
 
         // export meta information
         if( bOasis )

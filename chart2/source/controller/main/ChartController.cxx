@@ -483,7 +483,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         if( m_pDrawViewWrapper )
         {
             m_pDrawViewWrapper->UnmarkAll();
-            //m_pDrawViewWrapper->hideMarkHandles(); todo??
             m_pDrawViewWrapper->HideSdrPage();
         }
     }
@@ -555,9 +554,7 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
         m_pDrawModelWrapper.reset();
 
         aOldModelRef->removeListener( this );
-        //@todo?? termination correct?
-//      aOldModelRef->tryTermination();
-#ifdef TEST_ENABLE_MODIFY_LISTENER
+ #ifdef TEST_ENABLE_MODIFY_LISTENER
         uno::Reference< util::XModifyBroadcaster > xMBroadcaster( aOldModelRef->getModel(),uno::UNO_QUERY );
         if( xMBroadcaster.is())
             xMBroadcaster->removeModifyListener( this );
@@ -699,19 +696,11 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
     //change suspend mode
     if(bSuspend)
     {
-        //aGuard.clear();
-        //@todo ???  try to stop all what may prevent me from becoming disposed
-        //aGuard.reset();
-
         m_bSuspended = bSuspend;
         return sal_True;
     }
     else
     {
-        //aGuard.clear();
-        //@todo ??? redo what was made in section bSuspend==true
-        //aGuard.reset();
-
         m_bSuspended = bSuspend;
     }
     return sal_True;
@@ -1256,13 +1245,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const util::URL& /* aURL */ )
             throw (uno::RuntimeException)
 {
-//     // TODO: add listener by URL !
-//  SolarMutexGuard aGuard;
-//  if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
-//      return; //behave passive if already disposed or suspended
-
-//  //--add listener
-//      m_aLifeTimeManager.m_aListenerContainer.addInterface( ::getCppuType( & xControl ), xControl );
+    //@todo
 }
 
     void SAL_CALL ChartController
@@ -1270,13 +1253,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const util::URL& /* aURL */ )
             throw (uno::RuntimeException)
 {
-//     // TODO: remove listener by URL !
-//  SolarMutexGuard aGuard;
-//     if( m_aLifeTimeManager.impl_isDisposed() )
-//      return; //behave passive if already disposed or suspended
-
-//  //--remove listener
-//  m_aLifeTimeManager.m_aListenerContainer.removeInterface( ::getCppuType( & xControl ), xControl );
+    //@todo
 }
 
 //-----------------------------------------------------------------
@@ -1412,14 +1389,9 @@ void SAL_CALL ChartController::modified( const lang::EventObject& /* aEvent */ )
 {
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?
-//     if( getModel() == aEvent.Source )
-
-
     //todo? update menu states ?
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
 IMPL_LINK( ChartController, NotifyUndoActionHdl, SdrUndoAction*, pUndoAction )

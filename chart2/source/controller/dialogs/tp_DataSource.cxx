@@ -1037,11 +1037,6 @@ bool DataSourceTabPage::updateModelFromControl( Edit * pField )
                                 xLabeledSeq->setValues( xNewSeq );
                             }
                         }
-                        else if( xLabeledSeq.is())
-                        {
-                            // values cannot be deleted. This would also delete the Role (for labels)
-//                             xLabeledSeq->setValues( Reference< data::XDataSequence >());
-                        }
                     }
                 }
 

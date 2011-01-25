@@ -96,7 +96,6 @@ beans::PropertyState WrappedIgnoreProperty::getPropertyState( const Reference< b
 void WrappedIgnoreProperties::addIgnoreLineProperties( std::vector< WrappedProperty* >& rList )
 {
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineStyle" ), uno::makeAny( drawing::LineStyle_SOLID ) ) );
-//     rList.push_back( new WrappedIgnoreProperty( C2U( "LineDash" ), uno::makeAny( drawing::LineDash() ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineDashName" ), uno::makeAny( rtl::OUString() ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineColor" ), uno::makeAny( sal_Int32(0) ) ) );
     rList.push_back( new WrappedIgnoreProperty( C2U( "LineTransparence" ), uno::makeAny( sal_Int16(0) ) ) );

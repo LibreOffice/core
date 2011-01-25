@@ -574,13 +574,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                 aRet = aRet.replaceAt( nIndex, aWildcard.getLength(), lcl_getDataSeriesName( rObjectCID, xChartModel ) );
         }
     }
-    /*
-    else if( OBJECTTYPE_DIAGRAM == eObjectType )
-    {
-        //todo different names for different diagram types ???
-        //or different names for series of diferent charttypes
-    }
-    */
     else if( OBJECTTYPE_DATA_CURVE == eObjectType )
     {
         if( bVerbose )
@@ -611,12 +604,6 @@ rtl::OUString ObjectNameProvider::getHelpText( const rtl::OUString& rObjectCID, 
                         if( nIndex != -1 )
                         {
                             sal_Unicode aDecimalSep( '.' );
-                            //@todo: enable this code when a localized decimal
-                            //separator is also available for the formula
-//                             SvtSysLocale aSysLocale;
-//                             OUString aSep( aSysLocale.GetLocaleData().getNumDecimalSep());
-//                             if( aSep.getLength() == 1 )
-//                                 aDecimalSep = aSep.toChar();
                             double fR( xCalculator->getCorrelationCoefficient());
                             aRet = aRet.replaceAt(
                                 nIndex, aWildcard.getLength(),

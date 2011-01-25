@@ -109,8 +109,6 @@ public:
                            const ::com::sun::star::uno::Reference<
                                ::com::sun::star::uno::XComponentContext > & xContext );
 
-//     void setNumberFormatter();
-
     // predicates to determine what actions are possible at the current cursor
     // position.  This depends on the implementation of the according mutators
     // below.  (They are used for enabling toolbar icons)

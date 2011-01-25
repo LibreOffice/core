@@ -139,12 +139,6 @@ Sequence< OUString > SAL_CALL ChartType::getSupportedOptionalRoles()
 {
     static Sequence< OUString > aDefaultOptRolesSeq;
 
-//     if( aDefaultOptRolesSeq.getLength() == 0 )
-//     {
-//         aDefaultOptRolesSeq.realloc( 1 );
-//         aDefaultOptRolesSeq[0] = C2U( "error-bars-y" );
-//     }
-
     return aDefaultOptRolesSeq;
 }
 

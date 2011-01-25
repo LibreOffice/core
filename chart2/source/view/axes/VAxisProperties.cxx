@@ -402,16 +402,7 @@ AxisLabelProperties::AxisLabelProperties()
                         , nRhythm( 1 )
                         , bRhythmIsFix(false)
 {
-    /*
-    aLocale.Language = C2U( "en" );
-    aLocale.Country  = C2U( "US" );
 
-    //aLocale.Language = C2U( "ar" );
-    //aLocale.Country  = C2U( "IR" );
-
-    //aLocale.Language = C2U( "ja" );
-    //aLocale.Country  = C2U( "JP" );
-    */
 }
 
 void AxisLabelProperties::init( const uno::Reference< XAxis >& xAxisModel )
