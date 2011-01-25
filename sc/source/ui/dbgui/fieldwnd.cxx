@@ -616,19 +616,20 @@ void ScPivotFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void ScPivotFieldWindow::MouseMove( const MouseEvent& rMEvt )
+void ScPivotFieldWindow::RequestHelp( const HelpEvent& rHEvt )
 {
-    if( !mpDialog->IsTracking() )
+    if( (rHEvt.GetMode() & HELPMODE_QUICK) != 0 )
     {
         // show a tooltip with full field name, if field text is clipped
-        size_t nFieldIndex = GetFieldIndex( rMEvt.GetPosPixel() );
+        size_t nFieldIndex = GetFieldIndex( rHEvt.GetMousePosPixel() - GetPosPixel() );
         if( (nFieldIndex < maFields.size()) && maFields[ nFieldIndex ].mbClipped )
         {
-            Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
-            Rectangle aRect( aPos, GetSizePixel() );
+            Rectangle aRect( rHEvt.GetMousePosPixel(), GetSizePixel() );
             Help::ShowQuickHelp( this, aRect, maFields[ nFieldIndex ].maFieldName );
+            return;
         }
     }
+    Control::RequestHelp( rHEvt );
 }
 
 void ScPivotFieldWindow::GetFocus()

@@ -158,7 +158,7 @@ protected:
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
     virtual void        KeyInput( const KeyEvent& rKEvt );
     virtual void        MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void        MouseMove( const MouseEvent& rMEvt );
+    virtual void        RequestHelp( const HelpEvent& rHEvt );
     virtual void        GetFocus();
     virtual void        LoseFocus();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
