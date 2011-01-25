@@ -2723,6 +2723,9 @@ WW8PLCFx_Fc_FKP::WW8Fkp::Entry::Entry(const Entry &rEntry)
 WW8PLCFx_Fc_FKP::WW8Fkp::Entry&
     WW8PLCFx_Fc_FKP::WW8Fkp::Entry::operator=(const Entry &rEntry)
 {
+    if (this == &rEntry)
+        return *this;
+
     if (mbMustDelete)
         delete[] mpData;
 
