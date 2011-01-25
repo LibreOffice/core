@@ -1751,9 +1751,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                 const U16 nRangeCount = (pReadPtr[0]<<8) + pReadPtr[1];
                 assert( nRangeCount > 0);
                 assert( nRangeCount <= mnCharStrCount);
-#ifndef NDEBUG
                 U16 nPrev = (pReadPtr[2]<<8) + pReadPtr[3];
-#endif
                 assert( nPrev == 0);
                 (void)nPrev;
                 pReadPtr += 4;
@@ -1765,9 +1763,7 @@ int CffSubsetterContext::getFDSelect( int nGlyphIndex) const
                     if( nGlyphIndex < nNext)
                         return nFDIdx;
                     pReadPtr += 3;
-#ifndef NDEBUG
                     nPrev = nNext;
-#endif
                 }
             } break;
         default:    // invalid FDselect format
