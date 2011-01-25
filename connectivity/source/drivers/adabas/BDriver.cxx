@@ -28,7 +28,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
+
 #include <tools/solar.h>
+
+// Include odbc/sqltypes.h specifically and early to handle its nasty
+// re-definitions of BOOL and typedef of ULONG that clash horribly
+// with the solar.h stuff (which itself already clashes with <windows.h>).
+
 #define ULONG ODBC_ULONG
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqltypes.h>
@@ -37,6 +43,7 @@
 #endif
 #undef ULONG
 #undef BOOL
+
 #include <unotools/tempfile.hxx>
 #include <sal/macros.h>
 #include "adabas/BDriver.hxx"
