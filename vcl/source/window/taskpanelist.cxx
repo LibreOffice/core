@@ -108,26 +108,8 @@ TaskPaneList::~TaskPaneList()
 
 void TaskPaneList::AddWindow( Window *pWindow )
 {
-#if OSL_DEBUG_LEVEL > 0
-    bool bDockingWindow=false;
-    bool bToolbox=false;
-    bool bDialog=false;
-    bool bUnknown=false;
-#endif
-
     if( pWindow )
     {
-#if OSL_DEBUG_LEVEL > 0
-        if( pWindow->GetType() == RSC_DOCKINGWINDOW )
-            bDockingWindow = true;
-        else if( pWindow->GetType() == RSC_TOOLBOX )
-            bToolbox = true;
-        else if( pWindow->IsDialog() )
-            bDialog = true;
-        else
-            bUnknown = true;
-#endif
-
         ::std::vector< Window* >::iterator insertionPos = mTaskPanes.end();
         for ( ::std::vector< Window* >::iterator p = mTaskPanes.begin();
               p != mTaskPanes.end();
