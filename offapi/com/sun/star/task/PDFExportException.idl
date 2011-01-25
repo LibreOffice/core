@@ -24,35 +24,29 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
+#ifndef __com_sun_star_task_PDFExportException_idl__
+#define __com_sun_star_task_PDFExportException_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_uno_Exception_idl__
+#include <com/sun/star/uno/Exception.idl>
 #endif
 
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+ module com {  module sun {  module star {  module task {
 
-//=============================================================================
 
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/**
-    @deprecatd
-        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type>, and <type>AnimatedImagesControlModel</type>.
+/** is an exception that provides information on an error during PDF export.
  */
-published interface XThrobber: com::sun::star::uno::XInterface
+published exception PDFExportException: com::sun::star::uno::Exception
 {
-    void start();
-    void stop();
+    /** contains a number of errors that occured during PDFExport
+    */
+    sequence< long > ErrorCodes;
 };
 
 //=============================================================================
 
 }; }; }; };
 
+/*===========================================================================
+===========================================================================*/
 #endif

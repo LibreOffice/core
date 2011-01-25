@@ -1,4 +1,4 @@
-io	io	:	rdbmaker NULL
+io	io	: LIBXSLT:libxslt rdbmaker NULL
 io	io										usr1	-	all	io_mkout NULL
 io	io\inc									nmake	-	all	io_inc NULL
 io	io\source\acceptor						nmake	-	all	io_acceptor io_connector io_inc NULL

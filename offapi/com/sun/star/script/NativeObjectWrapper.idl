@@ -24,31 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_XThrobber_idl__
-#define __com_sun_star_awt_XThrobber_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
-
-#ifndef com_sun_star_graphic_XGraphic_idl
-#include <com/sun/star/graphic/XGraphic.idl>
-#endif
+#ifndef __com_sun_star_script_NativeObjectWrapper_idl__
+#define __com_sun_star_script_NativeObjectWrapper_idl__
 
 //=============================================================================
-
- module com {  module sun {  module star {  module awt {
-
-//=============================================================================
-
-/**
-    @deprecatd
-        You should use <type>XAnimation</type>, <type>AnimatedImagesControl</type>, and <type>AnimatedImagesControlModel</type>.
- */
-published interface XThrobber: com::sun::star::uno::XInterface
+module com {  module sun {  module star { module script {
+struct NativeObjectWrapper
 {
-    void start();
-    void stop();
+    any ObjectId;
 };
 
 //=============================================================================
