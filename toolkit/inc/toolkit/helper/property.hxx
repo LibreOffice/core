@@ -202,9 +202,10 @@ namespace rtl {
 #define BASEPROPERTY_GRID_LINE_COLOR                151
 #define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
 #define BASEPROPERTY_ITEM_SEPARATOR_POS             153
-#define BASEPROPERTY_ROW_HEADER_WIDTH               154
-#define BASEPROPERTY_COLUMN_HEADER_HEIGHT           155
-#define BASEPROPERTY_USE_GRID_LINES                 156
+#define BASEPROPERTY_AUTO_REPEAT                    154
+#define BASEPROPERTY_ROW_HEADER_WIDTH               155
+#define BASEPROPERTY_COLUMN_HEADER_HEIGHT           156
+#define BASEPROPERTY_USE_GRID_LINES                 157
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.

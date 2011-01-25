@@ -33,7 +33,6 @@
 #include <sys/types.h>
 #endif
 
-
 #include <svtools/inettbc.hxx>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
@@ -47,18 +46,10 @@
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
-
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
-
 #include <vcl/toolbox.hxx>
-#ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <unotools/historyoptions.hxx>
 #include <svl/eitem.hxx>
@@ -73,9 +64,8 @@
 #include <ucbhelper/content.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
-
 #include "iodlg.hrc"
-#include <asynclink.hxx>
+#include <svtools/asynclink.hxx>
 #include <svl/urlfilter.hxx>
 
 #include <vector>
@@ -857,7 +847,8 @@ void SvtURLBox::ImplInit()
 {
     pImp = new SvtURLBox_Impl();
 
-    SetHelpId( ".uno:OpenURL" );
+    if ( GetHelpId().getLength() == 0 )
+        SetHelpId( ".uno:OpenURL" );
     EnableAutocomplete( FALSE );
 
     SetText( String() );

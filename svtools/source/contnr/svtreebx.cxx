@@ -1146,9 +1146,11 @@ void SvTreeListBox::ModelIsRemoving( SvListEntry* pEntry )
     NotifyRemoving( (SvLBoxEntry*)pEntry );
 }
 
-void SvTreeListBox::ModelHasRemoved( SvListEntry* /* pEntry */ )
+void SvTreeListBox::ModelHasRemoved( SvListEntry* pEntry  )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+    if ( pEntry == pHdlEntry)
+        pHdlEntry = NULL;
     pImp->EntryRemoved();
 }
 
@@ -2233,8 +2235,8 @@ Region SvTreeListBox::GetDragRegion() const
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if ( !pImp->Command( rCEvt ) )
-        SvLBox::Command( rCEvt );
+    // FIXME gnumake2 resync to DEV300_m84
+    pImp->Command( rCEvt );
 }
 
 

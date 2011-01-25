@@ -34,9 +34,6 @@
 #include <cstdarg>
 #endif
 
-#ifndef GCC
-#endif
-
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 
@@ -44,7 +41,7 @@
 #include <svl/itemset.hxx>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
-#include "whiter.hxx"
+#include <svl/whiter.hxx>
 #include <svl/nranges.hxx>
 #include "whassert.hxx"
 

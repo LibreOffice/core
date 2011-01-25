@@ -51,6 +51,8 @@
 #include "toolkit/controls/tkspinbutton.hxx"
 #include <toolkit/controls/tksimpleanimation.hxx>
 #include <toolkit/controls/tkthrobber.hxx>
+#include <toolkit/controls/animatedimages.hxx>
+#include <toolkit/controls/spinningprogress.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
 #include "toolkit/dllapi.h"
 
@@ -198,6 +200,9 @@ IMPL_CREATEINSTANCE2( UnoSimpleAnimationControl )
 IMPL_CREATEINSTANCE2( UnoSimpleAnimationControlModel )
 IMPL_CREATEINSTANCE2( UnoThrobberControl )
 IMPL_CREATEINSTANCE2( UnoThrobberControlModel )
+IMPL_CREATEINSTANCE2( AnimatedImagesControl )
+IMPL_CREATEINSTANCE2( AnimatedImagesControlModel )
+IMPL_CREATEINSTANCE2( SpinningProgressControlModel )
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -300,6 +305,9 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         GET_FACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( GridColumn, "org.openoffice.comp.toolkit", szServiceName_GridColumn, NULL );
         GET_FACTORY_WITH_IMPL_PREFIX( SortableGridDataModel, "org.openoffice.comp.toolkit", szServiceName_SortableGridDataModel, NULL );
+        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControl, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControl, NULL )
+        GET_FACTORY_WITH_IMPL_PREFIX( AnimatedImagesControlModel, "org.openoffice.comp.toolkit", szServiceName_AnimatedImagesControlModel, NULL )
+        GET_FACTORY_WITH_IMPL_PREFIX( SpinningProgressControlModel, "org.openoffice.comp.toolkit", szServiceName_SpinningProgressControlModel, NULL )
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );

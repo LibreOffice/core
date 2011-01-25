@@ -43,7 +43,7 @@ public:
     ::cppu::OBroadcastHelper    BrdcstHelper;
 
     ::osl::Mutex&               GetMutex() { return Mutex; }
-
+    ::cppu::OBroadcastHelper&   GetBroadcastHelper() { return BrdcstHelper; }
 };
 
 #endif  // _TOOLKIT_HELPER_MUTEXANDBROADCASTHELPER_HXX

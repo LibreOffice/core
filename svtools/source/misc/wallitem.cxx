@@ -48,7 +48,7 @@
 #include <vcl/gradient.hxx>
 #include <vcl/cvtgrf.hxx>
 
-#include "wallitem.hxx"
+#include <svtools/wallitem.hxx>
 #include <svl/cntwall.hxx>
 
 // -----------------------------------------------------------------------
