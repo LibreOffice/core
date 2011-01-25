@@ -50,17 +50,17 @@ published struct FolderListEntry
     string ID;
 
     //-------------------------------------------------------------------------
-    /** The foler is subscribed.
+    /** The folder is subscribed.
     */
     boolean Subscribed;
 
     //-------------------------------------------------------------------------
-    /** The foler is new.
+    /** The folder is new.
     */
     boolean New;
 
     //-------------------------------------------------------------------------
-    /** The foler has been removed.
+    /** The folder has been removed.
     */
     boolean Removed;
 

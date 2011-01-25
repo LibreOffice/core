@@ -37,7 +37,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing an off line condition.
+/** A network error specifying an off line condition.
 */
 published exception InteractiveNetworkOffLineException: com::sun::star::ucb::InteractiveNetworkException
 {

@@ -37,7 +37,7 @@ module com {  module sun {  module star {  module ui {
 constants UIElementType
 {
     //-------------------------------------------------------------------------
-    /** unkown user interface element type, which can be used as a wildcard
+    /** unknown user interface element type, which can be used as a wildcard
        to specify all types.
     */
     const short UNKNOWN         = 0;
@@ -48,7 +48,7 @@ constants UIElementType
     const short MENUBAR         = 1;
 
     //-------------------------------------------------------------------------
-    /** specifies a popup menu.
+    /** specifies a pop-up menu.
     */
     const short POPUPMENU       = 2;
 

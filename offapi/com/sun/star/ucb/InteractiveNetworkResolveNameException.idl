@@ -37,7 +37,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing a name resolution failure.
+/** A network error specifying a name resolution failure.
 */
 published exception InteractiveNetworkResolveNameException: com::sun::star::ucb::InteractiveNetworkException
 {

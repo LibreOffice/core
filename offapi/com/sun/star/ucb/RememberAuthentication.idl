@@ -50,7 +50,7 @@ published enum RememberAuthentication
     SESSION,
 
     //-------------------------------------------------------------------------
-    /** Remember the authentication data 'forever'.
+    /** Remember the authentication data "forever".
     */
     PERSISTENT
 

@@ -35,7 +35,7 @@ module com {  module sun {  module star {  module ui {
 */
 published service ActionTriggerSeparator
 {
-    /** determins the type of the separator using constants from
+    /** determines the type of the separator using constants from
         <type>ActionTriggerSeparatorType</type>.
     */
     [optional, property] short SeparatorType;

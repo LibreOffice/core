@@ -46,7 +46,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** creates a <type>CachedDynamicResultSet</type>.
 
-    <p>Pay attention to instanciate this helper on clientside where your want
+    <p>Pay attention to instantiate this helper on client side where your want
     to read the data respectively where you have instantiated the listener to
     the <type>XDynamicResultSet</type>.
 
@@ -67,7 +67,7 @@ published interface XCachedDynamicResultSetFactory: com::sun::star::uno::XInterf
 
         @param ContentIdentifierMapping
         is not required, but can be set if it is necessary to change the
-        identity of the contents accessable via the interface
+        identity of the contents accessible via the interface
         <type>XContentAccess</type> of the <type>ContentResultSet</type>
         (e.g., if merging two sources of the same type).
 

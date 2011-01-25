@@ -33,7 +33,7 @@
 #endif
 
 #ifndef __com_sun_star_container_NoSuchElementException_idl__
-#include <com/sun/star/container/NoSuchElementExceptio.idl>
+#include <com/sun/star/container/NoSuchElementException.idl>
 #endif
 
 module com { module sun { module star { module ui {

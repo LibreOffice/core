@@ -40,7 +40,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** provides read access to a static or dynamicallly changing
+/** provides read access to a static or dynamically changing
     <type>ContentResultSet</type>.
 
     <p>For example, a <type>DynamicResultSet</type> is returned from the

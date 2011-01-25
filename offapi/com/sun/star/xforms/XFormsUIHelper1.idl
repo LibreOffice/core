@@ -94,7 +94,7 @@ interface XFormsUIHelper1
 
     // Creates a new binding based on the one passed as argument.
     // The new binding does *not* contribute to the MIPs table and acts
-    // as a propertyset in disguise, which is what the UI needs this object for...
+    // as a property set in disguise, which is what the UI needs this object for...
     com::sun::star::beans::XPropertySet cloneBindingAsGhost( [in] com::sun::star::beans::XPropertySet binding );
 
     void removeBindingIfUseless( [in] com::sun::star::beans::XPropertySet xBinding );

@@ -84,7 +84,7 @@ module com { module sun { module star { module ucb {
 published service Content
 {
     //-------------------------------------------------------------------------
-    /** provides access to the identitity and the type of the content and
+    /** provides access to the identity and the type of the content and
         allows the registration of listeners for <type>ContentEvent</type>s.
 
         <p>This interface is required.
@@ -95,7 +95,7 @@ published service Content
     /** must be implemented to make it possible to resolve cyclic object
         references.
 
-        <p>Those references i.e. may occure if there are listeners
+        <p>Those references i.e. may occur if there are listeners
         registered at the content ( the content holds the listeners ) and
         the implementation of the listener interface holds a reference on
         the content. If the content shall be released,
@@ -186,7 +186,7 @@ published service Content
         // - <type scope="com::sun::star::lang">IllegalArgumentException</type>
         //   indicates, that the property value is not acceptable. For instance,
         //   setting an empty title may be illegal.
-        // - Any other execption derived from <type scope="com::sun::star::uno">Exception</type>
+        // - Any other exception derived from <type scope="com::sun::star::uno">Exception</type>
         //   indicates, that the value was not set successfully. For example,
         //   this can be a <type>InteractiveAugmentedIOException</type>
         //   transporting the error code <member>IOErrorCode::ACCESS_DENIED</member>.
@@ -218,7 +218,7 @@ published service Content
         // SortingInfo      : contains sort criteria, if result set shall
         //                be sorted, otherwise it can be left empty.
         //
-        // The exceution must be aborted by the implementation of this command
+        // The execution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
         // unsupported mode is requested.
         <type>XDynamicResultSet</type>
@@ -240,7 +240,7 @@ published service Content
         // Properties   : empty ( ignored )
         // SortingInfo      : empty ( ignored )
         //
-        // The exceution must be aborted by the implementation of this command
+        // The execution must be aborted by the implementation of this command
         // (by throwing a <type>CommandAbortedException</type>), if an
         // unsupported mode is requested.
         void
@@ -315,7 +315,7 @@ published service Content
                 <type>InsertCommandArgument</type> aInsertCommandArg
 
         // This command searches for subcontents of a content matching the
-        // given search criteria. The command will return an implemenation
+        // given search criteria. The command will return an implementation
         // of service <type>DynamicResultSet</type>.
         <type>XDynamicResultSet</type>
             <B>search</B>
@@ -339,7 +339,7 @@ published service Content
         // for this scenario, because it is not directly supported by the IMAP
         // protocol. On the other hand, moving a message from one folder to
         // another folder on the same IMAP server should work, because it can
-        // be implemeted efficiently. If an implementation is not able to
+        // be implemented efficiently. If an implementation is not able to
         // handle a given source URL, it should indicate this by issuing a
         // <type>InteractiveBadTransferURLException</type> interaction request.
         // Source and target folder may be the same when doing a move operation.
@@ -363,7 +363,7 @@ published service Content
             <B>transfer</B>
                 <type>TransferInfo</type> aTransferInfo
 
-        // This command obtains an exlusive write lock for the resource. The
+        // This command obtains an exclusive write lock for the resource. The
         // lock is active until command "unlock" is executed or the OOo
         // session that obtained the lock ends or until the lock is released by
         // a third party (e.g. a system administrator).
@@ -406,7 +406,7 @@ published service Content
         // interface <type>XContentCreator</type>.
         <type>XContent</type> >
             <B>createNewContent</B>
-                <type>ContentInfo<type> contentinfo
+                <type>ContentInfo<type> content info
 
         =======================================================================
         Properties:
@@ -445,7 +445,7 @@ published service Content
         long AutoUpdateInterval
 
         // contains the maximum number of network connections
-        // allowed for one (internet) protocol at a time. (e.g. The HTTP
+        // allowed for one (Internet) protocol at a time. (e.g. The HTTP
         // cache can be configured to use a maximum for the number of
         // connections used for browsing.)
         short ConnectionLimit
@@ -466,7 +466,7 @@ published service Content
         // contains the count of marked documents within a folder.
         long DocumentCountMarked
 
-        // contains a sequence of documemt header fields (i.e. header
+        // contains a sequence of document header fields (i.e. header
         // fields of a MIME-message, or the document info of an
         // office document ). For some standard header fields there
         // are predefined separate properties, like &quot;MessageTo&quot;.

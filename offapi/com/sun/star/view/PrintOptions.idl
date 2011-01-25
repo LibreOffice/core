@@ -78,8 +78,8 @@ published service PrintOptions
 
             <p>Default is the asynchronous print mode.</p>
 
-        @attention  Using of this property with TRUE as value is highly reommended.
-                Otherwhise following actions (as e.g. closing the corresponding model) can fail.
+        @attention  Using of this property with TRUE as value is highly recommended.
+                Otherwise following actions (as e.g. closing the corresponding model) can fail.
      */
     [optional, property] boolean Wait;
 

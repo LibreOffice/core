@@ -141,10 +141,10 @@ published service PackageStreamContent
         string Title
         </li>
         <li>
-        boolean Compressed ( allows you to explecitly state whether you want a
+        boolean Compressed ( allows you to explicitly state whether you want a
         stream to be compressed or not. The default value of this property
-        will be determined according to the value of the property 'MediaType'.
-        If it is empty or prefixed by "text/", the value of 'Compressed' is set
+        will be determined according to the value of the property "MediaType".
+        If it is empty or prefixed by "text/", the value of "Compressed" is set
         to true. Otherwise the value will be false. )
         </li>
         <li>

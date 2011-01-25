@@ -44,7 +44,7 @@ module com { module sun { module star { module ucb {
     is not supported.
 
     <p>For example, each <type>OpenCommandArgument</type> supplied as argument
-    of the command 'open' contains such a data sink.
+    of the command "open" contains such a data sink.
 
     @version    1.0
     @author     Kai Sommerfeld

@@ -64,7 +64,7 @@ service Binding
     /** allows external instances to observe the value represented by the binding
 
         <p>This interface is an optional part of the
-        <type scope="com::sun::star::form::binding">ValueBinding</type> servce, but loses
+        <type scope="com::sun::star::form::binding">ValueBinding</type> service, but loses
         its optionality here.</p>
     */
     interface com::sun::star::util::XModifyBroadcaster;

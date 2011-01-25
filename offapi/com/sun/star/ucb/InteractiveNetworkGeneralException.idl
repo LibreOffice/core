@@ -37,7 +37,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** A network error specifing a general failure.
+/** A network error specifying a general failure.
 */
 published exception InteractiveNetworkGeneralException: com::sun::star::ucb::InteractiveNetworkException
 {

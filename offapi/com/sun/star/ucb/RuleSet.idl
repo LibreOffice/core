@@ -47,7 +47,7 @@ module com { module sun { module star { module ucb {
 published struct RuleSet
 {
     //-------------------------------------------------------------------------
-    /** conatains a number of rules.
+    /** contains a number of rules.
     */
     sequence<com::sun::star::ucb::Rule> Rules;
 

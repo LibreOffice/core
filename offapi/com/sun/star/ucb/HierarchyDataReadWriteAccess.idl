@@ -57,7 +57,7 @@ published service HierarchyDataReadWriteAccess
     //-------------------------------------------------------------------------
     /** allows adding and removing of hierarchy data nodes, replacing of
         the value of hierarchy data node members, as well as obtaining the
-        value of hieryrchy data node members.
+        value of hierarchy data node members.
 
         <p>Adding and removing must only be supported if the access object
         points to the "Children" data member of a node or to the root node.

@@ -121,7 +121,7 @@ published interface XFilePreview: com::sun::star::uno::XInterface
 
         @returns
         A value of <TRUE/> on success.
-        <p>A vaue of <FALSE/> if the operation fails for any reason or the preview
+        <p>A value of <FALSE/> if the operation fails for any reason or the preview
         implementation doesn't support hiding the preview.</p>
     */
     boolean setShowState( [in] boolean bShowState );

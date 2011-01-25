@@ -48,8 +48,8 @@ module com { module sun { module star { module ucb {
 /*published*/ interface XInteractionSupplyAuthentication2 : XInteractionSupplyAuthentication
 {
     //-------------------------------------------------------------------------
-    /** Specifies if 'system credentials' can be obtained and used by the issuer
-        of the authentiction request.
+    /** Specifies if "system credentials" can be obtained and used by the issuer
+        of the authentication request.
 
         @param Default
         Returns the default behavior for system credentials handling (to be
@@ -62,7 +62,7 @@ module com { module sun { module star { module ucb {
     boolean canUseSystemCredentials( [out] boolean Default );
 
     //-------------------------------------------------------------------------
-    /** Set a new 'use system credentials' value to hand back.
+    /** Set a new "use system credentials" value to hand back.
 
         @param UseSystemCredentials
         <true/> means the request issuer shall obtain and use system credentials.

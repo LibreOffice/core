@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-//i20156 - new file for xmlsecurity module
+//i20156 - new file for XML security module
 
 /** -- idl definition -- **/
 
@@ -53,7 +53,7 @@ interface XReferenceCollector : com::sun::star::uno::XInterface
         raises( com::sun::star::uno::Exception );
 
     /**
-     * Set the keeper id of the element colllector of the
+     * Set the keeper id of the element collector of the
      * referenced element.
      *
      * @param id   the keeper id of the element collector,

@@ -80,7 +80,7 @@ published service RenderOptions
 
     /** specifies if empty pages should be skipped.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has
+        <p>Tells the PDF export to skip empty pages. This flag also has
         to be passed to the ::render function, in order to calculate to
         correct page numbers during the export of hyperlinks, notes, and
         outlines.
@@ -93,7 +93,7 @@ published service RenderOptions
 
     /** specifies the page ranges to be rendered.
 
-        <p>Tells the pdf export to skip empty pages. This flag also has
+        <p>Tells the PDF export to skip empty pages. This flag also has
         to be passed to the ::render function, in order to calculate to
         correct page numbers during the export of hyperlinks, notes,
         and outlines.

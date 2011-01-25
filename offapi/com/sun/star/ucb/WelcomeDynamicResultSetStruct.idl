@@ -48,12 +48,12 @@ module com { module sun { module star { module ucb {
 published struct WelcomeDynamicResultSetStruct
 {
     //-------------------------------------------------------------------------
-    /** The static resultset containing the previous version of resultset data.
+    /** The static result set containing the previous version of result set data.
     */
     com::sun::star::sdbc::XResultSet    Old;
 
     //-------------------------------------------------------------------------
-    /** The static resultset containing the new version of resultset data.
+    /** The static result set containing the new version of result set data.
     */
     com::sun::star::sdbc::XResultSet    New;
 };

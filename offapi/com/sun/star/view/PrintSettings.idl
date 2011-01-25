@@ -36,7 +36,7 @@ module com {  module sun {  module star {  module view {
 
 /** provides access to the settings for printing documents.
 
-    <p>These settings are printer independet but affect the rendering of
+    <p>These settings are printer independent but affect the rendering of
     the document.
  */
 published service PrintSettings

@@ -50,7 +50,7 @@ published enum LockType
 //  READ,
 //
 //  //-------------------------------------------------------------------------
-//  /** readwrite lock.
+//  /** read-write lock.
 //  */
 //  READWRITE
 

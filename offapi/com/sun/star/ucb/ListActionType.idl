@@ -35,7 +35,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** These values are used to specify the type of change happened to a list.
 
-    <p>A change happened is sended from an <type>XDynamicResultSet</type>
+    <p>A change happened is sent from an <type>XDynamicResultSet</type>
     as <type>ListAction</type> to a <type>XDynamicResultSetListener</type>.
 
     <p>The values are contained in <member>ListAction::ListActionType</member>.
@@ -46,7 +46,7 @@ published constants ListActionType
     //-------------------------------------------------------------------------
     /** First notification to a single listener for purpose of initialization.
 
-    <p>This type of notification is required to be sended first and only once
+    <p>This type of notification is required to be sent first and only once
     to a new listener.
 
     <p>The member <member>ListAction::ActionInfo</member> is required to
@@ -76,7 +76,7 @@ published constants ListActionType
     <p> <member>ListAction::ActionInfo</member> could contain something but
     this is not required. For example, it could contain the properties of
     the new rows (i.e. for remote optimizing), but this is not required
-    nor unrestrictly recommended.
+    nor unrestrictedly recommended.
 
     <p>@todo ... further description of allowed contents for
     <member>ListAction::ActionInfo</member> is needed
@@ -101,7 +101,7 @@ published constants ListActionType
     //-------------------------------------------------------------------------
     /** The whole list was destroyed and independently rebuild.
 
-    <p>If 'CLEARED' is sended you don't need to refer to the old ResultSet.
+    <p>If "CLEARED" is sent you don't need to refer to the old ResultSet.
 
     <p>The members <member>ListAction::ListActionType</member>,
     <member>ListAction::Count</member> and <member>ListAction::Position</member>
@@ -117,9 +117,9 @@ published constants ListActionType
     moved rows. If the count is greater than one, the moved rows have to be
     one after the other.
 
-    <p><member>ListAction::ListActionType</member> is required to contain a 'long',
+    <p><member>ListAction::ListActionType</member> is required to contain a "long",
     which gives the shift of position.
-    (i.e. When two rows at position 3 and 4 are moved for a shift '+1',
+    (i.e. When two rows at position 3 and 4 are moved for a shift "+1",
     they will appear at the positions 4 and 5. In this action is included, that
     the row on old position 5 now appears on position 3.
     No other notification is needed, to explain or complete this action).
@@ -138,7 +138,7 @@ published constants ListActionType
 
     <p> <member>ListAction::ActionInfo</member> could contain something but
     this is not required. For example, it could contain the new properties
-    (i.e. for remote optimizing), but this is not required nor unrestrictly
+    (i.e. for remote optimizing), but this is not required nor unrestrictedly
     recommended.
 
     <p>@todo ... further description of allowed contents for
@@ -167,15 +167,15 @@ published constants ListActionType
 
     //-------------------------------------------------------------------------
     /*??????????????????????????? we probably will need this
-    After a completely notified Iteration send 'COMPLETED'.
+    After a completely notified Iteration send "COMPLETED".
 
     <p>This notification is required to be send, to indicate, that now the full
     result is reached.
 
     <p>E.g. while a new given list is sorted, some intermediate states are
     notified. After the last portion of sorting is done and notified you have
-    to send 'COMPLETED'. So a listener has the possibility to wait for
-    'COMPLETED' e.g. to print the full result. )
+    to send "COMPLETED". So a listener has the possibility to wait for
+    "COMPLETED" e.g. to print the full result. )
 
     <p>The members <member>ListAction::ListActionType</member>,
     <member>ListAction::Count</member> and <member>ListAction::Position</member>

@@ -86,7 +86,7 @@ published interface XFilePickerListener: com::sun::star::lang::XEventListener
         A help string which the FilePicker dialog should use to display
         a help for a specific control. If the returned string is empty it is
         undefined how the FilePicker implementation will behave.
-        It may show a message 'no help available' or may show no
+        It may show a message "no help available" or may show no
         help at all.
 
         @see com::sun::star::ui::dialogs::FilePickerEvent

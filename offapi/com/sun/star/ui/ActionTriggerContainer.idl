@@ -88,7 +88,7 @@ published service ActionTriggerContainer
     */
     [optional] interface ::com::sun::star::container::XEnumerationAccess;
 
-    /** allows foreign components to register themself as listener for the container
+    /** allows foreign components to register themselves as listener for the container
         structure.
     */
     [optional] interface ::com::sun::star::container::XContainer;

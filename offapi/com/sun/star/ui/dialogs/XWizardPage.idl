@@ -59,7 +59,7 @@ interface XWizardPage : ::com::sun::star::lang::XComponent
         depends on the current state of the page.</p>
 
         @param Reason
-            is one of the <type>WizardTravelType</type> contants denoting the reason why the page should be
+            is one of the <type>WizardTravelType</type> constants denoting the reason why the page should be
             committed.
     */
     boolean commitPage( [in] short Reason );

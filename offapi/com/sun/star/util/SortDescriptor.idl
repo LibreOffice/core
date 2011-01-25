@@ -60,7 +60,7 @@ published service SortDescriptor
      //-------------------------------------------------------------------------
     /** specifies the sorting order.
 
-            The sorting order may be defined for sepearte keys in specific
+            The sorting order may be defined for separate keys in specific
             implementations. For those this property may not need to be set.
 
             @see <type scope"com::sun::star::text">TextSortDescriptor</type>
@@ -94,7 +94,7 @@ published service SortDescriptor
      //-------------------------------------------------------------------------
     /** specifies the algorithm for the compare operator (collator).
 
-            The collator algorithm may be defined for sepearte keys in specific
+            The collator algorithm may be defined for separate keys in specific
             implementations. For those this property may not need to be set.
 
             @see <type scope"com::sun::star::text">TextSortDescriptor</type>

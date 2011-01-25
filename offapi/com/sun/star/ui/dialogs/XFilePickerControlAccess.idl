@@ -88,7 +88,7 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
     is a checkbox the returned value is a boolean that is <TRUE/>
     if the checkbox is checked <FALSE/> otherwise.
     If the specified element doesn't exist or the specified element
-    doesn't support the specidfied control action an empty any will be
+    doesn't support the specified control action an empty any will be
     returned.
 
     @see com::sun::star::ui::dialogs::CommonFilePickerElementIds

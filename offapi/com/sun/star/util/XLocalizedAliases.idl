@@ -67,7 +67,7 @@ published interface XLocalizedAliases: com::sun::star::uno::XInterface
                      [in]string alias)
         raises (com::sun::star::container::NoSuchElementException);
     //-------------------------------------------------------------------------
-    /** retrieves a registered porgrammatic name identified by an alias.
+    /** retrieves a registered programmatic name identified by an alias.
      */
     string lookupAlias([in]com::sun::star::lang::Locale locale,
                          [in]string Alias)

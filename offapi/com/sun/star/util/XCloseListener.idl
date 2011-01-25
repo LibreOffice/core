@@ -91,7 +91,7 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         <p>
         If this listener doesn't disagree with th close request it depends from his internal
         implementation if he deregister himself at the listened object.
-        But normaly this must be done in <member>XCloseListener::notifyClosing()</member>.
+        But normally this must be done in <member>XCloseListener::notifyClosing()</member>.
         </p>
 
         @param Source
@@ -113,11 +113,11 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
             raises( CloseVetoException );
 
     //-------------------------------------------------------------------------
-    /** is called when the listened object is closed realy
+    /** is called when the listened object is closed really
 
         <p>
-        Now the listened object is closed realy. Listener has to accept that;
-        should deregister himself and relaese all references to it.
+        Now the listened object is closed really. Listener has to accept that;
+        should deregister himself and release all references to it.
         It's not allowed nor possible to disagree with that by throwing any exception.
         </p>
 

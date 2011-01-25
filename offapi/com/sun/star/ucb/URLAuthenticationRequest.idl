@@ -37,7 +37,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** An error specifing lack of correct authentication data (e.g., to log into
+/** An error specifying lack of correct authentication data (e.g., to log into
     an account).
 
     @since OOo 3.2

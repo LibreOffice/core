@@ -79,7 +79,7 @@ published interface XAtomServer : com::sun::star::uno::XInterface
             the descriptions for all atoms of class <code>atomClass</code>
     */
     sequence< AtomDescription > getClass( [in] long atomClass );
-    /** returns mutltiple atom classes
+    /** returns multiple atom classes
 
         @param atomClasses
             which classes to return

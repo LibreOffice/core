@@ -56,10 +56,10 @@ published constants FetchError
     //-------------------------------------------------------------------------
     /** indicates that during fetching we got an exception.
 
-        <p>The row, that causes the exceptione, and all following ( 'following'
-        in readorder! ) rows are not contained in the <type>FetchResult</type>.
+        <p>The row, that causes the exception, and all following ( "following"
+        in read order! ) rows are not contained in the <type>FetchResult</type>.
         Therefore the <type>FetchResult</type> does not contain the full count
-        of demanded rows. But all properly readed rows so far must be contained.
+        of demanded rows. But all properly read rows so far must be contained.
     */
     const short EXCEPTION = 2;
 };

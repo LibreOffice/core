@@ -107,7 +107,7 @@ published struct ListAction
     long ListActionType;
 
     //-------------------------------------------------------------------------
-    /** dependend on the content of <member>ListAction::ListActionType</member>
+    /** depending on the content of <member>ListAction::ListActionType</member>
         the <member>ListAction::ActionInfo</member> could contain additional
         information about the changes happened (see table above).
     */

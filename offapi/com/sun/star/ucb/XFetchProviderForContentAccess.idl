@@ -55,7 +55,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains a string.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows
@@ -79,7 +79,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains an <type>XContentIdentifier</type>.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows
@@ -102,7 +102,7 @@ published interface XFetchProviderForContentAccess: com::sun::star::uno::XInterf
         of these anys contains an <type>XContent</type>.
 
         @param nRowStartPosition
-        the starting row of the resultset
+        the starting row of the result set
 
         @param nRowCount
         the count of rows
