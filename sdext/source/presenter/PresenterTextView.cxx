@@ -916,11 +916,9 @@ void PresenterTextParagraph::AddWord (
     const PresenterTheme::SharedFontDescriptor& rpFont)
 {
     sal_Int32 nLineStart (0);
-    sal_Int32 nLineEnd (0);
     if ( ! maLines.empty())
     {
         nLineStart = rCurrentLine.startPos;
-        nLineEnd = rCurrentLine.endPos;
     }
 
     const ::rtl::OUString sLineCandidate (
