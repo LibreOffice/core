@@ -54,7 +54,7 @@ namespace {
 const long CURSOR_WIDTH     = 3;
 
 /** Number of tracking events before auto scrolling starts. */
-const long TRACKING_DELAY   = 20;
+const size_t TRACKING_DELAY = 20;
 
 } // namespace
 
@@ -178,7 +178,6 @@ void ScPivotFieldWindow::ReadPivotFields( const ScPivotFieldVector& rPivotFields
 {
     maFields.clear();
     maFields.reserve( rPivotFields.size() );
-    bool bDataWindow = meFieldType == PIVOTFIELDTYPE_DATA;
     for( ScPivotFieldVector::const_iterator aIt = rPivotFields.begin(), aEnd = rPivotFields.end(); aIt != aEnd; ++aIt )
     {
         ScPivotWindowField aField( *mpDialog, *aIt, meFieldType == PIVOTFIELDTYPE_DATA );
