@@ -81,7 +81,7 @@ void    LtcUtBenValueStream::GetAmountLeft(ULONG * pAmtLeft)
 ULONG   LtcUtBenValueStream::GetData( void* pData, ULONG nSize )
 {
     //unsigned long AmtLeft;
-    ULONG AmtRead;
+    unsigned long AmtRead;
     //GetAmountLeft(&AmtLeft);
 
     //unsigned long AmtShouldRead = UtMin(nSize, AmtLeft);

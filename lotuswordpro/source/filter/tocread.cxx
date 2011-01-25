@@ -132,7 +132,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
 {
     BenError Err;
 
-    unsigned long Length;
+    ULONG Length;
     if ((Err = cpContainer->GetSize(&Length)) != BenErr_OK)
         return Err;
 
