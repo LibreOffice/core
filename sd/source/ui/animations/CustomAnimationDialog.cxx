@@ -2044,7 +2044,7 @@ CustomAnimationDurationTabPage::CustomAnimationDurationTabPage(Window* pParent, 
             String aDescription( getShapeDescription( xShape, true ) );
             USHORT nPos = mpLBTrigger->InsertEntry( aDescription );
 
-            mpLBTrigger->SetEntryData( nPos, (void*)nShape );
+            mpLBTrigger->SetEntryData( nPos, (void*)(sal_IntPtr)nShape );
             if( xShape == xTrigger )
                 mpLBTrigger->SelectEntryPos( nPos );
         }
