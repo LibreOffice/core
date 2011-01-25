@@ -69,7 +69,7 @@ ModalDialog DLG_WORDCOUNT
     FixedText       FT_CURRENTCHARACTEREXCLUDINGSPACES
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text [ en-US ] = "Characters excluding spaces:";
     };
     FixedText       FI_CURRENTCHARACTEREXCLUDINGSPACES
@@ -111,7 +111,7 @@ ModalDialog DLG_WORDCOUNT
     FixedText       FT_DOCCHARACTEREXCLUDINGSPACES
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
-        Size = MAP_APPFONT ( 80 , 8 ) ;
+        Size = MAP_APPFONT ( 98 , 8 ) ;
         Text [ en-US ] = "Characters excluding spaces:";
     };
     FixedText       FI_DOCCHARACTEREXCLUDINGSPACES
