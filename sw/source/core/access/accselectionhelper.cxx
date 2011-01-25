@@ -107,19 +107,14 @@ void SwAccessibleSelectionHelper::selectAccessibleChild(
 
     // we can only select fly frames, so we ignore (should: return
     // false) all other attempts at child selection
-    sal_Bool bRet = sal_False;
     SwFEShell* pFEShell = GetFEShell();
     if( pFEShell != NULL )
     {
         const SdrObject *pObj = aChild.GetDrawObject();
         if( pObj )
-        {
-            bRet = rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
-        }
+            rContext.Select( const_cast< SdrObject *>( pObj ), 0==aChild.GetSwFrm());
     }
     // no frame shell, or no frame, or no fly frame -> can't select
-
-    // return bRet;
 }
 
 sal_Bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
