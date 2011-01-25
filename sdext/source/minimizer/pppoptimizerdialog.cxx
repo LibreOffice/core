@@ -139,12 +139,10 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
     {
         if ( rURL.Path.compareToAscii( "execute" ) == 0 )
         {
-            sal_Bool bDialogExecuted = sal_False;
-
             try
             {
                 mpOptimizerDialog = new OptimizerDialog( mxMSF, mxFrame, this );
-                bDialogExecuted = mpOptimizerDialog->execute();
+                mpOptimizerDialog->execute();
 
                 const Any* pVal( mpOptimizerDialog->maStats.GetStatusValue( TK_FileSizeSource ) );
                 if ( pVal )
