@@ -64,7 +64,7 @@
 published service TextFrame
 {
     /** contains the definition of interfaces and properties that are supported by text frames,
-     graphic objects and embeddedobjects.
+     graphic objects and embedded objects.
      */
     service BaseFrame;
 
@@ -158,7 +158,7 @@ published service TextFrame
         in the page header then the document page, the page header is on, determines
         the page area.
         An exception of this interpretation rule is applied, if the anchor resides
-        in a table cell. In this situation the page area is always detemined by
+        in a table cell. In this situation the page area is always determined by
         the table cell.</p>
      */
     [optional, property] boolean IsFollowingTextFlow;

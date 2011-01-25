@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module sdbc {
 
 
-/** indicates in which direction a resultset should fetch next, just for
+/** indicates in which direction a result set should fetch next, just for
      optimization.
  */
 published constants FetchDirection

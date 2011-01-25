@@ -199,7 +199,7 @@ published service SheetCell
         <p>The property
         <member scope="com::sun::star::util">SearchDescriptor::SearchWords</member>
         has a different meaning in spreadsheets: If set to <TRUE/>, the
-        spreadsheet searches for cells containing the serch text only.</p>
+        spreadsheet searches for cells containing the search text only.</p>
      */
     interface com::sun::star::util::XReplaceable;
 
@@ -327,7 +327,7 @@ published service SheetCell
 
     //-------------------------------------------------------------------------
 
-    /** Returns the absolute adress of the range as string, e.g. "$Sheet1.$B$2".
+    /** Returns the absolute address of the range as string, e.g. "$Sheet1.$B$2".
      */
     [optional, readonly, property] string AbsoluteName;
 };

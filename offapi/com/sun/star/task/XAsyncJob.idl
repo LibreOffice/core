@@ -52,7 +52,7 @@ module com {  module sun {  module star {  module task {
     <p>
     Instead of <type>XJob</type> the implementation of this interface
     must be aware, that execution can be made real asynchronous (e.g. by using
-    threads). Because the environment whish to have creation and using of threads
+    threads). Because the environment wish to have creation and using of threads
     under control, it's not allowed for a real job implementation to use such mechanism
     by itself. The outside code decide, if it's possible and how it can be made
     asynchronous. In some special cases it can be, that asynchronous jobs will be executed

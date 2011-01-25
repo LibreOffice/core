@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a single field in a data pilot table.
 
     <p>If the data pilot table is based on a spreadsheet cell range, a field
-    is representred by a column of the range and is named using the topmost
+    is represented by a column of the range and is named using the topmost
     cell of the column.</p>
  */
 published service DataPilotField

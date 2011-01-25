@@ -34,7 +34,7 @@
  module com {  module sun {  module star {  module sdb {
 
 
-/** is an exception fired whenever a rowset operation was cancelled because of
+/** is an exception fired whenever a row set operation was cancelled because of
     of a veto of an approved listener.
     @see com::sun::star::sdb::XRowSetApproveListener
  */

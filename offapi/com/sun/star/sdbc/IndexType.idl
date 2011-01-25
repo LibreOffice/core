@@ -43,7 +43,7 @@ published constants IndexType
             <member scope="com::sun::star::sdbc">XDatabaseMetaData::getIndexInfo()</member>
             .
             <P>
-            Indentifies table statistics that are returned in conjunction
+            Identifies table statistics that are returned in conjunction
             with a table's index description.
             </P>
      */

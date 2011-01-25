@@ -51,7 +51,7 @@ published service ColumnSettings
         <p>
         If the value is
         <void/>
-        , a default numberformat should be used according to the datatype of the column.
+        , a default number format should be used according to the datatype of the column.
         </p>
 
     */
@@ -102,7 +102,7 @@ published service ColumnSettings
     [property] boolean Hidden;
 
 
-    /** indicates a control model whichs defines the settings for layouting.
+    /** indicates a control model which defines the settings for layouting.
         The default is
         <NULL/>
         .

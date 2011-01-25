@@ -116,7 +116,7 @@ published service AccessibleEndnoteView
                         >AccessibleStateType::VISIBLE</const>
                 </ul>
             <li>Depending of the application's region setting, the locale is
-                the western, asian or complex default language of the document.
+                the western, Asian or complex default language of the document.
         </ul>
 
      */

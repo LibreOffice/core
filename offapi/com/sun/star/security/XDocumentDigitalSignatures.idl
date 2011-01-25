@@ -44,7 +44,7 @@ module com { module sun { module star { module security {
 /** interface for signing and verifying digital signatures in office documents
 
     <p>
-    This interface can be used to digitaly sign different content in a office document.
+    This interface can be used to digitally sign different content in a office document.
     It can also be used to verify digital signatures.
     </p>
  */
@@ -103,7 +103,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
      */
     string getScriptingContentSignatureDefaultStreamName();
 
-    /** signs the full Package, which means everything in the storage excecpt the content of META-INF
+    /** signs the full Package, which means everything in the storage except the content of META-INF
      */
     boolean signPackage( [in] ::com::sun::star::embed::XStorage Storage,
                          [in] ::com::sun::star::io::XStream xSignStream);
@@ -131,7 +131,7 @@ interface XDocumentDigitalSignatures : com::sun::star::uno::XInterface
     void showCertificate( [in] com::sun::star::security::XCertificate Certificate );
 
 
-       /** manages trusted sources (Authors and pathes )
+       /** manages trusted sources (Authors and paths )
      */
 
     void    manageTrustedSources();

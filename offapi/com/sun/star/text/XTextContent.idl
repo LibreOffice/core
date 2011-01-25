@@ -69,7 +69,7 @@ published interface XTextContent: com::sun::star::lang::XComponent
         </p>
         <p>Both text objects and text content objects may only be connected
         to each other if they are created by the same component. When
-        implementing new components, this behaviour is deprecated.</p>
+        implementing new components, this behavior is deprecated.</p>
      */
     void attach( [in] com::sun::star::text::XTextRange xTextRange )
             raises( com::sun::star::lang::IllegalArgumentException );

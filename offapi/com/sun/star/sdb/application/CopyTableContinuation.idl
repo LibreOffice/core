@@ -54,7 +54,7 @@ constants CopyTableContinuation
 
     /** asks the user how the handle the error.
 
-        <p>The user can choose between ignoring the error and cancelling the copy
+        <p>The user can choose between ignoring the error and canceling the copy
         operation.</p>
     */
     const short AskUser         = 3;

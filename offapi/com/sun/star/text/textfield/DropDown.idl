@@ -54,7 +54,7 @@ published service DropDown
 
     /**
        The selected item. If no item is selected this property
-       contains an emtpy string. If this property is set to a value
+       contains an empty string. If this property is set to a value
        not present in the items of the dropdown field it is
        invalidated, i.e. it is set to an empty string.
     */

@@ -273,7 +273,7 @@ published service MailMerge
     //=============================================================================
 
     /** Contains the password of the incoming mail server. It is necessary to set this
-        if the mail server configuration is set to 'SMTP after POP' authentication and
+        if the mail server configuration is set to "SMTP after POP" authentication and
         the password is not already stored in the configuration for security reasons.
 
         <p>This property is only evaluated for e-Mail output.</p>
@@ -304,7 +304,7 @@ published service MailMerge
     //=============================================================================
 
     /** determines that the created mail merge document is sent as body in HTML format.
-        This property is only valid if the propery "SendAsAttachment" is set to <false/>.
+        This property is only valid if the property "SendAsAttachment" is set to <false/>.
 
         <p>This property is only evaluated for e-Mail output.</p>
 

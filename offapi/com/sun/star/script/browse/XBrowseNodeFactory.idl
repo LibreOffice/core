@@ -44,7 +44,7 @@ module com { module sun { module star { module script { module browse {
 
 //===========================================================================
 /**
-    This interface provides a factory for obtaining objects implmenting the
+    This interface provides a factory for obtaining objects implementing the
     XBrowseNode interface.
 */
 interface XBrowseNodeFactory : ::com::sun::star::uno::XInterface {

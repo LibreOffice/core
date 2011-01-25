@@ -47,7 +47,7 @@ module com {  module sun {  module star {  module sheet {
 /** represents a collection of fields in a data pilot table.
 
     <p>If the data pilot table is based on a spreadsheet cell range, the
-    fields are representred by the columns of the range and are named using
+    fields are represented by the columns of the range and are named using
     the first row of the range.</p>
 
     @see com::sun::star::sheet::DataPilotField

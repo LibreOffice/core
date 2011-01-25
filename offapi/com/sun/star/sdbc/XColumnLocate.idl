@@ -56,7 +56,7 @@
 published interface XColumnLocate: com::sun::star::uno::XInterface
 {
 
-    /** maps the given Resultset column name to its ResultSet column index.
+    /** maps the given ResultSet column name to its ResultSet column index.
         @param columnName
             the name of the column
         @returns

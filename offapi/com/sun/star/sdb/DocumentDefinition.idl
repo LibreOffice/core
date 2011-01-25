@@ -68,7 +68,7 @@ service DocumentDefinition
             <li><strong>close</strong>: closes the sub document, if it had previously been opened
                 using either the <code>open</code> or <code>openDesign</code> command. The return value
                 of the <code>execute</code> command is a <code>boolean</code> value indicating whether
-                the sub document could be closed. Reasons for not closing the document include vetos by
+                the sub document could be closed. Reasons for not closing the document include vetoes by
                 third parties, for instance, because the user opened a dialog modal to the sub document,
                 or a long-running task such as printing is currently running.</li>
             <li><strong>show</strong>: shows the sub document. This is useful if you previously opened the

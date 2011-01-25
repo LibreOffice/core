@@ -97,7 +97,7 @@ published service ViewSettings
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: property com::sun::star::text::ViewSettings::ShowHiddenParagraphs
-    /** If this property is <TRUE/>, hidden paragraghs are displayed.
+    /** If this property is <TRUE/>, hidden paragraphs are displayed.
      */
     [property] boolean ShowHiddenParagraphs;
 
@@ -329,7 +329,7 @@ published service ViewSettings
      */
     [optional, property] boolean ShowHiddenCharacters;
     //-------------------------------------------------------------------------
-    /** If this proeperty is <TRUE/>, the settings of nonprinting characters are applied.
+    /** If this property is <TRUE/>, the settings of non-printing characters are applied.
 
         <p>This option controls the use of the settings ShowHiddenCharacters,
         ShowTabstops, ShowSpaces, ShowBreaks and ShowParaBreaks </p>

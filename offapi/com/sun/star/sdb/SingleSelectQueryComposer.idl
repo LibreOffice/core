@@ -59,7 +59,7 @@ service SingleSelectQueryComposer
 
     interface XSingleSelectQueryComposer;
 
-    /** is the orignal SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
+    /** is the original SQL statement set with the interface <type scope="com::sun::star::sdb">XSingleSelectQueryAnalyzer</type>.
     */
     [readonly, property] string Original;
 };

@@ -140,7 +140,7 @@ service OfficeDatabaseDocument
                     <td align="center">yes</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveDone</em></td>
-                    <td>saving the document succeeeded.</td>
+                    <td>saving the document succeeded.</td>
                     <td align="center">no</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveFailed</em></td>
@@ -152,7 +152,7 @@ service OfficeDatabaseDocument
                     <td align="center">yes</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveAsDone</em></td>
-                    <td>saving the document under a new name succeeeded.</td>
+                    <td>saving the document under a new name succeeded.</td>
                     <td align="center">no</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveAsFailed</em></td>
@@ -165,7 +165,7 @@ service OfficeDatabaseDocument
                     <td align="center">yes</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveToDone</em></td>
-                    <td>saving the document to a different location succeeeded.</td>
+                    <td>saving the document to a different location succeeded.</td>
                     <td align="center">no</td>
                 </tr>
                 <tr><td valign="top"><em>OnSaveToFailed</em></td>

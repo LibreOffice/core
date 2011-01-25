@@ -152,7 +152,7 @@ published service ErrorMessageDialog
             </li>
             <li><b>SQLException</b><br/>
                 <type scope="com::sun::star::sdbc">SQLException</type>
-                describing the error which is beeing displayed.<br/>
+                describing the error which is being displayed.<br/>
                 When initializing this value, you may use any derivative of
                 <type scope="com::sun::star::sdbc">SQLException</type>
                 .

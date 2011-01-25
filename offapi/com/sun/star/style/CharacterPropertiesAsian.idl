@@ -40,7 +40,7 @@
  module com {  module sun {  module star {  module style {
 
 //=============================================================================
-/** This is a set of properties to describe the style of characters in asian texts.
+/** This is a set of properties to describe the style of characters in Asian texts.
  */
 published service CharacterPropertiesAsian
 {

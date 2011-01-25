@@ -89,7 +89,7 @@ published service ContentLoader
 
         The parameters passed to the
         <member scope="com::sun::star::frame">XFrameLoader::load()</member>
-        are forwarded to the object beeing created,
+        are forwarded to the object being created,
         in particular to it's
         <type scope="com::sun::star::lang">XInitialization</type>
         interface.

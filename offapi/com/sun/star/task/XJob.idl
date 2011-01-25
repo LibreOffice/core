@@ -49,7 +49,7 @@ module com {  module sun {  module star {  module task {
 
     <p>
     Instead of <type>XAsyncJob</type> the implementation of this interface
-    will be executed synchronously everytimes. That means: they can be shure that the
+    will be executed synchronously everytime. That means: they can be sure that the
     current stack context will be blocked till this job finish it's work.
     </p>
 
@@ -82,8 +82,8 @@ published interface XJob : com::sun::star::uno::XInterface
             was corrupt so the service couldn't work correctly
 
         @throws com::sun::star::uno::Exception
-            to notify the excutor about faild operation; otherwise the return value
-            indicates a successfull finishing.
+            to notify the executor about failed operation; otherwise the return value
+            indicates a successful finishing.
     */
     any execute(
         [in] sequence< com::sun::star::beans::NamedValue > Arguments )

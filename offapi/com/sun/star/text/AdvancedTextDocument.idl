@@ -147,7 +147,7 @@ published service AdvancedTextDocument
 
 
 
-        <p> I.e., slash and backslash. Whitespaces (tab stop,
+        <p> I.e., slash and backslash. Whitespace (tab stop,
         space, paragraph break, or line break) always separate
         words.</p>@see WordCount
      */

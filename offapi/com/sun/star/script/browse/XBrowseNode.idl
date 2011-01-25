@@ -39,7 +39,7 @@ module com { module sun { module star { module script { module browse {
     available scripts.
     Objects implementing this interface are expected to also implement
     com.sun.star.beans.XPropertySet and, optionally,
-    com.sun.star.script.XInvocation (see the Developers' Guide for
+    com.sun.star.script.XInvocation (see the Developer's Guide for
     more details).
 */
 interface XBrowseNode : ::com::sun::star::uno::XInterface
@@ -73,7 +73,7 @@ interface XBrowseNode : ::com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------
     /** the type of the node.
-        @returns A <atom>short</atom> reresenting the type of this node.
+        @returns A <atom>short</atom> representing the type of this node.
     */
     short getType();
 

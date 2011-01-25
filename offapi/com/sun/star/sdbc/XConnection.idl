@@ -137,7 +137,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         </p>
 
         @param sql
-            a SQL statement that may contain one or more '?' IN parameter placeholders
+            a SQL statement that may contain one or more "?" IN parameter placeholders
         @returns
             a new PreparedStatement object containing the pre-compiled statement
         @throws SQLException
@@ -174,7 +174,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         </p>
 
         @param sql
-            a SQL statement that may contain one or more '?' IN parameter placeholders
+            a SQL statement that may contain one or more "?" IN parameter placeholders
         @returns
             a new PreparedStatement object containing the pre-compiled statement
         @throws SQLException
@@ -189,7 +189,7 @@ published interface XConnection: com::sun::star::sdbc::XCloseable
         native form of the statement that the driver would have sent.
 
         @param sql
-            a SQL statement that may contain one or more '?' parameter placeholders
+            a SQL statement that may contain one or more "?" parameter placeholders
         @returns
             the native form of this statement
         @throws SQLException

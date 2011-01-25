@@ -82,7 +82,7 @@ published enum ValidationType
 
     //-------------------------------------------------------------------------
 
-    /** The specified formula detemines which contents are valid.
+    /** The specified formula determines which contents are valid.
      */
     CUSTOM
 

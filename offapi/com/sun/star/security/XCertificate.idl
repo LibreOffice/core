@@ -111,7 +111,7 @@ interface XCertificate : com::sun::star::uno::XInterface
     [attribute, readonly] string SignatureAlgorithm;
 
     /**
-     * the SHA1 thumbprint
+     * the SHA-1 thumbprint
      */
     [attribute, readonly] sequence< byte > SHA1Thumbprint;
 

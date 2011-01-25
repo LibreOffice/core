@@ -80,8 +80,8 @@ interface XFlatParagraph: com::sun::star::text::XTextMarkup
     boolean isModified();
 
     //-------------------------------------------------------------------------
-    /** change the 'checked' flag of the respective text node, i.e., mark the
-        text node as 'processed'
+    /** change the "checked" flag of the respective text node, i.e., mark the
+        text node as "processed"
 
         @param nType
                 type, see <type>TextMarkupType</type>.

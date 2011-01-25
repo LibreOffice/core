@@ -50,7 +50,7 @@ published service VolatileResult
 {
     // ------------------------------------------------------------------------
 
-    /** porovides handling with a volatile function result.
+    /** provides handling with a volatile function result.
      */
     interface com::sun::star::sheet::XVolatileResult;
 

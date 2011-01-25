@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-/** defines a list of flags (bitmaps) which determines the accessrights of a
+/** defines a list of flags (bitmaps) which determines the access rights of a
      user or a user group. This list may grow in the future.
  */
 published constants Privilege

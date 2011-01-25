@@ -61,7 +61,7 @@
     <p>
     On the one hand, a RowSet can be used as a short cut to retrieve the data of a DataSource.
     You don't have to establish a connection, create a Statement, and then create
-    a ResultSet. On the other hand, a rowset can be used to implement capabilties for
+    a ResultSet. On the other hand, a row set can be used to implement capabilities for
     a result set, which are not supported by a driver result set, like caching
     strategies or update capabilities.
     </p>
@@ -80,7 +80,7 @@ published service RowSet
     // used to set parameters.
     interface XParameters;
 
-    /** allows locating columns which's name is known only.
+    /** allows locating columns whose name is known only.
     */
     interface XColumnLocate;
 

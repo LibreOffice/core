@@ -87,18 +87,18 @@ published interface XSimpleMailMessage: com::sun::star::uno::XInterface
     sequence< string > getCcRecipient( );
 
     //-------------------------------------------------------------------------
-    /** To set the bcc recipient of a simple mail message.
+    /** To set the BCC recipient of a simple mail message.
         @param aBccRecipient
-        A sequence with the email addresses of one or more bcc recipients. An empty
-        sequence means there are no bcc recipients.</p>
+        A sequence with the email addresses of one or more BCC recipients. An empty
+        sequence means there are no BCC recipients.</p>
     */
     void setBccRecipient( [in] sequence< string > aBccRecipient );
 
     //-------------------------------------------------------------------------
-    /** To get the bcc recipients of a simple mail message.
+    /** To get the BCC recipients of a simple mail message.
         @returns
-        A sequence with the email addresses of one or more bcc recipients.
-        <p>If no bcc recipients have been specified an empty sequence will be returned.</p>
+        A sequence with the email addresses of one or more BCC recipients.
+        <p>If no BCC recipients have been specified an empty sequence will be returned.</p>
     */
     sequence< string > getBccRecipient( );
 

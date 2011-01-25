@@ -98,13 +98,13 @@ published constants NumberingType
 
     //-------------------------------------------------------------------------
     /** A transliteration module will be used to produce numbers in
-        chinese, japanese, etc.
+        Chinese, Japanese, etc.
      */
 
     const short TRANSLITERATION = 11;
 
     //-------------------------------------------------------------------------
-    /** The nativenumbersupplier service will be called to produce numbers in
+    /** The NativeNumberSupplier service will be called to produce numbers in
         native languages.
      */
     const short NATIVE_NUMBERING = 12;
@@ -179,7 +179,7 @@ published constants NumberingType
     const short NUMBER_UPPER_KO = 25;
 
     //-------------------------------------------------------------------------
-    /** Numbering for Korean hangul number
+    /** Numbering for Korean Hangul number
         as "일,이,삼..."
      */
     const short NUMBER_HANGUL_KO = 26;

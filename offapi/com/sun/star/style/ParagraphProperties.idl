@@ -220,7 +220,7 @@ published service ParagraphProperties
 
     //-------------------------------------------------------------------------
 
-    /** specifies the positions and kinds of thei tab stops within this
+    /** specifies the positions and kinds of the tab stops within this
                 paragraph.
      */
     [optional, property] sequence<com::sun::star::style::TabStop> ParaTabStops;
@@ -365,7 +365,7 @@ published service ParagraphProperties
         [property, optional] long BottomBorderDistance;
 
     //-------------------------------------------------------------------------
-        /** determins the type of break that is applied at the beginning of the table.
+        /** determines the type of break that is applied at the beginning of the table.
             @see com.sun.star.style.BreakType
          */
         [optional, property] com::sun::star::style::BreakType BreakType;

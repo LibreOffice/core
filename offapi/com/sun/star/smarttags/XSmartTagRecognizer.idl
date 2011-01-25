@@ -145,7 +145,7 @@ interface XSmartTagRecognizer: com::sun::star::lang::XInitialization
 
         @param aText
                 The text that should be scanned by the recognizer. aText
-                is UFT16 encoded.
+                is UTF-16 encoded.
 
         @param nStart
                 Denotes the start position of the region to scan.

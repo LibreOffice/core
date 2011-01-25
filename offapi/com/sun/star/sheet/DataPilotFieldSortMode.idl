@@ -64,7 +64,7 @@ constants DataPilotFieldSortMode
 
     //-------------------------------------------------------------------------
 
-    /** the field ist sorted by the data in the given field
+    /** the field is sorted by the data in the given field
 
     @see com::sun::star::sheet::DataPilotFieldSortInfo
 

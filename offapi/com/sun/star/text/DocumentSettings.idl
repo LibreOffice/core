@@ -68,7 +68,7 @@ published service DocumentSettings
 
     /** specifies if charts in text documents are updated automatically.
 
-        This has no effect if 'FieldAutoUpdate' is <FALSE/>.
+        This has no effect if "FieldAutoUpdate" is <FALSE/>.
     */
     [optional, property] boolean ChartAutoUpdate;
 
@@ -78,7 +78,7 @@ published service DocumentSettings
         <p>If between two paragraphs, two tables, or a paragraph and a
         table, you have defined spacing above and below each object,
         usually only the larger one of the two spaces is used.  If the
-        spacing between hte objects are to be added this property has
+        spacing between the objects are to be added this property has
         to be <TRUE/>.</p>
     */
     [optional, property] boolean AddParaTableSpacing;

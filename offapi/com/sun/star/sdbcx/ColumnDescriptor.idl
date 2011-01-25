@@ -95,7 +95,7 @@ published service ColumnDescriptor
      */
     [optional, property] string DefaultValue;
 
-    /** specifies how to create an autoincrement column.
+    /** specifies how to create an auto-increment column.
      */
     [optional, property] string AutoIncrementCreation;
 };

@@ -208,7 +208,7 @@ published interface XSQLInput: com::sun::star::uno::XInterface
     com::sun::star::io::XInputStream readBinaryStream() raises (SQLException);
     //-------------------------------------------------------------------------
 
-    /** reads the next attribute in the stream as a unicode string.
+    /** reads the next attribute in the stream as a Unicode string.
         @returns
             the attribute; if the value is SQL NULL, return null.
         @throws SQLException

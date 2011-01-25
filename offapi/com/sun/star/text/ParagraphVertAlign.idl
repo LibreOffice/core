@@ -34,7 +34,7 @@
 
 //=============================================================================
 
-/** These enumeration values are used to specify the vertical alignment of paragaphs.
+/** These enumeration values are used to specify the vertical alignment of paragraphs.
  */
 published constants ParagraphVertAlign
 {

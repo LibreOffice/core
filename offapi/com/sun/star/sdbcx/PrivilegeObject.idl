@@ -30,7 +30,7 @@
  module com {  module sun {  module star {  module sdbcx {
 
 
-/** defines the list of objects for which a user may have accessrights or not.
+/** defines the list of objects for which a user may have access rights or not.
         This list may grow in the future.
  */
 published constants PrivilegeObject

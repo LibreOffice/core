@@ -51,10 +51,10 @@ constants SQLFilterOperator
     /// greater than
     const long GREATER          = 4;
 
-    /// less or eqal than
+    /// less or equal than
     const long LESS_EQUAL       = 5;
 
-    /// greater or eqal than
+    /// greater or equal than
     const long GREATER_EQUAL    = 6;
 
     /// like

@@ -39,7 +39,7 @@
 //=============================================================================
 
 // DocMerge from xml: interface com::sun::star::task::XInteractionDisapprove
-/** An interaction continuation specifing 'disapproval'.
+/** An interaction continuation specifying "disapproval".
  */
 published interface XInteractionDisapprove: com::sun::star::task::XInteractionContinuation
 {

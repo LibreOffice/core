@@ -81,7 +81,7 @@ published constants DataPilotFieldGroupBy
         <p>Examples:
         <ul>
         <li>Calendar day grouping: The group <em>Jan 03</em> will contain all
-        members that contain the january 3rd, regardless of the year or time
+        members that contain the January 3rd, regardless of the year or time
         of the member, e.g. <em>2002-Jan-03 00:00:00</em> or
         <em>1999-Jan-03 02:12:45</em>.</li>
 
@@ -100,7 +100,7 @@ published constants DataPilotFieldGroupBy
         by their month.
 
         <p>Example: The group <em>Jan</em> will contain all members with a
-        date in the month january, regardless of the year, day, or time of the
+        date in the month January, regardless of the year, day, or time of the
         member, e.g. <em>2002-Jan-03 00:00:00</em> or
         <em>1999-Jan-02 02:12:45</em>.</p>
      */
@@ -111,8 +111,8 @@ published constants DataPilotFieldGroupBy
         by their quarter.
 
         <p>Example: The group <em>Q1</em> will contain all members with a
-        date in the first quarter of a year (i.e. the months january,
-        february, and march), regardless of the year, day, or time of the
+        date in the first quarter of a year (i.e. the months January,
+        February, and march), regardless of the year, day, or time of the
         member, e.g. <em>2002-Jan-03 00:00:00</em> or
         <em>1999-Mar-02 02:12:45</em>.</p>
      */
