@@ -533,8 +533,8 @@ LRESULT CALLBACK CWinFileOpenImpl::SubClassFunc(
 
     case WM_NCDESTROY:
         // restore the old window proc
-        SetWindowLong(hWnd, GWL_WNDPROC,
-            reinterpret_cast<LONG>(pImpl->m_pfnOldDlgProc));
+        SetWindowLongPtr(hWnd, GWLP_WNDPROC,
+            reinterpret_cast<LONG_PTR>(pImpl->m_pfnOldDlgProc));
 
         lResult = CallWindowProc(
             reinterpret_cast<WNDPROC>(pImpl->m_pfnOldDlgProc),
@@ -885,8 +885,8 @@ void SAL_CALL CWinFileOpenImpl::onInitDialog(HWND hwndDlg)
     // subclass the dialog window
     m_pfnOldDlgProc =
         reinterpret_cast<WNDPROC>(
-            SetWindowLong( hwndDlg, GWL_WNDPROC,
-            reinterpret_cast<LONG>(SubClassFunc)));
+            SetWindowLongPtr( hwndDlg, GWLP_WNDPROC,
+            reinterpret_cast<LONG_PTR>(SubClassFunc)));
 }
 
 //-----------------------------------------------------------------------------------------

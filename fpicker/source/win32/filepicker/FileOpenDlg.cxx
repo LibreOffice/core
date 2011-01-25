@@ -560,8 +560,8 @@ void SAL_CALL CFileOpenDialog::handleInitDialog(HWND hwndDlg, HWND hwndChild)
 //
 //------------------------------------------------------------------------
 
-unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
-    HWND hChildDlg, unsigned int uiMsg, WPARAM wParam, LPARAM lParam)
+UINT_PTR CALLBACK CFileOpenDialog::ofnHookProc(
+    HWND hChildDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndDlg = GetParent(hChildDlg);
     CFileOpenDialog* pImpl = NULL;
@@ -577,10 +577,10 @@ unsigned int CALLBACK CFileOpenDialog::ofnHookProc(
             // subclass the base dialog for WM_NCDESTROY processing
             pImpl->m_pfnBaseDlgProc =
                 reinterpret_cast<WNDPROC>(
-                    SetWindowLong(
+                    SetWindowLongPtr(
                         hwndDlg,
-                        GWL_WNDPROC,
-                        reinterpret_cast<LONG>(CFileOpenDialog::BaseDlgProc)));
+                        GWLP_WNDPROC,
+                        reinterpret_cast<LONG_PTR>(CFileOpenDialog::BaseDlgProc)));
             // connect the instance handle to the window
             SetProp(hwndDlg, CURRENT_INSTANCE, pImpl);
             pImpl->handleInitDialog(hwndDlg, hChildDlg);
@@ -621,8 +621,8 @@ LRESULT CALLBACK CFileOpenDialog::BaseDlgProc(
         pImpl = reinterpret_cast<CFileOpenDialog*>(
             RemoveProp(hWnd,CURRENT_INSTANCE));
 
-        SetWindowLong(hWnd, GWL_WNDPROC,
-            reinterpret_cast<LONG>(pImpl->m_pfnBaseDlgProc));
+        SetWindowLongPtr(hWnd, GWLP_WNDPROC,
+            reinterpret_cast<LONG_PTR>(pImpl->m_pfnBaseDlgProc));
     }
     else
     {

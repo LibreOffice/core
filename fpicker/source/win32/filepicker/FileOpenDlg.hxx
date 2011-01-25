@@ -303,9 +303,9 @@ private:
     WNDPROC             m_pfnBaseDlgProc;
 
     // callback function
-    static unsigned int CALLBACK ofnHookProc(
+    static UINT_PTR CALLBACK ofnHookProc(
         HWND hChildDlg, // handle to child dialog box
-        unsigned int uiMsg,     // message identifier
+        UINT uiMsg,     // message identifier
         WPARAM wParam,  // message parameter
         LPARAM lParam   // message parameter
     );
