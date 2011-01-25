@@ -331,7 +331,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     if (requestedSize.Height < pageBasedSize.Height)
         requestedSize.Height = pageBasedSize.Height + hc;
 
-    Size windowSize = GetWindow()->GetSizePixel();
     Window *parent = GetWindow()->GetParent();
     Size parentSize = parent->GetSizePixel();
 
@@ -344,9 +343,6 @@ void SAL_CALL VCLXTabControl::allocateArea (awt::Rectangle const &area)
     OSL_TRACE ("%s: minimum: %d, %d", __FUNCTION__, minimumSize.Width, minimumSize.Height );
     OSL_TRACE ("%s: requestedSize: %d, %d", __FUNCTION__, requestedSize.Width, requestedSize.Height );
     OSL_TRACE ("%s: pageBasedSize: %d, %d", __FUNCTION__, pageBasedSize.Width, pageBasedSize.Height );
-
-    //OSL_TRACE ("%s: parent: %d, %d", __FUNCTION__, parentSize.Width(), parentSize.Height() );
-    //OSL_TRACE ("%s: window: %d, %d", __FUNCTION__, windowSize.Width(), windowSize.Height() );
 #endif
 
     //bRealized = false;
