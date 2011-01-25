@@ -40,28 +40,26 @@
 class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
 private:
-    BitmapEx        maBmp;
-    BitmapEx        maBmpHC;
     ::sal_Int16     mnScaleMode;
 
 public:
                     ImageControl( Window* pParent, WinBits nStyle = 0 );
+                    ImageControl( Window* pParent, const ResId& rResId );
 
     // set/get the scale mode. This is one of the css.awt.ImageScaleMode constants
     void            SetScaleMode( const ::sal_Int16 _nMode );
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
     virtual void    Resize();
-    virtual void    UserDraw( const UserDrawEvent& rUDEvt );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    GetFocus();
     virtual void    LoseFocus();
 
-    void            SetBitmap( const BitmapEx& rBmp );
-    using OutputDevice::GetBitmap;
-    const BitmapEx& GetBitmap() const { return maBmp; }
-    BOOL            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const BitmapEx& GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+protected:
+    void    ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const;
+private:
+    using FixedImage::ImplDraw;
 };
 
 #endif  // _SV_IMGCTRL_HXX

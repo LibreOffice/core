@@ -66,6 +66,7 @@ public:
     const String&       GetHelpText() const { return maHelpText; }
     void                SetHelpText( const String& rHelpText );
     USHORT              GetWinStyle() const { return mnHelpWinStyle; }
+    USHORT              GetStyle() const { return mnStyle; }
 
     // Nur merken:
     void                SetStatusText( const String& rStatusText ) { maStatusText = rStatusText; }
