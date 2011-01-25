@@ -2354,25 +2354,6 @@ void Sc10Import::LoadObjects()
   if (rStream.IsEof()) return;
   if (ID == ObjectID)
   {
-#ifdef SC10_SHOW_OBJECTS
-    // Achtung nur zu Debugzwecken
-    //-----------------------------------
-    pDoc->InsertTab(SC_TAB_APPEND, "GraphObjects");
-    SCCOL nCol = 0;
-    SCROW nRow = 0;
-    SCTAB nTab = 0;
-    pDoc->GetTable("GraphObjects", nTab);
-    pDoc->SetString(nCol++, nRow, nTab, "ObjectTyp");
-    pDoc->SetString(nCol++, nRow, nTab, "Col");
-    pDoc->SetString(nCol++, nRow, nTab, "Row");
-    pDoc->SetString(nCol++, nRow, nTab, "Tab");
-    pDoc->SetString(nCol++, nRow, nTab, "X");
-    pDoc->SetString(nCol++, nRow, nTab, "Y");
-    pDoc->SetString(nCol++, nRow, nTab, "W");
-    pDoc->SetString(nCol++, nRow, nTab, "H");
-    //-----------------------------------
-#endif
-
     USHORT nAnz;
     rStream >> nAnz;
     sal_Char Reserved[32];
@@ -2404,36 +2385,6 @@ void Sc10Import::LoadObjects()
         nStartY = (long) ( nStartY * HMM_PER_TWIPS );
         nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
         long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
-
-#ifdef SC10_SHOW_OBJECTS
-         // Achtung nur zu Debugzwecken
-         //-----------------------------------
-         nCol = 0;
-         nRow++;
-         switch (ObjectType)
-         {
-          case otOle :
-           pDoc->SetString(nCol++, nRow, nTab, "Ole-Object");
-           break;
-          case otImage :
-           pDoc->SetString(nCol++, nRow, nTab, "Image-Object");
-           break;
-          case otChart :
-           pDoc->SetString(nCol++, nRow, nTab, "Chart-Object");
-           break;
-          default :
-           pDoc->SetString(nCol++, nRow, nTab, "ERROR");
-           break;
-         }
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretX);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretY);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.CarretZ);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.x);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.y);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.w);
-         pDoc->SetValue(nCol++, nRow, nTab, GraphHeader.h);
-         //-----------------------------------
-#endif
 
         switch (ObjectType)
         {
