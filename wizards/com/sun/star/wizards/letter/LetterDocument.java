@@ -172,7 +172,7 @@ public class LetterDocument extends TextDocument
             myFieldHandler.changeUserFieldContent("Street", (String) Helper.getUnoObjectbyName(oUserDataAccess, "street"));
             myFieldHandler.changeUserFieldContent("PostCode", (String) Helper.getUnoObjectbyName(oUserDataAccess, "postalcode"));
             myFieldHandler.changeUserFieldContent("City", (String) Helper.getUnoObjectbyName(oUserDataAccess, "l"));
-            myFieldHandler.changeUserFieldContent("State", (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
+            myFieldHandler.changeUserFieldContent(PropertyNames.PROPERTY_STATE, (String) Helper.getUnoObjectbyName(oUserDataAccess, "st"));
         }
         catch (Exception exception)
         {
@@ -304,8 +304,8 @@ public class LetterDocument extends TextDocument
         {
             Helper.setUnoPropertyValue(xFrame, "HoriOrient", new Short(HoriOrientation.NONE));
             Helper.setUnoPropertyValue(xFrame, "VertOrient", new Short(VertOrientation.NONE));
-            Helper.setUnoPropertyValue(xFrame, "Height", new Integer(iHeight));
-            Helper.setUnoPropertyValue(xFrame, "Width", new Integer(iWidth));
+            Helper.setUnoPropertyValue(xFrame, PropertyNames.PROPERTY_HEIGHT, new Integer(iHeight));
+            Helper.setUnoPropertyValue(xFrame, PropertyNames.PROPERTY_WIDTH, new Integer(iWidth));
             Helper.setUnoPropertyValue(xFrame, "HoriOrientPosition", new Integer(iXPos));
             Helper.setUnoPropertyValue(xFrame, "VertOrientPosition", new Integer(iYPos));
             Helper.setUnoPropertyValue(xFrame, "HoriOrientRelation", new Short(RelOrientation.PAGE_FRAME));

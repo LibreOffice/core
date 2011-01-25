@@ -50,6 +50,7 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.DocumentPreview;
@@ -241,7 +242,7 @@ public abstract class WWD_Startup extends WWD_General
 
         String soTemplateDir = FileAccess.getOfficePath(xmsf, "Template", "share", "/wizard");
 
-        String exclamationURL = FileAccess.connectURLs(soTemplateDir, "wizard/bitmap/caution_16.png");
+        String exclamationURL = FileAccess.connectURLs(soTemplateDir, "../wizard/bitmap/caution_16.png");
         this.drawNaviBar();
         this.buildStep1();
         this.buildStep2();
@@ -727,7 +728,7 @@ public abstract class WWD_Startup extends WWD_General
         task.advance(true);
 
         sessionNameDA.setDataObject(session, true);
-        Helper.setUnoPropertyValue(getModel(chkSaveSettings), "State", new Short((short) 1));
+        Helper.setUnoPropertyValue(getModel(chkSaveSettings), PropertyNames.PROPERTY_STATE, new Short((short) 1));
         docListDA.updateUI();
 
         task.advance(true);
@@ -914,7 +915,7 @@ public abstract class WWD_Startup extends WWD_General
         {
             bg = FileAccess.getPathFilename(getFileAccess().getPath(bg, null));
         }
-        Helper.setUnoPropertyValue(getModel(txtBackground), "Label", bg);
+        Helper.setUnoPropertyValue(getModel(txtBackground), PropertyNames.PROPERTY_LABEL, bg);
     }
 
     void updateIconsetText()
@@ -938,7 +939,7 @@ public abstract class WWD_Startup extends WWD_General
             }
         }
 
-        Helper.setUnoPropertyValue(getModel(txtIconset), "Label", iconsetName);
+        Helper.setUnoPropertyValue(getModel(txtIconset), PropertyNames.PROPERTY_LABEL, iconsetName);
     }
 
     /**

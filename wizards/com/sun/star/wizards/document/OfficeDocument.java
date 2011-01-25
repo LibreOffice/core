@@ -48,6 +48,7 @@ import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.table.XCellRange;
+import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
@@ -288,7 +289,7 @@ public class OfficeDocument
         return oDocument;
     }
 
-    public static boolean store(XMultiServiceFactory xMSF, XComponent xComponent, String StorePath, String FilterName, boolean bStoreToUrl, String sMsgSavingImpossible)
+    public static boolean store(XMultiServiceFactory xMSF, XComponent xComponent, String StorePath, String FilterName, boolean bStoreToUrl)
     {
         try
         {
@@ -296,10 +297,13 @@ public class OfficeDocument
             PropertyValue[] oStoreProperties;
             if (FilterName.length() > 0)
             {
-                oStoreProperties = new PropertyValue[1];
+                oStoreProperties = new PropertyValue[2];
                 oStoreProperties[0] = new PropertyValue();
                 oStoreProperties[0].Name = "FilterName";
                 oStoreProperties[0].Value = FilterName;
+                oStoreProperties[1] = new PropertyValue();
+                oStoreProperties[1].Name = "InteractionHandler";
+                oStoreProperties[1].Value = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xMSF.createInstance("com.sun.star.comp.uui.UUIInteractionHandler"));
             }
             else
             {
@@ -319,8 +323,6 @@ public class OfficeDocument
         {
 
             exception.printStackTrace(System.out);
-            //TODO make sure that the peer of the dialog is used when available
-            showMessageBox(xMSF, "ErrorBox", VclWindowPeerAttribute.OK, sMsgSavingImpossible);
             return false;
         }
     }

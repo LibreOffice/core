@@ -33,7 +33,7 @@
 #include <vcl/group.hxx>
 #endif
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>

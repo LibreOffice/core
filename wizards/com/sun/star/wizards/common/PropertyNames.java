@@ -24,46 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SVX_SPLITCELLDLG_HXX
-#define _SVX_SPLITCELLDLG_HXX
+package com.sun.star.wizards.common;
 
-#include <vcl/fixed.hxx>
-#include <vcl/field.hxx>
-#include <vcl/button.hxx>
-#include <vcl/button.hxx>
-
-#include <svx/stddlg.hxx>
-#include <svx/svxdlg.hxx>
-
-class SvxSplitTableDlg : public SvxAbstractSplittTableDialog, public SvxStandardDialog
+/**
+ *
+ * @author Ocke Janssen
+ */
+public class PropertyNames
 {
-    FixedText           maCountLbl;
-    NumericField        maCountEdit;
-    FixedLine           maCountFL;
-    ImageRadioButton    maHorzBox;
-    ImageRadioButton    maVertBox;
-    CheckBox            maPropCB;
-    FixedLine           maDirFL;
-    OKButton            maOKBtn;
-    CancelButton        maCancelBtn;
-    HelpButton          maHelpBtn;
 
-    long                mnMaxVertical;
-    long                mnMaxHorizontal;
-protected:
-    virtual void Apply();
-
-public:
-    SvxSplitTableDlg(Window *pParent, bool bIsTableVertical, long nMaxVertical, long nMaxHorizontal );
-    virtual ~SvxSplitTableDlg();
-
-    DECL_LINK( ClickHdl, Button * );
-
-    virtual bool IsHorizontal() const;
-    virtual bool IsProportional() const;
-    virtual long GetCount() const;
-
-    virtual short Execute();
-};
-
-#endif
+    public static String PROPERTY_ENABLED = "Enabled";
+    public static String PROPERTY_HEIGHT = "Height";
+    public static String PROPERTY_HELPURL = "HelpURL";
+    public static String PROPERTY_POSITION_X = "PositionX";
+    public static String PROPERTY_POSITION_Y = "PositionY";
+    public static String PROPERTY_LABEL = "Label";
+    public static String PROPERTY_MULTILINE = "MultiLine";
+    public static String PROPERTY_NAME = "Name";
+    public static String PROPERTY_STEP = "Step";
+    public static String PROPERTY_WIDTH = "Width";
+    public static String PROPERTY_TABINDEX = "TabIndex";
+    public static String PROPERTY_STATE = "State";
+    public static String PROPERTY_IMAGEURL = "ImageURL";
+}

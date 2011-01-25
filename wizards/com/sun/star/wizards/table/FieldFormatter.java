@@ -38,6 +38,7 @@ import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.db.TableDescriptor;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -79,7 +80,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.insertLabel("lblFieldNames",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -91,7 +92,7 @@ public class FieldFormatter implements XItemListener
             xlstFieldNames = CurUnoDialog.insertListBox("lstfieldnames", 3, null, this,
                     new String[]
                     {
-                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -109,7 +110,7 @@ public class FieldFormatter implements XItemListener
         btnShiftUp = CurUnoDialog.insertButton("btnShiftUp", "shiftFieldNameUp", this,
                 new String[]
                 {
-                    "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -119,7 +120,7 @@ public class FieldFormatter implements XItemListener
         btnShiftDown = CurUnoDialog.insertButton("btnShiftDown", "shiftFieldNameDown", this,
                 new String[]
                 {
-                    "Enabled", "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -131,7 +132,7 @@ public class FieldFormatter implements XItemListener
         btnminus = CurUnoDialog.insertButton("btnminus", "removeFieldName", this,
                 new String[]
                 {
-                    "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -141,7 +142,7 @@ public class FieldFormatter implements XItemListener
         btnplus = CurUnoDialog.insertButton("btnplus", "addFieldName", this,
                 new String[]
                 {
-                    "FontDescriptor", "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -151,7 +152,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "ColDescriptorHeader",
                 new String[]
                 {
-                    "Height", "Label", "Orientation", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -162,7 +163,7 @@ public class FieldFormatter implements XItemListener
         CurUnoDialog.insertLabel("lblFieldName",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -172,7 +173,7 @@ public class FieldFormatter implements XItemListener
         txtfieldname = CurUnoDialog.insertTextField("txtfieldname", MODIFYFIELDNAME, this,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -190,8 +191,8 @@ public class FieldFormatter implements XItemListener
             oColumnDescriptorModel = CurUnoDialog.insertControlModel("com.sun.star.sdb.ColumnDescriptorControlModel", "oColumnDescriptor",
                     new String[]
                     {
-                        "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width", "EditWidth"
-                    }, // "HelpURL"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH, "EditWidth"
+                    }, // PropertyNames.PROPERTY_HELPURL
                     new Object[]
                     {
                         new Integer(85), new Integer(158), new Integer(49), IFieldFormatStep, new Short(curtabindex++), new Integer(166), new Integer(50)
@@ -202,10 +203,10 @@ public class FieldFormatter implements XItemListener
         }
         else
         {
-            int nStep = ((Integer) Helper.getUnoPropertyValue(oColumnDescriptorModel, "Step")).intValue();
+            int nStep = ((Integer) Helper.getUnoPropertyValue(oColumnDescriptorModel, PropertyNames.PROPERTY_STEP)).intValue();
             if (nStep > IFieldFormatStep.intValue())
             {
-                Helper.setUnoPropertyValue(oColumnDescriptorModel, "Step", IFieldFormatStep);
+                Helper.setUnoPropertyValue(oColumnDescriptorModel, PropertyNames.PROPERTY_STEP, IFieldFormatStep);
                 CurUnoDialog.repaintDialogStep();
             }
         }
@@ -232,9 +233,9 @@ public class FieldFormatter implements XItemListener
             benableShiftUpButton = (iselpos != 0);
             benableShiftDownButton = (iselpos != ilistcount - 1);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), "Enabled", new Boolean(benableShiftUpButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), "Enabled", new Boolean(benableShiftDownButton));
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(blistispopulated));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftUp), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftUpButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnShiftDown), PropertyNames.PROPERTY_ENABLED, new Boolean(benableShiftDownButton));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(blistispopulated));
         CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, blistispopulated);
     }
 
@@ -297,10 +298,10 @@ public class FieldFormatter implements XItemListener
         else
         {
             Helper.setUnoPropertyValue(UnoDialog.getModel(txtfieldname), "Text", "");
-            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
+            Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
             CurUnoDialog.setcompleted(TableWizard.SOFIELDSFORMATPAGE, benable);
         }
-        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), "Enabled", new Boolean(benable));
+        Helper.setUnoPropertyValue(UnoDialog.getModel(btnminus), PropertyNames.PROPERTY_ENABLED, new Boolean(benable));
         CurUnoDialog.setControlVisible("oColumnDescriptor", benable);
         CurUnoDialog.repaintDialogStep();
     }
@@ -314,7 +315,7 @@ public class FieldFormatter implements XItemListener
             if (curTableDescriptor.modifyColumnName(oldfieldname, newfieldname))
             {
                 Object oColumn = Helper.getUnoPropertyValue(oColumnDescriptorModel, "Column");
-                Helper.setUnoPropertyValue(oColumn, "Name", newfieldname);
+                Helper.setUnoPropertyValue(oColumn, PropertyNames.PROPERTY_NAME, newfieldname);
                 FieldDescription curfielddescription = (FieldDescription) CurUnoDialog.fielditems.get(oldfieldname);
                 CurUnoDialog.fielditems.remove(oldfieldname);
                 curfielddescription.setName(newfieldname);
