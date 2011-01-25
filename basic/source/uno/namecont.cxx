@@ -981,7 +981,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
         {
             INetURLObject aPrevUserBasicInetObj = aPrevUserBasicInetObj_1;
             String aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
-            bool bSecondTime = false;
             if( mxSFI->isFolder( aPrevFolder ) )
             {
                 // #110101 Check if Standard folder exists and is complete
@@ -1027,7 +1026,6 @@ sal_Bool SfxLibraryContainer::init_Impl(
             }
             else
             {
-                bSecondTime = true;
                 aPrevUserBasicInetObj = aPrevUserBasicInetObj_2;
                 aPrevFolder = aPrevUserBasicInetObj.GetMainURL( INetURLObject::NO_DECODE );
             }
