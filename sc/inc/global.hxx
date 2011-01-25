@@ -43,8 +43,8 @@ class Bitmap;
 class SfxItemSet;
 class Color;
 
-// Macro fuer den Call-Profiler unter WinNT
-// mit S_CAP kann eine Messung gestarted, mit E_CAP wieder gestoppt werden
+// Macro for call profiler (WinNT)
+// S_CAP starts a measurement, E_CAP stops it
 #if defined( WNT ) && defined( PROFILE )
 
 extern "C" {
@@ -67,9 +67,9 @@ extern "C" {
 
 //------------------------------------------------------------------------
 
-//  die 1000 Namen des Calc...
-//  Clipboard-Namen sind jetzt in so3/soapp.hxx
-//  STRING_SCAPP war "scalc3", "scalc4", jetzt nur noch "scalc"
+//  Calc has lots of names...
+//  Clipboard names are in so3/soapp.hxx now
+//  STRING_SCAPP was "scalc3", "scalc4", now just "scalc"
 
 #define STRING_SCAPP    "scalc"
 #define STRING_SCSTREAM "StarCalcDocument"
@@ -78,7 +78,7 @@ extern "C" {
 
 // characters -----------------------------------------------------------------
 
-//  '\r' geht auf'm Mac nicht...
+//  '\r' does not work on a Mac...
 #define CHAR_CR     char(13)
 
 const sal_Unicode CHAR_NBSP     = 0x00A0;
@@ -110,8 +110,8 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #endif
 
 #define SC_START_INDEX_DB_COLL 50000
-                                        // Oberhalb dieser Grenze liegen
-                                        // die Indizes fuer DBBereiche
+                                        // Above this threshold are indices
+                                        // for data base areas
 
 #define PIXEL_PER_INCH      96.0
 
@@ -130,8 +130,8 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define HMM_PER_TWIPS       (CM_PER_TWIPS * 1000.0)
 
 #define STD_COL_WIDTH       1285
-#define STD_EXTRA_WIDTH     113     // 2mm Extra fuer optimale Breite
-                                    // Standard Zeilenhoehe: Text + Rand - STD_ROWHEIGHT_DIFF
+#define STD_EXTRA_WIDTH     113     // 2mm extra for optimal width
+                                    // standard row height: text + margin - STD_ROWHEIGHT_DIFF
 
 
 #define MAX_EXTRA_WIDTH     23811   // 42cm in TWIPS
@@ -140,19 +140,19 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define MAX_COL_HEIGHT      56693
 
 #define STD_ROWHEIGHT_DIFF  23
-#define STD_FONT_HEIGHT     200     // entspricht 10 Punkt
+#define STD_FONT_HEIGHT     200     // equates 10 points
 
-//!     statt STD_ROW_HEIGHT ScGlobal::nStdRowHeight benutzen !
+//!     use ScGlobal::nStdRowHeight instead of STD_ROW_HEIGHT !
 
 #define STD_ROW_HEIGHT      (12.8 * TWIPS_PER_POINT)            // 256 Twips, 0.45 cm
 
-                                    // Standardgroesse als Ole-Server (Zellen)
+                                    // standard size as OLE server (cells)
 #define OLE_STD_CELLS_X     4
 #define OLE_STD_CELLS_Y     5
 
 #define SC_SIZE_OPTIMUM     0xFFFF
 
-                                    // Update-Flags
+                                    // update flags
 #define UF_SCROLL_LEFT      1
 #define UF_SCROLL_RIGHT     2
 #define UF_SCROLL_UP        4
@@ -160,7 +160,7 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define UF_ROW              16
 #define UF_VIEW             32
 
-                                    // Repaint-Flags (fuer Messages)
+                                    // repaint flags (for messages)
 #define PAINT_GRID          1
 #define PAINT_TOP           2
 #define PAINT_LEFT          4
@@ -172,9 +172,9 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
 
 
-                                    // Flags fuer Spalten / Zeilen
-                                    // FILTERED immer zusammen mit HIDDEN
-                                    // FILTERED und MANUALSIZE nur fuer Zeilen moeglich
+                                    // flags for columns / rows
+                                    // FILTERED always together with HIDDEN
+                                    // FILTERED and MANUALSIZE only valid for rows
 const BYTE   CR_HIDDEN      = 1;
 const BYTE   CR_MANUALBREAK = 8;
 const BYTE   CR_FILTERED    = 16;
@@ -186,7 +186,7 @@ const ScBreakType BREAK_NONE   = 0;
 const ScBreakType BREAK_PAGE   = 1;
 const ScBreakType BREAK_MANUAL = 2;
 
-// Insert-/Delete-Flags
+// insert/delete flags
 const USHORT IDF_NONE       = 0x0000;
 const USHORT IDF_VALUE      = 0x0001;   /// Numeric values (and numeric results if IDF_FORMULA is not set).
 const USHORT IDF_DATETIME   = 0x0002;   /// Dates, times, datetime values.
@@ -215,7 +215,7 @@ const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define PASTE_NONEMPTY      5
 
-                                        // Bits fuer HasAttr
+                                        // bits for HasAttr
 #define HASATTR_LINES           1
 #define HASATTR_MERGED          2
 #define HASATTR_OVERLAPPED      4
@@ -236,28 +236,28 @@ const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 
 #define EMPTY_STRING ScGlobal::GetEmptyString()
 
-                                        //  Layer-ID's fuer Drawing
+                                        //  layer id's for drawing
 #define SC_LAYER_FRONT      0
 #define SC_LAYER_BACK       1
 #define SC_LAYER_INTERN     2
 #define SC_LAYER_CONTROLS   3
 #define SC_LAYER_HIDDEN     4
 
-                                        //  Tabellen linken
+                                        //  link tables
 #define SC_LINK_NONE        0
 #define SC_LINK_NORMAL      1
 #define SC_LINK_VALUE       2
 
-                                        //  Eingabe
+                                        //  input
 #define SC_ENTER_NORMAL     0
 #define SC_ENTER_BLOCK      1
 #define SC_ENTER_MATRIX     2
 
-                                        //  Step = 10pt, max. Einzug = 100 Schritte
+                                        //  step = 10pt, max. indention = 100 steps
 #define SC_INDENT_STEP      200
 #define SC_MAX_INDENT       20000
 
-                                        //  Szenario-Flags
+                                        //  scenario flags
 #define SC_SCENARIO_COPYALL     1
 #define SC_SCENARIO_SHOWFRAME   2
 #define SC_SCENARIO_PRINTFRAME  4
@@ -271,7 +271,7 @@ const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
 #define DELETEZ(pPtr) { delete pPtr; pPtr = 0; }
 #endif
 
-                                    // Ist Bit in Set gesetzt?
+                                    // is bit set in set?
 #define IS_SET(bit,set)(((set)&(bit))==(bit))
 
 #define SEL_ALL         -1  // Eingabezeile: alles Selektieren
@@ -287,7 +287,7 @@ enum CellType
         CELLTYPE_FORMULA,
         CELLTYPE_NOTE,
         CELLTYPE_EDIT,
-        CELLTYPE_SYMBOLS        // fuer Laden/Speichern
+        CELLTYPE_SYMBOLS        // for load/save
 #if DBG_UTIL
            ,CELLTYPE_DESTROYED
 #endif
