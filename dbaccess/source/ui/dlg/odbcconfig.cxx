@@ -30,6 +30,16 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "odbcconfig.hxx"
+
+// Include odbc/sqltypes.h specifically and early to handle its nasty
+// re-definitions of BOOL and typedef of ULONG that clash horribly
+// with the solar.h stuff (which itself already clashes with <windows.h>).
+
+#define ULONG ODBC_ULONG
+#include <odbc/sqltypes.h>
+#undef ULONG
+#undef BOOL
+
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
