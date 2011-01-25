@@ -166,6 +166,21 @@ $(eval $(call gb_Library_add_exception_objects,swui,\
 ))
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,swui,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    advapi32 \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,swui,\
     advapi32 \
     kernel32 \
@@ -174,5 +189,6 @@ $(eval $(call gb_Library_add_linked_libs,swui,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet sw=4 ts=4:

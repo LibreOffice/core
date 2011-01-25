@@ -32,7 +32,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
+#include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
 #include <editeng/editstat.hxx>
@@ -641,8 +641,8 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellRef & GetTmpSelectionDoc();
-    SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock & GetTmpSelectionDoc();
+    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 
