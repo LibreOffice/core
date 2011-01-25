@@ -2647,11 +2647,11 @@ sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_In
         OSL_ENSURE(m_nFilePos >= 1,"SdbDBFCursor::FileFetchRow: ungueltige Record-Position");
         sal_Int32 nPos = m_aHeader.db_kopf + (sal_Int32)(m_nFilePos-1) * nEntryLen;
 
-        ULONG nLen = m_pFileStream->Seek(nPos);
+        m_pFileStream->Seek(nPos);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
 
-        nLen = m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
+        m_pFileStream->Read((char*)m_pBuffer, nEntryLen);
         if (m_pFileStream->GetError() != ERRCODE_NONE)
             goto Error;
     }
