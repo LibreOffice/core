@@ -245,7 +245,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(INCLUDE) \
         -c $(3) \
         -Fo$(1))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
 endef
 
 
@@ -284,7 +284,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         $(INCLUDE_STL) $(INCLUDE) \
         -c $(3) \
         -Fo$(1))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(DEFS),$(CFLAGS),$(INCLUDE))
 endef
 
 
