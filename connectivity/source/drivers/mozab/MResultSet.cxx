@@ -897,8 +897,8 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         OSQLParseNode *pOptEscape;
         const OSQLParseNode* pPart2 = parseTree->getChild(1);
         pColumn     = parseTree->getChild(0);                        // Match Item
-        pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
-        pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        pAtom       = pPart2->getChild(pPart2->count()-2);     // Match String
+        pOptEscape  = pPart2->getChild(pPart2->count()-1);     // Opt Escape Rule
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||
@@ -1374,7 +1374,7 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
                                    const Reference<XDatabaseMetaData>& _xMetaData,
                                    ::std::vector<sal_Int32>& _rColMapping)
 {
-    ::comphelper::UStringMixEqual aCase(_xMetaData->storesMixedCaseQuotedIdentifiers());
+    ::comphelper::UStringMixEqual aCase(_xMetaData->supportsMixedCaseQuotedIdentifiers());
 
     Reference<XPropertySet> xTableColumn;
     ::rtl::OUString sTableColumnName, sSelectColumnRealName;

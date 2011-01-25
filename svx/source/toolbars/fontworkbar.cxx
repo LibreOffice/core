@@ -32,7 +32,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/viewsh.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
 #include <svx/dialmgr.hxx>
@@ -48,11 +48,11 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/charscaleitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxids.hrc>
 #include <svx/fontworkbar.hxx>
-#include "fontworkgallery.hxx"
+#include "svx/fontworkgallery.hxx"
 
 using ::rtl::OUString;
 
@@ -349,7 +349,7 @@ static void impl_execute( SdrView*, SfxRequest& rReq, SdrCustomShapeGeometryItem
     }
 }
 
-#include "gallery.hxx"
+#include "svx/gallery.hxx"
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svl/itempool.hxx>

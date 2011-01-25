@@ -60,11 +60,11 @@ ModalDialog RID_DLG_UPDATE {
         Right = TRUE;
         NoLabel = TRUE;
     };
-    Control RID_DLG_UPDATE_THROBBER {
+    FixedImage RID_DLG_UPDATE_THROBBER {
         Pos = MAP_APPFONT(
             RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_FIXEDTEXT_HEIGHT,
             RSC_SP_DLG_INNERBORDER_TOP);
-        Size = MAP_APPFONT(RSC_CD_FIXEDTEXT_HEIGHT, RSC_CD_FIXEDTEXT_HEIGHT);
+        Size = MAP_APPFONT(RSC_CD_FIXEDTEXT_HEIGHT, RSC_CD_FIXEDTEXT_HEIGHT + 1);
     };
     FixedText RID_DLG_UPDATE_UPDATE {
         Disable = TRUE;
@@ -199,7 +199,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "~Install";
         DefButton = TRUE;
     };
-    CancelButton RID_DLG_UPDATE_CANCEL {
+    PushButton RID_DLG_UPDATE_CLOSE {
         Pos = MAP_APPFONT(
             RSC_SP_DLG_INNERBORDER_LEFT + LOCAL_WIDTH - RSC_CD_PUSHBUTTON_WIDTH,
             (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
@@ -208,6 +208,7 @@ ModalDialog RID_DLG_UPDATE {
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT2 + RSC_SP_FLGR_SPACE_Y +
              RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
+        Text[en-US] = "Close";
     };
 
     Image RID_DLG_UPDATE_NORMALALERT {
@@ -227,7 +228,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "No new updates are available.";
     };
     String RID_DLG_UPDATE_NOINSTALLABLE {
-        Text[en-US] = "No installable updates are available. To see all updates, mark the check box 'Show all updates'.";
+        Text[en-US] = "No installable updates are available. To see ignored or disabled updates, mark the check box 'Show all updates'.";
     };
     String RID_DLG_UPDATE_FAILURE {
         Text[en-US] = "An error occurred:";
@@ -236,7 +237,7 @@ ModalDialog RID_DLG_UPDATE {
         Text[en-US] = "Unknown error.";
     };
     String RID_DLG_UPDATE_NODESCRIPTION {
-        Text[en-US] = "No descriptions available for this extension.";
+        Text[en-US] = "No more details are available for this update.";
     };
     String RID_DLG_UPDATE_NOINSTALL {
         Text[en-US] = "The extension cannot be updated because:";
@@ -250,9 +251,20 @@ ModalDialog RID_DLG_UPDATE {
     String RID_DLG_UPDATE_BROWSERBASED {
         Text[en-US] = "browser based update";
     };
-
     String RID_DLG_UPDATE_VERSION {
         Text[en-US] = "Version";
+    };
+    String RID_DLG_UPDATE_IGNORE {
+        Text[en-US] = "Ignore this Update";
+    };
+    String RID_DLG_UPDATE_IGNORE_ALL {
+        Text[en-US] = "Ignore all Updates";
+    };
+    String RID_DLG_UPDATE_ENABLE {
+        Text[en-US] = "Enable Updates";
+    };
+    String RID_DLG_UPDATE_IGNORED_UPDATE {
+        Text[en-US] = "This update will be ignored.\n";
     };
 };
 

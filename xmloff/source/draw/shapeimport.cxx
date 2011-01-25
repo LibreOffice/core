@@ -41,7 +41,7 @@
 #include <xmloff/shapeimport.hxx>
 #endif
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "ximpstyl.hxx"
 #include "ximpshap.hxx"
@@ -182,12 +182,6 @@ XMLShapeImportHelper::XMLShapeImportHelper(
     // chain text attributes
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImporter));
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
-
-/*
-    // chain form attributes
-    const UniReference< SvXMLImportPropertyMapper> xFormMapper( rImporter.GetFormImport()->getStylePropertyMapper().getBodyPtr() );
-    mpPropertySetMapper->ChainImportMapper(xFormMapper);
-*/
 
     // construct PresPagePropsMapper
     xMapper = new XMLPropertySetMapper((XMLPropertyMapEntry*)aXMLSDPresPageProps, mpSdPropHdlFactory);

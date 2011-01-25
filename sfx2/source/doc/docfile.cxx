@@ -81,6 +81,7 @@
 #include <unotools/tempfile.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/componentcontext.hxx>
+#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <unotools/streamhelper.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -144,7 +145,7 @@ using namespace ::com::sun::star::io;
 #include <sfx2/docfac.hxx>       // GetFilterContainer
 #include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/appuno.hxx>
 
 //#include "xmlversion.hxx"
@@ -881,17 +882,21 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 }
 
 //------------------------------------------------------------------
-void SfxMedium::SetPasswordToStorage_Impl()
+void SfxMedium::SetEncryptionDataToStorage_Impl()
 {
     // in case media-descriptor contains password it should be used on opening
     if ( pImp->xStorage.is() && pSet )
     {
-        ::rtl::OUString aPasswd;
-        if ( GetPasswd_Impl( pSet, aPasswd ) )
+        uno::Sequence< beans::NamedValue > aEncryptionData;
+        if ( GetEncryptionData_Impl( pSet, aEncryptionData ) )
         {
+            // replace the password with encryption data
+            pSet->ClearItem( SID_PASSWORD );
+            pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+
             try
             {
-                ::comphelper::OStorageHelper::SetCommonStoragePassword( pImp->xStorage, aPasswd );
+                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImp->xStorage, aEncryptionData );
             }
             catch( uno::Exception& )
             {
@@ -1326,7 +1331,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     // TODO/LATER: Get versionlist on demand
     if ( pImp->xStorage.is() )
     {
-        SetPasswordToStorage_Impl();
+        SetEncryptionDataToStorage_Impl();
         GetVersionList();
     }
 
@@ -3779,19 +3784,17 @@ sal_Bool SfxMedium::CallApproveHandler( const uno::Reference< task::XInteraction
         {
             uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( bAllowAbort ? 2 : 1 );
 
-            ::rtl::Reference< ::framework::ContinuationApprove > pApprove( new ::framework::ContinuationApprove() );
+            ::rtl::Reference< ::comphelper::OInteractionApprove > pApprove( new ::comphelper::OInteractionApprove );
             aContinuations[ 0 ] = pApprove.get();
 
             if ( bAllowAbort )
             {
-                ::rtl::Reference< ::framework::ContinuationAbort > pAbort( new ::framework::ContinuationAbort() );
+                ::rtl::Reference< ::comphelper::OInteractionAbort > pAbort( new ::comphelper::OInteractionAbort );
                 aContinuations[ 1 ] = pAbort.get();
             }
 
-            uno::Reference< task::XInteractionRequest > xRequest( new ::framework::InteractionRequest( aRequest, aContinuations ) );
-            xHandler->handle( xRequest );
-
-            bResult = pApprove->isSelected();
+            xHandler->handle(::framework::InteractionRequest::CreateRequest (aRequest,aContinuations));
+            bResult = pApprove->wasSelected();
         }
         catch( const Exception& )
         {

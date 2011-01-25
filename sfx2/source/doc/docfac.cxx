@@ -47,13 +47,13 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "fltfnc.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/mnumgr.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include "syspath.hxx"
 #include <osl/file.hxx>

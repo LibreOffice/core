@@ -30,9 +30,8 @@
 
 #include <rtl/ustring.hxx>
 #include <svtools/roadmapwizard.hxx>
-#include <vcl/window.hxx>
+#include <vcl/throbber.hxx>
 #include <tools/resid.hxx>
-#include <com/sun/star/awt/XThrobber.hpp>
 
 namespace desktop
 {
@@ -76,7 +75,7 @@ private:
     sal_Bool m_bLicenseWasAccepted;
     sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > m_xThrobber;
+    Throbber  m_aThrobber;
 
     rtl::OUString m_aLicensePath;
 
