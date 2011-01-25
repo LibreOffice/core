@@ -1477,11 +1477,11 @@ void SortedIndividualInt32List::Insert( sal_Int32 nDay )
             return;
         else if( nDay > nRef )
         {
-            MyList::Insert( (void*) nDay, nIndex + 1 );
+            MyList::Insert( (void*)(sal_IntPtr)nDay, nIndex + 1 );
             return;
         }
     }
-    MyList::Insert( (void*) nDay, 0UL );
+    MyList::Insert( (void*)(sal_IntPtr)nDay, 0UL );
 }
 
 
