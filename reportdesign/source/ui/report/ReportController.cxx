@@ -163,7 +163,7 @@
 
 #include <ReportControllerObserver.hxx>
 
-#define MAX_ROWS_FOR_PREVIEW    50
+#define MAX_ROWS_FOR_PREVIEW    20
 
 using namespace ::com::sun::star;
 using namespace uno;
@@ -563,7 +563,7 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_EXPAND_SECTION:
         case SID_NEXT_MARK:
         case SID_PREV_MARK:
-            aReturn.bEnabled = isEditable();
+            aReturn.bEnabled = isEditable() && !getDesignView()->isHandleEvent(_nId);
             break;
         case SID_SELECT:
         case SID_SELECT_REPORT:

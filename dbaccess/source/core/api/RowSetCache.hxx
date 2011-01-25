@@ -202,7 +202,8 @@ namespace dbaccess
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew,
                      const ORowSetValueVector& _aParameterValueForCache,
-                     const ::rtl::OUString& i_sRowSetFilter);
+                     const ::rtl::OUString& i_sRowSetFilter,
+                     sal_Int32 i_nMaxRows);
         ~ORowSetCache();
 
 
@@ -211,7 +212,7 @@ namespace dbaccess
         ORowSetCacheIterator createIterator(ORowSetBase* _pRowSet);
         void deleteIterator(const ORowSetBase* _pRowSet);
         // sets the size of the matrix
-        void setMaxRowSize(sal_Int32 _nSize);
+        void setFetchSize(sal_Int32 _nSize);
 
         TORowSetOldRowHelperRef registerOldRow();
         void deregisterOldRow(const TORowSetOldRowHelperRef& _rRow);

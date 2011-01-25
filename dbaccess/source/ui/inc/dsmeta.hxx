@@ -132,6 +132,7 @@ namespace dbaui
             ||  has( DSID_IGNORECURRENCY )
             ||  has( DSID_ESCAPE_DATETIME )
             ||  has( DSID_PRIMARY_KEY_SUPPORT )
+            ||  has( DSID_MAX_ROW_SCAN )
             ;
     }
 
