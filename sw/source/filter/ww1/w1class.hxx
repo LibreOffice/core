@@ -267,7 +267,6 @@ public:
     void SetParent(Ww1StyleSheet* newParent)    { pParent = newParent; }
     void SetName(const String& rName)   { bUsed = TRUE; aName = rName; }
     const String& GetName() const       { return aName; }
-//  Ww1Style& GetNext();
     Ww1Style& GetBase();
     USHORT GetnBase() const             { return stcBase; }
     USHORT GetnNext() const             { return stcNext; }
@@ -390,7 +389,6 @@ public:
 
 class Ww1SingleSprmByteSized : public Ww1SingleSprm {
 public:
-//  ostream& Dump(ostream&, BYTE*, USHORT);
     USHORT Size(BYTE*);
     Ww1SingleSprmByteSized(USHORT nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
@@ -399,7 +397,6 @@ public:
 
 class Ww1SingleSprmWordSized : public Ww1SingleSprm {
 public:
-//  ostream& Dump(ostream&, BYTE*, USHORT);
     USHORT Size(BYTE*);
     Ww1SingleSprmWordSized(USHORT nBytes, sal_Char* sName = 0) :
         Ww1SingleSprm(nBytes, sName) {
@@ -409,7 +406,6 @@ public:
 class Ww1SingleSprmByte : public Ww1SingleSprm {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
     Ww1SingleSprmByte(sal_Char* sName = 0) :
         Ww1SingleSprm(1, sName) {
         }
@@ -418,7 +414,6 @@ public:
 class Ww1SingleSprmBool : public Ww1SingleSprmByte {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
     Ww1SingleSprmBool(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -427,7 +422,6 @@ public:
 class Ww1SingleSprm4State : public Ww1SingleSprmByte {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
     Ww1SingleSprm4State(sal_Char* sName = 0) :
         Ww1SingleSprmByte(sName) {
         }
@@ -436,7 +430,6 @@ public:
 class Ww1SingleSprmWord : public Ww1SingleSprm {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
     Ww1SingleSprmWord(sal_Char* sName = 0)
     : Ww1SingleSprm(2, sName) {}
 };
@@ -444,7 +437,6 @@ public:
 class Ww1SingleSprmLong : public Ww1SingleSprm {
 public:
     ostream& Dump(ostream&, BYTE*, USHORT);
-//  USHORT Size(BYTE*);
     Ww1SingleSprmLong(sal_Char* sName = 0) :
         Ww1SingleSprm(4, sName) {
         }
@@ -529,7 +521,6 @@ public:
 
 class Ww1SingleSprmPBrc : public Ww1SingleSprmWord {
 protected:
-//  SvxBorderLine* SetBorder(SvxBorderLine*, W1_BRC*);
     // spezielle start-routine, je nach sprm verschieden versorgt
     // mit einem BoxItem.
     void Start(Ww1Shell&, BYTE, W1_BRC10*, USHORT, Ww1Manager&, SvxBoxItem&);
@@ -649,14 +640,6 @@ public:
     Ww1SingleSprmTJc(sal_Char* sName)
     : Ww1SingleSprmWord(sName) {}
 };
-
-//class Ww1SingleSprmTDxaLeft : public Ww1SingleSprmWord {
-//public:
-//  Ww1SingleSprmTDxaLeft(sal_Char* sName) :
-//      Ww1SingleSprmWord(sName) {
-//      }
-//  void Start(Ww1Shell&, BYTE, BYTE*, USHORT, Ww1Manager&);
-//};
 
 class Ww1SingleSprmTDxaGapHalf : public Ww1SingleSprmWord {
 public:
@@ -935,7 +918,6 @@ public:
 ///////////////////////////////////////////////////////////// PlcFields
 class Ww1PlcFields : public Ww1Plc
 {
-    //USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
     Ww1PlcFields(Ww1Fib& rFibL, ULONG start, USHORT nBytes)
         : Ww1Plc(rFibL, start, nBytes, 2)
@@ -972,7 +954,6 @@ public:
 
 class Ww1PlcBookmarkPos : public Ww1Plc
 {
-//  USHORT Fill(USHORT, BYTE&, String&, String&, String&);
 public:
     Ww1PlcBookmarkPos(Ww1Fib& _rFib, ULONG start, USHORT nBytes, BOOL bEnd)
         : Ww1Plc(_rFib, start, nBytes, (bEnd) ? 0 : 2)
@@ -988,7 +969,6 @@ public:
                ? Ww1Plc::Where(nIndex) + rFib.GetFIB().fcMinGet()
                : 0xffffffff;
     }
-//  friend ostream& operator <<(ostream&, Ww1PlcBookmarks&);
 };
 
 //////////////////////////////////////////////////////////////// PlcHdd
@@ -1147,7 +1127,6 @@ public:
         if (grpfIhdt & 0x0002) nFtnFollowSep = nextIhdd++;
         if (grpfIhdt & 0x0004) nFtnNote = nextIhdd++;
     }
-//  ~Ww1HeaderFooter() {}
     void SetGrpfIhdt(USHORT grpfIhdt)
     {
         if (grpfIhdt & 0x0001) nEvenHeadL = nextIhdd++;
@@ -1249,7 +1228,6 @@ public:
     Ww1Fields(Ww1Fib& rFibL, ULONG ulFilePos, USHORT nBytes)
         : Ww1PlcFields(rFibL, ulFilePos, nBytes), nPlcIndex(0), pField(0)
     {}
-//  ~Ww1Fields() {}
     // innerhalb des textes
     ULONG Where()       { return Where(nPlcIndex); }
     void operator++(int)
@@ -1316,8 +1294,6 @@ class Ww1Bookmarks
     USHORT nPlcIdx[2];
     USHORT nIsEnd;
     BOOL bOK;
-//  ULONG Where(USHORT nIndex) { // innerhalb des textes
-//      return Ww1PlcFields::Where(nIndex) - rFib.GetFIB().fcMinGet(); }
 public:
     Ww1Bookmarks(Ww1Fib& rFib);
     ~Ww1Bookmarks()
@@ -1348,7 +1324,6 @@ public:
     Ww1Footnotes(Ww1Fib& rFibL)
         : Ww1PlcFootnoteRef(rFibL), nPlcIndex(0), aText(rFibL), bStarted(FALSE)
     {}
-//  ~Ww1Footnotes() {}
     // innerhalb des textes
     ULONG Where()
     {
@@ -1383,7 +1358,6 @@ public:
     void SetGrpfIhdt(BYTE grpfIhdt)
     {
         GetHdd().SetGrpfIhdt(grpfIhdt);
-//      GetHdd().Start(rOut, rMan);
     }
     void Start(Ww1Shell&, Ww1Manager&);
     void Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)

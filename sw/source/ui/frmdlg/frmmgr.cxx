@@ -55,7 +55,6 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 
 using namespace ::com::sun::star;
-//using namespace text;
 
 static USHORT aFrmMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
