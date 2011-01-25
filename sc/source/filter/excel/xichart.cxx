@@ -43,6 +43,7 @@
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisMarkPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -59,7 +60,6 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
@@ -2423,15 +2423,15 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             manual mode, if the legend is moved or resized). With manual plot
             areas, Excel ignores the value in maData.mnDockMode completely. */
         cssc2::LegendPosition eApiPos = cssc2::LegendPosition_CUSTOM;
-        cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
+        cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_BALANCED;
         if( !GetChartData().IsManualPlotArea() ) switch( maData.mnDockMode )
         {
-            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
-            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc2::LegendExpansion_WIDE;   break;
-            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc2::LegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_LEFT:     eApiPos = cssc2::LegendPosition_LINE_START; eApiExpand = cssc::ChartLegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_RIGHT:    eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc::ChartLegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_TOP:      eApiPos = cssc2::LegendPosition_PAGE_START; eApiExpand = cssc::ChartLegendExpansion_WIDE;   break;
+            case EXC_CHLEGEND_BOTTOM:   eApiPos = cssc2::LegendPosition_PAGE_END;   eApiExpand = cssc::ChartLegendExpansion_WIDE;   break;
             // top-right not supported
-            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc2::LegendExpansion_HIGH;   break;
+            case EXC_CHLEGEND_CORNER:   eApiPos = cssc2::LegendPosition_LINE_END;   eApiExpand = cssc::ChartLegendExpansion_HIGH;   break;
         }
 
         // no automatic position: try to find the correct position and size
@@ -2464,18 +2464,18 @@ Reference< XLegend > XclImpChLegend::CreateLegend() const
             {
                 // automatic size: determine entry direction from flags
                 eApiExpand = ::get_flagvalue( maData.mnFlags, EXC_CHLEGEND_STACKED,
-                    cssc2::LegendExpansion_HIGH, cssc2::LegendExpansion_WIDE );
+                    cssc::ChartLegendExpansion_HIGH, cssc::ChartLegendExpansion_WIDE );
             }
             else
             {
                 // legend size is given in points, not in chart units
                 double fRatio = static_cast< double >( pFramePos->maRect.mnWidth ) / pFramePos->maRect.mnHeight;
                 if( fRatio > 1.5 )
-                    eApiExpand = cssc2::LegendExpansion_WIDE;
+                    eApiExpand = cssc::ChartLegendExpansion_WIDE;
                 else if( fRatio < 0.75 )
-                    eApiExpand = cssc2::LegendExpansion_HIGH;
+                    eApiExpand = cssc::ChartLegendExpansion_HIGH;
                 else
-                    eApiExpand = cssc2::LegendExpansion_BALANCED;
+                    eApiExpand = cssc::ChartLegendExpansion_BALANCED;
             }
         }
         aLegendProp.SetProperty( EXC_CHPROP_ANCHORPOSITION, eApiPos );

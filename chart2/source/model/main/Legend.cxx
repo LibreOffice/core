@@ -40,8 +40,9 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/chart2/RelativeSize.hpp>
 
 #include <algorithm>
 
@@ -63,10 +64,11 @@ static const OUString lcl_aServiceName(
 enum
 {
     PROP_LEGEND_ANCHOR_POSITION,
-    PROP_LEGEND_PREFERRED_EXPANSION,
+    PROP_LEGEND_EXPANSION,
     PROP_LEGEND_SHOW,
     PROP_LEGEND_REF_PAGE_SIZE,
-    PROP_LEGEND_REL_POS
+    PROP_LEGEND_REL_POS,
+    PROP_LEGEND_REL_SIZE
 };
 
 void lcl_AddPropertiesToVector(
@@ -81,8 +83,8 @@ void lcl_AddPropertiesToVector(
 
     rOutProperties.push_back(
         Property( C2U( "Expansion" ),
-                  PROP_LEGEND_PREFERRED_EXPANSION,
-                  ::getCppuType( reinterpret_cast< const chart2::LegendExpansion * >(0)),
+                  PROP_LEGEND_EXPANSION,
+                  ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -105,6 +107,15 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const chart2::RelativePosition * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
+
+
+    rOutProperties.push_back(
+        Property( C2U( "RelativeSize" ),
+                  PROP_LEGEND_REL_SIZE,
+                  ::getCppuType( reinterpret_cast< const chart2::RelativeSize * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
 }
 
 struct StaticLegendDefaults_Initializer
@@ -123,7 +134,7 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_PREFERRED_EXPANSION, chart2::LegendExpansion_HIGH );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, chart2::LegendExpansion_HIGH );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
         float fDefaultCharHeight = 10.0;

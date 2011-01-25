@@ -41,7 +41,7 @@
 #include <svtools/controldims.hrc>
 #endif
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
 //itemset stuff
 #include "chartview/ChartSfxItemIds.hxx"
@@ -151,7 +151,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
             //position
             chart2::LegendPosition eNewPos;
-            chart2::LegendExpansion eExp = chart2::LegendExpansion_HIGH;
+            ::com::sun::star::chart::ChartLegendExpansion eExp = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
 
             if( m_aRbtLeft.IsChecked() )
                 eNewPos = chart2::LegendPosition_LINE_START;
@@ -162,12 +162,12 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
             else if( m_aRbtTop.IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_START;
-                eExp = chart2::LegendExpansion_WIDE;
+                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
             }
             else if( m_aRbtBottom.IsChecked() )
             {
                 eNewPos = chart2::LegendPosition_PAGE_END;
-                eExp = chart2::LegendExpansion_WIDE;
+                eExp = ::com::sun::star::chart::ChartLegendExpansion_WIDE;
             }
 
             xProp->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));

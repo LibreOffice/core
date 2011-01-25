@@ -36,7 +36,7 @@
 #include <svx/chrtitem.hxx>
 #include <com/sun/star/chart2/XLegend.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
 #include <functional>
 #include <algorithm>
@@ -164,9 +164,9 @@ bool LegendItemConverter::ApplySpecialItem(
                         ( eOldPos != eNewPos ))
                     {
                         GetPropertySet()->setPropertyValue( C2U( "AnchorPosition" ), uno::makeAny( eNewPos ));
-                        chart2::LegendExpansion eExp = bIsWide
-                            ? chart2::LegendExpansion_WIDE
-                            : chart2::LegendExpansion_HIGH;
+                        ::com::sun::star::chart::ChartLegendExpansion eExp = bIsWide
+                            ? ::com::sun::star::chart::ChartLegendExpansion_WIDE
+                            : ::com::sun::star::chart::ChartLegendExpansion_HIGH;
                         GetPropertySet()->setPropertyValue( C2U( "Expansion" ), uno::makeAny( eExp ));
                         GetPropertySet()->setPropertyValue( C2U( "RelativePosition" ), uno::Any());
                         bChanged = true;

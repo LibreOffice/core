@@ -309,6 +309,7 @@ bool Selection::isResizeableObjectSelected()
         case OBJECTTYPE_DIAGRAM:
         case OBJECTTYPE_DIAGRAM_WALL:
         case OBJECTTYPE_SHAPE:
+        case OBJECTTYPE_LEGEND:
             return true;
         default:
             return false;

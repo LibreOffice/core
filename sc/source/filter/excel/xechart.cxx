@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/chart/ChartAxisLabelPosition.hpp>
 #include <com/sun/star/chart/ChartAxisPosition.hpp>
+#include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
@@ -54,7 +55,6 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#include <com/sun/star/chart2/LegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/StackingDirection.hpp>
@@ -2280,9 +2280,9 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
     }
 
     // legend expansion
-    cssc2::LegendExpansion eApiExpand = cssc2::LegendExpansion_BALANCED;
+    cssc::ChartLegendExpansion eApiExpand = cssc::ChartLegendExpansion_BALANCED;
     rPropSet.GetProperty( eApiExpand, EXC_CHPROP_EXPANSION );
-    ::set_flag( maData.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc2::LegendExpansion_WIDE );
+    ::set_flag( maData.mnFlags, EXC_CHLEGEND_STACKED, eApiExpand != cssc::ChartLegendExpansion_WIDE );
 
     // other flags
     ::set_flag( maData.mnFlags, EXC_CHLEGEND_AUTOSERIES );
