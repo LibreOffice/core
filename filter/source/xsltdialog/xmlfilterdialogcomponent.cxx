@@ -53,7 +53,6 @@
 
 #include "xmlfiltersettingsdialog.hxx"
 
-//using namespace ::comphelper;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::osl;
