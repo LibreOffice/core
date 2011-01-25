@@ -134,7 +134,7 @@ private:
         ::chart::CharacterProperties::AddDefaultsToMap( rOutMap );
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_ANCHOR_POSITION, chart2::LegendPosition_LINE_END );
-        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, chart2::LegendExpansion_HIGH );
+        ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_EXPANSION, ::com::sun::star::chart::ChartLegendExpansion_HIGH );
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LEGEND_SHOW, true );
 
         float fDefaultCharHeight = 10.0;
