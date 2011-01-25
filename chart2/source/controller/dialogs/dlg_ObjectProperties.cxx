@@ -59,6 +59,7 @@
 #include "chartview/NumberFormatterWrapper.hxx"
 #include "AxisIndexDefines.hxx"
 #include "AxisHelper.hxx"
+#include "ExplicitCategoriesProvider.hxx"
 
 #include <com/sun/star/chart2/XAxis.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
@@ -116,6 +117,7 @@ ObjectPropertiesDialogParameter::ObjectPropertiesDialogParameter( const rtl::OUS
         , m_bIsCrossingAxisIsCategoryAxis(false)
         , m_aCategories()
         , m_xChartDocument( 0 )
+        , m_bComplexCategoriesAxis( false )
 {
     rtl::OUString aParticleID = ObjectIdentifier::getParticleID( m_aObjectCID );
     m_bAffectsMultipleObjects = aParticleID.equals(C2U("ALLELEMENTS"));
@@ -205,6 +207,13 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                     m_bIsCrossingAxisIsCategoryAxis = ( chart2::AxisType::CATEGORY == aScale.AxisType  );
                     if( m_bIsCrossingAxisIsCategoryAxis )
                         m_aCategories = DiagramHelper::getExplicitSimpleCategories( Reference< chart2::XChartDocument >( xChartModel, uno::UNO_QUERY) );
+                }
+
+                m_bComplexCategoriesAxis = false;
+                if ( nDimensionIndex == 0 && aData.AxisType == chart2::AxisType::CATEGORY )
+                {
+                    ExplicitCategoriesProvider aExplicitCategoriesProvider( xCooSys, xChartModel );
+                    m_bComplexCategoriesAxis = aExplicitCategoriesProvider.hasComplexCategories();
                 }
             }
         }
@@ -321,6 +330,10 @@ bool ObjectPropertiesDialogParameter::ProvidesMissingValueTreatments() const
 uno::Reference< chart2::XChartDocument > ObjectPropertiesDialogParameter::getDocument() const
 {
     return m_xChartDocument;
+}
+bool ObjectPropertiesDialogParameter::IsComplexCategoriesAxis() const
+{
+    return m_bComplexCategoriesAxis;
 }
 
 //const USHORT nNoArrowDlg          = 1100;
@@ -566,6 +579,7 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
         {
             bool bShowStaggeringControls = m_pParameter->CanAxisLabelsBeStaggered();
             ((SchAxisLabelTabPage&)rPage).ShowStaggeringControls( bShowStaggeringControls );
+            ( dynamic_cast< SchAxisLabelTabPage& >( rPage ) ).SetComplexCategories( m_pParameter->IsComplexCategoriesAxis() );
             break;
         }
 
