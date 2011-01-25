@@ -26,8 +26,8 @@
  *
  ************************************************************************/
 /*
-    WICHTIG:
-    Folgende Reihenfolge beim Aufbau der Pivot-Tabelle unbedingt einzuhalten:
+    IMPORTANT:
+    Strictly adhere to the following sequence when creating a pivot table:
 
     pPivot->SetColFields(aColArr, aColCount)
     pPivot->SetRowFields(aRowArr, aRowCount)
@@ -38,9 +38,7 @@
         pPivotReleaseData();
     }
 
-    ausserdem ist sicherzustellen, dass entweder das ColArr oder das RowArr
-    einen PivotDataField Eintrag enthalten
-
+    Make sure that either ColArr or RowArr contains a PivotDataField entry.
 */
 
 
@@ -93,8 +91,8 @@ struct PivotField
 // implementation still in global2.cxx
 struct ScPivotParam
 {
-    SCCOL           nCol;           // Cursor Position /
-    SCROW           nRow;           // bzw. Anfang des Zielbereiches
+    SCCOL           nCol;           // cursor position /
+    SCROW           nRow;           // or start of destination area
     SCTAB           nTab;
     ::std::vector<ScDPLabelDataRef> maLabelArray;
     ::std::vector<PivotField> maPageFields;

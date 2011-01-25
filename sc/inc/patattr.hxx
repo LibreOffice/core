@@ -82,7 +82,7 @@ public:
     static const SfxPoolItem& GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     const SfxPoolItem&      GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
 
-                            // pWhich sind keine Ranges, sondern einzelne IDs, 0-terminiert
+                            // pWhich are no ranges, but single IDs, 0-terminated
     BOOL                    HasItemsSet( const USHORT* pWhich ) const;
     void                    ClearItems( const USHORT* pWhich );
 
