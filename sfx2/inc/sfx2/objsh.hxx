@@ -158,11 +158,6 @@ typedef sal_uInt32 SfxObjectShellFlags;
 
 //--------------------------------------------------------------------
 
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define OUSTRING                ::rtl::OUString
-
-//--------------------------------------------------------------------
-
 #define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
 #define HIDDENINFORMATION_NOTES                 0x0002
 #define HIDDENINFORMATION_DOCUMENTVERSIONS      0x0004
@@ -209,6 +204,7 @@ class SFX2_DLLPUBLIC SfxObjectShell :
     public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
 {
 friend struct ModifyBlocker_Impl;
+friend class SfxObjectShellLock;
 
 private:
     struct SfxObjectShell_Impl* pImp;               // interne Daten
@@ -617,7 +613,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
 
-    virtual SEQUENCE< OUSTRING >    GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
     String                      UpdateTitle( SfxMedium* pMed=NULL, USHORT nDocViewNo=0 );
@@ -831,7 +827,6 @@ public:
 //#endif
 
 //--------------------------------------------------------------------
-
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
 SV_DECL_REF(SfxObjectShell)
@@ -839,8 +834,6 @@ SV_DECL_REF(SfxObjectShell)
 SV_DECL_LOCK(SfxObjectShell)
 SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
-
-SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& rName, BOOL bWriting );
 
 //#if 0 // _SOLAR__PRIVATE
 //--------------------------------------------------------------------
