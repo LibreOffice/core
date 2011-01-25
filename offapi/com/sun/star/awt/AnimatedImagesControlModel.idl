@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,33 +23,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridCell_idl__
-#define __com_sun_star_awt_grid_XGridCell_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_awt_AnimatedImagesControlModel_idl__
+#define __com_sun_star_awt_AnimatedImagesControlModel_idl__
 
+#include <com/sun/star/awt/UnoControlModel.idl>
 
+//======================================================================================================================
 
-//=============================================================================
+module com { module sun { module star { module awt {
 
-module com {  module sun {  module star {  module awt {  module grid {
+interface XAnimatedImages;
 
-//=============================================================================
+//======================================================================================================================
 
-interface XGridCell
+/** describes the model for a control displaying a series of images
+
+    @since OOo 3.4
+ */
+service AnimatedImagesControlModel
 {
+    service com::sun::star::awt::UnoControlModel;
 
-    [attribute] string Value;
-
-    [attribute] boolean Editable;
-
-    [attribute] any Data;
+    interface XAnimatedImages;
 };
 
-//=============================================================================
+//======================================================================================================================
 
-}; }; }; }; };
+}; }; }; };
+
+//======================================================================================================================
 
 #endif

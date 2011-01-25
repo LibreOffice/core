@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,29 +23,32 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_grid_XGridCellRenderer_idl__
-#define __com_sun_star_awt_grid_XGridCellRenderer_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef __com_sun_star_awt_SpinningProgressControlModel_idl__
+#define __com_sun_star_awt_SpinningProgressControlModel_idl__
 
-//=============================================================================
+#include <com/sun/star/awt/AnimatedImagesControlModel.idl>
 
-module com {  module sun {  module star {  module awt { module grid {
+//======================================================================================================================
 
-//=============================================================================
+module com { module sun { module star { module awt {
 
-/** renderer for cells
+//======================================================================================================================
+
+/** is a specialization of the <type>AnimatedImagesControlModel</type> which provides standard image sets
+    for displaying a non-procentual progress.
+
+    <p>Three image sets are provided, of size 16x16, 32x32, and 64x64 pixels.</p>
  */
-interface XGridCellRenderer
+service SpinningProgressControlModel
 {
-    //-------------------------------------------------------------------------
-
+    service AnimatedImagesControlModel;
 };
 
-//=============================================================================
+//======================================================================================================================
 
-}; }; }; }; };
+}; }; }; };
+
+//======================================================================================================================
 
 #endif

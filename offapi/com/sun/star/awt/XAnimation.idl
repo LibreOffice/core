@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,31 +23,41 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_awt_GridControlEvent_idl__
-#define __com_sun_star_awt_GridControlEvent_idl__
 
-#ifndef __com_sun_star_lang_EventObject_idl__
-#include <com/sun/star/lang/EventObject.idl>
-#endif
+#ifndef __com_sun_star_awt_XAnimation_idl__
+#define __com_sun_star_awt_XAnimation_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
+//======================================================================================================================
 
-module com {  module sun {  module star {  module awt { module grid {
+module com { module sun { module star { module awt {
 
-//=============================================================================
+//======================================================================================================================
 
+/** allows controlling an animation.
 
-struct GridControlEvent: com::sun::star::lang::EventObject
+    @since OOo 3.4
+ */
+interface XAnimation
 {
-    //-------------------------------------------------------------------------
+    /** starts the animation
+    */
+    void    startAnimation();
 
-    string ActionCommand;
+    /** stops the animation
+    */
+    void    stopAnimation();
 
+    /** determines whether the animation is currently running
+    */
+    boolean isAnimationRunning();
 };
 
-//=============================================================================
+//======================================================================================================================
 
-}; }; }; }; };
+}; }; }; };
+
+//======================================================================================================================
 
 #endif
