@@ -317,6 +317,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
         if ( bNumberRequired )
         {
             sal_Int32 nStartIndex = nIndex;
+            sal_Int32 nEIndex = 0;  // index of "E" in double
 
             sal_Bool bE = sal_False;    // set if a double is including a "E" statement
             sal_Bool bDot = sal_False;  // set if there is a dot included
@@ -344,9 +345,7 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                         if ( bMustBePositiveWholeNumbered )
                             bValid = sal_False;
                         else
-                        {
-                            bValid = ( nStartIndex == nIndex ) || bE;
-                        }
+                            bValid = ( nStartIndex == nIndex ) || ( bE && ( nEIndex + 1 == nIndex ) );
                     }
                     break;
 
@@ -358,7 +357,10 @@ sal_Bool GetNextParameter( com::sun::star::drawing::EnhancedCustomShapeParameter
                         else
                         {
                             if ( !bE )
+                            {
                                 bE = sal_True;
+                                nEIndex = nIndex;
+                            }
                             else
                                 bEnd = sal_True;
                         }
