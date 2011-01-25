@@ -879,6 +879,9 @@ ConcreteXShapeGeometryAttributes::ConcreteXShapeGeometryAttributes( const css::u
 {
     m_pShapeHelper.reset( new ShapeHelper( xShape ) );
 }
+ConcreteXShapeGeometryAttributes::~ConcreteXShapeGeometryAttributes()
+{
+}
 
 sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
 {

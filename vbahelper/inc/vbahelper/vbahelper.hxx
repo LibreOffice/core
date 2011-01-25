@@ -186,6 +186,7 @@ public:
     virtual void setHeight( double nHeight );
     virtual double getWidth();
     virtual void setWidth( double nWidth);
+    virtual ~ConcreteXShapeGeometryAttributes();
 };
 
 #define VBA_LEFT "PositionX"

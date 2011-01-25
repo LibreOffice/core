@@ -42,10 +42,10 @@ $(eval $(call gb_Library_set_include,vbahelper,\
     -I$(OUTDIR)/inc/offuh \
 ))
 
-#$(eval $(call gb_Library_set_defs,vbahelper,\
-#	$$(DEFS) \
-#	-DVBAHELPER_DLLIMPLEMENTATION \
-#))
+$(eval $(call gb_Library_set_defs,vbahelper,\
+    $$(DEFS) \
+    -DVBAHELPER_DLLIMPLEMENTATION \
+))
 
 # add libraries to be linked to vbahelper; again these names need to be given as
 # specified in Repository.mk
