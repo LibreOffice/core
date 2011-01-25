@@ -434,7 +434,6 @@ void OutlinerView::ImpPaintDDCursor()
 
     Point aStartPointWin, aEndPointWin;
     Rectangle aOutputArWin = pEditView->GetOutputArea();
-    Rectangle aVisAreaRef = pEditView->GetVisArea();
 
     if( bDDChangingDepth )
     {

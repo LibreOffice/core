@@ -117,6 +117,7 @@ void lcl_addXFormsModel(
 
     // TODO: implement proper error handling
     DBG_ASSERT( bSuccess, "can't import model" );
+    (void)bSuccess;
 }
 
 Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(

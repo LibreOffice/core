@@ -804,7 +804,7 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
                       *pWordStt = 0,
                       *pDelim = 0;
 
-    BOOL bAtStart = FALSE, bPrevPara = FALSE;
+    BOOL bAtStart = FALSE;
     do {
         --pStr;
         if( rCC.isLetter(
@@ -879,7 +879,6 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         }
 
         aText = *pPrevPara;
-        bPrevPara = TRUE;
         bAtStart = FALSE;
         pStart = aText.GetBuffer();
         pStr = pStart + aText.Len();

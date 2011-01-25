@@ -293,6 +293,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
         }
         DBG_ASSERT( !bRefIsValid || ( rWrong.nStart < rWrong.nEnd ),
                 "TextInserted, WrongRange: Start >= End?!" );
+        (void)bRefIsValid;
     }
 
     DBG_ASSERT( !DbgIsBuggy(), "InsertWrong: WrongList kaputt!" );

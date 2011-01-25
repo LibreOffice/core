@@ -437,7 +437,7 @@ void EditUndoInsertFeature::Undo()
     EditSelection aSel( aPaM, aPaM );
     // Attribute werden dort implizit vom Dokument korrigiert...
     aSel.Max().GetIndex()++;
-    EditPaM aNewPaM = GetImpEditEngine()->ImpDeleteSelection( aSel );
+    GetImpEditEngine()->ImpDeleteSelection( aSel );
     aSel.Max().GetIndex()--;    // Fuer Selektion
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }

@@ -111,8 +111,6 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
-    ULONG nError = sal::static_int_cast< ULONG >(-1);
-
     // prepare ParserInputSource
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xIn;
@@ -145,18 +143,12 @@ void ReadThroughDic( const String &rMainURL, ConvDicXMLImport &rImport )
     try
     {
         xParser->parseStream( aParserInput );   // implicitly calls ConvDicXMLImport::CreateContext
-        if (rImport.GetSuccess())
-            nError = 0;
     }
     catch( xml::sax::SAXParseException& )
     {
-//        if( bEncrypted )
-//            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( xml::sax::SAXException& )
     {
-//        if( bEncrypted )
-//            nError = ERRCODE_SFX_WRONGPASSWORD;
     }
     catch( io::IOException& )
     {

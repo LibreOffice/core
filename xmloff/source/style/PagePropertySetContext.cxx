@@ -99,6 +99,8 @@ SvXMLImportContext *PagePropertySetContext::CreateChildContext(
                     nFil  == mxMapper->getPropertySetMapper()
                         ->GetEntryContextId( rProp.mnIndex-1 ),
                     "invalid property map!");
+        (void)nPos;
+        (void)nFil;
         pContext =
             new XMLBackgroundImageContext( GetImport(), nPrefix,
                                            rLocalName, xAttrList,

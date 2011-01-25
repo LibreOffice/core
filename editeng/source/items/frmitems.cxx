@@ -1851,7 +1851,6 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     sal_uInt16 nDist = 0;
     sal_Bool bDistMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
         case 0:
@@ -1871,22 +1870,18 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
             return sal_True;
         }
         case MID_LEFT_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case LEFT_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetLeft(), bConvert);
             break;
         case MID_RIGHT_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case RIGHT_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetRight(), bConvert);
             break;
         case MID_BOTTOM_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case BOTTOM_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetBottom(), bConvert);
             break;
         case MID_TOP_BORDER:
-            bSerialize = sal_True;      // intentionally no break!
         case TOP_BORDER:
             aRetLine = SvxBoxItem::SvxLineToLine(GetTop(), bConvert);
             break;
@@ -1915,21 +1910,7 @@ bool SvxBoxItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     if( bDistMember )
         rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nDist) : nDist);
     else
-    {
-/*
-        if ( bSerialize )
-        {
-            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
-            aSeq[0] <<= aRetLine.Color;
-            aSeq[1] <<= aRetLine.InnerLineWidth;
-            aSeq[2] <<= aRetLine.OuterLineWidth;
-            aSeq[3] <<= aRetLine.LineDistance;
-            rVal <<= aSeq;
-        }
-        else
-*/
-            rVal <<= aRetLine;
-    }
+        rVal <<= aRetLine;
 
     return true;
 }
@@ -2837,7 +2818,6 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     sal_Int16 nVal=0;
     sal_Bool bIntMember = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
-    sal_Bool bSerialize = sal_False;
     switch(nMemberId)
     {
         case 0:
@@ -2861,11 +2841,9 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
         }
 
         case MID_HORIZONTAL:
-            bSerialize = sal_True;
             aRetLine = SvxBoxItem::SvxLineToLine( pHori, bConvert);
             break;
         case MID_VERTICAL:
-            bSerialize = sal_True;
             aRetLine = SvxBoxItem::SvxLineToLine( pVert, bConvert);
             break;
         case MID_FLAGS:
@@ -2891,21 +2869,7 @@ bool SvxBoxInfoItem::QueryValue( uno::Any& rVal, BYTE nMemberId  ) const
     }
 
     if( !bIntMember )
-    {
-/*
-        if ( bSerialize )
-        {
-            ::com::sun::star::uno::Sequence < ::com::sun::star::uno::Any > aSeq(4);
-            aSeq[0] <<= aRetLine.Color;
-            aSeq[1] <<= aRetLine.InnerLineWidth;
-            aSeq[2] <<= aRetLine.OuterLineWidth;
-            aSeq[3] <<= aRetLine.LineDistance;
-            rVal <<= aSeq;
-        }
-        else
- */
-            rVal <<= aRetLine;
-    }
+        rVal <<= aRetLine;
 
     return true;
 }
