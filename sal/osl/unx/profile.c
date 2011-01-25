@@ -197,10 +197,7 @@ static oslProfile SAL_CALL osl_psz_openProfile(const sal_Char *pszProfileName, o
 {
     osl_TFile*        pFile;
     osl_TProfileImpl* pProfile;
-    sal_Char          Filename[PATH_MAX];
     sal_Bool bRet = sal_False;
-
-    Filename[0] = '\0';
 
 #ifdef TRACE_OSL_PROFILE
     OSL_TRACE("In  osl_openProfile\n");
