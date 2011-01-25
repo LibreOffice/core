@@ -224,8 +224,6 @@ void Pre_dtorTree( RscTop * pRscTop ){
 }
 
 RscTypCont :: ~RscTypCont(){
-    RscSysEntry   * pSysEntry;
-
     // Alle Unterbaeume loeschen
     aVersion.pClass->Destroy( aVersion );
     rtl_freeMemory( aVersion.pData );
@@ -256,17 +254,16 @@ RscTypCont :: ~RscTypCont(){
         delete aBaseLst[ i ];
     aBaseLst.clear();
 
-    while( NULL != (pSysEntry = aSysLst.Remove()) ){
-        delete pSysEntry;
-    };
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
+        delete aSysLst[ i ];
+    aSysLst.clear();
 }
 
 void RscTypCont::ClearSysNames()
 {
-    RscSysEntry   * pSysEntry;
-    while( NULL != (pSysEntry = aSysLst.Remove()) ){
-        delete pSysEntry;
-    };
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
+        delete aSysLst[ i ];
+    aSysLst.clear();
 }
 
 //=======================================================================
@@ -375,17 +372,17 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
     RscSysEntry *   pSysEntry;
     BOOL            bId1 = FALSE;
 
-    pSysEntry = aSysLst.First();
-    while( pSysEntry )
+    for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
+        pSysEntry = aSysLst[ i ];
         if( pSysEntry->nKey == 1 )
             bId1 = TRUE;
         if( !strcmp( pSysEntry->aFileName.GetBuffer(), pFileName ) )
-            if( pSysEntry->nRscTyp == nRscTyp
-              && pSysEntry->nTyp == nConst
-              && pSysEntry->nRefId == nId )
+            if(  pSysEntry->nRscTyp == nRscTyp
+              && pSysEntry->nTyp    == nConst
+              && pSysEntry->nRefId  == nId
+              )
                 break;
-        pSysEntry = aSysLst.Next();
     }
 
     if ( !pSysEntry || (bFirst && !bId1) )
@@ -399,10 +396,10 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
         if( bFirst && !bId1 )
         {
             pSysEntry->nKey = 1;
-            aSysLst.Insert( pSysEntry, (ULONG)0 );
+            aSysLst.insert( aSysLst.begin(), pSysEntry );
         }
         else
-            aSysLst.Insert( pSysEntry, LIST_APPEND );
+            aSysLst.push_back( pSysEntry );
     }
 
     return pSysEntry->nKey;

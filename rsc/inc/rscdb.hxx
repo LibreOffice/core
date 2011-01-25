@@ -68,7 +68,8 @@ struct RscSysEntry
     sal_uInt32      nTyp;
     sal_uInt32      nRefId;
 };
-DECLARE_LIST( RscSysList, RscSysEntry * )
+
+typedef ::std::vector< RscSysEntry* > RscSysList;
 
 class RscTypCont
 {
