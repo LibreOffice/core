@@ -24,30 +24,26 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package qa.drivers.dbase;
+package complex.connectivity.dbase;
 
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.sdbc.*;
 import com.sun.star.beans.XPropertySet;
 
 import com.sun.star.lang.XMultiServiceFactory;
+import complex.connectivity.TestCase;
+import complex.connectivity.SubTestCase;
 
-public class DBaseDateFunctions
+public class DBaseDateFunctions extends SubTestCase
 {
 
     private final String where = "FROM \"biblio\" \"biblio\" where \"Identifier\" = 'BOR00'";
     private final XMultiServiceFactory m_xORB;
-    private final DBaseDriverTest testcase;
 
-    public DBaseDateFunctions(final XMultiServiceFactory _xORB, final DBaseDriverTest _testcase)
+    public DBaseDateFunctions(final XMultiServiceFactory _xORB, final TestCase i_testCase)
     {
+        super( i_testCase );
         m_xORB = _xORB;
-        testcase = _testcase;
-    }
-
-    private void assure(final String s, final boolean b)
-    {
-        testcase.assure2(s, b);
     }
 
     public void testFunctions() throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
@@ -55,7 +51,7 @@ public class DBaseDateFunctions
         final XRowSet xRowRes = (XRowSet) UnoRuntime.queryInterface(XRowSet.class,
                 m_xORB.createInstance("com.sun.star.sdb.RowSet"));
 
-        testcase.getLog().println("starting DateTime function test!");
+        getLog().println("starting DateTime function test!");
         // set the properties needed to connect to a database
         final XPropertySet xProp = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xRowRes);
         xProp.setPropertyValue("DataSourceName", "Bibliography");
@@ -289,21 +285,21 @@ public class DBaseDateFunctions
     {
         final XRow row = execute(xRowRes, "CURDATE() ");
         final com.sun.star.util.Date aDate = row.getDate(1);
-        testcase.getLog().println("CURDATE() is '" + aDate.Year + "-" + aDate.Month + "-" + aDate.Day + "'");
+        getLog().println("CURDATE() is '" + aDate.Year + "-" + aDate.Month + "-" + aDate.Day + "'");
     }
 
     private void curtime(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "CURTIME() ");
         final com.sun.star.util.Time aTime = row.getTime(1);
-        testcase.getLog().println("CURTIME() is '" + aTime.Hours + ":" + aTime.Minutes + ":" + aTime.Seconds + "'");
+        getLog().println("CURTIME() is '" + aTime.Hours + ":" + aTime.Minutes + ":" + aTime.Seconds + "'");
     }
 
     private void now(final XRowSet xRowRes) throws com.sun.star.uno.Exception, com.sun.star.beans.UnknownPropertyException
     {
         final XRow row = execute(xRowRes, "NOW() ");
         final com.sun.star.util.DateTime aTime = row.getTimestamp(1);
-        testcase.getLog().println("NOW() is '" + aTime.Year + "-" + aTime.Month + "-" + aTime.Day + "'");
-        testcase.getLog().println("'" + aTime.Hours + ":" + aTime.Minutes + ":" + aTime.Seconds + "'");
+        getLog().println("NOW() is '" + aTime.Year + "-" + aTime.Month + "-" + aTime.Day + "'");
+        getLog().println("'" + aTime.Hours + ":" + aTime.Minutes + ":" + aTime.Seconds + "'");
     }
 }

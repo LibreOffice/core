@@ -67,7 +67,7 @@ using namespace com::sun::star::lang;
 
 IMPLEMENT_SERVICE_INFO(ODbaseIndex,"com.sun.star.sdbcx.driver.dbase.Index","com.sun.star.sdbcx.Index");
 // -------------------------------------------------------------------------
-ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()*/)
+ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()*/)
     ,m_pFileStream(NULL)
     ,m_nCurNode(NODE_NOTFOUND)
     ,m_pTable(_pTable)
@@ -80,7 +80,7 @@ ODbaseIndex::ODbaseIndex(ODbaseTable* _pTable) : OIndex(sal_True/*_pTable->getCo
 ODbaseIndex::ODbaseIndex(   ODbaseTable* _pTable,
                             const NDXHeader& _rHeader,
                             const ::rtl::OUString& _rName)
-    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True) // _pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers()
+    :OIndex(_rName,::rtl::OUString(),_rHeader.db_unique,sal_False,sal_False,sal_True) // _pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers()
     ,m_pFileStream(NULL)
     ,m_aHeader(_rHeader)
     ,m_nCurNode(NODE_NOTFOUND)
