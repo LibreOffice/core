@@ -58,10 +58,8 @@
 #include "dbdocfun.hxx"
 #include "unonames.hxx"
 #include "globstr.hrc"
-#ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
 #include "hints.hxx"
-#endif
 #include "attrib.hxx"
 #include "dpshttab.hxx"
 #include <comphelper/extract.hxx>
