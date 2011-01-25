@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart_LegendExpansion_idl
-#define com_sun_star_chart_LegendExpansion_idl
+#ifndef com_sun_star_chart_ChartLegendExpansion_idl
+#define com_sun_star_chart_ChartLegendExpansion_idl
 
 module com
 {
@@ -33,41 +33,37 @@ module sun
 {
 module star
 {
-module chart2
+module chart
 {
 
-/**
+/** Specifies sizing aspects of the legend
  */
-enum LegendExpansion
+enum ChartLegendExpansion
 {
-    /** The legend is laid out such that it is wider that high.  The
-        aspect ratio is greater than 1.
+    /** The legend entries are arranged in a single row if possible. If not enough space is available further rows are added.
 
         <p>This is usually used for legends that are displayed at the
         top or bottom of the page.</p>
      */
     WIDE,
 
-    /** The legend is laid out such that it is higher that wide.  The
-        aspect ratio is less than 1.
+    /** The legend entries are stacked in a single column if possible. If not enough space is available further columns are added.
 
         <p>This is usually used for legends that are displayed on the
         left or right hand side of the page.</p>
      */
     HIGH,
 
-    /** The legend is laid out such that height and width are not
-        differing too much.  It is not guaranteed to have an aspect
-        ratio of 1.
+    /** The legend entries are arranged in a way that the aspect ratio of the resulting legend is as near to 1 as possible.
      */
     BALANCED,
 
-    /** The aspect ratio of the legend is given explicitly
+    /** The size of the legend is given explicitly
      */
     CUSTOM
 };
 
-} ; // chart2
+} ; // chart
 } ; // com
 } ; // sun
 } ; // star
