@@ -121,7 +121,7 @@ namespace toolkit
     //====================================================================
     //--------------------------------------------------------------------
     UnoSimpleAnimationControl::UnoSimpleAnimationControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
-        :UnoControlBase( i_factory )
+        :UnoSimpleAnimationControl_Base( i_factory )
     {
     }
 
