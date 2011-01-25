@@ -917,9 +917,7 @@ void PresenterTextParagraph::AddWord (
 {
     sal_Int32 nLineStart (0);
     if ( ! maLines.empty())
-    {
         nLineStart = rCurrentLine.startPos;
-    }
 
     const ::rtl::OUString sLineCandidate (
         msParagraphText.copy(nLineStart, nWordBoundary-nLineStart));
