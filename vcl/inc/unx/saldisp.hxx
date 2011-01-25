@@ -49,7 +49,8 @@ class   SalXLib;
 #include <hash_map>
 #include <tools/gen.hxx>
 #include <salwtype.hxx>
-#include <vcl/dllapi.h>
+
+#include <vclpluginapi.h>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class   BitmapPalette;
@@ -208,7 +209,7 @@ public:
 typedef int(*YieldFunc)(int fd, void* data);
 struct YieldEntry;
 
-class VCL_DLLPUBLIC SalXLib
+class VCLPLUG_GEN_PUBLIC SalXLib
 {
 protected:
     timeval         m_aTimeout;
@@ -279,7 +280,7 @@ extern "C" {
     typedef Bool(*X_if_predicate)(Display*,XEvent*,XPointer);
 }
 
-class VCL_DLLPUBLIC SalDisplay
+class VCLPLUG_GEN_PUBLIC SalDisplay
 {
 public:
     struct RenderEntry
@@ -524,7 +525,7 @@ inline GC SalDisplay::GetGC( USHORT nDepth, int nScreen ) const
 inline  Display *SalColormap::GetXDisplay() const
 { return m_pDisplay->GetDisplay(); }
 
-class VCL_DLLPUBLIC SalX11Display : public SalDisplay
+class VCLPLUG_GEN_PUBLIC SalX11Display : public SalDisplay
 {
 public:
              SalX11Display( Display* pDisp );

@@ -27,10 +27,11 @@
 #ifndef _VCL_SM_HXX
 #define _VCL_SM_HXX
 
-#include <tools/link.hxx>
-#include <unx/salunx.h>
+#include "tools/link.hxx"
+#include "unx/salunx.h"
 #include <X11/SM/SMlib.h>
-#include <salsession.hxx>
+#include "salsession.hxx"
+#include "vclpluginapi.h"
 
 class SessionManagerClient
 {
@@ -60,7 +61,7 @@ class SessionManagerClient
     DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
 public:
-    static VCL_DLLPUBLIC void open(); // needed by other plugins, so export
+    static VCLPLUG_GEN_PUBLIC void open(); // needed by other plugins, so export
     static void close();
 
     static bool checkDocumentsSaved();
@@ -69,7 +70,7 @@ public:
     static void interactionDone( bool bCancelShutdown );
 
     static String getExecName();
-    static VCL_DLLPUBLIC const ByteString&  getSessionID();
+    static VCLPLUG_GEN_PUBLIC const ByteString&  getSessionID();
 };
 
 class SalFrame;

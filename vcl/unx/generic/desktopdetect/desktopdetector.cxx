@@ -33,12 +33,12 @@
 #include <X11/Xatom.h>
 #include <tools/postx.h>
 
-#include "vcl/dllapi.h"
-
 #include "rtl/ustrbuf.hxx"
 #include "osl/module.h"
 #include "osl/process.h"
 #include "osl/thread.h"
+
+#include "vclpluginapi.h"
 
 #include <unistd.h>
 
@@ -253,7 +253,7 @@ static bool is_cde_desktop( Display* pDisplay )
 extern "C"
 {
 
-VCL_DLLPUBLIC rtl::OUString get_desktop_environment()
+DESKTOP_DETECTOR_PUBLIC rtl::OUString get_desktop_environment()
 {
     rtl::OUStringBuffer aRet( 8 );
     static const char *pOverride = getenv( "OOO_FORCE_DESKTOP" );

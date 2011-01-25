@@ -34,7 +34,7 @@
 #endif
 #include <unx/saldisp.hxx>
 #include <salbmp.hxx>
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
 struct  BitmapBuffer;
 class   BitmapPalette;
@@ -46,7 +46,7 @@ class   ImplSalBitmapCache;
 // - SalBitmap -
 // -------------
 
-class VCL_DLLPUBLIC X11SalBitmap : public SalBitmap
+class VCLPLUG_GEN_PUBLIC X11SalBitmap : public SalBitmap
 {
 private:
 

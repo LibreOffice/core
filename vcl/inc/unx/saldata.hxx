@@ -37,7 +37,7 @@
 #ifndef _OSL_MODULE_H
 #include <osl/module.h>
 #endif
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalXLib;
@@ -55,7 +55,7 @@ typedef unsigned int pthread_t;
 #endif
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCL_DLLPUBLIC X11SalData : public SalData
+class VCLPLUG_GEN_PUBLIC X11SalData : public SalData
 {
 protected:
             BOOL                bNoExceptions_;

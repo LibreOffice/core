@@ -67,7 +67,6 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
     aModName.append( rModuleBase );
     aModName.appendAscii( SAL_DLLPOSTFIX );
-    aModName.appendAscii( SAL_DLLEXTENSION );
     OUString aModule = aModName.makeStringAndClear();
 
     oslModule aMod = osl_loadModuleRelative(

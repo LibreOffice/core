@@ -25,39 +25,46 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_vcl.hxx"
+#ifndef _VCLPLUGINAPI_H
+#define _VCLPLUGINAPI_H
 
-#include <vcl/abstdlg.hxx>
+#include "sal/config.h"
+#include "sal/types.h"
 
-#include <osl/module.hxx>
-#include <tools/string.hxx>
+#if defined VCLPLUG_GEN_IMPLEMENTATION
+#define VCLPLUG_GEN_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLPLUG_GEN_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-typedef VclAbstractDialogFactory* (__LOADONCALLAPI *FuncPtrCreateDialogFactory)();
+#if defined VCLPLUG_GTK_IMPLEMENTATION
+#define VCLPLUG_GTK_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLPLUG_GTK_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-extern "C" { static void SAL_CALL thisModule() {} }
+#if defined VCLPLUG_KDE_IMPLEMENTATION
+#define VCLPLUG_KDE_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLPLUG_KDE_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-VclAbstractDialogFactory* VclAbstractDialogFactory::Create()
-{
-    FuncPtrCreateDialogFactory fp = 0;
-    static ::osl::Module aDialogLibrary;
-    if ( aDialogLibrary.is() || aDialogLibrary.loadRelative( &thisModule, String( RTL_CONSTASCII_USTRINGPARAM( CUI_DLL_NAME ) ) ) )
-        fp = ( VclAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
-    if ( fp )
-        return fp();
-    return 0;
-}
+#if defined VCLPLUG_KDE4_IMPLEMENTATION
+#define VCLPLUG_KDE4_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLPLUG_KDE4_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-VclAbstractDialog::~VclAbstractDialog()
-{
-}
+#if defined VCLPLUG_SVP_IMPLEMENTATION
+#define VCLPLUG_SVP_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define VCLPLUG_SVP_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-// virtual
-VclAbstractDialog2::~VclAbstractDialog2()
-{
-}
+#if defined DESKTOP_DETECTOR_IMPLEMENTATION
+#define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define DESKTOP_DETECTOR_PUBLIC SAL_DLLPUBLIC_IMPORT
+#endif
 
-VclAbstractDialogFactory::~VclAbstractDialogFactory()
-{
-}
+#endif

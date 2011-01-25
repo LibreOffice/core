@@ -1135,8 +1135,6 @@ bool CUPSManager::addOrRemovePossible() const
     return (m_nDests && m_pDests && ! isCUPSDisabled())? false : PrinterInfoManager::addOrRemovePossible();
 }
 
-#include <rtsname.hxx>
-
 const char* CUPSManager::authenticateUser( const char* /*pIn*/ )
 {
     const char* pRet = NULL;

@@ -73,8 +73,6 @@ using namespace com::sun::star;
  *  static helpers
  */
 
-#include "rtsname.hxx"
-
 static oslModule driverLib                  = NULL;
 extern "C"
 {

@@ -28,9 +28,9 @@
 #ifndef __ATK_BRIDGE_HXX__
 #define __ATK_BRIDGE_HXX__
 
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
-bool VCL_DLLPUBLIC InitAtkBridge(void);
-void VCL_DLLPUBLIC DeInitAtkBridge(void);
+bool VCLPLUG_GTK_PUBLIC InitAtkBridge(void);
+void VCLPLUG_GTK_PUBLIC DeInitAtkBridge(void);
 
 #endif

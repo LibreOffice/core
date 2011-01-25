@@ -29,9 +29,9 @@
 #define _SAL_I18N_XKBDEXTENSION_HXX
 
 #include <sal/types.h>
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
-class VCL_DLLPUBLIC SalI18N_KeyboardExtension
+class VCLPLUG_GEN_PUBLIC SalI18N_KeyboardExtension
 {
 private:
 

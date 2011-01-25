@@ -32,12 +32,12 @@
 #include <tools/string.hxx>
 #endif
 #include <tools/gen.hxx>
-#include <vcl/dllapi.h>
 #ifndef _PREX_H
 #include <tools/prex.h>
 #include <X11/Xlib.h>
 #include <tools/postx.h>
 #endif
+#include <vclpluginapi.h>
 #include <vector>
 
 class SalDisplay;
@@ -45,7 +45,7 @@ class X11SalFrame;
 
 namespace vcl_sal {
 
-class VCL_DLLPUBLIC WMAdaptor
+class VCLPLUG_GEN_PUBLIC WMAdaptor
 {
 public:
     enum WMAtom {

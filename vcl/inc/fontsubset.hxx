@@ -32,9 +32,11 @@
 #include <tools/string.hxx>
 #include <cstdio>
 
+#include "vcl/dllapi.h"
+
 namespace vcl { struct _TrueTypeFont; } // SFT's idea of a TTF font
 
-class FontSubsetInfo
+class VCL_DLLPUBLIC FontSubsetInfo
 {
 public:
     explicit    FontSubsetInfo( void );

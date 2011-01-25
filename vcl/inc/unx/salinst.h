@@ -36,10 +36,10 @@
 #ifndef _VOS_THREAD_HXX
 #include <vos/thread.hxx>
 #endif
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 #include <salinst.hxx>
 
-class VCL_DLLPUBLIC SalYieldMutex : public vos::OMutex
+class VCLPLUG_GEN_PUBLIC SalYieldMutex : public vos::OMutex
 {
 protected:
     ULONG                                       mnCount;
@@ -57,7 +57,7 @@ public:
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-class VCL_DLLPUBLIC X11SalInstance : public SalInstance
+class VCLPLUG_GEN_PUBLIC X11SalInstance : public SalInstance
 {
 protected:
     SalYieldMutex*                  mpSalYieldMutex;

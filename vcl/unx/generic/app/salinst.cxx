@@ -102,7 +102,7 @@ sal_Bool SalYieldMutex::tryToAcquire()
 // plugin factory function
 extern "C"
 {
-    VCL_DLLPUBLIC SalInstance* create_SalInstance()
+    VCLPLUG_GEN_PUBLIC SalInstance* create_SalInstance()
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

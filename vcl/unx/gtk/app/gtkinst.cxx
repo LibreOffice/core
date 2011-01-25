@@ -130,7 +130,7 @@ extern "C"
         return true;
     }
 
-    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule pModule )
+    VCLPLUG_GTK_PUBLIC SalInstance* create_SalInstance( oslModule pModule )
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

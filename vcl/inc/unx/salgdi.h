@@ -29,13 +29,16 @@
 #define _SV_SALGDI_H
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+#include "tools/fract.hxx"
+
+#include "vcl/salgtype.hxx"
+#include "vcl/vclenum.hxx"
+
 #include "salstd.hxx"
 #include "salgdi.hxx"
-#include "vcl/salgtype.hxx"
-#include "tools/fract.hxx"
-#include "vcl/dllapi.h"
-#include <vcl/vclenum.hxx>
-#include <sallayout.hxx>
+#include "sallayout.hxx"
+#include "vclpluginapi.h"
+
 #include <deque>
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -73,7 +76,7 @@ public:
     ~CairoFontsCache();
 };
 
-class VCL_DLLPUBLIC X11SalGraphics : public SalGraphics
+class VCLPLUG_GEN_PUBLIC X11SalGraphics : public SalGraphics
 {
     friend class            X11FontLayout;
     friend class            ServerFontLayout;

@@ -31,7 +31,6 @@
 #include <tools/prex.h>
 #include <X11/extensions/Xrender.h>
 #include <tools/postx.h>
-#include <vcl/dllapi.h>
 
 #include <glyphcache.hxx>
 

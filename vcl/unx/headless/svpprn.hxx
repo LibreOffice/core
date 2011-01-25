@@ -34,6 +34,8 @@
 #include "printerjob.hxx"
 #include "salprn.hxx"
 
+#include "vclpluginapi.h"
+
 class PspGraphics;
 
 class PspSalInfoPrinter : public SalInfoPrinter
@@ -102,7 +104,7 @@ public:
 class Timer;
 
 namespace vcl_sal {
-class VCL_DLLPUBLIC PrinterUpdate
+class VCLPLUG_SVP_PUBLIC PrinterUpdate
 {
     static Timer*           pPrinterUpdateTimer;
     static int              nActiveJobs;

@@ -28,13 +28,13 @@
 #ifndef _SAL_I18N_INPUTMETHOD_HXX
 #define _SAL_I18N_INPUTMETHOD_HXX
 
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
 extern "C" char* GetMethodName( XIMStyle nStyle, char *pBuf, int nBufSize);
 
 #define bUseInputMethodDefault True
 
-class VCL_DLLPUBLIC SalI18N_InputMethod
+class VCLPLUG_GEN_PUBLIC SalI18N_InputMethod
 {
     Bool        mbUseable;  // system supports locale as well as status
                             // and preedit style ?

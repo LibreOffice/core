@@ -38,7 +38,7 @@
 #include <vcl/ptrstyle.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/timer.hxx>
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
 
 #include <list>
@@ -57,7 +57,7 @@ namespace vcl_sal { class WMAdaptor; class NetWMAdaptor; class GnomeWMAdaptor; }
 #define SHOWSTATE_NORMAL        1
 #define SHOWSTATE_HIDDEN        2
 
-class VCL_DLLPUBLIC X11SalFrame : public SalFrame
+class VCLPLUG_GEN_PUBLIC X11SalFrame : public SalFrame
 {
     friend class vcl_sal::WMAdaptor;
     friend class vcl_sal::NetWMAdaptor;

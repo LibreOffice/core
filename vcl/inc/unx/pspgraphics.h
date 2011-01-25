@@ -30,8 +30,8 @@
 
 
 #include "vcl/fontmanager.hxx"
-#include "vcl/dllapi.h"
 
+#include "vclpluginapi.h"
 #include "salgdi.hxx"
 #include "sallayout.hxx"
 
@@ -41,7 +41,7 @@ class ServerFont;
 class ImplDevFontAttributes;
 class SalInfoPrinter;
 
-class VCL_DLLPUBLIC PspGraphics : public SalGraphics
+class VCLPLUG_GEN_PUBLIC PspGraphics : public SalGraphics
 {
     psp::JobData*               m_pJobData;
     psp::PrinterGfx*            m_pPrinterGfx;

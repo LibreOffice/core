@@ -37,11 +37,11 @@
 #include <vos/thread.hxx>
 #endif
 #include <salsys.hxx>
-#include <vcl/dllapi.h>
+#include <vclpluginapi.h>
 
 #include <list>
 
-class VCL_DLLPUBLIC X11SalSystem : public SalSystem
+class VCLPLUG_GEN_PUBLIC X11SalSystem : public SalSystem
 {
 public:
     X11SalSystem() {}

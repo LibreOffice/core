@@ -45,9 +45,6 @@
 #include <sys/time.h>
 #include <unistd.h>
 #endif
-#include <unx/kde/kdedata.hxx>
-#include "unx/i18n_im.hxx"
-#include "unx/i18n_xkb.hxx"
 
 #include <osl/thread.h>
 #include <osl/process.h>
@@ -57,6 +54,12 @@
 
 #include <vos/process.hxx>
 #include <vos/mutex.hxx>
+
+#include "unx/kde/kdedata.hxx"
+#include "unx/i18n_im.hxx"
+#include "unx/i18n_xkb.hxx"
+
+#include "vclpluginapi.h"
 
 /* #i59042# override KApplications method for session management
  * since it will interfere badly with our own.
@@ -227,7 +230,7 @@ void KDEData::Init()
  **********************************************************************/
 
 extern "C" {
-    VCL_DLLPUBLIC SalInstance* create_SalInstance( oslModule )
+    VCLPLUG_KDE_PUBLIC SalInstance* create_SalInstance( oslModule )
     {
         /* #i92121# workaround deadlocks in the X11 implementation
         */

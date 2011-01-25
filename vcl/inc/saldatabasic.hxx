@@ -32,6 +32,8 @@
 #include <salinst.hxx>
 #include <osl/module.h>
 
+#include "vcl/dllapi.h"
+
 namespace psp
 {
     class PrinterInfoManager;

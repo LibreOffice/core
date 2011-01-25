@@ -30,8 +30,8 @@
 
 #include <vcl/sv.h>
 #include <vcl/sysdata.hxx>
-#include <vcl/dllapi.h>
 
+#include <vclpluginapi.h>
 #include <salobj.hxx>
 
 class SalClipRegion
@@ -65,7 +65,7 @@ private:
 };
 
 
-class X11SalObject : public SalObject
+class VCLPLUG_GEN_PUBLIC X11SalObject : public SalObject
 {
 public:
     SystemChildData maSystemChildData;
