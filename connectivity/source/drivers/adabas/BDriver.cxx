@@ -30,7 +30,11 @@
 #include "precompiled_connectivity.hxx"
 #include <tools/solar.h>
 #define ULONG ODBC_ULONG
+#ifdef SYSTEM_ODBC_HEADERS
+#include <sqltypes.h>
+#else
 #include <odbc/sqltypes.h>
+#endif
 #undef ULONG
 #undef BOOL
 #include <unotools/tempfile.hxx>
