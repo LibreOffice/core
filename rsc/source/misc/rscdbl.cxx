@@ -43,9 +43,9 @@
 |*
 *************************************************************************/
 REResourceList * InsertList( Atom nClassName, const RscId& rId,
-                             REResourceList * pList ){
+                             REResourceList * pList ) {
     REResourceList  *   pSubList;
-    const char *                pStrClass;
+    const char *        pStrClass;
     ByteString          aStrClass;
 
     pStrClass = pHS->getString( nClassName ).getStr();
@@ -56,8 +56,7 @@ REResourceList * InsertList( Atom nClassName, const RscId& rId,
 
     pSubList = new REResourceList( pList, aStrClass, rId );
 
-    pList->Insert( pSubList, 0xFFFFFFFF );
-    return( pSubList );
+    return pSubList;
 }
 
 void FillSubList( RSCINST & rInst, REResourceList * pList )

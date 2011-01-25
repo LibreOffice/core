@@ -34,9 +34,7 @@
 
 class REResourceList;
 
-DECLARE_LIST( RESubResourceList, REResourceList * )
-
-class REResourceList : public RESubResourceList
+class REResourceList
 {
 protected:
     REResourceList*  pParent;
