@@ -9,5 +9,6 @@ mkdir: %_DEST%\inc%_EXT%\sax\tools
 ..\inc\sax\fshelper.hxx %_DEST%\inc%_EXT%\sax\fshelper.hxx
 ..\inc\sax\fastattribs.hxx %_DEST%\inc%_EXT%\sax\fastattribs.hxx
 ..\inc\sax\tools\converter.hxx %_DEST%\inc%_EXT%\sax\tools\converter.hxx
+..\inc\sax\tools\documenthandleradapter.hxx %_DEST%\inc%_EXT%\sax\tools\documenthandleradapter.hxx
 
 dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
