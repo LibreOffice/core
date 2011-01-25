@@ -189,7 +189,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         String aLine( GetTextEngine()->GetText( nLine ) );
-        Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
+        aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
         GetTextEngine()->RemoveAttribs( nLine, TRUE );
         HighlightPortions aPortions;
