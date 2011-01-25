@@ -250,6 +250,8 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/table/tablecontrol \
     svtools/source/table/tablecontrol_impl \
     svtools/source/table/tabledatawindow \
+    svtools/source/table/mousefunction \
+    svtools/source/table/cellvalueconversion \
     svtools/source/table/tablegeometry \
     svtools/source/toolpanel/drawerlayouter \
     svtools/source/toolpanel/dummypanel \
@@ -278,6 +280,7 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/uno/toolboxcontroller \
     svtools/source/uno/treecontrolpeer \
     svtools/source/uno/unocontroltablemodel \
+    svtools/source/uno/unogridcolumnfacade \
     svtools/source/uno/unoevent \
     svtools/source/uno/unoiface \
     svtools/source/uno/unoimap \
