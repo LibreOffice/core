@@ -652,7 +652,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
             if( xImporter.is() )
             {
                 osl::File aInputFile( rURL );
-                osl::File::RC rc = aInputFile.open( osl_File_OpenFlag_Read );
+                aInputFile.open( osl_File_OpenFlag_Read );
 
                 Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 
@@ -677,7 +677,7 @@ void XMLFilterTestDialog::import( const OUString& rURL )
                 Reference< XDocumentHandler > xWriter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), UNO_QUERY );
 
                 File aOutputFile( aTempFileURL );
-                rc = aOutputFile.open( osl_File_OpenFlag_Write );
+                aOutputFile.open( osl_File_OpenFlag_Write );
 
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
                 Reference< XActiveDataSource > xDocSrc( xWriter, UNO_QUERY );

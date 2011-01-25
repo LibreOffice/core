@@ -411,7 +411,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
             // set flags that have to be set
             rRec.mpContents[ nRecType ] |= nContent;
             nContentEx |= ( nContent >> 16 );
-            rRec.Replace( nRecType, (void*)nContentEx );
+            rRec.Replace( nRecType, (void*)(sal_uIntPtr)nContentEx );
         }
         else
         {
@@ -470,7 +470,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
             }
             rRec.mpContents[ nRecType ] = nContent;
             rRec.mpFlags[ nRecType ] = aPropFlag;
-            rRec.Insert( nRecType, (void*)nContentEx );
+            rRec.Insert( nRecType, (void*)(sal_uIntPtr)nContentEx );
         }
     }
     aHd.SeekToEndOfRecord( rIn );
@@ -594,7 +594,7 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
             sal_uInt32 nNewContentEx = (sal_uInt32)(sal_uIntPtr)rMaster.GetCurObject();
             if ( ((DffPropSet*)this)->Seek( nRecType ) )
                 nNewContentEx |= (sal_uInt32)(sal_uIntPtr)GetCurObject();
-            ( (DffPropSet*) this )->Replace( nRecType, (void*)nNewContentEx );
+            ( (DffPropSet*) this )->Replace( nRecType, (void*)(sal_uIntPtr)nNewContentEx );
         }
         else
         {
@@ -669,7 +669,7 @@ void DffPropSet::SetPropertyValue( UINT32 nId, UINT32 nValue ) const
 {
     if ( !mpFlags[ nId ].bSet )
     {
-        ( (DffPropSet*) this )->Insert( nId, (void*)nValue );
+        ( (DffPropSet*) this )->Insert( nId, (void*)(sal_uIntPtr)nValue );
         ( (DffPropSet*) this )->mpFlags[ nId ].bSet = TRUE;
     }
     ( (DffPropSet*) this )->mpContents[ nId ] = nValue;
@@ -935,17 +935,14 @@ void SvxMSDffManager::SolveSolver( const SvxMSDffSolverContainer& rSolver )
             {
                 SdrObject*  pO;
                 sal_uInt32  nC, nSpFlags;
-                sal_Bool    bTail;
                 if ( !nN )
                 {
-                    bTail = sal_True;
                     pO = pPtr->pAObj;
                     nC = pPtr->ncptiA;
                     nSpFlags = pPtr->nSpFlagsA;
                 }
                 else
                 {
-                    bTail = sal_False;
                     pO = pPtr->pBObj;
                     nC = pPtr->ncptiB;
                     nSpFlags = pPtr->nSpFlagsB;
@@ -4947,7 +4944,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             SfxItemSet  aSet( pSdrModel->GetItemPool() );
 
             sal_Bool    bIsConnector = ( ( aObjData.eShapeType >= mso_sptStraightConnector1 ) && ( aObjData.eShapeType <= mso_sptCurvedConnector5 ) );
-            sal_Bool    bIsCustomShape = sal_False;
             sal_Int32   nObjectRotation = mnFix16Angle;
             sal_uInt32  nSpFlags = aObjData.nSpFlags;
 
@@ -5274,8 +5270,6 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     pRet->SetSnapRect( aObjData.aBoundRect );
                     EnhancedCustomShape2d aCustomShape2d( pRet );
                     aTextRect = aCustomShape2d.GetTextRect();
-
-                    bIsCustomShape = TRUE;
 
                     if( bIsConnector )
                     {
@@ -6293,7 +6287,7 @@ void SvxMSDffManager::SetDgContainer( SvStream& rSt )
         DffRecordHeader aRecHd;
         rSt >> aRecHd;
         UINT32 nDrawingId = aRecHd.nRecInstance;
-        maDgOffsetTable.Insert( nDrawingId, (void*)nFilePos );
+        maDgOffsetTable.Insert( nDrawingId, (void*)(sal_uIntPtr)nFilePos );
         rSt.Seek( nFilePos );
     }
 }
@@ -6650,7 +6644,6 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
 
     // wir wissen noch nicht, ob es eine TextBox ist
     MSO_SPT         eShapeType      = mso_sptNil;
-    MSO_WrapMode    eWrapMode       = mso_wrapSquare;
 //  BOOL            bIsTextBox      = FALSE;
 
     // Shape analysieren
@@ -6736,7 +6729,7 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                     break;
 
                     case DFF_Prop_WrapText :
-                        eWrapMode = (MSO_WrapMode)nPropVal;
+                        //TO-DO: eWrapMode = (MSO_WrapMode)nPropVal;
                     break;
 
                     default:
@@ -6758,50 +6751,6 @@ BOOL SvxMSDffManager::GetShapeContainerData( SvStream& rSt,
                     }
                     break;
                 }
-
-/*
-//JP 21.04.99: Bug 64510
-// alte Version, die unter OS/2 zu Compilerfehlern fuehrt und damit arge
-// Performance einbussen hat.
-
-                if( 0x4000 == ( nPropId & 0xC000 ) )// Bit gesetzt und gueltig?
-                {
-                    // Blip Property gefunden: BStore Idx vermerken!
-                    aInfo.nBStoreIdx = nPropVal;    // Index im BStore Container
-                    break;
-                }
-                else
-                if(    (    (    (DFF_Prop_txflTextFlow   == nPropId)
-                              || (DFF_Prop_Rotation       == nPropId)
-                              || (DFF_Prop_cdirFont       == nPropId) )
-                         && (0 != nPropVal) )
-
-                    || (    (DFF_Prop_gtextFStrikethrough == nPropId)
-                         && ( (0x20002000 & nPropVal)  == 0x20002000) ) // also DFF_Prop_gtextFVertical
-                    || (    (DFF_Prop_fc3DLightFace       == nPropId)
-                         && ( (0x00080008 & nPropVal)  == 0x00080008) ) // also DFF_Prop_f3D
-                  )
-                {
-                    bCanBeReplaced = FALSE;  // Mist: gedrehter Text oder 3D-Objekt!
-                }
-                else
-                if( DFF_Prop_WrapText == nPropId )
-                {
-                    eWrapMode = (MSO_WrapMode)nPropVal;
-                }
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                // keine weitere Property-Auswertung: folge beim Shape-Import //
-                ////////////////////////////////////////////////////////////////
-                ////////////////////////////////////////////////////////////////
-                else
-                if( 0x8000 & nPropId )
-                {
-                    // komplexe Prop gefunden: Laenge lesen und ueberspringen
-                    if(!SkipBytes( rSt, nPropVal )) return FALSE;
-                    nPropRead += nPropVal;
-                }
-*/
             }
             while( nPropRead < nLenShapePropTbl );
             rSt.Seek( nStartShapePropTbl + nLenShapePropTbl );

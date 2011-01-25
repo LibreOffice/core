@@ -112,7 +112,7 @@ void SAL_CALL XMLErrorHandler::error( const Any& aSAXParseException ) throw (SAX
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
         USHORT nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
+        mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
 
@@ -127,7 +127,7 @@ void SAL_CALL XMLErrorHandler::fatalError( const Any& aSAXParseException ) throw
         sErr += String( RTL_CONSTASCII_USTRINGPARAM( " : " ) );
         sErr += String( e.Message );
         USHORT nEntry = mrListBox.InsertEntry( sErr );
-        mrListBox.SetEntryData( nEntry, (void*)e.LineNumber );
+        mrListBox.SetEntryData( nEntry, (void*)(sal_IntPtr)e.LineNumber );
     }
 }
 

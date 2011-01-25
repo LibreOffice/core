@@ -5094,8 +5094,6 @@ sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
     pS->Read(pBlockFlags, sizeof(pBlockFlags));
 
     bool bSize = false;
-    bool bMultiRow = false;
-    bool bTooltips = true;
     bool hasEmbeddedImage = false;
     sal_Int32 nameSize = 0;
     sal_Int32 tipStringSize = 0;
@@ -5145,8 +5143,8 @@ sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
         if ( nOptional32 == 2 )
             bHasTabs =false;
     }
-    if (pBlockFlags[1] & 0x04)
-        bMultiRow = true;
+    // (pBlockFlags[1] & 0x04) -> MultiRow is true
+
     if (pBlockFlags[1] & 0x08)
     {
         ReadAlign(pS, pS->Tell() - nStart, 4);
@@ -5159,8 +5157,8 @@ sal_Bool OCX_TabStrip::Read(SotStorageStream *pS)
         sal_Int32 nOptional32 = 0; // tabfixedheight
         *pS >> nOptional32;
     }
-    if (pBlockFlags[1] & 0x20)
-        bTooltips = false;
+
+    // (pBlockFlags[1] & 0x20) -> Tooltips is false
 
     if (pBlockFlags[1] & 0x80)
     {
@@ -6054,13 +6052,11 @@ sal_Bool OCX_ProgressBar::Read( SvStorageStream *pS )
     *pS >> fMin >> fMax;
     nMin = static_cast< sal_Int32 >( fMin );
     nMax = static_cast< sal_Int32 >( fMax );
-    bool bVisible = true;
     sal_uInt8 pUnknownFlags[4];
     pS->Read(pUnknownFlags,4);
 
-    // complete guess, but we don't handle visible anyway
-    if ( ( pUnknownFlags[2] & 0x8 ) &&  (  pUnknownFlags[2] & 0x2 ) )
-        bVisible = false;
+    //complete guess, but we don't handle visible anyway
+    //( ( pUnknownFlags[2] & 0x8 ) && ( pUnknownFlags[2] & 0x2 ) ) -> Visible is false
 
     sal_uInt32 nFlags;
     *pS >> nFlags;

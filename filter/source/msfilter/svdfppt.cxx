@@ -1931,7 +1931,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                 if ( !pRet )
                                 {
                                     aNm = pOe->pShell->getEmbeddedObjectContainer().CreateUniqueObjectName();
-                                    ErrCode aErrCode = 0;
 
                                     // object is not an own object
                                     SotStorageRef xTarget = SotStorage::OpenOLEStorage( pOe->pShell->GetStorage(), aNm, STREAM_READWRITE );
@@ -1940,8 +1939,6 @@ SdrObject* SdrPowerPointImport::ImportOLE( long nOLEId,
                                         xObjStor->CopyTo( xTarget );
                                         if( !xTarget->GetError() )
                                             xTarget->Commit();
-                                        if( xTarget->GetError() )
-                                            aErrCode = xTarget->GetError();
                                     }
                                     xTarget.Clear();
 
@@ -2099,8 +2096,7 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                                                 *xOriginal  << nIDoNotKnow1
                                                                                 << nIDoNotKnow2;
 
-                                                                UINT32 nSource, nToCopy, nBufSize;
-                                                                nSource = rStCtrl.Tell();
+                                                                UINT32 nToCopy, nBufSize;
                                                                 nToCopy = pHd->nRecLen;
                                                                 BYTE* pBuf = new BYTE[ 0x40000 ];   // 256KB Buffer
                                                                 if ( pBuf )
@@ -5284,13 +5280,13 @@ void PPTStyleTextPropReader::Init( SvStream& rIn, SdrPowerPointImport& rMan, con
             if ( !nChar )
                 break;
             if ( ( nChar & 0xff00 ) == 0xf000 )         // in this special case we got a symbol
-                aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
+                aSpecMarkerList.Insert( (void*)(sal_uIntPtr)( i | PPT_SPEC_SYMBOL ), LIST_APPEND );
             else if ( nChar == 0xd )
             {
                 if ( nInstance == TSS_TYPE_PAGETITLE )
                     *pPtr = 0xb;
                 else
-                    aSpecMarkerList.Insert( (void*)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
+                    aSpecMarkerList.Insert( (void*)(sal_uIntPtr)( i | PPT_SPEC_NEWLINE ), LIST_APPEND );
             }
         }
         if ( i )
