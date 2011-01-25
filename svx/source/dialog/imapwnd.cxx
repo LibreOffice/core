@@ -1002,40 +1002,6 @@ void IMapWindow::CreateDefaultObject()
 
 void IMapWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    KeyCode aCode = rKEvt.GetKeyCode();
-
-/*
-    switch(aCode.GetCode())
-    {
-        case KEY_ESCAPE:
-        {
-            if ( pView->IsAction() )
-            {
-                pView->BrkAction();
-                return;
-            }
-            else if ( pView->AreObjectsMarked() )
-            {
-                const SdrHdlList& rHdlList = pView->GetHdlList();
-                SdrHdl* pHdl = rHdlList.GetFocusHdl();
-
-                if(pHdl)
-                {
-                    ((SdrHdlList&)rHdlList).ResetFocusHdl();
-                }
-                else
-                {
-                    pView->UnmarkAllObj();
-                    ((Dialog*)GetParent())->GrabFocusToFirstControl();
-                }
-
-                return;
-            }
-        }
-        break;
-
-    }
-*/
     GraphCtrl::KeyInput( rKEvt );
 }
 
