@@ -30,7 +30,7 @@
 #include "SchXMLLegendContext.hxx"
 #include "SchXMLEnumConverter.hxx"
 
-#include "xmlnmspe.hxx"
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmlement.hxx>
 #include <xmloff/prstylei.hxx>
 #include <xmloff/nmspmap.hxx>
