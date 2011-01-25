@@ -77,9 +77,6 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
     String&     rData = aDifParser.aData;
     BOOL        bData = FALSE;
 
-    SCCOL       nNumCols = 0;
-    SCROW       nNumRows = 0;
-
     rIn.Seek( 0 );
 
     ScfStreamProgressBar aPrgrsBar( rIn, pDoc->GetDocumentShell() );
@@ -106,20 +103,12 @@ FltError ScFormatFilterPluginImpl::ScImportDif( SvStream& rIn, ScDocument* pDoc,
             {
                 if( aDifParser.nVector != 0 )
                     bSyntErrWarn = TRUE;
-                if( aDifParser.nVal > MAXCOL + 1 )
-                    nNumCols = SCCOL_MAX;
-                else
-                    nNumCols = static_cast<SCCOL>(aDifParser.nVal);
             }
                 break;
             case T_TUPLES:
             {
                 if( aDifParser.nVector != 0 )
                     bSyntErrWarn = TRUE;
-                if( aDifParser.nVal > MAXROW + 1 )
-                    nNumRows = SCROW_MAX;
-                else
-                    nNumRows = static_cast<SCROW>(aDifParser.nVal);
             }
                 break;
             case T_DATA:

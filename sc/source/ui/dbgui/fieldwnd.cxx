@@ -483,7 +483,6 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
     const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
     Color aFaceColor = rStyleSet.GetFaceColor();
     Color aWinColor = rStyleSet.GetWindowColor();
-    Color aTextColor = rStyleSet.GetButtonTextColor();
     Color aWinTextColor = rStyleSet.GetWindowTextColor();
 
     Point aPos0;
@@ -768,12 +767,6 @@ bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
 
 void ScDPHorFieldControl::Redraw()
 {
-    const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
-    Color aFaceColor = rStyleSet.GetFaceColor();
-    Color aWinColor = rStyleSet.GetWindowColor();
-    Color aTextColor = rStyleSet.GetButtonTextColor();
-    Color aWinTextColor = rStyleSet.GetWindowTextColor();
-
     VirtualDevice   aVirDev;
     // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
     aVirDev.EnableRTL( IsRTLEnabled() );

@@ -1010,7 +1010,6 @@ ScDPFieldPopupWindow::ScDPFieldPopupWindow(Window* pParent, ScDocument* pDoc) :
     Size aSize;
     getSectionPosSize(aPos, aSize, WHOLE);
     SetOutputSizePixel(aSize);
-    Size aOutSize = GetOutputSizePixel();
 
     getSectionPosSize(aPos, aSize, BTN_OK);
     maBtnOk.SetPosSizePixel(aPos, aSize);

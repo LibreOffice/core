@@ -422,8 +422,6 @@ void ScFunctionDockWin::SetMyWidthLeRi(Size &aNewSize)
 
     Point aCDTopLeft=aCatBox.GetPosPixel();
     Point aFLTopLeft=aFuncList.GetPosPixel();
-    Point aSplitterTopLeft=aPrivatSplit.GetPosPixel();
-    Point aFDTopLeft=aFiFuncDesc.GetPosPixel();
 
     aCDSize.Width()=aNewSize.Width()-aCDTopLeft.X()-aFLTopLeft.X();
     aFLSize.Width()=aNewSize.Width()-2*aFLTopLeft.X();

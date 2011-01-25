@@ -233,7 +233,6 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
-    Point aLogic = pDev->LogicToPixel( Point(1000,1000), MAP_TWIP );
     double nPPTX = ScGlobal::nScreenPPTX;
     double nPPTY = ScGlobal::nScreenPPTY;
 

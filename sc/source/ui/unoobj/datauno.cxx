@@ -384,8 +384,6 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
 void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<beans::PropertyValue>& rSeq )
 {
-    sal_Bool bOldSortDescriptor(sal_False);
-    sal_Bool bNewSortDescriptor(sal_False);
     const beans::PropertyValue* pPropArray = rSeq.getConstArray();
     long nPropCount = rSeq.getLength();
     for (long nProp = 0; nProp < nPropCount; nProp++)
@@ -395,7 +393,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
 
         if (aPropName.EqualsAscii( SC_UNONAME_ORIENT ))
         {
-            bOldSortDescriptor = sal_True;
             //! test for correct enum type?
             table::TableOrientation eOrient = (table::TableOrientation)
                                 ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
@@ -403,7 +400,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISSORTCOLUMNS ))
         {
-            bNewSortDescriptor = sal_True;
             rParam.bByRow = !::cppu::any2bool(rProp.Value);
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_CONTHDR ))
@@ -423,7 +419,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             uno::Sequence<table::TableSortField> aNewSeq;
             if ( rProp.Value >>= aSeq )
             {
-                bOldSortDescriptor = sal_True;
                 INT32 nCount = aSeq.getLength();
                 INT32 i;
                 if ( nCount > MAXSORT )
@@ -445,7 +440,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             }
             else if ( rProp.Value >>= aNewSeq )
             {
-                bNewSortDescriptor = sal_True;
                 INT32 nCount = aNewSeq.getLength();
                 INT32 i;
                 if ( nCount > MAXSORT )
@@ -473,7 +467,6 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_ISCASE ))
         {
-            bOldSortDescriptor = sal_True;
             rParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_BINDFMT ))
@@ -500,12 +493,10 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_COLLLOC ))
         {
-            bOldSortDescriptor = sal_True;
             rProp.Value >>= rParam.aCollatorLocale;
         }
         else if (aPropName.EqualsAscii( SC_UNONAME_COLLALG ))
         {
-            bOldSortDescriptor = sal_True;
             rtl::OUString sStr;
             if ( rProp.Value >>= sStr )
                 rParam.aCollatorAlgorithm = sStr;

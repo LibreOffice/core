@@ -92,13 +92,9 @@ BOOL FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
         if ( pObj )
         {
             SetAttributes( pObj );
-            sal_Bool bForceFillStyle = sal_True;
             sal_Bool bForceNoFillStyle = sal_False;
             if ( ((SdrObjCustomShape*)pObj)->UseNoFillStyle() )
-            {
-                bForceFillStyle = sal_False;
                 bForceNoFillStyle = sal_True;
-            }
             if ( bForceNoFillStyle )
                 pObj->SetMergedItem( XFillStyleItem( XFILL_NONE ) );
         }

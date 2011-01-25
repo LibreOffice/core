@@ -373,8 +373,6 @@ BOOL FuText::MouseMove(const MouseEvent& rMEvt)
         pView->MovAction(aPnt);
     }
 
-//  ForcePointer(&rMEvt);
-
     return (bReturn);
 }
 
@@ -694,7 +692,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
         {
             SdrPageView* pPV = pView->GetSdrPageView();
             Rectangle aRect = pObj->GetLogicRect();
-            Point aPnt = aRect.Center();
 
             if ( pObj->HasTextEdit() )
             {
