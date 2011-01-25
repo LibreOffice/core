@@ -274,8 +274,8 @@ const USHORT IDF_AUTOFILL   = IDF_ALL & ~(IDF_NOTE | IDF_OBJECTS);
                                     // is bit set in set?
 #define IS_SET(bit,set)(((set)&(bit))==(bit))
 
-#define SEL_ALL         -1  // Eingabezeile: alles Selektieren
-#define RES_CANCEL      0   // Resultate der Funk.AutoPilot-Seiten
+#define SEL_ALL         -1  // input line: select all
+#define RES_CANCEL      0   // results of function AutoPilot pages
 #define RES_BACKWARD    1
 #define RES_END         2
 
@@ -364,29 +364,29 @@ enum ScSizeMode
 enum ScInputMode
     {
         SC_INPUT_NONE,
-        SC_INPUT_TYPE,              // Eingabe, ohne im Inplace-Modus zu sein
-        SC_INPUT_TABLE,             // Textcursor in der Tabelle
-        SC_INPUT_TOP                // Textcursor in der Eingabezeile
+        SC_INPUT_TYPE,              // input, while not in inplace mode
+        SC_INPUT_TABLE,             // text cursor in the table
+        SC_INPUT_TOP                // text cursor in the input line
     };
 
-enum ScVObjMode                     // Ausgabemodi von Objekten auf einer Seite
+enum ScVObjMode                     // output modes of objects on a page
 {
     VOBJ_MODE_SHOW,
     VOBJ_MODE_HIDE
 };
 
-enum ScAnchorType                   // Verankerung eines Zeichenobjekts
+enum ScAnchorType                   // anchor of a character object
 {
     SCA_CELL,
     SCA_PAGE,
-    SCA_DONTKNOW                    // bei Mehrfachselektion
+    SCA_DONTKNOW                    // for multi selection
 };
 
 enum ScGetDBMode
 {
-    SC_DB_MAKE,     // wenn noetig, "unbenannt" anlegen
-    SC_DB_IMPORT,   // wenn noetig, "Importx" anlegen
-    SC_DB_OLD       // nicht neu anlegen
+    SC_DB_MAKE,     // create "untitled" (if necessary)
+    SC_DB_IMPORT,   // create "Importx" (if necessary)
+    SC_DB_OLD       // don't create
 };
 
 /// For ScDBFunc::GetDBData()
@@ -412,12 +412,12 @@ enum ScGetDBSelection
     SC_DBSEL_FORCE_MARK
 };
 
-enum ScLkUpdMode
-{                   //Verknuepfungen
-    LM_ALWAYS,      //immer aktualisieren
-    LM_NEVER,       //niemals
-    LM_ON_DEMAND,   //auf nachfrage
-    LM_UNKNOWN      //Shit happens
+enum ScLkUpdMode    // modes for updating links
+{
+    LM_ALWAYS,
+    LM_NEVER,
+    LM_ON_DEMAND,
+    LM_UNKNOWN
 };
 
 
@@ -441,10 +441,10 @@ struct ScImportParam
     SCCOL           nCol2;
     SCROW           nRow2;
     BOOL            bImport;
-    String          aDBName;                    // Alias der Datenbank
+    String          aDBName;                    // alias of data base
     String          aStatement;
     BOOL            bNative;
-    BOOL            bSql;                       // Statement oder Name?
+    BOOL            bSql;                       // statement or name?
     BYTE            nType;                      // enum DBObject
 
     ScImportParam();
@@ -589,9 +589,9 @@ public:
     SC_DLLPUBLIC static long                nLastRowHeightExtra;
     static long             nLastColWidthExtra;
 
-    static void             Init();                     // am Anfang
+    static void             Init();                     // during start up
     static void             InitAddIns();
-    static void             Clear();                    // bei Programmende
+    static void             Clear();                    // at the end of the program
 
     static void             UpdatePPT(OutputDevice* pDev);
 
@@ -698,7 +698,7 @@ SC_DLLPUBLIC    static const sal_Unicode* FindUnquoted( const sal_Unicode* pStri
 #endif
 
 //==================================================================
-// evtl. in dbdata.hxx auslagern (?):
+// maybe move to dbdata.hxx (?):
 
 enum ScQueryOp
     {
@@ -750,9 +750,9 @@ enum ScSubTotalFunc
 // -----------------------------------------------------------------------
 
 /*
- * Dialog liefert die ausgezeichneten Feldwerte "leer"/"nicht leer"
- * als Konstanten SC_EMPTYFIELDS bzw. SC_NONEMPTYFIELDS in nVal in
- * Verbindung mit dem Schalter bQueryByString auf FALSE.
+ * dialog returns the special field values "empty"/"not empty"
+ * as constants SC_EMPTYFIELDS and SC_NONEMPTYFIELDS respectively in nVal in
+ * conjuctions with the flag bQueryByString = FALSE.
  */
 
 #define SC_EMPTYFIELDS      ((double)0x0042)
@@ -774,14 +774,14 @@ struct ScQueryEntry
     ScQueryConnect  eConnect;
     String*         pStr;
     double          nVal;
-    utl::SearchParam*   pSearchParam;       // falls RegExp, nicht gespeichert
-    utl::TextSearch*    pSearchText;        // falls RegExp, nicht gespeichert
+    utl::SearchParam*   pSearchParam;       // if RegExp, not saved
+    utl::TextSearch*    pSearchText;        // if RegExp, not saved
 
     ScQueryEntry();
     ScQueryEntry(const ScQueryEntry& r);
     ~ScQueryEntry();
 
-    // legt ggbf. pSearchParam und pSearchText an, immer RegExp!
+    // creates pSearchParam and pSearchText if necessary, always RegExp!
     utl::TextSearch*    GetSearchTextPtr( BOOL bCaseSens );
 
     void            Clear();
@@ -793,24 +793,24 @@ struct ScQueryEntry
 
 struct SC_DLLPUBLIC ScSubTotalParam
 {
-    SCCOL           nCol1;          // Selektierter Bereich
+    SCCOL           nCol1;          // selected area
     SCROW           nRow1;
     SCCOL           nCol2;
     SCROW           nRow2;
     BOOL            bRemoveOnly;
-    BOOL            bReplace;                   // vorhandene Ergebnisse ersetzen
-    BOOL            bPagebreak;                 // Seitenumbruch bei Gruppenwechsel
-    BOOL            bCaseSens;                  // Gross-/Kleinschreibung
-    BOOL            bDoSort;                    // vorher sortieren
-    BOOL            bAscending;                 // aufsteigend sortieren
-    BOOL            bUserDef;                   // Benutzer-def. Sort.Reihenfolge
-    USHORT          nUserIndex;                 // Index auf Liste
-    BOOL            bIncludePattern;            // Formate mit sortieren
-    BOOL            bGroupActive[MAXSUBTOTAL];  // aktive Gruppen
-    SCCOL           nField[MAXSUBTOTAL];        // zugehoeriges Feld
-    SCCOL           nSubTotals[MAXSUBTOTAL];    // Anzahl der SubTotals
-    SCCOL*          pSubTotals[MAXSUBTOTAL];    // Array der zu berechnenden Spalten
-    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    // Array der zugehoerige Funktionen
+    BOOL            bReplace;                   // replace existing results
+    BOOL            bPagebreak;                 // page break at change of group
+    BOOL            bCaseSens;                  //
+    BOOL            bDoSort;                    // presort
+    BOOL            bAscending;                 // sort ascending
+    BOOL            bUserDef;                   // sort user defined
+    USHORT          nUserIndex;                 // index into list
+    BOOL            bIncludePattern;            // sort formats
+    BOOL            bGroupActive[MAXSUBTOTAL];  // active groups
+    SCCOL           nField[MAXSUBTOTAL];        // associated field
+    SCCOL           nSubTotals[MAXSUBTOTAL];    // number of SubTotals
+    SCCOL*          pSubTotals[MAXSUBTOTAL];    // array of columns to be calculated
+    ScSubTotalFunc* pFunctions[MAXSUBTOTAL];    // array of associated functions
 
     ScSubTotalParam();
     ScSubTotalParam( const ScSubTotalParam& r );
@@ -829,15 +829,15 @@ class ScArea;
 
 struct ScConsolidateParam
 {
-    SCCOL           nCol;                   // Cursor Position /
-    SCROW           nRow;                   // bzw. Anfang des Zielbereiches
+    SCCOL           nCol;                   // cursor position /
+    SCROW           nRow;                   // or start of destination area respectively
     SCTAB           nTab;
-    ScSubTotalFunc  eFunction;              // Berechnungsvorschrift
-    USHORT          nDataAreaCount;         // Anzahl der Datenbereiche
-    ScArea**        ppDataAreas;            // Zeiger-Array auf Datenbereiche
-    BOOL            bByCol;                 // nach Spalten
-    BOOL            bByRow;                 // nach Zeilen
-    BOOL            bReferenceData;         // Quelldaten referenzieren
+    ScSubTotalFunc  eFunction;
+    USHORT          nDataAreaCount;         // number of data areas
+    ScArea**        ppDataAreas;            // array of pointers into data areas
+    BOOL            bByCol;
+    BOOL            bByRow;
+    BOOL            bReferenceData;         // reference source data
 
     ScConsolidateParam();
     ScConsolidateParam( const ScConsolidateParam& r );

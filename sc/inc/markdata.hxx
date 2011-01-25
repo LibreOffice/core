@@ -37,22 +37,22 @@ class ScMarkArray;
 class ScRangeList;
 
 //!     todo:
-//!     Es muss auch die Moeglichkeit geben, MarkArrays pro Tabelle zu halten,
-//!     damit "alle suchen" ueber mehrere Tabellen wieder funktioniert!
+//!     It should be possible to have MarkArrays for each table, in order to
+//!     enable "search all" across more than one table again!
 
 
 class SC_DLLPUBLIC ScMarkData
 {
 private:
-    ScRange         aMarkRange;             // Bereich
-    ScRange         aMultiRange;            // maximaler Bereich insgesamt
-    ScMarkArray*    pMultiSel;              // Mehrfachselektion
-    BOOL            bTabMarked[MAXTABCOUNT];// Tabelle selektiert
-    BOOL            bMarked;                // Rechteck markiert
-    BOOL            bMultiMarked;           // mehrfach markiert
+    ScRange         aMarkRange;             // area
+    ScRange         aMultiRange;            // maximum area altogether
+    ScMarkArray*    pMultiSel;              // multi selection
+    BOOL            bTabMarked[MAXTABCOUNT];// table marked
+    BOOL            bMarked;                // rectangle marked
+    BOOL            bMultiMarked;
 
-    BOOL            bMarking;               // Bereich wird aufgezogen -> kein MarkToMulti
-    BOOL            bMarkIsNeg;             // Aufheben bei Mehrfachselektion
+    BOOL            bMarking;               // area is being marked -> no MarkToMulti
+    BOOL            bMarkIsNeg;             // cancel if multi selection
 
 public:
                 ScMarkData();
@@ -89,7 +89,7 @@ public:
     void        SetMarking( BOOL bFlag )        { bMarking = bFlag;   }
     BOOL        GetMarkingFlag() const          { return bMarking;    }
 
-    //  fuer FillInfo / Document etc.
+    //  for FillInfo / Document etc.
     const ScMarkArray* GetArray() const         { return pMultiSel; }
 
     BOOL        IsCellMarked( SCCOL nCol, SCROW nRow, BOOL bNoSimple = FALSE ) const;
@@ -110,7 +110,7 @@ public:
     BOOL        HasMultiMarks( SCCOL nCol ) const;
     BOOL        HasAnyMultiMarks() const;
 
-    //  Tabellen-Markierungen anpassen:
+    //  adjust table marking:
     void        InsertTab( SCTAB nTab );
     void        DeleteTab( SCTAB nTab );
 };

@@ -39,7 +39,7 @@ class ScPaintHint : public SfxHint
 {
     ScRange     aRange;
     USHORT      nParts;
-    BOOL        bPrint;     //  Flag, ob auch Druck/Vorschau betroffen ist
+    BOOL        bPrint;     //  flag indicating whether print/preview if affected
 
     ScPaintHint(); // disabled
 
