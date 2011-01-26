@@ -27,6 +27,14 @@
 
 $(eval $(call gb_Library_Library,vcl))
 
+ifeq ($(OS),MACOSX)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.macosx))
+else ifeq ($(OS),WNT)
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.windows))
+else
+$(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
+endif
+
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
 $(eval $(call gb_Library_add_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
@@ -89,7 +97,7 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
     $$(OBJCXXFLAGS) \
 ))
-$(eval $(call gb_Library_add_add_objcxxobjects,vcl,\
+$(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \
     vcl/aqua/source/a11y/aqua11ycomponentwrapper \
     vcl/aqua/source/a11y/aqua11yfactory \
@@ -386,6 +394,19 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     dl \
     m \
     pthread \
+))
+endif
+
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    AppleRemote \
+))
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    -framework QuickTime \
+    -framework Cocoa \
+    -framework Carbon \
+    -framework CoreFoundation \
 ))
 endif
 
