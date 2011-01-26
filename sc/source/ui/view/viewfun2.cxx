@@ -744,17 +744,20 @@ String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTo
         pArray->AddOpCode(ocSep);
     }
 
-    ScRangeList aRangeList = rRangeList;
-    const ScRange* pFirst = aRangeList.front();
-    size_t ListSize = aRangeList.size();
-    for ( size_t i = 0; i < ListSize; ++i )
+    if(!rRangeList.empty())
     {
-        const ScRange* p = aRangeList[i];
-        if (p != pFirst)
-            pArray->AddOpCode(ocSep);
-        ScComplexRefData aRef;
-        aRef.InitRangeRel(*p, rAddr);
-        pArray->AddDoubleReference(aRef);
+        ScRangeList aRangeList = rRangeList;
+        const ScRange* pFirst = aRangeList.front();
+        size_t ListSize = aRangeList.size();
+        for ( size_t i = 0; i < ListSize; ++i )
+        {
+            const ScRange* p = aRangeList[i];
+            if (p != pFirst)
+                pArray->AddOpCode(ocSep);
+            ScComplexRefData aRef;
+            aRef.InitRangeRel(*p, rAddr);
+            pArray->AddDoubleReference(aRef);
+        }
     }
 
     pArray->AddOpCode(ocClose);
