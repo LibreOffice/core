@@ -963,18 +963,10 @@ void SvxNumberFormatTabPage::UpdateOptions_Impl( BOOL bCheckCatChange /*= FALSE*
     USHORT  nZeroes             = 0;
     BOOL    bNegRed             = FALSE;
     BOOL    bThousand           = FALSE;
-    short   nTmpCatPos;
     USHORT  nCurrencyPos        =aLbCurrency.GetSelectEntryPos();
 
     if(bOneAreaFlag)
-    {
-        nTmpCatPos=nFixedCategory;
         nCurCategory=nFixedCategory;
-    }
-    else
-    {
-        nTmpCatPos=nCurCategory;
-    }
 
 
     pNumFmtShell->GetOptions( theFormat,
@@ -1782,7 +1774,6 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     SvStringsDtor   aList;
     NfShCurrencyEntries rEntries;
     XubString*      pEntry = NULL;
-    USHORT  nPos=0;
     USHORT  nSelPos=0;
 
     pNumFmtShell->GetCurrencySymbols( aList, &nSelPos);
@@ -1790,7 +1781,7 @@ void SvxNumberFormatTabPage::FillCurrencyBox()
     for(USHORT i=1;i<aList.Count();i++)
     {
         pEntry=aList[i];
-        nPos=aLbCurrency.InsertEntry( *pEntry);
+        aLbCurrency.InsertEntry( *pEntry);
     }
     aLbCurrency.SelectEntryPos(nSelPos);
 }
