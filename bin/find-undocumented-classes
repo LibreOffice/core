@@ -2,6 +2,8 @@
 
 # finds undocumented classes in the current directory (recursive)
 
+type -p doxygen >/dev/null || exit
+
 filter=
 quiet=n
 if [ "$1" = "-q" ]; then
