@@ -217,7 +217,6 @@ struct FactoryInfo
         ::rtl::OUString     getShortName        () const { return sShortName;         };
         ::rtl::OUString     getTemplateFile     () const { return sTemplateFile;      };
         ::rtl::OUString     getWindowAttributes () const { return sWindowAttributes;  };
-        ::rtl::OUString     getEmptyDocumentURL () const { return sEmptyDocumentURL;  };
         ::rtl::OUString     getDefaultFilter    () const { return sDefaultFilter;     };
         sal_Bool            isDefaultFilterReadonly() const { return bDefaultFilterReadonly; }
         sal_Int32           getIcon             () const { return nIcon;              };
@@ -250,24 +249,6 @@ struct FactoryInfo
         }
 
         //---------------------------------------------------------------------------------------------------------
-        void setInstalled( sal_Bool bNewInstalled )
-        {
-            bInstalled = bNewInstalled;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setFactory( const ::rtl::OUString& sNewFactory )
-        {
-            sFactory = sNewFactory;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setShortName( const ::rtl::OUString& sNewShortName )
-        {
-            sShortName = sNewShortName;
-        };
-
-        //---------------------------------------------------------------------------------------------------------
         void setTemplateFile( const ::rtl::OUString& sNewTemplateFile )
         {
             if( sTemplateFile != sNewTemplateFile )
@@ -288,32 +269,12 @@ struct FactoryInfo
         };
 
         //---------------------------------------------------------------------------------------------------------
-        void setEmptyDocumentURL( const ::rtl::OUString& sNewEmptyDocumentURL )
-        {
-            if( sEmptyDocumentURL != sNewEmptyDocumentURL )
-            {
-                sEmptyDocumentURL        = sNewEmptyDocumentURL;
-                bChangedEmptyDocumentURL = sal_True            ;
-            }
-        };
-
-        //---------------------------------------------------------------------------------------------------------
         void setDefaultFilter( const ::rtl::OUString& sNewDefaultFilter )
         {
             if( sDefaultFilter != sNewDefaultFilter )
             {
                 sDefaultFilter       = sNewDefaultFilter;
                 bChangedDefaultFilter = sal_True         ;
-            }
-        };
-
-        //---------------------------------------------------------------------------------------------------------
-        void setIcon( sal_Int32 nNewIcon )
-        {
-            if( nIcon != nNewIcon )
-            {
-                nIcon        = nNewIcon;
-                bChangedIcon = sal_True;
             }
         };
 
