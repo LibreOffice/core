@@ -199,37 +199,36 @@ void SwTextShell::ExecMoveLingu(SfxRequest &rReq)
     GetView().GetEditWin().FlushInBuffer();
 
     USHORT nSlot = rReq.GetSlot();
-    BOOL bRet = FALSE;
     switch ( nSlot )
     {
         case FN_NEXT_WORD_SEL:
-        case FN_NEXT_WORD:      bRet = rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
+        case FN_NEXT_WORD:      rSh.NxtWrd( FN_NEXT_WORD_SEL == nSlot );
         break;
 
         case FN_START_OF_PARA_SEL:
-        case FN_START_OF_PARA:  bRet = rSh.SttPara( FN_START_OF_PARA_SEL == nSlot );
+        case FN_START_OF_PARA:  rSh.SttPara( FN_START_OF_PARA_SEL == nSlot );
         break;
 
         case FN_END_OF_PARA_SEL:
-        case FN_END_OF_PARA:    bRet = rSh.EndPara( FN_END_OF_PARA_SEL == nSlot );
+        case FN_END_OF_PARA:    rSh.EndPara( FN_END_OF_PARA_SEL == nSlot );
         break;
 
         case FN_PREV_WORD_SEL:
-        case FN_PREV_WORD:      bRet = rSh.PrvWrd( FN_PREV_WORD_SEL == nSlot );
+        case FN_PREV_WORD:      rSh.PrvWrd( FN_PREV_WORD_SEL == nSlot );
         break;
 
         case FN_NEXT_SENT_SEL:
-        case FN_NEXT_SENT:      bRet = rSh.FwdSentence( FN_NEXT_SENT_SEL == nSlot );
+        case FN_NEXT_SENT:      rSh.FwdSentence( FN_NEXT_SENT_SEL == nSlot );
         break;
 
         case FN_PREV_SENT_SEL:
-        case FN_PREV_SENT:      bRet = rSh.BwdSentence( FN_PREV_SENT_SEL == nSlot );
+        case FN_PREV_SENT:      rSh.BwdSentence( FN_PREV_SENT_SEL == nSlot );
         break;
 
-        case FN_NEXT_PARA:      bRet = rSh.FwdPara    ( FALSE );
+        case FN_NEXT_PARA:      rSh.FwdPara    ( FALSE );
         break;
 
-        case FN_PREV_PARA:      bRet = rSh.BwdPara    ( FALSE );
+        case FN_PREV_PARA:      rSh.BwdPara    ( FALSE );
         break;
         default: OSL_ENSURE(false, "wrong dispatcher"); return;
     }
