@@ -57,8 +57,9 @@
 
 #include <stdio.h>
 
-#ifdef KDE_HAVE_GLIB
 #if QT_VERSION >= QT_VERSION_CHECK( 4, 8, 0 )
+#define QT_UNIX_EVENT_LOOP_SUPPORT
+#ifdef KDE_HAVE_GLIB
 #define GLIB_EVENT_LOOP_SUPPORT
 #endif
 #endif
@@ -201,6 +202,12 @@ void KDEXLib::Init()
 static GPollFunc old_gpoll = NULL;
 static gint gpoll_wrapper( GPollFD*, guint, gint );
 #endif
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+static int (*qt_select)(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout);
+static int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout);
+#endif
 
 void KDEXLib::setupEventLoop()
 {
@@ -221,7 +228,24 @@ void KDEXLib::setupEventLoop()
         return;
     }
 #endif
-    // TODO handle also Qt's own event loop (requires fixing Qt too)
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+// When Qt does not use Glib support, it uses its own Unix event dispatcher.
+// That one has aboutToBlock() and awake() signals, but they are broken (either
+// functionality or semantics), as e.g. awake() is not emitted right after the dispatcher
+// is woken up from sleep again, but only later (which is too late for re-acquiring SolarMutex).
+// This should be fixed with Qt-4.8.0 (?) where support for adding custom select() function
+// has been added too (http://bugreports.qt.nokia.com/browse/QTBUG-16934).
+    if( QAbstractEventDispatcher::instance()->inherits( "QEventDispatcherUNIX" ))
+    {
+        eventLoopType = QtUnixEventLoop;
+        QInternal::callFunction( QInternal::GetUnixSelectFunction, reinterpret_cast< void** >( &qt_select ));
+        QInternal::callFunction( QInternal::SetUnixSelectFunction, reinterpret_cast< void** >( lo_select ));
+        // set QClipboard to use event loop, otherwise the main thread will hold
+        // SolarMutex locked, which will prevent the clipboard thread from answering
+        m_pApplication->clipboard()->setProperty( "useEventLoopWhenWaiting", true );
+        return;
+    }
+#endif
 }
 
 #ifdef GLIB_EVENT_LOOP_SUPPORT
@@ -229,6 +253,15 @@ gint gpoll_wrapper( GPollFD* ufds, guint nfds, gint timeout )
 {
     YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
     return old_gpoll( ufds, nfds, timeout );
+}
+#endif
+
+#ifdef QT_UNIX_EVENT_LOOP_SUPPORT
+int lo_select(int nfds, fd_set *fdread, fd_set *fdwrite, fd_set *fdexcept,
+   const struct timeval *orig_timeout)
+{
+    YieldMutexReleaser release; // release YieldMutex (and re-acquire at block end)
+    return qt_select( nfds, fdread, fdwrite, fdexcept, orig_timeout );
 }
 #endif
 
