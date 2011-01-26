@@ -485,8 +485,6 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
 {
     if (nLastWhich!=0) {
         bool bFnd = false;
-        USHORT nBestMinWh=0,nBestMaxWh=0xFFFF;       // not implemented yet
-        ULONG nBestMinPos=0,nBestMaxPos=0xFFFFFFFF;  // not implemented yet
         ULONG nAnz=aList.Count();
         ULONG nNum;
         for (nNum=0; nNum<nAnz && !bFnd; nNum++) {
@@ -494,8 +492,6 @@ void _SdrItemBrowserControl::ImpRestoreWhich()
             if (!pEntry->bComment) {
                 USHORT nWh=pEntry->nWhichId;
                 if (nWh==nLastWhich) bFnd = true;
-                else if (nWh<nLastWhich && nWh>nBestMinWh) nBestMinPos=nNum;
-                else if (nWh>nLastWhich && nWh<nBestMaxWh) nBestMaxPos=nNum;
             }
         }
         if (bFnd) {

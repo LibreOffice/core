@@ -321,11 +321,9 @@ Point SdrSnapView::GetSnapPos(const Point& rPnt, const SdrPageView* pPV) const
 USHORT SdrSnapView::SnapPos(Point& rPnt, const SdrPageView* pPV) const
 {
     if (!bSnapEnab) return SDRSNAP_NOTSNAPPED;
-    BOOL bPVOfs=FALSE;
     long x=rPnt.X();
     long y=rPnt.Y();
     if (pPV==NULL) {
-        bPVOfs=TRUE;
         pPV=GetSdrPageView();
         if (pPV==NULL) return SDRSNAP_NOTSNAPPED;
     }

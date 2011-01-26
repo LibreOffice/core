@@ -295,9 +295,6 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
             }
         }
 
-        // bei allen direkt selektierten Objekten auf selektiert setzen
-        SdrMark* pM = NULL;
-
         for(nObjs = 0;nObjs < nCnt;nObjs++)
         {
             SdrObject *pObj = GetMarkedObjectByIndex(nObjs);
@@ -307,7 +304,6 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut) const
                 E3dObject* p3DObj = (E3dObject*)pObj;
                 p3DObj->SetSelected(TRUE);
                 pScene = p3DObj->GetScene();
-                pM = GetSdrMarkByIndex(nObjs);
             }
         }
 

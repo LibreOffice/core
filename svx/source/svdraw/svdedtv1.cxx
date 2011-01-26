@@ -1377,7 +1377,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
 
     BOOL bChgPos=FALSE;
     BOOL bChgSiz=FALSE;
-    BOOL bChgHgt=FALSE;
     BOOL bRotate=FALSE;
     BOOL bShear =FALSE;
 
@@ -1403,7 +1402,6 @@ void SdrEditView::SetGeoAttrToMarked(const SfxItemSet& rAttr)
     if (SFX_ITEM_SET==rAttr.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,TRUE,&pPoolItem)) {
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
         bChgSiz=TRUE;
-        bChgHgt=TRUE;
     }
     if (bChgSiz) {
         eSizePoint=(RECT_POINT)((const SfxAllEnumItem&)rAttr.Get(SID_ATTR_TRANSFORM_SIZE_POINT)).GetValue();

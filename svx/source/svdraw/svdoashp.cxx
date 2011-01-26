@@ -508,7 +508,6 @@ sal_Bool SdrObjCustomShape::GetTextBounds( Rectangle& rTextBound ) const
 basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomShape* pCustomShape, const sal_Bool bBezierAllowed )
 {
     basegfx::B2DPolyPolygon aRetval;
-    sal_Bool bRet = sal_False;
     Reference< XCustomShapeEngine > xCustomShapeEngine( GetCustomShapeEngine( pCustomShape ) );
     if ( xCustomShapeEngine.is() )
     {
@@ -520,7 +519,6 @@ basegfx::B2DPolyPolygon SdrObjCustomShape::GetLineGeometry( const SdrObjCustomSh
             {
                 aRetval = basegfx::tools::adaptiveSubdivideByAngle(aRetval);
             }
-            bRet = sal_True;
         }
         catch ( const com::sun::star::lang::IllegalArgumentException )
         {

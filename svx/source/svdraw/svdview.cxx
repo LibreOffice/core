@@ -372,7 +372,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
     USHORT nHitPassNum=0;
     USHORT nHlplIdx=0;
     USHORT nGlueId=0;
-    BOOL bUnmarkedObjHit=FALSE;
     if (bTextEditHit || bTextEditSel)
     {
         eHit=SDRHIT_TEXTEDIT;
@@ -430,7 +429,6 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                     break;
             }
         }
-        bUnmarkedObjHit=TRUE;
     }
     else if (bEditMode && IsHlplVisible() && !IsHlplFront() && pOut!=NULL && PickHelpLine(aLocalLogicPosition,nHitTolLog,*pOut,nHlplIdx,pPV))
     {
