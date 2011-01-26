@@ -64,10 +64,6 @@ SHL1STDLIBS= \
             $(SOTLIB) \
             $(XMLSCRIPTLIB)
 
-.IF "$(SOLAR_JAVA)" != "TRUE"
-SHL1STDLIBS+=$(SJLIB)
-.ENDIF
-
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=	\
     $(UWINAPILIB)	\

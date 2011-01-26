@@ -49,7 +49,6 @@ APP1STDLIBS= \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
             $(CPPULIB) \
-            $(SJLIB) \
             $(SOTLIB) \
 
 
