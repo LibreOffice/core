@@ -451,19 +451,12 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
         return;
     // Alles geprueft und wir haben den Namen der Column.
     // Die wievielte Column ist das?
-    try
-    {
-        m_aOrderbyColumnNumber.push_back(xColLocate->findColumn(aColumnName));
-    }
-    catch(Exception)
-    {
-        ::vos::ORef<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
-        ::comphelper::UStringMixEqual aCase;
-        OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),aColumnName,aCase);
-        if ( aFind == aSelectColumns->get().end() )
-            throw SQLException();
-        m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->get().begin()) + 1);
-    }
+    ::vos::ORef<OSQLColumns> aSelectColumns = m_aSQLIterator.getSelectColumns();
+    ::comphelper::UStringMixEqual aCase;
+    OSQLColumns::Vector::const_iterator aFind = ::connectivity::find(aSelectColumns->get().begin(),aSelectColumns->get().end(),aColumnName,aCase);
+    if ( aFind == aSelectColumns->get().end() )
+        throw SQLException();
+    m_aOrderbyColumnNumber.push_back((aFind - aSelectColumns->get().begin()) + 1);
 
     // Ascending or Descending?
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? SQL_DESC : SQL_ASC);

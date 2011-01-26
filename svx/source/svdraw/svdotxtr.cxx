@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdopath.hxx>
@@ -41,7 +41,7 @@
 #include <svx/sdr/properties/properties.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svl/itemset.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <drawinglayer/processor2d/textaspolygonextractor2d.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/xflclit.hxx>
@@ -354,7 +354,7 @@ SdrObject* SdrTextObj::ImpConvertContainedTextToSdrPathObjs(bool bToPoly) const
     if(xSequence.hasElements())
     {
         // create an extractor with neutral ViewInformation
-        const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+        const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
         drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
         // extract text as polygons

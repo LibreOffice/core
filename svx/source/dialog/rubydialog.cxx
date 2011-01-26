@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <rubydialog.hxx>
+#include <svx/rubydialog.hxx>
 #include <tools/shl.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>

@@ -43,8 +43,8 @@
 #include <svx/svdhdl.hxx>
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include "svx/svdstr.hrc"    // Objektname
 #include <svl/style.hxx>
 #include <svl/smplhint.hxx>
 #include <editeng/eeitem.hxx>

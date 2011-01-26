@@ -152,7 +152,6 @@ SvxSimpleTable::SvxSimpleTable( Window* pParent,const ResId& rResId):
     InitHeaderBar( &aHeaderBar );
 
     aHeaderBar.Show();
-    SetWindowBits(WB_CLIPCHILDREN | WB_HSCROLL);
     SvHeaderTabListBox::Show();
 }
 

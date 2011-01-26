@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
-#include "svditer.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svditer.hxx"
 
 #if defined( UNX ) || defined( ICC )
 #include <stdlib.h>
 #endif
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/svdpage.hxx>
 #include <svl/style.hxx>
 #include <svx/scene3d.hxx>

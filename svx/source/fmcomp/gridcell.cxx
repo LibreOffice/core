@@ -30,7 +30,7 @@
 
 
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "svx/fmtools.hxx"
 #include "gridcell.hxx"
 #include "gridcols.hxx"
@@ -1653,11 +1653,14 @@ DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
 
 namespace
 {
-    void setCheckBoxStyle( Window* _pWindow, USHORT nStyle )
+    void setCheckBoxStyle( Window* _pWindow, bool bMono )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetCheckBoxStyle( nStyle );
+        if( bMono )
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
+        else
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & (~STYLE_OPTION_MONO) );
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
     }
@@ -1683,8 +1686,8 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
         sal_Int16 nStyle = awt::VisualEffect::LOOK3D;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle );
 
-        setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
-        setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+        setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT );
+        setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT );
 
         sal_Bool bTristate = sal_True;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
@@ -2953,13 +2956,13 @@ sal_Bool DbFilterField::commitControl()
         case ::com::sun::star::form::FormComponentType::CHECKBOX:
             return sal_True;
         case ::com::sun::star::form::FormComponentType::LISTBOX:
+            aText.Erase();
             if (static_cast<ListBox*>(m_pWindow)->GetSelectEntryCount())
             {
                 sal_Int16 nPos = (sal_Int16)static_cast<ListBox*>(m_pWindow)->GetSelectEntryPos();
-                aText = (const sal_Unicode*)m_aValueList.getConstArray()[nPos];
+                if ( ( nPos >= 0 ) && ( nPos < m_aValueList.getLength() ) )
+                    aText = (const sal_Unicode*)m_aValueList.getConstArray()[nPos];
             }
-            else
-                aText.Erase();
 
             if (m_aText != aText)
             {

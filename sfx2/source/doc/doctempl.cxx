@@ -94,7 +94,7 @@ using namespace ::ucbhelper;
 #include <sfx2/objsh.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 #include <sfx2/fcontnr.hxx>
 #include <svtools/templatefoldercache.hxx>
@@ -137,7 +137,11 @@ namespace DocTempl {
 class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
+
+    // the following member must be SfxObjectShellLock since it controlls that SfxObjectShell lifetime by design
+    // and users of this class expect it to be so.
     SfxObjectShellLock  mxObjShell;
+
     OUString            maTitle;
     OUString            maOwnURL;
     OUString            maTargetURL;

@@ -55,7 +55,7 @@
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #include <comphelper/processfactory.hxx>
 #include <vos/mutex.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 using namespace ::osl;
 using namespace ::vos;
@@ -122,7 +122,6 @@ private:
     SvxDrawOutlinerViewForwarder*   CreateViewForwarder();
 
     void                            SetupOutliner();
-    void                            UpdateOutliner();
 
     sal_Bool                        HasView() const { return mpView ? sal_True : sal_False; }
     sal_Bool                        IsEditMode() const
@@ -168,6 +167,8 @@ public:
     virtual void ObjectInDestruction(const SdrObject& rObject);
 
     void ChangeModel( SdrModel* pNewModel );
+
+    void                    UpdateOutliner();
 };
 
 //------------------------------------------------------------------------
@@ -1146,4 +1147,9 @@ const SvxUnoTextRangeBaseList& SvxTextEditSource::getRanges() const
 void SvxTextEditSource::ChangeModel( SdrModel* pNewModel )
 {
     mpImpl->ChangeModel( pNewModel );
+}
+
+void SvxTextEditSource::UpdateOutliner()
+{
+    mpImpl->UpdateOutliner();
 }

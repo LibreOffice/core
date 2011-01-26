@@ -93,7 +93,7 @@
 #include <hash_map>
 
 #include <sfx2/event.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper
@@ -639,7 +639,7 @@ void SAL_CALL SfxBaseController::attachFrame( const REFERENCE< XFRAME >& xFrame 
             ConnectSfxFrame_Impl( E_CONNECT );
 
             // attaching the frame to the controller is the last step in the creation of a new view, so notify this
-            SfxEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell() );
+            SfxViewEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), uno::Reference< frame::XController2 >( this ) );
             SFX_APP()->NotifyEvent( aHint );
         }
     }
@@ -734,7 +734,7 @@ ANY SfxBaseController::getViewData() throw( ::com::sun::star::uno::RuntimeExcept
     if ( m_pData->m_pViewShell )
     {
         m_pData->m_pViewShell->WriteUserData( sData1 ) ;
-        OUSTRING    sData( sData1 );
+        ::rtl::OUString    sData( sData1 );
         aAny <<= sData ;
     }
 
@@ -750,7 +750,7 @@ void SAL_CALL SfxBaseController::restoreViewData( const ANY& aValue ) throw( ::c
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pData->m_pViewShell )
     {
-        OUSTRING sData;
+        ::rtl::OUString sData;
         aValue >>= sData ;
         m_pData->m_pViewShell->ReadUserData( sData ) ;
     }
@@ -781,7 +781,7 @@ REFERENCE< XMODEL > SAL_CALL SfxBaseController::getModel() throw( ::com::sun::st
 //________________________________________________________________________________________________________
 
 REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOURL&             aURL            ,
-                                                                    const   OUSTRING&           sTargetFrameName,
+                                                                    const   ::rtl::OUString&            sTargetFrameName,
                                                                             sal_Int32           eSearchFlags    ) throw( RUNTIMEEXCEPTION )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -938,12 +938,12 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 //  SfxBaseController -> XDispatchProvider
 //________________________________________________________________________________________________________
 
-SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
+uno::Sequence< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // Create return list - which must have same size then the given descriptor
     // It's not allowed to pack it!
     sal_Int32 nCount = seqDescripts.getLength();
-    SEQUENCE< REFERENCE< XDISPATCH > > lDispatcher( nCount );
+    uno::Sequence< REFERENCE< XDISPATCH > > lDispatcher( nCount );
 
     for( sal_Int32 i=0; i<nCount; ++i )
     {
@@ -1069,7 +1069,7 @@ void SAL_CALL SfxBaseController::dispose() throw( ::com::sun::star::uno::Runtime
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
             }
 
-            SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc ) );
+            SFX_APP()->NotifyEvent( SfxViewEventHint(SFX_EVENT_CLOSEVIEW, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEVIEW ), pDoc, uno::Reference< frame::XController2 >( this ) ) );
             if ( !pView )
                 SFX_APP()->NotifyEvent( SfxEventHint(SFX_EVENT_CLOSEDOC, GlobalEventConfig::GetEventName( STR_EVENT_CLOSEDOC ), pDoc) );
 
@@ -1438,11 +1438,11 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 try
                 {
                     Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY_THROW );
-                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData(), UNO_SET_THROW );
+                    Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData() );
 
                     // find the view data item whose ViewId matches the ID of the view we're just connecting to
                     const SfxObjectFactory& rDocFactory( rDoc.GetFactory() );
-                    const sal_Int32 nCount = xViewData->getCount();
+                    const sal_Int32 nCount = xViewData.is() ? xViewData->getCount() : 0;
                     sal_Int32 nViewDataIndex = 0;
                     for ( sal_Int32 i=0; i<nCount; ++i )
                     {

@@ -64,7 +64,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 #include <sfx2/sfx.hrc>
 #include "docvor.hrc"
@@ -546,6 +546,9 @@ BOOL SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, BOOL bSelect )
         return SvTreeListBox::Select(pEntry,bSelect);
 
     Path aPath(this, pEntry);
+
+    // it is ok to use the SfxObjectShellRef here since the object that
+    // provides it ( GetObjectShell() calls CreateObjectShell() ) has a lock on it
     GetObjectShell(aPath)->TriggerHelpPI(
         aPath[nLevel+1], aPath[nLevel+2], aPath[nLevel+3]);
     return SvTreeListBox::Select(pEntry,bSelect);
@@ -691,10 +694,12 @@ BOOL SfxOrganizeListBox_Impl::MoveOrCopyContents(SvLBox *pSourceBox,
     BOOL bRemovedFromSource = FALSE;
     Path aSource(pSourceBox, pSource);
     Path aTarget(this, pTarget);
-    SfxObjectShellRef aSourceDoc =
-        ((SfxOrganizeListBox_Impl *)pSourceBox)->GetObjectShell(aSource);
 
+    // it is ok to use the SfxObjectShellRef here since the object that
+    // provides it ( GetObjectShell() calls CreateObjectShell() ) has a lock on it
+    SfxObjectShellRef aSourceDoc = ((SfxOrganizeListBox_Impl *)pSourceBox)->GetObjectShell(aSource);
     SfxObjectShellRef aTargetDoc = GetObjectShell(aTarget);
+
     const USHORT nSLevel =
         ((SfxOrganizeListBox_Impl *)pSourceBox)->GetDocLevel();
     const USHORT nTLevel = GetDocLevel();
@@ -1210,6 +1215,9 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
         {
             const USHORT nDocLevel = GetDocLevel();
             Path aPath(this, pEntry);
+
+            // it is ok to use the SfxObjectShellRef here since the object that
+            // provides it ( GetObjectShell() calls CreateObjectShell() ) has a lock on it
             SfxObjectShellRef aRef = GetObjectShell(aPath);
             if(aRef.Is())
             {
@@ -1887,6 +1895,9 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
                 if(!QueryDelete_Impl(pDialog, STR_DELETE_TEMPLATE, pFocusBox->GetEntryText(pEntry)))
                     return 1;
                 Path aPath(pFocusBox, pEntry);
+
+                // it is ok to use the SfxObjectShellRef here since the object that
+                // provides it ( GetObjectShell() calls CreateObjectShell() ) has a lock on it
                 SfxObjectShellRef aRef = pFocusBox->GetObjectShell(aPath);
                 if(aRef.Is() &&
                     aRef->Remove(aPath[1+pFocusBox->GetDocLevel()],
@@ -1953,6 +1964,9 @@ long SfxOrganizeDlg_Impl::Dispatch_Impl( USHORT nId, Menu* _pMenu )
             if ( !pEntry )
                 return 1;
             Path aPath( pFocusBox, pEntry );
+
+            // it is ok to use the SfxObjectShellRef here since the object that
+            // provides it ( GetObjectShell() calls CreateObjectShell() ) has a lock on it
             SfxObjectShellRef aRef = pFocusBox->GetObjectShell( aPath );
             if ( aRef.Is() )
             {

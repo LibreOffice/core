@@ -25,6 +25,7 @@
  *
  ************************************************************************/
 #define ED_NAME 2
+#define MLE_NAME 13
 #define LB_NEXT 4
 #define FT_BASE 5
 #define LB_BASE 6

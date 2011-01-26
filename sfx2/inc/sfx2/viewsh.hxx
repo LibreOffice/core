@@ -37,6 +37,7 @@
 #include <svl/lstner.hxx>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboardListener.hpp>
+#include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include "shell.hxx"
 #include <tools/gen.hxx>
@@ -58,7 +59,6 @@ class SfxItemPool;
 class SfxTabPage;
 class SfxPrintMonitor;
 class SfxFrameSetDescriptor;
-class PrintDialog;
 class Printer;
 class SfxPrinter;
 class SfxProgress;
@@ -238,13 +238,9 @@ public:
     void                        AdjustVisArea(const Rectangle& rRect);
 
     // Printing Interface
-    virtual void                PreparePrint( PrintDialog *pPrintDialog = 0 );
-    virtual ErrCode             DoPrint( SfxPrinter *pPrinter, PrintDialog *pPrintDialog, BOOL bSilent, BOOL bIsAPI );
-    virtual USHORT              Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog = 0 );
     virtual SfxPrinter*         GetPrinter( BOOL bCreate = FALSE );
     virtual USHORT              SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=FALSE );
     virtual SfxTabPage*         CreatePrintOptionsPage( Window *pParent, const SfxItemSet &rOptions );
-    virtual PrintDialog*        CreatePrintDialog( Window *pParent );
     void                        LockPrinter( BOOL bLock = TRUE );
     BOOL                        IsPrinterLocked() const;
     virtual JobSetup            GetJobSetup() const;
@@ -293,6 +289,7 @@ public:
     void                        ExecPrint( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool, sal_Bool );
 
     void                        AddRemoveClipboardListener( const com::sun::star::uno::Reference < com::sun::star::datatransfer::clipboard::XClipboardListener>&, BOOL );
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboardNotifier > GetClipboardNotifier();
 
 #if _SOLAR__PRIVATE
     SAL_DLLPRIVATE SfxInPlaceClient* GetUIActiveIPClient_Impl() const;
@@ -379,5 +376,4 @@ inline SfxViewFrame* SfxViewShell::GetViewFrame() const
 }
 
 #endif // #ifndef _SFXVIEWSH_HXX
-
 

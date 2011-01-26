@@ -42,7 +42,7 @@
 #include <sot/clsids.hxx>
 
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/xmlaustp.hxx>
@@ -1598,6 +1598,21 @@ void SchXMLExportHelper_Impl::exportTable()
     // table element
     // -------------
     mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_NAME, msTableName );
+
+    try
+    {
+        bool bProtected = false;
+        Reference< beans::XPropertySet > xProps( mrExport.GetModel(), uno::UNO_QUERY_THROW );
+        if ( ( xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bProtected ) &&
+             bProtected )
+        {
+            mrExport.AddAttribute( XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TRUE );
+        }
+    }
+    catch ( uno::Exception& )
+    {
+    }
+
     SvXMLElementExport aTable( mrExport, XML_NAMESPACE_TABLE, XML_TABLE, sal_True, sal_True );
 
     bool bHasOwnData = false;

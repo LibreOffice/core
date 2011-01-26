@@ -62,7 +62,7 @@
 #include <vcl/oldprintadaptor.hxx>
 
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "appdata.hxx"
 #include <sfx2/dinfdlg.hxx>
 #include "fltfnc.hxx"
@@ -71,11 +71,11 @@
 #include <sfx2/objsh.hxx>
 #include "objshimp.hxx"
 #include <sfx2/evntconf.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
+#include "sfx2/basmgr.hxx"
 #include <sfx2/viewfrm.hxx>
-#include "basmgr.hxx"
 #include <sfx2/doctempl.hxx>
 #include "doc.hrc"
 #include <sfx2/sfxbasemodel.hxx>
@@ -1088,58 +1088,8 @@ void SfxObjectShell::UpdateFromTemplate_Impl(  )
 //REPLACE                   pInfo->Save(xDocStor);
                 }
             }
-/*
-        SfxConfigManager *pCfgMgr = SFX_CFGMANAGER();
-        {
-            SfxConfigManager *pTemplCfg = new SfxConfigManager(aTemplStor, pCfgMgr);
-            SetConfigManager(pTemplCfg);
-            SetTemplateConfig(TRUE);
-
-            // Falls der gerade zerst"orte CfgMgr des Dokuments der
-            // aktive war, pCfgMgr lieber neu holen
-            pCfgMgr = SFX_CFGMANAGER();
-
-            // ggf. den neuen ConfigManager aktivieren
-            if ( this == SfxObjectShell::Current() )
-                pTemplCfg->Activate(pCfgMgr);
-        }
-*/
-        // Template und Template-DocInfo werden nicht mehr gebraucht
-//            delete pTemplInfo;
         }
     }
-}
-
-SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BOOL bForWriting )
-{
-    // check for own format
-    SfxObjectShellRef xDoc;
-    StreamMode nMode = bForWriting ? SFX_STREAM_READWRITE : SFX_STREAM_READONLY;
-    SfxMedium *pMed = new SfxMedium( aTargetURL, nMode, FALSE, 0 );
-    const SfxFilter* pFilter = NULL;
-    pMed->UseInteractionHandler(TRUE);
-    if( SFX_APP()->GetFilterMatcher().GuessFilter( *pMed, &pFilter ) == ERRCODE_NONE && pFilter && pFilter->IsOwnFormat() )
-    {
-        // create document
-        xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
-        if ( xDoc.Is() )
-        {
-            // partially load, so don't use DoLoad!
-            xDoc->DoInitNew(0);
-            // TODO/LATER: make sure that we don't use binary templates!
-            if( xDoc->LoadFrom( *pMed ) )
-            {
-                // connect to storage, abandon temp. storage
-                xDoc->DoSaveCompleted( pMed );
-            }
-            else
-                xDoc.Clear();
-        }
-    }
-    else
-        delete pMed;
-
-    return xDoc;
 }
 
 sal_Bool SfxObjectShell::IsHelpDocument() const

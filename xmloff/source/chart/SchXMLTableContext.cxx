@@ -37,7 +37,7 @@
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
@@ -375,12 +375,19 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_NAME ) )
+        if ( nPrefix == XML_NAMESPACE_TABLE )
         {
-            mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
-            break;   // we only need this attribute
+            if ( IsXMLToken( aLocalName, XML_NAME ) )
+            {
+                mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
+            }
+            else if ( IsXMLToken( aLocalName, XML_PROTECTED ) )
+            {
+                if ( IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
+                {
+                    mrTable.bProtected = true;
+                }
+            }
         }
     }
 }
@@ -704,6 +711,7 @@ private:
 
 public:
     SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                            USHORT nPrefix,
                             const ::rtl::OUString& rLocalName,
                             ::rtl::OUString& rRangeString );
     virtual ~SchXMLRangeSomewhereContext();
@@ -818,7 +826,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     {
         //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
         //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
-        pContext = new SchXMLRangeSomewhereContext( GetImport(), rLocalName, maRangeId );
+        pContext = new SchXMLRangeSomewhereContext( GetImport(), nPrefix, rLocalName, maRangeId );
     }
     else
     {
@@ -927,6 +935,19 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         xDataAccess->setComplexRowDescriptions( aComplexRowDescriptions );
     if( rTable.bHasHeaderRow )
         xDataAccess->setComplexColumnDescriptions( aComplexColumnDescriptions );
+
+    if ( rTable.bProtected )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ), uno::makeAny( sal_True ) );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
 }
 
 void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
@@ -1188,9 +1209,10 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 //---------------------------------------------------------------------------------------------------
 
 SchXMLRangeSomewhereContext::SchXMLRangeSomewhereContext( SvXMLImport& rImport,
+                                                USHORT nPrefix,
                                                 const OUString& rLocalName,
                                                 OUString& rRangeString ) :
-        SvXMLImportContext( rImport, XML_NAMESPACE_TEXT, rLocalName ),
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrRangeString( rRangeString )
 {
 }

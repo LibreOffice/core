@@ -75,7 +75,6 @@ class SvStringsDtor;
 #define OWEAKOBJECT                 ::cppu::OWeakObject
 #define REFERENCE                   ::com::sun::star::uno::Reference
 #define XINTERFACE                  ::com::sun::star::uno::XInterface
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
 #define EXCEPTION                   ::com::sun::star::uno::Exception
 #define RUNTIMEEXCEPTION            ::com::sun::star::uno::RuntimeException
 #define ANY                         ::com::sun::star::uno::Any
@@ -112,7 +111,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
+    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 #endif
 
 public:

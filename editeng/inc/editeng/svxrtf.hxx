@@ -38,7 +38,8 @@
 #include <editeng/editengdllapi.h>
 
 #include <deque>
-
+#include <utility>
+#include <vector>
 class Font;
 class Color;
 class Graphic;
@@ -109,7 +110,7 @@ struct SvxRTFStyleType
 
 
 // Bitmap - Mode
-
+typedef ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > PictPropertyNameValuePairs;
 struct EDITENG_DLLPUBLIC SvxRTFPictureType
 {
     // Format der Bitmap
@@ -140,7 +141,7 @@ struct EDITENG_DLLPUBLIC SvxRTFPictureType
     USHORT  nWidthBytes;
     USHORT  nScalX, nScalY;
     short   nCropT, nCropB, nCropL, nCropR;
-
+    PictPropertyNameValuePairs aPropertyPairs;
     SvxRTFPictureType() { ResetValues(); }
     // alle Werte auf default; wird nach einlesen der Bitmap aufgerufen !
     void ResetValues();
@@ -469,7 +470,7 @@ inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackTypePtr pTmp;
-    if( bNewGroup || 0 == ( pTmp = aAttrStack.back()) )
+    if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }

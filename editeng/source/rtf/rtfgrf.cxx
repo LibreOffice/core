@@ -39,6 +39,7 @@
 
 #include <editeng/svxrtf.hxx>
 
+using namespace ::rtl;
 
 #ifndef DBG_UTIL
 #undef DEBUG_JP
@@ -316,14 +317,26 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
 
     if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
         ++nValidDataBraket;
-
+    OUString sShapePropertyName, sShapePropertyValue;
+    int nShapePropertyBracket = -1;
     while( _nOpenBrakets && IsParserWorking() && bValidBmp )
     {
         nToken = GetNextToken();
         USHORT nVal = USHORT( nTokenValue );
         switch( nToken )
         {
-        case '}':       --_nOpenBrakets;    break;
+        case '}':
+            --_nOpenBrakets;
+            if( nShapePropertyBracket > 0 && nShapePropertyBracket > _nOpenBrakets )
+            {
+                nShapePropertyBracket = -1;
+                if( sShapePropertyName.getLength() )
+                {
+                    rPicType.aPropertyPairs.push_back( ::std::pair< OUString, OUString >( sShapePropertyName, sShapePropertyValue ) );
+                    sShapePropertyName = sShapePropertyValue = ::rtl::OUString();
+                }
+            }
+        break;
         case '{':
             {
                 if( RTF_IGNOREFLAG != GetNextToken() )
@@ -439,7 +452,24 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         case RTF_PICCROPB:          rPicType.nCropB = (short)nTokenValue; break;
         case RTF_PICCROPL:          rPicType.nCropL = (short)nTokenValue; break;
         case RTF_PICCROPR:          rPicType.nCropR = (short)nTokenValue; break;
-
+        case RTF_SP:
+            //read pairs of {\sn Name}{\sv Value}
+            nShapePropertyBracket = _nOpenBrakets;
+        break;
+        case RTF_SN:
+            nToken = GetNextToken();
+            if( nToken != '}' )
+                sShapePropertyName = aToken;
+            else
+                nToken = SkipToken( -1 );
+        break;
+        case RTF_SV:
+            nToken = GetNextToken();
+            if( nToken != '}' )
+                sShapePropertyValue = aToken;
+            else
+                nToken = SkipToken( -1 );
+        break;
         case RTF_TEXTTOKEN:
             // JP 26.06.98: Bug #51719# - nur TextToken auf 1. Ebene
             //              auswerten. Alle anderen sind irgendwelche

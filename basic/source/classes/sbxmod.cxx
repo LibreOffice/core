@@ -496,33 +496,26 @@ IMPL_LINK( AsyncQuitHandler, OnAsyncQuit, void*, /*pNull*/ )
     return 0L;
 }
 
-#if 0
-bool UnlockControllerHack( StarBASIC* pBasic )
+bool VBAUnlockControllers( StarBASIC* pBasic )
 {
     bool bRes = false;
     if ( pBasic && pBasic->IsDocBasic() )
     {
-        uno::Any aUnoVar;
-        ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
-        SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
-        if ( pGlobs )
-            aUnoVar = pGlobs->getUnoAny();
-        uno::Reference< frame::XModel > xModel( aUnoVar, uno::UNO_QUERY);
-        if ( xModel.is() )
+        SbUnoObject* pGlobs = dynamic_cast< SbUnoObject* >( pBasic->Find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" ) ), SbxCLASS_DONTCARE ) );
+        if ( pGlobs ) try
         {
-            try
-            {
+            uno::Reference< frame::XModel > xModel( pGlobs->getUnoAny(), uno::UNO_QUERY_THROW );
+            if ( xModel->hasControllersLocked() )
                 xModel->unlockControllers();
-                bRes = true;
-            }
-            catch( uno::Exception& )
-            {
-            }
+            bRes = true;
+        }
+        catch( uno::Exception& )
+        {
         }
     }
     return bRes;
 }
-#endif
+
 /////////////////////////////////////////////////////////////////////////////
 
 // Ein BASIC-Modul hat EXTSEARCH gesetzt, damit die im Modul enthaltenen
@@ -1176,6 +1169,8 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 // beim Programm-Ende freigeben, damit nichts gehalten wird.
                 ClearUnoObjectsInRTL_Impl( xBasic );
 
+                clearNativeObjectWrapperVector();
+
                 DBG_ASSERT(pINST->nCallLvl==0,"BASIC-Call-Level > 0");
                 delete pINST, pINST = NULL, bDelInst = FALSE;
 
@@ -1184,6 +1179,14 @@ USHORT SbModule::Run( SbMethod* pMeth )
                 SendHint( GetParent(), SBX_HINT_BASICSTOP, pMeth );
 
                 GlobalRunDeInit();
+
+                // VBA always ensures screenupdating is enabled after completing
+                if ( mbVBACompat )
+                    VBAUnlockControllers( PTR_CAST( StarBASIC, GetParent() ) );
+
+#ifdef DBG_TRACE_BASIC
+                dbg_DeInitTrace();
+#endif
             }
         }
         else
@@ -1195,12 +1198,7 @@ USHORT SbModule::Run( SbMethod* pMeth )
         StarBASIC::FatalError( SbERR_STACK_OVERFLOW );
     }
 
-    // VBA always ensure screenupdating is enabled after completing
     StarBASIC* pBasic = PTR_CAST(StarBASIC,GetParent());
-#if 0
-    if ( pBasic && pBasic->IsDocBasic() && !pINST )
-        UnlockControllerHack( pBasic );
-#endif
     if( bDelInst )
     {
         // #57841 Uno-Objekte, die in RTL-Funktionen gehalten werden,
@@ -1332,6 +1330,61 @@ void SbModule::ClearPrivateVars()
     }
 }
 
+void SbModule::implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic )
+{
+    if( pVar->SbxValue::GetType() != SbxOBJECT || pVar->ISA( SbProcedureProperty ) )
+        return;
+
+    SbxObject* pObj = PTR_CAST(SbxObject,pVar->GetObject());
+    if( pObj != NULL )
+    {
+        SbxObject* p = pObj;
+
+        SbModule* pMod = PTR_CAST( SbModule, p );
+        if( pMod != NULL )
+            pMod->ClearVarsDependingOnDeletedBasic( pDeletedBasic );
+
+        while( (p = p->GetParent()) != NULL )
+        {
+            StarBASIC* pBasic = PTR_CAST( StarBASIC, p );
+            if( pBasic != NULL && pBasic == pDeletedBasic )
+            {
+                pVar->SbxValue::Clear();
+                break;
+            }
+        }
+    }
+}
+
+void SbModule::ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic )
+{
+    (void)pDeletedBasic;
+
+    for( USHORT i = 0 ; i < pProps->Count() ; i++ )
+    {
+        SbProperty* p = PTR_CAST(SbProperty,pProps->Get( i ) );
+        if( p )
+        {
+            if( p->GetType() & SbxARRAY )
+            {
+                SbxArray* pArray = PTR_CAST(SbxArray,p->GetObject());
+                if( pArray )
+                {
+                    for( USHORT j = 0 ; j < pArray->Count() ; j++ )
+                    {
+                        SbxVariable* pVar = PTR_CAST(SbxVariable,pArray->Get( j ));
+                        implClearIfVarDependsOnDeletedBasic( pVar, pDeletedBasic );
+                    }
+                }
+            }
+            else
+            {
+                implClearIfVarDependsOnDeletedBasic( p, pDeletedBasic );
+            }
+        }
+    }
+}
+
 // Zunaechst in dieses Modul, um 358-faehig zu bleiben
 // (Branch in sb.cxx vermeiden)
 void StarBASIC::ClearAllModuleVars( void )
@@ -1341,7 +1394,7 @@ void StarBASIC::ClearAllModuleVars( void )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
         // Nur initialisieren, wenn der Startcode schon ausgefuehrt wurde
-        if( pModule->pImage && pModule->pImage->bInit )
+        if( pModule->pImage && pModule->pImage->bInit && !pModule->isProxyModule() && !pModule->ISA(SbObjModule) )
             pModule->ClearPrivateVars();
     }
 
@@ -1739,6 +1792,98 @@ BOOL SbModule::LoadCompleted()
     return TRUE;
 }
 
+void SbModule::handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint )
+{
+    bool bDone = false;
+
+    const SbxHint* pHint = PTR_CAST(SbxHint,&rHint);
+    if( pHint )
+    {
+        SbxVariable* pVar = pHint->GetVar();
+        SbProcedureProperty* pProcProperty = PTR_CAST( SbProcedureProperty, pVar );
+        if( pProcProperty )
+        {
+            bDone = true;
+
+            if( pHint->GetId() == SBX_HINT_DATAWANTED )
+            {
+                String aProcName;
+                aProcName.AppendAscii( "Property Get " );
+                aProcName += pProcProperty->GetName();
+
+                SbxVariable* pMeth = Find( aProcName, SbxCLASS_METHOD );
+                if( pMeth )
+                {
+                    SbxValues aVals;
+                    aVals.eType = SbxVARIANT;
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
+                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMeth->SetParameters( xMethParameters );
+                        pMeth->Get( aVals );
+                        pMeth->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMeth->Get( aVals );
+                    }
+
+                    pVar->Put( aVals );
+                }
+            }
+            else if( pHint->GetId() == SBX_HINT_DATACHANGED )
+            {
+                SbxVariable* pMeth = NULL;
+
+                bool bSet = pProcProperty->isSet();
+                if( bSet )
+                {
+                    pProcProperty->setSet( false );
+
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Set " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+                if( !pMeth )    // Let
+                {
+                    String aProcName;
+                    aProcName.AppendAscii( "Property Let " );
+                    aProcName += pProcProperty->GetName();
+                    pMeth = Find( aProcName, SbxCLASS_METHOD );
+                }
+
+                if( pMeth )
+                {
+                    // Setup parameters
+                    SbxArrayRef xArray = new SbxArray;
+                    xArray->Put( pMeth, 0 );    // Method as parameter 0
+                    xArray->Put( pVar, 1 );
+                    pMeth->SetParameters( xArray );
+
+                    SbxValues aVals;
+                    pMeth->Get( aVals );
+                    pMeth->SetParameters( NULL );
+                }
+            }
+        }
+    }
+
+    if( !bDone )
+        SbModule::Notify( rBC, rHint );
+}
+
+
 /////////////////////////////////////////////////////////////////////////
 // Implementation SbJScriptModule (Basic-Modul fuer JavaScript-Sourcen)
 SbJScriptModule::SbJScriptModule( const String& rName )
@@ -1969,6 +2114,11 @@ SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::Mod
     else if ( mInfo.ModuleObject.is() )
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
 }
+
+SbObjModule::~SbObjModule()
+{
+}
+
 void
 SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException )
 {
@@ -2004,6 +2154,13 @@ SbObjModule::Find( const XubString& rName, SbxClassType t )
         pVar = SbModule::Find( rName, t );
     return pVar;
 }
+
+void SbObjModule::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
+                         const SfxHint& rHint, const TypeId& rHintType )
+{
+    SbModule::handleProcedureProperties( rBC, rHint );
+}
+
 
 typedef ::cppu::WeakImplHelper2< awt::XTopWindowListener, awt::XWindowListener > FormObjEventListener_BASE;
 
@@ -2192,9 +2349,9 @@ SbUserFormModule::~SbUserFormModule()
 {
 }
 
-void SbUserFormModule::ResetApiObj()
+void SbUserFormModule::ResetApiObj(  bool bTriggerTerminateEvent )
 {
-    if (  m_xDialog.is() ) // probably someone close the dialog window
+    if ( bTriggerTerminateEvent && m_xDialog.is() ) // probably someone close the dialog window
     {
         triggerTerminateEvent();
     }
@@ -2379,11 +2536,12 @@ void SbUserFormModule::Unload()
 }
 //liuchen
 
+void registerComponentToBeDisposedForBasic( Reference< XComponent > xComponent, StarBASIC* pBasic );
+
 void SbUserFormModule::InitObject()
 {
     try
     {
-
         String aHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
         SbUnoObject* pGlobs = (SbUnoObject*)GetParent()->Find( aHook, SbxCLASS_DONTCARE );
         if ( m_xModel.is() && pGlobs )
@@ -2410,6 +2568,25 @@ void SbUserFormModule::InitObject()
             aArgs[ 3 ] <<= rtl::OUString( GetParent()->GetName() );
             pDocObject = new SbUnoObject( GetName(), uno::makeAny( xVBAFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.msforms.UserForm")), aArgs  ) ) );
             uno::Reference< lang::XComponent > xComponent( aArgs[ 1 ], uno::UNO_QUERY_THROW );
+
+            // the dialog must be disposed at the end!
+            if( xComponent.is() )
+            {
+                StarBASIC* pParentBasic = NULL;
+                SbxObject* pCurObject = this;
+                do
+                {
+                    SbxObject* pObjParent = pCurObject->GetParent();
+                    pParentBasic = PTR_CAST( StarBASIC, pObjParent );
+                    pCurObject = pObjParent;
+                }
+                while( pParentBasic == NULL && pCurObject != NULL );
+
+                OSL_ASSERT( pParentBasic != NULL );
+                registerComponentToBeDisposedForBasic( xComponent, pParentBasic );
+            }
+
+
             // remove old listener if it exists
             if ( m_DialogListener.get() )
                 m_DialogListener->removeListener();
