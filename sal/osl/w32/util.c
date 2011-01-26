@@ -30,7 +30,7 @@
 
 
 
-extern sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8* /*pAddr*/ )
+extern sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8* pAddr )
 {
     return sal_False;
 }

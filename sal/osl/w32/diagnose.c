@@ -164,7 +164,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     return sal_False;  /* not sure, don't care */
 }
 
-sal_Int32 SAL_CALL osl_reportError(sal_uInt32 /*nType*/, const sal_Char* pszMessage)
+sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
 {
     UINT nFlags;
     int nDisposition;
