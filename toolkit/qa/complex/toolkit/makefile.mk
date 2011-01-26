@@ -54,6 +54,7 @@ JAVAFILES = \
     accessibility/_XAccessibleText.java \
     awtgrid/GridDataListener.java \
     awtgrid/TMutableGridDataModel.java \
+    awtgrid/DummyColumn.java \
 
 #----- create a jar from compiled files ----------------------------
 
