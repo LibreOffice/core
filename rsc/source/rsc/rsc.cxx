@@ -216,7 +216,6 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
             else if( !rsc_strnicmp( (*ppStr) + 1, "d", 1 ) )
             { // Symbole definieren
                 nCommands |= DEFINE_FLAG;
-                aSymbolList.Insert( new ByteString( (*ppStr) + 2 ), 0xFFFF );
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "i", 1 ) )
             { // Include-Pfade definieren
@@ -304,7 +303,7 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
         else
         {
             // Eingabedatei
-            aInputList.Insert( new ByteString( *ppStr ), 0xFFFF );
+            aInputList.push_back( new ByteString( *ppStr ) );
         }
         ppStr++;
         i++;
@@ -313,16 +312,16 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
     if( nCommands & HELP_FLAG )
         pEH->FatalError( ERR_USAGE, RscId() );
     // was an inputted file specified
-    else if( aInputList.Count() )
+    else if( !aInputList.empty() )
     {
         ::std::list<OutputFile>::iterator it;
         for( it = m_aOutputFiles.begin(); it != m_aOutputFiles.end(); ++it )
         {
             if( ! it->aOutputRc.Len() )
-                it->aOutputRc  = ::OutputFile( *aInputList.First(), "rc"  );
+                it->aOutputRc  = ::OutputFile( *aInputList.front(), "rc"  );
         }
         if( ! bOutputSrsIsSet )
-            aOutputSrs = ::OutputFile( *aInputList.First(), "srs" );
+            aOutputSrs = ::OutputFile( *aInputList.front(), "srs" );
     }
     else if( !(nCommands & PRINTSYNTAX_FLAG) )
         pEH->FatalError( ERR_NOINPUT, RscId() );
@@ -337,12 +336,9 @@ RscCmdLine::RscCmdLine( int argc, char ** argv, RscError * pEH )
 *************************************************************************/
 RscCmdLine::~RscCmdLine()
 {
-    ByteString  *pString;
-
-    while( NULL != (pString = aInputList.Remove( (ULONG)0 )) )
-        delete pString;
-    while( NULL != (pString = aSymbolList.Remove( (ULONG)0 )) )
-        delete pString;
+    for ( size_t i = 0, n = aInputList.size(); i < n; ++i )
+        delete aInputList[ i ];
+    aInputList.clear();
 }
 
 /*************************************************************************
@@ -418,17 +414,6 @@ RscCompiler::RscCompiler( RscCmdLine * pLine, RscTypCont * pTypCont )
 *************************************************************************/
 RscCompiler::~RscCompiler()
 {
-    ByteString* pString;
-
-    // Dateien loeschen
-    pString = aTmpFileList.First();
-    while( pString )
-    {
-        unlink( pString->GetBuffer() );
-        delete pString;
-        pString = aTmpFileList.Next();
-    }
-
     pTC->pEH->SetListFile( NULL );
 
     if( fListing )
@@ -456,7 +441,6 @@ RscCompiler::~RscCompiler()
 ERRTYPE RscCompiler::Start()
 {
     ERRTYPE         aError;
-    ByteString*     pString;
     RscFile*        pFName;
 
     if( PRINTSYNTAX_FLAG & pCL->nCommands )
@@ -469,15 +453,11 @@ printf( "khg\n" );
     }
 
     // Kein Parameter, dann Hilfe
-    pString = pCL->aInputList.First();
-    if( !pString )
+    if( pCL->aInputList.empty() )
         pTC->pEH->FatalError( ERR_NOINPUT, RscId() );
 
-    while( pString )
-    {
-        pTC->aFileTab.NewCodeFile( *pString );
-        pString = pCL->aInputList.Next();
-    }
+    for( size_t i = 0, n = pCL->aInputList.size(); i < n; ++i )
+        pTC->aFileTab.NewCodeFile( *pCL->aInputList[ i ] );
 
     if( !(pCL->nCommands & NOSYNTAX_FLAG) )
     {
@@ -1096,7 +1076,6 @@ ByteString RscCompiler::GetTmpFileName()
     ByteString aFileName;
 
     aFileName = ::GetTmpFileName();
-    aTmpFileList.Insert( new ByteString( aFileName ) );
     return( aFileName );
 }
 

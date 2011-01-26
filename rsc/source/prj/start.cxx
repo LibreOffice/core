@@ -262,15 +262,14 @@ static BOOL CallRsc2( ByteString aRsc2Name,
         fprintf( fRspFile, "%s", aSrsName.GetBuffer() );
 #endif
 
-        pString = pInputList->First();
-        while( pString )
+        for ( size_t i = 0, n = pInputList->size(); i < n; ++i )
         {
+            pString = (*pInputList)[ i ];
 #ifdef OS2
             fprintf( fRspFile, "%s\n", pString->GetBuffer() );
 #else
             fprintf( fRspFile, " %s", pString->GetBuffer() );
 #endif
-            pString = pInputList->Next();
         };
 
         fclose( fRspFile );
@@ -403,21 +402,21 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
         {
             // Eingabedatei
-            aInputList.Insert( new ByteString( *ppStr ), CONTAINER_APPEND );
+            aInputList.push_back( new ByteString( *ppStr ) );
         }
         ppStr++;
         i++;
     }
 
-    if( aInputList.Count() )
+    if( !aInputList.empty() )
     {
         /* build the output file names          */
         if( ! aResName.Len() )
-            aResName = OutputFile( *aInputList.First(), "res" );
+            aResName = OutputFile( *aInputList[ 0 ], "res" );
         if( ! bSetSrs )
         {
             aSrsName = "-fp=";
-            aSrsName += OutputFile( *aInputList.First(), "srs" );
+            aSrsName += OutputFile( *aInputList[ 0 ], "srs" );
         }
     };
 
@@ -426,13 +425,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         bPrePro = FALSE;
         bResFile = FALSE;
     };
-    if( bPrePro && aInputList.Count() )
+    if( bPrePro && !aInputList.empty() )
     {
         ByteString aTmpName;
 
-        pString = aInputList.First();
-        while( pString )
+        for ( size_t i = 0, n = aInputList.size(); i < n; ++i )
         {
+            pString = aInputList[ i ];
             aTmpName = ::GetTmpFileName();
             if( !CallPrePro( aPrePro, *pString, aTmpName, &aCmdLine, bResponse ) )
             {
@@ -440,8 +439,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 bError = TRUE;
                 break;
             }
-            aTmpList.Insert( new ByteString( aTmpName ), CONTAINER_APPEND );
-            pString = aInputList.Next();
+            aTmpList.push_back( new ByteString( aTmpName ) );
         };
     };
 
@@ -458,16 +456,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         };
     };
 
-    pString = aTmpList.First();
-    while( pString )
-    {
-        #if OSL_DEBUG_LEVEL > 5
-        fprintf( stderr, "leaving temp file %s\n", pString->GetBuffer() );
-        #else
-        unlink( pString->GetBuffer() );
-        #endif
-        pString = aTmpList.Next();
-    };
+    for ( size_t i = 0, n = aTmpList.size(); i < n; ++i )
+        unlink( aTmpList[ i ]->GetBuffer() );
 
     return( bError );
 }

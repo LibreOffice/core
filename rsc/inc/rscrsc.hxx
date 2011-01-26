@@ -51,7 +51,6 @@ class RscCmdLine
 public:
 
     RscStrList          aInputList;     // Liste der Quelldateien
-    RscStrList          aSymbolList;    // Liste der Symbole
     ByteString          aPath;          // Liste der Pfade
     RSCBYTEORDER_TYPE   nByteOrder;
     unsigned short      nCommands;      // Steuerbits
@@ -91,7 +90,6 @@ struct WriteRcContext;
 class RscCompiler
 {
 private:
-    RscStrList      aTmpFileList;   // Liste der Tmp-Dateien
     ByteString      aTmpOutputHxx;  // Name der TempHxx-Ausgabedatei
     ByteString      aTmpOutputCxx;  // Name der TempCxx-Ausgabedatei
     ByteString      aTmpOutputRcCtor; // Name der Temp Ctor-Ausgabedatei

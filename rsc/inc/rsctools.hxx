@@ -37,6 +37,7 @@ class  RscPtrPtr;
 #include <stdio.h>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
+#include <vector>
 
 /******************* T y p e s *******************************************/
 // Zeichensatz
@@ -63,7 +64,9 @@ int rsc_stricmp( const char *string1, const char *string2 );
 char* rsc_strdup( const char* );
 
 /****************** C L A S S E S ****************************************/
-DECLARE_LIST( RscStrList, ByteString * )
+
+typedef ::std::vector< ByteString* > RscStrList;
+
 /*********** R s c C h a r ***********************************************/
 class RscChar
 {
