@@ -25,22 +25,14 @@
 #
 #*************************************************************************
 
-# ----------------------------COMPHLP settings------------------------------------#
-# target
-COMPHLP_TARGET=comphelp
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-# the major 
-COMPHLP_MAJOR=4
-# the minor 
-COMPHLP_MINOR=0
-# the micro 
-COMPHLP_MICRO=0
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# this is a c++ compatible library 
-COMPHLP_CPP=1
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-COMPHLP=$(COMPHLP_TARGET_TARGET)_$(CMPEXT)
-
-
-
-
+# vim: set noet sw=4 ts=4:
