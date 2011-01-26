@@ -691,7 +691,6 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
             pObj->ISA(SdrTextObj))
         {
             SdrPageView* pPV = pView->GetSdrPageView();
-            Rectangle aRect = pObj->GetLogicRect();
 
             if ( pObj->HasTextEdit() )
             {

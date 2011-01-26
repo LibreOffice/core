@@ -215,8 +215,6 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
     XMLPropertyState* pSWBorder_Left = NULL;
     XMLPropertyState* pSWBorder_Right = NULL;
     XMLPropertyState* pSWBorder_Top = NULL;
-    XMLPropertyState* pDiagonalTLBR = NULL;
-    XMLPropertyState* pDiagonalBLTR = NULL;
 
     XMLPropertyState* pAllBorderWidthState = NULL;
     XMLPropertyState* pLeftBorderWidthState = NULL;
@@ -277,9 +275,9 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertie; break;
                 case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertie; break;
                 case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertie; break;
-                case CTF_SC_DIAGONALTLBR:       pDiagonalTLBR = propertie; break;
+                case CTF_SC_DIAGONALTLBR:       break; //old diagonal line attribute names without "s" are only read, not written
                 case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
-                case CTF_SC_DIAGONALBLTR:       pDiagonalBLTR = propertie; break;
+                case CTF_SC_DIAGONALBLTR:       break; //old diagonal line attribute names without "s" are only read, not written
                 case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
                 case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
                 case CTF_PARA_ADJUSTLAST:       pParaAdjustLast = propertie; break;
