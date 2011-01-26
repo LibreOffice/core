@@ -33,13 +33,10 @@ $(eval $(call gb_Library_add_precompiled_header,tl,$(SRCDIR)/tools/inc/pch/preco
 
 $(eval $(call gb_Library_set_include,tl,\
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
-    -I$(WORKDIR)/inc/tools \
     -I$(SRCDIR)/tools/inc \
     -I$(SRCDIR)/tools/inc/pch \
     -I$(SRCDIR)/solenv/inc \
     -I$(SRCDIR)/solenv/inc/Xp31 \
-    -I$(OUTDIR)/inc/tools \
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc/stl \
 ))

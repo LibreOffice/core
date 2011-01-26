@@ -1,0 +1,3 @@
+to	sot	:	tools ucbhelper unotools NULL
+to	sot						usr1	-	all	sot_mkout NULL
+to	sot\prj				    nmake	-	all	sot_prj NULL

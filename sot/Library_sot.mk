@@ -34,11 +34,9 @@ $(eval $(call gb_Library_add_precompiled_header,sot,$(SRCDIR)/sot/inc/pch/precom
 $(eval $(call gb_Library_set_componentfile,sot,sot/util/sot))
 
 $(eval $(call gb_Library_set_include,sot,\
-    -I$(SRCDIR)/sot/inc \
     -I$(SRCDIR)/sot/inc/pch \
     $$(INCLUDE) \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,sot,\
@@ -53,11 +51,11 @@ $(eval $(call gb_Library_add_linked_libs,sot,\
     sal \
     tl \
     ucbhelper \
+    stl \
     utl \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sot,\
-    sot/source/unoolestorage/xolesimplestorage \
     sot/source/unoolestorage/xolesimplestorage \
     sot/source/unoolestorage/register \
     sot/source/base/formats \
@@ -65,27 +63,19 @@ $(eval $(call gb_Library_add_exception_objects,sot,\
     sot/source/base/exchange \
     sot/source/base/filelist \
     sot/source/base/factory \
-    sot/source/sdstor/stgio \
-    sot/source/sdstor/stgavl \
-    sot/source/sdstor/stgio \
-    sot/source/sdstor/storage \
-    sot/source/sdstor/stgavl \
-    sot/source/sdstor/ucbstorage \
-    sot/source/sdstor/storinfo \
     sot/source/sdstor/stg \
+    sot/source/sdstor/stgavl \
     sot/source/sdstor/stgcache \
-    sot/source/sdstor/stgelem \
-    sot/source/sdstor/stgstrms \
-    sot/source/sdstor/stgstrms \
-    sot/source/sdstor/stgelem \
-    sot/source/sdstor/stgcache \
-    sot/source/sdstor/stgole \
-    sot/source/sdstor/unostorageholder \
     sot/source/sdstor/stgdir \
+    sot/source/sdstor/stgelem \
+    sot/source/sdstor/stgio \
     sot/source/sdstor/stgole \
-    sot/source/sdstor/stgdir \
+    sot/source/sdstor/stgstrms \
+    sot/source/sdstor/storage \
+    sot/source/sdstor/storinfo \
+    sot/source/sdstor/ucbstorage \
     sot/source/sdstor/unostorageholder \
-    ))
+))
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,sot,\

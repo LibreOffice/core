@@ -35,13 +35,9 @@ $(eval $(call gb_Library_set_componentfile,svl,svl/util/svl))
 
 $(eval $(call gb_Library_set_include,svl,\
     $$(SOLARINC) \
-    -I$(WORKDIR)/inc/svl \
-    -I$(WORKDIR)/inc/ \
-    -I$(SRCDIR)/svl/inc \
     -I$(SRCDIR)/svl/source/inc \
     -I$(SRCDIR)/svl/inc/pch \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,svl,\
