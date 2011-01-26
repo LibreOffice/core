@@ -366,9 +366,9 @@ File gid_File_Lib_Vbamsforms
     Styles = (PACKED);
     Dir = SCP2_OOO_BIN_DIR;
   #ifdef UNX
-    Name = STRING(CONCAT4(libmsforms,DLLPOSTFIX,.uno,UNXSUFFIX));
+    Name = STRING(CONCAT3(msforms,.uno,UNXSUFFIX));
   #else
-    Name = STRING(CONCAT4(msforms,DLLPOSTFIX,.uno,.dll));
+    Name = STRING(CONCAT3(msforms,.uno,.dll));
   #endif
 End
 
