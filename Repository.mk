@@ -39,6 +39,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 ))
 
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
+    AppleRemote \
     avmedia \
     basegfx \
     basebmp \
