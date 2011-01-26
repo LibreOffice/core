@@ -1092,7 +1092,7 @@ void RtfAttributeOutput::EndStyle()
     m_rExport.InsStyle(m_nStyleId, aStyles);
     m_aStylesheet.append(aStyles);
     m_aStylesheet.append(' ');
-    m_aStylesheet.append(OUStringToOString( OUString( m_rStyleName ), m_rExport.eCurrentEncoding ));
+    m_aStylesheet.append(m_rExport.OutString(m_rStyleName, m_rExport.eCurrentEncoding));
     m_aStylesheet.append(";}");
     m_aStylesheet.append(m_rExport.sNewLine);
 }
