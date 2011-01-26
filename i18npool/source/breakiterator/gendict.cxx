@@ -126,12 +126,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(cfp, "static const sal_Int32 lenArray[] = {\n\t");
     count = 1;
     fprintf(cfp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
-    for (i = 0; i < lenArray.size(); i++) {
-        fprintf(cfp, "0x%lx, ", static_cast<long unsigned int>(lenArray[i]));
-        if (count == 0xf) {
-        count = 0;
-        fprintf(cfp, "\n\t");
-        } else count++;
+    for (size_t k = 0; k < lenArray.size(); k++)
+    {
+        fprintf(cfp, "0x%lx, ", static_cast<long unsigned int>(lenArray[k]));
+        if (count == 0xf)
+        {
+            count = 0;
+            fprintf(cfp, "\n\t");
+        }
+            else count++;
     }
     fprintf(cfp, "\n};\n");
 
