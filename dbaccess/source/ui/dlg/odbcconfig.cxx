@@ -36,7 +36,11 @@
 // with the solar.h stuff (which itself already clashes with <windows.h>).
 
 #define ULONG ODBC_ULONG
+#ifdef SYSTEM_ODBC_HEADERS
+#include <sqltypes.h>
+#else
 #include <odbc/sqltypes.h>
+#endif
 #undef ULONG
 #undef BOOL
 
