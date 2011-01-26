@@ -277,7 +277,7 @@ void SfxFrameHTMLWriter::OutHeader( rtl_TextEncoding eDestEnc )
     Strm() << sNewLine;
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_head, FALSE ) << sNewLine;
 
-//! OutScript();            // Hier fehlen noch die Scripten im Header
+//!     OutScript();                    // Hear the scripts in the Header are still missing
 }
 */
 

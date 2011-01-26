@@ -68,14 +68,14 @@ static HTMLOptionEnum const aScollingTable[] =
 
 void SfxFrameHTMLParser::ParseFrameOptions( SfxFrameDescriptor *pFrame, const HTMLOptions *pOptions, const String& rBaseURL )
 {
-    // die Optionen holen und setzen
+    // Get and set the options
     Size aMargin( pFrame->GetMargin() );
 
-    // MIB 15.7.97: Netscape scheint marginwidth auf 0 zu setzen, sobald
-    // marginheight gesetzt wird und umgekehrt. Machen wir jetzt wegen
-    // bug #41665# auch so.
-    // Netscape l"a\st aber ein direktes Setzen auf 0 nicht zu, IE4.0 schon.
-    // Den Bug machen wir nicht mit!
+    // MIB 07/15/1997: Netscape seems to set marginwidth to 0 as soon as
+    // marginheight is set, and vice versa. Due to bug #41665# let us also
+    // do like that for now. Netscape does however not aallow for a direct
+    // seting to 0, while IE4.0 does
+    // We will not mimic that bug !
     BOOL bMarginWidth = FALSE, bMarginHeight = FALSE;
 
     USHORT nArrLen = pOptions->Count();

@@ -73,16 +73,16 @@ struct BaseLink_Impl
         { delete m_pFileDlg; }
 };
 
-// nur fuer die interne Verwaltung
+// only for internal management
 struct ImplBaseLinkData
 {
     struct tClientType
     {
-        // gilt fuer alle Links
-        ULONG               nCntntType; // Update Format
-        // nicht Ole-Links
-        BOOL            bIntrnlLnk; // ist es ein interner Link
-        USHORT          nUpdateMode;// UpdateMode
+        // applies for all links
+        ULONG   nCntntType;  // Update Format
+        // Not Ole-Links
+        BOOL    bIntrnlLnk;  // It is an internal link
+        USHORT  nUpdateMode; // UpdateMode
     };
 
     struct tDDEType
@@ -108,7 +108,7 @@ class ImplDdeItem : public DdeGetPutItem
 {
     SvBaseLink* pLink;
     DdeData aData;
-    Sequence< sal_Int8 > aSeq;          // Datacontainer for DdeData !!!
+    Sequence< sal_Int8 > aSeq;  // Datacontainer for DdeData !!!
     BOOL bIsValidData : 1;
     BOOL bIsInDTOR : 1;
 public:
@@ -133,9 +133,9 @@ public:
 
 
 /************************************************************************
-|*    SvBaseLink::SvBaseLink()
+|*        SvBaseLink::SvBaseLink()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 SvBaseLink::SvBaseLink()
@@ -148,9 +148,9 @@ SvBaseLink::SvBaseLink()
 }
 
 /************************************************************************
-|*    SvBaseLink::SvBaseLink()
+|*        SvBaseLink::SvBaseLink()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
@@ -161,16 +161,16 @@ SvBaseLink::SvBaseLink( USHORT nUpdateMode, ULONG nContentType )
     bVisible = bSynchron = bUseCache = TRUE;
     bWasLastEditOK = FALSE;
 
-    // falls es ein Ole-Link wird,
+    // It it going to be a Ole-Link,
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
     pImplData->ClientType.bIntrnlLnk = FALSE;
 }
 
 /************************************************************************
-|*    SvBaseLink::SvBaseLink()
+|*        SvBaseLink::SvBaseLink()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSource* pObj )
@@ -183,7 +183,7 @@ SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSourc
 
     if( !pObj )
     {
-        DBG_ASSERT( pObj, "Wo ist mein zu linkendes Object" );
+        DBG_ASSERT( pObj, "Where is my left-most object" );
         return;
     }
 
@@ -193,15 +193,14 @@ SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSourc
         DdeTopic* pTopic = FindTopic( aLinkName, &nItemStt );
         if( pTopic )
         {
-            // dann haben wir alles zusammen
-            // MM hat gefummelt ???
-            // MM_TODO wie kriege ich den Namen
+            // then we have it all together
+            // MM_TODO how do I get the name
             String aStr = aLinkName; // xLinkName->GetDisplayName();
             aStr = aStr.Copy( nItemStt );
             pImplData->DDEType.pItem = new ImplDdeItem( *this, aStr );
             pTopic->InsertItem( pImplData->DDEType.pItem );
 
-            // dann koennen wir uns auch das Advise merken
+            // store the Advice
             xObj = pObj;
         }
     }
@@ -210,9 +209,9 @@ SvBaseLink::SvBaseLink( const String& rLinkName, USHORT nObjectType, SvLinkSourc
 }
 
 /************************************************************************
-|*    SvBaseLink::~SvBaseLink()
+|*        SvBaseLink::~SvBaseLink()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 SvBaseLink::~SvBaseLink()
@@ -244,9 +243,9 @@ IMPL_LINK( SvBaseLink, EndEditHdl, String*, _pNewName )
 }
 
 /************************************************************************
-|*    SvBaseLink::SetObjType()
+|*        SvBaseLink::SetObjType()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 void SvBaseLink::SetObjType( USHORT nObjTypeP )
@@ -258,9 +257,9 @@ void SvBaseLink::SetObjType( USHORT nObjTypeP )
 }
 
 /************************************************************************
-|*    SvBaseLink::SetName()
+|*        SvBaseLink::SetName()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 void SvBaseLink::SetName( const String & rNm )
@@ -269,9 +268,9 @@ void SvBaseLink::SetName( const String & rNm )
 }
 
 /************************************************************************
-|*    SvBaseLink::GetName()
+|*        SvBaseLink::GetName()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 String SvBaseLink::GetName() const
@@ -280,9 +279,9 @@ String SvBaseLink::GetName() const
 }
 
 /************************************************************************
-|*    SvBaseLink::SetObj()
+|*        SvBaseLink::SetObj()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
@@ -295,9 +294,9 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
 }
 
 /************************************************************************
-|*    SvBaseLink::SetLinkSourceName()
+|*        SvBaseLink::SetLinkSourceName()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
@@ -305,21 +304,21 @@ void SvBaseLink::SetLinkSourceName( const String & rLnkNm )
     if( aLinkName == rLnkNm )
         return;
 
-    AddNextRef(); // sollte ueberfluessig sein
-    // Alte Verbindung weg
+    AddNextRef(); // should be superfluous
+    // remove old connection
     Disconnect();
 
     aLinkName = rLnkNm;
 
-    // Neu verbinden
+    // New Connection
     _GetRealObject();
-    ReleaseRef(); // sollte ueberfluessig sein
+    ReleaseRef(); // should be superfluous
 }
 
 /************************************************************************
-|*    SvBaseLink::GetLinkSourceName()
+|*        SvBaseLink::GetLinkSourceName()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 String  SvBaseLink::GetLinkSourceName() const
@@ -329,9 +328,9 @@ String  SvBaseLink::GetLinkSourceName() const
 
 
 /************************************************************************
-|*    SvBaseLink::SetUpdateMode()
+|*        SvBaseLink::SetUpdateMode()
 |*
-|*    Beschreibung
+|*        Description
 *************************************************************************/
 
 void SvBaseLink::SetUpdateMode( USHORT nMode )
@@ -387,11 +386,11 @@ BOOL SvBaseLink::Update()
             }
             if( xObj.Is() )
             {
-                // sollten wir asynschron sein?
+                // should be asynschron?
                 if( xObj->IsPending() )
                     return TRUE;
 
-                // dann brauchen wir das Object auch nicht mehr
+                // we do not need the object anymore
                 AddNextRef();
                 Disconnect();
                 ReleaseRef();
@@ -421,14 +420,14 @@ void SvBaseLink::_GetRealObject( BOOL bConnect)
     {
         String sServer;
         if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
-            sServer == GetpApp()->GetAppName() )        // interner Link !!!
+            sServer == GetpApp()->GetAppName() )  // internal Link !!!
         {
-            // damit der Internal - Link erzeugt werden kann !!!
+            // so that the Internal link can be created!
             nObjType = OBJECT_INTERN;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
             pImplData->ClientType.bIntrnlLnk = TRUE;
-            nObjType = OBJECT_CLIENT_DDE;       // damit wir wissen was es mal war !!
+            nObjType = OBJECT_CLIENT_DDE;  // so we know what it once was!
         }
         else
         {
@@ -448,7 +447,7 @@ ULONG SvBaseLink::GetContentType() const
     if( OBJECT_CLIENT_SO & nObjType )
         return pImplData->ClientType.nCntntType;
 
-    return 0;       // alle Formate ?
+    return 0;  // all Formats ?
 }
 
 
@@ -578,7 +577,6 @@ bool SvBaseLink::ExecuteEdit( const String& _rNewName )
 void SvBaseLink::Closed()
 {
     if( xObj.Is() )
-        // beim Advise Abmelden
         xObj->RemoveAllDataAdvise( this );
 }
 
@@ -593,8 +591,7 @@ FileDialogHelper* SvBaseLink::GetFileDialog( sal_uInt32 nFlags, const String& rF
 ImplDdeItem::~ImplDdeItem()
 {
     bIsInDTOR = TRUE;
-    // damit im Disconnect nicht jemand auf die Idee kommt, den Pointer zu
-    // loeschen!!
+    // So that no-one gets the idea to delete the pointer when Disconnecting!
     SvBaseLinkRef aRef( pLink );
     aRef->Disconnect();
 }
@@ -603,7 +600,7 @@ DdeData* ImplDdeItem::Get( ULONG nFormat )
 {
     if( pLink->GetObj() )
     {
-        // ist das noch gueltig?
+        // is it still valid?
         if( bIsValidData && nFormat == aData.GetFormat() )
             return &aData;
 
@@ -635,12 +632,12 @@ BOOL ImplDdeItem::Put( const DdeData*  )
 
 void ImplDdeItem::AdviseLoop( BOOL bOpen )
 {
-    // Verbindung wird geschlossen, also Link abmelden
+    // Connection is closed, so also unsubscribe link
     if( pLink->GetObj() )
     {
         if( bOpen )
         {
-            // es wird wieder eine Verbindung hergestellt
+            // A connection is re-established
             if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
             {
                 pLink->GetObj()->AddDataAdvise( pLink, String::CreateFromAscii( "text/plain;charset=utf-16" ),  ADVISEMODE_NODATA );
@@ -649,8 +646,8 @@ void ImplDdeItem::AdviseLoop( BOOL bOpen )
         }
         else
         {
-            // damit im Disconnect nicht jemand auf die Idee kommt,
-            // den Pointer zu loeschen!!
+            // So that no-one gets the idea to delete the pointer
+            // when Disconnecting!
             SvBaseLinkRef aRef( pLink );
             aRef->Disconnect();
         }
@@ -672,7 +669,7 @@ static DdeTopic* FindTopic( const String & rLinkName, USHORT* pItemStt )
                                                 pService = rSvc.Next() )
         if( pService->GetName() == sService )
         {
-            // dann suchen wir uns das Topic
+            // then we search for the Topic
             String sTopic( sNm.GetToken( 0, cTokenSeperator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
@@ -686,10 +683,10 @@ static DdeTopic* FindTopic( const String & rLinkName, USHORT* pItemStt )
                     if( pTopic->GetName() == sTopic )
                         return pTopic;
 
-                // Topic nicht gefunden ?
-                // dann versuchen wir ihn mal anzulegen
+                // Topic not found?
+                // then we try once to create it
                 if( i || !pService->MakeTopic( sTopic ) )
-                    break;  // hat nicht geklappt, also raus
+                    break;  // did not work, exiting
             }
             break;
         }

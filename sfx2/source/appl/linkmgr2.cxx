@@ -122,12 +122,12 @@ void LinkManager::CloseCachedComps()
 /************************************************************************
 |*    LinkManager::Remove()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 
 void LinkManager::Remove( SvBaseLink *pLink )
 {
-    // keine Links doppelt einfuegen
+    // No duplicate links inserted
     int bFound = FALSE;
     SvBaseLinkRef** ppRef = (SvBaseLinkRef**)aLinkTbl.GetData();
     for( USHORT n = aLinkTbl.Count(); n; --n, ++ppRef )
@@ -140,7 +140,7 @@ void LinkManager::Remove( SvBaseLink *pLink )
             bFound = TRUE;
         }
 
-        // falls noch leere rum stehen sollten, weg damit
+        // Remove emty ones if they exist
         if( !(*ppRef)->Is() )
         {
             delete *ppRef;
@@ -177,7 +177,7 @@ void LinkManager::Remove( USHORT nPos, USHORT nCnt )
 
 BOOL LinkManager::Insert( SvBaseLink* pLink )
 {
-    // keine Links doppelt einfuegen
+  // No duplicate links inserted
     for( USHORT n = 0; n < aLinkTbl.Count(); ++n )
     {
         SvBaseLinkRef* pTmp = aLinkTbl[ n ];
@@ -200,7 +200,7 @@ BOOL LinkManager::InsertLink( SvBaseLink * pLink,
                                 USHORT nUpdateMode,
                                 const String* pName )
 {
-    // unbedingt zuerst
+    // This First
     pLink->SetObjType( nObjType );
     if( pName )
         pLink->SetName( *pName );
@@ -239,7 +239,7 @@ BOOL LinkManager::InsertDDELink( SvBaseLink * pLink )
 }
 
 
-// erfrage die Strings fuer den Dialog
+// Obtain the string for the dialog
 BOOL LinkManager::GetDisplayNames( const SvBaseLink * pLink,
                                         String* pType,
                                         String* pFile,
@@ -312,8 +312,8 @@ void LinkManager::UpdateAllLinks(
     SvStringsDtor aApps, aTopics, aItems;
     String sApp, sTopic, sItem;
 
-    // erstmal eine Kopie vom Array machen, damit sich updatende Links in
-    // Links in ... nicht dazwischen funken!!
+    // First make a copy of the array in order to update links
+    // links in ... no contact between them!
     SvPtrarr aTmpArr( 255, 50 );
     USHORT n;
     for( n = 0; n < aLinkTbl.Count(); ++n )
@@ -331,7 +331,7 @@ void LinkManager::UpdateAllLinks(
     {
         SvBaseLink* pLink = (SvBaseLink*)aTmpArr[ n ];
 
-        // suche erstmal im Array nach dem Eintrag
+        // search first in the array after the entry
         USHORT nFndPos = USHRT_MAX;
         for( USHORT i = 0; i < aLinkTbl.Count(); ++i )
             if( pLink == *aLinkTbl[ i ] )
@@ -341,9 +341,9 @@ void LinkManager::UpdateAllLinks(
             }
 
         if( USHRT_MAX == nFndPos )
-            continue;                   // war noch nicht vorhanden!
+            continue;  // was not available!
 
-        // Graphic-Links noch nicht updaten
+        // Graphic-Links not to update jet
         if( !pLink->IsVisible() ||
             ( !bUpdateGrfLinks && OBJECT_CLIENT_GRF == pLink->GetObjType() ))
             continue;
@@ -352,8 +352,8 @@ void LinkManager::UpdateAllLinks(
         {
             int nRet = QueryBox( pParentWin, WB_YES_NO | WB_DEF_YES, SfxResId( STR_QUERY_UPDATE_LINKS ) ).Execute();
             if( RET_YES != nRet )
-                return ;        // es soll nichts geupdatet werden
-            bAskUpdate = FALSE;     // einmal reicht
+                return ;         // nothing should be updated
+            bAskUpdate = FALSE;  // once is enough
         }
 
         pLink->Update();
@@ -364,7 +364,7 @@ void LinkManager::UpdateAllLinks(
 /************************************************************************
 |*    SvBaseLink::CreateObject()
 |*
-|*    Beschreibung
+|*    Description
 *************************************************************************/
 
 SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
@@ -386,7 +386,7 @@ SvLinkSourceRef LinkManager::CreateObj( SvBaseLink * pLink )
 
 BOOL LinkManager::InsertServer( SvLinkSource* pObj )
 {
-    // keine doppelt einfuegen
+    // no duplicate inserts
     if( !pObj || USHRT_MAX != aServerTbl.GetPos( pObj ) )
         return FALSE;
 
@@ -493,8 +493,8 @@ BOOL LinkManager::InsertFileLink( sfx2::SvBaseLink& rLink )
     return FALSE;
 }
 
-// eine Uebertragung wird abgebrochen, also alle DownloadMedien canceln
-// (ist zur Zeit nur fuer die FileLinks interressant!)
+// A transfer is aborted, so cancel all download media
+// (for now this is only of interest for the file links!)
 void LinkManager::CancelTransfers()
 {
     SvFileObject* pFileObj;
@@ -509,20 +509,19 @@ void LinkManager::CancelTransfers()
 //                                  CastAndAddRef( pLnk->GetObj() )) )
             pFileObj->CancelTransfers();
 }
-
-    // um Status Informationen aus dem FileObject an den BaseLink zu
-    // senden, gibt es eine eigene ClipBoardId. Das SvData-Object hat
-    // dann die entsprechenden Informationen als String.
-    // Wird zur Zeit fuer FileObject in Verbindung mit JavaScript benoetigt
-    // - das braucht Informationen ueber Load/Abort/Error
+    // For the purpose of sending Status information from the file object to
+    // the base link, there exist a dedicated ClipBoardId. The SvData-object
+    // gets the appropriate information as a string
+    // For now this is required for file object in conjunction with JavaScript
+    // - needs information about Load/Abort/Error
 ULONG LinkManager::RegisterStatusInfoId()
 {
     static ULONG nFormat = 0;
 
     if( !nFormat )
     {
-// wie sieht die neue Schnittstelle aus?
-//      nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
+// what is the new interface?
+//              nFormat = Exchange::RegisterFormatName( "StatusInfo vom SvxInternalLink" );
         nFormat = SotExchange::RegisterFormatName(
                     String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM(
                                 "StatusInfo vom SvxInternalLink" )));
@@ -594,9 +593,8 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     LinkManager* pLinkMgr = pLink->GetLinkManager();
     if (pLinkMgr && pLinkMgr->GetDisplayNames(pLink, 0, &sTopic, &sItem) && sTopic.Len())
     {
-        // erstmal nur ueber die DocumentShells laufen und die mit dem
-        // Namen heraussuchen:
-
+        // first only loop over the DocumentShells the shells and find those
+        // with the name:
         com::sun::star::lang::Locale aLocale;
         MsLangId::convertLanguageToLocale( LANGUAGE_SYSTEM, aLocale );
         CharClass aCC( aLocale );
@@ -635,7 +633,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
 
 
             aCC.toLower( sTmp );
-            if( sTmp == sNmURL )        // die wollen wir haben
+            if( sTmp == sNmURL )  // we want these
             {
                 pFndShell = pShell;
                 break;
@@ -675,7 +673,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
     }
     else
     {
-        // dann versuche die Datei zu laden:
+        // then try to download the file:
         INetURLObject aURL( sTopic );
         INetProtocol eOld = aURL.GetProtocol();
         aURL.SetURL( sTopic = lcl_DDE_RelToAbs( sTopic, sReferer ) );

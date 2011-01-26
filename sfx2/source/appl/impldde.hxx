@@ -49,8 +49,8 @@ class SvDDEObject : public SvLinkSource
     DdeRequest* pRequest;
     ::com::sun::star::uno::Any * pGetData;
 
-    BYTE bWaitForData : 1;                  // wird auf Daten gewartet?
-    BYTE nError     : 7;                    // Error Code fuer den Dialog
+    BYTE bWaitForData : 1;  // waiting for data?
+    BYTE nError       : 7;  // Error code for dialogue
 
 
     BOOL ImplHasOtherFormat( DdeTransaction& );

@@ -486,7 +486,7 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 {
     if ( pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL )
     {
-        // Hier k"onnte noch eine Nachinstallation angeboten werden
+        // Here could a  re-installation be offered
         String aText( SfxResId( STR_FILTER_NOT_INSTALLED ) );
         aText.SearchAndReplaceAscii( "$(FILTER)", pFilter->GetUIName() );
         QueryBox aQuery( NULL, WB_YES_NO | WB_DEF_YES, aText );
@@ -494,11 +494,11 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
         if ( nRet == RET_YES )
         {
 #ifdef DBG_UTIL
-            // Setup starten
-            InfoBox( NULL, DEFINE_CONST_UNICODE("Hier soll jetzt das Setup starten!") ).Execute();
+            // Start Setup
+            InfoBox( NULL, DEFINE_CONST_UNICODE("Here should the Setup now be starting!") ).Execute();
 #endif
-            // Installation mu\s hier noch mitteilen, ob es geklappt hat, dann kann das
-            // Filterflag gel"oscht werden
+            // Installation must still give feedback if it worked or not,
+            // then the  Filterflag be deleted
         }
 
         return ( !(pFilter->GetFilterFlags() & SFX_FILTER_MUSTINSTALL) );
@@ -516,9 +516,9 @@ sal_Bool SfxFilterMatcher::IsFilterInstalled_Impl( const SfxFilter* pFilter )
 
 
 sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**ppFilter, sal_Bool /*bPlugIn*/, sal_Bool bAPI ) const
-/*  [Beschreibung]
+/*  [Description]
 
-    Hier wird noch die Filterauswahlbox hochgezogen. Sonst GuessFilter
+    Here the Filter selection box is pulled up. Otherwise GuessFilter
  */
 
 {
@@ -557,17 +557,18 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
     {
         const SfxFilter* pInstallFilter = NULL;
 
-        // Jetzt auch Filter testen, die nicht installiert sind ( ErrCode ist irrelevant )
+        // Now test the filter which are not installed (ErrCode is irrelevant)
         GuessFilter( rMedium, &pInstallFilter, SFX_FILTER_IMPORT, SFX_FILTER_CONSULTSERVICE );
         if ( pInstallFilter )
         {
             if ( IsFilterInstalled_Impl( pInstallFilter ) )
-                // Eventuell wurde der Filter nachinstalliert
+                // Maybe the filter was installed was installed afterwards.
                 pFilter = pInstallFilter;
         }
         else
         {
-            // Jetzt auch Filter testen, die erst von Star bezogen werden m"ussen ( ErrCode ist irrelevant )
+          // Now test the filter, which first must be obtained by Star
+          // (ErrCode is irrelevant)
             GuessFilter( rMedium, &pInstallFilter, SFX_FILTER_IMPORT, 0 );
             if ( pInstallFilter )
                 IsFilterInstalled_Impl( pInstallFilter );
@@ -835,7 +836,7 @@ SfxFilterMatcherIter::SfxFilterMatcherIter(
     : nOrMask( nOrMaskP ), nAndMask( nAndMaskP ),
       nCurrent(0), pMatch( pMatchP->pImpl)
 {
-    if( nOrMask == 0xffff ) //Wg. Fehlbuild auf s
+    if( nOrMask == 0xffff ) //Due to falty build on s
         nOrMask = 0;
     pMatch->InitForIterating();
 }

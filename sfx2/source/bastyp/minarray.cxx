@@ -101,7 +101,7 @@ void SfxPtrArr::Append( void* aElem )
 {
     DBG_MEMTEST();
     DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
-    // musz das Array umkopiert werden?
+    // Does the Array need to be copied?
     if ( nUnused == 0 )
     {
         USHORT nNewSize = (nUsed == 1) ? (nGrow==1 ? 2 : nGrow) : nUsed+nGrow;
@@ -116,7 +116,7 @@ void SfxPtrArr::Append( void* aElem )
         pData = pNewData;
     }
 
-    // jetzt hinten in den freien Raum schreiben
+    // now write at the back in the open space
     pData[nUsed] = aElem;
     ++nUsed;
     --nUnused;
@@ -127,14 +127,14 @@ void SfxPtrArr::Append( void* aElem )
 USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
 {
     DBG_MEMTEST();
-    // nLen adjustieren, damit nicht ueber das Ende hinaus geloescht wird
+    // Adjust nLen, thus to avoid deleting beyond the end
     nLen = Min( (USHORT)(nUsed-nPos), nLen );
 
-    // einfache Aufgaben erfordern einfache Loesungen!
+    // simple problems require simple solutions!
     if ( nLen == 0 )
         return 0;
 
-    // bleibt vielleicht keiner uebrig
+    // Maybe no one will remain
     if ( (nUsed-nLen) == 0 )
     {
         delete [] pData;
@@ -144,10 +144,10 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // feststellen, ob das Array dadurch physikalisch schrumpft...
+    // Determine whether the array has physically shrunk...
     if ( (nUnused+nLen) >= nGrow )
     {
-        // auf die naechste Grow-Grenze aufgerundet verkleinern
+        // reduce (rounded up) to the next Grow-border
         USHORT nNewUsed = nUsed-nLen;
         USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
@@ -168,7 +168,7 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // in allen anderen Faellen nur zusammenschieben
+    // in all other cases, only push together
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(void*) );
     nUsed = nUsed - nLen;
@@ -181,11 +181,11 @@ USHORT SfxPtrArr::Remove( USHORT nPos, USHORT nLen )
 BOOL SfxPtrArr::Remove( void* aElem )
 {
     DBG_MEMTEST();
-    // einfache Aufgaben ...
+    // simple tasks ...
     if ( nUsed == 0 )
         return FALSE;
 
-    // rueckwaerts, da meist der letzte zuerst wieder entfernt wird
+    // backwards, since most of the last is first removed
     void* *pIter = pData + nUsed - 1;
     for ( USHORT n = 0; n < nUsed; ++n, --pIter )
         if ( *pIter == aElem )
@@ -201,11 +201,11 @@ BOOL SfxPtrArr::Remove( void* aElem )
 BOOL SfxPtrArr::Replace( void* aOldElem, void* aNewElem )
 {
     DBG_MEMTEST();
-    // einfache Aufgaben ...
+    // simple tasks ...
     if ( nUsed == 0 )
         return FALSE;
 
-    // rueckwaerts, da meist der letzte zuerst wieder entfernt wird
+    // backwards, since most of the last is first removed
     void* *pIter = pData + nUsed - 1;
     for ( USHORT n = 0; n < nUsed; ++n, --pIter )
         if ( *pIter == aOldElem )
@@ -240,10 +240,10 @@ void SfxPtrArr::Insert( USHORT nPos, void* rElem )
 {
     DBG_MEMTEST();
     DBG_ASSERT( sal::static_int_cast< unsigned >(nUsed+1) < ( USHRT_MAX / sizeof(void*) ), "array too large" );
-    // musz das Array umkopiert werden?
+    // Does the Array have o be copied?
     if ( nUnused == 0 )
     {
-        // auf die naechste Grow-Grenze aufgerundet vergroeszern
+        // increase (rounded up ) to the next Grow-border
         USHORT nNewSize = nUsed+nGrow;
         void** pNewData = new void*[nNewSize];
 
@@ -257,11 +257,11 @@ void SfxPtrArr::Insert( USHORT nPos, void* rElem )
         pData = pNewData;
     }
 
-    // jetzt den hinteren Teil verschieben
+    // Now move the rear part
     if ( nPos < nUsed )
         memmove( pData+nPos+1, pData+nPos, (nUsed-nPos)*sizeof(void*) );
 
-    // jetzt in den freien Raum schreiben
+    // Now write into the free space.
     memmove( pData+nPos, &rElem, sizeof(void*) );
     nUsed += 1;
     nUnused -= 1;
@@ -336,7 +336,7 @@ ByteArr& ByteArr::operator=( const ByteArr& rOrig )
 void ByteArr::Append( char aElem )
 {
     DBG_MEMTEST();
-    // musz das Array umkopiert werden?
+    // Does the Array have o be copied?
     if ( nUnused == 0 )
     {
         USHORT nNewSize = (nUsed == 1) ? (nGrow==1 ? 2 : nGrow) : nUsed+nGrow;
@@ -351,7 +351,7 @@ void ByteArr::Append( char aElem )
         pData = pNewData;
     }
 
-    // jetzt hinten in den freien Raum schreiben
+    // now write at the back in the open space
     pData[nUsed] = aElem;
     ++nUsed;
     --nUnused;
@@ -362,14 +362,14 @@ void ByteArr::Append( char aElem )
 USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
 {
     DBG_MEMTEST();
-    // nLen adjustieren, damit nicht ueber das Ende hinaus geloescht wird
+    // Adjust nLen, thus to avoid deleting beyond the end
     nLen = Min( (USHORT)(nUsed-nPos), nLen );
 
-    // einfache Aufgaben erfordern einfache Loesungen!
+    // simple problems require simple solutions!
     if ( nLen == 0 )
         return 0;
 
-    // bleibt vielleicht keiner uebrig
+    // Maybe no one will remain
     if ( (nUsed-nLen) == 0 )
     {
         delete [] pData;
@@ -379,10 +379,10 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // feststellen, ob das Array dadurch physikalisch schrumpft...
+    // Determine whether the array has physically shrunk...
     if ( (nUnused+nLen) >= nGrow )
     {
-        // auf die naechste Grow-Grenze aufgerundet verkleinern
+        // reduce (rounded up) to the next Grow-border
         USHORT nNewUsed = nUsed-nLen;
         USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
@@ -403,7 +403,7 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // in allen anderen Faellen nur zusammenschieben
+    // in all other cases, only push together
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(char) );
     nUsed = nUsed - nLen;
@@ -416,11 +416,11 @@ USHORT ByteArr::Remove( USHORT nPos, USHORT nLen )
 BOOL ByteArr::Remove( char aElem )
 {
     DBG_MEMTEST();
-    // einfache Aufgaben ...
+    // simple tasks ...
     if ( nUsed == 0 )
         return FALSE;
 
-    // rueckwaerts, da meist der letzte zuerst wieder entfernt wird
+    // backwards, since most of the last is first removed
     char *pIter = pData + nUsed - 1;
     for ( USHORT n = 0; n < nUsed; ++n, --pIter )
         if ( *pIter == aElem )
@@ -454,10 +454,10 @@ BOOL ByteArr::Contains( const char rItem ) const
 void ByteArr::Insert( USHORT nPos, char rElem )
 {
     DBG_MEMTEST();
-    // musz das Array umkopiert werden?
+    // Does the Array need to be copied?
     if ( nUnused == 0 )
     {
-        // auf die naechste Grow-Grenze aufgerundet vergroeszern
+        // increase (rounded up) to the next Grow-border
         USHORT nNewSize = nUsed+nGrow;
         char* pNewData = new char[nNewSize];
 
@@ -471,11 +471,11 @@ void ByteArr::Insert( USHORT nPos, char rElem )
         pData = pNewData;
     }
 
-    // jetzt den hinteren Teil verschieben
+    // Now move the rear part
     if ( nPos < nUsed )
         memmove( pData+nPos+1, pData+nPos, (nUsed-nPos)*sizeof(char) );
 
-    // jetzt in den freien Raum schreiben
+    // now write at the back in the open space
     memmove( pData+nPos, &rElem, sizeof(char) );
     nUsed += 1;
     nUnused -= 1;
@@ -568,7 +568,7 @@ WordArr& WordArr::operator=( const WordArr& rOrig )
 void WordArr::Append( short aElem )
 {
     DBG_MEMTEST();
-    // musz das Array umkopiert werden?
+    // Does the Array need to be copied?
     if ( nUnused == 0 )
     {
         USHORT nNewSize = (nUsed == 1) ? (nGrow==1 ? 2 : nGrow) : nUsed+nGrow;
@@ -583,7 +583,7 @@ void WordArr::Append( short aElem )
         pData = pNewData;
     }
 
-    // jetzt hinten in den freien Raum schreiben
+    // now write at the back in the open space
     pData[nUsed] = aElem;
     ++nUsed;
     --nUnused;
@@ -594,14 +594,14 @@ void WordArr::Append( short aElem )
 USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
 {
     DBG_MEMTEST();
-    // nLen adjustieren, damit nicht ueber das Ende hinaus geloescht wird
+    // Adjust nLen, thus to avoid deleting beyond the end
     nLen = Min( (USHORT)(nUsed-nPos), nLen );
 
-    // einfache Aufgaben erfordern einfache Loesungen!
+    // simple problems require simple solutions!
     if ( nLen == 0 )
         return 0;
 
-    // bleibt vielleicht keiner uebrig
+    // Maybe no one will remain
     if ( (nUsed-nLen) == 0 )
     {
         delete [] pData;
@@ -611,10 +611,10 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // feststellen, ob das Array dadurch physikalisch schrumpft...
+    // Determine whether the array has physically shrunk...
     if ( (nUnused+nLen) >= nGrow )
     {
-        // auf die naechste Grow-Grenze aufgerundet verkleinern
+        // reduce (rounded up) to the next Grow-border
         USHORT nNewUsed = nUsed-nLen;
         USHORT nNewSize = ((nNewUsed+nGrow-1)/nGrow) * nGrow;
         DBG_ASSERT( nNewUsed <= nNewSize && nNewUsed+nGrow > nNewSize,
@@ -635,7 +635,7 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
         return nLen;
     }
 
-    // in allen anderen Faellen nur zusammenschieben
+    // in all other cases, only push together
     if ( nUsed-nPos-nLen > 0 )
         memmove( pData+nPos, pData+nPos+nLen, (nUsed-nPos-nLen)*sizeof(short) );
     nUsed = nUsed - nLen;
@@ -648,11 +648,11 @@ USHORT WordArr::Remove( USHORT nPos, USHORT nLen )
 BOOL WordArr::Remove( short aElem )
 {
     DBG_MEMTEST();
-    // einfache Aufgaben ...
+    // simple tasks ...
     if ( nUsed == 0 )
         return FALSE;
 
-    // rueckwaerts, da meist der letzte zuerst wieder entfernt wird
+    // backwards, since most of the last is first removed
     short *pIter = pData + nUsed - 1;
     for ( USHORT n = 0; n < nUsed; ++n, --pIter )
         if ( *pIter == aElem )
@@ -686,10 +686,10 @@ BOOL WordArr::Contains( const short rItem ) const
 void WordArr::Insert( USHORT nPos, short rElem )
 {
     DBG_MEMTEST();
-    // musz das Array umkopiert werden?
+    // Does the Array need to be copied?
     if ( nUnused == 0 )
     {
-        // auf die naechste Grow-Grenze aufgerundet vergroeszern
+        // increase (rounded up) to the next Grow-border
         USHORT nNewSize = nUsed+nGrow;
         short* pNewData = new short[nNewSize];
 
@@ -703,11 +703,11 @@ void WordArr::Insert( USHORT nPos, short rElem )
         pData = pNewData;
     }
 
-    // jetzt den hinteren Teil verschieben
+    // Now move the rear part
     if ( nPos < nUsed )
         memmove( pData+nPos+1, pData+nPos, (nUsed-nPos)*sizeof(short) );
 
-    // jetzt in den freien Raum schreiben
+    // now write at the back in the open space
     memmove( pData+nPos, &rElem, sizeof(short) );
     nUsed += 1;
     nUnused -= 1;

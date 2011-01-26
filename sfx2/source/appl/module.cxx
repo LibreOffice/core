@@ -167,7 +167,8 @@ SfxModule::~SfxModule()
     {
         if ( SFX_APP()->Get_Impl() )
         {
-            // Das Modul wird noch vor dem DeInitialize zerst"ort, also auis dem Array entfernen
+            // The module will be destroyed before the Deinitialize,
+            // so remove from the array
             SfxModuleArr_Impl& rArr = GetModules_Impl();
             for( USHORT nPos = rArr.Count(); nPos--; )
             {
@@ -196,7 +197,7 @@ SfxSlotPool* SfxModule::GetSlotPool() const
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "Kein echtes Modul!" );
+    DBG_ASSERT( pImpl, "No real Modul!" );
 
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
@@ -206,7 +207,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
         {
             pImpl->pFactArr->Remove( nFactory );
-            DBG_ERROR("ChildWindow mehrfach registriert!");
+            DBG_ERROR("ChildWindow registered multiple times!");
             return;
         }
     }
@@ -220,7 +221,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 void SfxModule::RegisterChildWindowContext( USHORT nId,
         SfxChildWinContextFactory *pFact)
 {
-    DBG_ASSERT( pImpl, "Kein echtes Modul!" );
+    DBG_ASSERT( pImpl, "No real Modul!" );
 
     USHORT nCount = pImpl->pFactArr->Count();
     for (USHORT nFactory=0; nFactory<nCount; ++nFactory)
@@ -235,7 +236,7 @@ void SfxModule::RegisterChildWindowContext( USHORT nId,
         }
     }
 
-    DBG_ERROR( "Kein ChildWindow fuer diesen Context!" );
+    DBG_ERROR( "No ChildWindow for this Context!" );
 }
 
 //-------------------------------------------------------------------------
@@ -252,7 +253,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("TbxController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -274,7 +275,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("StbController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("TbxController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -296,7 +297,7 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
             (pF->nSlotId == pFact->nSlotId || pF->nSlotId == 0) )
         {
-            DBG_WARNING("MenuController-Registrierung ist nicht eindeutig!");
+            DBG_WARNING("MenuController-Registering is not clearly defined!");
         }
     }
 #endif
@@ -337,7 +338,7 @@ ImageList* SfxModule::GetImageList_Impl( BOOL bBig )
     return pImpl->GetImageList( pResMgr, bBig );
 }
 
-SfxTabPage* SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
+SfxTabPage*     SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )
 {
     return NULL;
 }

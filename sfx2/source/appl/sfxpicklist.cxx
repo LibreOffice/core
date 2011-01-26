@@ -220,7 +220,7 @@ void SfxPickList::CreatePickListEntries()
 {
     RemovePickListEntries();
 
-    // Einlesen der Pickliste
+    // Reading the pick list
     Sequence< Sequence< PropertyValue > > seqPicklist = SvtHistoryOptions().GetList( ePICKLIST );
 
     sal_uInt32 nCount   = seqPicklist.getLength();
@@ -357,7 +357,7 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.IsA( TYPE( SfxEventHint )))
     {
         SfxEventHint* pEventHint = PTR_CAST(SfxEventHint,&rHint);
-        // nur ObjectShell-bezogene Events mit Medium interessieren
+        // only ObjectShell-related events with media interest
         SfxObjectShell* pDocSh = pEventHint->GetObjShell();
         if( !pDocSh )
             return;
@@ -393,12 +393,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in History
+                // Unnamed Documents and embedded-Documents not in History
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;
@@ -424,12 +424,12 @@ void SfxPickList::Notify( SfxBroadcaster&, const SfxHint& rHint )
                 if( !pMed )
                     return;
 
-                // unbenannt-Docs und embedded-Docs nicht in Pickliste
+                // Unnamed Documents and embedded-Documents not im Pickliste
                 if ( !pDocSh->HasName() ||
                      SFX_CREATE_MODE_STANDARD != pDocSh->GetCreateMode() )
                     return;
 
-                // Hilfe nicht in History
+                // Help not in History
                 INetURLObject aURL( pDocSh->IsDocShared() ? pDocSh->GetSharedFileURL() : ::rtl::OUString( pMed->GetOrigURL() ) );
                 if ( aURL.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
                     return;

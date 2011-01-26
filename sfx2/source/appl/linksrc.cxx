@@ -61,7 +61,7 @@ SvLinkSourceTimer::SvLinkSourceTimer( SvLinkSource * pOwn )
 
 void SvLinkSourceTimer::Timeout()
 {
-    // sicher gegen zerstoeren im Handler
+    // Secure against beeing destroyed in Handler
     SvLinkSourceRef aAdv( pOwner );
     pOwner->SendDataChanged();
 }
@@ -275,7 +275,7 @@ void SvLinkSource::SendDataChanged()
 void SvLinkSource::NotifyDataChanged()
 {
     if( pImpl->nTimeout )
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
     else
     {
         SvLinkSource_EntryIter_Impl aIter( pImpl->aArr );
@@ -314,10 +314,10 @@ void SvLinkSource::DataChanged( const String & rMimeType,
                                 const ::com::sun::star::uno::Any & rVal )
 {
     if( pImpl->nTimeout && !rVal.hasValue() )
-    {   // nur wenn keine Daten mitgegeben wurden
+    {   // only when no data was included
         // fire all data to the sink, independent of the requested format
         pImpl->aDataMimeType = rMimeType;
-        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // Timeout neu
+        StartTimer( &pImpl->pTimer, this, pImpl->nTimeout ); // New timeout
     }
     else
     {

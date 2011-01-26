@@ -86,7 +86,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
     // Altough the real default encoding is ISO8859-1, we use MS-1252
-    // als default encoding.
+    // as default encoding.
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
@@ -95,15 +95,15 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
 
 SfxHTMLParser::~SfxHTMLParser()
 {
-    DBG_ASSERT( !pDLMedium, "Da ist ein File-Download stehengeblieben" );
+    DBG_ASSERT( !pDLMedium, "Here is a File Download that has got stuck" );
     delete pDLMedium;
 }
 
 BOOL SfxHTMLParser::ParseMapOptions(ImageMap * pImageMap,
                                     const HTMLOptions * pOptions)
 {
-    DBG_ASSERT( pImageMap, "ParseMapOptions: keine Image-Map" );
-    DBG_ASSERT( pOptions, "ParseMapOptions: keine Optionen" );
+    DBG_ASSERT( pImageMap, "ParseMapOptions: No Image-Map" );
+    DBG_ASSERT( pOptions, "ParseMapOptions: No Options" );
 
     String aName;
 
@@ -129,8 +129,8 @@ BOOL SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const String& rBaseUR
                                      USHORT nEventMouseOver,
                                      USHORT nEventMouseOut )
 {
-    DBG_ASSERT( pImageMap, "ParseAreaOptions: keine Image-Map" );
-    DBG_ASSERT( pOptions, "ParseAreaOptions: keine Optionen" );
+    DBG_ASSERT( pImageMap, "ParseAreaOptions: no Image-Map" );
+    DBG_ASSERT( pOptions, "ParseAreaOptions: no Options" );
 
     USHORT nShape = IMAP_OBJ_RECTANGLE;
     SvULongs aCoords;
@@ -247,41 +247,42 @@ IMAPOBJ_SETEVENT:
 void SfxHTMLParser::StartFileDownload( const String& rURL, int nToken,
                                        SfxObjectShell *pSh )
 {
-    DBG_ASSERT( !pDLMedium, "StartFileDwonload bei aktivem Download" );
+    DBG_ASSERT( !pDLMedium, "StartFileDownload when active Download" );
     if( pDLMedium )
         return;
 
     pDLMedium = new SfxMedium( rURL, SFX_STREAM_READONLY, FALSE );
     if( pSh )
     {
-        // Medium registrieren, damit abgebrochen werden kann
+        // Register the medium, so that it can be stopped.
         pSh->RegisterTransfer( *pDLMedium );
 
-        // Target-Frame uebertragen, damit auch javascript:-URLs
-        // "geladen" werden koennen.
+        // Transfer Target-Frame, so that also the javascript:-URLs
+        // can be "loaded".
         //const SfxMedium *pShMedium = pSh->GetMedium();
         //if( pShMedium )
-        //  pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
+        //      pDLMedium->SetLoadTargetFrame( pShMedium->GetLoadTargetFrame() );
     }
 
-    // Download anstossen (Achtung: Kann auch synchron sein).
+    // Push Download (Note: Can also be synchronous).
     if ( TRUE /*pMedium->GetDoneLink() == Link()*/ )
         pDLMedium->DownLoad();
     else
     {
-        // Downloading-Flag auf TRUE setzen. Es werden dann auch
-        // Data-Available-Links, wenn wir in den Pending-Staus gelangen.
+        // Set Downloading-Flag to TRUE. When we get into the Pending-status
+        // we will then also have Data-Available-Links.
         SetDownloadingFile( TRUE );
         pDLMedium->DownLoad( STATIC_LINK( this, SfxHTMLParser, FileDownloadDone ) );
 
-        // Wenn das Dowsnloading-Flag noch gesetzt ist erfolgt der Download
-        // asynchron. Wir gehen dann in den Pedning-Staus und warten dort.
-        // Solange sind alle Aufrufe des Data-Avaialble-Link gesperrt.
+        // If the Downloading-Flag is still set downloading will be done
+        // asynchronously. We will go into Pedning-status and wait there.
+        // As long as we are there all calls to the Data-Link Avaialble are
+        // locked.
         if( IsDownloadingFile() )
         {
-            // Den aktuellen Zustand einfrieren und in den Pending-Status gehen.
-            // Wenn der Download beendet oder abgebrochen wurde, wird ueber
-            // NewDataRead ein Continue mit dem uebergeben Token angesteossen.
+            // Unfreeze the current state and go into the Pending-Status.
+            // When the download is completed or aborted, a Continue with
+            // the transfer token will be pushed by passedNewDataRead.
             SaveState( nToken );
             eState = SVPAR_PENDING;
         }
@@ -299,7 +300,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
         DBG_ASSERT( pStream, "Kein In-Stream vom Medium erhalten" );
 
         SvMemoryStream aStream;
-        if( pStream )   // HACK wegen #65563#
+        if( pStream )   // HACK due to bug #65563#
             aStream << *pStream;
 
         aStream.Seek( STREAM_SEEK_TO_END );
@@ -324,11 +325,11 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
 
 IMPL_STATIC_LINK( SfxHTMLParser, FileDownloadDone, void*, EMPTYARG )
 {
-    // Der Download ist jetzt abgeschlossen. Ausserdem muss/darf der
-    // Data-Available-Link wieder durchgelassen werden.
+    // The Download is now completed. also the Data-Available-Link
+    // must or are allowed to be passed through.
     pThis->SetDownloadingFile( FALSE );
 
-    // ... und einmal aufrufen, damit weitergelesen wird.
+    // ... and call once, thus will continue reading.
     pThis->CallAsyncCallLink();
 
     return 0;

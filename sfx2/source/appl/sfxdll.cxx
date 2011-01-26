@@ -32,7 +32,7 @@
 #ifdef WIN
 #include <svwin.h>
 
-// Statische DLL-Verwaltungs-Variablen
+// Static DLL Administrative variables
 static HINSTANCE hDLLInst = 0;
 
 //==========================================================================
