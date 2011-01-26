@@ -584,30 +584,15 @@ void Ww1SingleSprmPpc::Start(
         return;                                 // nicht
 
     RndStdIds eAnchor;          // Bindung
-    sal_Int16 eHRel;        // Seite oder Seitenrand
-    sal_Int16 eVRel;        // Seite oder Seitenrand
 
-    switch ( ( nPpc & 0x30 ) >> 4 ){        // Y - Bindung bestimmt Sw-Bindung
-    case 0: eAnchor = FLY_AT_PARA;          // Vert Margin
-            eVRel = text::RelOrientation::PRINT_AREA;
-
+    switch ( ( nPpc & 0x30 ) >> 4 )     // Y - Bindung bestimmt Sw-Bindung
+    {
+        case 0:
+            eAnchor = FLY_AT_PARA;      // Vert Margin
             break;
-
-    default:eAnchor = FLY_AT_PAGE;          // Vert Page oder unknown
-            eVRel = text::RelOrientation::FRAME;
+        default:
+            eAnchor = FLY_AT_PAGE;      // Vert Page oder unknown
             break;                          // 2=Vert. Paragraph, 3=Use Default
-    }
-
-    switch ( ( nPpc & 0xc0 ) >> 6 ){        // X - Bindung -> Koordinatentransformation
-    case 0:                                 // Hor. Spalte
-    case 1:                                 // Hor. Absatz
-            eHRel = text::RelOrientation::PRINT_AREA;
-
-            break;
-
-    default:
-            eHRel = text::RelOrientation::FRAME;
-            break;
     }
 
     if( !rOut.IsInFly() && rMan.IsInStyle() ){
