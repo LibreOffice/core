@@ -176,10 +176,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 #endif
                 bSendData = TRUE;
             }
-            if ( m_bLog )
-            {
-//  HACK Too many KeyEvents generated              LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeys"), aKeyString.Len() );
-            }
             // cleanup
             aKeyString.Erase();
             pKeyWin = NULL;
@@ -274,7 +270,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
             case WINDOW_LISTBOX:
                 switch( nEventID )
                 {
-//                    case VCLEVENT_LISTBOX_DOUBLECLICK:
                     case VCLEVENT_LISTBOX_SELECT:
                         if ( m_bRecord )
                         {
@@ -431,26 +426,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                         }
                 }
                 break;
-/*          case C_MoreButton:
-                switch( nEventID )
-                {
-                    case M_IsOpen :
-                        pRet->GenReturn ( RET_Value, nUId, ((MoreButton*)pControl)->GetState());
-                        break;
-                    case M_Click :
-                        ((MoreButton*)pControl)->Click();
-                        break;
-                    case M_Open :
-                        ((MoreButton*)pControl)->SetState(TRUE);
-                        break;
-                    case M_Close :
-                        ((MoreButton*)pControl)->SetState(FALSE);
-                        break;
-                    default:
-                        ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "MoreButton" ) );
-                        break;
-                }
-                break;*/
             case WINDOW_SPINFIELD:
             case WINDOW_PATTERNFIELD:
             case WINDOW_NUMERICFIELD:
@@ -511,22 +486,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                             LogVCL( GetParentID( pWin ), pWin->GetType(), pWin->GetSmartUniqueOrHelpId(), CUniString("Click") );
                         }
                         break;
-/*      Keyevent or Timeout
-                    case M_Open :
-                        {
-                            MouseEvent aMEvnt;
-                            Point aPt( pControl->GetSizePixel().Width() / 2, pControl->GetSizePixel().Height() / 2 );
-                            aMEvnt = MouseEvent( aPt,1,MOUSE_SIMPLECLICK,MOUSE_LEFT );
-                            ImplMouseButtonDown( pControl, aMEvnt );
-
-                            ULONG nStart = Time::GetSystemTicks();
-                            ULONG nDelay = pControl->GetSettings().GetMouseSettings().GetActionDelay();
-                            while ( ( Time::GetSystemTicks() - nStart ) < nDelay + 100 )
-                                SafeReschedule();
-
-                            ImplMouseButtonUp  ( pControl, aMEvnt );
-                        }
-                        break;*/
                     }
                 break;
             case WINDOW_TOOLBOX:
@@ -549,118 +508,17 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                         StatementList::pRet->GenReturn( RET_MacroRecorder, pTB->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_Click|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pTB->GetHelpId( pTB->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
                                     bSendData = TRUE;
                                 }
-/* not needed                               if ( m_bLog )
-                                {
-                                }*/
                             }
                             break;
                         case VCLEVENT_TOOLBOX_CLICK:  /// ATTENTION this is called during initialisation of toolbox. whoever 'invented' this
                             pActionParent = pTB;
                             break;
-//                        case VCLEVENT_WINDOW_SHOW:        // not usable ATM. see above
-//                            if ( pActionParent )
-//                            {   // a new toolbox opens up, might be a tearoff
-//                                if ( pActionParent != pWin )
-//                                {   // it IS a tearoff not an undock
-//                                    // compare to 1 for floating ToolBoxes
-//                                  if ( m_bRecord )
-//                                  {
-//                                      if ( !pWin->GetSmartUniqueOrHelpId().HasAny() || pWin->GetSmartUniqueOrHelpId().Matches( 1 ) )
-//                                          // generate direct Button access
-//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), (comm_USHORT)(M_TearOff) );
-//                                      else
-//                                          // access via Toolbox
-//                                          StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetSmartUniqueOrHelpId(), (comm_USHORT)(M_TearOff|M_RET_NUM_CONTROL), static_cast<comm_ULONG>(pActionParent->GetHelpId( pActionParent->GetCurItemId() )) ); // GetHelpId() ULONG != comm_ULONG on 64bit
-//                                      bSendData = TRUE;
-//                                  }
-//                                    if ( m_bLog )
-//                                    {
-//                                        LogVCL( pActionParent->GetSmartUniqueOrHelpId(), pWin->GetType(), SmartId( pActionParent->GetHelpId( pActionParent->GetCurItemId() ) ), CUniString("TearOff") );
-//                                    }
-//                                }
-//                                pActionParent = NULL;
-//                            }
-//                            break;
                         case VCLEVENT_TOOLBOX_DEACTIVATE:
                             pActionParent = NULL;
                             break;
                     }
                 }
                 break;
-/*                  ToolBox *pTB = ((ToolBox*)pControl);
-                    if ( pTB->GetUniqueOrHelpId() != nUId ) // Also Button auf der ToolBox gefunden
-                    {
-                        if ( nParams == PARAM_NONE )
-                        {           // Wir fälschen einen Parameter
-                            nParams = PARAM_USHORT_1;
-                            nNr1 = nUId;
-                        }
-                        else
-                            ReportError( nUId, GEN_RES_STR1( S_INTERNAL_ERROR, MethodString( nMethodId ) ) );
-                    }
-
-#define FIND_HELP\
-{\
-    if( nParams == PARAM_USHORT_1 )\
-        nLNr1 = nNr1;\
-    for ( nNr1 = 0; nNr1 < pTB->GetItemCount() && nLNr1 != pTB->GetHelpId(pTB->GetItemId(nNr1)) ; nNr1++ ) {}\
-    bBool1 = nLNr1 == pTB->GetHelpId(pTB->GetItemId(nNr1));\
-    if ( !bBool1 )\
-        ReportError( nUId, GEN_RES_STR1( S_HELPID_ON_TOOLBOX_NOT_FOUND, MethodString( nMethodId ) ) );\
-    else\
-    {\
-        if ( !pTB->IsItemEnabled( pTB->GetItemId(nNr1) ) && nMethodId != _M_IsEnabled )\
-        {\
-            ReportError( nUId, GEN_RES_STR1( S_BUTTON_DISABLED_ON_TOOLBOX, MethodString( nMethodId ) ) );\
-            bBool1 = FALSE;\
-        }\
-        else if ( !pTB->IsItemVisible( pTB->GetItemId(nNr1) ) )\
-        {\
-            ReportError( nUId, GEN_RES_STR1( S_BUTTON_HIDDEN_ON_TOOLBOX, MethodString( nMethodId ) ) );\
-            bBool1 = FALSE;\
-        }\
-        else\
-        {\
-            if ( pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() )\
-            {\
-                USHORT nLine = pTB->GetCurLine();\
-                do\
-                {\
-                    pTB->ShowLine( FALSE );\
-                    for ( int i = 1 ; i < 30 ; i++ )\
-                        SafeReschedule();\
-                }\
-                while ( pTB->GetCurLine() != nLine && pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() );\
-                pTB->Invalidate( pTB->GetScrollRect() );\
-            }\
-            if ( pTB->GetItemRect(pTB->GetItemId(nNr1)).IsEmpty() )\
-            {\
-                ReportError( nUId, GEN_RES_STR1( S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX, MethodString( nMethodId ) ) );\
-                bBool1 = FALSE;\
-            }\
-        }\
-    }\
-}\
-
-                    switch( nEventID )
-                    {
-                        case M_SetNextToolBox :
-                            if ( (nParams & PARAM_STR_1) )
-                                pTB->SetNextToolBox( aString1 );
-                            else
-                                pTB->SetNextToolBox( pTB->GetNextToolBox() );
-                            pTB->NextToolBox();
-                            break;
-                        case M_GetNextToolBox :
-                            pRet->GenReturn ( RET_Value, nUId, (String)pTB->GetNextToolBox());
-                            break;
-                        default:
-                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "ToolBox" ) );
-                            break;
-                    }
-                }
-                break;
-*/
             case WINDOW_CONTROL:
             case WINDOW_WINDOW:
                 switch( nEventID )
@@ -678,11 +536,6 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
                                 if ( pIdWin != pWin )
                                    bKeyFollowFocus = TRUE;
                                 aKeyUniqueID = pIdWin->GetSmartUniqueOrHelpId();
-                                if ( m_bLog )
-                                {
-//   HACK Too many KeyEvents generated                                 if ( aKeyString.Len() == 0 )
-//   HACK Too many KeyEvents generated                                     LogVCL( SmartId(), 0, aKeyUniqueID, CUniString("TypeKeysStart") );
-                                }
                                 if ( ( !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) &&
                                       (( aKeyCode.GetGroup() == KEYGROUP_NUM)   ||
                                        ( aKeyCode.GetGroup() == KEYGROUP_ALPHA) ||
@@ -722,301 +575,21 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
 
                 }
                 break;
-              case WINDOW_DOCKINGWINDOW:
-//                switch( nEventID )
+            case WINDOW_DOCKINGWINDOW:
                 {
 //                  case 1 .. 0xffff:
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
 //                      BOOL bx = ((DockingWindow*)pWin)->IsFloatingMode();
 //                      break;
-/*                  case M_Dock :
-                        if ( ((DockingWindow*)pControl)->IsFloatingMode() )
-                            ((DockingWindow*)pControl)->SetFloatingMode(FALSE);
-                        else
-                            ReportError( nUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_FLOATING_MODE, MethodString( nMethodId ) ) );
-                        break;
-                    case M_Undock :
-                        if ( !((DockingWindow*)pControl)->IsFloatingMode() )
-                            ((DockingWindow*)pControl)->SetFloatingMode(TRUE);
-                        else
-                            ReportError( nUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_FLOATING_MODE, MethodString( nMethodId ) ) );
-                        break;
-                    case M_IsDocked :
-                        pRet->GenReturn ( RET_Value, nUId, (comm_BOOL) !((DockingWindow*)pControl)->IsFloatingMode());
-                        break;
-                    case M_Close:
-                            //nWindowWaitUId = nUId;
-                        DBG_ASSERT( nUId == pControl->GetUniqueOrHelpId(), "nUID != UniqueOrHelpId");
-                        SET_WINP_CLOSING(pControl);
-                        ((DockingWindow*)pControl)->Close();
-                        break;
-                    case M_Size:
-                    case M_Move:
-                    case M_IsMax :
-                    case M_Minimize :
-                    case M_Maximize :
-                        if ( ((DockingWindow*)pControl)->IsFloatingMode() )
-                        {
-                            pControl = ((DockingWindow*)pControl)->GetFloatingWindow();
-                            goto FloatWin;
-                        }
-                        else
-                            ReportError( nUId, GEN_RES_STR1( S_ALLOWED_ONLY_IN_DOCKING_MODE, MethodString( nMethodId ) ) );
-                        break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
-                        goto MoreDialog;
-
-                    default:
-                        ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "DockingWindow" ) );
-                        break;*/
                 }
                 break;
-
-
-
-
-
-
             case WINDOW_FLOATINGWINDOW:
                 {
     DBG_TRACE3( "TT_VCLMessage %u %u  %X",nEventID, pWin->GetType(), pWin );
 //                    FloatingWindow *pFW = ((FloatingWindow*)pWin);
-/*                  switch( nEventID )
-                    {
-
-// M_OpenMenu an einem ToolboxButton
-                        case VCLEVENT_WINDOW_SHOW:
-                            if ( pActionParent )
-                            {   // a new FloatingWindow opens up, so we assume an OpenMenu
-                                // compare to 1 for floating ToolBoxes
-                                if ( ( pActionParent->GetUniqueOrHelpId() == 0 || pActionParent->GetUniqueOrHelpId() == 1 ) )
-                                    // generate direct Button access
-                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetHelpId( pActionParent->GetCurItemId() ), (comm_USHORT)(M_OpenMenu) );
-                                else
-                                    // access via Toolbox
-                                    StatementList::pRet->GenReturn( RET_MacroRecorder, pActionParent->GetUniqueOrHelpId(), (comm_USHORT)(M_OpenMenu|M_RET_NUM_CONTROL), pActionParent->GetHelpId( pActionParent->GetCurItemId() ) );
-                                bSendData = TRUE;
-                            }
-                            break;
-
-                    }
-  */              }
-                break;
-/*
-                    case M_AnimateMouse :
-                        AnimateMouse( pControl, MitteOben);
-                        break;
-                    case M_IsMax :
-                        pRet->GenReturn ( RET_Value, nUId, (comm_BOOL)!((FloatingWindow*)pControl)->IsRollUp());
-                        break;
-                    case M_Minimize :
-                        ((FloatingWindow*)pControl)->RollUp();
-                        break;
-                    case M_Maximize :
-                        ((FloatingWindow*)pControl)->RollDown();
-                        break;
-                    case M_Size:
-                    {
-                        if ( pControl->GetStyle() & WB_SIZEABLE )
-                        {
-                            pControl->SetSizePixel(Size(nNr1,nNr2));
-                            pControl->Resize();
-                        }
-                        else
-                            ReportError( nUId, GEN_RES_STR1( S_SIZE_NOT_CHANGEABLE, MethodString( nMethodId ) ) );
-                        break;
-                    }
-                    case M_Close:
-                        DBG_ASSERT( nUId == pControl->GetUniqueOrHelpId(), "nUID != UniqueOrHelpId");
-                        SET_WINP_CLOSING(pControl);
-                        ((FloatingWindow*)pControl)->Close();
-                        break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
-                    case M_Move:
-                        goto MoreDialog;
-                    default:
-                        ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "FloatingWin" ) );
-                        break;
-                }
-                break;*/
-
-
-
-
-
-
-
-
-/*
-            case C_ModelessDlg:
-            case C_Dlg:
-            case C_TabDlg:
-                MoreDialog:
-                switch( nEventID )
-                {
-
-                    // (Rect GetRect)
-
-                    case M_AnimateMouse :
-                        AnimateMouse( pControl, MitteOben);
-                        break;
-                    case M_Close:
-                        DBG_ASSERT( nUId == pControl->GetUniqueOrHelpId(), "nUID != UniqueOrHelpId");
-                        SET_WINP_CLOSING(pControl);
-                        ((SystemWindow*)pControl)->Close();
-                        break;
-                    case M_Move:
-                    {
-                        pControl->SetPosPixel(Point(nNr1,nNr2));
-                        break;
-                    }
-                    default:
-                        ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "Dialog" ) );
-                        break;
-                }
-                break;*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-            case C_WorkWin:
-                switch( nEventID )
-                {
-                    case M_Close:
-                        DBG_ASSERT( nUId == pControl->GetUniqueOrHelpId(), "nUID != UniqueOrHelpId");
-                        SET_WINP_CLOSING(pControl);
-                        ((WorkWindow*)pControl)->Close();
-                        break;
-                    case M_Size:
-                    case M_Move:
-                        goto FloatWin;
-                        break;
-                    case M_Help:        // Alles was unten weiterbehandelt werden soll
-                        goto MoreDialog;
-                    default:
-                        ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "WorkWindow" ) );
-                        break;
                 }
                 break;
-  */
-
-
-/*          case C_TabPage:
-                switch( nEventID )
-                {
-                }
-                break;*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-            case C_MessBox:
-            case C_InfoBox:
-            case C_WarningBox:
-            case C_ErrorBox:
-            case C_QueryBox:
-                {
-                    BOOL bDone = TRUE;
-                    MessBox* pMB = (MessBox*)pControl;
-                    switch( nEventID )
-                    {
-                        case M_GetCheckBoxText:
-                            pRet->GenReturn ( RET_Value, nUId, pMB->GetCheckBoxText() );
-                            break;
-                        case M_IsChecked :
-                            pRet->GenReturn ( RET_Value, nUId, comm_BOOL( pMB->GetCheckBoxState() == STATE_CHECK) );
-                            break;
-                        case M_GetState :
-                            pRet->GenReturn ( RET_Value, nUId, comm_ULONG( pMB->GetCheckBoxState() ));
-                            break;
-                        case M_Check :
-                            pMB->SetCheckBoxState( STATE_CHECK );
-                            break;
-                        case M_UnCheck :
-                            pMB->SetCheckBoxState( STATE_NOCHECK );
-                            break;
-                        case M_GetText :
-                            pRet->GenReturn ( RET_Value, nUId, pMB->GetMessText());
-                            break;
-
-                        default:
-                            bDone = FALSE;
-                            break;
-                    }
-                    if ( bDone )
-                        break;  // break the case here else continue at C_ButtonDialog
-                }
-            case C_ButtonDialog:
-                {
-                    ButtonDialog* pBD = (ButtonDialog*)pControl;
-#if OSL_DEBUG_LEVEL > 1
-                    m_pDbgWin->AddText( "Working MessBox: " );
-                    if (pControl->IsVisible())
-                        m_pDbgWin->AddText("*(Visible)\n");
-                    else
-                        m_pDbgWin->AddText("*(nicht Visible)\n");
-#endif
-                    switch( nEventID )
-                    {
-                        case M_GetText :
-                            pRet->GenReturn ( RET_Value, nUId, pControl->GetText());
-                            break;
-                        case M_Click:
-                            if ( nParams & PARAM_USHORT_1 )
-                            {
-                                if ( pBD->GetPushButton( nNr1 ) )
-                                {
-                                    if ( nNr1 != BUTTONID_HELP )
-                                    {
-                                        SET_WINP_CLOSING(pControl);
-                                    }
-                                    pBD->GetPushButton( nNr1 )->Click();
-                                }
-                                else
-                                    ReportError( nUId, GEN_RES_STR2( S_NO_DEFAULT_BUTTON, UniString::CreateFromInt32( nNr1 ), MethodString( nMethodId ) ) );
-                            }
-                            else
-                                ReportError( nUId, GEN_RES_STR1( S_BUTTONID_REQUIRED, MethodString( nMethodId ) ) );
-                            break;
-                        case M_GetButtonCount :
-                            pRet->GenReturn ( RET_Value, nUId, comm_ULONG(pBD->GetButtonCount()));
-                            break;
-                        case M_GetButtonId :
-                            if ( ValueOK(nUId, MethodString( nMethodId ),nNr1,pBD->GetButtonCount()) )
-                                pRet->GenReturn ( RET_Value, nUId, comm_ULONG(pBD->GetButtonId(nNr1-1)));
-                            break;
-                        default:
-                            ReportError( nUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "MessageBox" ) );
-                            break;
-                    }
-                    break;
-
-
-                 */
-
-
         }
-
 
         switch( nEventID )
         {
@@ -1039,13 +612,7 @@ IMPL_LINK( MacroRecorder, EventListener, VclSimpleEvent*, pEvent )
         }
 
         pLastWin = pWin;
-
     }  // if
-    else if ( pEvent->ISA( VclMenuEvent ) )
-    {
-//        VclMenuEvent* pMenuEvent = ( VclMenuEvent* ) pEvent;
-    }
-
 
     if ( bSendData )
         new StatementFlow( NULL, F_EndCommandBlock );   // Kommando zum Senden erzeugen und in que eintragen

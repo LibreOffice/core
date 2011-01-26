@@ -368,19 +368,8 @@ void OMarkableOutputStreamTest::testSimple(     const XOutputStreamRef &rOutput 
 
 }
 
-/***
-* the test methods
-*
-****/
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OMarkableOutputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -417,7 +406,6 @@ UString     OMarkableOutputStreamTest_getImplementationName() THROWS( () )
 
 //-----------------------------------------------------
 // Input stream
-
 
 class OMarkableInputStreamTest :
         public XSimpleTest,
@@ -641,19 +629,8 @@ void OMarkableInputStreamTest::testSimple(      const XOutputStreamRef &rOutput 
     rInput->closeInput();
 }
 
-/***
-* the test methods
-*
-****/
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OMarkableInputStreamTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {

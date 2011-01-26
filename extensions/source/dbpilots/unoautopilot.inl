@@ -28,14 +28,9 @@
 // no include protecttion
 // this file is included from unoautopilot.hxx directly
 
-//using namespace ::com::sun::star::uno;
-//using namespace ::com::sun::star::lang;
-//using namespace ::com::sun::star::beans;
-//
 //=====================================================================
 //= OUnoAutoPilot
 //=====================================================================
-//---------------------------------------------------------------------
 template <class TYPE, class SERVICEINFO>
 OUnoAutoPilot<TYPE, SERVICEINFO>::OUnoAutoPilot(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB)
     :OUnoAutoPilot_Base(_rxORB)

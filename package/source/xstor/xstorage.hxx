@@ -295,8 +295,6 @@ class OStorage  : public ::com::sun::star::lang::XTypeProvider
                 , public ::com::sun::star::embed::XTransactedObject
                 , public ::com::sun::star::embed::XTransactionBroadcaster
                 , public ::com::sun::star::util::XModifiable
-                // , public ::com::sun::star::container::XNameAccess
-                // , public ::com::sun::star::lang::XComponent
                 , public ::com::sun::star::embed::XEncryptionProtectedSource
                 , public ::com::sun::star::beans::XPropertySet
                 , public ::com::sun::star::embed::XOptimizedStorage

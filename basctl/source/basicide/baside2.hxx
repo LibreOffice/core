@@ -73,9 +73,6 @@ private:
 public:
 
     inline          ProgressInfo( SfxObjectShell* pObjSh, const String& rText, ULONG nRange );
-
-//  inline void     StartProgress( const String& rName, ULONG nStates );
-//  inline void     EndProgress();
     inline void     StepProgress();
 };
 
@@ -84,19 +81,6 @@ inline ProgressInfo::ProgressInfo( SfxObjectShell* pObjSh, const String& rText, 
 {
     nCurState = 0;
 }
-
-// inline void ProgressInfo::StartProgress( const String& rName, ULONG nStates )
-// {
-//  nCurState = 0;
-//  if ( pStbMgr )
-//      pStbMgr->StartProgressMode( rName, nStates );
-// }
-
-// inline void ProgressInfo::EndProgress()
-// {
-//  if ( pStbMgr )
-//      pStbMgr->EndProgressMode();
-//}
 
 inline void ProgressInfo::StepProgress()
 {
@@ -233,16 +217,6 @@ protected:
     BOOL            ImplBasicEntryEdited( SvLBoxEntry* pEntry, const String& rResult );
     SbxBase*        ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArrayElement );
 
-//  virtual DragDropMode    NotifyBeginDrag( SvLBoxEntry* );
-//  virtual BOOL    NotifyQueryDrop( SvLBoxEntry* );
-
-//  virtual BOOL    NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-//  virtual BOOL    NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos );
-//  BOOL            NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
-//                      SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove );
-
 public:
     WatchTreeListBox( Window* pParent, WinBits nWinBits );
     ~WatchTreeListBox();
@@ -377,7 +351,6 @@ public:
     virtual void    StoreData();
     virtual void    UpdateData();
     virtual BOOL    CanClose();
-    // virtual void PrintData( Printer* pPrinter );
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
@@ -412,8 +385,6 @@ public:
     BOOL            ImportDialog();
 
     void            EditMacro( const String& rMacroName );
-
-//  void            InsertFromObjectCatalog( ObjectCatalog* pObjDlg );
 
     BOOL            ToggleBreakPoint( ULONG nLine );
 

@@ -70,7 +70,6 @@ sal_Int32 searchEOL( const ::rtl::OUString& rStr, sal_Int32 fromIndex );
 
 struct BasicStatus
 {
-//  BOOL    bCompiled       : 1;
     BOOL    bIsRunning      : 1;
     BOOL    bError          : 1;
     BOOL    bIsInReschedule : 1;

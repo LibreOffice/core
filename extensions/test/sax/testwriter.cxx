@@ -108,9 +108,6 @@ using namespace usr;
 
 /****
 * test szenarios :
-*
-*
-*
 ****/
 
 
@@ -398,20 +395,8 @@ void AttributeListImpl::clear()
     OSL_ASSERT( ! getLength() );
 }
 
-
-
-
-
-
-
-
-
-
-
 /**
 * for external binding
-*
-*
 **/
 XInterfaceRef OSaxWriterTest_CreateInstance( const XMultiServiceFactoryRef & rSMgr ) THROWS((Exception))
 {
@@ -751,8 +736,6 @@ void OSaxWriterTest::testPerformance(const  XExtendedDocumentHandlerRef &r )
             r->ignorableWhitespace( L"");
             r->startElement( L"huhu" , rList );
             r->characters( testParagraph );
-//          writeParagraph( r , testParagraph );
-
             r->ignorableWhitespace( L"");
             r->endElement( L"huhu" );
         }

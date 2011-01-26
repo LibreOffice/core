@@ -33,9 +33,7 @@
 #include "property.hrc"
 #include "convert.hxx"
 
-/** === begin UNO includes === **/
 #include <com/sun/star/xsd/WhiteSpaceTreatment.hpp>
-/** === end UNO includes === **/
 #include <tools/debug.hxx>
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>

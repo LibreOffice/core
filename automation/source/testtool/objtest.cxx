@@ -133,34 +133,6 @@ DBG_CTOR(ControlItem,0);
     pData->aUId = aUIdP;
 }
 
-/*ControlItem::ControlItem( const String &Name, const String &URL, const URLType aType )
-{
-DBG_CTOR(ControlItem,0);
-    InitData();
-    pData->Kurzname = Name;
-    pData->aURL = URL;
-    pData->nUId = aType;
-}
-
-ControlItem::ControlItem( const String &Name, const String &URL, const ULONG nUId )
-{
-DBG_CTOR(ControlItem,0);
-    InitData();
-    pData->Kurzname = Name;
-    pData->aURL = URL;
-    pData->nUId = nUId;
-}
-
-ControlItem::ControlItem( const char *Name, const String &URL, const ULONG nUId )
-{
-DBG_CTOR(ControlItem,0);
-    InitData();
-    pData->Kurzname.AssignAscii( Name );
-    pData->aURL = URL;
-    pData->nUId = nUId;
-} */
-
-
 ControlItem::ControlItem( ControlData *pDataP )
 {
 DBG_CTOR(ControlItem,0);
@@ -179,20 +151,6 @@ ControlSon::~ControlSon()
 ControlItemSon::ControlItemSon(const String &Name, SmartId aUIdP )
 : ControlItem( Name, aUIdP )
 {}
-
-/*ControlItemSon::ControlItemSon(const String &Name, const String &URL, const URLType aType )
-: ControlItem( Name, URL, aType )
-{}
-
-ControlItemSon::ControlItemSon(const String &Name, const String &URL, const ULONG nUId )
-: ControlItem( Name, URL, nUId )
-{}
-
-ControlItemSon::ControlItemSon(const char *Name, const String &URL, const ULONG nUId )
-: ControlItem( Name, URL, nUId )
-{}*/
-
-
 
 BOOL ControlDef::operator < (const ControlItem &rPar)
 {
@@ -225,12 +183,6 @@ ControlDef::ControlDef(const String &Name, SmartId aUIdP )
 {
     DBG_CTOR(ControlDef,0);
 }
-
-/*ControlDef::ControlDef(const String &Name, const String &URL, const URLType aType )
-: ControlItemSon( Name, URL, aType )
-{
-    DBG_CTOR(ControlDef,0);
-} */
 
 ControlDef::ControlDef(const String &aOldName, const String &aNewName, ControlDef *pOriginal, BOOL bWithSons )
 : ControlItemSon("", pOriginal->pData->aUId)
@@ -2914,15 +2866,6 @@ xub_StrLen TestToolObj::PreCompilePart( String &aSource, xub_StrLen nStart, xub_
     aSource.SearchAndReplaceAscii( "try", aReplacement, nTry );
     nTotalLength += aReplacement.Len();
 
-
-//          on error goto endcse
-//          goto endctchXX
-//          ctchXX:
-//          if err = 35 or err = 18 then : resume : endif :
-//          MaybeAddErr
-//          on error goto endcse
-//          resume ctchresXX
-//          ctchresXX:
     aReplacement.Erase();
     aReplacement.AppendAscii( "on error goto " );
     aReplacement += aFinalErrorLabel;
