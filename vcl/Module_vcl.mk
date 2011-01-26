@@ -31,9 +31,8 @@ $(eval $(call gb_Module_Module,vcl))
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     Package_inc \
+    StaticLibrary_vclmain \
 ))
-# FIXME: WiP
-#    StaticLibrary_vclmain \
 
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_targets,vcl,\
