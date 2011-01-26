@@ -2491,7 +2491,6 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                     const SfxPoolItem* pItem = NULL;
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_SIZE,sal_True,&pItem))
                     {
-                        const Size aPaperSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                         uno::Any aValue;
                         static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue,MID_SIZE_SIZE);
                         xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);

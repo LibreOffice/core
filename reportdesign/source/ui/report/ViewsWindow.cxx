@@ -1043,7 +1043,6 @@ void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _
                 rReportSection.getPage()->InsertObject(pNewObj);
                 rView.GetModel()->SetChanged(bChanged);
                 m_aBegDragTempList.push_back(pNewObj);
-                Rectangle aRect = pNewObj->GetLogicRect();
 
                 rView.MarkObj( pNewObj, rView.GetSdrPageView() );
             }
