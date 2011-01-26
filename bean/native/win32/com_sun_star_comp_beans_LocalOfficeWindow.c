@@ -151,7 +151,7 @@ JNIEXPORT jlong JNICALL Java_com_sun_star_comp_beans_LocalOfficeWindow_getNative
      */
     if (GetProp( hWnd, OLD_PROC_KEY )==0)
     {
-        hFuncPtr = SetWindowLong( hWnd, GWL_WNDPROC, (DWORD)OpenOfficeWndProc );
+        hFuncPtr = SetWindowLongPtr( hWnd, GWLP_WNDPROC, (LONG_PTR)OpenOfficeWndProc );
         SetProp( hWnd, OLD_PROC_KEY, (HANDLE)hFuncPtr );
     }
 
