@@ -77,4 +77,8 @@ $(eval $(call gb_Executable_add_linked_libs,gengal,\
 ))
 endif
 
+$(eval $(call gb_Package_Package,svx_gengal,$(SRCDIR)/svx/source/gengal))
+$(eval $(call gb_Package_add_file,svx_gengal,bin/gengalrc,gengalrc.in))
+$(eval $(call gb_Package_add_file,svx_gengal,bin/gengal,gengal.sh))
+
 # vim: set noet sw=4 ts=4:
