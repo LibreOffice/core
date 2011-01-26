@@ -313,7 +313,7 @@ awt::Size lcl_placeLegendEntries(
         sal_Int32 nCurrentColumn=-1;
         sal_Int32 nColumnCount=0;
         sal_Int32 nMaxColumnCount=-1;
-        for( sal_Int32 nN=0; nN<aTextShapes.size(); nN++)
+        for( sal_Int32 nN=0; nN<static_cast<sal_Int32>(aTextShapes.size()); nN++ )
         {
             Reference< drawing::XShape > xShape( aTextShapes[nN] );
             if( !xShape.is() )
