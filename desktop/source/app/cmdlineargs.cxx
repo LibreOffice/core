@@ -612,8 +612,8 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 
     if (bDeprecated)
     {
-        const sal_Char* s = rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8).getStr();
-        fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", s, s);
+        rtl::OString sArg(rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8));
+        fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
     }
     return sal_True;
 }
