@@ -61,7 +61,6 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
 {
     SdDrawDocument* pDocument = rBase.GetDocument();
     ::std::auto_ptr<controls::MasterPagesSelector> pSelector;
-    TitledControl* pTitledControl;
 
     ::boost::shared_ptr<MasterPageContainer> pContainer (new MasterPageContainer());
 
@@ -79,7 +78,7 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         HID_SD_TASK_PANE_PREVIEW_CURRENT,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE),
         HID_SD_CURRENT_MASTERS);
@@ -96,7 +95,7 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         HID_SD_TASK_PANE_PREVIEW_RECENT,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_RECENT_MASTER_PAGES_TITLE),
         HID_SD_RECENT_MASTERS);
@@ -114,7 +113,7 @@ void MasterPagesPanel::impl_construct( ViewShellBase& rBase )
         HID_SD_TASK_PANE_PREVIEW_ALL,
         pSelector.get(),
         pSelector->GetWindow());
-    pTitledControl = AddControl (
+    AddControl (
         ::std::auto_ptr<TreeNode>(pSelector.release()),
         SdResId(STR_TASKPANEL_ALL_MASTER_PAGES_TITLE),
         HID_SD_ALL_MASTERS);

@@ -721,7 +721,6 @@ void Window::UpdateMapOrigin(BOOL bInvalidate)
 
 void Window::UpdateMapMode (void)
 {
-    Size aWinSize = PixelToLogic(GetOutputSizePixel());
     maWinPos -= maViewOrigin;
     Size aPix(maWinPos.X(), maWinPos.Y());
     aPix = LogicToPixel(aPix);
@@ -733,9 +732,6 @@ void Window::UpdateMapMode (void)
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        Size aViewSizePixel = LogicToPixel(maViewSize);
-        Size aWinSizePixel = LogicToPixel(aWinSize);
-
         // Seite soll nicht am Fensterrand "kleben"
         if (aPix.Width() == 0)
         {

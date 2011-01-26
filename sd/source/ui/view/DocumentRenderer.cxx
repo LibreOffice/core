@@ -2041,13 +2041,11 @@ private:
             // Bugfix zu 44530:
             // Falls implizit umgestellt wurde (Landscape/Portrait)
             // wird dies beim Kacheln, bzw. aufteilen (Poster) beruecksichtigt
-            BOOL bSwitchPageSize = FALSE;
             if( ( rInfo.maPrintSize.Width() > rInfo.maPrintSize.Height()
                     && aPageWidth < aPageHeight )
                 || ( rInfo.maPrintSize.Width() < rInfo.maPrintSize.Height()
                     && aPageWidth > aPageHeight ) )
             {
-                bSwitchPageSize = TRUE;
                 const sal_Int32 nTmp (rInfo.maPrintSize.Width());
                 rInfo.maPrintSize.Width() = rInfo.maPrintSize.Height();
                 rInfo.maPrintSize.Height() = nTmp;

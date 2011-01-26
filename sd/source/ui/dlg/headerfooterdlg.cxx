@@ -572,7 +572,7 @@ void HeaderFooterTabPage::FillFormatList( int eFormat )
     {
         String aStr( SvxDateTimeField::GetFormatted( aDate, aTime, nDateTimeFormats[nFormat], *(SD_MOD()->GetNumberFormatter()), eLanguage ) );
         USHORT nEntry = maCBDateTimeFormat.InsertEntry( aStr );
-        maCBDateTimeFormat.SetEntryData( nEntry, (void*)nDateTimeFormats[nFormat] );
+        maCBDateTimeFormat.SetEntryData( nEntry, (void*)(sal_IntPtr)nDateTimeFormats[nFormat] );
         if( nDateTimeFormats[nFormat] == eFormat )
         {
             maCBDateTimeFormat.SelectEntryPos( nEntry );
