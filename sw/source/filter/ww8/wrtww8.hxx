@@ -619,9 +619,8 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const = 0;
 
-    /// Hack, unfortunately necessary at some places for now.
-    /// FIXME remove it when possible.
-    virtual bool HackIsWW8OrHigher() const = 0;
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const = 0;
 
     /// Used to filter out attributes that can be e.g. written to .doc but not to .docx
     virtual bool ignoreAttributeForStyles( USHORT /*nWhich*/ ) const { return false; }
@@ -926,7 +925,7 @@ public:
     virtual MSWordSections& Sections() const;
 
     /// False for WW6, true for WW8.
-    virtual bool HackIsWW8OrHigher() const { return bWrtWW8; }
+    virtual bool SupportsUnicode() const { return bWrtWW8; }
 
 private:
     /// Format-dependant part of the actual export.

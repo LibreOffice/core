@@ -189,7 +189,7 @@ void SwWW8AttrIter::IterToCurrent()
 SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
     MSWordAttrIter(rWr),
     rNd(rTxtNd),
-    maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.HackIsWW8OrHigher())),
+    maCharRuns(GetPseudoCharRuns(rTxtNd, 0, !rWr.SupportsUnicode())),
     pCurRedline(0),
     nAktSwPos(0),
     nCurRedlinePos(USHRT_MAX),
@@ -218,7 +218,7 @@ SwWW8AttrIter::SwWW8AttrIter(MSWordExportBase& rWr, const SwTxtNode& rTxtNd) :
      only be supported by word anchored inline ("as character"), so force
      this in the supportable case.
     */
-    if (rWr.HackIsWW8OrHigher() && rWr.bInWriteEscher)
+    if (rWr.SupportsUnicode() && rWr.bInWriteEscher)
     {
         std::for_each(maFlyFrms.begin(), maFlyFrms.end(),
             std::mem_fun_ref(&sw::Frame::ForceTreatAsInline));
@@ -514,7 +514,7 @@ void SwWW8AttrIter::OutAttr( xub_StrLen nSwPos, bool bRuby )
          this makes older nonunicode aware versions of word display the correct
          characters.
         */
-        if ( !m_rExport.HackIsWW8OrHigher() )
+        if ( !m_rExport.SupportsUnicode() )
             aFont.GetCharSet() = GetCharSet();
 
         if ( rParentFont != aFont )

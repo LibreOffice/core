@@ -95,9 +95,8 @@ public:
     /// Access to the sections/headers/footres.
     virtual MSWordSections& Sections() const;
 
-    /// Hack, unfortunately necessary at some places for now.
-    /// FIXME remove it when possible.
-    virtual bool HackIsWW8OrHigher() const { return true; }
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const { return true; }
 
     virtual bool ignoreAttributeForStyles( USHORT nWhich ) const;
 

@@ -2928,7 +2928,7 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
                                      nsRedlineMode_t::REDLINE_SHOW_INSERT) );
     }
 
-    maFontHelper.InitFontTable( HackIsWW8OrHigher(), *pDoc );
+    maFontHelper.InitFontTable( SupportsUnicode(), *pDoc );
     GatherChapterFields();
 
     CollectOutlineBookmarks(*pDoc);

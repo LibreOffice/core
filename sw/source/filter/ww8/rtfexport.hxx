@@ -82,8 +82,8 @@ public:
     /// Access to the Rtf Sdr exporter.
     virtual RtfSdrExport& SdrExporter() const;
 
-    /// Hack, unfortunately necessary at some places for now.
-    virtual bool HackIsWW8OrHigher() const { return true; }
+    /// Determines if the format is expected to support unicode.
+    virtual bool SupportsUnicode() const { return true; }
 
     /// Guess the script (asian/western).
     virtual bool CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich );

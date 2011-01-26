@@ -468,7 +468,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                         sFontName = pBulletFont->GetName();
 
                     pPseudoFont = new wwFont( sFontName, pBulletFont->GetPitch(),
-                        eFamily, eChrSet, HackIsWW8OrHigher() );
+                        eFamily, eChrSet, SupportsUnicode() );
                 }
                 else
                     pOutSet = &rFmt.GetCharFmt()->GetAttrSet();
@@ -738,7 +738,7 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
         rFontName = sFont;
         rChrSet = RTL_TEXTENCODING_SYMBOL;
     }
-    else if ( HackIsWW8OrHigher() &&
+    else if ( SupportsUnicode() &&
         (rNumStr.GetChar(0) < 0xE000 || rNumStr.GetChar(0) > 0xF8FF) )
     {
         /*
