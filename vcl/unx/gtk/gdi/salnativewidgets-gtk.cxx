@@ -1055,6 +1055,12 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         rNativeBoundingRegion = NWGetScrollButtonRect( m_nScreen, nPart, rControlRegion );
         rNativeContentRegion = rNativeBoundingRegion;
 
+        //See fdo#33523, possibly makes sense to do this test for all return values
+        if (!rNativeContentRegion.GetWidth())
+            rNativeContentRegion.Right() = rNativeContentRegion.Left() + 1;
+        if (!rNativeContentRegion.GetHeight())
+            rNativeContentRegion.Bottom() = rNativeContentRegion.Top() + 1;
+
         returnVal = TRUE;
     }
     if( (nType == CTRL_MENUBAR) && (nPart == PART_ENTIRE_CONTROL) )
@@ -1621,6 +1627,10 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType, ControlPart nPart,
     NWSetWidgetState( GTK_WIDGET(scrollbarWidget), nState, stateType );
     NWSetWidgetState( gWidgetData[m_nScreen].gBtnWidget, nState, stateType );
     style = GTK_WIDGET( scrollbarWidget )->style;
+
+    gtk_style_apply_default_background( m_pWindow->style, gdkDrawable, TRUE,
+                                        GTK_STATE_NORMAL, gdkRect,
+                                        x, y, w, h );
 
     // ----------------- TROUGH
     gtk_paint_flat_box( m_pWindow->style, gdkDrawable,
