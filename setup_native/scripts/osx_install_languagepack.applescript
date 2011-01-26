@@ -39,6 +39,7 @@ set installComplete to "[InstallCompleteText]
 
 set sourcedir to (do shell script "dirname " & quoted form of POSIX path of (path to of me))
 
+activate
 display dialog intro buttons {AbortLabel, InstallLabel} default button 2
 
 if (button returned of result) is AbortLabel then
