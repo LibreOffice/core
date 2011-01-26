@@ -36,13 +36,15 @@ $(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp4)
 $(eval $(call gb_Library_set_include,comphelper,\
     -I$(SRCDIR)/comphelper/inc/pch \
     -I$(SRCDIR)/comphelper/source/inc \
-    -I$(SRCDIR)/comphelper/inc \
-    -I$(WORKDIR)/inc/comphelper/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/comphelper \
     -I$(OUTDIR)/inc/offuh \
 ))
 
+$(eval $(call gb_Library_set_defs,comphelper,\
+       $$(DEFS) \
+       -DCOMPHELPER_DLLIMPLEMENTATION \
+))
+ 
 $(eval $(call gb_Library_add_linked_libs,comphelper,\
         sal \
         cppuhelper \
