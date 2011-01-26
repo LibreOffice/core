@@ -963,7 +963,7 @@ if ($STLPORT4 ne $no_stl) {
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
 {
-   if ( $JAVA_HOME ne "" )
+   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
    {
       $JAVA_LIB             = $JAVA_HOME.$LIB;
    }
@@ -980,7 +980,7 @@ if ($platform =~ m/cygwin/)
    $WIN_TOUCH            = '$CYGWIN_PATH'.$ds."touch.exe";
 }
 
-if ( $JAVA_HOME ne "" )
+if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
 {
    $JAVA_BIN             = $JAVA_HOME.$BIN;
    $JAVA_INCLUDE         = $JAVA_HOME.$ds."include";
@@ -1150,7 +1150,7 @@ if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris|openbsd/)
    $PATH             .= $ps.$oldPATH;
 
    my @javaBits;
-   if (( $JAVA_HOME ne "" ) && ( $JDK ne "gcj" )) {
+   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME"  &&  $JDK ne "gcj" ) {
       @javaBits = ( '$JAVA_HOME'.$BIN, 'javac' );
    } else {
       @javaBits = ();
@@ -1173,7 +1173,7 @@ elsif ($platform =~ m/cygwin/)
                         $ps.CygFormat($SOLARENV).$ds."bin".
                         $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
-   if ( $JAVA_HOME ne "" )
+   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
    {
       # hack either "hotspot" or "client" should be used, depending on the jdk version:
       # 1.2.x   -   no such directory, unsupported
@@ -1305,7 +1305,7 @@ elsif ($platform =~ m/os2/)
                         $ps.'$SOLARENV'.$ds."bin".
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
 
-   if ( $JAVA_HOME ne "" )
+   if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
    {
       # hack either "hotspot" or "client" should be used, depending on the jdk version:
       # 1.2.x   -   no such directory, unsupported
