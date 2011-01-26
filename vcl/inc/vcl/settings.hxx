@@ -892,7 +892,7 @@ public:
     void                            SetCursorBlinkTime( long nBlinkTime )
                                         { CopyData(); mpData->mnCursorBlinkTime = nBlinkTime; }
     long                            GetCursorBlinkTime() const
-                                        { return mpData->mnCursorBlinkTime; }
+                                        { return (long) mpData->mnCursorBlinkTime; }
 
     void                            SetScreenZoom( USHORT nPercent )
                                         { CopyData(); mpData->mnScreenZoom = nPercent; }
