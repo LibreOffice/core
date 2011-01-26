@@ -69,7 +69,9 @@ char const* const* SunInfo::getRuntimePaths(int * size)
 #if defined(WNT)
         "/bin/client/jvm.dll",
         "/bin/hotspot/jvm.dll",
-        "/bin/classic/jvm.dll"
+        "/bin/classic/jvm.dll",
+        // The 64-bit JRE has the jvm in bin/server
+        "/bin/server/jvm.dll"
 #elif defined(OS2)
         "/bin/classic/jvm.dll",
 #elif UNX
