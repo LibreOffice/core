@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde))
 
+$(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
+
 $(eval $(call gb_Library_add_precompiled_header,vclplug_kde,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
 $(eval $(call gb_Library_set_include,vclplug_kde,\

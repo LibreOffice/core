@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
 # FIXME: WiP
 #    StaticLibrary_vclmain \
 
-ifeq ($(GUI),UNX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_gen \
     Library_vclplug_svp \

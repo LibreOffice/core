@@ -40,7 +40,7 @@ $(eval $(call gb_Library_set_include,vcl,\
     -I$(OUTDIR)/inc/stl \
     -I$(OUTDIR)/inc \
 ))
-ifeq ($(GUI),UNX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
     $$(FREETYPE_CFLAGS) \
@@ -78,23 +78,114 @@ $(eval $(call gb_Library_add_linked_static_libs,vcl,\
     graphite \
 ))
 endif
-ifeq ($(GUI),UNX)
+ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     freetype \
 ))
 endif
 
-ifeq ($(GUI),UNX)
+ifeq ($(GUIBASE),aqua)
+$(eval $(call gb_Library_set_cxxflags,vcl,\
+    $$(CXXFLAGS) \
+    $$(OBJCXXFLAGS) \
+))
+$(eval $(call gb_Library_add_add_objcxxobjects,vcl,\
+    vcl/aqua/source/a11y/aqua11yactionwrapper \
+    vcl/aqua/source/a11y/aqua11ycomponentwrapper \
+    vcl/aqua/source/a11y/aqua11yfactory \
+    vcl/aqua/source/a11y/aqua11yrolehelper \
+    vcl/aqua/source/a11y/aqua11yselectionwrapper \
+    vcl/aqua/source/a11y/aqua11ytablewrapper \
+    vcl/aqua/source/a11y/aqua11ytextattributeswrapper \
+    vcl/aqua/source/a11y/aqua11ytextwrapper \
+    vcl/aqua/source/a11y/aqua11yutil \
+    vcl/aqua/source/a11y/aqua11yvaluewrapper \
+    vcl/aqua/source/a11y/aqua11ywrapper \
+    vcl/aqua/source/a11y/aqua11ywrapperbutton \
+    vcl/aqua/source/a11y/aqua11ywrappercheckbox \
+    vcl/aqua/source/a11y/aqua11ywrappercombobox \
+    vcl/aqua/source/a11y/aqua11ywrappergroup \
+    vcl/aqua/source/a11y/aqua11ywrapperlist \
+    vcl/aqua/source/a11y/aqua11ywrapperradiobutton \
+    vcl/aqua/source/a11y/aqua11ywrapperradiogroup \
+    vcl/aqua/source/a11y/aqua11ywrapperrow \
+    vcl/aqua/source/a11y/aqua11ywrapperscrollarea \
+    vcl/aqua/source/a11y/aqua11ywrapperscrollbar \
+    vcl/aqua/source/a11y/aqua11ywrappersplitter \
+    vcl/aqua/source/a11y/aqua11ywrapperstatictext \
+    vcl/aqua/source/a11y/aqua11ywrappertabgroup \
+    vcl/aqua/source/a11y/aqua11ywrappertextarea \
+    vcl/aqua/source/a11y/aqua11ywrappertoolbar \
+    vcl/aqua/source/app/salnstimer \
+    vcl/aqua/source/app/vclnsapp \
+    vcl/aqua/source/gdi/aquaprintaccessoryview \
+    vcl/aqua/source/gdi/aquaprintview \
+    vcl/aqua/source/window/salframeview \
+    vcl/aqua/source/window/salnsmenu \
+))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/printer/cupsmgr \
-    vcl/unx/generic/printer/jobdata \
-    vcl/unx/generic/printer/ppdparser \
-    vcl/unx/generic/printer/printerinfomanager \
+    vcl/aqua/source/a11y/aqua11yfocuslistener \
+    vcl/aqua/source/a11y/aqua11yfocustracker \
+    vcl/aqua/source/a11y/aqua11ylistener \
+    vcl/aqua/source/a11y/documentfocuslistener \
+    vcl/aqua/source/app/saldata \
+    vcl/aqua/source/app/salinst \
+    vcl/aqua/source/app/salsys \
+    vcl/aqua/source/app/saltimer \
+    vcl/aqua/source/dtrans/DataFlavorMapping \
+    vcl/aqua/source/dtrans/DragActionConversion \
+    vcl/aqua/source/dtrans/DragSource \
+    vcl/aqua/source/dtrans/DragSourceContext \
+    vcl/aqua/source/dtrans/DropTarget \
+    vcl/aqua/source/dtrans/HtmlFmtFlt \
+    vcl/aqua/source/dtrans/OSXTransferable \
+    vcl/aqua/source/dtrans/PictToBmpFlt \
+    vcl/aqua/source/dtrans/aqua_clipboard \
+    vcl/aqua/source/dtrans/service_entry \
+    vcl/aqua/source/gdi/salatslayout \
+    vcl/aqua/source/gdi/salatsuifontutils \
+    vcl/aqua/source/gdi/salbmp \
+    vcl/aqua/source/gdi/salcolorutils \
+    vcl/aqua/source/gdi/salgdi \
+    vcl/aqua/source/gdi/salgdiutils \
+    vcl/aqua/source/gdi/salmathutils \
+    vcl/aqua/source/gdi/salnativewidgets \
+    vcl/aqua/source/gdi/salprn \
+    vcl/aqua/source/gdi/salvd \
+    vcl/aqua/source/window/salframe \
+    vcl/aqua/source/window/salmenu \
+    vcl/aqua/source/window/salobj \
+))
+endif
+
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
+    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(gb_Library_SYSPRE)spa$(gb_Library_OOOEXT)\" \
+))
+ifneq ($(ENABLE_FONTCONFIG),)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DENABLE_FONTCONFIG \
+))
+endif
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/glyphs/gcach_ftyp \
+    vcl/source/glyphs/gcach_layout \
+    vcl/source/glyphs/gcach_rbmp \
+    vcl/source/glyphs/glyphcache \
     vcl/unx/generic/fontmanager/fontcache \
     vcl/unx/generic/fontmanager/fontconfig \
     vcl/unx/generic/fontmanager/fontmanager \
     vcl/unx/generic/fontmanager/helper \
     vcl/unx/generic/fontmanager/parseAFM \
+    vcl/unx/generic/plugadapt/salplug \
+    vcl/unx/generic/printer/cupsmgr \
+    vcl/unx/generic/printer/jobdata \
+    vcl/unx/generic/printer/ppdparser \
+    vcl/unx/generic/printer/printerinfomanager \
 ))
 endif
 
@@ -218,16 +309,6 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/gdi/textlayout \
     vcl/source/gdi/virdev \
     vcl/source/gdi/wall \
-    vcl/source/glyphs/gcach_ftyp \
-    vcl/source/glyphs/gcach_layout \
-    vcl/source/glyphs/gcach_rbmp \
-    vcl/source/glyphs/glyphcache \
-    vcl/source/glyphs/graphite_adaptors \
-    vcl/source/glyphs/graphite_cache \
-    vcl/source/glyphs/graphite_features \
-    vcl/source/glyphs/graphite_layout \
-    vcl/source/glyphs/graphite_serverfont \
-    vcl/source/glyphs/graphite_textsrc \
     vcl/source/helper/canvasbitmap \
     vcl/source/helper/canvastools \
     vcl/source/helper/evntpost \
@@ -285,22 +366,19 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wrkwin \
 ))
 
-ifeq ($(GUI),UNX)
+ifneq ($(ENABLE_GRAPHITE),)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DENABLE_GRAPHITE \
+))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/unx/generic/plugadapt/salplug \
+    vcl/source/glyphs/graphite_adaptors \
+    vcl/source/glyphs/graphite_cache \
+    vcl/source/glyphs/graphite_features \
+    vcl/source/glyphs/graphite_layout \
+    vcl/source/glyphs/graphite_serverfont \
+    vcl/source/glyphs/graphite_textsrc \
 ))
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
-    -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
-    -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(gb_Library_SYSPRE)spa$(gb_Library_OOOEXT)\" \
-))
-ifneq ($(ENABLE_FONTCONFIG),)
-$(eval $(call gb_Library_set_defs,vcl,\
-    $$(DEFS) \
-    -DENABLE_FONTCONFIG \
-))
-endif
 endif
 
 ifeq ($(OS),LINUX)
