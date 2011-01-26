@@ -36,7 +36,6 @@ $(eval $(call gb_Library_set_include,swui,\
     -I$(WORKDIR)/SdiTarget/sw/sdi \
     -I$(WORKDIR)/Misc/sw \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc/sw \
     -I$(OUTDIR)/inc/offuh \
 ))
 

@@ -41,11 +41,6 @@ $(eval $(call gb_Library_set_include,vbaswobj,\
     -I$(OUTDIR)/inc/ \
 ))
 
-$(eval $(call gb_Library_set_defs,vbaswobj,\
-    $$(DEFS) \
-    -DVBA_OOBUILD_HACK \
-))
-
 $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     comphelper \
     cppu \

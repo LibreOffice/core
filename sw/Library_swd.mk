@@ -38,7 +38,6 @@ $(eval $(call gb_Library_set_include,swd,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/filter/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
-    -I$(OUTDIR)/inc/sw \
     -I$(OUTDIR)/inc/offuh \
 ))
 
