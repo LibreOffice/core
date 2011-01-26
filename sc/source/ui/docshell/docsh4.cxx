@@ -239,8 +239,8 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     String aSelItem = sSbaData.GetToken(i,cSbaSep);
                     if (aSelItem.Len())
                     {
-                        void *pPtr = (void*)aSelItem.ToInt32();
-                        pSelectionList->Insert( pPtr, LIST_APPEND );
+                        sal_uIntPtr nValue = aSelItem.ToInt32();
+                        pSelectionList->Insert( (void*)nValue, LIST_APPEND );
                     }
                 }
 
