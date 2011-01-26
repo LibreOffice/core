@@ -423,7 +423,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             rPicType.uPicLen = nTokenValue;
             if (rPicType.uPicLen)
             {
-                ULONG nPos = rStrm.Tell();
                 rStrm.SeekRel(-1);
                 sal_uInt8 aData[4096];
                 ULONG nSize = sizeof(aData);
@@ -439,7 +438,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 }
                 nNextCh = GetNextChar();
                 bValidBmp = !pTmpFile->GetError();
-                nPos = rStrm.Tell();
             }
             break;
         case RTF_PICSCALEX:         rPicType.nScalX = nVal; break;
