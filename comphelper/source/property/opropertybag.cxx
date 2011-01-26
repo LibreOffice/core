@@ -485,8 +485,6 @@ namespace comphelper
 
         try
         {
-            ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
-
             // check for unknown properties
             // we cannot simply rely on the XMultiPropertySet::setPropertyValues
             // implementation of our base class, since it does not throw
@@ -503,6 +501,7 @@ namespace comphelper
                     ++pName, ++pHandle, ++pProperty
                 )
             {
+                ::cppu::IPropertyArrayHelper& rPropInfo = getInfoHelper();
                 *pHandle = rPropInfo.getHandleByName( *pName );
                 if ( *pHandle != -1 )
                     continue;
@@ -513,9 +512,6 @@ namespace comphelper
                     // add the property
                     sal_Int16 nAttributes = PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE | PropertyAttribute::MAYBEDEFAULT;
                     addProperty( *pName, nAttributes, pProperty->Value );
-                    // rPropInfo is invalid, refetch
-                    rPropInfo = getInfoHelper();
-                    *pHandle = rPropInfo.getHandleByName( *pName );
                     continue;
                 }
 
