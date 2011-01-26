@@ -209,7 +209,7 @@ MQueryHelper::next( )
     index = m_nIndex;
     m_aMutex.release();
 
-    result = getByIndex( m_nIndex + 1) ; // Add 1 as Row is numbered from 1 to N
+    result = getByIndex( index + 1) ; // Add 1 as Row is numbered from 1 to N
 
     if ( result ) {
         m_aMutex.acquire();
