@@ -223,19 +223,20 @@ static void cpp_call(
         // The Windows x64 calling convention is very regular and
         // elegant (even if perhaps then slightly slower than the
         // Linux x64 one): The first four parameters, never more, are
-        // passed in registers, as long as they are a qword ins size
+        // passed in registers, as long as they are a qword in size
         // or less. (If larger, a pointer to a temp copy is passed, so
         // it's equivalent anyway.) Floating point values are passed
-        // in XMM0..3 register, others in RCX, RDX, R8, R9. Now, the
-        // nice thing for us is that for varargs functions,
-        // floating-point parameters among the four first ones are
-        // always passed *both* in XMM and integer registers. So we
-        // don't need to bother here calling the method different ways
-        // depending on what types of parameters it actually expects,
-        // just pretend parameters 3..4 are doubles and they will be
-        // passed both in XMM and integer registers, callee will find
-        // them where it expects. (The callee is not actually varargs,
-        // of course.)
+        // in XMM0..3 registers, others in RCX, RDX, R8, R9.
+
+        // Now, the nice thing for us is that when calling varargs
+        // functions, floating-point parameters among the four first
+        // ones are always passed *both* in an XMM and integer
+        // register. So we don't need to bother here calling the
+        // method different ways depending on what types of parameters
+        // it actually expects. We just pretend parameters 3..4 are
+        // doubles, and they will be passed both in XMM and integer
+        // registers, and the callee will find them where it
+        // expects. (The callee is not actually varargs, of course.)
 
         sal_Int64 (*pMethod)(sal_Int64, ...) =
             (sal_Int64 (*)(sal_Int64, ...))

@@ -90,12 +90,12 @@ static inline typelib_TypeClass cpp2uno_call(
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
     void ** pCppArgs = pUnoArgs + nParams;
-    // indizes of values this have to be converted (interface conversion cpp<=>uno)
-    sal_Int64 * pTempIndizes = (sal_Int64 *)(pUnoArgs + (2 * nParams));
+    // indexes of values this have to be converted (interface conversion cpp<=>uno)
+    sal_Int64 * pTempIndexes = (sal_Int64 *)(pUnoArgs + (2 * nParams));
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
 
-    sal_Int32 nTempIndizes = 0;
+    sal_Int32 nTempIndexes = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -130,9 +130,9 @@ static inline typelib_TypeClass cpp2uno_call(
             {
                 // uno out is unconstructed mem!
                 pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
-                pTempIndizes[nTempIndizes] = nPos;
+                pTempIndexes[nTempIndexes] = nPos;
                 // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                ppTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
             }
             // is in/inout
             else if (bridges::cpp_uno::shared::relatesToInterfaceType(
@@ -142,9 +142,9 @@ static inline typelib_TypeClass cpp2uno_call(
                     pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     *(void **)pCppStack, pParamTypeDescr,
                     pThis->getBridge()->getCpp2Uno() );
-                pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
+                pTempIndexes[nTempIndexes] = nPos; // has to be reconverted
                 // will be released at reconversion
-                ppTempParamTypeDescr[nTempIndizes++] = pParamTypeDescr;
+                ppTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
             }
             else // direct way
             {
@@ -168,15 +168,15 @@ static inline typelib_TypeClass cpp2uno_call(
     if (pUnoExc)
     {
         // destruct temporary in/inout params
-        while (nTempIndizes--)
+        while (nTempIndexes--)
         {
-            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
+            sal_Int32 nIndex = pTempIndexes[nTempIndexes];
 
             if (pParams[nIndex].bIn) // is in/inout => was constructed
             {
-                ::uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndizes], 0 );
+                ::uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndexes], 0 );
             }
-            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndizes] );
+            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndexes] );
         }
         if (pReturnTypeDescr)
         {
@@ -192,10 +192,10 @@ static inline typelib_TypeClass cpp2uno_call(
     else // else no exception occurred...
     {
         // temporary params
-        while (nTempIndizes--)
+        while (nTempIndexes--)
         {
-            sal_Int32 nIndex = pTempIndizes[nTempIndizes];
-            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndizes];
+            sal_Int32 nIndex = pTempIndexes[nTempIndexes];
+            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndexes];
 
             if (pParams[nIndex].bOut) // inout/out
             {
@@ -362,30 +362,74 @@ extern void *cpp_vtable_call;
 //==================================================================================================
 int const codeSnippetSize = 28;
 
-#if 0
+// This function generates the code that acts as a proxy for the UNO function to be called.
+// The generated code does the following:
+// - Save register parametrs.
 
 unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset)
 {
     unsigned char * p = code;
-    // mov rax, functionIndex:
+
+    // mov eax, functionIndex:
     *p++ = 0xB8;
-    *reinterpret_cast< sal_Int64 * >(p) = functionIndex;
-    p += sizeof (sal_Int64);
-    // mov rdx, vtableOffset:
+    *reinterpret_cast< sal_Int32 * >(p) = functionIndex;
+    p += sizeof (sal_Int32);
+
+    // mov edx, vtableOffset:
     *p++ = 0xBA;
-    *reinterpret_cast< sal_Int64 * >(p) = vtableOffset;
-    p += sizeof (sal_Int64);
+    *reinterpret_cast< sal_Int32 * >(p) = vtableOffset;
+    p += sizeof (sal_Int32);
+
+#if 0
+        sub     esp, 8      // space for immediate return type
+        push    esp
+        push    edx         // vtable offset
+        push    eax         // function index
+        mov     eax, esp
+        add     eax, 20
+        push    eax         // original stack ptr
+
+        call    cpp_mediate
+        add     esp, 16
+
+        cmp     eax, typelib_TypeClass_FLOAT
+        je      Lfloat
+        cmp     eax, typelib_TypeClass_DOUBLE
+        je      Ldouble
+        cmp     eax, typelib_TypeClass_HYPER
+        je      Lhyper
+        cmp     eax, typelib_TypeClass_UNSIGNED_HYPER
+        je      Lhyper
+        // rest is eax
+        pop     eax
+        add     esp, 4
+        ret
+Lhyper:
+        pop     eax
+        pop     edx
+        ret
+Lfloat:
+        fld     dword ptr [esp]
+        add     esp, 8
+        ret
+Ldouble:
+        fld     qword ptr [esp]
+        add     esp, 8
+        ret
+
+#endif
+
+#if 0
     // jmp rel64 cpp_vtable_call:
     *p++ = 0xE9;
     *reinterpret_cast< sal_Int64 * >(p)
         = ((unsigned char *) cpp_vtable_call) - p - sizeof (sal_Int64);
     p += sizeof (sal_Int64);
+#endif
     OSL_ASSERT(p - code <= codeSnippetSize);
     return code + codeSnippetSize;
 }
-
-#endif
 
 }
 
@@ -437,18 +481,88 @@ static void whatthefuck(sal_Int64 i, ...)
 
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code,
-    typelib_InterfaceTypeDescription const *, sal_Int32 functionOffset,
+    typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
     sal_Int32 functionCount, sal_Int32 vtableOffset)
 {
     (*slots) -= functionCount;
     Slot * s = *slots;
-    for (sal_Int32 i = 0; i < functionCount; ++i) {
+
+    for (int i = 0; i < functionCount; ++i) {
+        typelib_TypeDescription * pTD = 0;
+
+        TYPELIB_DANGER_GET( &pTD, type->ppMembers[ i ] );
+        OSL_ASSERT( pTD );
+
+        CPPU_CURRENT_NAMESPACE::RegParamKind param_kind[4];
+        int nr = 0;
+
+        if ( pTD->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE )
+        {
+            typelib_InterfaceAttributeTypeDescription *pAttrTD =
+                reinterpret_cast<typelib_InterfaceAttributeTypeDescription *>( pTD );
+
+            // get method
 #if 0
-        (s++)->fn = code;
-        code = codeSnippet(code, functionOffset++, vtableOffset);
+            (s++)->fn = code;
+            code = codeSnippet(code, functionOffset++, vtableOffset);
 #else
-        (s++)->fn = whatthefuck;
+            (s++)->fn = whatthefuck;
 #endif
+
+            if ( ! pAttrTD->bReadOnly )
+            {
+                // set method
+#if 0
+                (s++)->fn = code;
+                code = codeSnippet(code, functionOffset++, vtableOffset);
+#else
+                (s++)->fn = whatthefuck;
+#endif
+            }
+        }
+        else if ( pTD->eTypeClass == typelib_TypeClass_INTERFACE_METHOD )
+        {
+            typelib_InterfaceMethodTypeDescription *pMethodTD =
+                reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
+
+            typelib_TypeDescription *pReturnTD = 0;
+            TYPELIB_DANGER_GET( &pReturnTD, pMethodTD->pReturnTypeRef );
+            OSL_ASSERT( pReturnTD );
+
+            if ( pReturnTD->nSize > 8 ) {
+                // Hidden return value
+                param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_INT;
+            }
+            TYPELIB_DANGER_RELEASE( pReturnTD );
+
+            // 'this'
+            param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_INT;
+
+            for (int j = 0; nr < 4 && j < pMethodTD->nParams; ++j)
+            {
+                typelib_TypeDescription *pParamTD = 0;
+
+                TYPELIB_DANGER_GET( &pParamTD, pMethodTD->pParams[j].pTypeRef );
+                OSL_ASSERT( pParamTD );
+
+                if ( pParamTD->eTypeClass == typelib_TypeClass_FLOAT ||
+                     pParamTD->eTypeClass == typelib_TypeClass_DOUBLE )
+                    param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_FLT;
+                else
+                    param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_INT;
+
+                TYPELIB_DANGER_RELEASE( pParamTD );
+
+#if 0
+                (s++)->fn = code;
+                code = codeSnippet(code, functionOffset++, vtableOffset);
+#else
+                (s++)->fn = whatthefuck;
+#endif
+            }
+        }
+        else
+            OSL_ASSERT( false );
     }
     return code;
 }
