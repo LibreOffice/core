@@ -86,8 +86,8 @@ void SfxMacroConfig::Release_Impl()
 struct SfxMacroConfig_Impl
 {
     SfxMacroInfoArr_Impl    aArr;
-    sal_uInt32                  nEventId;
-    sal_Bool                    bWaitingForCallback;
+    sal_uInt32              nEventId;
+    sal_Bool                bWaitingForCallback;
 
                             SfxMacroConfig_Impl()
                             : nEventId( 0 )
@@ -179,7 +179,7 @@ SfxMacroInfo::SfxMacroInfo( const String& rURL ) :
         if ( aTmp.GetTokenCount('/') > 3 )
         {
             // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-            // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
+            // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via included Doc-BASIC-Mgr
             if ( aTmp.CompareToAscii("///", 3 ) != COMPARE_EQUAL )
                 bAppBasic = FALSE;
             aTmp = rURL.GetToken( 3, '/' );
@@ -226,7 +226,7 @@ SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rLibName,
 //==========================================================================
 
 SfxMacroInfo::SfxMacroInfo(bool _bAppBasic, const String& rQualifiedName )
-:   pHelpText(0),
+:       pHelpText(0),
     nRefCnt(0),
     bAppBasic(_bAppBasic),
     nSlotId(0),
@@ -299,14 +299,16 @@ String SfxMacroInfo::GetQualifiedName() const
         aMacroName += '.';
     }
 
-    // Wg. ::com::sun::star::script::JavaScript kein Zerlegen des Strings mehr
+    // due to ::com::sun::star::script::JavaScript
+    // no more disassembly of the string
     aMacroName += aMethodName;
     return aMacroName;
 }
 
 String SfxMacroInfo::GetFullQualifiedName() const
 {
-    // Liefert nur Unsinn, wenn f"ur ein ::com::sun::star::script::JavaScript aufgerufen !
+    // Returns only nonsense, when called for a
+    // ::com::sun::star::script::JavaScript !
     String aRet;
     if ( bAppBasic )
         aRet = SFX_APP()->GetName();
@@ -321,7 +323,7 @@ String SfxMacroInfo::GetURL() const
         return aMethodName;
 
     // 'macro:///lib.mod.proc(args)' => Macro via App-BASIC-Mgr
-    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via zugehoerigen Doc-BASIC-Mgr
+    // 'macro://[docname|.]/lib.mod.proc(args)' => Macro via included Doc-BASIC-Mgr
     // 'macro://obj.method(args)' => Object via App-BASIC-Mgr
     String aURL( String::CreateFromAscii("macro://") );
     if ( !bAppBasic )
@@ -436,17 +438,18 @@ SFX_EXEC_STUB( SfxApplication, MacroExec_Impl )
 
 sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
 {
-    sal_uInt16 nCount = pImp->aArr.Count();      // Macro suchen
+    sal_uInt16 nCount = pImp->aArr.Count();      // Search for Macro
     sal_uInt16 i;
     for (i=0; i<nCount; i++)
         if ((*(pImp->aArr)[i]) == (*pInfo))
             break;
 
     if (i == nCount)
-    {                                   // Macro noch unbekannt
+    {
+        // Macro still unknown
         nCount = aIdArray.Count();
         sal_uInt16 n;
-        for (n=0; n<nCount; n++) // freie SlotId suchen
+        for (n=0; n<nCount; n++) // Seearch for free SlotId
             if (aIdArray[n] > SID_MACRO_START + n)
                 break;
 
@@ -479,7 +482,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
         else
             pNewSlot->pNextSlot = pNewSlot;
 
-        // Macro uebernehmen
+        // Take over Macro
         SfxMacroInfoPtr pNewInfo = new SfxMacroInfo(*pInfo);
         pNewInfo->nSlotId = SID_MACRO_START + n;
         pImp->aArr.Insert(pNewInfo,n);
@@ -500,7 +503,7 @@ sal_uInt16 SfxMacroConfig::GetSlotId(SfxMacroInfoPtr pInfo)
 
 void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
 {
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
+    DBG_ASSERT( IsMacroSlot( nId ), "SlotId is no Macro!");
 
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -511,23 +514,23 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
             pInfo->nRefCnt--;
             if (pInfo->nRefCnt == 0)
             {
-                // Slot wird nicht mehr referenziert, also holen
+                // Slot is no longer referenced, so get
                 SfxSlot *pSlot = pInfo->pSlot;
 
-                // Slot aus der Verkettung rausnehmen
+                // Take out Slot from the concatenation
                 while (pSlot->pNextSlot != pInfo->pSlot)
                     pSlot = (SfxSlot*) pSlot->pNextSlot;
                 pSlot->pNextSlot = pInfo->pSlot->pNextSlot;
 
-                // Slot selbst kurz schlie\sen
+                // Slot close itself briefly
                 pSlot = pInfo->pSlot;
                 pSlot->pNextSlot = pSlot;
 
-                // MacroInfo aus Array entfernen, damit sie kein Unheil
-                // anrichten kann
+                // Remove Macro info from array so that it can not cause
+                // any harm
                 pImp->aArr.Remove(i);
 
-                // SlotId wieder freigeben
+                // Release SlotId again
                 sal_uInt16 nIdCount = aIdArray.Count();
                 for (sal_uInt16 n=0; n<nIdCount; n++)
                 {
@@ -538,9 +541,9 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
                     }
                 }
 
-                // Sofern nicht die Applikation heruntergefahren wird, mu\s
-                // der Slot asynchron gel"oscht werden, falls er in seinem
-                // eigenen Execute abgeschossen wird!
+                // Unless the application is not shut down, then
+                // the Slot has to be deleted asynchronously if cancelled in
+                // its own Execute!
                 if ( !SFX_APP()->Get_Impl()->bInQuit )
                     pImp->nEventId = Application::PostUserEvent( LINK(this, SfxMacroConfig, EventHdl_Impl), pInfo );
                 else
@@ -550,14 +553,14 @@ void SfxMacroConfig::ReleaseSlotId(sal_uInt16 nId)
         }
     }
 
-    DBG_ERROR("Macro-SlotId nicht gefunden!");
+    DBG_ERROR("Macro-SlotId is not found!");
 }
 
 //==========================================================================
 
 void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
 {
-    DBG_ASSERT( IsMacroSlot( nId ), "SlotId ist kein Macro!");
+    DBG_ASSERT( IsMacroSlot( nId ), "SlotId is no Macro!");
 
     sal_uInt16 nCount = pImp->aArr.Count();
     for (sal_uInt16 i=0; i<nCount; i++)
@@ -569,7 +572,7 @@ void SfxMacroConfig::RegisterSlotId(sal_uInt16 nId)
         }
     }
 
-    DBG_ERROR("Macro-SlotId nicht gefunden!");
+    DBG_ERROR("Macro-SlotId is not found!");
 }
 
 //==========================================================================
@@ -608,7 +611,7 @@ sal_Bool SfxMacroConfig::ExecuteMacro( sal_uInt16 nId, const String& rArgs ) con
     SvxMacro aMacro( pInfo->GetQualifiedName(), pInfo->GetBasicName(), STARBASIC );
     sal_Bool bRet = ExecuteMacro( pSh, &aMacro, rArgs );
 
-    // Release, da im Dispatcher-Execute ein Register gemacht wurde
+    // Release, because a register was created in the dispatcher Execute
     ((SfxMacroConfig*)this)->ReleaseSlotId( nId );
     return bRet;
 }
@@ -617,11 +620,11 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
 {
     SfxApplication *pApp = SFX_APP();
 
-    // Name des Macros oder Scripts bzw. ScriptCode
+    // Name of the Macros or Scripts (ScriptCode)
     String aCode( pMacro->GetMacName() );
     ErrCode nErr = ERRCODE_NONE;
 
-    // Ist es ein Basic-Macro ?
+    // Is it a Basic-Macro ?
     ScriptType eSType = pMacro->GetScriptType();
     sal_Bool bIsBasic = eSType == STARBASIC;
     sal_Bool bIsStarScript = ( eSType == EXTENDED_STYPE && pMacro->GetLibName().SearchAscii( "StarScript" ) != STRING_NOTFOUND );
@@ -633,10 +636,10 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
         BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
         if( bIsBasic )
         {
-            // BasicManager von Document?
+            // BasicManager of the Document?
             BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 
-            // Da leider der Name zwischendurch h"aufig gewechselt hat ...
+            // As the name has unfortunately been changed often ...
             if( SFX_APP()->GetName() == pMacro->GetLibName() ||
                     pMacro->GetLibName().EqualsAscii("StarDesktop") )
                 pMgr = pAppMgr;
@@ -676,16 +679,16 @@ sal_Bool SfxMacroConfig::CheckMacro( SfxObjectShell *pSh, const SvxMacro* pMacro
 {
     SfxApplication *pApp = SFX_APP();
 
-    // Name des Macros oder Scripts bzw. ScriptCode
+    // Name of Macros or Scripts (ScriptCode)
     String aCode( pMacro->GetMacName() );
     ErrCode nErr = ERRCODE_NONE;
 
-    // BasicManager von Document oder Application
+    // BasicManager of Document or Application
     pApp->EnterBasicCall();
     BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 
-    // Da leider der Name zwischendurch h"aufig gewechselt hat ...
+    // As the name has unfortunately been changed often ...
     if( SFX_APP()->GetName() == pMacro->GetLibName() ||
             pMacro->GetLibName().EqualsAscii("StarDesktop") )
         pMgr = pAppMgr;
@@ -706,14 +709,15 @@ sal_Bool SfxMacroConfig::CheckMacro( sal_uInt16 nId ) const
     if ( !pInfo )
         return sal_False;
 
-    // Basic nur initialisieren, wenn default nicht ::com::sun::star::script::JavaScript; dann mu\s
-    // in IsBasic() sowieso das Basic angelegt werden
+    // only initialize Basic, when default is not
+    // ::com::sun::star::script::JavaScript; then the Basic has to be created
+    // anyway in IsBasic()
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
     SfxApplication *pApp = SFX_APP();
     pApp->EnterBasicCall();
 
-    // BasicManager von Document oder Application
+    // BasicManager of Document or Application
     BasicManager *pAppMgr = SFX_APP()->GetBasicManager();
     BasicManager *pMgr = pSh ? pSh->GetBasicManager() : NULL;
 

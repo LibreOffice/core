@@ -130,7 +130,7 @@ static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResI
 //====================================================================
 
 //====================================================================
-// ctor, registeres a new unit
+// constuctor, registeres a new unit
 
 SfxInterface::SfxInterface( const char *pClassName,
                             const ResId& rNameResId,
@@ -182,9 +182,9 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                         pIter->GetSlotId() != (pIter+1)->GetSlotId(),
                         "doppelte SID" );
 
-            // jeder Master verweist auf seinen ersten Slave (ENUM), alle
-            // Slaves auf ihren Master.
-            // Slaves verweisen im Ring auf die anderen mit gleichem Master
+            // every master refers to his first slave (ENUM),
+            // all slaves refer to their master.
+            // Slaves refer in a circle to the other slaves with the same master
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
                 pIter->pLinkedSlot = GetSlot( pIter->nMasterSlotId );
@@ -209,7 +209,8 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
             }
             else if ( 0 == pIter->GetNextSlot() )
             {
-                // Slots verweisen im Ring auf den n"achten mit derselben Statusmethode
+                // Slots refering in circle to the next with the same
+                // Status method.
                 SfxSlot *pLastSlot = pIter;
                 for ( USHORT n = nIter; n < Count(); ++n )
                 {
@@ -232,7 +233,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
         {
 
             if ( pNext->GetSlotId() <= pIter->GetSlotId() )
-                DBG_ERROR ("Falsche Reihenfolge!");
+                DBG_ERROR ("Wrong order!");
 
             if ( pIter->GetKind() == SFX_KIND_ENUM )
             {
@@ -243,7 +244,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                 {
                     if ( pSlave->pLinkedSlot != pMasterSlot )
                     {
-                        ByteString aStr("Falsche Master/Slave-Verkettung : ");
+                        ByteString aStr("Wrong Master/Slave- link: ");
                         aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
@@ -252,7 +253,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
 
                     if ( pSlave->nMasterSlotId != pMasterSlot->GetSlotId() )
                     {
-                        ByteString aStr("Falsche Master/Slave-Ids : ");
+                        ByteString aStr("Wrong Master/Slave-Ids: ");
                         aStr += ByteString::CreateFromInt32(pMasterSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pSlave->GetSlotId());
@@ -269,7 +270,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                 {
                     if ( pIter->pLinkedSlot->GetKind() != SFX_KIND_ENUM )
                     {
-                        ByteString aStr("Slave ist kein enum : ");
+                        ByteString aStr("Slave is no enum: ");
                         aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pIter->pLinkedSlot->GetSlotId());
@@ -283,7 +284,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
                     pCurSlot = pCurSlot->pNextSlot;
                     if ( pCurSlot->GetStateFnc() != pIter->GetStateFnc() )
                     {
-                        ByteString aStr("Verkettete Slots mit verschiedenen StateMethods : ");
+                        ByteString aStr("Linked Slots with different State Methods : ");
                         aStr += ByteString::CreateFromInt32(pCurSlot->GetSlotId());
                         aStr += " , ";
                         aStr += ByteString::CreateFromInt32(pIter->GetSlotId());
@@ -299,10 +300,7 @@ void SfxInterface::SetSlotMap( SfxSlot& rSlotMap, USHORT nSlotCount )
 #endif
 }
 
-
 //--------------------------------------------------------------------
-
-
 
 SfxInterface::~SfxInterface()
 {
@@ -322,7 +320,6 @@ SfxInterface::~SfxInterface()
 //--------------------------------------------------------------------
 
 // searches for the specified func
-
 
 const SfxSlot* SfxInterface::GetSlot( USHORT nFuncId ) const
 {
@@ -359,7 +356,6 @@ const SfxSlot* SfxInterface::GetSlot( const String& rCommand ) const
 
 //--------------------------------------------------------------------
 
-
 const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 {
     DBG_MEMTEST();
@@ -370,7 +366,7 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
     {
         if(pGenoType)
             return pGenoType->GetRealSlot(pSlot);
-        DBG_ERROR("fremder Slot");
+        DBG_ERROR("unknown Slot");
         return 0;
     }
 
@@ -378,7 +374,6 @@ const SfxSlot* SfxInterface::GetRealSlot( const SfxSlot *pSlot ) const
 }
 
 //--------------------------------------------------------------------
-
 
 const SfxSlot* SfxInterface::GetRealSlot( USHORT nSlotId ) const
 {
@@ -399,7 +394,6 @@ const SfxSlot* SfxInterface::GetRealSlot( USHORT nSlotId ) const
 }
 
 //--------------------------------------------------------------------
-
 
 void SfxInterface::RegisterPopupMenu( const ResId& rResId )
 {
@@ -453,10 +447,10 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
-        // Gibt es Toolbars in der Superklasse ?
+        // Are there toolbars in the super class?
         USHORT nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetObjectBarResId( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -464,7 +458,7 @@ const ResId& SfxInterface::GetObjectBarResId( USHORT nNo ) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->aResId;
 }
@@ -477,10 +471,10 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
-        // Gibt es Toolbars in der Superklasse ?
+        // Are there toolbars in the super class?
         USHORT nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetObjectBarPos( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -488,7 +482,7 @@ USHORT SfxInterface::GetObjectBarPos( USHORT nNo ) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->nPos;
 }
@@ -527,10 +521,10 @@ sal_uInt32 SfxInterface::GetChildWindowId (USHORT nNo) const
 {
     if ( pGenoType )
     {
-        // Gibt es ChildWindows in der Superklasse ?
+        // Are there ChildWindows in der Superklasse?
         USHORT nBaseCount = pGenoType->GetChildWindowCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetChildWindowId( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -538,7 +532,7 @@ sal_uInt32 SfxInterface::GetChildWindowId (USHORT nNo) const
 
 #ifdef DBG_UTIL
     USHORT nCWCount = pImpData->pChildWindows->Count();
-    DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
+    DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
 #endif
     sal_uInt32 nRet = (*pImpData->pChildWindows)[nNo]->aResId.GetId();
     if ( (*pImpData->pChildWindows)[nNo]->bContext )
@@ -550,10 +544,10 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (USHORT nNo) const
 {
     if ( pGenoType )
     {
-        // Gibt es ChildWindows in der Superklasse ?
+        // Are there ChildWindows in der Superklasse?
         USHORT nBaseCount = pGenoType->GetChildWindowCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetChildWindowFeature( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -561,7 +555,7 @@ sal_uInt32 SfxInterface::GetChildWindowFeature (USHORT nNo) const
 
 #ifdef DBG_UTIL
     USHORT nCWCount = pImpData->pChildWindows->Count();
-    DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
+    DBG_ASSERT( nNo<nCWCount,"ChildWindow is unknown!" );
 #endif
     return (*pImpData->pChildWindows)[nNo]->nFeature;
 }
@@ -599,10 +593,10 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
-        // Gibt es Toolbars in der Superklasse ?
+        // Are there toolbars in the super class?
         USHORT nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetObjectBarName( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -610,7 +604,7 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->pName;
 }
@@ -620,10 +614,10 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
-        // Gibt es Toolbars in der Superklasse ?
+        // Are there toolbars in the super class?
         USHORT nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->GetObjectBarFeature( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -631,7 +625,7 @@ sal_uInt32 SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->nFeature;
 }
@@ -641,10 +635,10 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
     {
-        // Gibt es Toolbars in der Superklasse ?
+        // Are there toolbars in the super class?
         USHORT nBaseCount = pGenoType->GetObjectBarCount();
         if ( nNo < nBaseCount )
-            // Die der Superklasse kommen zuerst
+            // The Super class comes first
             return pGenoType->IsObjectBarVisible( nNo );
         else
             nNo = nNo - nBaseCount;
@@ -652,7 +646,7 @@ BOOL SfxInterface::IsObjectBarVisible(USHORT nNo) const
 
 #ifdef DBG_UTIL
     USHORT nObjBarCount = pImpData->pObjectBars->Count();
-    DBG_ASSERT( nNo<nObjBarCount,"Objectbar ist unbekannt!" );
+    DBG_ASSERT( nNo<nObjBarCount,"Objectbar is unknown!" );
 #endif
     return (*pImpData->pObjectBars)[nNo]->bVisible;
 }
@@ -662,24 +656,22 @@ const SfxInterface* SfxInterface::GetRealInterfaceForSlot( const SfxSlot *pRealS
     DBG_ASSERT( pImpData->bRegistered, "Interface not registered!" );
     const SfxInterface* pInterface = this;
 
-    // Der Slot k"onnte auch aus dem Interface einer Shell-Basisklasse stammen
+    // The slot could also originate from the interface of a shell base class.
     do
     {
         const SfxSlot *pLastSlot  = (*pInterface)[pInterface->Count()-1];
         const SfxSlot *pFirstSlot = (*pInterface)[0];
 
-        // Ist pInterface der Owner von pRealSlot ?
+        // Is pInterface the Owner of pRealSlot ?
         if ( pFirstSlot <= pRealSlot && pRealSlot <= pLastSlot )
             break;
 
-        // Sonst Interface der Superklasse probieren
+        // Otherwise try the Interface of Super class
         pInterface = pInterface->pGenoType;
     }
     while ( pInterface );
 
     return pInterface;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

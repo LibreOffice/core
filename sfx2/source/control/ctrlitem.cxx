@@ -46,11 +46,11 @@ DBG_NAME(SfxControllerItem);
 
 void SfxControllerItem::CheckConfigure_Impl( ULONG nType )
 {
-    // echter Slot? (also kein Separator etc.)
+    // Real Slot? (i.e. no Separator etc.)
     if ( !nId )
         return;
 
-    // ist die Id "uberhaupt in 'nType' konfigurierbar?
+    // is the ID configurable at all in 'nType'?
     const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nId);
     DBG_ASSERTWARNING( pSlot, "SfxControllerItem: binding not existing slot" );
     if ( pSlot && !pSlot->IsMode(nType) )
@@ -64,7 +64,6 @@ void SfxControllerItem::CheckConfigure_Impl( ULONG nType )
 #endif
 
 //--------------------------------------------------------------------
-
 // returns the next registered SfxControllerItem with the same id
 
 SfxControllerItem* SfxControllerItem::GetItemLink()
@@ -75,7 +74,6 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
 }
 
 //--------------------------------------------------------------------
-
 // returns TRUE if this binding is really bound to a function
 
 BOOL SfxControllerItem::IsBound() const
@@ -86,23 +84,21 @@ BOOL SfxControllerItem::IsBound() const
 }
 
 //--------------------------------------------------------------------
-
 // returns the associated function-id or 0 if none
 
 // USHORT SfxControllerItem::GetId() const;
 
 //====================================================================
-
 // registeres with the id at the bindings
 
 void SfxControllerItem::Bind( USHORT nNewId, SfxBindings *pBindinx )
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings || pBindinx, "Keine Bindings");
+    DBG_ASSERT(pBindings || pBindinx, "No Bindings");
 
     if ( IsBound() ) {
-        DBG_ASSERT(pBindings, "Keine Bindings");
+        DBG_ASSERT(pBindings, "No Bindings");
         pBindings->Release(*this);
     }
 
@@ -118,10 +114,10 @@ void SfxControllerItem::BindInternal_Impl( USHORT nNewId, SfxBindings *pBindinx 
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings || pBindinx, "Keine Bindings");
+    DBG_ASSERT(pBindings || pBindinx, "No Bindings");
 
     if ( IsBound() ) {
-        DBG_ASSERT(pBindings, "Keine Bindings");
+        DBG_ASSERT(pBindings, "No Bindings");
         pBindings->Release(*this);
     }
 
@@ -138,14 +134,14 @@ void SfxControllerItem::BindInternal_Impl( USHORT nNewId, SfxBindings *pBindinx 
 
 void SfxControllerItem::UnBind()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "ost die Verbindung dieses SfxControllerItems mit der SfxBindings-Instanz,
-    an der es zur Zeit gebunden ist. Ab diesem Zeitpunkt erh"alt es keine
-    Statusbenachrichtigungen (<SfxControllerItem::StateChented()>) mehr.
+    Unbinds the connection of this SfxControllerItems with the SfxBindings
+    instance with which it to time is bound. From this time on it does not
+    receive any status notifications (<SfxControllerItem::StateChented()>)
+    anymore.
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxControllerItem::ReBind()>
     <SfxControllerItem::ClearCache()>
@@ -153,7 +149,7 @@ void SfxControllerItem::UnBind()
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings, "Keine Bindings");
+    DBG_ASSERT(pBindings, "No Bindings");
     DBG_ASSERT( IsBound(), "unbindings unbound SfxControllerItem" );
 
     pBindings->Release(*this);
@@ -164,14 +160,13 @@ void SfxControllerItem::UnBind()
 
 void SfxControllerItem::ReBind()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Binded dieses SfxControllerItem wieder an die SfxBindings-Instanz,
-    an der es zuletzt gebunden war. Ab diesem Zeitpunkt erh"alt es wieder
-    Statusbenachrichtigungen (<SfxControllerItem::StateChented()>).
+    Binds this SfxControllerItem with the SfxBindings instance again,
+    with which it was last bound. From this time on it does receive status
+    notifications (<SfxControllerItem::StateChented()>) again.
 
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxControllerItem::UnBind()>
     <SfxControllerItem::ClearCache()>
@@ -180,7 +175,7 @@ void SfxControllerItem::ReBind()
 {
     DBG_MEMTEST();
 DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings, "Keine Bindings");
+    DBG_ASSERT(pBindings, "No Bindings");
     DBG_ASSERT( !IsBound(), "bindings rebound SfxControllerItem" );
 
     pBindings->Register(*this);
@@ -190,11 +185,11 @@ DBG_CHKTHIS(SfxControllerItem, 0);
 
 void SfxControllerItem::UpdateSlot()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Holt den Status 'hart' neu.
+    Get the Status again.
 
-    [Querverweise]
+    [Cross-reference]
 
     <SfxControllerItem::ClearCache()>
 */
@@ -211,24 +206,20 @@ void SfxControllerItem::UpdateSlot()
 
 void SfxControllerItem::ClearCache()
 
-/*  [Beschreibung]
+/*  [Description]
 
-    "oscht den Status-Cache f"ur dieses SfxControllerItem. D.h. beim
-    n"achsten Status-Update wird das <SfxPoolItem> auf jeden Fall geschickt,
-    auch wenn zuvor dasselbe geschickt wurde. Dies wird ben"otigt, wenn
-    ein Controller umgeschaltet werden kann und sich diesen Status
-    selbst merkt.
+    Clears the cache status for this SfxControllerItem. That is by the next
+    status update is the <SfxPoolItem> sent in any case, even if the same was
+    sent before. This is needed if a controller can be switched on and note
+    that status themselves.
 
+    [Example]
 
-    [Beispiel]
+    The combined controller for adjusting the surface type and the concrete
+    expression (blue color, or hatching X) can be changed in type, but is then
+    notified of the next selection again, even if it the same data.
 
-    Der Kombi-Controller f"ur das Einstellen des Fl"achentyps und der
-    konkreten Auspr"agung (Farbe blau oder Schraffur X) kann im Typ
-    umgestellt werden, wird jedoch dann bei der n"achsten Selektion
-    wieder benachrichtigt, auch wenn es dieselben Daten sind.
-
-
-    [Querverweise]
+    [Cross-reference]
 
     <SfxControllerItem::UnBind()>
     <SfxControllerItem::ReBind()>
@@ -238,13 +229,12 @@ void SfxControllerItem::ClearCache()
 {
     DBG_MEMTEST();
     DBG_CHKTHIS(SfxControllerItem, 0);
-    DBG_ASSERT(pBindings, "Keine Bindings");
+    DBG_ASSERT(pBindings, "No Bindings");
 
     pBindings->ClearCache_Impl( GetId() );
 }
 
 //--------------------------------------------------------------------
-
 // replaces the successor in the list of bindings of the same id
 
 SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLink )
@@ -257,7 +247,6 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
 }
 
 //--------------------------------------------------------------------
-
 // changes the id of unbound functions (e.g. for sub-menu-ids)
 
 void SfxControllerItem::SetId( USHORT nItemId )
@@ -270,7 +259,7 @@ void SfxControllerItem::SetId( USHORT nItemId )
 
 //--------------------------------------------------------------------
 
-// creates a atomic item for a controller  without registration
+// creates a atomic item for a controller without registration.
 
 SfxControllerItem::SfxControllerItem():
     nId(0),
@@ -282,7 +271,6 @@ SfxControllerItem::SfxControllerItem():
 }
 
 //--------------------------------------------------------------------
-
 // creates a representation of the function nId and registeres it
 
 SfxControllerItem::SfxControllerItem( USHORT nID, SfxBindings &rBindings ):
@@ -296,7 +284,6 @@ SfxControllerItem::SfxControllerItem( USHORT nID, SfxBindings &rBindings ):
 }
 
 //--------------------------------------------------------------------
-
 // unregisteres the item in the bindings
 
 SfxControllerItem::~SfxControllerItem()
@@ -311,27 +298,29 @@ SfxControllerItem::~SfxControllerItem()
 
 void SfxControllerItem::StateChanged
 (
-    USHORT              ,   // <SID> des ausl"osenden Slot
-    SfxItemState        ,   // <SfxItemState> von 'pState'
-    const SfxPoolItem*      // Slot-Status, ggf. 0 oder IsInvalidItem()
+    USHORT,             // <SID> of the triggering slot
+    SfxItemState,       // <SfxItemState> of 'pState'
+    const SfxPoolItem*  // Slot-Status, NULL or IsInvalidItem()
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Diese virtuelle Methode wird vom SFx gerufen, um <SfxControllerItem>s
-    dar"uber zu benachrichtigen, da\s sich der Status des Slots 'nSID'
-    ge"andert hat. Der neue Wert sowie der von diesem Wert ermittelte
-    Status wird als 'pState' bzw. 'eState' mitgegeben.
+    This virtual method is called by the SFx to inform the <SfxControllerItem>s
+    is about that state of the slots 'NSID' has changed. The new value and the
+    value determined by this status is given as 'pState' or 'eState'.
 
-    Der Status eines Slots kann sich "andern, wenn z.B. das MDI-Fenster
-    gewechselt wird oder der Slot explizit mit <SfxBindings::Invalidate()>
-    invalidiert wurde.
+    The status of a slot may change, for example when the MDI window is
+    switched or when the slot was invalidated explicitly with
+    <SfxBindings::Invalidate()>.
 
     Achtung! Die Methode wird nicht gerufen, wenn der Slot ung"ultig wurde,
     danach jedoch wieder denselben Wert angenommen hat.
 
-    Diese Basisklasse braucht nicht gerufen zu werden, weitere Zwischenstufen
-    jedoch (z.B. <SfxToolboxControl>) sollten gerufen werden.
+    Beware! The method is not called when the slot is invalid, however
+    has again assumed the same value.
+
+    This base class need not be called, further interim steps however
+    (eg <SfxToolboxControl> ) should be called.
 */
 
 {
@@ -351,9 +340,9 @@ void SfxControllerItem::DeleteFloatingWindow()
 
 void SfxStatusForwarder::StateChanged
 (
-    USHORT              nSID,       // <SID> des ausl"osenden Slot
-    SfxItemState        eState,     // <SfxItemState> von 'pState'
-    const SfxPoolItem*  pState      // Slot-Status, ggf. 0 oder IsInvalidItem()
+    USHORT              nSID,    // <SID> of the triggering slot
+    SfxItemState        eState,  // <SfxItemState> of 'pState'
+    const SfxPoolItem*  pState   // Slot-Status, NULL or IsInvalidItem()
 )
 
 {
@@ -374,37 +363,35 @@ SfxStatusForwarder::SfxStatusForwarder(
 
 SfxItemState SfxControllerItem::GetItemState
 (
-    const SfxPoolItem* pState   /*  Pointer auf das <SfxPoolItem>, dessen
-                                    Status erfragt werden soll. */
+    const SfxPoolItem* pState   /*  Pointer to  <SfxPoolItem>, which
+                                    Status should be queried. */
 )
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Statische Methode zum Ermitteln des Status des SfxPoolItem-Pointers,
-    in der Methode <SfxControllerItem::StateChanged(const SfxPoolItem*)>
-    zu verwenden.
+    Static method to determine the status of the SfxPoolItem-Pointers, to be
+    used in the method <SfxControllerItem::StateChanged(const SfxPoolItem*)>
 
-    [R"uckgabewert]
+    [Return value]
 
     SfxItemState        SFX_ITEM_UNKNOWN
-                        Enabled, aber keine weitere Statusinformation
-                        verf"ugbar. Typisch f"ur <Slot>s, die allenfalls
-                        zeitweise disabled sind, aber ihre Darstellung sonst
-                        nicht "andern.
+                        Enabled, but no further status information available.
+                        Typical for <Slot>s, which anyway are sometimes
+                        disabled, but otherwise do not change their appearance.
 
                         SFX_ITEM_DISABLED
-                        Disabled und keine weiter Statusinformation
-                        verf"ugbar. Alle anderen ggf. angezeigten Werte sollten
-                        auf den Default zur"uckgesetzt werden.
+                        Disabled and no further status information available.
+                        All other values that may appear should be reset to
+                        default.
 
                         SFX_ITEM_DONTCARE
-                        Enabled aber es waren nur uneindeutige Werte
-                        verf"ugbar (also keine, die abgefragt werden k"onnen).
+                        Enabled but there were only ambiguous values available
+                        (i.e. non that can be queried).
 
                         SFX_ITEM_AVAILABLE
-                        Enabled und mit verf"ugbarem Wert, der von 'pState'
-                        erfragbar ist. Der Typ ist dabei im gesamten
-                        Programm eindeutig und durch den Slot festgelegt.
+                        Enabled and with available values, which are queried
+                        by 'pState'. The Type is thus clearly defined in the
+                        entire Program and specified through the Slot.
 */
 
 {
@@ -421,10 +408,10 @@ SfxItemState SfxControllerItem::GetItemState
 
 SfxMapUnit SfxControllerItem::GetCoreMetric() const
 
-/*  [Beschreibung]
+/*  [Description]
 
-    Holt vom zust"andigen Pool die Ma\seinheit ab, in der das Status-Item
-    vorliegt.
+    Gets the measurement unit from the competent pool, in which the Status
+    item exist.
 */
 
 {
@@ -461,6 +448,5 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
 #ifdef _MSC_VER
 #pragma optimize("g",off)
 #endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

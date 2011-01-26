@@ -31,7 +31,7 @@
 #include <tools/stream.hxx>
 #include <rsc/rscsfx.hxx>
 
-// wg. pSlotPool
+// due to pSlotPool
 #include "appdata.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/minarray.hxx>
@@ -98,7 +98,6 @@ SfxSlotPool::~SfxSlotPool()
 }
 
 //====================================================================
-
 // registers the availability of the Interface of functions
 
 void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
@@ -110,8 +109,8 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
         _pInterfaces = new SfxInterfaceArr_Impl;
     _pInterfaces->Append(&rInterface);
 
-    // bei einem (einzelnen) Null-Slot abbrechen (aus syntaktischen Gr"unden
-    // enthalten interfaces immer mindestens einen Slot)
+    // Stop at a (single) Null-slot (for syntactic reasons the interfaces
+    // always contain at least one slot)
     if ( rInterface.Count() == 1 && !rInterface[0]->nSlotId )
         return;
 
@@ -122,7 +121,7 @@ void SfxSlotPool::RegisterInterface( SfxInterface& rInterface )
 
         if ( _pParentPool )
         {
-            // Die Groups im parent Slotpool sind auch hier bekannt
+            // The Groups in parent Slotpool are also known here
             SfxSlotGroupArr_Impl& rGroups = *_pParentPool->_pGroups;
             for ( USHORT n=0; n<rGroups.Count(); n++ )
                 _pGroups->Append( rGroups[n] );
@@ -162,7 +161,6 @@ TypeId SfxSlotPool::GetSlotType( USHORT nId ) const
 }
 
 //====================================================================
-
 // unregisters the availability of the Interface of functions
 
 void SfxSlotPool::ReleaseInterface( SfxInterface& rInterface )
@@ -182,7 +180,7 @@ const SfxSlot* SfxSlotPool::GetSlot( USHORT nId )
     DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
-    // Zun"achst die eigenen Interfaces absuchen
+    // First, search their own interfaces
     for ( USHORT nInterf = 0; nInterf < _pInterfaces->Count(); ++nInterf )
     {
         const SfxSlot *pDef = _pInterfaces->GetObject(nInterf)->GetSlot(nId);
@@ -190,7 +188,7 @@ const SfxSlot* SfxSlotPool::GetSlot( USHORT nId )
             return pDef;
     }
 
-    // Dann beim eventuell vorhandenen parent versuchen
+    // Then try any of the possible existing parent
     return _pParentPool ? _pParentPool->GetSlot( nId ) : 0;
 }
 
@@ -209,15 +207,14 @@ String SfxSlotPool::SeekGroup( USHORT nNo )
         _nCurGroup = nNo;
         if ( _pParentPool )
         {
-            // Meistens stimmt die Reihenfolge der Ids "uberein
+            // In most cases, the order of the IDs agree
             USHORT nParentCount = _pParentPool->_pGroups->Count();
             if ( nNo < nParentCount && (*_pGroups)[nNo] == (*_pParentPool->_pGroups)[nNo] )
                 _pParentPool->_nCurGroup = nNo;
             else
             {
-                // Ansonsten mu\s gesucht werden
-                // Wenn die Gruppe im parent pool nicht gefunden wird, wird
-                // _nCurGroup au\serhalb des g"ultigen Bereiches gesetzt
+                // Otherwise search. If the group is not found in the parent
+                // pool, _nCurGroup is set outside the valid range
                 USHORT i;
                 for ( i=1; i<nParentCount; i++ )
                     if ( (*_pGroups)[nNo] == (*_pParentPool->_pGroups)[i] )
@@ -230,7 +227,7 @@ String SfxSlotPool::SeekGroup( USHORT nNo )
         aResId.SetRT(RSC_STRING);
         if ( !aResId.GetResMgr()->IsAvailable(aResId) )
         {
-            DBG_ERROR( "GroupId-Name nicht im SFX definiert!" );
+            DBG_ERROR( "GroupId-Name not defined in SFX!" );
             return String();
         }
 
@@ -258,18 +255,18 @@ const SfxSlot* SfxSlotPool::SeekSlot( USHORT nStartInterface )
     DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
-    // Die Numerierung der interfaces startet beim parent pool
+    // The numbering starts at the interfaces of the parent pool
     USHORT nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
 
-    // sind wir am Ende des Parent-Pools angekommen?
+    // have reached the end of the Parent-Pools?
     if ( nStartInterface < nFirstInterface &&
          _pParentPool->_nCurGroup >= _pParentPool->_pGroups->Count() )
         nStartInterface = nFirstInterface;
 
-    // liegt das Interface noch im Parent-Pool?
+    // Is the Interface still in the Parent-Pool?
     if ( nStartInterface < nFirstInterface )
     {
-        DBG_ASSERT( _pParentPool, "Kein parent pool!" );
+        DBG_ASSERT( _pParentPool, "No parent pool!" );
         _nCurInterface = nStartInterface;
         return _pParentPool->SeekSlot( nStartInterface );
     }
@@ -295,7 +292,6 @@ const SfxSlot* SfxSlotPool::SeekSlot( USHORT nStartInterface )
 }
 
 //--------------------------------------------------------------------
-
 // skips to the next func in the current group
 
 const SfxSlot* SfxSlotPool::NextSlot()
@@ -303,7 +299,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
     DBG_MEMTEST();
     DBG_ASSERT( _pInterfaces != 0, "no Interfaces registered" );
 
-    // Die Numerierung der interfaces startet beim parent pool
+    // The numbering starts at the interfaces of the parent pool
     USHORT nFirstInterface = _pParentPool ? _pParentPool->_pInterfaces->Count() : 0;
 
     if ( _nCurInterface < nFirstInterface && _nCurGroup >= _pParentPool->_pGroups->Count() )
@@ -311,13 +307,13 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
     if ( _nCurInterface < nFirstInterface )
     {
-        DBG_ASSERT( _pParentPool, "Kein parent pool!" );
+        DBG_ASSERT( _pParentPool, "No parent pool!" );
         const SfxSlot *pSlot = _pParentPool->NextSlot();
         _nCurInterface = _pParentPool->_nCurInterface;
         if ( pSlot )
             return pSlot;
         if ( _nCurInterface == nFirstInterface )
-            // parent pool ist fertig
+            // parent pool is ready
             return SeekSlot( nFirstInterface );
     }
 
@@ -340,9 +336,7 @@ const SfxSlot* SfxSlotPool::NextSlot()
 
 
 //--------------------------------------------------------------------
-
-// SlotName erfragen, gfs. mit HilfeText
-
+// Query SlotName with help text
 //--------------------------------------------------------------------
 
 SfxInterface* SfxSlotPool::FirstInterface()

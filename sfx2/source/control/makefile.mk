@@ -36,7 +36,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-# w.g. compilerbugs
+# due to compilerbugs
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"!="GCC"
 CFLAGS+=-Od

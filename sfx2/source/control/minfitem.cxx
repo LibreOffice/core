@@ -40,7 +40,7 @@ TYPEINIT1(SfxMacroInfoItem, SfxPoolItem);
 // -----------------------------------------------------------------------
 
 SfxMacroInfoItem::SfxMacroInfoItem(
-    USHORT nWhichId,        // Slot-ID
+    USHORT nWhichId,            // Slot-ID
     const BasicManager* pMgr,
     const String &rLibName,
     const String &rModuleName,
@@ -57,7 +57,7 @@ SfxMacroInfoItem::SfxMacroInfoItem(
 
 // -----------------------------------------------------------------------
 
-// copy ctor
+// copy constructor
 
 SfxMacroInfoItem::SfxMacroInfoItem(const SfxMacroInfoItem& rCopy):
     SfxPoolItem(rCopy),
