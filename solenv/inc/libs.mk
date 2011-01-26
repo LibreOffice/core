@@ -437,7 +437,6 @@ DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
 VBAHELPERLIB=vbahelper.lib
 TKTLIB=tkt.lib
-SJLIB=sj.lib
 SVXCORELIB=isvxcore.lib
 MSFILTERLIB=imsfilter.lib
 SVXLIB=isvx.lib
