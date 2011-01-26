@@ -93,6 +93,7 @@ typedef sal_Int32   ItemID;
 #define DSID_NAMED_PIPE             58
 #define DSID_PRIMARY_KEY_SUPPORT    59
 #define DSID_MAX_ROW_SCAN           60
+#define DSID_RESPECTRESULTSETTYPE   61
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 
@@ -100,7 +101,7 @@ typedef sal_Int32   ItemID;
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_MAX_ROW_SCAN
+#define DSID_LAST_ITEM_ID   DSID_RESPECTRESULTSETTYPE
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
