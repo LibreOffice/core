@@ -39,6 +39,7 @@
 #include <salframe.h>
 #include <salobj.h>
 #include <tools/debug.hxx>
+#include <vcl/svapp.hxx>
 
 // =======================================================================
 
@@ -100,6 +101,46 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 
     return pFrame;
 }
+
+// -----------------------------------------------------------------------
+
+sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg )
+{
+    sal_Bool bResult = sal_False;
+    if ( rMsg.message == WM_KEYDOWN )
+    {
+        wchar_t pClassName[10];
+        sal_Int32 nLen = GetClassNameW( rMsg.hwnd, pClassName, 10 );
+        if ( !( nLen == 9 && wcsncmp( pClassName, SAL_OBJECT_CLASSNAMEW, nLen ) == 0 ) )
+        {
+            // look for the first SalObject in the parent hierarchy
+            HWND hWin = rMsg.hwnd;
+            HWND hLastOLEWindow = hWin;
+            WinSalObject* pSalObj = NULL;
+            do
+            {
+                hLastOLEWindow = hWin;
+                hWin = ::GetParent( hWin );
+                if ( hWin )
+                {
+                    nLen = GetClassNameW( hWin, pClassName, 10 );
+                    if ( nLen == 9 && wcsncmp( pClassName, SAL_OBJECT_CLASSNAMEW, nLen ) == 0 )
+                        pSalObj = GetSalObjWindowPtr( hWin );
+                }
+            } while( hWin && !pSalObj );
+
+            if ( pSalObj && pSalObj->mbInterceptChildWindowKeyDown && pSalObj->maSysData.hWnd )
+            {
+                bResult = ( 1 == ImplSendMessage( pSalObj->maSysData.hWnd, rMsg.message, rMsg.wParam, rMsg.lParam ) );
+            }
+        }
+    }
+
+    return bResult;
+}
+
+// -----------------------------------------------------------------------
+
 
 // -----------------------------------------------------------------------
 
@@ -493,20 +534,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     // Hook installieren, wenn es das erste SalObject ist
     if ( !pSalData->mpFirstObject )
     {
-        if ( aSalShlData.mbWNT )
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
+        pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
                                                            SalSysMsgProc,
                                                            pSalData->mhInst,
                                                            pSalData->mnAppThreadId );
-        }
-        else
-        {
-            pSalData->mhSalObjMsgHook = SetWindowsHookExA( WH_CALLWNDPROC,
-                                                           SalSysMsgProc,
-                                                           pSalData->mhInst,
-                                                           pSalData->mnAppThreadId );
-        }
     }
 
     if ( !pSalData->mbObjClassInit )
@@ -623,6 +654,7 @@ WinSalObject::WinSalObject()
     mhLastFocusWnd  = 0;
     maSysData.nSize = sizeof( SystemEnvData );
     mpStdClipRgnData    = NULL;
+    mbInterceptChildWindowKeyDown = sal_False;
 
     // Insert object in objectlist
     mpNextObject = pSalData->mpFirstObject;
@@ -836,3 +868,11 @@ const SystemEnvData* WinSalObject::GetSystemData() const
 {
     return &maSysData;
 }
+
+// -----------------------------------------------------------------------
+
+void WinSalObject::InterceptChildWindowKeyDown( sal_Bool bIntercept )
+{
+    mbInterceptChildWindowKeyDown = bIntercept;
+}
+

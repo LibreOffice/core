@@ -35,7 +35,6 @@
 #include "vcl/salinst.hxx"
 #include "vcl/salgtype.hxx"
 #include "vcl/salgdi.hxx"
-#include "vcl/salctrlhandle.hxx"
 
 #include "vcl/unohelp.hxx"
 #include "tools/time.hxx"
@@ -44,7 +43,6 @@
 #include "tools/rc.h"
 #endif
 #include "vcl/svdata.hxx"
-#include "vcl/windata.hxx"
 #include "vcl/dbggui.hxx"
 #include "vcl/outfont.hxx"
 #include "vcl/outdev.h"
@@ -68,6 +66,7 @@
 #include "unotools/fontcfg.hxx"
 #include "vcl/sysdata.hxx"
 #include "vcl/sallayout.hxx"
+#include "vcl/salctype.hxx"
 #include "vcl/button.hxx" // Button::GetStandardText
 #include "vcl/taskpanelist.hxx"
 #include "com/sun/star/awt/XWindowPeer.hpp"
@@ -90,7 +89,6 @@
 #include "vcl/unowrap.hxx"
 #include "vcl/dndlcon.hxx"
 #include "vcl/dndevdis.hxx"
-#include "vcl/impbmpconv.hxx"
 #include "unotools/confignode.hxx"
 #include "vcl/gdimtf.hxx"
 
@@ -270,19 +268,41 @@ bool Window::ImplCheckUIFont( const Font& rFont )
     if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
 
+    // create a text string using the localized text of important buttons
     String aTestText;
-    aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_YES ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_NO ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_RETRY ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_HELP ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_CLOSE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_MORE ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_LESS ) );
-    aTestText.Append( Button::GetStandardText( BUTTON_ABORT ) );
+    static const StandardButtonType aTestButtons[] =
+    {
+        BUTTON_OK, BUTTON_CANCEL, BUTTON_CLOSE, BUTTON_ABORT,
+        BUTTON_YES, BUTTON_NO, BUTTON_MORE, BUTTON_IGNORE,
+        BUTTON_RETRY, BUTTON_HELP
+    };
 
-    return HasGlyphs( rFont, aTestText ) >= aTestText.Len();
+    const int nTestButtonCount = sizeof(aTestButtons)/sizeof(*aTestButtons);
+    for( int n = 0; n < nTestButtonCount; ++n )
+    {
+        String aButtonStr = Button::GetStandardText( aTestButtons[n] );
+        // #i115432# ignore mnemonic+accelerator part of each string
+        // TODO: use a string filtering method when it becomes available
+        const int nLen = aButtonStr.Len();
+        bool bInside = false;
+        for( int i = 0; i < nLen; ++i ) {
+            const sal_Unicode c = aButtonStr.GetChar( i );
+            if( (c == '('))
+                bInside = true;
+            if( (c == ')'))
+                bInside = false;
+            if( (c == '~')
+            ||  (c == '(') || (c == ')')
+            || ((c >= 'A') && (c <= 'Z') && bInside) )
+                aButtonStr.SetChar( i, ' ' );
+        }
+        // append sanitized button text to test string
+        aTestText.Append( aButtonStr );
+    }
+
+    const int nFirstChar = HasGlyphs( rFont, aTestText );
+    const bool bUIFontOk = (nFirstChar >= aTestText.Len());
+    return bUIFontOk;
 }
 
 // -----------------------------------------------------------------------
@@ -295,6 +315,8 @@ void Window::ImplUpdateGlobalSettings( AllSettings& rSettings, BOOL bCallHdl )
     aTmpSt.SetHighContrastMode( FALSE );
     rSettings.SetStyleSettings( aTmpSt );
     ImplGetFrame()->UpdateSettings( rSettings );
+    // reset default border width for layouters
+    ImplGetSVData()->maAppData.mnDefaultLayoutBorder = -1;
 
     // Verify availability of the configured UI font, otherwise choose "Andale Sans UI"
     String aUserInterfaceFont;
@@ -599,6 +621,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mpDlgCtrlDownWindow = NULL;         // window for dialog control
     mpWindowImpl->mpFirstDel          = NULL;         // Dtor notification list
     mpWindowImpl->mpUserData          = NULL;         // user data
+    mpWindowImpl->mpExtImpl           = NULL;         // extended implementation data
     mpWindowImpl->mpCursor            = NULL;         // cursor
     mpWindowImpl->mpControlFont       = NULL;         // font propertie
     mpWindowImpl->mpVCLXWindow        = NULL;
@@ -1129,6 +1152,8 @@ void Window::ImplCallResize()
     // #88419# Most classes don't call the base class in Resize() and Move(),
     // => Call ImpleResize/Move instead of Resize/Move directly...
     ImplCallEventListeners( VCLEVENT_WINDOW_RESIZE );
+
+    ImplExtResize();
 }
 
 // -----------------------------------------------------------------------
@@ -4342,6 +4367,8 @@ namespace
 
 Window::~Window()
 {
+    ImplFreeExtWindowImpl();
+
     vcl::LazyDeletor<Window>::Undelete( this );
 
     DBG_DTOR( Window, ImplDbgCheckWindow );
@@ -4779,6 +4806,13 @@ void Window::doLazyDelete()
 }
 
 // -----------------------------------------------------------------------
+void Window::InterceptChildWindowKeyDown( sal_Bool bIntercept )
+{
+    if( mpWindowImpl->mpSysObj )
+        mpWindowImpl->mpSysObj->InterceptChildWindowKeyDown( bIntercept );
+}
+
+// -----------------------------------------------------------------------
 
 void Window::MouseMove( const MouseEvent& rMEvt )
 {
@@ -4858,6 +4892,12 @@ void Window::Paint( const Rectangle& rRect )
     }
 
     ImplCallEventListeners( VCLEVENT_WINDOW_PAINT, (void*)&rRect );
+}
+
+// -----------------------------------------------------------------------
+
+void Window::PostPaint()
+{
 }
 
 // -----------------------------------------------------------------------
@@ -9696,11 +9736,14 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // =========================================
     if ( xFactory.is() )
     {
-        static Reference<lang::XMultiServiceFactory> xCanvasFactory(
-            xFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star."
-                              "rendering.CanvasFactory") ) ), UNO_QUERY );
+        static ::vcl::DeleteUnoReferenceOnDeinit<XMultiServiceFactory> xStaticCanvasFactory(
+            Reference<XMultiServiceFactory>(
+                xFactory->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.rendering.CanvasFactory") ) ),
+                UNO_QUERY ));
+        uno::Reference<XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+
         if(xCanvasFactory.is())
         {
 #ifdef WNT

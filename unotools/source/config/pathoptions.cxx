@@ -46,12 +46,14 @@
 #include <unotools/ucbhelper.hxx>
 #include <vos/process.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 #include <rtl/instance.hxx>
 
 #include <itemholder1.hxx>
@@ -997,6 +999,17 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                     String aURL;
                     if ( LocalFileHelper::ConvertPhysicalNameToURL( aPathToken, aURL ) )
                         aObj.SetURL( aURL );
+                }
+                if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
+                {
+                    ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+                    Reference< XMacroExpander > xMacroExpander( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY );
+                    OSL_ENSURE( xMacroExpander.is(), "SvtPathOptions::SearchFile: unable to access the MacroExpander singleton!" );
+                    if ( xMacroExpander.is() )
+                    {
+                        const ::rtl::OUString sExpandedPath = xMacroExpander->expandMacros( aObj.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+                        aObj.SetURL( sExpandedPath );
+                    }
                 }
 
                 xub_StrLen i, nCount = aIniFile.GetTokenCount( '/' );
