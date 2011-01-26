@@ -36,6 +36,8 @@
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <vector>
+using std::vector;
 
 using namespace ::rtl;
 
@@ -71,7 +73,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fprintf(cfp, "extern \"C\" {\n");
 
     sal_Int32 count, i, j;
-    sal_Int32 lenArrayCurr = 0, lenArrayCount = 0, lenArrayLen = 0, *lenArray = NULL, charArray[0x10000];
+    sal_Int32 lenArrayCurr = 0, charArray[0x10000];
+    vector<sal_Int32> lenArray;
     sal_Bool exist[0x10000];
     for (i = 0; i < 0x10000; i++) {
         exist[i] = sal_False;
@@ -97,15 +100,13 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         if (*u != current) {
         if (*u < current)
-        printf("u %x, current %x, count %d, lenArrayCount %d\n", *u, current,
-                    sal::static_int_cast<int>(count), sal::static_int_cast<int>(lenArrayCount));
+        printf("u %x, current %x, count %d, lenArray.size() %d\n", *u, current,
+                    sal::static_int_cast<int>(count), sal::static_int_cast<int>(lenArray.size()));
         current = *u;
-        charArray[current] = lenArrayCount;
+        charArray[current] = lenArray.size();
         }
 
-        if (lenArrayLen <= lenArrayCount+1)
-        lenArray = (sal_Int32*) realloc(lenArray, (lenArrayLen += 1000) * sizeof(sal_Int32));
-        lenArray[lenArrayCount++] = lenArrayCurr;
+        lenArray.push_back(lenArrayCurr);
 
         exist[u[0]] = sal_True;
         for (i = 1; i < len; i++) {     // start from second character,
@@ -116,15 +117,16 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         fprintf(cfp, "0x%04x, ", u[i]);
         }
     }
-    lenArray[lenArrayCount++] = lenArrayCurr; // store last ending pointer
-    charArray[current+1] = lenArrayCount;
+    lenArray.push_back( lenArrayCurr ); // store last ending pointer
+
+    charArray[current+1] = lenArray.size();
     fprintf(cfp, "\n};\n");
 
     // generate lenArray
     fprintf(cfp, "static const sal_Int32 lenArray[] = {\n\t");
     count = 1;
     fprintf(cfp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
-    for (i = 0; i < lenArrayCount; i++) {
+    for (i = 0; i < lenArray.size(); i++) {
         fprintf(cfp, "0x%lx, ", static_cast<long unsigned int>(lenArray[i]));
         if (count == 0xf) {
         count = 0;
@@ -132,8 +134,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         } else count++;
     }
     fprintf(cfp, "\n};\n");
-
-    free(lenArray);
 
     // generate index1 array
     fprintf (cfp, "static const sal_Int16 index1[] = {\n\t");
