@@ -58,7 +58,9 @@ my_components = \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
+    component/vbahelper/util/msforms \
     component/sfx2/util/sfx \
+    component/sot/util/sot \
     component/svl/source/fsstor/fsstorage \
     component/svl/source/passwordcontainer/passwordcontainer \
     component/svl/util/svl \
@@ -113,7 +115,6 @@ my_components = \
     mcnttype \
     migrationoo2 \
     msfilter \
-    msforms \
     mysql \
     odbc \
     offacc \
@@ -146,7 +147,6 @@ my_components = \
     sm \
     smd \
     solver \
-    sot \
     spell \
     spl \
     srtrs1 \
