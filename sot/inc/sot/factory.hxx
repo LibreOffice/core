@@ -32,13 +32,14 @@
 #include <tools/globname.hxx>
 #include <tools/rtti.hxx>
 #include "sot/sotdllapi.h"
+#include <vector>
 
 /*************************************************************************
 *************************************************************************/
 class SotObject;
 class SotFactory;
 
-DECLARE_LIST( SotFactoryList, SotFactory * )
+typedef ::std::vector< SotFactory* > SotFactoryList;
 typedef void * (*CreateInstanceType)( SotObject ** );
 
 //==================class SotFactory=======================================

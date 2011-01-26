@@ -34,13 +34,15 @@
 
 #include <tools/solar.h>
 #include "sot/sotdllapi.h"
+#include <vector>
 
 //==================class SotData_Impl====================================
 
 class List;
 class SotFactory;
-class SotFactoryList;
 class SotObjectList;
+
+typedef ::std::vector< SotFactory* > SotFactoryList;
 
 struct SotData_Impl
 {
