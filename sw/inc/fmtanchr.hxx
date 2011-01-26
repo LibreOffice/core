@@ -38,15 +38,14 @@ struct SwPosition;
 class IntlWrapper;
 #define IVER_FMTANCHOR_LONGIDX ((USHORT)1)
 
-//FlyAnchor, Anker des Freifliegenden Rahmen ----
-
+// FlyAnchors
 class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
 {
-    SwPosition *pCntntAnchor;   //0 Fuer Seitengebundene Rahmen.
-                                //Index fuer Absatzgebundene Rahmen.
-                                //Position fuer Zeichengebundene Rahmen
+    SwPosition *pCntntAnchor;   // 0 for page-bound frames.
+                                // Index for paragraph-bound frames.
+                                // Position for character-bound frames.
     RndStdIds  nAnchorId;
-    USHORT     nPageNum;        //Seitennummer bei Seitengeb. Rahmen.
+    USHORT     nPageNum;        // Page number for page-bound frames.
 
     // #i28701# - getting anchor positions ordered
     sal_uInt32 mnOrder;
@@ -57,7 +56,6 @@ public:
     SwFmtAnchor( const SwFmtAnchor &rCpy );
     ~SwFmtAnchor();
 
-    //  Zuweisungsoperator
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 
     // "pure virtual methods" of SfxPoolItem

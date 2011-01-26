@@ -37,9 +37,6 @@ class DateTime;
 class Date;
 class Time;
 
-/*--------------------------------------------------------------------
-    Beschreibung: Formate
- --------------------------------------------------------------------*/
 
 enum SwDateFormat
 {
@@ -95,9 +92,6 @@ enum SwDateSubFormat
     DATE_VAR
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SwDateTimeFieldType : public SwValueFieldType
 {
@@ -107,14 +101,11 @@ public:
         virtual SwFieldType*    Copy() const;
 };
 
-/*--------------------------------------------------------------------
-    Beschreibung: Datum/Uhrzeitfeld
- --------------------------------------------------------------------*/
 
 class SW_DLLPUBLIC SwDateTimeField : public SwValueField
 {
         USHORT              nSubType;
-        long                nOffset;    // Offset in Minutes
+        long                nOffset;    // Offset in minutes.
 
 public:
         SwDateTimeField(SwDateTimeFieldType* pType, USHORT nSubType = DATEFLD,

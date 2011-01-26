@@ -28,9 +28,7 @@
 #ifndef _FLDINIT_HXX
 #define _FLDINIT_HXX
 
-/*--------------------------------------------------------------------
-    Beschreibung: Tabelle aller FeldInfos
- --------------------------------------------------------------------*/
+//Table for FieldInfo.
 
 void InitFieldInfo();
 void FinitFieldInfo();
