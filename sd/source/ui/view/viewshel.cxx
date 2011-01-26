@@ -812,11 +812,7 @@ void ViewShell::Resize (void)
     // end of included AdjustPosSizePixel.
 
     Size aS (GetParentWindow()->GetOutputSizePixel());
-    Size aVisSizePixel = GetActiveWindow()->GetOutputSizePixel();
-    Rectangle aVisArea = GetParentWindow()->PixelToLogic(
-        Rectangle( Point(0,0), aVisSizePixel));
     Rectangle aCurrentVisArea (GetDocSh()->GetVisArea(ASPECT_CONTENT));
-    Rectangle aWindowRect = GetActiveWindow()->LogicToPixel(aCurrentVisArea);
     if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED
         && IsMainViewShell())
     {
