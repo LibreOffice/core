@@ -72,6 +72,8 @@ namespace toolkit
         ,m_nMinWidth( i_copySource.m_nMinWidth )
         ,m_nFlexibility( i_copySource.m_nFlexibility )
         ,m_bResizeable( i_copySource.m_bResizeable )
+        ,m_sTitle( i_copySource.m_sTitle )
+        ,m_sHelpText( i_copySource.m_sHelpText )
         ,m_eHorizontalAlign( i_copySource.m_eHorizontalAlign )
     {
     }

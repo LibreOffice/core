@@ -223,11 +223,12 @@ public class UnitConversion
         xWindow.dispose();
     }
 
-
-
     @BeforeClass
-    public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
+    public static void setUpConnection() throws Exception
+    {
+        System.out.println( "--------------------------------------------------------------------------------" );
+        System.out.println( "starting class: " + UnitConversion.class.getName() );
+        System.out.println( "connecting ..." );
         connection.setUp();
     }
 
@@ -235,10 +236,12 @@ public class UnitConversion
     public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection()");
+        System.out.println();
+        System.out.println( "tearing down connection" );
         connection.tearDown();
+        System.out.println( "finished class: " + UnitConversion.class.getName() );
+        System.out.println( "--------------------------------------------------------------------------------" );
     }
 
     private static final OfficeConnection connection = new OfficeConnection();
-
 }

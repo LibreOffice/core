@@ -94,8 +94,18 @@ namespace toolkit
                     ++col
                 )
             {
-                const Reference< XCloneable > xCloneable( *col, UNO_QUERY_THROW );
-                aColumns.push_back( Reference< XGridColumn >( xCloneable->createClone(), UNO_QUERY_THROW ) );
+                Reference< XCloneable > const xCloneable( *col, UNO_QUERY_THROW );
+                Reference< XGridColumn > const xClone( xCloneable->createClone(), UNO_QUERY_THROW );
+
+                GridColumn* const pGridColumn = GridColumn::getImplementation( xClone );
+                if ( pGridColumn == NULL )
+                    throw RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "invalid clone source implementation" ) ), *this );
+                    // that's indeed a RuntimeException, not an IllegalArgumentException or some such:
+                    // a DefaultGridColumnModel implementation whose columns are not GridColumn implementations
+                    // is borked.
+                pGridColumn->setIndex( col - i_copySource.m_aColumns.begin() );
+
+                aColumns.push_back( xClone );
             }
         }
         catch( const Exception& )
@@ -181,6 +191,17 @@ namespace toolkit
 
         aGuard.clear();
         m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
+
+        // dispose the removed column
+        try
+        {
+            Reference< XComponent > const xColComp( xColumn, UNO_QUERY_THROW );
+            xColComp->dispose();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //------------------------------------------------------------------------------------------------------------------

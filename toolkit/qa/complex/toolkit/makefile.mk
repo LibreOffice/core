@@ -52,6 +52,8 @@ JAVAFILES = \
     accessibility/_XAccessibleEventBroadcaster.java \
     accessibility/_XAccessibleExtendedComponent.java \
     accessibility/_XAccessibleText.java \
+    awtgrid/GridDataListener.java \
+    awtgrid/TMutableGridDataModel.java \
 
 #----- create a jar from compiled files ----------------------------
 
@@ -60,6 +62,7 @@ JARTARGET       = $(TARGET).jar
 #----- JUnit tests class -------------------------------------------
 
 JAVATESTFILES = \
+    GridControl.java \
     UnitConversion.java \
     AccessibleStatusBar.java \
 

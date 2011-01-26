@@ -118,36 +118,45 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )
     :UnoControlModel( rModel )
 {
-    // clone the data model
-    const Reference< XFastPropertySet > xCloneSource( &const_cast< UnoGridModel& >( rModel ) );
-    bool success = false;
-    try
+    osl_incrementInterlockedCount( &m_refCount );
     {
-        const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL ), UNO_QUERY_THROW );
-        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( xCloneable->createClone() ) );
-        success = true;
-    }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    if ( !success )
-        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL, makeAny( lcl_getDefaultDataModel_throw( maContext ) ) );
+        Reference< XGridDataModel > xDataModel;
+        // clone the data model
+        const Reference< XFastPropertySet > xCloneSource( &const_cast< UnoGridModel& >( rModel ) );
+        try
+        {
+            const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL ), UNO_QUERY_THROW );
+            xDataModel.set( xCloneable->createClone(), UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        if ( !xDataModel.is() )
+            xDataModel = lcl_getDefaultDataModel_throw( maContext );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_DATAMODEL, makeAny( xDataModel ) );
+            // do *not* use setFastPropertyValue here: The UnoControlModel ctor did a simple copy of all property values,
+            // so before this call here, we share our data model with the own of the clone source. setFastPropertyValue,
+            // then, disposes the old data model - which means the data model which in fact belongs to the clone source.
+            // so, call the UnoControlModel's impl-method for setting the value.
 
-    // clone the column model
-    success = false;
-    try
-    {
-        const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL ), UNO_QUERY_THROW );
-        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xCloneable->createClone() ) );
-        success = true;
+        // clone the column model
+        Reference< XGridColumnModel > xColumnModel;
+        try
+        {
+            const Reference< XCloneable > xCloneable( xCloneSource->getFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL ), UNO_QUERY_THROW );
+            xColumnModel.set( xCloneable->createClone(), UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        if ( !xColumnModel.is() )
+            xColumnModel = lcl_getDefaultColumnModel_throw( maContext );
+        UnoControlModel::setFastPropertyValue_NoBroadcast( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( xColumnModel ) );
+            // same comment as above: do not use our own setPropertyValue here.
     }
-    catch( const Exception& )
-    {
-        DBG_UNHANDLED_EXCEPTION();
-    }
-    if ( !success )
-        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL, makeAny( lcl_getDefaultColumnModel_throw( maContext ) ) );
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
