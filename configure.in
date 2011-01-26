@@ -3195,25 +3195,43 @@ if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
    export JITC_PROCESSOR_TYPE
 fi
 
-if test "$_os" = "WINNT"; then
-   if test -z "$with_jdk_home"; then
-      _jdk_home=`./oowintool --jdk-home`
-       if test -d "$_jdk_home"; then
-          with_jdk_home="$_jdk_home"
-       fi
-   else
-      with_jdk_home=`cygpath -u "$with_jdk_home"`
-   fi
-fi
 if test $_os = "WINNT"; then
    WITH_VC_REDIST="TRUE"
 fi
 AC_SUBST(WITH_VC_REDIST)
 
 dnl ===================================================================
-dnl Checks for java
+dnl Checks for Java
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
+
+   # Windows-specific tests
+   if test "$_os" = "WINNT"; then
+      if test "$CL_X64" != ""; then
+	 bitness="64-bit"
+	 otherbitness="32-bit"
+      else
+	 bitness="32-bit"
+	 otherbitness="64-bit"
+      fi
+      if test -z "$with_jdk_home"; then
+
+	 # Unfortunately apparently no way to find, if needed, the 64-bit
+	 # JDK in the Registry from the 32-bit Perl oowintool
+
+	 _jdk_home=`./oowintool --jdk-home`
+	 if test -f "$_jdk_home/lib/jvm.lib" -a -f "$_jdk_home/bin/java.exe"; then
+	    with_jdk_home="$_jdk_home"
+	    howfound="found by oowintool"
+	 else
+	    AC_MSG_ERROR([No JDK found by oowintool, pass the --with-jdk-home option pointing to a $bitness JDK])
+	 fi
+      else
+	 with_jdk_home=`cygpath -u "$with_jdk_home"`
+	 howfound="you passed"
+      fi
+   fi
+
    JAVA_HOME=; export JAVA_HOME
    if test -z "$with_jdk_home"; then
       AC_PATH_PROG(JAVAINTERPRETER, $WITH_JAVA)
@@ -3223,10 +3241,21 @@ if test "$SOLAR_JAVA" != ""; then
       if test -x "$_java_path"; then
          JAVAINTERPRETER=$_java_path
       else
-         AC_MSG_ERROR([$_java_path not found set with_jdk_home])
+         AC_MSG_ERROR([$_java_path not found, pass --with-jdk-home])
       fi
    fi
+
    if test "$_os" = "WINNT"; then
+      # Check that the JDK found is correct architecture
+      shortjdkhome=`cygpath -d "$with_jdk_home"`
+      if test "$CL_X64" != "" -a -f "$with_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" == "" >/dev/null; then
+	 AC_MSG_WARN([You are building 64-bit binaries but the JDK $howfound is 32-bit])
+	 AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a 64-bit JDK])
+      elif test "$CL_X64" == "" -a -f "$_jdk_home/bin/java.exe" -a "`$shortjdkhome/bin/java.exe -version 2>&1 | grep -i 64-bit`" != ""  >/dev/null; then
+	 AC_MSG_WARN([You are building 32-bit binaries but the JDK $howfound is 64-bit])
+	 AC_MSG_ERROR([You should pass the --with-jdk-home option pointing to a (32-bit) JDK])
+      fi
+
       if test x`echo "$JAVAINTERPRETER" | grep -i '\.exe$'` = x; then
           JAVAINTERPRETER="${JAVAINTERPRETER}.exe"
       fi
@@ -3256,23 +3285,6 @@ if test "$SOLAR_JAVA" != ""; then
       dnl java -version sends output to stderr!
       if test `$JAVAINTERPRETER -version 2>&1 | grep -c "Kaffe"` -gt 0; then
          AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
-#        dnl Kaffe specific tests
-#        KAFFE_VER=`$JAVAINTERPRETER -version 2>&1 | $EGREP "  Version:" | $SED -r "s/.*  Version: ([[0-9\.]]*).*/\1/"`
-#        if test -z "$KAFFE_VER"; then
-#          AC_MSG_ERROR([looks like Kaffe but version detection failed])
-#        fi
-#        _kaffe_ver=`echo "$KAFFE_VER" | $AWK -F. '{ print (($1 * 100) + $2) * 100 + $3;}'`
-#        if test "$_kaffe_ver" -lt 10100; then
-#           AC_MSG_ERROR([Kaffe is too old ($KAFFE_VER - $_kaffe_ver), you need at least 1.1.0])
-#        fi
-#        JDK=kaffe
-#
-#        dnl TODO: define some project exclusion variables
-#
-#        AC_MSG_RESULT([checked (Kaffe $KAFFE_VER)])
-#        AC_MSG_WARN([EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile])
-#        echo "EXPERIMENTAL: Kaffe is not a full JDK replacement - some projects will fail to compile" >>warn
-#        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*java,,p"`
       elif test `$JAVAINTERPRETER --version 2>&1 | grep -c "GNU libgcj"` -gt 0; then
         JDK=gcj
         AC_MSG_RESULT([checked (gcj)])
