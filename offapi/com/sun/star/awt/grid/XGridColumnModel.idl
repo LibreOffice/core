@@ -80,7 +80,7 @@ interface XGridColumnModel
 
     /** Adds a column to the model.
 
-        </p>You should use the <member>createColumn</member> member to create a new column. This gives
+        <p>You should use the <member>createColumn</member> member to create a new column. This gives
         implementations of the <code>XGridColumnModel</code> interface the possibility to provide own column
         implementations which extend the basic <type>GridColumn</type> type.</p>
 
