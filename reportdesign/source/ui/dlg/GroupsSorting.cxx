@@ -1477,7 +1477,6 @@ void OGroupsSortingDialog::resizeControls(const Size& _rDiff)
     // we use large images so we must change them
     if ( _rDiff.Width() || _rDiff.Height() )
     {
-        Point aPos = LogicToPixel( Point( 2*RELATED_CONTROLS , 0), MAP_APPFONT );
         Invalidate();
     }
 }
