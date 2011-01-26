@@ -53,10 +53,6 @@
         unshift(@INC, "$ENV{COMMON_ENV_TOOLS}/modules");
         $in_so_env++;
     };
-    if (defined $ENV{CWS_WORK_STAMP}) {
-        require GenInfoParser; import GenInfoParser;
-        require IO::Handle; import IO::Handle;
-    };
     my $verbose_mode = 0;
     if (defined $ENV{verbose} || defined $ENV{VERBOSE}) {
         $verbose_mode = ($ENV{verbose} =~ /^t\S*$/i);
@@ -2206,21 +2202,6 @@ sub provide_consistency {
 };
 
 #
-# Get the workspace list ('stand.lst'), either from 'localini'
-# or, if this is not possible, from 'globalini.
-# (Heiner's proprietary :)
-#
-sub get_workspace_lst
-{
-    my $home = $ENV{HOME};
-    my $inifile = $ENV{HOME}. '/localini/stand.lst';
-    if (-f $inifile) {
-        return $inifile;
-    };
-    return '';
-}
-
-#
 # Procedure clears up module for incompatible build
 #
 sub ensure_clear_module {
@@ -2504,27 +2485,6 @@ sub get_modules_passed {
     };
 };
 
-sub get_workspace_platforms {
-    my $workspace_patforms = shift;
-    my $solver_path = $ENV{SOLARVERSION};
-    opendir(SOLVERDIR, $solver_path);
-    @dir_list = readdir(SOLVERDIR);
-    close SOLVERDIR;
-    foreach (@dir_list) {
-        next if /^common/;
-        next if /^\./;
-        if (open(LS, "ls $solver_path/$_/inc/*minor.mk 2>$nul |")) {
-            foreach my $string (<LS>) {
-                chomp $string;
-                if ($string =~ /minor.mk$/) {
-                    $$workspace_patforms{$_}++
-                };
-            };
-            close LS;
-        };
-    };
-};
-
 sub get_platforms {
     my $platforms_ref = shift;
     if ($only_platform) {
@@ -2532,27 +2492,6 @@ sub get_platforms {
             $$platforms_ref{$_}++;
         }
         $platforms_ref = \%platforms_to_copy;
-    };
-
-    my $workspace_lst = get_workspace_lst();
-    if ($workspace_lst) {
-        my $workspace_db;
-        eval { $workspace_db = GenInfoParser->new(); };
-        if (!$@) {
-            my $success = $workspace_db->load_list($workspace_lst);
-            if ( !$success ) {
-                print_error("Can't load workspace list '$workspace_lst'.", 4);
-            }
-            my $access_path = $ENV{WORK_STAMP} . '/Environments';
-            my @platforms_available = $workspace_db->get_keys($access_path);
-            my $solver = $ENV{SOLARVERSION};
-            foreach (@platforms_available) {
-                my $s_path = $solver . '/' .  $_;
-                $$platforms_ref{$_}++ if (-d $s_path);
-            };
-        } else {
-            get_workspace_platforms(\%platforms);
-        };
     };
 
     if (!scalar keys %platforms) {
