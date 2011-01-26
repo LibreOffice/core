@@ -193,6 +193,10 @@ ifeq ($(strip $(ENABLE_VBA)),YES)
 gb_GLOBALDEFS += -DENABLE_VBA
 endif
 
+ifeq ($(strip $(ENABLE_GRAPHITE)),TRUE)
+gb_GLOBALDEFS += -DENABLE_GRAPHITE
+endif
+
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
 include $(GBUILDDIR)/Deliver.mk
