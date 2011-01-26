@@ -140,7 +140,7 @@ File gid_File_Bin_Gengal
     Dir = gid_Dir_Program;
     Styles = (PACKED);
   #ifdef UNX
-    Name = "gengal.bin";
+    Name = "gengal";
   #else
     Name = "gengal.exe";
   #endif
@@ -152,7 +152,7 @@ File gid_File_Script_Gengal
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
-    Name = "gengal";
+    Name = "gengal.sh"
 End
 
 #endif
