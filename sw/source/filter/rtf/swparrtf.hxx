@@ -76,6 +76,8 @@ struct SvxRTFPictureType;
 class RtfReader: public Reader
 {
     virtual ULONG Read( SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+public:
+    virtual ULONG Read( SvStream* pStrm, SwDoc &, const String& rBaseURL, SwPaM &);
 };
 
 class SwNodeIdx : public SvxNodeIdx

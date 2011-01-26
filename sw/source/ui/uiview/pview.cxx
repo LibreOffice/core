@@ -35,7 +35,6 @@
 #include <vcl/help.hxx>
 #include <vcl/cmdevt.hxx>
 #include <vcl/button.hxx>
-#include <svtools/printdlg.hxx>
 #include <svl/whiter.hxx>
 #include <svl/stritem.hxx>
 #include <svl/eitem.hxx>
@@ -91,7 +90,6 @@
 
 
 using namespace ::com::sun::star;
-
 
 SFX_IMPL_NAMED_VIEWFACTORY(SwPagePreView, "PrintPreview")
 {
@@ -1979,18 +1977,6 @@ SfxTabPage*  SwPagePreView::CreatePrintOptionsPage( Window *pParent,
                                                 const SfxItemSet &rOptions )
 {
     return ::CreatePrintOptionsPage( pParent, rOptions, !bNormalPrint );
-}
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-PrintDialog*  SwPagePreView::CreatePrintDialog( Window *pParent )
-{
-    PrintDialog *pDlg = ::CreatePrintDialog( pParent, 1, 0 );
-    pDlg->DisableRange( PRINTDIALOG_SELECTION );
-    return pDlg;
 }
 
 /*--------------------------------------------------------------------

@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -183,7 +182,7 @@ void SwView::ImpSetVerb( int nSelType )
     }
     if ( bResetVerbs )
     {
-        SetVerbs( 0 );
+        SetVerbs( Sequence< embed::VerbDescriptor >() );
         bVerbsActive = sal_False;
     }
 }
@@ -1179,8 +1178,8 @@ bool lcl_IsOwnDocument( SwView& rView )
     String Created = xDocProps->getAuthor();
     String Changed = xDocProps->getModifiedBy();
     String FullName = SW_MOD()->GetUserOptions().GetFullName();
-    return FullName.Len() &&
-            (Changed.Len() && Changed == FullName ) ||
+    return (FullName.Len() &&
+            (Changed.Len() && Changed == FullName )) ||
             (!Changed.Len() && Created.Len() && Created == FullName );
 }
 
@@ -1898,16 +1897,16 @@ void SwView::NotifyDBChanged()
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetTmpSelectionDoc()
 {
     return GetViewImpl()->GetTmpSelectionDoc();
 }
 /* -----------------------------31.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetOrCreateTmpSelectionDoc()
 {
-    SfxObjectShellRef &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
+    SfxObjectShellLock &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();

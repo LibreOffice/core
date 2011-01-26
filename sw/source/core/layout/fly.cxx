@@ -1273,6 +1273,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
             aHori.SetPos( nTmpX );
             aSet.Put( aHori );
         }
+        SetCurrRelPos( rNewPos );
         pFmt->GetDoc()->SetAttr( aSet, *pFmt );
     }
 }
@@ -2851,3 +2852,14 @@ bool SwFlyFrm::IsFormatPossible() const
     return SwAnchoredObject::IsFormatPossible() &&
            !IsLocked() && !IsColLocked();
 }
+
+const SwFlyFrmFmt * SwFlyFrm::GetFmt() const
+{
+    return static_cast< const SwFlyFrmFmt * >( GetDep() );
+}
+
+SwFlyFrmFmt * SwFlyFrm::GetFmt()
+{
+    return static_cast< SwFlyFrmFmt * >( GetDep() );
+}
+

@@ -432,7 +432,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 
     aTree.SetHelpId(HID_REGION_TREE);
     aTree.SetSelectionMode( MULTIPLE_SELECTION );
-    aTree.SetWindowBits(WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
+    aTree.SetStyle(aTree.GetStyle()|WB_HASBUTTONSATROOT|WB_CLIPCHILDREN|WB_HSCROLL);
     aTree.SetSpaceBetweenEntries(0);
 
     if(bWeb)

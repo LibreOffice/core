@@ -209,23 +209,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             return 0;
         }
     }
-    if(rMedium.IsStorage())
-    {
-        //SvStorageRef aStor( rMedium.GetStorage() );
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pItem;
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
-            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
-        }
-        // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
-        // eigene Filter ist.
-        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "Am Filter ist keine FF-Version gesetzt" );
-        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-        //    aStor->SetVersion( (long)pFlt->GetVersion() );
-    }
+
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
@@ -484,7 +468,9 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             // will set the wrong class id.
             SvGlobalName aClassName;
             String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh =
+
+            // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
+            SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
             // the global document can not be a template
             xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), sal_False );
@@ -715,25 +701,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             GetDoc()->set(IDocumentSettingAccess::HTML_MODE, bIsHTMLModeSave );
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, bIsGlobalDocSave);
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
-        }
-
-        if( bRet && nMyType != nSaveType )
-        {
-            SvGlobalName aClassName;
-            String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh;
-            switch( nSaveType )
-            {
-            case 0:
-                xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 1:
-                xDocSh = new SwWebDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 2:
-                xDocSh = new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            }
         }
 
         return bRet;
@@ -1145,6 +1112,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_ATTR_CHAR_FONTLIST:
         {
             rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+        }
+        break;
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //check if linked content or possibly hidden content is available
+            //pDoc->UpdateFlds( NULL, false );
+            sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+            const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+            sal_Bool bRet = sal_False;
+            if( rLnks.Count() )
+                bRet = sal_True;
+            else
+            {
+                //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields
+                bRet = pDoc->HasInvisibleContent();
+            }
+            rSet.Put( SfxBoolItem( nWhich, bRet ) );
         }
         break;
 

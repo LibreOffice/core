@@ -134,6 +134,7 @@
 #include <memory>
 #include <vector>
 #include <unomid.h>
+#include <section.hxx>
 
 using namespace ::osl;
 using namespace ::svx;
@@ -842,6 +843,23 @@ void lcl_CopyFollowPageDesc(
     }
 }
 
+void lcl_RemoveSectionLinks( SwWrtShell& rWorkShell )
+{
+    //reset all links of the sections of synchronized labels
+    USHORT nSections = rWorkShell.GetSectionFmtCount();
+    for( USHORT nSection = 0; nSection < nSections; ++nSection )
+    {
+        SwSectionData aSectionData( *rWorkShell.GetSectionFmt( nSection ).GetSection() );
+        if( aSectionData.GetType() == FILE_LINK_SECTION )
+        {
+            aSectionData.SetType( CONTENT_SECTION );
+            aSectionData.SetLinkFileName( String() );
+            rWorkShell.UpdateSection( nSection, aSectionData );
+        }
+    }
+    rWorkShell.SetLabelDoc( sal_False );
+}
+
 BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
 {
@@ -920,7 +938,11 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
 
             // in case of creating a single resulting file this has to be created here
             SwWrtShell* pTargetShell = 0;
-            SfxObjectShellRef xTargetDocShell;
+
+            // the shell will be explicitly closed at the end of the method, but it is
+            // still more safe to use SfxObjectShellLock here
+            SfxObjectShellLock xTargetDocShell;
+
             SwView* pTargetView = 0;
             std::auto_ptr< utl::TempFile > aTempFile;
             String sModifiedStartingPageDesc;
@@ -1044,8 +1066,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         for (USHORT i = 0; i < 10; i++)
                             Application::Reschedule();
 
-                        // Neues Dokument erzeugen und speichern
-                        SfxObjectShellRef xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                        // Create and save new document
+                        // The SfxObjectShell will be closed explicitly later but it is more safe to use SfxObjectShellLock here
+                        SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                         SfxMedium* pWorkMed = new SfxMedium( sSourceDocumentURL, STREAM_STD_READ, TRUE );
                         pWorkMed->SetFilter( pSfxFlt );
 
@@ -1082,6 +1105,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 // copy created file into the target document
                                 rWorkShell.ConvertFieldsToText();
                                 rWorkShell.SetNumberingRestart();
+                                if( bSynchronizedDoc )
+                                {
+                                    lcl_RemoveSectionLinks( rWorkShell );
+                                }
 
                                 // insert the document into the target document
                                 rWorkShell.SttEndDoc(FALSE);
@@ -1481,7 +1508,8 @@ ULONG SwNewDBMgr::GetColumnFmt( uno::Reference< XDataSource> xSource,
     if(!xSource.is())
     {
         uno::Reference<XChild> xChild(xConnection, UNO_QUERY);
-        xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
+        if ( xChild.is() )
+            xSource = uno::Reference<XDataSource>(xChild->getParent(), UNO_QUERY);
     }
     if(xSource.is() && xConnection.is() && xColumn.is() && pNFmtr)
     {
@@ -2521,6 +2549,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         if(xResSet.is())
             aDescriptor[daCursor] <<= xResSet;
 
+        // SfxObjectShellRef is ok, since there should be no control over the document lifetime here
         SfxObjectShellRef xDocShell = rSh.GetView().GetViewFrame()->GetObjectShell();
         SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xDocShell));
         {
@@ -2551,7 +2580,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
             }
             else
             {
-                SfxObjectShellRef xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                // the shell will be explicitly closed, but it is more safe to use SfxObjectShellLock here
+                // especially for the case that the loading has failed
+                SfxObjectShellLock xWorkDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 SfxMedium* pWorkMed = new SfxMedium( sTempURL, STREAM_STD_READ, TRUE );
                 pWorkMed->SetFilter( pSfxFlt );
                 if( xWorkDocSh->DoLoad(pWorkMed) )
@@ -2894,7 +2925,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             }
 
             // copy the source document
-            SfxObjectShellRef xWorkDocSh;
+            // the copy will be closed later, but it is more safe to use SfxObjectShellLock here
+            SfxObjectShellLock xWorkDocSh;
             if(nDocNo == 1 )
             {
                 uno::Reference< util::XCloneable > xClone( rSourceView.GetDocShell()->GetModel(), uno::UNO_QUERY);
@@ -2931,7 +2963,10 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
             rWorkShell.RemoveInvisibleContent();
             rWorkShell.ConvertFieldsToText();
             rWorkShell.SetNumberingRestart();
-
+            if( bSynchronizedDoc )
+            {
+                lcl_RemoveSectionLinks( rWorkShell );
+            }
 
             // insert the document into the target document
             rWorkShell.SttEndDoc(FALSE);

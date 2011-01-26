@@ -32,6 +32,7 @@
 // <--
 
 #include <cppuhelper/weakref.hxx>
+#include <tools/gen.hxx>
 
 #include <format.hxx>
 
@@ -153,6 +154,12 @@ class SW_DLLPUBLIC SwFlyFrmFmt: public SwFrmFmt
 {
     friend class SwDoc;
 
+    // #i972:
+    // it stores the previous position of Prt rectangle from RequestObjectResize
+    // so it can be used to move frames of non-resizable objects to align them correctly
+    // when they get borders (this is done in SwWrtShell::CalcAndGetScale)
+    Point   m_aLastFlyFrmPrtRectPos;
+
     //Beide nicht vorhanden.
     SwFlyFrmFmt( const SwFlyFrmFmt &rCpy );
     SwFlyFrmFmt &operator=( const SwFlyFrmFmt &rCpy );
@@ -218,6 +225,9 @@ public:
         @return true, if background brush is "inherited" from parent/grandparent
     */
     sal_Bool IsBackgroundBrushInherited() const;
+
+    const Point & GetLastFlyFrmPrtRectPos() const       { return m_aLastFlyFrmPrtRectPos; }
+    void SetLastFlyFrmPrtRectPos( const Point &rPoint ) { m_aLastFlyFrmPrtRectPos = rPoint; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwFlyFrmFmt)
 };

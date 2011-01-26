@@ -67,7 +67,7 @@ public:
     String GetDescription();
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-    com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
+    const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > GetOleRef();
     svt::EmbeddedObjectRef& GetObject();
     const String& GetCurrentPersistName() const { return aName; }
     BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
@@ -168,4 +168,3 @@ inline const SwOLENode *SwNode::GetOLENode() const
 }
 
 #endif  // _NDOLE_HXX
-

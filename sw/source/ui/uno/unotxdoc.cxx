@@ -83,7 +83,6 @@
 #include <globals.hrc>
 #include <unomid.h>
 #include <unotools/printwarningoptions.hxx>
-
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -948,7 +947,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                 RES_PARATR_BEGIN, RES_PARATR_END-1,
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
             BOOL bCancel;
@@ -2592,7 +2591,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (rpView  &&  rpView->IsA(aSwViewTypeId))
             {
-                SfxObjectShellRef xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                SfxObjectShellLock xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
                 if (xDocSh.Is())
                 {
                     pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
@@ -3171,8 +3170,12 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    //create a new document - hidden - copy the storage and return it
-    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
+
+    // create a new document - hidden - copy the storage and return it
+    // SfxObjectShellRef is used here, since the model should control object lifetime after creation
+    // and thus SfxObjectShellLock is not allowed here
+    // the model holds reference to the shell, so the shell will not destructed at the end of method
+    SfxObjectShellRef pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
     uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
     uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;

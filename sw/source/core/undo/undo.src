@@ -394,7 +394,7 @@ String STR_UNDO_SETRUBYATTR
 {
     Text [ en-US ] = "Ruby Setting";
 };
-#102505#
+// #102505#
 String STR_UNDO_TMPAUTOCORR
 {
     Text [ en-US ] = "AutoCorrect" ;

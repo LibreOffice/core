@@ -254,7 +254,6 @@ SwDoc::SwDoc() :
     pFtnIdxs( new SwFtnIdxs ),
     pDocStat( new SwDocStat ),
     pDocShell( 0 ),
-    pDocShRef( 0 ),
     pLinkMgr( new sfx2::LinkManager( 0 ) ),
     pACEWord( 0 ),
     pURLStateChgd( 0 ),
@@ -366,6 +365,7 @@ SwDoc::SwDoc() :
     mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
     mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
     mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
+    mbMathBaselineAlignment                 = false;        // default for *old* documents is 'off'
     mbAddFlyOffsets                         = false;        // hidden
     mbOldNumbering                          = false;        // hidden
     mbUseHiResolutionVirtualDevice          = true;         // hidden
@@ -1148,15 +1148,23 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
     // COMPATIBILITY FLAGS END
     //
     pRet->ReplaceStyles( * const_cast< SwDoc*>( this ));
-    SfxObjectShellRef aDocShellRef = const_cast< SwDocShell* >( GetDocShell() );
-    pRet->SetRefForDocShell( boost::addressof(aDocShellRef) );
-    SfxObjectShellRef xRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
+
+    // we have to use pointer here, since the callee has to decide whether SfxObjectShellLock or SfxObjectShellRef should be used
+    // sometimes the object will be returned with refcount set to 0 ( if no DoInitNew is done )
+    SfxObjectShell* pRetShell = new SwDocShell( pRet, SFX_CREATE_MODE_STANDARD );
     if( bCallInitNew )
-        xRetShell->DoInitNew();
+    {
+        // it could happen that DoInitNew creates model, that increases the refcount of the object
+        pRetShell->DoInitNew();
+    }
+
     //copy content
     pRet->Paste( *this );
-    pRet->SetRefForDocShell( 0 );
-    return xRetShell;
+
+    // remove the temporary shell if it is there as it was done before
+    pRet->SetTmpDocShell( (SfxObjectShell*)NULL );
+
+    return pRetShell;
 }
 /*-- 08.05.2009 10:52:40---------------------------------------------------
     copy document content - code from SwFEShell::Paste( SwDoc* , BOOL  )
