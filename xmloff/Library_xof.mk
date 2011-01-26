@@ -33,9 +33,7 @@ $(eval $(call gb_Library_set_include,xof,\
     -I$(SRCDIR)/xmloff/inc/pch \
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/inc \
-    -I$(WORKDIR)/inc/ \
     $$(INCLUDE) \
-    -I$(OUTDIR)/inc \
     -I$(OUTDIR)/inc/offuh \
 ))
 

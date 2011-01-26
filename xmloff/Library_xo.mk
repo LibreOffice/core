@@ -36,12 +36,10 @@ $(eval $(call gb_Library_add_precompiled_header,xo,$(SRCDIR)/xmloff/inc/pch/prec
 $(eval $(call gb_Library_set_include,xo,\
     $$(SOLARINC) \
     -I. \
-    -I$(WORKDIR)/inc/ \
     -I$(SRCDIR)/xmloff/inc \
     -I$(SRCDIR)/xmloff/source/inc \
     -I$(SRCDIR)/xmloff/inc/pch \
     -I$(OUTDIR)/inc/offuh \
-    -I$(OUTDIR)/inc \
 ))
 
 $(eval $(call gb_Library_set_defs,xo,\

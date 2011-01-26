@@ -50,12 +50,10 @@ $(eval $(call gb_Module_add_targets,sfx2,\
 endif
 endif
 
-#todo: source/appl ohne Optimierung?
-#todo: source/control ohne Optimierung?
 #todo: source/dialog BUILD_VER_STRING
 #todo: source/doc SYSTEM_LIBXML2
-#todo: noopt for acldetect.cxx?
 #todo: ENABLE_LAYOUT
-#todo: quickstarter
+#todo: clean up quickstarter stuff in both libraries
+#todo: move standard pool to svl
 
 # vim: set noet sw=4 ts=4:
