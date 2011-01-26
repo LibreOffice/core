@@ -212,7 +212,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
 
         // predefined legend position and expansion
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
-        cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_HIGH;
+        cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         switch( mrModel.mnPosition )
         {
             case XML_l:
@@ -220,6 +220,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
             case XML_r:
+            case XML_tr:    // top-right not supported
                 eLegendPos = cssc2::LegendPosition_LINE_END;
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
@@ -230,10 +231,6 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             case XML_b:
                 eLegendPos = cssc2::LegendPosition_PAGE_END;
                 eLegendExpand = cssc::ChartLegendExpansion_WIDE;
-            break;
-            case XML_tr:
-                eLegendPos = cssc2::LegendPosition_LINE_END; // top-right not supported
-                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
             break;
         }
 
