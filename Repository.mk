@@ -41,6 +41,7 @@ $(eval $(call gb_Helper_register_executables,NONE, \
 $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     avmedia \
     basegfx \
+    comphelp4 \
     cui \
     drawinglayer \
     editeng \

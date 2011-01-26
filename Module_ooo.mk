@@ -28,7 +28,8 @@
 $(eval $(call gb_Module_Module,ooo))
 
 $(eval $(call gb_Module_add_moduledirs,ooo,\
-    editeng \
+    comphelper \
+        editeng \
     framework \
     sfx2 \
     sot \
