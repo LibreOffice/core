@@ -237,21 +237,13 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             break;
         }
 
-        // manual positioning
-        LayoutModel& rLayout = mrModel.mxLayout.getOrCreate();
-        LayoutConverter aLayoutConv( *this, rLayout );
-        aLayoutConv.convertFromModel( aPropSet );
-        Rectangle aLegendRect;
-        if( aLayoutConv.calcAbsRectangle( aLegendRect ) )
+        // manual positioning and size
+        if( mrModel.mxLayout.get() )
         {
-            // #i71697# it is not possible to set the size directly, do some magic here
-            double fRatio = static_cast< double >( aLegendRect.Width ) / aLegendRect.Height;
-            if( fRatio > 1.5 )
-                eLegendExpand = cssc::ChartLegendExpansion_WIDE;
-            else if( fRatio < 0.75 )
-                eLegendExpand = cssc::ChartLegendExpansion_HIGH;
-            else
-                eLegendExpand = cssc::ChartLegendExpansion_BALANCED;
+            LayoutConverter aLayoutConv( *this, *mrModel.mxLayout );
+            // manual size needs ChartLegendExpansion_CUSTOM
+            if( aLayoutConv.convertFromModel( aPropSet ) )
+                eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         }
 
         // set position and expansion properties

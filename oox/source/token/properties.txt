@@ -348,6 +348,7 @@ RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
 RelativePosition
+RelativeSize
 Repeat
 RepeatDelay
 Representation
