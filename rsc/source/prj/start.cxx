@@ -429,9 +429,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         ByteString aTmpName;
 
-        for ( size_t i = 0, n = aInputList.size(); i < n; ++i )
+        for ( size_t k = 0, n = aInputList.size(); k < n; ++k )
         {
-            pString = aInputList[ i ];
+            pString = aInputList[ k ];
             aTmpName = ::GetTmpFileName();
             if( !CallPrePro( aPrePro, *pString, aTmpName, &aCmdLine, bResponse ) )
             {
@@ -456,8 +456,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         };
     };
 
-    for ( size_t i = 0, n = aTmpList.size(); i < n; ++i )
-        unlink( aTmpList[ i ]->GetBuffer() );
+    for ( size_t k = 0, n = aTmpList.size(); k < n; ++k )
+        unlink( aTmpList[ k ]->GetBuffer() );
 
     return( bError );
 }
