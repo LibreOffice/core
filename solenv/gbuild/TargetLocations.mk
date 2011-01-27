@@ -112,6 +112,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
     SdiTarget \
     SrsTarget \
     CppunitTest \
+    CustomTarget \
 ))
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\

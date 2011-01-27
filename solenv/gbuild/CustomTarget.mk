@@ -29,8 +29,8 @@ gb_CustomTarget_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 
 define gb_CustomTarget__command
 $(call gb_Helper_abbreviate_dirs,\
-    mkdir -p $(dir $(1)) && \
-    $(MAKE) -C $(dir $(1)) -f $< && \
+    mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
+    $(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
     touch $(1))
 
 endef
@@ -38,7 +38,7 @@ endef
 define gb_CustomTarget__rules
 $$(call gb_CustomTarget_get_repo_target,$(1),%) :
     $$(call gb_Output_announce,$$*,$$(true),MAK,3)
-    $$(call gb_CustomTarget__command,$$@)
+    $$(call gb_CustomTarget__command,$$@,$$*)
 
 $$(call gb_CustomTarget_get_target,%) : $$(call gb_CustomTarget_get_repo_target,$(1),%)
     $$(call gb_Helper_abbreviate_dirs,\
@@ -46,10 +46,13 @@ $$(call gb_CustomTarget_get_target,%) : $$(call gb_CustomTarget_get_repo_target,
 
 endef
 
+.PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
     $(call gb_Output_announce,$*,$(false),MAK,3)
     $(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(call gb_CustomTarget_get_workdir,$*) && rm -f $(call gb_CustomTarget_get_target,$*))
+        rm -rf $(call gb_CustomTarget_get_workdir,$*) && \
+        rm -f $(call gb_CustomTarget_get_target,$*) \
+            $(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),$(call gb_CustomTarget_get_repo_target,$(reponame),$*)))
 
 
 $(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),$(eval $(call gb_CustomTarget__rules,$(reponame))))
@@ -75,6 +78,17 @@ endef
 
 define gb_CustomTarget_add_dependencies
 $(foreach dependency,$(2),$(call gb_CustomTarget_add_dependency,$(1),$(dependency)))
+
+endef
+
+define gb_CustomTarget_add_outdir_dependency
+$(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
+    $(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $(2)))
+
+endef
+
+define gb_CustomTarget_add_outdir_dependencies
+$(foreach dependency,$(2),$(call gb_CustomTarget_add_outdir_dependency,$(1),$(dependency)))
 
 endef
 

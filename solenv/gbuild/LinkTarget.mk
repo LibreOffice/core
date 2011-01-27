@@ -595,7 +595,7 @@ $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
 endef
 
 define gb_LinkTarget_add_package_headers
-$(call gb_LinkTarget__add_internal_headers,$(1),$(foreach package,$(2),$(call gb_Package_get_target,$(package))))
+$(foreach package,$(2),$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_Package_get_target,$(package))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_Package_get_clean_target,$(package)))
 
 endef
