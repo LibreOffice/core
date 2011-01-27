@@ -177,7 +177,10 @@ sal_Int16 SAL_CALL SalGtkFolderPicker::execute() throw( uno::RuntimeException )
     uno::Reference< awt::XExtendedToolkit > xToolkit(
         m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ), uno::UNO_QUERY);
 
-    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit);
+    uno::Reference< frame::XDesktop > xDesktop(
+        m_xServiceMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY);
+
+    RunDialog* pRunDialog = new RunDialog(m_pDialog, xToolkit, xDesktop);
     uno::Reference < awt::XTopWindowListener > xLifeCycle(pRunDialog);
     gint nStatus = pRunDialog->run();
     switch( nStatus )
