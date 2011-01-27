@@ -1204,8 +1204,9 @@ public:
 struct TextInfo
 {
     sal_uInt16 nToxField;
-    sal_uInt16 nHelpId;
+    const char* pHelpId;
 };
+
 static const TextInfo aTextInfoArr[] =
 {
     {AUTH_FIELD_IDENTIFIER,      HID_AUTH_FIELD_IDENTIFIER      },
@@ -1741,7 +1742,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pTypeListBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pTypeListBox->Show();
             pTypeListBox->SetSelectHdl(LINK(this, SwCreateAuthEntryDlg_Impl, EnableHdl));
-            pTypeListBox->SetHelpId(aCurInfo.nHelpId);
+            pTypeListBox->SetHelpId(aCurInfo.pHelpId);
 
         }
         else if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField && !m_bNewEntryMode)
@@ -1769,7 +1770,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pIdentifierBox->SetSizePixel(aTmp);
             pIdentifierBox->SetPosPixel(bLeft ? aTR1 : aTR2);
             pIdentifierBox->Show();
-            pIdentifierBox->SetHelpId(aCurInfo.nHelpId);
+            pIdentifierBox->SetHelpId(aCurInfo.pHelpId);
         }
         else
         {
@@ -1780,7 +1781,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
             pEdits[nIndex]->SetPosPixel(bLeft ? aTR1 : aTR2);
             pEdits[nIndex]->SetText(pFields[aCurInfo.nToxField]);
             pEdits[nIndex]->Show();
-            pEdits[nIndex]->SetHelpId(aCurInfo.nHelpId);
+            pEdits[nIndex]->SetHelpId(aCurInfo.pHelpId);
             if(AUTH_FIELD_IDENTIFIER == aCurInfo.nToxField)
             {
                 pEdits[nIndex]->SetModifyHdl(LINK(this, SwCreateAuthEntryDlg_Impl, ShortNameHdl));

@@ -28,7 +28,7 @@
 #define _SWMODULE_HXX
 #include <tools/link.hxx>
 #include <tools/string.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <svl/lstner.hxx>
 #include <unotools/options.hxx>
 #include <sfx2/module.hxx>
@@ -133,7 +133,7 @@ protected:
 
 public:
     // public Data - used for internal Clipboard / Drag & Drop / XSelection
-    SwTransferable  *pClipboard, *pDragDrop, *pXSelection;
+    SwTransferable  *pDragDrop, *pXSelection;
 
     TYPEINFO();
     SFX_DECL_INTERFACE(SW_INTERFACE_MODULE)

@@ -31,7 +31,7 @@
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-
+#include <sfx2/objface.hxx>
 
 #include <fldmgr.hxx>
 #include <expfld.hxx>
@@ -92,7 +92,7 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
                                                         pMDI, *pWrtShell, TRUE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");
 
-            pDlg->SetHelpId(FN_EDIT_FOOTNOTE);
+            pDlg->SetHelpId(GetStaticInterface()->GetSlot(FN_EDIT_FOOTNOTE)->GetCommand());
             pDlg->SetText( SW_RESSTR(STR_EDIT_FOOTNOTE) );
             pDlg->Execute();
             delete pDlg;

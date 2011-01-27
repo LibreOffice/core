@@ -42,8 +42,7 @@ GEN_HID_OTHER=TRUE
 RESLIB1NAME=sm
 RESLIB1IMAGES=$(PRJ)$/res
 RESLIB1SRSFILES=\
-    $(SRS)$/smres.srs \
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+    $(SRS)$/smres.srs 
 
 SHL1TARGET= sm$(DLLPOSTFIX)
 SHL1IMPLIB= smimp
@@ -112,3 +111,17 @@ SHL1RES=	$(RCTARGET)
 
 .INCLUDE :  target.mk
 
+
+ALLTAR : $(MISC)/sm.component $(MISC)/smd.component
+
+$(MISC)/sm.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sm.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sm.component
+
+$(MISC)/smd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        smd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt smd.component

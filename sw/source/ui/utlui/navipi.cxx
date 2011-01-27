@@ -429,14 +429,17 @@ IMPL_LINK( SwNavigationPI, ToolBoxDropdownClickHdl, ToolBox*, pBox )
 
         case FN_DROP_REGION:
         {
+            static const char* aHIDs[] =
+            {
+                HID_NAVI_DRAG_HYP,
+                HID_NAVI_DRAG_LINK,
+                HID_NAVI_DRAG_COPY,
+            };
             PopupMenu *pMenu = new PopupMenu;
             for (USHORT i = 0; i <= REGION_MODE_EMBEDDED; i++)
             {
                 pMenu->InsertItem( i + 1, aContextArr[i] );
-                pMenu->SetHelpId(i + 1, HID_NAVI_DRAG_HYP + i);
-                    /*HID_NAVI_DRAG_HYP
-                    HID_NAVI_DRAG_LINK
-                    HID_NAVI_DRAG_COPY  */
+                pMenu->SetHelpId(i + 1, aHIDs[i]);
             }
             pMenu->CheckItem( nRegionMode + 1 );
             pMenu->SetSelectHdl(LINK(this, SwNavigationPI, MenuSelectHdl));
@@ -865,7 +868,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
         ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
     aContentTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
-    aContentTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
+    aContentTree.SetStyle( aContentTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aContentTree.SetSpaceBetweenEntries(3);
     aContentTree.SetSelectionMode( SINGLE_SELECTION );
@@ -879,7 +882,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* _pBindings,
 //  TreeListBox fuer Globaldokument
     aGlobalTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
-    aGlobalTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
+    aGlobalTree.SetStyle( aGlobalTree.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                                 WB_CLIPCHILDREN|WB_HSCROLL );
     Size aGlblSize(aGlobalToolBox.CalcWindowSizePixel());
     aGlobalToolBox.SetSizePixel(aGlblSize);

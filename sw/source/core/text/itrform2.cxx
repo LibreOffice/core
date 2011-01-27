@@ -335,8 +335,14 @@ void SwTxtFormatter::InsertPortion( SwTxtFormatInfo &rInf,
     // bei dem LineLayout ist allerdings alles anders...
     if( pPor == pCurr )
     {
-        if( pCurr->GetPortion() )
+        if ( pCurr->GetPortion() )
+        {
             pPor = pCurr->GetPortion();
+        }
+
+        // --> OD 2010-07-07 #i112181#
+        rInf.SetOtherThanFtnInside( rInf.IsOtherThanFtnInside() || !pPor->IsFtnPortion() );
+        // <--
     }
     else
     {
@@ -1587,8 +1593,8 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStartPos )
         }
         else
         {
-            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow( GetInfo() )
-                     || GetInfo().CheckFtnPortion( pCurr ) );
+            bBuild = ( GetInfo().GetTxtFly()->IsOn() && ChkFlyUnderflow(GetInfo()) )
+                     || GetInfo().CheckFtnPortion(pCurr);
             if( bBuild )
             {
                 GetInfo().SetNumDone( bOldNumDone );

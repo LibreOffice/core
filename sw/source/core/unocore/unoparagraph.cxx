@@ -139,7 +139,8 @@ public:
         , m_rThis(rThis)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
-        , m_bIsDescriptor(0 == pTxtNode)
+        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        , m_bIsDescriptor((0 == pTxtNode) ? true : false)
         , m_nSelectionStartPos(nSelStart)
         , m_nSelectionEndPos(nSelEnd)
         , m_xParentText(xParent)

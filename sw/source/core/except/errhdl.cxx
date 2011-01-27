@@ -27,25 +27,19 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#ifdef DBG_UTIL
+
 #define _ERRHDL_CXX
 
 
 #include "stdlib.h"
-#ifdef WIN
-#endif
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/sound.hxx>
 #include <errhdl.hxx>
 #include <error.h>              // fuer die defines von ERR_SW6MSG_ ...
 
-// break into CodeView
-#if defined(ZTC) && defined(WIN)
-#define CVBREAK     asm( 0xCC );
-#endif
-#if defined(MSC) && defined(WIN)
-#define CVBREAK     __asm int 3;
-#endif
 #ifndef CVBREAK
 #define CVBREAK
 #endif
@@ -138,4 +132,5 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
     AssertFail( pMsg, pFileName, nLine );
 }
 
+#endif // DBG_UTIL
 

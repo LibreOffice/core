@@ -117,7 +117,7 @@ using ::rtl::OUString;
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
-static const USHORT __FAR_DATA aHelpForMenu[] =
+static const char* __FAR_DATA aHelpForMenu[] =
 {
     0,                          //
     HID_GLBLTREE_UPDATE,        //CTX_UPDATE
@@ -1241,11 +1241,20 @@ BOOL    SwGlobalTree::Update(BOOL bHard)
                     GlobalDocContentType eType = pLeft->GetType();
                     SvLBoxEntry* pEntry = GetEntry(i);
                     String sTemp = GetEntryText(pEntry);
-                    if(eType != pRight->GetType() ||
-                        eType == GLBLDOC_SECTION &&
-                            (pLeft->GetSection()->GetSectionName() != sTemp) ||
-                        eType == GLBLDOC_TOXBASE && pLeft->GetTOX()->GetTitle() != sTemp)
-                            bCopy = bRet = TRUE;
+                    if (
+                         eType != pRight->GetType() ||
+                         (
+                           eType == GLBLDOC_SECTION &&
+                           pLeft->GetSection()->GetSectionName() != sTemp
+                         ) ||
+                         (
+                           eType == GLBLDOC_TOXBASE &&
+                           pLeft->GetTOX()->GetTitle() != sTemp
+                         )
+                       )
+                    {
+                        bCopy = bRet = TRUE;
+                    }
                 }
             }
             if(bCopy || bHard)

@@ -334,7 +334,13 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         new SwEndNode( aEndIdx, *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
-        pLine->GetTabBoxes().C40_INSERT( SwTableBox, pPrvBox, nInsPos + n );
+
+        SwTableBoxes & rTabBoxes = pLine->GetTabBoxes();
+        USHORT nRealInsPos = nInsPos + n;
+        if (nRealInsPos > rTabBoxes.Count())
+            nRealInsPos = rTabBoxes.Count();
+
+        rTabBoxes.C40_INSERT( SwTableBox, pPrvBox, nRealInsPos );
 
         //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
         if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
@@ -2120,9 +2126,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             BOOL bSavePageBreak = FALSE, bSavePageDesc = FALSE;
@@ -2176,9 +2183,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]->GetCntntNode();
@@ -4368,7 +4376,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         }
 
         SwDoc* pCpyDoc = (SwDoc*)pSrcTblNd->GetDoc();
-        SfxObjectShellRef* pRefForDocSh = 0;
         BOOL bDelCpyDoc = pCpyDoc == this;
 
         if( bDelCpyDoc )
@@ -4376,13 +4383,10 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             // kopiere die Tabelle erstmal in ein temp. Doc
             pCpyDoc = new SwDoc;
             pCpyDoc->acquire();
-            pRefForDocSh = new SfxObjectShellRef();
-            pCpyDoc->SetRefForDocShell( pRefForDocSh );
 
             SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
             if( !pSrcTblNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, TRUE, TRUE ))
             {
-                delete pRefForDocSh;
                 if( pCpyDoc->release() == 0 )
                     delete pCpyDoc;
 
@@ -4395,8 +4399,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             }
             aPos.nNode -= 1;        // auf den EndNode der Tabelle
             pSrcTblNd = aPos.nNode.GetNode().FindTableNode();
-
-            pCpyDoc->SetRefForDocShell( NULL );
         }
 
         const SwStartNode* pSttNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
@@ -4435,7 +4437,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         if( bDelCpyDoc )
         {
-            delete pRefForDocSh;
             if( pCpyDoc->release() == 0 )
                 delete pCpyDoc;
         }

@@ -437,16 +437,14 @@ Size SwOLENode::GetTwipSize() const
 SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
     // Falls bereits eine SvPersist-Instanz existiert, nehmen wir diese
-    SfxObjectShell* p = pDoc->GetPersist();
-    if( !p )
+    SfxObjectShell* pPersistShell = pDoc->GetPersist();
+    if( !pPersistShell )
     {
-        // TODO/LATER: reicht hier nicht ein EmbeddedObjectContainer? Was passiert mit
-        // diesem Dokument?
-        ASSERT( pDoc->GetRefForDocShell(),
-                        "wo ist die Ref-Klasse fuer die DocShell?")
-        p = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
-        *pDoc->GetRefForDocShell() = p;
-        p->DoInitNew( NULL );
+        // TODO/LATER: is EmbeddedObjectContainer not enough?
+        // the created document will be closed by pDoc ( should use SfxObjectShellLock )
+        pPersistShell = new SwDocShell( pDoc, SFX_CREATE_MODE_INTERNAL );
+        pDoc->SetTmpDocShell( pPersistShell );
+        pPersistShell->DoInitNew( NULL );
     }
 
     // Wir hauen das Ding auf SvPersist-Ebene rein
@@ -454,7 +452,7 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     ::rtl::OUString aNewName/*( Sw3Io::UniqueName( p->GetStorage(), "Obj" ) )*/;
     SfxObjectShell* pSrc = GetDoc()->GetPersist();
 
-    p->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
+    pPersistShell->GetEmbeddedObjectContainer().CopyAndGetEmbeddedObject(
         pSrc->GetEmbeddedObjectContainer(),
         pSrc->GetEmbeddedObjectContainer().GetEmbeddedObject( aOLEObj.aName ),
         aNewName );
@@ -781,7 +779,7 @@ BOOL SwOLEObj::IsOleRef() const
     return xOLERef.is();
 }
 
-uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
+const uno::Reference < embed::XEmbeddedObject > SwOLEObj::GetOleRef()
 {
     if( !xOLERef.is() )
     {
@@ -1016,3 +1014,4 @@ void SwOLELRUCache::RemoveObj( SwOLEObj& rObj )
     if( !Count() )
         DELETEZ( pOLELRU_Cache );
 }
+

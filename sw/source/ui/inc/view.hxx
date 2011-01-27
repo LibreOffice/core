@@ -32,7 +32,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
+#include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
 #include <editeng/editstat.hxx>
@@ -57,7 +57,6 @@ class SvxRuler;
 class SvxLRSpaceItem;
 class SwDocShell;
 class SwScrollbar;
-class PrintDialog;
 class SvxVCBrowser;
 class SvBorder;
 class Ruler;
@@ -83,7 +82,6 @@ class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
-class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
@@ -356,7 +354,6 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // Methoden fuers Printing
     SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
-    SW_DLLPRIVATE virtual PrintDialog*  CreatePrintDialog( Window* pParent );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung
@@ -452,7 +449,7 @@ public:
     inline       SwEditWin &GetEditWin()        { return *pEditWin; }
     inline const SwEditWin &GetEditWin () const { return *pEditWin; }
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
 #endif
 
@@ -644,8 +641,8 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellRef & GetTmpSelectionDoc();
-    SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock & GetTmpSelectionDoc();
+    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 

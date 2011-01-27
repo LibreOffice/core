@@ -724,7 +724,7 @@ SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) 
     pExampleFrame(0)
 {
     FreeResource();
-    aAutoTextLB.SetWindowBits( WB_HSCROLL );
+    aAutoTextLB.SetStyle( aAutoTextLB.GetStyle() | WB_HSCROLL );
     aAutoTextLB.SetSpaceBetweenEntries(0);
     aAutoTextLB.SetSelectionMode( SINGLE_SELECTION );
     aAutoTextLB.SetHelpId(HID_BUSINESS_CARD_CONTENT);

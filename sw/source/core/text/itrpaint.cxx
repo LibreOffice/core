@@ -495,7 +495,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
                 if( ( nDiff > 0 &&
                       ( GetEnd() < GetInfo().GetTxt().Len() ||
                         ( nDiff > nTmpHeight/2 && GetPrevLine() ) ) ) ||
-                    nDiff >= 0 && bNextUndersized )
+                    (nDiff >= 0 && bNextUndersized) )
 
                 {
                     SwArrowPortion aArrow( GetInfo() );

@@ -32,7 +32,6 @@
 #include <hintids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-#include <vcl/imgcons.hxx>
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/htmlkywd.hxx>
@@ -68,6 +67,7 @@
 #include <com/sun/star/awt/XTextLayoutConstrains.hpp>
 #include <com/sun/star/awt/XLayoutConstrains.hpp>
 #include <com/sun/star/awt/XImageConsumer.hpp>
+#include <com/sun/star/awt/ImageStatus.hpp>
 #include <com/sun/star/form/XImageProducerSupplier.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <doc.hxx>
@@ -599,7 +599,7 @@ void SwHTMLImageWatcher::complete( sal_Int32 Status,
         const uno::Reference< awt::XImageProducer >& )
     throw( uno::RuntimeException )
 {
-    if( IMAGEERROR == Status || IMAGEABORTED == Status )
+    if( awt::ImageStatus::IMAGESTATUS_ERROR == Status || awt::ImageStatus::IMAGESTATUS_ABORTED == Status )
     {
         // uns selbst abmelden und loeschen
         clear();
@@ -1351,7 +1351,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1525,7 +1525,7 @@ void SwHTMLParser::InsertInput()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2017,7 +2017,7 @@ void SwHTMLParser::NewTextArea()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2308,7 +2308,7 @@ void SwHTMLParser::NewSelect()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )

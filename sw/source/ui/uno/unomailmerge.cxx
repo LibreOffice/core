@@ -201,6 +201,7 @@ static BOOL LoadFromURL_impl(
     }
     else
     {
+        // SfxObjectShellRef is ok here, since the document will be explicitly closed
         SfxObjectShellRef xTmpDocSh = pTmpDocShell;
         CloseModelAndDocSh( xTmpModel, xTmpDocSh );
     }

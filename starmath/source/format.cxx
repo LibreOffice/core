@@ -112,8 +112,9 @@ SmFormat::SmFormat()
 {
     nVersion    = SM_FMT_VERSION_NOW;
 
-    eHorAlign   = AlignCenter;
-    bIsTextmode = bScaleNormalBrackets = FALSE;
+    eHorAlign       = AlignCenter;
+    nGreekCharStyle = 0;
+    bIsTextmode     = bScaleNormalBrackets = FALSE;
 
     vSize[SIZ_TEXT]     = 100;
     vSize[SIZ_INDEX]    = 60;
@@ -191,6 +192,7 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
     SetVersion (rFormat.GetVersion());
     SetHorAlign(rFormat.GetHorAlign());
     SetTextmode(rFormat.IsTextmode());
+    SetGreekCharStyle(rFormat.GetGreekCharStyle());
     SetScaleNormalBrackets(rFormat.IsScaleNormalBrackets());
 
     USHORT  i;
@@ -212,6 +214,7 @@ BOOL SmFormat::operator == (const SmFormat &rFormat) const
 {
     BOOL bRes = aBaseSize == rFormat.aBaseSize  &&
                 eHorAlign == rFormat.eHorAlign  &&
+                nGreekCharStyle == rFormat.nGreekCharStyle &&
                 bIsTextmode == rFormat.bIsTextmode  &&
                 bScaleNormalBrackets  == rFormat.bScaleNormalBrackets;
 

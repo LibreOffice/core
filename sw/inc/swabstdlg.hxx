@@ -127,7 +127,7 @@ public:
     virtual BOOL            IsEndNote() = 0;
     virtual String          GetStr() = 0;
     //from class Window
-    virtual void    SetHelpId( ULONG nHelpId ) = 0;
+    virtual void    SetHelpId( const rtl::OString& sHelpId ) = 0;
     virtual void    SetText( const XubString& rStr ) = 0;
 };
 
@@ -494,5 +494,5 @@ public:
     virtual CreateTabPage               GetTabPageCreatorFunc( USHORT nId ) = 0;
     virtual GetTabPageRanges            GetTabPageRangesFunc( USHORT nId ) = 0;
 };
-#endif
 
+#endif

@@ -28,7 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+#include "node.hxx"
+#include "rect.hxx"
+#include "symbol.hxx"
+#include "smmod.hxx"
+#include "document.hxx"
+#include "view.hxx"
+#include "mathtype.hxx"
+
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
 #include <rtl/math.hxx>
@@ -38,22 +45,18 @@
 #include <vcl/outdev.hxx>
 #include <sfx2/module.hxx>
 
-
-#include "node.hxx"
-#include <rect.hxx>
-#include "symbol.hxx"
-#include "smmod.hxx"
-#include <document.hxx>
-#include <view.hxx>
-#ifndef _MATHTYPE_HXX
-#include "mathtype.hxx"
-#endif
-
 #include <math.h>
 #include <float.h>
 
+
+#define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
+
 // define this to draw rectangles for debugging
 //#define SM_RECT_DEBUG
+
+
+using ::rtl::OUString;
+
 
 ////////////////////////////////////////
 // SmTmpDevice
@@ -570,6 +573,13 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(xub_StrLen nAccIdx) const
     return pResult;
 }
 
+
+long SmNode::GetFormulaBaseline() const
+{
+    DBG_ASSERT( 0, "This dummy implementation should not have been called." );
+    return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////
 
 SmStructureNode::SmStructureNode( const SmStructureNode &rNode ) :
@@ -760,7 +770,7 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         }
 
     Point  aPos;
-    SmRect::operator = (SmRect(nMaxWidth, 0));
+    SmRect::operator = (SmRect(nMaxWidth, 1));
     for (i = 0;  i < nSize;  i++)
     {   if (NULL != (pNode = GetSubNode(i)))
         {   const SmRect &rNodeRect = pNode->GetRect();
@@ -776,12 +786,34 @@ void SmTableNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
             ExtendBy(rNodeRect, nSize > 1 ? RCP_NONE : RCP_ARG);
         }
     }
+    // --> 4.7.2010 #i972#
+    if (HasBaseline())
+        nFormulaBaseline = GetBaseline();
+    else
+    {
+        SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
+        aTmpDev.SetFont(GetFont());
+
+        SmRect aRect = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                               GetFont().GetBorderWidth()));
+        nFormulaBaseline = GetAlignM();
+        // move from middle position by constant - distance
+        // between middle and baseline for single letter
+        nFormulaBaseline += aRect.GetBaseline() - aRect.GetAlignM();
+    }
+    // <--
 }
 
 
 SmNode * SmTableNode::GetLeftMost()
 {
     return this;
+}
+
+
+long SmTableNode::GetFormulaBaseline() const
+{
+    return nFormulaBaseline;
 }
 
 
@@ -815,20 +847,21 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
     SmTmpDevice  aTmpDev ((OutputDevice &) rDev, TRUE);
     aTmpDev.SetFont(GetFont());
 
-    // provide an empty rectangle with alignment parameters for the "current"
-    // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
-    // same sub-/supscript positions.)
-    //! be sure to use a character that has explicitly defined HiAttribut
-    //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
-    //! 'vec {a}'.
-    SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
-                               GetFont().GetBorderWidth()));
-    // make sure that the rectangle occupies (almost) no space
-    SetWidth(1);
-    SetItalicSpaces(0, 0);
-
     if (nSize < 1)
+    {
+        // provide an empty rectangle with alignment parameters for the "current"
+        // font (in order to make "a^1 {}_2^3 a_4" work correct, that is, have the
+        // same sub-/supscript positions.)
+        //! be sure to use a character that has explicitly defined HiAttribut
+        //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
+        //! 'vec {a}'.
+        SmRect::operator = (SmRect(aTmpDev, &rFormat, C2S("a"),
+                            GetFont().GetBorderWidth()));
+        // make sure that the rectangle occupies (almost) no space
+        SetWidth(1);
+        SetItalicSpaces(0, 0);
         return;
+    }
 
     // make distance depend on font size
     long nDist = (rFormat.GetDistance(DIS_HORIZONTAL) * GetFont().GetSize().Height()) / 100L;
@@ -836,14 +869,17 @@ void SmLineNode::Arrange(const OutputDevice &rDev, const SmFormat &rFormat)
         nDist = 0;
 
     Point   aPos;
-    for (i = 0;  i < nSize;  i++)
+    // copy the first node into LineNode and extend by the others
+    if (NULL != (pNode = GetSubNode(0)))
+        SmRect::operator = (pNode->GetRect());
+
+    for (i = 1;  i < nSize;  i++)
         if (NULL != (pNode = GetSubNode(i)))
         {
             aPos = pNode->AlignTo(*this, RP_RIGHT, RHA_CENTER, RVA_BASELINE);
 
-            // no horizontal space before first node
-            if (i)
-                aPos.X() += nDist;
+            // add horizontal space to the left for each but the first sub node
+            aPos.X() += nDist;
 
             pNode->MoveTo(aPos);
             ExtendBy( *pNode, RCP_XOR );
@@ -2355,6 +2391,20 @@ void SmRectangleNode::Draw(OutputDevice &rDev, const Point &rPosition) const
 /**************************************************************************/
 
 
+SmTextNode::SmTextNode( SmNodeType eNodeType, const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(eNodeType, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
+SmTextNode::SmTextNode( const SmToken &rNodeToken, USHORT nFontDescP ) :
+    SmVisibleNode(NTEXT, rNodeToken)
+{
+    nFontDesc = nFontDescP;
+}
+
+
 void SmTextNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
     SmNode::Prepare(rFormat, rDocShell);
@@ -2458,6 +2508,12 @@ void SmTextNode::Draw(OutputDevice &rDev, const Point& rPosition) const
     aPos.Y() += GetBaselineOffset();
     // auf Pixelkoordinaten runden
     aPos = rDev.PixelToLogic( rDev.LogicToPixel(aPos) );
+
+#if OSL_DEBUG_LEVEL > 1
+    sal_Int32 nPos = 0;
+    sal_UCS4 cChar = OUString( aText ).iterateCodePoints( &nPos );
+    (void) cChar;
+#endif
 
     rDev.DrawStretchText(aPos, GetWidth(), aText);
 
@@ -2798,6 +2854,36 @@ void SmAttributNode::CreateTextFromNode(String &rText)
 
 /**************************************************************************/
 
+bool lcl_IsFromGreekSymbolSet( const String &rTokenText )
+{
+    bool bRes = false;
+
+    // valid symbol name needs to have a '%' at pos 0 and at least an additonal char
+    if (rTokenText.Len() > 2 && rTokenText.GetBuffer()[0] == (sal_Unicode)'%')
+    {
+        String aName( rTokenText.Copy(1) );
+        SmSym *pSymbol = SM_MOD()->GetSymbolManager().GetSymbolByName( aName );
+        if (pSymbol && GetExportSymbolSetName( pSymbol->GetSymbolSetName() ).EqualsAscii( "Greek" ) )
+            bRes = true;
+    }
+
+    return bRes;
+}
+
+
+SmSpecialNode::SmSpecialNode(SmNodeType eNodeType, const SmToken &rNodeToken, USHORT _nFontDesc) :
+    SmTextNode(eNodeType, rNodeToken, _nFontDesc)
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
+
+SmSpecialNode::SmSpecialNode(const SmToken &rNodeToken) :
+    SmTextNode(NSPECIAL, rNodeToken, FNT_MATH)  //! default Font nicht immer richtig
+{
+    bIsFromGreekSymbolSet = lcl_IsFromGreekSymbolSet( rNodeToken.aText );
+}
+
 
 void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell)
 {
@@ -2806,9 +2892,12 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
     const SmSym   *pSym;
     SmModule  *pp = SM_MOD();
 
-    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName(GetToken().aText)))
+    String aName( GetToken().aText.Copy(1) );
+    if (NULL != (pSym = pp->GetSymbolManager().GetSymbolByName( aName )))
     {
-        SetText( pSym->GetCharacter() );
+        sal_UCS4 cChar = pSym->GetCharacter();
+        String aTmp( OUString( &cChar, 1 ) );
+        SetText( aTmp );
         GetFont() = pSym->GetFace();
     }
     else
@@ -2832,6 +2921,33 @@ void SmSpecialNode::Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell
         SetAttribut(ATTR_BOLD);
 
     Flags() |= FLG_FONT;
+
+    if (bIsFromGreekSymbolSet)
+    {
+        DBG_ASSERT( GetText().Len() == 1, "a symbol should only consist of 1 char!" );
+        bool bItalic = false;
+        INT16 nStyle = rFormat.GetGreekCharStyle();
+        DBG_ASSERT( nStyle >= 0 && nStyle <= 2, "unexpected value for GreekCharStyle" );
+        if (nStyle == 1)
+            bItalic = true;
+        else if (nStyle == 2)
+        {
+            String aTmp( GetText() );
+            if (aTmp.Len() > 0)
+            {
+                const sal_Unicode cUppercaseAlpha = 0x0391;
+                const sal_Unicode cUppercaseOmega = 0x03A9;
+                sal_Unicode cChar = aTmp.GetBuffer()[0];
+                // uppercase letters should be straight and lowercase letters italic
+                bItalic = !(cUppercaseAlpha <= cChar && cChar <= cUppercaseOmega);
+            }
+        }
+
+        if (bItalic)
+            Attributes() |= ATTR_ITALIC;
+        else
+            Attributes() &= ~ATTR_ITALIC;;
+    }
 };
 
 

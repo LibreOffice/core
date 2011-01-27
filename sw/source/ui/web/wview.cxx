@@ -93,11 +93,10 @@
 #include <swslots.hxx>
 
 
-SFX_IMPL_VIEWFACTORY(SwWebView, SW_RES(STR_NONAME))
+SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
-
 
 SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 {

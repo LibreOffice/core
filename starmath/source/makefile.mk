@@ -36,6 +36,8 @@ LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 
+ENABLE_EXCEPTIONS=TRUE
+
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
@@ -45,6 +47,7 @@ SMDLL=TRUE
 SRS2NAME =smres
 SRC2FILES = smres.src   \
             symbol.src	\
+            toolbox.src \
             commands.src
 
 SLO1FILES =  \
@@ -84,24 +87,6 @@ SLOFILES = \
     $(SLO1FILES) \
     $(SLO2FILES)
 
-EXCEPTIONSFILES =   \
-        $(SLO)$/register.obj  \
-        $(SLO)$/accessibility.obj \
-        $(SLO)$/cfgitem.obj \
-        $(SLO)$/dialog.obj \
-        $(SLO)$/document.obj \
-        $(SLO)$/node.obj \
-        $(SLO)$/parse.obj \
-        $(SLO)$/mathmlimport.obj \
-        $(SLO)$/mathmlexport.obj \
-        $(SLO)$/mathtype.obj \
-        $(SLO)$/smdll.obj \
-        $(SLO)$/view.obj \
-        $(SLO)$/unomodel.obj \
-        $(SLO)$/smdetect.obj \
-        $(SLO)$/symbol.obj \
-        $(SLO)$/unodoc.obj
-
 LIB1TARGET = \
     $(SLB)$/$(TARGET).lib
 
@@ -109,9 +94,6 @@ LIB1OBJFILES = \
     $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
-
-LOCALIZE_ME =  menu_tmpl.src
-
 
 .INCLUDE :  target.mk
 

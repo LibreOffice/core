@@ -193,15 +193,51 @@ class SwAnchorMarker
     SdrHdl* pHdl;
     Point aHdlPos;
     Point aLastPos;
+    // --> OD 2010-09-16 #i114522#
+    bool bTopRightHandle;
+    // <--
 public:
-    SwAnchorMarker( SdrHdl* pH ) :
-        pHdl( pH ), aHdlPos( pH->GetPos() ), aLastPos( pH->GetPos() ) {}
+    SwAnchorMarker( SdrHdl* pH )
+        : pHdl( pH )
+        , aHdlPos( pH->GetPos() )
+        , aLastPos( pH->GetPos() )
+        // --> OD 2010-09-16 #i114522#
+        , bTopRightHandle( pH->GetKind() == HDL_ANCHOR_TR )
+        // <--
+    {}
     const Point& GetLastPos() const { return aLastPos; }
     void SetLastPos( const Point& rNew ) { aLastPos = rNew; }
     void SetPos( const Point& rNew ) { pHdl->SetPos( rNew ); }
     const Point& GetPos() { return pHdl->GetPos(); }
     const Point& GetHdlPos() { return aHdlPos; }
-    void ChgHdl( SdrHdl* pNew ) { pHdl = pNew; }
+    void ChgHdl( SdrHdl* pNew )
+    {
+        pHdl = pNew;
+        // --> OD 2010-09-16 #i114522#
+        if ( pHdl )
+        {
+            bTopRightHandle = (pHdl->GetKind() == HDL_ANCHOR_TR);
+        }
+        // <--
+    }
+    // --> OD 2010-09-16 #i114522#
+    const Point GetPosForHitTest( const OutputDevice& rOut )
+    {
+        Point aHitTestPos( GetPos() );
+        aHitTestPos = rOut.LogicToPixel( aHitTestPos );
+        if ( bTopRightHandle )
+        {
+            aHitTestPos += Point( -1, 1 );
+        }
+        else
+        {
+            aHitTestPos += Point( 1, 1 );
+        }
+        aHitTestPos = rOut.PixelToLogic( aHitTestPos );
+
+        return aHitTestPos;
+    }
+    // <--
 };
 
 struct QuickHelpData
@@ -2261,7 +2297,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
 
 
                 BOOL bIsAutoCorrectChar =  SvxAutoCorrect::IsAutoCorrectChar( aCh );
-                BOOL bRunNext = pACorr->HasRunNext();
+                BOOL bRunNext = pACorr && pACorr->HasRunNext();
                 if( !aKeyEvent.GetRepeat() && pACorr && ( bIsAutoCorrectChar || bRunNext ) &&
                         pACfg->IsAutoFmtByInput() &&
                     (( pACorr->IsAutoCorrFlag( ChgWeightUnderl ) &&
@@ -3609,7 +3645,10 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 // So the pAnchorMarker has to find the right SdrHdl, if it's
                 // the old one, it will find it with position aOld, if this one
                 // is destroyed, it will find a new one at position GetHdlPos().
-                Point aOld = pAnchorMarker->GetPos();
+                // --> OD 2010-09-16 #i114522#
+//                const Point aOld = pAnchorMarker->GetPos();
+                const Point aOld = pAnchorMarker->GetPosForHitTest( *(rSh.GetOut()) );
+                // <--
                 Point aNew = rSh.FindAnchorPos( aDocPt );
                 SdrHdl* pHdl;
                 if( (0!=( pHdl = pSdrView->PickHandle( aOld ) )||

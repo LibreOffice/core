@@ -52,7 +52,7 @@
 #include <comphelper/ChainablePropertySetInfo.hxx>
 #include <edtwin.hxx>
 #include <rtl/ustrbuf.hxx>
-
+#include <tools/urlobj.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -799,14 +799,12 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 OUString sHelpURL;
                 if ( ! ( rValue >>= sHelpURL ) )
                     throw IllegalArgumentException();
-                SwEditWin &rEditWin = pView->GetEditWin();
-                OUString sPrefix = sHelpURL.copy ( 0, 4 );
-                // Make sure we have a valid string...should be in the format HID:12345
-                if ( ! sPrefix.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "HID:" ) ) )
+
+                INetURLObject aHID( sHelpURL );
+                if ( aHID.GetProtocol() == INET_PROT_HID )
+                      pView->GetEditWin().SetHelpId( rtl::OUStringToOString( aHID.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
+                else
                     throw IllegalArgumentException ();
-                OUString sNumber = sHelpURL.copy ( 4 );
-                sal_uInt32 nHelpId = sNumber.toInt32();
-                rEditWin.SetHelpId ( nHelpId );
             }
             else
                 throw UnknownPropertyException();
@@ -918,7 +916,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
         case  HANDLE_VIEWSET_TABSTOPS              :   bBoolVal = mpConstViewOption->IsTab(sal_True);   break;
         case  HANDLE_VIEWSET_BREAKS                :   bBoolVal = mpConstViewOption->IsLineBreak(sal_True); break;
         case  HANDLE_VIEWSET_HIDDEN_TEXT           :   bBoolVal = mpConstViewOption->IsShowHiddenField();   break;
-        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(); break;
+        case  HANDLE_VIEWSET_HIDDEN_CHARACTERS     :   bBoolVal = mpConstViewOption->IsShowHiddenChar(sal_True); break;
         case  HANDLE_VIEWSET_HIDDEN_PARAGRAPHS     :   bBoolVal = mpConstViewOption->IsShowHiddenPara();    break;
         case  HANDLE_VIEWSET_TABLE_BOUNDARIES      :   bBoolVal = SwViewOption::IsTableBoundaries(); break;
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = SwViewOption::IsDocBoundaries(); break;
@@ -985,9 +983,9 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
             {
                 bBool = sal_False;
                 OUStringBuffer sHelpURL;
-                sHelpURL.appendAscii ( "HID:" );
+                sHelpURL.appendAscii ( INET_HID_SCHEME );
                 SwEditWin &rEditWin = pView->GetEditWin();
-                sHelpURL.append ( static_cast < sal_Int32 > ( rEditWin.GetHelpId() ) );
+                sHelpURL.append( rtl::OStringToOUString( rEditWin.GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
                 rValue <<= sHelpURL.makeStringAndClear();
             }
             else

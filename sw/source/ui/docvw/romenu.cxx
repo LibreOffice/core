@@ -238,9 +238,13 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
         EnableItem( MN_READONLY_COPY, FALSE );
 
     eState = pVFrame->GetBindings().QueryState( SID_EDITDOC, pState );
-    if(eState < SFX_ITEM_DEFAULT ||
-        rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
+    if (
+        eState < SFX_ITEM_DEFAULT ||
+        (rSh.IsGlobalDoc() && rView.GetDocShell()->IsReadOnlyUI())
+       )
+    {
         EnableItem( MN_READONLY_EDITDOC, FALSE );
+    }
 
     if ( !sURL.Len() )
     {

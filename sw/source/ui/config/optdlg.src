@@ -56,18 +56,21 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_CROSS
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_CROSS";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Guides ~while moving";
     };
     CheckBox CB_HANDLE
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HANDLE";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Sim~ple handles";
     };
     CheckBox CB_BIGHANDLE
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_BIGHANDLE";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         Text [ en-US ] = "Large handles";
@@ -81,54 +84,63 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_HSCROLL
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HSCROLL";
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "H~orizontal scrollbar" ;
     };
     CheckBox CB_VSCROLL
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VSCROLL";
         Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Vertical scrollbar" ;
     };
     CheckBox CB_ANY_RULER
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_ANY_RULER";
         Pos = MAP_APPFONT ( 136 , 40 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
         Text [ en-US ] = "R~uler" ;
     };
     CheckBox CB_HRULER
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_HRULER";
         Pos = MAP_APPFONT ( 142 , 53 ) ;
         Size = MAP_APPFONT ( 62 , 10 ) ;
         Text [ en-US ] = "Hori~zontal ruler" ;
     };
     ListBox LB_HMETRIC
     {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_HMETRIC";
         Pos = MAP_APPFONT ( 206 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE;
     };
     CheckBox CB_VRULER
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VRULER";
         Pos = MAP_APPFONT ( 142 , 66 ) ;
         Size = MAP_APPFONT ( 62 , 10 ) ;
         Text [ en-US ] = "Verti~cal ruler" ;
     };
     CheckBox CB_VRULER_RIGHT
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_VRULER_RIGHT";
         Pos = MAP_APPFONT ( 148 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Right-aligned";
     };
     ListBox LB_VMETRIC
     {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_VMETRIC";
         Pos = MAP_APPFONT ( 206 , 64 ) ;
         Size = MAP_APPFONT ( 45 , 60 ) ;
         DropDown = TRUE;
     };
     CheckBox CB_SMOOTH_SCROLL
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_SMOOTH_SCROLL";
         Pos = MAP_APPFONT ( 136 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "S~mooth scroll" ;
@@ -142,6 +154,7 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_GRF
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_GRF";
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Graphics and objects" ;
@@ -150,24 +163,28 @@ TabPage TP_CONTENT_OPT
     };
     CheckBox CB_TBL
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_TBL";
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Tables " ;
     };
     CheckBox CB_DRWFAST
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_DRWFAST";
         Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Dra~wings and controls" ;
     };
     CheckBox CB_FIELD
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_FIELD";
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Field codes" ;
     };
     CheckBox CB_POSTIT
     {
+        HelpID = "sw:CheckBox:TP_CONTENT_OPT:CB_POSTIT";
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "~Comments" ;
@@ -188,6 +205,7 @@ TabPage TP_CONTENT_OPT
     };
     ListBox LB_METRIC
     {
+        HelpID = "sw:ListBox:TP_CONTENT_OPT:LB_METRIC";
         Pos = MAP_APPFONT ( 199, 133 ) ;
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE ;
@@ -214,6 +232,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     CheckBox CB_PGRF /*functionally merged with CB_PDRAW*/
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PGRF";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Pictures and objects" ;
@@ -224,6 +243,7 @@ TabPage TP_OPTPRINT_PAGE
     removed, tables now always get printed
     CheckBox CB_PTAB
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PTAB";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Tables" ;
@@ -233,6 +253,7 @@ TabPage TP_OPTPRINT_PAGE
     functionally merged with CB_PGRF (pictures and graphics)
     CheckBox CB_PDRAW
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PDRAW";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Dra~wings" ;
@@ -240,30 +261,35 @@ TabPage TP_OPTPRINT_PAGE
 */
     CheckBox CB_CTRLFLD
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_CTRLFLD";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Form control~s" ;
     };
     CheckBox CB_BACKGROUND
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_BACKGROUND";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Page ba~ckground" ;
     };
     CheckBox CB_BLACK_FONT
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_BLACK_FONT";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Print text in blac~k" ;
     };
     CheckBox CB_HIDDEN_TEXT
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_HIDDEN_TEXT";
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Hidden te~xt" ;
     };
     CheckBox CB_TEXT_PLACEHOLDER
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_TEXT_PLACEHOLDER";
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Text ~placeholder" ;
@@ -283,6 +309,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     CheckBox CB_LEFTP
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_LEFTP";
         Pos = MAP_APPFONT ( 96 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Left pages" ;
@@ -291,6 +318,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     CheckBox CB_RIGHTP
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_RIGHTP";
         Pos = MAP_APPFONT ( 96 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Right pages" ;
@@ -299,6 +327,7 @@ TabPage TP_OPTPRINT_PAGE
     removed, noe handled by the new print dialog (i.e. vcl) itself
     CheckBox CB_REVERSE
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_REVERSE";
         Pos = MAP_APPFONT ( 96 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Re~versed" ;
@@ -306,12 +335,14 @@ TabPage TP_OPTPRINT_PAGE
 */
     CheckBox CB_PROSPECT
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT";
         Pos = MAP_APPFONT ( 96 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Broch~ure" ;
     };
     CheckBox CB_PROSPECT_RTL
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PROSPECT_RTL";
         Pos = MAP_APPFONT ( 103 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Right to Left" ;
@@ -319,6 +350,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     RadioButton RB_NO
     {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_NO";
         Pos = MAP_APPFONT ( 180 , 14 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "~None" ;
@@ -327,18 +359,21 @@ TabPage TP_OPTPRINT_PAGE
     };
     RadioButton RB_ONLY
     {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_ONLY";
         Pos = MAP_APPFONT ( 180 , 27 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "Comments ~only" ;
     };
     RadioButton RB_END
     {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_END";
         Pos = MAP_APPFONT ( 180 , 40 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "End of docu~ment" ;
     };
     RadioButton RB_PAGEEND
     {
+        HelpID = "sw:RadioButton:TP_OPTPRINT_PAGE:RB_PAGEEND";
         Pos = MAP_APPFONT ( 180 , 53 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         Text [ en-US ] = "~End of page" ;
@@ -365,6 +400,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     CheckBox CB_PRINTEMPTYPAGES
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PRINTEMPTYPAGES";
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -373,6 +409,7 @@ TabPage TP_OPTPRINT_PAGE
 /*
     CheckBox CB_SINGLEJOBS
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_SINGLEJOBS";
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -381,6 +418,7 @@ TabPage TP_OPTPRINT_PAGE
 */
     CheckBox CB_PAPERFROMSETUP
     {
+        HelpID = "sw:CheckBox:TP_OPTPRINT_PAGE:CB_PAPERFROMSETUP";
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
@@ -395,6 +433,7 @@ TabPage TP_OPTPRINT_PAGE
     };
     ListBox LB_FAX
     {
+        HelpID = "sw:ListBox:TP_OPTPRINT_PAGE:LB_FAX";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 70 , 132 ) ;
         Size = MAP_APPFONT ( 184 , 70 ) ;
@@ -437,6 +476,7 @@ TabPage TP_STD_FONT
     };
     MetricBox LB_STANDARD_SIZE
     {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_STANDARD_SIZE";
         Pos = MAP_APPFONT ( 204 , 25 ) ;
         Size = MAP_APPFONT ( 30 , 60 ) ;
         Border = TRUE ;
@@ -444,6 +484,7 @@ TabPage TP_STD_FONT
     };
     MetricBox LB_TITLE_SIZE
     {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_TITLE_SIZE";
         Pos = MAP_APPFONT ( 204 , 42 ) ;
         Size = MAP_APPFONT ( 30 , 60 ) ;
         Border = TRUE ;
@@ -451,6 +492,7 @@ TabPage TP_STD_FONT
     };
     MetricBox LB_LIST_SIZE
     {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_LIST_SIZE";
         Pos = MAP_APPFONT ( 204 , 59 ) ;
         Size = MAP_APPFONT ( 30 , 60 ) ;
         Border = TRUE ;
@@ -458,6 +500,7 @@ TabPage TP_STD_FONT
     };
     MetricBox LB_LABEL_SIZE
     {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_LABEL_SIZE";
         Pos = MAP_APPFONT ( 204 , 76 ) ;
         Size = MAP_APPFONT ( 30 , 60 ) ;
         Border = TRUE ;
@@ -465,6 +508,7 @@ TabPage TP_STD_FONT
     };
     MetricBox LB_INDEX_SIZE
     {
+        HelpID = "sw:MetricBox:TP_STD_FONT:LB_INDEX_SIZE";
         Pos = MAP_APPFONT ( 204 , 93 ) ;
         Size = MAP_APPFONT ( 30 , 60 ) ;
         Border = TRUE ;
@@ -507,6 +551,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_STANDARD
     {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_STANDARD";
         Pos = MAP_APPFONT ( 63 , 25 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
@@ -515,6 +560,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_TITLE
     {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_TITLE";
         Pos = MAP_APPFONT ( 63 , 42 ) ;
         Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
@@ -523,6 +569,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_LIST
     {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_LIST";
         Pos = MAP_APPFONT ( 63 , 59 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
@@ -531,6 +578,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_LABEL
     {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_LABEL";
         Pos = MAP_APPFONT ( 63 , 76 ) ;
         Size = MAP_APPFONT ( 135 , 73 ) ;
         TabStop = TRUE ;
@@ -539,6 +587,7 @@ TabPage TP_STD_FONT
     };
     ComboBox LB_IDX
     {
+        HelpID = "sw:ComboBox:TP_STD_FONT:LB_IDX";
         Pos = MAP_APPFONT ( 63 , 94 ) ;
         Size = MAP_APPFONT ( 135, 73 ) ;
         TabStop = TRUE ;
@@ -547,12 +596,14 @@ TabPage TP_STD_FONT
     };
     CheckBox CB_DOCONLY
     {
+        HelpID = "sw:CheckBox:TP_STD_FONT:CB_DOCONLY";
         Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
         Text [ en-US ] = "C~urrent document only" ;
     };
     PushButton PB_STANDARD
     {
+        HelpID = "sw:PushButton:TP_STD_FONT:PB_STANDARD";
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
@@ -588,6 +639,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_HEADER
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_HEADER";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
         TabStop = TRUE ;
@@ -595,6 +647,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_REPEAT_HEADER
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_REPEAT_HEADER";
         Pos = MAP_APPFONT ( 21 , 27 ) ;
         Size = MAP_APPFONT ( 99 , 10 ) ;
         TabStop = TRUE ;
@@ -602,6 +655,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_DONT_SPLIT
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_DONT_SPLIT";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
         TabStop = TRUE ;
@@ -609,6 +663,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_BORDER
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_BORDER";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
         TabStop = TRUE ;
@@ -628,6 +683,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMFORMATTING
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMFORMATTING";
         Pos = MAP_APPFONT ( 131 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
         TabStop = TRUE ;
@@ -635,6 +691,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMFMT_FORMATTING";
         Pos = MAP_APPFONT ( 140 , 27 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         TabStop = TRUE ;
@@ -642,6 +699,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     CheckBox CB_NUMALIGNMENT
     {
+        HelpID = "sw:CheckBox:TP_OPTTABLE_PAGE:CB_NUMALIGNMENT";
         Pos = MAP_APPFONT ( 140 , 40 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
         TabStop = TRUE ;
@@ -667,6 +725,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     MetricField MF_ROWMOVE
     {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_ROWMOVE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 83 , 91 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -689,6 +748,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     MetricField MF_COLMOVE
     {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_COLMOVE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 83 , 106 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -717,6 +777,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     MetricField MF_ROWINSERT
     {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_ROWINSERT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 211 , 91 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -739,6 +800,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     MetricField MF_COLINSERT
     {
+        HelpID = "sw:MetricField:TP_OPTTABLE_PAGE:MF_COLINSERT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 211 , 106 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
@@ -761,6 +823,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIX
     {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_FIX";
         Pos = MAP_APPFONT ( 21 , 133 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Fixed" ;
@@ -774,6 +837,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_FIXPROP
     {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_FIXPROP";
         Pos = MAP_APPFONT ( 21 , 151 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "Fi~xed, proportional" ;
@@ -787,6 +851,7 @@ TabPage TP_OPTTABLE_PAGE
     };
     RadioButton RB_VAR
     {
+        HelpID = "sw:RadioButton:TP_OPTTABLE_PAGE:RB_VAR";
         Pos = MAP_APPFONT ( 21 , 169 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ en-US ] = "~Variable" ;
@@ -820,6 +885,7 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_PARA
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_PARA";
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Pa~ragraph end" ;
@@ -828,48 +894,56 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_SHYPH
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SHYPH";
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Custom h~yphens" ;
     };
     CheckBox CB_SPACE
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SPACE";
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Spac~es" ;
     };
     CheckBox CB_HSPACE
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_HSPACE";
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Non-breaking s~paces" ;
     };
     CheckBox CB_TAB
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_TAB";
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Ta~bs" ;
     };
     CheckBox CB_BREAK
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_BREAK";
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Brea~ks" ;
     };
     CheckBox CB_CHAR_HIDDEN
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_CHAR_HIDDEN";
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Hidden text" ;
     };
     CheckBox CB_FLD_HIDDEN
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_FLD_HIDDEN";
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Fields: Hidden te~xt" ;
     };
     CheckBox CB_FLD_HIDDEN_PARA
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_FLD_HIDDEN_PARA";
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
         Text [ en-US ] = "Fields: Hidden p~aragraphs" ;
@@ -888,6 +962,7 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_SHDWCRSONOFF
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_SHDWCRSONOFF";
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -903,6 +978,7 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLMARGIN";
         Pos = MAP_APPFONT ( 145 , 39 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
@@ -911,18 +987,21 @@ TabPage TP_OPTSHDWCRSR
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLINDENT";
         Pos = MAP_APPFONT ( 145 , 52 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~Left paragraph margin" ;
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLTAB";
         Pos = MAP_APPFONT ( 145 , 66 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "~Tabs" ;
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
+        HelpID = "sw:RadioButton:TP_OPTSHDWCRSR:RB_SHDWCRSFILLSPACE";
         Pos = MAP_APPFONT ( 145 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Tabs a~nd spaces" ;
@@ -935,14 +1014,26 @@ TabPage TP_OPTSHDWCRSR
     };
     CheckBox CB_ALLOW_IN_PROT
     {
+        HelpID = "sw:CheckBox:TP_OPTSHDWCRSR:CB_ALLOW_IN_PROT";
         Pos = MAP_APPFONT ( 136 , 107 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         Text [ en-US ] = "Enable";
     };
+    FixedLine FL_LAYOUT_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 133 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Text [ en-US ] = "Layout assistance";
+    };
+    CheckBox CB_MATH_BASELINE_ALIGNMENT
+    {
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Math baseline alignment";
+    };
 };
-
 
 StringArray STR_PRINTOPTUI
 {
@@ -951,47 +1042,33 @@ StringArray STR_PRINTOPTUI
         < "%PRODUCTNAME %s"; >;
         < "Contents"; >;
         < "Page ba~ckground"; >;
-        < "Specifies whether to include colors and objects that are inserted to the background of the page (Format - Page - Background) in the printed document."; >;
         < "P~ictures and other graphic objects"; >;
-        < "Specifies whether the graphics and drawing or OLE objects of your text document are printed"; >;
         < "Hidden te~xt"; >;
-        < "Enable this option to print text that is marked as hidden."; >;
         < "~Text placeholders"; >;
-        < "Enable this option to print text placeholders. Disable this option to leave the text placeholders blank in the printout."; >;
         < "Form control~s"; >;
-        < "Specifies whether the form control fields of the text document are printed"; >;
         < "Color"; >;
         < "Print text in blac~k"; >;
-        < "Specifies whether to always print text in black."; >;
         < "Pages"; >;
         < "Print ~automatically inserted blank pages"; >;
-        < "If this option is enabled automatically inserted blank pages are printed. This is best if you are printing double-sided. For example, in a book, a \"chapter\" paragraph style has been set to always start with an odd numbered page. If the previous chapter ends on an odd page, %PRODUCTNAME inserts an even numbered blank page. This option controls whether to print that even numbered page or not"; >;
         < "~Use only paper tray from printer preferences"; >;
-        < "For printers with multiple trays this option specifies whether the paper tray used is specified by the system settings of the printer."; >;
         < "Print"; >;
         < "None (document only)"; >;
         < "Comments only"; >;
         < "Place at end of document"; >;
         < "Place at end of page"; >;
-        < "Specify where to print comments (if any)."; >;
         < "~Comments"; >;
         < "Page sides";>;
         < "All pages"; >;
         < "Back sides / left pages"; >;
         < "Front sides / right pages"; >;
-        < "Specify which pages to include in the output"; >;
         < "Include"; >;
         < "Broch~ure"; >;
-        < "Select the Brochure option to print the document in brochure format."; >;
         < "Left-to-right script"; >;
         < "Right-to-left script"; >;
         < "Range and copies"; >;
         < "~All pages"; >;
-        < "Print the whole document."; >;
         < "Pa~ges"; >;
-        < "Print a range of pages of the document."; >;
         < "~Selection"; >;
-        < "Print only the selected parts of the document"; >;
     };
 };
 

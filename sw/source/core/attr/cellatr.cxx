@@ -28,9 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include <float.h>
+
+#include <rtl/math.hxx>
+
 #include <hintids.hxx>          // fuer RES_..
 #include <cellatr.hxx>
 #include <calc.hxx>
@@ -249,8 +250,12 @@ SwTblBoxValue::SwTblBoxValue( const double nVal )
 
 int SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return nValue == ((SwTblBoxValue&)rAttr).nValue;
+    ASSERT(SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal");
+    SwTblBoxValue const& rOther( static_cast<SwTblBoxValue const&>(rAttr) );
+    // items with NaN should be equal to enable pooling
+    return ::rtl::math::isNan(nValue)
+        ?   ::rtl::math::isNan(rOther.nValue)
+        :   (nValue == rOther.nValue);
 }
 
 

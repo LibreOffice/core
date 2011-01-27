@@ -741,14 +741,14 @@ void SmParser::NextToken()
                         CurToken.nLevel     = 5;
                         CurToken.aText      = String();
                         CurToken.nRow       = sal::static_int_cast< xub_StrLen >(Row);
-                        CurToken.nCol       = nTmpStart - ColOff + 1;
+                        CurToken.nCol       = nTmpStart - ColOff;
 
                         if (aTmpRes.TokenType & KParseType::IDENTNAME)
                         {
 
                             xub_StrLen n = sal::static_int_cast< xub_StrLen >(aTmpRes.EndPos - nTmpStart);
                             CurToken.eType      = TSPECIAL;
-                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart), n );
+                            CurToken.aText      = BufferString.Copy( sal::static_int_cast< xub_StrLen >(nTmpStart-1), n+1 );
 
                             DBG_ASSERT( aTmpRes.EndPos > rnEndPos,
                                     "empty identifier" );
@@ -2317,18 +2317,23 @@ void SmParser::Special()
         // conversion of symbol names for 6.0 (XML) file format
         // (name change on import / export.
         // UI uses localized names XML file format does not.)
-        if (IsImportSymbolNames())
+        if( rName.Len() && rName.GetChar( 0 ) == sal_Unicode( '%' ) )
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetUiSymbolName( rName );
-            bReplace = TRUE;
+            if (IsImportSymbolNames())
+            {
+                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+                aNewName = rLSD.GetUiSymbolName( rName.Copy( 1 ) );
+                bReplace = TRUE;
+            }
+            else if (IsExportSymbolNames())
+            {
+                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+                aNewName = rLSD.GetExportSymbolName( rName.Copy( 1 ) );
+                bReplace = TRUE;
+            }
         }
-        else if (IsExportSymbolNames())
-        {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetExportSymbolName( rName );
-            bReplace = TRUE;
-        }
+        if( aNewName.Len() )
+            aNewName.Insert( '%', 0 );
     }
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
@@ -2367,7 +2372,7 @@ void SmParser::Special()
 
     if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
     {
-        Replace( GetTokenIndex() + 1, rName.Len(), aNewName );
+        Replace( GetTokenIndex(), rName.Len(), aNewName );
         rName = aNewName;
     }
 

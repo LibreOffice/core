@@ -65,7 +65,7 @@ namespace nsTransferBufferType
 class SwTransferable : public TransferableHelper
 {
     friend class SwView_Impl;
-    SfxObjectShellRef             aDocShellRef;
+    SfxObjectShellLock             aDocShellRef;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
     ::sfx2::SvBaseLinkRef            refDdeLink;
@@ -91,6 +91,7 @@ class SwTransferable : public TransferableHelper
     void DeleteSelection();
 
     // helper methods for the paste
+    static SwTransferable* GetSwTransferable( const TransferableDataHelper& rData );
     static void SetSelInShell( SwWrtShell& , BOOL , const Point* );
     static BOOL _CheckForURLOrLNKFile( TransferableDataHelper& rData,
                                 String& rFileName, String* pTitle = 0 );
