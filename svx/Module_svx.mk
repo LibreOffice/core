@@ -38,7 +38,6 @@ $(eval $(call gb_Module_add_targets,svx,\
     AllLangResTarget_textconversiondlgs \
     Package_inc \
     Package_sdi \
-    Executable_gengal \
 ))
 
 $(eval $(call gb_Module_add_subsequentcheck_targets,svx,\
