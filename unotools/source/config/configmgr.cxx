@@ -116,7 +116,12 @@ ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
+#if OSL_DEBUG_LEVEL > 1
+    // I think this is a pointless assertion, the code seems to cope
+    // fine with it being empty, no need to crash in a dbglevel=1
+    // build.
     OSL_ENSURE(pMgrImpl->aItemList.empty(), "some ConfigItems are still alive");
+#endif
     if(!pMgrImpl->aItemList.empty())
     {
         ConfigItemList::iterator aListIter;
