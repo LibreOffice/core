@@ -182,9 +182,9 @@ static sal_Bool checkSingletons(Options_Impl const & options, RegistryKey& singl
     if ((e != REG_VALUE_NOT_EXISTS) && (e != REG_INVALID_VALUE) && (valueType == RG_VALUETYPE_BINARY))
     {
         std::vector< sal_uInt8 > value(size);
-        typeKey.getValue(tmpName, value.data()); // @@@ broken api: write to buffer w/o buffer size.
+        typeKey.getValue(tmpName, &value[0]); // @@@ broken api: write to buffer w/o buffer size.
 
-        RegistryTypeReader reader(value.data(), value.size(), sal_False);
+        RegistryTypeReader reader(&value[0], value.size(), sal_False);
         if ( reader.isValid() && reader.getTypeClass() == RT_TYPE_SINGLETON )
         {
             RegistryKey entryKey;

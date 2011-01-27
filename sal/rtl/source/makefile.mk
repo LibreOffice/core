@@ -96,7 +96,7 @@ SLOFILES=   \
             $(SLO)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/memory_fini.obj
+SLOFILES+=$(SLO)$/alloc_fini.obj
 .ENDIF
 
 
@@ -129,7 +129,7 @@ OBJFILES=   \
             $(OBJ)$/alloc_arena.obj
 
 .IF "$(OS)"=="MACOSX"
-OBJFILES+=$(OBJ)$/memory_fini.obj
+OBJFILES+=$(OBJ)$/alloc_fini.obj
 .ENDIF
 
 
