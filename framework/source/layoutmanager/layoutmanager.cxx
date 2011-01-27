@@ -4726,7 +4726,6 @@ throw (RuntimeException)
     RTL_LOGFILE_CONTEXT( aLog, "framework (cd100003) ::LayoutManager::hideElement" );
 
 
-    sal_Bool            bResult( sal_False );
     sal_Bool            bNotify( sal_False );
     ::rtl::OUString            aElementType;
     ::rtl::OUString            aElementName;
@@ -4755,7 +4754,6 @@ throw (RuntimeException)
                     if ( pMenuBar )
                     {
                         pMenuBar->SetDisplayable( sal_False );
-                        bResult = sal_True;
                         bNotify = sal_True;
                     }
                 }
@@ -4774,14 +4772,13 @@ throw (RuntimeException)
                     implts_writeWindowStateData( m_aStatusBarAlias, m_aStatusBarElement );
                     doLayout();
                     bNotify = sal_True;
-                    bResult = sal_True;
                 }
             }
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ))
         {
-            bResult = bNotify = implts_hideProgressBar();
+            bNotify = implts_hideProgressBar();
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ))
         {
@@ -4806,7 +4803,6 @@ throw (RuntimeException)
                         if ( xDockWindow.is() && !xDockWindow->isFloating() )
                             doLayout();
 
-                        bResult = sal_True;
                         bNotify = sal_True;
                     } // if ( xDockWindow.is() )
                     break;

@@ -164,7 +164,7 @@ void FmRecordCountListener::NotifyCurrentCount()
     if (m_lnkWhoWantsToKnow.IsSet())
     {
         DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::NotifyCurrentCount : I have no propset ... !?");
-        void* pTheCount = (void*)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
+        void* pTheCount = (void*)(sal_IntPtr)::comphelper::getINT32(m_xListening->getPropertyValue(FM_PROP_ROWCOUNT));
         m_lnkWhoWantsToKnow.Call(pTheCount);
     }
 }

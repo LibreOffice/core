@@ -66,7 +66,6 @@ SvxXMeasurePreview::SvxXMeasurePreview
     SetMapMode( aMapMode );
 
     aSize = GetOutputSize();
-    Rectangle aRect = Rectangle( Point(), aSize );
     Point aPt1 = Point( aSize.Width() / 5, (long) ( aSize.Height() / 2 ) );
     Point aPt2 = Point( aSize.Width() * 4 / 5, (long) ( aSize.Height() / 2 ) );
 

@@ -194,8 +194,7 @@ void FwkTabPage::Resize()
 {
     if ( m_xPage.is () )
     {
-        Size  aSize = GetSizePixel ();
-        Point aPos  = GetPosPixel  ();
+        Size aSize = GetSizePixel();
 
         m_xPage->setPosSize( 0, 0, aSize.Width()-1 , aSize.Height()-1, awt::PosSize::POSSIZE );
     }

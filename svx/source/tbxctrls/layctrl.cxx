@@ -307,7 +307,6 @@ void TableWindow::Paint( const Rectangle& )
             aText += String(SVX_RESSTR(RID_SVXSTR_PAGES));
         }
 
-        Size aSize = GetOutputSizePixel();
         Size aTextSize( GetTextWidth( aText ), GetTextHeight() );
 
         long nTextX = nSelectionWidth + TABLE_CELL_WIDTH;
@@ -490,7 +489,6 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
     SfxPopupWindow::MouseMove( rMEvt );
     Point aPos = rMEvt.GetPosPixel();
     Point aMousePos = aPos;
-    Point aWinPos = GetPosPixel();
 
     if ( rMEvt.IsEnterWindow() )
         CaptureMouse();

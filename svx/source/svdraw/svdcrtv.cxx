@@ -473,7 +473,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
             }
             if (pAktCreate!=NULL)
             {
-                BOOL bStartEdit=FALSE; // nach Ende von Create automatisch TextEdit starten
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
                 // #101618# SW uses a naked SdrObject for frame construction. Normally, such an
@@ -492,8 +491,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
-
-                    bStartEdit=TRUE;
                 }
                 if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
@@ -506,8 +503,6 @@ BOOL SdrCreateView::ImpBegCreateObj(UINT32 nInvent, UINT16 nIdent, const Point& 
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
-
-                    bStartEdit=TRUE;
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 

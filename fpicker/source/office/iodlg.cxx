@@ -2489,7 +2489,6 @@ void SvtFileDialog::InitSize()
     if ( !_pImp->_nFixDeltaHeight )
     {
         // Fixgr"ossen errechnen und merken
-        Point aPnt = _pFileView->GetPosPixel();
         long nBoxH = _pFileView->GetSizePixel().Height();
         long nH = GetSizePixel().Height();
         _pImp->_nFixDeltaHeight = nH - nBoxH;

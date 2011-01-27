@@ -94,25 +94,17 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
 {
     INetURLObject   aURL( rURL );
     String          aFileName;
-    BOOL            bExists = FALSE;
 
     // check original file name
-    if( FileExists( aURL ) )
-        bExists = TRUE;
-    else
+    if( !FileExists( aURL ) )
     {
         // check upper case file name
         aURL.setName( aURL.getName().toAsciiUpperCase() );
 
-        if( FileExists( aURL ) )
-            bExists = TRUE;
-        else
+        if(!FileExists( aURL ) )
         {
             // check lower case file name
             aURL.setName( aURL.getName().toAsciiLowerCase() );
-
-            if( FileExists( aURL ) )
-                bExists = TRUE;
         }
     }
 

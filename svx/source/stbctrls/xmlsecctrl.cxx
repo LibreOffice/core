@@ -147,8 +147,6 @@ void XmlSecStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     OutputDevice*       pDev = rUsrEvt.GetDevice();
     DBG_ASSERT( pDev, "-XmlSecStatusBarControl::Paint(): no Output Device... this will lead to nirvana..." );
     Rectangle           aRect = rUsrEvt.GetRect();
-    StatusBar&          rBar = GetStatusBar();
-    Point               aItemPos = rBar.GetItemTextPos( GetId() );
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
 
