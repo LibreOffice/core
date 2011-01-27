@@ -50,7 +50,7 @@ endef
 
 define gb_SrsPartMergeTarget__rules
 $$(call gb_SrsPartMergeTarget_get_target,%) : $(1)/% $$(gb_Helper_MISCDUMMY) | $$(gb_SrsPartMergeTarget_TRANSEXTARGET) $$(gb_SrsPartMergeTarget_TRANSEXAUXDEPS)
-    $$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<)
+    $$(if $$(SDF),$$(call gb_SrsPartMergeTarget__command,$$@,$$*,$$<),mkdir -p $$(dir $$@) && cp $$< $$@)
 
 endef
 
@@ -107,7 +107,7 @@ $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE :=
 else
 $(call gb_SrsPartTarget_get_target,$(1)) : MERGEDFILE := $(call gb_SrsPartMergeTarget_get_target,$(1))
 $(call gb_SrsPartTarget_get_target,$(1)) : $(call gb_SrsPartMergeTarget_get_target,$(1))
-$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf
+$(call gb_SrsPartMergeTarget_get_target,$(1)) : SDF := $(realpath $(gb_SrsPartMergeTarget_SDFLOCATION)$(dir $(1))localize.sdf)
 endif
 
 endef
