@@ -244,6 +244,15 @@ ifneq ($(wildcard $(GBUILDDIR)/extensions/post_*.mk),)
 include $(wildcard $(GBUILDDIR)/extensions/post_*.mk)
 endif
 
+ifeq ($(SYSTEM_LIBXSLT),YES)
+gb_XSLTPROCTARGET :=
+gb_XSLTPROC := xsltproc
+else
+gb_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
+gb_XSLTPROC := $(gb_XSLTPROCPRECOMMAND) $(gb_XSLTPROCTARGET)
+endif
+
 export gb_AWK
+export gb_XSLTPROC
 
 # vim: set noet sw=4 ts=4:

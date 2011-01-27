@@ -611,7 +611,7 @@ endif
 
 # ComponentTarget
 
-gb_ComponentTarget_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
+gb_XSLTPROCPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 gb_Library_COMPONENTPREFIXES := \
     OOO:vnd.sun.star.expand:\dBRAND_BASE_DIR/program/ \
     URELIB:vnd.sun.star.expand:\dURE_INTERNAL_LIB_DIR/ \
