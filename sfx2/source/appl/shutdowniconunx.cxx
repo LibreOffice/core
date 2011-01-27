@@ -333,13 +333,25 @@ static gboolean display_menu_cb( GtkWidget *,
  * upgraded, then the old quickstarter is still running, but is now unreliable
  * as the old install has been deleted. A fairly intractable problem but we
  * can avoid much of the pain if we turn off the quickstarter if we detect
- * that it has been physically deleted.
+ * that it has been physically deleted or overwritten
 */
 static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*/,
     GFile * /*arg2*/, GFileMonitorEvent event_type, gpointer /*user_data*/)
 {
-    if (event_type == G_FILE_MONITOR_EVENT_DELETED)
-        exit_quickstarter_cb(NULL);
+    //Shutdown the quick starter if anything has happened to make it unsafe
+    //to remain running, e.g. rpm --erased and all libs deleted, or
+    //rpm --upgrade and libs being overwritten
+    switch (event_type)
+    {
+        case G_FILE_MONITOR_EVENT_DELETED:
+        case G_FILE_MONITOR_EVENT_CREATED:
+        case G_FILE_MONITOR_EVENT_PRE_UNMOUNT:
+        case G_FILE_MONITOR_EVENT_UNMOUNTED:
+            exit_quickstarter_cb(GTK_WIDGET(pTrayIcon));
+            break;
+        default:
+            break;
+    }
 }
 #endif
 
