@@ -35,8 +35,10 @@
 #ifdef SOLAR_JAVA
 #include "jni.h"
 #else
-struct JNIEnv;
-struct JavaVM;
+struct JNIEnv_;
+typedef JNIEnv_ JNIEnv;
+struct JavaVM_;
+typedef JavaVM_ JavaVM;
 typedef int jint;
 typedef void * jobject;
 #endif
