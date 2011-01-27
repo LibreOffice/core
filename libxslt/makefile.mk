@@ -50,24 +50,28 @@ LIBXSLTVERSION=$(LIBXSLT_MAJOR).$(LIBXSLT_MINOR).$(LIBXSLT_MICRO)
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXSLTVERSION)
 TARFILE_MD5=e61d0364a30146aaa3001296f853b2b9
+
+# libxslt-internal-symbols: #i112480#: Solaris ld requires symbols to be defined
 PATCH_FILES=libxslt-configure.patch \
             libxslt-win_manifest.patch \
-            libxslt-gnome602728.patch
+            libxslt-mingw.patch \
+            libxslt-internal-symbols.patch
+
 
 # This is only for UNX environment now
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-xslt_CC=$(CC)
+xslt_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 xslt_CC+=-shared-libgcc
 .ENDIF
-xslt_LIBS=-lmingwthrd
+xslt_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xslt_LIBS+=-lstdc++_s
+xslt_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-crypto --without-python --enable-static=no --with-sax1=yes --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xslt_CC)" CFLAGS="$(xslt_CFLAGS) -D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="$(xslt_LIBS)"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--without-crypto --without-python --enable-static=no --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(xslt_CC)" CFLAGS="$(xslt_CFLAGS)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xslt_LIBS)"  LIBXML2LIB=$(LIBXML2LIB) OBJDUMP=objdump
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -87,7 +91,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
 
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
 LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'

@@ -49,6 +49,7 @@ TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
 PATCH_FILES=\
     Python-$(PYVERSION).patch \
+    Python-parallel-make.patch \
     Python-ssl.patch
 
 CONFIGURE_DIR=
@@ -65,10 +66,6 @@ python_LDFLAGS+=-L$(SYSBASE)/usr/lib
 CC+:=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
-
-.IF "$(OS)$(COM)"=="LINUXGCC"
-python_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 .IF "$(OS)$(CPU)"=="SOLARISU"
 CC+:=$(ARCH_FLAGS)
@@ -93,6 +90,7 @@ python_LDFLAGS=-mno-cygwin -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 python_LDFLAGS+=-shared-libgcc
 .ENDIF
+python_LDFLAGS+=-shared-libgcc -Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE

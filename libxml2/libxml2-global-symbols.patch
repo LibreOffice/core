@@ -1,0 +1,59 @@
+--- misc/libxml2-2.7.6/libxml2.syms	Tue Oct  6 18:31:35 2009
++++ misc/build/libxml2-2.7.6/libxml2.syms	Wed Jul  7 15:43:17 2010
+@@ -2184,10 +2184,10 @@
+ } LIBXML2_2.6.27;
+ 
+ LIBXML2_2.6.29 {
+-    global:
++#    global:
+ 
+ # threads
+-  xmlDllMain;
++#WIN32 only!  xmlDllMain;
+ } LIBXML2_2.6.28;
+ 
+ LIBXML2_2.6.32 {
+@@ -2231,3 +2231,43 @@
+   xmlXIncludeProcessTreeFlagsData;
+ } LIBXML2_2.7.3;
+ 
++# HACK: export global variable accessor functions (globals.h)
++LIBXML2_GLOBAL_VARIABLES {
++    global:
++#  __xmlMalloc;
++#  __xmlMallocAtomic;
++#  __xmlRealloc;
++#  __xmlFree;
++#  __xmlMemStrdup;
++  __docbDefaultSAXHandler;
++  __htmlDefaultSAXHandler;
++  __xmlLastError;
++  __oldXMLWDcompatibility;
++  __xmlBufferAllocScheme;
++  __xmlDefaultBufferSize;
++  __xmlDefaultSAXHandler;
++  __xmlDefaultSAXLocator;
++  __xmlDoValidityCheckingDefaultValue;
++  __xmlGenericError;
++  __xmlStructuredError;
++  __xmlGenericErrorContext;
++  __xmlStructuredErrorContext;
++  __xmlGetWarningsDefaultValue;
++  __xmlIndentTreeOutput;
++  __xmlTreeIndentString;
++  __xmlKeepBlanksDefaultValue;
++  __xmlLineNumbersDefaultValue;
++  __xmlLoadExtDtdDefaultValue;
++  __xmlParserDebugEntities;
++  __xmlParserVersion;
++  __xmlPedanticParserDefaultValue;
++  __xmlSaveNoEmptyTags;
++  __xmlSubstituteEntitiesDefaultValue;
++  __xmlRegisterNodeDefaultValue;
++  __xmlDeregisterNodeDefaultValue;
++  __xmlParserInputBufferCreateFilenameValue;
++  __xmlOutputBufferCreateFilenameValue;
++# Solaris ld needs explicit auto-reduction (or, alternatively, "-B local")
++    local:
++  *;
++} LIBXML2_2.7.4;
