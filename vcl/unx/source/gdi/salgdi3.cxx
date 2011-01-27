@@ -1218,7 +1218,7 @@ X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 
 // ---------------------------------------------------------------------------
 
-sal_uInt32
+sal_uLong
 X11SalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 {
     if( ! bPrinter_ )
