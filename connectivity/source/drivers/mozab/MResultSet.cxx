@@ -1224,7 +1224,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
             else
             {
                 sal_Bool bDistinct = sal_False;
-                sal_Bool bWasSorted = sal_False;
                 OSQLParseNode *pDistinct = m_pParseTree->getChild(1);
                 if (pDistinct && pDistinct->getTokenID() == SQL_TOKEN_DISTINCT)
                 {
@@ -1233,8 +1232,6 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
                         m_aOrderbyColumnNumber.push_back(m_aColMapping[1]);
                         m_aOrderbyAscending.push_back(SQL_DESC);
                     }
-                    else
-                        bWasSorted = sal_True;
                     bDistinct = sal_True;
                 }
 
