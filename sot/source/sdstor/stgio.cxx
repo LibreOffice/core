@@ -386,5 +386,3 @@ ULONG StgIo::ValidateFATs()
 //  DBG_ERROR("Validiere nicht (kein FileStorage)");
     return FAT_OK;
 }
-
-
