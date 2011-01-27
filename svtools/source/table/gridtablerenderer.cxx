@@ -300,7 +300,7 @@ namespace svt { namespace table
             {
                 // text is right aligned => draw the sort indicator at the left hand side
                 _rDevice.DrawBitmapEx(
-                    Point( nSortIndicatorPaddingX, nSortIndicatorPaddingY ),
+                    Point( _rArea.Left() + nSortIndicatorPaddingX, _rArea.Top() + nSortIndicatorPaddingY ),
                     aIndicatorBitmap
                 );
             }
