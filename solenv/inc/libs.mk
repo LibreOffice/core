@@ -344,12 +344,17 @@ HUNSPELLLIB=$(HUNSPELL_LIBS)
 .ELSE
 HUNSPELLLIB=-lhunspell-1.2
 .ENDIF
-MYTHESLIB=-lmythes
+.IF "$(SYSTEM_MYTHES)" == "YES"
+MYTHESLIB=$(MYTHES_LIBS)
+.ELSE
+MYTHESLIB=-lmythes-1.2
+.ENDIF
 PYUNOLIB=-lpyuno
 LPSOLVELIB=-llpsolve55
 SOFFICELIB=-lsofficeapp
 UNOPKGAPPLIB=-lunopkgapp
 TESTLIB=-ltest
+XMLREADERLIB=-lxmlreader
 
 .ELSE				# ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"
 
@@ -531,5 +536,6 @@ LPSOLVELIB=lpsolve55.lib
 SOFFICELIB=isofficeapp.lib
 UNOPKGAPPLIB=iunopkgapp.lib
 TESTLIB=itest.lib
+XMLREADERLIB=ixmlreader.lib
 
 .ENDIF              # ("$(GUI)"=="UNX" || "$(COM)"=="GCC") && "$(GUI)"!="OS2"

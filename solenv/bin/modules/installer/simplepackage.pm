@@ -62,25 +62,44 @@ sub check_simple_packager_project
 }
 
 ####################################################
+# Detecting the directory with extensions
+####################################################
+
+sub get_extensions_dir
+{
+    my ( $subfolderdir ) = @_;
+
+    my $extensiondir = $subfolderdir . $installer::globals::separator;
+    if ( $installer::globals::officedirhostname ne "" ) { $extensiondir = $extensiondir . $installer::globals::officedirhostname . $installer::globals::separator; }
+    my $extensionsdir = $extensiondir . "share" . $installer::globals::separator . "extensions";
+    my $preregdir = $extensiondir . "share" . $installer::globals::separator . "prereg" . $installer::globals::separator . "bundled";
+
+    return ( $extensionsdir, $preregdir );
+}
+
+####################################################
 # Registering extensions
 ####################################################
 
 sub register_extensions
 {
-    my ($officedir, $languagestringref) = @_;
+    my ($officedir, $languagestringref, $preregdir) = @_;
+
+    my $infoline = "";
+
+    if ( $preregdir eq "" )
+    {
+        $infoline = "ERROR: Failed to determine directory \"prereg\" for extension registration! Please check your installation set.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+        installer::exiter::exit_program($infoline, "register_extensions");
+    }
 
     my $programdir = $officedir . $installer::globals::separator;
-    # if ( $installer::globals::sundirhostname ne "" ) { $programdir = $programdir . $installer::globals::sundirhostname . $installer::globals::separator; }
     if ( $installer::globals::officedirhostname ne "" ) { $programdir = $programdir . $installer::globals::officedirhostname . $installer::globals::separator; }
     $programdir = $programdir . "program";
 
     my $from = cwd();
     chdir($programdir);
-
-    my $infoline = "";
-
-    # my $unopkgfile = $officedir . $installer::globals::separator . "program" .
-    #               $installer::globals::separator . $installer::globals::unopkgfile;
 
     my $unopkgfile = $installer::globals::unopkgfile;
 
@@ -92,87 +111,73 @@ sub register_extensions
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    # my $extensiondir = $officedir . $installer::globals::separator . "share" .
-    #           $installer::globals::separator . "extension" .
-    #           $installer::globals::separator . "install";
+    if ( ! -f $unopkgfile )
+    {
+        $unopkgexists = 0;
+        $infoline = "Info: File $unopkgfile does not exist! Extensions cannot be registered.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
 
-    my $extensiondir = ".." . $installer::globals::separator . "share" . $installer::globals::separator . "extension" . $installer::globals::separator . "install";
-
-    my $allextensions = installer::systemactions::find_file_with_file_extension("oxt", $extensiondir);
-
-    if (( $#{$allextensions} > -1 ) && ( $unopkgexists ))
+    if ( $unopkgexists )
     {
         my $currentdir = cwd();
         print "... current dir: $currentdir ...\n";
         $infoline = "Current dir: $currentdir\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        for ( my $i = 0; $i <= $#{$allextensions}; $i++ )
+        if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
+
+        my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
+
+        my $slash = "";
+
+        if ( $installer::globals::iswindowsbuild )
         {
-            my $oneextension = $extensiondir . $installer::globals::separator . ${$allextensions}[$i];
-
-            # my $systemcall = $unopkgfile . " add --shared --suppress-license " . "\"" . $oneextension . "\"";
-
-            if ( ! -f $unopkgfile ) { installer::exiter::exit_program("ERROR: $unopkgfile not found!", "register_extensions"); }
-            if ( ! -f $oneextension ) { installer::exiter::exit_program("ERROR: $oneextension not found!", "register_extensions"); }
-
-            my $localtemppath = installer::systemactions::create_directories("uno", $languagestringref);
-
-            if ( $installer::globals::iswindowsbuild )
+            if ( $^O =~ /cygwin/i )
             {
-                if ( $^O =~ /cygwin/i )
-                {
-                    $localtemppath = $installer::globals::cyg_temppath;
-                }
-                else
-                {
-                    $windowsslash = "\/";
-                }
-                $localtemppath =~ s/\\/\//g;
-                $localtemppath = "/".$localtemppath;
+                $localtemppath = $installer::globals::cyg_temppath;
+                $preregdir = qx{cygpath -m "$preregdir"};
+                chomp($preregdir);
             }
-            my $systemcall = $unopkgfile . " add --shared --suppress-license --verbose " . $oneextension . " -env:UserInstallation=file://" . $localtemppath . " 2\>\&1 |";
-
-            print "... $systemcall ...\n";
-
-            $infoline = "Systemcall: $systemcall\n";
-            push( @installer::globals::logfileinfo, $infoline);
-
-            my @unopkgoutput = ();
-
-            open (UNOPKG, $systemcall);
-            while (<UNOPKG>)
-            {
-                my $lastline = $_;
-                push(@unopkgoutput, $lastline);
-            }
-            close (UNOPKG);
-
-            my $returnvalue = $?;   # $? contains the return value of the systemcall
-
-            if ($returnvalue)
-            {
-                # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
-                # contains strings like "Error" even in the case of success. This causes a packaging error
-                # when the log file is analyzed at the end, even if there is no real error.
-                for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
-
-                $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
-                push( @installer::globals::logfileinfo, $infoline);
-                installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
-            }
-            else
-            {
-                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-                push( @installer::globals::logfileinfo, $infoline);
-            }
+            $localtemppath =~ s/\\/\//g;
+            $slash = "/"; # Third slash for Windows. Other OS pathes already start with "/"
         }
-    }
-    else
-    {
-        if ( ! ( $#{$allextensions} > -1 ))
+
+        $preregdir =~ s/\/\s*$//g;
+
+        my $systemcall = $unopkgfile . " sync --verbose -env:BUNDLED_EXTENSIONS_USER=\"file://" . $slash . $preregdir . "\"" . " -env:UserInstallation=file://" . $slash . $localtemppath . " -env:UNO_JAVA_JFW_ENV_JREHOME=true 2\>\&1 |";
+
+        print "... $systemcall ...\n";
+
+        $infoline = "Systemcall: $systemcall\n";
+        push( @installer::globals::logfileinfo, $infoline);
+
+        my @unopkgoutput = ();
+
+        open (UNOPKG, $systemcall);
+        while (<UNOPKG>)
         {
-            $infoline = "No extensions located in directory $extensiondir.\n";
+            my $lastline = $_;
+            push(@unopkgoutput, $lastline);
+        }
+        close (UNOPKG);
+
+        my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+        if ($returnvalue)
+        {
+            # Writing content of @unopkgoutput only in the error case into the log file. Sometimes it
+            # contains strings like "Error" even in the case of success. This causes a packaging error
+            # when the log file is analyzed at the end, even if there is no real error.
+            for ( my $j = 0; $j <= $#unopkgoutput; $j++ ) { push( @installer::globals::logfileinfo, "$unopkgoutput[$j]"); }
+
+            $infoline = "ERROR: Could not execute \"$systemcall\"!\nExitcode: '$returnvalue'\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            installer::exiter::exit_program("ERROR: $systemcall failed!", "register_extensions");
+        }
+        else
+        {
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
             push( @installer::globals::logfileinfo, $infoline);
         }
     }
@@ -342,9 +347,10 @@ sub replace_one_variable_in_shellscript
 
 sub replace_variables_in_scriptfile
 {
-    my ($scriptfile, $volume_name, $allvariables) = @_;
+    my ($scriptfile, $volume_name, $volume_name_app, $allvariables) = @_;
 
     replace_one_variable_in_shellscript($scriptfile, $volume_name, "FULLPRODUCTNAME" );
+    replace_one_variable_in_shellscript($scriptfile, $volume_name_app, "FULLAPPPRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTNAME'}, "PRODUCTNAME" );
     replace_one_variable_in_shellscript($scriptfile, $allvariables->{'PRODUCTVERSION'}, "PRODUCTVERSION" );
 
@@ -403,10 +409,17 @@ sub create_package
             $folder = $packagename;
         }
 
-        my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
-        $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        # my $volume_name = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'}; # Adding PRODUCTVERSION makes this difficult to maintain!
+        my $volume_name = $allvariables->{'PRODUCTNAME'};
+        my $volume_name_classic = $allvariables->{'PRODUCTNAME'} . ' ' . $allvariables->{'PRODUCTVERSION'};
+        my $volume_name_classic_app = $volume_name;  # "app" should not contain version number
+        # $volume_name = $volume_name . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'}; # Adding PRODUCTEXTENSION makes this difficult to maintain!
+        $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
+        $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'PRODUCTEXTENSION'} if $allvariables->{'PRODUCTEXTENSION'};
         if ( $allvariables->{'DMG_VOLUMEEXTENSION'} ) {
             $volume_name = $volume_name . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
+            $volume_name_classic = $volume_name_classic . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
+            $volume_name_classic_app = $volume_name_classic_app . ' ' . $allvariables->{'DMG_VOLUMEEXTENSION'};
         }
 
         my $sla = 'sla.r';
@@ -422,11 +435,22 @@ sub create_package
         if (( $installer::globals::languagepack ) || ( $installer::globals::patch ))
         {
             $localtempdir = "$tempdir/$packagename";
-            if ( $installer::globals::languagepack ) { $volume_name = "$volume_name Language Pack"; }
-            if ( $installer::globals::patch ) { $volume_name = "$volume_name Patch"; }
+            if ( $installer::globals::languagepack )
+            {
+                $volume_name = "$volume_name Language Pack";
+                $volume_name_classic = "$volume_name_classic Language Pack";
+                $volume_name_classic_app = "$volume_name_classic_app Language Pack";
+            }
+            if ( $installer::globals::patch )
+            {
+                $volume_name = "$volume_name Patch";
+                $volume_name_classic = "$volume_name_classic Patch";
+                $volume_name_classic_app = "$volume_name_classic_app Patch";
+            }
 
             # Create tar ball named tarball.tar.bz2
-            my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            # my $appfolder = $localtempdir . "/" . $volume_name . "\.app";
+            my $appfolder = $localtempdir . "/" . $volume_name_classic_app . "\.app";
             my $contentsfolder = $appfolder . "/Contents";
             my $tarballname = "tarball.tar.bz2";
 
@@ -469,7 +493,8 @@ sub create_package
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
             if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
-            my $scripthelperrealfilename = $volume_name;
+            # my $scripthelperrealfilename = $volume_name;
+            my $scripthelperrealfilename = $volume_name_classic_app;
             my $translationfilename = $installer::globals::macinstallfilename;
 
             # Finding both files in solver
@@ -492,7 +517,8 @@ sub create_package
             my $scriptfilecontent = installer::files::read_file($scriptfilename);
             my $translationfilecontent = installer::files::read_file($$translationfileref);
             localize_scriptfile($scriptfilecontent, $translationfilecontent, $languagestringref);
-            replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+            # replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
+            replace_variables_in_scriptfile($scriptfilecontent, $volume_name_classic, $volume_name_classic_app, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
             $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
@@ -519,7 +545,8 @@ sub create_package
 
             # Replacing variables in Info.plist
             $scriptfilecontent = installer::files::read_file($destfile);
-            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+            # replace_one_variable_in_shellscript($scriptfilecontent, $volume_name, "FULLPRODUCTNAME" );
+            replace_one_variable_in_shellscript($scriptfilecontent, $volume_name_classic_app, "FULLAPPPRODUCTNAME" ); # OpenOffice.org Language Pack
             installer::files::save_file($destfile, $scriptfilecontent);
 
             chdir $localfrom;
@@ -647,6 +674,7 @@ sub create_simple_package
         if ( $onedir->{'HostName'} )
         {
             my $destdir = $subfolderdir . $installer::globals::separator . $onedir->{'HostName'};
+
             if ( ! -d $destdir )
             {
                 if ( $^O =~ /cygwin/i ) # Cygwin performance check
@@ -772,11 +800,17 @@ sub create_simple_package
         system($localcall);
     }
 
+    installer::logger::print_message( "... removing superfluous directories ...\n" );
+    installer::logger::include_header_into_logfile("Removing superfluous directories:");
+
+    my ( $extensionfolder, $preregdir ) = get_extensions_dir($subfolderdir);
+    installer::systemactions::remove_empty_dirs_in_folder($extensionfolder);
+
     # Registering the extensions
 
     installer::logger::print_message( "... registering extensions ...\n" );
     installer::logger::include_header_into_logfile("Registering extensions:");
-    register_extensions($subfolderdir, $languagestringref);
+    register_extensions($subfolderdir, $languagestringref, $preregdir);
 
     if ( $installer::globals::compiler =~ /^unxmacx/ )
     {

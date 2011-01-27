@@ -12,9 +12,15 @@
 
 #include "cpp.h"
 
+#if defined MACOSX || !defined HAVE_GETOPT
 extern int stgetopt(int, char *const *, const char *);
-extern char *optarg, rcsid[];
+extern char *optarg;
 extern int optind;
+#else
+#include <getopt.h>
+#endif
+
+extern char rcsid[];
 
 int Pflag = 0;                          /* print no line information */
 int Iflag = 0;                          /* print includes */
@@ -36,7 +42,11 @@ void
     Tokenrow tr;
 
     setup_kwtab();
+#if defined MACOSX || !defined HAVE_GETOPT
     while ((c = stgetopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+#else
+    while ((c = getopt(argc, argv, "NOPV:I:D:U:F:A:X:u:l:+")) != -1)
+#endif
         switch (c)
         {
             case 'N':

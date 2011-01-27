@@ -30,9 +30,7 @@
 
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#ifndef _LISTMACR_HXX
-#include <bootstrp/listmacr.hxx>
-#endif
+#include <soldep/listmacr.hxx>
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
@@ -382,7 +380,7 @@ private:
     ByteString      aStarName; // no idee what this should be
 
 protected:
-    NAMESPACE_VOS( OMutex ) aMutex;
+    vos:: OMutex  aMutex;
 
     USHORT          nStarMode;
     SolarFileList   aFileList;
@@ -406,8 +404,7 @@ public:
                     Star();
                     Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
                     Star( SolarFileList *pSolarFiles );
-                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
-                        const char *pSourceRoot = NULL  );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion );
 
                     ~Star();
 
@@ -430,10 +427,8 @@ public:
     BOOL            NeedsUpdate();
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
-    void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
-                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
-    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
-                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
     BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);
 
@@ -465,7 +460,7 @@ public:
                     StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
                     StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
                     StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
-                        BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
+                        BOOL bReadComments = FALSE );
 
     void            CleanUp();
 

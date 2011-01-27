@@ -65,7 +65,7 @@ CXX*=g++
 # name of C Compiler
 CC*=gcc
 .IF "$(SYSBASE)"!=""
-CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CFLAGS_SYSBASE:=--sysroot=$(SYSBASE)
 CXX+:=$(CFLAGS_SYSBASE)
 CC+:=$(CFLAGS_SYSBASE)
 .ENDIF          # "$(SYSBASE)"!=""
@@ -143,6 +143,9 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
+.IF "$(SYSBASE)"!=""
+LINKFLAGS_SYSBASE:=-Wl,--sysroot=$(SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
 LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
 LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
@@ -151,19 +154,18 @@ LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
-# flag -Wl,-z,noexecstack sets the NX bit on the stack
-LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGS_SYSBASE)
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
 LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
@@ -198,6 +200,14 @@ STDLIBCUIMT+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
 .ENDIF
+
+.IF "$(ALLOC)" == "JEMALLOC"
+STDLIBGUIMT+=-ljemalloc
+STDLIBCUIMT+=-ljemalloc
+STDSHLGUIMT+=-ljemalloc
+STDSHLCUIMT+=-ljemalloc
+.ENDIF
+
 .IF "$(HAVE_LD_HASH_STYLE)"  == "TRUE"
 LINKFLAGS += -Wl,--hash-style=both
 .ELSE

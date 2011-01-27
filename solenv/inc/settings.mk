@@ -299,6 +299,12 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
+.IF "$(GUI)"=="WNT"
+posix_PWD:=/cygdrive/$(PWD:s/://)
+.ELSE			#GUI)"=="WNT"
+posix_PWD:=$(PWD)
+.ENDIF			#GUI)"=="WNT"
+
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
@@ -387,9 +393,11 @@ COMPILER_WARN_ERRORS=TRUE
 rsc_once*=$(RSC_ONCE)
 .ENDIF
 
-.IF "$(COMMON_BUILD)"!=""
-common_build*=$(COMMON_BUILD)
-.ENDIF
+#.IF "$(COMMON_BUILD)"!=""
+#common_build*=$(COMMON_BUILD)
+#.ENDIF
+common_build:=
+COMMON_BUILD:=
 
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
@@ -574,24 +582,24 @@ PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
 
-# common output tree
-.IF "$(common_build)"!=""
-COMMON_OUTDIR*=common
-.IF "$(no_common_build_reslib)"==""
-common_build_reslib=true
-.ENDIF			# "$(no_common_build_reslib)"==""
-.IF "$(no_common_build_zip)"==""
-common_build_zip=true
-.ENDIF			# "$(no_common_build_zip)"==""
-.IF "$(no_common_build_sign_jar)"==""
-common_build_sign_jar=true
-.ENDIF			# "$(no_common_build_sign_jar)"==""
-.IF "$(no_common_build_srs)"==""
-common_build_srs=true
-.ENDIF			# "$(no_common_build_srs)"==""
-.ELSE			# "$(common_build)"!=""
+## common output tree
+#.IF "$(common_build)"!=""
+#COMMON_OUTDIR*=common
+#.IF "$(no_common_build_reslib)"==""
+#common_build_reslib=true
+#.ENDIF			# "$(no_common_build_reslib)"==""
+#.IF "$(no_common_build_zip)"==""
+#common_build_zip=true
+#.ENDIF			# "$(no_common_build_zip)"==""
+#.IF "$(no_common_build_sign_jar)"==""
+#common_build_sign_jar=true
+#.ENDIF			# "$(no_common_build_sign_jar)"==""
+#.IF "$(no_common_build_srs)"==""
+#common_build_srs=true
+#.ENDIF			# "$(no_common_build_srs)"==""
+#.ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR:=$(OUTPATH)
-.ENDIF			# "$(common_build)"!=""
+#.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
@@ -602,23 +610,18 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 # As this is not part of the initial startup makefile we define an infered
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
-$(OUT)/inc/%world.mk :
+$(posix_PWD)/$(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
-# don't need/want output trees in solenv!!!
-.IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
+.INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
 
 .IF "$(common_build)"!=""
-$(LOCAL_COMMON_OUT)/inc/%world.mk :
+$(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
-.IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
+.INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
 .ENDIF			# "$(common_build)"!=""
 
 .INCLUDE .IGNORE : office.mk
@@ -827,6 +830,9 @@ LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(TRYSDF) $(THEN) echo $(TRYSDF) $(FI)
 .IF  "$(LOCALIZESDF)"==""
 LOCALSDFFILE:=$(COMMONMISC)$/$(PRJNAME)$/$(PATH_IN_MODULE)$/localize.sdf
 LOCALIZESDF:=$(strip $(shell @+$(IFEXIST) $(SOLARCOMMONSDFDIR)$/$(PRJNAME).zip $(THEN) echo $(LOCALSDFFILE) $(FI)))
+.IF  "$(LOCALIZESDF)"==""
+LOCALSDFFILE!:=
+.ENDIF			# "$(LOCALIZESDF)"==""
 .ENDIF			# "$(LOCALIZESDF)"==""
 # dummy target to keep the build happy.
 .IF  "$(LOCALIZESDF)"==""
@@ -865,7 +871,7 @@ SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
 SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 SCPDEFS+=-DCCNUMVER=$(CCNUMVER)
 .IF "$(COM)"=="GCC"
-SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3)
+SCPDEFS+=-DSHORTSTDCPP3=$(SHORTSTDCPP3) -DSHORTSTDC3=$(SHORTSTDC3)
 .ENDIF			# "$(SHORTSTDCPP3)"!=""
 # extend library path for OS/2 gcc/wlink
 .IF "$(GUI)"=="OS2"
@@ -964,9 +970,6 @@ RSC=$(AUGMENT_LIBRARY_PATH) $(FLIPCMD) $(SOLARBINDIR)/rsc
     .IF "$(VERBOSE)" == "FALSE"
         VERBOSITY=-quiet
         ZIP_VERBOSITY=-q
-        TRANSEX_VERBOSITY=-QQ
-        CFGEX_VERBOSITY=-QQ
-        ULFEX_VERBOSITY=-QQ
     .ENDIF
 .ENDIF # "$(VERBOSE)" == "TRUE"
 COMPILE_ECHO_SWITCH=
@@ -1018,15 +1021,15 @@ LNTFLAGSOUTOBJ=-os
 .ENDIF
 
 .IF "$(OOO_LIBRARY_PATH_VAR)" != ""
-# Add SOLARLIBDIR to the end of a (potentially previously undefined) library
-# path (LD_LIBRARY_PATH, PATH, etc.; there is no real reason to prefer adding at
-# the end over adding at the start); the ": &&" in the bash case enables this to
-# work at the start of a recipe line that is not prefixed by "+" as well as in
-# the middle of an existing && chain:
+# Add SOLARLIBDIR at the begin of a (potentially previously undefined) library
+# path (LD_LIBRARY_PATH, PATH, etc.; prepending avoids fetching libraries from
+# an existing office/URE installation; the ": &&" enables this to work at the
+# start of a recipe line that is not prefixed by "+" as well as in the middle of
+# an existing && chain:
 AUGMENT_LIBRARY_PATH = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(SOLARSHAREDBIN))
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 AUGMENT_LIBRARY_PATH_LOCAL = : && \
-    $(OOO_LIBRARY_PATH_VAR)=$${{$(OOO_LIBRARY_PATH_VAR)+$${{$(OOO_LIBRARY_PATH_VAR)}}:}}$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))
+    $(OOO_LIBRARY_PATH_VAR)=$(normpath, $(PWD)/$(DLLDEST)):$(normpath, $(SOLARSHAREDBIN))$${{$(OOO_LIBRARY_PATH_VAR):+:$${{$(OOO_LIBRARY_PATH_VAR)}}}}
 .END
 
 # remove if .Net 2003 support has expired 
@@ -1353,6 +1356,20 @@ XERCES_JAR*=$(SOLARBINDIR)/xercesImpl.jar
 .IF "$(SYSTEM_CPPUNIT)" != "YES"
 CPPUNIT_CFLAGS =
 .END
+
+COMPONENTPREFIX_URE_NATIVE = vnd.sun.star.expand:$$URE_INTERNAL_LIB_DIR/
+COMPONENTPREFIX_URE_JAVA = vnd.sun.star.expand:$$URE_INTERNAL_JAVA_DIR/
+.IF "$(OS)" == "WNT"
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$BRAND_BASE_DIR/program/
+.ELSE
+COMPONENTPREFIX_BASIS_NATIVE = vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+.END
+COMPONENTPREFIX_BASIS_JAVA = vnd.sun.star.expand:$$OOO_BASE_DIR/program/classes/
+COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
+COMPONENTPREFIX_INBUILD_NATIVE = \
+    vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
+COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
+COMPONENTPREFIX_EXTENSION = ./
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized

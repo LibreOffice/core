@@ -21,6 +21,7 @@ common
         *dmake
         *copyprj
 		__mgrdir
+        gb_LOCALBUILDDIR
 		product
         rsc_once
         wrapper_override_cc_wrapper
@@ -44,6 +45,7 @@ common
 		BUILD_TOOLS
         BUILD_TYPE
 		BUILD_SPECIAL
+		BUILD_STAX
         BUILD_X64
 		CLASSPATH
 		CALL_CDECL
@@ -168,6 +170,7 @@ common
 		PACKMS
 		PCLEAN_PATH
         PKGCONFIG_ROOT
+        PKG_CONFIG_PATH
         PKGFORMAT
 		PRE
 	    PREBUILD_MOZAB

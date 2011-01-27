@@ -68,7 +68,6 @@ SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(VCLLIB)			\
                 $(UCBHELPERLIB)	\
                 $(SOTLIB)			\
-                $(BTSTRPLIB)		\
                 $(TOOLSLIB) 		\
                 $(VOSLIB)			\
                 $(SALLIB)           \
@@ -109,7 +108,6 @@ APP1STDLIBS= \
             $(UCBHELPERLIB)	\
             $(VCLLIB)			\
             $(SOTLIB)			\
-            $(BTSTRPLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\
             $(SALLIB)           \
@@ -126,16 +124,6 @@ APP1OBJS= \
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
-
-ALLTAR : $(BIN)$/applicat.rdb
-
-$(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
-    rm -f $@
-    $(GNUCOPY) $(UNOUCRRDB) $@
-     cd $(BIN) && \
-    $(REGCOMP) -register -r applicat.rdb \
-             -c i18nsearch.uno$(DLLPOST) \
-             -c i18npool.uno$(DLLPOST)
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------

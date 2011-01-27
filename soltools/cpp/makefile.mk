@@ -45,7 +45,6 @@ LIBSALCPPRT=$(0)
 OBJFILES= \
     $(OBJ)$/_cpp.obj		\
     $(OBJ)$/_eval.obj 	\
-    $(OBJ)$/_getopt.obj	\
     $(OBJ)$/_include.obj \
     $(OBJ)$/_lex.obj 	\
     $(OBJ)$/_macro.obj 	\
@@ -53,6 +52,15 @@ OBJFILES= \
     $(OBJ)$/_nlist.obj 	\
     $(OBJ)$/_tokens.obj 	\
     $(OBJ)$/_unix.obj
+
+# nonstandard cpp options needed for Mac (-isysroot),
+# needs the custom stgetopt defined here :/
+.IF "$(OS)" == "MACOSX" || "$(HAVE_GETOPT)" != "YES"
+OBJFILES += $(OBJ)$/_getopt.obj
+.ENDIF
+.IF "$(HAVE_GETOPT)" == "YES"
+CDEFS += -DHAVE_GETOPT
+.ENDIF
 
 APP1TARGET	=	$(TARGET)
 .IF "$(GUI)" != "OS2"

@@ -29,15 +29,6 @@
 # instructions for ???
 # unroll begin
 
-.IF "$(HIDSID$(TNR)PARTICLE)"!=""
-$(HIDSID$(TNR)PARTICLE): $(SDI$(TNR)TARGET)
-    @echo "Making:   " $(@:f)
-    @-$(RM) $@.$(ROUT).tmp $@
-    @$(TYPE) $(MISC)/$(SDI$(TNR)NAME).sid | $(AWK) '$$1=="#define" { print $$2, $$3 }' > $@.$(ROUT).tmp
-    @-$(RM) $@
-    @$(RENAME) $@.$(ROUT).tmp $@
-.ENDIF # "$(HIDSID$(TNR)PARTICLE)"!=""
-
 .IF "$(SDI$(TNR)TARGET)"!=""
 $(SDI$(TNR)TARGET): $(SVSDI$(TNR)DEPEND) $(SDI$(TNR)NAME).sdi
     @echo "Making:   " $(@:f)

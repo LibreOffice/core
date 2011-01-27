@@ -79,14 +79,14 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $UPD, $WORK_STAMP, $SOURCE_ROOT_DIR ,
-     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
+     $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $WORKDIR, $OUTDIR, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
      $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $FRAMEWORKSHOME, $COMEX, $PERL, 
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
-     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
+     $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
@@ -1009,6 +1009,10 @@ else
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
 
+#Location of gnu make directories.
+$WORKDIR              = '$SOLARVER/$INPATH/workdir';
+$OUTDIR              = '$SOLARVER/$INPATH';
+
 $SOLARENVINC          = '$SOLARENV'.$INC;
 # Location of 
 $LOCALINI             = '$SOLARENV'.$CONFIG;
@@ -1384,7 +1388,7 @@ if ($platform =~ m/linux|freebsd|netbsd/)
 # This simply adds an include path, so even cases that break the FHS work
 $SOLARINC            .= $STLPORT_inc_stlport;
 }
-if ($platform =~ m/solaris/ && $CC !=~ "gcc")
+if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
 }
@@ -1619,6 +1623,7 @@ ToFile( "GTK_CFLAGS",        "@GTK_CFLAGS@",       "e" );
 ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
+ToFile( "ENABLE_GSTREAMER",  "@ENABLE_GSTREAMER@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
 ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
 ToFile( "ENABLE_PDFIMPORT",  "@ENABLE_PDFIMPORT@", "e" );
@@ -1662,6 +1667,7 @@ ToFile( "MOC4",              "@MOC4@",             "e" );
 ToFile( "ENABLE_KAB",        "@ENABLE_KAB@",       "e" );
 ToFile( "PSPRINT",           "TRUE",             "e" );
 ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+ToFile( "nodep",             "@nodep@",          "e" );
 ToFile( "TARFILE_LOCATION",  $TARFILE_LOCATION,  "e" );
 ToFile( "DO_FETCH_TARBALLS", "@DO_FETCH_TARBALLS@",  "e" );
 #
@@ -1692,6 +1698,16 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+if ( $platform =~ m/darwin/ )
+{
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+}
+
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
@@ -1728,6 +1744,8 @@ ToFile( "UPD",               $UPD,               "e" );
 ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
 ToFile( "SOLARVER",          $SOLARVER,          "e" );
 ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
+ToFile( "WORKDIR",           $WORKDIR,           "e" );
+ToFile( "OUTDIR",            $OUTDIR,            "e" );
 ToFile( "SOLARENV",          $SOLARENV,          "e" );
 ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
 ToFile( "LOCALINI",          $LOCALINI,          "e" );
@@ -1787,7 +1805,6 @@ ToFile( "ENABLE_FONTCONFIG", "@ENABLE_FONTCONFIG@", "e" );
 ToFile( "ENABLE_DIRECTX",    "@ENABLE_DIRECTX@",    "e" );
 ToFile( "ENABLE_LAYOUT",     "@ENABLE_LAYOUT@",     "e" );
 ToFile( "ENABLE_PCH",        "@ENABLE_PCH@",       "e" );
-ToFile( "NO_HIDS",           "@NO_HIDS@",       "e" );
 ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
 ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
@@ -1849,6 +1866,8 @@ ToFile( "FREETYPE_LIBS",     "@FREETYPE_LIBS@",    "e" );
 ToFile( "SYSTEM_POPPLER",    "@SYSTEM_POPPLER@",   "e" );
 ToFile( "POPPLER_CFLAGS",    "@POPPLER_CFLAGS@",   "e" );
 ToFile( "POPPLER_LIBS",      "@POPPLER_LIBS@",     "e" );
+ToFile( "GSTREAMER_CFLAGS",  "@GSTREAMER_CFLAGS@", "e" );
+ToFile( "GSTREAMER_LIBS",    "@GSTREAMER_LIBS@",   "e" );
 ToFile( "SYSTEM_CAIRO",      "@SYSTEM_CAIRO@",     "e" );
 ToFile( "BUILD_PIXMAN",      "@BUILD_PIXMAN@",     "e" );
 ToFile( "CAIRO_CFLAGS",      "@CAIRO_CFLAGS@",     "e" );
@@ -1896,6 +1915,7 @@ ToFile( "SYSTEM_CURL",       "@SYSTEM_CURL@",      "e" );
 ToFile( "CURL_CFLAGS",       "@CURL_CFLAGS@",      "e" );
 ToFile( "CURL_LIBS",         "@CURL_LIBS@",        "e" );
 ToFile( "SYSTEM_BOOST",      "@SYSTEM_BOOST@",     "e" );
+ToFile( "SYSTEM_MDDS",       "@SYSTEM_MDDS@",      "e" );
 ToFile( "SYSTEM_VIGRA",      "@SYSTEM_VIGRA@",     "e" );
 ToFile( "SYSTEM_NEON",       "@SYSTEM_NEON@",      "e" );
 ToFile( "NEON_VERSION",      "@NEON_VERSION@",     "e" );
@@ -1907,18 +1927,27 @@ ToFile( "ENABLE_AGG",        "@ENABLE_AGG@",       "e" );
 ToFile( "SYSTEM_AGG",	     "@SYSTEM_AGG@",       "e" );
 ToFile( "AGG_VERSION",	     "@AGG_VERSION@",      "e" );
 ToFile( "BUILD_DMAKE",       "@BUILD_DMAKE@",      "e" );
+ToFile( "BUILD_STAX",        "@BUILD_STAX@",       "e" );
 ToFile( "BUILD_UNOWINREG",   "@BUILD_UNOWINREG@",  "e" );
 ToFile( "USE_XINERAMA",      "@USE_XINERAMA@",     "e" );
 ToFile( "XINERAMA_LINK",     "@XINERAMA_LINK@",    "e" );
 ToFile( "SYSTEM_REDLAND",    "@SYSTEM_REDLAND@",   "e" );
+ToFile( "REDLAND_CFLAGS",    "@REDLAND_CFLAGS@",   "e" );
 ToFile( "REDLAND_LIBS",      "@REDLAND_LIBS@",     "e" );
 ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_LPSOLVE",    "@SYSTEM_LPSOLVE@",   "e" );
+ToFile( "HAVE_GETOPT",       "@HAVE_GETOPT@",      "e" );
+ToFile( "HAVE_READDIR_R",    "@HAVE_READDIR_R@",   "e" );
+ToFile( "SYSTEM_LIBC",       "@SYSTEM_LIBC@",      "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
 ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
+ToFile( "MYTHES_CFLAGS",     "@MYTHES_CFLAGS@",    "e" );
+ToFile( "MYTHES_LIBS",       "@MYTHES_LIBS@",      "e" );
+ToFile( "SYSTEM_LIBTEXTCAT", "@SYSTEM_LIBTEXTCAT@","e" );
+ToFile( "SYSTEM_LIBTEXTCAT_DATA","@SYSTEM_LIBTEXTCAT_DATA@","e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
@@ -1947,6 +1976,7 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
       ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
       ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_SHARED_LIBSTDCPP",         "@MINGW_SHARED_LIBSTDCPP@",              "e" );
       ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
       ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }

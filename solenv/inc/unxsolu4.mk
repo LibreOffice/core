@@ -137,7 +137,7 @@ LINKFLAGSRUNPATH_UREBIN=-R\''$$ORIGIN/../lib:$$ORIGIN'\'
 LINKFLAGSRUNPATH_OOO=-R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
 LINKFLAGSRUNPATH_BRAND=-R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-R\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 LINKFLAGS=-m64 -w -mt -z combreloc -PIC -temp=/tmp -norunpath -library=stlport4
 LINKCFLAGS=-m64 -w -mt -z combreloc -norunpath

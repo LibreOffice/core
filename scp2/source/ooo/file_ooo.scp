@@ -391,12 +391,6 @@ STD_FILTER_FILE( gid_File_Filter_Iti, iti)
 
 STD_RES_FILE( gid_File_Res_Eps, eps )
 
-STD_RES_FILE( gid_File_Res_Egi, egi )
-
-STD_RES_FILE( gid_File_Res_Ept, ept )
-
-STD_RES_FILE( gid_File_Res_Eme, eme )
-
 File gid_File_Help_Common_Zip
     Dir = gid_Dir_Help_Isolanguage;
     ARCHIVE_TXT_FILE_BODY;
@@ -423,14 +417,13 @@ File gid_File_Help_Schart_Zip
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(schart);
 End
 
-#if defined INCLUDE_JAVA_ACCESSBRIDGE && defined WNT
+#if defined WNT
 
 File gid_File_Jar_Accessbridge
     TXT_FILE_BODY;
     Name = "java_uno_accessbridge.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,DONT_OVERWRITE,UNO_COMPONENT);
+    Styles = (PACKED,DONT_OVERWRITE);
 End
 
 #endif
@@ -449,7 +442,7 @@ STD_JAR_FILE( gid_File_Jar_Lucene_Analyzers, lucene-analyzers-2.3 )
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
+STD_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -473,14 +466,14 @@ End
 
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Report, report )
-UNO_JAR_FILE( gid_File_Jar_Table, table )
-UNO_JAR_FILE( gid_File_Jar_Letter, letter )
-UNO_JAR_FILE( gid_File_Jar_Form, form )
-UNO_JAR_FILE( gid_File_Jar_Fax, fax )
-UNO_JAR_FILE( gid_File_Jar_Agenda, agenda )
-UNO_JAR_FILE( gid_File_Jar_Query, query )
-UNO_JAR_FILE( gid_File_Jar_Web, web )
+STD_JAR_FILE( gid_File_Jar_Report, report )
+STD_JAR_FILE( gid_File_Jar_Table, table )
+STD_JAR_FILE( gid_File_Jar_Letter, letter )
+STD_JAR_FILE( gid_File_Jar_Form, form )
+STD_JAR_FILE( gid_File_Jar_Fax, fax )
+STD_JAR_FILE( gid_File_Jar_Agenda, agenda )
+STD_JAR_FILE( gid_File_Jar_Query, query )
+STD_JAR_FILE( gid_File_Jar_Web, web )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -500,10 +493,10 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+STD_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+STD_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -523,6 +516,7 @@ STD_JAR_FILE( gid_File_Jar_Saxon, saxon9 )
 #endif
 #endif
 
+#ifndef SYSTEM_LIBTEXTCAT_DATA
 // fingerprint files (lm)
 
 File gid_File_Conf_Fpdb
@@ -1036,7 +1030,7 @@ File gid_File_Lm_Zulu
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End
-
+#endif
 
 
 // mod files
@@ -1685,13 +1679,7 @@ File gid_Starregistry_Services_Rdb
     TXT_FILE_BODY;
     Name = "services.rdb";
     Dir = gid_Dir_Program;
-    Styles = (PACKED, STARREGISTRY);
-#if defined WNT
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$BRAND_BASE_DIR/program/";
-#else
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/";
-#endif
-    JavaServicesURLPrefix = "vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/";
+    Styles = (PACKED);
 End
 
 #ifdef LINUX
@@ -1804,9 +1792,8 @@ End
 File gid_File_Jar_Productregistration
     TXT_FILE_BODY;
     Name = "productregistration.jar";
-    RegistryID = gid_Starregistry_Services_Rdb;
     Dir = gid_Dir_Classes;
-    Styles = (PACKED,UNO_COMPONENT);
+    Styles = (PACKED);
 End
 #endif
 
@@ -1870,288 +1857,288 @@ End
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Af
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Af;
 	Name = "dict-af.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ca
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ca;
     Name = "dict-ca.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Cs
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Cs;
 	Name = "dict-cs.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Da
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Da;
 	Name = "dict-da.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_De_AT
-	Dir = gid_Brand_Dir_Share_Extension_Install;
-    Name = "dict-de-AT.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_De_At;
+	Name = "dict-de-AT.oxt";
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_De_CH
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_Ch;
     Name = "dict-de-CH.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_De_DE
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_De_De;
     Name = "dict-de-DE.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_En
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_En;
 	Name = "dict-en.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Es
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Es;
 	Name = "dict-es.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Et
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Et;
 	Name = "dict-et.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Fr
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Fr;
 	Name = "dict-fr.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Gl
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Gl;
 	Name = "dict-gl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_He
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_He;
     Name = "dict-he.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Hu
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Hu;
 	Name = "dict-hu.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_It
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_It;
 	Name = "dict-it.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ku_Tr
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ku_Tr;
 	Name = "dict-ku-TR.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Lt
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Lt;
 	Name = "dict-lt.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ne
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ne;
 	Name = "dict-ne.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Nl
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Nl;
 	Name = "dict-nl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_No
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_No;
     Name = "dict-no.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pl
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pl;
 	Name = "dict-pl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Pt
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Pt;
 	Name = "dict-pt.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ro
-    Dir = gid_Brand_Dir_Share_Extension_Install;
+    Dir = gid_Brand_Dir_Share_Extensions_Dict_Ro;
     Name = "dict-ro.oxt";
-    Styles = (PACKED, FORCELANGUAGEPACK);
+    Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
     UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Ru
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Ru;
 	Name = "dict-ru.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sk
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sk;
 	Name = "dict-sk.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sl
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sl;
 	Name = "dict-sl.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sr
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sr;
 	Name = "dict-sr.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sv
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sv;
 	Name = "dict-sv.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Sw
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Sw;
 	Name = "dict-sw.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Th
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Th;
 	Name = "dict-th.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Vi
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Vi;
 	Name = "dict-vi.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
 
 #ifndef WITHOUT_MYSPELL_DICTS
 File gid_File_Extension_Dictionary_Zu
-	Dir = gid_Brand_Dir_Share_Extension_Install;
+	Dir = gid_Brand_Dir_Share_Extensions_Dict_Zu;
 	Name = "dict-zu.oxt";
-	Styles = (PACKED, FORCELANGUAGEPACK);
+	Styles = (PACKED, FORCELANGUAGEPACK, ARCHIVE);
 	UnixRights = 444;
 End
 #endif
@@ -2159,8 +2146,8 @@ End
 // #ifdef BUILD_SPECIAL
 // File gid_File_Extension_Oxt_Oooimprovement
 //    Name = "OOoImprovement.oxt";
-//    Dir = gid_Brand_Dir_Share_Extension_Install;
-//    Styles = (PACKED);
+//    Dir = gid_Brand_Dir_Share_Extensions_Oooimprovement;
+//    Styles = (PACKED, ARCHIVE);
 //    UnixRights = 444;
 // End
 // #endif

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,39 +25,13 @@
 #
 #*************************************************************************
 
-PRJ=..
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-PRJNAME=soltools
-TARGET=hidc
-TARGETTYPE=CUI
-LIBTARGET=no
-NO_DEFAULT_STL=TRUE
-INCPRE=$(MISC)
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Settings -----------------------------------------------------
+$(foreach repo,$(gb_REPOS),$(eval $(call gb_Module_make_global_targets,$(wildcard $(repo)/Module_*.mk))))
 
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-.INCLUDE :  settings.mk
-.INCLUDE :  libs.mk
-CDEFS+= -DYY_NEVER_INTERACTIVE=1
-
-UWINAPILIB=$(0)
-
-# --- Files --------------------------------------------------------
-
-# HID compiler
-APP1TARGET=     $(TARGET)
-APP1OBJS=   $(OBJ)$/wrap_hidclex.obj
-APP1DEPN=   $(OBJ)$/wrap_hidclex.obj
-APP1LIBSALCPPRT=
-
-DEPOBJFILES=$(APP1OBJS)
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-$(MISC)$/%_yy.cxx : %lex.l
-    flex -l -8 -o$@ $<
-
-$(OBJ)$/wrap_hidclex.obj: $(MISC)$/hidc_yy.cxx
+# vim: set noet sw=4 ts=4:
