@@ -37,7 +37,7 @@ endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
 
-$(eval $(call gb_Library_add_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
+#$(eval $(call gb_Library_add_precompiled_header,vcl,$(SRCDIR)/vcl/inc/pch/precompiled_vcl))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
@@ -82,9 +82,15 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 
 ifneq ($(ENABLE_GRAPHITE),)
+ifneq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_static_libs,vcl,\
     graphite \
 ))
+else
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    graphite_dll \
+))
+endif
 endif
 ifeq ($(GUIBASE),unx)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -195,6 +201,30 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/unx/generic/printer/ppdparser \
     vcl/unx/generic/printer/printerinfomanager \
 ))
+endif
+
+ifeq ($(OS),WNT)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/win/source/app/saldata \
+    vcl/win/source/app/salinfo \
+    vcl/win/source/app/salinst \
+    vcl/win/source/app/salshl \
+    vcl/win/source/app/saltimer \
+    vcl/win/source/gdi/salbmp \
+    vcl/win/source/gdi/salgdi \
+    vcl/win/source/gdi/salgdi2 \
+    vcl/win/source/gdi/salgdi3 \
+    vcl/win/source/gdi/salgdi_gdiplus \
+    vcl/win/source/gdi/salnativewidgets-luna \
+    vcl/win/source/gdi/salprn \
+    vcl/win/source/gdi/salvd \
+    vcl/win/source/gdi/winlayout \
+    vcl/win/source/gdi/wntgdi \
+    vcl/win/source/window/salframe \
+    vcl/win/source/window/salmenu \
+    vcl/win/source/window/salobj \
+))
+#$(call gb_CxxObject_get_target,vcl/win/source/gdi/wntgdi) : DEFS += -DFOO
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
@@ -380,13 +410,17 @@ $(eval $(call gb_Library_set_defs,vcl,\
     -DENABLE_GRAPHITE \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/glyphs/graphite_adaptors \
     vcl/source/glyphs/graphite_cache \
     vcl/source/glyphs/graphite_features \
     vcl/source/glyphs/graphite_layout \
-    vcl/source/glyphs/graphite_serverfont \
     vcl/source/glyphs/graphite_textsrc \
 ))
+ifeq ($(GUIBASE),unx)
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/source/glyphs/graphite_adaptors \
+    vcl/source/glyphs/graphite_serverfont \
+))
+endif
 endif
 
 ifeq ($(OS),LINUX)
@@ -411,29 +445,14 @@ $(eval $(call gb_Library_set_ldflags,vcl,\
 endif
 
 ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    advapi32 \
-    kernel32 \
-    mpr \
-    msvcrt \
-    ole32 \
-    shell32 \
-    user32 \
-    uuid \
-))
-else
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     advapi32 \
+    gdi32 \
+    gdiplus \
+    imm32 \
     kernel32 \
     mpr \
+    msimg32 \
     msvcrt \
     oldnames \
     ole32 \
@@ -441,7 +460,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     user32 \
     uuid \
     uwinapi \
+    winspool \
 ))
-endif
 endif
 # vim: set noet sw=4 ts=4:
