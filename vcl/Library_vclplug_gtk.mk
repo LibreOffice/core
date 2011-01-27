@@ -52,6 +52,17 @@ $(eval $(call gb_Library_set_defs,vclplug_gtk,\
     -DVERSION=\"$(UPD)$(LAST_MINOR)\" \
 ))
 
+ifneq ($(ENABLE_DBUS),)
+$(eval $(call gb_Library_set_defs,vclplug_gtk,\
+    $$(DEFS) \
+    -DENABLE_DBUS \
+))
+$(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
+    $$(LDFLAGS) \
+    $(shell pkg-config --libs dbus-glib-1)\
+))
+endif
+
 $(eval $(call gb_Library_set_ldflags,vclplug_gtk,\
     $$(LDFLAGS) \
     $$(GTK_LIBS)\

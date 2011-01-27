@@ -58,7 +58,7 @@ endif
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DVCL_DLLIMPLEMENTATION \
-    -DCUI_DLL_NAME=\"$(gb_Library_SYSPRE)cui$(gb_Library_OOOEXT)\" \
+    -DCUI_DLL_NAME=\"$(or $(call gb_Library_get_dllname,cui),$(call gb_Library_get_filename,cui))\" \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
@@ -82,11 +82,7 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
 ))
 
 ifneq ($(ENABLE_GRAPHITE),)
-ifneq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_static_libs,vcl,\
-    graphite \
-))
-else
+ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,vcl,\
     graphite_dll \
 ))
@@ -103,6 +99,12 @@ $(eval $(call gb_Library_set_cxxflags,vcl,\
     $$(CXXFLAGS) \
     $$(OBJCXXFLAGS) \
 ))
+ifeq ($(ENABLE_CAIRO),TRUE)
+$(eval $(call gb_Library_set_defs,vclplug_gen,\
+    $$(DEFS) \
+    -DCAIRO \
+))
+endif
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \
     vcl/aqua/source/a11y/aqua11ycomponentwrapper \
@@ -177,13 +179,21 @@ $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \
-    -D_XSALSET_LIBNAME=\"$(gb_Library_SYSPRE)spa$(gb_Library_OOOEXT)\" \
+    -D_XSALSET_LIBNAME=\"$(call gb_Library_get_filename,spa)\" \
 ))
+## handle fontconfig
 ifneq ($(ENABLE_FONTCONFIG),)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DENABLE_FONTCONFIG \
 ))
+## handle CUPS
+ifneq ($(ENABLE_CUPS),)
+$(eval $(call gb_Library_set_defs,vcl,\
+    $$(DEFS) \
+    -DENABLE_CUPS \
+))
+endif
 endif
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/gcach_ftyp \
@@ -404,6 +414,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/wrkwin \
 ))
 
+## handle Graphite
 ifneq ($(ENABLE_GRAPHITE),)
 $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
@@ -420,6 +431,16 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/glyphs/graphite_adaptors \
     vcl/source/glyphs/graphite_serverfont \
 ))
+ifeq ($(SYSTEM_GRAPHITE),YES)
+$(eval $(call gb_Library_set_ldflags,vcl,\
+    $$(LDFLAGS) \
+    $(GRAPHITE_LIBS)
+))
+else
+$(eval $(call gb_Library_add_linked_static_libs,vcl,\
+    graphite \
+))
+endif
 endif
 endif
 
