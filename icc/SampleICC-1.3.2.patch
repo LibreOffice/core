@@ -1602,7 +1602,7 @@
   
     default:
       sReport += icValidateWarningMsg;
-!     sprintf(buf, " - %s: Unregisterd CMM signature.\n", Info.GetCmmSigName((icCmmSignature)m_Header.cmmId));
+!     sprintf(buf, " - %s: Unregistered CMM signature.\n", Info.GetCmmSigName((icCmmSignature)m_Header.cmmId));
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
