@@ -990,6 +990,14 @@ struct AnnotatingVisitor
                             rParent.maStrokeGradient );
                 break;
             }
+            case XML_COLOR:
+            {
+                if( aValueUtf8 == "inherit" )
+                    maCurrState.maCurrentColor = maParentStates.back().maCurrentColor;
+                else
+                    parseColor(aValueUtf8, maCurrState.maCurrentColor);
+                break;
+            }
             case XML_TRANSFORM:
             {
                 basegfx::B2DHomMatrix aTransform;
