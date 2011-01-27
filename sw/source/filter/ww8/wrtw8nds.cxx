@@ -35,7 +35,7 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 #   include <cstdio>
 #endif
 
@@ -2740,9 +2740,7 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
             OutputOLENode( *rNode.GetOLENode() );
             break;
         default:
-#if OSL_DEBUG_LEVEL > 0
             OSL_TRACE("Unhandled node, type == %d\n", rNode.GetNodeType() );
-#endif
             break;
     }
 }

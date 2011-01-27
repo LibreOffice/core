@@ -213,7 +213,7 @@ void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
     if ( nHeadFootFlags & nsHdFtFlags::WW8_FOOTER_FIRST )
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "DocxExport::WriteHeadersFooters() - nBreakCode introduced, but ignored\n" );
 #endif
 }
@@ -230,7 +230,7 @@ void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "TODO DocxExport::WriteHyperlinkData()\n" );
 #endif
 }

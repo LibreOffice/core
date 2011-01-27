@@ -134,7 +134,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #endif
 
@@ -1676,7 +1676,7 @@ void DocxAttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_
 
 void DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t /*pTableTextNodeInfoInner*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "TODO: DocxAttributeOutput::TableSpacing( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner )\n" );
 #endif
 }
@@ -1701,7 +1701,7 @@ void DocxAttributeOutput::EndStyles( USHORT /*nNumberOfStyles*/ )
 void DocxAttributeOutput::DefaultStyle( USHORT nStyle )
 {
     // are these the values of enum ww::sti (see ../inc/wwstyles.hxx)?
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     OSL_TRACE( "TODO DocxAttributeOutput::DefaultStyle( USHORT nStyle )- %d\n", nStyle );
 #else
     (void) nStyle; // to quiet the warning
@@ -1710,9 +1710,7 @@ void DocxAttributeOutput::DefaultStyle( USHORT nStyle )
 
 void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize )
 {
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size& rSize ) - some stuff still missing\n" );
-#endif
     // create the relation ID
     OString aRelId;
     sal_Int32 nImageType;
@@ -2076,12 +2074,10 @@ void DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame &rFrame, const Po
             }
             break;
         default:
-#if OSL_DEBUG_LEVEL > 0
             OSL_TRACE( "TODO DocxAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Point& rNdTopLeft ) - frame type '%s'\n",
                     rFrame.GetWriterType() == sw::Frame::eTxtBox? "eTxtBox":
                     ( rFrame.GetWriterType() == sw::Frame::eOle? "eOle":
                       ( rFrame.GetWriterType() == sw::Frame::eFormControl? "eFormControl": "???" ) ) );
-#endif
             break;
     }
 
@@ -2208,9 +2204,7 @@ void DocxAttributeOutput::SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo
             }
             break;
         default:
-#if OSL_DEBUG_LEVEL > 0
             OSL_TRACE( "Unknown section break to write: %d\n", nC );
-#endif
             break;
     }
 }
@@ -2287,9 +2281,7 @@ void DocxAttributeOutput::SectionFormProtection( bool bProtected )
 void DocxAttributeOutput::SectionLineNumbering( ULONG /*nRestartNo*/, const SwLineNumberInfo& /*rLnNumInfo*/ )
 {
     // see 2.6.8 lnNumType (Line Numbering Settings)
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::SectionLineNumbering()\n" );
-#endif
 }
 
 void DocxAttributeOutput::SectionTitlePage()
@@ -2372,9 +2364,7 @@ void DocxAttributeOutput::SectionPageNumbering( USHORT nNumType, USHORT nPageRes
     m_pSerializer->singleElementNS( XML_w, XML_pgNumType, xAttrs );
 
     // see 2.6.12 pgNumType (Page Numbering Settings)
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::SectionPageNumbering()\n" );
-#endif
 }
 
 void DocxAttributeOutput::SectionType( BYTE nBreakCode )
@@ -2478,7 +2468,7 @@ void DocxAttributeOutput::NumberingDefinition( USHORT nId, const SwNumRule &rRul
             FSNS( XML_w, XML_val ), aId.getStr(),
             FSEND );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     // TODO ww8 version writes this, anything to do about it here?
     if ( rRule.IsContinusNum() )
         OSL_TRACE( "TODO DocxAttributeOutput::NumberingDefinition()\n" );
@@ -2833,9 +2823,7 @@ void DocxAttributeOutput::CharWeight( const SvxWeightItem& rWeight )
 
 void DocxAttributeOutput::CharAutoKern( const SvxAutoKernItem& )
 {
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::CharAutoKern()\n" );
-#endif
 }
 
 void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
@@ -3031,16 +3019,12 @@ void DocxAttributeOutput::RefField( const SwField&  rFld, const String& rRef )
 
 void DocxAttributeOutput::HiddenField( const SwField& /*rFld*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::HiddenField()\n" );
-#endif
 }
 
 void DocxAttributeOutput::PostitField( const SwField* /* pFld*/ )
 {
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::PostitField()\n" );
-#endif
 }
 
 bool DocxAttributeOutput::DropdownField( const SwField* pFld )
@@ -3487,9 +3471,7 @@ void DocxAttributeOutput::FormatFrameSize( const SwFmtFrmSize& rSize )
 
 void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
 {
-#if OSL_DEBUG_LEVEL > 0
     OSL_TRACE( "TODO DocxAttributeOutput::FormatPaperBin()\n" );
-#endif
 }
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
