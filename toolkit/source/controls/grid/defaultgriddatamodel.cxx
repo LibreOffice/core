@@ -340,7 +340,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL DefaultGridDataModel::setRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 

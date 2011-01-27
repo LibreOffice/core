@@ -670,7 +670,7 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL SortableGridDataModel::setRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
+    void SAL_CALL SortableGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *this, rBHelper );
         DBG_CHECK_ME();
@@ -679,7 +679,7 @@ namespace toolkit
 
         Reference< XMutableGridDataModel > const delegator( m_delegator );
         aGuard.clear();
-        delegator->setRowHeading( rowIndex, i_heading );
+        delegator->updateRowHeading( rowIndex, i_heading );
     }
 
     //------------------------------------------------------------------------------------------------------------------

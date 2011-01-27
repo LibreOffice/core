@@ -205,7 +205,7 @@ public class TMutableGridDataModel
     }
 
     /**
-     * tests the XMutableGridDataModel.setRowHeading method
+     * tests the XMutableGridDataModel.updateRowHeading method
      */
     public void testUpdateRowHeading() throws IndexOutOfBoundsException
     {
@@ -215,7 +215,7 @@ public class TMutableGridDataModel
 
         final int rowToUpdate = 2;
         final String valueToUpdate = "some text";
-        m_dataModel.setRowHeading( rowToUpdate, valueToUpdate );
+        m_dataModel.updateRowHeading( rowToUpdate, valueToUpdate );
         final GridDataEvent event = m_listener.assertSingleRowHeadingChangeEvent();
         assertEquals( "row heading update notification: FirstRow is invalid", rowToUpdate, event.FirstRow );
         assertEquals( "row heading update notification: FirstRow is invalid", rowToUpdate, event.LastRow );
