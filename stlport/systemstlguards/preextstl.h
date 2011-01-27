@@ -48,7 +48,6 @@
 #       if defined(_GNUC__)
 #           pragma GCC visibility push(default)
 #       endif
-#       include _STLP_NATIVE_HEADER(exception_defines.h)
 #       include _STLP_NATIVE_HEADER(limits)
 #       if !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #           include _STLP_NATIVE_HEADER(memory)
