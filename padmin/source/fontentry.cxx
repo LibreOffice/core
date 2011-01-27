@@ -216,7 +216,7 @@ void FontNameDlg::init()
             else
                 aEntry = fillFontEntry( aInfo, String( ByteString( aFile ), osl_getThreadTextEncoding() ), aFamilies[ aInfo.m_aFamilyName ] > 1  );
             USHORT nEntry = m_aFontBox.InsertEntry( aEntry );
-            m_aFontBox.SetEntryData( nEntry, (void*)(*font_it) );
+            m_aFontBox.SetEntryData( nEntry, (void*)(sal_IntPtr)(*font_it) );
         }
     }
 }

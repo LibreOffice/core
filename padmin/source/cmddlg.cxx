@@ -333,7 +333,7 @@ void RTSCommandPage::save()
     String aOldPdfPath;
     bool bOldFaxSwallow = false;
     bool bFaxSwallow = m_aFaxSwallowBox.IsChecked() ? true : false;
-    bool bOldExternalDialog = false, bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
+    bool bExternalDialog = m_aExternalCB.IsChecked() ? true : false;
 
     while( nIndex != -1 )
     {
@@ -359,10 +359,6 @@ void RTSCommandPage::save()
         {
             sal_Int32 nPos = 0;
             bOldFaxSwallow = aToken.getToken( 1, '=', nPos ).compareToAscii( "swallow", 7 ) ? false : true;
-        }
-        else if( ! aToken.compareToAscii( "external_dialog" ) )
-        {
-            bOldExternalDialog = true;
         }
     }
     ::std::list< String >* pList = &m_aPrinterCommands;

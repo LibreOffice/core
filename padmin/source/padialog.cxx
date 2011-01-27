@@ -737,7 +737,7 @@ void PADialog::UpdateDevice()
                                       bFax ? m_aFaxImg :
                                       bPdf ? m_aPdfImg : m_aPrinterImg
                                       );
-        m_aDevicesLB.SetEntryData( nPos, (void*)it->getLength() );
+        m_aDevicesLB.SetEntryData( nPos, (void*)(sal_IntPtr)it->getLength() );
         if( *it == m_rPIManager.getDefaultPrinter() )
         {
             m_aDevicesLB.SelectEntryPos( nPos );
