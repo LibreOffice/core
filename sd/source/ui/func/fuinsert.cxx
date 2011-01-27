@@ -42,7 +42,7 @@
 
 #include <tools/urlobj.hxx>
 #include <svl/urihelper.hxx>
-
+#include <sfx2/msgpool.hxx>
 #include <svtools/sores.hxx>
 #include <svtools/insdlg.hxx>
 #include <sfx2/request.hxx>
@@ -454,12 +454,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     // intentionally no break!
                 }
                 case SID_INSERT_PLUGIN :
-                case SID_INSERT_APPLET :
                 case SID_INSERT_FLOATINGFRAME :
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
-                            pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), nSlotId,
+                            pFact->CreateInsertObjectDialog( mpViewShell->GetActiveWindow(), SD_MOD()->GetSlotPool()->GetSlot(nSlotId)->GetCommandString(),
                             xStorage, &aServerLst );
                     if ( pDlg )
                     {

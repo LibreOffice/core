@@ -52,12 +52,6 @@ TYPEINIT1(PresentationViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new PresentationViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(PresentationViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* PresentationViewShellBase::pFactory;
 SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
@@ -70,7 +64,7 @@ SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
 void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
-        &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
+        &CreateInstance,&InitFactory,nPrio,"FullScreenPresentation");
     InitFactory();
 }
 void PresentationViewShellBase::InitFactory()
@@ -115,7 +109,6 @@ PresentationViewShellBase::PresentationViewShellBase (
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
-
 
 
 

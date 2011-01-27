@@ -49,10 +49,10 @@ SdPageListControl::SdPageListControl(
     : SvTreeListBox(pParent, rResId)
 {
     // Tree-ListBox mit Linien versehen
-    SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
+    SetStyle( GetStyle() | WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
                             WB_HSCROLL | // #31562#
-                            WB_HASBUTTONSATROOT ) );
+                            WB_HASBUTTONSATROOT );
 
     SetNodeDefaultImages ();
     m_pCheckButton = new SvLBoxButtonData(this);

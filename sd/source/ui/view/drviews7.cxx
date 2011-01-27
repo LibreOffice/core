@@ -34,12 +34,9 @@
 #include <svx/globl3d.hxx>
 #include <svx/svdouno.hxx>
 #include <editeng/eeitem.hxx>
-#ifndef _FLDITEM_HXX
 #include <editeng/flditem.hxx>
-#endif
-#ifndef _SVXIDS_HXX
+#include <editeng/outlobj.hxx>
 #include <svx/svxids.hrc>
-#endif
 #include <svx/svdpagv.hxx>
 #include <svx/clipfmtitem.hxx>
 #include <svx/fmshell.hxx>
@@ -301,7 +298,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         {
             SdPage* pPage = dynamic_cast< SdPage* >( pPageView->GetPage() );
 
-            if( pPage )
+            if( pPage && !pPage->IsMasterPage() )
             {
                 rSet.Put( SfxUInt32Item( SID_ASSIGN_LAYOUT, static_cast< sal_uInt32 >(pPage->GetAutoLayout()) ) );
                 bDisable = false;
@@ -310,7 +307,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bDisable)
         {
-            rSet.DisableItem(SID_EXPAND_PAGE);
+            rSet.DisableItem(SID_ASSIGN_LAYOUT);
         }
     }
 
@@ -325,9 +322,26 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
             {
                 SdrObject* pObj = pPage->GetPresObj(PRESOBJ_OUTLINE);
 
-                if(pObj && !pObj->IsEmptyPresObj())
+                if (pObj!=NULL )
                 {
-                    bDisable = false;
+                    if( !pObj->IsEmptyPresObj() )
+                    {
+                        bDisable = false;
+                    }
+                    else
+                    {
+                        // check if the object is in edit, than its temporarely not empty
+                        SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
+                        if( pTextObj )
+                        {
+                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            if( pParaObj )
+                            {
+                                delete pParaObj;
+                                bDisable = false;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -957,11 +971,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_DIAGRAM );
         rSet.DisableItem( SID_ATTR_TABLE );
@@ -970,7 +980,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_SIZE_ALL );
         rSet.DisableItem( SID_SIZE_PAGE_WIDTH );
         rSet.DisableItem( SID_SIZE_PAGE );
-//      rSet.DisableItem( SID_INSERTPAGE );
         rSet.DisableItem( SID_DUPLICATE_PAGE );
         rSet.DisableItem( SID_ZOOM_TOOLBOX );
     }
@@ -1061,12 +1070,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem( SID_INSERT_PLUGIN );
         rSet.DisableItem( SID_INSERT_SOUND );
         rSet.DisableItem( SID_INSERT_VIDEO );
-        rSet.DisableItem( SID_INSERT_APPLET );
         rSet.DisableItem( SID_INSERT_FLOATINGFRAME );
 
-#ifdef STARIMAGE_AVAILABLE
-        rSet.DisableItem( SID_INSERT_IMAGE );
-#endif
         rSet.DisableItem( SID_INSERT_MATH );
         rSet.DisableItem( SID_INSERT_FRAME );
         rSet.DisableItem( SID_INSERTFILE );
@@ -1565,17 +1570,12 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if ( bDisableEditHyperlink )
         rSet.DisableItem( SID_OPEN_HYPERLINK );
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     if( !mxScannerManager.is() )
     {
         rSet.DisableItem( SID_TWAIN_SELECT );
         rSet.DisableItem( SID_TWAIN_TRANSFER );
     }
-#endif
-
-// Fuer Win16
-#ifndef SOLAR_JAVA
-    rSet.DisableItem( SID_INSERT_APPLET );
 #endif
 
     // Set the state of two entries in the 'Slide' context sub-menu

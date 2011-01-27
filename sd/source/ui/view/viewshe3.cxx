@@ -34,8 +34,9 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
+#include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
-
+#include <svtools/svtdata.hxx>
 #include <utility>
 #include <vector>
 
@@ -165,7 +166,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp( SvtResId( STR_UNDO ) );
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -193,7 +194,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
@@ -215,7 +216,8 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 SdPage* ViewShell::CreateOrDuplicatePage (
     SfxRequest& rRequest,
     PageKind ePageKind,
-    SdPage* pPage)
+    SdPage* pPage,
+    const sal_Int32 nInsertPosition)
 {
     USHORT nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
@@ -254,7 +256,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             && rBase.GetMainViewShell()->GetShellType()!=ViewShell::ST_DRAW)
         {
             framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
-                framework::FrameworkHelper::msLayoutTaskPanelURL);
+                framework::FrameworkHelper::msLayoutTaskPanelURL,
+                false);
         }
 */
 
@@ -376,7 +379,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         eStandardLayout,
                         eNotesLayout,
                         bIsPageBack,
-                        bIsPageObj);
+                        bIsPageObj,
+                        nInsertPosition);
                     // Select exactly the new page.
                     USHORT nPageCount (pDocument->GetSdPageCount(ePageKind));
                     for (USHORT i=0; i<nPageCount; i++)
@@ -399,7 +403,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eStandardLayout,
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj);
+                    bIsPageObj,
+                    nInsertPosition);
             break;
 
         case SID_DUPLICATE_PAGE:
@@ -413,7 +418,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                     eStandardLayout,
                     eNotesLayout,
                     bIsPageBack,
-                    bIsPageObj);
+                    bIsPageObj,
+                    nInsertPosition);
             break;
 
         default:

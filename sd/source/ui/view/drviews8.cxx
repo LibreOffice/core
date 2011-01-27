@@ -196,7 +196,6 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         case SID_INSERT_PLUGIN:
         case SID_INSERT_SOUND:
         case SID_INSERT_VIDEO:
-        case SID_INSERT_APPLET:
         case SID_INSERT_FLOATINGFRAME:
         case SID_INSERT_MATH:
         case SID_INSERT_DIAGRAM:

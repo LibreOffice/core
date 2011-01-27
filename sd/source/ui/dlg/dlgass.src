@@ -48,6 +48,7 @@ ModalDialog DLG_ASS
 
     CheckBox CB_PREVIEW
     {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PREVIEW";
         Pos = MAP_APPFONT ( 144 , 140  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
@@ -56,6 +57,7 @@ ModalDialog DLG_ASS
 
     CheckBox CB_STARTWITH
     {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_STARTWITH";
         Pos = MAP_APPFONT ( 144 , 154  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
@@ -84,6 +86,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_EMPTY
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_EMPTY";
         Pos = MAP_APPFONT ( 12 , 48  );
         Size = MAP_APPFONT ( 130 , 10 );
         TabStop = TRUE;
@@ -92,6 +95,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_TEMPLATE
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_TEMPLATE";
         Pos = MAP_APPFONT ( 12 , 62  );
         Size = MAP_APPFONT ( 130 , 10 );
         Text [ en-US ] = "~From template";
@@ -99,6 +103,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE1_OPEN
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE1_OPEN";
         Pos = MAP_APPFONT ( 12 , 76  );
         Size = MAP_APPFONT ( 130 , 10 );
         Text [ en-US ] = "O~pen existing presentation";
@@ -106,6 +111,7 @@ ModalDialog DLG_ASS
 
     PushButton PB_PAGE1_OPEN
     {
+        HelpID = "sd:PushButton:DLG_ASS:PB_PAGE1_OPEN";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 18 , 89 ) ;
         Size = MAP_APPFONT ( 50 , 18 ) ;
@@ -171,6 +177,7 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE2_LAYOUT
     {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE2_LAYOUT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 64  ) ;
         Size = MAP_APPFONT ( 120 , 40 ) ;
@@ -186,6 +193,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM5
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM5";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 121  );
         Size = MAP_APPFONT ( 59 , 10 );
@@ -194,6 +202,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM1
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM1";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 75 , 121  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
@@ -202,6 +211,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM2
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM2";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 75 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
@@ -211,6 +221,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM3
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM3";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
@@ -220,6 +231,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE2_MEDIUM4
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE2_MEDIUM4";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 149  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
@@ -256,6 +268,7 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE3_EFFECT
     {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_EFFECT";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 72 , 48  );
         Size = MAP_APPFONT ( 60 , 12 );
@@ -274,6 +287,7 @@ ModalDialog DLG_ASS
 
     ListBox LB_PAGE3_SPEED
     {
+        HelpID = "sd:ListBox:DLG_ASS:LB_PAGE3_SPEED";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 72 , 64  );
         Size = MAP_APPFONT ( 60 , 12 );
@@ -292,6 +306,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE3_LIVE
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_LIVE";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 94  );
         Size = MAP_APPFONT ( 120 , 10 );
@@ -300,6 +315,7 @@ ModalDialog DLG_ASS
 
     RadioButton RB_PAGE3_KIOSK
     {
+        HelpID = "sd:RadioButton:DLG_ASS:RB_PAGE3_KIOSK";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 108  );
         Size = MAP_APPFONT ( 120 , 10 );
@@ -316,6 +332,7 @@ ModalDialog DLG_ASS
 
     TimeField TMF_PAGE3_TIME
     {
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_TIME";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 77 , 122  ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
@@ -349,6 +366,7 @@ ModalDialog DLG_ASS
 
     TimeField TMF_PAGE3_BREAK
     {
+        HelpID = "sd:TimeField:DLG_ASS:TMF_PAGE3_BREAK";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 77 , 138  ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
@@ -374,6 +392,7 @@ ModalDialog DLG_ASS
 
     CheckBox CB_PAGE3_LOGO
     {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE3_LOGO";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 21 , 154  );
         Size = MAP_APPFONT ( 111 , 10 );
@@ -410,6 +429,7 @@ ModalDialog DLG_ASS
     };
     Edit EDT_PAGE4_ASKNAME
     {
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKNAME";
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
@@ -425,6 +445,7 @@ ModalDialog DLG_ASS
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
+        HelpID = "sd:Edit:DLG_ASS:EDT_PAGE4_ASKTOPIC";
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 88 ) ;
@@ -440,6 +461,7 @@ ModalDialog DLG_ASS
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
+        HelpID = "sd:MultiLineEdit:DLG_ASS:EDT_PAGE4_ASKINFORMATION";
         OutputSize = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 117  ) ;
@@ -479,6 +501,7 @@ ModalDialog DLG_ASS
 
     CheckBox CB_PAGE5_SUMMARY
     {
+        HelpID = "sd:CheckBox:DLG_ASS:CB_PAGE5_SUMMARY";
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 6 , 154  );
         Size = MAP_APPFONT ( 132 , 10 );
@@ -505,6 +528,7 @@ ModalDialog DLG_ASS
 
     PushButton BUT_LAST
     {
+        HelpID = "sd:PushButton:DLG_ASS:BUT_LAST";
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
@@ -514,6 +538,7 @@ ModalDialog DLG_ASS
 
     PushButton BUT_NEXT
     {
+        HelpID = "sd:PushButton:DLG_ASS:BUT_NEXT";
         DefButton = TRUE ;
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 165 , 170 ) ;

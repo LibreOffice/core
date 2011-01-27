@@ -31,16 +31,12 @@
 #include "sdxfer.hxx"
 
 class SdDrawDocument;
-namespace sd
-{
-    class pWorkView;
-    namespace slidesorter
-    {
-        class SlideSorterViewShell;
-    }
-}
+namespace sd { namespace slidesorter {
+class SlideSorterViewShell;
+} }
 
 namespace sd { namespace slidesorter { namespace controller {
+
 
 /** This class exists to have DragFinished call the correct object: the
     SlideSorterViewShell instead of the old SlideView.
@@ -49,18 +45,39 @@ class Transferable
     : public SdTransferable
 {
 public:
+    class Representative
+    {
+    public:
+        Representative (const Bitmap& rBitmap, const bool bIsExcluded)
+            : maBitmap(rBitmap), mbIsExcluded(bIsExcluded) {}
+        Representative (const Representative& rOther)
+            : maBitmap(rOther.maBitmap), mbIsExcluded(rOther.mbIsExcluded) {}
+        Representative operator= (Representative& rOther)
+        {   if (&rOther != this) {maBitmap = rOther.maBitmap; mbIsExcluded = rOther.mbIsExcluded; }
+            return *this;
+        }
+
+        Bitmap maBitmap;
+        bool mbIsExcluded;
+    };
+
+
     Transferable (
         SdDrawDocument* pSrcDoc,
         ::sd::View* pWorkView,
         BOOL bInitOnGetData,
-        SlideSorterViewShell* pViewShell);
+        SlideSorterViewShell* pViewShell,
+        const ::std::vector<Representative>& rRepresentatives);
 
     virtual ~Transferable (void);
 
     virtual void DragFinished (sal_Int8 nDropAction);
 
+    const ::std::vector<Representative>& GetRepresentatives (void) const;
+
 private:
     SlideSorterViewShell* mpViewShell;
+    const ::std::vector<Representative> maRepresentatives;
 
     virtual void Notify (SfxBroadcaster& rBroadcaster, const SfxHint& rHint);
 };

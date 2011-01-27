@@ -61,6 +61,7 @@
 #include <sfx2/dispatch.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
+#include "helpids.h"
 
 #include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
@@ -334,16 +335,16 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     if( eDocType == DOCUMENT_TYPE_DRAW )
     {
         SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetHelpId( SD_IF_SDGRAPHICVIEWSHELL );
-        GetActiveWindow()->SetUniqueId( SD_IF_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetHelpId( HID_SDGRAPHICVIEWSHELL );
+        GetActiveWindow()->SetUniqueId( HID_SDGRAPHICVIEWSHELL );
     }
     else
     {
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -351,8 +352,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
 
             // AutoLayouts muessen erzeugt sein
             GetDoc()->StopWorkStartupDelay();
@@ -360,8 +361,8 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( HID_SDDRAWVIEWSHELL );
         }
     }
 

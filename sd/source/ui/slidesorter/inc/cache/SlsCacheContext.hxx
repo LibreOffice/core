@@ -33,8 +33,8 @@
 #include <boost/shared_ptr.hpp>
 #include <vector>
 
-class BitmapEx;
 class SdrPage;
+class Bitmap;
 
 namespace sd { namespace slidesorter { namespace cache {
 
@@ -55,7 +55,7 @@ public:
     */
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
-        const ::boost::shared_ptr<BitmapEx>& rPreview) = 0;
+        const Bitmap& rPreview) = 0;
 
     /** Called to determine whether the system is idle and a preview can be
         created without annoying the user.

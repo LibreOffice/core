@@ -60,12 +60,13 @@
 #include <svx/unopage.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/svditer.hxx>
 
 #include <editeng/adjitem.hxx>
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
-
+#include "app.hrc"
 #include "misc.hxx"
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -364,7 +365,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             // #i105146# We want no content to be displayed for PK_HANDOUT,
             // so just never set a page as content
             pSdrObj = new SdrPageObj(0);
-            pSdrObj->SetResizeProtect(TRUE);
+//          pSdrObj->SetResizeProtect(TRUE);
         }
         break;
 
@@ -2104,7 +2105,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     }
 }
 
-SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind eObjKind, bool bVertical, Rectangle aRect )
+SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, PresObjKind& eObjKind, bool bVertical, Rectangle aRect )
 {
     SdDrawDocument* pModel = static_cast< SdDrawDocument* >( rPage.GetModel() );
     DBG_ASSERT( pModel, "sd::convertPresentationObjectImpl(), no model on page!" );
@@ -2217,6 +2218,16 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             if( !bUndo )
                 SdrObject::Free( pSourceObj );
+        }
+    }
+    else if((eObjKind == PRESOBJ_OUTLINE) && (pSourceObj->GetObjIdentifier() != OBJ_OUTLINETEXT) )
+    {
+        switch( pSourceObj->GetObjIdentifier() )
+        {
+        case OBJ_TABLE: eObjKind = PRESOBJ_TABLE; break;
+        case OBJ_MEDIA: eObjKind = PRESOBJ_MEDIA; break;
+        case OBJ_GRAF: eObjKind = PRESOBJ_GRAPHIC; break;
+        case OBJ_OLE2: eObjKind = PRESOBJ_OBJECT; break;
         }
     }
 
@@ -2344,7 +2355,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
-    if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
+    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
         pObj->AdjustToMaxRect( aRect );
 
     return pObj;
@@ -2939,146 +2950,160 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 {
     SdPage& rHandoutMaster = *rModel.GetMasterSdPage( 0, PK_HANDOUT );
 
-    Size    aArea = rHandoutMaster.GetSize();
-
-    const long nGapW = 1000; // gap is 1cm
-    const long nGapH = 1000;
-
-    long nLeftBorder = rHandoutMaster.GetLftBorder();
-    long nRightBorder = rHandoutMaster.GetRgtBorder();
-    long nTopBorder = rHandoutMaster.GetUppBorder();
-    long nBottomBorder = rHandoutMaster.GetLwrBorder();
-
-    const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
-
-    nTopBorder += nHeaderFooterHeight;
-    nBottomBorder += nHeaderFooterHeight;
-
-    long nX = nGapW + nLeftBorder;
-    long nY = nGapH + nTopBorder;
-
-    aArea.Width() -= nGapW * 2 + nLeftBorder + nRightBorder;
-    aArea.Height() -= nGapH * 2 + nTopBorder + nBottomBorder;
-
-    const bool bLandscape = aArea.Width() > aArea.Height();
-
-    static sal_uInt16 aOffsets[5][9] =
+    if( eLayout == AUTOLAYOUT_NONE )
     {
-        { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
-        { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
-        { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
-        { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
-        { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
-    };
-
-    sal_uInt16* pOffsets = aOffsets[0];
-    USHORT  nColCnt = 0, nRowCnt = 0;
-    switch ( eLayout )
-    {
-        case AUTOLAYOUT_HANDOUT1:
-            nColCnt = 1; nRowCnt = 1;
-            break;
-
-        case AUTOLAYOUT_HANDOUT2:
-            if( bLandscape )
-            {
-                nColCnt = 2; nRowCnt = 1;
-            }
-            else
-            {
-                nColCnt = 1; nRowCnt = 2;
-            }
-            break;
-
-        case AUTOLAYOUT_HANDOUT3:
-            if( bLandscape )
-            {
-                nColCnt = 3; nRowCnt = 2;
-            }
-            else
-            {
-                nColCnt = 2; nRowCnt = 3;
-            }
-            pOffsets = aOffsets[ bLandscape ? 1 : 0 ];
-            break;
-
-        case AUTOLAYOUT_HANDOUT4:
-            nColCnt = 2; nRowCnt = 2;
-            pOffsets = aOffsets[ bHorizontal ? 0 : 2 ];
-            break;
-
-        case AUTOLAYOUT_HANDOUT6:
-            if( bLandscape )
-            {
-                nColCnt = 3; nRowCnt = 2;
-            }
-            else
-            {
-                nColCnt = 2; nRowCnt = 3;
-            }
-            if( !bHorizontal )
-                pOffsets = aOffsets[ bLandscape ? 1 : 3 ];
-            break;
-
-        default:
-        case AUTOLAYOUT_HANDOUT9:
-            nColCnt = 3; nRowCnt = 3;
-
-            if( !bHorizontal )
-                pOffsets = aOffsets[4];
-            break;
-    }
-
-    rAreas.resize( nColCnt * nRowCnt );
-
-    Size aPartArea, aSize;
-    aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
-    aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
-
-    SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PK_STANDARD);
-    if ( pFirstPage )
-    {
-        // scale actual size into handout rect
-        double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWdt();
-
-        aSize.Height() = (long)(fScale * pFirstPage->GetHgt() );
-        if( aSize.Height() > aPartArea.Height() )
+        // use layout from handout master
+        SdrObjListIter aShapeIter (rHandoutMaster);
+        while (aShapeIter.IsMore())
         {
-            fScale = (double)aPartArea.Height() / (double)pFirstPage->GetHgt();
-            aSize.Height() = aPartArea.Height();
-            aSize.Width() = (long)(fScale * pFirstPage->GetWdt());
+            SdrPageObj* pPageObj = dynamic_cast<SdrPageObj*>(aShapeIter.Next());
+            if (pPageObj)
+                rAreas.push_back( pPageObj->GetCurrentBoundRect() );
         }
-        else
-        {
-            aSize.Width() = aPartArea.Width();
-        }
-
-        nX += (aPartArea.Width() - aSize.Width()) / 2;
-        nY += (aPartArea.Height()- aSize.Height())/ 2;
     }
     else
     {
-        aSize = aPartArea;
-    }
+        Size    aArea = rHandoutMaster.GetSize();
 
-    Point aPos( nX, nY );
+        const long nGapW = 1000; // gap is 1cm
+        const long nGapH = 1000;
 
-    const bool bRTL = rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+        long nLeftBorder = rHandoutMaster.GetLftBorder();
+        long nRightBorder = rHandoutMaster.GetRgtBorder();
+        long nTopBorder = rHandoutMaster.GetUppBorder();
+        long nBottomBorder = rHandoutMaster.GetLwrBorder();
 
-    const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
-    const long nOffsetY = aPartArea.Height() + nGapH;
-    const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) - nX : nX;
+        const long nHeaderFooterHeight = static_cast< long >( (aArea.Height() - nTopBorder - nLeftBorder) * 0.05  );
 
-    for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
-    {
-        aPos.X() = nStartX;
-        for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
+        nTopBorder += nHeaderFooterHeight;
+        nBottomBorder += nHeaderFooterHeight;
+
+        long nX = nGapW + nLeftBorder;
+        long nY = nGapH + nTopBorder;
+
+        aArea.Width() -= nGapW * 2 + nLeftBorder + nRightBorder;
+        aArea.Height() -= nGapH * 2 + nTopBorder + nBottomBorder;
+
+        const bool bLandscape = aArea.Width() > aArea.Height();
+
+        static sal_uInt16 aOffsets[5][9] =
         {
-            rAreas[*pOffsets++] = Rectangle(aPos, aSize);
-            aPos.X() += nOffsetX;
+            { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
+            { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
+            { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
+            { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
+            { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
+        };
+
+        sal_uInt16* pOffsets = aOffsets[0];
+        USHORT  nColCnt = 0, nRowCnt = 0;
+        switch ( eLayout )
+        {
+            case AUTOLAYOUT_HANDOUT1:
+                nColCnt = 1; nRowCnt = 1;
+                break;
+
+            case AUTOLAYOUT_HANDOUT2:
+                if( bLandscape )
+                {
+                    nColCnt = 2; nRowCnt = 1;
+                }
+                else
+                {
+                    nColCnt = 1; nRowCnt = 2;
+                }
+                break;
+
+            case AUTOLAYOUT_HANDOUT3:
+                if( bLandscape )
+                {
+                    nColCnt = 3; nRowCnt = 2;
+                }
+                else
+                {
+                    nColCnt = 2; nRowCnt = 3;
+                }
+                pOffsets = aOffsets[ bLandscape ? 1 : 0 ];
+                break;
+
+            case AUTOLAYOUT_HANDOUT4:
+                nColCnt = 2; nRowCnt = 2;
+                pOffsets = aOffsets[ bHorizontal ? 0 : 2 ];
+                break;
+
+            case AUTOLAYOUT_HANDOUT6:
+                if( bLandscape )
+                {
+                    nColCnt = 3; nRowCnt = 2;
+                }
+                else
+                {
+                    nColCnt = 2; nRowCnt = 3;
+                }
+                if( !bHorizontal )
+                    pOffsets = aOffsets[ bLandscape ? 1 : 3 ];
+                break;
+
+            default:
+            case AUTOLAYOUT_HANDOUT9:
+                nColCnt = 3; nRowCnt = 3;
+
+                if( !bHorizontal )
+                    pOffsets = aOffsets[4];
+                break;
         }
 
-        aPos.Y() += nOffsetY;
+        rAreas.resize( nColCnt * nRowCnt );
+
+        Size aPartArea, aSize;
+        aPartArea.Width()  = ((aArea.Width()  - ((nColCnt-1) * nGapW) ) / nColCnt);
+        aPartArea.Height() = ((aArea.Height() - ((nRowCnt-1) * nGapH) ) / nRowCnt);
+
+        SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PK_STANDARD);
+        if ( pFirstPage )
+        {
+            // scale actual size into handout rect
+            double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWdt();
+
+            aSize.Height() = (long)(fScale * pFirstPage->GetHgt() );
+            if( aSize.Height() > aPartArea.Height() )
+            {
+                fScale = (double)aPartArea.Height() / (double)pFirstPage->GetHgt();
+                aSize.Height() = aPartArea.Height();
+                aSize.Width() = (long)(fScale * pFirstPage->GetWdt());
+            }
+            else
+            {
+                aSize.Width() = aPartArea.Width();
+            }
+
+            nX += (aPartArea.Width() - aSize.Width()) / 2;
+            nY += (aPartArea.Height()- aSize.Height())/ 2;
+        }
+        else
+        {
+            aSize = aPartArea;
+        }
+
+        Point aPos( nX, nY );
+
+        const bool bRTL = rModel.GetDefaultWritingMode() == ::com::sun::star::text::WritingMode_RL_TB;
+
+        const long nOffsetX = (aPartArea.Width() + nGapW) * (bRTL ? -1 : 1);
+        const long nOffsetY = aPartArea.Height() + nGapH;
+        const long nStartX = bRTL ? nOffsetX*(1 - nColCnt) - nX : nX;
+
+        for(sal_uInt16 nRow = 0; nRow < nRowCnt; nRow++)
+        {
+            aPos.X() = nStartX;
+            for(sal_uInt16 nCol = 0; nCol < nColCnt; nCol++)
+            {
+                rAreas[*pOffsets++] = Rectangle(aPos, aSize);
+                aPos.X() += nOffsetX;
+            }
+
+            aPos.Y() += nOffsetY;
+        }
     }
 }
 

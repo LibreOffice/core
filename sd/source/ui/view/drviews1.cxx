@@ -219,7 +219,7 @@ void DrawViewShell::SelectionHasChanged (void)
     }
 
     ViewShellBase& rBase = GetViewShellBase();
-    rBase.SetVerbs(0);
+    rBase.SetVerbs( uno::Sequence< embed::VerbDescriptor >() );
 
     try
     {
@@ -1244,6 +1244,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
         rBindings.Invalidate(SID_DELETE_MASTER_PAGE, TRUE, FALSE);
         rBindings.Invalidate(SID_DELETE_PAGE, TRUE, FALSE);
         rBindings.Invalidate(SID_ASSIGN_LAYOUT,TRUE,FALSE);
+        rBindings.Invalidate(SID_INSERTPAGE,TRUE,FALSE);
         UpdatePreview( mpActualPage );
 
         mpDrawView->AdjustMarkHdl();

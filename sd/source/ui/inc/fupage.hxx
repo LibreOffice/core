@@ -50,7 +50,6 @@ class FuPage
     virtual void Deactivate();         // Function deaktivieren
 
     const SfxItemSet* ExecuteDialog( Window* pParent );
-    void ApplyItemSet( const SfxItemSet* pArgs );
 
 protected:
     virtual ~FuPage (void);
@@ -62,6 +61,8 @@ private:
         ::sd::View* pView,
         SdDrawDocument* pDoc,
         SfxRequest& rReq );
+
+    void ApplyItemSet( const SfxItemSet* pArgs );
 
     SfxRequest&                 mrReq;
     const SfxItemSet*           mpArgs;

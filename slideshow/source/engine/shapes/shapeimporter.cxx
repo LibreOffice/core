@@ -285,7 +285,9 @@ ShapeSharedPtr ShapeImporter::createShape(
     rtl::OUString const& shapeType ) const
 {
     if( shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ))
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ) ||
+        shapeType.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape") ) )
     {
         // Media shape (video etc.). This is a special object
         return createMediaShape(xCurrShape,
@@ -337,7 +339,9 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   mrContext );
     }
     else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape") ))
+                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape") ) ||
+             shapeType.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OLE2Shape") ) )
     {
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
@@ -349,7 +353,10 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.drawing.GraphicObjectShape") ))
+                     "com.sun.star.drawing.GraphicObjectShape") ) ||
+             shapeType.equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.presentation.GraphicObjectShape") ) )
     {
         GraphicObject aGraphicObject;
 
@@ -513,12 +520,11 @@ void ShapeImporter::importPolygons(uno::Reference<beans::XPropertySet> const& xP
 
     ::basegfx::B2DPolygon aPoly;
     basegfx::B2DPoint aPoint;
-    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly )
+    for( sal_Int32 nCurrPoly=0; nCurrPoly<pOuterSequence->getLength(); ++nCurrPoly, ++pInnerSequence )
     {
         aPoint.setX((*pInnerSequence).X);
         aPoint.setY((*pInnerSequence).Y);
         aPoly.append( aPoint );
-        *pInnerSequence++;
     }
     UnoViewVector::const_iterator aIter=(mrContext.mrViewContainer).begin();
     UnoViewVector::const_iterator aEnd=(mrContext.mrViewContainer).end();
@@ -647,20 +653,13 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
-#else
-    mxPagesSupplier( NULL ),
-#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
-#ifndef ENABLE_PRESENTER_EXTRA_UI
-    (void)xPagesSupplier;
-#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );

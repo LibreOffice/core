@@ -1003,13 +1003,11 @@ void SAL_CALL SdStyleSheet::setName( const OUString& rName  ) throw(RuntimeExcep
 {
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
-    if( IsUserDefined() )
+
+    if( SetName( rName ) )
     {
-        if( SetName( rName ) )
-        {
-            msApiName = rName;
-            Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
-        }
+        msApiName = rName;
+        Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
     }
 }
 
@@ -1056,28 +1054,25 @@ void SAL_CALL SdStyleSheet::setParentStyle( const OUString& rParentName  ) throw
     OGuard aGuard( Application::GetSolarMutex() );
     throwIfDisposed();
 
-    if( IsUserDefined() )
+    if( rParentName.getLength() )
     {
-        if( rParentName.getLength() )
-        {
-            const SfxStyles& rStyles = mxPool->GetStyles();
+        const SfxStyles& rStyles = mxPool->GetStyles();
 
-            for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
-            {
-                SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
-                if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
-                {
-                    if( pStyle != this )
-                        SetParent( pStyle->GetName() );
-                    return;
-                }
-            }
-            throw NoSuchElementException();
-        }
-        else
+        for( SfxStyles::const_iterator iter( rStyles.begin() ); iter != rStyles.end(); iter++ )
         {
-            SetParent( rParentName );
+            SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( (*iter).get() );
+            if( pStyle && (pStyle->nFamily == nFamily) && (pStyle->msApiName == rParentName) )
+            {
+                if( pStyle != this )
+                    SetParent( pStyle->GetName() );
+                return;
+            }
         }
+        throw NoSuchElementException();
+    }
+    else
+    {
+        SetParent( rParentName );
     }
 }
 

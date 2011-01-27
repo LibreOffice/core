@@ -45,6 +45,7 @@
 
 #include <vcl/help.hxx>
 #include <vcl/imagerepository.hxx>
+#include <vcl/lazydelete.hxx>
 
 #include <svx/sdrpagewindow.hxx>
 #include <svx/sdrpaintwindow.hxx>
@@ -79,9 +80,6 @@ class ImageButtonHdl;
 
 // --------------------------------------------------------------------
 
-BitmapEx ViewOverlayManager::maSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START];
-BitmapEx ViewOverlayManager::maLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START];
-
 static USHORT gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static USHORT gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
@@ -93,6 +91,32 @@ static BitmapEx loadImageResource( USHORT nId )
     aResId.SetRT( RSC_BITMAP );
 
     return BitmapEx( aResId );
+}
+
+// --------------------------------------------------------------------
+
+static BitmapEx* getButtonImage( int index, bool large )
+{
+    static vcl::DeleteOnDeinit< BitmapEx > gSmallButtonImages[BMP_PLACEHOLDER_SMALL_END - BMP_PLACEHOLDER_SMALL_START] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    static vcl::DeleteOnDeinit< BitmapEx > gLargeButtonImages[BMP_PLACEHOLDER_LARGE_END - BMP_PLACEHOLDER_LARGE_START] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+    if( !gSmallButtonImages[0].get() )
+    {
+        for( sal_uInt16 i = 0; i < (BMP_PLACEHOLDER_SMALL_END-BMP_PLACEHOLDER_SMALL_START); i++ )
+        {
+            gSmallButtonImages[i].set( new BitmapEx( loadImageResource( BMP_PLACEHOLDER_SMALL_START + i ) ) );
+            gLargeButtonImages[i].set( new BitmapEx( loadImageResource( BMP_PLACEHOLDER_LARGE_START + i ) ) );
+        }
+    }
+
+    if( large )
+    {
+        return gLargeButtonImages[index].get();
+    }
+    else
+    {
+        return gSmallButtonImages[index].get();
+    }
 }
 
 // --------------------------------------------------------------------
@@ -374,20 +398,20 @@ BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
         Size aShapeSizePix = pDev->LogicToPixel(rSnapRect.GetSize());
         long nShapeSizePix = std::min(aShapeSizePix.Width(),aShapeSizePix.Height());
 
-        BitmapEx* pImages = (nShapeSizePix > 250) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        bool bLarge = nShapeSizePix > 250;
 
-        Size aSize( pImages->GetSizePixel() );
+        Size aSize( getButtonImage( 0, bLarge )->GetSizePixel() );
 
         aRet.SetSizePixel( Size( aSize.Width() << 1, aSize.Height() << 1 ) );
 
         const Rectangle aRectSrc( Point( 0, 0 ), aSize );
 
-        aRet = pImages[(nHighlight == 0) ? 4 : 0];
+        aRet = *(getButtonImage((nHighlight == 0) ? 4 : 0, bLarge));
         aRet.Expand( aSize.Width(), aSize.Height(), NULL, TRUE );
 
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, &pImages[(nHighlight == 1) ? 5 : 1] );
-        aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, &pImages[(nHighlight == 2) ? 6 : 2] );
-        aRet.CopyPixel( Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, &pImages[(nHighlight == 3) ? 7 : 3] );
+        aRet.CopyPixel( Rectangle( Point( aSize.Width(), 0              ), aSize ), aRectSrc, getButtonImage((nHighlight == 1) ? 5 : 1, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( 0,             aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 2) ? 6 : 2, bLarge) );
+        aRet.CopyPixel( Rectangle( Point( aSize.Width(), aSize.Height() ), aSize ), aRectSrc, getButtonImage((nHighlight == 3) ? 7 : 3, bLarge) );
     }
 
     return aRet;
@@ -411,9 +435,9 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
         if( 50 > nShapeSizePix )
             return;
 
-        BitmapEx* pImages = (nShapeSizePix > 250) ? &ViewOverlayManager::maLargeButtonImages[0] : &ViewOverlayManager::maSmallButtonImages[0];
+        bool bLarge = nShapeSizePix > 250;
 
-        Size aButtonSize( pDev->PixelToLogic(pImages[0].GetSizePixel()) );
+        Size aButtonSize( pDev->PixelToLogic( getButtonImage(0, bLarge )->GetSizePixel()) );
 
         const int nColumns = 2;
         const int nRows = 2;
@@ -490,17 +514,6 @@ ViewOverlayManager::~ViewOverlayManager()
 
 // --------------------------------------------------------------------
 
-void ViewOverlayManager::UpdateImages()
-{
-    for( sal_uInt16 i = 0; i < (BMP_PLACEHOLDER_SMALL_END-BMP_PLACEHOLDER_SMALL_START); i++ )
-    {
-        maSmallButtonImages[i] = loadImageResource( BMP_PLACEHOLDER_SMALL_START + i );
-        maLargeButtonImages[i] = loadImageResource( BMP_PLACEHOLDER_LARGE_START + i );
-    }
-}
-
-// --------------------------------------------------------------------
-
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
@@ -546,11 +559,8 @@ bool ViewOverlayManager::CreateTags()
 
     SdPage* pPage = mrBase.GetMainViewShell()->getCurrentPage();
 
-    if( pPage )
+    if( pPage && !pPage->IsMasterPage() && (pPage->GetPageKind() == PK_STANDARD) )
     {
-        if( !maSmallButtonImages[0] )
-            UpdateImages();
-
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
         for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )

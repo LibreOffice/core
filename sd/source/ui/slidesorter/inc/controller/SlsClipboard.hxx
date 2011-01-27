@@ -24,11 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+
 #ifndef SD_SLIDESORTER_CLIPBOARD
 #define SD_SLIDESORTER_CLIPBOARD
 
 #include "ViewClipboard.hxx"
-
+#include "controller/SlsSelectionObserver.hxx"
 #include <sal/types.h>
 #include <tools/solar.h>
 #include <svx/svdpage.hxx>
@@ -96,6 +97,8 @@ public:
         USHORT nPage = SDRPAGE_NOTFOUND,
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
+    void Abort (void);
+
 protected:
     virtual USHORT DetermineInsertPosition (
         const SdTransferable& rTransferable);
@@ -126,6 +129,15 @@ private:
         selection has to be updated or can stay as it is (FALSE).
     */
     bool mbUpdateSelectionPending;
+
+    /** Used when a drop is executed to combine all undo actions into one.
+        Typically created in ExecuteDrop() and released in DragFinish().
+    */
+    class UndoContext;
+    ::boost::scoped_ptr<UndoContext> mpUndoContext;
+
+    ::boost::scoped_ptr<SelectionObserver::Context> mpSelectionObserverContext;
+    ULONG mnDragFinishedUserEventId;
 
     void CreateSlideTransferable (
         ::Window* pWindow,
@@ -208,6 +220,11 @@ private:
         ::sd::Window* pTargetWindow,
         USHORT nPage,
         USHORT nLayer);
+
+    /** Asynchronous part of DragFinished.  The argument is the sal_Int8
+        nDropAction, disguised as void*.
+    */
+    DECL_LINK(ProcessDragFinished, void*);
 };
 
 } } } // end of namespace ::sd::slidesorter::controller

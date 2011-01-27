@@ -47,6 +47,7 @@ public:
     virtual void onSelect() = 0;
     virtual void onDoubleClick() = 0;
     virtual void onContextMenu( USHORT nSelectedPopupEntry ) = 0;
+    virtual ~ICustomAnimationListController() {}
 };
 
 class CustomAnimationList : public SvTreeListBox, public ISequenceListener

@@ -44,10 +44,10 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include "pres.hxx"
 #include "navigatr.hxx"
-//#include "navichld.hxx"
 #include "navigatr.hrc"
 #include "pgjump.hxx"
 #include "app.hrc"
@@ -309,6 +309,14 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             // gespeichert ist oder nicht
             PopupMenu *pMenu = new PopupMenu;
 
+            static const char* aHIDs[] =
+            {
+                 HID_SD_NAVIGATOR_MENU1,
+                 HID_SD_NAVIGATOR_MENU2,
+                 HID_SD_NAVIGATOR_MENU3,
+                 0
+            };
+
             for( USHORT nID = NAVIGATOR_DRAGTYPE_URL;
                  nID < NAVIGATOR_DRAGTYPE_COUNT;
                  nID++ )
@@ -316,9 +324,9 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
                 USHORT nRId = GetDragTypeSdResId( (NavigatorDragType)nID );
                 if( nRId > 0 )
                 {
+                    DBG_ASSERT(aHIDs[nID-NAVIGATOR_DRAGTYPE_URL],"HelpId not added!");
                     pMenu->InsertItem( nID, String( SdResId( nRId ) ) );
-                    pMenu->SetHelpId( nID, HID_SD_NAVIGATOR_MENU1 +
-                                            nID - NAVIGATOR_DRAGTYPE_URL );
+                    pMenu->SetHelpId( nID, aHIDs[nID - NAVIGATOR_DRAGTYPE_URL] );
                 }
 
             }
@@ -337,7 +345,6 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
-            //pBox->Invalidate();
         }
         break;
 

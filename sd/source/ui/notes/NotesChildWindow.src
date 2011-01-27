@@ -27,10 +27,11 @@
 
 #include "app.hrc"
 #include "NotesChildWindow.hrc"
+#include "sdcommands.h"
 
 DockingWindow FLT_WIN_NOTES
 {
-    HelpID = SID_NOTES_WINDOW ;
+    HelpID = CMD_SID_NOTES_WINDOW ;
     Border = TRUE ;
     Hide = FALSE ;
     SVLook = TRUE ;

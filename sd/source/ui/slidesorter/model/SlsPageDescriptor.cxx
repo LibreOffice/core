@@ -29,9 +29,6 @@
 #include "precompiled_sd.hxx"
 
 #include "model/SlsPageDescriptor.hxx"
-#include "view/SlsPageObject.hxx"
-#include "view/SlsPageObjectViewObjectContact.hxx"
-#include "controller/SlsPageObjectFactory.hxx"
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -39,31 +36,35 @@
 #include <svx/svdopage.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/sdr/contact/viewobjectcontact.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 namespace sd {  namespace slidesorter { namespace model {
 
+
 PageDescriptor::PageDescriptor (
     const Reference<drawing::XDrawPage>& rxPage,
     SdPage* pPage,
-    const sal_Int32 nIndex,
-    const controller::PageObjectFactory& rPageObjectFactory)
+    const sal_Int32 nIndex)
     : mpPage(pPage),
       mxPage(rxPage),
+      mpMasterPage(NULL),
       mnIndex(nIndex),
-      mpPageObjectFactory(&rPageObjectFactory),
-      mpPageObject(NULL),
+      maBoundingBox(),
+      maVisualState(nIndex),
       mbIsSelected(false),
+      mbWasSelected(false),
       mbIsVisible(false),
       mbIsFocused(false),
       mbIsCurrent(false),
-      mpViewObjectContact(NULL),
-      maModelBorder(0,0,0,0),
-      maPageNumberAreaModelSize(0,0)
+      mbIsMouseOver(false)
 {
+    OSL_ASSERT(mpPage);
     OSL_ASSERT(mpPage == SdPage::getImplementation(rxPage));
+    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
+        mpMasterPage = &mpPage->TRG_GetMasterPage();
 }
 
 
@@ -92,48 +93,31 @@ Reference<drawing::XDrawPage> PageDescriptor::GetXDrawPage (void) const
 
 
 
-view::PageObject* PageDescriptor::GetPageObject (void)
+sal_Int32 PageDescriptor::GetPageIndex (void) const
 {
-    if (mpPageObject==NULL && mpPageObjectFactory!=NULL && mpPage != NULL)
+    return mnIndex;
+}
+
+
+
+
+void PageDescriptor::SetPageIndex (const sal_Int32 nNewIndex)
+{
+    mnIndex = nNewIndex;
+    maVisualState.mnPageId = nNewIndex;
+}
+
+
+
+
+bool PageDescriptor::UpdateMasterPage (void)
+{
+    const SdrPage* pMaster = NULL;
+    if (mpPage!=NULL && mpPage->TRG_HasMasterPage())
+        pMaster = &mpPage->TRG_GetMasterPage();
+    if (mpMasterPage != pMaster)
     {
-        mpPageObject = mpPageObjectFactory->CreatePageObject(mpPage, shared_from_this());
-    }
-
-    return mpPageObject;
-}
-
-
-
-
-void PageDescriptor::ReleasePageObject (void)
-{
-    mpPageObject = NULL;
-}
-
-
-
-
-bool PageDescriptor::IsVisible (void) const
-{
-    return mbIsVisible;
-}
-
-
-
-
-void PageDescriptor::SetVisible (bool bIsVisible)
-{
-    mbIsVisible = bIsVisible;
-}
-
-
-
-
-bool PageDescriptor::Select (void)
-{
-    if ( ! IsSelected())
-    {
-        mbIsSelected = true;
+        mpMasterPage = pMaster;
         return true;
     }
     else
@@ -143,35 +127,113 @@ bool PageDescriptor::Select (void)
 
 
 
-bool PageDescriptor::Deselect (void)
+bool PageDescriptor::HasState (const State eState) const
 {
-    if (IsSelected())
+    switch (eState)
     {
-        mbIsSelected = false;
-        return true;
+        case ST_Visible:
+            return mbIsVisible;
+
+        case ST_Selected:
+            return mbIsSelected;
+
+        case ST_WasSelected:
+            return mbWasSelected;
+
+        case ST_Focused:
+            return mbIsFocused;
+
+        case ST_MouseOver:
+            return mbIsMouseOver;
+
+        case ST_Current:
+            return mbIsCurrent;
+
+        case ST_Excluded:
+            return mpPage!=NULL && mpPage->IsExcluded();
+
+        default:
+            OSL_ASSERT(false);
+            return false;
     }
-    else
-        return false;
 }
 
 
 
 
-bool PageDescriptor::IsSelected (void) const
+bool PageDescriptor::SetState (const State eState, const bool bNewStateValue)
 {
-    return mbIsSelected;
+    bool bModified (false);
+    switch (eState)
+    {
+        case ST_Visible:
+            bModified = (bNewStateValue!=mbIsVisible);
+            if (bModified)
+                mbIsVisible = bNewStateValue;
+            break;
+
+        case ST_Selected:
+            bModified = (bNewStateValue!=mbIsSelected);
+            if (bModified)
+                mbIsSelected = bNewStateValue;
+            break;
+
+        case ST_WasSelected:
+            bModified = (bNewStateValue!=mbWasSelected);
+            if (bModified)
+                mbWasSelected = bNewStateValue;
+            break;
+
+        case ST_Focused:
+            bModified = (bNewStateValue!=mbIsFocused);
+            if (bModified)
+                mbIsFocused = bNewStateValue;
+            break;
+
+        case ST_MouseOver:
+            bModified = (bNewStateValue!=mbIsMouseOver);
+            if (bModified)
+                mbIsMouseOver = bNewStateValue;
+            break;
+
+        case ST_Current:
+            bModified = (bNewStateValue!=mbIsCurrent);
+            if (bModified)
+                mbIsCurrent = bNewStateValue;
+            break;
+
+        case ST_Excluded:
+            // This is a state of the page and has to be handled differently
+            // from the view-only states.
+            if (mpPage != NULL)
+                if (bNewStateValue != (mpPage->IsExcluded()==TRUE))
+                {
+                    mpPage->SetExcluded(bNewStateValue);
+                    bModified = true;
+                }
+            break;
+    }
+
+    if (bModified)
+        maVisualState.UpdateVisualState(*this);
+    return bModified;
 }
 
 
 
 
-bool PageDescriptor::UpdateSelection (void)
+VisualState& PageDescriptor::GetVisualState (void)
+{
+    return maVisualState;
+}
+
+
+
+
+bool PageDescriptor::GetCoreSelection (void)
 {
     if (mpPage!=NULL && (mpPage->IsSelected()==TRUE) != mbIsSelected)
-    {
-        mbIsSelected = ! mbIsSelected;
-        return true;
-    }
+        return SetState(ST_Selected, !mbIsSelected);
     else
         return false;
 }
@@ -179,101 +241,47 @@ bool PageDescriptor::UpdateSelection (void)
 
 
 
-bool PageDescriptor::IsFocused (void) const
+void PageDescriptor::SetCoreSelection (void)
 {
-    return mbIsFocused;
+    if (mpPage != NULL)
+        if (HasState(ST_Selected))
+            mpPage->SetSelected(TRUE);
+        else
+            mpPage->SetSelected(FALSE);
+    else
+    {
+        OSL_ASSERT(mpPage!=NULL);
+    }
 }
 
 
 
 
-void PageDescriptor::SetFocus (void)
+Rectangle PageDescriptor::GetBoundingBox (void) const
 {
-    mbIsFocused = true;
+    Rectangle aBox (maBoundingBox);
+    const Point aOffset (maVisualState.GetLocationOffset());
+    aBox.Move(aOffset.X(), aOffset.Y());
+    return aBox;
 }
 
 
 
 
-void PageDescriptor::RemoveFocus (void)
+Point PageDescriptor::GetLocation (const bool bIgnoreOffset) const
 {
-    mbIsFocused = false;
+    if (bIgnoreOffset)
+        return maBoundingBox.TopLeft();
+    else
+        return maBoundingBox.TopLeft() + maVisualState.GetLocationOffset();
 }
 
 
 
 
-view::PageObjectViewObjectContact*
-    PageDescriptor::GetViewObjectContact (void) const
+void PageDescriptor::SetBoundingBox (const Rectangle& rBoundingBox)
 {
-    return mpViewObjectContact;
-}
-
-
-
-
-void PageDescriptor::SetViewObjectContact (
-    view::PageObjectViewObjectContact* pViewObjectContact)
-{
-    mpViewObjectContact = pViewObjectContact;
-}
-
-
-
-
-const controller::PageObjectFactory&
-    PageDescriptor::GetPageObjectFactory (void) const
-{
-    return *mpPageObjectFactory;
-}
-
-
-
-
-void PageDescriptor::SetPageObjectFactory (
-    const controller::PageObjectFactory& rFactory)
-{
-    mpPageObjectFactory = &rFactory;
-}
-
-
-
-
-void PageDescriptor::SetModelBorder (const SvBorder& rBorder)
-{
-    maModelBorder = rBorder;
-}
-
-
-
-
-SvBorder PageDescriptor::GetModelBorder (void) const
-{
-    return maModelBorder;
-}
-
-
-
-
-void PageDescriptor::SetPageNumberAreaModelSize (const Size& rSize)
-{
-    maPageNumberAreaModelSize = rSize;
-}
-
-
-
-
-Size PageDescriptor::GetPageNumberAreaModelSize (void) const
-{
-    return maPageNumberAreaModelSize;
-}
-
-
-
-
-void PageDescriptor::SetIsCurrentPage (const bool bIsCurrent)
-{
-    mbIsCurrent = bIsCurrent;
+    maBoundingBox = rBoundingBox;
 }
 
 

@@ -98,11 +98,13 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
 
 TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
 {
+    HelpID = "sd:TabPage:RID_TP_CUSTOMANIMATION_ENTRANCE";
     Hide = TRUE;
     Size = MAP_APPFONT ( 156, 217 );
 
     ListBox LB_EFFECTS
     {
+        HelpID = "sd:ListBox:RID_TP_CUSTOMANIMATION_ENTRANCE:LB_EFFECTS";
         Pos = MAP_APPFONT ( 3 , 3  ) ;
         Size = MAP_APPFONT( 144, 160 );
         OutputSize = TRUE;
@@ -121,6 +123,7 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
 
     ComboBox CB_SPEED
     {
+        HelpID = "sd:ComboBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CB_SPEED";
         Pos = MAP_APPFONT ( 48 , 166 ) ;
         Size = MAP_APPFONT ( 101, 48 );
         TabStop = TRUE ;
@@ -130,6 +133,7 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
 
     CheckBox CBX_PREVIEW
     {
+        HelpID = "sd:CheckBox:RID_TP_CUSTOMANIMATION_ENTRANCE:CBX_PREVIEW";
         Pos = MAP_APPFONT ( 3 , 181 ) ;
         Size = MAP_APPFONT ( 143 , 10 ) ;
         TabStop = TRUE ;

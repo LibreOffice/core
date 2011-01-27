@@ -25,46 +25,36 @@
  *
  ************************************************************************/
 
+#ifndef SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
+#define SD_SLIDESORTER_VIEW_LAYER_PAINTER_HXX
 
-#ifndef _SD_PRINTDLG_HXX_
-#define _SD_PRINTDLG_HXX_
+#include <boost/shared_ptr.hpp>
+#include <sal/types.h>
 
+class OutputDevice;
+class Rectangle;
 
-#include <vcl/group.hxx>
-#include <vcl/dialog.hxx>
+namespace sd { namespace slidesorter { namespace view {
 
-#ifndef _SV_BUTTON_HXX //autogen
-#include <vcl/button.hxx>
-#endif
-#include <svtools/stdctrl.hxx>
-
-
-/*************************************************************************
-|*
-|*    SdPrintDlg::SdPrintDlg()
-|*
-|*    Beschreibung  Dialog zum Einstellen von Printoptionen
-|*
-*************************************************************************/
-
-class SdPrintDlg : public ModalDialog
+class ILayerInvalidator
 {
-private:
-    FixedInfo           aFtInfo;
-    RadioButton         aRbtScale;
-    RadioButton         aRbtPoster;
-    RadioButton         aRbtCut;
-    FixedLine           aGrpOptions;
-    OKButton            aBtnOK;
-    CancelButton        aBtnCancel;
-    HelpButton          aBtnHelp;
-
 public:
-
-            SdPrintDlg( Window* pWindow );
-
-    USHORT  GetAttr();
+    virtual void Invalidate (const Rectangle& rInvalidationBox) = 0;
 };
+typedef ::boost::shared_ptr<ILayerInvalidator> SharedILayerInvalidator;
 
-#endif // _SD_PRINTDLG_HXX_
+class ILayerPainter
+{
+public:
+    virtual void SetLayerInvalidator (
+        const SharedILayerInvalidator& rpInvalidator) = 0;
+    virtual void Paint (
+        OutputDevice& rDevice,
+        const Rectangle& rRepaintArea) = 0;
+};
+typedef ::boost::shared_ptr<ILayerPainter> SharedILayerPainter;
 
+
+} } } // end of namespace ::sd::slidesorter::view
+
+#endif

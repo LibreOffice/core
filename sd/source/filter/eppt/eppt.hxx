@@ -727,9 +727,9 @@ class PPTWriter : public GroupTable, public PropValue, public PPTExBulletProvide
         sal_uInt32          mnTextSize;
 
         SvStorageRef        mrStg;
-        SvStorageStream*    mpCurUserStrm;
-        SvStorageStream*    mpStrm;
-        SvStorageStream*    mpPicStrm;
+        SvStream*           mpCurUserStrm;
+        SvStream*           mpStrm;
+        SvStream*           mpPicStrm;
         PptEscherEx*        mpPptEscherEx;
 
         List                maExOleObj;

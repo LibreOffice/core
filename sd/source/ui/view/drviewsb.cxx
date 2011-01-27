@@ -33,7 +33,7 @@
 #ifndef _SVXIDS_HXX
 #include <svx/svxids.hrc>
 #endif
-
+#include <sfx2/msgpool.hxx>
 #include <svx/hyprlink.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svx/hlnkitem.hxx>
@@ -127,7 +127,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, true, String( SdResId( STR_INSERTLAYER ) ) ) : 0;
                 if( pDlg )
                 {
-                    pDlg->SetHelpId( SID_INSERTLAYER );
+                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_INSERTLAYER )->GetCommand() );
 
                     // Ueberpruefung auf schon vorhandene Namen
                     BOOL bLoop = TRUE;
@@ -293,7 +293,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 AbstractSdInsertLayerDlg* pDlg = pFact ? pFact->CreateSdInsertLayerDlg(NULL, aNewAttr, bDelete, String( SdResId( STR_MODIFYLAYER ) ) ) : 0;
                 if( pDlg )
                 {
-                    pDlg->SetHelpId( SID_MODIFYLAYER );
+                    pDlg->SetHelpId( SD_MOD()->GetSlotPool()->GetSlot( SID_MODIFYLAYER )->GetCommand() );
 
                     // Ueberpruefung auf schon vorhandene Namen
                     BOOL    bLoop = TRUE;

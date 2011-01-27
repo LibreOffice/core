@@ -503,45 +503,78 @@ SdPage* DocumentHelper::ProvideMasterPage (
     SdPage* pMasterPage,
     const ::boost::shared_ptr<std::vector<SdPage*> >& rpPageList)
 {
-    SdPage* pMasterPageInDocument = NULL;
-
-    // Get notes master page.
-    SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
-    SdPage* pNotesMasterPage = static_cast<SdPage*>(
-        pSourceDocument->GetMasterPage (pMasterPage->GetPageNum()+1));
-    if (pNotesMasterPage != NULL)
+    // Make sure that both the master page and its notes master exist
+    // in the source document.  If one is missing then return without
+    // making any changes.
+    if (pMasterPage == NULL)
     {
-        // When the given master page or its associated notes master page do
-        // not already belong to the document we have to create copies of
-        // them and insert them into the document.
+        // The caller should make sure that the master page is valid.
+        OSL_ASSERT(pMasterPage != NULL);
+        return NULL;
+    }
+    SdDrawDocument* pSourceDocument = static_cast<SdDrawDocument*>(pMasterPage->GetModel());
+    if (pSourceDocument == NULL)
+        return NULL;
+    SdPage* pNotesMasterPage = static_cast<SdPage*>(
+        pSourceDocument->GetMasterPage(pMasterPage->GetPageNum()+1));
+    if (pNotesMasterPage == NULL)
+    {
+        // The model is not in a valid state.  Maybe a new master page
+        // is being (not finished yet) created?  Return without making
+        // any changes.
+        return NULL;
+    }
 
-        // Determine the position where the new master pages are inserted.
-        // By default they are inserted at the end.  When we assign to a
-        // master page then insert after the last of the (selected) pages.
-        USHORT nInsertionIndex = rTargetDocument.GetMasterPageCount();
-        if (rpPageList->front()->IsMasterPage())
+    SdPage* pMasterPageInDocument = NULL;
+    // Search for a master page with the same name as the given one in
+    // the target document.
+    const XubString sMasterPageLayoutName (pMasterPage->GetLayoutName());
+    for (USHORT nIndex=0,nCount=rTargetDocument.GetMasterPageCount(); nIndex<nCount; ++nIndex)
+    {
+        SdPage* pCandidate = static_cast<SdPage*>(rTargetDocument.GetMasterPage(nIndex));
+        if (pCandidate!=NULL
+            && sMasterPageLayoutName==pCandidate->GetLayoutName())
         {
-            nInsertionIndex = rpPageList->back()->GetPageNum();
-        }
-
-        if (pMasterPage->GetModel() != &rTargetDocument)
-        {
-            pMasterPageInDocument = AddMasterPage (rTargetDocument, pMasterPage, nInsertionIndex);
-            if( rTargetDocument.IsUndoEnabled() )
-                rTargetDocument.AddUndo(
-                    rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pMasterPageInDocument));
-        }
-        else
-            pMasterPageInDocument = pMasterPage;
-        if (pNotesMasterPage->GetModel() != &rTargetDocument)
-        {
-            SdPage* pClonedNotesMasterPage
-                = AddMasterPage (rTargetDocument, pNotesMasterPage, nInsertionIndex+1);
-            if( rTargetDocument.IsUndoEnabled() )
-                rTargetDocument.AddUndo(
-                    rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pClonedNotesMasterPage));
+            // The requested master page does already exist in the
+            // target document, return it.
+            return pCandidate;
         }
     }
+
+    // The given master page does not already belong to the target
+    // document so we have to create copies and insert them into the
+    // targer document.
+
+    // Determine the position where the new master pages are inserted.
+    // By default they are inserted at the end.  When we assign to a
+    // master page then insert after the last of the (selected) pages.
+    USHORT nInsertionIndex = rTargetDocument.GetMasterPageCount();
+    if (rpPageList->front()->IsMasterPage())
+    {
+        nInsertionIndex = rpPageList->back()->GetPageNum();
+    }
+
+    // Clone the master page.
+    if (pMasterPage->GetModel() != &rTargetDocument)
+    {
+        pMasterPageInDocument = AddMasterPage (rTargetDocument, pMasterPage, nInsertionIndex);
+        if( rTargetDocument.IsUndoEnabled() )
+                rTargetDocument.AddUndo(
+                    rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pMasterPageInDocument));
+    }
+    else
+        pMasterPageInDocument = pMasterPage;
+
+    // Clone the notes master.
+    if (pNotesMasterPage->GetModel() != &rTargetDocument)
+    {
+        SdPage* pClonedNotesMasterPage
+            = AddMasterPage (rTargetDocument, pNotesMasterPage, nInsertionIndex+1);
+        if( rTargetDocument.IsUndoEnabled() )
+            rTargetDocument.AddUndo(
+                rTargetDocument.GetSdrUndoFactory().CreateUndoNewPage(*pClonedNotesMasterPage));
+    }
+
     return pMasterPageInDocument;
 }
 

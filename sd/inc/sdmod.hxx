@@ -114,8 +114,6 @@ public:
     void                    Execute(SfxRequest& rReq);
     void                    GetState(SfxItemSet&);
 
-    virtual void            FillStatusBar(StatusBar& rBar);
-
     SdOptions*              GetSdOptions(DocumentType eDocType);
     SD_DLLPUBLIC SvStorageStreamRef     GetOptionStream( const String& rOptionName, SdOptionStreamMode eMode );
 

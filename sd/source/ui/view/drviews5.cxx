@@ -51,7 +51,7 @@
 #include "res_bmp.hrc"
 #include "glob.hrc"
 #include "app.hrc"
-
+#include "helpids.h"
 #include "optsitem.hxx"
 #include "app.hxx"
 #include "FrameView.hxx"
@@ -597,20 +597,20 @@ void DrawViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence
         if (mePageKind == PK_NOTES)
         {
             SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetHelpId( SID_NOTESMODE );
-            GetActiveWindow()->SetUniqueId( SID_NOTESMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
         }
         else if (mePageKind == PK_HANDOUT)
         {
             SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetHelpId( SID_HANDOUTMODE );
-            GetActiveWindow()->SetUniqueId( SID_HANDOUTMODE );
+            GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
+            GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
         }
         else
         {
             SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetHelpId( SD_IF_SDDRAWVIEWSHELL );
-            GetActiveWindow()->SetUniqueId( SD_IF_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetHelpId( HID_SDDRAWVIEWSHELL );
+            GetActiveWindow()->SetUniqueId( HID_SDDRAWVIEWSHELL );
         }
     }
 

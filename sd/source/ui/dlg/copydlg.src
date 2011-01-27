@@ -28,9 +28,11 @@
 #include "app.hrc"
 #include "res_bmp.hrc"
 #include "copydlg.hrc"
+#include "helpids.h"
+
 ModalDialog DLG_COPY
 {
-    HelpID = SID_COPYOBJECTS ;
+    HelpID = CMD_SID_COPYOBJECTS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 177 ) ;
@@ -63,6 +65,7 @@ ModalDialog DLG_COPY
     };
     NumericField NUM_FLD_COPIES
     {
+        HelpID = "sd:NumericField:DLG_COPY:NUM_FLD_COPIES";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 7 ) ;
         Size = MAP_APPFONT ( 35 , 12 ) ;
@@ -78,6 +81,7 @@ ModalDialog DLG_COPY
     };
     ImageButton BTN_SET_VIEWDATA
     {
+        HelpID = "sd:ImageButton:DLG_COPY:BTN_SET_VIEWDATA";
         Pos = MAP_APPFONT ( 122 , 6 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         ButtonImage = Image
@@ -90,6 +94,7 @@ ModalDialog DLG_COPY
     };
     PushButton BTN_SET_DEFAULT
     {
+        HelpID = "sd:PushButton:DLG_COPY:BTN_SET_DEFAULT";
         Pos = MAP_APPFONT ( 148 , 63  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -97,6 +102,7 @@ ModalDialog DLG_COPY
     };
     MetricField MTR_FLD_ANGLE
     {
+        HelpID = "sd:MetricField:DLG_COPY:MTR_FLD_ANGLE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 69 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -124,6 +130,7 @@ ModalDialog DLG_COPY
     };
     MetricField MTR_FLD_MOVE_X
     {
+        HelpID = "sd:MetricField:DLG_COPY:MTR_FLD_MOVE_X";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 37 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -141,6 +148,7 @@ ModalDialog DLG_COPY
     };
     MetricField MTR_FLD_MOVE_Y
     {
+        HelpID = "sd:MetricField:DLG_COPY:MTR_FLD_MOVE_Y";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 53 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -158,6 +166,7 @@ ModalDialog DLG_COPY
     };
     MetricField MTR_FLD_WIDTH
     {
+        HelpID = "sd:MetricField:DLG_COPY:MTR_FLD_WIDTH";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 98 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -175,6 +184,7 @@ ModalDialog DLG_COPY
     };
     MetricField MTR_FLD_HEIGHT
     {
+        HelpID = "sd:MetricField:DLG_COPY:MTR_FLD_HEIGHT";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 114 ) ;
         Size = MAP_APPFONT ( 45 , 12 ) ;
@@ -228,6 +238,7 @@ ModalDialog DLG_COPY
     };
     ListBox LB_START_COLOR
     {
+        HelpID = "sd:ListBox:DLG_COPY:LB_START_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 143 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;
@@ -243,6 +254,7 @@ ModalDialog DLG_COPY
     };
     ListBox LB_END_COLOR
     {
+        HelpID = "sd:ListBox:DLG_COPY:LB_END_COLOR";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 76 , 159 ) ;
         Size = MAP_APPFONT ( 60 , 90 ) ;

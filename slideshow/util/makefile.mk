@@ -102,3 +102,11 @@ $(MISC)$/$(SHL2TARGET).flt: makefile.mk \
                             $(TARGET2).flt
     +$(TYPE) $(TARGET2).flt > $@
 
+
+ALLTAR : $(MISC)/slideshow.component
+
+$(MISC)/slideshow.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        slideshow.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt slideshow.component

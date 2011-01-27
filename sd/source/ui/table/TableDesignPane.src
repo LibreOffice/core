@@ -112,6 +112,7 @@ Control DLG_TABLEDESIGNPANE
 
 ModalDialog DLG_TABLEDESIGNPANE
 {
+    HelpID = "sd:ModalDialog:DLG_TABLEDESIGNPANE";
     OutputSize = TRUE;
     SVLook = TRUE ;
     Moveable = TRUE ;

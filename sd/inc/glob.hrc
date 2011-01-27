@@ -154,5 +154,7 @@
 #define STR_CUSTOMANIMATIONPANE                 RID_GLOB_START+227
 #define STR_SLIDE_TRANSITION_PANE               RID_GLOB_START+228
 
+#define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
+
 
 

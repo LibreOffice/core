@@ -228,8 +228,10 @@ private:
 
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
+#ifdef VERBOSE
     void DumpShellStack (const ShellStack& rStack);
     void DumpSfxShellStack (void);
+#endif
 
     /** To be called before a shell is taken fom the SFX shell stack.  This
         method deactivates an active text editing to avoid problems with
@@ -1319,6 +1321,7 @@ void ViewShellManager::Implementation::Shutdown (void)
 
 
 
+#ifdef VERBOSE
 void ViewShellManager::Implementation::DumpShellStack (const ShellStack& rStack)
 {
     ShellStack::const_reverse_iterator iEntry;
@@ -1345,7 +1348,7 @@ void ViewShellManager::Implementation::DumpSfxShellStack (void)
         aSfxShellStack.push_back(mrBase.GetSubShell(nIndex));
     DumpShellStack(aSfxShellStack);
 }
-
+#endif
 
 
 
