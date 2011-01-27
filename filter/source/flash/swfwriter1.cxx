@@ -1329,12 +1329,10 @@ bool Writer::Impl_writeFilling( SvtGraphicFill& rFilling )
             aMatrix.set(2, 2, 1.0);
 
             // scale bitmap
-            Rectangle originalPixelRect = Rectangle(Point(), aGraphic.GetBitmapEx().GetSizePixel());
-
             double XScale = (double)aNewRect.GetWidth()/aOldRect.GetWidth();
             double YScale = (double)aNewRect.GetHeight()/aOldRect.GetHeight();
 
-             aMatrix.scale( XScale, YScale );
+            aMatrix.scale( XScale, YScale );
 
             FillStyle aFillStyle( nBitmapId, !rFilling.IsTiling(), aMatrix );
 

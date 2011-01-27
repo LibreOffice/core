@@ -430,9 +430,11 @@ ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool
 
     PolyPolygon aPolyPolygon = EscherPropertyContainer::GetPolyPolygon( xShape );
     Rectangle aRect( aPolyPolygon.GetBoundRect() );
-    awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
 
+#if OSL_DEBUG_LEVEL > 0
+    awt::Size size = MapSize( awt::Size( aRect.GetWidth(), aRect.GetHeight() ) );
     DBG(printf("poly count %d\nsize: %d x %d", aPolyPolygon.Count(), int( size.Width ), int( size.Height )));
+#endif
 
     // non visual shape properties
     pFS->startElementNS( mnXmlNamespace, XML_nvSpPr, FSEND );
