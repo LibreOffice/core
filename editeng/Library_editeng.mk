@@ -37,6 +37,7 @@ $(eval $(call gb_Library_add_precompiled_header,editeng,$(SRCDIR)/editeng/inc/pc
 # add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/editeng/inc/pch \
     -I$(SRCDIR)/editeng/inc \
     -I$(OUTDIR)/inc/offuh \
 ))
