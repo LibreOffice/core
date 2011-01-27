@@ -977,8 +977,6 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
     if( implIsInsideGroup( pObj ) )
         return;
 
-    Any aEmpty;
-
     sd::MainSequencePtr pMainSequence = static_cast<SdPage*>(pObj->GetPage())->getMainSequence();
 
     const Reference< XShape > xShape( pShape );
@@ -992,8 +990,10 @@ void EffectMigration::SetDimHide( SvxShape* pShape, sal_Bool bDimHide )
         if( pEffect->getTargetShape() == xShape )
         {
             pEffect->setHasAfterEffect( bDimHide ? true : false );
-            if( bDimHide )
+            if( bDimHide ) {
+                Any aEmpty;
                 pEffect->setDimColor( aEmpty );
+            }
             pEffect->setAfterEffectOnNext( false );
             bNeedRebuild = true;
         }
