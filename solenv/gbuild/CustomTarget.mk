@@ -27,8 +27,9 @@
 
 gb_CustomTarget_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
 
+# N.B.: putting the "+" there at the start activates the GNU make job server
 define gb_CustomTarget__command
-$(call gb_Helper_abbreviate_dirs,\
++$(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(call gb_CustomTarget_get_workdir,$(2)) && \
     $(MAKE) -C $(call gb_CustomTarget_get_workdir,$(2)) -f $< && \
     touch $(1))
