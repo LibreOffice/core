@@ -106,12 +106,15 @@ testcase tToolsNumbering12
 				                 "." & sCurrentFilterExt )
 				hDeleteFile( ExportFileName ) ' There should never be a reason to overwrite 
 
-				printlog "  - export as: " & ExportFileName
-				Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
-				Call hCloseDocument
+                ' Binary export filter was removed
+                if iDocumentType < 3 then
+                    printlog "  - export as: " & ExportFileName
+                    Call hFileSaveAsWithFilter( ExportFileName, sCurrentFilter )
+                    Call hCloseDocument
 
-				printlog "  - load previous saved document"
-				hFileOpen(  ExportFileName )
+                    printlog "  - load previous saved document"
+                    hFileOpen(  ExportFileName )
+                endif
 
 				printlog "  - close document"
 				hFileCloseAll()

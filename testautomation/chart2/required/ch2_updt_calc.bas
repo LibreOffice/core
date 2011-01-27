@@ -71,8 +71,6 @@ sub main
     call tFileSaveAsSTC
     call tFileSaveAsXLS
     call tFileSaveAsXLT
-    call tFileSaveAsSDC
-    call tFileSaveAsVOR
     call tFileReload                
     printLog Chr(13) + "----------  Chart2 View Menu -----------"
     Call tViewToolbars
