@@ -983,7 +983,7 @@ if ($platform =~ m/cygwin/)
 if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
 {
    $JAVA_BIN             = $JAVA_HOME.$BIN;
-   $JAVA_INCLUDE         = $JAVA_HOME.$ds."include";
+   $JAVA_INCLUDE         = $JAVA_HOME.$INCLUDE;
 }
 
 
@@ -1098,8 +1098,10 @@ if ($platform =~ m/cygwin|os2/)
 
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$JAVA_HOME.$LIB;
+   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB;
+      if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" ) {
+          $ILIB   .= $wps.$JAVA_HOME.$LIB;
+      }
       if ( $CL_X64 ne "TRUE" ) {
           $ILIB   .= $wps.$COMPATH.$LIB.
 		             $wps.$PSDK_HOME.$LIB;
@@ -1426,7 +1428,7 @@ $SOLARINC            .= '/SC5 ';
 # Platform dependent include path at the top of this list of include paths
 if ($platform =~ m/solaris/)
 {
-    $SOLARINC         .= $I.$COMPATH.$ds."include";
+    $SOLARINC         .= $I.$COMPATH.$INCLUDE;
 }
 if ($platform =~ m/linux/)
 {
@@ -1439,13 +1441,14 @@ if ($platform =~ m/linux/)
 
 	# pickup system jpeg over java jpeg on OpenBSD
 	if ($platform =~ m/openbsd/)
-	{  $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
+	{   $SOLARINC  .= $I.$USR_LOCAL.$INCLUDE;
 	}
-	{  $SOLARINC  .= $I.'$JAVA_HOME'.$INCLUDE;
+    if ( $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME" )
+    {   $SOLARINC  .= $I.'$JAVA_HOME'.$INCLUDE;
 	}
 
 	#include system dependent Java include directory
-	if (!($JDK eq "gcj"))
+	if (!($JDK eq "gcj") && $JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
 	{
    		if ($platform =~ m/solaris/)
    		{  $SOLARINC   .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
@@ -1471,7 +1474,7 @@ if ($platform =~ m/linux/)
 
    		#java threads include path
 
-   		$SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
+        $SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$INCLUDE;
 	}
     #The tail, if needed
     if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd/)
@@ -1483,30 +1486,31 @@ if ($platform =~ m/linux/)
     }
 }
 elsif ($platform =~ m/cygwin/)
-{  $SOLARINC         .= $STLPORT_stlport.
-                        $I.'$JAVA_HOME'.$ds."include".$ds."win32".
-                        $I.'$JAVA_HOME'.$ds."include";
+{  $SOLARINC          .= $STLPORT_stlport;
+   if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
+   {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32";
+   }
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
-                         $I.'$COMPATH'.$ds."include";
+                         $I.'$COMPATH'.$INCLUDE;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
       }
    }
    elsif ( $COM eq "GCC" )
-   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
+   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$INCLUDE;
      if ( $USE_MINGW eq "cygwin" )
-     {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw").
-                        $I.PathFormat($USR.$ds."include".$ds."w32api").
-                        $I.PathFormat($USR.$ds."include"); }
+     {  $SOLARINC    .= $I.PathFormat($USR.$INCLUDE.$ds."mingw").
+                        $I.PathFormat($USR.$INCLUDE.$ds."w32api").
+                        $I.PathFormat($USR.$INCLUDE); }
      else
-     {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
+     {  $SOLARINC    .= $I.'$COMPATH'.$INCLUDE; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
      $SOLARINC .= $I.PathFormat("@MINGW_BACKWARD_INCLUDE_PATH@");
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
-           if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
+           if ( $mingw_lib_include_path ne $COMPATH.$INCLUDE && $mingw_lib_include_path ne "" )
            {
               $SOLARINC   .= $I.PathFormat($mingw_lib_include_path);
            }
@@ -1514,7 +1518,7 @@ elsif ($platform =~ m/cygwin/)
      $SOLARINC .= $I.PathFormat("@GXX_INCLUDE_PATH@").$I.PathFormat("@GXX_INCLUDE_PATH@".$ds."mingw32").
                   $I.'$PSDK_HOME'.$INCLUDE;
    }
-   if ( '@ENABLE_DIRECTX@' ne "" ) {
+   if ( $COM ne "MSC" && '@ENABLE_DIRECTX@' ne "" ) {
        $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
