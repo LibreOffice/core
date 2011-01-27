@@ -92,7 +92,6 @@
 #include "../ui/inc/optsitem.hxx"
 #include "../ui/inc/FrameView.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 
 using ::rtl::OUString;
@@ -176,7 +175,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 , mpDrawPageListWatcher(0)
 , mpMasterPageListWatcher(0)
 {
-    // #109538#
     mpDrawPageListWatcher = ::std::auto_ptr<ImpDrawPageListWatcher>(
         new ImpDrawPageListWatcher(*this));
     mpMasterPageListWatcher = ::std::auto_ptr<ImpMasterPageListWatcher>(
@@ -400,7 +398,6 @@ SdDrawDocument::~SdDrawDocument()
     CloseBookmarkDoc();
     SetAllocDocSh(FALSE);
 
-    // #116168#
     ClearModel(sal_True);
 
     if (pLinkManager)
@@ -972,8 +969,6 @@ SvxNumType SdDrawDocument::GetPageNumType() const
 
 void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
-    // #108104#
-
     switch (nMode)
     {
         case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
@@ -981,7 +976,6 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
             // Just store supported modes and inform the doc shell.
             mnPrinterIndependentLayout = nMode;
 
-            // #108104#
             // Since it is possible that a SdDrawDocument is constructed without a
             // SdDrawDocShell the pointer member mpDocSh needs to be tested
             // before the call is executed. This is e.-g. used for copy/paste.
@@ -1013,13 +1007,11 @@ void SdDrawDocument::SetStartWithPresentation( bool bStartWithPresentation )
     mbStartWithPresentation = bStartWithPresentation;
 }
 
-// #109538#
 void SdDrawDocument::PageListChanged()
 {
     mpDrawPageListWatcher->Invalidate();
 }
 
-// #109538#
 void SdDrawDocument::MasterPageListChanged()
 {
     mpMasterPageListWatcher->Invalidate();

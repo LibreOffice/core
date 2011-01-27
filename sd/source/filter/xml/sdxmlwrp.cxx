@@ -884,7 +884,6 @@ sal_Bool SdXMLFilter::Export()
         /** property map for export info set */
         PropertyMapEntry aExportInfoMap[] =
         {
-            // #82003#
             { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -968,7 +967,6 @@ sal_Bool SdXMLFilter::Export()
                 xGrfResolver = pGraphicHelper;
             }
 
-            // #82003#
             if(mbShowProgress)
             {
                 CreateStatusIndicator();
@@ -1083,7 +1081,6 @@ sal_Bool SdXMLFilter::Export()
             }
             while( bDocRet && pServices->mpService );
 
-            // #82003#
             if(mbShowProgress)
             {
                 if(mxStatusIndicator.is())

@@ -211,25 +211,21 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
 
 SdPage* SdDrawDocument::GetSdPage(USHORT nPgNum, PageKind ePgKind) const
 {
-    // #109538#
     return mpDrawPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
 
 USHORT SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 {
-    // #109538#
     return (sal_uInt16)mpDrawPageListWatcher->GetSdPageCount(ePgKind);
 }
 
 SdPage* SdDrawDocument::GetMasterSdPage(USHORT nPgNum, PageKind ePgKind)
 {
-    // #109538#
     return mpMasterPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
 
 USHORT SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 {
-    // #109538#
     return (sal_uInt16)mpMasterPageListWatcher->GetSdPageCount(ePgKind);
 }
 
@@ -1340,7 +1336,6 @@ USHORT SdDrawDocument::CreatePage (
     // Create new standard page and set it up.
     pStandardPage = (SdPage*) AllocPage(FALSE);
 
-    // #108658#
     // Set the size here since else the presobj autolayout
     // will be wrong.
     pStandardPage->SetSize( pPreviousStandardPage->GetSize() );

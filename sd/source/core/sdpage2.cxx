@@ -52,7 +52,6 @@
 #include "../ui/inc/strings.hrc"
 #include "../ui/inc/DrawDocShell.hxx"
 
-// #90477#
 #include <tools/tenccvt.hxx>
 #include <svl/itemset.hxx>
 

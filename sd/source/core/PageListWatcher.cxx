@@ -36,7 +36,6 @@
 #include <svx/svdmodel.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// #109538#
 
 void ImpPageListWatcher::ImpRecreateSortedPageListOnDemand()
 {

@@ -700,7 +700,7 @@ ParagraphObj::ParagraphObj( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
             }
         }
-        ImplGetParagraphValues( rProv, TRUE );//
+        ImplGetParagraphValues( rProv, TRUE );
     }
 }
 

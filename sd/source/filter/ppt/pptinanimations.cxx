@@ -3062,7 +3062,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                     switch( nRefMode )
                     {
-// default          case 0: rSubType = ShapeAnimationSubType::AS_WHOLE; break;
                     case 6: rSubType = ShapeAnimationSubType::ONLY_BACKGROUND; break;
                     case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
                     case 2: // one paragraph
@@ -3127,12 +3126,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                     DBG_ERROR("unknown reference type");
                 }
 
-
-#ifdef DBG_ANIM_LOG
-                if((begin != -1) || (end != -1) )
-                {
-                }
-#endif
             }
             break;
             case 0x2b01:

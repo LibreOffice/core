@@ -135,7 +135,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             }
             else
                 {
-                    DBG_ERROR( "sd::TransitionPreset::importTransitionPresetList(), missformed xml configuration file, giving up!" );
+                    DBG_ERROR( "sd::TransitionPreset::importTransitionPresetList(), misformed xml configuration file, giving up!" );
                     break;
                 }
         }
