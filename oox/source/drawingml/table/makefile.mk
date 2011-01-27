@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -25,43 +25,38 @@
 #
 #*************************************************************************
 
-$ARGV0 = shift @ARGV;
-$ARGV1 = shift @ARGV;
-$ARGV2 = shift @ARGV;
+PRJ=..$/..$/..
 
-# parse input file
+PRJNAME=oox
+TARGET=table
+AUTOSEG=true
 
-open( INFILE, $ARGV0 ) or die "Error: cannot open input file: $!";
-my %props;
-while( <INFILE> )
-{
-    # trim newline
-    chomp( $_ );
-    # trim leading/trailing whitespace
-    $_ =~ s/^\s*//g;
-    $_ =~ s/\s*$//g;
-    # check for valid characters
-    $_ =~ /^[A-Z][a-zA-Z0-9]*$/ or die "Error: invalid character in property '$_'";
-    $id = "PROP_$_";
-    $props{$_} = $id;
-}
-close( INFILE );
+ENABLE_EXCEPTIONS=TRUE
 
-# generate output files
+# --- Settings -----------------------------------------------------
 
-open( IDFILE, ">$ARGV1" ) or die "Error: cannot open output file: $!";
-open( NAMEFILE, ">$ARGV2" ) or die "Error: cannot open output file: $!";
+.INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
 
-$i = 0;
-foreach( sort( keys( %props ) ) )
-{
-    print( IDFILE "const sal_Int32 $props{$_} = $i;\n" );
-    print( NAMEFILE "/* $i */ \"$_\",\n" );
-    ++$i;
-}
+# --- Files --------------------------------------------------------
 
-print( IDFILE "const sal_Int32 PROP_COUNT = $i;\n" );
-print( IDFILE "const sal_Int32 PROP_INVALID = -1;\n" );
+SLOFILES = \
+    $(SLO)$/tablecontext.obj \
+    $(SLO)$/tableproperties.obj \
+    $(SLO)$/tablerow.obj \
+    $(SLO)$/tablerowcontext.obj \
+    $(SLO)$/tablecell.obj \
+    $(SLO)$/tablecellcontext.obj \
+    $(SLO)$/tablestylelist.obj \
+    $(SLO)$/tablestylelistfragmenthandler.obj \
+    $(SLO)$/tablestylecontext.obj \
+    $(SLO)$/tablestyle.obj \
+    $(SLO)$/tablebackgroundstylecontext.obj \
+    $(SLO)$/tablepartstylecontext.obj \
+    $(SLO)$/tablestyletextstylecontext.obj \
+    $(SLO)$/tablestylecellstylecontext.obj \
+    $(SLO)$/tablestylepart.obj
 
-close( IDFILE );
-close( NAMEFILE );
+# --- Targets -------------------------------------------------------
+
+.INCLUDE :  target.mk

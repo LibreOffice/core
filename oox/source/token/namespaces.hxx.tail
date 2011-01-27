@@ -12,24 +12,24 @@ inline sal_Int32 getNamespace( sal_Int32 nToken ) { return nToken & NMSP_MASK; }
 
 
 // defines for tokens with specific namespaces
-#define OOX_TOKEN( token, namespace ) (::oox::XML_##token | ::oox::NMSP_##namespace)
+#define OOX_TOKEN( namespace, token ) (::oox::NMSP_##namespace | ::oox::XML_##token)
 
-#define A_TOKEN( token )        OOX_TOKEN( token, dml )
-#define AX_TOKEN( token )       OOX_TOKEN( token, ax )
-#define C_TOKEN( token )        OOX_TOKEN( token, dmlChart )
-#define CDR_TOKEN( token )      OOX_TOKEN( token, dmlChartDr )
-#define DGM_TOKEN( token )      OOX_TOKEN( token, dmlDiagram )
-#define O_TOKEN( token )        OOX_TOKEN( token, vmlOffice )
-#define PC_TOKEN( token )       OOX_TOKEN( token, packageContentTypes )
-#define PPT_TOKEN( token )      OOX_TOKEN( token, ppt )
-#define PR_TOKEN( token )       OOX_TOKEN( token, packageRel )
-#define R_TOKEN( token )        OOX_TOKEN( token, officeRel )
-#define VML_TOKEN( token )      OOX_TOKEN( token, vml )
-#define VMLX_TOKEN( token )     OOX_TOKEN( token, vmlExcel )
-#define XDR_TOKEN( token )      OOX_TOKEN( token, dmlSpreadDr )
-#define XLS_TOKEN( token )      OOX_TOKEN( token, xls )
-#define XM_TOKEN( token )       OOX_TOKEN( token, xm )
-#define XML_TOKEN( token )      OOX_TOKEN( token, xml )
+#define A_TOKEN( token )        OOX_TOKEN( dml, token )
+#define AX_TOKEN( token )       OOX_TOKEN( ax, token )
+#define C_TOKEN( token )        OOX_TOKEN( dmlChart, token )
+#define CDR_TOKEN( token )      OOX_TOKEN( dmlChartDr, token )
+#define DGM_TOKEN( token )      OOX_TOKEN( dmlDiagram, token )
+#define O_TOKEN( token )        OOX_TOKEN( vmlOffice, token )
+#define PC_TOKEN( token )       OOX_TOKEN( packageContentTypes, token )
+#define PPT_TOKEN( token )      OOX_TOKEN( ppt, token )
+#define PR_TOKEN( token )       OOX_TOKEN( packageRel, token )
+#define R_TOKEN( token )        OOX_TOKEN( officeRel, token )
+#define VML_TOKEN( token )      OOX_TOKEN( vml, token )
+#define VMLX_TOKEN( token )     OOX_TOKEN( vmlExcel, token )
+#define XDR_TOKEN( token )      OOX_TOKEN( dmlSpreadDr, token )
+#define XLS_TOKEN( token )      OOX_TOKEN( xls, token )
+#define XM_TOKEN( token )       OOX_TOKEN( xm, token )
+#define XML_TOKEN( token )      OOX_TOKEN( xml, token )
 
 // ============================================================================
 

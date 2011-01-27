@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2011 Oracle and/or its affiliates.
+# Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,19 +14,40 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-$(eval $(call gb_Package_Package,oox_workdir,$(WORKDIR)/Misc/oox))
-$(eval $(call gb_Package_add_file,oox_workdir,inc/oox/token/namespaces.hxx,token/namespaces.hxx))
-$(eval $(call gb_Package_add_file,oox_workdir,inc/oox/token/namespaces.txt,token/namespaces.txt))
-$(eval $(call gb_Package_add_file,oox_workdir,inc/oox/token/properties.hxx,token/properties.hxx))
-$(eval $(call gb_Package_add_file,oox_workdir,inc/oox/token/tokens.hxx,token/tokens.hxx))
+PRJ=..$/..
+
+PRJNAME=oox
+TARGET=dump
+AUTOSEG=true
+
+ENABLE_EXCEPTIONS=TRUE
+
+# --- Settings -----------------------------------------------------
+
+.INCLUDE :  settings.mk
+.INCLUDE: $(PRJ)$/util$/makefile.pmk
+
+# --- Files --------------------------------------------------------
+
+SLOFILES =							\
+        $(SLO)$/biffdumper.obj		\
+        $(SLO)$/dffdumper.obj		\
+        $(SLO)$/dumperbase.obj		\
+        $(SLO)$/oledumper.obj		\
+        $(SLO)$/pptxdumper.obj		\
+        $(SLO)$/xlsbdumper.obj
+
+# --- Targets -------------------------------------------------------
+
+.INCLUDE :  target.mk
