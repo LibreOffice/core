@@ -26,6 +26,11 @@
 
 package complex.toolkit;
 
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
+import com.sun.star.awt.XControlModel;
+import com.sun.star.awt.XToolkit;
+import com.sun.star.awt.grid.DefaultGridDataModel;
 import com.sun.star.awt.grid.XGridColumn;
 import com.sun.star.awt.grid.XGridColumnModel;
 import com.sun.star.awt.grid.XGridDataModel;
@@ -35,10 +40,12 @@ import com.sun.star.beans.Pair;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainerListener;
+import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.EventObject;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XEventListener;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -204,6 +211,14 @@ public class GridControl
         test.testUpdateRowData();
         test.testUpdateRowHeading();
         test.cleanup();
+
+        // a somehwat less straight-forward test: the data model is expected to implicitly increase its column count
+        // when you add a row which has more columns than currently known
+        final XMutableGridDataModel dataModel = DefaultGridDataModel.create( m_context );
+        dataModel.addRow( 0, new Object[] { 1 } );
+        assertEquals( "unexpected column count after adding the most simple row", 1, dataModel.getColumnCount() );
+        dataModel.addRow( 1, new Object[] { 1, 2 } );
+        assertEquals( "implicit extension of the column count doesn't work", 2, dataModel.getColumnCount() );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -387,6 +402,67 @@ public class GridControl
     }
 
     // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void testModelViewInteraction() throws Exception
+    {
+        final List< Object > disposables = new ArrayList< Object >();
+        try
+        {
+            // create a siple dialog model/control/peer trinity
+            final XControlModel dialogModel = createInstance( XControlModel.class, "com.sun.star.awt.UnoControlDialogModel" );
+            disposables.add( dialogModel );
+            final XPropertySet dialogProps = UnoRuntime.queryInterface( XPropertySet.class, dialogModel );
+            dialogProps.setPropertyValue( "Width", 200 );
+            dialogProps.setPropertyValue( "Height", 100 );
+            dialogProps.setPropertyValue( "Title", "Grid Control Unit Test" );
+            final XControl dialogControl = createInstance( XControl.class, "com.sun.star.awt.UnoControlDialog" );
+            disposables.add( dialogControl );
+            dialogControl.setModel( dialogModel );
+            dialogControl.createPeer( createInstance( XToolkit.class, "com.sun.star.awt.Toolkit" ), null );
+
+            // insert a grid control model
+            final XMultiServiceFactory controlModelFactory = UnoRuntime.queryInterface( XMultiServiceFactory.class,
+                dialogModel );
+            XPropertySet gridModelProps = UnoRuntime.queryInterface( XPropertySet.class,
+                controlModelFactory.createInstance( "com.sun.star.awt.grid.UnoControlGridModel" ) );
+            disposables.add( gridModelProps );
+            gridModelProps.setPropertyValue( "PositionX", 6 );
+            gridModelProps.setPropertyValue( "PositionY", 6 );
+            gridModelProps.setPropertyValue( "Width", 188 );
+            gridModelProps.setPropertyValue( "Height", 88 );
+            final XNameContainer modelContainer = UnoRuntime.queryInterface( XNameContainer.class, dialogModel );
+            modelContainer.insertByName( "grid", gridModelProps );
+
+            // check the respective control has been created
+            final XControlContainer controlContainer = UnoRuntime.queryInterface( XControlContainer.class, dialogControl );
+            final XControl gridControl = controlContainer.getControl( "grid" );
+            assertNotNull( "no grid control created in the dialog", gridControl );
+
+            // in the current implementation (not sure this is a good idea at all), the control (more precise: the peer)
+            // ensures that if there are no columns in the column model, but in the data model, then the column model
+            // will implicitly have the needed columns added.
+            // To ensure that clients which rely on this do not break in the future, check this here.
+            final XMutableGridDataModel dataModel = UnoRuntime.queryInterface( XMutableGridDataModel.class,
+                gridModelProps.getPropertyValue( "GridDataModel" ) );
+            assertNotNull( dataModel );
+            assertEquals( 0, dataModel.getColumnCount() );
+
+            final XGridColumnModel columnModel = UnoRuntime.queryInterface( XGridColumnModel.class,
+                gridModelProps.getPropertyValue( "ColumnModel" ) );
+            assertNotNull( columnModel );
+            assertEquals( 0, columnModel.getColumnCount() );
+
+            dataModel.addRow( null, new Object[] { 1, 2, 3 } );
+            assertEquals( 3, dataModel.getColumnCount() );
+            assertEquals( 3, columnModel.getColumnCount() );
+        }
+        finally
+        {
+            impl_dispose( disposables.toArray());
+        }
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
     private int impl_assertInteger( final Object i_object )
     {
         assertTrue( i_object instanceof Integer );
@@ -502,6 +578,12 @@ public class GridControl
         m_connection.tearDown();
         System.out.println( "finished class: " + GridControl.class.getName() );
         System.out.println( "--------------------------------------------------------------------------------" );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    public <T> T createInstance( Class<T> i_interfaceClass, final String i_serviceIndentifer ) throws Exception
+    {
+        return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceIndentifer ) );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

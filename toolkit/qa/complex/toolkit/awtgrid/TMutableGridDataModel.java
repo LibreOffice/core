@@ -26,11 +26,13 @@
 
 package complex.toolkit.awtgrid;
 
+import java.lang.reflect.Method;
 import com.sun.star.awt.grid.GridDataEvent;
 import com.sun.star.awt.grid.XMutableGridDataModel;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.IndexOutOfBoundsException;
 import static org.junit.Assert.*;
+import static complex.toolkit.Assert.*;
 
 /** test for the <code>css.awt.grid.XMutableGridData</code> interface
  *
@@ -49,19 +51,21 @@ public class TMutableGridDataModel
     /*
      * tests the XMutableGridDataModel.addRow method
      */
-    public void testAddRow()
+    public void testAddRow() throws IndexOutOfBoundsException
     {
         m_dataModel.addRow( 1, m_rowValues[0] );
         GridDataEvent event = m_listener.assertSingleRowInsertionEvent();
+        m_listener.reset();
         assertEquals( "row insertion: wrong FirstRow (1)", 0, event.FirstRow );
         assertEquals( "row insertion: wrong LastRow (1)", 0, event.LastRow );
-        m_listener.reset();
+        impl_assertRowData( 0 );
 
         m_dataModel.addRow( 2, m_rowValues[1] );
         event = m_listener.assertSingleRowInsertionEvent();
+        m_listener.reset();
         assertEquals( "row insertion: wrong FirstRow (2)", 1, event.FirstRow );
         assertEquals( "row insertion: wrong LastRow (2)", 1, event.LastRow );
-        m_listener.reset();
+        impl_assertRowData( 1 );
     }
 
     /**
@@ -87,6 +91,9 @@ public class TMutableGridDataModel
                     m_rowValues[row][col], m_dataModel.getCellData( col, row ) );
             }
         }
+
+        assertException( "addRows is expected to throw when invoked with different-sized arrays",
+            m_dataModel, "addRows", new Object[] { new Object[0], new Object[1][2] }, IllegalArgumentException.class );
     }
 
     /**
@@ -112,6 +119,11 @@ public class TMutableGridDataModel
                     m_rowValues[row+1][col], m_dataModel.getCellData( col, row ) );
             }
         }
+
+        assertException( "removeRow silently ignores an invalid index (1)",
+            m_dataModel, "removeRow", new Object[] { -1 }, IndexOutOfBoundsException.class );
+        assertException( "removeRow silently ignores an invalid index (2)",
+            m_dataModel, "removeRow", new Object[] { m_dataModel.getRowCount() }, IndexOutOfBoundsException.class );
     }
 
     /**
@@ -163,6 +175,16 @@ public class TMutableGridDataModel
 
             assertEquals( "data change at (" + col + ", " + row + ") not successful", value, m_dataModel.getCellData( col, row ) );
         }
+
+        assertException( "updateCellData silently ignores an invalid index (1)",
+            m_dataModel, "updateCellData", new Class[] { int.class, int.class, Object.class },
+            new Object[] { -1, -1, "text" }, IndexOutOfBoundsException.class );
+        assertException( "updateCellData silently ignores an invalid index (2)",
+            m_dataModel, "updateCellData", new Class[] { int.class, int.class, Object.class },
+            new Object[] { 0, m_dataModel.getRowCount(), "text" }, IndexOutOfBoundsException.class );
+        assertException( "updateCellData silently ignores an invalid index (3)",
+            m_dataModel, "updateCellData", new Class[] { int.class, int.class, Object.class },
+            new Object[] { m_dataModel.getColumnCount(), 0, "text" }, IndexOutOfBoundsException.class );
     }
 
     /**
@@ -202,6 +224,17 @@ public class TMutableGridDataModel
 
         // ensure both the manually updated pre-update data and the post-update data are identical
         assertArrayEquals( preUpdateValues, postUpdateValues );
+
+
+        assertException( "updateRowData silently ignores an invalid index (1)",
+            m_dataModel, "updateRowData", new Class[] { int[].class, int.class, Object[].class },
+            new Object[] { new int[] { -1 }, 0, new Object[] { "text" } }, IndexOutOfBoundsException.class );
+        assertException( "updateRowData silently ignores an invalid index (2)",
+            m_dataModel, "updateRowData", new Class[] { int[].class, int.class, Object[].class },
+            new Object[] { new int[] { 0 }, -1, new Object[] { "" } }, IndexOutOfBoundsException.class );
+        assertException( "updateRowData silently ignores different-sized arrays",
+            m_dataModel, "updateRowData", new Class[] { int[].class, int.class, Object[].class },
+            new Object[] { new int[] { 0, 0 }, 0, new Object[] { "" } }, IllegalArgumentException.class );
     }
 
     /**
@@ -225,6 +258,10 @@ public class TMutableGridDataModel
 
         final Object[] postUpdateHeadings = impl_getCurrentRowHeadings();
         assertArrayEquals( preUpdateHeadings, postUpdateHeadings );
+
+        assertException( "updateRowHeading silently ignores an invalid index",
+            m_dataModel, "updateRowHeading", new Class[] { int.class, Object.class },
+            new Object[] { -1, "" }, IndexOutOfBoundsException.class );
     }
 
     public void cleanup()
@@ -254,6 +291,14 @@ public class TMutableGridDataModel
         for ( int row=0; row<rowCount; ++row )
             headings[row] = m_dataModel.getRowHeading( row );
         return headings;
+    }
+
+    private void impl_assertRowData( final int i_rowIndex ) throws IndexOutOfBoundsException
+    {
+        for ( int i=0; i<m_rowValues[i_rowIndex].length; ++i )
+        {
+            assertEquals( m_rowValues[i_rowIndex][i], m_dataModel.getCellData( i, i_rowIndex ) );
+        }
     }
 
     private final XMutableGridDataModel m_dataModel;
