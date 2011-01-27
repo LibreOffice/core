@@ -32,8 +32,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
-#include <cxxabi.h>
 #include <hash_map>
+
+#include <cxxabi.h>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -46,7 +47,6 @@
 #include <uno/any2.h>
 
 #include "share.hxx"
-
 
 using namespace ::std;
 using namespace ::osl;
