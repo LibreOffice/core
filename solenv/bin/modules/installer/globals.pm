@@ -87,7 +87,8 @@ BEGIN
         "oc",
         "ml",
         "as",
-        "ast"
+        "ast",
+        "ht"
     );
     @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");

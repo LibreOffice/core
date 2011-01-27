@@ -73,6 +73,7 @@ he \
 hi \
 hi-IN \
 hr \
+ht \
 hu \
 is \
 it \
