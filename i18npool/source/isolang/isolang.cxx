@@ -292,7 +292,6 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
 //    { LANGUAGE_USER_CATALAN_VALENCIAN,      "ca", "ES" },   // In case MS format files escaped into the wild, map them back.
     { LANGUAGE_FRENCH_CAMEROON,             "fr", "CM" },
     { LANGUAGE_FRENCH_COTE_D_IVOIRE,        "fr", "CI" },
-    { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
     { LANGUAGE_FRENCH_MALI,                 "fr", "ML" },
     { LANGUAGE_FRENCH_SENEGAL,              "fr", "SN" },
     { LANGUAGE_FRENCH_ZAIRE,                "fr", "CD" },   // Democratic Republic Of Congo
@@ -465,6 +464,8 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_USER_LIMBU,                 "lif", "NP" },
     { LANGUAGE_USER_LOJBAN,                "jbo", ""   },
     { LANGUAGE_USER_KABYLE,                "kab", "DZ" },
+    { LANGUAGE_USER_HAITIAN,                "ht", "HT" },
+    { LANGUAGE_FRENCH_HAITI,                "fr", "HT" },
     { LANGUAGE_NONE,                       "zxx", ""   },   // added to ISO 639-2 on 2006-01-11: Used to declare the absence of linguistic information
     { LANGUAGE_DONTKNOW,                    "",   ""   }    // marks end of table
 };
