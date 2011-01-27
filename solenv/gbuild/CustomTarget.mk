@@ -49,7 +49,7 @@ endef
 $(call gb_CustomTarget_get_clean_target,%) :
     $(call gb_Output_announce,$*,$(false),MAK,3)
     $(call gb_Helper_abbreviate_dirs,\
-        rm -rf $(dir $(call gb_CustomTarget_get_target,$*)))
+        rm -rf $(call gb_CustomTarget_get_workdir,$*) && rm -f $(call gb_CustomTarget_get_target,$*))
 
 
 $(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),$(eval $(call gb_CustomTarget__rules,$(reponame))))
@@ -61,6 +61,8 @@ endef
 define gb_CustomTarget_CustomTarget
 $(foreach reponame,$(gb_CustomTarget_REPOSITORYNAMES),\
     $(eval $(call gb_CustomTarget_get_repo_target,$(reponame),$(1)) : $(call gb_CustomTarget__get_makefile,$($(reponame)),$(1))))
+
+$(call gb_CustomTarget_get_workdir,$(1))/% : $(call gb_CustomTarget_get_target,$(1))
 
 endef
 
