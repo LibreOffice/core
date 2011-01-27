@@ -637,7 +637,7 @@ void  SwFormatTablePage::Reset( const SfxItemSet& )
     //text direction
     if( SFX_ITEM_SET == rSet.GetItemState( RES_FRAMEDIR, TRUE, &pItem ) )
     {
-        sal_uInt32 nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
+        sal_uIntPtr nVal  = ((SvxFrameDirectionItem*)pItem)->GetValue();
         USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();

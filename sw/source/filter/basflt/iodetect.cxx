@@ -308,14 +308,12 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
     {
         // package storage or OLEStorage based format
         SotStorageRef xStg;
-        BOOL bDeleteMedium = FALSE;
         if (!pMedium )
         {
             INetURLObject aObj;
             aObj.SetSmartProtocol( INET_PROT_FILE );
             aObj.SetSmartURL( rFileName );
             pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ, FALSE );
-            bDeleteMedium = TRUE;
         }
 
         // templates should not get precedence over "normal" filters (#i35508, #i33168)
@@ -457,8 +455,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         rLen-=nHead;
     }
 
-    bool bCR = false, bLF = false, bNoNormalChar = false,
-        bIsBareUnicode = false;
+    bool bCR = false, bLF = false, bIsBareUnicode = false;
 
     if (eCharSet != RTL_TEXTENCODING_DONTKNOW)
     {
@@ -547,8 +544,6 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
                 case 0x9:
                     break;
                 default:
-                    if (0x20 > (BYTE)*pBuf)
-                        bNoNormalChar = true;
                     break;
             }
         }

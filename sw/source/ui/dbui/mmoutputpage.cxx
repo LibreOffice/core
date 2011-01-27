@@ -1038,7 +1038,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
     bool bAsBody = false;
-    bool bIsPDF = false;
     rtl_TextEncoding eEncoding = ::gsl_getSystemTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
@@ -1047,7 +1046,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     switch( nDocType )
     {
         case MM_DOCTYPE_OOO : break;
-        case MM_DOCTYPE_PDF : bIsPDF = true; break;
+        case MM_DOCTYPE_PDF : break;
         case MM_DOCTYPE_WORD:
         {
             //the method SwIOSystemGetFilterOfFormat( ) returns the template filter

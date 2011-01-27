@@ -568,7 +568,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
             if( bIsSimpleDrawingTextBox )
                 ApplyAttributes( rSt, aSet, rObjData );
 
-            bool bFitText = false;
             if (GetPropertyValue(DFF_Prop_FitTextToShape) & 2)
             {
                 aSet.Put( SdrTextAutoGrowHeightItem( TRUE ) );
@@ -576,7 +575,6 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     aNewRect.Bottom() - aNewRect.Top() ) );
                 aSet.Put( SdrTextMinFrameWidthItem(
                     aNewRect.Right() - aNewRect.Left() ) );
-                bFitText = true;
             }
             else
             {

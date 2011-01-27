@@ -711,7 +711,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     rtl_TextEncoding& rChrSet, String& rFontName ) const
 {
     StarSymbolToMSMultiFont *pConvert = 0;
-    FontFamily eFamily = FAMILY_DECORATIVE;
 
     if (!bSubstituteBullets)
         return;
@@ -748,7 +747,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
         let words own font substitution kick in
         */
         rChrSet = RTL_TEXTENCODING_UNICODE;
-        eFamily = FAMILY_SWISS;
         rFontName = ::GetFontToken(rFontName, 0);
      }
      else

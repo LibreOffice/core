@@ -1034,8 +1034,6 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
 
     const Font& rEmptyPgFont = SwPageFrm::GetEmptyPageFont();
 
-    Color aEmptyPgShadowBorderColor = SwViewOption::GetFontColor();
-
     for ( std::vector<PrevwPage*>::const_iterator aPageIter = maPrevwPages.begin();
           aPageIter != maPrevwPages.end();
           ++aPageIter )
