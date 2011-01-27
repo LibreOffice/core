@@ -32,7 +32,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
-#include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/reflection/XTypeDescription.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -507,35 +506,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    if (component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries ))
-    {
-        try
-        {
-            // register singleton
-            registry::XRegistryKey * pKey =
-                reinterpret_cast< registry::XRegistryKey * >( pRegistryKey );
-            Reference< registry::XRegistryKey > xKey(
-                pKey->createKey(
-                    OUSTR(IMPLNAME "/UNO/SINGLETONS/com.sun.star.reflection.theCoreReflection") ) );
-            xKey->setStringValue( OUSTR("com.sun.star.reflection.CoreReflection") );
-            return sal_True;
-        }
-        catch (Exception & exc)
-        {
-#if OSL_DEBUG_LEVEL > 0
-            OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_ENSURE( 0, cstr.getStr() );
-#else
-            (void) exc; // unused
-#endif
-        }
-    }
-    return sal_False;
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(

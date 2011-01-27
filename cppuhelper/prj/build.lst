@@ -1,4 +1,4 @@
-ch	cppuhelper	:	BOOST:boost codemaker cppu offuh NULL
+ch	cppuhelper	:	BOOST:boost LIBXSLT:libxslt codemaker cppu offuh NULL
 ch	cppuhelper								usr1	-	all	ch_mkout NULL
 ch	cppuhelper\inc							nmake	-	all	ch_include NULL
 ch	cppuhelper\source						nmake	-	all	ch_source ch_unotypes ch_include NULL

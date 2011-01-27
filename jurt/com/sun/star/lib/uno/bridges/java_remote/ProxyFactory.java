@@ -148,11 +148,22 @@ final class ProxyFactory {
 
         private Object request(String operation, Object[] args) throws Throwable
         {
-            return requestHandler.sendRequest(oid, type, operation, args);
+            Object res = requestHandler.sendRequest(oid, type, operation, args);
+            // Avoid early finalization of this object, while an invoke ->
+            // request call is still ongoing; as finalize also calls request,
+            // this should fulfil the condition from The Java Language
+            // Specification, 3rd ed., that "if an object's finalizer can result
+            // in synchronization on that object, then that object must be alive
+            // and considered reachable whenever a lock is held on it:"
+            synchronized (this) {
+                ++dummy;
+            }
+            return res;
         }
 
         private final String oid;
         private final Type type;
+        private int dummy = 0;
     }
 
     private static final Method METHOD_EQUALS;

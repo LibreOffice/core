@@ -28,8 +28,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_rtl_crc32
-# this is removed at the moment because we need some enhancements
-# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 

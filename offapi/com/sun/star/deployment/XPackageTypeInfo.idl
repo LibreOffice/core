@@ -29,7 +29,7 @@
 #define INCLUDED_com_sun_star_deployment_XPackageTypeInfo_idl
 
 #include <com/sun/star/uno/XInterface.idl>
-
+#include <com/sun/star/deployment/ExtensionRemovedException.idl>
 
 module com { module sun { module star { module deployment {
 
@@ -52,7 +52,8 @@ interface XPackageTypeInfo
         @return
                 description
     */
-    string getDescription();
+    string getDescription()
+        raises (ExtensionRemovedException);
 
     /** returns a short description string to describe a package type
         (one line only).
@@ -60,7 +61,8 @@ interface XPackageTypeInfo
         @return
                 description
     */
-    string getShortDescription();
+    string getShortDescription()
+        raises (ExtensionRemovedException);
 
     /** returns a file filter string for the file picker user interface.
         Both, the short description string and file filter string

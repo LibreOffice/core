@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-UDK_3_0_0 {
+UDK_3.1 {
     global:
         # jvmaccess/virtualmachine.hxx:
         _ZN9jvmaccess14VirtualMachine11AttachGuard17CreationExceptionC1Ev; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
@@ -59,7 +59,7 @@ UDK_3.2 {
     # We put the '*' at the beginning because its unlikely that these symbols will ever be a postfix of another symbol.
         _*ZN9jvmaccess14VirtualMachineC1EP10_Jv_JavaVMibP10_Jv_JNIEnv; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, int, bool, JNIEnv *)
         _*ZN9jvmaccess14VirtualMachineC2EP10_Jv_JavaVMibP10_Jv_JNIEnv; # jvmaccess::VirtualMachine::VirtualMachine(JavaVM *, int, bool, JNIEnv *)
-} UDK_3_0_0;
+} UDK_3.1;
 
 UDK_3.3 {
     global:

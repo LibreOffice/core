@@ -1,0 +1,140 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_script_vba_VBAEventId_idl__
+#define __com_sun_star_script_vba_VBAEventId_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star { module script { module vba {
+
+//=============================================================================
+
+/** Constants used to identify VBA document events.
+
+    <p>If one of these events is fired, a specific VBA macro in a specific
+    document code module will be executed.</p>
+
+    <p>Each event expects some specific arguments to be passed to
+    <member>XVBAEventProcessor::processVbaEvent</member>.</p>
+
+    @see XVBAEventProcessor
+ */
+constants VBAEventId
+{
+    //=========================================================================
+
+    /** An identifier not corresponding to any VBA document event. */
+    const long NO_EVENT                             = -1;
+
+    //=========================================================================
+    // Global events (identifiers from 1 to 999)
+
+    /** New document opened from template. No arguments. */
+    const long AUTO_NEW                             = 1;
+    /** Document opened (loaded). No arguments. */
+    const long AUTO_OPEN                            = 2;
+    /** Document about to be closed. No arguments. */
+    const long AUTO_CLOSE                           = 3;
+    /** Application start. No arguments. */
+    const long AUTO_EXEC                            = 4;
+    /** Application exit. No arguments. */
+    const long AUTO_EXIT                            = 5;
+
+    //=========================================================================
+    // MS Word (identifiers from 1001 to 1999)
+
+    /** New text document opened from template. No arguments. */
+    const long DOCUMENT_NEW                         = 1001;
+    /** Text document opened (loaded). No arguments. */
+    const long DOCUMENT_OPEN                        = 1002;
+    /** Document about to be closed. No arguments. */
+    const long DOCUMENT_CLOSE                       = 1003;
+
+    //=========================================================================
+    // MS Excel (identifiers from 2001 to 2999)
+
+    //-------------------------------------------------------------------------
+    // document events (2001-2099)
+
+    /** Document activated. No arguments. */
+    const long WORKBOOK_ACTIVATE                    = 2001;
+    /** Document deactivated. No arguments. */
+    const long WORKBOOK_DEACTIVATE                  = 2002;
+    /** Document opened (loaded). No arguments. */
+    const long WORKBOOK_OPEN                        = 2003;
+    /** Document about to be closed. Arguments: [out] boolean bCancel. */
+    const long WORKBOOK_BEFORECLOSE                 = 2004;
+    /** Document about to be printed. Arguments: [out] boolean bCancel. */
+    const long WORKBOOK_BEFOREPRINT                 = 2005;
+    /** Document about to be saved. Arguments: boolean bSaveAs, [out] boolean bCancel. */
+    const long WORKBOOK_BEFORESAVE                  = 2006;
+    /** Document has been saved. Arguments: boolean bSuccess. */
+    const long WORKBOOK_AFTERSAVE                   = 2007;
+    /** New sheet inserted. Arguments: short nSheet. */
+    const long WORKBOOK_NEWSHEET                    = 2008;
+    /** Document window has been activated. No arguments. */
+    const long WORKBOOK_WINDOWACTIVATE              = 2009;
+    /** Document window has been deactivated. No arguments. */
+    const long WORKBOOK_WINDOWDEACTIVATE            = 2010;
+    /** Document window has been resized. No arguments. */
+    const long WORKBOOK_WINDOWRESIZE                = 2011;
+
+    //-------------------------------------------------------------------------
+    // sheet events (2101-2199)
+
+    /** Worksheet has been activated (made visible). Arguments: short nSheet. */
+    const long WORKSHEET_ACTIVATE                   = 2101;
+    /** Worksheet has been activated (made visible). Arguments: short nSheet. */
+    const long WORKSHEET_DEACTIVATE                 = 2102;
+    /** Double click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange, [out] boolean bCancel. */
+    const long WORKSHEET_BEFOREDOUBLECLICK          = 2103;
+    /** Right click in the sheet. Arguments: XRange/XSheetCellRangeContainer aRange, [out] boolean bCancel. */
+    const long WORKSHEET_BEFORERIGHTCLICK           = 2104;
+    /** Cells in sheet have been recalculated. Arguments: short nSheet. */
+    const long WORKSHEET_CALCULATE                  = 2105;
+    /** Cells in sheet have been changed. Arguments: XRange/XSheetCellRangeContainer aRange. */
+    const long WORKSHEET_CHANGE                     = 2106;
+    /** Selection in sheet has been changed. Arguments: XRange/XSheetCellRangeContainer aRange. */
+    const long WORKSHEET_SELECTIONCHANGE            = 2107;
+    /** Hyperlink has been clicked. Arguments: XCell aCell. */
+    const long WORKSHEET_FOLLOWHYPERLINK            = 2108;
+
+    //=========================================================================
+
+    /** Implementations are allowed to use identifiers above this value for any
+        internal purpose. */
+    const long USERDEFINED_START                    = 1000000;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif

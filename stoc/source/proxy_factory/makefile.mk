@@ -63,3 +63,11 @@ DEF1NAME=$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE : target.mk
+
+ALLTAR : $(MISC)/proxyfac.component
+
+$(MISC)/proxyfac.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        proxyfac.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt proxyfac.component

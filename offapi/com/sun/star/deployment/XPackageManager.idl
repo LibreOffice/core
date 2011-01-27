@@ -37,21 +37,26 @@
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/container/NoSuchElementException.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/beans/NamedValue.idl>
 
 
 module com { module sun { module star { module deployment {
 
 /** The <type>XPackageManager</type> interface is used to add or remove
-    packages to a specific deployment context.
+    packages to a specific repository. This interface represents a particular
+    repository.
     Packages are deployable files, e.g. scripts or UNO components.
     <p>
     Adding an UNO package means that a copy of the package is stored
-    with respect to the context of the manager and the package is registered,
-    thus activated.
+    in the repository.
     </p>
     <p>
-    Removing an UNO package means that the previously added package is revoked,
-    thus deactivated, first and then removed from the context.
+    Removing an UNO package means that the previously added package is
+    removed from the repository.
+    </p>
+    <p>
+    All interface methods do neither register nor revoke an extension.
+    This happens exclusively by <type>XExtensionManager</type>.
     </p>
     <p>
     Objects of this interface are created using the
@@ -63,6 +68,8 @@ module com { module sun { module star { module deployment {
 
     @see thePackageManagerFactory
     @since OOo 2.0.0
+    @deprecated
+         Use <type>XExtensionManager</type>.
 */
 interface XPackageManager
 {
@@ -75,7 +82,8 @@ interface XPackageManager
     */
     interface com::sun::star::util::XModifyBroadcaster;
 
-    /** returns the underlying deployment context.
+    /** returns the underlying deployment context, that is,
+        the name of the repository..
 
         @return
                 underlying deployment context
@@ -98,8 +106,15 @@ interface XPackageManager
 
     /** adds an UNO package.
 
+        The properties argument is currently only used to suppress the license information
+        for shared extensions.
+
+
         @param url
                package URL, must be UCB conform
+        @param properties
+               additional properties, for example, that the license is to be
+               suppressed (if supported by the extension)
         @param mediaType
                media-type of package, empty string if to be detected
         @param xAbortChannel
@@ -111,7 +126,32 @@ interface XPackageManager
                <type>XPackage</type> handle
     */
     XPackage addPackage( [in] string url,
+                         [in] sequence<com::sun::star::beans::NamedValue> properties,
                          [in] string mediaType,
+                         [in] com::sun::star::task::XAbortChannel xAbortChannel,
+                         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** adds an extension.
+
+        This copies the extension. If it was from the same repository,
+        which is represented by this XPackageManager insterface, then
+        nothing happens.
+
+        @param extension
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the adding process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+        @return
+               <type>XPackage</type> handle
+    */
+    XPackage importExtension( [in] XPackage extension,
                          [in] com::sun::star::task::XAbortChannel xAbortChannel,
                          [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
@@ -211,6 +251,61 @@ interface XPackageManager
         </p>
     */
     boolean isReadOnly();
+
+    /** synchronizes the extension database with the contents of the extensions
+       folder.
+
+       Added extensions will be added to the database and removed extensions
+       will be removed from the database.
+
+       @param xAddedExtension
+            new extensions which may need to be registered.
+
+       @param
+            removed extensions which must be revoked
+       @return
+            If true - then at least one extension was removed or added. Otherwise
+            nothing was chaned.
+    */
+    boolean synchronize([in] com::sun::star::task::XAbortChannel xAbortChannel,
+                     [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException);
+
+
+    /** returns all extensions which are currently not in use
+        because the user did not accept the license.
+
+        The function will not return any object for the user repository, because
+        a user extension will not be kept in the user repository if its license
+        is declined. Only extensions which are registered at start-up of OOo,
+        that is, shared and bundled extensions, can be returned.
+
+        Extensions which allow the license to be suppressed, that is, it does not
+        need to be displayed, and which are installed with the corresponding option,
+        are also not returned.
+    */
+    sequence<XPackage> getExtensionsWithUnacceptedLicenses(
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException);
+
+    /** checks if the extension can be used.
+
+        The extension must be managed by this package manager, that is, it must
+        be recorded in its database.  The package manager calls
+        XPackage::checkPrerequisites and updates its data base with the
+        result. The result, which is from <type>Prerequisites</type> will be
+        returned.
+     */
+    long checkPrerequisites(
+        [in] XPackage extension,
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
 };
 
