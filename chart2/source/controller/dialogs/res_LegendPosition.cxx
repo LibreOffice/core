@@ -45,9 +45,8 @@
 
 //itemset stuff
 #include "chartview/ChartSfxItemIds.hxx"
-#include <svx/chrtitem.hxx>
-// header for class SfxItemPool
-#include <svl/itempool.hxx>
+#include <svl/intitem.hxx>
+#include <svl/eitem.hxx>
 
 //.............................................................................
 namespace chart
@@ -197,51 +196,51 @@ IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 
 void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 {
-    SvxChartLegendPos ePos = CHLEGEND_NONE;
-
     const SfxPoolItem* pPoolItem = NULL;
-    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
-                               TRUE, &pPoolItem ) != SFX_ITEM_SET )
-        pPoolItem = &(rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
-
-    if( pPoolItem )
-        ePos = ((const SvxChartLegendPosItem*)pPoolItem)->GetValue();
-
-    switch( ePos )
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS, TRUE, &pPoolItem ) == SFX_ITEM_SET )
     {
-        case CHLEGEND_LEFT:
-            m_aRbtLeft.Check(TRUE);
-            break;
-        case CHLEGEND_TOP:
-            m_aRbtTop.Check(TRUE);
-            break;
-        case CHLEGEND_RIGHT:
-            m_aRbtRight.Check(TRUE);
-            break;
-        case CHLEGEND_BOTTOM:
-            m_aRbtBottom.Check(TRUE);
-            break;
-        default:
-            break;
+        sal_Int32 nLegendPosition = ((const SfxInt32Item*)pPoolItem)->GetValue();
+        switch( nLegendPosition )
+        {
+            case chart2::LegendPosition_LINE_START:
+                m_aRbtLeft.Check(TRUE);
+                break;
+            case chart2::LegendPosition_PAGE_START:
+                m_aRbtTop.Check(TRUE);
+                break;
+            case chart2::LegendPosition_LINE_END:
+                m_aRbtRight.Check(TRUE);
+                break;
+            case chart2::LegendPosition_PAGE_END:
+                m_aRbtBottom.Check(TRUE);
+                break;
+            default:
+                break;
+        }
     }
+
+    if( rInAttrs.GetItemState( SCHATTR_LEGEND_SHOW, TRUE, &pPoolItem ) == SFX_ITEM_SET )
+    {
+        bool bShow = static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
+        m_aCbxShow.Check(bShow);
+    }
+
 }
 
 void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 {
-    SvxChartLegendPos ePos;
-
+    sal_Int32 nLegendPosition = chart2::LegendPosition_CUSTOM;
     if( m_aRbtLeft.IsChecked() )
-        ePos = CHLEGEND_LEFT;
+        nLegendPosition = chart2::LegendPosition_LINE_START;
     else if( m_aRbtTop.IsChecked() )
-        ePos = CHLEGEND_TOP;
+        nLegendPosition = chart2::LegendPosition_PAGE_START;
     else if( m_aRbtRight.IsChecked() )
-        ePos = CHLEGEND_RIGHT;
+        nLegendPosition = chart2::LegendPosition_LINE_END;
     else if( m_aRbtBottom.IsChecked() )
-        ePos = CHLEGEND_BOTTOM;
-    else
-        ePos = CHLEGEND_NONE;
+        nLegendPosition = chart2::LegendPosition_PAGE_END;
+    rOutAttrs.Put(SfxInt32Item(SCHATTR_LEGEND_POS, nLegendPosition ));
 
-    rOutAttrs.Put(SvxChartLegendPosItem( ePos, SCHATTR_LEGEND_POS ));
+    rOutAttrs.Put( SfxBoolItem(SCHATTR_LEGEND_SHOW, m_aCbxShow.IsChecked()) );
 }
 
 IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )

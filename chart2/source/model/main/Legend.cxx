@@ -108,7 +108,6 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
 
-
     rOutProperties.push_back(
         Property( C2U( "RelativeSize" ),
                   PROP_LEGEND_REL_SIZE,

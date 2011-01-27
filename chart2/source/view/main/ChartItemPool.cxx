@@ -44,6 +44,8 @@
 #include <editeng/editids.hrc>
 #include <svx/svxids.hrc>
 
+#include <com/sun/star/chart2/LegendPosition.hpp>
+
 namespace chart
 {
 
@@ -66,7 +68,9 @@ ChartItemPool::ChartItemPool():
     ppPoolDefaults[SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,aTmp);
     ppPoolDefaults[SCHATTR_DATADESCR_NO_PERCENTVALUE    - SCHATTR_START] = new SfxBoolItem(SCHATTR_DATADESCR_NO_PERCENTVALUE);
 
-    ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SvxChartLegendPosItem( CHLEGEND_RIGHT, SCHATTR_LEGEND_POS );
+    ppPoolDefaults[SCHATTR_LEGEND_POS               - SCHATTR_START] = new SfxInt32Item(SCHATTR_LEGEND_POS, ::com::sun::star::chart2::LegendPosition_LINE_END );
+    ppPoolDefaults[SCHATTR_LEGEND_SHOW              - SCHATTR_START] = new SfxBoolItem(SCHATTR_LEGEND_SHOW, TRUE);
+
 //  ppPoolDefaults[SCHATTR_TEXT_ORIENT              - SCHATTR_START] = new SvxChartTextOrientItem;
     ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
     ppPoolDefaults[SCHATTR_TEXT_ORDER               - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_TEXT_ORDER);

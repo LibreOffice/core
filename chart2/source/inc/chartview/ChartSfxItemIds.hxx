@@ -53,7 +53,8 @@
 
 #define SCHATTR_LEGEND_START                (SCHATTR_DATADESCR_END + 1)
 #define SCHATTR_LEGEND_POS                  SCHATTR_LEGEND_START
-#define SCHATTR_LEGEND_END                  SCHATTR_LEGEND_POS
+#define SCHATTR_LEGEND_SHOW                 (SCHATTR_LEGEND_START + 1)
+#define SCHATTR_LEGEND_END                  SCHATTR_LEGEND_SHOW
 
 #define SCHATTR_TEXT_START                  (SCHATTR_LEGEND_END + 1)
 // #define SCHATTR_TEXT_ORIENT                  SCHATTR_TEXT_START
