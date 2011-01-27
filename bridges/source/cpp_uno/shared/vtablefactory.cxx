@@ -132,6 +132,11 @@ extern "C" void SAL_CALL freeExec(
     munmap(static_cast< char * >(address), size);
 #elif defined SAL_W32
     (void) size; // unused
+
+    // TODO: For wntmscx (x64 Windows), we need to remove the function
+    // table for the dynamically generated function that was added in
+    // codeSnippet() in cpp2uno.cxx.
+
     VirtualFree(address, 0, MEM_RELEASE);
 #elif defined(SAL_OS2)
     (void) DosFreeMem( address);

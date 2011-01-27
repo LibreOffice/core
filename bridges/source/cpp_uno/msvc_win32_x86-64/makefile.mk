@@ -51,10 +51,11 @@ CFLAGS += -DLEAK_STATIC_DATA
 
 
 SLOFILES= \
-    $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj		\
-    $(SLO)$/dllinit.obj		\
-    $(SLO)$/except.obj
+    $(SLO)$/cpp2uno.obj \
+    $(SLO)$/uno2cpp.obj \
+    $(SLO)$/dllinit.obj \
+    $(SLO)$/except.obj  \
+    $(SLO)$/codeSnippet.obj
 
 NOOPTFILES= \
     $(SLO)$/except.obj
@@ -70,7 +71,7 @@ SHL1OBJS = $(SLOFILES)
 SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
 
 SHL1STDLIBS= \
-    $(CPPULIB)			\
+    $(CPPULIB) \
     $(SALLIB)
 
 DEF1NAME=$(SHL1TARGET)
