@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -81,14 +81,10 @@ endcase
 
 '*******************************************************************************
 
-sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as string )
+function hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as string ) as beoolean
     
     dim sFile as String
     dim bOleAvailable as boolean
-    
-    
-    
-    
     
     printlog( "" )
     printlog( "Beginning testcase with options: " )
@@ -102,12 +98,14 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
     ' So writer/writer, calc/calc, masterdoc/writer is skipped ...
     if ( gApplication = cOleType ) then
         printlog( "Skipping " & cOleType & " as OLE object" )
-        goto testend
+        hInsertOLEObject() = false
+        exit function
     endif
     
     if ( gApplication = "MASTERDOCUMENT" and cOleType = "WRITER" ) then
         printlog( "Skipping " & cOleType & " as OLE object" )
-        goto testend
+        hInsertOLEObject() = false
+        exit function
     endif
     
     hCreateDocument()
@@ -125,12 +123,12 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
         ObjektTyp.Select( cOLEObject )
         
         printlog( "Click OK" )
-        OLEObjektEinfuegen.OK()
-        WaitSlot( 3000 )
+        hCloseDialog( OLEObjektEinfuegen, "ok" )
     else
         warnlog( "Insert OLE object dialog is missing, test ends" )
         hDestroyDocument()
-        goto testend
+        hInsertOLEObject() = false
+        exit function
     endif
     
     if ( bRemoveFocus ) then
@@ -149,14 +147,8 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
     
     sFile = ConvertPath ( gOfficePath + "user\work\ole_" & cOleType )
     printlog( "Save the file; File to be written (w/o extension): " & sFile )
-    if fileexists(sFile) then
-    	kill(sFile)
-    	qaerrorlog("killed file from former test run")
-    endif
-    
-    hFileSaveAsKill( sFile )
-    
-    printlog( "Close the document" )
+    hDeleteFile( sFile )
+    hFileSaveAs( sFile )
     hDestroyDocument()
     
     printlog( "Reopen the file: " & sFile )
@@ -165,7 +157,8 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
     bOleAvailable = isOleAvailable()
     if ( bOleAvailable ) then
         
-        call DisableNavigator()
+        kontext "Navigator"
+        if ( Navigator.exists() ) then hCloseDialog( Navigator, "close,optional" )
         
         call OLESetFocus()
         
@@ -174,14 +167,10 @@ sub hInsertOLEObject( bRemoveFocus as boolean, cOLEObject as string, cOleType as
         qaErrorLog( "#i44725# OLE Object not saved in Master Document" )
     endif
     
-    printlog( "Cleanup: Close the document" )
+    printlog( "Cleanup: Close the document, delete workfile" )
     hDestroyDocument()
-    
-    printlog( "Cleanup: Delete the workfile" )
     hDeleteFile( sFile )
-    
-    ' We end up here when the test has been skipped or aborted
-    testend:
+    hInsertOLEObject() = true
     
 end sub
 

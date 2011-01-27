@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.creamer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : XML Calc Include File
 '*

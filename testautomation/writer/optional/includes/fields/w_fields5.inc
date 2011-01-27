@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Fields - Variables
 '*
@@ -667,7 +667,7 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldManual
-    warnlog "#i112079#testcase must be reworked"
+    qaerrorlog "#i112079#testcase must be reworked"
     goto endsub
 
     Dim sDDEFile        as String
@@ -685,7 +685,7 @@ testcase tVariablesDDEFieldManual
     printlog "DDE field - manual"
     '/// <b> DDE field - manual </b>
 
-    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
     Call hNewDocument
 
@@ -722,7 +722,7 @@ testcase tVariablesDDEFieldManual
 
     '/// Open the test file which you just closed , add something ,
     '/// Save the file
-    Call hFileOpen(sDDEFile)
+    hFileOpenLocally( sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
@@ -752,14 +752,14 @@ testcase tVariablesDDEFieldManual
 
     Call hCloseDocument
 
-    if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+    if FileExists( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 
 '-----------------------------------------------------------------
 
 testcase tVariablesDDEFieldAutomatic
-    warnlog "#i112079#testcase must be reworked"
+    qaerrorlog "#i112079#testcase must be reworked"
     goto endsub
 
     qaerrorlog "#i102792# - tVariablesDDEFieldAutomatic outcommented. Fields not updated."
@@ -780,7 +780,7 @@ testcase tVariablesDDEFieldAutomatic
   printlog "DDE field - automatic"
  '/// <b> DDE field - automatic </b>
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
   Call hNewDocument
 
@@ -818,7 +818,7 @@ testcase tVariablesDDEFieldAutomatic
 
   '/// Open the test file which you just closed , add something ,
   '/// Save the file
-   Call hFileOpen(sDDEFile)
+   hFileOpenLocally( sDDEFile)
     Call wTypeKeys "<MOD1 Home>"
     Call wTypeKeys "XYZ"
     FileSave
@@ -834,7 +834,7 @@ testcase tVariablesDDEFieldAutomatic
 
   Call hCloseDocument
 
-  if hFileExists ( sDDEFile ) then app.kill ( sDDEFile )
+  if FileExists ( sDDEFile ) then app.kill ( sDDEFile )
 
 endcase
 

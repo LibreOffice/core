@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description :
 '*
@@ -280,7 +280,11 @@ testcase tFilePassword
       printlog "   Check: (" + i + "/" + x +"): " +sTemp
       if Passwort.isEnabled then
          if NOT((instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1)) then 
-             warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+             if (4=i) then
+                warnlog "#i112895# (" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+             else
+                warnlog "(" + i + "/" + x +"): '"+sTemp+"' Password Checkbox: Enabled"
+            endif
          endif
       else
          if (instr(sTemp,gMathFilter) = 1)OR(instr(sTemp," (.sxm)") > 1) then 
@@ -298,7 +302,7 @@ function TBOloadFormulaFromFile () as string
 '///+  take formula out of command window ///
 '///+  save it into a variable ///
 '///  close dokument ///
-   Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
+   Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_1.sxm") )
    kontext "dokumentwriter"
    try
    EditSelectAllMath
@@ -340,8 +344,7 @@ testcase tFilePrint
        goto endsub
    endif
 
-    Call hFileOpen ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
-    TBOmakeWriteable()
+    Call hFileOpenLocally ( ConvertPath(gTesttoolPath + "math/optional/input/101_2.sxw") )
 
     '/// find the translated formula in the document and get the language it belongs to ///'
     '///+ compare it to the officelanguage ///'
@@ -429,7 +432,7 @@ testcase tFilePrint
     DokumentWriter.MouseUp 99,99
 
     sFileName = convertpath( gOfficePath + "user/work/math/level1/ftc_a.odt")
-    if (hFileExists(sFileName)) then
+    if (FileExists(sFileName)) then
         '/// goto end of page; insert page break ///'
         kontext "DokumentWriter"
         DokumentWriter.typeKeys "<mod1 end>"
@@ -577,28 +580,6 @@ testcase tFilePrint
 endcase
 
 
-function TBOmakeWriteable()
-   ' check if writeable! (especially for HTML Doks!!)
-   sleep (3)
-   try
-      UseBindings
-      FormatStyleBold
-      sleep 2
-      FormatStyleBold
-   catch
-   '/// make document writeable :-)///'
-      kontext "Funktionsleiste"
-      printlog "ReadOnly, changed it to writeable."
-      Bearbeiten.click
-      kontext
-      if active.exists (5) then
-         Printlog " active, accessrights ?!: '"+active.GetText+"'"
-         active.yes
-      endif
-   endcatch
-   sleep (3)
-end function
-
 function isCheckedWarnAlienFormat (optional bChange as boolean)
     dim uno
     dim ap
@@ -660,20 +641,12 @@ function hSpeichernUnterMitFilterKillTBO (sFileName as String, sFilterName, opti
     Dim bAlienNotAllowed as boolean
 
     sDerName = ConvertPath (sFileName)
-
-    if hFileExists (sDerName) = TRUE then
-        try 
-            app.kill (sDerName)
-        catch
-            Exceptlog
-        endcatch
-    end if
-    
-    if FileExists(sDerName) then
-        warnlog "file '" & sDerName & "' couldn't be deleted. Exiting function now..."
+    if ( not hDeleteFile( sDerName ) ) then
+        warnlog( "Aborting function because the file could not be deleted: " & sDerName )
+        hSpeichernUnterMitFilterKillTBO() = FALSE
         exit function
-    end if
-
+    endif
+ 
     sleep (1)
     FileSaveAs    
     Kontext "SpeichernDlg"

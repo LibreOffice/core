@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Helper functions to ease usage of templates
 '*
@@ -123,86 +123,6 @@ function hFindTemplate( sTemplateName as string ) as integer
     hFindTemplate() = irc
     '///</ul>
     
-end function
-
-'*******************************************************************************
-
-function hGetRefFilePath( cCategory as string, location as string) as string
-
-    '///<h3>Retrieve the location of the reference files for filename comparision</h3>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Category (string)</li>
-    '///<ul>
-    '///+<li>&quot;NEWDOCUMENTS&quot; for New Documents</li>
-    '///+<li>&quot;TEMPLATES&quot; for Templates</li>
-    '///+<li>&quot;SAMPLES&quot; for Samples</li>
-    '///</ul>
-    '///+<li>Location (string)</li>
-    '///<ul>
-    '///+<li>&quot;TESTTOOL&quot; to use files below gTesttoolPath</li>
-    '///+<li>&quot;LOCAL&quot; to use files below gOfficePath/user/work</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>: 
-    '///<ol>
-    '///+<li>Fully qualified path to workfile (string)</li>
-    '///</ol>
-
-    '///<u>Description</u>:
-    '///<ul>
-
-    dim cFile as string
-    
-    cCategory = ucase( cCategory )
-
-    '///+<li>Retrieve the location</li>
-    '///<ul>
-    '///+<li>For TESTTOOL</li>
-    '///<ul>
-    if ( ucase( location ) = "TESTTOOL" ) then
-    
-        '///+<li>Prepend path within testtool-environment</li>
-        cFile = "framework\update\input\templdoc\" & gProductName
-   
-        '///+<li>Build a name containing langcode and .txt suffix</li>
-        if ( cCategory = "NEWDOCUMENTS" ) then
-            cFile = cFile & "\new_" & iSprache & ".txt"
-        elseif ( cCategory  = "TEMPLATES" ) then
-            cFile = cFile & "\tem_" & iSprache & ".txt"
-        elseif ( cCategory = "SAMPLES" ) then
-            cFile = cFile & "\sam_" & iSprache & ".txt"
-        else
-            warnlog( "Invalid category passed to hGetRefFilePath" )
-        endif
-        
-        '///+<li>Set returnvalue</li>
-        hGetRefFilePath() = convertpath( gTesttoolPath & cFile )
-       
-    '///</ul>
-    '///+<li>For LOCAL</li>
-    '///<ul>
-    elseif ( ucase( location ) = "LOCAL" ) then
-   
-        '///+<li>Build a name containing langcode and .txt suffix</li>
-        if ( cCategory = "NEWDOCUMENTS" ) then
-            cFile = "new_" & iSprache & ".txt"
-        elseif ( cCategory = "TEMPLATES" ) then
-            cFile = "tem_" & iSprache & ".txt"
-        elseif ( cCategory = "SAMPLES" ) then
-            cFile = "sam_" & iSprache & ".txt"
-        else
-            warnlog( "Invalid category passed to hGetRefFilePath" )
-        endif
-       
-        '///+<li>Set returnvalue</li>
-        hGetRefFilePath() = convertpath( hGetWorkPath() & cFile )
-
-    end if
-    '///</ul>
-    '///</ul>
-    '///</ul>
-	
 end function
 
 '*******************************************************************************
@@ -334,11 +254,14 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
     '///<u>Input</u>: 
     '///<ol>
     '///+<li>Index of the folder to be selected on the categories-pane (integer)</li>
+    '///<ul>
+    '///+<li>Valid positive index</li>
+    '///</ul>
     '///+<li>Mode in which to open the template (integer)</li>
     '///<ul>
     '///+<li>0 = Do not open the object, just return its name</li>
     '///+<li>1 = Open a new document based on the selected Template</li>
-    '///+<li>2 = edit the template</li>
+    '///+<li>2 = edit the template (unsupported)</li>
     '///</ul>
     '///</ol>
     '///<u>Returns</u>:
@@ -347,32 +270,12 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
     '///</ul>
     '///<u>Description</u>:
     '///<ul>
-    '///+<li>Verify function parameter iMode</li>
-
-    if ( ( iMode < 0 ) or ( iMode > 2 ) ) then
-        warnlog( CFN & "Invalid function parameter iMode: " & iMode )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
 
     dim cTitle as string
     dim brc as boolean
     dim iObjectCount as integer
 
     Kontext "TemplateAndDocuments"
-    '///+<li>Verify the function parameter iTitle > 0</li>
-    if ( iTitle < 1 ) then
-        warnlog( CFN & "Invalid function parameter iTitle: " & iTitle )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
-
-    '///+<li>Verify that the index is not too large</li>
-    if ( iTitle > FileList.getItemCount() ) then
-        warnlog( CFN & "Invalid function parameter iTitle: " & iTitle )
-        hSelectDocumentObject() = ""
-        exit function
-    endif
 
     '///+<li>Get the title of the selected object</li>
     cTitle = hGetFileFolderName( iTitle )
@@ -395,9 +298,7 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
             kontext "TemplateAndDocuments"
             if ( TemplateAndDocuments.exists() ) then
                 '///+<li>If yes: Try to determine if it is a new folder</li>
-                brc = hIsObjectAFolder( iObjectCount )
-
-                if ( brc ) then
+                if ( hIsObjectAFolder( iObjectCount ) ) then
                     hSelectDocumentObject() = "Folder"
                     exit function
                 endif
@@ -406,12 +307,13 @@ function hSelectDocumentObject( iTitle as integer , iMode as integer ) as string
         catch
         endcatch
         
-        hFileWait()
-        hHandleActivesOnLoad( 2, false )
-        hHandleInitialDialogs()
+    case 2 : warnlog( "Unsupported option: Edit template" )
         
     end select
 
+    hFileWait()
+    hHandleActivesOnLoad( 2, false )
+    brc = hHandleInitialDialogs()
 
     '///+<li>If all initial dialogs were handled correctly, return the title</li>
     if ( brc ) then

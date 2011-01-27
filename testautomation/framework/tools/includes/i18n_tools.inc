@@ -25,95 +25,11 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Tools to ease working with language dependent strings/values
 '*
 '\******************************************************************************
-
-function hGetI18nData( cSection as string, cLanguage as string ) as string
-
-    '///<h3>Retrieve various information about i18n</h3>
-    '///<i>Uses datafile: framework/tools/input/i18ndata.txt</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Section from which to retrieve the data (string)</li>
-    '///<ul>
-    '///+<li>Any name of a section existing in the datafile</li>
-    '///</ul>
-    '///+<li>Language code as string</li>
-    '///<ul>
-    '///+<li>Use hGetTwoDigitLangCode(...) to ensure proper string formatting</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Language identifier (string)</li>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    '///+<li>Create the path to the datafile</li>
-    dim cPath as string
-        cPath = gTesttoolPath & "framework\tools\input\i18ndata.txt"
-        cPath = convertpath( cPath )
-        
-    '///+<li>Find out the required size of the array to hold the entire file</li>
-    dim iFileSize as integer
-        iFileSize = hListFileGetSize( cPath )
-        
-    '///+<li>Define an array to hold the datafile</li>
-    dim aFileContent( iFileSize ) as string
-    
-    '///+<li>Retrieve the requested section from the datafile</li>
-    hGetDatafileSection( cPath, aFileContent(), cSection, "", "" )
-    
-    '///+<li>Isolate the requested language item</li>
-    hGetI18nData() = hGetValueForKeyAsString( aFileContent(), cLanguage )
-    
-    '///</ul>
-    
-end function
-
-'*******************************************************************************
-
-function hGetTwoDigitLangCode( iLanguage as integer ) as string
-
-    '///<h3>Retrieve a two digit language code from integer</h3>
-    '///<i>Replaces and enhances deprecated sub &quot;siSpracheSetzen&quot;</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Language Code (integer)</li>
-    '///<ul>
-    '///+<li>Any number between (and including) 1 and 99</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Language Code (string)</li>
-    '///<ul>
-    '///+<li>1 - 9 -&gt; &quot;01&quot; - &quot;09&quot;</li>
-    '///+<li>10 - 99 -&gt; &quot;10&quot; - &quot;99&quot;</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    dim cLanguage as string
-    
-    '///+<li>Convert single digit language code to two digit language string</li>
-    if ( ( iLanguage > 0 ) and ( iLanguage < 10 ) ) then
-        cLanguage = "0" & iLanguage
-    else
-        cLanguage = iLanguage
-    endif
-    
-    hGetTwoDigitLangCode() = cLanguage
-    '///</ul>
-
-end function
-
-
-'*******************************************************************************
 
 function hTestLocale() as boolean
 

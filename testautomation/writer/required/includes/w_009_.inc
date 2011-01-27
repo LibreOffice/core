@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*                                                                **
-'* owner : helge.delfs@sun.com                                    **
+'* owner : helge.delfs@oracle.com                                    **
 '*                                                                **
 '* short description :   Testcases for the Help-Menu
 '*
@@ -86,9 +86,8 @@ testcase tHelpAboutStarOffice
     DialogTest ( UeberStarWriter )
     printlog " In About dialog enter key <Strg+Alt+Del>"
     UeberStarWriter.TypeKeys "<Mod1 S><Mod1 D><Mod1 T>"
-    Sleep 3
     printlog " Close About dialog"
-    UeberStarWriter.OK
+    hCloseDialog( UeberStarWriter, "ok" )
     printlog " Close active document"
     Call hCloseDocument
 endcase

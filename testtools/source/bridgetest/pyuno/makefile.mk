@@ -33,6 +33,8 @@ LIBTARGET=NO
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 
+my_components = pythonloader
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -55,12 +57,12 @@ PYTHONPATH:=$(SOLARLIBDIR)$/pyuno:$(PWD):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$
 
 .IF "$(GUI)"!="WNT" && "$(GUI)"!="OS2"
 TEST_ENV=export FOO=file://$(shell @pwd)$/$(DLLDEST) \
-    UNO_TYPES=pyuno_regcomp.rdb UNO_SERVICES=pyuno_regcomp.rdb
+    UNO_TYPES=uno_types.rdb UNO_SERVICES=pyuno_services.rdb
 .ELSE # "$(GUI)" != "WNT"
 # aaaaaa, how to get the current working directory on windows ???
 CWD_TMP=$(strip $(shell @echo "import os;print os.getcwd()" | $(PYTHON)))
 TEST_ENV=export FOO=file:///$(strip $(subst,\,/ $(CWD_TMP)$/$(DLLDEST))) && \
-        export UNO_TYPES=pyuno_regcomp.rdb && export UNO_SERVICES=pyuno_regcomp.rdb
+        export UNO_TYPES=uno_types.rdb && export UNO_SERVICES=pyuno_services.rdb
 .ENDIF  # "$(GUI)"!="WNT"
 PYFILES = \
     $(DLLDEST)$/core.py			\
@@ -75,7 +77,7 @@ PYCOMPONENTS = \
 
 ALL : 	\
     $(PYFILES)				\
-    $(DLLDEST)$/pyuno_regcomp.rdb		\
+    $(DLLDEST)/pyuno_services.rdb \
     doc					\
     ALLTAR
 .ENDIF # L10N_framework
@@ -91,18 +93,21 @@ $(DLLDEST)$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
 $(DLLDEST)$/regcomp$(EXECPOST) : $(SOLARBINDIR)$/regcomp$(EXECPOST)
     cp $? $@
 
-$(DLLDEST)$/pyuno_regcomp.rdb: $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_services.rdb
-    -rm -f $@
-    $(WRAPCMD) $(REGMERGE) $(DLLDEST)$/pyuno_regcomp.rdb / $(DLLDEST)$/uno_types.rdb $(SOLARBINDIR)$/pyuno_services.rdb
+$(DLLDEST)$/pyuno_services.rdb .ERRREMOVE : \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/pyuno_services.input \
+        $(my_components:^"$(SOLARXMLDIR)/":+".component")
+    $(XSLTPROC) --nonet --stringparam prefix $(SOLARXMLDIR)/ -o $@ \
+        $(SOLARENV)/bin/packcomponents.xslt $(MISC)/pyuno_services.input
+
+$(MISC)/pyuno_services.input :
+    echo \
+        '<list>$(my_components:^"<filename>":+".component</filename>")</list>' \
+        > $@
 
 doc .PHONY:
     @echo start test with  dmake runtest
 
 runtest : ALL
     cd $(DLLDEST) && $(TEST_ENV) && $(PYTHON) main.py
-    cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy.rdb \
-            -l com.sun.star.loader.Python $(foreach,i,$(PYCOMPONENTS) -c vnd.openoffice.pymodule:$(i))
-    cd $(DLLDEST) && $(TEST_ENV) && $(WRAPCMD) $(REGCOMP) -register -br pyuno_regcomp.rdb -r dummy2.rdb \
-            -l com.sun.star.loader.Python -c vnd.sun.star.expand:$$FOO/samplecomponent.py
 .ENDIF # L10N_framework
 

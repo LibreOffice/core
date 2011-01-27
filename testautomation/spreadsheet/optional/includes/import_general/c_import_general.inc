@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '**                                                                
-'** owner : oliver.craemer@sun.com                                  
+'** owner : oliver.craemer@oracle.com                                  
 '**                                                                
 '** short description : Imports every Document from a given path (gsSourcePath variable)     
 '**                                                                
@@ -40,6 +40,8 @@
 sub tLoadAllDocuments ( gsSourcePath as string )
     Dim i as integer 
     Dim x as integer
+
+    dim gsSourceDocument( 50 ) as string
 
     printlog "Source path: " & gsSourcePath
     'Get the files into a list.    
@@ -56,6 +58,7 @@ end sub
 '-------------------------------------------------------------------------------
 '
 testcase tLoadSpreadsheetDocument (SourceFile)
+
     Dim sOnlyFileName as string
     Dim sOnlyFileExtension as string
     Dim sTempFileName as String
@@ -63,45 +66,33 @@ testcase tLoadSpreadsheetDocument (SourceFile)
 
     sTempFileName = SourceFile
     sOnlyFileName = DateiOhneExt(DateiExtract(SourceFile)
-    sOnlyFileExtension = GetExtention(sTempFileName)        
-    select case sOnlyFileName
-        case "so3tmpl", "so4tmpl", "so5tmpl" :
-                                printlog  "Test case: " & sOnlyFileName & "." & sOnlyFileExtension
-                                
-        case else               printlog  "Test case: " & sOnlyFileName & "." & sOnlyFileExtension
+    sOnlyFileExtension = GetExtention(sTempFileName)
+
+    select case ( sOnlyFileName )
+    case "so3tmpl", "so4tmpl", "so5tmpl" : printlog  "Test case: " & sOnlyFileName & "." & sOnlyFileExtension
+    case else :              printlog  "Test case: " & sOnlyFileName & "." & sOnlyFileExtension
     end select
+
     'Maybe file name is empty
     if sOnlyFileName > "" then
         'Some extensions make no sense to load
         if sOnlyFileExtension <> "so" AND sOnlyFileExtension <> "tmp" AND sOnlyFileExtension <> "dbt" then
-            if fCalcFileOpen(SourceFile) AND IsItLoaded()then                
+            if fCalcFileOpen(SourceFile) then
                 if (hIsNamedDocLoaded (SourceFile)) then
                     printlog "-  loaded"
                     sleep(15)
                     Call hCloseDocument
                 else
                     warnlog sOnlyFileName + " document has not been loaded correctly [hIsNamedDocLoaded]!"                    
-                    if GetDocumentCount > 1 then
-                        Do Until GetDocumentCount = 1
-                            Call hCloseDocument
-                        Loop
-                    endif
+                    hFileCloseAll()
                 endif
             else
                 warnlog sOnlyFileName + " document has not been loaded correctly [fCalcFileOpen; IsItLoaded]!"                
-                if GetDocumentCount > 1 then
-                    Do Until GetDocumentCount = 1
-                        Call hCloseDocument
-                    Loop
-                endif
+                hFileCloseAll()
             endif
         else
             printlog "(" + sOnlyFileName + "." + sOnlyFileExtension + ") won't be loaded because of excluded extensions .so and .tmp."
-            if GetDocumentCount > 1 then
-                Do Until GetDocumentCount = 1
-                    Call hCloseDocument
-                Loop
-            endif
+            hFileCloseAll()
         endif
     endif
 endcase
@@ -115,7 +106,7 @@ function fCalcFileOpen (sDocName as string, optional bLinked as boolean) as bool
     sSourceFile = ConvertPath ( sDocName )
 
     fCalcFileOpen = TRUE
-    if hFileExists (sSourceFile) = FALSE then
+    if FileExists (sSourceFile) = FALSE then
         warnlog "fCalcFileOpen: '" + sSourceFile + "' does not exists!"
         fCalcFileOpen = FALSE
     else

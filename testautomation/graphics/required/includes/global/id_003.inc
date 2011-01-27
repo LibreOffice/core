@@ -25,19 +25,26 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
-'***********************************************************************************
-' #1 tiViewNavigator
-' #1 tiViewZoom
-' #1 tiViewToolbar
-' #1 tiViewDisplayQuality
-' #1 tiViewLayer
-' #1 tViewSnapLines
-' #1 tViewGrid
-'\**********************************************************************************
+'\******************************************************************************
+
+sub id_003
+
+    printLog Chr(13) + "---------    id_003    ----------"
+
+    call tiViewNavigator
+    call tiViewZoom
+    call tiViewToolbar
+    Call tToolsCustomize			     'global\required\include
+    call tiViewDisplayQuality
+    call tiViewLayer
+    call tViewSnapLines
+    call tViewGrid
+end sub
+'-------------------------------------------------------------------------
 testcase tiViewNavigator
 
     printlog " open application "

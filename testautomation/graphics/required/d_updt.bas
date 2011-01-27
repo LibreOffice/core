@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Draw Required Test
 '*
@@ -55,13 +55,13 @@ sub main
     use "graphics\required\includes\draw\d_005_.inc"
     use "graphics\required\includes\draw\d_007.inc"
 
-    Call D_003_
+    Call d_003
     call id_002
     call id_011
-    Call D_002_
+    Call d_002
     call id_003
     call id_004
-    Call D_005_
+    Call d_005
     call id_005
     call id_Tools
     call d_007

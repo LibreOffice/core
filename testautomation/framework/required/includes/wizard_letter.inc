@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update Test for Letter Wizard
 '*
@@ -35,10 +35,6 @@ testcase tUpdtWizardLetter
 
     printlog( "Resource test for the letter-wizard" )
 
-    dim iErr as integer
-    dim brc as boolean
-    dim irc as integer
-    
     ' Build the filename we want to save the template as.
     dim cTemplateName as string
         cTemplateName = "FWK-Testtool-Template-letterWizard.ott"
@@ -89,7 +85,7 @@ testcase tUpdtWizardLetter
         kontext "AutopilotLetter"
         LetterHead.Check()
 
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 2 )
@@ -123,7 +119,7 @@ testcase tUpdtWizardLetter
             warnlog( "FooterHeight should not be enabled in this configuration" )
         endif
         
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 3 )    
@@ -136,11 +132,11 @@ testcase tUpdtWizardLetter
         
         printlog( "   * change Complimentary Close to second entry" )
         ListGreetings.select( 2 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 4 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 5 )    
@@ -150,7 +146,7 @@ testcase tUpdtWizardLetter
         
         printlog( "   * check Include only on second ..." )
         IncludeFromPage2.check()
-        hClickNextButton()
+        hClickButton( NextButton )
 
         kontext "AutopilotLetter"
         call DialogTest( AutopilotLetter, 6 )   
@@ -158,8 +154,9 @@ testcase tUpdtWizardLetter
         printlog( "   * name the template for further usage" )
         TemplateName.setText( cTemplateName )
         hSetTemplateSavePath( cTemplatePath )
-        
-        hFinishWizard( 1 )
+
+        kontext "AutopilotLetter"
+        hClickButton( FinishButton )
 
         if ( gOOo ) then
             kontext "UseOfThisTemplate"
@@ -171,30 +168,23 @@ testcase tUpdtWizardLetter
             endif
         endif
         
-        iErr = hHandleSaveError()
-        if ( iErr = 1 ) then
+        if ( hHandleSaveError() = 1 ) then
             kontext "AutopilotLetter"
-            hFinishWizard( 1 )
+            hClickButton( FinishButton )
         endif
         
-        brc = hDestroyDocument()
-        if ( not brc ) then
-            qaerrorlog( "#i59233# The wizard does not display the new template" )
-        endif   
+        if ( not hDestroyDocument() ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
     else
         warnlog( "Autopilot Letter not open/exceeded timeout" )
     endif
     
     hDeleteFile( cTemplatePath )
     
-    irc = hDeleteUserTemplates()
-    if ( irc <> 0 ) then
+    if ( hDeleteUserTemplates() <> 0 ) then
         printlog( "Unexpectedly deleted user template(s), please check")
     endif
     
-    do while( getDocumentCount() > 0 )
-        call hCloseDocument()
-    loop
+    hFileCloseAll()
 
 endcase
 

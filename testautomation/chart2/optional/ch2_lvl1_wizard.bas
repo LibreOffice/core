@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Level 1 functional test for Chart2 Wizard
 '*

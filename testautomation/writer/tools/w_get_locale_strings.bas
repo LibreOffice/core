@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Get Locale Strings for Writer Level1-Test
 '*

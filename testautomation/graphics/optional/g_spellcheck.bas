@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : Graphics Function: Tools - Spellcheck
 '*
@@ -42,19 +42,16 @@ sub main
     use "graphics\optional\includes\global\g_spellcheck.inc"
 
     hSetLocaleStrings ( gTesttoolPath + "graphics\tools\locale_1.txt" , glLocale () )
-
-    PrintLog "-------------------------" + gApplication + "-------------------"
-    Call tiToolsSpellcheckCorrect
-    Call tiToolsSpellcheckError
-    Call tiToolsSpellcheckCheck
-    Call tToolsSpellcheckAutoSpellcheck
+    PrintLog "-------------------------" + gApplication + "-------------------"    
+    call tiToolsSpellcheckCheck_AlwaysIgnore
+    call tiToolsSpellcheckCheck_Change
+    call tiToolsSpellcheckCheck_ChangeAll
 
     gApplication = "DRAW"
     PrintLog "-------------------------" + gApplication + "-------------------"
-    Call tiToolsSpellcheckCorrect
-    Call tiToolsSpellcheckError
-    Call tiToolsSpellcheckCheck
-    Call tToolsSpellcheckAutoSpellcheck
+    call tiToolsSpellcheckCheck_AlwaysIgnore
+    call tiToolsSpellcheckCheck_Change
+    call tiToolsSpellcheckCheck_ChangeAll
 
     Call hStatusOut
 end sub

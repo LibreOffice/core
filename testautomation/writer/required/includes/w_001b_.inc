@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Required-Testcases for the File-menu.
 '*
@@ -90,11 +90,8 @@ testcase tFileSendCreateHTMLDocument
     PrintLog "- File / Send / Create HTML-Dokument"
     PrintLog "Open new document"
     Select Case gApplication
-    Case "WRITER"
-        Call hNewDocument
-    Case "MASTERDOCUMENT"
-        Call hNewDocument
-    Case "HTML"
+    Case "WRITER", "MASTERDOCUMENT" : hNewDocument()
+    Case else
         printlog "Not in WriterWeb!"
         goto endsub
     end select
@@ -128,7 +125,7 @@ testcase tFileSendOutlineToPresentation
         goto endsub
     end select
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile$ )
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     Sleep 1
@@ -159,11 +156,8 @@ testcase tFileSendOutlineToPresentation
     endif
 
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    PrintLog "Close documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hCloseDialog( Navigator, "Close,optional" )
+    hFileCloseAll()
 endcase
 
 '-----------------------------------------------------------
@@ -182,7 +176,7 @@ testcase tFileSendOutlineToClipboard
     end select
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile$ )
     Sleep 1
     PrintLog "File / Send / Outline to Clipboard"
     try
@@ -204,6 +198,7 @@ testcase tFileSendOutlineToClipboard
 
     PrintLog "Paste outline in new document"
     hUseAsyncSlot( "EditPaste" )
+    WaitSlot(1000)
     Call wTypeKeys("<Up>", 6)
     Call wTypeKeys("<Home><Shift End>")
     hUseAsyncSlot( "EditCopy" )
@@ -229,7 +224,7 @@ testcase tFileSendCreateAutoabstract
     end select
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile$ )
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     Sleep 1
@@ -259,13 +254,9 @@ testcase tFileSendCreateAutoabstract
     endcatch
 
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    Sleep 1
+    hCloseDialog( Navigator, "Close,optional" )
+    hFileCloseAll()
 
-    PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
 endcase
 
 '-----------------------------------------------------------
@@ -284,7 +275,7 @@ testcase tFileSendAutoabstractToPresentation
     end select
 
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile$ )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile$ )
     Kontext "Navigator"
     if Navigator.Exists then Navigator.Close
     Sleep 1
@@ -321,12 +312,11 @@ testcase tFileSendAutoabstractToPresentation
         Warnlog "- Outline in Impress not created!"
     endif
     Kontext "Navigator"
-    if Navigator.Exists then Navigator.Close
-    Sleep 1
+    hCloseDialog( Navigator, "Close,optional" )
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
 endcase
 '--------------------------------------------------------------------------------------------------------------------------------------------
@@ -410,7 +400,7 @@ testcase tMasterDocFileSaveWithPassword
     FileClose
     WaitSlot(2000)
     PrintLog "Open previous saved document"
-    Call hFileOpen(Datei$)
+    Call hFileOpen( Datei$)
 
     Kontext "PasswordFileOpen"
     PrintLog "Enter a wrong password."
@@ -438,7 +428,7 @@ testcase tMasterDocFileSaveWithPassword
 
     Sleep 1
     PrintLog "File / Open again your previous saved document"
-    Call hFileOpen(Datei$)
+    Call hFileOpen( Datei$)
     PrintLog "Enter your password in password dialog"
     Kontext "PasswordFileOpen"
     if PasswordFileOpen.Exists then
@@ -479,7 +469,7 @@ testcase tMasterDocFileSaveWithPassword
             Sleep 1
             FileClose
             PrintLog "File / Close and open your document again"
-            Call hFileOpen(Datei$)
+            hFileOpen( Datei$)
             Sleep 1
             Kontext "PasswordFileOpen"
             PrintLog "Now the passwort dialog should come up"
@@ -528,7 +518,7 @@ testcase tMasterDocFileReload
     endif
 
     PrintLog "Open previous saved document"
-    Call hFileOpen ( sDocumentPath )
+    Call hFileOpen(  sDocumentPath )
     
     PrintLog "Insert a table in document"
     Call hTabelleEinfuegen
@@ -663,7 +653,7 @@ testcase tMasterDocFileSendOutlineToPresentation
 
     gApplication = "MASTERDOCUMENT"
 
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile )
     
     Kontext "Navigator"
     if ( Navigator.Exists ) then 
@@ -694,10 +684,7 @@ testcase tMasterDocFileSendOutlineToPresentation
     endif
 
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
     
     PrintLog "Close documents"
     hFileCloseAll()
@@ -712,7 +699,7 @@ testcase tMasterDocFileSendOutlineToClipboard
     Dim sFile as string : sFile = "htmltest.sxg"
 
     PrintLog "- File / Send / Outline to Clipboard"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile )
     
     PrintLog "File / Send / Outline to Clipboard"
     try
@@ -752,13 +739,10 @@ testcase tMasterDocFileSendCreateAutoabstract
     Dim sFile as string : sFile = "htmltest.sxg"
 
     PrintLog "- File / Send / Create Autoabstract"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile )
     
     Kontext "Navigator"
-    if ( Navigator.Exists ) then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     Kontext "DocumentWriter"
     PrintLog "File / Send / Create Autoabstract"
@@ -788,10 +772,7 @@ testcase tMasterDocFileSendCreateAutoabstract
     endif    
 
     Kontext "Navigator"
-    if ( Navigator.Exists ) then 
-        Navigator.Close()
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     PrintLog "Close documents"
     hFileCloseAll()    
@@ -808,13 +789,10 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     
     PrintLog "- File / Send / Autoabstract to Presentation"
     PrintLog "Open file ( gTesttoolPath + writer\required\input\ + htmltest.sxw )"
-    Call hFileOpen ( gTesttoolPath + "writer\required\input\" + sFile )
+    hFileOpenLocally(  gTesttoolPath + "writer\required\input\" + sFile )
     
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        Waitslot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
     
     Kontext "DocumentWriter"
     PrintLog "File / Send / Create Autoabstract To Presentation"
@@ -854,15 +832,12 @@ testcase tMasterDocFileSendAutoabstractToPresentation
     endif
     
     Kontext "Navigator"
-    if Navigator.Exists then 
-        Navigator.Close
-        WaitSlot()
-    endif
+    hCloseDialog( Navigator, "Close,optional" )
 
     Call hCloseDocument
     PrintLog "Close active document"
 
-    Call wDocSetContext
+    hSetDocumentContext()
     FileClose
     gApplication = "WRITER"
     

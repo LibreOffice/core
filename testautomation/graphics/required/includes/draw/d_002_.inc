@@ -25,12 +25,20 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
 '*
 '\*****************************************************************
 
+sub d_002
+
+    call tdEditCrossFading()
+    call tdEditLayer()
+
+end sub
+
+'*******************************************************************************
 
 testcase tdEditCrossFading
 

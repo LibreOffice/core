@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Tools library for options testcases
 '*
@@ -196,6 +196,9 @@ function hSetMacroSecurity( iLevel as integer ) as integer
     '///Switch between macro security levels in Tools/Options
     '///<ul>
     const CFN = "hSetMacroSecurity::"
+    const RETVAL_FAILURE = -1
+    const DEFAULT_WAIT_TIME = 2
+
     dim iOldSecurityLevel as integer
 
     dim caLevel( 3 ) as string
@@ -206,7 +209,7 @@ function hSetMacroSecurity( iLevel as integer ) as integer
 
     if ( ( iLevel < GC_MACRO_SECURITY_LEVEL_LOW ) or ( iLevel > GC_MACRO_SECURITY_LEVEL_VERYHIGH ) ) then
         warnlog( CFN & "Invalid index (0...3) passed to function: " & ilevel )
-        hSetMacroSecurity() = -1
+        hSetMacroSecurity() = RETVAL_FAILURE
         exit function
     end if
 
@@ -216,12 +219,12 @@ function hSetMacroSecurity( iLevel as integer ) as integer
 
     '///+<li>Click on the macro security button</li>
     Kontext "TabSecurity"
-    if ( MacroSecurity.exists( 2 ) ) then
+    if ( MacroSecurity.exists( DEFAULT_WAIT_TIME ) ) then
         MacroSecurity.click()
 
         '///+<li>Ensure we are on the Security Level page</li>
         kontext "Active"
-        if ( Active.exists( 2 ) ) then
+        if ( Active.exists( DEFAULT_WAIT_TIME ) ) then
 
             Kontext
             active.setpage TabSecurityLevel
@@ -241,12 +244,12 @@ function hSetMacroSecurity( iLevel as integer ) as integer
             else
                 printlog( CFN & "Security Tabpage not available. Aborting." )
                 kontext "OptionenDlg"
-                if ( OptionenDlg.exists( 2 ) ) then
+                if ( OptionenDlg.exists( DEFAULT_WAIT_TIME ) ) then
                     OptionenDlg.cancel()
                 else
                     warnlog( CFN & "Unrecoverable error, status unknown." )
                 endif
-                hSetMacroSecurity() = -1
+                hSetMacroSecurity() = RETVAL_FAILURE
                 exit function
             endif
 
@@ -263,12 +266,12 @@ function hSetMacroSecurity( iLevel as integer ) as integer
         else
             printlog( CFN & "Macro Security Dialog did not open. Aborting." )
             kontext "OptionenDlg"
-            if ( OptionenDlg.exists( 2 ) ) then
+            if ( OptionenDlg.exists( DEFAULT_WAIT_TIME ) ) then
                 OptionenDlg.cancel()
             else
                 warnlog( CFN & "Unrecoverable error, status unknown." )
             endif
-            hSetMacroSecurity() = -1
+            hSetMacroSecurity() = RETVAL_FAILURE
             exit function
         endif
 
@@ -276,7 +279,7 @@ function hSetMacroSecurity( iLevel as integer ) as integer
         TabSecurityLevel.ok()
     else
         warnlog( CFN & "The Macro Security Button is not available" )
-        iOldSecurityLevel = -1
+        iOldSecurityLevel = RETVAL_FAILURE
     end if
     Kontext "OptionenDLG"
     OptionenDLG.OK()
@@ -312,6 +315,7 @@ function hGetMacroSecurityAPI() as integer
     '///</ol>
 
     const CFN = "hGetMacroSecurityAPI::"
+    const RETVAL_FAILURE = -1
 
     dim oUnoOfficeConnection as object
     dim oUnoConfigurationAccess as object
@@ -336,7 +340,7 @@ function hGetMacroSecurityAPI() as integer
     catch
 
         warnlog( CFN & "Failed to retrieve macro security Level via API" )
-        iLevel = -1
+        iLevel = RETVAL_FAILURE
 
     endcatch
 

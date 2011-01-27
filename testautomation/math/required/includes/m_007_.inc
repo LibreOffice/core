@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* Owner : thorsten.bosbach@sun.com
+'* Owner : thorsten.bosbach@oracle.com
 '*
 '* short description : Test the Help Menu
 '*
@@ -49,7 +49,7 @@ testcase tmHelpHelpAgent
    '/// open application ///'
    Call hNewDocument
 
-   hTBOtypeInDoc
+   SchreibenInMathdok "a over b"
 
    HelpHelpAgent ' it's just a switch
    sleep 2
@@ -62,7 +62,7 @@ endcase
 testcase tmHelpTips
    '/// open application ///'
    Call hNewDocument
-   hTBOtypeInDoc
+   SchreibenInMathdok "a over b"
 
    HelpTips
    Sleep 2
@@ -75,7 +75,7 @@ endcase
 testcase tmHelpExtendedTips
    '/// open application ///'
    Call hNewDocument
-   hTBOtypeInDoc
+   SchreibenInMathdok "a over b"
 
    HelpEntendedHelp
    Sleep (2)
@@ -88,7 +88,7 @@ endcase
 testcase tmHelpAboutStarOffice
    '/// open application ///'
    Call hNewDocument
-   hTBOtypeInDoc
+   SchreibenInMathdok "a over b"
 
    HelpAboutStarOffice
    Kontext "UeberStarMath"

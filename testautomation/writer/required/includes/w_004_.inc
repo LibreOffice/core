@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Testcases with connection to the Insert-menu.
 '*
@@ -36,49 +36,24 @@ sub w_004_
     printLog Chr(13) + "---------  Insert Menu ( w_004_ ) ----------"
     gApplication = "WRITER"
 
-    Call tInsertManualBreak
-    Call tInsertFields
-
-    Call tInsertFieldsOther
-    Call tInsertSpecialCharacter
-
-    Call tInsertSection
-    Call tInsertHyperlink
-
-    Call tInsertFootnote
-    Call tInsertCaption
-    Call tInsertBookmark
-    Call tInsertCrossReference
-    Call tInsertComment
-    Call tInsertScript
-    Call tInsertIndexesEntry
-    Call tInsertIndexesIndex
-    Call tInsertIndexesBibliographyEntry
-
-    Call tInsertEnvelope
-
-    Call tInsertFrame
-    Call tInsertTable
-    Call tInsertHorizontalLine
-    Call tInsertGraphicsFromFile
-    Call tInsertAllGraphicsFromFile
-
-    Call tInsertObjectOLEObject
-    Call tInsertObjectPlugIn
-    Call tInsertObjectSound
-    Call tInsertObjectVideo
-    Call tInsertObjectFormula
-    Call tInsertObjectChart
-    Call tInsertFile
-
-    'Writer Web
-    gApplication = "HTML"
-    Call tHtmlDocInsertFields
-    Call tHtmlDocInsertFieldsOther
-    Call tHtmlDocInsertSection
-    Call tHtmlDocInsertFrame
-    Call tHtmlDocInsertGraphicsFromFile
-    gApplication = "WRITER"
+    call tInsertManualBreak
+    call tInsertFields
+    call tInsertFieldsOther
+    call tInsertSpecialCharacter
+    call tInsertSection
+    call tInsertHyperlink
+    call tInsertFootnote
+    call tInsertCaption
+    call tInsertBookmark
+    call tInsertComment
+    call tInsertCrossReference
+    call tInsertScript
+    call tInsertIndexesEntry
+    call tInsertIndexesIndex
+    call tInsertIndexesBibliographyEntry
+    call tInsertEnvelope
+    call tInsertFrame
+    call tInsertTable
 
 end sub
 
@@ -345,45 +320,52 @@ testcase tInsertHyperlink
     printlog "-  Internet"
     printlog " Insert / Hyperlink"
     InsertHyperlink
-    printlog "  In 'Hyperlink' dialog step through all pages"
-    Call wEinfuegenHyperlink(1)
-    Call DialogTest ( TabHyperlinkInternet )
 
-    Kontext "Hyperlink"
-    printlog "-  Mail & News"
-    Call wEinfuegenHyperlink(2)
-    wait 500
-    Call DialogTest ( TabHyperlinkMailUndNews )
+    kontext "HyperlinkDialog"
+    if ( HyperlinkDialog.exists( 2 ) ) then
 
-    Kontext "Hyperlink"
-    printlog "-  Document"
-    Call wEinfuegenHyperlink(3)
-    wait 500
-    Call DialogTest ( TabHyperlinkDokument )
-    
-    DateiOeffnen.Click
+        printlog "  In 'Hyperlink' dialog step through all pages"
+        Call wEinfuegenHyperlink(1)
+        Call DialogTest ( TabHyperlinkInternet )
 
-    Kontext "OeffnenDlg"
-    if ( OeffnenDlg.exists( 1 ) ) then
+        Kontext "Hyperlink"
+        printlog "-  Mail & News"
+        Call wEinfuegenHyperlink(2)
+        wait 500
+        Call DialogTest ( TabHyperlinkMailUndNews )
+
+        Kontext "Hyperlink"
+        printlog "-  Document"
+        Call wEinfuegenHyperlink(3)
+        wait 500
+        Call DialogTest ( TabHyperlinkDokument )
+
+        DateiOeffnen.Click
+
+        Kontext "OeffnenDlg"
+        if ( OeffnenDlg.exists( 1 ) ) then
+            OeffnenDlg.Cancel
+        else
+            warnlog( "Dialog <OeffnenDlg> is not available" )
+        endif
+
+        Kontext "Hyperlink"
+        printlog "-  New Document"
+        Call wEinfuegenHyperlink(4)
+        wait 500
+        Call DialogTest ( TabHyperlinkNeuesDokument )
+
+        Pfad.Click
+        Sleep 1
+        Kontext "OeffnenDlg"
         OeffnenDlg.Cancel
+
+        printlog " Close 'Hyperlink' dialog"
+        kontext "HyperlinkDialog"
+        HyperlinkDialog.Close
     else
-        warnlog( "Dialog <OeffnenDlg> is not available" )
+        warnlog( "Unable to open <HyperlinkDialog>" )
     endif
-
-    Kontext "Hyperlink"
-    printlog "-  New Document"
-    Call wEinfuegenHyperlink(4)
-    wait 500
-    Call DialogTest ( TabHyperlinkNeuesDokument )
-    
-    Pfad.Click
-    Sleep 1
-    Kontext "OeffnenDlg"
-    OeffnenDlg.Cancel
-
-    Kontext "TabHyperlinkNeuesDokument"
-    TabHyperlinkNeuesDokument.Cancel
-    printlog " Close 'Hyperlink' dialog"
 
     printlog " Close active document"
     Call hCloseDocument
@@ -481,6 +463,7 @@ testcase tInsertComment
 
     printlog " Insert / Comment"
     InsertNoteWriter
+    wait 500
     Kontext "DocumentWriter"
     sNoteText = "Comment inserted by testtool !"
     Call wTypeKeys (sNoteText)
@@ -1028,777 +1011,3 @@ testcase tInsertTable
     Call hCloseDocument
 endcase
 
-'-----------------------------------------------------------
-
-testcase tInsertHorizontalLine
-    PrintLog "- Insert / Horizontal Line"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Horizontal Line"
-    InsertHorizontalLine
-    Kontext "HorizontaleLinieEinfuegen"
-    Call DialogTest (HorizontaleLinieEinfuegen)
-    printlog " Close dialog 'Insert Horizontal Ruler'"
-    HorizontaleLinieEinfuegen.Cancel
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertGraphicsFromFile
-    PrintLog "- Insert / Graphics / From File"
-    Dim j as integer
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Graphics from file"
-    InsertGraphicsFromFile
-
-    Kontext "GrafikEinfuegenDlg"
-    printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
-    Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    Oeffnen.Click
-
-    Kontext "Active"
-    if Active.Exists( 1 ) then
-        Warnlog Active.Gettext
-        Active.Ok
-        Kontext "GrafikEinfuegenDlg"
-        GrafikEinfuegenDlg.Cancel
-        Call hCloseDocument
-        goto endsub
-    else
-        printlog " select again 'Insert / Grahics from file'"
-        InsertGraphicsFromFile
-        WaitSlot (2000)
-        printlog " Step through all tabpages"
-        Kontext
-        active.SetPage TabType
-        wait 500
-        Kontext "TabType"
-        Call DialogTest ( TabType )
-
-        Kontext
-        active.SetPage TabZusaetze
-        wait 500
-        Kontext "TabZusaetze"
-        Call DialogTest ( TabZusaetze )
-
-        Kontext
-        active.SetPage TabUmlauf
-        wait 500
-        Kontext "TabUmlauf"
-        Call DialogTest ( TabUmlauf )
-
-        Kontext
-        active.SetPage TabHyperlinkRahmen
-        wait 500
-        Kontext "TabHyperlinkRahmen"
-        Call DialogTest ( TabHyperlinkRahmen )
-
-        Kontext
-        active.SetPage TabGrafik
-        wait 500
-        Kontext "TabGrafik"
-        Call DialogTest ( TabGrafik )
-
-        Kontext
-        active.SetPage TabUmrandung
-        wait 500
-        Kontext "TabUmrandung"
-        Call DialogTest ( TabUmrandung )
-
-        Kontext
-        active.SetPage TabMakro
-        ' if no JRE is installed a messagebox appears
-        j = 0
-        Do
-            j = j + 1
-            Kontext "Active"
-            if Active.Exists() then
-                if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext
-                    Active.Ok
-                else
-                    exit do
-                end if
-            else
-                exit do
-            end if
-        Loop
-        wait 500
-        Kontext "TabMakro"
-        Call DialogTest ( TabMakro )
-
-        if gApplication <> "HTML" then
-            Kontext
-            active.SetPage TabZuschneiden
-            wait 500
-            Kontext "TabZuschneiden"
-            Call DialogTest ( TabZuschneiden )
-
-            Kontext
-            active.SetPage TabHintergrund
-            wait 500
-            Kontext "TabHintergrund"
-            Call DialogTest ( TabHintergrund )
-            printlog " Close dialog"
-            TabHintergrund.Cancel
-        else
-            printlog " Close dialog"
-            TabMakro.Cancel
-        end if
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertAllGraphicsFromFile
-    Dim i as integer
-    Dim quellpfad as string
-    Dim DieDatei as string
-    Dim Ziel( 5000 ) as String
-    printlog "Insert / Graphics / From File (all Formats)"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert all graphic formats from directory: global\input\graf_inp\"
-    quellpfad = ConvertPath(gtesttoolpath + "global\input\graf_inp\")
-
-    GetFileList(quellpfad, "*.*" , Ziel())
-    for i=1 to ListCount(Ziel())
-        if (gPlatform = "osx") AND (right(ziel(i),3) = "eps") then
-            qaerrorlog "#i100253# skipping eps"
-            i=i+1
-        endif
-        printlog "- Graphic: " + Right(Ziel(i),3) + "-Format"
-        Call hGrafikEinfuegen ( Ziel(i) )
-        Sleep 5
-        Call wTypeKeys("<Delete>")
-        Call gMouseDoubleClick (10,10)
-        Sleep 5
-    next i
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectOLEObject
-    PrintLog "- Insert / Object / OLE-Objekt"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Object / OLE-Object"
-    InsertObjectOLEObject
-
-    Kontext "OLEObjektEinfuegen"
-    printlog " Check both radiobuttons 'Create now' and 'Create from file'"
-    NeuErstellen.Check
-    Call DialogTest (OLEObjektEinfuegen, 1)
-    AusDateiErstellen.Check
-    Call DialogTest (OLEObjektEinfuegen, 2)
-    OLEObjektEinfuegen.Cancel
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectPlugIn
-    PrintLog "- Insert / Object / Plug-In"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Close 'Plug in' dialog"
-    InsertObjectPlugIn
-
-    Kontext "PlugInEinfuegen"
-    if PlugInEinfuegen.Exists then
-        Call DialogTest (PlugInEinfuegen)
-        PlugInEinfuegen.Cancel
-    else
-        Warnlog "Dialog 'Plugin' is not up!"
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectSound
-    Printlog "- Insert / Object / Sound"
-    printlog " Open new document"
-    Call hNewDocument
-
-    try
-        if gUseSysDlg = False then
-            InsertObjectSound
-            printlog " Insert / Object / Sound"
-            Kontext "OeffnenDlg"
-            if OeffnenDlg.Exists then
-                OeffnenDlg.Cancel
-            else
-                Warnlog "Dialog to insert Sound isn't up!"
-            end if
-        end if
-    catch
-        'Warnlog "- Menu disabled or no Sound-PlugIn installed !?"
-    endcatch
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectVideo
-    Printlog "- Insert / Object / Video"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    try
-        if gUseSysDlg = False then
-            InsertObjectVideo
-            printlog " Insert / Object / Video"
-            Kontext "OeffnenDlg"
-            if OeffnenDlg.Exists then
-                OeffnenDlg.Cancel
-            else
-                Warnlog "Dialog to insert Video isn't up!"
-            end if
-        end if
-    catch
-        'Warnlog "- Menu disabled or no Video-PlugIn installed !?"
-    endcatch
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectFormula
-    PrintLog "- Insert / Object / Formula"
-
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Object / Formular"
-    InsertObjectFormula
-    WaitSlot (2000)
-    Kontext "Active"
-    if Active.Exists then
-        if Active.GetRT = 304 then
-            Warnlog Active.Gettext
-            Active.Ok
-        end if
-    end if
-    Sleep 1
-
-    printlog " Click in 'Math' document"
-    Call gMouseClick(1,1)
-    sleep 1
-    printlog "  'Delete math-object in document"
-    Call wTypeKeys("<Delete>")
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertObjectChart
-    PrintLog "- Insert / Object / Chart"
-
-    printlog " Open new document"
-    Call hNewDocument
-    ' Chart-Wizard will be invoked if data ranges exist
-    ' Therefor a table will be inserted
-    printlog " Insert / Table"
-    InsertTableWriter
-    Kontext "TabelleEinfuegenWriter"
-    TabelleEinfuegenWriter.Ok
-
-    printlog " Insert / Object / Chart"
-    InsertObjectChart
-
-    Kontext "ChartWizard"
-    if ChartWizard.Exists then
-        printlog "- Chart-Wizard is up=>OK"
-        Call DialogTest ( ChartWizard )
-        printlog " Cancel Chart-Wizard"
-        ChartWizard.Cancel
-    else
-        warnlog "Chart-Wizard is not up though a table has been inserted"
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tInsertFile
-    PrintLog "- Insert / File"
-
-    printlog " Open new document"
-    Call hNewDocument
-    InsertFileWriter
-    WaitSlot( 2000 )
-    
-    printlog " Insert / File"
-    Kontext "OeffnenDlg"
-
-    printlog " Check 'File dialog'"
-    if OeffnenDlg.Exists( 2 ) then
-        Call DialogTest ( OeffnenDlg )
-        try
-            Standard.Click
-        catch
-            Exceptlog
-        endcatch
-
-        Kontext "Active"
-        if Active.Exists then
-            Warnlog Active.Gettext
-            Active.Ok
-        else
-            Kontext "OeffnenDlg"
-            OeffnenDlg.Cancel
-        end if
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-endcase
-
-'-----------------------------------------------------------
-
-testcase tHtmlDocInsertFields
-    PrintLog "- Insert / Fields"
-
-    gApplication = "HTML"
-    printlog " Open new document"
-    Call hNewDocument
-
-    try
-        printlog "Insert / Fields / Date"
-        InsertFieldsDate
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Date "
-    endcatch
-    printlog " Insert / Fields / Date"
-    Call wTypeKeys (" <Return>")
-    try
-        printlog "Insert / Fields / Time"
-        InsertFieldsTime
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Time"
-    endcatch
-    printlog " Insert / Fields / Time"
-    Call wTypeKeys (" <Return>")
-    try
-        printlog "Insert / Fields / Page Number"
-        InsertFieldsPageNumbers
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Page numbers"
-    endcatch
-    printlog " Insert / Fields / Page numbers"
-    Call wTypeKeys (" <Return>")
-    try
-        printlog "Insert / Fields / Page Count"
-        InsertFieldsPageCount
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Page Count"
-    endcatch
-    printlog " Insert / Fields / Page count"
-    Call wTypeKeys (" <Return>")
-    try
-        printlog "Insert / Fields / Title"
-        InsertFieldsTitle
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Title"
-    endcatch
-    printlog " Insert / Fields / Title"
-    Call wTypeKeys (" <Return>")
-    try
-        printlog "Insert / Fields / Author"
-        InsertFieldsAuthor
-    catch
-        Warnlog "Unable to execute: Insert / Fields / Author"
-    endcatch
-    printlog " Insert / Fields / Author"
-    if gApplication <> "HTML" then
-        try
-            printlog "Insert / Fields / Subject"
-            InsertFieldsSubject
-        catch
-            Warnlog "Unable to execute: Insert / Fields / Subject"
-        endcatch
-        printlog " If document not HTML then  'Insert / Fields / Subject"
-        Call wTypeKeys (" <Return>")
-        printlog " Press key 'enter'"
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
-endcase
-
-'-----------------------------------------------------------
-
-testcase tHtmlDocInsertFieldsOther
-    Dim i as integer
-    Dim j as integer
-    printlog "- Insert / Fields / Other"
-
-    gApplication = "HTML"
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Fields / Other"
-    InsertFieldsOther
-
-    Kontext
-    printlog " In dialog step through all tabpages"
-    Active.SetPage TabDokumentFeldbefehle
-    Kontext "TabDokumentFeldbefehle"
-    Call Dialogtest ( TabDokumentFeldbefehle )
-
-    Kontext
-    Active.SetPage TabDokumentinfoFeldbefehle
-    Kontext "TabDokumentinfoFeldbefehle"
-    Call Dialogtest ( TabDokumentinfoFeldbefehle )
-
-    Kontext
-    Active.SetPage TabVariablen
-    Kontext "TabVariablen"
-    Call Dialogtest ( TabVariablen )
-
-    if gApplication <> "HTML" then
-        Kontext
-        Active.SetPage TabReferenzen
-        Kontext "TabReferenzen"
-        Call Dialogtest ( TabReferenzen )
-
-        Kontext
-        Active.SetPage TabFunktionen
-        Kontext "TabFunktionen"
-        Call Dialogtest ( TabFunktionen )
-        for i=1 to Feldtyp.GetItemCount
-            Feldtyp.Select i
-            if MakroButton.IsEnabled then
-                MakroButton.Click
-                ' if no JRE is installed a messagebox appears
-                Do
-                    j = j + 1
-                    Kontext "Active"
-                    if Active.Exists then
-                        if Active.GetRT = 304 then
-                            if j = 1 then Warnlog Active.Gettext
-                            Active.Ok
-                        else
-                            exit do
-                        end if
-                    else
-                        exit do
-                    end if
-                Loop
-
-                Kontext "ScriptSelector"
-                if ( ScriptSelector.exists( 3 ) ) then
-                    ScriptSelector.Close
-                else
-                    warnlog( "Dialog <ScriptSelector> is not available" )
-                endif
-                Kontext "TabFunktionen"
-                i=100
-            end if
-        next i
-
-        Kontext
-        Active.SetPage TabDatenbank
-        Kontext "TabDatenbank"
-        Call Dialogtest ( TabDatenbank )
-
-        printlog " Close dialog"
-        TabDatenbank.Close
-    else
-        printlog " Close dialog"
-        TabVariablen.Close
-    end if
-    printlog " Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
-endcase
-
-'-----------------------------------------------------------
-
-testcase tHtmlDocInsertSection
-    PrintLog "- Insert / Section"
-
-    gApplication = "HTML"
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Section"
-    InsertSection
-    Kontext
-
-    printlog "  In dialog step through all tabpages"
-    printlog "-  Tabpage Section"
-    Active.Setpage TabBereiche
-    Kontext "TabBereiche"
-    Call DialogTest (TabBereiche)
-    Verknuepfung.Check
-
-    Auswaehlen.Click
-    Kontext "OeffnenDlg"
-    if ( OeffnenDlg.exists( 1 ) ) then
-        OeffnenDlg.Cancel
-    else
-        warnlog( "Dialog <OeffnenDlg> is not available" )
-    endif
-
-    Wait 500
-    Kontext
-    printlog "-  Tabpage Columns"
-    Active.Setpage TabSpalten
-    Kontext "TabSpalten"
-    Call DialogTest (TabSpalten)
-
-    Kontext
-    printlog "-  Tabpage Background"
-    Active.Setpage TabHintergrund
-    Kontext "TabHintergrund"
-    Call DialogTest (TabHintergrund)
-
-    if gApplication <> "HTML" then
-        printlog "Tabpage Indents"
-        Kontext
-        Active.Setpage TabSectionIndent
-        Kontext "TabSectionIndent"
-        Call DialogTest (TabSectionIndent)
-
-        printlog "-  Tabpage Footnotes/Endnotes"
-        Kontext
-        Active.Setpage TabFussEndnoten
-        Kontext "TabFussEndnoten"
-        Call DialogTest (TabFussEndnoten)
-        TabFussEndnoten.Cancel
-    else
-        TabHintergrund.Cancel
-    end if
-    printlog " Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
-endcase
-
-'-----------------------------------------------------------
-
-testcase tHtmlDocInsertFrame
-    PrintLog "- Insert / Frame"
-
-    gApplication = "HTML"
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Frame"
-    InsertFrame
-    WaitSlot (2000)
-
-    printlog " Step through all tabpages"
-    Kontext
-    active.SetPage TabType
-    Kontext "TabType"
-    Call DialogTest (TabType)
-    Sleep 1
-
-    Kontext
-    active.SetPage TabZusaetze
-    Kontext "TabZusaetze"
-    Call DialogTest (TabZusaetze)
-    Sleep 1
-
-    Kontext
-    active.SetPage TabUmlauf
-    Kontext "TabUmlauf"
-    Call DialogTest (TabUmlauf)
-    Sleep 1
-
-    Kontext
-    active.SetPage TabUmrandung
-    Kontext "TabUmrandung"
-    Call DialogTest (TabUmrandung)
-    Sleep 1
-
-    Kontext
-    active.SetPage TabHintergrund
-    Kontext "TabHintergrund"
-    Call DialogTest (TabHintergrund, 1)
-    Sleep 1
-    try
-        Als.Select (2)
-        Call DialogTest (TabHintergrund, 2)
-        Sleep 1
-    catch
-        Warnlog "Maybe missing combobox! (#i29517)"
-    endcatch
-
-    if gApplication <> "HTML" then
-        Kontext
-        active.SetPage TabHyperlinkRahmen
-        Kontext "TabHyperlinkRahmen"
-        Call DialogTest (TabHyperlinkRahmen)
-        Durchsuchen.Click
-
-        if gUSeSysDlg = False then
-            Kontext "OeffnenDlg"
-            OeffnenDlg.Cancel
-        end if
-
-        Kontext
-        active.SetPage TabSpalten
-        Kontext "TabSpalten"
-        Call DialogTest (TabSpalten)
-        printlog " Close dialog"
-        TabSpalten.Cancel
-    else
-        printlog " Close dialog"
-        TabHintergrund.Cancel
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
-endcase
-
-'-----------------------------------------------------------
-
-testcase tHtmlDocInsertGraphicsFromFile
-    PrintLog "- Insert / Graphics / From File"
-    Dim j as integer
-
-    gApplication = "HTML"
-    printlog " Open new document"
-    Call hNewDocument
-
-    printlog " Insert / Graphics from file"
-    InsertGraphicsFromFile
-
-    Kontext "GrafikEinfuegenDlg"
-    printlog " Select as graphic to insert: '...\writer\required\input\graphics\jolink.jpg"
-    Dateiname.Settext ConvertPath ( gTesttoolPath + "writer\required\input\graphics\jolink.jpg" )
-    Oeffnen.Click
-
-    Kontext "Active"
-    if Active.Exists( 1 ) then
-        Warnlog Active.Gettext
-        Active.Ok
-        Kontext "GrafikEinfuegenDlg"
-        GrafikEinfuegenDlg.Cancel
-        Call hCloseDocument
-        goto endsub
-    else
-        printlog " select again 'Insert / Grahics from file'"
-        InsertGraphicsFromFile
-        WaitSlot (2000)
-        printlog " Step through all tabpages"
-        Kontext
-        active.SetPage TabType
-        wait 500
-        Kontext "TabType"
-        Call DialogTest ( TabType )
-
-        Kontext
-        active.SetPage TabZusaetze
-        wait 500
-        Kontext "TabZusaetze"
-        Call DialogTest ( TabZusaetze )
-
-        Kontext
-        active.SetPage TabUmlauf
-        wait 500
-        Kontext "TabUmlauf"
-        Call DialogTest ( TabUmlauf )
-
-        Kontext
-        active.SetPage TabHyperlinkRahmen
-        wait 500
-        Kontext "TabHyperlinkRahmen"
-        Call DialogTest ( TabHyperlinkRahmen )
-
-        Kontext
-        active.SetPage TabGrafik
-        wait 500
-        Kontext "TabGrafik"
-        Call DialogTest ( TabGrafik )
-
-        Kontext
-        active.SetPage TabUmrandung
-        wait 500
-        Kontext "TabUmrandung"
-        Call DialogTest ( TabUmrandung )
-
-        Kontext
-        active.SetPage TabMakro
-        ' if no JRE is installed a messagebox appears
-        j = 0
-        Do
-            j = j + 1
-            Kontext "Active"
-            if Active.Exists then
-                if Active.GetRT = 304 then
-                    if j = 1 then Warnlog Active.Gettext
-                    Active.Ok
-                else
-                    exit do
-                end if
-            else
-                exit do
-            end if
-        Loop
-        wait 500
-        Kontext "TabMakro"
-        Call DialogTest ( TabMakro )
-
-        if gApplication <> "HTML" then
-            Kontext
-            active.SetPage TabZuschneiden
-            wait 500
-            Kontext "TabZuschneiden"
-            Call DialogTest ( TabZuschneiden )
-
-            Kontext
-            active.SetPage TabHintergrund
-            wait 500
-            Kontext "TabHintergrund"
-            Call DialogTest ( TabHintergrund )
-            printlog " Close dialog"
-            TabHintergrund.Cancel
-        else
-            printlog " Close dialog"
-            TabMakro.Cancel
-        end if
-    end if
-
-    printlog " Close active document"
-    Call hCloseDocument
-    gApplication = "WRITER"
-endcase
-
-'-----------------------------------------------------------

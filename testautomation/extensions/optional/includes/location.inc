@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test the extension locator service
 '*
@@ -61,14 +61,15 @@ testcase tExtensionLocation
         warnlog( "Macro execution warning is missing" )
     endif
 
-    irc = hMacroOrganizerRunMacro( MACRO_NAME )
-    if ( irc = 0 ) then
-        warnlog( "No macro with the given name could be found, aborting" )
-        kontext "Makro"
-        if ( Makro.exists() ) then
-            Makro.close()
-        endif
+    hMacroOrganizerRunMacro( MACRO_NAME )
+
+    kontext "Makro"
+    if ( Makro.exists( 1 ) ) then
+        warnlog( "Macro was not executed")
+        Makro.close()
         goto endsub
+    else
+        printlog( "Macro was executed")
     endif
 
     kontext "active"
@@ -84,11 +85,8 @@ testcase tExtensionLocation
         warnlog( "No messagebox displayed, please check that the macro is executed" )
     endif
 
-    irc = hExtensionAddGUI( cWorkPath & EXTENSION_NAME , "verbose,InstallForUser" )
-    irc = hMacroOrganizerRunMacro( MACRO_NAME )
-    if ( irc = 0 ) then
-        warnlog( "No macro with the given name could be found" )
-    endif
+    hExtensionAddGUI( cWorkPath & EXTENSION_NAME , "verbose,InstallForUser" )
+    hMacroOrganizerRunMacro( MACRO_NAME )
 
     kontext "active"
     if ( active.exists( 2 ) ) then

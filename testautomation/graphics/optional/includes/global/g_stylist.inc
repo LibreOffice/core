@@ -25,21 +25,9 @@
 '
 '/************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description :
-'*
-'*******************************************************************
-'*
-' #1 tFormatStylistFlyer
-' #1 tFormatStylistDocuments
-' #1 tFormatStylistTemplatesUse
-' #1 tFormatStylistTemplateCreate
-' #1 tFormatStylistTemplateSelect
-' #1 tFormatStylistTemplateNew
-' #1 tiFormatStylist
-' #1 tFormatStylist
-' #1 hWalkTheStyles
 '*
 '\*******************************************************************
 
@@ -50,17 +38,18 @@ testcase tFormatStylistFlyer
     Dim ySize%
 
     printlog "   - Format/Stylist : using all possible things to manipulate the flyer"
-    '/// open application ///'
+    printlog "open application"
     Call  hNewDocument
     Kontext "Gestalter"
-    '/// Check if stylist is there. Expected: not there ///'
+    printlog "Check if stylist is there. Expected: not there"
     if Gestalter.NotExists = false Then
-        qaErrorLog "   - Expected Stylist to be closed; But is Open. Check tests."
+        qaErrorLog "Expected Stylist to be closed; But is Open. Check tests."
     else
         if lcase(gPlatform) = "osx" then
             hTypekeys "<mod1 t>"
         else
-            hTypekeys "<F11>"   '/// open stylist by pressing key [F11] ///'
+            printlog "open stylist by pressing key [F11]"
+            hTypekeys "<F11>"   
         end if
         sleep 1
     end if
@@ -69,51 +58,51 @@ testcase tFormatStylistFlyer
         Warnlog "   No stylist popped up using F11; opening now via slotID"
         FormatStylist
     end if
-    '///+ save stylist position and size ///'
+    printlog "save stylist position and size"
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    '///+ if Stylist is docked; undock ///'
+    printlog " if Stylist is docked; undock"
     if Gestalter.IsDocked then Gestalter.UnDock
-    printlog "  -   '///move stylist ///"
-    '///+ move stylist to 10,10 ///'
+    printlog " move stylist"
+    printlog "move stylist to 10,10"
     Gestalter.Move 10, 10
     Sleep 1
-    '///+ move stylist to 300,400 ///'
+    printlog "move stylist to 300,400"
     Gestalter.Move 300, 400
     Sleep 1
-    '///+ move stylist to 590,790 ///'
+    printlog "move stylist to 590,790"
     Gestalter.Move 590, 790
     Sleep 1
-    '///+ move stylist back to saved start position ///'
+    printlog " move stylist back to saved start position"
     Gestalter.Move xPos%, yPos%
     Sleep 1
 
-    printlog "  -   '///size stylist ///"
-    '///+ change size to 200,200 ///'
+    printlog "size stylist"
+    printlog "change size to 200,200"
     Gestalter.Size 200, 200
     Sleep 1
-    '///+ change size to 300,400 ///'
+    printlog "change size to 300,400"
     Gestalter.Size 300, 400
     Sleep 1
-    '///+ change size to 150,250 ///'
+    printlog "change size to 150,250"
     Gestalter.Size 150, 250
     Sleep 1
-    '///+ change size back to saved size ///'
+    printlog "change size back to saved size"
     Gestalter.Size xSize%, ySize%
     Sleep 1
 
-    printlog "  -   Close stylist reopen stylist, check if appearence is same as before"
-    '/// save stylist position and size ///'
+    printlog "Close stylist reopen stylist, check if appearence is same as before"
+    printlog "save stylist position and size"
     xPos% = Gestalter.GetPosX
     yPos% = Gestalter.GetPosY
     xSize% = Gestalter.GetSizeX
     ySize% = Gestalter.GetSizeY
-    '/// close stylist Format->Stylist ///'
+    printlog "close stylist Format->Stylist"
     FormatStylist
     Sleep 1
-    '/// open stylist Format->Stylist ///'
+    printlog "open stylist Format->Stylist"
     FormatStylist
     sleep (1)
     if xPos% <> Gestalter.GetPosX then Warnlog "The x-Pos. has changed : Should be -> '"+ xPos% +  "'  Is -> '"+ Gestalter.GetPosX  +"'."
@@ -122,32 +111,32 @@ testcase tFormatStylistFlyer
     if ySize% <> Gestalter.GetSizeY then Warnlog "The y-Size has changed : Should be -> '"+ ySize% + "'  Is -> '"+ Gestalter.GetSizeY +"'."
 
     printlog "  -   dock stylist"
-    '/// dock stylist ///'
+    printlog "dock stylist"
     Gestalter.Dock
     Sleep 1
     if (NOT Gestalter.IsDocked) then
         warnlog "   stylist not docked but should"
     endif
-    '/// UNdock stylist ///'
+    printlog "UNdock stylist"
     if (Gestalter.IsDocked) Then
         Gestalter.UnDock
     endif
     Sleep 1
 
     printlog "  -   maximize/minimize stylist"
-    '/// minimize stylist ///'
+    printlog "minimize stylist"
     Gestalter.Minimize
     Sleep 1
-    '/// maximize stylist ///'
+    printlog "maximize stylist"
     Gestalter.Maximize
     Sleep 1
     if (NOT Gestalter.IsMax) then
         warnlog "   The stylist did not return to maximized state"
     endif
-    '/// close stylist ///'
+    printlog "close stylist"
     Gestalter.Close
     Call  hCloseDocument
-    
+
 endcase 'tFormatStylistFlyer
 '--------------------------------------------------------
 testcase tFormatStylistDocuments
@@ -169,11 +158,9 @@ testcase tFormatStylistDocuments
     endif
 
     printlog "  -   Close all documents, reopen 1"
-    FileClose
-    Sleep 2
-    FileClose
-    Sleep 2
-    hNewDocument
+    hFileCloseAll()
+    hNewDocument()
+    
     Kontext "Gestalter"
     if (Gestalter.NotExists) then
         warnlog "   There is no stylist in the new document"
@@ -190,12 +177,9 @@ testcase tFormatStylistDocuments
     endif
 
     printlog "  -   Close all documents, reopen one and check the docked stylist"
-    FileClose
-    Sleep 2
-    FileClose
-    Sleep 2
-    Kontext "Gestalter"
-    hNewDocument
+    hFileCloseAll()
+    hNewDocument()
+
     Kontext "Gestalter"
     if NOT Gestalter.IsDocked then
         warnlog "   In the new document is the stylist not docked"
@@ -215,7 +199,7 @@ testcase tFormatStylistDocuments
         Gestalter.Close
     end if
     Call  hCloseDocument
-    
+
 endcase 'tFormatStylistDocuments
 '--------------------------------------------------------
 testcase tFormatStylistTemplatesUse
@@ -234,7 +218,7 @@ testcase tFormatStylistTemplatesUse
         FormatStylist
     endif
     printlog "   - Presentation-templates"
-    if (Lcase (gApplication) = "IMPRESS") then
+    if ( gApplication = "IMPRESS") then
         TBGestalter.Click Praesentationsvorlagen
     endif
     save = Gruppenliste.GetSelIndex
@@ -253,11 +237,11 @@ testcase tFormatStylistTemplatesUse
     sleep 1
     Gruppenliste.Select save
 
-    Gestalter.Close
+    kontext "Gestalter"
+    hCloseDialog( Gestalter, "Close" )
 
-    sleep 3
-    Call  hCloseDocument
-    
+    hFileCloseAll()
+
 endcase 'tFormatStylistTemplatesUse
 '--------------------------------------------------------
 testcase tFormatStylistTemplateCreate
@@ -299,10 +283,10 @@ testcase tFormatStylistTemplateCreate
     zaehler=Ansicht.getItemCount
     i=0
     do
-    inc i
+        inc i
     loop while ((Ansicht.getItemText(i) <> "ATesttool") AND (i <= zaehler))
     if i>zaehler then
-    warnlog "   error"
+        warnlog "   error"
     endif
     Ansicht.Select i
     sleep 1
@@ -317,10 +301,8 @@ testcase tFormatStylistTemplateCreate
     sleep 1
     Kontext "DocumentDraw"
     gMouseClick 90,90
-    sleep 1
-    Call hCloseDocument
-    sleep 1
-    
+    hFileCloseAll()
+
 endcase 'tFormatStylistTemplateCreate
 '--------------------------------------------------------
 testcase tFormatStylistTemplateSelect
@@ -400,7 +382,7 @@ testcase tFormatStylistTemplateSelect
     TabArea.OK
     sleep 2
     hCloseDocument
-    
+
 endcase 'tFormatStylistTemplateSelect
 '---------------------------------------------------------
 testcase tFormatStylistTemplateNew
@@ -484,14 +466,14 @@ testcase tFormatStylistTemplateNew
     Vorlagenliste.TypeKeys "<End>"
     i = 0
     do
-    inc i
-    sTemp = Vorlagenliste.GetText
-    Vorlagenliste.TypeKeys "<Up>"
+        inc i
+        sTemp = Vorlagenliste.GetText
+        Vorlagenliste.TypeKeys "<Up>"
     loop while (("Testtool" <> sTemp) AND (i<20))
     Vorlagenliste.TypeKeys "<Return>"
     Kontext "Gestalter"
     Gestalter.Close
-    
+
     Printlog "   - check template"
     FormatCharacter
     Kontext
@@ -537,8 +519,10 @@ testcase tiFormatStylist
         goto endsub
     end select
 
+    printlog "Open new doc"
     Call hNewDocument
     sleep 2
+    printlog "call the navigator"
     Kontext "Gestalter"
     if Gestalter.Exists Then
         Warnlog "- Stylist exists, perhaps not closed last time a Impress doc was open"
@@ -548,11 +532,14 @@ testcase tiFormatStylist
 
     FormatStylist
     Kontext "Gestalter"
+    printlog "opening graphics styles"
     Grafikvorlagen.Click
     sleep 1
+    printlog "Select number 1"
     Vorlagenliste.Select Num1        ' num1
     sleep 1
     Printlog "- open Grafic template Dialogs using the context menue , checking if all resources exist"
+    printlog "Opening context menu"
     Vorlagenliste.OpenContextMenu
     sleep 1
     hMenuSelectNr (2)
@@ -562,6 +549,7 @@ testcase tiFormatStylist
     Messagebox.SetPage TabText
     Kontext "TabText"
     sleep 1
+    printlog "Canceling dialog"
     TabText.Cancel
     sleep 1
 
@@ -569,18 +557,21 @@ testcase tiFormatStylist
         Kontext "Gestalter"
         Printlog "- presentation templates"
         sleep 1
+        printlog "presentation styles"
         Praesentationsvorlagen.Click
 
         Vorlagenliste.Select Num2
         sleep 1
+        printlog "opening context menu"
         Vorlagenliste.OpenContextMenu
         sleep 1
+        printlog "selecting modify"
         hMenuSelectNr (1)
         sleep 1
         Kontext
         if Messagebox.exists (5) then
             try
-                '                    Messagebox.SetPage TabArea
+                printlog "Messagebox.SetPage TabArea"
                 Kontext "TabArea"
                 if TabArea.Exists = false then
                     warnlog "Where is TabArea?"
@@ -597,88 +588,113 @@ testcase tiFormatStylist
         Kontext "Gestalter"
         sleep 1
 
+        printlog "Select number 3"
         Vorlagenliste.Select Num3
         sleep 1
+        printlog "opening context menu of number 3"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
+        printlog "Check the styles..."
         call hWalkTheStyles (1,1)
         Kontext
+        printlog "setting tabpage indents and spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         Kontext "TabEinzuegeUndAbstaende"
         sleep 1
+        printlog "Canceling tabpage"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
+        printlog "Select number 4"
         Vorlagenliste.Select Num4
         sleep 1
+        printlog "opening context menu of number 4"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
+        printlog "setting tabpage TabFont"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
+        printlog "setting tabpage TabFontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
+        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
+        printlog "canceling TabIndents and Spacing"
         TabEinzuegeUndAbstaende.Cancel
         sleep 1
         Kontext "Gestalter"
         sleep 1
 
+        printlog "opening context menu of number 5"
         Vorlagenliste.Select Num5
         sleep 1
+        printlog "opening context menu of number 5"
         Vorlagenliste.OpenContextMenu
         sleep 1
         hMenuSelectNr (1)
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Font"
         Messagebox.SetPage TabFont
         kontext "TabFont"
         Kontext
+        printlog "setting tabpage Tab FontEffects"
         Messagebox.SetPage TabFontEffects
         kontext "TabFontEffects"
         Kontext
+        printlog "setting tabpage TabIndents and Spacing"
         Messagebox.SetPage TabEinzuegeUndAbstaende
         kontext "TabEinzuegeUndAbstaende"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Bullets"
         Messagebox.SetPage TabBullet
         Kontext "TabBullet"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Numbering Type"
         Messagebox.SetPage TabNumerierungsart
         Kontext "TabNumerierungsart"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Graphics"
         Messagebox.SetPage TabGrafiken
         Kontext "TabGrafiken"
         sleep 1
         Kontext
+        printlog "setting tabpage Tab Numbering options"
         Messagebox.SetPage TabOptionenNumerierung
         Kontext "TabOptionenNumerierung"
         sleep 1
+        printlog "Canceling..."
         TabOptionenNumerierung.Cancel
         sleep 1
     endif
+    kontext "DocumentImpress"
+    printlog "Closing Stylist"
     if lcase(gPlatform) = "osx" then
         hTypekeys "<mod1 t>"
     else
-        hTypeKeys "<F11>"
+        Kontext "Gestalter"
+        Gestalter.Close 
     end if
     sleep 1
     Kontext "Gestalter"
     if Gestalter.Exists Then Warnlog "- Stylist could not be closed pressing F11"
-        Call hCloseDocument
-        
+    printlog "Closing doc."
+    Call hCloseDocument
+
 endcase 'tiFormatStylist
 '---------------------------------------------------------
 sub hWalkTheStyles (optional a as integer,optional b as integer)
@@ -686,115 +702,115 @@ sub hWalkTheStyles (optional a as integer,optional b as integer)
     dim i as integer
 
     if isMissing (a) then a=1
-        if isMissing (b) then b=2
-            i=1
-            if a <= i AND i <= b then
-                Kontext
-                Messagebox.SetPage TabLinie
-                kontext "TabLinie"
-                Call DialogTest ( TabLinie )
-                Kontext
-                Messagebox.SetPage TabArea
-                kontext "TabArea"
-                Call DialogTest ( TabArea, 1 )
-                FillOptions.Select 1  '  NoFill.Check
-                Call DialogTest ( TabArea, 1 )
-                FillOptions.Select 2
-                Call DialogTest ( TabArea, 2 )
-                FillOptions.Select 3
-                Call DialogTest ( TabArea, 3 )
-                FillOptions.Select 4
-                Call DialogTest ( TabArea, 4 )
-                FillOptions.Select 5
-                Call DialogTest ( TabArea, 5 )
-                Kontext
-                Messagebox.SetPage TabSchatten
-                kontext "TabSchatten"
-                Anzeigen.check
-                Call DialogTest ( TabSchatten )
-                Kontext
-                Messagebox.SetPage TabTransparenz
-                kontext "TabTransparenz"
-                KeineTransparenz.Check
-                LineareTransparenz.Check
-                Transparenzverlauf.Check
-                Kontext
-                Messagebox.SetPage TabFont
-                kontext "TabFont"
-                Call DialogTest ( TabFont )
-                Kontext
-                Messagebox.SetPage TabFontEffects
-                kontext "TabFontEffects"
-                Kontext
-                Messagebox.SetPage TabEinzuegeUndAbstaende
-                kontext "TabEinzuegeUndAbstaende"
-                Call DialogTest ( TabEinzuegeUndAbstaende )
-            endif
-            i=2
-            if a <= i AND i <= b then
-                Kontext
-                Messagebox.SetPage TabVerwalten
-                kontext "TabVerwalten"
-                Call DialogTest ( TabVerwalten )
-                Kontext
-                Messagebox.SetPage TabText
-                Kontext "TabText"
-                Call DialogTest ( TabText )
-                Kontext
-                Messagebox.SetPage TabLauftext
-                Kontext "TabLauftext"
-                Call DialogTest ( TabLauftext )
-                Kontext
-                Messagebox.SetPage TabBemassung
-                Kontext "TabBemassung"
-                Call DialogTest ( TabBemassung )
-                Kontext
-                Messagebox.setpage TabVerbinder
-                Kontext "TabVerbinder"
-                Call Dialogtest ( TabVerbinder )
-                Kontext
-                Messagebox.setpage TabAusrichtungAbsatz
-                Kontext "TabAusrichtungAbsatz"
-                Links.Check
-                Rechts.Check
-                Zentriert.Check
-                Blocksatz.Check
-                Kontext
-                Messagebox.setpage TabTabulator
-                Kontext "TabTabulator"
-                Neu.click
-                AlleLoeschen.click
-                Neu.click
-                Loeschen.click
-            endif
-            i=3
-            if a <= i AND i <= b then
-                Kontext
-                Messagebox.SetPage TabBullet
-                Kontext "TabBullet"
-                sleep 1
-                Call DialogTest (TabBullet)
-                sleep 1
-                Kontext
-                Messagebox.SetPage TabNumerierungsart
-                Kontext "TabNumerierungsart"
-                sleep 1
-                Call DialogTest (TabNumerierungsart)
-                sleep 1
-                Kontext
-                Messagebox.SetPage TabGrafiken
-                Kontext "TabGrafiken"
-                sleep 1
-                Call DialogTest (TabGrafiken)
-                sleep 1
-                Kontext
-                Messagebox.SetPage TabOptionenNumerierung
-                Kontext "TabOptionenNumerierung"
-                sleep 1
-                Call DialogTest (TabOptionenNumerierung)
-                sleep 1
-            endif
-            
+    if isMissing (b) then b=2
+    i=1
+    if a <= i AND i <= b then
+        Kontext
+        Messagebox.SetPage TabLinie
+        kontext "TabLinie"
+        Call DialogTest ( TabLinie )
+        Kontext
+        Messagebox.SetPage TabArea
+        kontext "TabArea"
+        Call DialogTest ( TabArea, 1 )
+        FillOptions.Select 1  '  NoFill.Check
+        Call DialogTest ( TabArea, 1 )
+        FillOptions.Select 2
+        Call DialogTest ( TabArea, 2 )
+        FillOptions.Select 3
+        Call DialogTest ( TabArea, 3 )
+        FillOptions.Select 4
+        Call DialogTest ( TabArea, 4 )
+        FillOptions.Select 5
+        Call DialogTest ( TabArea, 5 )
+        Kontext
+        Messagebox.SetPage TabSchatten
+        kontext "TabSchatten"
+        Anzeigen.check
+        Call DialogTest ( TabSchatten )
+        Kontext
+        Messagebox.SetPage TabTransparenz
+        kontext "TabTransparenz"
+        KeineTransparenz.Check
+        LineareTransparenz.Check
+        Transparenzverlauf.Check
+        Kontext
+        Messagebox.SetPage TabFont
+        kontext "TabFont"
+        Call DialogTest ( TabFont )
+        Kontext
+        Messagebox.SetPage TabFontEffects
+        kontext "TabFontEffects"
+        Kontext
+        Messagebox.SetPage TabEinzuegeUndAbstaende
+        kontext "TabEinzuegeUndAbstaende"
+        Call DialogTest ( TabEinzuegeUndAbstaende )
+    endif
+    i=2
+    if a <= i AND i <= b then
+        Kontext
+        Messagebox.SetPage TabVerwalten
+        kontext "TabVerwalten"
+        Call DialogTest ( TabVerwalten )
+        Kontext
+        Messagebox.SetPage TabText
+        Kontext "TabText"
+        Call DialogTest ( TabText )
+        Kontext
+        Messagebox.SetPage TabLauftext
+        Kontext "TabLauftext"
+        Call DialogTest ( TabLauftext )
+        Kontext
+        Messagebox.SetPage TabBemassung
+        Kontext "TabBemassung"
+        Call DialogTest ( TabBemassung )
+        Kontext
+        Messagebox.setpage TabVerbinder
+        Kontext "TabVerbinder"
+        Call Dialogtest ( TabVerbinder )
+        Kontext
+        Messagebox.setpage TabAusrichtungAbsatz
+        Kontext "TabAusrichtungAbsatz"
+        Links.Check
+        Rechts.Check
+        Zentriert.Check
+        Blocksatz.Check
+        Kontext
+        Messagebox.setpage TabTabulator
+        Kontext "TabTabulator"
+        Neu.click
+        AlleLoeschen.click
+        Neu.click
+        Loeschen.click
+    endif
+    i=3
+    if a <= i AND i <= b then
+        Kontext
+        Messagebox.SetPage TabBullet
+        Kontext "TabBullet"
+        sleep 1
+        Call DialogTest (TabBullet)
+        sleep 1
+        Kontext
+        Messagebox.SetPage TabNumerierungsart
+        Kontext "TabNumerierungsart"
+        sleep 1
+        Call DialogTest (TabNumerierungsart)
+        sleep 1
+        Kontext
+        Messagebox.SetPage TabGrafiken
+        Kontext "TabGrafiken"
+        sleep 1
+        Call DialogTest (TabGrafiken)
+        sleep 1
+        Kontext
+        Messagebox.SetPage TabOptionenNumerierung
+        Kontext "TabOptionenNumerierung"
+        sleep 1
+        Call DialogTest (TabOptionenNumerierung)
+        sleep 1
+    endif
+
 end sub 'hWalkTheStyles
 '---------------------------------------------------------
 testcase tFormatStylist
@@ -889,7 +905,7 @@ testcase tFormatStylist
         endif
     endif
     Call hCloseDocument
-    
+
 endcase 'tFormatStylist
 '--------------------------------------------------------
 function hSelectInList (window, sEntry as String) as Boolean
@@ -901,16 +917,16 @@ function hSelectInList (window, sEntry as String) as Boolean
     window.TypeKeys "<End>"
     sTemp = ""
     do
-    sLastTemp = sTemp
-    sTemp = window.GetText
-    window.TypeKeys "<Up>"
-loop while ((sEntry <> sTemp) AND (sLastTemp <> sTemp))
-if (sEntry = sTemp) then
-    window.TypeKeys "<Return>"
-    hSelectInList = TRUE
-else
-    hSelectInList = FALSE
-endif
+        sLastTemp = sTemp
+        sTemp = window.GetText
+        window.TypeKeys "<Up>"
+    loop while ((sEntry <> sTemp) AND (sLastTemp <> sTemp))
+    if (sEntry = sTemp) then
+        window.TypeKeys "<Return>"
+        hSelectInList = TRUE
+    else
+        hSelectInList = FALSE
+    endif
 
 end function 'hSelectInList
 '---------------------------------------------------------

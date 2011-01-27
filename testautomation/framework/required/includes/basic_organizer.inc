@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for the Basic Organizer dialog
 '*
@@ -35,7 +35,6 @@ testcase tUpdtBasicOrganizer
 
     printlog( "Update test for the Basic Organizer dialog" )
 
-    dim brc as boolean
     dim cTempString as string
     const TESTLIB = "zzzz"
 
@@ -48,7 +47,7 @@ testcase tUpdtBasicOrganizer
     kontext "Makro"
     if ( not makro.exists() ) then
         warnlog( "Macro Organizer is not open, aborting test" )
-        brc = hDestroyDocument()
+        hDestroyDocument()
         goto endsub
     else
         printlog( "Successfully opened the MacroOrganizer" )
@@ -68,7 +67,7 @@ testcase tUpdtBasicOrganizer
         printlog( "TabModule is not open, the test cannot continue" )
         kontext "Makro"
         Makro.cancel()
-        brc = hDestroyDocument()
+        hDestroyDocument()
         goto endsub
     endif
         
@@ -125,7 +124,7 @@ testcase tUpdtBasicOrganizer
         Neu.click()
         kontext "NeueBibliothek"
         call DialogTest( NeueBibliothek )
-        Bibliotheksname.setText( "zzzz" )
+        Bibliotheksname.setText( TESTLIB )
         NeueBibliothek.ok()
     else
         warnlog( "There is a problem accessing the New Libraries dialog" )
@@ -138,7 +137,7 @@ testcase tUpdtBasicOrganizer
         Neu.click()
         kontext "NeueBibliothek"
         call DialogTest( NeueBibliothek )
-        Bibliotheksname.setText( "zzzz" )
+        Bibliotheksname.setText( TESTLIB )
         NeueBibliothek.ok()
     else
         warnlog( "There is a problem accessing the New Libraries dialog" )
@@ -192,7 +191,7 @@ testcase tUpdtBasicOrganizer
     printlog( "Try to delete the library" )
     
     cTempString = BibliotheksListe.getSelText() 
-    if ( cTempString = "zzzz" ) then
+    if ( cTempString = TESTLIB ) then
         printlog( "Delete" )
         Loeschen.click()
         Kontext "Active"
@@ -223,8 +222,7 @@ testcase tUpdtBasicOrganizer
     Makro.cancel()
     
     printlog( "Close the document" )
-    brc = hDestroyDocument()
-
+    hDestroyDocument()
 
 endcase
 

@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : thorsten.bosbach@sun.com
+'*  owner : thorsten.bosbach@oracle.com
 '*
 '*  short description : Function: Tools->Options: Load/Save
 '*

@@ -25,28 +25,16 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test of Hangul/Hanja Conversion - 3
-'*
-'************************************************************************
-'*
-' #1 tHHOptions_1             'User defined dictionaries
-' #1 tHHOptions_2             'Options - New 1
-' #1 tHHOptions_3             'Options - New 2
-' #1 tHHOptions_4             'Options - New 3
-' #1 tHHOptions_5             'Options - Edit (Book)
-' #1 tHHOptions_6             'Options - Edit (Original) -1
-' #1 tHHOptions_7             'Options - Edit (Original) -2
-' #1 tHHOptions_8             'Options - Edit (Original) -3
-' #1 tHHOptions_9             'Options - Edit (Original) -4
-' #1 tHHOptions_10            'Options - Edit (Original) -5
-' #1 tHHOptions_11            'Options - Edit (Original) -6
-' #1 tHHOptions_12            'Options - Edit (Original) -7
 '*
 '\***********************************************************************
 
 testcase tHHOptions_1
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile  as String
 
@@ -59,12 +47,13 @@ testcase tHHOptions_1
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
+
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + there should be no entries in User defined dictionaries
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion : WaitSlot
    Kontext "HangulHanjaConversion"
 
      Options.Click
@@ -84,6 +73,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_2
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile        as String
   Dim  sDictionaryName1 as String
@@ -100,14 +92,14 @@ testcase tHHOptions_2
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
   '/// + then press new button , enter 1 new dictionar name ,
   '/// + close the new dictionary dialog , and add another new
   '/// + dictionary name
-   ToolsLanguageHangulHanjaConversion
+   ToolsLanguageHangulHanjaConversion: WaitSlot
    Kontext "HangulHanjaConversion"
 
      Options.Click
@@ -165,6 +157,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_3
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile       as String
   Dim  sDictionaryName as String
@@ -179,7 +174,7 @@ testcase tHHOptions_3
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese characters
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -226,6 +221,10 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_4
+warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
+
 
   Dim  sTestFile       as String
   Dim  sDictionaryName as String
@@ -240,7 +239,7 @@ testcase tHHOptions_4
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -288,6 +287,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_5
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile        as String
   Dim  sDictionaryName1 as String
@@ -304,7 +306,7 @@ testcase tHHOptions_5
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -355,6 +357,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_6
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                      as String
   Dim  sDictionaryName                as String
@@ -376,7 +381,7 @@ testcase tHHOptions_6
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -463,6 +468,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_7
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                      as String
   Dim  sDictionaryName                as String
@@ -484,7 +492,7 @@ testcase tHHOptions_7
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -570,6 +578,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_8
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile           as String
   Dim  sDictionaryName     as String
@@ -589,7 +600,7 @@ testcase tHHOptions_8
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -659,6 +670,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_9
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                     as String
   Dim  sDictionaryName               as String
@@ -676,7 +690,7 @@ testcase tHHOptions_9
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -742,6 +756,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_10
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                     as String
   Dim  sDictionaryName               as String
@@ -759,7 +776,7 @@ testcase tHHOptions_10
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -827,6 +844,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_11
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile                     as String
   Dim  sDictionaryName               as String
@@ -844,7 +864,7 @@ testcase tHHOptions_11
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,
@@ -907,6 +927,9 @@ endcase
 '-----------------------------------------------------------------
 
 testcase tHHOptions_12
+    warnlog( "#i111911# - Test is broken beyond repait, please rewrite" )
+    goto endsub
+
 
   Dim  sTestFile             as String
   Dim  sDictionaryName       as String
@@ -924,7 +947,7 @@ testcase tHHOptions_12
 
   '/// Open a test file , which includes some
   '/// + Korean chacters and chinese character
-   Call hFileOpen(sTestFile)
+   hFileOpenLocally( sTestFile )
    Call wTypeKeys "<MOD1 Home>"
 
   '/// Tools / HangulHanjaConversion , Press Options button ,

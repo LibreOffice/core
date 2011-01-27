@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Library for DocBook XML Im-/Export Test
 '*
@@ -43,7 +43,7 @@ sub tDocBookXMLtestdocs
         exit sub
     end if        
     'Calculating how many documents are in that directory (max. 500)
-    if hDirectoryExists(sSourcePath) then
+    if FileExists(sSourcePath) then
         'Get the file list and put it in a list (max. 500 per directory!)
         call GetAllFileList(sSourcePath, "*.xml" , sSourceDocuments())  
         iNumberOfDocuments = ListCount(sSourceDocuments())
