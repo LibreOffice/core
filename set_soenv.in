@@ -967,7 +967,7 @@ $XINC                 = PathFormat('@XINC@'); # X11 includes
 
 # Mac OS X/Darwin only variables.
 if ( $platform =~ m/darwin/ )
-{  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
+{  $FRAMEWORKSHOME       = $ds."Developer".$ds."SDKs".$ds."MacOSX10.4u.sdk".$ds."System".$ds."Library".$ds."Frameworks";
    if ( $XLIB eq "no_x_libraries" ) {
       $GUIBASE  = "aqua";
    } else {
