@@ -31,6 +31,7 @@ import com.sun.star.awt.grid.XGridColumnModel;
 import com.sun.star.awt.grid.XGridDataModel;
 import com.sun.star.awt.grid.XMutableGridDataModel;
 import com.sun.star.awt.grid.XSortableMutableGridDataModel;
+import com.sun.star.beans.Pair;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.ContainerEvent;
 import com.sun.star.container.XContainerListener;
@@ -273,7 +274,7 @@ public class GridControl
         while ( m_columnModel.getColumnCount() != 0 )
         {
             final int columnCount = m_columnModel.getColumnCount();
-            final int removeColumnIndex = (new Random()).nextInt( columnCount );
+            final int removeColumnIndex = m_randomGenerator.nextInt( columnCount );
             m_columnModel.removeColumn( removeColumnIndex );
             events = listener.assertExclusiveRemovalEvents();
             listener.reset();
@@ -306,6 +307,83 @@ public class GridControl
         assertEquals( "addColumn notifies the wrong number of insertion events", 1, events.size() );
         final int insertionIndex = impl_assertInteger( events.get(0).Accessor );
         assertEquals( insertionIndex, newColumn.getIndex() );
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    @Test
+    public void testSortableDataModel() throws Exception
+    {
+        impl_recreateGridModel();
+
+        final int colCount = 3;
+        final int rowCount = 10;
+        // initialize with some data
+        final Object[][] data = new Object[][] {
+            new Object[] { 15, 17, 0 },
+            new Object[] { 9, 8, 14 },
+            new Object[] { 17, 2, 16 },
+            new Object[] { 0, 7, 14 },
+            new Object[] { 10, 16, 16 },
+            new Object[] { 2, 8, 10 },
+            new Object[] { 4, 8, 3 },
+            new Object[] { 7, 9, 0 },
+            new Object[] { 15, 6, 19 },
+            new Object[] { 2, 14, 19 }
+        };
+        final Object[] rowHeadings = new Object[] {
+            0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+        };
+        // ensure consistency of the test data
+        assertEquals( rowHeadings.length, rowCount );
+        assertEquals( data.length, rowCount );
+        for ( Object[] rowData : data )
+            assertEquals( rowData.length, colCount );
+
+        // add the test data
+        m_dataModel.addRows( rowHeadings, data );
+        assertEquals( rowCount, m_dataModel.getRowCount() );
+        assertEquals( colCount, m_dataModel.getColumnCount() );
+
+        // sort by each column
+        for ( int colIndex = 0; colIndex < colCount; ++colIndex )
+        {
+            for ( boolean ascending : new boolean[] { true, false } )
+            {
+                m_dataModel.sortByColumn( colIndex, ascending );
+                Pair currentSortOrder = m_dataModel.getCurrentSortOrder();
+                assertEquals( "invalid current sort column (column " + colIndex + ")", ((Integer)currentSortOrder.First).intValue(), colIndex );
+                assertEquals( "invalid current sort direction", ((Boolean)currentSortOrder.Second).booleanValue(), ascending );
+
+                /*for ( int i=0; i<rowCount; ++i )
+                {
+                    for ( int j=0; j<colCount; ++j )
+                        System.out.print( m_dataModel.getCellData( j, i ).toString() + ", " );
+                    System.out.println();
+                }*/
+
+                // verify the data is actually sorted by this column
+                for ( int rowIndex = 0; rowIndex < rowCount - 1; ++rowIndex )
+                {
+                    final Object currentValue = m_dataModel.getCellData( colIndex, rowIndex );
+                    final int currentIntValue = impl_assertInteger( currentValue );
+                    final Object nextValue = m_dataModel.getCellData( colIndex, rowIndex + 1 );
+                    final int nextIntValue = impl_assertInteger( nextValue );
+                    assertTrue( "data in row " + rowIndex + " is actually not sorted " + ( ascending ? "ascending" : "descending" ),
+                        ascending   ? currentIntValue <= nextIntValue
+                                    : currentIntValue >= nextIntValue );
+
+                    // ensure the data in the other columns, and the row headings, are sorted as well
+                    final Object rowHeading = m_dataModel.getRowHeading( rowIndex );
+                    final int unsortedRowIndex = impl_assertInteger( rowHeading );
+                    for ( int innerColIndex = 0; innerColIndex < colCount; ++innerColIndex )
+                    {
+                        assertEquals( "sorted row " + rowIndex + ", unsorted row " + unsortedRowIndex + ", col " + innerColIndex +
+                            ": wrong data",
+                            data[unsortedRowIndex][innerColIndex], m_dataModel.getCellData( innerColIndex, rowIndex ) );
+                    }
+                }
+            }
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -405,8 +483,13 @@ public class GridControl
     {
         System.out.println( "--------------------------------------------------------------------------------" );
         System.out.println( "starting class: " + GridControl.class.getName() );
-        System.out.println( "connecting ..." );
+        System.out.print( "connecting ... " );
         m_connection.setUp();
+        System.out.println( "done.");
+
+        final long seed = m_randomGenerator.nextLong();
+        m_randomGenerator.setSeed( seed );
+        System.out.println( "seeding random number generator with " + seed );
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -513,6 +596,7 @@ public class GridControl
 
     // -----------------------------------------------------------------------------------------------------------------
     private static final OfficeConnection m_connection = new OfficeConnection();
+    private static Random m_randomGenerator = new Random();
     private final XComponentContext m_context;
 
     private XPropertySet                    m_gridControlModel;
