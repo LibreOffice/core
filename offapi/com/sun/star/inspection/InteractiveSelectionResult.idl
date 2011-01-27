@@ -42,7 +42,7 @@ enum InteractiveSelectionResult
 {
     /** The interactive selection of a property value was canceled.
     */
-    Canceled,
+    Cancelled,
 
     /** The interactive selection of a property value succeeded, and the
         new property value chosen by the user has already been set at the
