@@ -32,7 +32,7 @@
 *   (die defines setzen sich aus "_SVSTDARR_" und dem Namen des Array
 *    ohne "Sv" zusammen)
 *
-*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs, SvShorts
+*   VarArr:     SvBools, SvULongs, SvUShorts, SvLongs
 *   PtrArr:     SvStrings, SvStringsDtor
 *   SortArr:    SvStringsSort, SvStringsSortDtor,
 *               SvStringsISort, SvStringsISortDtor,
@@ -120,11 +120,6 @@ SV_DECL_VARARR_VISIBILITY( SvLongs, long, 1, 1, SVL_DLLPUBLIC )
 #ifndef _SVSTDARR_LONGSSORT_DECL
 SV_DECL_VARARR_SORT_VISIBILITY( SvLongsSort, long, 1, 1, SVL_DLLPUBLIC )
 #define _SVSTDARR_LONGSSORT_DECL
-#endif
-
-#ifndef _SVSTDARR_SHORTS_DECL
-SV_DECL_VARARR_VISIBILITY( SvShorts, short, 1, 1, SVL_DLLPUBLIC )
-#define _SVSTDARR_SHORTS_DECL
 #endif
 
 #include <tools/string.hxx>
