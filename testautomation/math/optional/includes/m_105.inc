@@ -408,7 +408,8 @@ testcase tToolsCatalog
                     SymboleMath.close
                 catch
                     if ((2=i)AND(11=j))then
-                        warnlog "#i42011# Expected: Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
+                        '#i42011# 
+                        warnlog "Expected: Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
                     else
                         warnlog "Not Expected! Timeout on closing Tools->Catalog with this character. (" + i + "/" + iSymbolSets + ")(" + j + "/" + x(i) + ")"
                     endif
@@ -570,7 +571,8 @@ testcase tToolsCatalogNew
                     try
                         SymbolSet.select "TBOnewSymbolSet"
                     catch
-                        qaerrorlog "#i64504# Symbol set name is not saved on exiting OOo"
+                        'i64504
+                        qaerrorlog "Symbol set name is not saved on exiting OOo"
                         SymbolSet.select ""
                     endcatch
                     SymbolSet.setText "TBOnewSymbolSet"
