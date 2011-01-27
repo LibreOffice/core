@@ -406,8 +406,11 @@ gb_Library_PLAINEXT := .lib
 gb_Library_PLAINLIBS_NONE += \
     advapi32 \
     gdi32 \
+    gdiplus \
     gnu_getopt \
+    imm32\
     kernel32 \
+    msimg32 \
     msvcrt \
     mpr \
     oldnames \
@@ -418,6 +421,7 @@ gb_Library_PLAINLIBS_NONE += \
     user32 \
     uuid \
     uwinapi \
+    winspool \
     z \
 
 gb_LinkTarget_LAYER := \
