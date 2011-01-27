@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+             xmlns:cnt="http://openoffice.org/2007/layout/container"
+             title="Splitter Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox>
+        <hsplitter>
+            <pushbutton label="Left" />
+            <pushbutton label="Right" />
+        </hsplitter>
+        <okbutton cnt:expand="false" />
+    </vbox>
+</dialog>

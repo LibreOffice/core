@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="style_XStyle" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'     - Global oStandartStyle As Object
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.style.XStyle
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim cName, cObjName As String
+
+    Test.StartMethod("isUserDefined()")
+    bOK = true
+    bOK = bOK AND oObj.isUserDefined() AND NOT oStandartStyle.isUserDefined()
+    Test.MethodTested("isUserDefined()", bOK)
+
+    Test.StartMethod("isInUse()")
+    bOK = true
+    bOK = bOK AND oObj.isInUse()
+    Test.MethodTested("isInUse()", bOK)
+
+    Test.StartMethod("setParentStyle()")
+    Test.StartMethod("getParentStyle()")
+    bOK = true
+    cName = oStandartStyle.Name
+    Out.Log("setting name to '" &amp; cName &amp; "'")
+    oObj.setParentStyle(cName)
+    cObjName = oObj.getParentStyle()
+    Out.Log("name is '" &amp; cObjName &amp; "'")
+    bOK = bOK AND cObjName = cName
+    Test.MethodTested("getParentStyle()", bOK)
+    Test.MethodTested("setParentStyle()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

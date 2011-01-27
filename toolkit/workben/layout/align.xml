@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dialog xmlns="http://openoffice.org/2007/layout"
+        xmlns:cnt="http://openoffice.org/2007/layout/container"
+        title="Align Test" optimumsize="true" has_border="true" sizeable="true" moveable="true">
+    <vbox>
+    <!-- Ver Top -->
+    <hbox>
+        <align halign="0" valign="0">
+        <pushbutton label="Top Left" />
+        </align>
+        <align halign="0.5" valign="0">
+        <pushbutton label="Top Middle"  />
+        </align>
+        <align halign="1" valign="0">
+        <pushbutton label="Top Right"  />
+        </align>
+    </hbox>
+    <!-- Ver Middle -->
+    <hbox>
+        <align halign="0" valign="0.5">
+        <pushbutton label="Middle Left" />
+        </align>
+        <align halign="0.5" valign="0.5">
+        <pushbutton label="Middle Middle" />
+        </align>
+        <align halign="1" valign="0.5">
+        <pushbutton label="Middle Right" />
+        </align>
+    </hbox>
+    <!-- Ver Bottom -->
+    <hbox>
+        <align halign="0" valign="1">
+        <pushbutton label="Bottom Left" />
+        </align>
+        <align halign="0.5" valign="1">
+        <pushbutton label="Bottom Middle" />
+        </align>
+        <align halign="1" valign="1">
+        <pushbutton label="Bottom Right" />
+        </align>
+    </hbox>
+    </vbox>
+</dialog>

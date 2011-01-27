@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBAUI_AUTOCONTROLS_HRC_
+#include "AutoControls.hrc"
+#endif
+
+String STR_DBASE_PATH_OR_FILE
+{
+    Text[ en-US ] = "Path to the dBASE files";
+};
+
+String STR_FLAT_PATH_OR_FILE
+{
+    Text[ en-US ] = "Path to the text files";
+};
+
+String STR_CALC_PATH_OR_FILE
+{
+    Text[ en-US ] = "Path to the spreadsheet document";
+};
+
+String STR_NAME_OF_ODBC_DATASOURCE
+{
+    Text[ en-US ] = "Name of the ODBC data source on your system";
+};
+
+String STR_MYSQL_DATABASE_NAME
+{
+    Text[ en-US ] = "Name of the MySQL database";
+};
+
+String STR_ORACLE_DATABASE_NAME
+{
+    Text[ en-US ] = "Name of the Oracle database";
+};
+
+String STR_ADABAS_DATABASE_NAME
+{
+    Text[ en-US ] = "Name of the Adabas D database";
+};
+
+String STR_MSACCESS_MDB_FILE
+{
+    Text[ en-US ] = "Microsoft Access database file";
+};
+
+String STR_NO_ADDITIONAL_SETTINGS
+{
+    Text[ en-US ] = "No more settings are necessary. To verify that the connection is working, click the '%test' button.";
+};
+
+String STR_COMMONURL
+{
+    Text [ en-US ] = "Datasource URL" ;
+};
+
+String STR_HOSTNAME
+{
+    Text[ en-US ] = "~Host name";
+};
+
+String STR_MOZILLA_PROFILE_NAME
+{
+    Text[ en-US ] = "~Mozilla profile name";
+};
+
+String STR_THUNDERBIRD_PROFILE_NAME
+{
+    Text[ en-US ] = "~Thunderbird profile name";
+};
+
+// -------------------------------------------------------------------------------------------------

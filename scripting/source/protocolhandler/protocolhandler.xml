@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   ScriptProtocolHandler   </module-name>
+    <component-description>
+        <author> Noel Power</author>
+        <name>  com.sun.star.frame.ProtocolHandler</name>
+        <description>
+    This component is part of the Scripting Framework
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  c++ </language>
+        <status value="com"/>
+        <supported-service>  com.sun.star.frame.ProtocolHandler </supported-service>
+        <type>  com.sun.star.frame.XDispatchProvider </type>
+        <type>  com.sun.star.frame.XNotifyingDispatch </type>
+        <type>  com.sun.star.lang.XServiceInfo </type>
+        <type>  com.sun.star.lang.XInitialization </type>
+        <type>  com.sun.star.io.IOException </type>
+        <type>  com.sun.star.uri.XUriReference </type>
+        <type>  com.sun.star.uri.XUriReferenceFactory </type>
+        <type>  com.sun.star.uri.XVndSunStarScriptUrl </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper2$(COM)   </runtime-module-dependency>
+    <runtime-module-dependency> cppu2   </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>

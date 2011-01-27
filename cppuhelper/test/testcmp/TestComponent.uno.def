@@ -1,0 +1,11 @@
+HEAPSIZE	  0
+EXPORTS
+	component_getImplementationEnvironmentExt;
+	component_getFactory;
+	component_writeInfo;
+	?g_envDcp@@3VOUString@rtl@@A;
+
+
+
+
+

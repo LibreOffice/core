@@ -1,0 +1,1105 @@
+.\\\ WRITER 5 \\\
+S:\APP\SW5\STARLAB.LAY
+S:\APP\SW5\TREIBER\PS.BIN
+12
+00012
+00010
+00940
+00001
+00001
+00001
+00002
+00002
+00000
+00000
+00000
+00000
+N 383284761 Mm
+S 383284859 484 116 4
+D 0 0 
+N 383996714 Mm
+S 383996741 494 117 4
+D 0 0 
+N 384006675 Mm
+S 384006697 502 117 4
+D 0 0 
+N 384133637 Mm
+S 384133699 502 117 3
+D 384133693 3 PostScript
+               
+               
+                              
+                              
+                              
+                              
+                    
+                    
+                    
+                    
+16836
+11338
+0
+0
+JA
+0
+0
+0
+JA
+
+
+
+9
+20
+4
+Helvetica 14 Pt
+H1
+97
+20
+0
+Helvetica 12 Pt
+H2
+65
+23
+0
+Helvetia 10 Pt
+H3
+65
+20
+0
+Courier 10 Pt
+C1
+1
+23
+0
+Helvetica 14 Pt Fett
+F1
+65
+27
+2
+Helvetica 12 Pt Fett
+F2
+65
+23
+2
+Helvetia 10 Pt Fett
+F3
+65
+20
+0
+Tasten
+T1
+129
+27
+0
+Grundschrift
+GA
+97
+20
+0
+Grund - Absatzlayout V1.5-LSLP8
+GA
+0
+0
+0
+0
+9
+97
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Grundabsatzlayout-rechtsbndig
+GR
+0
+0
+0
+0
+9
+35
+20
+0
+2
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Listing
+LI
+0
+0
+0
+0
+0
+1
+23
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift
+U0
+0
+0
+0
+0
+5
+35
+28
+2
+1
+0
+1
+0
+NEIN
+JA
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift X.
+U1
+0
+0
+0
+0
+5
+35
+28
+2
+1
+0
+1
+0
+NEIN
+JA
+240
+1
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift X.X.
+U2
+0
+0
+0
+0
+6
+35
+24
+2
+1
+0
+1
+0
+NEIN
+JA
+240
+2
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift X.X.X.
+U3
+0
+0
+0
+0
+6
+35
+20
+2
+1
+0
+1
+0
+NEIN
+JA
+240
+3
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift X.X.X.X.
+U4
+0
+0
+0
+0
+7
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+4
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+šberschrift X.X.X.X.X.
+U5
+0
+0
+0
+0
+7
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+5
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Einrckung 4 Sp / 4 Sp
+E1
+576
+576
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Einrckung 8 Sp / 8 Sp
+E2
+1150
+1150
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Einrckung 0 Sp / 4 Sp
+E3
+0
+564
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Einrckung 4 Sp / 8 Sp
+E4
+564
+1150
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Funktionsparameter
+FP
+0
+2891
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Inhaltsverzeichnis
+IV
+0
+0
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+1
+7653
+0
+Stichwortverzeichnis
+SV
+0
+0
+0
+0
+9
+35
+20
+0
+1
+141
+1
+32
+NEIN
+NEIN
+240
+0
+1
+3744
+1
+Fettschrift einzeilig
+F1
+0
+0
+0
+0
+7
+65
+20
+2
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+576
+0
+1152
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Punktliste
+PL
+0
+564
+0
+0
+9
+35
+20
+0
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+13
+566
+0
+1133
+0
+1728
+0
+2304
+0
+2880
+0
+3456
+0
+4032
+0
+4608
+0
+5184
+0
+5760
+0
+6336
+0
+6912
+0
+7488
+0
+Fuázeile
+FZ
+0
+0
+0
+0
+3
+97
+20
+2
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+1
+7200
+1
+Kopfzeile
+KZ
+0
+0
+0
+0
+3
+97
+20
+2
+1
+0
+1
+0
+NEIN
+NEIN
+240
+0
+1
+7920
+1
+Grund-Seitenlayout
+GS
+566
+849
+2436
+679
+1416
+1416
+0
+0
+1
+0
+0
+0
+AkzBf3#_PFAD##_TEXTNAME#	$-#_S#-
+Bf3ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+AfzBf3$Date:   05 Jul 1991 13:18:52  $	$Revision:   1.1  $
+
+Stichwortverzeichnis
+SV
+566
+849
+2437
+680
+1416
+1416
+566
+0
+2
+0
+0
+0
+AliBf3Stichwortverzeichnis
+AliBf3ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+ÄÄÄÄÄÄÄ
+
+Ali6Bf3- #_S# -B00
+
+GS - ohne Fuázeile
+KF
+566
+849
+2437
+680
+1416
+1416
+0
+0
+1
+0
+0
+0
+AliBf3#_KATEGORIE# / #_THEMA2#
+AliBf3ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+Ali
+
+Inhaltsverzeichnis
+IV
+566
+849
+2437
+680
+1416
+1416
+0
+0
+1
+0
+0
+0
+AliBf3Inhaltsverzeichnis
+AliBf3ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+ÄÄÄÄÄÄÄ
+
+Ali
+
+
+
+
+0
+
+0
+
+Au0nderungen von der rsc-Compilerversion 1.12 zur Version 1.13
+
+Aga- Die L„nge eines Strings in den Extradaten hat sich ver„ndert.
+- Das Schlsselwort RESOURCE kann angegeben werden.
+- Die Klasse InfoBox wurde gestrichen, sie kann ber MessageBox definiert werden.
+- Die Klasse String kann jetzt als lokale Resource angegeben werden.
+- Die Abkrzung ID fr IDENTIFIER wurde gestrichen.
+- Anstelle von ENABLE gibt es jetzt DISABLE mit gegenteiliger Bedeutung.
+- Anstelle von VISIBLE gibt es jetzt HIDE mit gegenteiliger Bedeutung.
+- Jede Konstruktion mit Hilfen von AUTO_ID wurde gestrichen.
+- Anstelle von Justify = LEFT oder CENTER oder RIGHT wird jetzt Left = TRUE oder Center = 
+TRUE oder Right = TRUE geschrieben.
+- Innerhalb der Klasse Brush heiát es statt
+	Color BRUSHCOLOR {...}; jetzt
+	BrushColor = Color { ... };
+  und statt
+	Color FILLCOLOR { ... }; jetzt
+	FillColor = Color { ... };
+- Innerhalb der Klass Pen heiát es statt
+	Color { ... }; jetzt
+	PenColor = Color { ... };
+- Innerhalb der Klasse MapMode sind die Schlsselw”rter HORIZONTALSCALE und 
+VERTICALSCAL weggefallen. XSCALE und YSCALE sind jetzt Tupel.
+- Innerhalb der Klasse Accelerator heiát es statt
+	Accelerator {
+		AcceleratorKey { ... };
+		AcceleratorKey { ... };
+				.
+				.
+				.
+	}; jetzt
+	Accelerator {
+		KeyList = {
+			AcceleratorKey { ... };
+			AcceleratorKey { ... };
+		};
+	};
+- Innerhalb der Klasse AcceleratorKey heiát es statt
+	AcceleratorKey {
+		Accelerator { ... };
+	}; jetzt
+	AcceleratorKey {
+		SubAccelerator = Accelerator { ... };
+	};
+- Innerhalb der Klasse OutputDevice heiát es statt
+	OutputDevice {
+		Pen { ... };
+		Brush BACKGROUNDBRUSH { ... };
+		Brush FILLINBRUSH { ... };
+		Font { ... };
+		MapMode { ... };
+	}; jetzt
+	OutputDevice {
+		OutputPen = Pen { ... };
+		BackGroundBrush = Brush { ... };
+		FillInBrush = Brush { ... };
+		OutputFont = Font { ... };
+		OutputMapMode = MapMode { ... };
+	};
+- Innerhalb der Klasse Window heiát es statt
+	Window {
+		Pointer { ... };
+	}; jetzt
+	WindowPointer = Pointer { ... };
+- Das Schlsselwort FOCUS wurde gestrichen.
+- Windows die automatisch geladen werden sollen werden jetzt durch
+	Window {
+		WinChilds = {
+			FixedText { ... };
+			FixedText { ... };
+		};
+	}; spezifiziert.
+- Innerhalb der Klasse WorkWindow heiát es statt
+	WorkWindow {
+		Icon { ... };
+	}; jetzt
+	WorkWindow {
+		WorkWindowIcon = Icon { ... };
+	};
+- In der Klasse DialogBox wird
+	Mode = SYSTEMMODAL oder Mode = APPLICATIONMODAL durch
+	AppModal = TRUE oder SysModal = TRUE ersetzt.
+
+- Innerhalb der Klasse Menu heiát es statt
+	Menu {
+		MenuItem { ... };
+		MenuItem { ... };
+				.
+				.
+				.
+	}; jetzt
+	Menu {
+		ItemList = {
+			MenuItem { ... };
+			MenuItem { ... };
+		};
+	};
+und statt
+	Menu { ... Separator; ... }; jetzt
+	Menu { ...
+		MenuItem { Seperator = TRUE; };
+		...
+	};
+- Innerhalb der Klasse MenuItem heiát es statt
+	MenuItem {
+		Menu { ... };
+	}; jetzt
+	MenuItem {
+		SubMenu = Menu { ... };
+	};
+- Innerhalb der Klasse ListBox heiát es statt
+	ListBox {
+		StringList = "Ich", "heiáe", "Eddie";
+	}; jetzt
+	ListBox {
+		StringList = { "Ich"; "heiáe"; "Eddie"; };
+	};
+

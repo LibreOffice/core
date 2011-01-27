@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+/* StarView ressource file */
+
+#include "olmenu.hrc"
+#include "helpid.h"
+
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
+#define SEPARATOR   MenuItem { Separator = TRUE; };
+
+Menu MN_SPELL_POPUP
+{
+    ItemList =
+    {
+        MenuItem
+        {
+            Identifier = MN_IGNORE_WORD ;
+            HelpID = HID_LINGU_IGNORE_WORD ;
+            Text [ en-US ] = "Ignore All" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_ADD_TO_DIC ;
+            HelpID = HID_LINGU_ADD_WORD ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "~Add" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_AUTOCORR ;
+            HelpID = HID_LINGU_AUTOCORR ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "AutoCorrect" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_SPELLING_DLG ;
+            HelpID = HID_LINGU_SPELLING_DLG ;
+            Text [ en-US ] = "~Spellcheck..." ;
+        };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_SELECTION ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Selection" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_PARAGRAPH ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Paragraph" ;
+        };
+/*
+       MenuItem
+        {
+            Identifier = MN_SET_LANGUAGE_ALL_TEXT ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for all Text" ;
+        };
+*/
+    };
+};
+String STR_WORD
+{
+    Text [ en-US ] = "Word is " ;
+};
+String STR_PARAGRAPH
+{
+    Text [ en-US ] = "Paragraph is " ;
+};
+String STR_SPELL_OK
+{
+    Text [ en-US ] = "The spellcheck is complete." ;
+};
+String STR_HYP_OK
+{
+    Text [ en-US ] = "Hyphenation completed" ;
+};
+String STR_LANGSTATUS_NONE
+{
+    Text [ en-US ] = "None (Do not check spelling)" ;
+};
+String STR_RESET_TO_DEFAULT_LANGUAGE
+{
+    Text [ en-US ] = "Reset to Default Language" ;
+    Text [ x-comment ] = " ";
+};
+String STR_LANGSTATUS_MORE
+{
+    Text [ en-US ] = "More..." ;
+};
+String STR_IGNORE_SELECTION
+{
+    Text [ en-US ] = "Ignore" ;
+};
+
+Image IMG_INFO_16
+{
+    ImageBitmap = Bitmap { File = "info_16.png" ; };
+    MASKCOLOR
+};
+

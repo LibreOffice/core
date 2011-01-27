@@ -1,0 +1,123 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _CHART2_RESOURCE_TRENDLINE_HXX
+#define _CHART2_RESOURCE_TRENDLINE_HXX
+
+#include "res_Trendline_IDs.hrc"
+#include "HelpIds.hrc"
+
+#define RESOURCE_TRENDLINE(availablewidth, yoffset) \
+FixedLine FL_TYPE \
+{ \
+    Pos = MAP_APPFONT( 6 ,6  ); \
+    Size = MAP_APPFONT( availablewidth - 12 ,8 ); \
+    Text[ en-US ] = "Regression Type"; \
+}; \
+RadioButton RB_NONE \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_NONE; \
+    Pos = MAP_APPFONT( 29, 22  ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~None"; \
+}; \
+RadioButton RB_LINEAR \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_LINEAR; \
+    Pos = MAP_APPFONT( 29, 22 + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~Linear"; \
+}; \
+RadioButton RB_LOGARITHMIC \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_LOGARITHMIC; \
+    Pos = MAP_APPFONT( 29, 44  + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "L~ogarithmic"; \
+}; \
+RadioButton RB_EXPONENTIAL \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_EXPONENTIAL; \
+    Pos = MAP_APPFONT( 29, 66 + yoffset  ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "E~xponential"; \
+}; \
+RadioButton RB_POWER \
+{ \
+    HelpId = HID_SCH_TRENDLINE_RB_POWER; \
+    Pos = MAP_APPFONT( 29, 88 + yoffset ); \
+    Size = MAP_APPFONT( 100, 10 ); \
+    Text[ en-US ] = "~Power"; \
+}; \
+FixedImage FI_NONE \
+{ \
+    Pos = MAP_APPFONT( 10, 18 ); \
+    Size = MAP_APPFONT( 18, 18 ); \
+}; \
+FixedImage FI_LINEAR \
+{ \
+    Pos = MAP_APPFONT( 10, 18 + yoffset ); \
+    Size = MAP_APPFONT( 18, 18 ); \
+}; \
+FixedImage FI_LOGARITHMIC \
+{ \
+    Pos = MAP_APPFONT( 10, 40 + yoffset ); \
+    Size = MAP_APPFONT( 18, 18 ); \
+}; \
+FixedImage FI_EXPONENTIAL \
+{ \
+    Pos = MAP_APPFONT( 10, 62 + yoffset ); \
+    Size = MAP_APPFONT( 18, 18 ); \
+}; \
+FixedImage FI_POWER \
+{ \
+    Pos = MAP_APPFONT( 10, 84 + yoffset ); \
+    Size = MAP_APPFONT( 18, 18 ); \
+}; \
+FixedLine FL_EQUATION \
+{ \
+    Pos = MAP_APPFONT( 6, 108 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 12, 8 ); \
+    Text[ en-US ] = "Equation"; \
+}; \
+CheckBox CB_SHOW_EQUATION \
+{ \
+    HelpId = HID_SCH_TRENDLINE_SHOW_EQUATION; \
+    Pos = MAP_APPFONT( 10, 120 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 20, 10 ); \
+    TabStop = TRUE; \
+    Text[ en-US ] = "Show ~equation"; \
+}; \
+CheckBox CB_SHOW_CORRELATION_COEFF \
+{ \
+    HelpId = HID_SCH_TRENDLINE_SHOW_R_SQUARED; \
+    Pos = MAP_APPFONT( 10, 134 + yoffset ); \
+    Size = MAP_APPFONT( availablewidth - 20, 10 ); \
+    TabStop = TRUE; \
+    Text[ en-US ] = "Show ~coefficient of determination (R²)"; \
+};
+
+#endif

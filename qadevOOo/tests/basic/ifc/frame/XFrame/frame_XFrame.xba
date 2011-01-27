@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="frame_XFrame" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+' - Global XFrame As Object optional
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.frame.XFrame
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Test.StartMethod("getName()")
+    bOK = true
+    Dim oldName As String
+    oldName = oObj.getName()
+    Out.log("getName(): " + oldName)
+    bOK = Not isNull(oldName)
+    Test.MethodTested("getName()", bOK)
+
+    Test.StartMethod("setName()")
+    bOK = true
+    Dim sName As String, gName As String
+    sName = "XFrame"
+    oObj.setName(sName)
+    gName = oObj.getName()
+    bOK = gName = sName
+    Out.log("setName('" + sName + "'), getName() return '" + gName + "'")
+    oObj.setName(oldName)
+    Test.MethodTested("setName()", bOK)
+
+    Test.StartMethod("activate()")
+    bOK = true
+    oObj.activate()
+    Test.MethodTested("activate()", bOK)
+
+    Test.StartMethod("deactivate()")
+    bOK = true
+    oObj.deactivate()
+    Test.MethodTested("deactivate()", bOK)
+
+    Test.StartMethod("isActive()")
+    bOK = true
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop is always active")
+        bOK = oObj.isActive()
+    else
+        oObj.activate()
+        bOK = oObj.isActive()
+        if (Not bOK) then
+            Out.log("after activate() method call, isActive() returned false")
+        end if
+        oObj.deactivate()
+        bOK = Not oObj.isActive()
+        if (oObj.isActive()) then
+            Out.log("after deactivate() method call, isActive() returned true")
+        end if
+    end if
+    Test.MethodTested("isActive()", bOK)
+
+    Test.StartMethod("getCreator()")
+    bOK = true
+    Dim creator As Object
+    creator = oObj.getCreator()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop has no creator")
+    else
+        bOK = Not isNull(creator)
+    end if
+    Test.MethodTested("getCreator()", bOK)
+
+    Test.StartMethod("getComponentWindow()")
+    bOK = true
+    Dim compWin As Object
+    compWin = oObj.getComponentWindow()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop has no component window")
+    else
+        bOK = Not isNull(compWin)
+    end if
+    Test.MethodTested("getComponentWindow()", bOK)
+
+    Test.StartMethod("getContainerWindow()")
+    bOK = true
+    Dim contWin As Object
+    contWin = oObj.getContainerWindow()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop has no container window")
+    else
+        bOK = Not isNull(contWin)
+    end if
+    Test.MethodTested("getContainerWindow()", bOK)
+
+    Test.StartMethod("getController()")
+    bOK = true
+    Dim controller As Object
+    controller = oObj.getController()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop has no controller")
+    else
+        if (isNull(controller)) then
+            Out.log("getController() returns null")
+            bOK = false
+        else
+            Dim frm As Object
+            frm = controller.getFrame()
+            if (frm.getName() &lt;&gt; oObj.getName()) then
+                Out.log("Frame returned by controller not " + _
+                        "equals to frame testing")
+                bOK = false
+            end if
+        end if
+    end if
+    Test.MethodTested("getController()", bOK)
+
+    Test.StartMethod("isTop()")
+    bOK = true
+    Out.log("isTop() = " + oObj.isTop())
+    Test.MethodTested("isTop()", bOK)
+
+    Test.StartMethod("findFrame()")
+    bOK = true
+    if (Not isNull(XFrame)) then
+        Out.log("Trying to find a frame with name 'XFrame' ...")
+        Dim aFrame As Object
+        aFrame = oObj.findFrame("XFrame", com.sun.star.frame.FrameSearchFlag.GLOBAL)
+        if (isNull(aFrame)) then
+            Out.log("findFrame('XFrame',com.sun.star.frame.FrameSearchFlag.GLOBAL) returns null")
+            bOK = false
+        elseif (XFrame.getName() &lt;&gt; aFrame.getName()) then
+            Out.log("findFrame('XFrame',com.sun.star.frame.FrameSearchFlag.GLOBAL)" _
+                    + " returns frame which is not equal to passed in relation")
+            bOK = false
+        end if
+    end if
+    Out.log("Trying to find a frame with name '_self' ...")
+    Dim frame As Object
+    frame = oObj.findFrame("_self", com.sun.star.frame.FrameSearchFlag.AUTO)
+    if (isNull(frame)) then
+        Out.log("findFrame('_self') returns null")
+        bOK = false
+    elseif (frame.getName() &lt;&gt; oObj.getName()) then
+        Out.log("findFrame('_self') returns frame which is not equal to tested")
+        bOK = false
+    end if
+    Test.MethodTested("findFrame()", bOK)
+
+    Test.StartMethod("setCreator()")
+    bOK = true
+    oObj.setCreator(NULL_OBJECT)
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop has no creator")
+    else
+        bOK = isNull(oObj.getCreator())
+        oObj.setCreator(creator)
+    end if
+    Test.MethodTested("setCreator()", bOK)
+
+    Test.StartMethod("setComponent()")
+    bOK = true
+    Dim res As Boolean
+    res = oObj.setComponent(NULL_OBJECT, NULL_OBJECT)
+    if (res) then
+        ' component must be changed
+        bOK = isNull(oObj.getComponentWindow())
+        bOK = bOK and isNull(oObj.getController())
+        if (Not bOK) then
+            Out.log("setComponent() returns true, but component is not changed.")
+        end if
+    else
+        Out.log("frame is not allowed to change component")
+    end if
+    oObj.setComponent(compWin, controller)
+    Test.MethodTested("setComponent()", bOK)
+
+    Test.StartMethod("initialize()")
+    bOK = true
+    oObj.initialize(contWin)
+    Test.MethodTested("initialize()", bOK)
+
+    Test.StartMethod("addFrameActionListener()")
+    bOK = true
+    Dim listener1 As Object, listener2 As Object
+    listener1 = createUnoListener("FA1_", "com.sun.star.frame.XFrameActionListener")
+    listener2 = createUnoListener("FA2_", "com.sun.star.frame.XFrameActionListener")
+    initListeners()
+    oObj.activate()
+    oObj.deactivate()
+    oObj.activate()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("No actions supported by Desktop")
+    else
+        wait(1000)
+        if (Not listener1Called) then
+            bOK = false
+            Out.log("Listener1 wasn't called")
+        end if
+        if (Not listener2Called) then
+            bOK = false
+            Out.log("Listener2 wasn't called")
+        end if
+        if (Not activatedCalled1 or Not activatedCalled2) then
+            bOK = false
+            Out.log("Listener was called, FRAME_ACTIVATED was not")
+        endif
+        if (Not deactivatedCalled1 or Not deactivatedCalled2) then
+            bOK = false
+            Out.log("Listener was called, FRAME_DEACTIVATED was not")
+        endif
+    end if
+    Test.MethodTested("addFrameActionListener()", bOK)
+
+    Test.StartMethod("removeFrameActionListener()")
+    bOK = true
+    Out.log("removes listener2")
+    oObj.removeFrameActionListener(listener2)
+    initListeners()
+    oObj.activate()
+    oObj.deactivate()
+    oObj.activate()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("No actions supported by Desktop")
+    else
+        wait(1000)
+        if (Not listener1Called) then
+            bOK = false
+            Out.log("Listener1 wasn't called")
+        end if
+        if (listener2Called) then
+            bOK = false
+            Out.log("Listener2 was called, but it was removed")
+        end if
+    end if
+    Test.MethodTested("removeFrameActionListener()", bOK)
+
+    Test.StartMethod("contextChanged()")
+    bOK = true
+    oObj.addFrameActionListener(listener1)
+    initListeners()
+    oObj.contextChanged()
+    if (instr(cObjectName,"Desktop") &gt; -1) then
+        Out.log("Desktop cann't change context")
+    elseif(contextChanged1) then
+        bOK = true
+    elseif(listener1Called) then
+        bOK = false
+        Out.log("listener was called, but Action != CONTEXT_CHANGED")
+    else
+        bOK = false
+        Out.log("listener was not called on contextChanged() call")
+    end if
+    Test.MethodTested("contextChanged()", bOK)
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Dim listener1Called As Boolean
+Dim listener2Called As Boolean
+Dim activatedCalled1 As Boolean
+Dim deactivatedCalled1 As Boolean
+Dim contextChanged1 As Boolean
+Dim activatedCalled2 As Boolean
+Dim deactivatedCalled2 As Boolean
+
+Sub initListeners()
+    listener1Called = false
+    listener2Called = false
+    contextChanged1 = false
+    activatedCalled1 = false
+    deactivatedCalled1 = false
+    activatedCalled2 = false
+    deactivatedCalled2 = false
+End Sub
+
+Sub FA1_frameAction(event As Object)
+    listener1Called = true
+    Out.Log("Listener1: frameAction: " + event.Action)
+    if (event.Action = com.sun.star.frame.FrameAction.FRAME_ACTIVATED) then
+        activatedCalled1 = true
+    elseif (event.Action = com.sun.star.frame.FrameAction.FRAME_DEACTIVATING) then
+        deactivatedCalled1 = true
+    elseif (event.Action = com.sun.star.frame.FrameAction.CONTEXT_CHANGED) then
+        contextChanged1 = true
+    endif
+End Sub
+
+Sub FA2_frameAction(event As Object)
+    listener2Called = true
+    Out.Log("Listener2: frameAction: " + event.Action)
+    if (event.Action = com.sun.star.frame.FrameAction.FRAME_ACTIVATED) then
+        activatedCalled2 = true
+    elseif (event.Action = com.sun.star.frame.FrameAction.FRAME_DEACTIVATING) then
+        deactivatedCalled2 = true
+    endif
+End Sub
+</script:module>

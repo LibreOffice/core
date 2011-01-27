@@ -1,0 +1,10 @@
+    <node oor:name="pgm_Export" oor:op="replace"  >
+        <prop oor:name="Type"><value>pgm_Portable_Graymap</value></prop>
+        <prop oor:name="FormatName"><value>epg</value></prop>
+        <prop oor:name="RealFilterName"/>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">PGM - Portable Graymap</value>
+        </prop>
+        <prop oor:name="Flags"><value>EXPORT</value></prop>
+    </node>

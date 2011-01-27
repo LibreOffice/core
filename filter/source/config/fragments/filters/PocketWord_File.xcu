@@ -1,0 +1,13 @@
+    <node oor:name="PocketWord File" oor:op="replace">
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>writer_PocketWord_File</value></prop>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.TextDocument</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UserData"><value>com.sun.star.documentconversion.XMergeBridge classes/pocketword.jar com.sun.star.comp.Writer.XMLImporter com.sun.star.comp.Writer.XMLExporter staroffice/sxw application/x-pocket-word</value></prop>
+        <prop oor:name="FilterService"><value>com.sun.star.comp.Writer.XmlFilterAdaptor</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="UIName">
+            <value>Pocket Word</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN 3RDPARTYFILTER</value></prop>
+    </node>

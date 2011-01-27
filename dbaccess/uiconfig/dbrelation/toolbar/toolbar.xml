@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="helpid:5505" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="helpid:6312" toolbar:text="" toolbar:style="" toolbar:visible="false" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="helpid:5701" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="helpid:5700" toolbar:text="" />
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AddTable" toolbar:helpid="helpid:10722" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:DBAddRelation" toolbar:helpid="helpid:12296" toolbar:text="" />
+</toolbar:toolbar>

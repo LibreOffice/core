@@ -1,0 +1,13 @@
+..\%__SRC%\bin\climaker.exe %_DEST%\bin%_EXT%\climaker.exe
+..\%__SRC%\bin\climaker.pdb %_DEST%\bin%_EXT%\climaker.pdb
+..\%__SRC%\bin\climaker.exe.config %_DEST%\bin%_EXT%\climaker.exe.config
+
+..\%__SRC%\bin\cli_*.dll %_DEST%\bin%_EXT%\cli_*.dll
+..\%__SRC%\bin\cli_*.pdb %_DEST%\bin%_EXT%\cli_*.pdb
+..\%__SRC%\bin\cli_*.config %_DEST%\bin%_EXT%\cli_*.config
+..\%__SRC%\bin\policy*.dll %_DEST%\bin%_EXT%\policy*.dll
+..\%__SRC%\bin\cli_uno.* %_DEST%\bin%_EXT%\cli_uno.*
+
+..\%__SRC%\bin\cliuno.snk %_DEST%\bin%_EXT%\cliuno.snk
+
+..\%__SRC%\bin\cliureversion.mk %_DEST%\bin%_EXT%\cliureversion.mk

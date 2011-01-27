@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="forms_ODateModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' for XComponent
+Global oComponentInstance As Object
+
+' for XPersistObject
+Global oPersistInstance As Object
+
+' for XUpdateBroadcaster
+Global bCustomUpdate As Boolean
+
+Global oForm As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' forms.ODateModel
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim oShape As Object, oDrawPage As Object
+    
+    bOK = true
+    ' --- create a document if needed
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oShape = toolkittools.addControlToDefaultForm("DateField", 1000, 1000, 2000, 1000)
+    oObj = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("DateField", 1000, 3000, 2000, 1000)
+    oComponentInstance = oShape.getControl()
+    oShape = toolkittools.addControlToDefaultForm("DateField", 1000, 5000, 2000, 1000)
+    oPersistInstance = oShape.getControl()
+
+    'get control from document
+    oDrawPage = oDoc.DrawPage
+    oForm = oDrawPage.Forms.getByName("Standard")
+    
+	oForm.DataSourceName = "Bibliography"
+	oForm.Command = "biblio"
+	oForm.CommandType = com.sun.star.sdb.CommandType.TABLE
+
+    oObj.DataField = "Custom1"
+
+    oForm.load()
+    
+    ' for XUpdateBroadcaster
+    bCustomUpdate = true
+    
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Global aChangedValue As Variant
+
+' for XBoundComponent
+Sub prepareCommit() 
+On Error Goto ErrHndl
+    Dim dat As New com.sun.star.util.Date
+
+    Out.Log("prepareCommit() called.")
+    if NOT (isNull(oObj.Date) OR isEmpty(oObj.Date)) then
+        aChangedValue = oObj.Date + 1
+    else
+        aChangedValue = 1
+    end if
+    oObj.Date = aChangedValue
+    
+    exit sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+' for XBoundComponent
+Function checkCommit() As Boolean
+On Error Goto ErrHndl
+    Out.Log("checkCommit() called.")
+    Dim rowValue As Variant
+    
+    oForm.updateRow()
+    oForm.reload()
+    rowValue = oObj.Date
+    Out.Log("Value was set to " + aChangedValue )
+    Out.Log("the value in current row is " + rowValue)
+    checkCommit() = (rowValue = aChangedValue)
+
+    exit function
+ErrHndl:
+    Test.Exception()
+End Function
+
+' for XUpdateBroadcaster
+Sub UpdateComponent()
+    oObj.Date = oObj.Date + 1
+    oObj.commit()
+End Sub
+</script:module>

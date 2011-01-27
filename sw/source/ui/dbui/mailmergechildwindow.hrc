@@ -1,0 +1,59 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#define TB_BACK                     1
+#define ILIST_TBX                   90
+
+#define FL_SEPARATOR                7
+
+#define FL_STATUS                   60
+#define FT_STATUS1                  61
+#define FL_TRANSFERSTATUS           62
+#define FT_TRANSFERSTATUS           63
+#define PB_PROGRESS                 64
+#define FT_ERRORSTATUS              65
+#define PB_DETAILS                  66
+#define LB_STATUS                   67
+#define FI_PAUSED                   68
+#define PB_STOP                     69
+#define PB_CLOSE                    70
+#define ST_CONTINUE                 71
+#define ST_LESS                     72
+#define ST_TASK                     73
+#define ST_STATUS                   74
+#define ILIST                       75
+#define ST_SEND                     77
+#define ST_SENDINGTO                78
+#define ST_COMPLETED                79
+#define ST_FAILED                   80
+#define ST_TERMINATEQUERY           81
+
+#define IM_WARNING                  10
+#define FI_WARNING                  11
+#define FT_DETAILS                  12
+#define ED_DETAILS                  13
+#define PB_OK                       14

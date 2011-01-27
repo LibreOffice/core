@@ -1,0 +1,6 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.comp.configuration.backend.GconfBackend
+ComponentName=gconfbe1.uno.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[SupportedServices]
+com.sun.star.configuration.backend.GconfBackend

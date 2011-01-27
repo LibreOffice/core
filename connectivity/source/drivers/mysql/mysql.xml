@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//W3C//DTD HTML 3.2//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>odbc</module-name>
+    <component-description>
+        <author>Ocke Janssen</author>
+        <name>org.openoffice.comp.drivers.MySQL.Driver</name>
+        <description>
+            This is the implementation of the MySQL driver.
+        </description>
+        <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
+        <language>c++</language>
+        <status value="final"/>
+        <supported-service>com.sun.star.sdbc.Driver</supported-service>
+        <supported-service>com.sun.star.sdbcx.Driver</supported-service>
+    </component-description>
+    <project-build-dependency>cppuhelper</project-build-dependency>
+    <project-build-dependency>cppu</project-build-dependency>
+    <project-build-dependency>sal</project-build-dependency>
+    <runtime-module-dependency>cppuhelper</runtime-module-dependency>
+    <runtime-module-dependency>cppu</runtime-module-dependency>
+    <runtime-module-dependency>sal</runtime-module-dependency>
+    <runtime-module-dependency>dbtools</runtime-module-dependency>
+    <runtime-module-dependency>comphelper</runtime-module-dependency>
+</module-description>
+
+

@@ -1,0 +1,56 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+// the controls
+
+#define FL_MAIN         10
+#define FT_FORMATTING   11
+#define LB_FORMATTING   12
+#define FT_OPTIONS      13
+#define LB_OPTIONS      14
+#define PB_RESET        15
+#define PB_DEFAULT      16
+
+// the option strings
+
+#define STR_USERENTRY                   10
+#define STR_QRYBOX_USEASDEFAULT         11
+
+#define STR_COMP_OPTIONS_START          100
+#define STR_PRINTER_METRICS             (STR_COMP_OPTIONS_START + 0)
+#define STR_MERGE_PARA_DIST             (STR_COMP_OPTIONS_START + 1)
+#define STR_MERGE_PARA_DIST_PAGESTART   (STR_COMP_OPTIONS_START + 2)
+#define STR_TAB_ALIGNMENT               (STR_COMP_OPTIONS_START + 3)
+#define STR_EXTERNAL_LEADING            (STR_COMP_OPTIONS_START + 4)
+#define STR_LINE_SPACING                (STR_COMP_OPTIONS_START + 5)
+#define STR_ADD_TABLESPACING            (STR_COMP_OPTIONS_START + 6)
+#define STR_USE_OBJPOSITIONING          (STR_COMP_OPTIONS_START + 7)
+#define STR_USE_OURTEXTWRAPPING         (STR_COMP_OPTIONS_START + 8)
+#define STR_CONSIDER_WRAPPINGSTYLE      (STR_COMP_OPTIONS_START + 9)
+#define STR_EXPAND_WORDSPACE            (STR_COMP_OPTIONS_START + 10)
+#define STR_COMP_OPTIONS_END            (STR_EXPAND_WORDSPACE + 1)
+

@@ -1,0 +1,69 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_RTL_TEXTENC_CONTEXT_H
+#include "context.h"
+#endif
+#ifndef INCLUDED_RTL_TEXTENC_CONVERTEUCTW_H
+#include "converteuctw.h"
+#endif
+
+#ifndef _RTL_TENCINFO_H
+#include "rtl/tencinfo.h"
+#endif
+#ifndef _RTL_TEXTENC_H
+#include "rtl/textenc.h"
+#endif
+
+#include "generate/cns116431992.tab"
+
+static ImplEucTwConverterData const aImplEucTwConvertData
+    = { aImplCns116431992ToUnicodeData,
+        aImplCns116431992ToUnicodeRowOffsets,
+        aImplCns116431992ToUnicodePlaneOffsets,
+        aImplUnicodeToCns116431992Data,
+        aImplUnicodeToCns116431992PageOffsets,
+        aImplUnicodeToCns116431992PlaneOffsets };
+
+static ImplTextEncodingData const aImplEucTwTextEncodingData
+    = { { &aImplEucTwConvertData,
+          &ImplConvertEucTwToUnicode,
+          &ImplConvertUnicodeToEucTw,
+          &ImplCreateEucTwToUnicodeContext,
+          &ImplDestroyContext,
+          &ImplResetEucTwToUnicodeContext,
+          &ImplCreateUnicodeToTextContext,
+          &ImplDestroyContext,
+          &ImplResetUnicodeToTextContext },
+        1,
+        4,
+        2,
+        136,
+        "cns11643-1",
+        "Big5",
+        RTL_TEXTENCODING_INFO_ASCII | RTL_TEXTENCODING_INFO_MULTIBYTE };
+    /* SCRIPT_CHINESE_TRADITIONAL */

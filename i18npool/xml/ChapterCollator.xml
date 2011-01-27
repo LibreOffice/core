@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name>   i18n    </module-name>
+    <component-description>
+        <author>    Bustamam Harun  </author>
+        <name>  com.sun.star.i18n.ChapterCollator   </name>
+        <description>
+    This component provides localized collation algorithm
+</description>
+        <loader-name>   com.sun.star.loader.SharedLibrary   </loader-name>
+        <language>  C++ </language>
+        <status value="final"/>
+        <supported-service> com.sun.star.i18n.ChapterCollator   </supported-service>
+        <reference-docu xlink:href="file:///docs/sampledoc.html" xlink:type="simple"/>
+        <type>  com.sun.star.lang.XMultiServiceFactory  </type>
+        <type>  com.sun.star.uno.Reference              </type>
+        <type>  com.sun.star.i18n.XLocaleData           </type>
+        <type>  com.sun.star.i18n.XCollator         </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  registry    </project-build-dependency>
+    <project-build-dependency>  store       </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <project-build-dependency>  unotools    </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu        </runtime-module-dependency>
+    <runtime-module-dependency> reg         </runtime-module-dependency>
+    <runtime-module-dependency> store       </runtime-module-dependency>
+    <runtime-module-dependency> sal         </runtime-module-dependency>
+    <runtime-module-dependency> unotools    </runtime-module-dependency>
+</module-description>

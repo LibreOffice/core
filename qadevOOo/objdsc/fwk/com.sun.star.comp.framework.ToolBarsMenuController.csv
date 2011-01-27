@@ -1,0 +1,5 @@
+"ToolBarsMenuController";"com::sun::star::frame::XPopupMenuController";"setPopupMenu()"
+"ToolBarsMenuController";"com::sun::star::frame::XPopupMenuController";"updatePopupMenu()"
+"ToolBarsMenuController";"com::sun::star::lang::XEventListener";"disposing()"
+"ToolBarsMenuController";"com::sun::star::lang::XInitialization";"initialize()"
+"ToolBarsMenuController";"com::sun::star::frame::XStatusListener";"statusChanged()"

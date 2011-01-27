@@ -1,0 +1,125 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xsd_DataTypeClass_idl__
+#define __com_sun_star_xsd_DataTypeClass_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xsd {
+
+//=============================================================================
+
+/** These constants specify the class used of an <type>XDataType</type>
+*/
+constants DataTypeClass
+{
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#string">XSD compliant string type</a>
+    */
+    const short STRING = 1;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#boolean">XSD compliant boolean type</a>
+    */
+    const short BOOLEAN = 2;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#decimal">XSD compliant decimal type</a>
+    */
+    const short DECIMAL = 3;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#float">XSD compliant float type</a>
+    */
+    const short FLOAT = 4;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#double">XSD compliant double type</a>
+    */
+    const short DOUBLE = 5;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#duration">XSD compliant duration type</a>
+    */
+    const short DURATION = 6;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#datetime">XSD compliant datetime type</a>
+    */
+    const short DATETIME = 7;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#time">XSD compliant time type</a>
+    */
+    const short TIME = 8;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#date">XSD compliant date type</a>
+    */
+    const short DATE = 9;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gYearMonth">XSD compliant gYearMonth type</a>
+    */
+    const short gYearMonth = 10;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gYear">XSD compliant gYear type</a>
+    */
+    const short gYear = 11;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gMonthDay">XSD compliant gMonthDay type</a>
+    */
+    const short gMonthDay = 12;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gDay">XSD compliant gDay type</a>
+    */
+    const short gDay = 13;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#gMonth">XSD compliant gMonth type</a>
+    */
+    const short gMonth = 14;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#hexBinary">XSD compliant hexBinary type</a>
+    */
+    const short hexBinary = 15;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#base64Binary">XSD compliant base64Binary type</a>
+    */
+    const short base64Binary = 16;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#anyURI">XSD compliant anyURI type</a>
+    */
+    const short anyURI = 17;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#QName">XSD compliant QName type</a>
+    */
+    const short QName = 18;
+
+    /** specifies an <a href="http://www.w3.org/TR/xmlschema-2/#NOTATION">XSD compliant NOTATION type</a>
+    */
+    const short NOTATION = 19;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

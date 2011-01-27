@@ -1,0 +1,5 @@
+    <node oor:name="writerweb8_writer_template">
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">HTML Document Template</value>
+                    </prop>
+    </node>

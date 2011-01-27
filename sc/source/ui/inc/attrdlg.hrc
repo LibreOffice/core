@@ -1,0 +1,49 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "sc.hrc"   // -> SC_DLG_ATTR
+
+#define TP_NUMBER       1
+#define TP_FONT         2
+#define TP_ALIGNMENT    3
+#define TP_BORDER       4
+#define TP_BACKGROUND   5
+#define TP_PROTECTION   6
+#define TP_FONTEFF      7
+#define TP_ASIAN        8
+
+//================================================
+// Zellschutz-TabPage:
+
+#define BTN_PROTECTED           1
+#define BTN_HIDE_FORMULAR       2
+#define BTN_HIDE_ALL            3
+#define FT_HINT                 4
+#define FL_PROTECTION           5
+#define BTN_HIDE_PRINT          6
+#define FT_HINT2                7
+#define FL_PRINT                8

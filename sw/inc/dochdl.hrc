@@ -1,0 +1,54 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DOCHDL_HRC
+#define _DOCHDL_HRC
+
+#include "rcid.hrc"
+
+#define STR_NOGLOS                  (RC_DOCHDL_BEGIN + 1)
+#define MSG_ERR_INSERT_GLOS         (RC_DOCHDL_BEGIN + 3)
+#define MSG_CLPBRD_FORMAT_ERROR     (RC_DOCHDL_BEGIN + 4)
+#define MSG_UPDATE_NEW_GLOS_FMT     (RC_DOCHDL_BEGIN + 5)
+
+#define DLG_SEL_GLOS                (RC_DOCHDL_BEGIN + 6)
+#define STR_NO_TABLE                (RC_DOCHDL_BEGIN + 7)
+
+#define STR_PRIVATETEXT             (RC_DOCHDL_BEGIN + 8)
+#define STR_PRIVATEGRAPHIC          (RC_DOCHDL_BEGIN + 9)
+#define STR_PRIVATEOLE              (RC_DOCHDL_BEGIN + 10)
+#define STR_DDEFORMAT               (RC_DOCHDL_BEGIN + 11)
+
+
+#define DOCHDL_ACT_END              STR_DDEFORMAT
+
+#if DOCHDL_ACT_END > RC_DOCHDL_END
+#error Resource-Id Ueberlauf in #file, #line
+#endif
+
+#endif
+

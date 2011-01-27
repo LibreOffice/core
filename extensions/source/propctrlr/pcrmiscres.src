@@ -1,0 +1,173 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef EXTENSIONS_PROPRESID_HRC
+#include "formresid.hrc"
+#endif
+#ifndef _EXTENSIONS_PROPCTRLR_FORMLOCALID_HRC_
+#include "formlocalid.hrc"
+#endif
+
+String RID_STR_CONFIRM_DELETE_DATA_TYPE
+{
+    Text [ en-US ] = "Do you want to delete the data type '#type#' from the model?\n"
+             "Please note that this will affect all controls which are bound to this data type.";
+};
+
+Resource RID_RSC_BUTTON_IMAGES
+{
+    Image IMG_PLUS
+    {
+        ImageBitmap = Bitmap{ file = "buttonplus.png"; };
+    };
+    Image IMG_MINUS
+    {
+        ImageBitmap = Bitmap{ file = "buttonminus.png"; };
+    };
+};
+
+#define IMAGE_IDS \
+    IdList = \
+    { \
+        RID_SVXIMG_CONTROL; \
+        RID_SVXIMG_BUTTON; \
+        RID_SVXIMG_RADIOBUTTON; \
+        RID_SVXIMG_CHECKBOX; \
+        RID_SVXIMG_FIXEDTEXT; \
+        RID_SVXIMG_GROUPBOX; \
+        RID_SVXIMG_EDIT; \
+        RID_SVXIMG_LISTBOX; \
+        RID_SVXIMG_COMBOBOX; \
+        RID_SVXIMG_GRID; \
+        RID_SVXIMG_IMAGEBUTTON; \
+        RID_SVXIMG_FILECONTROL; \
+        RID_SVXIMG_DATEFIELD; \
+        RID_SVXIMG_TIMEFIELD; \
+        RID_SVXIMG_NUMERICFIELD; \
+        RID_SVXIMG_CURRENCYFIELD; \
+        RID_SVXIMG_PATTERNFIELD; \
+        RID_SVXIMG_IMAGECONTROL; \
+        RID_SVXIMG_HIDDEN; \
+        RID_SVXIMG_FORMATTEDFIELD; \
+        RID_SVXIMG_FILTER; \
+        RID_SVXIMG_FORMS; \
+        RID_SVXIMG_FORM; \
+        RID_SVXIMG_COLLAPSEDNODE; \
+        RID_SVXIMG_EXPANDEDNODE; \
+        RID_SVXIMG_SCROLLBAR; \
+        RID_SVXIMG_SPINBUTTON; \
+        RID_SVXIMG_NAVIGATIONBAR; \
+    }; \
+    IdCount = 29
+
+ImageList RID_IL_FORMEXPLORER
+{
+    Prefix = "sx";
+    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    IMAGE_IDS;
+};
+
+String RID_STR_PROPTITLE_PUSHBUTTON
+{
+    Text [ en-US ] = "Button" ;
+};
+String RID_STR_PROPTITLE_RADIOBUTTON
+{
+    Text [ en-US ] = "Option Button" ;
+};
+String RID_STR_PROPTITLE_CHECKBOX
+{
+    Text [ en-US ] = "Check Box" ;
+};
+String RID_STR_PROPTITLE_FIXEDTEXT
+{
+    Text [ en-US ] = "Label Field" ;
+};
+String RID_STR_PROPTITLE_GROUPBOX
+{
+    Text [ en-US ] = "Group Box" ;
+};
+String RID_STR_PROPTITLE_EDIT
+{
+    Text [ en-US ] = "Text Box" ;
+};
+String RID_STR_PROPTITLE_FORMATTED
+{
+    Text [ en-US ] = "Formatted Field";
+};
+String RID_STR_PROPTITLE_LISTBOX
+{
+    Text [ en-US ] = "List Box" ;
+};
+String RID_STR_PROPTITLE_COMBOBOX
+{
+    Text [ en-US ] = "Combo Box" ;
+};
+String RID_STR_PROPTITLE_IMAGEBUTTON
+{
+    Text [ en-US ] = "Image Button" ;
+};
+String RID_STR_PROPTITLE_HIDDENCONTROL
+{
+    Text [ en-US ] = "Hidden Control" ;
+};
+String RID_STR_PROPTITLE_UNKNOWNCONTROL
+{
+    Text [ en-US ] = "Control (unknown type)" ;
+};
+String RID_STR_PROPTITLE_IMAGECONTROL
+{
+    Text [ en-US ] = "Image Control" ;
+};
+String RID_STR_PROPTITLE_FILECONTROL
+{
+    Text [ en-US ] = "File Selection" ;
+};
+String RID_STR_PROPTITLE_DATEFIELD
+{
+    Text [ en-US ] = "Date Field" ;
+};
+String RID_STR_PROPTITLE_TIMEFIELD
+{
+    Text [ en-US ] = "Time Field" ;
+};
+String RID_STR_PROPTITLE_NUMERICFIELD
+{
+    Text [ en-US ] = "Numeric Field" ;
+};
+String RID_STR_PROPTITLE_CURRENCYFIELD
+{
+    Text [ en-US ] = "Currency Field" ;
+};
+String RID_STR_PROPTITLE_PATTERNFIELD
+{
+    Text [ en-US ] = "Pattern Field" ;
+};
+String RID_STR_PROPTITLE_DBGRID
+{
+    Text [ en-US ] = "Table Control " ;
+};

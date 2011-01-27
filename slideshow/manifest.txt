@@ -1,0 +1,95 @@
+Slideshow module design & coding manifest
+=========================================
+
+Coding style:
+-------------
+
+ - modified BSD style:
+   if( !test )
+   {
+       function( arg1,
+                 arg2,
+                 arg3 );                
+   }
+
+ - members are always named maSomething
+
+ - no tabs, indent four spaces
+
+ - Class names (and type names in general) are UpperCamelCase, method
+   names lowerCamelCase
+
+ - all file names are lowercase, header files end in hxx, source files
+   in cxx; one header per class, only one linkable class per cxx.
+
+ - header guards follow this scheme: INCLUDED_SLIDESHOW_<CLASSNAME>_HXX
+
+ - module-external headers, and system headers are included like this:
+   #include <module/header.hxx> or #include <boost/shared_ptr.hpp>. 
+   module-internal headers are included like this:
+   #include "header.hxx"
+   No external header guards are used in cxx files
+
+
+Design
+------
+ 
+ - currently, the slideshow module is basically
+   single-threaded. Therefore, the XSlideShow interface must be called
+   from the _main thread_ (this precondition is asserted). Other
+   listener interfaces, which we could not impose this limitation upon
+   (XSlideShowView's XMouseMotionListener, XMouseListener,
+   XPaintListener and XModifyListener) will queue the events, and
+   process them in the main thread. Therefore, XSlideShow::update()
+   needs to be called frequently from the slideshow client.
+
+   This design is necessitated by the fact that at least one XCanvas
+   implementation (vclcanvas) must be called from the main thread
+   only. Once the UNO threading framework is integrated, this can be
+   changed. 
+
+   As of now, SlideView, SlideShowImpl, EventMultiplexerListener and
+   DummyRenderer are exposed to calls from the outside world; of
+   those, SlideView and EventMultiplexerListener serialize the calls
+   by enqueuing events, SlideShowImpl imposes the hard constraint of
+   being called from the main thread, and DummyRenderer is content
+   with a simple object mutex. As a side effect, the global EventQueue
+   must be thread-safe (as one of the few internal objects having an
+   object mutex)
+
+ - wherever possible, abstract interfaces and shared_ptr are used.
+   * exception: global objects like EventQueue,
+     and tightly collaborating classes, like Slide/LayerManager/Layer
+
+ - since shared_ptr can lead to circular references (resulting in
+   memory leaks), some care needs to be taken to avoid those. Where
+   circular references are inevitable, or can happen by accident,
+   classes implement the Disposable interface. The owner of the object
+   then calls dispose() on its owned objects.
+   Another way of avoiding circular references are weak_ptr, which are
+   used in a few places.
+   One of those places are the ViewEventHandlers, which are held weak
+   on the EventMultiplexer. Otherwise, every class in need of view
+   events would have to delegate listening to a dedicated child
+   object, or burden their clients with the Disposable interface.
+
+ - Pattern: Separate Listener
+   To avoid circular shared_ptr references, classes in need to
+   register a listener at EventMultiplexer often implement the
+   corresponding listener interface in a separate object. This object
+   is held via shared_ptr by the original class, and normally
+   registered at the EventMultiplexer (and thus held by shared_ptr
+   there, too). The separate listener object in turn holds the
+   original object by plain reference. This is safe, if the original
+   object removes the listener from the EventMultiplexer, before or
+   within the destructor.
+
+
+Testing
+=======
+
+Before merging changes to HEAD, besides making sure the usual QA has
+been done, also run the unit and integration tests in the
+slideshow/test directory. Issuing a "dmake test" should run the unit
+tests, and generate a "demoshow" binary, that should also be run and
+checked to work properly.

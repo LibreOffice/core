@@ -1,0 +1,109 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_FontWidth_idl__
+#define __com_sun_star_awt_FontWidth_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module awt {
+
+//=============================================================================
+
+/** These values are used to specify the width of the characters of a font.
+
+    <p>They may be expanded in future versions.</p>
+ */
+published constants FontWidth
+{
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is not specified/known.
+     */
+    const float DONTKNOW = 0.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is condensed to 50%.
+     */
+    const float ULTRACONDENSED = 50.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is condensed to 60%.
+     */
+    const float EXTRACONDENSED = 60.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is condensed to 75%.
+     */
+    const float CONDENSED = 75.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is condensed to 90%.
+     */
+    const float SEMICONDENSED = 90.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is normal.
+     */
+    const float NORMAL = 100.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is expanded to 110%.
+     */
+    const float SEMIEXPANDED = 110.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is expanded to 150%.
+     */
+    const float EXPANDED = 150.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is expanded to 175%.
+     */
+    const float EXTRAEXPANDED = 175.000000;
+
+    //-------------------------------------------------------------------------
+
+    /** The width of the font is expanded to 200%.
+     */
+    const float ULTRAEXPANDED = 200.000000;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

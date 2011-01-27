@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_animations_AnimationEndSync_idl__
+#define __com_sun_star_animations_AnimationEndSync_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module animations {
+
+//=============================================================================
+
+/** @see http://www.w3.org/TR/smil20/smil-timing.html#adef-endsync
+*/
+constants AnimationEndSync
+{
+    /** The par, excl, or media element's implicit duration ends with the earliest
+        active end of all the child elements. This does not refer to the lexical
+        first child, or to the first child to start, but rather refers to the first
+        child to end its (first) active duration.
+    */
+    const short FIRST = 0;
+
+    /** The par, excl, or media element's implicit duration ends with the last active
+        end of the child elements. This does not refer to the lexical last child, or
+        to the last child to start, but rather refers to the last active end of all
+        children that have a resolved, definite begin time. If the time container
+        has no children with a resolved begin time, the time container ends
+        immediately. If child elements have multiple begin times, or otherwise
+        restart, the child elements must complete all instances of active durations
+        for resolved begin times.
+        This is the default value for par and excl elements.
+    */
+    const short LAST = 1;
+
+    /** The par, excl, or media element's implicit duration ends when all of the
+        child elements have ended their respective active durations. Elements with
+        indefinite or unresolved begin times will keep the simple duration of the
+        time container from ending.
+        When all elements have completed the active duration one or more times,
+        the parent time container can end.
+    */
+    const short ALL = 2;
+
+    /** The time container element's implicit duration ends when the intrinsic
+        media duration of the element ends. This must be defined by a host language.
+        If the time container element does not define an intrinsic media duration,
+        the host language must define the simple duration for the element.
+        This is the default value for media time container elements.
+    */
+    const short MEDIA = 3;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

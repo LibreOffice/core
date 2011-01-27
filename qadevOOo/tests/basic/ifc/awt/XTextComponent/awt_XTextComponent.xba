@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XTextComponent" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+Dim bCB1_textChanged As Boolean
+Dim bCB2_textChanged As Boolean
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XTextComponent
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oListener1 As Object, oListener2 As Object
+    Dim vSelection As new com.sun.star.awt.Selection
+    Dim vSelectionSelection As new com.sun.star.awt.Selection
+    Dim vGetSelection As  new com.sun.star.awt.Selection
+    Dim vInsertSelection As  new com.sun.star.awt.Selection
+    Dim cGetText As String
+    Dim len2set As Integer
+
+    Out.Log("create two com.sun.star.awt.XTextListener")
+    oListener1 = createUNOListener("CB1_", "com.sun.star.awt.XTextListener")
+    oListener2 = createUNOListener("CB2_", "com.sun.star.awt.XTextListener")
+
+    Test.StartMethod("setText()")
+    bOK = true
+    Dim cText As String
+    cText = "XTextComponent: setText()"
+    oObj.setText(cText)
+    Test.StartMethod("getText()")
+    bOK = bOK AND (cText = oObj.getText())
+    Test.MethodTested("setText()", bOK)
+    Test.MethodTested("getText()", bOK)
+
+    Test.StartMethod("insertText()")
+    bOK = true
+    oObj.setText("setSelection")
+    vInsertSelection.Min = 0
+    vInsertSelection.Max = 3
+    oObj.insertText(vInsertSelection,"new")
+    Out.Log("result of getText is: '" + oObj.getText() +"'. It sould be 'newSelection'")
+    bOK = bOK AND (oObj.getText() = "newSelection")
+    Test.MethodTested("insertText()", bOK)
+
+
+    Test.StartMethod("setSelection()")
+    bOK = true
+    vSelectionSelection.Min = 2
+    vSelectionSelection.Max = 3
+    oObj.setSelection(vSelectionSelection)
+    Test.StartMethod("getSelection()")
+    vGetSelection = oObj.getSelection()
+    bOK = bOK AND (vGetSelection.Min = vSelectionSelection.Min) AND _
+          (vGetSelection.Max = vSelectionSelection.Max)
+    Test.MethodTested("setSelection()", bOK)
+    Test.MethodTested("getSelection()", bOK)
+
+    Test.StartMethod("getSelectedText()")
+    bOK = true
+    oObj.setText("getSelectedText")
+    vSelectionSelection.Min = 0
+    vSelectionSelection.Max = 3
+    oObj.setSelection(vSelectionSelection)
+    Out.Log("result of getSelectedText is: '" + oObj.getSelectedText() +"'. It sould be 'get'")
+    bOK = bOK AND (oObj.getSelectedText() = "get")
+    Test.MethodTested("getSelectedText()", bOK)
+
+    Test.StartMethod("setEditable()")
+    bOK = true
+    oObj.setEditable(true)
+    Test.StartMethod("isEditable()")
+    bOK = bOK AND oObj.isEditable()
+    oObj.setEditable(false)
+    bOK = bOK AND NOT oObj.isEditable()
+    oObj.setEditable(true)
+    bOK = bOK AND oObj.isEditable()
+    Test.MethodTested("setEditable()", bOK)
+    Test.MethodTested("isEditable()", bOK)
+
+    Test.StartMethod("setMaxTextLen()")
+    bOK = true
+    if (oObj.getMaxTextLen = 12) then
+        len2set = 10
+    else
+        len2set = 12
+    endif
+    oObj.setMaxTextLen(len2set)
+    oObj.setText("0123456789ABCDE")
+    cGetText = oObj.getText()
+    Out.Log("result of Len(cGetText) is: '" + Len(cGetText) + "'. It sould be >'" + len2set+"' ")
+    bOK = bOK AND (Len(cGetText) > len2set)
+    Test.MethodTested("setMaxTextLen()", bOK)
+
+    Test.StartMethod("getMaxTextLen()")
+    bOK = true
+    if (oObj.getMaxTextLen = 12) then
+        len2set = 10
+    else
+        len2set = 12
+    endif
+    oObj.setMaxTextLen(len2set)
+    Out.Log("result of getMaxTextLen is: '" + oObj.getMaxTextLen() +"'. It sould be '"+len2set+"'")
+    bOK = bOK AND (oObj.getMaxTextLen() = len2set)
+    Test.MethodTested("getMaxTextLen()", bOK)
+
+    bCB1_textChanged = false
+    bCB2_textChanged = false
+
+    Test.StartMethod("addTextListener()")
+    bOK = true
+    oObj.addTextListener(oListener1)
+    oObj.addTextListener(oListener2)
+    oObj.setText("addTextListener")
+    Wait(500)
+    bOK = bOK AND bCB1_textChanged AND bCB2_textChanged
+    Test.MethodTested("addTextListener()", bOK)
+
+    bCB1_textChanged = false
+    bCB2_textChanged = false
+
+    Test.StartMethod("removeTextListener()")
+    bOK = true
+    oObj.removeTextListener(oListener1)
+    oObj.setText("removeTextListener")
+    Wait(500)
+    bOK = bOK AND NOT bCB1_textChanged AND bCB2_textChanged
+    oObj.removeTextListener(oListener2)
+    Test.MethodTested("removeTextListener()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub CB1_disposing()
+End Sub
+
+Sub CB2_disposing()
+End Sub
+
+' Listener call backs for com.sun.star.awt.XTextListener
+Sub CB1_textChanged
+    Out.Log("CallBack for Listener1 textChanged was called.")
+    bCB1_textChanged = true
+End Sub
+Sub CB2_TextChanged
+    Out.Log("CallBack for Listener2 textChanged was called.")
+    bCB2_textChanged = true
+End Sub
+</script:module>

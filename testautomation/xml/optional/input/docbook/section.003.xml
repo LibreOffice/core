@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article>
+<articleinfo>
+<title>Unit Test: section.003</title>
+<releaseinfo role="CVS">$Id: section.003.xml,v 1.2 2008-07-11 07:57:31 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+    <section id="c2s1"><title>This is a Section Title.</title>
+      <para>blah.</para>
+      <section id="c2s1s1"><title>This is a Really Long Section Title That's Almost Certainly Bound to Wrap Around on the Page</title>
+    <para>blah.</para>
+      </section>
+    </section>
+
+</article>

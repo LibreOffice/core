@@ -1,0 +1,70 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_awt_grid_XGridControl_idl__
+#define __com_sun_star_awt_grid_XGridControl_idl__
+
+#include <com/sun/star/awt/grid/XGridSelection.idl>
+#include <com/sun/star/awt/grid/XGridColumnModel.idl>
+#include <com/sun/star/awt/grid/XGridDataModel.idl>
+#include <com/sun/star/awt/XMouseListener.idl>
+
+//=============================================================================
+
+module com {  module sun {  module star {  module awt { module grid {
+
+//=============================================================================
+
+/** An interface to a control that displays a tabular data.
+
+    @see UnoControlGrid
+
+    @since OOo 3.3.0
+ */
+interface XGridControl: XGridSelection
+{
+    /** Converting
+    */
+
+    long getItemIndexAtPoint( [in] long x, [in] long y);
+
+    /** Sets tooltip for row
+        @param textForTooltip
+            text, which will be shown as tooltip.
+            If only cell content should be displayed, leave sequence empty.
+        @param columnsForTooltip
+            column numbers, which define the cell content that should be shown in the tooltip.
+            If only text should be shown, leave this sequence empty.
+    */
+    void setToolTip( [in] sequence< string > textForTooltip, [in] sequence< long > columnsForTooltip);
+
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif

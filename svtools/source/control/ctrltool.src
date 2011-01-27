@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <svtools/svtools.hrc>
+
+String STR_SVT_STYLE_LIGHT
+{
+    Text [ en-US ] = "Light" ;
+};
+
+String STR_SVT_STYLE_LIGHT_ITALIC
+{
+    Text [ en-US ] = "Light Italic" ;
+};
+
+String STR_SVT_STYLE_NORMAL
+{
+    Text [ en-US ] = "Regular" ;
+};
+
+String STR_SVT_STYLE_NORMAL_ITALIC
+{
+    Text [ en-US ] = "Italic" ;
+};
+
+String STR_SVT_STYLE_BOLD
+{
+    Text [ en-US ] = "Bold" ;
+};
+
+String STR_SVT_STYLE_BOLD_ITALIC
+{
+    Text [ en-US ] = "Bold Italic" ;
+};
+
+String STR_SVT_STYLE_BLACK
+{
+    Text [ en-US ] = "Black" ;
+};
+
+String STR_SVT_STYLE_BLACK_ITALIC
+{
+    Text [ en-US ] = "Black Italic" ;
+};
+
+String STR_SVT_FONTMAP_BOTH
+{
+    Text [ en-US ] = "The same font will be used on both your printer and your screen." ;
+};
+
+String STR_SVT_FONTMAP_PRINTERONLY
+{
+    Text [ en-US ] = "This is a printer font. The screen image may differ." ;
+};
+
+String STR_SVT_FONTMAP_SCREENONLY
+{
+    Text [ en-US ] = "This is a screen font. The printer image may differ." ;
+};
+
+String STR_SVT_FONTMAP_SIZENOTAVAILABLE
+{
+    Text [ en-US ] = "This font size has not been installed. The closest available size will be used.";
+};
+
+String STR_SVT_FONTMAP_STYLENOTAVAILABLE
+{
+    Text [ en-US ] = "This font style will be simulated or the closest matching style will be used.";
+};
+
+String STR_SVT_FONTMAP_NOTAVAILABLE
+{
+    Text [ en-US ] = "This font has not been installed. The closest available font will be used.";
+};

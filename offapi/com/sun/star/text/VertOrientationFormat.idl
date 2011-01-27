@@ -1,0 +1,77 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_VertOrientationFormat_idl__
+#define __com_sun_star_text_VertOrientationFormat_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+// DocMerge from xml: struct com::sun::star::text::VertOrientationFormat
+/** describes the vertical orientation of an object.
+
+
+
+    <p>If <code>VerticalOrientation == VERT_NONE</code>, then the value "YPos"
+    describes the distance from the top of the context. Otherwise "YPos"
+    is ignored.
+    </p>
+ */
+published struct VertOrientationFormat
+{
+    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::YPos
+    /** contains the distance from top. Only valid if the property
+        VerticalOrientation contains the value VERT_NONE.
+     */
+    long YPos;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::VerticalOrientation
+    /** determines the vertical alignment of an object.
+        The values refer to com::sun::star::VertOrientation.
+     */
+    short VerticalOrientation;
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: field com::sun::star::text::VertOrientationFormat::VerticalRelation
+    /** determines the reference position of the vertical alignment.@see com::sun::star::text::RelOrientation
+     */
+    short VerticalRelation;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

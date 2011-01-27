@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sd_SdMasterPage" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+' REQUIRED VARIABLES for interface/service tests:
+Global oGrouperCollection AS Object
+Global oCombinerCollection As Object
+Global oBinderCollection As Object
+
+'Required for com.sun.star.drawing.XShapes
+Global oXShapeInstance As Object 'to add/remove
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sd.SdMasterPage
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim oMasterPages As Object
+
+    oDoc = utils.createDocument("sdraw", cObjectName)
+
+    oXShapeInstance =  oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+    oGrouperCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+    oCombinerCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+    oBinderCollection = createUNOService("com.sun.star.drawing.ShapeCollection")
+
+    oMasterPages = oDoc.MasterPages
+    oObj = oMasterPages(0)
+
+    addShape(oObj, 1000, 1000)
+    addShape(oObj, 5000, 5000)
+    addShape(oObj, 2000, 2000)
+    addShape(oObj, 3000, 3000)
+    addShape(oObj, 4000, 4000)
+    addShape(oObj, 5000, 5000)
+    addShape(oObj, 6000, 6000)
+    addShape(oObj, 7000, 7000)
+
+    oGrouperCollection.Add(oObj.getByIndex(0))
+    oGrouperCollection.Add(oObj.getByIndex(1))
+    oCombinerCollection.Add(oObj.getByIndex(2))
+    oCombinerCollection.Add(oObj.getByIndex(3))
+    oBinderCollection.Add(oObj.getByIndex(4))
+    oBinderCollection.Add(oObj.getByIndex(5))
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub AddShape(oPage as Object, nPosX as Integer, nPosY as Integer)
+    Dim aPoint As New com.sun.star.awt.Point
+    Dim aSize As New com.sun.star.awt.Size
+    Dim oRectangleShape As Object
+
+    aPoint.x = nPosX
+    aPoint.y = nPosY
+    aSize.Width = 10000
+    aSize.Height = 10000
+    oRectangleShape = oDoc.createInstance("com.sun.star.drawing.RectangleShape")
+    oRectangleShape.Size = aSize
+    oRectangleShape.Position = aPoint
+    oRectangleShape.FillColor = RGB(255, 0, 0)
+    oPage.add(oRectangleShape)
+End Sub
+
+Sub DisposeObj()
+    if hasUnoInterfaces(oDoc, "com.sun.star.lang.XComponent") then
+        oDoc.dispose()
+    end if
+End Sub
+</script:module>

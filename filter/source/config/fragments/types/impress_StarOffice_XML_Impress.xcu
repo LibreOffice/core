@@ -1,0 +1,12 @@
+    <node oor:name="impress_StarOffice_XML_Impress" oor:op="replace" >
+        <prop oor:name="DetectService"><value>com.sun.star.comp.draw.FormatDetector</value></prop>
+        <prop oor:name="URLPattern"/>
+        <prop oor:name="Extensions"><value>sxi</value></prop>
+        <prop oor:name="MediaType"><value>application/vnd.sun.xml.impress</value></prop>
+        <prop oor:name="Preferred"><value>false</value></prop>
+        <prop oor:name="PreferredFilter"><value>StarOffice XML (Impress)</value></prop>
+        <prop oor:name="UIName">
+            <value>%productname% %formatversion% Präsentation</value>
+        </prop>
+        <prop oor:name="ClipboardFormat"><value>Impress 6.0</value></prop>
+    </node>

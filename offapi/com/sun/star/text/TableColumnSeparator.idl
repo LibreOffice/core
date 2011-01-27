@@ -1,0 +1,86 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_text_TableColumnSeparator_idl__
+#define __com_sun_star_text_TableColumnSeparator_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module text {
+
+//=============================================================================
+
+/** The width of the cells of a text table is defined by the position
+    of the separator between neighboring cells.
+
+    <p>If cells of the table are merged, this separator is not removed, but
+    it is hidden.
+    </p>
+
+    <p>A text table or a text table row provides the separators in a
+    sequence of <type>TableColumnSeparator</type>s. If the table only
+    consists of one column, then this sequence is empty.
+
+    </p>
+    <p>The real width of a table depends on the environment (page style and
+    number of text columns at the table's position, alignment, and left and
+    right margins).  For that reason, the table column separator does not
+    contain metric values for the column widths. The values are relative
+    to the value of the property <member>TextTable::TableColumnRelativeSum</member>.
+
+    </p>
+    <p>A table provides this property only if all rows have the same structure.
+    If the table does not provide the property, then it cannot be set using.
+    </p>
+
+    <p>The state of <member>TableColumnSeparator::IsVisible</member> and the
+    count of the sequence must be the same in as it was in.
+    Hidden separators cannot be moved and they cannot be overtaken by visible
+    separators.</p>
+
+    @see com::sun::star::text::TextTable
+ */
+published struct TableColumnSeparator
+{
+    /** contains the position of the separator.
+     */
+    short Position;
+
+    //-------------------------------------------------------------------------
+
+    /** determines if the separator is visible.
+     */
+    boolean IsVisible;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+
+#endif

@@ -1,0 +1,10 @@
+    <node oor:name="sgv_Import" oor:op="replace"  >
+        <prop oor:name="Type"><value>sgv_StarDraw_20</value></prop>
+        <prop oor:name="FormatName"><value>SVSGV</value></prop>
+        <prop oor:name="RealFilterName"><value>SGV - StarDraw 2.0</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="UIName">
+            <value xml:lang="en-US">SGV - StarDraw 2.0</value>
+        </prop>
+        <prop oor:name="Flags"><value>IMPORT</value></prop>
+    </node>

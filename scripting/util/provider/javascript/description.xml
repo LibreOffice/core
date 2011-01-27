@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<description
+  xmlns="http://openoffice.org/extensions/description/2006"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  xmlns:dep="http://openoffice.org/extensions/description/2006">
+
+  <identifier value="com.sun.star.script.provider.ScriptProviderForJavaScript"/>
+
+  <dependencies>
+    <OpenOffice.org-minimal-version value="3.0" dep:name="OpenOffice.org 3.0"/>
+  </dependencies>
+
+  <version value="3.3.0"/>
+
+  <publisher>
+    <name xlink:href="http://www.documentfoundation.org" lang="en">The
+      Document Foundation</name>
+  </publisher>
+
+  <display-name>
+    <name lang="en">Script provider for JavaScript</name>
+  </display-name>
+
+</description>

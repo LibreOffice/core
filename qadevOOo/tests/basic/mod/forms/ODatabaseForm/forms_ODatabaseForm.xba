@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="forms_ODatabaseForm" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' for XPersistObject
+  Global oPersistInstance As Object
+
+' Required for  com.sun.star.lang.XComponent:
+  Global oComponentInstance As Object ' it will be disposed
+
+  ' Requiered for  com.sun.star.container.XNameContainer
+  Global oInstance As Object 'instance to insert
+
+  ' Required for com.sun.star.sdbc.XResultSet
+  Global cXResultSetFirstRecord as String
+  Global cXResultSetLastRecord as String
+  Global cXResultSetRecord1 as String
+  Global cXResultSetRecord2 as String
+  Global cXResultSet2BeforeLastRecord as String
+
+' Required for  com.sun.star.sdbc.XColumnLocate:
+  Global cExistantColumnName As String
+
+  ' Requiered for  com.sun.star.container.XNameReplace
+  Global cNameToReplace As String 'name of instance to be replased
+  Global oReplaceInstance As Object 'instance, that will be inserted
+                                    'instead old one
+
+  Global oIdxReplaceInstance As Object
+
+' Required for com.sun.star.sdbc.XParameters
+  Global paramTypes as Variant
+
+' Required for com.sun.star.sdbc.XRow and com.sun.star.sdbc.XRowUpdate
+  Global rowTypes as Variant
+  Global rowTypesCol as Variant
+
+' Required for com.sun.star.sdbc.XResultSetUpdate
+  Global textColumn As String
+
+' Required for com.sun.star.awt.XTabControllerModel
+  Global XTabControlModel1 As Object
+  Global XTabControlModel2 As Object
+
+  Global oConnection As Object
+  
+' Required for com.sun.star.container.XContainer
+  Global oElementToInsert As Object
+  Global oContainer As Object
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' forms.ODatabaseForm
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim oRowSet As Object, facc As Object, dbSource As Object
+    Dim srcFile As String, dstFile As String, dbSrcURL As String
+    Dim oDrawPage As Object, oForms As Object, oForm As Object
+    Dim oShape1 As Object, oShape2 As Object
+
+    bOK = true
+
+    ' Copying DB file to temp location
+    srcFile = utils.Path2URL(cTestDocsDir) + "TestDB/testDB.dbf"
+    dstFile = utils.getTempFileURL("TestDB.dbf")
+    dbSrcURL = "sdbc:dbase:" + utils.StrReplace(dstFile, "/testDB.dbf", "")
+
+    Out.Log("Copying file '" + srcFile + "' to '" + dstFile + "'")
+    facc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
+    if (facc.exists(dstFile)) then facc.kill(dstFile)
+    facc.copy(srcFile, dstFile)
+
+    dbtools.RegisterDataSource("DBTest", dbSrcURL)
+
+    ' Creating a form
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    oShape1 = toolkittools.addControlToDefaultForm("ComboBox", 1000, 1000, 2000, 1000)
+    oShape2 = toolkittools.addControlToDefaultForm("TextField", 1000, 1000, 2000, 1000)
+    'get control from document
+    oDrawPage = oDoc.DrawPage
+    oForms = oDrawPage.getForms()
+
+    oForm = oForms.getByName("Standard")
+
+    oForms.insertByName("Instance1", oDoc.createInstance("com.sun.star.form.component.Form"))
+    oForms.insertByName("Instance2", oDoc.createInstance("com.sun.star.form.component.Form"))
+
+    oObj = oForm
+
+    'connect to a database
+    oForm.DataSourceName = "DBTest"
+    oForm.Command = "TestDB"
+    oForm.CommandType = com.sun.star.sdb.CommandType.TABLE
+    oForm.Load()
+
+    oConnection = oForm.ActiveConnection
+    Dim list as Object
+'    list = createUnoListener("C_", "com.sun.star.lang.XEventListener")
+'	oConnection.addEventListener(list)
+
+    'for XComponent
+    Out.Log("" + oForms.hasByName("Instance1") + "," + oForms.hasByName("Instance2"))
+    oComponentInstance = oForms.getByName("Instance1")
+    oPersistInstance = oForms.getByName("Instance2")
+
+    'for XNameContainer, XIndexContainer
+    oInstance = oDoc.createInstance("com.sun.star.form.component.ComboBox")
+    
+    'for XContainer
+    oElementToInsert = oDoc.createInstance("com.sun.star.form.component.ComboBox")
+    
+    'for XNameReplace
+    oReplaceInstance = oDoc.createInstance("com.sun.star.form.component.ComboBox")
+    oObj.insertByName(cObjectName + "Replace", oDoc.createInstance("com.sun.star.form.component.ComboBox"))
+    cNameToReplace = cObjectName + "Replace"
+
+    'for XIndexReplace
+    oIdxReplaceInstance = oDoc.createInstance("com.sun.star.form.component.ComboBox")
+
+    cExistantColumnName = "_TEXT"
+    cXResultSetFirstRecord = "text1"
+    cXResultSetLastRecord = "text3"
+    cXResultSetRecord1 = "text1"
+    cXResultSetRecord2 = "text2"
+    cXResultSet2BeforeLastRecord = "text2"
+
+    ' for XParameters
+    paramTypes = DimArray()
+'    paramTypes = Array("boolean", "byte", "short", "int", "long", "float", "double", "string", _
+'        "bytes", "date", "time", "timestamp", "binarystream", "characterstream", "object", "objectwithinfo", _
+'        "ref", "blob", "clob", "array")
+
+    ' for XRow and XRowUpdate
+    rowTypes = Array("string", "int", "long", "double", "float", "date", "datetm", "boolean")
+    rowTypesCol = Array(1, 2, 3, 4, 5, 6, 7, 9)
+'    rowTypes = Array("boolean", "byte", "short", "int", "long", "float", "double", "string", _
+'        "bytes", "date", "time", "timestamp", "binarystream", "characterstream", "object", "objectwithinfo", _
+'        "ref", "blob", "clob", "array")
+
+' Required for com.sun.star.sdbc.XResultSetUpdate
+    textColumn = "_TEXT"
+
+' Required for com.sun.star.awt.XTabControllerModel
+    XTabControlModel1 = oShape1.getControl()
+    XTabControlModel2 = oShape2.getControl()
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub DisposeObj()
+On Error Goto ErrHndl
+'msgbox "Disposing ODatabaseForm"
+    Out.Log("Closing DB connection ...")
+    oConnection.close()
+
+    Out.Log("Revoking 'DBTest' datasource ...")
+    dbtools.RevokeDB("DBTest")
+'msgbox "ODatabaseForm disposed."
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub
+
+Sub C_disposing()
+    Out.Log("!!! Connection disposed !!!")
+'    oConnection.close()
+End Sub
+</script:module>

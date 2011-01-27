@@ -1,0 +1,134 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_uno_XInterface_idl__
+#define __com_sun_star_uno_XInterface_idl__
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module uno {
+
+//=============================================================================
+
+// DocMerge from xml: interface com::sun::star::uno::XInterface
+/** base interface of all UNO interfaces
+
+    <p> It provides lifetime control by reference counting and the
+    possibility of querying for other
+    interfaces of the same logical object.
+
+
+    <p>
+    "Logical Object" in this case means that the
+    interfaces actually can be supported by internal (e.g. aggregated) physical objects.</p>
+
+    <p> Deriving from this interface is mandatory for all UNO interfaces.
+    <p> Each language binding (Java, C++, StarBasic, Python, ... ) may
+    provide a different mapping of this interface, please look into the language
+    dependent documention.
+
+    <p> The UNO object does not export the state of the reference count (acquire() and
+        release() do not have return values). In general, also the UNO object itself
+        should not make any assumption on the concrete value of the reference count
+        (except on the transition from one to zero ).
+
+ */
+published interface XInterface
+{
+    /** queries for a new interface to an existing UNO object.
+        <p>
+        The queryInterface() method is the entry point to obtain other interfaces which
+        are exported by the object. The caller asks the implementation of the object,
+        if it supports the interface specified by the type argument. The call may either
+        return with a interface reference of the requested type or with a void any.
+
+        <p>
+        There are certain specifications, a queryInterface() implementation must not violate.
+        <p>
+        1) If queryInterface on a specific object has once returned a valid interface reference
+          for a given type, it must return a valid reference for any successive queryInterface
+          calls on this object for the same type.
+        <p>
+        2) If queryInterface on a specific object has once returned a null reference
+        for a given type, it must always return a null reference for the same type.
+        <p>
+        3) If queryInterface on a reference A returns reference B, queryInterface on
+        B for Type A must return interface reference A or calls made on the returned
+        reference must be equivalent to calls made on reference A.
+        <p>
+        4) If queryInterface on a reference A returns reference B, queryInterface on
+        A and B for XInterface must return the same interface reference (object identity).
+
+        <p> The reason for the strong specification is, that a Uno Runtime Environment (URE)
+        may choose to cache queryInterface() calls.
+        <p> As mentioned above, certain language bindings may map this function differently also
+        with different specifications, please visit the language dependent specification for it.
+        The current C++ binding sticks to the specification state
+        <p>
+        The rules mentioned above are basically identical to the rules of QueryInterface in MS COM.
+
+        @param aType a UNO interface type, for which an object reference shall be obtained.
+        @return an interface reference in case the requested interface is supported by the object,
+                a void any otherwise.
+     */
+    any queryInterface( [in] type aType );
+
+    //-------------------------------------------------------------------------
+    /** increases the reference counter by one.
+
+        <p>When you have called acquire() on the
+        UNO object, it is often said, that you have a reference or a hard reference
+        to the object.
+
+        <p>
+        It is only allowed to invoke a method on an UNO object, when you keep
+        a hard reference to it.
+
+        <p> Every call to acquire must be followed by a corresponding call to release
+        some time later, which may eventually lead to the destruction of the object.
+     */
+    [oneway] void acquire();
+
+    //-------------------------------------------------------------------------
+
+    // DocMerge from xml: method com::sun::star::uno::XInterface::release
+    /** decreases the reference counter by one.
+        <p>When the reference counter reaches 0, the object gets deleted.</p>
+        <p>Calling release() on the object is often called releasing
+        or clearing the reference to an object.
+     */
+    [oneway] void release();
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif

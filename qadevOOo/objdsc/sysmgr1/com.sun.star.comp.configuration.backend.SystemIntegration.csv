@@ -1,0 +1,5 @@
+"SystemIntegration";"com::sun::star::lang::XInitialization#optional";"initialize()"
+"SystemIntegration";"com::sun::star::configuration::backend::XBackend";"listOwnLayers()"
+"SystemIntegration";"com::sun::star::configuration::backend::XBackend";"getOwnUpdateHandler()"
+"SystemIntegration";"com::sun::star::configuration::backend::XBackend";"listLayers()"
+"SystemIntegration";"com::sun::star::configuration::backend::XBackend";"getUpdateHandler()"

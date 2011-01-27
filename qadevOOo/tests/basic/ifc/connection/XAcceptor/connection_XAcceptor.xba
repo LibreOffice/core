@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="connection_XAcceptor" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.connection.XAcceptor
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim oConnector As Object
+    Dim xConnection As Object
+    Dim sConnectionString As String
+    Dim args(1) As Variant
+
+    bOK = true
+
+    Test.startMethod("accept()")
+
+    oConnector = createUnoService("basichelper.Connector")
+
+    Dim iPos1 As Integer, iPos2 As Integer
+
+    iPos1 = inStr(1, CNCSTR, "socket")
+    iPos2 = inStr(iPos1, CNCSTR, "port=")
+
+    sConnectionString = mid(CNCSTR, iPos1, iPos2 - iPos1 + 5) &amp; "18888"
+
+    Out.Log("Connection string is '" &amp; sConnectionString &amp; "'")
+
+    args(0) = createUnoService("com.sun.star.connection.Connector")
+    args(1) = sConnectionString
+
+    ' When call initialize() method, a new thread is created and tries to
+    ' connect to Acceptor after some seconds.
+
+    oConnector.initialize(args())
+
+    ' Starting acception.
+    xConnection = oObj.accept(sConnectionString)
+    wait(500) 'Just to be sure that component had a chance to change it's state.
+
+    bOK = bOK AND hasUNOInterfaces(xConnection, "com.sun.star.connection.XConnection")
+    Out.Log("Connector's state is '" &amp; oConnector.getByName("State") &amp; "'")
+    bOK = bOK AND oConnector.getByName("State") = "connected" ' This means that connection was established.
+
+    if (bOK) then
+        Out.Log("Connection established! Trying to get data from stream.")
+
+        Dim aStr As String
+        Dim aByte As Integer
+        Dim readData() As Variant
+        aStr = ""
+        aByte = 1
+        while (aByte &lt;&gt; 0)
+            ReDim readData() As Variant
+            xConnection.read(readData, 1)
+            aByte = readData(0)
+            if (aByte &lt;&gt; 0) then
+                    aStr = aStr &amp; chr(aByte)
+            end if
+        wend
+
+        Out.Log("Returned data from stream is " &amp; aStr)
+        bOK = bOK AND aStr = sConnectionString
+    end if
+
+    Test.MethodTested("accept()", bOK)
+
+    Test.startMethod("stopAccepting()")
+    bOK = true
+    ' Now stopping acception and trying to connect again
+    ' (we can do this, if connection string is the same.)
+    oObj.stopAccepting()
+
+    Out.Log("Trying to connect after stopping accepting...")
+    oConnector.initialize(args())
+    Out.Log("Connector's state is '" &amp; oConnector.getByName("State") &amp; "'")
+
+    ' Now oConnector shouldn't connect. So, check it's state
+    ' after few seconds (= Connection's Timeout + 3 sec)
+    wait(3000 + oConnector.getByName("Timeout"))
+    Out.Log("Connector's state is '" &amp; oConnector.getByName("State") &amp; "'")
+    bOK = bOK AND oConnector.getByName("State") = "NoConnectException"
+
+    Test.MethodTested("stopAccepting()", bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    resume next
+End Sub
+</script:module>

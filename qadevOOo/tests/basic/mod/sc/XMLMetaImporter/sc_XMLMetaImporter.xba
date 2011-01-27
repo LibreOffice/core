@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sc_XMLMetaImporter" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for com.sun.star.xml.sax.XDocumentHandler
+  Global vXMLData As Variant
+
+' Required for procedure CheckImport
+  Global sTitle As String
+
+' Required for  com.sun.star.document.XImporter:
+  Global oSrcDocument As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sc.XMLMetaImporter
+'*************************************************************************
+On Error Goto ErrHndl
+    oDoc = utils.createDocument("scalc", cObjectName)
+    oObj = createUnoService("com.sun.star.comp.Calc.XMLMetaImporter")
+
+    oSrcDocument = oDoc
+    oObj.setTargetDocument(oDoc)
+
+    sTitle = "XMLMetaImporter"
+    vXMLData = Array( _
+            Array("start", "office:document-meta", _
+                        "xmlns:office", "CDATA", "http://openoffice.org/2000/office", _
+                        "xmlns:meta", "CDATA", "http://openoffice.org/2000/meta", _
+                        "xmlns:dc", "CDATA", "http://purl.org/dc/elements/1.1/"), _
+            Array("start", "office:meta"), _
+            Array("start", "dc:title"), _
+            Array("chars", sTitle), _
+            Array("end", "dc:title"), _
+            Array("end", "office:meta"), _
+            Array("end", "office:document-meta"))
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Function CheckImport() As Boolean
+    Dim res As Boolean
+    Dim docInfo As Object
+    Dim title As String
+    out.log("checking of import...")
+    docInfo = oDoc.getDocumentInfo()
+    title = docInfo.getPropertyValue("Title")
+    res = title = sTitle
+    out.log("checking result: " + res)
+    CheckImport() = res
+End Function
+</script:module>

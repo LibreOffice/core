@@ -1,0 +1,3 @@
+# empty01
+TEST|Empty 1|QUICKWORD|empty01
+ENTER_STRING_AT_LOCATION|LEFT|TOP|New text added to empty file.\n

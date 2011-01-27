@@ -1,0 +1,51 @@
+How to write my own sdbc driver
+
+all example files can be found in connectivity/workben/skeleton
+
+Pre implementation steps
+- copy all files from connectivity/workben/skeleton into your new created directory under
+  connectivity/source/drivers and rename the first char of the files to one which isn't used so far
+  ( please have a look at the other drivers )
+- search all occurrences of skeleton and replace them to a name which you prefer
+
+1. Implement a class called driver or modify the existing skeleton	-> have a look at SDriver.?xx 
+2. Implement a class called connection								-> have a look at SConnection.?xx 	
+3. Have a look at the DatabaseMetaData								-> see SDatabaseMetaData.cxx
+	The methods which should be implemented at least are
+		- getTableTypes
+		- getTables
+		- getTypeInfo
+		- getColumns
+
+4. You need a statement to show/access some data					-> have a look at SStatement.cxx
+																	-> especially executeQuery()
+
+5. The ResultSet: without you see nothing							-> look at SResultSet.cxx
+6. The ResultSetMetaData needed to get some information about what are waiting for us
+																	-> look at SResultSetMetaData.cxx
+
+7. The prepared statement is the last class we have to implement now
+	-> you have to allow statements like "SELECT * FROM table WHERE id = ?"
+
+
+8. insert entry in version.mk
+# ----------------------------SKELETON settings-----------------------------------#
+# target
+SKELETON_TARGET=skeleton
+
+# the major 
+SKELETON_MAJOR=2
+# the minor 
+SKELETON_MINOR=0
+# the micro 
+SKELETON_MICRO=0
+
+# this is a c++ compatible library 
+SKELETON_CPP=1
+
+SKELETON=$(SKELETON_TARGET_TARGET)_$(CMPEXT)
+
+
+9. copy dll to program dir of office and register the dll
+
+10. congratulations you have now implement your own driver :-)

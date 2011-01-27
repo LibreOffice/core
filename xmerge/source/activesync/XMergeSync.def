@@ -1,0 +1,9 @@
+
+LIBRARY      "XMERGESYNC.DLL"
+DESCRIPTION  'XMerge Desktop Synchronization Module'
+
+EXPORTS
+       DllCanUnloadNow		PRIVATE
+       DllGetClassObject	PRIVATE
+       DllRegisterServer	PRIVATE
+       DllUnregisterServer	PRIVATE

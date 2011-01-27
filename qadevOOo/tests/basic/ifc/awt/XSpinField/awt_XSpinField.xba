@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_XSpinField" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.awt.XSpinField
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Test.StartMethod("addSpinListener()")
+    Dim oListener As Object
+    oListener = createUnoListener("SL_", "com.sun.star.awt.XSpinListener")
+    initListener()
+    oObj.addSpinListener(oListener)
+    Test.MethodTested("addSpinListener()", True)
+
+    Test.StartMethod("up()")
+    oObj.up()
+    wait(1000)
+    Test.MethodTested("up()", bUpCalled)
+
+    Test.StartMethod("down()")
+    oObj.down()
+    wait(1000)
+    Test.MethodTested("down()", bDownCalled)
+
+    Test.StartMethod("first()")
+    oObj.first()
+    wait(1000)
+    Test.MethodTested("first()", bFirstCalled)
+
+    Test.StartMethod("last()")
+    oObj.last()
+    wait(1000)
+    Test.MethodTested("last()", bLastCalled)
+
+    Test.StartMethod("removeSpinListener()")
+    oObj.removeSpinListener(oListener)
+    initListener()
+    oObj.up()
+    wait(1000)
+    Test.MethodTested("removeSpinListener()", Not bUpCalled)
+
+    Test.StartMethod("enableRepeat()")
+    oObj.enableRepeat(true)
+    oObj.enableRepeat(false)
+    Test.MethodTested("enableRepeat()", True)
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Dim bUpCalled As Boolean
+Dim bDownCalled As Boolean
+Dim bFirstCalled As Boolean
+Dim bLastCalled As Boolean
+
+Sub initListener()
+    bUpCalled = false
+    bDownCalled = false
+    bFirstCalled  = false
+    bLastCalled = false
+End Sub
+
+Sub SL_up()
+    Out.log("Listener up called")
+    bUpCalled = true
+End Sub
+
+Sub SL_down()
+    Out.log("Listener down called")
+    bDownCalled = true
+End Sub
+
+Sub SL_first()
+    Out.log("Listener first called")
+    bFirstCalled = true
+End Sub
+
+Sub SL_last()
+    Out.log("Listener last called")
+    bLastCalled = true
+End Sub
+</script:module>

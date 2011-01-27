@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sch_ChartTitle" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+' REQUIRED VARIABLES for interface/service tests:
+Global oComponentDoc As Object
+Global oComponentInstance As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sch.ChartTitle
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim oChart As Object
+	Dim oCompChart as Object
+	
+    oDoc = utils.createDocument("scalc", cObjectName)
+    oChart = utils.createChartObject(oDoc, cObjectName)
+    oComponentDoc = utils.createDocument("scalc", cObjectName &amp; "1")
+    oCompChart = utils.createChartObject(oComponentDoc, cObjectName)
+
+    oChart.hasMainTitle = true
+    oObj = oChart.Title
+    oComponentInstance = oComponentDoc.Title
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Sub FillCells()
+    Dim oRange As Object
+    Dim n1 As Integer
+    Dim n2 As Integer
+
+    oRange = oDoc.Sheets(0).getCellRangeByPosition(0, 0, nCol, nRow)
+
+    for n1 = 1 to nCol - 1
+        For n2 = 1 To nRow - 1
+            oRange.getCellByPosition(n1, n2).Value = n2 * (n1 + 1)
+        Next n2
+    next n1
+
+    for n1 = 1 to nCol - 1
+        oRange.getCellByPosition(n1, 0).String = "Col " + n1
+    next n1
+    for n2 = 1 to nRow - 1
+        oRange.getCellByPosition(0, n2).String = "Row " + n2
+    next n2
+End Sub
+
+Sub DisposeObj()
+    if NOT isNULL(oComponentDoc) then oComponentDoc.dispose()
+End Sub
+</script:module>

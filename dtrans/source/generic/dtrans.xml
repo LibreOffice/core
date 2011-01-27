@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module-description PUBLIC "-//StarOffice//DTD ComponentDescription 1.0//EN" "module-description.dtd">
+
+<module-description xmlns:xlink="http://www.w3.org/1999/xlink">
+    <module-name> dtrans </module-name>
+    <component-description>
+        <author> Oliver Braun </author>
+        <name> com.sun.star.comp.datatransfer.generic </name>
+        <description> This module includes a generic clipboard implementation </description>
+        <loader-name> com.sun.star.loader.SharedLibrary </loader-name>
+        <language> c++ </language>
+        <status value="beta"/>
+        <supported-service> com.sun.star.datatransfer.clipboard.GenericClipboard </supported-service>
+        <supported-service> com.sun.star.datatransfer.clipboard.ClipboardManager </supported-service>
+        <service-dependency> ... </service-dependency>
+        <type> com.sun.star.datatransfer.clipboard.RenderingCapabilities </type>
+        <type> com.sun.star.datatransfer.clipboard.XClipboardEx </type>
+        <type> com.sun.star.datatransfer.clipboard.XClipboardManager </type>
+        <type> com.sun.star.datatransfer.clipboard.XClipboardNotifier </type>
+        <type> com.sun.star.datatransfer.XTransferableEx </type>
+        <type> com.sun.star.datatransfer.XTransferableSource </type>
+        <type> com.sun.star.io.XOutputStream </type>
+        <type> com.sun.star.lang.DisposedException </type>
+        <type> com.sun.star.lang.IllegalArgumentException </type>
+        <type> com.sun.star.lang.XComponent </type>
+        <type> com.sun.star.lang.XInitialization </type>
+        <type> com.sun.star.lang.XMultiServiceFactory </type>
+        <type> com.sun.star.lang.XSingleComponentFactory </type>
+        <type> com.sun.star.lang.XSingleServiceFactory </type>
+        <type> com.sun.star.lang.XServiceInfo </type>
+        <type> com.sun.star.lang.XTypeProvider </type>
+        <type> com.sun.star.registry.XRegistryKey </type>
+        <type> com.sun.star.uno.TypeClass </type>
+        <type> com.sun.star.uno.XComponentContext </type>
+        <type> com.sun.star.uno.XWeak </type>
+        <type> com.sun.star.uno.XAggregation </type>
+    </component-description>
+    <project-build-dependency>  cppuhelper  </project-build-dependency>
+    <project-build-dependency>  cppu        </project-build-dependency>
+    <project-build-dependency>  sal         </project-build-dependency>
+    <runtime-module-dependency> cppuhelper  </runtime-module-dependency>
+    <runtime-module-dependency> cppu2       </runtime-module-dependency>
+    <runtime-module-dependency> sal2        </runtime-module-dependency>
+</module-description>

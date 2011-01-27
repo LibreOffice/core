@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=oasis-web-template
+Type=MimeType
+Patterns=*.oth
+MimeType=application/vnd.oasis.opendocument.text-web
+Comment=HTML Document Template

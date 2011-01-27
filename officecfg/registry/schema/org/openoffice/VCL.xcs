@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ * 
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="VCL" oor:package="org.openoffice" xml:lang="en-US"> <info>
+		<author>PL</author>
+		<desc >Contains preferences for the VCL (Visual Class Library).</desc>
+	</info>
+	<templates>
+		<group oor:name="LFonts">
+			<info>
+				<author>PL</author>
+				<desc>Contains attributes for fonts. The substitution lists are separated by &apos;;&apos; and are searched first to last for a substitute.</desc>
+			</info>
+			<prop oor:name="SubstFonts" oor:type="xs:string">
+				<info>
+					<desc>Contains a list of substitute fonts used in office documents.</desc>
+				</info>
+			</prop>
+			<prop oor:name="SubstFontsMS" oor:type="xs:string">
+				<info>
+					<desc>Contains a list of substitute fonts used in MS import filters.</desc>
+				</info>
+			</prop>
+			<prop oor:name="SubstFontsPS" oor:type="xs:string">
+				<info>
+					<desc>Contains a list of substitute fonts used in a PostScript context (for example, EPS export).</desc>
+				</info>
+			</prop>
+			<prop oor:name="SubstFontsHTML" oor:type="xs:string">
+				<info>
+					<desc>Contains a list of substitute fonts used in a HTML context (for example, HTML import/export).</desc>
+				</info>
+			</prop>
+			<prop oor:name="FontWeight" oor:type="xs:string">
+				<info>
+					<desc>Specifies the font weight. Valid values are &quot;thin&quot;, &quot;ultralight&quot;, &quot;light&quot;, &quot;semilight&quot;, &quot;normal&quot;, &quot;medium&quot;, &quot;semibold&quot;, &quot;bold&quot;, &quot;ultrabold&quot;, &quot;black&quot; (in ascending order of weight) and &quot;unknown&quot;.</desc>
+				</info>
+			</prop>
+			<prop oor:name="FontWidth" oor:type="xs:string">
+				<info>
+					<desc>Specifies the font width. Valid values are &quot;ultracondensed&quot;, &quot;extracondensed&quot;, &quot;condensed&quot;, &quot;semicondensed&quot;, &quot;normal&quot;, &quot;semiexpanded&quot;, &quot;expanded&quot;, &quot;extraexpanded&quot;, &quot;ultraexpanded&quot; (in ascending order of width) and &quot;unknown&quot;.</desc>
+				</info>
+			</prop>
+			<prop oor:name="FontType" oor:type="xs:string">
+				<info>
+					<desc>Denotes the compatible styles for the font. Multiple styles are separated by &apos;,&apos;. Valid styles are: &quot;Default&quot;, &quot;Standard&quot;, &quot;Normal&quot;, &quot;Symbol&quot;, &quot;Fixed&quot;, &quot;SansSerif&quot;, &quot;Serif&quot;, &quot;Decorative&quot;, &quot;Special&quot;, &quot;Italic&quot;, &quot;Title&quot;, &quot;Capitals&quot;, &quot;CJK&quot;, &quot;CJK_JP&quot;, &quot;CJK_SC&quot;, &quot;CJK_TC&quot;, &quot;CJK_KR&quot;, &quot;CTL&quot;, &quot;NoneLatin&quot;, &quot;Full&quot;, &quot;Outline&quot;, &quot;Shadow&quot;, &quot;Rounded&quot;, &quot;Typewriter&quot;, &quot;Script&quot;, &quot;Handwriting&quot;, &quot;Chancery&quot;, &quot;comic&quot;, &quot;brushscript&quot;, &quot;gothic&quot;, &quot;schoolbook&quot;, &quot;other&quot;</desc>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="ConfigurableSettings" oor:extensible="true">
+			<info>
+				<author>PL</author>
+				<desc>Specifies an extensible set of options that are ordered into key/value pairs for the VCL. For example, a valid key for describing when ATTools is activated is: &quot;EnableATToolSupport&quot; (valid values = &quot;true&quot;, &quot;false&quot;).</desc>
+			</info>
+		</group>
+		<group oor:name="LocalizedDefaultFonts" oor:extensible="true">
+			<info>
+				<author>PL</author>
+				<desc>Contains a localized table of default font lists organized as a set of sets of key/value pairs. The outer set denotes the language (e.g. &quot;en-US&quot;) so that default fonts can be declared for different language contexts. Each value is a font list separated by &apos;;&apos;. Default fonts are: CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS. Corresponding font lists: *_DISPLAY, *_HEADING, *_PRESENTATION, *_SPREADSHEET, *_TEXT, SANS, SANS_UNICODE, SERIF,SYMBOL, UI_FIXED, UI_SANS.</desc>
+			</info>
+		</group>
+		<set oor:name="LocalizedFontSubstitutions" oor:node-type="LFonts">
+			<info>
+				<author>PL</author>
+				<desc>Contains localized font substitution tables organized as a group of sets of LFonts. The outer set denotes the language (for example, &quot;en-US&quot;).</desc>
+			</info>
+		</set>
+	</templates>
+	<component>
+		<set oor:name="Settings" oor:node-type="ConfigurableSettings">
+			<info>
+				<author>PL</author>
+				<desc>Contains the settings for VCL (see template description).</desc>
+			</info>
+		</set>
+		<set oor:name="DefaultFonts" oor:node-type="LocalizedDefaultFonts">
+			<info>
+				<author>PL</author>
+				<desc>Contains the localized default fonts for VCL (see template description).</desc>
+			</info>
+		</set>
+		<set oor:name="FontSubstitutions" oor:node-type="LocalizedFontSubstitutions">
+			<info>
+				<author>PL</author>
+				<desc>Contains the localized font substitution tables for VCL (see template description).</desc>
+			</info>
+		</set>
+	</component>
+</oor:component-schema>
+

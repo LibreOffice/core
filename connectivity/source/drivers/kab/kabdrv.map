@@ -1,0 +1,9 @@
+UDK_3_0_0 {
+    global:
+        createKabConnection;
+        initKApplication;
+        shutdownKApplication;
+        matchKDEVersion;
+    local:
+        *;
+};

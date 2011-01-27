@@ -1,0 +1,27 @@
+// If using XComponentContext need to uncomment import directive below:
+// import com.sun.star.uno.XComponentContext;
+
+// If using XDesktop need to uncomment import directive below:
+// import com.sun.star.frame.XDesktop;
+
+// If using XComponent need to uncomment import directive below:
+// import com.sun.star.frame.XModel;
+
+import drafts.com.sun.star.script.framework.runtime.XScriptContext;
+
+public class Empty {
+
+  public void doMethod(XScriptContext xSc) {
+      
+      /* Methods available from XScriptContext: 
+            xSc.getDocument() returns XModel
+            xSc.getDesktop() returns XDesktop
+            xSc.getComponentContext() returns XComponentContext
+        */
+        
+        // Uncomment to get the current document as a component
+        // XComponent xcomponent = xSc.getDocument();
+        
+  }
+
+}

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="xmloff_Chart_XMLContentImporter" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for com.sun.star.xml.sax.XDocumentHandler
+  Global vXMLData As Variant
+
+' Required for procedure CheckImport
+  Global sValue As String
+
+' Required for  com.sun.star.document.XImporter:
+  Global oSrcDocument As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' xmloff.Chart.XMLContentImporter
+'*************************************************************************
+On Error Goto ErrHndl
+    oDoc = utils.loadTestDocument("emptyChart.sds", cObjectName)
+    oObj = createUnoService("com.sun.star.comp.Chart.XMLContentImporter")
+
+    oSrcDocument = oDoc
+    oObj.setTargetDocument(oDoc)
+
+    sValue = "XMLContentImporter_test"
+    vXMLData = Array( _
+            Array("start", "office:document-content", _
+                "xmlns:office", "CDATA", "http://openoffice.org/2000/office", _
+                "xmlns:text", "CDATA", "http://openoffice.org/2000/text", _
+                "xmlns:chart", "CDATA", "http://openoffice.org/2000/chart", _
+                "xmlns:table", "CDATA", "http://openoffice.org/2000/table", _
+                "xmlns:svg", "CDATA", "http://openoffice.org/2000/svg", _
+                "office:class", "CDATA", "chart", _
+                "office:version", "CDATA", "1.0"), _
+            Array("start", "office:body"), _
+            Array("start", "chart:chart"), _
+            Array("start", "chart:title"), _
+            Array("start", "text:p"), _
+            Array("chars", sValue), _
+            Array("end", "text:p"), _
+            Array("end", "chart:title"), _
+            Array("end", "chart:chart"), _
+            Array("end", "office:body"), _
+            Array("end", "office:document-content"))
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Function CheckImport() As Boolean
+    Dim res As Boolean
+    Dim oTitle As Object    
+    Dim title As String
+    out.log("checking of import...")
+    oTitle = oDoc.getTitle()
+    title = oTitle.getPropertyValue("String")
+    res = (title = sValue)
+    out.log("checking result: " + res)
+    CheckImport() = res
+End Function
+</script:module>

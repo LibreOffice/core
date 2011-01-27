@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleSelection" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+'*************************************************************************
+' This Interface/Service test depends on the following GLOBAL variables,
+' which must be specified in the object creation:
+
+'	Global multiSelection As Boolean
+
+'*************************************************************************
+
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleSelection
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean, locRes As Boolean
+    Dim chCount As Long, selCount As Long
+    Dim i As Long, mCount As Integer
+
+    if multiSelection then
+        Out.Log("Object allows multiple selection!")
+    else
+        Out.Log("Object does not allow multiple selection!")
+    End If
+
+    chCount = oObj.getAccessibleChildCount()
+    selCount = oObj.getSelectedAccessibleChildCount()
+    Out.Log("Object has "+chCount+" child(ren), "+selCount+" of them selected.")
+    If (chCount &gt; 50) then
+        mCount = 50
+        Out.Log("Object has too many children. Testing only first 50.")
+    else
+        mCount = chCount
+    End If
+
+    clearSelection()
+
+    Test.StartMethod("selectAccessibleChild()")
+    bOK = true
+    if (mCount &gt; 0) then
+        i = mCount - 1
+        while (oObj.isAccessibleChildSelected(i) OR itemDisabled(oObj.getAccessibleChild(i))) AND (i &gt; 0)
+            i = i - 1
+        wend
+        if (i &gt;= 0) then 
+            Out.Log("Selecting child #"+i+"...")
+            oObj.selectAccessibleChild(i)
+            wait(500)
+            locRes = oObj.isAccessibleChildSelected(i)
+            Out.Log("Child #"+i+" selected: "+locRes)
+            bOK = bOK AND locRes
+        End If
+    End If
+    clearSelection()
+    Test.MethodTested("selectAccessibleChild()",bOK)
+
+    Test.StartMethod("isAccessibleChildSelected()")
+    bOK = true
+    if (mCount &gt; 0) then
+        i = mCount - 1
+        while (oObj.isAccessibleChildSelected(i) OR itemDisabled(oObj.getAccessibleChild(i))) AND (i &gt; 0)
+            i = i - 1
+        wend
+        if (i &gt;= 0) then 
+            Out.Log("Selecting child #"+i+"...")
+            oObj.selectAccessibleChild(i)
+            wait(500)
+            locRes = oObj.isAccessibleChildSelected(i)
+            Out.Log("Child #"+i+" selected: "+locRes)
+            bOK = bOK AND locRes
+        End If
+    End If
+    clearSelection()
+    Test.MethodTested("isAccessibleChildSelected()",bOK)
+
+    Test.StartMethod("clearAccessibleSelection()")
+    bOK = true
+    if (mCount &gt; 0) AND (multiSelection) then
+        oObj.selectAccessibleChild(chCount - 1)
+        wait(500)
+        oObj.clearAccessibleSelection()
+        wait(500)
+        bOK = bOK AND NOT oObj.isAccessibleChildSelected(mCount - 1)
+    else
+        Out.Log("Cannot clear all selection for this object!")
+    End If
+    Test.MethodTested("clearAccessibleSelection()",bOK)
+
+' ### The following property was not found in correspond IDL file! ###
+    Test.StartMethod("selectAllAccessibleChildren()")
+    bOK = true
+    i = 0
+    if ((mCount &gt; 0) AND multiSelection) then
+' ### The following property was not found in correspond IDL file! ###
+        oObj.selectAllAccessibleChildren()
+        wait(500)
+        while (i &lt; mCount)
+            bOK = bOK AND oObj.isAccessibleChildSelected(i)
+            i = i + 1
+        wend
+    else
+        Out.Log("Cannot select all children for this object!")
+    End If
+    clearSelection()
+    Test.MethodTested("selectAllAccessibleChildren()",bOK)
+
+    Test.StartMethod("getSelectedAccessibleChildCount()")
+    bOK = true
+    Out.Log("Selecting all...")
+    oObj.selectAllAccessibleChildren()
+    wait(500)
+    selCount = oObj.getSelectedAccessibleChildCount()
+    Out.Log("Selected "+selCount+" child(ren).")
+    If (multiSelection) then
+        bOK = bOK AND (selCount = chCount)
+    else
+        bOK = bOK AND (selCount = 1) 
+    End If
+    clearSelection()
+    selCount = oObj.getSelectedAccessibleChildCount()
+    if (multiSelection) then
+        bOK = bOK AND (selCount = 0)
+    else
+        bOK = bOK AND (selCount = 1)
+    End If
+    Test.MethodTested("getSelectedAccessibleChildCount()",bOK)
+
+    Test.StartMethod("getSelectedAccessibleChild()")
+    Dim selAccChild As Object, accChild As Object
+    bOK = true
+    if (mCount &gt; 0) then
+        i = mCount - 1
+        while (oObj.isAccessibleChildSelected(i) OR itemDisabled(oObj.getAccessibleChild(i))) AND (i &gt; 0)
+            i = i - 1
+        wend
+        if (i &gt;= 0) then
+            Out.Log("Selecting child #"+i+"...")
+            oObj.selectAccessibleChild(i)
+            wait(500)
+            Out.Log("Child #"+i+" selected: "+oObj.isAccessibleChildSelected(i))
+            Out.Log("Now "+oObj.getSelectedAccessibleChildCount()+" child(ren) selected.")
+            selCount = oObj.getSelectedAccessibleChildCount()
+            if (selCount &gt; 0) then
+                selAccChild = oObj.getSelectedAccessibleChild(selCount-1)
+                accChild = oObj.getAccessibleChild(i)
+                bOK = bOK AND utils.at_equals(accChild,selAccChild)                
+            else
+                Out.Log("There are no selected children. Test fails.")
+                bOK = false
+            End If           
+        End If
+    End If
+    Test.MethodTested("getSelectedAccessibleChild()",bOK)
+
+    Test.StartMethod("deselectAccessibleChild()")
+    Dim newSelCount As Long
+	Dim isSelected as Boolean
+    bOK = true
+	oObj.selectAllAccessibleChildren()
+	wait(500)
+    selCount = oObj.getSelectedAccessibleChildCount()
+    Out.Log("There was "+selCount+" selected child(ren)")
+    Out.Log("Deselecting child...")
+	for i = 0 to mCount - 1
+		if oObj.isAccessibleChildSelected(i) then
+			isSelected = true
+		end if
+        oObj.deselectAccessibleChild(i)
+        wait(500)
+        newSelCount = oObj.getSelectedAccessibleChildCount()
+		Out.Log("selCount = " + selCount + " newSelCount = " + newSelCount) 
+        if (multiSelection) then
+			if isSelected then
+				Out.Log("isSelected")
+	            bOK = bOK AND (selCount - 1 = newSelCount)
+			else
+	            bOK = bOK AND (selCount = newSelCount)
+			end if
+        else
+			Out.Log("is not multi")
+            bOK = bOK AND (newSelCount &lt;= 1)
+        End If
+		selCount = newSelCount
+	next
+    Test.MethodTested("deselectAccessibleChild()",bOK)
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Sub clearSelection()
+    if NOT multiSelection then Exit Sub
+    Dim selCount As Long
+    selCount = oObj.getSelectedAccessibleChildCount()
+    if (selCount = 0) then Exit Sub
+    oObj.clearAccessibleSelection()
+    wait(500)
+    selCount = oObj.getSelectedAccessibleChildCount()
+    if selCount = 0 then
+        Out.Log("Deselect all: success")
+    else
+        Out.Log("Deselect all: error!. "+selCount+" child(ren) remains selected.")
+    End If
+End Sub
+
+Function itemDisabled(oChild As Object) As Boolean
+    if NOT hasUNOInterfaces(oChild,"com.sun.star.accessibility.XAccessibleContext") then
+        oChild = oChild.getAccessibleContext()
+    End If
+    itemDisabled = NOT oChild.getAccessibleStateSet().contains(21)
+End Function
+
+</script:module>

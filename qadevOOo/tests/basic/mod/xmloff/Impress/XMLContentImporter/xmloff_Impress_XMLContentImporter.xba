@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="xmloff_Impress_XMLContentImporter" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for com.sun.star.xml.sax.XDocumentHandler
+  Global vXMLData As Variant
+
+' Required for procedure CheckImport
+  Global sPageName As String
+
+' Required for  com.sun.star.document.XImporter:
+  Global oSrcDocument As Object
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' xmloff.Impress.XMLContentImporter
+'*************************************************************************
+On Error Goto ErrHndl
+    oDoc = utils.createImpressDocument(cObjectName)
+    oObj = createUnoService("com.sun.star.comp.Draw.XMLContentImporter")
+
+    oSrcDocument = oDoc
+    oObj.setTargetDocument(oDoc)
+
+    sPageName = "XMLImporterPage"
+    vXMLData = Array( _
+            Array("start", "office:document", _
+                "xmlns:office", "CDATA", "http://openoffice.org/2000/office", _
+                "xmlns:presentation", "CDATA", "http://openoffice.org/2000/presentation", _
+                "xmlns:svg", "CDATA", "http://openoffice.org/2000/svg", _
+                "xmlns:draw", "CDATA", "http://openoffice.org/2000/drawing", _
+                "office:class", "CDATA", "presentation", _
+                "office:version", "CDATA", "1.0"), _
+            Array("start", "office:body"), _
+            Array("start", "draw:page", _
+                "draw:name", "CDATA", sPageName, _
+                "draw:master-page-name", "CDATA", "Default"), _
+            Array("start", "presentation:notes"), _
+            Array("start", "draw:page-thumbnail", _
+                "draw:style-name", "CDATA", "gr1", _
+                "draw:layer", "CDATA", "layout", _
+                "svg:width", "CDATA", "12.768cm", _
+                "svg:height", "CDATA", "9.576cm", _
+                "svg:x", "CDATA", "4.411cm", _
+                "svg:y", "CDATA", "2.794cm", _
+                "presentation:class", "CDATA", "page", _
+                "draw:page-number", "CDATA", "1"), _
+            Array("end", "draw:page-thumbnail"), _
+            Array("start", "draw:text-box", _
+                "presentation:style-name", "CDATA", "Default-notes", _
+                "draw:layer", "CDATA", "layout", _
+                "svg:width", "CDATA", "15.021cm", _
+                "svg:height", "CDATA", "10.63cm", _
+                "svg:x", "CDATA", "3.292cm", _
+                "svg:y", "CDATA", "13.299cm", _
+                "presentation:class", "CDATA", "notes", _
+                "presentation:placeholder", "CDATA", "true"), _
+            Array("end", "draw:text-box"), _
+            Array("end", "presentation:notes"), _
+            Array("end", "draw:page"), _
+            Array("end", "office:body"), _
+            Array("end", "office:document"))
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+
+Function CheckImport() As Boolean
+    Dim i As Integer
+    Dim res As Boolean
+    Dim oPages, oPage As Object
+    Dim pageName As String
+    res = False
+    out.log("checking of import...")
+    oPages = oDoc.getDrawPages()
+    out.log("Draw pages:")
+    For i = 0 to oPages.getCount() - 1
+        oPage = oPages.getByIndex(i)
+        pageName = oPage.getName()
+        out.log(pageName)
+        If pageName = sPageName then
+            res = True
+        EndIf
+    Next i
+    out.log("checking result: " + res)
+    CheckImport() = res
+End Function
+</script:module>

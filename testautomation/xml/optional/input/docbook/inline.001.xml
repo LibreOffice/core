@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+                  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<article id="article">
+<articleinfo>
+<title>Unit Test: inline.001.xml</title>
+<releaseinfo role="CVS">$Id: inline.001.xml,v 1.2 2008-07-11 07:50:15 rt Exp $</releaseinfo>
+<author><firstname>Norman</firstname><surname>Walsh</surname>
+        <affiliation><address><email>ndw@nwalsh.com</email></address></affiliation>
+</author>
+</articleinfo>
+
+<para>This article tests inline objects.</para>
+
+<para>This is a <phrase role="red">red phrase</phrase>.
+This <emphasis role="strong">emphasis is strong</emphasis>.
+</para>
+
+<section><title>Trademarks</title>
+
+<para><trademark>This is trademarked</trademark>.
+<trademark class="copyright">This is copyrighted</trademark>.
+<trademark class="registered">This is a registered trademark</trademark>.
+<trademark class="service">This is is a service mark</trademark>.</para>
+</section>
+
+</article>

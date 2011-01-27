@@ -1,0 +1,65 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _MAILMERGEGREETINGSPAGE_HRC
+#define _MAILMERGEGREETINGSPAGE_HRC
+
+
+#define CB_PERSONALIZED         2
+#define LB_FEMALE               3
+#define PB_FEMALE               4
+#define LB_MALE                 5
+#define PB_MALE                 6
+#define FI_FEMALE               7
+#define FT_FEMALECOLUMN         8
+#define LB_FEMALECOLUMN         9
+#define FT_FEMALEFIELD          10
+#define CB_FEMALEFIELD          11
+#define FT_NEUTRAL              12
+
+#define CB_NEUTRAL              14
+#define CB_GREETINGLINE         15
+#define FI_PREVIEW              16
+#define WIN_PREVIEW             17
+#define PB_ASSIGN               18
+#define FI_DOCINDEX             19
+#define IB_PREVSET              20
+#define IB_NEXTSET              21
+#define STR_DOCUMENT            22
+#define FI_HEADER               23
+#define FT_FEMALE               24
+#define FT_MALE                 25
+
+#define FT_BODY                 30
+#define MLE_BODY                31
+#define FL_SEPARATOR            32
+#define PB_OK                   33
+#define PB_CANCEL               34
+#define PB_HELP                 35
+
+#endif
+
+

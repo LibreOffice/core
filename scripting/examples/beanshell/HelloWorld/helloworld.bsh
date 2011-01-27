@@ -1,0 +1,17 @@
+// Hello World in BeanShell
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.text.XTextDocument;
+import com.sun.star.text.XText;
+import com.sun.star.text.XTextRange;
+
+// get the document from the scripting context which is made available to all 
+// scripts
+oDoc = XSCRIPTCONTEXT.getDocument();
+//get the XTextDocument interface
+xTextDoc = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class,oDoc);
+//get the XText interface
+xText = xTextDoc.getText();
+// get an (empty) XTextRange at the end of the document
+xTextRange = xText.getEnd();
+// set the string
+xTextRange.setString( "Hello World (in BeanShell)" );

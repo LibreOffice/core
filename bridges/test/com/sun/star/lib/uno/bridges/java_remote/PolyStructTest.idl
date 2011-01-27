@@ -1,0 +1,52 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "com/sun/star/uno/XInterface.idl"
+
+module com { module sun { module star { module lib { module uno {
+module bridges { module javaremote {
+
+enum TestEnum { VALUE1 = 100, VALUE2 = -100 };
+
+struct TestPolyStruct<T> { T member; };
+
+interface TestTransport {
+    TestPolyStruct<boolean> transportBoolean([in] TestPolyStruct<boolean> arg);
+    TestPolyStruct<byte> transportByte([in] TestPolyStruct<byte> arg);
+    TestPolyStruct<short> transportShort([in] TestPolyStruct<short> arg);
+    TestPolyStruct<long> transportLong([in] TestPolyStruct<long> arg);
+    TestPolyStruct<hyper> transportHyper([in] TestPolyStruct<hyper> arg);
+    TestPolyStruct<float> transportFloat([in] TestPolyStruct<float> arg);
+    TestPolyStruct<double> transportDouble([in] TestPolyStruct<double> arg);
+    TestPolyStruct<char> transportChar([in] TestPolyStruct<char> arg);
+    TestPolyStruct<string> transportString([in] TestPolyStruct<string> arg);
+    TestPolyStruct<type> transportType([in] TestPolyStruct<type> arg);
+    TestPolyStruct<any> transportAny([in] TestPolyStruct<any> arg);
+    TestPolyStruct<TestEnum> transportEnum([in] TestPolyStruct<TestEnum> arg);
+};
+
+}; }; }; }; }; }; };
