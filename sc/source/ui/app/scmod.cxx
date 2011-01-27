@@ -1047,7 +1047,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     BOOL                    bUpdateMarks        = FALSE;
     BOOL                    bUpdateRefDev       = FALSE;
     BOOL                    bCalcAll            = FALSE;
-    BOOL                    bSaveSpellCheck     = FALSE;
     BOOL                    bSaveAppOptions     = FALSE;
     BOOL                    bSaveInputOptions   = FALSE;
 
@@ -1227,10 +1226,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         }
 
         if ( bOldAutoSpell != bDoAutoSpell )
-        {
             SetAutoSpellProperty( bDoAutoSpell );
-            bSaveSpellCheck = TRUE;
-        }
         if ( pDocSh )
             pDocSh->PostPaintGridAll();                     // wegen Markierungen
         ScInputHandler* pInputHandler = GetInputHdl();
@@ -1313,12 +1309,6 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
     }
 
     //----------------------------------------------------------
-
-//  if ( bSaveSpellCheck )
-//  {
-        //  currently LinguProperties are saved only at program exit.
-        //  if a save method becomes available, it should be called here.
-//  }
 
     if ( bSaveAppOptions )
         pAppCfg->OptionsChanged();

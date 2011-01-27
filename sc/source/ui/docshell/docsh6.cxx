@@ -218,7 +218,6 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     Rectangle aOldArea = SfxObjectShell::GetVisArea();
     Rectangle aNewArea = aOldArea;
 
-    BOOL bChange = FALSE;
     BOOL bEmbedded = aDocument.IsEmbedded();
     if (bEmbedded)
         aNewArea = aDocument.GetEmbeddedRect();
@@ -226,10 +225,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     {
         SCTAB nTab = pViewData->GetTabNo();
         if ( nTab != aDocument.GetVisibleTab() )
-        {
             aDocument.SetVisibleTab( nTab );
-            bChange = TRUE;
-        }
 
         BOOL bNegativePage = aDocument.IsNegativePage( nTab );
         SCCOL nX = pViewData->GetPosX(SC_SPLIT_LEFT);
@@ -244,10 +240,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
     }
 
     if (aNewArea != aOldArea)
-    {
         SetVisAreaOrSize( aNewArea, TRUE ); // hier muss auch der Start angepasst werden
-        bChange = TRUE;
-    }
 }
 
 //
