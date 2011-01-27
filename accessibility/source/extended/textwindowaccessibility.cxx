@@ -603,8 +603,7 @@ ParagraphImpl::getRunAttributes(::sal_Int32 Index, const ::css::uno::Sequence< :
     checkDisposed();
 
     ::sal_Int32 nLineNo = -1;
-    ::css::i18n::Boundary aBoundary =
-        m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
+    m_xDocument->retrieveParagraphLineBoundary( this, nIndex, &nLineNo );
 
     return nLineNo;
 }

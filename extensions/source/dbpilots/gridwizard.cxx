@@ -118,10 +118,10 @@ namespace dbp
         static const ::rtl::OUString s_sEmptyString;
 
         // collect "descriptors" for the to-be-created (grid)columns
-        DECLARE_STL_VECTOR( ::rtl::OUString, StringArray );
-        StringArray aColumnServiceNames;    // service names to be used with the XGridColumnFactory
-        StringArray aColumnLabelPostfixes;  // postfixes to append to the column labels
-        StringArray aFormFieldNames;        // data field names
+        DECLARE_STL_VECTOR( ::rtl::OUString, OUStringArray );
+        OUStringArray aColumnServiceNames;  // service names to be used with the XGridColumnFactory
+        OUStringArray aColumnLabelPostfixes;    // postfixes to append to the column labels
+        OUStringArray aFormFieldNames;      // data field names
 
         aColumnServiceNames.reserve(getSettings().aSelectedFields.getLength());
         aColumnLabelPostfixes.reserve(getSettings().aSelectedFields.getLength());
@@ -196,10 +196,10 @@ namespace dbp
         {
             Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
 
-            ConstStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
-            ConstStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
-            ConstStringArrayIterator pFormFieldName = aFormFieldNames.begin();
-            ConstStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
+            ConstOUStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
+            ConstOUStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
+            ConstOUStringArrayIterator pFormFieldName = aFormFieldNames.begin();
+            ConstOUStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
 
             for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
             {

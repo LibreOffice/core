@@ -5975,7 +5975,6 @@ BitmapEx SvxIconSelectorDialog::AutoScaleBitmap(BitmapEx & aBitmap, const long a
         imgposY = (aStandardSize - imgOldHeight) / 2 + 0.5;
     }
 
-    Size aBmpSize = aRet.GetSizePixel();
     Size aStdSize( aStandardSize, aStandardSize );
     Rectangle aRect(aEmptyPoint, aStdSize );
 

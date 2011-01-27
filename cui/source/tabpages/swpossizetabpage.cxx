@@ -1889,30 +1889,6 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
     }
     else
         m_bIsMultiSelection = true;
-
-    // use page offset and recalculate
-    Point aPt( m_pSdrView->GetSdrPageView()->GetPageOrigin() );
-
-    // Massstab
-    Fraction aUIScale = m_pSdrView->GetModel()->GetUIScale();
-
-//    lcl_ScaleRect( m_aWorkArea, aUIScale );
-//    lcl_ScaleRect( m_aRect, aUIScale );
-//    lcl_ScalePoint( aPt, aUIScale );
-
-    // Metrik konvertieren
-//    int nDigits = maMtrPosX.GetDecimalDigits();
-
-//    aPt = lcl_ConvertPoint( aPt, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-//    m_aWorkArea = lcl_ConvertRect( m_aWorkArea, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-//    m_aRect = lcl_ConvertRect( m_aRect, nDigits, (MapUnit) mePoolUnit, meDlgUnit );
-
-    // use page offset
-//    aPt *= -1;
-//    aPt += m_aWorkArea.TopLeft();
-//    m_aWorkArea.SetPos( aPt );
-
-    //SetMinMaxPosition();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

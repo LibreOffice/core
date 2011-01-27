@@ -391,8 +391,8 @@ IMPL_LINK( DigitalSignaturesDialog, OKButtonHdl, void*, EMPTYARG )
     uno::Reference< com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler =
         maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-    int nInfos = maCurrentSignatureInformations.size();
-    for( int n = 0 ; n < nInfos ; ++n )
+    size_t nInfos = maCurrentSignatureInformations.size();
+    for( size_t n = 0 ; n < nInfos ; ++n )
         maSignatureHelper.ExportSignature(
         xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
@@ -485,8 +485,8 @@ IMPL_LINK( DigitalSignaturesDialog, AddButtonHdl, Button*, EMPTYARG )
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
             // Export old signatures...
-             int nInfos = maCurrentSignatureInformations.size();
-            for ( int n = 0; n < nInfos; n++ )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for ( size_t n = 0; n < nInfos; n++ )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[n]);
 
             // Create a new one...
@@ -547,8 +547,8 @@ IMPL_LINK( DigitalSignaturesDialog, RemoveButtonHdl, Button*, EMPTYARG )
             Reference< css::xml::sax::XDocumentHandler> xDocumentHandler =
                 maSignatureHelper.CreateDocumentHandlerWithHeader( xOutputStream );
 
-            int nInfos = maCurrentSignatureInformations.size();
-            for( int n = 0 ; n < nInfos ; ++n )
+            size_t nInfos = maCurrentSignatureInformations.size();
+            for( size_t n = 0 ; n < nInfos ; ++n )
                 maSignatureHelper.ExportSignature( xDocumentHandler, maCurrentSignatureInformations[ n ] );
 
             maSignatureHelper.CloseDocumentHandler( xDocumentHandler);
@@ -587,13 +587,13 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
     uno::Reference< ::com::sun::star::security::XCertificate > xCert;
 
     String aNullStr;
-    int nInfos = maCurrentSignatureInformations.size();
-    int nValidSigs = 0, nValidCerts = 0;
+    size_t nInfos = maCurrentSignatureInformations.size();
+    size_t nValidSigs = 0, nValidCerts = 0;
     bool bAllNewSignatures = true;
 
     if( nInfos )
     {
-        for( int n = 0; n < nInfos; ++n )
+        for( size_t n = 0; n < nInfos; ++n )
         {
             DocumentSignatureAlgorithm mode = DocumentSignatureHelper::getDocumentAlgorithm(
                 m_sODFVersion, maCurrentSignatureInformations[n]);

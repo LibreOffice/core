@@ -450,7 +450,6 @@ void SvxBorderTabPage::Reset( const SfxItemSet& rSet )
     const SvxBoxInfoItem*   pBoxInfoItem;
     USHORT                  nWhichBox       = GetWhich(SID_ATTR_BORDER_OUTER);
     SfxMapUnit              eCoreUnit;
-    const Color             aColBlack       = RGBCOL(COL_BLACK);
 
     pBoxItem  = (const SvxBoxItem*)GetItem( rSet, SID_ATTR_BORDER_OUTER );
 

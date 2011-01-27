@@ -980,7 +980,6 @@ void SvxCharNamePage::FillSizeBox_Impl( const FontNameBox* pNameBox )
 
 void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp )
 {
-    FixedText* pNameLabel = NULL;
     FontNameBox* pNameBox = NULL;
     FixedText* pStyleLabel = NULL;
     FontStyleBox* pStyleBox = NULL;
@@ -993,7 +992,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
     switch ( eLangGrp )
     {
         case Western :
-            pNameLabel = m_pWestFontNameFT;
             pNameBox = m_pWestFontNameLB;
             pStyleLabel = m_pWestFontStyleFT;
             pStyleBox = m_pWestFontStyleLB;
@@ -1005,7 +1003,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
 
         case Asian :
-            pNameLabel = m_pEastFontNameFT;
             pNameBox = m_pEastFontNameLB;
             pStyleLabel = m_pEastFontStyleFT;
             pStyleBox = m_pEastFontStyleLB;
@@ -1017,7 +1014,6 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
             break;
 
         case Ctl :
-            pNameLabel = m_pCTLFontNameFT;
             pNameBox = m_pCTLFontNameLB;
             pStyleLabel = m_pCTLFontStyleFT;
             pStyleBox = m_pCTLFontStyleLB;

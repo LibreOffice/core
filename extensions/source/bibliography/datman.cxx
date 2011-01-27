@@ -1524,7 +1524,6 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
 {
     try
     {
-        sal_Bool bFlag=sal_False;
         if(evt.PropertyName == FM_PROP_VALUE)
         {
             if( evt.NewValue.getValueType() == ::getCppuType((Reference<io::XInputStream>*)0) )
@@ -1538,7 +1537,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
 
             Reference< XRowLocate > xLocate(xBibCursor, UNO_QUERY);
             DBG_ASSERT(xLocate.is(), "BibDataManager::propertyChange : invalid cursor !");
-            bFlag = xLocate->moveToBookmark(aUID);
+            xLocate->moveToBookmark(aUID);
         }
     }
     catch(Exception& e )

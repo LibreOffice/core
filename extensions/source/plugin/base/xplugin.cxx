@@ -548,7 +548,7 @@ void XPlugin_Impl::loadPlugin()
             return;
     }
 
-    NPError aError = getPluginComm()->
+    getPluginComm()->
         NPP_New( (char*)OUStringToOString( m_aDescription.Mimetype,
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
@@ -595,7 +595,7 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.width   = aPosSize.Width ? aPosSize.Width : 600;
     m_aNPWindow.height  = aPosSize.Height ? aPosSize.Height : 600;
 
-    aError = getPluginComm()->NPP_SetWindow( this );
+    getPluginComm()->NPP_SetWindow( this );
 }
 
 void XPlugin_Impl::destroyStreams()

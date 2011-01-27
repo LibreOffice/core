@@ -383,7 +383,6 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
 {
     if (!xController.is())
         return sal_False;
-    sal_Bool bInserted = sal_False;
 
     Reference< XResultSetUpdate> _xCursor = Reference< XResultSetUpdate>(xController->getModel(), UNO_QUERY);
 
@@ -412,8 +411,6 @@ sal_Bool BibFrameController_Impl::SaveModified(const Reference< form::runtime::X
         {
             DBG_ERROR("SaveModified: Exception occurred!");
         }
-
-        bInserted = bIsNew && bResult;
     }
     return bResult;
 }

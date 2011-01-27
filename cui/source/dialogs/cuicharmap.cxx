@@ -349,7 +349,6 @@ SvxCharMapData::SvxCharMapData( SfxModalDialog* pDialog, BOOL bOne_, ResMgr* pRe
     // left align aShowText field
     int nLeftEdge = aSymbolText.GetPosPixel().X();
     nLeftEdge += aSymbolText.GetTextWidth( aSymbolText.GetText() );
-    Size aNewSize = aShowText.GetOutputSizePixel();
     aShowText.SetPosPixel( Point( nLeftEdge+4, aShowText.GetPosPixel().Y() ) );
 }
 
