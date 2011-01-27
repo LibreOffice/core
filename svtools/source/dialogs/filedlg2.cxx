@@ -28,17 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svtdata.hxx>
-
 #include <filedlg2.hxx>
-#include <filedlg.hxx>
-#include <filedlg2.hrc>
+#include <svtools/filedlg.hxx>
+#include <svtools/filedlg2.hrc>
 #include <vcl/msgbox.hxx>
 #include <vos/security.hxx>
 #include <com/sun/star/i18n/XCollator.hpp>
@@ -68,9 +65,9 @@ DECLARE_LIST( UniStringList, UniString* )
 //      #define STD_BTN_WIDTH   90
 //      #define STD_BTN_HEIGHT  35
 
-#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, nHelpId ) \
+#define INITCONTROL( p, ControlClass, nBits, aPos, aSize, aTitel, rHelpId ) \
     p = new ControlClass( GetPathDialog(), WinBits( nBits ) ); \
-    p->SetHelpId( nHelpId ); \
+    p->SetHelpId( rHelpId ); \
     p->SetPosSizePixel( aPos, aSize ); \
     p->SetText( aTitel ); \
     p->Show();
@@ -226,10 +223,10 @@ void ImpPathDialog::InitControls()
     aPnt.X() = 2 * a6Siz.Width() + aEDSiz.Width();
     aPnt.Y() = a6Siz.Height();
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
-                 aPnt, aBtnSiz, aOkStr, 0 );
+                 aPnt, aBtnSiz, aOkStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pCancelBtn, CancelButton, 0,
-                 aPnt, aBtnSiz, aCancelStr, 0 );
+                 aPnt, aBtnSiz, aCancelStr, "" );
     aPnt.Y() += aBtnSiz.Height() + a3Siz.Height();
     INITCONTROL( pNewDirBtn, PushButton, WB_DEFBUTTON,
                  aPnt, aBtnSiz, aNewDirStr, HID_FILEDLG_NEWDIR );
@@ -347,7 +344,7 @@ IMPL_LINK( ImpPathDialog, ClickHdl, Button*, pBtn )
     if ( pBtn == pHomeBtn )
     {
         ::rtl::OUString aHomeDir;
-        NAMESPACE_VOS( OSecurity ) aSecurity;
+        vos:: OSecurity  aSecurity;
         if ( aSecurity.getHomeDir( aHomeDir ) )
         {
             DirEntry aFile ( aHomeDir );
@@ -782,10 +779,10 @@ void ImpFileDialog::InitControls()
     const long nButtonStartX = 2*nW+20+15;
     INITCONTROL( pOkBtn, PushButton, WB_DEFBUTTON,
         Point(nButtonStartX, 10), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_OK ), 0 );
+        Button::GetStandardText( BUTTON_OK ), "" );
     INITCONTROL( pCancelBtn, CancelButton, 0,
         Point(nButtonStartX, 45 ), Size(STD_BTN_WIDTH, STD_BTN_HEIGHT),
-        Button::GetStandardText( BUTTON_CANCEL ), 0 );
+        Button::GetStandardText( BUTTON_CANCEL ), "" );
 
     pLoadBtn = 0;
 

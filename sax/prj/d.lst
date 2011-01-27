@@ -2,6 +2,9 @@
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+..\%__SRC%\misc\fastsax.component %_DEST%\xml%_EXT%\fastsax.component
+..\%__SRC%\misc\sax.component %_DEST%\xml%_EXT%\sax.component
+..\%__SRC%\misc\sax.inbuild.component %_DEST%\xml%_EXT%\sax.inbuild.component
 
 mkdir: %_DEST%\inc%_EXT%\sax
 mkdir: %_DEST%\inc%_EXT%\sax\tools

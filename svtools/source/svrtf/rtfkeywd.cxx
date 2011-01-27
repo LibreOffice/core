@@ -30,8 +30,8 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#include "rtfkeywd.hxx"
-#include "rtftoken.h"
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtftoken.h>
 #include "tools/string.hxx"
 
 #include <string.h>
@@ -1160,6 +1160,7 @@ static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
         */
         {{OOO_STRING_SVTOOLS_RTF_SN},       RTF_SN},
         {{OOO_STRING_SVTOOLS_RTF_SV},       RTF_SV},
+        {{OOO_STRING_SVTOOLS_RTF_SP},       RTF_SP},
 
 // Support for overline attributes
         {{OOO_STRING_SVTOOLS_RTF_OL},           RTF_OL},

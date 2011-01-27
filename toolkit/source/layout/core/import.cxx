@@ -101,24 +101,13 @@ SAL_THROW (())
         if ( findAndRemove( "help-id", aProps, aHelpId ) )
         {
             OSL_TRACE("Setting help-id: %s", OUSTRING_CSTR( aHelpId ) );
-            xDialog->setHelpId( aHelpId.toInt32 () );
+            xDialog->setHelpId( aHelpId );
         }
     } // DEBUG:
     else if ( pParent == NULL )
     {
         DBG_ERROR( "Fatal error: top node isn't a dialog" );
     }
-
-#if 0
-    // Hack moved to proplist.cxx
-    OUString aGraphic;
-    if ( findAndRemove( "graphic", aProps, aGraphic ) )
-        //if ( layout::FixedImage *i = dynamic_cast<layout::FixedImage *> ( mpWidget->getPeer().get() ) )
-        // FIXME: huh? XImageProducer::complete( XImageConsumer )
-        //i->setImage( Image( loadGraphic( OUSTRING_CSTR( aGraphic ) ) ) );
-        mpWidget->setProperty( OUString::createFromAscii( "graphic" ),
-                               loadGraphic( OUSTRING_CSTR( aGraphic ) ) );
-#endif
 
     OUString aOrdering;
     if ( findAndRemove( "ordering", aProps, aOrdering ) )

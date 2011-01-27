@@ -142,7 +142,6 @@ class RscTypCont
     Atom                nTopImageId;
     Atom                nNoLabelId;
     Atom                nVertId;
-    Atom                nSingleLineId;
     Atom                nSysWinId;
 
     void        Init();         // Initialisiert Klassen und Tabelle
@@ -285,6 +284,7 @@ public:
     RscRange            a0to9999Short;
     RscIdRange          aIdLong;
     RscString           aString;
+    RscString           aStringLiteral;
     RscFlag             aWinBits;
     RscLangEnum         aLangType;
     RscLangArray        aLangString;

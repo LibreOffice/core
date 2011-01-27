@@ -201,6 +201,8 @@ UniString::UniString( const ResId& rResId )
         Append( UniString::CreateFromInt32( rResId.GetId() ) );
         AppendAscii( " not found>" );
 #endif
+        if( pResMgr )
+            pResMgr->PopContext();
     }
 
 

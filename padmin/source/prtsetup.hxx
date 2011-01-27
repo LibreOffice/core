@@ -147,7 +147,8 @@ public:
 
     void update();
 
-    ULONG getLevel() { return m_aLevelBox.GetSelectEntry().ToInt32(); }
+    ULONG getLevel();
+    ULONG getPDFDevice();
     ULONG getDepth() { return m_aDepthBox.GetSelectEntry().ToInt32(); }
     ULONG getColorDevice()
     {

@@ -52,8 +52,6 @@
 
 using namespace ::com::sun::star;
 
-static ResStringArray *strAllUnits = NULL;
-
 // -----------------------------------------------------------------------
 
 #define FORMAT_NUMERIC       1
@@ -224,6 +222,42 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     return TRUE;
 }
 
+static void ImplUpdateSeparatorString( String& io_rText,
+                                       const String& rOldDecSep, const String& rNewDecSep,
+                                       const String& rOldThSep, const String& rNewThSep )
+{
+    rtl::OUStringBuffer aBuf( io_rText.Len() );
+    xub_StrLen nIndexDec = 0, nIndexTh = 0, nIndex = 0;
+
+    const sal_Unicode* pBuffer = io_rText.GetBuffer();
+    while( nIndex != STRING_NOTFOUND )
+    {
+        nIndexDec = io_rText.Search( rOldDecSep, nIndex );
+        nIndexTh = io_rText.Search( rOldThSep, nIndex );
+        if(   (nIndexTh != STRING_NOTFOUND && nIndexDec != STRING_NOTFOUND && nIndexTh < nIndexDec )
+           || (nIndexTh != STRING_NOTFOUND && nIndexDec == STRING_NOTFOUND)
+           )
+        {
+            aBuf.append( pBuffer + nIndex, nIndexTh - nIndex );
+            aBuf.append( rNewThSep );
+            nIndex = nIndexTh + rOldThSep.Len();
+        }
+        else if( nIndexDec != STRING_NOTFOUND )
+        {
+            aBuf.append( pBuffer + nIndex, nIndexDec - nIndex );
+            aBuf.append( rNewDecSep );
+            nIndex = nIndexDec + rOldDecSep.Len();
+        }
+        else
+        {
+            aBuf.append( pBuffer + nIndex );
+            nIndex = STRING_NOTFOUND;
+        }
+    }
+
+    io_rText = aBuf.makeStringAndClear();
+}
+
 static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDecSep,
                                   const String& rOldThSep, const String& rNewThSep,
                                   Edit* pEdit )
@@ -236,10 +270,7 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
         BOOL bUpdateMode = pEdit->IsUpdateMode();
         pEdit->SetUpdateMode( FALSE );
         String aText = pEdit->GetText();
-        if( bChangeDec )
-            aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
-        if( bChangeTh )
-            aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+        ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
         pEdit->SetText( aText );
 
         ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
@@ -250,12 +281,11 @@ static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDe
             for ( USHORT i=0; i < nEntryCount; i++ )
             {
                 aText = pCombo->GetEntry( i );
-                if( bChangeDec )
-                    aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
-                if( bChangeTh )
-                    aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+                void* pEntryData = pCombo->GetEntryData( i );
+                ImplUpdateSeparatorString( aText, rOldDecSep, rNewDecSep, rOldThSep, rNewThSep );
                 pCombo->RemoveEntry( i );
                 pCombo->InsertEntry( aText, i );
+                pCombo->SetEntryData( i, pEntryData );
             }
         }
         if( bUpdateMode )
@@ -1099,34 +1129,37 @@ static XubString ImplMetricGetUnitText( const XubString& rStr )
 
 // #104355# support localized mesaurements
 
-static String ImplMetricToString( FieldUnit rUnit )
+static const String& ImplMetricToString( FieldUnit rUnit )
 {
-    if( !strAllUnits )
+    FieldUnitStringList* pList = ImplGetFieldUnits();
+    if( pList )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, *pResMgr) );
+        // return unit's default string (ie, the first one )
+        for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
+        {
+            if ( it->second == rUnit )
+                return it->first;
+        }
     }
-    // return unit's default string (ie, the first one )
-    for( USHORT i=0; i < strAllUnits->Count(); i++ )
-        if( (FieldUnit) strAllUnits->GetValue( i ) == rUnit )
-            return strAllUnits->GetString( i );
 
-    return String();
+    return String::EmptyString();
 }
 
 static FieldUnit ImplStringToMetric( const String &rMetricString )
 {
-    if( !strAllUnits )
+    FieldUnitStringList* pList = ImplGetCleanedFieldUnits();
+    if( pList )
     {
-        ResMgr* pResMgr = ImplGetResMgr();
-        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, *pResMgr) );
+        // return FieldUnit
+        String aStr( rMetricString );
+        aStr.ToLowerAscii();
+        aStr.EraseAllChars( sal_Unicode( ' ' ) );
+        for( FieldUnitStringList::const_iterator it = pList->begin(); it != pList->end(); ++it )
+        {
+            if ( it->first.Equals( aStr ) )
+                return it->second;
+        }
     }
-    // return FieldUnit
-    String aStr( rMetricString );
-    aStr.ToLowerAscii();
-    for( USHORT i=0; i < strAllUnits->Count(); i++ )
-        if ( strAllUnits->GetString( i ).Equals( aStr ) )
-            return (FieldUnit) strAllUnits->GetValue( i );
 
     return FUNIT_NONE;
 }

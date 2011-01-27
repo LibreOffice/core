@@ -189,7 +189,7 @@ public:
 
 /** Base class for socket addresses.
 */
-class ISocketAddr : public NAMESPACE_VOS(ISocketTypes)
+class ISocketAddr : public vos::ISocketTypes
 {
 public:
     virtual ~ISocketAddr() { }
@@ -202,11 +202,11 @@ public:
     virtual sal_Bool SAL_CALL operator== (oslSocketAddr Addr)= 0;
 };
 
-class OSocketAddr : public NAMESPACE_VOS(ISocketAddr),
-            public NAMESPACE_VOS(OObject)
+class OSocketAddr : public vos::ISocketAddr,
+            public vos::OObject
 
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OSocketAddr));
+    VOS_DECLARE_CLASSINFO(vos::OSocketAddr);
 public:
 
     /** Creates socket address of unknown type.
@@ -274,9 +274,9 @@ protected:
 
 /** Represents an internet-address.
 */
-class OInetSocketAddr : public NAMESPACE_VOS(OSocketAddr)
+class OInetSocketAddr : public vos::OSocketAddr
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OInetSocketAddr));
+    VOS_DECLARE_CLASSINFO(vos::OInetSocketAddr);
 public:
 
     /** Creates an empty internet-address (INADDR_ANY).
@@ -359,9 +359,9 @@ public:
 
 /** Represents an IPX/SPX address.
 */
-class OIpxSocketAddr :  public NAMESPACE_VOS(OSocketAddr)
+class OIpxSocketAddr :  public vos::OSocketAddr
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OIpxSocketAddr));
+    VOS_DECLARE_CLASSINFO(vos::OIpxSocketAddr);
 public:
 
     typedef oslSocketIpxNetNumber  TIpxNetNumber;
@@ -430,11 +430,11 @@ public:
 
 /** Represents a socket.
 */
-class OSocket : public NAMESPACE_VOS(ISocketTypes),
-                public NAMESPACE_VOS(OReference),
-                public NAMESPACE_VOS(OObject)
+class OSocket : public vos::ISocketTypes,
+                public vos::OReference,
+                public vos::OObject
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OSocket));
+    VOS_DECLARE_CLASSINFO(vos::OSocket);
 
 protected:
     typedef ORefObj<oslSocket> SockRef;
@@ -809,10 +809,10 @@ public:
 
 /** A socket to send or receive a stream of data.
 */
-class OStreamSocket : public NAMESPACE_VOS(OSocket),
-                      public NAMESPACE_VOS(IStream)
+class OStreamSocket : public vos::OSocket,
+                      public vos::IStream
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OStreamSocket));
+    VOS_DECLARE_CLASSINFO(vos::OStreamSocket);
 public:
 
     /** Creates an unattached socket. You must attach the socket to an oslSocket
@@ -952,9 +952,9 @@ protected:
 
 /** A socket to accept incoming connections.
 */
-class OAcceptorSocket : public NAMESPACE_VOS(OSocket)
+class OAcceptorSocket : public vos::OSocket
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OAcceptorSocket));
+    VOS_DECLARE_CLASSINFO(vos::OAcceptorSocket);
 public:
 
     /** Creates a socket that can accept connections.
@@ -1014,9 +1014,9 @@ public:
 
 /** A socket to initiate a conenction.
 */
-class OConnectorSocket : public NAMESPACE_VOS(OStreamSocket)
+class OConnectorSocket : public vos::OStreamSocket
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OConnectorSocket));
+    VOS_DECLARE_CLASSINFO(vos::OConnectorSocket);
 public:
 
     /** Creates a socket that can accept connections.
@@ -1050,9 +1050,9 @@ public:
 
 /** A connectionless socket to send and receive datagrams.
 */
-class ODatagramSocket : public NAMESPACE_VOS(OSocket)
+class ODatagramSocket : public vos::OSocket
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(ODatagramSocket));
+    VOS_DECLARE_CLASSINFO(vos::ODatagramSocket);
 public:
 
     /** Creates a datagram socket.

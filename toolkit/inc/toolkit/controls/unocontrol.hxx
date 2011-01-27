@@ -39,6 +39,7 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <com/sun/star/awt/XUnitConversion.hpp>
+#include <com/sun/star/awt/XStyleSettingsSupplier.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <cppuhelper/weakagg.hxx>
 #include <osl/mutex.hxx>
@@ -47,7 +48,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase8.hxx>
+#include <cppuhelper/implbase9.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
@@ -74,7 +75,7 @@ struct UnoControl_Data;
 //  ----------------------------------------------------
 //  class UnoControl
 //  ----------------------------------------------------
-typedef ::cppu::WeakAggImplHelper8  <   ::com::sun::star::awt::XControl
+typedef ::cppu::WeakAggImplHelper9  <   ::com::sun::star::awt::XControl
                                     ,   ::com::sun::star::awt::XWindow2
                                     ,   ::com::sun::star::awt::XView
                                     ,   ::com::sun::star::beans::XPropertiesChangeListener
@@ -82,6 +83,7 @@ typedef ::cppu::WeakAggImplHelper8  <   ::com::sun::star::awt::XControl
                                     ,   ::com::sun::star::accessibility::XAccessible
                                     ,   ::com::sun::star::util::XModeChangeBroadcaster
                                     ,   ::com::sun::star::awt::XUnitConversion
+                                    ,   ::com::sun::star::awt::XStyleSettingsSupplier
                                     >   UnoControl_Base;
 
 class TOOLKIT_DLLPUBLIC UnoControl :    public UnoControl_Base
@@ -227,6 +229,9 @@ public:
     virtual ::com::sun::star::awt::Point SAL_CALL convertPointToPixel( const ::com::sun::star::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Size SAL_CALL convertSizeToLogic( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::awt::Size SAL_CALL convertSizeToPixel( const ::com::sun::star::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // XStyleSettingsSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings > SAL_CALL getStyleSettings() throw (::com::sun::star::uno::RuntimeException);
 
 private:
     // ::com::sun::star::beans::XPropertiesChangeListener

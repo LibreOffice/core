@@ -124,7 +124,6 @@ typedef USHORT WindowType;
 // - Window-Bits -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 typedef sal_Int64 WinBits;
 
 // Window-Bits fuer Window
@@ -215,6 +214,7 @@ typedef sal_Int64 WinBits;
 
 // Window-Bits for CheckBox
 #define WB_CBLINESTYLE          ((WinBits)SAL_CONST_INT64(0x2000000000))
+#define WB_EARLYTOGGLE          ((WinBits)SAL_CONST_INT64(0x4000000000))
 
 // Window-Bits for Edit
 #define WB_PASSWORD             ((WinBits)0x01000000)
@@ -237,9 +237,6 @@ typedef sal_Int64 WinBits;
 #define WB_LINESPACING          ((WinBits)0x01000000)
 #define WB_SCROLL               ((WinBits)0x02000000)
 #define WB_FORCETABCYCLE        ((WinBits)0x04000000)
-
-// Window-Bits for TabControl
-#define WB_SINGLELINE           ((WinBits)0x02000000)
 
 // Window-Bits for DockingWindows
 #define WB_DOCKBORDER           ((WinBits)0x00001000)
@@ -273,9 +270,16 @@ typedef sal_Int64 WinBits;
 #define WB_STDTABCONTROL        0
 
 // For TreeListBox
-#define WB_HASBUTTONS           ((WinBits)0x00800000)
-#define WB_HASLINES             ((WinBits)0x01000000)
-#define WB_HASLINESATROOT       ((WinBits)0x02000000)
+#define WB_HASBUTTONS           ((WinBits)SAL_CONST_INT64(0x000100000000))
+#define WB_HASLINES             ((WinBits)SAL_CONST_INT64(0x000200000000))
+#define WB_HASLINESATROOT       ((WinBits)SAL_CONST_INT64(0x000400000000))
+#define WB_HASBUTTONSATROOT     ((WinBits)SAL_CONST_INT64(0x000800000000))
+#define WB_NOINITIALSELECTION   ((WinBits)SAL_CONST_INT64(0x001000000000))
+#define WB_HIDESELECTION        ((WinBits)SAL_CONST_INT64(0x002000000000))
+#define WB_FORCE_MAKEVISIBLE    ((WinBits)SAL_CONST_INT64(0x004000000000))
+// DO NOT USE: 0x008000000000, that's WB_SYSTEMCHILDWINDOW
+#define WB_QUICK_SEARCH         ((WinBits)SAL_CONST_INT64(0x010000000000))
+
 
 // For FileOpen Dialog
 #define WB_PATH                 ((WinBits)0x00100000)
@@ -297,7 +301,6 @@ typedef sal_Int64 WinBits;
 // - WindowAlign -
 // ---------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum WindowAlign { WINDOWALIGN_LEFT, WINDOWALIGN_TOP, WINDOWALIGN_RIGHT, WINDOWALIGN_BOTTOM };
 enum ImageAlign { IMAGEALIGN_LEFT, IMAGEALIGN_TOP, IMAGEALIGN_RIGHT, IMAGEALIGN_BOTTOM,
                   IMAGEALIGN_LEFT_TOP, IMAGEALIGN_LEFT_BOTTOM, IMAGEALIGN_TOP_LEFT,
@@ -309,7 +312,6 @@ enum SymbolAlign { SYMBOLALIGN_LEFT, SYMBOLALIGN_RIGHT };
 // - TriState -
 // ------------
 
-// By changes you must also change: rsc/vclrsc.hxx
 enum TriState { STATE_NOCHECK, STATE_CHECK, STATE_DONTKNOW };
 
 

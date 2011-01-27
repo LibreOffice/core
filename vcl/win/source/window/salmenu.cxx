@@ -59,7 +59,7 @@ BOOL SalData::IsKnownMenuHandle( HMENU hMenu )
 
 // WinSalInst factory methods
 
-SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar )
+SalMenu* WinSalInstance::CreateMenu( BOOL bMenuBar, Menu* )
 {
     WinSalMenu *pSalMenu = new WinSalMenu();
 

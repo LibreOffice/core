@@ -78,6 +78,7 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
         static const ::rtl::OUString& PROP_DEEPDETECTION();
         static const ::rtl::OUString& PROP_DETECTSERVICE();
         static const ::rtl::OUString& PROP_DOCUMENTSERVICE();
+        static const ::rtl::OUString& PROP_ENCRYPTIONDATA();
         static const ::rtl::OUString& PROP_EXTENSION();
         static const ::rtl::OUString& PROP_FILENAME();
         static const ::rtl::OUString& PROP_FILTERNAME();
@@ -127,7 +128,6 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
     //-------------------------------------------
     // interface
     public:
-
         //---------------------------------------
         /** @short  these ctors do nothing - excepting that they forward
                     the given parameters to the base class ctors.
@@ -196,6 +196,56 @@ class COMPHELPER_DLLPUBLIC MediaDescriptor : public SequenceAsHashMap
                     FALSE otherwhise.
          */
         sal_Bool isStreamReadOnly() const;
+
+        //---------------------------------------
+        /** Returns a value from the sequence contained in the property
+            'ComponentData' of this media descriptor.
+
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>.
+
+            @return  The value with the specified name, if existing in the
+                sequence of the 'ComponentData' property, otherwise an empty
+                Any.
+         */
+        ::com::sun::star::uno::Any getComponentDataEntry(
+            const ::rtl::OUString& rName ) const;
+
+        //---------------------------------------
+        /** Inserts a value into the sequence contained in the property
+            'ComponentData' of the media descriptor.
+
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>. The passed value
+                will be inserted into the sequence, or, if already existing,
+                will be overwritten.
+
+            @param rName  The name of the value to be inserted into the
+                sequence of the 'ComponentData' property.
+
+            @param rValue  The value to be inserted into the sequence of the
+                'ComponentData' property.
+         */
+        void setComponentDataEntry(
+            const ::rtl::OUString& rName,
+            const ::com::sun::star::uno::Any& rValue );
+
+        //---------------------------------------
+        /** Removes a value from the sequence contained in the property
+            'ComponentData' of the media descriptor.
+
+            @descr  The property 'ComponentData' should be empty, or should
+                contain a value of type sequence<com.sun.star.beans.NamedValue>
+                or sequence<com.sun.star.beans.PropertyValue>. The value with
+                the passed name will be removed from the sequence, if existing.
+
+            @param rName  The name of the value to be removed from the sequence
+                of the 'ComponentData' property.
+         */
+        void clearComponentDataEntry(
+            const ::rtl::OUString& rName );
 
     //-------------------------------------------
     // helper

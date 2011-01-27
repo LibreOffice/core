@@ -48,7 +48,7 @@ dummy:
 .ELSE		# "$(GUIBASE)"!="unx"
 
 SLOFILES=	\
-        $(SLO)/FWS.obj $(SLO)/salframe.obj $(SLO)/salobj.obj $(SLO)/salmenu.obj
+        $(SLO)/FWS.obj $(SLO)/salframe.obj $(SLO)/salobj.obj
 
 .ENDIF		# "$(GUIBASE)"!="unx"
 

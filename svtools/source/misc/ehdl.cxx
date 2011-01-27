@@ -30,7 +30,7 @@
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <tools/rcid.h>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>
 #if defined(OS2)
@@ -43,7 +43,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include "sfxecode.hxx"
+#include <svtools/sfxecode.hxx>
 
 //=========================================================================
 
@@ -64,7 +64,7 @@ static USHORT aWndFunc(
 
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
     // aus den Flags die benoetigten WinBits ermitteln
     WinBits eBits=0;
@@ -377,7 +377,7 @@ BOOL SfxErrorHandler::GetErrorString(
     */
 
 {
-    NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+    vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
     BOOL bRet = FALSE;
     rStr=String(SvtResId(RID_ERRHDL_CLASS));
@@ -454,7 +454,7 @@ BOOL SfxErrorContext::GetString(ULONG nErrId, String &rStr)
     }
     if( pMgr )
     {
-        NAMESPACE_VOS( OGuard ) aGuard( Application::GetSolarMutex() );
+        vos:: OGuard  aGuard( Application::GetSolarMutex() );
 
         ResId aResId( nResId, *pMgr );
 

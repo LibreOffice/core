@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sot.hxx"
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"
@@ -159,6 +159,7 @@ class EasyFat
 public:
     EasyFat( StgIo & rIo, StgStrm *pFatStream, INT32 nPSize );
     ~EasyFat() { delete[] pFat; delete[] pFree; }
+
     INT32 GetPageSize() { return nPageSize; }
     INT32 Count() { return nPages; }
     INT32 operator[]( INT32 nOffset ) { return pFat[ nOffset ]; }

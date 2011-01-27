@@ -2043,7 +2043,7 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
         case MWT_IDENTITY :
         {
             maXForm.eM11 = maXForm.eM12 = maXForm.eM21 = maXForm.eM22 = 1.0f;
-            maXForm.eDx = maXForm.eDx = 0.0f;
+            maXForm.eDx = maXForm.eDy = 0.0f;
         }
         break;
 

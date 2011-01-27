@@ -109,7 +109,7 @@ void VCLXGraphics::InitOutputDevice( sal_uInt16 nFlags )
 {
     if(mpOutputDevice)
     {
-        NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex()  );
+        vos::OGuard aVclGuard( Application::GetSolarMutex()  );
 
         if ( nFlags & INITOUTDEV_FONT )
         {

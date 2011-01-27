@@ -240,12 +240,15 @@ USHORT SvpSalGraphics::SetFont( ImplFontSelectData* pIFSD, int nFallbackLevel )
 
 // ---------------------------------------------------------------------------
 
-void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void SvpSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
-    if( m_pServerFont[0] != NULL )
+    if( nFallbackLevel >= MAX_FALLBACK )
+        return;
+
+    if( m_pServerFont[nFallbackLevel] != NULL )
     {
         long rDummyFactor;
-        m_pServerFont[0]->FetchFontMetric( *pMetric, rDummyFactor );
+        m_pServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
 }
 
@@ -269,15 +272,13 @@ ULONG SvpSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // ---------------------------------------------------------------------------
 
-ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* SvpSalGraphics::GetImplFontCharMap() const
 {
     if( !m_pServerFont[0] )
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !m_pServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    const ImplFontCharMap* pIFCMap = m_pServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 // ---------------------------------------------------------------------------

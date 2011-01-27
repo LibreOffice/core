@@ -42,7 +42,6 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/svdata.hxx>
 #include <vcl/dbggui.hxx>
-#include <vcl/windata.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/event.hxx>
 #include <vcl/sound.hxx>
@@ -62,7 +61,7 @@
 #include <vcl/salgdi.hxx>
 #include <vcl/menu.hxx>
 
-#include <dndlcon.hxx>
+#include <vcl/dndlcon.hxx>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 

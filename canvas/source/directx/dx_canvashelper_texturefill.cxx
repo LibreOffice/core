@@ -422,8 +422,6 @@ namespace dxcanvas
             }
 
 #if defined(VERBOSE) && defined(DBG_UTIL)
-            rGraphics->MultiplyTransform( &aMatrix );
-
             Gdiplus::Pen aPen( Gdiplus::Color( 255, 255, 0, 0 ),
                                0.0001f );
 

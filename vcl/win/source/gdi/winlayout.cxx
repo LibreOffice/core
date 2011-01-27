@@ -244,24 +244,11 @@ HFONT WinLayout::DisableFontScaling() const
     if( mfFontScale == 1.0 )
         return 0;
 
-    HFONT hHugeFont = 0;
-    if( aSalShlData.mbWNT )
-    {
-        LOGFONTW aLogFont;
-        ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
-        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
-        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
-        hHugeFont = ::CreateFontIndirectW( &aLogFont);
-    }
-    else
-    {
-        LOGFONTA aLogFont;
-        ::GetObjectA( mhFont, sizeof(LOGFONTA), &aLogFont);
-        aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
-        aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
-        hHugeFont = ::CreateFontIndirectA( &aLogFont);
-    }
-
+    LOGFONTW aLogFont;
+    ::GetObjectW( mhFont, sizeof(LOGFONTW), &aLogFont);
+    aLogFont.lfHeight = (LONG)(mfFontScale * aLogFont.lfHeight);
+    aLogFont.lfWidth  = (LONG)(mfFontScale * aLogFont.lfWidth);
+    HFONT hHugeFont = ::CreateFontIndirectW( &aLogFont);
     if( !hHugeFont )
         return 0;
 
@@ -671,57 +658,31 @@ void SimpleWinLayout::DrawText( SalGraphics& rGraphics ) const
 
     Point aPos = GetDrawPosition( Point( mnBaseAdv, 0 ) );
 
-     // #108267#, limit the number of glyphs to avoid paint errors
-    UINT limitedGlyphCount = Min( 8192, mnGlyphCount );
-    if( mnDrawOptions || aSalShlData.mbWNT )
-    {
-        // #108267#, break up into glyph portions of a limited size required by Win32 API
-        const unsigned int maxGlyphCount = 8192;
-        UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
-        UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
+    // #108267#, break up into glyph portions of a limited size required by Win32 API
+    const unsigned int maxGlyphCount = 8192;
+    UINT numGlyphPortions = mnGlyphCount / maxGlyphCount;
+    UINT remainingGlyphs = mnGlyphCount % maxGlyphCount;
 
-        if( numGlyphPortions )
-        {
-            // #108267#,#109387# break up string into smaller chunks
-            // the output positions will be updated by windows (SetTextAlign)
-            unsigned int i,n;
-            POINT oldPos;
-            UINT oldTa = ::GetTextAlign( aHDC );
-            ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
-            ::MoveToEx( aHDC, aPos.X(), aPos.Y(), &oldPos );
-            for( i=n=0; n<numGlyphPortions; n++, i+=maxGlyphCount )
-                ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
-                    mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i );
+    if( numGlyphPortions )
+    {
+        // #108267#,#109387# break up string into smaller chunks
+        // the output positions will be updated by windows (SetTextAlign)
+        POINT oldPos;
+        UINT oldTa = ::GetTextAlign( aHDC );
+        ::SetTextAlign( aHDC, (oldTa & ~TA_NOUPDATECP) | TA_UPDATECP );
+        ::MoveToEx( aHDC, aPos.X(), aPos.Y(), &oldPos );
+        unsigned int i = 0;
+        for( unsigned int n = 0; n < numGlyphPortions; ++n, i+=maxGlyphCount )
             ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
-                mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i );
-            ::MoveToEx( aHDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
-            ::SetTextAlign( aHDC, oldTa );
-        }
-        else
-            ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
-                mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
+                mpOutGlyphs+i, maxGlyphCount, mpGlyphAdvances+i );
+        ::ExtTextOutW( aHDC, 0, 0, mnDrawOptions, NULL,
+            mpOutGlyphs+i, remainingGlyphs, mpGlyphAdvances+i );
+        ::MoveToEx( aHDC, oldPos.x, oldPos.y, (LPPOINT) NULL);
+        ::SetTextAlign( aHDC, oldTa );
     }
     else
-    {
-        // #108267#, On Win9x, we get paint errors when drawing huge strings, even when
-        // split into pieces (see above), seems to be a problem in the internal text clipping
-        // so we just cut off the string
-        if( !mpGlyphOrigAdvs )
-            ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
-                mpOutGlyphs, limitedGlyphCount, NULL );
-        else
-        {
-            // workaround for problem in #106259#
-            long nXPos = mnBaseAdv;
-            for( unsigned int i = 0; i < limitedGlyphCount; ++i )
-            {
-                ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), 0, NULL,
-                    mpOutGlyphs+i, 1, NULL );
-                nXPos += mpGlyphAdvances[ i ];
-                aPos = GetDrawPosition( Point( nXPos, 0 ) );
-            }
-        }
-    }
+        ::ExtTextOutW( aHDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
+            mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
 
     if( hOrigFont )
         DeleteFont( SelectFont( aHDC, hOrigFont ) );
@@ -2076,6 +2037,13 @@ void UniscribeLayout::MoveGlyph( int nStartx8, long nNewXPos )
         // move the visual item by having an offset
         pVI->mnXOffset += nDelta;
     }
+    // move subsequent items - this often isn't necessary because subsequent
+    // moves will correct subsequent items. However, if there is a contiguous
+    // range not involving fallback which spans items, this will be needed
+    while (++pVI - mpVisualItems < mnItemCount)
+    {
+        pVI->mnXOffset += nDelta;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -2203,7 +2171,9 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
             const int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
             const int nRelGlyphPos = (j++) - rVI.mnMinGlyphPos;
-            mpLogClusters[ k ]    = static_cast<WORD>(nRelGlyphPos);
+            if( k < 0) // extra glyphs are already mapped
+                continue;
+            mpLogClusters[ k ] = static_cast<WORD>(nRelGlyphPos);
         }
 
         rVI.mnEndGlyphPos = j;
@@ -2362,6 +2332,10 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         if( rVisualItem.IsEmpty() )
             continue;
 
+        if (mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK)
+        {
+            nXPos = rVisualItem.mnXOffset;
+        }
         // get glyph positions
         // TODO: handle when rVisualItem's glyph range is only partially used
         for( i = rVisualItem.mnMinGlyphPos; i < rVisualItem.mnEndGlyphPos; ++i )
@@ -2395,13 +2369,17 @@ void UniscribeLayout::GetCaretPositions( int nMaxIdx, long* pCaretXArray ) const
         }
     }
 
-    // fixup unknown character positions to neighbor
-    for( i = 0; i < nMaxIdx; ++i )
+    if (!(mnLayoutFlags & SAL_LAYOUT_FOR_FALLBACK))
     {
-        if( pCaretXArray[ i ] >= 0 )
-            nXPos = pCaretXArray[ i ];
-        else
-            pCaretXArray[ i ] = nXPos;
+        nXPos = 0;
+        // fixup unknown character positions to neighbor
+        for( i = 0; i < nMaxIdx; ++i )
+        {
+            if( pCaretXArray[ i ] >= 0 )
+                nXPos = pCaretXArray[ i ];
+            else
+                pCaretXArray[ i ] = nXPos;
+        }
     }
 }
 
@@ -2821,7 +2799,7 @@ sal_GlyphId GraphiteLayoutWinImpl::getKashidaGlyph(int & rWidth)
 class GraphiteWinLayout : public WinLayout
 {
 private:
-    mutable gr::WinFont   mpFont;
+    mutable GraphiteWinFont mpFont;
     grutils::GrFeatureParser * mpFeatures;
     mutable GraphiteLayoutWinImpl maImpl;
 public:
@@ -2894,6 +2872,11 @@ void GraphiteWinLayout::RestoreDC(gr::Segment & segment) const
 
 bool GraphiteWinLayout::LayoutText( ImplLayoutArgs & args)
 {
+    if (args.mnMinCharPos >= args.mnEndCharPos)
+    {
+        maImpl.clear();
+        return true;
+    }
     HFONT hUnRotatedFont;
     if (args.mnOrientation)
     {

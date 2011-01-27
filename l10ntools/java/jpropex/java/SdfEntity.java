@@ -97,24 +97,25 @@ public class SdfEntity implements Cloneable{
     }
 
     public void setProperties( String line ){
-
-        String[] splitted       = line.split("\t");
-
-        setProject(         splitted[ SdfEntity.PROJECT_POS ]       );
-        setSource_file(     splitted[ SdfEntity.SOURCE_FILE_POS ]   );
-        setDummy1(          splitted[ SdfEntity.DUMMY1_POS ]        );
-        setResource_type(   splitted[ SdfEntity.RESOURCE_TYPE_POS ] );
-        setGid(             splitted[ SdfEntity.GID_POS ]           );
-        setLid(             splitted[ SdfEntity.LID_POS ]           );
-        setHelpid(          splitted[ SdfEntity.HELPID_POS ]        );
-        setPlatform(        splitted[ SdfEntity.PLATFORM_POS ]      );
-        setDummy2(          splitted[ SdfEntity.DUMMY2_POS ]        );
-        setLangid(          splitted[ SdfEntity.LANGID_POS ]        );
-        setText(            splitted[ SdfEntity.TEXT_POS ]          );
-        setHelptext(        splitted[ SdfEntity.HELPTEXT_POS ]      );
-        setQuickhelptext(   splitted[ SdfEntity.QUICKHELPTEXT_POS ] );
-        setTitle(           splitted[ SdfEntity.TITLE_POS ]         );
-        setDate(            splitted[ SdfEntity.DATE_POS ]          );
+        if( line != null )
+        {
+            String[] splitted       = line.split("\t",15);
+            setProject(         splitted[ SdfEntity.PROJECT_POS ]       );
+            setSource_file(     splitted[ SdfEntity.SOURCE_FILE_POS ]   );
+            setDummy1(          splitted[ SdfEntity.DUMMY1_POS ]        );
+            setResource_type(   splitted[ SdfEntity.RESOURCE_TYPE_POS ] );
+            setGid(             splitted[ SdfEntity.GID_POS ]           );
+            setLid(             splitted[ SdfEntity.LID_POS ]           );
+            setHelpid(          splitted[ SdfEntity.HELPID_POS ]        );
+            setPlatform(        splitted[ SdfEntity.PLATFORM_POS ]      );
+            setDummy2(          splitted[ SdfEntity.DUMMY2_POS ]        );
+            setLangid(          splitted[ SdfEntity.LANGID_POS ]        );
+            setText(            splitted[ SdfEntity.TEXT_POS ]          );
+            setHelptext(        splitted[ SdfEntity.HELPTEXT_POS ]      );
+            setQuickhelptext(   splitted[ SdfEntity.QUICKHELPTEXT_POS ] );
+            setTitle(           splitted[ SdfEntity.TITLE_POS ]         );
+            setDate(            splitted[ SdfEntity.DATE_POS ]          );
+        }
     }
 
     public String getFileId(){

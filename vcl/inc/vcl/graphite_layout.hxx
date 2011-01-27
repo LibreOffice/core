@@ -40,13 +40,13 @@
 #include <vector>
 #include <utility>
 // Libraries
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/GrConstants.h>
 #include <graphite/GrAppData.h>
 #include <graphite/SegmentAux.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 // Platform
 #include <vcl/sallayout.hxx>
 #include <vcl/dllapi.h>
@@ -65,6 +65,19 @@ class GraphiteFontAdaptor;
 class GrSegRecord;
 // SAL/VCL types
 class ServerFont;
+
+#ifdef WNT
+// The GraphiteWinFont is just a wrapper to enable GrFontHasher to be a friend
+// so that UniqueCacheInfo can be called.
+#include <graphite/WinFont.h>
+class GraphiteWinFont : public gr::WinFont
+{
+    friend class GrFontHasher;
+public:
+    GraphiteWinFont(HDC hdc) : gr::WinFont(hdc) {};
+    virtual ~GraphiteWinFont() {};
+};
+#endif
 // Graphite types
 namespace gr { class Segment; class GlyphIterator; }
 namespace grutils { class GrFeatureParser; }
@@ -98,7 +111,7 @@ public:
         iterator_pair_t    neighbour_clusters(const_iterator) const;
     private:
         std::pair<float,float> appendCluster(gr::Segment & rSeg, ImplLayoutArgs & rArgs,
-            bool bRtl, int nFirstCharInCluster, int nNextChar,
+            bool bRtl, float fSegmentAdvance, int nFirstCharInCluster, int nNextChar,
             int nFirstGlyphInCluster, int nNextGlyph, float fScaling,
             std::vector<int> & rChar2Base, std::vector<int> & rGlyph2Char,
             std::vector<int> & rCharDxs, long & rDXOffset);

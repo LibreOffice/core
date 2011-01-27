@@ -96,6 +96,7 @@ DBG_NAME( Menu )
 
 #define EXTRASPACEY         2
 #define EXTRAITEMHEIGHT     4
+#define GUTTERBORDER        8
 
 // document closer
 #define IID_DOCUMENTCLOSE 1
@@ -157,7 +158,7 @@ struct MenuItemData
     XubString       aTipHelpText;           // TipHelp-String (eg, expanded filenames)
     XubString       aCommandStr;            // CommandString
     XubString       aHelpCommandStr;        // Help command string (to reference external help)
-    ULONG           nHelpId;                // Help-Id
+    rtl::OString    aHelpId;                // Help-Id
     ULONG           nUserValue;             // User value
     Image           aImage;                 // Image
     KeyCode         aAccelKey;              // Accelerator-Key
@@ -252,7 +253,6 @@ MenuItemData* MenuItemList::Insert( USHORT nId, MenuItemType eType,
     pData->nBits            = nBits;
     pData->pSubMenu         = NULL;
     pData->pAutoSubMenu     = NULL;
-    pData->nHelpId          = 0;
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
@@ -284,7 +284,6 @@ void MenuItemList::InsertSeparator( USHORT nPos )
     pData->nBits            = 0;
     pData->pSubMenu         = NULL;
     pData->pAutoSubMenu     = NULL;
-    pData->nHelpId          = 0;
     pData->nUserValue       = 0;
     pData->bChecked         = FALSE;
     pData->bEnabled         = TRUE;
@@ -844,14 +843,14 @@ static BOOL ImplHandleHelpEvent( Window* pMenuWindow, Menu* pMenu, USHORT nHighl
             // Ist eine ID vorhanden, dann Hilfe mit der ID aufrufen, sonst
             // den Hilfe-Index
             String aCommand = pMenu->GetItemCommand( nId );
-            ULONG  nHelpId  = pMenu->GetHelpId( nId );
+            rtl::OString aHelpId(  pMenu->GetHelpId( nId ) );
+            if( ! aHelpId.getLength() )
+                aHelpId = OOO_HELP_INDEX;
 
             if ( aCommand.Len() )
                 pHelp->Start( aCommand, NULL );
-            else if ( nHelpId )
-                pHelp->Start( nHelpId, NULL );
             else
-                pHelp->Start( OOO_HELP_INDEX, NULL );
+                pHelp->Start( rtl::OStringToOUString( aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
         }
         bDone = TRUE;
     }
@@ -938,6 +937,14 @@ Menu::~Menu()
     if ( nEventId )
         Application::RemoveUserEvent( nEventId );
 
+    // Notify deletion of this menu
+    ImplMenuDelData* pDelData = mpFirstDel;
+    while ( pDelData )
+    {
+        pDelData->mpMenu = NULL;
+        pDelData = pDelData->mpNext;
+    }
+
     bKilled = TRUE;
 
     delete pItemList;
@@ -970,9 +977,9 @@ void Menu::ImplInit()
     bInCallback     = FALSE;
     bKilled         = FALSE;
     mpLayoutData    = NULL;
-
+    mpFirstDel      = NULL;         // Dtor notification list
     // Native-support: returns NULL if not supported
-    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar );
+    mpSalMenu = ImplGetSVData()->mpDefInst->CreateMenu( bIsMenuBar, this );
 }
 
 Menu* Menu::ImplGetStartedFrom() const
@@ -1034,19 +1041,29 @@ void Menu::CreateAutoMnemonics()
 void Menu::Activate()
 {
     bInCallback = TRUE;
+
+    ImplMenuDelData aDelData( this );
+
     ImplCallEventListeners( VCLEVENT_MENU_ACTIVATE, ITEMPOS_INVALID );
-    if ( !aActivateHdl.Call( this ) )
+
+    if( !aDelData.isDeleted() )
     {
-        Menu* pStartMenu = ImplGetStartMenu();
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if ( !aActivateHdl.Call( this ) )
         {
-            pStartMenu->bInCallback = TRUE;
-            // MT 11/01: Call EventListener here? I don't know...
-            pStartMenu->aActivateHdl.Call( this );
-            pStartMenu->bInCallback = FALSE;
+            if( !aDelData.isDeleted() )
+            {
+                Menu* pStartMenu = ImplGetStartMenu();
+                if ( pStartMenu && ( pStartMenu != this ) )
+                {
+                    pStartMenu->bInCallback = TRUE;
+                    // MT 11/01: Call EventListener here? I don't know...
+                    pStartMenu->aActivateHdl.Call( this );
+                    pStartMenu->bInCallback = FALSE;
+                }
+            }
         }
+        bInCallback = FALSE;
     }
-    bInCallback = FALSE;
 }
 
 void Menu::Deactivate()
@@ -1059,33 +1076,49 @@ void Menu::Deactivate()
     }
 
     bInCallback = TRUE;
+
+    ImplMenuDelData aDelData( this );
+
     Menu* pStartMenu = ImplGetStartMenu();
     ImplCallEventListeners( VCLEVENT_MENU_DEACTIVATE, ITEMPOS_INVALID );
-    if ( !aDeactivateHdl.Call( this ) )
+
+    if( !aDelData.isDeleted() )
     {
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if ( !aDeactivateHdl.Call( this ) )
         {
-            pStartMenu->bInCallback = TRUE;
-            pStartMenu->aDeactivateHdl.Call( this );
-            pStartMenu->bInCallback = FALSE;
+            if( !aDelData.isDeleted() )
+            {
+                if ( pStartMenu && ( pStartMenu != this ) )
+                {
+                    pStartMenu->bInCallback = TRUE;
+                    pStartMenu->aDeactivateHdl.Call( this );
+                    pStartMenu->bInCallback = FALSE;
+                }
+            }
         }
     }
-    bInCallback = FALSE;
 
-    if ( this == pStartMenu )
-        GetpApp()->HideHelpStatusText();
+    if( !aDelData.isDeleted() )
+    {
+        bInCallback = FALSE;
+
+        if ( this == pStartMenu )
+            GetpApp()->HideHelpStatusText();
+    }
 }
 
 void Menu::Highlight()
 {
+    ImplMenuDelData aDelData( this );
+
     Menu* pStartMenu = ImplGetStartMenu();
-    if ( !aHighlightHdl.Call( this ) )
+    if ( !aHighlightHdl.Call( this ) && !aDelData.isDeleted() )
     {
         if ( pStartMenu && ( pStartMenu != this ) )
             pStartMenu->aHighlightHdl.Call( this );
     }
 
-    if ( GetCurItemId() )
+    if ( !aDelData.isDeleted() && GetCurItemId() )
         GetpApp()->ShowHelpStatusText( GetHelpText( GetCurItemId() ) );
 }
 
@@ -1112,14 +1145,19 @@ void Menu::ImplSelect()
 
 void Menu::Select()
 {
+    ImplMenuDelData aDelData( this );
+
     ImplCallEventListeners( VCLEVENT_MENU_SELECT, GetItemPos( GetCurItemId() ) );
-    if ( !aSelectHdl.Call( this ) )
+    if ( !aDelData.isDeleted() && !aSelectHdl.Call( this ) )
     {
-        Menu* pStartMenu = ImplGetStartMenu();
-        if ( pStartMenu && ( pStartMenu != this ) )
+        if( !aDelData.isDeleted() )
         {
-            pStartMenu->nSelectedId = nSelectedId;
-            pStartMenu->aSelectHdl.Call( this );
+            Menu* pStartMenu = ImplGetStartMenu();
+            if ( pStartMenu && ( pStartMenu != this ) )
+            {
+                pStartMenu->nSelectedId = nSelectedId;
+                pStartMenu->aSelectHdl.Call( this );
+            }
         }
     }
 }
@@ -1141,6 +1179,8 @@ void Menu::RequestHelp( const HelpEvent& )
 
 void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
 {
+    ImplMenuDelData aDelData( this );
+
     VclMenuEvent aEvent( this, nEvent, nPos );
 
     // This is needed by atk accessibility bridge
@@ -1149,16 +1189,22 @@ void Menu::ImplCallEventListeners( ULONG nEvent, USHORT nPos )
         ImplGetSVData()->mpApp->ImplCallEventListeners( &aEvent );
     }
 
-    if ( !maEventListeners.empty() )
+    if ( !aDelData.isDeleted() && !maEventListeners.empty() )
         maEventListeners.Call( &aEvent );
 
-    Menu* pMenu = this;
-    while ( pMenu )
+    if( !aDelData.isDeleted() )
     {
-        if ( !maChildEventListeners.empty() )
-            maChildEventListeners.Call( &aEvent );
+        Menu* pMenu = this;
+        while ( pMenu )
+        {
+            if ( !maChildEventListeners.empty() )
+                maChildEventListeners.Call( &aEvent );
 
-        pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
+            if( aDelData.isDeleted() )
+                break;
+
+            pMenu = ( pMenu->pStartedFrom != pMenu ) ? pMenu->pStartedFrom : NULL;
+        }
     }
 }
 
@@ -1283,15 +1329,14 @@ void Menu::InsertItem( const ResId& rResId, USHORT nPos )
             SetHelpText( nItemId, aHelpText );
     }
 
-    ULONG  nHelpId = 0;
     if ( nObjMask & RSC_MENUITEM_HELPID )
     {
-        nHelpId = ReadLongRes();
+        rtl::OString aHelpId( ReadByteStringRes() );
         if ( !bSep )
-            SetHelpId( nItemId, nHelpId );
+            SetHelpId( nItemId, aHelpId );
     }
 
-    if( !bSep /* && SvHelpSettings::HelpText( aHelpText, nHelpId ) */ )
+    if( !bSep )
         SetHelpText( nItemId, aHelpText );
 
     if ( nObjMask & RSC_MENUITEM_KEYCODE )
@@ -1416,7 +1461,7 @@ void ImplCopyItem( Menu* pThis, const Menu& rMenu, USHORT nPos, USHORT nNewPos,
             pThis->CheckItem( nId, TRUE );
         if ( !rMenu.IsItemEnabled( nId ) )
             pThis->EnableItem( nId, FALSE );
-        pThis->SetHelpId( nId, pData->nHelpId );
+        pThis->SetHelpId( nId, pData->aHelpId );
         pThis->SetHelpText( nId, pData->aHelpText );
         pThis->SetAccelKey( nId, pData->aAccelKey );
         pThis->SetItemCommand( nId, pData->aCommandStr );
@@ -1992,7 +2037,7 @@ const XubString& Menu::ImplGetHelpText( USHORT nItemId ) const
     if ( pData )
     {
         if ( !pData->aHelpText.Len() &&
-             (( pData->nHelpId  ) || ( pData->aCommandStr.Len() )))
+             (( pData->aHelpId.getLength()  ) || ( pData->aCommandStr.Len() )))
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
@@ -2000,8 +2045,8 @@ const XubString& Menu::ImplGetHelpText( USHORT nItemId ) const
                 if ( pData->aCommandStr.Len() )
                     pData->aHelpText = pHelp->GetHelpText( pData->aCommandStr, NULL );
 
-                if( !pData->aHelpText.Len() && pData->nHelpId )
-                    pData->aHelpText = pHelp->GetHelpText( pData->nHelpId, NULL );
+                if( !pData->aHelpText.Len() && pData->aHelpId.getLength() )
+                    pData->aHelpText = pHelp->GetHelpText( rtl::OStringToOUString( pData->aHelpId, RTL_TEXTENCODING_UTF8 ), NULL );
             }
         }
 
@@ -2034,22 +2079,29 @@ const XubString& Menu::GetTipHelpText( USHORT nItemId ) const
         return ImplGetSVEmptyStr();
 }
 
-void Menu::SetHelpId( USHORT nItemId, ULONG nHelpId )
+void Menu::SetHelpId( USHORT nItemId, const rtl::OString& rHelpId )
 {
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        pData->nHelpId = nHelpId;
+        pData->aHelpId = rHelpId;
 }
 
-ULONG Menu::GetHelpId( USHORT nItemId ) const
+rtl::OString Menu::GetHelpId( USHORT nItemId ) const
 {
+    rtl::OString aRet;
+
     MenuItemData* pData = pItemList->GetData( nItemId );
 
     if ( pData )
-        return pData->nHelpId;
-    else
-        return 0;
+    {
+        if ( pData->aHelpId.getLength() )
+            aRet = pData->aHelpId;
+        else
+            aRet = ::rtl::OUStringToOString( pData->aCommandStr, RTL_TEXTENCODING_UTF8 );
+    }
+
+    return aRet;
 }
 
 Menu& Menu::operator=( const Menu& rMenu )
@@ -2221,10 +2273,10 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
     if( ! bIsMenuBar )
     {
         ImplControlValue aVal;
-        Region aNativeBounds;
-        Region aNativeContent;
+        Rectangle aNativeBounds;
+        Rectangle aNativeContent;
         Point tmp( 0, 0 );
-        Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+        Rectangle aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
         {
             if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
@@ -2237,8 +2289,8 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
                                               aNativeContent )
             )
             {
-                rCheckHeight = aNativeBounds.GetBoundRect().GetHeight();
-                rMaxWidth = aNativeContent.GetBoundRect().GetWidth();
+                rCheckHeight = aNativeBounds.GetHeight();
+                rMaxWidth = aNativeContent.GetWidth();
             }
         }
         if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
@@ -2253,13 +2305,49 @@ long Menu::ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lon
                                               aNativeContent )
             )
             {
-                rRadioHeight = aNativeBounds.GetBoundRect().GetHeight();
-                rMaxWidth = Max (rMaxWidth, aNativeContent.GetBoundRect().GetWidth());
+                rRadioHeight = aNativeBounds.GetHeight();
+                rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
             }
         }
     }
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
+
+// -----------------------------------------------------------------------
+
+void Menu::ImplAddDel( ImplMenuDelData& rDel )
+{
+    DBG_ASSERT( !rDel.mpMenu, "Menu::ImplAddDel(): cannot add ImplMenuDelData twice !" );
+    if( !rDel.mpMenu )
+    {
+        rDel.mpMenu = this;
+        rDel.mpNext = mpFirstDel;
+        mpFirstDel = &rDel;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void Menu::ImplRemoveDel( ImplMenuDelData& rDel )
+{
+    rDel.mpMenu = NULL;
+    if ( mpFirstDel == &rDel )
+    {
+        mpFirstDel = rDel.mpNext;
+    }
+    else
+    {
+        ImplMenuDelData* pData = mpFirstDel;
+        while ( pData && (pData->mpNext != &rDel) )
+            pData = pData->mpNext;
+
+        DBG_ASSERT( pData, "Menu::ImplRemoveDel(): ImplMenuDelData not registered !" );
+        if( pData )
+            pData->mpNext = rDel.mpNext;
+    }
+}
+
+// -----------------------------------------------------------------------
 
 Size Menu::ImplCalcSize( Window* pWin )
 {
@@ -2397,6 +2485,16 @@ Size Menu::ImplCalcSize( Window* pWin )
 
     if ( !bIsMenuBar )
     {
+        // popup menus should not be wider than half the screen
+        // except on rather small screens
+        // TODO: move GetScreenNumber from SystemWindow to Window ?
+        // currently we rely on internal privileges
+        unsigned int nScreenNumber = pWin->ImplGetWindowImpl()->mpFrame->maGeometry.nScreenNumber;
+        Rectangle aDispRect( Application::GetScreenPosSizePixel( nScreenNumber ) );
+        long nScreenWidth = aDispRect.GetWidth() >= 800 ? aDispRect.GetWidth() : 800;
+        if( nMaxWidth > nScreenWidth/2 )
+            nMaxWidth = nScreenWidth/2;
+
         USHORT gfxExtra = (USHORT) Max( nExtra, 7L ); // #107710# increase space between checkmarks/images/text
         nCheckPos = (USHORT)nExtra;
         if (nMenuFlags & MENU_FLAG_SHOWCHECKIMAGES)
@@ -2433,10 +2531,10 @@ Size Menu::ImplCalcSize( Window* pWin )
         if( pWindow->IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
         {
             ImplControlValue aVal;
-            Region aNativeBounds;
-            Region aNativeContent;
+            Rectangle aNativeBounds;
+            Rectangle aNativeContent;
             Point tmp( 0, 0 );
-            Region aCtrlRegion( Rectangle( tmp, Size( 100, 15 ) ) );
+            Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
             if( pWindow->GetNativeControlRegion( ControlType(CTRL_MENUBAR),
                                                  ControlPart(PART_ENTIRE_CONTROL),
                                                  aCtrlRegion,
@@ -2447,7 +2545,7 @@ Size Menu::ImplCalcSize( Window* pWin )
                                                  aNativeContent )
             )
             {
-                int nNativeHeight = aNativeBounds.GetBoundRect().GetHeight();
+                int nNativeHeight = aNativeBounds.GetHeight();
                 if( nNativeHeight > aSz.Height() )
                     aSz.Height() = nNativeHeight;
             }
@@ -2472,7 +2570,7 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
     if( i_pWindow->IsNativeControlSupported( CTRL_TOOLBAR, PART_BUTTON ) )
     {
         ImplControlValue    aControlValue;
-        Region              aCtrlRegion( i_rRect );
+        Rectangle           aCtrlRegion( i_rRect );
         ControlState        nState = CTRL_STATE_PRESSED | CTRL_STATE_ENABLED;
 
         aControlValue.setTristateVal( BUTTONVALUE_ON );
@@ -2488,6 +2586,26 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
         i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
     }
+}
+
+static String getShortenedString( const String& i_rLong, Window* i_pWin, long i_nMaxWidth )
+{
+    xub_StrLen nPos = STRING_NOTFOUND;
+    String aNonMnem( OutputDevice::GetNonMnemonicString( i_rLong, nPos ) );
+    aNonMnem = i_pWin->GetEllipsisString( aNonMnem, i_nMaxWidth, TEXT_DRAW_CENTERELLIPSIS );
+    // re-insert mnemonic
+    if( nPos != STRING_NOTFOUND )
+    {
+        if( nPos < aNonMnem.Len() && i_rLong.GetChar(nPos+1) == aNonMnem.GetChar(nPos) )
+        {
+            rtl::OUStringBuffer aBuf( i_rLong.Len() );
+            aBuf.append( aNonMnem.GetBuffer(), nPos );
+            aBuf.append( sal_Unicode('~') );
+            aBuf.append( aNonMnem.GetBuffer()+nPos );
+            aNonMnem = aBuf.makeStringAndClear();
+        }
+    }
+    return aNonMnem;
 }
 
 void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* pThisItemOnly, BOOL bHighlighted, bool bLayout ) const
@@ -2553,14 +2671,36 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                 // Separator
                 if ( !bLayout && !bIsMenuBar && ( pData->eType == MENUITEM_SEPARATOR ) )
                 {
-                    aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
-                    aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
-                    pWin->SetLineColor( rSettings.GetShadowColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
-                    aTmpPos.Y()++;
-                    pWin->SetLineColor( rSettings.GetLightColor() );
-                    pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
-                    pWin->SetLineColor();
+                    bool bNativeOk = false;
+                    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                        PART_MENU_SEPARATOR ) )
+                    {
+                        ControlState nState = 0;
+                        if ( pData->bEnabled )
+                            nState |= CTRL_STATE_ENABLED;
+                        if ( bHighlighted )
+                            nState |= CTRL_STATE_SELECTED;
+                        Size aSz( pData->aSz );
+                        aSz.Width() = aOutSz.Width() - 2*nOuterSpace;
+                        Rectangle aItemRect( aPos, aSz );
+                        MenupopupValue aVal( nTextPos-GUTTERBORDER, aItemRect );
+                        bNativeOk = pWin->DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_SEPARATOR,
+                                                             aItemRect,
+                                                             nState,
+                                                             aVal,
+                                                             OUString() );
+                    }
+                    if( ! bNativeOk )
+                    {
+                        aTmpPos.Y() = aPos.Y() + ((pData->aSz.Height()-2)/2);
+                        aTmpPos.X() = aPos.X() + 2 + nOuterSpace;
+                        pWin->SetLineColor( rSettings.GetShadowColor() );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        aTmpPos.Y()++;
+                        pWin->SetLineColor( rSettings.GetLightColor() );
+                        pWin->DrawLine( aTmpPos, Point( aOutSz.Width() - 3 - 2*nOuterSpace, aTmpPos.Y() ) );
+                        pWin->SetLineColor();
+                    }
                 }
 
                 Rectangle aOuterCheckRect( Point( aPos.X()+nCheckPos, aPos.Y() ), Size( pData->aSz.Height(), pData->aSz.Height() ) );
@@ -2605,10 +2745,11 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - nCtrlHeight)/2;
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
+                            MenupopupValue aVal( nTextPos-GUTTERBORDER, Rectangle( aPos, pData->aSz ) );
                             pWin->DrawNativeControl( CTRL_MENU_POPUP, nPart,
-                                                     Region( aCheckRect ),
+                                                     aCheckRect,
                                                      nState,
-                                                     ImplControlValue(),
+                                                     aVal,
                                                      OUString() );
                         }
                         else if ( pData->bChecked ) // by default do nothing for unchecked items
@@ -2680,7 +2821,19 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                             pWin->GetSettings().GetStyleSettings().GetMenuColor();
                         pWin->SetBackground( Wallpaper( aBg ) );
                     }
-                    pWin->DrawCtrlText( aTmpPos, pData->aText, 0, pData->aText.Len(), nStyle, pVector, pDisplayText );
+                    // how much space is there for the text ?
+                    long nMaxItemTextWidth = aOutSz.Width() - aTmpPos.X() - nExtra - nOuterSpace;
+                    if( !bIsMenuBar && pData->aAccelKey.GetCode() && !ImplAccelDisabled() )
+                    {
+                        XubString aAccText = pData->aAccelKey.GetName();
+                        nMaxItemTextWidth -= pWin->GetTextWidth( aAccText ) + 3*nExtra;
+                    }
+                    if( !bIsMenuBar && pData->pSubMenu )
+                    {
+                        nMaxItemTextWidth -= nFontHeight - nExtra;
+                    }
+                    String aItemText( getShortenedString( pData->aText, pWin, nMaxItemTextWidth ) );
+                    pWin->DrawCtrlText( aTmpPos, aItemText, 0, aItemText.Len(), nStyle, pVector, pDisplayText );
                     if( bSetTmpBackground )
                         pWin->SetBackground();
                 }
@@ -2716,16 +2869,6 @@ void Menu::ImplPaint( Window* pWin, USHORT nBorder, long nStartY, MenuItemData* 
                     aDecoView.DrawSymbol(
                         Rectangle( aTmpPos, Size( nFontHeight/2, nFontHeight/2 ) ),
                         SYMBOL_SPIN_RIGHT, pWin->GetTextColor(), nSymbolStyle );
-//                  if ( pData->nBits & MIB_POPUPSELECT )
-//                  {
-//                      aTmpPos.Y() += nFontHeight/2 ;
-//                      pWin->SetLineColor( rSettings.GetShadowColor() );
-//                      pWin->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      pWin->SetLineColor( rSettings.GetLightColor() );
-//                      aTmpPos.Y()++;
-//                      pWin->DrawLine( aTmpPos, Point( aTmpPos.X() + nFontHeight/3, aTmpPos.Y() ) );
-//                      pWin->SetLineColor();
-//                  }
                 }
 
                 if ( pThisItemOnly && bHighlighted )
@@ -2790,13 +2933,19 @@ Menu* Menu::ImplGetStartMenu()
 
 void Menu::ImplCallHighlight( USHORT nHighlightedItem )
 {
+    ImplMenuDelData aDelData( this );
+
     nSelectedId = 0;
     MenuItemData* pData = pItemList->GetDataFromPos( nHighlightedItem );
     if ( pData )
         nSelectedId = pData->nId;
     ImplCallEventListeners( VCLEVENT_MENU_HIGHLIGHT, GetItemPos( GetCurItemId() ) );
-    Highlight();
-    nSelectedId = 0;
+
+    if( !aDelData.isDeleted() )
+    {
+        Highlight();
+        nSelectedId = 0;
+    }
 }
 
 IMPL_LINK( Menu, ImplCallSelect, Menu*, EMPTYARG )
@@ -3292,10 +3441,14 @@ BOOL MenuBar::HandleMenuActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
+        ImplMenuDelData aDelData( this );
+
         pMenu->pStartedFrom = (Menu*)this;
         pMenu->bInCallback = TRUE;
         pMenu->Activate();
-        pMenu->bInCallback = FALSE;
+
+        if( !aDelData.isDeleted() )
+            pMenu->bInCallback = FALSE;
     }
     return TRUE;
 }
@@ -3304,10 +3457,13 @@ BOOL MenuBar::HandleMenuDeActivateEvent( Menu *pMenu ) const
 {
     if( pMenu )
     {
+        ImplMenuDelData aDelData( this );
+
         pMenu->pStartedFrom = (Menu*)this;
         pMenu->bInCallback = TRUE;
         pMenu->Deactivate();
-        pMenu->bInCallback = FALSE;
+        if( !aDelData.isDeleted() )
+            pMenu->bInCallback = FALSE;
     }
     return TRUE;
 }
@@ -3318,13 +3474,18 @@ BOOL MenuBar::HandleMenuHighlightEvent( Menu *pMenu, USHORT nHighlightEventId ) 
         pMenu = ((Menu*) this)->ImplFindMenu( nHighlightEventId );
     if( pMenu )
     {
+        ImplMenuDelData aDelData( pMenu );
+
         if( mnHighlightedItemPos != ITEMPOS_INVALID )
             pMenu->ImplCallEventListeners( VCLEVENT_MENU_DEHIGHLIGHT, mnHighlightedItemPos );
 
-        pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
-        pMenu->nSelectedId = nHighlightEventId;
-        pMenu->pStartedFrom = (Menu*)this;
-        pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
+        if( !aDelData.isDeleted() )
+        {
+            pMenu->mnHighlightedItemPos = pMenu->GetItemPos( nHighlightEventId );
+            pMenu->nSelectedId = nHighlightEventId;
+            pMenu->pStartedFrom = (Menu*)this;
+            pMenu->ImplCallHighlight( pMenu->mnHighlightedItemPos );
+        }
         return TRUE;
     }
     else
@@ -3621,7 +3782,7 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     if ( GetItemCount() )
     {
         SalMenu* pMenu = ImplGetSalMenu();
-        if( pMenu && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
+        if( pMenu && bRealExecute && pMenu->ShowNativePopupMenu( pWin, aRect, nPopupModeFlags | FLOATWIN_POPUPMODE_GRABFOCUS ) )
         {
             pWin->StopExecute(0);
             pWin->doShutdown();
@@ -4577,19 +4738,20 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     Push( PUSH_CLIPREGION );
                     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( aSz.Width(), pData->aSz.Height() ) ) );
                     Rectangle aCtrlRect( Point( nX, 0 ), Size( aPxSize.Width()-nX, aPxSize.Height() ) );
+                    MenupopupValue aVal( pMenu->nTextPos-GUTTERBORDER, aItemRect );
                     DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                                       Region( aCtrlRect ),
+                                       aCtrlRect,
                                        CTRL_STATE_ENABLED,
-                                       ImplControlValue(),
+                                       aVal,
                                        OUString() );
                     if( bHighlight &&
                         IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
                     {
                         bDrawItemRect = false;
                         if( FALSE == DrawNativeControl( CTRL_MENU_POPUP, PART_MENU_ITEM,
-                                                        Region( aItemRect ),
+                                                        aItemRect,
                                                         CTRL_STATE_SELECTED | ( pData->bEnabled? CTRL_STATE_ENABLED: 0 ),
-                                                        ImplControlValue(),
+                                                        aVal,
                                                         OUString() ) )
                         {
                             bDrawItemRect = bHighlight;
@@ -4924,10 +5086,11 @@ void MenuFloatingWindow::Paint( const Rectangle& )
         long nX = pMenu->pLogo ? pMenu->pLogo->aBitmap.GetSizePixel().Width() : 0;
         Size aPxSize( GetOutputSizePixel() );
         aPxSize.Width() -= nX;
+        ImplControlValue aVal( pMenu->nTextPos-GUTTERBORDER );
         DrawNativeControl( CTRL_MENU_POPUP, PART_ENTIRE_CONTROL,
-                           Region( Rectangle( Point( nX, 0 ), aPxSize ) ),
+                           Rectangle( Point( nX, 0 ), aPxSize ),
                            CTRL_STATE_ENABLED,
-                           ImplControlValue(),
+                           aVal,
                            OUString() );
         ImplInitClipRegion();
     }
@@ -5439,23 +5602,21 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                         IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL ) )
                     {
                         // draw background (transparency)
-                        ImplControlValue aControlValue;
-                        MenubarValue aMenubarValue;
-                        aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
+                        MenubarValue aControlValue;
+                        aControlValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
 
                         Point tmp(0,0);
-                        Region aBgRegion( Rectangle( tmp, GetOutputSizePixel() ) );
+                        Rectangle aBgRegion( tmp, GetOutputSizePixel() );
                         DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL,
                                            aBgRegion,
                                            CTRL_STATE_ENABLED,
                                            aControlValue,
                                            OUString() );
-                        ImplAddNWFSeparator( this, aMenubarValue );
+                        ImplAddNWFSeparator( this, aControlValue );
 
                         // draw selected item
                         DrawNativeControl( CTRL_MENUBAR, PART_MENU_ITEM,
-                                           Region( aRect ),
+                                           aRect,
                                            CTRL_STATE_ENABLED | CTRL_STATE_SELECTED,
                                            aControlValue,
                                            OUString() );
@@ -5471,18 +5632,15 @@ void MenuBarWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                 {
                     if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
                     {
-                        ImplControlValue aControlValue;
                         MenubarValue aMenubarValue;
                         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-                        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
                         // use full window size to get proper gradient
                         // but clip accordingly
                         Point aPt;
                         Rectangle aCtrlRect( aPt, GetOutputSizePixel() );
-                        Region aCtrlRegion( aCtrlRect );
 
-                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+                        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRect, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
                         ImplAddNWFSeparator( this, aMenubarValue );
                     }
                     else
@@ -5713,14 +5871,12 @@ void MenuBarWindow::Paint( const Rectangle& )
     if( IsNativeControlSupported( CTRL_MENUBAR, PART_ENTIRE_CONTROL) )
     {
         Point aPt;
-        Region              aCtrlRegion( Rectangle( aPt, GetOutputSizePixel() ) );
+        Rectangle aCtrlRegion( aPt, GetOutputSizePixel() );
 
-        ImplControlValue aControlValue;
         MenubarValue aMenubarValue;
         aMenubarValue.maTopDockingAreaHeight = ImplGetTopDockingAreaHeight( this );
-        aControlValue.setOptionalVal( (void *)(&aMenubarValue) );
 
-        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aControlValue, rtl::OUString() );
+        DrawNativeControl( CTRL_MENUBAR, PART_ENTIRE_CONTROL, aCtrlRegion, CTRL_STATE_ENABLED, aMenubarValue, rtl::OUString() );
         ImplAddNWFSeparator( this, aMenubarValue );
     }
     SetFillColor( GetSettings().GetStyleSettings().GetMenuColor() );
@@ -5988,4 +6144,18 @@ bool MenuBarWindow::HandleMenuButtonEvent( USHORT i_nButtonId )
         return it->second.m_aSelectLink.Call( &aArg );
     }
     return FALSE;
+}
+
+ImplMenuDelData::ImplMenuDelData( const Menu* pMenu )
+: mpNext( 0 )
+, mpMenu( 0 )
+{
+    if( pMenu )
+        const_cast< Menu* >( pMenu )->ImplAddDel( *this );
+}
+
+ImplMenuDelData::~ImplMenuDelData()
+{
+    if( mpMenu )
+        const_cast< Menu* >( mpMenu )->ImplRemoveDel( *this );
 }

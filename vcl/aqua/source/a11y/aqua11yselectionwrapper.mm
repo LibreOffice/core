@@ -40,20 +40,23 @@ using namespace ::com::sun::star::uno;
 +(id)selectedChildrenAttributeForElement:(AquaA11yWrapper *)wrapper
 {
     Reference< XAccessibleSelection > xAccessibleSelection = [ wrapper accessibleSelection ];
-    NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
-    
-    try {
-        sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
-        for ( sal_Int32 i=0 ; i < n ; ++i ) {
-            [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
+    if( xAccessibleSelection.is() )
+    {
+        NSMutableArray * children = [ [ NSMutableArray alloc ] init ];
+        try {
+            sal_Int32 n = xAccessibleSelection -> getSelectedAccessibleChildCount();
+            for ( sal_Int32 i=0 ; i < n ; ++i ) {
+                [ children addObject: [ AquaA11yFactory wrapperForAccessible: xAccessibleSelection -> getSelectedAccessibleChild( i ) ] ];
+            }
+            
+            return children;
+            
+        } catch ( Exception& e)
+        {
         }
-        
-        return children;
-        
-    } catch ( Exception& e) {
-        return nil;
     }
     
+    return nil;
 }
 
 

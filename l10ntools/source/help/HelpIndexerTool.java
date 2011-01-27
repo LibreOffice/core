@@ -72,6 +72,9 @@ public class HelpIndexerTool
         String aSegmentName = "";
 
         // Scan arguments
+        //If this tool is invoked in the build process for extensions help,
+        //then -extension must be set.
+        boolean bExtension = false;
         boolean bLang = false;
         boolean bMod = false;
         boolean bZipDir = false;
@@ -83,7 +86,11 @@ public class HelpIndexerTool
         int nArgCount = args.length;
         for( int i = 0 ; i < nArgCount ; i++ )
         {
-            if( "-lang".equals(args[i]) )
+            if( "-extension".equals(args[i]) )
+            {
+                bExtension = true;
+            }
+            else if( "-lang".equals(args[i]) )
             {
                 if( i + 1 < nArgCount )
                 {
@@ -142,20 +149,21 @@ public class HelpIndexerTool
                     bSegmentName = true;
                 }
                 i++;
-        if (!(bCfsName && bSegmentName))
-        {
-            System.out.println("Usage: HelpIndexer -checkcfsandsegname _0 _3 (2 arguments needed)");
-            System.exit( -1 );
-        }
+                if (!(bCfsName && bSegmentName))
+                {
+                    System.out.println("Usage: HelpIndexer -checkcfsandsegname _0 _3 (2 arguments needed)");
+                    System.exit( -1 );
+                }
             }
         }
 
-        if( !bLang || !bMod || !bZipDir || (!bOutput && !bExtensionMode) )
+        if( !bLang || !bMod || !bZipDir || (!bOutput && !bExtensionMode && !bExtension) )
         {
             if( bExtensionMode )
                 return;
 
             System.out.println("Usage: HelpIndexer -lang ISOLangCode -mod HelpModule -zipdir TempZipDir -o OutputZipFile");
+            System.out.println("Usage: HelpIndexer -extension -lang ISOLangCode -mod HelpModule -zipdir PathToLangDir");
             System.exit( -1 );
         }
 
@@ -199,7 +207,7 @@ public class HelpIndexerTool
                 System.out.println( "Checking segment file " + aSegmentName+ ": " + (bSegmentFileOk ? "Found" : "Not found") );
             }
 
-            if( bExtensionMode )
+            if( bExtensionMode || bExtension)
             {
                 if( !bSrcDir )
                 {

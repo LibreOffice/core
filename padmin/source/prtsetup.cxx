@@ -198,6 +198,7 @@ IMPL_LINK( RTSDialog, ClickButton, Button*, pButton )
             m_aJobData.m_nColorDepth    = m_pDevicePage->getDepth();
             m_aJobData.m_nColorDevice   = m_pDevicePage->getColorDevice();
             m_aJobData.m_nPSLevel       = m_pDevicePage->getLevel();
+            m_aJobData.m_nPDFDevice     = m_pDevicePage->getPDFDevice();
         }
         if( m_pOtherPage )
             // write other settings
@@ -363,8 +364,8 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         m_aPPDKeyBox( this, PaResId( RID_RTS_DEVICE_PPDKEY_BOX ) ),
         m_aPPDValueText( this, PaResId( RID_RTS_DEVICE_PPDVALUE_TXT ) ),
         m_aPPDValueBox( this, PaResId( RID_RTS_DEVICE_PPDVALUE_BOX ) ),
-        m_aLevelText( this, PaResId( RID_RTS_DEVICE_LEVEL_TXT ) ),
-        m_aLevelBox( this, PaResId( RID_RTS_DEVICE_LEVEL_BOX ) ),
+        m_aLevelText( this, PaResId( RID_RTS_DEVICE_PRINTLANG_TXT ) ),
+        m_aLevelBox( this, PaResId( RID_RTS_DEVICE_PRINTLANG_BOX ) ),
         m_aSpaceText( this, PaResId( RID_RTS_DEVICE_SPACE_TXT ) ),
         m_aSpaceBox( this, PaResId( RID_RTS_DEVICE_SPACE_BOX ) ),
         m_aDepthText( this, PaResId( RID_RTS_DEVICE_DEPTH_TXT ) ),
@@ -385,13 +386,19 @@ RTSDevicePage::RTSDevicePage( RTSDialog* pParent ) :
         case  1: m_aSpaceBox.SelectEntry( m_aSpaceColor );break;
     }
 
-    m_aLevelBox.InsertEntry( m_pParent->m_aFromDriverString );
-    m_aLevelBox.InsertEntry( String( RTL_CONSTASCII_USTRINGPARAM( "1" ) ) );
-    m_aLevelBox.InsertEntry( String( RTL_CONSTASCII_USTRINGPARAM( "2" ) ) );
-    if( m_pParent->m_aJobData.m_nPSLevel == 0 )
-        m_aLevelBox.SelectEntry( m_pParent->m_aFromDriverString );
+    ULONG nLevelEntryData = 0;
+    if( m_pParent->m_aJobData.m_nPDFDevice > 0 )
+        nLevelEntryData = 10;
     else
-        m_aLevelBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nPSLevel ) );
+        nLevelEntryData = m_pParent->m_aJobData.m_nPSLevel+1;
+    for( USHORT i = 0; i < m_aLevelBox.GetEntryCount(); i++ )
+    {
+        if( (ULONG)m_aLevelBox.GetEntryData( i ) == nLevelEntryData )
+        {
+            m_aLevelBox.SelectEntryPos( i );
+            break;
+        }
+    }
 
     m_aDepthBox.SelectEntry( String::CreateFromInt32( m_pParent->m_aJobData.m_nColorDepth ).AppendAscii( " Bit" ) );
 
@@ -426,6 +433,22 @@ RTSDevicePage::~RTSDevicePage()
 
 void RTSDevicePage::update()
 {
+}
+
+// ------------------------------------------------------------------
+
+ULONG RTSDevicePage::getLevel()
+{
+    ULONG nLevel = (ULONG)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    return nLevel < 10 ? nLevel-1 : 0;
+}
+
+// ------------------------------------------------------------------
+
+ULONG RTSDevicePage::getPDFDevice()
+{
+    ULONG nLevel = (ULONG)m_aLevelBox.GetEntryData( m_aLevelBox.GetSelectEntryPos() );
+    return nLevel > 9 ? 1 : 0;
 }
 
 // ------------------------------------------------------------------

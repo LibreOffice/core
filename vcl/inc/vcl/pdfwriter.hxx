@@ -38,7 +38,8 @@
 #include <vcl/font.hxx>
 #include <vcl/graphictools.hxx>
 
-#include <com/sun/star/io/XOutputStream.hpp>
+#include "com/sun/star/io/XOutputStream.hpp"
+#include "com/sun/star/beans/XMaterialHolder.hpp"
 
 #include <list>
 #include <vector>
@@ -47,6 +48,7 @@
 class Font;
 class Point;
 class OutputDevice;
+class GDIMetaFile;
 class MapMode;
 class Polygon;
 class LineInfo;
@@ -61,15 +63,7 @@ class Wallpaper;
 namespace vcl
 {
 
-struct PDFDocInfo
-{
-    String          Title;          // document title
-    String          Author;         // document author
-    String          Subject;        // subject
-    String          Keywords;       // keywords
-    String          Creator;        // application that created the original document
-    String          Producer;       // OpenOffice
-};
+class PDFExtOutDevData;
 
 struct PDFNote
 {
@@ -468,7 +462,7 @@ public:
         FitVisible,
         ActionZoom
     };
-// These emuns are treated as integer while reading/writing to configuration
+// These enums are treated as integer while reading/writing to configuration
     enum PDFPageLayout
     {
         DefaultLayout,
@@ -489,20 +483,35 @@ public:
 /*
 The following structure describes the permissions used in PDF security
  */
-    struct PDFSecPermissions
+    struct PDFEncryptionProperties
     {
-//for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
-        bool    CanPrintTheDocument;
+
+        bool Security128bit; // true to select 128 bit encryption, false for 40 bit
+        //for both 40 and 128 bit security, see 3.5.2 PDF v 1.4 table 3.15, v 1.5 and v 1.6 table 3.20.
+        bool CanPrintTheDocument;
         bool CanModifyTheContent;
         bool CanCopyOrExtract;
         bool CanAddOrModify;
-//for revision 3 (bit 128 security) only
+        //for revision 3 (bit 128 security) only
         bool CanFillInteractive;
         bool CanExtractForAccessibility;
         bool CanAssemble;
         bool CanPrintFull;
-//permission default set for 128 bit, accessibility only
-        PDFSecPermissions() :
+
+        // encryption will only happen if EncryptionKey is not empty
+        // EncryptionKey is actually a construct out of OValue, UValue and DocumentIdentifier
+        // if these do not match, behavior is undefined, most likely an invalid PDF will be produced
+        // OValue, UValue, EncryptionKey and DocumentIdentifier can be computed from
+        // PDFDocInfo, Owner password and User password used the InitEncryption method which
+        // implements the algorithms described in the PDF reference chapter 3.5: Encryption
+        std::vector<sal_uInt8> OValue;
+        std::vector<sal_uInt8> UValue;
+        std::vector<sal_uInt8> EncryptionKey;
+        std::vector<sal_uInt8> DocumentIdentifier;
+
+        //permission default set for 128 bit, accessibility only
+        PDFEncryptionProperties() :
+            Security128bit              ( true ),
             CanPrintTheDocument         ( false ),
             CanModifyTheContent         ( false ),
             CanCopyOrExtract            ( false ),
@@ -512,6 +521,20 @@ The following structure describes the permissions used in PDF security
             CanAssemble                 ( false ),
             CanPrintFull                ( false )
             {}
+
+
+        bool Encrypt() const
+        { return ! OValue.empty() && ! UValue.empty() && ! DocumentIdentifier.empty(); }
+    };
+
+    struct PDFDocInfo
+    {
+        String          Title;          // document title
+        String          Author;         // document author
+        String          Subject;        // subject
+        String          Keywords;       // keywords
+        String          Creator;        // application that created the original document
+        String          Producer;       // OpenOffice
     };
 
     struct PDFWriterContext
@@ -570,14 +593,12 @@ The following structure describes the permissions used in PDF security
         sal_Int32                       InitialPage;
         sal_Int32                       OpenBookmarkLevels; // -1 means all levels
 
-        struct PDFSecPermissions        AccessPermissions;
-
-        bool                            Encrypt; // main encryption flag, must be true to encript
-        bool                            Security128bit; // true to select 128 bit encryption, false for 40 bit
-        rtl::OUString                   OwnerPassword; // owner password for PDF, in clear text
-        rtl::OUString                   UserPassword; // user password for PDF, in clear text
+        PDFWriter::PDFEncryptionProperties  Encryption;
+        PDFWriter::PDFDocInfo           DocumentInfo;
 
         com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
+        sal_uInt32                      DPIx, DPIy;     // how to handle MapMode( MAP_PIXEL )
+                                                        // 0 here specifies a default handling
 
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
@@ -604,13 +625,13 @@ The following structure describes the permissions used in PDF security
                 FirstPageLeft( false ),
                 InitialPage( 1 ),
                 OpenBookmarkLevels( -1 ),
-                AccessPermissions( ),
-                Encrypt( false ),
-                Security128bit( true )
+                Encryption(),
+                DPIx( 0 ),
+                DPIy( 0 )
         {}
     };
 
-    PDFWriter( const PDFWriterContext& rContext );
+    PDFWriter( const PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
     ~PDFWriter();
 
     /** Returns an OutputDevice for formatting
@@ -635,17 +656,24 @@ The following structure describes the permissions used in PDF security
         returns the page id of the new page
     */
     sal_Int32 NewPage( sal_Int32 nPageWidth = 0, sal_Int32 nPageHeight = 0, Orientation eOrientation = Inherit );
+    /** Play a metafile like an outputdevice would do
+    */
+    struct PlayMetafileContext
+    {
+        int     m_nMaxImageResolution;
+        bool    m_bOnlyLosslessCompression;
+        int     m_nJPEGQuality;
+        bool    m_bTransparenciesWereRemoved;
 
-    /*
-     *  set document info; due to the use of document information in building the PDF document ID, must be called before
-     *  emitting anything.
-     */
-    void SetDocInfo( const PDFDocInfo& rInfo );
+        PlayMetafileContext()
+        : m_nMaxImageResolution( 0 )
+        , m_bOnlyLosslessCompression( false )
+        , m_nJPEGQuality( 90 )
+        , m_bTransparenciesWereRemoved( false )
+        {}
 
-    /*
-     *  get currently set document info
-     */
-    const PDFDocInfo& GetDocInfo() const;
+    };
+    void PlayMetafile( const GDIMetaFile&, const PlayMetafileContext&, vcl::PDFExtOutDevData* pDevDat = NULL );
 
     /* sets the document locale originally passed with the context to a new value
      * only affects the output if used before calling <code>Emit/code>.
@@ -663,6 +691,12 @@ The following structure describes the permissions used in PDF security
     std::set< ErrorCode > GetErrors();
 
     PDFVersion GetVersion() const;
+
+    static com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+           InitEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit
+                         );
 
     /* functions for graphics state */
     /* flag values: see vcl/outdev.hxx */

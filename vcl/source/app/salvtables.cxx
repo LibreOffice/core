@@ -38,7 +38,6 @@
 #include <vcl/salbmp.hxx>
 #include <vcl/salobj.hxx>
 #include <vcl/salmenu.hxx>
-#include <vcl/salctrlhandle.hxx>
 
 // this file contains the virtual destructors of the sal interface
 // compilers ususally put their vtables where the destructor is
@@ -72,6 +71,29 @@ SalInstance::~SalInstance()
 void SalInstance::FillFontPathList( std::list< rtl::OString >& )
 {
     // do nothing
+}
+
+SalMenu* SalInstance::CreateMenu( BOOL, Menu* )
+{
+    // default: no native menus
+    return NULL;
+}
+
+void SalInstance::DestroyMenu( SalMenu* pMenu )
+{
+    (void)pMenu;
+    OSL_ENSURE( pMenu == 0, "DestroyMenu called with non-native menus" );
+}
+
+SalMenuItem* SalInstance::CreateMenuItem( const SalItemParams* )
+{
+    return NULL;
+}
+
+void SalInstance::DestroyMenuItem( SalMenuItem* pItem )
+{
+    (void)pItem;
+    OSL_ENSURE( pItem == 0, "DestroyMenu called with non-native menus" );
 }
 
 SalTimer::~SalTimer()
@@ -136,9 +158,6 @@ Rectangle SalMenu::GetMenuBarButtonRectPixel( USHORT, SalFrame* )
 }
 
 SalMenuItem::~SalMenuItem()
-{
-}
-SalControlHandle::~SalControlHandle()
 {
 }
 

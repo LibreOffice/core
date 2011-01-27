@@ -36,6 +36,7 @@
 
 #include "vcl/salinst.hxx"
 #include "saldata.hxx"
+#include "vcl/printerinfomanager.hxx"
 
 #include <cstdio>
 #include <unistd.h>
@@ -291,10 +292,12 @@ const OUString& SalGetDesktopEnvironment()
 
 SalData::SalData() :
     m_pInstance(NULL),
-    m_pPlugin(NULL)
+    m_pPlugin(NULL),
+    m_pPIManager(NULL)
 {
 }
 
 SalData::~SalData()
 {
+    psp::PrinterInfoManager::release();
 }

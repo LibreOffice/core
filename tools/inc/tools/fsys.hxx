@@ -159,21 +159,10 @@ enum FSysExact
 // - Char-Set -
 // ------------
 
-#if defined(WIN) || defined(W30)
-
-// MS-Windows has different char-sets for file-system and user-interface
-String Gui2FSys( const String& rStr );
-String FSys2Gui( const String& rStr );
-#define GUI2FSYS(s) Gui2FSys( s )
-#define FSYS2GUI(s) FSys2Gui( s )
-
-#else
-
-// all other OS have the same char-set for both
+// Was different for WIN, no longer needed...
 #define GUI2FSYS(s) s
 #define FSYS2GUI(s) s
 
-#endif
 
 // ------------
 // - FileStat -

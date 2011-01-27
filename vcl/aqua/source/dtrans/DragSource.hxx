@@ -46,6 +46,7 @@
 
 
 class DragSource;
+class AquaSalFrame;
 
 /* The functions declared in this protocol are actually
    declared in vcl/aqua/inc/salframe.h. Because we want
@@ -120,6 +121,7 @@ public:
   com::sun::star::uno::Reference< com::sun::star::datatransfer::dnd::XDragSourceContext > mXCurrentContext;
 
   id mView;
+  AquaSalFrame* mpFrame;
   NSEvent* mLastMouseEventBeforeStartDrag;
   DragSourceHelper* mDragSourceHelper;
   com::sun::star::awt::MouseEvent mMouseEvent;

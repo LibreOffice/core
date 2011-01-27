@@ -71,6 +71,7 @@ public:
     bool                    m_bFax:1;
     bool                    m_bPdf:1;
     bool                    m_bSwallowFaxNo:1;
+    bool                    m_bIsPDFWriterJob:1;
     PspGraphics*            m_pGraphics;
     psp::PrinterJob         m_aPrintJob;
     psp::JobData            m_aJobData;
@@ -91,6 +92,11 @@ public:
                                               bool bCollate,
                                               bool bDirect,
                                               ImplJobSetup* pSetupData );
+    virtual BOOL                    StartJob( const String*,
+                                              const String&,
+                                              const String&,
+                                              ImplJobSetup*,
+                                              vcl::PrinterController& i_rController );
     virtual BOOL                    EndJob();
     virtual BOOL                    AbortJob();
     virtual SalGraphics*            StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData );

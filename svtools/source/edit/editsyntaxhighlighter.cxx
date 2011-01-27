@@ -31,7 +31,7 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include "../../inc/txtattr.hxx"
+#include <svtools/txtattr.hxx>
 
 
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
@@ -193,7 +193,7 @@ void MultiLineEditSyntaxHighlight::UpdateData()
         GetTextEngine()->RemoveAttribs( nLine, TRUE );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        for ( USHORT i = 0; i < aPortions.Count(); i++ )
+        for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
             GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, TRUE );

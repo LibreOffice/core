@@ -28,18 +28,15 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
-
-// -=-= exports -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-class   SalFontCacheItem;
-
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include "salstd.hxx"
 #include "vcl/salgdi.hxx"
 #include "vcl/salgtype.hxx"
 #include "tools/fract.hxx"
 #include "vcl/dllapi.h"
+#include <vcl/vclenum.hxx>
+#include <vcl/sallayout.hxx>
 #include <deque>
-#include "xfont.hxx"
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 struct  ImplFontMetricData;
@@ -100,7 +97,6 @@ protected:
     Pixel           nPenPixel_;
 
     GC              pFontGC_;       // Font attributes
-    ExtendedFontStructRef   mXFont[ MAX_FALLBACK ];
     ServerFont*             mpServerFont[ MAX_FALLBACK ];
 
     SalColor        nTextColor_;
@@ -185,7 +181,7 @@ protected:
                                 const SalBitmap  &rTransparentBitmap,
                                 SalColor          nTransparentColor );
 
-    GC                      SelectFont();
+    GC                      GetFontGC();
     bool                    setFont( const ImplFontSelectData* pEntry, int nFallbackLevel );
 
     void                    drawMaskedBitmap( const SalTwoRect* pPosAry,
@@ -193,9 +189,6 @@ protected:
                                               const SalBitmap& rTransparentBitmap );
 
 protected:
-    void                    DrawStringUCS2MB( ExtendedFontStruct& rFont, const Point&,
-                                const sal_Unicode* pStr, int nLength );
-
     void                    DrawPrinterString( const SalLayout& );
 
     void                    DrawServerFontString( const ServerFontLayout& );
@@ -253,9 +246,9 @@ public:
 
     virtual void            SetTextColor( SalColor nSalColor );
     virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual ULONG           GetKernPairs( ULONG nMaxPairs, ImplKernPairData* );
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
@@ -294,7 +287,7 @@ public:
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
+    virtual bool            drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidth, basegfx::B2DLineJoin );
     virtual bool            drawFilledTrapezoids( const ::basegfx::B2DTrapezoid*, int nTrapCount, double fTransparency );
 
 #if 1 // TODO: remove these obselete methods
@@ -386,19 +379,8 @@ inline Pixel X11SalGraphics::GetPixel( SalColor nSalColor ) const
 
 #ifdef DBG_UTIL
 #define stderr0( s )            fprintf( stderr, s )
-#define stderr1( s, a )         fprintf( stderr, s, a )
-#define stderr2( s, a, b )      fprintf( stderr, s, a, b )
-#define stderr3( s, a, b, c )   fprintf( stderr, s, a, b, c )
-#define stdass0( b )            (void)( !(b) \
-                                        ? fprintf( stderr, "\"%s\" (%s line %d)\n", \
-                                                    #b, __FILE__, __LINE__ ) \
-                                        : 0 )
 #else
 #define stderr0( s )            ;
-#define stderr1( s, a )     ;
-#define stderr2( s, a, b )  ;
-#define stderr3( s, a, b, c )   ;
-#define stdass0( b )            ;
 #endif
 
 #endif // _SV_SALGDI_H

@@ -38,10 +38,6 @@
 
 extern SgfFontLst* pSgfFonts;
 
-#if defined( WIN ) && defined( MSC )
-#pragma code_seg( "SVTOOLS_FILTER1", "SVTOOLS_CODE" )
-#endif
-
 #ifndef abs
 #define abs(x) ((x)<0 ? -(x) : (x))
 #endif
@@ -621,7 +617,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
-#if defined(WIN) || defined(WNT) || defined(PM2)
+#if defined(WNT) || defined(PM2)
               FNam=String::CreateFromAscii( "Times New Roman" );  // CG Times ist unter Windows und OS/2 Times New Roman
 #else
               FNam=String::CreateFromAscii( "Times" );            // ansonsten ist das einfach Times
@@ -630,7 +626,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
               FNam=String::CreateFromAscii( "Arial", 5 );            // Univers ist unter Windows Arial
 #else
               FNam=String::CreateFromAscii( "Helvetica" );        // und ansonsten Helvetica
@@ -639,7 +635,7 @@ USHORT SetTextContext(OutputDevice& rOut, ObjTextType& Atr, BOOL Kapt, USHORT Dr
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
-#if defined(WIN) || defined(WNT)
+#if defined(WNT)
               FNam=String::CreateFromAscii( "Courier New" );      // Der Vector-Courierfont unter Windows heisst Courier New
 #else
               FNam=String::CreateFromAscii( "Courier" );          // ansonsten ist und bleibt Courier immer Courier

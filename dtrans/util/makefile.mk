@@ -180,3 +180,32 @@ DEF3EXPORTFILE=	exports.dxp
 
 .INCLUDE :  target.mk
 
+ALLTAR : \
+    $(MISC)/dnd.component \
+    $(MISC)/ftransl.component \
+    $(MISC)/mcnttype.component \
+    $(MISC)/sysdtrans.component
+
+$(MISC)/dnd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        dnd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt dnd.component
+
+$(MISC)/ftransl.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        ftransl.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL2TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt ftransl.component
+
+$(MISC)/mcnttype.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        mcnttype.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt mcnttype.component
+
+$(MISC)/sysdtrans.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        sysdtrans.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL3TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt sysdtrans.component

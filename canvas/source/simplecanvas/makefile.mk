@@ -61,3 +61,11 @@ DEF1EXPORTFILE=exports.dxp
 # ==========================================================================
 
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/simplecanvas.component
+
+$(MISC)/simplecanvas.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt simplecanvas.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt simplecanvas.component

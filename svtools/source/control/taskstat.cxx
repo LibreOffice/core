@@ -30,18 +30,15 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/calendarwrapper.hxx>
-
 #include <unotools/syslocale.hxx>
-#include <taskbar.hxx>
+#include <svtools/taskbar.hxx>
 
 // =======================================================================
 
@@ -517,13 +514,13 @@ void TaskStatusBar::RequestHelp( const HelpEvent& rHEvt )
         {
             if ( pItem )
             {
-                ULONG nHelpId = pItem->maItem.GetHelpId();
-                if ( nHelpId )
+                rtl::OUString aHelpId( rtl::OStringToOUString( pItem->maItem.GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                if ( aHelpId.getLength() )
                 {
                     // Wenn eine Hilfe existiert, dann ausloesen
                     Help* pHelp = Application::GetHelp();
                     if ( pHelp )
-                        pHelp->Start( nHelpId, this );
+                        pHelp->Start( aHelpId, this );
                     return;
                 }
             }

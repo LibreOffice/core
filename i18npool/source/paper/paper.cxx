@@ -436,8 +436,8 @@ Paper PaperInfo::fromPSName(const rtl::OString &rName)
 }
 
 //http://wiki.services.openoffice.org/wiki/DefaultPaperSize
-//http://sources.redhat.com/cgi-bin/cvsweb.cgi/libc/localedata/locales/?cvsroot=glibc
 //http://www.unicode.org/cldr/data/charts/supplemental/territory_language_information.html
+//http://sourceware.org/git/?p=glibc.git;a=tree;f=localedata/locales
 //http://en.wikipedia.org/wiki/Paper_size
 //http://msdn.microsoft.com/en-us/library/cc195164.aspx
 PaperInfo PaperInfo::getDefaultPaperForLocale(
@@ -448,22 +448,57 @@ PaperInfo PaperInfo::getDefaultPaperForLocale(
     if (
         //United States, Letter
         !rLocale.Country.compareToAscii("US") ||
-        //Puerto Rico, http://sources.redhat.com/ml/libc-hacker/2001-07/msg00046.html
+        //Puerto Rico:
+        //    http://unicode.org/cldr/trac/ticket/1710
+        //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00046.html
         !rLocale.Country.compareToAscii("PR") ||
-        //Canada, http://sources.redhat.com/ml/libc-hacker/2001-07/msg00053.html
+        //Canada:
+        //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00053.html
         !rLocale.Country.compareToAscii("CA") ||
-        //Venuzuela, https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00019.html
+        //Venuzuela:
+        //    http://unicode.org/cldr/trac/ticket/1710
+        //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00019.html
         !rLocale.Country.compareToAscii("VE") ||
-        //Chile, https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00240.html
+        //Chile:
+        //    http://unicode.org/cldr/trac/ticket/1710
+        //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00240.html
         !rLocale.Country.compareToAscii("CL") ||
-        //Mexico, http://qa.openoffice.org/issues/show_bug.cgi?id=49739
+        //Mexico:
+        //    http://unicode.org/cldr/trac/ticket/1710
+        //    http://qa.openoffice.org/issues/show_bug.cgi?id=49739
         !rLocale.Country.compareToAscii("MX") ||
-        //Colombia, http://qa.openoffice.org/issues/show_bug.cgi?id=69703
+        //Colombia:
+        //    http://unicode.org/cldr/trac/ticket/1710
+        //    http://qa.openoffice.org/issues/show_bug.cgi?id=69703
         !rLocale.Country.compareToAscii("CO") ||
-        //Philippines,
+        //Philippines:
+        //    http://unicode.org/cldr/trac/ticket/1710
         //    http://ubuntuliving.blogspot.com/2008/07/default-paper-size-in-evince.html
         //    http://www.gov.ph/faqs/driverslicense.asp
-        !rLocale.Country.compareToAscii("PH")
+        !rLocale.Country.compareToAscii("PH") ||
+        //Belize:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        //    http://www.belize.gov.bz/ct.asp?xItem=1666&ctNode=486&mp=27
+        !rLocale.Country.compareToAscii("BZ") ||
+        //Costa Rica:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=11258
+        !rLocale.Country.compareToAscii("CR") ||
+        //Guatemala:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=10936
+        !rLocale.Country.compareToAscii("GT") ||
+        //Nicaragua:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        !rLocale.Country.compareToAscii("NI") ||
+        //Panama:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        //    http://www.minsa.gob.pa/minsa/tl_files/documents/baner_informativo/INSTRUMENTO%20DE%20INVESTIGACION%20DE%20RAAV%202009.pdf
+        !rLocale.Country.compareToAscii("PA") ||
+        //El Salvador:
+        //    http://unicode.org/cldr/trac/ticket/2585
+        //    http://www.tse.gob.sv
+        !rLocale.Country.compareToAscii("SV")
        )
     {
         eType = PAPER_LETTER;

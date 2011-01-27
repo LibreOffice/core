@@ -59,6 +59,9 @@ namespace vcl
             VirtualDevice       maPageVDev;
             rtl::OUString       maReplacementString;
             rtl::OUString       maToolTipString;
+            bool                mbGreyscale;
+            FixedLine           maHorzDim;
+            FixedLine           maVertDim;
 
             bool useHCColorReplacement() const;
         public:
@@ -71,7 +74,8 @@ namespace vcl
             virtual void DataChanged( const DataChangedEvent& );
 
             void setPreview( const GDIMetaFile&, const Size&, const rtl::OUString&,
-                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY
+                             sal_Int32 i_nDPIX, sal_Int32 i_nDPIY,
+                             bool i_bGreyscale
                             );
         };
 
@@ -126,7 +130,6 @@ namespace vcl
             // border around each page
             CheckBox                                maBorderCB;
 
-            vcl::RowOrColumn                        maLayout;
             boost::shared_ptr< vcl::RowOrColumn >   mxBrochureDep;
             boost::shared_ptr< vcl::LabeledElement >mxPagesBtnLabel;
 
@@ -142,7 +145,7 @@ namespace vcl
 
             void showAdvancedControls( bool );
 
-            virtual void Resize();
+            // virtual void Resize();
         };
 
         class JobTabPage : public TabPage
@@ -174,7 +177,6 @@ namespace vcl
 
             long                                    mnCollateUIMode;
 
-            vcl::RowOrColumn                        maLayout;
             boost::shared_ptr<vcl::RowOrColumn>     mxPrintRange;
             boost::shared_ptr<vcl::WindowArranger>  mxDetails;
 
@@ -184,7 +186,7 @@ namespace vcl
             void readFromSettings();
             void storeToSettings();
 
-            virtual void Resize();
+            // virtual void Resize();
 
             void setupLayout();
         };
@@ -197,7 +199,6 @@ namespace vcl
             CheckBox                            maCollateSingleJobsBox;
             CheckBox                            maReverseOrderBox;
 
-            vcl::RowOrColumn                    maLayout;
             boost::shared_ptr<vcl::RowOrColumn> mxOptGroup;
 
             OutputOptPage( Window*, const ResId& );
@@ -206,7 +207,7 @@ namespace vcl
             void readFromSettings();
             void storeToSettings();
 
-            virtual void Resize();
+            // virtual void Resize();
 
             void setupLayout();
         };
@@ -251,7 +252,6 @@ namespace vcl
         rtl::OUString                           maPrintText;
         rtl::OUString                           maDefPrtText;
 
-        vcl::RowOrColumn                        maLayout;
         boost::shared_ptr<vcl::RowOrColumn>     mxPreviewCtrls;
 
         Size                                    maDetailsCollapsedSize;

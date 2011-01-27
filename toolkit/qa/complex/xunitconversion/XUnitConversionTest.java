@@ -29,12 +29,20 @@ package complex.xunitconversion;
 
 import com.sun.star.awt.XUnitConversion;
 import com.sun.star.uno.UnoRuntime;
-import complexlib.ComplexTestCase;
+
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.XWindowPeer;
 
 import util.DesktopTools;
+
+// import org.junit.After;
+import org.junit.AfterClass;
+// import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import org.openoffice.test.OfficeConnection;
+import static org.junit.Assert.*;
 
 /**
  * This complex test is only for testing the com.sun.star.awt.XUnitConversion methods
@@ -44,12 +52,12 @@ import util.DesktopTools;
  *
  * @author ll93751
  */
-public class XUnitConversionTest extends ComplexTestCase
+public class XUnitConversionTest
 {
-    public String[] getTestMethodNames()
-        {
-            return new String[]{"testXUnitConversion"}; // function name of the test method
-        }
+//    public String[] getTestMethodNames()
+//        {
+//            return new String[]{"testXUnitConversion"}; // function name of the test method
+//        }
 
         /**
          * returns the delta value between a and b
@@ -77,14 +85,14 @@ public class XUnitConversionTest extends ComplexTestCase
         try
         {
             com.sun.star.awt.Size aSizeIn = m_xConversion.convertSizeToLogic(_aSize, _aMeasureUnit);
-            log.println("Window size:");
-            log.println("Width:" + aSizeIn.Width + " " + _sEinheit);
-            log.println("Height:" + aSizeIn.Height + " " + _sEinheit);
-            log.println("");
+            System.out.println("Window size:");
+            System.out.println("Width:" + aSizeIn.Width + " " + _sEinheit);
+            System.out.println("Height:" + aSizeIn.Height + " " + _sEinheit);
+            System.out.println("");
         }
         catch (com.sun.star.lang.IllegalArgumentException e)
         {
-            log.println("Caught IllegalArgumentException in convertSizeToLogic with '" + _sEinheit + "' " + e.getMessage());
+            System.out.println("Caught IllegalArgumentException in convertSizeToLogic with '" + _sEinheit + "' " + e.getMessage());
         }
     }
 
@@ -99,19 +107,22 @@ public class XUnitConversionTest extends ComplexTestCase
  *
  * If no test fails, the test is well done and returns with 'PASSED, OK'
  *
- */    public void testXUnitConversion()
+ */
+    @Test public void testXUnitConversion()
         {
-            XMultiServiceFactory xMSF = (XMultiServiceFactory) param.getMSF();
-            assure("failed: There is no office.", xMSF != null);
+            // XMultiServiceFactory xMSF = (XMultiServiceFactory) param.getMSF();
+            final XMultiServiceFactory xMSF = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
+
+            assertNotNull("failed: There is no office.", xMSF);
 
             // create a window
             XWindowPeer xWindowPeer = DesktopTools.createFloatingWindow(xMSF);
-            assure("failed: there is no window peer", xWindowPeer != null);
+            assertNotNull("failed: there is no window peer", xWindowPeer);
 
 
             // resize and move the window to a well known position and size
-            XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
-            assure("failed: there is no window, cast wrong?", xWindow != null);
+            XWindow xWindow = UnoRuntime.queryInterface(XWindow.class, xWindowPeer);
+            assertNotNull("failed: there is no window, cast wrong?", xWindow);
 
             xWindow.setVisible(Boolean.TRUE);
 
@@ -125,30 +136,30 @@ public class XUnitConversionTest extends ComplexTestCase
             com.sun.star.awt.Point aPoint = new com.sun.star.awt.Point(aRect.X, aRect.Y);
             com.sun.star.awt.Size aSize = new com.sun.star.awt.Size(aRect.Width, aRect.Height);
 
-            log.println("Window position and size in pixel:");
-            log.println("X:" + aPoint.X);
-            log.println("Y:" + aPoint.Y);
-            log.println("Width:" + aSize.Width);
-            log.println("Height:" + aSize.Height);
-            log.println("");
+            System.out.println("Window position and size in pixel:");
+            System.out.println("X:" + aPoint.X);
+            System.out.println("Y:" + aPoint.Y);
+            System.out.println("Width:" + aSize.Width);
+            System.out.println("Height:" + aSize.Height);
+            System.out.println("");
 
-            assure("Window pos size wrong", aSize.Width == width && aSize.Height == height && aPoint.X == x && aPoint.Y == y);
+            assertTrue("Window pos size wrong", aSize.Width == width && aSize.Height == height && aPoint.X == x && aPoint.Y == y);
 
             // XToolkit aToolkit = xWindowPeer.getToolkit();
-            m_xConversion = (XUnitConversion) UnoRuntime.queryInterface(XUnitConversion.class, xWindowPeer);
+            m_xConversion = UnoRuntime.queryInterface(XUnitConversion.class, xWindowPeer);
 
             // try to get the position of the window in 1/100mm with the XUnitConversion method
             try
             {
                 com.sun.star.awt.Point aPointInMM_100TH = m_xConversion.convertPointToLogic(aPoint, com.sun.star.util.MeasureUnit.MM_100TH);
-                log.println("Window position:");
-                log.println("X:" + aPointInMM_100TH.X + " 1/100mm");
-                log.println("Y:" + aPointInMM_100TH.Y + " 1/100mm");
-                log.println("");
+                System.out.println("Window position:");
+                System.out.println("X:" + aPointInMM_100TH.X + " 1/100mm");
+                System.out.println("Y:" + aPointInMM_100TH.Y + " 1/100mm");
+                System.out.println("");
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                assure("failed: IllegalArgumentException caught in convertPointToLogic " + e.getMessage(), Boolean.FALSE);
+                fail("failed: IllegalArgumentException caught in convertPointToLogic " + e.getMessage());
             }
 
             // try to get the size of the window in 1/100mm with the XUnitConversion method
@@ -157,22 +168,22 @@ public class XUnitConversionTest extends ComplexTestCase
             try
             {
                 aSizeInMM_100TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_100TH);
-                log.println("Window size:");
-                log.println("Width:" + aSizeInMM_100TH.Width + " 1/100mm");
-                log.println("Height:" + aSizeInMM_100TH.Height + " 1/100mm");
-                log.println("");
+                System.out.println("Window size:");
+                System.out.println("Width:" + aSizeInMM_100TH.Width + " 1/100mm");
+                System.out.println("Height:" + aSizeInMM_100TH.Height + " 1/100mm");
+                System.out.println("");
 
                 // try to get the size of the window in 1/10mm with the XUnitConversion method
 
                 aSizeInMM_10TH = m_xConversion.convertSizeToLogic(aSize, com.sun.star.util.MeasureUnit.MM_10TH);
-                log.println("Window size:");
-                log.println("Width:" + aSizeInMM_10TH.Width + " 1/10mm");
-                log.println("Height:" + aSizeInMM_10TH.Height + " 1/10mm");
-                log.println("");
+                System.out.println("Window size:");
+                System.out.println("Width:" + aSizeInMM_10TH.Width + " 1/10mm");
+                System.out.println("Height:" + aSizeInMM_10TH.Height + " 1/10mm");
+                System.out.println("");
 
                 // check the size with a delta which must be smaller a given difference
-                assure("Size.Width  not correct", delta(aSizeInMM_100TH.Width, aSizeInMM_10TH.Width * 10) < 10);
-                assure("Size.Height not correct", delta(aSizeInMM_100TH.Height, aSizeInMM_10TH.Height * 10) < 10);
+                assertTrue("Size.Width  not correct", delta(aSizeInMM_100TH.Width, aSizeInMM_10TH.Width * 10) < 10);
+                assertTrue("Size.Height not correct", delta(aSizeInMM_100TH.Height, aSizeInMM_10TH.Height * 10) < 10);
 
                 // new
                 checkSize(aSize, com.sun.star.util.MeasureUnit.PIXEL, "pixel");
@@ -196,27 +207,44 @@ public class XUnitConversionTest extends ComplexTestCase
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                assure("failed: IllegalArgumentException caught in convertSizeToLogic " + e.getMessage(), Boolean.FALSE);
+                fail("failed: IllegalArgumentException caught in convertSizeToLogic " + e.getMessage());
             }
 
             // convert the 1/100mm window size back to pixel
             try
             {
                 com.sun.star.awt.Size aNewSize = m_xConversion.convertSizeToPixel(aSizeInMM_100TH, com.sun.star.util.MeasureUnit.MM_100TH);
-                log.println("Window size:");
-                log.println("Width:" + aNewSize.Width + " pixel");
-                log.println("Height:" + aNewSize.Height + " pixel");
+                System.out.println("Window size:");
+                System.out.println("Width:" + aNewSize.Width + " pixel");
+                System.out.println("Height:" + aNewSize.Height + " pixel");
 
                 // assure the pixels are the same as we already know
-                assure("failed: Size from pixel to 1/100mm to pixel", aSize.Width == aNewSize.Width && aSize.Height == aNewSize.Height);
+                assertTrue("failed: Size from pixel to 1/100mm to pixel", aSize.Width == aNewSize.Width && aSize.Height == aNewSize.Height);
             }
             catch (com.sun.star.lang.IllegalArgumentException e)
             {
-                assure("failed: IllegalArgumentException caught in convertSizeToPixel " + e.getMessage(), Boolean.FALSE);
+                fail("failed: IllegalArgumentException caught in convertSizeToPixel " + e.getMessage());
             }
 
             // close the window.
             // IMHO a little bit stupid, but the XWindow doesn't support a XCloseable interface
             xWindow.dispose();
     }
+
+
+
+    @BeforeClass public static void setUpConnection() throws Exception {
+        System.out.println("setUpConnection()");
+        connection.setUp();
+    }
+
+    @AfterClass public static void tearDownConnection()
+        throws InterruptedException, com.sun.star.uno.Exception
+    {
+        System.out.println("tearDownConnection()");
+        connection.tearDown();
+    }
+
+    private static final OfficeConnection connection = new OfficeConnection();
+
 }

@@ -36,23 +36,17 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
-
-#ifndef _COMPHELPER_SERVICEHELPER_HXX_
 #include <comphelper/servicehelper.hxx>
-#endif
 #include <comphelper/propertysethelper.hxx>
 #include <comphelper/propertysetinfo.hxx>
 #include <cppuhelper/weakagg.hxx>
-
 #include <cppuhelper/implbase3.hxx>
-
 #include <list>
 #include <rtl/uuid.h>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-
-#include "unoevent.hxx"
-#include "unoimap.hxx"
+#include <svtools/unoevent.hxx>
+#include <svtools/unoimap.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imapcirc.hxx>
 #include <svtools/imaprect.hxx>
@@ -210,6 +204,8 @@ PropertySetInfo* SvUnoImageMapObject::createPropertySetInfo( UINT16 nType )
 SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( nType ) ),
     mnType( nType )
+,   mbIsActive( true )
+,   mnRadius( 0 )
 {
     mpEvents = new SvMacroTableEventDescriptor( pSupportedMacroItems );
     mpEvents->acquire();
@@ -218,6 +214,8 @@ SvUnoImageMapObject::SvUnoImageMapObject( UINT16 nType, const SvEventDescription
 SvUnoImageMapObject::SvUnoImageMapObject( const IMapObject& rMapObject, const SvEventDescription* pSupportedMacroItems )
 :   PropertySetHelper( createPropertySetInfo( rMapObject.GetType() ) ),
     mnType( rMapObject.GetType() )
+,   mbIsActive( true )
+,   mnRadius( 0 )
 {
     maURL = rMapObject.GetURL();
     maAltText = rMapObject.GetAltText();

@@ -32,7 +32,6 @@
 
 #include <rtl/ustring.hxx>
 #include <vcl/image.hxx>
-#include <vcl/smartid.hxx>
 
 #include <boost/noncopyable.hpp>
 
@@ -62,7 +61,7 @@ namespace svt
         virtual Image GetImage() const = 0;
 
         /// retrieves the help ID associated with the panel, if any.
-        virtual SmartId GetHelpID() const = 0;
+        virtual rtl::OString GetHelpID() const = 0;
 
         /** activates the panel
 

@@ -48,8 +48,8 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include <svtools/parhtml.hxx>
-#include "htmltokn.h"
-#include "htmlkywd.hxx"
+#include <svtools/htmltokn.h>
+#include <svtools/htmlkywd.hxx>
 
 
 using namespace ::com::sun::star;
@@ -2118,11 +2118,7 @@ enum eHtmlMetas {
 };
 
 // <META NAME=xxx>
-#ifdef __MINGW32__ // for runtime pseudo reloc
-static HTMLOptionEnum aHTMLMetaNameTable[] =
-#else
 static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
-#endif
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
     { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },

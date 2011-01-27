@@ -108,6 +108,8 @@ class VCL_DLLPUBLIC X11SalFrame : public SalFrame
     bool            m_bXEmbed;
     int             nVisibility_;
     int             m_nWorkArea;
+    bool            m_bSetFocusOnMap;
+
 
     int             nScreenSaversTimeout_;
     Rectangle       maPaintRegion;
@@ -205,6 +207,10 @@ public:
     void                    setPosSize( const Rectangle& rRect ) { SetPosSize( rRect ); }
     bool                    isMapped() const { return bMapped_; }
     bool                    hasFocus() const { return mbInputFocus; }
+
+    void                    beginUnicodeSequence();
+    bool                    appendUnicodeSequence( sal_Unicode );
+    bool                    endUnicodeSequence();
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );

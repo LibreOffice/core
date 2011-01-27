@@ -53,7 +53,7 @@ class ImplPropertyTable;
 //  class UnoControlModel
 //  ----------------------------------------------------
 
-class UnoControlModel : public ::com::sun::star::awt::XControlModel,
+class TOOLKIT_DLLPUBLIC UnoControlModel :   public ::com::sun::star::awt::XControlModel,
                         public ::com::sun::star::beans::XPropertyState,
                         public ::com::sun::star::io::XPersistObject,
                         public ::com::sun::star::lang::XComponent,

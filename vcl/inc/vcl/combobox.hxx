@@ -138,6 +138,7 @@ public:
 
     USHORT          GetEntryPos( const XubString& rStr ) const;
     USHORT          GetEntryPos( const void* pData ) const;
+    Image           GetEntryImage( USHORT nPos ) const;
     XubString       GetEntry( USHORT nPos ) const;
     USHORT          GetEntryCount() const;
 

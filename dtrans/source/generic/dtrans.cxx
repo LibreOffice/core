@@ -52,43 +52,6 @@ void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvType
 
 //==================================================================================================
 
-sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" CLIPBOARDMANAGER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
-
-            const Sequence< OUString > & rSNL = ClipboardManager_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            sal_Int32 nPos;
-            for ( nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                OUString::createFromAscii("/" GENERIC_CLIPBOARD_IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
-
-            const Sequence< OUString > & rSNL2 = GenericClipboard_getSupportedServiceNames();
-            pArray = rSNL2.getConstArray();
-            for ( nPos = rSNL2.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-
-    return sal_False;
-}
-
-//==================================================================================================
-
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName,
     void * pServiceManager,

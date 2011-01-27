@@ -100,6 +100,7 @@ Bitmap BMP_LINK
 
 ModalDialog DLG_STRINGINPUT
 {
+    HelpID = "ucbhelper:ModalDialog:DLG_STRINGINPUT";
     Border = TRUE ;
     Moveable = TRUE ;
     OutputSize = TRUE ;
@@ -113,6 +114,7 @@ ModalDialog DLG_STRINGINPUT
     };
     Edit ED_STRINGINPUT_DLG_NAME
     {
+        HelpID = "ucbhelper:Edit:DLG_STRINGINPUT:ED_STRINGINPUT_DLG_NAME";
         Pos = MAP_APPFONT ( 40 , 16 ) ;
         Size = MAP_APPFONT ( 110 , 12 ) ;
         Border = TRUE ;

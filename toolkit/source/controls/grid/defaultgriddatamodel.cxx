@@ -198,7 +198,7 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
         ::rtl::OUString headerName( (::rtl::OUString) rowHeaders[index] );
         rowHeaders.erase(rowHeaders.begin() + index);
 
-        Sequence< Any >& rowData ( (Sequence< Any >&)data[index] );
+        Sequence< Any > rowData ( (Sequence< Any >&)data[index] );
         data.erase(data.begin() + index);
         broadcast_remove( index, headerName, rowData);
     }
@@ -241,7 +241,7 @@ void SAL_CALL DefaultGridDataModel::removeAll() throw (RuntimeException)
 {
     rowHeaders.clear();
     data.clear();
-    broadcast_remove( -1, ::rtl::OUString(), 0);
+    broadcast_remove( -1, ::rtl::OUString(), Sequence< Any >());
 }
 //---------------------------------------------------------------------
 void SAL_CALL DefaultGridDataModel::setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)

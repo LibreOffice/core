@@ -26,8 +26,8 @@
  ************************************************************************/
 
 #include "HistoryOptTest.hxx"
-#include "AccessibilityOptTest.hxx"
-#include "PrintOptTest.hxx"
+// #include "AccessibilityOptTest.hxx"
+// #include "PrintOptTest.hxx"
 #include "UserOptTest.hxx"
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -50,8 +50,8 @@ static const ::rtl::OUString PROP_TEST                  = ::rtl::OUString::creat
 static const ::rtl::OUString TEST_PICKLIST              = ::rtl::OUString::createFromAscii("checkPicklist");
 static const ::rtl::OUString TEST_URLHISTORY            = ::rtl::OUString::createFromAscii("checkURLHistory");
 static const ::rtl::OUString TEST_HELPBOOKMARKS         = ::rtl::OUString::createFromAscii("checkHelpBookmarks");
-static const ::rtl::OUString TEST_ACCESSIBILITYOPTIONS  = ::rtl::OUString::createFromAscii("checkAccessibilityOptions");
-static const ::rtl::OUString TEST_PRINTOPTIONS          = ::rtl::OUString::createFromAscii("checkPrintOptions");
+// static const ::rtl::OUString TEST_ACCESSIBILITYOPTIONS  = ::rtl::OUString::createFromAscii("checkAccessibilityOptions");
+// static const ::rtl::OUString TEST_PRINTOPTIONS          = ::rtl::OUString::createFromAscii("checkPrintOptions");
 static const ::rtl::OUString TEST_USEROPTIONS           = ::rtl::OUString::createFromAscii("checkUserOptions");
 
 //=============================================================================
@@ -136,16 +136,16 @@ css::uno::Any SAL_CALL ConfigItemTest::execute(const css::uno::Sequence< css::be
         HistoryOptTest aOptTest;
         aOptTest.checkHelpBookmarks();
     }
-    else if (sTest.equals(TEST_ACCESSIBILITYOPTIONS))
-    {
-        AccessibilityOptTest aOptTest;
-        aOptTest.impl_checkAccessibilityOptions();
-    }
-    else if (sTest.equals(TEST_PRINTOPTIONS))
-    {
-        PrintOptTest aOptTest;
-        aOptTest.impl_checkPrint();
-    }
+//  else if (sTest.equals(TEST_ACCESSIBILITYOPTIONS))
+//  {
+//      AccessibilityOptTest aOptTest;
+//      aOptTest.impl_checkAccessibilityOptions();
+//  }
+//  else if (sTest.equals(TEST_PRINTOPTIONS))
+//  {
+//         PrintOptTest aOptTest;
+//         aOptTest.impl_checkPrint();
+//  }
     else if (sTest.equals(TEST_USEROPTIONS))
     {
         UserOptTest aOptTest;
