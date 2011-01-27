@@ -387,12 +387,12 @@ PROCTYPE := $(shell $(PRJ)/config.guess | cut -d"-" -f1)
 # Default is MacOSX on a Intel machine    
 PLATFORM=macosx
 
-ifeq "$(PROCTYPE)" "i686"
+ifeq "$(PROCTYPE)" "i386"
 PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
 else
-ifeq "$(PROCTYPE)" "i386"
+ifeq "$(PROCTYPE)" "x86_64"
 PACKAGE_LIB_DIR=macosx_x86.plt
 UNOPKG_PLATFORM=MacOSX_x86
 JAVA_PROC_TYPE=x86
