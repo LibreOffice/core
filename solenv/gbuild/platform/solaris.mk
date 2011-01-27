@@ -198,6 +198,7 @@ $(call gb_Helper_abbreviate_dirs,\
         $(patsubst lib%.so,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
         $(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
         -o $(1))
 endef
@@ -207,7 +208,9 @@ $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
     $(gb_AR) -rsu $(1) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
-        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) 2> /dev/null)
+        $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+        2> /dev/null)
 endef
 
 define gb_LinkTarget__command

@@ -138,6 +138,38 @@ endif
 gb_CxxObject_CxxObject =
 
 
+# GenCxxObject class
+
+gb_GenCxxObject_get_source = $(WORKDIR)/$(1).cxx
+# defined by platform
+#  gb_CxxObject__command
+
+# This rule generates an "always rebuild" dep file, to have something to
+# include. The dep file will be overridden on the fly, when the object is
+# compiled.
+ifeq ($(gb_FULLDEPS),$(true))
+define gb_GenCxxObject__command_dep
+mkdir -p $(dir $(1)) && \
+    echo '$(call gb_GenCxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
+endef
+else
+gb_GenCxxObject__command_dep =
+endif
+
+$(call gb_GenCxxObject_get_target,%) : $(call gb_GenCxxObject_get_source,%)
+    $(call gb_CxxObject__command,$@,$*,$<)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_source,%)
+    $(call gb_GenCxxObject__command_dep,$@,$*,$<)
+
+$(call gb_GenCxxObject_get_dep_target,%) :
+    $(eval $(call gb_Output_error,Unable to find generated C++ file $(call gb_GenCxxObject_get_source,$*) in WORKDIR.))
+endif
+
+gb_GenCxxObject_GenCxxObject =
+
+
 # ObjCxxObject class
 #
 gb_ObjCxxObject_REPOS := $(gb_REPOS)
@@ -199,6 +231,8 @@ $(call gb_LinkTarget_get_clean_target,%) :
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_dep_target,$(object))) \
         $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_target,$(object))) \
         $(foreach object,$(OBJCXXOBJECTS),$(call gb_ObjCxxObject_get_dep_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_dep_target,$(object))) \
         $(call gb_LinkTarget_get_target,$*) \
         $(call gb_LinkTarget_get_dep_target,$*) \
         $(call gb_LinkTarget_get_headers_target,$*) \
@@ -217,7 +251,9 @@ $(call gb_Helper_abbreviate_dirs,\
     RESPONSEFILE=$(call var2file,$(call uniqname),200,\
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
-        $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))) && \
+        $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
+         $(foreach object,$(6),$(call gb_GenCxxObject_get_dep_target,$(object)))\
+        ) && \
     cat $${RESPONSEFILE} |xargs -n 200 cat > $(1)) && \
     rm -f $${RESPONSEFILE}
 
@@ -229,7 +265,7 @@ $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_headers_target,%) 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_LinkTarget_get_target,%) : $(call gb_LinkTarget_get_dep_target,%)
 $(call gb_LinkTarget_get_dep_target,%) : | $(call gb_LinkTarget_get_headers_target,%)
-    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS))
+    $(call gb_LinkTarget__command_dep,$@,$*,$(COBJECTS),$(CXXOBJECTS),$(OBJCXXOBJECTS),$(GENCXXOBJECTS))
 endif
 
 # Ok, this is some dark voodoo: When declaring a linktarget with
@@ -267,7 +303,7 @@ $(call gb_LinkTarget_get_headers_target,%) : $(call gb_LinkTarget_get_external_h
 # - gb_LinkTarget_get_target links the objects into a file in WORKDIR.
 # gb_LinkTarget_get_target depends on gb_LinkTarget_get_headers_target which in
 # turn depends gb_LinkTarget_get_external_headers_target.
-    # gb_LinkTarget_get_target depends additionally on the objects, which in turn
+# gb_LinkTarget_get_target depends additionally on the objects, which in turn
 # depend build-order only on the gb_LinkTarget_get_headers_target. The build
 # order-only dependency ensures all headers to be there for compiling and
 # dependency generation without causing all objects to be rebuild when one
@@ -300,6 +336,8 @@ $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_clean_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
@@ -334,6 +372,7 @@ endif
 $(call gb_LinkTarget_get_dep_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXOBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) : OBJCXXOBJECTS :=
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) : CFLAGS := $$(gb_LinkTarget_CFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
@@ -484,6 +523,21 @@ endif
 
 endef
 
+define gb_LinkTarget_add_generated_cxx_object
+$(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
+
+$(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
+$(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : CXXFLAGS += $(3)
+
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : GENCXXOBJECTS += $(2)
+$(call gb_LinkTarget_get_dep_target,$(1)) : $(call gb_GenCxxObject_get_dep_target,$(2))
+endif
+
+endef
+
 define gb_LinkTarget_add_noexception_object
 $(call gb_LinkTarget_add_cxxobject,$(1),$(2),$(gb_LinkTarget_NOEXCEPTIONFLAGS))
 endef
@@ -510,6 +564,14 @@ endef
 
 define gb_LinkTarget_add_exception_objects
 $(foreach obj,$(2),$(call gb_LinkTarget_add_exception_object,$(1),$(obj)))
+endef
+
+define gb_LinkTarget_add_generated_exception_object
+$(call gb_LinkTarget_add_generated_cxx_object,$(1),$(2),$(gb_LinkTarget_EXCEPTIONFLAGS))
+endef
+
+define gb_LinkTarget_add_generated_exception_objects
+$(foreach obj,$(2),$(call gb_LinkTarget_add_generated_exception_object,$(1),$(obj)))
 endef
 
 define gb_LinkTarget_set_targettype

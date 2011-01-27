@@ -391,7 +391,9 @@ $(call gb_Helper_abbreviate_dirs_native,\
     rm -f $(1) && \
     RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
-        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) $(PCHOBJS)" > $${RESPONSEFILE} && \
+        $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
+        $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
+        $(PCHOBJS)" > $${RESPONSEFILE} && \
     $(gb_LINK) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \
         $(if $(filter StaticLibrary,$(TARGETTYPE)),$(gb_StaticLibrary_TARGETTYPEFLAGS)) \
