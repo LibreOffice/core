@@ -586,7 +586,10 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
                 )
                                                                 )   ||
         ((nType == CTRL_MENUBAR) &&
-                (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
+                (   (nPart==PART_ENTIRE_CONTROL)
+                ||  (nPart==PART_MENU_ITEM)
+                )
+                                                                )   ||
         ((nType == CTRL_TOOLTIP) &&
                 (   (nPart==PART_ENTIRE_CONTROL) )              )   ||
         ((nType == CTRL_MENU_POPUP) &&
