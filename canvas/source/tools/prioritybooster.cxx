@@ -68,7 +68,7 @@ namespace canvas
                             "PriorityBooster::PriorityBooster(): Was not able to modify thread priority" );
             }
 #else
-            nDelta = 0; // #i55991# placate gcc warning
+            (void)nDelta;
 #endif
         }
 
