@@ -1109,9 +1109,10 @@ SAL_CALL rtl_arena_free (
             {
                 rtl_arena_segment_type *next, *prev;
 
-                /* DEBUG ONLY: mark undefined, unallocated */
-                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x33333333, segment->m_size));
+                /* DEBUG ONLY: mark unallocated, undefined */
                 VALGRIND_MEMPOOL_FREE(arena, segment->m_addr);
+                VALGRIND_MAKE_MEM_UNDEFINED(segment->m_addr, segment->m_size);
+                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x33333333, segment->m_size));
 
                 /* coalesce w/ adjacent free segment(s) */
                 rtl_arena_segment_coalesce (arena, segment);
@@ -1366,7 +1367,18 @@ rtl_arena_init (void)
 
 /* ================================================================= */
 
-#if defined(__GNUC__)
+/*
+  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+
+  Mac OS X does not seem to support "__cxa__atexit", thus leading
+  to the situation that "__attribute__((destructor))__" functions
+  (in particular "rtl_{memory|cache|arena}_fini") become called
+  _before_ global C++ object d'tors.
+
+  Delegated the call to "rtl_arena_fini()" into a dummy C++ object,
+  see alloc_fini.cxx .
+*/
+#if defined(__GNUC__) && !defined(MACOSX)
 static void rtl_arena_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_arena_fini)

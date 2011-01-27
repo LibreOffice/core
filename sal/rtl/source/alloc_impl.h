@@ -250,6 +250,7 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 
 #if defined(NVALGRIND)
 #define VALGRIND_MAKE_MEM_UNDEFINED(addr, size)
+#define VALGRIND_MAKE_MEM_DEFINED(addr, size)
 #define VALGRIND_MALLOCLIKE_BLOCK(addr, sizeB, rzB, is_zeroed)
 #define VALGRIND_FREELIKE_BLOCK(addr, rzB)
 #define VALGRIND_CREATE_MEMPOOL(pool, rzB, is_zeroed)

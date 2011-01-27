@@ -151,11 +151,11 @@ rtl_memory_init (void)
 
   Mac OS X does not seem to support "__cxa__atexit", thus leading
   to the situation that "__attribute__((destructor))__" functions
-  (in particular "rtl_memory_fini") become called _before_ global
-  C++ object d'tors.
+  (in particular "rtl_{memory|cache|arena}_fini") become called
+  _before_ global C++ object d'tors.
 
-  Delegated the call to "rtl_memory_fini" into a dummy C++ object,
-  see memory_fini.cxx .
+  Delegated the call to "rtl_memory_fini()" into a dummy C++ object,
+  see alloc_fini.cxx .
 */
 #if defined(__GNUC__) && !defined(MACOSX)
 static void rtl_memory_fini (void) __attribute__((destructor));

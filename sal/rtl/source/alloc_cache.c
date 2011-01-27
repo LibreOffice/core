@@ -534,9 +534,9 @@ rtl_cache_slab_free (
     RTL_MEMORY_LOCK_ACQUIRE(&(cache->m_slab_lock));
 
     /* DEBUG ONLY: mark unallocated, undefined */
-    OSL_DEBUG_ONLY(memset(addr, 0x33333333, cache->m_type_size));
     VALGRIND_MEMPOOL_FREE(cache, addr);
     VALGRIND_MAKE_MEM_UNDEFINED(addr, cache->m_type_size);
+    OSL_DEBUG_ONLY(memset(addr, 0x33333333, cache->m_type_size));
 
     /* determine slab from addr */
     if (cache->m_features & RTL_CACHE_FEATURE_HASH)
@@ -644,8 +644,13 @@ rtl_cache_magazine_clear (
         void * obj = mag->m_objects[mag->m_mag_used - 1];
         mag->m_objects[mag->m_mag_used - 1] = 0;
 
+        /* mark cached object allocated, undefined */
+        VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
         if (cache->m_destructor != 0)
         {
+            /* keep constructed object defined */
+            VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+
             /* destruct object */
             (cache->m_destructor)(obj, cache->m_userarg);
         }
@@ -1218,7 +1223,14 @@ SAL_CALL rtl_cache_alloc (
             if ((curr != 0) && (curr->m_mag_used > 0))
             {
                 obj = curr->m_objects[--curr->m_mag_used];
+#if defined(HAVE_VALGRIND_MEMCHECK_H)
                 VALGRIND_MEMPOOL_ALLOC(cache, obj, cache->m_type_size);
+                if (cache->m_constructor != 0)
+                {
+                    /* keep constructed object defined */
+                    VALGRIND_MAKE_MEM_DEFINED(obj, cache->m_type_size);
+                }
+#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_alloc += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1286,7 +1298,9 @@ SAL_CALL rtl_cache_free (
             if ((curr != 0) && (curr->m_mag_used < curr->m_mag_size))
             {
                 curr->m_objects[curr->m_mag_used++] = obj;
+#if defined(HAVE_VALGRIND_MEMCHECK_H)
                 VALGRIND_MEMPOOL_FREE(cache, obj);
+#endif /* HAVE_VALGRIND_MEMCHECK_H */
                 cache->m_cpu_stats.m_free += 1;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_depot_lock));
 
@@ -1678,7 +1692,18 @@ rtl_cache_init (void)
 
 /* ================================================================= */
 
-#if defined(__GNUC__)
+/*
+  Issue http://udk.openoffice.org/issues/show_bug.cgi?id=92388
+
+  Mac OS X does not seem to support "__cxa__atexit", thus leading
+  to the situation that "__attribute__((destructor))__" functions
+  (in particular "rtl_{memory|cache|arena}_fini") become called
+  _before_ global C++ object d'tors.
+
+  Delegated the call to "rtl_cache_fini()" into a dummy C++ object,
+  see alloc_fini.cxx .
+*/
+#if defined(__GNUC__) && !defined(MACOSX)
 static void rtl_cache_fini (void) __attribute__((destructor));
 #elif defined(__SUNPRO_C) || defined(__SUNPRO_CC)
 #pragma fini(rtl_cache_fini)
