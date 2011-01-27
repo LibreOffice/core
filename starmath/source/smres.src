@@ -1099,6 +1099,13 @@ TabPage RID_PRINTOPTIONPAGE
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line";
     };
+    CheckBox CB_SAVE_ONLY_USED_SYMBOLS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Embed only used symbols (smaller file size)";
+    };
 };
 
 ModalDialog RID_SYMBOLDIALOG
