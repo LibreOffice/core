@@ -1684,7 +1684,16 @@ void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(Runt
 
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementInserted: illegal element!" );
+    try
+    {
+        ImplInsertControl( xModel, aName );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void UnoDialogControl::elementRemoved( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1693,8 +1702,16 @@ void UnoDialogControl::elementRemoved( const ContainerEvent& Event ) throw(Runti
 
     Reference< XControlModel > xModel;
     Event.Element >>= xModel;
-    if ( xModel.is() )
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementRemoved: illegal element!" );
+    try
+    {
         ImplRemoveControl( xModel );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void UnoDialogControl::elementReplaced( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1703,13 +1720,31 @@ void UnoDialogControl::elementReplaced( const ContainerEvent& Event ) throw(Runt
 
     Reference< XControlModel > xModel;
     Event.ReplacedElement >>= xModel;
-    if ( xModel.is() )
-        ImplRemoveControl( xModel );
+    try
+    {
+        OSL_ENSURE( xModel.is(), "UnoDialogControl::elementReplaced: invalid ReplacedElement!" );
+        if ( xModel.is() )
+            ImplRemoveControl( xModel );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 
     ::rtl::OUString aName;
     Event.Accessor >>= aName;
     Event.Element >>= xModel;
-    ImplInsertControl( xModel, aName );
+    ENSURE_OR_RETURN_VOID( xModel.is(), "UnoDialogControl::elementReplaced: invalid new element!" );
+    try
+    {
+        ImplInsertControl( xModel, aName );
+    }
+    catch ( const RuntimeException& e ) { throw; }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void UnoDialogControl::addTopWindowListener( const Reference< XTopWindowListener >& rxListener ) throw (RuntimeException)
