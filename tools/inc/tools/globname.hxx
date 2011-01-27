@@ -125,7 +125,7 @@ public:
                     ~SvGlobalNameList();
 
     void            Append( const SvGlobalName & );
-    SvGlobalName    GetObject( sal_uInt32 );
+    SvGlobalName    GetObject( sal_uLong );
     sal_Bool            IsEntry( const SvGlobalName & rName );
     sal_uInt32           Count() const { return aList.Count(); }
 private:

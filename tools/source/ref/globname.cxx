@@ -389,7 +389,7 @@ void SvGlobalNameList::Append( const SvGlobalName & rName )
 /*************************************************************************
 |*    SvGlobalNameList::GetObject()
 *************************************************************************/
-SvGlobalName SvGlobalNameList::GetObject( sal_uIntPtr nPos )
+SvGlobalName SvGlobalNameList::GetObject( sal_uLong nPos )
 {
     return SvGlobalName( (ImpSvGlobalName *)aList.GetObject( nPos ) );
 }
