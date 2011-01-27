@@ -148,11 +148,6 @@ namespace dbaui
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
         DBG_ASSERT(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
-        // determine the style of the dialog, dependent on the present continuation types
-        WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-        if (-1 != nAbortPos)
-            nDialogStyle = WB_OK_CANCEL;
-
         OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
         sal_Int16 nResult = aDlg.Execute();
         try
@@ -283,11 +278,6 @@ namespace dbaui
             {
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
                 DBG_ASSERT(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
-
-                // determine the style of the dialog, dependent on the present continuation types
-                WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-                if (-1 != nAbortPos)
-                    nDialogStyle = WB_OK_CANCEL;
 
                 OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
                 sal_Int16 nResult = aDlg.Execute();

@@ -387,13 +387,9 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the current table filter
         SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, sal_True);
-        SFX_ITEMSET_GET(_rSet, pSuppress, SfxBoolItem, DSID_SUPPRESSVERSIONCL, sal_True);
         Sequence< ::rtl::OUString > aTableFilter;
-        sal_Bool bSuppressVersionColumns = sal_True;
         if (pTableFilter)
             aTableFilter = pTableFilter->getList();
-        if (pSuppress)
-            bSuppressVersionColumns = pSuppress->GetValue();
 
         implCompleteTablesCheck( aTableFilter );
 

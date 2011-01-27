@@ -55,7 +55,7 @@ namespace dbaui
         virtual TypeSelectionPageFactory
                              getTypeSelectionPageFactory();
 
-        void                TableDataOn(SvxCellHorJustify& eVal,int nToken);
+        void                TableDataOn(SvxCellHorJustify& eVal);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
         sal_Int16           GetWidthPixel( const HTMLOption* pOption );
         void                setTextEncoding();

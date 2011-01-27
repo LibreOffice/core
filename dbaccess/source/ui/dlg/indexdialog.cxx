@@ -889,7 +889,6 @@ DBG_NAME(DbaIndexDialog)
     void DbaIndexDialog::resizeControls(const Size& _rDiff)
     {
         // we use large images so we must change them
-        Size aTbNewSize = m_aActions.GetSizePixel();
         if ( _rDiff.Width() || _rDiff.Height() )
         {
             Size aDlgSize = GetSizePixel();

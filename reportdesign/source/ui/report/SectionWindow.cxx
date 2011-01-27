@@ -342,8 +342,6 @@ IMPL_LINK( OSectionWindow, SplitHdl, Splitter*, _pSplitter )
     }
 
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
-    const Point aPos = _pSplitter->GetPosPixel();
-
 
     const uno::Reference< report::XSection> xSection = m_aReportSection.getSection();
     nSplitPos = m_aSplitter.PixelToLogic(Size(0,nSplitPos)).Height();
