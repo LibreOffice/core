@@ -116,7 +116,7 @@ interface XMutableGridDataModel : XGridDataModel
             if the given index does not denote a valid row.
     */
     void
-        setRowHeading( [in] long RowIndex, [in] any Heading )
+        updateRowHeading( [in] long RowIndex, [in] any Heading )
             raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** updates the tooltip to be displayed for a given cell

@@ -28,7 +28,7 @@
 #define __com_sun_star_awt_grid_XSortableMutableGridDataModel_idl__
 
 #include <com/sun/star/awt/grid/XMutableGridDataModel.idl>
-#include <com/sun/star/awt/grid/XSortableGridDataModel.idl>
+#include <com/sun/star/awt/grid/XSortableGridData.idl>
 
 //==================================================================================================================
 
@@ -49,7 +49,7 @@ interface XSortableMutableGridDataModel
         <p>If you set a new column sort order, the implementation will notify the registered <type>XGridDataListener</type>s
         via a call to its <member>XGridDataListener::dataChanged</member> method.</p>
     */
-    interface XSortableGridDataModel;
+    interface XSortableGridData;
 };
 
 //==================================================================================================================
