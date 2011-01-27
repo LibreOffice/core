@@ -40,9 +40,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
-#include <com/sun/star/accessibility/AccessibleTableModelChange.hpp>
-#include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
-#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <com/sun/star/awt/grid/GridInvalidDataException.hpp>
 #include <com/sun/star/awt/grid/GridInvalidModelException.hpp>
@@ -56,9 +53,6 @@ using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
-using namespace ::com::sun::star::accessibility::AccessibleEventId;
-using namespace ::com::sun::star::accessibility::AccessibleTableModelChangeType;
-using ::com::sun::star::accessibility::AccessibleTableModelChange;
 
 
 SVTXGridControl::SVTXGridControl()
