@@ -105,6 +105,7 @@
 #include <basic/basmgr.hxx>
 #include <boost/scoped_ptr.hpp>
 #include <set>
+#include <vector>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -2833,8 +2834,8 @@ BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
     {
         if (bRecord)
         {
-            SvShorts theTabs;
-            theTabs.Insert(nTab,theTabs.Count());
+            vector<SCTAB> theTabs;
+            theTabs.push_back(nTab);
             rDocShell.GetUndoManager()->AddUndoAction(
                         new ScUndoDeleteTab( &rDocShell, theTabs, pUndoDoc, pUndoData ));
         }

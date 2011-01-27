@@ -130,7 +130,7 @@ public:
                     TYPEINFO();
                     ScUndoDeleteTab(
                             ScDocShell* pNewDocShell,
-                            const SvShorts &theTabs,        //SCTAB nNewTab,
+                            const std::vector<SCTAB> &theTabs,      //SCTAB nNewTab,
                             ScDocument* pUndoDocument,
                             ScRefUndoData* pRefData );
     virtual         ~ScUndoDeleteTab();
@@ -143,7 +143,7 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvShorts    theTabs;
+    std::vector<SCTAB> theTabs;
     ULONG           nStartChangeAction;
     ULONG           nEndChangeAction;
 

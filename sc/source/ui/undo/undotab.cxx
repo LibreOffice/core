@@ -57,6 +57,8 @@
 #include "drwlayer.hxx"
 #include "scresid.hxx"
 
+#include <vector>
+
 extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
 
 using namespace com::sun::star;
@@ -252,14 +254,13 @@ void ScUndoInsertTables::Undo()
     pDocShell->SetInUndo( TRUE );               //! BeginUndo
     bDrawIsInUndo = TRUE;
 
-    SvShorts TheTabs;
-    for(int i=0;i<pNameList->Count();i++)
+    vector<SCTAB> TheTabs;
+    for(int i=0; i<pNameList->Count(); ++i)
     {
-        TheTabs.Insert( sal::static_int_cast<short>(nTab+i), TheTabs.Count() );
+        TheTabs.push_back(nTab+i);
     }
-
     pViewShell->DeleteTables( TheTabs, FALSE );
-    TheTabs.Remove(0,TheTabs.Count());
+    TheTabs.clear();
 
     bDrawIsInUndo = FALSE;
     pDocShell->SetInUndo( FALSE );              //! EndUndo
@@ -309,19 +310,17 @@ BOOL ScUndoInsertTables::CanRepeat(SfxRepeatTarget& rTarget) const
 //      Tabelle loeschen
 //
 
-ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell,const SvShorts &aTab, //SCTAB nNewTab,
+ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell, const vector<SCTAB> &aTab, //SCTAB nNewTab,
                                     ScDocument* pUndoDocument, ScRefUndoData* pRefData ) :
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST )
 {
-        for(int i=0;i<aTab.Count();i++)
-            theTabs.Insert(aTab[sal::static_int_cast<USHORT>(i)],theTabs.Count());
-
-        SetChangeTrack();
+    theTabs.insert(theTabs.end(), aTab.begin(), aTab.end() );
+    SetChangeTrack();
 }
 
 ScUndoDeleteTab::~ScUndoDeleteTab()
 {
-    theTabs.Remove(0,theTabs.Count());
+    theTabs.clear();
 }
 
 String ScUndoDeleteTab::GetComment() const
@@ -338,10 +337,10 @@ void ScUndoDeleteTab::SetChangeTrack()
         nStartChangeAction = pChangeTrack->GetActionMax() + 1;
         nEndChangeAction = 0;
         ScRange aRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
-        for ( int i = 0; i < theTabs.Count(); i++ )
+        for ( unsigned int i = 0; i < theTabs.size(); ++i )
         {
-            aRange.aStart.SetTab( theTabs[sal::static_int_cast<USHORT>(i)] );
-            aRange.aEnd.SetTab( theTabs[sal::static_int_cast<USHORT>(i)] );
+            aRange.aStart.SetTab( theTabs[i] );
+            aRange.aEnd.SetTab( theTabs[i] );
             pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc,
                 nTmpChangeAction, nEndChangeAction, (short) i );
         }
@@ -361,15 +360,15 @@ SCTAB lcl_GetVisibleTabBefore( ScDocument& rDoc, SCTAB nTab )
 void ScUndoDeleteTab::Undo()
 {
     BeginUndo();
-    int i=0;
+    unsigned int i=0;
     ScDocument* pDoc = pDocShell->GetDocument();
 
     BOOL bLink = FALSE;
     String aName;
 
-    for(i=0;i<theTabs.Count();i++)
+    for(i=0; i<theTabs.size(); ++i)
     {
-        SCTAB nTab = theTabs[sal::static_int_cast<USHORT>(i)];
+        SCTAB nTab = theTabs[i];
         pRefUndoDoc->GetName( nTab, aName );
 
         bDrawIsInUndo = TRUE;
@@ -425,9 +424,9 @@ void ScUndoDeleteTab::Undo()
     if ( pChangeTrack )
         pChangeTrack->Undo( nStartChangeAction, nEndChangeAction );
 
-    for(i=0;i<theTabs.Count();i++)
+    for(i=0; i<theTabs.size(); ++i)
     {
-        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[sal::static_int_cast<USHORT>(i)]) );
+        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
     }
     SfxApplication* pSfxApp = SFX_APP();                                // Navigator
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );

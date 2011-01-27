@@ -59,6 +59,8 @@
 #include "tabbgcolor.hxx"
 #include "tabbgcolordlg.hxx"
 
+#include <vector>
+
 using ::boost::scoped_ptr;
 using namespace com::sun::star;
 
@@ -634,12 +636,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     SCTAB nFirstTab=0;
                     BOOL   bTabFlag=FALSE;
                     ScMarkData& rMark = pViewData->GetMarkData();
-                    SvShorts TheTabs;
+                    std::vector<SCTAB> TheTabs;
                     for(SCTAB i=0;i<nTabCount;i++)
                     {
                         if(rMark.GetTableSelect(i) &&!pDoc->IsTabProtected(i))
                         {
-                            TheTabs.Insert(i,TheTabs.Count());
+                            TheTabs.push_back(i);
                             bTabFlag=TRUE;
                             if(nNewTab==i) nNewTab++;
                         }
@@ -649,7 +651,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     pViewData->SetTabNo(nNewTab);
                     DeleteTables(TheTabs);
-                    TheTabs.Remove(0,TheTabs.Count());
+                    TheTabs.clear();
                     rReq.Done();
                 }
             }

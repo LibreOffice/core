@@ -46,6 +46,7 @@
 #endif
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
+#include <vector>
 
 class ScPatternAttr;
 class ScAutoFormatData;
@@ -269,7 +270,7 @@ public:
     BOOL            AppendTable( const String& rName, BOOL bRecord = TRUE );
 
     BOOL            DeleteTable( SCTAB nTabNr, BOOL bRecord = TRUE );
-    BOOL            DeleteTables(const SvShorts &TheTabs, BOOL bRecord = TRUE );
+    BOOL            DeleteTables(const std::vector<SCTAB>& TheTabs, BOOL bRecord = TRUE );
 
     BOOL            RenameTable( const String& rName, SCTAB nTabNr );
     void            MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const String* pNewTabName = NULL );
