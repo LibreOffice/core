@@ -718,6 +718,7 @@ namespace svt { namespace table
             if ( !m_bUpdatingColWidths )
             {
                 impl_ni_updateColumnWidths( i_column );
+                invalidate( TableAreaAll );
                 impl_ni_updateScrollbars();
             }
 
@@ -1031,6 +1032,11 @@ namespace svt { namespace table
             const long columnEnd = columnStart + colWidth;
             m_aColumnWidths.push_back( MutableColumnMetrics( columnStart, columnEnd ) );
             accumulatedWidthPixel = columnEnd;
+
+            // and don't forget to forward this to the column models
+            PColumnModel const pColumn = m_pModel->getColumnModel( col );
+            ENSURE_OR_THROW( !!pColumn, "invalid column returned by the model!" );
+            pColumn->setWidth( newWidths[col] );
         }
 
         // if the column resizing happened to leave some space at the right, but there are columns
