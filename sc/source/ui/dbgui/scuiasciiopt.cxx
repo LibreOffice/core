@@ -273,7 +273,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     OUString sTextSeparators;
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
-    bool bQuotedFieldAsText = true;
+    bool bQuotedFieldAsText = false;
     bool bDetectSpecialNum = false;
     sal_Int32 nFromRow = 1;
     sal_Int32 nCharSet = -1;

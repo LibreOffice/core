@@ -1037,7 +1037,7 @@ Resource RID_GLOBSTR
     };
     String STR_EXPORT_ASCII
     {
-        Text [ en-US ] = "Export of text files" ;
+        Text [ en-US ] = "Export Text File" ;
     };
     String STR_IMPORT_LOTUS
     {

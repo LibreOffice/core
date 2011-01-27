@@ -58,11 +58,12 @@ private:
     ComboBox            aEdFieldSep;
     FixedText           aFtTextSep;
     ComboBox            aEdTextSep;
+    CheckBox            aCbQuoteAll;
+    CheckBox            aCbShown;
     CheckBox            aCbFixed;
     OKButton            aBtnOk;
     CancelButton        aBtnCancel;
     HelpButton          aBtnHelp;
-    CheckBox            aCbShown;
 
     ScDelimiterTable*   pFieldSepTab;
     ScDelimiterTable*   pTextSepTab;
