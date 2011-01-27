@@ -2027,16 +2027,13 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         aSet.Put(aKeep);
     }
 
-    sal_Bool bFullAlign = sal_True;
     const uno::Any* pHOrient;
     if(GetProperty(RES_HORI_ORIENT, MID_HORIORIENT_ORIENT, pHOrient))
     {
         SwFmtHoriOrient aOrient ( rFrmFmt.GetHoriOrient() );
         ((SfxPoolItem&)aOrient).PutValue(*pHOrient, MID_HORIORIENT_ORIENT|CONVERT_TWIPS);
-        bFullAlign = (aOrient.GetHoriOrient() == text::HoriOrientation::FULL);
         aSet.Put(aOrient);
     }
-
 
     const uno::Any* pSzRel       = 0;
     GetProperty(FN_TABLE_IS_RELATIVE_WIDTH, 0xff, pSzRel  );

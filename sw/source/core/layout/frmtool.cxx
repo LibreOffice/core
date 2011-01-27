@@ -1013,7 +1013,6 @@ SwCntntNotify::~SwCntntNotify()
                     continue;   //#60878# nicht etwa zeichengebundene.
                 }
 
-                BOOL bCheckPos = FALSE;
                 if ( rAnch.GetCntntAnchor() )
                 {
                     if ( !pIdx )
@@ -1022,7 +1021,6 @@ SwCntntNotify::~SwCntntNotify()
                     }
                     if ( rAnch.GetCntntAnchor()->nNode == *pIdx )
                     {
-                        bCheckPos = TRUE;
                         if (FLY_AT_PAGE == rAnch.GetAnchorId())
                         {
                             OSL_ENSURE( false, "<SwCntntNotify::~SwCntntNotify()> - to page anchored object with content position. Please inform OD." );

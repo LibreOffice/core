@@ -701,13 +701,12 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
         fmax < dmax ? pFDiag[++fmax + 1] = -1 : --fmax;
         for (d = fmax; d >= fmin; d -= 2)
         {
-            long x, y, oldx, tlo = pFDiag[d - 1], thi = pFDiag[d + 1];
+            long x, y, tlo = pFDiag[d - 1], thi = pFDiag[d + 1];
 
             if (tlo >= thi)
                 x = tlo + 1;
             else
                 x = thi;
-            oldx = x;
             y = x - d;
             while( ULONG(x) < nEnd1 && ULONG(y) < nEnd2 &&
                 rMoved1.GetIndex( x ) == rMoved2.GetIndex( y ))
@@ -725,13 +724,12 @@ ULONG Compare::CompareSequence::CheckDiag( ULONG nStt1, ULONG nEnd1,
         bmax < dmax ? pBDiag[++bmax + 1] = INT_MAX : --bmax;
         for (d = bmax; d >= bmin; d -= 2)
         {
-            long x, y, oldx, tlo = pBDiag[d - 1], thi = pBDiag[d + 1];
+            long x, y, tlo = pBDiag[d - 1], thi = pBDiag[d + 1];
 
             if (tlo < thi)
                 x = tlo;
             else
                 x = thi - 1;
-            oldx = x;
             y = x - d;
             while( ULONG(x) > nStt1 && ULONG(y) > nStt2 &&
                 rMoved1.GetIndex( x - 1 ) == rMoved2.GetIndex( y - 1 ))
