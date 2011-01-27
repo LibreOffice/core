@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -30,7 +30,7 @@ NEON_MAJOR=0
 # the minor
 NEON_MINOR=29
 # the micro
-NEON_MICRO=3
+NEON_MICRO=5
 
 # concat
 NEON_VERSION=$(NEON_MAJOR)$(NEON_MINOR)$(NEON_MICRO)
