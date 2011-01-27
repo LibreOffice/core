@@ -14,11 +14,11 @@
 ;;
 ;; The Initial Developer of the Original Code is
 ;;       Novell, Inc.
-;; Portions created by the Initial Developer are Copyright (C) 2011 the
-;; Initial Developer. All Rights Reserved.
+;; Portions created by the Initial Developer are Copyright (C) 2011
+;; Novell, Inc. All Rights Reserved.
 ;;
 ;; Major Contributor(s):
-;; Tor Lillqvist <tml@iki.fi>
+;;       Tor Lillqvist <tml@iki.fi>
 ;; Portions created by Tor Lillqvist are Copyright (C) 2011 Tor Lillqvist. All Rights Reserved.
 ;;
 ;; For minor contributions see the git repository.
@@ -40,10 +40,7 @@
 ;; codeSnippet().
 
 ;; This is in a separate file for x86-64 as MSVC doesn't have in-line
-;; assembly for x64. The code here is still partly just a crude copy of
-;; the in-line x86 code from ../msvc_win32_intel that is totally
-;; pointless on x64. But parts have been properly changed into x64
-;; calling convention and might even work.
+;; assembly for x64.
 
 ;; Random web links and other documentation about low-level
 ;; implementation details for the C++/UNO bridge on x64 Windows kept
