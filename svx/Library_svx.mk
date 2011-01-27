@@ -30,10 +30,10 @@ $(eval $(call gb_Library_Library,svx))
 $(eval $(call gb_Library_set_componentfile,svx,svx/util/svx))
 
 $(eval $(call gb_Library_set_include,svx,\
-    $$(SOLARINC) \
     -I$(SRCDIR)/svx/inc \
     -I$(SRCDIR)/svx/source/inc \
     -I$(SRCDIR)/svx/inc/pch \
+    $$(SOLARINC) \
     -I$(OUTDIR)/inc/offuh \
 ))
 

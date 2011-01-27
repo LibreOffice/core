@@ -121,9 +121,10 @@ $(WORKDIR)/inc/svx/globlmn.hrc : $(SRCDIR)/svx/inc/globlmn_tmpl.hrc $(gb_SrsPart
     -mkdir -p $(WORKDIR)/inc/svx
     rm -f $(WORKDIR)/inc/svx/lastrun.mk
     echo gb_lastrun_globlmn:=MERGED > $(WORKDIR)/inc/svx/lastrun.mk
-    $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
+    $(call gb_Helper_abbreviate_dirs_native, \
+        $(gb_SrsPartMergeTarget_TRANSEXCOMMAND) \
         -p svx \
-         -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all
+         -i $< -o $@ -m $(gb_SrsPartMergeTarget_SDFLOCATION)/svx/inc/localize.sdf -l all)
 endif
 
 .PHONY : $(WORKDIR)/inc/svx/globlmn.hrc_clean
