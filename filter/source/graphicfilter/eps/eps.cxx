@@ -44,6 +44,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/cvtgrf.hxx>
 #include <vcl/gradient.hxx>
+#include <unotools/configmgr.hxx>
 #include <svl/solar.hrc>
 #include <svtools/fltcall.hxx>
 #include <svtools/FilterConfigItem.hxx>
@@ -53,6 +54,8 @@
 #include "dlgeps.hxx"
 
 #include <math.h>
+
+using namespace ::com::sun::star::uno;
 
 #define POSTSCRIPT_BOUNDINGSEARCH   0x1000  // we only try to get the BoundingBox
                                             // in the first 4096 bytes
@@ -459,7 +462,18 @@ void PSWriter::ImplWriteProlog( const Graphic* pPreview )
     ImplWriteLong( aSizePoint.Width() );
     ImplWriteLong( aSizePoint.Height() ,PS_RET );
     ImplWriteLine( "%%Pages: 0" );
-    ImplWriteLine( "%%Creator: Sun Microsystems, Inc." );
+    ::rtl::OUStringBuffer aCreator;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( "%%Creator: " ) );
+    ::utl::ConfigManager& rMgr = ::utl::ConfigManager::GetConfigManager();
+    Any aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+    ::rtl::OUString sProductName;
+    aProductName >>= sProductName;
+    aCreator.append( sProductName );
+    aProductName = rMgr.GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+    aProductName >>= sProductName;
+    aCreator.appendAscii( RTL_CONSTASCII_STRINGPARAM( " " ) );
+    aCreator.append( sProductName );
+    ImplWriteLine( ::rtl::OUStringToOString( aCreator.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
     ImplWriteLine( "%%Title: none" );
     ImplWriteLine( "%%CreationDate: none" );
 
