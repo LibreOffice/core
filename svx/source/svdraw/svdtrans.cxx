@@ -56,7 +56,6 @@ void ResizeRect(Rectangle& rRect, const Point& rRef, const Fraction& rxFact, con
 {
     Fraction xFact(rxFact);
     Fraction yFact(ryFact);
-    //long nHgt=rRect.Bottom()-rRect.Top();
 
     {
         if (xFact.GetDenominator()==0) {
@@ -268,16 +267,6 @@ void ShearXPoly(XPolyPolygon& rPoly, const Point& rRef, double tn, bool bVShear)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//   @@@@  @@@@@   @@@@   @@@@  @@  @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@     @@@@@  @@  @@ @@  @@ @@@@
-//  @@     @@  @@ @@  @@ @@  @@ @@ @@
-//  @@  @@ @@  @@ @@  @@ @@  @@ @@  @@
-//   @@@@  @@  @@  @@@@   @@@@  @@  @@
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 double CrookRotateXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCenter,
                          const Point& rRad, double& rSin, double& rCos, bool bVert)
@@ -392,19 +381,14 @@ double CrookStretchXPoint(Point& rPnt, Point* pC1, Point* pC2, const Point& rCen
                           const Point& rRad, double& rSin, double& rCos, bool bVert,
                           const Rectangle rRefRect)
 {
-    //bool bC1=pC1!=NULL;
-    //bool bC2=pC2!=NULL;
-    //long x0=rPnt.X();
     long y0=rPnt.Y();
     CrookSlantXPoint(rPnt,pC1,pC2,rCenter,rRad,rSin,rCos,bVert);
     if (bVert) {
     } else {
-        //long nBase=rCenter.Y()-rRad.Y();
         long nTop=rRefRect.Top();
         long nBtm=rRefRect.Bottom();
         long nHgt=nBtm-nTop;
         long dy=rPnt.Y()-y0;
-        //bool bOben=rRad.Y()<0;
         double a=((double)(y0-nTop))/nHgt;
         a*=dy;
         rPnt.Y()=y0+Round(a);
