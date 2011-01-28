@@ -70,8 +70,9 @@ namespace slideshow
                                  ActivitiesQueue&         rActivitiesQueue,
                                  ScreenUpdater&           rScreenUpdater,
                                  const UnoViewContainer&  rViews,
-                 Slide&                   rSlide,
-                                 const PolyPolygonVector& rPolygons ) :
+                                 Slide&                   rSlide,
+                                 const PolyPolygonVector& rPolygons,
+                                 bool                     bActive ) :
                 mrActivitiesQueue( rActivitiesQueue ),
                 mrScreenUpdater( rScreenUpdater ),
                 maViews(),
@@ -87,7 +88,8 @@ namespace slideshow
                 //handle the "remove stroke by stroke" mode of erasing
                 mbIsEraseModeActivated( false ),
                 mrSlide(rSlide),
-                mnSize(100)
+                mnSize(100),
+                mbActive( bActive )
             {
                 std::for_each( rViews.begin(),
                                rViews.end(),
@@ -129,6 +131,8 @@ namespace slideshow
 
             bool colorChanged( RGBColor const& rUserColor )
             {
+                mbIsLastPointValid = false;
+                mbActive = true;
                 this->maStrokeColor = rUserColor;
                 this->mbIsEraseModeActivated = false;
                 return true;
@@ -141,22 +145,15 @@ namespace slideshow
                 return true;
             }
 
-            bool eraseAllInkChanged( bool const& rEraseAllInk )
+            void repaintWithoutPolygons()
             {
-                this->mbIsEraseAllModeActivated= rEraseAllInk;
-                // if the erase all mode is activated it will remove all ink from slide,
-                // therefor destroy all the polygons stored
-                if(mbIsEraseAllModeActivated)
-                {
-                    // The Erase Mode should be desactivated
-                    mbIsEraseModeActivated = false;
                     // must get access to the instance to erase all polygon
                     for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
                         // fully clear view content to background color
-                        (*aIter)->getCanvas()->clear();
+                        //(*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
@@ -181,7 +178,19 @@ namespace slideshow
 
                         mrScreenUpdater.notifyUpdate(*aIter,true);
                     }
-                maPolygons.clear();
+            }
+
+            bool eraseAllInkChanged( bool const& rEraseAllInk )
+            {
+                this->mbIsEraseAllModeActivated= rEraseAllInk;
+                // if the erase all mode is activated it will remove all ink from slide,
+                // therefor destroy all the polygons stored
+                if(mbIsEraseAllModeActivated)
+                {
+                    // The Erase Mode should be desactivated
+                    mbIsEraseModeActivated = false;
+                    repaintWithoutPolygons();
+                    maPolygons.clear();
                 }
             mbIsEraseAllModeActivated=false;
             return true;
@@ -198,18 +207,25 @@ namespace slideshow
 
             bool switchPenMode()
             {
+                mbIsLastPointValid = false;
+                mbActive = true;
                 this->mbIsEraseModeActivated = false;
                 return true;
             }
 
             bool switchEraserMode()
             {
+                mbIsLastPointValid = false;
+                mbActive = true;
                 this->mbIsEraseModeActivated = true;
                 return true;
             }
 
             bool disable()
             {
+                mbIsLastPointValid = false;
+                mbIsLastMouseDownPosValid = false;
+                mbActive = false;
                 return true;
             }
 
@@ -235,6 +251,9 @@ namespace slideshow
             // MouseEventHandler methods
             virtual bool handleMousePressed( const awt::MouseEvent& e )
             {
+                if( !mbActive )
+                    return false;
+
                 if (e.Buttons == awt::MouseButton::RIGHT)
                 {
                     mbIsLastPointValid = false;
@@ -255,6 +274,9 @@ namespace slideshow
 
             virtual bool handleMouseReleased( const awt::MouseEvent& e )
             {
+                if( !mbActive )
+                    return false;
+
                 if (e.Buttons == awt::MouseButton::RIGHT)
                 {
                     mbIsLastPointValid = false;
@@ -289,6 +311,9 @@ namespace slideshow
 
             virtual bool handleMouseEntered( const awt::MouseEvent& e )
             {
+                if( !mbActive )
+                    return false;
+
                 mbIsLastPointValid = true;
                 maLastPoint.setX( e.X );
                 maLastPoint.setY( e.Y );
@@ -298,6 +323,9 @@ namespace slideshow
 
             virtual bool handleMouseExited( const awt::MouseEvent& )
             {
+                if( !mbActive )
+                    return false;
+
                 mbIsLastPointValid = false;
                 mbIsLastMouseDownPosValid = false;
 
@@ -306,7 +334,16 @@ namespace slideshow
 
             virtual bool handleMouseDragged( const awt::MouseEvent& e )
             {
-        if(mbIsEraseModeActivated)
+                if( !mbActive )
+                    return false;
+
+                if (e.Buttons == awt::MouseButton::RIGHT)
+                {
+                    mbIsLastPointValid = false;
+                    return false;
+                }
+
+                if(mbIsEraseModeActivated)
                 {
                     //define the last point as an object
                     //we suppose that there's no way this point could be valid
@@ -421,6 +458,14 @@ namespace slideshow
             }
 
 
+            void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
+            {
+                maStrokeColor = aUserPaintColor;
+                mnStrokeWidth = dUserPaintStrokeWidth;
+                mbActive = bUserPaintEnabled;
+                if( !mbActive )
+                    disable();
+            }
 
         private:
             ActivitiesQueue&        mrActivitiesQueue;
@@ -438,17 +483,20 @@ namespace slideshow
             bool                    mbIsEraseModeActivated;
             Slide&                  mrSlide;
             sal_Int32               mnSize;
+            bool                    mbActive;
         };
 
         UserPaintOverlaySharedPtr UserPaintOverlay::create( const RGBColor&          rStrokeColor,
                                                             double                   nStrokeWidth,
                                                             const SlideShowContext&  rContext,
-                                                            const PolyPolygonVector& rPolygons )
+                                                            const PolyPolygonVector& rPolygons,
+                                                            bool                     bActive )
         {
             UserPaintOverlaySharedPtr pRet( new UserPaintOverlay( rStrokeColor,
                                                                   nStrokeWidth,
                                                                   rContext,
-                                                                  rPolygons ));
+                                                                  rPolygons,
+                                                                  bActive));
 
             return pRet;
         }
@@ -456,7 +504,8 @@ namespace slideshow
         UserPaintOverlay::UserPaintOverlay( const RGBColor&          rStrokeColor,
                                             double                   nStrokeWidth,
                                             const SlideShowContext&  rContext,
-                                            const PolyPolygonVector& rPolygons ) :
+                                            const PolyPolygonVector& rPolygons,
+                                            bool                     bActive ) :
             mpHandler( new PaintOverlayHandler( rStrokeColor,
                                                 nStrokeWidth,
                                                 rContext.mrActivitiesQueue,
@@ -464,7 +513,7 @@ namespace slideshow
                                                 rContext.mrViewContainer,
                                                 //adding a link to Slide
                                                 dynamic_cast<Slide&>(rContext.mrCursorManager),
-                                                rPolygons )),
+                                                rPolygons, bActive )),
             mrMultiplexer( rContext.mrEventMultiplexer )
         {
             mrMultiplexer.addClickHandler( mpHandler, 3.0 );
@@ -482,6 +531,12 @@ namespace slideshow
         {
             mpHandler->drawPolygons();
         }
+
+        void UserPaintOverlay::update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth )
+        {
+            mpHandler->update_settings( bUserPaintEnabled, aUserPaintColor, dUserPaintStrokeWidth );
+        }
+
 
         UserPaintOverlay::~UserPaintOverlay()
         {
