@@ -64,20 +64,13 @@ using namespace com::sun::star::datatransfer::dnd;
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 using namespace rtl;
 
-// defined in atlwindow.hxx
-// #define WM_SOURCE_INIT WM_APP+100
-// #define WM_SOURCE_STARTDRAG WM_APP+101
 #define WM_CREATE_MTA_WND
 
 HRESULT doTest();
 DWORD WINAPI MTAFunc( void* threadData);
 
 Reference< XMultiServiceFactory > MultiServiceFactory;
-//int APIENTRY WinMain(HINSTANCE hInstance,
-//                     HINSTANCE hPrevInstance,
-//                     LPSTR     lpCmdLine,
-//                     int       nCmdShow)
-//int _tmain( int argc, TCHAR *argv[ ], TCHAR *envp[ ] )
+
 int main( int argc, char *argv[ ], char *envp[ ] )
 {
     HRESULT hr;
@@ -93,8 +86,6 @@ int main( int argc, char *argv[ ], char *envp[ ] )
     if( FAILED(hr=doTest()))
     {
         _com_error err( hr);
-        const TCHAR * errMsg= err.ErrorMessage();
-//      MessageBox( NULL, errMsg, "Test failed", MB_ICONERROR);
     }
 
 
@@ -160,8 +151,7 @@ DWORD WINAPI MTAFunc( void* threadData)
 
     RECT pos={0, 406, 300, 605};
     AWindow win(_T("DnD, full MTA"), GetCurrentThreadId(), pos, false, true);
-//  ThreadData data= *( ThreadData*)pParams;
-//  SetEvent(data.evtThreadReady);
+
     while( GetMessage(&msg, (HWND)NULL, 0, 0) )
     {
         switch( msg.message)
