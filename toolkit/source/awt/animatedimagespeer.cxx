@@ -234,6 +234,12 @@ namespace toolkit
                             ++check
                         )
                     {
+                        if  (   ( check->Width > aWindowSizePixel.Width() )
+                            ||  ( check->Height > aWindowSizePixel.Height() )
+                            )
+                            // do not use an image set which doesn't fit into the window
+                            continue;
+
                         const sal_Int64 distance =
                                 ( aWindowSizePixel.Width() - check->Width ) * ( aWindowSizePixel.Width() - check->Width )
                             +   ( aWindowSizePixel.Height() - check->Height ) * ( aWindowSizePixel.Height() - check->Height );
