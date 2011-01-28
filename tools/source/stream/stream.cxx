@@ -41,13 +41,6 @@
 
 #include "boost/static_assert.hpp"
 
-/*
-#if defined( DBG_UTIL ) && (OSL_DEBUG_LEVEL > 1)
-// prueft Synchronisation des Buffers nach allen Read, Write, Seek
-#define OV_DEBUG
-#endif
-*/
-
 #include <tools/solar.h>
 
 #if defined(BLC)

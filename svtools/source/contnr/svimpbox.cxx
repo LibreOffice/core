@@ -2513,19 +2513,6 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 bKeyUsed = FALSE;
             break;
 
-
-#ifdef OV_DEBUG
-        case KEY_F9:
-            MakeVisible( pCursor );
-            break;
-        case KEY_F10:
-            pView->RemoveSelection();
-            break;
-        case KEY_DELETE:
-            pView->RemoveEntry( pCursor );
-            break;
-#endif
-
         case KEY_ADD:
             if( pCursor )
             {
