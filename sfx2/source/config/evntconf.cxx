@@ -34,7 +34,7 @@
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-    #include <sot/storage.hxx>
+#include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
 #include <rtl/ustring.h>
@@ -47,7 +47,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "config.hrc"
 #include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
