@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.framework;
+package complex.sfx2;
 
 import com.sun.star.awt.XWindow;
 import com.sun.star.document.XEventBroadcaster;
@@ -33,7 +33,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
-import complex.framework.DocHelper.WriterHelper;
+import complex.sfx2.tools.WriterHelper;
 
 import java.util.ArrayList;
 
@@ -53,19 +53,13 @@ import static org.junit.Assert.*;
  * it will add an XEventListener and verify the Events
  * raised when opening/changing and closing Office Documents
  */
-public class CheckGlobalEventBroadcaster_writer1 {
+public class GlobalEventBroadcaster {
     XMultiServiceFactory m_xMSF = null;
     XEventBroadcaster m_xEventBroadcaster = null;
     ArrayList notifyEvents = new ArrayList();
     // XTextDocument xTextDoc;
     XSpreadsheetDocument xSheetDoc;
     XEventListener m_xEventListener = new EventListenerImpl();
-
-//    public String[] getTestMethodNames() {
-//        return new String[] {
-//            "initialize", "checkWriter", "cleanup"
-//        };
-//    }
 
     @Before public void initialize() {
         m_xMSF = getMSF();
@@ -79,7 +73,6 @@ public class CheckGlobalEventBroadcaster_writer1 {
                 "Create an instance of com.sun.star.frame.GlobalEventBroadcaster");
 
         Object GlobalEventBroadcaster = null;
-        Object dispatcher = null;
 
         try {
             GlobalEventBroadcaster = m_xMSF.createInstance(
@@ -116,7 +109,6 @@ public class CheckGlobalEventBroadcaster_writer1 {
 
         WriterHelper wHelper = new WriterHelper(m_xMSF);
         String[] expected;
-        boolean locRes = true;
         System.out.println("opening an empty writer doc");
         notifyEvents.clear();
         {

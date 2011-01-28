@@ -24,19 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SFXBASIC_HXX
-#define _SFXBASIC_HXX
+package complex.sfx2.standalonedocinfo;
 
-class BasicManager;
-class SbMethod;
-
-//------------------------------------------------------------------
-
-SbMethod* SfxQueryMacro( BasicManager* pMgr, const String& rMacro );
-
-ErrCode SfxCallMacro( BasicManager* pMgr, const String& rMacro,
-                      SbxArray *pArgs = 0, SbxValue *pRet = 0 );
-
-
-#endif
-
+public interface StandaloneDocumentInfoTest {
+    boolean test();
+}

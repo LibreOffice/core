@@ -24,8 +24,10 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.standalonedocumentinfo;
+package complex.sfx2.standalonedocinfo;
 
+import complex.sfx2.standalonedocinfo.TestHelper;
+import complex.sfx2.standalonedocinfo.StandaloneDocumentInfoTest;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.document.XStandaloneDocumentInfo;
 import com.sun.star.io.XTempFile;

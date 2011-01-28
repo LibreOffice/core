@@ -25,12 +25,12 @@
 *
 ************************************************************************/
 
-package complex.framework;
+package complex.sfx2.tools;
 
 import java.io.File;
 import org.openoffice.test.OfficeFileUrl;
 
-final class TestDocument {
+public final class TestDocument {
     public static String getUrl(String name) {
         return OfficeFileUrl.getAbsolute(new File("testdocuments", name));
     }

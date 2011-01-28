@@ -77,6 +77,8 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/helper/imageproducer \
     framework/source/fwe/helper/propertysetcontainer \
     framework/source/fwe/helper/titlehelper \
+    framework/source/fwe/helper/documentundoguard \
+    framework/source/fwe/helper/undomanagerhelper \
     framework/source/fwe/helper/uiconfigelementwrapperbase \
     framework/source/fwe/helper/uielementwrapperbase \
     framework/source/fwe/interaction/preventduplicateinteraction \

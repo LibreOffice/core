@@ -48,28 +48,5 @@
 				<desc>Lists the registered Scripting Framework runtimes.</desc>
 			</info>
 		</set>
-		<group oor:name="ScriptDisplaySettings">
-			<info>
-				<desc> Specifies display settings for assignment dialogs </desc>
-			</info>
-			<prop oor:name="ShowBasic" oor:type="xs:boolean">
-				<info>
-					<desc>Show Basic scripts in assignment dialogs</desc>
-				</info>
-				<value>false</value>
-			</prop>
-			<prop oor:name="ShowSF" oor:type="xs:boolean">
-				<info>
-					<desc>Show Scripting Framework scripts in assignment dialogs</desc>
-				</info>
-				<value>true</value>
-			</prop>
-			<prop oor:name="UseNewToolsConfigure" oor:type="xs:boolean">
-				<info>
-					<desc>Use New Tools Configure dialog</desc>
-				</info>
-				<value>true</value>
-			</prop>
-		</group>
 	</component>
 </oor:component-schema>

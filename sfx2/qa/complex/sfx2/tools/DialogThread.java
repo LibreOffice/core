@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.framework.DocHelper;
+package complex.sfx2.tools;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XController;
@@ -36,9 +36,6 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
-
-import java.lang.Thread;
-
 
 /**
  * This class opens a given dialog in a separate Thread by dispatching an url
@@ -55,21 +52,17 @@ public class DialogThread extends Thread {
         this.m_url = url;
     }
 
+    @Override
     public void run() {
-        XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
-                                                           m_xDoc);
+        XModel aModel = UnoRuntime.queryInterface( XModel.class, m_xDoc );
 
         XController xController = aModel.getCurrentController();
 
         //Opening Dialog
         try {
-            XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
-                                                  XDispatchProvider.class,
-                                                  xController.getFrame());
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
-                                              XURLTransformer.class,
-                                              m_xMSF.createInstance(
-                                                      "com.sun.star.util.URLTransformer"));
+            XDispatchProvider xDispProv = UnoRuntime.queryInterface( XDispatchProvider.class, xController.getFrame() );
+            XURLTransformer xParser = UnoRuntime.queryInterface( XURLTransformer.class,
+                m_xMSF.createInstance( "com.sun.star.util.URLTransformer" ) );
 
             // Because it's an in/out parameter
             // we must use an array of URL objects.
