@@ -863,7 +863,7 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
                     xDPS->getDocumentProperties());
                 DBG_ASSERT(xDocProps.is(), "DocumentProperties is null");
                 if ( xDocProps.is() && (xDocProps->getAutoloadSecs() > 0) &&
-                     xDocProps->getAutoloadURL().equalsAscii("") )
+                     (xDocProps->getAutoloadURL().getLength() == 0) )
                 {
                     xDocProps->setAutoloadURL(aPathToFile);
                 }
