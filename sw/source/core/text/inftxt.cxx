@@ -117,29 +117,17 @@ static sal_Bool bDbgLow = sal_False;
 #endif
 
 #if OSL_DEBUG_LEVEL > 1
-
 sal_Bool SwTxtSizeInfo::IsOptCalm() const { return !GetOpt().IsTest3(); }
-
 sal_Bool SwTxtSizeInfo::IsOptLow() const { return bDbgLow; }
-
 sal_Bool SwTxtSizeInfo::IsOptDbg() const { return GetOpt().IsTest4(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest1() const { return GetOpt().IsTest1(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest2() const { return GetOpt().IsTest2(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest3() const { return GetOpt().IsTest3(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest4() const { return GetOpt().IsTest4(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest5() const { return GetOpt().IsTest5(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest6() const { return GetOpt().IsTest6(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest7() const { return GetOpt().IsTest7(); }
-
 sal_Bool SwTxtSizeInfo::IsOptTest8() const { return GetOpt().IsTest8(); }
-
 #endif
 
 /*************************************************************************
@@ -163,7 +151,6 @@ SwLineInfo::~SwLineInfo()
 void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
                                    const SwTxtNode& rTxtNode )
 {
-//    pRuler = &rAttrSet.GetTabStops();
     delete pRuler;
     pRuler = new SvxTabStopItem( rAttrSet.GetTabStops() );
     if ( rTxtNode.GetListTabStopPosition( nListTabStopPosition ) )
@@ -335,18 +322,6 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
         pRef->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG );
         nDirection = DIR_LEFT2RIGHT;
     }
-
-/*    LanguageType eLang;
-    const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
-    if ( SvtCTLOptions::NUMERALS_HINDI == rCTLOptions.GetCTLTextNumerals() )
-        eLang = LANGUAGE_ARABIC_SAUDI_ARABIA;
-    else if ( SvtCTLOptions::NUMERALS_ARABIC == rCTLOptions.GetCTLTextNumerals() )
-        eLang = LANGUAGE_ENGLISH;
-    else
-        eLang = (LanguageType)::GetAppLanguage();
-
-    pOut->SetDigitLanguage( eLang );
-    pRef->SetDigitLanguage( eLang );*/
 
     //
     // The Options
@@ -1626,12 +1601,6 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
     bool bNumFound = false;
     const bool bTabCompat = GetTxtFrm()->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT);
 
-    // Removed for i7288. bSkip used to be passed from SwFldPortion::Format
-    // as IsFollow(). Therefore more than one special character was not
-    // handled correctly at the beginning of follow fields.
-//    if ( bSkip && i < nEnd )
-//       ++i;
-
     for( ; i < nEnd; ++i )
     {
         const xub_Unicode cPos = GetChar( i );
@@ -1650,8 +1619,6 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
         case CH_BREAK:
         case CHAR_ZWSP :
         case CHAR_ZWNBSP :
-//        case CHAR_RLM :
-//        case CHAR_LRM :
             cHookChar = cPos;
             return i;
 
