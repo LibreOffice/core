@@ -559,7 +559,6 @@ void GtkSalFrame::InitCommon()
     // init members
     m_pCurrentCursor    = NULL;
     m_nKeyModifiers     = 0;
-    m_bSingleAltPress   = false;
     m_bFullscreen       = false;
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
     m_nVisibility       = GDK_VISIBILITY_FULLY_OBSCURED;
@@ -2851,7 +2850,6 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
     if( !pEvent->in )
     {
         pThis->m_nKeyModifiers = 0;
-        pThis->m_bSingleAltPress = false;
         pThis->m_bSendModChangeOnRelease = false;
     }
 
@@ -3055,10 +3053,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
     if( pThis->m_pIMHandler )
     {
         if( pThis->m_pIMHandler->handleKeyEvent( pEvent ) )
-        {
-            pThis->m_bSingleAltPress = false;
             return TRUE;
-        }
     }
     GTK_YIELD_GRAB();
 
@@ -3157,10 +3152,7 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
                               (pEvent->type == GDK_KEY_PRESS),
                               false );
         if( ! aDel.isDeleted() )
-        {
             pThis->m_bSendModChangeOnRelease = false;
-            pThis->m_bSingleAltPress = false;
-        }
     }
 
     if( !aDel.isDeleted() && pThis->m_pIMHandler )
