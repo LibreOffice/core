@@ -2925,7 +2925,6 @@ BOOL ScCompiler::IsMacro( const String& rName )
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
 
     SfxApplication* pSfxApp = SFX_APP();
-    pSfxApp->EnterBasicCall();              // initialize document's BASIC
 
     if( pDocSh )//XXX
         pObj = pDocSh->GetBasic();
@@ -2942,7 +2941,6 @@ BOOL ScCompiler::IsMacro( const String& rName )
     SbxMethod* pMeth = (SbxMethod*) pObj->Find( aName, SbxCLASS_METHOD );
     if( !pMeth )
     {
-        pSfxApp->LeaveBasicCall();
         return FALSE;
     }
     // It really should be a BASIC function!
@@ -2950,14 +2948,12 @@ BOOL ScCompiler::IsMacro( const String& rName )
      || ( pMeth->IsFixed() && pMeth->GetType() == SbxEMPTY )
      || !pMeth->ISA(SbMethod) )
     {
-        pSfxApp->LeaveBasicCall();
         return FALSE;
     }
     ScRawToken aToken;
     aToken.SetExternal( aName.GetBuffer() );
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
-    pSfxApp->LeaveBasicCall();
     return TRUE;
 }
 

@@ -463,6 +463,10 @@ String STR_ACTION_NOTPOSSIBLE
 {
     Text [ en-US ] = "This function cannot be completed with the selected objects." ;
 };
+String STR_ACTION_EDIT_TEXT
+{
+    Text [ en-US ] = "Edit text";
+};
 
 String STR_COLUMN_LABEL
 {

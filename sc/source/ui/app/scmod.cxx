@@ -58,7 +58,6 @@
 #include <vcl/status.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/printer.hxx>
 #include <editeng/langitem.hxx>
 #include <svtools/colorcfg.hxx>
@@ -391,20 +390,14 @@ void ScModule::Execute( SfxRequest& rReq )
             {
                 String aMacroName =
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Template.Samples.ShowStyles"));
-                SfxApplication* pApp = SFX_APP();
-                pApp->EnterBasicCall();
-                pApp->GetMacroConfig()->Call( NULL, aMacroName, pApp->GetBasicManager() );
-                pApp->LeaveBasicCall();
+                SfxApplication::CallAppBasic( aMacroName );
             }
             break;
         case SID_EURO_CONVERTER:
             {
                 String aMacroName =
                     String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Euro.ConvertRun.Main"));
-                SfxApplication* pApp = SFX_APP();
-                pApp->EnterBasicCall();
-                pApp->GetMacroConfig()->Call( NULL, aMacroName, pApp->GetBasicManager() );
-                pApp->LeaveBasicCall();
+                SfxApplication::CallAppBasic( aMacroName );
             }
             break;
         case SID_AUTOSPELL_CHECK:
