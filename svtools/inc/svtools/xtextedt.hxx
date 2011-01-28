@@ -31,10 +31,6 @@
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 
-#define XTEXTUNDO_REPLACEALL    (XTEXTUNDO_START+1)
-#define XTEXTUNDO_INDENTBLOCK       122
-#define XTEXTUNDO_UNINDENTBLOCK     123
-
 namespace com {
 namespace sun {
 namespace star {

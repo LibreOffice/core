@@ -67,21 +67,6 @@ private:
     exc_handling const m_excHandling;
 };
 
-class COMPHELPER_DLLPUBLIC FlagGuard : ScopeGuard
-{
-public:
-    explicit FlagGuard( bool& i_flagRef, exc_handling i_excHandling = IGNORE_EXCEPTIONS )
-        :ScopeGuard( ::boost::bind( ResetFlag, ::boost::ref( i_flagRef ) ), i_excHandling )
-    {
-    }
-
-private:
-    static void ResetFlag( bool& i_flagRef )
-    {
-        i_flagRef = false;
-    }
-};
-
 } // namespace comphelper
 
 #endif // ! defined(INCLUDED_COMPHELPER_SCOPEGUARD_HXX)

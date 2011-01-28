@@ -115,6 +115,7 @@ namespace comphelper
         CPPUTYPE_SEQNAMEDVALUE,     //getCppuType( (Sequence<beans::NamedValue>*)0 )
         CPPUTYPE_REFXGRAPHIC,       //getCppuType( Reference< graphic::XGraphic >*)0)
         CPPUTYPE_TABLEBORDERDISTANCES, //getCppuType( (table::TableBorderDistances*)0 )
+        CPPUTPYE_REFEMBEDDEDOBJECT, // XEmbeddedObject::static_type
 
         CPPUTYPE_END
     };
