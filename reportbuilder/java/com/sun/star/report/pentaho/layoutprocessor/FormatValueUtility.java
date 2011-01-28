@@ -143,7 +143,7 @@ public class FormatValueUtility
         {
             if ("date".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate(HSSFDateUtil.getJavaDate((BigDecimal)value, false, 0)));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, "date-value", formatDate(HSSFDateUtil.getJavaDate((BigDecimal) value, false, 0)));
             }
             else
             {
@@ -156,13 +156,21 @@ public class FormatValueUtility
         }
         else if (value instanceof Boolean)
         {
-            if (Boolean.TRUE.equals(value))
+            if ("float".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
+                float fvalue = Boolean.TRUE.equals(value) ? 1 : 0;
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(fvalue));
             }
             else
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
+                if (Boolean.TRUE.equals(value))
+                {
+                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.TRUE);
+                }
+                else
+                {
+                    variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, BOOLEAN_VALUE, OfficeToken.FALSE);
+                }
             }
         }
         else if (value != null)
@@ -178,12 +186,10 @@ public class FormatValueUtility
             }
             if (!"string".equals(valueType))
             {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
+                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE_TYPE, "string");
+                //variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, VALUE, String.valueOf(value));
             }
-            else
-            {
-                variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
-            }
+            variableSection.setAttribute(OfficeNamespaces.OFFICE_NS, STRING_VALUE, String.valueOf(value));
         }
         else
         {
