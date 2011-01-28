@@ -27,14 +27,12 @@
 
 $(eval $(call gb_Module_Module,vbahelper))
 
-ifeq ($(strip $(ENABLE_VBA)),YES)
 # the targets to be inserted are their file names without .mk extension
 $(eval $(call gb_Module_add_targets,vbahelper,\
     Library_vbahelper \
     Library_msforms \
     Package_inc \
 ))
-endif
 
 # add any runtime tests (unit tests) here
 # remove if no tests

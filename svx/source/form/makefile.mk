@@ -40,10 +40,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-.IF "$(ENABLE_VBA)"=="YES"
-    CDEFS+=-DENABLE_VBA
-.ENDIF
-
 SRS1NAME=form
 SRC1FILES= \
     fmexpl.src 		\
