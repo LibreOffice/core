@@ -14,56 +14,23 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
+### FIXME: when we have a real ZipTarget mechanism in gbuild replace this mess
+$(eval $(call gb_Package_Package,vcl_zip,))
+$(eval $(call gb_Package_add_file,vcl_zip,bin/osxres.zip,$(WORKDIR)/Misc/osxres.zip))
 
-$(eval $(call gb_Module_Module,vcl))
+/$(WORKDIR)/Misc/osxres.zip: $(SRCDIR)/vcl/aqua/source/res/MainMenu.nib/*.nib $(SRCDIR)/vcl/aqua/source/res/cursors/*.png 
+    cd $(SRCDIR)/vcl/aqua/source/res ; \
+    mkdir -p $(dir $@) ; \
+    zip $@ MainMenu.nib/*.nib cursors/*.png
 
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vcl \
-    Package_inc \
-    StaticLibrary_vclmain \
-    AllLangResTarget_vcl \
-))
-
-ifeq ($(GUIBASE),unx)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_gen \
-    Library_vclplug_svp \
-    Library_desktop_detector \
-))
-
-ifneq ($(ENABLE_GTK),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_gtk \
-))
-endif
-ifneq ($(ENABLE_KDE),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_kde \
-))
-endif
-ifneq ($(ENABLE_KDE4),)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Library_vclplug_kde4 \
-))
-endif
-endif
-
-ifeq ($(GUIBASE),aqua)
-$(eval $(call gb_Module_add_targets,vcl,\
-    Package_osx \
-))
-endif
-
-
-# vim: set noet sw=4 ts=4:
