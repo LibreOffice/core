@@ -381,7 +381,7 @@ struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
 
     virtual bool setsCategories( bool bDataInColumns )
     {
-        return !bDataInColumns;
+        return bDataInColumns;
     }
 
     virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
