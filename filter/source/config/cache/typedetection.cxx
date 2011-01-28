@@ -261,7 +261,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             if (
                 (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.sheet.SpreadsheetDocument"))) &&
                 (
-                    (sRealType.equalsAscii("writer_Text"        )) ||
+                    (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text"))) ||
                     (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("writer_Text_encoded")))
                 )
                )
@@ -271,7 +271,7 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
             else
             if (
                 (sDocumentService.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.TextDocument"))) &&
-                (sRealType.equalsAscii("calc_Text_txt_csv_StarCalc"           ))
+                (sRealType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("calc_Text_txt_csv_StarCalc")))
                )
             {
                 sRealType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "writer_Text" ));
