@@ -390,6 +390,9 @@ static bool lcl_CharIsJoiner(sal_Unicode cChar)
     return ((cChar == 0x200C) || (cChar == 0x200D));
 }
 
+//See https://bugs.freedesktop.org/show_bug.cgi?id=31016
+#define ARABIC_BANDAID
+
 bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
     LEUnicode* pIcuChars;
@@ -622,7 +625,9 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
 
             // add resulting glyph item to layout
             GlyphItem aGI( nCharPos, nGlyphIndex, aNewPos, nGlyphFlags, nGlyphWidth );
+#ifdef ARABIC_BANDAID
             aGI.mnNewWidth = nNewWidth;
+#endif
             rLayout.AppendGlyph( aGI );
             ++nFilteredRunGlyphCount;
             nLastCharPos = nCharPos;
