@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,28 +23,28 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_DiskFullException_idl__
-#define __com_sun_star_util_DiskFullException_idl__
 
-#ifndef __com_sun_star_util_FileIOException_idl__
-#include <com/sun/star/util/FileIOException.idl>
-#endif
+#ifndef __com_sun_star_util_NotLockedException_idl__
+#define __com_sun_star_util_NotLockedException_idl__
 
+#include <com/sun/star/util/InvalidStateException.idl>
 
-//=============================================================================
+//==================================================================================================================
 
-module com {  module sun {  module star {  module util {
+module com { module sun { module star { module util {
 
-//=============================================================================
+//==================================================================================================================
 
-/** @deprecated
+/** is raised when attempt is made to unlock a lockable component which actually is not locked.
  */
-published exception DiskFullException: com::sun::star::util::FileIOException
+exception NotLockedException : ::com::sun::star::util::InvalidStateException
 {
 };
 
-//=============================================================================
+//==================================================================================================================
 
 }; }; }; };
+
+//==================================================================================================================
 
 #endif

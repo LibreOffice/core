@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,28 +23,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __com_sun_star_util_DiskFullException_idl__
-#define __com_sun_star_util_DiskFullException_idl__
 
-#ifndef __com_sun_star_util_FileIOException_idl__
-#include <com/sun/star/util/FileIOException.idl>
-#endif
+#ifndef __com_sun_star_document_XUndoManagerSupplier_idl__
+#define __com_sun_star_document_XUndoManagerSupplier_idl__
 
+#include <com/sun/star/uno/XInterface.idl>
 
-//=============================================================================
+//==================================================================================================================
 
-module com {  module sun {  module star {  module util {
+module com { module sun { module star { module document {
 
-//=============================================================================
+interface XUndoManager;
 
-/** @deprecated
+//==================================================================================================================
+
+/** provides access to an XUndoManager.
  */
-published exception DiskFullException: com::sun::star::util::FileIOException
+interface XUndoManagerSupplier
 {
+    /** returns the Undo manager associated with the component.
+    */
+    XUndoManager    getUndoManager();
 };
 
-//=============================================================================
+//==================================================================================================================
 
 }; }; }; };
+
+//==================================================================================================================
 
 #endif

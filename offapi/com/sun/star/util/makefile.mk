@@ -145,6 +145,8 @@ IDLFILES=\
     UriAbbreviation.idl\
     XJobManager.idl\
     JobManager.idl\
+    XLockable.idl\
+    NotLockedException.idl\
 
 # ------------------------------------------------------------------
 
