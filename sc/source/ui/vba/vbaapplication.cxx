@@ -1629,10 +1629,10 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                         sal_Int32 nSemicolonID = 0;
                         ::rtl::OUString sFirstFilter = sSelectedFilters.getToken( 0, ';' , nSemicolonID );
                         ::rtl::OUString sFileExtension = aURLObj.GetExtension();
-                        if ( sFileExtension.equalsAscii("") )
+                        if ( sFileExtension.getLength() == 0 )
                         {
                             sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? sFileExtension : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                            aPathStr = sFileExtension.equalsAscii("") ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
+                            aPathStr = sFileExtension.getLength() == 0 ? aPathStr : aPathStr + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
                         }
                         else
                         {
@@ -1661,7 +1661,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                             {
                                 sFileExtension = sFirstFilter.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("*.*")) ? rtl::OUString()
                                                                                  : sFirstFilter.copy( sFirstFilter.indexOfAsciiL("*.", 2) + 2 );
-                                aPathStr = sFileExtension.equalsAscii("") ? aPathStr
+                                aPathStr = sFileExtension.getLength() == 0 ? aPathStr
                                                                           : aPathStr + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")) + sFileExtension;
                             }
                         }

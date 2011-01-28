@@ -361,7 +361,7 @@ void ScHTMLExport::WriteHeader()
         OUT_LF();
 
         //----------------------------------------------------------
-        if (!xDocProps->getPrintedBy().equalsAscii(""))
+        if (xDocProps->getPrintedBy().getLength())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
             String aStrOut( GLOBSTR( STR_DOC_PRINTED ) );
