@@ -40,7 +40,7 @@
 #include <rscclass.hxx>
 #include <rsccont.hxx>
 #include <rscdb.hxx>
-#include <rscsfx.hxx>
+#include <rsc/rscsfx.hxx>
 
 #include "rsclex.hxx"
 #include <yyrscyacc.hxx>
@@ -2277,7 +2277,6 @@ RscTop * RscTypCont::InitClassTabControl( RscTop * pSuper,
         pClassTabControl->SetVariable( nId, pCont, NULL, 0,
                                        RSC_TABCONTROL_ITEMLIST );
 
-        INS_WINBIT( pClassTabControl, SingleLine );
         INS_WINBIT( pClassTabControl, DropDown );
     }
 

@@ -175,7 +175,7 @@ namespace toolkit
         _pWindow->SetStyle( nStyle );
     }
 
-    static void setVisualEffect( const Any& _rValue, Window* _pWindow, void (StyleSettings::*pSetter)( USHORT ), sal_Int16 _nFlatBits, sal_Int16 _n3DBits )
+    static void setVisualEffect( const Any& _rValue, Window* _pWindow )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
@@ -185,22 +185,22 @@ namespace toolkit
         switch ( nStyle )
         {
         case FLAT:
-            (aStyleSettings.*pSetter)( _nFlatBits );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & ~STYLE_OPTION_MONO );
             break;
         case LOOK3D:
         default:
-            (aStyleSettings.*pSetter)( _n3DBits );
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
         }
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
     }
 
-    static Any getVisualEffect( Window* _pWindow, USHORT (StyleSettings::*pGetter)( ) const, sal_Int16 _nFlatBits )
+    static Any getVisualEffect( Window* _pWindow )
     {
         Any aEffect;
 
         StyleSettings aStyleSettings = _pWindow->GetSettings().GetStyleSettings();
-        if ( (aStyleSettings.*pGetter)() == _nFlatBits )
+        if ( (aStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
             aEffect <<= (sal_Int16)FLAT;
         else
             aEffect <<= (sal_Int16)LOOK3D;
@@ -963,7 +963,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pCheckBox, &StyleSettings::SetCheckBoxStyle, STYLE_CHECKBOX_MONO, STYLE_CHECKBOX_WIN );
+                ::toolkit::setVisualEffect( Value, pCheckBox );
                 break;
 
             case BASEPROPERTY_TRISTATE:
@@ -1000,7 +1000,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                aProp = ::toolkit::getVisualEffect( pCheckBox, &StyleSettings::GetCheckBoxStyle, STYLE_CHECKBOX_MONO );
+                aProp = ::toolkit::getVisualEffect( pCheckBox );
                 break;
             case BASEPROPERTY_TRISTATE:
                  aProp <<= (sal_Bool)pCheckBox->IsTriStateEnabled();
@@ -1135,7 +1135,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                ::toolkit::setVisualEffect( Value, pButton, &StyleSettings::SetRadioButtonStyle, STYLE_RADIOBUTTON_MONO, STYLE_RADIOBUTTON_WIN );
+                ::toolkit::setVisualEffect( Value, pButton );
                 break;
 
             case BASEPROPERTY_STATE:
@@ -1178,7 +1178,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
         switch ( nPropType )
         {
             case BASEPROPERTY_VISUALEFFECT:
-                aProp = ::toolkit::getVisualEffect( pButton, &StyleSettings::GetRadioButtonStyle, STYLE_RADIOBUTTON_MONO );
+                aProp = ::toolkit::getVisualEffect( pButton );
                 break;
             case BASEPROPERTY_STATE:
                 aProp <<= (sal_Int16) ( pButton->IsChecked() ? 1 : 0 );
