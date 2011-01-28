@@ -58,6 +58,8 @@
 #include <ascfldlg.hrc>
 #endif
 
+#include "vcl/metric.hxx"
+
 
 using namespace ::com::sun::star;
 
@@ -180,11 +182,21 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 bDelPrinter = TRUE;
             }
 
-            const USHORT nCount = pPrt->GetFontCount();
-            for (USHORT i = 0; i < nCount; ++i)
+
+            // get the set of disctinct available family names
+            std::set< String > aFontNames;
+            int nFontNames = pPrt->GetDevFontCount();
+            for( int i = 0; i < nFontNames; i++ )
             {
-                const String &rStr = pPrt->GetFont(i)->GetName();
-                aFontLB.InsertEntry( rStr );
+                FontInfo aInf( pPrt->GetDevFont( i ) );
+                aFontNames.insert( aInf.GetName() );
+            }
+
+            // insert to listbox
+            for( std::set< String >::const_iterator it = aFontNames.begin();
+                 it != aFontNames.end(); ++it )
+            {
+                aFontLB.InsertEntry( *it );
             }
 
             if( !aOpt.GetFontName().Len() )

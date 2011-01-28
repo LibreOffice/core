@@ -25,36 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=sw
-TARGET=except
+.INCLUDE : settings.mk
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  $(PRJ)$/inc$/swpre.mk
-
-# hier kein PCH!
-prjpch=
-PRJPCH=
-
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-# --- Files --------------------------------------------------------
-
-CXXFILES =
-
-.IF "$(dbgutil)"!=""
-CXXFILES += \
-        errhdl.cxx			\
-        dbgloop.cxx
-
-SLOFILES +=  \
-        $(SLO)$/errhdl.obj 	\
-        $(SLO)$/dbgloop.obj
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
-# --- Tagets -------------------------------------------------------
 
-.INCLUDE :  target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

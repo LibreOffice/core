@@ -4376,7 +4376,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         }
 
         SwDoc* pCpyDoc = (SwDoc*)pSrcTblNd->GetDoc();
-        SfxObjectShellRef* pRefForDocSh = 0;
         BOOL bDelCpyDoc = pCpyDoc == this;
 
         if( bDelCpyDoc )
@@ -4384,13 +4383,10 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             // kopiere die Tabelle erstmal in ein temp. Doc
             pCpyDoc = new SwDoc;
             pCpyDoc->acquire();
-            pRefForDocSh = new SfxObjectShellRef();
-            pCpyDoc->SetRefForDocShell( pRefForDocSh );
 
             SwPosition aPos( SwNodeIndex( pCpyDoc->GetNodes().GetEndOfContent() ));
             if( !pSrcTblNd->GetTable().MakeCopy( pCpyDoc, aPos, rBoxes, TRUE, TRUE ))
             {
-                delete pRefForDocSh;
                 if( pCpyDoc->release() == 0 )
                     delete pCpyDoc;
 
@@ -4403,8 +4399,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             }
             aPos.nNode -= 1;        // auf den EndNode der Tabelle
             pSrcTblNd = aPos.nNode.GetNode().FindTableNode();
-
-            pCpyDoc->SetRefForDocShell( NULL );
         }
 
         const SwStartNode* pSttNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
@@ -4443,7 +4437,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         if( bDelCpyDoc )
         {
-            delete pRefForDocSh;
             if( pCpyDoc->release() == 0 )
                 delete pCpyDoc;
         }
