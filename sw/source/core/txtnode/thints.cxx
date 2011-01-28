@@ -65,6 +65,7 @@
 #include <fmtmeta.hxx>
 #include <breakit.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <errhdl.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
@@ -1318,11 +1319,9 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                             SwIndex aTmpIdx( this, *pAttr->GetStart() );
                             Update( aTmpIdx, 1, TRUE );
                         }
-                        // Format loeschen nicht ins Undo aufnehmen!!
-                        BOOL bUndo = pDoc->DoesUndo();
-                        pDoc->DoUndo( FALSE );
+                        // do not record deletion of Format!
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         DestroyAttr( pAttr );
-                        pDoc->DoUndo( bUndo );
                         return false;
                     }
                 }

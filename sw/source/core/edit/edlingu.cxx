@@ -35,9 +35,7 @@
 
 #include <unoflatpara.hxx>
 
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <hintids.hxx>
 #include <linguistic/lngprops.hxx>
 #include <vcl/msgbox.hxx>
@@ -49,6 +47,7 @@
 #include <charatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>      // SwRootFrm
 #include <pam.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
@@ -57,9 +56,7 @@
 #include <viscrs.hxx>       // SwShellCrsr
 #include <SwGrammarMarkUp.hxx>      // SwWrongList
 #include <mdiexp.hxx>       // Statusanzeige
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // StatLine-String
-#endif
 #include <cntfrm.hxx>
 #include <crsskip.hxx>
 #include <splargs.hxx>
@@ -1334,7 +1331,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
         StartAction();
 
         SwPaM *pCrsr = GetCrsr();
@@ -1463,7 +1460,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // set continuation position for spell/grammar checking to the end of this sentence
         pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
 
-        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
         EndAction();
     }
 }

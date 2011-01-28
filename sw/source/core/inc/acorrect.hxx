@@ -56,7 +56,7 @@ class SwAutoCorrDoc : public SvxAutoCorrDoc
     SwEditShell& rEditSh;
     SwPaM& rCrsr;
     SwNodeIndex* pIdx;
-    SwUndoId nUndoId;
+    int m_nEndUndoCounter;
     bool    bUndoIdInitialized;
 
     void DeleteSel( SwPaM& rDelPam );

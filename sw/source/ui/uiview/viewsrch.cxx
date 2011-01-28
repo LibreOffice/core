@@ -38,9 +38,7 @@
 #include <svl/whiter.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/stritem.hxx>
-#ifndef _T2XTCMP_HXX //autogen
 #include <svtools/txtcmp.hxx>
-#endif
 #include <svl/itempool.hxx>
 #include <svl/eitem.hxx>
 #include <svl/srchitem.hxx>
@@ -52,27 +50,16 @@
 #include <swmodule.hxx>
 #include <swwait.hxx>
 #include <workctrl.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
 #include <uitool.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 
-#ifndef _VIEW_HRC
 #include <view.hrc>
-#endif
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include "PostItMgr.hxx"
 
@@ -598,7 +585,7 @@ void SwView::Replace()
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(UNDO_UI_REPLACE_STYLE); // #111827#
+        pWrtShell->EndUndo(); // #111827#
     }
     else
     {
