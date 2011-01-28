@@ -23,33 +23,27 @@
 # for a copy of the LGPLv3 License.
 #***********************************************************************/
 
-PRJ = ../../../../..
+PRJ = ../../../../../..
 PRJNAME = test
-TARGET = test
+TARGET = test-tools
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-
-PACKAGE = org/openoffice/test
-JAVAFILES = \
-    Argument.java \
-    FileHelper.java \
-    OfficeConnection.java \
-    OfficeFileUrl.java \
-    TestArgument.java
-JARFILES = juh.jar ridl.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-
-JARTARGET        = $(TARGET).jar
-JARCLASSDIRS     = $(PACKAGE)
-JARCLASSEXCLUDES = $(PACKAGE)/tools/*
-JARCLASSPATH     = $(JARFILES)
- # expect $(OOO_JUNIT_JAR) to be on CLASSPATH wherever test.jar is used (also,
- # on Windows, $(OOO_JUNIT_JAR) could be an absolute pathname with drive letter
- # like X:/path and some JVMs would refuse to load test.jar if its MANIFEST.MF
- # Class-Path contained such a pathname that looks like an unknown URL with
- # scheme X)
-
-.END
+PACKAGE = org/openoffice/test/tools
 
 .INCLUDE: settings.mk
+
+JARFILES = juh.jar ridl.jar unoil.jar
+JAVAFILES = \
+    OfficeDocument.java \
+    OfficeDocumentView.java \
+    DocumentType.java \
+    SpreadsheetDocument.java \
+    SpreadsheetView.java \
+
+JARTARGET = $(TARGET).jar
+JARCLASSDIRS = $(PACKAGE)
+JARCLASSPATH = $(JARFILES)
+
 .INCLUDE: target.mk
+
+test:
+    echo $(JAVACLASSFILES)
