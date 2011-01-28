@@ -1536,7 +1536,6 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 {
     String aSequenceName;
     String aBook;
-    bool bHidden    = false;
     bool bFormat    = false;
     bool bShowLast  = false;
     bool bCountOn   = true;
@@ -1556,13 +1555,10 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
 
         case 'h':
-            if( !bFormat )
-                bHidden = true;             // Hidden-Flag aktivieren
             break;
 
         case '*':
             bFormat = true;                 // Format-Flag aktivieren
-            bHidden = false;                // Hidden-Flag deaktivieren
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet )
                 eNumFormat = GetNumTypeFromName( aReadParam.GetResult() );
