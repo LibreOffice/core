@@ -33,7 +33,7 @@
 #include <whassert.hxx>
 
 #ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #endif
 
 //============================================================================

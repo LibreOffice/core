@@ -31,7 +31,7 @@ $(eval $(call gb_Library_add_package_headers,comphelper,comphelper_inc))
 
 $(eval $(call gb_Library_add_precompiled_header,comphelper,$(SRCDIR)/comphelper/inc/pch/precompiled_comphelper))
 
-$(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp4))
+$(eval $(call gb_Library_set_componentfile,comphelper,comphelper/util/comphelp))
 
 $(eval $(call gb_Library_set_include,comphelper,\
     -I$(SRCDIR)/comphelper/inc/pch \
@@ -44,7 +44,7 @@ $(eval $(call gb_Library_set_defs,comphelper,\
        $$(DEFS) \
        -DCOMPHELPER_DLLIMPLEMENTATION \
 ))
- 
+
 $(eval $(call gb_Library_add_linked_libs,comphelper,\
         sal \
         cppuhelper \

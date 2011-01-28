@@ -41,7 +41,6 @@
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/extract.hxx>
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
@@ -59,6 +58,7 @@
 #include <unotools/configmgr.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
+#include <comphelper/extract.hxx>
 #include <vcl/svapp.hxx>
 #include <uno/data.h>
 
