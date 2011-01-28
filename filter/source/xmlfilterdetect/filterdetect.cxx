@@ -163,18 +163,18 @@ Reference< com::sun::star::frame::XModel > xModel;
 
             sal_Int32 new_nlength=0;
             sal_Int32 i = 0 ;
-             while(  (i < nLength) && (sTypeName.equalsAscii("")))
+             while(  (i < nLength) && (sTypeName.getLength() == 0))
             {
 
                 Any elem = xTypeCont->getByName(myTypes[i]);
                 elem >>=lProps;
                 new_nlength = lProps.getLength();
                 sal_Int32 j =0;
-                while( j < new_nlength && sTypeName.equalsAscii(""))
+                while( j < new_nlength && (sTypeName.getLength() == 0))
                 {
                     ::rtl::OUString tmpStr;
                     lProps[j].Value >>=tmpStr;
-                    if((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && (!tmpStr.equalsAscii("")) )
+                    if((lProps[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ClipboardFormat"))) && tmpStr.getLength() )
                     {
                         sTypeName = supportedByType(tmpStr,resultString, myTypes[i]);
                     }
@@ -189,11 +189,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         {
                  OSL_ENSURE( sal_False, "An Exception occurred while opening File stream" );
         }
-        if(sTypeName.equalsAscii(""))
-        {
-            //sTypeName=::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer_Flat_XML_File"));
-        }
-        else
+        if (sTypeName.getLength())
         {
             if ( location == aArguments.getLength() )
             {
