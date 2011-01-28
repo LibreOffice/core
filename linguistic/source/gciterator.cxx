@@ -58,10 +58,10 @@
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <cppuhelper/extract.hxx>
 #include <cppuhelper/factory.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/processfactory.hxx>
+#include <comphelper/extract.hxx>
 
 #include <deque>
 #include <map>

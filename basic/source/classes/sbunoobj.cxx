@@ -39,8 +39,8 @@
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/extract.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/processfactory.hxx>
 
 #include <rtl/ustrbuf.hxx>
