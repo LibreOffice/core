@@ -297,7 +297,7 @@ public:
 //------------------------------------------------------------------------
 
 //
-//  gibt Bereiche mit Referenz und alle DB-Bereiche zurueck
+//  returns areas with reference and all db-areas
 //
 
 class SC_DLLPUBLIC ScAreaNameIterator

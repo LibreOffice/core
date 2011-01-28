@@ -94,8 +94,9 @@ private:
 SV_DECL_IMPL_REF( ScRangeList );
 
 
-// RangePairList: erster Range (aRange[0]) eigentlicher Range, zweiter
-// Range (aRange[1]) Daten zu diesem Range, z.B. Rows eines ColName
+// RangePairList:
+//    aRange[0]: actual range,
+//    aRange[1]: data for that range, e.g. Rows belonging to a ColName
 class SC_DLLPUBLIC ScRangePairList : public SvRefBase
 {
 public:

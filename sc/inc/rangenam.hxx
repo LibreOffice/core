@@ -76,7 +76,7 @@ private:
     RangeType       eType;
     ScDocument*     pDoc;
     USHORT          nIndex;
-    BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
+    BOOL            bModified;          // is set/cleared by UpdateReference
 
     // max row and column to use for wrapping of references.  If -1 use the
     // application's default.
@@ -102,7 +102,7 @@ public:
     SC_DLLPUBLIC                ScRangeData( ScDocument* pDoc,
                                  const String& rName,
                                  const ScAddress& rTarget );
-                                // rTarget ist ABSPOS Sprungmarke
+                                // rTarget is ABSPOS jump label
                     ScRangeData(const ScRangeData& rScRangeData);
 
     SC_DLLPUBLIC virtual        ~ScRangeData();
@@ -116,7 +116,7 @@ public:
     const String&   GetName( void ) const           { return aName; }
     const String&   GetUpperName( void ) const      { return aUpperName; }
     ScAddress       GetPos() const                  { return aPos; }
-    // Der Index muss eindeutig sein. Ist er 0, wird ein neuer Index vergeben
+    // The index has to be unique. If index=0 a new index value is assigned.
     void            SetIndex( USHORT nInd )         { nIndex = nInd; }
     USHORT    GetIndex() const                { return nIndex; }
     ScTokenArray*   GetCode()                       { return pCode; }
@@ -189,7 +189,7 @@ public:
                 ScDocument* pDocument = NULL) :
         ScSortedCollection  ( nLim, nDel, bDup ),
         pDoc                ( pDocument ),
-        nSharedMaxIndex     ( 1 ) {}            // darf nicht 0 sein!!
+        nSharedMaxIndex     ( 1 ) {}            // must not be 0!!
 
     ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument);
 
