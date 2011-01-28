@@ -39,7 +39,6 @@
 
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <tools/list.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
 #include <tools/string.hxx>
@@ -379,13 +378,12 @@ ScFunctionList::ScFunctionList() :
     ScFuncDesc* pDesc = NULL;
     xub_StrLen nStrLen = 0;
     FuncCollection* pFuncColl;
+    ::std::list<ScFuncDesc*> tmpFuncList;
     sal_uInt16 nDescBlock[] =
     {
         RID_SC_FUNCTION_DESCRIPTIONS1,
         RID_SC_FUNCTION_DESCRIPTIONS2
     };
-
-    aFunctionList.Clear();
 
     for (sal_uInt16 k = 0; k < SAL_N_ELEMENTS(nDescBlock); ++k)
     {
@@ -412,7 +410,7 @@ ScFunctionList::ScFunctionList() :
                 else
                 {
                     pDesc->nFIndex = i;
-                    aFunctionList.Insert( pDesc, LIST_APPEND );
+                    tmpFuncList.push_back(pDesc);
 
                     nStrLen = (*(pDesc->pFuncName)).getLength();
                     if (nStrLen > nMaxFuncNameLen)
@@ -524,7 +522,7 @@ ScFunctionList::ScFunctionList() :
             }
         }
 
-        aFunctionList.Insert(pDesc, LIST_APPEND);
+        tmpFuncList.push_back(pDesc);
         nStrLen = (*(pDesc->pFuncName)).getLength();
         if ( nStrLen > nMaxFuncNameLen)
             nMaxFuncNameLen = nStrLen;
@@ -541,7 +539,7 @@ ScFunctionList::ScFunctionList() :
 
         if ( pUnoAddIns->FillFunctionDesc( nFunc, *pDesc ) )
         {
-            aFunctionList.Insert(pDesc, LIST_APPEND);
+            tmpFuncList.push_back(pDesc);
             nStrLen = (*(pDesc->pFuncName)).getLength();
             if (nStrLen > nMaxFuncNameLen)
                 nMaxFuncNameLen = nStrLen;
@@ -549,6 +547,14 @@ ScFunctionList::ScFunctionList() :
         else
             delete pDesc;
     }
+
+    //Move list to vector for better random access performance
+    aFunctionList.reserve(tmpFuncList.size());
+    aFunctionList.assign(tmpFuncList.begin(),tmpFuncList.end());
+    tmpFuncList.clear();
+
+    //Initialize iterator
+    aFunctionListIter = aFunctionList.end();
 }
 
 ScFunctionList::~ScFunctionList()
@@ -559,6 +565,36 @@ ScFunctionList::~ScFunctionList()
         delete pDesc;
         pDesc = Next();
     }
+}
+
+const ScFuncDesc* ScFunctionList::First()
+{
+    const ScFuncDesc* pDesc = NULL;
+    aFunctionListIter = aFunctionList.begin();
+    if(aFunctionListIter != aFunctionList.end())
+        pDesc = *aFunctionListIter;
+
+    return pDesc;
+}
+
+const ScFuncDesc* ScFunctionList::Next()
+{
+    const ScFuncDesc* pDesc = NULL;
+    if(aFunctionListIter != aFunctionList.end())
+    {
+        if((++aFunctionListIter) != aFunctionList.end())
+            pDesc = *aFunctionListIter;
+    }
+    return pDesc;
+}
+
+const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
+{
+    const ScFuncDesc* pDesc = NULL;
+    if(nIndex < aFunctionList.size())
+        pDesc = aFunctionList.at(nIndex);
+
+    return pDesc;
 }
 
 //===================================================================

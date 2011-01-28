@@ -29,14 +29,10 @@
 #ifndef SC_FUNCDESC_HXX
 #define SC_FUNCDESC_HXX
 
-/* Function descriptions for function wizard / autopilot / most recent used
- * list et al. Separated from the global.hxx lump, implementation still in
- * global.cxx
- */
+/* Function descriptions for function wizard / autopilot */
 
 #include "scfuncs.hrc"
 
-#include <tools/list.hxx>
 #include <formula/IFunctionDescription.hxx>
 #include <sal/types.h>
 #include <rtl/ustring.hxx>
@@ -240,26 +236,21 @@ public:
     ScFunctionList();
     ~ScFunctionList();
 
-    sal_uInt32           GetCount() const
-                    { return aFunctionList.Count(); }
+    sal_uInt32 GetCount() const
+               { return aFunctionList.size(); }
 
-    const ScFuncDesc*   First()
-                        { return (const ScFuncDesc*) aFunctionList.First(); }
+    const ScFuncDesc* First();
 
-    const ScFuncDesc*   Next()
-                        { return (const ScFuncDesc*) aFunctionList.Next(); }
+    const ScFuncDesc* Next();
 
-    const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const
-        { return static_cast<const ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
+    const ScFuncDesc* GetFunction( sal_uInt32 nIndex ) const;
 
-    ScFuncDesc* GetFunction( sal_uInt32 nIndex )
-        { return static_cast<ScFuncDesc*>(aFunctionList.GetObject(nIndex)); }
-
-    xub_StrLen      GetMaxFuncNameLen() const
-                    { return nMaxFuncNameLen; }
+    xub_StrLen GetMaxFuncNameLen() const
+               { return nMaxFuncNameLen; }
 
 private:
-    List        aFunctionList; /**< List of functions */
+    ::std::vector<const ScFuncDesc*> aFunctionList; /**< List of functions */
+    ::std::vector<const ScFuncDesc*>::iterator aFunctionListIter; /**< position in function list */
     xub_StrLen  nMaxFuncNameLen; /**< Length of longest function name */
 };
 
