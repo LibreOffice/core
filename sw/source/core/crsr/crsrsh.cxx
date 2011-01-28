@@ -3419,7 +3419,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             //no determine the rectangle in the current line
             xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
             //take one less than the line end - otherwise the next line would be calculated
-            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+            xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd : (nBegin + nLen - nLeft - nRight);
             Push();
             pCrsr->DeleteMark();
             SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -3431,7 +3431,7 @@ void SwCrsrShell::GetSmartTagTerm( const Point& rPt, SwRect& rSelectRect,
             SwCntntFrm *pCntntFrame = pCntntNode->GetFrm( &rPt, pCrsr->GetPoint(), FALSE);
 
             pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
-            rContent = nWordEnd;
+            rContent = nWordEnd - 1;
             SwRect aEndRect;
             pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
             rSelectRect = aStartRect.Union( aEndRect );

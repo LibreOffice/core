@@ -550,7 +550,6 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
 
     const sal_Bool bAuto = IsAuto();
      uno::Reference< XHyphenatedWord >  xHyphWord;
-    sal_uInt16 nRet;
     sal_Bool bGoOn = sal_False;
     do {
         SwPaM *pCrsr;
@@ -565,10 +564,7 @@ uno::Any SwHyphIter::Continue( sal_uInt16* pPageCnt, sal_uInt16* pPageSt )
                 pCrsr->SetMark();
             }
 
-            // geraten BUG:
-            if ( *pCrsr->End() > *GetEnd() )
-                nRet = 0;
-            else
+            if ( *pCrsr->End() <= *GetEnd() )
             {
                 *pCrsr->GetMark() = *GetEnd();
 
@@ -1076,7 +1072,7 @@ uno::Reference< XSpellAlternatives >
                 //no determine the rectangle in the current line
                 xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 //take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd: (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
                 SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -1088,7 +1084,7 @@ uno::Reference< XSpellAlternatives >
                 SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), FALSE);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
-                rContent = nWordEnd;
+                rContent = nWordEnd - 1;
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
@@ -1210,7 +1206,7 @@ bool SwEditShell::GetGrammarCorrection(
                 //no determine the rectangle in the current line
                 xub_StrLen nWordStart = (nBegin + nLeft) < nLineStart ? nLineStart : nBegin + nLeft;
                 //take one less than the line end - otherwise the next line would be calculated
-                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd - 1: (nBegin + nLen - nLeft - nRight);
+                xub_StrLen nWordEnd = (nBegin + nLen - nLeft - nRight) > nLineEnd ? nLineEnd: (nBegin + nLen - nLeft - nRight);
                 Push();
                 pCrsr->DeleteMark();
                 SwIndex& rContent = GetCrsr()->GetPoint()->nContent;
@@ -1222,7 +1218,7 @@ bool SwEditShell::GetGrammarCorrection(
                 SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), FALSE);
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
-                rContent = nWordEnd;
+                rContent = nWordEnd - 1;
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
