@@ -100,7 +100,7 @@ testcase tUsageTracking3
             
             kontext "Active"
             if ( Active.exists( 2 ) ) then
-                qaerrorlog( "Messagebox not required as control should not be enabled (see #i97340#)" )
+                warnlog( "Messagebox not required as control should not be enabled (see #i97340#)" )
                 Active.ok()
             
                 kontext "TextImport"
