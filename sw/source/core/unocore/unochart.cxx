@@ -1546,7 +1546,7 @@ sal_Bool SAL_CALL SwChartDataProvider::supportsService(
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return rServiceName.equalsAscii( SN_DATA_PROVIDER );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_PROVIDER ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataProvider::getSupportedServiceNames(  )
@@ -1943,7 +1943,7 @@ sal_Bool SAL_CALL SwChartDataSource::supportsService(
     throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    return rServiceName.equalsAscii( SN_DATA_SOURCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_SOURCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSource::getSupportedServiceNames(  )
@@ -2408,7 +2408,7 @@ sal_Bool SAL_CALL SwChartDataSequence::supportsService(
         const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SN_DATA_SEQUENCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_DATA_SEQUENCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartDataSequence::getSupportedServiceNames(  )
@@ -2891,7 +2891,7 @@ sal_Bool SAL_CALL SwChartLabeledDataSequence::supportsService(
         const OUString& rServiceName )
     throw (uno::RuntimeException)
 {
-    return rServiceName.equalsAscii( SN_LABELED_DATA_SEQUENCE );
+    return rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SN_LABELED_DATA_SEQUENCE ) );
 }
 
 uno::Sequence< OUString > SAL_CALL SwChartLabeledDataSequence::getSupportedServiceNames(  )

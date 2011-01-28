@@ -4126,13 +4126,13 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                                 if ( aCntntAtPos.aFnd.pFldmark != NULL)
                                 {
                                     IFieldmark *fieldBM = const_cast< IFieldmark* > ( aCntntAtPos.aFnd.pFldmark );
-                                    if (fieldBM->GetFieldname( ).equalsAscii( ODF_FORMCHECKBOX ) )
+                                    if (fieldBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) )
                                     {
                                         ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(fieldBM);
                                         pCheckboxFm->SetChecked(!pCheckboxFm->IsChecked());
                                         pCheckboxFm->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
-                                    } else if (fieldBM->GetFieldname().equalsAscii( ODF_FORMDROPDOWN) ) {
+                                    } else if (fieldBM->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ) {
                                         rView.ExecFieldPopup( aDocPt, fieldBM );
                                         fieldBM->Invalidate();
                                         rSh.InvalidateWindows( rView.GetVisArea() );
