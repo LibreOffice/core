@@ -817,7 +817,7 @@ void PspGraphics::GetFontMetric( ImplFontMetricData *pMetric, int )
     }
 }
 
-sal_uInt32 PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
+sal_uLong PspGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData *pKernPairs )
 {
     const ::std::list< ::psp::KernPair >& rPairs( m_pPrinterGfx->getKernPairs() );
     sal_uLong nHavePairs = rPairs.size();

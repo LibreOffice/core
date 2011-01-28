@@ -103,7 +103,7 @@ public:
     virtual void            SetTextColor( SalColor nSalColor );
     virtual sal_uInt16          SetFont( ImplFontSelectData*, int nFallbackLevel );
     virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
-    virtual sal_uIntPtr         GetKernPairs( sal_uIntPtr nMaxPairs, ImplKernPairData* );
+    virtual sal_uLong           GetKernPairs( sal_uLong nMaxPairs, ImplKernPairData* );
     virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
