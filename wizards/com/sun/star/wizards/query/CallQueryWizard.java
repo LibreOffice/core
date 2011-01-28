@@ -28,7 +28,6 @@ package com.sun.star.wizards.query;
 
 import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
@@ -160,6 +159,7 @@ public class CallQueryWizard
          * whole combination of objects.
          * @return Array of bytes, in order to distinguish between two sets.
          */
+        @Override
         public byte[] getImplementationId()
         {
             byte[] byteReturn =
@@ -168,7 +168,7 @@ public class CallQueryWizard
 
             try
             {
-                byteReturn = new String("" + this.hashCode()).getBytes();
+                byteReturn = ("" + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {
@@ -191,6 +191,7 @@ public class CallQueryWizard
          * @return Sequence of all types (usually interface types) provided by the
          * service.
          */
+        @Override
         public Type[] getTypes()
         {
             Type[] typeReturn =

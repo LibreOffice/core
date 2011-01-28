@@ -142,7 +142,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
                     },
                     new Object[]
                     {
-                        Boolean.FALSE, new Integer(8), _reslblTables, new Integer(95), new Integer(27), IStep, new Short((short) 3), LabelWidth
+                        Boolean.FALSE, 8, _reslblTables, 95, 27, IStep, new Short((short) 3), LabelWidth
                     });
             // DropDown Listbox TableNames
             xTableListBox = CurUnoDialog.insertListBox(sTableListBoxName, 0, null, new ItemListenerImpl(),
@@ -152,7 +152,7 @@ public class CommandFieldSelection extends FieldSelection implements Comparator
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, Boolean.FALSE, new Integer(12), HelpIds.getHelpIdString(super.FirstHelpIndex - 1), new Short(UnoDialog.getListBoxLineCount()), new Integer(95), new Integer(37), IStep, new Short((short) 4), getListboxWidth()
+                        Boolean.TRUE, Boolean.FALSE, 12, HelpIds.getHelpIdString(super.FirstHelpIndex - 1), new Short(UnoDialog.getListBoxLineCount()), 95, 37, IStep, new Short((short) 4), getListboxWidth()
                     });
             // XWindow xTableListBoxWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xTableListBox);
             fillupCommandListBox();

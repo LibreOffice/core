@@ -80,7 +80,7 @@ public class ColumnPropertySet
             }
             if ((nType == DataType.VARCHAR) && (precision == null || precision.intValue() == 0))
             {
-                precision = new Integer(50);
+                precision = 50;
             }
             if (precision != null)
             {

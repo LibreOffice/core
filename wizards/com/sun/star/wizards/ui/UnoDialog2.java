@@ -209,11 +209,11 @@ public class UnoDialog2 extends UnoDialog implements EventNames
         XControl xImgControl = insertImage(Desktop.getUniqueName(getDlgNameAccess(), "imgHint"),
                 new String[]
                 {
-                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_BORDER, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Short((short) 0), new Integer(10), UIConsts.INFOIMAGEURL, new Integer(_posx), new Integer(_posy), Boolean.FALSE, new Integer(_iStep), new Integer(10)
+                    new Short((short) 0), 10, UIConsts.INFOIMAGEURL, new Integer(_posx), new Integer(_posy), Boolean.FALSE, new Integer(_iStep), 10
                 });
         super.getPeerConfiguration().setImageUrl(getModel(xImgControl), UIConsts.INFOIMAGEURL, UIConsts.INFOIMAGEURL_HC);
         return xImgControl;

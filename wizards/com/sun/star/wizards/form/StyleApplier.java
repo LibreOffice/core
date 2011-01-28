@@ -116,7 +116,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sPageStyles, new Integer(92), new Integer(25), IStyleStep, new Short(curtabindex++), new Integer(90)
+                        UIConsts.INTEGERS[8], sPageStyles, 92, 25, IStyleStep, new Short(curtabindex++), 90
                     });
 
             lstStyles = CurUnoDialog.insertListBox("lstStyles", null, SCHANGELAYOUT, this,
@@ -126,7 +126,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        new Integer(143), "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", new Integer(92), new Integer(35), SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), new Integer(90)
+                        143, "HID:WIZARDS_HID_DLGFORM_LSTSTYLES", 92, 35, SelLayoutPos, IStyleStep, this.StyleNames, new Short(curtabindex++), 90
                     });
 
             optNoBorder = CurUnoDialog.insertRadioButton("otpNoBorder", SCHANGEBORDERTYPE, this,
@@ -136,7 +136,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, new Integer(196), new Integer(39), IStyleStep, new Short(curtabindex++), "0", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDNOBORDER", sNoBorder, 196, 39, IStyleStep, new Short(curtabindex++), "0", 93
                     });
 
             opt3DLook = CurUnoDialog.insertRadioButton("otp3DLook", SCHANGEBORDERTYPE, this,
@@ -146,7 +146,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, new Integer(196), new Integer(53), new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMD3DBORDER", s3DLook, 196, 53, new Short((short) 1), IStyleStep, new Short(curtabindex++), "1", 93
                     });
 
             optFlat = CurUnoDialog.insertRadioButton("otpFlat", SCHANGEBORDERTYPE, this,
@@ -156,7 +156,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, new Integer(196), new Integer(67), IStyleStep, new Short(curtabindex++), "2", new Integer(93)
+                        UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDSIMPLEBORDER", sFlat, 196, 67, IStyleStep, new Short(curtabindex++), "2", 93
                     });
 
             CurUnoDialog.insertFixedLine("lnFieldBorder",
@@ -166,7 +166,7 @@ public class StyleApplier
                     },
                     new Object[]
                     {
-                        UIConsts.INTEGERS[8], sFieldBorder, new Integer(192), new Integer(25), IStyleStep, new Short(curtabindex++), new Integer(98)
+                        UIConsts.INTEGERS[8], sFieldBorder, 192, 25, IStyleStep, new Short(curtabindex++), 98
                     });
 //        }
 //        catch (Exception e)
@@ -281,10 +281,10 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     GridControl oGridControl = curControlForm.getGridControl();
-                    oGridControl.xPropertySet.setPropertyValue("Border", IBorderValue);
+                    oGridControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                 }
                 else
                 {
@@ -297,17 +297,17 @@ public class StyleApplier
                             for (int i = 0; i < 2; i++)
                             {
                                 XPropertySet xPropertySet = oTimeStampControl.getControlofGroupShapeByIndex(i);
-                                if (xPropertySet.getPropertySetInfo().hasPropertyByName("Border"))
+                                if (xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                                 {
-                                    xPropertySet.setPropertyValue("Border", IBorderValue);
+                                    xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                                 }
                             }
                         }
                         else
                         {
-                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName("Border"))
+                            if (DBControls[n].xPropertySet.getPropertySetInfo().hasPropertyByName(PropertyNames.PROPERTY_BORDER))
                             {
-                                DBControls[n].xPropertySet.setPropertyValue("Border", IBorderValue);
+                                DBControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, IBorderValue);
                             }
                         }
                     }
@@ -439,7 +439,7 @@ public class StyleApplier
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = ((FormDocument.ControlForm) curFormDocument.oControlForms.get(m));
-                if (curControlForm.getArrangemode() == FormWizard.SOGRID)
+                if (curControlForm.getArrangemode() == FormWizard.AS_GRID)
                 {
                     if (_iStyleColors[SOLABELTEXTCOLOR] > -1)
                     {

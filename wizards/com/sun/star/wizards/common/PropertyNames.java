@@ -46,4 +46,9 @@ public class PropertyNames
     public static String PROPERTY_TABINDEX = "TabIndex";
     public static String PROPERTY_STATE = "State";
     public static String PROPERTY_IMAGEURL = "ImageURL";
+    public static String PROPERTY_TITLE = "Title";
+    public static String PROPERTY_BORDER = "Border";
+    public static String PROPERTY_MOVEABLE = "Moveable";
+    public static String PROPERTY_CLOSEABLE = "Closeable";
+    public static String PROPERTY_ALIGN = "Align";
 }

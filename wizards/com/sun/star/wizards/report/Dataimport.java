@@ -119,11 +119,11 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             Helper.setUnoPropertyValues(xDialogModel,
                     new String[]
                     {
-                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, "Title", PropertyNames.PROPERTY_WIDTH
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
-                        new Integer(84), new Integer(0), sProgressTitle, new Integer(180)
+                        84, 0, sProgressTitle, 180
                     });
             com.sun.star.awt.FontDescriptor oFontDesc = new com.sun.star.awt.FontDescriptor();
             oFontDesc.Weight = com.sun.star.awt.FontWeight.BOLD;
@@ -136,7 +136,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                         },
                         new Object[]
                         {
-                            oFontDesc, new Integer(10), sProgressDBConnection, new Integer(6), new Integer(6), new Integer(0), new Integer(150)
+                            oFontDesc, 10, sProgressDBConnection, 6, 6, 0, 150
                         });
 
                 insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblProgressDataImport",
@@ -146,7 +146,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                         },
                         new Object[]
                         {
-                            new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)
+                            10, sProgressDataImport, 6, 24, 0, 120
                         });
             }
             else
@@ -158,7 +158,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                         },
                         new Object[]
                         {
-                            oFontDesc, new Integer(10), sProgressDataImport, new Integer(6), new Integer(24), new Integer(0), new Integer(120)
+                            oFontDesc, 10, sProgressDataImport, 6, 24, 0, 120
                         });
             }
             insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblCurProgress",
@@ -168,7 +168,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        new Integer(10), "", new Integer(12), new Integer(42), new Integer(0), new Integer(120)
+                        10, "", 12, 42, 0, 120
                     });
 
             insertButton("cmdCancel", 10000, this,
@@ -178,7 +178,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                     },
                     new Object[]
                     {
-                        new Integer(14), HelpIds.getHelpIdString(34321), new Integer(74), new Integer(58), new Integer(0), new Short((short) 1), new Integer(40), sStop
+                        14, HelpIds.getHelpIdString(34321), 74, 58, 0, new Short((short) 1), 40, sStop
                     });
             createWindowPeer(CurReportDocument.getWizardParent());
             calculateDialogPosition(CurReportDocument.getFrame().getComponentWindow().getPosSize());
