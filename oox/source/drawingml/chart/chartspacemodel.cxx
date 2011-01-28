@@ -38,7 +38,8 @@ ChartSpaceModel::ChartSpaceModel() :
     mnStyle( 2 ),
     mbAutoTitleDel( false ),
     mbPlotVisOnly( false ),
-    mbShowLabelsOverMax( false )
+    mbShowLabelsOverMax( false ),
+    mbPivotChart( false )
 {
 }
 
