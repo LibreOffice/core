@@ -419,9 +419,9 @@ public:
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */
-    ::std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT];
-    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListIter;
-    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListEnd;
+    ::std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListIter; /**< position in current category */
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListEnd; /**< end of current category */
 };
 
 #endif // SC_FUNCDESC_HXX
