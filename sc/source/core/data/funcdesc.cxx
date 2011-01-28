@@ -46,6 +46,7 @@
 #include <unotools/collatorwrapper.hxx>
 
 #include <numeric>
+#include <boost/scoped_ptr.hpp>
 
 class ScFuncRes : public Resource
 {
@@ -618,7 +619,7 @@ ScFunctionMgr::ScFunctionMgr() :
     }
 
     // Sort functions in cumulative category by name
-    sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
+    ::std::sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
 
     // Allocate correct amount of space for categories
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
@@ -650,9 +651,12 @@ const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
     const ScFuncDesc* pDesc = NULL;
     if (rFName.getLength() <= pFuncList->GetMaxFuncNameLen())
     {
-        ScFuncDesc* dummy = new ScFuncDesc();
+        ::boost::scoped_ptr<ScFuncDesc> dummy(new ScFuncDesc);
         dummy->pFuncName = new ::rtl::OUString(rFName);
-        ::std::vector<const ScFuncDesc*>::iterator lower = lower_bound(aCatLists[0]->begin(), aCatLists[0]->end(), static_cast<const ScFuncDesc*>(dummy), ScFuncDesc::compareByName);
+        ::std::vector<const ScFuncDesc*>::iterator lower =
+            ::std::lower_bound(aCatLists[0]->begin(), aCatLists[0]->end(),
+                        static_cast<const ScFuncDesc*>(dummy.get()), ScFuncDesc::compareByName);
+
         if(rFName.equalsIgnoreAsciiCase(*(*lower)->pFuncName))
             pDesc = *lower;
     }
