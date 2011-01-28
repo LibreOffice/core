@@ -228,10 +228,12 @@ static inline typelib_TypeClass cpp2uno_call(
 
 //==================================================================================================
 extern "C" typelib_TypeClass cpp_vtable_call(
-    sal_Int32 nFunctionIndex,
-    sal_Int32 nVtableOffset,
+    sal_Int64 nOffsetAndIndex,
     void ** pStack )
 {
+    sal_Int32 nFunctionIndex = (nOffsetAndIndex & 0xFFFFFFFF);
+    sal_Int32 nVtableOffset = ((nOffsetAndIndex >> 32) & 0xFFFFFFFF);
+
     // pStack points to space for return value, after which
     // follows our return address (uninteresting) then the spilled
     // integer or floating-point register parameters from the call to
@@ -372,89 +374,84 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 }
 
 //==================================================================================================
-extern "C" {
 
-// These are actually addresses in the code compiled from codeSnippet.asm
-extern char
-    fp_spill_templates,
-    fp_spill_templates_end,
-    trampoline_template,
-    trampoline_template_function_table,
-    trampoline_template_spill_params,
-    trampoline_template_spill_params_end,
-    trampoline_template_function_index,
-    trampoline_template_vtable_offset,
-    trampoline_template_cpp_vtable_call,
-    trampoline_template_end;
-}
+int const codeSnippetSize = 48;
 
-// Just the code
-int const codeSnippetSize =
-    (int) (&trampoline_template_end - &trampoline_template);
+extern "C" char privateSnippetExecutor;
 
 // This function generates the code that acts as a proxy for the UNO function to be called.
 // The generated code does the following:
-// - Save register parametrs.
+// - Spills register parameters on stack
+// - Loads functionIndex and vtableOffset into scratch registers
+// - Jumps to privateSnippetExecutor
 
 unsigned char * codeSnippet(
     unsigned char * code,
     char param_kind[4],
-    sal_Int32 functionIndex,
-    sal_Int32 vtableOffset,
+    sal_Int32 nFunctionIndex,
+    sal_Int32 nVtableOffset,
     bool bHasHiddenParam )
 {
-    OSL_ASSERT( (&fp_spill_templates_end - &fp_spill_templates) ==
-                (&trampoline_template_spill_params_end - &trampoline_template_spill_params) );
-
-    OSL_ASSERT( ((&fp_spill_templates_end - &fp_spill_templates) / 4) * 4 ==
-                (&fp_spill_templates_end - &fp_spill_templates) );
+    sal_uInt64 nOffsetAndIndex = ( ( (sal_uInt64) nVtableOffset ) << 32 ) | ( (sal_uInt64) nFunctionIndex );
+    unsigned char *p = code;
 
     if ( bHasHiddenParam )
-        functionIndex |= 0x80000000;
+        nOffsetAndIndex |= 0x80000000;
 
-    int const one_spill_instruction_size =
-        (int) ((&fp_spill_templates_end - &fp_spill_templates)) / 4;
-
-    memcpy( code, &trampoline_template, codeSnippetSize );
-
-    for (int i = 0; i < 4; ++i)
+    // Spill parameters
+    if ( param_kind[0] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
     {
-        if ( param_kind[i] == CPPU_CURRENT_NAMESPACE::REGPARAM_FLT )
-        {
-            memcpy (&trampoline_template_spill_params + i*one_spill_instruction_size,
-                    &fp_spill_templates + i*one_spill_instruction_size,
-                    one_spill_instruction_size);
-        }
+        // mov qword ptr 8[rsp], rcx
+        *p++ = 0x48; *p++ = 0x89; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x08;
+    }
+    else
+    {
+        // movsd qword ptr 8[rsp], xmm0
+        *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x44; *p++ = 0x24; *p++ = 0x08;
+    }
+    if ( param_kind[1] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    {
+        // mov qword ptr 16[rsp], rdx
+        *p++ = 0x48; *p++ = 0x89; *p++ = 0x54; *p++ = 0x24; *p++ = 0x10;
+    }
+    else
+    {
+        // movsd qword ptr 16[rsp], xmm1
+        *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x10;
+    }
+    if ( param_kind[2] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    {
+        // mov qword ptr 24[rsp], r8
+        *p++ = 0x4C; *p++ = 0x89; *p++ = 0x44; *p++ = 0x24; *p++ = 0x18;
+    }
+    else
+    {
+        // movsd qword ptr 24[rsp], xmm2
+        *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x54; *p++ = 0x24; *p++ = 0x18;
+    }
+    if ( param_kind[3] == CPPU_CURRENT_NAMESPACE::REGPARAM_INT )
+    {
+        // mov qword ptr 32[rsp], r9
+        *p++ = 0x4C;*p++ = 0x89; *p++ = 0x4C; *p++ = 0x24; *p++ = 0x20;
+    }
+    else
+    {
+        // movsd qword ptr 32[rsp], xmm3
+        *p++ = 0xF2; *p++ = 0x0F; *p++ = 0x11; *p++ = 0x5C; *p++ = 0x24; *p++ = 0x20;
     }
 
-    ((sal_uInt64*) (code + (&trampoline_template_function_index
-                            - &trampoline_template)))[-1] =
-        functionIndex;
-    ((sal_uInt64*) (code + (&trampoline_template_vtable_offset
-                            - &trampoline_template)))[-1] =
-        vtableOffset;
-    ((void**) (code + (&trampoline_template_cpp_vtable_call
-                            - &trampoline_template)))[-1] =
-        cpp_vtable_call;
+    // mov rcx, nOffsetAndIndex
+    *p++ = 0x48; *p++ = 0xB9;
+    *((sal_uInt64 *)p) = nOffsetAndIndex; p += 8;
 
-    // Add unwind data for the dynamically generated function by
-    // calling RtlAddFunctionTable().
+    // mov r11, privateSnippetExecutor
+    *p++ = 0x49; *p++ = 0xBB;
+    *((void **)p) = &privateSnippetExecutor; p += 8;
 
-    // The unwind data is inside the function code, at a fixed offset
-    // from the function start. See codeSnippet.asm. Actually this is
-    // unnecessarily complex, we could as well just allocate the
-    // function table dynamically. But it doesn't hurt either, I
-    // think.
+    // jmp r11
+    *p++ = 0x41; *p++ = 0xFF; *p++ = 0xE3;
 
-    // The real problem now is that we need to remove the unwind data
-    // with RtlDeleteFunctionTable() in freeExec() in
-    // vtablefactory.cxx. See comment there.
-
-    RUNTIME_FUNCTION *pFunTable =
-        (RUNTIME_FUNCTION *) (code + (&trampoline_template_function_table
-                                      - &trampoline_template));
-
-    RtlAddFunctionTable( pFunTable, 1, (DWORD64) code );
+    OSL_ASSERT( p < code + codeSnippetSize );
 
     return code + codeSnippetSize;
 }

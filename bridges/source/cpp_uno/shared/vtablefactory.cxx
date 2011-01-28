@@ -125,14 +125,6 @@ extern "C" void * SAL_CALL allocExec(rtl_arena_type *, sal_Size * size) {
     return p;
 }
 
-#if defined SAL_W32
-extern "C" {
-extern char
-    trampoline_template,
-    trampoline_template_function_table;
-}
-#endif
-
 extern "C" void SAL_CALL freeExec(
     rtl_arena_type *, void * address, sal_Size size)
 {
@@ -140,22 +132,6 @@ extern "C" void SAL_CALL freeExec(
     munmap(static_cast< char * >(address), size);
 #elif defined SAL_W32
     (void) size; // unused
-
-    // Remove the function table for the dynamically generated
-    // function that was added in codeSnippet() in cpp2uno.cxx.
-
-#if 0
-    // This is broken. address is not the address of a code
-    // snippet. Each virtual memory region alocated with
-    // VirtualAlloc() contains multiple generated code snippets. We
-    // need to have a hash table from the base addresses of the region
-    // to the function tables inside it.
-
-    RUNTIME_FUNCTION *pFunTable =
-        (RUNTIME_FUNCTION *) ((char *) address + (&trampoline_template_function_table - &trampoline_template));
-    RtlDeleteFunctionTable( pFunTable );
-#endif
-
     VirtualFree(address, 0, MEM_RELEASE);
 #elif defined(SAL_OS2)
     (void) DosFreeMem( address);
