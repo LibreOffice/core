@@ -170,7 +170,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_PIPETTE ;
                 HelpId = HID_CONTDLG_PIPETTE ;
-                Text [ en-US ] = "Eyedropper" ;
+                Text [ en-US ] = "Pipette" ;
                 AutoCheck = TRUE ;
             };
         };

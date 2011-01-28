@@ -34,7 +34,7 @@
 #include <ucbhelper/contentbroker.hxx>
 #include <unotools/datetime.hxx>
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <editeng/editdata.hxx>
 #include <sfx2/lnkbase.hxx>

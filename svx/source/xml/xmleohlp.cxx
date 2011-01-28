@@ -56,7 +56,7 @@
 #include <sot/clsids.hxx>
 #endif
 #include <map>
-#include "xmleohlp.hxx"
+#include "svx/xmleohlp.hxx"
 
 // -----------
 // - Defines -

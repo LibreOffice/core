@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "XPropertyTable.hxx"
+#include "svx/XPropertyTable.hxx"
 #include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/LineDash.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -42,7 +42,7 @@
 #include "unopolyhelper.hxx"
 #include <svx/xdef.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <editeng/unoprnms.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 

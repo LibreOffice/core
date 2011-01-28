@@ -44,8 +44,8 @@
 #include <svx/sdr/event/eventhandler.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
-#include "svdstr.hrc"
-#include <svdglob.hxx>
+#include "svx/svdstr.hrc"
+#include <svx/svdglob.hxx>
 #include <vcl/svapp.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
@@ -296,7 +296,7 @@ namespace sdr
 
                     // decompose immediately with neutral ViewInformation. This will
                     // layout the text to more simple TextPrimitives from drawinglayer
-                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D(0);
+                    const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
 
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(
                         xRetval,

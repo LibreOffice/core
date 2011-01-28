@@ -41,7 +41,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "insctrl.hxx"
+#include "svx/insctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #define PAINT_OFFSET    5

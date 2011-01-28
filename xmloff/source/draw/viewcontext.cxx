@@ -30,9 +30,9 @@
 #include "viewcontext.hxx"
 #include "sdxmlimp_impl.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "VisAreaContext.hxx"
+#include "xmloff/VisAreaContext.hxx"
 
 using namespace com::sun::star;
 using namespace rtl;

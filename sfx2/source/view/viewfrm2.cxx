@@ -30,7 +30,7 @@
 
 #include "impviewframe.hxx"
 #include "statcach.hxx"
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"

@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "SchXMLImport.hxx"

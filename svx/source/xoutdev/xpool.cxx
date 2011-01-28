@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/xtable.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>
@@ -52,8 +52,8 @@ XOutdevItemPool::XOutdevItemPool(
     const XubString aNullStr;
     const Bitmap aNullBmp;
     const basegfx::B2DPolyPolygon aNullPol;
-    const Color aNullLineCol(RGB_Color(COL_BLACK));
-    const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));  // "Blue 8"
+    const Color aNullLineCol(RGB_Color(COL_DEFAULT_SHAPE_STROKE));
+    const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
     const XGradient aNullGrad(aNullLineCol, RGB_Color(COL_WHITE));

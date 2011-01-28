@@ -31,7 +31,7 @@
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
 #endif
-#include <prtqry.hxx>
+#include <svx/prtqry.hxx>
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>
 

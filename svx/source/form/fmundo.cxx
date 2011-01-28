@@ -31,10 +31,10 @@
 #include "fmundo.hxx"
 #include "fmpgeimp.hxx"
 #include "svx/dbtoolsclient.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "fmobj.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "svx/fmglob.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmmodel.hxx"
@@ -130,6 +130,8 @@ private:
                 {
                     Reference< XMultiComponentFactory > xMFac(
                     xCtx->getServiceManager(), UNO_QUERY );
+
+                    // SfxObjectShellRef is good here since the model controls the lifetime of the shell
                     SfxObjectShellRef xObjSh = pModel->GetObjectShell();
                     Reference< XMultiServiceFactory > xDocFac;
                     if ( xObjSh.Is() )
@@ -150,6 +152,7 @@ private:
         {
             try
             {
+                // SfxObjectShellRef is good here since the model controls the lifetime of the shell
                 SfxObjectShellRef xObjSh = pModel->GetObjectShell();
                 if ( xObjSh.Is() && m_vbaListener.is() )
                 {

@@ -53,7 +53,7 @@
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/dispatch.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/viewsh.hxx>
 #include "intro.hxx"
@@ -116,21 +116,6 @@ void SfxApplication::Init
     <SfxApplication::OpenClients()>
 */
 {
-#ifdef DDE_AVAILABLE
-#ifndef DBG_UTIL
-    InitializeDde();
-#else
-    if( !InitializeDde() )
-    {
-        ByteString aStr( "Kein DDE-Service moeglich. Fehler: " );
-        if( GetDdeService() )
-            aStr += GetDdeService()->GetError();
-        else
-            aStr += '?';
-        DBG_ASSERT( sal_False, aStr.GetBuffer() )
-    }
-#endif
-#endif
 }
 
 //--------------------------------------------------------------------

@@ -1445,7 +1445,7 @@ uno::Sequence<sal_Int16> SAL_CALL SalGtkFilePicker::getSupportedImageFormats() t
     OSL_ASSERT( m_pDialog != NULL );
 
     // TODO return m_pImpl->getSupportedImageFormats();
-    return 0;
+    return uno::Sequence<sal_Int16>();
 }
 
 sal_Int32 SAL_CALL SalGtkFilePicker::getTargetColorDepth() throw( uno::RuntimeException )
