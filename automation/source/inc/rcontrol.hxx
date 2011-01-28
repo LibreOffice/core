@@ -37,9 +37,7 @@
 #ifndef _RCONTROL_HXX
 #define _RCONTROL_HXX
 
-
 #define UID_ACTIVE          0
-
 
 #define SI_IPCCommandBlock  1
 #define SI_SocketCommandBlock   SI_IPCCommandBlock  // Zumindest erstmal
@@ -61,7 +59,6 @@
 #define BinString           12
 #define BinBool             13
 #define BinSbxValue         15
-
 
 // Classes
 // !!!Diese Defines duerfen niemals geaendert werden!!!
@@ -117,7 +114,6 @@
 
 #define C_Window            47
 
-
 #define C_PatternBox        60
 #define C_ToolBox           61
 #define C_ValueSet          62
@@ -129,9 +125,6 @@
 #define C_ButtonDialog      67
 
 #define C_Dialog            68
-
-
-
 
 #define M_WITH_RETURN       0x0200  // Die Variable wird zum Aufnehmen des Wertes gespeichert
 #define M_KEY_STRING        0x0400  // Key Befehle werden umgewandelt i.e. "<return><up>"
@@ -173,8 +166,6 @@
 #define M_Dock              47
 #define M_Undock            48
 
-
-
 #define M_TypeKeys          ( M_KEY_STRING | 50 )
 #define M_MouseDown         51
 #define M_MouseUp           52
@@ -207,7 +198,6 @@
 #define M_Pin               82
 
 #define M_UseMenu           83      // Use the menu of the next possible parent of given Window
-
 #define M_OpenMenu          84      // MenuButtons and Menus in ToolBoxes
 
 #define M_Restore           85      // Window Control together with M_Maximize and M_Minimize
@@ -260,7 +250,6 @@
 #define M_StatusGetItemCount ( M_WITH_RETURN | 34 )
 #define M_StatusGetItemId   ( M_WITH_RETURN | 35 )
 
-//
 #define M_GetMouseStyle     ( M_WITH_RETURN | 36 )
 
 // support for Messagebox with checkbox
@@ -273,10 +262,8 @@
 // Dieser befehl wird nur intern im Controller (sts library) verwendet. Sie tauchen nicht im Testtool auf!
 #define _M_IsEnabled        ( M_WITH_RETURN | 50 )
 
-
 #define M_GetFixedTextCount ( M_WITH_RETURN | 51 )
 #define M_GetFixedText      ( M_WITH_RETURN | 52 )
-
 
 #define M_IsMin             ( M_WITH_RETURN | 53 )
 #define M_IsRestore         ( M_WITH_RETURN | 54 )
@@ -292,7 +279,6 @@
 
 //#define M_SOFFICE           0x0800  // Command valid for Star/Open Office
 //#define M_MOZILLA           0x1000  // Command valid for Mozilla
-
 
 // RemoteCommands
 #define RC_AppAbort         ( M_SOFFICE | M_MOZILLA | 1 )
@@ -316,23 +302,14 @@
 
 #define RC_CaptureAssertions (M_SOFFICE | M_MOZILLA | 17 )
 #define RC_Assert           ( M_SOFFICE | M_MOZILLA | 18 )
-
 #define RC_MenuOpen         ( M_SOFFICE | M_MOZILLA | 19 )
-
 #define RC_TypeKeysDelay    ( M_SOFFICE | M_MOZILLA | 20 )
-
 #define RC_ShowBar          (             M_MOZILLA | 21 )
-
 #define RC_LoadURL          (             M_MOZILLA | 22 )
-
 #define RC_CloseSysDialog   ( M_SOFFICE             | 23 )
-
 #define RC_SAXRelease       ( M_SOFFICE             | 24 )
-
 #define RC_RecordMacro      ( M_SOFFICE             | 25 )
-
 #define RC_ActivateDocument ( M_SOFFICE             | 26 )
-
 #define RC_CatchGPF         ( M_SOFFICE             | 27 )
 
 #define _RC_LAST_NO_RETURN                            27
@@ -408,8 +385,6 @@
 #define RET_DirectLoging    136         // Direktes Übertragen von Informationen in das Log
 #define RET_MacroRecorder   137         // MakroRecorder Befehl übertragen
 
-
-
 // Subcodes die in nUId geliefert werden
 // für F_ProfileInfo
 #define S_ProfileReset      201         // nNr1 = Anzahl Borders
@@ -427,8 +402,6 @@
 #define S_AssertWarning     221
 #define S_AssertTrace       222
 #define S_QAError           223
-
-
 
 // Constants which are available in VCLTestTool scripts
 
@@ -484,7 +457,6 @@
 
 // Zusätzliche Beschreibung!! wird auch mit dem Rest verodert
 //#define PARAM_STR_RAW           0x8000        // Der Zeichensatz der Strings wird nicht konvertiert(für Fareastern)
-
 
 #define ERR_SEND_TIMEOUT        100
 #define ERR_EXEC_TIMEOUT        101
