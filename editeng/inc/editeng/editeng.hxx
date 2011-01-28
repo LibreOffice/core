@@ -306,8 +306,8 @@ public:
     void            Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation = 0 );
 
 //  sal_uInt32: Fehlercode des Streams.
-    sal_uInt32           Read( SvStream& rInput, const String& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
-    sal_uInt32          Write( SvStream& rOutput, EETextFormat );
+        sal_uLong               Read( SvStream& rInput, const String& rBaseURL, EETextFormat, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
+    sal_uLong       Write( SvStream& rOutput, EETextFormat );
 
     void            SetStatusEventHdl( const Link& rLink );
     Link            GetStatusEventHdl() const;
