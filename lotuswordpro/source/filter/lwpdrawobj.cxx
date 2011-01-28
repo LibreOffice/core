@@ -940,9 +940,7 @@ XFFrame* LwpDrawArc::CreateDrawObj(const rtl::OUString& rStyleName )
     XFPoint aCtl2((double)m_aVector[2].x/TWIPS_PER_CM* m_pTransData->fScaleX,
         (double)m_aVector[2].y/TWIPS_PER_CM * m_pTransData->fScaleY);
     pArc->CurveTo(aDest, aCtl1, aCtl2);
-//  pArc->CurveTo(XFPoint((double)m_aVector[3].x/TWIPS_PER_CM, (double)m_aVector[3].y/TWIPS_PER_CM),
-//      XFPoint((double)m_aVector[1].x/TWIPS_PER_CM, (double)m_aVector[1].y/TWIPS_PER_CM),
-//      XFPoint((double)m_aVector[2].x/TWIPS_PER_CM, (double)m_aVector[2].y/TWIPS_PER_CM));
+
     this->SetPosition(pArc);
 
     pArc->SetStyleName(rStyleName);
@@ -1051,39 +1049,6 @@ void LwpDrawTextBox::Read()
     m_pStream->Read(&m_aTextRec.nTextRotation, sizeof(m_aTextRec.nTextRotation));
     m_pStream->Read(&m_aTextRec.nTextExtraSpacing, sizeof(m_aTextRec.nTextExtraSpacing));
 
-    /*#ifdef JAPANESE_ENABLED //For Amipro Support KOBA-WADA
-        lubyte compText[3];
-        lsshort TextLength;
-        lubyte * pTextString;
-        cBinaryData.GetUBytes(compText, 2);
-        compText[2] = '\0';
-        if (compText[0] == 0 && compText[1] == 0 && recLen > 105 )
-        {
-            // AmiPro R3.1J's extended text object format
-            TextLength = recLen - 71 - 34;
-            cBinaryData.SkipUBytes(32);
-
-            pTextString = new lubyte[TextLength];
-
-            LASSERT(pTextString != LNULL);
-
-            cBinaryData.GetUBytes(pTextString, TextLength);
-        }
-        else
-        {
-            // AmiPro R3.X original text object format
-
-            // some draw files in version 1.2 have an extra byte following '\0'.
-            // can't rely on that, so read in the whole string into memory.
-            TextLength = recLen - 71;
-            pTextString = new lubyte[TextLength];
-
-            LASSERT(pTextString != LNULL);
-
-            strcpy((char *)pTextString, (const char *)compText);
-            cBinaryData.GetUBytes(pTextString + 2, TextLength - 2);
-        }
-#else*/
         // some draw files in version 1.2 have an extra byte following '\0'.
         // can't rely on that, so read in the whole string into memory.
 
@@ -1092,9 +1057,6 @@ void LwpDrawTextBox::Read()
         m_aTextRec.pTextString = new sal_uInt8 [TextLength];
 
         m_pStream->Read(m_aTextRec.pTextString, TextLength);
-
-//#endif // AmiPro
-
 }
 
 rtl::OUString LwpDrawTextBox::RegisterStyle()
@@ -1121,10 +1083,6 @@ rtl::OUString LwpDrawTextBox::RegisterStyle()
 XFFrame* LwpDrawTextBox::CreateDrawObj(const rtl::OUString& rStyleName )
 {
     XFFrame* pTextBox = new XFFrame(sal_True);
-/*  this->SetPosition(pTextBox);
-    XFRect aBoundRect((double)m_aObjHeader.nLeft/TWIPS_PER_CM, (double)m_aObjHeader.nTop/TWIPS_PER_CM,
-        (double)(m_aObjHeader.nRight-m_aObjHeader.nLeft)/TWIPS_PER_CM, (double)(m_aObjHeader.nBottom-m_aObjHeader.nTop)/TWIPS_PER_CM);
-    pTextBox->SetPosition(aBoundRect);*/
 
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
     rtl_TextEncoding aEncoding;
@@ -1138,10 +1096,6 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const rtl::OUString& rStyleName )
         aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
     }
 
-//  XFTextSpan* pTextSpan = new XFTextSpan();
-//  pTextSpan->SetText(rtl::OUString((sal_Char*)m_aTextRec.pTextString, (TextLength-2), aEncoding));
-//  pTextSpan->SetStyleName(rStyleName);
-
     XFParagraph* pXFPara = new XFParagraph();
     pXFPara->Add(rtl::OUString((sal_Char*)m_aTextRec.pTextString, (TextLength-2), aEncoding));
     pXFPara->SetStyleName(rStyleName);
@@ -1149,12 +1103,6 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const rtl::OUString& rStyleName )
     pTextBox->Add(pXFPara);
     this->SetPosition(pTextBox);
 
-    /*
-    XFFrameStyle* pBoxStyle = new XFFrameStyle();
-    pBoxStyle->SetYPosType(enumXFFrameYPosFromTop, enumXFFrameYRelFrame);
-    pBoxStyle->SetXPosType(enumXFFrameXPosFromLeft, enumXFFrameXRelFrame);
-    pBoxStyle->SetPadding(0.0, 0.0, 0.0, 0.0);
-    */
     XFTextBoxStyle* pBoxStyle = new XFTextBoxStyle();
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -1289,7 +1237,6 @@ void LwpDrawTextArt::Read()
 
     m_pStream->Read(&m_aTextArtRec.nTextAttrs, sizeof(m_aTextArtRec.nTextAttrs));
     m_pStream->Read(&m_aTextArtRec.nTextCharacterSet, sizeof(m_aTextArtRec.nTextCharacterSet));
-//  m_pStream->Read(&m_aTextArtRec.nTextRotation, sizeof(m_aTextArtRec.nTextRotation));
     m_aTextArtRec.nTextRotation = 0;
     m_pStream->Read(&m_aTextArtRec.nTextExtraSpacing, sizeof(m_aTextArtRec.nTextExtraSpacing));
 
@@ -1512,12 +1459,6 @@ void LwpDrawBitmap::Read()
     }
 
     m_pStream->Read(pPicData, nDIBRemaining);
-
-/*  FILE* pStream;
-    pStream = fopen( "drawing_test.bmp", "w+" );
-    fwrite(m_pImageData, sizeof(sal_uInt8), m_aBmpRec.nFileSize, pStream);
-    fclose( pStream );
-*/
 }
 
 rtl::OUString LwpDrawBitmap::RegisterStyle()
