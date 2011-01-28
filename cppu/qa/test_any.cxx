@@ -205,45 +205,25 @@ public:
 class Test: public CppUnit::TestFixture {
 public:
     void testVoid();
-
     void testBoolean();
-
     void testByte();
-
     void testShort();
-
     void testUnsignedShort();
-
     void testLong();
-
     void testUnsignedLong();
-
     void testHyper();
-
     void testUnsignedHyper();
-
     void testFloat();
-
     void testDouble();
-
     void testChar();
-
     void testString();
-
     void testType();
-
     void testSequence();
-
     void testEnum();
-
     void testStruct();
-
     void testPoly();
-
     void testException();
-
     void testInterface();
-
     void testNull();
 
     CPPUNIT_TEST_SUITE(Test);
