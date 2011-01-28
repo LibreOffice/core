@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxsystemdependentwindow \
     toolkit/source/awt/vclxtabcontrol \
     toolkit/source/awt/vclxtabpage \
+    toolkit/source/awt/vclxtabpagecontainer \
     toolkit/source/awt/vclxtoolkit \
     toolkit/source/awt/vclxtopwindow \
     toolkit/source/awt/vclxwindow \
@@ -90,6 +91,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
+    toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
     toolkit/source/controls/eventcontainer \
     toolkit/source/controls/formattedcontrol \
@@ -100,6 +102,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/tabpagecontainer \
+    toolkit/source/controls/tabpagemodel \
     toolkit/source/controls/stdtabcontroller \
     toolkit/source/controls/stdtabcontrollermodel \
     toolkit/source/controls/tkscrollbar \
