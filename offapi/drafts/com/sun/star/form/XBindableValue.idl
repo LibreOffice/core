@@ -48,7 +48,7 @@ interface XValueBinding;
     @see XValueBinding
 
     @deprecated
-        This interface is superseeded by <type scope="com::sun::star::form::binding">XBindableValue</type>
+        This interface is superseded by <type scope="com::sun::star::form::binding">XBindableValue</type>
 */
 interface XBindableValue : com::sun::star::uno::XInterface
 {

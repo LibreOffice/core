@@ -42,7 +42,7 @@ module drafts { module com {  module sun {  module star {  module form {
     an <type>XBindableValue</type> are incompatible
 
     @deprecated
-        This exception is superseeded by <type scope="com::sun::star::form::binding">IncompatibleTypesException</type>
+        This exception is superseded by <type scope="com::sun::star::form::binding">IncompatibleTypesException</type>
 */
 exception IncompatibleTypesException: com::sun::star::uno::Exception
 {

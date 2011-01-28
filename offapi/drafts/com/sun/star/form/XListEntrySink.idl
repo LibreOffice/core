@@ -43,7 +43,7 @@ interface XListEntrySource;
 /** specifies support for indirect manipulation of of a string list
 
     @deprecated
-        This interface is superseeded by <type scope="com::sun::star::form::binding">XListEntrySink</type>
+        This interface is superseded by <type scope="com::sun::star::form::binding">XListEntrySink</type>
 */
 interface XListEntrySink : com::sun::star::uno::XInterface
 {

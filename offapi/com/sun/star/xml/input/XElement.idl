@@ -46,10 +46,10 @@ interface XElement : com::sun::star::uno::XInterface
     */
     XElement getParent();
 
-    /** Gets the localname of this element.
+    /** Gets the local name of this element.
 
         @return
-                localname of this element
+                local name of this element
     */
     string getLocalName();
 
@@ -67,12 +67,12 @@ interface XElement : com::sun::star::uno::XInterface
     */
     XAttributes getAttributes();
 
-    /** Called upon each occuring child element.
+    /** Called upon each occurring child element.
 
         @param uid
                namespace uid of element
         @param localName
-               localname of element
+               local name of element
         @param xAttributes
                attributes of element
         @return

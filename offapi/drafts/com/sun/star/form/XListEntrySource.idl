@@ -54,7 +54,7 @@ interface XListEntryListener;
     @see XListEntrySink
 
     @deprecated
-        This interface is superseeded by <type scope="com::sun::star::form::binding">XListEntrySource</type>
+        This interface is superseded by <type scope="com::sun::star::form::binding">XListEntrySource</type>
 */
 interface XListEntrySource : com::sun::star::uno::XInterface
 {
@@ -87,7 +87,7 @@ interface XListEntrySource : com::sun::star::uno::XInterface
                 raises( com::sun::star::lang::NullPointerException );
 
     /** revokes the given listener from the list of components which will
-        be notfiied about changes in the entry list.
+        be notified about changes in the entry list.
 
         @throws <type scope="com::sun::star::lang">NullPointerException</type>
             if the given listener is <NULL/>

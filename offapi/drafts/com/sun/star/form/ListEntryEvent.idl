@@ -45,7 +45,7 @@ module drafts { module com {  module sun {  module star {  module form {
     @see XListEntryListener
 
     @deprecated
-        This structure is superseeded by <type scope="com::sun::star::form::binding">ListEntryEvent</type>
+        This structure is superseded by <type scope="com::sun::star::form::binding">ListEntryEvent</type>
 */
 struct ListEntryEvent : com::sun::star::lang::EventObject
 {

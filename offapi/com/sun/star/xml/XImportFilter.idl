@@ -61,7 +61,7 @@ published interface XImportFilter: com::sun::star::uno::XInterface
           which defines the data source
 
       @param msUserData
-          Sequence of strings which contains the userdata defined in the
+          Sequence of strings which contains the user data defined in the
           TypeDetection.xml
 
       @param xDocHandler

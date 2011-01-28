@@ -52,7 +52,7 @@ interface XXPathObject : com::sun::star::uno::XInterface
     XPathObjectType getObjectType();
 
     /**
-        get the nodes from a nodelist type object
+        get the nodes from a node list type object
     */
     com::sun::star::xml::dom::XNodeList getNodeList();
 

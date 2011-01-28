@@ -48,7 +48,7 @@ interface XNamedNodeMap : com::sun::star::uno::XInterface
     long getLength();
 
     /**
-    Retrieves a node specified by local name
+    Retrieves a node specified by local name.
     */
     XNode getNamedItem([in] string name);
 
@@ -58,7 +58,7 @@ interface XNamedNodeMap : com::sun::star::uno::XInterface
     XNode getNamedItemNS([in] string namespaceURI,[in]  string localName);
 
     /**
-    Returns the indexth item in the map.
+    Returns a node specified by index.
     */
     XNode item([in] long index);
 
