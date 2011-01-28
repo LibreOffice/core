@@ -33,7 +33,7 @@ $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2)
-$(2) : $(3)
+$(2) :| $(3)
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2))
 
 endef
