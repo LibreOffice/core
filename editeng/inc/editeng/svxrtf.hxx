@@ -67,7 +67,7 @@ class SvxNodeIdx
 {
 public:
     virtual ~SvxNodeIdx() {}
-    virtual sal_uInt32  GetIdx() const = 0;
+    virtual sal_uLong   GetIdx() const = 0;
     virtual SvxNodeIdx* Clone() const = 0;  // erzeuge von sich eine Kopie
 };
 
@@ -76,7 +76,7 @@ class SvxPosition
 public:
     virtual ~SvxPosition() {}
 
-    virtual sal_uInt32      GetNodeIdx() const = 0;
+    virtual sal_uLong   GetNodeIdx() const = 0;
     virtual xub_StrLen  GetCntIdx() const = 0;
 
     virtual SvxPosition* Clone() const = 0; // erzeuge von sich eine Kopie
@@ -439,8 +439,8 @@ public:
     void MoveFullNode(const SvxNodeIdx &rOldNode,
         const SvxNodeIdx &rNewNode);
 
-    sal_uInt32 GetSttNodeIdx() const { return pSttNd->GetIdx(); }
-    sal_uInt32 GetEndNodeIdx() const { return pEndNd->GetIdx(); }
+    sal_uLong GetSttNodeIdx() const { return pSttNd->GetIdx(); }
+    sal_uLong GetEndNodeIdx() const { return pEndNd->GetIdx(); }
 
     const SvxNodeIdx& GetSttNode() const { return *pSttNd; }
     const SvxNodeIdx& GetEndNode() const { return *pEndNd; }

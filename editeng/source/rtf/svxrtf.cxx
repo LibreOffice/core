@@ -946,7 +946,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
         SvxRTFItemStackType *pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
 
         do {        // middle check loop
-            sal_uInt32 nOldSttNdIdx = pOld->pSttNd->GetIdx();
+            sal_uLong nOldSttNdIdx = pOld->pSttNd->GetIdx();
             if( !pOld->pChildList &&
                 ((!pOld->aAttrSet.Count() && !pOld->nStyleNo ) ||
                 (nOldSttNdIdx == pInsPos->GetNodeIdx() &&
@@ -981,7 +981,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
             if( bCrsrBack )
             {
                 // am Absatzanfang ? eine Position zurueck
-                sal_uInt32 nNd = pInsPos->GetNodeIdx();
+                sal_uLong nNd = pInsPos->GetNodeIdx();
                 MovePos( sal_False );
                 // if can not move backward then later dont move forward !
                 bCrsrBack = nNd != pInsPos->GetNodeIdx();
