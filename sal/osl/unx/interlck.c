@@ -94,47 +94,16 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return --nCount;
 }
 
-#elif defined ( GCC ) && defined ( POWERPC ) && !defined( AIX )
-
-/*****************************************************************************/
-/* osl_incrementInterlockedCount */
-/*****************************************************************************/
+#elif defined ( GCC )
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    /* "addi" doesn't work with r0 as second parameter */
-    register oslInterlockedCount nCount __asm__ ("r4");
-
-    __asm__ __volatile__ (
-        "1: lwarx   %0,0,%2\n\t"
-        "   addi    %0,%0,1\n\t"
-        "   stwcx.  %0,0,%2\n\t"
-        "   bne-    1b\n\t"
-        "   isync"
-        : "=&r" (nCount), "=m" (*pCount)
-        : "r" (pCount)
-        : "memory");
-
-    return nCount;
+    return __sync_add_and_fetch(pCount, 1);
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    /* "subi" doesn't work with r0 as second parameter */
-    register oslInterlockedCount nCount __asm__ ("r4");
-
-    __asm__ __volatile__ (
-        "1: lwarx   %0,0,%2\n\t"
-        "   subi    %0,%0,1\n\t"
-        "   stwcx.  %0,0,%2\n\t"
-        "   bne-    1b\n\t"
-        "   isync"
-        : "=&r" (nCount), "=m" (*pCount)
-        : "r" (pCount)
-        : "memory");
-
-    return nCount;
+    return __sync_sub_and_fetch(pCount, 1);
 }
-
 #else
 /* use only if nothing else works, expensive due to single mutex for all reference counts */
 
