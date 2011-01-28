@@ -1001,7 +1001,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 BYTE nLevel = pDlg->GetLevel();
                 BYTE nPara = pDlg->GetPara();
                 SwDoc* pSmryDoc = new SwDoc();
-                SfxObjectShellRef xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
+                SfxObjectShellLock xDocSh( new SwDocShell( pSmryDoc, SFX_CREATE_MODE_STANDARD));
                 xDocSh->DoInitNew( 0 );
 
                 BOOL bImpress = FN_ABSTRACT_STARIMPRESS == nWhich;

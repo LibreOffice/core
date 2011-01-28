@@ -1318,9 +1318,10 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 // Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
 //  0 - Fehler, konnte DocShell nicht finden
 //  1 - DocShell ist ein existieren Document
-//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden
+//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
 
 int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+                        SfxObjectShellLock& xLockRef,
                         const String& rFileName,
                         const String& rPasswd,
                         String& rFilter,
@@ -1406,7 +1407,9 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             // ohne Filter geht gar nichts
             pMed->SetFilter( pSfxFlt );
 
-            xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            // if the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
+            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )
                 return 2;
         }
@@ -1503,6 +1506,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
             RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;
             SfxObjectShellRef xDocSh;
+            SfxObjectShellLock xLockRef;
             int nRet;
             if( !sFileName.Len() )
             {
@@ -1511,7 +1515,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
             }
             else
             {
-                nRet = lcl_FindDocShell( xDocSh, sFileName,
+                nRet = lcl_FindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )

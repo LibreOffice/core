@@ -72,6 +72,7 @@ class SwList;
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <vos/ref.hxx>
 #include <svx/svdtypes.hxx>
+#include <sfx2/objsh.hxx>
 #include <svl/style.hxx>
 #include <editeng/numitem.hxx>
 #include "comphelper/implementationreference.hxx"
@@ -92,8 +93,6 @@ class SwList;
 
 #include <boost/scoped_ptr.hpp>
 
-class SfxObjectShell;
-class SfxObjectShellRef;
 class SvxForbiddenCharactersTable;
 class SwExtTextInput;
 class DateTime;
@@ -352,9 +351,8 @@ class SW_DLLPUBLIC SwDoc :
     SvxMacroTableDtor *pMacroTable;     // Tabelle der dokumentglobalen Macros
 
     SwDocShell      *pDocShell;         // Ptr auf die SfxDocShell vom Doc
-    SfxObjectShellRef* pDocShRef;     // fuers Kopieren von OLE-Nodes (wenn keine
-                                        // DocShell gesetzt ist, muss dieser
-                                        // Ref-Pointer gesetzt sein!!!!)
+    SfxObjectShellLock xTmpDocShell;    // A temporary shell that is used to copy OLE-Nodes
+
     sfx2::LinkManager   *pLinkMgr;          // Liste von Verknuepften (Grafiken/DDE/OLE)
 
     SwAutoCorrExceptWord *pACEWord;     // fuer die automatische Uebernahme von
@@ -1789,10 +1787,10 @@ public:
     const SwDocShell* GetDocShell() const   { return pDocShell; }
     void SetDocShell( SwDocShell* pDSh );
 
-    // falls beim Kopieren von OLE-Nodes eine DocShell angelegt werden muss,
-    // dann MUSS der Ref-Pointer besetzt sein!!!!
-    SfxObjectShellRef* GetRefForDocShell()            { return pDocShRef; }
-    void SetRefForDocShell( SfxObjectShellRef* p )    { pDocShRef = p; }
+    // in case during copying of embedded object a new shell is created,
+    // it should be set here and cleaned later
+    void SetTmpDocShell( SfxObjectShellLock rLock )    { xTmpDocShell = rLock; }
+    SfxObjectShellLock GetTmpDocShell()    { return xTmpDocShell; }
 
     // fuer die TextBausteine - diese habe nur ein SvPersist zur
     // Verfuegung

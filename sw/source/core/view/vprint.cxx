@@ -444,8 +444,8 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     }
 
     // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+//REMOVE    //      if( aDocShellRef.Is() )
+//REMOVE    //          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
     // und fuellen es mit dem selektierten Bereich
     pFESh->Copy( pPrtDoc );
 
@@ -503,10 +503,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
     SwDoc *pOutDevDoc;
-
-    //!! muss warum auch immer hier in diesem scope existieren !!
-    //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
-    SfxObjectShellRef aDocShellRef;
 
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.
