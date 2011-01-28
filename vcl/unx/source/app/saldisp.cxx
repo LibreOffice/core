@@ -375,11 +375,6 @@ sal_GetServerVendor( Display *p_display )
         { vendor_none,        NULL,                               0 },
     };
 
-#ifdef _USE_PRINT_EXTENSION_
-    if ( ! XSalIsDisplay( p_display ) )
-        return vendor_xprinter;
-#endif
-
     // handle regular server vendors
     char     *p_name   = ServerVendor( p_display );
     vendor_t *p_vendor;
@@ -508,7 +503,6 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
-        mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
         m_pDtIntegrator( NULL ),
@@ -557,7 +551,6 @@ void SalDisplay::doDestruct()
     m_pDtIntegrator = NULL;
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
-    DestroyFontCache();
 
     if( IsDisplay() )
     {
@@ -814,8 +807,6 @@ void SalDisplay::Init()
     eWindowManager_     = otherwm;
     nProperties_        = PROPERTY_DEFAULT;
     hEventGuard_        = NULL;
-    m_pFontCache        = NULL;
-    mpFontList          = (XlfdStorage*)NULL;
     mpFactory           = (AttributeProvider*)NULL;
     m_pCapture          = NULL;
     m_bXinerama         = false;
@@ -2575,6 +2566,7 @@ void SalDisplay::PrintInfo() const
             fprintf( stderr, "\tProperties        \t0x%lX\n", GetProperties() );
         if( eWindowManager_ != otherwm )
             fprintf( stderr, "\tWindowmanager     \t%d\n", eWindowManager_ );
+        fprintf( stderr, "\tWMName            \t%s\n", rtl::OUStringToOString( getWMAdaptor()->getWindowManagerName(), osl_getThreadTextEncoding() ).getStr() );
     }
     fprintf( stderr, "Screen\n" );
     fprintf( stderr, "\tResolution/Size   \t%ld*%ld %ld*%ld %.1lf\"\n",

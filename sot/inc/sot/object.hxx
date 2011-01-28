@@ -381,22 +381,17 @@ SotFactory * ClassName::pFactory = NULL;                                   \
 #pragma warning(disable: 4250)
 #endif
 
-class SvAggregateMemberList;
 struct IUnknown;
 class SOT_DLLPUBLIC SotObject : virtual public SvRefBase
 {
 friend class SotFactory;
 friend class SvObject;
-    SvAggregateMemberList * pAggList; // fuer Aggregation, erstes ist das MainObj
     USHORT      nStrongLockCount;
     USHORT      nOwnerLockCount;
     BOOL        bOwner:1,
                 bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
                 bInClose:1;         // TRUE, im DoClose
 
-    void *      DownAggCast( const SotFactory * pFact );
-    void        RemoveInterface( ULONG );
-    void        RemoveInterface( SotObject * );
 #if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
 public:
 #else
@@ -414,25 +409,10 @@ public:
     virtual IUnknown *  GetInterface( const SvGlobalName & );
 
     BOOL                Owner() const { return bOwner; }
-    BOOL                IsSvObject() const;
 
-    // Methoden fuer die Aggregation (siehe OLE2-Spec)
-    BOOL                ShouldDelete();
-    virtual void        QueryDelete();
-    SvAggregateMemberList & GetAggList();
-    void                AddInterface( SotObject * );
-    void                AddInterface( SotFactory * );
-    virtual SotObjectRef CreateAggObj( const SotFactory * );
-    void *              AggCast( const SotFactory * pFact );
-    void *              CastAndAddRef( const SotFactory * pFact );
-    SotObject *         GetMainObj() const;
+    void*               CastAndAddRef( const SotFactory * pFact );
 
-                        // !!! Read the Manual !!!
-    virtual USHORT      FuzzyLock( BOOL bLock, BOOL bIntern, BOOL bClose );
-    void                Lock( BOOL bLock )
-                        {
-                            FuzzyLock( bLock, TRUE, TRUE );
-                        }
+    USHORT              Lock( BOOL bLock ); // affects nStrongLockCount
     USHORT              GetOwnerLockCount() const { return nOwnerLockCount; }
     USHORT              GetStrongLockCount() const { return nStrongLockCount; }
 
@@ -449,18 +429,6 @@ private:
 
 //==================class SotObjectRef======================================
 SV_IMPL_REF(SotObject)
-
-inline SotObjectRef::SotObjectRef( SotObject * pObjP, SvCastEnum )
-{
-    if( pObjP )
-    {
-        pObj = (SotObject *)pObjP->AggCast( SotObject::ClassFactory() );
-        if( pObj )
-            pObj->AddRef();
-    }
-    else
-        pObj = NULL;
-}
 
 //==================class SotObject*List====================================
 SV_DECL_REF_LIST(SotObject,SotObject*)
