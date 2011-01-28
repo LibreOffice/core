@@ -37,9 +37,7 @@
 #include <doc.hxx>
 #include <paratr.hxx>           // fuer SwParaFmt - SwHyphenBug
 #include <swcache.hxx>
-// --> OD 2006-11-22 #i71574#
 #include <fmtcolfunc.hxx>
-// <--
 
 TYPEINIT1( SwFmt, SwClient );   //rtti fuer SwFmt
 
@@ -450,12 +448,11 @@ BOOL SwFmt::SetFmtAttr(const SfxPoolItem& rAttr )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rAttr ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
+        // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL && rAttr.Which() == RES_PARATR_NUMRULE )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {
@@ -501,12 +498,11 @@ BOOL SwFmt::SetFmtAttr( const SfxItemSet& rSet )
     {
         if( 0 != ( bRet = (0 != aSet.Put( rSet ))) )
             aSet.SetModifyAtAttr( this );
-        // --> OD 2006-11-22 #i71574#
+        // #i71574#
         if ( nFmtWhich == RES_TXTFMTCOLL )
         {
             TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle( this );
         }
-        // <--
     }
     else
     {
@@ -563,10 +559,9 @@ BOOL SwFmt::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
 
 
 
-// --> OD 2007-01-24 #i73790#
+// #i73790#
 // method renamed
 USHORT SwFmt::ResetAllFmtAttr()
-// <--
 {
     if( !aSet.Count() )
         return 0;
@@ -639,9 +634,8 @@ void SwFmt::DelDiffs( const SfxItemSet& rSet )
     }
 }
 
-/** SwFmt::IsBackgroundTransparent - for feature #99657#
+/** SwFmt::IsBackgroundTransparent
 
-    OD 22.08.2002
     Virtual method to determine, if background of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent background.
@@ -655,9 +649,8 @@ sal_Bool SwFmt::IsBackgroundTransparent() const
     return sal_False;
 }
 
-/** SwFmt::IsShadowTransparent - for feature #99657#
+/** SwFmt::IsShadowTransparent
 
-    OD 22.08.2002
     Virtual method to determine, if shadow of format is transparent.
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent shadow.

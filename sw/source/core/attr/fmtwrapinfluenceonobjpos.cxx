@@ -106,12 +106,11 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
         {
             sal_Int16 nNewWrapInfluence = 0;
             rVal >>= nNewWrapInfluence;
-            // --> OD 2004-10-18 #i35017# - constant names have changed and
+            // #i35017# - constant names have changed and
             // <ITERATIVE> has been added
             if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
                  nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
-            // <--
             {
                 SetWrapInfluenceOnObjPos( nNewWrapInfluence );
             }
@@ -132,12 +131,11 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, BYTE nMemberId )
 
 void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
-    // --> OD 2004-10-18 #i35017# - constant names have changed and consider
+    // #i35017# - constant names have changed and consider
     // new value <ITERATIVE>
     if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
-    // <--
     {
         mnWrapInfluenceOnPosition = _nWrapInfluenceOnPosition;
     }
@@ -147,7 +145,7 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
 }
 
-// --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+// #i35017# - add parameter <_bIterativeAsOnceConcurrent>
 // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
 sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
                                 const bool _bIterativeAsOnceConcurrent ) const
@@ -162,6 +160,5 @@ sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
 
     return nWrapInfluenceOnPosition;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

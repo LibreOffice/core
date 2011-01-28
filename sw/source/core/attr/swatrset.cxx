@@ -61,7 +61,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 2, 1, 75, pVersionMap2 );
     SetVersionMap( 3, 1, 86, pVersionMap3 );
     SetVersionMap( 4, 1,121, pVersionMap4 );
-    // OD 2004-01-21 #i18732# - apply new version map
+    // #i18732# - apply new version map
     SetVersionMap( 5, 1,130, pVersionMap5 );
     SetVersionMap( 6, 1,136, pVersionMap6 );
 }
@@ -246,9 +246,8 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
     {
         if( Count() )
         {
-            // --> OD 2008-08-15 #i92811#
+            // #i92811#
             SfxStringItem* pNewListIdItem( 0 );
-            // <--
 
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
@@ -285,7 +284,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     // copy list style, if needed
                     const String sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
-                    // --> OD 2008-08-15 #i92811#
+                    // #i92811#
                     const SwNumRule* pDstDocNumRule =
                                 pDstDoc->FindNumRulePtr( sDefaultListStyleName );
                     if ( !pDstDocNumRule )
@@ -316,12 +315,11 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                         // copy list
                         pDstDoc->createList( sListId, sDefaultListStyleName );
                     }
-                    // <--
                 }
             }
 
-            // JP 04.02.99: Task #61467# Seitenvorlagenwechsel mit kopieren
-            //              Gegenueber dem alten Verhalten, sie zu entfernen
+            // Seitenvorlagenwechsel mit kopieren Gegenueber dem alten
+            // Verhalten, sie zu entfernen
             const SwPageDesc* pPgDesc;
             if( pSrcDoc != pDstDoc && SFX_ITEM_SET == GetItemState(
                                             RES_PAGEDESC, FALSE, &pItem ) &&
@@ -344,12 +342,11 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
                 if( pCNd )
                 {
-                    // --> OD 2008-08-15 #i92811#
+                    // #i92811#
                     if ( pNewListIdItem != 0 )
                     {
                         aTmpSet.Put( *pNewListIdItem );
                     }
-                    // <--
                     pCNd->SetAttr( aTmpSet );
                 }
                 else
@@ -357,7 +354,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             }
             else if( pCNd )
             {
-                // --> OD 2008-08-15 #i92811#
+                // #i92811#
                 if ( pNewListIdItem != 0 )
                 {
                     SfxItemSet aTmpSet( *this );
@@ -368,15 +365,13 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 {
                     pCNd->SetAttr( *this );
                 }
-                // <--
             }
             else
                 pFmt->SetFmtAttr( *this );
 
-            // --> OD 2008-08-15 #i92811#
+            // #i92811#
             delete pNewListIdItem;
             pNewListIdItem = 0;
-            // <--
         }
     }
 #if OSL_DEBUG_LEVEL > 1

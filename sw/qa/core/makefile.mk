@@ -150,6 +150,7 @@ STAR_RESOURCEPATH:=$(PWD)/$(BIN)$(PATH_SEPERATOR)$(SOLARBINDIR)
 .EXPORT : STAR_RESOURCEPATH
 
 test .PHONY: $(SHL1TARGETN) $(SHL2TARGETN) $(MISC)/$(TARGET)/services.rdb $(MISC)$/$(TARGET)$/types.rdb $(MISC)/$(TARGET)/udkapi.rdb
+    echo $(STAR_RESOURCEPATH)
     @echo ----------------------------------------------------------
     @echo - start unit test \#1 on library $(SHL1TARGETN)
     @echo ----------------------------------------------------------
