@@ -95,10 +95,10 @@ extern cpp_vtable_call: proc
 
 fp_spill_templates:
 public fp_spill_templates
-    movsd qword ptr (40+32)[rsp], xmm3
-    movsd qword ptr (40+24)[rsp], xmm2
-    movsd qword ptr (40+16)[rsp], xmm1
     movsd qword ptr (40+8)[rsp], xmm0
+    movsd qword ptr (40+16)[rsp], xmm1
+    movsd qword ptr (40+24)[rsp], xmm2
+    movsd qword ptr (40+32)[rsp], xmm3
 fp_spill_templates_end:
 public fp_spill_templates_end
 
@@ -148,13 +148,13 @@ public trampoline_template_spill_params
     ;; generated code snippet with floating-point moves for
     ;; floating-point parameters.
 
-    mov qword ptr (40+32)[rsp], r9
+    mov qword ptr (40+8)[rsp], rcx
+    nop
+    mov qword ptr (40+16)[rsp], rdx
     nop
     mov qword ptr (40+24)[rsp], r8
     nop
-    mov qword ptr (49+16)[rsp], rdx
-    nop
-    mov qword ptr (40+8)[rsp], rcx
+    mov qword ptr (40+32)[rsp], r9
     nop
 trampoline_template_spill_params_end::
 public trampoline_template_spill_params_end
