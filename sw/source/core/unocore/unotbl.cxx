@@ -69,6 +69,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/XTextSection.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/table/ShadowFormat.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
 #include <com/sun/star/table/TableBorderDistances.hpp>
@@ -3851,6 +3852,14 @@ void SwXCellRange::setPropertyValue(const OUString& rPropertyName,
                     pDoc->SetBoxAttr( *pCrsr, aNumberFormat);
                 }
                 break;
+                case RES_VERT_ORIENT:
+                {
+                    sal_Int16 nAlign = -1;
+                    aValue >>= nAlign;
+                    if( nAlign >= text::VertOrientation::NONE && nAlign <= text::VertOrientation::BOTTOM)
+                        pDoc->SetBoxAlign( *pCrsr, nAlign );
+                }
+                break;
                 case FN_UNO_RANGE_ROW_LABEL:
                 {
                     sal_Bool bTmp = *(sal_Bool*)aValue.getValue();
@@ -3926,6 +3935,15 @@ uno::Any SwXCellRange::getPropertyValue(const OUString& rPropertyName) throw( be
                     pDoc->GetTabBorders(*pTblCrsr, aSet);
                     const SvxBoxItem& rBoxItem = ((const SvxBoxItem&)aSet.Get(RES_BOX));
                     rBoxItem.QueryValue(aRet, pEntry->nMemberId);
+                }
+                break;
+                case RES_VERT_ORIENT:
+                {
+                    SwFmtVertOrient aVertOrient;
+                    if( pTblCrsr->GetDoc()->GetBoxAttr( *pTblCrsr, aVertOrient ) )
+                    {
+                        aVertOrient.QueryValue( aRet, pEntry->nMemberId );
+                    }
                 }
                 break;
                 case RES_BOXATR_FORMAT:

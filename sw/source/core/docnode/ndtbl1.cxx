@@ -1209,6 +1209,18 @@ BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
                     else if( rToFill != rDir )
                         bRet = FALSE;
                 }
+                case RES_VERT_ORIENT:
+                {
+                    const SwFmtVertOrient& rOrient =
+                                    aBoxes[i]->GetFrmFmt()->GetVertOrient();
+                    if( !bOneFound )
+                    {
+                        (SwFmtVertOrient&)rToFill = rOrient;
+                        bOneFound = TRUE;
+                    }
+                    else if( rToFill != rOrient )
+                        bRet = FALSE;
+                }
             }
 
             if ( FALSE == bRet )
