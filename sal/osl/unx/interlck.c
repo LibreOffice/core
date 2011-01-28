@@ -46,52 +46,40 @@ extern int osl_isSingleCPU;
 /*****************************************************************************/
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    register oslInterlockedCount nCount asm("%eax");
-
-    nCount = 1;
-
+    // Fast case for old, slow, single CPU Intel machines for whom
+    // interlocking is a performance nightmare.
     if ( osl_isSingleCPU ) {
-        __asm__ __volatile__ (
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-    }
-    else {
-        __asm__ __volatile__ (
-            "lock\n\t"
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-    }
+        register oslInterlockedCount nCount asm("%eax");
 
-    return ++nCount;
+        nCount = 1;
+
+        __asm__ __volatile__ (
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+        return ++nCount;
+    }
+    else
+        return __sync_add_and_fetch (pCount, 1);
 }
 
 oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* pCount)
 {
-    register oslInterlockedCount nCount asm("%eax");
-
-    nCount = -1;
-
     if ( osl_isSingleCPU ) {
-        __asm__ __volatile__ (
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-    }
-    else {
-        __asm__ __volatile__ (
-            "lock\n\t"
-            "xaddl %0, %1\n\t"
-        :   "+r" (nCount), "+m" (*pCount)
-        :   /* nothing */
-        :   "memory");
-    }
+        register oslInterlockedCount nCount asm("%eax");
 
-    return --nCount;
+        nCount = -1;
+
+        __asm__ __volatile__ (
+            "xaddl %0, %1\n\t"
+        :   "+r" (nCount), "+m" (*pCount)
+        :   /* nothing */
+        :   "memory");
+        return --nCount;
+    }
+    else
+        return __sync_sub_and_fetch (pCount, 1);
 }
 
 #elif defined ( GCC )
