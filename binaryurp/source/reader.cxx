@@ -114,6 +114,7 @@ Reader::Reader(rtl::Reference< Bridge > const & bridge): bridge_(bridge) {
 Reader::~Reader() {}
 
 void Reader::run() {
+    setName("binaryurpReader");
     try {
         bridge_->sendRequestChangeRequest();
         css::uno::Reference< css::connection::XConnection > con(

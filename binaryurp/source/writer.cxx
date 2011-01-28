@@ -153,6 +153,7 @@ void Writer::stop() {
 Writer::~Writer() {}
 
 void Writer::run() {
+    setName("binaryurpWriter");
     try {
         unblocked_.wait();
         for (;;) {
