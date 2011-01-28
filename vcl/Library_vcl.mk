@@ -59,6 +59,7 @@ $(eval $(call gb_Library_set_defs,vcl,\
     $$(DEFS) \
     -DVCL_DLLIMPLEMENTATION \
     -DCUI_DLL_NAME=\"$(or $(call gb_Library_get_dllname,cui),$(call gb_Library_get_filename,cui))\" \
+    -DDLLPOSTFIX=$(subst $(or $(gb_Library_DLLEXT),$(gb_Library_PLAINEXT)),,$(gb_Library_OOOEXT)) \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,vcl,\
