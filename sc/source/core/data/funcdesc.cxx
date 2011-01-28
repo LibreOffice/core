@@ -363,6 +363,11 @@ bool ScFuncDesc::isParameterOptional(sal_uInt32 _nPos) const
     return pDefArgFlags[_nPos].bOptional;
 }
 
+bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
+{
+    return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) == COMPARE_LESS);
+}
+
 //===================================================================
 // class ScFunctionList:
 //===================================================================
@@ -555,9 +560,13 @@ ScFunctionList::~ScFunctionList()
     }
 }
 
+//===================================================================
+// class ScFunctionCategory:
+//===================================================================
+
 sal_uInt32 ScFunctionCategory::getCount() const
 {
-    return m_pCategory->Count();
+    return m_pCategory->size();
 }
 
 const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
@@ -575,9 +584,8 @@ const formula::IFunctionManager* ScFunctionCategory::getFunctionManager() const
 const formula::IFunctionDescription* ScFunctionCategory::getFunction(sal_uInt32 _nPos) const
 {
     const ScFuncDesc* pDesc = NULL;
-    sal_uInt32 i = 0;
-    for (pDesc = (const ScFuncDesc*)m_pCategory->First(); i < _nPos &&  pDesc; pDesc = (const ScFuncDesc*)m_pCategory->Next(),++i)
-        ;
+    if(_nPos < m_pCategory->size())
+        pDesc = m_pCategory->at(_nPos);
     return pDesc;
 }
 
@@ -591,42 +599,44 @@ sal_uInt32 ScFunctionCategory::getNumber() const
 //========================================================================
 
 ScFunctionMgr::ScFunctionMgr() :
-    pFuncList( ScGlobal::GetStarCalcFunctionList() ),
-    pCurCatList( NULL )
+    pFuncList( ScGlobal::GetStarCalcFunctionList() )
 {
     DBG_ASSERT( pFuncList, "Functionlist not found." );
-    sal_uInt32 nCount = pFuncList->GetCount();
-    ScFuncDesc* pDesc;
-    List* pRootList;
-    sal_uInt32 n;
+    sal_uInt32 catCount[MAX_FUNCCAT] = {0};
 
-    for (sal_uInt16 i = 0; i < MAX_FUNCCAT; ++i) // create category lists
-        aCatLists[i] = new List;
+    aCatLists[0] = new ::std::vector<const ScFuncDesc*>();
+    aCatLists[0]->reserve(pFuncList->GetCount());
 
-    pRootList = aCatLists[0]; // create cumulative list ("All")
-    CollatorWrapper* pCaseCollator = ScGlobal::GetCaseCollator();
-    for ( n=0; n<nCount; n++ )
+    // Retrieve all functions, store in cumulative ("All") category, and count
+    // number of functions in each category
+    for(const ScFuncDesc* pDesc = pFuncList->First(); pDesc; pDesc = pFuncList->Next())
     {
-        sal_uInt32 nTmpCnt=0;
-        pDesc = pFuncList->GetFunction(n);
-        for (nTmpCnt = 0; nTmpCnt < n; nTmpCnt++)
-        {
-            // it's case sensitiv, but special characters have to be put the right place
-            const ScFuncDesc* pTmpDesc = static_cast<const ScFuncDesc*>(
-                pRootList->GetObject(nTmpCnt));
-            if ( pCaseCollator->compareString(*pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
-                break;
-        }
-        pRootList->Insert(static_cast<void*>(pDesc), nTmpCnt); // insert the right place
-    }
-
-    for ( n=0; n<nCount; n++ ) // copy to group list
-    {
-        pDesc = static_cast<ScFuncDesc*>(pRootList->GetObject(n));
         DBG_ASSERT((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
         if ((pDesc->nCategory) < MAX_FUNCCAT)
-            aCatLists[pDesc->nCategory]->Insert(static_cast<void*>(pDesc), LIST_APPEND);
+            ++catCount[pDesc->nCategory];
+        aCatLists[0]->push_back(pDesc);
     }
+
+    // Sort functions in cumulative category by name
+    sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
+
+    // Allocate correct amount of space for categories
+    for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
+    {
+        aCatLists[i] = new ::std::vector<const ScFuncDesc*>();
+        aCatLists[i]->reserve(catCount[i]);
+    }
+
+    // Fill categories with the corresponding functions (still sorted by name)
+    for(::std::vector<const ScFuncDesc*>::iterator iter = aCatLists[0]->begin(); iter!=aCatLists[0]->end(); ++iter)
+    {
+        if (((*iter)->nCategory) < MAX_FUNCCAT)
+            aCatLists[(*iter)->nCategory]->push_back(*iter);
+    }
+
+    // Initialize iterators
+    pCurCatListIter = aCatLists[0]->end();
+    pCurCatListEnd = aCatLists[0]->end();
 }
 
 ScFunctionMgr::~ScFunctionMgr()
@@ -639,9 +649,13 @@ const ScFuncDesc* ScFunctionMgr::Get( const ::rtl::OUString& rFName ) const
 {
     const ScFuncDesc* pDesc = NULL;
     if (rFName.getLength() <= pFuncList->GetMaxFuncNameLen())
-        for (pDesc = First(0); pDesc; pDesc = Next())
-            if (rFName.equalsIgnoreAsciiCase(*pDesc->pFuncName))
-                break;
+    {
+        ScFuncDesc* dummy = new ScFuncDesc();
+        dummy->pFuncName = new ::rtl::OUString(rFName);
+        ::std::vector<const ScFuncDesc*>::iterator lower = lower_bound(aCatLists[0]->begin(), aCatLists[0]->end(), static_cast<const ScFuncDesc*>(dummy), ScFuncDesc::compareByName);
+        if(rFName.equalsIgnoreAsciiCase(*(*lower)->pFuncName))
+            pDesc = *lower;
+    }
     return pDesc;
 }
 
@@ -657,25 +671,32 @@ const ScFuncDesc* ScFunctionMgr::Get( sal_uInt16 nFIndex ) const
 const ScFuncDesc* ScFunctionMgr::First( sal_uInt16 nCategory ) const
 {
     DBG_ASSERT( nCategory < MAX_FUNCCAT, "Unbekannte Kategorie" );
-
+    const ScFuncDesc* pDesc = NULL;
     if ( nCategory < MAX_FUNCCAT )
     {
-        pCurCatList = aCatLists[nCategory];
-        return (const ScFuncDesc*)pCurCatList->First();
+        pCurCatListIter = aCatLists[nCategory]->begin();
+        pCurCatListEnd = aCatLists[nCategory]->end();
+        pDesc = *pCurCatListIter;
     }
     else
     {
-        pCurCatList = NULL;
-        return NULL;
+        pCurCatListIter = aCatLists[0]->end();
+        pCurCatListEnd = aCatLists[0]->end();
     }
+    return pDesc;
 }
 
 const ScFuncDesc* ScFunctionMgr::Next() const
 {
-    if ( pCurCatList )
-        return (const ScFuncDesc*)pCurCatList->Next();
-    else
-        return NULL;
+    const ScFuncDesc* pDesc = NULL;
+    if ( pCurCatListIter != pCurCatListEnd )
+    {
+        if ( (++pCurCatListIter) != pCurCatListEnd )
+        {
+            pDesc = *pCurCatListIter;
+        }
+    }
+    return pDesc;
 }
 
 sal_uInt32 ScFunctionMgr::getCount() const

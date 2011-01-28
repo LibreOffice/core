@@ -185,6 +185,18 @@ public:
     */
     virtual bool isParameterOptional(sal_uInt32 _nPos) const ;
 
+    /**
+      Compares functions by name, respecting special characters
+
+      @param a
+      pointer to first function descriptor
+
+      @param b
+      pointer to second function descriptor
+
+      @return "(a < b)"
+    */
+    static bool compareByName(const ScFuncDesc* a, const ScFuncDesc* b);
 
     /**
       Stores whether a parameter is optional or suppressed
@@ -260,7 +272,7 @@ private:
 class ScFunctionCategory : public formula::IFunctionCategory
 {
 public:
-    ScFunctionCategory(ScFunctionMgr* _pMgr,List* _pCategory,sal_uInt32 _nCategory)
+    ScFunctionCategory(ScFunctionMgr* _pMgr,::std::vector<const ScFuncDesc*>* _pCategory,sal_uInt32 _nCategory)
             : m_pMgr(_pMgr),m_pCategory(_pCategory),m_nCategory(_nCategory){}
     virtual ~ScFunctionCategory(){}
 
@@ -288,7 +300,7 @@ public:
 
 private:
     ScFunctionMgr* m_pMgr; /**< function manager for this category */
-    List* m_pCategory; /**< list of functions in this category */
+    ::std::vector<const ScFuncDesc*>* m_pCategory; /**< list of functions in this category */
     mutable ::rtl::OUString m_sName; /**< name of this category */
     sal_uInt32 m_nCategory; /**< index number of this category */
 };
@@ -407,8 +419,9 @@ public:
 
 private:
     ScFunctionList* pFuncList; /**< list of all calc functions */
-    List*           aCatLists[MAX_FUNCCAT]; /**< array of all categories, 0 is the cumulative ('All') category */
-    mutable List*   pCurCatList; /**< pointer to current category */
+    ::std::vector<const ScFuncDesc*>* aCatLists[MAX_FUNCCAT];
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListIter;
+    mutable ::std::vector<const ScFuncDesc*>::iterator pCurCatListEnd;
 };
 
 #endif // SC_FUNCDESC_HXX
