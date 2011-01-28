@@ -1281,7 +1281,7 @@ BOOL __EXPORT DialogWindow::IsModified()
     return pEditor->IsModified();
 }
 
-SfxUndoManager* __EXPORT DialogWindow::GetUndoManager()
+::svl::IUndoManager* __EXPORT DialogWindow::GetUndoManager()
 {
     return pUndoMgr;
 }

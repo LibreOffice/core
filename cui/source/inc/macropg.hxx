@@ -90,7 +90,7 @@ protected:
 
                                 _SvxMacroTabPage( Window* pParent, const ResId& rId, const SfxItemSet& rItemSet );
 
-    void                        EnableButtons( const String& rLanguage );
+    void                        EnableButtons();
     ::com::sun::star::uno::Any  GetPropsByName( const ::rtl::OUString& eventName, EventsHash& eventsHash );
     ::std::pair< ::rtl::OUString, ::rtl::OUString > GetPairFromAny( ::com::sun::star::uno::Any aAny );
 
