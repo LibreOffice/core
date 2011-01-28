@@ -41,7 +41,6 @@
 #include <rtl/ustrbuf.hxx>
 #include <tools/rcid.h>
 #include <tools/resid.hxx>
-#include <tools/string.hxx>
 #include <unotools/collatorwrapper.hxx>
 
 #include <numeric>
