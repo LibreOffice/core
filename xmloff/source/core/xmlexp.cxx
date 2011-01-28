@@ -2509,7 +2509,7 @@ SvXMLExport::AddAttributeXmlId(uno::Reference<uno::XInterface> const & i_xIfc)
     if ( xMeta.is() )
     {
         const beans::StringPair mdref( xMeta->getMetadataReference() );
-        if ( !mdref.Second.equalsAscii("") )
+        if ( mdref.Second.getLength() )
         {
             const ::rtl::OUString streamName( GetStreamName() );
             if ( streamName.getLength() )

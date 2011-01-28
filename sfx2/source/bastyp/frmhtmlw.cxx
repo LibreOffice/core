@@ -164,7 +164,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const String& rBaseURL,
     {
         // Reload
         if( (i_xDocProps->getAutoloadSecs() != 0) ||
-            !i_xDocProps->getAutoloadURL().equalsAscii("") )
+            i_xDocProps->getAutoloadURL().getLength() )
         {
             String sContent = String::CreateFromInt32(
                                 i_xDocProps->getAutoloadSecs() );

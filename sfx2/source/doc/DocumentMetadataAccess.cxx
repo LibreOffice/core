@@ -545,7 +545,7 @@ readStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     try {
         if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
-        if (dir.equalsAscii("")) {
+        if (dir.getLength() == 0) {
             if (i_xStorage->isStreamElement(i_rPath)) {
                 const uno::Reference<io::XStream> xStream(
                     i_xStorage->openStreamElement(i_rPath,
@@ -665,7 +665,7 @@ writeStream(struct DocumentMetadataAccess_Impl & i_rImpl,
     ::rtl::OUString rest;
     if (!splitPath(i_rPath, dir, rest)) throw uno::RuntimeException();
     try {
-        if (dir.equalsAscii("")) {
+        if (dir.getLength() == 0) {
             exportStream(i_rImpl, i_xStorage, i_xGraphName, i_rPath,
                 i_rBaseURI);
         } else {
@@ -1307,7 +1307,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     if (md.addInputStream()) {
         md[ ::comphelper::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xIn;
     }
-    if (!xIn.is() && URL.equalsAscii("")) {
+    if (!xIn.is() && (URL.getLength() == 0)) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::loadMetadataFromMedium: "
             "inalid medium: no URL, no input stream")), *this, 0);
@@ -1363,7 +1363,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     ::comphelper::MediaDescriptor md(i_rMedium);
     ::rtl::OUString URL;
     md[ ::comphelper::MediaDescriptor::PROP_URL() ] >>= URL;
-    if (URL.equalsAscii("")) {
+    if (URL.getLength() == 0) {
         throw lang::IllegalArgumentException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
             "DocumentMetadataAccess::storeMetadataToMedium: "
             "invalid medium: no URL")), *this, 0);
