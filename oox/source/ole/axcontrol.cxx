@@ -1762,31 +1762,31 @@ EmbeddedControl::~EmbeddedControl()
 ControlModelRef EmbeddedControl::createModel( const OUString& rClassId )
 {
     OUString aClassId = rClassId.toAsciiUpperCase();
-    if( aClassId.equalsAscii( AX_GUID_COMMANDBUTTON ) )
+    if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_COMMANDBUTTON ) ) )
         mxModel.reset( new AxCommandButtonModel );
-    else if( aClassId.equalsAscii( AX_GUID_LABEL ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_LABEL ) ) )
         mxModel.reset( new AxLabelModel );
-    else if( aClassId.equalsAscii( AX_GUID_IMAGE ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_IMAGE ) ) )
         mxModel.reset( new AxImageModel );
-    else if( aClassId.equalsAscii( AX_GUID_TOGGLEBUTTON ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_TOGGLEBUTTON ) ) )
         mxModel.reset( new AxToggleButtonModel );
-    else if( aClassId.equalsAscii( AX_GUID_CHECKBOX ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_CHECKBOX ) ) )
         mxModel.reset( new AxCheckBoxModel );
-    else if( aClassId.equalsAscii( AX_GUID_OPTIONBUTTON ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_OPTIONBUTTON ) ) )
         mxModel.reset( new AxOptionButtonModel );
-    else if( aClassId.equalsAscii( AX_GUID_TEXTBOX ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_TEXTBOX ) ) )
         mxModel.reset( new AxTextBoxModel );
-    else if( aClassId.equalsAscii( AX_GUID_LISTBOX ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_LISTBOX ) ) )
         mxModel.reset( new AxListBoxModel );
-    else if( aClassId.equalsAscii( AX_GUID_COMBOBOX ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_COMBOBOX ) ) )
         mxModel.reset( new AxComboBoxModel );
-    else if( aClassId.equalsAscii( AX_GUID_SPINBUTTON ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_SPINBUTTON ) ) )
         mxModel.reset( new AxSpinButtonModel );
-    else if( aClassId.equalsAscii( AX_GUID_SCROLLBAR ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_SCROLLBAR ) ) )
         mxModel.reset( new AxScrollBarModel );
-    else if( aClassId.equalsAscii( AX_GUID_FRAME ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( AX_GUID_FRAME ) ) )
         mxModel.reset( new AxFrameModel );
-    else if( aClassId.equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )
+    else if( aClassId.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( COMCTL_GUID_SCROLLBAR_60 ) ) )
         mxModel.reset( new ComCtlScrollBarModel( 6 ) );
     else
         mxModel.reset();
