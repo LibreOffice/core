@@ -68,6 +68,8 @@
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
+#include <toolkit/awt/vclxtabpagecontainer.hxx>
+#include <toolkit/awt/vclxtabpagemodel.hxx>
 
 #include <toolkit/awt/xsimpleanimation.hxx>
 #include <toolkit/awt/xthrobber.hxx>
@@ -329,7 +331,9 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "tristatebox",        WINDOW_TRISTATEBOX },
     { "warningbox",         WINDOW_WARNINGBOX },
     { "window",             WINDOW_WINDOW },
-    { "workwindow",         WINDOW_WORKWINDOW }
+    { "workwindow",         WINDOW_WORKWINDOW },
+    { "tabpagecontainer",   WINDOW_CONTROL },
+    { "tabpagemodel",       WINDOW_TABPAGE }
 };
 
 extern "C"
@@ -863,13 +867,25 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
+                *ppNewComp = new VCLXTabPageContainer;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
-                pNewWindow = new TabPage( pParent, nWinBits );
-                *ppNewComp = new VCLXTabPage;
+                /*
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagemodel") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
+                }
+                else
+                */
+                {
+                    pNewWindow = new TabPage( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPage;
+                }
             break;
             case WINDOW_TIMEBOX:
                 pNewWindow = new TimeBox( pParent, nWinBits );
@@ -997,6 +1013,12 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     nWinBits |= WB_SCALE;
                     pNewWindow = new FixedImage( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::XThrobber;
+                }
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
                 }
             break;
             default:    DBG_ERRORFILE( "UNO3!" );
