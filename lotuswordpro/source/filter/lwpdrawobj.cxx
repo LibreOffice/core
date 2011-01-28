@@ -1037,12 +1037,8 @@ void LwpDrawTextBox::Read()
 
     m_pStream->Read(&m_aTextRec.nTextSize, sizeof(m_aTextRec.nTextSize));
 
-    bool TextSizeIsCellHeight = true;
     if (m_aTextRec.nTextSize < 0)
-    {
-        TextSizeIsCellHeight = false;
         m_aTextRec.nTextSize = -m_aTextRec.nTextSize;
-    }
 
     //color
     m_pStream->Read(&m_aTextRec.aTextColor.nR, 1);
@@ -1287,12 +1283,9 @@ void LwpDrawTextArt::Read()
     m_pStream->SeekRel(1);// PitchAndFamily
 
     m_pStream->Read(&m_aTextArtRec.nTextSize, sizeof(m_aTextArtRec.nTextSize));
-    bool TextSizeIsCellHeight = true;
+
     if (m_aTextArtRec.nTextSize < 0)
-    {
-        TextSizeIsCellHeight = false;
         m_aTextArtRec.nTextSize = -m_aTextArtRec.nTextSize;
-    }
 
     m_pStream->Read(&m_aTextArtRec.nTextAttrs, sizeof(m_aTextArtRec.nTextAttrs));
     m_pStream->Read(&m_aTextArtRec.nTextCharacterSet, sizeof(m_aTextArtRec.nTextCharacterSet));
