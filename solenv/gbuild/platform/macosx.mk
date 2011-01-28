@@ -28,7 +28,7 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := TMPDIR= mktemp -t
+gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)
@@ -63,7 +63,7 @@ else # ifeq ($(CPUNAME),POWERPC)
 gb_CPUDEFS := -DPOWERPC -DPPC
 endif
 
-ifeq ($(SYSBASE), "")
+ifeq ($(strip $(SYSBASE)),)
 gb_SDKDIR := /Developer/SDKs/MacOSX10.4u.sdk
 else
 gb_SDKDIR := $(SYSBASE)/MacOSX10.4u.sdk
@@ -274,7 +274,7 @@ gb_Library__FRAMEWORKS += \
 
 gb_Library_PLAINLIBS_NONE += \
     Cocoa \
-     objc \
+    objc \
     jpeg \
     m \
     pthread \

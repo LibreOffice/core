@@ -85,7 +85,7 @@ CDEFS+=-D_DLL
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNCC=-Wall -Wextra -Wendif-labels
 CFLAGSWARNCXX=$(CFLAGSWARNCC) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor -Wno-uninitialized
+    -Wno-non-virtual-dtor
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror
@@ -128,7 +128,7 @@ LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES" && "$(DYNAMIC_CRT)"!=""
-STDLIBCPP=-lstdc++_s
+STDLIBCPP=$(MINGW_SHARED_LIBSTDCPP)
 .ELSE
 STDLIBCPP=-lstdc++
 .ENDIF
