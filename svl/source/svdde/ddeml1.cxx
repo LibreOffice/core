@@ -2580,8 +2580,6 @@ MRESULT ImpDdeMgr::DdeUnadvise( ImpWndProcParams* pParams )
             if( nTransId )
             {
                 ////WRITELOG("DdeUnadvise:Transaction found")
-                Transaction* pTrans = pTransTable;
-                pTrans += (USHORT)nTransId;
                 ImpHCONV* pConv = pConvTable;
                 pConv += (USHORT)hConv;
                 nClosedTransactions = 1;
