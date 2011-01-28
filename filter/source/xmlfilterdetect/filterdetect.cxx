@@ -106,7 +106,6 @@ Reference< com::sun::star::frame::XModel > xModel;
 
         com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInStream;
         ::rtl::OUString temp;
-        //OSL_ENSURE( sal_False, " starting Detect" );
         const PropertyValue * pValue = aArguments.getConstArray();
         sal_Int32 nLength;
         ::rtl::OString resultString;
@@ -115,20 +114,13 @@ Reference< com::sun::star::frame::XModel > xModel;
         sal_Int32 location=nLength;
         for ( sal_Int32 i = 0 ; i < nLength; i++)
         {
-              //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(pValue[i].Name,RTL_TEXTENCODING_ASCII_US).getStr() );
             if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "TypeName" ) ) )
             {
-                  //pValue[i].Value >>= originalTypeName;
-                    location=i;
-                   // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
-
+                location=i;
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "URL" ) ) )
             {
-
                 pValue[i].Value >>= sUrl;
-                   //OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sUrl,RTL_TEXTENCODING_ASCII_US).getStr() );
-
             }
             else if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             {
@@ -198,8 +190,6 @@ Reference< com::sun::star::frame::XModel > xModel;
             }
             aArguments[location].Value <<=sTypeName;
         }
-       // OSL_ENSURE( sal_False, ::rtl::OUStringToOString(sTypeName,RTL_TEXTENCODING_ASCII_US).getStr() );
-
 
     return sTypeName;
 }
@@ -213,7 +203,6 @@ Reference< com::sun::star::frame::XModel > xModel;
     if((clipBoardFormat.match(OUString( RTL_CONSTASCII_USTRINGPARAM( "doctype:" )))))
     {
             ::rtl::OString tryStr = ::rtl::OUStringToOString(clipBoardFormat.copy(8),RTL_TEXTENCODING_ASCII_US).getStr();
-            // OSL_ENSURE( sal_False, tryStr);
             if (resultString.indexOf(tryStr) >= 0)
             {
                     sTypeName = checkType;
