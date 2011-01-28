@@ -567,8 +567,8 @@ Window* WidgetFactory::layoutCreateWindow (VCLXWindow** component, Window *paren
         window = new Window( parent, ImplGetWinBits( attributes, 0 ) );
         *component = new layoutimpl::LocalizedString();
     }
-    else if (name.equalsAscii ("svxfontlistbox")
-             || name.equalsAscii ("svxlanguagebox"))
+    else if (name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("svxfontlistbox"))
+             || name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("svxlanguagebox")))
     {
         window = new ListBox (parent, ImplGetWinBits (attributes, 0));
         *component = new VCLXListBox ();
