@@ -24,37 +24,54 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef __com_sun_star_script_XDirectInvocation_idl__
+#define __com_sun_star_script_XDirectInvocation_idl__
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
-#define __com_sun_star_sheet_XSheetFilterDescriptor_idl__
-
-#include <com/sun/star/sheet/TableFilterField.idl>
+#ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+#ifndef __com_sun_star_script_CannotConvertException_idl__
+#include <com/sun/star/script/CannotConvertException.idl>
+#endif
+
+#ifndef __com_sun_star_reflection_InvocationTargetException_idl__
+#include <com/sun/star/reflection/InvocationTargetException.idl>
+#endif
+
+#ifndef __com_sun_star_beans_UnknownPropertyException_idl__
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#endif
+
 
 //=============================================================================
 
-module com {  module sun {  module star {  module sheet {
+ module com {  module sun {  module star {  module script {
 
 //=============================================================================
-
-/** provides access to a collection of filter conditions (filter fields).
-
-    @see SheetFilterDescriptor
+/** provides access to an object's methods and properties.
  */
-published interface XSheetFilterDescriptor: com::sun::star::uno::XInterface
+published interface XDirectInvocation: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
+    /** provides access to methods and properties exposed by an object.
 
-    /** returns the collection of filter fields.
+        @param aParams all parameters, out parameters are not supported
      */
-    sequence< TableFilterField > getFilterFields();
+    any directInvoke( [in] string aName,
+             [in] sequence<any> aParams )
+            raises( com::sun::star::lang::IllegalArgumentException,
+                    com::sun::star::script::CannotConvertException,
+                    com::sun::star::reflection::InvocationTargetException );
 
     //-------------------------------------------------------------------------
-
-    /** sets a new collection of filter fields.
+    /** returns <TRUE/> if the method or property with the specified name exists, else <FALSE/>.
      */
-    void setFilterFields( [in] sequence< TableFilterField > aFilterFields );
-
+    boolean hasMember( [in] string aName );
 };
 
 //=============================================================================
