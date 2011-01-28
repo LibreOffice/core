@@ -619,10 +619,6 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         (void)nDbgY;
 #endif
 
-#ifdef DBGTXT
-        if( IsDbg( this ) )
-            DBTXTFRM << "Paint()" << endl;
-#endif
         if( IsLocked() || IsHiddenNow() || ! Prt().HasArea() )
             return;
 

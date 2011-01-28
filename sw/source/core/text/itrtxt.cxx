@@ -58,15 +58,6 @@
 
 void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 {
-#ifdef DBGTXT
-    // nStopAt laesst sich vom CV bearbeiten.
-    static MSHORT nStopAt = 0;
-    if( nStopAt == pNewFrm->GetFrmId() )
-    {
-        int i = pNewFrm->GetFrmId();
-    }
-#endif
-
     SwTxtNode *pNode = pNewFrm->GetTxtNode();
 
     OSL_ENSURE( pNewFrm->GetPara(), "No paragraph" );

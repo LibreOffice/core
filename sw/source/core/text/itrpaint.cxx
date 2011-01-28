@@ -264,12 +264,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     }
 
     if( !pPor && !bEndPor )
-    {
-#ifdef DBGTXT
-        aDbstream << "PAINTER: done nothing" << endl;
-#endif
         return;
-    }
 
     // Baseline-Ausgabe auch bei nicht-TxtPortions (vgl. TabPor mit Fill)
     // if no special vertical alignment is used,

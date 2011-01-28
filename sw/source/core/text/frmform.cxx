@@ -790,12 +790,6 @@ SwCntntFrm *SwTxtFrm::SplitFrm( const xub_StrLen nTxtPos )
 
 void SwTxtFrm::_SetOfst( const xub_StrLen nNewOfst )
 {
-#ifdef DBGTXT
-    // Es gibt tatsaechlich einen Sonderfall, in dem ein SetOfst(0)
-    // zulaessig ist: bug 3496
-    OSL_ENSURE( nNewOfst, "!SwTxtFrm::SetOfst: missing JoinFrm()." );
-#endif
-
     // Die Invalidierung unseres Follows ist nicht noetig.
     // Wir sind ein Follow, werden gleich formatiert und
     // rufen von dort aus das SetOfst() !
@@ -1699,9 +1693,6 @@ void SwTxtFrm::FormatOnceMore( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     sal_uInt8 nGo    = 0;
     while( bGoOn )
     {
-#ifdef DBGTXT
-        aDbstream << "OnceMore!" << endl;
-#endif
         ++nGo;
         rInf.Init();
         rLine.Top();

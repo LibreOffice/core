@@ -882,9 +882,6 @@ void SwTxtAdjuster::CalcDropAdjust()
                         pLeft->MoveAllGlue( pRight );
                     else
                         pLeft->MoveGlue( pRight, nGlue );
-#ifdef DBGTXT
-                    aDbstream << "Drop adjusted: " << nGlue << endl;
-#endif
                 }
             }
         }
