@@ -1366,12 +1366,12 @@ sal_Bool  OResultSet::isBookmarkable() const
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_CURSOR_TYPE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchSize(sal_Int32 _par0)
 {
-    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)_par0,SQL_IS_UINTEGER);
+    N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_ARRAY_SIZE,(SQLPOINTER)(sal_IntPtr)_par0,SQL_IS_UINTEGER);
     delete m_pRowStatusArray;
     m_pRowStatusArray = new SQLUSMALLINT[_par0];
     N3SQLSetStmtAttr(m_aStatementHandle,SQL_ATTR_ROW_STATUS_PTR,m_pRowStatusArray,SQL_IS_POINTER);
