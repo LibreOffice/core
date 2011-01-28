@@ -404,35 +404,35 @@ testcase tSetFormatCharacter
         Call  hNewDocument
 
         printlog "activate all languages in options "
-        '///+ Tools->Options "
+        printlog " Tools->Options "
         ToolsOptions
-        '///+ select tabpage 'Languages' from set 'Language Settings' "
+        printlog " select tabpage 'Languages' from set 'Language Settings' "
         hToolsOptions("LANGUAGESETTINGS","Languages")
         kontext "TabSprachen"
-        '///+ save state and check checkbox 'Asian languages support' "
+        printlog " save state and check checkbox 'Asian languages support' "
         printlog "if the language is Asian, skip this part "
         printlog "iSprache = " + iSprache
         if bAsianLan = FALSE then
            bAsian = Aktivieren.isEnabled
            Aktivieren.check
         endif
-        '///+ save state and  check checkbox 'Complex text layout (CTL) support' "
+        printlog " save state and  check checkbox 'Complex text layout (CTL) support' "
         bComplex = ComplexScriptEnabled.isEnabled
         ComplexScriptEnabled.check
-        '///+ close dialog 'Options' with OK "
+        printlog "close dialog 'Options' with OK "
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
         printlog "get count of languages "
-        '///+ Format->Character "
+        printlog " Format->Character "
         FormatCharacter
         sleep 1
         Kontext
-        '///+ switch to tabpage 'Font' "
+        printlog "switch to tabpage 'Font' "
         Messagebox.SetPage TabFont
         kontext "TabFont"
         sleep 1
-        '///+ get count of languages for Western/Asian/CTL fonts "
+        printlog " get count of languages for Western/Asian/CTL fonts "
         iWest    = LanguageWest.getItemCount
         iAsian   = LanguageEast.getItemCount
         iComplex = LanguageCTL.getItemCount
