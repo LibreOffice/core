@@ -1297,6 +1297,30 @@ Any sbxToUnoValue( SbxVariable* pVar )
     return sbxToUnoValueImpl( pVar );
 }
 
+
+// Funktion, um einen globalen Bezeichner im
+// UnoScope zu suchen und fuer Sbx zu wrappen
+static bool implGetTypeByName( const String& rName, Type& rRetType )
+{
+    bool bSuccess = false;
+
+    Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();
+    if( xTypeAccess->hasByHierarchicalName( rName ) )
+    {
+        Any aRet = xTypeAccess->getByHierarchicalName( rName );
+        Reference< XTypeDescription > xTypeDesc;
+        aRet >>= xTypeDesc;
+
+        if( xTypeDesc.is() )
+        {
+            rRetType = Type( xTypeDesc->getTypeClass(), xTypeDesc->getName() );
+            bSuccess = true;
+        }
+    }
+    return bSuccess;
+}
+
+
 // Konvertierung von Sbx nach Uno mit bekannter Zielklasse
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty )
 {
@@ -1383,6 +1407,39 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                     Reference<XInterface> xInt;
                     aRetVal <<= xInt;
                 }
+            }
+        }
+        break;
+
+        case TypeClass_TYPE:
+        {
+            if( eBaseType == SbxOBJECT )
+            {
+                // XIdlClass?
+                Reference< XIdlClass > xIdlClass;
+
+                SbxBaseRef pObj = (SbxBase*)pVar->GetObject();
+                if( pObj && pObj->ISA(SbUnoObject) )
+                {
+                    Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                    aUnoAny >>= xIdlClass;
+                }
+
+                if( xIdlClass.is() )
+                {
+                    ::rtl::OUString aClassName = xIdlClass->getName();
+                    Type aType( xIdlClass->getTypeClass(), aClassName.getStr() );
+                    aRetVal <<= aType;
+                }
+            }
+            else if( eBaseType == SbxSTRING )
+            {
+                // String representing type?
+                String aTypeName = pVar->GetString();
+                Type aType;
+                bool bSuccess = implGetTypeByName( aTypeName, aType );
+                if( bSuccess )
+                    aRetVal <<= aType;
             }
         }
         break;
@@ -4237,6 +4294,8 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     (void)pBasic;
     (void)bWrite;
 
+    static String aTypeTypeString( RTL_CONSTASCII_USTRINGPARAM("type") );
+
     // 2 parameters needed
     if ( rPar.Count() != 3 )
     {
@@ -4247,6 +4306,41 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     // Klassen-Name der struct holen
     String aTypeName = rPar.Get(1)->GetString();
     SbxVariable* pVal = rPar.Get(2);
+
+    if( aTypeName == aTypeTypeString )
+    {
+        SbxDataType eBaseType = pVal->SbxValue::GetType();
+        String aValTypeName;
+        if( eBaseType == SbxSTRING )
+        {
+            aValTypeName = pVal->GetString();
+        }
+        else if( eBaseType == SbxOBJECT )
+        {
+            // XIdlClass?
+            Reference< XIdlClass > xIdlClass;
+
+            SbxBaseRef pObj = (SbxBase*)pVal->GetObject();
+            if( pObj && pObj->ISA(SbUnoObject) )
+            {
+                Any aUnoAny = ((SbUnoObject*)(SbxBase*)pObj)->getUnoAny();
+                aUnoAny >>= xIdlClass;
+            }
+
+            if( xIdlClass.is() )
+                aValTypeName = xIdlClass->getName();
+        }
+        Type aType;
+        bool bSuccess = implGetTypeByName( aValTypeName, aType );
+        if( bSuccess )
+        {
+            Any aTypeAny( aType );
+            SbxVariableRef refVar = rPar.Get(0);
+            SbxObjectRef xUnoAnyObject = new SbUnoAnyObject( aTypeAny );
+            refVar->PutObject( xUnoAnyObject );
+        }
+        return;
+    }
 
     // Check the type
     Reference< XHierarchicalNameAccess > xTypeAccess = getTypeProvider_Impl();

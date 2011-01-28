@@ -375,12 +375,19 @@ void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttribut
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
         rtl::OUString aLocalName;
         USHORT nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
-
-        if( nPrefix == XML_NAMESPACE_TABLE &&
-            IsXMLToken( aLocalName, XML_NAME ) )
+        if ( nPrefix == XML_NAMESPACE_TABLE )
         {
-            mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
-            break;   // we only need this attribute
+            if ( IsXMLToken( aLocalName, XML_NAME ) )
+            {
+                mrTable.aTableNameOfFile = xAttrList->getValueByIndex( i );
+            }
+            else if ( IsXMLToken( aLocalName, XML_PROTECTED ) )
+            {
+                if ( IsXMLToken( xAttrList->getValueByIndex( i ), XML_TRUE ) )
+                {
+                    mrTable.bProtected = true;
+                }
+            }
         }
     }
 }
@@ -938,6 +945,19 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
         xDataAccess->setAnyRowDescriptions( aComplexRowDescriptions );
     if( rTable.bHasHeaderRow )
         xDataAccess->setAnyColumnDescriptions( aComplexColumnDescriptions );
+
+    if ( rTable.bProtected )
+    {
+        try
+        {
+            Reference< beans::XPropertySet > xProps( xChartDoc, uno::UNO_QUERY_THROW );
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ), uno::makeAny( sal_True ) );
+            xProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ), uno::makeAny( sal_True ) );
+        }
+        catch ( uno::Exception& )
+        {
+        }
+    }
 }
 
 void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
