@@ -41,7 +41,7 @@ class SC_DLLPUBLIC ScRangeList : public SvRefBase
 public:
                     ScRangeList() {}
                     ScRangeList( const ScRangeList& rList );
-    virtual         ~ScRangeList();
+    virtual     ~ScRangeList();
     ScRangeList&    operator=(const ScRangeList& rList);
     void            Append( const ScRange& rRange )
                     {
