@@ -55,30 +55,33 @@ static inline typelib_TypeClass cpp2uno_call(
     void ** pStack )
 {
     // Return type
-    typelib_TypeDescription * pReturnTypeDescr = NULL;
+    typelib_TypeDescription * pReturnTD = NULL;
     if ( pReturnTypeRef )
-        TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
+        TYPELIB_DANGER_GET( &pReturnTD, pReturnTypeRef );
 
     int nFirstRealParam = 2;
 
     void * pUnoReturn = NULL;
     void * pCppReturn = NULL;   // Complex return ptr: if != NULL && != pUnoReturn, reconversion need
 
-    if ( pReturnTypeDescr )
+    if ( pReturnTD )
     {
-        if ( !bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ) )
+        if ( pReturnTD->nSize > 8 )
         {
             pCppReturn = pStack[nFirstRealParam++];
 
-            pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
-                           ? alloca( pReturnTypeDescr->nSize )
+            pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTD )
+                           ? alloca( pReturnTD->nSize )
                            : pCppReturn ); // direct way
         }
-        else // complex return, store it directly where the C++ called wants it
+        else
         {
             pUnoReturn = pStack;
         }
     }
+
+    // "this"
+    nFirstRealParam++;
 
     void ** pCppIncomingParams = pStack + nFirstRealParam;
 
@@ -96,7 +99,7 @@ static inline typelib_TypeClass cpp2uno_call(
         (int *)alloca( sizeof(int) * nParams );
 
     // Type descriptions for reconversions
-    typelib_TypeDescription ** ppTempParamTypeDescr =
+    typelib_TypeDescription ** ppTempParamTD =
         (typelib_TypeDescription **)alloca( sizeof(void *) * nParams );
 
     int nTempIndexes = 0;
@@ -105,16 +108,17 @@ static inline typelib_TypeClass cpp2uno_call(
     {
         const typelib_MethodParameter & rParam = pParams[nPos];
 
-        if ( !rParam.bOut
-             && bridges::cpp_uno::shared::isSimpleType( rParam.pTypeRef ) )
+        typelib_TypeDescription * pParamTD = NULL;
+        TYPELIB_DANGER_GET( &pParamTD, rParam.pTypeRef );
+
+        if ( !rParam.bOut && pParamTD->nSize <= 8 )
         {
             pCppArgs[nPos] = pUnoArgs[nPos] = pCppIncomingParams++;
+
+            TYPELIB_DANGER_RELEASE( pParamTD );
         }
         else // ptr to complex value | ref
         {
-            typelib_TypeDescription * pParamTD = NULL;
-            TYPELIB_DANGER_GET( &pParamTD, rParam.pTypeRef );
-
             void * pCppStack;
 
             pCppArgs[nPos] = pCppStack = *pCppIncomingParams++;
@@ -125,7 +129,7 @@ static inline typelib_TypeClass cpp2uno_call(
                 pUnoArgs[nPos] = alloca( pParamTD->nSize );
                 pTempIndexes[nTempIndexes] = nPos;
                 // pParamTD will be released at reconversion
-                ppTempParamTypeDescr[nTempIndexes++] = pParamTD;
+                ppTempParamTD[nTempIndexes++] = pParamTD;
             }
             //
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType(
@@ -137,7 +141,7 @@ static inline typelib_TypeClass cpp2uno_call(
                     pThis->getBridge()->getCpp2Uno() );
                 pTempIndexes[nTempIndexes] = nPos; // Has to be reconverted
                 // pParamTD will be released at reconversion
-                ppTempParamTypeDescr[nTempIndexes++] = pParamTD;
+                ppTempParamTD[nTempIndexes++] = pParamTD;
             }
             else // direct way
             {
@@ -166,12 +170,12 @@ static inline typelib_TypeClass cpp2uno_call(
 
             if ( pParams[nIndex].bIn ) // Is in/inout => was constructed
             {
-                ::uno_destructData( pUnoArgs[nIndex], ppTempParamTypeDescr[nTempIndexes], 0 );
+                ::uno_destructData( pUnoArgs[nIndex], ppTempParamTD[nTempIndexes], 0 );
             }
-            TYPELIB_DANGER_RELEASE( ppTempParamTypeDescr[nTempIndexes] );
+            TYPELIB_DANGER_RELEASE( ppTempParamTD[nTempIndexes] );
         }
-        if ( pReturnTypeDescr )
-            TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+        if ( pReturnTD )
+            TYPELIB_DANGER_RELEASE( pReturnTD );
 
         CPPU_CURRENT_NAMESPACE::mscx_raiseException(
             &aUnoExc, pThis->getBridge()->getUno2Cpp() ); // Has to destruct the any
@@ -185,21 +189,21 @@ static inline typelib_TypeClass cpp2uno_call(
         while (nTempIndexes--)
         {
             int nIndex = pTempIndexes[nTempIndexes];
-            typelib_TypeDescription * pParamTypeDescr = ppTempParamTypeDescr[nTempIndexes];
+            typelib_TypeDescription * pParamTD = ppTempParamTD[nTempIndexes];
 
             if ( pParams[nIndex].bOut ) // inout/out
             {
                 // Convert and assign
                 ::uno_destructData(
-                    pCppArgs[nIndex], pParamTypeDescr, cpp_release );
+                    pCppArgs[nIndex], pParamTD, cpp_release );
                 ::uno_copyAndConvertData(
-                    pCppArgs[nIndex], pUnoArgs[nIndex], pParamTypeDescr,
+                    pCppArgs[nIndex], pUnoArgs[nIndex], pParamTD,
                     pThis->getBridge()->getUno2Cpp() );
             }
             // Destroy temp uno param
-            ::uno_destructData( pUnoArgs[nIndex], pParamTypeDescr, 0 );
+            ::uno_destructData( pUnoArgs[nIndex], pParamTD, 0 );
 
-            TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+            TYPELIB_DANGER_RELEASE( pParamTD );
         }
         // Return
         if ( pCppReturn ) // Has complex return
@@ -207,18 +211,18 @@ static inline typelib_TypeClass cpp2uno_call(
             if ( pUnoReturn != pCppReturn ) // Needs reconversion
             {
                 ::uno_copyAndConvertData(
-                    pCppReturn, pUnoReturn, pReturnTypeDescr,
+                    pCppReturn, pUnoReturn, pReturnTD,
                     pThis->getBridge()->getUno2Cpp() );
                 // Destroy temp uno return
-                ::uno_destructData( pUnoReturn, pReturnTypeDescr, 0 );
+                ::uno_destructData( pUnoReturn, pReturnTD, 0 );
             }
             // Complex return ptr is set to eax
             pStack[0] = pCppReturn;
         }
-        if ( pReturnTypeDescr )
+        if ( pReturnTD )
         {
-            typelib_TypeClass eRet = (typelib_TypeClass)pReturnTypeDescr->eTypeClass;
-            TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+            typelib_TypeClass eRet = (typelib_TypeClass)pReturnTD->eTypeClass;
+            TYPELIB_DANGER_RELEASE( pReturnTD );
             return eRet;
         }
         else
