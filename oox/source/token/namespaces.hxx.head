@@ -25,34 +25,12 @@
  *
  ************************************************************************/
 
-#ifndef OOX_HELPER_RECORDINPUTSTREAM_HXX
-#define OOX_HELPER_RECORDINPUTSTREAM_HXX
+#ifndef OOX_TOKEN_NAMESPACES_HXX
+#define OOX_TOKEN_NAMESPACES_HXX
 
-#include "oox/helper/binaryinputstream.hxx"
+#include <sal/types.h>
 
 namespace oox {
 
 // ============================================================================
-
-/** Reads the contents of a record from a binary OOBIN stream. */
-class RecordInputStream : public SequenceInputStream
-{
-public:
-    explicit            RecordInputStream( const StreamDataSequence& rData );
-
-    /** Reads a string with leading 16-bit or 32-bit length field. */
-    ::rtl::OUString     readString( bool b32BitLen = true );
-
-    /** Stream operator for integral types. */
-    template< typename Type >
-    inline RecordInputStream& operator>>( Type& ornValue ) { readValue( ornValue ); return *this; }
-    /** Stream operator for an ::rtl::OUString, reads 32-bit string length and Unicode array. */
-    inline RecordInputStream& operator>>( ::rtl::OUString& orString ) { orString = readString(); return *this; }
-};
-
-// ============================================================================
-
-} // namespace oox
-
-#endif
 

@@ -34,14 +34,12 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/XAnimate.hpp>
 
-#include "oox/core/namespaces.hxx"
 #include "oox/core/fragmenthandler.hxx"
 
 #include "commonbehaviorcontext.hxx"
 #include "commontimenodecontext.hxx"
 #include "timetargetelementcontext.hxx"
 #include "pptfilterhelpers.hxx"
-#include "tokens.hxx"
 
 #include <string.h>
 
@@ -57,7 +55,7 @@ namespace oox { namespace ppt {
     CommonBehaviorContext::CommonBehaviorContext( ContextHandler& rParent,
             const Reference< XFastAttributeList >& xAttribs,
             const TimeNodePtr & pNode )
-        : TimeNodeContext( rParent, NMSP_PPT|XML_cBhvr, xAttribs, pNode )
+        : TimeNodeContext( rParent, PPT_TOKEN( cBhvr ), xAttribs, pNode )
             , mbInAttrList( false )
             , mbIsInAttrName( false )
     {
@@ -75,7 +73,7 @@ namespace oox { namespace ppt {
     {
         switch( aElement )
         {
-        case NMSP_PPT|XML_cBhvr:
+        case PPT_TOKEN( cBhvr ):
         {
             if( !maAttributes.empty() )
             {
@@ -94,10 +92,10 @@ namespace oox { namespace ppt {
             }
             break;
         }
-        case NMSP_PPT|XML_attrNameLst:
+        case PPT_TOKEN( attrNameLst ):
             mbInAttrList = false;
             break;
-        case NMSP_PPT|XML_attrName:
+        case PPT_TOKEN( attrName ):
             if( mbIsInAttrName )
             {
                 const ImplAttributeNameConversion *attrConv = gImplConversionList;
@@ -145,16 +143,16 @@ namespace oox { namespace ppt {
 
         switch ( aElementToken )
         {
-        case NMSP_PPT|XML_cTn:
+        case PPT_TOKEN( cTn ):
             xRet.set( new CommonTimeNodeContext( *this, aElementToken, xAttribs, mpNode ) );
             break;
-        case NMSP_PPT|XML_tgtEl:
+        case PPT_TOKEN( tgtEl ):
             xRet.set( new TimeTargetElementContext( *this, mpNode->getTarget() ) );
             break;
-        case NMSP_PPT|XML_attrNameLst:
+        case PPT_TOKEN( attrNameLst ):
             mbInAttrList = true;
             break;
-        case NMSP_PPT|XML_attrName:
+        case PPT_TOKEN( attrName ):
         {
             if( mbInAttrList )
             {

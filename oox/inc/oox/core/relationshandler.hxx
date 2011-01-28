@@ -58,4 +58,3 @@ private:
 } // namespace oox
 
 #endif // OOX_CORE_RELATIONSHANDLER
-
