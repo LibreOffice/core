@@ -93,15 +93,12 @@ public:
     void CompleteSelectionChanged(sal_Bool bNewState);
 
     virtual void LostFocus();
-
     virtual void GotFocus();
 
     void BoundingBoxChanged();
-
     void VisAreaChanged();
 
     ///=====  SfxListener  =====================================================
-
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     ///=====  XAccessibleTable  ================================================
@@ -285,7 +282,6 @@ private:
     Rectangle   GetVisArea(ScTabViewShell* pViewShell, ScSplitPos eSplitPos);
     Rectangle   GetVisCells(const Rectangle& rVisArea);
 };
-
 
 #endif
 

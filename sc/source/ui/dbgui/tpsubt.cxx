@@ -31,8 +31,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include "scitems.hxx"
 #include "uiitems.hxx"
 #include "global.hxx"
@@ -63,7 +61,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
         :   SfxTabPage      ( pParent,
                               ScResId( nResId ),
                               rArgSet ),
-            //
             aFtGroup        ( this, ScResId( FT_GROUP ) ),
             aLbGroup        ( this, ScResId( LB_GROUP ) ),
             aFtColumns      ( this, ScResId( FT_COLUMNS ) ),
@@ -72,7 +69,6 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
             aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
             aStrNone        ( ScResId( SCSTR_NONE ) ),
             aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
-            //
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
@@ -412,7 +408,6 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
         else if ( pLb == &aLbFunctions )
         {
             *pFunction = nFunction;
-//          aLbColumns.CheckEntryPos( nColumn, (nFunction != 0) );//XXX
             aLbColumns.CheckEntryPos( nColumn, TRUE );
         }
     }
@@ -473,25 +468,17 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
 
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
-
 void ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
-
 void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
-
 void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
-
 #undef RESET
 
 // -----------------------------------------------------------------------
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
-
 BOOL ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
-
 BOOL ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
-
 BOOL ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
-
 #undef FILL
 
 //========================================================================
@@ -503,7 +490,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
         :   SfxTabPage      ( pParent,
                               ScResId( RID_SCPAGE_SUBT_OPTIONS ),
                               rArgSet ),
-            //
             aFlGroup        ( this, ScResId( FL_GROUP ) ),
             aBtnPagebreak   ( this, ScResId( BTN_PAGEBREAK ) ),
             aBtnCase        ( this, ScResId( BTN_CASE ) ),
@@ -514,7 +500,6 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
             aBtnFormats     ( this, ScResId( BTN_FORMATS ) ),
             aBtnUserDef     ( this, ScResId( BTN_USERDEF ) ),
             aLbUserDef      ( this, ScResId( LB_USERDEF ) ),
-            //
             pViewData       ( NULL ),
             pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
