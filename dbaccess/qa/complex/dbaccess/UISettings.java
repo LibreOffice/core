@@ -38,12 +38,7 @@ import com.sun.star.util.XCloseable;
 import connectivity.tools.CRMDatabase;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -107,7 +102,7 @@ public class UISettings extends TestCase
 
         // verify the properties
         assertEquals( "wrong font name", "Andale Sans UI", (String)tableControlModel.getPropertyValue( "FontName" ) );
-        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue() );
+        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue(), 0 );
         assertEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
 
         // close the doc

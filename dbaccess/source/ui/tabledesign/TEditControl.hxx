@@ -148,7 +148,7 @@ namespace dbaui
         virtual         ~OTableEditorCtrl();
         virtual BOOL    CursorMoving(long nNewRow, USHORT nNewCol);
         virtual void    UpdateAll();
-        SfxUndoManager* GetUndoManager() const;
+        SfxUndoManager& GetUndoManager() const;
 
         void            SetDescrWin( OTableFieldDescWin* pWin ){ pDescrWin = pWin; if (pDescrWin && pActRow) pDescrWin->DisplayData(pActRow->GetActFieldDescr()); }
         BOOL            SaveCurRow();

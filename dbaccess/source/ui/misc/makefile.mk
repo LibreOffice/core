@@ -25,8 +25,8 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-PRJINC=$(PRJ)$/source
+PRJ=../../..
+PRJINC=$(PRJ)/source
 PRJNAME=dbaccess
 TARGET=uimisc
 
@@ -35,50 +35,53 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+.INCLUDE : $(PRJ)/util/makefile.pmk
 
 # --- Files -------------------------------------
 
 # ... resource files ............................
 
 SRS1NAME=$(TARGET)
-SRC1FILES =	\
-        dbumiscres.src	\
+SRC1FILES =    \
+        dbumiscres.src    \
         WizardPages.src
 
 # ... object files ............................
 
-SLOFILES=	\
-        $(SLO)$/asyncmodaldialog.obj        \
-        $(SLO)$/imageprovider.obj           \
-        $(SLO)$/singledoccontroller.obj		\
-        $(SLO)$/datasourceconnector.obj		\
-        $(SLO)$/linkeddocuments.obj			\
-        $(SLO)$/indexcollection.obj			\
-        $(SLO)$/UITools.obj					\
-        $(SLO)$/WCPage.obj					\
-        $(SLO)$/WCopyTable.obj				\
-        $(SLO)$/WTypeSelect.obj				\
-        $(SLO)$/TokenWriter.obj				\
-        $(SLO)$/HtmlReader.obj				\
-        $(SLO)$/RtfReader.obj				\
-        $(SLO)$/propertysetitem.obj			\
-        $(SLO)$/databaseobjectview.obj      \
-        $(SLO)$/DExport.obj					\
-        $(SLO)$/uiservices.obj				\
-        $(SLO)$/RowSetDrop.obj				\
-        $(SLO)$/TableCopyHelper.obj			\
-        $(SLO)$/moduledbu.obj               \
-        $(SLO)$/WColumnSelect.obj			\
-        $(SLO)$/WExtendPages.obj			\
-        $(SLO)$/WNameMatch.obj				\
-        $(SLO)$/ToolBoxHelper.obj			\
-        $(SLO)$/stringlistitem.obj			\
-        $(SLO)$/charsets.obj				\
-        $(SLO)$/defaultobjectnamecheck.obj  \
-        $(SLO)$/dsmeta.obj                  \
-        $(SLO)$/controllerframe.obj			\
-        $(SLO)$/propertystorage.obj
+SLOFILES=    \
+        $(SLO)/asyncmodaldialog.obj         \
+        $(SLO)/imageprovider.obj            \
+        $(SLO)/singledoccontroller.obj      \
+        $(SLO)/dbsubcomponentcontroller.obj \
+        $(SLO)/datasourceconnector.obj      \
+        $(SLO)/linkeddocuments.obj          \
+        $(SLO)/indexcollection.obj          \
+        $(SLO)/UITools.obj                  \
+        $(SLO)/WCPage.obj                   \
+        $(SLO)/WCopyTable.obj               \
+        $(SLO)/WTypeSelect.obj              \
+        $(SLO)/TokenWriter.obj              \
+        $(SLO)/HtmlReader.obj               \
+        $(SLO)/RtfReader.obj                \
+        $(SLO)/propertysetitem.obj          \
+        $(SLO)/databaseobjectview.obj       \
+        $(SLO)/DExport.obj                  \
+        $(SLO)/uiservices.obj               \
+        $(SLO)/RowSetDrop.obj               \
+        $(SLO)/TableCopyHelper.obj          \
+        $(SLO)/moduledbu.obj                \
+        $(SLO)/WColumnSelect.obj            \
+        $(SLO)/WExtendPages.obj             \
+        $(SLO)/WNameMatch.obj               \
+        $(SLO)/ToolBoxHelper.obj            \
+        $(SLO)/stringlistitem.obj           \
+        $(SLO)/charsets.obj                 \
+        $(SLO)/defaultobjectnamecheck.obj   \
+        $(SLO)/dsmeta.obj                   \
+        $(SLO)/controllerframe.obj          \
+        $(SLO)/propertystorage.obj          \
+        $(SLO)/dbaundomanager.obj           \
+
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk

@@ -37,7 +37,7 @@
 #include <toolkit/helper/convert.hxx>
 #include "RptPage.hxx"
 #include "corestrings.hrc"
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include "ModuleHelper.hxx"
 
 #include <RptResId.hrc>
