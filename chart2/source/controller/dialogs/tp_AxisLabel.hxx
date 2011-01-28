@@ -76,6 +76,7 @@ private:
     bool                m_bHasInitialDegrees;       /// false = DialControl in tristate
     bool                m_bInitialStacking;
     bool                m_bHasInitialStacking;      /// false = checkbox in tristate
+    bool                m_bComplexCategories;
 
     DECL_LINK ( ToggleShowLabel, void* );
 
@@ -90,6 +91,7 @@ public:
     virtual void Reset( const SfxItemSet& rInAttrs );
 
     void ShowStaggeringControls( BOOL bShowStaggeringControls );
+    void SetComplexCategories( bool bComplexCategories );
 };
 //.............................................................................
 } //namespace chart

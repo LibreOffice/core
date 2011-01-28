@@ -56,6 +56,9 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "scmod.hxx"
+#include "charthelper.hxx"
+#include "docuno.hxx"
+#include "docsh.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -399,6 +402,14 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
 
+    bool bCopy = false;
+    ScViewData* pViewData = ( pViewShell ? pViewShell->GetViewData() : NULL );
+    ScDocument* pDocument = ( pViewData ? pViewData->GetDocument() : NULL );
+    SdrPageView* pPageView = ( pView ? pView->GetSdrPageView() : NULL );
+    SdrPage* pPage = ( pPageView ? pPageView->GetPage() : NULL );
+    ::std::vector< ::rtl::OUString > aExcludedChartNames;
+    ScRangeListVector aProtectedChartRangesVector;
+
     if ( rMEvt.IsLeft() )
     {
         if ( pView->IsDragObj() )
@@ -406,6 +417,29 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
             /******************************************************************
             * Objekt wurde verschoben
             ******************************************************************/
+            if ( rMEvt.IsMod1() )
+            {
+                if ( pPage )
+                {
+                    ScChartHelper::GetChartNames( aExcludedChartNames, pPage );
+                }
+                if ( pView && pDocument )
+                {
+                    const SdrMarkList& rSdrMarkList = pView->GetMarkedObjectList();
+                    ULONG nMarkCount = rSdrMarkList.GetMarkCount();
+                    for ( ULONG i = 0; i < nMarkCount; ++i )
+                    {
+                        SdrMark* pMark = rSdrMarkList.GetMark( i );
+                        SdrObject* pObj = ( pMark ? pMark->GetMarkedSdrObj() : NULL );
+                        if ( pObj )
+                        {
+                            ScChartHelper::AddRangesIfProtectedChart( aProtectedChartRangesVector, pDocument, pObj );
+                        }
+                    }
+                }
+                bCopy = true;
+            }
+
             pView->EndDragObj( rMEvt.IsMod1() );
             pView->ForceMarkedToAnotherPage();
 
@@ -565,6 +599,18 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         if (pViewShell->IsDrawSelMode())
             pViewShell->GetViewData()->GetDispatcher().
                 Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+
+    if ( bCopy && pViewData && pDocument && pPage )
+    {
+        ScDocShell* pDocShell = pViewData->GetDocShell();
+        ScModelObj* pModelObj = ( pDocShell ? ScModelObj::getImplementation( pDocShell->GetModel() ) : NULL );
+        if ( pModelObj )
+        {
+            SCTAB nTab = pViewData->GetTabNo();
+            ScChartHelper::CreateProtectedChartListenersAndNotify( pDocument, pPage, pModelObj, nTab,
+                aProtectedChartRangesVector, aExcludedChartNames );
+        }
+    }
 
     return (bReturn);
 }
