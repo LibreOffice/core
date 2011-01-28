@@ -28,21 +28,11 @@
 #ifndef __com_sun_star_sheet_SheetFilterDescriptor_idl__
 #define __com_sun_star_sheet_SheetFilterDescriptor_idl__
 
-#ifndef __com_sun_star_sheet_XSheetFilterDescriptor_idl__
 #include <com/sun/star/sheet/XSheetFilterDescriptor.idl>
-#endif
-
-#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/sheet/XSheetFilterDescriptor2.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-#endif
-
-#ifndef __com_sun_star_table_TableOrientation_idl__
 #include <com/sun/star/table/TableOrientation.idl>
-#endif
-
-#ifndef __com_sun_star_table_CellAddress_idl__
 #include <com/sun/star/table/CellAddress.idl>
-#endif
 
 //=============================================================================
 
@@ -62,7 +52,20 @@ published service SheetFilterDescriptor
 
     /** provides access to the collection of filter fields.
      */
-    interface com::sun::star::sheet::XSheetFilterDescriptor;
+    interface XSheetFilterDescriptor;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the collection of filter fields.
+
+        <p>This interface provides a sequence of <type>TableFilterField2</type>
+        structures supporting a wider range of comparison operators, compared
+        to the <type>TableFilterField</type> structure provided by interface
+        <type>XSheetFilterDescriptor</type>.
+
+        @since OOo 3.2
+     */
+    [optional] interface XSheetFilterDescriptor2;
 
     //-------------------------------------------------------------------------
 
