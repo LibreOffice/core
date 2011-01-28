@@ -112,8 +112,8 @@ static inline typelib_TypeClass cpp2uno_call(
         }
         else // ptr to complex value | ref
         {
-            typelib_TypeDescription * pParamTypeDescr = 0;
-            TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
+            typelib_TypeDescription * pParamTD = NULL;
+            TYPELIB_DANGER_GET( &pParamTD, rParam.pTypeRef );
 
             void * pCppStack;
 
@@ -122,28 +122,28 @@ static inline typelib_TypeClass cpp2uno_call(
             if ( !rParam.bIn ) // Pure out
             {
                 // UNO out is unconstructed mem
-                pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                pUnoArgs[nPos] = alloca( pParamTD->nSize );
                 pTempIndexes[nTempIndexes] = nPos;
-                // pParamTypeDescr will be released at reconversion
-                ppTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
+                // pParamTD will be released at reconversion
+                ppTempParamTypeDescr[nTempIndexes++] = pParamTD;
             }
             //
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType(
-                         pParamTypeDescr ) )
+                         pParamTD ) )
             {
                 ::uno_copyAndConvertData(
-                    pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
-                    pCppStack, pParamTypeDescr,
+                    pUnoArgs[nPos] = alloca( pParamTD->nSize ),
+                    pCppStack, pParamTD,
                     pThis->getBridge()->getCpp2Uno() );
                 pTempIndexes[nTempIndexes] = nPos; // Has to be reconverted
-                // pParamTypeDescr will be released at reconversion
-                ppTempParamTypeDescr[nTempIndexes++] = pParamTypeDescr;
+                // pParamTD will be released at reconversion
+                ppTempParamTypeDescr[nTempIndexes++] = pParamTD;
             }
             else // direct way
             {
                 pUnoArgs[nPos] = pCppStack;
                 // No longer needed
-                TYPELIB_DANGER_RELEASE( pParamTypeDescr );
+                TYPELIB_DANGER_RELEASE( pParamTD );
             }
         }
     }
@@ -374,69 +374,23 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 //==================================================================================================
 extern "C" {
 
-// From http://msdn.microsoft.com/en-us/library/ssa62fwe%28v=VS.90%29.aspx
-
-typedef enum _UNWIND_OP_CODES {
-    UWOP_PUSH_NONVOL = 0, /* info == register number */
-    UWOP_ALLOC_LARGE,     /* no info, alloc size in next 2 slots */
-    UWOP_ALLOC_SMALL,     /* info == size of allocation / 8 - 1 */
-    UWOP_SET_FPREG,       /* no info, FP = RSP + UNWIND_INFO.FPRegOffset*16 */
-    UWOP_SAVE_NONVOL,     /* info == register number, offset in next slot */
-    UWOP_SAVE_NONVOL_FAR, /* info == register number, offset in next 2 slots */
-    UWOP_SAVE_XMM128,     /* info == XMM reg number, offset in next slot */
-    UWOP_SAVE_XMM128_FAR, /* info == XMM reg number, offset in next 2 slots */
-    UWOP_PUSH_MACHFRAME   /* info == 0: no error-code, 1: error-code */
-} UNWIND_CODE_OPS;
-
-typedef union _UNWIND_CODE {
-    struct {
-        sal_uChar CodeOffset;
-        sal_uChar UnwindOp : 4;
-        sal_uChar OpInfo   : 4;
-    } u;
-    USHORT FrameOffset;
-} UNWIND_CODE, *PUNWIND_CODE;
-
-#define UNW_FLAG_EHANDLER  0x01
-#define UNW_FLAG_UHANDLER  0x02
-#define UNW_FLAG_CHAININFO 0x04
-
-typedef struct _UNWIND_INFO {
-    sal_uChar Version       : 3;
-    sal_uChar Flags         : 5;
-    sal_uChar SizeOfProlog;
-    sal_uChar CountOfCodes;
-    sal_uChar FrameRegister : 4;
-    sal_uChar FrameOffset   : 4;
-    UNWIND_CODE UnwindCode[1];
-/*  UNWIND_CODE MoreUnwindCode[((CountOfCodes + 1) & ~1) - 1];
-*   union {
-*       OPTIONAL ULONG ExceptionHandler;
-*       OPTIONAL ULONG FunctionEntry;
-*   };
-*   OPTIONAL ULONG ExceptionData[]; */
-} UNWIND_INFO, *PUNWIND_INFO;
-
 // These are actually addresses in the code compiled from codeSnippet.asm
 extern char
     fp_spill_templates,
     fp_spill_templates_end,
     trampoline_template,
-    trampoline_template_spill_end,
-    trampoline_template_prolog_end,
+    trampoline_template_function_table,
+    trampoline_template_spill_params,
+    trampoline_template_spill_params_end,
     trampoline_template_function_index,
     trampoline_template_vtable_offset,
+    trampoline_template_cpp_vtable_call,
     trampoline_template_end;
 }
 
 // Just the code
-int const codeSnippetCodeSize =
-    (int) (&trampoline_template_end - &trampoline_template);
-
-// Including the function table entry and unwind information, plus
-// alignment padding
 int const codeSnippetSize =
-    codeSnippetCodeSize + (int) (sizeof( RUNTIME_FUNCTION ) + sizeof( UNWIND_INFO )) + 8;
+    (int) (&trampoline_template_end - &trampoline_template);
 
 // This function generates the code that acts as a proxy for the UNO function to be called.
 // The generated code does the following:
@@ -450,7 +404,7 @@ unsigned char * codeSnippet(
     bool bHasHiddenParam )
 {
     OSL_ASSERT( (&fp_spill_templates_end - &fp_spill_templates) ==
-                (&trampoline_template_spill_end - &trampoline_template) );
+                (&trampoline_template_spill_params_end - &trampoline_template_spill_params) );
 
     OSL_ASSERT( ((&fp_spill_templates_end - &fp_spill_templates) / 4) * 4 ==
                 (&fp_spill_templates_end - &fp_spill_templates) );
@@ -458,53 +412,47 @@ unsigned char * codeSnippet(
     if ( bHasHiddenParam )
         functionIndex |= 0x80000000;
 
-    int const one_spill_instruction_size = (int) ((&fp_spill_templates_end - &fp_spill_templates)) / 4;
+    int const one_spill_instruction_size =
+        (int) ((&fp_spill_templates_end - &fp_spill_templates)) / 4;
 
-    memcpy( code, &trampoline_template, codeSnippetCodeSize );
+    memcpy( code, &trampoline_template, codeSnippetSize );
 
     for (int i = 0; i < 4; ++i)
+    {
         if ( param_kind[i] == CPPU_CURRENT_NAMESPACE::REGPARAM_FLT )
-            memcpy (code + i*one_spill_instruction_size,
+        {
+            memcpy (&trampoline_template_spill_params + i*one_spill_instruction_size,
                     &fp_spill_templates + i*one_spill_instruction_size,
                     one_spill_instruction_size);
+        }
+    }
 
-    ((sal_uInt64*) trampoline_template_function_index)[-1] = functionIndex;
-    ((sal_uInt64*) trampoline_template_vtable_offset)[-1] = vtableOffset;
+    ((sal_uInt64*) (code + (&trampoline_template_function_index
+                            - &trampoline_template)))[-1] =
+        functionIndex;
+    ((sal_uInt64*) (code + (&trampoline_template_vtable_offset
+                            - &trampoline_template)))[-1] =
+        vtableOffset;
+    ((void**) (code + (&trampoline_template_cpp_vtable_call
+                            - &trampoline_template)))[-1] =
+        cpp_vtable_call;
 
     // Add unwind data for the dynamically generated function by
     // calling RtlAddFunctionTable().
 
-    // TODO: We need to remove the unwind data with
-    // RtlDeleteFunctionTable() in freeExec() in
-    // vtablefactory.cxx. How can we get at the function pointer table
-    // there? Maybe we should move the function table and unwind info
-    // to be at the beginning of the allocated block, and add another
-    // parameter to this function to return the actual trampoline
-    // start, etc?
+    // The unwind data is inside the function code, at a fixed offset
+    // from the function start. See codeSnippet.asm. Actually this is
+    // unnecessarily complex, we could as well just allocate the
+    // function table dynamically. But it doesn't hurt either, I
+    // think.
 
-    // Just one function with one unwind info with one unwind code
-    // included in it. Here we just "know" what the code in
-    // codeSnippet.asm looks like, sorry.
+    // The real problem now is that we need to remove the unwind data
+    // with RtlDeleteFunctionTable() in freeExec() in
+    // vtablefactory.cxx. See comment there.
 
     RUNTIME_FUNCTION *pFunTable =
-        (RUNTIME_FUNCTION *) (((((sal_uInt64) (code + codeSnippetSize) - 1) / 4) + 1) * 4);
-    UNWIND_INFO *pUnwInfo =
-        (UNWIND_INFO *) (pFunTable + 1);
-
-    OSL_ASSERT( (unsigned char *) (pUnwInfo + 1) <= code + codeSnippetSize );
-
-    pFunTable->BeginAddress = 0;
-    pFunTable->EndAddress = codeSnippetCodeSize;
-    pFunTable->UnwindData = (DWORD) ((unsigned char *) pUnwInfo - code);
-
-    pUnwInfo->Version = 1;
-    pUnwInfo->Flags = 0;
-    pUnwInfo->SizeOfProlog = (sal_uChar) (&trampoline_template_prolog_end - &trampoline_template);
-    pUnwInfo->CountOfCodes = 1;
-    pUnwInfo->FrameRegister = 0;
-    pUnwInfo->UnwindCode[0].u.CodeOffset = (sal_uChar) (&trampoline_template_prolog_end - &trampoline_template);
-    pUnwInfo->UnwindCode[0].u.UnwindOp = UWOP_ALLOC_SMALL;
-    pUnwInfo->UnwindCode[0].u.OpInfo = 4;
+        (RUNTIME_FUNCTION *) (code + (&trampoline_template_function_table
+                                      - &trampoline_template));
 
     RtlAddFunctionTable( pFunTable, 1, (DWORD64) code );
 
@@ -563,10 +511,10 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     (*slots) -= functionCount;
     Slot * s = *slots;
 
-    for (int i = 0; i < functionCount; ++i) {
-        typelib_TypeDescription * pTD = 0;
+    for (int member = 0; member < type->nMembers; ++member) {
+        typelib_TypeDescription * pTD = NULL;
 
-        TYPELIB_DANGER_GET( &pTD, type->ppMembers[ i ] );
+        TYPELIB_DANGER_GET( &pTD, type->ppMembers[ member ] );
         OSL_ASSERT( pTD );
 
         char param_kind[4];
@@ -606,29 +554,29 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             typelib_InterfaceMethodTypeDescription *pMethodTD =
                 reinterpret_cast<typelib_InterfaceMethodTypeDescription *>( pTD );
 
-            typelib_TypeDescription *pReturnTD = 0;
+            typelib_TypeDescription *pReturnTD = NULL;
             TYPELIB_DANGER_GET( &pReturnTD, pMethodTD->pReturnTypeRef );
             OSL_ASSERT( pReturnTD );
 
             if ( pReturnTD->nSize > 8 )
             {
                 // Hidden return value
-                nr++;
+                ++nr;
             }
 
             // 'this'
-            nr++;
+            ++nr;
 
-            for (int j = 0; nr < 4 && j < pMethodTD->nParams; ++j)
+            for (int param = 0; nr < 4 && param < pMethodTD->nParams; ++param, ++nr)
             {
-                typelib_TypeDescription *pParamTD = 0;
+                typelib_TypeDescription *pParamTD = NULL;
 
-                TYPELIB_DANGER_GET( &pParamTD, pMethodTD->pParams[j].pTypeRef );
+                TYPELIB_DANGER_GET( &pParamTD, pMethodTD->pParams[param].pTypeRef );
                 OSL_ASSERT( pParamTD );
 
                 if ( pParamTD->eTypeClass == typelib_TypeClass_FLOAT ||
                      pParamTD->eTypeClass == typelib_TypeClass_DOUBLE )
-                    param_kind[nr++] = CPPU_CURRENT_NAMESPACE::REGPARAM_FLT;
+                    param_kind[nr] = CPPU_CURRENT_NAMESPACE::REGPARAM_FLT;
 
                 TYPELIB_DANGER_RELEASE( pParamTD );
             }
