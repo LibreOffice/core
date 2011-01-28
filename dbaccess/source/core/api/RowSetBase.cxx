@@ -1383,6 +1383,7 @@ void ORowSetBase::positionCache( CursorMoveDirection _ePrepareForDirection )
         }
     }
     OSL_ENSURE( bSuccess, "ORowSetBase::positionCache: failed!" );
+    (void)bSuccess;
 
     DBG_TRACE2("DBACCESS ORowSetBase::positionCache() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
 }
