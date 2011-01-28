@@ -59,8 +59,7 @@ SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 XMLSCRIPTLIB =-lxcr$(DLLPOSTFIX)
-.INCLUDE .IGNORE : comphelper/version.mk
-COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
+COMPHELPERLIB=-lcomphelp$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
