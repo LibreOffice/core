@@ -3136,36 +3136,6 @@ gboolean GtkSalFrame::signalKey( GtkWidget*, GdkEventKey* pEvent, gpointer frame
 
         pThis->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
 
-        if( ! aDel.isDeleted() )
-        {
-            // emulate KEY_MENU
-            if( ( pEvent->keyval == GDK_Alt_L || pEvent->keyval == GDK_Alt_R ) &&
-                ( nModCode & ~(KEY_MOD3|KEY_MOD2)) == 0 )
-            {
-                if( pEvent->type == GDK_KEY_PRESS )
-                    pThis->m_bSingleAltPress = true;
-
-                else if( pThis->m_bSingleAltPress )
-                {
-                    SalKeyEvent aKeyEvt;
-
-                    aKeyEvt.mnCode     = KEY_MENU | nModCode;
-                    aKeyEvt.mnRepeat   = 0;
-                    aKeyEvt.mnTime     = pEvent->time;
-                    aKeyEvt.mnCharCode = 0;
-
-                    // simulate KEY_MENU
-                    pThis->CallCallback( SALEVENT_KEYINPUT, &aKeyEvt );
-                    if( ! aDel.isDeleted() )
-                    {
-                        pThis->CallCallback( SALEVENT_KEYUP, &aKeyEvt );
-                        pThis->m_bSingleAltPress = false;
-                    }
-                }
-            }
-            else
-                pThis->m_bSingleAltPress = false;
-        }
     }
     else
     {
