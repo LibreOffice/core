@@ -153,16 +153,16 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     //Resources Object
     private FTPDialogResources resources;
     private List dataAware = new Vector();
-    public String username = "";
-    public String password = "";
+    public String username = PropertyNames.EMPTY_STRING;
+    public String password = PropertyNames.EMPTY_STRING;
     /**
      * The ftp host name
      */
-    public String host = "";
+    public String host = PropertyNames.EMPTY_STRING;
     /**
      * The ftp directory.
      */
-    private String dir = "";
+    private String dir = PropertyNames.EMPTY_STRING;
     /**
      * the ftp publish object which contains the
      * data for this dialog.
@@ -353,7 +353,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
                 PROPNAMES_BUTTON2,
                 new Object[]
                 {
-                    INTEGER_14, "", resources.resbtnHelp_value, "btnHelp", 57, 142, new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_50
+                    INTEGER_14, PropertyNames.EMPTY_STRING, resources.resbtnHelp_value, "btnHelp", 57, 142, new Short((short) PushButtonType.HELP_value), new Short((short) 15), INTEGER_50
                 });
 
     }
@@ -379,8 +379,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     public short execute(UnoDialog parent) throws Exception
     {
         host = extractHost(publish.cp_URL);
-        username = publish.cp_Username == null ? "" : publish.cp_Username;
-        password = publish.password == null ? "" : publish.password;
+        username = publish.cp_Username == null ? PropertyNames.EMPTY_STRING : publish.cp_Username;
+        password = publish.password == null ? PropertyNames.EMPTY_STRING : publish.password;
         dir = extractDir(publish.cp_URL);
         setLabel(STATUS_UNKONWN);
 
@@ -419,7 +419,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     {
         if (ftpUrl == null || ftpUrl.length() < 6)
         {
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
         String url = ftpUrl.substring(6);
         int i = url.indexOf("/");
@@ -469,11 +469,11 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
 
     /**
      * @param s
-     * @return true if the string is null or "".
+     * @return true if the string is null or PropertyNames.EMPTY_STRING.
      */
     private final boolean isEmpty(String s)
     {
-        return (s == null) || (s.equals(""));
+        return (s == null) || (s.equals(PropertyNames.EMPTY_STRING));
     }
 
     /**
@@ -724,7 +724,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     public void chooseDirectory()
     {
         SystemDialog sd = SystemDialog.createOfficeFolderDialog(xMSF);
-        String newUrl = sd.callFolderDialog(resources.resFTPDirectory, "", getFullUrl());
+        String newUrl = sd.callFolderDialog(resources.resFTPDirectory, PropertyNames.EMPTY_STRING, getFullUrl());
         if (newUrl != null)
         {
             /*  if the user chose a local directory,

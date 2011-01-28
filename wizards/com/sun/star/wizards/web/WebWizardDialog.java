@@ -196,11 +196,11 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     };
     private static String[] PROPNAMES_TXT_2 = new String[]
     {
-        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ReadOnly", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.READ_ONLY, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_TITLE = new String[]
     {
-        "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+        PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static Integer INTEGER_91 = 91;
     private static Integer INTEGER_97 = 97;
@@ -270,7 +270,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGERS[2], "", "lnLoadSettings", 91, 147, INTEGERS[1], new Short(tabIndex++), 234
+                    INTEGERS[2], PropertyNames.EMPTY_STRING, "lnLoadSettings", 91, 147, INTEGERS[1], new Short(tabIndex++), 234
                 });
         lblLoadSettings = insertLabel("lblLoadSettings",
                 new String[]
@@ -341,7 +341,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnDocUp = insertButton("btnDocUp", BTNDOCUP_ACTION_PERFORMED,
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -350,7 +350,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnDocDown = insertButton("btnDocDown", BTNDOCDOWN_ACTION_PERFORMED,
                 new String[]
                 {
-                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.FONT_DESCRIPTOR, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -620,7 +620,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 },
                 new Object[]
                 {
-                    0, Boolean.FALSE, 78, "", "imgPreview", 91, 100, Boolean.FALSE, INTEGERS[5], new Short((short) 55), 232
+                    0, Boolean.FALSE, 78, PropertyNames.EMPTY_STRING, "imgPreview", 91, 100, Boolean.FALSE, INTEGERS[5], new Short((short) 55), 232
                 });
 
     }
@@ -853,7 +853,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
                 PROPNAMES_TXT,
                 new Object[]
                 {
-                    INTEGERS[2], "", "lnSaveSetting", 97, 151, INTEGERS[7], new Short(tabIndex++), 228
+                    INTEGERS[2], PropertyNames.EMPTY_STRING, "lnSaveSetting", 97, 151, INTEGERS[7], new Short(tabIndex++), 228
                 });
         chkSaveSettings = insertCheckBox("chkSaveSettings", CHKSAVESETTINGS_ITEM_CHANGED,
                 PROPNAMES_CHKBOX,
@@ -926,7 +926,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
 
         public String render(Object listItem)
         {
-            return listItem == null ? "" : ((CGLayout) listItem).cp_Name;
+            return listItem == null ? PropertyNames.EMPTY_STRING : ((CGLayout) listItem).cp_Name;
         }
     }
 }

@@ -38,6 +38,7 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class TypeInspector
 {
@@ -284,7 +285,7 @@ public class TypeInspector
      */
     public String getDefaultTypeName(int _curDataType, Integer precision)
     {
-        String ret = "";
+        String ret = PropertyNames.EMPTY_STRING;
         for (int i = 0; i < nDataTypeInfos.length; i++)
         {
             if (nDataTypeInfos[i] == _curDataType)

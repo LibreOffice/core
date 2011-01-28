@@ -135,7 +135,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
                 new Object[]
                 {
                     Integer.valueOf(imageTextHeight),
-                    "",
+                    PropertyNames.EMPTY_STRING,
                     "(1)",
                     Integer.valueOf(nXPos),
                     Integer.valueOf(nYPos),
@@ -190,7 +190,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             lblCounter = dialog.insertLabel(m_aControlName + "_lblCounter", pNames1, new Object[]
                     {
                         Integer.valueOf(LINE_HEIGHT),
-                        "",
+                        PropertyNames.EMPTY_STRING,
                         Integer.valueOf(pos.Width + btnSize.intValue() + 1),
                         Integer.valueOf(pos.Height + (m_aButtonSize.Height + gap.Height) * rows + gap.Height + imageTextHeight + ((btnSize.intValue() - LINE_HEIGHT) / 2)),
                         step,
@@ -675,7 +675,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     private void refreshImageText()
     {
         Object item = m_nCurrentSelection >= 0 ? getListModel().getElementAt(m_nCurrentSelection) : null;
-        final String sText = " " + renderer.render(item);
+        final String sText = PropertyNames.SPACE + renderer.render(item);
         Helper.setUnoPropertyValue(getModel(lblImageText), PropertyNames.PROPERTY_LABEL, sText);
     }
 
@@ -770,7 +770,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         // @Override
         public String render(Object counter)
         {
-            return "" + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
+            return PropertyNames.EMPTY_STRING + ((Counter) counter).start + ".." + ((Counter) counter).end + "/" + ((Counter) counter).max;
         }
     }
 
@@ -891,7 +891,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
         }
 
         // check which Button is pressed.
-        String sControlName = aHelper.getPropertyValueAsString(PropertyNames.PROPERTY_NAME, "");
+        String sControlName = aHelper.getPropertyValueAsString(PropertyNames.PROPERTY_NAME, PropertyNames.EMPTY_STRING);
         final String sButton = sControlName.substring(7 + m_aControlName.length());
         int nButton = new Integer(sButton).intValue();
 

@@ -81,8 +81,8 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     private XColumnsSupplier xKeyColumnSupplier;
     private XPropertySet xKey;
     private boolean bIDFieldisInserted = false;
-    private String IDFieldName = "";
-    private String sColumnAlreadyExistsMessage = "";
+    private String IDFieldName = PropertyNames.EMPTY_STRING;
+    private String sColumnAlreadyExistsMessage = PropertyNames.EMPTY_STRING;
 //    private WizardDialog oUnoDialog;
     private XWindow xWindow;
 
@@ -319,7 +319,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         try
         {
-            xPropTableDataDescriptor.setPropertyValue(PropertyNames.PROPERTY_NAME, "");
+            xPropTableDataDescriptor.setPropertyValue(PropertyNames.PROPERTY_NAME, PropertyNames.EMPTY_STRING);
             if ((xKeyDrop != null) && (xIndexAccessKeys != null))
             {
                 int icount = xIndexAccessKeys.getCount();
@@ -374,7 +374,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
     {
         if (_svalue != null)
         {
-            if (!_svalue.equals(""))
+            if (!_svalue.equals(PropertyNames.EMPTY_STRING))
             {
                 try
                 {
@@ -664,7 +664,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
         {
             if (!hasByName(_columnname))
             {
-                if (_columnname.equals(""))
+                if (_columnname.equals(PropertyNames.EMPTY_STRING))
                 {
                     return false;
                 }
@@ -694,7 +694,7 @@ public class TableDescriptor extends CommandMetaData implements XContainerListen
                 try
                 {
                     XPropertySet xColPropertySet = xColumnDataDescriptorFactory.createDataDescriptor();
-                    IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, "");
+                    IDFieldName = Desktop.getUniqueName(getColumnNames(), _columnname, PropertyNames.EMPTY_STRING);
                     xColPropertySet.setPropertyValue(PropertyNames.PROPERTY_NAME, IDFieldName);
 
                     int nDataType = oTypeInspector.convertDataType(com.sun.star.sdbc.DataType.INTEGER);

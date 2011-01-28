@@ -36,6 +36,7 @@ import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class TextStyleHandler
 {
@@ -58,7 +59,7 @@ public class TextStyleHandler
         {
             XStyleLoader xStyleLoader = (XStyleLoader) UnoRuntime.queryInterface(XStyleLoader.class, xStyleFamiliesSupplier.getStyleFamilies());
             com.sun.star.beans.PropertyValue[] StyleOptions = xStyleLoader.getStyleLoaderOptions();
-            String CurOptionName = "";
+            String CurOptionName = PropertyNames.EMPTY_STRING;
             int PropCount = StyleOptions.length;
             for (int i = 0; i < PropCount; i++)
             {

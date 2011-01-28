@@ -152,7 +152,7 @@ public class DatabaseControl extends Control
                 return FormHandler.oControlData[i].GridColumnName;
             }
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public int getControlHeight()

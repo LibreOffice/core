@@ -41,6 +41,7 @@ import com.sun.star.report.XReportDefinition;
 import com.sun.star.report.XSection;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  *
@@ -319,8 +320,8 @@ public class DesignTemplate
         m_xReportDefinition = (XReportDefinition) UnoRuntime.queryInterface(XReportDefinition.class, aObj);
 
         PropertyValue[] aLoadProps = new PropertyValue[2];
-        aLoadProps[0] = Properties.createProperty("URL", _sPath);
-        aLoadProps[1] = Properties.createProperty("ReadOnly", Boolean.TRUE);
+        aLoadProps[0] = Properties.createProperty(PropertyNames.URL, _sPath);
+        aLoadProps[1] = Properties.createProperty(PropertyNames.READ_ONLY, Boolean.TRUE);
 
         m_xReportDefinition.load(aLoadProps);
         analyseReportDefinition();

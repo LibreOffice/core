@@ -87,7 +87,7 @@ public class OfficeDocument
             oEventProperties[0].Name = "EventType";
             oEventProperties[0].Value = EventType; // "Service", "StarBasic"
             oEventProperties[1] = new PropertyValue();
-            oEventProperties[1].Name = "Script"; //"URL";
+            oEventProperties[1].Name = "Script"; //PropertyNames.URL;
             oEventProperties[1].Value = EventURL;
             xEventsSuppl.getEvents().replaceByName(EventName, oEventProperties);
         }
@@ -131,7 +131,7 @@ public class OfficeDocument
 
         PropertyValue[] loadValues = new PropertyValue[2];
         loadValues[0] = new PropertyValue();
-        loadValues[0].Name = "ReadOnly";
+        loadValues[0].Name = PropertyNames.READ_ONLY;
         loadValues[0].Value = readonly ? Boolean.TRUE : Boolean.FALSE;
         loadValues[1] = new PropertyValue();
         loadValues[1].Name = "Preview";
@@ -145,7 +145,7 @@ public class OfficeDocument
         try
         {
             xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, frame);
-            /*if (frame.getName() == null || frame.getName().equals(""));
+            /*if (frame.getName() == null || frame.getName().equals(PropertyNames.EMPTY_STRING));
             frame.setName("T" + System.currentTimeMillis());*/
             XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, "_self", 0, loadValues);
 
@@ -389,13 +389,13 @@ public class OfficeDocument
 
         PropertyValue[][] mediaDescr = new PropertyValue[1][1];
         mediaDescr[0][0] = new PropertyValue();
-        mediaDescr[0][0].Name = "URL";
+        mediaDescr[0][0].Name = PropertyNames.URL;
         mediaDescr[0][0].Value = url;
 
         String type = ((XTypeDetection) UnoRuntime.queryInterface(XTypeDetection.class, typeDetect)).queryTypeByDescriptor(mediaDescr, true);
 
         XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, typeDetect);
-        if (type.equals(""))
+        if (type.equals(PropertyNames.EMPTY_STRING))
         {
             return null;
         }
