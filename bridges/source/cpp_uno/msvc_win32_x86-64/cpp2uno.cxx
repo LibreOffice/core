@@ -374,18 +374,69 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 //==================================================================================================
 extern "C" {
 
+// From http://msdn.microsoft.com/en-us/library/ssa62fwe%28v=VS.90%29.aspx
+
+typedef enum _UNWIND_OP_CODES {
+    UWOP_PUSH_NONVOL = 0, /* info == register number */
+    UWOP_ALLOC_LARGE,     /* no info, alloc size in next 2 slots */
+    UWOP_ALLOC_SMALL,     /* info == size of allocation / 8 - 1 */
+    UWOP_SET_FPREG,       /* no info, FP = RSP + UNWIND_INFO.FPRegOffset*16 */
+    UWOP_SAVE_NONVOL,     /* info == register number, offset in next slot */
+    UWOP_SAVE_NONVOL_FAR, /* info == register number, offset in next 2 slots */
+    UWOP_SAVE_XMM128,     /* info == XMM reg number, offset in next slot */
+    UWOP_SAVE_XMM128_FAR, /* info == XMM reg number, offset in next 2 slots */
+    UWOP_PUSH_MACHFRAME   /* info == 0: no error-code, 1: error-code */
+} UNWIND_CODE_OPS;
+
+typedef union _UNWIND_CODE {
+    struct {
+        sal_uChar CodeOffset;
+        sal_uChar UnwindOp : 4;
+        sal_uChar OpInfo   : 4;
+    } u;
+    USHORT FrameOffset;
+} UNWIND_CODE, *PUNWIND_CODE;
+
+#define UNW_FLAG_EHANDLER  0x01
+#define UNW_FLAG_UHANDLER  0x02
+#define UNW_FLAG_CHAININFO 0x04
+
+typedef struct _UNWIND_INFO {
+    sal_uChar Version       : 3;
+    sal_uChar Flags         : 5;
+    sal_uChar SizeOfProlog;
+    sal_uChar CountOfCodes;
+    sal_uChar FrameRegister : 4;
+    sal_uChar FrameOffset   : 4;
+    UNWIND_CODE UnwindCode[1];
+/*  UNWIND_CODE MoreUnwindCode[((CountOfCodes + 1) & ~1) - 1];
+*   union {
+*       OPTIONAL ULONG ExceptionHandler;
+*       OPTIONAL ULONG FunctionEntry;
+*   };
+*   OPTIONAL ULONG ExceptionData[]; */
+} UNWIND_INFO, *PUNWIND_INFO;
+
 // These are actually addresses in the code compiled from codeSnippet.asm
 extern char
     fp_spill_templates,
     fp_spill_templates_end,
     trampoline_template,
     trampoline_template_spill_end,
+    trampoline_template_prolog_end,
     trampoline_template_function_index,
     trampoline_template_vtable_offset,
     trampoline_template_end;
 }
 
-int const codeSnippetSize = (int) (&trampoline_template_end - &trampoline_template);
+// Just the code
+int const codeSnippetCodeSize =
+    (int) (&trampoline_template_end - &trampoline_template);
+
+// Including the function table entry and unwind information, plus
+// alignment padding
+int const codeSnippetSize =
+    codeSnippetCodeSize + (int) (sizeof( RUNTIME_FUNCTION ) + sizeof( UNWIND_INFO )) + 8;
 
 // This function generates the code that acts as a proxy for the UNO function to be called.
 // The generated code does the following:
@@ -409,7 +460,7 @@ unsigned char * codeSnippet(
 
     int const one_spill_instruction_size = (int) ((&fp_spill_templates_end - &fp_spill_templates)) / 4;
 
-    memcpy( code, &trampoline_template, codeSnippetSize );
+    memcpy( code, &trampoline_template, codeSnippetCodeSize );
 
     for (int i = 0; i < 4; ++i)
         if ( param_kind[i] == CPPU_CURRENT_NAMESPACE::REGPARAM_FLT )
@@ -420,9 +471,42 @@ unsigned char * codeSnippet(
     ((sal_uInt64*) trampoline_template_function_index)[-1] = functionIndex;
     ((sal_uInt64*) trampoline_template_vtable_offset)[-1] = vtableOffset;
 
-    // TODO: Add unwind data for the dynamically generated function by
-    // calling RtlAddFunctionTable(). We also need to remove the
-    // unwind data with RtlDeleteFunctionTable() in freeExec() then.
+    // Add unwind data for the dynamically generated function by
+    // calling RtlAddFunctionTable().
+
+    // TODO: We need to remove the unwind data with
+    // RtlDeleteFunctionTable() in freeExec() in
+    // vtablefactory.cxx. How can we get at the function pointer table
+    // there? Maybe we should move the function table and unwind info
+    // to be at the beginning of the allocated block, and add another
+    // parameter to this function to return the actual trampoline
+    // start, etc?
+
+    // Just one function with one unwind info with one unwind code
+    // included in it. Here we just "know" what the code in
+    // codeSnippet.asm looks like, sorry.
+
+    RUNTIME_FUNCTION *pFunTable =
+        (RUNTIME_FUNCTION *) (((((sal_uInt64) (code + codeSnippetSize) - 1) / 4) + 1) * 4);
+    UNWIND_INFO *pUnwInfo =
+        (UNWIND_INFO *) (pFunTable + 1);
+
+    OSL_ASSERT( (unsigned char *) (pUnwInfo + 1) <= code + codeSnippetSize );
+
+    pFunTable->BeginAddress = 0;
+    pFunTable->EndAddress = codeSnippetCodeSize;
+    pFunTable->UnwindData = (DWORD) ((unsigned char *) pUnwInfo - code);
+
+    pUnwInfo->Version = 1;
+    pUnwInfo->Flags = 0;
+    pUnwInfo->SizeOfProlog = (sal_uChar) (&trampoline_template_prolog_end - &trampoline_template);
+    pUnwInfo->CountOfCodes = 1;
+    pUnwInfo->FrameRegister = 0;
+    pUnwInfo->UnwindCode[0].u.CodeOffset = (sal_uChar) (&trampoline_template_prolog_end - &trampoline_template);
+    pUnwInfo->UnwindCode[0].u.UnwindOp = UWOP_ALLOC_SMALL;
+    pUnwInfo->UnwindCode[0].u.OpInfo = 4;
+
+    RtlAddFunctionTable( pFunTable, 1, (DWORD64) code );
 
     return code + codeSnippetSize;
 }

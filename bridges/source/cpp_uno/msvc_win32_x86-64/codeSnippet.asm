@@ -132,6 +132,8 @@ public trampoline_template_spill_end
     ;; cpp_vtable_call()) to spill their register parameters.
 
     sub rsp, 40
+trampoline_template_prolog_end::
+public trampoline_template_prolog_end
 
     ;; Call cpp_vtable_call() with 3 parameters:
 
