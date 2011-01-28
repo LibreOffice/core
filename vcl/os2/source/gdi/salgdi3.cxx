@@ -991,8 +991,6 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
     HMODULE hMod;
     ULONG   ObjNum, Offset, rc;
     CHAR    Buff[2*_MAX_PATH];
-    char    drive[_MAX_DRIVE], dir[_MAX_DIR];
-    char    fname[_MAX_FNAME], ext[_MAX_EXT];
     // get module handle (and name)
     rc = DosQueryModFromEIP( &hMod, &ObjNum, sizeof( Buff), Buff,
                             &Offset, (ULONG)ImplSalGetUniString);
