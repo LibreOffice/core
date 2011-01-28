@@ -29,7 +29,7 @@
 #include <svtools/localresaccess.hxx>
 #include "com/sun/star/inspection/XPropertyHandler.hpp"
 #include <tools/debug.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #ifndef RTPUI_REPORTDESIGN_HELPID_HRC
 #include "helpids.hrc"
 #endif
