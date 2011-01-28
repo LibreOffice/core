@@ -85,6 +85,7 @@ SHL1STDLIBS=       \
     $(CPPUHELPERLIB)	\
     $(COMPHELPERLIB)	\
     $(UCBHELPERLIB)	\
+    $(VBAHELPERLIB)	\
     $(TKLIB)		\
     $(VOSLIB)		\
     $(SALLIB)		\
