@@ -74,7 +74,7 @@
 #include <wrong.hxx>
 
 #include <vcl/window.hxx>
-#include <docufld.hxx> // OD 2008-06-19 #i90516#
+#include <docufld.hxx>
 
 using namespace ::com::sun::star;
 
@@ -1522,7 +1522,7 @@ BOOL SwCrsrShell::GetContentAtPos( const Point& rPt,
     return bRet;
 }
 
-// --> OD 2008-06-19 #i90516#
+// #i90516#
 const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 {
     const SwPostItField* pPostItFld = 0;
@@ -1545,7 +1545,6 @@ const SwPostItField* SwCrsrShell::GetPostItFieldAtCursor() const
 
     return pPostItFld;
 }
-// <--
 
 // befindet sich der Node in einem geschuetzten Bereich?
 BOOL SwContentAtPos::IsInProtectSect() const

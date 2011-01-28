@@ -129,9 +129,7 @@
 #include <swcalwrp.hxx>
 #include <SwStyleNameMapper.hxx>
 
-// OD 09.10.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
-// OD 2004-05-05 #i28701#
 #include <fmtwrapinfluenceonobjpos.hxx>
 
 #include <fmtmeta.hxx>
@@ -387,12 +385,11 @@ SfxItemInfo aSlotTab[] =
 
     { SID_ATTR_HDFT_DYNAMIC_SPACING, SFX_ITEM_POOLABLE }, // RES_HEADER_FOOTER_EAT_SPACING
     { FN_TABLE_ROW_SPLIT, SFX_ITEM_POOLABLE },            // RES_ROW_SPLIT
-    // DVO, OD 18.09.2003 #i18732# - use slot-id define in svx
+    // #i18732# - use slot-id define in svx
     { SID_SW_FOLLOW_TEXT_FLOW, SFX_ITEM_POOLABLE },         // RES_FOLLOW_TEXT_FLOW
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // collapsing borders #i29550#
     { SID_SW_COLLAPSING_BORDERS, SFX_ITEM_POOLABLE },       // RES_COLLAPSING_BORDERS
-    // <-- collapsing
-    // OD 2004-05-04 #i28701#
+    // #i28701#
     { SID_SW_WRAP_INFLUENCE_ON_OBJPOS, SFX_ITEM_POOLABLE }, // RES_WRAP_INFLUENCE_ON_OBJPOS
     { 0, 0 },                                           // RES_AUTO_STYLE
     { 0, SFX_ITEM_POOLABLE },                           // RES_FRMATR_STYLE_NAME
@@ -428,7 +425,7 @@ USHORT* SwAttrPool::pVersionMap1 = 0;
 USHORT* SwAttrPool::pVersionMap2 = 0;
 USHORT* SwAttrPool::pVersionMap3 = 0;
 USHORT* SwAttrPool::pVersionMap4 = 0;
-// OD 2004-01-21 #i18732#
+// #i18732#
 USHORT* SwAttrPool::pVersionMap5 = 0;
 USHORT* SwAttrPool::pVersionMap6 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
@@ -605,13 +602,12 @@ void _InitCore()
     aAttrTab[ RES_FRAMEDIR - POOLATTR_BEGIN ] = new SvxFrameDirectionItem( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     aAttrTab[ RES_ROW_SPLIT - POOLATTR_BEGIN ] = new SwFmtRowSplit;
 
-    // OD 18.09.2003 #i18732#
+    // #i18732#
     aAttrTab[ RES_FOLLOW_TEXT_FLOW - POOLATTR_BEGIN ] = new SwFmtFollowTextFlow( TRUE );
-    // --> collapsing borders FME 2005-05-27 #i29550#
+    // collapsing borders #i29550#
     aAttrTab[ RES_COLLAPSING_BORDERS - POOLATTR_BEGIN ] = new SfxBoolItem( RES_COLLAPSING_BORDERS, FALSE );
-    // <-- collapsing
-    // OD 2004-05-04 #i28701#
-    // --> OD 2004-10-18 #i35017# - constant name has changed
+    // #i28701#
+    // #i35017# - constant name has changed
     aAttrTab[ RES_WRAP_INFLUENCE_ON_OBJPOS - POOLATTR_BEGIN ] =
             new SwFmtWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
     // <--
@@ -701,7 +697,7 @@ void _InitCore()
     for ( i = 66; i <= 121; ++i )
         SwAttrPool::pVersionMap4[ i-1 ] = i + 9;
 
-    // OD 2004-01-21 #i18732# - setup new version map due to extension of
+    // #i18732# - setup new version map due to extension of
     // the frame attributes (RES_FRMATR_*) for binary filters.
     SwAttrPool::pVersionMap5 = new USHORT[ 130 ];
     for( i = 1; i <= 109; i++ )
@@ -822,7 +818,7 @@ void _FinitCore()
     delete[] SwAttrPool::pVersionMap2;
     delete[] SwAttrPool::pVersionMap3;
     delete[] SwAttrPool::pVersionMap4;
-    // OD 2004-01-21 #i18732#
+    // #i18732#
     delete[] SwAttrPool::pVersionMap5;
     delete[] SwAttrPool::pVersionMap6;
 

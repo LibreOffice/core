@@ -281,7 +281,7 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
     }
     else
     {
-        // --> OD 2004-07-26 #i32089# - delete at-frame anchored objects
+        // #i32089# - delete at-frame anchored objects
         if ( nWh == RES_FLYFRMFMT )
         {
             // determine frame formats of at-frame anchored objects
@@ -481,15 +481,15 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     else
     {
         OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
-        // OD 2005-08-02 #i52780# - Note: moving object to visible layer not needed.
+        // #i52780# - Note: moving object to visible layer not needed.
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
         SwDrawContact* pContact = new SwDrawContact( (SwDrawFrmFmt*)pDest,
                                 CloneSdrObj( *pSourceContact->GetMaster(),
                                         mbCopyIsMove && this == pSrcDoc ) );
-        // --> OD 2005-05-23 #i49730# - notify draw frame format
-        // that position attributes are already set, if the position attributes
-        // are already set at the source draw frame format.
+        // #i49730# - notify draw frame format that position attributes are
+        // already set, if the position attributes are already set at the
+        // source draw frame format.
         if ( pDest->ISA(SwDrawFrmFmt) &&
              rSource.ISA(SwDrawFrmFmt) &&
              static_cast<const SwDrawFrmFmt&>(rSource).IsPosAttrSet() )
@@ -500,8 +500,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
         if( pDest->GetAnchor() == rNewAnchor )
         {
-            // OD 03.07.2003 #108784# - do *not* connect to layout, if
-            // a <MakeFrms> will not be called.
+            // Do *not* connect to layout, if a <MakeFrms> will not be called.
             if ( bMakeFrms )
             {
                 pContact->ConnectToLayout( &rNewAnchor );
@@ -534,9 +533,8 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
                                 sal_Bool bInsInPage )
 {
-    // --> OD 2005-08-08 #i52858# - method name changed
+    // #i52858# - method name changed
     SdrPage *pPg = GetOrCreateDrawModel()->GetPage( 0 );
-    // <--
     if( !pPg )
     {
         pPg = GetDrawModel()->AllocPage( sal_False );
@@ -561,8 +559,7 @@ SdrObject* SwDoc::CloneSdrObj( const SdrObject& rObj, sal_Bool bMoveWithinDoc,
     else if( bInsInPage )
         pPg->InsertObject( pObj );
 
-    // OD 02.07.2003 #108784# - for drawing objects: set layer of cloned object
-    // to invisible layer
+    // For drawing objects: set layer of cloned object to invisible layer
     SdrLayerID nLayerIdForClone = rObj.GetLayer();
     if ( !pObj->ISA(SwFlyDrawObj) &&
          !pObj->ISA(SwVirtFlyDrawObj) &&
@@ -625,8 +622,8 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     // Anker noch nicht gesetzt ?
     RndStdIds eAnchorId = pAnchor ? pAnchor->GetAnchorId()
                                   : pFmt->GetAnchor().GetAnchorId();
-    // --> OD 2010-01-07 #i107811#
-    // Assure that at-page anchored fly frames have a page num or a content anchor set.
+    // #i107811# Assure that at-page anchored fly frames have a page num or a
+    // content anchor set.
     if ( !pAnchor ||
          ( FLY_AT_PAGE != pAnchor->GetAnchorId() &&
            !pAnchor->GetCntntAnchor() ) ||
@@ -924,8 +921,8 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                     : &rRg.GetPoint()->nNode;
     }
 
-    // OD 24.06.2003 #108784# - allow drawing objects in header/footer, but
-    // control objects aren't allowed in header/footer.
+    // Allow drawing objects in header/footer, but control objects aren't
+    // allowed in header/footer.
     if( pChkIdx &&
         ::CheckControlLayer( &rDrawObj ) &&
         IsInHeaderFooter( *pChkIdx ) )
@@ -970,14 +967,13 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     if( GetRootFrm() )
     {
         pFmt->MakeFrms();
-        // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
+        // #i42319# - follow-up of #i35635#
         // move object to visible layer
-        // --> OD 2007-07-10 #i79391#
+        // #i79391#
         if ( pContact->GetAnchorFrm() )
         {
             pContact->MoveObjToVisibleLayer( &rDrawObj );
         }
-        // <--
     }
 
     if( DoesUndo() )
@@ -1544,7 +1540,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     // dem Object (Grafik/Ole) absatzgebunden in den neuen Rahmen,
     // Frames erzeugen.
 
-    // OD 27.11.2003 #112045# - Keep layer ID of drawing object before removing
+    // Keep layer ID of drawing object before removing
     // its frames.
     // Note: The layer ID is passed to the undo and have to be the correct value.
     //       Removing the frames of the drawing object changes its layer.
@@ -1572,7 +1568,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     lcl_CpyAttr( *pNewSet, pOldFmt->GetAttrSet(), RES_SURROUND );
 
     // Den Rahmen ggf. in den Hintergrund schicken.
-    // OD 02.07.2003 #108784# - consider 'invisible' hell layer.
+    // Consider 'invisible' hell layer.
     if ( GetHellId() != nLayerId &&
          GetInvisibleHellId() != nLayerId )
     {
@@ -1582,7 +1578,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     }
 
     // Position uebernehmen
-    // OD 2004-04-15 #i26791# - use directly the positioning attributes of
+    // #i26791# - use directly the positioning attributes of
     // the drawing object.
     pNewSet->Put( pOldFmt->GetHoriOrient() );
     pNewSet->Put( pOldFmt->GetVertOrient() );
@@ -1648,13 +1644,13 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
     if( nLayerId == GetHellId() )
         rSdrObj.SetLayer( GetHeavenId() );
-    // OD 02.07.2003 #108784# - consider drawing objects in 'invisible' hell layer
+    // Consider drawing objects in 'invisible' hell layer
     else if( nLayerId == GetInvisibleHellId() )
         rSdrObj.SetLayer( GetInvisibleHeavenId() );
     pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
-    // OD 2004-04-15 #i26791# - set position of the drawing object, which is labeled.
+    // #i26791# - set position of the drawing object, which is labeled.
     pNewSet->Put( SwFmtVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ) );
     pNewSet->Put( SwFmtHoriOrient( 0, text::HoriOrientation::CENTER, text::RelOrientation::FRAME ) );
 
@@ -1669,7 +1665,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     if( pUndo )
     {
         pUndo->SetFlys( *pOldFmt, *pNewSet, *pNewFmt );
-        // OD 2004-04-15 #i26791# - position no longer needed
+        // #i26791# - position no longer needed
         pUndo->SetDrawObj( nLayerId );
     }
     else
@@ -2163,13 +2159,12 @@ short SwDoc::GetTextDirection( const SwPosition& rPos,
 
     SwCntntNode *pNd = rPos.nNode.GetNode().GetCntntNode();
 
-    // --> OD 2005-02-21 #i42921# - use new method <SwCntntNode::GetTextDirection(..)>
+    // #i42921# - use new method <SwCntntNode::GetTextDirection(..)>
     if ( pNd )
     {
         nRet = pNd->GetTextDirection( rPos, pPt );
     }
     if ( nRet == -1 )
-    // <--
     {
         const SvxFrameDirectionItem* pItem = 0;
         if( pNd )

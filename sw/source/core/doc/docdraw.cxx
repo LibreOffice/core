@@ -107,22 +107,19 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                 "<lcl_AdjustPositioningAttr(..)> - anchor frame is a follow. Please inform OD." );
         bool bVert = false;
         bool bR2L = false;
-        // --> OD 2005-05-10 #i45952# - use anchor position of
-        // anchor frame, if it exist.
+        // #i45952# - use anchor position of anchor frame, if it exist.
         Point aAnchorPos;
         if ( pAnchorFrm )
         {
-            // --> OD 2005-05-10 #i45952#
+            // #i45952#
             aAnchorPos = pAnchorFrm->GetFrmAnchorPos( ::HasWrap( &_rSdrObj ) );
-            // <--
             bVert = pAnchorFrm->IsVertical();
             bR2L = pAnchorFrm->IsRightToLeft();
         }
         else
         {
-            // --> OD 2005-05-10 #i45952#
+            // #i45952#
             aAnchorPos = _rSdrObj.GetAnchorPos();
-            // <--
             // If no anchor frame exist - e.g. because no layout exists - the
             // default layout direction is taken.
             const SvxFrameDirectionItem* pDirItem =
@@ -183,10 +180,9 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
 
     _pFrmFmt->SetFmtAttr( SwFmtHoriOrient( nHoriRelPos, text::HoriOrientation::NONE, text::RelOrientation::FRAME ) );
     _pFrmFmt->SetFmtAttr( SwFmtVertOrient( nVertRelPos, text::VertOrientation::NONE, text::RelOrientation::FRAME ) );
-    // --> OD 2005-03-11 #i44334#, #i44681# - positioning attributes already set
+    // #i44334#, #i44681# - positioning attributes already set
     _pFrmFmt->PosAttrSet();
-    // <--
-    // --> OD 2004-10-01 #i34750# - keep current object rectangle for  drawing
+    // #i34750# - keep current object rectangle for  drawing
     // objects. The object rectangle is used on events from the drawing layer
     // to adjust the positioning attributes - see <SwDrawContact::_Changed(..)>.
     {
@@ -200,13 +196,12 @@ void lcl_AdjustPositioningAttr( SwDrawFrmFmt* _pFrmFmt,
                                         ->SetLastObjRect( aObjRect.SVRect() );
         }
     }
-    // <--
 }
 
 SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
 {
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
+    // replace marked 'virtual' drawing objects by the corresponding 'master'
+    // drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
@@ -224,28 +219,26 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
                                  ? 0
                                  : new SwUndoDrawGroup( (USHORT)rMrkList.GetMarkCount() );
 
-        // --> OD 2005-08-16 #i53320#
+        // #i53320#
         bool bGroupMembersNotPositioned( false );
         {
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pMyContact->GetAnchoredObj( pObj ));
             bGroupMembersNotPositioned = pAnchoredDrawObj->NotYetPositioned();
         }
-        // <--
         //ContactObjekte und Formate vernichten.
         for( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
 
-            // --> OD 2005-08-16 #i53320#
+            // #i53320#
 #if OSL_DEBUG_LEVEL > 1
             SwAnchoredDrawObject* pAnchoredDrawObj =
                 static_cast<SwAnchoredDrawObject*>(pContact->GetAnchoredObj( pObj ));
             OSL_ENSURE( bGroupMembersNotPositioned == pAnchoredDrawObj->NotYetPositioned(),
                     "<SwDoc::GroupSelection(..)> - group members have different positioning status!" );
 #endif
-            // <--
 
             pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
             //loescht sich selbst!
@@ -257,41 +250,37 @@ SwDrawContact* SwDoc::GroupSelection( SdrView& rDrawView )
             else
                 DelFrmFmt( pFmt );
 
-            // --> OD 2005-05-10 #i45952# - re-introduce position
-            // normalization of group member objects, because its anchor position
-            // is cleared, when they are grouped.
+            // #i45952# - re-introduce position normalization of group member
+            // objects, because its anchor position is cleared, when they are
+            // grouped.
             Point aAnchorPos( pObj->GetAnchorPos() );
             pObj->NbcSetAnchorPos( Point( 0, 0 ) );
             pObj->NbcMove( Size( aAnchorPos.X(), aAnchorPos.Y() ) );
-            // <--
         }
 
         pFmt = MakeDrawFrmFmt( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "DrawObject" )),
                                 GetDfltFrmFmt() );
         pFmt->SetFmtAttr( aAnch );
-        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+        // #i36010# - set layout direction of the position
         pFmt->SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
-        // <--
 
         rDrawView.GroupMarked();
         OSL_ENSURE( rMrkList.GetMarkCount() == 1, "GroupMarked more or none groups." );
 
         SdrObject* pNewGroupObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         pNewContact = new SwDrawContact( pFmt, pNewGroupObj );
-        // --> OD 2004-11-22 #i35635#
+        // #i35635#
         pNewContact->MoveObjToVisibleLayer( pNewGroupObj );
-        // <--
         pNewContact->ConnectToLayout();
-        // --> OD 2005-08-16 #i53320# - No adjustment of the positioning and
-        // alignment attributes, if group members aren't positioned yet.
+        // #i53320# - No adjustment of the positioning and alignment
+        // attributes, if group members aren't positioned yet.
         if ( !bGroupMembersNotPositioned )
         {
-            // OD 2004-04-01 #i26791# - Adjust positioning and alignment attributes.
+            // #i26791# - Adjust positioning and alignment attributes.
             lcl_AdjustPositioningAttr( pFmt, *pNewGroupObj );
         }
-        // <--
 
         if( pUndo )
         {
@@ -319,20 +308,16 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
     if( bUndo )
         ClearRedo();
 
-    // OD 30.06.2003 #108784# - replace marked 'virtual' drawing objects by
-    // the corresponding 'master' drawing objects.
+    // replace marked 'virtual' drawing objects by the corresponding 'master'
+    // drawing objects.
     SwDrawView::ReplaceMarkedDrawVirtObjs( rDrawView );
 
     const SdrMarkList &rMrkList = rDrawView.GetMarkedObjectList();
-    // --> OD 2006-11-01 #130889#
     std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >* pFmtsAndObjs( 0L );
     const sal_uInt32 nMarkCount( rMrkList.GetMarkCount() );
-    // <--
     if ( nMarkCount )
     {
-        // --> OD 2006-11-01 #130889#
         pFmtsAndObjs = new std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >[nMarkCount];
-        // <--
         SdrObject *pMyObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
         if( !pMyObj->GetUpGroup() )
         {
@@ -360,11 +345,10 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
                         SwDrawFrmFmt *pFmt = MakeDrawFrmFmt( sDrwFmtNm,
                                                             GetDfltFrmFmt() );
                         pFmt->SetFmtAttr( aAnch );
-                        // --> OD 2004-10-25 #i36010# - set layout direction of the position
+                        // #i36010# - set layout direction of the position
                         pFmt->SetPositionLayoutDir(
                             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
                         pFmtsAndObjs[i].push_back( std::pair< SwDrawFrmFmt*, SdrObject* >( pFmt, pSubObj ) );
-                        // <--
 
                         if( bUndo )
                             pUndo->AddObj( i2, pFmt );
@@ -374,7 +358,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         }
     }
     rDrawView.UnGroupMarked();
-    // --> OD 2006-11-01 #130889#
     // creation of <SwDrawContact> instances for the former group members and
     // its connection to the Writer layout.
     for ( sal_uInt32 i = 0; i < nMarkCount; ++i )
@@ -404,7 +387,6 @@ void SwDoc::UnGroupSelection( SdrView& rDrawView )
         }
     }
     delete [] pFmtsAndObjs;
-    // <--
 }
 
 /*************************************************************************
@@ -472,10 +454,10 @@ BOOL SwDoc::DeleteSelection( SwDrawView& rDrawView )
                     if( pContact ) // natuerlich nicht bei gruppierten Objekten
                     {
                         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-                        // OD 18.06.2003 #108784# - before delete of selection
-                        // is performed, marked <SwDrawVirtObj>-objects have to
-                        // be replaced by its reference objects.
-                        // Thus, assert, if a <SwDrawVirt>-object is found in the mark list.
+                        // before delete of selection is performed, marked
+                        // <SwDrawVirtObj>-objects have to be replaced by its
+                        // reference objects.  Thus, assert, if a
+                        // <SwDrawVirt>-object is found in the mark list.
                         if ( pObj->ISA(SwDrawVirtObj) )
                         {
                             OSL_ENSURE( false,
@@ -611,8 +593,7 @@ void SwDoc::InitDrawModel()
     sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
     nControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
 
-    // OD 25.06.2003 #108784# - add invisible layers corresponding to the
-    // visible ones.
+    // add invisible layers corresponding to the visible ones.
     {
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("InvisibleHell" ));
         nInvisibleHell   = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
@@ -656,12 +637,7 @@ void SwDoc::InitDrawModel()
     }
 }
 
-/** method to notify drawing page view about the invisible layers
-
-    OD 26.06.2003 #108784#
-
-    @author OD
-*/
+/** method to notify drawing page view about the invisible layers */
 void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 {
     String sLayerNm;
@@ -677,10 +653,7 @@ void SwDoc::NotifyInvisibleLayers( SdrPageView& _rSdrPageView )
 
 /** method to determine, if a layer ID belongs to the visible ones.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is unknown, method asserts and returns <false>.
-
-    @author OD
 */
 bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 {
@@ -709,11 +682,8 @@ bool SwDoc::IsVisibleLayerId( const SdrLayerID& _nLayerId ) const
 
 /** method to determine, if the corresponding visible layer ID for a invisible one.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is a visible one, method returns given layer ID.
     Note: If given layer ID is unknown, method returns given layer ID.
-
-    @author OD
 */
 SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisibleLayerId )
 {
@@ -749,11 +719,8 @@ SdrLayerID SwDoc::GetVisibleLayerIdByInvisibleOne( const SdrLayerID& _nInvisible
 
 /** method to determine, if the corresponding invisible layer ID for a visible one.
 
-    OD 25.06.2003 #108784#
     Note: If given layer ID is a invisible one, method returns given layer ID.
     Note: If given layer ID is unknown, method returns given layer ID.
-
-    @author OD
 */
 SdrLayerID SwDoc::GetInvisibleLayerIdByVisibleOne( const SdrLayerID& _nVisibleLayerId )
 {
@@ -954,7 +921,7 @@ SdrLayerID SwDoc::GetInvisibleHellId() const { return nInvisibleHell; }
 SdrLayerID SwDoc::GetInvisibleControlsId() const { return nInvisibleControls; }
 SdrModel* SwDoc::GetOrCreateDrawModel() { return GetDrawModel() ? GetDrawModel() : _MakeDrawModel(); }
 
-// --> OD 2006-03-14 #i62875#
+// #i62875#
 namespace docfunc
 {
     bool ExistsDrawObjs( SwDoc& p_rDoc )
@@ -1044,6 +1011,5 @@ namespace docfunc
         return bAllDrawObjsOnPage;
     }
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

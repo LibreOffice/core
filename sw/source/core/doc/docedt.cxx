@@ -1058,11 +1058,9 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
         {
             if( pTNd->CanJoinNext())
             {
-                // --> OD 2009-08-20 #i100466#
                 // Always join next, because <pTNd> has to stay as it is.
                 // A join previous from its next would more or less delete <pTNd>
                 pTNd->JoinNext();
-                // <--
                 bRemove = false;
             }
         }
@@ -1436,8 +1434,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             }
 
             pDoc->CorrRel( aIdx, *rPam.GetPoint(), 0, sal_True );
-            // --> OD 2009-08-20 #i100466#
-            // adjust given <rPam>, if it does not belong to the cursors
+            // #i100466# adjust given <rPam>, if it does not belong to the cursors
             if ( pDelNd == rPam.GetBound( sal_True ).nContent.GetIdxReg() )
             {
                 rPam.GetBound( sal_True ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
@@ -1446,7 +1443,6 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
             {
                 rPam.GetBound( sal_False ) = SwPosition( SwNodeIndex( *pTxtNd ), SwIndex( pTxtNd ) );
             }
-            // <--
             pTxtNd->JoinNext();
         }
     }
@@ -1578,12 +1574,12 @@ bool SwDoc::DeleteAndJoinImpl( SwPaM & rPam,
 {
     sal_Bool bJoinTxt, bJoinPrev;
     lcl_GetJoinFlags( rPam, bJoinTxt, bJoinPrev );
-    // --> OD 2009-08-20 #i100466#
+    // #i100466#
     if ( bForceJoinNext )
     {
         bJoinPrev = sal_False;
     }
-    // <--
+
     {
         bool const bSuccess( DeleteRangeImpl( rPam ) );
         if (!bSuccess)
@@ -1789,8 +1785,7 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
     return true;
 }
 
-// OD 2009-08-20 #i100466#
-// Add handling of new optional parameter <bForceJoinNext>
+// #i100466# Add handling of new optional parameter <bForceJoinNext>
 bool SwDoc::DeleteAndJoin( SwPaM & rPam,
                            const bool bForceJoinNext )
 {

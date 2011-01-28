@@ -1191,8 +1191,8 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
                 if( !aNew.Len() )               // nichts gefunden, dann ist
                     aNew = pSFld->GetFormula(); // die Formel der neue Wert
 
-                // OD 11.02.2003 #i3141# - update expression of field as in
-                // method <SwDoc::UpdateExpFlds(..)> for string/text fields
+                // #i3141# - update expression of field as in method
+                // <SwDoc::UpdateExpFlds(..)> for string/text fields
                 pSFld->ChgExpStr( aNew );
 
                 // suche den Namen vom Feld
@@ -2225,7 +2225,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         delete pFldSortLst;
     pFldSortLst = new _SetGetExpFlds( 64, 16 );
 
-    /// OD 09.08.2002 [#101207#,#101216#,#101778#] - consider and unhide sections
+    /// consider and unhide sections
     ///     with hide condition, only in mode GETFLD_ALL (<eGetMode == GETFLD_ALL>)
     ///     notes by OD:
     ///         eGetMode == GETFLD_CALC in call from methods SwDoc::FldsToCalc

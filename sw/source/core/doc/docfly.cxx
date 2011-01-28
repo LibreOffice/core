@@ -66,9 +66,7 @@
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 
-// --> OD 2009-07-20 #i73249#
 #include <undoflystrattr.hxx>
-// <--
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
@@ -350,8 +348,8 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
                 pItem = 0;
             SwFmtVertOrient aOldV( rFmt.GetVertOrient() );
 
-            // OD 2004-05-14 #i28922# - correction: compare <aOldV.GetVertOrient()
-            // with <text::VertOrientation::NONE>
+            // #i28922# - correction: compare <aOldV.GetVertOrient() with
+            // <text::VertOrientation::NONE>
             if( text::VertOrientation::NONE == aOldV.GetVertOrient() && (!pItem ||
                 aOldV.GetPos() == ((SwFmtVertOrient*)pItem)->GetPos() ) )
             {
@@ -460,7 +458,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
-// --> OD 2009-07-20 #i73249#
+// #i73249#
 void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
                             const String& sNewTitle )
 {
@@ -514,7 +512,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 
     SetModified();
 }
-// <--
 
 /***************************************************************************
  *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
@@ -652,7 +649,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         {
             SwDrawContact* pContact = static_cast<SwDrawContact*>(GetUserCall(pObj));
 
-            // OD 27.06.2003 #108784# - consider, that drawing object has
+            // consider, that drawing object has
             // no user call. E.g.: a 'virtual' drawing object is disconnected by
             // the anchor type change of the 'master' drawing object.
             // Continue with next selected object and assert, if this isn't excepted.
@@ -667,23 +664,21 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 continue;
             }
 
-            // OD 2004-03-29 #i26791#
+            // #i26791#
             const SwFrm* pOldAnchorFrm = pContact->GetAnchorFrm( pObj );
             const SwFrm* pNewAnchorFrm = pOldAnchorFrm;
 
-            // --> OD 2006-03-01 #i54336#
+            // #i54336#
             // Instead of only keeping the index position for an as-character
             // anchored object the complete <SwPosition> is kept, because the
             // anchor index position could be moved, if the object again is
             // anchored as character.
-//            xub_StrLen nIndx = STRING_NOTFOUND;
             const SwPosition* pOldAsCharAnchorPos( 0L );
             const RndStdIds eOldAnchorType = pContact->GetAnchorId();
             if ( !_bSameOnly && eOldAnchorType == FLY_AS_CHAR )
             {
                 pOldAsCharAnchorPos = new SwPosition( pContact->GetCntntAnchor() );
             }
-            // <--
 
             if ( _bSameOnly )
                 _eAnchorType = eOldAnchorType;
@@ -703,7 +698,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                                             ? aObjRect.TopRight()
                                             : aPt;
 
-                    // OD 18.06.2003 #108784# - allow drawing objects in header/footer
+                    // allow drawing objects in header/footer
                     pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aNewPoint, false );
                     if ( pNewAnchorFrm->IsTxtFrm() && ((SwTxtFrm*)pNewAnchorFrm)->IsFollow() )
                     {
@@ -733,8 +728,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         Point aPoint( aPt );
                         aPoint.X() -= 1;
                         GetRootFrm()->GetCrsrOfst( &aPos, aPoint, &aState );
-                        // OD 20.06.2003 #108784# - consider that drawing objects
-                        // can be in header/footer. Thus, <GetFrm()> by left-top-corner
+                        // consider that drawing objects can be in
+                        // header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
                                         GetCntntNode()->GetFrm( &aPt, 0, FALSE );
                     }
@@ -775,7 +770,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
                 else            // Ankerwechsel
                 {
-                    // OD 18.06.2003 #108784# - allow drawing objects in header/footer
+                    // allow drawing objects in header/footer
                     pNewAnchorFrm = ::FindAnchor( pOldAnchorFrm, aPt, false );
                     if( pNewAnchorFrm->IsProtected() )
                     {
@@ -806,8 +801,8 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                     }
                     aNewAnch.SetAnchor( &aPos );
                     SetAttr( aNewAnch, *pContact->GetFmt() );
-                    // OD 2004-04-13 #i26791# - adjust vertical positioning to
-                    // 'center to baseline'
+                    // #i26791# - adjust vertical positioning to 'center to
+                    // baseline'
                     SetAttr( SwFmtVertOrient( 0, text::VertOrientation::CENTER, text::RelOrientation::FRAME ), *pContact->GetFmt() );
                     SwTxtNode *pNd = aPos.nNode.GetNode().GetTxtNode();
                     OSL_ENSURE( pNd, "Cursor not positioned at TxtNode." );
@@ -824,14 +819,14 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                  pNewAnchorFrm &&
                  ( !_bSameOnly || pNewAnchorFrm != pOldAnchorFrm ) )
             {
-                // OD 2004-04-06 #i26791# - Direct object positioning no longer
-                // needed. Apply of attributes (method call <SetAttr(..)>) takes
-                // care of the invalidation of the object position.
+                // #i26791# - Direct object positioning no longer needed. Apply
+                // of attributes (method call <SetAttr(..)>) takes care of the
+                // invalidation of the object position.
                 SetAttr( aNewAnch, *pContact->GetFmt() );
                 if ( _bPosCorr )
                 {
-                    // --> OD 2004-08-24 #i33313# - consider not connected
-                    // 'virtual' drawing objects
+                    // #i33313# - consider not connected 'virtual' drawing
+                    // objects
                     if ( pObj->ISA(SwDrawVirtObj) &&
                          !static_cast<SwDrawVirtObj*>(pObj)->IsConnected() )
                     {
@@ -849,7 +844,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 }
             }
 
-            // --> OD 2006-03-01 #i54336#
+            // #i54336#
             if ( pNewAnchorFrm && pOldAsCharAnchorPos )
             {
                 //Bei InCntnt's wird es spannend: Das TxtAttribut muss vernichtet
@@ -869,7 +864,6 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                 pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIndx, nIndx );
                 delete pOldAsCharAnchorPos;
             }
-            // <--
         }
     }
 
@@ -925,7 +919,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
     {
         const SwFmtAnchor& rAnchor = (*GetSpzFrmFmts())[ n ]->GetAnchor();
         ULONG nTstSttNd;
-        // OD 11.12.2003 #i20622# - to-frame anchored objects are allowed.
+        // #i20622# - to-frame anchored objects are allowed.
         if ( ((rAnchor.GetAnchorId() == FLY_AT_PARA) ||
               (rAnchor.GetAnchorId() == FLY_AT_CHAR)) &&
              0 != rAnchor.GetCntntAnchor() &&

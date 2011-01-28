@@ -381,7 +381,7 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
     {
         const BOOL bSkipHidden = !GetViewOptions()->IsShowHiddenChar();
-        // --> OD 2009-12-30 #i107447#
+        // #i107447#
         // To avoid loop the reset of <bInFrontOfLabel> flag is no longer
         // reflected in the return value <bRet>.
         const bool bResetOfInFrontOfLabel = SetInFrontOfLabel( FALSE );
@@ -392,7 +392,6 @@ BOOL SwCrsrShell::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
             // undo reset of <bInFrontOfLabel> flag
             SetInFrontOfLabel( TRUE );
         }
-        // <--
     }
 
     if( bRet )
@@ -459,10 +458,8 @@ BOOL SwCrsrShell::UpDown( BOOL bUp, USHORT nCnt )
     SwShellCrsr* pTmpCrsr = getShellCrsr( true );
 
     BOOL bRet = pTmpCrsr->UpDown( bUp, nCnt );
-    // --> FME 2005-01-10 #i40019# UpDown should always reset the
-    // bInFrontOfLabel flag:
+    // #i40019# UpDown should always reset the bInFrontOfLabel flag:
     bRet = SetInFrontOfLabel(FALSE) || bRet;
-    // <--
 
     if( pBlockCrsr )
         pBlockCrsr->clearPoints();
@@ -731,12 +728,11 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText, bool bBlock )
     *pCrsr->GetPoint() = aPos;
     rAktCrsrPt = aPt;
 
-    // --> FME 2005-01-31 #i41424# Only update the marked number levels if necessary
+    // #i41424# Only update the marked number levels if necessary
     // Force update of marked number levels if necessary.
     if ( bNewInFrontOfLabel || bOldInFrontOfLabel )
         pCurCrsr->_SetInFrontOfLabel( !bNewInFrontOfLabel );
     SetInFrontOfLabel( bNewInFrontOfLabel );
-    // <--
 
     if( !pCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ) )
     {
@@ -1287,8 +1283,8 @@ static void lcl_CheckHiddenPara( SwPosition& rPos )
         rPos = SwPosition( aTmp, SwIndex( pTxtNd, 0 ) );
 }
 
-// --> OD 2005-12-14 #i27301# - helper class, which notifies the accessibility
-// about invalid text selections in its destructor
+// #i27301# - helper class, which notifies the accessibility about invalid text
+// selections in its destructor
 class SwNotifyAccAboutInvalidTextSelections
 {
     private:
@@ -1321,9 +1317,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
         return;             // wenn nicht, dann kein Update !!
     }
 
-    // --> OD 2005-12-14 #i27301#
+    // #i27301#
     SwNotifyAccAboutInvalidTextSelections aInvalidateTextSelections( *this );
-    // <--
 
     if ( bIgnoreReadonly )
     {
@@ -2557,7 +2552,6 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = TRUE;
     bSetCrsrInReadOnly = TRUE;
     pVisCrsr = new SwVisCrsr( this );
-    // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
 }
 

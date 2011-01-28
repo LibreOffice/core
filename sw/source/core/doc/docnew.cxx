@@ -102,16 +102,11 @@
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 
 
-// --> OD 2006-04-19 #b6375613#
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-// <--
-
-// --> OD 2007-03-16 #i73788#
 #include <pausethreadstarting.hxx>
-// <--
 #include <numrule.hxx>
 #include <list.hxx>
 #include <listfunc.hxx>
@@ -267,9 +262,7 @@ SwDoc::SwDoc() :
     mpGrammarContact( 0 ),
     aChartDataProviderImplRef(),
     pChartControllerHelper( 0 ),
-    // --> OD 2007-10-31 #i83479#
-    mpListItemsList( new tImplSortedNodeNumList() ),
-    // <--
+    mpListItemsList( new tImplSortedNodeNumList() ), // #i83479#
     m_pXmlIdRegistry(),
     nUndoPos( 0 ),
     nUndoSavePos( 0 ),
@@ -284,12 +277,10 @@ SwDoc::SwDoc() :
     mIdleBlockCount(0),
     nLockExpFld( 0 ),
     mbReadlineChecked(false),
-    // --> OD 2005-02-11 #i38810#
-    mbLinksUpdated( sal_False ),
+    mbLinksUpdated( sal_False ), //#i38810#
     mbClipBoard( false ),
     mbColumnSelection( false ),
-    // i#78591#
-    mbProtectForm(false),
+    mbProtectForm(false), // i#78591#
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
     mbStartIdleTimer(sal_False)
@@ -326,9 +317,7 @@ SwDoc::SwDoc() :
 #if OSL_DEBUG_LEVEL > 1
     mbXMLExport =
 #endif
-    // --> OD 2006-03-21 #b6375613#
     mbApplyWorkaroundForB6375613 =
-    // <--
                             false;
 
     mbGroupUndo =
@@ -369,9 +358,7 @@ SwDoc::SwDoc() :
     mbUnixForceZeroExtLeading               = false;        // hidden
     mbOldPrinterMetrics                     = false;        // hidden
     mbTabRelativeToIndent                   = true;         // hidden
-    // --> OD 2008-06-05 #i89181#
-    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden
-    // <--
+    mbTabAtLeftIndentForParagraphsInList    = false;        // hidden #i89181#
     mbInvertBorderSpacing                   = false;        // hidden
     mbCollapseEmptyCellPara                 = true;        // hidden
 
@@ -412,16 +399,12 @@ SwDoc::SwDoc() :
 
     // lege (fuer die Filter) eine Default-OutlineNumRule an
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
-    // #115901#
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
 
     new SwTxtNode( SwNodeIndex( aUndoNodes.GetEndOfContent() ), pDfltTxtFmtColl );
     new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
@@ -460,14 +443,11 @@ SwDoc::SwDoc() :
  */
 SwDoc::~SwDoc()
 {
-    // --> OD 2007-03-16 #i73788#
-    SwPauseThreadStarting aPauseThreadStarting;
-    // <--
+    SwPauseThreadStarting aPauseThreadStarting; // #i73788#
 
-    // --> OD 2007-11-01 #i83479#
+    // #i83479#
     delete mpListItemsList;
     mpListItemsList = 0;
-    // <--
 
     // clean up chart related structures...
     // Note: the chart data provider gets already diposed in ~SwDocShell
@@ -691,13 +671,11 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
 
-    // <--
     pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
 
-    // --> FME 2006-10-09 #i60945# External leading compatibility for unix systems.
+    // #i60945# External leading compatibility for unix systems.
     if ( get(IDocumentSettingAccess::UNIX_FORCE_ZERO_EXT_LEADING ) )
         pNewVir->Compat_ZeroExtleadBug();
-    // <--
 
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
@@ -821,16 +799,12 @@ void SwDoc::ClearDoc()
     pNumRuleTbl->DeleteAndDestroy( 0, pNumRuleTbl->Count() );
     // creation of new outline numbering rule
     pOutlineRule = new SwNumRule( String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ),
-                                  // --> OD 2008-06-06 #i89178#
+                                  // #i89178#
                                   numfunc::GetDefaultPositionAndSpaceMode(),
-                                  // <--
                                   OUTLINE_RULE );
-    // <--
     AddNumRule(pOutlineRule);
-    // --> OD 2005-10-21 - counting of phantoms depends on <IsOldNumbering()>
+    // Counting of phantoms depends on <IsOldNumbering()>
     pOutlineRule->SetCountPhantoms( !get(IDocumentSettingAccess::OLD_NUMBERING) );
-    // <--
-    // <--
 
     //remove the dummy pagedec from the array and delete all the old ones
     aPageDescs.Remove( nDummyPgDsc );
@@ -929,8 +903,8 @@ IGrammarContact* getGrammarContact( const SwTxtNode& rTxtNode )
     return pDoc->getGrammarContact();
 }
 
-// --> FME 2005-02-25 #i42634# Moved common code of SwReader::Read() and
-// SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
+// #i42634# Moved common code of SwReader::Read() and SwDocShell::UpdateLinks()
+// to new SwDoc::UpdateLinks():
 void SwDoc::UpdateLinks( BOOL bUI )
 {
     SfxObjectCreateMode eMode;
@@ -972,8 +946,7 @@ void SwDoc::UpdateLinks( BOOL bUI )
     }
 
 }
-// <--
-// --> OD 2006-04-19 #b6375613#
+
 void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
 {
     if ( mbApplyWorkaroundForB6375613 != p_bApplyWorkaroundForB6375613 )
@@ -1011,7 +984,6 @@ void SwDoc::SetApplyWorkaroundForB6375613( bool p_bApplyWorkaroundForB6375613 )
         }
     }
 }
-// <--
 
 ::sfx2::IXmlIdRegistry&
 SwDoc::GetXmlIdRegistry()

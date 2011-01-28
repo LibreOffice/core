@@ -610,7 +610,7 @@ namespace sw { namespace mark
             {
                 // completely in range
 
-                // --> OD 2009-08-07 #i92125#
+                // #i92125#
                 bool bKeepCrossRefBkmk( false );
                 {
                     if ( rStt == rEnd &&
@@ -628,7 +628,6 @@ namespace sw { namespace mark
                         pSaveBkmk->push_back(SaveBookmark(true, true, *pMark, rStt, pSttIdx));
                     vMarksToDelete.push_back(ppMark);
                 }
-                // <--
             }
             else if(isPosInRange ^ isOtherPosInRange)
             {
@@ -645,7 +644,7 @@ namespace sw { namespace mark
                         rEnd,
                         isPosInRange ? pMark->GetOtherMarkPos() : pMark->GetMarkPos());
 
-                // --> OD 2009-08-06 #i92125#
+                // #i92125#
                 // no move of position for cross-reference bookmarks,
                 // if move occurs inside a certain node
                 if ( ( IDocumentMarkAccess::GetType(*pMark) !=
@@ -662,7 +661,6 @@ namespace sw { namespace mark
                     // illegal selection? collapse the mark and restore sorting later
                     isSortingNeeded |= lcl_FixCorrectedMark(isPosInRange, isOtherPosInRange, pMark);
                 }
-                // <--
             }
         }
 
