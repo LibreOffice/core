@@ -235,7 +235,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/win/source/window/salmenu \
     vcl/win/source/window/salobj \
 ))
-#$(call gb_CxxObject_get_target,vcl/win/source/gdi/wntgdi) : DEFS += -DFOO
+
+### FIXME: need to link windows resources to vcl dll
 endif
 
 $(eval $(call gb_Library_add_cobjects,vcl,\
