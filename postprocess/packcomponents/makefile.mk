@@ -54,7 +54,7 @@ my_components = \
     chartmodel \
     charttools \
     chartview \
-    comphelp4 \
+    component/comphelper/util/comphelp \
     component/framework/util/fwk \
     component/framework/util/fwl \
     component/framework/util/fwm \
