@@ -202,37 +202,23 @@ namespace basegfx
 
     // external operators
     //////////////////////////////////////////////////////////////////////////
-
     class B2DTuple;
 
     B2ITuple minimum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple maximum(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple absolute(const B2ITuple& rTup);
-
     B2DTuple interpolate(const B2ITuple& rOld1, const B2ITuple& rOld2, double t);
-
     B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2);
-
     B2DTuple average(const B2ITuple& rOld1, const B2ITuple& rOld2, const B2ITuple& rOld3);
 
     B2ITuple operator+(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple operator-(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple operator/(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple operator*(const B2ITuple& rTupA, const B2ITuple& rTupB);
-
     B2ITuple operator*(const B2ITuple& rTup, sal_Int32 t);
-
     B2ITuple operator*(sal_Int32 t, const B2ITuple& rTup);
-
     B2ITuple operator/(const B2ITuple& rTup, sal_Int32 t);
-
     B2ITuple operator/(sal_Int32 t, const B2ITuple& rTup);
-
 } // end of namespace basegfx
 
 #endif /* _BGFX_TUPLE_B2ITUPLE_HXX */

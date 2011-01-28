@@ -118,7 +118,6 @@ class UcbStreamer_Impl : public ::cppu::WeakImplHelper2< XActiveDataStreamer, XA
     UcbLockBytesRef         m_xLockBytes;
 
 public:
-
                             UcbStreamer_Impl( UcbLockBytes* pLockBytes )
                                 : m_xLockBytes( pLockBytes )
                             {}
@@ -169,7 +168,6 @@ public:
                                 : m_xInteractionHandler( rxInteractionHandler )
                                 , m_xProgressHandler( rxProgressHandler )
                             {}
-
 
     virtual Reference<XInteractionHandler> SAL_CALL getInteractionHandler() throw (RuntimeException)
     { return m_xInteractionHandler; }
@@ -259,7 +257,6 @@ class Moderator
     // returns. This would imply that these class must be refcounted !!!
 
 public:
-
     Moderator(
         Reference < XContent >& xContent,
         Reference < XInteractionHandler >& xInteract,
@@ -300,7 +297,6 @@ public:
         : public salhelper::Condition
     {
     public:
-
         ConditionRes(osl::Mutex& aMutex,Moderator& aModerator)
             : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
@@ -308,13 +304,11 @@ public:
         }
 
     protected:
-
         bool applies() const {
             return m_aModerator.m_aResultType != NORESULT;
         }
 
     private:
-
         Moderator& m_aModerator;
     };
 
@@ -325,9 +319,7 @@ public:
         sal_Int32         ioErrorCode;
     };
 
-
     Result getResult(const sal_uInt32 milliSec);
-
 
     enum ReplyType {
         NOREPLY,
@@ -336,12 +328,10 @@ public:
         REQUESTHANDLED
     };
 
-
     class ConditionRep
         : public salhelper::Condition
     {
     public:
-
         ConditionRep(osl::Mutex& aMutex,Moderator& aModerator)
             : salhelper::Condition(aMutex),
               m_aModerator(aModerator)
@@ -349,40 +339,30 @@ public:
         }
 
     protected:
-
         bool applies() const {
             return m_aModerator.m_aReplyType != NOREPLY;
         }
 
     private:
-
         Moderator& m_aModerator;
     };
 
     void setReply(ReplyType);
 
-
     void handle( const Reference<XInteractionRequest >& Request );
-
     void push( const Any& Status );
-
     void update( const Any& Status );
-
     void pop(  );
 
     void setStream(const Reference< XStream >& aStream);
-
     void setInputStream(const Reference<XInputStream> &rxInputStream);
 
 
 protected:
-
     virtual void SAL_CALL run();
-
     virtual void SAL_CALL onTerminated();
 
 private:
-
     osl::Mutex        m_aMutex;
 
     friend class ConditionRes;
@@ -433,13 +413,11 @@ public:
 
 
 private:
-
     Moderator& m_aModerator;
 
     osl::Mutex m_aMutex;
     Reference<XStream> m_xStream;
 };
-
 
 
 class ModeratorsActiveDataSink
@@ -473,7 +451,6 @@ public:
 
 
 private:
-
     Moderator& m_aModerator;
     osl::Mutex m_aMutex;
     Reference<XInputStream> m_xStream;
@@ -557,7 +534,6 @@ class ModeratorsProgressHandler
     : public ::cppu::WeakImplHelper1<XProgressHandler>
 {
 public:
-
     ModeratorsProgressHandler(Moderator &theModerator);
 
     ~ModeratorsProgressHandler();
@@ -574,7 +550,6 @@ public:
 
 
 private:
-
     Moderator& m_aModerator;
 };
 
@@ -609,8 +584,6 @@ void SAL_CALL ModeratorsProgressHandler::pop(  )
 {
     m_aModerator.pop();
 }
-
-
 
 
 ModeratorsInteractionHandler::ModeratorsInteractionHandler(
@@ -776,7 +749,6 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
 }
 
 
-
 void Moderator::push( const Any& Status )
 {
     {
@@ -866,7 +838,6 @@ void Moderator::setInputStream(const Reference<XInputStream> &rxInputStream)
 }
 
 
-
 void SAL_CALL Moderator::run()
 {
     ResultType aResultType;
@@ -908,8 +879,6 @@ void SAL_CALL Moderator::run()
     }
 }
 
-
-
 void SAL_CALL Moderator::onTerminated()
 {
     {
@@ -918,12 +887,10 @@ void SAL_CALL Moderator::onTerminated()
      delete this;
 }
 
-
 /**
    Function for opening UCB contents synchronously,
    but with handled timeout;
 */
-
 static sal_Bool _UCBOpenContentSync(
     UcbLockBytesRef xLockBytes,
     Reference < XContent > xContent,
@@ -1270,7 +1237,6 @@ static sal_Bool _UCBOpenContentSync(
 
     return ( bAborted || bException );
 }
-
 
 //----------------------------------------------------------------------------
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )

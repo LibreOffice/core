@@ -124,7 +124,6 @@ CommandLine::CommandLine(const char *CommandString, BOOL bWrite)
 {
     CommandBuffer = new char [1];
     if (CommandBuffer == NULL) {
-        //cout << "Error: nospace" << endl;
         exit(0);
     }
     nArgc = 0;
@@ -150,7 +149,6 @@ CommandLine::CommandLine(const CommandLine& CCommandLine, BOOL bWrite)
 {
     CommandBuffer = new char [1];
     if (CommandBuffer == NULL) {
-        //cout << "Error: nospace" << endl;
         exit(0);
     }
     nArgc = 0;
@@ -175,7 +173,6 @@ CommandLine::~CommandLine()
 {
     delete [] CommandBuffer;
     delete [] ComShell;
-    //for (int i = 0; ppArgv[i] != '\0'; i++) {
     for (int i = 0; ppArgv[i] != 0; i++) {
         delete [] ppArgv[i];
     }
@@ -218,13 +215,6 @@ CommandLine& CommandLine::operator=(const char *CommandString)
 void CommandLine::Print()
 /*****************************************************************************/
 {
-    //cout << "******* start print *******" << endl;
-    //cout << "nArgc = " << nArgc << endl;
-    //cout << "CommandBuffer = " << CommandBuffer << endl;
-    for (int i = 0; ppArgv[i] != NULL; i++) {
-        //cout << "ppArgv[" << i << "] = " << ppArgv[i] << endl;
-    }
-    //cout << "******** end print ********" << endl;
 }
 
 /*****************************************************************************/
@@ -246,11 +236,9 @@ void CommandLine::BuildCommand(const char *CommandString)
     }
 
     // delete old memory and get some new memory for CommandBuffer
-
     delete [] CommandBuffer;
     CommandBuffer =  new char [strlen(ComShell)+strlen(WorkString)+1];
     if (CommandBuffer == NULL) {
-        //cout << "Error: nospace" << endl;
         exit(0);
     }
     strcpy (CommandBuffer, ComShell);
@@ -262,14 +250,12 @@ void CommandLine::BuildCommand(const char *CommandString)
     Strtokens(CommandString);
 
     // delete the space for the old CommandLine
-
     for (int i = 0; ppArgv[i] != 0; i++) {
         delete [] ppArgv[i];
     }
     delete [] ppArgv;
 
     /* get space for the new command line */
-
     ppArgv = (char **) new char * [nArgc+1];
     if (ppArgv == NULL) {
         //cout << "Error: no space" << endl;
@@ -277,30 +263,23 @@ void CommandLine::BuildCommand(const char *CommandString)
     }
 
     // flush the white space
-
     while ( isspace(*CommandString) )
         CommandString++;
 
     index = 0;
 
     // start the loop to build all the individual tokens
-
     while (*CommandString != '\0') {
-
         pos = 0;
 
         // copy the token until white space is found
-
         while ( !isspace(*CommandString) && *CommandString != '\0') {
-
             buffer[pos++] = *CommandString++;
-
         }
 
         buffer[pos] = '\0';
 
         // get space for the individual tokens
-
         ppArgv[index] = (char *) new char [strlen(buffer)+1];
         if (ppArgv[index] == NULL) {
             //cout << "Error: nospace" << endl;
@@ -308,14 +287,11 @@ void CommandLine::BuildCommand(const char *CommandString)
         }
 
         // copy the token
-
         strcpy (ppArgv[index++], buffer);
 
         // flush while space
-
         while ( isspace(*CommandString) )
             CommandString++;
-
     }
 
     // finish by setting the las pointer to NULL
@@ -333,17 +309,13 @@ void CommandLine::Strtokens(const char *CommandString)
     temp = CommandString;
 
     /* bypass white space */
-
     while (isspace(*temp)) temp++;
 
     for (count=0; *temp != '\0'; count++) {
-
         /* continue until white space of string terminator is found */
-
         while ((!isspace(*temp)) && (*temp != '\0')) temp++;
 
         /* bypass white space */
-
         while (isspace(*temp)) temp++;
 
     }
@@ -447,26 +419,15 @@ CCommand::operator int()
 #elif defined OS2
     nRet = _spawnv( P_WAIT, ppArgv[0], ppArgv );
 #elif defined UNX
-    //fprintf( stderr, "CComand : operator (int) not implemented\n");
-    // **** Unix Implementierung ***************
     pid_t pid;
 
     if (( pid = fork()) < 0 )
-    {
         DBG_ASSERT( FALSE, "fork error" );
-    }
     else if ( pid == 0 )
-    {
         if ( execv( ppArgv[0], (char * const *) ppArgv ) < 0 )
-        {
             DBG_ASSERT( FALSE, "execv failed" );
-        }
-    }
-    //fprintf( stderr, "parent: %s %s\n", ppArgv[0] , ppArgv[1] );
     if ( (nRet = waitpid( pid, NULL, 0 ) < 0) )
-    {
         DBG_ASSERT( FALSE, "wait error" );
-    }
 #endif
 
     switch ( errno )
@@ -628,8 +589,6 @@ CCommandd::operator int()
     aStartupInfo.lpTitle = NULL;
     aStartupInfo.dwX = 100;
     aStartupInfo.dwY = 100;
-    //aStartupInfo.dwXSize = 400;
-    //aStartupInfo.dwYSize = 400;
     aStartupInfo.dwXCountChars = 40;
     aStartupInfo.dwYCountChars = 40;
 
@@ -637,15 +596,9 @@ CCommandd::operator int()
     aStartupInfo.dwFillAttribute = FOREGROUND_RED | BACKGROUND_RED |
                                 BACKGROUND_BLUE | BACKGROUND_GREEN;
 
-//  aStartupInfo.dwFlags = STARTF_USESTDHANDLES;
-    //aStartupInfo.wShowWindow = SW_NORMAL; //SW_SHOWDEFAULT;
-    //aStartupInfo.wShowWindow = SW_HIDE; //SW_SHOWNOACTIVATE;
     aStartupInfo.wShowWindow = SW_SHOWNOACTIVATE;
     aStartupInfo.cbReserved2 = NULL;
     aStartupInfo.lpReserved2 = NULL;
-    //aStartupInfo.hStdInput = stdin;
-    //aStartupInfo.hStdOutput = stdout;
-    //aStartupInfo.hStdError = stderr;
 
     if ( nFlag & COMMAND_EXECUTE_HIDDEN )
     {

@@ -32,25 +32,15 @@
 
 //===============================================
 // includes
-
 #include <com/sun/star/frame/XModuleManager.hpp>
-
 #include <com/sun/star/frame/XDesktop.hpp>
-
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
-
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
-
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
-
 #include <com/sun/star/awt/XTopWindow.hpp>
-
 #include <com/sun/star/awt/KeyModifier.hpp>
-
 #include <com/sun/star/uno/Sequence.hxx>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <toolkit/helper/vclunohelper.hxx>
 
@@ -73,7 +63,6 @@ namespace svt
 class SVT_DLLPRIVATE AsyncAccelExec
 {
     public:
-
         //---------------------------------------
         /** creates a new instance of this class, which can be used
             one times only!
@@ -87,7 +76,6 @@ class SVT_DLLPRIVATE AsyncAccelExec
         void execAsync();
 
     private:
-
         //---------------------------------------
         /** @short  allow creation of instances of this class
                     by using our factory only!
@@ -98,7 +86,6 @@ class SVT_DLLPRIVATE AsyncAccelExec
         DECL_DLLPRIVATE_LINK(impl_ts_asyncCallback, void*);
 
     private:
-
         ::vcl::EventPoster m_aAsyncCallback;
         css::uno::Reference< css::frame::XDispatch > m_xDispatch;
         css::util::URL m_aURL;
@@ -328,91 +315,62 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
         {
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfLine" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfLine" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfPara" ) );
-
         case com::sun::star::awt::Key::DELETE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfPara" ) );
-
         case com::sun::star::awt::Key::DELETE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToStartOfWord" ) );
-
         case com::sun::star::awt::Key::DELETE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DelToEndOfWord" ) );
-
         case com::sun::star::awt::Key::INSERT_LINEBREAK:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertLinebreak" ) );
-
         case com::sun::star::awt::Key::INSERT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:InsertPara" ) );
-
         case com::sun::star::awt::Key::MOVE_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToPrevWord" ) );
-
         case com::sun::star::awt::Key::MOVE_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToNextWord" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfLine" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfLine" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfPara" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfPara" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToStartOfDoc" ) );
-
         case com::sun::star::awt::Key::MOVE_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:GoToEndOfDoc" ) );
-
         case com::sun::star::awt::Key::SELECT_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharLeftSel" ) );
-
         case com::sun::star::awt::Key::SELECT_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharRightSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD_BACKWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordLeftSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD_FORWARD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:WordRightSel" ) );
-
         case com::sun::star::awt::Key::SELECT_WORD:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectWord" ) );
-
         case com::sun::star::awt::Key::SELECT_LINE:
             return rtl::OUString();
-
         case com::sun::star::awt::Key::SELECT_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectText" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfLineSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_LINE:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfLineSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfParaSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_PARAGRAPH:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfParaSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_BEGIN_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:StartOfDocumentSel" ) );
-
         case com::sun::star::awt::Key::SELECT_TO_END_OF_DOCUMENT:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:EndOfDocumentSel" ) );
-
         case com::sun::star::awt::Key::SELECT_ALL:
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:SelectAll" ) );
         default:
