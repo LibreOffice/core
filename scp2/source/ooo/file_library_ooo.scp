@@ -55,7 +55,6 @@ File gid_File_Lib_Basprov
   #endif
 End
 
-#ifdef ENABLE_VBA
 File gid_File_Lib_Vbaevent
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -66,7 +65,6 @@ File gid_File_Lib_Vbaevent
     Name = STRING(CONCAT4(vbaevents,DLLPOSTFIX,.uno,.dll));
   #endif
 End
-#endif // ENABLE_VBA
 
 STD_LIB_FILE( gid_File_Lib_Bib , bib)
 
@@ -336,9 +334,6 @@ File gid_File_Lib_Stringresource
   #endif
 End
 
-#if defined ENABLE_VBA
-#ifndef VBA_EXTENSION
-
 File gid_File_Lib_Vbaobj
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -372,7 +367,6 @@ File gid_File_Lib_Vbamsforms
   #endif
 End
 
-#endif // VBA_EXTENSION
 File gid_File_Lib_Vbahelper
     TXT_FILE_BODY;
     Styles = (PACKED);
@@ -383,7 +377,6 @@ File gid_File_Lib_Vbahelper
     Name = STRING(CONCAT3(vbahelper,DLLPOSTFIX,.dll));
   #endif
 End
-#endif // ENABLE_VBA
 
 
 #ifdef WNT

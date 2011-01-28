@@ -98,7 +98,6 @@ common
         ENABLE_REPORTBUILDER
 		ENABLE_REPORTDESIGN
         ENABLE_SVCTAGS
-		ENABLE_VBA
 		FORCE2ARCHIVE
 		PA_VER
         ENABLE_NAS
@@ -291,7 +290,6 @@ common
         URE_BOOTSTRAP
         USE_FT_EMBOLDEN
         USE_XINERAMA
-        VBA_EXTENSION
         XINERAMA_LINK
 	}
 	restore
