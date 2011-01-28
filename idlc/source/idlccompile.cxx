@@ -41,6 +41,7 @@
 #endif
 
 #ifdef  SAL_UNX
+#include <errno.h>
 #include <unistd.h>
 #if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD) || \
     defined(AIX) || defined(OPENBSD)
@@ -168,7 +169,7 @@ OString makeTempName(const OString& prefix)
     int nDescriptor = mkstemp(tmpFilePattern);
     if( -1 == nDescriptor )
     {
-        fprintf( stderr,"idlc: couldn't create temporary file\n" );
+        fprintf(stderr, "idlc: mkstemp(\"%s\") failed: %s\n", tmpFilePattern, strerror(errno));
         exit( 1 );
     }
     // the file shall later be reopened by stdio functions
