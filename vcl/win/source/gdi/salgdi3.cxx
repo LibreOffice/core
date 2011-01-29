@@ -213,7 +213,7 @@ ImplFontAttrCache::~ImplFontAttrCache()
 
                 aCacheFile.WriteByteStringLine( rDFA.maStyleName, RTL_TEXTENCODING_UTF8 );
 
-                aIter++;
+                ++aIter;
             }
             // EOF Marker
             String aEmptyStr;
