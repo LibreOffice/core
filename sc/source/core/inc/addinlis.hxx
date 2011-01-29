@@ -30,7 +30,6 @@
 #define SC_ADDINLIS_HXX
 
 #include "adiasync.hxx" // for ScAddInDocs PtrArr
-#include <tools/list.hxx>
 #include <com/sun/star/sheet/XResultListener.hpp>
 #include <com/sun/star/sheet/XVolatileResult.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -48,7 +47,7 @@ private:
     com::sun::star::uno::Any aResult;
     ScAddInDocs* pDocs; // documents where this is used
 
-    static List aAllListeners;
+    static ::std::list<ScAddInListener*> aAllListeners;
 
     // always allocated via CreateListener
     ScAddInListener( com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVR,

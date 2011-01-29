@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#include <tools/debug.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
@@ -43,7 +42,7 @@ using namespace com::sun::star;
 
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
 
-List ScAddInListener::aAllListeners;
+::std::list<ScAddInListener*> ScAddInListener::aAllListeners;
 
 ScAddInListener* ScAddInListener::CreateListener(
                         uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc )
@@ -51,7 +50,7 @@ ScAddInListener* ScAddInListener::CreateListener(
     ScAddInListener* pNew = new ScAddInListener( xVR, pDoc );
 
     pNew->acquire(); // for aAllListeners
-    aAllListeners.Insert( pNew, LIST_APPEND );
+    aAllListeners.push_back( pNew );
 
     if ( xVR.is() )
         xVR->addResultListener( pNew ); // after at least 1 ref exists!
@@ -73,45 +72,46 @@ ScAddInListener::~ScAddInListener()
 
 ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xVR )
 {
+    ScAddInListener* pLst = NULL;
     sheet::XVolatileResult* pComp = xVR.get();
 
-    sal_uInt32 nCount = aAllListeners.Count();
-    for (sal_uInt32 nPos=0; nPos<nCount; nPos++)
+    for(::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin(); iter != aAllListeners.end(); ++iter)
     {
-        ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
-        if ( pComp == (sheet::XVolatileResult*)pLst->xVolRes.get() )
-            return pLst;
+        if ( pComp == (sheet::XVolatileResult*)(*iter)->xVolRes.get() )
+        {
+            pLst = *iter;
+            break;
+        }
     }
-    return NULL; // not found
+    return pLst;
 }
 
 //! move to some container object?
 void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
 {
-    sal_uInt32 nPos = aAllListeners.Count();
-    while (nPos)
+    ::std::list<ScAddInListener*>::iterator iter = aAllListeners.begin();
+    while(iter != aAllListeners.end())
     {
-        // loop backwards because elements are removed
-        --nPos;
-        ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
-        ScAddInDocs* p = pLst->pDocs;
+        ScAddInDocs* p = (*iter)->pDocs;
         sal_uInt16 nFoundPos;
         if ( p->Seek_Entry( pDocumentP, &nFoundPos ) )
         {
             p->Remove( nFoundPos );
             if ( p->Count() == 0 )
             {
+                if ( (*iter)->xVolRes.is() )
+                    (*iter)->xVolRes->removeResultListener( *iter );
+
+                (*iter)->release(); // Ref for aAllListeners - pLst may be deleted here
+
                 // this AddIn is no longer used
                 // dont delete, just remove the ref for the list
 
-                aAllListeners.Remove( nPos );
-
-                if ( pLst->xVolRes.is() )
-                    pLst->xVolRes->removeResultListener( pLst );
-
-                pLst->release(); // Ref for aAllListeners - pLst may be deleted here
+                iter = aAllListeners.erase( iter );
+                continue;
             }
         }
+        ++iter;
     }
 }
 
