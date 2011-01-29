@@ -135,7 +135,6 @@ PPTExBulletProvider::~PPTExBulletProvider()
 sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraphicSize )
 {
     sal_uInt16 nRetValue = 0xffff;
-    sal_uInt32 nId = 0;
 
     if ( rUniqueId.Len() )
     {
@@ -169,8 +168,7 @@ sal_uInt16 PPTExBulletProvider::GetId( const ByteString& rUniqueId, Size& rGraph
                 aGraphicObject = GraphicObject( aMappedGraphic );
             }
         }
-
-        nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
+        sal_uInt32 nId = pGraphicProv->GetBlibID( aBuExPictureStream, aGraphicObject.GetUniqueID(), aRect, NULL, NULL );
 
         if ( nId && ( nId < 0x10000 ) )
             nRetValue = (sal_uInt16)nId - 1;
@@ -3248,7 +3246,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 continue;
             }
-            sal_Int32 nPlacementID = -1;
 
             sal_Bool bClientData = ( bEffect || ( eCa != ::com::sun::star::presentation::ClickAction_NONE ) ||
                                         nPlaceHolderAtom || nOlePictureId );
@@ -3256,6 +3253,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
             {
                 if ( nPlaceHolderAtom )
                 {
+                    sal_Int32 nPlacementID = -1;
                     if ( ( mnTextStyle == EPP_TEXTSTYLE_TITLE ) || ( mnTextStyle == EPP_TEXTSTYLE_BODY ) )
                         nPlacementID = nIndices++;
                     else

@@ -237,10 +237,11 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             aAny >>= aAs;
             nSpeed = (sal_uInt8)aAs;
         }
-        sal_Int16 nTT = 0, nTST = 0;
+        sal_Int16 nTT = 0;
         if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionType" ) ) )
             && ( aAny >>= nTT ) )
         {
+            sal_Int16 nTST = 0;
             if ( GetPropertyValue( aAny, mXPagePropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TransitionSubtype" ) ) )
                 && ( aAny >>= nTST ) )
                 nTransitionType = GetTransition( nTT, nTST, eFe, nDirection );
