@@ -683,13 +683,6 @@ void SwView::ExecTabWin( SfxRequest& rReq )
 
             nBorder = (bVerticalWriting ? nPageHeight : nPageWidth) - aTabCols.GetLeftMin() - aColItem.GetRight();
 
-#ifdef DEBUG
-            long nTmp1 = nPageWidth;
-            long nTmp2 = aTabCols.GetLeftMin() + nBorder;
-            (void)nTmp1;
-            (void)nTmp2;
-#endif
-
             if ( aColItem.GetRight() > 0 )
                 aTabCols.SetRight( nBorder );
 
