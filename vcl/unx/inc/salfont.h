@@ -35,7 +35,6 @@ struct  SalFontDimension;
 class   SalFontFamily;
 class   SalFontFamilyList;
 class   SalFontStruct;
-class   SalFontStructList;
 class   SalFonts;
 
 // -=-= includes -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -173,9 +172,6 @@ public:
             CharSet GetCharSet() { return meCharSet; }
 
 };
-
-// -=-= SalFontStructList =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-DECLARE_LIST( SalFontStructList, SalFontStruct* )
 
 #endif // _SV_SALFONT_H
 
