@@ -323,7 +323,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
 
         if ( bClip )
             pOut->IntersectClipRegion( aPaintArea.SVRect() );
-        /// OD 25.09.2002 #99739# - delete unused 3rd parameter
+        /// delete unused 3rd parameter
         PaintPicture( pOut, aGrfArea );
     }
     else
@@ -378,9 +378,8 @@ void lcl_CalcRect( Point& rPt, Size& rDim, USHORT nMirror )
 void SwNoTxtFrm::GetGrfArea( SwRect &rRect, SwRect* pOrigRect,
                              BOOL ) const
 {
-    // JP 23.01.2001: currently only used for scaling, cropping and mirroring
-    // the contour of graphics!
-    //                  all other is handled by the GraphicObject
+    //currently only used for scaling, cropping and mirroring the contour of graphics!
+    //all other is handled by the GraphicObject
 
     //In rRect wird das sichbare Rechteck der Grafik gesteckt.
     //In pOrigRect werden Pos+Size der Gesamtgrafik gesteck.
@@ -731,7 +730,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 else if ( pSh->VisArea().IsOver( aRect ) &&
                    OUTDEV_WINDOW == pSh->GetOut()->GetOutDevType() )
                 {
-                    // OD 27.11.2002 #105519# - invalidate instead of painting
+                    //invalidate instead of painting
                     pSh->GetWin()->Invalidate( aRect.SVRect() );
                 }
 
@@ -784,9 +783,9 @@ void lcl_correctlyAlignRect( SwRect& rAlignedGrfArea, const SwRect& rInArea, Out
 // Ausgabe der Grafik. Hier wird entweder eine QuickDraw-Bmp oder
 // eine Grafik vorausgesetzt. Ist nichts davon vorhanden, wird
 // eine Ersatzdarstellung ausgegeben.
-/// OD 25.09.2002 #99739# - delete unused 3rd parameter.
-/// OD 25.09.2002 #99739# - use aligned rectangle for drawing graphic.
-/// OD 25.09.2002 #99739# - pixel-align coordinations for drawing graphic.
+/// delete unused 3rd parameter.
+/// use aligned rectangle for drawing graphic.
+/// pixel-align coordinations for drawing graphic.
 void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) const
 {
     ViewShell* pShell = GetShell();
@@ -800,7 +799,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     const bool bIsChart = pOLENd && ChartPrettyPainter::IsChart( pOLENd->GetOLEObj().GetObject() );
 
-    /// OD 25.09.2002 #99739# - calculate aligned rectangle from parameter <rGrfArea>.
+    /// calculate aligned rectangle from parameter <rGrfArea>.
     ///     Use aligned rectangle <aAlignedGrfArea> instead of <rGrfArea> in
     ///     the following code.
     SwRect aAlignedGrfArea = rGrfArea;
@@ -808,7 +807,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
     if( !bIsChart )
     {
-        /// OD 25.09.2002 #99739#
         /// Because for drawing a graphic left-top-corner and size coordinations are
         /// used, these coordinations have to be determined on pixel level.
         ::SwAlignGrfRect( &aAlignedGrfArea, *pOut );

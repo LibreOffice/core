@@ -874,8 +874,8 @@ SwModify*   SwDoc::GetUnoCallBack() const
     return pUnoCallBack;
 }
 
-/*-----------------28.5.2001 10:06------------------
- * SwDoc:
+
+/** SwDoc:
  *  Reading and writing of the layout cache.
  *--------------------------------------------------*/
 void SwDoc::ReadLayoutCache( SvStream& rStream )

@@ -3122,9 +3122,8 @@ BOOL SwRedline::HasValidRange() const
                 * pMkNd = &GetMark()->nNode.GetNode();
     if( pPtNd->StartOfSectionNode() == pMkNd->StartOfSectionNode() &&
         !pPtNd->StartOfSectionNode()->IsTableNode() &&
-        // JP 18.5.2001: Bug 87222 - invalid if points on the end of content
-        // DVO 25.03.2002: #96530# end-of-content only invalid if no content
-        //                 index exists
+        // invalid if points on the end of content
+        // end-of-content only invalid if no content index exists
         ( pPtNd != pMkNd || GetContentIdx() != NULL ||
           pPtNd != &pPtNd->GetNodes().GetEndOfContent() )
         )

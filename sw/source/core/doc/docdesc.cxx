@@ -94,8 +94,8 @@ static void lcl_DefaultPageFmt( sal_uInt16 nPoolFmtId,
     //Raender haben eine defaultmaessige Mindestgroesse.
     //wenn der Drucker einen groesseren Rand vorgibt, so
     //ist mir dass auch recht.
-    // MIB 06/25/2002, #99397#: The HTML page desc had A4 as page size
-    // always. This has been changed to take the page size from the printer.
+    // The HTML page desc had A4 as page size always.
+    // This has been changed to take the page size from the printer.
     // Unfortunately, the margins of the HTML page desc are smaller than
     // the margins used here in general, so one extra case is required.
     // In the long term, this needs to be changed to always keep the

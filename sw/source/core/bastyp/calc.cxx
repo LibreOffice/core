@@ -721,8 +721,8 @@ void SwCalc::Pop( const VoidPtr )
 SwCalcOper SwCalc::GetToken()
 {
 #if OSL_DEBUG_LEVEL > 1
-//JP 25.01.2001: static for switch back to the "old" implementation of the
-//              calculator, which don't use the I18N routines.
+//static for switch back to the "old" implementation of the
+//calculator, which don't use the I18N routines.
 static int nUseOld = 0;
 if( !nUseOld )
 {
