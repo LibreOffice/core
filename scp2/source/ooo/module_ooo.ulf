@@ -197,7 +197,7 @@ en-US = "Romanian Dictionaries"
 en-US = "Russian"
 
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_RU]
-en-US = "Russian hyphenation dictionary and thesaurus"
+en-US = "Russian spell check dictionary, hyphenation rules and thesaurus"
 
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_SK]
 en-US = "Slovak"
