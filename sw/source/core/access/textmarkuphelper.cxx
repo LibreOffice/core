@@ -86,14 +86,14 @@ namespace {
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwTxtNode& rTxtNode )
     : mrPortionData( rPortionData )
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     , mpTxtNode( &rTxtNode )
     , mpTextMarkupList( 0 )
     // <--
 {
 }
 
-// --> OD 2010-02-19 #i108125#
+// #i108125#
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
@@ -109,7 +109,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 {
     sal_Int32 nTextMarkupCount( 0 );
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -139,7 +139,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -188,7 +188,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
         return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    // --> OD 2010-02-19 #i108125#
+    // #i108125#
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
