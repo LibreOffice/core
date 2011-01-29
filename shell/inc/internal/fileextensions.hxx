@@ -45,7 +45,7 @@ struct FileExtensionEntry
 {
     char*    ExtensionAnsi;         // e.g. ".sxw"
     wchar_t* ExtensionUnicode;      // e.g. L".sxw"
-    char*    RegistryForwardKey;    // e.g. "soffice.StarWriterDocument.6"
+    char*    RegistryForwardKey;    // e.g. "LibreOffice.StarWriterDocument.6"
 };
 
 extern FileExtensionEntry OOFileExtensionTable[];
