@@ -29,41 +29,32 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <tools/debug.hxx>
 #include <sfx2/objsh.hxx>
 #include <vcl/svapp.hxx>
 
-
 #include "addinlis.hxx"
-#include "miscuno.hxx"      // SC_IMPL_SERVICE_INFO
+#include "miscuno.hxx" // SC_IMPL_SERVICE_INFO
 #include "document.hxx"
 #include "brdcst.hxx"
 #include "sc.hrc"
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
-
 SC_SIMPLE_SERVICE_INFO( ScAddInListener, "ScAddInListener", "stardiv.one.sheet.AddInListener" )
 
-//------------------------------------------------------------------------
-
 List ScAddInListener::aAllListeners;
-
-//------------------------------------------------------------------------
 
 ScAddInListener* ScAddInListener::CreateListener(
                         uno::Reference<sheet::XVolatileResult> xVR, ScDocument* pDoc )
 {
     ScAddInListener* pNew = new ScAddInListener( xVR, pDoc );
 
-    pNew->acquire();                                // for aAllListeners
+    pNew->acquire(); // for aAllListeners
     aAllListeners.Insert( pNew, LIST_APPEND );
 
     if ( xVR.is() )
-        xVR->addResultListener( pNew );             // after at least 1 ref exists!
+        xVR->addResultListener( pNew ); // after at least 1 ref exists!
 
     return pNew;
 }
@@ -91,7 +82,7 @@ ScAddInListener* ScAddInListener::Get( uno::Reference<sheet::XVolatileResult> xV
         if ( pComp == (sheet::XVolatileResult*)pLst->xVolRes.get() )
             return pLst;
     }
-    return NULL;        // not found
+    return NULL; // not found
 }
 
 //! move to some container object?
@@ -100,7 +91,7 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
     sal_uInt32 nPos = aAllListeners.Count();
     while (nPos)
     {
-        //  loop backwards because elements are removed
+        // loop backwards because elements are removed
         --nPos;
         ScAddInListener* pLst = (ScAddInListener*)aAllListeners.GetObject(nPos);
         ScAddInDocs* p = pLst->pDocs;
@@ -111,31 +102,29 @@ void ScAddInListener::RemoveDocument( ScDocument* pDocumentP )
             if ( p->Count() == 0 )
             {
                 // this AddIn is no longer used
-                //  dont delete, just remove the ref for the list
+                // dont delete, just remove the ref for the list
 
                 aAllListeners.Remove( nPos );
 
                 if ( pLst->xVolRes.is() )
                     pLst->xVolRes->removeResultListener( pLst );
 
-                pLst->release();    // Ref for aAllListeners - pLst may be deleted here
+                pLst->release(); // Ref for aAllListeners - pLst may be deleted here
             }
         }
     }
 }
-
-//------------------------------------------------------------------------
 
 // XResultListener
 
 void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEvent& aEvent )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;         //! or generate a UserEvent
+    SolarMutexGuard aGuard; //! or generate a UserEvent
 
-    aResult = aEvent.Value;     // store result
+    aResult = aEvent.Value; // store result
 
-    //  notify document of changes
+    // notify document of changes
 
     Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 
@@ -164,10 +153,5 @@ void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObj
         xVolRes = NULL;
     }
 }
-
-
-//------------------------------------------------------------------------
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
