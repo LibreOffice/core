@@ -778,33 +778,4 @@ Sequence<sal_Int8> Model::getImplementationId()
     return getUnoTunnelID();
 }
 
-
-//
-// 'shift' operators for getting data into and out of Anys
-//
-
-void operator <<= ( com::sun::star::uno::Any& rAny,
-                    xforms::Model* pModel)
-{
-    Reference<XPropertySet> xPropSet( static_cast<XPropertySet*>( pModel ) );
-    rAny <<= xPropSet;
-}
-
-bool operator >>= ( xforms::Model* pModel,
-                    com::sun::star::uno::Any& rAny )
-{
-    bool bRet = false;
-
-    // acquire model pointer through XUnoTunnel
-    Reference<XUnoTunnel> xTunnel( rAny, UNO_QUERY );
-    if( xTunnel.is() )
-    {
-        pModel = reinterpret_cast<xforms::Model*>(
-            xTunnel->getSomething( xforms::Model::getUnoTunnelID() ) );
-        bRet = true;
-    }
-
-    return bRet;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
