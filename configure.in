@@ -5330,18 +5330,21 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
-   AC_MSG_CHECKING([ICU version])
-      AC_TRY_RUN([
-#include <unicode/uversion.h>
 
-int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM < 4)
-        return 1;
-      else
-        return 0;
-}
-      ], [AC_MSG_RESULT(OK)], [AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])])
-      AC_LANG_POP([C++])
+   AC_PATH_PROG( ICUCONFIG, icu-config)
+   AC_MSG_CHECKING([ICU version])
+   ICU_VERSION=`$ICUCONFIG --version`
+   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+
+   if test "$ICU_MAJOR" -ge "4"; then
+      AC_MSG_RESULT([OK])
+   else
+      AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
+   fi
+
+    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -5351,6 +5354,9 @@ AC_SUBST(SYSTEM_ICU)
 AC_SUBST(SYSTEM_GENBRK)
 AC_SUBST(SYSTEM_GENCCODE)
 AC_SUBST(SYSTEM_GENCMN)
+AC_SUBST(ICU_MAJOR)
+AC_SUBST(ICU_MINOR)
+AC_SUBST(ICU_MICRO)
 
 dnl ===================================================================
 dnl Graphite
