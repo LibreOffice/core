@@ -235,6 +235,12 @@ en-US = "Thai"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_TH]
 en-US = "Thai spelling dictionary"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_UK]
+en-US = "Ukrainian"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_UK]
+en-US = "Ukrainian spell check dictionary, hyphenation rules and thesaurus"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_VI]
 en-US = "Vietnamese"
 

@@ -397,6 +397,17 @@ Module gid_Module_Root_Extension_Dictionary_Th
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Uk
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_UK );
+    Files = (gid_File_Extension_Dictionary_Uk);
+    InstallOrder = "2000";
+    Sortkey = "755";
+    Spellcheckerlanguage = "uk";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Vi
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_VI );
     Files = (gid_File_Extension_Dictionary_Vi);
