@@ -65,9 +65,7 @@
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <fmtanchr.hxx>
 #include <fmtrowsplt.hxx>
-// --> OD 2005-01-27 #i33818#
-#include <fmtfollowtextflow.hxx>
-// <--
+#include <fmtfollowtextflow.hxx> // #i33818#
 #include <numrule.hxx>
 #   include "../inc/wwstyles.hxx"
 #   include "writerhelper.hxx"
@@ -332,17 +330,14 @@ sal_uInt32 wwSectionManager::GetTextAreaWidth() const
     return !maSegments.empty() ? maSegments.back().GetTextAreaWidth() : 0;
 }
 
-// --> OD 2007-07-03 #148498#
 sal_uInt32 wwSectionManager::GetWWPageTopMargin() const
 {
     return !maSegments.empty() ? maSegments.back().maSep.dyaTop : 0;
 }
-// <--
 
 sal_uInt16 SwWW8ImplReader::End_Ftn()
 {
     /*
-    #84095#
     Ignoring Footnote outside of the normal Text. People will put footnotes
     into field results and field commands.
     */
@@ -447,7 +442,6 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
 long SwWW8ImplReader::Read_Ftn(WW8PLCFManResult* pRes)
 {
     /*
-    #84095#
     Ignoring Footnote outside of the normal Text. People will put footnotes
     into field results and field commands.
     */
@@ -531,7 +525,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : 0;
     ApoTestResults aRet;
     // Frame in Style Definition (word appears to ignore them if inside an
-    // text autoshape, e.g. #94418#)
+    // text autoshape)
     if (!bTxbxFlySection)
         aRet.mpStyleApo = StyleExists(nAktColl) ? pCollA[nAktColl].pWWFly : 0;
 
@@ -591,7 +585,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                 }
                 else
                 {
-                    // --> OD 2005-02-01 #i39468#
+                    // #i39468#
                     // If current cell isn't valid, the test is allowed.
                     // The cell isn't valid, if e.g. there is a new row
                     // <pTableDesc->nAktRow> >= <pTableDesc->pTabLines->Count()>
@@ -700,8 +694,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
 
             // replace by simple Bullet ?
             if( bListSymbol )
-                //JP 14.08.96: cBulletChar benutzen, damit auf dem MAC
-                //              richtig gemappt wird
+                //cBulletChar benutzen, damit auf dem MAC richtig gemappt wird
                 sTxt.Fill(  SVBT8ToByte( rAV.cbTextBefore )
                           + SVBT8ToByte( rAV.cbTextAfter  ), cBulletChar );
             }
@@ -786,7 +779,7 @@ SwNumRule* SwWW8ImplReader::GetStyRule()
     const String aBaseName(CREATE_CONST_ASC( "WW8StyleNum" ));
     const String aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
-    // --> OD 2008-06-04 #i86652#
+    // #i86652#
     USHORT nRul = rDoc.MakeNumRule( aName, 0, FALSE,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     // <--
@@ -859,7 +852,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( USHORT, const BYTE* pData, short nLen ) 
 
                                         // Falls bereits direkt oder durch
                                         // Vererbung NumruleItems gesetzt sind,
-                                        // dann jetzt ausschalten #56163
+                                        // dann jetzt ausschalten
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         String aName(CREATE_CONST_ASC( "Outline" ));
@@ -1008,7 +1001,7 @@ void SwWW8ImplReader::StartAnl(const BYTE* pSprm13)
     {
         if (!pNumRule)
         {
-            // --> OD 2008-06-04 #i86652#
+            // #i86652#
             pNumRule = rDoc.GetNumRuleTbl()[
                             rDoc.MakeNumRule( sNumRule, 0, FALSE,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
@@ -1971,7 +1964,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             }
         }
 
-        // #55171: WW-Tabellen koennen Fly-Wechsel beinhalten daher hier
+        // WW-Tabellen koennen Fly-Wechsel beinhalten daher hier
         // Tabellen abbrechen und neu beginnen noch steht *pPap noch vor
         // TabRowEnd, daher kann TestApo() mit letztem Parameter false und
         // damit wirksam gerufen werden.
@@ -2054,7 +2047,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         aRes.pMemPos = 0;
         aRes.nStartPos = nStartCp;
 
-        // #114237 PlcxMan currently points too far ahead so we need to bring
+        // PlcxMan currently points too far ahead so we need to bring
         // it back to where we are trying to make a table
         pIo->pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
         if (!(pPap->SeekPos(aRes.nStartPos)))
@@ -2134,7 +2127,6 @@ void WW8TabDesc::CalcDefaults()
     nMaxRight = SHRT_MIN;
 
     /*
-    #101175#
     If we are an honestly inline centered table, then the normal rules of
     engagement for left and right margins do not apply. The multiple rows are
     centered regardless of the actual placement of rows, so we cannot have
@@ -2160,7 +2152,7 @@ void WW8TabDesc::CalcDefaults()
         for( short i = 0; i < pR->nWwCols; i++ )
         {
            /*
-            #74387# If the margins are so large as to make the displayable
+            If the margins are so large as to make the displayable
             area inside them smaller than the minimum allowed then adjust the
             width to fit. But only do it if the two cells are not the exact
             same value, if they are then the cell does not really exist and will
@@ -2180,7 +2172,7 @@ void WW8TabDesc::CalcDefaults()
     }
     nSwWidth = nMaxRight - nMinLeft;
 
-    // #109830# If the table is right aligned we need to align all rows to the
+    // If the table is right aligned we need to align all rows to the
     // row that has the furthest right point
 
     if(eOri == text::HoriOrientation::RIGHT)
@@ -2315,7 +2307,6 @@ void WW8TabDesc::CalcDefaults()
         OSL_ENSURE(i,"no columns in row ?");
 
         /*
-        #96345#
         If the last cell was "false" then there is no valid cell following it,
         so the default mapping forward wont't work. So map it (and
         contigious invalid cells backwards to the last valid cell instead.
@@ -2546,10 +2537,9 @@ void WW8TabDesc::UseSwTable()
         GetSttNd()->FindTableNode();
     OSL_ENSURE( pTblNd, "wo ist mein TabellenNode" );
 
-    // --> mloiseleur 2007-10-10 #i69519# Restrict rows to repeat to a decent value
+    // #i69519# - Restrict rows to repeat to a decent value
     if ( nRowsToRepeat == static_cast<USHORT>(nRows) )
         nRowsToRepeat = 1;
-    // <--
 
     pTblNd->GetTable().SetRowsToRepeat( nRowsToRepeat );
     // ggfs. Zusatz-Zellen einfuegen u.dgl.
@@ -2592,7 +2582,7 @@ void WW8TabDesc::MergeCells()
                     pTabBoxes = &pTabLine->GetTabBoxes();
 
                     USHORT nCol = pActBand->nTransCell[ i ];
-                    if (!pActBand->bExist[i])    //#113434#
+                    if (!pActBand->bExist[i])
                         continue;
                     OSL_ENSURE(nCol < pTabBoxes->Count(),
                         "Too few columns, table ended early");
@@ -2607,10 +2597,9 @@ void WW8TabDesc::MergeCells()
                         bMerge = true;
                     else if (rCell.bFirstMerged && pActBand->bExist[i])
                     {
-                        //#91211# Some tests to avoid merging cells
-                        //which previously were declared invalid because
-                        //of sharing the exact same dimensions as their
-                        //previous cell
+                        // Some tests to avoid merging cells which previously were
+                        // declared invalid because of sharing the exact same dimensions
+                        // as their previous cell
 
                         //If theres anything underneath/above we're ok.
                         if (rCell.bVertMerge || rCell.bVertRestart)
@@ -2649,8 +2638,8 @@ void WW8TabDesc::MergeCells()
                         // 2. aktuelle Merge-Gruppe anlegen
                         pActMGroup = new WW8SelBoxInfo( nX1, nWidth );
 
-                        // --> OD 2005-02-04 #118544# - determine size of new
-                        // merge group before inserted the new merge group.
+                        // determine size of new merge group
+                        // before inserted the new merge group.
                         // Needed to correctly locked previously created merge groups.
                         // Gesamtbreite ermitteln und zuweisen
                         short nSizCell = pActBand->nWidth[ i ];
@@ -2665,9 +2654,8 @@ void WW8TabDesc::MergeCells()
                         pActMGroup->nGroupWidth = nSizCell;
                         // <--
 
-                        // --> OD 2005-02-03 #118544# - locked previously
-                        // created merge groups, after determining the size
-                        // for the new merge group.
+                        // locked previously created merge groups,
+                        // after determining the size for the new merge group.
                         // 1. ggfs. alte Mergegruppe(n) schliessen, die
                         // den von unserer neuen Gruppe betroffenen
                         // X-Bereich ueberdecken
@@ -2806,8 +2794,8 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
         short nGrX1;
         short nGrX2;
 
-        // --> OD 2005-02-04 #118544# - improvement: search backwards
-        //for ( USHORT iGr = 0; iGr < pMergeGroups->Count(); iGr++ )
+        // improvement: search backwards
+        // for ( USHORT iGr = 0; iGr < pMergeGroups->Count(); iGr++ )
         for ( short iGr = pMergeGroups->Count() - 1; iGr >= 0; --iGr )
         {
             // die aktuell untersuchte Gruppe
@@ -3100,9 +3088,7 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, BOOL bIsBiDi)
         default:
             OSL_ENSURE(eDir == 4, "unknown direction code, maybe its a bitfield");
         case 3:
-            // --> FME/Alan Yaniger: 2006-09-15 #i38158# Consider RTL tables:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
-            // <--
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
             break;
         case 5:
             eDir = FRMDIR_VERT_TOP_RIGHT;
@@ -3111,9 +3097,7 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, BOOL bIsBiDi)
             eDir = FRMDIR_VERT_TOP_RIGHT;
             break;
         case 4:
-            // --> FME/Alan Yaniger: 2006-09-15 #i38158# Consider RTL tables:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
-            // <--
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
             break;
     }
     return eDir;
@@ -3338,8 +3322,7 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
     SwTableBox* pResult = 0;
 
     // pruefen, ob die Box zu mergen ist
-    // --> OD 2005-02-04 #118544# - If cell is the first one to be merged,
-    // a new merge group has to be provided.
+    // If cell is the first one to be merged, a new merge group has to be provided.
     // E.g., it could be that a cell is the first one to be merged, but no
     // new merge group is provided, because the potential other cell to be merged
     // doesn't exist - see method <WW8TabDesc::MergeCells>.
@@ -3420,11 +3403,11 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     if (pTableDesc)
         maTableStack.push(pTableDesc);
 
-    // --> OD 2005-01-27 #i33818# - determine absolute position object attributes,
+    // #i33818# - determine absolute position object attributes,
     // if possible. It's needed for nested tables.
     WW8FlyPara* pTableWFlyPara( 0L );
     WW8SwFlyPara* pTableSFlyPara( 0L );
-    // --> OD 2005-03-21 #i45301# - anchor nested table inside Writer fly frame
+    // #i45301# - anchor nested table inside Writer fly frame
     // only at-character, if absolute position object attributes are available.
     // Thus, default anchor type is as-character anchored.
     RndStdIds eAnchor( FLY_AS_CHAR );
@@ -3449,18 +3432,15 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableWFlyPara = ConstructApo( aApo, pNestedTabPos );
             if ( pTableWFlyPara )
             {
-                // --> OD 2007-07-03 #148498#
                 // <WW8SwFlyPara> constructor has changed - new 4th parameter
                 // containing WW8 page top margin.
                 pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
                     maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);
-                // <--
-                // --> OD 2005-03-21 #i45301# - anchor nested table Writer fly
-                // frame at-character
+
+                // #i45301# - anchor nested table Writer fly frame at-character
                 eAnchor = FLY_AT_CHAR;
-                // <--
             }
         }
     }
@@ -3483,9 +3463,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-            // --> OD 2005-01-26 #i33818# - anchor the Writer fly frame for
-            // the nested table at-character.
-            // --> OD 2005-03-21 #i45301#
+            // #i33818# - anchor the Writer fly frame for the nested table at-character.
+            // #i45301#
             SwFmtAnchor aAnchor( eAnchor );
             aAnchor.SetAnchor( pTableDesc->pParentPos );
             aItemSet.Put( aAnchor );
@@ -3500,9 +3479,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         if (pTableDesc->pFlyFmt)
         {
             pTableDesc->SetSizePosition(pTableDesc->pFlyFmt);
-            // --> OD 2005-01-26 #i33818# - Use absolute position object
-            // attributes, if existing, and apply them to the created Writer fly
-            // frame.
+            // #i33818# - Use absolute position object attributes,
+            // if existing, and apply them to the created Writer fly frame.
             if ( pTableWFlyPara && pTableSFlyPara )
             {
                 WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
@@ -3519,7 +3497,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 pTableDesc->pFlyFmt->SetFmtAttr( SwFmtSurround( SURROUND_NONE ) );
             }
             // <--
-            // --> OD 2005-01-27 #i33818# - The nested table doesn't have to leave
+            // #i33818# - The nested table doesn't have to leave
             // the table cell. Thus, the Writer fly frame has to follow the text flow.
             pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( TRUE ) );
             // <--
@@ -3531,7 +3509,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     else
         PopTableDesc();
 
-    // --> OD 2005-01-28 #i33818#
+    // #i33818#
     delete pTableWFlyPara;
     delete pTableSFlyPara;
     // <--
@@ -3645,13 +3623,11 @@ void SwWW8ImplReader::StopTable()
     }
 
     bReadTable = true;
-    // --> OD 2009-04-16 #i101116#
-    // Keep PaM on table end only for nested tables
+    // #i101116# - Keep PaM on table end only for nested tables
     if ( nInTable > 1 )
     {
         mpTableEndPaM.reset(new SwPaM(*pPaM));
     }
-    // <--
 }
 
 // GetTableLeft() wird fuer absatzgebundene Grafikobjekte in Tabellen
@@ -3872,7 +3848,7 @@ void WW8RStyle::Set1StyleDefaults()
     if (!bCTLFontChanged)   // Style no CTL Font? set the default
         pIo->SetNewFontAttr(ftcBi, true, RES_CHRATR_CTL_FONT);
 
-    //#88976# western 2nd to make western charset conversion the default
+    // western 2nd to make western charset conversion the default
     if (!bFontChanged)      // Style has no Font? set the default,
     {
         pIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
@@ -3940,9 +3916,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         if (bStyExist)
         {
-            // --> OD 2007-01-25 #i73790# - method renamed
-            pColl->ResetAllFmtAttr();
-            // <--
+            pColl->ResetAllFmtAttr(); // #i73790# - method renamed
         }
         pColl->SetAuto(false);          // nach Empfehlung JP
     }                                   // macht die UI aber anders

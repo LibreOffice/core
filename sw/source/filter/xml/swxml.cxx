@@ -76,25 +76,19 @@
 
 #include <statstr.hrc>
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 #include <SwStyleNameMapper.hxx>
 #include <poolfmt.hxx>
 #include <numrule.hxx>
 #include <paratr.hxx>
 // <--
 
-// --> OD 2006-02-22 #b6382898#
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svditer.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
-// <--
-
-// --> OD 2008-12-17 #i70748#
-#include <sfx2/docfilt.hxx>
-// <--
-
+#include <sfx2/docfilt.hxx> // #i70748#
 #include <istyleaccess.hxx>
 #define LOGFILE_AUTHOR "mb93740"
 
@@ -409,7 +403,7 @@ sal_Int32 ReadThroughComponent(
     return ERR_SWG_READ_ERROR;
 }
 
-// --> OD 2005-09-06 #i44177#
+// #i44177#
 void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 {
     // array containing the names of the default outline styles ('Heading 1',
@@ -466,7 +460,7 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     const SwNumRule* pOutlineRule = _rDoc.GetOutlineNumRule();
     for ( BYTE i = 0; i < MAXLEVEL; ++i )
     {
-        // --> OD 2007-01-11 #i73361#
+        // #i73361#
         // Do not change assignment of already created default outline style
         // to a certain outline level.
         if ( !aOutlineLevelAssigned[ i ] &&
@@ -491,7 +485,6 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
 }
 // <--
 
-// --> OD 2006-02-22 #b6382898#
 void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
 {
     if ( _rDoc.GetDrawModel() &&
@@ -529,7 +522,6 @@ void lcl_ConvertSdrOle2ObjsToSdrGrafObjs( SwDoc& _rDoc )
         }
     }
 }
-// <--
 
 
 ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const String & rName )
@@ -646,17 +638,19 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         { "OrganizerMode", sizeof("OrganizerMode")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2004-08-10 #i28749# - Add property, which indicates, if the
+
+        // #i28749# - Add property, which indicates, if the
         // shape position attributes are given in horizontal left-to-right layout.
         // This is the case for the OpenOffice.org file format.
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
+
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2007-12-19 #152540#
+
         // Add property, which indicates, if a text document in OpenOffice.org
         // file format is read.
         // Note: Text documents read via the binary filter are also finally
@@ -870,7 +864,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
-    // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
+    // #i28749# - set property <ShapePositionInHoriL2R>
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
@@ -878,14 +872,12 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
                 makeAny( bShapePositionInHoriL2R ) );
     }
     // <--
-    // --> OD 2007-12-19 #152540#
     {
         const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
         xInfoSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat")),
                 makeAny( bTextDocInOOoFileFormat ) );
     }
-    // <--
 
     sal_uInt32 nWarnRDF = 0;
     if ( !(IsOrganizerMode() || IsBlockMode() || aOpt.IsFmtsOnly() ||
@@ -1004,8 +996,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     rDoc.SetRedlineMode_intern((RedlineMode_t)( ~nRedlineMode ));
     rDoc.SetRedlineMode( (RedlineMode_t)( nRedlineMode ));
 
-    // #103728# move Pam into valid content
-    lcl_EnsureValidPam( rPaM );
+    lcl_EnsureValidPam( rPaM ); // move Pam into valid content
 
     if( pGraphicHelper )
         SvXMLGraphicHelper::Destroy( pGraphicHelper );
@@ -1017,14 +1008,14 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     if ( !bOASIS )
     {
-        // --> OD 2005-09-06 #i44177# - assure that for documents in OpenOffice.org
+        // #i44177# - assure that for documents in OpenOffice.org
         // file format the relation between outline numbering rule and styles is
         // filled-up accordingly.
         // Note: The OpenOffice.org file format, which has no content that applys
         //       a certain style, which is related to the outline numbering rule,
         //       has lost the information, that this certain style is related to
         //       the outline numbering rule.
-        // --> OD 2008-12-17 #i70748# - only for templates
+        // #i70748# - only for templates
         if ( pMedium && pMedium->GetFilter() &&
              pMedium->GetFilter()->IsOwnTemplateFormat() )
         {
@@ -1039,18 +1030,16 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     rDoc.PropagateOutlineRule();
 
-    // --> OD 2006-03-14 #i62875#
+    // #i62875#
     if ( rDoc.get(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE) && !docfunc::ExistsDrawObjs( rDoc ) )
     {
         rDoc.set(IDocumentSettingAccess::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE, false);
     }
     // <--
 
-    // --> OD 2006-02-22 #b6382898#
     // Convert all instances of <SdrOle2Obj> into <SdrGrafObj>, because the
     // Writer doesn't support such objects.
     lcl_ConvertSdrOle2ObjsToSdrGrafObjs( rDoc );
-    // <--
 
     // set BuildId on XModel for later OLE object loading
     if( xInfoSet.is() )
@@ -1106,7 +1095,6 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             if( xXMLParser.is() )
             {
                 // get filter
-                // #110680#
                 // uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( rStrings );
                 uno::Reference< xml::sax::XDocumentHandler > xFilter = new SwXMLSectionList( xServiceFactory, rStrings );
 

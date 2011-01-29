@@ -401,7 +401,7 @@ public:
 
     void Reset()
     {
-        // --> OD 2007-01-25 #i73790# - method renamed
+        // #i73790# - method renamed
         pColl->ResetAllFmtAttr();
         // <--
         pColl->SetAuto(FALSE); // nach Empfehlung JP

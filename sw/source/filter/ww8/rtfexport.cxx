@@ -547,8 +547,7 @@ void RtfExport::ExportDocument_Impl()
     // size and empty margins of the page
     if( pDoc->GetPageDescCnt() )
     {
-        //JP 06.04.99: Bug 64361 - Seeking the first SwFmtPageDesc. If
-        //              no set, the default is valid
+        // Seeking the first SwFmtPageDesc. If no set, the default is valid
         const SwFmtPageDesc* pSttPgDsc = 0;
         {
             const SwNode& rSttNd = *pDoc->GetNodes()[

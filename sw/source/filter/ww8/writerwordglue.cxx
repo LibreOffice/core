@@ -64,7 +64,6 @@ namespace myImplHelpers
     SwTwips CalcHdFtDist(const SwFrmFmt& rFmt, sal_uInt16 nSpacing)
     {
         /*
-        #98506#
         The normal case for reexporting word docs is to have dynamic spacing,
         as this is word's only setting, and the reason for the existance of the
         dynamic spacing features. If we have dynamic spacing active then we can

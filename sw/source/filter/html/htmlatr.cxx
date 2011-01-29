@@ -627,7 +627,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( bNumbered )
         {
             nBulletGrfLvl = nLvl; // nur veruebergehend!!!
-            // --> OD 2005-11-15 #i57919#
+            // #i57919#
             // correction of re-factoring done by cws swnumtree:
             // - <nNumStart> has to contain the restart value, if the
             //   numbering is restarted at this text node. Value <USHRT_MAX>
@@ -900,7 +900,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     else
     {
         rHWrt.nDfltTopMargin = pFmtInfo->nTopMargin;
-        // #60393#: Wenn im letzten Absatz einer Tabelle der
+        // Wenn im letzten Absatz einer Tabelle der
         // untere Absatz-Abstand veraendert wird, vertut sich
         // Netscape total. Deshalb exportieren wir hier erstmal
         // nichts, indem wir den Abstand aus dem Absatz als Default
@@ -947,7 +947,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.IsHTMLMode( HTMLMODE_NO_CONTROL_CENTERING ) &&
         rHWrt.HasControls() )
     {
-        // #64687#: The align=... attribute does behave strange in netscape
+        // The align=... attribute does behave strange in netscape
         // if there are controls in a paragraph, because the control and
         // all text behind the control does not recognize this attribute.
         ByteString sOut( '<' );
@@ -2413,7 +2413,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     xub_StrLen nOffset = 0;
     String aOutlineTxt;
     String aFullText;
-    // --> OD 2006-06-12 #b6435904#
+
     // export numbering string as plain text only for the outline numbering,
     // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
     if ( pNd->IsOutline() &&

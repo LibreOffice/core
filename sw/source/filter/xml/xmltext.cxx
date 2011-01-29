@@ -88,7 +88,7 @@ SvXMLImportContext *SwXMLBodyContentContext_Impl::CreateChildContext(
 
 void SwXMLBodyContentContext_Impl::EndElement()
 {
-    /* #108146# Code moved to SwXMLOmport::endDocument */
+    /* Code moved to SwXMLOmport::endDocument */
     GetImport().GetTextImport()->SetOutlineStyles( sal_False );
 }
 

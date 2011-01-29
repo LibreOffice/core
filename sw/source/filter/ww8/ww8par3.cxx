@@ -123,7 +123,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
         ImportFormulaControl(aFormula,pF->nSCode+pF->nLCode-1, WW8_CT_EDIT);
     }
 
-    /* #80205#
+    /*
     Here we have a small complication. This formula control contains
     the default text that is displayed if you edit the form field in
     the "default text" area. But MSOffice does not display that
@@ -573,9 +573,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     //
     // 2. ggfs. PAPx einlesen und nach Einzug-Werten suchen
     //
-    // --> OD 2008-06-04 #i86652# - read tab setting
-    short nTabPos = 0;
-    // <--
+    short nTabPos = 0; // #i86652# - read tab setting
     if( aLVL.nLenGrpprlPapx )
     {
         sal_uInt8 aGrpprlPapx[ 255 ];
@@ -608,7 +606,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             aLVL.nDxaLeft1 = SVBT16ToShort(  pSprm );
         }
 
-        // --> OD 2008-06-04 #i86652# - read tab setting
+        // #i86652# - read tab setting
         if(0 != (pSprm = GrpprlHasSprm(0xC615,aGrpprlPapx[0],aLVL.nLenGrpprlPapx)) )
         {
             bool bDone = false;
@@ -745,7 +743,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             eType = SVX_NUM_ARABIC;
             break;
         case 23:
-        case 25:    //#114412#
+        case 25:
             eType = SVX_NUM_CHAR_SPECIAL;
             break;
         case 255:
@@ -785,7 +783,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     }
     myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
     myIter aEnd = aOfsNumsXCH.end();
-    // --> OD 2006-01-16 #i60633# - suppress access on <aOfsNumsXCH.end()>
+    // #i60633# - suppress access on <aOfsNumsXCH.end()>
     if ( aIter != aEnd )
     {
         // Somehow the first removed vector element, at which <aIter>
@@ -824,7 +822,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
     else
     {
         /*
-        #83154#, #82192#, #i173#, #109158#
+        #i173#
         Our aOfsNumsXCH seems generally to be an array that contains the
         offset into sNumString of locations where the numbers should be
         filled in, so if the first "fill in a number" slot is greater than
@@ -901,7 +899,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         rNumFmt.SetIncludeUpperLevels( nUpperLevel );
     }
 
-    // --> OD 2008-06-04 #i89181#
+    // #i89181#
     if ( rNumFmt.GetPositionAndSpaceMode() ==
                               SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
@@ -1032,9 +1030,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         Font aFont;
         if( !pFmt )
         {
-            // --> OD 2006-06-27 #b6440955#
             aFont = numfunc::GetDefBulletFont();
-            // <--
         }
         else
         {
@@ -1058,7 +1054,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     // wird erstmal zur Bildung des Style Namens genommen
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
-    // --> OD 2008-06-04 #i86652#
+    // #i86652#
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, FALSE,
                               SvxNumberFormat::LABEL_ALIGNMENT );
@@ -1283,7 +1279,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
             if( pLFOInfo->bOverride )
             {
                 WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
-                if (!pParentListInfo) //e.g. #112324#
+                if (!pParentListInfo)
                     break;
                 //
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
@@ -1515,9 +1511,9 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
         return 0;
 
     // #i25545#
-    // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
+    // #i100132# - a number format does not have to exist on given list level
     SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
-    // <--
+
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
         if ( pFmt.GetNumAdjust() == SVX_ADJUST_RIGHT)
             pFmt.SetNumAdjust(SVX_ADJUST_LEFT);
@@ -1610,7 +1606,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     {
         pNode->SetAttrListLevel(nLevel);
 
-        if (bRestart || bNewstart)   //#112466# (I think)
+        if (bRestart || bNewstart)
             pNode->SetListRestart(true);
         if (bNewstart)
             pNode->SetAttrListRestartValue(nStart);
@@ -1631,7 +1627,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             ? true : false;
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
         OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
-        // --> OD 2006-10-19 #134160# - make code robust
+        // make code robust
         if ( !pTxtNode )
         {
             return bRes;
@@ -1657,14 +1653,12 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         }
         else
         {
-            // --> OD 2005-11-07 #127520#
             // Use outline level set at the style info <rStyleInfo> instead of
             // the outline level at the text format, because the WW8 document
             // could contain more than one outline numbering rule and the one
             // of the text format isn't the one, which a chosen as the Writer
             // outline rule.
             pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
-            // <--
         }
     }
     return bRes;
@@ -1672,7 +1666,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
 
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    // --> OD 2008-06-03 #i86652#
+    // #i86652#
     if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
     {
         const long nAbsLSpace = rFmt.GetAbsLSpace();
@@ -1688,17 +1682,13 @@ void UseListIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 
 void SetStyleIndent(SwWW8StyInf &rStyle, const SwNumFmt &rFmt)
 {
-    // --> OD 2008-06-03 #i86652#
-    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
-    // <--
+    if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION ) // #i86652#
     {
         SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*rStyle.pFmt, RES_LR_SPACE));
         if (rStyle.bListReleventIndentSet)
         {
-            // --> OD 2010-05-06 #i103711#
-            // --> OD 2010-05-11 #i105414#
-            SyncIndentWithList( aLR, rFmt, false, false );
-            // <--
+
+            SyncIndentWithList( aLR, rFmt, false, false ); // #i103711#, #i105414#
         }
         else
         {
@@ -1816,8 +1806,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
              is the one that was chosen to be the outline numbering then all
              is unchanged
             */
-            // --> OD 2005-11-04 #???# - correct condition according to the
-            // above given comment.
+            // correct condition according to the above given comment.
             if ( pTxtNd->GetNumRule() == rDoc.GetOutlineNumRule() &&
                  pRule == mpChosenOutlineNumRule )
             // <--
@@ -1839,18 +1828,16 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                     }
                 }
             }
-            // --> OD 2005-10-17 #126238#
-
             pTxtNd->SetAttrListLevel(nActLevel);
-            // --> OD 2005-11-01 #126924#
-            // - <IsCounted()> state of text node has to be adjusted accordingly.
+
+            // <IsCounted()> state of text node has to be adjusted accordingly.
             if ( /*nActLevel >= 0 &&*/ nActLevel < MAXLEVEL )
             {
                 pTxtNd->SetCountedInList( true );
             }
             // <--
 
-            // --> OD 2009-03-04 #i99822#
+            // #i99822#
             // Direct application of the list level formatting no longer
             // needed for list levels of mode LABEL_ALIGNMENT
             bool bApplyListLevelIndentDirectlyAtPara( true );
@@ -1941,7 +1928,6 @@ void SwWW8ImplReader::Read_ListLevel(sal_uInt16, const sal_uInt8* pData,
         if (pStyles && !bVer67)
         {
             /*
-            #94672#
             if this is the case, then if the numbering is actually stored in
             winword 6 format, and its likely that sprmPIlvl has been abused
             to set the ww6 list level information which we will need when we
@@ -1986,7 +1972,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         if( 0 >= nData )
         {
             /*
-            #94672# discussion
             If you have a paragraph in word with left and/or hanging indent
             and remove its numbering, then the indentation appears to get
             reset, but not back to the base style, instead its goes to a blank
@@ -1999,13 +1984,11 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             if (pAktColl)
             {
                 pAktColl->SetFmtAttr(*GetDfltAttr( RES_PARATR_NUMRULE));
-                pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));    //#94672#
+                pAktColl->SetFmtAttr(SvxLRSpaceItem(RES_LR_SPACE));
             }
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
-                // --> OD 2005-10-21 #i54393#
-                pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
-                // <--
+                pTxtNode->ResetAttr( RES_PARATR_NUMRULE ); // #i54393#
                 pTxtNode->SetCountedInList(false);
 
                 /*
@@ -2015,14 +1998,13 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                 numbering, and then I can say when I come to say that I want no
                 number on the normal numbering rule, that should all work out
 
-                #115901#
                 No special outline number in textnode any more
                 */
                 if (pTxtNode->IsOutline())
                 {
-                    // OD 2005-10-21 #i54393#
+                    // #i54393#
                     // It's not needed to call <SetCounted( false )> again - see above.
-                    // --> OD 2005-10-21 #i54393#
+                    // #i54393#
                     // Assure that the numbering rule, which is retrieved at
                     // the paragraph is the outline numbering rule, instead of
                     // incorrectly setting the chosen outline rule.
@@ -2036,7 +2018,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
                     // <--
                 }
 
-                //#94672#
                 pCtrlStck->NewAttr(*pPaM->GetPoint(), SvxLRSpaceItem(RES_LR_SPACE));
                 pCtrlStck->SetAttr(*pPaM->GetPoint(), RES_LR_SPACE);
             }
@@ -2046,7 +2027,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
         {
             nLFOPosition = (sal_uInt16)nData-1;
             /*
-            #94672#
             If we are a ww8+ style with ww7- style lists then there is a
             bizarre broken word bug where when the list is removed from a para
             the ww6 list first line indent still affects the first line

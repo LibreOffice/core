@@ -137,14 +137,11 @@ protected:
     virtual XMLFontAutoStylePool* CreateFontAutoStylePool();
 
 public:
-
-    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nExportFlags = EXPORT_ALL);
 
 #ifdef XML_CORE_API
-    // #110680#
     SwXMLExport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel,

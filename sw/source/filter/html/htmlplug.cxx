@@ -416,7 +416,7 @@ void SwHTMLParser::InsertEmbed()
                            INetURLObject(sBaseURL), aURL,
                            URIHelper::GetMaybeFileHdl()) );
 
-    // #109761# do not insert plugin if it has neither URL nor type
+    // do not insert plugin if it has neither URL nor type
     bool bHasType = aType.Len() != 0;
     if( !bHasURL && !bHasType )
         return;

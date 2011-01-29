@@ -95,15 +95,15 @@ namespace
         return res;
     }
 
-    // --> OD 2009-02-04 #i98791# - adjust sorting
-    //Utility to sort SwTxtFmtColl's by their assigned outline style list level
+    // #i98791# - adjust sorting
+    // Utility to sort SwTxtFmtColl's by their assigned outline style list level
     class outlinecmp : public
         std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
     {
     public:
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
-            // --> OD 2009-02-04 #i98791#
+            // #i98791#
             bool bResult( false );
             const bool bIsAAssignedToOutlineStyle( pA->IsAssignedToListLevelOfOutlineStyle() );
             const bool bIsBAssignedToOutlineStyle( pB->IsAssignedToListLevelOfOutlineStyle() );
@@ -180,14 +180,11 @@ namespace sw
         : mpFlyFrm(&rFmt),
           maPos(rPos),
           maSize(),
-          // --> OD 2007-04-19 #i43447#
-          maLayoutSize(),
-          // <--
+          maLayoutSize(), // #i43447#
           meWriterType(eTxtBox),
           mpStartFrameContent(0),
-          // --> OD 2007-04-19 #i43447# - move to initialization list
+          // #i43447# - move to initialization list
           mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-          // <--
     {
         switch (rFmt.Which())
         {
@@ -197,7 +194,7 @@ namespace sw
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
                     using sw::util::GetSwappedInSize;
-                    // --> OD 2007-04-19 #i43447# - determine layout size
+                    // #i43447# - determine layout size
                     {
                         SwRect aLayRect( rFmt.FindLayoutRect() );
                         Rectangle aRect( aLayRect.SVRect() );
@@ -222,8 +219,7 @@ namespace sw
                             break;
                         default:
                             meWriterType = eTxtBox;
-                            // --> OD 2007-04-19 #i43447#
-                            // Size equals layout size for text boxes
+                            // #i43447# - Size equals layout size for text boxes
                             maSize = maLayoutSize;
                             // <--
                             break;
@@ -437,15 +433,13 @@ namespace sw
             std::swap(mnFormLayer, rOther.mnFormLayer);
         }
 
-        // --> OD 2004-12-13 #i38889# - by default put objects into the invisible
-        // layers.
+        // #i38889# - by default put objects into the invisible layers.
         SetLayer::SetLayer(const SwDoc &rDoc)
             : mnHeavenLayer(rDoc.GetInvisibleHeavenId()),
               mnHellLayer(rDoc.GetInvisibleHellId()),
               mnFormLayer(rDoc.GetInvisibleControlsId())
         {
         }
-        // <--
 
         SetLayer::SetLayer(const SetLayer& rOther) throw()
             : mnHeavenLayer(rOther.mnHeavenLayer),
@@ -554,12 +548,11 @@ namespace sw
             return pFmt;
         }
 
-        // --> OD 2009-02-04 #i98791# - adjust sorting algorithm
+        // #i98791# - adjust sorting algorithm
         void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles)
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
         }
-        // <--
 
         /*
            Utility to extract flyfmts from a document, potentially from a

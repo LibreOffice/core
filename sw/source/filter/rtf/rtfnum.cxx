@@ -346,10 +346,10 @@ void SwRTFParser::ReadListTable()
                     RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
                 aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, 0, FALSE, SvxNumberFormat::LABEL_ALIGNMENT );
                 pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-                // --> OD 2008-07-08 #i91400#
+                // #i91400#
                 pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ),
                                    *pDoc );
-                // <--
+
                 pCurRule->SetAutoRule( FALSE );
                 nNumLvl = (BYTE)-1;
             }
@@ -361,15 +361,14 @@ void SwRTFParser::ReadListTable()
         case RTF_LISTRESTARTHDN:
             break;
         case RTF_LISTNAME:
-            if (nNextCh=='}') break;  // #118989# empty listnames
+            if (nNextCh=='}') break;  // empty listnames
             if( RTF_TEXTTOKEN == GetNextToken() )
             {
                 String sTmp( DelCharAtEnd( aToken, ';' ));
                 if( sTmp.Len() && !pDoc->FindNumRulePtr( sTmp ))
                 {
-                    // --> OD 2008-07-08 #i91400#
+                    // #i91400#
                     pCurRule->SetName( sTmp, *pDoc );
-                    // <--
                 }
             }
             SkipGroup();
@@ -548,10 +547,10 @@ void SwRTFParser::ReadListOverrideTable()
                                 RTL_CONSTASCII_STRINGPARAM( RTF_NUMRULE_NAME " 1" )));
                             aEntry.nListDocPos = pDoc->MakeNumRule( sTmp, pRule );
                             pRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-                            // --> OD 2008-07-08 #i91400#
+                            // #i91400#
                             pRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ),
                                             *pDoc );
-                            // <--
+
                             pRule->SetAutoRule( FALSE );
                             nNumLvl = (BYTE)-1;
                             aListArr.Insert( aEntry, aListArr.Count() );
@@ -602,7 +601,6 @@ void SwRTFParser::ReadListOverrideTable()
         const SwNumRule *pNumRule = 0;
         SvxRTFStyleType* pStyle = GetStyleTbl().First();
         do {
-            // #151213#
             if ( MAXLEVEL > pStyle->nOutlineNo )
             {
                 pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().GetCurKey() );
@@ -803,9 +801,9 @@ SwNumRule *SwRTFParser::ReadNumSecLevel( int nToken )
         aEntry.nListNo = nListNo;
         aListArr.Insert( aEntry, aListArr.Count() );
         pCurRule = pDoc->GetNumRuleTbl()[ aEntry.nListDocPos ];
-        // --> OD 2008-07-08 #i91400#
+        // #i91400#
         pCurRule->SetName( pDoc->GetUniqueNumRuleName( &sTmp, FALSE ), *pDoc );
-        // <--
+
         pCurRule->SetAutoRule( FALSE );
         pCurRule->SetContinusNum( bContinus );
     }

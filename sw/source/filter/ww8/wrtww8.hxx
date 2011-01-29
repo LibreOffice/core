@@ -519,7 +519,7 @@ public:
     HdFtPlcDrawObj *pHFSdrObjs;     // Draw-/Fly-Objects in header or footer
 
     SwEscherEx* pEscher;            // escher export class
-    // --> OD 2007-04-19 #i43447# - removed
+    // #i43447# - removed
 //    SwTwips nFlyWidth, nFlyHeight;  // Fuer Anpassung Graphic
     // <--
 
@@ -1037,7 +1037,7 @@ public:
     virtual void SectionBreaksAndFrames( const SwTxtNode& rNode );
 
     /// Helper method for OutputSectionBreaks() and OutputFollowPageDesc().
-    // OD 2007-05-29 #i76300#
+    // #i76300#
     virtual void PrepareNewPageDesc( const SfxItemSet* pSet,
                                      const SwNode& rNd,
                                      const SwFmtPageDesc* pNewPgDescFmt = 0,
@@ -1050,10 +1050,8 @@ public:
     WW8_BRC TranslateBorderLine(const SvxBorderLine& pLine,
         USHORT nDist, bool bShadow);
 
-    // --> OD 2007-06-04 #i77805#
-    // new return value indicates, if an inherited outline numbering is suppressed
+    // #i77805# - new return value indicates, if an inherited outline numbering is suppressed
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
-    // <--
 
     unsigned int GetHdFtIndex() const { return mnHdFtIndex; }
     void SetHdFtIndex(unsigned int nHdFtIndex) { mnHdFtIndex = nHdFtIndex; }

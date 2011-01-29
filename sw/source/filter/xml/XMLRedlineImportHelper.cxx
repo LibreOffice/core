@@ -626,7 +626,7 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
 
 
     // cover three cases:
-    // 1) empty redlines (no range, no content) #100921#
+    // 1) empty redlines (no range, no content)
     // 2) check for:
     //    a) bIgnoreRedline (e.g. insert mode)
     //    b) illegal PaM range (CheckNodesRange())

@@ -410,7 +410,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     pChpPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
     pO->Remove( 0, pO->Count() );                   // leeren
 
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     const SwGrfNode* pGrfNd = rFrame.IsInline() && rFrame.GetContent()
                               ? rFrame.GetContent()->GetGrfNode() : 0;
@@ -496,7 +496,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     Set_UInt8( pArr, nAttrMagicIdx++ );
     pChpPlc->AppendFkpEntry( Strm().Tell(), static_cast< short >(pArr - aArr), aArr );
 
-    // --> OD 2007-04-23 #i75464#
+    // #i75464#
     // Check, if graphic isn't exported as-character anchored.
     // Otherwise, an additional paragraph is exported for a graphic, which is
     // forced to be treated as inline, because it's anchored inside another frame.
@@ -518,7 +518,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
         pPapPlc->AppendFkpEntry( Strm().Tell(), pO->Count(), pO->GetData() );
         pO->Remove( 0, pO->Count() );                   // leeren
     }
-    // --> OD 2007-06-06 #i29408#
+    // #i29408#
     // linked, as-character anchored graphics have to be exported as fields.
     else if ( pGrfNd && pGrfNd->IsLinkedFile() )
     {
@@ -636,7 +636,6 @@ void SwWW8WrGrf::WritePICFHeader(SvStream& rStrm, const sw::Frame &rFly,
     Set_UInt16( pArr, mm );                         // set mm
 
     /*
-    #92494#
     Just in case our original size is too big to fit inside a ushort we can
     substitute the final size and loose on retaining the scaling factor but
     still keep the correct display size anyway.

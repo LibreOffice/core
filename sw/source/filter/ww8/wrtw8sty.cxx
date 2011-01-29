@@ -1562,11 +1562,10 @@ void MSWordExportBase::SectionProperties( const WW8_SepInfo& rSepInfo, WW8_PdAtt
             // und raus damit ins WW-File
             const SfxItemSet* pOldI = pISet;
             pISet = &aSet;
-            // --> OD 2007-06-12 #TESTING#
+
             // Switch off test on default item values, if page description
             // set (value of <bOutPgDscSet>) isn't written.
             AttrOutput().OutputStyleItemSet( aSet, true, bOutPgDscSet );
-            // <--
 
             //Cannot export as normal page framedir, as continous sections
             //cannot contain any grid settings like proper sections
@@ -2009,7 +2008,6 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                     rWrt.WriteSpecialText( pNdIdx->GetIndex() + 1,
                                            pNdIdx->GetNode().EndOfSectionIndex(),
                                            nTTyp );
-                    // --> OD 2008-08-07 #156757#
                     {
                         SwNodeIndex aContentIdx = *pNdIdx;
                         ++aContentIdx;
@@ -2034,7 +2032,6 @@ bool WW8_WrPlcSubDoc::WriteGenericTxt( WW8Export& rWrt, BYTE nTTyp,
                             }
                         }
                     }
-                    // <--
                 }
 
                 // CR at end of one textbox text ( otherwise WW gpft :-( )

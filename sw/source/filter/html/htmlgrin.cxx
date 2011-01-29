@@ -1383,7 +1383,7 @@ void SwHTMLParser::StripTrailingPara()
                         OSL_ENSURE(!this, "Hoppla, wo ist mein Vorgaenger-Node");
                         return;
                     }
-                    // --> OD 2007-09-27 #i81002# - refactoring
+                    // #i81002# - refactoring
                     // Do not directly manipulate member of <SwBookmark>
                     {
                         SwPosition aNewPos(*pNd);

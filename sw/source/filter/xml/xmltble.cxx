@@ -868,8 +868,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                     else if ( (-1 != nNumberFormat) && (xText->getString().getLength() > 0) )
                     {
                         // number format key:
-                        // (export values only if cell contains text;
-                        //  cf. #83755#)
+                        // (export values only if cell contains text;)
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
@@ -985,8 +984,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 #endif
             }
 
-            // --> OD 2009-03-19 #i95726#
-            // Some fault tolerance, if table is somehow corrupted.
+            // #i95726# - Some fault tolerance, if table is somehow corrupted.
             if ( nCol < nOldCol )
             {
                 OSL_ENSURE( false, "table and/or table information seems to be corrupted." );
@@ -1229,7 +1227,7 @@ void SwXMLTextParagraphExport::exportTable(
                 // AUTOSTYLES: Optimization: Do not export table autostyle if
                 // we are currently exporting the content.xml stuff and
                 // the table is located in header/footer:
-                // #144704: During the flat XML export (used e.g. by .sdw-export)
+                // During the flat XML export (used e.g. by .sdw-export)
                 // ALL flags are set at the same time.
                 const bool bExportStyles = ( GetExport().getExportFlags() & EXPORT_STYLES ) != 0;
                 if ( bExportStyles || !pFmt->GetDoc()->IsInHeaderFooter( aIdx ) )

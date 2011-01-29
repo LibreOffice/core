@@ -115,12 +115,11 @@ namespace sw
         const SwFrmFmt* mpFlyFrm;
         SwPosition maPos;
         Size maSize;
-        // --> OD 2007-04-19 #i43447#
-        // Size of the frame in the layout.
+        // #i43447# - Size of the frame in the layout.
         // Especially needed for graphics, whose layout size can differ from its
         // size, because it is scaled into its environment.
         Size maLayoutSize;
-        // <--
+
         WriterSource meWriterType;
         const SwNode *mpStartFrameContent;
         bool mbIsInline;
@@ -201,8 +200,7 @@ namespace sw
 
         /** The layout size of the contained element
 
-            OD 2007-04-19 #i43447#
-            Needed for graphics, which are scaled into its environment
+            #i43447# - Needed for graphics, which are scaled into its environment
 
             @return layout size
         */
@@ -563,7 +561,7 @@ namespace sw
             e.g.  given Normal/Heading1/Heading2/.../Heading10 at their default
             assigned outline style list levels of body level/level 1/level 2/.../level 10
 
-            OD 2009-02-04 #i98791#
+            #i98791#
             adjust the sorting algorithm due to introduced outline level attribute
 
             @param rStyles

@@ -910,7 +910,7 @@ void WW8SprmIter::advance()
 
 void WW8SprmIter::UpdateMyMembers()
 {
-    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0)) //see #125180#
+    if (pSprms && nRemLen > (mrSprmParser.getVersion()?1:0))
     {
         nAktId = mrSprmParser.GetSprmId(pSprms);
         pAktParams = pSprms + mrSprmParser.DistanceToData(nAktId);
@@ -2695,8 +2695,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     //one more FC than grrpl entries
     maEntries.push_back(Entry(Get_Long(pStart)));
 
-    //#104773#, we expect them sorted, but it appears possible
-    //for them to arive unsorted
+    //we expect them sorted, but it appears possible for them to arive unsorted
     std::sort(maEntries.begin(), maEntries.end());
 
     mnIdx = 0;
@@ -2944,7 +2943,7 @@ bool WW8PLCFx_Fc_FKP::NewFkp()
 
     long nAktFkpFilePos = pFkp ? pFkp->GetFilePos() : -1;
     if (nAktFkpFilePos == nPo)
-        pFkp->Reset(GetStartFc()); // #79464# //
+        pFkp->Reset(GetStartFc());
     else
     {
         myiter aIter =
@@ -3270,7 +3269,6 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
     else
     {
         /*
-        #93702#
         For the odd case where we have a location in a fastsaved file which
         does not have an entry in the FKP, perhaps its para end is in the next
         piece, or perhaps the cp just doesn't exist at all in this document.
@@ -3959,7 +3957,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
                     rStrm.SeekRel( nExtraLen );
             }
         }
-        // #129053# read the value of the document variables, if requested.
+        // read the value of the document variables, if requested.
         if (pValueArray)
         {
                 for( USHORT i=0; i < nStrings; i++ )
@@ -4002,8 +4000,7 @@ void WW8ReadSTTBF(bool bVer8, SvStream& rStrm, UINT32 nStart, INT32 nLen,
             else
                 rArray.push_back(aEmptyStr);
 
-            // #89125# Skip the extra data (for bVer67 versions this must come
-            // from external knowledge)
+            // Skip the extra data (for bVer67 versions this must come from external knowledge)
             if (nExtraLen)
             {
                 if (pExtraArray)
@@ -4846,7 +4843,6 @@ void WW8PLCFMan::AdvSprm(short nIdx, bool bStart)
                 p->nStartPos = p->nOrigEndPos+p->nCpOfs;
 
                 /*
-                #93702#
                 On failed seek we have run out of sprms, probably.  But if its
                 a fastsaved file (has pPcd) then we may be just in a sprm free
                 gap between pieces that have them, so set dirty flag in sprm
@@ -5696,7 +5692,7 @@ WW8Fib::WW8Fib(BYTE nVer)
             fFarEast = false;
             break;
     };
-    // <-- #i90932#
+    // <--
 
     Locale aTempLocale;
     SvxLanguageToLocale( aTempLocale, lid );
@@ -7282,7 +7278,6 @@ USHORT WW8DopTypography::GetConvertedLang() const
     //i.e. i.e. whats with the powers of two ?
 
     /*
-    #84082#
     One example of 3 for reserved1 which was really Japanese, perhaps last bit
     is for some other use ?, or redundant. If more examples trigger the assert
     we might be able to figure it out.

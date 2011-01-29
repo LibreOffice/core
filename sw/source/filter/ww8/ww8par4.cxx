@@ -507,7 +507,6 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         /*
-         #101578#
          It is possible to have a number of date stamps for the created time
          of the change, (possibly a word bug) so we must use the "get a full
          list" varient of HasCharSprm and take the last one as the true one.

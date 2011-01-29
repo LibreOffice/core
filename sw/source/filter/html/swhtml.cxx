@@ -168,9 +168,8 @@ String HTMLReader::GetTemplateName() const
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM("html") );
     String sTemplateWithoutExt( sTemplate );
 #ifndef MAC_WITHOUT_EXT
-    // --> OD 2005-01-26 - first search for OpenDocument Writer/Web template
+    // first search for OpenDocument Writer/Web template
     sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".oth") );
-    // <--
 #endif
 
     SvtPathOptions aPathOpt;
@@ -182,7 +181,7 @@ String HTMLReader::GetTemplateName() const
     {
         // 6.0 (extension .stw)
         sTemplate = sTemplateWithoutExt;
-        // --> OD 2005-01-26 - no OpenDocument Writer/Web template found.
+        // no OpenDocument Writer/Web template found.
         // search for OpenOffice.org Writer/Web template
         sTemplate.AppendAscii( TOOLS_CONSTASCII_STRINGPARAM(".stw") );
         // <--
@@ -298,7 +297,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     nSBModuleCnt( 0 ),
     nMissingImgMaps( 0 ),
     nParaCnt( 5 ),
-    // --> OD 2007-10-26 #i83625#
+    // #i83625#
     nContextStMin( 0 ),
     nContextStAttrMin( 0 ),
     // <--
@@ -456,7 +455,7 @@ SwHTMLParser::~SwHTMLParser()
 
         if ( pDoc->GetDocShell()->IsLoading() )
         {
-            // --> OD 2006-11-07 #i59688#
+            // #i59688#
             pDoc->GetDocShell()->LoadingFinished();
         }
     }
@@ -509,7 +508,7 @@ IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
 {
     nEventId=0;
 
-    // --> FME 2005-08-18 #i47907# If the document has already been destructed,
+    // #i47907# - If the document has already been destructed,
     // the parser should be aware of this:
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->getReferenceCount() )
@@ -540,7 +539,7 @@ SvParserState SwHTMLParser::CallParser()
 
         pPam->Move( fnMoveBackward );
 
-        // #106634# split any redline over the insertion point
+        // split any redline over the insertion point
         aInsertionRangePam.SetMark();
         *aInsertionRangePam.GetPoint() = *pPam->GetPoint();
         aInsertionRangePam.Move( fnMoveBackward );
@@ -1234,7 +1233,7 @@ void SwHTMLParser::NextToken( int nToken )
         }
         else if( aUnknownToken.Len() )
         {
-            // Fix i#59064 : Paste content of unknown tags.
+            // Paste content of unknown tags.
             if (aToken.Len() > 0)
             {
                 if( !bDocInitalized )
@@ -1966,7 +1965,7 @@ void SwHTMLParser::NextToken( int nToken )
         if( ( aToken.Len() > 5 ) && ( ! bIgnoreHTMLComments ) )
         {
             // als Post-It einfuegen
-            // MIB 8.12.2000: If there are no space characters right behind
+            // If there are no space characters right behind
             // the <!-- and on front of the -->, leave the comment untouched.
             if( ' ' == aToken.GetChar( 3 ) &&
                 ' ' == aToken.GetChar( aToken.Len()-3 ) )
@@ -2243,7 +2242,7 @@ BOOL SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, BOOL bUpdateNum )
                         // darf es auch nicht in die Prev-Liste eines ausseren
                         // Attributs eingetragen werden, denn dieses wird ja
                         // erstmal nicht gesetzt. Das fuehrt zu verschiebenungen,
-                        // wenn Felder ins Rennen kommen (siehe #51020#)
+                        // wenn Felder ins Rennen kommen
                         if( !pNext || bWholePara )
                         {
                             USHORT nTmp = pSetAttr->bInsAtStart ? 0
@@ -2608,7 +2607,7 @@ void SwHTMLParser::_SetAttr( BOOL bChkEnd, BOOL bBeforeTable,
         BOOL bSetAttr;
         if( bChkEnd )
         {
-            // fix #42192#: Zechen-Attribute mit Ende moeglich frueh,
+            // Zechen-Attribute mit Ende moeglich frueh,
             // also noch im aktuellen Absatz setzen (wegen JavaScript
             // und diversen Chats). das darf man aber nicht fuer Attribute,
             // die ueber den ganzen Absatz aufgspannt werden sollen, weil
@@ -4439,7 +4438,7 @@ BOOL SwHTMLParser::HasCurrentParaFlys( BOOL bNoSurroundOnly,
             }
             else
             {
-                // fix #42282#: Wenn Rahmen mit Umlauf gesucht sind,
+                // Wenn Rahmen mit Umlauf gesucht sind,
                 // auch keine mit Durchlauf beachten. Dabei handelt es
                 // sich (noch) um HIDDEN-Controls, und denen weicht man
                 // besser auch nicht aus.

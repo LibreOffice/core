@@ -1812,7 +1812,7 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     {
         if( pPrevCell->GetStartNode() )
             pSttNd = pPrevCell->GetStartNode();
-        // --> OD 2009-03-19 #i95726# - Some fault tolerance
+        // #i95726# - Some fault tolerance
 //        else
         else if ( pPrevCell->GetSubTable() )
         // <--
@@ -1910,9 +1910,7 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
         // (but preserve FillOrder)
         pBoxFmt2 = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
         SwFmtFillOrder aFillOrder( pBoxFmt2->GetFillOrder() );
-        // --> OD 2007-01-25 #i73790# - method renamed
-        pBoxFmt2->ResetAllFmtAttr();
-        // <--
+        pBoxFmt2->ResetAllFmtAttr(); // #i73790# - method renamed
         pBoxFmt2->SetFmtAttr( aFillOrder );
         bNew = sal_True;    // it's a new format now
 
@@ -1957,9 +1955,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    // --> OD 2007-01-25 #i73790# - method renamed
-    pFrmFmt->ResetAllFmtAttr();
-    // <--
+    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
@@ -2092,7 +2088,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     if( pCell->GetStartNode() )
     {
 
-        // #104801# try to rescue broken documents with a certain pattern
+        // try to rescue broken documents with a certain pattern
         // if: 1) the cell has a default number format (number 0)
         //     2) the call has no formula
         //     3) the value is 0.0
@@ -2223,9 +2219,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
     // TODO: Share formats!
     SwFrmFmt *pFrmFmt = pLine->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    // --> OD 2007-01-25 #i73790# - method renamed
-    pFrmFmt->ResetAllFmtAttr();
-    // <--
+    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
@@ -2295,7 +2289,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 // No subtabels: We use the new table model.
                 SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
-                // --> OD 2009-03-19 #i95726# - some fault tolerance
+                // #i95726# - some fault tolerance
                 if ( pCell == 0 )
                 {
                     OSL_ENSURE( false, "table seems to be corrupt." );
@@ -2330,7 +2324,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             {
                 SwTableBox* pBox = 0;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
-                // --> OD 2009-03-19 #i95726# - some fault tolerance
+                // #i95726# - some fault tolerance
                 if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
                     pCell->GetColSpan() == (nCol+1UL-nStartCol) &&
                     ( pCell->GetStartNode() || pCell->GetSubTable() ) )
@@ -2750,7 +2744,7 @@ void SwXMLTableContext::MakeTable()
         {
         case text::HoriOrientation::FULL:
         case text::HoriOrientation::NONE:
-            // #78246#: For text::HoriOrientation::NONE we would prefere to use the sum
+            // For text::HoriOrientation::NONE we would prefere to use the sum
             // of the relative column widths as reference width.
             // Unfortunately this works only if this sum interpreted as
             // twip value is larger than the space that is avaialable.
@@ -2893,7 +2887,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
-        // --> OD 2007-07-02 #i78921# - make code robust
+        // #i78921# - make code robust
 #if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
 #endif
@@ -2908,10 +2902,9 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
-        // --> FLR 2005-08-30 #125369#
         // Consider the case that a table is defined without a row.
         if( !pPrevSttNd && pBox1 != NULL )
-        // <--
+
         {
             pBox1->pSttNd = pStNd;
             SwCntntNode *pCNd = pDoc->GetNodes()[ pStNd->GetIndex() + 1 ]

@@ -2055,13 +2055,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             {
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
                 SvxULSpaceItem aUL( *(SvxULSpaceItem*)pItem );
-                // OD, MMAHER 2004-03-01 #i25901#- consider compatibility option
+                // #i25901#- consider compatibility option
                 if (!pDoc->get(IDocumentSettingAccess::PARA_SPACE_MAX_AT_PAGES))
                 {
                     if( !(ND_HAS_PREV_LAYNODE & nPrvNxtNd ))
                         aUL.SetUpper( 0 );
                 }
-                // OD, MMAHER 2004-03-01 #i25901# - consider compatibility option
+                // #i25901# - consider compatibility option
                 if (!pDoc->get(IDocumentSettingAccess::ADD_PARA_SPACING_TO_TABLE_CELLS))
                 {
                     if( !(ND_HAS_NEXT_LAYNODE & nPrvNxtNd ))
@@ -2089,7 +2089,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 pTmpSet = new SfxItemSet( rNode.GetSwAttrSet() );
 
             SvxLRSpaceItem aLR(ItemGet<SvxLRSpaceItem>(*pTmpSet, RES_LR_SPACE));
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( pFmt->GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2099,7 +2099,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             if( rNode.IsNumbered() && rNode.IsCountedInList() )
             {
-                // --> OD 2008-06-03 #i86652#
+                // #i86652#
                 if ( pFmt->GetPositionAndSpaceMode() ==
                                         SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
                 {
@@ -2110,7 +2110,6 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
                 // <--
 
-                // --> OD 2009-03-09 #100020#
                 // correct fix for issue i94187
                 if (SFX_ITEM_SET !=
                     pTmpSet->GetItemState(RES_PARATR_NUMRULE, false) )
@@ -2134,7 +2133,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             else
                 pTmpSet->ClearItem(RES_PARATR_NUMRULE);
 
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( pFmt->GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2168,7 +2167,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
 
             pTmpSet->Put(SvxFrameDirectionItem(FRMDIR_HORI_RIGHT_TOP, RES_FRAMEDIR));
         }
-        // --> OD 2005-10-18 #126238# - move code for handling of numbered,
+        // move code for handling of numbered,
         // but not counted paragraphs to this place. Otherwise, the paragraph
         // isn't exported as numbered, but not counted, if no other attribute
         // is found in <pTmpSet>
@@ -2197,7 +2196,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             // new left margin = old left + label space
             const SwNumRule* pRule = rNode.GetNumRule();
             const SwNumFmt& rNumFmt = pRule->Get( static_cast< USHORT >(rNode.GetActualListLevel()) );
-            // --> OD 2008-06-03 #i86652#
+            // #i86652#
             if ( rNumFmt.GetPositionAndSpaceMode() ==
                                     SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
@@ -2220,7 +2219,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // --> OD 2007-04-24 #i75457#
+        // #i75457#
         // Export page break after attribute from paragraph style.
         // If page break attribute at the text node exist, an existing page
         // break after at the paragraph style hasn't got to be considered.
@@ -2248,7 +2247,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
             }
         }
 
-        // --> FME 2007-05-30 #i76520# Emulate non-splitting tables
+        // #i76520# Emulate non-splitting tables
         if ( bOutTable )
         {
             const SwTableNode* pTableNode = rNode.FindTableNode();
@@ -2535,7 +2534,6 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             bUseEscher = true;
 
         /*
-         #110185#
          A special case for converting some inline form controls to form fields
          when in winword 8+ mode
         */
@@ -2580,11 +2578,7 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
             Point aOffset;
             if ( m_rWW8Export.mpParentFrame )
             {
-                /*
-                #90804#
-                Munge flys in fly into absolutely positioned elements for
-                word 6
-                */
+                /* Munge flys in fly into absolutely positioned elements for word 6 */
                 const SwTxtNode* pParTxtNode = rAnch.GetCntntAnchor()->nNode.GetNode().GetTxtNode();
                 const SwRect aPageRect = pParTxtNode->FindPageFrmRect( FALSE, 0, FALSE );
 

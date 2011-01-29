@@ -848,7 +848,6 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     const SvxBrushItem *pBrushItem =
                         (const SvxBrushItem *)pItem;
 
-                    /// OD 02.09.2002 #99657#
                     /// Body has a background color, if it is not "no fill"/"auto fill"
                     if( pBrushItem->GetColor() != COL_TRANSPARENT )
                         bBodyBGColorSet = TRUE;

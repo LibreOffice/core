@@ -280,7 +280,6 @@ USHORT SwHTMLWriter::GuessFrmType( const SwFrmFmt& rFrmFmt,
                 if( bEmpty )
                 {
                     const SvxBrushItem& rBrush = rFrmFmt.GetBackground();
-                    /// OD 02.09.2002 #99657#
                     /// background is not empty, if it has a background graphic
                     /// or its background color is not "no fill"/"auto fill".
                     if( GPOS_NONE != rBrush.GetGraphicPos() ||
@@ -788,7 +787,7 @@ void SwHTMLWriter::OutFrmFmtOptions( const SwFrmFmt &rFrmFmt,
             break;
 
         default:
-            // #67508#: If a frame is centered, it gets left aligned. This
+            // If a frame is centered, it gets left aligned. This
             // should be taken into account here, too.
             {
                 switch( eSurround )

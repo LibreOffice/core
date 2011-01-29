@@ -2345,7 +2345,6 @@ static BOOL OutCSS1_FrmFmtBrush( SwHTMLWriter& rWrt,
                                  const SvxBrushItem& rBrushItem )
 {
     BOOL bWritten = FALSE;
-    /// OD 02.09.2002 #99657#
     /// output brush of frame format, if its background color is not "no fill"/"auto fill"
     /// or it has a background graphic.
     if( rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -2901,7 +2900,7 @@ static Writer& OutCSS1_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    // #60393#: Netscape4 hat massive Probleme mit den Zellenhoehen
+    // Netscape4 hat massive Probleme mit den Zellenhoehen
     // wenn der Zeilenabstand innerhalb einer Tabelle geaendert wird
     // und die Breite der Tabelle nicht automatisch berechnet wird
     // (also wenn eine WIDTH-Option vorhanden ist).
@@ -3388,7 +3387,6 @@ static Writer& OutCSS1_SvxBrush( Writer& rWrt, const SfxPoolItem& rHt,
 
     // Erstmal die Farbe holen
     BOOL bColor = FALSE;
-    /// OD 02.09.2002 #99657#
     /// set <bTransparent> to TRUE, if color is "no fill"/"auto fill"
     BOOL bTransparent = (rColor.GetColor() == COL_TRANSPARENT);
     Color aColor;

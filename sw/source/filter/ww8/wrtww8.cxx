@@ -2643,7 +2643,7 @@ void WW8Export::WriteFkpPlcUsw()
         if (pEscher || pDoc->ContainsMSVBasic())
         {
             /*
-             #82587# Everytime MS 2000 creates an escher stream there is always
+             Everytime MS 2000 creates an escher stream there is always
              an ObjectPool dir (even if empty). It turns out that if a copy of
              MS 2000 is used to open a document that contains escher graphics
              exported from StarOffice without this empty dir then *if* that
@@ -2658,10 +2658,7 @@ void WW8Export::WriteFkpPlcUsw()
              the existence of an ObjectPool dir is necessary for triggering
              some magic. cmc
             */
-            /*
-            #10570# Similiarly having msvbasic storage seems to also trigger
-            creating this stream
-            */
+            /* Similiarly having msvbasic storage seems to also trigger creating this stream */
             GetWriter().GetStorage().OpenSotStorage(CREATE_CONST_ASC(SL::aObjectPool),
                 STREAM_READWRITE | STREAM_SHARE_DENYALL);
         }
@@ -2694,8 +2691,8 @@ void WW8Export::WriteFkpPlcUsw()
         // Write SttbfAssoc
         WW8SttbAssoc * pSttbfAssoc = dynamic_cast<WW8SttbAssoc *>
             (pDoc->getExternalData(::sw::STTBF_ASSOC).get());
-        // --> OD 2009-10-19 #i106057#
-        if ( pSttbfAssoc )
+
+        if ( pSttbfAssoc )                      // #i106057#
         // <--
         {
         ::std::vector<String> aStrings;
@@ -2916,10 +2913,8 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     if ( !pOCXExp )
         pOCXExp = new SwMSConvertControls( pDoc->GetDocShell(), pCurPam );
 
-    // --> OD 2007-10-08 #i81405#
-    // Collect anchored objects before changing the redline mode.
+    // #i81405# - Collect anchored objects before changing the redline mode.
     maFrames = GetFrames( *pDoc, bWriteAll? NULL : pOrigPam );
-    // <--
 
     mnRedlineMode = pDoc->GetRedlineMode();
     if ( pDoc->GetRedlineTbl().Count() )
@@ -3270,7 +3265,7 @@ void WW8Export::PrepareStorage()
 
 ULONG SwWW8Writer::WriteStorage()
 {
-    // #i34818# #120099# - update layout (if present), for SwWriteTable
+    // #i34818# - update layout (if present), for SwWriteTable
     ViewShell* pViewShell = NULL;
     pDoc->GetEditShell( &pViewShell );
     if( pViewShell != NULL )

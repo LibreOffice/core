@@ -446,7 +446,7 @@ void SwRelNumRuleSpaces::SetOultineRelSpaces( const SwNodeIndex& rStt,
 void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
 {
     BOOL bOutlineRule = OUTLINE_RULE == rRule.GetRuleType();
-    // #128056# correction of refactoring done by cws swnumtree:
+    // correction of refactoring done by cws swnumtree:
     // - assure a correct level for retrieving numbering format.
     BYTE nLvl = 0;
     if ( rNd.GetActualListLevel() >= 0 && rNd.GetActualListLevel() < MAXLEVEL )
@@ -469,11 +469,9 @@ void SwRelNumRuleSpaces::SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule )
         if( 0 < rLR.GetTxtFirstLineOfst() )
             nParaLeft += rLR.GetTxtFirstLineOfst();
         else if( nParaLeft >= nLeft )
-            // #82963#/#82962#: set correct paragraph indent
+            // set correct paragraph indent
             nParaLeft -= nLeft;
         else
-            //#83154#, Don't think any of the older #80856# bugfix code is
-            //relevent anymore.
             nParaLeft = rLR.GetTxtLeft()+rLR.GetTxtFirstLineOfst();
         aLR.SetTxtLeft( nParaLeft );
     }

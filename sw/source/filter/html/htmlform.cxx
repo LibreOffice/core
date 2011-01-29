@@ -1055,11 +1055,9 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             xPropSetInfo->hasPropertyByName( sPropName ) )
         {
             const Color &rColor = ((const SvxBrushItem *)pItem)->GetColor();
-            /// OD 02.09.2002 #99657#
             /// copy color, if color is not "no fill"/"auto fill"
             if( rColor.GetColor() != COL_TRANSPARENT )
             {
-                /// OD 02.09.2002 #99657#
                 /// copy complete color with transparency
                 aTmp <<= static_cast<sal_Int32>(rColor.GetColor());
                 rFCompPropSet->setPropertyValue( sPropName, aTmp );
@@ -1652,7 +1650,6 @@ void SwHTMLParser::InsertInput()
         // ALIGN fuer alle Controls auszuwerten ist keine so gute Idee,
         // solange Absatz-gebundene Controls die Hoehe von Tabellen-Zellen
         // nicht beeinflussen
-        // (#64110#, http://www.telekom.de/katalog-online/onlineshop.html)
         eVertOri = text::VertOrientation::TOP;
         eHoriOri = text::HoriOrientation::NONE;
     }
@@ -1764,7 +1761,7 @@ void SwHTMLParser::InsertInput()
             aTmp <<= OUString();
             xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),
                                         aTmp );
-            // #53559#: Beim RadioButton darf die DefaultChecked-Property
+            // Beim RadioButton darf die DefaultChecked-Property
             // erst gesetzt werden, wenn das Control angelegt und ein
             // activateTabOrder gerufen wurde, weil es sonst noch zu der
             // vorhergehenden Gruppe gehoert.

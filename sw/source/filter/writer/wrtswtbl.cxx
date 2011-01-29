@@ -127,10 +127,9 @@ long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
             return nHeight;
 
         // Wenn kein Layout gefunden wurde, gehen wir von festen Hoehen aus.
-        // --> FME 2007-3-26 #i60390# in some cases we still want to continue
+        // #i60390# - in some cases we still want to continue
         // to use the layout heights even if one of the rows has a height of 0
         // ('hidden' rows)
-        // <--
         bUseLayoutHeights = bLayoutAvailable; /*FALSE;*/
 
 #if OSL_DEBUG_LEVEL > 1

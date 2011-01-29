@@ -171,7 +171,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         { "StyleFamilies", sizeof("StyleFamilies")-1, 0,
               &::getCppuType( (Sequence<sal_Int32>*)0 ),
               beans::PropertyAttribute::MAYBEVOID, 0 },
-        // --> OD 2006-09-26 #i69627#
+        // #i69627#
         { "OutlineStyleAsNormalListStyle", sizeof("OutlineStyleAsNormalListStyle")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
@@ -270,7 +270,7 @@ pGraphicHelper = SvXMLGraphicHelper::Create( xStg,
         xInfoSet->setPropertyValue( sAutoTextMode, aAny2 );
     }
 
-    // --> OD 2006-09-26 #i69627#
+    // #i69627#
     const sal_Bool bOASIS = ( SotStorage::GetVersion( xStg ) > SOFFICE_FILEFORMAT_60 );
     if ( bOASIS &&
          docfunc::HasOutlineStyleToBeWrittenAsNormalListStyle( *pDoc ) )

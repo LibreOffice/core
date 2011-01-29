@@ -65,15 +65,12 @@
 #include <deque>
 #include <map>
 #include <utility>
-// --> OD 2004-06-30 #i27767#
+// #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 // <--
 #include <editeng/brshitem.hxx>
 #include <fmtfollowtextflow.hxx>
-// --> OD, FLR 2006-02-16 #131205#
 #include "dcontact.hxx"
-// <--
-
 
 using namespace ::com::sun::star;
 
@@ -244,10 +241,9 @@ void SwRTFParser::SetFlysInDoc()
 
 
 
-        //JP 21.09.98: wenn ein DropCap ist, dann Text im Node belassen, am
-        //              Absatz das Absatz Attribut setzen. Ggfs noch die
-        //              FontSize zuruecksetzen, damit das DropCap nicht zu
-        //              gro? wird.
+        // wenn ein DropCap ist, dann Text im Node belassen,
+        // am Absatz das Absatz Attribut setzen. Ggfs noch die FontSize zuruecksetzen,
+        // damit das DropCap nicht zu gross wird.
         if( pFlySave->nDropAnchor )
         {
             SwTxtNode* pSttNd = pFlySave->nSttNd.GetNode().GetTxtNode();
@@ -411,7 +407,7 @@ void SwRTFParser::SetFlysInDoc()
         // border or backgorund, then put it to the frame
         // Not in our own RTF-Format!
                 // <<<<< DOES NOT MAKE SENSE TO ME (flr)
-        // #102781#. Added support for transparent frames.
+        // Added support for transparent frames.
         if( pSttNd->GetIndex() + 1 != pSttNd->EndOfSectionIndex() &&
             !bSwPageDesc )
         {
@@ -441,7 +437,7 @@ void SwRTFParser::SetFlysInDoc()
                     aTmpSet.Put(aBrush, RES_BACKGROUND);
                 }
             }
-            // #117914# Topic 6.
+            // Topic 6.
             pFlySave->aFlySet.Put( aTmpSet );
             if( pSrcNd && pSrcNd->HasSwAttrSet() )
             {
@@ -455,10 +451,10 @@ void SwRTFParser::SetFlysInDoc()
         if (FLY_AS_CHAR != rAnchor.GetAnchorId())
         {
             // korrigiere noch den Absatz, ist immer der vorhergehende !
-            // JP 20.09.95: wenn es diesen gibt! (DocAnfang!)
+            // wenn es diesen gibt! (DocAnfang!)
 
-            //JP 02.08.99: that is wrong. The anchor is ever the NEXT!
-            //JP 05.08.99: there are an Bug in the ExportFilter which will
+            // that is wrong. The anchor is ever the NEXT!
+            // there are an Bug in the ExportFilter which will
             //              be fixed in the Version 517 - by SWG-Export
             //              the fly will be after the paragraph - but in RTF
             //              the flys will be before the paragraph.
@@ -494,9 +490,9 @@ void SwRTFParser::SetFlysInDoc()
                 for (myIter aIter = rDeque.begin(); aIter != aEnd; ++aIter)
                 {
                     aIter->second.SetAnchor(&aPos);
-                    // --> OD 2004-06-30 #i27767# - push on front to keep order
-                    // of objects for the correct object positioning
-                    //aPrevFmts[pCurrentAnchor].push_back(*aIter);
+                    // #i27767# - push on front to keep order of objects
+                    // for the correct object positioning
+                    // aPrevFmts[pCurrentAnchor].push_back(*aIter);
                     aPrevFmts[pCurrentAnchor].push_front(*aIter);
                 }
                 rDeque.clear();
@@ -504,7 +500,6 @@ void SwRTFParser::SetFlysInDoc()
            }
         }
 
-        // --> OD, FLR 2006-02-16 #131205#
         // Create draw contact object, which also creates a <SdrObject> instance,
         // in order to set the order number.
         // The order number is assumed to be the order of the text flow.
@@ -559,12 +554,12 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         InsertPara();
 
     // RTF-Defaults setzen:
-    // --> OD 2004-06-24 #i27767#
+    // #i27767#
     SwFmtAnchor aAnchor( FLY_AT_PARA );
-
     SwFmtHoriOrient aHori( 0, text::HoriOrientation::LEFT, text::RelOrientation::FRAME );
     SwFmtVertOrient aVert( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME );
     // <--
+
     SvxFrameDirectionItem aFrmDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );
 
     USHORT nCols = USHRT_MAX, nColSpace = USHRT_MAX, nAktCol = 0;
@@ -851,7 +846,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                                 }
                                 break;
 
-// JP 26.09.94: die Bindung an die Spalte gibt es nicht mehr !!
+// die Bindung an die Spalte gibt es nicht mehr !!
 //                          case RTF_FLY_COLUMN:
                             }
                             break;
@@ -951,8 +946,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
     pSet->Put( aHori );
     pSet->Put( aVert );
 
-    // --> OD 2004-06-30 #i27767# - set wrapping style influence
-    // --> OD 2004-10-18 #i35017# - constant name has changed
+    // #i27767# - set wrapping style influence
+    // #i35017# - constant name has changed
     pSet->Put( SwFmtWrapInfluenceOnObjPos(
                     text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ));
     // <--
@@ -1020,9 +1015,8 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 }
             }
             aFlyArr.Insert(  pFlySave, nFlyArrCnt++ );
-            // --> OD 2008-12-22 #i83368# - reset
+            // #i83368# - reset
             mbReadCellWhileReadSwFly = false;
-            // <--
         }
     }
 
@@ -1038,7 +1032,7 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
 
         if( !IsPardTokenRead() )
         {
-            // #102781#. Added support for transparent frames.
+            // Added support for transparent frames.
             if (nToken == RTF_CBPAT && nFlyArrCnt > 0)
             {
                 USHORT _index=USHORT(nTokenValue);
@@ -1234,10 +1228,8 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     // kennzeichen fuer Swg-Dokumente:
     // (dann ist das FlyFmt fuer die Grafik!)
     SwGrfNode * pGrfNd;
-    // --> OD 2008-12-22 #i83368#
-    // Assure that graphic node is enclosed by fly frame node.
+    // #i83368# - Assure that graphic node is enclosed by fly frame node.
     if ( bReadSwFly && !mbReadCellWhileReadSwFly )
-    // <--
     {
         // erzeuge nur einen normalen GrafikNode und ersetze diesen gegen
         // den vorhandenen Textnode
@@ -1342,7 +1334,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
             else
             {
                 // von 100TH_MM nach TWIP umrechenen!
-                // #117879# when \picwgoal resp \pichgoal are present, then use them.
+                // When \picwgoal resp \pichgoal are present, then use them.
                 //          The values of \picwgoal and \picwgoal are already given in twips.
                 aSize.Width() = (pPicType->nGoalWidth?pPicType->nGoalWidth:(pPicType->nWidth*144)/254);
                 aSize.Height() = (pPicType->nGoalHeight?pPicType->nGoalHeight:(pPicType->nHeight*144)/254);
@@ -1375,8 +1367,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         }
     }
 
-    //JP 8.11.2001: bug 94450 - if no size exist, then the size is set by
-    //              the swapin of the graphic.
+    // if no size exist, then the size is set by the swapin of the graphic.
     SwGrfNode* pGrfNd;
     if( !aSize.Width() && !aSize.Height() &&
         0 != (pGrfNd = (SwGrfNode*)rNd.GetGrfNode() ) && pGrfNd->IsGrfLink() )

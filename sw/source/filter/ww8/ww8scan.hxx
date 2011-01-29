@@ -545,7 +545,6 @@ private:
     WW8Fkp* pFkp;
 
     /*
-        #100042#
         Keep a cache of eMaxCache entries of previously seen pFkps, which
         speeds up considerably table parsing and load save plcfs for what turn
         out to be small text frames, which frames generally are
@@ -1556,16 +1555,16 @@ public:
     UINT16  fLockRev : 1;       //   when 1, the current revision marking state is locked
     UINT16  fEmbedFonts : 1;    //   when 1, document contains embedded True Type fonts
     //    compatability options
-    UINT16 copts_fNoTabForInd : 1;          //    when 1, donÔøΩt add automatic tab stops for hanging indent
-    UINT16 copts_fNoSpaceRaiseLower : 1;        //    when 1, donÔøΩt add extra space for raised or lowered characters
+    UINT16 copts_fNoTabForInd : 1;          //    when 1, donÅEΩt add automatic tab stops for hanging indent
+    UINT16 copts_fNoSpaceRaiseLower : 1;        //    when 1, donÅEΩt add extra space for raised or lowered characters
     UINT16 copts_fSupressSpbfAfterPgBrk : 1;    // when 1, supress the paragraph Space Before and Space After options after a page break
     UINT16 copts_fWrapTrailSpaces : 1;      //    when 1, wrap trailing spaces at the end of a line to the next line
     UINT16 copts_fMapPrintTextColor : 1;        //    when 1, print colors as black on non-color printers
-    UINT16 copts_fNoColumnBalance : 1;      //    when 1, donÔøΩt balance columns for Continuous Section starts
+    UINT16 copts_fNoColumnBalance : 1;      //    when 1, donÅEΩt balance columns for Continuous Section starts
     UINT16 copts_fConvMailMergeEsc : 1;
     UINT16 copts_fSupressTopSpacing : 1;        //    when 1, supress extra line spacing at top of page
     UINT16 copts_fOrigWordTableRules : 1;   //    when 1, combine table borders like Word 5.x for the Macintosh
-    UINT16 copts_fTransparentMetafiles : 1; //    when 1, donÔøΩt blank area between metafile pictures
+    UINT16 copts_fTransparentMetafiles : 1; //    when 1, donÅEΩt blank area between metafile pictures
     UINT16 copts_fShowBreaksInFrames : 1;   //    when 1, show hard page or column breaks in frames
     UINT16 copts_fSwapBordersFacingPgs : 1; //    when 1, swap left and right pages on odd facing pages
     UINT16 copts_fExpShRtn : 1;             //    when 1, expand character spaces on the line ending SHIFT+RETURN  // #i56856#
@@ -1584,7 +1583,7 @@ public:
     INT32   cCh;                //      count of characters tallied by last Word Count execution
     INT16   cPg;                //      count of pages tallied by last Word Count execution
     INT32   cParas;             //      count of paragraphs tallied by last Word Count execution
-    UINT16 rncEdn : 2;          //      restart endnote number code: 0 donÔøΩt restart endnote numbering, 1 section, 2 page
+    UINT16 rncEdn : 2;          //      restart endnote number code: 0 donÅEΩt restart endnote numbering, 1 section, 2 page
     UINT16 nEdn : 14;           //      beginning endnote number
     UINT16 epc : 2;         //      endnote position code: 0 at end of section, 3 at end of document
     // UINT16 nfcFtnRef : 4;        //      number format code for auto footnotes: 0 Arabic, 1 Upper case Roman, 2 Lower case Roman

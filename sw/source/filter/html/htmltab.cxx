@@ -1546,8 +1546,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
 
             if( bSet )
             {
-                // fix #30588#: BorderDist nicht mehr Bestandteil
-                // einer Zelle mit fixer Breite
+                // BorderDist nicht mehr Bestandteil einer Zelle mit fixer Breite
                 sal_uInt16 nBDist = static_cast< sal_uInt16 >(
                     (2*nCellPadding <= nInnerFrmWidth) ? nCellPadding
                                                       : (nInnerFrmWidth / 2) );
@@ -1568,8 +1567,7 @@ void HTMLTable::FixFrameFmt( SwTableBox *pBox,
             else
                 pFrmFmt->ResetFmtAttr( RES_BACKGROUND );
 
-            // fix #41003#: Format nur setzten, wenn es auch einen Value
-            // gibt oder die Box leer ist.
+            // Format nur setzten, wenn es auch einen Value gibt oder die Box leer ist.
             if( bHasNumFmt && (bHasValue || IsBoxEmpty(pBox)) )
             {
                 sal_Bool bLock = pFrmFmt->GetDoc()->GetNumberFormatter()
@@ -2362,10 +2360,9 @@ inline void HTMLTable::CloseColGroup( sal_uInt16 nSpan, sal_uInt16 _nWidth,
 void HTMLTable::InsertCol( sal_uInt16 nSpan, sal_uInt16 nColWidth, sal_Bool bRelWidth,
                            SvxAdjust eAdjust, sal_Int16 eVertOrient )
 {
-    // --> OD, MIB 2004-11-08 #i35143# - no columns, if rows already exist.
+    // #i35143# - no columns, if rows already exist.
     if ( nRows > 0 )
         return;
-    // <--
 
     sal_uInt16 i;
 
@@ -4620,7 +4617,7 @@ void SwHTMLParser::BuildTableSection( HTMLTable *pCurTable,
         delete pSaveStruct;
     }
 
-    // wir stehen jetzt (wahrscheinlich) vor <TBODY>,... oder </TABLE>
+    // now we stand (perhaps) in front of <TBODY>,... or </TABLE>
 }
 
 struct _TblColGrpSaveStruct : public SwPendingStackData
@@ -5522,9 +5519,9 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 eJumpTo = JUMPTO_NONE;
             }
 
-            // fix #37886#: Wenn Import abgebrochen wurde kein erneutes Show
+            // Wenn Import abgebrochen wurde kein erneutes Show
             // aufrufen, weil die ViewShell schon geloescht wurde!
-            // fix #41669#: Genuegt nicht. Auch im ACCEPTING_STATE darf
+            // Genuegt nicht. Auch im ACCEPTING_STATE darf
             // kein Show aufgerufen werden, weil sonst waehrend des
             // Reschedules der Parser zerstoert wird, wenn noch ein
             // DataAvailable-Link kommt. Deshalb: Nur im WORKING-State.

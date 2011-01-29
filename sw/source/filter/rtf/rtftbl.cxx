@@ -315,9 +315,9 @@ void SwRTFParser::ReadTable( int nToken )
                     else
                         pFmt = aBoxFmts[ aBoxFmts.Count()-1 ];
 
-                    // --> OD 2007-01-25 #i73790# - method renamed
+                    // #i73790# - method renamed
                     pBoxFmt->ResetAllFmtAttr();
-                    // <--
+
                     nSize += pFmt->GetFrmSize().GetWidth();
                 }
                 else
@@ -372,7 +372,6 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_TRQC:          eAdjust = text::HoriOrientation::CENTER;  break;
 
                                 // mit text::VertOrientation::TOP kommt der Dialog nicht klar!
-                                // Bug #65126#
         case RTF_CLVERTALT:     eVerOrient = text::VertOrientation::NONE;     break;
 
         case RTF_CLVERTALC:     eVerOrient = text::VertOrientation::CENTER;   break;
@@ -583,7 +582,7 @@ void SwRTFParser::ReadTable( int nToken )
         bNewTbl = FALSE;
 
         {
-            // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
+            //TabellenUmrandungen optimieren
             void* p = pFmt;
             aTblFmts.Insert( p, aTblFmts.Count() );
         }
@@ -650,7 +649,7 @@ void SwRTFParser::ReadTable( int nToken )
                 pDoc->InsertTable(
                     SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
                     *pPam->GetPoint(), 1, 1, eAdjust, 0, 0, FALSE, FALSE );
-            bContainsTablePara=true; //#117881#
+            bContainsTablePara=true;
             pTableNode = pTable ? pTable->GetTableNode() : 0;
 
             if (pTableNode)
@@ -683,7 +682,7 @@ void SwRTFParser::ReadTable( int nToken )
             pOldTblNd = pTableNode;
 
             {
-                // JP 13.08.98: TabellenUmrandungen optimieren - Bug 53525
+                // TabellenUmrandungen optimieren
                 void* p = pFmt;
                 aTblFmts.Insert( p, aTblFmts.Count() );
             }

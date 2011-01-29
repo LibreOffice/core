@@ -3227,8 +3227,7 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
 
         long nXCroppedSize = rOrig.Width()-(rCr.GetLeft() + rCr.GetRight());
         long nYCroppedSize = rOrig.Height()-(rCr.GetTop() + rCr.GetBottom());
-        /* #127543#: Graphic with a zero height or width, typically copied from webpages, caused
-           crashes. */
+        /* Graphic with a zero height or width, typically copied from webpages, caused crashes. */
         if( !nXCroppedSize )
             nXCroppedSize = 100;
         if( !nYCroppedSize )

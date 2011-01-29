@@ -1131,7 +1131,6 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem,
                                   String& rEmbGrfNm, sal_Bool bGraphic )
 {
     const Color &rBackColor = pBrushItem->GetColor();
-    /// OD 02.09.2002 #99657#
     /// check, if background color is not "no fill"/"auto fill", instead of
     /// only checking, if transparency is not set.
     if( rBackColor.GetColor() != COL_TRANSPARENT )

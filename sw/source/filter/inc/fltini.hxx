@@ -73,7 +73,6 @@ public:
 void GetWW8Writer( const String&, const String&, WriterRef& );
 
 
-// JP 17.03.99 - 63049
 // Umsetzen der LRSpaces im aktuell importierten Doc. Die Fremd-Filter
 // liefern immer absolute Werte fuer die Ebenen einer NumRule. Wir
 // verarbeiten jetzt aber relative Werte bezogen auf das LR-Space-Item.

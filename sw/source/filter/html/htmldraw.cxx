@@ -104,8 +104,8 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
                                      sal_Bool bHidden )
 {
     // always on top of text.
-    // OD 02.07.2003 #108784# but in invisible layer. <ConnectToLayout> will
-    // move the object to the visible layer.
+    // but in invisible layer. <ConnectToLayout> will move the object
+    // to the visible layer.
     pNewDrawObj->SetLayer( pDoc->GetInvisibleHeavenId() );
 
     SfxItemSet aFrmSet( pDoc->GetAttrPool(),
@@ -196,7 +196,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         {
             aAnchor.SetType( FLY_AT_PAGE );
         }
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(rCSS1PropInfo.nLeft + nLeftSpace,
                                            rCSS1PropInfo.nTop + nUpperSpace) );
         aFrmSet.Put( SwFmtSurround(SURROUND_THROUGHT) );
@@ -207,7 +207,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
         aAnchor.SetType( FLY_AT_PARA );
         aFrmSet.Put( SwFmtSurround(bHidden ? SURROUND_THROUGHT
                                              : SURROUND_RIGHT) );
-        // OD 2004-04-13 #i26791# - direct positioning for <SwDoc::Insert(..)>
+        // #i26791# - direct positioning for <SwDoc::Insert(..)>
         pNewDrawObj->SetRelativePos( Point(nLeftSpace, nUpperSpace) );
     }
     else if( text::VertOrientation::NONE != eVertOri )
@@ -387,9 +387,9 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
     }
 
     // Ein DrawTxtobj anlegen
-    // --> OD 2005-08-08 #i52858# - method name changed
+    // #i52858# - method name changed
     SdrModel* pModel = pDoc->GetOrCreateDrawModel();
-    // <--
+
     SdrPage* pPg = pModel->GetPage( 0 );
     pMarquee = SdrObjFactory::MakeNewObject( SdrInventor,
                                              OBJ_TEXT, pPg, pModel );

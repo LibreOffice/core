@@ -256,7 +256,7 @@ void DocxAttributeOutput::FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointe
         const SwTableLines& rLines = pTable->GetTabLines( );
         USHORT nLinesCount = rLines.Count( );
         // HACK
-        // fdo#30860 - msoffice seems to have an internal limitation of 63 columns for tables
+        // msoffice seems to have an internal limitation of 63 columns for tables
         // and refuses to load .docx with more, even though the spec seems to allow that;
         // so simply if there are more columns, don't close the last one msoffice will handle
         // and merge the contents of the remaining ones into it (since we don't close the cell

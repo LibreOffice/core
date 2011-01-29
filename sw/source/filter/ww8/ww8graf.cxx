@@ -64,7 +64,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
-#include <editeng/outliner.hxx>         // #79453#
+#include <editeng/outliner.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svx/xfltrit.hxx>
 #include <filter/msfilter/msdffimp.hxx>
@@ -91,7 +91,7 @@
 #include <fmtinfmt.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/flditem.hxx>
-// OD 30.09.2003 #i18732#
+// #i18732#
 #include <fmtfollowtextflow.hxx>
 #include "writerhelper.hxx"
 #include "writerwordglue.hxx"
@@ -1311,7 +1311,6 @@ SdrObject *SwWW8ImplReader::ReadGroup( WW8_DPHEAD* pHd, const WW8_DO* pDo,
         SfxAllItemSet aSet(pDrawModel->GetItemPool());
         if (SdrObject *pObject = ReadGrafPrimitive(nLeft, pDo, aSet))
         {
-            // #116150#
             // first add and then set ItemSet
             SdrObjList *pSubGroup = pObj->GetSubList();
             OSL_ENSURE(pSubGroup, "Why no sublist available?");
@@ -2121,7 +2120,7 @@ void SwWW8ImplReader::MapWrapIntoFlyFmt(SvxMSDffImportRec* pRecord,
             Fraction aMapPolyY(rOrigSize.Height(), ww::nWrap100Percent);
             aPoly.Scale(aMapPolyX, aMapPolyY);
 
-            // --> OD 2005-05-19 #i47277# - contour is already in unit of the
+            // #i47277# - contour is already in unit of the
             // graphic prefered unit. Thus, call method <SetContour(..)>
             pNd->SetContour(&aPoly);
             // <--
@@ -2137,8 +2136,8 @@ void SwWW8ImplReader::SetAttributesAtGrfNode( SvxMSDffImportRec* pRecord,
     if( pIdx && 0 != (pGrfNd = rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() ))
     {
         Size aSz(pGrfNd->GetTwipSize());
-        // --> OD 2005-08-01 #124722# - use type <sal_uInt64> instead of <ULONG>
-        // to get correct results in the following calculations.
+        // use type <sal_uInt64> instead of <ULONG> to get correct results
+        // in the following calculations.
         sal_uInt64 rHeight = aSz.Height();
         sal_uInt64 rWidth  = aSz.Width();
         // <--
@@ -2216,7 +2215,6 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 {
     if (pFlyFmt)
     {
-        //JP 11.1.2002: task 96329
         SdrObject* pNewObject = mbNewDoc ? 0 : pFlyFmt->FindRealSdrObject();
         if (!pNewObject)
             pNewObject = pFlyFmt->FindSdrObject();
@@ -2232,8 +2230,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
     return 0;
 }
 
-//#109311# Miserable miserable hack to fudge word's graphic layout in
-//RTL mode to ours.
+// Miserable miserable hack to fudge word's graphic layout in RTL mode to ours.
 bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     sal_Int16 eHoriOri, sal_Int16 eHoriRel)
 {
@@ -2283,11 +2280,11 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     if (pFSPA)
     {
         /*
-        #74188# #i15718# #i19008#
+        #i15718# #i19008#
         Strangely in this case the FSPA value seems to be considered before
         the newer escher nXRelTo record.
         */
-        // --> OD 2005-08-04 #i52565# - correct condition checking:
+        // #i52565# - correct condition checking:
         // first check, if <nXRelTo> and <nYRelTo> have default values.  This
         // is a hint that these values aren't set by the escher import - see
         // method <SwMSDffManager::ProcessObj(..)>. Then, check if for each
@@ -2306,9 +2303,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     UINT32 nXRelTo = nCntRelTo > *(pRecord->pXRelTo) ? *(pRecord->pXRelTo) : 1;
     UINT32 nYRelTo = nCntRelTo > *(pRecord->pYRelTo) ? *(pRecord->pYRelTo) : 1;
 
-    // --> OD 2005-03-03 #i43718#
-    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR;
-    // <--
+    RndStdIds eAnchor = IsInlineEscherHack() ? FLY_AS_CHAR : FLY_AT_CHAR; // #i43718#
 
     SwFmtAnchor aAnchor( eAnchor );
     aAnchor.SetAnchor( pPaM->GetPoint() );
@@ -2316,7 +2311,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
 
     if (pFSPA)
     {
-        // OD 14.10.2003 #i18732#
+        // #i18732#
         //Given new layout where everything is changed to be anchored to
         //character the following 4 tables may need to be changed.
 
@@ -2327,7 +2322,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             text::HoriOrientation::LEFT,     // left
             text::HoriOrientation::CENTER,   // centered
             text::HoriOrientation::RIGHT,    // right
-            // --> OD 2004-12-06 #i36649#
+            // #i36649#
             // - inside -> text::HoriOrientation::LEFT and outside -> text::HoriOrientation::RIGHT
             text::HoriOrientation::LEFT,   // inside
             text::HoriOrientation::RIGHT   // outside
@@ -2346,7 +2341,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             text::VertOrientation::LINE_BOTTOM   // outside (obscure)
         };
 
-        // CMC,OD 24.11.2003 #i22673# - to-line vertical alignment
+        // #i22673# - to-line vertical alignment
         static const sal_Int16 aToLineVertOriTab[ nCntYAlign ] =
         {
             text::VertOrientation::NONE,         // below
@@ -2367,8 +2362,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         };
 
         // Adjustment is vertically relative to...
-        // CMC, OD 24.11.2003 #i22673# - adjustment for new vertical alignment
-        // at top of line.
+        // #i22673# - adjustment for new vertical alignment at top of line.
         static const sal_Int16 aVertRelOriTab[nCntRelTo] =
         {
             text::RelOrientation::PAGE_PRINT_AREA, // 0 is page textarea margin
@@ -2380,7 +2374,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         sal_Int16 eHoriOri = aHoriOriTab[ nXAlign ];
         sal_Int16 eHoriRel = aHoriRelOriTab[  nXRelTo ];
 
-        // --> OD 2004-12-06 #i36649# - adjustments for certain alignments
+        // #i36649# - adjustments for certain alignments
         if ( eHoriOri == text::HoriOrientation::LEFT && eHoriRel == text::RelOrientation::PAGE_FRAME )
         {
             // convert 'left to page' to 'from left -<width> to page text area'
@@ -2401,11 +2395,11 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
         // <--
 
-        // --> OD 2005-02-07 #i24255# - position of floating screen objects in
+        // #i24255# - position of floating screen objects in
         // R2L layout are given in L2R layout, thus convert them of all
         // floating screen objects, which are imported.
         {
-            //#109311# Miserable miserable hack.
+            // Miserable miserable hack.
             SwTwips nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
             SwTwips nLeft = pFSPA->nXaLeft;
             if (MiserableRTLGraphicsHack(nLeft, nWidth, eHoriOri,
@@ -2417,11 +2411,10 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         }
         // <--
 
-        // --> OD 2005-01-20 #118546# - if the object is anchored inside
-        // a table cell, is horizontal aligned at frame|character and
-        // has wrap through, but its attribute 'layout in table cell' isn't set,
-        // convert its horizontal alignment to page text area.
-        // --> OD 2008-04-10 #i84783# - use new method <IsObjectLayoutInTableCell()>
+        // if the object is anchored inside a table cell, is horizontal aligned
+        // at frame|character and has wrap through, but its attribute
+        // 'layout in table cell' isn't set, convert its horizontal alignment to page text area.
+        // #i84783# - use new method <IsObjectLayoutInTableCell()>
         if ( nInTable &&
              ( eHoriRel == text::RelOrientation::FRAME || eHoriRel == text::RelOrientation::CHAR ) &&
              pFSPA->nwr == 3 &&
@@ -2445,9 +2438,8 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
             pRecord->nDxWrapDistRight=0;
 
         sal_Int16 eVertRel;
-        // OD 14.10.2003 #i18732#
-        eVertRel = aVertRelOriTab[  nYRelTo ];
-        // CMC, OD 24.11.2003 #i22673# - fill <eVertOri> in dependence of <eVertRel>
+        eVertRel = aVertRelOriTab[  nYRelTo ]; // #i18732#
+        // #i22673# - fill <eVertOri> in dependence of <eVertRel>
         sal_Int16 eVertOri;
         if ( eVertRel == text::RelOrientation::TEXT_LINE )
         {
@@ -2461,7 +2453,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         //Below line in word is a positive value, while in writer its
         //negative
         long nYPos = pFSPA->nYaTop;
-        // CMC, OD 24.11.2003 #i22673#
+        // #i22673#
         if ((eVertRel == text::RelOrientation::TEXT_LINE) && (eVertOri == text::VertOrientation::NONE))
             nYPos = -nYPos;
 
@@ -2480,7 +2472,7 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
     return eAnchor;
 }
 
-// --> OD 2008-04-10 #i84783#
+// #i84783#
 bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell ) const
 {
     bool bIsObjectLayoutInTableCell = false;
@@ -2502,7 +2494,7 @@ bool SwWW8ImplReader::IsObjectLayoutInTableCell( const UINT32 nLayoutInTableCell
             case 0x6000: // version 11 aka Microsoft Word 2003
             case 0x8000: // version 12 aka Microsoft Word 2007
             {
-                // --> OD 2009-01-13 #i98037#
+                // #i98037#
                 // adjustment of conditions needed after deeper analysis of
                 // certain test cases.
                 if ( nLayoutInTableCell == 0xFFFFFFFF || // no explicit attribute value given
@@ -2629,7 +2621,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
     }
 
-    //#108778# when in a header or footer word appears to treat all elements as wrap through
+    // when in a header or footer word appears to treat all elements as wrap through
 
     // Umfluss-Modus ermitteln
     SfxItemSet aFlySet(rDoc.GetAttrPool(), RES_FRMATR_BEGIN, RES_FRMATR_END-1);
@@ -2715,10 +2707,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         nInTable && IsObjectLayoutInTableCell( pRecord->nLayoutInTableCell );
     // <--
 
-    // OD 14.10.2003 #i18732#
-    // Switch on 'follow text flow',
-    // if object is laid out inside table cell and
-    // its wrapping isn't 'SURROUND_THROUGH'
+    // #i18732# - Switch on 'follow text flow', if object is laid out
+    // inside table cell and its wrapping isn't 'SURROUND_THROUGH'
     if (bLayoutInTableCell && eSurround != SURROUND_THROUGHT)
     {
         SwFmtFollowTextFlow aFollowTextFlow( TRUE );
@@ -2735,10 +2725,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
     // #i14045# MM If we are in a header or footer then make the object transparent
     // Not exactly like word but close enough for now
 
-    // --> OD 2005-03-07 #b6234902# - both flags <bBelowText> and <bDrawHell>
-    // have to be set to move object into the background.
-    // --> OD 2005-04-11 #i46794# - it reveals that value of flag <bBelowText>
-    // can be neglected.
+    // both flags <bBelowText> and <bDrawHell> have to be set to move object into the background.
+    // #i46794# - it reveals that value of flag <bBelowText> can be neglected.
     const bool bMoveToBackgrd = pRecord->bDrawHell ||
                                 ( ( bIsHeader || bIsFooter ) && pF->nwr == 3 );
     if ( bMoveToBackgrd )
@@ -2784,12 +2772,8 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
 
             if (!IsInlineEscherHack())
             {
-                /*
-                #97824#  Need to make sure that the correct layer ordering is
-                applied.
-                */
-                // --> OD 2004-12-13 #117915# - pass information, if object
-                // is in page header|footer to method.
+                /* Need to make sure that the correct layer ordering is applied. */
+                //  pass information, if object is in page header|footer to method.
                 pWWZOrder->InsertEscherObject( pObject, pF->nSpId,
                                                bIsHeader || bIsFooter );
                 // <--
@@ -2823,7 +2807,7 @@ SwFrmFmt* SwWW8ImplReader::Read_GrafLayer( long nGrafAnchorCp )
         }
     }
 
-    // --> OD 2005-03-11 #i44344#, #i44681# - positioning attributes already set
+    // #i44344#, #i44681# - positioning attributes already set
     if ( pRetFrmFmt /*#i52825# */ && pRetFrmFmt->ISA(SwDrawFrmFmt) )
     {
         static_cast<SwDrawFrmFmt*>(pRetFrmFmt)->PosAttrSet();
@@ -3013,7 +2997,6 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
         if (rpOurNewObject)
         {
             /*
-            #96375#
             We do not store our rpOutNewObject in the ShapeOrder because we
             have a FrmFmt from which we can regenerate the contact object when
             we need it. Because, we can have frames anchored to paragraphs in
@@ -3032,8 +3015,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ConvertDrawTextToFly(SdrObject* &rpObject,
             // SwWW8ImplReader::LoadDoc1() can determine the z-order.
             if (!rpOurNewObject->IsInserted())
             {
-                // 2004-12-13 #117915# - pass information, if object
-                // is in page header|footer to method.
+                // pass information, if object is in page header|footer to method.
                 pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                                bIsHeader || bIsFooter );
             }
@@ -3127,7 +3109,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
                 URIHelper::SmartRel2Abs(
                     INetURLObject(sBaseURL), pGrf->GetFileName(),
                     URIHelper::GetMaybeFileHdl()));
-            // --> OD 2005-07-04 #124117# - correction of fix for issue #i10939#:
+            // correction of fix for issue #i10939#:
             // One of the two conditions have to be true to insert the graphic
             // as a linked graphic -
             if (GRAPHIC_NONE == eType || CanUseRemoteLink(aGrfName))
@@ -3182,8 +3164,7 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         // SwWW8ImplReader::LoadDoc1() die Z-Order festgelegt werden kann !!!
         if (!rpOurNewObject->IsInserted())
         {
-            // --> OD 2004-12-13 #117915# - pass information, if object
-            // is in page header|footer to method.
+            // pass information, if object is in page header|footer to method.
             pWWZOrder->InsertEscherObject( rpOurNewObject, pF->nSpId,
                                            bIsHeader || bIsFooter );
             // <--
@@ -3196,9 +3177,7 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
 {
     if (!pDrawModel)
     {
-        // --> OD 2005-08-08 #i52858# - method name changed
-        rDoc.GetOrCreateDrawModel();
-        // <--
+        rDoc.GetOrCreateDrawModel(); // #i52858# - method name changed
         pDrawModel  = rDoc.GetDrawModel();
         OSL_ENSURE(pDrawModel, "Kann DrawModel nicht anlegen");
         pDrawPg = pDrawModel->GetPage(0);
@@ -3206,7 +3185,6 @@ void SwWW8ImplReader::GrafikCtor()  // Fuer SVDraw und VCControls und Escher
         pMSDffManager = new SwMSDffManager(*this);
         pMSDffManager->SetModel(pDrawModel, 1440);
         /*
-         #79055#
          Now the dff manager always needs a controls //converter as well, but a
          control converter may still exist //without a dffmanager. cmc
         */

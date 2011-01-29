@@ -86,9 +86,8 @@ ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String &
         return ERR_SWG_READ_ERROR;
     }
 
-    //JP 18.01.96: Alle Ueberschriften sind normalerweise ohne
-    //              Kapitelnummer. Darum hier explizit abschalten
-    //              weil das Default jetzt wieder auf AN ist.
+    // Alle Ueberschriften sind normalerweise ohne Kapitelnummer.
+    // Darum hier explizit abschalten weil das Default jetzt wieder auf AN ist.
     if( !bInsertMode )
         Reader::SetNoOutlineNum( rDoc );
 
@@ -336,7 +335,6 @@ ULONG SwASCIIParser::ReadChars()
                 break;      // aus der WHILE-Schleife heraus
 
             /*
-            #98380#
             If there was some unconverted bytes on the last cycle then they
             were put at the beginning of the array, so total bytes available
             to convert this cycle includes them. If we found 0 following bytes
@@ -395,7 +393,7 @@ ULONG SwASCIIParser::ReadChars()
                     pLastStt = ++pStt;
                 cLastCR = 0;
                 nLineLen = 0;
-                // JP 03.04.96: das letze am Ende nehmen wir nicht
+                // das letze am Ende nehmen wir nicht
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
                     pDoc->SplitNode( *pPam->GetPoint(), false );
@@ -412,7 +410,7 @@ ULONG SwASCIIParser::ReadChars()
                         *pStt = 0;
                         ++pStt;
 
-                        // JP 03.04.96: das letze am Ende nehmen wir nicht
+                        // das letze am Ende nehmen wir nicht
                         if( !rInput.IsEof() || pEnd != pStt )
                             bSplitNode = true;
                     }
@@ -438,7 +436,7 @@ ULONG SwASCIIParser::ReadChars()
                         else
                             bChkSplit = true;
 
-                            // JP 03.04.96: das letze am Ende nehmen wir nicht
+                            // das letze am Ende nehmen wir nicht
                         if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
                             bSplitNode = true;
                     }

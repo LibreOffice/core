@@ -106,7 +106,7 @@
 #include "ww8par2.hxx"          // class WW8RStyle, class WwAnchorPara
 #include "ww8graf.hxx"
 
-// OD 2004-05-18 #i27767#
+// #i27767#
 #include <fmtwrapinfluenceonobjpos.hxx>
 
 using namespace sw::util;
@@ -214,7 +214,6 @@ bool wwSection::IsVertical() const
 }
 
 /*
-  #113694#
   This is something of festering mapping, I'm open to better ways of doing it,
   but primarily the grid in writer is different to that in word. In writer the
   grid elements are squares with ruby rows inbetween. While in word there is no
@@ -553,7 +552,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasHeader )
     {
         rData.nSwUp  = nWWHTop;             // Header -> umrechnen
-        // --> CMC, OD 2004-06-18 #i19922# - correction:
+        // #i19922# - correction:
         // consider that <nWWUp> can be negative, compare only if it's positive
         if ( nWWUp > 0 &&
              static_cast<sal_uInt32>(abs(nWWUp)) >= nWWHTop )
@@ -561,7 +560,7 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
         else
             rData.nSwHLo = 0;
 
-        // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+        // #i19922# - minimum page header height is now 1mm
         // use new constant <cMinHdFtHeight>
         if (rData.nSwHLo < sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight))
             rData.nSwHLo = sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight);
@@ -580,15 +579,14 @@ void wwSectionManager::GetPageULData(const wwSection &rSection, bool bFirst,
     if( rData.bHasFooter )
     {
         rData.nSwLo = nWWFBot;              // Footer -> Umrechnen
-        // --> CMC, OD 2004-06-18 #i19922# - correction:
-        // consider that <nWWLo> can be negative, compare only if it's positive
+        // #i19922# - correction: consider that <nWWLo> can be negative, compare only if it's positive
         if ( nWWLo > 0 &&
              static_cast<sal_uInt32>(abs(nWWLo)) >= nWWFBot )
             rData.nSwFUp = nWWLo - nWWFBot;
         else
             rData.nSwFUp = 0;
 
-        // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+        // #i19922# - minimum page header height is now 1mm
         // use new constant <cMinHdFtHeight>
         if (rData.nSwFUp < sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight))
             rData.nSwFUp = sal::static_int_cast< sal_uInt32 >(cMinHdFtHeight);
@@ -609,7 +607,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             if (!rSection.IsFixedHeightHeader())    //normal
             {
                 pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwHLo));
-                // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+                // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aHdUL.SetLower( writer_cast<USHORT>(rData.nSwHLo - cMinHdFtHeight) );
                 pHdFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
@@ -617,8 +615,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             }
             else
             {
-                // --> OD 2005-05-20 #i48832# - set correct spacing between
-                // header and body.
+                // #i48832# - set correct spacing between header and body.
                 const SwTwips nHdLowerSpace( Abs(rSection.maSep.dyaTop) - rData.nSwUp - rData.nSwHLo );
                 pHdFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwHLo + nHdLowerSpace));
                 aHdUL.SetLower( static_cast< USHORT >(nHdLowerSpace) );
@@ -638,7 +635,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             if (!rSection.IsFixedHeightFooter())    //normal
             {
                 pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_MIN_SIZE, 0, rData.nSwFUp));
-                // --> OD 2004-06-18 #i19922# - minimum page header height is now 1mm
+                // #i19922# - minimum page header height is now 1mm
                 // use new constant <cMinHdFtHeight>
                 aFtUL.SetUpper( writer_cast<USHORT>(rData.nSwFUp - cMinHdFtHeight) );
                 pFtFmt->SetFmtAttr(SwHeaderAndFooterEatSpacingItem(
@@ -646,8 +643,7 @@ void wwSectionManager::SetPageULSpaceItems(SwFrmFmt &rFmt,
             }
             else
             {
-                // --> OD 2005-05-20 #i48832# - set correct spacing between
-                // footer and body.
+                // #i48832# - set correct spacing between footer and body.
                 const SwTwips nFtUpperSpace( Abs(rSection.maSep.dyaBottom) - rData.nSwLo - rData.nSwFUp );
                 pFtFmt->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, 0, rData.nSwFUp + nFtUpperSpace));
                 aFtUL.SetUpper( static_cast< USHORT >(nFtUpperSpace) );
@@ -807,7 +803,7 @@ void wwSectionManager::SetNumberingType(const wwSection &rNewSection,
 void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
 {
     /*
-    #i1909# #100688# section/page breaks should not occur in tables or subpage
+    #i1909# section/page breaks should not occur in tables or subpage
     elements like frames. Word itself ignores them in this case. The bug is
     more likely that this filter created such documents in the past!
     */
@@ -835,8 +831,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         SwSectionData aSection(FILE_LINK_SECTION, sSectionName);
         aSection.SetLinkFileName( sSectionName );
         aSection.SetProtectFlag(true);
-        // --> CMC, OD 2004-06-18 #i19922# improvement:
-        // return value of method <Insert> not used.
+        // #i19922# - improvement: return value of method <Insert> not used.
         mrReader.rDoc.InsertSwSection(*mrReader.pPaM, aSection, 0, 0, false);
     }
 
@@ -1013,8 +1008,8 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
     aNewSection.maSep.dxaLeft = ReadUSprm( pSep, pIds[3], nLef[nLIdx]);
     aNewSection.maSep.dxaRight = ReadUSprm( pSep, pIds[4], nRig[nLIdx]);
 
-    //#110175# 2pages in 1sheet hackery ?
-    //#i31806# but only swap if 2page in 1sheet is enabled.
+    // 2pages in 1sheet hackery ?
+    // #i31806# but only swap if 2page in 1sheet is enabled.
     // its not clear if dmOrientPage is the correct member to
     // decide on this but I am not about to 2nd guess cmc.
     if(mrReader.pWDop->doptypography.f2on1 &&
@@ -1696,7 +1691,7 @@ bool WW8FlyPara::operator==(const WW8FlyPara& rSrc) const
     /*
      Compare the parts that word seems to compare for equivalence.
      Interestingly being autoheight or absolute height (the & 0x7fff) doesn't
-     matter to word e.g. #110507#
+     matter to word
     */
     return
        (
@@ -1905,7 +1900,7 @@ bool WW8FlyPara::IsEmpty() const
     return false;
 }
 
-// OD 14.10.2003 #i18732# - changes made on behalf of CMC
+// #i18732# - changes made on behalf of CMC
 WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
                             SwWW8ImplReader& rIo,
                             WW8FlyPara& rWW,
@@ -1973,14 +1968,14 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     // Wenn der Fly links, rechts, oben oder unten aligned ist,
     // wird der aeussere Textabstand ignoriert, da sonst
     // der Fly an falscher Position landen wuerde
-    // JP 18.11.98: Problematisch wird es nur bei Innen/Aussen
+    // Problematisch wird es nur bei Innen/Aussen
 
     // Bindung
     nYBind = (( rWW.nSp29 & 0x30 ) >> 4);
-    // --> OD 2005-08-24 #i53725# - absolute positioned objects have to be
+    //#i53725# - absolute positioned objects have to be
     // anchored at-paragraph to assure its correct anchor position.
     eAnchor = FLY_AT_PARA;
-    // <--
+
     switch (nYBind)
     {
         case 0:     //relative to margin
@@ -1994,7 +1989,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             break;
     }
 
-// OD 14.10.2003 #i18732#
+// #i18732#
     switch( rWW.nSp27 )             // besondere Y-Positionen ?
     {
         case -4:
@@ -2042,7 +2037,7 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
     }
 
     nXBind = ( rWW.nSp29 & 0xc0 ) >> 6;
-// OD 14.10.2003 #i18732#
+// #i18732#
     switch (nXBind)           // X - Bindung -> Koordinatentransformation
     {
         case 0:     //relative to column
@@ -2056,15 +2051,14 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
             break;
     }
 
-    // --> OD 2004-12-06 #i36649# - adjustments for certain horizontal alignments
+    // #i36649# - adjustments for certain horizontal alignments
     // Note: These special adjustments found by an investigation of documents
     //       containing frames with different left/right border distances and
     //       distances to text. The outcome is some how strange.
     // Note: These adjustments causes wrong horizontal positions for frames,
     //       which are aligned inside|outside to page|margin on even pages,
     //       the left and right border distances are different.
-    // --> OD 2005-01-19 #119176# - no adjustments possible, if frame has
-    // automatic width.
+    // no adjustments possible, if frame has automatic width.
     // determine left border distance
     INT16 nLeBorderMgn( 0L );
     if ( !bAutoWidth )
@@ -2144,7 +2138,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         }
     }
 
-    // --> OD 2007-07-03 #148498#
     // adjustments for certain vertical alignments
     if ( eVAlign == text::VertOrientation::NONE && eVRel == text::RelOrientation::PAGE_PRINT_AREA )
     {
@@ -2153,7 +2146,6 @@ WW8SwFlyPara::WW8SwFlyPara( SwPaM& rPaM,
         eVRel = text::RelOrientation::PAGE_FRAME;
         nYPos = static_cast< INT16 >( nYPos + nWWPgTop );
     }
-    // <--
 
     FlySecur1( nWidth, rWW.bBorderLines );          // passen Raender ?
     FlySecur1( nHeight, rWW.bBorderLines );
@@ -2208,11 +2200,10 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
 
     // der 5. Parameter ist immer 0, daher geht beim Cast nix verloren
 
-    // OD 2004-05-18 #i27767#
-    // --> OD 2004-10-18 #i35017# - constant name has changed
+    // #i27767#
+    // #i35017# - constant name has changed
     Put( SwFmtWrapInfluenceOnObjPos(
                 text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ) );
-    // <--
 
     if( !bGraf )
     {
@@ -2455,7 +2446,6 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
     if (0 == (pWFlyPara = ConstructApo(rApo, pTabPos)))
         return false;
 
-    // --> OD 2007-07-03 #148498#
     // <WW8SwFlyPara> constructor has changed - new 4th parameter
     // containing WW8 page top margin.
     pSFlyPara = new WW8SwFlyPara( *pPaM, *this, *pWFlyPara,
@@ -2463,7 +2453,6 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
                                   maSectionManager.GetPageLeft(),
                                   maSectionManager.GetTextAreaWidth(),
                                   nIniFlyDx, nIniFlyDy);
-    // <--
 
     // If this paragraph is a Dropcap set the flag and we will deal with it later
     if (IsDropCap())
@@ -2578,7 +2567,6 @@ void SwWW8ImplReader::StopApo()
         }
 
         /*
-        #104920#
         What we are doing with this temporary nodeindex is as follows: The
         stack of attributes normally only places them into the document when
         the current insertion point has passed them by. Otherwise the end
@@ -2604,7 +2592,7 @@ void SwWW8ImplReader::StopApo()
         if (SwTxtNode* pNd = aPref.GetNode().GetTxtNode())
         {
             /*
-            #i582#/#114238#
+            #i582#
             Take the last paragraph background colour and fill the frame with
             it.  Otherwise, make it transparent, this appears to be how MSWord
             works
@@ -2635,7 +2623,7 @@ void SwWW8ImplReader::StopApo()
                 SwFmtFrmSize( pSFlyPara->eHeightFix, nW, pSFlyPara->nHeight ) );
         }
         /*
-        #83307# Word set *no* width meaning its an automatic width. The
+        Word set *no* width meaning its an automatic width. The
         SwFlyPara reader will have already set a fallback width of the
         printable regions width, so we should reuse it. Despite the related
         problems with layout addressed with a hack in WW8FlyPara's constructor
@@ -2729,14 +2717,14 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
         else
         {
             pCtrlStck->NewAttr(*pPaM->GetPoint(), rAttr);
-            // --> OD 2010-05-06 #i103711#
+            // #i103711#
             if ( bFirstLineOfStSet )
             {
                 const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
                 maTxtNodesHavingFirstLineOfstSet.insert( pNd );
             }
             // <--
-            // --> OD 2010-05-11 #i105414#
+            // #i105414#
             if ( bLeftIndentSet )
             {
                 const SwNode* pNd = &(pPaM->GetPoint()->nNode.GetNode());
@@ -3236,7 +3224,6 @@ void SwWW8ImplReader::Read_SubSuper( USHORT, const BYTE* pData, short nLen )
 SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
 {
     /*
-    #92489# & #92946#
     For inline graphics and objects word has a hacked in feature to use
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
@@ -3270,7 +3257,6 @@ SwFrmFmt *SwWW8ImplReader::ContainsSingleInlineGraphic(const SwPaM &rRegion)
 bool SwWW8ImplReader::ConvertSubToGraphicPlacement()
 {
     /*
-    #92489# & #92946#
     For inline graphics and objects word has a hacked in feature to use
     subscripting to force the graphic into a centered position on the line, so
     we must check when applying sub/super to see if it the subscript range
@@ -4076,12 +4062,8 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
         }
     }
 
-    // --> OD 2010-05-06 #i103711#
-    bool bFirstLinOfstSet( false );
-    // <--
-    // --> OD 2010-05-11 #i105414#
-    bool bLeftIndentSet( false );
-    // <--
+    bool bFirstLinOfstSet( false ); // #i103711#
+    bool bLeftIndentSet( false ); // #i105414#
 
     switch (nId)
     {
@@ -4094,16 +4076,13 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             {
                 pCollA[nAktColl].bListReleventIndentSet = true;
             }
-            // --> OD 2010-05-11 #i105414#
-            bLeftIndentSet = true;
-            // <--
+            bLeftIndentSet = true;  // #i105414#
             break;
         //sprmPDxaLeft1
         case     19:
         case 0x8411:
         case 0x8460:
             /*
-            #94672# #99584#
             As part of an attempt to break my spirit ww 8+ formats can contain
             ww 7- lists. If they do and the list is part of the style, then
             when removing the list from a paragraph of that style there
@@ -4131,9 +4110,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             {
                 pCollA[nAktColl].bListReleventIndentSet = true;
             }
-            // --> OD 2010-05-06 #i103711#
-            bFirstLinOfstSet = true;
-            // <--
+            bFirstLinOfstSet = true; // #i103711#
             break;
         //sprmPDxaRight
         case     16:
@@ -4145,10 +4122,7 @@ void SwWW8ImplReader::Read_LR( USHORT nId, const BYTE* pData, short nLen )
             return;
     }
 
-    // --> OD 2010-05-06 #i103711#
-    // --> OD 2010-05-11 #i105414#
-    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet );
-    // <--
+    NewAttr( aLR, bFirstLinOfstSet, bLeftIndentSet ); // #i103711#, #i105414#
 }
 
 // Sprm 20
@@ -4201,7 +4175,7 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
     {
         long n = nSpace * 10 / 24;  // WW: 240 = 100%, SW: 100 = 100%
 
-//JP 03.12.98: nach Absprache mit AMA ist die Begrenzung unsinnig
+// nach Absprache mit AMA ist die Begrenzung unsinnig
         if( n>200 ) n = 200;        // SW_UI-Maximum
         aLSpc.SetPropLineSpace( (const BYTE)n );
         const SvxFontHeightItem* pH = (const SvxFontHeightItem*)
@@ -4571,7 +4545,7 @@ void SwWW8ImplReader::Read_Relief( USHORT nId, const BYTE* pData, short nLen )
     {
         if( *pData )
         {
-// JP 16.03.2001 - not so eays because this is also a toggle attribute!
+// not so eays because this is also a toggle attribute!
 //  2 x emboss on -> no emboss !!!
 // the actual value must be searched over the stack / template
 
@@ -4600,7 +4574,7 @@ void SwWW8ImplReader::Read_TxtAnim(USHORT /*nId*/, const BYTE* pData, short nLen
         {
             bool bBlink;
 
-            // #110851# The 7 animated text effects available in word all get
+            // The 7 animated text effects available in word all get
             // mapped to a blinking text effect in StarOffice
             // 0 no animation       1 Las Vegas lights
             // 2 background blink   3 sparkle text
@@ -4860,9 +4834,8 @@ void SwWW8ImplReader::Read_Border(USHORT , const BYTE* , short nLen)
             {
                 // in Apo keine Umrandungen *ein*-schalten, da ich
                 // sonst die Flyumrandungen doppelt bekomme
-                // JP 04.12.98: aber nur wenn am Fly ein gesetzt ist, keine
-                //              uebernehmen. Sonst wird gar keine gesetzt!
-                //              Bug #59619#
+                // aber nur wenn am Fly ein gesetzt ist, keine
+                // uebernehmen. Sonst wird gar keine gesetzt!
 
                 // auch wenn kein Rand gesetzt ist, muss das Attribut gesetzt
                 // werden, sonst ist kein hartes Ausschalten von Style-Attrs

@@ -343,8 +343,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
         return 0;
 #endif
 
-    //JP 16.11.98: ToUpper darf auf keinen Fall gemacht werden, weil der
-    //Bookmark- name ein Hyperlink-Ziel sein kann!
+    //ToUpper darf auf keinen Fall gemacht werden, weil der Bookmark- name ein Hyperlink-Ziel sein kann!
 
     String aVal;
     if( SwFltGetFlag( nFieldFlags, SwFltControlStack::BOOK_TO_VAR_REF ) )
@@ -359,11 +358,10 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
                                         eStructCharSet );
         pStrm->Seek( nOldPos );
 
-        // JP 19.03.2001 - now here the implementation of the old
-        //              "QuoteString" and I hope with a better performance
-        //              as before. It's also only needed if the filterflags
-        //              say we will convert bookmarks to SetExpFields! And
-        //              this the exception!
+        // now here the implementation of the old "QuoteString" and
+        // I hope with a better performance as before. It's also only
+        // needed if the filterflags say we will convert bookmarks
+        // to SetExpFields! And this the exception!
 
         String sHex(CREATE_CONST_ASC( "\\x" ));
         bool bSetAsHex;
@@ -444,7 +442,7 @@ void SwWW8ImplReader::ConvertFFileName( String& rName, const String& rOrg )
     if( rName.Len() &&  '"' == rName.GetChar( rName.Len()-1 ))
         rName.Erase( rName.Len()-1, 1);
 
-    //#82900# Need the more sophisticated url converter. cmc
+    // Need the more sophisticated url converter. cmc
     if (rName.Len())
         rName = URIHelper::SmartRel2Abs(
             INetURLObject(sBaseURL), rName, Link(), false);
@@ -588,7 +586,7 @@ String GetWordDefaultDateStringAsUS(SvNumberFormatter* pFormatter, USHORT nLang)
     aFormat.ConvertLanguage(*pFormatter, nLang, LANGUAGE_ENGLISH_US);
 
     String sParams(aFormat.GetFormatstring());
-    // --> OD 2007-02-09 #i36594#
+    // #i36594#
     // Fix provided by mloiseleur@openoffice.org.
     // A default date can have already 4 year digits, in some case
     const xub_StrLen pos = sParams.Search( CREATE_CONST_ASC("YYYY") );
@@ -821,11 +819,9 @@ bool AcceptableNestedField(sal_uInt16 nFieldCode)
         case 68:
         case 79:
         case 88:
-        // --> OD 2007-01-02 #b6504125#
         // Accept AutoTextList field as nested field.
         // Thus, the field result is imported as plain text.
         case 89:
-        // <--
             return true;
         default:
             return false;
@@ -1027,7 +1023,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     bool bOk = pF->GetPara(pRes->nCp2OrIdx, aF);
 
     OSL_ENSURE(bOk, "WW8: Bad Field!\n");
-    if (aF.nId == 33) aF.bCodeNest=false; //#124716#: do not recurse into nested page fields
+    if (aF.nId == 33) aF.bCodeNest=false; // do not recurse into nested page fields
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
 
@@ -1073,7 +1069,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
             aF.nSCode, aF.nLCode, eTextCharSet );
         pStrm->Seek( nOldPos );
 
-        //#124725# field codes which contain '/' or '.' are not displayed in WinWord
+        // field codes which contain '/' or '.' are not displayed in WinWord
         xub_StrLen nSpacePos = aStr.Search( ' ', 1 );
         if ( STRING_NOTFOUND == nSpacePos )
             nSpacePos = aStr.Len( );
@@ -1110,8 +1106,8 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
                 aF.nSCode, aF.nLCode, eTextCharSet );
         }
 
-        // --> OD 2005-07-25 #i51312# - graphics inside field code not supported
-        // by Writer. Thus, delete character 0x01, which stands for such a graphic.
+        // #i51312# - graphics inside field code not supported by Writer.
+        // Thus, delete character 0x01, which stands for such a graphic.
         if (aF.nId==51) //#i56768# only do it for the MACROBUTTON field, since DropListFields need the 0x01.
         {
             aStr.EraseAllChars( 0x01 );
@@ -1132,7 +1128,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
             case FLD_TEXT:
                 // so viele ueberlesen, das Resultfeld wird wie Haupttext
                 // eingelesen
-                // JP 15.07.99: attributes can start at char 0x14 so skip one
+                // attributes can start at char 0x14 so skip one
                 // char more back == "-2"
                 if (aF.nLRes)
                     return aF.nLen - aF.nLRes - 2;
@@ -1806,7 +1802,6 @@ eF_ResT SwWW8ImplReader::Read_F_Author( WW8FieldDesc*, String& )
 {
         // SH: Das SwAuthorField bezeichnet nicht den urspruenglichen
         // Autor, sondern den aktuellen Benutzer, also besser ueber DocInfo
-        // (#56149)
     SwDocInfoField aFld( (SwDocInfoFieldType*)
                      rDoc.GetSysFldType( RES_DOCINFOFLD ),
                      DI_CREATE|DI_SUB_AUTHOR, String() );
@@ -2848,8 +2843,7 @@ void lcl_toxMatchTSwitch(SwWW8ImplReader& rReader, SwTOXBase& rBase,
         {
             xub_StrLen nIndex = 0;
 
-            //#92940# Delimiters between styles and style levels appears to
-            //allow both ; and ,
+            // Delimiters between styles and style levels appears to allow both ; and ,
 
             String sTemplate( sParams.GetToken(0, ';', nIndex) );
             if( STRING_NOTFOUND == nIndex )
@@ -3293,11 +3287,10 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             if (AddExtraOutlinesAsExtraStyles(*pBase))
                                 eCreateFrom |= (nsSwTOXElement::TOX_TEMPLATE | nsSwTOXElement::TOX_OUTLINELEVEL);
 
-                            // --> FME 2004-12-16 #i19683# Insert a text token " " between the
-                            // number and entry token. In an ideal world we could handle the
-                            // tab stop between the number and the entry correctly, but I
-                            // currently have no clue how to obtain the tab stop position.
-                            // It is _not_ set at the paragraph style.
+                            // #i19683# Insert a text token " " between the number and entry token.
+                            // In an ideal world we could handle the tab stop between the number and
+                            // the entry correctly, but I currently have no clue how to obtain
+                            // the tab stop position. It is _not_ set at the paragraph style.
                             SwForm* pForm = 0;
                             for (USHORT nI = 0; nI < nColls; ++nI)
                             {
@@ -3345,7 +3338,6 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         pBase->SetCreate( eCreateFrom );
 
                         /*
-                        #91214#
                         We don't know until here if we are an illustration
                         or not, and so have being used a TOX_CONTENT so far
                         which has 10 levels, while TOX has only two, this
@@ -3358,7 +3350,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                         SwForm aForm( eType );
                         USHORT nEnd = aForm.GetFormMax()-1;
 
-                        // -> #i21237#
+                        // #i21237#
                         for(USHORT nLevel = 1; nLevel <= nEnd; ++nLevel)
                         {
                             SwFormTokens aPattern = aOldForm.GetPattern(nLevel);
@@ -3366,14 +3358,15 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                             SwFormTokens::iterator new_end=remove_if(aPattern.begin(), aPattern.end(),
                                       SwFormTokenEqualToFormTokenType(TOKEN_ENTRY_NO));
 
-                            aPattern.erase (new_end, aPattern.end() ); // #124710#: table index imported with wrong page number format
+                            // table index imported with wrong page number format
+                            aPattern.erase (new_end, aPattern.end() );
 
                             aForm.SetPattern(nLevel, aPattern);
 
                             aForm.SetTemplate( nLevel,
                                 aOldForm.GetTemplate(nLevel));
                         }
-                        // <- #i21237#
+                        // <--
 
                         pBase->SetTOXForm( aForm );
                     }
@@ -3394,13 +3387,12 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     // Update fuer TOX anstossen
     rDoc.SetUpdateTOX(true);
 
-    // #i21237#
-    // propagate tab stops from paragraph styles used in TOX to
-    // patterns of the TOX
+    // #i21237# - propagate tab stops from paragraph styles
+    // used in TOX to patterns of the TOX
+
     pBase->AdjustTabStops(rDoc, TRUE);
 
-    //#i10028# inserting a toc implicltly acts like a parabreak
-    //in word and writer
+    // #i10028# - inserting a toc implicltly acts like a parabreak in word and writer
     if (pPaM->GetPoint()->nContent.GetIndex())
         AppendTxtNode(*pPaM->GetPoint());
 

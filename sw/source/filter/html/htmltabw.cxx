@@ -154,7 +154,6 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableBox& rBox,
         const SvxBrushItem& rBrushItem =
             rBox.GetFrmFmt()->GetBackground();
 
-        /// OD 02.09.2002 #99657#
         /// The table box has a background, if its background color is not "no fill"/
         /// "auto fill" or it has a background graphic.
         bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
@@ -185,7 +184,6 @@ sal_Bool SwHTMLWrtTable::HasTabBackground( const SwTableLine& rLine,
 
     sal_Bool bRet = sal_False;
     const SvxBrushItem& rBrushItem = rLine.GetFrmFmt()->GetBackground();
-    /// OD 02.09.2002 #99657#
     /// The table line has a background, if its background color is not "no fill"/
     /// "auto fill" or it has a background graphic.
     bRet = rBrushItem.GetColor() != COL_TRANSPARENT ||
