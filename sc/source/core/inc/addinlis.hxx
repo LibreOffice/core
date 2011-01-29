@@ -72,7 +72,7 @@ public:
                                     com::sun::star::sheet::XVolatileResult> xVR );
     static void             RemoveDocument( ScDocument* pDocument );
 
-    BOOL                    HasDocument( ScDocument* pDoc ) const   { return pDocs->Seek_Entry( pDoc ); }
+    bool                    HasDocument( ScDocument* pDoc ) const   { return pDocs->Seek_Entry( pDoc ); }
     void                    AddDocument( ScDocument* pDoc )         { pDocs->Insert( pDoc ); }
     const com::sun::star::uno::Any& GetResult() const               { return aResult; }
 
