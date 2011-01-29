@@ -3403,6 +3403,54 @@ void ToolBox::ImplDrawNext( BOOL bIn )
 
 // -----------------------------------------------------------------------
 
+void ToolBox::ImplDrawSeparator( USHORT nPos, Rectangle rRect )
+{
+    BOOL bNativeOk = FALSE;
+    ImplToolItem* pItem = &mpData->m_aItems[nPos];
+
+    if( IsNativeControlSupported( CTRL_TOOLBAR, PART_SEPARATOR ) )
+    {
+        ImplControlValue    aControlValue;
+        ControlState        nState = 0;
+        bNativeOk = DrawNativeControl( CTRL_TOOLBAR, PART_SEPARATOR,
+                                       rRect, nState, aControlValue, rtl::OUString() );
+    }
+
+    /* Draw the widget only if it can't be drawn natively. */
+    if( !bNativeOk )
+    {
+        const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
+        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
+
+        // no separator before or after windows or at breaks
+        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
+        {
+            pTempItem = &mpData->m_aItems[nPos+1];
+            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
+            {
+                long nCenterPos, nSlim;
+                SetLineColor( rStyleSettings.GetSeparatorColor() );
+                if ( IsHorizontal() )
+                {
+                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
+                    nCenterPos = pItem->maRect.Center().X();
+                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
+                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
+                }
+                else
+                {
+                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
+                    nCenterPos = pItem->maRect.Center().Y();
+                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
+                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
+                }
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
 static void ImplDrawButton( ToolBox* pThis, const Rectangle &rRect, USHORT highlight, BOOL bChecked, BOOL bEnabled, BOOL bIsWindow )
 {
     // draws toolbar button background either native or using a coloured selection
@@ -3462,6 +3510,33 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     if( rStyleSettings.GetFaceColor() == Color( COL_WHITE ) )
         bHighContrastWhite = TRUE;
 
+    // Compute buttons area.
+    Size    aBtnSize    = pItem->maRect.GetSize();
+    if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
+    {
+        // separate button not for dropdown only where the whole button is painted
+        if ( pItem->mnBits & TIB_DROPDOWN &&
+            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
+        {
+            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
+            if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
+                aBtnSize.Width() -= aArrowRect.GetWidth();
+            else // dropdown arrow on bottom side
+                aBtnSize.Height() -= aArrowRect.GetHeight();
+        }
+    }
+
+    /* Compute the button/separator rectangle here, we'll need it for
+     * both the buttons and the separators. */
+    Rectangle aButtonRect( pItem->maRect.TopLeft(), aBtnSize );
+    long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
+    long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
+    long    nImageOffX  = 0;
+    long    nImageOffY  = 0;
+    long    nTextOffX   = 0;
+    long    nTextOffY   = 0;
+    USHORT  nStyle      = 0;
+
     // draw separators in flat style only
     if ( !bLayout &&
          (mnOutStyle & TOOLBOX_STYLE_FLAT) &&
@@ -3469,31 +3544,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
          nPos > 0
          )
     {
-        // no separator before or after windows or at breaks
-        ImplToolItem* pTempItem = &mpData->m_aItems[nPos-1];
-        if ( pTempItem && !pTempItem->mbShowWindow && nPos < mpData->m_aItems.size()-1 )
-        {
-            pTempItem = &mpData->m_aItems[nPos+1];
-            if ( !pTempItem->mbShowWindow && !pTempItem->mbBreak )
-            {
-                long nCenterPos, nSlim;
-                SetLineColor( rStyleSettings.GetSeparatorColor() );
-                if ( IsHorizontal() )
-                {
-                    nSlim = (pItem->maRect.Bottom() - pItem->maRect.Top ()) / 4;
-                    nCenterPos = pItem->maRect.Center().X();
-                    DrawLine( Point( nCenterPos, pItem->maRect.Top() + nSlim ),
-                              Point( nCenterPos, pItem->maRect.Bottom() - nSlim ) );
-                }
-                else
-                {
-                    nSlim = (pItem->maRect.Right() - pItem->maRect.Left ()) / 4;
-                    nCenterPos = pItem->maRect.Center().Y();
-                    DrawLine( Point( pItem->maRect.Left() + nSlim, nCenterPos ),
-                              Point( pItem->maRect.Right() - nSlim, nCenterPos ) );
-                }
-            }
-        }
+        ImplDrawSeparator( nPos, aButtonRect );
     }
 
     // do nothing if item is no button or will be displayed as window
@@ -3556,30 +3607,6 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             pMgr->UpdateDragRect();
         return;
     }
-
-    // draw button
-    Size    aBtnSize    = pItem->maRect.GetSize();
-    if( ImplGetSVData()->maNWFData.mbToolboxDropDownSeparate )
-    {
-        // separate button not for dropdown only where the whole button is painted
-        if ( pItem->mnBits & TIB_DROPDOWN &&
-            ((pItem->mnBits & TIB_DROPDOWNONLY) != TIB_DROPDOWNONLY) )
-        {
-            Rectangle aArrowRect = pItem->GetDropDownRect( mbHorz );
-            if( aArrowRect.Top() == pItem->maRect.Top() ) // dropdown arrow on right side
-                aBtnSize.Width() -= aArrowRect.GetWidth();
-            else // dropdown arrow on bottom side
-                aBtnSize.Height() -= aArrowRect.GetHeight();
-        }
-    }
-    Rectangle aButtonRect( pItem->maRect.TopLeft(), aBtnSize );
-    long    nOffX       = SMALLBUTTON_OFF_NORMAL_X;
-    long    nOffY       = SMALLBUTTON_OFF_NORMAL_Y;
-    long    nImageOffX=0;
-    long    nImageOffY=0;
-    long    nTextOffX=0;
-    long    nTextOffY=0;
-    USHORT  nStyle      = 0;
 
     if ( pItem->meState == STATE_CHECK )
     {

@@ -260,6 +260,7 @@ private:
     SAL_DLLPRIVATE void            ImplFormat( BOOL bResize = FALSE );
     SAL_DLLPRIVATE void            ImplDrawSpin( BOOL bUpperIn, BOOL bLowerIn );
     SAL_DLLPRIVATE void            ImplDrawNext( BOOL bIn );
+    SAL_DLLPRIVATE void            ImplDrawSeparator( USHORT nPos, Rectangle rRect );
     SAL_DLLPRIVATE void            ImplDrawItem( USHORT nPos, BOOL bHighlight = FALSE, BOOL bPaint = FALSE, BOOL bLayout = FALSE );
     using Window::ImplInvalidate;
     SAL_DLLPRIVATE void            ImplInvalidate( BOOL bNewCalc = FALSE, BOOL bFullPaint = FALSE );
