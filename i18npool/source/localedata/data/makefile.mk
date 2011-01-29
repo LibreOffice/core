@@ -272,6 +272,7 @@ SHL4OBJS= \
     $(SLO)$/localedata_ia.obj    \
     $(SLO)$/localedata_id_ID.obj \
     $(SLO)$/localedata_ja_JP.obj \
+    $(SLO)$/localedata_jbo.obj \
     $(SLO)$/localedata_kk_KZ.obj \
     $(SLO)$/localedata_km_KH.obj \
     $(SLO)$/localedata_kn_IN.obj \
