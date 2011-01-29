@@ -1067,8 +1067,6 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         m_aPreviews.push_back(pNewPreview);
     }
     ListBox* pBottomBox = m_aMatches[rHeaders.Count() -1];
-    long nYBottom = pBottomBox->GetPosPixel().Y();
-    nYBottom += pBottomBox->GetDropDownPosSizePixel().GetHeight();
     m_aVScroll.SetRange(Range(0, rHeaders.Count()));
     m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
     m_aVScroll.EnableDrag();
