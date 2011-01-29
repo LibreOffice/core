@@ -175,6 +175,12 @@ en-US = "Norwegian"
 [STR_DESC_MODULE_EXTENSION_DICTIONARY_NO]
 en-US = "Norwegian dictionaries (Nynorsk and Bokmal)"
 
+[STR_NAME_MODULE_EXTENSION_DICTIONARY_OC]
+en-US = "Occitan"
+
+[STR_DESC_MODULE_EXTENSION_DICTIONARY_OC]
+en-US = "Occitan spell check dictionary"
+
 [STR_NAME_MODULE_EXTENSION_DICTIONARY_PL]
 en-US = "Polish"
 
