@@ -549,9 +549,9 @@ ScFunctionList::ScFunctionList() :
     }
 
     //Move list to vector for better random access performance
-    aFunctionList.reserve(tmpFuncList.size());
-    aFunctionList.assign(tmpFuncList.begin(),tmpFuncList.end());
+    ::std::vector<const ScFuncDesc*> tmp(tmpFuncList.begin(), tmpFuncList.end());
     tmpFuncList.clear();
+    aFunctionList.swap(tmp);
 
     //Initialize iterator
     aFunctionListIter = aFunctionList.end();
