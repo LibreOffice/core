@@ -29,14 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <editeng/tstpitem.hxx>
 #include <svl/stritem.hxx>
 #include <sfx2/request.hxx>
-
 
 #include "view.hxx"
 #include "wrtsh.hxx"

@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include "hintids.hxx"
 #include <vcl/help.hxx>
 #include <svx/ruler.hxx>
@@ -98,8 +97,8 @@ void lcl_GetPos(SwView* pView,
 
     long lDelta = lPos - rSh.VisArea().Pos().*pPt;
     const long lSize = aDocSz.*pSz + lBorder;
-    // Bug 11693: sollte rechts oder unten zuviel Wiese sein, dann muss
-    //            diese von der VisArea herausgerechnet werden!
+    // sollte rechts oder unten zuviel Wiese sein, dann muss
+    // diese von der VisArea herausgerechnet werden!
     long nTmp = pView->GetVisArea().Right()+lDelta;
     if ( bHori && nTmp > lSize )
         lDelta -= nTmp - lSize;
@@ -688,8 +687,8 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         pScrollbar->GetType() == SCROLL_DRAG)
     {
         //Hier wieder auskommentieren wenn das mitscrollen nicht gewuenscht ist.
-        // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
-        //              so we dont must do it agin.
+        // the end scrollhandler invalidate the FN_STAT_PAGE,
+        // so we dont must do it agin.
         EndScrollHdl(pScrollbar);
 
         Point aPos( aVisArea.TopLeft() );
@@ -907,7 +906,7 @@ void ViewResizePixel( const Window &rRef,
         if(!aSize.Height())
             aSize.Height() = pHLineal->GetSizePixel().Height();
         pHLineal->SetPosSizePixel( rOfst, aSize );
-//      #46802 VCL ruft an unsichtbaren Fenstern kein Resize
+//      VCL ruft an unsichtbaren Fenstern kein Resize
 //      fuer das Lineal ist das aber keine gute Idee
         if(!pHLineal->IsVisible())
             pHLineal->Resize();
@@ -945,7 +944,7 @@ void ViewResizePixel( const Window &rRef,
 
         Size  aImgSz( nVBSzWidth, nVBSzWidth );
 
-        //#55949#  wenn der Platz fuer Scrollbar und Page-Buttons zu klein wird, dann
+        // wenn der Platz fuer Scrollbar und Page-Buttons zu klein wird, dann
         // werden die Buttons versteckt
         USHORT nCnt = pNaviBtn ? 3 : 2;
         long nSubSize = (aImgSz.Width() * nCnt );
@@ -1073,7 +1072,7 @@ void SwView::InnerResizePixel( const Point &rOfst, const Size &rSize )
 
 void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
 {
-    // FME 22.08.2003 #i16909# - return, if no size (caused by minimize window).
+    // #i16909# return, if no size (caused by minimize window).
     if ( bInOuterResizePixel || ( !rSize.Width() && !rSize.Height() ) )
         return;
     bInOuterResizePixel = TRUE;
@@ -1300,7 +1299,7 @@ BOOL SwView::UpdateScrollbars()
 void SwView::Move()
 {
     if ( GetWrtShell().IsInSelect() )
-        GetWrtShell().EndSelect();  //#32427#
+        GetWrtShell().EndSelect();
     SfxViewShell::Move();
 }
 

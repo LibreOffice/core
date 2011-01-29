@@ -30,7 +30,6 @@
 #include "precompiled_sw.hxx"
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 
-
 #include <wrtsh.hxx>
 #include <swtypes.hxx>
 #include <view.hxx>
@@ -140,8 +139,8 @@ void SwOleClient::ViewChanged()
 
     Size aVisSize( aSz.Width, aSz.Height );
 
-    // Bug 24833: solange keine vernuenftige Size vom Object kommt,
-    //              kann nichts skaliert werden
+    // solange keine vernuenftige Size vom Object kommt,
+    // kann nichts skaliert werden
     if( !aVisSize.Width() || !aVisSize.Height() )
         return;
 

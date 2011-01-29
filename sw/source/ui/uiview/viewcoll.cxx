@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "cmdid.h"
 #include "uiitems.hxx"
 #include <tools/list.hxx>
@@ -39,7 +37,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/stritem.hxx>
 #include <rsc/rscsfx.hxx>
-
 
 #include "errhdl.hxx"
 #include "view.hxx"

@@ -29,10 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
-
 
 #include <fldmgr.hxx>
 #include <expfld.hxx>

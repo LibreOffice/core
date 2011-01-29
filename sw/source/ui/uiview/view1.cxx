@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svx/svdpagv.hxx>
 #include <svx/svdview.hxx>
 #include <svx/ruler.hxx>
@@ -70,7 +69,7 @@ void SwView::Activate(BOOL bMDIActivate)
     if(!bDocSzUpdated)
         DocSzChgd(aDocSz);
 
-    // #b6330459# make selection visible
+    // make selection visible
     if(bMakeSelectionVisible)
     {
         pWrtShell->MakeSelVisible();

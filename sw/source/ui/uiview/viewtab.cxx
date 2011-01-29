@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <tools/list.hxx>
 
 #include <hintids.hxx>
@@ -66,10 +65,8 @@
 #include "fmtcol.hxx"
 #include "section.hxx"
 
-// -> #i23726#
 #include "ndtxt.hxx"
 #include "pam.hxx"
-// <- #i23726#
 
 #include <IDocumentSettingAccess.hxx>
 
@@ -129,7 +126,7 @@ void lcl_ConvertToCols(const SvxColumnItem& rColItem,
                           SwFmtCol& rCols)
 {
     OSL_ENSURE( rCols.GetNumCols() == rColItem.Count(), "Column count mismatch" );
-    // #126939# ruler executes that change the columns shortly after the selection has changed
+    // ruler executes that change the columns shortly after the selection has changed
     // can result in a crash
     if(rCols.GetNumCols() != rColItem.Count())
         return;
@@ -594,7 +591,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
         // #i23726#
         if (pNumRuleNodeFromDoc)
         {
-            // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+            // --> #i42922# Mouse move of numbering label
             // has to consider the left indent of the paragraph
             SfxItemSet aSet( GetPool(), RES_LR_SPACE, RES_LR_SPACE );
             rSh.GetCurAttr( aSet );
@@ -603,11 +600,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
             // <--
 
             SwPosition aPos(*pNumRuleNodeFromDoc);
-            // --> OD 2008-06-09 #i90078#
+            // #i90078#
             rSh.SetIndent( static_cast< short >(aParaMargin.GetTxtLeft() - rLR.GetTxtLeft()), aPos);
-            // <--
-            // --> OD 2005-02-18 #i42921# - invalidate state of indent in order
-            // to get a ruler update.
+            // #i42921# invalidate state of indent in order to get a ruler update.
             aParaMargin.SetWhich( nSlot );
             GetViewFrame()->GetBindings().SetState( aParaMargin );
             // <--
@@ -1090,7 +1085,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     if (pNumRuleNodeFromDoc)
                     {
                         short nOffset = static_cast< short >(aLR.GetTxtLeft() +
-                                        // --> FME 2005-02-22 #i42922# Mouse move of numbering label
+                                        // #i42922# Mouse move of numbering label
                                         // has to consider the left indent of the paragraph
                                         pNumRuleNodeFromDoc->GetLeftMarginWithNum( TRUE ) );
                                        // <--

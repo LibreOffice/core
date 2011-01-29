@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <cmdid.h>
 #include "globals.hrc"
 
@@ -58,7 +57,6 @@
 #include <mmconfigitem.hxx>
 
 #include <view.hrc>
-
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

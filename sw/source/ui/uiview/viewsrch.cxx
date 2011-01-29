@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <string> // HACK: prevent conflict between STLPORT and Workshop headers
 #include <hintids.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -305,7 +304,7 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         SwWait aWait( *GetDocShell(), TRUE );
                         pWrtShell->StartAllAction();
                         nFound = FUNC_Search( aOpts );
-                        // i#8288: Now that everything has been replaced, restore the original cursor position.
+                        // #i8288# Now that everything has been replaced, restore the original cursor position.
                         pWrtShell->GetSwCrsr()->RestoreSavePos();  // (position saved by SwCrsrSaveState above)
                         pWrtShell->EndAllAction();
                     }
@@ -579,13 +578,13 @@ void SwView::Replace()
         aRewriter.AddRule(UNDO_ARG2, SW_RES(STR_YIELDS));
         aRewriter.AddRule(UNDO_ARG3, pSrchItem->GetReplaceString());
 
-        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter); // #111827#
+        pWrtShell->StartUndo(UNDO_UI_REPLACE_STYLE, &aRewriter);
 
         pWrtShell->SetTxtFmtColl( pWrtShell->GetParaStyle(
                             pSrchItem->GetReplaceString(),
                             SwWrtShell::GETSTYLE_CREATESOME ));
 
-        pWrtShell->EndUndo(UNDO_UI_REPLACE_STYLE); // #111827#
+        pWrtShell->EndUndo(UNDO_UI_REPLACE_STYLE);
     }
     else
     {

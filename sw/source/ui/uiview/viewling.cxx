@@ -559,8 +559,8 @@ void SwView::InsertThesaurusSynonym( const String &rSynonmText, const String &rL
 
         // adjust existing selection
         SwPaM *pCrsr = pWrtShell->GetCrsr();
-        pCrsr->GetPoint()->nContent/*.nIndex*/ -= nRight;
-        pCrsr->GetMark()->nContent/*.nIndex*/ += nLeft;
+        pCrsr->GetPoint()->nContent -= nRight;
+        pCrsr->GetMark()->nContent += nLeft;
     }
 
     pWrtShell->Insert( rSynonmText );
@@ -685,7 +685,7 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             // default context menu.
             bool bUseGrammarContext = false;
             Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
-            /*linguistic2::*/ProofreadingResult aGrammarCheckRes;
+            ProofreadingResult aGrammarCheckRes;
             sal_Int32 nErrorInResult = -1;
             uno::Sequence< rtl::OUString > aSuggestions;
             bool bCorrectionRes = false;
@@ -933,7 +933,6 @@ protected:
 
 IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
 {
-//    printf("### DROP DOWN SELECT... IsTravelSelect=%i\n", pBox->IsTravelSelect());
     if (pBox->IsTravelSelect()) {
     return 0;
     } else {
@@ -956,7 +955,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     SwFieldDialog aFldDlg(pEditWin, fieldBM);
     aFldDlg.SetPosPixel(pEditWin->OutputToScreenPixel(aPixPos));
 
-    /*short ret=*/aFldDlg.Execute();
+    aFldDlg.Execute();
     sal_Int32 selection=aFldDlg.getSelection();
     if (selection>=0) {
         (*fieldBM->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = makeAny(selection);

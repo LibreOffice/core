@@ -262,7 +262,7 @@ void SwSrcView::SaveContentTo(SfxMedium& rMed)
 {
     SvStream* pOutStream = rMed.GetOutStream();
     pOutStream->SetStreamCharSet(lcl_GetStreamCharSet(eLoadEncoding));
-    aEditWin.Write( *pOutStream );//, EE_FORMAT_TEXT);
+    aEditWin.Write( *pOutStream );
 }
 
 void SwSrcView::Init()
@@ -294,7 +294,7 @@ void SwSrcView::SaveContent(const String& rTmpFile)
     SfxMedium aMedium( rTmpFile,    STREAM_WRITE, TRUE);
     SvStream* pOutStream = aMedium.GetOutStream();
     pOutStream->SetStreamCharSet( lcl_GetStreamCharSet(eLoadEncoding) );
-    aEditWin.Write(*pOutStream);//, EE_FORMAT_TEXT);
+    aEditWin.Write(*pOutStream);
     aMedium.Commit();
 }
 
@@ -816,7 +816,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             pStream->Seek(0);
             TextEngine* pTextEngine = aEditWin.GetTextEngine();
             pTextEngine->EnableUndo(FALSE);
-            aEditWin.Read(*pStream);//, EE_FORMAT_TEXT);
+            aEditWin.Read(*pStream);
             pTextEngine->EnableUndo(TRUE);
         }
         else
@@ -852,7 +852,7 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             pInStream->SetStreamCharSet( eDestEnc );
 
 
-            aEditWin.Read(*pInStream);//, EE_FORMAT_TEXT);
+            aEditWin.Read(*pInStream);
         }
     }
     aEditWin.ClearModifyFlag();

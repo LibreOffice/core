@@ -157,8 +157,8 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_UNDO:
             {
-                //JP 21.07.98: Bug 53429 - die muss noch nicht vorhanden sein
-                //              also lasse sie mal anlegen:
+                // die muss noch nicht vorhanden sein
+                // also lasse sie mal anlegen:
                 if( !pShell )
                     SelectShell();
 
