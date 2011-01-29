@@ -288,11 +288,11 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
         OSL_ENSURE( pGuid, "VbaSiteModel::createControlModel - invalid class table index" );
         if( pGuid )
         {
-            if( pGuid->equalsAscii( COMCTL_GUID_SCROLLBAR_60 ) )
+            if( pGuid->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMCTL_GUID_SCROLLBAR_60)) )
                 xCtrlModel.reset( new ComCtlScrollBarModel( 6 ) );
-            else if( pGuid->equalsAscii( COMCTL_GUID_PROGRESSBAR_50 ) )
+            else if( pGuid->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMCTL_GUID_PROGRESSBAR_50)) )
                 xCtrlModel.reset( new ComCtlProgressBarModel( 5 ) );
-            else if( pGuid->equalsAscii( COMCTL_GUID_PROGRESSBAR_60 ) )
+            else if( pGuid->equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMCTL_GUID_PROGRESSBAR_60)) )
                 xCtrlModel.reset( new ComCtlProgressBarModel( 6 ) );
         }
     }
