@@ -129,7 +129,6 @@ void SwScrollbar::AutoShow()
 {
     long nVis = GetVisibleSize();
     long nLen = GetRange().Len();
-    {
         if( nVis >= nLen - 1)
         {
             if(ScrollBar::IsVisible())
@@ -142,7 +141,6 @@ void SwScrollbar::AutoShow()
         {
             ScrollBar::Show(TRUE);
         }
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
