@@ -207,7 +207,6 @@ bool IsInstallForAllUsers( MSIHANDLE hMSI )
 wchar_t* GetBasisInstallLocation( MSIHANDLE hMSI )
 {
     OutputDebugStringFormat(L"GetBasisInstallLocation - START\n" );
-    bool bResult = FALSE;
     wchar_t* pVal = NULL;
     GetMsiProp( hMSI, L"INSTALLLOCATION", &pVal);
 
