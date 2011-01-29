@@ -347,23 +347,15 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     if( pCert != NULL )
     {
         unsigned char fingerprint[20];
-        //char *fpStr = NULL;
-        SECItem fpItem;
         int length = ((id == SEC_OID_MD5)?MD5_LENGTH:SHA1_LENGTH);
 
         memset(fingerprint, 0, sizeof fingerprint);
         PK11_HashBuf(id, fingerprint, pCert->derCert.data, pCert->derCert.len);
-        fpItem.data = fingerprint;
-        fpItem.len = length;
-        //fpStr = CERT_Hexify(&fpItem, 1);
 
         Sequence< sal_Int8 > thumbprint( length ) ;
         for( int i = 0 ; i < length ; i ++ )
-        {
             thumbprint[i] = fingerprint[i];
-        }
 
-        //PORT_Free(fpStr);
         return thumbprint;
     }
     else

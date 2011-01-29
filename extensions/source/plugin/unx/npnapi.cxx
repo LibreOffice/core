@@ -704,7 +704,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
                         gtk_widget_show( pInst->pGtkWidget );
                         gtk_container_add( GTK_CONTAINER(pInst->pGtkWindow), pInst->pGtkWidget );
                         gtk_widget_show_all( pInst->pGtkWindow );
-                        pInst->window.window = (void *)gtk_socket_get_id( GTK_SOCKET(pInst->pGtkWidget ) );
+                        pInst->window.window = (void *)(sal_uIntPtr)gtk_socket_get_id( GTK_SOCKET(pInst->pGtkWidget ) );
 
                         XSync( pAppDisplay, False );
 
