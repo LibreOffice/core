@@ -449,7 +449,6 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         Reference< XIndexContainer >  xCols(static_cast<FmGridControl*>(GetParent())->GetPeer()->getColumns());
         Reference< XGridColumnFactory >  xFactory(xCols, UNO_QUERY);
 
-        Point aPos  = OutputToScreenPixel(m_pImpl->aDropPosPixel);
         sal_uInt16 nColId = GetItemId(m_pImpl->aDropPosPixel);
         // EinfuegePosition, immer vor der aktuellen Spalte
         sal_uInt16 nPos = GetModelColumnPos(nColId);

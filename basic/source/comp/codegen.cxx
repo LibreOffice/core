@@ -33,6 +33,7 @@
 #include "sbcomp.hxx"
 #include "image.hxx"
 #include <limits>
+#include <algorithm>
 #include <com/sun/star/script/ModuleType.hpp>
 
 // nInc is the increment size of the buffers
@@ -243,7 +244,7 @@ void SbiCodeGen::Save()
                     if( nPass == 1 )
                         aPropName = aPropName.Copy( aIfaceName.Len() + 1 );
                     SbProcedureProperty* pProcedureProperty = NULL;
-                                        OSL_TRACE("*** getProcedureProperty for thing %s",
+                    OSL_TRACE("*** getProcedureProperty for thing %s",
                         rtl::OUStringToOString( aPropName,RTL_TEXTENCODING_UTF8 ).getStr() );
                     pProcedureProperty = rMod.GetProcedureProperty( aPropName, ePropType );
                 }
@@ -437,10 +438,7 @@ public:
         T result = 0 ;
         static const S max = std::numeric_limits< S >::max();
         result = m_nNumOp0 + ( ( sizeof(S) + 1 ) * m_nNumSingleParams ) + ( (( sizeof(S) * 2 )+ 1 )  * m_nNumDoubleParams );
-        if ( result > max )
-            return max;
-
-        return static_cast<S>(result);
+        return std::min(static_cast<T>(max), result);
     }
    virtual bool processParams(){ return false; }
 };
