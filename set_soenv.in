@@ -1488,7 +1488,8 @@ if ($platform =~ m/linux/)
 elsif ($platform =~ m/cygwin/)
 {  $SOLARINC          .= $STLPORT_stlport;
    if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
-   {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32";
+   {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32".
+                         $I.'$JAVA_HOME'.$INCLUDE;
    }
    # Mingw is different
    if ( $COM eq "MSC" )
