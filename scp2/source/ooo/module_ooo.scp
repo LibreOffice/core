@@ -287,6 +287,17 @@ Module gid_Module_Root_Extension_Dictionary_No
     Styles = ();
 End
 
+Module gid_Module_Root_Extension_Dictionary_Oc
+    MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_OC );
+    Files = (gid_File_Extension_Dictionary_Oc);
+    InstallOrder = "2000";
+    Sortkey = "655";
+    Spellcheckerlanguage = "oc";
+    PackageInfo = "packinfo_office.txt";
+    ParentID = gid_Module_Dictionaries;
+    Styles = ();
+End
+
 Module gid_Module_Root_Extension_Dictionary_Pl
     MOD_NAME_DESC ( MODULE_EXTENSION_DICTIONARY_PL );
     Files = (gid_File_Extension_Dictionary_Pl);
