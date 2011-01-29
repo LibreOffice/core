@@ -93,6 +93,9 @@ namespace {
 
 class Test : public CppUnit::TestFixture {
 public:
+    Test();
+    ~Test();
+
     // init
     virtual void setUp();
     virtual void tearDown();
@@ -111,6 +114,9 @@ public:
     void SimpleGreekChars();
     void SimpleSpecialChars();
     void testBinomInBinHor();
+    void testBinVerInUnary();
+    void testBinHorInSubSup();
+    void testUnaryInMixedNumberAsNumerator();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(SimpleUnaryOp);
@@ -126,15 +132,19 @@ public:
     CPPUNIT_TEST(SimpleGreekChars);
     CPPUNIT_TEST(SimpleSpecialChars);
     CPPUNIT_TEST(testBinomInBinHor);
+    CPPUNIT_TEST(testBinVerInUnary);
+    CPPUNIT_TEST(testBinHorInSubSup);
+    CPPUNIT_TEST(testUnaryInMixedNumberAsNumerator);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_context;
     SmDocShellRef xDocShRef;
     void parseandparseagain(const char *input, const char *test_name);
+    void ParseAndCheck(const char *input, const char *expected, const char *test_name);
 };
 
-void Test::setUp()
+Test::Test()
 {
     m_context = cppu::defaultBootstrap_InitialComponentContext();
 
@@ -149,11 +159,19 @@ void Test::setUp()
     InitVCL(xSM);
 
     SmDLL::Init();
+}
 
+void Test::setUp()
+{
     xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
 }
 
 void Test::tearDown()
+{
+    xDocShRef.Clear();
+}
+
+Test::~Test()
 {
 }
 
@@ -172,6 +190,17 @@ void Test::SimpleUnaryOp()
     parseandparseagain("+-3", "Plus/minus");
     parseandparseagain("-+4", "Minus/plus");
     parseandparseagain("neg a", "Boolean 'not'");
+    parseandparseagain("fact a", "Factorial");
+    parseandparseagain(" - { 1 over 2 } ", "BinVer in Unary 1");
+    ParseAndCheck(" - { 1 over 2 } ", " - { 1 over 2 } ", "BinVer in Unary 1");
+    parseandparseagain(" { - { 1 over 2 } } ", "BinVer in Unary 2");
+    parseandparseagain(" - 1 over 2 ", "Unary in BinVer as numerator 1");
+    parseandparseagain(" { - 1 } over 2 ", "Unary in BinVer as numerator 2");
+    parseandparseagain(" 1 over - 2 ", "Unary in BinVer as denominator 1");
+    parseandparseagain(" 1 over { - 2 } ", "Unary in BinVer as denominator 2");
+    parseandparseagain(" 2 { - 1 over 2 } ", "Mixed number with Unary in denominator 1");
+    parseandparseagain(" 2 { - 1 } over 2 ", "Mixed number with Unary in denominator 2");
+    parseandparseagain(" - 1 + 2 ", "Unary in BinHor");
 }
 
 void Test::SimpleBinaryOp()
@@ -266,7 +295,6 @@ void Test::SimpleFunctions()
     parseandparseagain("arcosh(a)", "Arc hyperbolic cosine");
     parseandparseagain("artanh(a)", "Arc hyperbolic tangent");
     parseandparseagain("arcoth(a)", "Arc hyperbolic cotangent");
-    parseandparseagain("fact a", "Factorial");
 }
 
 void Test::SimpleOperators()
@@ -275,7 +303,9 @@ void Test::SimpleOperators()
     parseandparseagain("sum{a}", "Sum");
     parseandparseagain("prod{a}", "Product");
     parseandparseagain("coprod{a}", "Coproduct");
-    parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral");
+    parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral (from & to)");
+    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r rsub 0 } csub { r rsub t } a ", "Upper and lower bounds shown with integral (csub & csup)");
+    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "Sum with sized upper and lower bounds");
     parseandparseagain("int{a}", "Integral");
     parseandparseagain("iint{a}", "Double integral");
     parseandparseagain("iiint{a}", "Triple integral");
@@ -497,6 +527,26 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     delete pNode2;
 }
 
+void Test::ParseAndCheck(const char *formula, const char * expected, const char *test_name)
+{
+    String sInput, sOutput, sExpected;
+    SmNode *pNode;
+
+    // parse
+    sInput.AppendAscii(formula);
+    pNode = SmParser().ParseExpression(sInput);
+    pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+    SmNodeToTextVisitor(pNode, sOutput);
+
+    // compare
+    sExpected.AppendAscii(expected);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
+        sExpected,
+        sOutput);
+
+    delete pNode;
+}
+
 void Test::testBinomInBinHor()
 {
     String sInput, sExpected, sOutput;
@@ -521,6 +571,117 @@ void Test::testBinomInBinHor()
 
     sExpected.AppendAscii(" { { binom a b + c } + d } ");
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
+
+    delete pTree;
+}
+
+void Test::testBinVerInUnary()
+{
+    String sInput, sExpected, sOutput;
+    SmNode* pTree;
+
+    // set up a unary operator with operand
+    sInput.AppendAscii("- 1");
+    pTree = SmParser().Parse(sInput);
+    pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+
+    SmCursor aCursor(pTree, xDocShRef);
+    TestOutputDevice aOutputDevice;
+
+    // move forward (more than) enough places to be at the end
+    int i;
+    for (i = 0; i < 3; ++i)
+        aCursor.Move(&aOutputDevice, MoveRight);
+
+    // select the operand
+    aCursor.Move(&aOutputDevice, MoveLeft, false);
+    // set up a fraction
+    aCursor.InsertFraction();
+    aCursor.Move(&aOutputDevice, MoveDown);
+    aCursor.InsertText('2');
+
+    sExpected.AppendAscii(" - { 1 over 2 } ");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binary Vertical in Unary Operator", sExpected, xDocShRef->GetText());
+
+    delete pTree;
+}
+
+void Test::testBinHorInSubSup()
+{
+    String sInput, sExpected, sOutput;
+    SmNode* pTree;
+
+    // set up a blank formula
+    sInput.AppendAscii("");
+    pTree = SmParser().Parse(sInput);
+    pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+
+    SmCursor aCursor(pTree, xDocShRef);
+    TestOutputDevice aOutputDevice;
+
+    // Insert an RSup expression with a BinHor for the exponent
+    aCursor.InsertText('a');
+    aCursor.InsertSubSup(RSUP);
+    aCursor.InsertText('b');
+    aCursor.InsertElement(PlusElement);
+    aCursor.InsertText('c');
+
+    // Move to the end and add d to the expression
+    aCursor.Move(&aOutputDevice, MoveRight);
+    aCursor.InsertElement(PlusElement);
+    aCursor.InsertText('d');
+
+    sExpected.AppendAscii(" { a rsup { b + c } + d } ");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
+
+    delete pTree;
+}
+
+void Test::testUnaryInMixedNumberAsNumerator()
+{
+    String sInput, sExpected, sOutput;
+    SmNode* pTree;
+
+    // set up a unary operator
+    sInput.AppendAscii("- 1");
+    pTree = SmParser().Parse(sInput);
+    pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+
+    SmCursor aCursor(pTree, xDocShRef);
+    TestOutputDevice aOutputDevice;
+
+    // move forward (more than) enough places to be at the end
+    int i;
+    for (i = 0; i < 3; ++i)
+        aCursor.Move(&aOutputDevice, MoveRight);
+
+    // Select the whole Unary Horizontal Node
+    aCursor.Move(&aOutputDevice, MoveLeft, false);
+    aCursor.Move(&aOutputDevice, MoveLeft, false);
+
+    // Set up a fraction
+    aCursor.InsertFraction();
+    aCursor.Move(&aOutputDevice, MoveDown);
+    aCursor.InsertText('2');
+
+    // Move left and turn this into a mixed number
+    // (bad form, but this could happen right?)
+    aCursor.Move(&aOutputDevice, MoveLeft);
+    aCursor.Move(&aOutputDevice, MoveLeft);
+    aCursor.InsertText('2');
+
+    // move forward (more than) enough places to be at the end
+    for (i = 0; i < 8; ++i)
+        aCursor.Move(&aOutputDevice, MoveRight);
+
+    // add 4 to the end
+    aCursor.InsertElement(PlusElement);
+    aCursor.InsertText('4');
+
+    sExpected.AppendAscii(" { 2 { - 1 over 2 } + 4 } ");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Unary in mixed number as Numerator", sExpected, xDocShRef->GetText());
+
+    delete pTree;
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

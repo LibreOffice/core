@@ -2244,33 +2244,39 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );
-            Append( "lsup " );
+            Append( "lsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
             Separate( );
-            Append( "lsub " );
+            Append( "lsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup " );
+            Append( "rsup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub " );
+            Append( "rsub { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csup " );
+            Append( "csup { " );
             LineToText( pChild );
+            Append( "} " );
         }
         if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csub " );
+            Append( "csub { " );
             LineToText( pChild );
+            Append( "} " );
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2401,19 +2407,23 @@ void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
 {
     SmNode *pNum    = pNode->GetSubNode( 0 ),
            *pDenom  = pNode->GetSubNode( 2 );
+    Append( "{ " );
     LineToText( pNum );
     Append( "over" );
     LineToText( pDenom );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinDiagonalNode* pNode )
 {
     SmNode *pLeftOperand  = pNode->GetSubNode( 0 ),
            *pRightOperand = pNode->GetSubNode( 1 );
+    Append( "{ " );
     LineToText( pLeftOperand );
     Separate( );
     Append( "wideslash " );
     LineToText( pRightOperand );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmSubSupNode* pNode )
@@ -2525,7 +2535,7 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() != NEXPRESSION;
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() == NBINHOR;
     if (bracketsNeeded) {
         Append( "{ " );
     }
