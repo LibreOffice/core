@@ -191,10 +191,6 @@ ifneq ($(strip $(ENABLE_KDE4)),)
 gb_GLOBALDEFS += -DENABLE_KDE4
 endif
 
-ifeq ($(strip $(ENABLE_VBA)),YES)
-gb_GLOBALDEFS += -DENABLE_VBA
-endif
-
 ifeq ($(strip $(ENABLE_GRAPHITE)),TRUE)
 gb_GLOBALDEFS += -DENABLE_GRAPHITE
 endif
