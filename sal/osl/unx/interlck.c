@@ -86,6 +86,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
         :   "+r" (nCount), "+m" (*pCount)
         :   /* nothing */
         :   "memory");
+        return --nCount;
     }
 #if ( __GNUC__ > 4 ) || (( __GNUC__ == 4)  && ( __GNUC_MINOR__ >= 4 ))
     else
@@ -103,7 +104,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 #endif
 }
 
-#elif defined ( GCC )
+#elif ( __GNUC__ > 4 ) || (( __GNUC__ == 4) && ( __GNUC_MINOR__ >= 4 ))
 oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* pCount)
 {
     return __sync_add_and_fetch(pCount, 1);
