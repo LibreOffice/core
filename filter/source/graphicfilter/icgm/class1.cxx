@@ -181,7 +181,7 @@ void CGM::ImplDoClass1()
                 {
                     memcpy( pBuf, mpSource, mnElementSize );
                     maDefRepList.Insert( pBuf, LIST_APPEND );
-                    maDefRepSizeList.Insert( (void*)mnElementSize, LIST_APPEND );
+                    maDefRepSizeList.Insert( (void*)(sal_uIntPtr)mnElementSize, LIST_APPEND );
                 }
             }
             mnParaSize = mnElementSize;
