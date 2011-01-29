@@ -748,6 +748,7 @@ void SmMathConfig::ReadFontFormat( SmFontFormat &rFontFormat,
         ++pValue;
 
         OSL_ENSURE( bOK, "read FontFormat failed" );
+        (void)bOK;
     }
 }
 

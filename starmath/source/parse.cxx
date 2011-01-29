@@ -1569,28 +1569,29 @@ void SmParser::Escape()
 {
     NextToken();
 
-    sal_Unicode cChar;
     switch (CurToken.eType)
-    {   case TLPARENT :     cChar = MS_LPARENT;     break;
-        case TRPARENT :     cChar = MS_RPARENT;     break;
-        case TLBRACKET :    cChar = MS_LBRACKET;    break;
-        case TRBRACKET :    cChar = MS_RBRACKET;    break;
-        case TLDBRACKET :   cChar = MS_LDBRACKET;   break;
-        case TRDBRACKET :   cChar = MS_RDBRACKET;   break;
+    {
+        case TLPARENT :
+        case TRPARENT :
+        case TLBRACKET :
+        case TRBRACKET :
+        case TLDBRACKET :
+        case TRDBRACKET :
         case TLBRACE :
-        case TLGROUP :      cChar = MS_LBRACE;      break;
+        case TLGROUP :
         case TRBRACE :
-        case TRGROUP :      cChar = MS_RBRACE;      break;
-        case TLANGLE :      cChar = MS_LANGLE;      break;
-        case TRANGLE :      cChar = MS_RANGLE;      break;
-        case TLCEIL :       cChar = MS_LCEIL;       break;
-        case TRCEIL :       cChar = MS_RCEIL;       break;
-        case TLFLOOR :      cChar = MS_LFLOOR;      break;
-        case TRFLOOR :      cChar = MS_RFLOOR;      break;
+        case TRGROUP :
+        case TLANGLE :
+        case TRANGLE :
+        case TLCEIL :
+        case TRCEIL :
+        case TLFLOOR :
+        case TRFLOOR :
         case TLLINE :
-        case TRLINE :       cChar = MS_LINE;        break;
+        case TRLINE :
         case TLDLINE :
-        case TRDLINE :      cChar = MS_DLINE;       break;
+        case TRDLINE :
+            break;
         default:
             Error(PE_UNEXPECTED_TOKEN);
     }
