@@ -1246,44 +1246,8 @@ void SwRTFParser::ReadDrawingObject()
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
 
-        /*
-        text::RelOrientation::FRAME,          // Absatz inkl. Raender
-        text::RelOrientation::PRINT_AREA,     // Absatz ohne Raender
-        text::RelOrientation::CHAR,       // an einem Zeichen
-        text::RelOrientation::PAGE_LEFT,  // im linken Seitenrand
-        text::RelOrientation::PAGE_RIGHT,   // im rechten Seitenrand
-        text::RelOrientation::FRAME_LEFT,   // im linken Absatzrand
-        text::RelOrientation::FRAME_RIGHT,  // im rechten Absatzrand
-        text::RelOrientation::PAGE_FRAME, // Seite inkl. Raender, bei seitengeb. identisch mit text::RelOrientation::FRAME
-        text::RelOrientation::PAGE_PRINT_AREA,    // Seite ohne Raender, bei seitengeb. identisch mit text::RelOrientation::PRTAREA
-        // #i22341#
-        text::RelOrientation::TEXT_LINE,  // vertical relative to top of text line, only for to-character
-                        // anchored objects.
-
-
-            text::HoriOrientation::NONE,      //Der Wert in nYPos gibt die RelPos direkt an.
-        text::HoriOrientation::RIGHT,     //Der Rest ist fuer automatische Ausrichtung.
-        text::HoriOrientation::CENTER,
-        text::HoriOrientation::LEFT,
-        text::HoriOrientation::INSIDE,
-        text::HoriOrientation::OUTSIDE,
-        text::HoriOrientation::FULL,          //Spezialwert fuer Tabellen
-        text::HoriOrientation::LEFT_AND_WIDTH  //Auch fuer Tabellen
-        */
         SwFmtHoriOrient aHori( 0, text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aHori );
-        /*
-        text::VertOrientation::NONE,  //Der Wert in nYPos gibt die RelPos direkt an.
-        text::VertOrientation::TOP,   //Der Rest ist fuer automatische Ausrichtung.
-        text::VertOrientation::CENTER,
-        text::VertOrientation::BOTTOM,
-        text::VertOrientation::CHAR_TOP,      //Ausrichtung _nur_ fuer Zeichengebundene Rahmen
-        text::VertOrientation::CHAR_CENTER,   //wie der Name jew. sagt wird der RefPoint des Rahmens
-        text::VertOrientation::CHAR_BOTTOM,   //entsprechend auf die Oberkante, Mitte oder Unterkante
-        text::VertOrientation::LINE_TOP,      //der Zeile gesetzt. Der Rahmen richtet sich  dann
-        text::VertOrientation::LINE_CENTER,   //entsprechend aus.
-        text::VertOrientation::LINE_BOTTOM
-        */
         SwFmtVertOrient aVert( 0, text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME );
         aFlySet.Put( aVert );
 
@@ -1494,7 +1458,6 @@ void SwRTFParser::ReadShapeObject()
               rOutliner.Read(aStream, String::CreateFromAscii(""), EE_FORMAT_RTF);
               OutlinerParaObject* pParaObject=rOutliner.CreateParaObject();
               pStroke->NbcSetOutlinerParaObject(pParaObject);
-              //delete pParaObject;
               rOutliner.Clear();
             }
             if (txflTextFlow==2) {
@@ -3832,7 +3795,7 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
+        nOutlineLevel = MAXLEVEL;
 
     rbCollExist = false;
     SwTxtFmtColl* pColl;
@@ -3843,10 +3806,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
+            if(nOutlineLevel < MAXLEVEL )
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
-                pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+                pColl->DeleteAssignmentToListLevelOfOutlineStyle();
             return pColl;
         }
 
@@ -3868,10 +3831,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
 
     if (!rbCollExist)
     {
-        if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
+        if(nOutlineLevel < MAXLEVEL)
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
-            pColl->DeleteAssignmentToListLevelOfOutlineStyle(); //<-end,zhaojianwei
+            pColl->DeleteAssignmentToListLevelOfOutlineStyle();
     }
 
     return pColl;
