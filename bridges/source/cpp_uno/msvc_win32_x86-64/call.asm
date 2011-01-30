@@ -64,10 +64,11 @@
 ;; This one is actually more readable: "Improving Automated Analysis
 ;; of Windows x64 Binaries": http://www.uninformed.org/?v=4&a=1
 
-;; For exception handling and unwinding to work across the generated
-;; functions (as I assume we want?), we would need call
-;; RtlAddFunctionTable() (and RtlDeleteFunctionTable()). See Windows
-;; SDK documentation.
+;; This one has a mass of information about different architectures
+;; and compilers, and contains some details about the x64 Windows
+;; calling convention in particular that Microsoft doesn't mention
+;; above:
+;; http://www.agner.org/optimize/calling_conventions.pdf
 
 ;; Random interesting discussion threads:
 ;; http://social.msdn.microsoft.com/Forums/en/vcgeneral/thread/300bd6d3-9381-4d2d-8129-e48b392c05d8

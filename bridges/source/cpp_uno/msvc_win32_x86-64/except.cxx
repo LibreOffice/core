@@ -45,7 +45,6 @@
 
 #include "mscx.hxx"
 
-
 #pragma pack(push, 8)
 
 using namespace ::com::sun::star::uno;
@@ -56,8 +55,9 @@ using namespace ::rtl;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-//==================================================================================================
-static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
+static inline OUString toUNOname(
+    OUString const & rRTTIname )
+    throw ()
 {
     OUStringBuffer aRet( 64 );
     OUString aStr( rRTTIname.copy( 4, rRTTIname.getLength()-4-2 ) ); // filter .?AUzzz@yyy@xxx@@
@@ -74,8 +74,10 @@ static inline OUString toUNOname( OUString const & rRTTIname ) throw ()
     }
     return aRet.makeStringAndClear();
 }
-//==================================================================================================
-static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
+
+static inline OUString toRTTIname(
+    OUString const & rUNOname )
+    throw ()
 {
     OUStringBuffer aRet( 64 );
     aRet.appendAscii( RTL_CONSTASCII_STRINGPARAM(".?AV") ); // class ".?AV"; struct ".?AU"
@@ -91,15 +93,10 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
     return aRet.makeStringAndClear();
 }
 
-
-//##################################################################################################
-//#### RTTI simulation #############################################################################
-//##################################################################################################
-
+//RTTI simulation
 
 typedef hash_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
-//==================================================================================================
 class RTTInfos
 {
     Mutex               _aMutex;
@@ -113,7 +110,6 @@ public:
     ~RTTInfos();
 };
 
-//==================================================================================================
 class __type_info
 {
     friend type_info * RTTInfos::getRTTI( OUString const & ) throw ();
@@ -131,11 +127,11 @@ private:
     void * _m_data;
     char _m_d_name[1];
 };
-//__________________________________________________________________________________________________
+
 __type_info::~__type_info() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
 {
     // a must be
@@ -164,11 +160,11 @@ type_info * RTTInfos::getRTTI( OUString const & rUNOname ) throw ()
         return (type_info *)iFind->second;
     }
 }
-//__________________________________________________________________________________________________
+
 RTTInfos::RTTInfos() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 RTTInfos::~RTTInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -185,13 +181,6 @@ RTTInfos::~RTTInfos() throw ()
     }
 }
 
-
-//##################################################################################################
-//#### Exception raising ###########################################################################
-//##################################################################################################
-
-
-//==================================================================================================
 struct ObjectFunction
 {
     char somecode[12];
@@ -204,7 +193,8 @@ struct ObjectFunction
     ~ObjectFunction() throw ();
 };
 
-inline void * ObjectFunction::operator new ( size_t nSize )
+inline void * ObjectFunction::operator new(
+    size_t nSize )
 {
     void * pMem = rtl_allocateMemory( nSize );
     if (pMem != 0)
@@ -219,13 +209,15 @@ inline void * ObjectFunction::operator new ( size_t nSize )
     return pMem;
 }
 
-inline void ObjectFunction::operator delete ( void * pMem )
+inline void ObjectFunction::operator delete(
+    void * pMem )
 {
     rtl_freeMemory( pMem );
 }
 
-//__________________________________________________________________________________________________
-ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpFunc ) throw ()
+ObjectFunction::ObjectFunction(
+    typelib_TypeDescription * pTypeDescr,
+    void * fpFunc ) throw ()
     : _pTypeDescr( pTypeDescr )
 {
     ::typelib_typedescription_acquire( _pTypeDescr );
@@ -242,27 +234,31 @@ ObjectFunction::ObjectFunction( typelib_TypeDescription * pTypeDescr, void * fpF
     *pCode++ = 0xe9;
     *(sal_Int64 *)pCode = ((unsigned char *)fpFunc) - pCode - sizeof(sal_Int64);
 }
-//__________________________________________________________________________________________________
+
 ObjectFunction::~ObjectFunction() throw ()
 {
     ::typelib_typedescription_release( _pTypeDescr );
 }
 
-//==================================================================================================
-void * __cdecl __copyConstruct( void * pExcThis, void * pSource, ObjectFunction * pThis )
+
+void * __cdecl __copyConstruct(
+    void * pExcThis,
+    void * pSource,
+    ObjectFunction * pThis )
     throw ()
 {
     ::uno_copyData( pExcThis, pSource, pThis->_pTypeDescr, cpp_acquire );
     return pExcThis;
 }
-//==================================================================================================
-void * __cdecl __destruct( void * pExcThis, ObjectFunction * pThis )
+
+void * __cdecl __destruct(
+    void * pExcThis,
+    ObjectFunction * pThis )
     throw ()
 {
     ::uno_destructData( pExcThis, pThis->_pTypeDescr, cpp_release );
     return pExcThis;
 }
-
 
 #if 0
 
@@ -285,7 +281,6 @@ static void whatthefuck_dtor(sal_Int64 i, ...)
 
 #endif
 
-//==================================================================================================
 struct ExceptionType
 {
     sal_Int32           _n0;
@@ -310,7 +305,7 @@ struct ExceptionType
     inline ~ExceptionType() throw ()
         { delete _pCopyCtor; }
 };
-//==================================================================================================
+
 struct RaiseInfo
 {
     sal_Int32           _n0;
@@ -322,7 +317,7 @@ struct RaiseInfo
     RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ();
     ~RaiseInfo() throw ();
 };
-//__________________________________________________________________________________________________
+
 RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
     : _n0( 0 )
 #if 0
@@ -357,7 +352,7 @@ RaiseInfo::RaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
         ppTypes[nPos++] = new ExceptionType( (typelib_TypeDescription *)pCompTypeDescr );
     }
 }
-//__________________________________________________________________________________________________
+
 RaiseInfo::~RaiseInfo() throw ()
 {
     ExceptionType ** ppTypes = (ExceptionType **)((sal_Int64 *)_types + 1);
@@ -370,7 +365,6 @@ RaiseInfo::~RaiseInfo() throw ()
     delete _pDtor;
 }
 
-//==================================================================================================
 class ExceptionInfos
 {
     Mutex           _aMutex;
@@ -382,11 +376,11 @@ public:
     ExceptionInfos() throw ();
     ~ExceptionInfos() throw ();
 };
-//__________________________________________________________________________________________________
+
 ExceptionInfos::ExceptionInfos() throw ()
 {
 }
-//__________________________________________________________________________________________________
+
 ExceptionInfos::~ExceptionInfos() throw ()
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -400,8 +394,8 @@ ExceptionInfos::~ExceptionInfos() throw ()
         delete (RaiseInfo *)iPos->second;
     }
 }
-//__________________________________________________________________________________________________
-void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) throw ()
+void * ExceptionInfos::getRaiseInfo(
+    typelib_TypeDescription * pTypeDescr ) throw ()
 {
     static ExceptionInfos * s_pInfos = 0;
     if (! s_pInfos)
@@ -445,14 +439,8 @@ void * ExceptionInfos::getRaiseInfo( typelib_TypeDescription * pTypeDescr ) thro
     return pRaiseInfo;
 }
 
-
-//##################################################################################################
-//#### exported ####################################################################################
-//##################################################################################################
-
-
-//##################################################################################################
-type_info * mscx_getRTTI( OUString const & rUNOname )
+type_info * mscx_getRTTI(
+    OUString const & rUNOname )
 {
     static RTTInfos * s_pRTTIs = 0;
     if (! s_pRTTIs)
@@ -471,8 +459,9 @@ type_info * mscx_getRTTI( OUString const & rUNOname )
     return s_pRTTIs->getRTTI( rUNOname );
 }
 
-//##################################################################################################
-void mscx_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
+void mscx_raiseException(
+    uno_Any * pUnoExc,
+    uno_Mapping * pUno2Cpp )
 {
     // no ctor/dtor in here: this leads to dtors called twice upon RaiseException()!
     // thus this obj file will be compiled without opt, so no inling of
@@ -498,9 +487,10 @@ void mscx_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cpp )
     RaiseException( MSVC_ExceptionCode, EXCEPTION_NONCONTINUABLE, 3, arFilterArgs );
 }
 
-//##############################################################################
 int mscx_filterCppException(
-    EXCEPTION_POINTERS * pPointers, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
+    EXCEPTION_POINTERS * pPointers,
+    uno_Any * pUnoExc,
+    uno_Mapping * pCpp2Uno )
 {
     if (pPointers == 0)
         return EXCEPTION_CONTINUE_SEARCH;
