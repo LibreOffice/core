@@ -30,7 +30,6 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
 #include <svl/eitem.hxx>
@@ -85,9 +84,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
     nFlags      ( pStyle->GetMask() )
 
 /*  [Beschreibung]
-
     Konstruktor; initialisiert die ListBoxen mit den Vorlagen
-
 */
 
 {
@@ -269,9 +266,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
 /*  [Beschreibung]
-
     Destruktor; Freigabe der Daten
-
 */
 
 {
@@ -289,16 +284,13 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
                                                const String& rNew )
 
 /*  [Beschreibung]
-
     Nach der "Anderung eines Vorlagennamens die ListBox pBox
     aktualisieren
 
     [Parameter]
-
     ListBox* pBox           ListBox, deren Eintr"age aktualisiert
                             werden sollen
     const String& rNew      der neue Name
-
 */
 
 {
@@ -319,7 +311,6 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
 void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
 /*  [Beschreibung]
-
     Attributbeschreibung setzen. daf"ur die eingestellte Metrik besorgen.
 */
 
@@ -338,14 +329,11 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     switch ( eFieldUnit )
     {
         case FUNIT_MM:      eUnit = SFX_MAPUNIT_MM; break;
-
         case FUNIT_CM:
         case FUNIT_M:
         case FUNIT_KM:      eUnit = SFX_MAPUNIT_CM; break;
-
         case FUNIT_POINT:
         case FUNIT_PICA:    eUnit = SFX_MAPUNIT_POINT; break;
-
         case FUNIT_INCH:
         case FUNIT_FOOT:
         case FUNIT_MILE:    eUnit = SFX_MAPUNIT_INCH; break;
@@ -361,9 +349,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
 /*  [Beschreibung]
-
     StarView Handler; GetFocus-Handler des Edits mit dem Vorlagennamen.
-
 */
 
 {
@@ -400,27 +386,20 @@ IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
 /*  [Beschreibung]
-
-
     Handler f"ur das Setzen der (modifizierten) Daten. Wird aus
     dem Ok des SfxTabDialog gerufen.
 
     [Parameter]
-
     SfxItemSet &rAttrSet        das Set, das die Daten entgegennimmt.
 
-
     [R"uckgabewert]
-
     BOOL                        TRUE:  es hat eine "Anderung der Daten
                                        stattgefunden
                                 FALSE: es hat keine "Anderung der Daten
                                        stattgefunden
 
     [Querverweise]
-
     <class SfxTabDialog>
-
 */
 
 {
@@ -456,19 +435,13 @@ BOOL SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
 /*  [Beschreibung]
-
-
     Handler f"ur das Initialisieren der Seite mit den initialen Daten.
 
     [Parameter]
-
     const SfxItemSet &rAttrSet      das Set mit den Daten
 
-
     [Querverweise]
-
     <class SfxTabDialog>
-
 */
 
 {
@@ -528,12 +501,9 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
                                              const SfxItemSet &rAttrSet )
 
 /*  [Beschreibung]
-
-
     Factory f"ur das Erzeugen der Seite
 
     [Querverweise]
-
     <class SfxTabDialog>
 
 */
@@ -547,20 +517,16 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
 /*  [Beschreibung]
-
     ActivatePage- Handler des SfxTabDialog; wird f"ur die Aktualisierung
     des beschreibenden Textes verwendet, da sich dieser durch "Anderungen
     der Daten anderer Seiten ge"andert haben kann.
 
     [Parameter]
-
     const SfxItemSet&       das Set f"ur den Datenaustausch; wird
                             hier nicht verwendet.
 
     [Querverweise]
-
     <SfxTabDialog::ActivatePage(const SfxItemSet &)>
-
 */
 
 {
@@ -580,20 +546,16 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
 /*  [Beschreibung]
-
     DeactivatePage- Handler des SfxTabDialog; die Daten werden
     an der Vorlage eingestellt, damit die richtige Vererbung
     f"ur die anderen Seiten des Dialoges vorliegt.
     Im Fehlerfall wird das Verlassen der Seite unterbunden.
 
     [Parameter]
-
     SfxItemSet*         das Set f"ur den Datenaustausch; wird hier nicht verwendet.
 
     [Querverweise]
-
     <SfxTabDialog::DeactivatePage(SfxItemSet*)>
-
 */
 
 {

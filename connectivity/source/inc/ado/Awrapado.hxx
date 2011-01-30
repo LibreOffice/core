@@ -36,8 +36,6 @@
 #include <ocidl.h>
 #include <adoint.h>
 #include "ado_post_sys_include.h"
-
-
 #include "ado/adoimp.hxx"
 #include "ado/Aolewrap.hxx"
 #include "ado/Aolevariant.hxx"
@@ -75,53 +73,36 @@ namespace connectivity
             WpADOProperties get_Properties() const;
 
              rtl::OUString GetConnectionString() const;
-
              sal_Bool PutConnectionString(const ::rtl::OUString &aCon) const;
-
              sal_Int32 GetCommandTimeout() const;
-
              void PutCommandTimeout(sal_Int32 nRet);
-
              sal_Int32 GetConnectionTimeout() const ;
-
              void PutConnectionTimeout(sal_Int32 nRet);
 
              sal_Bool Close( ) ;
-
              sal_Bool Execute(const ::rtl::OUString& _CommandText,OLEVariant& RecordsAffected,long Options, WpADORecordset** ppiRset);
-
              sal_Bool BeginTrans();
-
              sal_Bool CommitTrans( ) ;
-
              sal_Bool RollbackTrans( );
-
              sal_Bool Open(const ::rtl::OUString& ConnectionString, const ::rtl::OUString& UserID,const ::rtl::OUString& Password,long Options);
-
              sal_Bool GetErrors(ADOErrors** pErrors);
 
              ::rtl::OUString GetDefaultDatabase() const;
-
              sal_Bool PutDefaultDatabase(const ::rtl::OUString& _bstr);
 
              IsolationLevelEnum get_IsolationLevel() const ;
-
              sal_Bool put_IsolationLevel(const IsolationLevelEnum& eNum) ;
 
              sal_Int32 get_Attributes() const;
-
              sal_Bool put_Attributes(sal_Int32 nRet);
 
              CursorLocationEnum get_CursorLocation() const;
-
              sal_Bool put_CursorLocation(const CursorLocationEnum &eNum) ;
 
              ConnectModeEnum get_Mode() const;
-
              sal_Bool put_Mode(const ConnectModeEnum &eNum) ;
 
              ::rtl::OUString get_Provider() const;
-
              sal_Bool put_Provider(const ::rtl::OUString& _bstr);
 
              sal_Int32 get_State() const;
@@ -223,9 +204,7 @@ namespace connectivity
             //////////////////////////////////////////////////////////////////////
 
              ::rtl::OUString GetDescription() const;
-
              ::rtl::OUString GetSource() const ;
-
              sal_Int32 GetNumber() const ;
              ::rtl::OUString GetSQLState() const ;
              sal_Int32 GetNativeError() const ;

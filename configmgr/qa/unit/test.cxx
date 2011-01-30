@@ -88,23 +88,15 @@ void normalize(
 class Test: public CppUnit::TestFixture {
 public:
     virtual void setUp();
-
     virtual void tearDown();
 
     void testKeyFetch();
-
     void testKeySet();
-
     void testKeyReset();
-
     void testSetSetMemberName();
-
     void testReadCommands();
-
     void testThreads();
-
     void testRecursive();
-
     void testCrossThreads();
 
     css::uno::Any getKey(

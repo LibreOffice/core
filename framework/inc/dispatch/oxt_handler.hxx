@@ -32,49 +32,31 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
-
 #include <threadhelp/threadhelpbase.hxx>
-
 #include <threadhelp/resetableguard.hxx>
-
 #include <macros/xinterface.hxx>
-
 #include <macros/xtypeprovider.hxx>
-
 #include <macros/xserviceinfo.hxx>
-
 #include <macros/debug.hxx>
-
 #include <macros/generic.hxx>
-
 #include <general.h>
-
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
-
 #include <com/sun/star/lang/XTypeProvider.hpp>
-
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
-
 #include <com/sun/star/frame/XStatusListener.hpp>
-
 #include <com/sun/star/frame/XFrame.hpp>
-
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
-
 #include <com/sun/star/beans/PropertyValue.hpp>
-
 #include <com/sun/star/util/URL.hpp>
 
 //_________________________________________________________________________________________________________________
 //  other includes
 //_________________________________________________________________________________________________________________
-
 #include <cppuhelper/weak.hxx>
 
 //_________________________________________________________________________________________________________________
