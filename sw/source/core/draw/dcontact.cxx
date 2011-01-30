@@ -2581,7 +2581,9 @@ SdrHdl* SwDrawVirtObj::GetHdl(sal_uInt32 nHdlNum) const
 SdrHdl* SwDrawVirtObj::GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const
 {
     SdrHdl* pHdl = rRefObj.GetPlusHdl(rHdl, nPlNum);
-    pHdl->SetPos(pHdl->GetPos() + GetOffset());
+
+    if (pHdl)
+        pHdl->SetPos(pHdl->GetPos() + GetOffset());
 
     return pHdl;
 }
