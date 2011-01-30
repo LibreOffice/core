@@ -249,9 +249,6 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
        )
     {
         WorkWindow* pWorkWindow = (WorkWindow*)pWindow;
-#ifdef COPY_TO_TITLE_FOR_DEBUG
-        pWorkWindow->SetText( sApplicationID );
-#endif
         pWorkWindow->SetApplicationID( sApplicationID );
     }
     // <- VCL SYNCHRONIZED
