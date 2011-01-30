@@ -1794,6 +1794,29 @@ OUString PrintFontManager::convertTrueTypeName( void* pRecord ) const
     return aValue;
 }
 
+//fdo#33349.There exists an archaic Berling Antiqua font which has a "Times New
+//Roman" name field in it. We don't want the "Times New Roman" name to take
+//precedence in this case. We take Berling Antiqua as a higher priority name,
+//and erase the "Times New Roman" name
+namespace
+{
+    bool isBadTNR(const OUString &rName, ::std::set< OUString >& rSet)
+    {
+        bool bRet = false;
+        if (rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Berling Antiqua")))
+        {
+            ::std::set< OUString >::iterator aEnd = rSet.end();
+            ::std::set< OUString >::iterator aI = rSet.find(OUString(RTL_CONSTASCII_USTRINGPARAM("Times New Roman")));
+            if (aI != aEnd)
+            {
+                bRet = true;
+                rSet.erase(aI);
+            }
+        }
+        return bRet;
+    }
+}
+
 // -------------------------------------------------------------------------
 
 void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OUString >& rNames ) const
@@ -1831,7 +1854,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
             }
             OUString aName = convertTrueTypeName( pNameRecords + i );
             aSet.insert( aName );
-            if( nMatch > nLastMatch )
+            if( nMatch > nLastMatch || isBadTNR(aName, aSet) )
             {
                 nLastMatch = nMatch;
                 aFamily = aName;
