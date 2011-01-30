@@ -47,7 +47,7 @@
 #include <com/sun/star/linguistic2/SingleGrammarError.hpp>
 #include <com/sun/star/linguistic2/GrammarCheckingResult.hpp>
 #include "lngopt.hxx"
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <unotools/processfactory.hxx>
 #include <map>
 #include <com/sun/star/text/TextMarkupType.hpp>
