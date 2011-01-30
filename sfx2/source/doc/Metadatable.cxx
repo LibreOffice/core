@@ -127,12 +127,12 @@ static const char s_prefix  [] = "id";  // prefix for generated xml:id
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_content);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_content));
 }
 
 static bool isStylesFile (::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_styles);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_styles));
 }
 
 
@@ -405,7 +405,7 @@ template< typename T >
     ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
     static rtlRandomPool s_Pool( rtl_random_createPool() );
-    const ::rtl::OUString prefix( ::rtl::OUString::createFromAscii(s_prefix) );
+    const ::rtl::OUString prefix(RTL_CONSTASCII_USTRINGPARAM(s_prefix));
     typename ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;

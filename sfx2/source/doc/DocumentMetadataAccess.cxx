@@ -112,20 +112,20 @@ static const char s_odfmime [] = "application/vnd.oasis.opendocument.";
 
 static bool isContentFile(::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_content);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_content));
 }
 
 static bool isStylesFile (::rtl::OUString const & i_rPath)
 {
-    return i_rPath.equalsAscii(s_styles);
+    return i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_styles));
 }
 
 static bool isReservedFile(::rtl::OUString const & i_rPath)
 {
     return isContentFile(i_rPath)
         || isStylesFile(i_rPath)
-        || i_rPath.equalsAscii(s_meta)
-        || i_rPath.equalsAscii(s_settings);
+        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_meta))
+        || i_rPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(s_settings));
 }
 
 ////////////////////////////////////////////////////////////////////////////
