@@ -775,7 +775,6 @@ BOOL SdDrawDocument::CreateMissingNotesAndHandoutPages()
 
 BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
 {
-    SdPage* pTargetPage        = NULL;
     SdPage* pPage              = NULL;
     USHORT  nPage;
     USHORT  nNoOfPages         = GetSdPageCount(PK_STANDARD);
@@ -840,7 +839,6 @@ BOOL SdDrawDocument::MovePages(USHORT nTargetPage)
     // hinter <nPage> einfuegen
     else
     {
-        pTargetPage = GetSdPage(nPage, PK_STANDARD);
         nTargetPage = nPage;
         nTargetPage = 2 * nTargetPage + 1;    // PK_STANDARD --> absolut
         while (aPageList.Count() > 0)
