@@ -82,7 +82,7 @@ DocumentCollector::DocumentCollector(WPXInputStream *pInput, DocumentHandlerInte
     mbUsed(false),
     mWriterDocumentStates(),
     mWriterListStates(),
-    mfSectionSpaceAfter(0.0f),
+    mfSectionSpaceAfter(0.0),
     miNumListStyles(0),
     mpCurrentContentElements(&mBodyElements),
     mpCurrentPageSpan(NULL),
