@@ -342,33 +342,6 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
         {
             ::SetWindowLong( (HWND) mnFrameWnd, 0, (DWORD) this );
 
-#ifdef DDRAW_TEST_OUTPUT
-            IDirectDraw7*           pDDraw;
-            IDirectDrawSurface7*    pDDSurface;
-            IDirectDrawClipper*     pDDClipper;
-
-            if( DD_OK == DirectDrawCreateEx( NULL, (void**) &pDDraw, IID_IDirectDraw7, NULL ) )
-            {
-                if( DD_OK == pDDraw->SetCooperativeLevel( (HWND) mnParentWnd, DDSCL_NORMAL ) )
-                {
-                    DDSURFACEDESC2 aDDDesc;
-
-                    memset( &aDDDesc, 0, sizeof( aDDDesc ) );
-                    aDDDesc.dwSize = sizeof( aDDDesc );
-                    aDDDesc.dwFlags = DDSD_CAPS;
-                    aDDDesc.ddsCaps.dwCaps |= DDSCAPS_PRIMARYSURFACE;
-
-                    if( DD_OK == pDDraw->CreateSurface( &aDDDesc, &pDDSurface, NULL ) )
-                    {
-                        if( DD_OK == pDDraw->CreateClipper( 0, &pDDClipper, NULL ) )
-                        {
-                            pDDClipper->SetHWnd( 0, (HWND) mnFrameWnd );
-                            pDDSurface->SetClipper( pDDClipper );
-                        }
-
-                        mrPlayer.setDDrawParams( (IDirectDraw*) pDDraw, (IDirectDrawSurface*) pDDSurface );
-#endif
-
                         pVideoWindow->put_Owner( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_MessageDrain( (OAHWND) mnFrameWnd );
                         pVideoWindow->put_WindowStyle( WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN );
@@ -377,11 +350,6 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
                         meZoomLevel = media::ZoomLevel_ORIGINAL;
                         ImplLayoutVideoWindow();
-#ifdef DDRAW_TEST_OUTPUT
-                    }
-                }
-            }
-#endif
         }
     }
 
