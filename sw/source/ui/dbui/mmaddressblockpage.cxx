@@ -621,7 +621,7 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     {
         const XubString& rHeader = rHeaders.GetString( i );
         SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(rHeader);
-        pEntry->SetUserData((void*)(sal_Int32)i);
+        pEntry->SetUserData((void*)(sal_IntPtr)i);
     }
     m_aOK.SetClickHdl(LINK(this, SwCustomizeAddressBlockDialog, OKHdl_Impl));
     m_aAddressElementsLB.SetSelectHdl(LINK(this, SwCustomizeAddressBlockDialog, ListBoxSelectHdl_Impl ));
@@ -1066,7 +1066,6 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         m_aMatches.push_back(pNewLB);
         m_aPreviews.push_back(pNewPreview);
     }
-    ListBox* pBottomBox = m_aMatches[rHeaders.Count() -1];
     m_aVScroll.SetRange(Range(0, rHeaders.Count()));
     m_aVScroll.SetPageSize((aOutputSize.Height() - nHBHeight - m_nLBStartTopPos)/ m_nYOffset);
     m_aVScroll.EnableDrag();
