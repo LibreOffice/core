@@ -616,17 +616,24 @@ IMPL_LINK( ScPivotLayoutDlg, ClickHdl, PushButton *, pBtn )
 {
     if( mpFocusWindow )
     {
+        /*  Raising sub dialogs (from the NotifyDoubleClick function) triggers
+            VCL child window focus events from this sub dialog which may
+            invalidate the member mpFocusWindow pointing to the target field
+            window. This would cause a crash with the following call to the
+            GrabFieldFocus function. */
+        ScPivotFieldWindow& rTargetWindow = *mpFocusWindow;
+
         if( pBtn == &maBtnRemove )
         {
             mpFocusWindow->RemoveSelectedField();
             // focus back to field window
-            GrabFieldFocus( *mpFocusWindow );
+            GrabFieldFocus( rTargetWindow );
         }
         else if( pBtn == &maBtnOptions )
         {
-            NotifyDoubleClick( *mpFocusWindow );
+            NotifyDoubleClick( rTargetWindow );
             // focus back to field window
-            GrabFieldFocus( *mpFocusWindow );
+            GrabFieldFocus( rTargetWindow );
         }
     }
     return 0;
