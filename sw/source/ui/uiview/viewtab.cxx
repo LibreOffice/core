@@ -584,17 +584,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     {
         SvxLRSpaceItem aParaMargin((const SvxLRSpaceItem&)rReq.
                                         GetArgs()->Get(nSlot));
-        if(nFrmType & FRMTYPE_FLY_ANY)
-        {
-            if(nFrmType & FRMTYPE_COLUMN)
-            {
-                USHORT nCurFrameCol = rSh.GetCurColNum() - 1;
-                const SwFrmFmt* pFmt =  rSh.GetFlyFrmFmt();
-                const SwFmtCol* pCols = &pFmt->GetCol();
-                const SwColumns& rCols = pCols->GetColumns();
-                USHORT nColumnCount = rCols.Count();
-            }
-        }
+
         aParaMargin.SetRight( aParaMargin.GetRight() - nRightBorderDistance );
         aParaMargin.SetTxtLeft(aParaMargin.GetTxtLeft() - nLeftBorderDistance );
 
