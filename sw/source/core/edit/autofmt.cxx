@@ -59,7 +59,7 @@
 #include <pam.hxx>
 #include <edimp.hxx>
 #include <fesh.hxx>
-#include <swundo.hxx>       // fuer die UndoIds
+#include <swundo.hxx>       // for the UndoId's
 #include <poolfmt.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
@@ -96,23 +96,23 @@ const sal_Unicode cStarSymbolEmDash = 0x2014;
 
 SvxSwAutoFmtFlags* SwEditShell::pAutoFmtFlags = 0;
 
-// Anzahl von Num-/Bullet-Absatzvorlagen. MAXLEVEL wird demnaechst auf
-// x erhoeht, die Anzahl Vorlagen aber nicht (Ueberbleibsel aus <= 4.0)
+// Number of num-/bullet-paragraph templates. MAXLEVEL will soon be raised
+// to x, but not the number of templates. (Artifact from <= 4.0)
 const USHORT cnNumBullColls = 4;
 
 class SwAutoFormat
 {
     SvxSwAutoFmtFlags aFlags;
-    SwPaM aDelPam;              // ein Pam der benutzt werden kann
-    SwNodeIndex aNdIdx;         // der Index auf den akt. TextNode
-    SwNodeIndex aEndNdIdx;      // Index auf das Ende vom Bereich
+    SwPaM aDelPam;              // a Pam that can be used
+    SwNodeIndex aNdIdx;         // the index on the current TextNode
+    SwNodeIndex aEndNdIdx;      // index on the end of the area
 
     SwEditShell* pEditShell;
     SwDoc* pDoc;
-    SwTxtNode* pAktTxtNd;       // der akt. TextNode
-    SwTxtFrm* pAktTxtFrm;       // Frame vom akt. TextNode
+    SwTxtNode* pAktTxtNd;       // the current TextNode
+    SwTxtFrm* pAktTxtFrm;       // frame of the current TextNode
     CharClass* pCharClass;      // Character classification
-    ULONG nEndNdIdx;            // fuer die Prozent-Anzeige
+    ULONG nEndNdIdx;            // for the percentage-display
     LanguageType eCharClassLang;
 
     USHORT nLastHeadLvl, nLastCalcHeadLvl;
@@ -175,7 +175,7 @@ class SwAutoFormat
     String GoNextPara();
     BOOL HasObjects( const SwNode& rNd );
 
-    // TxtNode Methoden
+    // TxtNode methods
     const SwTxtNode* GetNextNode() const;
     BOOL IsEmptyLine( const SwTxtNode& rNd ) const
         {   return 0 == rNd.GetTxt().Len() ||
@@ -198,7 +198,7 @@ class SwAutoFormat
     USHORT GetDigitLevel( const SwTxtNode& rTxtNd, xub_StrLen& rPos,
                             String* pPreFix = 0, String* pPostFix = 0,
                             String* pNumTypes = 0 ) const;
-        // hole den FORMATIERTEN TextFrame
+        // get the FORMATED TextFrame
     SwTxtFrm* GetFrm( const SwTxtNode& rTxtNd ) const;
 
     void BuildIndent();
@@ -212,15 +212,15 @@ class SwAutoFormat
     BOOL HasBreakAttr( const SwTxtNode& ) const;
     void DeleteSel( SwPaM& rPam );
     BOOL DeleteAktNxtPara( const String& rNxtPara );
-    // loesche im Node Anfang oder/und Ende
+    // delete in the node start and/or end
     void DeleteAktPara( BOOL bStart = TRUE, BOOL nEnd = TRUE );
     void DelEmptyLine( BOOL bTstNextPara = TRUE );
-        // loesche bei mehrzeiligen Absaetzen die "linken" und/oder
-        // "rechten" Raender
+        // when using multiline paragraphs delete the "left" and/or
+        // "right" margins
     void DelMoreLinesBlanks( BOOL bWithLineBreaks = FALSE );
-        // loesche den vorherigen Absatz
+        // delete the previous paragraph
     void DelPrevPara();
-        // dann lasse doch mal das AutoCorrect auf den akt. TextNode los
+        // execute AutoCorrect on current TextNode
     void AutoCorrect( xub_StrLen nSttPos = 0 );
 
     BOOL CanJoin( const SwTxtNode* pTxtNd ) const
@@ -234,7 +234,7 @@ class SwAutoFormat
              !HasBreakAttr( *pTxtNd );
     }
 
-    // ist ein Punkt am Ende ??
+    // is a dot at the end ??
     BOOL IsSentenceAtEnd( const SwTxtNode& rTxtNd ) const;
 
     BOOL DoUnderline();
@@ -266,7 +266,7 @@ const sal_Unicode* StrChr( const sal_Unicode* pSrc, sal_Unicode c )
 
 SwTxtFrm* SwAutoFormat::GetFrm( const SwTxtNode& rTxtNd ) const
 {
-    // besorge mal den Frame
+    // get the Frame
     const SwCntntFrm *pFrm = rTxtNd.GetFrm();
     OSL_ENSURE( pFrm, "zum Autoformat muss das Layout vorhanden sein" );
     if( aFlags.bAFmtByInput && !pFrm->IsValid() )
@@ -344,10 +344,10 @@ String SwAutoFormat::GoNextPara()
         else
             pNewNd = &aNdIdx.GetNode();
 
-        // kein TextNode ->
-        //      TableNode   : Tabelle ueberspringen
-        //      NoTxtNode   : Nodes ueberspringen
-        //      EndNode     : Ende erreicht, beenden
+        // not a TextNode ->
+        //      TableNode   : skip table
+        //      NoTxtNode   : skip nodes
+        //      EndNode     : at the end, terminate
         if( pNewNd->IsEndNode() )
         {
             bEnde = TRUE;
@@ -374,8 +374,8 @@ String SwAutoFormat::GoNextPara()
 
 BOOL SwAutoFormat::HasObjects( const SwNode& rNd )
 {
-    // haengt irgend etwas absatzgebundenes am Absatz?
-    // z.B. Rahmen, DrawObjecte, ..
+    // Is there something bound to the paragraph in the paragraph
+    // like borders, DrawObjects, ...
     BOOL bRet = FALSE;
     const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
     for( USHORT n = 0; n < rFmts.Count(); ++n )
@@ -428,12 +428,12 @@ BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
     if( !nLen )
         return FALSE;
 
-    // -, +, * getrennt durch Blank ??
+    // -, +, * separated by blank ??
     if( 2 < nLen && IsSpace( rTxt.GetChar( nBlnks + 1 ) ) )
     {
         if( StrChr( pBulletChar, rTxt.GetChar( nBlnks ) ) )
             return TRUE;
-        // sollte an der Position ein Symbolfont existieren ?
+        // Should there be a symbol font at the position?
         SwTxtFrmInfo aFInfo( GetFrm( rNd ) );
         if( aFInfo.IsBullet( nBlnks ))
             return TRUE;
@@ -446,7 +446,7 @@ BOOL SwAutoFormat::IsEnumericChar( const SwTxtNode& rNd ) const
 
 BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
 {
-    // suche im String mehr als 5 Blanks/Tabs
+    // Search more that 5 blanks/tabs in the string.
     String sTmp( rNd.GetTxt() );
     DelTrailingBlanks( DelLeadingBlanks( sTmp ));
     const sal_Unicode* pTmp = sTmp.GetBuffer();
@@ -454,7 +454,7 @@ BOOL SwAutoFormat::IsBlanksInString( const SwTxtNode& rNd ) const
     {
         if( IsSpace( *pTmp ) )
         {
-            if( IsSpace( *++pTmp ))     // 2 Space nach einander
+            if( IsSpace( *++pTmp ))     // 2 spaces after each other
             {
                 const sal_Unicode* pStt = pTmp;
                 while( *pTmp && IsSpace( *++pTmp ))
@@ -503,7 +503,7 @@ USHORT SwAutoFormat::CalcLevel( const SwTxtNode& rNd, USHORT *pDigitLvl ) const
                     break;
         default:
             if( pDigitLvl )
-                // Teste auf 1.) / 1. / 1.1.1 / (1). / (1) / ....
+                // test 1.) / 1. / 1.1.1 / (1). / (1) / ....
                 *pDigitLvl = GetDigitLevel( rNd, n );
             return nLvl;
         }
