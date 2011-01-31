@@ -36,7 +36,7 @@ $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_targe
         rm -f $@ $@.log)
 
 .PHONY : $(call gb_JunitTest_get_target,$(1))
-$(call gb_JunitTest_get_target,%) : $(gb_JunitTest_JAVACOMMAND)
+$(call gb_JunitTest_get_target,%) :
     $(call gb_Output_announce,$*,$(true),JUT,2)
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
