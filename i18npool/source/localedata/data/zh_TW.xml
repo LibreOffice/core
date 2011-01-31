@@ -129,11 +129,11 @@
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-<FormatCode>GGGE"年"M"月"D"日"</FormatCode>
+<FormatCode>GGGEE"年"M"月"D"日"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
-<FormatCode>GGGE"年"M"月"D"日"</FormatCode>
+<FormatCode>GGGEE"年"M"月"D"日"</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey9" default="false" type="long" usage="DATE" formatindex="26">
@@ -149,11 +149,11 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey12" default="false" type="long" usage="DATE" formatindex="29">
-<FormatCode>GGE"年"M"月"D"日" NNNN</FormatCode>
+<FormatCode>GGEE"年"M"月"D"日" NNNN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey13" default="false" type="long" usage="DATE" formatindex="30">
-<FormatCode>GGGE"年"M"月"D"日" NNNN</FormatCode>
+<FormatCode>GGGEE"年"M"月"D"日" NNNN</FormatCode>
 <DefaultName></DefaultName>
 </FormatElement>
 <FormatElement msgid="DateFormatskey14" default="true" type="short" usage="DATE" formatindex="31">
@@ -161,11 +161,11 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey15" default="false" type="medium" usage="DATE" formatindex="32">
-<FormatCode>E"年"M"月"D"日"</FormatCode>
+<FormatCode>EE"年"M"月"D"日"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey16" default="false" type="medium" usage="DATE" formatindex="33">
-<FormatCode>GGGE"年"M"月"D"日"</FormatCode>
+<FormatCode>GGGEE"年"M"月"D"日"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey17" default="false" type="short" usage="DATE" formatindex="34">
@@ -181,7 +181,7 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey20" default="false" type="medium" usage="DATE" formatindex="37">
-<FormatCode>GGE"年度"QQ</FormatCode>
+<FormatCode>GGEE"年度"QQ</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateFormatskey21" default="false" type="short" usage="DATE" formatindex="38">
@@ -251,7 +251,7 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey3" default="true" type="long" usage="DATE_TIME"  formatindex="56">
-<FormatCode>E"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
+<FormatCode>EE"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey4" default="false" type="long" usage="DATE_TIME"  formatindex="57">
@@ -259,11 +259,11 @@
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey5" default="false" type="long" usage="DATE_TIME"  formatindex="58">
-<FormatCode>GGE"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
+<FormatCode>GGEE"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey6" default="false" type="long" usage="DATE_TIME"  formatindex="59">
-<FormatCode>GGGE"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
+<FormatCode>GGGEE"年"M"月"D"日" HH"時"MM"分"SS"秒"</FormatCode>
 <DefaultName/>
 </FormatElement>
 <FormatElement msgid="DateTimeFormatskey7" default="false" type="long" usage="DATE_TIME"  formatindex="60">
