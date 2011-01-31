@@ -1,7 +1,5 @@
 # This file contain a list of todos for testshl2 automated tests.
 # 
-# $Id: libs2test.txt,v 1.13 2007-11-20 19:25:30 ihi Exp $
-#
 # Legend:
 # there exist 2 formats
 # 1. file
