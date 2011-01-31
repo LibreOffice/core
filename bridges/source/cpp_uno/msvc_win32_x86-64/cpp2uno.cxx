@@ -327,8 +327,8 @@ extern "C" typelib_TypeClass cpp_vtable_call(
 
                         if ( pInterface )
                         {
-                            // pStack[0] = hidden return value pointer
-                            ::uno_any_construct( reinterpret_cast<uno_Any *>( pStack[0] ),
+                            // pStack[3] = hidden return value pointer
+                            ::uno_any_construct( reinterpret_cast<uno_Any *>( pStack[3] ),
                                                  &pInterface, pTD, cpp_acquire );
 
                             pInterface->release();
