@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "rtl/alloc.h"
+#include "alloc_impl.h"
 
 #ifndef INCLUDED_STRING_H
 #include <string.h>
@@ -44,7 +45,6 @@
 #include <stdio.h>
 #define INCLUDED_STDIO_H
 #endif
-#include "alloc_impl.h"
 #include "internal/once.h"
 #include "sal/macros.h"
 #include "osl/diagnose.h"
