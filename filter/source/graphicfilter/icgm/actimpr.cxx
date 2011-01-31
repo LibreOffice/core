@@ -210,7 +210,6 @@ void CGMImpressOutAct::ImplSetFillBundle()
 
     sal_uInt32              nFillColor;
     FillInteriorStyle       eFillStyle;
-    long                    nPatternIndex;
     sal_uInt32              nHatchIndex;
 
     if ( mpCGM->pElement->eEdgeVisibility == EV_ON )
@@ -243,10 +242,6 @@ void CGMImpressOutAct::ImplSetFillBundle()
         nHatchIndex = (sal_uInt32)mpCGM->pElement->pFillBundle->nFillHatchIndex;
     else
         nHatchIndex = (sal_uInt32)mpCGM->pElement->aFillBundle.nFillHatchIndex;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_PATTERNINDEX )
-        nPatternIndex = mpCGM->pElement->pFillBundle->nFillPatternIndex;
-    else
-        nPatternIndex = mpCGM->pElement->aFillBundle.nFillPatternIndex;
 
     aAny <<= (sal_Int32)nFillColor;
     maXPropSet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FillColor" )), aAny );
@@ -384,28 +379,13 @@ void CGMImpressOutAct::ImplSetFillBundle()
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
     uno::Any        aAny;
-    TextPrecision   eTextPrecision;
     sal_uInt32      nTextFontIndex;
     sal_uInt32      nTextColor;
-    double          fCharacterExpansion;
-    double          fCharacterSpacing;
 
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTFONTINDEX )
         nTextFontIndex = mpCGM->pElement->pTextBundle->nTextFontIndex;
     else
         nTextFontIndex = mpCGM->pElement->aTextBundle.nTextFontIndex;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTPRECISION )
-        eTextPrecision = mpCGM->pElement->pTextBundle->eTextPrecision;
-    else
-        eTextPrecision = mpCGM->pElement->aTextBundle.eTextPrecision;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_CHARACTEREXPANSION )
-        fCharacterExpansion = mpCGM->pElement->pTextBundle->nCharacterExpansion;
-    else
-        fCharacterExpansion = mpCGM->pElement->aTextBundle.nCharacterExpansion;
-    if ( mpCGM->pElement->nAspectSourceFlags & ASF_CHARACTERSPACING )
-        fCharacterSpacing = mpCGM->pElement->pTextBundle->nCharacterSpacing;
-    else
-        fCharacterSpacing = mpCGM->pElement->aTextBundle.nCharacterSpacing;
     if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTCOLOR )
         nTextColor = mpCGM->pElement->pTextBundle->GetColor();
     else

@@ -57,7 +57,7 @@ typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 class DomainMapper_Impl;
 class TableStyleSheetEntry;
 struct TableInfo;
-class DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
+class WRITERFILTER_DLLPRIVATE DomainMapperTableHandler : public TableDataHandler<Handle_t , TablePropertyMapPtr >
 {
     TextReference_t         m_xText;
     DomainMapper_Impl&      m_rDMapper_Impl;

@@ -269,7 +269,7 @@ struct LineNumberSettings
 
   -----------------------------------------------------------------------*/
 class DomainMapper;
-class DomainMapper_Impl
+class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
 {
 public:
     typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;

@@ -941,6 +941,7 @@ namespace oox { namespace ppt {
                     // CT_TLPoint
                     Point p = GetPointPercent( xAttribs );
                     // TODO push
+                    (void)p;
                     break;
                 }
                 default:
