@@ -919,7 +919,8 @@ testcase tToolsUpdate
             Active.Ok
         end if
     end if
-
+    Sleep 5
+    
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
 

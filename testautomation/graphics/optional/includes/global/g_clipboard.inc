@@ -119,7 +119,7 @@ testcase tiEditUndo
     end if
     TabPositionAndSize.Cancel
     printlog "Close document"
-     Call hCloseDocument	
+    Call hCloseDocument
     sLocaltestfile = hFileGetLocalPath( gTesttoolPath + "leer."+ExtensionString )
     printlog sLocaltestfile
     if (FileExists (sLocaltestfile)) then
@@ -128,9 +128,7 @@ testcase tiEditUndo
     else
         warnlog "File is missing."
     endif
-
-    printlog "Close document"					
-
+    					
 endcase 'tiEditUndo
 
 '-------------------------------------------------------------------------------
