@@ -30,8 +30,6 @@
 // hwpfile.h
 // (C) 1998 Mizi Research, All rights are reserved
 //
-// $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
-//
 
 #ifndef _HWPFILE_H_
 #define _HWPFILE_H_
@@ -97,7 +95,6 @@ struct ColumnInfo{
  *
  * @short HWP file management object
  * @author Mizi Reserach
- * @version $Id: hwpfile.h,v 1.5 2008-06-04 10:01:33 vg Exp $
  */
 class DLLEXPORT HWPFile
 {

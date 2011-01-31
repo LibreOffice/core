@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hwplib.h,v 1.5 2008-04-10 12:09:50 rt Exp $ */
-
 #ifndef _HWPLIB_H_
 #define _HWPLIB_H_
 #include "precompile.h"

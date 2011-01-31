@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hiodev.cpp,v 1.6 2008-04-10 12:05:38 rt Exp $ */
-
 #ifdef __GNUG__
 #pragma implementation "hiodev.h"
 #endif

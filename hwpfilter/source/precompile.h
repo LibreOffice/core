@@ -26,10 +26,6 @@
  *
  ************************************************************************/
 
-/*
-  $Id: precompile.h,v 1.5 2008-04-10 12:13:09 rt Exp $
-*/
-
 #ifdef _WIN32
     #if defined _MSC_VER
         #pragma warning(push, 1)

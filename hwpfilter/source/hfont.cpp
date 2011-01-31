@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-/* $Id: hfont.cpp,v 1.4 2008-06-04 09:56:49 vg Exp $ */
-
 #include "precompile.h"
 #include "hwplib.h"
 #include "hwpfile.h"
