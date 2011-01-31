@@ -94,7 +94,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), sReportTitle, new Integer(95), new Integer(27), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(68)
+                    8, sReportTitle, 95, 27, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 68
                 });
 
         xTitleTextBox = CurUnoDialog.insertTextField("txtTitle", CHANGEREPORTTITLE_FUNCNAME, this,
@@ -104,7 +104,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(12), "HID:WIZARDS_HID_DLGREPORT_4_TITLE", new Integer(95), new Integer(37), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    12, "HID:WIZARDS_HID_DLGREPORT_4_TITLE", 95, 37, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblChooseReportKind",
@@ -114,7 +114,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), slblChooseReportKind, new Integer(95), new Integer(57), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    8, slblChooseReportKind, 95, 57, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
         CurUnoDialog.insertRadioButton("optCreateDocument", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -124,7 +124,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, new Integer(95), new Integer(69), new Short((short) 0), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTSTATDOCUMENT", sSaveAsDocument, 95, 69, new Short((short) 0), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 138
                 });
 
         CurUnoDialog.insertRadioButton("optCreateReportTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -134,7 +134,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE", sSaveAsTemplate, new Integer(95), new Integer(81), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    8, "HID:WIZARDS_HID_DLGREPORT_5_OPTDYNTEMPLATE", sSaveAsTemplate, 95, 81, new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
 
@@ -145,7 +145,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(8), slblHowProceed, new Integer(105), new Integer(93), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(209)
+                    8, slblHowProceed, 105, 93, new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 209
                 });
 
 
@@ -156,7 +156,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, new Integer(111), new Integer(105), new Integer(6), new Short(curtabindex++), new Integer(138)
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTEDITTEMPLATE", sEditTemplate, 111, 105, 6, new Short(curtabindex++), 138
                 });
 
         CurUnoDialog.insertRadioButton("optUseTemplate", TOGGLESUBTEMPLATECONTROLS_FUNCNAME, this,
@@ -166,7 +166,7 @@ public class ReportFinalizer
                 },
                 new Object[]
                 {
-                    new Integer(10), "HID:WIZARDS_HID_DLGREPORT_5_OPTUSETEMPLATE", sUseTemplate, new Integer(111), new Integer(115), new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), new Integer(138)
+                    10, "HID:WIZARDS_HID_DLGREPORT_5_OPTUSETEMPLATE", sUseTemplate, 111, 115, new Short((short) 1), new Integer(ReportWizard.SOSTOREPAGE), new Short(curtabindex++), 138
                 });
     }
 

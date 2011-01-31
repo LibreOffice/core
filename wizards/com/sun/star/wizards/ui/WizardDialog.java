@@ -247,12 +247,12 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     new Object[]
                     {
                         new Integer(iDialogHeight - 26),
-                        new Integer(0),
-                        new Integer(0),
-                        new Integer(0),
+                        0,
+                        0,
+                        0,
                         new Short((short)0),
                         Boolean.TRUE,
-                        new Integer(85)
+                        85
                     });
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oRoadmap);
             xPSet.setPropertyValue(PropertyNames.PROPERTY_NAME, "rdmNavi");
@@ -454,7 +454,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             Integer IButtonWidth = new Integer(iButtonWidth);
             int iButtonHeight = 14;
             Integer IButtonHeight = new Integer(iButtonHeight);
-            Integer ICurStep = new Integer(0);
+            Integer ICurStep = 0;
             int iDialogHeight = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_HEIGHT)).intValue();
             int iDialogWidth = ((Integer) Helper.getUnoPropertyValue(this.xDialogModel, PropertyNames.PROPERTY_WIDTH)).intValue();
             int iHelpPosX = 8;
@@ -471,7 +471,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        new Integer(1), new Integer(0), new Integer(0), new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)
+                        1, 0, 0, new Integer(iDialogHeight - 26), ICurStep, new Integer(iDialogWidth)
                     });
 
             insertControlModel("com.sun.star.awt.UnoControlFixedLineModel", "lnRoadSep",
@@ -481,7 +481,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        new Integer(iBtnPosY - 6), new Integer(1), new Integer(85), new Integer(0), ICurStep, new Integer(1)
+                        new Integer(iBtnPosY - 6), 1, 85, 0, ICurStep, 1
                     });
 
             String[] propNames = new String[]
@@ -751,7 +751,7 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
                     },
                     new Object[]
                     {
-                        oFontDesc, new Integer(16), sRightPaneHeaders[i], Boolean.TRUE, new Integer(91), new Integer(8), new Integer(i + 1), new Short((short) 12), new Integer(212)
+                        oFontDesc, 16, sRightPaneHeaders[i], Boolean.TRUE, 91, 8, new Integer(i + 1), new Short((short) 12), 212
                     });
         }
     }

@@ -83,7 +83,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], sLabelPlacment, new Integer(97), new Integer(25), IControlStep, new Short(curtabindex++), new Integer(207)
+                    UIConsts.INTEGERS[8], sLabelPlacment, 97, 25, IControlStep, new Short(curtabindex++), 207
                 });
         // Radio Button "Align Left"
         optAlignLeft = CurUnoDialog.insertRadioButton("optAlignLeft", SOALIGNMETHOD, this,
@@ -93,7 +93,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, new Integer(107), new Integer(38), new Short((short) 1), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNLEFT", sAlignLeft, 107, 38, new Short((short) 1), IControlStep, new Short(curtabindex++), 171
                 });
         // Radio Button "Align Right"
         optAlignRight = CurUnoDialog.insertRadioButton("optAlignRight", SOALIGNMETHOD, this,
@@ -103,7 +103,7 @@ public class UIControlArranger
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, new Integer(107), new Integer(50), IControlStep, new Short(curtabindex++), new Integer(171)
+                    UIConsts.INTEGERS[10], "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT", sAlignRight, Boolean.TRUE, 107, 50, IControlStep, new Short(curtabindex++), 171
                 });
 
 
@@ -119,7 +119,7 @@ public class UIControlArranger
 //                },
 //                new Object[]
 //                {
-//                    UIConsts.INTEGERS[8], sArrangementHeader[0], new Integer(97), new Integer(60), IControlStep, new Short(curtabindex++), new Integer(207)
+//                    UIConsts.INTEGERS[8], sArrangementHeader[0], 97, 60, IControlStep, new Short(curtabindex++), 207
 //                });
 //
 //        boolean bEnabled = true;
@@ -142,14 +142,14 @@ public class UIControlArranger
 //                new Object[]
 //                {
 //                    Boolean.valueOf(bEnabled),
-//                    new Integer(14),
+//                    14,
 ///* TODO: WRONG!*/   "HID:WIZARDS_HID_DLGFORM_CMDALIGNRIGHT",
 //                    "1",
 //                    new Integer(nXPos + nBtnWidth),
 //                    new Integer(nYPos),
 //                    IControlStep,
 //                    new Short(curtabindex++),
-//                    new Integer(16)
+//                    16
 //                });
 
         DefaultListModel imageModel = new DefaultListModel();
@@ -206,16 +206,7 @@ public class UIControlArranger
 
     public short getAlignValue()
     {
-        Short IAlignValue = null;
-        if (optAlignLeft.getState())
-        {
-            IAlignValue = new Short((short) 0);
-        }
-        else
-        {
-            IAlignValue = new Short((short) 2);
-        }
-        return IAlignValue.shortValue();
+        return optAlignLeft.getState() ? (short)0 : (short)2;
     }
 
     public void alignLabelControls()
@@ -226,12 +217,12 @@ public class UIControlArranger
             for (int m = 0; m < curFormDocument.oControlForms.size(); m++)
             {
                 FormDocument.ControlForm curControlForm = (FormDocument.ControlForm) curFormDocument.oControlForms.get(m);
-                if (curControlForm.getArrangemode() == FormWizard.SOCOLUMNARLEFT)
+                if (curControlForm.getArrangemode() == FormWizard.COLUMNAR_LEFT)
                 {
                     Control[] LabelControls = curControlForm.getLabelControls();
                     for (int n = 0; n < LabelControls.length; n++)
                     {
-                        LabelControls[n].xPropertySet.setPropertyValue("Align", new Short(iAlignValue));
+                        LabelControls[n].xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short(iAlignValue));
                     }
                 }
             }
@@ -267,7 +258,7 @@ public class UIControlArranger
 //                    },
 //                    new Object[]
 //                    {
-//                        UIConsts.INTEGERS[8], _sArrangementHeader, new Integer(97), YPos, IControlStep, new Short(curtabindex++), new Integer(207)
+//                        UIConsts.INTEGERS[8], _sArrangementHeader, 97, YPos, IControlStep, new Short(curtabindex++), 207
 //                    });
 //
 //            int nypos = SOBASEIMAGEYPOSITION + 12 + _formindex * SOIMAGELISTHEIGHT;
@@ -396,11 +387,11 @@ public class UIControlArranger
                     {
                         UIConsts.INTEGERS[8],
                         _sArrangementHeader,
-                        new Integer(97),
+                        97,
                         YPos,
                         IControlStep,
                         new Short(curtabindex++),
-                        new Integer(207)
+                        207
                     });
 
             int nypos = SOBASEIMAGEYPOSITION + 12 - 5 + _formindex * SOIMAGELISTHEIGHT;
@@ -421,7 +412,7 @@ public class UIControlArranger
 
             m_aButtonList.setListModel(model);
             m_aButtonList.create(CurUnoDialog);
-            m_aButtonList.setSelected(FormWizard.SOGRID - 1);
+            m_aButtonList.setSelected(FormWizard.AS_GRID - 1);
             m_aButtonList.addItemListener(this);
         }
 
@@ -450,13 +441,13 @@ public class UIControlArranger
                         final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
                         final int nSelected1 = (m_aArrangeList[1].m_aButtonList.getSelected() + 1);
 
-                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.SOCOLUMNARLEFT) ||
-                                                    (nSelected1 == FormWizard.SOCOLUMNARLEFT));
+                        bEnableAlignControlGroup = ((nSelected0 == FormWizard.COLUMNAR_LEFT) ||
+                                                    (nSelected1 == FormWizard.COLUMNAR_LEFT));
                     }
                     else
                     {
                         final int nSelected0 = (m_aArrangeList[0].m_aButtonList.getSelected() + 1);
-                        bEnableAlignControlGroup = (nSelected0 == FormWizard.SOCOLUMNARLEFT);
+                        bEnableAlignControlGroup = (nSelected0 == FormWizard.COLUMNAR_LEFT);
                     }
                     enableAlignControlGroup(bEnableAlignControlGroup);
                     final Short nBorderType = CurUnoDialog.getBorderType();
