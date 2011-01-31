@@ -1959,12 +1959,6 @@ void SfxDispatcher::FlushImpl()
     {
         pImp->bFlushing = sal_True;
         DBG_PROFSTOP(SfxDispatcherFlush);
-//!
-#ifdef DBG_UTIL_MESSEHACK_AUSKOMMENT
-        DBG_ERROR( "reentering SfxDispatcher::Flush()" );
-        aMsg += " reentering, aborted";
-        DbgTrace( aMsg.GetBuffer() );
-#endif
         return;
     }
 
