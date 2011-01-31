@@ -83,12 +83,15 @@ OUString ConfigurationBackendDb::getKeyElementName()
 void ConfigurationBackendDb::addEntry(::rtl::OUString const & url, Data const & data)
 {
     try{
-        Reference<css::xml::dom::XNode> helpNode
-            = writeKeyElement(url);
+        if (!activateEntry(url))
+        {
+            Reference<css::xml::dom::XNode> helpNode
+                = writeKeyElement(url);
 
-        writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
-        writeSimpleElement(OUSTR("ini-entry"), data.iniEntry, helpNode);
-        save();
+            writeSimpleElement(OUSTR("data-url"), data.dataUrl, helpNode);
+            writeSimpleElement(OUSTR("ini-entry"), data.iniEntry, helpNode);
+            save();
+        }
     }
     catch (css::deployment::DeploymentException& )
     {

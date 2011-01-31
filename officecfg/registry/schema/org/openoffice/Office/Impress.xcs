@@ -331,7 +331,7 @@
           <desc>Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
           <label>Copy while moving</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="ObjectMoveable" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
@@ -371,7 +371,7 @@
           <desc>Indicates whether a double-click on an object activates the rotation mode.</desc>
           <label>Rotation Mode after clicking object</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="Preview" oor:type="xs:double">
         <!-- OldPath: Impress/Other -->
@@ -426,7 +426,7 @@
           <desc>Indicates whether to show big (true) or small (false) handles.</desc>
           <label>Big Handles</label>
         </info>
-        <value>false</value>
+        <value>true</value>
       </prop>
       <prop oor:name="ModifyWithAttributes" oor:type="xs:boolean">
         <!-- OldPath: Impress/Other -->
@@ -537,6 +537,29 @@
         </info>
         <value>0</value>
       </prop>
+      <prop oor:name="PenColor" oor:type="xs:int">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: slide show context menu -->
+        <info>
+          <author>CL</author>
+          <desc>Color of the pen during slideshow.</desc>
+          <label>Pen Color</label>
+        </info>
+        <value>16711680</value>
+      </prop>
+      <prop oor:name="PenWidth" oor:type="xs:double">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: slide show context menu -->
+        <info>
+          <author>CL</author>
+          <desc>Width of the pen during slideshow.</desc>
+          <label>Pen Width</label>
+        </info>
+        <value>150</value>
+      </prop>
+
       <group oor:name="TextObject">
         <info>
           <desc>Contains text editing related configuration items.</desc>
@@ -679,7 +702,7 @@
             <desc>Indicates whether to snap at snap lines.</desc>
             <label>Snap lines</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="PageMargin" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
@@ -699,7 +722,7 @@
             <desc>Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
             <label>Object frame</label>
           </info>
-          <value>false</value>
+          <value>true</value>
         </prop>
         <prop oor:name="ObjectPoint" oor:type="xs:boolean">
           <!-- OldPath: Impress/Snap/Objects -->
@@ -871,14 +894,14 @@
               <desc>Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
               <label/>
             </info>
-            <value>1000</value>
+            <value>2000</value>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <info>
               <desc>Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
             </info>
-            <value>1270</value>
+            <value>2540</value>
           </prop>
         </group>
         <group oor:name="YAxis">
@@ -895,14 +918,14 @@
               <desc>Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
               <label/>
             </info>
-            <value>1000</value>
+            <value>2000</value>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <info>
               <desc>Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
               <label/>
             </info>
-            <value>1270</value>
+            <value>2540</value>
           </prop>
         </group>
       </group>
@@ -919,7 +942,7 @@
             <desc>Specifies the number of points between two adjacent grid points on the X axis.</desc>
             <label>X Axis Subdivision</label>
           </info>
-          <value>1</value>
+          <value>9</value>
         </prop>
         <prop oor:name="YAxis" oor:type="xs:double">
           <!-- OldPath: Impress/Grid/Subdivision -->
@@ -930,7 +953,7 @@
             <desc>Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
             <label>Y Axis Subdivision</label>
           </info>
-          <value>1</value>
+          <value>9</value>
         </prop>
       </group>
       <group oor:name="SnapGrid">
@@ -961,7 +984,7 @@
               <desc>Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
               <label/>
             </info>
-            <value>1000</value>
+            <value>100</value>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <info>
@@ -985,7 +1008,7 @@
               <desc>Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
               <label/>
             </info>
-            <value>1000</value>
+            <value>100</value>
           </prop>
           <prop oor:name="NonMetric" oor:type="xs:int">
             <info>
