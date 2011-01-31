@@ -1785,7 +1785,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
 
     const SvxHorJustifyItem* pHorJustify = NULL;
     const SvxVerJustifyItem* pVerJustify = NULL;
-    SvxCellHorJustify        eHorJustify = SVX_HOR_JUSTIFY_STANDARD;
     SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     USHORT                   nWhich      = 0;
     BOOL                     bJustifyStd = FALSE;
@@ -1797,8 +1796,6 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     {
         case SFX_ITEM_SET:
             {
-                eHorJustify = SvxCellHorJustify( pHorJustify->GetValue() );
-
                 switch ( SvxCellHorJustify( pHorJustify->GetValue() ) )
                 {
                     case SVX_HOR_JUSTIFY_STANDARD:
