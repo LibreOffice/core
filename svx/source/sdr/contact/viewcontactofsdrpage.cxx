@@ -45,8 +45,8 @@
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
 #include <svx/sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <vcl/lazydelete.hxx>
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include <svx/svdstr.hrc>
+#include <svx/svdglob.hxx>
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
 #include <drawinglayer/attribute/sdrfillattribute.hxx>
 

@@ -53,7 +53,7 @@
 #include <drawinglayer/primitive2d/wrongspellprimitive2d.hxx>
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>

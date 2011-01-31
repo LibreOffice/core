@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/overlay/overlaymanagerbuffered.hxx>
 #include <svx/svdpntv.hxx>
 #include <vcl/gdimtf.hxx>

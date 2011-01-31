@@ -63,7 +63,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XCustomShapeEngine.hpp>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

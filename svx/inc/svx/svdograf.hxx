@@ -120,7 +120,8 @@ protected:
 
     void                    ImpLinkAnmeldung();
     void                    ImpLinkAbmeldung();
-    sal_Bool                ImpUpdateGraphicLink() const;
+    sal_Bool                ImpUpdateGraphicLink( sal_Bool bAsynchron = sal_True ) const;
+    void                    ImpSetLinkedGraphic( const Graphic& rGraphic );
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
 
 public:

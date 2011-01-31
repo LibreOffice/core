@@ -377,83 +377,46 @@ int SvxURLField::operator==( const SvxFieldData& rOther ) const
 
 // -----------------------------------------------------------------------
 
+static void write_unicode( SvPersistStream & rStm, const String& rString )
+{
+    USHORT nL = rString.Len();
+    rStm << nL;
+    rStm.Write( rString.GetBuffer(), nL*sizeof(sal_Unicode) );
+}
+
+static void read_unicode( SvPersistStream & rStm, String& rString )
+{
+    USHORT nL = 0;
+    rStm >> nL;
+    if ( nL )
+    {
+        rString.AllocBuffer( nL );
+        rStm.Read( rString.GetBufferAccess(), nL*sizeof(sal_Unicode) );
+        rString.ReleaseBufferAccess( nL );
+    }
+}
+
 void SvxURLField::Load( SvPersistStream & rStm )
 {
-    USHORT nFormat;
-    sal_uInt32 nFrameMarker, nCharSetMarker;
-    long nUlongSize = (long)sizeof(sal_uInt32);
-    String aTmpURL;
+    USHORT nFormat = 0;
 
     rStm >> nFormat;
-
-    // UNICODE: rStm >> aTmpURL;
-    rStm.ReadByteString(aTmpURL);
-
-    // UNICODE: rStm >> aRepresentation;
-    // read to a temp string first, read text encoding and
-    // convert later to stay compatible to fileformat
-    ByteString aTempString;
-    rtl_TextEncoding aTempEncoding = RTL_TEXTENCODING_MS_1252;  // #101493# Init for old documents
-    rStm.ReadByteString(aTempString);
-
-    rStm >> nFrameMarker;
-    if ( nFrameMarker == FRAME_MARKER )
-    {
-        // UNICODE: rStm >> aTargetFrame;
-        rStm.ReadByteString(aTargetFrame);
-
-        rStm >> nCharSetMarker;
-        if ( nCharSetMarker == CHARSET_MARKER )
-        {
-            USHORT nCharSet;
-            rStm >> nCharSet;
-
-            // remember encoding
-            aTempEncoding = (rtl_TextEncoding)nCharSet;
-        }
-        else
-            rStm.SeekRel( -nUlongSize );
-    }
-    else
-        rStm.SeekRel( -nUlongSize );
-
-    // now build representation string due to known encoding
-    aRepresentation = String(aTempString, aTempEncoding);
-
     eFormat= (SvxURLFormat)nFormat;
 
-    // Relatives Speichern => Beim laden absolut machen.
-    DBG_ERROR("No BaseURL!");
-    // TODO/MBA: no BaseURL
-    aURL = INetURLObject::GetAbsURL( String(), aTmpURL );
+    read_unicode( rStm, aURL );
+    read_unicode( rStm, aRepresentation );
+    read_unicode( rStm, aTargetFrame );
 }
 
 // -----------------------------------------------------------------------
 
 void SvxURLField::Save( SvPersistStream & rStm )
 {
-    // Relatives Speichern der URL
-    DBG_ERROR("No BaseURL!");
-    // TODO/MBA: no BaseURL
-    String aTmpURL = INetURLObject::GetRelURL( String(), aURL );
-
     rStm << (USHORT)eFormat;
 
-    // UNICODE: rStm << aTmpURL;
-    rStm.WriteByteString(aTmpURL);
-
-    // UNICODE: rStm << aRepresentation;
-    rStm.WriteByteString(aRepresentation);
-
-    rStm << FRAME_MARKER;
-
-    // UNICODE: rStm << aTargetFrame;
-    rStm.WriteByteString(aTargetFrame);
-
-    rStm << CHARSET_MARKER;
-
-    // #90477# rStm << (USHORT)GetStoreCharSet(gsl_getSystemTextEncoding(), rStm.GetVersion());
-    rStm << (USHORT)GetSOStoreTextEncoding(gsl_getSystemTextEncoding(), (sal_uInt16)rStm.GetVersion());
+    write_unicode( rStm, aURL );
+    write_unicode( rStm, aRepresentation );
+    write_unicode( rStm, aTargetFrame );
 }
 
 MetaAction* SvxURLField::createBeginComment() const
@@ -921,16 +884,11 @@ int SvxAuthorField::operator==( const SvxFieldData& rOther ) const
 
 void SvxAuthorField::Load( SvPersistStream & rStm )
 {
-    USHORT nType, nFormat;
+    USHORT nType = 0, nFormat = 0;
 
-    // UNICODE: rStm >> aName;
-    rStm.ReadByteString(aName);
-
-    // UNICODE: rStm >> aFirstName;
-    rStm.ReadByteString(aFirstName);
-
-    // UNICODE: rStm >> aShortName;
-    rStm.ReadByteString(aShortName);
+    read_unicode( rStm, aName );
+    read_unicode( rStm, aFirstName );
+    read_unicode( rStm, aShortName );
 
     rStm >> nType;
     rStm >> nFormat;
@@ -943,14 +901,9 @@ void SvxAuthorField::Load( SvPersistStream & rStm )
 
 void SvxAuthorField::Save( SvPersistStream & rStm )
 {
-    // UNICODE: rStm << aName;
-    rStm.WriteByteString(aName);
-
-    // UNICODE: rStm << aFirstName;
-    rStm.WriteByteString(aFirstName);
-
-    // UNICODE: rStm << aShortName;
-    rStm.WriteByteString(aShortName);
+    write_unicode( rStm, aName );
+    write_unicode( rStm, aFirstName );
+    write_unicode( rStm, aShortName );
 
     rStm << (USHORT) eType;
     rStm << (USHORT) eFormat;

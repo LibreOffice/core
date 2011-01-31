@@ -37,7 +37,7 @@
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
 
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
@@ -45,8 +45,8 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <svx/svddrgv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
@@ -59,7 +59,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -68,7 +68,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
@@ -902,6 +902,9 @@ void SdrDragMovHdl::TakeSdrDragComment(XubString& rStr) const
 
 bool SdrDragMovHdl::BeginSdrDrag()
 {
+    if( !GetDragHdl() )
+        return false;
+
     DragStat().Ref1()=GetDragHdl()->GetPos();
     DragStat().SetShown(!DragStat().IsShown());
     SdrHdlKind eKind=GetDragHdl()->GetKind();
@@ -931,7 +934,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 {
     Point aPnt(rNoSnapPnt);
 
-    if (DragStat().CheckMinMoved(rNoSnapPnt))
+    if ( GetDragHdl() && DragStat().CheckMinMoved(rNoSnapPnt))
     {
         if (GetDragHdl()->GetKind()==HDL_MIRX)
         {
@@ -1042,22 +1045,25 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
 
 bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
 {
-    switch (GetDragHdl()->GetKind())
+    if( GetDragHdl() )
     {
-        case HDL_REF1:
-            Ref1()=DragStat().GetNow();
-            break;
+        switch (GetDragHdl()->GetKind())
+        {
+            case HDL_REF1:
+                Ref1()=DragStat().GetNow();
+                break;
 
-        case HDL_REF2:
-            Ref2()=DragStat().GetNow();
-            break;
+            case HDL_REF2:
+                Ref2()=DragStat().GetNow();
+                break;
 
-        case HDL_MIRX:
-            Ref1()+=DragStat().GetNow()-DragStat().GetStart();
-            Ref2()+=DragStat().GetNow()-DragStat().GetStart();
-            break;
+            case HDL_MIRX:
+                Ref1()+=DragStat().GetNow()-DragStat().GetStart();
+                Ref2()+=DragStat().GetNow()-DragStat().GetStart();
+                break;
 
-        default: break;
+            default: break;
+        }
     }
 
     return true;
@@ -1066,7 +1072,11 @@ bool SdrDragMovHdl::EndSdrDrag(bool /*bCopy*/)
 void SdrDragMovHdl::CancelSdrDrag()
 {
     Hide();
-    GetDragHdl()->SetPos(DragStat().GetRef1());
+
+    SdrHdl* pHdl = GetDragHdl();
+    if( pHdl )
+        pHdl->SetPos(DragStat().GetRef1());
+
     SdrHdl* pHM = GetHdlList().GetHdl(HDL_MIRX);
 
     if(pHM)

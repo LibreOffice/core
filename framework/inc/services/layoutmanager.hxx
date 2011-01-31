@@ -52,7 +52,7 @@
 #include <stdtypes.h>
 #include <uielement/menubarmanager.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uielement/panelwindow.hxx>
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>
@@ -85,7 +85,7 @@
 #include <cppuhelper/implbase8.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <svtools/miscopt.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/timer.hxx>
