@@ -61,7 +61,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sdbc;
 
 OColumnControl::OColumnControl(const Reference<XMultiServiceFactory>& _rxFactory)
-: m_xORB(_rxFactory)
+    :UnoControl( _rxFactory )
 {
 }
 // -----------------------------------------------------------------------------
@@ -87,7 +87,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
                 pParentWin = pParent->GetWindow();
         }
 
-        OColumnPeer* pPeer = new OColumnPeer(pParentWin,m_xORB);
+        OColumnPeer* pPeer = new OColumnPeer( pParentWin, maContext.getLegacyServiceFactory() );
         OSL_ENSURE(pPeer != NULL, "FmXGridControl::createPeer : imp_CreatePeer didn't return a peer !");
         setPeer( pPeer );
 
