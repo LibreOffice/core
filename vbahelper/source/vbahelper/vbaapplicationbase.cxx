@@ -359,15 +359,10 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const ::rtl::OUString& MacroName, con
         const uno::Any** pArg = aArgsPtrArray;
         const uno::Any** pArgEnd = ( aArgsPtrArray + nArg );
 
-        sal_Int32 nLastArgWithValue = 0;
         sal_Int32 nArgProcessed = 0;
 
         for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
-        {
             aArgs[ nArgProcessed ] =  **pArg;
-            if( (*pArg)->hasValue() )
-                nLastArgWithValue = nArgProcessed;
-        }
 
         // resize array to position of last param with value
         aArgs.realloc( nArgProcessed + 1 );

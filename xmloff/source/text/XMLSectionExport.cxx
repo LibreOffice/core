@@ -1241,7 +1241,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
 
     // tab position
     sal_Bool bRightAligned = sal_False;
-    sal_Bool bRightAlignedOK = sal_False;
 
     // tab position
     sal_Int32 nTabPosition = 0;
@@ -1315,7 +1314,6 @@ void XMLSectionExport::ExportIndexTemplateElement(
                 case TOK_TPARAM_TAB_RIGHT_ALIGNED:
                     bRightAligned =
                         *(sal_Bool *)rValues[i].Value.getValue();
-                    bRightAlignedOK = sal_True;
                     break;
 
                 case TOK_TPARAM_TAB_POSITION:
