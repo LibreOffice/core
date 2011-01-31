@@ -45,7 +45,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
-#include "sbtrace.hxx"
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
@@ -732,11 +731,6 @@ BOOL SbiRuntime::Step()
                 Application::Reschedule();
         }
 
-#ifdef DBG_TRACE_BASIC
-        UINT32 nPC = ( pCode - (const BYTE* )pImg->GetCode() );
-        dbg_traceStep( pMod, nPC, pINST->nCallLvl );
-#endif
-
         SbiOpcode eOp = (SbiOpcode ) ( *pCode++ );
         UINT32 nOp1, nOp2;
         if( eOp <= SbOP0_END )
@@ -773,11 +767,6 @@ BOOL SbiRuntime::Step()
         // (insbesondere nicht nach Compiler-Fehlern zur Laufzeit)
         if( nError && bRun )
         {
-#ifdef DBG_TRACE_BASIC
-            SbError nTraceErr = nError;
-            String aTraceErrMsg = GetSbData()->aErrMsg;
-            bool bTraceErrHandled = true;
-#endif
             SbError err = nError;
             ClearExprStack();
             nError = 0;
@@ -858,19 +847,12 @@ BOOL SbiRuntime::Step()
                 // Kein Error-Hdl gefunden -> altes Vorgehen
                 else
                 {
-#ifdef DBG_TRACE_BASIC
-                    bTraceErrHandled = false;
-#endif
                     pInst->Abort();
                 }
 
                 // ALT: Nur
                 // pInst->Abort();
             }
-
-#ifdef DBG_TRACE_BASIC
-            dbg_traceNotifyError( nTraceErr, aTraceErrMsg, bTraceErrHandled, pINST->nCallLvl );
-#endif
         }
     }
     return bRun;

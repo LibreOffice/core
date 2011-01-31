@@ -36,7 +36,6 @@
 #include "sb.hxx"
 #include "iosys.hxx"
 #include "disas.hxx"
-#include "sbtrace.hxx"
 
 
 static const char* pOp1[] = {
@@ -364,10 +363,6 @@ BOOL SbiDisas::DisasLine( String& rText )
     if( !Fetch() )
         return FALSE;
 
-#ifdef DBG_TRACE_BASIC
-    String aTraceStr_STMNT;
-#endif
-
     // New line?
     if( eOp == _STMNT && nOp1 != nLine )
     {
@@ -400,10 +395,6 @@ BOOL SbiDisas::DisasLine( String& rText )
             rText.AppendAscii( "; " );
             rText += s;
             rText.AppendAscii( _crlf() );
-
-#ifdef DBG_TRACE_BASIC
-            aTraceStr_STMNT = s;
-#endif
         }
     }
 
@@ -462,10 +453,6 @@ BOOL SbiDisas::DisasLine( String& rText )
     }
 
     rText += aPCodeStr;
-
-#ifdef DBG_TRACE_BASIC
-    dbg_RegisterTraceTextForPC( pMod, nPC, aTraceStr_STMNT, aPCodeStr );
-#endif
 
     return TRUE;
 }
