@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#define _FSTEST_CXX "$Revision: 1.5 $"
+#define _FSTEST_CXX
 #include <tools/solar.h>
 
 #include <stdio.h>
