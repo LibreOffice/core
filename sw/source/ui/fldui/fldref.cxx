@@ -226,7 +226,7 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         if ((nsSwGetSetExpType::GSE_SEQ & pType->GetType()) && pType->GetDepends() && pSh->IsUsed(*pType))
         {
             nPos = aTypeLB.InsertEntry(pType->GetName());
-            aTypeLB.SetEntryData(nPos, (void*)(REFFLDFLAG | n));
+            aTypeLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(REFFLDFLAG | n));
         }
     }
 

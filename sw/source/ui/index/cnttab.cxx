@@ -998,7 +998,7 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
         {
             nPos = aTypeLB.InsertEntry(rSh.GetTOXType(TOX_USER, nUser)->GetTypeName(), nPos);
-            sal_uInt32 nEntryData = nUser << 8;
+            sal_uIntPtr nEntryData = nUser << 8;
             nEntryData |= TO_USER;
             aTypeLB.SetEntryData(nPos, (void*)nEntryData);
         }
@@ -2130,7 +2130,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(0);
                         aFirstKeyLB.SelectEntryPos(
-                            aFirstKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aFirstKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aFirstSortUpRB.Check(pKey->bSortAscending);
                         aFirstSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2138,7 +2138,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(1);
                         aSecondKeyLB.SelectEntryPos(
-                            aSecondKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aSecondKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aSecondSortUpRB.Check(pKey->bSortAscending);
                         aSecondSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2146,7 +2146,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
                     {
                         const SwTOXSortKey* pKey = pFType->GetSortKey(2);
                         aThirdKeyLB.SelectEntryPos(
-                            aThirdKeyLB.GetEntryPos((void*)(sal_uInt32)pKey->eField));
+                            aThirdKeyLB.GetEntryPos((void*)(sal_uIntPtr)pKey->eField));
                         aThirdSortUpRB.Check(pKey->bSortAscending);
                         aThirdSortDownRB.Check(!pKey->bSortAscending);
                     }
@@ -2374,7 +2374,7 @@ void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
     sal_uInt32 nData = rToken.nAuthorityField;
     String sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
     sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTemp);
-    aAuthFieldsLB.SetEntryData(nPos, (void*)(nData));
+    aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(nData));
 }
 /*-----------------------------------------------------------------------
 
@@ -2479,7 +2479,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
         {
             String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
             sal_uInt16 nPos = aAuthFieldsLB.InsertEntry(sTmp);
-            aAuthFieldsLB.SetEntryData(nPos, (void*)(i));
+            aAuthFieldsLB.SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
         // #i21237#
@@ -2492,7 +2492,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
-                sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*) nSearch );
+                sal_uInt16  nLstBoxPos = aAuthFieldsLB.GetEntryPos( (void*)(sal_uIntPtr)nSearch );
                 OSL_ENSURE(LISTBOX_ENTRY_NOTFOUND != nLstBoxPos, "Entry not found?");
                 aAuthFieldsLB.RemoveEntry(nLstBoxPos);
             }
@@ -2866,8 +2866,6 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     //now the display
     if(nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
     {
-         Size aToolBoxSize = GetSizePixel();
-
         // #i21237#
         SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
@@ -3053,7 +3051,6 @@ void    SwTokenWindow::InsertAtSelection(
             pControl = aControlList.Next();
         }
 
-        sal_Bool bPostLinkEndFound = sal_False;
         sal_Bool bPostLinkStartFound = sal_False;
         if(!bPreStartLinkFound && !bPreEndLinkFound)
             while(pControl)
@@ -3076,10 +3073,6 @@ void    SwTokenWindow::InsertAtSelection(
                         {
                             bPostLinkStartFound = sal_False;
                             pExchange = 0;
-                        }
-                        else
-                        {
-                            bPostLinkEndFound = sal_True;
                         }
                         break;
                     }
