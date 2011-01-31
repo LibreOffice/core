@@ -197,10 +197,10 @@ testcase db_JDBCMySQL
         'call fInsertIntoTable( aFieldContent(), sTableName)
         'call fCloseDatabase
 
-        'use "dbaccess/optional/includes/b_lvl1_Query.inc"
-        'call b_lvl1_Query(sFileName,"dbase")
+        use "dbaccess/optional/includes/db_Query.inc"
+        call db_Query(sFileName,"MYSQL_JDBC")
 
-        call tRelation( sFileName, aDatabaseProperties(6), "rel1", "rel2" )
+        'call tRelation( sFileName, aDatabaseProperties(6), "rel1", "rel2" )
 
     else
         warnlog "Data Source could not be created - beyond testcases stopped"
