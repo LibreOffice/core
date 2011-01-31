@@ -173,7 +173,7 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     }
                 }
             }
-        } catch (RuntimeException e) {
+        } catch (RuntimeException &e) {
         }
     }
 #endif // GNOME_VFS_ENABLED

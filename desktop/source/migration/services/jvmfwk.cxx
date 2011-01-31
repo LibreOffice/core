@@ -78,7 +78,7 @@ public:
     JavaInfo* pData;
     CJavaInfo();
     ~CJavaInfo();
-    operator JavaInfo* ();
+    operator JavaInfo* () const;
 };
 
 CJavaInfo::CJavaInfo(): pData(NULL)
@@ -90,7 +90,7 @@ CJavaInfo::~CJavaInfo()
     jfw_freeJavaInfo(pData);
 }
 
-CJavaInfo::operator JavaInfo*()
+CJavaInfo::operator JavaInfo*() const
 {
     return pData;
 }

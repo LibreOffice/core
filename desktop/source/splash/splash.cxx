@@ -322,8 +322,6 @@ void SplashScreen::loadConfig()
     if ( sProgressFrameColor.getLength() )
     {
         UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressFrameColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
@@ -333,8 +331,8 @@ void SplashScreen::loadConfig()
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
+            UINT8 nGreen = static_cast< UINT8 >( temp );
+            UINT8 nBlue = static_cast< UINT8 >( sProgressFrameColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressFrameColor = Color( nRed, nGreen, nBlue );
         }
     }
@@ -342,8 +340,6 @@ void SplashScreen::loadConfig()
     if ( sProgressBarColor.getLength() )
     {
         UINT8 nRed = 0;
-        UINT8 nGreen = 0;
-        UINT8 nBlue = 0;
         sal_Int32 idx = 0;
         sal_Int32 temp = sProgressBarColor.getToken( 0, ',', idx ).toInt32();
         if ( idx != -1 )
@@ -353,8 +349,8 @@ void SplashScreen::loadConfig()
         }
         if ( idx != -1 )
         {
-            nGreen = static_cast< UINT8 >( temp );
-            nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
+            UINT8 nGreen = static_cast< UINT8 >( temp );
+            UINT8 nBlue = static_cast< UINT8 >( sProgressBarColor.getToken( 0, ',', idx ).toInt32() );
             _cProgressBarColor = Color( nRed, nGreen, nBlue );
         }
     }

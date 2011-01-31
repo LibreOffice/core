@@ -129,7 +129,7 @@ extern "C" int __stdcall WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, int )
     {
         pSetup->DisplayError( ERROR_OUTOFMEMORY );
     }
-    catch ( UINT nErr )
+    catch ( UINT &nErr )
     {
         pSetup->DisplayError( nErr );
     }

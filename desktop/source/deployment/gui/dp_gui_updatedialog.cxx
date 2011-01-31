@@ -821,10 +821,10 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
         return;
 
     css::uno::Sequence< css::uno::Sequence< rtl::OUString > > aItemList;
-    sal_Int32 nCount = 0;
 
     if ( ! bRecheckOnly )
     {
+        sal_Int32 nCount = 0;
         for ( sal_Int16 i = 0; i < m_updates.getItemCount(); ++i )
         {
             css::uno::Sequence< rtl::OUString > aItem(2);

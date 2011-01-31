@@ -462,8 +462,6 @@ static void
 get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char *name )
 {
     rtl_uString *pKey = NULL, *pValue = NULL;
-    sal_Int32 nIndex = 0;
-    int i = 0;
 
     /* get the value from the ini file */
     rtl_uString_newFromAscii( &pKey, name );
@@ -473,7 +471,8 @@ get_bootstrap_value( int *array, int size, rtlBootstrapHandle handle, const char
     if ( rtl_uString_getLength( pValue ) > 0 )
     {
         rtl_uString *pToken = NULL;
-
+        int i = 0;
+        sal_Int32 nIndex = 0;
         for ( ; ( nIndex >= 0 ) && ( i < size ); ++i )
         {
             nIndex = rtl_uString_getToken( &pToken, pValue, 0, ',', nIndex );
