@@ -26,7 +26,7 @@
  ************************************************************************/
 
 #include <svtools/svtools.hrc>
-#include <about_ooo.hrc>
+#include "about_ooo.hrc"
 
 String ABOUT_STR_COPYRIGHT
 {
