@@ -395,6 +395,7 @@ void SAL_CALL osl_yieldThread(void)
 }
 
 void SAL_CALL osl_setThreadName(char const * name) {
+#ifdef _MSC_VER
     /* See <http://msdn.microsoft.com/en-us/library/xcb2z8hs.aspx>: */
 #pragma pack(push, 8)
     struct {
@@ -413,6 +414,9 @@ void SAL_CALL osl_setThreadName(char const * name) {
             0x406D1388, 0, sizeof info / sizeof (ULONG_PTR),
             (ULONG_PTR *) &info);
     } __except (EXCEPTION_EXECUTE_HANDLER) {}
+#else
+    (void) name;
+#endif
 }
 
 typedef struct _TLS

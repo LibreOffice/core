@@ -163,8 +163,8 @@ void SAL_CALL osl_yieldThread(void);
 
     The name of a thread is usually evaluated for debugging purposes.  Not all
     platforms support this.  On Linux, a set thread name can be observed with
-    "ps -L".  On Windows, a thread name set while a debugger is attached can be
-    observed within the debugger.
+    "ps -L".  On Windows with the Microsoft compiler, a thread name set while a
+    debugger is attached can be observed within the debugger.
 
     @param name  the name of the thread; must not be null; on Linux, only the
     first 16 characters are used
