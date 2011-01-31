@@ -899,28 +899,15 @@ void SAL_CALL ChartModel::setArguments( const Sequence< beans::PropertyValue >& 
             Reference< chart2::data::XDataSource > xDataSource( m_xDataProvider->createDataSource( aArguments ) );
             if( xDataSource.is() )
             {
-                // set new data
-                Reference< chart2::XChartTypeTemplate > xTemplate;
                 Reference< chart2::XDiagram > xDia( getFirstDiagram() );
-                if( xDia.is())
+                if( !xDia.is() )
                 {
-                    // apply new data
-                    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-                        DiagramHelper::getTemplateForDiagram(
-                            xDia, Reference< lang::XMultiServiceFactory >( m_xChartTypeManager, uno::UNO_QUERY ));
-                    xTemplate.set( aTemplateAndService.first );
-                }
-
-                if( !xTemplate.is())
-                    xTemplate.set( impl_createDefaultChartTypeTemplate() );
-
-                if( xTemplate.is())
-                {
-                    if( xDia.is())
-                        xTemplate->changeDiagramData( xDia, xDataSource, aArguments );
-                    else
+                    Reference< chart2::XChartTypeTemplate > xTemplate( impl_createDefaultChartTypeTemplate() );
+                    if( xTemplate.is())
                         setFirstDiagram( xTemplate->createDiagramByDataSource( xDataSource, aArguments ) );
                 }
+                else
+                    xDia->setDiagramData( xDataSource, aArguments );
             }
         }
         catch( lang::IllegalArgumentException & )

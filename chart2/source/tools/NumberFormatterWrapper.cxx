@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_chart2.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "macros.hxx"
 #include <comphelper/processfactory.hxx>
 // header for class SvNumberFormatsSupplierObj
@@ -98,6 +98,25 @@ NumberFormatterWrapper::~NumberFormatterWrapper()
 SvNumberFormatter* NumberFormatterWrapper::getSvNumberFormatter() const
 {
     return m_pNumberFormatter;
+}
+
+Date NumberFormatterWrapper::getNullDate() const
+{
+    USHORT nYear = 1899,nDay = 30,nMonth = 12;
+    Date aRet(nDay,nMonth,nYear);
+
+    util::DateTime aUtilDate;
+    if( m_aNullDate.hasValue() && (m_aNullDate >>= aUtilDate) )
+    {
+        aRet = Date(aUtilDate.Day,aUtilDate.Month,aUtilDate.Year);
+    }
+    else if( m_pNumberFormatter )
+    {
+        Date* pDate = m_pNumberFormatter->GetNullDate();
+        if( pDate )
+            aRet = *pDate;
+    }
+    return aRet;
 }
 
 rtl::OUString NumberFormatterWrapper::getFormattedString(

@@ -56,8 +56,7 @@ PlotterBase::PlotterBase( sal_Int32 nDimensionCount )
 {
 }
 
-    void SAL_CALL PlotterBase
-::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
+void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogicTarget
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const rtl::OUString& rCID )
@@ -77,11 +76,9 @@ PlotterBase::~PlotterBase()
     delete m_pShapeFactory;
 }
 
-void SAL_CALL PlotterBase::setScales( const uno::Sequence< ExplicitScaleData >& rScales
-                                     , sal_Bool bSwapXAndYAxis )
-                            throw (uno::RuntimeException)
+void PlotterBase::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
-    DBG_ASSERT(m_nDimension<=rScales.getLength(),"Dimension of Plotter does not fit two dimension of given scale sequence");
+    DBG_ASSERT(m_nDimension<=static_cast<sal_Int32>(rScales.size()),"Dimension of Plotter does not fit two dimension of given scale sequence");
     m_pPosHelper->setScales( rScales, bSwapXAndYAxis );
 }
 

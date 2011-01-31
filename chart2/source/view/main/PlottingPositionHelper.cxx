@@ -32,12 +32,14 @@
 #include "ViewDefines.hxx"
 #include "Linear3DTransformation.hxx"
 #include "VPolarTransformation.hxx"
-
 #include "ShapeFactory.hxx"
 #include "PropertyMapper.hxx"
+#include "DateHelper.hxx"
+
+#include <com/sun/star/chart/TimeUnit.hpp>
+#include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
-#include <com/sun/star/chart2/AxisType.hpp>
 
 #include <rtl/math.hxx>
 
@@ -57,6 +59,12 @@ PlottingPositionHelper::PlottingPositionHelper()
         , m_nYResolution( 1000 )
         , m_nZResolution( 1000 )
         , m_bMaySkipPointsInRegressionCalculation( true )
+        , m_bDateAxis(false)
+        , m_nTimeResolution( ::com::sun::star::chart::TimeUnit::DAY )
+        , m_aNullDate(30,12,1899)
+        , m_fScaledCategoryWidth(1.0)
+        , m_bAllowShiftXAxisPos(false)
+        , m_bAllowShiftZAxisPos(false)
 {
 }
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
@@ -68,6 +76,12 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
         , m_nYResolution( rSource.m_nYResolution )
         , m_nZResolution( rSource.m_nZResolution )
         , m_bMaySkipPointsInRegressionCalculation( rSource.m_bMaySkipPointsInRegressionCalculation )
+        , m_bDateAxis( rSource.m_bDateAxis )
+        , m_nTimeResolution( rSource.m_nTimeResolution )
+        , m_aNullDate( rSource.m_aNullDate )
+        , m_fScaledCategoryWidth( rSource.m_fScaledCategoryWidth )
+        , m_bAllowShiftXAxisPos( rSource.m_bAllowShiftXAxisPos )
+        , m_bAllowShiftZAxisPos( rSource.m_bAllowShiftZAxisPos )
 {
 }
 
@@ -95,13 +109,13 @@ void PlottingPositionHelper::setTransformationSceneToScreen( const drawing::Homo
     m_xTransformationLogicToScene = NULL;
 }
 
-void PlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >& rScales, sal_Bool bSwapXAndYAxis )
+void PlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
     m_aScales = rScales;
     m_bSwapXAndY = bSwapXAndYAxis;
     m_xTransformationLogicToScene = NULL;
 }
-const uno::Sequence< ExplicitScaleData >& PlottingPositionHelper::getScales() const
+const std::vector< ExplicitScaleData >& PlottingPositionHelper::getScales() const
 {
     return m_aScales;
 }
@@ -129,8 +143,8 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
         AxisOrientation nZAxisOrientation = m_aScales[2].Orientation;
 
         //apply scaling
-        doLogicScaling( &MinX, &MinY, &MinZ );
-        doLogicScaling( &MaxX, &MaxY, &MaxZ);
+        doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
+        doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
         if(m_bSwapXAndY)
         {
@@ -176,9 +190,9 @@ uno::Reference< XTransformation > PlottingPositionHelper::getTransformationScale
 drawing::Position3D PlottingPositionHelper::transformLogicToScene(
     double fX, double fY, double fZ, bool bClip ) const
 {
-    if(bClip)
-        this->clipLogicValues( &fX,&fY,&fZ );
     this->doLogicScaling( &fX,&fY,&fZ );
+    if(bClip)
+        this->clipScaledLogicValues( &fX,&fY,&fZ );
 
     return this->transformScaledLogicToScene( fX, fY, fZ, false );
 }
@@ -254,8 +268,8 @@ void PlottingPositionHelper::clipScaledLogicValues( double* pX, double* pY, doub
     double MaxZ = getLogicMaxZ();
 
     //apply scaling
-    doLogicScaling( &MinX, &MinY, &MinZ );
-    doLogicScaling( &MaxX, &MaxY, &MaxZ);
+    doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
+    doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
     if(pX)
     {
@@ -291,8 +305,8 @@ basegfx::B2DRectangle PlottingPositionHelper::getScaledLogicClipDoubleRect() con
     double MaxZ = getLogicMaxZ();
 
     //apply scaling
-    doLogicScaling( &MinX, &MinY, &MinZ );
-    doLogicScaling( &MaxX, &MaxY, &MaxZ);
+    doUnshiftedLogicScaling( &MinX, &MinY, &MinZ );
+    doUnshiftedLogicScaling( &MaxX, &MaxY, &MaxZ);
 
     basegfx::B2DRectangle aRet( MinX, MaxY, MaxX, MinY );
     return aRet;
@@ -355,7 +369,7 @@ void PolarPlottingPositionHelper::setTransformationSceneToScreen( const drawing:
     PlottingPositionHelper::setTransformationSceneToScreen( rMatrix);
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
 }
-void PolarPlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleData >& rScales, sal_Bool bSwapXAndYAxis )
+void PolarPlottingPositionHelper::setScales( const std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis )
 {
     PlottingPositionHelper::setScales( rScales, bSwapXAndYAxis );
     m_aUnitCartesianToScene =impl_calculateMatrixUnitCartesianToScene( m_aMatrixScreenToScene );
@@ -365,7 +379,7 @@ void PolarPlottingPositionHelper::setScales( const uno::Sequence< ExplicitScaleD
 {
     ::basegfx::B3DHomMatrix aRet;
 
-    if( !m_aScales.getLength() )
+    if( m_aScales.empty() )
         return aRet;
 
     double fTranslate =1.0;
@@ -638,6 +652,41 @@ bool PlottingPositionHelper::isPercentY() const
 double PlottingPositionHelper::getBaseValueY() const
 {
     return m_aScales[1].Origin;
+}
+
+void PlottingPositionHelper::setTimeResolution( long nTimeResolution, const Date& rNullDate )
+{
+    m_nTimeResolution = nTimeResolution;
+    m_aNullDate = rNullDate;
+
+    //adapt category width
+    double fCategoryWidth = 1.0;
+    if( !m_aScales.empty() )
+    {
+        if( m_aScales[0].AxisType == ::com::sun::star::chart2::AxisType::DATE )
+        {
+            m_bDateAxis = true;
+            if( nTimeResolution == ::com::sun::star::chart::TimeUnit::YEAR )
+            {
+                const double fMonthCount = 12.0;//todo: this depends on the DateScaling and must be adjusted in case we use more generic calendars in future
+                fCategoryWidth = fMonthCount;
+            }
+        }
+    }
+    setScaledCategoryWidth(fCategoryWidth);
+}
+
+void PlottingPositionHelper::setScaledCategoryWidth( double fScaledCategoryWidth )
+{
+    m_fScaledCategoryWidth = fScaledCategoryWidth;
+}
+void PlottingPositionHelper::AllowShiftXAxisPos( bool bAllowShift )
+{
+    m_bAllowShiftXAxisPos = bAllowShift;
+}
+void PlottingPositionHelper::AllowShiftZAxisPos( bool bAllowShift )
+{
+    m_bAllowShiftZAxisPos = bAllowShift;
 }
 
 /*

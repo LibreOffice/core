@@ -32,11 +32,11 @@
 #include "DataSourceHelper.hxx"
 
 /** === begin UNO includes === **/
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/chart2/data/XDataSource.hpp>
@@ -67,7 +67,7 @@ namespace chart
     using ::com::sun::star::util::XCloneable;
     using ::com::sun::star::chart2::XChartDocument;
     using ::com::sun::star::chart2::XInternalDataProvider;
-    using ::com::sun::star::chart::XComplexDescriptionAccess;
+    using ::com::sun::star::chart2::XAnyDescriptionAccess;
     using ::com::sun::star::view::XSelectionSupplier;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::chart2::XTitled;
@@ -197,13 +197,13 @@ namespace chart
             // copy data from stored internal data provider
             if( xDoc.is() && xDoc->hasInternalDataProvider())
             {
-                Reference< XComplexDescriptionAccess > xCurrentData( xDoc->getDataProvider(), UNO_QUERY );
-                Reference< XComplexDescriptionAccess > xSavedData( i_data, UNO_QUERY );
+                Reference< XAnyDescriptionAccess > xCurrentData( xDoc->getDataProvider(), UNO_QUERY );
+                Reference< XAnyDescriptionAccess > xSavedData( i_data, UNO_QUERY );
                 if ( xCurrentData.is() && xSavedData.is() )
                 {
                     xCurrentData->setData( xSavedData->getData() );
-                    xCurrentData->setComplexRowDescriptions( xSavedData->getComplexRowDescriptions() );
-                    xCurrentData->setComplexColumnDescriptions( xSavedData->getComplexColumnDescriptions() );
+                    xCurrentData->setAnyRowDescriptions( xSavedData->getAnyRowDescriptions());
+                    xCurrentData->setAnyColumnDescriptions( xSavedData->getAnyColumnDescriptions());
                 }
             }
         }
