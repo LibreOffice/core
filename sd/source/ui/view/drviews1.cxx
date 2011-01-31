@@ -186,7 +186,6 @@ void DrawViewShell::SelectionHasChanged (void)
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
     SdrOle2Obj* pOleObj = NULL;
-    SdrGrafObj* pGrafObj = NULL;
 
     if ( mpDrawView->AreObjectsMarked() )
     {
@@ -206,10 +205,7 @@ void DrawViewShell::SelectionHasChanged (void)
                 UpdateIMapDlg( pObj );
             }
             else if (nSdrObjKind == OBJ_GRAF)
-            {
-                pGrafObj = (SdrGrafObj*) pObj;
                 UpdateIMapDlg( pObj );
-            }
         }
     }
 

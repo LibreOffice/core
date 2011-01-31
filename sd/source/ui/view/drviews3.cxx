@@ -152,8 +152,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
     {
         case SID_SWITCHPAGE:  // BASIC
         {
-            BOOL bWasBasic = FALSE;
-
             // switch page in running slide show
             if(SlideShow::IsRunning(GetViewShellBase()) && rReq.GetArgs())
             {
@@ -193,7 +191,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                         nSelectedPage = (short) nWhatPage;
                         mePageKind    = (PageKind) nWhatKind;
-                        bWasBasic     = TRUE;
                     }
                 }
                 else
@@ -790,7 +787,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     if( mpDrawView->IsTextEdit() )
     {
         Point aPnt1 = GetActiveWindow()->GetWinViewPos();
-        Point aPnt2 = GetActiveWindow()->GetViewOrigin();
         Rectangle aMinMaxRect = Rectangle( aPnt1, Size(ULONG_MAX, ULONG_MAX) );
         rSet.Put( SfxRectangleItem(SID_RULER_LR_MIN_MAX, aMinMaxRect) );
     }
