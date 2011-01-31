@@ -837,13 +837,13 @@ const OUString* ScDPSaveData::GetGrandTotalName() const
     return mpGrandTotalName.get();
 }
 
-ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
+ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const ::rtl::OUString& rName)
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return pDim;
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
@@ -851,25 +851,25 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
     return pNew;
 }
 
-ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const String& rName) const
+ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const ::rtl::OUString& rName) const
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return pDim;
     }
     return NULL; // don't create new
 }
 
-ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
+ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const ::rtl::OUString& rName)
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
             return DuplicateDimension(rName);
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
@@ -883,7 +883,7 @@ ScDPSaveDimension* ScDPSaveData::GetDataLayoutDimension()
     if (pDim)
         return pDim;
 
-    ScDPSaveDimension* pNew = new ScDPSaveDimension( String(), true );
+    ScDPSaveDimension* pNew = new ScDPSaveDimension( ::rtl::OUString(), true );
     aDimList.Insert( pNew, LIST_APPEND );
     return pNew;
 }
@@ -900,7 +900,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDataLayoutDimension() const
     return NULL;
 }
 
-ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
+ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const ::rtl::OUString& rName)
 {
     // always insert new
     //! check if dimension is there?
@@ -912,13 +912,13 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const String& rName)
     return pNew;
 }
 
-void ScDPSaveData::RemoveDimensionByName(const String& rName)
+void ScDPSaveData::RemoveDimensionByName(const ::rtl::OUString& rName)
 {
     long nCount = aDimList.Count();
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
         {
             delete pDim;
             aDimList.Remove(i);
@@ -1219,8 +1219,8 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
     for (sal_uInt32 i = 0; i < n; ++i)
     {
         ScDPSaveDimension* pDim = static_cast<ScDPSaveDimension*>(aDimList.GetObject(i));
-        const String& rDimName = pDim->GetName();
-        if (!rDimName.Len())
+        const ::rtl::OUString& rDimName = pDim->GetName();
+        if (!rDimName.getLength())
             // empty dimension name. It must be data layout.
             continue;
 
@@ -1235,7 +1235,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         for (size_t j = 0; j < mMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
-            String aMemName = pMemberData->GetString();
+            ::rtl::OUString aMemName = pMemberData->GetString();
             if (pDim->GetExistingMemberByName(aMemName))
                 // this member instance already exists. nothing to do.
                 continue;
@@ -1285,7 +1285,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
             }
             if ( !bFound )
             {
-                deletedDims.push_back( ::rtl::OUString(aName) );
+                deletedDims.push_back( aName );
                 aDimList.Remove(i);
                 DBG_TRACE( "\n Remove dim: \t" );
                 DBG_TRACESTR( String( aName ) );

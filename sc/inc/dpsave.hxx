@@ -280,17 +280,17 @@ public:
      *         manages its life cycle; hence the caller must
      *         <i>not</i> delete this object.
      */
-    ScDPSaveDimension* GetDimensionByName(const String& rName);
+    ScDPSaveDimension* GetDimensionByName(const ::rtl::OUString& rName);
     SC_DLLPUBLIC ScDPSaveDimension* GetDataLayoutDimension();
     SC_DLLPUBLIC ScDPSaveDimension* GetExistingDataLayoutDimension() const;
 
-    ScDPSaveDimension* DuplicateDimension(const String& rName);
+    ScDPSaveDimension* DuplicateDimension(const ::rtl::OUString& rName);
     SC_DLLPUBLIC ScDPSaveDimension& DuplicateDimension(const ScDPSaveDimension& rDim);
 
-    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDimensionByName(const String& rName) const;
-    SC_DLLPUBLIC ScDPSaveDimension* GetNewDimensionByName(const String& rName);
+    SC_DLLPUBLIC ScDPSaveDimension* GetExistingDimensionByName(const ::rtl::OUString& rName) const;
+    SC_DLLPUBLIC ScDPSaveDimension* GetNewDimensionByName(const ::rtl::OUString& rName);
 
-    void RemoveDimensionByName(const String& rName);
+    void RemoveDimensionByName(const ::rtl::OUString& rName);
 
     ScDPSaveDimension* GetInnermostDimension(sal_uInt16 nOrientation);
     ScDPSaveDimension* GetFirstDimension(::com::sun::star::sheet::DataPilotFieldOrientation eOrientation);
