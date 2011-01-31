@@ -192,6 +192,13 @@ void Throbber::initImages()
             {
                 ENSURE_OR_CONTINUE( !check->empty(), "Throbber::initImages: illegal image!" );
                 const Size aImageSize = (*check)[0].GetSizePixel();
+
+                if  (   ( aImageSize.Width() > aWindowSizePixel.Width() )
+                    ||  ( aImageSize.Height() > aWindowSizePixel.Height() )
+                    )
+                    // do not use an image set which doesn't fit into the window
+                    continue;
+
                 const sal_Int64 distance =
                         ( aWindowSizePixel.Width() - aImageSize.Width() ) * ( aWindowSizePixel.Width() - aImageSize.Width() )
                     +   ( aWindowSizePixel.Height() - aImageSize.Height() ) * ( aWindowSizePixel.Height() - aImageSize.Height() );
