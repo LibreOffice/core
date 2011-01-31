@@ -33,6 +33,7 @@ $(eval $(call gb_Module_add_targets,sw,\
     Library_sw \
     Library_swd \
     Library_swui \
+    Library_vbaswobj \
     Package_misc \
     Package_uiconfig \
     Package_xml \
