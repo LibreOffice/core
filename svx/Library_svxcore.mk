@@ -50,9 +50,6 @@ $(eval $(call gb_Library_set_include,svxcore,\
 #.IF "$(GUI)"=="WNT"
 #CFLAGS+= -DUNICODE -D_UNICODE
 #.ENDIF
-#.IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
-#NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
-#.ENDIF
 
 $(eval $(call gb_Library_set_defs,svxcore,\
     $$(DEFS) \
@@ -91,7 +88,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/coreservices \
     svx/source/customshapes/EnhancedCustomShape2d \
-    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
     svx/source/customshapes/EnhancedCustomShapeGeometry \
     svx/source/customshapes/EnhancedCustomShapeTypeNames \
     svx/source/dialog/checklbx \
@@ -432,6 +428,24 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtable \
     svx/source/xoutdev/xtablend \
 ))
+
+#.IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
+#NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
+#.ENDIF
+
+# the following source file can't be compiled with optimization by some compilers (crash or endless loop):
+# Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
+# the latter is currently not supported by gbuild and needs a fix here later
+ifeq ($(OS),$(filter-out SOLARIS MACOSX,$(OS)))
+$(eval $(call gb_Library_add_exception_objects,svxcore,\
+    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
+))
+else
+$(eval $(call gb_Library_add_cxxobjects,svxcore,\
+    svx/source/customshapes/EnhancedCustomShapeFunctionParser \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
+))
+endif
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,svxcore,\

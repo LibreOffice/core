@@ -280,7 +280,7 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/syspathw32 \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) -nologo -UPRECOMPILED_HEADERS \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -nologo -UPRECOMPILED_HEADERS \
 ))
 
 ifneq ($(USE_MINGW),)
@@ -319,7 +319,7 @@ else
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) \
 ))
 
 endif
