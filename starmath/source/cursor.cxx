@@ -243,7 +243,7 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
              nLineOffset != 0 &&
              pLine->GetType() == NEXPRESSION &&
              pLine->GetNumSubNodes() == 0){
-        //There's a (sub/super/*) script we can delete
+        //There's a (sub/super) script we can delete
     //Consider selecting the entire script if GetNumSubNodes() != 0 or pLine->GetType() != NEXPRESSION
     //TODO: Handle case where we delete a limit
     */
