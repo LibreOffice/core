@@ -111,11 +111,10 @@ gb_CXXFLAGS := \
 # (see toolkit module for a case where it is necessary to do it this way)
 gb_OBJCXXFLAGS := -x objective-c++ -fobjc-exceptions
 
-gb_CFLAGS_WERROR := \
-    -Werror \
-
-gb_CXXFLAGS_WERROR := \
-    -Werror \
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+gb_CFLAGS_WERROR := -Werror
+gb_CXXFLAGS_WERROR := -Werror
+endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
@@ -217,8 +216,8 @@ define gb_LinkTarget__get_installname
 $(if $(2),-install_name '$(2)$(1)',)
 endef
 
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)

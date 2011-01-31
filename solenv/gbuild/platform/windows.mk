@@ -109,7 +109,6 @@ gb_CFLAGS := \
     -wd4800 \
     -wd4820 \
     -wd4826 \
-    -WX \
     -Zc:forScope,wchar_t- \
     -Zm500 \
 
@@ -156,9 +155,13 @@ gb_CXXFLAGS := \
     -wd4800 \
     -wd4820 \
     -wd4826 \
-    -WX \
     -Zc:forScope,wchar_t- \
     -Zm500 \
+
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+gb_CFLAGS_WERROR := -WX
+gb_CXXFLAGS_WERROR := -WX
+endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
@@ -375,8 +378,8 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
 gb_LinkTarget_INCLUDE :=\
     $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \

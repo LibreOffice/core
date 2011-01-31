@@ -102,6 +102,11 @@ gb_CXXFLAGS := \
     -fvisibility=hidden \
     -pipe \
 
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+gb_CFLAGS_WERROR := -Werror
+gb_CXXFLAGS_WERROR := -Werror
+endif
+
 ifneq ($(strip $(SYSBASE)),)
 gb_CXXFLAGS += --sysroot=$(SYSBASE)
 gb_CFLAGS += --sysroot=$(SYSBASE)
@@ -199,8 +204,8 @@ gb_LinkTarget__RPATHS := \
     SDKBIN:\dORIGIN/../../ure-link/lib \
     NONEBIN:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline

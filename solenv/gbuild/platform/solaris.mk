@@ -84,11 +84,10 @@ gb_CXXFLAGS := \
     +w2 \
     -erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype \
 
-gb_CFLAGS_WERROR := \
-    -errwarn=%all \
-
-gb_CXXFLAGS_WERROR := \
-    -xwe \
+ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
+gb_CFLAGS_WERROR := -errwarn=%all
+gb_CXXFLAGS_WERROR := -xwe
+endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
     -DEXCEPTIONS_ON \
@@ -179,8 +178,8 @@ gb_LinkTarget__RPATHS := \
     SDKBIN:\dORIGIN/../../ure-link/lib \
     NONEBIN:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_LinkTarget_CXXFLAGS += -g
