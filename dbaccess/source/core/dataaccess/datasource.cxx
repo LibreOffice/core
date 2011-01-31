@@ -204,7 +204,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
     if ( xListener.is() )
         xListener->disposing( Source );
 
-    impl_dispose( false );
+    impl_dispose( true );
 }
 
 //--------------------------------------------------------------------------

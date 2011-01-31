@@ -281,14 +281,6 @@ ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
     Message [ en-US ] = "[*] cannot be used as a sort criterion.";
 };
-String STR_QUERY_TRUE
-{
-    Text [ en-US ] = "TRUE" ;
-};
-String STR_QUERY_FALSE
-{
-    Text [ en-US ] = "FALSE" ;
-};
 String STR_QRY_TOO_MANY_TABLES
 {
     Text [ en-US ] = "There are too many tables.";
