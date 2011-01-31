@@ -1131,9 +1131,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                             ULONG nRowKey = nRow + j;
                             SCROW nR = (SCROW)(ULONG)pTab1->Get( nRowKey );
                             if ( !nR )
-                                pTab1->Insert( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                             else if ( nRowsPerRow1 > nR )
-                                pTab1->Replace( nRowKey, (void*) nRowsPerRow1 );
+                                pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow1 );
                                 //2do: wie geht das noch besser?
                             else if ( nRowsPerRow1 < nR && nRowSpan == 1
                               && nTable == nMaxTable )
@@ -1145,8 +1145,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                                     SCROW nR2 = (SCROW)(ULONG)pTab1->Get( nRowKey+1 );
                                     if ( nR2 > nAdd )
                                     {   // nur wenn wirklich Platz
-                                        pTab1->Replace( nRowKey, (void*) nR );
-                                        pTab1->Replace( nRowKey+1, (void*) (nR2 - nAdd) );
+                                        pTab1->Replace( nRowKey, (void*)(sal_IntPtr)nR );
+                                        pTab1->Replace( nRowKey+1, (void*)(sal_IntPtr)(nR2 - nAdd) );
                                         nRowsPerRow2 = nR / nRows;
                                     }
                                 }
@@ -1165,9 +1165,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                             ULONG nRowKey = nRow + j;
                             SCROW nR = (SCROW)(ULONG)pTab2->Get( nRowKey );
                             if ( !nR )
-                                pTab2->Insert( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Insert( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                             else if ( nRowsPerRow2 > nR )
-                                pTab2->Replace( nRowKey, (void*) nRowsPerRow2 );
+                                pTab2->Replace( nRowKey, (void*)(sal_IntPtr)nRowsPerRow2 );
                         }
                     }
                 }

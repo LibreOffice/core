@@ -424,7 +424,6 @@ void XclImpPCField::ConvertStdGroupField( ScDPSaveData& rSaveData, const ScfStri
         if( rBaseFieldName.Len() > 0 )
         {
             // *** create a ScDPSaveGroupItem for each own item, they collect base item names ***
-            typedef ::std::vector< ScDPSaveGroupItem > ScDPSaveGroupItemVec;
             ScDPSaveGroupItemVec aGroupItems;
             aGroupItems.reserve( maItems.size() );
             // initialize with own item names

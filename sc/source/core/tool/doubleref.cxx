@@ -67,7 +67,6 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         return false;
 
     BOOL bValid;
-    BOOL bFound;
     OUString aCellStr;
     SCSIZE nIndex = 0;
     SCROW nRow = 0;
@@ -101,7 +100,6 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if ((nIndex < 1) || bValid)
         {
             // field name in the 2nd column.
-            bFound = FALSE;
             aCellStr = pQueryRef->getString(1, nRow);
             SCCOL nField = pDBRef->findFieldColumn(aCellStr); // TODO: must be case insensitive comparison.
             if (ValidCol(nField))
@@ -116,7 +114,6 @@ bool lcl_createStarQuery(ScQueryParamBase* pParam, const ScDBRangeBase* pDBRef, 
         if (bValid)
         {
             // equality, non-equality operator in the 3rd column.
-            bFound = FALSE;
             aCellStr = pQueryRef->getString(2, nRow);
             lcl_toUpper(aCellStr);
             const sal_Unicode* p = aCellStr.getStr();

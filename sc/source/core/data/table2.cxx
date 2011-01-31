@@ -2829,7 +2829,6 @@ short DiffSign( T a, T b )
 void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
 {
     BOOL bSizeChanged = FALSE;
-    BOOL bMissed      = FALSE;
 
     SCCOL nCol;
     SCROW nRow;
@@ -2872,8 +2871,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                                     {
                                         bFound = TRUE;
                                     }
-                                    else
-                                        bMissed = TRUE;
                                 }
                 }
         }
@@ -2902,8 +2899,6 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
                             {
                                 bFound = TRUE;
                             }
-                            else
-                                bMissed = TRUE;
                         }
             }
         }

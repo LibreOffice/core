@@ -177,7 +177,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     {
         sal_Int32 nEntry = 0;
         if ( aSelection[i] >>= nEntry )
-            aList.Insert( (void*)nEntry, LIST_APPEND );
+            aList.Insert( (void*)(sal_IntPtr)nEntry, LIST_APPEND );
     }
 
     BOOL bAddrInsert = FALSE;       //!???

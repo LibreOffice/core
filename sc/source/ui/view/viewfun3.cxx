@@ -1112,9 +1112,6 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
 #endif
     }
 
-    SCCOL nMarkAddX = 0;
-    SCROW nMarkAddY = 0;
-
     // Also for a filtered selection the area is used, for undo et al.
     if ( aFilteredMark.IsMarked() || bMarkIsFiltered )
     {
@@ -1140,14 +1137,10 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
             }
         }
 
-        if (nBlockAddX > nDestSizeX)
-            nMarkAddX = nBlockAddX - nDestSizeX;            // fuer Merge-Test
-        else
+        if (nBlockAddX <= nDestSizeX)
             nEndCol = nStartCol + nDestSizeX;
 
-        if (nBlockAddY > nDestSizeY)
-            nMarkAddY = nBlockAddY - nDestSizeY;            // fuer Merge-Test
-        else
+        if (nBlockAddY <= nDestSizeY)
         {
             nEndRow = nStartRow + nDestSizeY;
             if (bMarkIsFiltered || nEndRow > aMarkRange.aEnd.Row())
