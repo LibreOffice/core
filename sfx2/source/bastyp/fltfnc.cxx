@@ -1139,17 +1139,6 @@ void SfxFilterContainer::ReadFilters_Impl( BOOL bUpdate )
                     // Try to get filter .. but look for any exceptions!
                     // May be filter was deleted by another thread ...
                     ::rtl::OUString sFilterName = lFilterNames[nFilter];
-
-                    // This debug code can be used to break on inserting/updating
-                    // special debug filters at runtime.
-                    // Otherwise you have to check more then 300 filter names manually .-)
-                    // And conditional breakpoints on unicode values seams not to be supported .-(
-                    #ifdef DEBUG
-                    bool bDBGStop = FALSE;
-                    if (sFilterName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DBG_")))>-1)
-                        bDBGStop = TRUE;
-                    #endif
-
                     ReadSingleFilter_Impl( sFilterName, xTypeCFG, xFilterCFG, bUpdate );
                 }
             }
