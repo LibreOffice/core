@@ -83,7 +83,7 @@ void lcl_SetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
     xProp->setPropertyValue( rName, uno::Any( &bValue, getBooleanCppuType() ) );
 }
 
-ScDPSaveMember::ScDPSaveMember(const String& rName) :
+ScDPSaveMember::ScDPSaveMember(const ::rtl::OUString& rName) :
     aName( rName ),
     mpLayoutName(NULL),
     nVisibleMode( SC_DPSAVEMODE_DONTKNOW ),
@@ -135,7 +135,7 @@ void ScDPSaveMember::SetShowDetails(bool bSet)
     nShowDetailsMode = bSet;
 }
 
-void ScDPSaveMember::SetName( const String& rNew )
+void ScDPSaveMember::SetName( const ::rtl::OUString& rNew )
 {
     // Used only if the source member was renamed (groups).
     // For UI renaming of members, a layout name must be used.

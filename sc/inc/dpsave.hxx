@@ -29,6 +29,7 @@
 #ifndef SC_DPSAVE_HXX
 #define SC_DPSAVE_HXX
 
+#include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/string.hxx>
 #include <tools/list.hxx>
@@ -58,19 +59,19 @@ class ScDPTableData;
 class ScDPSaveMember
 {
 private:
-    String aName;
+    ::rtl::OUString aName;
     ::std::auto_ptr<rtl::OUString> mpLayoutName; // custom name to be displayed in the table.
     sal_uInt16 nVisibleMode;
     sal_uInt16 nShowDetailsMode;
 
 public:
-    ScDPSaveMember(const String& rName);
+    ScDPSaveMember(const ::rtl::OUString& rName);
     ScDPSaveMember(const ScDPSaveMember& r);
     ~ScDPSaveMember();
 
     bool operator== ( const ScDPSaveMember& r ) const;
 
-    const String& GetName() const
+    const ::rtl::OUString& GetName() const
         { return aName; }
 
     bool HasIsVisible() const;
@@ -83,7 +84,7 @@ public:
     bool GetShowDetails() const
         { return bool(nShowDetailsMode); }
 
-    void SetName( const String& rNew ); // used if the source member was renamed (groups)
+    void SetName( const ::rtl::OUString& rNew ); // used if the source member was renamed (groups)
 
     SC_DLLPUBLIC void SetLayoutName( const ::rtl::OUString& rName );
     SC_DLLPUBLIC const ::rtl::OUString*  GetLayoutName() const;

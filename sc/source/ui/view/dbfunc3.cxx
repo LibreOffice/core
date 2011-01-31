@@ -1680,7 +1680,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
                             // already used.
                             if (rString.Len())
                             {
-                                if (rString.EqualsIgnoreCaseAscii(pMem->GetName()))
+                                if (::rtl::OUString(rString).equalsIgnoreAsciiCase(pMem->GetName()))
                                 {
                                     pMem->RemoveLayoutName();
                                     bChange = true;
