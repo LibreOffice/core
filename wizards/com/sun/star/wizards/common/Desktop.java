@@ -161,7 +161,7 @@ public class Desktop
 
     public static void dispatchURL(XMultiServiceFactory xMSF, String sURL, XFrame xFrame)
     {
-        dispatchURL(xMSF, sURL, xFrame, "");
+        dispatchURL(xMSF, sURL, xFrame, PropertyNames.EMPTY_STRING);
     }
 
     public static void dispatchURL(XDispatch _xDispatch, com.sun.star.util.URL oURL)
@@ -190,7 +190,7 @@ public class Desktop
     {
         boolean bElementexists = true;
         int i = 1;
-        String sIncSuffix = "";
+        String sIncSuffix = PropertyNames.EMPTY_STRING;
         String BaseName = ElementName;
         while (bElementexists == true)
         {
@@ -212,7 +212,7 @@ public class Desktop
     {
         boolean bElementexists = true;
         int i = 1;
-        String sIncSuffix = "";
+        String sIncSuffix = PropertyNames.EMPTY_STRING;
         String BaseName = ElementName;
         while (bElementexists == true)
         {
@@ -238,7 +238,7 @@ public class Desktop
             int nContFlags = nStartFlags;
             Object ocharservice = _xMSF.createInstance("com.sun.star.i18n.CharacterClassification");
             XCharacterClassification xCharacterClassification = (XCharacterClassification) UnoRuntime.queryInterface(XCharacterClassification.class, ocharservice);
-            ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, "", nContFlags, " ");
+            ParseResult aResult = xCharacterClassification.parsePredefinedToken(KParseType.IDENTNAME, _sString, 0, _aLocale, nStartFlags, PropertyNames.EMPTY_STRING, nContFlags, PropertyNames.SPACE);
             return aResult.EndPos;
         }
         catch (Exception e)
@@ -258,7 +258,7 @@ public class Desktop
             if (i < snewname.length())
             {
                 String sspecialchar = snewname.substring(i, i + 1);
-                snewname = JavaTools.replaceSubString(snewname, "", sspecialchar);
+                snewname = JavaTools.replaceSubString(snewname, PropertyNames.EMPTY_STRING, sspecialchar);
             }
         }
         return snewname;
@@ -322,7 +322,7 @@ public class Desktop
             }
             scompname = _sElementName + _sSuffixSeparator + a++;
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     /**
@@ -377,9 +377,9 @@ public class Desktop
             try
             {
                 TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
-                UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
+                UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
                 BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/../wizard/bitmap");
-                WorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
+                WorkPath = FileAccess.getOfficePath(xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
             }
             catch (NoValidPathException nopathexception)
             {
@@ -397,20 +397,20 @@ public class Desktop
         catch (NoValidPathException nopathexception)
         {
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public static String getUserTemplatePath(XMultiServiceFactory _xMSF)
     {
         try
         {
-            String sUserTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "user", "");
+            String sUserTemplatePath = FileAccess.getOfficePath(_xMSF, "Template", "user", PropertyNames.EMPTY_STRING);
             return sUserTemplatePath;
         }
         catch (NoValidPathException nopathexception)
         {
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public static String getBitmapPath(XMultiServiceFactory _xMSF)
@@ -423,20 +423,20 @@ public class Desktop
         catch (NoValidPathException nopathexception)
         {
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public static String getWorkPath(XMultiServiceFactory _xMSF)
     {
         try
         {
-            String sWorkPath = FileAccess.getOfficePath(_xMSF, "Work", "", "");
+            String sWorkPath = FileAccess.getOfficePath(_xMSF, "Work", PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING);
             return sWorkPath;
         }
         catch (NoValidPathException nopathexception)
         {
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public static XStringSubstitution createStringSubstitution(XMultiServiceFactory xMSF)

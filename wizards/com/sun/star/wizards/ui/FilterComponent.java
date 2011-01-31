@@ -128,7 +128,7 @@ public class FilterComponent
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject)
         {
             int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
-            String sControlName = "";
+            String sControlName = PropertyNames.EMPTY_STRING;
             switch (iKey)
             {
                 case SO_FIRSTFIELDNAME:
@@ -232,7 +232,7 @@ public class FilterComponent
         {
             e.printStackTrace(System.out);
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public PropertyValue[][] getFilterConditions()
@@ -249,7 +249,7 @@ public class FilterComponent
                 final XPropertyContainer column = (XPropertyContainer) UnoRuntime.queryInterface(XPropertyContainer.class, oQueryMetaData.xMSF.createInstance(serviceName));
 
                 column.addProperty("Type", PropertyAttribute.BOUND, DataType.VARCHAR);
-                column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, "");
+                column.addProperty(PropertyNames.PROPERTY_NAME, PropertyAttribute.BOUND, PropertyNames.EMPTY_STRING);
                 column.addProperty("Value", (short) (PropertyAttribute.MAYBEVOID | PropertyAttribute.REMOVABLE), null);
                 final XPropertySet columnSet = UnoRuntime.queryInterface(XPropertySet.class, column);
 
@@ -341,7 +341,7 @@ public class FilterComponent
             String sreturn = JavaTools.replaceSubString(_BaseString, FieldName, "<FIELDNAME>");
             String soperator = sLogicOperators[_filtercondition.Handle - 1];
             sreturn = JavaTools.replaceSubString(sreturn, soperator, "<LOGICOPERATOR>");
-            String sDisplayValue = "";
+            String sDisplayValue = PropertyNames.EMPTY_STRING;
             if ((_filtercondition.Handle != SQLFilterOperator.SQLNULL)
                     && (_filtercondition.Handle != SQLFilterOperator.NOT_SQLNULL)
                     && !AnyConverter.isVoid(_filtercondition.Value))
@@ -355,7 +355,7 @@ public class FilterComponent
         {
             e.printStackTrace(System.out);
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     private int getfilterstate()
@@ -678,7 +678,7 @@ public class FilterComponent
                             PropertyNames.PROPERTY_POSITION_X,
                             PropertyNames.PROPERTY_POSITION_Y,
                             PropertyNames.PROPERTY_STEP,
-                            "StringItemList",
+                            PropertyNames.STRING_ITEM_LIST,
                             PropertyNames.PROPERTY_TABINDEX,
                             PropertyNames.PROPERTY_WIDTH
                         },
@@ -734,11 +734,11 @@ public class FilterComponent
         {
             try
             {
-                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), "SelectedItems"));
+                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.SELECTED_ITEMS));
                 if (SelFields.length > 0)
                 {
                     int nSelOperator = getSelectedOperator();
-                    // short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
+                    // short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), PropertyNames.SELECTED_ITEMS));
                     if (nSelOperator == com.sun.star.sdb.SQLFilterOperator.SQLNULL
                             || /* is null */ nSelOperator == com.sun.star.sdb.SQLFilterOperator.NOT_SQLNULL) /* is not null */
 
@@ -761,7 +761,7 @@ public class FilterComponent
                         if (!AnyConverter.isVoid(oValue))
                         {
                             String sValue = (String.valueOf(oValue));
-                            return (!sValue.equals(""));
+                            return (!sValue.equals(PropertyNames.EMPTY_STRING));
                         }
                     }
                 }
@@ -788,8 +788,8 @@ public class FilterComponent
                     String sValue = AnyConverter.toString(_filtercondition.Value);
                     if (sValue.indexOf("{D '") > -1)
                     {
-                        sValue = JavaTools.replaceSubString(sValue, "", "{D '");
-                        sValue = JavaTools.replaceSubString(sValue, "", "' }");
+                        sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "{D '");
+                        sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
@@ -801,8 +801,8 @@ public class FilterComponent
                     }
                     else if (sValue.indexOf("{T '") > -1)
                     {
-                        sValue = JavaTools.replaceSubString(sValue, "", "{T '");
-                        sValue = JavaTools.replaceSubString(sValue, "", "' }");
+                        sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "{T '");
+                        sValue = JavaTools.replaceSubString(sValue, PropertyNames.EMPTY_STRING, "' }");
                         try
                         {
                             oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
@@ -836,7 +836,7 @@ public class FilterComponent
 
         protected void setFieldNames(String[] _FieldNames)
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), "StringItemList", _FieldNames);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.STRING_ITEM_LIST, _FieldNames);
             FieldNames = _FieldNames;
         }
 
@@ -867,7 +867,7 @@ public class FilterComponent
                 };
                 try
                 {
-                    iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
+                    iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), PropertyNames.SELECTED_ITEMS));
                 }
                 catch (Exception e)
                 {
@@ -875,7 +875,7 @@ public class FilterComponent
                 }
                 if ((iselected.length) == 0)
                 {
-                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[]
+                    Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), PropertyNames.SELECTED_ITEMS, new short[]
                             {
                                 0
                             });
@@ -891,7 +891,7 @@ public class FilterComponent
         {
             try
             {
-                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), "SelectedItems"));
+                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTFIELDNAME]), PropertyNames.SELECTED_ITEMS));
                 return FieldNames[SelFields[0]];
             }
             catch (Exception exception)
@@ -907,7 +907,7 @@ public class FilterComponent
         {
             try
             {
-                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
+                short[] SelFields = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), PropertyNames.SELECTED_ITEMS));
                 switch (SelFields[0])
                 {
                     case 0:

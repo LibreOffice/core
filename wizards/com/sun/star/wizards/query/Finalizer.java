@@ -118,7 +118,7 @@ public class Finalizer
                 });
         m_queryWizard.insertTextField("txtSummary", 0, null, new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ReadOnly", PropertyNames.PROPERTY_STEP, "VScroll", PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.READ_ONLY, PropertyNames.PROPERTY_STEP, "VScroll", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -142,7 +142,7 @@ public class Finalizer
             String sCurQueryName = AnyConverter.toString(Helper.getUnoPropertyValue(UnoDialog.getModel(m_aTxtTitle), "Text"));
             if (sCurQueryName != null)
             {
-                if (sCurQueryName.equals(""))
+                if (sCurQueryName.equals(PropertyNames.EMPTY_STRING))
                 {
                     String[] sCommandNames = CurDBMetaData.getIncludedCommandNames();
                     sCurQueryName = resQuery + "_" + sCommandNames[0];
@@ -158,7 +158,7 @@ public class Finalizer
         catch (com.sun.star.uno.Exception exception)
         {
             exception.printStackTrace(System.out);
-            return "";
+            return PropertyNames.EMPTY_STRING;
         }
     }
 
@@ -176,7 +176,7 @@ public class Finalizer
             )
             return queryName;
 
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public final boolean displayQueryDesign()

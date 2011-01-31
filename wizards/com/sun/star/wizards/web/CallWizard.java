@@ -38,6 +38,7 @@ import com.sun.star.task.XJob;
 import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.Resource;
 
 /**
@@ -107,7 +108,7 @@ public class CallWizard
          */
         public void trigger(String str)
         {
-            if (str.equalsIgnoreCase("start"))
+            if (str.equalsIgnoreCase(PropertyNames.START))
             {
                 if (webWizard == null)
                 {
@@ -226,7 +227,7 @@ public class CallWizard
 
             try
             {
-                byteReturn = ("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {
@@ -284,7 +285,7 @@ public class CallWizard
         {
             XMultiServiceFactory xmsf = Desktop.connect(ConnectStr);
             CallWizard.WizardImplementation ww = new CallWizard.WizardImplementation(xmsf);
-            ww.trigger("start");
+            ww.trigger(PropertyNames.START);
 
         }
         catch (Exception exception)

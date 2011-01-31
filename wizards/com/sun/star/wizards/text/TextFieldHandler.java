@@ -82,7 +82,7 @@ public class TextFieldHandler
             Object oTextField = Helper.getUnoPropertyValue(xTextRange, "TextField");
             if (com.sun.star.uno.AnyConverter.isVoid(oTextField))
             {
-                return "";
+                return PropertyNames.EMPTY_STRING;
             }
             else
             {
@@ -96,7 +96,7 @@ public class TextFieldHandler
         {
             exception.printStackTrace(System.out);
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public void insertUserField(XTextCursor xTextCursor, String FieldName, String FieldTitle)

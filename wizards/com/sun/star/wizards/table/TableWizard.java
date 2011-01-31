@@ -53,7 +53,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     ScenarioSelector curScenarioSelector;
     FieldFormatter curFieldFormatter;
     PrimaryKeyHandler curPrimaryKeyHandler;
-    String sMsgWizardName = "";
+    String sMsgWizardName = PropertyNames.EMPTY_STRING;
     public Hashtable fielditems;
     int wizardmode;
     String tablename;
@@ -66,7 +66,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
     public static final int SOFIELDSFORMATPAGE = 2;
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
-    private String sMsgColumnAlreadyExists = "";
+    private String sMsgColumnAlreadyExists = PropertyNames.EMPTY_STRING;
     String WizardHeaderText[] = new String[8];
 
     private String m_tableName;
@@ -325,15 +325,15 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
             Object oFormWizard = this.xMSF.createInstance("com.sun.star.wizards.form.CallFormWizard");
 
             NamedValueCollection wizardContext = new NamedValueCollection();
-            wizardContext.put( "ActiveConnection", curTableDescriptor.DBConnection );
+            wizardContext.put( PropertyNames.ACTIVE_CONNECTION, curTableDescriptor.DBConnection );
             wizardContext.put( "DataSource", curTableDescriptor.getDataSource() );
-            wizardContext.put( "CommandType", CommandType.TABLE );
-            wizardContext.put( "Command", scomposedtablename );
+            wizardContext.put( PropertyNames.COMMAND_TYPE, CommandType.TABLE );
+            wizardContext.put( PropertyNames.COMMAND, scomposedtablename );
             wizardContext.put( "DocumentUI", m_docUI );
             XInitialization xInitialization = UnoRuntime.queryInterface( XInitialization.class, oFormWizard );
             xInitialization.initialize( wizardContext.getPropertyValues() );
             XJobExecutor xJobExecutor = UnoRuntime.queryInterface( XJobExecutor.class, oFormWizard );
-            xJobExecutor.trigger("start");
+            xJobExecutor.trigger(PropertyNames.START);
         }
         catch (Exception e)
         {
@@ -387,7 +387,7 @@ public class TableWizard extends DatabaseObjectWizard implements XTextListener, 
         {
             jexception.printStackTrace(System.out);
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public boolean getTableResources()

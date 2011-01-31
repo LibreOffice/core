@@ -81,8 +81,8 @@ public class FieldLinker extends DBLimitedFieldSelection
                 SOTHIRDLINKLST = 2;
                 SOFOURTHLINKLST = 3;
                 IListBoxPosX = new Integer(iCompPosX + 6);
-                sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];""; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
-                sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];""; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+                sSlaveListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 20, 4); //new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
+                sMasterListHeader = CurUnoDialog.m_oResource.getResArray(UIConsts.RID_FORM + 24, 4);// new String[rowcount];PropertyNames.EMPTY_STRING; //CurUnoDialog.m_oResource.getResText(UIConsts.RID_FORM + 40);
                 SOLINKLST = new int[]
                         {
                             SOFIRSTLINKLST, SOSECLINKLST, SOTHIRDLINKLST, SOFOURTHLINKLST
@@ -212,8 +212,8 @@ public class FieldLinker extends DBLimitedFieldSelection
             Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.PROPERTY_ENABLED, new Boolean(bDoEnable));
             if (bDoEnable == false)
             {
-                Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), "SelectedItems", new short[] { 0 });
-                Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), "SelectedItems", new short[] { 0 });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[i]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
+                Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[i]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
             }
         }
     }
@@ -225,11 +225,11 @@ public class FieldLinker extends DBLimitedFieldSelection
 
         if ((iNextMasterItemPos != 0) && (iNextSlaveItemPos != 0))
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex]), "SelectedItems", new short[] {iNextMasterItemPos });
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex]), "SelectedItems", new short[]  {iNextSlaveItemPos});
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex]), PropertyNames.SELECTED_ITEMS, new short[] {iNextMasterItemPos });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex]), PropertyNames.SELECTED_ITEMS, new short[]  {iNextSlaveItemPos});
 
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex + 1]), "SelectedItems", new short[] { 0 });
-            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex + 1]), "SelectedItems", new short[] { 0 });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstMasterFields[curindex + 1]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
+            Helper.setUnoPropertyValue(UnoDialog.getModel(lstSlaveFields[curindex + 1]), PropertyNames.SELECTED_ITEMS, new short[] { 0 });
             toggleControlRow(curindex, true);
         }
     }

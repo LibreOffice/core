@@ -265,7 +265,7 @@ public abstract class WWD_Startup extends WWD_General
         ilLayouts.setListModel(settings.cp_Layouts);
         ilLayouts.create(this);
 
-        checkContent(settings.cp_DefaultSession.cp_Content, new Task("", "", 99999), this.xControl);
+        checkContent(settings.cp_DefaultSession.cp_Content, new Task(PropertyNames.EMPTY_STRING, PropertyNames.EMPTY_STRING, 99999), this.xControl);
 
         //saved sessions, styles, combobox save session.
         // also set the chosen saved session...
@@ -548,7 +548,7 @@ public abstract class WWD_Startup extends WWD_General
     protected void selectSession()
     {
         int selectedSession = 0;
-        if (settings.cp_LastSavedSession != null && !settings.cp_LastSavedSession.equals(""))
+        if (settings.cp_LastSavedSession != null && !settings.cp_LastSavedSession.equals(PropertyNames.EMPTY_STRING))
         {
 
             Object ses = settings.cp_SavedSessions.getElement(settings.cp_LastSavedSession);
@@ -557,7 +557,7 @@ public abstract class WWD_Startup extends WWD_General
                 selectedSession = settings.cp_SavedSessions.getIndexOf(ses);
             }
         }
-        Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", new short[]
+        Helper.setUnoPropertyValue(getModel(lstLoadSettings), PropertyNames.SELECTED_ITEMS, new short[]
                 {
                     (short) selectedSession
                 });
@@ -682,8 +682,8 @@ public abstract class WWD_Startup extends WWD_General
                 });
         pubAware.add(uda);
         pubAware.add(
-                isLabel ? UnoDataAware.attachLabel(p, "URL", textbox, checkPublish, false)
-                : UnoDataAware.attachEditControl(p, "URL", textbox, checkPublish, false));
+                isLabel ? UnoDataAware.attachLabel(p, PropertyNames.URL, textbox, checkPublish, false)
+                : UnoDataAware.attachEditControl(p, PropertyNames.URL, textbox, checkPublish, false));
 
     }
 
@@ -806,7 +806,7 @@ public abstract class WWD_Startup extends WWD_General
         catch (FileNotFoundException ex)
         {
 
-            int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer(), "WarningBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL, "") + "\n\n" + resources.resSpecifyNewFileLocation);
+            int relocate = SystemDialog.showMessageBox(xMSF, xC.getPeer(), "WarningBox", VclWindowPeerAttribute.YES_NO + VclWindowPeerAttribute.DEF_NO, getFileAccess().getPath(doc.cp_URL, PropertyNames.EMPTY_STRING) + "\n\n" + resources.resSpecifyNewFileLocation);
 
             if (relocate == 2)
             {
@@ -831,7 +831,7 @@ public abstract class WWD_Startup extends WWD_General
             //file is a directory
             AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),
                     JavaTools.replaceSubString(resources.resErrIsDirectory,
-                    getFileAccess().getPath(doc.cp_URL, ""),
+                    getFileAccess().getPath(doc.cp_URL, PropertyNames.EMPTY_STRING),
                     "%FILENAME"),
                     ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
@@ -842,7 +842,7 @@ public abstract class WWD_Startup extends WWD_General
             exp.printStackTrace();
             AbstractErrorHandler.showMessage(xMSF, xControl.getPeer(),
                     JavaTools.replaceSubString(resources.resErrDocValidate,
-                    getFileAccess().getPath(doc.cp_URL, ""),
+                    getFileAccess().getPath(doc.cp_URL, PropertyNames.EMPTY_STRING),
                     "%FILENAME"), ErrorHandler.ERROR_PROCESS_FATAL);
             return false;
         }
@@ -907,7 +907,7 @@ public abstract class WWD_Startup extends WWD_General
     void updateBackgroundText()
     {
         String bg = settings.cp_DefaultSession.cp_Design.cp_BackgroundImage;
-        if (bg == null || bg.equals(""))
+        if (bg == null || bg.equals(PropertyNames.EMPTY_STRING))
         {
             bg = resources.resBackgroundNone;
         }
@@ -922,7 +922,7 @@ public abstract class WWD_Startup extends WWD_General
     {
         String iconset = settings.cp_DefaultSession.cp_Design.cp_IconSet;
         String iconsetName;
-        if (iconset == null || iconset.equals(""))
+        if (iconset == null || iconset.equals(PropertyNames.EMPTY_STRING))
         {
             iconsetName = resources.resIconsetNone;
         }

@@ -59,9 +59,17 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.container.XNamed;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FormHandler
 {
+    private static final String CHECKBOX = "CheckBox";
+    private static final String DATEFIELD = "DateField";
+    private static final String FORMATTEDFIELD = "FormattedField";
+    private static final String IMAGECONTROL = "ImageControl";
+    private static final String TEXTFIELD = "TextField";
+    private static final String TIMEFIELD = "TimeField";
 
     public XFormsSupplier xFormsSupplier;
     public XMultiServiceFactory xMSFDoc;
@@ -124,30 +132,30 @@ public class FormHandler
         sModelServices[SOIMAGECONTROL] = "com.sun.star.form.component.DatabaseImageControl";
 
         oControlData = new ControlData[22];
-        oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, "CheckBox", "CheckBox", false);
-        oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, "CheckBox", "CheckBox", false);
-        oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[3] = createControlData(DataType.SMALLINT,     SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[4] = createControlData(DataType.INTEGER,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[5] = createControlData(DataType.BIGINT,       SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[6] = createControlData(DataType.FLOAT,        SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[7] = createControlData(DataType.REAL,         SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[8] = createControlData(DataType.DOUBLE,       SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[9] = createControlData(DataType.NUMERIC,      SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[10] = createControlData(DataType.DECIMAL,     SONUMERICCONTROL, "FormattedField", "FormattedField", false);
-        oControlData[11] = createControlData(DataType.CHAR,        SOTEXTBOX, "TextField", "TextField", false);
-        oControlData[12] = createControlData(DataType.VARCHAR,     SOTEXTBOX, "TextField", "TextField", true);
-        oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, "TextField", "TextField", true);
-        oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, "DateField", "DateField", false);
-        oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, "TimeField", "TimeField", false);
-        oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, "DateField", "TextField", false);
+        oControlData[0] = createControlData(DataType.BIT,          SOCHECKBOX, CHECKBOX, CHECKBOX, false);
+        oControlData[1] = createControlData(DataType.BOOLEAN,      SOCHECKBOX, CHECKBOX, CHECKBOX, false);
+        oControlData[2] = createControlData(DataType.TINYINT,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[3] = createControlData(DataType.SMALLINT,     SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[4] = createControlData(DataType.INTEGER,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[5] = createControlData(DataType.BIGINT,       SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[6] = createControlData(DataType.FLOAT,        SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[7] = createControlData(DataType.REAL,         SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[8] = createControlData(DataType.DOUBLE,       SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[9] = createControlData(DataType.NUMERIC,      SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[10] = createControlData(DataType.DECIMAL,     SONUMERICCONTROL, FORMATTEDFIELD, FORMATTEDFIELD, false);
+        oControlData[11] = createControlData(DataType.CHAR,        SOTEXTBOX, TEXTFIELD, TEXTFIELD, false);
+        oControlData[12] = createControlData(DataType.VARCHAR,     SOTEXTBOX, TEXTFIELD, TEXTFIELD, true);
+        oControlData[13] = createControlData(DataType.LONGVARCHAR, SOTEXTBOX, TEXTFIELD, TEXTFIELD, true);
+        oControlData[14] = createControlData(DataType.DATE,        SODATECONTROL, DATEFIELD, DATEFIELD, false);
+        oControlData[15] = createControlData(DataType.TIME,        SOTIMECONTROL, TIMEFIELD, TIMEFIELD, false);
+        oControlData[16] = createControlData(DataType.TIMESTAMP,   SODATECONTROL, DATEFIELD, TEXTFIELD, false);
         // oImageControlData = new ControlData[4];
-        oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, "ImageControl", "TextField", false);
-        oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[17] = createControlData(DataType.BINARY,      SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
+        oControlData[18] = createControlData(DataType.VARBINARY,   SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
+        oControlData[19] = createControlData(DataType.LONGVARBINARY, SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
+        oControlData[20] = createControlData(DataType.BLOB,        SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
 
-        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, "ImageControl", "TextField", false);
+        oControlData[21] = createControlData(DataType.OTHER,       SOIMAGECONTROL, IMAGECONTROL, TEXTFIELD, false);
     }
 
     public int getControlType(int _fieldtype)
@@ -209,8 +217,7 @@ public class FormHandler
 
     public XNameContainer getDocumentForms()
     {
-        XNameContainer xNamedForms = xFormsSupplier.getForms();
-        return xNamedForms;
+        return xFormsSupplier.getForms();
     }
 
     public String getValueofHiddenControl(XNameAccess xNamedForm, String ControlName, String sMsg) throws com.sun.star.wizards.document.FormHandler.UnknownHiddenControlException
@@ -238,7 +245,7 @@ public class FormHandler
         try
         {
             XInterface xHiddenControl;
-            if (xNameAccess.hasByName(ControlName) == true)
+            if (xNameAccess.hasByName(ControlName))
             {
                 xHiddenControl = (XInterface) AnyConverter.toObject(new Type(XInterface.class), xNameAccess.getByName(ControlName));
             }
@@ -249,9 +256,9 @@ public class FormHandler
             }
             Helper.setUnoPropertyValue(xHiddenControl, "HiddenValue", ControlValue);
         }
-        catch (Exception exception)
+        catch (Exception ex)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -285,9 +292,9 @@ public class FormHandler
                 xNamedFormContainer.removeByName(_FormName);
             }
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.uno.Exception ex)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -306,7 +313,7 @@ public class FormHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -318,11 +325,11 @@ public class FormHandler
         }
         catch ( WrappedTargetException e )
         {
-            e.printStackTrace( System.err );
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
         catch( final NoSuchElementException e )
         {
-            e.printStackTrace( System.err );
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -363,9 +370,9 @@ public class FormHandler
                 return getFormByName(_FormName);
             }
         }
-        catch (com.sun.star.uno.Exception exception)
+        catch (com.sun.star.uno.Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
             return null;
         }
     }
@@ -393,7 +400,7 @@ public class FormHandler
         }
         catch (IllegalArgumentException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
         return xNamedForm;
     }
@@ -490,7 +497,7 @@ public class FormHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -538,7 +545,7 @@ public class FormHandler
         }
         catch (Exception e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
             return null;
         }
     }
@@ -586,9 +593,9 @@ public class FormHandler
             XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, this.xMSFDoc.createInstance("com.sun.star.text.DocumentSettings"));
             xPropertySet.setPropertyValue("DoNotCaptureDrawObjsOnPage", new Boolean(!_bCaptureObjects));
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            ex.printStackTrace(System.out);
+            Logger.getLogger(FormHandler.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 }

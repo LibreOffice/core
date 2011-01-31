@@ -320,7 +320,7 @@ public abstract class DataAware {
                 ex2.printStackTrace();
             } catch (NullPointerException npe) {
                 if (getMethod.getReturnType().equals(String.class))
-                    return "";
+                    return PropertyNames.EMPTY_STRING;
                 if (getMethod.getReturnType().equals(Short.class))
                     return new Short((short) 0);
                 if (getMethod.getReturnType().equals(Integer.class))

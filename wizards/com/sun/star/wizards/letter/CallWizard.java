@@ -38,6 +38,7 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.task.XJob;
 import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.Type;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * This class capsulates the class, that implements the minimal component, a factory for
@@ -105,7 +106,7 @@ public class CallWizard
          */
         public void trigger(String str)
         {
-            if (str.equalsIgnoreCase("start"))
+            if (str.equalsIgnoreCase(PropertyNames.START))
             {
                 LetterWizardDialogImpl lw = new LetterWizardDialogImpl(xmultiservicefactory);
                 if (!LetterWizardDialogImpl.running)
@@ -189,7 +190,7 @@ public class CallWizard
 
             try
             {
-                byteReturn = ("" + this.hashCode()).getBytes();
+                byteReturn = (PropertyNames.EMPTY_STRING + this.hashCode()).getBytes();
             }
             catch (Exception exception)
             {

@@ -53,9 +53,16 @@ import com.sun.star.wizards.text.TextStyleHandler;
 import com.sun.star.wizards.text.TextFieldHandler;
 import com.sun.star.wizards.text.ViewHandler;
 import com.sun.star.wizards.document.FormHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implements Comparator
 {
+
+    private static final String ISLANDSCAPE = "IsLandscape";
+    private static final String ISVISIBLE = "IsVisible";
+    private static final String QUERYNAME = "QueryName";
+    private static final String SIZE = "Size";
     // private XMultiServiceFactory xMSF;
     // private XMultiServiceFactory xMSFDoc;
     private Object ReportPageStyle;
@@ -102,7 +109,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         lateInit(oResource, _aRP);
     }
 
-    void lateInit(Resource oResource, RecordParser _aRecordParser)
+    private void lateInit(Resource oResource, RecordParser _aRecordParser)
     {
         oTextTableHandler = new TextTableHandler(xMSFDoc, xTextDocument);
         oTextSectionHandler = new TextSectionHandler(xMSFDoc, xTextDocument);
@@ -146,12 +153,12 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             {
                 oTextSection = xTextSections.getByName(RECORDSECTION);
             }
-            boolean bLayoutMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(oTextSection, "IsVisible"));
+            boolean bLayoutMode = AnyConverter.toBoolean(Helper.getUnoPropertyValue(oTextSection, ISVISIBLE));
             return bLayoutMode;
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
             // In doubt we rather suggest this is LayoutMode...
             return true;
         }
@@ -172,7 +179,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
         // xProgressBar.setValue(100);
         oViewHandler.selectFirstPage(oTextTableHandler);
-    // xProgressBar.end();
+        // xProgressBar.end();
     }
 
     public void swapLayoutTemplate(String LayoutTemplatePath/*, String BitmapPath*/)
@@ -181,17 +188,17 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         {
             // xProgressBar.start("", 10);
             this.LayoutTemplatePath = LayoutTemplatePath;
-            boolean bOldIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, "IsLandscape"));
+            boolean bOldIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, ISLANDSCAPE));
             oTextStyleHandler.loadStyleTemplates(LayoutTemplatePath, "LoadPageStyles");
             // xProgressBar.setValue(60);
             changePageOrientation(bOldIsCurLandscape);
             // xProgressBar.setValue(100);
             oViewHandler.selectFirstPage(oTextTableHandler);
-        // xProgressBar.end();
+            // xProgressBar.end();
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -199,21 +206,41 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         com.sun.star.container.XNameContainer xNamedForm = oFormHandler.insertFormbyName(SOREPORTFORMNAME);
         XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xNamedForm);
-        oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "CommandType", new String(Integer.toString(CurDBMetaData.getCommandType())));
+        oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND_TYPE, Integer.toString(CurDBMetaData.getCommandType()));
         if (CurDBMetaData.getCommandType() == CommandType.QUERY)
         {
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "QueryName", CurDBMetaData.getCommandName());
-            // oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Command", "");
-            DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBMetaData.getCommandName());
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Command", CurDBMetaData.Command);
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, CurDBMetaData.getCommandName());
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, "");
+            //DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(CurDBMetaData.getCommandName());
+            //oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, COMMAND, CurDBMetaData.Command);
         }
         else
         {
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "QueryName", "");
-            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Command", CurDBMetaData.Command);
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, QUERYNAME, "");
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, PropertyNames.COMMAND, CurDBMetaData.Command);
         }
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "GroupFieldNames", JavaTools.ArraytoString(CurDBMetaData.GroupFieldNames));
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "FieldNames", JavaTools.ArraytoString(CurDBMetaData.getFieldNames()));
+        String[][] sortFieldNames = CurDBMetaData.getSortFieldNames();
+        if (sortFieldNames != null && sortFieldNames.length > 0)
+        {
+            final String space = ",";
+            final String colon = ";";
+            StringBuilder orderBy = new StringBuilder();
+            for (String[] sortPair : sortFieldNames)
+            {
+                orderBy.append(sortPair[0]).append(space).append(sortPair[1]).append(colon);
+            }
+            if (orderBy.length() != 0)
+            {
+                orderBy.delete(orderBy.lastIndexOf(colon), orderBy.length());
+            }
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Sorting", orderBy.toString());
+        }
+        else
+        {
+            oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "Sorting", "");
+        }
         oFormHandler.insertHiddenControl(xNameAccess, xNamedForm, "RecordFieldNames", JavaTools.ArraytoString(CurDBMetaData.getRecordFieldNames()));
     }
 
@@ -230,9 +257,9 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             ReportPageStyle = Helper.getUnoObjectbyName(oPageStyleFamily, "Standard");
             FirstPageStyle = Helper.getUnoObjectbyName(oPageStyleFamily, "First Page");
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -242,15 +269,15 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         {
             com.sun.star.awt.Size oNewSize;
             getReportPageStyles();
-            com.sun.star.awt.Size oLocSize = (com.sun.star.awt.Size) Helper.getUnoStructValue(ReportPageStyle, "Size");
-            bIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, "IsLandscape"));
+            com.sun.star.awt.Size oLocSize = (com.sun.star.awt.Size) Helper.getUnoStructValue(ReportPageStyle, SIZE);
+            bIsCurLandscape = AnyConverter.toBoolean(Helper.getUnoPropertyValue(ReportPageStyle, ISLANDSCAPE));
             if (bIsCurLandscape != bNewLandscape)
             {
                 oNewSize = new com.sun.star.awt.Size(oLocSize.Height, oLocSize.Width);
-                Helper.setUnoPropertyValue(ReportPageStyle, "IsLandscape", new Boolean(bNewLandscape));
-                Helper.setUnoPropertyValue(ReportPageStyle, "Size", oNewSize);
-                Helper.setUnoPropertyValue(FirstPageStyle, "IsLandscape", new Boolean(bNewLandscape));
-                Helper.setUnoPropertyValue(FirstPageStyle, "Size", oNewSize);
+                Helper.setUnoPropertyValue(ReportPageStyle, ISLANDSCAPE, bNewLandscape);
+                Helper.setUnoPropertyValue(ReportPageStyle, SIZE, oNewSize);
+                Helper.setUnoPropertyValue(FirstPageStyle, ISLANDSCAPE, bNewLandscape);
+                Helper.setUnoPropertyValue(FirstPageStyle, SIZE, oNewSize);
                 int iLeftMargin = AnyConverter.toInt(Helper.getUnoPropertyValue(ReportPageStyle, "LeftMargin"));
                 int iRightMargin = AnyConverter.toInt(Helper.getUnoPropertyValue(ReportPageStyle, "RightMargin"));
                 PageWidth = oNewSize.Width - iLeftMargin - iRightMargin;
@@ -260,9 +287,9 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                 }
             }
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 
@@ -303,9 +330,9 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             }
             return true;
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
             return false;
         }
     }
@@ -352,6 +379,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     //    {
     //        return (JavaTools.FieldInList(CurDBMetaData.GroupFieldNames, _FieldName) != -1);
     //    }
+
     public void replaceFieldValueInRecordSection(int RecordCount)
     {
         int GroupCount = CurDBMetaData.GroupFieldNames.length;
@@ -367,7 +395,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         String TableName;
         DBColumn OldDBColumn;
         DBColumn CurDBColumn;
-        XNameAccess xTableNames = oTextTableHandler.xTextTablesSupplier.getTextTables();
+        // XNameAccess xTableNames = oTextTableHandler.xTextTablesSupplier.getTextTables();
         int GroupFieldCount = SelGroupNames.length;
         for (int i = 0; i < GroupFieldCount; i++)
         {
@@ -639,7 +667,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
     {
         try
         {
-            Vector aFieldColumns = new Vector();
+            ArrayList<FieldColumn> aFieldColumns = new ArrayList<FieldColumn>();
             for (int i = 0; i < _FieldColumns.length; i++)
             {
                 FieldColumn CurFieldColumn = _FieldColumns[i];
@@ -654,7 +682,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
         }
         catch (RuntimeException e)
         {
-            e.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
             return null;
         }
     }
@@ -728,7 +756,7 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
                         {
 //                                xRelativeTextContentRemove.removeTextContentBefore(xTextContent);
                             xRelativeTextContentRemove.removeTextContentAfter(xTextContent);
-                        // IllegalArgumentException may be thrown when no paragraphbreak is there
+                            // IllegalArgumentException may be thrown when no paragraphbreak is there
                         }
                         catch (IllegalArgumentException iexception)
                         {
@@ -751,17 +779,17 @@ class ReportTextDocument extends com.sun.star.wizards.text.TextDocument implemen
             for (int i = 0; i < GroupFieldCount; i++)
             {
                 oTextSection = xTextSections.getByName(GROUPSECTION + String.valueOf(i + 1));
-                Helper.setUnoPropertyValue(oTextSection, "IsVisible", new Boolean(_IsVisible));
+                Helper.setUnoPropertyValue(oTextSection, ISVISIBLE, _IsVisible);
             }
             if (xTextSections.hasByName(RECORDSECTION))
             {
                 oTextSection = xTextSections.getByName(RECORDSECTION);
-                Helper.setUnoPropertyValue(oTextSection, "IsVisible", new Boolean(_IsVisible));
+                Helper.setUnoPropertyValue(oTextSection, ISVISIBLE, _IsVisible);
             }
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            exception.printStackTrace(System.out);
+            Logger.getLogger(ReportTextDocument.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 

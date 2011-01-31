@@ -161,7 +161,7 @@ public class FormConfiguration
         oRelationController = _oRelationController;
         sreferencedTables = oRelationController.getExportedKeys();
         bsupportsRelations = (sreferencedTables.length > 0);
-        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), "StringItemList", sreferencedTables);
+        Helper.setUnoPropertyValue(UnoDialog.getModel(lstRelations), PropertyNames.STRING_ITEM_LIST, sreferencedTables);
         this.CurSubFormFieldSelection = _CurSubFormFieldSelection;
         toggleRelationsListbox();
         Helper.setUnoPropertyValue(UnoDialog.getModel(optOnExistingRelation), PropertyNames.PROPERTY_ENABLED, new Boolean(bsupportsRelations && (chkcreateSubForm.getState() == 1)));
@@ -195,7 +195,7 @@ public class FormConfiguration
     {
         if (areexistingRelationsdefined())
         {
-            short[] iselected = (short[]) Helper.getUnoArrayPropertyValue(UnoDialog.getModel(lstRelations), "SelectedItems");
+            short[] iselected = (short[]) Helper.getUnoArrayPropertyValue(UnoDialog.getModel(lstRelations), PropertyNames.SELECTED_ITEMS);
             if (iselected != null)
             {
                 if (iselected.length > 0)
@@ -204,7 +204,7 @@ public class FormConfiguration
                 }
             }
         }
-        return "";
+        return PropertyNames.EMPTY_STRING;
     }
 
     public void onexistingRelationSelection()
