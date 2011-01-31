@@ -28,7 +28,7 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := mktemp -p
+gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 gb_CC := cc
 gb_CXX := g++

@@ -28,7 +28,8 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
+# Darwin mktemp -t expects a prefix, not a pattern
+gb_MKTEMP := /usr/bin/mktemp -t gbuild.
 
 gb_CC := cc
 gb_CXX := g++
@@ -246,7 +247,7 @@ endef
 define gb_LinkTarget__command_dynamiclink
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
-    DYLIB_FILE=`$(gb_MKTEMP) $(dir $(1))` && \
+    DYLIB_FILE=`$(gb_MKTEMP)` && \
     $(PERL) $(SOLARENV)/bin/macosx-dylib-link-list.pl \
         $(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
         $(if $(filter Library CppunitTest,$(TARGETTYPE)),$(gb_Library_TARGETTYPEFLAGS)) \

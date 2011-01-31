@@ -67,7 +67,7 @@ gb_SrsPartTarget_REPOS := $(gb_REPOS)
 define gb_SrsPartTarget__command
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "-s \
         $(INCLUDE) \
         -I$(dir $(3)) \
@@ -212,7 +212,7 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(dir $@) $(OUTDIR)/bin \
             $(dir $(call gb_ResTarget_get_imagelist_target,$*)) && \
-        RESPONSEFILE=`$(gb_MKTEMP) $(gb_Helper_MISC)` && \
+        RESPONSEFILE=`$(gb_MKTEMP)` && \
         echo "-r -p \
             -lg$(LANGUAGE) \
             -fs=$@ \

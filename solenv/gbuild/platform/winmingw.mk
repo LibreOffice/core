@@ -28,7 +28,7 @@
 GUI := WNT
 COM := GCC
 
-gb_MKTEMP := mktemp -p
+gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)
@@ -367,7 +367,7 @@ define gb_SharedLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_LINK) \
@@ -388,7 +388,7 @@ define gb_ExecutableLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_LINK) \
@@ -407,7 +407,7 @@ define gb_StaticLinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
     $(gb_AR) -rsu\

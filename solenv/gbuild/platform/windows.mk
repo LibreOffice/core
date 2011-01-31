@@ -28,7 +28,7 @@
 GUI := WNT
 COM := MSC
 
-gb_MKTEMP := mktemp -p
+gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 gb_CC := cl
 gb_CXX := cl
@@ -391,7 +391,7 @@ $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     rm -f $(1) && \
-    RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
+    RESPONSEFILE=`$(gb_MKTEMP)` && \
     echo "$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
         $(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \

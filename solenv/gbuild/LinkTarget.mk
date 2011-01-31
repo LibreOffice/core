@@ -224,7 +224,7 @@ gb_LinkTarget_DEFAULTDEFS := $(gb_GLOBALDEFS)
 .PHONY : $(call gb_LinkTarget_get_clean_target,%)
 $(call gb_LinkTarget_get_clean_target,%) :
     $(call gb_Output_announce,$*,$(false),LNK,4)
-    RESPONSEFILE=$(call var2file,$(call uniqname),200,\
+    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_target,$(object))) \
         $(foreach object,$(COBJECTS),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
@@ -248,7 +248,7 @@ define gb_LinkTarget__command_dep
 $(call gb_Output_announce,LNK:$(2),$(true),DEP,1)
 $(call gb_Helper_abbreviate_dirs,\
     mkdir -p $(dir $(1)) && \
-    RESPONSEFILE=$(call var2file,$(call uniqname),200,\
+    RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),200,\
         $(foreach object,$(3),$(call gb_CObject_get_dep_target,$(object))) \
         $(foreach object,$(4),$(call gb_CxxObject_get_dep_target,$(object))) \
         $(foreach object,$(5),$(call gb_ObjCxxObject_get_dep_target,$(object)))\
