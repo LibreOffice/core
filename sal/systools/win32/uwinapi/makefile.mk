@@ -117,10 +117,6 @@ SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-DEF1EXPORTFILE=\
-    $(SHL1TARGET).dxp\
-    unicows.dxp
-
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
@@ -145,8 +141,7 @@ SHL1STDLIBS+=\
         $(ADVAPI32LIB)\
         $(VERSIONLIB)\
         $(LIBCMT)\
-        $(SHLWAPILIB)\
-        unicows.lib
+        $(SHLWAPILIB)
 
 
 .ENDIF
