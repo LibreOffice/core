@@ -121,6 +121,7 @@ gb_COMPILEROPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
 endif
 endif
 
+gb_COMPILERNOOPTFLAGS :=
 
 # Helper class
 
@@ -178,7 +179,7 @@ gb_LinkTarget__RPATHS := \
     SDKBIN:\dORIGIN/../../ure-link/lib \
     NONEBIN:\dORIGIN/../lib:\dORIGIN \
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)

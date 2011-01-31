@@ -136,6 +136,7 @@ else
 gb_COMPILEROPTFLAGS := -O2
 endif
 
+gb_COMPILERNOOPTFLAGS := -O0
 
 # Helper class
 
@@ -216,7 +217,7 @@ $(if $(2),-install_name '$(2)$(1)',)
 endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_OBJCXXFLAGS := $(gb_CXXFLAGS) $(gb_OBJCXXFLAGS) $(gb_COMPILEROPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)

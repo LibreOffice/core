@@ -197,6 +197,8 @@ else
 gb_COMPILEROPTFLAGS := -Ob1 -Oxs -Oy-
 endif
 
+gb_COMPILERNOOPTFLAGS := -Od
+
 
 # Helper class
 gb_Helper_SRCDIR_NATIVE := $(shell cygpath -m $(SRCDIR) | $(gb_AWK) -- '{ print tolower(substr($$0,1,1)) substr($$0,2) }')
@@ -373,7 +375,7 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
 
 gb_LinkTarget_INCLUDE :=\
