@@ -124,13 +124,13 @@ namespace connectivity
         friend class OSQLParser;
 
         OSQLParseNodes                  m_aChildren;
-        OSQLParseNode*                  m_pParent;      // pParent fuer Reuckverkettung im Baum
-        ::rtl::OUString                 m_aNodeValue;   // Token-Name oder leer bei Regeln oder ::rtl::OUString bei
-                                                        // ::rtl::OUString, INT, usw. -Werten
+        OSQLParseNode*                  m_pParent;      // pParent for reverse linkage in the tree
+        ::rtl::OUString                 m_aNodeValue;   // token name, or empty in case of rules, or ::rtl::OUString in case of
+                                                        // ::rtl::OUString, INT, etc.
         SQLNodeType                     m_eNodeType;    // s. o.
-        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (bei IsRule()) oder Token ID (bei !IsRule())
-                                            // ::com::sun::star::chaos::Rule IDs und Token IDs koennen nicht anhand des Wertes
-                                            // unterschieden werden, dafuer ist IsRule() abzufragen!
+        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule()) or Token ID (if !IsRule())
+                                            // ::com::sun::star::chaos::Rule IDs and Token IDs can't be distinguished by their values,
+                                            // IsRule has to be used for that!
     public:
         enum Rule
         {
@@ -233,7 +233,7 @@ namespace connectivity
             other_like_predicate_part_2,
             between_predicate_part_2,
             cast_spec,
-            rule_count,             // letzter_wert
+            rule_count,             // last value
             UNKNOWN_RULE            // ID indicating that a node is no rule with a matching Rule-enum value (see getKnownRuleID)
         };
 
@@ -254,22 +254,19 @@ namespace connectivity
                       SQLNodeType _eNodeType,
                       sal_uInt32 _nNodeID = 0);
 
-            // Kopiert den entsprechenden ParseNode
+            // copies the respective ParseNode
         OSQLParseNode(const OSQLParseNode& rParseNode);
         OSQLParseNode& operator=(const OSQLParseNode& rParseNode);
 
         sal_Bool operator==(OSQLParseNode& rParseNode) const;
 
-        // Destruktor raeumt rekursiv den Baum ab
+        // destructor destruct the tree recursively
         virtual ~OSQLParseNode();
 
-        // Parent gibt den Zeiger auf den Parent zurueck
         OSQLParseNode* getParent() const {return m_pParent;};
 
-        // SetParent setzt den Parent-Zeiger eines ParseNodes
         void setParent(OSQLParseNode* pParseNode) {m_pParent = pParseNode;};
 
-        // ChildCount liefert die Anzahl der Kinder eines Knotens
         sal_uInt32 count() const {return m_aChildren.size();};
         inline OSQLParseNode* getChild(sal_uInt32 nPos) const;
 
@@ -350,15 +347,14 @@ namespace connectivity
         OSQLParseNode* getByRule(OSQLParseNode::Rule eRule) const;
 
 #if OSL_DEBUG_LEVEL > 0
-            // zeigt den ParseTree mit tabs und linefeeds
+            // shows the ParseTree with tabs and linefeeds
         void showParseTree( ::rtl::OUString& rString ) const;
         void showParseTree( ::rtl::OUStringBuffer& _inout_rBuf, sal_uInt32 nLevel ) const;
 #endif
 
-            // GetNodeType gibt den Knotentyp zurueck
         SQLNodeType getNodeType() const {return m_eNodeType;};
 
-            // RuleId liefert die RuleId der Regel des Knotens (nur bei IsRule())
+            // RuleId returns the RuleID of the node's rule (only if IsRule())
         sal_uInt32 getRuleID() const {return m_nNodeID;}
 
         /** returns the ID of the rule represented by the node
@@ -367,25 +363,22 @@ namespace connectivity
         */
         Rule getKnownRuleID() const;
 
-            // RuleId liefert die TokenId des Tokens des Knotens (nur bei ! IsRule())
+            // returns the TokenId of the node's tokenRuleId (only if !isRule())
         sal_uInt32 getTokenID() const {return m_nNodeID;}
 
-            // IsRule testet ob ein Node eine Regel (NonTerminal) ist
-            // Achtung : Regeln koenne auch Blaetter sein, z.B. leere Listen
+            // IsRule tests whether a node is a rule (NonTerminal)
+            // ATTENTION: rules can be leaves, for example empty lists
         sal_Bool isRule() const
             { return (m_eNodeType == SQL_NODE_RULE) || (m_eNodeType == SQL_NODE_LISTRULE)
                 || (m_eNodeType == SQL_NODE_COMMALISTRULE);}
 
-            // IsToken testet ob ein Node ein Token (Terminal) ist
-        sal_Bool isToken() const {return !isRule();} // ein Token ist keine Regel
+            // IsToken tests whether a Node is a Token (Terminal)
+        sal_Bool isToken() const {return !isRule();}
 
-                // TokenValue liefert den NodeValue eines Tokens
         const ::rtl::OUString& getTokenValue() const {return m_aNodeValue;}
 
-            // SetTokenValue setzt den NodeValue
         void setTokenValue(const ::rtl::OUString& rString) {    if (isToken()) m_aNodeValue = rString;}
 
-            // IsLeaf testet ob ein Node ein Blatt ist
         sal_Bool isLeaf() const {return m_aChildren.empty();}
 
         // negate only a searchcondition, any other rule could cause a gpf
