@@ -58,7 +58,7 @@ class EDITENG_DLLPUBLIC SvxFontHeightItem : public SfxPoolItem
 public:
     TYPEINFO();
 
-    SvxFontHeightItem( const sal_uInt32 nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
+    SvxFontHeightItem( const sal_uLong nSz /*= 240*/, const sal_uInt16 nPropHeight /*= 100*/,
                        const sal_uInt16 nId  );
 
     // "pure virtual Methoden" vom SfxPoolItem

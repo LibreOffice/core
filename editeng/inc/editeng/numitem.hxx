@@ -83,8 +83,8 @@ public:
     SvxNumberType(const SvxNumberType& rType);
     ~SvxNumberType();
 
-    String          GetNumStr( sal_uInt32 nNo ) const;
-    String          GetNumStr( sal_uInt32 nNo, const com::sun::star::lang::Locale& rLocale ) const;
+    String          GetNumStr( sal_uLong nNo ) const;
+    String          GetNumStr( sal_uLong nNo, const com::sun::star::lang::Locale& rLocale ) const;
 
     void            SetNumberingType(sal_Int16 nSet) {nNumType = nSet;}
     sal_Int16       GetNumberingType() const {return nNumType;}
@@ -254,7 +254,7 @@ public:
     // <--
 
     static Size     GetGraphicSizeMM100(const Graphic* pGraphic);
-    static String   CreateRomanString( sal_uInt32 nNo, sal_Bool bUpper );
+    static String   CreateRomanString( sal_uLong nNo, sal_Bool bUpper );
 };
 
 enum SvxNumRuleType
@@ -279,7 +279,7 @@ class EDITENG_DLLPUBLIC SvxNumRule
     com::sun::star::lang::Locale aLocale;
 public:
     // --> OD 2008-02-11 #newlistlevelattrs#
-    SvxNumRule( sal_uInt32 nFeatures,
+    SvxNumRule( sal_uLong nFeatures,
                 sal_uInt16 nLevels,
                 sal_Bool bCont,
                 SvxNumRuleType eType = SVX_RULETYPE_NUMBERING,
