@@ -830,12 +830,12 @@ INT32 StgDataStrm::Read( void* pBuf, INT32 n )
     while( n )
     {
         short nBytes = nPageSize - nOffset;
-        short nRes;
         StgPage* pPg;
         if( (INT32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
+            short nRes;
             void *p = (BYTE *) pBuf + nDone;
             if( nBytes == nPageSize )
             {
@@ -888,12 +888,12 @@ INT32 StgDataStrm::Write( const void* pBuf, INT32 n )
     while( n )
     {
         short nBytes = nPageSize - nOffset;
-        short nRes;
         StgPage* pPg;
         if( (INT32) nBytes > n )
             nBytes = (short) n;
         if( nBytes )
         {
+            short nRes;
             const void *p = (const BYTE *) pBuf + nDone;
             if( nBytes == nPageSize )
             {
