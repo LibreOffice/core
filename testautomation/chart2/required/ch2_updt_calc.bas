@@ -110,6 +110,7 @@ sub main
     Call tFormatAxisSecondaryXAxis
     Call tFormatAxisSecondaryYAxis
     Call tFormatAxisAllAxes
+    Call tFormatDateAxis
     Call tFormatXAxisMainGrid
     Call tFormatYAxisMainGrid
     Call tFormatZAxisMainGrid
