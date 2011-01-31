@@ -1522,7 +1522,7 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
             for( ULONG nDim = 0; nDim < nDimCount; ++nDim )
             {
                 ScDPSaveDimension* pDim = static_cast< ScDPSaveDimension* >( rDimensions.GetObject( nDim ) );
-                if( !pDim->IsDataLayout() && (pDim->GetName() == aFieldName) )
+                if( !pDim->IsDataLayout() && (pDim->GetName() == ::rtl::OUString(aFieldName)) )
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
                         return pDim;
@@ -2085,7 +2085,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
             for ( sal_Int32 nDim = 0; nDim < nDimCount && !pNewDim; nDim++ )
             {
                 ScDPSaveDimension* pOneDim = static_cast<ScDPSaveDimension*>(rDimensions.GetObject(nDim));
-                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == aNameStr) )
+                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == ::rtl::OUString(aNameStr)) )
                 {
                     if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
                         pNewDim = pOneDim;      // use this one
@@ -2237,7 +2237,7 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        String aPage( rPage );
+        const ::rtl::OUString aPage( rPage );
         pDim->SetCurrentPage( &aPage );
         SetDPObject( pDPObj );
     }
@@ -2262,7 +2262,7 @@ void ScDataPilotFieldObj::setUseCurrentPage( sal_Bool bUse )
                 true, because it is still needed to set an explicit page name. */
             if( !pDim->HasCurrentPage() )
             {
-                String aPage;
+                const ::rtl::OUString aPage;
                 pDim->SetCurrentPage( &aPage );
             }
         }

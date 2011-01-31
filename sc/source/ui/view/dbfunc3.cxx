@@ -1534,7 +1534,7 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
         {
             if (rString.Len())
             {
-                if (rString.EqualsIgnoreCaseAscii(pDim->GetName()))
+                if (::rtl::OUString(rString).equalsIgnoreAsciiCase(pDim->GetName()))
                 {
                     pDim->RemoveLayoutName();
                     bChange = true;

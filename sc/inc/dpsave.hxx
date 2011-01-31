@@ -102,8 +102,8 @@ bool operator == (const ::com::sun::star::sheet::DataPilotFieldReference &l, con
 class SC_DLLPUBLIC ScDPSaveDimension
 {
 private:
-    String aName;
-    String* pSelectedPage;
+    ::rtl::OUString aName;
+    ::rtl::OUString* pSelectedPage;
     ::std::auto_ptr<rtl::OUString> mpLayoutName;
     ::std::auto_ptr<rtl::OUString> mpSubtotalName;
     bool bIsDataLayout;
@@ -121,7 +121,7 @@ private:
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
 
 public:
-    typedef std::hash_map <String, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
+    typedef std::hash_map <rtl::OUString, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
     typedef std::list <ScDPSaveMember*> MemberList;
 
 private:
@@ -129,7 +129,7 @@ private:
     MemberList maMemberList;
 
 public:
-    ScDPSaveDimension(const String& rName, bool bDataLayout);
+    ScDPSaveDimension(const ::rtl::OUString& rName, bool bDataLayout);
     ScDPSaveDimension(const ScDPSaveDimension& r);
     ~ScDPSaveDimension();
 
@@ -146,13 +146,13 @@ public:
     bool GetDupFlag() const
         { return bDupFlag; }
 
-    const String& GetName() const
+    const ::rtl::OUString& GetName() const
         { return aName; }
 
     bool IsDataLayout() const
         { return bIsDataLayout; }
 
-    void SetName( const String& rNew ); // used if the source dim was renamed (groups)
+    void SetName( const ::rtl::OUString& rNew ); // used if the source dim was renamed (groups)
 
     void SetOrientation(sal_uInt16 nNew);
     void SetSubTotals(long nCount, const sal_uInt16* pFuncs);
@@ -201,14 +201,14 @@ public:
 
     void SetLayoutInfo(const ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pNew);
 
-    void SetCurrentPage( const String* pPage ); // NULL = no selection (all)
+    void SetCurrentPage( const ::rtl::OUString* pPage ); // NULL = no selection (all)
     bool HasCurrentPage() const;
-    const String& GetCurrentPage() const;
+    const ::rtl::OUString& GetCurrentPage() const;
 
     sal_uInt16 GetOrientation() const
         { return nOrientation; }
 
-    ScDPSaveMember* GetExistingMemberByName(const String& rName);
+    ScDPSaveMember* GetExistingMemberByName(const ::rtl::OUString& rName);
 
     /**
      * Get a member object by its name.  If one doesn't exist, creat a new
@@ -219,13 +219,13 @@ public:
      *
      * @return pointer to the member object.
      */
-    ScDPSaveMember* GetMemberByName(const String& rName);
+    ScDPSaveMember* GetMemberByName(const ::rtl::OUString& rName);
 
-    void SetMemberPosition( const String& rName, sal_Int32 nNewPos );
+    void SetMemberPosition( const ::rtl::OUString& rName, sal_Int32 nNewPos );
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xDim );
     void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource ,
-                      const std::list<String> & deletedDims);
+                      const std::list<rtl::OUString> & deletedDims);
 
     void UpdateMemberVisibility(const ::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 

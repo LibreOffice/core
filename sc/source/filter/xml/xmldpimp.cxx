@@ -1044,7 +1044,7 @@ void ScXMLDataPilotFieldContext::EndElement()
         pDim->SetOrientation(nOrientation);
         if (bSelectedPage)
         {
-            String sPage(sSelectedPage);
+            const ::rtl::OUString sPage(sSelectedPage);
             pDim->SetCurrentPage(&sPage);
         }
         pDataPilotTable->AddDimension(pDim, mbHasHiddenMember);

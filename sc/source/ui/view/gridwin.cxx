@@ -563,7 +563,10 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
                 ScDPSaveDimension* pDim = aSaveData.GetDimensionByName(aDimName);
 
                 if ( bHasSelection )
-                    pDim->SetCurrentPage( &rStr );
+                {
+                    const ::rtl::OUString rOUStr = rStr;
+                    pDim->SetCurrentPage( &rOUStr );
+                }
                 else
                     pDim->SetCurrentPage( NULL );
 

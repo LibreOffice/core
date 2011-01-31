@@ -182,7 +182,7 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
     }
 }
 
-ScDPSaveDimension::ScDPSaveDimension(const String& rName, bool bDataLayout) :
+ScDPSaveDimension::ScDPSaveDimension(const ::rtl::OUString& rName, bool bDataLayout) :
     aName( rName ),
     pSelectedPage( NULL ),
     mpLayoutName(NULL),
@@ -226,7 +226,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
 
     for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; ++i)
     {
-        const String& rName =  (*i)->GetName();
+        const ::rtl::OUString& rName =  (*i)->GetName();
         ScDPSaveMember* pNew = new ScDPSaveMember( **i );
         maMemberHash[rName] = pNew;
         maMemberList.push_back( pNew );
@@ -248,7 +248,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     else
         pLayoutInfo = NULL;
     if (r.pSelectedPage)
-        pSelectedPage = new String( *(r.pSelectedPage) );
+        pSelectedPage = new ::rtl::OUString( *(r.pSelectedPage) );
     else
         pSelectedPage = NULL;
     if (r.mpLayoutName.get())
@@ -349,11 +349,11 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
 
 void ScDPSaveDimension::AddMember(ScDPSaveMember* pMember)
 {
-    const String & rName =  pMember->GetName();
+    const ::rtl::OUString & rName = pMember->GetName();
     MemberHash::iterator aExisting = maMemberHash.find( rName );
     if ( aExisting == maMemberHash.end() )
     {
-        std::pair< const String, ScDPSaveMember *> key( rName, pMember );
+        std::pair< const ::rtl::OUString, ScDPSaveMember *> key( rName, pMember );
         maMemberHash.insert ( key );
     }
     else
@@ -365,7 +365,7 @@ void ScDPSaveDimension::AddMember(ScDPSaveMember* pMember)
     maMemberList.push_back( pMember );
 }
 
-void ScDPSaveDimension::SetName( const String& rNew )
+void ScDPSaveDimension::SetName( const ::rtl::OUString& rNew )
 {
     // Used only if the source dim was renamed (groups).
     // For UI renaming of dimensions, the layout name must be used.
@@ -492,11 +492,11 @@ void ScDPSaveDimension::SetLayoutInfo(const sheet::DataPilotFieldLayoutInfo* pNe
         pLayoutInfo = NULL;
 }
 
-void ScDPSaveDimension::SetCurrentPage( const String* pPage )
+void ScDPSaveDimension::SetCurrentPage( const ::rtl::OUString* pPage )
 {
     delete pSelectedPage;
     if (pPage)
-        pSelectedPage = new String( *pPage );
+        pSelectedPage = new ::rtl::OUString( *pPage );
     else
         pSelectedPage = NULL;
 }
@@ -506,14 +506,15 @@ bool ScDPSaveDimension::HasCurrentPage() const
     return ( pSelectedPage != NULL );
 }
 
-const String& ScDPSaveDimension::GetCurrentPage() const
+const ::rtl::OUString& ScDPSaveDimension::GetCurrentPage() const
 {
+    static const ::rtl::OUString emptyOUString = ::rtl::OUString();
     if (pSelectedPage)
         return *pSelectedPage;
-    return EMPTY_STRING;
+    return emptyOUString;
 }
 
-ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const String& rName)
+ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const ::rtl::OUString& rName)
 {
     MemberHash::const_iterator res = maMemberHash.find (rName);
     if (res != maMemberHash.end())
@@ -521,7 +522,7 @@ ScDPSaveMember* ScDPSaveDimension::GetExistingMemberByName(const String& rName)
     return NULL;
 }
 
-ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
+ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const ::rtl::OUString& rName)
 {
     MemberHash::const_iterator res = maMemberHash.find (rName);
     if (res != maMemberHash.end())
@@ -533,7 +534,7 @@ ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
     return pNew;
 }
 
-void ScDPSaveDimension::SetMemberPosition( const String& rName, sal_Int32 nNewPos )
+void ScDPSaveDimension::SetMemberPosition( const ::rtl::OUString& rName, sal_Int32 nNewPos )
 {
     ScDPSaveMember* pMember = GetMemberByName( rName ); // make sure it exists and is in the hash
 
@@ -708,7 +709,7 @@ void ScDPSaveDimension::UpdateMemberVisibility(const hash_map<OUString, bool, OU
     for (; itrMem != itrMemEnd; ++itrMem)
     {
         ScDPSaveMember* pMem = *itrMem;
-        const String& rMemName = pMem->GetName();
+        const ::rtl::OUString& rMemName = pMem->GetName();
         DataMap::const_iterator itr = rData.find(rMemName);
         if (itr != rData.end())
             pMem->SetIsVisible(itr->second);
@@ -842,7 +843,7 @@ ScDPSaveDimension* ScDPSaveData::GetDimensionByName(const String& rName)
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
             return pDim;
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
@@ -856,7 +857,7 @@ ScDPSaveDimension* ScDPSaveData::GetExistingDimensionByName(const String& rName)
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
             return pDim;
     }
     return NULL; // don't create new
@@ -868,7 +869,7 @@ ScDPSaveDimension* ScDPSaveData::GetNewDimensionByName(const String& rName)
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
             return DuplicateDimension(rName);
     }
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rName, false );
@@ -917,7 +918,7 @@ void ScDPSaveData::RemoveDimensionByName(const String& rName)
     for (long i=0; i<nCount; i++)
     {
         ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
-        if ( pDim->GetName() == rName && !pDim->IsDataLayout() )
+        if ( pDim->GetName() == ::rtl::OUString(rName) && !pDim->IsDataLayout() )
         {
             delete pDim;
             aDimList.Remove(i);
@@ -1096,7 +1097,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
             ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
             rtl::OUString aName = pDim->GetName();
 
-            DBG_TRACESTR(pDim->GetName());
+            DBG_TRACESTR(String(pDim->GetName()));
 
             bool bData = pDim->IsDataLayout();
 
@@ -1262,7 +1263,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
     try
     {
         long nCount = aDimList.Count();
-        std::list<String> deletedDims;
+        std::list<rtl::OUString> deletedDims;
         for (long i=nCount-1; i >=0 ; i--)
         {
             ScDPSaveDimension* pDim = (ScDPSaveDimension*)aDimList.GetObject(i);
@@ -1284,7 +1285,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
             }
             if ( !bFound )
             {
-                deletedDims.push_back( aName );
+                deletedDims.push_back( ::rtl::OUString(aName) );
                 aDimList.Remove(i);
                 DBG_TRACE( "\n Remove dim: \t" );
                 DBG_TRACESTR( String( aName ) );
@@ -1314,7 +1315,7 @@ void ScDPSaveData::Refresh( const uno::Reference<sheet::XDimensionsSupplier>& xS
 }
 void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                                 com::sun::star::sheet::XDimensionsSupplier>& xSource ,
-                                const std::list<String>& deletedDims)
+                                const std::list<rtl::OUString>& deletedDims)
 {
     if ( xSource.is() )
     {
@@ -1329,7 +1330,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             return;
         if ( pSelectedPage )
         {//check pSelected page
-            DBG_TRACESTR( (*pSelectedPage) );
+            DBG_TRACESTR( String(*pSelectedPage) );
             if ( pCache->GetIdByItemData( nSrcDim, *pSelectedPage ) == -1 )
             {
                 delete pSelectedPage;
@@ -1366,16 +1367,16 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
                 {
                     if( pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
                     {
-                        const String& sReferenceFieldName = pReferenceValue->ReferenceField;
-                        DBG_TRACESTR( sReferenceFieldName );
+                        const ::rtl::OUString& sReferenceFieldName = pReferenceValue->ReferenceField;
+                        DBG_TRACESTR( String(sReferenceFieldName) );
                         SCCOL nRefDim = pCache->GetDimensionIndex( sReferenceFieldName );
                         bool bValid = true;
                         if ( nRefDim == -1 )
                             bValid = false;
                         else if ( pReferenceValue->ReferenceType != sheet::DataPilotFieldReferenceType::RUNNING_TOTAL )
                         { //running total has not reference item
-                            const String& sReferenceItemName = pReferenceValue->ReferenceItemName;
-                            DBG_TRACESTR( sReferenceItemName );
+                            const ::rtl::OUString& sReferenceItemName = pReferenceValue->ReferenceItemName;
+                            DBG_TRACESTR( String(sReferenceItemName) );
                             if ( pCache->GetIdByItemData( nRefDim, sReferenceItemName ) == -1 )
                                 bValid = false;
                         }
@@ -1396,8 +1397,8 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             if ( pSortInfo->Mode == DataPilotFieldSortMode::DATA )
             {
                 DBG_TRACE( "\n DataPilotFieldSortMode::DATA \n" );
-                const String& sFieldDimName = pSortInfo->Field;
-                std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
+                const ::rtl::OUString& sFieldDimName = pSortInfo->Field;
+                std::list<rtl::OUString>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
                 if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1 )
                 {
                     pSortInfo->Mode = DataPilotFieldSortMode::MANUAL;
@@ -1408,8 +1409,8 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
 
         if ( pAutoShowInfo )
         { //check autoshow
-            const String& sFieldDimName = pAutoShowInfo->DataField;
-            std::list<String>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
+            const ::rtl::OUString& sFieldDimName = pAutoShowInfo->DataField;
+            std::list<rtl::OUString>::const_iterator iter = std::find( deletedDims.begin(), deletedDims.end(), sFieldDimName );
             if ( iter != deletedDims.end() && pCache->GetDimensionIndex( sFieldDimName ) == -1 )
             {
                 delete pAutoShowInfo;
