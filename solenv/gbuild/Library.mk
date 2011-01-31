@@ -80,7 +80,7 @@ $(call gb_Deliver_add_deliverable,$(call gb_Library_get_target,$(1)),$(call gb_L
 endef
 
 define gb_Library_set_componentfile
-$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_filename,$(1)),$(call gb_Library_get_dllname,$(1)))
+$(call gb_ComponentTarget_ComponentTarget,$(2),$(call gb_Library__get_componentprefix,$(1)),$(call gb_Library_get_runtime_filename,$(1)))
 $(call gb_Library_get_target,$(1)) : $(call gb_ComponentTarget_get_outdir_target,$(2))
 $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_target,$(2))
 
@@ -100,6 +100,9 @@ define gb_Library__forward_to_Linktarget
 gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$$(call gb_Library__get_linktargetname,$$(1)),$$(2),$$(3))
 
 endef
+
+gb_Library_get_runtime_filename = \
+ $(or $(call gb_Library_get_dllname,$(1)),$(call gb_Library_get_filename,$(1)))
 
 $(eval $(foreach method,\
     add_cobject \
