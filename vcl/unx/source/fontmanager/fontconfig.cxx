@@ -255,7 +255,8 @@ public:
     { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
 
 public: // TODO: cleanup
-    FcResult FamilyFromPattern(FcPattern* pPattern, FcChar8 **family);
+    FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
+                                         const char *elementtype, const char *elementlangtype);
     std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aFontNameToLocalized;
     std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aLocalizedToCanonical;
 };
@@ -500,27 +501,27 @@ void FontCfgWrapper::release()
 #ifdef ENABLE_FONTCONFIG
 namespace
 {
-    typedef std::pair<FcChar8*, FcChar8*> lang_and_family;
+    typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
 
     class localizedsorter
     {
             rtl::OLocale maLoc;
         public:
             localizedsorter(rtl_Locale* pLoc) : maLoc(pLoc) {}
-            FcChar8* bestname(const std::vector<lang_and_family> &families);
+            FcChar8* bestname(const std::vector<lang_and_element> &elements);
     };
 
-    FcChar8* localizedsorter::bestname(const std::vector<lang_and_family> &families)
+    FcChar8* localizedsorter::bestname(const std::vector<lang_and_element> &elements)
     {
-        FcChar8* candidate = families.begin()->second;
+        FcChar8* candidate = elements.begin()->second;
         rtl::OString sLangMatch(rtl::OUStringToOString(maLoc.getLanguage().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8));
-    rtl::OString sFullMatch = sLangMatch;
+        rtl::OString sFullMatch = sLangMatch;
         sFullMatch += OString('-');
         sFullMatch += rtl::OUStringToOString(maLoc.getCountry().toAsciiLowerCase(), RTL_TEXTENCODING_UTF8);
 
-        std::vector<lang_and_family>::const_iterator aEnd = families.end();
+        std::vector<lang_and_element>::const_iterator aEnd = elements.end();
         bool alreadyclosematch = false;
-        for( std::vector<lang_and_family>::const_iterator aIter = families.begin(); aIter != aEnd; ++aIter )
+        for( std::vector<lang_and_element>::const_iterator aIter = elements.begin(); aIter != aEnd; ++aIter )
         {
             const char *pLang = (const char*)aIter->first;
             if( rtl_str_compare( pLang, sFullMatch.getStr() ) == 0)
@@ -542,7 +543,7 @@ namespace
             }
             else if( rtl_str_compare( pLang, "en") == 0)
             {
-                // fallback to the english family name
+                // fallback to the english element name
                 candidate = aIter->second;
             }
         }
@@ -550,27 +551,29 @@ namespace
     }
 }
 
-FcResult FontCfgWrapper::FamilyFromPattern(FcPattern* pPattern, FcChar8 **family)
-{
-    FcChar8 *origfamily;
-    FcResult eFamilyRes = FcPatternGetString( pPattern, FC_FAMILY, 0, &origfamily );
-    *family = origfamily;
 
-    if( eFamilyRes == FcResultMatch)
+FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **element,
+                                                     const char *elementtype, const char *elementlangtype)
+{                                                /* e. g.:      ^ FC_FAMILY              ^ FC_FAMILYLANG */
+    FcChar8 *origelement;
+    FcResult eElementRes = FcPatternGetString( pPattern, elementtype, 0, &origelement );
+    *element = origelement;
+
+    if( eElementRes == FcResultMatch)
     {
-        FcChar8* familylang = NULL;
-        if (FcPatternGetString( pPattern, FC_FAMILYLANG, 0, &familylang ) == FcResultMatch)
+        FcChar8* elementlang = NULL;
+        if (FcPatternGetString( pPattern, elementlangtype, 0, &elementlang ) == FcResultMatch)
         {
-            std::vector< lang_and_family > lang_and_families;
-            lang_and_families.push_back(lang_and_family(familylang, *family));
+            std::vector< lang_and_element > lang_and_elements;
+            lang_and_elements.push_back(lang_and_element(elementlang, *element));
             int k = 1;
             while (1)
             {
-                if (FcPatternGetString( pPattern, FC_FAMILYLANG, k, &familylang ) != FcResultMatch)
+                if (FcPatternGetString( pPattern, elementlangtype, k, &elementlang ) != FcResultMatch)
                     break;
-                if (FcPatternGetString( pPattern, FC_FAMILY, k, family ) != FcResultMatch)
+                if (FcPatternGetString( pPattern, elementtype, k, element ) != FcResultMatch)
                     break;
-                lang_and_families.push_back(lang_and_family(familylang, *family));
+                lang_and_elements.push_back(lang_and_element(elementlang, *element));
                 ++k;
             }
 
@@ -578,21 +581,21 @@ FcResult FontCfgWrapper::FamilyFromPattern(FcPattern* pPattern, FcChar8 **family
             rtl_Locale* pLoc;
             osl_getProcessLocale(&pLoc);
             localizedsorter aSorter(pLoc);
-            *family = aSorter.bestname(lang_and_families);
+            *element = aSorter.bestname(lang_and_elements);
 
-            std::vector<lang_and_family>::const_iterator aEnd = lang_and_families.end();
-            for (std::vector<lang_and_family>::const_iterator aIter = lang_and_families.begin(); aIter != aEnd; ++aIter)
+            std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
+            for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
             {
                 const char *candidate = (const char*)(aIter->second);
-                if (rtl_str_compare(candidate, (const char*)(*family)) != 0)
-                    m_aFontNameToLocalized[OString(candidate)] = OString((const char*)(*family));
+                if (rtl_str_compare(candidate, (const char*)(*element)) != 0)
+                    m_aFontNameToLocalized[OString(candidate)] = OString((const char*)(*element));
             }
-            if (rtl_str_compare((const char*)origfamily, (const char*)(*family)) != 0)
-                m_aLocalizedToCanonical[OString((const char*)(*family))] = OString((const char*)origfamily);
+            if (rtl_str_compare((const char*)origelement, (const char*)(*element)) != 0)
+                m_aLocalizedToCanonical[OString((const char*)(*element))] = OString((const char*)origelement);
         }
     }
 
-    return eFamilyRes;
+    return eElementRes;
 }
 
 /*
@@ -698,8 +701,8 @@ int PrintFontManager::countFontconfigFonts( std::hash_map<rtl::OString, int, rtl
             FcBool outline = false;
 
             FcResult eFileRes         = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_FILE, 0, &file );
-            FcResult eFamilyRes       = rWrapper.FamilyFromPattern( pFSet->fonts[i], &family );
-            FcResult eStyleRes        = rWrapper.FcPatternGetString( pFSet->fonts[i], FC_STYLE, 0, &style );
+            FcResult eFamilyRes       = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &family, FC_FAMILY, FC_FAMILYLANG );
+            FcResult eStyleRes        = rWrapper.LocalizedElementFromPattern( pFSet->fonts[i], &style, FC_STYLE, FC_STYLELANG );
             FcResult eSlantRes        = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SLANT, 0, &slant );
             FcResult eWeightRes       = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_WEIGHT, 0, &weight );
             FcResult eSpacRes         = rWrapper.FcPatternGetInteger( pFSet->fonts[i], FC_SPACING, 0, &spacing );
