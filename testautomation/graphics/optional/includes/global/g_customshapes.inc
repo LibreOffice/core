@@ -38,20 +38,19 @@ testcase tCustomshapes
    dim counter as Integer
    dim MakeInto3Dcounter as Integer
 
-   '/// Create new document ///'
+   printlog "Create new document "
    Call hNewDocument
    Call sSelectEmptyLayout
-     if gApplication = "DRAW" then
+    if gApplication = "DRAW" then
         Kontext "Documentdraw"
-     else '(Impress)
+    else '(Impress)
         Kontext "DocumentImpress"
-     endif
-     kontext "Toolbar"
-     sleep 1
-     printlog "insert a Smiley."
-     '/// From the toolbar: Insert three objects: ///'
-     '/// insert a Smiley. ///'
-     kontext "Toolbar"
+    endif
+    kontext "Toolbar"
+    sleep 1
+    printlog "From the toolbar: Insert three objects: "
+    printlog "1st: insert a Smiley. "
+    kontext "Toolbar"
      if Toolbar.Exists then
         if Toolbar.IsVisible then
            sleep 1
@@ -73,17 +72,15 @@ testcase tCustomshapes
            kontext "SymbolShapes"
 	   SymbolShapes.Close
 
-           '/// Unmark all objects ///'
+           printlog "Unmark all objects "
            hTypeKeys "<ESCAPE>"
 
-           '/// Mark the Smiley ///'
+           printlog "Mark the Smiley "
            hTypeKeys "<TAB>"
 
            printlog "Rename the object to 'First'."
-           '/// Rename the object to 'First' ///"
            hOpenContextMenu
            sleep 2
-           'Choose rename.
            if hMenuFindSelect(27027, true, 15) = false then
               Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -93,11 +90,9 @@ testcase tCustomshapes
            NameField.SetText "First"
            NameDlgObject.OK
 
-           printlog "Set the object -Title/Description to 'SecondTitle' and 'SecondText'"
-           '/// Open the Context-menu and set the description of the object to 'First' ///"
+           printlog "Open the Context-menu and set the description of the object to 'First'"
            hOpenContextMenu
            sleep (2)
-           'Choose "Description"
            if hMenuFindSelect(27033, true, 14) = false then
               Warnlog "Context-Menu-entry `Description` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -115,8 +110,7 @@ testcase tCustomshapes
      endif
      gMouseClick 90, 90
 
-     printlog "Insert a Triangle."
-     '/// Insert a Triangle ///'
+     printlog "2nd: Insert a Triangle "
      kontext "Toolbar"
      if Toolbar.Exists then
         if Toolbar.IsVisible then
@@ -138,16 +132,14 @@ testcase tCustomshapes
 	   BasicShapes.Close
            sleep 1
 
-           '/// Unmark all objects ///'
+           printlog "Unmark all objects "
            hTypeKeys "<ESCAPE>"
-           '/// Mark the Triangle ///'
+           printlog "Mark the Triangle "
            hTypeKeys "<TAB>", 2
 
-           printlog "Rename the object into 'Second'."
-           '/// Rename the object into 'Second'. ///'
+           printlog "Rename the object into 'Second'. "
            hOpenContextMenu
            sleep 2
-           'Choose rename.
            if hMenuFindSelect(27027, true, 15) = false then
               Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -159,11 +151,9 @@ testcase tCustomshapes
            NameField.SetText "Second"
            NameDlgObject.OK
 
-           printlog "Set the object -Title/Description to 'SecondTitle' and 'SecondText'."
-           '/// Open the Context-menu and set the description of the object to 'SecondTitle' and 'SecondText' ///"
+           printlog "Open the Context-menu and set the description of the object to 'SecondTitle' and 'SecondText'"
            hOpenContextMenu
            sleep (2)
-           'Choose "Description"
            if hMenuFindSelect(27033, true, 14) = false then
               Warnlog "Context-Menu-entry `Description` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -181,14 +171,13 @@ testcase tCustomshapes
      endif
      gMouseClick 90, 90
 
-     printlog "Insert Thinking-cloud."
-     '/// Insert Thinking-cloud. ///'
+     printlog "3rd: Insert Thinking-cloud."
      kontext "Toolbar"
      if Toolbar.Exists then
         if Toolbar.IsVisible then
            sleep 1
            try
-              CalloutShapes.TearOff  ' insert Thinking-cloud
+              CalloutShapes.TearOff  
            catch
               warnlog "bug for GH from FHA; .tearoff doesnt tell success"
            endcatch
@@ -206,16 +195,14 @@ testcase tCustomshapes
 	   Callouts.Close
 	   sleep 1
 
-           '/// Unmark all objects ///'
+           printlog "Unmark all objects "
            hTypeKeys "<ESCAPE>"
-           '/// Mark the cloud ///'
+           printlog "Mark the cloud "
            hTypeKeys "<TAB>", 3
 
-           printlog "Rename the object to 'Third'."
-           '/// Rename the object to 'Third'. ///'
+           printlog "Rename the object to 'Third'. "
            hOpenContextMenu
            sleep 2
-           'Choose rename.
            if hMenuFindSelect(27027, true, 15) = false then
               Warnlog "Context-Menu-entry `Rename` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -225,11 +212,9 @@ testcase tCustomshapes
            NameField.SetText "Third"
            NameDlgObject.OK
 
-           printlog "Set the object -Title/Description to 'ThirdTitle' and 'ThirdText'."
-           '/// Open the Context-menu and set the description of the object to 'First' ///"
+           printlog "Open the Context-menu and set the description of the object to 'First'"
            hOpenContextMenu
            sleep (2)
-           'Choose "Description"
            if hMenuFindSelect(27033, true, 14) = false then
               Warnlog "Context-Menu-entry `Description` was not found. Therefore the test ends."
               Call hCloseDocument
@@ -247,8 +232,7 @@ testcase tCustomshapes
      endif
      gMouseClick 90, 90
 
-     printlog "Change all objects into 3D."
-     '/// Change all objects into 3D. ///'
+     printlog "Change all objects into 3D. "
      if gApplication = "DRAW" then
         Kontext "Documentdraw"
      else '(Impress)
@@ -294,9 +278,8 @@ testcase tCustomshapes
          hTypeKeys "<ESCAPE>"
      Next MakeInto3Dcounter
 
-     printlog "See if the objects still are Custom Shapes."
-     '/// See if the objects still are Custom Shapes ///'
-     '/// We do so by moving the lower part of the the thinking-cloud. ///'
+     printlog "See if the objects still are Custom Shapes "
+     printlog "We do so by moving the lower part of the the thinking-cloud. "
      gMouseClick 90, 1
      hTypeKeys "<TAB><TAB><TAB>"
 
@@ -313,8 +296,7 @@ testcase tCustomshapes
      gMouseClick 90, 1
      hTypeKeys "<TAB>"
 
-     printlog "Check the name of the selected object (should be 'First')"
-     '/// Check the name of the selected object (should be 'First') ///'
+     printlog "Check the name of the selected object (should be 'First') "
      hOpenContextMenu
      sleep 2
      'Choose rename.
@@ -334,7 +316,6 @@ testcase tCustomshapes
      NameDlgObject.OK
 
      printlog "Open the Context-menu and check if the description of the object is right"
-     '/// Open the Context-menu and check if the description of the object is right ///"
      hOpenContextMenu
      sleep (2)
      'Choose "Description"
@@ -363,10 +344,9 @@ testcase tCustomshapes
 
      gMouseClick 90, 1
      hTypeKeys "<TAB><TAB>"
-     '/// Check the name of the selected object (should be 'Second') ///'
+     printlog "Check the name of the selected object (should be 'Second') "
      hOpenContextMenu
      sleep 2
-     'Choose rename.
      if hMenuFindSelect(27027, true, 15) = false then
         Warnlog "   Context-Menu-entry `Rename` was not found. Therefore the test ends."
         Call hCloseDocument
@@ -383,7 +363,6 @@ testcase tCustomshapes
      NameDlgObject.OK
 
      printlog "Open the Context-menu and check if the description of the object is right"
-     '/// Open the Context-menu and check if the description of the object is right ///"
      hOpenContextMenu
      sleep (2)
      'Choose "Description"
@@ -416,7 +395,7 @@ testcase tCustomshapes
 
      gMouseClick 90, 1
      hTypeKeys "<TAB><TAB><TAB>"
-     '/// Check the name of the selected object (should be "Third") ///'
+     printlog "Check the name of the selected object (should be Third) "
      hOpenContextMenu
      sleep 2
      'Choose rename.
@@ -436,7 +415,6 @@ testcase tCustomshapes
      NameDlgObject.OK
 
      printlog "Open the Context-menu and check if the description of the object is right"
-     '/// Open the Context-menu and check if the description of the object is right ///"
      hOpenContextMenu
      sleep (2)
      'Choose "Description"
@@ -468,14 +446,14 @@ testcase tCustomshapes
      endif
 
      printlog "End of test. Close the document."
-     Call hCloseDocument         '/// Close Document ///'
+     Call hCloseDocument         
      
 endcase 'tCustomshapes
 '---------------------------------------------------------
 testcase tFormatPaintbrush
 
    dim counter, ZaehlerVerlauf, j as Integer
-   '/// Hatching ///'
+   printlog "Hatching "
    dim HatchingDistance as string
    dim HatchingAngle as string
    dim HatchingLineType as string
@@ -524,23 +502,24 @@ testcase tFormatPaintbrush
    dim front_value as string
    dim background_value as string
 
-   '/// Create new document ///'
+   printlog "Create new document "
    Call hNewDocument
-      '/// Create a new rectangle ///'
+      printlog "Create a new rectangle "
       hRechteckErstellen ( 10, 10, 30, 30 )
       FormatArea
-         '/// Switch to Tabpage "Area" ///'
+         printlog "Switch to Tabpage Area "
          Kontext
          Active.SetPage TabArea
          Kontext "TabArea"
          sleep 1
-         FillOptions.Select 4          '/// Select hatching, control after closing and reopening dialog if changes are recognized ///'
-         '/// Switch to Tabpage "Hatching" ///'
+         printlog "Select hatching, control after closing and reopening dialog if changes are recognized "
+         FillOptions.Select 4          
+         printlog "Switch to Tabpage Hatching "
          Kontext
          Active.setpage TabSchraffuren
          Kontext "TabSchraffuren"
 
-         '/// Get the values for the Rectangle ///'
+         printlog "Get the values for the Rectangle "
          HatchingDistance = Abstand.GetText
          HatchingAngle = Winkel.GetText
          'Definition
@@ -551,7 +530,7 @@ testcase tFormatPaintbrush
          sleep 1
 
 '         FormatArea
-         '/// Switch to Tabpage "Shaddow" ///'
+         printlog "Switch to Tabpage Shaddow "
          Kontext
          Active.setpage TabSchatten
          Kontext "TabSchatten"
@@ -565,7 +544,7 @@ testcase tFormatPaintbrush
          endif
          sleep 1
 
-         '/// Switch to Tabpage "Transparency" ///'
+         printlog "Switch to Tabpage Transparency "
          Kontext
          Active.SetPage TabTransparenz
          Kontext "TabTransparenz"
@@ -583,7 +562,7 @@ testcase tFormatPaintbrush
          MFEnd_value = MFEndwert.GetText
 
          sleep 1
-         '/// Switch to Tabpage "Color" ///'
+         printlog "Switch to Tabpage Color "
          Kontext
          Active.setpage TabFarben
          Kontext "TabFarben"
@@ -603,7 +582,7 @@ testcase tFormatPaintbrush
          endif
          sleep 1
 
-         '/// Switch to Tabpage "Gradient" ///'
+         printlog "Switch to Tabpage Gradient "
          Kontext
          Active.setpage TabFarbverlaeufe
          Kontext "TabFarbverlaeufe"
@@ -619,7 +598,7 @@ testcase tFormatPaintbrush
          tovalue_value = BisWert.GetText
          sleep 1
 
-         '/// Switch to Tabpage "Bitmap" ///'
+         printlog "Switch to Tabpage Bitmap "
          Kontext
          Active.setpage TabBitmap
          Kontext "TabBitmap"
@@ -627,11 +606,11 @@ testcase tFormatPaintbrush
          front_value = Vordergrund.GetSelText
          background_value = Hintergrund.GetSelText
          sleep 1
-      '/// Close the FormatArea-dialogue with "OK" ///'
+      printlog "Close the FormatArea-dialogue with OK "
       TabBitmap.OK
       sleep 2
 
-      '/// Create a second rectangle, and use the "Paintbrush-icon" to copy the settings for the first rectangle onto the new one ///'
+      printlog "Create a second rectangle, and use the Paintbrush-icon to copy the settings for the first rectangle onto the new one "
       hRechteckErstellen ( 70, 70, 90, 90 )
       if gApplication = "DRAW" then
          kontext "Documentdraw"
@@ -659,21 +638,23 @@ testcase tFormatPaintbrush
          sleep 1
       endif
 
-      '/// Check if the Formatting is like the first one. ///'
+      printlog "Check if the Formatting is like the first one. "
       FormatArea
-         '/// Switch to Tabpage "Area" ///'
+         printlog "Switch to Tabpage Area "
          Kontext
          Active.SetPage TabArea
          Kontext "TabArea"
-'         if FillOptions.GetSelIndex <> 4 then        '/// The selected value should be 'no fill' ///'
+'         if FillOptions.GetSelIndex <> 4 then        printlog "The selected value should be 'no fill' "
 '            warnlog "The FillOptions-value was not transferred correctly."
 '         else
 '            printlog "The FillOptions-value was transferred correctly."
 '         endif
 
-            sleep 1                      '/// control if changes are still there after closing and reopening dialog ///'
-            FillOptions.Select 4         '/// Select hatching, control after closing and reopening dialog if changes are recognized ///'
-            '/// Switch to Tabpage "Hatching" ///'
+            sleep 1
+            printlog "control if changes are still there after closing and reopening dialog "
+            FillOptions.Select 4
+            printlog "Select hatching, control after closing and reopening dialog if changes are recognized "
+            printlog "Switch to Tabpage Hatching "
             kontext
             Active.setpage TabSchraffuren
             kontext "TabSchraffuren"
@@ -693,7 +674,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
 
-         '/// Switch to Tabpage "Shaddow" ///'
+         printlog "Switch to Tabpage Shaddow "
          Kontext
          Active.setpage TabSchatten
          Kontext "TabSchatten"
@@ -718,7 +699,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
 
-         '/// Switch to Tabpage "Transparency" ///'
+         printlog "Switch to Tabpage Transparency "
          Kontext
          Active.SetPage TabTransparenz
          Kontext "TabTransparenz"
@@ -757,7 +738,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
 
-         '/// Switch to Tabpage "Color" ///'
+         printlog "Switch to Tabpage Color "
          Kontext
          Active.setpage TabFarben
          Kontext "TabFarben"
@@ -798,7 +779,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
 
-         '/// Switch to Tabpage "Gradient" ///'
+         printlog "Switch to Tabpage Gradient "
          Kontext
          Active.setpage TabFarbverlaeufe
          Kontext "TabFarbverlaeufe"
@@ -831,7 +812,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
 
-         '/// Switch to Tabpage "Bitmap" ///'
+         printlog "Switch to Tabpage Bitmap "
          Kontext
          Active.setpage TabBitmap
          Kontext "TabBitmap"
@@ -843,6 +824,7 @@ testcase tFormatPaintbrush
             endif
             sleep 1
       TabBitmap.OK
-   Call hCloseDocument         '/// Close Document ///'
+      printlog "Close Document "
+   Call hCloseDocument         
    
 endcase 'tFormatPaintbrush
