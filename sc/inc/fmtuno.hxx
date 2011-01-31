@@ -95,7 +95,6 @@ public:
 
     void                    FillFormat( ScConditionalFormat& rFormat, ScDocument* pDoc,
                                 formula::FormulaGrammar::Grammar eGrammar) const;
-    void                    DataChanged();
 
                             // XSheetConditionalEntries
     virtual void SAL_CALL   addNew( const ::com::sun::star::uno::Sequence<
@@ -157,13 +156,11 @@ class ScTableConditionalEntry : public cppu::WeakImplHelper3<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
-    ScTableConditionalFormat*   pParent;
     ScCondFormatEntryItem       aData;
 
     ScTableConditionalEntry(); // disabled
 public:
-                            ScTableConditionalEntry(ScTableConditionalFormat* pPar,
-                                                    const ScCondFormatEntryItem& aItem);
+                            ScTableConditionalEntry(const ScCondFormatEntryItem& aItem);
     virtual                 ~ScTableConditionalEntry();
 
     void                    GetData(ScCondFormatEntryItem& rData) const;
@@ -241,7 +238,6 @@ public:
 
     ScValidationData*       CreateValidationData( ScDocument* pDoc,
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
-    void                    DataChanged();
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()

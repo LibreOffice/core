@@ -851,13 +851,13 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     return TRUE;
 }
 
-void ScDocFunc::NotifyInputHandler( const ScAddress& /* rPos */ )
+void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh && pViewSh->GetViewData()->GetDocShell() == &rDocShell )
     {
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
-        if ( pInputHdl )
+        if ( pInputHdl && pInputHdl->GetCursorPos() == rPos )
         {
             sal_Bool bIsEditMode(pInputHdl->IsEditMode());
 
@@ -986,7 +986,7 @@ ScTokenArray* lcl_ScDocFunc_CreateTokenArrayXML( const String& rText, const Stri
 
 
 ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
-        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar )
+        const String& rText, const String& rFormulaNmsp, const formula::FormulaGrammar::Grammar eGrammar, short* pRetFormatType )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     ScBaseCell* pNewCell = NULL;
@@ -1020,7 +1020,12 @@ ScBaseCell* ScDocFunc::InterpretEnglishString( const ScAddress& rPos,
         sal_uInt32 nEnglish = pFormatter->GetStandardIndex(LANGUAGE_ENGLISH_US);
         double fVal;
         if ( pFormatter->IsNumberFormat( rText, nEnglish, fVal ) )
+        {
             pNewCell = new ScValueCell( fVal );
+            // return the format type from the English format, so a localized format can be created
+            if ( pRetFormatType )
+                *pRetFormatType = pFormatter->GetType( nEnglish );
+        }
         else if ( rText.Len() )
             pNewCell = ScBaseCell::CreateTextCell( rText, pDoc );
 
@@ -2650,8 +2655,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
-            String sCodeName( genModuleName );
-            rDoc.SetCodeName( nTab, sCodeName );
+            rDoc.SetCodeName( nTab, genModuleName );
             script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
             xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
             xLib->insertByName( genModuleName, aSourceAny );
@@ -3122,6 +3126,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                                         ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord, BOOL bApi )
 {
+    ScDocShellModificator aModificator( rDocShell );
+
     if (!nRangeCnt)
         return TRUE;
 
@@ -3283,6 +3289,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     pDoc->UpdatePageBreaks( nTab );
 
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
+    aModificator.SetDocumentModified();
 
     return bSuccess;
 }
@@ -4862,9 +4869,11 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     }
 
     //  Update hat sein eigenes Undo
-
-    pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
-    pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    if (pDoc->IsExecuteLinkEnabled())
+    {
+        pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
+        pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    }
     pLink->SetDoInsert(TRUE);       // Default = TRUE
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();

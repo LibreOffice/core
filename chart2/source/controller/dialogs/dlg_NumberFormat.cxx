@@ -67,7 +67,6 @@ NumberFormatDialog::~NumberFormatDialog()
 {
 }
 
-//static
 SfxItemSet NumberFormatDialog::CreateEmptyItemSetForNumberFormatDialog( SfxItemPool& rItemPool )
 {
     static const USHORT nWhichPairs[] =

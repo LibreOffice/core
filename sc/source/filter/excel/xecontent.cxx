@@ -55,7 +55,7 @@
 #include "xestyle.hxx"
 #include "xename.hxx"
 
-#include <oox/core/tokens.hxx>
+using namespace ::oox;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;

@@ -72,7 +72,6 @@
 #include <com/sun/star/task/XJob.hpp>
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
-#include <vbahelper/vbaaccesshelper.hxx>
 
 #include "scabstdlg.hxx" //CHINA001
 #include <sot/formats.hxx>
@@ -554,6 +553,13 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                     xVbaEvents->processVbaEvent( WORKBOOK_AFTERSAVE, aArgs );
                 }
                 break;
+                case SFX_EVENT_CLOSEDOC:
+                {
+                    // #163655# prevent event processing after model is disposed
+                    aDocument.SetVbaEventProcessor( uno::Reference< script::vba::XVBAEventProcessor >() );
+                    uno::Reference< lang::XEventListener >( xVbaEvents, uno::UNO_QUERY_THROW )->disposing( lang::EventObject() );
+                }
+                break;
             }
         }
     }
@@ -618,25 +624,6 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
                             // TODO/LATER: And error message should be shown here probably
                             SetReadOnlyUI( sal_True );
                         }
-                    }
-
-                    // VBA specific initialization
-                    if( aDocument.IsInVBAMode() ) try
-                    {
-                        uno::Reference< frame::XModel > xModel( GetModel(), uno::UNO_SET_THROW );
-
-                        // create VBAGlobals object if not yet done (this also creates the "ThisExcelDoc" symbol)
-                        uno::Reference< lang::XMultiServiceFactory > xFactory( xModel, uno::UNO_QUERY_THROW );
-                        xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
-
-                        // create the VBA document event processor
-                        uno::Sequence< uno::Any > aArgs( 1 );
-                        aArgs[ 0 ] <<= xModel;
-                        xVbaEvents.set( ooo::vba::createVBAUnoAPIServiceWithArgs( this, "com.sun.star.script.vba.VBASpreadsheetEventProcessor" , aArgs ), uno::UNO_QUERY );
-                        aDocument.SetVbaEventProcessor( xVbaEvents );
-                    }
-                    catch( uno::Exception& )
-                    {
                     }
                 }
                 break;
@@ -2618,6 +2605,7 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
     if ( pPaintLockData && bIsModified )
     {
         //! BCA_BRDCST_ALWAYS etc. also needed here?
+        aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
         pPaintLockData->SetModified();          // spaeter...

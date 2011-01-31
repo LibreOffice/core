@@ -453,7 +453,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                     {
                         if ( pStyleSheet )
                         {
-                            pTabViewShell->RemoveStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
+                            pTabViewShell->RemoveStyleSheetInUse( pStyleSheet );
                             pStylePool->Remove( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
                             nRetMask = TRUE;
@@ -556,7 +556,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // Attribute uebernehmen und Style anwenden
                             pStyleSheet->GetItemSet().Put( aAttrSet );
-                            pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
+                            pTabViewShell->UpdateStyleSheetInUse( pStyleSheet );
 
                             //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
                             //  (pStyleSheet pointer is used!)
@@ -578,7 +578,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 }
 
                                 pStyleSheet->GetItemSet().Put( aAttrSet );
-                                pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
+                                pTabViewShell->UpdateStyleSheetInUse( pStyleSheet );
 
                                 //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
                                 //  (pStyleSheet pointer is used!)
@@ -868,7 +868,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 (const SvxNumberInfoItem&)
                                     *(pDocSh->GetItem(SID_ATTR_NUMBERFORMAT_INFO)) );
 
-                            pTabViewShell->UpdateStyleSheetInUse( (SfxStyleSheet*)pStyleSheet );
+                            pTabViewShell->UpdateStyleSheetInUse( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
                         }
 
