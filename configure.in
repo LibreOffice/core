@@ -1530,6 +1530,15 @@ case "$host_os" in
         PTHREAD_LIBS="-pthread"
         _os=OpenBSD
         ;;
+    dragonfly*)
+        test_gtk=yes
+        build_gstreamer=yes
+        test_kde=yes
+        test_kde4=yes
+        test_freetype=yes
+        PTHREAD_LIBS="-pthread"
+        _os=DragonFly
+        ;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
    ;;
