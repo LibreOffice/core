@@ -1518,7 +1518,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 OSL_ENSURE( false, "VCLXWindow::setProperty( 'MouseWheelBehavior' ): illegal property value!" );
             }
 
-            aMouseSettings.SetWheelBehavior( nWheelBehavior );
+            aMouseSettings.SetWheelBehavior( nVclBehavior );
             aSettings.SetMouseSettings( aMouseSettings );
             pWindow->SetSettings( aSettings, TRUE );
         }
