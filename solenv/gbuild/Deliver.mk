@@ -77,7 +77,7 @@ deliverlog:
     $(eval $(call gb_Deliver_setdeliverlogcommand))
     $(call gb_Helper_abbreviate_dirs, $(COMMAND))
 
-all : deliverlog
+# all : deliverlog
 
 define gb_Deliver_print_deliverable
 $(info $(1) $(patsubst $(OUTDIR)/%,%,$(2)))
