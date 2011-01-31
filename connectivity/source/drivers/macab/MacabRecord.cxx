@@ -202,7 +202,7 @@ sal_Int32 MacabRecord::compareFields(const macabfield *_field1, const macabfield
             result = CFStringCompare(
                 (CFStringRef) _field1->value,
                 (CFStringRef) _field2->value,
-                0); // 0 = no options (like ignore case)
+                kCFCompareLocalized); // Specifies that the comparison should take into account differences related to locale, such as the thousands separator character.
             break;
 
         case kABDateProperty:
