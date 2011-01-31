@@ -27,8 +27,11 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idlc.hxx"
-#include <idlc/idlc.hxx>
+
+#include "idlc/idlc.hxx"
 #include "sal/main.h"
+
+#include <string.h>
 
 using namespace ::rtl;
 
