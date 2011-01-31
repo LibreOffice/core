@@ -968,7 +968,7 @@ void NewXForms( SfxRequest& rReq )
     // copied & excerpted from SwModule::InsertLab(..)
 
     // create new document
-    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
+    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
     xDocSh->DoInitNew( 0 );
 
     // initialize XForms
