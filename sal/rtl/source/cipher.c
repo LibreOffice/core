@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_CIPHER_C_ "$Revision: 1.5 $"
+#define _RTL_CIPHER_C_
 
 #include <sal/types.h>
 #include <rtl/alloc.h>

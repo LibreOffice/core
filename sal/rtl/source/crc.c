@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_CRC_C_ "$Revision: 1.3 $"
+#define _RTL_CRC_C_
 
 #include <sal/types.h>
 #include <rtl/crc.h>

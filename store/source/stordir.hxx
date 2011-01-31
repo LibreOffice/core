@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORDIR_HXX_
-#define _STORE_STORDIR_HXX_ "$Revision: 1.1.2.2 $"
+#define _STORE_STORDIR_HXX_
 
 #include <sal/types.h>
 

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORE_H_
-#define _STORE_STORE_H_ "$Revision: 1.6 $"
+#define _STORE_STORE_H_
 
 #include <store/types.h>
 

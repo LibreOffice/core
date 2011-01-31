@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _RTL_DIGEST_H_
-#define _RTL_DIGEST_H_ "$Revision: 1.8 $"
+#define _RTL_DIGEST_H_
 
 #include <sal/types.h>
 

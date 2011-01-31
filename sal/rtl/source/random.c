@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#define _RTL_RANDOM_C_ "$Revision: 1.6 $"
+#define _RTL_RANDOM_C_
 
 #include <sal/types.h>
 #include <osl/thread.h>

@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORTREE_HXX
-#define _STORE_STORTREE_HXX "$Revision: 1.6.8.2 $"
+#define _STORE_STORTREE_HXX
 
 #include "sal/types.h"
 

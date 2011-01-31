@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #ifndef _RTL_RANDOM_H_
-#define _RTL_RANDOM_H_ "$Revision: 1.7 $"
+#define _RTL_RANDOM_H_
 
 #include <sal/types.h>
 
