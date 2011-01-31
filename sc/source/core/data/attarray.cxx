@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 //------------------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -58,16 +56,7 @@
 #include "segmenttree.hxx"
 #include "cell.hxx"
 
-#undef DBG_INVALIDATE
-#define DBGOUTPUT(s) \
-    DBG_ERROR( String("Invalidate ") + String(s) + String(": ") \
-               + String(nCol) + String('/') + String(aAdrStart.Row()) + String('/') + String(nTab) \
-               + String(" bis ") \
-               + String(nCol) + String('/') + String(aAdrEnd.Row())   + String('/') + String(nTab) \
-              );
-
 // STATIC DATA -----------------------------------------------------------
-
 
 //------------------------------------------------------------------------
 
@@ -155,9 +144,6 @@ void ScAttrArray::Reset( const ScPatternAttr* pPattern, BOOL bAlloc )
                 aAdrStart.SetRow( i ? pData[i-1].nRow+1 : 0 );
                 aAdrEnd  .SetRow( pData[i].nRow );
                 pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-#ifdef DBG_INVALIDATE
-                DBGOUTPUT("Reset");
-#endif
             }
             // conditional format or deleted?
             if ( &pPattern->GetItem(ATTR_CONDITIONAL) != &pOldPattern->GetItem(ATTR_CONDITIONAL) )
@@ -384,9 +370,6 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                     aAdrStart.SetRow( Max(nStartRow,ns) );
                     aAdrEnd  .SetRow( Min(nEndRow,pData[nx].nRow) );
                     pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-#ifdef DBG_INVALIDATE
-                    DBGOUTPUT("SetPatternArea");
-#endif
                 }
                 if ( &rNewSet.Get(ATTR_CONDITIONAL) != &rOldSet.Get(ATTR_CONDITIONAL) )
                 {
@@ -568,9 +551,6 @@ void ScAttrArray::ApplyStyleArea( SCROW nStartRow, SCROW nEndRow, ScStyleSheet* 
                     aAdrStart.SetRow( nPos ? pData[nPos-1].nRow+1 : 0 );
                     aAdrEnd  .SetRow( pData[nPos].nRow );
                     pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-#ifdef DBG_INVALIDATE
-                    DBGOUTPUT("ApplyStyleArea");
-#endif
                 }
 
                 pDocument->GetPool()->Remove(*pData[nPos].pPattern);
@@ -793,9 +773,6 @@ void ScAttrArray::ApplyCacheArea( SCROW nStartRow, SCROW nEndRow, SfxItemPoolCac
                         aAdrStart.SetRow( nPos ? pData[nPos-1].nRow+1 : 0 );
                         aAdrEnd  .SetRow( pData[nPos].nRow );
                         pDocument->InvalidateTextWidth( &aAdrStart, &aAdrEnd, bNumFormatChanged );
-#ifdef DBG_INVALIDATE
-                        DBGOUTPUT("ApplyCacheArea");
-#endif
                     }
 
                     // Reset conditional formats or delete ?
