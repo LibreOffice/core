@@ -24,40 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_AxisType_idl
-#define com_sun_star_chart2_AxisType_idl
+#ifndef com_sun_star_chart_XAxis_idl
+#define com_sun_star_chart_XAxis_idl
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
 
-constants AxisType
+module com {  module sun {  module star {  module chart {
+
+/** Allows easier access to the different subelements of an axis.
+@since OOo 3.4
+*/
+
+interface XAxis : ::com::sun::star::uno::XInterface
 {
-    /** the axis represent real numbers
+    /** @returns
+            the title of the axis. The returned object supports the properties described in service <type>ChartTitle</type>.
      */
-    const long REALNUMBER = 0;
-    /** the axis represent real numbers in percent
-     */
-    const long PERCENT = 1;
-    /** the axis represent discrete categories
-     */
-    const long CATEGORY = 2;
-    /** the axis shows the series names (z axis)
-     */
-    const long SERIES = 3;
-    /** the axis shows dates
-     */
-    const long DATE = 4;
+    com::sun::star::beans::XPropertySet getAxisTitle();
+
+    /** @returns
+            the properties of the major grid of the axis. The returned object supports service <type>ChartGrid</type>.
+    */
+    com::sun::star::beans::XPropertySet getMajorGrid();
+
+    /** @returns
+            the properties of the minor grid of the axis. The returned object supports service <type>ChartGrid</type>.
+    */
+    com::sun::star::beans::XPropertySet getMinorGrid();
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif

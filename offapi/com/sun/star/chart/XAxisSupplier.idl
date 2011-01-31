@@ -24,40 +24,38 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_AxisType_idl
-#define com_sun_star_chart2_AxisType_idl
+#ifndef com_sun_star_chart_XAxisSupplier_idl
+#define com_sun_star_chart_XAxisSupplier_idl
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+#ifndef __com_sun_star_chart_XAxis_idl__
+#include <com/sun/star/chart/XAxis.idl>
+#endif
 
-constants AxisType
+module com {  module sun {  module star {  module chart {
+
+/** Easier access to the different axes within a chart.
+@since OOo 3.4
+*/
+
+interface XAxisSupplier : ::com::sun::star::uno::XInterface
 {
-    /** the axis represent real numbers
+    /** @returns
+            the primary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
+
+        @param nDimensionIndex
+            Parameter nDimensionIndex says wether it is a x, y or z-axis (0 for x).
      */
-    const long REALNUMBER = 0;
-    /** the axis represent real numbers in percent
+    com::sun::star::chart::XAxis getAxis( [in] long nDimensionIndex );
+
+    /** @returns
+            the secondary axis of the specified dimension. The returned object supports service <type>ChartAxis</type>.
+
+        @param nDimensionIndex
+            Parameter nDimensionIndex says wether it is a x, y or z-axis (0 for x).
      */
-    const long PERCENT = 1;
-    /** the axis represent discrete categories
-     */
-    const long CATEGORY = 2;
-    /** the axis shows the series names (z axis)
-     */
-    const long SERIES = 3;
-    /** the axis shows dates
-     */
-    const long DATE = 4;
+    com::sun::star::chart::XAxis getSecondaryAxis( [in] long nDimensionIndex );
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif
