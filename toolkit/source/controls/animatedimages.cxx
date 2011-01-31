@@ -67,6 +67,7 @@ namespace toolkit
     using ::com::sun::star::awt::XWindowPeer;
     using ::com::sun::star::util::XModifyListener;
     using ::com::sun::star::awt::XToolkit;
+    using ::com::sun::star::lang::XMultiServiceFactory;
     /** === end UNO using === **/
     namespace VisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
@@ -75,8 +76,8 @@ namespace toolkit
     //= AnimatedImagesControl
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    AnimatedImagesControl::AnimatedImagesControl()
-        :AnimatedImagesControl_Base()
+    AnimatedImagesControl::AnimatedImagesControl( Reference< XMultiServiceFactory > const & i_factory )
+        :AnimatedImagesControl_Base( i_factory )
     {
     }
 
@@ -238,8 +239,9 @@ namespace toolkit
     //= AnimatedImagesControlModel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    AnimatedImagesControlModel::AnimatedImagesControlModel()
-        :m_pData( new AnimatedImagesControlModel_Data )
+    AnimatedImagesControlModel::AnimatedImagesControlModel( Reference< XMultiServiceFactory > const & i_factory )
+        :AnimatedImagesControlModel_Base( i_factory )
+        ,m_pData( new AnimatedImagesControlModel_Data )
     {
         ImplRegisterProperty( BASEPROPERTY_AUTO_REPEAT );
         ImplRegisterProperty( BASEPROPERTY_BORDER );

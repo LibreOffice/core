@@ -55,13 +55,15 @@ namespace toolkit
     using ::com::sun::star::uno::Sequence;
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::beans::XPropertySetInfo;
+    using ::com::sun::star::lang::XMultiServiceFactory;
     /** === end UNO using === **/
 
     //==================================================================================================================
     //= SpinningProgressControlModel
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    SpinningProgressControlModel::SpinningProgressControlModel()
+    SpinningProgressControlModel::SpinningProgressControlModel( Reference< XMultiServiceFactory > const & i_factory )
+        :SpinningProgressControlModel_Base( i_factory )
     {
         // default image sets
         osl_incrementInterlockedCount( &m_refCount );

@@ -96,7 +96,7 @@ protected:
     UnoControlModelHolderList::iterator         ImplFindElement( const ::rtl::OUString& rName );
 
 public:
-                        UnoControlDialogModel();
+                        UnoControlDialogModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
 
@@ -242,7 +242,7 @@ protected:
 
 public:
 
-                                UnoDialogControl();
+                                UnoDialogControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
 
     ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }

@@ -64,6 +64,20 @@ $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
 ))
 endif
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
     kernel32 \
     msvcrt \
@@ -72,5 +86,6 @@ $(eval $(call gb_Library_add_linked_libs,hatchwindowfactory,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet sw=4 ts=4:

@@ -98,6 +98,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/defaultgridcolumnmodel \
     toolkit/source/controls/grid/defaultgriddatamodel \
     toolkit/source/controls/grid/gridcolumn \
+    toolkit/source/controls/grid/grideventforwarder \
+    toolkit/source/controls/grid/sortablegriddatamodel \
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
@@ -168,10 +170,23 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
 ))
 endif
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,tk,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    mingwex \
+    kernel32 \
+    msvcrt \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,tk,\
     kernel32 \
     msvcrt \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet sw=4 ts=4:

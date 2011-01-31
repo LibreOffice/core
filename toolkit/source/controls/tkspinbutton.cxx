@@ -50,7 +50,8 @@ namespace toolkit
     //= UnoSpinButtonModel
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSpinButtonModel::UnoSpinButtonModel()
+    UnoSpinButtonModel::UnoSpinButtonModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
     {
         ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
         ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -137,8 +138,9 @@ namespace toolkit
     //= UnoSpinButtonControl
     //====================================================================
     //--------------------------------------------------------------------
-    UnoSpinButtonControl::UnoSpinButtonControl()
-        :maAdjustmentListeners( *this )
+    UnoSpinButtonControl::UnoSpinButtonControl( const Reference< XMultiServiceFactory >& i_factory )
+        :UnoControlBase( i_factory )
+        ,maAdjustmentListeners( *this )
     {
     }
 

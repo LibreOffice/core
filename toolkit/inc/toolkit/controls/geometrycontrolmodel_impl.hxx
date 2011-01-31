@@ -32,8 +32,8 @@
 //====================================================================
 //--------------------------------------------------------------------
 template <class CONTROLMODEL>
-OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel()
-    :OGeometryControlModel_Base(new CONTROLMODEL)
+OGeometryControlModel<CONTROLMODEL>::OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+    :OGeometryControlModel_Base(new CONTROLMODEL( i_factory ) )
 {
 }
 
