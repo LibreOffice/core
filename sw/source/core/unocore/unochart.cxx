@@ -1172,6 +1172,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
         {
             DBG_ASSERT( nCurLabelSeqLen == 0 && nCurValuesSeqLen == 1,
                     "trying to determine 'DataRowSource': something's fishy... should have been a single cell");
+            (void)nCurValuesSeqLen;
             nDirection = 0;     // default direction for a single cell should be 'columns'
         }
         else    // more than one cell is availabale (in values and label together!)
@@ -1729,16 +1730,12 @@ void SwChartDataProvider::AddRowCols(
         {
             //get range of indices in col/rows for new cells
             sal_Int32 nFirstNewCol = nFirstCol;
-            sal_Int32 nLastNewCol  = nLastCol;
             sal_Int32 nFirstNewRow = bBehind ?  nFirstRow + 1 : nFirstRow - nLines;
-            sal_Int32 nLastNewRow  = nFirstNewRow - 1 + nLines;
             if (bAddCols)
             {
                 DBG_ASSERT( nFirstCol == nLastCol, "column indices seem broken" );
                 nFirstNewCol = bBehind ?  nFirstCol + 1 : nFirstCol - nLines;
-                nLastNewCol  = nFirstNewCol - 1 + nLines;
                 nFirstNewRow = nFirstRow;
-                nLastNewRow  = nLastRow;
             }
 
             // iterate over all data-sequences for the table

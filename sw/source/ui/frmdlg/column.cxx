@@ -140,14 +140,14 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
         pSectionSet->Put( pCurrSection->GetFmt()->GetAttrSet() );
         pColPgSet = pSectionSet;
         aApplyToLB.RemoveEntry( aApplyToLB.GetEntryPos(
-                                        (void*)( 1 >= nFullSectCnt
+                                        (void*)(sal_IntPtr)( 1 >= nFullSectCnt
                                                     ? LISTBOX_SECTIONS
                                                     : LISTBOX_SECTION )));
     }
     else
     {
-        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*) LISTBOX_SECTION ));
-        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*) LISTBOX_SECTIONS ));
+        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SECTION ));
+        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SECTIONS ));
     }
 
     if( rWrtShell.HasSelection() && rWrtShell.IsInsRegionAvailable() &&
@@ -158,7 +158,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
         pColPgSet = pSelectionSet;
     }
     else
-        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*) LISTBOX_SELECTION ));
+        aApplyToLB.RemoveEntry(aApplyToLB.GetEntryPos( (void*)(sal_IntPtr)LISTBOX_SELECTION ));
 
     if( rWrtShell.GetFlyFrmFmt() )
     {
@@ -595,8 +595,8 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR ) )
     {
         const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
-        sal_uInt32 nVal  = rItem.GetValue();
-        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*) nVal );
+        sal_uIntPtr nVal  = rItem.GetValue();
+        USHORT nPos = aTextDirectionLB.GetEntryPos( (void*)nVal );
         aTextDirectionLB.SelectEntryPos( nPos );
         aTextDirectionLB.SaveValue();
     }

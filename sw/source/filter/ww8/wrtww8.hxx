@@ -404,9 +404,9 @@ private:
     HdFtPlcDrawObj& operator=(const HdFtPlcDrawObj&);
 };
 
-typedef ::std::pair<String, ULONG> aPair;
-typedef std::vector<aPair> SwImplBookmarks;
-typedef std::vector<aPair>::iterator SwImplBookmarksIter;
+typedef ::std::pair<String, ULONG> aBookmarkPair;
+typedef std::vector<aBookmarkPair> SwImplBookmarks;
+typedef std::vector<aBookmarkPair>::iterator SwImplBookmarksIter;
 
 class WW8_WrtRedlineAuthor : public sw::util::WrtRedlineAuthor
 {

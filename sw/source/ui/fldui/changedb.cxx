@@ -170,7 +170,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 {
     String sDBName(rDBName.GetToken(0, DB_DELIM));
     String sTableName(rDBName.GetToken(1, DB_DELIM));
-    int nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
+    sal_IntPtr nCommandType = rDBName.GetToken(2, DB_DELIM).ToInt32();
     SvLBoxEntry* pParent;
     SvLBoxEntry* pChild;
 

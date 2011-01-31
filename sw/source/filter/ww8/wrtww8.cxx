@@ -2793,7 +2793,7 @@ void MSWordExportBase::AddLinkTarget(const String& rURL)
         if( pDoc->GotoOutline( aPos, aOutline ) )
         {
             ULONG nIdx = aPos.nNode.GetIndex();
-            aPair aImplicitBookmark;
+            aBookmarkPair aImplicitBookmark;
             aImplicitBookmark.first = aOutline;
             aImplicitBookmark.second = nIdx;
             maImplicitBookmarks.push_back(aImplicitBookmark);
