@@ -36,6 +36,7 @@
 #include "ShapeFactory.hxx"
 #include "RelativeSizeHelper.hxx"
 #include "LegendEntryProvider.hxx"
+#include "chartview/DrawModelWrapper.hxx"
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -45,7 +46,6 @@
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <svl/languageoptions.hxx>
 
@@ -193,16 +193,10 @@ awt::Size lcl_createTextShapes(
         try
         {
             // create label shape
-            Reference< drawing::XShape > xGroupShapeForSingleEntry(
-                xShapeFactory->createInstance(
-                    C2U( "com.sun.star.drawing.GroupShape" )), uno::UNO_QUERY_THROW );
-            Reference< drawing::XShape >xEntry(
+            Reference< drawing::XShape > xEntry(
                 xShapeFactory->createInstance(
                     C2U( "com.sun.star.drawing.TextShape" )), uno::UNO_QUERY_THROW );
-            xTarget->add( xGroupShapeForSingleEntry );
-
-            Reference< drawing::XShapes > xGroup( xGroupShapeForSingleEntry, uno::UNO_QUERY_THROW );
-            xGroup->add( xEntry );
+            xTarget->add( xEntry );
 
             // set label text
             Sequence< Reference< XFormattedString > > aLabelSeq = (*aIt).aLabel;
@@ -230,7 +224,7 @@ awt::Size lcl_createTextShapes(
                 aResult.Height = ::std::max( aResult.Height, aCurrSize.Height );
             }
 
-            rOutTextShapes.push_back( xGroupShapeForSingleEntry );
+            rOutTextShapes.push_back( xEntry );
         }
         catch( uno::Exception & ex )
         {
@@ -241,9 +235,77 @@ awt::Size lcl_createTextShapes(
     return aResult;
 }
 
+void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns, const ::std::vector< Reference< drawing::XShape > > aTextShapes
+                            , const sal_Int32 nXOffset, const awt::Size& aMaxSymbolExtent )
+{
+    rColumnWidths.clear();
+    sal_Int32 nRow = 0;
+    sal_Int32 nColumn = 0;
+    sal_Int32 nNumberOfEntries = aTextShapes.size();
+    for( ; nRow < nNumberOfRows; ++nRow )
+    {
+        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+        {
+            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+            if( nEntry < nNumberOfEntries )
+            {
+                awt::Size aTextSize( aTextShapes[ nEntry ]->getSize() );
+                sal_Int32 nWidth = nXOffset + aMaxSymbolExtent.Width + aTextSize.Width;
+                if( nColumn>0 )
+                    nWidth += nXOffset;
+                if( nRow==0 )
+                    rColumnWidths.push_back( nWidth );
+                else
+                    rColumnWidths[nColumn] = ::std::max( nWidth, rColumnWidths[nColumn] );
+            }
+        }
+    }
+}
+
+void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns, const ::std::vector< Reference< drawing::XShape > > aTextShapes
+                                        , const sal_Int32 nYOffset, const awt::Size& aMaxSymbolExtent )
+{
+    // calculate maximum height for each row
+    // and collect column widths
+    rRowHeights.clear();
+    sal_Int32 nRow = 0;
+    sal_Int32 nColumn = 0;
+    sal_Int32 nNumberOfEntries = aTextShapes.size();
+    for( ; nRow < nNumberOfRows; ++nRow )
+    {
+        sal_Int32 nCurrentRowHeight = 0;
+        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+        {
+            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
+            if( nEntry < nNumberOfEntries )
+            {
+                awt::Size aTextSize( aTextShapes[ nEntry ]->getSize() );
+                nCurrentRowHeight = ::std::max( nCurrentRowHeight, nYOffset + aTextSize.Height );
+            }
+        }
+        rRowHeights.push_back( nCurrentRowHeight );
+    }
+}
+
+sal_Int32 lcl_getTextLineHeight( const std::vector< sal_Int32 >& aRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nYOffset, double fViewFontSize )
+{
+    const sal_Int32 nFontHeight = static_cast< sal_Int32 >( fViewFontSize );
+    sal_Int32 nTextLineHeight = nFontHeight;
+    for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
+    {
+        sal_Int32 nFullTextHeight = aRowHeights[ nR ] - nYOffset;
+        if( ( nFullTextHeight / nFontHeight ) <= 1 )
+        {
+            nTextLineHeight = nFullTextHeight;//found an entry with one line-> have real text height
+            break;
+        }
+    }
+    return nTextLineHeight;
+}
+
 //returns resulting legend size
 awt::Size lcl_placeLegendEntries(
-    const tViewLegendEntryContainer & rEntries,
+    tViewLegendEntryContainer & rEntries,
     ::com::sun::star::chart::ChartLegendExpansion eExpansion,
     bool bSymbolsLeftSide,
     const Reference< beans::XPropertySet > & xProperties,
@@ -301,6 +363,9 @@ awt::Size lcl_placeLegendEntries(
 
     sal_Int32 nNumberOfColumns = 0, nNumberOfRows = 0;
     std::vector< sal_Int32 > aColumnWidths;
+    std::vector< sal_Int32 > aRowHeights;
+
+    sal_Int32 nTextLineHeight = static_cast< sal_Int32 >( fViewFontSize );
 
     // determine layout depending on LegendExpansion
     if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
@@ -373,11 +438,56 @@ awt::Size lcl_placeLegendEntries(
         nNumberOfColumns = aColumnWidths.size();
         nNumberOfRows = nCurrentRow+1;
 
-        //check if some space is left an should be spread equally over all entries
+        //check if there is not enough space so that some entries must be removed
+        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes, nYOffset, aMaxSymbolExtent );
+        nTextLineHeight = lcl_getTextLineHeight( aRowHeights, nNumberOfRows, nYOffset, fViewFontSize );
+        sal_Int32 nSumHeight = 0;
+        for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
+            nSumHeight += aRowHeights[nR];
+        sal_Int32 nRemainingSpace = (rAvailableSpace.Height - nSumHeight)/(nNumberOfRows+1);
+
+        if( nRemainingSpace<nYOffset )
+        {
+            //remove entries that are too big
+            for( sal_Int32 nR=nNumberOfRows; nR--; )
+            {
+                for( sal_Int32 nC=nNumberOfColumns; nC--; )
+                {
+                    sal_Int32 nEntry = (nC + nR * nNumberOfColumns);
+                    if( nEntry < static_cast<sal_Int32>(aTextShapes.size()) )
+                    {
+                        DrawModelWrapper::removeShape( aTextShapes[nEntry] );
+                        aTextShapes.pop_back();
+                    }
+                    if( nEntry < static_cast<sal_Int32>(rEntries.size()) )
+                    {
+                        DrawModelWrapper::removeShape( rEntries[ nEntry ].aSymbol );
+                        rEntries.pop_back();
+                    }
+                }
+                nSumHeight -= aRowHeights[nR];
+                aRowHeights.pop_back();
+                nRemainingSpace = rAvailableSpace.Height - nSumHeight;
+                if( nRemainingSpace>=0 )
+                    break;
+            }
+            nNumberOfRows = static_cast<sal_Int32>(aRowHeights.size());
+            nRemainingSpace = (rAvailableSpace.Height - nSumHeight)/(nNumberOfRows+1);
+        }
+
+        //check if there is some remaining space that should be spread equally over all rows
+        if( nRemainingSpace>0 )
+        {
+            nYPadding += nRemainingSpace;
+            for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
+                aRowHeights[nR] = aRowHeights[nR] + nRemainingSpace;
+        }
+
+        //check if there is some remaining space that should be spread equally over all columns
         sal_Int32 nSumWidth = 0;
         for( sal_Int32 nC=0; nC<nNumberOfColumns; nC++ )
             nSumWidth += aColumnWidths[nC];
-        sal_Int32 nRemainingSpace = (rAvailableSpace.Width - nSumWidth)/(nNumberOfColumns+1);
+        nRemainingSpace = (rAvailableSpace.Width - nSumWidth)/(nNumberOfColumns+1);
         if( nRemainingSpace>0 )
         {
             nXPadding += nRemainingSpace;
@@ -437,69 +547,11 @@ awt::Size lcl_placeLegendEntries(
     if(nNumberOfRows<=0)
         return aResultingLegendSize;
 
-    // calculate maximum height for each row
-    // and collect column widths
-    std::vector< sal_Int32 > aRowHeights( nNumberOfRows );
-    sal_Int32 nRow = 0;
-    sal_Int32 nColumn = 0;
-    for( ; nRow < nNumberOfRows; ++nRow )
+    if( eExpansion != ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
     {
-        sal_Int32 nCurrentRowHeight = 0;
-        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
-        {
-            sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
-            if( nEntry < nNumberOfEntries )
-            {
-                awt::Size aTextSize( aTextShapes[ nEntry ]->getSize() );
-                nCurrentRowHeight = ::std::max( nCurrentRowHeight, nYOffset + aTextSize.Height );
-
-                //collect column widths
-                if( eExpansion != ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
-                {
-                    sal_Int32 nWidth = nXOffset + aMaxSymbolExtent.Width + aTextSize.Width;
-                    if( nColumn>0 )
-                        nWidth += nXOffset;
-                    if( nRow==0 )
-                        aColumnWidths.push_back( nWidth );
-                    else
-                        aColumnWidths[nColumn] = ::std::max( nWidth, aColumnWidths[nColumn] );
-                }
-            }
-        }
-        aRowHeights[ nRow ] = nCurrentRowHeight;
-    }
-
-    const sal_Int32 nFontHeight = static_cast< sal_Int32 >( fViewFontSize );
-    sal_Int32 nTextLineHeight = nFontHeight;
-    for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
-    {
-        sal_Int32 nFullTextHeight = aRowHeights[ nR ] - nYOffset;
-        if( ( nFullTextHeight / nFontHeight ) <= 1 )
-        {
-            nTextLineHeight = nFullTextHeight;//found an entry with one line-> have real text height
-            break;
-        }
-    }
-
-    //check if there is some remaining space that should be spread equally over all rows or whether some rows must be limited
-    bool bSetMaximumFrameHeight = false;
-    OUString aPropNameTextMaximumFrameHeight( C2U("TextMaximumFrameHeight") );
-    if( eExpansion == ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
-    {
-        sal_Int32 nSumHeight = 0;
-        for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
-            nSumHeight += aRowHeights[nR];
-        sal_Int32 nRemainingSpace = (rAvailableSpace.Height - nSumHeight)/(nNumberOfRows+1);
-        if( nRemainingSpace>0 )
-        {
-            nYPadding += nRemainingSpace;
-            for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
-                aRowHeights[nR] = aRowHeights[nR] + nRemainingSpace;
-        }
-        else if( nRemainingSpace<0 )
-        {
-            bSetMaximumFrameHeight = true;
-        }
+        lcl_collectColumnWidths( aColumnWidths, nNumberOfRows, nNumberOfColumns, aTextShapes, nXOffset, aMaxSymbolExtent );
+        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes, nYOffset, aMaxSymbolExtent );
+        nTextLineHeight = lcl_getTextLineHeight( aRowHeights, nNumberOfRows, nYOffset, fViewFontSize );
     }
 
     sal_Int32 nCurrentXPos = nXPadding;
@@ -509,6 +561,8 @@ awt::Size lcl_placeLegendEntries(
 
     // place entries into column and rows
     sal_Int32 nMaxYPos = 0;
+    sal_Int32 nRow = 0;
+    sal_Int32 nColumn = 0;
     for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
     {
         nCurrentYPos = nYPadding;
@@ -518,7 +572,6 @@ awt::Size lcl_placeLegendEntries(
             if( nEntry >= nNumberOfEntries )
                 break;
 
-            bool bRemove = false;
             // text shape
             Reference< drawing::XShape > xTextShape( aTextShapes[nEntry] );
             if( xTextShape.is() )
@@ -528,65 +581,25 @@ awt::Size lcl_placeLegendEntries(
                 if( !bSymbolsLeftSide )
                     nTextXPos = nCurrentXPos - aMaxSymbolExtent.Width - aTextSize.Width;
                 xTextShape->setPosition( awt::Point( nTextXPos, nCurrentYPos ));
-
-                if( bSetMaximumFrameHeight )
-                {
-                    sal_Int32 nRemainingSpace = rAvailableSpace.Height - (nCurrentYPos + aTextSize.Height);
-                    if( nRemainingSpace < 0 )
-                    {
-                        Reference< beans::XPropertySet > xTextProp( xTextShape, uno::UNO_QUERY );
-                        if( xTextProp.is() )
-                        {
-                            sal_Int32 nLimit = rAvailableSpace.Height - nCurrentYPos;
-                            xTextShape->setSize( awt::Size( aTextSize.Width, nLimit ) );
-                            static bool bTest = false;
-                            if( bTest )
-                            {
-                                //todo
-                                xTextProp->setPropertyValue( aPropNameTextMaximumFrameHeight, uno::makeAny(nLimit) );
-                                xTextProp->setPropertyValue( C2U("TextAutoGrowHeight"), uno::makeAny(sal_False) );
-                            }
-                        }
-                        bRemove = true;
-                    }
-                }
             }
 
             // symbol
             Reference< drawing::XShape > xSymbol( rEntries[ nEntry ].aSymbol );
             if( xSymbol.is() )
             {
-                if( bRemove )
-                {
-                    uno::Reference< container::XChild > xChild( xSymbol, uno::UNO_QUERY );
-                    if( xChild.is() )
-                    {
-                        uno::Reference<drawing::XShapes> xShapes( xChild->getParent(), uno::UNO_QUERY );
-                        if( xShapes.is() )
-                        {
-                            xShapes->remove(xSymbol);
-                        }
-                    }
-                }
-                else
-                {
-                    // Note: aspect ratio should always be 3:2
-                    // set symbol size to 75% of maximum space
-                    awt::Size aSymbolSize(
-                        aMaxSymbolExtent.Width  * 75 / 100,
-                        aMaxSymbolExtent.Height * 75 / 100 );
-                    xSymbol->setSize( aSymbolSize );
-                    sal_Int32 nSymbolXPos = nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2);
-                    if( !bSymbolsLeftSide )
-                        nSymbolXPos = nSymbolXPos - aMaxSymbolExtent.Width;
+                // Note: aspect ratio should always be 3:2
+                // set symbol size to 75% of maximum space
+                awt::Size aSymbolSize(
+                    aMaxSymbolExtent.Width  * 75 / 100,
+                    aMaxSymbolExtent.Height * 75 / 100 );
+                xSymbol->setSize( aSymbolSize );
+                sal_Int32 nSymbolXPos = nCurrentXPos + ((aMaxSymbolExtent.Width - aSymbolSize.Width) / 2);
+                if( !bSymbolsLeftSide )
+                    nSymbolXPos = nSymbolXPos - aMaxSymbolExtent.Width;
 
-                    sal_Int32 nSymbolYPos = nCurrentYPos + ( ( nTextLineHeight - aSymbolSize.Height ) / 2 );
-                    xSymbol->setPosition( awt::Point( nSymbolXPos, nSymbolYPos ) );
-                }
+                sal_Int32 nSymbolYPos = nCurrentYPos + ( ( nTextLineHeight - aSymbolSize.Height ) / 2 );
+                xSymbol->setPosition( awt::Point( nSymbolXPos, nSymbolYPos ) );
             }
-
-            if( bRemove )
-                break; //-> next column
 
             nCurrentYPos += aRowHeights[ nRow ];
             nMaxYPos = ::std::max( nMaxYPos, nCurrentYPos );
