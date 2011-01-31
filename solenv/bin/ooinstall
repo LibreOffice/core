@@ -14,7 +14,7 @@ use Cwd;
 $path = '';
 $do_link = 0;
 
-( $^O =~ /netbsd/i ) || ( $^O =~ /openbsd/i ) || ( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
+( $^O =~ /freebsd/i ) || ( $^O =~ /netbsd/i ) || ( $^O =~ /openbsd/i ) || ( $^O =~ /darwin/i ) || ( -f "/proc/meminfo" ) || die "The installer cannot work without javaldx running, which requires /proc to be mounted";
 
 # Workaround for system Mozilla
 if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
