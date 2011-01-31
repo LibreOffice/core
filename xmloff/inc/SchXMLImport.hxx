@@ -90,13 +90,6 @@ enum SchXMLSeriesElemTokenMap
     XML_TOK_SERIES_ERROR_INDICATOR
 };
 
-enum SchXMLAxisElemTokenMap
-{
-    XML_TOK_AXIS_TITLE,
-    XML_TOK_AXIS_CATEGORIES,
-    XML_TOK_AXIS_GRID
-};
-
 // ----------------------------------------
 
 enum SchXMLChartAttrMap
@@ -132,13 +125,6 @@ enum SchXMLPlotAreaAttrTokenMap
     XML_TOK_PA_SHADE_MODE,
     XML_TOK_PA_AMBIENT_COLOR,
     XML_TOK_PA_LIGHTING_MODE
-};
-
-enum SchXMLAxisAttrTokenMap
-{
-    XML_TOK_AXIS_DIMENSION,
-    XML_TOK_AXIS_NAME,
-    XML_TOK_AXIS_STYLE_NAME
 };
 
 enum SchXMLLegendAttrMap

@@ -80,11 +80,9 @@ private:
     SvXMLTokenMap* mpChartElemTokenMap;
     SvXMLTokenMap* mpPlotAreaElemTokenMap;
     SvXMLTokenMap* mpSeriesElemTokenMap;
-    SvXMLTokenMap* mpAxisElemTokenMap;
 
     SvXMLTokenMap* mpChartAttrTokenMap;
     SvXMLTokenMap* mpPlotAreaAttrTokenMap;
-    SvXMLTokenMap* mpAxisAttrTokenMap;
     SvXMLTokenMap* mpLegendAttrTokenMap;
     SvXMLTokenMap* mpAutoStyleAttrTokenMap;
     SvXMLTokenMap* mpCellAttrTokenMap;
@@ -123,11 +121,9 @@ public:
     const SvXMLTokenMap& GetChartElemTokenMap();
     const SvXMLTokenMap& GetPlotAreaElemTokenMap();
     const SvXMLTokenMap& GetSeriesElemTokenMap();
-    const SvXMLTokenMap& GetAxisElemTokenMap();
 
     const SvXMLTokenMap& GetChartAttrTokenMap();
     const SvXMLTokenMap& GetPlotAreaAttrTokenMap();
-    const SvXMLTokenMap& GetAxisAttrTokenMap();
     const SvXMLTokenMap& GetLegendAttrTokenMap();
     const SvXMLTokenMap& GetAutoStyleAttrTokenMap();
     const SvXMLTokenMap& GetCellAttrTokenMap();
