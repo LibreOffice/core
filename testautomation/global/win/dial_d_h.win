@@ -264,6 +264,7 @@ Synchronisieren sym:sw:PushButton:DLG_SYNC_BTN:BTN_SYNC
 Zeichensatzliste sym:sc:ListBox:RID_SCDLG_IMPORTOPT:LB_FONT
 Feldtrenner sym:sc:ComboBox:RID_SCDLG_IMPORTOPT:ED_FIELDSEP
 Texttrenner sym:sc:ComboBox:RID_SCDLG_IMPORTOPT:ED_TEXTSEP
+QuoteAll sym:sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_QUOTEALL
 Zeichensatz sym:sc:ListBox:RID_SCDLG_IMPORTOPT:DDLB_FONT
 FixedWidth sym:sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_FIXEDWIDTH
 SaveAsShown sym:sc:CheckBox:RID_SCDLG_IMPORTOPT:CB_SAVESHOWN

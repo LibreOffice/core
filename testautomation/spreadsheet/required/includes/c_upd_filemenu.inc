@@ -40,6 +40,7 @@
 ' #1 tFileRecentDocuments
 ' #1 tFileClose
 ' #1 tFileSave
+' #1 tFileSaveAsCSV
 ' #1 tFileSaveAsDBF
 ' #1 tFileVersions
 ' #1 tFilePagePreview
@@ -59,6 +60,7 @@ sub c_upd_filemenu
     Call tFileRecentDocuments
     Call tFileClose
     Call tFileSave
+    Call tFileSaveAsCSV
     Call tFileSaveAsDBF
     Call tFileVersions
     Call tFilePagePreview
@@ -540,6 +542,68 @@ testcase tFileSave
     '/// Close dialog with Cancel
     SpeichernDlg.Cancel
     '/// Close document
+    Printlog " Close document"
+    Call hCloseDocument
+
+endcase
+
+'-----------------------------------------------------------
+
+testcase tFileSaveAsCSV
+
+    Dim UIFilter as string
+    Dim bStatus as boolean
+
+    Printlog " Open new Spreadsheet document"
+    Call hNewDocument
+    Printlog " Fill two cells (10, Test)"
+    Kontext "DocumentCalc"
+    DocumentCalc.Typekeys "10 <TAB> Test <RETURN>"
+    Printlog " Open 'SaveAs' dialog"
+    FileSaveAs
+    Kontext "SpeichernDlg"
+    Printlog " Enter filename 'csv-Test_update'"
+    DateiName.SetText "csv-Test_update"
+    Printlog " Choose file typ CSV"
+    UIFilter = hGetUIFiltername ( "Text - txt - csv (StarCalc)" )
+    bStatus = hSelectUIFilter ( UIFilter )
+    if ( not bStatus ) then
+        warnlog "Filter not found"
+        SpeichernDlg.Cancel
+        Call hCloseDocument
+        goto endsub
+    end if
+    Printlog " Click on Save button"
+    Speichern.click
+    Printlog " Commit overwrite warning if file already exists"
+    Kontext
+    if Active.exists(2) then
+        Active.Yes
+    end if
+    Printlog " Check alien file format warning"
+    Kontext "AlienWarning"
+    if AlienWarning.exists(2) then
+    Printlog "  Commit if exists"
+        AlienWarning.OK
+    else
+        warnlog "Alien file format warning is missing -> Check this out!"
+    end if
+    Printlog " Check existence of export encoding dialog"
+    Kontext "ExportCalc"
+    Call DialogTest (ExportCalc)
+    printlog " Verify that Quote All is disabled by default"
+    if QuoteAll.IsChecked then
+        warnlog " Option Quote All is checked but shouldn't"
+    end if
+    Printlog " Accept dialog by OK"
+    ExportCalc.OK
+    Kontext
+    if Active.exists(2) then
+        Printlog Active.GetText
+        Active.OK
+    else
+        warnlog " Messagebox that only the current sheet is saved is missing"
+    end if
     Printlog " Close document"
     Call hCloseDocument
 
