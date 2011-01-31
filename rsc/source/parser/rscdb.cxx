@@ -369,8 +369,9 @@ void RscTypCont :: Delete( Atom nRT, const RscId & rId ){
 sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
                                  sal_uInt32 nConst, sal_uInt32 nId, BOOL bFirst )
 {
-    RscSysEntry *   pSysEntry;
-    BOOL            bId1 = FALSE;
+    RscSysEntry *pSysEntry;
+    RscSysEntry *pFoundEntry = NULL;
+    BOOL         bId1 = FALSE;
 
     for ( size_t i = 0, n = aSysLst.size(); i < n; ++i )
     {
@@ -381,9 +382,12 @@ sal_uInt32 RscTypCont :: PutSysName( sal_uInt32 nRscTyp, char * pFileName,
             if(  pSysEntry->nRscTyp == nRscTyp
               && pSysEntry->nTyp    == nConst
               && pSysEntry->nRefId  == nId
-              )
+                 ) {
+                pFoundEntry = pSysEntry;
                 break;
+            }
     }
+    pSysEntry = pFoundEntry;
 
     if ( !pSysEntry || (bFirst && !bId1) )
     {
