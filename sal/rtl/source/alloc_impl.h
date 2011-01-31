@@ -259,6 +259,9 @@ typedef CRITICAL_SECTION rtl_memory_lock_type;
 #define VALGRIND_MEMPOOL_FREE(pool, addr)
 #elif defined(HAVE_VALGRIND_MEMCHECK_H)
 #include <valgrind/memcheck.h>
+#if !defined(FORCE_SYSALLOC)
+#define FORCE_SYSALLOC 1
+#endif /* !FORCE_SYSALLOC */
 #endif /* NVALGRIND || HAVE_VALGRIND_MEMCHECK_H */
 
 #ifdef __cplusplus
