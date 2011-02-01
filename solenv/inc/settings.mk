@@ -607,6 +607,8 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 
 # --- generate output tree -----------------------------------------
 
+# disable for makefiles wrapping a gnumake module
+.IF "$(TARGET)"!="prj"
 # As this is not part of the initial startup makefile we define an infered
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
@@ -623,6 +625,7 @@ $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
 
 .INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
 .ENDIF			# "$(common_build)"!=""
+.ENDIF          # "$(TARGET)"!="prj"
 
 .INCLUDE .IGNORE : office.mk
 
