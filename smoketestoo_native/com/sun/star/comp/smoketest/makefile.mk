@@ -53,7 +53,6 @@ ZIP1EXT=.oxt
 
 # --- Files --------------------------------------------------------
 
-#COPY_OXT_MANIFEST:= $(MISC)$/$(TARGET)$/META-INF$/manifest.xml
 JAVAFILES = TestExtension.java
 
 # --- Targets ------------------------------------------------------

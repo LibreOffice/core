@@ -40,7 +40,7 @@ TARGET = runner_basicrunner
 JARFILES       = ridl.jar jurt.jar unoil.jar
 JAVAFILES      = BasicException.java BasicIfcTest.java BasicHandler.java BasicTestCase.java BasicHandlerProvider.java
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-#SUBDIRS        = basichelper
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
