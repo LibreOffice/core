@@ -61,7 +61,6 @@ SHL1STDLIBS=	\
                 $(SALLIB)
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
-#SHL1DEPN=       $(SHL1IMPLIBN) $(SHL1TARGETN)
 
 DEF1NAME=       $(SHL1TARGET)
 

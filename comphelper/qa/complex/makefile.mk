@@ -30,6 +30,7 @@ TARGET  = ComphelperComplexTests
 PRJNAME = comphelper
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
@@ -42,7 +43,6 @@ JAVACLASSFILES	:= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(i:d)$/$(i:b).class)
 
 MAXLINELENGTH = 100000
 
-#JARCLASSDIRS    =
 JARTARGET       = $(TARGET).jar
 JARCOMPRESS 	= TRUE
 

@@ -31,7 +31,6 @@ PRJNAME=svl
 TARGET=svl
 RESTARGETSIMPLE=svs
 GEN_HID=TRUE
-# GEN_HID_OTHER=TRUE
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------

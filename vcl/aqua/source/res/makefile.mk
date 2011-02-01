@@ -43,7 +43,6 @@ dummy:
 
 ZIPFLAGS = -r
 ZIP1TARGET = osxres
-#ZIP1DIR = 
 ZIP1LIST = MainMenu.nib/*.nib cursors/*.png
 
 # --- Targets --------------------------------------------------
