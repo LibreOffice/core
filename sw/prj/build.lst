@@ -1,5 +1,2 @@
 sw      sw      :    filter l10n connectivity OOo:writerperfect vbahelper svx stoc writerfilter LIBXSLT:libxslt NULL
 sw sw\prj nmake - all sw_prj   NULL
-sw sw\qa\complex\accessibility nmake - all sw_qa_complex_accessibility NULL
-sw sw\qa\complex\checkColor nmake - all sw_qa_complex_checkColor NULL
-sw sw\qa\unoapi nmake - all sw_qa_unoapi NULL
