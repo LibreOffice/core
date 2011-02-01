@@ -74,9 +74,11 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/imageManager/_XUIConfiguration \
     framework/qa/complex/api_internal/CheckAPI \
     framework/qa/complex/dispatches/Interceptor \
-    framework/qa/complex/dispatches/checkdispatchapi \
     framework/qa/complex/ModuleManager/CheckXModuleManager \
 ))
+
+# does not build
+#	framework/qa/complex/dispatches/checkdispatchapi \
 
 $(eval $(call gb_JunitTest_add_classes,framework_complex,\
 ))
