@@ -113,7 +113,10 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 
 #define STARTERLIST 0
 
-rtl::OUString HelpLocaleString()
+static bool impl_hasHelpInstalled();
+
+/// Return the locale we prefer for displaying help
+static rtl::OUString HelpLocaleString()
 {
     static rtl::OUString aLocaleStr;
     if (!aLocaleStr.getLength())
@@ -124,7 +127,7 @@ rtl::OUString HelpLocaleString()
                ::utl::ConfigManager::LOCALE );
         aLocale >>= aLocaleStr;
         bool bOk = aLocaleStr.getLength() != 0;
-        if ( bOk )
+        if ( impl_hasHelpInstalled() && bOk )
         {
             rtl::OUString aBaseInstallPath;
             // utl::Bootstrap::PathStatus aBaseLocateResult =
