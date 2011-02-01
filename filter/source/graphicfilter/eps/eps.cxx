@@ -374,7 +374,16 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     if ( rGraphic.GetType() == GRAPHIC_GDIMETAFILE )
         pMTF = &rGraphic.GetGDIMetaFile();
     else
-        pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+    {
+        Bitmap aBmp( rGraphic.GetBitmap() );
+        pAMTF = new GDIMetaFile();
+        VirtualDevice aTmpVDev;
+        pAMTF->Record( &aTmpVDev );
+        aTmpVDev.DrawBitmap( Point(), aBmp );
+        pAMTF->Stop();
+        pAMTF->SetPrefSize( aBmp.GetSizePixel() );
+        pMTF = pAMTF;
+    }
     aVDev.SetMapMode( pMTF->GetPrefMapMode() );
     nBoundingX1 = nBoundingY1 = 0;
     nBoundingX2 = pMTF->GetPrefSize().Width();
