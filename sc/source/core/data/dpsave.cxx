@@ -67,6 +67,7 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
 using ::rtl::OUStringHash;
 using ::std::hash_map;
 using ::std::auto_ptr;
@@ -1131,11 +1132,11 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                 {
                     if ( pDim->GetDupFlag() )
                     {
-                        String aNewName = pDim->GetName();
+                        OUStringBuffer aBuf(pDim->GetName());
 
                         // different name for each duplication of a (real) dimension...
                         for (long j=0; j<=i; ++j) //! Test !!!!!!
-                            aNewName += '*'; //! modify name at creation of SaveDimension
+                            aBuf.append(sal_Unicode('*')); //! modify name at creation of SaveDimension
 
                         uno::Reference<util::XCloneable> xCloneable( xIntDim, uno::UNO_QUERY );
                         DBG_ASSERT( xCloneable.is(), "cannot clone dimension" );
@@ -1145,7 +1146,7 @@ void ScDPSaveData::WriteToSource( const uno::Reference<sheet::XDimensionsSupplie
                             uno::Reference<container::XNamed> xNewName( xNew, uno::UNO_QUERY );
                             if (xNewName.is())
                             {
-                                xNewName->setName( aNewName );
+                                xNewName->setName(aBuf.makeStringAndClear());
                                 pDim->WriteToSource( xNew );
                             }
                         }
