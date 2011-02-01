@@ -30,7 +30,6 @@ PRJ = ..$/..
 PRJNAME = desktop
 TARGET = deployment
 ENABLE_EXCEPTIONS = TRUE
-#USE_DEFFILE = TRUE
 NO_BSYMBOLIC = TRUE
 
 .IF "$(GUI)"=="OS2"

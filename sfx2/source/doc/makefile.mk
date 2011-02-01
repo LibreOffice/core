@@ -87,8 +87,6 @@ SLOFILES =	\
         $(SLO)$/syspath.obj \
         $(SLO)$/syspathw32.obj
 
-#                $(SLO)$/applet.obj \
-
 .IF "$(GUI)" == "WNT"
 
 #HACK TO DISABLE PCH

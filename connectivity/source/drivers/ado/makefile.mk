@@ -31,9 +31,8 @@ PRJNAME=connectivity
 TARGET=ado
 VISIBILITY_HIDDEN=TRUE
 
-#	ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings ----------------------------------
+
 .IF "$(DBGUTIL_OJ)"!=""
 ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
@@ -97,7 +96,6 @@ SHL1STDLIBS=\
 SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
-#SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def

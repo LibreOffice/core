@@ -30,8 +30,6 @@ PRJ=..
 PRJNAME=SV
 TARGET=svdem
 LIBTARGET=NO
-#TARGETTYPE=GUI
-
 
 .IF "$(GUI)" == "OS2"
 TARGETTYPE=GUI
@@ -49,8 +47,6 @@ OBJFILES=		$(OBJ)$/svdem.obj
 APP1NOSAL=		TRUE
 APP1TARGET= 	$(TARGET)
 APP1OBJS=		$(OBJFILES)
-
-#				$(OBJ)$/salmain.obj
 
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\

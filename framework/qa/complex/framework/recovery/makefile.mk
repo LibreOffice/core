@@ -31,8 +31,8 @@ PRJNAME = framework
 PACKAGE = complex$/framework$/recovery
 
 # --- Settings -----------------------------------------------------
-.INCLUDE: settings.mk
 
+.INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
 
@@ -74,8 +74,6 @@ MYTAR: ALLTAR
 CT_APPEXECCOMMAND =
 .ELSE
 CT_APPEXECCOMMAND = -cmd "$(cmd)"
-#CT_APPEXECCOMMAND = -AppExecutionCommand \
-#            "$(OFFICE)$/soffice -accept=socket,host=localhost,port=8100;urp;"
 .ENDIF
 
 # test base is java complex
@@ -93,11 +91,6 @@ CT_NOOFFICE = -NoOffice true
 .INCLUDE :  target.mk
 
 RUN: run
-# muss noch angepasst werden: es soll auf -AppExecutionCommand und -NoOffice gepr??ft werden
-#.IF "$(OFFICE)" == ""
-#run:
-#    @echo Exit
-#.ELSE
 run:
     +java -cp $(CLASSPATH) $(CT_APP) $(CT_TESTBASE) $(CT_APPEXECCOMMAND) $(CT_NOOFFICE) $(CT_PACKAGE).RecoveryTest
 

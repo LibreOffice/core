@@ -39,9 +39,9 @@ TARGET=sfxslots
 
 SDI1NAME=$(TARGET)
 SDI1EXPORT=sfx
-#SIDHRCNAME=sfx.hrc unused???
 
 .ENDIF
+
 # --- Files --------------------------------------------------------
 
 SVSDI1DEPEND= \

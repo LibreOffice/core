@@ -64,11 +64,6 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(UCBHELPERLIB)		\
             $(SVXCORELIB)
 
-#.IF "$(COM)"=="GCC"
-#ADDOPTFILES=$(OBJ)$/gengal.obj
-#add_cflagscxx="-frtti -fexceptions"
-#.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
