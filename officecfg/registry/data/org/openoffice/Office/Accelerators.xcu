@@ -422,6 +422,11 @@
       <value xml:lang="en-US">.uno:GoDownToEndOfData</value>
      </prop>
     </node>
+    <node oor:name="DOWN_MOD2" oor:op="replace">
+     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
+      <value xml:lang="en-US">.uno:DataSelect</value>
+     </prop>
+    </node>
     <node oor:name="DOWN_SHIFT" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:GoDownSel</value>
@@ -435,11 +440,6 @@
     <node oor:name="D_MOD1" oor:op="replace">
      <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
       <value xml:lang="en-US">.uno:FillDown</value>
-     </prop>
-    </node>
-    <node oor:name="D_SHIFT_MOD1" oor:op="replace">
-     <prop oor:name="Command"><value xml:lang="x-no-translate">I10N SHORTCUTS - NO TRANSLATE</value>
-      <value xml:lang="en-US">.uno:DataSelect</value>
      </prop>
     </node>
     <node oor:name="END" oor:op="replace">
