@@ -261,7 +261,7 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
 }
 
 void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int32 nNumberOfRows, const sal_Int32 nNumberOfColumns
-                          , const ::std::vector< Reference< drawing::XShape > > aTextShapes, const awt::Size& aMaxSymbolExtent )
+                          , const ::std::vector< Reference< drawing::XShape > > aTextShapes )
 {
     // calculate maximum height for each row
     // and collect column widths
@@ -435,7 +435,7 @@ awt::Size lcl_placeLegendEntries(
         nNumberOfRows = nCurrentRow+1;
 
         //check if there is not enough space so that some entries must be removed
-        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes, aMaxSymbolExtent );
+        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes );
         nTextLineHeight = lcl_getTextLineHeight( aRowHeights, nNumberOfRows, fViewFontSize );
         sal_Int32 nSumHeight = 0;
         for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
@@ -491,7 +491,7 @@ awt::Size lcl_placeLegendEntries(
         for( sal_Int32 nC=0; nC<nNumberOfColumns; nC++ )
             nSumWidth += aColumnWidths[nC];
         nRemainingSpace = rAvailableSpace.Width - nSumWidth;
-        if( nRemainingSpace>0 )
+        if( nRemainingSpace>=0 )
         {
             sal_Int32 nNormalSpacingWidth = 2*nXPadding+(nNumberOfColumns-1)*nXOffset;
             if( nRemainingSpace < nNormalSpacingWidth )
@@ -563,7 +563,7 @@ awt::Size lcl_placeLegendEntries(
     if( eExpansion != ::com::sun::star::chart::ChartLegendExpansion_CUSTOM )
     {
         lcl_collectColumnWidths( aColumnWidths, nNumberOfRows, nNumberOfColumns, aTextShapes, aMaxSymbolExtent );
-        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes, aMaxSymbolExtent );
+        lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes );
         nTextLineHeight = lcl_getTextLineHeight( aRowHeights, nNumberOfRows, fViewFontSize );
     }
 
