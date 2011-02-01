@@ -168,7 +168,6 @@ Module gid_Module_Root_Files_4
     gid_File_Lib_Sdbt,
     gid_File_Lib_Dbmm,
 	gid_File_Lib_Dba,
-	gid_File_Lib_Dbacfg,
 	gid_File_Lib_Dbase2,
 	gid_File_Lib_Dbaxml,
 	gid_File_Lib_Dbt,
