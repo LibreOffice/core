@@ -29,24 +29,16 @@
  */
 
 
-package qa.drivers.hsqldb;
+package complex.connectivity.hsqldb;
 
-import java.io.*;
 
 
 import org.hsqldb.lib.StopWatch;
-import org.hsqldb.lib.FileAccess;
 
 import java.util.Random;
 import com.sun.star.lang.*;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyState;
-import com.sun.star.container.XNameAccess;
 import com.sun.star.sdbc.*;
-import com.sun.star.document.XDocumentSubStorageSupplier;
-import com.sun.star.embed.XStorage;
-import com.sun.star.frame.XStorable;
 
 /**
  * Test large cached tables by setting up a cached table of 100000 records
@@ -123,17 +115,17 @@ public class TestCacheSize {
     XDriver drv;
     com.sun.star.beans.PropertyValue[] info;
 
-    TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
+    public TestCacheSize(XMultiServiceFactory _xmulti,com.sun.star.beans.PropertyValue[] _info,XDriver _drv){
         servicefactory = _xmulti;
         drv = _drv;
         info = _info;
     }
 
-    void setURL(String _url){
+    public void setURL(String _url){
         url = _url;
     }
 
-    protected void setUp() {
+    public void setUp() {
 
         user     = "sa";
         password = "";
@@ -406,9 +398,9 @@ public class TestCacheSize {
                            + (i * 1000 / (sw.elapsedTime() + 1)));
     }
 
-    protected void tearDown() {}
+    public void tearDown() {}
 
-    protected void checkResults() {
+    public void checkResults() {
 
         try {
             StopWatch sw = new StopWatch();

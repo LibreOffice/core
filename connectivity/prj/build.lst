@@ -28,5 +28,5 @@ cn  connectivity\source\parse                       nmake   -   all cn_parse cn_
 cn  connectivity\source\simpledbt                   nmake   -   all cn_simpledbt cn_cmtools cn_inc NULL
 cn  connectivity\source\dbtools                     nmake   -   all cn_dbtools cn_simpledbt cn_cmtools cn_parse cn_res cn_sdbcx cn_inc cn_res NULL
 cn  connectivity\qa\connectivity\tools              nmake   -   all cn_qa_tools cn_inc NULL
+cn  connectivity\qa                                 nmake   -   all cn_qa cn_inc NULL
 cn  connectivity\util                               nmake   -   all cn_util cn_ado cn_mozab cn_kab cn_evoab2 cn_calc cn_odbc cn_mysql cn_jdbc cn_adabas cn_flat cn_dbase cn_hsqldb cn_macab NULL
-

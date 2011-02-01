@@ -79,6 +79,7 @@
 #define ED_USER_FATHER          18
 #define ED_USER_INITIALS        19
 #define TR_WAITING              20
+#define CTRL_THROBBER           21
 
 // global strings
 #define STR_STATE_WELCOME           RID_FIRSTSTSTART_START+100

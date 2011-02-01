@@ -40,7 +40,7 @@ import com.sun.star.sdbc.XRow;
 import com.sun.star.uno.UnoRuntime;
 import complexlib.ComplexTestCase;
 
-public class LongVarCharTest extends ComplexTestCase
+public class JdbcLongVarCharTest extends ComplexTestCase
 {
 
     public String[] getTestMethodNames()
@@ -51,6 +51,7 @@ public class LongVarCharTest extends ComplexTestCase
                 };
     }
 
+    @Override
     public String getTestObjectName()
     {
         return "LongVarCharTest";
