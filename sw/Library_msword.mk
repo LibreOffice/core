@@ -71,6 +71,7 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     ucbhelper \
     utl \
     vcl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
@@ -126,15 +127,6 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     kernel32 \
     msvcrt \
     user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,msword,\
-    advapi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif

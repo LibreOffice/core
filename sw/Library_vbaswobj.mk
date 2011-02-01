@@ -61,6 +61,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     utl \
     vbahelper \
     vcl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vbaswobj,\
@@ -134,15 +135,6 @@ $(eval $(call gb_Library_add_linked_libs,vbaswobj,\
     kernel32 \
     msvcrt \
     user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,vbaswobj,\
-    advapi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif
