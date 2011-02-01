@@ -175,42 +175,25 @@ void OutputDevice::ImplDrawLinearGradient( const Rectangle& rRect,
                                            BOOL bMtf, const PolyPolygon* pClipPolyPoly )
 {
     // rotiertes BoundRect ausrechnen
-    Rectangle aRect = rRect;
-    aRect.Left()--;
-    aRect.Top()--;
-    aRect.Right()++;
-    aRect.Bottom()++;
-    USHORT  nAngle = rGradient.GetAngle() % 3600;
-    double  fAngle  = nAngle * F_PI1800;
-    double  fWidth  = aRect.GetWidth();
-    double  fHeight = aRect.GetHeight();
-    double  fDX     = fWidth  * fabs( cos( fAngle ) ) +
-                      fHeight * fabs( sin( fAngle ) );
-    double  fDY     = fHeight * fabs( cos( fAngle ) ) +
-                      fWidth  * fabs( sin( fAngle ) );
-            fDX     = (fDX - fWidth)  * 0.5 + 0.5;
-            fDY     = (fDY - fHeight) * 0.5 + 0.5;
-    aRect.Left()   -= (long)fDX;
-    aRect.Right()  += (long)fDX;
-    aRect.Top()    -= (long)fDY;
-    aRect.Bottom() += (long)fDY;
+    Rectangle aRect;
+    Point     aCenter;
+    USHORT    nAngle = rGradient.GetAngle() % 3600;
+
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
 
     // Rand berechnen und Rechteck neu setzen
-    Point       aCenter = rRect.Center();
     Rectangle   aFullRect = aRect;
     long        nBorder = (long)rGradient.GetBorder() * aRect.GetHeight() / 100;
-    BOOL        bLinear;
 
     // Rand berechnen und Rechteck neu setzen fuer linearen Farbverlauf
-    if ( rGradient.GetStyle() == GRADIENT_LINEAR )
+    bool bLinear = (rGradient.GetStyle() == GRADIENT_LINEAR);
+    if ( bLinear )
     {
-        bLinear = TRUE;
         aRect.Top() += nBorder;
     }
     // Rand berechnen und Rechteck neu setzen fuer axiale Farbverlauf
     else
     {
-        bLinear = FALSE;
         nBorder >>= 1;
 
         aRect.Top()    += nBorder;
@@ -430,7 +413,8 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     // Virtuelle Device werden auch ausgeklammert, da einige Treiber
     // ansonsten zu langsam sind
     PolyPolygon*    pPolyPoly;
-    Rectangle       aRect( rRect );
+    Rectangle       aRect;
+    Point           aCenter;
     Color           aStartCol( rGradient.GetStartColor() );
     Color           aEndCol( rGradient.GetEndColor() );
     long            nStartRed = ( (long) aStartCol.GetRed() * rGradient.GetStartIntensity() ) / 100;
@@ -445,66 +429,13 @@ void OutputDevice::ImplDrawComplexGradient( const Rectangle& rRect,
     long            nStepCount = rGradient.GetSteps();
     USHORT          nAngle = rGradient.GetAngle() % 3600;
 
+    rGradient.GetBoundRect( rRect, aRect, aCenter );
+
     if( (meRasterOp != ROP_OVERPAINT) || (meOutDevType != OUTDEV_WINDOW) || bMtf )
         pPolyPoly = new PolyPolygon( 2 );
     else
         pPolyPoly = NULL;
 
-    if( rGradient.GetStyle() == GRADIENT_SQUARE || rGradient.GetStyle() == GRADIENT_RECT )
-    {
-        const double    fAngle  = nAngle * F_PI1800;
-        const double    fWidth  = aRect.GetWidth();
-        const double    fHeight = aRect.GetHeight();
-        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
-        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
-
-        fDX = ( fDX - fWidth ) * 0.5 + 0.5;
-        fDY = ( fDY - fHeight ) * 0.5 + 0.5;
-
-        aRect.Left() -= (long) fDX;
-        aRect.Right() += (long) fDX;
-        aRect.Top() -= (long) fDY;
-        aRect.Bottom() += (long) fDY;
-    }
-
-    Size aSize( aRect.GetSize() );
-
-    if( rGradient.GetStyle() == GRADIENT_RADIAL )
-    {
-        // Radien-Berechnung fuer Kreis
-        aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
-        aSize.Height() = aSize.Width();
-    }
-    else if( rGradient.GetStyle() == GRADIENT_ELLIPTICAL )
-    {
-        // Radien-Berechnung fuer Ellipse
-        aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
-        aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
-    }
-    else if( rGradient.GetStyle() == GRADIENT_SQUARE )
-    {
-        if ( aSize.Width() > aSize.Height() )
-            aSize.Height() = aSize.Width();
-        else
-            aSize.Width() = aSize.Height();
-    }
-
-    // neue Mittelpunkte berechnen
-    long    nZWidth = aRect.GetWidth()  * (long) rGradient.GetOfsX() / 100;
-    long    nZHeight = aRect.GetHeight() * (long) rGradient.GetOfsY() / 100;
-    long    nBorderX = (long) rGradient.GetBorder() * aSize.Width()  / 100;
-    long    nBorderY = (long) rGradient.GetBorder() * aSize.Height() / 100;
-    Point   aCenter( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
-
-    // Rand beruecksichtigen
-    aSize.Width() -= nBorderX;
-    aSize.Height() -= nBorderY;
-
-    // Ausgaberechteck neu setzen
-    aRect.Left() = aCenter.X() - ( aSize.Width() >> 1 );
-    aRect.Top() = aCenter.Y() - ( aSize.Height() >> 1 );
-
-    aRect.SetSize( aSize );
     long nMinRect = Min( aRect.GetWidth(), aRect.GetHeight() );
 
     // Anzahl der Schritte berechnen, falls nichts uebergeben wurde

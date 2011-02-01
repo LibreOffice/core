@@ -31,6 +31,7 @@
 
 #include <vcl/dllapi.h>
 #include <tools/color.hxx>
+#include <tools/gen.hxx>
 
 #include <vcl/vclenum.hxx>
 
@@ -118,6 +119,8 @@ public:
 
     void            SetSteps( USHORT nSteps );
     USHORT          GetSteps() const { return mpImplGradient->mnStepCount; }
+
+    void            GetBoundRect( const Rectangle& rRect, Rectangle &rBoundRect, Point& rCenter ) const;
 
     Gradient&       operator=( const Gradient& rGradient );
     BOOL            operator==( const Gradient& rGradient ) const;

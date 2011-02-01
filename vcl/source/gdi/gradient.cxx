@@ -245,6 +245,99 @@ void Gradient::SetSteps( USHORT nSteps )
 
 // -----------------------------------------------------------------------
 
+void Gradient::GetBoundRect( const Rectangle& rRect, Rectangle& rBoundRect, Point& rCenter ) const
+{
+    Rectangle aRect( rRect );
+    USHORT nAngle = GetAngle() % 3600;
+
+    if( GetStyle() == GRADIENT_LINEAR || GetStyle() == GRADIENT_AXIAL )
+    {
+        aRect.Left()--;
+        aRect.Top()--;
+        aRect.Right()++;
+        aRect.Bottom()++;
+
+        const double    fAngle = nAngle * F_PI1800;
+        const double    fWidth = aRect.GetWidth();
+        const double    fHeight = aRect.GetHeight();
+        double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
+        double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
+
+        fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
+        fDY = ( fDY - fHeight ) * 0.5 + 0.5;
+
+        aRect.Left()   -= (long) fDX;
+        aRect.Right()  += (long) fDX;
+        aRect.Top()    -= (long) fDY;
+        aRect.Bottom() += (long) fDY;
+
+        rBoundRect = aRect;
+        rCenter = rRect.Center();
+    }
+    else
+    {
+
+        if( GetStyle() == GRADIENT_SQUARE || GetStyle() == GRADIENT_RECT )
+        {
+            const double    fAngle = nAngle * F_PI1800;
+            const double    fWidth = aRect.GetWidth();
+            const double    fHeight = aRect.GetHeight();
+            double          fDX = fWidth  * fabs( cos( fAngle ) ) + fHeight * fabs( sin( fAngle ) );
+            double          fDY = fHeight * fabs( cos( fAngle ) ) + fWidth  * fabs( sin( fAngle ) );
+
+            fDX = ( fDX - fWidth  ) * 0.5 + 0.5;
+            fDY = ( fDY - fHeight ) * 0.5 + 0.5;
+
+            aRect.Left()   -= (long) fDX;
+            aRect.Right()  += (long) fDX;
+            aRect.Top()    -= (long) fDY;
+            aRect.Bottom() += (long) fDY;
+        }
+
+        Size aSize( aRect.GetSize() );
+
+        if( GetStyle() == GRADIENT_RADIAL )
+        {
+            // Radien-Berechnung fuer Kreis
+            aSize.Width() = (long)(0.5 + sqrt((double)aSize.Width()*(double)aSize.Width() + (double)aSize.Height()*(double)aSize.Height()));
+            aSize.Height() = aSize.Width();
+        }
+        else if( GetStyle() == GRADIENT_ELLIPTICAL )
+        {
+            // Radien-Berechnung fuer Ellipse
+            aSize.Width() = (long)( 0.5 + (double) aSize.Width()  * 1.4142 );
+            aSize.Height() = (long)( 0.5 + (double) aSize.Height() * 1.4142 );
+        }
+        else if( GetStyle() == GRADIENT_SQUARE )
+        {
+            if ( aSize.Width() > aSize.Height() )
+                aSize.Height() = aSize.Width();
+            else
+                aSize.Width() = aSize.Height();
+        }
+
+        // neue Mittelpunkte berechnen
+        long    nZWidth = aRect.GetWidth() * (long) GetOfsX() / 100;
+        long    nZHeight = aRect.GetHeight() * (long) GetOfsY() / 100;
+        long    nBorderX = (long) GetBorder() * aSize.Width()  / 100;
+        long    nBorderY = (long) GetBorder() * aSize.Height() / 100;
+        rCenter = Point( aRect.Left() + nZWidth, aRect.Top() + nZHeight );
+
+        // Rand beruecksichtigen
+        aSize.Width() -= nBorderX;
+        aSize.Height() -= nBorderY;
+
+        // Ausgaberechteck neu setzen
+        aRect.Left() = rCenter.X() - ( aSize.Width() >> 1 );
+        aRect.Top() = rCenter.Y() - ( aSize.Height() >> 1 );
+
+        aRect.SetSize( aSize );
+        rBoundRect = rRect;
+    }
+}
+
+// -----------------------------------------------------------------------
+
 Gradient& Gradient::operator=( const Gradient& rGradient )
 {
     DBG_CHKTHIS( Gradient, NULL );
