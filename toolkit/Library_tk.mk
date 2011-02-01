@@ -83,6 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxtabcontrol \
     toolkit/source/awt/vclxtabpage \
     toolkit/source/awt/vclxtabpagecontainer \
+    toolkit/source/awt/animatedimagespeer \
     toolkit/source/awt/vclxtoolkit \
     toolkit/source/awt/vclxtopwindow \
     toolkit/source/awt/vclxwindow \
@@ -110,6 +111,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/tksimpleanimation \
     toolkit/source/controls/tkspinbutton \
     toolkit/source/controls/tkthrobber \
+    toolkit/source/controls/animatedimages \
+    toolkit/source/controls/spinningprogress \
     toolkit/source/controls/tree/treecontrol \
     toolkit/source/controls/tree/treedatamodel \
     toolkit/source/controls/unocontrol \
@@ -127,7 +130,6 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/helper/property \
     toolkit/source/helper/registerservices \
     toolkit/source/helper/servicenames \
-    toolkit/source/helper/throbberimpl \
     toolkit/source/helper/tkresmgr \
     toolkit/source/helper/unomemorystream \
     toolkit/source/helper/unopropertyarrayhelper \

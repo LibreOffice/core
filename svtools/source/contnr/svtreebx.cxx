@@ -1146,9 +1146,11 @@ void SvTreeListBox::ModelIsRemoving( SvListEntry* pEntry )
     NotifyRemoving( (SvLBoxEntry*)pEntry );
 }
 
-void SvTreeListBox::ModelHasRemoved( SvListEntry* /* pEntry */ )
+void SvTreeListBox::ModelHasRemoved( SvListEntry* pEntry  )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+    if ( pEntry == pHdlEntry)
+        pHdlEntry = NULL;
     pImp->EntryRemoved();
 }
 

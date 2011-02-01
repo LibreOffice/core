@@ -30,6 +30,7 @@
 
 #include <vcl/event.hxx>
 #include <vcl/imgctrl.hxx>
+#include <tools/rcid.h>
 
 #include <com/sun/star/awt/ImageScaleMode.hdl>
 
@@ -37,10 +38,18 @@ namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
 // -----------------------------------------------------------------------
 
-ImageControl::ImageControl( Window* pParent, WinBits nStyle ) :
-    FixedImage( pParent, nStyle )
+ImageControl::ImageControl( Window* pParent, WinBits nStyle )
+    :FixedImage( pParent, nStyle )
+    ,mnScaleMode( ImageScaleMode::Anisotropic )
 {
-    mnScaleMode = ImageScaleMode::Anisotropic;
+}
+
+// -----------------------------------------------------------------------
+
+ImageControl::ImageControl( Window* pParent, const ResId& rResId )
+    :FixedImage( pParent, rResId )
+    ,mnScaleMode( ImageScaleMode::Anisotropic )
+{
 }
 
 // -----------------------------------------------------------------------
@@ -86,17 +95,24 @@ namespace
 
 // -----------------------------------------------------------------------
 
-void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
+void ImageControl::ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const
 {
     USHORT nStyle = 0;
-    BitmapEx* pBitmap = &maBmp;
-    if( !!maBmpHC )
+    if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
     {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pBitmap = &maBmpHC;
+        if ( !IsEnabled() )
+            nStyle |= IMAGE_DRAW_DISABLE;
     }
 
-    if ( !*pBitmap )
+    const Image& rImage( GetModeImage( BMP_COLOR_NORMAL ) );
+    const Image& rImageHC( GetModeImage( BMP_COLOR_HIGHCONTRAST ) );
+
+    const Image* pImage = &rImage;
+    if ( !!rImageHC && GetSettings().GetStyleSettings().GetHighContrastMode() )
+        pImage = &rImageHC;
+
+    const Rectangle aDrawRect( rPos, rSize );
+    if ( !*pImage )
     {
         String  sText( GetText() );
         if ( !sText.Len() )
@@ -104,131 +120,56 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 
         WinBits nWinStyle = GetStyle();
         USHORT nTextStyle = FixedText::ImplGetTextStyle( nWinStyle );
-        if ( !IsEnabled() )
-            nTextStyle |= TEXT_DRAW_DISABLE;
+        if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
+            if ( !IsEnabled() )
+                nTextStyle |= TEXT_DRAW_DISABLE;
 
-        DrawText( rUDEvt.GetRect(), sText, nTextStyle );
+        rDev.DrawText( aDrawRect, sText, nTextStyle );
         return;
     }
 
-    const Rectangle& rPaintRect = rUDEvt.GetRect();
-    const Size&      rBitmapSize = maBmp.GetSizePixel();
+    const Size&      rBitmapSize = pImage->GetSizePixel();
 
-    if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
+    switch ( mnScaleMode )
     {
-        // only images support IMAGE_DRAW_COLORTRANSFORM
-        Image aImage( *pBitmap );
-        if ( !!aImage )
-        {
-            switch ( mnScaleMode )
-            {
-            case ImageScaleMode::None:
-            {
-                rUDEvt.GetDevice()->DrawImage(
-                    lcl_centerWithin( rPaintRect, rBitmapSize ), aImage, nStyle );
-            }
-            break;
-
-            case ImageScaleMode::Isotropic:
-            {
-                const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
-                rUDEvt.GetDevice()->DrawImage(
-                    lcl_centerWithin( rPaintRect, aPaintSize ),
-                    aPaintSize,
-                    aImage, nStyle );
-            }
-            break;
-
-            case ImageScaleMode::Anisotropic:
-            {
-                rUDEvt.GetDevice()->DrawImage(
-                    rPaintRect.TopLeft(),
-                    rPaintRect.GetSize(),
-                    aImage, nStyle );
-            }
-            break;
-
-            default:
-                OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
-                break;
-
-            }   // switch ( mnScaleMode )
-        }
+    case ImageScaleMode::None:
+    {
+        rDev.DrawImage( lcl_centerWithin( aDrawRect, rBitmapSize ), *pImage, nStyle );
     }
-    else
+    break;
+
+    case ImageScaleMode::Isotropic:
     {
-        switch ( mnScaleMode )
-        {
-        case ImageScaleMode::None:
-        {
-            pBitmap->Draw( rUDEvt.GetDevice(), lcl_centerWithin( rPaintRect, rBitmapSize ) );
-        }
+        const Size aPaintSize = lcl_calcPaintSize( aDrawRect, rBitmapSize );
+        rDev.DrawImage(
+            lcl_centerWithin( aDrawRect, aPaintSize ),
+            aPaintSize,
+            *pImage, nStyle );
+    }
+    break;
+
+    case ImageScaleMode::Anisotropic:
+    {
+        rDev.DrawImage(
+            aDrawRect.TopLeft(),
+            aDrawRect.GetSize(),
+            *pImage, nStyle );
+    }
+    break;
+
+    default:
+        OSL_ENSURE( false, "ImageControl::ImplDraw: unhandled scale mode!" );
         break;
 
-        case ImageScaleMode::Isotropic:
-        {
-            const Size aPaintSize = lcl_calcPaintSize( rPaintRect, rBitmapSize );
-            pBitmap->Draw( rUDEvt.GetDevice(),
-                           lcl_centerWithin( rPaintRect, aPaintSize ),
-                           aPaintSize );
-        }
-        break;
-
-        case ImageScaleMode::Anisotropic:
-        {
-            pBitmap->Draw( rUDEvt.GetDevice(),
-                           rPaintRect.TopLeft(),
-                           rPaintRect.GetSize() );
-        }
-        break;
-
-        default:
-            OSL_ENSURE( false, "ImageControl::UserDraw: unhandled scale mode!" );
-            break;
-
-        }   // switch ( mnScaleMode )
-    }
+    }   // switch ( mnScaleMode )
 }
 
 // -----------------------------------------------------------------------
 
-void ImageControl::SetBitmap( const BitmapEx& rBmp )
+void ImageControl::Paint( const Rectangle& /*rRect*/ )
 {
-    maBmp = rBmp;
-    StateChanged( STATE_CHANGE_DATA );
-}
+    ImplDraw( *this, 0, Point(), GetOutputSizePixel() );
 
-// -----------------------------------------------------------------------
-
-BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
-{
-    if( eMode == BMP_COLOR_NORMAL )
-        SetBitmap( rBitmap );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-    {
-        maBmpHC = rBitmap;
-        StateChanged( STATE_CHANGE_DATA );
-    }
-    else
-        return FALSE;
-    return TRUE;
-}
-
-// -----------------------------------------------------------------------
-
-const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
-{
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maBmpHC;
-    else
-        return maBmp;
-}
-
-// -----------------------------------------------------------------------
-
-void    ImageControl::Paint( const Rectangle& rRect )
-{
-    FixedImage::Paint( rRect );
     if( HasFocus() )
     {
         Window *pWin = GetWindow( WINDOW_BORDER );
@@ -249,6 +190,27 @@ void    ImageControl::Paint( const Rectangle& rRect )
         pWin->SetLineColor( oldLineCol );
         pWin->SetFillColor( oldFillCol );
     }
+}
+
+// -----------------------------------------------------------------------
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+{
+    const Point     aPos  = pDev->LogicToPixel( rPos );
+    const Size      aSize = pDev->LogicToPixel( rSize );
+          Rectangle aRect( aPos, aSize );
+
+    pDev->Push();
+    pDev->SetMapMode();
+
+    // Border
+    if ( !(nFlags & WINDOW_DRAW_NOBORDER) && (GetStyle() & WB_BORDER) )
+    {
+        ImplDrawFrame( pDev, aRect );
+    }
+    pDev->IntersectClipRegion( aRect );
+    ImplDraw( *pDev, nFlags, aRect.TopLeft(), aRect.GetSize() );
+
+    pDev->Pop();
 }
 
 // -----------------------------------------------------------------------

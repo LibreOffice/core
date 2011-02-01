@@ -33,6 +33,7 @@
 #include <tools/svwin.h>
 #endif
 #include <stdio.h>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -73,6 +74,7 @@
 
 #include <toolkit/awt/xsimpleanimation.hxx>
 #include <toolkit/awt/xthrobber.hxx>
+#include <toolkit/awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -117,6 +119,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 
 #include <tools/debug.hxx>
@@ -315,6 +318,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "scrollbar",          WINDOW_SCROLLBAR },
     { "scrollbarbox",       WINDOW_SCROLLBARBOX },
     { "simpleanimation",    WINDOW_CONTROL },
+    { "animatedimages",     WINDOW_CONTROL },
     { "spinbutton",         WINDOW_SPINBUTTON },
     { "spinfield",          WINDOW_SPINFIELD },
     { "throbber",           WINDOW_CONTROL },
@@ -1000,18 +1004,18 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
             break;
             case WINDOW_CONTROL:
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("simpleanimation") ) )
+                if  ( aServiceName.EqualsAscii( "simpleanimation" ) )
                 {
-                    nWinBits |= WB_SCALE;
-                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("throbber") ) )
+                else if ( aServiceName.EqualsAscii( "throbber" ) )
                 {
-                    nWinBits |= WB_SCALE;
-                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
                 else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
@@ -1020,8 +1024,15 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     pNewWindow = new TabControl( pParent, nWinBits );
                     *ppNewComp = new VCLXTabPageContainer;
                 }
+                else if ( aServiceName.EqualsAscii( "animatedimages" ) )
+                {
+                    pNewWindow = new Throbber( pParent, nWinBits );
+                    *ppNewComp = new ::toolkit::AnimatedImagesPeer;
+                }
             break;
-            default:    DBG_ERRORFILE( "UNO3!" );
+            default:
+                OSL_ENSURE( false, "VCLXToolkit::ImplCreateWindow: unknown window type!" );
+                break;
         }
     }
 
