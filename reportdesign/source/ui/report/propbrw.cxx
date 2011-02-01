@@ -363,13 +363,13 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
     }
     else if ( _aObjects.getLength() == 1 )    // single selection
     {
-        sal_uInt16 nResId = 0;
         aName = String(ModuleRes(RID_STR_BRWTITLE_PROPERTIES));
 
         uno::Reference< container::XNameContainer > xNameCont(_aObjects[0],uno::UNO_QUERY);
         Reference< lang::XServiceInfo > xServiceInfo( xNameCont->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReportComponent"))), UNO_QUERY );
         if ( xServiceInfo.is() )
         {
+            sal_uInt16 nResId = 0;
             if ( xServiceInfo->supportsService( SERVICE_FIXEDTEXT ) )
             {
                 nResId = RID_STR_PROPTITLE_FIXEDTEXT;
