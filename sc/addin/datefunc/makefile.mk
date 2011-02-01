@@ -43,9 +43,6 @@ CL2CSRC=$(TARGET).src
 
 CFILES= $(MISC)$/x$(TARGET).c
 
-# no version OBJ
-#VERSIONOBJ=
-
 SLOFILES= \
             $(SLO)$/x$(TARGET).obj
 
