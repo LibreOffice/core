@@ -33,9 +33,9 @@
 #include <svtools/parhtml.hxx>
 #include <unotools/syslocale.hxx>
 #include <tools/debug.hxx>
-#include <tools/list.hxx>
 #include <tools/link.hxx>
 #include <sal/macros.h>
+#include <list>
 
 // -----------------------------------------------------------------------
 #define HTMLCFG_UNKNOWN_TAGS            0x01
@@ -54,13 +54,11 @@ using namespace com::sun::star::uno;
 
 static SvxHtmlOptions* pOptions = 0;
 
-DECLARE_LIST( LinkList, Link * )
-
 #define C2U(cChar) OUString::createFromAscii(cChar)
 
 struct HtmlOptions_Impl
 {
-    LinkList    aList;
+    ::std::list<Link> aList;
     sal_Int32   nFlags;
     sal_Int32   nExportMode;
     sal_Int32   aFontSizeArr[HTML_FONT_COUNT];
@@ -268,16 +266,16 @@ void    SvxHtmlOptions::Commit()
 
 void SvxHtmlOptions::AddListenerLink( const Link& rLink )
 {
-    pImp->aList.Insert( new Link( rLink ) );
+    pImp->aList.push_back( rLink );
 }
 
 void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<pImp->aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
     {
-        if ( (*pImp->aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete pImp->aList.Remove(n);
+            pImp->aList.erase(iter);
             break;
         }
     }
@@ -285,8 +283,8 @@ void SvxHtmlOptions::RemoveListenerLink( const Link& rLink )
 
 void SvxHtmlOptions::CallListeners()
 {
-    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
-        pImp->aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = pImp->aList.begin(); iter != pImp->aList.end(); ++iter )
+        iter->Call( this );
 }
 
 

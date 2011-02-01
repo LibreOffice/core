@@ -39,7 +39,6 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/link.hxx>
-#include <tools/list.hxx>
 #include <tools/wldcrd.hxx>
 #include <tools/urlobj.hxx>
 
@@ -48,6 +47,8 @@
 
 #include <imgdef.hxx>
 #include <vcl/svapp.hxx>
+
+#include <list>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -94,8 +95,6 @@ using namespace ::com::sun::star;
 
 #define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
 
-DECLARE_LIST( LinkList, Link * )
-
 //_________________________________________________________________________________________________________________
 //  private declarations!
 //_________________________________________________________________________________________________________________
@@ -107,7 +106,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-    LinkList    aList;
+    ::std::list<Link> aList;
     sal_Bool    m_bUseSystemFileDialog;
     sal_Bool    m_bIsUseSystemFileDialogRO;
     sal_Bool    m_bTryODMADialog;
@@ -469,9 +468,6 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
     {
         Commit();
     }
-
-    for ( USHORT n=0; n<aList.Count(); )
-        delete aList.Remove(n);
 }
 
 static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
@@ -580,16 +576,16 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
 
 void SvtMiscOptions_Impl::AddListenerLink( const Link& rLink )
 {
-    aList.Insert( new Link( rLink ) );
+    aList.push_back( rLink );
 }
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
-        if ( (*aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete aList.Remove(n);
+            aList.erase(iter);
             break;
         }
     }
@@ -597,8 +593,8 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( USHORT n = 0; n < aList.Count(); ++n )
-        aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+        iter->Call( this );
 }
 
 void SvtMiscOptions_Impl::SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified )

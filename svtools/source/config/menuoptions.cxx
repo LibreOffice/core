@@ -40,6 +40,8 @@
 #include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
+#include <list>
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -71,8 +73,6 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYCOUNT                           4
 
 #include <tools/link.hxx>
-#include <tools/list.hxx>
-DECLARE_LIST( LinkList, Link * )
 
 //_________________________________________________________________________________________________________________
 //  private declarations!
@@ -85,7 +85,7 @@ class SvtMenuOptions_Impl : public ConfigItem
     //-------------------------------------------------------------------------------------------------------------
 
     private:
-        LinkList    aList;
+        ::std::list<Link> aList;
         sal_Bool    m_bDontHideDisabledEntries          ;   /// cache "DontHideDisabledEntries" of Menu section
         sal_Bool    m_bFollowMouse                      ;   /// cache "FollowMouse" of Menu section
         sal_Int16   m_nMenuIcons                        ;   /// cache "MenuIcons" of Menu section
@@ -171,8 +171,8 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_bDontHideDisabledEntries = bState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
-                            aList.GetObject(n)->Call( this );
+                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+                            iter->Call( this );
                         Commit();
                     }
 
@@ -180,8 +180,8 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_bFollowMouse = bState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
-                            aList.GetObject(n)->Call( this );
+                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+                            iter->Call( this );
                         Commit();
                     }
 
@@ -189,8 +189,8 @@ class SvtMenuOptions_Impl : public ConfigItem
                     {
                         m_nMenuIcons = nState;
                         SetModified();
-                        for ( USHORT n=0; n<aList.Count(); n++ )
-                            aList.GetObject(n)->Call( this );
+                        for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+                            iter->Call( this );
                         Commit();
                     }
 
@@ -300,9 +300,6 @@ SvtMenuOptions_Impl::~SvtMenuOptions_Impl()
     {
         Commit();
     }
-
-    for ( USHORT n=0; n<aList.Count(); )
-        delete aList.Remove(n);
 }
 
 //*****************************************************************************************************************
@@ -353,8 +350,8 @@ void SvtMenuOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNames )
     if ( bMenuSettingsChanged )
         m_nMenuIcons = bSystemMenuIcons ? 2 : bMenuIcons;
 
-    for ( USHORT n=0; n<aList.Count(); n++ )
-        aList.GetObject(n)->Call( this );
+    for ( ::std::list<Link>::const_iterator iter = aList.begin(); iter != aList.end(); ++iter )
+        iter->Call( this );
 }
 
 //*****************************************************************************************************************
@@ -417,16 +414,16 @@ Sequence< OUString > SvtMenuOptions_Impl::impl_GetPropertyNames()
 
 void SvtMenuOptions_Impl::AddListenerLink( const Link& rLink )
 {
-    aList.Insert( new Link( rLink ) );
+    aList.push_back( rLink );
 }
 
 void SvtMenuOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( ::std::list<Link>::iterator iter = aList.begin(); iter != aList.end(); ++iter )
     {
-        if ( (*aList.GetObject(n) ) == rLink )
+        if ( *iter == rLink )
         {
-            delete aList.Remove(n);
+            aList.erase(iter);
             break;
         }
     }
