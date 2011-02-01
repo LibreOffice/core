@@ -48,13 +48,7 @@ $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
     stl \
     ucbhelper \
     utl \
-))
-
-$(eval $(call gb_Library_add_linked_system_libs,passwordcontainer,\
-    icuuc \
-    dl \
-    m \
-    pthread \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,passwordcontainer,\
@@ -70,20 +64,11 @@ $(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
     mingw32 \
     $(gb_MINGW_LIBGCC) \
     uwinapi \
-    moldname \
     mingwex \
     kernel32 \
     msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,passwordcontainer,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif
+
 # vim: set noet sw=4 ts=4:

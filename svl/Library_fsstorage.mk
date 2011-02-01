@@ -50,6 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,fsstorage,\
     tl \
     ucbhelper \
     utl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,fsstorage,\
@@ -79,14 +80,6 @@ $(eval $(call gb_Library_add_linked_libs,fsstorage,\
     kernel32 \
     msvcrt \
     user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,fsstorage,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif

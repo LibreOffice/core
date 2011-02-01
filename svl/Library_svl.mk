@@ -60,6 +60,7 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
     ucbhelper \
     utl \
     vos3 \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,svl,\
@@ -182,13 +183,7 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,svl,\
-    advapi32 \
-    kernel32 \
-    gdi32 \
-    msvcrt \
-    shell32 \
     user32 \
-    uwinapi \
 ))
 endif
 else

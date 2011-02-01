@@ -44,6 +44,7 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     stl \
     tl \
     vos3 \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\
@@ -77,13 +78,7 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
 else
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     gnu_getopt \
-))
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    kernel32 \
-    msvcrt \
     oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif

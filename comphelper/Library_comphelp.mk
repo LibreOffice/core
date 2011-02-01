@@ -46,12 +46,13 @@ $(eval $(call gb_Library_set_defs,comphelper,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,comphelper,\
-        sal \
-        cppuhelper \
+    sal \
+    cppuhelper \
     cppu \
-        ucbhelper \
+    ucbhelper \
     vos3 \
     stl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,comphelper,\
@@ -119,7 +120,7 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/misc/uieventslogger \
     comphelper/source/misc/weak \
     comphelper/source/misc/weakeventlistener \
-        comphelper/source/officeinstdir/officeinstallationdirectories \
+    comphelper/source/officeinstdir/officeinstallationdirectories \
     comphelper/source/processfactory/componentfactory \
     comphelper/source/processfactory/processfactory \
     comphelper/source/property/ChainablePropertySet \
@@ -158,13 +159,6 @@ $(eval $(call gb_Library_add_linked_libs,comphelper,\
     dl \
     m \
     pthread \
-))
-endif
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,comphelper,\
-    kernel32 \
-    msvcrt \
-    uwinapi \
 ))
 endif
 # vim: set noet sw=4 ts=4:

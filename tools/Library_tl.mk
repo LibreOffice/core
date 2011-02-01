@@ -55,6 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
     cppu \
     sal \
     vos3 \
+    $(gb_StdLibs) \
 ))
 
 
@@ -159,14 +160,13 @@ $(eval $(call gb_Library_add_exception_objects,tl,\
 
 ifneq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_linked_libs,tl,\
+    uwinapi \
     mingwthrd \
     $(gb_MINGW_LIBSTDCPP) \
     mingw32 \
     $(gb_MINGW_LIBGCC) \
-    uwinapi \
     moldname \
     mingwex \
-    advapi32 \
     kernel32 \
     mpr \
     msvcrt \
@@ -177,16 +177,12 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,tl,\
-    advapi32 \
-    kernel32 \
     mpr \
-    msvcrt \
     oldnames \
     ole32 \
     shell32 \
     user32 \
     uuid \
-    uwinapi \
 ))
 endif
 endif

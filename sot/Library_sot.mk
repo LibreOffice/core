@@ -53,6 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,sot,\
     ucbhelper \
     stl \
     utl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sot,\
@@ -85,11 +86,4 @@ $(eval $(call gb_Library_add_linked_libs,sot,\
 ))
 endif
 
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,sot,\
-    kernel32 \
-    msvcrt \
-    uwinapi \
-))
-endif
 # vim: set noet sw=4 ts=4:
