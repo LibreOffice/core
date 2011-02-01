@@ -1334,9 +1334,9 @@ if test -z "$BASH"; then
 fi
 AC_SUBST(BASH)
 
-AC_MSG_CHECKING([for GNU tar])
+AC_MSG_CHECKING([for GNU or BSD tar])
 for a in $GNUTAR gtar gnutar tar; do
-      $a --version 2> /dev/null | grep GNU  2>&1 > /dev/null
+      $a --version 2> /dev/null | egrep "GNU|bsdtar"  2>&1 > /dev/null
       if test $? -eq 0;  then
            GNUTAR=$a
            break
@@ -1344,7 +1344,7 @@ for a in $GNUTAR gtar gnutar tar; do
 done
 AC_MSG_RESULT($GNUTAR)
 if test -z "$GNUTAR"; then
-    AC_MSG_ERROR([not found. install GNU tar.])
+    AC_MSG_ERROR([not found. install GNU or BSD tar.])
 fi
 AC_SUBST(GNUTAR)
 
