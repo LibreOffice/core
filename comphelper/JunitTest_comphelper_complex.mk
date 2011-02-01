@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,30 +25,24 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_JunitTest_JunitTest,comphelper_complex))
 
-PRJ = ../../..
-PRJNAME = comphelper
-TARGET = qa_complex_comphelper
+$(eval $(call gb_JunitTest_add_sourcefiles,comphelper_complex,\
+    comphelper/qa/complex/comphelper/Map \
+    comphelper/qa/complex/comphelper/SequenceOutputStreamUnitTest \
+))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/comphelper
-JAVATESTFILES = \
-    Map.java \
-    SequenceOutputStreamUnitTest.java
-    
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
+$(eval $(call gb_JunitTest_add_jars,comphelper_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
+$(eval $(call gb_JunitTest_add_classes,comphelper_complex,\
+    complex.comphelper.SequenceOutputStreamUnitTest \
+    complex.comphelper.Map \
+))
 
-ALLTAR : javatest
-
-.END
-
+# vim: set noet sw=4 ts=4:

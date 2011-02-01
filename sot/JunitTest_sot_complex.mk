@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,38 +25,25 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_JunitTest_JunitTest,sot_complex))
 
-PRJ = ../../..
-PRJNAME = sot
-TARGET = qa_complex_olesimplestorage
+$(eval $(call gb_JunitTest_add_sourcefiles,sot_complex,\
+    sot/qa/complex/olesimplestorage/OLESimpleStorageTest \
+    sot/qa/complex/olesimplestorage/OLESimpleStorageUnitTest \
+    sot/qa/complex/olesimplestorage/Test01 \
+    sot/qa/complex/olesimplestorage/TestHelper \
+))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/olesimplestorage
-JAVATESTFILES = \
-    OLESimpleStorageUnitTest.java
+$(eval $(call gb_JunitTest_add_jars,sot_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-JAVAFILES = $(JAVATESTFILES) \
-    OLESimpleStorageTest.java \
-    Test01.java \
-    TestHelper.java
+$(eval $(call gb_JunitTest_add_classes,sot_complex,\
+    complex.olesimplestorage.OLESimpleStorageUnitTest \
+))
 
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar jurt.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
-
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
-
-ALLTAR : javatest
-
-.END
-
-
-
-
-
-
+# vim: set noet sw=4 ts=4:

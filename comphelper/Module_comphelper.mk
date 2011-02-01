@@ -32,4 +32,8 @@ $(eval $(call gb_Module_add_targets,comphelper,\
     Library_comphelp \
 ))
 
+$(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
+    JunitTest_comphelper_complex \
+))
+
 # vim: set noet ts=4 sw=4:
