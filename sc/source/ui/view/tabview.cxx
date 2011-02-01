@@ -143,6 +143,7 @@
 #include "viewuno.hxx"
 #include "AccessibilityHints.hxx"
 #include "appoptio.hxx"
+#include "attrib.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 
@@ -2398,14 +2399,22 @@ void ScTabView::StartDataSelect()
             //  no meaningful input is possible anyway, so this function
             //  can be used to select a page field entry.
             pWin->LaunchPageFieldMenu( nCol, nRow );
-        break;
+            return;
         case sheet::DataPilotFieldOrientation_COLUMN:
         case sheet::DataPilotFieldOrientation_ROW:
             pWin->LaunchDPFieldMenu( nCol, nRow );
-        break;
+            return;
         default:
-            pWin->DoAutoFilterMenue( nCol, nRow, TRUE );
+            ;
     }
+
+    // Do autofilter if the current cell has autofilter button.  Otherwise do
+    // a normal data select popup.
+    const ScMergeFlagAttr* pAttr = static_cast<const ScMergeFlagAttr*>(
+        aViewData.GetDocument()->GetAttr(
+            nCol, nRow, aViewData.GetTabNo(), ATTR_MERGE_FLAG));
+
+    pWin->DoAutoFilterMenue(nCol, nRow, !pAttr->HasAutoFilter());
 }
 
 void ScTabView::EnableRefInput(BOOL bFlag)

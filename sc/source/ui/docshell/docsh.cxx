@@ -2829,11 +2829,11 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
     aCtrlD.Modifiers = awt::KeyModifier::MOD1;
     aKeys.push_back(&aCtrlD);
 
-    // Ctrl-Shift-D
-    awt::KeyEvent aCtrlShiftD;
-    aCtrlShiftD.KeyCode = awt::Key::D;
-    aCtrlShiftD.Modifiers = awt::KeyModifier::MOD1 | awt::KeyModifier::SHIFT;
-    aKeys.push_back(&aCtrlShiftD);
+    // Alt-Down
+    awt::KeyEvent aAltDown;
+    aAltDown.KeyCode = awt::Key::DOWN;
+    aAltDown.Modifiers = awt::KeyModifier::MOD2;
+    aKeys.push_back(&aAltDown);
 
     // Remove all involved keys first, because swapping commands don't work
     // well without doing this.
@@ -2846,7 +2846,7 @@ void ScDocShell::ResetKeyBindings( ScOptionsUtil::KeyBindingType eType )
             xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ClearContents")));
             xScAccel->setKeyEvent(aBackspace, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));
             xScAccel->setKeyEvent(aCtrlD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:FillDown")));
-            xScAccel->setKeyEvent(aCtrlShiftD, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
+            xScAccel->setKeyEvent(aAltDown, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DataSelect")));
         break;
         case ScOptionsUtil::KEY_OOO_LEGACY:
             xScAccel->setKeyEvent(aDelete, OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Delete")));
