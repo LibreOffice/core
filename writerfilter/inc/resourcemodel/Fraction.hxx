@@ -24,41 +24,37 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_CELLCOLORHANDLER_HXX
-#define INCLUDED_CELLCOLORHANDLER_HXX
+#ifndef INCLUDED_FRACTION_HXX
+#define INCLUDED_FRACTION_HXX
 
-#include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
-#include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <sal/types.h>
 
 namespace writerfilter {
-namespace dmapper
-{
-class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
+namespace resourcemodel {
+
+class Fraction
 {
 public:
-    sal_Int32 m_nShadowType;
-    sal_Int32 m_nColor;
-    sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
+    explicit Fraction(sal_Int32 nNumerator, sal_Int32 nDenominator = 1);
+    explicit Fraction(const Fraction & a, const Fraction & b);
+    virtual ~Fraction();
+
+    void init(sal_Int32 nNumerator, sal_Int32 nDenominator);
+    void assign(const Fraction & rFraction);
+
+    Fraction inverse() const;
+
+    Fraction operator=(const Fraction & rFraction);
+    Fraction operator+(const Fraction & rFraction) const;
+    Fraction operator-(const Fraction & rFraction) const;
+    Fraction operator*(const Fraction & rFraction) const;
+    Fraction operator/(const Fraction & rFraction) const;
+    operator sal_Int32() const;
+    operator float() const;
 
 private:
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
-public:
-    CellColorHandler( );
-    virtual ~CellColorHandler();
-
-    ::boost::shared_ptr<TablePropertyMap>            getProperties();
-
-    void setParagraph() { m_bParagraph = true; }
+    sal_Int32 mnNumerator;
+    sal_Int32 mnDenominator;
 };
-typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
-
-#endif //
+#endif // INCLUDED_FRACTION_HXX

@@ -24,53 +24,67 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_SECTIONCOLUMNHANDLER_HXX
-#define INCLUDED_SECTIONCOLUMNHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
-#include <boost/shared_ptr.hpp>
+#include <stdio.h>
+#include <resourcemodel/XPathLogger.hxx>
 
-
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter
 {
-class PropertyMap;
-
-struct _Column
+XPathLogger::XPathLogger()
+: mp_tokenMap(new TokenMap_t)
 {
-    sal_Int32 nWidth;
-    sal_Int32 nSpace;
-};
+}
 
-
-class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public LoggedProperties
+XPathLogger::~XPathLogger()
 {
-    bool        bEqualWidth;
-    sal_Int32   nSpace;
-    sal_Int32   nNum;
-    bool        bSep;
-    std::vector<_Column> aCols;
+}
 
-    _Column   aTempColumn;
+string XPathLogger::getXPath() const
+{
+    return m_currentPath;
+}
 
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
+void XPathLogger::updateCurrentPath()
+{
+    m_currentPath = "";
 
-public:
-    SectionColumnHandler();
-    virtual ~SectionColumnHandler();
+    for (vector<string>::const_iterator aIt = m_path.begin();
+         aIt != m_path.end();
+         aIt++)
+    {
+        if (m_currentPath.size() > 0)
+            m_currentPath += "/";
 
-    bool        IsEqualWidth() const { return bEqualWidth; }
-    sal_Int32   GetSpace() const { return nSpace; }
-    sal_Int32   GetNum() const { return nNum; }
-    bool        IsSeparator() const { return bSep; }
+        m_currentPath += *aIt;
+    }
+}
 
-    const std::vector<_Column>& GetColumns() const { return aCols;}
+void XPathLogger::startElement(string _token)
+{
+    TokenMap_t::const_iterator aIt = mp_tokenMap->find(_token);
 
-};
-typedef boost::shared_ptr< SectionColumnHandler >          SectionColumnHandlerPtr;
-}}
+    if (aIt == mp_tokenMap->end())
+        (*mp_tokenMap)[_token] = 1;
+    else
+        (*mp_tokenMap)[_token]++;
 
-#endif //
+    static char sBuffer[256];
+    snprintf(sBuffer, sizeof(sBuffer), "[%d]", (*mp_tokenMap)[_token]);
+    m_path.push_back(_token + sBuffer);
+
+    m_tokenMapStack.push(mp_tokenMap);
+    mp_tokenMap.reset(new TokenMap_t);
+
+    updateCurrentPath();
+}
+
+void XPathLogger::endElement()
+{
+    mp_tokenMap = m_tokenMapStack.top();
+    m_tokenMapStack.pop();
+    m_path.pop_back();
+
+    updateCurrentPath();
+}
+
+}

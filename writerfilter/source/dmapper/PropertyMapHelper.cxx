@@ -32,7 +32,6 @@
 #include <resourcemodel/TagLogger.hxx>
 #include "PropertyMapHelper.hxx"
 
-#ifdef DEBUG
 namespace writerfilter
 {
 namespace dmapper
@@ -128,4 +127,3 @@ XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t rPropValSeq
 
 }
 }
-#endif // DEBUG

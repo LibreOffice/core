@@ -24,41 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_CELLCOLORHANDLER_HXX
-#define INCLUDED_CELLCOLORHANDLER_HXX
+#ifndef INCLUDED_XPATH_LOGGER_HXX
+#define INCLUDED_XPATH_LOGGER_HXX
 
-#include <WriterFilterDllApi.hxx>
-#include <resourcemodel/LoggedResources.hxx>
+#include <hash_map>
+#include <stack>
+#include <string>
+#include <vector>
 #include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <WriterFilterDllApi.hxx>
 
-namespace writerfilter {
-namespace dmapper
+namespace writerfilter
 {
-class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
+using ::std::hash_map;
+using ::std::stack;
+using ::std::string;
+using ::std::vector;
+
+class WRITERFILTER_DLLPUBLIC XPathLogger
 {
+    typedef hash_map<string, unsigned int> TokenMap_t;
+    typedef boost::shared_ptr<TokenMap_t> TokenMapPointer_t;
+
+    TokenMapPointer_t mp_tokenMap;
+    stack<TokenMapPointer_t> m_tokenMapStack;
+    vector<string> m_path;
+    string m_currentPath;
+
+    void updateCurrentPath();
+
 public:
-    sal_Int32 m_nShadowType;
-    sal_Int32 m_nColor;
-    sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
+    explicit XPathLogger();
+    virtual ~XPathLogger();
 
-private:
-    // Properties
-    virtual void lcl_attribute(Id Name, Value & val);
-    virtual void lcl_sprm(Sprm & sprm);
-
-public:
-    CellColorHandler( );
-    virtual ~CellColorHandler();
-
-    ::boost::shared_ptr<TablePropertyMap>            getProperties();
-
-    void setParagraph() { m_bParagraph = true; }
+    string getXPath() const;
+    void startElement(string _token);
+    void endElement();
 };
-typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
-}}
-
-#endif //
+}
+#endif // INCLUDED_XPATH_LOGGER_HXX

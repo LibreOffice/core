@@ -24,41 +24,68 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef INCLUDED_CELLCOLORHANDLER_HXX
-#define INCLUDED_CELLCOLORHANDLER_HXX
 
-#include <WriterFilterDllApi.hxx>
+#ifndef WRAP_POLYGON_HANDLER_HXX
+#define WRAP_POLYGON_HANDLER_HXX
+
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <resourcemodel/LoggedResources.hxx>
-#include <boost/shared_ptr.hpp>
-//#include <com/sun/star/table/TableBorder.hpp>
-#include <com/sun/star/table/BorderLine.hpp>
+#include <resourcemodel/Fraction.hxx>
 
 namespace writerfilter {
-namespace dmapper
-{
-class TablePropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public LoggedProperties
+namespace dmapper {
+
+using namespace ::com::sun::star;
+using resourcemodel::Fraction;
+
+class WrapPolygon
 {
 public:
-    sal_Int32 m_nShadowType;
-    sal_Int32 m_nColor;
-    sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
+    typedef ::std::deque<awt::Point> Points_t;
+    typedef ::boost::shared_ptr<WrapPolygon> Pointer_t;
 
 private:
+    Points_t mPoints;
+
+public:
+    WrapPolygon();
+    virtual ~WrapPolygon();
+
+    void addPoint(const awt::Point & rPoint);
+
+    Points_t::const_iterator begin() const;
+    Points_t::const_iterator end() const;
+    Points_t::iterator begin();
+    Points_t::iterator end();
+
+    size_t size() const;
+
+    WrapPolygon::Pointer_t move(const awt::Point & rMove);
+    WrapPolygon::Pointer_t scale(const Fraction & rFractionX, const Fraction & rFractionY);
+    WrapPolygon::Pointer_t correctWordWrapPolygon(const awt::Size & rSrcSize, const awt::Size & rDstSize);
+    drawing::PointSequenceSequence getPointSequenceSequence() const;
+};
+
+class WrapPolygonHandler : public LoggedProperties
+{
+public:
+    WrapPolygonHandler();
+    virtual ~WrapPolygonHandler();
+
+    WrapPolygon::Pointer_t getPolygon();
+
+private:
+    WrapPolygon::Pointer_t mpPolygon;
+
+    sal_uInt32 mnX;
+    sal_uInt32 mnY;
+
     // Properties
     virtual void lcl_attribute(Id Name, Value & val);
     virtual void lcl_sprm(Sprm & sprm);
 
-public:
-    CellColorHandler( );
-    virtual ~CellColorHandler();
-
-    ::boost::shared_ptr<TablePropertyMap>            getProperties();
-
-    void setParagraph() { m_bParagraph = true; }
 };
-typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
+
 }}
 
-#endif //
+#endif // WRAP_POLYGON_HANDLER_HXX
