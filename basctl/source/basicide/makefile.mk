@@ -38,7 +38,6 @@ PROJECTPCHSOURCE=ide_pch
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 .IF "$(basicdebug)" != "" || "$(BASICDEBUG)" != ""
 CDEFS+=-DBASICDEBUG
