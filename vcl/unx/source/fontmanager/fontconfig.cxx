@@ -92,6 +92,11 @@ using namespace psp;
 using namespace osl;
 using namespace rtl;
 
+namespace
+{
+    typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
+}
+
 class FontCfgWrapper
 {
     oslModule       m_pLib;
@@ -254,11 +259,14 @@ public:
     FT_UInt FcFreeTypeCharIndex( FT_Face face, FcChar32 ucs4 )
     { return m_pFcFreeTypeCharIndex ? m_pFcFreeTypeCharIndex( face, ucs4 ) : 0; }
 
-public: // TODO: cleanup
+public:
     FcResult LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **family,
                                          const char *elementtype, const char *elementlangtype);
+//to-do, make private and add some cleanish accessor methods
     std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aFontNameToLocalized;
     std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash > m_aLocalizedToCanonical;
+private:
+    void cacheLocalizedFontNames(FcChar8 *origfontname, FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements);
 };
 
 oslGenericFunction FontCfgWrapper::loadSymbol( const char* pSymbol )
@@ -501,8 +509,6 @@ void FontCfgWrapper::release()
 #ifdef ENABLE_FONTCONFIG
 namespace
 {
-    typedef std::pair<FcChar8*, FcChar8*> lang_and_element;
-
     class localizedsorter
     {
             rtl::OLocale maLoc;
@@ -551,6 +557,19 @@ namespace
     }
 }
 
+//Set up maps to quickly map between a fonts best UI name and all the rest of its names, and vice versa
+void FontCfgWrapper::cacheLocalizedFontNames(FcChar8 *origfontname, FcChar8 *bestfontname, const std::vector< lang_and_element > &lang_and_elements)
+{
+    std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
+    for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
+    {
+        const char *candidate = (const char*)(aIter->second);
+        if (rtl_str_compare(candidate, (const char*)bestfontname) != 0)
+            m_aFontNameToLocalized[OString(candidate)] = OString((const char*)bestfontname);
+    }
+    if (rtl_str_compare((const char*)origfontname, (const char*)bestfontname) != 0)
+        m_aLocalizedToCanonical[OString((const char*)bestfontname)] = OString((const char*)origfontname);
+}
 
 FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar8 **element,
                                                      const char *elementtype, const char *elementlangtype)
@@ -583,15 +602,9 @@ FcResult FontCfgWrapper::LocalizedElementFromPattern(FcPattern* pPattern, FcChar
             localizedsorter aSorter(pLoc);
             *element = aSorter.bestname(lang_and_elements);
 
-            std::vector<lang_and_element>::const_iterator aEnd = lang_and_elements.end();
-            for (std::vector<lang_and_element>::const_iterator aIter = lang_and_elements.begin(); aIter != aEnd; ++aIter)
-            {
-                const char *candidate = (const char*)(aIter->second);
-                if (rtl_str_compare(candidate, (const char*)(*element)) != 0)
-                    m_aFontNameToLocalized[OString(candidate)] = OString((const char*)(*element));
-            }
-            if (rtl_str_compare((const char*)origelement, (const char*)(*element)) != 0)
-                m_aLocalizedToCanonical[OString((const char*)(*element))] = OString((const char*)origelement);
+            //if this element is a fontname, map the other names to this best-name
+            if (rtl_str_compare(elementtype, FC_FAMILY) == 0)
+                cacheLocalizedFontNames(origelement, *element, lang_and_elements);
         }
     }
 
