@@ -167,10 +167,10 @@ void lcl_SetSpecialProperty(SwFrmFmt* pFmt, const SfxItemPropertySimpleEntry* pE
         case  FN_TABLE_WIDTH:
         case  FN_TABLE_RELATIVE_WIDTH:
         {
-            sal_Int32 nWidth = 0;
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             if(FN_TABLE_WIDTH == pEntry->nWID)
             {
+                sal_Int32 nWidth = 0;
                 aValue >>= nWidth;
                 aSz.SetWidthPercent(0);
                 aSz.SetWidth ( MM100_TO_TWIP ( nWidth ) );

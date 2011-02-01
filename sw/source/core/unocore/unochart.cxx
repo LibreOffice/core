@@ -1717,9 +1717,9 @@ void SwChartDataProvider::AddRowCols(
     SwTableBox* pFirstBox   = *( rBoxes.GetData() + 0 );
     SwTableBox* pLastBox    = *( rBoxes.GetData() + nBoxes - 1 );
 
-    sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
     if (pFirstBox && pLastBox)
     {
+        sal_Int32 nFirstCol = -1, nFirstRow = -1, nLastCol = -1, nLastRow = -1;
         lcl_GetCellPosition( pFirstBox->GetName(), nFirstCol, nFirstRow  );
         lcl_GetCellPosition( pLastBox->GetName(),  nLastCol,  nLastRow );
 
