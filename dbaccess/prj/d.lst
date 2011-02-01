@@ -53,7 +53,6 @@ touch: ..\%__SRC%\misc\dbaccess.hid %_DEST%\bin%_EXT%\dba.hid
 
 ..\%__SRC%\misc\adabasui.component %_DEST%\xml%_EXT%\adabasui.component
 ..\%__SRC%\misc\dba.component %_DEST%\xml%_EXT%\dba.component
-..\%__SRC%\misc\dbacfg.component %_DEST%\xml%_EXT%\dbacfg.component
 ..\%__SRC%\misc\dbaxml.component %_DEST%\xml%_EXT%\dbaxml.component
 ..\%__SRC%\misc\dbmm.component %_DEST%\xml%_EXT%\dbmm.component
 ..\%__SRC%\misc\dbu.component %_DEST%\xml%_EXT%\dbu.component

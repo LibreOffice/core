@@ -45,24 +45,10 @@ import static org.junit.Assert.*;
 public class UISettings extends TestCase
 {
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "checkTableFormattingPersistence",
-//            "checkTransparentQueryColumnSettings"
-//        };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "UISettings";
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test public void checkTableFormattingPersistence() throws java.lang.Exception
+    @Test
+    public void checkTableFormattingPersistence() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
         CRMDatabase database = new CRMDatabase( getMSF(), true );
@@ -114,7 +100,8 @@ public class UISettings extends TestCase
      * settings
      * @throws java.lang.Exception
      */
-    @Test public void checkTransparentQueryColumnSettings() throws java.lang.Exception
+    @Test
+    public void checkTransparentQueryColumnSettings() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
         CRMDatabase database = new CRMDatabase( getMSF(), true );

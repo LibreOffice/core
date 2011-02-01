@@ -48,11 +48,8 @@ import util.UITools;
 
 // ---------- junit imports -----------------
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -70,30 +67,18 @@ public class CopyTableWizard extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "copyTable", "copyTableDbase"
-//                };
-//    }
 
-    // --------------------------------------------------------------------------------------------------------
-//    @Override
-//    public String getTestObjectName()
-//    {
-//        return getClass().getName();
-//    }
-// --------------------------------------------------------------------------------------------------------
-    // --------------------------------------------------------------------------------------------------------
-
-    @After public void after()
+    @After
+    @Override
+    public void after()
     {
         dest.store();
         super.after();
     }
 
-    @Before public void before()
+    @Before
+    @Override
+    public void before()
     {
         try
         {
@@ -106,16 +91,14 @@ public class CopyTableWizard extends CRMBasedTestCase
             fail("");
         }
     }
+
     // --------------------------------------------------------------------------------------------------------
-
-
-
     class CopyThread implements Runnable
     {
 
         final XCopyTableWizard copyWizard;
 
-        public CopyThread(final XCopyTableWizard copyWizard)
+        CopyThread(final XCopyTableWizard copyWizard)
         {
             this.copyWizard = copyWizard;
         }
@@ -138,17 +121,19 @@ public class CopyTableWizard extends CRMBasedTestCase
             return null;
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(XExtendedToolkit.class, toolKit);
+        XExtendedToolkit tk = UnoRuntime.queryInterface( XExtendedToolkit.class, toolKit );
         Object atw = tk.getActiveTopWindow();
-        return (XWindow) UnoRuntime.queryInterface(XWindow.class, atw);
+        return UnoRuntime.queryInterface( XWindow.class, atw );
     }
 
-    @Test public void copyTable() throws Exception, IOException, java.lang.Exception
+    @Test
+    public void copyTable() throws Exception, IOException, java.lang.Exception
     {
         copyTable(source,source);
     }
 
-    @Test public void copyTableDbase() throws Exception, IOException, java.lang.Exception
+    @Test
+    public void copyTableDbase() throws Exception, IOException, java.lang.Exception
     {
         copyTable(source,dest);
     }
@@ -167,15 +152,10 @@ public class CopyTableWizard extends CRMBasedTestCase
         }
     }
 
-    public void assure(final String message)
-    {
-        fail(message);
-    }
-
     private void copyTable(final String tableName, final XConnection sourceConnection, final XConnection destConnection) throws Exception, IOException, java.lang.Exception
     {
 
-        final XInteractionHandler interAction = new CopyTableInterActionHandler(this);
+        final XInteractionHandler interAction = new CopyTableInterActionHandler();
         final XComponentContext context = getComponentContext();
         final XPropertySet sourceDescriptor = DataAccessDescriptorFactory.get(context).createDataAccessDescriptor();
         sourceDescriptor.setPropertyValue("CommandType", CommandType.TABLE);
@@ -185,7 +165,8 @@ public class CopyTableWizard extends CRMBasedTestCase
         final XPropertySet destDescriptor = DataAccessDescriptorFactory.get(context).createDataAccessDescriptor();
         destDescriptor.setPropertyValue("ActiveConnection", destConnection);
 
-        final XCopyTableWizard copyWizard = com.sun.star.sdb.application.CopyTableWizard.createWithInteractionHandler(context, sourceDescriptor, destDescriptor, interAction);
+        final XCopyTableWizard copyWizard = com.sun.star.sdb.application.CopyTableWizard.createWithInteractionHandler(
+            context, sourceDescriptor, destDescriptor, interAction);
         copyWizard.setOperation((short) 0); // com.sun.star.sdb.application.CopyDefinitionAndData
         Optional<String> auto = new Optional<String>();
 
@@ -219,7 +200,7 @@ public class CopyTableWizard extends CRMBasedTestCase
             }
             catch (java.lang.Exception exception)
             {
-                exception.printStackTrace();
+                exception.printStackTrace( System.err );
             }
         }
         catch (com.sun.star.lang.IndexOutOfBoundsException indexOutOfBoundsException)

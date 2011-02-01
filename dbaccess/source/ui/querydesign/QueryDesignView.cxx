@@ -1957,7 +1957,7 @@ namespace
                 pJoinType = pNode->getChild(2);
             }
 
-            if (SQL_ISRULE(pJoinType,join_type) && SQL_ISTOKEN(pJoinType->getChild(0),INNER))
+            if (SQL_ISRULE(pJoinType,join_type) && (!pJoinType->count() || SQL_ISTOKEN(pJoinType->getChild(0),INNER)))
             {
                 eJoinType = INNER_JOIN;
             }
