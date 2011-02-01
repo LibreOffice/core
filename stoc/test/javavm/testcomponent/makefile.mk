@@ -31,11 +31,12 @@ PRJNAME = testcomponent
 PACKAGE =
 TARGET  = JavaTestComponent
 
-
 # --- Settings -----------------------------------------------------
-#.INCLUDE : $(PRJ)$/util$/makefile.pmk
+
 .INCLUDE : settings.mk
+
 # Files --------------------------------------------------------
+
 JARFILES = ridl.jar jurt.jar unoil.jar
 
 CUSTOMMANIFESTFILE= manifest
@@ -48,11 +49,6 @@ JAVAFILES= \
 
 JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
-
-
-
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
-

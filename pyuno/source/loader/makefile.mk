@@ -73,16 +73,6 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 SLOFILES=       $(SLO)$/pyuno_loader.obj
 
-#COMPONENTS= \
-#	tcv		\
-#	inv		\
-#	corefl		\
-#	insp		\
-#	invadp		\
-#	proxyfac 	\
-#	pythonloader.uno \
-
-
 COMPONENTS= \
     stocservices.uno	\
     invocation.uno		\

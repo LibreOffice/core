@@ -33,13 +33,13 @@ TARGETTYPE=CUI
 LIBTARGET=NO
 USE_LDUMP2=TRUE
 ENABLE_EXCEPTIONS=TRUE
-#LDUMP2=LDUMP3
-
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
+
 # ------------------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
@@ -70,6 +70,7 @@ APP4STDLIBS = $(SALLIB)
 
 
 # --- Targets ------------------------------------------------------
+
 .IF "$(depend)" == ""
 ALL : ALLTAR \
       $(BIN)$/$(BOOTSTRAPSCRIPT) \
@@ -144,6 +145,7 @@ $(BIN)$/bootstraptest.ini : bootstraptest.ini
 
 
 # --- SO2-Filter-Datei ---
+
 $(MISC)$/tsl$(DLLPOSTFIX).flt:
     @echo ------------------------------
     @echo Making: $@

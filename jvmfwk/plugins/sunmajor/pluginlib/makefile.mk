@@ -27,13 +27,9 @@
 PRJ=..$/..$/..
 
 PRJNAME= jvmfwk
-
 TARGET = plugin
-
 ENABLE_EXCEPTIONS=TRUE
-
 LIBTARGET=NO
-
 UNOCOMPONENT1=sunjavaplugin
 
 # --- Settings -----------------------------------------------------
@@ -43,7 +39,6 @@ DLLPRE =
 
 # ------------------------------------------------------------------
 
-#.INCLUDE :  ..$/cppumaker.mk
 .IF "$(SOLAR_JAVA)"!=""
 
 SLOFILES= \
@@ -57,8 +52,6 @@ SLOFILES= \
     $(SLO)$/otherjre.obj 
 
 LIB1OBJFILES= $(SLOFILES)
-
-
 
 LIB1TARGET=$(SLB)$/$(UNOCOMPONENT1).lib
 
@@ -94,8 +87,6 @@ JAVACLASSFILES= \
 JAVAFILES = $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES))) 
 
 .ENDIF # SOLAR_JAVA
-
-
 
 # --- Targets ------------------------------------------------------
 
