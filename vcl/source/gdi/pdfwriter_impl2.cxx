@@ -48,11 +48,28 @@
 
 #include <rtl/digest.h>
 
+#undef USE_PDFGRADIENTS
+
 using namespace vcl;
 using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::beans;
+
+// -----------------------------------------------------------------------------
+
+void PDFWriterImpl::implWriteGradient( const PolyPolygon& i_rPolyPoly, const Gradient& i_rGradient,
+                                       VirtualDevice* i_pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& i_rContext )
+{
+    GDIMetaFile        aTmpMtf;
+
+    i_pDummyVDev->AddGradientActions( i_rPolyPoly.GetBoundRect(), i_rGradient, aTmpMtf );
+
+    m_rOuterFace.Push();
+    m_rOuterFace.IntersectClipRegion( i_rPolyPoly.getB2DPolyPolygon() );
+    playMetafile( aTmpMtf, NULL, i_rContext, i_pDummyVDev );
+    m_rOuterFace.Pop();
+}
 
 // -----------------------------------------------------------------------------
 
@@ -349,14 +366,23 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                 case( META_GRADIENT_ACTION ):
                 {
                     const MetaGradientAction* pA = (const MetaGradientAction*) pAction;
+                    #ifdef USE_PDFGRADIENTS
                     m_rOuterFace.DrawGradient( pA->GetRect(), pA->GetGradient() );
+                    #else
+                    const PolyPolygon         aPolyPoly( pA->GetRect() );
+                    implWriteGradient( aPolyPoly, pA->GetGradient(), pDummyVDev, i_rContext );
+                    #endif
                 }
                 break;
 
                 case( META_GRADIENTEX_ACTION ):
                 {
                     const MetaGradientExAction* pA = (const MetaGradientExAction*) pAction;
+                    #ifdef USE_PDFGRADIENTS
                     m_rOuterFace.DrawGradient( pA->GetPolyPolygon(), pA->GetGradient() );
+                    #else
+                    implWriteGradient( pA->GetPolyPolygon(), pA->GetGradient(), pDummyVDev, i_rContext );
+                    #endif
                 }
                 break;
 
@@ -512,7 +538,11 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
 
                         if( pGradAction )
                         {
+                            #if USE_PDFGRADIENTS
                             m_rOuterFace.DrawGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient() );
+                            #else
+                            implWriteGradient( pGradAction->GetPolyPolygon(), pGradAction->GetGradient(), pDummyVDev, i_rContext );
+                            #endif
                         }
                     }
                     else
