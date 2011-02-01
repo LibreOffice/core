@@ -151,8 +151,8 @@ public:
 
     bool                                SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammarCheck);
     void                                ToSentenceStart();
-    const ::svx::SpellPortions          GetLastPortions(){ return aLastPortions;}
-    SpellContentPositions               GetLastPositions() {return aLastPositions;}
+    const ::svx::SpellPortions          GetLastPortions() const { return aLastPortions;}
+    SpellContentPositions               GetLastPositions() const {return aLastPositions;}
     void                                ContinueAfterThisSentence() { bMoveToEndOfSentence = true; }
 };
 
