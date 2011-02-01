@@ -25,36 +25,29 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sfx2))
+$(eval $(call gb_JunitTest_JunitTest,sfx2_unoapi))
 
-$(eval $(call gb_Module_add_targets,sfx2,\
-    AllLangResTarget_sfx2 \
-    Library_sfx \
-    Package_inc \
-    Package_sdi \
+$(eval $(call gb_JunitTest_set_defs,sfx2_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/sfx2/qa/unoapi/sfx.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/sfx2/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sfx2/qa/unoapi/testdocuments \
 ))
 
-$(eval $(call gb_Module_add_check_targets,sfx2,\
-    CppunitTest_sfx2_metadatable \
+$(eval $(call gb_JunitTest_add_jars,sfx2_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,sfx2,\
-    JunitTest_sfx2_complex \
-    JunitTest_sfx2_unoapi \
+$(eval $(call gb_JunitTest_add_sourcefiles,sfx2_unoapi,\
+    sfx2/qa/unoapi/Test \
 ))
 
-ifeq ($(OS),LINUX)
-ifeq ($(ENABLE_SYSTRAY_GTK),TRUE)
-$(eval $(call gb_Module_add_targets,sfx2,\
-    Library_qstart \
+$(eval $(call gb_JunitTest_add_classes,sfx2_unoapi,\
+    org.openoffice.sfx2.qa.unoapi.Test \
 ))
-endif
-endif
-
-#todo: source/dialog BUILD_VER_STRING
-#todo: source/doc SYSTEM_LIBXML2
-#todo: ENABLE_LAYOUT
-#todo: clean up quickstarter stuff in both libraries
-#todo: move standard pool to svl
 
 # vim: set noet sw=4 ts=4:
