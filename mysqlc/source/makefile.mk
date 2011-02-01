@@ -281,18 +281,6 @@ $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xc
     @@-$(MKDIRHIER) $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess
     @$(COPY) $< $(EXTENSIONDIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess$/Drivers.xcu > $(NULLDEV)
 
-# The below doesn't work - it's completely beyond me .... $@ is some strange path when echoed, so the whole construct
-# doesn't work .... :(
-
-#$(foreach,i,$(COMPONENT_XCU) $(EXTENSIONDIR)$/$i : $i)
-#    @echo -----------------
-#    @echo $@
-#    @echo $<
-#    @echo -----------------
-#    -$(MKDIRHIER) $(@:d)
-#    (COPY) $< $@
-#    @echo -----------------
-
 # non-existing descriptions: copy from the English version
 .IF "$(strip $(MISSING_LANGS))" != ""
 $(foreach,i,$(MISSING_LANGS) $(EXTENSIONDIR)$/description$/description_$i.txt): .$/description$/description_en-US.txt

@@ -44,8 +44,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  target.mk
 
-#ALLTAR : $(MISC)$/test_0_succeeded $(MISC)$/test_1_succeeded
-
 $(MISC)$/test_0_succeeded: $(BIN)$/xpdfimport$(EXECPOST) binary_0_out.def text_0_out.def testinput.pdf
     $(BIN)$/xpdfimport -f $(MISC)$/binary_0_out testinput.pdf > $(MISC)$/text_0_out
     diff --strip-trailing-cr $(MISC)$/binary_0_out binary_0_out.def

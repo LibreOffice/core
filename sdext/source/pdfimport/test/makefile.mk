@@ -162,5 +162,3 @@ APP2STDLIBS=\
           @echo ----------------------------------------------------------
           testshl2 -forward $(BIN)$/ $(SHL1TARGETN)
            $(TOUCH) $@
-
-#ALLTAR : $(MISC)$/pdfi_unittest_succeeded

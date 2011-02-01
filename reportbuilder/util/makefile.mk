@@ -41,7 +41,6 @@ EXTENSION_VERSION_BASE=1.2.1
 .IF "$(L10N_framework)"==""
 # ------------------------------------------------------------------
 # calready set in util$/makefile.pmk
-# EXTENSIONNAME:=report-builder
 EXTENSION_ZIPNAME:=report-builder
 
 # create Extension -----------------------------

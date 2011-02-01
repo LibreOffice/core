@@ -42,9 +42,6 @@ TARFILE_MD5=90401bca927835b6fbae4a707ed187c8
 TARFILE_NAME=nlpsolver-0.9
 TARFILE_ROOTDIR=nlpsolver-0.9
 
-#ADDITIONAL_FILES= \
-#    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
-
 PATCH_FILES=nlpsolver-0.9.patch
 
 ANT_FLAGS+=-Dplatforms.JDK_1.5.home=$(JAVA_HOME) -Doffice.program.dir=$(SOLARBINDIR)
