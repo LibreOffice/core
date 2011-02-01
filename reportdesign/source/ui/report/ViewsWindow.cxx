@@ -184,7 +184,6 @@ OViewsWindow::OViewsWindow( OReportWindow* _pReportWindow)
 ,m_bInUnmark(sal_False)
 {
     DBG_CTOR( rpt_OViewsWindow,NULL);
-    SetPaintTransparent(TRUE);
     SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
     m_aColorConfig.AddListener(this);
@@ -244,8 +243,9 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
         if ( bSet )
         {
             impl_resizeSectionWindow(*pSectionWindow.get(),aStartPoint,bSet);
-            pSectionWindow->Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
-            pSectionWindow->getStartMarker().Invalidate(INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT );
+            static sal_Int32 nIn = INVALIDATE_UPDATE | INVALIDATE_TRANSPARENT;
+            pSectionWindow->getStartMarker().Invalidate( nIn ); // INVALIDATE_NOERASE |INVALIDATE_NOCHILDREN| INVALIDATE_TRANSPARENT
+            pSectionWindow->getEndMarker().Invalidate( nIn );
         }
     } // for (;aIter != aEnd ; ++aIter,++nPos)
     Fraction aStartWidth(long(REPORT_STARTMARKER_WIDTH));
@@ -256,7 +256,6 @@ void OViewsWindow::resize(const OSectionWindow& _rSectionWindow)
     m_pParent->notifySizeChanged();
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
-    Invalidate(aRect,INVALIDATE_NOERASE | INVALIDATE_NOCHILDREN | INVALIDATE_TRANSPARENT);
 }
 //------------------------------------------------------------------------------
 void OViewsWindow::Resize()
@@ -294,7 +293,7 @@ void OViewsWindow::Paint( const Rectangle& rRect )
 //------------------------------------------------------------------------------
 void OViewsWindow::ImplInitSettings()
 {
-    // SetBackground( Wallpaper( COL_LIGHTBLUE ));
+    EnableChildTransparentMode( TRUE );
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
@@ -317,8 +316,6 @@ void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSectio
     ::boost::shared_ptr<OSectionWindow> pSectionWindow( new OSectionWindow(this,_xSection,_sColorEntry) );
     m_aSections.insert(getIteratorAtPos(_nPosition) , TSectionsMap::value_type(pSectionWindow));
     m_pParent->setMarked(&pSectionWindow->getReportSection().getSectionView(),m_aSections.size() == 1);
-
-    Resize();
 }
 //----------------------------------------------------------------------------
 void OViewsWindow::removeSection(USHORT _nPosition)
@@ -566,8 +563,8 @@ void OViewsWindow::unmarkAllObjects(OSectionView* _pSectionView)
 // -----------------------------------------------------------------------
 void OViewsWindow::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32)
 {
-        ImplInitSettings();
-        Invalidate();
+    ImplInitSettings();
+    Invalidate();
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
@@ -946,7 +943,8 @@ void OViewsWindow::setGridSnap(BOOL bOn)
     for (; aIter != aEnd ; ++aIter)
     {
         (*aIter)->getReportSection().getSectionView().SetGridSnap(bOn);
-        (*aIter)->getReportSection().Invalidate();
+        static sal_Int32 nIn = 0;
+        (*aIter)->getReportSection().Invalidate(nIn);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1826,7 +1824,8 @@ void OViewsWindow::zoom(const Fraction& _aZoom)
     aOut = PixelToLogic(aOut);
 
     Rectangle aRect(PixelToLogic(Point(0,0)),aOut);
-    Invalidate(aRect,/*INVALIDATE_NOERASE | */INVALIDATE_NOCHILDREN /*| INVALIDATE_TRANSPARENT*/);
+    static sal_Int32 nIn = INVALIDATE_NOCHILDREN;
+    Invalidate(aRect,nIn);
 }
 //----------------------------------------------------------------------------
 void OViewsWindow::scrollChildren(const Point& _aThumbPos)
@@ -1843,8 +1842,6 @@ void OViewsWindow::scrollChildren(const Point& _aThumbPos)
         SetMapMode( aMapMode );
         //OWindowPositionCorrector aCorrector(this,0,-( aOld.Y() + aPosY.Y()));
         Scroll(0, -( aOld.Y() + aPosY.Y()),SCROLL_CHILDREN);
-        Resize();
-        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_TRANSPARENT);
     }
 
     TSectionsMap::iterator aIter = m_aSections.begin();
