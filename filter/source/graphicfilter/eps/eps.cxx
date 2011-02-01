@@ -373,7 +373,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
 
     if (rGraphic.GetType() == GRAPHIC_GDIMETAFILE)
         pMTF = &rGraphic.GetGDIMetaFile();
-    else if (rGraphic.GetGDIMetaFile.GetActionCount())
+    else if (rGraphic.GetGDIMetaFile().GetActionCount())
         pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
     else
     {
