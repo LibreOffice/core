@@ -995,13 +995,6 @@ void XclExpXmlStream::PopStream()
     maStreams.pop();
 }
 
-OUString XclExpXmlStream::GetIdForPath( const OUString& sPath )
-{
-    if( maOpenedStreamMap.find( sPath ) == maOpenedStreamMap.end() )
-        return OUString();
-    return maOpenedStreamMap[ sPath ].first;
-}
-
 sax_fastparser::FSHelperPtr XclExpXmlStream::GetStreamForPath( const OUString& sPath )
 {
     if( maOpenedStreamMap.find( sPath ) == maOpenedStreamMap.end() )
@@ -1132,14 +1125,6 @@ bool XclExpXmlStream::exportDocument() throw()
 
     mpRoot = NULL;
     return true;
-}
-
-void XclExpXmlStream::Trace( const char* format, ...)
-{
-    va_list ap;
-    va_start( ap, format );
-    vfprintf( stderr, format, ap );
-    va_end( ap );
 }
 
 //////////////////////////////////////////////////////////////////////////

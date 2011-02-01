@@ -108,11 +108,6 @@ ScAddress XclImpAddressConverter::CreateValidAddress(
 
 // cell range -----------------------------------------------------------------
 
-bool XclImpAddressConverter::CheckRange( const XclRange& rXclRange, bool bWarn )
-{
-    return CheckAddress( rXclRange.maFirst, bWarn ) && CheckAddress( rXclRange.maLast, bWarn );
-}
-
 bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
         const XclRange& rXclRange, SCTAB nScTab1, SCTAB nScTab2, bool bWarn )
 {

@@ -125,7 +125,6 @@ public:
     void                        TraceChartOnlySheet();
     void                        TraceChartDataTable();
     void                        TraceChartLegendPosition();
-    void                        TraceChartEmbeddedObj();
     void                        TraceUnsupportedObjects();
     void                        TraceObjectNotPrintable();
     void                        TraceDVType(bool bType);

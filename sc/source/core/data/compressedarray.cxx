@@ -516,75 +516,6 @@ A ScBitMaskCompressedArray<A,D>::GetLastAnyBitAccess( A nStart,
 }
 
 
-template< typename A, typename D >
-template< typename S >
-unsigned long ScBitMaskCompressedArray<A,D>::SumCoupledArrayForCondition(
-        A nStart, A nEnd, const D& rBitMask, const D& rMaskedCompare,
-        const ScSummableCompressedArray<A,S>& rArray ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    size_t nIndex1 = Search( nStart);
-    size_t nIndex2 = rArray.Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
-        {
-            while (nIndex2 < rArray.GetEntryCount() &&
-                    rArray.GetDataEntry(nIndex2).nEnd < nS)
-                ++nIndex2;
-            unsigned long nNew = rArray.SumValuesContinuation( nS,
-                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2);
-            nSum += nNew;
-            if (nSum < nNew)
-                return ::std::numeric_limits<unsigned long>::max();
-        }
-        nS = this->pData[nIndex1].nEnd + 1;
-        ++nIndex1;
-    } while (nIndex1 < this->nCount && nS <= nEnd);
-    if (nEnd > this->nMaxAccess &&
-            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
-        nSum += rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * (nEnd -
-                this->nMaxAccess);
-    return nSum;
-}
-
-
-template< typename A, typename D >
-template< typename S >
-unsigned long ScBitMaskCompressedArray<A,D>::SumScaledCoupledArrayForCondition(
-        A nStart, A nEnd, const D& rBitMask, const D& rMaskedCompare,
-        const ScSummableCompressedArray<A,S>& rArray, double fScale ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    size_t nIndex1 = Search( nStart);
-    size_t nIndex2 = rArray.Search( nStart);
-    do
-    {
-        if ((this->pData[nIndex1].aValue & rBitMask) == rMaskedCompare)
-        {
-            while (nIndex2 < rArray.GetEntryCount() &&
-                    rArray.GetDataEntry(nIndex2).nEnd < nS)
-                ++nIndex2;
-            unsigned long nNew = rArray.SumScaledValuesContinuation( nS,
-                    ::std::min( this->pData[nIndex1].nEnd, nEnd), nIndex2, fScale);
-            nSum += nNew;
-            if (nSum < nNew)
-                return ::std::numeric_limits<unsigned long>::max();
-        }
-        nS = this->pData[nIndex1].nEnd + 1;
-        ++nIndex1;
-    } while (nIndex1 < this->nCount && nS <= nEnd);
-    if (nEnd > this->nMaxAccess &&
-            (this->pData[this->GetEntryCount()-1].aValue & rBitMask) == rMaskedCompare)
-        nSum += (unsigned long)
-            (rArray.GetDataEntry(rArray.GetEntryCount()-1).aValue * fScale) *
-            (nEnd - this->nMaxAccess);
-    return nSum;
-}
-
-
 // === ScCompressedArrayIterator =============================================
 
 template< typename A, typename D >
@@ -610,100 +541,14 @@ void ScCompressedArrayIterator<A,D>::Follow(
 }
 
 
-// === ScCoupledCompressedArrayIterator ======================================
-
-template< typename A, typename D, typename S >
-ScCoupledCompressedArrayIterator<A,D,S>::ScCoupledCompressedArrayIterator(
-        const ScBitMaskCompressedArray<A,D> & rArray1, A nStart, A nEnd,
-        const D& rBitMaskP, const D& rMaskedCompareP,
-        const ScCompressedArray<A,S> & rArray2 )
-    : aIter1( rArray1, nStart, nEnd )
-    , aIter2( rArray2, nStart, nEnd )
-    , rBitMask( rBitMaskP )
-    , rMaskedCompare( rMaskedCompareP )
-{
-    InitLimits();
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::InitLimits()
-{
-    bool bFound = true;
-    bool bMoved = false;
-    while (bFound && ((*aIter1 & rBitMask) != rMaskedCompare))
-    {
-        bFound = aIter1.NextRange();
-        bMoved = true;
-    }
-    if (bMoved && bFound)
-        aIter2.Follow( aIter1);
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::NewLimits( A nStart, A nEnd )
-{
-    aIter1.NewLimits( nStart, nEnd);
-    aIter2.NewLimits( nStart, nEnd);
-    InitLimits();
-}
-
-
-template< typename A, typename D, typename S >
-bool ScCoupledCompressedArrayIterator<A,D,S>::NextRange()
-{
-    bool bAdv;
-    if (aIter1.GetRangeEnd() <= aIter2.GetRangeEnd())
-    {
-        // Advance bit mask array until condition is met, coupled array
-        // follows.
-        do
-        {
-            bAdv = aIter1.NextRange();
-        } while (bAdv && ((*aIter1 & rBitMask) != rMaskedCompare));
-        if (bAdv)
-            aIter2.Follow( aIter1);
-    }
-    else
-    {
-        // Make coupled array catch up with bit mask array.
-        do
-        {
-            bAdv = aIter2.NextRange();
-        } while (bAdv && aIter2.GetRangeEnd() < aIter1.GetRangeStart());
-        if (bAdv)
-            aIter1.Follow( aIter2);     // synchronize aIter1.nCurrent
-    }
-    return operator bool();
-}
-
-
-template< typename A, typename D, typename S >
-void ScCoupledCompressedArrayIterator<A,D,S>::Resync( A nPos )
-{
-    aIter1.Resync( nPos);
-    aIter2.Resync( nPos);
-    InitLimits();
-}
-
-
 // === Force instantiation of specializations ================================
 
 template class ScCompressedArray< SCROW, USHORT>;           // heights, base class
 template class ScSummableCompressedArray< SCROW, USHORT>;   // heights
 template class ScCompressedArray< SCROW, BYTE>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, BYTE>;      // flags
-template unsigned long ScBitMaskCompressedArray< SCROW,
-    BYTE>::SumCoupledArrayForCondition( SCROW, SCROW, const BYTE&, const BYTE&,
-            const ScSummableCompressedArray< SCROW, USHORT>&) const;
-template unsigned long ScBitMaskCompressedArray< SCROW,
-    BYTE>::SumScaledCoupledArrayForCondition( SCROW, SCROW, const BYTE&,
-            const BYTE&, const ScSummableCompressedArray< SCROW, USHORT>&,
-            double) const;
 template void ScCompressedArrayIterator< SCROW, USHORT>::Follow(
         const ScCompressedArrayIterator< SCROW, BYTE>&);
-template class ScCoupledCompressedArrayIterator< SCROW, BYTE, USHORT>;
 
 // === EOF ===================================================================
 

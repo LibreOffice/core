@@ -216,11 +216,6 @@ const XclImpPCField* XclImpPCField::GetGroupBaseField() const
     return IsGroupChildField() ? mrPCache.GetField( maFieldInfo.mnGroupBase ) : 0;
 }
 
-sal_uInt16 XclImpPCField::GetItemCount() const
-{
-    return static_cast< sal_uInt16 >( maItems.size() );
-}
-
 const XclImpPCItem* XclImpPCField::GetItem( sal_uInt16 nItemIdx ) const
 {
     return (nItemIdx < maItems.size()) ? maItems[ nItemIdx ].get() : 0;
@@ -961,12 +956,6 @@ const String* XclImpPTField::GetItemName( sal_uInt16 nItemIdx ) const
     return pItem ? pItem->GetItemName() : 0;
 }
 
-const String* XclImpPTField::GetVisItemName( sal_uInt16 nItemIdx ) const
-{
-    const XclImpPTItem* pItem = GetItem( nItemIdx );
-    return pItem ? pItem->GetVisItemName() : 0;
-}
-
 // records --------------------------------------------------------------------
 
 void XclImpPTField::ReadSxvd( XclImpStream& rStrm )
@@ -1229,13 +1218,6 @@ XclImpPTField* XclImpPivotTable::GetFieldAcc( sal_uInt16 nFieldIdx )
 {
     // do not return maDataOrientField
     return (nFieldIdx < maFields.size()) ? maFields[ nFieldIdx ].get() : 0;
-}
-
-const String& XclImpPivotTable::GetFieldName( sal_uInt16 nFieldIdx ) const
-{
-    if( const XclImpPTField* pField = GetField( nFieldIdx ) )
-        return pField->GetFieldName();
-    return EMPTY_STRING;
 }
 
 const XclImpPTField* XclImpPivotTable::GetDataField( sal_uInt16 nDataFieldIdx ) const

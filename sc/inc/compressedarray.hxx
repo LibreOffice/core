@@ -89,17 +89,10 @@ public:
     /** Get value for a row, and it's region end row */
     const D&                    GetValue( A nPos, size_t& nIndex, A& nEnd ) const;
 
-    /** Get value for a row, and it's region start row and end row */
-    const D&                    GetValue( A nPos, size_t& nIndex, A& nStart, A& nEnd ) const;
-
     /** Get next value and it's region end row. If nIndex<nCount, nIndex is
         incremented first. If the resulting nIndex>=nCount, the value of the
         last entry is returned again. */
     const D&                    GetNextValue( size_t& nIndex, A& nEnd ) const;
-
-    /** Get previous value and it's region start row. If nIndex==0, nIndex is
-        not decremented and the value of the first entry is returned again. */
-    const D&                    GetPrevValue( size_t& nIndex, A& nStart ) const;
 
     /** Insert rows before nStart and copy value for inserted rows from
         nStart-1, return that value. */
@@ -117,8 +110,6 @@ public:
     SC_DLLPUBLIC size_t                      Search( A nPos ) const;
     /** Get number of entries */
     size_t                      GetEntryCount() const;
-    /** Get data entry for an index */
-    const DataEntry&            GetDataEntry( size_t nIndex ) const;
 
 protected:
 
@@ -171,17 +162,6 @@ const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nEnd ) con
 
 
 template< typename A, typename D >
-const D& ScCompressedArray<A,D>::GetValue( A nPos, size_t& nIndex, A& nStart,
-        A& nEnd ) const
-{
-    nIndex = Search( nPos);
-    nStart = (nIndex > 0 ? pData[nIndex-1].nEnd + 1 : 0);
-    nEnd = pData[nIndex].nEnd;
-    return pData[nIndex].aValue;
-}
-
-
-template< typename A, typename D >
 const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 {
     if (nIndex < nCount)
@@ -193,27 +173,9 @@ const D& ScCompressedArray<A,D>::GetNextValue( size_t& nIndex, A& nEnd ) const
 
 
 template< typename A, typename D >
-const D& ScCompressedArray<A,D>::GetPrevValue( size_t& nIndex, A& nStart ) const
-{
-    if (nIndex > 0)
-        --nIndex;
-    nStart = (nIndex > 0 ? pData[nIndex-1].nEnd + 1 : 0);
-    return pData[nIndex].aValue;
-}
-
-
-template< typename A, typename D >
 size_t ScCompressedArray<A,D>::GetEntryCount() const
 {
     return nCount;
-}
-
-
-template< typename A, typename D >
-const typename ScCompressedArray<A,D>::DataEntry&
-ScCompressedArray<A,D>::GetDataEntry( size_t nIndex ) const
-{
-    return pData[nIndex];
 }
 
 
@@ -474,21 +436,6 @@ public:
         meets this condition, ::std::numeric_limits<A>::max() is returned. */
     A                           GetLastAnyBitAccess( A nStart,
                                     const D& rBitMask ) const;
-
-    /** Sum values of a ScSummableCompressedArray for each row where in *this*
-        array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
-    template< typename S >
-    SC_DLLPUBLIC unsigned long               SumCoupledArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask, const D& rMaskedCompare,
-                                    const ScSummableCompressedArray<A,S>& rArray ) const;
-
-    /** Sum scaled values of a ScSummableCompressedArray for each row where in
-        *this* array the condition is met: ((aValue & rBitMask) == rMaskedCompare). */
-    template< typename S >
-    SC_DLLPUBLIC unsigned long               SumScaledCoupledArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask, const D& rMaskedCompare,
-                                    const ScSummableCompressedArray<A,S>& rArray,
-                                    double fScale ) const;
 };
 
 
@@ -507,107 +454,6 @@ void ScBitMaskCompressedArray<A,D>::OrValue( A nPos, const D& rValueToOr )
     const D& rValue = GetValue( nPos);
     if ((rValue | rValueToOr) != rValue)
         SetValue( nPos, rValue | rValueToOr);
-}
-
-
-// === ScCoupledCompressedArrayIterator ======================================
-
-/** Iterate over a ScBitMaskCompressedArray and retrieve values from a coupled
-    array for positions where in the bit mask array the condition ((*aIter1 &
-    rBitMask) == rMaskedCompare) is met.
- */
-
-template< typename A, typename D, typename S > class ScCoupledCompressedArrayIterator
-{
-public:
-    SC_DLLPUBLIC                            ScCoupledCompressedArrayIterator(
-                                        const ScBitMaskCompressedArray<A,D> & rArray1,
-                                        A nStart, A nEnd,
-                                        const D& rBitMask,
-                                        const D& rMaskedCompare,
-                                        const ScCompressedArray<A,S> & rArray2 );
-    void                        NewLimits( A nStart, A nEnd );
-    A                           GetIterStart() const;
-    A                           GetIterEnd() const;
-    bool                        operator ++();
-    A                           GetPos() const;
-                                operator bool() const;
-    const S&                    operator *() const;
-    SC_DLLPUBLIC bool                        NextRange();
-    A                           GetRangeStart() const;
-    A                           GetRangeEnd() const;
-    void                        Resync( A nPos );
-
-private:
-    ScCompressedArrayIterator<A,D>  aIter1;
-    ScCompressedArrayIterator<A,S>  aIter2;
-    const D&                        rBitMask;
-    const D&                        rMaskedCompare;
-
-    void                            InitLimits();
-};
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetIterStart() const
-{
-    return aIter1.GetIterStart();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetIterEnd() const
-{
-    return aIter1.GetIterEnd();
-}
-
-
-template< typename A, typename D, typename S >
-ScCoupledCompressedArrayIterator<A,D,S>::operator bool() const
-{
-    return aIter1 && aIter2;
-}
-
-
-template< typename A, typename D, typename S >
-const S& ScCoupledCompressedArrayIterator<A,D,S>::operator*() const
-{
-    return *aIter2;
-}
-
-
-template< typename A, typename D, typename S >
-bool ScCoupledCompressedArrayIterator<A,D,S>::operator ++()
-{
-    if (aIter1.GetPos() < aIter1.GetRangeEnd())
-    {
-        ++aIter1;
-        ++aIter2;
-        return operator bool();
-    }
-    else
-        return NextRange();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetPos() const
-{
-    return aIter2.GetPos();
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetRangeStart() const
-{
-    return ::std::max( aIter1.GetRangeStart(), aIter2.GetRangeStart());
-}
-
-
-template< typename A, typename D, typename S >
-A ScCoupledCompressedArrayIterator<A,D,S>::GetRangeEnd() const
-{
-    return ::std::min( aIter1.GetRangeEnd(), aIter2.GetRangeEnd());
 }
 
 

@@ -667,13 +667,6 @@ XclImpStream& XclImpStream::operator>>( double& rfValue )
     return *this;
 }
 
-sal_Int8 XclImpStream::ReadInt8()
-{
-    sal_Int8 nValue(0);
-    operator>>( nValue );
-    return nValue;
-}
-
 sal_uInt8 XclImpStream::ReaduInt8()
 {
     sal_uInt8 nValue(0);
@@ -707,13 +700,6 @@ sal_uInt32 XclImpStream::ReaduInt32()
     sal_uInt32 nValue(0);
     operator>>( nValue );
     return nValue;
-}
-
-float XclImpStream::ReadFloat()
-{
-    float fValue(0.0);
-    operator>>( fValue );
-    return fValue;
 }
 
 double XclImpStream::ReadDouble()
@@ -950,11 +936,6 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars, sal_uInt8 nFlags )
 void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
 {
     IgnoreUniString( nChars, ReaduInt8() );
-}
-
-void XclImpStream::IgnoreUniString()
-{
-    IgnoreUniString( ReaduInt16() );
 }
 
 // ----------------------------------------------------------------------------

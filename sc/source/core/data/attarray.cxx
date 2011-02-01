@@ -1160,7 +1160,6 @@ long lcl_LineSize( const SvxBorderLine& rLine )
     return nTotal;
 }
 
-
 BOOL ScAttrArray::HasLines( SCROW nRow1, SCROW nRow2, Rectangle& rSizes,
                                 BOOL bLeft, BOOL bRight ) const
 {

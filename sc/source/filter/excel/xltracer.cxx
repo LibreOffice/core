@@ -243,12 +243,6 @@ void XclTracer::TraceChartLegendPosition()
     ProcessTraceOnce(eChartLegendPosition);
 }
 
-void XclTracer::TraceChartEmbeddedObj()
-{
-    // drawing objects e.g. text boxes etc not supported inside charts
-    ProcessTraceOnce(eChartEmbeddedObj);
-}
-
 void XclTracer::TraceUnsupportedObjects()
 {
     // Called from Excel 5.0 - limited Graphical object support.

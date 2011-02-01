@@ -317,7 +317,6 @@ public:
     void PushStream( sax_fastparser::FSHelperPtr aStream );
     void PopStream();
 
-    ::rtl::OUString                 GetIdForPath( const ::rtl::OUString& rPath );
     sax_fastparser::FSHelperPtr     GetStreamForPath( const ::rtl::OUString& rPath );
 
     sax_fastparser::FSHelperPtr&    WriteAttributes( sal_Int32 nAttribute, ... );
@@ -340,7 +339,6 @@ public:
     virtual const oox::drawingml::table::TableStyleListPtr getTableStyles();
     virtual oox::drawingml::chart::ChartConverter& getChartConverter();
 
-    void Trace( const char* format, ...);
 private:
     virtual ::rtl::OUString implGetImplementationName() const;
     ScDocShell *getDocShell();
