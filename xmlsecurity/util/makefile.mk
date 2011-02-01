@@ -30,8 +30,6 @@ PRJ=..
 PRJNAME=xmlsecurity
 TARGET=xmlsecurity
 
-# Disable '-z defs' due to broken libxpcom.
-#LINKFLAGSDEFS=$(0)
 USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
