@@ -32,6 +32,7 @@
 
 #include <tools/stream.hxx>
 #include <unotools/syslocale.hxx>
+#include <svl/cjkoptions.hxx>
 
 #include "swtypes.hxx"
 #include "hintids.hxx"
@@ -72,9 +73,16 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     bApplyCharUnit(sal_False)
 {
     MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
+    SvtCJKOptions aCJKOptions;
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
-    eHScrollMetric = eUserMetric;
-    eVScrollMetric = eUserMetric;
+
+    sal_Bool bCJKEnabled = aCJKOptions.IsAsianTypographyEnabled();
+    bApplyCharUnit = bCJKEnabled;
+    eHScrollMetric = bApplyCharUnit ? FUNIT_CHAR : eUserMetric;
+    eVScrollMetric = bApplyCharUnit ? FUNIT_LINE : eUserMetric;
+
+    bIsHScrollMetricSet = bApplyCharUnit;
+    bIsVScrollMetricSet = bApplyCharUnit;
 
     aContentConfig.Load();
     aLayoutConfig.Load();
