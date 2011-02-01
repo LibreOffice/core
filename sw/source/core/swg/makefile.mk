@@ -30,8 +30,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=swg
 
-#ENABLE_EXCEPTIONS=TRUE
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk

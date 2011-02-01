@@ -31,13 +31,13 @@ PRJNAME=sw
 TARGET=unocore
 
 # --- Settings -----------------------------------------------------
-#ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
 .INCLUDE :	$(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+
 EXCEPTIONSFILES=	\
     $(SLO)$/swunohelper.obj\
     $(SLO)$/SwXTextDefaults.obj\
@@ -119,6 +119,4 @@ SLOFILES =	\
 
 # --- Targets -------------------------------------------------------
 
-
 .INCLUDE :	target.mk
-

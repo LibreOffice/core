@@ -25,11 +25,8 @@
 #
 #*************************************************************************
 
-# CDEFS=$(CDEFS) -DXXX
-
 # Bereiche aktivieren
 
-#CDEFS+=-DXML_CORE_API
 CDEFS+=-DACCESSIBLE_LAYOUT
 
 # define SW_DLLIMPLEMENTATION (see @ swdllapi.h)

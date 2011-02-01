@@ -45,7 +45,6 @@ SVSDIINC=$(PRJ)$/source$/ui$/inc
 .IF "$(L10N_framework)"==""
 SDI1NAME=$(TARGET)
 SDI1EXPORT=swriter
-#SIDHRCNAME=swslots.hrc
 
 # --- Files --------------------------------------------------------
 SVSDI1DEPEND= \

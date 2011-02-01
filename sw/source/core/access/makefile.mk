@@ -31,7 +31,6 @@ PRJNAME=sw
 TARGET=access
 
 # --- Settings -----------------------------------------------------
-#ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :	$(PRJ)$/inc$/swpre.mk
 .INCLUDE :	settings.mk
@@ -95,6 +94,4 @@ EXCEPTIONSFILES=	\
 
 # --- Targets -------------------------------------------------------
 
-
 .INCLUDE :	target.mk
-
