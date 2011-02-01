@@ -32,7 +32,7 @@ gb_SrsPartMergeTarget_TRANSEXAUXDEPS := $(call gb_Library_get_target,tl) $(call 
 # gb_SrsPartMergeTarget_TRANSEXPRECOMMAND is set by the platforms
 
 gb_SrsPartMergeTarget_TRANSEXCOMMAND := $(gb_SrsPartMergeTarget_TRANSEXPRECOMMAND) $(gb_SrsPartMergeTarget_TRANSEXTARGET)
-gb_SrsPartMergeTarget_SDFLOCATION := $(SRCDIR)/l10n/$(INPATH)/misc/sdf/
+gb_SrsPartMergeTarget_SDFLOCATION := $(LOCDIR)/l10n/$(INPATH)/misc/sdf/
 gb_SrsPartMergeTarget_REPOS := $(gb_REPOS)
 
 define gb_SrsPartMergeTarget__command
