@@ -224,7 +224,7 @@
         Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 12 , CHECKBOX_HEIGHT ) ;          \
         TabStop = TRUE ;                                                            \
         HelpId = HID_DSADMIN_RESPECTRESULTSETTYPE;                                   \
-        Text [ en-US ] = "Ignore the result set type from the database driver";                                   \
+        Text [ en-US ] = "Respect the result set type from the database driver";                                   \
     };
 
 
