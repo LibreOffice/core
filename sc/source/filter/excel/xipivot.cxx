@@ -1010,8 +1010,8 @@ void XclImpPTField::ConvertPageField( ScDPSaveData& rSaveData ) const
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_PAGE, "XclImpPTField::ConvertPageField - no page field" );
     if( ScDPSaveDimension* pSaveDim = ConvertRCPField( rSaveData ) )
     {
-        const rtl::OUString rOUStr = *GetItemName( maPageInfo.mnSelItem );
-        pSaveDim->SetCurrentPage( &rOUStr );
+        const rtl::OUString aName = *GetItemName( maPageInfo.mnSelItem );
+        pSaveDim->SetCurrentPage( &aName );
     }
 }
 

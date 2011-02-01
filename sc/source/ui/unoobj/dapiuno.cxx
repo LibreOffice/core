@@ -1515,14 +1515,13 @@ ScDPSaveDimension* ScDataPilotChildObjBase::GetDPDimension( ScDPObject** ppDPObj
                 return pSaveData->GetDimensionByName( maFieldId.maFieldName );
 
             // find dimension with specified index (search in duplicated dimensions)
-            String aFieldName = maFieldId.maFieldName;  // needed for comparison
             const List& rDimensions = pSaveData->GetDimensions();
             ULONG nDimCount = rDimensions.Count();
             sal_Int32 nFoundIdx = 0;
             for( ULONG nDim = 0; nDim < nDimCount; ++nDim )
             {
                 ScDPSaveDimension* pDim = static_cast< ScDPSaveDimension* >( rDimensions.GetObject( nDim ) );
-                if( !pDim->IsDataLayout() && (pDim->GetName() == ::rtl::OUString(aFieldName)) )
+                if( !pDim->IsDataLayout() && (pDim->GetName() == maFieldId.maFieldName) )
                 {
                     if( nFoundIdx == maFieldId.mnFieldIdx )
                         return pDim;
@@ -2078,14 +2077,13 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
 
             // look for existing duplicate with orientation "hidden"
 
-            String aNameStr( maFieldId.maFieldName );
             const List& rDimensions = pSaveData->GetDimensions();
             sal_Int32 nDimCount = rDimensions.Count();
             sal_Int32 nFound = 0;
             for ( sal_Int32 nDim = 0; nDim < nDimCount && !pNewDim; nDim++ )
             {
                 ScDPSaveDimension* pOneDim = static_cast<ScDPSaveDimension*>(rDimensions.GetObject(nDim));
-                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == ::rtl::OUString(aNameStr)) )
+                if ( !pOneDim->IsDataLayout() && (pOneDim->GetName() == maFieldId.maFieldName) )
                 {
                     if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
                         pNewDim = pOneDim;      // use this one
@@ -2237,8 +2235,7 @@ void ScDataPilotFieldObj::setCurrentPage( const OUString& rPage )
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        const ::rtl::OUString aPage( rPage );
-        pDim->SetCurrentPage( &aPage );
+        pDim->SetCurrentPage( &rPage );
         SetDPObject( pDPObj );
     }
 }

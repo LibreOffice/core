@@ -564,8 +564,8 @@ void ScGridWindow::ExecPageFieldSelect( SCCOL nCol, SCROW nRow, BOOL bHasSelecti
 
                 if ( bHasSelection )
                 {
-                    const ::rtl::OUString rOUStr = rStr;
-                    pDim->SetCurrentPage( &rOUStr );
+                    const ::rtl::OUString aName = rStr;
+                    pDim->SetCurrentPage( &aName );
                 }
                 else
                     pDim->SetCurrentPage( NULL );
