@@ -36,13 +36,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
-# BEGIN ----------------------------------------------------------------
-# auto generated Target:testjob by codegen.pl
-
-.IF "$(GUI)" == "WNT"
-    #CFLAGS+=/Ob1
-.ENDIF
-
 SHL1OBJS=\
     $(SLO)$/testProperty.obj \
     $(SLO)$/FileLoggerImpl.obj\
@@ -62,13 +55,9 @@ SHL1STDLIBS+=$(LB)$/libodiapi.dylib
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
 DEF1NAME    =$(SHL1TARGET)
 
 SHL1VERSIONMAP = export.map
-
-# END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
 

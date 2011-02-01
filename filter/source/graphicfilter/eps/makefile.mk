@@ -31,8 +31,6 @@ PRJNAME=filter
 TARGET=eps
 DEPTARGET=veps
 
-#GEN_HID=TRUE
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :	settings.mk
