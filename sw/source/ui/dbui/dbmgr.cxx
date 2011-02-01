@@ -643,7 +643,8 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     else
     {
         rtl::OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
+        if ( sDBName.getLength() )
+            xConnection = RegisterConnection( sDBName );
     }
     if(xConnection.is())
     {
@@ -1750,7 +1751,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             try
             {
                 SwDbtoolsClient& aClient = SwNewDBMgr::GetDbtoolsClient();
-                sRet = aClient.getValue(
+                sRet = aClient.getFormattedValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
