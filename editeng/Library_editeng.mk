@@ -164,6 +164,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     icuuc \
     i18nisolang1 \
     i18npaper \
+    $(gb_StdLibs) \
 ))
 
 ifeq ($(OS),LINUX)
@@ -171,15 +172,6 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     dl \
     m \
     pthread \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,editeng,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
 ))
 endif
 

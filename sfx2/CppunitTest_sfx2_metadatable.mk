@@ -35,6 +35,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sfx2_metadatable, \
     sal \
     sfx \
     stl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
@@ -42,14 +43,5 @@ $(eval $(call gb_CppunitTest_set_include,sfx2_metadatable,\
     -I$(OUTDIR)/inc/offuh \
     -I$(OUTDIR)/inc \
 ))
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_CppunitTest_add_linked_libs,sfx2_metadatable, \
-    kernel32 \
-    user32 \
-    oldnames \
-    msvcrt \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

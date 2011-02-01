@@ -83,6 +83,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     vcl \
     vos3 \
     xo \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
@@ -452,17 +453,6 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     dl \
     m \
     pthread \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
-    advapi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 

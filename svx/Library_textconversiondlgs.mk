@@ -52,6 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     tl \
     utl \
     vcl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
@@ -68,17 +69,6 @@ $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     m \
     pthread \
     stl \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
-    advapi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 

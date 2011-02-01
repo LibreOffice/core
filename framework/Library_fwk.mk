@@ -58,6 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     ucbhelper \
     utl \
     vcl \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwk,\
@@ -200,12 +201,6 @@ $(eval $(call gb_Library_add_linked_libs,fwk,\
     mingwex \
     kernel32 \
     msvcrt \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,fwk,\
-    kernel32 \
-    msvcrt \
-    uwinapi \
 ))
 endif
 endif

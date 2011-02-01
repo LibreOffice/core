@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
     salhelper \
     stl \
     xo \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,xof,\
@@ -106,19 +107,9 @@ $(eval $(call gb_Library_add_linked_libs,xof,\
     mingw32 \
     $(gb_MINGW_LIBGCC) \
     uwinapi \
-    moldname \
     mingwex \
     kernel32 \
     msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,xof,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif

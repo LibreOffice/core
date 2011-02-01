@@ -58,6 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     utl \
     vcl \
     vos3 \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwi,\
@@ -91,21 +92,14 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     mingw32 \
     $(gb_MINGW_LIBGCC) \
     uwinapi \
-    moldname \
     mingwex \
     advapi32 \
     kernel32 \
     msvcrt \
-    unicows \
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,fwi,\
     advapi32 \
-    kernel32 \
-    msvcrt \
-    stl \
-    unicows \
-    uwinapi \
 ))
 endif
 endif

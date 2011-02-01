@@ -68,6 +68,7 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     vos3 \
     xo \
     xcr \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
@@ -226,11 +227,7 @@ else
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,svx,\
     advapi32 \
-    kernel32 \
-    msvcrt \
     oldnames \
-    user32 \
-    uwinapi \
 ))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportw32 \

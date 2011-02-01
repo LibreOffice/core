@@ -76,6 +76,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     vcl \
     vos3 \
     xml2 \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,sfx,\
@@ -290,7 +291,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     mingw32 \
     $(gb_MINGW_LIBGCC) \
     uwinapi \
-    moldname \
     mingwex \
     advapi32 \
     gdi32 \
@@ -303,16 +303,12 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,sfx,\
-    advapi32 \
     gdi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
+    advapi32 \
     ole32 \
     shell32 \
     user32 \
     uuid \
-    uwinapi \
 ))
 endif
 else
