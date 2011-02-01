@@ -141,7 +141,6 @@ $(DESTDIRJAR)/com/sun/star/lib/loader/%.class : $(CLASSDIR)/com/sun/star/lib/loa
 
 $(DESTDIRIDL)/% : $(IDLOUT)/%
     $(MY_TEXTCOPY) $< $@
-#	@touch $(IDL_DOCU_CLEANUP_FLAG)
 
 $(DESTDIRINC)/udkversion.mk :
     @@-rm -f $@
