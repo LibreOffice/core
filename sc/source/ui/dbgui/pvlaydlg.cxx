@@ -620,12 +620,12 @@ IMPL_LINK( ScPivotLayoutDlg, ClickHdl, PushButton *, pBtn )
             VCL child window focus events from this sub dialog which may
             invalidate the member mpFocusWindow pointing to the target field
             window. This would cause a crash with the following call to the
-            GrabFieldFocus function. */
+            GrabFieldFocus function, if mpFocusWindow is used directly. */
         ScPivotFieldWindow& rTargetWindow = *mpFocusWindow;
 
         if( pBtn == &maBtnRemove )
         {
-            mpFocusWindow->RemoveSelectedField();
+            rTargetWindow.RemoveSelectedField();
             // focus back to field window
             GrabFieldFocus( rTargetWindow );
         }
@@ -903,10 +903,10 @@ IMPL_LINK( ScPivotLayoutDlg, SelAreaHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( ScPivotLayoutDlg, ChildEventListener, VclWindowEvent*, pEvent )
 {
-    if( pEvent->GetId() == VCLEVENT_WINDOW_GETFOCUS )
+    Window* pWindow = pEvent->GetWindow();
+    // check that this dialog is the parent of the window, to ignore focus events from sub dialogs
+    if( (pEvent->GetId() == VCLEVENT_WINDOW_GETFOCUS) && pWindow && (pWindow->GetParent() == this) )
     {
-        Window* pWindow = pEvent->GetWindow();
-
         // check if old window and/or new window are field windows
         ScPivotFieldWindow* pSourceWindow = mpFocusWindow;
         ScPivotFieldWindow* pTargetWindow = dynamic_cast< ScPivotFieldWindow* >( pWindow );
