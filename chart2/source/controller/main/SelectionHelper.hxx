@@ -74,7 +74,7 @@ public: //methods
     void resetPossibleSelectionAfterSingleClickWasEnsured();
 
     void remindSelectionBeforeMouseDown();
-    bool isSelectionDifferentFromBeforeMouseDown();
+    bool isSelectionDifferentFromBeforeMouseDown() const;
 
     void adaptSelectionToNewPos( const Point& rMousePos, DrawViewWrapper* pDrawViewWrapper
                                        , bool bIsRightMouse, bool bWaitingForDoubleClick );

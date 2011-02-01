@@ -179,9 +179,10 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rSubIncrements.getLength() == 0 )
                 rSubIncrements.realloc( 1 );
 
-            double fStepMain = 0, fStepHelp = 0;
+            double fStepHelp = 0;
             if( (rOuterValue >>= fStepHelp) )
             {
+                double fStepMain = 0;
                 if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
                 {
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepHelp);

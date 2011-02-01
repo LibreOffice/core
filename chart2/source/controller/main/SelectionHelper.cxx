@@ -151,7 +151,7 @@ void Selection::remindSelectionBeforeMouseDown()
     m_aSelectedOID_beforeMouseDown = m_aSelectedOID;
 }
 
-bool Selection::isSelectionDifferentFromBeforeMouseDown()
+bool Selection::isSelectionDifferentFromBeforeMouseDown() const
 {
     return ( m_aSelectedOID != m_aSelectedOID_beforeMouseDown );
 }
