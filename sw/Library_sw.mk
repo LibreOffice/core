@@ -737,6 +737,21 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
 endif
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,sw,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    advapi32 \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,sw,\
     advapi32 \
     kernel32 \
@@ -745,6 +760,7 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
