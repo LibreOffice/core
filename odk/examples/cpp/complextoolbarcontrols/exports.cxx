@@ -41,17 +41,17 @@
 
 namespace css = ::com::sun::star;
 
-static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
-                      const char*                                               pImplementationName,
-                      const char*                                               pServiceName       )
-{
-    ::rtl::OUStringBuffer sKey(256);
-    sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
-    sKey.appendAscii("/UNO/SERVICES/");
-    sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
+// static void writeInfo(const css::uno::Reference< css::registry::XRegistryKey >& xRegistryKey       ,
+//                       const char*                                               pImplementationName,
+//                       const char*                                               pServiceName       )
+// {
+//     ::rtl::OUStringBuffer sKey(256);
+//  sKey.append     (::rtl::OUString::createFromAscii(pImplementationName));
+//     sKey.appendAscii("/UNO/SERVICES/");
+//     sKey.append     (::rtl::OUString::createFromAscii(pServiceName));
 
-    xRegistryKey->createKey(sKey.makeStringAndClear());
-}
+//     xRegistryKey->createKey(sKey.makeStringAndClear());
+// }
 
 extern "C"
 {
@@ -62,27 +62,30 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(const 
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
+// This method not longer necessary since OOo 3.4 where the component registration was
+// was changed to passive component registration. For more details see
+// http://wiki.services.openoffice.org/wiki/Passive_Component_Registration
 //==================================================================================================
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* pServiceManager,
-                                                            void* pRegistryKey   )
-{
-    if (!pRegistryKey)
-        return sal_False;
+// SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(void* pServiceManager,
+//                                                             void* pRegistryKey   )
+// {
+//     if (!pRegistryKey)
+//         return sal_False;
 
-    try
-    {
-        css::uno::Reference< css::registry::XRegistryKey > xKey(reinterpret_cast< css::registry::XRegistryKey* >(pRegistryKey), css::uno::UNO_QUERY);
+//     try
+//     {
+//         css::uno::Reference< css::registry::XRegistryKey > xKey(reinterpret_cast< css::registry::XRegistryKey* >(pRegistryKey), css::uno::UNO_QUERY);
 
-        writeInfo( xKey, MYLISTENER_IMPLEMENTATIONNAME       , MYLISTENER_SERVICENAME        );
-        writeInfo( xKey, MYPROTOCOLHANDLER_IMPLEMENTATIONNAME, MYPROTOCOLHANDLER_SERVICENAME );
+//         writeInfo( xKey, MYLISTENER_IMPLEMENTATIONNAME       , MYLISTENER_SERVICENAME        );
+//         writeInfo( xKey, MYPROTOCOLHANDLER_IMPLEMENTATIONNAME, MYPROTOCOLHANDLER_SERVICENAME );
 
-        return sal_True;
-    }
-    catch(const css::registry::InvalidRegistryException&)
-        { OSL_ENSURE( sal_False, "### InvalidRegistryException!" ); }
+//         return sal_True;
+//     }
+//     catch(const css::registry::InvalidRegistryException&)
+//         { OSL_ENSURE( sal_False, "### InvalidRegistryException!" ); }
 
-    return sal_False;
-}
+//     return sal_False;
+// }
 
 //==================================================================================================
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(const sal_Char* pImplName      ,
