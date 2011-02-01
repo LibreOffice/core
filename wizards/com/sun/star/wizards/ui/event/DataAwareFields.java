@@ -27,7 +27,7 @@
 package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.Field;
-
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.uno.Any;
 
 /**
