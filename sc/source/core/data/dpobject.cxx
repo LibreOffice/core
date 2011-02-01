@@ -1716,6 +1716,7 @@ void lcl_FillOldFields( ScPivotFieldVector& rFields,
                             USHORT nOrient, SCCOL nColAdd, BOOL bAddData )
 {
     BOOL bDataFound = FALSE;
+    rFields.clear();
 
     //! merge multiple occurences (data field with different functions)
     //! force data field in one dimension
