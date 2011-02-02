@@ -56,9 +56,6 @@ EXCEPTIONSFILES= \
     $(SLO)$/typemap.obj \
     $(SLO)$/transobj.obj
 
-#LIB3TARGET=$(SLB)$/ysclib.lib
-#LIB3OBJFILES=$(SLO)$/sclib.obj
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
