@@ -3,4 +3,3 @@ sf sfx2					    usr1	-	all	sf_mkout NULL
 sf sfx2\prj				    nmake	-	all	sf_prj NULL
 sf sfx2\qa\cppunit          nmake - all sf_qa_cppunit NULL
 sf sfx2\qa\unoapi           nmake - all sf_qa_unoapi NULL
-sf sfx2\qa\complex\sfx2     nmake - all sf_qa_complex NULL
