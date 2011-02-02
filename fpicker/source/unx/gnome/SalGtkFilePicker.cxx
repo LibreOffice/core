@@ -1847,7 +1847,7 @@ case_insensitive_filter (const GtkFileFilterInfo *filter_info, gpointer data)
     if( !g_ascii_strcasecmp( pFilter, pExtn ) )
         bRetval = TRUE;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "'%s' match extn '%s' vs '%s' yeilds %d\n",
         filter_info->uri, pExtn, pFilter, bRetval );
 #endif
@@ -1893,7 +1893,7 @@ GtkFileFilter* SalGtkFilePicker::implAddFilter( const OUString& rFilter, const O
 
                 OSL_TRACE( "fustering with %s\n", rtl::OUStringToOString( aToken, RTL_TEXTENCODING_UTF8 ).getStr());
             }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 0
             else
             {
                 g_warning( "Duff filter token '%s'\n",
