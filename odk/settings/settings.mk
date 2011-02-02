@@ -81,10 +81,8 @@ PATH_SEPARATOR=;
 # use this for release version
 CC_FLAGS=-c -MT -Zm500 -Zc:forScope,wchar_t- -wd4251 -wd4275 -wd4290 -wd4675 -wd4786 -wd4800 -Zc:forScope -GR -EHa
 ifeq "$(CPP_MANIFEST)" "true"
-#CC_FLAGS+=-EHa -Zc:wchar_t-
 LINK_MANIFEST=mt -manifest $@.manifest "-outputresource:$@;2"
 else
-#CC_FLAGS+=
 LINK_MANIFEST=
 endif
 ifeq "$(DEBUG)" "yes"
@@ -363,7 +361,6 @@ LIBRARY_LINK_FLAGS+=-fPIC
 endif
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 
-#EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined -Wl,-export-dynamic -Wl,-z,defs -Wl,--no-whole-archive
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)"
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
@@ -596,7 +593,6 @@ LIBRARY_LINK_FLAGS=-shared '-Wl,-rpath,$$ORIGIN'
 COMP_LINK_FLAGS=$(LIBRARY_LINK_FLAGS) -Wl,--version-script,$(PRJ)/settings/component.uno.map
 
 EXE_LINK_FLAGS=-Wl,--allow-shlib-undefined 
-#EXE_LINK_FLAGS+=-Wl,-export-dynamic -Wl,-z,defs
 LINK_LIBS=-L"$(OUT)/lib" -L"$(OO_SDK_HOME)/lib" -L"$(OO_SDK_URE_LIB_DIR)" $(PTHREAD_LIBS)
 LINK_JAVA_LIBS=-L"$(OO_SDK_JAVA_HOME)/jre/lib/$(JAVA_PROC_TYPE)"
 
