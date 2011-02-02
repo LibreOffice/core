@@ -648,6 +648,8 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
         if (HasFocus())
             FieldFocusChanged(nOldSelected, mnFieldSelected);
     }
+
+    ScrollToShowSelection();
 }
 
 void ScDPFieldControlBase::SetSelectionHome()
