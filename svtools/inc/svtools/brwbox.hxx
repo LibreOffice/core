@@ -36,6 +36,7 @@
 #include <svtools/transfer.hxx>
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <svtools/accessibletableprovider.hxx>
+#include <vector>
 
 #ifndef INCLUDED_LIMITS_H
 #include <limits.h>
@@ -48,10 +49,11 @@
 #endif
 
 class BrowserColumn;
-class BrowserColumns;
 class BrowserDataWin;
 class MultiSelection;
 class BrowserHeader;
+
+typedef ::std::vector< BrowserColumn* > BrowserColumns;
 
 namespace svt {
     class BrowseBoxImpl;

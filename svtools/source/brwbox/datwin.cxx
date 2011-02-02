@@ -38,8 +38,6 @@
 
 #include <tools/debug.hxx>
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* )
-
 //===================================================================
 void ButtonFrame::Draw( OutputDevice& rDev )
 {
@@ -344,28 +342,28 @@ BrowseEvent BrowserDataWin::CreateBrowseEvent( const Point& rPosPixel )
     // find column under mouse
     long nMouseX = rPosPixel.X();
     long nColX = 0;
-    USHORT nCol;
+    size_t nCol;
     for ( nCol = 0;
-          nCol < pBox->pCols->Count() && nColX < GetSizePixel().Width();
+          nCol < pBox->pCols->size() && nColX < GetSizePixel().Width();
           ++nCol )
-        if ( pBox->pCols->GetObject(nCol)->IsFrozen() || nCol >= pBox->nFirstCol )
+        if ( (*pBox->pCols)[ nCol ]->IsFrozen() || nCol >= pBox->nFirstCol )
         {
-            nColX += pBox->pCols->GetObject(nCol)->Width();
+            nColX += (*pBox->pCols)[ nCol ]->Width();
             if ( nMouseX < nColX )
                 break;
         }
     USHORT nColId = BROWSER_INVALIDID;
-    if ( nCol < pBox->pCols->Count() )
-        nColId = pBox->pCols->GetObject(nCol)->GetId();
+    if ( nCol < pBox->pCols->size() )
+        nColId = (*pBox->pCols)[ nCol ]->GetId();
 
     // compute the field rectangle and field relative MouseEvent
     Rectangle aFieldRect;
-    if ( nCol < pBox->pCols->Count() )
+    if ( nCol < pBox->pCols->size() )
     {
-        nColX -= pBox->pCols->GetObject(nCol)->Width();
+        nColX -= (*pBox->pCols)[ nCol ]->Width();
         aFieldRect = Rectangle(
             Point( nColX, nRelRow * pBox->GetDataRowHeight() ),
-            Size( pBox->pCols->GetObject(nCol)->Width(),
+            Size( (*pBox->pCols)[ nCol ]->Width(),
                   pBox->GetDataRowHeight() ) );
     }
 

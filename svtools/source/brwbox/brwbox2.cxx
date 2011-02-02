@@ -50,8 +50,6 @@ DBG_NAMEEX(BrowseBox)
 
 extern const char* BrowseBoxCheckInvariants( const void * pVoid );
 
-DECLARE_LIST( BrowserColumns, BrowserColumn* )
-
 //===================================================================
 
 void BrowseBox::StartDrag( sal_Int8 /* _nAction */, const Point& /* _rPosPixel */ )
@@ -204,11 +202,11 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
             pHeaderBar->SetZoom(GetZoom());
 
         // let the cols calc their new widths and adjust the header bar
-        for ( USHORT nPos = 0; nPos < pCols->Count(); ++nPos )
+        for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
         {
-            pCols->GetObject(nPos)->ZoomChanged(GetZoom());
+            (*pCols)[ nPos ]->ZoomChanged(GetZoom());
             if ( pHeaderBar )
-                pHeaderBar->SetItemSize( pCols->GetObject(nPos)->GetId(), pCols->GetObject(nPos)->Width() );
+                pHeaderBar->SetItemSize( (*pCols)[ nPos ]->GetId(), (*pCols)[ nPos ]->Width() );
         }
 
         // all our controls have to be repositioned
@@ -217,7 +215,7 @@ void BrowseBox::StateChanged( StateChangedType nStateChange )
     else if (STATE_CHANGE_ENABLE == nStateChange)
     {
         // do we have a handle column?
-        sal_Bool bHandleCol = pCols->Count() && (0 == pCols->GetObject(0)->GetId());
+        sal_Bool bHandleCol = !pCols->empty() && (0 == (*pCols)[ 0 ]->GetId());
         // do we have a header bar
         sal_Bool bHeaderBar = (NULL != static_cast<BrowserDataWin&>(GetDataWindow()).pHeaderBar);
 
@@ -309,7 +307,6 @@ void BrowseBox::ColumnMoved( USHORT )
 void BrowseBox::StartScroll()
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-    //((Control*)pDataWin)->HideFocus();
     DoHideCursor( "StartScroll" );
 }
 
@@ -350,7 +347,7 @@ void BrowseBox::ToggleSelection( BOOL bForce )
     long nLastRowInRect = 0; // fuer den CFront
 
     // Handle-Column nicht highlighten
-    BrowserColumn *pFirstCol = pCols->GetObject(0);
+    BrowserColumn *pFirstCol = pCols->empty() ? NULL : (*pCols)[ 0 ];
     long nOfsX = (!pFirstCol || pFirstCol->GetId()) ? 0 : pFirstCol->Width();
 
     // accumulate old row selection
@@ -389,7 +386,7 @@ void BrowseBox::ToggleSelection( BOOL bForce )
           nColId = pColSel->NextSelected() )
     {
         Rectangle aRect( GetFieldRectPixel(nCurRow,
-                                           pCols->GetObject(nColId)->GetId(),
+                                           (*pCols)[ nColId ]->GetId(),
                                            FALSE ) );
         aRect.Left() -= MIN_COLUMNWIDTH;
         aRect.Right() += MIN_COLUMNWIDTH;
@@ -436,15 +433,14 @@ void BrowseBox::DrawCursor()
     if ( bColumnCursor )
     {
         aCursor = GetFieldRectPixel( nCurRow, nCurColId, FALSE );
-        //! --aCursor.Bottom();
         aCursor.Left() -= MIN_COLUMNWIDTH;
         aCursor.Right() += 1;
         aCursor.Bottom() += 1;
     }
     else
         aCursor = Rectangle(
-            Point( ( pCols->Count() && pCols->GetObject(0)->GetId() == 0 ) ?
-                        pCols->GetObject(0)->Width() : 0,
+            Point( ( !pCols->empty() && (*pCols)[ 0 ]->GetId() == 0 ) ?
+                        (*pCols)[ 0 ]->Width() : 0,
                         (nCurRow - nTopRow) * GetDataRowHeight() + 1 ),
             Size( pDataWin->GetOutputSizePixel().Width() + 1,
                   GetDataRowHeight() - 2 ) );
@@ -454,8 +450,6 @@ void BrowseBox::DrawCursor()
             --aCursor.Top();
         --aCursor.Bottom();
     }
-
-    //!mi_mac pDataWin->Update();
 
     if (m_aCursorColor == COL_TRANSPARENT)
     {
@@ -485,9 +479,9 @@ ULONG BrowseBox::GetColumnWidth( USHORT nId ) const
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     USHORT nItemPos = GetColumnPos( nId );
-    if ( nItemPos >= pCols->Count() )
+    if ( nItemPos >= pCols->size() )
         return 0;
-    return pCols->GetObject(nItemPos)->Width();
+    return (*pCols)[ nItemPos ]->Width();
 }
 
 //-------------------------------------------------------------------
@@ -496,9 +490,9 @@ USHORT BrowseBox::GetColumnId( USHORT nPos ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    if ( nPos >= pCols->Count() )
+    if ( nPos >= pCols->size() )
         return 0;
-    return pCols->GetObject(nPos)->GetId();
+    return (*pCols)[ nPos ]->GetId();
 }
 
 //-------------------------------------------------------------------
@@ -507,8 +501,8 @@ USHORT BrowseBox::GetColumnPos( USHORT nId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    for ( USHORT nPos = 0; nPos < pCols->Count(); ++nPos )
-        if ( pCols->GetObject(nPos)->GetId() == nId )
+    for ( USHORT nPos = 0; nPos < pCols->size(); ++nPos )
+        if ( (*pCols)[ nPos ]->GetId() == nId )
             return nPos;
     return BROWSER_INVALIDID;
 }
@@ -519,9 +513,9 @@ BOOL BrowseBox::IsFrozen( USHORT nColumnId ) const
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
-    for ( USHORT nPos = 0; nPos < pCols->Count(); ++nPos )
-        if ( pCols->GetObject(nPos)->GetId() == nColumnId )
-            return pCols->GetObject(nPos)->IsFrozen();
+    for ( size_t nPos = 0; nPos < pCols->size(); ++nPos )
+        if ( (*pCols)[ nPos ]->GetId() == nColumnId )
+            return (*pCols)[ nPos ]->IsFrozen();
     return FALSE;
 }
 
@@ -598,7 +592,7 @@ void BrowseBox::Resize()
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     if ( !bBootstrapped && IsReallyVisible() )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
-    if ( !pCols->Count() )
+    if ( pCols->empty() )
     {
         getDataWindow()->bResizeOnPaint = TRUE;
         return;
@@ -618,7 +612,7 @@ void BrowseBox::Resize()
 
     // did we need a horiz. scroll bar oder gibt es eine Control Area?
     if ( !getDataWindow()->bNoHScroll &&
-         ( ( pCols->Count() - FrozenColCount() ) > 1 ) )
+         ( ( pCols->size() - FrozenColCount() ) > 1 ) )
         aHScroll.Show();
     else
         aHScroll.Hide();
@@ -658,7 +652,7 @@ void BrowseBox::Resize()
     if ( pHeaderBar )
     {
         // Handle-Column beruecksichtigen
-        BrowserColumn *pFirstCol = pCols->GetObject(0);
+        BrowserColumn *pFirstCol = (*pCols)[ 0 ];
         long nOfsX = pFirstCol->GetId() ? 0 : pFirstCol->Width();
         pHeaderBar->SetPosSizePixel( Point( nOfsX, 0 ), Size( GetOutputSizePixel().Width() - nOfsX, GetTitleHeight() ) );
     }
@@ -676,10 +670,10 @@ void BrowseBox::Paint( const Rectangle& rRect )
     // initializations
     if ( !bBootstrapped && IsReallyVisible() )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
-    if ( !pCols->Count() )
+    if ( pCols->empty() )
         return;
 
-    BrowserColumn *pFirstCol = pCols->GetObject(0);
+    BrowserColumn *pFirstCol = (*pCols)[ 0 ];
     BOOL bHandleCol = pFirstCol && pFirstCol->GetId() == 0;
     BOOL bHeaderBar = getDataWindow()->pHeaderBar != NULL;
 
@@ -708,20 +702,20 @@ void BrowseBox::Paint( const Rectangle& rRect )
     {
         // iterate through columns to redraw
         long nX = 0;
-        USHORT nCol;
+        size_t nCol;
         for ( nCol = 0;
-              nCol < pCols->Count() && nX < rRect.Right();
+              nCol < pCols->size() && nX < rRect.Right();
               ++nCol )
         {
             // skip invisible colums between frozen and scrollable area
-            if ( nCol < nFirstCol && !pCols->GetObject(nCol)->IsFrozen() )
+            if ( nCol < nFirstCol && !(*pCols)[ nCol ]->IsFrozen() )
                 nCol = nFirstCol;
 
             // nur die HandleCol ?
             if (bHeaderBar && bHandleCol && nCol > 0)
                 break;
 
-            BrowserColumn *pCol = pCols->GetObject(nCol);
+            BrowserColumn *pCol = (*pCols)[ nCol ];
 
             // draw the column and increment position
             if ( pCol->Width() > 4 )
@@ -748,7 +742,7 @@ void BrowseBox::Paint( const Rectangle& rRect )
         }
 
         // retouching
-        if ( !bHeaderBar && nCol == pCols->Count() )
+        if ( !bHeaderBar && nCol == pCols->size() )
         {
             const StyleSettings &rSettings = GetSettings().GetStyleSettings();
             Color aColFace( rSettings.GetFaceColor() );
@@ -819,10 +813,10 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
     nDataRowHeight = nForeignHeightPixel;
 
     // this counts for the column widths, too
-    USHORT nPos;
-    for ( nPos = 0; nPos < pCols->Count(); ++nPos )
+    size_t nPos;
+    for ( nPos = 0; nPos < pCols->size(); ++nPos )
     {
-        BrowserColumn* pCurrent = pCols->GetObject(nPos);
+        BrowserColumn* pCurrent = (*pCols)[ nPos ];
 
         long nWidthLogic = PixelToLogic(Size(pCurrent->Width(), 0), MAP_10TH_MM).Width();
         long nForeignWidthPixel = pDev->LogicToPixel(Size(nWidthLogic, 0), MAP_10TH_MM).Width();
@@ -845,7 +839,7 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
         long nTitleHeight = PixelToLogic(Size(0, GetTitleHeight()), MAP_10TH_MM).Height();
         nTitleHeight = pDev->LogicToPixel(Size(0, nTitleHeight), MAP_10TH_MM).Height();
 
-        BrowserColumn* pFirstCol = pCols->Count() ? pCols->GetObject(0) : NULL;
+        BrowserColumn* pFirstCol = !pCols->empty() ? (*pCols)[ 0 ] : NULL;
 
         Point aHeaderPos(pFirstCol && (pFirstCol->GetId() == 0) ? pFirstCol->Width() : 0, 0);
         Size aHeaderSize(aRealSize.Width() - aHeaderPos.X(), nTitleHeight);
@@ -899,9 +893,9 @@ void BrowseBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, 
 
     // restore the column widths/data row height
     nDataRowHeight = nOriginalHeight;
-    for ( nPos = 0; nPos < pCols->Count(); ++nPos )
+    for ( nPos = 0; nPos < pCols->size(); ++nPos )
     {
-        BrowserColumn* pCurrent = pCols->GetObject(nPos);
+        BrowserColumn* pCurrent = (*pCols)[ nPos ];
 
         long nForeignWidthLogic = pDev->PixelToLogic(Size(pCurrent->Width(), 0), MAP_10TH_MM).Width();
         long nWidthPixel = LogicToPixel(Size(nForeignWidthLogic, 0), MAP_10TH_MM).Width();
@@ -938,9 +932,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     Color aOldTextColor = _rOut.GetTextColor();
     Color aOldFillColor = _rOut.GetFillColor();
     Color aOldLineColor = _rOut.GetLineColor();
-    long nHLineX = 0 == pCols->GetObject(0)->GetId()
-                    ? pCols->GetObject(0)->Width()
-                    : 0;
+    long nHLineX = 0 == (*pCols)[ 0 ]->GetId() ? (*pCols)[ 0 ]->Width() : 0;
     nHLineX += aOverallAreaPos.X();
 
     Color aDelimiterLineColor( ::svtools::ColorConfig().GetColorValue( ::svtools::CALCGRID ).nColor );
@@ -983,11 +975,11 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         }
 
         // iterate through columns to redraw
-        USHORT nCol;
-        for ( nCol = 0; nCol < pCols->Count(); ++nCol )
+        size_t nCol;
+        for ( nCol = 0; nCol < pCols->size(); ++nCol )
         {
             // get column
-            BrowserColumn *pCol = pCols->GetObject(nCol);
+            BrowserColumn *pCol = (*pCols)[ nCol ];
 
             // at end of invalid area
             if ( aPos.X() >= _rRect.Right() )
@@ -997,7 +989,7 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
             if ( nCol < nFirstCol && !pCol->IsFrozen() )
             {
                 nCol = nFirstCol;
-                pCol = pCols->GetObject(nCol);
+                pCol = (nCol < pCols->size() ) ? (*pCols)[ nCol ] : NULL;
                 if (!pCol)
                 {   // FS - 21.05.99 - 66325
                     // ist zwar eigentlich woanders (an der richtigen Stelle) gefixt, aber sicher ist sicher ...
@@ -1098,14 +1090,14 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
     aOldLineColor = _rOut.GetLineColor();
     aOldFillColor = _rOut.GetFillColor();
     _rOut.SetFillColor( rSettings.GetFaceColor() );
-    if ( pCols->Count() && ( pCols->GetObject(0)->GetId() == 0 ) && ( aPos.Y() <= _rRect.Bottom() ) )
+    if ( !pCols->empty() && ( (*pCols)[ 0 ]->GetId() == 0 ) && ( aPos.Y() <= _rRect.Bottom() ) )
     {
         // fill rectangle gray below handle column
         // DG: fill it only until the end of the drawing rect and not to the end, as this may overpaint handle columns
         _rOut.SetLineColor( Color( COL_BLACK ) );
         _rOut.DrawRect( Rectangle(
             Point( aOverallAreaPos.X() - 1, aPos.Y() - 1 ),
-            Point( aOverallAreaPos.X() + pCols->GetObject(0)->Width() - 1,
+            Point( aOverallAreaPos.X() + (*pCols)[ 0 ]->Width() - 1,
                    _rRect.Bottom() + 1) ) );
     }
     _rOut.SetFillColor( aOldFillColor );
@@ -1124,16 +1116,16 @@ void BrowseBox::ImplPaintData(OutputDevice& _rOut, const Rectangle& _rRect, BOOL
         _rOut.SetLineColor( aDelimiterLineColor );
         Point aVertPos( aOverallAreaPos.X() - 1, aOverallAreaPos.Y() );
         long nDeltaY = aOverallAreaBRPos.Y();
-        for ( USHORT nCol = 0; nCol < pCols->Count(); ++nCol )
+        for ( size_t nCol = 0; nCol < pCols->size(); ++nCol )
         {
             // get column
-            BrowserColumn *pCol = pCols->GetObject(nCol);
+            BrowserColumn *pCol = (*pCols)[ nCol ];
 
             // skip invisible colums between frozen and scrollable area
             if ( nCol < nFirstCol && !pCol->IsFrozen() )
             {
                 nCol = nFirstCol;
-                pCol = pCols->GetObject(nCol);
+                pCol = (*pCols)[ nCol ];
             }
 
             // skip column
@@ -1166,7 +1158,7 @@ void BrowseBox::PaintData( Window& rWin, const Rectangle& rRect )
         BrowseBox::StateChanged( STATE_CHANGE_INITSHOW );
 
     // initializations
-    if ( !pCols || !pCols->Count() || !rWin.IsUpdateMode() )
+    if ( !pCols || pCols->empty() || !rWin.IsUpdateMode() )
         return;
     if ( getDataWindow()->bResizeOnPaint )
         Resize();
@@ -1226,7 +1218,7 @@ void BrowseBox::UpdateScrollbars()
 
     USHORT nFrozenCols = FrozenColCount();
     BOOL bNeedsHScroll =    getDataWindow()->bAutoHScroll
-                        ?   ( nFirstCol > nFrozenCols ) || ( nLastCol <= pCols->Count() )
+                        ?   ( nFirstCol > nFrozenCols ) || ( nLastCol <= pCols->size() )
                         :   !getDataWindow()->bNoHScroll;
     if ( !bNeedsHScroll )
     {
@@ -1255,19 +1247,11 @@ void BrowseBox::UpdateScrollbars()
         Size( aDataWinSize.Width() - nHScrX, nCornerSize ) );
 
     // Scrollable Columns insgesamt
-    short nScrollCols = short(pCols->Count()) - (short)nFrozenCols;
-    /*short nVisibleHSize= std::max(nLastCol == BROWSER_INVALIDID
-                                ? pCols->Count() - nFirstCol -1
-                                : nLastCol - nFirstCol - 1, 0);
-
-    aHScroll.SetVisibleSize( nVisibleHSize );
-    aHScroll.SetRange( Range( 0, Max( std::min(nScrollCols, nVisibleHSize), (short)0 ) ) );
-    if ( bNeedsHScroll && !aHScroll.IsVisible() )
-        aHScroll.Show();*/
+    short nScrollCols = short(pCols->size()) - (short)nFrozenCols;
 
     // Sichtbare Columns
     short nVisibleHSize = nLastCol == BROWSER_INVALIDID
-        ? (short)( pCols->Count() - nFirstCol )
+        ? (short)( pCols->size() - nFirstCol )
         : (short)( nLastCol - nFirstCol );
 
     short nRange = Max( nScrollCols, (short)0 );
@@ -1333,13 +1317,13 @@ void BrowseBox::UpdateScrollbars()
     if ( getDataWindow()->pHeaderBar )
     {
         long nWidth = 0;
-        for ( USHORT nCol = 0;
-              nCol < pCols->Count() && nCol < nFirstCol;
+        for ( size_t nCol = 0;
+              nCol < pCols->size() && nCol < nFirstCol;
               ++nCol )
         {
             // HandleColumn nicht
-            if ( pCols->GetObject(nCol)->GetId() )
-                nWidth += pCols->GetObject(nCol)->Width();
+            if ( (*pCols)[ nCol ]->GetId() )
+                nWidth += (*pCols)[ nCol ]->Width();
         }
 
         getDataWindow()->pHeaderBar->SetOffset( nWidth );
@@ -1401,10 +1385,10 @@ long BrowseBox::GetFrozenWidth() const
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 
     long nWidth = 0;
-    for ( USHORT nCol = 0;
-          nCol < pCols->Count() && pCols->GetObject(nCol)->IsFrozen();
+    for ( size_t nCol = 0;
+          nCol < pCols->size() && (*pCols)[ nCol ]->IsFrozen();
           ++nCol )
-        nWidth += pCols->GetObject(nCol)->Width();
+        nWidth += (*pCols)[ nCol ]->Width();
     return nWidth;
 }
 
@@ -1426,7 +1410,7 @@ USHORT BrowseBox::FrozenColCount() const
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
     USHORT nCol;
     for ( nCol = 0;
-          nCol < pCols->Count() && pCols->GetObject(nCol)->IsFrozen();
+          nCol < pCols->size() && (*pCols)[ nCol ]->IsFrozen();
           ++nCol )
         /* empty loop */;
     return nCol;
@@ -1464,9 +1448,8 @@ IMPL_LINK( BrowseBox,EndScrollHdl,ScrollBar*, EMPTYARG )
     // kein Focus grabben!
     /// GrabFocus();
 
-    if ( /*pBar->GetDelta() <= 0 &&*/ getDataWindow()->bNoScrollBack )
+    if ( getDataWindow()->bNoScrollBack )
     {
-        // UpdateScrollbars();
         EndScroll();
         return 0;
     }
@@ -1501,10 +1484,10 @@ void BrowseBox::MouseButtonDown( const MouseEvent& rEvt )
 
     long nX = 0;
     long nWidth = GetOutputSizePixel().Width();
-    for ( USHORT nCol = 0; nCol < pCols->Count() && nX < nWidth; ++nCol )
+    for ( size_t nCol = 0; nCol < pCols->size() && nX < nWidth; ++nCol )
     {
         // is this column visible?
-        BrowserColumn *pCol = pCols->GetObject(nCol);
+        BrowserColumn *pCol = (*pCols)[ nCol ];
         if ( pCol->IsFrozen() || nCol >= nFirstCol )
         {
             // compute right end of column
@@ -1556,15 +1539,15 @@ void BrowseBox::MouseMove( const MouseEvent& rEvt )
     Pointer aNewPointer;
 
     USHORT nX = 0;
-    for ( USHORT nCol = 0;
-          nCol < USHORT(pCols->Count()) &&
-            ( nX + pCols->GetObject(nCol)->Width() ) < USHORT(GetOutputSizePixel().Width());
+    for ( size_t nCol = 0;
+          nCol < pCols->size() &&
+            ( nX + (*pCols)[ nCol ]->Width() ) < USHORT(GetOutputSizePixel().Width());
           ++nCol )
         // is this column visible?
-        if ( pCols->GetObject(nCol)->IsFrozen() || nCol >= nFirstCol )
+        if ( (*pCols)[ nCol ]->IsFrozen() || nCol >= nFirstCol )
         {
             // compute right end of column
-            BrowserColumn *pCol = pCols->GetObject(nCol);
+            BrowserColumn *pCol = (*pCols)[ nCol ];
             USHORT nR = (USHORT)(nX + pCol->Width() - 1);
 
             // show resize-pointer?
@@ -1613,7 +1596,7 @@ void BrowseBox::MouseButtonUp( const MouseEvent & rEvt )
 
         // width changed?
         nDragX = Max( rEvt.GetPosPixel().X(), nMinResizeX );
-        if ( (nDragX - nResizeX) != (long)pCols->GetObject(nResizeCol)->Width() )
+        if ( (nDragX - nResizeX) != (long)(*pCols)[ nResizeCol ]->Width() )
         {
             // resize column
             long nMaxX = pDataWin->GetSizePixel().Width();
@@ -1661,7 +1644,7 @@ void BrowseBox::MouseButtonDown( const BrowserMouseEvent& rEvt )
         {
             if ( bColumnCursor && rEvt.GetColumn() != 0 )
             {
-                if ( rEvt.GetColumn() < pCols->Count() )
+                if ( rEvt.GetColumn() < pCols->size() )
                     SelectColumnPos( rEvt.GetColumn(), TRUE, FALSE);
             }
         }
