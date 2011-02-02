@@ -150,7 +150,7 @@ OLocalExchange* OFilterExchangeHelper::createExchange() const
 
 //========================================================================
 TYPEINIT0(FmFilterData);
-Image FmFilterData::GetImage( BmpColorMode /*_eMode*/ ) const
+Image FmFilterData::GetImage() const
 {
     return Image();
 }
@@ -168,7 +168,7 @@ FmParentData::~FmParentData()
 //========================================================================
 TYPEINIT1(FmFormItem, FmParentData);
 //------------------------------------------------------------------------
-Image FmFormItem::GetImage( BmpColorMode /* _eMode */) const
+Image FmFormItem::GetImage() const
 {
     static Image aImage;
 
@@ -199,7 +199,7 @@ FmFilterItem* FmFilterItems::Find( const ::sal_Int32 _nFilterComponentIndex ) co
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItems::GetImage( BmpColorMode /* _eMode */ ) const
+Image FmFilterItems::GetImage() const
 {
     static Image aImage;
 
@@ -226,7 +226,7 @@ FmFilterItem::FmFilterItem( const Reference< XMultiServiceFactory >& _rxFactory,
 }
 
 //------------------------------------------------------------------------
-Image FmFilterItem::GetImage( BmpColorMode /* _eMode */ ) const
+Image FmFilterItem::GetImage() const
 {
     static Image aImage;
 
