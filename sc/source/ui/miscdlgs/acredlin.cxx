@@ -343,8 +343,10 @@ BOOL ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     aComment.EraseAllChars('\n');
 
     if(eType==SC_CAT_CONTENT)
+    {
         if(!pScChangeAction->IsDialogParent())
             pScChangeAction->GetDescription( aDesc, pDoc, TRUE);
+    }
     else
         pScChangeAction->GetDescription( aDesc, pDoc,!pScChangeAction->IsMasterDelete());
 
