@@ -177,7 +177,7 @@ SeriesOptionsItemConverter::SeriesOptionsItemConverter(
             }
         }
     }
-    catch( uno::Exception ex )
+    catch( uno::Exception &ex )
     {
         ASSERT_EXCEPTION( ex );
     }

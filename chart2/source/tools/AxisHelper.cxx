@@ -574,11 +574,11 @@ std::vector< Reference< XAxis > > AxisHelper::getAllAxesOfCoordinateSystem(
 
     if(xCooSys.is())
     {
-        sal_Int32 nDimensionIndex = 0;
         sal_Int32 nMaxDimensionIndex = xCooSys->getDimension() -1;
         if( nMaxDimensionIndex>=0 )
         {
-            for(nDimensionIndex=0; nDimensionIndex<=nMaxDimensionIndex; ++nDimensionIndex)
+            sal_Int32 nDimensionIndex = 0;
+            for(; nDimensionIndex<=nMaxDimensionIndex; ++nDimensionIndex)
             {
                 const sal_Int32 nMaximumAxisIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionIndex);
                 for(sal_Int32 nAxisIndex=0; nAxisIndex<=nMaximumAxisIndex; ++nAxisIndex)

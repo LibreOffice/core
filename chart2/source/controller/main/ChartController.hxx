@@ -519,7 +519,7 @@ private:
             void        removeListener(  ChartController* pController );
             void        tryTermination();
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
-                        getModel() { return m_xModel;}
+                        getModel() const { return m_xModel;}
 
         private:
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >     m_xModel;

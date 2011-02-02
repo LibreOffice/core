@@ -87,10 +87,9 @@ void PolarOptionsTabPage::Reset(const SfxItemSet& rInAttrs)
 {
     const SfxPoolItem *pPoolItem = NULL;
 
-    long nTmp;
     if (rInAttrs.GetItemState(SCHATTR_STARTING_ANGLE, TRUE, &pPoolItem) == SFX_ITEM_SET)
     {
-        nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
+        long nTmp = (long)((const SfxInt32Item*)pPoolItem)->GetValue();
 
         m_aAngleDial.SetRotation( nTmp*100 );
     }
