@@ -78,7 +78,7 @@ struct GUID
     sal_uInt32 Data1;
     sal_uInt16 Data2;
     sal_uInt16 Data3;
-    sal_Int8   Data4[8];
+    sal_uInt8  Data4[8];
 };
 SvGlobalName::SvGlobalName( const CLSID & rId )
 {

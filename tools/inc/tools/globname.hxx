@@ -36,7 +36,7 @@
 *************************************************************************/
 struct ImpSvGlobalName
 {
-    sal_Int8        szData[ 16 ];
+    sal_uInt8       szData[ 16 ];
     sal_uInt16      nRefCount;
 
                 ImpSvGlobalName()
@@ -110,7 +110,7 @@ public:
 
                   SvGlobalName( const CLSID & rId );
     const CLSID & GetCLSID() const { return *(CLSID *)pImp->szData; }
-    const sal_Int8* GetBytes() const { return pImp->szData; }
+    const sal_uInt8* GetBytes() const { return pImp->szData; }
 
     // platform independent representation of a "GlobalName"
     // maybe transported remotely
