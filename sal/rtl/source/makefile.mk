@@ -102,7 +102,6 @@ SLOFILES+=$(SLO)$/memory_fini.obj
 .ENDIF
 
 
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=   \
             $(OBJ)$/memory.obj      \
             $(OBJ)$/cipher.obj      \

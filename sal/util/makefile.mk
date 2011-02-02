@@ -66,11 +66,6 @@ LIB1FILES=	\
     $(SLB)$/cpprtl.lib	\
     $(SLB)$/textenc.lib 
 
-#.IF "$(GUI)"=="UNX"
-#LIB1FILES+=$(SLB)$/systoolsunx.lib
-#.ENDIF # UNX
-
-
 LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=	\
@@ -79,9 +74,6 @@ LIB3FILES=	\
     $(LB)$/cpprtl.lib	\
     $(LB)$/textenc.lib
 
-#.IF "$(GUI)"=="UNX"
-#LIB3FILES+=$(LB)$/systoolsunx.lib
-#.ENDIF # UNX
 
 .IF "$(GUI)" == "WNT" || "$(GUI)"=="OS2"
 SHL1TARGET= $(TARGET)

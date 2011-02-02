@@ -55,16 +55,11 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
 
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
-
 DEF1NAME    =$(SHL1TARGET)
 
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END ------------------------------------------------------------------
-
-#.IF "$(GUI)" == "WNT"
 
 SHL2OBJS=$(SLO)$/osl_process.obj
 SHL2TARGET=osl_process
@@ -80,16 +75,7 @@ DEF2EXPORTFILE=export.exp
 OBJ3FILES=$(OBJ)$/osl_process_child.obj
 APP3TARGET=osl_process_child
 APP3OBJS=$(OBJ3FILES)
-
-# .IF "$(GUI)" == "UNX"
-# APP3STDLIBS=$(LB)$/libsal.so
-# .ENDIF
-# .IF "$(GUI)" == "WNT"
-# APP3STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
-# .ENDIF
 APP3STDLIBS=$(SALLIB)
-
-#.ENDIF # "$(GUI)" == "WNT"
 
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies

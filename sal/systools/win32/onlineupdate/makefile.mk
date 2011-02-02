@@ -66,9 +66,6 @@ DEF1DEPN=\
 
 SHL1OBJS=$(SLOFILES)
 
-#No default libraries
-#STDSHL=
-
 SHL1STDLIBS=\
         $(KERNEL32LIB)\
         $(LIBCMT)\

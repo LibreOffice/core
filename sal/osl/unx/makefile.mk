@@ -41,7 +41,6 @@ PROJECTPCHSOURCE=cont_pch
 
 TARGETTYPE=CUI
 
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -81,8 +80,6 @@ SLOFILES= \
             $(SLO)$/process_impl.obj\
             $(SLO)$/salinit.obj
 
-
-#.IF "$(UPDATER)"=="YES"
 OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/diagnose.obj \
             $(OBJ)$/semaphor.obj \
@@ -112,7 +109,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
             $(OBJ)$/process_impl.obj\
             $(OBJ)$/salinit.obj
             
-#.ENDIF
 
 .IF "$(OS)"=="MACOSX"
 SLOFILES += $(SLO)$/osxlocale.obj

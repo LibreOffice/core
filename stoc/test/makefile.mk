@@ -24,6 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..
 
 PRJNAME=stoc
@@ -38,7 +39,7 @@ TARGET7=testconv
 TARGET8=testproxyfac
 TARGET9=testsmgr2
 TARGETTYPE=CUI
-#LIBTARGET=NO
+
 ENABLE_EXCEPTIONS=TRUE
 NO_BSYMBOLIC=TRUE
 
@@ -59,7 +60,6 @@ SHL1STDLIBS= \
 SHL1TARGET=testsmgr_component
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
-#SHL1LIBS=$(SLB)$/$(SHL1TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 SHL1VERSIONMAP=testsmgr_cpnt.map

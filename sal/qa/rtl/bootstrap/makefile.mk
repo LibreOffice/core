@@ -38,11 +38,9 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 .IF "$(GUI)"=="WNT"
-#BOOTSTRAPSCRIPT=bootstrap.bat
 BOOTSTRAPINI=testshl2.ini
 MY_SCRIPTCAT=cat
 .ELSE
-#BOOTSTRAPSCRIPT=bootstrap
 BOOTSTRAPINI=testshl2rc
 MY_SCRIPTCAT=tr -d "\015" <
 .ENDIF
@@ -61,27 +59,15 @@ SHL1TARGET= rtl_Bootstrap
 SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 
 SHL1IMPLIB= i$(SHL1TARGET)
-# SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-# DEF1EXPORTFILE= export.exp
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 OBJ2FILES=$(OBJ)$/bootstrap_process.obj
 APP2TARGET=bootstrap_process
 APP2OBJS=$(OBJ2FILES)
-
-# .IF "$(GUI)" == "UNX"
-# APP2STDLIBS=$(LB)$/libsal.so
-# .ENDIF
-# .IF "$(GUI)" == "WNT"
-# APP2STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
-# .ENDIF
 APP2STDLIBS=$(SALLIB)
-#------------------------------- All object files -------------------------------
-# do this here, so we get right dependencies
-# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

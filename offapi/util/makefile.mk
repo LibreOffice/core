@@ -31,12 +31,12 @@ PRJPCH=
 PRJNAME=offapi
 TARGET=offapi_db
 
-
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  makefile.pmk
 
 # ------------------------------------------------------------------
+
 UNOIDLDBFILES= \
     $(UCR)$/cssauth.db \
     $(UCR)$/cssawt.db \
