@@ -3459,13 +3459,6 @@ void ScDocument::ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow)
 }
 
 
-void ScDocument::SetColFlags( SCCOL nCol, SCTAB nTab, BYTE nNewFlags )
-{
-    if ( ValidTab(nTab) && pTab[nTab] )
-        pTab[nTab]->SetColFlags( nCol, nNewFlags );
-}
-
-
 void ScDocument::SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags )
 {
     if ( ValidTab(nTab) && pTab[nTab] )
@@ -3734,13 +3727,6 @@ void ScDocument::SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool
     pTab[nTab]->SetRowFiltered(nStartRow, nEndRow, bFiltered);
 }
 
-void ScDocument::SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bFiltered)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-        return;
-
-    pTab[nTab]->SetColFiltered(nStartCol, nEndCol, bFiltered);
-}
 
 SCROW ScDocument::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
 {

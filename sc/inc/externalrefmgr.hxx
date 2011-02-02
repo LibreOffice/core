@@ -180,7 +180,6 @@ public:
         /// Returns the half-open range of used columns in the specified row. Returns [0,0) if row is empty.
         SC_DLLPUBLIC ::std::pair< SCCOL, SCCOL > getColRange( SCROW nRow ) const;
         void getAllNumberFormats(::std::vector<sal_uInt32>& rNumFmts) const;
-        const ScRangeList& getCachedRanges() const;
         bool isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const;
 
         void setCachedCell(SCCOL nCol, SCROW nRow);
@@ -299,7 +298,6 @@ private:
         bool             mbAllReferenced;
 
                     ReferencedStatus();
-        explicit    ReferencedStatus( size_t nDocs );
         void        reset( size_t nDocs );
         void        checkAllDocs();
 

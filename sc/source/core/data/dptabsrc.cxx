@@ -161,11 +161,6 @@ ScDPSource::~ScDPSource()
     delete pResData;
 }
 
-void ScDPSource::SetGrandTotalName(const ::rtl::OUString& rName)
-{
-    mpGrandTotalName.reset(new ::rtl::OUString(rName));
-}
-
 const ::rtl::OUString* ScDPSource::GetGrandTotalName() const
 {
     return mpGrandTotalName.get();
@@ -323,11 +318,6 @@ USHORT ScDPSource::GetDataLayoutOrientation()
 BOOL ScDPSource::IsDateDimension(long nDim)
 {
     return pData->IsDateDimension(nDim);
-}
-
-UINT32  ScDPSource::GetNumberFormat(long nDim)
-{
-    return pData->GetNumberFormat( nDim );
 }
 
 ScDPDimensions* ScDPSource::GetDimensionsObject()
@@ -1529,19 +1519,6 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
     return *pSelectedData;
 }
 
-BOOL ScDPDimension::IsVisible( const ScDPItemData& rData )
-{
-    if( ScDPMembers* pMembers = this->GetHierarchiesObject()->getByIndex(0)->
-        GetLevelsObject()->getByIndex(0)->GetMembersObject() )
-    {
-        for( long i = pMembers->getCount()-1; i>=0; i-- )
-            if( ScDPMember *pDPMbr = pMembers->getByIndex( i ) )
-                if( rData.IsCaseInsEqual( pDPMbr->GetItemData() ) && !pDPMbr->getIsVisible() )
-                    return FALSE;
-    }
-
-    return TRUE;
-}
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()

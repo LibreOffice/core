@@ -1311,7 +1311,6 @@ public:
     SC_DLLPUBLIC void           ShowCol(SCCOL nCol, SCTAB nTab, BOOL bShow);
     SC_DLLPUBLIC void           ShowRow(SCROW nRow, SCTAB nTab, BOOL bShow);
     SC_DLLPUBLIC void           ShowRows(SCROW nRow1, SCROW nRow2, SCTAB nTab, BOOL bShow);
-    SC_DLLPUBLIC void           SetColFlags( SCCOL nCol, SCTAB nTab, BYTE nNewFlags );
     SC_DLLPUBLIC void           SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags );
     SC_DLLPUBLIC void           SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags );
 
@@ -1347,7 +1346,6 @@ public:
     bool                        HasFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     bool                        ColFiltered(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL);
     SC_DLLPUBLIC void           SetRowFiltered(SCROW nStartRow, SCROW nEndRow, SCTAB nTab, bool bFiltered);
-    SC_DLLPUBLIC void           SetColFiltered(SCCOL nStartCol, SCCOL nEndCol, SCTAB nTab, bool bFiltered);
     SCROW                       FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
     SCROW                       CountNonFilteredRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab);
@@ -1456,7 +1454,6 @@ public:
 
     void            Sort( SCTAB nTab, const ScSortParam& rSortParam, BOOL bKeepQuery );
     SCSIZE          Query( SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeepSub );
-    BOOL            ValidQuery( SCROW nRow, SCTAB nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial = NULL );
     SC_DLLPUBLIC BOOL           CreateQueryParam( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         SCTAB nTab, ScQueryParam& rQueryParam );
     void            GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr);

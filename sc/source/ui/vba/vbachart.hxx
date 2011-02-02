@@ -76,15 +76,6 @@ public:
     css::uno::Reference< css::beans::XPropertySet > xDiagramPropertySet() const { return mxDiagramPropertySet; }
     bool isSeriesIndexValid(sal_Int32 _seriesindex) throw( css::script::BasicErrorException );
     bool areIndicesValid(sal_Int32 _seriesindex, sal_Int32 _valindex) throw ( css::script::BasicErrorException );
-    void setSeriesName(sal_Int32 _index, rtl::OUString _sname) throw ( css::script::BasicErrorException );
-    sal_Int32 getSeriesIndex(rtl::OUString _sseriesname) throw ( css::script::BasicErrorException );
-    sal_Int32 getSeriesCount() throw ( css::script::BasicErrorException );
-    rtl::OUString getSeriesName(sal_Int32 _index) throw ( css::script::BasicErrorException );
-    double getValue(sal_Int32 _seriesIndex, sal_Int32 _valindex) throw ( css::script::BasicErrorException );
-    sal_Int32 getValuesCount(sal_Int32 _seriesIndex) throw ( css::script::BasicErrorException );
-    css::uno::Reference< ov::excel::XDataLabels > DataLabels( const css::uno::Reference< ov::excel::XSeries > _oSeries ) throw ( css::script::BasicErrorException );
-    bool getHasDataCaption( const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet )throw ( css::script::BasicErrorException );
-    void setHasDataCaption( const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, bool _bHasDataLabels )throw ( css::script::BasicErrorException );
     bool is3D() throw ( css::uno::RuntimeException );
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException );
     // Methods

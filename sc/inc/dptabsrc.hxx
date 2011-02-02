@@ -164,7 +164,6 @@ public:
     ScDPTableData*          GetData()       { return pData; }
     const ScDPTableData*    GetData() const { return pData; }
 
-    void                    SetGrandTotalName(const ::rtl::OUString& rName);
     const ::rtl::OUString*  GetGrandTotalName() const;
 
     USHORT                  GetOrientation(long nColumn);
@@ -182,7 +181,6 @@ public:
     USHORT                  GetDataLayoutOrientation();
 
     BOOL                    IsDateDimension(long nDim);
-    UINT32                  GetNumberFormat(long nDim);
 
     BOOL                    SubTotalAllowed(long nColumn);      //! move to ScDPResultData
 
@@ -442,8 +440,6 @@ public:
     const ScDPItemData&         GetSelectedData();
 
     const ::com::sun::star::sheet::DataPilotFieldReference& GetReferenceValue() const;
-
-    BOOL                      IsVisible( const ScDPItemData& rData );
 };
 
 class ScDPHierarchies : public cppu::WeakImplHelper2<

@@ -389,11 +389,6 @@ void ScExternalRefCache::Table::getAllNumberFormats(vector<sal_uInt32>& rNumFmts
     }
 }
 
-const ScRangeList& ScExternalRefCache::Table::getCachedRanges() const
-{
-    return maCachedRanges;
-}
-
 bool ScExternalRefCache::Table::isRangeCached(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2) const
 {
     return maCachedRanges.In(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
@@ -1089,12 +1084,6 @@ ScExternalRefCache::ReferencedStatus::ReferencedStatus() :
     mbAllReferenced(false)
 {
     reset(0);
-}
-
-ScExternalRefCache::ReferencedStatus::ReferencedStatus( size_t nDocs ) :
-    mbAllReferenced(false)
-{
-    reset( nDocs);
 }
 
 void ScExternalRefCache::ReferencedStatus::reset( size_t nDocs )

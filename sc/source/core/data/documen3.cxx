@@ -1213,16 +1213,6 @@ SCSIZE ScDocument::Query(SCTAB nTab, const ScQueryParam& rQueryParam, BOOL bKeep
 }
 
 
-BOOL ScDocument::ValidQuery( SCROW nRow, SCTAB nTab, const ScQueryParam& rQueryParam, BOOL* pSpecial )
-{
-    if ( ValidTab(nTab) && pTab[nTab] )
-        return pTab[nTab]->ValidQuery( nRow, rQueryParam, pSpecial );
-
-    DBG_ERROR("missing tab");
-    return FALSE;
-}
-
-
 void ScDocument::GetUpperCellString(SCCOL nCol, SCROW nRow, SCTAB nTab, String& rStr)
 {
     if ( ValidTab(nTab) && pTab[nTab] )
