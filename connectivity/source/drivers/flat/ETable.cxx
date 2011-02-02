@@ -159,7 +159,7 @@ void OFlatTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
         }
         ++nRowCount;
     }
-    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding));
+    while(nRowCount < nMaxRowsToScan && m_pFileStream->ReadByteStringLine(aFirstLine,nEncoding) && !m_pFileStream->IsEof());
 
     for (xub_StrLen i = 0; i < nFieldCount; i++)
     {
