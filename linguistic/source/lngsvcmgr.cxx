@@ -42,7 +42,7 @@
 #include <i18npool/lang.h>
 #include <i18npool/mslangid.hxx>
 #include <cppuhelper/factory.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <rtl/logfile.hxx>
 
 #include <boost/checked_delete.hpp>

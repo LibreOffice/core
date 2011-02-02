@@ -146,8 +146,6 @@ void SfxApplication::Deinitialize()
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEZ(pAppData_Impl->pMatcher);
 
-    delete pAppData_Impl->pLabelResMgr;
-
     DELETEX(pAppData_Impl->pSlotPool);
     DELETEX(pAppData_Impl->pEventConfig);
     SfxMacroConfig::Release_Impl();

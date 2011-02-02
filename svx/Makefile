@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,12 +25,14 @@
 #
 #*************************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
+
+gb_PARTIALBUILD := T
 GBUILDDIR := $(SOLARENV)/gbuild
 include $(GBUILDDIR)/gbuild.mk
 
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-gb_CURRENT_MODULE := $(lastword $(subst /, ,$(dir $(realpath $(firstword $(MAKEFILE_LIST))))))
-
-$(eval $(call gb_Module_make_global_targets,$(gb_CURRENT_MODULE)))
-
-
+# vim: set noet sw=4 ts=4:

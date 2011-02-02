@@ -159,12 +159,9 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
 
     SfxAppData_Impl*            pAppData_Impl;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
     SAL_DLLPRIVATE BOOL         SaveAll_Impl(BOOL bPrompt = FALSE, BOOL bAutoSave = FALSE);
     SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, BOOL bAutoSave = FALSE);
-    SAL_DLLPRIVATE void         InitializeDisplayName_Impl();
-//#endif
 
     static SfxApplication*      Create();
     void                        Init();
@@ -184,11 +181,9 @@ public:
     static SfxApplication*      GetOrCreate();
 
     // Resource Manager
-    bool                        InitLabelResMgr( const char* _pLabelPrefix, bool _bException = false );
     SfxResourceManager&         GetResourceManager() const;
     ResMgr*                     GetSfxResManager();
     SimpleResMgr*               GetSimpleResManager();
-    ResMgr*                     GetLabelResManager() const;
     static ResMgr*              CreateResManager( const char *pPrefix );
     SimpleResMgr*               CreateSimpleResManager();
 

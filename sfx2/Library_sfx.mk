@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2009 by Sun Microsystems, Inc.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,12 +14,12 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
@@ -54,7 +54,6 @@ $(eval $(call gb_Library_set_include,sfx,\
 $(eval $(call gb_Library_set_defs,sfx,\
     $$(DEFS) \
     -DSFX2_DLLIMPLEMENTATION \
-    -DABOUTBMPNAMES="$(ABOUTBITMAPS)" \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,sfx,\
@@ -77,6 +76,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     vcl \
     vos3 \
     xml2 \
+    $(gb_StdLibs) \
 ))
 
 $(eval $(call gb_Library_add_linked_system_libs,sfx,\
@@ -150,7 +150,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/sorgitm \
     sfx2/source/control/statcach \
     sfx2/source/control/unoctitm \
-    sfx2/source/dialog/about \
     sfx2/source/dialog/alienwarn \
     sfx2/source/dialog/basedlgs \
     sfx2/source/dialog/dinfdlg \
@@ -282,7 +281,7 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
     sfx2/source/doc/syspathw32 \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) -nologo -UPRECOMPILED_HEADERS \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) -nologo -UPRECOMPILED_HEADERS \
 ))
 
 ifneq ($(USE_MINGW),)
@@ -292,7 +291,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     mingw32 \
     $(gb_MINGW_LIBGCC) \
     uwinapi \
-    moldname \
     mingwex \
     advapi32 \
     gdi32 \
@@ -305,23 +303,19 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
 ))
 else
 $(eval $(call gb_Library_add_linked_libs,sfx,\
-    advapi32 \
     gdi32 \
-    kernel32 \
-    msvcrt \
-    oldnames \
+    advapi32 \
     ole32 \
     shell32 \
     user32 \
     uuid \
-    uwinapi \
 ))
 endif
 else
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \
     sfx2/source/doc/sfxacldetect \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) \
+    , $(gb_LinkTarget_EXCEPTIONFLAGS) $(gb_COMPILEROPTFLAGS) \
 ))
 
 endif
