@@ -217,6 +217,16 @@
         Text [ en-US ] = "Supports primary keys";                                   \
     };
 
+#define AUTO_RESPECTRESULTSETTYPE(AUTO_Y)                                            \
+    CheckBox CB_RESPECTRESULTSETTYPE                                                 \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X - 12 , CHECKBOX_HEIGHT ) ;          \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_RESPECTRESULTSETTYPE;                                   \
+        Text [ en-US ] = "Respect the result set type from the database driver";                                   \
+    };
+
 
 //-------------------------------------------------------------------------
 
@@ -351,8 +361,9 @@ TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
     AUTO_IGNORECURRENCY(       13*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 12*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_ESCAPE_DATETIME(      14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_PRIMARY_KEY_SUPPORT(  15*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS )
-    AUTO_BOOLEANCOMPARISON(    16*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
-    AUTO_MAXROWSCAN(           17*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 14*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_RESPECTRESULTSETTYPE( 16*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 16*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(    17*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_MAXROWSCAN(           18*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 15*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
 };
 
 //-------------------------------------------------------------------------

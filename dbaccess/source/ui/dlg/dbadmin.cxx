@@ -411,10 +411,12 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxStringItem(DSID_NAMED_PIPE, String());
     *pCounter++ = new OptionalBoolItem( DSID_PRIMARY_KEY_SUPPORT );
     *pCounter++ = new SfxInt32Item(DSID_MAX_ROW_SCAN, 100);
+    *pCounter++ = new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,sal_False );
 
     // create the pool
     static SfxItemInfo __READONLY_DATA aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
+        {0,0},
         {0,0},
         {0,0},
         {0,0},

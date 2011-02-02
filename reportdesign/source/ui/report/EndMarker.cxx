@@ -46,7 +46,6 @@ OEndMarker::OEndMarker(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
     DBG_CTOR( rpt_OEndMarker,NULL);
     SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
-    SetPaintTransparent(TRUE);
 }
 // -----------------------------------------------------------------------------
 OEndMarker::~OEndMarker()
@@ -89,6 +88,10 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 // -----------------------------------------------------------------------
 void OEndMarker::ImplInitSettings()
 {
+    EnableChildTransparentMode( TRUE );
+    SetParentClipMode( PARENTCLIPMODE_NOCLIP );
+    SetPaintTransparent( TRUE );
+
     SetBackground( Wallpaper( svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor)  );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
 }

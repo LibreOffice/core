@@ -495,10 +495,6 @@ IMPL_LINK( ODesignView, SplitHdl, void*,  )
     {
         long nOldSplitPos = getController().getSplitPos();
         getController().setSplitPos(nTest);
-        if ( nOldSplitPos != -1 && nOldSplitPos <= nTest )
-        {
-            Invalidate(/*INVALIDATE_NOCHILDREN*/);
-        }
     }
 
     return 0L;

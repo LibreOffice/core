@@ -760,11 +760,18 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
     Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
     if ( xWarnings.is() )
     {
-        SQLExceptionInfo aInfo( xWarnings->getWarnings() );
-        if ( aInfo.isValid() )
+        try
         {
-            showError( aInfo );
-            impl_checkForCannotSelectUnfiltered( aInfo );
+            SQLExceptionInfo aInfo( xWarnings->getWarnings() );
+            if ( aInfo.isValid() )
+            {
+                showError( aInfo );
+                impl_checkForCannotSelectUnfiltered( aInfo );
+            }
+        }
+        catch(const SQLException& e)
+        {
+            (void)e;
         }
     }
 
