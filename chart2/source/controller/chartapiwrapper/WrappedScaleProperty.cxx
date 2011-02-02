@@ -279,7 +279,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         }
         case SCALE_PROP_AXIS_TYPE:
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             if( (rOuterValue >>= nType) )
             {
                 if( ::com::sun::star::chart::ChartAxisType::AUTOMATIC == nType )
