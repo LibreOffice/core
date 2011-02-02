@@ -257,11 +257,6 @@ LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
 .ENDIF
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 
-.IF "$(USE_SYSTEM_STL)" == "YES" && "$(DBG_LEVEL)" >= "1"
-# turn on debugging version of libstdc++
-CDEFS += -D_GLIBCXX_DEBUG
-.ENDIF
-
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
