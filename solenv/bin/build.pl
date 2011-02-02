@@ -206,6 +206,8 @@
     my $zenity_in = '';
     my $zenity_out = '';
     my $zenity_err = '';
+    my $verbose = 0;
+
 ### main ###
 
     get_options();
@@ -251,7 +253,7 @@
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command = $ENV{DELIVER};
-    $deliver_command .= ' -verbose' if ($html);
+    $deliver_command .= ' -verbose' if ($html || $verbose);
     $deliver_command .= ' '. $dlv_switch if ($dlv_switch);
     $ENV{mk_tmp}++;
     %prj_platform = ();
@@ -1124,7 +1126,7 @@ sub get_commands {
     while ($arg = pop(@dmake_args)) {
         $dmake .= ' '.$arg;
     };
-    $dmake .= ' verbose=true' if ($html);
+    $dmake .= ' verbose=true' if ($html || $verbose);
 };
 
 #
@@ -1401,7 +1403,7 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive]\n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches prj_name1[:prj_name2] [--skip prj_name1[:prj_name2] [prj_name3 [...]] [prj_name3 [...]|-b]|[--prepare|-p][:platform] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring] [--stoponerror] [--genconf [--removeall|--clear|--remove|--add [module1,module2[,...,moduleN]]]] [--exclude_branch_from prj_name1[:prj_name2] [prj_name3 [...]]] [--interactive] [--verbose]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
@@ -1444,6 +1446,7 @@ sub usage {
 
     print STDERR "        --stoponerror      - stop build when error occurs (for mp builds)\n";
     print STDERR "        --interactive      - start interactive build process (process can be managed via html page)\n";
+    print STDERR "        --verbose          - generates a detailed output of the build process\n";
     print STDERR "   Custom jobs:\n";
     print STDERR "        --job=job_string        - execute custom job in (each) module. job_string is a shell script/command to be executed instead of regular dmake jobs\n";
     print STDERR "        --pre_job=pre_job_string        - execute preliminary job in (each) module. pre_job_string is a shell script/command to be executed before regular job in the module\n";
@@ -1534,6 +1537,7 @@ sub get_options {
         $arg =~ /^--mode$/        and get_modes()         and next;
         $arg =~ /^--stoponerror$/        and $stop_build_on_error = 1         and next;
         $arg =~ /^--interactive$/        and $interactive = 1         and next;
+        $arg =~ /^--verbose$/       and $verbose = 1         and next;
         if ($arg =~ /^--$/) {
             push (@dmake_args, get_dmake_args()) if (!$custom_job);
             next;
@@ -2019,14 +2023,14 @@ sub run_job {
     chdir $path;
     getcwd();
 
-    if ($html) {
+    if ($html || $verbose) {
         my $log_file = $jobs_hash{$registered_name}->{LONG_LOG_PATH};
         my $log_dir = File::Basename::dirname($log_file);
         if (!-d $log_dir) {
              system("$perl $mkout");
         };
         $error_code = system ("$job_to_do > $log_file 2>&1");
-        if (!$grab_output && -f $log_file) {
+        if ((!$grab_output || $verbose) && -f $log_file) {
             system("cat $log_file");
         };
     } else {
