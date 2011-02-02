@@ -79,6 +79,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     msword \
 	odbc \
 	odbcbase \
+	oox \
     qstart_gtk \
 	rpt \
 	rptui \
@@ -106,6 +107,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     unordf \
     unoxml \
     vbahelper \
+	writerfilter \
     vcl \
     vclplug_gen \
     vclplug_gtk \
@@ -161,6 +163,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 	simplecanvas \
     vbaswobj \
 	vclcanvas \
+	writerfilter_debug \
 ))
 
 
