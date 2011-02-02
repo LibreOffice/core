@@ -43,7 +43,8 @@ $(RSC_MULTI$(TNR)) : \
     -fs={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))/$(RESLIB$(TNR)NAME)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)/$(RSCDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res ) \
+    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res \
+    -lip=$(SOLARSRC)/$(RSCDEFIMG)/$i -lip=$(SOLARSRC)/$(RSCDEFIMG) ) \
     -subMODULE=$(SOLARSRC)/$(RSCDEFIMG) \
     -subGLOBALRES=$(SOLARSRC)/$(RSCDEFIMG)/res \
     -oil={$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(BIN))} \
@@ -58,7 +59,8 @@ $(RSC_MULTI$(TNR)) : \
     -fs={$(BIN)/$(RESLIB$(TNR)NAME)$i.res} \
     $(foreach,j,$(subst,$(PRJ),$(SOLARSRC)/$(RSCDEFIMG)/$(PRJNAME) $(RESLIB$(TNR)IMAGES)) -lip={$j}/$i \
     -lip={$j} ) \
-    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res ) \
+    -lip=$(SOLARSRC)/$(RSCDEFIMG)/res/$i -lip=$(SOLARSRC)/$(RSCDEFIMG)/res \
+    -lip=$(SOLARSRC)/$(RSCDEFIMG)/$i -lip=$(SOLARSRC)/$(RSCDEFIMG) ) \
     -subMODULE=$(SOLARSRC)/$(RSCDEFIMG) \
     -subGLOBALRES=$(SOLARSRC)/$(RSCDEFIMG)/res \
     -oil=$(BIN) \

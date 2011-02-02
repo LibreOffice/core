@@ -30,6 +30,8 @@
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
 
+#include "dmapperLoggers.hxx"
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -40,10 +42,11 @@ using namespace ::com::sun::star;
 
   -----------------------------------------------------------------------*/
 SectionColumnHandler::SectionColumnHandler() :
-    bEqualWidth( false ),
-    nSpace( 0 ),
-    nNum( 0 ),
-    bSep( false )
+LoggedProperties(dmapper_logger, "SectionColumnHandler"),
+bEqualWidth( false ),
+nSpace( 0 ),
+nNum( 0 ),
+bSep( false )
 {
 }
 /*-- 02.06.2008 13:36:24---------------------------------------------------
@@ -55,7 +58,7 @@ SectionColumnHandler::~SectionColumnHandler()
 /*-- 02.06.2008 13:36:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SectionColumnHandler::attribute(Id rName, Value & rVal)
+void SectionColumnHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     /* WRITERFILTERSTATUS: table: SectionColumnHandler_attributedata */
@@ -93,7 +96,7 @@ void SectionColumnHandler::attribute(Id rName, Value & rVal)
 /*-- 02.06.2008 13:36:24---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SectionColumnHandler::sprm(Sprm & rSprm)
+void SectionColumnHandler::lcl_sprm(Sprm & rSprm)
 {
     /* WRITERFILTERSTATUS: table: SectionColumnHandler_sprm */
     switch( rSprm.getId())

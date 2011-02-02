@@ -1017,7 +1017,7 @@ BOOL SwFEShell::HasBoxSelection() const
         pNd->EndOfSectionIndex())
     {
             SwNodeIndex aIdx( *pNd->EndOfSectionNode(), -1 );
-            SwCntntNode* pCNd = GetDoc()->GetNodes()[ aIdx ]->GetCntntNode();
+            SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
             if( !pCNd )
             {
                 pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
@@ -1309,7 +1309,7 @@ BOOL SwFEShell::IsAdjustCellWidthAllowed( BOOL bBalance ) const
                 if ( pCNd->GetTxt().Len() )
                     return TRUE;
                 ++aIdx;
-                pCNd = GetDoc()->GetNodes()[ aIdx ]->GetTxtNode();
+                pCNd = aIdx.GetNode().GetTxtNode();
             }
         }
     }

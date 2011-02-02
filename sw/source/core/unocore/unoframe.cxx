@@ -45,6 +45,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <swcli.hxx>
@@ -1656,7 +1657,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_MODEL == pEntry->nWID||
-                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID)
+                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID||
+                FN_EMBEDDED_OBJECT == pEntry->nWID)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
@@ -1677,7 +1679,15 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     {
                         uno::Reference < lang::XComponent > xComp( xIP->getComponent(), uno::UNO_QUERY );
                         uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
-                        if ( xModel.is() )
+                        if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
+                        {
+                            // ensure the
+                            ASSERT( pDoc->GetDocShell(), "no doc shell => no client site" );
+                            if ( pDoc->GetDocShell() )
+                                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
+                            aAny <<= xIP;
+                        }
+                        else if ( xModel.is() )
                             aAny <<= xModel;
                         else if ( FN_UNO_COMPONENT == pEntry->nWID )
                             aAny <<= xComp;
@@ -2311,7 +2321,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
 
                     UnoActionContext aAction(pDoc);
-                    pDoc->StartUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
                     if(!bSizeFound)
                     {
                         //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
@@ -2358,7 +2368,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
                     ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
 
-                    pDoc->EndUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                     pFmt2->Add(this);
                     if(sName.Len())
                         pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
@@ -2368,11 +2378,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 ::rtl::OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
-                pDoc->StartUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
                 SwFlyFrmFmt* pFrmFmt = 0;
                 pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
-                pDoc->EndUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
                 if(sName.Len())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);

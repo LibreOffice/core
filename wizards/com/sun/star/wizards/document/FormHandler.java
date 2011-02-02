@@ -466,7 +466,7 @@ public class FormHandler
 //                  this.xDrawPage.remove(ControlList[i].xShape);
                 {
                     ControlList[i].setPosition(new Point(this.iXNirwanaPos, this.iYNirwanaPos));
-//                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue("Name");
+//                  String sControlName = (String) ControlList[i].xPropertySet.getPropertyValue(PropertyNames.PROPERTY_NAME);
 //
 //                  if (_xNamedForm.hasByName(sControlName))
 //                      _xNamedForm.removeByName(sControlName);

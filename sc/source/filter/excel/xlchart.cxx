@@ -329,6 +329,24 @@ XclChLabelRange::XclChLabelRange() :
 
 // ----------------------------------------------------------------------------
 
+XclChDateRange::XclChDateRange() :
+    mnMinDate( 0 ),
+    mnMaxDate( 0 ),
+    mnMajorStep( 0 ),
+    mnMajorUnit( EXC_CHDATERANGE_DAYS ),
+    mnMinorStep( 0 ),
+    mnMinorUnit( EXC_CHDATERANGE_DAYS ),
+    mnBaseUnit( EXC_CHDATERANGE_DAYS ),
+    mnCross( 0 ),
+    mnFlags( EXC_CHDATERANGE_AUTOMIN | EXC_CHDATERANGE_AUTOMAX |
+        EXC_CHDATERANGE_AUTOMAJOR | EXC_CHDATERANGE_AUTOMINOR |
+        EXC_CHDATERANGE_AUTOBASE | EXC_CHDATERANGE_AUTOCROSS |
+        EXC_CHDATERANGE_AUTODATE )
+{
+}
+
+// ----------------------------------------------------------------------------
+
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
     mfMax( 0.0 ),
@@ -336,7 +354,8 @@ XclChValueRange::XclChValueRange() :
     mfMinorStep( 0.0 ),
     mfCross( 0.0 ),
     mnFlags( EXC_CHVALUERANGE_AUTOMIN | EXC_CHVALUERANGE_AUTOMAX |
-        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR | EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
+        EXC_CHVALUERANGE_AUTOMAJOR | EXC_CHVALUERANGE_AUTOMINOR |
+        EXC_CHVALUERANGE_AUTOCROSS | EXC_CHVALUERANGE_BIT8 )
 {
 }
 

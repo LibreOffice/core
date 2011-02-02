@@ -39,7 +39,6 @@ const cTempFileName = &quot;ttt&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
 const cMessageSaveOpenXMLDoc = &quot;Save/Open Document XML (6/7)&quot;
-const cMessageSaveOpen50Doc = &quot;Save/Open Document 5.0&quot;
 const cMessageNewDoc = &quot;New Document&quot;
 const cMessageCloseDoc = &quot;Close Document&quot;
 
@@ -87,22 +86,6 @@ Sub DeleteAllSavedFiles()
         Kill (sFileName)
     End If
     sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFltXML)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmWriter or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmCalc or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmImpress or cFlt50)
-    If FileExists (sFileName) then
-        Kill (sFileName)
-    End If
-    sFileName = sWorkPath+cTempFileName+&quot;.&quot;+GetDocEndings(frmDraw or cFlt50)
     If FileExists (sFileName) then
         Kill (sFileName)
     End If
@@ -298,17 +281,11 @@ Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
     if bMakeSaveOpenXMLTest then
         sWriteStr = sWriteStr + &quot;, save XML&quot;
     end if
-    if bMakeSaveOpen50Test then
-        sWriteStr = sWriteStr + &quot;, save 5.0&quot;
-    end if
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, open 8.0&quot;
     end if
     if bMakeSaveOpenXMLTest then
         sWriteStr = sWriteStr + &quot;, open XML&quot;
-    end if
-    if bMakeSaveOpen50Test then
-        sWriteStr = sWriteStr + &quot;, open 5.0&quot;
     end if
     end if
 
@@ -343,7 +320,7 @@ end Sub
 
 Sub MakeDocTest (FilterType as Integer)
     Dim oDoc as Object
-    Dim sFileNameXML$, sFileName50$, sFileName8$
+    Dim sFileNameXML$, sFileName8$
     Dim bError as Boolean
     Dim nCurrentAction as Integer
 
@@ -365,11 +342,6 @@ Sub MakeDocTest (FilterType as Integer)
         if bMakeSaveOpenXMLTest and IsFilterAvailable (FilterType or cFltXML) then
             sFileNameXML = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFltXML)
             SaveDoc (sFileNameXML, oDoc, GetDocFilter(FilterType or cFltXML))
-        end if
-        nCurrentAction = cDocSaveOpen50
-        if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
-            sFileName50 = sWorkPathURL+cTempFileName+&quot;.&quot;+GetDocEndings(FilterType or cFlt50)
-            SaveDoc (sFileName50, oDoc, GetDocFilter(FilterType or cFlt50))
         end if
 &apos;      oDoc.dispose
         nCurrentAction = cDocClose
@@ -410,21 +382,6 @@ Sub MakeDocTest (FilterType as Integer)
             end If
         end if
 
-        nCurrentAction = cDocSaveOpen50
-        if bMakeSaveOpen50Test and IsFilterAvailable (FilterType or cFlt50) then
-            oDoc = LoadDoc (sFileName50)
-
-&apos;          oDoc = Documents.open(sFileName)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, FileChannel)
-            LogState (not IsNull (oDoc),GetDocFilter(FilterType or cFltNewDoc)+&quot; &quot;+ cMessageSaveOpen50Doc, MainFileChannel)
-            SetStatus (FilterType, cDocSaveOpen50, not IsNull (oDoc))
-
-            if not IsNull (oDoc) then
-&apos;              oDoc.dispose
-                nCurrentAction = cDocClose
-                oDoc.close (true)
-            end If
-        end if
     end If
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
@@ -545,16 +502,8 @@ Function GetDocEndings (DocType as Integer) as String
             GetDocEndings = &quot;odp&quot; &apos;PrÕsentation
         case frmDraw or cFlt8
             GetDocEndings = &quot;odg&quot; &apos;Zeichen
-        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFltXML
             GetDocEndings = &quot;html&quot; &apos;Hypertext-Dokument
-        case frmWriter or cFlt50
-            GetDocEndings = &quot;sdw&quot; &apos; Textdokument 5.0
-        case frmCalc or cFlt50
-            GetDocEndings = &quot;sdc&quot; &apos;Tabellendokument 5.0
-        case frmImpress or cFlt50
-            GetDocEndings = &quot;sdd&quot; &apos;PrÕsentation 5.0
-        case frmDraw or cFlt50
-            GetDocEndings = &quot;sda&quot; &apos;Zeichen 5.0
         case frmWriter or cFltXML
             GetDocEndings = &quot;sxw&quot; &apos; Textdokument
         case frmCalc or cFltXML
@@ -592,18 +541,8 @@ Function GetDocFilter (DocType as Integer) as String
         case frmMath or cFltXML
             GetDocFilter = &quot;StarOffice XML (Math)&quot; &apos;Formel
 
-        case frmHyperText, frmHyperText or cFlt50, frmHyperText or cFltXML
+        case frmHyperText, frmHyperText or cFltXML
             GetDocFilter = &quot;HTML&quot; &apos;Hypertext-Dokument
-        case frmWriter or cFlt50
-            GetDocFilter = &quot;StarWriter 5.0&quot; &apos; Textdokument 5.0
-        case frmCalc or cFlt50
-            GetDocFilter = &quot;StarCalc 5.0&quot; &apos;Tabellendokument 5.0
-        case frmImpress or cFlt50
-            GetDocFilter = &quot;StarImpress 5.0&quot; &apos;Präsentation 5.0
-        case frmDraw or cFlt50
-            GetDocFilter = &quot;StarDraw 5.0&quot; &apos;Zeichen 5.0
-        case frmMath or cFlt50
-            GetDocFilter = &quot;StarMath 5.0&quot; &apos;Formel 5.0
 
         case frmWriter or cFltNewDoc
             GetDocFilter = &quot;swriter&quot; &apos; Textdokument
@@ -667,8 +606,6 @@ Function GetErrorMessageOnAction (nAction as Integer) as String
             GetErrorMessageOnAction = cMessageSaveOpen8Doc
         case cDocSaveOpenXML
             GetErrorMessageOnAction = cMessageSaveOpenXMLDoc
-        case cDocSaveOpen50
-            GetErrorMessageOnAction = cMessageSaveOpen50Doc
         case cDocClose
             GetErrorMessageOnAction = cMessageCloseDoc
         case else
@@ -678,7 +615,7 @@ end Function
 
 Function IsFilterAvailable (FilterType as Integer) as boolean
     IsFilterAvailable = true
-    if ((FilterType = (frmHyperText or cFlt50)) or (FilterType = (frmHyperText or cFltXML))) then
+    if ((FilterType = (frmHyperText or cFltXML))) then
         IsFilterAvailable = false
     end if
 End Function

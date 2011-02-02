@@ -105,10 +105,25 @@ cpptest : $(MISC)/$(TARGET)/installation.flag
 .END
 
 .IF "$(SOLAR_JAVA)" == "TRUE" && "$(OOO_JUNIT_JAR)" != ""
-javatest .PHONY : $(JAVATARGET)
+javatest_% .PHONY : $(JAVATARGET)
+    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
+        '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
+        -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
+        -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \
+        $(my_javaenv) $(TEST_ARGUMENTS:^"-Dorg.openoffice.test.arg.testarg.") \
+        org.junit.runner.JUnitCore \
+        $(subst,/,. $(PACKAGE)).$(@:s/javatest_//)
     $(RM) -r $(MISC)/$(TARGET)/user
-    $(MKDIRHIER) $(MISC)/$(TARGET)/user
-    $(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
+.IF "$(OS)" == "WNT" && "$(OOO_TEST_SOFFICE)" == ""
+    $(RM) -r $(installationtest_instpath) $(MISC)/$(TARGET)/installation.flag
+javatest : $(MISC)/$(TARGET)/installation.flag
+.END
+javatest .PHONY : $(JAVATARGET)
+    $(COMMAND_ECHO)$(RM) -r $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(MKDIRHIER) $(MISC)/$(TARGET)/user
+    $(COMMAND_ECHO)$(JAVAI) $(JAVAIFLAGS) $(JAVACPS) \
         '$(OOO_JUNIT_JAR)$(PATH_SEPERATOR)$(CLASSPATH)' \
         -Dorg.openoffice.test.arg.soffice=$(my_soffice) \
         -Dorg.openoffice.test.arg.user=$(my_file)$(PWD)/$(MISC)/$(TARGET)/user \

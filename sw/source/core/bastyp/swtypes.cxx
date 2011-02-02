@@ -39,7 +39,8 @@
 #include <frmfmt.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoDelete.hxx>
+#include <UndoInsert.hxx>
 #include <swtable.hxx>
 #include <viscrs.hxx>
 #include <fntcache.hxx>

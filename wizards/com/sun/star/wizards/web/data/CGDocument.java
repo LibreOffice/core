@@ -46,6 +46,7 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.XMLHelper;
 import com.sun.star.wizards.common.XMLProvider;
 import com.sun.star.wizards.document.OfficeDocument;
@@ -236,7 +237,7 @@ public class CGDocument extends ConfigSetItem implements XMLProvider
         }
 
         String media = (mediaDesc == null)
-                ? "" : (String) Properties.getPropertyValue(mediaDescriptor, "Name");
+                ? "" : (String) Properties.getPropertyValue(mediaDescriptor, PropertyNames.PROPERTY_NAME);
         appType = getDocType(media);
 
         //System.out.println(appType);

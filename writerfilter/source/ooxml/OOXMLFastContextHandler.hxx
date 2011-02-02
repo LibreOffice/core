@@ -230,18 +230,13 @@ public:
     virtual string toString() const;
 #endif
 
-#ifdef DEBUG_MEMORY
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-#endif
-
 protected:
     OOXMLFastContextHandler * mpParent;
     Id mId;
     Id mnDefine;
     Token_t mnToken;
 
-#ifdef DEBUG_CONTEXT_STACK
+#ifdef DEBUG_CONTEXT_HANDLER
     string msTokenString;
 #endif
 

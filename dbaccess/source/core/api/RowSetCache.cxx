@@ -91,7 +91,8 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew,
                            const ORowSetValueVector& _aParameterValueForCache,
-                           const ::rtl::OUString& i_sRowSetFilter)
+                           const ::rtl::OUString& i_sRowSetFilter,
+                           sal_Int32 i_nMaxRows)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
     ,m_aContext( _rContext )
@@ -128,7 +129,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             xUp->cancelRowUpdates();
             _xRs->beforeFirst();
             m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
-            m_pCacheSet = new WrappedResultSet();
+            m_pCacheSet = new WrappedResultSet(i_nMaxRows);
             m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs,i_sRowSetFilter);
             return;
@@ -175,7 +176,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
             if ( aTableNames.getLength() > 1 && !_rUpdateTableName.getLength() && bNeedKeySet )
             {// here we have a join or union and nobody told us which table to update, so we update them all
                 m_nPrivileges = Privilege::SELECT|Privilege::DELETE|Privilege::INSERT|Privilege::UPDATE;
-                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache);
+                OptimisticSet* pCursor = new OptimisticSet(m_aContext,xConnection,_xAnalyzer,_aParameterValueForCache,i_nMaxRows);
                 m_pCacheSet = pCursor;
                 m_xCacheSet = m_pCacheSet;
                 try
@@ -237,7 +238,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
     {
         try
         {
-            m_pCacheSet = new OBookmarkSet();
+            m_pCacheSet = new OBookmarkSet(i_nMaxRows);
             m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs,i_sRowSetFilter);
 
@@ -271,7 +272,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
         // oj removed because keyset uses only the next// || (xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_RESULTSETTYPE) && comphelper::getINT32(xProp->getPropertyValue(PROPERTY_RESULTSETTYPE)) == ResultSetType::FORWARD_ONLY)
         if(!bAllKeysFound )
         {
-            m_pCacheSet = new OStaticSet();
+            m_pCacheSet = new OStaticSet(i_nMaxRows);
             m_xCacheSet = m_pCacheSet;
             m_pCacheSet->construct(_xRs,i_sRowSetFilter);
             m_nPrivileges = Privilege::SELECT;
@@ -308,7 +309,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 }
             }
 
-            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache);
+            OKeySet* pKeySet = new OKeySet(m_aUpdateTable,xUpdateTableKeys,aUpdateTableName ,_xAnalyzer,_aParameterValueForCache,i_nMaxRows);
             try
             {
                 m_pCacheSet = pKeySet;
@@ -335,7 +336,7 @@ ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                 if ( m_pCacheSet )
                     m_pCacheSet = NULL;
                 m_xCacheSet = NULL;
-                m_pCacheSet = new OStaticSet();
+                m_pCacheSet = new OStaticSet(i_nMaxRows);
                 m_xCacheSet = m_pCacheSet;
                 m_pCacheSet->construct(_xRs,i_sRowSetFilter);
                 m_nPrivileges = Privilege::SELECT;
@@ -373,9 +374,8 @@ ORowSetCache::~ORowSetCache()
 }
 
 // -------------------------------------------------------------------------
-void ORowSetCache::setMaxRowSize(sal_Int32 _nSize)
+void ORowSetCache::setFetchSize(sal_Int32 _nSize)
 {
-
     if(_nSize == m_nFetchSize)
         return;
 

@@ -481,7 +481,6 @@ void SAL_CALL
 ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
 {
     StarBASIC* pBasic = SFX_APP()->GetBasic();
-    SFX_APP()->EnterBasicCall();
     SbxArrayRef aArgs = new SbxArray;
     SbxVariableRef aRef = new SbxVariable;
     aRef->PutDouble( time );
@@ -495,8 +494,6 @@ ScVbaApplication::wait( double time ) throw (uno::RuntimeException)
         // forces a broadcast
         SbxVariableRef pNew = new  SbxMethod( *((SbxMethod*)pMeth));
     }
-    SFX_APP()->LeaveBasicCall();
-
 }
 
 uno::Any SAL_CALL
@@ -1164,7 +1161,6 @@ uno::Any SAL_CALL
 ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeException )
 {
     StarBASIC* pBasic = SFX_APP()->GetBasic();
-    SFX_APP()->EnterBasicCall();
     SbMethod* pMeth = (SbMethod*)pBasic->GetRtl()->Find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FuncCaller") ), SbxCLASS_METHOD );
     uno::Any aRet;
     if ( pMeth )
@@ -1175,7 +1171,6 @@ ScVbaApplication::Caller( const uno::Any& /*aIndex*/ ) throw ( uno::RuntimeExcep
                 OSL_TRACE("pNew has type %d and string value %s", pNew->GetType(), rtl::OUStringToOString( pNew->GetString(), RTL_TEXTENCODING_UTF8 ).getStr() );
         aRet = sbxToUnoValue( pNew );
     }
-    SFX_APP()->LeaveBasicCall();
     return aRet;
 }
 

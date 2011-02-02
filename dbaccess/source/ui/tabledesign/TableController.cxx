@@ -568,7 +568,7 @@ void OTableController::impl_initialize()
     {
         loadData();                 // fill the column information form the table
         getView()->initialize();    // show the windows and fill with our informations
-        getUndoMgr()->Clear();      // clear all undo redo things
+        ClearUndoManager();
         setModified(sal_False);     // and we are not modified yet
     }
     catch( const Exception& )
@@ -664,11 +664,6 @@ void OTableController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:SaveAs",        ID_BROWSER_SAVEASDOC,   CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:DBIndexDesign", SID_INDEXDESIGN,        CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:EditDoc",       ID_BROWSER_EDITDOC,     CommandGroup::EDIT );
-}
-// -----------------------------------------------------------------------------
-SfxUndoManager* OTableController::getUndoMgr()
-{
-    return &m_aUndoManager;
 }
 // -----------------------------------------------------------------------------
 void OTableController::impl_onModifyChanged()
@@ -1521,7 +1516,7 @@ void OTableController::reSyncRows()
     }
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
 
-    getUndoMgr()->Clear();      // clear all undo redo things
+    ClearUndoManager();
     setModified(sal_False);     // and we are not modified yet
 }
 // -----------------------------------------------------------------------------
@@ -1577,7 +1572,7 @@ void OTableController::reload()
 {
     loadData();                 // fill the column information form the table
     static_cast<OTableDesignView*>(getView())->reSync();    // show the windows and fill with our informations
-    getUndoMgr()->Clear();      // clear all undo redo things
+    ClearUndoManager();
     setModified(sal_False);     // and we are not modified yet
     static_cast<OTableDesignView*>(getView())->Invalidate();
 }

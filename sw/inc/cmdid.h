@@ -911,6 +911,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 // #i972: bool items to be passed to SwFrmPage for evaluation
 #define FN_OLE_IS_MATH                      (FN_EXTRA2 + 114)
 #define FN_MATH_BASELINE_ALIGNMENT          (FN_EXTRA2 + 115)
+
+#define FN_EMBEDDED_OBJECT                  (FN_EXTRA2 + 116)
+
 /*--------------------------------------------------------------------
     Bereich: Hilfe
  --------------------------------------------------------------------*/

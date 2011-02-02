@@ -28,7 +28,7 @@
 
 #include "RptModel.hxx"
 #include "RptPage.hxx"
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <tools/debug.hxx>
 #include <unotools/pathoptions.hxx>
 

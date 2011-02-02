@@ -71,27 +71,17 @@ namespace toolkit
     //= UnoSimpleAnimationControl
     //====================================================================
 
-    typedef ::cppu::ImplHelper1 <   ::com::sun::star::awt::XSimpleAnimation
-                                >   UnoSimpleAnimationControl_Base;
+    typedef ::cppu::AggImplInheritanceHelper1   <   UnoControlBase
+                                                ,   ::com::sun::star::awt::XSimpleAnimation
+                                                >   UnoSimpleAnimationControl_Base;
 
-    class UnoSimpleAnimationControl :public UnoControlBase
-                                    ,public UnoSimpleAnimationControl_Base
+    class UnoSimpleAnimationControl : public UnoSimpleAnimationControl_Base
     {
     private:
 
     public:
                                     UnoSimpleAnimationControl();
         ::rtl::OUString             GetComponentServiceName();
-
-        DECLARE_UNO3_AGG_DEFAULTS( UnoSimpleAnimationControl, UnoControlBase );
-        ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-
-        void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
-        void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException) { UnoControlBase::disposing( Source ); }
-        void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
-
-        // XTypeProvider
-        DECLARE_XTYPEPROVIDER()
 
         // XSimpleAnimation
         virtual void SAL_CALL start() throw (::com::sun::star::uno::RuntimeException);

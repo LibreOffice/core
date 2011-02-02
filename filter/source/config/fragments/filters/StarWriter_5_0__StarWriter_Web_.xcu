@@ -1,5 +1,5 @@
     <node oor:name="StarWriter 5.0 (StarWriter/Web)" oor:op="replace">
-        <prop oor:name="Flags"><value>EXPORT TEMPLATE ALIEN 3RDPARTYFILTER</value></prop>
+        <prop oor:name="Flags"><value>TEMPLATE ALIEN 3RDPARTYFILTER</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="UserData"><value>CSW5</value></prop>

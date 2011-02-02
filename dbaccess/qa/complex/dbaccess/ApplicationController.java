@@ -27,35 +27,27 @@
 package complex.dbaccess;
 
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.FrameSearchFlag;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
 import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.application.XDatabaseDocumentUI;
 import com.sun.star.sdbcx.XTablesSupplier;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XComponentContext;
 import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
-import helper.URLHelper;
-import java.io.File;
 import java.io.IOException;
 
 
 // ---------- junit imports -----------------
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -72,16 +64,6 @@ public class ApplicationController extends TestCase
     {
         super();
     }
-
-    // --------------------------------------------------------------------------------------------------------
-
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "checkSaveAs"
-//                };
-//    }
 
     // --------------------------------------------------------------------------------------------------------
     public String getTestObjectName()
@@ -129,21 +111,26 @@ public class ApplicationController extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Before public void before() throws java.lang.Exception
+    @Before
+    @Override
+    public void before() throws java.lang.Exception
     {
         super.before();
         impl_switchToDocument(null);
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @After public void after() throws java.lang.Exception
+    @After
+    @Override
+    public void after() throws java.lang.Exception
     {
         impl_closeDocument();
         super.after();
     }
     // --------------------------------------------------------------------------------------------------------
 
-    @Test public void checkSaveAs() throws Exception, IOException, java.lang.Exception
+    @Test
+    public void checkSaveAs() throws Exception, IOException, java.lang.Exception
     {
         // issue 93737 describes the problem that when you save-as a database document, and do changes to it,
         // then those changes are saved in the old document, actually

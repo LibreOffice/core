@@ -33,9 +33,7 @@
 
 #include "swuiidxmrk.hxx"
 #include <hintids.hxx>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #define _SVSTDARR_STRINGSSORT
 #include <svl/svstdarr.hxx>
 #include <comphelper/processfactory.hxx>
@@ -46,9 +44,7 @@
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <svl/stritem.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <sfx2/dispatch.hxx>
 #include <svl/eitem.hxx>
 #include <svtools/txtcmp.hxx>
@@ -60,20 +56,12 @@
 #include <idxmrk.hxx>
 #include <txttxmrk.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <multmrk.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _INDEX_HRC
 #include <index.hrc>
-#endif
-#ifndef _IDXMRK_HRC
 #include <idxmrk.hrc>
-#endif
 #include <swmodule.hxx>
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
@@ -83,7 +71,6 @@
 #include <ndtxt.hxx>
 #include <breakit.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 #include "swuiidxmrk.hxx"
 #include <unomid.h>

@@ -37,8 +37,6 @@
 ' #1 tFileSaveAsSTC
 ' #1 tFileSaveAsXLS
 ' #1 tFileSaveAsXLT
-' #1 tFileSaveAsSDC
-' #1 tFileSaveAsVOR
 ' #1 tFileReload
 '*
 '\************************************************************************
@@ -295,82 +293,7 @@ testcase tFileSaveAsXLT
 endcase
 '
 '-------------------------------------------------------------
-'
-testcase tFileSaveAsSDC
-'///<u><b>Save the test file as StarCalc 5.0 (.sdc)</b></u> 
-    Dim sOutputFile as string
-   
-    sOutputFile = convertpath( gOfficepath & "user/work/verySimpleChart.sdc" )
 
-    '/// Load simple chart document 
-    if fLoadVerySimpleChartAndSaveLocal() > 0 then
-        warnlog "Loading test document seems to have failed -> Check this out!"
-        goto endsub
-    endif
-    '/// Select chart using navigator 
-    call fSelectFirstOLE
-    '/// Invoke Edit::Object::Edit to enter Inplace Mode 
-    EditObjectEdit
-    '/// Convert chart to 3D (just to edit document) 
-    if NOT fConvertChartTo3D() then
-        warnlog "Conversion of chart to 3D failed -> Quit testcase"
-        Call hCloseDocument
-        goto endsub
-    endif
-    '/// Unselect chart using Escape key 
-    Kontext "DocumentCalc"
-    DocumentCalc.TypeKeys "<Escape>"
-    '/// Save document as StarCalc 5.0 (.sdc) 
-    if NOT hFileSaveAsWithFilterKill ( sOutputFile , "StarCalc 5.0" ) then
-        warnlog "Saving test document as '" & sOutputFile & "' failed -> Aborting"
-        call hCloseDocument
-        goto endsub
-    endif
-    '/// Close document 
-    Kontext "DocumentCalc"
-    DocumentCalc.TypeKeys "<Escape>"
-    Call hCloseDocument
-endcase
-'
-'-------------------------------------------------------------
-'
-testcase tFileSaveAsVOR
-'///<u><b>Save the test file as StarCalc 5.0 Template(.vor)</b></u> 
-    Dim sOutputFile as string
-           
-    sOutputFile = convertpath( gOfficepath & "user/work/verySimpleChart.vor" )
-
-    '/// Load simple chart document 
-    if fLoadVerySimpleChartAndSaveLocal() > 0 then
-        warnlog "Loading test document seems to have failed -> Check this out!"
-        goto endsub
-    endif
-    '/// Select chart using navigator 
-    call fSelectFirstOLE
-    '/// Invoke Edit::Object::Edit to enter Inplace Mode 
-    EditObjectEdit
-    '/// Convert chart to 3D (just to edit document) 
-    if NOT fConvertChartTo3D() then
-        warnlog "Conversion of chart to 3D failed -> Quit testcase"
-        Call hCloseDocument
-        goto endsub
-    endif
-    '/// Unselect chart using Escape key 
-    Kontext "DocumentCalc"
-    DocumentCalc.TypeKeys "<Escape>"
-    '/// Save document as StarCalc 5.0 Template(.vor) 
-    if NOT hFileSaveAsWithFilterKill ( sOutputFile , "StarCalc 5.0 Vorlage/Template" ) then
-        warnlog "Saving test document as '" & sOutputFile & "' failed -> Aborting"
-        call hCloseDocument
-        goto endsub
-    endif
-    '/// Close document 
-    Kontext "DocumentCalc"
-    DocumentCalc.TypeKeys "<Escape>"
-    Call hCloseDocument
-endcase
-'
-'-------------------------------------------------------------
 '
 testcase tFileReload
     printlog "Load simple chart document" 

@@ -338,6 +338,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -360,6 +363,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -387,6 +393,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -407,6 +416,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -440,6 +452,9 @@ BOOL TGAReader::ImplReadBody()
                                         nXCount = 0;
                                         nY += nYAdd;
                                         nYCount++;
+
+                                        if( nYCount >= mpFileHeader->nImageHeight )
+                                            return false; // invalid picture
                                     }
                                 }
                             }
@@ -457,6 +472,9 @@ BOOL TGAReader::ImplReadBody()
                                         nXCount = 0;
                                         nY += nYAdd;
                                         nYCount++;
+
+                                        if( nYCount >= mpFileHeader->nImageHeight )
+                                            return false; // invalid picture
                                     }
                                 }
                             }
@@ -483,6 +501,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -500,6 +521,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -528,6 +552,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }
@@ -548,6 +575,9 @@ BOOL TGAReader::ImplReadBody()
                                     nXCount = 0;
                                     nY += nYAdd;
                                     nYCount++;
+
+                                    if( nYCount >= mpFileHeader->nImageHeight )
+                                        return false; // invalid picture
                                 }
                             }
                         }

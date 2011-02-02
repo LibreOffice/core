@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-
 #include "precompiled_sw.hxx"
 
 #include <AnnotationWin.hxx>
@@ -62,7 +61,9 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
+
 
 namespace sw { namespace annotation {
 
@@ -116,7 +117,8 @@ void SwAnnotationWin::UpdateData()
         SwField* pOldField = mpFld->Copy();
         mpFld->SetPar2(Engine()->GetEditEngine().GetText());
         mpFld->SetTextObject(Engine()->CreateParaObject());
-        DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         delete pOldField;
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
@@ -246,7 +248,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     SwField* pOldField = mpFld->Copy();
     mpFld->SetPar2(Engine()->GetEditEngine().GetText());
     mpFld->SetTextObject(Engine()->CreateParaObject());
-    DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+    DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+        new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
     delete pOldField;
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();

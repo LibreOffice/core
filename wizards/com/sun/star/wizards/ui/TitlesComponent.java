@@ -52,14 +52,14 @@ public class TitlesComponent extends ControlScroller
         super(_CurUnoDialog, null, _iStep, _iCompPosX, _iCompPosY, _iCompWidth, _uitextfieldcount, 18, _firsthelpindex);
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnNames", new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
                     new Integer(8), _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, new Integer(60)
                 });
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles", new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
                     new Integer(8), _slblColumnTitles, new Integer(90), new Integer(iCompPosY - 10), IStep, new Integer(152)
@@ -107,7 +107,7 @@ public class TitlesComponent extends ControlScroller
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", slabelname,
                     new String[]
                     {
-                        "Height", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -117,7 +117,7 @@ public class TitlesComponent extends ControlScroller
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,
                     new String[]
                     {
-                        "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -158,17 +158,17 @@ public class TitlesComponent extends ControlScroller
         Integer TitleWidth = new Integer(iCompPosX + iCompWidth - TitlePosX.intValue() - iScrollBarWidth - 6);
         for (short i = 0; i <= ncurfieldcount; i++)
         {
-            CurUnoDialog.setControlProperty(getColumnName(i), "Width", FieldNameWidth);
+            CurUnoDialog.setControlProperty(getColumnName(i), PropertyNames.PROPERTY_WIDTH, FieldNameWidth);
             CurUnoDialog.setControlProperties(getTitleName(i), new String[]
                     {
-                        "PositionX", "Width"
+                        PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_WIDTH
                     }, new Object[]
                     {
                         TitlePosX, TitleWidth
                     });
         }
-        CurUnoDialog.setControlProperty("lblColumnNames", "Width", FieldNameWidth);
-        CurUnoDialog.setControlProperty("lblColumnTitles", "PositionX", TitlePosX);
+        CurUnoDialog.setControlProperty("lblColumnNames", PropertyNames.PROPERTY_WIDTH, FieldNameWidth);
+        CurUnoDialog.setControlProperty("lblColumnTitles", PropertyNames.PROPERTY_POSITION_X, TitlePosX);
     }
 
     public void initialize(String[] _fieldnames, Map _fieldtitleset)
@@ -208,9 +208,9 @@ public class TitlesComponent extends ControlScroller
 
     public String getFieldNameByTitleControl(Object _fieldtitlemodel)
     {
-        String sTitleModelName = (String) Helper.getUnoPropertyValue(_fieldtitlemodel, "Name");
+        String sTitleModelName = (String) Helper.getUnoPropertyValue(_fieldtitlemodel, PropertyNames.PROPERTY_NAME);
         String sindex = JavaTools.getSuffixNumber(sTitleModelName);
-        return (String) CurUnoDialog.getControlProperty(this.SOLABELPREFIX + sindex, "Label");
+        return (String) CurUnoDialog.getControlProperty(this.SOLABELPREFIX + sindex, PropertyNames.PROPERTY_LABEL);
     }
 
     public String[] getFieldTitles()

@@ -137,7 +137,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
     sfx2/source/control/dispatch \
-    sfx2/source/control/macrconf \
     sfx2/source/control/macro \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
@@ -215,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/plugin \
     sfx2/source/doc/printhelper \
     sfx2/source/doc/querytemplate \
+    sfx2/source/doc/docundomanager \
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \

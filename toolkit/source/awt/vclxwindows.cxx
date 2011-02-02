@@ -37,6 +37,7 @@
 #include <toolkit/helper/imagealign.hxx>
 #include <toolkit/helper/accessibilityclient.hxx>
 #include <toolkit/helper/fixedhyperbase.hxx>
+#include <toolkit/helper/tkresmgr.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/awt/VisualEffect.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -62,6 +63,7 @@
 #include <vcl/scrbar.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
+#include <vcl/tabctrl.hxx>
 #include <tools/diagnose_ex.h>
 
 #include <boost/bind.hpp>
@@ -219,7 +221,7 @@ void VCLXGraphicControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXGraphicControl::ImplSetNewImage: window is required to be not-NULL!" );
     Button* pButton = static_cast< Button* >( GetWindow() );
-    pButton->SetModeBitmap( GetBitmap() );
+    pButton->SetModeImage( GetImage() );
 }
 
 void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
@@ -660,14 +662,14 @@ void VCLXImageControl::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXImageControl::ImplSetNewImage: window is required to be not-NULL!" );
     ImageControl* pControl = static_cast< ImageControl* >( GetWindow() );
-    pControl->SetBitmap( GetBitmap() );
+    pControl->SetImage( GetImage() );
 }
 
 ::com::sun::star::awt::Size VCLXImageControl::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
 
-    Size aSz = GetBitmap().GetSizePixel();
+    Size aSz = GetImage().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
 
     return AWTSize(aSz);
@@ -2068,34 +2070,32 @@ void VCLXListBox::ImplCallItemListeners()
         maItemListeners.itemStateChanged( aEvent );
     }
 }
-
 namespace
 {
-    Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
-    {
-        if ( !i_rImageURL.getLength() )
-            return Image();
+     Image lcl_getImageFromURL( const ::rtl::OUString& i_rImageURL )
+     {
+         if ( !i_rImageURL.getLength() )
+             return Image();
 
         try
         {
-            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-            Reference< XGraphicProvider > xProvider;
-            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
-            {
-                ::comphelper::NamedValueCollection aMediaProperties;
-                aMediaProperties.put( "URL", i_rImageURL );
-                Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+             Reference< XGraphicProvider > xProvider;
+             if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+             {
+                 ::comphelper::NamedValueCollection aMediaProperties;
+                 aMediaProperties.put( "URL", i_rImageURL );
+                 Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
                 return Image( xGraphic );
-            }
-        }
-        catch( const uno::Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
-        return Image();
-    }
+             }
+         }
+         catch( const uno::Exception& )
+         {
+             DBG_UNHANDLED_EXCEPTION();
+         }
+         return Image();
+     }
 }
-
 void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -2107,7 +2107,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) thr
         "VCLXListBox::listItemInserted: illegal (inconsistent) item position!" );
     pListBox->InsertEntry(
         i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString(),
-        i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
+        i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : Image(),
         i_rEvent.ItemPosition );
 }
 
@@ -2137,7 +2137,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) thr
     // VCL's ListBox does not support changing an entry's text or image, so remove and re-insert
 
     const ::rtl::OUString sNewText = i_rEvent.ItemText.IsPresent ? i_rEvent.ItemText.Value : ::rtl::OUString( pListBox->GetEntry( i_rEvent.ItemPosition ) );
-    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? lcl_getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
+    const Image aNewImage( i_rEvent.ItemImageURL.IsPresent ? TkResMgr::getImageFromURL( i_rEvent.ItemImageURL.Value ) : pListBox->GetEntryImage( i_rEvent.ItemPosition  ) );
 
     pListBox->RemoveEntry( i_rEvent.ItemPosition );
     pListBox->InsertEntry( sNewText, aNewImage, i_rEvent.ItemPosition );
@@ -2554,6 +2554,15 @@ throw(::com::sun::star::uno::RuntimeException)
                 }
             }
             break;
+            case BASEPROPERTY_TITLE:
+                {
+                    ::rtl::OUString sTitle;
+                    if ( Value >>= sTitle )
+                    {
+                        pTabPage->SetText(sTitle);
+                    }
+                }
+                break;
 
             default:
             {

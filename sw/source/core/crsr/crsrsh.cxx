@@ -174,6 +174,21 @@ BOOL SwCrsrShell::DestroyCrsr()
 }
 
 
+SwPaM & SwCrsrShell::CreateNewShellCursor()
+{
+    if (HasSelection())
+    {
+        (void) CreateCrsr(); // n.b. returns old cursor
+    }
+    return *GetCrsr();
+}
+
+SwPaM & SwCrsrShell::GetCurrentShellCursor()
+{
+    return *GetCrsr();
+}
+
+
 // gebe den aktuellen zurueck
 
 SwPaM* SwCrsrShell::GetCrsr( BOOL bMakeTblCrsr ) const

@@ -33,26 +33,6 @@
 #include <svl/smplhint.hxx>
 #include <tools/string.hxx>
 
-#define TEXTUNDO_START              100
-#define TEXTUNDO_REMOVECHARS        100
-#define TEXTUNDO_CONNECTPARAS       101
-#define TEXTUNDO_SPLITPARA          102
-#define TEXTUNDO_INSERTCHARS        103
-#define TEXTUNDO_DELCONTENT         104
-#define TEXTUNDO_DELETE             105
-#define TEXTUNDO_CUT                106
-#define TEXTUNDO_PASTE              107
-#define TEXTUNDO_INSERT             108
-#define TEXTUNDO_ATTRIBS            109
-#define TEXTUNDO_DRAGANDDROP        110
-#define TEXTUNDO_READ               111
-#define TEXTUNDO_END                149
-
-#define XTEXTUNDO_START             150
-#define XTEXTUNDO_END               199
-
-#define TEXTUNDO_USER               200
-
 // Fuer Notify, wenn alle Absaetze geloescht wurden...
 #define TEXT_PARA_ALL               0xFFFFFFFF
 

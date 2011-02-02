@@ -632,6 +632,7 @@ public:
     /** application can set it's own undo manager, BegUndo, EndUndo and AddUndoAction
         calls are routet to this interface if given */
     void SetSdrUndoManager( SfxUndoManager* pUndoManager );
+    SfxUndoManager* GetSdrUndoManager() const;
 
     /** applications can set their own undo factory to overide creation of
         undo actions. The SdrModel will become owner of the given SdrUndoFactory

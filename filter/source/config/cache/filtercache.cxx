@@ -2110,7 +2110,6 @@ css::uno::Sequence< ::rtl::OUString > FilterCache::impl_convertFlagField2FlagNam
     if ((nFlags & FLAGVAL_PASSWORDTOMODIFY ) == FLAGVAL_PASSWORDTOMODIFY ) lFlagNames.push_back(FLAGNAME_PASSWORDTOMODIFY );
     if ((nFlags & FLAGVAL_PREFERRED        ) == FLAGVAL_PREFERRED        ) lFlagNames.push_back(FLAGNAME_PREFERRED        );
     if ((nFlags & FLAGVAL_READONLY         ) == FLAGVAL_READONLY         ) lFlagNames.push_back(FLAGNAME_READONLY         );
-    if ((nFlags & FLAGVAL_SILENTEXPORT     ) == FLAGVAL_SILENTEXPORT     ) lFlagNames.push_back(FLAGNAME_SILENTEXPORT     );
     if ((nFlags & FLAGVAL_SUPPORTSSELECTION) == FLAGVAL_SUPPORTSSELECTION) lFlagNames.push_back(FLAGNAME_SUPPORTSSELECTION);
     if ((nFlags & FLAGVAL_TEMPLATE         ) == FLAGVAL_TEMPLATE         ) lFlagNames.push_back(FLAGNAME_TEMPLATE         );
     if ((nFlags & FLAGVAL_TEMPLATEPATH     ) == FLAGVAL_TEMPLATEPATH     ) lFlagNames.push_back(FLAGNAME_TEMPLATEPATH     );
@@ -2220,11 +2219,6 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
         if (pNames[i].equals(FLAGNAME_READONLY))
         {
             nField |= FLAGVAL_READONLY;
-            continue;
-        }
-        if (pNames[i].equals(FLAGNAME_SILENTEXPORT))
-        {
-            nField |= FLAGVAL_SILENTEXPORT;
             continue;
         }
         if (pNames[i].equals(FLAGNAME_SUPPORTSSELECTION))

@@ -126,11 +126,11 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     if(aText != m_strOrigText)
     {
         OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
-        SfxUndoManager* pUndoMgr = rController.getUndoMgr();
+        SfxUndoManager& rUndoMgr = rController.GetUndoManager();
         OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( this );
 
         pUndoAct->SetOriginalText( m_strOrigText );
-        pUndoMgr->AddUndoAction( pUndoAct );
+        rUndoMgr.AddUndoAction( pUndoAct );
 
         rController.InvalidateFeature(SID_UNDO);
         rController.InvalidateFeature(SID_REDO);

@@ -41,7 +41,7 @@ SchResId::SchResId( sal_Int16 nId )
 
 ::rtl::OUString SchResId::getResString( sal_Int16 nId )
 {
-    return ::rtl::OUString( String( SchResId( nId )));
+    return String( SchResId( nId ));
 }
 
 } //  namespace chart

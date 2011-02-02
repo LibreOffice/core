@@ -1332,7 +1332,7 @@ USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOO
     return nFound;
 }
 
-SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
+::svl::IUndoManager* __EXPORT ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();

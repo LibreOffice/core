@@ -265,9 +265,9 @@ void lcl_CreateUndoForPages(
     const ::sd::slidesorter::SharedPageSelection& rpPages,
     ::sd::ViewShellBase& rBase )
 {
-    ::sd::DrawDocShell* pDocSh  = rBase.GetDocShell();
-    SfxUndoManager* pManager    = pDocSh->GetUndoManager();
-    SdDrawDocument* pDoc        = pDocSh->GetDoc();
+    ::sd::DrawDocShell* pDocSh      = rBase.GetDocShell();
+    ::svl::IUndoManager* pManager   = pDocSh->GetUndoManager();
+    SdDrawDocument* pDoc            = pDocSh->GetDoc();
     if( pManager && pDocSh && pDoc )
     {
         String aComment( SdResId(STR_UNDO_SLIDE_PARAMS) );

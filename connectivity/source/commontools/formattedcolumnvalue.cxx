@@ -328,7 +328,7 @@ namespace dbtools
         {
             if ( m_pData->m_bNumericField )
             {
-                sStringValue = DBTypeConversion::getValue(
+                sStringValue = DBTypeConversion::getFormattedValue(
                     m_pData->m_xColumn, m_pData->m_xFormatter, m_pData->m_aNullDate, m_pData->m_nFormatKey, m_pData->m_nKeyType
                 );
             }

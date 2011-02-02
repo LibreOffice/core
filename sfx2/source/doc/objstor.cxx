@@ -3025,7 +3025,7 @@ sal_Bool SfxObjectShell::IsInformationLost()
     {
         const SfxFilter *pFilt = GetMedium()->GetFilter();
         DBG_ASSERT( pFilt && aFilterName.equals( pFilt->GetName() ), "MediaDescriptor contains wrong filter!\n" );
-        return ( pFilt && pFilt->IsAlienFormat() && !(pFilt->GetFilterFlags() & SFX_FILTER_SILENTEXPORT ) );
+        return ( pFilt && pFilt->IsAlienFormat() );
     }
 
     return sal_False;

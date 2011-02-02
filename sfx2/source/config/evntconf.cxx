@@ -42,7 +42,7 @@
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
+
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>

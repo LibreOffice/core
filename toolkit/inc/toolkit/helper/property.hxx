@@ -202,6 +202,7 @@ namespace rtl {
 #define BASEPROPERTY_GRID_ROW_BACKGROUND            151
 #define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
 #define BASEPROPERTY_ITEM_SEPARATOR_POS             153
+#define BASEPROPERTY_AUTO_REPEAT                    154
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.

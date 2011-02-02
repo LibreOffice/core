@@ -494,7 +494,7 @@ IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
     {
         getView()->initialize();    // show the windows and fill with our informations
         getView()->Invalidate(INVALIDATE_NOERASE);
-        getUndoMgr()->Clear();      // clear all undo redo things
+        ClearUndoManager();
         setModified(sal_False);     // and we are not modified yet
 
         if(m_vTableData.empty())

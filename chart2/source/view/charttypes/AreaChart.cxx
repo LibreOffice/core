@@ -43,6 +43,7 @@
 #include "Clipping.hxx"
 #include "Stripe.hxx"
 #include "PolarLabelPositionHelper.hxx"
+#include "DateHelper.hxx"
 
 #include <com/sun/star/chart2/Symbol.hpp>
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
@@ -96,6 +97,11 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
 {
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
+    if( m_pMainPosHelper )
+    {
+        m_pMainPosHelper->AllowShiftXAxisPos(true);
+        m_pMainPosHelper->AllowShiftZAxisPos(true);
+    }
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
 
@@ -121,18 +127,12 @@ AreaChart::~AreaChart()
     delete m_pMainPosHelper;
 }
 
-double AreaChart::getMinimumX()
-{
-    if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
-        return 1.0;//first category (index 0) matches with real number 1.0
-    return VSeriesPlotter::getMinimumX();
-}
-
 double AreaChart::getMaximumX()
 {
+    double fMax = VSeriesPlotter::getMaximumX();
     if( m_bCategoryXAxis && m_bIsPolarCooSys )//the angle axis in net charts needs a different autoscaling
-        return getPointCount()+1;
-    return VSeriesPlotter::getMaximumX();
+        fMax += 1.0;
+    return fMax;
 }
 
 bool AreaChart::isExpandIfValuesCloseToBorder( sal_Int32 nDimensionIndex )
@@ -181,18 +181,6 @@ APPHELPER_XSERVICEINFO_IMPL(AreaChart,CHART2_VIEW_AREACHART_SERVICE_IMPLEMENTATI
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ] = CHART2_VIEW_AREACHART_SERVICE_NAME;
     return aSNS;
-}
-*/
-/*
-//-----------------------------------------------------------------
-// chart2::XPlotter
-//-----------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL AreaChart
-::getCoordinateSystemTypeID()
-    throw (uno::RuntimeException)
-{
-    return CHART2_COOSYSTEM_CARTESIAN_SERVICE_NAME;
 }
 */
 drawing::Direction3D AreaChart::getPreferredDiagramAspectRatio() const
@@ -628,7 +616,7 @@ void AreaChart::createShapes()
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = 0.5;//as defined
+    double fLogicZ        = 1.0;//as defined
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
@@ -729,6 +717,8 @@ void AreaChart::createShapes()
 
                     //collect data point information (logic coordinates, style ):
                     double fLogicX = (*aSeriesIter)->getXValue(nIndex);
+                    if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+                        fLogicX = DateHelper::RasterizeDateValue( fLogicX, m_aNullDate, m_nTimeResolution );
                     double fLogicY = (*aSeriesIter)->getYValue(nIndex);
 
                     if( m_bIsPolarCooSys && m_bArea &&

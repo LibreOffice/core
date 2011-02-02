@@ -41,6 +41,7 @@ DLLPRE =
 
 SLOFILES= \
         $(SLO)$/dlgprov.obj \
+        $(SLO)$/DialogModelProvider.obj \
         $(SLO)$/dlgevtatt.obj
 
 SHL1TARGET= $(TARGET)$(DLLPOSTFIX).uno

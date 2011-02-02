@@ -40,6 +40,7 @@ import com.sun.star.awt.XTextComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.HelpIds;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.ImageList;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.WizardDialog;
@@ -176,30 +177,30 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
     FontDescriptor fontDescriptor4 = new FontDescriptor();
     FontDescriptor fontDescriptor5 = new FontDescriptor();
     FontDescriptor fontDescriptor6 = new FontDescriptor();
-    FontDescriptor fontDescriptor7 = new FontDescriptor();    //private static String[] PROPNAMES_LBL_NOFOCUS =     new String[] {"Height", "Label", "Name", "PositionX", "PositionY", "Step", "Width"};
+    FontDescriptor fontDescriptor7 = new FontDescriptor();    //private static String[] PROPNAMES_LBL_NOFOCUS =     new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH};
     private static String[] PROPNAMES_LBL = new String[]
     {
-        "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_CHKBOX = new String[]
     {
-        "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_BUTTON = new String[]
     {
-        "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_TXT = new String[]
     {
-        "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_TXT_2 = new String[]
     {
-        "Height", "HelpURL", "Name", "PositionX", "PositionY", "ReadOnly", "Step", "TabIndex", "Width"
+        PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ReadOnly", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static String[] PROPNAMES_TITLE = new String[]
     {
-        "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+        "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
     };
     private static Integer INTEGER_91 = new Integer(91);
     private static Integer INTEGER_97 = new Integer(97);
@@ -218,7 +219,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -258,7 +259,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lblIntroduction = insertLabel("lblIntroduction",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -274,7 +275,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lblLoadSettings = insertLabel("lblLoadSettings",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -283,7 +284,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lstLoadSettings = insertListBox("lstLoadSettings", null, LSTLOADSETTINGS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -292,7 +293,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnDelSession = insertButton("btnDelSession", BTNDELSESSION_ACTION_PERFORMED,
                 new String[]
                 {
-                    "Enabled", "Height", "HelpURL", "ImageAlign", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "ImageAlign", PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -319,7 +320,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lstDocuments = insertListBox("lstDocuments", null, null,
                 new String[]
                 {
-                    "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -340,7 +341,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnDocUp = insertButton("btnDocUp", BTNDOCUP_ACTION_PERFORMED,
                 new String[]
                 {
-                    "FontDescriptor", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -349,7 +350,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         btnDocDown = insertButton("btnDocDown", BTNDOCDOWN_ACTION_PERFORMED,
                 new String[]
                 {
-                    "FontDescriptor", "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -365,7 +366,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lstDocTargetType = insertListBox("lstDocTargetType", null, null,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -402,7 +403,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         txtDocInfo = insertTextField("txtDocInfo", null,
                 new String[]
                 {
-                    "Height", "HelpURL", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -450,7 +451,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lnDisplay = insertLabel("lblDisplay",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -554,7 +555,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lstStyles = insertListBox("lstStyles", null, LSTSTYLES_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -569,7 +570,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         txtBackground = insertLabel("txtBackground",
                 new String[]
                 {
-                    "Border", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -589,7 +590,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         txtIconset = insertLabel("txtIconset",
                 new String[]
                 {
-                    "Border", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -604,7 +605,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         insertLabel("lblIconsetInfo",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -615,7 +616,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         imgPreview = insertImage("imgPreview",
                 new String[]
                 {
-                    "BackgroundColor", "Enabled", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"
+                    "BackgroundColor", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -700,7 +701,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         dateSiteCreated = insertDateField("dateSiteCreated", null,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -716,7 +717,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         dateSiteUpdate = insertDateField("dateSiteUpdate", null,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -809,7 +810,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         lblFTP = insertLabel("lblFTP",
                 new String[]
                 {
-                    "Border", "Height", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -829,7 +830,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
             insertImage("imgFTPDisabled",
                     new String[]
                     {
-                        "BackgroundColor", "Border", "Enabled", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"
+                        "BackgroundColor", "Border", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -838,7 +839,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
             insertLabel("lblFTPDisabled",
                     new String[]
                     {
-                        "BackgroundColor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                        "BackgroundColor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -869,7 +870,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
         cbSaveSettings = insertComboBox("txtSaveSettings", TXTSAVESETTINGS_TEXT_CHANGED, TXTSAVESETTINGS_TEXT_CHANGED, TXTSAVESETTINGS_TEXT_CHANGED,
                 new String[]
                 {
-                    "Autocomplete", "Dropdown", "Height", "HelpURL", "LineCount", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Autocomplete", "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -899,7 +900,7 @@ public abstract class WebWizardDialog extends WizardDialog implements WebWizardC
 
     /*for (int i = 0; i<8; i++)
     imgIconsPrev[i] = insertImage("imgIconPrev" + i,
-    new String[] { "BackgroundColor","Border","Height","ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "Tabstop", "Width"},
+    new String[] { "BackgroundColor","Border",PropertyNames.PROPERTY_HEIGHT,PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, "Tabstop", PropertyNames.PROPERTY_WIDTH},
     new Object[] { new Integer(-1), new Short((short)0),new Integer(14),"file:///c:/bludisk.gif", new Integer(97 + i * 20 + 7 ),new Integer(147),Boolean.FALSE,INTEGERS[5],Boolean.FALSE,new Integer(14)});
      */
     }

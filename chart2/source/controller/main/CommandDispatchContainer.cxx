@@ -75,12 +75,6 @@ void CommandDispatchContainer::setModel(
     m_xModel = xModel;
 }
 
-// void CommandDispatchContainer::setUndoManager(
-//     const Reference< chart2::XUndoManager > & xUndoManager )
-// {
-//     m_xUndoManager = xUndoManager;
-// }
-
 void CommandDispatchContainer::setChartDispatch(
     const Reference< frame::XDispatch > xChartDispatch,
     const ::std::set< OUString > & rChartCommands )

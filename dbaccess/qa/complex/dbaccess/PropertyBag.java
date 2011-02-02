@@ -29,18 +29,20 @@ package complex.dbaccess;
 
 // import complexlib.ComplexTestCase;
 
+import com.sun.star.beans.NamedValue;
+import com.sun.star.beans.PropertyState;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.XPropertyAccess;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertyContainer;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.beans.*;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -52,27 +54,20 @@ public class PropertyBag extends TestCase
     private XPropertyAccess         m_access;
     private XMultiServiceFactory    m_orb = null;
 
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//        {
-//            "checkBasics",
-//            "checkSequenceAccess",
-//            "checkDynamicSet"
-//        };
-//    }
-
     public String getTestObjectName()
     {
         return "PropertyBag";
     }
 
-    @Before public void before()
+    @Before
+    @Override
+    public void before()
     {
         m_orb = getMSF();
     }
 
-    @Test public void checkBasics()
+    @Test
+    public void checkBasics()
     {
         createEmptyBag();
         System.out.println("testing the basics");
@@ -161,7 +156,8 @@ public class PropertyBag extends TestCase
         }
     }
 
-    @Test public void checkSequenceAccess() throws com.sun.star.uno.Exception
+    @Test
+    public void checkSequenceAccess() throws com.sun.star.uno.Exception
     {
         System.out.println( "checking PropertySetAccess via sequences" );
         createStandardBag( false );
@@ -218,7 +214,8 @@ public class PropertyBag extends TestCase
         }
     }
 
-    @Test public void checkDynamicSet() throws com.sun.star.uno.Exception
+    @Test
+    public void checkDynamicSet() throws com.sun.star.uno.Exception
     {
         System.out.println( "checking proper dynamic of the set" );
         createStandardBag( false );

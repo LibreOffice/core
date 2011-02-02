@@ -70,6 +70,7 @@ public:
 
     // loads the image with the specified resource id
     static Image loadImage( sal_uInt16 nResId );
+    static Image getImageFromURL( const ::rtl::OUString& i_rImageURL );
 };
 
 

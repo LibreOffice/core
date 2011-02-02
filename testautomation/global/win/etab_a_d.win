@@ -194,9 +194,16 @@ MajorIntervalAutomatic      sym:chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_MAIN
 MinorIntervalCount          sym:chart2:MetricField:TP_SCALE:MT_STEPHELP    
 MinorIntervalCountAutomatic sym:chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_HELP
 ReferenceValue              sym:chart2:SpinField:TP_SCALE:EDT_ORIGIN              
-RreferenceValueAutomatic    sym:chart2:CheckBox:TP_SCALE:CBX_AUTO_ORIGIN
+ReferenceValueAutomatic     sym:chart2:CheckBox:TP_SCALE:CBX_AUTO_ORIGIN
 LogarithmicScale            sym:chart2:CheckBox:TP_SCALE:CBX_LOGARITHM
-ReverseDirection            sym:chart2:CheckBox:TP_SCALE:CBX_REVERSE
+ReverseDirectionDateAxis    sym:chart2:CheckBox:TP_SCALE:CBX_REVERSE:MayBeDateAxis
+ReverseDirectionValueAxis   sym:chart2:CheckBox:TP_SCALE:CBX_REVERSE:ValueAxis
+AxisType                    sym:chart2:ListBox:TP_SCALE:LB_AXIS_TYPE
+Resolution                  sym:chart2:ListBox:TP_SCALE:LB_TIME_RESOLUTION
+AutoResolution              sym:chart2:CheckBox:TP_SCALE:CBX_AUTO_TIME_RESOLUTION
+MajorIntervalMetric         sym:chart2:MetricField:TP_SCALE:MT_MAIN_DATE_STEP
+MajorIntervalUnit           sym:chart2:ListBox:TP_SCALE:LB_MAIN_TIME_UNIT
+MinorIntervalUnit           sym:chart2:ListBox:TP_SCALE:LB_HELP_TIME_UNIT
 
 *TabChartAxisPositioning    sym:chart2:TabPage:TP_AXIS_POSITIONS
 CrossOtherAxisAt            sym:chart2:ListBox:TP_AXIS_POSITIONS:LB_CROSSES_OTHER_AXIS_AT

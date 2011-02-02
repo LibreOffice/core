@@ -491,8 +491,7 @@ SwActualSection::SwActualSection( SwActualSection *pUp,
     if ( !pSectNode )
     {
         const SwNodeIndex *pIndex = pSect->GetFmt()->GetCntnt().GetCntntIdx();
-        pSectNode = pSect->GetFmt()->GetDoc()->GetNodes()[*pIndex]->
-                                                            FindSectionNode();
+        pSectNode = pIndex->GetNode().FindSectionNode();
     }
 }
 

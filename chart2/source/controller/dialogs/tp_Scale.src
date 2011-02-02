@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #include "HelpIds.hrc"
-#include "TabPages.hrc"
+#include "tp_Scale.hrc"
 
 #define YLine1 3
 #define Y1 (YLine1+13)
@@ -33,16 +33,26 @@
 #define Y3 (Y2+16)
 #define Y4 (Y3+16)
 #define Y5 (Y4+16)
-#define Y6 (Y5+17)
-#define Y7 (Y6+15)
+#define Y6 (Y5+16)
+#define Y7 (Y6+16)
+#define Y8 (Y7+16)
 
 #define LABELWIDTH 88
-#define AUTOCHECKWIDTH 88
+#define AUTOCHECKWIDTH 41
 #define EDITWIDTH 50
 #define X1 6
 #define X2 11
 #define X3 (X2+LABELWIDTH+4)
 #define X4 (X3+EDITWIDTH+5)
+#define X5 (X4+AUTOCHECKWIDTH+5)
+
+#define STR_LIST_TIME_UNIT  \
+    StringList [ en-US ] = \
+    { \
+        "Days" ; \
+        "Months" ; \
+        "Years" ; \
+    };
 
 TabPage TP_SCALE
 {
@@ -57,86 +67,201 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Scale" ;
     };
+    //---------------------------
+    CheckBox CBX_REVERSE
+    {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE:ValueAxis";
+        Pos = MAP_APPFONT ( X2 , Y1  ) ;
+        Size = MAP_APPFONT ( 244 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Reverse direction" ;
+    };
+    //---------------------------
+    CheckBox CBX_LOGARITHM
+    {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_LOGARITHM";
+        Pos = MAP_APPFONT ( X2 , Y2  ) ;
+        Size = MAP_APPFONT ( 244 , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Logarithmic scale" ;
+    };
+    //---------------------------
+    FixedText TXT_AXIS_TYPE
+    {
+        Pos = MAP_APPFONT ( X2 , Y2  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "T~ype" ;
+    };
+    ListBox LB_AXIS_TYPE
+    {
+        HelpID = "chart2:ListBox:TP_SCALE:LB_AXIS_TYPE";
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X3 , Y2-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        StringList [ en-US ] =
+        {
+            "Automatic" ;
+            "Text" ;
+            "Date" ;
+        };
+    };
+    //---------------------------
     FixedText TXT_MIN
     {
-        Pos = MAP_APPFONT ( X2 , Y1  ) ;
+        Pos = MAP_APPFONT ( X2 , Y3  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
-        Text [ en-US ] = "~Minimum:" ;
+        Text [ en-US ] = "~Minimum" ;
     };
     SpinField EDT_MIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_MIN";
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( X3 , Y1-2 ) ;
+        Pos = MAP_APPFONT ( X3 , Y3-2 ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_MIN
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MIN";
-        Pos = MAP_APPFONT ( X4 , Y1-1  ) ;
+        Pos = MAP_APPFONT ( X4 , Y3+1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Automatic" ;
     };
-
+    //---------------------------
     FixedText TXT_MAX
     {
-        Pos = MAP_APPFONT ( X2 , Y2  ) ;
+        Pos = MAP_APPFONT ( X2 , Y4  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
-        Text [ en-US ] = "Ma~ximum:" ;
+        Text [ en-US ] = "Ma~ximum" ;
     };
     SpinField EDT_MAX
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_MAX";
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( X3 , Y2-2  ) ;
+        Pos = MAP_APPFONT ( X3 , Y4-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_MAX
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_MAX";
-        Pos = MAP_APPFONT ( X4 , Y2-1  ) ;
+        Pos = MAP_APPFONT ( X4 , Y4+1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "A~utomatic" ;
     };
+    //---------------------------
+    FixedText TXT_TIME_RESOLUTION
+    {
+        Pos = MAP_APPFONT ( X2 , Y5  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "R~esolution" ;
+    };
+    ListBox LB_TIME_RESOLUTION
+    {
+        HelpID = "chart2:ListBox:TP_SCALE:LB_TIME_RESOLUTION";
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X3 , Y5-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        STR_LIST_TIME_UNIT
+    };
+    CheckBox CBX_AUTO_TIME_RESOLUTION
+    {
+        HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_TIME_RESOLUTION";
+        Pos = MAP_APPFONT ( X4 , Y5+1  ) ;
+        Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Automat~ic" ;
+    };
+    //---------------------------
     FixedText TXT_STEP_MAIN
     {
-        Pos = MAP_APPFONT ( X2 , Y3  ) ;
+        Pos = MAP_APPFONT ( X2 , Y5  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
-        Text [ en-US ] = "Ma~jor interval:" ;
+        Text [ en-US ] = "Ma~jor interval" ;
     };
     SpinField EDT_STEP_MAIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_STEP_MAIN";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( X3 , Y3-2  ) ;
+        Pos = MAP_APPFONT ( X3 , Y5-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
+    MetricField MT_MAIN_DATE_STEP
+    {
+        HelpID = "chart2:MetricField:TP_SCALE:MT_MAIN_DATE_STEP";
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( X3 , Y6-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 100000 ;
+        StrictFormat = TRUE ;
+        Unit = FUNIT_CUSTOM ;
+        First = 1 ;
+        Last = 100000 ;
+        SpinSize = 1 ;
+    };
+
+    ListBox LB_MAIN_TIME_UNIT
+    {
+        HelpID = "chart2:ListBox:TP_SCALE:LB_MAIN_TIME_UNIT";
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X5 , Y6-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        STR_LIST_TIME_UNIT
+    };
+
     CheckBox CBX_AUTO_STEP_MAIN
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_MAIN";
-        Pos = MAP_APPFONT ( X4 , Y3-1  ) ;
+        Pos = MAP_APPFONT ( X4 , Y5+1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Au~tomatic" ;
     };
+    //---------------------------
+    FixedText TXT_STEP_HELP_COUNT
+    {
+        Pos = MAP_APPFONT ( X2 , Y6  ) ;
+        Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
+        Text [ en-US ] = "Minor inter~val count" ;
+    };
     FixedText TXT_STEP_HELP
     {
-        Pos = MAP_APPFONT ( X2 , Y4  ) ;
+        Pos = MAP_APPFONT ( X2 , Y7  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
-        Text [ en-US ] = "Minor interval ~count:" ;
+        Text [ en-US ] = "Minor inter~val" ;
     };
     MetricField MT_STEPHELP
     {
         HelpID = "chart2:MetricField:TP_SCALE:MT_STEPHELP";
         Border = TRUE ;
-        Pos = MAP_APPFONT ( X3 , Y4-2  ) ;
+        Pos = MAP_APPFONT ( X3 , Y6-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
         Repeat = TRUE ;
@@ -149,55 +274,51 @@ TabPage TP_SCALE
         Last = 100 ;
         SpinSize = 1 ;
     };
+    ListBox LB_HELP_TIME_UNIT
+    {
+        HelpID = "chart2:ListBox:TP_SCALE:LB_HELP_TIME_UNIT";
+        Border = TRUE ;
+        AutoHScroll = TRUE ;
+        Pos = MAP_APPFONT ( X5 , Y7-2  ) ;
+        Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
+        TabStop = TRUE ;
+        Group = TRUE ;
+        DropDown=TRUE;
+        DDExtraWidth = TRUE ;
+
+        STR_LIST_TIME_UNIT
+    };
     CheckBox CBX_AUTO_STEP_HELP
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_STEP_HELP";
-        Pos = MAP_APPFONT ( X4 , Y4-1  ) ;
+        Pos = MAP_APPFONT ( X4 , Y6+1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Aut~omatic" ;
     };
-
+    //---------------------------
     FixedText TXT_ORIGIN
     {
-        Pos = MAP_APPFONT ( X2 , Y5  ) ;
+        Pos = MAP_APPFONT ( X2 , Y7  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
-        Text [ en-US ] = "Reference ~value:" ;
+        Text [ en-US ] = "Re~ference value" ;
     };
     SpinField EDT_ORIGIN
     {
         HelpID = "chart2:SpinField:TP_SCALE:EDT_ORIGIN";
         Border = TRUE ;
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( X3 , Y5-2  ) ;
+        Pos = MAP_APPFONT ( X3 , Y7-2  ) ;
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
     CheckBox CBX_AUTO_ORIGIN
     {
         HelpID = "chart2:CheckBox:TP_SCALE:CBX_AUTO_ORIGIN";
-        Pos = MAP_APPFONT ( X4 , Y5-1  ) ;
+        Pos = MAP_APPFONT ( X4 , Y7+1  ) ;
         Size = MAP_APPFONT ( AUTOCHECKWIDTH , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Automat~ic" ;
     };
-
-    CheckBox CBX_LOGARITHM
-    {
-        HelpID = "chart2:CheckBox:TP_SCALE:CBX_LOGARITHM";
-        Pos = MAP_APPFONT ( X2 , Y6  ) ;
-        Size = MAP_APPFONT ( 244 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Logarithmic scale" ;
-    };
-
-    CheckBox CBX_REVERSE
-    {
-        HelpID = "chart2:CheckBox:TP_SCALE:CBX_REVERSE";
-        Pos = MAP_APPFONT ( X2 , Y7  ) ;
-        Size = MAP_APPFONT ( 244 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Reverse direction" ;
-    };
-
+    //---------------------------
 };

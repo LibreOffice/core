@@ -1009,7 +1009,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
-    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
     const BOOL bRecord(pDoc->IsUndoEnabled());
 
     ScDocShellModificator aModificator( *pDocSh );
@@ -1635,7 +1635,7 @@ bool ScViewFunc::PasteMultiRangesFromClip(
 
     if (pDoc->IsUndoEnabled())
     {
-        SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+        ::svl::IUndoManager* pUndoMgr = pDocSh->GetUndoManager();
         String aUndo = ScGlobal::GetRscString(
             pClipDoc->IsCutMode() ? STR_UNDO_CUT : STR_UNDO_COPY);
         pUndoMgr->EnterListAction(aUndo, aUndo);

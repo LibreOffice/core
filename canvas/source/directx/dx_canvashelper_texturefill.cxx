@@ -227,6 +227,7 @@ namespace dxcanvas
             Gdiplus::SolidBrush aBackgroundBrush( rColors[0] );
             rGraphics->FillPath( &aBackgroundBrush, pFillPath.get() );
 
+            Gdiplus::Matrix aMatrix;
             // scale focus according to aspect ratio: for wider-than-tall
             // bounds (nAspectRatio > 1.0), the focus must have non-zero
             // width. Specifically, a bound rect twice as wide as tall has
@@ -383,7 +384,6 @@ namespace dxcanvas
                 // one sets both, only the translational components of the
                 // texture is respected.
 
-                Gdiplus::Matrix aMatrix;
                 tools::gdiPlusMatrixFromAffineMatrix2D( aMatrix,
                                                         texture.AffineTransform );
                 GraphicsPathSharedPtr pGradientPath(

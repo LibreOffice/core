@@ -926,9 +926,16 @@ File gid_File_Lm_Scots_Gaelic
     Styles = (PACKED);
 End
 
-File gid_File_Lm_Serbian_Ascii
+File gid_File_Lm_Serbian
     TXT_FILE_BODY;
-    Name = "serbian_ascii.lm";
+    Name = "serbian.lm";
+    Dir = gid_Dir_Share_Fingerprint;
+    Styles = (PACKED);
+End
+
+File gid_File_Lm_Serbian_Latin
+    TXT_FILE_BODY;
+    Name = "serbian-latin.lm";
     Dir = gid_Dir_Share_Fingerprint;
     Styles = (PACKED);
 End

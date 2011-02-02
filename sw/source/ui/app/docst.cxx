@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -52,7 +53,8 @@
 #include <fchrfmt.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 
 #include "view.hxx"
@@ -62,7 +64,8 @@
 #include "cmdid.h"
 #include "globals.hrc"
 #include "viewopt.hxx"
-#include "doc.hxx"
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include "swstyle.h"
 #include "frmfmt.hxx"
 #include "charfmt.hxx"
@@ -751,7 +754,9 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
             pDoc->SetModified();
             if( !bModified )    // Bug 57028
-                pDoc->SetUndoNoResetModified();
+            {
+                pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+            }
 
             GetWrtShell()->EndAllAction();
         }
@@ -761,8 +766,8 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             {
                 // #116530#
                 //pBasePool->Erase( &aTmp );
-                GetWrtShell()->Undo(UNDO_EMPTY, 1);
-                pDoc->ClearRedo();
+                GetWrtShell()->Undo(1);
+                pDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 
             if( !bModified )
@@ -814,7 +819,9 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
 
         pDoc->SetModified();
         if( !bModified )        // Bug 57028
-            pDoc->SetUndoNoResetModified();
+        {
+            pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
         GetWrtShell()->EndAllAction();
     }
 
@@ -1003,7 +1010,7 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
                 GetWrtShell()->SetTxtFmtColl( pColl );
-                GetWrtShell()->EndUndo(UNDO_INSFMTATTR, NULL);
+                GetWrtShell()->EndUndo();
                 GetWrtShell()->EndAllAction();
             }
             break;
@@ -1200,7 +1207,7 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
             rDest.SetPoolHlpFileId( nHFId );
 
             // werden Kopf-/Fusszeilen angelegt, so gibt es kein Undo mehr!
-            pCurrWrtShell->GetDoc()->DelAllUndoObj();
+            pCurrWrtShell->GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
 
             pCurrWrtShell->EndAllAction();
         }
@@ -1274,7 +1281,7 @@ void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocu
             {
                 // die View wird spaeter angelegt, ueberschreibt aber das
                 // Modify-Flag. Per Undo ist sowieso nichts mehr zu machen
-                pDoc->SetUndoNoResetModified();
+                pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
             }
         }
     }

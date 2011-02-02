@@ -49,7 +49,7 @@ SwUndoFlyStrAttr::~SwUndoFlyStrAttr()
 {
 }
 
-void SwUndoFlyStrAttr::Undo( SwUndoIter& )
+void SwUndoFlyStrAttr::UndoImpl(::sw::UndoRedoContext &)
 {
     switch ( GetId() )
     {
@@ -69,7 +69,7 @@ void SwUndoFlyStrAttr::Undo( SwUndoIter& )
     }
 }
 
-void SwUndoFlyStrAttr::Redo( SwUndoIter& )
+void SwUndoFlyStrAttr::RedoImpl(::sw::UndoRedoContext &)
 {
     switch ( GetId() )
     {
@@ -87,11 +87,6 @@ void SwUndoFlyStrAttr::Redo( SwUndoIter& )
         {
         }
     }
-}
-
-void SwUndoFlyStrAttr::Repeat( SwUndoIter& )
-{
-    // no repeat
 }
 
 SwRewriter SwUndoFlyStrAttr::GetRewriter() const

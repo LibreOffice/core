@@ -33,7 +33,6 @@ class EditView;
 class OutputDevice;
 class EditUndo;
 class SvxFont;
-class SfxUndoManager;
 class SfxItemPool;
 class SfxStyleSheet;
 class String;
@@ -82,6 +81,9 @@ namespace com { namespace sun { namespace star {
 namespace svx{
 struct SpellPortion;
 typedef std::vector<SpellPortion> SpellPortions;
+}
+namespace svl{
+class IUndoManager;
 }
 
 namespace basegfx { class B2DPolyPolygon; }
@@ -268,7 +270,8 @@ public:
     void            ShowParagraph( USHORT nParagraph, BOOL bShow = TRUE );
     BOOL            IsParagraphVisible( USHORT nParagraph );
 
-    SfxUndoManager& GetUndoManager();
+    ::svl::IUndoManager&
+                    GetUndoManager();
     void            UndoActionStart( USHORT nId );
     void            UndoActionEnd( USHORT nId );
     BOOL            IsInUndo();

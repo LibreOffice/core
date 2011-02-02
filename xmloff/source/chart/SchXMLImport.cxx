@@ -143,11 +143,9 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpChartElemTokenMap( 0 ),
         mpPlotAreaElemTokenMap( 0 ),
         mpSeriesElemTokenMap( 0 ),
-        mpAxisElemTokenMap( 0 ),
 
         mpChartAttrTokenMap( 0 ),
         mpPlotAreaAttrTokenMap( 0 ),
-        mpAxisAttrTokenMap( 0 ),
         mpLegendAttrTokenMap( 0 ),
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
@@ -169,15 +167,11 @@ SchXMLImportHelper::~SchXMLImportHelper()
         delete mpPlotAreaElemTokenMap;
     if( mpSeriesElemTokenMap )
         delete mpSeriesElemTokenMap;
-    if( mpAxisElemTokenMap )
-        delete mpAxisElemTokenMap;
 
     if( mpChartAttrTokenMap )
         delete mpChartAttrTokenMap;
     if( mpPlotAreaAttrTokenMap )
         delete mpPlotAreaAttrTokenMap;
-    if( mpAxisAttrTokenMap )
-        delete mpAxisAttrTokenMap;
     if( mpLegendAttrTokenMap )
         delete mpLegendAttrTokenMap;
     if( mpAutoStyleAttrTokenMap )
@@ -320,24 +314,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesElemTokenMap()
     return *mpSeriesElemTokenMap;
 }
 
-const SvXMLTokenMap& SchXMLImportHelper::GetAxisElemTokenMap()
-{
-    if( ! mpAxisElemTokenMap )
-    {
-        static __FAR_DATA SvXMLTokenMapEntry aAxisElemTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_TITLE,                  XML_TOK_AXIS_TITLE      },
-    { XML_NAMESPACE_CHART,  XML_CATEGORIES,             XML_TOK_AXIS_CATEGORIES },
-    { XML_NAMESPACE_CHART,  XML_GRID,                   XML_TOK_AXIS_GRID       },
-    XML_TOKEN_MAP_END
-};
-
-        mpAxisElemTokenMap = new SvXMLTokenMap( aAxisElemTokenMap );
-    } // if( ! mpAxisElemTokenMap )
-
-    return *mpAxisElemTokenMap;
-}
-
 // ----------------------------------------
 
 const SvXMLTokenMap& SchXMLImportHelper::GetChartAttrTokenMap()
@@ -393,24 +369,6 @@ const SvXMLTokenMap& SchXMLImportHelper::GetPlotAreaAttrTokenMap()
     } // if( ! mpPlotAreaAttrTokenMap )
 
     return *mpPlotAreaAttrTokenMap;
-}
-
-const SvXMLTokenMap& SchXMLImportHelper::GetAxisAttrTokenMap()
-{
-    if( ! mpAxisAttrTokenMap )
-    {
-        static __FAR_DATA SvXMLTokenMapEntry aAxisAttrTokenMap[] =
-{
-    { XML_NAMESPACE_CHART,  XML_DIMENSION,              XML_TOK_AXIS_DIMENSION      },
-    { XML_NAMESPACE_CHART,  XML_NAME,                   XML_TOK_AXIS_NAME           },
-    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_AXIS_STYLE_NAME     },
-    XML_TOKEN_MAP_END
-};
-
-        mpAxisAttrTokenMap = new SvXMLTokenMap( aAxisAttrTokenMap );
-    } // if( ! mpAxisAttrTokenMap )
-
-    return *mpAxisAttrTokenMap;
 }
 
 const SvXMLTokenMap& SchXMLImportHelper::GetLegendAttrTokenMap()

@@ -516,8 +516,8 @@ public:
                         SvPtrarr& rArr );
 
     // lege einen neuen PaM an der Position an
-    static SwPaM* NewSwPaM( SwDoc & rDoc, ULONG nStartIdx, ULONG nEndIdx,
-                                    BOOL bNodesArray = TRUE );
+    static SwPaM * NewSwPaM(SwDoc & rDoc,
+                            ULONG const nStartIdx, ULONG const nEndIdx);
 
     // kopiere ggfs. eine lokale Datei ins Internet
     BOOL CopyLocalFileToINet( String& rFileNm );

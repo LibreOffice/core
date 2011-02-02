@@ -522,40 +522,28 @@
 #define SID_CURSORTOPOFSCREEN               (SID_SFX_START + 744)
 #define SID_CURSORHOME                      (SID_SFX_START + 745)
 #define SID_CURSOREND                       (SID_SFX_START + 746)
-#define SID_SCROLLDOWN                      (SID_SFX_START + 751)
-#define SID_SCROLLUP                        (SID_SFX_START + 752)
 #define SID_FORMATMENU                      (SID_SFX_START + 780)
 #define SID_OBJECTMENU0                     SID_FORMATMENU
 #define SID_OBJECTMENU1                     (SID_SFX_START + 781)
 #define SID_OBJECTMENU2                     (SID_SFX_START + 782)
 #define SID_OBJECTMENU3                     (SID_SFX_START + 783)
 #define SID_OBJECTMENU_LAST                 SID_OBJECTMENU3
-#define SID_EDITMENU                        (SID_SFX_START + 790)
 #define SID_FORMATMENUSTATE                 (SID_SFX_START + 791)
 
 // default-ids for macros
 #define SID_RECORDING_FLOATWINDOW           (SID_SFX_START + 800)
 #define SID_RECORDMACRO                     (SID_SFX_START + 1669)
-#define SID_PLAYMACRO                       (SID_SFX_START + 801)
-#define SID_EDITMACRO                       (SID_SFX_START + 802)
-#define SID_MACROLIBMANAGER                 (SID_SFX_START + 803)
-#define SID_LOADMACROLIB                    (SID_SFX_START + 804)
-#define SID_RELEASEMACROLIB                 (SID_SFX_START + 805)
-#define SID_BASICNAME                       (SID_SFX_START + 806)
-#define SID_LIBNAME                         (SID_SFX_START + 807)
-#define SID_MODULENAME                      (SID_SFX_START + 808)
-#define SID_STATEMENT                       (SID_SFX_START + 810)
+    // FREE: SID_SFX_START + 801
+    // FREE: SID_SFX_START + 802
+    // FREE: SID_SFX_START + 803
+    // FREE: SID_SFX_START + 804
+    // FREE: SID_SFX_START + 805
+    // FREE: SID_SFX_START + 806
+    // FREE: SID_SFX_START + 807
+    // FREE: SID_SFX_START + 808
+    // FREE: SID_SFX_START + 809
+    // FREE: SID_SFX_START + 810
 #define SID_ASYNCHRON                       (SID_SFX_START + 811)
-
-#define SID_START_APP                       (SID_SFX_START + 820)
-#define SID_START_BEGIN                     (SID_SFX_START + 821)
-#define SID_STARTSW                         SID_START_BEGIN
-#define SID_STARTSC                         (SID_START_BEGIN + 1)
-#define SID_STARTSD                         (SID_START_BEGIN + 2)
-#define SID_STARTSIM                        (SID_START_BEGIN + 3)
-#define SID_STARTSCH                        (SID_START_BEGIN + 4)
-#define SID_STARTSMA                        (SID_START_BEGIN + 5)
-#define SID_START_END                       SID_STARTSMA
 
 // default-ids for configuration
 #define SID_RESTOREMENU                     (SID_SFX_START + 901)
@@ -622,11 +610,9 @@
 #define SID_OBJECTRESIZE                    (SID_SFX_START + 1000)
 #define SID_INSERT_TEXT                     (SID_SFX_START + 1001)
 
-#define SID_MACRO_START                     (SID_SFX_START + 1002)
-#define SID_MACRO_END                       (SID_SFX_START + 1100)
-#define SID_EVENTCONFIG                     (SID_MACRO_END + 1)
-#define SID_VERB_START                      (SID_MACRO_END + 2)
-#define SID_VERB_END                        (SID_MACRO_END + 21)
+#define SID_EVENTCONFIG                     (SID_SFX_START + 1101)
+#define SID_VERB_START                      (SID_SFX_START + 1100)
+#define SID_VERB_END                        (SID_SFX_START + 1121)
 
 #define SID_BROWSER_TASK                    (SID_MACRO_END + 22)
 

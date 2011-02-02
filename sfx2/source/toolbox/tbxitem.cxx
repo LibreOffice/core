@@ -90,7 +90,6 @@
 #include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/genlink.hxx>
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/sfx.hrc>

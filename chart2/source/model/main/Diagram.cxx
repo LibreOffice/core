@@ -33,6 +33,7 @@
 #include "Wall.hxx"
 #include "UserDefinedProperties.hxx"
 #include "ConfigColorScheme.hxx"
+#include "DiagramHelper.hxx"
 #include "ContainerHelper.hxx"
 #include "ThreeDHelper.hxx"
 #include "CloneHelper.hxx"
@@ -425,6 +426,22 @@ void SAL_CALL Diagram::setDefaultColorScheme( const Reference< chart2::XColorSch
         m_xColorScheme.set( xColorScheme );
     }
     fireModifyEvent();
+}
+
+void SAL_CALL Diagram::setDiagramData(
+    const Reference< chart2::data::XDataSource >& xDataSource,
+    const Sequence< beans::PropertyValue >& aArguments )
+        throw (uno::RuntimeException)
+{
+    uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( m_xContext->getServiceManager()->createInstanceWithContext(
+            C2U( "com.sun.star.chart2.ChartTypeManager" ), m_xContext ), uno::UNO_QUERY );
+    DiagramHelper::tTemplateWithServiceName aTemplateAndService = DiagramHelper::getTemplateForDiagram( this, xChartTypeManager );
+    uno::Reference< chart2::XChartTypeTemplate > xTemplate( aTemplateAndService.first );
+    if( !xTemplate.is() )
+        xTemplate.set( xChartTypeManager->createInstance( C2U("com.sun.star.chart2.template.Column") ), uno::UNO_QUERY );
+    if(!xTemplate.is())
+        return;
+    xTemplate->changeDiagramData( this, xDataSource, aArguments );
 }
 
 // ____ XTitled ____

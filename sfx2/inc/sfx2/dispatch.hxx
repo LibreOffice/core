@@ -211,9 +211,6 @@ public:
                                       Window *pWin, const Point *pPosPixel,
                                       const SfxPoolItem *pArg1, ...  );
 
-    void                EnterAction( const String& rName );
-    void                LeaveAction();
-
     BOOL                IsAppDispatcher() const;
     BOOL                IsFlushed() const;
     void                Flush();

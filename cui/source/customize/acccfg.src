@@ -271,10 +271,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
         ImageBitmap = Bitmap { File = "imh30826.png"; };
         MASKCOLOR
     };
-    String STR_BASICNAME
-    {
-        Text = "%PRODUCTNAME Basic" ;
-    };
     Image BMP_COLLAPSED
     {
         ImageBitmap = Bitmap

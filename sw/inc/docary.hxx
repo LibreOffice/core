@@ -71,13 +71,6 @@ SV_DECL_PTRARR_DEL( SwFldTypes, SwFldTypePtr, INIT_FLDTYPES, GROW_FLDTYPES )
 typedef SwTOXType* SwTOXTypePtr;
 SV_DECL_PTRARR_DEL( SwTOXTypes, SwTOXTypePtr, 0, 1 )
 
-// Undo
-#define INIT_UNDOS 5
-#define GROW_UNDOS 5
-// Das Array der Undo-History
-typedef SwUndo* SwUndoPtr;
-SV_DECL_PTRARR_DEL( SwUndos, SwUndoPtr, INIT_UNDOS, GROW_UNDOS )
-
 typedef SwSectionFmt* SwSectionFmtPtr;
 SV_DECL_PTRARR_DEL(SwSectionFmts,SwSectionFmtPtr,0,4)
 

@@ -54,7 +54,7 @@
 #include <comphelper/stl_types.hxx>
 #include <comphelper/componentcontext.hxx>
 #include <vcl/svapp.hxx>
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <vos/mutex.hxx>
 
@@ -262,7 +262,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if (!xSet.is())
         return;
 
-    dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
+    dbaui::DBSubComponentController* pController = m_pImpl->m_rModel.getController();
     if ( !pController )
         return;
 
@@ -380,7 +380,7 @@ void SAL_CALL OXUndoEnvironment::propertyChange( const PropertyChangeEvent& _rEv
     if ( pUndo == NULL )
         pUndo = new ORptUndoPropertyAction( m_pImpl->m_rModel, _rEvent );
 
-    pController->addUndoActionAndInvalidate(pUndo);
+    m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( pUndo );
     pController->InvalidateAll();
 }
 // -----------------------------------------------------------------------------
@@ -439,12 +439,9 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
             uno::Reference< report::XFunctions> xContainer(evt.Source,uno::UNO_QUERY);
             if ( xContainer.is() )
             {
-                dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
-                pController->addUndoActionAndInvalidate(new OUndoContainerAction(m_pImpl->m_rModel
-                                                                                ,rptui::Inserted
-                                                                                ,xContainer.get()
-                                                                                ,xIface
-                                                                                ,RID_STR_UNDO_ADDFUNCTION));
+                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction(
+                    new OUndoContainerAction( m_pImpl->m_rModel, rptui::Inserted, xContainer.get(),
+                        xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }
     }
@@ -510,12 +507,8 @@ void SAL_CALL OXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw
             uno::Reference< report::XFunctions> xFunctions(evt.Source,uno::UNO_QUERY);
             if ( xFunctions.is() )
             {
-                dbaui::OSingleDocumentController* pController = m_pImpl->m_rModel.getController();
-                pController->addUndoActionAndInvalidate(new OUndoContainerAction(m_pImpl->m_rModel
-                                                                                ,rptui::Removed
-                                                                                ,xFunctions.get()
-                                                                                ,xIface
-                                                                                ,RID_STR_UNDO_ADDFUNCTION));
+                m_pImpl->m_rModel.GetSdrUndoManager()->AddUndoAction( new OUndoContainerAction(
+                    m_pImpl->m_rModel, rptui::Removed, xFunctions.get(), xIface, RID_STR_UNDO_ADDFUNCTION ) );
             }
         }
     }

@@ -27,23 +27,14 @@
 package complex.dbaccess;
 
 import com.sun.star.container.XNameAccess;
-import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XNamingService;
-// import complexlib.ComplexTestCase;
 import connectivity.tools.CRMDatabase;
 import connectivity.tools.HsqlDatabase;
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -53,21 +44,6 @@ public class DataSource extends TestCase
 
     HsqlDatabase m_database;
     connectivity.tools.DataSource m_dataSource;
-
-    // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                    "testRegistrationName"
-//                };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "DataSource";
-//    }
 
     // --------------------------------------------------------------------------------------------------------
     private void createTestCase()
@@ -92,13 +68,8 @@ public class DataSource extends TestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-//    private XMultiServiceFactory getFactory()
-//    {
-//        return (XMultiServiceFactory) param.getMSF();
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-    @Test public void testRegistrationName()
+    @Test
+    public void testRegistrationName()
     {
         try
         {
@@ -109,8 +80,8 @@ public class DataSource extends TestCase
             assertEquals("pre-registered database has a wrong name!", dataSourceName, bibliography.getName());
             // 2. register a newly created data source, and verify it has the proper name
             dataSourceName = "someDataSource";
-            final XNamingService dataSourceRegistrations = (XNamingService) UnoRuntime.queryInterface(
-                    XNamingService.class, getMSF().createInstance("com.sun.star.sdb.DatabaseContext"));
+            final XNamingService dataSourceRegistrations = UnoRuntime.queryInterface(
+                XNamingService.class, getMSF().createInstance( "com.sun.star.sdb.DatabaseContext" ) );
             final XNameAccess existenceCheck = UnoRuntime.queryInterface( XNameAccess.class, dataSourceRegistrations );
             if ( existenceCheck.hasByName( "someDataSource" ) )
                 dataSourceRegistrations.revokeObject( "someDataSource" );

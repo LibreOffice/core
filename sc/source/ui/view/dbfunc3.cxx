@@ -2187,7 +2187,7 @@ void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const Sequence<sheet
     pInsDoc->GetCellArea( nNewTab, nEndCol, nEndRow );
     pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
 
-    SfxUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
     String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
     pMgr->EnterListAction( aUndo, aUndo );
 

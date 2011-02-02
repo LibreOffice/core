@@ -78,6 +78,7 @@
 #include <tgrditem.hxx>
 #include <hfspacingitem.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <rootfrm.hxx>
 #include <cntfrm.hxx>
@@ -106,9 +107,7 @@
 
 #include <cmdid.h>
 #include <unomid.h>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <svx/svdundo.hxx> // #111827#
 // OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
@@ -218,7 +217,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
-                pNode = pDoc->GetNodes()[ aIdx ];
+                pNode = & aIdx.GetNode();
                 sal_uInt32 nEnd = pNode->EndOfSectionIndex();
                 while ( aIdx < nEnd )
                 {
@@ -237,21 +236,17 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                         } while ( aIter++ );
                     }
                     aIdx++;
-                    pNode = pDoc->GetNodes()[ aIdx ];
+                    pNode = & aIdx.GetNode();
                 }
             }
             rCnt.SetNewCntntIdx( (const SwNodeIndex*)0 );
 
             // beim Loeschen von Header/Footer-Formaten IMMER das Undo
             // abschalten! (Bug 31069)
-            sal_Bool bDoesUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( sal_False );
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
             ASSERT( pNode, "Ein grosses Problem." );
             pDoc->DeleteSection( pNode );
-
-            if( bDoesUndo )
-                pDoc->DoUndo( sal_True );
         }
         delete pFmt;
     }

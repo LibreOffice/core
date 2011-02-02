@@ -1089,13 +1089,6 @@ void SfxObjectShell::ExecProps_Impl(SfxRequest &rReq)
             rReq.Done();
             break;
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_PLAYMACRO:
-        {
-            SFX_APP()->PlayMacro_Impl( rReq, GetBasic() );
-            break;
-        }
-
         case SID_DOCINFO_AUTHOR :
         {
             ::rtl::OUString aStr = ( (SfxStringItem&)rReq.GetArgs()->Get(rReq.GetSlot())).GetValue();

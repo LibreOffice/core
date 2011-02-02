@@ -1198,8 +1198,11 @@ void SAL_CALL ORowSetBase::refreshRow(  ) throw(SQLException, RuntimeException)
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {
+        sal_Bool bWasNew = m_pCache->m_bNew || impl_rowDeleted();
+        ORowSetRow aOldValues = getOldRow(bWasNew);
         positionCache( MOVE_NONE_REFRESH_ONLY );
         m_pCache->refreshRow();
+        firePropertyChange(aOldValues);
     }
 }
 // -------------------------------------------------------------------------

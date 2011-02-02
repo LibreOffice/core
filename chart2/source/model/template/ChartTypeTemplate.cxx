@@ -643,17 +643,30 @@ void ChartTypeTemplate::adaptScales(
             sal_Int32 nDim( xCooSys->getDimension());
             if( nDim > 0 )
             {
-                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(0);
+                const sal_Int32 nDimensionX = 0;
+                const sal_Int32 nMaxIndex = xCooSys->getMaximumAxisIndexByDimension(nDimensionX);
                 for(sal_Int32 nI=0; nI<=nMaxIndex; ++nI)
                 {
-                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(0,nI) );
+                    Reference< XAxis > xAxis( xCooSys->getAxisByDimension(nDimensionX,nI) );
                     if( xAxis.is())
                     {
                         ScaleData aData( xAxis->getScaleData() );
                         aData.Categories = xCategories;
-                        aData.AxisType = bSupportsCategories ? AxisType::CATEGORY : AxisType::REALNUMBER;
-                        if( bSupportsCategories )
-                            AxisHelper::removeExplicitScaling( aData );
+                        if(bSupportsCategories)
+                        {
+
+                            Reference< XChartType > xChartType( getChartTypeForNewSeries(Sequence< Reference< XChartType > >() ));
+                            bool bSupportsDates = ::chart::ChartTypeHelper::isSupportingDateAxis( xChartType, 2, nDimensionX );
+                            if( aData.AxisType != AxisType::CATEGORY && ( aData.AxisType != AxisType::DATE || !bSupportsDates) )
+                            {
+                                aData.AxisType = AxisType::CATEGORY;
+                                aData.AutoDateAxis = true;
+                                AxisHelper::removeExplicitScaling( aData );
+                            }
+                        }
+                        else
+                            aData.AxisType = AxisType::REALNUMBER;
+
                         xAxis->setScaleData( aData );
                     }
                 }

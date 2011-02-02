@@ -26,23 +26,28 @@
  ************************************************************************/
 package complex.dbaccess;
 
+import com.sun.star.beans.PropertyState;
+import com.sun.star.sdb.SQLFilterOperator;
+import com.sun.star.beans.PropertyAttribute;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.beans.XPropertyContainer;
+import com.sun.star.beans.NamedValue;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.sdbcx.XTablesSupplier;
+import com.sun.star.sdb.XParametersSupplier;
+import com.sun.star.beans.PropertyValue;
+import com.sun.star.sdbcx.XColumnsSupplier;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.*;
-import com.sun.star.sdbcx.*;
-import com.sun.star.sdb.*;
-import com.sun.star.container.*;
 
 import com.sun.star.sdbc.DataType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
@@ -58,32 +63,13 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     private final static String INNERPRODUCTSQUERY = "products (inner)";
 
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[]
-//                {
-//                  "testSetCommand",
-//                    "testAttributes",
-//                    "testSubQueries",
-//                    "testParameters",
-//                    "testDisjunctiveNormalForm",
-//                    "testConditionByColumn"
-//                };
-//    }
-
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "SingleSelectQueryComposer";
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
     private void createQueries() throws Exception
     {
         m_database.getDatabase().getDataSource().createQuery(INNERPRODUCTSQUERY, "SELECT * FROM \"products\"");
     }
 
     // --------------------------------------------------------------------------------------------------------
+    @Override
     protected void createTestCase()
     {
         try
@@ -141,7 +127,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
     /** tests setCommand of the composer
      */
-    @Test public void testSetCommand()
+    @Test
+    public void testSetCommand()
     {
         System.out.println("testing SingleSelectQueryComposer's setCommand");
 
@@ -166,7 +153,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     }
     /** tests accessing attributes of the composer (order, filter, group by, having)
      */
-    @Test public void testAttributes()
+    @Test
+    public void testAttributes()
     {
         System.out.println("testing SingleSelectQueryComposer's attributes (order, filter, group by, having)");
 
@@ -223,7 +211,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
     /** test various sub query related features ("queries in queries")
      */
-    @Test public void testSubQueries() throws Exception
+    @Test
+    public void testSubQueries() throws Exception
     {
         m_composer.setQuery("SELECT * from \"" + INNERPRODUCTSQUERY + "\"");
         final XTablesSupplier suppTables = UnoRuntime.queryInterface(XTablesSupplier.class, m_composer);
@@ -239,7 +228,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
 
     /** tests the XParametersSupplier functionality
      */
-    @Test public void testParameters()
+    @Test
+    public void testParameters()
     {
         try
         {
@@ -278,7 +268,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
         }
     }
 
-    @Test public void testConditionByColumn()
+    @Test
+    public void testConditionByColumn()
     {
         try
         {
@@ -337,7 +328,8 @@ public class SingleSelectQueryComposer extends CRMBasedTestCase
     /** tests the disjunctive normal form functionality, aka the structured filter,
      *  of the composer
      */
-    @Test public void testDisjunctiveNormalForm()
+    @Test
+    public void testDisjunctiveNormalForm()
     {
         // a simple case: WHERE clause simply is a combination of predicates knitted with AND
         String query =

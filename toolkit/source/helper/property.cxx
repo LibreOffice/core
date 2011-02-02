@@ -66,6 +66,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::awt::XDevice;
 using ::com::sun::star::awt::FontDescriptor;
 using ::com::sun::star::style::VerticalAlignment;
+using ::com::sun::star::graphic::XGraphic;
 
 struct ImplPropertyInfo
 {
@@ -181,7 +182,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_3     ( "FormatKey",              FORMATKEY,          sal_Int32,      BOUND, MAYBEVOID, TRANSIENT ),
             DECL_PROP_3     ( "FormatsSupplier",        FORMATSSUPPLIER,    Reference< ::com::sun::star::util::XNumberFormatsSupplier >, BOUND, MAYBEVOID, TRANSIENT ),
 
-            DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< ::com::sun::star::graphic::XGraphic >, BOUND, TRANSIENT ),
+            DECL_PROP_2     ( "Graphic",                GRAPHIC,            Reference< XGraphic >, BOUND, TRANSIENT ),
             DECL_PROP_2     ( "HelpText",               HELPTEXT,           ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HelpURL",                HELPURL,            ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "HideInactiveSelection",  HIDEINACTIVESELECTION, bool,            BOUND, MAYBEDEFAULT ),
@@ -218,6 +219,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "PushButtonType",         PUSHBUTTONTYPE,     sal_Int16,          BOUND, MAYBEDEFAULT),
             DECL_PROP_2     ( "ReadOnly",               READONLY,           bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "Repeat",                 REPEAT,             bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "AutoRepeat",             AUTO_REPEAT,        sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "RepeatDelay",            REPEAT_DELAY,       sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ScaleImage",             SCALEIMAGE,         bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "ScaleMode",              IMAGE_SCALE_MODE,   sal_Int16,          BOUND, MAYBEDEFAULT ),

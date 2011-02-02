@@ -118,7 +118,7 @@ double InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals(
             pExplicitValueProvider->getExplicitValuesForAxis( xAxis,aExplicitScale, aExplicitIncrement );
 
             fStepWidth = aExplicitIncrement.Distance;
-            if( aExplicitIncrement.SubIncrements.getLength()  && aExplicitIncrement.SubIncrements[0].IntervalCount>0 )
+            if( !aExplicitIncrement.SubIncrements.empty() && aExplicitIncrement.SubIncrements[0].IntervalCount>0 )
                 fStepWidth=fStepWidth/double(aExplicitIncrement.SubIncrements[0].IntervalCount);
             else
                 fStepWidth/=10;

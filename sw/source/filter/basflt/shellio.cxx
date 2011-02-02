@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -46,6 +47,7 @@
 #include <swtypes.hxx>
 #include <shellio.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <editsh.hxx>
 #include <undobj.hxx>           // fuer Undo Insert-Dokument
@@ -131,7 +133,7 @@ ULONG SwReader::Read( const Reader& rOptions )
     SwUndoInsDoc* pUndo = 0;
 
     BOOL bReadPageDescs = FALSE;
-    BOOL bDocUndo = pDoc->DoesUndo();
+    bool const bDocUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     BOOL bSaveUndo = bDocUndo && pCrsr;
     if( bSaveUndo )
     {
@@ -139,15 +141,15 @@ ULONG SwReader::Read( const Reader& rOptions )
         if( 0 != ( bReadPageDescs = po->aOpt.IsPageDescs() ) )
         {
             bSaveUndo = FALSE;
-            pDoc->DelAllUndoObj();
+            pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
         }
         else
         {
-            pDoc->ClearRedo();
-            pDoc->StartUndo( UNDO_INSDOKUMENT, NULL );
+            pDoc->GetIDocumentUndoRedo().ClearRedo();
+            pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSDOKUMENT, NULL );
         }
     }
-    pDoc->DoUndo( FALSE );
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     SwNodeIndex aSplitIdx( pDoc->GetNodes() );
 
@@ -270,7 +272,11 @@ ULONG SwReader::Read( const Reader& rOptions )
                             if( bSaveUndo )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
-                                pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
+                                // UGLY: temp. enable undo
+                                pDoc->GetIDocumentUndoRedo().DoUndo(true);
+                                pDoc->GetIDocumentUndoRedo().AppendUndo(
+                                    new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
+                                pDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
                             if( pFrmFmt->GetDepends() )
@@ -314,7 +320,10 @@ ULONG SwReader::Read( const Reader& rOptions )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, FALSE );
-            pDoc->AppendUndo( pUndo );
+            // UGLY: temp. enable undo
+            pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
+            pDoc->GetIDocumentUndoRedo().DoUndo(false);
             pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
 
@@ -348,15 +357,13 @@ ULONG SwReader::Read( const Reader& rOptions )
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
 
-    if( bReadPageDescs )
-        pDoc->DoUndo( TRUE );
-    else
+    pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
+    if (!bReadPageDescs)
     {
-        pDoc->DoUndo( bDocUndo );
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );
-            pDoc->EndUndo( UNDO_INSDOKUMENT, NULL );
+            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSDOKUMENT, NULL );
             pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
     }
@@ -535,7 +542,8 @@ SwDoc* Reader::GetTemplateDoc()
                     {
                         pTemplate = pDocSh->GetDoc();
                         pTemplate->SetOle2Link( Link() );
-                        pTemplate->DoUndo( FALSE );     // always FALSE
+                        // always FALSE
+                        pTemplate->GetIDocumentUndoRedo().DoUndo( false );
                         pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
 

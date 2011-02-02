@@ -362,7 +362,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS) \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
         $(SHL$(TNR)LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -386,7 +386,7 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS)                      \
         $(SHL$(TNR)STDSHL) $(STDSHL$(TNR))                           \
         $(SHL$(TNR)LINKRES) \
-    ) $(LINKOUTPUTFILTER)
+    )
 # double check if target was really written... still making sense?
     @@$(LS) $@
     @echo linking $@.manifest ...
@@ -558,7 +558,6 @@ $(SHL$(TNR)TARGETN) : \
         $(SHL$(TNR)STDLIBS:^"-l") \
         $(SHL$(TNR)LINKRES) \
         $(SHL$(TNR)STDSHL:^"-l") $(STDSHL$(TNR):^"-l")                           \
-    $(LINKOUTPUTFILTER)
     @$(LS) $@ >& $(NULLDEV)
 
 .ENDIF			# "$(USE_DEFFILE)"!=""

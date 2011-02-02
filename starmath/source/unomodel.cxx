@@ -171,7 +171,11 @@ SmPrintUIOptions::SmPrintUIOptions()
 //
 // class SmModel
 //
-#define PROPERTY_NONE 0
+
+// values from com/sun/star/beans/PropertyAttribute
+#define PROPERTY_NONE        0
+#define PROPERTY_READONLY   16
+
 enum SmModelPropertyHandles
 {
     HANDLE_FORMULA,
@@ -233,6 +237,7 @@ enum SmModelPropertyHandles
     HANDLE_PRINTER_NAME,
     HANDLE_PRINTER_SETUP,
     HANDLE_SYMBOLS,
+    HANDLE_USED_SYMBOLS,
     HANDLE_BASIC_LIBRARIES,     /* #93295# */
     HANDLE_RUNTIME_UID,
     // --> PB 2004-08-25 #i33095# Security Options
@@ -307,6 +312,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "RightMargin"                       ),    HANDLE_RIGHT_MARGIN                  ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_RIGHTSPACE               },
         { RTL_CONSTASCII_STRINGPARAM( "RuntimeUID"                      ), HANDLE_RUNTIME_UID                        ,      &::getCppuType(static_cast< const rtl::OUString * >(0)),    PropertyAttribute::READONLY, 0 },
         { RTL_CONSTASCII_STRINGPARAM( "Symbols"                       ),        HANDLE_SYMBOLS                       ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PROPERTY_NONE, 0  },
+        { RTL_CONSTASCII_STRINGPARAM( "UserDefinedSymbolsInUse"       ),        HANDLE_USED_SYMBOLS                  ,      &::getCppuType((const Sequence < SymbolDescriptor > *)0),   PropertyAttribute::READONLY, 0  },
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
         // --> PB 2004-08-25 #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
@@ -904,7 +910,11 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             break;
             case HANDLE_SYMBOLS:
+            case HANDLE_USED_SYMBOLS:
             {
+                const bool bUsedSymbolsOnly = (*ppEntries)->mnHandle == HANDLE_USED_SYMBOLS;
+                const std::set< rtl::OUString > &rUsedSymbols = pDocSh->GetUsedSymbols();
+
                 // this is get
                 SmModule *pp = SM_MOD();
                 const SmSymbolManager &rManager = pp->GetSymbolManager();
@@ -915,7 +925,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                 for (size_t i = 0; i < aSymbols.size(); ++i)
                 {
                     const SmSym * pSymbol = aSymbols[ i ];
-                    if (pSymbol && !pSymbol->IsPredefined () )
+                    const bool bIsUsedSymbol = rUsedSymbols.find( pSymbol->GetName() ) != rUsedSymbols.end();
+                    if (pSymbol && !pSymbol->IsPredefined() &&
+                        (!bUsedSymbolsOnly || bIsUsedSymbol))
                     {
                         aVector.push_back ( pSymbol );
                         nCount++;

@@ -35,6 +35,18 @@
     <service name="com.sun.star.awt.Layout"/>
     <service name="com.sun.star.comp.awt.Layout"/>
   </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPage">
+    <service name="com.sun.star.awt.tab.UnoControlTabPage"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageModel">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainerModel">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageContainerModel"/>
+  </implementation>
+  <implementation name="stardiv.Toolkit.UnoControlTabPageContainer">
+    <service name="com.sun.star.awt.tab.UnoControlTabPageContainer"/>
+  </implementation>
   <implementation name="stardiv.Toolkit.DefaultGridColumnModel">
     <service name="com.sun.star.awt.grid.DefaultGridColumnModel"/>
   </implementation>
@@ -256,6 +268,15 @@
   <implementation name="stardiv.Toolkit.UnoSimpleAnimationControlModel">
     <service name="com.sun.star.awt.UnoControlSimpleAnimationModel"/>
     <service name="com.sun.star.awt.UnoSimpleAnimationControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.SpinningProgressControlModel">
+    <service name="com.sun.star.awt.SpinningProgressControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControlModel">
+    <service name="com.sun.star.awt.AnimatedImagesControlModel"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.AnimatedImagesControl">
+    <service name="com.sun.star.awt.AnimatedImagesControl"/>
   </implementation>
   <implementation name="stardiv.Toolkit.UnoSpinButtonControl">
     <service name="com.sun.star.awt.UnoControlSpinButton"/>

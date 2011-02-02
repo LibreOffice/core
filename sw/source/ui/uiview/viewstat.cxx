@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
@@ -49,28 +50,20 @@
 #include <tox.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <wrtsh.hxx>
-#ifndef _BASESH_HXX
 #include <basesh.hxx>
-#endif
 #include <uitool.hxx>
 #include <viewopt.hxx>
 #include <tablemgr.hxx>
 #include <pagedesc.hxx>
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <globdoc.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <svl/visitem.hxx>
 
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
 
 #include <IDocumentRedlineAccess.hxx>
 
@@ -163,7 +156,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetUndoIds() != UNDO_EMPTY));
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetLastUndoInfo(0, 0)));
             }
             break;
             case SID_UNDO:

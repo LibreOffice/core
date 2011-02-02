@@ -448,6 +448,10 @@ typedef struct {
     sal_Int16 script;
 } UBlock2Script;
 
+// for a list of the UBLOCK_... values see:
+// http://icu-project.org/apiref/icu4c/uchar_8h.html
+// where enum UBlockCode is defined.
+// See also http://www.unicode.org/charts/ for general reference
 static UBlock2Script scriptList[] = {
     {UBLOCK_NO_BLOCK, UBLOCK_NO_BLOCK, ScriptType::WEAK},
     {UBLOCK_BASIC_LATIN, UBLOCK_ARMENIAN, ScriptType::LATIN},

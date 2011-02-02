@@ -118,7 +118,7 @@ public abstract class ControlScroller
         oImgControl = CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
                 new String[]
                 {
-                    "Border", "Height", "PositionX", "PositionY", "Step", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -130,7 +130,7 @@ public abstract class ControlScroller
                 new AdjustmentListenerImpl(),
                 new String[]
                 {
-                    "Border", "Enabled", "Height", "HelpURL", "Orientation", "PositionX", "PositionY", "Step", "Width"
+                    "Border", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -178,7 +178,7 @@ public abstract class ControlScroller
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                         {
-                            "Enabled", "BlockIncrement", "LineIncrement", "ScrollValue", "ScrollValueMax"
+                            PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "LineIncrement", "ScrollValue", "ScrollValueMax"
                         }, new Object[]
                         {
                             Boolean.TRUE, new Integer(nblockincrement), new Integer(nlineincrement), new Integer(nscrollvalue), new Integer(ntotfieldcount - nblockincrement)
@@ -188,7 +188,7 @@ public abstract class ControlScroller
             {
                 Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                         {
-                            "Enabled", "ScrollValue"
+                            PropertyNames.PROPERTY_ENABLED, "ScrollValue"
                         }, new Object[]
                         {
                             Boolean.FALSE, new Integer(nscrollvalue)
@@ -286,7 +286,7 @@ public abstract class ControlScroller
         {
             Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                     {
-                        "Enabled", "ScrollValueMax"
+                        PropertyNames.PROPERTY_ENABLED, "ScrollValueMax"
                     }, new Object[]
                     {
                         Boolean.TRUE, new Integer(ntotfieldcount - nblockincrement)
@@ -294,14 +294,14 @@ public abstract class ControlScroller
         }
         else
         {
-            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), "Enabled", Boolean.FALSE);
+            Helper.setUnoPropertyValue(UnoDialog.getModel(xScrollBar), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         }
     }
 
     protected void toggleComponent(boolean _bdoenable)
     {
         boolean bdoenable = _bdoenable && (ntotfieldcount > nblockincrement);
-        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, "Enabled", new Boolean(bdoenable));
+        CurUnoDialog.setControlProperty("TitleScrollBar" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, new Boolean(bdoenable));
     }
 
     protected void toggleControls(boolean _bdoenable)
@@ -312,7 +312,7 @@ public abstract class ControlScroller
             for (int m = 0; m < curproperties.length; m++)
             {
                 PropertyValue curproperty = curproperties[m];
-                CurUnoDialog.setControlProperty(curproperty.Name, "Enabled", new Boolean(_bdoenable));
+                CurUnoDialog.setControlProperty(curproperty.Name, PropertyNames.PROPERTY_ENABLED, new Boolean(_bdoenable));
             }
         }
 
@@ -340,7 +340,7 @@ public abstract class ControlScroller
         this.nblockincrement = _nblockincrement;
         Helper.setUnoPropertyValues(UnoDialog.getModel(xScrollBar), new String[]
                 {
-                    "Enabled", "BlockIncrement", "ScrollValueMax"
+                    PropertyNames.PROPERTY_ENABLED, "BlockIncrement", "ScrollValueMax"
                 }, new Object[]
                 {
                     new Boolean(ntotfieldcount > nblockincrement), new Integer(nblockincrement), new Integer(ntotfieldcount - nblockincrement)

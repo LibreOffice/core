@@ -321,7 +321,7 @@ bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
 
 
 
-SfxUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* SlideSorterViewShell::ImpGetUndoManager (void) const
 {
     SfxShell* pObjectBar = GetViewShellBase().GetViewShellManager()->GetTopShell();
     if (pObjectBar != NULL)

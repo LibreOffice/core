@@ -28,8 +28,6 @@
 #ifndef INCLUDED_TAG_LOGGER_HXX
 #define INCLUDED_TAG_LOGGER_HXX
 
-#ifdef DEBUG
-
 #include <rtl/ustring.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <WriterFilterDllApi.hxx>
@@ -86,7 +84,7 @@ namespace writerfilter
         const string & getTag() const;
         string toString() const;
 
-        ostream & output(ostream & o) const;
+        ostream & output(ostream & o, const string & sIndent = "") const;
     };
 
     class WRITERFILTER_DLLPUBLIC TagLogger
@@ -139,8 +137,7 @@ namespace writerfilter
         IdToString::Pointer_t mpIdToString;
 
     public:
-        PropertySetToTagHandler(IdToString::Pointer_t pIdToString)
-        : mpTag(new XMLTag("propertyset")), mpIdToString(pIdToString) {}
+        PropertySetToTagHandler(IdToString::Pointer_t pIdToString);
         virtual ~PropertySetToTagHandler();
 
         XMLTag::Pointer_t getTag() const { return mpTag; }
@@ -155,5 +152,4 @@ namespace writerfilter
 WRITERFILTER_DLLPUBLIC XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet);
 }
 
-#endif // DEBUG
 #endif // INCLUDED_TAG_LOGGER_HXX

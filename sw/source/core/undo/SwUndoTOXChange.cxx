@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <SwUndoTOXChange.hxx>
 #include <swundo.hxx>
 #include <doctxm.hxx>
@@ -45,27 +46,32 @@ void SwUndoTOXChange::UpdateTOXBaseSection()
     if (pTOX->ISA(SwTOXBaseSection))
     {
         SwTOXBaseSection * pTOXBase = static_cast<SwTOXBaseSection *>(pTOX);
-
         pTOXBase->Update();
         pTOXBase->UpdatePageNum();
     }
 }
 
-void SwUndoTOXChange::Undo(SwUndoIter &)
+void SwUndoTOXChange::UndoImpl(::sw::UndoRedoContext &)
 {
     *pTOX = aOld;
 
     UpdateTOXBaseSection();
 }
 
-void SwUndoTOXChange::Redo(SwUndoIter &)
+void SwUndoTOXChange::DoImpl()
 {
     *pTOX = aNew;
 
     UpdateTOXBaseSection();
 }
 
-void SwUndoTOXChange::Repeat(SwUndoIter & rIter)
+void SwUndoTOXChange::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIter);
+    DoImpl();
 }
+
+void SwUndoTOXChange::RepeatImpl(::sw::RepeatContext &)
+{
+    DoImpl();
+}
+

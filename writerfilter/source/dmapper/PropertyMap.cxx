@@ -112,13 +112,43 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
     }
     return m_aValues;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+void lcl_AnyToTag(XMLTag::Pointer_t pTag, const uno::Any & rAny)
+{
+    try {
+        sal_Int32 aInt = 0;
+        rAny >>= aInt;
+        pTag->addAttr("value", aInt);
+
+        sal_uInt32 auInt = 0;
+        rAny >>= auInt;
+        pTag->addAttr("unsignedValue", auInt);
+
+        float aFloat = 0.0f;
+        rAny >>= aFloat;
+        pTag->addAttr("floatValue", aFloat);
+
+        ::rtl::OUString aStr;
+        rAny >>= aStr;
+        pTag->addAttr("stringValue", aStr);
+    }
+    catch (...) {
+    }
+}
+
 void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any& rAny, bool bOverwrite )
 {
-//    const ::rtl::OUString& rInsert = PropertyNameSupplier::
-//                           GetPropertyNameSupplier().GetName(eId);
+#ifdef DEBUG_DMAPPER_PROPERTY_MAP
+    const ::rtl::OUString& rInsert = PropertyNameSupplier::
+        GetPropertyNameSupplier().GetName(eId);
+
+    XMLTag::Pointer_t pTag(new XMLTag("propertyMap.insert"));
+    pTag->addAttr("name", rInsert);
+    lcl_AnyToTag(pTag, rAny);
+
+    dmapper_logger->addTag(pTag);
+#endif
+
     PropertyMap::iterator aElement = find(PropertyDefinition( eId, bIsTextProperty ) );
     if( aElement != end())
     {
@@ -132,7 +162,6 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
     Invalidate();
 }
 
-#ifdef DEBUG_DOMAINMAPPER
 XMLTag::Pointer_t PropertyMap::toTag() const
 {
     XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
@@ -153,15 +182,15 @@ XMLTag::Pointer_t PropertyMap::toTag() const
             default:
             {
                 try {
-                    sal_Int32 aInt;
+                    sal_Int32 aInt = 0;
                     aMapIter->second >>= aInt;
                     pTag->addAttr("value", aInt);
 
-                    sal_uInt32 auInt;
+                    sal_uInt32 auInt = 0;
                     aMapIter->second >>= auInt;
                     pTag->addAttr("unsignedValue", auInt);
 
-                    float aFloat;
+                    float aFloat = 0.0;
                     aMapIter->second >>= aFloat;
                     pTag->addAttr("floatValue", aFloat);
 
@@ -182,7 +211,6 @@ XMLTag::Pointer_t PropertyMap::toTag() const
 
     return pResult;
 }
-#endif
 
 /*-- 13.12.2006 10:46:42---------------------------------------------------
 

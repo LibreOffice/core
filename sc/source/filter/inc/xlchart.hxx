@@ -101,6 +101,7 @@ class XclRoot;
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
 #define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
 #define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
+#define EXC_CHPROP_EXPTIMEINCREMENT         CREATE_OUSTRING( "ExplicitTimeIncrement" )
 #define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
@@ -721,6 +722,23 @@ const sal_uInt8 EXC_CH3DDATAFORMAT_TRUNC        = 2;        /// Shart top, trunc
 
 const sal_uInt16 EXC_ID_CHPIEEXT                = 0x1061;
 
+// (0x1062) CHDATERANGE -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_CHDATERANGE             = 0x1062;
+
+const sal_uInt16 EXC_CHDATERANGE_AUTOMIN        = 0x0001;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMAX        = 0x0002;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMAJOR      = 0x0004;
+const sal_uInt16 EXC_CHDATERANGE_AUTOMINOR      = 0x0008;
+const sal_uInt16 EXC_CHDATERANGE_DATEAXIS       = 0x0010;
+const sal_uInt16 EXC_CHDATERANGE_AUTOBASE       = 0x0020;
+const sal_uInt16 EXC_CHDATERANGE_AUTOCROSS      = 0x0040;   /// Other axis crosses at own maximum.
+const sal_uInt16 EXC_CHDATERANGE_AUTODATE       = 0x0080;   /// Recognize date/text automatically.
+
+const sal_uInt16 EXC_CHDATERANGE_DAYS           = 0;
+const sal_uInt16 EXC_CHDATERANGE_MONTHS         = 1;
+const sal_uInt16 EXC_CHDATERANGE_YEARS          = 2;
+
 // (0x1066) CHESCHERFORMAT ----------------------------------------------------
 
 const sal_uInt16 EXC_ID_CHESCHERFORMAT          = 0x1066;
@@ -1050,6 +1068,23 @@ struct XclChLabelRange
     sal_uInt16          mnFlags;            /// Additional flags.
 
     explicit            XclChLabelRange();
+};
+
+// ----------------------------------------------------------------------------
+
+struct XclChDateRange
+{
+    sal_uInt16          mnMinDate;          /// Minimum value on axis.
+    sal_uInt16          mnMaxDate;          /// Maximum value on axis.
+    sal_uInt16          mnMajorStep;        /// Distance for major grid lines.
+    sal_uInt16          mnMajorUnit;        /// Time unit for major step.
+    sal_uInt16          mnMinorStep;        /// Distance for minor grid lines.
+    sal_uInt16          mnMinorUnit;        /// Time unit for minor step.
+    sal_uInt16          mnBaseUnit;         /// Time unit for axis values.
+    sal_uInt16          mnCross;            /// Crossing position of other axis.
+    sal_uInt16          mnFlags;            /// Additional flags.
+
+    explicit            XclChDateRange();
 };
 
 // ----------------------------------------------------------------------------

@@ -27,26 +27,14 @@
 #ifndef DBAUI_JOINCONTROLLER_HXX
 #define DBAUI_JOINCONTROLLER_HXX
 
-#ifndef DBAUI_SINGLEDOCCONTROLLER_HXX
 #include "singledoccontroller.hxx"
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
-#endif
-#ifndef DBAUI_JOINDESIGNVIEW_HXX
 #include "JoinDesignView.hxx"
-#endif
 #include "TableConnectionData.hxx"
 #include "TableWindowData.hxx"
-#ifndef _MEMORY_
 #include <memory>
-#endif
 #include <boost/shared_ptr.hpp>
 
 namespace comphelper

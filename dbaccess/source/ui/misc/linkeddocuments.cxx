@@ -114,9 +114,6 @@
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
 #endif
-#ifndef _SFX_MACROCONF_HXX
-#include <sfx2/macrconf.hxx>
-#endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
 #endif

@@ -93,12 +93,6 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    ::vos::ORef< SvXMLExportPropertyMapper > OFormLayerXMLExport::getStylePropertyMapper()
-    {
-        return m_pImpl->getStylePropertyMapper();
-    }
-
-    //---------------------------------------------------------------------
     void OFormLayerXMLExport::initialize()
     {
         m_pImpl->clear();

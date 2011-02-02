@@ -111,7 +111,6 @@ using namespace ::vos;
 #include <unotools/syslocale.hxx>
 
 #include "sfx2/sfxhelp.hxx"
-#include "sfxbasic.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
 #include "sfxtypes.hxx"
@@ -590,37 +589,6 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
         if( STRING_NOTFOUND != aFlags.Search( 'H' ) )
             bHidden = sal_True;
     }
-/*
-    if ( ( !pFilter || nErr == ERRCODE_SFX_CONSULTUSER ) && !bAPI && !bHidden )
-    {
-        if ( !pFilter )
-            pFilter = pOldFilter;
-
-        String aTmpName;
-        if ( pFilter )
-            aTmpName = pFilter->GetUIName();
-
-        SfxFilterMatcher *pMatcher;
-        if( bPlugIn && pFilter )
-            pMatcher = new SfxFilterMatcher( (SfxFilterContainer *) pFilter->GetFilterContainer() );
-        else
-            pMatcher = (SfxFilterMatcher*) this;
-
-        SfxFilterDialog *pDlg = new SfxFilterDialog( 0, &rMedium, *pMatcher, pFilter ? &aTmpName: 0, 0 );
-        const sal_Bool bOk = RET_OK == pDlg->Execute();
-        if (bOk)
-            pFilter  = pMatcher->GetFilter4UIName( pDlg->GetSelectEntry());
-
-        if( bPlugIn && pFilter )
-            delete pMatcher;
-        delete pDlg;
-
-        if ( !bOk)
-            nErr = ERRCODE_ABORT;
-        else
-            nErr = ERRCODE_NONE;
-    }
-*/
     *ppFilter = pFilter;
 
     if ( bHidden || (bAPI && nErr == ERRCODE_SFX_CONSULTUSER) )
@@ -773,22 +741,6 @@ const SfxFilter* SfxFilterMatcher::GetFilter4Extension( const String& rExt, SfxF
 
 const SfxFilter* SfxFilterMatcher::GetFilter4ClipBoardId( sal_uInt32 nId, SfxFilterFlags nMust, SfxFilterFlags nDont ) const
 {
-    /*
-    if ( pImpl->pList )
-    {
-        sal_uInt16 nCount = ( sal_uInt16 ) pImpl->pList->Count();
-        for( sal_uInt16 n = 0; n < nCount; n++ )
-        {
-            const SfxFilter* pFilter = pImpl->pList->GetObject( n );
-            SfxFilterFlags nFlags = pFilter->GetFilterFlags();
-            if ( (nFlags & nMust) == nMust && !(nFlags & nDont ) && pFilter->GetFormat() == nId )
-                return pFilter;
-        }
-
-        return 0;
-    }
-    */
-
     if (nId == 0)
         return 0;
 

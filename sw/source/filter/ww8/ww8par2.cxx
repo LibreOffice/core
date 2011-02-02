@@ -2505,7 +2505,7 @@ void WW8TabDesc::CreateSwTable()
     // ein Pagedesc steht. Dann wuerde der PageDesc in die naechste Zeile
     // hinter der Tabelle rutschen, wo er nichts zu suchen hat.  -> loeschen
     // und spaeter an das Tabellenformat setzen
-    if (SwTxtNode* pNd = pIo->rDoc.GetNodes()[pTmpPos->nNode]->GetTxtNode())
+    if (SwTxtNode *const pNd = pTmpPos->nNode.GetNode().GetTxtNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
         {

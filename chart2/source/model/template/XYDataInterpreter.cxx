@@ -75,11 +75,12 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
     Reference< data::XLabeledDataSequence > xCategories;
-    // check for categories. If true, the the categories bet parked in the axis scale, but not used via setting the Axistype to Not CATEGORY
     bool bHasCategories = HasCategories( aArguments, aData );
+    bool bUseCategoriesAsX = UseCategoriesAsX( aArguments );
 
     // parse data
     bool bCategoriesUsed = false;
+    bool bSetXValues = aData.getLength()>(bCategoriesUsed?2:1);
     for( sal_Int32 nDataIdx= 0; nDataIdx < aData.getLength(); ++nDataIdx )
     {
         try
@@ -88,10 +89,14 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
             {
                 xCategories.set( aData[nDataIdx] );
                 if( xCategories.is())
+                {
                     SetRole( xCategories->getValues(), C2U("categories"));
+                    if( bUseCategoriesAsX )
+                        bSetXValues = false;
+                }
                 bCategoriesUsed = true;
             }
-            else if( !xValuesX.is() && (aData.getLength()>(bCategoriesUsed?2:1)) )
+            else if( !xValuesX.is() && bSetXValues )
             {
                 xValuesX.set( aData[nDataIdx] );
                 if( xValuesX.is())
@@ -123,22 +128,14 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
 
     for( ;aSequencesVecIt != aSequencesVec.end(); ++aSequencesVecIt, ++nSeriesIndex )
     {
-        Sequence< Reference< data::XLabeledDataSequence > > aNewData(xValuesX.is()?2:1);
-        if( aSequencesVecIt != aSequencesVec.begin() &&
-            xCloneable.is() )
-        {
-            xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
-        }
+        vector< Reference< data::XLabeledDataSequence > > aNewData;
 
+        if( aSequencesVecIt != aSequencesVec.begin() && xCloneable.is() )
+            xClonedXValues.set( xCloneable->createClone(), uno::UNO_QUERY );
         if( xValuesX.is() )
-        {
-            aNewData[0] = xClonedXValues;
-            aNewData[1] = (*aSequencesVecIt);
-        }
-        else
-        {
-            aNewData[0] = (*aSequencesVecIt);
-        }
+            aNewData.push_back( xClonedXValues );
+
+        aNewData.push_back( *aSequencesVecIt );
 
         Reference< XDataSeries > xSeries;
         if( nSeriesIndex < aSeriesToReUse.getLength())
@@ -148,7 +145,7 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
         OSL_ASSERT( xSeries.is() );
         Reference< data::XDataSink > xSink( xSeries, uno::UNO_QUERY );
         OSL_ASSERT( xSink.is() );
-        xSink->setData( aNewData );
+        xSink->setData( ContainerHelper::ContainerToSequence( aNewData ) );
 
         aSeriesVec.push_back( xSeries );
     }

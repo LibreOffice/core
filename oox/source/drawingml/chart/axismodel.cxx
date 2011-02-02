@@ -48,7 +48,6 @@ AxisDispUnitsModel::~AxisDispUnitsModel()
 AxisModel::AxisModel( sal_Int32 nTypeId ) :
     mnAxisId( -1 ),
     mnAxisPos( XML_TOKEN_INVALID ),
-    mnBaseTimeUnit( XML_days ),
     mnCrossAxisId( -1 ),
     mnCrossBetween( XML_between ),
     mnCrossMode( XML_autoZero ),

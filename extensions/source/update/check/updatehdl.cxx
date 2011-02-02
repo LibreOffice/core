@@ -49,7 +49,7 @@
 #include "com/sun/star/awt/XControl.hpp"
 #include "com/sun/star/awt/XControlContainer.hpp"
 #include "com/sun/star/awt/XMessageBox.hpp"
-#include "com/sun/star/awt/XThrobber.hpp"
+#include "com/sun/star/awt/XAnimation.hpp"
 #include "com/sun/star/awt/XTopWindow.hpp"
 #include "com/sun/star/awt/XVclWindowPeer.hpp"
 #include "com/sun/star/awt/XVclContainer.hpp"
@@ -759,14 +759,14 @@ void UpdateHandler::loadStrings()
 void UpdateHandler::startThrobber( bool bStart )
 {
     uno::Reference< awt::XControlContainer > xContainer( mxUpdDlg, uno::UNO_QUERY );
-    uno::Reference< awt::XThrobber > xThrobber( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
+    uno::Reference< awt::XAnimation > xThrobber( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
 
     if ( xThrobber.is() )
     {
         if ( bStart )
-            xThrobber->start();
+            xThrobber->startAnimation();
         else
-            xThrobber->stop();
+            xThrobber->stopAnimation();
     }
 
     uno::Reference< awt::XWindow > xWindow( xContainer->getControl( CTRL_THROBBER ), uno::UNO_QUERY );
@@ -1084,8 +1084,8 @@ bool UpdateHandler::showOverwriteWarning() const
 #define EDIT_WIDTH          ( DIALOG_WIDTH - 2 * DIALOG_BORDER )
 #define BOX1_BTN_X          ( DIALOG_BORDER + EDIT_WIDTH - BUTTON_WIDTH - INNER_BORDER )
 #define BOX1_BTN_Y          ( DIALOG_BORDER + LABEL_HEIGHT + INNER_BORDER)
-#define THROBBER_WIDTH      14
-#define THROBBER_HEIGHT     14
+#define THROBBER_WIDTH      16
+#define THROBBER_HEIGHT     16
 #define THROBBER_X_POS      ( DIALOG_BORDER + 8 )
 #define THROBBER_Y_POS      ( DIALOG_BORDER + 23 )
 #define BUTTON_BAR_HEIGHT   24
@@ -1372,7 +1372,7 @@ void UpdateHandler::createDialog()
     {   // @see awt/UnoControlThrobberModel.idl
         uno::Sequence< beans::NamedValue > aProps;
 
-        insertControlModel( xControlModel, UNISTRING("com.sun.star.awt.UnoThrobberControlModel"), CTRL_THROBBER,
+        insertControlModel( xControlModel, UNISTRING("com.sun.star.awt.SpinningProgressControlModel"), CTRL_THROBBER,
                             awt::Rectangle( THROBBER_X_POS, THROBBER_Y_POS, THROBBER_WIDTH, THROBBER_HEIGHT),
                             aProps );
     }

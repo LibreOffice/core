@@ -44,7 +44,8 @@ SRC1FILES=			images.src			\
                     helptext.src		\
                     units.src		    \
                     btntext.src         \
-                    print.src
+                    print.src           \
+                    throbber.src        \
 
 RESLIB1NAME=		$(RESTARGET)
 RESLIB1IMAGES= $(PRJ)$/source/src

@@ -29,7 +29,7 @@
 
 #include "VAxisOrGridBase.hxx"
 #include "VAxisProperties.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 //.............................................................................
@@ -52,18 +52,18 @@ public:
 
     sal_Int32 getDimensionCount();
 
-    virtual void SAL_CALL createMaximumLabels()=0;
-    virtual void SAL_CALL createLabels()=0;
-    virtual void SAL_CALL updatePositions()=0;
+    virtual void createMaximumLabels()=0;
+    virtual void createLabels()=0;
+    virtual void updatePositions()=0;
 
-    virtual sal_Bool SAL_CALL isAnythingToDraw();
-    virtual void SAL_CALL initAxisLabelProperties(
+    virtual sal_Bool isAnythingToDraw();
+    virtual void initAxisLabelProperties(
                     const ::com::sun::star::awt::Size& rFontReferenceSize
                   , const ::com::sun::star::awt::Rectangle& rMaximumSpaceForLabels );
 
-    virtual void SAL_CALL setExplicitScaleAndIncrement(
-            const ::com::sun::star::chart2::ExplicitScaleData& rScale
-          , const ::com::sun::star::chart2::ExplicitIncrementData& rIncrement )
+    virtual void setExplicitScaleAndIncrement(
+            const ExplicitScaleData& rScale
+          , const ExplicitIncrementData& rIncrement )
                 throw (::com::sun::star::uno::RuntimeException);
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
@@ -82,6 +82,9 @@ protected: //methods
     void recordMaximumTextSize( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShape >& xShape
                     , double fRotationAngleDegree );
+
+    bool isDateAxis() const;
+    bool isComplexCategoryAxis() const;
 
 protected: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;

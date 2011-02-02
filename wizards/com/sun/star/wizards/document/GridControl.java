@@ -70,7 +70,7 @@ public class GridControl extends Shape
             xGridColumnFactory = UnoRuntime.queryInterface( XGridColumnFactory.class, oGridModel );
             xComponent = UnoRuntime.queryInterface( XComponent.class, oGridModel );
 
-//      Helper.setUnoPropertyValue(oGridModel, "Name", _sname);
+//      Helper.setUnoPropertyValue(oGridModel, PropertyNames.PROPERTY_NAME, _sname);
             for (int i = 0; i < fieldcolumns.length; i++)
             {
                 FieldColumn curfieldcolumn = fieldcolumns[i];

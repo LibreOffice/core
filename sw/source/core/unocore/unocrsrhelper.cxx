@@ -43,6 +43,7 @@
 #include <unoframe.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <fmtftn.hxx>
 #include <fmtpdsc.hxx>
@@ -708,7 +709,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
 
                 if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
                 {
-                    pDoc->StartUndo( UNDO_START, NULL );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
@@ -718,7 +719,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                         // <--
                     }
-                    pDoc->EndUndo( UNDO_END, NULL );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
@@ -805,12 +806,12 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
 
             if( rPam.GetNext() != &rPam )           // Mehrfachselektion ?
             {
-                pDoc->StartUndo( UNDO_START, NULL );
+                pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
                 SwPaM aPam( *rPam.GetPoint() );
                 for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     pDoc->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), 1 );
-                pDoc->EndUndo( UNDO_END, NULL );
+                pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             }
             else
                 pDoc->SetNodeNumStart( *rPam.GetPoint(), 0 );
@@ -1008,6 +1009,8 @@ sal_Bool DocInsertStringSplitCR(
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
+    // grouping done in InsertString is intended for typing, not API calls
+    ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
     SwTxtNode* const pTxtNd =

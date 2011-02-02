@@ -415,13 +415,34 @@ bool ChartTypeHelper::isSupportingAxisPositioning( const uno::Reference< chart2:
     return true;
 }
 
-bool ChartTypeHelper::shiftTicksAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
+bool ChartTypeHelper::isSupportingDateAxis( const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 /*nDimensionCount*/, sal_Int32 nDimensionIndex )
+{
+    if( nDimensionIndex!=0 )
+        return false;
+    if( xChartType.is() )
+    {
+        sal_Int32 nType = ChartTypeHelper::getAxisType( xChartType, nDimensionIndex );
+        if( nType != AxisType::CATEGORY )
+            return false;
+        rtl::OUString aChartTypeName = xChartType->getChartType();
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+            return false;
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET) )
+            return false;
+    }
+    return true;
+}
+
+bool ChartTypeHelper::shiftCategoryPosAtXAxisPerDefault( const uno::Reference< chart2::XChartType >& xChartType )
 {
     if(xChartType.is())
     {
         rtl::OUString aChartTypeName = xChartType->getChartType();
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
-            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR)
+            || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return true;
     }
     return false;

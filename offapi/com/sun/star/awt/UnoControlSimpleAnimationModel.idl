@@ -38,36 +38,16 @@
 
 //=============================================================================
 
-/** specifies the standard model of an <type>UnoControlSimpleAnimation</type>.
-
-    <p>The simple animation control displays a sequence of images.</p>
-
-    <p> </p>
-
-    @see UnoControlScrollBarModel
+/**
     @since OOo 2.2
+    @deprecated
+        You should use <type>AnimatedImagesControlModel</type>.
  */
 
 published service UnoControlSimpleAnimationModel
 {
     service com::sun::star::awt::UnoControlModel;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies the time in milliseconds between two animation steps.
-
-        <pre>This is the minimum time, the actual value might be longer due to
-        system load. The default value will be 100 ms.</pre>
-     */
     [property] long StepTime;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the animation will restart again after displaying the last
-        image.
-
-        <p>The default is FALSE.</p>
-     */
     [property] boolean AutoRepeat;
 };
 

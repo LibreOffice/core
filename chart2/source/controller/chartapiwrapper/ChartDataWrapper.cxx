@@ -64,9 +64,11 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 using ::osl::MutexGuard;
+using ::com::sun::star::chart2::XAnyDescriptionAccess;
 using ::com::sun::star::chart::XComplexDescriptionAccess;
 using ::com::sun::star::chart::XChartData;
 using ::com::sun::star::chart::XChartDataArray;
+using ::com::sun::star::chart::XDateCategories;
 
 namespace
 {
@@ -132,7 +134,7 @@ struct lcl_Operator
     virtual ~lcl_Operator()
     {
     }
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess ) = 0;
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess ) = 0;
 
     virtual bool setsCategories( bool /*bDataInColumns*/ )
     {
@@ -155,13 +157,20 @@ struct lcl_AllOperator : public lcl_Operator
         return true;
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( !xDataAccess.is() )
             return;
 
+        Reference< XAnyDescriptionAccess > xNewAny( m_xDataToApply, uno::UNO_QUERY );
         Reference< XComplexDescriptionAccess > xNewComplex( m_xDataToApply, uno::UNO_QUERY );
-        if( xNewComplex.is() )
+        if( xNewAny.is() )
+        {
+            xDataAccess->setData( xNewAny->getData() );
+            xDataAccess->setComplexRowDescriptions( xNewAny->getComplexRowDescriptions() );
+            xDataAccess->setComplexColumnDescriptions( xNewAny->getComplexColumnDescriptions() );
+        }
+        else if( xNewComplex.is() )
         {
             xDataAccess->setData( xNewComplex->getData() );
             xDataAccess->setComplexRowDescriptions( xNewComplex->getComplexRowDescriptions() );
@@ -192,7 +201,7 @@ struct lcl_DataOperator : public lcl_Operator
     {
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( xDataAccess.is() )
             xDataAccess->setData( lcl_getNANInsteadDBL_MIN( m_rData ) );
@@ -205,33 +214,76 @@ struct lcl_DataOperator : public lcl_Operator
 
 struct lcl_RowDescriptionsOperator : public lcl_Operator
 {
-    lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions )
+    lcl_RowDescriptionsOperator( const Sequence< OUString >& rRowDescriptions
+        , const Reference< chart2::XChartDocument >& xChartDoc )
         : lcl_Operator()
         , m_rRowDescriptions( rRowDescriptions )
+        , m_xChartDoc(xChartDoc)
+        , m_bDataInColumns(true)
     {
     }
 
     virtual bool setsCategories( bool bDataInColumns )
     {
+        m_bDataInColumns = bDataInColumns;
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( xDataAccess.is() )
+        {
             xDataAccess->setRowDescriptions( m_rRowDescriptions );
+            if( m_bDataInColumns )
+                DiagramHelper::switchToTextCategories( m_xChartDoc );
+        }
     }
 
     const Sequence< OUString >& m_rRowDescriptions;
+    Reference< chart2::XChartDocument > m_xChartDoc;
+    bool m_bDataInColumns;
 };
 
 //--------------------------------------------------------------------------
 
 struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
 {
-    lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions )
+    lcl_ComplexRowDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexRowDescriptions
+        , const Reference< chart2::XChartDocument >& xChartDoc )
         : lcl_Operator()
         , m_rComplexRowDescriptions( rComplexRowDescriptions )
+        , m_xChartDoc(xChartDoc)
+        , m_bDataInColumns(true)
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        m_bDataInColumns = bDataInColumns;
+        return bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+        {
+            xDataAccess->setComplexRowDescriptions( m_rComplexRowDescriptions );
+            if( m_bDataInColumns )
+                DiagramHelper::switchToTextCategories( m_xChartDoc );
+        }
+    }
+
+    const Sequence< Sequence< OUString > >& m_rComplexRowDescriptions;
+    Reference< chart2::XChartDocument > m_xChartDoc;
+    bool m_bDataInColumns;
+};
+//--------------------------------------------------------------------------
+
+struct lcl_AnyRowDescriptionsOperator : public lcl_Operator
+{
+    lcl_AnyRowDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyRowDescriptions )
+        : lcl_Operator()
+        , m_rAnyRowDescriptions( rAnyRowDescriptions )
     {
     }
 
@@ -240,61 +292,130 @@ struct lcl_ComplexRowDescriptionsOperator : public lcl_Operator
         return bDataInColumns;
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( xDataAccess.is() )
-            xDataAccess->setComplexRowDescriptions( m_rComplexRowDescriptions );
+            xDataAccess->setAnyRowDescriptions( m_rAnyRowDescriptions );
     }
 
-    const Sequence< Sequence< OUString > >& m_rComplexRowDescriptions;
+    const Sequence< Sequence< uno::Any > >& m_rAnyRowDescriptions;
 };
 
 //--------------------------------------------------------------------------
 
 struct lcl_ColumnDescriptionsOperator : public lcl_Operator
 {
-    lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions )
+    lcl_ColumnDescriptionsOperator( const Sequence< OUString >& rColumnDescriptions
+        , const Reference< chart2::XChartDocument >& xChartDoc )
         : lcl_Operator()
         , m_rColumnDescriptions( rColumnDescriptions )
+        , m_xChartDoc(xChartDoc)
+        , m_bDataInColumns(true)
     {
     }
 
     virtual bool setsCategories( bool bDataInColumns )
     {
+        m_bDataInColumns = bDataInColumns;
         return !bDataInColumns;
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( xDataAccess.is() )
+        {
             xDataAccess->setColumnDescriptions( m_rColumnDescriptions );
+            if( !m_bDataInColumns )
+                DiagramHelper::switchToTextCategories( m_xChartDoc );
+        }
     }
 
     const Sequence< OUString >& m_rColumnDescriptions;
+    Reference< chart2::XChartDocument > m_xChartDoc;
+    bool m_bDataInColumns;
 };
 
 //--------------------------------------------------------------------------
 
 struct lcl_ComplexColumnDescriptionsOperator : public lcl_Operator
 {
-    lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions )
+    lcl_ComplexColumnDescriptionsOperator( const Sequence< Sequence< OUString > >& rComplexColumnDescriptions
+        , const Reference< chart2::XChartDocument >& xChartDoc )
         : lcl_Operator()
         , m_rComplexColumnDescriptions( rComplexColumnDescriptions )
+        , m_xChartDoc(xChartDoc)
+        , m_bDataInColumns(true)
     {
     }
 
     virtual bool setsCategories( bool bDataInColumns )
     {
+        m_bDataInColumns = bDataInColumns;
         return !bDataInColumns;
     }
 
-    virtual void apply( const Reference< XComplexDescriptionAccess >& xDataAccess )
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
     {
         if( xDataAccess.is() )
+        {
             xDataAccess->setComplexColumnDescriptions( m_rComplexColumnDescriptions );
+            if( !m_bDataInColumns )
+                DiagramHelper::switchToTextCategories( m_xChartDoc );
+        }
     }
 
     const Sequence< Sequence< OUString > >& m_rComplexColumnDescriptions;
+    Reference< chart2::XChartDocument > m_xChartDoc;
+    bool m_bDataInColumns;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_AnyColumnDescriptionsOperator : public lcl_Operator
+{
+    lcl_AnyColumnDescriptionsOperator( const Sequence< Sequence< uno::Any > >& rAnyColumnDescriptions )
+        : lcl_Operator()
+        , m_rAnyColumnDescriptions( rAnyColumnDescriptions )
+    {
+    }
+
+    virtual bool setsCategories( bool bDataInColumns )
+    {
+        return bDataInColumns;
+    }
+
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    {
+        if( xDataAccess.is() )
+            xDataAccess->setAnyColumnDescriptions( m_rAnyColumnDescriptions );
+    }
+
+    const Sequence< Sequence< uno::Any > >& m_rAnyColumnDescriptions;
+};
+
+//--------------------------------------------------------------------------
+
+struct lcl_DateCategoriesOperator : public lcl_Operator
+{
+    lcl_DateCategoriesOperator( const Sequence< double >& rDates )
+        : lcl_Operator()
+        , m_rDates( rDates )
+    {
+    }
+
+    virtual bool setsCategories( bool /*bDataInColumns*/ )
+    {
+        return true;
+    }
+
+    virtual void apply( const Reference< XAnyDescriptionAccess >& xDataAccess )
+    {
+        Reference< XDateCategories > xDateCategories( xDataAccess, uno::UNO_QUERY );
+        if( xDateCategories.is() )
+            xDateCategories->setDateCategories( m_rDates );
+    }
+
+    const Sequence< double >& m_rDates;
 };
 
 //--------------------------------------------------------------------------
@@ -353,6 +474,7 @@ Sequence< OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
         return m_xDataAccess->getColumnDescriptions();
     return Sequence< OUString > ();
 }
+
 // ____ XComplexDescriptionAccess (read) ____
 Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexRowDescriptions() throw (uno::RuntimeException)
 {
@@ -369,6 +491,32 @@ Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDesc
     return Sequence< Sequence< OUString > >();
 }
 
+// ____ XAnyDescriptionAccess (read) ____
+Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions() throw (uno::RuntimeException)
+{
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getAnyRowDescriptions();
+    return Sequence< Sequence< uno::Any > >();
+}
+Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescriptions() throw (uno::RuntimeException)
+{
+    initDataAccess();
+    if( m_xDataAccess.is() )
+        return m_xDataAccess->getAnyColumnDescriptions();
+    return Sequence< Sequence< uno::Any > >();
+}
+
+// ____ XDateCategories (read) ____
+Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories() throw (uno::RuntimeException)
+{
+    initDataAccess();
+    Reference< XDateCategories > xDateCategories( m_xDataAccess, uno::UNO_QUERY );
+    if( xDateCategories.is() )
+        return xDateCategories->getDateCategories();
+    return Sequence< double >();
+}
+
 // ____ XChartDataArray (write)____
 void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& rData )
     throw (uno::RuntimeException)
@@ -379,26 +527,48 @@ void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& r
 void SAL_CALL ChartDataWrapper::setRowDescriptions( const Sequence< OUString >& rRowDescriptions )
     throw (uno::RuntimeException)
 {
-    lcl_RowDescriptionsOperator aOperator( rRowDescriptions );
+    lcl_RowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString >& rColumnDescriptions )
     throw (uno::RuntimeException)
 {
-    lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions );
+    lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 
 // ____ XComplexDescriptionAccess (write) ____
 void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rRowDescriptions ) throw (uno::RuntimeException)
 {
-    lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions );
+    lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< ::rtl::OUString > >& rColumnDescriptions ) throw (uno::RuntimeException)
 {
-    lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions );
+    lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
+}
+
+// ____ XAnyDescriptionAccess (write) ____
+void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& rRowDescriptions ) throw (uno::RuntimeException)
+{
+    lcl_AnyRowDescriptionsOperator aOperator( rRowDescriptions );
+    applyData( aOperator );
+}
+void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& rColumnDescriptions ) throw (uno::RuntimeException)
+{
+    lcl_AnyColumnDescriptionsOperator aOperator( rColumnDescriptions );
+    applyData( aOperator );
+}
+
+// ____ XDateCategories (write) ____
+void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
+    ControllerLockGuard aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
+    lcl_DateCategoriesOperator aOperator( rDates );
+    applyData( aOperator );
+    DiagramHelper::switchToDateCategories( xChartDoc );
 }
 
 //--------------------------------------------------------------------------------------
@@ -508,11 +678,11 @@ void ChartDataWrapper::initDataAccess()
     if( !xChartDoc.is() )
         return;
     if( xChartDoc->hasInternalDataProvider() )
-        m_xDataAccess = Reference< XComplexDescriptionAccess >( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
+        m_xDataAccess = Reference< XAnyDescriptionAccess >( xChartDoc->getDataProvider(), uno::UNO_QUERY_THROW );
     else
     {
         //create a separate "internal data provider" that is not connected to the model
-        m_xDataAccess = Reference< XComplexDescriptionAccess >( ChartModelHelper::createInternalDataProvider(
+        m_xDataAccess = Reference< XAnyDescriptionAccess >( ChartModelHelper::createInternalDataProvider(
             xChartDoc, false /*bConnectToModel*/ ), uno::UNO_QUERY_THROW );
     }
 }
@@ -569,30 +739,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         return;
     uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );
 
-    // determine a template
-    uno::Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-    uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDia, xFact );
-    ::rtl::OUString aServiceName( aTemplateAndService.second );
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
-
-    // (fall-back)
-    if( ! xTemplate.is())
-    {
-        if( aServiceName.getLength() == 0 )
-            aServiceName = C2U("com.sun.star.chart2.template.Column");
-        xTemplate.set( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-    }
-    OSL_ASSERT( xTemplate.is());
-
-    if( xTemplate.is() && xSource.is())
-    {
-        // argument detection works with internal knowledge of the
-        // ArrayDataProvider
-        OSL_ASSERT( xDia.is());
-        xTemplate->changeDiagramData( xDia, xSource, aArguments );
-    }
+    uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
+    if( xDia.is() )
+        xDia->setDiagramData( xSource, aArguments );
 
     //correct stacking mode
     if( bStacked || bPercent || bDeep )

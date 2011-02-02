@@ -1,4 +1,4 @@
-ba      dbaccess        :       l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript LIBXSLT:libxslt NULL
+ba      dbaccess        :       l10n BOOST:boost connectivity svx stoc qadevOOo xmlscript LIBXSLT:libxslt test NULL
 ba	dbaccess								usr1	-	all	ba_mkout NULL
 ba	dbaccess\inc							nmake	-	all	ba_inc NULL
 ba	dbaccess\source\ui\inc					nmake	-	all	ba_uiinc ba_inc NULL
@@ -8,7 +8,6 @@ ba	dbaccess\source\core\recovery           nmake	-	all	ba_crecovery ba_inc NULL
 ba	dbaccess\source\core\misc				nmake	-	all	ba_cmisc ba_inc NULL
 ba	dbaccess\source\core\resource			nmake	-	all	ba_cres ba_inc NULL
 ba	dbaccess\source\filter\xml				nmake	-	all	ba_ffilter ba_shared ba_util ba_inc NULL
-ba	dbaccess\source\filter\migration		nmake	-	all	ba_fmigration ba_shared ba_inc NULL
 ba	dbaccess\source\shared					nmake	-	all	ba_shared ba_cres ba_inc NULL
 ba  dbaccess\source\sdbtools\connection     nmake   -   all ba_conntools ba_inc NULL
 ba  dbaccess\source\sdbtools\misc           nmake   -   all ba_misctools ba_inc NULL

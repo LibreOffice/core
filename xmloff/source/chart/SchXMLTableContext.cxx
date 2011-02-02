@@ -42,11 +42,11 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/chart2/XAnyDescriptionAccess.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XInternalDataProvider.hpp>
-#include <com/sun/star/chart/XComplexDescriptionAccess.hpp>
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -846,15 +846,25 @@ void SchXMLTableCellContext::EndElement()
 
 // ========================================
 
-void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< OUString >& rComplexLabel )
+void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >& rComplexLabel )
 {
     if( rCell.eType == SCH_CELL_TYPE_STRING )
     {
         rComplexLabel.realloc(1);
-        rComplexLabel[0] = rCell.aString;
+        rComplexLabel[0] = uno::makeAny( rCell.aString );
     }
     else if( rCell.pComplexString && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
-        rComplexLabel = *rCell.pComplexString;
+    {
+        sal_Int32 nCount = rCell.pComplexString->getLength();
+        rComplexLabel.realloc( nCount );
+        for( sal_Int32 nN=0; nN<nCount; nN++)
+            rComplexLabel[nN] = uno::makeAny((*rCell.pComplexString)[nN]);
+    }
+    else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
+    {
+        rComplexLabel.realloc(1);
+        rComplexLabel[0] = uno::makeAny( rCell.fValue );
+    }
 }
 
 void SchXMLTableHelper::applyTableToInternalDataProvider(
@@ -885,8 +895,8 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     }
 
     Sequence< Sequence< double > > aDataInRows( nNumRows );
-    Sequence< Sequence< OUString > > aComplexRowDescriptions( nNumRows );
-    Sequence< Sequence< OUString > > aComplexColumnDescriptions( nNumColumns );
+    Sequence< Sequence< uno::Any > > aComplexRowDescriptions( nNumRows );
+    Sequence< Sequence< uno::Any > > aComplexColumnDescriptions( nNumColumns );
     for( sal_Int32 i=0; i<nNumRows; ++i )
         aDataInRows[i].realloc( nNumColumns );
 
@@ -926,15 +936,15 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     }
 
     //apply the collected data to the chart
-    Reference< chart::XComplexDescriptionAccess > xDataAccess( xDataProv, uno::UNO_QUERY );
+    Reference< chart2::XAnyDescriptionAccess > xDataAccess( xDataProv, uno::UNO_QUERY );
     if( !xDataAccess.is() )
         return;
 
     xDataAccess->setData( aDataInRows );
     if( rTable.bHasHeaderColumn )
-        xDataAccess->setComplexRowDescriptions( aComplexRowDescriptions );
+        xDataAccess->setAnyRowDescriptions( aComplexRowDescriptions );
     if( rTable.bHasHeaderRow )
-        xDataAccess->setComplexColumnDescriptions( aComplexColumnDescriptions );
+        xDataAccess->setAnyColumnDescriptions( aComplexColumnDescriptions );
 
     if ( rTable.bProtected )
     {

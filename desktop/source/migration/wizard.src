@@ -42,6 +42,13 @@ ModalDialog DLG_FIRSTSTART_WIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
     HelpID          = HID_FIRSTSTART_DIALOG;
+
+    FixedImage CTRL_THROBBER
+    {
+        Pos = MAP_APPFONT( 5, 210 );
+        Size = MAP_APPFONT( 11, 11 );
+        Hide = TRUE;
+    };
 };
 
 String STR_STATE_WELCOME

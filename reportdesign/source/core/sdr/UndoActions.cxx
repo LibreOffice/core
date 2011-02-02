@@ -52,7 +52,7 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/stl_types.hxx>
 #include <vcl/svapp.hxx>
-#include <dbaccess/singledoccontroller.hxx>
+#include <dbaccess/dbsubcomponentcontroller.hxx>
 #include <svx/unoshape.hxx>
 #include <vos/mutex.hxx>
 

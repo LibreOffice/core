@@ -1650,7 +1650,7 @@ void SVTXRoadmap::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
     ::svt::ORoadmap* pButton = static_cast< ::svt::ORoadmap* >( GetWindow() );
-    pButton->SetRoadmapBitmap( GetBitmap() );
+    pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }
 
 void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )

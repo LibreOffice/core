@@ -127,7 +127,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  UndoManager wird beim Umschalten in den Edit-Modus umgesetzt...
-    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
     SetUndoManager( pMgr );
     if ( !pViewData->GetDocument()->IsUndoEnabled() )
     {

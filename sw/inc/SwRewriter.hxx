@@ -31,6 +31,12 @@
 #include <vector>
 #include <tools/string.hxx>
 
+
+String const UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
+String const UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
+String const UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
+
+
 typedef std::pair<String, String> SwRewriteRule;
 
 class SwRewriter

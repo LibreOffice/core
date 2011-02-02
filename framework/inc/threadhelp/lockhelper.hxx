@@ -33,7 +33,7 @@
 //_________________________________________________________________________________________________________________
 
 #include <threadhelp/inoncopyable.h>
-#include <threadhelp/imutex.h>
+#include <framework/imutex.hxx>
 #include <threadhelp/irwlock.h>
 #include <threadhelp/fairrwlock.hxx>
 

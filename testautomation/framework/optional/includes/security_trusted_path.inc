@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Execute macros from trusted path
 '*
@@ -63,6 +63,7 @@ testcase tSecTrustedPath( cWorkFile as string, iSecLevel as integer )
         endif
     endif
 
+    Sleep (1)
     printlog( "Verify that the macro is executed" )
     kontext "Active"
     if ( active.exists( 2 ) ) then

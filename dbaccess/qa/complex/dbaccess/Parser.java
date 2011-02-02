@@ -37,34 +37,14 @@ import com.sun.star.uno.UnoRuntime;
 
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
 public class Parser extends CRMBasedTestCase
 {
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "checkJoinSyntax",
-//            "checkParameterTypes",
-//            "checkWhere",
-//        };
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "Parser";
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
+    @Override
     protected void createTestCase()
     {
         try
@@ -79,7 +59,9 @@ public class Parser extends CRMBasedTestCase
         }
     }
 
-    @Test public void checkWhere() throws Exception
+    // --------------------------------------------------------------------------------------------------------
+    @Test
+    public void checkWhere() throws Exception
     {
         final XSingleSelectQueryComposer composer = createQueryComposer();
         final String SELECT = "SELECT \"products\".\"Name\" FROM \"products\" WHERE ";
@@ -118,7 +100,8 @@ public class Parser extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test public void checkJoinSyntax() throws Exception
+    @Test
+    public void checkJoinSyntax() throws Exception
     {
         final XSingleSelectQueryComposer composer = createQueryComposer();
 
@@ -186,7 +169,8 @@ public class Parser extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that the parser properly recognizes the types of parameters
      */
-    @Test public void checkParameterTypes() throws Exception
+    @Test
+    public void checkParameterTypes() throws Exception
     {
         impl_checkParameters(
             "SELECT * FROM \"all orders\" " +

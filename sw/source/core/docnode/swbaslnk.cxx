@@ -354,7 +354,7 @@ BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
                 SwNode *pANd;
                 SwTableNode *pTblNd;
                 if( pAPos &&
-                    0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
+                    0 != (pANd = & pAPos->nNode.GetNode()) &&
                     0 != (pTblNd = pANd->FindTableNode()) )
                 {
                     const BOOL bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();

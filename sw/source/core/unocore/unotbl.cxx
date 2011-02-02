@@ -45,6 +45,7 @@
 #include <hints.hxx>
 #include <swtblfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <shellres.hxx>
 #include <docary.hxx>
 #include <ndole.hxx>
@@ -2505,7 +2506,7 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
         {
             UnoActionContext aCont( pDoc );
 
-            pDoc->StartUndo(UNDO_EMPTY, NULL);
+            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
             const SwTable *pTable = 0;
             if( 0 != aPam.Start()->nContent.GetIndex() )
             {
@@ -2564,9 +2565,8 @@ void SwXTextTable::attachToRange(const uno::Reference< text::XTextRange > & xTex
                 bIsDescriptor = sal_False;
                 DELETEZ(pTableProps);
             }
-            pDoc->EndUndo( UNDO_END, NULL );
+            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
         }
-
     }
     else
         throw lang::IllegalArgumentException();
@@ -3417,7 +3417,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                     SwDoc* pDoc = pFmt->GetDoc();
                     SwTable* pTable = SwTable::FindTable( pFmt );
                     SwTableLines &rLines = pTable->GetTabLines();
-                    pDoc->StartUndo(UNDO_START, NULL);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
                     for(sal_uInt16 i = 0; i < rLines.Count(); i++)
                     {
                         SwTableLine* pLine = rLines.GetObject(i);
@@ -3447,7 +3447,7 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             }
                         }
                     }
-                    pDoc->EndUndo(UNDO_END, NULL);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
                 }
                 break;
                 case FN_UNO_TABLE_COLUMN_SEPARATORS:
@@ -3777,7 +3777,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
         while ( 0 != (pStNd = aIdx.GetNode().GetStartNode()) )
         {
             aIdx++;
-            SwNode *pNd = pFmt->GetDoc()->GetNodes()[aIdx];
+            SwNode *const pNd = & aIdx.GetNode();
             if ( pNd->IsOLENode() &&
                 aOldName == ((SwOLENode*)pNd)->GetChartTblName() )
             {

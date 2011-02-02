@@ -329,15 +329,14 @@ void OSectionWindow::zoom(const Fraction& _aZoom)
 //-----------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, StartSplitHdl, Splitter*,  )
 {
-    const String sEmpty(ModuleRes(RID_STR_UNDO_CHANGE_SIZE));
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->EnterListAction(sEmpty,String());
+    const String sUndoAction( ModuleRes( RID_STR_UNDO_CHANGE_SIZE ) );
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().EnterListAction( sUndoAction, String() );
     return 0L;
 }
 //------------------------------------------------------------------------------
 IMPL_LINK( OSectionWindow, EndSplitHdl, Splitter*,  )
 {
-    getViewsWindow()->getView()->getReportView()->getController().getUndoMgr()->LeaveListAction();
-    /*getViewsWindow()->Resize();*/
+    getViewsWindow()->getView()->getReportView()->getController().getUndoManager().LeaveListAction();
     return 0L;
 }
 //-----------------------------------------------------------------------------

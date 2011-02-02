@@ -1476,7 +1476,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
         if ( !m_xCachedProps.get() )
-            m_xCachedProps.reset( new ContentProperties( *xProps.get() ) );
+            m_xCachedProps.reset( new CachableContentProperties( *xProps.get() ) );
         else
             m_xCachedProps->addProperties( *xProps.get() );
 
@@ -2012,7 +2012,7 @@ uno::Any Content::open(
                     // cache headers.
                     if ( !m_xCachedProps.get())
                         m_xCachedProps.reset(
-                            new ContentProperties( aResource ) );
+                            new CachableContentProperties( aResource ) );
                     else
                         m_xCachedProps->addProperties( aResource );
 
@@ -2058,7 +2058,7 @@ uno::Any Content::open(
                         // cache headers.
                         if ( !m_xCachedProps.get())
                             m_xCachedProps.reset(
-                                new ContentProperties( aResource ) );
+                                new CachableContentProperties( aResource ) );
                         else
                             m_xCachedProps->addProperties(
                                 aResource.properties );
@@ -3229,7 +3229,7 @@ const Content::ResourceType & Content::getResourceType(
                 if ( resources.size() == 1 )
                 {
                     m_xCachedProps.reset(
-                        new ContentProperties( resources[ 0 ] ) );
+                        new CachableContentProperties( resources[ 0 ] ) );
                     m_xCachedProps->containsAllNames(
                         aProperties, m_aFailedPropNames );
                 }

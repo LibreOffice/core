@@ -30,23 +30,29 @@
 
 #include <ide_pch.hxx>
 
-#include <vector>
-#include <algorithm>
-#include <basic/sbx.hxx>
-#include <unotools/moduleoptions.hxx>
+#include "basobj.hxx"
+#include "iderdll.hxx"
+#include "iderdll2.hxx"
+#include "iderid.hxx"
+#include "macrodlg.hxx"
+#include "moduldlg.hxx"
+#include "basidesh.hxx"
+#include "basidesh.hrc"
+#include "baside2.hxx"
+#include "basicmod.hxx"
+#include "basdoc.hxx"
+
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/document/XScriptInvocationContext.hpp>
-#include <basobj.hxx>
-#include <iderdll.hxx>
-#include <iderdll2.hxx>
-#include <iderid.hxx>
-#include <macrodlg.hxx>
-#include <moduldlg.hxx>
-#include <basidesh.hxx>
-#include <basidesh.hrc>
-#include <baside2.hxx>
-#include <basicmod.hxx>
-#include <basdoc.hxx>
+
+#include <basic/sbx.hxx>
+#include <framework/documentundoguard.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/moduleoptions.hxx>
+
+#include <vector>
+#include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -216,6 +222,51 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     return true;
 }
 
+
+//----------------------------------------------------------------------------
+
+namespace
+{
+    struct MacroExecutionData
+    {
+        ScriptDocument  aDocument;
+        SbMethodRef     xMethod;
+
+        MacroExecutionData()
+            :aDocument( ScriptDocument::NoDocument )
+            ,xMethod( NULL )
+        {
+        }
+    };
+
+    class MacroExecution
+    {
+    public:
+        DECL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData* );
+    };
+
+
+    IMPL_STATIC_LINK( MacroExecution, ExecuteMacroEvent, MacroExecutionData*, i_pData )
+    {
+        (void)pThis;
+        ENSURE_OR_RETURN( i_pData, "wrong MacroExecutionData", 0L );
+        // take ownership of the data
+        ::std::auto_ptr< MacroExecutionData > pData( i_pData );
+
+        DBG_ASSERT( pData->xMethod->GetParent()->GetFlags() & SBX_EXTSEARCH, "Kein EXTSEARCH!" );
+
+        // in case this is a document-local macro, try to protect the document's Undo Manager from
+        // flawed scripts
+        ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+        if ( pData->aDocument.isDocument() )
+            pUndoGuard.reset( new ::framework::DocumentUndoGuard( pData->aDocument.getDocument() ) );
+
+        BasicIDE::RunMethod( pData->xMethod );
+
+        return 1L;
+    }
+}
+
 //----------------------------------------------------------------------------
 
 ::rtl::OUString ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
@@ -225,13 +276,12 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
     BasicIDEDLL::Init();
 
     IDE_DLL()->GetExtraData()->ChoosingMacro() = TRUE;
-    SFX_APP()->EnterBasicCall();
 
     String aScriptURL;
     BOOL bError = FALSE;
     SbMethod* pMethod = NULL;
 
-    MacroChooser* pChooser = new MacroChooser( NULL, TRUE );
+    ::std::auto_ptr< MacroChooser > pChooser( new MacroChooser( NULL, TRUE ) );
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
@@ -251,103 +301,95 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             if ( !pMethod && pChooser->GetMode() == MACROCHOOSER_RECORDING )
                 pMethod = pChooser->CreateMacro();
 
-            if ( pMethod )
+            if ( !pMethod )
+                break;
+
+            SbModule* pModule = pMethod->GetModule();
+            ENSURE_OR_BREAK( pModule, "BasicIDE::ChooseMacro: No Module found!" );
+
+            StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
+            ENSURE_OR_BREAK( pBasic, "BasicIDE::ChooseMacro: No Basic found!" );
+
+            BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
+            ENSURE_OR_BREAK( pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!" );
+
+            // name
+            String aName;
+            aName += pBasic->GetName();
+            aName += '.';
+            aName += pModule->GetName();
+            aName += '.';
+            aName += pMethod->GetName();
+
+            // language
+            String aLanguage = String::CreateFromAscii("Basic");
+
+            // location
+            String aLocation;
+            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+            if ( aDocument.isDocument() )
             {
-                SbModule* pModule = pMethod->GetModule();
-                DBG_ASSERT(pModule, "BasicIDE::ChooseMacro: No Module found!");
-                if ( pModule )
+                // document basic
+                aLocation = String::CreateFromAscii("document");
+
+                if ( rxLimitToDocument.is() )
                 {
-                    StarBASIC* pBasic = (StarBASIC*)pModule->GetParent();
-                    DBG_ASSERT(pBasic, "BasicIDE::ChooseMacro: No Basic found!");
-                    if ( pBasic )
-                    {
-                        BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
-                        DBG_ASSERT(pBasMgr, "BasicIDE::ChooseMacro: No BasicManager found!");
-                        if ( pBasMgr )
-                        {
-                            // name
-                            String aName;
-                            aName += pBasic->GetName();
-                            aName += '.';
-                            aName += pModule->GetName();
-                            aName += '.';
-                            aName += pMethod->GetName();
+                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
 
-                            // language
-                            String aLanguage = String::CreateFromAscii("Basic");
-
-                            // location
-                            String aLocation;
-                            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
-                            if ( aDocument.isDocument() )
+                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
+                    if ( !xScripts.is() )
+                    {   // the document itself does not support embedding scripts
+                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
+                        if ( xContext.is() )
+                            xScripts = xContext->getScriptContainer();
+                        if ( xScripts.is() )
+                        {   // but it is able to refer to a document which actually does support this
+                            xLimitToDocument.set( xScripts, UNO_QUERY );
+                            if ( !xLimitToDocument.is() )
                             {
-                                // document basic
-                                aLocation = String::CreateFromAscii("document");
-
-                                if ( rxLimitToDocument.is() )
-                                {
-                                    uno::Reference< frame::XModel > xLimitToDocument( rxLimitToDocument );
-
-                                    uno::Reference< document::XEmbeddedScripts > xScripts( rxLimitToDocument, UNO_QUERY );
-                                    if ( !xScripts.is() )
-                                    {   // the document itself does not support embedding scripts
-                                        uno::Reference< document::XScriptInvocationContext > xContext( rxLimitToDocument, UNO_QUERY );
-                                        if ( xContext.is() )
-                                            xScripts = xContext->getScriptContainer();
-                                        if ( xScripts.is() )
-                                        {   // but it is able to refer to a document which actually does support this
-                                            xLimitToDocument.set( xScripts, UNO_QUERY );
-                                            if ( !xLimitToDocument.is() )
-                                            {
-                                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
-                                                xLimitToDocument = rxLimitToDocument;
-                                            }
-                                        }
-                                    }
-
-                                    if ( xLimitToDocument != aDocument.getDocument() )
-                                    {
-                                        // error
-                                        bError = TRUE;
-                                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // application basic
-                                aLocation = String::CreateFromAscii("application");
-                            }
-
-                            // script URL
-                            if ( !bError )
-                            {
-                                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
-                                aScriptURL += aName;
-                                aScriptURL += String::CreateFromAscii("?language=");
-                                aScriptURL += aLanguage;
-                                aScriptURL += String::CreateFromAscii("&location=");
-                                aScriptURL += aLocation;
+                                OSL_ENSURE( false, "BasicIDE::ChooseMacro: a script container which is no document!?" );
+                                xLimitToDocument = rxLimitToDocument;
                             }
                         }
                     }
+
+                    if ( xLimitToDocument != aDocument.getDocument() )
+                    {
+                        // error
+                        bError = TRUE;
+                        ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
+                    }
                 }
             }
-
-            if ( pMethod && !rxLimitToDocument.is() )
+            else
             {
-                pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
-                Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
+                // application basic
+                aLocation = String::CreateFromAscii("application");
+            }
+
+            // script URL
+            if ( !bError )
+            {
+                aScriptURL = String::CreateFromAscii("vnd.sun.star.script:");
+                aScriptURL += aName;
+                aScriptURL += String::CreateFromAscii("?language=");
+                aScriptURL += aLanguage;
+                aScriptURL += String::CreateFromAscii("&location=");
+                aScriptURL += aLocation;
+            }
+
+            if ( !rxLimitToDocument.is() )
+            {
+                MacroExecutionData* pExecData = new MacroExecutionData;
+                pExecData->aDocument = aDocument;
+                pExecData->xMethod = pMethod;   // keep alive until the event has been processed
+                Application::PostUserEvent( STATIC_LINK( NULL, MacroExecution, ExecuteMacroEvent ), pExecData );
             }
         }
         break;
     }
 
-    delete pChooser;
-
-    SFX_APP()->LeaveBasicCall();
-
-    return ::rtl::OUString( aScriptURL );
+    return aScriptURL;
 }
 
 //----------------------------------------------------------------------------

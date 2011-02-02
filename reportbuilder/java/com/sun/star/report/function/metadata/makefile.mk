@@ -50,18 +50,20 @@ JAVAFILES       :=	AuthorFunction.java \
                     MetaDataFunctionCategory.java
 
 # PROPERTYFILES := $(shell @$(FIND) . -name "*.properties")
-PROPERTYFILES := $(CLASSDIR)$/$(PACKAGE)$/category.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
-         $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
-                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties	\
-         $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
+PROPERTYFILES:=$(CLASSDIR)$/$(PACKAGE)$/category.properties \
+                 $(CLASSDIR)$/$(PACKAGE)$/Title-Function.properties\
+                $(CLASSDIR)$/$(PACKAGE)$/category_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Author-Function_en_US.properties \
+                $(CLASSDIR)$/$(PACKAGE)$/Title-Function_en_US.properties
                  
+L10NPROPERTYFILES = $(PROPERTYFILES)
+ALLTAR : $(PROPERTYFILES)
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
 
-ALLTAR : $(PROPERTYFILES)
-
-$(CLASSDIR)$/$(PACKAGE)$/%.properties : %.properties
+.IF "$(WITH_LANG)"==""
+$(CLASSDIR)/$(PACKAGE)/%.properties : %.properties
     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(COMMAND_ECHO)$(COPY) $< $@
+.ENDIF

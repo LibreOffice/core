@@ -29,7 +29,7 @@
 
 #include "ItemConverter.hxx"
 #include "GraphicPropertyItemConverter.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 
 #include <com/sun/star/chart2/XDataSeries.hpp>
 #include <com/sun/star/awt/Size.hpp>

@@ -317,7 +317,7 @@ void LayerTabBar::EndRenaming()
             DBG_ASSERT( pDrView, "Rename layer undo action is only working with a SdDrawView" );
             if( pDrView )
             {
-                SfxUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
+                ::svl::IUndoManager* pManager = pDoc->GetDocSh()->GetUndoManager();
                 SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                     pDoc,
                     pLayer,

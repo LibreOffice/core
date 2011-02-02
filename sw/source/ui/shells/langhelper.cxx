@@ -300,11 +300,9 @@ namespace SwLangHelper
                     }
                     rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
 
-                    // set respective language attribute in text document to default
+                    // #i102191: hard set respective language attribute in text document
                     // (for all text in the document - which should be selected by now...)
-                    SvUShortsSort aAttribs;
-                    aAttribs.Insert( nLangWhichId );
-                    rWrtSh.ResetAttr( &aAttribs );
+                    rWrtSh.SetAttr( SvxLanguageItem( nLang, nLangWhichId ) );
                 }
             }
         }

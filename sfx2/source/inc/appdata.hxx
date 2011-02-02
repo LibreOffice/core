@@ -116,7 +116,6 @@ public:
 
     // global pointers
     SfxItemPool*                        pPool;
-    SfxEventConfiguration*              pEventConfig;
     SvUShorts*                          pDisabledSlotList;
     SvStrings*                          pSecureURLs;
     SvtSaveOptions*                     pSaveOptions;
@@ -129,7 +128,6 @@ public:
 
     USHORT                              nDocModalMode;              // counts documents in modal mode
     USHORT                              nAutoTabPageId;
-    USHORT                              nBasicCallLevel;
     USHORT                              nRescheduleLocks;
     USHORT                              nInReschedule;
     USHORT                              nAsynchronCalls;

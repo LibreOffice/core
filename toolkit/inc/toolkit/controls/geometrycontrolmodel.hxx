@@ -186,6 +186,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
     {
     public:
         OGeometryControlModel();
+        OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_xCompContext);
 
     private:
         OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);

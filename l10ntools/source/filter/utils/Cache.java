@@ -159,7 +159,6 @@ public class Cache
     private static final java.lang.String FLAGNAME_PACKED           = "PACKED";
     private static final java.lang.String FLAGNAME_PREFERRED        = "PREFERRED";
     private static final java.lang.String FLAGNAME_READONLY         = "READONLY";
-    private static final java.lang.String FLAGNAME_SILENTEXPORT     = "SILENTEXPORT";
     private static final java.lang.String FLAGNAME_TEMPLATE         = "TEMPLATE";
     private static final java.lang.String FLAGNAME_TEMPLATEPATH     = "TEMPLATEPATH";
     private static final java.lang.String FLAGNAME_USESOPTIONS      = "USESOPTIONS";
@@ -185,7 +184,6 @@ public class Cache
     private static final int FLAGVAL_PACKED            = 0x00100000; // 1048576
     private static final int FLAGVAL_PREFERRED         = 0x10000000; // 268435456
     private static final int FLAGVAL_READONLY          = 0x00010000; // 65536
-    private static final int FLAGVAL_SILENTEXPORT      = 0x00200000; // 2097152
     private static final int FLAGVAL_TEMPLATE          = 0x00000004; // 4
     private static final int FLAGVAL_TEMPLATEPATH      = 0x00000010; // 16
     private static final int FLAGVAL_USESOPTIONS       = 0x00000080; // 128
@@ -1358,9 +1356,6 @@ public class Cache
             if (sFlagName.equals(FLAGNAME_READONLY))
                 nFlags |= FLAGVAL_READONLY;
             else
-            if (sFlagName.equals(FLAGNAME_SILENTEXPORT))
-                nFlags |= FLAGVAL_SILENTEXPORT;
-            else
             if (sFlagName.equals(FLAGNAME_TEMPLATE))
                 nFlags |= FLAGVAL_TEMPLATE;
             else
@@ -1454,9 +1449,6 @@ public class Cache
 
         if((field & FLAGVAL_PACKED) == FLAGVAL_PACKED)
             lFlags.add(FLAGNAME_PACKED);
-
-        if((field & FLAGVAL_SILENTEXPORT) == FLAGVAL_SILENTEXPORT)
-            lFlags.add(FLAGNAME_SILENTEXPORT);
 
         if((field & FLAGVAL_BROWSERPREFERRED) == FLAGVAL_BROWSERPREFERRED)
             lFlags.add(FLAGNAME_BROWSERPREFERRED);

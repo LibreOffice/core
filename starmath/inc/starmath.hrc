@@ -82,10 +82,9 @@
 #define SID_CMDBOXWINDOW            (SID_SMA_START + 122)
 #define SID_TOOLBOXWINDOW           (SID_SMA_START + 123)
 #define SID_NO_RIGHT_SPACES         (SID_SMA_START + 124)
+#define SID_SAVE_ONLY_USED_SYMBOLS  (SID_SMA_START + 125)
 #define SID_DUMMY                   (SID_SMA_START + 254)
 
-//#define GID_FORMEL                            (RID_GROUPS_OFFSET + 1)
-//#define GID_ERROR                             (RID_GROUPS_OFFSET + 2)
 
 //#define RID_OPTIONSDIALOG         (RID_APP_START + 1)
 #define RID_FONTDIALOG              (RID_APP_START + 2)
@@ -100,8 +99,6 @@
 #define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
-// wegen #58705# entfernt
-//#define RID_DRAW_OBJECTBAR            (RID_APP_START + 51)
 
 #define RID_DEFAULTSAVEQUERY        (RID_APP_START + 102)
 #define RID_WRITESYMBOLERROR        (RID_APP_START + 202)

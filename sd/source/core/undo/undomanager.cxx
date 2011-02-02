@@ -34,40 +34,22 @@ using namespace sd;
 
 UndoManager::UndoManager( USHORT nMaxUndoActionCount /* = 20 */ )
 : SfxUndoManager( nMaxUndoActionCount )
-, mnListLevel( 0 )
 , mpLinkedUndoManager(NULL)
 {
 }
 
 void UndoManager::EnterListAction(const UniString &rComment, const UniString& rRepeatComment, USHORT nId /* =0 */)
 {
-    if( !isInUndo() )
+    if( !IsDoing() )
     {
         ClearLinkedRedoActions();
-        mnListLevel++;
         SfxUndoManager::EnterListAction( rComment, rRepeatComment, nId );
-    }
-}
-
-void UndoManager::LeaveListAction()
-{
-    if( !isInUndo() )
-    {
-        SfxUndoManager::LeaveListAction();
-        if( mnListLevel )
-        {
-            mnListLevel--;
-        }
-        else
-        {
-            DBG_ERROR("sd::UndoManager::LeaveListAction(), no open list action!" );
-        }
     }
 }
 
 void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALSE */ )
 {
-    if( !isInUndo() )
+    if( !IsDoing() )
     {
         ClearLinkedRedoActions();
         SfxUndoManager::AddUndoAction( pAction, bTryMerg );
@@ -79,22 +61,7 @@ void UndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg /* = FALS
 }
 
 
-BOOL UndoManager::Undo( USHORT nCount )
-{
-    ScopeLockGuard aGuard( maIsInUndoLock );
-    return SfxUndoManager::Undo( nCount );
-}
-
-BOOL UndoManager::Redo( USHORT nCount )
-{
-    ScopeLockGuard aGuard( maIsInUndoLock );
-    return SfxUndoManager::Redo( nCount );
-}
-
-
-
-
-void UndoManager::SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager)
+void UndoManager::SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager)
 {
     mpLinkedUndoManager = pLinkedUndoManager;
 }

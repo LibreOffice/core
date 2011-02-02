@@ -28,7 +28,6 @@
 #define CHART2_COMMANDDISPATCHCONTAINER_HXX
 
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/chart2/XUndoManager.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
@@ -86,9 +85,6 @@ public:
     void setModel(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xModel );
-//     void setUndoManager(
-//         const ::com::sun::star::uno::Reference<
-//             ::com::sun::star::chart2::XUndoManager > & xUndoManager );
 
     /** Set a chart dispatcher that is used for all commands contained in
         rChartCommands
@@ -140,9 +136,8 @@ private:
     mutable tDispatchMap m_aCachedDispatches;
     mutable tDisposeVector m_aToBeDisposedDispatches;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >    m_xModel;
-    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XUndoManager > m_xUndoManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >    m_xContext;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >         m_xModel;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xChartDispatcher;
     ::std::set< ::rtl::OUString >                                          m_aChartCommands;

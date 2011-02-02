@@ -45,10 +45,6 @@
 #define ITEMID_MACRO SID_ATTR_MACROITEM
 #include <svl/macitem.hxx>
 
-class SfxMacroInfo;
-class SfxMacroInfoArr_Impl;
-class SfxEventConfigItem_Impl;
-class SfxEventInfoArr_Impl;
 class SfxObjectShell;
 class SvxMacroTableDtor;
 

@@ -40,6 +40,7 @@
 #include <IMark.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <istyleaccess.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
@@ -66,9 +67,7 @@
 #include <fmtfld.hxx>
 #include <fmtpdsc.hxx>
 #include <pagedesc.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <poolfmt.hxx>
 #include <edimp.hxx>
 #include <fchrfmt.hxx>
@@ -350,13 +349,13 @@ throw (lang::IllegalArgumentException)
 
     SwTxtFmtColl *const pLocal = pStyle->GetCollection();
     UnoActionContext aAction(pDoc);
-    pDoc->StartUndo( UNDO_START, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     SwPaM *pTmpCrsr = &rPaM;
     do {
         pDoc->SetTxtFmtColl(*pTmpCrsr, pLocal);
         pTmpCrsr = static_cast<SwPaM*>(pTmpCrsr->GetNext());
     } while ( pTmpCrsr != &rPaM );
-    pDoc->EndUndo( UNDO_END, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 }
 
 /* -----------------06.07.98 07:38-------------------
@@ -427,7 +426,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
 
     if( rCrsr.GetNext() != &rCrsr )         // Mehrfachselektion ?
     {
-        pDoc->StartUndo( UNDO_START, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( rCrsr );
         SwPaM aPam( *rCrsr.GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
@@ -436,7 +435,7 @@ lcl_SetNodeNumStart(SwPaM & rCrsr, uno::Any const& rValue)
           pDoc->SetNodeNumStart(*aRangeArr.SetPam( n, aPam ).GetPoint(),
                     nStt );
         }
-        pDoc->EndUndo( UNDO_END, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     else
     {
@@ -457,7 +456,7 @@ lcl_setCharFmtSequence(SwPaM & rPam, uno::Any const& rValue)
     for (sal_Int32 nStyle = 0; nStyle < aCharStyles.getLength(); nStyle++)
     {
         uno::Any aStyle;
-        rPam.GetDoc()->StartUndo(UNDO_START, NULL);
+        rPam.GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
         aStyle <<= aCharStyles.getConstArray()[nStyle];
         // create a local set and apply each format directly
         SfxItemSet aSet(rPam.GetDoc()->GetAttrPool(),
@@ -468,7 +467,7 @@ lcl_setCharFmtSequence(SwPaM & rPam, uno::Any const& rValue)
         SwUnoCursorHelper::SetCrsrAttr(rPam, aSet, (nStyle)
                 ? nsSetAttrMode::SETATTR_DONTREPLACE
                 : nsSetAttrMode::SETATTR_DEFAULT);
-        rPam.GetDoc()->EndUndo(UNDO_START, NULL);
+        rPam.GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_START, NULL);
     }
     return true;
 }
@@ -931,7 +930,7 @@ void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
         SwDoc* pDoc = pUnoCrsr->GetDoc();
         UnoActionContext aAction(pDoc);
         const xub_StrLen nTxtLen = rText.getLength();
-        pDoc->StartUndo(UNDO_INSERT, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
         SwCursor * pCurrent = pUnoCrsr;
         do
         {
@@ -953,7 +952,7 @@ void SwXTextCursor::DeleteAndInsert(const ::rtl::OUString& rText,
             }
             pCurrent = static_cast<SwCursor *>(pCurrent->GetNext());
         } while (pCurrent != pUnoCrsr);
-        pDoc->EndUndo(UNDO_INSERT, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     }
 }
 

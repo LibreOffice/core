@@ -64,7 +64,6 @@
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 namespace css = ::com::sun::star;
 

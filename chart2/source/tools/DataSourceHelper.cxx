@@ -461,25 +461,8 @@ void DataSourceHelper::setRangeSegmentation(
     if( !xDataSource.is() )
         return;
 
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDiagram, xTemplateFactory );
-
-    rtl::OUString aServiceName( aTemplateAndService.second );
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
-
-    if( !xTemplate.is() )
-    {
-        if( aServiceName.getLength() == 0 )
-            aServiceName = C2U("com.sun.star.chart2.template.Column");
-        xTemplate.set( xTemplateFactory->createInstance( aServiceName ), uno::UNO_QUERY );
-    }
-    if( !xTemplate.is() )
-        return;
-
-    // /-- locked controllers
     ControllerLockGuard aCtrlLockGuard( xChartModel );
-    xTemplate->changeDiagramData( xDiagram, xDataSource, aArguments );
-    // \-- locked controllers
+    xDiagram->setDiagramData( xDataSource, aArguments );
 }
 
 Sequence< OUString > DataSourceHelper::getRangesFromLabeledDataSequence(
