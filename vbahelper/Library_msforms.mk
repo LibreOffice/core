@@ -61,26 +61,8 @@ $(eval $(call gb_Library_add_linked_libs,msforms,\
     tk \
     sb \
     stl \
+    $(gb_STDLIBS) \
 ))
-
-# this code usually will be platform specific; these libraries are also defined in Repository.mk
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,msforms,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,msforms,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
-))
-endif
 
 # add all source files that shall be compiled with exceptions enabled
 # the name is relative to $(SRCROOT) and must not contain an extension

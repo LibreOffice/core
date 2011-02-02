@@ -68,7 +68,7 @@ $(eval $(call gb_Library_add_linked_libs,svx,\
     vos3 \
     xo \
     xcr \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svx,\
@@ -217,11 +217,6 @@ $(eval $(call gb_Library_add_exception_objects,svx,\
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportunx \
-))
-$(eval $(call gb_Library_add_linked_libs,svx,\
-    dl \
-    m \
-    pthread \
 ))
 else
 ifeq ($(OS),WNT)

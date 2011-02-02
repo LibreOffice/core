@@ -58,7 +58,7 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
     utl \
     vcl \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwi,\
@@ -77,13 +77,6 @@ $(eval $(call gb_Library_add_exception_objects,fwi,\
     framework/source/fwi/uielement/rootitemcontainer \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,fwi,\
-    dl \
-    m \
-    pthread \
-))
-endif
 ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_linked_libs,fwi,\
@@ -103,5 +96,5 @@ $(eval $(call gb_Library_add_linked_libs,fwi,\
 ))
 endif
 endif
-# TODO: visibility
+
 # vim: set noet sw=4 ts=4:

@@ -52,7 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
     tl \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
@@ -62,14 +62,5 @@ $(eval $(call gb_Library_add_exception_objects,textconversiondlgs,\
     svx/source/unodialogs/textconversiondlgs/chinese_translation_unodialog \
     svx/source/unodialogs/textconversiondlgs/resid \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,textconversiondlgs,\
-    dl \
-    m \
-    pthread \
-    stl \
-))
-endif
 
 # vim: set noet sw=4 ts=4:

@@ -54,7 +54,7 @@ $(eval $(call gb_Library_add_linked_libs,fwl,\
     tl \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fwl,\
@@ -83,13 +83,7 @@ $(eval $(call gb_Library_add_exception_objects,fwl,\
     framework/source/uielement/simpletextstatusbarcontroller \
     framework/source/uielement/toolbarsmenucontroller \
 ))
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,fwl,\
-    dl \
-    m \
-    pthread \
-))
-endif
+
 ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_linked_libs,fwl,\

@@ -76,14 +76,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     vcl \
     vos3 \
     xml2 \
-    $(gb_StdLibs) \
-))
-
-$(eval $(call gb_Library_add_linked_system_libs,sfx,\
-    icuuc \
-    dl \
-    m \
-    pthread \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,sfx,\

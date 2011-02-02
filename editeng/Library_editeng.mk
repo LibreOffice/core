@@ -31,10 +31,6 @@ $(eval $(call gb_Library_add_package_headers,editeng,editeng_inc))
 
 $(eval $(call gb_Library_add_precompiled_header,editeng,$(SRCDIR)/editeng/inc/pch/precompiled_editeng))
 
-# in case UNO services are exported: declare location of component file
-#$(eval $(call gb_Library_set_componentfile,editeng,editeng/COMPONENT_FILE))
-
-# add any additional include paths for this library here
 $(eval $(call gb_Library_set_include,editeng,\
     $$(INCLUDE) \
     -I$(SRCDIR)/editeng/inc/pch \
@@ -164,16 +160,8 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     icuuc \
     i18nisolang1 \
     i18npaper \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,editeng,\
-    dl \
-    m \
-    pthread \
-))
-endif
 
 # vim: set noet sw=4 ts=4:
 

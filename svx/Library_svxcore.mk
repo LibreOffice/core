@@ -83,7 +83,7 @@ $(eval $(call gb_Library_add_linked_libs,svxcore,\
     vcl \
     vos3 \
     xo \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
@@ -445,14 +445,6 @@ else
 $(eval $(call gb_Library_add_cxxobjects,svxcore,\
     svx/source/customshapes/EnhancedCustomShapeFunctionParser \
     , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,svxcore,\
-    dl \
-    m \
-    pthread \
 ))
 endif
 
