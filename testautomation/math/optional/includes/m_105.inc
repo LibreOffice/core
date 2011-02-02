@@ -453,8 +453,8 @@ testcase tToolsCatalog
             next j
         next i
 
-    if (listCount(lAllSymbols()) <> 106) then
-        warnlog "There have to be 106 Symbols, but there are: " + listCount(lAllSymbols())
+    if (listCount(lAllSymbols()) <> 108) then
+        warnlog "There have to be 108 Symbols, but there are: " + listCount(lAllSymbols())
     endif
     ' TODO: check sAllSymbols for not allowed characters!
     listCopy(lAllSymbols(),lAllSymbolsSort())
