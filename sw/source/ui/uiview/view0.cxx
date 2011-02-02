@@ -66,11 +66,6 @@
 
 #define OLEObjects
 #define SwView
-#define SearchAttributes
-#define ReplaceAttributes
-#define SearchSettings
-#define _ExecSearch ExecSearch
-#define _StateSearch StateSearch
 #define Frames
 #define Graphics
 #define Tables
@@ -90,7 +85,6 @@
 #define WebListInTable
 #define TextPage
 #include <sfx2/msg.hxx>
-#include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <PostItMgr.hxx>
 

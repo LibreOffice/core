@@ -25,29 +25,33 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,sw))
+$(eval $(call gb_JunitTest_JunitTest,sw_complex))
 
-$(eval $(call gb_Module_add_targets,sw,\
-    AllLangResTarget_sw \
-    Library_msword \
-    Library_sw \
-    Library_swd \
-    Library_swui \
-    Library_vbaswobj \
-    Package_misc \
-    Package_uiconfig \
-    Package_xml \
+$(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
+    sw/qa/complex/checkColor/CheckChangeColor \
+    sw/qa/complex/indeterminateState/CheckIndeterminateState \
+    sw/qa/complex/writer/CheckCrossReferences \
+    sw/qa/complex/writer/LoadSaveTest \
+    sw/qa/complex/writer/CheckNamedPropertyValues \
+    sw/qa/complex/writer/CheckIndexedPropertyValues \
+    sw/qa/complex/writer/TestDocument \
+    sw/qa/complex/writer/CheckBookmarks \
+    sw/qa/complex/writer/CheckFlies \
+    sw/qa/complex/writer/TextPortionEnumerationTest \
+    sw/qa/complex/accessibility/AccessibleRelationSet \
 ))
 
-ifeq ($(strip $(ENABLE_VBA)),YES)
-$(eval $(call gb_Module_add_targets,sw,\
-    Library_vbaswobj \
-))
-endif
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sw,\
-    JunitTest_sw_complex \
-    JunitTest_sw_unoapi \
+$(eval $(call gb_JunitTest_add_jars,sw_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
 ))
 
-# vim: set noet ts=4 sw=4:
+$(eval $(call gb_JunitTest_add_classes,sw_complex,\
+    complex.accessibility.AccessibleRelationSet \
+    complex.checkColor.CheckChangeColor \
+))
+
+# vim: set noet sw=4 ts=4:

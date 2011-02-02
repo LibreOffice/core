@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,26 +25,29 @@
 #
 #*************************************************************************
 
-.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
-nothing .PHONY:
-.ELSE
+$(eval $(call gb_JunitTest_JunitTest,sw_unoapi))
 
-PRJ = ../../..
-PRJNAME = sw
-TARGET = qa_complex_accessibility
+$(eval $(call gb_JunitTest_set_defs,sw_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/sw/qa/unoapi/sw.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/sw/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/sw/qa/unoapi/testdocuments \
+))
 
-.IF "$(OOO_JUNIT_JAR)" != ""
-PACKAGE = complex/accessibility
-JAVATESTFILES = AccessibleRelationSet.java
-JAVAFILES = $(JAVATESTFILES)
-JARFILES = OOoRunner.jar ridl.jar test.jar unoil.jar
-EXTRAJARFILES = $(OOO_JUNIT_JAR)
-.END
+$(eval $(call gb_JunitTest_add_jars,sw_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE: settings.mk
-.INCLUDE: target.mk
-.INCLUDE: installationtest.mk
+$(eval $(call gb_JunitTest_add_sourcefiles,sw_unoapi,\
+    sw/qa/unoapi/Test \
+))
 
-ALLTAR : javatest
+$(eval $(call gb_JunitTest_add_classes,sw_unoapi,\
+    org.openoffice.sw.qa.unoapi.Test \
+))
 
-.END
+# vim: set noet sw=4 ts=4:

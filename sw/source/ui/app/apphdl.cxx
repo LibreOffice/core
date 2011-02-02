@@ -135,7 +135,6 @@ using namespace ::com::sun::star;
 #define _ExecAddress ExecOther
 #define _StateAddress StateOther
 #include <sfx2/msg.hxx>
-#include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <cfgid.h>
 

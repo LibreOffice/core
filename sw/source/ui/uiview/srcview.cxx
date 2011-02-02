@@ -90,10 +90,6 @@
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <sfx2/filedlghelper.hxx>
 #define SwSrcView
-#define SearchSettings
-#define _ExecSearch Execute
-#define _StateSearch GetState
-#include <svx/svxslots.hxx>
 #include "swslots.hxx"
 
 #include <unomid.h>
