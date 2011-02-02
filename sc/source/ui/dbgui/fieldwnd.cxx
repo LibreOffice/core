@@ -637,8 +637,10 @@ void ScDPFieldControlBase::SetSelection(size_t nIndex)
     if (rFields.empty())
         return;
 
-    if( mnFieldSelected >= rFields.size() )
-        mnFieldSelected = rFields.size() - 1;
+    if (nIndex >= rFields.size())
+        // Prevent it from going out-of-bound.
+        nIndex = rFields.size() - 1;
+
     if( mnFieldSelected != nIndex )
     {
         size_t nOldSelected = mnFieldSelected;
