@@ -68,19 +68,6 @@ static const char   aXMLAttrHeight[] = "height";
 static const char   aXMLAttrPoints[] = "points";
 static const char   aXMLAttrXLinkHRef[] = "xlink:href";
 
-static const sal_Unicode pBase64[] =
-{
-    //0   1   2   3   4   5   6   7
-     'A','B','C','D','E','F','G','H', // 0
-     'I','J','K','L','M','N','O','P', // 1
-     'Q','R','S','T','U','V','W','X', // 2
-     'Y','Z','a','b','c','d','e','f', // 3
-     'g','h','i','j','k','l','m','n', // 4
-     'o','p','q','r','s','t','u','v', // 5
-     'w','x','y','z','0','1','2','3', // 6
-     '4','5','6','7','8','9','+','/'  // 7
-};
-
 // --------------
 // - FastString -
 // --------------
@@ -94,64 +81,6 @@ FastString::FastString( sal_uInt32 nInitLen, sal_uInt32 nIncrement ) :
 {
     DBG_ASSERT( nInitLen, "invalid initial length" );
     DBG_ASSERT( nIncrement, "invalid increment" );
-}
-
-// -----------------------------------------------------------------------------
-
-FastString::FastString( sal_Char* pBufferForBase64Encoding, sal_uInt32 nBufLen ) :
-    mnBufInc( 2048 ),
-    mnPartPos( 0 )
-{
-    DBG_ASSERT( pBufferForBase64Encoding && nBufLen, "invalid arguments" );
-
-    const sal_uInt32 nQuadCount = nBufLen / 3;
-    const sal_uInt32 nRest = nBufLen % 3;
-
-    if( nQuadCount || nRest )
-    {
-        mnBufLen = mnCurLen = ( ( nQuadCount + ( nRest ? 1 : 0 ) ) << 2 );
-        mpBuffer = new sal_Unicode[ mnBufLen * sizeof( sal_Unicode ) ];
-
-        sal_Char*       pTmpSrc = pBufferForBase64Encoding;
-        sal_Unicode*    pTmpDst = mpBuffer;
-
-        for( sal_uInt32 i = 0; i < nQuadCount; i++ )
-        {
-            const sal_Int32 nA = *pTmpSrc++;
-            const sal_Int32 nB = *pTmpSrc++;
-            const sal_Int32 nC = *pTmpSrc++;
-
-            *pTmpDst++ = pBase64[ ( nA >> 2 ) & 0x3f ];
-            *pTmpDst++ = pBase64[ ( ( nA << 4 ) & 0x30 ) + ( ( nB >> 4 ) & 0xf ) ];
-            *pTmpDst++ = pBase64[ ( ( nB << 2 ) & 0x3c ) + ( ( nC >> 6 ) & 0x3 ) ];
-            *pTmpDst++ = pBase64[ nC & 0x3f ];
-        }
-
-        if( 1 == nRest )
-        {
-            const sal_Int32 nA = *pTmpSrc;
-
-            *pTmpDst++ = pBase64[ ( nA >> 2 ) & 0x3f ];
-            *pTmpDst++ = pBase64[ ( nA << 4 ) & 0x30 ];
-            *pTmpDst++ = '=';
-            *pTmpDst = '=';
-        }
-        else if( 2 == nRest )
-        {
-            const sal_Int32 nA = *pTmpSrc++;
-            const sal_Int32 nB = *pTmpSrc;
-
-            *pTmpDst++ = pBase64[ ( nA >> 2 ) & 0x3f ];
-            *pTmpDst++ = pBase64[ ( ( nA << 4 ) & 0x30 ) + ( ( nB >> 4 ) & 0xf ) ];
-            *pTmpDst++ = pBase64[ ( nB << 2 ) & 0x3c ];
-            *pTmpDst = '=';
-        }
-    }
-    else
-    {
-        mpBuffer = new sal_Unicode[ ( mnBufLen = 1 ) * sizeof( sal_Unicode ) ];
-        mnCurLen = 0;
-    }
 }
 
 // -----------------------------------------------------------------------------
@@ -196,39 +125,6 @@ const NMSP_RTL::OUString& FastString::GetString() const
         ( (FastString*) this )->maString = NMSP_RTL::OUString( mpBuffer, mnCurLen );
 
     return maString;
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool FastString::GetFirstPartString( const sal_uInt32 nPartLen, NMSP_RTL::OUString& rPartString )
-{
-    const sal_uInt32 nLength = Min( mnCurLen, nPartLen );
-
-    mnPartPos = 0;
-
-    if( nLength )
-    {
-        rPartString = NMSP_RTL::OUString( mpBuffer, nLength );
-        mnPartPos = nLength;
-    }
-
-    return( rPartString.getLength() > 0 );
-}
-
-// -----------------------------------------------------------------------------
-
-sal_Bool FastString::GetNextPartString( const sal_uInt32 nPartLen, NMSP_RTL::OUString& rPartString )
-{
-    if( mnPartPos < mnCurLen )
-    {
-        const sal_uInt32 nLength = Min( mnCurLen - mnPartPos, nPartLen );
-        rPartString = NMSP_RTL::OUString( mpBuffer + mnPartPos, nLength );
-        mnPartPos += nLength;
-    }
-    else
-        rPartString = NMSP_RTL::OUString();
-
-    return( rPartString.getLength() > 0 );
 }
 
 // ----------------------
@@ -1106,59 +1002,21 @@ void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
 
             if( GraphicConverter::Export( aOStm, rBmpEx, CVT_PNG ) == ERRCODE_NONE )
             {
-                const Point                                 aPt( ImplMap( rPt ) );
-                const Size                                  aSz( ImplMap( rSz ) );
-                FastString                                  aImageData( (sal_Char*) aOStm.GetData(), aOStm.Tell() );
-                REF( NMSP_SAX::XExtendedDocumentHandler )   xExtDocHandler( mrExport.GetDocHandler(), NMSP_UNO::UNO_QUERY );
+                const Point              aPt( ImplMap( rPt ) );
+                const Size               aSz( ImplMap( rSz ) );
+                Sequence< sal_Int8 >     aSeq( (sal_Int8*) aOStm.GetData(), aOStm.Tell() );
+                NMSP_RTL::OUStringBuffer aBuffer;
+                aBuffer.appendAscii( "data:image/png;base64," );
+                SvXMLUnitConverter::encodeBase64( aBuffer, aSeq );
 
-                if( xExtDocHandler.is() )
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, GetValueString( aSz.Width() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, GetValueString( aSz.Height() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrXLinkHRef, aBuffer.makeStringAndClear() );
+
                 {
-                    static const sal_uInt32     nPartLen = 64;
-                    const NMSP_RTL::OUString    aSpace( ' ' );
-                    const NMSP_RTL::OUString    aLineFeed( NMSP_RTL::OUString::valueOf( (sal_Unicode) 0x0a ) );
-                    NMSP_RTL::OUString          aString;
-                    NMSP_RTL::OUString          aImageString;
-
-                    aString = aLineFeed;
-                    aString +=  B2UCONST( "<" );
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLElemImage );
-                    aString += aSpace;
-
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLAttrX );
-                    aString += B2UCONST( "=\"" );
-                    aString += GetValueString( aPt.X() );
-                    aString += B2UCONST( "\" " );
-
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLAttrY );
-                    aString += B2UCONST( "=\"" );
-                    aString += GetValueString( aPt.Y() );
-                    aString += B2UCONST( "\" " );
-
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLAttrWidth );
-                    aString += B2UCONST( "=\"" );
-                    aString += GetValueString( aSz.Width() );
-                    aString += B2UCONST( "\" " );
-
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLAttrHeight );
-                    aString += B2UCONST( "=\"" );
-                    aString += GetValueString( aSz.Height() );
-                    aString += B2UCONST( "\" " );
-
-                    aString += NMSP_RTL::OUString::createFromAscii( aXMLAttrXLinkHRef );
-                    aString += B2UCONST( "=\"data:image/png;base64," );
-
-                    if( aImageData.GetFirstPartString( nPartLen, aImageString ) )
-                    {
-                        xExtDocHandler->unknown( aString += aImageString );
-
-                        while( aImageData.GetNextPartString( nPartLen, aImageString ) )
-                        {
-                            xExtDocHandler->unknown( aLineFeed );
-                            xExtDocHandler->unknown( aImageString );
-                        }
-                    }
-
-                    xExtDocHandler->unknown( B2UCONST( "\"/>" ) );
+                    SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemImage, TRUE, TRUE );
                 }
             }
         }

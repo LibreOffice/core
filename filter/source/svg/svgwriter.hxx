@@ -44,6 +44,7 @@
 #include <vcl/cvtgrf.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/nmspmap.hxx>
+#include <xmloff/xmluconv.hxx>
 
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/RuntimeException.hpp>
@@ -102,14 +103,11 @@ private:
 public:
 
                                 FastString( sal_uInt32 nInitLen = 2048, sal_uInt32 nIncrement = 2048 );
-                                FastString( sal_Char* pBufferForBase64Encoding, sal_uInt32 nBufLen );
                                 ~FastString();
 
     FastString&                 operator+=( const ::rtl::OUString& rStr );
 
     const ::rtl::OUString&      GetString() const;
-    sal_Bool                    GetFirstPartString( const sal_uInt32 nPartLen, ::rtl::OUString& rPartString );
-    sal_Bool                    GetNextPartString( const sal_uInt32 nPartLen, ::rtl::OUString& rPartString );
 
     sal_uInt32                  GetLength() const { return mnCurLen; }
     void                        Clear() { mnCurLen = 0, maString = ::rtl::OUString(); }
