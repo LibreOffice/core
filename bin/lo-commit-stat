@@ -17,13 +17,12 @@ sub search_bugs($$$$)
 
     my $bug = "";
     my $bug_orig;
-    %{$pdata->{$piece}{$commit_id}{'bugs'}} = ();
     while (defined $bug) {
         # match fdo#123, rhz#123, i#123
         if ( $line =~ m/(\w*\#+\d+)/ ) {
             $bug_orig = $1;
             $bug = $1;
-        # match #i123#    
+        # match #i123#
         } elsif ( $line =~ m/(\#i)(\d+)(\#)/ ) {
             $bug_orig = $1 . $2 . $3;
             $bug = $2;
@@ -34,7 +33,7 @@ sub search_bugs($$$$)
         $bug_orig =~ s/\#/\\#/;
         $line =~ s/[Rr]esolves:\s*$bug_orig\s*//;
         $line =~ s/\s*-\s*$bug_orig\s*//;
-        $line =~ s/$bug_orig[:,]?\s*//;
+        $line =~ s/\(?$bug_orig\)?[:,]?\s*//;
         %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
         $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
         $bug = undef;
@@ -78,14 +77,14 @@ sub load_git_log($$$$)
     while (my $line = <GIT>) {
         chomp $line;
 
-        if ( $line =~ m/commit ([0-9a-z]{20})/ ) {
+        if ( $line =~ m/^commit ([0-9a-z]{20})/ ) {
             $commit_id = "$1";
             $summary=undef;
             %{$pdata->{$piece}{"$commit_id"}} = ();
             next;
         }
 
-        if ( $line =~ /Author:\s*([^\<]*)\<([^\>]*)>/ ) {
+        if ( $line =~ /^Author:\s*([^\<]*)\<([^\>]*)>/ ) {
             # get rid of extra empty spaces;
             my $name = "$1";
             $name =~ s/\s+$//;
@@ -95,12 +94,12 @@ sub load_git_log($$$$)
             $pdata->{$piece}{$commit_id}{'author'}{'email'} = "$2";
             next;
         }
-        
-        if ( $line =~ /Date:\s+/ ) {
+
+        if ( $line =~ /^Date:\s+/ ) {
             # ignore date line
             next;
         }
-        
+
         if ( $line =~ /^\s*$/ ) {
             # ignore empty line
             next;
@@ -161,7 +160,7 @@ sub load_data($$$$)
 sub print_summary_in_stat($$$$)
 {
     my ($summary, $pbugs, $pauthors, $prefix) = @_;
-    
+
     return if ( $summary eq "" );
 
     my $bugs = "";
