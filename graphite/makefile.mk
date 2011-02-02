@@ -137,14 +137,6 @@ BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libgraphite.*.dylib
-.ELSE
-.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-.IF "$(debug)"!=""
-OUT2BIN=engine$/debug$/*.pdb
-.ELSE
-OUT2BIN=
-.ENDIF
-.ENDIF
 .ENDIF
 
 
