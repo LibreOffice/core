@@ -216,8 +216,7 @@ MergeDataFile::MergeDataFile(
         {
             // Skip all wrong filenames
             const ::rtl::OString filename = lcl_NormalizeFilename(sLine.GetToken( 1 , '\t' ));
-
-            if(isFileEmpty || (!isFileEmpty && filename.equals(sFileNormalized)))
+            if(isFileEmpty || sFileNormalized.equals("") || (!isFileEmpty && filename.equals(sFileNormalized)) )
             {
                 xub_StrLen rIdx = 0;
                 const ByteString sTYP = sLine.GetToken( 3, '\t', rIdx );
