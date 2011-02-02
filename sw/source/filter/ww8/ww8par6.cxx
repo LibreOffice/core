@@ -4163,10 +4163,6 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
 // bei proportional betraegt er min( 0cm, FontSize*(nFach-1) ) sowohl "vor"
 // wie auch "nach"
 
-    USHORT nWwPre = 0;
-    USHORT nWwPost = 0;
-    USHORT nSwPre = 0;
-    USHORT nSwPost = 0;
     USHORT nSpaceTw = 0;
 
     SvxLineSpacingItem aLSpc( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING );
@@ -4181,10 +4177,6 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
         const SvxFontHeightItem* pH = (const SvxFontHeightItem*)
             GetFmtAttr( RES_CHRATR_FONTSIZE );
         nSpaceTw = (USHORT)( n * pH->GetHeight() / 100 );
-
-        if( n > 100 )
-            nWwPost = nSwPre = nSwPost = (USHORT)( ( n - 100 )
-                                                    * pH->GetHeight() / 100 );
     }
     else                            // Fixed / Minimum
     {
@@ -4192,19 +4184,6 @@ void SwWW8ImplReader::Read_LineSpace( USHORT, const BYTE* pData, short nLen )
         nSpaceTw = (USHORT)nSpace;
         aLSpc.SetLineHeight( nSpaceTw );
         aLSpc.GetLineSpaceRule() = eLnSpc;
-        nSwPre = nSpace;
-
-        if( SVX_LINE_SPACE_FIX == eLnSpc )                  // Genau
-        {
-            nWwPre = (USHORT)( 8L * nSpace / 10 );
-            nWwPost = (USHORT)( 2L * nSpace / 10 );
-            nSwPre = nSpace;
-        }
-        else                                                // Minimum
-        {
-            nWwPre = (USHORT)( 129L * nSpace / 100 - 95 );// erst bei groesseren
-                                                          // Zeilenabstaenden
-        }
     }
     NewAttr( aLSpc );
     if( pSFlyPara )
