@@ -46,8 +46,12 @@ TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
+#icu4c.8320.freeserif.crash.patch, see
+#http://bugs.icu-project.org/trac/ticket/8320 for crash with FreeSerif
+
 PATCH_FILES=\
     ${TARFILE_NAME}.patch \
+    icu4c.8320.freeserif.crash.patch \
     icu4c-aix.patch
 
 .IF "$(GUI)"=="UNX"
