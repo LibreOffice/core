@@ -50,7 +50,7 @@ Simstr::Simstr(const char * s_)
       }
    else
       {
-         len = strlen(s_);
+         len = (int)strlen(s_);
          sz = new char[len+1];
          memcpy(sz,s_,len+1);
       }
@@ -97,7 +97,7 @@ Simstr::Simstr( const char *   anybytes,
                 int            firstBytesPos,
                 int            nrOfBytes)
 {
-   unsigned slen = strlen(anybytes);
+   unsigned slen = (unsigned)strlen(anybytes);
    if (anybytes == 0 || slen <= unsigned(firstBytesPos))
       {
          len = 0;
