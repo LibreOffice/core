@@ -31,7 +31,7 @@ PRJNAME=sc
 TARGET=vbaobj
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
-CDEFS+=-DVBA_OOBUILD_HACK
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
@@ -41,6 +41,9 @@ DLLPRE =
 dummy:
         @echo "not building vba..."
 .ENDIF
+
+CDEFS+=-DVBA_OOBUILD_HACK
+
 .IF "$(L10N_framework)"==""
 INCPRE=$(INCCOM)$/$(TARGET)
 
