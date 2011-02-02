@@ -3040,7 +3040,7 @@ dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 HAVE_GCC_VISIBILITY_BROKEN=
-if test "$_os" != "WINNT" -a "$USE_SYSTEM_STL" = "YES"; then
+if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$USE_SYSTEM_STL" = "YES"; then
    AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
    AC_LANG_PUSH([C++])
 
