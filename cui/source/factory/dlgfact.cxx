@@ -103,6 +103,8 @@
 #include "passwdomdlg.hxx"
 #include "hyphen.hxx"
 #include "thesdlg.hxx"
+#include "about.hxx"
+#include "dialmgr.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::frame;
@@ -1004,6 +1006,11 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     Dialog* pDlg=NULL;
     switch ( nResId )
     {
+        case RID_DEFAULTABOUT:
+        {
+            pDlg = new AboutDialog( pParent, CUI_RES( (USHORT) nResId ) );
+            break;
+        }
         case SID_OPTIONS_TREEDIALOG :
         case SID_OPTIONS_DATABASES :
         case SID_LANGUAGE_OPTIONS :
