@@ -1,7 +1,7 @@
-#************************************************************************
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,36 +23,18 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-# ***********************************************************************/
-PRJ=..$/..$/..
-PRJNAME=writerfilter
-TARGET=debugservices_ooxml
-ENABLE_EXCEPTIONS=TRUE
+#*************************************************************************
 
-# --- Settings -----------------------------------------------------
+PRJ=..
+TARGET=prj
 
-.INCLUDE :  settings.mk
+.INCLUDE : settings.mk
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-RESSOUREMODELLIB=-lresourcemodel
-.ELIF "$(GUI)"=="WNT"
-.IF "$(COM)"=="GCC"
-RESOURCEMODELLIB=-lresourcemodel
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
 .ELSE
-RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+VERBOSEFLAG := -s
 .ENDIF
-.ENDIF
 
-SHL1STDLIBS= \
-    $(COMPHELPERLIB) \
-    $(RESOURCEMODELLIB)
-
-# --- Files --------------------------------------------------------
-
-SLOFILES= \
-    $(SLO)$/OOXMLTestService.obj \
-    $(SLO)$/OOXMLAnalyzeService.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+all:
+	cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)

@@ -1,7 +1,7 @@
-#************************************************************************
+#*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,23 +23,16 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-# ***********************************************************************/
-PRJ=..$/..$/..
-PRJNAME=writerfilter
-TARGET=debugservices_rtftok
-ENABLE_EXCEPTIONS=TRUE
+#*************************************************************************
 
-# --- Settings -----------------------------------------------------
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
-.INCLUDE :  settings.mk
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-SLOFILES=\
-    $(SLO)$/ScannerTestService.obj \
-    $(SLO)$/XMLScanner.obj 
-#$(SLO)$/TestService.obj $(SLO)$/ResolverTestService.obj $(SLO)$/XmlParserTestService.obj $(SLO)$/RngService.obj
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
+# vim: set noet sw=4 ts=4:

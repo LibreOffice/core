@@ -1,11 +1,2 @@
 wf	writerfilter	: soltools sal BOOST:boost cppu cppuhelper ucbhelper tools svx LIBXSLT:libxslt oox NULL
-wf	writerfilter	usr1	-	all	wf_mkout NULL
-wf	writerfilter\source\resourcemodel	nmake	-	all	wf_resourcemodel NULL
-wf	writerfilter\source\doctok	nmake	-	all	wf_doctok wf_resourcemodel NULL
-wf	writerfilter\source\ooxml	nmake	-	all	wf_ooxml wf_resourcemodel NULL
-wf  writerfilter\source\filter      nmake   - all   wf_filter NULL
-wf  writerfilter\source\dmapper      nmake   - all   wf_dmapper wf_doctok wf_ooxml wf_resourcemodel NULL
-wf	writerfilter\unocomponent\debugservices\doctok	nmake	-	all	wf_debugservicesdoctok NULL
-wf	writerfilter\unocomponent\debugservices\ooxml	nmake	-	all	wf_debugservicesooxml NULL
-wf	writerfilter\unocomponent	nmake	-	all	wf_unocomponent wf_doctok wf_ooxml wf_resourcemodel wf_debugservicesdoctok wf_debugservicesooxml NULL
-wf  writerfilter\util   nmake   - all wf_util wf_filter wf_dmapper wf_doctok wf_ooxml wf_unocomponent NULL
+wf	writerfilter\prj	nmake	-	all	wf_prj NULL
