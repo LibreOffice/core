@@ -712,6 +712,9 @@ SdPage* DrawViewShell::getCurrentPage() const
 
 void DrawViewShell::ResetActualPage()
 {
+    if (!GetDoc())
+        return;
+
     USHORT nCurrentPage = maTabControl.GetCurPageId() - 1;
     USHORT nPageCount   = (meEditMode == EM_PAGE)?GetDoc()->GetSdPageCount(mePageKind):GetDoc()->GetMasterSdPageCount(mePageKind);
     if (nPageCount > 0)
