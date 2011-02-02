@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "charsets.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbu_misc.hrc"
 #include <rtl/tencinfo.h>
 #include <tools/rcid.h>
@@ -122,7 +122,7 @@ namespace dbaui
         :CharsetDisplayDerefHelper_Base(_rBase)
         ,m_sDisplayName(_rDisplayName)
     {
-        DBG_ASSERT( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
+        OSL_ENSURE( m_sDisplayName.getLength(), "CharsetDisplayDerefHelper::CharsetDisplayDerefHelper: invalid display name!" );
     }
 
     //=========================================================================
@@ -133,7 +133,7 @@ namespace dbaui
         :m_pContainer(_pContainer)
         ,m_aPosition(_rPosition)
     {
-        DBG_ASSERT(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
+        OSL_ENSURE(m_pContainer, "OCharsetDisplay::ExtendedCharsetIterator::ExtendedCharsetIterator : invalid container!");
     }
 
     //-------------------------------------------------------------------------
@@ -146,7 +146,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper OCharsetDisplay::ExtendedCharsetIterator::operator*() const
     {
-        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
+        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator* : invalid position!");
 
         rtl_TextEncoding eEncoding = (*m_aPosition).getEncoding();
         return CharsetDisplayDerefHelper(
@@ -158,7 +158,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator++()
     {
-        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
+        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::end(), "OCharsetDisplay::ExtendedCharsetIterator::operator++ : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::end() )
             ++m_aPosition;
         return *this;
@@ -167,7 +167,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     const OCharsetDisplay::ExtendedCharsetIterator& OCharsetDisplay::ExtendedCharsetIterator::operator--()
     {
-        DBG_ASSERT( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
+        OSL_ENSURE( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin(), "OCharsetDisplay::ExtendedCharsetIterator::operator-- : invalid position!");
         if ( m_aPosition != m_pContainer->OCharsetDisplay_Base::begin() )
             --m_aPosition;
         return *this;

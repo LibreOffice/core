@@ -85,6 +85,7 @@
 #include <unotools/saveopt.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 
@@ -1668,7 +1669,7 @@ void ODatabaseDocument::disposing()
     if ( !m_pImpl.is() )
     {
         // this means that we're already disposed
-        DBG_ASSERT( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
+        OSL_ENSURE( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
         return;
     }
 
@@ -1694,7 +1695,7 @@ void ODatabaseDocument::disposing()
     // SYNCHRONIZED ->
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
         // normally, nobody should explicitly dispose, but only XCloseable::close the document. And upon
         // closing, our controllers are closed, too
 
@@ -1717,7 +1718,7 @@ void ODatabaseDocument::disposing()
 
     // now, at the latest, the controller array should be empty. Controllers are
     // expected to listen for our disposal, and disconnect then
-    DBG_ASSERT( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
+    OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
     aKeepAlive.push_back( m_xModuleManager );

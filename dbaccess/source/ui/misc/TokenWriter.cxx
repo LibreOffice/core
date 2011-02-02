@@ -31,6 +31,7 @@
 #include "TokenWriter.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "RtfReader.hxx"
 #include "HtmlReader.hxx"
 #include "dbustrings.hrc"
@@ -693,7 +694,7 @@ OHTMLImportExport::OHTMLImportExport(const ::svx::ODataAccessDescriptor& _aDataD
                                      const String& rExchange)
         : ODatabaseImportExport(_aDataDescriptor,_rM,_rxNumberF,rExchange)
     ,m_nIndent(0)
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     ,m_bCheckFont(FALSE)
 #endif
 {
@@ -1058,7 +1059,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
 void OHTMLImportExport::FontOn()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOn" );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
         m_bCheckFont = TRUE;
 #endif
 
@@ -1089,9 +1090,9 @@ void OHTMLImportExport::FontOn()
 inline void OHTMLImportExport::FontOff()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::FontOff" );
-    DBG_ASSERT(m_bCheckFont,"Kein FontOn() gerufen");
+    OSL_ENSURE(m_bCheckFont,"Kein FontOn() gerufen");
     TAG_OFF( OOO_STRING_SVTOOLS_HTML_font );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
     m_bCheckFont = FALSE;
 #endif
 }

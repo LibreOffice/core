@@ -37,6 +37,7 @@
 
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/extract.hxx>
@@ -562,7 +563,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
 
 void ODefinitionContainer::implReplace(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
-    DBG_ASSERT(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
+    OSL_ENSURE(checkExistence(_rName), "ODefinitionContainer::implReplace : invalid name !");
 
     Documents::iterator aFind = m_aDocumentMap.find(_rName);
     removeObjectListener(aFind->second);

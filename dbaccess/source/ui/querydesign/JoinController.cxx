@@ -66,6 +66,7 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "UITools.hxx"
+#include <osl/diagnose.h>
 
 #include <boost/optional.hpp>
 
@@ -334,7 +335,7 @@ void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabW
     // Wenn die TabWins ein SetData haetten, koennte ich mir das sparen ... haben sie aber nicht, ausserdem muesste ich dann immer
     // noch Informationen, die sich eigentlich nicht geaendert haben, auch neu setzen.
     // Also loesche ich die TabWinDatas nicht, sondern aktualisiere sie nur.
-    DBG_ASSERT(m_vTableData.size() == pTabWinList->size(),
+    OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 
     OJoinTableView::OTableWindowMap::iterator aIter = pTabWinList->begin();

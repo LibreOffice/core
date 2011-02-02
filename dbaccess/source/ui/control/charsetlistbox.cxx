@@ -36,6 +36,7 @@
 
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
+#include <osl/diagnose.h>
 
 //........................................................................
 namespace dbaui
@@ -104,7 +105,7 @@ namespace dbaui
         if ( GetSelectEntryPos() != GetSavedValue() )
         {
             OCharsetDisplay::const_iterator aFind = m_aCharSets.findDisplayName( GetSelectEntry() );
-            DBG_ASSERT( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
+            OSL_ENSURE( aFind != m_aCharSets.end(), "CharSetListBox::StoreSelectedCharSet: could not translate the selected character set!" );
             if ( aFind != m_aCharSets.end() )
             {
                 _rSet.Put( SfxStringItem( _nItemId, (*aFind).getIanaName() ) );

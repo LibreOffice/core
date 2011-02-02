@@ -35,6 +35,7 @@
 #include "module_dba.hxx"
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/sequence.hxx>
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -151,7 +152,7 @@ OComponentDefinition::OComponentDefinition( const Reference< XInterface >& _rxCo
     registerProperties();
 
     m_pImpl->m_aProps.aTitle = _rElementName;
-    DBG_ASSERT(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
+    OSL_ENSURE(m_pImpl->m_aProps.aTitle.getLength() != 0, "OComponentDefinition::OComponentDefinition : invalid name !");
 }
 
 IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);

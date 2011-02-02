@@ -32,8 +32,8 @@
 #include "QueryTableView.hxx"
 #include "TableFieldInfo.hxx"
 #include "TableFieldDescription.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include "QTableWindow.hxx"
 #include "QTableConnection.hxx"
@@ -284,7 +284,7 @@ void OQueryTableView::ReSync()
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
-    DBG_ASSERT((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
+    OSL_ENSURE((getTableConnections()->size()==0) && (GetTabWinMap()->size()==0),
         "vor OQueryTableView::ReSync() bitte ClearAll aufrufen !");
 
     // ich brauche eine Sammlung aller Fensternamen, deren Anlegen schief geht, damit ich die entsprechenden Connections
@@ -477,7 +477,7 @@ Reference<XPropertySet> getKeyReferencedTo(const Reference<XIndexAccess>& _rxKey
 void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& _rTableName, const ::rtl::OUString& strAlias, sal_Bool bNewTable)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(_rTableName.getLength() || strAlias.getLength(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
+    OSL_ENSURE(_rTableName.getLength() || strAlias.getLength(), "OQueryTableView::AddTabWin : kein Tabellen- und kein Aliasname !");
         // wenn der Tabellenname nicht gesetzt ist, steht das fuer ein Dummy-Fenster, das braucht aber wenigstens einen Alias-Namen
 
     // neue Datenstruktur erzeugen
@@ -753,7 +753,7 @@ void OQueryTableView::KeyInput( const KeyEvent& rEvt )
 OQueryTableWindow* OQueryTableView::FindTable(const String& rAliasName)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(rAliasName.Len(), "OQueryTableView::FindTable : der AliasName sollte nicht leer sein !");
+    OSL_ENSURE(rAliasName.Len(), "OQueryTableView::FindTable : der AliasName sollte nicht leer sein !");
         // (nicht dass es schadet, aber es ist sinnlos und weist vielleicht auf Fehler beim Aufrufer hin)
     OTableWindowMap::const_iterator aIter = GetTabWinMap()->find(rAliasName);
     if(aIter != GetTabWinMap()->end())
@@ -781,7 +781,7 @@ sal_Bool OQueryTableView::FindTableFromField(const String& rFieldName, OTableFie
 void OQueryTableView::RemoveTabWin(OTableWindow* pTabWin)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Fenster sollte ungleich NULL sein !");
+    OSL_ENSURE(pTabWin != NULL, "OQueryTableView::RemoveTabWin : Fenster sollte ungleich NULL sein !");
 
     // mein Parent brauche ich, da es vom Loeschen erfahren soll
     OQueryDesignView* pParent = static_cast<OQueryDesignView*>(getDesignView());
@@ -848,7 +848,7 @@ void OQueryTableView::HideTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUndoAc
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
     OTableWindowMap* pTabWins = GetTabWinMap();
-    DBG_ASSERT(pTabWins != NULL, "OQueryTableView::HideTabWin : habe keine TabWins !");
+    OSL_ENSURE(pTabWins != NULL, "OQueryTableView::HideTabWin : habe keine TabWins !");
 
     if (pTabWin)
     {
@@ -929,7 +929,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
         if (pTabWin->Init())
         {
             TTableWindowData::value_type pData = pTabWin->GetData();
-            DBG_ASSERT(pData != NULL, "OQueryTableView::ShowTabWin : TabWin hat keine Daten !");
+            OSL_ENSURE(pData != NULL, "OQueryTableView::ShowTabWin : TabWin hat keine Daten !");
             // Wenn die Daten schon PosSize haben, diese benutzen
             if (pData->HasPosition() && pData->HasSize())
             {
@@ -996,7 +996,7 @@ sal_Bool OQueryTableView::ShowTabWin( OQueryTableWindow* pTabWin, OQueryTabWinUn
 void OQueryTableView::InsertField(const OTableFieldDescRef& rInfo)
 {
     DBG_CHKTHIS(OQueryTableView,NULL);
-    DBG_ASSERT(getDesignView() != NULL, "OQueryTableView::InsertField : habe kein Parent !");
+    OSL_ENSURE(getDesignView() != NULL, "OQueryTableView::InsertField : habe kein Parent !");
     static_cast<OQueryDesignView*>(getDesignView())->InsertField(rInfo);
 }
 //------------------------------------------------------------------------------

@@ -62,6 +62,7 @@
 #include <connectivity/sqlparse.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 
@@ -1452,7 +1453,7 @@ sal_Bool ORowSetCache::checkInnerJoin(const ::connectivity::OSQLParseNode *pNode
     else if (SQL_ISRULE(pNode,comparison_predicate))
     {
         // only the comparison of columns is allowed
-        DBG_ASSERT(pNode->count() == 3,"checkInnerJoin: Fehler im Parse Tree");
+        OSL_ENSURE(pNode->count() == 3,"checkInnerJoin: Fehler im Parse Tree");
         if (!(SQL_ISRULE(pNode->getChild(0),column_ref) &&
                 SQL_ISRULE(pNode->getChild(2),column_ref) &&
                 pNode->getChild(1)->getNodeType() == SQL_NODE_EQUAL))

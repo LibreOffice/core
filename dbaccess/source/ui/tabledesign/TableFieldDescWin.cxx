@@ -30,7 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 
 #include "TableFieldDescWin.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "dbu_tbl.hrc"
 #include "FieldDescriptions.hxx"
@@ -111,7 +111,7 @@ OTableFieldDescWin::~OTableFieldDescWin()
 //------------------------------------------------------------------------------
 void OTableFieldDescWin::Init()
 {
-    DBG_ASSERT(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
+    OSL_ENSURE(getGenPage() != NULL, "OTableFieldDescWin::Init : ups ... no GenericPage ... this will crash ...");
     getGenPage()->Init();
 }
 

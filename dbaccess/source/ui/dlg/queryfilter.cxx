@@ -42,9 +42,8 @@
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "moduledbu.hxx"
 #include <connectivity/sqliterator.hxx>
 #include <connectivity/dbtools.hxx>
@@ -465,7 +464,7 @@ Reference< XPropertySet > DlgFilterCrit::getMatchingColumn( const Edit& _rValueI
 //------------------------------------------------------------------------------
 IMPL_LINK( DlgFilterCrit, PredicateLoseFocus, Edit*, _pField )
 {
-    DBG_ASSERT( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
+    OSL_ENSURE( _pField, "DlgFilterCrit::PredicateLoseFocus: invalid event source!" );
     if ( _pField )
     {
         // retrieve the field affected
@@ -754,7 +753,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else
         {
-            DBG_ASSERT(0,"DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
+            OSL_ENSURE(0,"DlgFilterCrit::ListSelectHdl: Diese Column d�rfte garnicht vorhanden sein!");
         }
     }
     pComp->SelectEntryPos(0);

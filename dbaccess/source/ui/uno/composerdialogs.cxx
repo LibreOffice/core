@@ -39,8 +39,8 @@
 #include "queryfilter.hxx"
 #include "queryorder.hxx"
 #include <connectivity/dbtools.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 extern "C" void SAL_CALL createRegistryInfo_ComposerDialogs()
 {
@@ -130,7 +130,7 @@ namespace dbaui
                     xColumns = xSuppColumns->getColumns();
             }
 
-            DBG_ASSERT( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
+            OSL_ENSURE( xColumns.is() && xColumns->hasElements(), "ComposerDialog::createDialog: not much fun without any columns!" );
         }
         catch( const Exception& )
         {

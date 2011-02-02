@@ -66,6 +66,7 @@
 #include <unotools/moduleoptions.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/mimeconfighelper.hxx>
 #include <comphelper/documentconstants.hxx>
@@ -228,9 +229,9 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XMultiServiceFactory> & rFactory,
     const uno::Reference< XDocumentHandler >& _xFilter )
 {
-    DBG_ASSERT(xInputStream.is(), "input stream missing");
-    DBG_ASSERT(xModelComponent.is(), "document missing");
-    DBG_ASSERT(rFactory.is(), "factory missing");
+    OSL_ENSURE(xInputStream.is(), "input stream missing");
+    OSL_ENSURE(xModelComponent.is(), "document missing");
+    OSL_ENSURE(rFactory.is(), "factory missing");
 
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "dbaxml", "oj", "ReadThroughComponent" );
 
@@ -243,13 +244,13 @@ sal_Int32 ReadThroughComponent(
         rFactory->createInstance(
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
-    DBG_ASSERT( xParser.is(), "Can't create parser" );
+    OSL_ENSURE( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
         return 1;
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "parser created" );
 
     // get filter
-    DBG_ASSERT( _xFilter.is(), "Can't instantiate filter component." );
+    OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return 1;
 
@@ -311,8 +312,8 @@ sal_Int32 ReadThroughComponent(
     const uno::Reference<XMultiServiceFactory> & rFactory,
     const uno::Reference< XDocumentHandler >& _xFilter)
 {
-    DBG_ASSERT( xStorage.is(), "Need storage!");
-    DBG_ASSERT(NULL != pStreamName, "Please, please, give me a name!");
+    OSL_ENSURE( xStorage.is(), "Need storage!");
+    OSL_ENSURE(NULL != pStreamName, "Please, please, give me a name!");
 
     if ( xStorage.is() )
     {

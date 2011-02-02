@@ -92,6 +92,7 @@
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <connectivity/DriversConfig.hxx>
 
 #include <memory>
@@ -171,7 +172,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
 
-    DBG_ASSERT(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
+    OSL_ENSURE(m_pCollection, "ODbTypeWizDialogSetup::ODbTypeWizDialogSetup : really need a DSN type collection !");
 
     FreeResource();
 

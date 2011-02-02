@@ -46,6 +46,7 @@
 #include <connectivity/dbexception.hxx>
 
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/enumhelper.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/property.hxx>
@@ -241,8 +242,8 @@ void SAL_CALL OQueryContainer::elementInserted( const ::com::sun::star::containe
             // nothing to do, we're inserting via an "appendByDescriptor"
             return;
 
-        DBG_ASSERT(sElementName.getLength(), "OQueryContainer::elementInserted : invalid name !");
-        DBG_ASSERT(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(sElementName.getLength(), "OQueryContainer::elementInserted : invalid name !");
+        OSL_ENSURE(m_aDocumentMap.find(sElementName) == m_aDocumentMap.end(), "OQueryContainer::elementInserted         : oops .... we're inconsistent with our master container !");
         if (!sElementName.getLength() || hasByName(sElementName))
             return;
 
@@ -257,8 +258,8 @@ void SAL_CALL OQueryContainer::elementRemoved( const ::com::sun::star::container
     ::rtl::OUString sAccessor;
     _rEvent.Accessor >>= sAccessor;
     {
-        DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementRemoved : invalid name !");
-        DBG_ASSERT(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(sAccessor.getLength(), "OQueryContainer::elementRemoved : invalid name !");
+        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementRemoved : oops .... we're inconsistent with our master container !");
         if ( !sAccessor.getLength() || !hasByName(sAccessor) )
             return;
     }
@@ -274,8 +275,8 @@ void SAL_CALL OQueryContainer::elementReplaced( const ::com::sun::star::containe
 
     {
         MutexGuard aGuard(m_aMutex);
-        DBG_ASSERT(sAccessor.getLength(), "OQueryContainer::elementReplaced : invalid name !");
-        DBG_ASSERT(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
+        OSL_ENSURE(sAccessor.getLength(), "OQueryContainer::elementReplaced : invalid name !");
+        OSL_ENSURE(m_aDocumentMap.find(sAccessor) != m_aDocumentMap.end(), "OQueryContainer::elementReplaced         : oops .... we're inconsistent with our master container !");
         if (!sAccessor.getLength() || !hasByName(sAccessor))
             return;
 

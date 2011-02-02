@@ -34,6 +34,7 @@
 #include "sdbcoretools.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -338,13 +339,13 @@ namespace dbaccess
         inline LifetimeCoupler( const Reference< XInterface >& _rxClient, const Reference< XComponent >& _rxActor )
             :m_xClient( _rxClient )
         {
-            DBG_ASSERT( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
+            OSL_ENSURE( _rxActor.is(), "LifetimeCoupler::LifetimeCoupler: this will crash!" );
             osl_incrementInterlockedCount( &m_refCount );
             {
                 _rxActor->addEventListener( this );
             }
             osl_decrementInterlockedCount( &m_refCount );
-            DBG_ASSERT( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
+            OSL_ENSURE( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
         }
 
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException);
@@ -716,7 +717,7 @@ namespace
     public:
         inline LayoutManagerLock( const Reference< XController >& _rxController )
         {
-            DBG_ASSERT( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
+            OSL_ENSURE( _rxController.is(), "LayoutManagerLock::LayoutManagerLock: this will crash!" );
             Reference< XFrame > xFrame( _rxController->getFrame() );
             try
             {

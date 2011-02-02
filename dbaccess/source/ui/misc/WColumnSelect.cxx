@@ -31,7 +31,7 @@
 
 #include "WColumnSelect.hxx"
 #include "dbu_misc.hrc"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "WizardPages.hrc"
 #include "WCopyTable.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -341,7 +341,7 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
                                                                     ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-        DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+        OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
         if ( aIter == m_pParent->m_mNameMapping.end() )
             return; // do nothing
         const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
@@ -391,7 +391,7 @@ USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
                                                                     ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
-            DBG_ASSERT(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
+            OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
             const ODatabaseExport::TColumns* pSrcColumns = m_pParent->getSourceColumns();
             ODatabaseExport::TColumns::const_iterator aSrcIter = pSrcColumns->find((*aIter).first);
             if ( aSrcIter != pSrcColumns->end() )

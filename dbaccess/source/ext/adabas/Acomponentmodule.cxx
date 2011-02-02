@@ -32,7 +32,7 @@
 #include <tools/resmgr.hxx>
 #include <svl/solar.hrc>
 #include <comphelper/sequence.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #define ENTER_MOD_METHOD()  \
     ::osl::MutexGuard aGuard(s_aMutex); \
@@ -90,12 +90,12 @@ namespace COMPMOD_NAMESPACE
         // note that this method is not threadsafe, which counts for the whole class !
         if (!m_pRessources && !m_bInitialized)
         {
-            DBG_ASSERT(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
+            OSL_ENSURE(m_sFilePrefix.Len(), "OModuleImpl::getResManager: no resource file prefix!");
             // create a manager with a fixed prefix
             ByteString aMgrName = m_sFilePrefix;
 
             m_pRessources = ResMgr::CreateResMgr(aMgrName.GetBuffer());
-            DBG_ASSERT(m_pRessources,
+            OSL_ENSURE(m_pRessources,
                     (ByteString("OModuleImpl::getResManager: could not create the resource manager (file name: ")
                 +=  aMgrName
                 +=  ByteString(")!")).GetBuffer());

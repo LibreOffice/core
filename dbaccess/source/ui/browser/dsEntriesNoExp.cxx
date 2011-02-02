@@ -33,7 +33,7 @@
 #include "browserids.hxx"
 #include "listviewitems.hxx"
 #include "imageprovider.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbtreeview.hxx"
 #include "dbtreelistbox.hxx"
 #include "dbu_brw.hrc"
@@ -50,7 +50,7 @@ namespace dbaui
 // -----------------------------------------------------------------------------
 SbaTableQueryBrowser::EntryType SbaTableQueryBrowser::getChildType( SvLBoxEntry* _pEntry ) const
 {
-    DBG_ASSERT(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
+    OSL_ENSURE(isContainer(_pEntry), "SbaTableQueryBrowser::getChildType: invalid entry!");
     switch (getEntryType(_pEntry))
     {
         case etTableContainer:

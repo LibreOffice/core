@@ -74,6 +74,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <typelib/typedescription.hxx>
 #include <unotools/confignode.hxx>
@@ -152,7 +153,7 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
     ,m_aListener( _rxListener )
 {
     DBG_CTOR( FlushNotificationAdapter, NULL );
-    DBG_ASSERT( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
+    OSL_ENSURE( _rxBroadcaster.is(), "FlushNotificationAdapter::FlushNotificationAdapter: invalid flushable!" );
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -160,7 +161,7 @@ FlushNotificationAdapter::FlushNotificationAdapter( const Reference< XFlushable 
             _rxBroadcaster->addFlushListener( this );
     }
     osl_decrementInterlockedCount( &m_refCount );
-    DBG_ASSERT( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
+    OSL_ENSURE( m_refCount == 1, "FlushNotificationAdapter::FlushNotificationAdapter: broadcaster isn't holding by hard ref!?" );
 }
 
 //------------------------------------------------------------
@@ -1201,7 +1202,7 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const rtl::OUS
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "ODatabaseSource::buildIsolatedConnection" );
     Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
-    DBG_ASSERT( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
+    OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
     // buildLowLevelConnection is expected to always succeed
     if ( xSdbcConn.is() )
     {

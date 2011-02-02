@@ -51,7 +51,6 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>
-#include <tools/debug.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/ucbhelper.hxx>
 #include "dlgsave.hxx"
@@ -91,6 +90,7 @@
 #include <sfx2/docfilt.hxx>
 #include <svtools/fileview.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "defaultobjectnamecheck.hxx"
 #include <osl/mutex.hxx>
 #include "subcomponentmanager.hxx"
@@ -680,7 +680,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
                 // create a new object
                 Reference< XPropertySet > xNewQuery(xQueryFactory->createInstance(), UNO_QUERY);
-                DBG_ASSERT(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
+                OSL_ENSURE(xNewQuery.is(), "OApplicationController::paste: invalid object created by factory!");
                 if (xNewQuery.is())
                 {
                     // initialize

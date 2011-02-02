@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "WNameMatch.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "FieldDescriptions.hxx"
 #include "WCopyTable.hxx"
 #include "dbaccess_helpid.hrc"
@@ -155,7 +155,7 @@ sal_Bool OWizNameMatching::LeavePage()
     while(pLeftEntry && pRightEntry)
     {
         OFieldDescription* pSrcField = static_cast<OFieldDescription*>(pLeftEntry->GetUserData());
-        DBG_ASSERT(pSrcField,"OWizNameMatching: OColumn can not be null!");
+        OSL_ENSURE(pSrcField,"OWizNameMatching: OColumn can not be null!");
 
         ODatabaseExport::TColumnVector::const_iterator aSrcIter = pSrcColumns->begin();
         ODatabaseExport::TColumnVector::const_iterator aSrcEnd  = pSrcColumns->end();
@@ -166,7 +166,7 @@ sal_Bool OWizNameMatching::LeavePage()
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
-            DBG_ASSERT(pDestField,"OWizNameMatching: OColumn can not be null!");
+            OSL_ENSURE(pDestField,"OWizNameMatching: OColumn can not be null!");
             const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
             ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
             ODatabaseExport::TColumnVector::const_iterator aDestEnd = pDestColumns->end();

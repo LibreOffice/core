@@ -30,6 +30,7 @@
 #include "precompiled_dbaccess.hxx"
 #include "TableConnectionData.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/stl_types.hxx>
 
 using namespace dbaui;
@@ -60,7 +61,7 @@ void OTableConnectionData::Init()
 {
     //////////////////////////////////////////////////////////////////////
     // LineDataList mit Defaults initialisieren
-    DBG_ASSERT(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
+    OSL_ENSURE(m_vConnLineData.size() == 0, "OTableConnectionData::Init() : nur mit leere Linienliste aufzurufen !");
     ResetConnLines(TRUE);
         // das legt Defaults an
 }
@@ -120,7 +121,7 @@ BOOL OTableConnectionData::SetConnLine( USHORT nIndex, const String& rSourceFiel
         return AppendConnLine(rSourceFieldName, rDestFieldName);
 
     OConnectionLineDataRef pConnLineData = m_vConnLineData[nIndex];
-    DBG_ASSERT(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
+    OSL_ENSURE(pConnLineData != NULL, "OTableConnectionData::SetConnLine : habe ungueltiges LineData-Objekt");
 
     pConnLineData->SetSourceFieldName( rSourceFieldName );
     pConnLineData->SetDestFieldName( rDestFieldName );

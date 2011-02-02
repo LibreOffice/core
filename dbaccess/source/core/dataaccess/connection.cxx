@@ -54,6 +54,7 @@
 #include <connectivity/dbexception.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include <comphelper/uno3.hxx>
 #include <comphelper/sequence.hxx>
@@ -321,7 +322,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 _rxORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.ProxyFactory"))),UNO_QUERY);
         Reference<XAggregation> xAgg = xProxyFactory->createProxy(_rxMaster.get());
         setDelegation(xAgg,m_refCount);
-        DBG_ASSERT(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
+        OSL_ENSURE(m_xConnection.is(), "OConnection::OConnection : invalid master connection !");
     }
     catch(const Exception&)
     {

@@ -181,7 +181,7 @@ namespace dbaui
         static const char sIndentSource[];
         char                    sIndent[nIndentMax+1];
         sal_Int16               m_nIndent;
-    #ifdef DBG_UTIL
+    #if OSL_DEBUG_LEVEL > 0
         BOOL                    m_bCheckFont;
     #endif
 

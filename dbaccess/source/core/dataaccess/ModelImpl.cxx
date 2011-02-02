@@ -64,6 +64,7 @@
 #include <sfx2/signaturestate.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/errcode.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/sharedunocomponent.hxx>
@@ -777,7 +778,7 @@ const Reference< XNumberFormatsSupplier > & ODatabaseModelImpl::getNumberFormats
 
         m_xNumberFormatsSupplier.set(
             m_aContext.createComponentWithArguments( "com.sun.star.util.NumberFormatsSupplier", aArguments ), UNO_QUERY_THROW );
-        DBG_ASSERT(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
+        OSL_ENSURE(m_xNumberFormatsSupplier.is(), "ODatabaseModelImpl::getNumberFormatsSupplier : could not instantiate the formats supplier !");
     }
     return m_xNumberFormatsSupplier;
 }

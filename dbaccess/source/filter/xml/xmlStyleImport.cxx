@@ -43,10 +43,9 @@
 #include <comphelper/extract.hxx>
 #include <xmloff/xmlprcon.hxx>
 #include <xmloff/xmluconv.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "xmlfilter.hxx"
 #include "xmlHelper.hxx"
-#include <tools/debug.hxx>
 
 
 #define XML_LINE_LEFT 0
@@ -146,7 +145,7 @@ void OTableStyleContext::SetDefaults()
 void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any& rValue)
 {
     sal_Int32 nIndex(static_cast<OTableStylesContext *>(pStyles)->GetIndex(nContextID));
-    DBG_ASSERT(nIndex != -1, "Property not found in Map");
+    OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
     GetProperties().push_back(aPropState); // has to be insertes in a sort order later
 }

@@ -35,6 +35,7 @@
 #include "dbamiscres.hrc"
 #include <unotools/confignode.hxx>
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/wldcrd.hxx>
 #include <osl/file.hxx>
 #include "dbastrings.hrc"
@@ -71,7 +72,7 @@ DBG_NAME(ODsnTypeCollection)
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFactory)
 :m_aDriverConfig(_xFactory)
 ,m_xFactory(_xFactory)
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 ,m_nLivingIterators(0)
 #endif
 {
@@ -85,7 +86,7 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
         m_aDsnTypesDisplayNames.push_back(m_aDriverConfig.getDriverTypeDisplayName(*pIter));
     }
 
-    DBG_ASSERT(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
+    OSL_ENSURE(m_aDsnTypesDisplayNames.size() == m_aDsnPrefixes.size(),
         "ODsnTypeCollection::ODsnTypeCollection : invalid resources !");
 }
 
@@ -93,7 +94,7 @@ ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< :
 ODsnTypeCollection::~ODsnTypeCollection()
 {
     DBG_DTOR(ODsnTypeCollection,NULL);
-    DBG_ASSERT(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
+    OSL_ENSURE(0 == m_nLivingIterators, "ODsnTypeCollection::~ODsnTypeCollection : there are still living iterator objects!");
 }
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::getTypeDisplayName(const ::rtl::OUString& _sURL) const
@@ -565,7 +566,7 @@ ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pConta
     :m_pContainer(_pContainer)
     ,m_nPosition(_nInitialPos)
 {
-    DBG_ASSERT(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
+    OSL_ENSURE(m_pContainer, "ODsnTypeCollection::TypeIterator::TypeIterator : invalid container!");
 #ifdef DBG_UTIL
     ++const_cast<ODsnTypeCollection*>(m_pContainer)->m_nLivingIterators;
 #endif
@@ -592,19 +593,19 @@ ODsnTypeCollection::TypeIterator::~TypeIterator()
 //-------------------------------------------------------------------------
 String ODsnTypeCollection::TypeIterator::getDisplayName() const
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnTypesDisplayNames[m_nPosition];
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString ODsnTypeCollection::TypeIterator::getURLPrefix() const
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnPrefixes.size(), "ODsnTypeCollection::TypeIterator::getDisplayName : invalid position!");
     return m_pContainer->m_aDsnPrefixes[m_nPosition];
 }
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator++()
 {
-    DBG_ASSERT(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
+    OSL_ENSURE(m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size(), "ODsnTypeCollection::TypeIterator::operator++ : invalid position!");
     if (m_nPosition < (sal_Int32)m_pContainer->m_aDsnTypesDisplayNames.size())
         ++m_nPosition;
     return *this;
@@ -613,7 +614,7 @@ const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operat
 //-------------------------------------------------------------------------
 const ODsnTypeCollection::TypeIterator& ODsnTypeCollection::TypeIterator::operator--()
 {
-    DBG_ASSERT(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
+    OSL_ENSURE(m_nPosition >= 0, "ODsnTypeCollection::TypeIterator::operator-- : invalid position!");
     if (m_nPosition >= 0)
         --m_nPosition;
     return *this;

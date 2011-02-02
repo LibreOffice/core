@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 #include "AppDetailView.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include "dbaccess_helpid.hrc"
 #include "dbu_app.hrc"
 #include "AppView.hxx"
@@ -138,7 +138,7 @@ void OCreationList::PreparePaint( SvLBoxEntry* _pEntry )
 void OCreationList::SelectSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    DBG_ASSERT( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
+    OSL_ENSURE( pEntry, "OCreationList::SelectSearchEntry: invalid entry!" );
 
     if ( pEntry )
         setCurrentEntryInvalidate( pEntry );
@@ -151,8 +151,8 @@ void OCreationList::SelectSearchEntry( const void* _pEntry )
 void OCreationList::ExecuteSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
-    DBG_ASSERT( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
-    DBG_ASSERT( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
+    OSL_ENSURE( pEntry, "OCreationList::ExecuteSearchEntry: invalid entry!" );
+    OSL_ENSURE( pEntry == GetCurEntry(), "OCreationList::ExecuteSearchEntry: SelectSearchEntry should have been called before!" );
 
     if ( pEntry )
         onSelected( pEntry );
@@ -168,7 +168,7 @@ Rectangle OCreationList::GetFocusRect( SvLBoxEntry* _pEntry, long _nLine )
     SvLBoxItem* pBitmapItem = _pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP );
     SvLBoxTab* pTab = pBitmapItem ? GetTab( _pEntry, pBitmapItem ) : NULL;
     SvViewDataItem* pItemData = pBitmapItem ? GetViewDataItem( _pEntry, pBitmapItem ) : NULL;
-    DBG_ASSERT( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
+    OSL_ENSURE( pTab && pItemData, "OCreationList::GetFocusRect: could not find the first bitmap item!" );
     if ( pTab && pItemData )
         aRect.Left() = pTab->GetPos() - pItemData->aSize.Width() / 2;
 
@@ -212,7 +212,7 @@ void OCreationList::MouseButtonDown( const MouseEvent& rMEvt )
 {
     SvTreeListBox::MouseButtonDown( rMEvt );
 
-    DBG_ASSERT( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
+    OSL_ENSURE( !m_pMouseDownEntry, "OCreationList::MouseButtonDown: I missed some mouse event!" );
     m_pMouseDownEntry = GetCurEntry();
     if ( m_pMouseDownEntry )
     {
@@ -234,14 +234,14 @@ void OCreationList::MouseMove( const MouseEvent& rMEvt )
         if ( m_pMouseDownEntry )
         {
             // we're currently in a "mouse down" phase
-            DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
+            OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseMove: inconsistence (1)!" );
             if ( pEntry == m_pMouseDownEntry )
             {
                 setCurrentEntryInvalidate( m_pMouseDownEntry );
             }
             else
             {
-                DBG_ASSERT( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
+                OSL_ENSURE( ( GetCurEntry() == m_pMouseDownEntry ) || !GetCurEntry(),
                     "OCreationList::MouseMove: inconsistence (2)!" );
                 setCurrentEntryInvalidate( NULL );
             }
@@ -274,7 +274,7 @@ void OCreationList::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( m_pMouseDownEntry )
     {
-        DBG_ASSERT( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
+        OSL_ENSURE( IsMouseCaptured(), "OCreationList::MouseButtonUp: hmmm .... no mouse captured, but an active entry?" );
         ReleaseMouse();
 
         InvalidateEntry( m_pMouseDownEntry );
@@ -315,7 +315,7 @@ void OCreationList::updateHelpText()
 // -----------------------------------------------------------------------------
 void OCreationList::onSelected( SvLBoxEntry* _pEntry ) const
 {
-    DBG_ASSERT( _pEntry, "OCreationList::onSelected: invalid entry!" );
+    OSL_ENSURE( _pEntry, "OCreationList::onSelected: invalid entry!" );
     URL aCommand;
     aCommand.Complete = reinterpret_cast< TaskEntry* >( _pEntry->GetUserData() )->sUNOCommand;
     m_rTaskWindow.getDetailView()->getBorderWin().getView()->getAppController().executeChecked( aCommand, Sequence< PropertyValue >() );

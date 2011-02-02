@@ -40,7 +40,7 @@
 #include "dbustrings.hrc"
 #include <vcl/svapp.hxx>
 #include <vcl/msgbox.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/diagnose_ex.h>
 #include "localresaccess.hxx"
 #include <unotools/syslocale.hxx>
@@ -105,7 +105,7 @@ DBG_NAME(OParameterDialog)
             m_xFormatter->attachNumberFormatsSupplier(xNumberFormats);
         try
         {
-            DBG_ASSERT(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
+            OSL_ENSURE(rParamContainer->getCount(), "OParameterDialog::OParameterDialog : can't handle empty containers !");
 
             m_aFinalValues.realloc(rParamContainer->getCount());
             PropertyValue* pValues = m_aFinalValues.getArray();
@@ -298,7 +298,7 @@ DBG_NAME(OParameterDialog)
         {
             sal_uInt16 nCurrent = m_aAllParams.GetSelectEntryPos();
             sal_uInt16 nCount = m_aAllParams.GetEntryCount();
-            DBG_ASSERT(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
+            OSL_ENSURE(nCount == m_aVisitedParams.size(), "OParameterDialog::OnButtonClicked : inconsistent lists !");
 
             // search the next entry in list we haven't visited yet
             sal_uInt16 nNext = (nCurrent + 1) % nCount;
@@ -343,13 +343,13 @@ DBG_NAME(OParameterDialog)
 
         // initialize the controls with the new values
         sal_uInt16 nSelected = m_aAllParams.GetSelectEntryPos();
-        DBG_ASSERT(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
+        OSL_ENSURE(nSelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnEntrySelected : no current entry !");
 
         m_aParam.SetText(::comphelper::getString(m_aFinalValues[nSelected].Value));
         m_nCurrentlySelected = nSelected;
 
         // with this the value isn't dirty
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnEntrySelected : invalid current entry !");
         m_aVisitedParams[m_nCurrentlySelected] &= ~EF_DIRTY;
 
         m_aResetVisitFlag.SetTimeout(1000);
@@ -361,10 +361,10 @@ DBG_NAME(OParameterDialog)
     //------------------------------------------------------------------------------
     IMPL_LINK(OParameterDialog, OnVisitedTimeout, Timer*, /*pTimer*/)
     {
-        DBG_ASSERT(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
+        OSL_ENSURE(m_nCurrentlySelected != LISTBOX_ENTRY_NOTFOUND, "OParameterDialog::OnVisitedTimeout : invalid call !");
 
         // mark the currently selected entry as visited
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnVisitedTimeout : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_VISITED;
 
         // was it the last "not visited yet" entry ?
@@ -411,7 +411,7 @@ DBG_NAME(OParameterDialog)
     IMPL_LINK(OParameterDialog, OnValueModified, Control*, /*pBox*/)
     {
         // mark the currently selected entry as dirty
-        DBG_ASSERT(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
+        OSL_ENSURE(m_nCurrentlySelected < m_aVisitedParams.size(), "OParameterDialog::OnValueModified : invalid entry !");
         m_aVisitedParams[m_nCurrentlySelected] |= EF_DIRTY;
 
         m_bNeedErrorOnCurrent = sal_True;

@@ -31,6 +31,7 @@
 
 #include "finteraction.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/ucb/InteractiveIOException.hpp>
 
 //........................................................................
@@ -51,7 +52,7 @@ namespace dbaui
         ,m_bDoesNotExist(sal_False)
     {
         DBG_CTOR( OFilePickerInteractionHandler, NULL );
-        DBG_ASSERT( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
+        OSL_ENSURE( m_xMaster.is(), "OFilePickerInteractionHandler::OFilePickerInteractionHandler: invalid master handler!" );
     }
 
     //--------------------------------------------------------------------

@@ -36,7 +36,7 @@
 #include "moduledbu.hxx"
 #include "dbu_dlg.hrc"
 #include "dbfindex.hrc"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <unotools/localfilehelper.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/pathoptions.hxx>
@@ -166,7 +166,7 @@ OTableIndex ODbaseIndexDialog::implRemoveIndex(const String& _rName, TableIndexL
     }
 
     (void)_bMustExist;
-    DBG_ASSERT(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
+    OSL_ENSURE(!_bMustExist || (aSearch != _rList.end()), "ODbaseIndexDialog::implRemoveIndex : did not find the index!");
     return aReturn;
 }
 

@@ -34,8 +34,8 @@
 #include "QueryDesignView.hxx"
 #include "TableWindowData.hxx"
 #include "imageprovider.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 #include <vcl/wall.hxx>
 
@@ -293,7 +293,7 @@ BOOL OTableWindow::Init()
     if ( !m_pListBox )
     {
         m_pListBox = CreateListBox();
-        DBG_ASSERT( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
+        OSL_ENSURE( m_pListBox != NULL, "OTableWindow::Init() : CreateListBox hat NULL geliefert !" );
         m_pListBox->SetSelectionMode( MULTIPLE_SELECTION );
     }
 

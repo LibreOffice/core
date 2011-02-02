@@ -55,6 +55,7 @@
 #include "dbaccess_helpid.hrc"
 #include "UITools.hxx"
 #include <osl/mutex.hxx>
+#include <osl/diagnose.h>
 #include <svtools/imgdef.hxx>
 #include "TablesSingleDlg.hxx"
 #include <tools/diagnose_ex.h>
@@ -256,7 +257,7 @@ DBG_NAME(OTableSubscriptionPage)
 
         // get the name of the data source we're working for
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, sal_True);
-        DBG_ASSERT(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
+        OSL_ENSURE(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
         String sDSName = pNameItem->GetValue();
 
         if (bValid && sDSName.Len() && !m_xCurrentConnection.is() )
@@ -264,7 +265,7 @@ DBG_NAME(OTableSubscriptionPage)
 
             // the PropertyValues for the current dialog settings
             Sequence< PropertyValue > aConnectionParams;
-            DBG_ASSERT(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
+            OSL_ENSURE(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
             if ( m_pTablesDlg )
             {
                 if (!m_pTablesDlg->getCurrentSettings(aConnectionParams))
@@ -446,11 +447,11 @@ DBG_NAME(OTableSubscriptionPage)
     {
         SvLBoxEntry* pLHS = static_cast<SvLBoxEntry*>(_pSortData->pLeft);
         SvLBoxEntry* pRHS = static_cast<SvLBoxEntry*>(_pSortData->pRight);
-        DBG_ASSERT(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
+        OSL_ENSURE(pLHS && pRHS, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid tree entries!");
 
         SvLBoxString* pLeftTextItem = static_cast<SvLBoxString*>(pLHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
         SvLBoxString* pRightTextItem = static_cast<SvLBoxString*>(pRHS->GetFirstItem(SV_ITEM_ID_LBOXSTRING));
-        DBG_ASSERT(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
+        OSL_ENSURE(pLeftTextItem && pRightTextItem, "SbaTableQueryBrowser::OnTreeEntryCompare: invalid text items!");
 
         String sLeftText = pLeftTextItem->GetText();
         String sRightText = pRightTextItem->GetText();

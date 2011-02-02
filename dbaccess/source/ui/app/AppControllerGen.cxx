@@ -75,6 +75,7 @@
 #include <svx/dbaexchange.hxx>
 #include <toolkit/unohlp.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <tools/urlobj.hxx>
 #include <unotools/bootstrap.hxx>
 #include <vcl/mnemonic.hxx>
@@ -226,7 +227,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         Reference< ::com::sun::star::awt::XWindow> xWindow = getTopMostContainerWindow();
         if ( !xWindow.is() )
         {
-            DBG_ASSERT( getContainer(), "OApplicationController::Construct: have no view!" );
+            OSL_ENSURE( getContainer(), "OApplicationController::Construct: have no view!" );
             if ( getContainer() )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }

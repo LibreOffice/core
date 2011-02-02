@@ -33,7 +33,6 @@
 
 #include <svtools/editbrowsebox.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include "TableConnectionData.hxx"
 #include "TableConnection.hxx"
@@ -45,7 +44,7 @@
 #include "RelControliFace.hxx"
 #include "dbu_control.hrc"
 #include "dbaccess_helpid.hrc"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 
 #include <algorithm>
 
@@ -496,7 +495,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
     // -----------------------------------------------------------------------------
     void OTableListBoxControl::fillListBoxes()
     {
-        DBG_ASSERT( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
+        OSL_ENSURE( !m_pTableMap->empty(), "OTableListBoxControl::fillListBoxes: no table window!");
         OTableWindow* pInitialLeft = NULL;
         OTableWindow* pInitialRight = NULL;
 
@@ -583,7 +582,7 @@ OTableListBoxControl::OTableListBoxControl(  Window* _pParent
             OTableWindow* pLoop = NULL;
             if( aFind != m_pTableMap->end() )
                 pLoop = aFind->second;
-            DBG_ASSERT(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
+            OSL_ENSURE(pLoop != NULL, "ORelationDialog::OnTableChanged : ungueltiger Eintrag in ListBox !");
                 // da ich die ListBoxen selber mit eben diesen Tabellennamen, mit denen ich sie jetzt vergleiche, gefuellt habe,
                 // MUSS ich strSelected finden
             if (pListBox == &m_lmbLeftTable)

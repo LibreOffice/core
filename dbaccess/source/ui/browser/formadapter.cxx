@@ -31,6 +31,7 @@
 
 #include "formadapter.hxx"
 #include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <comphelper/types.hxx>
 #include <comphelper/enumhelper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -192,7 +193,7 @@ void SbaXFormAdapter::AttachForm(const Reference< ::com::sun::star::sdbc::XRowSe
     if (xNewMaster == m_xMainForm)
         return;
 
-    DBG_ASSERT(xNewMaster.get() != static_cast< ::com::sun::star::sdbc::XRowSet* >(this), "SbaXFormAdapter::AttachForm : invalid argument !");
+    OSL_ENSURE(xNewMaster.get() != static_cast< ::com::sun::star::sdbc::XRowSet* >(this), "SbaXFormAdapter::AttachForm : invalid argument !");
 
     if (m_xMainForm.is())
     {
@@ -1188,7 +1189,7 @@ void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< ::com::sun::
 void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     Reference< ::com::sun::star::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
-    DBG_ASSERT(xSet.is(), "SAL_CALL SbaXFormAdapter::setFastPropertyValue : have no master form !");
+    OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::setFastPropertyValue : have no master form !");
 
     if (m_nNamePropHandle == nHandle)
     {
@@ -1221,7 +1222,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
 Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( ::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
 {
     Reference< ::com::sun::star::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
-    DBG_ASSERT(xSet.is(), "SAL_CALL SbaXFormAdapter::getFastPropertyValue : have no master form !");
+    OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::getFastPropertyValue : have no master form !");
 
     if (m_nNamePropHandle == nHandle)
         return makeAny(m_sName);
@@ -1315,7 +1316,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< ::rt
     // search for (and fake) the NAME property
     const ::rtl::OUString* pNames = aPropertyNames.getConstArray();
     Any* pValues = aReturn.getArray();
-    DBG_ASSERT(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
+    OSL_ENSURE(aReturn.getLength() == aPropertyNames.getLength(), "SAL_CALL SbaXFormAdapter::getPropertyValues : the main form returned an invalid-length sequence !");
     for (sal_Int32 i=0; i<aPropertyNames.getLength(); ++i, ++pNames, ++pValues)
         if (pNames->equals(PROPERTY_NAME))
         {
@@ -1497,7 +1498,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const ::
     if (sal::static_int_cast< sal_uInt32 >(nIndex) > m_aChildren.size())
         nIndex = m_aChildren.size();
 
-    DBG_ASSERT(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::implInsert : inconsistent container state !");
+    OSL_ENSURE(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::implInsert : inconsistent container state !");
     m_aChildren.insert(m_aChildren.begin() + nIndex, xElement);
     m_aChildNames.insert(m_aChildNames.begin() + nIndex, sName);
 
@@ -1616,7 +1617,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( ::com::su
 
     Reference< ::com::sun::star::form::XFormComponent >  xAffected = *(m_aChildren.begin() + _rIndex);
 
-    DBG_ASSERT(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::removeByIndex : inconsistent container state !");
+    OSL_ENSURE(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::removeByIndex : inconsistent container state !");
     m_aChildren.erase(m_aChildren.begin() + _rIndex);
     m_aChildNames.erase(m_aChildNames.begin() + _rIndex);
 
@@ -1675,7 +1676,7 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
 
     Reference< ::com::sun::star::form::XFormComponent >  xOld = *(m_aChildren.begin() + _rIndex);
 
-    DBG_ASSERT(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::replaceByIndex : inconsistent container state !");
+    OSL_ENSURE(m_aChildren.size() == m_aChildNames.size(), "SAL_CALL SbaXFormAdapter::replaceByIndex : inconsistent container state !");
     *(m_aChildren.begin() + _rIndex) = xElement;
     *(m_aChildNames.begin() + _rIndex) = sName;
 
@@ -1750,7 +1751,7 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const ::com::sun::star::beans::Pro
         if(aIter != m_aChildren.end())
         {
             sal_Int32 nPos = aIter - m_aChildren.begin();
-            DBG_ASSERT(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
+            OSL_ENSURE(*(m_aChildNames.begin() + nPos) == ::comphelper::getString(evt.OldValue), "SAL_CALL SbaXFormAdapter::propertyChange : object has a wrong name !");
             *(m_aChildNames.begin() + nPos) = ::comphelper::getString(evt.NewValue);
         }
     }

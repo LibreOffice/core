@@ -39,6 +39,7 @@
 #include <cppuhelper/queryinterface.hxx>
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <comphelper/propagg.hxx>
 #include <comphelper/sequence.hxx>
 
@@ -101,7 +102,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
     ODataSettings::registerPropertiesFor(this);
 
     osl_incrementInterlockedCount(&m_refCount);
-    DBG_ASSERT(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
+    OSL_ENSURE(m_xCommandDefinition.is(), "OQuery::OQuery : invalid CommandDefinition object !");
     if ( m_xCommandDefinition.is() )
     {
         try
@@ -117,7 +118,7 @@ OQuery::OQuery( const Reference< XPropertySet >& _rxCommandDefinition
         //  m_xCommandDefinition->addPropertyChangeListener(PROPERTY_NAME, this);
         m_xCommandPropInfo = m_xCommandDefinition->getPropertySetInfo();
     }
-    DBG_ASSERT(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
+    OSL_ENSURE(m_xConnection.is(), "OQuery::OQuery : invalid connection !");
     osl_decrementInterlockedCount(&m_refCount);
 }
 
@@ -238,7 +239,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
     {
         MutexGuard aGuard(m_aMutex);
 
-        DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+        OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
             "OQuery::propertyChange : where did this call come from ?");
 
         if (m_eDoingCurrently == SETTING_PROPERTIES)
@@ -269,7 +270,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
     MutexGuard aGuard(m_aMutex);
 
     (void)_rSource;
-    DBG_ASSERT(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
+    OSL_ENSURE(_rSource.Source.get() == Reference< XInterface >(m_xCommandDefinition, UNO_QUERY).get(),
         "OQuery::disposing : where did this call come from ?");
 
     m_xCommandDefinition->removePropertyChangeListener(::rtl::OUString(), this);

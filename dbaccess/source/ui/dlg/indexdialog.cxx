@@ -41,6 +41,7 @@
 #include <svtools/imgdef.hxx>
 #include "browserids.hxx"
 #include <connectivity/dbtools.hxx>
+#include <osl/diagnose.h>
 //......................................................................
 namespace dbaui
 {
@@ -145,14 +146,14 @@ namespace dbaui
     //------------------------------------------------------------------
     void DbaIndexList::enableSelectHandler()
     {
-        DBG_ASSERT(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
+        OSL_ENSURE(m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_False;
     }
 
     //------------------------------------------------------------------
     void DbaIndexList::disableSelectHandler()
     {
-        DBG_ASSERT(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
+        OSL_ENSURE(!m_bSuspendSelectHdl, "DbaIndexList::enableSelectHandler: invalid call (this is not cumulative)!");
         m_bSuspendSelectHdl = sal_True;
     }
 
@@ -340,7 +341,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     sal_Bool DbaIndexDialog::implCommit(SvLBoxEntry* _pEntry)
     {
-        DBG_ASSERT(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
+        OSL_ENSURE(_pEntry, "DbaIndexDialog::implCommit: invalid entry!");
 
         Indexes::iterator aCommitPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
@@ -408,7 +409,7 @@ DBG_NAME(DbaIndexDialog)
         for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
         {
             Indexes::iterator aAfterInsertPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
-            DBG_ASSERT(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
+            OSL_ENSURE(aAfterInsertPos != m_pIndexes->end(), "DbaIndexDialog::OnNewIndex: problems with on of the entries!");
             pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterInsertPos - m_pIndexes->begin())));
         }
 
@@ -424,7 +425,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
+        OSL_ENSURE(pSelected, "DbaIndexDialog::OnDropIndex: invalid call!");
         if (pSelected)
         {
             // let the user confirm the drop
@@ -450,7 +451,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // do the drop
         Indexes::iterator aDropPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
-        DBG_ASSERT(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
+        OSL_ENSURE(aDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: did not find the index in my collection!");
 
         SQLExceptionInfo aExceptionInfo;
         sal_Bool bSuccess = sal_False;
@@ -480,7 +481,7 @@ DBG_NAME(DbaIndexDialog)
             for (SvLBoxEntry* pAdjust = m_aIndexes.First(); pAdjust; pAdjust = m_aIndexes.Next(pAdjust))
             {
                 Indexes::iterator aAfterDropPos = m_pIndexes->find(m_aIndexes.GetEntryText(pAdjust));
-                DBG_ASSERT(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
+                OSL_ENSURE(aAfterDropPos != m_pIndexes->end(), "DbaIndexDialog::OnDropIndex: problems with on of the remaining entries!");
                 pAdjust->SetUserData(reinterpret_cast< void* >(sal_Int32(aAfterDropPos - m_pIndexes->begin())));
             }
 
@@ -501,7 +502,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
+        OSL_ENSURE(pSelected, "DbaIndexDialog::OnRenameIndex: invalid call!");
 
         // save the changes made 'til here
         // Upon leaving the edit mode, the control will be re-initialized with the
@@ -530,7 +531,7 @@ DBG_NAME(DbaIndexDialog)
     {
         // the selected index
         SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
+        OSL_ENSURE(pSelected, "DbaIndexDialog::OnResetIndex: invalid call!");
 
         Indexes::iterator aResetPos = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(pSelected->GetUserData());
 
@@ -588,7 +589,7 @@ DBG_NAME(DbaIndexDialog)
     {
         if (m_aIndexes.IsEditingActive())
         {
-            DBG_ASSERT(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
+            OSL_ENSURE(!m_bEditAgain, "DbaIndexDialog::OnCloseDialog: somebody was faster than hell!");
                 // this means somebody entered a new name, which was invalid, which cause us to posted us an event,
                 // and before the event arrived the user clicked onto "close". VERY fast, this user ....
             m_aIndexes.EndEditing(sal_False);
@@ -599,7 +600,7 @@ DBG_NAME(DbaIndexDialog)
 
         // the currently selected entry
         const SvLBoxEntry* pSelected = m_aIndexes.FirstSelected();
-        DBG_ASSERT(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
+        OSL_ENSURE(pSelected == m_pPreviousSelection, "DbaIndexDialog::OnCloseDialog: inconsistence!");
 
         sal_Int32 nResponse = RET_NO;
         if (pSelected)
@@ -644,7 +645,7 @@ DBG_NAME(DbaIndexDialog)
     {
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(_pEntry->GetUserData());
 
-        DBG_ASSERT(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
+        OSL_ENSURE(aPosition >= m_pIndexes->begin() && aPosition < m_pIndexes->end(),
             "DbaIndexDialog::OnEntryEdited: invalid entry!");
 
         String sNewName = m_aIndexes.GetEntryText(_pEntry);
@@ -768,7 +769,7 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     IMPL_LINK( DbaIndexDialog, OnModified, void*, /*NOTINTERESTEDIN*/ )
     {
-        DBG_ASSERT(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
+        OSL_ENSURE(m_pPreviousSelection, "DbaIndexDialog, OnModified: invalid call!");
         Indexes::iterator aPosition = m_pIndexes->begin() + reinterpret_cast<sal_IntPtr>(m_pPreviousSelection->GetUserData());
 
         aPosition->setModified(sal_True);

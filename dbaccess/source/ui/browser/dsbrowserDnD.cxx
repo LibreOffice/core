@@ -51,6 +51,7 @@
 #include <svtools/treelist.hxx>
 #include <svx/dataaccessdescriptor.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 
 #include <functional>
 // .........................................................................
@@ -278,7 +279,7 @@ namespace dbaui
 
                     if ( pData->xConnection.is() )
                     {
-                        DBG_ASSERT( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
+                        OSL_ENSURE( impl_isDataSourceEntry( pEntryLoop ), "SbaTableQueryBrowser::clearTreeModel: no data source entry, but a connection?" );
                         // connections are to be stored *only* at the data source entries
                         impl_releaseConnection( pData->xConnection );
                     }

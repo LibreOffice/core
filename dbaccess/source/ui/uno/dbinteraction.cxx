@@ -31,8 +31,8 @@
 
 #include "dbinteraction.hxx"
 #include "dbu_reghelper.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 #include <connectivity/dbexception.hxx>
 #include "sqlmessage.hxx"
@@ -99,7 +99,7 @@ namespace dbaui
     sal_Bool BasicInteractionHandler::impl_handle_throw( const Reference< XInteractionRequest >& i_Request )
     {
         Any aRequest( i_Request->getRequest() );
-        DBG_ASSERT(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
+        OSL_ENSURE(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
         if ( !aRequest.hasValue() )
             // no request -> no handling
             return sal_False;
@@ -146,7 +146,7 @@ namespace dbaui
         Reference< XInteractionSupplyParameters > xParamCallback;
         if (-1 != nParamPos)
             xParamCallback = Reference< XInteractionSupplyParameters >(_rContinuations[nParamPos], UNO_QUERY);
-        DBG_ASSERT(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
+        OSL_ENSURE(xParamCallback.is(), "BasicInteractionHandler::implHandle(ParametersRequest): can't set the parameters without an appropriate interaction handler!s");
 
         OParameterDialog aDlg(NULL, _rParamRequest.Parameters, _rParamRequest.Connection, m_xORB);
         sal_Int16 nResult = aDlg.Execute();
@@ -277,7 +277,7 @@ namespace dbaui
             if (-1 != nDocuPos)
             {
                 Reference< XInteractionDocumentSave > xCallback(_rContinuations[nDocuPos], UNO_QUERY);
-                DBG_ASSERT(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
+                OSL_ENSURE(xCallback.is(), "BasicInteractionHandler::implHandle(DocumentSaveRequest): can't save document without an appropriate interaction handler!s");
 
                 OCollectionView aDlg(NULL,_rDocuRequest.Content,_rDocuRequest.Name,m_xORB);
                 sal_Int16 nResult = aDlg.Execute();

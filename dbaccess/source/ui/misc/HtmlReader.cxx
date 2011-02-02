@@ -36,7 +36,7 @@
 #include "dbu_misc.hrc"
 #include "dbustrings.hrc"
 #include <sfx2/sfxhtml.hxx>
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <tools/tenccvt.hxx>
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
@@ -436,7 +436,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption* pOption )
     const String& rOptVal = pOption->GetString();
     if ( rOptVal.Search('%') != STRING_NOTFOUND )
     {   // Prozent
-        DBG_ASSERT( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
+        OSL_ENSURE( m_nColumnWidth, "WIDTH Option: m_nColumnWidth==0 und Width%" );
         return (sal_Int16)((pOption->GetNumber() * m_nColumnWidth) / 100);
     }
     else

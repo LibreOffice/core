@@ -56,8 +56,8 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/unohlp.hxx>
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include <vcl/msgbox.hxx>
 
 //........................................................................
@@ -264,7 +264,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     void OSingleDocumentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
-        DBG_ASSERT( !isConnected(), "OSingleDocumentController::initializeConnection: not to be called when already connected!" );
+        OSL_ENSURE( !isConnected(), "OSingleDocumentController::initializeConnection: not to be called when already connected!" );
             // usually this gets called from within initialize of derived classes ...
         if ( isConnected() )
             disconnect();
@@ -304,7 +304,7 @@ namespace dbaui
             // get a number formatter
             Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps(), UNO_SET_THROW );
             xDataSourceProps->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->m_sDataSourceName;
-            DBG_ASSERT( m_pImpl->m_sDataSourceName.getLength(), "OSingleDocumentController::initializeConnection: invalid data source name!" );
+            OSL_ENSURE( m_pImpl->m_sDataSourceName.getLength(), "OSingleDocumentController::initializeConnection: invalid data source name!" );
             Reference< XNumberFormatsSupplier> xSupplier = ::dbtools::getNumberFormats(m_pImpl->m_xConnection);
             if(xSupplier.is())
             {
@@ -381,7 +381,7 @@ namespace dbaui
     //--------------------------------------------------------------------
     sal_Bool OSingleDocumentController::Construct(Window* _pParent)
     {
-        DBG_ASSERT( getView(), "OSingleDocumentController::Construct: have no view!" );
+        OSL_ENSURE( getView(), "OSingleDocumentController::Construct: have no view!" );
         if ( getView() )
             getView()->enableSeparator( );
 

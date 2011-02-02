@@ -35,8 +35,8 @@
 #include <vcl/svapp.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "dataview.hxx"
-#include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
+#include <osl/diagnose.h>
 #include "dbustrings.hrc"
 #include <vcl/stdtext.hxx>
 #include <cppuhelper/typeprovider.hxx>
@@ -262,7 +262,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     fillSupportedFeatures();
 
     // create the database context
-    DBG_ASSERT(getORB().is(), "OGenericUnoController::Construct need a service factory!");
+    OSL_ENSURE(getORB().is(), "OGenericUnoController::Construct need a service factory!");
     try
     {
         m_xDatabaseContext = Reference< XNameAccess >(getORB()->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
@@ -678,7 +678,7 @@ void OGenericUnoController::InvalidateAll_Impl()
 
     {
         ::osl::MutexGuard aGuard( m_aFeatureMutex);
-        DBG_ASSERT(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
+        OSL_ENSURE(m_aFeaturesToInvalidate.size(), "OGenericUnoController::InvalidateAll_Impl: to be called from within InvalidateFeature_Impl only!");
         m_aFeaturesToInvalidate.pop_front();
         if(!m_aFeaturesToInvalidate.empty())
             m_aAsyncInvalidateAll.Call();
@@ -914,7 +914,7 @@ void OGenericUnoController::implDescribeSupportedFeature( const sal_Char* _pAsci
         sal_uInt16 _nFeatureId, sal_Int16 _nCommandGroup )
 {
 #ifdef DBG_UTIL
-    DBG_ASSERT( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
+    OSL_ENSURE( m_bDescribingSupportedFeatures, "OGenericUnoController::implDescribeSupportedFeature: bad timing for this call!" );
 #endif
     OSL_PRECOND( _nFeatureId < FIRST_USER_DEFINED_FEATURE, "OGenericUnoController::implDescribeSupportedFeature: invalid feature id!" );
 

@@ -34,7 +34,7 @@
 #include "QueryTableView.hxx"
 #include "querycontroller.hxx"
 #include "JoinExchange.hxx"
-#include <tools/debug.hxx>
+#include <osl/diagnose.h>
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #include <svx/dbexch.hrc>
 #include <vcl/svapp.hxx>
@@ -377,7 +377,7 @@ IMPL_LINK( OTableWindowListBox, OnDoubleClick, SvTreeListBox *, /*pBox*/ )
 {
     // meinem Elter Bescheid sagen
     Window* pParent = Window::GetParent();
-    DBG_ASSERT(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
+    OSL_ENSURE(pParent != NULL, "OTableWindowListBox::OnDoubleClick : habe kein Parent !");
 
     static_cast<OTableWindow*>(pParent)->OnEntryDoubleClicked(GetHdlEntry());
 
