@@ -81,7 +81,7 @@ namespace comphelper{
 
     @param  SERVICENAME
             a list of supported uno service names from type
-            [css::uno::Sequence< ::rtl::OUString >]
+            [::com::sun::star::uno::Sequence< ::rtl::OUString >]
             or any possible method call, which returns such
             list.
  */
@@ -96,12 +96,12 @@ namespace comphelper{
         ::rtl::OUString sKey = sKeyBuf.makeStringAndClear();                                                        \
                                                                                                                     \
         /* try to register this service ... thrown exception will be catched by COMPONENT_WRITEINFO! */             \
-        css::uno::Reference< css::registry::XRegistryKey > xKey = xRoot->createKey(sKey);                           \
+        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xKey = xRoot->createKey(sKey);                           \
         if (!xKey.is())                                                                                             \
-            throw css::registry::InvalidRegistryException(sKey, css::uno::Reference< css::uno::XInterface >());     \
+            throw ::com::sun::star::registry::InvalidRegistryException(sKey, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());     \
                                                                                                                     \
         /* dont optimize it! it must work for simple types and function calls! */                                   \
-        const css::uno::Sequence< ::rtl::OUString > lServiceNames = SERVICENAMES;                                   \
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString > lServiceNames = SERVICENAMES;                                   \
         const ::rtl::OUString*                      pServiceNames = lServiceNames.getConstArray();                  \
         sal_Int32                                   nCount        = lServiceNames.getLength();                      \
                                                                                                                     \
@@ -131,7 +131,7 @@ namespace comphelper{
         if (!pServiceManager || !pRegistryKey)                                                                                      \
             return sal_False;                                                                                                       \
                                                                                                                                     \
-        css::uno::Reference< css::registry::XRegistryKey > xRoot = reinterpret_cast< css::registry::XRegistryKey* >(pRegistryKey);  \
+        ::com::sun::star::uno::Reference< ::com::sun::star::registry::XRegistryKey > xRoot = reinterpret_cast< ::com::sun::star::registry::XRegistryKey* >(pRegistryKey);  \
                                                                                                                                     \
         /*if one of following registration will fail ... an exception is thrown! */                                                 \
         try                                                                                                                         \
@@ -142,7 +142,7 @@ namespace comphelper{
             /*   _COMPHELPER_COMPONENTINFO(n) */                                                                                    \
             INFOLIST                                                                                                                \
         }                                                                                                                           \
-        catch(const css::registry::InvalidRegistryException&)                                                                       \
+        catch(const ::com::sun::star::registry::InvalidRegistryException&)                                                                       \
         {                                                                                                                           \
             return sal_False;                                                                                                       \
         }                                                                                                                           \
@@ -188,8 +188,8 @@ namespace comphelper{
                                                                                                                                                     \
         STATIC_INIT                                                                                                                                 \
                                                                                                                                                     \
-        css::uno::Reference< css::lang::XMultiServiceFactory >  xSMGR     = reinterpret_cast< css::lang::XMultiServiceFactory* >(pServiceManager);  \
-        css::uno::Reference< css::lang::XSingleServiceFactory > xFactory  ;                                                                         \
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >  xSMGR     = reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >(pServiceManager);  \
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > xFactory  ;                                                                         \
         rtl::OUString                                           sImplName = ::rtl::OUString::createFromAscii(pImplementationName);                  \
                                                                                                                                                     \
         /* This parameter will expand to: */                                                                                                        \
