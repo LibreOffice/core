@@ -91,6 +91,7 @@ my_components = \
     component/toolkit/util/tk \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
+    component/writerfilter/util/writerfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
@@ -178,7 +179,6 @@ my_components = \
     vbaevents \
     vbaobj \
     wpft \
-    writerfilter \
     xmlfa \
     xmlfd \
     xmx \
