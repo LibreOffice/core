@@ -71,7 +71,7 @@ $(eval $(call gb_Library_add_linked_libs,msword,\
     ucbhelper \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,msword,\
