@@ -144,7 +144,7 @@ Fraction::operator sal_Int32() const
 
 Fraction::operator float() const
 {
-    return mnNumerator / mnDenominator;
+    return static_cast<float>(mnNumerator) / static_cast<float>(mnDenominator);
 }
 
 }}
