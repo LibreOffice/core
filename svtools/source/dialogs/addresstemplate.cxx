@@ -41,7 +41,7 @@
 #include <vcl/waitobj.hxx>
 #include <vcl/msgbox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <cppuhelper/extract.hxx>
+#include <comphelper/extract.hxx>
 #include <comphelper/interaction.hxx>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/awt/XWindow.hpp>

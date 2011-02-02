@@ -25,28 +25,35 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_Module_Module,svtools))
+$(eval $(call gb_JunitTest_JunitTest,svl_complex))
 
-$(eval $(call gb_Module_add_targets,svtools,\
-    AllLangResTarget_productregistration \
-    AllLangResTarget_svt \
-    Executable_bmp \
-    Executable_bmpsum \
-    Executable_g2g \
-    Library_hatchwindowfactory \
-    Library_productregistration \
-    Library_svt \
-    Package_inc \
+$(eval $(call gb_JunitTest_set_defs,svl_complex,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/svl/qa/complex/broken_document/test_documents \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,svtools,\
-    JunitTest_svtools_unoapi \
+$(eval $(call gb_JunitTest_add_jars,svl_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+    $(OUTDIR)/bin/ConnectivityTools.jar \
 ))
 
-#todo: javapatchres
-#todo: jpeg on mac in svtools/util/makefile.mk
-#todo: deliver errtxt.src as ehdl.srs
-#todo: nooptfiles filter, filterconfigitem, FilterConfigCache, SvFilterOptionsDialog
-#todo: map file
+$(eval $(call gb_JunitTest_add_sourcefiles,svl_complex,\
+    svl/qa/complex/ConfigItems/CheckConfigItems \
+    svl/qa/complex/passwordcontainer/PasswordContainerUnitTest \
+    svl/qa/complex/passwordcontainer/TestHelper \
+    svl/qa/complex/passwordcontainer/Test03 \
+    svl/qa/complex/passwordcontainer/Test02 \
+    svl/qa/complex/passwordcontainer/Test01 \
+    svl/qa/complex/passwordcontainer/PasswordContainerTest \
+    svl/qa/complex/passwordcontainer/MasterPasswdHandler \
+))
+
+$(eval $(call gb_JunitTest_add_classes,svl_complex,\
+    complex.passwordcontainer.PasswordContainerUnitTest \
+))
 
 # vim: set noet sw=4 ts=4:

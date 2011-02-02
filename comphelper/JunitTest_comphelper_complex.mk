@@ -1,7 +1,8 @@
 #*************************************************************************
+#
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -22,27 +23,26 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#***********************************************************************/
+#*************************************************************************
 
-PRJNAME=extensions
-PRJ=..$/..
+$(eval $(call gb_JunitTest_JunitTest,comphelper_complex))
 
-TARGET=uno_iterators
+$(eval $(call gb_JunitTest_add_sourcefiles,comphelper_complex,\
+    comphelper/qa/complex/comphelper/Map \
+    comphelper/qa/complex/comphelper/SequenceOutputStreamUnitTest \
+))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_add_jars,comphelper_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE : settings.mk
+$(eval $(call gb_JunitTest_add_classes,comphelper_complex,\
+    complex.comphelper.SequenceOutputStreamUnitTest \
+    complex.comphelper.Map \
+))
 
-OBJFILES= \
-    $(OBJ)$/uno_iterators.obj
-
-APP1TARGET=uno_iterators
-APP1OBJS= \
-    $(OBJ)$/uno_iterators.obj
-APP1STDLIBS= \
-    $(SALLIB) \
-    $(CPPULIB) \
-    $(SALHELPERLIB) \
-    $(CPPUHELPERLIB)
-
-.INCLUDE : target.mk 
+# vim: set noet sw=4 ts=4:

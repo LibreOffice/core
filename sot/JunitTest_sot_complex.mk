@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -24,25 +24,26 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..
 
-PRJNAME=comphelper
-TARGET=inc
+$(eval $(call gb_JunitTest_JunitTest,sot_complex))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_sourcefiles,sot_complex,\
+    sot/qa/complex/olesimplestorage/OLESimpleStorageTest \
+    sot/qa/complex/olesimplestorage/OLESimpleStorageUnitTest \
+    sot/qa/complex/olesimplestorage/Test01 \
+    sot/qa/complex/olesimplestorage/TestHelper \
+))
 
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_JunitTest_add_jars,sot_complex,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-# --- Files --------------------------------------------------------
-# --- Targets -------------------------------------------------------
+$(eval $(call gb_JunitTest_add_classes,sot_complex,\
+    complex.olesimplestorage.OLESimpleStorageUnitTest \
+))
 
-.INCLUDE :  target.mk
-
-.IF "$(ENABLE_PCH)"!=""
-ALLTAR : \
-    $(SLO)$/precompiled.pch \
-    $(SLO)$/precompiled_ex.pch
-    
-.ENDIF			# "$(ENABLE_PCH)"!=""
-
+# vim: set noet sw=4 ts=4:

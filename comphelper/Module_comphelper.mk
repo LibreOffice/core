@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,39 +14,26 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJNAME=comphelper
-TARGET=processfactory
+$(eval $(call gb_Module_Module,comphelper))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Module_add_targets,comphelper,\
+    Package_inc \
+    Library_comphelp \
+))
 
-# --- Settings common for the whole project -----
+$(eval $(call gb_Module_add_subsequentcheck_targets,comphelper,\
+    JunitTest_comphelper_complex \
+))
 
-
-# --- Settings ----------------------------------
-
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-# --- Types -------------------------------------
-
-# --- Files -------------------------------------
-
-SLOFILES=	$(SLO)$/processfactory.obj	\
-            $(SLO)$/componentfactory.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet ts=4 sw=4:

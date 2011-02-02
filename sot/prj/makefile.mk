@@ -25,7 +25,16 @@
 #
 #*************************************************************************
 
-# define SOT_DLLIMPLEMENTATION (see @ = sotdllapi.h)
-CDEFS += -DSOT_DLLIMPLEMENTATION
+PRJ=..
+TARGET=prj
 
-VISIBILITY_HIDDEN=TRUE
+.INCLUDE : settings.mk
+
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
+
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

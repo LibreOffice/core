@@ -32,6 +32,21 @@
  // images ********************************************************************
 
 #define X_IMAGE_LIST \
+        IMG_IMPRESS ;           \
+        IMG_CALC ;              \
+        IMG_CALCTEMPLATE ;      \
+        IMG_CHART ;             \
+        IMG_IMPRESSTEMPLATE ;   \
+        IMG_HTML ;              \
+        IMG_MATH ;              \
+        IMG_WRITER ;            \
+        IMG_WRITERTEMPLATE ;    \
+        IMG_MACROLIB ;          \
+        IMG_GLOBAL_DOC ;        \
+        IMG_DRAW ;              \
+        IMG_DRAWTEMPLATE ;      \
+        IMG_NEWFROMTEMPLATE ;   \
+        IMG_DATABASE;           \
         IMG_WORKPLACE ; \
         IMG_BITMAP ; \
         IMG_EXCEL ; \
@@ -111,7 +126,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        68 ;
+        83 ;
     };
 };
 
@@ -125,7 +140,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        68;
+        83;
     };
 };
 
@@ -139,7 +154,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG_HIGHCONTRAST
     };
     IdCount =
     {
-        68 ;
+        83 ;
     };
 };
 
@@ -153,7 +168,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL_HIGHCONTRAST
     };
     IdCount =
     {
-        68;
+        83;
     };
 };
 

@@ -28,11 +28,14 @@
 PRJ = ..$/..
 PRJNAME = vcl
 TARGET = salmain
-LIBTARGET = NO
 ENABLE_EXCEPTIONS = TRUE
 
 .INCLUDE: settings.mk
 
 OBJFILES = $(OBJ)$/salmain.obj
+
+LIB1TARGET=$(LB)$/vclmain.lib
+LIB1ARCHIV=$(LB)$/libvclmain.a
+LIB1FILES=$(LB)$/salmain.lib
 
 .INCLUDE: target.mk

@@ -2,7 +2,7 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2000, 2011 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -25,23 +25,29 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
-PRJINC=..$/..$/inc
-PRJNAME=comphelper
-TARGET=compare
+$(eval $(call gb_JunitTest_JunitTest,toolkit_unoapi))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_set_defs,toolkit_unoapi,\
+    $$(DEFS) \
+    -Dorg.openoffice.test.arg.sce=$(SRCDIR)/toolkit/qa/unoapi/toolkit.sce \
+    -Dorg.openoffice.test.arg.xcl=$(SRCDIR)/toolkit/qa/unoapi/knownissues.xcl \
+    -Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/toolkit/qa/unoapi/testdocuments \
+))
 
-# --- Settings ----------------------------------
+$(eval $(call gb_JunitTest_add_jars,toolkit_unoapi,\
+    $(OUTDIR)/bin/OOoRunner.jar \
+    $(OUTDIR)/bin/ridl.jar \
+    $(OUTDIR)/bin/test.jar \
+    $(OUTDIR)/bin/unoil.jar \
+    $(OUTDIR)/bin/jurt.jar \
+))
 
-.INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_JunitTest_add_sourcefiles,toolkit_unoapi,\
+    toolkit/qa/unoapi/Test \
+))
 
-# --- Files -------------------------------------
+$(eval $(call gb_JunitTest_add_classes,toolkit_unoapi,\
+    org.openoffice.toolkit.qa.unoapi.Test \
+))
 
-SLOFILES=$(SLO)$/AnyCompareFactory.obj
-
-# --- Targets ----------------------------------
-
-.INCLUDE : target.mk
-
+# vim: set noet sw=4 ts=4:
