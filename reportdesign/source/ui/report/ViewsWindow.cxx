@@ -1652,6 +1652,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                 {
                     // restrict movement to work area
                     Rectangle rWorkArea = rView.GetWorkArea();
+                    rWorkArea.Right()++;
 
                     if ( !rWorkArea.IsEmpty() )
                     {
@@ -1682,8 +1683,53 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                             bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
                         }
 
-                        if ( bCheck && isOver(aMarkRect,*rReportSection.getPage(),rView) )
-                            break;
+
+                        if ( bCheck )
+                        {
+                            SdrObject* pOverlapped = isOver(aMarkRect,*rReportSection.getPage(),rView);
+                            if ( pOverlapped )
+                            {
+                                do
+                                {
+                                    Rectangle aOver = pOverlapped->GetLastBoundRect();
+                                    Point aPos;
+                                    if ( nCode == KEY_UP )
+                                    {
+                                        aPos.X() = aMarkRect.Left();
+                                        aPos.Y() = aOver.Top() - aMarkRect.getHeight();
+                                        nY += (aPos.Y() - aMarkRect.Top());
+                                    }
+                                    else if ( nCode == KEY_DOWN )
+                                    {
+                                        aPos.X() = aMarkRect.Left();
+                                        aPos.Y() = aOver.Bottom();
+                                        nY += (aPos.Y() - aMarkRect.Top());
+                                    }
+                                    else if ( nCode == KEY_LEFT )
+                                    {
+                                        aPos.X() = aOver.Left() - aMarkRect.getWidth();
+                                        aPos.Y() = aMarkRect.Top();
+                                        nX += (aPos.X() - aMarkRect.Left());
+                                    }
+                                    else if ( nCode == KEY_RIGHT )
+                                    {
+                                        aPos.X() = aOver.Right();
+                                        aPos.Y() = aMarkRect.Top();
+                                        nX += (aPos.X() - aMarkRect.Left());
+                                    }
+
+                                    aMarkRect.SetPos(aPos);
+                                    if ( !rWorkArea.IsInside( aMarkRect ) )
+                                    {
+                                        break;
+                                    }
+                                    pOverlapped = isOver(aMarkRect,*rReportSection.getPage(),rView);
+                                }
+                                while(pOverlapped != NULL);
+                                if (pOverlapped != NULL)
+                                    break;
+                            }
+                        }
                     }
 
                     if ( nX != 0 || nY != 0 )

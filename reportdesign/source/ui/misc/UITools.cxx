@@ -885,13 +885,12 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
 
             OUnoObject* pObj = dynamic_cast<OUnoObject*>(pObjIter);
             if (pObj != NULL)
-        {
-
-            Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
-            if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
-                pOverlappedObj = pObjIter;
+            {
+                Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
+                if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
+                    pOverlappedObj = pObjIter;
+            }
         }
-    }
     }
     return pOverlappedObj;
 }
