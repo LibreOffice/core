@@ -32,8 +32,6 @@ TARGET=kdefilepicker
 LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
-#COMP1TYPELIST=$(TARGET)
-#COMPRDB=$(SOLARBINDIR)$/types.rdb
 
 # --- Settings -----------------------------------------------------
 

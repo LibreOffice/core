@@ -29,10 +29,6 @@ PRJ=..$/..
 PRJNAME=editeng
 TARGET=misc
 
-#PROJECTPCH4DLL=TRUE
-#PROJECTPCH=eeng_pch
-#PROJECTPCHSOURCE=eeng_pch
-
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------

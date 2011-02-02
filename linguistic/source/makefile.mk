@@ -78,7 +78,6 @@ SHL1STDLIBS= \
 SHL1LIBS=		$(SLB)$/$(TARGET).lib
 SHL1DEPN=		$(SLB)$/$(TARGET).lib
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-#SHL1VERSIONMAP= $(TARGET).map
 SHL1IMPLIB= ilng
 
 # build DEF file
@@ -86,7 +85,6 @@ DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
 DEFLIB1NAME =$(TARGET)
 DEF1DES     =Linguistic main DLL
-#DEF1EXPORTFILE=	exports.dxp
 
 
 .IF "$(GUI)"=="WNT"
@@ -96,7 +94,6 @@ DEF1EXPORT3 = component_getImplementationEnvironment
 .ENDIF
 
 # --- Targets ------------------------------------------------------
-
 
 .INCLUDE : target.mk
 

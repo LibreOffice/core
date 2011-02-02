@@ -29,7 +29,6 @@ PRJ=..$/..$/..
 
 PRJNAME=fpicker
 TARGET=fps
-#LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 COMP1TYPELIST=$(TARGET)
 
@@ -41,10 +40,7 @@ COMP1TYPELIST=$(TARGET)
 
 CDEFS+=-D_UNICODE
 CDEFS+=-DUNICODE
-#CDEFS+=-DWIN32_LEAN_AND_MEAN
-#CDEFS+=-DWIN32
 CDEFS+=-U_WIN32_WINNT -D_WIN32_WINNT=0x0600
-
 
 # --- Resources ----------------------------------------------------
 

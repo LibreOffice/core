@@ -34,6 +34,7 @@ COMP1TYPELIST = migrationoo2
 LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE : ..$/..$/deployment/inc/dp_misc.mk
 .INCLUDE :  settings.mk
 DLLPRE =
@@ -80,7 +81,6 @@ SHL1STDLIBS= \
 
 SHL1DEPN=
 SHL1IMPLIB=imigrationoo2
-#SHL1LIBS=$(SLB)$/$(TARGET).lib
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=$(SHL1TARGET)
@@ -108,7 +108,6 @@ SHL2STDLIBS= \
 
 SHL2DEPN=
 SHL2IMPLIB=imigrationoo3
-#SHL2LIBS=$(SLB)$/$(SHL2TARGET).lib
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)

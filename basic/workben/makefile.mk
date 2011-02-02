@@ -51,16 +51,6 @@ APP1STDLIBS= \
             $(CPPULIB) \
             $(SOTLIB) \
 
-
-#.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-#APP1STDLIBS+=$(CPPULIB)
-#.ENDIF
-#.IF "$(GUI)"=="UNX"
-#APP1STDLIBS+= \
-#			 \
-#			$(SALLIB)
-#.ENDIF
-
 .IF "$(GUI)"!="OS2"
 APP1LIBS= \
             $(LB)$/basic.lib 

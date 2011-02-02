@@ -30,17 +30,13 @@ PRJINC=$(PRJ)$/source
 PRJNAME=formula
 TARGET=ui_resource
 ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-
-#SRS1NAME=ui_res
-#SRC1FILES= \
-#    ui_resource.src
-
 
 SLOFILES=	$(SLO)$/ModuleHelper.obj \
 
