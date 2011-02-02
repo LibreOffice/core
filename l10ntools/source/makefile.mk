@@ -33,12 +33,14 @@ PRJNAME=l10ntools
 TARGET=transex
 TARGETTYPE=CUI
 LIBTARGET=no
+
 # --- Settings -----------------------------------------------------
+
 ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
+
 CDEFS+= -DYY_NEVER_INTERACTIVE=1
-#CDEFS+= -pg
 
 .IF "$(SYSTEM_EXPAT)" == "YES"
 CFLAGS+=-DSYSTEM_EXPAT
@@ -62,7 +64,6 @@ OBJFILES=   			\
 
 LIB1TARGET= $(LB)$/$(TARGET).lib
 LIB1ARCHIV= $(LB)$/libtransex.a
-#LIB1FILES=  $(LB)$/transex3.lib
 LIB1OBJFILES=        $(OBJ)$/export.obj      \
         $(OBJ)$/export2.obj     \
         $(OBJ)$/merge.obj   \
@@ -76,47 +77,25 @@ APP1VERSIONMAP=exports.map
 
 # extractor and merger for *.src and *.hrc
 APP1TARGET=  transex3
-#APP1OBJS=   $(OBJ)$/src_yy.obj
 APP1OBJS=   $(OBJ)$/src_yy_wrapper.obj
-
 APP1STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-.ENDIF
-
 APP1LIBS+=	$(LB)$/$(TARGET).lib
 APP1DEPN=   $(OBJ)$/src_yy_wrapper.obj $(LB)$/$(TARGET).lib
 
 APP2TARGET= helpex
 APP2OBJS= $(OBJ)$/helpmerge.obj  $(OBJ)$/xmlparse.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj $(OBJ)$/merge.obj $(OBJ)$/helpex.obj 
 APP2RPATH= NONE
-
-.IF "$(OS)"!="MACOSX"
-.ENDIF
-
 APP2STDLIBS+=$(SALLIB) $(EXPATASCII3RDLIB) $(TOOLSLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-.ENDIF
 
 # extractor and merger for *.lng and *.lng
 APP3TARGET= ulfex
 APP3OBJS=   $(OBJ)$/lngmerge.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/lngex.obj $(OBJ)$/utf8conv.obj
 APP3RPATH=  NONE
-
-.IF "$(OS)"!="MACOSX"
-#APP3STDLIBS+= $(BTSTRPLIB)
-.ENDIF
 APP3STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-.ENDIF
 
 # encoding converter for *.gsi
 APP4TARGET= gsiconv
@@ -135,39 +114,17 @@ APP5STDLIBS+= \
 # extractor and merger for *.cfg
 APP6TARGET= cfgex
 APP6OBJS=   $(OBJ)$/cfgmerge.obj $(OBJ)$/cfg_yy_wrapper.obj  $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
-
-.IF "$(OS)"!="MACOSX"
-#APP6STDLIBS+= $(BTSTRPLIB)
-.ENDIF
-
 APP6STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-.ENDIF
 
 # extractor and merger for *.xrm
 APP7TARGET= xrmex
 APP7OBJS=   $(OBJ)$/xrmmerge.obj $(OBJ)$/xrm_yy_wrapper.obj $(OBJ)$/merge.obj $(OBJ)$/export2.obj $(OBJ)$/utf8conv.obj
 APP7RPATH=  NONE
-
-.IF "$(OS)"!="MACOSX"
-.ENDIF
-
 APP7STDLIBS+= \
             $(TOOLSLIB) \
             $(SALLIB)
-
-.IF "$(OS)"=="MACOSX"
-# static libs at end for OS X
-.ENDIF
-
-# 
-#APP8TARGET= treeconfig
-#APP8OBJS=   $(OBJ)$/treeconfig.obj $(OBJ)$/inireader.obj $(OBJ)$/export2.obj
-#APP8STDLIBS=$(TOOLSLIB) $(SALLIB)  $(ICUINLIB) $(STLPORT)
 
 # localizer for l10n framework
 APP9TARGET= localize_sl

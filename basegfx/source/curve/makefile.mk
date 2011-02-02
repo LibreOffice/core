@@ -29,9 +29,7 @@ PRJ=..$/..
 PRJNAME=basegfx
 TARGET=curve
 
-#UNOUCRRDB=$(SOLARBINDIR)$/applicat.rdb
 ENABLE_EXCEPTIONS=FALSE
-#USE_DEFFILE=TRUE
 
 # --- Settings ----------------------------------
 

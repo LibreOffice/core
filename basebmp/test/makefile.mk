@@ -99,25 +99,6 @@ SHL1RPATH = NONE
 .ENDIF
 # END ------------------------------------------------------------------
 
-#APP2TARGET= bmpdemo
-
-#APP2OBJS=	\
-#	$(OBJ)$/bmpdemo.obj
-
-#APP2STDLIBS=$(TOOLSLIB) 		\
-#			$(COMPHELPERLIB)	\
-#			$(BASEGFXLIB)	    \
-#			$(BASEBMPLIB)	    \
-#			$(CPPULIB)			\
-#			$(CPPUHELPERLIB)	\
-#			$(UCBHELPERLIB)		\
-#			$(SALLIB)			\
-#			$(VCLLIB)
-#
-#.IF "$(GUI)"!="UNX"
-#APP2DEF=	$(MISC)$/$(TARGET).def
-#.ENDIF
-
 #------------------------------- All object files -------------------------------
 # do this here, so we get right dependencies
 SLOFILES=$(SHL1OBJS)

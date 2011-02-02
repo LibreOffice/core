@@ -46,9 +46,7 @@ APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB)  $(SALLIB) # $(RTLLIB)
 APP1LIBS=   $(LB)$/rsctoo.lib
 APP1OBJS=   $(OBJ)$/start.obj
 .IF "$(GUI)" != "OS2"
-# why not this way?
 APP1STACK=64000
-#APP1STACK=32768
 .ENDIF
 APP1RPATH=NONE
 
@@ -67,9 +65,7 @@ APP2LIBS=   $(LB)$/rsctoo.lib \
             $(LB)$/rscmis.lib
 APP2OBJS=   $(OBJ)$/gui.obj
 .IF "$(GUI)" != "OS2"
-# why not this way?
 APP2STACK=64000
-#APP2STACK=32768
 .ENDIF
 APP2RPATH=NONE
 
