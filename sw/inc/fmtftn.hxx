@@ -35,17 +35,17 @@
 class SwDoc;
 class SwTxtFtn;
 
-// ATT_FTN **********************************************************
+// ATT_FTN
 
 class SW_DLLPUBLIC SwFmtFtn: public SfxPoolItem
 {
     friend class SwTxtFtn;
-    SwTxtFtn* pTxtAttr;     //my TextAttribute
-    String  aNumber;        //user-defined 'Number'
-    USHORT  nNumber;        //automatic numbering
-    bool    m_bEndNote;     // is it an End note?
+    SwTxtFtn* pTxtAttr;     // My TextAttribute.
+    String  aNumber;        // User-defined 'Number'.
+    USHORT  nNumber;        // Automatic numbering.
+    bool    m_bEndNote;     // Is it an End note?
 
-    // protected CopyCtor
+    // Protected CopyCtor.
     SwFmtFtn& operator=(const SwFmtFtn& rFtn);
     SwFmtFtn( const SwFmtFtn& );
 
@@ -53,7 +53,7 @@ public:
     SwFmtFtn( bool bEndNote = false );
     virtual ~SwFmtFtn();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

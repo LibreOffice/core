@@ -37,12 +37,11 @@
 class SwFlyFrmFmt;
 class IntlWrapper;
 
-//Verbindung (Textfluss) zwischen zwei FlyFrms
-
+// Connection (text flow) between two FlyFrms.
 class SW_DLLPUBLIC SwFmtChain: public SfxPoolItem
 {
-    SwClient aPrev, //Vorgaenger (SwFlyFrmFmt), wenn es diesen gibt.
-             aNext; //Nachfolger (SwFlyFrmFmt), wenn es diesen gibt.
+    SwClient aPrev, // Previous SwFlyFrmFmt (if existent).
+             aNext; // Next SwFlyFrmFmt (if existent).
 
 
 public:
@@ -51,7 +50,7 @@ public:
 
     inline SwFmtChain &operator=( const SwFmtChain& );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

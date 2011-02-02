@@ -37,15 +37,14 @@
 
 class IntlWrapper;
 
-//Die Framesize ---------------------------------
+//Frame size.
 
 enum SwFrmSize
 {
-    ATT_VAR_SIZE,       //Frm ist in der Var-Richtung variabel
-    ATT_FIX_SIZE,       //Frm ist in der Var-Richtung unbeweglich
-    ATT_MIN_SIZE        //Der Wert in der Var-Richtung beschreibt eine
-                        //Minimalgroesse, die nicht unter- wohl aber
-                        //ueberschritten werden kann.
+    ATT_VAR_SIZE,       // Frame is variable in Var-direction.
+    ATT_FIX_SIZE,       // Frame cannot be moved in Var-direction.
+    ATT_MIN_SIZE        // Value in Var-direction gives minimum
+                        // (can be exceeded but not be less).
 };
 
 class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
@@ -53,27 +52,28 @@ class SW_DLLPUBLIC SwFmtFrmSize: public SfxPoolItem
     Size      aSize;
     SwFrmSize eFrmHeightType;
     SwFrmSize eFrmWidthType;
-    BYTE      nWidthPercent;    //Fuer Tabellen kann die Breite in Prozent
-    BYTE      nHeightPercent;   //angegeben sein.
-                                //Fuer Rahmen koennen Hoehe und/oder Breite
-                                //in Prozent angegeben sein. Wenn nur eine
-                                //der Angaben in Prozent angeben ist, kann
-                                //durch den ausgezeichneten Wert 0xFF in der
-                                //anderen Prozentangabe bestimmt werden, das
-                                //sich diese Richtung proportional zur anderen
-                                //verhaelt. Basis fuer die Umrechnung sind fuer
-                                //diesen Fall die Angaben in der Size.
-                                //Die Prozentwerte beziehen sich immer auf die
-                                //Umgebung in der das Objekt steht (PrtArea)
-                                //Auf die Bildschirmbreite abzueglich Raender
-                                //in der BrowseView wenn die Umgebung die Seite
-                                //ist.
+    BYTE      nWidthPercent;
+    BYTE      nHeightPercent;
+
+    // For tables: width can be given in percent.
+
+    // For frames: height and/or width may be given in percent.
+    // If only one of these percentage values is given, the value 0xFF
+    // used instead of the missing percentage value indicates this side
+    // being proportional to the given one.
+    // The calculation in this case is based upon the values in Size.
+    // Percentages are always related to the environment in which
+    // the object is placed (PrtArea) and to the screen width
+    // minus borders in BrowseView if the environment is the page.
+
+
+
 public:
     SwFmtFrmSize( SwFrmSize eSize = ATT_VAR_SIZE,
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

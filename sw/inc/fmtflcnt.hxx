@@ -33,25 +33,24 @@
 
 class SwFrmFmt;
 class SwTxtFlyCnt;
-// ATT_FLYCNT *******************************************************
+// ATT_FLYCNT
 
 class SwFmtFlyCnt : public SfxPoolItem
 {
     friend class SwTxtFlyCnt;
-    SwTxtFlyCnt* pTxtAttr;      // mein TextAttribut
-    SwFrmFmt* pFmt;             // mein Fly/DrawFrame-Format
+    SwTxtFlyCnt* pTxtAttr;
+    SwFrmFmt* pFmt; // My Fly/DrawFrame-format.
     // protected CopyCtor
     SwFmtFlyCnt& operator=(const SwFmtFlyCnt& rFlyCnt);
 
 public:
     SwFmtFlyCnt( SwFrmFmt *pFrmFmt );
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
     inline SwFrmFmt *GetFrmFmt() const { return pFmt; }
-    // fuer Undo: loesche "logisch" das FlyFrmFormat, wird sich im
-    //          Undo-Object gemerkt.
+    // For Undo: delete the FlyFrmFormat "logically"; it is kept in Undo-object.
     inline void SetFlyFmt( SwFrmFmt* pNew = 0 )   { pFmt = pNew; }
 
     const SwTxtFlyCnt *GetTxtFlyCnt() const { return pTxtAttr; }
