@@ -98,7 +98,6 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         {
             if (! bFound)
             {
-                // --> OD 2005-11-02 #125329#
                 // assure that text is in the correct nodes array
                 if ( &(pTxtNd->GetNodes()) == this )
                 {
@@ -109,7 +108,6 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
                     OSL_ENSURE( false,
                             "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
                 }
-                // <--
             }
         }
         else

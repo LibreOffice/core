@@ -32,7 +32,7 @@
 
 /** class for an observable thread
 
-    OD 2007-01-29 #i73788#
+   #i73788#
 
     @author OD
 */

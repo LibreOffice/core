@@ -33,7 +33,7 @@
 
 /** class to manage threads in Writer - it conforms the singleton pattern
 
-    OD 2007-04-13 #i73788#
+    #i73788#
 
     @author OD
 */

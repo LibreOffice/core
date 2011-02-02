@@ -60,13 +60,13 @@
 #include <doctxm.hxx>
 #include <fmtftntx.hxx>
 #include <comcore.hrc>
-// --> OD 2005-12-01 #i27138#
+// #i27138#
 #include <viewsh.hxx>
 #include <txtfrm.hxx>
 // <--
 
 
-// OD 04.11.2003 #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
+// #i21457# - new implementation of local method <lcl_IsInSameTblBox(..)>.
 // Method now determines the previous/next on its own. Thus, it can be controlled,
 // for which previous/next is checked, if it's visible.
 bool lcl_IsInSameTblBox( SwNodes& _rNds,
@@ -142,13 +142,13 @@ void lcl_CheckEmptyLayFrm( SwNodes& rNds, SwSectionData& rSectionData,
     SwNodeIndex aIdx( rStt );
     if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
         !CheckNodesRange( rStt, aIdx, TRUE ) ||
-        // OD 04.11.2003 #i21457#
+        // #i21457#
         !lcl_IsInSameTblBox( rNds, rStt, true ))
     {
         aIdx = rEnd;
         if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
             !CheckNodesRange( rEnd, aIdx, TRUE ) ||
-            // OD 04.11.2003 #i21457#
+            // #i21457#
             !lcl_IsInSameTblBox( rNds, rEnd, false ))
         {
             rSectionData.SetHidden( false );
@@ -621,7 +621,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 {
     SwSectionFmt* pFmt = (*pSectionFmtTbl)[ nPos ];
     SwSection* pSection = pFmt->GetSection();
-    /// OD 04.10.2002 #102894#
+
     /// remember hidden condition flag of SwSection before changes
     bool bOldCondHidden = pSection->IsCondHidden() ? true : false;
 
@@ -717,7 +717,6 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     else
         sSectName.Erase();
 
-    /// OD 04.10.2002 #102894# - NOTE
     /// In SwSection::operator=(..) class member bCondHiddenFlag is always set to TRUE.
     /// IMHO this have to be changed, but I can't estimate the consequences:
     /// Either it is set to TRUE using corresponding method <SwSection.SetCondHidden(..)>,
@@ -742,7 +741,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         if( !pIdx )
             pIdx = pFmt->GetCntnt().GetCntntIdx();
         FldsToCalc( aCalc, pIdx->GetIndex(), USHRT_MAX );
-        /// OD 04.10.2002 #102894#
+
         /// Because on using SwSection::operator=() to set up <pSection>
         /// with <rNewData> and the above given note, the hidden condition flag
         /// has to be set to FALSE, if hidden condition flag of <pFmt->GetSection()>
@@ -1153,7 +1152,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 pNew = rIdx.GetNode().GetCntntNode()->MakeFrm();
 
                 SwSectionNode* pS = rIdx.GetNode().FindSectionNode();
-                // --> OD 2008-06-23 #156927#
+
                 // Assure that node is not inside a table, which is inside the
                 // found section.
                 if ( pS )
@@ -1165,16 +1164,15 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                         pS = 0;
                     }
                 }
-                // <--
+
                 // if the node is in a section, the sectionframe now
                 // has to be created..
-                // OD 14.11.2002 #104684# - boolean to control <Init()> of a new
-                // section frame.
+                // boolean to control <Init()> of a new section frame.
                 bool bInitNewSect = false;
                 if( pS )
                 {
                     SwSectionFrm *pSct = new SwSectionFrm( pS->GetSection() );
-                    // OD 14.11.2002 #104684# - prepare <Init()> of new section frame.
+                    // prepare <Init()> of new section frame.
                     bInitNewSect = true;
                     SwLayoutFrm* pUp = pSct;
                     while( pUp->Lower() )  // for columned sections
@@ -1183,7 +1181,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                         pUp = (SwLayoutFrm*)pUp->Lower();
                     }
                     pNew->Paste( pUp, NULL );
-                    // --> OD 2005-12-01 #i27138#
+                    // #i27138#
                     // notify accessibility paragraphs objects about changed
                     // CONTENT_FLOWS_FROM/_TO relation.
                     // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1210,7 +1208,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 else
                     // der neue liegt hinter mir
                     pNew->Paste( pFrm->GetUpper(), pFrm->GetNext() );
-                // --> OD 2005-12-01 #i27138#
+                // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1280,13 +1278,13 @@ void SwSectionNode::DelFrms()
         SwNodeIndex aIdx( *this );
         if( !rNds.GoPrevSection( &aIdx, TRUE, FALSE ) ||
             !CheckNodesRange( *this, aIdx, TRUE ) ||
-            // OD 04.11.2003 #i21457#
+            // #i21457#
             !lcl_IsInSameTblBox( rNds, *this, true ))
         {
             aIdx = *EndOfSectionNode();
             if( !rNds.GoNextSection( &aIdx, TRUE, FALSE ) ||
                 !CheckNodesRange( *EndOfSectionNode(), aIdx, TRUE ) ||
-                // OD 04.11.2003 #i21457#
+                // #i21457#
                 !lcl_IsInSameTblBox( rNds, *EndOfSectionNode(), false ))
             {
                 m_pSection->m_Data.SetHiddenFlag(false);

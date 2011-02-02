@@ -41,7 +41,7 @@
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <svl/stritem.hxx>
-// OD 06.08.2003 #i17174#
+// #i17174#
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -93,9 +93,7 @@
 
 #include <map>
 #include <algorithm>
-// --> OD 2005-12-05 #i27138#
-#include <rootfrm.hxx>
-// <--
+#include <rootfrm.hxx> // #i27138#
 #include <fldupde.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -2423,7 +2421,7 @@ void SwTableNode::MakeFrms( SwNodeIndex* pIdxBehind )
     {
         SwTabFrm* pNew = MakeFrm();
         pNew->Paste( pUpper, pFrm );
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -2463,7 +2461,7 @@ void SwTableNode::DelFrms()
             {
                 while ( pFrm->HasFollow() )
                     pFrm->JoinAndDelFollows();
-                // --> OD 2005-12-01 #i27138#
+                // #i27138#
                 // notify accessibility paragraphs objects about changed
                 // CONTENT_FLOWS_FROM/_TO relation.
                 // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -2769,7 +2767,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     SwTable& rTab = *pTab->GetTable();
     const SwFmtFrmSize& rTblFrmSz = rTab.GetFrmFmt()->GetFrmSize();
     SWRECTFN( pTab )
-    // OD 06.08.2003 #i17174# - With fix for #i9040# the shadow size is taken
+    // #i17174# - With fix for #i9040# the shadow size is taken
     // from the table width. Thus, add its left and right size to current table
     // printing area width in order to get the correct table size attribute.
     SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();

@@ -37,9 +37,7 @@
 #include <doc.hxx>          // fuer GetAttrPool
 #include <errhdl.hxx>
 #include <fmtcol.hxx>
-// --> OD 2006-11-22 #i71574#
-#include <fmtcolfunc.hxx>
-// <--
+#include <fmtcolfunc.hxx> // #i71574#
 #include <hints.hxx>
 #include <calc.hxx>
 #include <node.hxx>
@@ -60,7 +58,7 @@ SV_IMPL_PTRARR( SwFmtCollConditions, SwCollConditionPtr );
 namespace TxtFmtCollFunc
 {
 
-    // --> OD 2006-11-22 #i71574#
+    // #i71574#
     void CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
                                             SwFmt* pFmt,
                                             const SwNumRuleItem* pNewNumRuleItem )
@@ -75,7 +73,7 @@ namespace TxtFmtCollFunc
             return;
         }
 
-        // --> OD 2007-01-24 #i73790#
+        // #i73790#
         if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
              pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         // <--
@@ -148,16 +146,13 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         return;
     }
 
-    // --> OD 2006-06-16 #i66431# - adjust type of <bNewParent>
-    bool bNewParent( false );
-    // <--
+    bool bNewParent( false ); // #i66431# - adjust type of <bNewParent>
     SvxULSpaceItem *pNewULSpace = 0, *pOldULSpace = 0;
     SvxLRSpaceItem *pNewLRSpace = 0, *pOldLRSpace = 0;
     SvxFontHeightItem* aFontSizeArr[3] = {0,0,0};
-    // --> OD 2006-10-17 #i70223#
+    // #i70223#
     const bool bAssignedToListLevelOfOutlineStyle(IsAssignedToListLevelOfOutlineStyle());//#outline level ,zhaojianwei
     const SwNumRuleItem* pNewNumRuleItem( 0L );
-    // <--
 
     SwAttrSetChg *pNewChgSet = 0,  *pOldChgSet = 0;
 
@@ -177,8 +172,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[1]) );
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
-        // --> OD 2006-10-17 #i70223#
-        // --> OD 2007-12-19 #i84745#
+        // #i70223#, #i84745#
         // check, if attribute set is applied to this paragraph style
         if ( bAssignedToListLevelOfOutlineStyle &&
              pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
@@ -199,10 +193,8 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             aFontSizeArr[0] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_FONTSIZE );
             aFontSizeArr[1] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CJK_FONTSIZE );
             aFontSizeArr[2] = (SvxFontHeightItem*)&pParent->Get( RES_CHRATR_CTL_FONTSIZE );
-            // --> OD 2006-06-16 #i66431#
-            // modify has to be propagated, because of new parent format.
+            // #i66431# - modify has to be propagated, because of new parent format.
             bNewParent = true;
-            // <--
         }
         break;
 
@@ -221,7 +213,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     case RES_CHRATR_CTL_FONTSIZE:
         aFontSizeArr[2] = (SvxFontHeightItem*)pNew;
         break;
-    // --> OD 2006-10-17 #i70223#
+    // #i70223#
     case RES_PARATR_NUMRULE:
     {
         if ( bAssignedToListLevelOfOutlineStyle )
@@ -233,7 +225,7 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         break;
     }
 
-    // --> OD 2006-10-17 #i70223#
+    // #i70223#
     if ( bAssignedToListLevelOfOutlineStyle && pNewNumRuleItem )
     {
         TxtFmtCollFunc::CheckTxtFmtCollForDeletionOfAssignmentToOutlineStyle(
@@ -424,12 +416,12 @@ BOOL SwTxtFmtColl::ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 )
 }
 // <--
 
-// --> OD 2007-01-24 #i73790#
+// #i73790#
 USHORT SwTxtFmtColl::ResetAllFmtAttr()
 {
     const bool bOldState( mbStayAssignedToListLevelOfOutlineStyle );
     mbStayAssignedToListLevelOfOutlineStyle = true;
-    // --> OD 2008-12-16 #i70748#
+    // #i70748#
     // Outline level is no longer a member, it is a attribute now.
     // Thus, it needs to be restored, if the paragraph style is assigned
     // to the outline style
@@ -440,7 +432,7 @@ USHORT SwTxtFmtColl::ResetAllFmtAttr()
 
     USHORT nRet = SwFmtColl::ResetAllFmtAttr();
 
-    // --> OD 2008-12-16 #i70748#
+    // #i70748#
     if ( nAssignedOutlineStyleLevel != -1 )
     {
         AssignToListLevelOfOutlineStyle( nAssignedOutlineStyleLevel );
@@ -680,7 +672,7 @@ void SwTxtFmtColl::AssignToListLevelOfOutlineStyle(const int nAssignedListLevel)
     mbAssignedToOutlineStyle = true;
     SetAttrOutlineLevel(nAssignedListLevel+1);
 
-    // --> OD 2009-03-18 #i100277#
+    // #i100277#
     SwClientIter aIter( *this );
     SwTxtFmtColl* pDerivedTxtFmtColl =
                 dynamic_cast<SwTxtFmtColl*>(aIter.First( TYPE( SwTxtFmtColl ) ));

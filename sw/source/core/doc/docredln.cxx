@@ -3510,10 +3510,8 @@ void SwRedline::DelCopyOfSection()
 
         if( pCSttNd && pCEndNd )
         {
-            // --> OD 2009-08-20 #i100466#
-            // force a <join next> on <delete and join> operation
+            // #i100466# - force a <join next> on <delete and join> operation
             pDoc->DeleteAndJoin( aPam, true );
-            // <--
         }
         else if( pCSttNd || pCEndNd )
         {
@@ -3617,9 +3615,7 @@ void SwRedline::MoveFromSection()
             }
         }
 
-        // --> OD 2009-03-17 #i95711#
-        const SwNode* pKeptCntntSectNode( &pCntntSect->GetNode() );
-        // <--
+        const SwNode* pKeptCntntSectNode( &pCntntSect->GetNode() ); // #i95711#
         {
             SwPaM aPam( pCntntSect->GetNode(),
                         *pCntntSect->GetNode().EndOfSectionNode(), 1,
@@ -3668,7 +3664,7 @@ void SwRedline::MoveFromSection()
             if( pColl && pCNd )
                 pCNd->ChgFmtColl( pColl );
         }
-        // --> OD 2009-03-17 #i95771#
+        // #i95771#
         // Under certain conditions the previous <SwDoc::Move(..)> has already
         // remove the change tracking section of this <SwRedline> instance from
         // the change tracking nodes area.

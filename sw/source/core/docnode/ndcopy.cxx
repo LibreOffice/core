@@ -118,11 +118,9 @@ namespace
         nNdOff -= nDelCount;
         xub_StrLen nCntntPos = rOrigPos.nContent.GetIndex();
 
-        // --> OD, AMA 2008-07-07 #b6713815#
         // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
         rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
         if( !nNdOff )
-        // <--
         {
             // dann nur den Content anpassen
             if( nCntntPos > rOrigStt.nContent.GetIndex() )
@@ -273,7 +271,7 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     }
 
         // ??? reicht das ??? was ist mit PostIts/Feldern/FeldTypen ???
-    // --> OD 2008-11-18 #i96213# - force copy of all attributes
+    // #i96213# - force copy of all attributes
     pCpyTxtNd->CopyText( pTxtNd, SwIndex( pCpyTxtNd ),
         pCpyTxtNd->GetTxt().Len(), true );
     // <--
@@ -818,7 +816,7 @@ bool lcl_MarksWholeNode(const SwPaM & rPam)
     return bResult;
 }
 
-// --> OD 2009-08-25 #i86492#
+// #i86492#
 bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 {
     bool bRet = false;
@@ -912,7 +910,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pDoc->SetOutlineNumRule(*GetOutlineNumRule());
     }
 
-    // --> OD 2009-08-25 #i86492#
+    // #i86492#
     // Correct the search for a previous list:
     // First search for non-outline numbering list. Then search for non-outline
     // bullet list.
@@ -926,7 +924,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
     }
     // <--
-    // --> OD 2009-08-25 #i86492#
+    // #i86492#
     // Do not propagate previous found list, if
     // - destination is an empty paragraph which is not in a list and
     // - source contains at least one paragraph which is not in a list
@@ -1001,8 +999,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
 
                 /* #107213#: Safe numrule item at destination. */
-                // --> OD 2009-08-25 #i86492#
-                // Safe also <ListId> item of destination.
+                // #i86492# - Safe also <ListId> item of destination.
                 int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
                 int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1045,10 +1042,9 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     {
                         pSttTxtNd->CopyCollFmt( *pDestTxtNd );
 
-                        /* #107213# If only a part of one paragraph is copied
+                        /* If only a part of one paragraph is copied
                            restore the numrule at the destination. */
-                        // --> OD 2009-08-25 #i86492#
-                        // restore also <ListId> item
+                        // #i86492# - restore also <ListId> item
                         if ( !lcl_MarksWholeNode(rPam) )
                         {
                             if (SFX_ITEM_SET == aNumRuleState)
@@ -1150,8 +1146,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             }
 
             /* #107213# Save numrule at destination */
-            // --> OD 2009-08-25 #i86492#
-            // Safe also <ListId> item of destination.
+            // #i86492# - Safe also <ListId> item of destination.
             int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
             int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1189,8 +1184,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 {
                     /* #107213# If only a part of one paragraph is copied
                        restore the numrule at the destination. */
-                    // --> OD 2009-08-25 #i86492#
-                    // restore also <ListId> item
+                    // #i86492# - restore also <ListId> item
                     if ( !lcl_MarksWholeNode(rPam) )
                     {
                         if (SFX_ITEM_SET == aNumRuleState)
@@ -1459,7 +1453,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     {
         const _ZSortFly& rZSortFly = aArr[ n ];
 
-        // --> OD 2006-01-04 #i59964#
+        // #i59964#
         // correct determination of new anchor position
         SwFmtAnchor aAnchor( *rZSortFly.GetAnchor() );
         SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();

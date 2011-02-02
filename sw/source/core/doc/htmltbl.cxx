@@ -369,7 +369,7 @@ USHORT SwHTMLTableLayout::GetBrowseWidth( const SwDoc& rDoc )
             return (USHORT)pPageFrm->Prt().Width();
     }
 
-    // --> OD 2010-05-12 #i91658#
+    // #i91658#
     // Assertion removed which state that no browse width is available.
     // Investigation reveals that all calls can handle the case that no browse
     // width is provided.

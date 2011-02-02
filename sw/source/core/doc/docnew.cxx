@@ -475,9 +475,7 @@ SwDoc::~SwDoc()
     delete pURLStateChgd;
 
     delete pLayouter;
-    // --> OD 2005-09-05 #125370#
     pLayouter = 0L;
-    // <--
 
     // Undo-Benachrichtigung vom Draw abschalten
     if( pDrawModel )
@@ -792,7 +790,7 @@ void SwDoc::ClearDoc()
     GetNodes().Delete( aSttIdx,
             GetNodes().GetEndOfContent().GetIndex() - aSttIdx.GetIndex() );
 
-    // --> OD 2006-02-28 #i62440#
+    // #i62440#
     // destruction of numbering rules and creation of new outline rule
     // *after* the document nodes are deleted.
     pOutlineRule = NULL;
@@ -817,9 +815,9 @@ void SwDoc::ClearDoc()
     pFtnColl = pEndNoteInfo->GetFtnTxtColl();
     if( pFtnColl ) pFtnColl->Remove( pEndNoteInfo );
 
-    // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
-    //              steht, sollte das als letztes geloescht werden, damit
-    //              die ganze Umhaengerei der Formate vermieden wird!
+    // opt.: ausgehend davon, das Standard als 2. im Array
+    // steht, sollte das als letztes geloescht werden, damit
+    // die ganze Umhaengerei der Formate vermieden wird!
     if( 2 < pTxtFmtCollTbl->Count() )
         pTxtFmtCollTbl->DeleteAndDestroy( 2, pTxtFmtCollTbl->Count()-2 );
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );

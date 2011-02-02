@@ -241,7 +241,7 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
                     pColl->SetFmtAttr( aLR );
                 }
 
-                // --> OD 2006-11-20 #i71764#
+                // #i71764#
                 // Check on document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE no longer needed.
                 // All paragraph styles, which are assigned to a level of the
                 // outline style has to have the outline style set as its list style.
@@ -1640,9 +1640,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
 
     const SvxNumberFormat::SvxNumPositionAndSpaceMode eNumberFormatPositionAndSpaceMode
-                                  // --> OD 2008-06-06 #i89178#
-                                  = numfunc::GetDefaultPositionAndSpaceMode();
-                                  // <--
+                                  = numfunc::GetDefaultPositionAndSpaceMode(); //#i89178#
     // <--
     {
         BOOL bIsModified = IsModified();
@@ -1962,9 +1960,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 
             aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
             aFmt.SetCharFmt( pBullCFmt );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( cBulletChar );
             USHORT nOffs = GetMetricVal( CM_01 ) * 4,
                    nOffs2 = GetMetricVal( CM_1 ) * 2;
@@ -2007,9 +2003,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( cBulletChar );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
@@ -2065,9 +2059,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
             aFmt.SetBulletChar( 0x2013 );
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
@@ -2124,9 +2116,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
 
             USHORT nOffs = GetMetricVal( CM_01 ) * 4;
 
@@ -2167,9 +2157,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetCharFmt( pBullCFmt );
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont(  &numfunc::GetDefBulletFont() );
-            // <--
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2232,9 +2220,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
             aFmt.SetStart( 1 );
             aFmt.SetIncludeUpperLevels( 1 );
             aFmt.SetBulletChar( 0x2717 );
-            // --> OD 2006-06-29 #6440955#
             aFmt.SetBulletFont( &numfunc::GetDefBulletFont() );
-            // <--
 
             static const USHORT aAbsSpace[ MAXLEVEL ] =
                 {
@@ -2504,7 +2490,7 @@ void SwDoc::RemoveAllFmtLanguageDependencies()
         rDesc.GetLeft().SetFmtAttr( aFrameDir );
     }
 
-    // OD 09.10.2003 #i18732# - restore static pool default for item
+    // #i18732# - restore static pool default for item
     // RES_FOLLOW_TEXT_FLOW.
     GetAttrPool().ResetPoolDefaultItem( RES_FOLLOW_TEXT_FLOW );
 

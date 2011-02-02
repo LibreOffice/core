@@ -32,9 +32,7 @@
 
 #include <hintids.hxx>
 
-// --> OD 2005-02-21 #i42921#
-#include <editeng/frmdiritem.hxx>
-// <--
+#include <editeng/frmdiritem.hxx> // #i42921#
 #include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <fmtcntnt.hxx>
@@ -72,13 +70,9 @@
 #include <crsskip.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <scriptinfo.hxx>
-// --> OD 2005-12-05 #i27138#
-#include <rootfrm.hxx>
-// <--
+#include <rootfrm.hxx> // #i27138#
 #include <istyleaccess.hxx>
-// --> OD 2007-10-31 #i83479#
-#include <IDocumentListItems.hxx>
-// <--
+#include <IDocumentListItems.hxx> // #i83479#
 
 using namespace ::com::sun::star::i18n;
 
@@ -521,7 +515,6 @@ BOOL SwNode::IsProtect() const
 const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                                         sal_uInt32* pPgDescNdIdx ) const
 {
-    // OD 18.03.2003 #106329#
     if ( !GetNodes().IsDocNodes() )
     {
         return 0;
@@ -556,7 +549,6 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
             0 != ( pPage = pFrm->FindPageFrm() ) )
         {
             pPgDesc = pPage->GetPageDesc();
-            // OD 18.03.2003 #106329#
             if ( pPgDescNdIdx )
             {
                 *pPgDescNdIdx = pNode->GetIndex();
@@ -752,7 +744,6 @@ const SwPageDesc* SwNode::FindPageDesc( BOOL bCalcLay,
                 else if( pNd->IsSectionNode() )
                     pPgDesc = pNd->GetSectionNode()->GetSection().
                             GetFmt()->GetPageDesc().GetPageDesc();
-                // OD 18.03.2003 #106329#
                 if ( pPgDescNdIdx )
                 {
                     *pPgDescNdIdx = pNd->GetIndex();
@@ -892,8 +883,7 @@ BYTE SwNode::HasPrevNextLayNode() const
     if( IsValidNextPrevNd( *this ))
     {
         SwNodeIndex aIdx( *this, -1 );
-        // --> OD 2007-06-04 #i77805#
-        // skip section start and end nodes
+        // #i77805# - skip section start and end nodes
         while ( aIdx.GetNode().IsSectionNode() ||
                 ( aIdx.GetNode().IsEndNode() &&
                   aIdx.GetNode().StartOfSectionNode()->IsSectionNode() ) )
@@ -1326,7 +1316,7 @@ void SwCntntNode::MakeFrms( SwCntntNode& rNode )
     {
         pNew = rNode.MakeFrm();
         pNew->Paste( pUpper, pFrm );
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for next paragraph will change
@@ -1364,7 +1354,7 @@ void SwCntntNode::DelFrms()
     for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
          pFrm = (SwCntntFrm*)aIter.Next() )
     {
-        // --> OD 2005-12-01 #i27138#
+        // #i27138#
         // notify accessibility paragraphs objects about changed
         // CONTENT_FLOWS_FROM/_TO relation.
         // Relation CONTENT_FLOWS_FROM for current next paragraph will change
@@ -1759,7 +1749,7 @@ const SfxPoolItem* SwCntntNode::GetNoCondAttr( USHORT nWhich,
                     nWhich, FALSE, &pFnd ) && bInParents ))
             ((SwFmt*)GetRegisteredIn())->GetItemState( nWhich, bInParents, &pFnd );
     }
-    // --> OD 2005-10-25 #126347# - undo change of issue #i51029#
+    // undo change of issue #i51029#
     // Note: <GetSwAttrSet()> returns <mpAttrSet>, if set, otherwise it returns
     //       the attribute set of the paragraph style, which is valid for the
     //       content node - see file <node.hxx>
@@ -1989,7 +1979,7 @@ void SwCntntNode::ChkCondColl()
     }
 }
 
-// --> OD 2005-02-21 #i42921#
+// #i42921#
 short SwCntntNode::GetTextDirection( const SwPosition& rPos,
                                      const Point* pPt ) const
 {
@@ -1999,10 +1989,8 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     if( pPt )
         aPt = *pPt;
 
-    // --> OD 2007-01-10 #i72024#
-    // No format of the frame, because this can cause recursive layout actions
+    // #i72024# - No format of the frame, because this can cause recursive layout actions
     SwFrm* pFrm = GetFrm( &aPt, &rPos, FALSE );
-    // <--
 
     if ( pFrm )
     {
@@ -2059,12 +2047,11 @@ const IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() const { return G
 IDocumentFieldsAccess* SwNode::getIDocumentFieldsAccess() { return GetDoc(); }
 IDocumentContentOperations* SwNode::getIDocumentContentOperations() { return GetDoc(); }
 IStyleAccess& SwNode::getIDocumentStyleAccess() { return GetDoc()->GetIStyleAccess(); }
-// --> OD 2007-10-31 #i83479#
+// #i83479#
 IDocumentListItems& SwNode::getIDocumentListItems()
 {
     return *GetDoc();
 }
-// <--
 
 BOOL SwNode::IsInRedlines() const
 {

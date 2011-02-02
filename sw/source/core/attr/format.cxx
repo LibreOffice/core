@@ -655,8 +655,6 @@ sal_Bool SwFmt::IsBackgroundTransparent() const
     Default implementation returns false. Thus, subclasses have to overload
     method, if the specific subclass can have a transparent shadow.
 
-    @author OD
-
     @return false, default implementation
 */
 sal_Bool SwFmt::IsShadowTransparent() const

@@ -34,7 +34,7 @@
 /** class to provide creation of a thread to retrieve an input stream given by
     an URL and to consume the retrieved input stream.
 
-    OD 2007-01-29 #i73788#
+    #i73788#
 
     @author OD
 */

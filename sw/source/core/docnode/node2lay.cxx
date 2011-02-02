@@ -232,12 +232,12 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             SwFrm* pFrm = bMaster ? rpFrm->FindPrev() : rpFrm->FindNext();
             if( pFrm && pFrm->IsSctFrm() )
             {
-                // #137684#: pFrm could be a "dummy"-section
+                // pFrm could be a "dummy"-section
                 if( ((SwSectionFrm*)pFrm)->GetSection() &&
                     (&((SwSectionNode*)pNode)->GetSection() ==
                      ((SwSectionFrm*)pFrm)->GetSection()) )
                 {
-                    // OD 2004-06-02 #i22922# - consider columned sections
+                    // #i22922# - consider columned sections
                     // 'Go down' the section frame as long as the layout frame
                     // is found, which would contain content.
                     while ( pFrm->IsLayoutFrm() &&
@@ -347,7 +347,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
         {
             SwSectionFrm* pSctFrm = pTmp->FindSctFrm();
             pSctFrm->ColUnlock();
-            // OD 26.08.2003 #i18103# - invalidate size of section in order to
+            // #i18103# - invalidate size of section in order to
             // assure, that the section is formatted, unless it was 'Collocked'
             // from its 'collection' until its 'restoration'.
             pSctFrm->_InvalidateSize();

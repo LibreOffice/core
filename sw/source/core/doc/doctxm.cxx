@@ -374,7 +374,7 @@ const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
 
         if( bExpand )
         {
-            // OD 19.03.2003 #106329# - add value for 2nd parameter = true to
+            // add value for 2nd parameter = true to
             // indicate, that a creation of a new table of content has to be performed.
             // Value of 1st parameter = default value.
             pNewSection->Update( 0, true );
@@ -792,8 +792,8 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
     if(pAttr && pDoc && GetFmt())
         pDoc->ChgFmt(*GetFmt(), *pAttr);
 
-    // OD 18.03.2003 #106329# - determine default page description, which
-    // will be used by the content nodes, if no approriate one is found.
+    // determine default page description, which will be used by the content nodes,
+    // if no approriate one is found.
     const SwPageDesc* pDefaultPageDesc;
     {
         pDefaultPageDesc =
@@ -809,8 +809,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 pDefaultPageDesc = 0;
             }
         }
-        // OD 28.04.2003 #109166# - consider end node of content section in the
-        // node array.
+        // consider end node of content section in the node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->EndOfSectionNode()->GetIndex() <
                  (pSectNd->GetNodes().GetEndOfContent().GetIndex() - 1) )
@@ -828,8 +827,7 @@ void SwTOXBaseSection::Update(const SfxItemSet* pAttr,
                 pDefaultPageDesc = pNdAfterTOX->FindPageDesc( FALSE );
             }
         }
-        // OD 28.04.2003 #109166# - consider start node of content section in
-        // the node array.
+        // consider start node of content section in the node array.
         if ( !pDefaultPageDesc &&
              ( pSectNd->GetIndex() >
                  (pSectNd->GetNodes().GetEndOfContent().StartOfSectionIndex() + 1) )
@@ -1020,8 +1018,8 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
                     pNextMark->GetSecondaryKey() == sSecKey)
                 nRange++;
         }
-        // OD 18.03.2003 #106329# - pass node index of table-of-content section
-        // and default page description to method <GenerateText(..)>.
+        // pass node index of table-of-content section and default page description
+        // to method <GenerateText(..)>.
         GenerateText( nCnt, nRange, aStrArr, pSectNd->GetIndex(), pDefaultPageDesc );
         nCnt += nRange - 1;
     }
@@ -1596,8 +1594,8 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, BYT
     return sRet;
 }
 
-// OD 18.03.2003 #106329# - add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc>
-// in order to control, which page description is used, no appropriate one is found.
+// add parameter <_TOXSectNdIdx> and <_pDefaultPageDesc> in order to control,
+// which page description is used, no appropriate one is found.
 void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                                      USHORT nCount,
                                      SvStringsDtor& ,
@@ -1701,7 +1699,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     {
                         // dann hilft alles nichts, wir muessen ueber die Seiten-
                         // vorlage gehen.
-                        // OD 18.03.2003 #106329# - call
                         sal_uInt32 nPgDescNdIdx = pTOXNd->GetIndex() + 1;
                         sal_uInt32* pPgDescNdIdx = &nPgDescNdIdx;
                         pPageDesc = pTOXNd->FindPageDesc( FALSE, pPgDescNdIdx );
@@ -1768,10 +1765,9 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                     if(rBase.aTOXSources.Count())
                         pTOXSource = &rBase.aTOXSources[0];
 
-                    // --> OD 2008-02-14 #i53420#
+                    // #i53420#
                     if ( pTOXSource && pTOXSource->pNd &&
                          pTOXSource->pNd->IsCntntNode() )
-                    // <--
                     {
                         const SwCntntFrm* pFrm = pTOXSource->pNd->GetFrm();
                         if( pFrm )
@@ -1779,13 +1775,13 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                             SwChapterFieldType aFldTyp;
                             SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
                             aFld.SetLevel( static_cast<BYTE>(aToken.nOutlineLevel - 1) );
-                            // --> OD 2008-02-14 #i53420#
+                            // #i53420#
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
                                 TRUE );
                             // <--
-                            //---> i89791
-                            // OD 2008-06-26 - continue to support CF_NUMBER
+                            //---> #i89791#
+                            // continue to support CF_NUMBER
                             // and CF_NUM_TITLE in order to handle ODF 1.0/1.1
                             // written by OOo 3.x in the same way as OOo 2.x
                             // would handle them.

@@ -2592,8 +2592,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     bSetCrsrInReadOnly = TRUE;
 
     pVisCrsr = new SwVisCrsr( this );
-    // OD 11.02.2003 #100556#
-    mbMacroExecAllowed = true;
+    mbMacroExecAllowed = true; // #100556#
 }
 
 

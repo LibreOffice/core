@@ -163,8 +163,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
             SwNodeIndex aDelIdx( *this, n );
             SwNode& rNd = aDelIdx.GetNode();
 
-            // --> OD 2005-11-16 #i57920#
-            // correction of refactoring done by cws swnumtree:
+            // #i57920# - correction of refactoring done by cws swnumtree:
             // - <SwTxtNode::SetLevel( NO_NUMBERING ) is deprecated and
             //   set <IsCounted> state of the text node to <false>, which
             //   isn't correct here.

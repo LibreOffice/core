@@ -30,7 +30,7 @@
 
 /** helper class to observe threads
 
-    OD 2007-03-30 #i73788#
+    #i73788#
 
     @author OD
 */

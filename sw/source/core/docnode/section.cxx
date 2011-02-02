@@ -95,13 +95,11 @@ public:
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 
-    // --> OD 2007-02-14 #b6521322#
     inline SwSectionNode* GetSectNode()
     {
         const SwNode* pSectNd( const_cast<SwIntrnlSectRefLink*>(this)->GetAnchor() );
         return const_cast<SwSectionNode*>( dynamic_cast<const SwSectionNode*>( pSectNd ) );
     }
-    // <--
 };
 
 
@@ -746,7 +744,6 @@ void SwSectionFmt::DelFrms()
     {
         SwClientIter aIter( *this );
         SwClient *pLast = aIter.GoStart();
-        // --> OD 2007-08-14 #147431#
         // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
         while ( pLast )
         {
@@ -771,7 +768,7 @@ void SwSectionFmt::DelFrms()
             }
             pLast = aIter++;
         }
-        // <--
+
         ULONG nEnde = pSectNd->EndOfSectionIndex();
         ULONG nStart = pSectNd->GetIndex()+1;
         lcl_DeleteFtn( pSectNd, nStart, nEnde );
@@ -1225,7 +1222,6 @@ SwSectionFmt::MakeUnoObject()
 }
 
 
-// --> OD 2007-02-14 #b6521322#
 // Method to break section links inside a linked section
 void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
 {
@@ -1262,7 +1258,6 @@ void lcl_BreakSectionLinksInSect( const SwSectionNode& rSectNd )
         }
     }
 }
-// <--
 
 void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 {
@@ -1433,7 +1428,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
         return ;
     }
 
-    // --> OD 2005-02-11 #i38810# - Due to possible existing signatures, the
+    //  #i38810# - Due to possible existing signatures, the
     // document has to be modified after updating a link.
     pDoc->SetModified();
     // set additional flag that links have been updated, in order to check this
@@ -1579,7 +1574,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     pCpyRg = new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), 2,
                                           pSrcDoc->GetNodes().GetEndOfContent() );
 
-                // --> OD 2007-11-30 #i81653#
+                // #i81653#
                 // Update links of extern linked document or extern linked
                 // document section, if section is protected.
                 if ( pSrcDoc != pDoc &&
@@ -1618,9 +1613,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     delete pCpyRg;
                 }
 
-                // --> OD 2007-02-14 #b6521322#
                 lcl_BreakSectionLinksInSect( *pSectNd );
-                // <--
 
                 // update alle Links in diesem Bereich
                 lcl_UpdateLinksInSect( *this, *pSectNd );
@@ -1810,7 +1803,6 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     }
 }
 
-// --> OD 2007-02-14 #b6521322#
 void SwSection::BreakLink()
 {
     const SectionType eCurrentType( GetType() );
@@ -1839,7 +1831,6 @@ void SwSection::BreakLink()
     SetLinkFileName( aEmptyStr );
     SetLinkFilePassword( aEmptyStr );
 }
-// <--
 
 const SwNode* SwIntrnlSectRefLink::GetAnchor() const
 {

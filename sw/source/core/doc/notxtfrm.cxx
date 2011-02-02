@@ -79,9 +79,7 @@
 
 #include <svtools/embedhlp.hxx>
 #include <svtools/chartprettypainter.hxx>
-// --> OD 2009-03-05 #i99665#
-#include <dview.hxx>
-// <--
+#include <dview.hxx> // #i99665#
 
 using namespace com::sun::star;
 
@@ -228,7 +226,7 @@ void lcl_ClearArea( const SwFrm &rFrm,
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
-            // OD 2004-04-23 #116347#
+            // #116347#
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
@@ -254,7 +252,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     if( !pSh->GetViewOptions()->IsGraphic() )
     {
         StopAnimation();
-        // OD 10.01.2003 #i6467# - no paint of placeholder for page preview
+        // #i6467# - no paint of placeholder for page preview
         if ( pSh->GetWin() && !pSh->IsPreView() )
         {
             const SwNoTxtNode* pNd = GetNode()->GetNoTxtNode();
@@ -286,7 +284,7 @@ void SwNoTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/
     if( pGrfNd )
         pGrfNd->SetFrameInPaint( TRUE );
 
-    // OD 16.04.2003 #i13147# - add 2nd parameter with value <sal_True> to
+    // #i13147# - add 2nd parameter with value <sal_True> to
     // method call <FindFlyFrm().GetContour(..)> to indicate that it is called
     // for paint in order to avoid load of the intrinsic graphic.
     if ( ( !pOut->GetConnectMetaFile() ||
@@ -629,7 +627,7 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 
-    // --> OD 2007-03-06 #i73788#
+    // #i73788#
     // no <SwCntntFrm::Modify(..)> for RES_LINKED_GRAPHIC_STREAM_ARRIVED
     if ( RES_GRAPHIC_PIECE_ARRIVED != nWhich &&
          RES_GRAPHIC_ARRIVED != nWhich &&
@@ -701,10 +699,8 @@ void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
     case RES_GRAPHIC_PIECE_ARRIVED:
     case RES_GRAPHIC_ARRIVED:
-    // --> OD 2007-03-06 #i73788#
-    // handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
+    // i73788# - handle RES_LINKED_GRAPHIC_STREAM_ARRIVED as RES_GRAPHIC_ARRIVED
     case RES_LINKED_GRAPHIC_STREAM_ARRIVED:
-    // <--
         if ( GetNode()->GetNodeType() == ND_GRFNODE )
         {
             bComplete = FALSE;
@@ -831,14 +827,13 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
 
         if( !bPrn )
         {
-            // --> OD 2007-01-02 #i73788#
+            // #i73788#
             if ( pGrfNd->IsLinkedInputStreamReady() )
             {
                 pGrfNd->UpdateLinkWithInputStream();
             }
             // <--
-            // --> OD 2008-01-30 #i85717#
-            // --> OD 2008-07-21 #i90395# - check, if asynchronous retrieval
+            // #i85717#, #i90395# - check, if asynchronous retrieval
             // if input stream for the graphic is possible
 //            else if( GRAPHIC_DEFAULT == rGrfObj.GetType() &&
             else if ( ( rGrfObj.GetType() == GRAPHIC_DEFAULT ||
@@ -854,9 +849,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
                     !aTmpSz.Height() || !pGrfNd->GetAutoFmtLvl() )
                 {
-                    // --> OD 2006-12-22 #i73788#
-                    pGrfNd->TriggerAsyncRetrieveInputStream();
-                    // <--
+                    pGrfNd->TriggerAsyncRetrieveInputStream(); // #i73788#
                 }
                 String aTxt( pGrfNd->GetTitle() );
                 if ( !aTxt.Len() )
@@ -954,7 +947,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
     }
     else if( pOLENd )
     {
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         // Adjust AntiAliasing mode at output device for chart OLE
         const USHORT nFormerAntialiasingAtOutput( pOut->GetAntialiasing() );
         if ( pOLENd->IsChart() &&
@@ -1009,7 +1002,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 
-        // --> OD 2009-03-05 #i99665#
+        // #i99665#
         if ( pOLENd->IsChart() &&
              pShell->Imp()->GetDrawView()->IsAntiAliasing() )
         {
