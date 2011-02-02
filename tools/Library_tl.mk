@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
     cppu \
     sal \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 
@@ -137,14 +137,6 @@ $(eval $(call gb_Library_add_linked_libs,tl,\
 else
 $(eval $(call gb_Library_add_linked_static_libs,tl,\
     zlib \
-))
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,tl,\
-    dl \
-    m \
-    pthread \
 ))
 endif
 

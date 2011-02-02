@@ -45,7 +45,7 @@ $(eval $(call gb_Executable_add_linked_libs,mkunroll,\
     stl \
     tl \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 # used to link against basegfxlx comphelp4gcc3 i18nisolang1gcc3 ucbhelper4gcc3 uno_cppu uno_cppuhelpergcc3 uno_salhelpergcc3 - seems to be superficial
@@ -77,13 +77,6 @@ $(eval $(call gb_Executable_add_linked_libs,mkunroll,\
     oldnames \
 ))
 endif
-endif
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,mkunroll,\
-    dl \
-    pthread \
-))
 endif
 
 # vim: set noet sw=4 ts=4:

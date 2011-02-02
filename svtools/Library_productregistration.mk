@@ -50,20 +50,13 @@ $(eval $(call gb_Library_add_linked_libs,productregistration,\
     tl \
     utl \
     vcl \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,productregistration,\
     svtools/source/productregistration/productregistration \
     svtools/source/productregistration/registrationdlg \
 ))
-
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,productregistration,\
-    dl \
-    m \
-    pthread \
-))
-endif
 
 ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
@@ -78,14 +71,6 @@ $(eval $(call gb_Library_add_linked_libs,productregistration,\
     kernel32 \
     msvcrt \
     user32 \
-))
-else
-$(eval $(call gb_Library_add_linked_libs,productregistration,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
 ))
 endif
 endif

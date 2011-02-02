@@ -42,6 +42,7 @@ $(eval $(call gb_Executable_add_linked_libs,bmpsum,\
     tl \
     vcl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,bmpsum,\
@@ -62,21 +63,7 @@ $(eval $(call gb_Executable_add_linked_libs,bmpsum,\
     msvcrt \
     user32 \
 ))
-else
-$(eval $(call gb_Executable_add_linked_libs,bmpsum,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-    uwinapi \
-))
 endif
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,bmpsum,\
-   dl \
-   pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:

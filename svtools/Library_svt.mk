@@ -70,6 +70,7 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
     utl \
     vcl \
     vos3 \
+    $(gb_STDLIBS) \
 ))
 
 ifeq ($(SYSTEM_JPEG),YES)
@@ -290,14 +291,6 @@ $(eval $(call gb_Library_add_cobjects,svt,\
     svtools/source/filter.vcl/jpeg/jpegc \
 ))
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,svt,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
 ifeq ($(OS),WNT)
 ifneq ($(USE_MINGW),)
 $(eval $(call gb_Library_add_linked_libs,svt,\
@@ -321,14 +314,11 @@ else
 $(eval $(call gb_Library_add_linked_libs,svt,\
     advapi32 \
     gdi32 \
-    kernel32 \
-    msvcrt \
     oldnames \
     ole32 \
     oleaut32 \
     user32 \
     uuid \
-    uwinapi \
 ))
 endif
 endif

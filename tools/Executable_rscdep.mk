@@ -44,7 +44,7 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
     stl \
     tl \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Executable_add_exception_objects,rscdep,\
@@ -83,10 +83,4 @@ $(eval $(call gb_Executable_add_linked_libs,rscdep,\
 endif
 endif
 
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    dl \
-    pthread \
-))
-endif
 # vim: set noet sw=4 ts=4:

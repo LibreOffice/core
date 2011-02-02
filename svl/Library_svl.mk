@@ -60,16 +60,8 @@ $(eval $(call gb_Library_add_linked_libs,svl,\
     ucbhelper \
     utl \
     vos3 \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
-
-$(eval $(call gb_Library_add_linked_system_libs,svl,\
-    dl \
-    icuuc \
-    m \
-    pthread \
-))
-
 
 $(eval $(call gb_Library_add_exception_objects,svl,\
     svl/inc/pch/precompiled_svl \

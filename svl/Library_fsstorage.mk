@@ -50,14 +50,7 @@ $(eval $(call gb_Library_add_linked_libs,fsstorage,\
     tl \
     ucbhelper \
     utl \
-    $(gb_StdLibs) \
-))
-
-$(eval $(call gb_Library_add_linked_system_libs,fsstorage,\
-    dl \
-    icuuc \
-    m \
-    pthread \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,fsstorage,\

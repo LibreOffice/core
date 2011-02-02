@@ -55,7 +55,7 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
     tl \
     utl \
     vcl \
-    $(gb_StdLibs) \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_exception_objects,tk,\
@@ -159,9 +159,6 @@ endif
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,tk,\
     X11 \
-    dl \
-    m \
-    pthread \
 ))
 endif
 ifeq ($(OS),WNT)
