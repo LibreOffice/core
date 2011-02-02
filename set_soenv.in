@@ -983,7 +983,7 @@ $SOLARSRC             = '$SRC_ROOT';
 my @splitlist = split( /\//, $SRC_ROOT );
 pop @splitlist;
 $SOURCE_ROOT_DIR      = join("/", @splitlist);
-$gb_REPOS = $SOURCE_ROOT_DIR."/ooo ".$SOURCE_ROOT_DIR."/loc";
+$gb_REPOS = $SOURCE_ROOT_DIR."/ooo ".$SOURCE_ROOT_DIR."/l10n";
 
 # default TARFILE_LOCATION
 if ('@TARFILE_LOCATION@' eq "DEFAULT")

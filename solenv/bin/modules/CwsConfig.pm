@@ -353,7 +353,6 @@ sub _get_hg_source
         if ( !defined($source) ) {
             $source = "";
         }
-        #print "result = ".$source."\n";
         $self->{$repository_source} = $source;
     }
     return $self->{$repository_source} ? $self->{$repository_source} : undef;

@@ -49,7 +49,6 @@ BEGIN {
 use lib (@lib_dirs);
 
 use Cws;
-print "I am cws.pl from cws!"
 
 #### script id #####
 
@@ -1718,9 +1717,6 @@ sub do_fetch
                 print_error("Can't create directory '$work_master': $!.", 8);
             }
 
-            hg_clone_cws_or_milestone('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
-            hg_clone_cws_or_milestone('so', $cws, "$work_master/sun", $clone_milestone_only);
-
             my %unique = map { $_ => 1 } split(/,/,$additional_repositories_opt);
             my @unique_repo_list = keys %unique;
 
@@ -1732,6 +1728,9 @@ sub do_fetch
                 }
 
             }
+
+            hg_clone_cws_or_milestone('ooo', $cws, "$work_master/ooo", $clone_milestone_only);
+            hg_clone_cws_or_milestone('so', $cws, "$work_master/sun", $clone_milestone_only);
 
             if ( get_source_config_for_milestone($masterws, $milestone) ) {
                 # write source_config file
