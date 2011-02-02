@@ -105,7 +105,7 @@ public:
     Bitmap              GetBitmap( const Color* pTransReplaceColor = NULL ) const;
     Bitmap              GetMask() const;
 
-    BitmapEx            GetColorTransformedBitmapEx( BmpColorMode eColorMode ) const;
+    BitmapEx            GetColorTransformedBitmapEx() const;
 
     BOOL                IsAlpha() const;
     AlphaMask           GetAlpha() const;

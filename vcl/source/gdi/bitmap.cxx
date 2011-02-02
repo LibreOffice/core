@@ -1739,38 +1739,6 @@ Bitmap Bitmap::CreateDisplayBitmap( OutputDevice* pDisplay )
 
 // ------------------------------------------------------------------
 
-Bitmap Bitmap::GetColorTransformedBitmap( BmpColorMode eColorMode ) const
-{
-    Bitmap  aRet;
-
-    if( BMP_COLOR_HIGHCONTRAST == eColorMode )
-    {
-        Color*  pSrcColors = NULL;
-        Color*  pDstColors = NULL;
-        ULONG   nColorCount = 0;
-
-        aRet = *this;
-
-        Image::GetColorTransformArrays( (ImageColorTransform) eColorMode, pSrcColors, pDstColors, nColorCount );
-
-        if( nColorCount && pSrcColors && pDstColors )
-               aRet.Replace( pSrcColors, pDstColors, nColorCount );
-
-        delete[] pSrcColors;
-        delete[] pDstColors;
-    }
-    else if( BMP_COLOR_MONOCHROME_BLACK == eColorMode ||
-             BMP_COLOR_MONOCHROME_WHITE == eColorMode )
-    {
-        aRet = *this;
-        aRet.MakeMono( BMP_COLOR_MONOCHROME_THRESHOLD );
-    }
-
-    return aRet;
-}
-
-// ------------------------------------------------------------------
-
 BOOL Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
 {
     BitmapReadAccess*   pMaskAcc = ( (Bitmap&) rMask ).AcquireReadAccess();

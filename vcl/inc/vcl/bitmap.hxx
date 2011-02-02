@@ -145,14 +145,6 @@ enum BmpFilter
 
 // ------------------------------------------------------------------------
 
-enum BmpColorMode
-{
-    BMP_COLOR_NORMAL = 0,
-    BMP_COLOR_HIGHCONTRAST = 1,
-    BMP_COLOR_MONOCHROME_BLACK = 2,
-    BMP_COLOR_MONOCHROME_WHITE = 3
-};
-
 // --------------------
 // - FilterParameters -
 // --------------------
@@ -362,7 +354,7 @@ public:
     ULONG                   GetChecksum() const;
 
     Bitmap                  CreateDisplayBitmap( OutputDevice* pDisplay );
-    Bitmap                  GetColorTransformedBitmap( BmpColorMode eColorMode ) const;
+    Bitmap                  GetColorTransformedBitmap() const;
 
     static const BitmapPalette& GetGreyPalette( int nEntries );
 

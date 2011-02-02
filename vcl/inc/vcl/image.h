@@ -54,7 +54,7 @@ public:
     void        Replace( USHORT nPos, const BitmapEx& rBmpEx );
 
     void        ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount );
-    void        ColorTransform( BmpColorMode eColorMode );
+    void        ColorTransform();
     void            Invert();
 
     BitmapEx    GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const;

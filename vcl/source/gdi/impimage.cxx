@@ -347,15 +347,6 @@ void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColo
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ColorTransform( BmpColorMode eColorMode )
-{
-    maBmpEx = maBmpEx.GetColorTransformedBitmapEx( eColorMode );
-    delete mpDisplayBmp;
-    mpDisplayBmp = NULL;
-}
-
-// -----------------------------------------------------------------------
-
 BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
 {
     const Bitmap    aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
@@ -405,7 +396,6 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
         else
         {
             if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM |
-                           IMAGE_DRAW_MONOCHROME_BLACK | IMAGE_DRAW_MONOCHROME_WHITE |
                            IMAGE_DRAW_HIGHLIGHT | IMAGE_DRAW_DEACTIVE | IMAGE_DRAW_SEMITRANSPARENT ) )
             {
                 BitmapEx        aTmpBmpEx;
@@ -417,14 +407,6 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     aTmpBmpEx = maBmpEx.GetBitmap();
 
                 aTmpBmpEx.Crop( aCropRect );
-
-                if( nStyle & ( IMAGE_DRAW_COLORTRANSFORM | IMAGE_DRAW_MONOCHROME_BLACK | IMAGE_DRAW_MONOCHROME_WHITE ) )
-                {
-                    const BmpColorMode eMode = ( nStyle & IMAGE_DRAW_COLORTRANSFORM ) ? BMP_COLOR_HIGHCONTRAST :
-                                                ( ( nStyle & IMAGE_DRAW_MONOCHROME_BLACK ) ? BMP_COLOR_MONOCHROME_BLACK : BMP_COLOR_MONOCHROME_WHITE );
-
-                    aTmpBmpEx = aTmpBmpEx.GetColorTransformedBitmapEx( eMode );
-                }
 
                 Bitmap aTmpBmp( aTmpBmpEx.GetBitmap() );
 
