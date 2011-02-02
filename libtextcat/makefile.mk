@@ -58,8 +58,6 @@ ADDITIONAL_FILES= \
                 src$/libtextcat.map
 
 .IF "$(GUI)"=="UNX"
-#CONFIGURE_DIR=$(BUILD_DIR)
-
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=configure CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
