@@ -74,7 +74,6 @@ STDSHL+=	\
     -lmsvcrt
 .ENDIF
 
-#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1OBJS = $(SLOFILES)              \
     $(SLO)$/registerextensions.obj  \
@@ -94,7 +93,3 @@ DEF1EXPORTFILE=exports.dxp
 # --- Targets --------------------------------------------------------------
 
 .INCLUDE : target.mk
-
-# -------------------------------------------------------------------------
-
-

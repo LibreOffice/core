@@ -69,7 +69,6 @@ STDSHL+=	\
     -lmsvcrt
 .ENDIF
 
-#SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
 SHL1OBJS = $(SLOFILES)               \
     $(SLO)$/respintest.obj           \

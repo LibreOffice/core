@@ -46,20 +46,13 @@ CDEFS+=-DOJI
 # --- Types -------------------------------------
 
 .IF "$(WITH_MOZILLA)" != "NO"
-
-#UNOUCROUT=$(OUT)$/inc$/$(PRJNAME)
-#INCPRE+=$(UNOUCROUT)
-
-# --- Types -------------------------------------
-
 SLOFILES =	$(SLO)$/winmgr.obj	\
             $(SLO)$/sysplug.obj
-
 .ENDIF # $(WITH_MOZILLA) != "NO"
+
 .ENDIF
 
 # ------------------------------------------------------------------
-
 
 .INCLUDE :  target.mk
 

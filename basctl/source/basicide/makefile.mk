@@ -43,7 +43,6 @@ PROJECTPCHSOURCE=ide_pch
 CDEFS+=-DBASICDEBUG
 .ENDIF
 
-
 # --- Allgemein ----------------------------------------------------------
 
 EXCEPTIONSFILES= \

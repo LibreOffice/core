@@ -24,6 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 CONFIG_ALL_TARGET               = basicusr
 CONFIG_SHARE_TARGET             = basicshare
 EURO_ALL_TARGET                 = basicsrveuro
@@ -38,4 +39,3 @@ DEPOT_ALL_TARGET                = basicsrvdepot
 STANDARD_ALL_TARGET             = basicsrvstandard
 LAUNCHER_ALL_TARGET             = basicsrvlauncher
 TUTORIALS_ALL_TARGET            = basicsrvtutorials
-

@@ -24,6 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
 PRJ=..
 
 PRJNAME=basctl
@@ -44,4 +45,3 @@ ALLTAR : \
     $(SLO)$/precompiled_ex.pch
     
 .ENDIF			# "$(ENABLE_PCH)"!=""
-

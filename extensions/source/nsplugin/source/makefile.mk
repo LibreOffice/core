@@ -72,9 +72,6 @@ SHL1OBJS=	$(SLO)$/npshell.obj \
 .IF "$(GUI)"=="UNX"
 STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
-#.IF "$(OS)"!="FREEBSD"
-#SHL1STDLIBS+= -ldl -lnsl
-#.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
 SHL1OBJS+=$(SOLARLIBDIR)$/pathutils-slo.obj

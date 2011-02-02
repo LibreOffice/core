@@ -36,14 +36,6 @@ TARGET=depotall
 
 # --- Files --------------------------------------------------------
 
-#
-# testresource.
-#
-# SRS2NAME =              depot
-# SRC2FILES=              webwizar.src
-# RESLIB2SRSFILES= $(SRS)$/webwizar.srs
-# RESLIB2NAME=    wwz
-
 ZIP1TARGET      = $(DEPOT_ALL_TARGET)
 ZIP1LIST        = *.xdl *.xba *.xlb
 

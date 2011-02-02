@@ -37,19 +37,10 @@ USE_JAVAVER:=TRUE
 .INCLUDE :  settings.mk
 
 .IF "$(JAVAVER:s/.//)" >= "140" 
-
 .INCLUDE : makefile.common
-
 JAVACLASSFILES= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
-
-#JARTARGET               = $(TARGET).jar
-#JARCOMPRESS             = TRUE
-#JARCLASSDIRS            = $(PACKAGE) org/openoffice/java/accessibility/awb 
-#CUSTOMMANIFESTFILE      = manifest
 .ENDIF
 
 # --- Targets ------------------------------------------------------
 
-
 .INCLUDE :  target.mk
-

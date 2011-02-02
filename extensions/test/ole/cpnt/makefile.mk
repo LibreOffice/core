@@ -35,20 +35,6 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-#UNOUCRDEP=    $(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
-#UNOUCRRDB=    $(SOLARBINDIR)$/types.rdb $(BIN)$/oletest.rdb
-
-#UNOUCROUT=    $(OUT)$/inc
-
-#UNOTYPES= oletest.XTestSequence \
-#    oletest.XTestStruct     \
-#    oletest.XTestOther      \
-#    oletest.XTestInterfaces \
-#    oletest.XSimple         \
-#    oletest.XSimple2        \
-#    oletest.XSimple3        \
-#    oletest.XTestInParameters       \
-#    oletest.XIdentity       
 
 INCPRE+= -I$(ATL_INCLUDE)
 
@@ -61,10 +47,6 @@ SHL1STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
-
-#.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
-#	SHL1STDLIBS+= $(COMPATH)$/atlmfc$/lib$/atls.lib
-#.ENDIF
 
 .IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
 .IF "$(USE_STLP_DEBUG)" != ""

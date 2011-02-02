@@ -32,11 +32,6 @@ TARGET=workben
 LIBTARGET=NO
 
 TESTAPP=testpgp
-#TESTAPP=testcomponent
-#TESTAPP=pythontest
-#TESTAPP=pythonautotest
-#TESTAPP=testresource
-#TESTAPP=testframecontrol
 
 .IF "$(TESTAPP)" == "testresource" || "$(TESTAPP)" == "testframecontrol"
 TARGETTYPE=GUI
@@ -106,27 +101,14 @@ APP2STDLIBS = \
 # test python.
 #
 .IF "$(TESTAPP)" == "phytontest"
-
 OBJFILES=	$(OBJ)$/pythontest.obj
-
-#APP4TARGET=	pythontest
-#APP4OBJS=	$(OBJ)$/pythontest.obj 
-#APP4STDLIBS=$(TOOLSLIB)
-#
-
 .ENDIF # phytontest
 
 #
 # python auto test
 #
 .IF "$(TESTAPP)" == "phytonautotest"
-
 OBJFILES=	$(OBJ)$/pythonautotest.obj
-
-#APP5TARGET= pythonautotest
-#APP5OBJS = $(OBJ)$/pythonautotest.obj
-#APP5STDLIBS=$(TOOLSLIB)
-
 .ENDIF # phytonautotest
 
 #
