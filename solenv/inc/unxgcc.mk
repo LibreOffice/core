@@ -159,15 +159,26 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
+#
+# The DT RPATH value is used first, before any other path, specifically before
+# the path defined in the LD_LIBRARY_PATH environment variable. This is
+# problematic since it does not allow the user to overwrite the value.
+# Therefore DT_RPATH is deprecated. The introduction of the new variant,
+# DT_RUNPATH, corrects this oversight by requiring the value is used after the
+# path in LD_LIBRARY_PATH.
+#
+# The linker option --enable-new-dtags must be used to also add DT_RUNPATH
+# entry. This will cause both, DT_RPATH and DT_RUNPATH entries, to be created
+#
 LINKFLAGSDEFS*=-Wl,-z,defs
-LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
+LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\',--enable-new-dtags
+LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\',--enable-new-dtags
     #TODO: drop $ORIGIN once no URE executable is also shipped in OOo
-LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
-LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\'
-LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+LINKFLAGSRUNPATH_OOO=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\',--enable-new-dtags
+LINKFLAGSRUNPATH_SDK=-Wl,-rpath,\''$$ORIGIN/../../ure-link/lib'\',--enable-new-dtags
+LINKFLAGSRUNPATH_BRAND=-Wl,-rpath,\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\',--enable-new-dtags
 LINKFLAGSRUNPATH_OXT=
-LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
+LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\',--enable-new-dtags
 LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
 LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
