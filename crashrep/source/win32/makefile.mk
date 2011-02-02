@@ -69,7 +69,8 @@ STDLIB1=\
     $(ADVAPI32LIB)\
     $(WSOCK32LIB)\
     $(SHELL32LIB)\
-    $(DBGHELPLIB)
+    $(DBGHELPLIB)\
+    psapi.lib
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
 
