@@ -764,6 +764,7 @@ HTMLTableCell::HTMLTableCell():
     bRelWidth( sal_False ),
     bHasNumFmt(sal_False),
     bHasValue(sal_False),
+    bNoWrap(sal_False),
     mbCovered(sal_False)
 {}
 
