@@ -296,22 +296,20 @@ namespace svt { namespace table
             return SkipFunction;
 
         TableCell const tableCell( i_tableControl.hitTest( i_event.GetPosPixel() ) );
-        if ( ( tableCell.nRow != ROW_COL_HEADERS ) || ( tableCell.nColumn != m_nActiveColumn ) )
-            // mouse was pressed on a column header, but released outside of it.
-            // => just deactivate, without sorting
-            return DeactivateFunction;
+        if ( ( tableCell.nRow == ROW_COL_HEADERS ) && ( tableCell.nColumn == m_nActiveColumn ) )
+        {
+            ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
+            ENSURE_OR_RETURN( pSort != NULL, "ColumnSortHandler::handleMouseUp: somebody is mocking with us!", DeactivateFunction );
+                // in handleMousButtonDown, the model claimed to have sort support ...
 
-        ITableDataSort* pSort = i_tableControl.getModel()->getSortAdapter();
-        ENSURE_OR_RETURN( pSort != NULL, "ColumnSortHandler::handleMouseUp: somebody is mocking with us!", DeactivateFunction );
-            // in handleMousButtonDown, the model claimed to have sort support ...
+            ColumnSortDirection eSortDirection = ColumnSortAscending;
+            ColumnSort const aCurrentSort = pSort->getCurrentSortOrder();
+            if ( aCurrentSort.nColumnPos == m_nActiveColumn )
+                // invert existing sort order
+                eSortDirection = ( aCurrentSort.eSortDirection == ColumnSortAscending ) ? ColumnSortDescending : ColumnSortAscending;
 
-        ColumnSortDirection eSortDirection = ColumnSortAscending;
-        ColumnSort const aCurrentSort = pSort->getCurrentSortOrder();
-        if ( aCurrentSort.nColumnPos == m_nActiveColumn )
-            // invert existing sort order
-            eSortDirection = ( aCurrentSort.eSortDirection == ColumnSortAscending ) ? ColumnSortDescending : ColumnSortAscending;
-
-        pSort->sortByColumn( m_nActiveColumn, eSortDirection );
+            pSort->sortByColumn( m_nActiveColumn, eSortDirection );
+        }
 
         m_nActiveColumn = COL_INVALID;
         return DeactivateFunction;
