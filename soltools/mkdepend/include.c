@@ -291,7 +291,7 @@ void included_by(ip, newfile)
     else {
         for (i=0; i<ip->i_listlen; i++)
             if (ip->i_list[ i ] == newfile) {
-                i = strlen(newfile->i_file);
+                i = (int)strlen(newfile->i_file);
                 if (!ip->i_included_sym &&
                 !(i > 2 &&
                   newfile->i_file[i-1] == 'c' &&

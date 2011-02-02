@@ -33,6 +33,10 @@ in this Software without prior written authorization from the X Consortium.
 #include <sys/stat.h>
 #endif
 
+#ifdef _WIN32
+#include <io.h>
+#endif
+
 #ifdef _MSC_VER     /* Define ssize_t */
 
 #if !defined(_W64)
