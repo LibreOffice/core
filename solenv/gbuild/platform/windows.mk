@@ -160,10 +160,10 @@ gb_CXXFLAGS := \
     -Zc:forScope,wchar_t- \
     -Zm500 \
 
-gb_StdLibs := \
+gb_STDLIBS := \
     uwinapi \
     kernel32 \
-    msvcrt
+    msvcrt \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
