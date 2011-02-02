@@ -56,9 +56,7 @@
 #include <ktempfile.h>
 
 #include <algorithm>
-#if OSL_DEBUG_LEVEL > 1
 #include <iostream>
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 // KDEFileDialog
