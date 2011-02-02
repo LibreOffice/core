@@ -171,10 +171,10 @@ OUString OTextInputStream::readLine(  )
     return implReadString( aDummySeq, sal_True, sal_True );
 }
 
-OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool )
+OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
         throw(IOException, RuntimeException)
 {
-    return implReadString( Delimiters, sal_True, sal_False );
+    return implReadString( Delimiters, bRemoveDelimiter, sal_False );
 }
 
 sal_Bool OTextInputStream::isEOF()
