@@ -41,7 +41,7 @@ packmodule : COMMAND := true
 endif
 endef
 
-packmodule : all
+packmodule : all deliverlog
     $(eval $(call gb_PackModule_setpackmodulecommand))
     $(COMMAND)
 
