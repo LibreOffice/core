@@ -35,6 +35,7 @@ TARGET=ooo_mozab
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
+
 # ----- pkg-config start -------
 .INCLUDE .IGNORE : pkgroot.mk
 .IF "$(PKGCONFIG_ROOT)"!=""
@@ -143,10 +144,6 @@ MOZILLA_CONFIGURE_FLAGS +=  --disable-tests \
                 --disable-printing \
                 --disable-pango \
                 --enable-extensions="pref"
-
-#.IF "$(GUI)"!="WNT"
-#MOZILLA_CONFIGURE_FLAGS += --enable-system-cairo
-#.ENDIF
 
 #disable profilelocking to share profile with mozilla
 #disable activex and activex-scripting to remove the dependence of Microsoft_SDK\src\mfc\atlbase.h

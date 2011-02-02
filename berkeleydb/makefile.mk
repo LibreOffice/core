@@ -86,10 +86,6 @@ LDFLAGSVERSION:= -Wl,--version-script=../db_4_7_gcc4.map
 .EXPORT: LDFLAGSVERSION
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#CXX:=$(COMPATH)$/bin$/CC
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
 LDFLAGS:=$(ARCH_FLAGS) -R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
@@ -167,9 +163,6 @@ BUILD_DIR=
 BUILD_ACTION=dmake
 
 BUILD_DIR_OUT=build_windows
-#OUT2LIB= \
-#	$(BUILD_DIR_OUT)$/Release$/libdb42.lib
-#OUT2BIN=$(BUILD_DIR_OUT)$/Release$/libdb42.dll
 OUT2INC= \
     $(BUILD_DIR_OUT)$/db.h
 .ENDIF

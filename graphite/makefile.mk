@@ -60,12 +60,6 @@ CONVERTFILES=\
     engine/makefile.vc8 \
     engine/test/RegressionTest/RtTextSrc.h
 
-#.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#CONFIGURE_DIR=win32
-#.ELSE
-#CONFIGURE_DIR=engine
-#.ENDIF
-
 CONFIGURE_DIR=engine
 
 .IF "$(COM)"=="MSC"
@@ -128,7 +122,6 @@ CONFIGURE_ACTION=bash -c 'CXXFLAGS="$(INCLUDE) $(CFLAGSCXX) $(CFLAGSCOBJ) $(CDEF
 BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#OUT2LIB=win32$/bin.msvc$/*.lib
 .IF "$(debug)"!=""
 OUT2LIB=engine$/debug$/*.lib
 .ELSE
@@ -146,18 +139,11 @@ BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2LIB+=src$/.libs$/libgraphite.*.dylib
 .ELSE
 .IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
-#OUT2LIB+=engine$/src$/.libs$/libgraphite*.dll
 .IF "$(debug)"!=""
-OUT2BIN= \
-#    engine$/debug$/*.dll \
-    engine$/debug$/*.pdb
+OUT2BIN=engine$/debug$/*.pdb
 .ELSE
 OUT2BIN=
-#    engine$/release$/*.dll
-#    engine$/release$/*.pdb
 .ENDIF
-.ELSE
-#OUT2LIB+=engine$/src$/.libs$/libgraphite.so.*.*.*
 .ENDIF
 .ENDIF
 
@@ -172,8 +158,8 @@ OUT2INC=wrappers$/win32$/WinFont.h
 dddd:
     @echo Nothing to do
 .ENDIF
-# --- Targets ------------------------------------------------------
 
+# --- Targets ------------------------------------------------------
 
 .INCLUDE :	set_ext.mk
 .INCLUDE :	target.mk

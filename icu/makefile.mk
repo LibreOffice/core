@@ -50,15 +50,7 @@ PATCH_FILES=\
     ${TARFILE_NAME}.patch \
     icu4c-aix.patch
 
-# ADDITIONAL_FILES=
-
 .IF "$(GUI)"=="UNX"
-.IF "$(COMNAME)"=="sunpro5"
-#.IF "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-#CC:=$(COMPATH)$/bin$/cc
-#CXX:=$(COMPATH)$/bin$/CC
-#.ENDIF          # "$(BUILD_TOOLS)$/cc"=="$(shell +-which cc)"
-.ENDIF          # "$(COMNAME)"=="sunpro5"
 
 .IF "$(SYSBASE)"!=""
 icu_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -114,7 +106,6 @@ CONFIGURE_DIR=source
 
 CONFIGURE_ACTION+=sh -c 'CFLAGS="$(icu_CFLAGS)" CXXFLAGS="$(icu_CXXFLAGS)" LDFLAGS="$(icu_LDFLAGS) $(LDFLAGSADD)" ./configure --enable-layout --enable-static --enable-shared=yes $(DISABLE_64BIT)'
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
 
 # Use of
@@ -168,7 +159,6 @@ icu_LIBS+=-lstdc++_s
 icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
-#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
 CONFIGURE_FLAGS=
 
 # Use of

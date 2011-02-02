@@ -41,9 +41,7 @@ all:
     @echo "Therefore the version provided here does not need to be built in addition."
 .ENDIF
 
-
 # --- Files --------------------------------------------------------
-
 
 TARFILE_NAME=Python-$(PYVERSION)
 TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
@@ -106,19 +104,6 @@ python_LDFLAGS+=-shared-libgcc -Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CC="$(CC:s/guw.exe //)" CXX="$(CXX:s/guw.exe //)" MACHDEP=MINGW32 LN="cp -p" CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 BUILD_ACTION=$(ENV_BUILD) make && make install
 .ELSE
-#PYTHONPATH:=..$/Lib
-#.EXPORT : PYTHONPATH
-
-#.IF "$(CCNUMVER)" <= "001400000000"
-#EXFLAGS="/GX /YX"
-#.ELSE
-#.IF "$(WINDOWS_VISTA_PSDK)"!=""
-#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-#ADDITIONALLIBS=ws2_32.lib
-#.ELSE  #"$(WINDOWS_VISTA_PSDK)"!=""
-#EXFLAGS="/EHa /Zc:wchar_t- /D "_CRT_SECURE_NO_DEPRECATE""
-#.ENDIF #"$(WINDOWS_VISTA_PSDK)"!=""
-#.ENDIF
 
 .IF "$(CCNUMVER)" >= "001600000000"
 PATCH_FILES+=Python-$(PYVERSION)-vc10.patch
