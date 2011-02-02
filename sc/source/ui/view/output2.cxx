@@ -1336,7 +1336,6 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
     BOOL bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( TRUE );
-    Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
@@ -2363,7 +2362,6 @@ bool EditAlignmentParam::adjustHorAlignment(ScFieldEditEngine* pEngine)
 void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
-    Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
