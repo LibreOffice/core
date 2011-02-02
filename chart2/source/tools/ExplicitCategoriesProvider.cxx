@@ -221,7 +221,7 @@ void ExplicitCategoriesProvider::convertCategoryAnysToText( uno::Sequence< rtl::
         uno::Any aAny = rInAnys[nN];
         if( aAny.hasValue() )
         {
-            double fDouble;
+            double fDouble = 0;
             if( aAny>>=fDouble )
             {
                 if( !::rtl::math::isNan(fDouble) )
@@ -478,7 +478,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
             if( aAny.hasValue() )
             {
                 OUString aTest;
-                double fTest;
+                double fTest = 0;
                 if( (aAny>>=aTest) && !aTest.getLength() ) //empty String
                     bContainsEmptyString = true;
                 else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )

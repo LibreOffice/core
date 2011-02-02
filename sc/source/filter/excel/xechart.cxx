@@ -191,7 +191,7 @@ sal_uInt16 lclGetTimeValue( const XclExpRoot& rRoot, double fSerialDate, sal_uIn
 
 bool lclConvertTimeValue( const XclExpRoot& rRoot, sal_uInt16& rnValue, const Any& rAny, sal_uInt16 nTimeUnit )
 {
-    double fSerialDate;
+    double fSerialDate = 0;
     bool bAuto = lclIsAutoAnyOrGetValue( fSerialDate, rAny );
     if( !bAuto )
         rnValue = lclGetTimeValue( rRoot, fSerialDate, nTimeUnit );
