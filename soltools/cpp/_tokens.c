@@ -194,8 +194,8 @@ void
 Token *
     growtokenrow(Tokenrow * trp)
 {
-    int ncur = trp->tp - trp->bp;
-    int nlast = trp->lp - trp->bp;
+    size_t ncur = trp->tp - trp->bp;
+    size_t nlast = trp->lp - trp->bp;
 
     trp->max = 3 * trp->max / 2 + 1;
     trp->bp = (Token *) realloc(trp->bp, trp->max * sizeof(Token));
@@ -235,7 +235,7 @@ int
 void
     insertrow(Tokenrow * dtr, int ntok, Tokenrow * str)
 {
-    int nrtok = rowlen(str);
+    int nrtok = (int)rowlen(str);
 
     dtr->tp += ntok;
     adjustrow(dtr, nrtok - ntok);
@@ -274,7 +274,7 @@ void
 void
     movetokenrow(Tokenrow * dtr, Tokenrow * str)
 {
-    int nby;
+    size_t nby;
 
     /* nby = sizeof(Token) * (str->lp - str->bp); */
     nby = (char *) str->lp - (char *) str->bp;
@@ -290,7 +290,7 @@ void
 void
     adjustrow(Tokenrow * trp, int nt)
 {
-    int nby, size;
+    size_t nby, size;
 
     if (nt == 0)
         return;
@@ -311,7 +311,7 @@ void
 Tokenrow *
     copytokenrow(Tokenrow * dtr, Tokenrow * str)
 {
-    int len = rowlen(str);
+    int len = (int)rowlen(str);
 
     maketokenrow(len, dtr);
     movetokenrow(dtr, str);
@@ -331,7 +331,7 @@ Tokenrow *
     Tokenrow *ntrp = new(Tokenrow);
     int len;
 
-    len = trp->lp - trp->tp;
+    len = (int)(trp->lp - trp->tp);
     if (len <= 0)
         len = 1;
     maketokenrow(len, ntrp);
@@ -396,7 +396,7 @@ void
     {
         if (tp->type != NL)
         {
-            len = tp->len + tp->wslen;
+            len = (int)(tp->len + tp->wslen);
             p = tp->t - tp->wslen;
 
             /* add parameter check to delete operator? */
@@ -410,7 +410,7 @@ void
                     if( ntp->type == NAME )
                     {
                         uchar* np = ntp->t - ntp->wslen;
-                        int nlen = ntp->len + ntp->wslen;
+                        int nlen = (int)(ntp->len + ntp->wslen);
 
                         memcpy(wbp, "if(", 3 );
                          wbp += 4;
@@ -492,7 +492,7 @@ void
 {
     if (wbp > wbuf)
     {
-        if ( write(1, wbuf, wbp - wbuf) != -1)
+        if ( write(1, wbuf, (int)(wbp - wbuf)) != -1)
             wbp = wbuf;
     else
         exit(1);
@@ -527,7 +527,7 @@ char *
  * Null terminated.
  */
 uchar *
-    newstring(uchar * s, int l, int o)
+    newstring(uchar * s, size_t l, size_t o)
 {
     uchar *ns = (uchar *) domalloc(l + o + 1);
 

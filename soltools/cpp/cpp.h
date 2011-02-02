@@ -54,8 +54,8 @@ typedef struct token
 {
     unsigned char type;
     unsigned char flag;
-    unsigned int wslen;
-    unsigned int len;
+    size_t wslen;
+    size_t len;
     uchar *t;
     unsigned int identifier;            /* used from macro processor to identify where a macro becomes valid again. */
 }   Token;
@@ -87,7 +87,7 @@ typedef struct nlist
 {
     struct nlist *next;
     uchar *name;
-    int len;
+    size_t len;
     Tokenrow *vp;                       /* value as macro */
     Tokenrow *ap;                       /* list of argument names, if any */
     char val;                           /* value as preprocessor name */
@@ -174,7 +174,7 @@ Source *setsource(char *, int, int, char *, int);
 void unsetsource(void);
 void puttokens(Tokenrow *);
 void process(Tokenrow *);
-void *domalloc(int);
+void *domalloc(size_t);
 void dofree(void *);
 void error(enum errtype, char *,...);
 void flushout(void);
@@ -211,7 +211,7 @@ void setempty(Tokenrow *);
 void makespace(Tokenrow *, Token *);
 char *outnum(char *, int);
 int digit(int);
-uchar *newstring(uchar *, int, int);
+uchar *newstring(uchar *, size_t, size_t);
 
 #define rowlen(tokrow)  ((tokrow)->lp - (tokrow)->bp)
 

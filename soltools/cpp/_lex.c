@@ -635,7 +635,7 @@ Source *
     setsource(char *name, int path, int fd, char *str, int wrap)
 {
     Source *s = new(Source);
-    int len;
+    size_t len;
 
     s->line = 1;
     s->lineinc = 0;

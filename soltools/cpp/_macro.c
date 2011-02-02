@@ -516,7 +516,7 @@ void
                 error(ERROR, "# not followed by macro parameter");
                 continue;
             }
-            ntok = 1 + (rtr->tp - tp);
+            ntok = 1 + (int)(rtr->tp - tp);
             rtr->tp = tp;
             insertrow(rtr, ntok, stringify(atr[argno]));
             continue;
@@ -554,7 +554,7 @@ void
 {
     Token *ltp, *ntp;
     Tokenrow ntr;
-    int len;
+    size_t len;
 
     for (trp->tp = trp->bp; trp->tp < trp->lp; trp->tp++)
     {
@@ -617,7 +617,7 @@ void
                 doconcat(&ntr);
                 trp->tp = ltp;
                 makespace(&ntr, ltp);
-                insertrow(trp, ntp - ltp, &ntr);
+                insertrow(trp, (int)(ntp - ltp), &ntr);
                 dofree(ntr.bp);
                 trp->tp--;
             }
@@ -639,7 +639,7 @@ int
     for (ap = mac->ap->bp; ap < mac->ap->lp; ap++)
     {
         if (ap->len == tp->len && strncmp((char *) ap->t, (char *) tp->t, ap->len) == 0)
-            return ap - mac->ap->bp;
+            return (int)(ap - mac->ap->bp);
     }
     return -1;
 }

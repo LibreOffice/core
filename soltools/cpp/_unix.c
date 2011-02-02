@@ -135,7 +135,7 @@ void
 
                         case 'w':
                             dp = &optarg[n + 1];
-                            n += strlen(dp);
+                            n += (int)strlen(dp);
                             while (isspace(*dp)) dp++;
 
                             for (i = NINCLUDE - 1; i >= 0; i--)
@@ -173,7 +173,7 @@ void
     {
         if ((fp = strrchr(argv[optind], '/')) != NULL)
         {
-            int len = fp - argv[optind];
+            int len = (int)(fp - argv[optind]);
 
             dp = (char *) newstring((uchar *) argv[optind], len + 1, 0);
             dp[len] = '\0';
