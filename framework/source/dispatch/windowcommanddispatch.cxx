@@ -82,30 +82,20 @@ WindowCommandDispatch::WindowCommandDispatch(const css::uno::Reference< css::lan
 //-----------------------------------------------
 WindowCommandDispatch::~WindowCommandDispatch()
 {
+    impl_stopListening();
     m_xSMGR.clear();
-}
-
-//-----------------------------------------------
-void SAL_CALL WindowCommandDispatch::disposing(const css::lang::EventObject& /*aSource*/)
-    throw (css::uno::RuntimeException)
-{
-    // We hold our window weak ... so there is no need to clear it's reference here.
-    // The window and we will die by ref count automatically.
 }
 
 //-----------------------------------------------
 void WindowCommandDispatch::impl_startListening()
 {
-    // SYNCHRONIZED ->
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
     aReadLock.unlock();
-    // <- SYNCHRONIZED
 
     if ( ! xWindow.is())
         return;
 
-    // SYNCHRONIZED ->
     {
         SolarMutexGuard aSolarLock;
 
@@ -115,8 +105,30 @@ void WindowCommandDispatch::impl_startListening()
 
         pWindow->AddEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
     }
-    // <- SYNCHRONIZED
 }
+
+void WindowCommandDispatch::impl_stopListening()
+{
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::awt::XWindow > xWindow( m_xWindow.get(), css::uno::UNO_QUERY );
+    aReadLock.unlock();
+
+    if (!xWindow.is())
+        return;
+
+    {
+        SolarMutexGuard aSolarLock;
+
+        Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
+        if (!pWindow)
+            return;
+
+        pWindow->RemoveEventListener( LINK(this, WindowCommandDispatch, impl_notifyCommand) );
+
+        m_xWindow.clear();
+    }
+}
+
 
 //-----------------------------------------------
 IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
@@ -125,6 +137,11 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const VclWindowEvent* pEvent = (VclWindowEvent*)pParam;
+    if (pEvent->GetId() == VCLEVENT_OBJECT_DYING)
+    {
+        impl_stopListening();
+        return 0L;
+    }
     if (pEvent->GetId() != VCLEVENT_WINDOW_COMMAND)
         return 0L;
 
@@ -137,7 +154,7 @@ IMPL_LINK(WindowCommandDispatch, impl_notifyCommand, void*, pParam)
         return 0L;
 
     const int nCommand = pData->GetDialogId();
-          ::rtl::OUString sCommand;
+    ::rtl::OUString sCommand;
 
     switch (nCommand)
     {

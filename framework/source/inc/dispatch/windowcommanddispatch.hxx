@@ -67,13 +67,12 @@ namespace css = ::com::sun::star;
             e.g. "Pereferences" or "About". These menu entries trigger hard coded commands.
             Here we map these commands to the right URLs and dispatch them.
 
-            This helper knows a frame and it's container window (where VCL provide the hard coded
-            commands). We hold those objects weak ... so there is no need to react for complex dispose/ing()
+            This helper knows a frame and its container window (where VCL provide the hard coded
+            commands). We hold those objects weak so there is no need to react for complex UNO dispose/ing()
             scenarios. On the other side VCL does not hold us alive (because it doesn't know our UNO reference).
-            So we register us at the XWindow as event listener also to be sure to live as long the XWindow/VCLWindow lives.
+            So we register at the VCL level as an event listener and
  */
 class WindowCommandDispatch : private ThreadHelpBase
-                  , public  ::cppu::WeakImplHelper1< css::lang::XEventListener >
 {
     //___________________________________________
     // const
@@ -129,15 +128,6 @@ class WindowCommandDispatch : private ThreadHelpBase
         virtual ~WindowCommandDispatch();
 
     //___________________________________________
-    // uno interface
-
-    public:
-
-        // XEventListener
-         virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
-            throw (css::uno::RuntimeException);
-
-    //___________________________________________
     // implementation
 
     private:
@@ -148,10 +138,14 @@ class WindowCommandDispatch : private ThreadHelpBase
 
             @descr  Those listener connections will be created one times only (see ctor).
                     Afterwards we listen for incoming events till our referred frame/window pair
-                    will be closed. All objects die by refcount automatically. Because we hold
-                    it weak ...
+                    will be closed.
          */
         void impl_startListening();
+
+        /** @short  drop all listener connections we need.
+
+         */
+        void impl_stopListening();
 
         //_______________________________________
 

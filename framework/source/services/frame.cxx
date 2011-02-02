@@ -292,6 +292,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   m_bSelfClose                ( sal_False                                         ) // Important!
         ,   m_bIsHidden                 ( sal_True                                          )
         ,   m_xTitleHelper              (                                                   )
+        ,   m_pWindowCommandDispatch    ( 0                                                 )
         ,   m_aChildFrameContainer      (                                                   )
 {
     // Check incoming parameter to avoid against wrong initialization.
@@ -622,8 +623,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     impl_enablePropertySet();
 
-    // create WindowCommandDispatch; it is supposed to release itself at frame destruction
-    (void)new WindowCommandDispatch(xSMGR, this);
+    m_pWindowCommandDispatch = new WindowCommandDispatch(xSMGR, this);
 
     // Initialize title functionality
     TitleHelper* pTitleHelper = new TitleHelper(xSMGR);
@@ -1862,6 +1862,8 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
     // These events are superflous but can make trouble!
     // We will die, die and die ...
     implts_stopWindowListening();
+
+    delete m_pWindowCommandDispatch;
 
     // Send message to all listener and forget her references.
     css::lang::EventObject aEvent( xThis );
