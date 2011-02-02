@@ -2393,23 +2393,27 @@ dnl ===================================================================
    else
       AC_PROG_CPP
    fi
-fi
 
-AC_CHECK_SIZEOF(long)
-SIZEOF_LONG=$ac_cv_sizeof_long
+   AC_CHECK_SIZEOF(long)
+   SIZEOF_LONG=$ac_cv_sizeof_long
+   AC_C_BIGENDIAN
+   WORDS_BIGENDIAN=$ac_cv_c_bigendian
+
+   dnl Check for large file support
+   AC_SYS_LARGEFILE
+   if test -n "$ac_cv_sys_file_offset_bits"; then
+      LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+   fi
+   if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
+      LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
+   fi
+else
+   SIZEOF_LONG=4
+   WORDS_BIGENDIAN=no
+   LFS_CFLAGS=''
+fi
 AC_SUBST(SIZEOF_LONG)
-AC_C_BIGENDIAN
-WORDS_BIGENDIAN=$ac_cv_c_bigendian
 AC_SUBST(WORDS_BIGENDIAN)
-
-dnl Check for large file support
-AC_SYS_LARGEFILE
-if test -n "$ac_cv_sys_file_offset_bits"; then
-   LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
-fi
-if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
-   LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
-fi
 AC_SUBST(LFS_CFLAGS)
 
 dnl ===================================================================
