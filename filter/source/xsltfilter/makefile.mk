@@ -26,7 +26,6 @@
 #*************************************************************************
 PRJ	= ..$/..
 PRJNAME = filter
-#PACKAGE = com$/sun$/star$/documentconversion$/XSLTFilter
 TARGET  =XSLTFilter
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
@@ -54,8 +53,6 @@ SHL1STDLIBS= \
 
 .IF "$(SOLAR_JAVA)"!=""
 
-#USE_UDK_EXTENDED_MANIFESTFILE=TRUE
-#USE_EXTENDED_MANIFESTFILE=TRUE
 JARFILES 		= ridl.jar unoil.jar jurt.jar juh.jar
 
 JAVAFILES		= $(subst,$(CLASSDIR)$/, $(subst,.class,.java $(JAVACLASSFILES)))
