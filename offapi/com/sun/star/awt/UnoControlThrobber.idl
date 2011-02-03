@@ -42,17 +42,14 @@
 
 //=============================================================================
 
-/** specifies a simple animation control.
-
-    <p>The model of an <type>UnoControlThrobber</type> control must support
-    the <type>UnoControlThrobberModel</type> service.</p>
-
+/**
     @since OOo 2.2
+    @deprecatd
+        You should use <type>AnimatedImagesControl</type>.
  */
 published service UnoControlThrobber
 {
     service com::sun::star::awt::UnoControl;
-
     interface com::sun::star::awt::XThrobber;
 
 };

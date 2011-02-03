@@ -41,14 +41,10 @@ PRJNAME=offapi
 IDLFILES= \
     AxisType.idl \
     AxisOrientation.idl \
-    Break.idl \
     CoordinateSystemTypeID.idl \
     CurveStyle.idl \
     DataPointGeometry3D.idl \
     DataPointLabel.idl \
-    ExplicitIncrementData.idl \
-    ExplicitScaleData.idl \
-    ExplicitSubIncrement.idl \
     FillBitmap.idl \
     IncrementData.idl \
     InterpretedData.idl \
@@ -67,6 +63,7 @@ IDLFILES= \
     TickmarkStyle.idl \
     TransparencyStyle.idl \
     ViewLegendEntry.idl \
+    XAnyDescriptionAccess.idl\
     XAxis.idl \
     XCoordinateSystem.idl \
     XCoordinateSystemContainer.idl \
@@ -91,7 +88,6 @@ IDLFILES= \
     XLegend.idl \
     XLegendEntry.idl \
     XLegendSymbolProvider.idl \
-    XPlotter.idl \
     XRegressionCurve.idl \
     XRegressionCurveCalculator.idl \
     XRegressionCurveContainer.idl \
@@ -101,9 +97,6 @@ IDLFILES= \
     XTitle.idl \
     XTitled.idl \
     XTransformation.idl \
-    XUndoManager.idl \
-    XUndoSupplier.idl \
-    XUndoHelper.idl
 
 # --- Targets ------------------------------------------------------
 

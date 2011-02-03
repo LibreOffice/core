@@ -8,6 +8,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\accessibility
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tree
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\beans
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge\oleautomation
@@ -159,6 +160,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\msforms
 ..\%__SRC%\inc\offuh\com\sun\star\awt\tree\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tree\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\awt\grid\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\awt\grid\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\grid\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\awt\tab\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\awt\tab\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\awt\tab\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\beans\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\beans\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\beans\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\beans\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\bridge\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\bridge\*.hdl
