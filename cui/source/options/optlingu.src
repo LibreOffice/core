@@ -354,11 +354,4 @@ QueryBox RID_SFXQB_DELDICT
     DefButton = WB_DEF_NO ;
     Message [ en-US ] = "Do you want to delete the dictionary?" ;
 };
- // RID_SFXQB_DEL_IGNORELIST ----------------------------------------------
-QueryBox RID_SFXQB_DEL_IGNORELIST
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "Do you want to delete the ignore list?" ;
-};
  // ******************************************************************* EOF

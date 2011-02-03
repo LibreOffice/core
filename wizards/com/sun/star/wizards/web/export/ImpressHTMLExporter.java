@@ -28,6 +28,7 @@ package com.sun.star.wizards.web.export;
 
 import com.sun.star.io.IOException;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.event.Task;
 import com.sun.star.wizards.web.data.CGDocument;
 import com.sun.star.wizards.web.data.CGSession;
@@ -61,7 +62,7 @@ public class ImpressHTMLExporter extends ConfiguredExporter
         props.put("HomepageURL", getHomepageURL(session));
         props.put("UserText", source.cp_Title);
 
-        props.put("Width", getImageWidth(session));
+        props.put(PropertyNames.PROPERTY_WIDTH, getImageWidth(session));
 
         /*
          * props.put("BackColor",...);
