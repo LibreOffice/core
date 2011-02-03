@@ -36,7 +36,7 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/lang/XEventListener.hpp>
 
