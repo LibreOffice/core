@@ -28,6 +28,7 @@
 #define _CHART2_VPOLARANGLEAXIS_HXX
 
 #include "VPolarAxis.hxx"
+#include "Tickmarks_Equidistant.hxx"
 
 //.............................................................................
 namespace chart
@@ -46,11 +47,11 @@ public:
            , sal_Int32 nDimensionCount );
     virtual ~VPolarAngleAxis();
 
-    virtual void SAL_CALL createMaximumLabels();
-    virtual void SAL_CALL createLabels();
-    virtual void SAL_CALL updatePositions();
+    virtual void createMaximumLabels();
+    virtual void createLabels();
+    virtual void updatePositions();
 
-    virtual void SAL_CALL createShapes();
+    virtual void createShapes();
 
 private: //methods
     bool createTextShapes_ForAngleAxis(

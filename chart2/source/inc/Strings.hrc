@@ -30,8 +30,8 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 291
-//single free is: 134
+//next free is 293
+//single free: 139
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -165,6 +165,8 @@
 #define STR_STEP_GT_ZERO                    (RID_APP_START + 102)
 #define STR_BAD_LOGARITHM                   (RID_APP_START + 111)
 #define STR_MIN_GREATER_MAX                 (RID_APP_START + 101)
+#define STR_INVALID_INTERVALS               (RID_APP_START + 291)
+#define STR_INVALID_TIME_UNIT               (RID_APP_START + 292)
 
 //-----------------------------------------------------------------------------
 //for range didalog
@@ -310,6 +312,7 @@
 #define STR_ACTION_TOGGLE_GRID_HORZ         (RID_APP_START + 86)
 #define STR_ACTION_SCALE_TEXT               (RID_APP_START + 93)
 #define STR_ACTION_REARRANGE_CHART          (RID_APP_START + 94)
+#define STR_ACTION_EDIT_TEXT                (RID_APP_START + 95)
 
 #define STR_TIP_CHOOSECOLOR                 (RID_APP_START + 233)
 #define STR_TIP_LIGHTSOURCE_X               (RID_APP_START + 234)
@@ -324,7 +327,6 @@
 #define STR_TIP_DATAPOINT                   (RID_APP_START + 140)
 #define STR_TIP_DATAPOINT_INDEX             (RID_APP_START + 141)
 #define STR_TIP_DATAPOINT_VALUES            (RID_APP_START + 142)
-#define STR_TIP_CATEGORY_VALUE              (RID_APP_START + 139)
 
 //-----------------------------------------------------------------------------
 //warning and info boxes

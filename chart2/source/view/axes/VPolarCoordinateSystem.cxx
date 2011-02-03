@@ -107,15 +107,6 @@ void VPolarCoordinateSystem::createVAxisList(
             tFullAxisIndex aFullAxisIndex( nDimensionIndex, nAxisIndex );
             m_aAxisMap[aFullAxisIndex] = apVAxis;
 
-            //apVAxis->setExplicitScaleAndIncrement( this->getExplicitScale( nDimensionIndex, nAxisIndex ), this->getExplicitIncrement(nDimensionIndex, nAxisIndex) );
-            //apVAxis->initPlotter(m_xLogicTargetForAxes,m_xFinalTarget,m_xShapeFactory
-            //    , this->createCIDForAxis( xAxis, nDimensionIndex, nAxisIndex ) );
-            //VPolarAxis* pVPolarAxis = dynamic_cast< VPolarAxis* >( apVAxis.get() );
-            //if( pVPolarAxis )
-            //    pVPolarAxis->setIncrements( this->getExplicitIncrements( nDimensionIndex, nAxisIndex ) );
-            //if(2==nDimensionCount)
-            //    apVAxis->setTransformationSceneToScreen( m_aMatrixSceneToScreen );
-            //apVAxis->setScales( this->getExplicitScales( nDimensionIndex, nAxisIndex ), bSwapXAndY );
             apVAxis->initAxisLabelProperties(rFontReferenceSize,rMaximumSpaceForLabels);
         }
     }

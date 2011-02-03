@@ -55,20 +55,11 @@ public:
 
     virtual ~VCartesianAxis();
 
-    //-------------------------------------------------------------------------
-    // partly chart2::XPlotter
-    //-------------------------------------------------------------------------
+    virtual void createMaximumLabels();
+    virtual void createLabels();
+    virtual void updatePositions();
 
-    /*
-    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
-    */
-
-    virtual void SAL_CALL createMaximumLabels();
-    virtual void SAL_CALL createLabels();
-    virtual void SAL_CALL updatePositions();
-
-    virtual void SAL_CALL createShapes();
+    virtual void createShapes();
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos );
@@ -79,7 +70,7 @@ public:
     sal_Int32 getTextLevelCount() const;
 
     //-------------------------------------------------------------------------
-    virtual TickmarkHelper* createTickmarkHelper();
+    virtual TickFactory* createTickFactory();
 
     //-------------------------------------------------------------------------
     double      getLogicValueWhereMainLineCrossesOtherAxis() const;
@@ -122,16 +113,16 @@ protected: //methods
                        ::com::sun::star::drawing::XShapes >& xTarget
                      , TickIter& rTickIter
                      , AxisLabelProperties& rAxisLabelProperties
-                     , TickmarkHelper_2D* pTickmarkHelper
+                     , TickFactory_2D* pTickFactory
                      , sal_Int32 nScreenDistanceBetweenTicks );
 
-    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickmarkHelper_2D& rTickmarkHelper2D, bool bOnlyAtLabels );
+    void    createTickMarkLineShapes( ::std::vector< TickInfo >& rTickInfos, const TickmarkProperties& rTickmarkProperties, TickFactory_2D& rTickFactory2D, bool bOnlyAtLabels );
 
-    TickmarkHelper_2D* createTickmarkHelper2D();
+    TickFactory_2D* createTickFactory2D();
     void    hideIdenticalScreenValues(  ::std::vector< ::std::vector< TickInfo > >& rTickInfos ) const;
 
     void    doStaggeringOfLabels( const AxisLabelProperties& rAxisLabelProperties
-                            , TickmarkHelper_2D* pTickmarkHelper2D );
+                            , TickFactory_2D* pTickFactory2D );
     bool    isAutoStaggeringOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties
                             , bool bIsHorizontalAxis, bool bIsVerticalAxis );
     bool    isBreakOfLabelsAllowed( const AxisLabelProperties& rAxisLabelProperties, bool bIsHorizontalAxis );

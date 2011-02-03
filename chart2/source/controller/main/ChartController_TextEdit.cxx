@@ -29,6 +29,8 @@
 #include "precompiled_chart2.hxx"
 #include "ChartController.hxx"
 
+#include "ResId.hxx"
+#include "UndoGuard.hxx"
 #include "DrawViewWrapper.hxx"
 #include "ChartWindow.hxx"
 #include "TitleHelper.hxx"
@@ -36,6 +38,7 @@
 #include "macros.hxx"
 #include "ControllerLockGuard.hxx"
 #include "AccessibleTextHelper.hxx"
+#include "Strings.hrc"
 #include "chartview/DrawModelWrapper.hxx"
 
 #include <svx/svdotext.hxx>
@@ -81,7 +84,9 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     if(!pTextObj)
         return;
 
-    m_xUndoManager->preAction( getModel());
+    OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
+    m_pTextActionUndoGuard.reset( new UndoGuard(
+        String( SchResId( STR_ACTION_EDIT_TEXT ) ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
     //pOutliner->SetRefDevice(m_pChartWindow);
     //pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)pStyleSheetPool);
@@ -165,26 +170,11 @@ bool ChartController::EndTextEdit()
             TitleHelper::setCompleteString( aString, uno::Reference<
                 ::com::sun::star::chart2::XTitle >::query( xPropSet ), m_xCC );
 
-            try
-            {
-                m_xUndoManager->postAction( C2U("Edit Text") );
-            }
-            catch( uno::RuntimeException& e)
-            {
-                ASSERT_EXCEPTION( e );
-            }
+            OSL_ENSURE( m_pTextActionUndoGuard.get(), "ChartController::EndTextEdit: no TextUndoGuard!" );
+            if ( m_pTextActionUndoGuard.get() )
+                m_pTextActionUndoGuard->commit();
         }
-        else
-        {
-            try
-            {
-                m_xUndoManager->cancelAction();
-            }
-            catch ( uno::RuntimeException& e )
-            {
-                ASSERT_EXCEPTION( e );
-            }
-        }
+        m_pTextActionUndoGuard.reset();
     }
     return true;
 }

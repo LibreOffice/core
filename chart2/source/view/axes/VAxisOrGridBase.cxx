@@ -31,7 +31,7 @@
 #include "VAxisOrGridBase.hxx"
 #include "ShapeFactory.hxx"
 #include "CommonConverters.hxx"
-#include "TickmarkHelper.hxx"
+#include "Tickmarks.hxx"
 
 // header for define DBG_ASSERT
 #include <tools/debug.hxx>
@@ -57,7 +57,7 @@ VAxisOrGridBase::~VAxisOrGridBase()
 {
 }
 
-void SAL_CALL VAxisOrGridBase::setExplicitScaleAndIncrement(
+void VAxisOrGridBase::setExplicitScaleAndIncrement(
               const ExplicitScaleData& rScale
             , const ExplicitIncrementData& rIncrement )
             throw (uno::RuntimeException)
@@ -79,18 +79,9 @@ void VAxisOrGridBase::set3DWallPositions( CuboidPlanePosition eLeftWallPos, Cubo
     m_eBottomPos = eBottomPos;
 }
 
-TickmarkHelper* VAxisOrGridBase::createTickmarkHelper()
+TickFactory* VAxisOrGridBase::createTickFactory()
 {
-    TickmarkHelper* pRet=NULL;
-    if( 2==m_nDimension )
-    {
-        pRet = new TickmarkHelper( m_aScale, m_aIncrement );
-    }
-    else
-    {
-        pRet = new TickmarkHelper_3D( m_aScale, m_aIncrement );
-    }
-    return pRet;
+    return new TickFactory( m_aScale, m_aIncrement );
 }
 
 //.............................................................................

@@ -31,9 +31,8 @@
 #include "ScaleAutomatism.hxx"
 #include "ThreeDHelper.hxx"
 #include "ExplicitCategoriesProvider.hxx"
+#include "chartview/ExplicitScaleValues.hxx"
 
-#include <com/sun/star/chart2/ExplicitIncrementData.hpp>
-#include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XCoordinateSystem.hpp>
 #include "comphelper/implementationreference.hxx"
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -63,7 +62,7 @@ public:
     static VCoordinateSystem* createCoordinateSystem( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::chart2::XCoordinateSystem >& xCooSysModel );
 
-    virtual void SAL_CALL initPlottingTargets(
+    virtual void initPlottingTargets(
                   const ::com::sun::star::uno::Reference<
                         ::com::sun::star::drawing::XShapes >& xLogicTarget
                 , const ::com::sun::star::uno::Reference<
@@ -83,16 +82,16 @@ public:
     virtual ::com::sun::star::uno::Sequence< sal_Int32 > getCoordinateSystemResolution( const ::com::sun::star::awt::Size& rPageSize
                                     , const ::com::sun::star::awt::Size& rPageResolution );
 
-    ::com::sun::star::chart2::ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
-    ::com::sun::star::chart2::ExplicitIncrementData getExplicitIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
+    ExplicitScaleData getExplicitScale( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
+    ExplicitIncrementData getExplicitIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
 
     void setExplicitCategoriesProvider( ExplicitCategoriesProvider* /*takes ownership*/ );
     ExplicitCategoriesProvider* getExplicitCategoriesProvider();
 
     // returns a coplete scale set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
-    ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData > getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
+    ::std::vector< ExplicitScaleData > getExplicitScales( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
     // returns a coplete increment set for a given dimension and index; for example if nDimensionIndex==1 and nAxisIndex==2 you get returned the secondary x axis, main y axis and main z axis
-    ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitIncrementData > getExplicitIncrements( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
+    ::std::vector< ExplicitIncrementData > getExplicitIncrements( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex ) const;
 
     void addMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
     bool hasMinimumAndMaximumSupplier( MinimumAndMaximumSupplier* pMinimumAndMaximumSupplier );
@@ -101,8 +100,8 @@ public:
     void prepareScaleAutomatismForDimensionAndIndex( ScaleAutomatism& rScaleAutomatism, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
 
     void setExplicitScaleAndIncrement( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex
-        , const ::com::sun::star::chart2::ExplicitScaleData& rExplicitScale
-        , const ::com::sun::star::chart2::ExplicitIncrementData& rExplicitIncrement );
+        , const ExplicitScaleData& rExplicitScale
+        , const ExplicitIncrementData& rExplicitIncrement );
 
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
@@ -142,8 +141,6 @@ protected: //methods
         getGridListFromAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XAxis >& xAxis );
 
     VAxisBase* getVAxis( sal_Int32 nDimensionIndex, sal_Int32 nAxisIndex );
-
-    void prepareScaleAutomatism( ScaleAutomatism& rScaleAutomatism, double fMin, double fMax, sal_Int32 nDimIndex, sal_Int32 nAxisIndex );
 
     rtl::OUString createCIDForAxis( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::chart2::XAxis >& xAxis
@@ -194,11 +191,11 @@ protected: //member
     tVAxisMap m_aAxisMap;
 
 private:
-    ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitScaleData >     m_aExplicitScales;
-    ::com::sun::star::uno::Sequence< ::com::sun::star::chart2::ExplicitIncrementData > m_aExplicitIncrements;
+    std::vector< ExplicitScaleData >     m_aExplicitScales;
+    std::vector< ExplicitIncrementData > m_aExplicitIncrements;
 
-    typedef std::map< tFullAxisIndex, ::com::sun::star::chart2::ExplicitScaleData > tFullExplicitScaleMap;
-    typedef std::map< tFullAxisIndex, ::com::sun::star::chart2::ExplicitIncrementData > tFullExplicitIncrementMap;
+    typedef std::map< tFullAxisIndex, ExplicitScaleData > tFullExplicitScaleMap;
+    typedef std::map< tFullAxisIndex, ExplicitIncrementData > tFullExplicitIncrementMap;
 
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;

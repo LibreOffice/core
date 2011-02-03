@@ -46,11 +46,7 @@ public:
              , sal_Int32 nDimensionCount );
     virtual ~BubbleChart();
 
-    //-------------------------------------------------------------------------
-    // chart2::XPlotter
-    //-------------------------------------------------------------------------
-
-    virtual void SAL_CALL createShapes();
+    virtual void createShapes();
 
     virtual void addSeries( VDataSeries* pSeries, sal_Int32 zSlot = -1, sal_Int32 xSlot = -1,sal_Int32 ySlot = -1 );
 

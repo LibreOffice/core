@@ -93,6 +93,8 @@ public:
     */
     double GetCellNumber( long nRow, USHORT nColumnId ) const;
 
+    bool isDateString( rtl::OUString aInputString, double& fOutDateValue );
+
     // Window
     virtual void Resize();
 
