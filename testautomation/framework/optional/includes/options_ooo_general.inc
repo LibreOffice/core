@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : joerg.skottke@oracle.com
+'* owner : gregor.hartmann@oracle.com
 '*
 '* short description : 1. test for general group userdata
 '*

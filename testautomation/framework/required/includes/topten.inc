@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@oracle.com
+'* owner : gregor.hartmann@oracle.com
 '*
 '* short description : Smoke test (load/save/clipboard)
 '*
@@ -65,7 +65,6 @@ testcase Top_ten_test
 
     dim sUserWorkDirectory as string
     dim sFilename_native as String
-    dim sFilename_export as String
     dim sFilter_native as string
     dim sFilter_export as String
     dim bExportFile as boolean
@@ -78,19 +77,15 @@ testcase Top_ten_test
     ' set the filenames and their filters. HTML is not exported
     if ( gApplication = "HTML" ) then
         sFilename_native = "ls_test.html"
-        sFilename_export = "ls_test.htm"  
         bExportFile      = FALSE      
     else
         sFilename_native = "ls_test" & hGetSuffix( "current" )
-        sFilename_export = "ls_test" & hGetSuffix( "569" )
     endif
     
     printlog( "File (current): " & sFilename_native )
-    printlog( "File (src569).: " & sFilename_export )
     
     ' Delete the workfiles, they might have been left over by prior incomplete testrun
     hDeleteFile( sUserWorkDirectory & sFilename_native )
-    hDeleteFile( sUserWorkDirectory & sFilename_export )
     
     ' Set the API filternames for the current application (native XML format)
     select case gApplication
@@ -113,45 +108,16 @@ testcase Top_ten_test
     printlog( "Save (default-fileformat): " & sFilename_native )
     call hFileSaveAsKill ( sUserWorkDirectory & sFilename_native )
     
-    if ( bExportFile ) then
-    
-        ' Set the API filternames for the current application (StarOffice 5.2 binary format)
-        select case gApplication
-        case "WRITER"          : sFilter_export = "StarWriter 5.0"
-        case "CALC"            : sFilter_export = "StarCalc 5.0"
-        case "DRAW"            : sFilter_export = "StarDraw 5.0"
-        case "IMPRESS"         : sFilter_export = "StarImpress 5.0"
-        case "MATH"            : sFilter_export = "StarMath 5.0"
-        case "MASTERDOCUMENT"  : sFilter_export = "StarWriter 5.0/GlobalDocument"
-        case else              : warnlog "Invalid gApplication: " & gApplication 
-        end select
-        
-        printlog( "Save (5.2-fileformat): " & sFilename_export )
-        hFileSaveAsWithFilterKill( sUserWorkDirectory & sFilename_export , sFilter_export )
+    FileClose
 
-        printlog( "Close" )
-        FileClose
-
-        ' There should be no alien warning
-        kontext "active"
-        If ( active.exists( 1 ) ) then
-            warnlog( "Unexpected messagebox: '" & active.getText & "'" )
-            Active.Yes
-        else
-            printlog( "No more alien warning on closing the document. Good." )
-        endif
-    else
-        FileClose
-
-        kontext "active"
-        if ( Active.Exists( 1 ) ) then
-            warnlog( "Unexpected Active after saving: '" & active.getText & "'" )
-            try
-                Active.Yes()
-            catch
-                Active.No()
-            endcatch
-        endif
+    kontext "active"
+    if ( Active.Exists( 1 ) ) then
+        warnlog( "Unexpected Active after saving: '" & active.getText & "'" )
+        try
+            Active.Yes()
+        catch
+            Active.No()
+        endcatch
     endif
 
     printlog( "Load (default-fileformat): " & sFilename_native )
@@ -167,60 +133,7 @@ testcase Top_ten_test
     printlog( "Close" )
     FileClose
 
-    if ( bExportFile ) then
-    
-        printlog( "Load (5.2-fileformat): " & sFilename_export )
-        call hFileOpen (sUserWorkDirectory & sFilename_export)
-        
-        if ( gApplication = "MATH" AND iSprache = 84 AND gPlatform="lin" ) then
-            try
-                kontext "DocumentMath"
-                DocumentMath.MouseDown(50,50)
-                DocumentMath.MouseUp(50,50)
-                qaErrorLog( "Use workaround focus problem for math and language vi/84" )
-                ' Needed by AndreSchnabel, not manual reproduceable, only with TestTool
-            catch
-                qaErrorLog( "Workaround focus problem failed." )
-            endcatch
-        endif
-        
-        ' Modify the export document to trigger the alien warning on next save
-        printlog( "Change the document" )
-        hChangeDoc()
-        
-        printlog( "Save" )
-        FileSave
-
-        Kontext "AlienWarning"
-        if ( AlienWarning.exists( 3 ) ) then
-            printlog( "Closing expected alien warning. Good." )
-            AlienWarning.OK()
-        else
-            warnlog( "Alien warning is missing" )
-        endif
-
-        kontext "active"
-        if ( Active.Exists( 3 ) ) then
-            warnlog(  "Unexpected messagebox: '" & active.getText & "'" )
-            Active.yes
-        else
-            printlog( "No unexpected messages on save. Good." )
-        endif
-
-        printlog( "Close" )
-        FileClose
-
-        kontext "active"
-        if ( Active.Exists() ) then
-            warnlog( "Unexpected messagebox: '" & active.getText & "'" )
-            Active.Yes()
-        else
-            printlog( "No more alien warning to close. Good." )
-        endif
-    endif
-    
     hDeleteFile( sUserWorkDirectory & sFilename_native )
-    hDeleteFile( sUserWorkDirectory & sFilename_export )
     
 endcase
 
