@@ -900,6 +900,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
         pColumn     = parseTree->getChild(0);                        // Match Item
         pAtom       = pPart2->getChild(parseTree->count()-2);     // Match String
         pOptEscape  = pPart2->getChild(parseTree->count()-1);     // Opt Escape Rule
+        (void)pOptEscape;
         const bool bNot = SQL_ISTOKEN(pPart2->getChild(0), NOT);
 
         if (!(pAtom->getNodeType() == SQL_NODE_STRING ||

@@ -119,6 +119,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
 
         pWhereClause    = pTableExp->getChild(1);
         pOrderbyClause  = pTableExp->getChild(4);
+        (void)pOrderbyClause;
     }
     else if (SQL_ISRULE(pSQLParseNode,update_statement_searched))
     {

@@ -900,6 +900,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 if ( pParams->count() )
                 {
                     nLen = pParams->getChild(1)->getTokenValue().toInt32();
+                    (void)nLen;
                 }
             }
             else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
