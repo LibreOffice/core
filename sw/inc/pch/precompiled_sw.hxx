@@ -687,7 +687,6 @@
 #include "svtools/svtabbx.hxx"
 #include "svtools/svtreebx.hxx"
 #include "unotools/syslocale.hxx"
-#include "svtools/templdlg.hxx"
 #include "svtools/textview.hxx"
 #include "svtools/transfer.hxx"
 #include "svtools/txtattr.hxx"
