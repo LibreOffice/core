@@ -146,7 +146,7 @@ bool Options_Impl::initOptions_Impl(std::vector< std::string > & rArgs)
         case 'f':
         case 'F':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", option.c_str());
                 }
@@ -156,7 +156,7 @@ bool Options_Impl::initOptions_Impl(std::vector< std::string > & rArgs)
         case 'h':
         case '?':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", option.c_str());
                 }

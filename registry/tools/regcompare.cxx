@@ -208,7 +208,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         case 'f':
         case 'F':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
@@ -218,7 +218,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         case 'c':
         case 'C':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
@@ -228,7 +228,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         case 't':
         case 'T':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
@@ -238,7 +238,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         case 'u':
         case 'U':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
@@ -248,7 +248,7 @@ bool Options_Impl::initOptions_Impl (std::vector< std::string > & rArgs)
         case 'h':
         case '?':
             {
-                if ((*first)[2] != 0)
+                if ((*first).size() > 2)
                 {
                     return badOption("invalid", (*first).c_str());
                 }
