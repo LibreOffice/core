@@ -47,11 +47,18 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#define IMGTEXTSPACE    2
-#define EXTRAFONTSIZE   5
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
+
+#define IMGINNERTEXTSPACE 2
+#define IMGOUTERTEXTSPACE 5
+#define EXTRAFONTSIZE 5
+#define MAXPREVIEWWIDTH 150
 
 static sal_Unicode aImplSymbolFontText[] = {0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
 static sal_Unicode aImplStarSymbolText[] = {0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
+
+using namespace ::com::sun::star;
 
 // ========================================================================
 // ColorListBox
@@ -846,50 +853,106 @@ void FontNameBox::ImplCalcUserItemSize()
     Size aUserItemSz;
     if ( mbWYSIWYG && mpFontList )
     {
-        USHORT nMaxLen = 0;
-        BOOL bSymbolFont = FALSE;
-        BOOL bStarSymbol = FALSE;
-        for ( USHORT n = GetEntryCount(); n; )
-        {
-            ImplFontNameListData* pData = mpFontList->GetObject( --n );
-            XubString aFontName = pData->maInfo.GetName();
-            if ( aFontName.Len() > nMaxLen )
-                nMaxLen = aFontName.Len();
-            if ( pData->maInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-                bSymbolFont = TRUE;
-            // starsymbol is a unicode font, but gets WYSIWIG symbols
-            if( aFontName.EqualsIgnoreCaseAscii( "starsymbol" )
-            ||  aFontName.EqualsIgnoreCaseAscii( "opensymbol" ) )
-                bSymbolFont = bStarSymbol = TRUE;
-        }
-
-        // guess maximimum width
-        Size aOneCharSz( GetTextWidth( String( 'X' ) ), GetTextHeight() );
-        Size aSz( aOneCharSz );
-        aSz.Width() *= nMaxLen;
-        // only XX% of width, because ListBox calculates the normal width...
-        aSz.Width() *= 1;
-        aSz.Width() /= 10;
-        if ( bSymbolFont )
-        {
-            int nLength = SAL_N_ELEMENTS(aImplSymbolFontText) - 1;
-            int nLength2 = SAL_N_ELEMENTS(aImplStarSymbolText) - 1;
-            if( bStarSymbol && (nLength < nLength2) )
-                nLength = nLength2;
-            aSz.Width() += aOneCharSz.Width() * nLength;
-        }
-        aSz.Height() *= 14;
-        aSz.Height() /= 10;
-        aUserItemSz = aSz;
+        aUserItemSz = Size(MAXPREVIEWWIDTH, GetTextHeight() );
+        aUserItemSz.Height() *= 16;
+        aUserItemSz.Height() /= 10;
     }
     if ( mbSymbols )
     {
         Size aSz = maImageScalableFont.GetSizePixel();
-        aUserItemSz.Width() += aSz.Width() + IMGTEXTSPACE;
+        aUserItemSz.Width() += aSz.Width() + IMGINNERTEXTSPACE;
+
+        if ( mbWYSIWYG && mpFontList )
+            aUserItemSz.Width() += IMGOUTERTEXTSPACE;
+
         if ( aSz.Height() > aUserItemSz.Height() )
             aUserItemSz.Height() = aSz.Height();
     }
     SetUserItemSize( aUserItemSz );
+}
+
+#define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
+
+namespace
+{
+    rtl::OUString makeRepresentativeSymbolText(bool bOpenSymbol, OutputDevice &rDevice)
+    {
+        rtl::OUString sSampleText;
+
+        FontCharMap aFontCharMap;
+        bool bHasCharMap = rDevice.GetFontCharMap( aFontCharMap );
+        if( bHasCharMap )
+        {
+            // use some sample characters available in the font
+            sal_Unicode aText[8];
+
+            // start just above the PUA used by most symbol fonts
+            sal_uInt32 cNewChar = 0xFF00;
+    #ifdef QUARTZ
+            // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
+            if( !bOpenSymbol )
+                cNewChar = 0x0192;
+    #endif
+
+            const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
+            int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
+            if( nSkip > 10 )
+                nSkip = 10;
+            else if( nSkip <= 0 )
+                nSkip = 1;
+            for( int i = 0; i < nMaxCount; ++i )
+            {
+                sal_uInt32 cOldChar = cNewChar;
+                for( int j = nSkip; --j >= 0; )
+                    cNewChar = aFontCharMap.GetPrevChar( cNewChar );
+                if( cOldChar == cNewChar )
+                    break;
+                aText[ i ] = static_cast<sal_Unicode>(cNewChar); // TODO: support UCS4 samples
+                aText[ i+1 ] = 0;
+            }
+
+            sSampleText = rtl::OUString(aText);
+        }
+        else
+        {
+            const sal_Unicode* pText = aImplSymbolFontText;
+            if( bOpenSymbol )
+                pText = aImplStarSymbolText;
+            sSampleText = rtl::OUString(pText);
+        }
+
+        return sSampleText;
+    }
+
+    long shrinkFontToFit(rtl::OUString &rSampleText, long nH, Font &rFont, OutputDevice &rDevice, Rectangle &rTextRect)
+    {
+        long nWidth = 0;
+
+        Size aSize( rFont.GetSize() );
+
+        //Make sure it fits in the available height
+        while (aSize.Height() > 0)
+        {
+            if (!rDevice.GetTextBoundRect(rTextRect, rSampleText, 0, 0))
+                break;
+            if (rTextRect.GetHeight() <= nH)
+            {
+                nWidth = rTextRect.GetWidth();
+                break;
+            }
+
+            aSize.Height() -= EXTRAFONTSIZE;
+            rFont.SetSize(aSize);
+            rDevice.SetFont(rFont);
+        }
+
+        return nWidth;
+    }
+}
+
+bool isUnsuitableSize(Rectangle &rTextRect, long nBoxHeight)
+{
+    return (rTextRect.GetHeight() > nBoxHeight || rTextRect.GetHeight() <= 0 || rTextRect.GetWidth() <= 0);
 }
 
 // -------------------------------------------------------------------
@@ -905,7 +968,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
     if ( mbSymbols )
     {
-        nX += IMGTEXTSPACE;
+        nX += IMGINNERTEXTSPACE;
         Image* pImg = NULL;
         if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
             pImg = &maImagePrinterFont;
@@ -926,7 +989,7 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
     if ( mbWYSIWYG && mpFontList )
     {
-        nX += IMGTEXTSPACE;
+        nX += IMGOUTERTEXTSPACE;
 
         bool bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL)
                               || rInfo.GetName().EqualsIgnoreCaseAscii("cmsy10")
@@ -951,15 +1014,6 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
                               || rInfo.GetName().EqualsIgnoreCaseAscii( "opensymbol" );
         bSymbolFont |= bOpenSymbol;
 
-        if( bSymbolFont )
-        {
-            String aText( rInfo.GetName() );
-            aText.AppendAscii( "  " );
-            Point aPos( nX, aTopLeft.Y() + (nH-rUDEvt.GetDevice()->GetTextHeight())/2 );
-            rUDEvt.GetDevice()->DrawText( aPos, aText );
-            nX += rUDEvt.GetDevice()->GetTextWidth( aText );
-        }
-
         Color aTextColor = rUDEvt.GetDevice()->GetTextColor();
         Font aOldFont( rUDEvt.GetDevice()->GetFont() );
         Size aSize( aOldFont.GetSize() );
@@ -969,62 +1023,79 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         rUDEvt.GetDevice()->SetFont( aFont );
         rUDEvt.GetDevice()->SetTextColor( aTextColor );
 
-        FontCharMap aFontCharMap;
-        bool bHasCharMap = rUDEvt.GetDevice()->GetFontCharMap( aFontCharMap );
+        bool bUsingCorrectFont = true;
+        Rectangle aTextRect;
 
-        String aString;
-        if( !bSymbolFont )
-        {
-              // preview the font name
-            aString = rInfo.GetName();
+        // Preview the font name
+        rtl::OUString sFontName = rInfo.GetName();
 
-            // reset font if the name cannot be display in the preview font
-            if( STRING_LEN != rUDEvt.GetDevice()->HasGlyphs( aFont, aString ) )
-                rUDEvt.GetDevice()->SetFont( aOldFont );
-        }
-        else if( bHasCharMap )
-        {
-            // use some sample characters available in the font
-            sal_Unicode aText[8];
-
-            // start just above the PUA used by most symbol fonts
-            sal_uInt32 cNewChar = 0xFF00;
-#ifdef QUARTZ
-            // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
-            if( !bOpenSymbol )
-                cNewChar = 0x0192;
-#endif
-            const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
-            int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
-            if( nSkip > 10 )
-                nSkip = 10;
-            else if( nSkip <= 0 )
-                nSkip = 1;
-            for( int i = 0; i < nMaxCount; ++i )
-            {
-                sal_uInt32 cOldChar = cNewChar;
-                for( int j = nSkip; --j >= 0; )
-                    cNewChar = aFontCharMap.GetPrevChar( cNewChar );
-                if( cOldChar == cNewChar )
-                    break;
-                aText[ i ] = static_cast<sal_Unicode>(cNewChar); // TODO: support UCS4 samples
-                aText[ i+1 ] = 0;
-            }
-
-            aString = String( aText );
-        }
+        //If it shouldn't or can't draw its own name because it doesn't have the glyphs
+        if (bSymbolFont || (STRING_LEN != rUDEvt.GetDevice()->HasGlyphs(aFont, sFontName)))
+            bUsingCorrectFont = false;
         else
         {
-            const sal_Unicode* pText = aImplSymbolFontText;
-            if( bOpenSymbol )
-                pText = aImplStarSymbolText;
-
-            aString = String( pText );
+            //Make sure it fits in the available height, shrinking the font if necessary
+            bUsingCorrectFont = shrinkFontToFit(sFontName, nH, aFont, *rUDEvt.GetDevice(), aTextRect) != 0;
         }
 
-        long nTextHeight = rUDEvt.GetDevice()->GetTextHeight();
-        Point aPos( nX, aTopLeft.Y() + (nH-nTextHeight)/2 );
-        rUDEvt.GetDevice()->DrawText( aPos, aString );
+        if (!bUsingCorrectFont)
+        {
+            rUDEvt.GetDevice()->SetFont(aOldFont);
+            rUDEvt.GetDevice()->GetTextBoundRect(aTextRect, sFontName, 0, 0);
+        }
+
+        long nTextHeight = aTextRect.GetHeight();
+        long nDesiredGap = (nH-nTextHeight)/2;
+        long nVertAdjust = nDesiredGap - aTextRect.Top();
+//      long nHortAdjust = 0 - aTextRect.Left();
+        Point aPos( nX, aTopLeft.Y() + nVertAdjust );
+        rUDEvt.GetDevice()->DrawText( aPos, sFontName );
+        Rectangle aHack(aPos.X(), aTopLeft.Y() + nH/2 - 5, aPos.X() + 40, aTopLeft.Y() + nH/2 + 5);
+        long nTextX = aPos.X() + aTextRect.GetWidth();
+
+        if (!bUsingCorrectFont)
+            rUDEvt.GetDevice()->SetFont( aFont );
+
+        rtl::OUString sSampleText;
+        bool bHasSampleTextGlyphs=false;
+
+        //If we're a symbol font, or for some reason the font still couldn't
+        //render something representative of what it would like to render then
+        //make up some semi-random text that it *can* display
+        if (bSymbolFont || !bUsingCorrectFont)
+        {
+            sSampleText = makeRepresentativeSymbolText(bOpenSymbol, *rUDEvt.GetDevice());
+            bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
+        }
+
+        if (sSampleText.getLength() && bHasSampleTextGlyphs)
+        {
+            const Size &rItemSize = rUDEvt.GetDevice()->GetOutputSize();
+            //leave a little border at the edge
+            long nSpace = rItemSize.Width() - nTextX - IMGOUTERTEXTSPACE;
+            if (nSpace >= 0)
+            {
+                //Make sure it fits in the available height, and get how wide that would be
+                long nWidth = shrinkFontToFit(sSampleText, nH, aFont, *rUDEvt.GetDevice(), aTextRect);
+                //Chop letters off until it fits in the available width
+                while (nWidth > nSpace || nWidth > MAXPREVIEWWIDTH)
+                {
+                    sSampleText = sSampleText.copy(0, sSampleText.getLength()-1);
+                    nWidth = rUDEvt.GetDevice()->GetTextBoundRect(aTextRect, sSampleText, 0, 0) ?
+                             aTextRect.GetWidth() : 0;
+                }
+
+                //center the text on the line
+                if (sSampleText.getLength() && nWidth)
+                {
+                    nTextHeight = aTextRect.GetHeight();
+                    nDesiredGap = (nH-nTextHeight)/2;
+                    nVertAdjust = nDesiredGap - aTextRect.Top();
+                    aPos = Point(nTextX + nSpace - nWidth, aTopLeft.Y() + nVertAdjust);
+                    rUDEvt.GetDevice()->DrawText( aPos, sSampleText );
+                }
+            }
+        }
 
         rUDEvt.GetDevice()->SetFont( aOldFont );
         DrawEntry( rUDEvt, FALSE, FALSE);   // draw seperator
