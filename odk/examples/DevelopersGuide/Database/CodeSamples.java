@@ -151,33 +151,6 @@ public class CodeSamples
         if(xDriverManager != null)
         {
             // first create the needed url
-            String adabasURL = "sdbc:adabas::MYDB0";
-            // second create the necessary properties
-            com.sun.star.beans.PropertyValue [] adabasProps = new com.sun.star.beans.PropertyValue[]
-            {
-                new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
-                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
-            };
-            // now create a connection to adabas
-            con = xDriverManager.getConnectionWithInfo(adabasURL,adabasProps);
-        }
-        return con;
-    }
-
-    // uses the driver manager to create a new connection and dispose it.
-    public static XConnection openToJDBC() throws com.sun.star.uno.Exception
-    {
-        XConnection con = null;
-        // create the DriverManager
-        Object driverManager =
-            xMCF.createInstanceWithContext("com.sun.star.sdbc.DriverManager",
-                                           xContext);
-        // query for the interface
-        com.sun.star.sdbc.XDriverManager xDriverManager;
-        xDriverManager = (XDriverManager)UnoRuntime.queryInterface(XDriverManager.class,driverManager);
-        if(xDriverManager != null)
-        {
-            // first create the needed url
             String url = "jdbc:mysql://localhost:3306/TestTables";
             // second create the necessary properties
             com.sun.star.beans.PropertyValue [] props = new com.sun.star.beans.PropertyValue[]
@@ -186,7 +159,7 @@ public class CodeSamples
                 new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
                 new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.gjt.mm.mysql.Driver",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
-            // now create a connection to adabas
+            // now create a connection to mysql
             con = xDriverManager.getConnectionWithInfo(url,props);
         }
         return con;
@@ -198,7 +171,7 @@ public class CodeSamples
         XConnection con = null;
         // create the Driver with the implementation name
         Object aDriver =
-            xMCF.createInstanceWithContext("com.sun.star.comp.sdbcx.adabas.ODriver",
+            xMCF.createInstanceWithContext("org.openoffice.comp.drivers.MySQL.Driver",
                                            xContext);
         // query for the interface
         com.sun.star.sdbc.XDriver xDriver;
@@ -206,15 +179,16 @@ public class CodeSamples
         if(xDriver != null)
         {
             // first create the needed url
-            String adabasURL = "sdbc:adabas::MYDB0";
+            String url = "jdbc:mysql://localhost:3306/TestTables";
             // second create the necessary properties
-            com.sun.star.beans.PropertyValue [] adabasProps = new com.sun.star.beans.PropertyValue[]
+            com.sun.star.beans.PropertyValue [] props = new com.sun.star.beans.PropertyValue[]
             {
                 new com.sun.star.beans.PropertyValue("user",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
-                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE)
+                new com.sun.star.beans.PropertyValue("password",0,"test1",com.sun.star.beans.PropertyState.DIRECT_VALUE),
+                                new com.sun.star.beans.PropertyValue("JavaDriverClass",0,"org.gjt.mm.mysql.Driver",com.sun.star.beans.PropertyState.DIRECT_VALUE)
             };
-            // now create a connection to adabas
-            con = xDriver.connect(adabasURL,adabasProps);
+            // now create a connection to mysql
+            con = xDriver.connect(url,props);
         }
         return con;
     }
