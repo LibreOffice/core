@@ -78,6 +78,8 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/helper/imageproducer \
     framework/source/fwe/helper/propertysetcontainer \
     framework/source/fwe/helper/titlehelper \
+    framework/source/fwe/helper/documentundoguard \
+    framework/source/fwe/helper/undomanagerhelper \
     framework/source/fwe/interaction/preventduplicateinteraction \
     framework/source/fwe/xml/eventsconfiguration \
     framework/source/fwe/xml/eventsdocumenthandler \

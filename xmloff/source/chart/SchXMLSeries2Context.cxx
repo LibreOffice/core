@@ -336,7 +336,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
                     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
                     {
                         if( aValue.equals( mrAxes[ nCurrent ].aName ) &&
-                            mrAxes[ nCurrent ].eClass == SCH_XML_AXIS_Y )
+                            mrAxes[ nCurrent ].eDimension == SCH_XML_AXIS_Y )
                         {
                             mpAttachedAxis = &( mrAxes[ nCurrent ] );
                         }
@@ -364,7 +364,7 @@ void SchXMLSeries2Context::StartElement( const uno::Reference< xml::sax::XAttrib
 
     if( mpAttachedAxis )
     {
-        if( mpAttachedAxis->nIndexInCategory > 0 )
+        if( mpAttachedAxis->nAxisIndex > 0 )
         {
             // secondary axis => property has to be set (primary is default)
             mnAttachedAxis = 2;
