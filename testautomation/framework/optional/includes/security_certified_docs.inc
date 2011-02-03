@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.co
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Load certified documents and verify the certificate
 '*

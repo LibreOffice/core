@@ -910,6 +910,7 @@ testcase tToolsUpdate
     Call wTypeKeys ("Dieser Text ist zur Aktualisierung")
     printlog " Insert / Indexes"
     InsertIndexes
+    sleep 1
 
     Kontext "Active"
     if ( Active.Exists( 2 ) ) then
@@ -918,7 +919,8 @@ testcase tToolsUpdate
             Active.Ok
         end if
     end if
-
+    Sleep 5
+    
     Kontext
     Active.Setpage TabVerzeichnisseVerzeichnis
 

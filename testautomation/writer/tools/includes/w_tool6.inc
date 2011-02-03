@@ -38,6 +38,10 @@ sub wOfficeRestart
     FileExit "SynchronMode", TRUE
 
     Call hStartTheOffice
+
+    ' Open new document
+    Call hNewDocument
+
 end sub
 
 '--------------------------------------------------------------

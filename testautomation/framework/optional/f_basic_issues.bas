@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : Joerg.Skottke@Sun.Com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Regression tests for especially annoying BASIC issues
 '*
