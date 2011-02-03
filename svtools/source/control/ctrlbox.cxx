@@ -47,9 +47,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/i18n/XBreakIterator.hpp>
-
 #define IMGINNERTEXTSPACE 2
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5
@@ -950,11 +947,6 @@ namespace
     }
 }
 
-bool isUnsuitableSize(Rectangle &rTextRect, long nBoxHeight)
-{
-    return (rTextRect.GetHeight() > nBoxHeight || rTextRect.GetHeight() <= 0 || rTextRect.GetWidth() <= 0);
-}
-
 // -------------------------------------------------------------------
 
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
@@ -1058,6 +1050,9 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 
         rtl::OUString sSampleText;
         bool bHasSampleTextGlyphs=false;
+
+        //TO-DO: for non-symbol fonts pull GPOS/GSUB features through vcl to
+        //and map to suitable strings for Arabic, Hebrew, etc fonts
 
         //If we're a symbol font, or for some reason the font still couldn't
         //render something representative of what it would like to render then
