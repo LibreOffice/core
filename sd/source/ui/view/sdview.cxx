@@ -1167,7 +1167,7 @@ bool View::isRecordingUndo() const
     if( mpDoc && mpDoc->IsUndoEnabled() )
     {
         sd::UndoManager* pUndoManager = mpDoc ? mpDoc->GetUndoManager() : 0;
-        return pUndoManager && pUndoManager->isInListAction();
+        return pUndoManager && pUndoManager->IsInListAction();
     }
     else
     {

@@ -915,7 +915,7 @@ void ViewShellManager::Implementation::UpdateShellStack (void)
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    SfxUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
         ? pTopMostShell->GetUndoManager()
         : NULL;
 
@@ -1015,7 +1015,7 @@ void ViewShellManager::Implementation::TakeShellsFromStack (const SfxShell* pShe
 
     // Remember the undo manager from the top-most shell on the stack.
     SfxShell* pTopMostShell = mrBase.GetSubShell(0);
-    SfxUndoManager* pUndoManager = (pTopMostShell!=NULL)
+    ::svl::IUndoManager* pUndoManager = (pTopMostShell!=NULL)
         ? pTopMostShell->GetUndoManager()
         : NULL;
 
