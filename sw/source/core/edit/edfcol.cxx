@@ -33,6 +33,7 @@
 #include <editeng/brkitem.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer SwTxtFmtColls
+#include <IDocumentUndoRedo.hxx>
 #include <edimp.hxx>    // fuer MACROS
 #include <ndtxt.hxx>
 #include <paratr.hxx>
@@ -41,7 +42,7 @@
 #include <viewopt.hxx>
 // <--
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 
 /*************************************
@@ -77,7 +78,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     SwRewriter aRewriter;
     aRewriter.AddRule(UNDO_ARG1, pLocal->GetName());
 
-    GetDoc()->StartUndo(UNDO_SETFMTCOLL, &aRewriter);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_SETFMTCOLL, &aRewriter);
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel(
@@ -87,7 +88,7 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
-    GetDoc()->EndUndo(UNDO_SETFMTCOLL, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_SETFMTCOLL, &aRewriter);
     EndAllAction();
 }
 // <--

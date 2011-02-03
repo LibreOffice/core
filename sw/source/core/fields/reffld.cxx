@@ -863,7 +863,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
-                pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
+                pTxtNd = pPos->nNode.GetNode().GetTxtNode();
                 *pStt = pPos->nContent.GetIndex();
                 if(pEnd)
                 {

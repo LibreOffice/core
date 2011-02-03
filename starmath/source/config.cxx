@@ -101,6 +101,10 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }
+    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, TRUE, &pItem) == SFX_ITEM_SET)
+    {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
+        SetSaveOnlyUsedSymbols( bVal );
+    }
 
     SaveOther();
 }
@@ -120,6 +124,7 @@ void SmConfig::ConfigToItemSet(SfxItemSet &rSet) const
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_PRINTFRAME), IsPrintFrame()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_AUTOREDRAW), IsAutoRedraw()));
     rSet.Put(SfxBoolItem(pPool->GetWhich(SID_NO_RIGHT_SPACES), IsIgnoreSpacesRight()));
+    rSet.Put(SfxBoolItem(pPool->GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), IsSaveOnlyUsedSymbols()));
 }
 
 

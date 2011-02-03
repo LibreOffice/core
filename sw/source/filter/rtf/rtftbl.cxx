@@ -181,7 +181,7 @@ void SwRTFParser::ReadTable( int nToken )
 
         // wenn schon in einer Tabellen, dann splitte oder benutze
         // die bisherigen Boxen weiter
-        bChkExistTbl = 0 != pDoc->GetNodes()[ pPam->GetPoint()->nNode ]->FindTableNode();
+        bChkExistTbl = 0 != pPam->GetPoint()->nNode.GetNode().FindTableNode();
     }
     else
     {
@@ -919,7 +919,7 @@ void SwRTFParser::GotoNextBox()
             // dann hinter die Tabelle
             pPam->Move( fnMoveForward, fnGoNode );
     }
-    else if( !pDoc->GetNodes()[ pPam->GetPoint()->nNode ]->IsCntntNode() )
+    else if (pPam->GetPoint()->nNode.GetNode().IsCntntNode())
         // dann in die vorherige ans Ende
         pPam->Move( fnMoveBackward, fnGoCntnt );
 }

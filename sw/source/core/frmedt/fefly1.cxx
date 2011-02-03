@@ -55,6 +55,7 @@
 #include <viewimp.hxx>
 #include <viscrs.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -707,7 +708,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     SwFlyFrmFmt *pRet;
     if( bMoveCntnt )
     {
-        GetDoc()->StartUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
         SwFmtAnchor* pOldAnchor = 0;
         sal_Bool bHOriChgd = sal_False, bVOriChgd = sal_False;
         SwFmtVertOrient aOldV;
@@ -765,9 +766,18 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                 // das verschieben von TabelleSelektion ist noch nicht
                 // Undofaehig - also darf das UmAnkern auch nicht
                 // aufgezeichnet werden.
-                sal_Bool bDoesUndo = GetDoc()->DoesUndo();
-                if( bDoesUndo && UNDO_INSLAYFMT == GetDoc()->GetUndoIds(NULL, NULL) )
-                    GetDoc()->DoUndo( sal_False );
+                bool const bDoesUndo =
+                    GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+                SwUndoId nLastUndoId(UNDO_EMPTY);
+                if (bDoesUndo &&
+                    GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0,
+                        & nLastUndoId))
+                {
+                    if (UNDO_INSLAYFMT == nLastUndoId)
+                    {
+                        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+                    }
+                }
 
                 ((SfxItemSet&)rSet).Put( *pOldAnchor );
 
@@ -777,11 +787,11 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                     ((SfxItemSet&)rSet).Put( aOldV );
 
                 GetDoc()->SetFlyFrmAttr( *pRet, (SfxItemSet&)rSet );
-                GetDoc()->DoUndo( bDoesUndo );
+                GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
             }
             delete pOldAnchor;
         }
-        GetDoc()->EndUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
     }
     else
         /* #109161# If called from a shell try to propagate an

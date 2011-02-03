@@ -50,6 +50,7 @@
 #include <unocrsr.hxx>
 #include <section.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <docary.hxx>
@@ -327,7 +328,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     //das muss jetzt sal_True liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
-    pDoc->StartUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
     if (!m_pImpl->m_sName.getLength())
     {
@@ -456,7 +457,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     // Undo-Klammerung hier beenden
-    pDoc->EndUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
 }
