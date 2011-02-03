@@ -211,7 +211,7 @@ static BOOL RemoveExtensionInRegistry( LPCSTR lpSubKey )
 
             // we will remove all key with an default value starting with ooostub but
             // we have to be careful about MSO keys
-            if ( strncmp( szBuffer, "LibreOffice.", 13 ) == 0 )
+            if ( strncmp( szBuffer, "opendocument.", 13 ) == 0 )
             {
                 if ( nSubKeys == 0 )
                 {
