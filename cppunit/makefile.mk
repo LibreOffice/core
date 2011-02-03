@@ -104,6 +104,7 @@ OUTDIR2INC = ooo-install/include/cppunit
 
 OUT2BIN = ooo-install/bin/DllPlugInTester.exe \
     ooo-install/bin/cygcppunit-1-12-1.dll
+OUT2LIB = ooo-install/lib/libcppunit.dll.a
 
 .INCLUDE: set_ext.mk
 .INCLUDE: target.mk
