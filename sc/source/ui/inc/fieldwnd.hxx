@@ -58,6 +58,14 @@ enum ScPivotFieldType
     PIVOTFIELDTYPE_SELECT           /// Selection window with all fields.
 };
 
+/** Type of an end tracking event. */
+enum ScPivotFieldEndTracking
+{
+    ENDTRACKING_SUSPEND,            /// Stop tracking in this window, but tracking still active (in another window).
+    ENDTRACKING_CANCEL,             /// Tracking has been cancelled.
+    ENDTRACKING_DROP                /// Tracking has ended, a field has been dropped.
+};
+
 // ============================================================================
 
 typedef ::std::pair< const ScPivotFuncData*, size_t > ScPivotFuncDataEntry;
@@ -145,12 +153,12 @@ public:
     /** Moves the selected field in front of the specified field. */
     bool                MoveSelectedField( size_t nInsertIndex );
 
-    /** Inserts an insertion cursor used for field tracking. */
+    /** Called from dialog when tracking starts in this field window. */
+    void                NotifyStartTracking();
+    /** Called from dialog while tracking in this field window. */
     void                NotifyTracking( const Point& rWindowPos );
-    /** Hides the insertion cursor used for field tracking. */
-    void                NotifyEndTracking();
-    /** Hides the insertion cursor used for field tracking and restores original scroll position. */
-    void                NotifyCancelTracking();
+    /** Called from dialog when tracking ends in this field window. */
+    void                NotifyEndTracking( ScPivotFieldEndTracking eEndType );
 
 protected:
     virtual void        Paint( const Rectangle& rRect );
@@ -180,13 +188,12 @@ private:
     /** Specifies how the selection cursor can move in the window. */
     enum MoveType { PREV_FIELD, NEXT_FIELD, PREV_LINE, NEXT_LINE, PREV_PAGE, NEXT_PAGE, FIRST_FIELD, LAST_FIELD };
 
-    /** Returns the index of the last existing and visible field for the passed scrolling offset. */
-    size_t              GetLastVisibleIndex( size_t nFirstVisIndex ) const;
-    /** Returns the scrolling offset needed to show the specified field as last field. */
-    size_t              GetFirstVisibleIndex( size_t nLastVisIndex ) const;
+    /** Calculates a scroll position to make the passed field visible. Tries to
+        stick to current scroll position if possible. */
+    size_t              RecalcVisibleIndex( size_t nSelectIndex ) const;
 
-    /** Sets selection to the specified field and adjusts scrolling position. */
-    void                SetSelection( size_t nSelectIndex, size_t nFirstVisIndex );
+    /** Sets selection to the specified field and changes scrolling position. */
+    void                SetSelectionUnchecked( size_t nSelectIndex, size_t nFirstVisIndex );
     /** Selects a field and adjusts scrolling position to make the field visible. */
     void                MoveSelection( size_t nSelectIndex );
     /** Sets selection to a new position relative to current. */
@@ -229,12 +236,15 @@ private:
     PointerStyle        meDropPointer;      /// Mouse pointer style for tracking over this window.
     size_t              mnColCount;         /// Number of field columns.
     size_t              mnRowCount;         /// Number of field rows.
+    size_t              mnLineSize;         /// Number of fields per line (depending on scrolling orientation).
+    size_t              mnPageSize;         /// Number of visible fields.
     size_t              mnFirstVisIndex;    /// Index of first visible field (scrolling offset).
     size_t              mnSelectIndex;      /// Currently selected field.
     size_t              mnInsCursorIndex;   /// Position of the insertion cursor.
     size_t              mnOldFirstVisIndex; /// Stores original scroll position during auto scrolling.
     size_t              mnAutoScrollDelay;  /// Initial counter before auto scrolling starts on tracking.
     bool                mbVertical;         /// True = sort fields vertically.
+    bool                mbIsTrackingSource; /// True = this field window is the source while tracking.
 };
 
 // ============================================================================

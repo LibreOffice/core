@@ -309,6 +309,8 @@ String ScPivotLayoutDlg::GetFuncString( USHORT& rnFuncMask, bool bIsValue )
 void ScPivotLayoutDlg::NotifyStartTracking( ScPivotFieldWindow& rSourceWindow )
 {
     mpTrackingWindow = &rSourceWindow;
+    mpDropWindow = 0;
+    rSourceWindow.NotifyStartTracking();
     StartTracking( STARTTRACK_BUTTONREPEAT );
     SetPointer( Pointer( rSourceWindow.GetDropPointerStyle() ) );
 }
@@ -397,42 +399,46 @@ void ScPivotLayoutDlg::Tracking( const TrackingEvent& rTEvt )
     if( pTargetWindow && (pTargetWindow->GetType() == PIVOTFIELDTYPE_SELECT) )
         pTargetWindow = 0;
 
-    // remove insertion cursor in old field window, if visible
-    if( mpDropWindow && (mpDropWindow != pTargetWindow) )
-        mpDropWindow->NotifyCancelTracking();
-    // draw insertion cursor in current field window
-    if( pTargetWindow )
-        pTargetWindow->NotifyTracking( rDialogPos - pTargetWindow->GetPosPixel() );
-    mpDropWindow = pTargetWindow;
+    // notify windows about tracking
+    if( mpDropWindow != pTargetWindow )
+    {
+        // tracking window changed
+        if( mpDropWindow )
+            mpDropWindow->NotifyEndTracking( ENDTRACKING_SUSPEND );
+        if( pTargetWindow )
+            pTargetWindow->NotifyStartTracking();
+        mpDropWindow = pTargetWindow;
+    }
+    if( mpDropWindow )
+        mpDropWindow->NotifyTracking( rDialogPos - pTargetWindow->GetPosPixel() );
 
     // end tracking: move or remove field
     if( rTEvt.IsTrackingEnded() )
     {
-        if( pTargetWindow )
+        bool bCancelled = rTEvt.IsTrackingCanceled();
+        if( mpDropWindow )
         {
-            if( rTEvt.IsTrackingCanceled() )
+            mpDropWindow->NotifyEndTracking( bCancelled ? ENDTRACKING_CANCEL : ENDTRACKING_DROP );
+            if( !bCancelled )
             {
-                pTargetWindow->NotifyCancelTracking();
-            }
-            else
-            {
-                pTargetWindow->NotifyEndTracking();
-                size_t nInsertIndex = pTargetWindow->GetDropIndex( rDialogPos - pTargetWindow->GetPosPixel() );
-                bool bMoved = MoveField( *mpTrackingWindow, *pTargetWindow, nInsertIndex, true );
+                size_t nInsertIndex = mpDropWindow->GetDropIndex( rDialogPos - mpDropWindow->GetPosPixel() );
+                bool bMoved = MoveField( *mpTrackingWindow, *mpDropWindow, nInsertIndex, true );
                 // focus drop window, if move was successful, otherwise back to source window
-                GrabFieldFocus( bMoved ? *pTargetWindow : *mpTrackingWindow );
+                GrabFieldFocus( bMoved ? *mpDropWindow : *mpTrackingWindow );
             }
         }
         else
         {
             // drop target invalid (outside field windows): remove tracked field
-            if( !rTEvt.IsTrackingCanceled() )
+            if( !bCancelled )
                 mpTrackingWindow->RemoveSelectedField();
             // focus source window (or another window, if it is empty now)
             GrabFieldFocus( *mpTrackingWindow );
         }
         eTargetPointer = POINTER_ARROW;
-        mpTrackingWindow = 0;
+        if( mpTrackingWindow != mpDropWindow )
+            mpTrackingWindow->NotifyEndTracking( ENDTRACKING_CANCEL );
+        mpTrackingWindow = mpDropWindow = 0;
     }
     SetPointer( eTargetPointer );
 }

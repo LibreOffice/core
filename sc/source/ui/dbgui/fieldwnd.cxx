@@ -51,10 +51,10 @@ using ::rtl::OUString;
 namespace {
 
 /** Line width for insertion cursor in pixels. */
-const long CURSOR_WIDTH     = 3;
+const long CURSOR_WIDTH             = 3;
 
 /** Number of tracking events before auto scrolling starts. */
-const size_t TRACKING_DELAY = 20;
+const size_t INITIAL_TRACKING_DELAY = 20;
 
 } // namespace
 
@@ -119,9 +119,13 @@ ScPivotFieldWindow::ScPivotFieldWindow( ScPivotLayoutDlg* pDialog, const ResId& 
     mnInsCursorIndex( PIVOTFIELD_INVALID ),
     mnOldFirstVisIndex( 0 ),
     mnAutoScrollDelay( 0 ),
-    mbVertical( eFieldType == PIVOTFIELDTYPE_SELECT )
+    mbVertical( eFieldType == PIVOTFIELDTYPE_SELECT ),
+    mbIsTrackingSource( false )
 {
     SetHelpId( pcHelpId );
+
+    mnLineSize = mbVertical ? mnRowCount : mnColCount;
+    mnPageSize = mnColCount * mnRowCount;
 
     // a single field is 36x12 appfont units
     maFieldSize = LogicToPixel( Size( 36, 12 ), MapMode( MAP_APPFONT ) );
@@ -147,9 +151,9 @@ ScPivotFieldWindow::ScPivotFieldWindow( ScPivotLayoutDlg* pDialog, const ResId& 
         aScrollBarSize.Width() = GetSettings().GetStyleSettings().GetScrollBarSize();
     }
     mrScrollBar.SetPosSizePixel( aScrollBarPos, aScrollBarSize );
-    mrScrollBar.SetLineSize( static_cast< long >( mbVertical ? mnRowCount : 1 ) );
-    mrScrollBar.SetPageSize( static_cast< long >( mnColCount * mnRowCount ) );
-    mrScrollBar.SetVisibleSize( static_cast< long >( mnColCount * mnRowCount ) );
+    mrScrollBar.SetLineSize( 1 );
+    mrScrollBar.SetPageSize( static_cast< long >( mbVertical ? mnColCount : mnRowCount ) );
+    mrScrollBar.SetVisibleSize( static_cast< long >( mbVertical ? mnColCount : mnRowCount ) );
     mrScrollBar.SetScrollHdl( LINK( this, ScPivotFieldWindow, ScrollHdl ) );
     mrScrollBar.SetEndScrollHdl( LINK( this, ScPivotFieldWindow, ScrollHdl ) );
 }
@@ -336,13 +340,9 @@ bool ScPivotFieldWindow::RemoveField( size_t nRemoveIndex )
     {
         // remove the field from the vector and notify accessibility object
         RemoveFieldUnchecked( nRemoveIndex );
-        // adjust selection and scroll position
+        // adjust selection and scroll position, if last field is removed
         if( !maFields.empty() )
-        {
-            size_t nSelectIndex = ::std::min< size_t >( mnSelectIndex, maFields.size() - 1 );
-            size_t nFirstVisIndex = ::std::min< size_t >( mnFirstVisIndex, GetFirstVisibleIndex( maFields.size() - 1 ) );
-            SetSelection( nSelectIndex, nFirstVisIndex );
-        }
+            MoveSelection( (mnSelectIndex < maFields.size()) ? mnSelectIndex : (maFields.size() - 1) );
         Invalidate();
         return true;
     }
@@ -398,67 +398,60 @@ bool ScPivotFieldWindow::MoveSelectedField( size_t nInsertIndex )
     return MoveField( mnSelectIndex, nInsertIndex );
 }
 
+void ScPivotFieldWindow::NotifyStartTracking()
+{
+    // rescue old scrolling index, to be able to restore it when tracking is cancelled
+    mnOldFirstVisIndex = mnFirstVisIndex;
+}
+
 void ScPivotFieldWindow::NotifyTracking( const Point& rWindowPos )
 {
-    /*  Start tracking: rescue old scrolling index, to be able to restore it
-        when tracking is cancelled. */
-    if( mnInsCursorIndex == PIVOTFIELD_INVALID )
-        mnOldFirstVisIndex = mnFirstVisIndex;
-
     size_t nFieldIndex = GetDropIndex( rWindowPos );
-    if( nFieldIndex == mnInsCursorIndex )
-    {
-        // insertion cursor unchanged: auto scrolling
-        if( mnAutoScrollDelay < TRACKING_DELAY )
-        {
-            ++mnAutoScrollDelay;
-        }
-        else
-        {
-            // check if tracking happens on first or last field
-            size_t nLastVisIndex = GetLastVisibleIndex( mnFirstVisIndex );
-            long nScrollDelta = 0;
-            if( (mnFirstVisIndex > 0) && (mnInsCursorIndex == mnFirstVisIndex) )
-                nScrollDelta = -1;
-            else if( (nLastVisIndex + 1 < maFields.size()) && (mnInsCursorIndex == nLastVisIndex + 1) )
-                nScrollDelta = 1;
 
-            if( nScrollDelta != 0 )
-            {
-                // update mnInsCursorIndex, so it will be drawn at the same position after scrolling
-                mnInsCursorIndex += nScrollDelta;
-                mnFirstVisIndex += nScrollDelta;
-                mrScrollBar.SetThumbPos( static_cast< long >( mnFirstVisIndex ) );
-                Invalidate();
-            }
-        }
-    }
-    else
+    // insertion index changed: draw new cursor and exit
+    if( nFieldIndex != mnInsCursorIndex )
     {
-        // insertion index changed, draw new cursor
         mnInsCursorIndex = nFieldIndex;
-        mnAutoScrollDelay = 0;
+        mnAutoScrollDelay = INITIAL_TRACKING_DELAY;
+        Invalidate();
+        return;
+    }
+
+    // insertion index unchanged: countdown for auto scrolling
+    if( mnAutoScrollDelay > 0 )
+    {
+        --mnAutoScrollDelay;
+        return;
+    }
+
+    // check if tracking happens on first or last field
+    long nScrollDelta = 0;
+    if( (mnInsCursorIndex > 0) && (mnInsCursorIndex == mnFirstVisIndex) )
+        nScrollDelta = -static_cast< long >( mnLineSize );
+    else if( (mnInsCursorIndex < maFields.size()) && (mnInsCursorIndex == mnFirstVisIndex + mnPageSize) )
+        nScrollDelta = static_cast< long >( mnLineSize );
+    if( nScrollDelta != 0 )
+    {
+        // update mnInsCursorIndex, so it will be drawn at the same position after scrolling
+        mnInsCursorIndex += nScrollDelta;
+        mnFirstVisIndex += nScrollDelta;
+        // delay auto scroll by line size, to slow down scrolling in column/page windows
+        mnAutoScrollDelay = mnLineSize - 1;
         Invalidate();
     }
 }
 
-void ScPivotFieldWindow::NotifyEndTracking()
+void ScPivotFieldWindow::NotifyEndTracking( ScPivotFieldEndTracking eEndType )
 {
-    if( mnInsCursorIndex != PIVOTFIELD_INVALID )
-    {
-        mnInsCursorIndex = PIVOTFIELD_INVALID;
-        mnAutoScrollDelay = 0;
-        Invalidate();
-    }
-}
-
-void ScPivotFieldWindow::NotifyCancelTracking()
-{
-    if( mnInsCursorIndex != PIVOTFIELD_INVALID )
-    {
+    if( eEndType != ENDTRACKING_DROP )
         mnFirstVisIndex = mnOldFirstVisIndex;
-        NotifyEndTracking();
+    if( eEndType != ENDTRACKING_SUSPEND )
+    {
+        mnOldFirstVisIndex = PIVOTFIELD_INVALID;
+        mbIsTrackingSource = false;
     }
+    mnInsCursorIndex = PIVOTFIELD_INVALID;
+    Invalidate();
 }
 
 // protected ------------------------------------------------------------------
@@ -477,13 +470,13 @@ void ScPivotFieldWindow::Paint( const Rectangle& /*rRect*/ )
 
     // draw the background and all fields
     DrawBackground( aVirDev );
-    for( size_t nFieldIndex = mnFirstVisIndex, nLastIndex = GetLastVisibleIndex( mnFirstVisIndex ); nFieldIndex <= nLastIndex; ++nFieldIndex )
+    for( size_t nFieldIndex = mnFirstVisIndex, nEndIndex = mnFirstVisIndex + mnPageSize; nFieldIndex < nEndIndex; ++nFieldIndex )
         DrawField( aVirDev, nFieldIndex );
     DrawInsertionCursor( aVirDev );
     DrawBitmap( Point( 0, 0 ), aVirDev.GetBitmap( Point( 0, 0 ), GetSizePixel() ) );
 
     // draw field text focus
-    if( HasFocus() && !maFields.empty() && (mnFirstVisIndex <= mnSelectIndex) && (mnSelectIndex <= GetLastVisibleIndex( mnFirstVisIndex )) )
+    if( HasFocus() && (mnSelectIndex < maFields.size()) && (mnFirstVisIndex <= mnSelectIndex) && (mnSelectIndex < mnFirstVisIndex + mnPageSize) )
     {
         long nFieldWidth = maFieldSize.Width();
         long nSelectionWidth = Min( GetTextWidth( maFields[ mnSelectIndex ].maFieldName ) + 4, nFieldWidth - 6 );
@@ -495,16 +488,15 @@ void ScPivotFieldWindow::Paint( const Rectangle& /*rRect*/ )
 
     // update scrollbar
     size_t nFieldCount = maFields.size();
-    size_t nVisibleCount = mnColCount * mnRowCount;
     /*  Already show the scrollbar if window is full but no fields are hidden
         (yet). This gives the user the hint that it is now possible to add more
         fields to the window. */
-    mrScrollBar.Show( nFieldCount >= nVisibleCount );
-    mrScrollBar.Enable( nFieldCount > nVisibleCount );
+    mrScrollBar.Show( nFieldCount >= mnPageSize );
+    mrScrollBar.Enable( nFieldCount > mnPageSize );
     if( mrScrollBar.IsVisible() )
     {
-        mrScrollBar.SetRange( Range( 0, static_cast< long >( nFieldCount ) ) );
-        mrScrollBar.SetThumbPos( static_cast< long >( mnFirstVisIndex ) );
+        mrScrollBar.SetRange( Range( 0, static_cast< long >( (nFieldCount - 1) / mnLineSize + 1 ) ) );
+        mrScrollBar.SetThumbPos( static_cast< long >( mnFirstVisIndex / mnLineSize ) );
     }
 
     /*  Exclude empty fields from tab chain, but do not disable them. They need
@@ -604,6 +596,8 @@ void ScPivotFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
             if( rMEvt.GetClicks() == 1 )
             {
                 // one click: start tracking
+                mbIsTrackingSource = true;
+                mnOldFirstVisIndex = mnFirstVisIndex;
                 mpDialog->NotifyStartTracking( *this );
             }
             else
@@ -660,18 +654,20 @@ uno::Reference< accessibility::XAccessible > ScPivotFieldWindow::CreateAccessibl
 
 // private --------------------------------------------------------------------
 
-size_t ScPivotFieldWindow::GetLastVisibleIndex( size_t nFirstVisIndex ) const
+size_t ScPivotFieldWindow::RecalcVisibleIndex( size_t nSelectIndex ) const
 {
-    return maFields.empty() ? 0 : (::std::min< size_t >( nFirstVisIndex + mnColCount * mnRowCount, maFields.size() ) - 1);
+    // calculate a scrolling offset that shows the selected field
+    size_t nNewFirstVisIndex = mnFirstVisIndex;
+    if( nSelectIndex < nNewFirstVisIndex )
+        nNewFirstVisIndex = static_cast< size_t >( (nSelectIndex / mnLineSize) * mnLineSize );
+    else if( nSelectIndex >= nNewFirstVisIndex + mnPageSize )
+        nNewFirstVisIndex = static_cast< size_t >( (nSelectIndex / mnLineSize + 1) * mnLineSize ) - mnPageSize;
+    // check if there are complete empty lines in the bottom/right
+    size_t nMaxFirstVisIndex = (maFields.size() <= mnPageSize) ? 0 : (((maFields.size() - 1) / mnLineSize + 1) * mnLineSize - mnPageSize);
+    return ::std::min( nNewFirstVisIndex, nMaxFirstVisIndex );
 }
 
-size_t ScPivotFieldWindow::GetFirstVisibleIndex( size_t nLastVisIndex ) const
-{
-    size_t nVisibleCount = mnColCount * mnRowCount;
-    return (nLastVisIndex >= nVisibleCount) ? (nLastVisIndex - nVisibleCount + 1) : 0;
-}
-
-void ScPivotFieldWindow::SetSelection( size_t nSelectIndex, size_t nFirstVisIndex )
+void ScPivotFieldWindow::SetSelectionUnchecked( size_t nSelectIndex, size_t nFirstVisIndex )
 {
     if( !maFields.empty() && (nSelectIndex < maFields.size()) )
     {
@@ -699,12 +695,8 @@ void ScPivotFieldWindow::SetSelection( size_t nSelectIndex, size_t nFirstVisInde
 
 void ScPivotFieldWindow::MoveSelection( size_t nSelectIndex )
 {
-    size_t nNewFirstVisIndex = mnFirstVisIndex;
-    if( nSelectIndex < nNewFirstVisIndex )
-        nNewFirstVisIndex = nSelectIndex;
-    else if( nSelectIndex > GetLastVisibleIndex( nNewFirstVisIndex ) )
-        nNewFirstVisIndex = GetFirstVisibleIndex( nSelectIndex );
-    SetSelection( nSelectIndex, nNewFirstVisIndex );
+    if( nSelectIndex < maFields.size() )
+        SetSelectionUnchecked( nSelectIndex, RecalcVisibleIndex( nSelectIndex ) );
 }
 
 void ScPivotFieldWindow::MoveSelection( MoveType eMoveType )
@@ -712,80 +704,38 @@ void ScPivotFieldWindow::MoveSelection( MoveType eMoveType )
     if( maFields.empty() )
         return;
 
-    // maximum valid field index
     size_t nLastIndex = maFields.size() - 1;
-    // maximum valid scroll offset
-    size_t nMaxFirstVisIndex = GetFirstVisibleIndex( nLastIndex );
-
-    // size of a line
-    size_t nLineSize = mbVertical ? mnRowCount : mnColCount;
-    // size of a page
-    size_t nPageSize = mnColCount * mnRowCount;
-
-    // takes the new selected field
     size_t nNewSelectIndex = mnSelectIndex;
-    // takes the new first visible field
-    size_t nNewFirstVisIndex = mnFirstVisIndex;
-
-    /*  Replace "move line" with "move field" if line size is 1. This will
-        prevent that the cursor moves to first or last visible field. */
-    if( nLineSize == 1 ) switch( eMoveType )
-    {
-        case PREV_LINE: eMoveType = PREV_FIELD; break;
-        case NEXT_LINE: eMoveType = NEXT_FIELD; break;
-        default:;
-    }
-
     switch( eMoveType )
     {
         case PREV_FIELD:
             nNewSelectIndex = (nNewSelectIndex > 0) ? (nNewSelectIndex - 1) : 0;
-            // adjust scrolling position: try to show one field before new selected field
-            if( nNewSelectIndex <= nNewFirstVisIndex )
-                nNewFirstVisIndex = (nNewSelectIndex > 0) ? (nNewSelectIndex - 1) : 0;
         break;
         case NEXT_FIELD:
             nNewSelectIndex = (nNewSelectIndex < nLastIndex) ? (nNewSelectIndex + 1) : nLastIndex;
-            // adjust scrolling position: try to show one field after new selected field
-            if( nNewSelectIndex >= GetLastVisibleIndex( nNewFirstVisIndex ) )
-                nNewFirstVisIndex = ::std::min< size_t >( GetFirstVisibleIndex( nNewSelectIndex + 1 ), nMaxFirstVisIndex );
         break;
         case PREV_LINE:
-            nNewSelectIndex = (nNewSelectIndex > nLineSize) ? (nNewSelectIndex - nLineSize) : 0;
-            // adjust scrolling position: scroll entire lines until field is visible
-            while( nNewSelectIndex < nNewFirstVisIndex )
-                nNewFirstVisIndex = (nNewFirstVisIndex > nLineSize) ? (nNewFirstVisIndex - nLineSize) : 0;
+            nNewSelectIndex = (nNewSelectIndex > mnLineSize) ? (nNewSelectIndex - mnLineSize) : 0;
         break;
         case NEXT_LINE:
-            nNewSelectIndex = (nNewSelectIndex + nLineSize < nLastIndex) ? (nNewSelectIndex + nLineSize) : nLastIndex;
-            // adjust scrolling position: scroll entire lines until field is visible
-            while( nNewSelectIndex > GetLastVisibleIndex( nNewFirstVisIndex ) )
-                nNewFirstVisIndex = ::std::min< size_t >( nNewFirstVisIndex + nLineSize, nMaxFirstVisIndex );
+            nNewSelectIndex = (nNewSelectIndex + mnLineSize < nLastIndex) ? (nNewSelectIndex + mnLineSize) : nLastIndex;
         break;
         case PREV_PAGE:
-            nNewSelectIndex = (nNewSelectIndex > nPageSize) ? (nNewSelectIndex - nPageSize) : 0;
-            // adjust scrolling position: scroll entire page until field is visible
-            while( nNewSelectIndex < nNewFirstVisIndex )
-                nNewFirstVisIndex = (nNewFirstVisIndex > nPageSize) ? (nNewFirstVisIndex - nPageSize) : 0;
+            nNewSelectIndex = (nNewSelectIndex > mnPageSize) ? (nNewSelectIndex - mnPageSize) : 0;
         break;
         case NEXT_PAGE:
-            nNewSelectIndex = (nNewSelectIndex + nPageSize < nLastIndex) ? (nNewSelectIndex + nPageSize) : nLastIndex;
-            // adjust scrolling position: scroll entire pages until field is visible
-            while( nNewSelectIndex > GetLastVisibleIndex( nNewFirstVisIndex ) )
-                nNewFirstVisIndex = ::std::min< size_t >( nNewFirstVisIndex + nPageSize, nMaxFirstVisIndex );
+            nNewSelectIndex = (nNewSelectIndex + mnPageSize < nLastIndex) ? (nNewSelectIndex + mnPageSize) : nLastIndex;
         break;
         case FIRST_FIELD:
             nNewSelectIndex = 0;
-            nNewFirstVisIndex = 0;
         break;
         case LAST_FIELD:
             nNewSelectIndex = nLastIndex;
-            nNewFirstVisIndex = nMaxFirstVisIndex;
         break;
     }
 
-    // SetSelection() redraws the control and updates the scrollbar
-    SetSelection( nNewSelectIndex, nNewFirstVisIndex );
+    // SetSelectionUnchecked() redraws the control and updates the scrollbar
+    SetSelectionUnchecked( nNewSelectIndex, RecalcVisibleIndex( nNewSelectIndex ) );
 }
 
 void ScPivotFieldWindow::MoveSelectedField( MoveType eMoveType )
@@ -850,7 +800,7 @@ void ScPivotFieldWindow::DrawBackground( OutputDevice& rDev )
 
 void ScPivotFieldWindow::DrawField( OutputDevice& rDev, size_t nFieldIndex )
 {
-    if( (nFieldIndex < maFields.size()) && (mnFirstVisIndex <= nFieldIndex) && (nFieldIndex <= GetLastVisibleIndex( mnFirstVisIndex )) )
+    if( (nFieldIndex < maFields.size()) && (mnFirstVisIndex <= nFieldIndex) && (nFieldIndex < mnFirstVisIndex + mnPageSize) )
     {
         // draw the button
         Point aFieldPos = GetFieldPosition( nFieldIndex );
@@ -887,7 +837,8 @@ void ScPivotFieldWindow::DrawField( OutputDevice& rDev, size_t nFieldIndex )
 
 void ScPivotFieldWindow::DrawInsertionCursor( OutputDevice& rDev )
 {
-    if( (mnInsCursorIndex <= maFields.size()) && (mnFirstVisIndex <= mnInsCursorIndex) && (mnInsCursorIndex <= GetLastVisibleIndex( mnFirstVisIndex ) + 1) )
+    if( (mnInsCursorIndex <= maFields.size()) && (mnFirstVisIndex <= mnInsCursorIndex) && (mnInsCursorIndex <= mnFirstVisIndex + mnPageSize) &&
+        (!mbIsTrackingSource || (mnInsCursorIndex < mnSelectIndex) || (mnInsCursorIndex > mnSelectIndex + 1)) )
     {
         Color aTextColor = GetSettings().GetStyleSettings().GetButtonTextColor();
         rDev.SetLineColor( aTextColor );
@@ -896,7 +847,7 @@ void ScPivotFieldWindow::DrawInsertionCursor( OutputDevice& rDev )
         bool bVerticalCursor = mnColCount > 1;
         long nCursorLength = bVerticalCursor ? maFieldSize.Height() : maFieldSize.Width();
 
-        bool bEndOfLastField = mnInsCursorIndex == mnFirstVisIndex + mnColCount * mnRowCount;
+        bool bEndOfLastField = mnInsCursorIndex == mnFirstVisIndex + mnPageSize;
         Point aMainLinePos = GetFieldPosition( bEndOfLastField ? (mnInsCursorIndex - 1) : mnInsCursorIndex );
         if( bEndOfLastField )
             (bVerticalCursor ? aMainLinePos.X() : aMainLinePos.Y()) += ((bVerticalCursor ? maFieldSize.Width() : maFieldSize.Height()) - CURSOR_WIDTH);
@@ -938,9 +889,16 @@ IMPL_LINK( ScPivotFieldWindow, ScrollHdl, ScrollBar*, pScrollBar )
     long nThumbPos = pScrollBar->GetThumbPos();
     if( nThumbPos >= 0 )
     {
-        size_t nNewFirstVisIndex = static_cast< size_t >( pScrollBar->GetThumbPos() );
-        size_t nNewSelectIndex = ::std::min( ::std::max( mnSelectIndex, nNewFirstVisIndex ), GetLastVisibleIndex( nNewFirstVisIndex ) );
-        SetSelection( nNewSelectIndex, nNewFirstVisIndex );
+        size_t nNewFirstVisIndex = static_cast< size_t >( nThumbPos * mnLineSize );
+        // keep the selection index on same relative position inside row/column
+        size_t nSelectLineOffset = mnSelectIndex % mnLineSize;
+        size_t nNewSelectIndex = mnSelectIndex;
+        if( nNewSelectIndex < nNewFirstVisIndex )
+            nNewSelectIndex = nNewFirstVisIndex + nSelectLineOffset;
+        else if( nNewSelectIndex >= nNewFirstVisIndex + mnPageSize )
+            nNewSelectIndex = nNewFirstVisIndex + mnPageSize - mnLineSize + nSelectLineOffset;
+        nNewSelectIndex = ::std::min( nNewSelectIndex, maFields.size() - 1 );
+        SetSelectionUnchecked( nNewSelectIndex, nNewFirstVisIndex );
     }
     GrabFocus();
     return 0;
