@@ -26,21 +26,16 @@
  ************************************************************************/
 #include "precompiled_reportdesign.hxx"
 
-#include "Undo.hxx"
-#ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
+#include "RptUndo.hxx"
 #include "uistrings.hrc"
-#endif
-#ifndef _RPTUI_SLOTID_HRC_
 #include "rptui_slotid.hrc"
-#endif
-#ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
-#endif
+#include "UndoEnv.hxx"
+
 #include <dbaccess/IController.hxx>
 #include <com/sun/star/report/XSection.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-#include "UndoEnv.hxx"
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/awt/Size.hpp>
 #include <svx/unoshape.hxx>
