@@ -236,8 +236,6 @@ STD_LIB_FILE( gid_File_Lib_Sdbt, sdbt)
 
 STD_LIB_FILE( gid_File_Lib_Dbmm, dbmm)
 
-STD_LIB_FILE( gid_File_Lib_Dbacfg, dbacfg)
-
 STD_LIB_FILE( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE( gid_File_Lib_Dbfile , file)

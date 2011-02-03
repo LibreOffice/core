@@ -1,4 +1,5 @@
 http://hg.services.openoffice.org/binaries
+48a9f787f43a09c0a9b7b00cd1fddbbf-hyphen-2.7.1.tar.gz
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
@@ -40,12 +41,10 @@ a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 abc405d0bdd3ee22782d7aa20e440f08-zlib-1.1.4.tar.gz
 ada24d37d8d638b3d8a9985e80bc2978-source-9.0.0.7-bj.zip
 af3c3acf618de6108d65fcdc92b492e1-commons-codec-1.3-src.tar.gz
-ba1015b59c112d44d7797b62fe7bee51-neon-0.29.3.tar.gz
 bc702168a2af16869201dbe91e46ae48-LICENSE_Python-2.6.1
 c441926f3a552ed3e5b274b62e86af16-STLport-4.0.tar.gz
 ca66e26082cab8bb817185a116db809b-redland-1.0.8.tar.gz
 cd5997284f4ba1e8dde5d1e5869fc342-libwpd-0.8.8.tar.gz
-d0b5af6e408b8d2958f3d83b5244f5e8-hyphen-2.4.tar.gz
 d1a3205871c3c52e8a50c9f18510ae12-libformula.zip
 d35724900f6a4105550293686688bbb3-silgraphite-2.3.1.tar.gz
 d4c4d91ab3a8e52a2e69d48d34ef4df4-core.zip
@@ -75,3 +74,4 @@ db60e4fde8dd6d6807523deb71ee34dc-liblayout-0.2.10.zip
 eeb2c7ddf0d302fba4bfc6e97eac9624-libbase-1.1.6.zip
 f94d9870737518e3b597f9265f4e9803-libserializer-1.1.6.zip
 ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
+ff369e69ef0f0143beb5626164e87ae2-neon-0.29.5.tar.gz
