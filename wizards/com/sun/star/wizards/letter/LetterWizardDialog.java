@@ -143,7 +143,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -165,7 +165,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optBusinessLetter = insertRadioButton("optBusinessLetter", OPTBUSINESSLETTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -174,7 +174,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optPrivOfficialLetter = insertRadioButton("optPrivOfficialLetter", OPTPRIVOFFICIALLETTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -183,7 +183,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optPrivateLetter = insertRadioButton("optPrivateLetter", OPTPRIVATELETTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -192,7 +192,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstBusinessStyle = insertListBox("lstBusinessStyle", LSTBUSINESSSTYLE_ACTION_PERFORMED, LSTBUSINESSSTYLE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -201,7 +201,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkBusinessPaper = insertCheckBox("chkBusinessPaper", CHKBUSINESSPAPER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -210,7 +210,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstPrivOfficialStyle = insertListBox("lstPrivOfficialStyle", LSTPRIVOFFICIALSTYLE_ACTION_PERFORMED, LSTPRIVOFFICIALSTYLE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -219,7 +219,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstPrivateStyle = insertListBox("lstPrivateStyle", LSTPRIVATESTYLE_ACTION_PERFORMED, LSTPRIVATESTYLE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -228,7 +228,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblBusinessStyle = insertLabel("lblBusinessStyle",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -237,7 +237,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblPrivOfficialStyle = insertLabel("lblPrivOfficialStyle",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -246,7 +246,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle1 = insertLabel("lblTitle1",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -255,7 +255,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblPrivateStyle = insertLabel("lblPrivateStyle",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -264,7 +264,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblIntroduction = insertLabel("lblIntroduction",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -273,7 +273,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         ImageControl3 = insertInfoImage(92, 145, 1);
 
 //    ImageControl3 = insertImage("ImageControl3",
-//      new String[] {"Border", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
+//      new String[] {"Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
 //      new Object[] { new Short((short)0), INTEGERS[10],"private:resource/dbu/image/19205","ImageControl3",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)81),INTEGERS[10]}
 //    );
     }
@@ -283,7 +283,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkPaperCompanyLogo = insertCheckBox("chkPaperCompanyLogo", CHKPAPERCOMPANYLOGO_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -292,7 +292,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numLogoHeight = insertNumericField("numLogoHeight", NUMLOGOHEIGHT_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "StrictFormat", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, "StrictFormat", PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -301,7 +301,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numLogoX = insertNumericField("numLogoX", NUMLOGOX_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -310,7 +310,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numLogoWidth = insertNumericField("numLogoWidth", NUMLOGOWIDTH_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -319,7 +319,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numLogoY = insertNumericField("numLogoY", NUMLOGOY_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -328,7 +328,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkPaperCompanyAddress = insertCheckBox("chkPaperCompanyAddress", CHKPAPERCOMPANYADDRESS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -337,7 +337,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numAddressHeight = insertNumericField("numAddressHeight", NUMADDRESSHEIGHT_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "StrictFormat", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, "StrictFormat", PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -346,7 +346,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numAddressX = insertNumericField("numAddressX", NUMADDRESSX_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -355,7 +355,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numAddressWidth = insertNumericField("numAddressWidth", NUMADDRESSWIDTH_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -364,7 +364,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numAddressY = insertNumericField("numAddressY", NUMADDRESSY_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -373,7 +373,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkCompanyReceiver = insertCheckBox("chkCompanyReceiver", CHKCOMPANYRECEIVER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -382,7 +382,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkPaperFooter = insertCheckBox("chkPaperFooter", CHKPAPERFOOTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -391,7 +391,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         numFooterHeight = insertNumericField("numFooterHeight", NUMFOOTERHEIGHT_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Spin", "Step", "TabIndex", "Value", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Spin", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Value", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -400,7 +400,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblLogoHeight = insertLabel("lblLogoHeight",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -409,7 +409,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblLogoWidth = insertLabel("lblLogoWidth",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -418,7 +418,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         FixedLine5 = insertFixedLine("FixedLine5",
                 new String[]
                 {
-                    "Height", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -427,7 +427,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         FixedLine6 = insertFixedLine("FixedLine6",
                 new String[]
                 {
-                    "Height", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -436,7 +436,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblFooterHeight = insertLabel("lblFooterHeight",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -445,7 +445,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblLogoX = insertLabel("lblLogoX",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -454,7 +454,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblLogoY = insertLabel("lblLogoY",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -463,7 +463,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblAddressHeight = insertLabel("lblAddressHeight",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -472,7 +472,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblAddressWidth = insertLabel("lblAddressWidth",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -481,7 +481,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblAddressX = insertLabel("lblAddressX",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -490,7 +490,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblAddressY = insertLabel("lblAddressY",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -499,7 +499,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle2 = insertLabel("lblTitle2",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -512,7 +512,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstLetterNorm = insertListBox("lstLetterNorm", LSTLETTERNORM_ACTION_PERFORMED, LSTLETTERNORM_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -521,7 +521,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseLogo = insertCheckBox("chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -530,7 +530,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseAddressReceiver = insertCheckBox("chkUseAddressReceiver", CHKUSEADDRESSRECEIVER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -539,7 +539,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseSigns = insertCheckBox("chkUseSigns", CHKUSESIGNS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -548,7 +548,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseSubject = insertCheckBox("chkUseSubject", CHKUSESUBJECT_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -557,7 +557,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseSalutation = insertCheckBox("chkUseSalutation", CHKUSESALUTATION_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -566,7 +566,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstSalutation = insertComboBox("lstSalutation", LSTSALUTATION_ACTION_PERFORMED, LSTSALUTATION_ITEM_CHANGED, LSTSALUTATION_TEXT_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -575,7 +575,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseBendMarks = insertCheckBox("chkUseBendMarks", CHKUSEBENDMARKS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -584,7 +584,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseGreeting = insertCheckBox("chkUseGreeting", CHKUSEGREETING_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -593,7 +593,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lstGreeting = insertComboBox("lstGreeting", LSTGREETING_ACTION_PERFORMED, LSTGREETING_ITEM_CHANGED, LSTGREETING_TEXT_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -602,7 +602,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkUseFooter = insertCheckBox("chkUseFooter", CHKUSEFOOTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -611,7 +611,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblLetterNorm = insertLabel("lblLetterNorm",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -620,7 +620,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle3 = insertLabel("lblTitle3",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -633,7 +633,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optSenderPlaceholder = insertRadioButton("optSenderPlaceholder", OPTSENDERPLACEHOLDER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -642,7 +642,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optSenderDefine = insertRadioButton("optSenderDefine", OPTSENDERDEFINE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -651,7 +651,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtSenderName = insertTextField("txtSenderName", TXTSENDERNAME_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -660,7 +660,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtSenderStreet = insertTextField("txtSenderStreet", TXTSENDERSTREET_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -669,7 +669,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtSenderPostCode = insertTextField("txtSenderPostCode", TXTSENDERPOSTCODE_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -678,7 +678,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtSenderState = insertTextField("txtSenderState", TXTSENDERSTATE_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -687,7 +687,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtSenderCity = insertTextField("txtSenderCity", TXTSENDERCITY_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -696,7 +696,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optReceiverPlaceholder = insertRadioButton("optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -705,7 +705,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optReceiverDatabase = insertRadioButton("optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -714,7 +714,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblSenderAddress = insertLabel("lblSenderAddress",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -723,7 +723,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         FixedLine2 = insertFixedLine("FixedLine2",
                 new String[]
                 {
-                    "Height", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -732,7 +732,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblReceiverAddress = insertLabel("lblReceiverAddress",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -741,7 +741,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblSenderName = insertLabel("lblSenderName",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -750,7 +750,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblSenderStreet = insertLabel("lblSenderStreet",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -759,7 +759,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblPostCodeCity = insertLabel("lblPostCodeCity",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -768,7 +768,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle4 = insertLabel("lblTitle4",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -781,7 +781,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtFooter = insertTextField("txtFooter", TXTFOOTER_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -790,7 +790,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkFooterNextPages = insertCheckBox("chkFooterNextPages", CHKFOOTERNEXTPAGES_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -799,7 +799,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         chkFooterPageNumbers = insertCheckBox("chkFooterPageNumbers", CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -808,7 +808,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblFooter = insertLabel("lblFooter",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -817,7 +817,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle5 = insertLabel("lblTitle5",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -830,7 +830,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         txtTemplateName = insertTextField("txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -839,7 +839,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optCreateLetter = insertRadioButton("optCreateLetter", OPTCREATELETTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -848,7 +848,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         optMakeChanges = insertRadioButton("optMakeChanges", OPTMAKECHANGES_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -857,7 +857,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblFinalExplanation1 = insertLabel("lblFinalExplanation1",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -866,7 +866,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblProceed = insertLabel("lblProceed",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -875,7 +875,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblFinalExplanation2 = insertLabel("lblFinalExplanation2",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -884,7 +884,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         ImageControl2 = insertImage("ImageControl2",
                 new String[]
                 {
-                    "Border", "Height", "ImageURL", "Name", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -893,7 +893,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTemplateName = insertLabel("lblTemplateName",
                 new String[]
                 {
-                    "Height", "Label", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -902,7 +902,7 @@ public abstract class LetterWizardDialog extends WizardDialog implements LetterW
         lblTitle6 = insertLabel("lblTitle6",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

@@ -1199,7 +1199,7 @@ Any OFormattedModel::translateControlValueToExternalValue( ) const
 Any OFormattedModel::translateDbColumnToControlValue()
 {
     if ( m_bNumeric )
-        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate, m_nKeyType ); // #100056# OJ
+        m_aSaveValue <<= DBTypeConversion::getValue( m_xColumn, m_aNullDate ); // #100056# OJ
     else
         m_aSaveValue <<= m_xColumn->getString();
 

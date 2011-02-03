@@ -30,6 +30,7 @@ import com.sun.star.awt.*;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 /**
  * @author rpiterman
@@ -79,7 +80,7 @@ public class UnoDataAware extends DataAware
 
     protected void setToUI(Object value)
     {
-        //System.out.println("Settings uno property : "+ Helper.getUnoPropertyValue(this.unoModel,"Name") + "<-" +stringof(value));
+        //System.out.println("Settings uno property : "+ Helper.getUnoPropertyValue(this.unoModel,PropertyNames.PROPERTY_NAME) + "<-" +stringof(value));
         Helper.setUnoPropertyValue(unoModel, unoPropName, value);
     }
 
@@ -203,7 +204,7 @@ public class UnoDataAware extends DataAware
                 field
                 ? DataAwareFields.getFieldValueFor(data, prop, new Short((short) 0))
                 : new DataAware.PropertyValue(prop, data),
-                checkBox, "State");
+                checkBox, PropertyNames.PROPERTY_STATE);
         xcheckBox.addItemListener(itemListener(uda, listener));
         return uda;
     }
@@ -233,7 +234,7 @@ public class UnoDataAware extends DataAware
         return new UnoDataAware(data,
                 field ? DataAwareFields.getFieldValueFor(data, prop, "")
                 : new DataAware.PropertyValue(prop, data),
-                label, "Label");
+                label, PropertyNames.PROPERTY_LABEL);
     }
 
     public static UnoDataAware attachListBox(Object data, String prop, Object listBox, final Listener listener, boolean field)
@@ -260,6 +261,6 @@ public class UnoDataAware extends DataAware
 
     public static void setEnabled(Object control, Boolean enabled)
     {
-        Helper.setUnoPropertyValue(getModel(control), "Enabled", enabled);
+        Helper.setUnoPropertyValue(getModel(control), PropertyNames.PROPERTY_ENABLED, enabled);
     }
 }

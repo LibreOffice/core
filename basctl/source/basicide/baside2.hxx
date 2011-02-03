@@ -443,7 +443,8 @@ public:
     virtual void        BasicStarted();
     virtual void        BasicStopped();
 
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                        GetUndoManager();
 
     const ::rtl::OUString&  GetModule() const { return m_aModule; }
     void                    SetModule( const ::rtl::OUString& aModule ) { m_aModule = aModule; }

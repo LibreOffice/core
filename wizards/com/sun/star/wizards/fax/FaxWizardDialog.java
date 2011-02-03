@@ -112,7 +112,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "Moveable", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -134,7 +134,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optBusinessFax = insertRadioButton("optBusinessFax", OPTBUSINESSFAX_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -143,7 +143,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lstBusinessStyle = insertListBox("lstBusinessStyle", LSTBUSINESSSTYLE_ACTION_PERFORMED, LSTBUSINESSSTYLE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -152,7 +152,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optPrivateFax = insertRadioButton("optPrivateFax", OPTPRIVATEFAX_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -161,7 +161,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lstPrivateStyle = insertListBox("lstPrivateStyle", LSTPRIVATESTYLE_ACTION_PERFORMED, LSTPRIVATESTYLE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -170,7 +170,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblBusinessStyle = insertLabel("lblBusinessStyle",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -179,7 +179,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblTitle1 = insertLabel("lblTitle1",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -188,7 +188,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblPrivateStyle = insertLabel("lblPrivateStyle",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -197,7 +197,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblIntroduction = insertLabel("lblIntroduction",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -205,7 +205,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
                 });
         ImageControl3 = insertInfoImage(92, 145, 1);
 //  ImageControl3 = insertImage("ImageControl3",
-//      new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"},
+//      new String[] {"Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
 //      new Object[] { new Short((short)0),INTEGERS[10],"private:resource/dbu/image/19205",new Integer(92),new Integer(145),Boolean.FALSE,INTEGERS[1],new Short((short)56),INTEGERS[10]}
 //    );
     }
@@ -215,7 +215,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseLogo = insertCheckBox("chkUseLogo", CHKUSELOGO_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -224,7 +224,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseDate = insertCheckBox("chkUseDate", CHKUSEDATE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -233,7 +233,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseCommunicationType = insertCheckBox("chkUseCommunicationType", CHKUSECOMMUNICATIONTYPE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -242,7 +242,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lstCommunicationType = insertComboBox("lstCommunicationType", LSTCOMMUNICATIONTYPE_ACTION_PERFORMED, LSTCOMMUNICATIONTYPE_ITEM_CHANGED, LSTCOMMUNICATIONTYPE_TEXT_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -251,7 +251,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseSubject = insertCheckBox("chkUseSubject", CHKUSESUBJECT_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -260,7 +260,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseSalutation = insertCheckBox("chkUseSalutation", CHKUSESALUTATION_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -269,7 +269,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lstSalutation = insertComboBox("lstSalutation", LSTSALUTATION_ACTION_PERFORMED, LSTSALUTATION_ITEM_CHANGED, LSTSALUTATION_TEXT_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -278,7 +278,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseGreeting = insertCheckBox("chkUseGreeting", CHKUSEGREETING_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -287,7 +287,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lstGreeting = insertComboBox("lstGreeting", LSTGREETING_ACTION_PERFORMED, LSTGREETING_ITEM_CHANGED, LSTGREETING_TEXT_CHANGED,
                 new String[]
                 {
-                    "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "Dropdown", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -296,7 +296,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkUseFooter = insertCheckBox("chkUseFooter", CHKUSEFOOTER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -305,7 +305,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblTitle3 = insertLabel("lblTitle3",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -318,7 +318,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optSenderPlaceholder = insertRadioButton("optSenderPlaceholder", OPTSENDERPLACEHOLDER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -327,7 +327,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optSenderDefine = insertRadioButton("optSenderDefine", OPTSENDERDEFINE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -336,7 +336,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderName = insertTextField("txtSenderName", TXTSENDERNAME_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -345,7 +345,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderStreet = insertTextField("txtSenderStreet", TXTSENDERSTREET_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -354,7 +354,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderPostCode = insertTextField("txtSenderPostCode", TXTSENDERPOSTCODE_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -363,7 +363,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderState = insertTextField("txtSenderState", TXTSENDERSTATE_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -372,7 +372,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderCity = insertTextField("txtSenderCity", TXTSENDERCITY_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -381,7 +381,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtSenderFax = insertTextField("txtSenderFax", TXTSENDERFAX_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -390,7 +390,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optReceiverPlaceholder = insertRadioButton("optReceiverPlaceholder", OPTRECEIVERPLACEHOLDER_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -399,7 +399,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optReceiverDatabase = insertRadioButton("optReceiverDatabase", OPTRECEIVERDATABASE_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -408,7 +408,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblSenderAddress = insertLabel("lblSenderAddress",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -417,7 +417,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         FixedLine2 = insertFixedLine("FixedLine2",
                 new String[]
                 {
-                    "Height", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -426,7 +426,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblSenderName = insertLabel("lblSenderName",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -435,7 +435,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblSenderStreet = insertLabel("lblSenderStreet",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -444,7 +444,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblPostCodeCity = insertLabel("lblPostCodeCity",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -453,7 +453,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblTitle4 = insertLabel("lblTitle4",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -462,7 +462,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         Label1 = insertLabel("lblSenderFax",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -471,7 +471,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         Label2 = insertLabel("Label2",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -484,7 +484,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtFooter = insertTextField("txtFooter", TXTFOOTER_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -493,7 +493,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkFooterNextPages = insertCheckBox("chkFooterNextPages", CHKFOOTERNEXTPAGES_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -502,7 +502,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         chkFooterPageNumbers = insertCheckBox("chkFooterPageNumbers", CHKFOOTERPAGENUMBERS_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -511,7 +511,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblFooter = insertLabel("lblFooter",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -520,7 +520,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblTitle5 = insertLabel("lblTitle5",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -533,7 +533,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         txtTemplateName = insertTextField("txtTemplateName", TXTTEMPLATENAME_TEXT_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Text", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -541,14 +541,14 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
                 });
         /*
         fileTemplatePath = insertFileControl("fileTemplatePath", FILETEMPLATEPATH_TEXT_CHANGED,
-        new String[] {"Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+        new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
         new Object[] { INTEGER_12,FILETEMPLATEPATH_HID,new Integer(172),new Integer(74),INTEGERS[5],new Short((short)29),new Integer(130)}
         );
          */
         optCreateFax = insertRadioButton("optCreateFax", OPTCREATEFAX_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -557,7 +557,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         optMakeChanges = insertRadioButton("optMakeChanges", OPTMAKECHANGES_ITEM_CHANGED,
                 new String[]
                 {
-                    "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -566,7 +566,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblFinalExplanation1 = insertLabel("lblFinalExplanation1",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -575,7 +575,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblProceed = insertLabel("lblProceed",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -584,7 +584,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblFinalExplanation2 = insertLabel("lblFinalExplanation2",
                 new String[]
                 {
-                    "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -593,7 +593,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         ImageControl2 = insertImage("ImageControl2",
                 new String[]
                 {
-                    "Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step", "TabIndex", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_IMAGEURL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -602,7 +602,7 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
         lblTemplateName = insertLabel("lblTemplateName",
                 new String[]
                 {
-                    "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -610,14 +610,14 @@ public abstract class FaxWizardDialog extends WizardDialog implements FaxWizardD
                 });
         /*
         lblTemplatePath = insertLabel("lblTemplatePath",
-        new String[] {"Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width"},
+        new String[] {PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH},
         new Object[] { INTEGERS[8],resources.reslblTemplatePath_value,new Integer(97),new Integer(77),INTEGERS[5],new Short((short)58),new Integer(71)}
         );
          */
         lblTitle6 = insertLabel("lblTitle6",
                 new String[]
                 {
-                    "FontDescriptor", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "TabIndex", "Width"
+                    "FontDescriptor", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {

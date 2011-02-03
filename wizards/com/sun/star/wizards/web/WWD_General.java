@@ -33,6 +33,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.HelpIds;
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.ListModelBinder;
 import com.sun.star.wizards.web.data.CGDocument;
@@ -215,7 +216,7 @@ public abstract class WWD_General extends WebWizardDialog
     protected boolean isSaveSession()
     {
         return (((Number) Helper.getUnoPropertyValue(
-                getModel(chkSaveSettings), "State")).intValue() == 1);
+                getModel(chkSaveSettings), PropertyNames.PROPERTY_STATE)).intValue() == 1);
     }
 
     /**
@@ -343,7 +344,7 @@ public abstract class WWD_General extends WebWizardDialog
     {
         try
         {
-            return (checkPublish(LOCAL_PUBLISHER, txtLocalDir, "Text") | (!proxies && checkPublish(FTP_PUBLISHER, lblFTP, "Label")) | checkPublish(ZIP_PUBLISHER, txtZip, "Text")) && checkSaveSession();
+            return (checkPublish(LOCAL_PUBLISHER, txtLocalDir, "Text") | (!proxies && checkPublish(FTP_PUBLISHER, lblFTP, PropertyNames.PROPERTY_LABEL)) | checkPublish(ZIP_PUBLISHER, txtZip, "Text")) && checkSaveSession();
         }
         catch (IllegalArgumentException ex)
         {
