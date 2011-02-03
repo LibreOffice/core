@@ -104,8 +104,8 @@ namespace frm
     //=====================================================================
     //---------------------------------------------------------------------
     OFilterControl::OFilterControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_aTextListeners( *this )
-        ,m_aContext( _rxORB )
+        :UnoControl( _rxORB )
+        ,m_aTextListeners( *this )
         ,m_aParser( _rxORB )
         ,m_nControlClass( FormComponentType::TEXTFIELD )
         ,m_bFilterList( sal_False )
@@ -132,11 +132,11 @@ namespace frm
         if ( !m_xFormatter.is() )
         {
             // we can create one from the connection, if it's an SDB connection
-            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
+            Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, maContext.getLegacyServiceFactory() );
 
             if ( xFormatSupplier.is() )
             {
-                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
+                maContext.createComponent( "com.sun.star.util.NumberFormatter", m_xFormatter );
                 if ( m_xFormatter.is() )
                     m_xFormatter->attachNumberFormatsSupplier( xFormatSupplier );
             }
@@ -354,7 +354,7 @@ namespace frm
                         sItemText = itemPos->second;
                         if ( sItemText.getLength() )
                         {
-                            ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                            ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                             ::rtl::OUString sErrorMessage;
                             OSL_VERIFY( aPredicateInput.normalizePredicateString( sItemText, m_xField, &sErrorMessage ) );
                         }
@@ -539,7 +539,7 @@ namespace frm
             aNewText.trim();
             if ( aNewText.getLength() )
             {
-                ::dbtools::OPredicateInputController aPredicateInput( m_aContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
+                ::dbtools::OPredicateInputController aPredicateInput( maContext.getLegacyServiceFactory(), m_xConnection, getParseContext() );
                 ::rtl::OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
@@ -743,7 +743,7 @@ namespace frm
 
             static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.sdb.ErrorMessageDialog" );
 
-            Reference< XExecutableDialog > xErrorDialog( m_aContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
+            Reference< XExecutableDialog > xErrorDialog( maContext.createComponentWithArguments( s_sDialogServiceName, aArgs ), UNO_QUERY );
             if ( xErrorDialog.is() )
                 xErrorDialog->execute();
             else
