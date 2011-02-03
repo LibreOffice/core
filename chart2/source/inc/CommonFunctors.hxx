@@ -67,18 +67,7 @@ struct OOO_DLLPUBLIC_CHARTTOOLS AnyToDouble : public ::std::unary_function< ::co
         ::rtl::math::setNan( & fResult );
 
         ::com::sun::star::uno::TypeClass eClass( rAny.getValueType().getTypeClass() );
-        if( eClass == ::com::sun::star::uno::TypeClass_STRING )
-        {
-            rtl_math_ConversionStatus eConversionStatus;
-            fResult = ::rtl::math::stringToDouble(
-                * reinterpret_cast< const ::rtl::OUString * >( rAny.getValue() ),
-                sal_Char( '.' ), sal_Char( ',' ),
-                & eConversionStatus, NULL );
-
-            if( eConversionStatus != rtl_math_ConversionStatus_Ok )
-                ::rtl::math::setNan( & fResult );
-        }
-        else if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
+        if( eClass == ::com::sun::star::uno::TypeClass_DOUBLE )
         {
             fResult = * reinterpret_cast< const double * >( rAny.getValue() );
         }

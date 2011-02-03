@@ -801,7 +801,11 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         if ( m_eDrawMode == CHARTDRAW_INSERT && pDrawViewWrapper->IsCreateObj() )
         {
             pDrawViewWrapper->EndCreateObj( SDRCREATE_FORCEEND );
-            impl_switchDiagramPositioningToExcludingPositioning();
+            {
+                HiddenUndoContext aUndoContext( m_xUndoManager );
+                    // don't want the positioning Undo action to appear in the UI
+                impl_switchDiagramPositioningToExcludingPositioning();
+            }
             if ( pDrawViewWrapper->AreObjectsMarked() )
             {
                 if ( pDrawViewWrapper->GetCurrentObjIdentifier() == OBJ_TEXT )
@@ -838,12 +842,12 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             if( pChartDragMethod )
             {
                 UndoGuard aUndoGuard( pChartDragMethod->getUndoDescription(),
-                        m_xUndoManager, getModel() );
+                        m_xUndoManager );
 
                 if( pDrawViewWrapper->EndDragObj(false) )
                 {
                     bDraggingDone = true;
-                    aUndoGuard.commitAction();
+                    aUndoGuard.commit();
                 }
             }
 
@@ -871,7 +875,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
                         UndoGuard aUndoGuard(
                             ActionDescriptionProvider::createDescription( eActionType, ObjectNameProvider::getName( eObjectType)),
-                            m_xUndoManager, getModel() );
+                            m_xUndoManager );
 
                         bool bChanged = false;
                         if ( eObjectType == OBJECTTYPE_LEGEND )
@@ -885,7 +889,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
                         if( bMoved || bChanged )
                         {
                             bDraggingDone = true;
-                            aUndoGuard.commitAction();
+                            aUndoGuard.commit();
                         }
                     }
                 }
@@ -1838,7 +1842,7 @@ bool ChartController::impl_moveOrResizeObject(
 
             ObjectType eObjectType = ObjectIdentifier::getObjectType( rCID );
             UndoGuard aUndoGuard( ActionDescriptionProvider::createDescription(
-                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager, xChartModel );
+                    eActionType, ObjectNameProvider::getName( eObjectType )), m_xUndoManager );
             {
                 ControllerLockGuard aCLGuard( xChartModel );
                 if( bNeedShift )
@@ -1846,7 +1850,7 @@ bool ChartController::impl_moveOrResizeObject(
                 if( bNeedResize || (eObjectType == OBJECTTYPE_DIAGRAM) )//Also set an explicat size at the diagram when an explicit position is set
                     xObjProp->setPropertyValue( C2U("RelativeSize"), uno::makeAny( aRelSize ));
             }
-            aUndoGuard.commitAction();
+            aUndoGuard.commit();
         }
     }
     return bResult;

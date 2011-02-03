@@ -43,7 +43,7 @@
 #include "ChartTypeHelper.hxx"
 #include "Clipping.hxx"
 #include "servicenames_charttypes.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "ContainerHelper.hxx"
 #include "DataSeriesHelper.hxx"
 #include "RegressionCurveHelper.hxx"
@@ -52,6 +52,8 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "RelativePositionHelper.hxx"
+#include "DateHelper.hxx"
+#include "DiagramHelper.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"
@@ -62,6 +64,7 @@
 //
 
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
@@ -155,6 +158,8 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_xChartTypeModelProps( uno::Reference< beans::XPropertySet >::query( xChartTypeModel ))
         , m_aZSlots()
         , m_bCategoryXAxis(bCategoryXAxis)
+        , m_nTimeResolution(::com::sun::star::chart::TimeUnit::DAY)
+        , m_aNullDate(30,12,1899)
         , m_xColorScheme()
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
@@ -201,7 +206,17 @@ void VSeriesPlotter::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32
         return;
 
     if(m_bCategoryXAxis)
-        pSeries->setCategoryXAxis();
+    {
+        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
+            pSeries->setXValues( m_pExplicitCategoriesProvider->getOriginalCategories() );
+        else
+            pSeries->setCategoryXAxis();
+    }
+    else
+    {
+        if( m_pExplicitCategoriesProvider )
+            pSeries->setXValuesIfNone( m_pExplicitCategoriesProvider->getOriginalCategories() );
+    }
 
     if(zSlot<0 || zSlot>=static_cast<sal_Int32>(m_aZSlots.size()))
     {
@@ -381,7 +396,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
             nNumberFormatKey = rDataSeries.getExplicitNumberFormat(nPointIndex,bAsPercentage);
         else if( bAsPercentage )
         {
-            sal_Int32 nPercentFormat = ExplicitValueProvider::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
+            sal_Int32 nPercentFormat = DiagramHelper::getPercentNumberFormat( m_apNumberFormatterWrapper->getNumberFormatsSupplier() );
             if( nPercentFormat != -1 )
                 nNumberFormatKey = nPercentFormat;
         }
@@ -758,6 +773,17 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
     return aMainDirection;
 }
 
+drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper* pPosHelper
+    , double fX /*scaled*/, double fY /*unscaled*/, double fZ /*unscaled*/, bool bClip )
+{
+    if(!pPosHelper)
+        return drawing::Position3D(0,0,0);
+    pPosHelper->doLogicScaling( 0,&fY,&fZ );
+    if(bClip)
+        pPosHelper->clipScaledLogicValues( &fX,&fY,&fZ );
+    return pPosHelper->transformScaledLogicToScene( fX, fY, fZ, false );
+}
+
 } // anonymous namespace
 
 // virtual
@@ -768,6 +794,7 @@ void VSeriesPlotter::createErrorBar(
     , const VDataSeries& rVDataSeries
     , sal_Int32 nIndex
     , bool bYError /* = true */
+    , double* pfScaledLogicX
     )
 {
     if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
@@ -802,7 +829,13 @@ void VSeriesPlotter::createErrorBar(
         const double fX = aUnscaledLogicPosition.PositionX;
         const double fY = aUnscaledLogicPosition.PositionY;
         const double fZ = aUnscaledLogicPosition.PositionZ;
-        aMiddle = m_pPosHelper->transformLogicToScene( fX, fY, fZ, true );
+        double fScaledX = fX;
+        if( pfScaledLogicX )
+            fScaledX = *pfScaledLogicX;
+        else
+            m_pPosHelper->doLogicScaling( &fScaledX, 0, 0 );
+
+        aMiddle = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fY, fZ, true );
 
         drawing::Position3D aNegative(aMiddle);
         drawing::Position3D aPositive(aMiddle);
@@ -817,11 +850,16 @@ void VSeriesPlotter::createErrorBar(
                 double fLocalX = fX;
                 double fLocalY = fY;
                 if( bYError )
+                {
                     fLocalY+=fLength;
+                    aPositive = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                }
                 else
+                {
                     fLocalX+=fLength;
+                    aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                }
                 bCreatePositiveBorder = m_pPosHelper->isLogicVisible(fLocalX, fLocalY, fZ);
-                aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
             }
             else
                 bShowPositive = false;
@@ -835,12 +873,16 @@ void VSeriesPlotter::createErrorBar(
                 double fLocalX = fX;
                 double fLocalY = fY;
                 if( bYError )
+                {
                     fLocalY-=fLength;
+                    aNegative = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                }
                 else
+                {
                     fLocalX-=fLength;
-
+                    aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                }
                 bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
-                aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
             }
             else
                 bShowNegative = false;
@@ -884,7 +926,8 @@ void VSeriesPlotter::createErrorBar(
 // virtual
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-                            , const uno::Reference< drawing::XShapes >& xTarget )
+                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , double* pfScaledLogicX )
 {
     if(m_nDimension!=2)
         return;
@@ -898,7 +941,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
             , rVDataSeries, nPointIndex
-            , true /* bYError */ );
+            , true /* bYError */
+            , pfScaledLogicX );
     }
 }
 
@@ -936,13 +980,13 @@ void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
         aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
         sal_Int32 nRealPointCount=0;
 
-        uno::Sequence< chart2::ExplicitScaleData > aScaleDataSeq( m_pPosHelper->getScales());
+        std::vector< ExplicitScaleData > aScales( m_pPosHelper->getScales());
         uno::Reference< chart2::XScaling > xScalingX;
         uno::Reference< chart2::XScaling > xScalingY;
-        if( aScaleDataSeq.getLength() >= 2 )
+        if( aScales.size() >= 2 )
         {
-            xScalingX.set( aScaleDataSeq[0].Scaling );
-            xScalingY.set( aScaleDataSeq[1].Scaling );
+            xScalingX.set( aScales[0].Scaling );
+            xScalingY.set( aScales[1].Scaling );
         }
 
         uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
@@ -1126,35 +1170,58 @@ void VSeriesPlotter::setMappedProperties(
     PropertyMapper::setMappedProperties(xTargetProp,xSource,rMap,pOverwriteMap);
 }
 
+void VSeriesPlotter::setTimeResolutionOnXAxis( long TimeResolution, const Date& rNullDate )
+{
+    m_nTimeResolution = TimeResolution;
+    m_aNullDate = rNullDate;
+}
+
 //-------------------------------------------------------------------------
 // MinimumAndMaximumSupplier
 //-------------------------------------------------------------------------
-
+long VSeriesPlotter::calculateTimeResolutionOnXAxis()
+{
+    long nRet = ::com::sun::star::chart::TimeUnit::YEAR;
+    if( m_pExplicitCategoriesProvider )
+    {
+        const std::vector< DatePlusIndex >&  rDateCategories = m_pExplicitCategoriesProvider->getDateCategories();
+        std::vector< DatePlusIndex >::const_iterator aIt = rDateCategories.begin(), aEnd = rDateCategories.end();
+        Date aNullDate(30,12,1899);
+        if( m_apNumberFormatterWrapper.get() )
+            aNullDate = m_apNumberFormatterWrapper->getNullDate();
+        if( aIt!=aEnd )
+        {
+            Date aPrevious(aNullDate); aPrevious+=rtl::math::approxFloor(aIt->fValue);
+            ++aIt;
+            for(;aIt!=aEnd;++aIt)
+            {
+                Date aCurrent(aNullDate); aCurrent+=rtl::math::approxFloor(aIt->fValue);
+                if( ::com::sun::star::chart::TimeUnit::YEAR == nRet )
+                {
+                    if( DateHelper::IsInSameYear( aPrevious, aCurrent ) )
+                        nRet = ::com::sun::star::chart::TimeUnit::MONTH;
+                }
+                if( ::com::sun::star::chart::TimeUnit::MONTH == nRet )
+                {
+                    if( DateHelper::IsInSameMonth( aPrevious, aCurrent ) )
+                        nRet = ::com::sun::star::chart::TimeUnit::DAY;
+                }
+                if( ::com::sun::star::chart::TimeUnit::DAY == nRet )
+                    break;
+                aPrevious=aCurrent;
+            }
+        }
+    }
+    return nRet;
+}
 double VSeriesPlotter::getMinimumX()
 {
-    if( m_bCategoryXAxis )
-    {
-        double fRet = 1.0;//first category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
-            fRet -= 0.5;
-        return fRet;
-    }
-
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMinimum;
 }
 double VSeriesPlotter::getMaximumX()
 {
-    if( m_bCategoryXAxis )
-    {
-        //return category count
-        double fRet = getPointCount();//first category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
-            fRet += 0.5;
-        return fRet;
-    }
-
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMaximum;
@@ -1162,7 +1229,7 @@ double VSeriesPlotter::getMaximumX()
 
 double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    if( !m_bCategoryXAxis )
+    if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
         this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
@@ -1196,7 +1263,7 @@ double VSeriesPlotter::getMinimumYInRange( double fMinimumX, double fMaximumX, s
 
 double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, sal_Int32 nAxisIndex )
 {
-    if( !m_bCategoryXAxis )
+    if( !m_bCategoryXAxis || ( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() ) )
     {
         double fMinY, fMaxY;
         this->getMinimumAndMaximiumYInContinuousXRange( fMinY, fMaxY, fMinimumX, fMaximumX, nAxisIndex );
@@ -1231,13 +1298,13 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
 double VSeriesPlotter::getMinimumZ()
 {
     //this is the default for all charts without a meaningfull z axis
-    return 0.5;
+    return 1.0;
 }
 double VSeriesPlotter::getMaximumZ()
 {
-    if( 3!=m_nDimension )
-        return 0.5;
-    return m_aZSlots.size()+0.5;
+    if( 3!=m_nDimension || !m_aZSlots.size() )
+        return getMinimumZ()+1;
+    return m_aZSlots.size();
 }
 
 namespace
@@ -1603,7 +1670,7 @@ double VSeriesPlotter::getTransformedDepth() const
     return FIXED_SIZE_FOR_3D_CHART_VOLUME/(MaxZ-MinZ);
 }
 
-void SAL_CALL VSeriesPlotter::addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
+void VSeriesPlotter::addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
                 throw (uno::RuntimeException)
 {
     if( nAxisIndex<1 )
@@ -1633,9 +1700,9 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
         }
     }
     if( !pRet )
-    {
         pRet = m_pMainPosHelper;
-    }
+    if(pRet)
+        pRet->setTimeResolution( m_nTimeResolution, m_aNullDate );
     return *pRet;
 }
 

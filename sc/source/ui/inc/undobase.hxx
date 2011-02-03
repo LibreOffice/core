@@ -31,6 +31,7 @@
 #include <svl/undo.hxx>
 #include "global.hxx"
 #include "address.hxx"
+#include "docsh.hxx"
 
 class ScDocument;
 class ScDocShell;
@@ -52,6 +53,10 @@ public:
 protected:
     ScDocShell*     pDocShell;
     SfxUndoAction*  pDetectiveUndo;
+
+    bool            IsPaintLocked() const { return pDocShell->IsPaintLocked(); }
+
+    bool            SetViewMarkData( const ScMarkData& rMarkData );
 
     void            BeginUndo();
     void            EndUndo();

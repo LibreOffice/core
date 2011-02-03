@@ -239,6 +239,8 @@ public:
     SvNumberFormatter&  GetFormatter() const;
     /** Returns the null date of the current number formatter. */
     DateTime            GetNullDate() const;
+    /** Returns the base year depending on the current null date (1900 or 1904). */
+    sal_uInt16          GetBaseYear() const;
     /** Converts a date/time value to a floating-point value. */
     double              GetDoubleFromDateTime( const DateTime& rDateTime ) const;
     /** Converts a floating-point value to a date/time value. */

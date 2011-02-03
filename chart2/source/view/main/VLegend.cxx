@@ -843,7 +843,7 @@ VLegend::VLegend(
 
 // ----------------------------------------
 
-void SAL_CALL VLegend::init(
+void VLegend::init(
     const Reference< drawing::XShapes >& xTargetPage,
     const Reference< lang::XMultiServiceFactory >& xFactory,
     const Reference< frame::XModel >& xModel )
