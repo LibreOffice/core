@@ -622,7 +622,7 @@ bool DlgEdFunc::isRectangleHit(const MouseEvent& rMEvt)
             while( (pObjIter = aIter.Next()) != NULL && !bIsSetPoint)
             {
                 if ( m_rView.IsObjMarked(pObjIter)
-                     && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+                     && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL) )
                 {
                     Rectangle aNewRect = pObjIter->GetLastBoundRect();
                     long nDx = rDragStat.IsHorFixed() ? 0 : rDragStat.GetDX();

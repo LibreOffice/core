@@ -876,15 +876,14 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
     {
         if ( _pIgnore != pObjIter
             && (_bAllObjects || !_rView.IsObjMarked(pObjIter))
-            && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+            && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL))
         {
             if (_nIgnoreType == ISOVER_IGNORE_CUSTOMSHAPES && pObjIter->GetObjIdentifier() == OBJ_CUSTOMSHAPE)
             {
                 continue;
             }
 
-            OUnoObject* pObj = dynamic_cast<OUnoObject*>(pObjIter);
-            if (pObj != NULL)
+            if (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL)
             {
                 Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
                 if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
@@ -922,7 +921,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
         }
 
         if ( (_bAllObjects || !_rView.IsObjMarked(pObjIter))
-             && dynamic_cast<OUnoObject*>(pObjIter) != NULL )
+             && (dynamic_cast<OUnoObject*>(pObjIter) != NULL || dynamic_cast<OOle2Obj*>(pObjIter) != NULL) )
         {
             Rectangle aRect = _rRect.GetIntersection(pObjIter->GetLastBoundRect());
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
@@ -936,10 +935,9 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
 SdrObject* isOver(SdrObject* _pObj,SdrPage& _rPage,SdrView& _rView,bool _bUnMarkedObjects)
 {
     SdrObject* pOverlappedObj = NULL;
-    OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(_pObj);
-    if ( pUnoObj ) // this doesn't need to be done for shapes
+    if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL) // this doesn't need to be done for shapes
     {
-        Rectangle aRect = pUnoObj->GetCurrentBoundRect();
+        Rectangle aRect = _pObj->GetCurrentBoundRect();
         pOverlappedObj = isOver(aRect,_rPage,_rView,_bUnMarkedObjects,_pObj);
     }
     return pOverlappedObj;

@@ -85,7 +85,7 @@ bool lcl_getNewRectSize(const Rectangle& _aObjRect,long& _nXMov, long& _nYMov,Sd
                     aNewRect.Move(_nXMov,_nYMov);
                     break;
             }
-            if ( dynamic_cast<OUnoObject*>(_pObj) )
+            if (dynamic_cast<OUnoObject*>(_pObj) != NULL || dynamic_cast<OOle2Obj*>(_pObj) != NULL)
             {
                 pOverlappedObj = isOver(aNewRect,*_pObj->GetPage(),*_pView,true,_pObj);
                 if ( pOverlappedObj && _pObj != pOverlappedObj )
@@ -865,7 +865,7 @@ void OViewsWindow::alignMarkedObjects(sal_Int32 _nControlModification,bool _bAli
                 TRectangleMap::iterator aInterSectRectIter = aSortRectangles.begin();
                 for (; aInterSectRectIter != aRectIter; ++aInterSectRectIter)
                 {
-                    if ( pView == aInterSectRectIter->second.second && dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) )
+                    if ( pView == aInterSectRectIter->second.second && (dynamic_cast<OUnoObject*>(aInterSectRectIter->second.first) || dynamic_cast<OOle2Obj*>(aInterSectRectIter->second.first)))
                     {
                         SdrObject* pPreviousObj = aInterSectRectIter->second.first;
                         Rectangle aIntersectRect = aTest.GetIntersection(_bBoundRects ? pPreviousObj->GetCurrentBoundRect() : pPreviousObj->GetSnapRect());
@@ -1680,7 +1680,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL|| dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj());
                         }
 
 
@@ -1768,7 +1768,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
                         for (sal_uInt32 i =  0; !bCheck && i < rMarkList.GetMarkCount();++i )
                         {
                             SdrMark* pMark = rMarkList.GetMark(i);
-                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL;
+                            bCheck = dynamic_cast<OUnoObject*>(pMark->GetMarkedSdrObj()) != NULL || dynamic_cast<OOle2Obj*>(pMark->GetMarkedSdrObj()) != NULL;
                             if ( bCheck )
                                 aNewRect.Union(pMark->GetMarkedSdrObj()->GetLastBoundRect());
                         }

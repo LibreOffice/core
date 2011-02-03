@@ -866,7 +866,10 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         uno::Reference< inspection::XNumericControl > xNumericControl(aOut.Control,uno::UNO_QUERY);
         xNumericControl->setDecimalDigits( 2 );
         xNumericControl->setValueUnit( util::MeasureUnit::MM_100TH );
-        xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
+        uno::Reference< drawing::XShapeDescriptor> xShapeDesc(m_xReportComponent,uno::UNO_QUERY);
+        bool bSetMin = !xShapeDesc.is() || xShapeDesc->getShapeType() != ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
+        if ( bSetMin )
+            xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
         if ( nDisplayUnit != -1 )
             xNumericControl->setDisplayUnit( nDisplayUnit );
         uno::Reference< report::XReportComponent> xComp(m_xReportComponent,uno::UNO_QUERY);
@@ -884,7 +887,8 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     case PROPERTY_ID_POSITIONX:
                     case PROPERTY_ID_POSITIONY:
                     case PROPERTY_ID_WIDTH:
-                        xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
+                        if ( bSetMin )
+                            xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
                         xNumericControl->setMaxValue(beans::Optional<double>(sal_True,double(aSize.Width - nLeftMargin - nRightMargin)));
                         if ( PROPERTY_ID_WIDTH == nId )
                         {
