@@ -4262,20 +4262,8 @@ bool WW8PLCFx_Book::MapName(String& rName)
 
     bool bFound = false;
     USHORT i = 0;
-    WW8_CP nStartAkt, nEndAkt;
     do
     {
-        void* p;
-        USHORT nEndIdx;
-
-        if( pBook[0]->GetData( i, nStartAkt, p ) && p )
-            nEndIdx = SVBT16ToShort( *((SVBT16*)p) );
-        else
-        {
-            OSL_ENSURE( !this, "Bookmark-EndIdx nicht lesbar" );
-            nEndIdx = i;
-        }
-        nEndAkt = pBook[1]->GetPos( nEndIdx );
         if (COMPARE_EQUAL == rName.CompareIgnoreCaseToAscii(aBookNames[i]))
         {
             rName = aBookNames[i];

@@ -2521,8 +2521,6 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
     rtl::OUString sDataSource, sDataTableOrQuery;
     uno::Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
-    BOOL bHasSelectionProperty = FALSE;
-    sal_Int32 nSelectionPos = 0;
     sal_Int16 nCmdType = CommandType::TABLE;
     const PropertyValue* pValues = rProperties.getConstArray();
     uno::Reference< XConnection> xConnection;
@@ -2535,11 +2533,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCursor)))
             pValues[nPos].Value >>= xResSet;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cSelection)))
-        {
-            bHasSelectionProperty = TRUE;
-            nSelectionPos = nPos;
             pValues[nPos].Value >>= aSelection;
-        }
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cCommandType)))
             pValues[nPos].Value >>= nCmdType;
         else if(pValues[nPos].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(cActiveConnection)))
