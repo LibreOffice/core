@@ -164,6 +164,7 @@ gb_STDLIBS := \
     uwinapi \
     kernel32 \
     msvcrt \
+    oldnames \
 
 ifneq ($(EXTERNAL_WARNINGS_NOT_ERRORS),TRUE)
 gb_CFLAGS_WERROR := -WX
