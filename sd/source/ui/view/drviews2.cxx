@@ -151,7 +151,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             if( rReq.GetArgs() )
             {
                 BOOL bMergeUndo = FALSE;
-                SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+                ::svl::IUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
                 // Anpassungen Start/EndWidth #63083#
                 if(nSId == SID_ATTR_LINE_WIDTH)
