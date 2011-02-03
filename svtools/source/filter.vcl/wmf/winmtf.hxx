@@ -389,8 +389,8 @@ struct WinMtfFillStyle
         { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) && ( aType == rStyle.aType ) ); }
     BOOL operator==( WinMtfFillStyle* pStyle )
         { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) && ( aType == pStyle->aType ) ); }
-    void operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; }
-    void operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; }
+    WinMtfFillStyle& operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; return *this; }
+    WinMtfFillStyle& operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; return *this; }
 };
 
 // -----------------------------------------------------------------------------
@@ -416,18 +416,20 @@ struct WinMtfLineStyle
 
     BOOL operator==( const WinMtfLineStyle& rStyle ) { return ( ( aLineColor == rStyle.aLineColor ) && ( bTransparent == rStyle.bTransparent ) && ( aLineInfo == rStyle.aLineInfo ) ); }
     BOOL operator==( WinMtfLineStyle* pStyle ) { return ( ( aLineColor == pStyle->aLineColor ) && ( bTransparent == pStyle->bTransparent ) && ( aLineInfo == pStyle->aLineInfo ) ); }
-    void operator=( const WinMtfLineStyle& rStyle )
+    WinMtfLineStyle& operator=( const WinMtfLineStyle& rStyle )
     {
         aLineColor = rStyle.aLineColor;
         bTransparent = rStyle.bTransparent;
         aLineInfo = rStyle.aLineInfo;
+        return *this;
     }
 
-    void operator=( WinMtfLineStyle* pStyle )
+    WinMtfLineStyle& operator=( WinMtfLineStyle* pStyle )
     {
         aLineColor = pStyle->aLineColor;
         bTransparent = pStyle->bTransparent;
         aLineInfo = pStyle->aLineInfo;
+        return *this;
     }
 };
 
