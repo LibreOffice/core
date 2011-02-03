@@ -54,7 +54,6 @@
 #include <svl/filenotation.hxx>
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
-#include <svtools/templdlg.hxx>
 #include "moduledbu.hxx"
 // -----------------
 // for calling basic
