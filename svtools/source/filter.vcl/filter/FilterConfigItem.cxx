@@ -462,7 +462,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
 
         if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
-            sal_Int32 nOldValue;
+            sal_Int32 nOldValue = 0;
             if ( aAny >>= nOldValue )
             {
                 if ( nOldValue != nNewValue )
