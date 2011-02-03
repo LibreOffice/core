@@ -25,9 +25,27 @@
  *
  ************************************************************************/
 
-package complex.framework;
+package complex.sfx2;
 
 // import complexlib.ComplexTestCase;
+import com.sun.star.beans.Pair;
+import com.sun.star.rdf.Literal;
+import com.sun.star.rdf.XLiteral;
+import com.sun.star.rdf.XNamedGraph;
+import com.sun.star.rdf.BlankNode;
+import com.sun.star.rdf.XQuerySelectResult;
+import com.sun.star.rdf.XNode;
+import com.sun.star.rdf.XDocumentRepository;
+import com.sun.star.rdf.XMetadatable;
+import com.sun.star.rdf.Statement;
+import com.sun.star.rdf.FileFormat;
+import com.sun.star.rdf.URIs;
+import com.sun.star.rdf.URI;
+import com.sun.star.rdf.XDocumentMetadataAccess;
+import com.sun.star.rdf.XRepositorySupplier;
+import com.sun.star.rdf.XRepository;
+import com.sun.star.rdf.XBlankNode;
+import com.sun.star.rdf.XURI;
 import helper.StreamSimulator;
 
 import com.sun.star.uno.UnoRuntime;
@@ -41,7 +59,6 @@ import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.WrappedTargetRuntimeException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.Pair;
 import com.sun.star.beans.StringPair;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XEnumeration;
@@ -51,7 +68,7 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XText;
-import com.sun.star.rdf.*;
+import complex.sfx2.tools.TestDocument;
 import lib.TestParameters;
 
 
@@ -73,7 +90,7 @@ import static org.junit.Assert.*;
  *
  * @author mst
  */
-public class DocumentMetadataAccessTest
+public class DocumentMetadataAccess
 {
     XMultiServiceFactory xMSF;
     XComponentContext xContext;
@@ -196,22 +213,22 @@ public class DocumentMetadataAccessTest
             PropertyValue[] loadProps = new PropertyValue[1];
             loadProps[0] = new PropertyValue();
             loadProps[0].Name = "Hidden";
-            loadProps[0].Value = new Boolean(true);
+            loadProps[0].Value = true;
             xComp = util.DesktopTools.openNewDoc(xMSF, "swriter", loadProps);
             XTextDocument xText = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
-            XRepositorySupplier xRS = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
-            assertNotNull("xRS null", xRS);
-            XDocumentMetadataAccess xDMA = UnoRuntime.queryInterface(XDocumentMetadataAccess.class, xRS);
-            assertNotNull("xDMA null", xDMA);
-            xRep = xRS.getRDFRepository();
+            XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
+            assertNotNull("xRS null", xRepoSupplier);
+            XDocumentMetadataAccess xDocMDAccess = UnoRuntime.queryInterface(XDocumentMetadataAccess.class, xRepoSupplier);
+            assertNotNull("xDMA null", xDocMDAccess);
+            xRep = xRepoSupplier.getRDFRepository();
             assertNotNull("xRep null", xRep);
 
             System.out.println("...done");
 
             System.out.println("Checking that new repository is initialized...");
 
-            XURI xBaseURI = (XURI) xDMA;
+            XURI xBaseURI = (XURI) xDocMDAccess;
             String baseURI = xBaseURI.getStringValue();
             assertNotNull("new: baseURI", xBaseURI );
             assertTrue("new: baseURI", !xBaseURI.getStringValue().equals(""));
@@ -235,79 +252,79 @@ public class DocumentMetadataAccessTest
             XMetadatable xM = (XMetadatable) xTR;
 
             try {
-                xDMA.getElementByURI(null);
+                xDocMDAccess.getElementByURI(null);
                 fail("getElementByURI: null allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.getMetadataGraphsWithType(null);
+                xDocMDAccess.getMetadataGraphsWithType(null);
                 fail("getMetadataGraphsWithType: null URI allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("", new XURI[0]);
+                xDocMDAccess.addMetadataFile("", new XURI[0]);
                 fail("addMetadataFile: empty filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("/foo", new XURI[0]);
+                xDocMDAccess.addMetadataFile("/foo", new XURI[0]);
                 fail("addMetadataFile: absolute filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("fo\"o", new XURI[0]);
+                xDocMDAccess.addMetadataFile("fo\"o", new XURI[0]);
                 fail("addMetadataFile: invalid filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("../foo", new XURI[0]);
+                xDocMDAccess.addMetadataFile("../foo", new XURI[0]);
                 fail("addMetadataFile: filename with .. allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("foo/../../bar", new XURI[0]);
+                xDocMDAccess.addMetadataFile("foo/../../bar", new XURI[0]);
                 fail("addMetadataFile: filename with nest .. allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("foo/././bar", new XURI[0]);
+                xDocMDAccess.addMetadataFile("foo/././bar", new XURI[0]);
                 fail("addMetadataFile: filename with nest . allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("content.xml", new XURI[0]);
+                xDocMDAccess.addMetadataFile("content.xml", new XURI[0]);
                 fail("addMetadataFile: content.xml allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("styles.xml", new XURI[0]);
+                xDocMDAccess.addMetadataFile("styles.xml", new XURI[0]);
                 fail("addMetadataFile: styles.xml allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("meta.xml", new XURI[0]);
+                xDocMDAccess.addMetadataFile("meta.xml", new XURI[0]);
                 fail("addMetadataFile: meta.xml allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addMetadataFile("settings.xml", new XURI[0]);
+                xDocMDAccess.addMetadataFile("settings.xml", new XURI[0]);
                 fail("addMetadataFile: settings.xml allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.importMetadataFile(FileFormat.RDF_XML, null, "foo",
+                xDocMDAccess.importMetadataFile(FileFormat.RDF_XML, null, "foo",
                     foo, new XURI[0]);
                 fail("importMetadataFile: null stream allowed");
             } catch (IllegalArgumentException e) {
@@ -317,7 +334,7 @@ public class DocumentMetadataAccessTest
             final String sEmptyRDF = TestDocument.getUrl("empty.rdf");
             try {
                 XInputStream xFooIn = new StreamSimulator(sEmptyRDF, true, param);
-                xDMA.importMetadataFile(FileFormat.RDF_XML, xFooIn, "",
+                xDocMDAccess.importMetadataFile(FileFormat.RDF_XML, xFooIn, "",
                     foo, new XURI[0]);
                 fail("importMetadataFile: empty filename allowed");
             } catch (IllegalArgumentException e) {
@@ -326,7 +343,7 @@ public class DocumentMetadataAccessTest
             try {
                 XInputStream xFooIn =
                     new StreamSimulator(sEmptyRDF, true, param);
-                xDMA.importMetadataFile(FileFormat.RDF_XML, xFooIn, "meta.xml",
+                xDocMDAccess.importMetadataFile(FileFormat.RDF_XML, xFooIn, "meta.xml",
                     foo, new XURI[0]);
                 fail("importMetadataFile: meta.xml filename allowed");
             } catch (IllegalArgumentException e) {
@@ -335,7 +352,7 @@ public class DocumentMetadataAccessTest
             try {
                 XInputStream xFooIn =
                     new StreamSimulator(sEmptyRDF, true, param);
-                xDMA.importMetadataFile(FileFormat.RDF_XML,
+                xDocMDAccess.importMetadataFile(FileFormat.RDF_XML,
                     xFooIn, "foo", null, new XURI[0]);
                 fail("importMetadataFile: null base URI allowed");
             } catch (IllegalArgumentException e) {
@@ -344,62 +361,62 @@ public class DocumentMetadataAccessTest
             try {
                 XInputStream xFooIn =
                     new StreamSimulator(sEmptyRDF, true, param);
-                xDMA.importMetadataFile(FileFormat.RDF_XML,
+                xDocMDAccess.importMetadataFile(FileFormat.RDF_XML,
                     xFooIn, "foo", rdf_type, new XURI[0]);
                 fail("importMetadataFile: non-absolute base URI allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.removeMetadataFile(null);
+                xDocMDAccess.removeMetadataFile(null);
                 fail("removeMetadataFile: null URI allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addContentOrStylesFile("");
+                xDocMDAccess.addContentOrStylesFile("");
                 fail("addContentOrStylesFile: empty filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addContentOrStylesFile("/content.xml");
+                xDocMDAccess.addContentOrStylesFile("/content.xml");
                 fail("addContentOrStylesFile: absolute filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.addContentOrStylesFile("foo.rdf");
+                xDocMDAccess.addContentOrStylesFile("foo.rdf");
                 fail("addContentOrStylesFile: invalid filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.removeContentOrStylesFile("");
+                xDocMDAccess.removeContentOrStylesFile("");
                 fail("removeContentOrStylesFile: empty filename allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.loadMetadataFromStorage(null, foo, null);
+                xDocMDAccess.loadMetadataFromStorage(null, foo, null);
                 fail("loadMetadataFromStorage: null storage allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.storeMetadataToStorage(null/*, base*/);
+                xDocMDAccess.storeMetadataToStorage(null/*, base*/);
                 fail("storeMetadataToStorage: null storage allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.loadMetadataFromMedium(new PropertyValue[0]);
+                xDocMDAccess.loadMetadataFromMedium(new PropertyValue[0]);
                 fail("loadMetadataFromMedium: empty medium allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
             }
             try {
-                xDMA.storeMetadataToMedium(new PropertyValue[0]);
+                xDocMDAccess.storeMetadataToMedium(new PropertyValue[0]);
                 fail("storeMetadataToMedium: empty medium allowed");
             } catch (IllegalArgumentException e) {
                 // ignore
@@ -409,26 +426,26 @@ public class DocumentMetadataAccessTest
 
             System.out.println("Checking file addition/removal...");
 
-            xDMA.removeContentOrStylesFile(contentPath);
+            xDocMDAccess.removeContentOrStylesFile(contentPath);
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("removeContentOrStylesFile (content)",
                 eq(xStmtsEnum, new Statement[] {
                         manifestStmts[0], manifestStmts[2], manifestStmts[4]
                     }));
 
-            xDMA.addContentOrStylesFile(contentPath);
+            xDocMDAccess.addContentOrStylesFile(contentPath);
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("addContentOrStylesFile (content)",
                 eq(xStmtsEnum, manifestStmts));
 
-            xDMA.removeContentOrStylesFile(stylesPath);
+            xDocMDAccess.removeContentOrStylesFile(stylesPath);
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("removeContentOrStylesFile (styles)",
                 eq(xStmtsEnum, new Statement[] {
                         manifestStmts[0], manifestStmts[1], manifestStmts[3]
                     }));
 
-            xDMA.addContentOrStylesFile(stylesPath);
+            xDocMDAccess.addContentOrStylesFile(stylesPath);
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("addContentOrStylesFile (styles)",
                 eq(xStmtsEnum, manifestStmts));
@@ -441,19 +458,19 @@ public class DocumentMetadataAccessTest
                 new Statement(xFoo, rdf_type, pkg_MetadataFile, manifest);
             Statement xM_FooTypeBar =
                 new Statement(xFoo, rdf_type, bar, manifest);
-            xDMA.addMetadataFile(fooPath, new XURI[] { bar });
+            xDocMDAccess.addMetadataFile(fooPath, new XURI[] { bar });
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("addMetadataFile",
                 eq(xStmtsEnum, merge(manifestStmts, new Statement[] {
                         xM_BaseHaspartFoo, xM_FooTypeMetadata, xM_FooTypeBar
                     })));
 
-            XURI[] graphsBar = xDMA.getMetadataGraphsWithType(bar);
+            XURI[] graphsBar = xDocMDAccess.getMetadataGraphsWithType(bar);
             assertTrue("getMetadataGraphsWithType",
                 graphsBar.length == 1 && eq(graphsBar[0], xFoo));
 
 
-            xDMA.removeMetadataFile(xFoo);
+            xDocMDAccess.removeMetadataFile(xFoo);
             xStmtsEnum = xManifest.getStatements(null, null, null);
             assertTrue("removeMetadataFile",
                 eq(xStmtsEnum, manifestStmts));
@@ -468,7 +485,7 @@ public class DocumentMetadataAccessTest
 
             XURI uri;
             XMetadatable xMeta;
-            xMeta = xDMA.getElementByURI(xMeta1);
+            xMeta = xDocMDAccess.getElementByURI(xMeta1);
             assertTrue("getElementByURI: null", null != xMeta);
             String XmlId = xMeta.getMetadataReference().Second;
             String XmlId1 = xMeta1.getMetadataReference().Second;
@@ -483,7 +500,7 @@ public class DocumentMetadataAccessTest
                 fooBarPath);
             Statement[] metadataStmts = getMetadataFileStmts(xBaseURI,
                 fooBarPath);
-            xDMA.addMetadataFile(fooBarPath, new XURI[0]);
+            xDocMDAccess.addMetadataFile(fooBarPath, new XURI[0]);
             xStmtsEnum = xRep.getStatements(null, null, null);
             assertTrue("addMetadataFile",
                 eq(xStmtsEnum, merge(manifestStmts, metadataStmts )));
@@ -520,15 +537,15 @@ public class DocumentMetadataAccessTest
             xStmtsEnum = xRep.getStatements(null, null, null);
             XURI[] graphs = xRep.getGraphNames();
 
-            xDMA.storeMetadataToMedium(args);
+            xDocMDAccess.storeMetadataToMedium(args);
 
             // this should re-init
-            xDMA.loadMetadataFromMedium(argsEmptyNoContent);
-            xRep = xRS.getRDFRepository();
+            xDocMDAccess.loadMetadataFromMedium(argsEmptyNoContent);
+            xRep = xRepoSupplier.getRDFRepository();
             assertTrue("xRep null", null != xRep);
             assertTrue("baseURI still tdoc?",
-                !baseURI.equals(xDMA.getStringValue()));
-            Statement[] manifestStmts2 = getManifestStmts((XURI) xDMA);
+                !baseURI.equals(xDocMDAccess.getStringValue()));
+            Statement[] manifestStmts2 = getManifestStmts((XURI) xDocMDAccess);
             xStmtsEnum = xRep.getStatements(null, null, null);
             // there is no content or styles file in here, so we have just
             // the package stmt
@@ -536,29 +553,29 @@ public class DocumentMetadataAccessTest
                 eq(xStmtsEnum, new Statement[] { manifestStmts2[0] }));
 
             // this should re-init
-            xDMA.loadMetadataFromMedium(argsEmpty);
-            xRep = xRS.getRDFRepository();
+            xDocMDAccess.loadMetadataFromMedium(argsEmpty);
+            xRep = xRepoSupplier.getRDFRepository();
             assertTrue("xRep null", null != xRep);
             assertTrue("baseURI still tdoc?",
-                !baseURI.equals(xDMA.getStringValue()));
-            Statement[] manifestStmts3 = getManifestStmts((XURI) xDMA);
+                !baseURI.equals(xDocMDAccess.getStringValue()));
+            Statement[] manifestStmts3 = getManifestStmts((XURI) xDocMDAccess);
 
             xStmtsEnum = xRep.getStatements(null, null, null);
             assertTrue("loadMetadataFromMedium (no metadata)",
                 eq(xStmtsEnum, manifestStmts3));
 
-            xDMA.loadMetadataFromMedium(args);
-            xRep = xRS.getRDFRepository();
+            xDocMDAccess.loadMetadataFromMedium(args);
+            xRep = xRepoSupplier.getRDFRepository();
             assertTrue("xRep null", null != xRep);
-            Statement[] manifestStmts4 = getManifestStmts((XURI) xDMA);
-            Statement[] metadataStmts4 = getMetadataFileStmts((XURI) xDMA,
+            Statement[] manifestStmts4 = getManifestStmts((XURI) xDocMDAccess);
+            Statement[] metadataStmts4 = getMetadataFileStmts((XURI) xDocMDAccess,
                 fooBarPath);
 
             xStmtsEnum = xRep.getStatements(null, null, null);
             assertTrue("some graph(s) not reloaded",
                 graphs.length == xRep.getGraphNames().length);
 
-            XURI xFoobar4 = URI.createNS(xContext, xDMA.getStringValue(),
+            XURI xFoobar4 = URI.createNS(xContext, xDocMDAccess.getStringValue(),
                 fooBarPath);
             Statement xFoobar_FooBarFoo4 =
                 new Statement(foo, bar, foo, xFoobar4);
@@ -572,7 +589,7 @@ public class DocumentMetadataAccessTest
 
             String f = tempDir + "TESTPARA.odt";
 
-            XStorable xStor = UnoRuntime.queryInterface(XStorable.class, xRS);
+            XStorable xStor = UnoRuntime.queryInterface(XStorable.class, xRepoSupplier);
 
             xStor.storeToURL(f, new PropertyValue[0]);
 
@@ -656,17 +673,17 @@ public class DocumentMetadataAccessTest
             PropertyValue[] loadProps = new PropertyValue[1];
             loadProps[0] = new PropertyValue();
             loadProps[0].Name = "Hidden";
-            loadProps[0].Value = new Boolean(true);
+            loadProps[0].Value = true;
 
 
 
             xComp = util.DesktopTools.loadDoc(xMSF, file, loadProps);
 
-            XRepositorySupplier xRS = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
-            assertTrue("xRS null", null != xRS);
+            XRepositorySupplier xRepoSupplier = UnoRuntime.queryInterface(XRepositorySupplier.class, xComp);
+            assertTrue("xRS null", null != xRepoSupplier);
 
-            XDocumentRepository xRep = UnoRuntime.queryInterface(XDocumentRepository.class, xRS.getRDFRepository());
-            assertTrue("xRep null", null != xRep);
+            XDocumentRepository xDocRepository = UnoRuntime.queryInterface(XDocumentRepository.class, xRepoSupplier.getRDFRepository());
+            assertTrue("xRep null", null != xDocRepository);
 
             XTextDocument xTextDoc = UnoRuntime.queryInterface(XTextDocument.class, xComp);
 
@@ -684,7 +701,7 @@ public class DocumentMetadataAccessTest
 
             Statement x_FooBarLit1 = new Statement(foo, bar, mkLit("1"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 1",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -693,7 +710,7 @@ public class DocumentMetadataAccessTest
 
             Statement x_FooBarLit2 = new Statement(foo, bar, mkLit("2"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 2",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -703,7 +720,7 @@ public class DocumentMetadataAccessTest
             Statement x_BlankBarLit3 =
                 new Statement(blank1, bar, mkLit("3"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 3",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -714,7 +731,7 @@ public class DocumentMetadataAccessTest
             Statement x_BlankBarLit4 =
                 new Statement(blank2, bar, mkLit("4"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 4",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -725,7 +742,7 @@ public class DocumentMetadataAccessTest
             Statement x_BlankBarLit5 =
                 new Statement(blank1, bar, mkLit("5"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 5",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -741,7 +758,7 @@ public class DocumentMetadataAccessTest
             Statement x_FooBarLit6 = new Statement(foo, bar, mkLit("6"), null);
             Statement x_FooBazLit6 = new Statement(foo, baz, mkLit("6"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 6",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -752,7 +769,7 @@ public class DocumentMetadataAccessTest
             Statement x_FooBazLit7 = new Statement(foo, baz, mkLit("7"), null);
             Statement x_FooFooLit7 = new Statement(foo, foo, mkLit("7"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 7",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -765,7 +782,7 @@ public class DocumentMetadataAccessTest
             Statement x_FooBarLittype = new Statement(foo, bar, lit_type, null);
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 8",
                 result.Second &&
                 eq(result.First, new Statement[] {
@@ -773,7 +790,7 @@ public class DocumentMetadataAccessTest
                     }));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 9",
                 result.Second &&
                 eq(result.First, new Statement[] {
@@ -781,7 +798,7 @@ public class DocumentMetadataAccessTest
                     }));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 10",
                 result.Second &&
                 eq(result.First, new Statement[] {
@@ -791,7 +808,7 @@ public class DocumentMetadataAccessTest
             Statement x_FooBarLit11
                 = new Statement(foo, bar, mkLit("11", bar), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 11",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -802,7 +819,7 @@ public class DocumentMetadataAccessTest
             Statement x_FileBarLit12 =
                 new Statement(xFile, bar, mkLit("12"), null);
               xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 12",
                 !result.Second &&
                 eq(result.First, new Statement[] {
@@ -810,7 +827,7 @@ public class DocumentMetadataAccessTest
                     }));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 13",
                 result.Second &&
                 eq(result.First, new Statement[] {
@@ -820,7 +837,7 @@ public class DocumentMetadataAccessTest
             Statement x_FooLabelLit14 =
                 new Statement(foo, rdfs_label, mkLit("14"), null);
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 14",
                 result.Second &&
                 eq(result.First, new Statement[] {
@@ -828,33 +845,33 @@ public class DocumentMetadataAccessTest
                     }));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 15", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 16", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 17", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 18", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 19", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 20", eq(result.First, new Statement[] { } ));
 
             xPara = UnoRuntime.queryInterface(
                 XMetadatable.class, xEnum.nextElement());
-            result = xRep.getStatementRDFa(xPara);
+            result = xDocRepository.getStatementRDFa(xPara);
             assertTrue("RDFa: 21", eq(result.First, new Statement[] { } ));
 
             System.out.println("...done");
@@ -889,7 +906,7 @@ public class DocumentMetadataAccessTest
 
     public void report(Exception e) {
         System.out.println("Exception occurred:");
-        e.printStackTrace();
+        e.printStackTrace(System.out);
         report2(e);
         fail();
     }
@@ -1275,14 +1292,18 @@ public class DocumentMetadataAccessTest
 
     // setup and close connections
     @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "starting class: " + DocumentMetadataAccess.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.setUp();
     }
 
     @AfterClass public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection() DocumentMetadataAccessTest");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "finishing class: " + DocumentMetadataAccess.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.tearDown();
     }
 

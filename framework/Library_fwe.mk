@@ -77,6 +77,8 @@ $(eval $(call gb_Library_add_exception_objects,fwe,\
     framework/source/fwe/helper/imageproducer \
     framework/source/fwe/helper/propertysetcontainer \
     framework/source/fwe/helper/titlehelper \
+    framework/source/fwe/helper/documentundoguard \
+    framework/source/fwe/helper/undomanagerhelper \
     framework/source/fwe/helper/uiconfigelementwrapperbase \
     framework/source/fwe/helper/uielementwrapperbase \
     framework/source/fwe/interaction/preventduplicateinteraction \
@@ -105,11 +107,24 @@ $(eval $(call gb_Library_add_linked_libs,fwe,\
 ))
 endif
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,fwe,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    mingwex \
+    kernel32 \
+    msvcrt \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,fwe,\
     kernel32 \
     msvcrt \
     uwinapi \
 ))
+endif
 endif
 # TODO: visibility
 # vim: set noet sw=4 ts=4:

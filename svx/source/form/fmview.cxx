@@ -46,7 +46,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <basic/sbuno.hxx>
-#include <sfx2/macrconf.hxx>
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"

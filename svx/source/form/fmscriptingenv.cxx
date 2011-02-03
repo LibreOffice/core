@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "fmscriptingenv.hxx"
-#include <svx/fmmodel.hxx>
+#include "svx/fmmodel.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -37,6 +37,7 @@
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
 /** === end UNO includes === **/
+
 #include <tools/diagnose_ex.h>
 #include <cppuhelper/implbase1.hxx>
 #include <comphelper/implementationreference.hxx>
@@ -45,6 +46,8 @@
 #include <vcl/svapp.hxx>
 #include <vos/mutex.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/app.hxx>
+#include <basic/basmgr.hxx>
 
 #include <boost/shared_ptr.hpp>
 
@@ -416,60 +419,6 @@ namespace svxform
 
             m_rObjectShell.CallXScript( m_sScriptCode, _rArguments, _rSynchronousResult, aOutArgsIndex, aOutArgs );
         }
-
-        //................................................................
-        //. QualifiedBasicScript
-        //................................................................
-        class QualifiedBasicScript : public IScript
-        {
-            SfxObjectShell&         m_rObjectShell;
-            const ::rtl::OUString   m_sMacroLocation;
-            const ::rtl::OUString   m_sScriptCode;
-
-        public:
-            QualifiedBasicScript( SfxObjectShell& _rObjectShell, const ::rtl::OUString& _rLocation, const ::rtl::OUString& _rScriptCode )
-                :m_rObjectShell( _rObjectShell )
-                ,m_sMacroLocation( _rLocation )
-                ,m_sScriptCode( _rScriptCode )
-            {
-            }
-
-            // IScript
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
-        };
-
-        //................................................................
-        void QualifiedBasicScript::invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult )
-        {
-            m_rObjectShell.CallStarBasicScript( m_sScriptCode, m_sMacroLocation,
-                &_rArguments, &_rSynchronousResult );
-        }
-
-        //................................................................
-        //. UnqualifiedBasicScript
-        //................................................................
-        class UnqualifiedBasicScript : public IScript
-        {
-            SfxObjectShell&         m_rObjectShell;
-            const ::rtl::OUString   m_sScriptCode;
-
-        public:
-            UnqualifiedBasicScript( SfxObjectShell& _rObjectShell, const ::rtl::OUString& _rScriptCode )
-                :m_rObjectShell( _rObjectShell )
-                ,m_sScriptCode( _rScriptCode )
-            {
-            }
-
-            // IScript
-            virtual void invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult );
-        };
-
-        //................................................................
-        void UnqualifiedBasicScript::invoke( const Sequence< Any >& _rArguments, Any& _rSynchronousResult )
-        {
-            m_rObjectShell.CallScript( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ), m_sScriptCode,
-                &_rArguments, &_rSynchronousResult );
-        }
     }
 
     //--------------------------------------------------------------------
@@ -481,6 +430,7 @@ namespace svxform
         if ( m_bDisposed )
             return;
 
+        // SfxObjectShellRef is good here since the model controls the lifetime of the object
         SfxObjectShellRef xObjectShell = m_rFormModel.GetObjectShell();
         if( !xObjectShell.Is() )
             return;
@@ -513,14 +463,24 @@ namespace svxform
                 sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
             }
 
-            if ( sMacroLocation.getLength() )
-            {   // we have a StarBasic macro with fully-qualified macro location
-                pScript.reset( new QualifiedBasicScript( *xObjectShell, sMacroLocation, sScriptCode ) );
+            if ( !sMacroLocation.getLength() )
+            {
+                // legacy format: use the app-wide Basic, if it has a respective method, otherwise fall back to the doc's Basic
+                if ( SFX_APP()->GetBasicManager()->HasMacro( sScriptCode ) )
+                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application" ) );
+                else
+                    sMacroLocation = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "document" ) );
             }
-            else
-            {   // we have a StarBasic macro without qualified location - let the object shell gues ....
-                pScript.reset( new UnqualifiedBasicScript( *xObjectShell, sScriptCode ) );
-            }
+
+            ::rtl::OUStringBuffer aScriptURI;
+            aScriptURI.appendAscii( "vnd.sun.star.script:" );
+            aScriptURI.append( sScriptCode );
+            aScriptURI.appendAscii( "?language=Basic" );
+            aScriptURI.appendAscii( "&location=" );
+            aScriptURI.append( sMacroLocation );
+
+            const ::rtl::OUString sScriptURI( aScriptURI.makeStringAndClear() );
+            pScript.reset( new NewStyleUNOScript( *xObjectShell, sScriptURI ) );
         }
 
         OSL_ENSURE( pScript.get(), "FormScriptingEnvironment::doFireScriptEvent: no script to execute!" );

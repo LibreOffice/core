@@ -41,6 +41,8 @@
 #include <tools/simplerm.hxx>
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
 #include <vcl/sound.hxx>
@@ -375,6 +377,8 @@ SfxApplication::SfxApplication()
 
 SfxApplication::~SfxApplication()
 {
+    OSL_ENSURE( GetObjectShells_Impl().Count() == 0, "Memory leak: some object shells were not removed!" );
+
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     SfxModule::DestroyModules_Impl();
@@ -829,3 +833,7 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
     pSymbol( nTabId );
 }
 
+ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
+{
+    return pMgr->ExecuteMacro( rCode, pArgs, pRet);
+}

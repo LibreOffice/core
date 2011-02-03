@@ -38,6 +38,7 @@
 #include <sfx2/linkmgr.hxx>
 
 #include <tools/urlobj.hxx>
+#include <tools/diagnose_ex.h>
 #include <unotools/pathoptions.hxx>
 #ifndef GCC
 #endif
@@ -197,11 +198,9 @@ long SfxApplication::DdeExecute
     else
     {
         // alle anderen per BASIC
-        EnterBasicCall();
         StarBASIC* pBasic = GetBasic();
-        DBG_ASSERT( pBasic, "Wo ist mein Basic???" );
+        ENSURE_OR_RETURN( pBasic, "where's my basic?", 0 );
         SbxVariable* pRet = pBasic->Execute( rCmd );
-        LeaveBasicCall();
         if( !pRet )
         {
             SbxBase::ResetError();

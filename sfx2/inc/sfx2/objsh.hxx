@@ -73,7 +73,6 @@ class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
-class SfxEventConfigItem_Impl;
 class SfxStyleSheetBasePool;
 class INote;
 class SfxStyleSheetPool;
@@ -158,11 +157,6 @@ typedef sal_uInt32 SfxObjectShellFlags;
 
 //--------------------------------------------------------------------
 
-#define SEQUENCE                ::com::sun::star::uno::Sequence
-#define OUSTRING                ::rtl::OUString
-
-//--------------------------------------------------------------------
-
 #define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
 #define HIDDENINFORMATION_NOTES                 0x0002
 #define HIDDENINFORMATION_DOCUMENTVERSIONS      0x0004
@@ -195,12 +189,6 @@ in fremde Objekte integriert werden k"onnen.
 
 ----------------------------------------------------------------------*/
 
-enum SfxTitleQuery
-{
-    SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL
-};
-
-
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
 
@@ -209,6 +197,7 @@ class SFX2_DLLPUBLIC SfxObjectShell :
     public ::comphelper::IEmbeddedHelper, public ::sfx2::IXmlIdRegistrySupplier
 {
 friend struct ModifyBlocker_Impl;
+friend class SfxObjectShellLock;
 
 private:
     struct SfxObjectShell_Impl* pImp;               // interne Daten
@@ -367,36 +356,11 @@ public:
     sal_uInt16                  GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual String              QueryTitle( SfxTitleQuery ) const;
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
-    sal_Bool                    IsBasic( const String & rCode, SbxObject * pVCtrl = NULL );
 
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
-                                    SbxObject* pVCtrl, SbxArray* pArgs = 0, SbxValue* pRet = 0 );
-    ErrCode                     Call( const String & rCode, sal_Bool bIsBasicReturn, SbxObject * pVCtrl = NULL );
-
-    ErrCode                     CallScript(
-        const String & rScriptType, const String & rCode, const void* pArgs = NULL, void* pRet = NULL );
-
-    /** calls a StarBasic script without magic
-    @param _rMacroName
-        specifies the name of the method to execute
-    @param _rLocation
-        specifies the location of the script to execute. Allowed values are "application" and "document".
-    @param _pArguments
-        This is a pointer to a Sequence< Any >. All elements of the Sequence are wrapped into Basic objects
-        and passed as arguments to the method specified by <arg>_rMacroName</arg>
-    @param _pReturn
-        If not <NULL/>, the Any pointed to by this argument contains the return value of the (synchronous) call
-        to the StarBasic macro
-    */
-    ErrCode     CallStarBasicScript(
-        const String& _rMacroName,
-        const String& _rLocation,
-        const void* _pArguments = NULL,
-        void* _pReturn = NULL
-    );
+                                    SbxArray* pArgs = 0, SbxValue* pRet = 0 );
 
     ErrCode     CallXScript(
         const String& rScriptURL,
@@ -617,7 +581,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetBaseModel() const;
     // Nur uebergangsweise fuer die Applikationen !!!
 
-    virtual SEQUENCE< OUSTRING >    GetEventNames();
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > GetEventNames();
 
     Window*                     GetDialogParent( SfxMedium* pMedium=0 );
     String                      UpdateTitle( SfxMedium* pMed=NULL, USHORT nDocViewNo=0 );
@@ -791,7 +755,6 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
-    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = FALSE );
 
@@ -831,7 +794,6 @@ public:
 //#endif
 
 //--------------------------------------------------------------------
-
 #ifndef SFX_DECL_OBJECTSHELL_DEFINED
 #define SFX_DECL_OBJECTSHELL_DEFINED
 SV_DECL_REF(SfxObjectShell)
@@ -839,8 +801,6 @@ SV_DECL_REF(SfxObjectShell)
 SV_DECL_LOCK(SfxObjectShell)
 SV_IMPL_LOCK(SfxObjectShell)
 SV_IMPL_REF(SfxObjectShell)
-
-SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& rName, BOOL bWriting );
 
 //#if 0 // _SOLAR__PRIVATE
 //--------------------------------------------------------------------

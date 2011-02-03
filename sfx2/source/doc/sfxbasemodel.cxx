@@ -127,6 +127,7 @@
 #include "sfx2/docstoragemodifylistener.hxx"
 #include "sfx2/brokenpackageint.hxx"
 #include "graphhelp.hxx"
+#include "docundomanager.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
@@ -153,6 +154,10 @@ using ::com::sun::star::lang::WrappedTargetException;
 using ::com::sun::star::uno::Type;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::document::XDocumentRecovery;
+using ::com::sun::star::document::XUndoManager;
+using ::com::sun::star::document::XUndoAction;
+using ::com::sun::star::document::UndoFailedException;
+using ::com::sun::star::frame::XModel;
 
 /** This Listener is used to get notified when the XDocumentProperties of the
     XModel change.
@@ -227,10 +232,11 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
     uno::Reference< script::provider::XScriptProvider >     m_xScriptProvider;
     uno::Reference< ui::XUIConfigurationManager >           m_xUIConfigurationManager;
     ::rtl::Reference< ::sfx2::DocumentStorageModifyListener >   m_pStorageModifyListen;
-    ::rtl::OUString                                 m_sModuleIdentifier;
+    ::rtl::OUString                                         m_sModuleIdentifier;
     css::uno::Reference< css::frame::XTitle >               m_xTitleHelper;
     css::uno::Reference< css::frame::XUntitledNumbers >     m_xNumberedControllers;
-    uno::Reference< rdf::XDocumentMetadataAccess>   m_xDocumentMetadata;
+    uno::Reference< rdf::XDocumentMetadataAccess>           m_xDocumentMetadata;
+    ::rtl::Reference< ::sfx2::DocumentUndoManager >         m_pDocumentUndoManager;
 
 
     IMPL_SfxBaseModel_DataContainer( ::osl::Mutex& rMutex, SfxObjectShell* pObjectShell )
@@ -248,6 +254,7 @@ struct IMPL_SfxBaseModel_DataContainer : public ::sfx2::IModifiableDocument
             ,   m_xTitleHelper          ()
             ,   m_xNumberedControllers  ()
             ,   m_xDocumentMetadata     () // lazy
+            ,   m_pDocumentUndoManager  ()
     {
         // increase global instance counter.
         ++g_nInstanceCounter;
@@ -788,6 +795,12 @@ void SAL_CALL SfxBaseModel::dispose() throw(::com::sun::star::uno::RuntimeExcept
         m_pData->m_pStorageModifyListen = NULL;
     }
 
+    if ( m_pData->m_pDocumentUndoManager.is() )
+    {
+        m_pData->m_pDocumentUndoManager->disposing();
+        m_pData->m_pDocumentUndoManager = NULL;
+    }
+
     lang::EventObject aEvent( (frame::XModel *)this );
     m_pData->m_aInterfaceContainer.disposeAndClear( aEvent );
 
@@ -1185,6 +1198,51 @@ void SAL_CALL SfxBaseModel::disconnectController( const uno::Reference< frame::X
         m_pData->m_xCurrent = uno::Reference< frame::XController > ();
 }
 
+namespace
+{
+    typedef ::cppu::WeakImplHelper1< XUndoAction > ControllerLockUndoAction_Base;
+    class ControllerLockUndoAction : public ControllerLockUndoAction_Base
+    {
+    public:
+        ControllerLockUndoAction( const Reference< XModel >& i_model, const bool i_undoIsUnlock )
+            :m_xModel( i_model )
+            ,m_bUndoIsUnlock( i_undoIsUnlock )
+        {
+        }
+
+        // XUndoAction
+        virtual ::rtl::OUString SAL_CALL getTitle() throw (RuntimeException);
+        virtual void SAL_CALL undo(  ) throw (UndoFailedException, RuntimeException);
+        virtual void SAL_CALL redo(  ) throw (UndoFailedException, RuntimeException);
+
+    private:
+        const Reference< XModel >   m_xModel;
+        const bool                  m_bUndoIsUnlock;
+    };
+
+    ::rtl::OUString SAL_CALL ControllerLockUndoAction::getTitle() throw (RuntimeException)
+    {
+        // this action is intended to be used within an UndoContext only, so nobody will ever see this title ...
+        return ::rtl::OUString();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::undo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->unlockControllers();
+        else
+            m_xModel->lockControllers();
+    }
+
+    void SAL_CALL ControllerLockUndoAction::redo(  ) throw (UndoFailedException, RuntimeException)
+    {
+        if ( m_bUndoIsUnlock )
+            m_xModel->lockControllers();
+        else
+            m_xModel->unlockControllers();
+    }
+}
+
 //________________________________________________________________________________________________________
 //  frame::XModel
 //________________________________________________________________________________________________________
@@ -1194,6 +1252,14 @@ void SAL_CALL SfxBaseModel::lockControllers() throw(::com::sun::star::uno::Runti
     SfxModelGuard aGuard( *this );
 
     ++m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, true ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1205,6 +1271,14 @@ void SAL_CALL SfxBaseModel::unlockControllers() throw(::com::sun::star::uno::Run
     SfxModelGuard aGuard( *this );
 
     --m_pData->m_nControllerLockCount ;
+
+    if  (   m_pData->m_pDocumentUndoManager.is()
+        &&  m_pData->m_pDocumentUndoManager->isInContext()
+        &&  !m_pData->m_pDocumentUndoManager->isLocked()
+        )
+    {
+        m_pData->m_pDocumentUndoManager->addUndoAction( new ControllerLockUndoAction( this, false ) );
+    }
 }
 
 //________________________________________________________________________________________________________
@@ -1643,6 +1717,17 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
 #endif
     }
+}
+
+//________________________________________________________________________________________________________
+//  XUndoManagerSupplier
+//________________________________________________________________________________________________________
+Reference< XUndoManager > SAL_CALL SfxBaseModel::getUndoManager(  ) throw (RuntimeException)
+{
+    SfxModelGuard aGuard( *this );
+    if ( !m_pData->m_pDocumentUndoManager.is() )
+        m_pData->m_pDocumentUndoManager.set( new ::sfx2::DocumentUndoManager( *this ) );
+    return m_pData->m_pDocumentUndoManager.get();
 }
 
 //________________________________________________________________________________________________________
@@ -4372,5 +4457,18 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 
     return xDMA->storeMetadataToMedium(i_rMedium);
+}
+
+// =====================================================================================================================
+// = SfxModelSubComponent
+// =====================================================================================================================
+
+SfxModelSubComponent::~SfxModelSubComponent()
+{
+}
+
+void SfxModelSubComponent::disposing()
+{
+    // nothing to do here
 }
 

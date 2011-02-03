@@ -40,7 +40,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objface.hxx>
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include "sfx2/sfxresid.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/module.hxx>

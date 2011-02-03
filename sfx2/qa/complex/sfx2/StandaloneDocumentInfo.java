@@ -24,10 +24,12 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.standalonedocumentinfo;
+package complex.sfx2;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
+import complex.sfx2.standalonedocinfo.StandaloneDocumentInfoTest;
+import complex.sfx2.standalonedocinfo.Test01;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -40,17 +42,8 @@ import static org.junit.Assert.*;
 /* Document here
 */
 
-public class StandaloneDocumentInfoUnitTest {
+public class StandaloneDocumentInfo {
     private XMultiServiceFactory m_xMSF = null;
-
-//    public String[] getTestMethodNames() {
-//        return new String[] {
-//            "ExecuteTest01"};
-//    }
-
-//    public String[] getTestObjectNames() {
-//        return new String[] {"StandaloneDocumentInfoUnitTest"};
-//    }
 
     @Before public void before() {
         try {
@@ -82,15 +75,20 @@ public class StandaloneDocumentInfoUnitTest {
     }
 
     // setup and close connections
-    @BeforeClass public static void setUpConnection() throws Exception {
-        System.out.println("setUpConnection()");
+    @BeforeClass public static void setUpConnection() throws Exception
+    {
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "starting class: " + StandaloneDocumentInfo.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.setUp();
     }
 
     @AfterClass public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
-        System.out.println("tearDownConnection()");
+        System.out.println( "------------------------------------------------------------" );
+        System.out.println( "finishing class: " + StandaloneDocumentInfo.class.getName() );
+        System.out.println( "------------------------------------------------------------" );
         connection.tearDown();
     }
 

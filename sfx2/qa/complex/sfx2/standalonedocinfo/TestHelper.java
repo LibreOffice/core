@@ -24,18 +24,25 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+package complex.sfx2.standalonedocinfo;
 
-#ifndef _SFX_CONFIG_HRC
-#define _SFX_CONFIG_HRC
 
-#include <sfx2/sfx.hrc>
+public class TestHelper {
 
-// #defines *****************************************************************
+    String m_sTestPrefix;
 
-#define BTN_OK                          2
-#define BTN_CANCEL                      3
-#define FT_OK                           4
-#define FT_CANCEL                       5
+    /** Creates a new instance of TestHelper
+     * @param sTestPrefix
+     */
+    public TestHelper ( String sTestPrefix ) {
+        m_sTestPrefix = sTestPrefix;
+    }
 
-#endif
+    public void Error ( String sError ) {
+        System.out.println ( m_sTestPrefix + "Error: " + sError );
+    }
 
+    public void Message ( String sMessage ) {
+        System.out.println ( m_sTestPrefix + sMessage );
+    }
+}

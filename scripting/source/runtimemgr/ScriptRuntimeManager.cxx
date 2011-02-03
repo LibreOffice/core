@@ -37,6 +37,7 @@
 #include <util/scriptingconstants.hxx>
 
 #include <cppuhelper/implementationentry.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XEventListener.hpp>
@@ -68,14 +69,10 @@ static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceNam
 // ScriptRuntimeManager Constructor
 ScriptRuntimeManager::ScriptRuntimeManager(
     const Reference< XComponentContext > & xContext ) :
-    m_xContext( xContext )
+    m_xContext( xContext, UNO_SET_THROW )
 {
     OSL_TRACE( "< ScriptRuntimeManager ctor called >\n" );
-    validateXRef( m_xContext,
-        "ScriptRuntimeManager::ScriptRuntimeManager: invalid context" );
-    m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr,
-        "ScriptRuntimeManager::ScriptRuntimeManager: cannot get ServiceManager" );
+    m_xMgr.set( m_xContext->getServiceManager(), UNO_SET_THROW );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
     // test
     //scripting_securitymgr::ScriptSecurityManager ssm(xContext);
@@ -106,22 +103,12 @@ throw( RuntimeException )
         Reference< storage::XScriptInfo > sinfo =
             Reference< storage::XScriptInfo >( scriptInfo, UNO_QUERY_THROW );
 
-        OUStringBuffer *buf = new OUStringBuffer(80);
-        buf->appendAscii("/singletons/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeFor");
-        buf->append(sinfo->getLanguage());
+        OUStringBuffer* buf( 80 );
+        buf.appendAscii("/singletons/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeFor");
+        buf.append(sinfo->getLanguage());
 
-        Any a = m_xContext->getValueByName(buf->makeStringAndClear());
-
-        if ( sal_False == ( a >>= xInterface ) )
-        {
-            throw RuntimeException(
-                sinfo->getLanguage().concat( OUSTR( " runtime support is not installed for this language" ) ),
-                Reference< XInterface >() );
-        }
-        validateXRef( xInterface,
-            "ScriptRuntimeManager::GetScriptRuntime: cannot get appropriate ScriptRuntime Service"
-        );
-        xScriptInvocation = Reference< runtime::XScriptInvocation >( xInterface, UNO_QUERY_THROW );
+        xInterface.set( m_xContext->getValueByName( buf.makeStringAndClear() ), UNO_QUERY_THROW );
+        xScriptInvocation.set( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -143,13 +130,14 @@ throw( RuntimeException )
 
     try
     {
-        Reference< XInterface > xInterface = m_xMgr->createInstanceWithContext(
-            OUString::createFromAscii(
-                "drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
-                m_xContext );
-        validateXRef( xInterface,
-            "ScriptRuntimeManager::GetScriptRuntime: cannot get instance of DefaultScriptNameResolver" );
-        xScriptNameResolver = Reference< runtime::XScriptNameResolver >( xInterface, UNO_QUERY_THROW );
+        Reference< XInterface > xInterface(
+            m_xMgr->createInstanceWithContext(
+                OUString::createFromAscii("drafts.com.sun.star.script.framework.runtime.DefaultScriptNameResolver" ),
+                m_xContext
+            ),
+            UNO_SET_THROW
+        );
+        xScriptNameResolver.set( xInterface, UNO_QUERY_THROW );
     }
     catch ( Exception & e )
     {
@@ -182,9 +170,8 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
     try
     {
-        Reference< storage::XScriptInfo > resolvedScript = resolve( scriptURI,
-            resolvedCtx );
-        validateXRef( resolvedScript, "ScriptRuntimeManager::invoke: No resolvedURI" );
+        Reference< storage::XScriptInfo > resolvedScript = resolve( scriptURI, resolvedCtx );
+        ENSURE_OR_THROW( resolvedScript.is(), "ScriptRuntimeManager::invoke: No resolvedURI" );
 
         Reference< beans::XPropertySet > xPropSetResolvedCtx;
         if ( sal_False == ( resolvedCtx >>= xPropSetResolvedCtx ) )
@@ -216,7 +203,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
 
         Reference< runtime::XScriptInvocation > xScriptInvocation =
             getScriptRuntime( resolvedScript );
-        validateXRef( xScriptInvocation,
+        ENSURE_OR_THROW( xScriptInvocation.is(),
             "ScriptRuntimeManager::invoke: cannot get instance of language specific runtime." );
 
         // the scriptURI is currently passed to the language-dept runtime but
@@ -232,13 +219,7 @@ Any SAL_CALL ScriptRuntimeManager::invoke(
         {
             Any a = m_xContext->getValueByName(
                     scriptingConstantsPool.SCRIPTSTORAGEMANAGER_SERVICE );
-            Reference < lang::XEventListener > xEL_ScriptStorageManager;
-            if ( sal_False == ( a >>= xEL_ScriptStorageManager ) )
-            {
-                throw RuntimeException( OUSTR( "ScriptRuntimeManager::invoke: can't get ScriptStorageManager XEventListener interface when trying to dispose of filesystem storage" ),
-                        Reference< XInterface > () );
-            }
-            validateXRef( xEL_ScriptStorageManager, "Cannot get XEventListener from ScriptStorageManager" );
+            Reference < lang::XEventListener > xEL_ScriptStorageManager( a, UNO_QUERY_THROW );
             lang::EventObject event(resolvedScript);
             xEL_ScriptStorageManager->disposing( event );
         }
@@ -310,7 +291,7 @@ throw( lang::IllegalArgumentException, script::CannotConvertException, RuntimeEx
     Reference< storage::XScriptInfo > resolvedURI;
 
     Reference< runtime::XScriptNameResolver > xScriptNameResolver = getScriptNameResolver();
-    validateXRef( xScriptNameResolver,
+    ENSURE_OR_THROW( xScriptNameResolver.is(),
         "ScriptRuntimeManager::resolve: No ScriptNameResolver" );
 
     try

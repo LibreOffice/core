@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-package complex.standalonedocumentinfo;
+package complex.sfx2.standalonedocinfo;
 
 public interface StandaloneDocumentInfoTest {
     boolean test();

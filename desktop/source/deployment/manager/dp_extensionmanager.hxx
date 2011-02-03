@@ -205,6 +205,12 @@ public:
                css::lang::IllegalArgumentException,
                css::uno::RuntimeException);
 
+    virtual void SAL_CALL synchronizeBundledPrereg(
+        css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
+        css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
+        throw (css::deployment::DeploymentException,
+               css::uno::RuntimeException);
+
     virtual css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > SAL_CALL
     getExtensionsWithUnacceptedLicenses(
         ::rtl::OUString const & repository,
@@ -229,11 +235,7 @@ private:
     };
 
     css::uno::Reference< css::uno::XComponentContext> m_xContext;
-
-    css::uno::Reference<css::deployment::XPackageManager> m_userRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_sharedRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_bundledRepository;
-    css::uno::Reference<css::deployment::XPackageManager> m_tmpRepository;
+    css::uno::Reference<css::deployment::XPackageManagerFactory> m_xPackageManagerFactory;
 
     //only to be used within addExtension
     ::osl::Mutex m_addMutex;
@@ -242,6 +244,11 @@ private:
        then "bundled"
      */
     ::std::list< ::rtl::OUString > m_repositoryNames;
+
+    css::uno::Reference<css::deployment::XPackageManager> getUserRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getSharedRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getBundledRepository();
+    css::uno::Reference<css::deployment::XPackageManager> getTmpRepository();
 
     bool isUserDisabled(::rtl::OUString const & identifier,
                         ::rtl::OUString const & filename);

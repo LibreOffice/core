@@ -4635,31 +4635,6 @@ SfxVoidItem PickList SID_PICKLIST
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem PlayMacro SID_PLAYMACRO
-(SfxStringItem Statement SID_STATEMENT,SfxBoolItem Asynchron SID_ASYNCHRON)
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
 
 [
@@ -5235,31 +5210,6 @@ SfxVoidItem RunBasic SID_BASICRUN
     StatusBarConfig = FALSE,
     ToolBoxConfig = TRUE,
     GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem RunStarWriter SID_STARTSW
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
 ]
 
 //--------------------------------------------------------------------------
@@ -6567,31 +6517,6 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem ToolsMacroEdit SID_EDITMACRO
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------

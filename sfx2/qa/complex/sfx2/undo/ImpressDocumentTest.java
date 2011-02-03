@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -23,13 +22,25 @@
  * <http://www.openoffice.org/license.html>
  * for a copy of the LGPLv3 License.
  *
- ************************************************************************/
+ *************************************************************************/
 
-//#include "config.hrc"
-//#include "sfxlocal.hrc"
-#include <sfx2/sfx.hrc>
+package complex.sfx2.undo;
 
-String STR_FILTERNAME_CFG
+import com.sun.star.lang.XMultiServiceFactory;
+import org.openoffice.test.tools.DocumentType;
+
+/**
+ * @author frank.schoenheit@oracle.com
+ */
+public class ImpressDocumentTest extends DrawingOrPresentationDocumentTest
 {
-    Text [ en-US ] = "Configuration" ;
-};
+    public ImpressDocumentTest( XMultiServiceFactory i_orb ) throws com.sun.star.uno.Exception
+    {
+        super( i_orb, DocumentType.PRESENTATION );
+    }
+
+    public String getDocumentDescription()
+    {
+        return "presentation document";
+    }
+}

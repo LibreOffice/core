@@ -67,6 +67,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/chart/ColorPropertySet \
     xmloff/source/chart/PropertyMaps \
     xmloff/source/chart/SchXMLAutoStylePoolP \
+    xmloff/source/chart/SchXMLAxisContext \
     xmloff/source/chart/SchXMLCalculationSettingsContext \
     xmloff/source/chart/SchXMLChartContext \
     xmloff/source/chart/SchXMLExport \
@@ -390,6 +391,20 @@ $(eval $(call gb_Library_add_linked_libs,xo,\
 endif
 
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,xo,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    kernel32 \
+    msvcrt \
+    user32 \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,xo,\
     kernel32 \
     msvcrt \
@@ -397,5 +412,6 @@ $(eval $(call gb_Library_add_linked_libs,xo,\
     user32 \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet ts=4 sw=4:

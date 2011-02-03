@@ -137,7 +137,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/control/bindings \
     sfx2/source/control/ctrlitem \
     sfx2/source/control/dispatch \
-    sfx2/source/control/macrconf \
     sfx2/source/control/macro \
     sfx2/source/control/minfitem \
     sfx2/source/control/msg \
@@ -215,6 +214,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/doc/plugin \
     sfx2/source/doc/printhelper \
     sfx2/source/doc/querytemplate \
+    sfx2/source/doc/docundomanager \
     sfx2/source/doc/sfxbasemodel \
     sfx2/source/doc/sfxmodelfactory \
     sfx2/source/doc/syspath \
@@ -285,6 +285,25 @@ $(eval $(call gb_Library_add_cxxobjects,sfx,\
     , $(gb_LinkTarget_EXCEPTIONFLAGS) -nologo -UPRECOMPILED_HEADERS \
 ))
 
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,sfx,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    moldname \
+    mingwex \
+    advapi32 \
+    gdi32 \
+    kernel32 \
+    msvcrt \
+    ole32 \
+    shell32 \
+    user32 \
+    uuid \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,sfx,\
     advapi32 \
     gdi32 \
@@ -297,6 +316,7 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
     uuid \
     uwinapi \
 ))
+endif
 else
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
     sfx2/source/appl/shutdowniconw32 \

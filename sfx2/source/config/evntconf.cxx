@@ -34,7 +34,7 @@
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-    #include <sot/storage.hxx>
+#include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
 #include <rtl/ustring.h>
@@ -42,12 +42,11 @@
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
 #include <sfx2/evntconf.hxx>
-#include <sfx2/macrconf.hxx>
+
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "config.hrc"
 #include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
