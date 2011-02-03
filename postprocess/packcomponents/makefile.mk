@@ -108,6 +108,7 @@ my_components = \
     log \
     mcnttype \
     migrationoo2 \
+    msfilter \
     msforms \
     mysql \
     odbc \
