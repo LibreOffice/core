@@ -82,6 +82,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/vclxsystemdependentwindow \
     toolkit/source/awt/vclxtabcontrol \
     toolkit/source/awt/vclxtabpage \
+    toolkit/source/awt/vclxtabpagecontainer \
     toolkit/source/awt/animatedimagespeer \
     toolkit/source/awt/vclxtoolkit \
     toolkit/source/awt/vclxtopwindow \
@@ -91,6 +92,7 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/awt/xsimpleanimation \
     toolkit/source/awt/xthrobber \
     toolkit/source/controls/accessiblecontrolcontext \
+    toolkit/source/controls/controlmodelcontainerbase \
     toolkit/source/controls/dialogcontrol \
     toolkit/source/controls/eventcontainer \
     toolkit/source/controls/formattedcontrol \
@@ -101,6 +103,8 @@ $(eval $(call gb_Library_add_exception_objects,tk,\
     toolkit/source/controls/grid/gridcontrol \
     toolkit/source/controls/roadmapcontrol \
     toolkit/source/controls/roadmapentry \
+    toolkit/source/controls/tabpagecontainer \
+    toolkit/source/controls/tabpagemodel \
     toolkit/source/controls/stdtabcontroller \
     toolkit/source/controls/stdtabcontrollermodel \
     toolkit/source/controls/tkscrollbar \
@@ -168,10 +172,23 @@ $(eval $(call gb_Library_add_linked_libs,tk,\
 ))
 endif
 ifeq ($(OS),WNT)
+ifneq ($(USE_MINGW),)
+$(eval $(call gb_Library_add_linked_libs,tk,\
+    mingwthrd \
+    $(gb_MINGW_LIBSTDCPP) \
+    mingw32 \
+    $(gb_MINGW_LIBGCC) \
+    uwinapi \
+    mingwex \
+    kernel32 \
+    msvcrt \
+))
+else
 $(eval $(call gb_Library_add_linked_libs,tk,\
     kernel32 \
     msvcrt \
     uwinapi \
 ))
+endif
 endif
 # vim: set noet sw=4 ts=4:

@@ -43,7 +43,7 @@
 #ifndef _SV_SALIDS_HRC
 #include <salids.hrc>
 #endif
-#include <vcl/salatype.hxx>
+#include <vcl/apptypes.hxx>
 #include <saldata.hxx>
 #include <salinst.h>
 #include <salframe.h>

@@ -65,6 +65,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
+#include <comphelper/flagguard.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
@@ -93,32 +94,6 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 using ::toolkit::ReleaseSolarMutex;
-
-//====================================================================
-//= misc helpers
-//====================================================================
-namespace
-{
-    //................................................................
-    //. FlagGuard
-    //................................................................
-    class FlagGuard
-    {
-    private:
-        bool&   m_rFlag;
-
-    public:
-        FlagGuard( bool& _rFlag )
-            :m_rFlag( _rFlag )
-        {
-            m_rFlag = true;
-        }
-        ~FlagGuard()
-        {
-            m_rFlag = false;
-        }
-    };
-}
 
 //====================================================================
 //= VCLXWindowImpl
@@ -2347,7 +2322,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
             if ( !mpImpl->getDrawingOntoParent_ref() )
             {
-                FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
+                ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
 
                 BOOL bWasVisible = pWindow->IsVisible();
                 Point aOldPos( pWindow->GetPosPixel() );
