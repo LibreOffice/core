@@ -928,7 +928,24 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
     {
         nX += IMGTEXTSPACE;
 
-        bool bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL);
+        bool bSymbolFont = (rInfo.GetCharSet() == RTL_TEXTENCODING_SYMBOL)
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("cmsy10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("cmex10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("feta26")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("jsMath-cmsy10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("jsMath-cmex10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("msam10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("msbm10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("wasy10")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("Denemo")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("GlyphBasic1")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("GlyphBasic2")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("GlyphBasic3")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("GlyphBasic4")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("Letters Laughing")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("MusiQwik")
+                              || rInfo.GetName().EqualsIgnoreCaseAscii("MusiSync");
+
         // starsymbol is a unicode font, but cannot display its own name
         const bool bOpenSymbol = rInfo.GetName().EqualsIgnoreCaseAscii( "starsymbol" )
                               || rInfo.GetName().EqualsIgnoreCaseAscii( "opensymbol" );
