@@ -107,8 +107,8 @@ int main(int argc, char **argv)
 #endif
 
     // try to read a possible open password form stdin
-    char aPwBuf[34];
-    aPwBuf[33] = 0;
+    char aPwBuf[129];
+    aPwBuf[128] = 0;
     if( ! fgets( aPwBuf, sizeof(aPwBuf)-1, stdin ) )
         aPwBuf[0] = 0; // mark as empty
     else
@@ -132,14 +132,14 @@ int main(int argc, char **argv)
 
 
     // check for password string(s)
-    GooString* pOwnerPasswordStr( ownerPassword[0] != '\001'
-                                  ? new GooString(ownerPassword)
-                                  : (GooString *)NULL );
-    GooString* pUserPasswordStr( aPwBuf[0] != 0
+    GooString* pOwnerPasswordStr( aPwBuf[0] != 0
                                  ? new GooString( aPwBuf )
-                                 : ( userPassword[0] != '\001'
-                                     ? new GooString(userPassword)
-                                     : (GooString *)NULL ) );
+                                 : (ownerPassword[0] != '\001'
+                                    ? new GooString(ownerPassword)
+                                    : (GooString *)NULL ) );
+    GooString* pUserPasswordStr(  userPassword[0] != '\001'
+                                  ? new GooString(userPassword)
+                                  : (GooString *)NULL );
     if( outputFile[0] != '\001' )
         g_binary_out = fopen(outputFile,"wb");
 
@@ -188,7 +188,6 @@ int main(int argc, char **argv)
    }
    else
    {
-
       pdfi::PDFOutDev* pOutDev( new pdfi::PDFOutDev(&aDoc) );
 
       // tell receiver early - needed for proper progress calculation

@@ -32,6 +32,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/alloc.h>
 #include <rtl/digest.h>
 #include <rtl/cipher.h>
@@ -1275,6 +1276,23 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
     }
 
     return bValid;
+}
+
+rtl::OUString PDFFile::getDecryptionKey() const
+{
+    rtl::OUStringBuffer aBuf( ENCRYPTION_KEY_LEN * 2 );
+    if( impl_getData()->m_bIsEncrypted )
+    {
+        for( sal_uInt32 i = 0; i < m_pData->m_nKeyLength; i++ )
+        {
+            static const sal_Unicode pHexTab[16] = { '0', '1', '2', '3', '4', '5', '6', '7',
+                                                     '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+            aBuf.append( pHexTab[(m_pData->m_aDecryptionKey[i] >> 4) & 0x0f] );
+            aBuf.append( pHexTab[(m_pData->m_aDecryptionKey[i] & 0x0f)] );
+        }
+
+    }
+    return aBuf.makeStringAndClear();
 }
 
 PDFFileImplData* PDFFile::impl_getData() const
