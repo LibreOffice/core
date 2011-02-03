@@ -30,7 +30,7 @@
 #define _REGIMPL_HXX_
 
 #include <set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include    <registry/registry.h>
 #include    <rtl/ustring.hxx>
@@ -168,11 +168,7 @@ private:
                         const rtl::OUString& sName,
                         sal_Int16 nSpace) const;
 
-#ifdef USE_MSVC_HASH_MAP
-    typedef std::hash_map< rtl::OUString, ORegKey* > KeyMap;
-#else
-    typedef std::hash_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
-#endif
+    typedef boost::unordered_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;

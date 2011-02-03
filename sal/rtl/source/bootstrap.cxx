@@ -50,7 +50,7 @@
 
 #include "macro.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 #define MY_STRING_(x) # x
@@ -604,19 +604,10 @@ void Bootstrap_Impl::expandValue(
 namespace {
 
 struct bootstrap_map {
-    // map<> may be preferred here, but hash_map<> is implemented fully inline,
-    // thus there is no need to link against the stlport:
-#ifdef USE_MSVC_HASH_MAP
-    typedef std::hash_map<
-        rtl::OUString, Bootstrap_Impl *,
-        std::hash_compare<rtl::OUString>,
-        rtl::Allocator< OUString> > t;
-#else
-    typedef std::hash_map<
+    typedef boost::unordered_map<
         rtl::OUString, Bootstrap_Impl *,
         rtl::OUStringHash, std::equal_to< rtl::OUString >,
         rtl::Allocator< OUString > > t;
-#endif
 
     // get and release must only be called properly synchronized via some mutex
     // (e.g., osl::Mutex::getGlobalMutex()):

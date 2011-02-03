@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <vector>
 #include <set>
@@ -73,7 +73,7 @@ typedef ::std::list< AstUnionLabel* >   LabelList;
 
 class AstDeclaration;
 
-typedef ::std::hash_map< ::rtl::OString, AstDeclaration*, HashString, EqualString > DeclMap;
+typedef ::boost::unordered_map< ::rtl::OString, AstDeclaration*, HashString, EqualString > DeclMap;
 typedef ::std::list< AstDeclaration* > DeclList;
 
 class AstScope;

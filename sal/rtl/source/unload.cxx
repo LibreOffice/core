@@ -32,7 +32,7 @@
 #include <rtl/alloc.h>
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "rtl/allocator.hxx"
 
 #include <functional>
@@ -157,30 +157,13 @@ struct hashModule
     }
 };
 
-#ifdef USE_MSVC_HASH_MAP
-namespace stdext
-{
-    inline size_t hash_value( const oslModule& rkey)
-    {
-        return (size_t)rkey;
-    }
-}
-
-typedef std::hash_map<
-    oslModule,
-    std::pair<sal_uInt32, component_canUnloadFunc>,
-    std::hash_compare<oslModule>,
-    rtl::Allocator<oslModule>
-> ModuleMap;
-#else
-typedef std::hash_map<
+typedef boost::unordered_map<
     oslModule,
     std::pair<sal_uInt32, component_canUnloadFunc>,
     hashModule,
     std::equal_to<oslModule>,
     rtl::Allocator<oslModule>
 > ModuleMap;
-#endif
 
 typedef ModuleMap::iterator Mod_IT;
 
@@ -323,22 +306,13 @@ struct hashListener
     }
 };
 
-#ifdef USE_MSVC_HASH_MAP
-typedef std::hash_map<
-    sal_Int32,
-    std::pair<rtl_unloadingListenerFunc, void*>,
-    std::hash_compare<sal_Int32>,
-    rtl::Allocator<sal_Int32>
-> ListenerMap;
-#else
-typedef std::hash_map<
+typedef boost::unordered_map<
     sal_Int32,
     std::pair<rtl_unloadingListenerFunc, void*>,
     hashListener,
     std::equal_to<sal_Int32>,
     rtl::Allocator<sal_Int32>
 > ListenerMap;
-#endif
 
 typedef ListenerMap::iterator Lis_IT;
 

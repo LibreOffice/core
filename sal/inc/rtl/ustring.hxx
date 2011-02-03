@@ -1550,14 +1550,6 @@ inline OString OUStringToOString( const OUString & rUnicode,
 
 } /* Namespace */
 
-namespace stdext
-{
-    inline size_t hash_value(const rtl::OUString &rString)
-    {
-        return rtl::OUStringHash()(rString);
-    }
-}
-
 #endif /* __cplusplus */
 
 #endif /* _RTL_USTRING_HXX */
