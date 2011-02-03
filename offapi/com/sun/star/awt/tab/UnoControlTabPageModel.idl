@@ -24,23 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_Break_idl
-#define com_sun_star_chart2_Break_idl
+#ifndef __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
+#define __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
+
+#include <com/sun/star/awt/tab/XTabPageModel.idl>
 
 //=============================================================================
 
-module com {  module sun {  module star {  module chart2 {
+module com {  module sun {  module star {  module awt { module tab {
 
 //=============================================================================
 
-struct Break
+/** specifies the standard model of a XTabPageModel.
+    @since OOo 3.4
+ */
+service UnoControlTabPageModel : XTabPageModel
 {
-    double Min;
-    double Max;
+    /** Creates a new XTabPageModel with a given ID.
+    */
+    create([in] short tabPageID);
+
+    /** Creates a new XTabPageModel with a given ID and a url which is used to load teh tab page model.
+    */
+    load([in] short tabPageID,[in] string url);
 };
 
 //=============================================================================
 
-}; }; }; };
+}; }; }; }; };
 
 #endif

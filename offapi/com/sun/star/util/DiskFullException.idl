@@ -38,7 +38,7 @@ module com {  module sun {  module star {  module util {
 
 //=============================================================================
 
-/** is thrown when a disk full error occurs.
+/** @deprecated
  */
 published exception DiskFullException: com::sun::star::util::FileIOException
 {

@@ -50,6 +50,9 @@ constants AxisType
     /** the axis shows the series names (z axis)
      */
     const long SERIES = 3;
+    /** the axis shows dates
+     */
+    const long DATE = 4;
 };
 
 } ; // chart2
