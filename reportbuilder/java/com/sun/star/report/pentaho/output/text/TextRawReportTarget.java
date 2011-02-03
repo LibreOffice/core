@@ -26,6 +26,7 @@
  ************************************************************************/
 package com.sun.star.report.pentaho.output.text;
 
+
 import com.sun.star.report.DataSourceFactory;
 import com.sun.star.report.ImageService;
 import com.sun.star.report.InputRepository;
@@ -45,13 +46,14 @@ import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.styles.LengthCalculator;
 
 import java.io.IOException;
-import java.io.InputStream;
+
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+
 
 import org.jfree.layouting.input.style.values.CSSNumericValue;
 import org.jfree.layouting.util.AttributeMap;
@@ -67,7 +69,6 @@ import org.jfree.report.util.AttributeNameGenerator;
 import org.jfree.report.util.IntegerCache;
 
 import org.pentaho.reporting.libraries.base.util.FastStack;
-import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
 import org.pentaho.reporting.libraries.resourceloader.ResourceKey;
 import org.pentaho.reporting.libraries.resourceloader.ResourceManager;
@@ -1270,7 +1271,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             rootAttributes.addNamespaceDeclaration("config", OfficeNamespaces.CONFIG);
             rootAttributes.addNamespaceDeclaration("ooo", OfficeNamespaces.OO2004_NS);
             rootAttributes.setAttribute(OfficeNamespaces.OFFICE_NS, "version",
-                   OfficeDocumentReportTarget.ODF_VERSION);
+                    OfficeDocumentReportTarget.ODF_VERSION);
             final OutputStream outputStream = getOutputRepository().createOutputStream("settings.xml", "text/xml");
             final XmlWriter xmlWriter = new XmlWriter(new OutputStreamWriter(outputStream, "UTF-8"), createTagDescription());
             xmlWriter.setAlwaysAddNamespace(true);
@@ -1291,20 +1292,7 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
             xmlWriter.writeCloseTag();
             xmlWriter.close();
 
-            // now copy the meta.xml
-            if (getInputRepository().isReadable("meta.xml"))
-            {
-                final InputStream inputStream = getInputRepository().createInputStream("meta.xml");
-                try
-                {
-                    final OutputStream outputMetaStream = getOutputRepository().createOutputStream("meta.xml", "text/xml");
-                    IOUtils.getInstance().copyStreams(inputStream, outputMetaStream);
-                    outputMetaStream.close();
-                } finally
-                {
-                    inputStream.close();
-                }
-            }
+            copyMeta();
         }
         catch (IOException ioe)
         {

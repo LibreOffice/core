@@ -1870,3 +1870,32 @@
      }
      objStr->getObject(e->gen, num, obj);
      break;
+--- misc/xpdf-3.02/fofi/FoFiType1.cc	2007-02-27 23:05:51.000000000 +0100
++++ misc/build/xpdf-3.02/fofi/FoFiType1.cc	2011-01-04 13:41:06.871136746 +0100
+@@ -224,7 +224,7 @@
+ 		code = code * 8 + (*p2 - '0');
+ 	      }
+ 	    }
+-	    if (code < 256) {
++	    if (code < 256 && code >= 0) {
+ 	      for (p = p2; *p == ' ' || *p == '\t'; ++p) ;
+ 	      if (*p == '/') {
+ 		++p;
+--- misc/xpdf-3.02/xpdf/Gfx.cc	2007-02-27 23:05:52.000000000 +0100
++++ misc/build/xpdf-3.02/xpdf/Gfx.cc	2011-01-04 13:41:19.847501431 +0100
+@@ -441,6 +441,7 @@
+ 	 void *abortCheckCbkDataA) {
+   int i;
+ 
++  parser = NULL;
+   xref = xrefA;
+   subPage = gFalse;
+   printCommands = globalParams->getPrintCommands();
+@@ -483,6 +484,7 @@
+ 	 void *abortCheckCbkDataA) {
+   int i;
+ 
++  parser = NULL;
+   xref = xrefA;
+   subPage = gTrue;
+   printCommands = globalParams->getPrintCommands();
