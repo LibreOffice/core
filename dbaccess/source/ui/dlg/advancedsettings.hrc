@@ -69,7 +69,9 @@
 #define FT_AUTOINCREMENTVALUE   1
 #define FT_RETRIEVE_AUTO        2
 #define FT_BOOLEANCOMPARISON    3
+#define FT_MAXROWSCAN           4
 
 #define LB_BOOLEANCOMPARISON    1
+#define NF_MAXROWSCAN           1
 
 #endif // DBAUI_ADVANCEDSETTINGS_HRC
