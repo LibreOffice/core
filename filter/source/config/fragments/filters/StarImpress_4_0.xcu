@@ -1,5 +1,5 @@
     <node oor:name="StarImpress 4.0" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT TEMPLATE OWN ALIEN 3RDPARTYFILTER PREFERRED</value></prop>
         <prop oor:name="UIComponent"/>
         <prop oor:name="FilterService"><value>com.sun.star.comp.office.BF_MigrateFilter</value></prop>
         <prop oor:name="UserData"><value></value></prop>

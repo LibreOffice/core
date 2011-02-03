@@ -39,9 +39,7 @@
 #include <map>
 #include <vector>
 
-#ifdef DEBUG_DOMAINMAPPER
 #include <resourcemodel/TagLogger.hxx>
-#endif
 
 namespace com{namespace sun{namespace star{
     namespace beans{
@@ -136,10 +134,7 @@ public:
 
     virtual void insertTableProperties( const PropertyMap* );
 
-#ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag() const;
-#endif
-
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 

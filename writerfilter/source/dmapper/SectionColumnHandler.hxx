@@ -28,7 +28,7 @@
 #define INCLUDED_SECTIONCOLUMNHANDLER_HXX
 
 #include <WriterFilterDllApi.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 #include <boost/shared_ptr.hpp>
 
 
@@ -44,7 +44,7 @@ struct _Column
 };
 
 
-class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public Properties
+class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public LoggedProperties
 {
     bool        bEqualWidth;
     sal_Int32   nSpace;
@@ -54,13 +54,13 @@ class WRITERFILTER_DLLPRIVATE SectionColumnHandler : public Properties
 
     _Column   aTempColumn;
 
+    // Properties
+    virtual void lcl_attribute(Id Name, Value & val);
+    virtual void lcl_sprm(Sprm & sprm);
+
 public:
     SectionColumnHandler();
     virtual ~SectionColumnHandler();
-
-    // Properties
-    virtual void attribute(Id Name, Value & val);
-    virtual void sprm(Sprm & sprm);
 
     bool        IsEqualWidth() const { return bEqualWidth; }
     sal_Int32   GetSpace() const { return nSpace; }

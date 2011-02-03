@@ -1755,6 +1755,18 @@ void WorkbookStreamObject::implDumpRecordBody()
             if( eBiff >= BIFF5 ) dumpHex< sal_uInt16 >( "flags", "CHDATAFORMAT-FLAGS" );
         break;
 
+        case BIFF_ID_CHDATERANGE:
+            dumpDec< sal_uInt16 >( "minimum-date" );
+            dumpDec< sal_uInt16 >( "maximum-date" );
+            dumpDec< sal_uInt16 >( "major-unit-value" );
+            dumpDec< sal_uInt16 >( "major-unit", "CHDATERANGE-UNIT" );
+            dumpDec< sal_uInt16 >( "minor-unit-value" );
+            dumpDec< sal_uInt16 >( "minor-unit", "CHDATERANGE-UNIT" );
+            dumpDec< sal_uInt16 >( "base-unit", "CHDATERANGE-UNIT" );
+            dumpDec< sal_uInt16 >( "axis-crossing-date" );
+            dumpHex< sal_uInt16 >( "flags", "CHDATERANGE-FLAGS" );
+        break;
+
         case BIFF_ID_CHECKCOMPAT:
             dumpFrHeader( true, true );
             dumpBool< sal_uInt32 >( "check-compatibility" );
@@ -1882,18 +1894,6 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_uInt16 >( "label-frequency" );
             dumpDec< sal_uInt16 >( "tick-frequency" );
             dumpHex< sal_uInt16 >( "flags", "CHLABELRANGE-FLAGS" );
-        break;
-
-        case BIFF_ID_CHLABELRANGE2:
-            dumpDec< sal_uInt16 >( "minimum-categ" );
-            dumpDec< sal_uInt16 >( "maximum-categ" );
-            dumpDec< sal_uInt16 >( "major-unit-value" );
-            dumpDec< sal_uInt16 >( "major-unit" );
-            dumpDec< sal_uInt16 >( "minor-unit-value" );
-            dumpDec< sal_uInt16 >( "minor-unit" );
-            dumpDec< sal_uInt16 >( "base-unit" );
-            dumpDec< sal_uInt16 >( "axis-crossing-date" );
-            dumpHex< sal_uInt16 >( "flags", "CHLABELRANGE2-FLAGS" );
         break;
 
         case BIFF_ID_CHLEGEND:

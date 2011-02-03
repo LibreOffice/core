@@ -1,3 +1,29 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
 #ifndef INCLUDED_NUMBERINGMANAGER_HXX
 #define INCLUDED_NUMBERINGMANAGER_HXX
 
@@ -5,7 +31,7 @@
 
 #include <WriterFilterDllApi.hxx>
 #include <dmapper/DomainMapper.hxx>
-#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/LoggedResources.hxx>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
 
@@ -170,8 +196,8 @@ public:
 /** This class provides access to the defined numbering styles.
   */
 class ListsManager :
-    public Properties,
-    public Table
+    public LoggedProperties,
+    public LoggedTable
 {
 private:
 
@@ -190,6 +216,13 @@ private:
 
     AbstractListDef::Pointer    GetAbstractList( sal_Int32 nId );
 
+    // Properties
+    virtual void lcl_attribute( Id nName, Value & rVal );
+    virtual void lcl_sprm(Sprm & sprm);
+
+    // Table
+    virtual void lcl_entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
+
 public:
 
     ListsManager(
@@ -198,13 +231,6 @@ public:
     virtual ~ListsManager();
 
     typedef boost::shared_ptr< ListsManager >  Pointer;
-
-    // Properties
-    virtual void attribute( Id nName, Value & rVal );
-    virtual void sprm(Sprm & sprm);
-
-    // Table
-    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Config methods
     void SetLFOImport( bool bLFOImport ) { m_bIsLFOImport = bLFOImport; };
