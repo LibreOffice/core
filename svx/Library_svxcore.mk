@@ -430,10 +430,6 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
-#.IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
-#NOOPTFILES= $(SLO)$/EnhancedCustomShapeFunctionParser.obj
-#.ENDIF
-
 # the following source file can't be compiled with optimization by some compilers (crash or endless loop):
 # Solaris Sparc with Sun compiler, gcc on MacOSX and Linux PPC
 # the latter is currently not supported by gbuild and needs a fix here later

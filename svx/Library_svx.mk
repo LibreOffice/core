@@ -222,7 +222,6 @@ else
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_linked_libs,svx,\
     advapi32 \
-    oldnames \
 ))
 $(eval $(call gb_Library_add_exception_objects,svx,\
     svx/source/dialog/sendreportw32 \

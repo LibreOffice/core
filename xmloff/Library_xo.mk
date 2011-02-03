@@ -379,18 +379,4 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/xforms/xformsimport \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,xo,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    mingwex \
-    kernel32 \
-    msvcrt \
-))
-endif
-endif
 # vim: set noet ts=4 sw=4:
