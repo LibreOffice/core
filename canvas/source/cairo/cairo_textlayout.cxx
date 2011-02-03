@@ -81,7 +81,7 @@ namespace cairocanvas
                               sal_Int8      nTextDirection )
         {
             // TODO(P3): avoid if already correctly set
-            ULONG nLayoutMode;
+            sal_uLong nLayoutMode;
             switch( nTextDirection )
             {
                 default:
