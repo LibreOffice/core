@@ -56,25 +56,4 @@ $(eval $(call gb_Executable_add_exception_objects,sspretty,\
     tools/bootstrp/sspretty \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Executable_add_linked_libs,sspretty,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Executable_add_linked_libs,sspretty,\
-    oldnames \
-))
-endif
-endif
-
 # vim: set noet sw=4 ts=4:

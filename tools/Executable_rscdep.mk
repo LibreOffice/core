@@ -64,21 +64,7 @@ $(eval $(call gb_Executable_set_cxxflags,rscdep,\
 ))
 endif
 $(eval $(call gb_Executable_add_linked_libs,rscdep,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-else
-$(eval $(call gb_Executable_add_linked_libs,rscdep,\
     gnu_getopt \
-    oldnames \
 ))
 endif
 endif
