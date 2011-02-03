@@ -205,6 +205,7 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SOCKET, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LocalSocket" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_RESPECTRESULTSETTYPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RespectDriverResultSetType" ) ) ) );
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_MAX_ROW_SCAN, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxRowScan" ) ) ) );
 
     // special settings for adabas
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
