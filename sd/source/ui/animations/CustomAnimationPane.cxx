@@ -289,7 +289,7 @@ CustomAnimationPane::~CustomAnimationPane()
 
 void CustomAnimationPane::addUndo()
 {
-    SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+    ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
     if( pManager )
     {
         SdPage* pPage = SdPage::getImplementation( mxCurrentPage );
@@ -1953,6 +1953,16 @@ void CustomAnimationPane::onChange( bool bCreate )
                 {
                     CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
 
+                    // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+                    if( bHasText && (aTargets.size() == 1) )
+                    {
+                        Reference< XShape > xShape( (*aIter), UNO_QUERY );
+                        if( xShape.is() && !hasVisibleShape( xShape ) )
+                        {
+                            mpMainSequence->createTextGroup( pCreated, 1, -1.0, sal_False, sal_False );
+                        }
+                    }
+
                     if( bFirst )
                         bFirst = false;
                     else
@@ -2451,7 +2461,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
         CustomAnimationEffectPtr pEffect = xTag->getEffect();
         if( (pPathObj != 0) && pEffect.get() != 0 )
         {
-            SfxUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
+            ::svl::IUndoManager* pManager = mrBase.GetDocShell()->GetUndoManager();
             if( pManager )
             {
                 SdPage* pPage = SdPage::getImplementation( mxCurrentPage );

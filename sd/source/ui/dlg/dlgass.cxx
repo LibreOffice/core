@@ -49,7 +49,7 @@
 #include <svl/undo.hxx>
 #include "DrawDocShell.hxx"
 #include <vcl/gdimtf.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include "docprev.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -1556,7 +1556,7 @@ void AssistentDlgImpl::UpdatePreview( BOOL bDocPreview )
         {
             SfxObjectShell* pShell = xDocShell;
             DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
-            SfxUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
+            ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
             mbUserDataDirty = TRUE;
