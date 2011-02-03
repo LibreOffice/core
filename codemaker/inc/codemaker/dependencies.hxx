@@ -31,7 +31,7 @@
 
 #include "rtl/string.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace rtl { class OUString; }
 class TypeManager;
@@ -53,7 +53,7 @@ public:
      */
     enum Kind { KIND_NO_BASE, KIND_BASE };
 
-    typedef std::hash_map< rtl::OString, Kind, rtl::OStringHash > Map;
+    typedef boost::unordered_map< rtl::OString, Kind, rtl::OStringHash > Map;
 
     /**
        Constructs the dependencies for a given type.

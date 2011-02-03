@@ -29,28 +29,17 @@
 #ifndef INCLUDED_CODEMAKER_OPTIONS_HXX
 #define INCLUDED_CODEMAKER_OPTIONS_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <codemaker/global.hxx>
 
-#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString,
-    ::rtl::OString,
-    HashString,
-    EqualString,
-    NewAlloc
-> OptionMap;
-#else
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString,
     ::rtl::OString,
     HashString,
     EqualString
 > OptionMap;
-#endif
 
 class IllegalArgument
 {

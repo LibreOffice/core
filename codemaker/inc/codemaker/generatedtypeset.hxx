@@ -31,7 +31,7 @@
 
 #include "rtl/string.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 /// @HTML
 
@@ -72,7 +72,7 @@ private:
     GeneratedTypeSet(GeneratedTypeSet &); // not implemented
     void operator =(GeneratedTypeSet); // not implemented
 
-    std::hash_set< rtl::OString, rtl::OStringHash > m_set;
+    boost::unordered_set< rtl::OString, rtl::OStringHash > m_set;
 };
 
 }
