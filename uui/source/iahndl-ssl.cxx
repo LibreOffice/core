@@ -25,12 +25,18 @@
  *
  ************************************************************************/
 
+
 #include "com/sun/star/security/CertificateValidity.hpp"
+#include "com/sun/star/security/XCertificateExtension.hpp"
+#include "com/sun/star/security/XSanExtension.hpp"
+#include <com/sun/star/security/ExtAltNameType.hpp>
 #include "com/sun/star/task/XInteractionAbort.hpp"
 #include "com/sun/star/task/XInteractionApprove.hpp"
 #include "com/sun/star/task/XInteractionRequest.hpp"
 #include "com/sun/star/ucb/CertificateValidationRequest.hpp"
+#include <com/sun/star/uno/Reference.hxx>
 
+#include <com/sun/star/uno/Sequence.hxx>
 #include "vos/mutex.hxx"
 #include "tools/datetime.hxx"
 #include "svl/zforlist.hxx"
@@ -46,6 +52,9 @@
 #define DESCRIPTION_1 1
 #define DESCRIPTION_2 2
 #define TITLE 3
+
+#define OID_SUBJECT_ALTERNATIVE_NAME "2.5.29.17"
+
 
 using namespace com::sun::star;
 
@@ -77,19 +86,25 @@ getContentPart( const String& _rRawString )
 
 bool
 isDomainMatch(
-    rtl::OUString hostName, rtl::OUString certHostName)
+              rtl::OUString hostName, uno::Sequence< ::rtl::OUString > certHostNames)
 {
-    if (hostName.equalsIgnoreAsciiCase( certHostName ))
-        return true;
+    for ( int i = 0; i < certHostNames.getLength(); i++){
+        ::rtl::OUString element = certHostNames[i];
 
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
-              hostName.getLength() >= certHostName.getLength()  )
-    {
-        rtl::OUString cmpStr = certHostName.copy( 1 );
+       if (element.getLength() == 0)
+           continue;
 
-        if ( hostName.matchIgnoreAsciiCase(
-                 cmpStr, hostName.getLength() - cmpStr.getLength()) )
-            return true;
+       if (hostName.equalsIgnoreAsciiCase( element ))
+           return true;
+
+       if ( 0 == element.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+                 hostName.getLength() >= element.getLength()  )
+       {
+           rtl::OUString cmpStr = element.copy( 1 );
+           if ( hostName.matchIgnoreAsciiCase(
+                    cmpStr, hostName.getLength() - cmpStr.getLength()) )
+               return true;
+       }
     }
 
     return false;
@@ -278,10 +293,34 @@ handleCertificateValidationRequest_(
                                               rRequest.Certificate );
     }
 
+    uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
+    uno::Sequence< security::CertAltNameEntry > altNames;
+    for (sal_Int32 i = 0 ; i < extensions.getLength(); i++){
+        uno::Reference< security::XCertificateExtension >element = extensions[i];
+
+        rtl::OString aId ( (const sal_Char *)element->getExtensionId().getArray(), element->getExtensionId().getLength());
+        if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
+        {
+           uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
+           altNames =  sanExtension->getAlternativeNames();
+           break;
+        }
+    }
+
+    ::rtl::OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
+    uno::Sequence< ::rtl::OUString > certHostNames(altNames.getLength() + 1);
+
+    certHostNames[0] = certHostName;
+
+    for(int n = 1; n < altNames.getLength(); n++){
+        if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME){
+           altNames[n].Value >>= certHostNames[n];
+        }
+    }
+
     if ( (!isDomainMatch(
               rRequest.HostName,
-              getContentPart(
-                  rRequest.Certificate->getSubjectName()) )) &&
+              certHostNames )) &&
           trustCert )
     {
         trustCert = executeSSLWarnDialog( pParent,
