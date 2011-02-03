@@ -1,5 +1,5 @@
---- misc/neon-0.29.5/src/config.h	2010-12-07 15:53:32.000000000 +0100
-+++ misc/build/neon-0.29.5/src/config.h	2010-12-07 13:44:29.000000000 +0100
+--- misc/neon-0.29.5/src/config.h	2011-02-03 10:32:38.000000000 +0100
++++ misc/build/neon-0.29.5/src/config.h	2011-02-03 10:26:19.000000000 +0100
 @@ -1 +1,488 @@
 -dummy
 +
@@ -490,8 +490,8 @@
 +#else
 +#define HAVE_NTLM 1
 +#endif
---- misc/neon-0.29.5/src/makefile.mk	2010-12-07 15:53:32.000000000 +0100
-+++ misc/build/neon-0.29.5/src/makefile.mk	2010-12-07 13:44:29.000000000 +0100
+--- misc/neon-0.29.5/src/makefile.mk	2011-02-03 10:32:38.000000000 +0100
++++ misc/build/neon-0.29.5/src/makefile.mk	2011-02-03 10:26:19.000000000 +0100
 @@ -1 +1,102 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..
@@ -597,7 +597,7 @@
 +DEF1NAME=$(SHL1TARGET)
 +.INCLUDE :  target.mk
 --- misc/neon-0.29.5/src/ne_auth.c	2010-10-14 17:00:53.000000000 +0200
-+++ misc/build/neon-0.29.5/src/ne_auth.c	2010-12-07 15:39:56.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_auth.c	2011-02-03 10:31:22.000000000 +0100
 @@ -367,7 +367,7 @@
  static int get_credentials(auth_session *sess, ne_buffer **errmsg, int attempt,
                             struct auth_challenge *chall, char *pwbuf) 
@@ -607,7 +607,28 @@
                                chall->handler->attempt++, sess->username, pwbuf) == 0) {
          return 0;
      } else {
-@@ -610,10 +610,12 @@
+@@ -385,15 +385,19 @@
+ {
+     char *tmp, password[NE_ABUFSIZ];
+ 
++#if 0 /* Workaround - IIS sends challenge without realm. */
++
+     /* Verify challenge... must have a realm */
+     if (parms->realm == NULL) {
+         challenge_error(errmsg, _("missing realm in Basic challenge"));
+ 	return -1;
+     }
++#endif
+ 
+     clean_session(sess);
+     
+-    sess->realm = ne_strdup(parms->realm);
++    if (parms->realm != NULL)
++        sess->realm = ne_strdup(parms->realm);
+ 
+     if (get_credentials(sess, errmsg, attempt, parms, password)) {
+ 	/* Failed to get credentials */
+@@ -610,10 +614,12 @@
          return NULL;
  }
  
@@ -621,7 +642,7 @@
      
      NE_DEBUG(NE_DBG_HTTPAUTH, "auth: SSPI challenge.\n");
      
-@@ -630,8 +632,17 @@
+@@ -630,8 +636,17 @@
              return status;
          }
      }
@@ -641,7 +662,7 @@
      if (status) {
          return status;
      }
-@@ -651,7 +662,7 @@
+@@ -651,7 +666,7 @@
  {
      int ntlm = ne_strcasecmp(parms->protocol->name, "NTLM") == 0;
  
@@ -650,7 +671,7 @@
  }
  
  static int verify_sspi(struct auth_request *req, auth_session *sess,
-@@ -674,7 +685,7 @@
+@@ -674,7 +689,7 @@
          return NE_OK;
      }
  
@@ -660,7 +681,7 @@
  
  #endif
 --- misc/neon-0.29.5/src/ne_auth.h	2009-09-01 22:13:12.000000000 +0200
-+++ misc/build/neon-0.29.5/src/ne_auth.h	2010-12-07 13:44:30.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_auth.h	2011-02-03 10:26:20.000000000 +0100
 @@ -47,8 +47,8 @@
   * Hint: if you just wish to attempt authentication just once (even if
   * the user gets the username/password wrong), have the callback
@@ -673,7 +694,7 @@
  /* Set callbacks to provide credentials for server and proxy
   * authentication, using the default set of authentication protocols.
 --- misc/neon-0.29.5/src/ne_defs.h	2010-01-11 23:57:34.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_defs.h	2010-12-07 13:44:30.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_defs.h	2011-02-03 10:26:20.000000000 +0100
 @@ -41,7 +41,7 @@
  #endif
  
@@ -684,7 +705,7 @@
  #endif
  
 --- misc/neon-0.29.5/src/ne_locks.c	2007-02-05 11:09:27.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_locks.c	2010-12-07 13:44:30.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_locks.c	2011-02-03 10:26:21.000000000 +0100
 @@ -579,6 +579,23 @@
          const char *token = ne_get_response_header(ctx->req, "Lock-Token");
          /* at the root element; retrieve the Lock-Token header,
@@ -752,7 +773,7 @@
  	}
      }
 --- misc/neon-0.29.5/src/ne_locks.h	2006-01-02 12:43:19.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_locks.h	2010-12-07 13:44:30.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_locks.h	2011-02-03 10:26:21.000000000 +0100
 @@ -22,6 +22,10 @@
  #ifndef NE_LOCKS_H
  #define NE_LOCKS_H
@@ -765,7 +786,7 @@
  #include "ne_uri.h" /* for ne_uri */
  
 --- misc/neon-0.29.5/src/ne_sspi.c	2007-08-10 17:26:08.000000000 +0200
-+++ misc/build/neon-0.29.5/src/ne_sspi.c	2010-12-07 13:44:31.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_sspi.c	2011-02-03 10:26:21.000000000 +0100
 @@ -206,6 +206,45 @@
  }
  
@@ -852,7 +873,7 @@
          securityStatus =
              initializeSecurityContext(&sspiContext->credentials, NULL,
 --- misc/neon-0.29.5/src/ne_sspi.h	2006-02-12 13:05:14.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_sspi.h	2010-12-07 13:44:31.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_sspi.h	2011-02-03 10:26:21.000000000 +0100
 @@ -41,7 +41,7 @@
  int ne_sspi_clear_context(void *context);
  
@@ -863,7 +884,7 @@
  #endif /* HAVE_SSPI */
  
 --- misc/neon-0.29.5/src/ne_uri.c	2007-12-05 12:04:47.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_uri.c	2010-12-07 13:44:31.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_uri.c	2011-02-03 10:26:21.000000000 +0100
 @@ -42,7 +42,7 @@
  #include "ne_alloc.h"
  #include "ne_uri.h"
@@ -910,7 +931,7 @@
  /*   4x */ AT, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL,
  /*   5x */ AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, AL, GD, OT, GD, OT, US,
 --- misc/neon-0.29.5/src/ne_utils.c	2006-03-07 10:36:43.000000000 +0100
-+++ misc/build/neon-0.29.5/src/ne_utils.c	2010-12-07 13:44:31.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_utils.c	2011-02-03 10:26:21.000000000 +0100
 @@ -118,6 +118,9 @@
  #ifdef HAVE_GNUTLS
      ", GNU TLS " LIBGNUTLS_VERSION
@@ -941,7 +962,7 @@
  #endif /* NE_HAVE_* */
      default:
 --- misc/neon-0.29.5/src/ne_utils.h	2007-07-16 08:54:57.000000000 +0200
-+++ misc/build/neon-0.29.5/src/ne_utils.h	2010-12-07 13:44:31.000000000 +0100
++++ misc/build/neon-0.29.5/src/ne_utils.h	2011-02-03 10:26:21.000000000 +0100
 @@ -54,6 +54,7 @@
  #define NE_FEATURE_SOCKS (5) /* SOCKSv5 support */
  #define NE_FEATURE_TS_SSL (6) /* Thread-safe SSL/TLS support */
