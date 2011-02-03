@@ -102,7 +102,17 @@ extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[], szSe
 extern const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[], szServiceName2_UnoSimpleAnimationControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[], szServiceName2_UnoThrobberControl[];
 extern const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[], szServiceName2_UnoThrobberControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_AnimatedImagesControl[];
+extern const sal_Char __FAR_DATA szServiceName_AnimatedImagesControlModel[];
+extern const sal_Char __FAR_DATA szServiceName_SpinningProgressControlModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[], szServiceName_UnoControlFixedHyperlinkModel[];
 
+extern const sal_Char __FAR_DATA szServiceName_UnoControlTabPageModel[], szServiceName2_UnoControlTabPageModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlTabPage[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainerModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlTabPageContainer[];
+
+// ExtUnoWrapper:
+extern const char __FAR_DATA szServiceName_ImageProducer[], szServiceName2_ImageProducer[];
 #endif // _TOOLKIT_HELPER_SERVICENAMES_HXX_
 

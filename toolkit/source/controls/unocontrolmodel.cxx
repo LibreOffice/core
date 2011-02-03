@@ -532,6 +532,8 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
     aEvt.Source = (::com::sun::star::uno::XAggregation*)(::cppu::OWeakAggObject*)this;
     maDisposeListeners.disposeAndClear( aEvt );
 
+    BrdcstHelper.aLC.disposeAndClear( aEvt );
+
     // let the property set helper notify our property listeners
     OPropertySetHelper::disposing();
 }

@@ -33,6 +33,7 @@
 #include <tools/svwin.h>
 #endif
 #include <stdio.h>
+#include <com/sun/star/awt/ImageScaleMode.hpp>
 #include <com/sun/star/awt/WindowAttribute.hpp>
 #include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
 #include <com/sun/star/awt/WindowClass.hpp>
@@ -68,9 +69,12 @@
 #include <toolkit/awt/vclxsystemdependentwindow.hxx>
 #include <toolkit/awt/vclxregion.hxx>
 #include <toolkit/awt/vclxtoolkit.hxx>
+#include <toolkit/awt/vclxtabpagecontainer.hxx>
+#include <toolkit/awt/vclxtabpagemodel.hxx>
 
 #include <toolkit/awt/xsimpleanimation.hxx>
 #include <toolkit/awt/xthrobber.hxx>
+#include <toolkit/awt/animatedimagespeer.hxx>
 #include <toolkit/awt/vclxtopwindow.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
@@ -115,6 +119,7 @@
 #include <vcl/virdev.hxx>
 #include <vcl/window.hxx>
 #include <vcl/wrkwin.hxx>
+#include <vcl/throbber.hxx>
 #include "toolkit/awt/vclxspinbutton.hxx"
 
 #include <tools/debug.hxx>
@@ -313,6 +318,7 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "scrollbar",          WINDOW_SCROLLBAR },
     { "scrollbarbox",       WINDOW_SCROLLBARBOX },
     { "simpleanimation",    WINDOW_CONTROL },
+    { "animatedimages",     WINDOW_CONTROL },
     { "spinbutton",         WINDOW_SPINBUTTON },
     { "spinfield",          WINDOW_SPINFIELD },
     { "throbber",           WINDOW_CONTROL },
@@ -329,7 +335,9 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "tristatebox",        WINDOW_TRISTATEBOX },
     { "warningbox",         WINDOW_WARNINGBOX },
     { "window",             WINDOW_WINDOW },
-    { "workwindow",         WINDOW_WORKWINDOW }
+    { "workwindow",         WINDOW_WORKWINDOW },
+    { "tabpagecontainer",   WINDOW_CONTROL },
+    { "tabpagemodel",       WINDOW_TABPAGE }
 };
 
 extern "C"
@@ -863,13 +871,25 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
+                *ppNewComp = new VCLXTabPageContainer;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
             break;
             case WINDOW_TABPAGE:
-                pNewWindow = new TabPage( pParent, nWinBits );
-                *ppNewComp = new VCLXTabPage;
+                /*
+                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagemodel") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
+                }
+                else
+                */
+                {
+                    pNewWindow = new TabPage( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPage;
+                }
             break;
             case WINDOW_TIMEBOX:
                 pNewWindow = new TimeBox( pParent, nWinBits );
@@ -984,22 +1004,35 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 }
             break;
             case WINDOW_CONTROL:
-                if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("simpleanimation") ) )
+                if  ( aServiceName.EqualsAscii( "simpleanimation" ) )
                 {
-                    nWinBits |= WB_SCALE;
-                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
-                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString::createFromAscii("throbber") ) )
+                else if ( aServiceName.EqualsAscii( "throbber" ) )
                 {
-                    nWinBits |= WB_SCALE;
-                    pNewWindow = new FixedImage( pParent, nWinBits );
+                    pNewWindow = new Throbber( pParent, nWinBits, Throbber::IMAGES_NONE );
+                    ((Throbber*)pNewWindow)->SetScaleMode( css::awt::ImageScaleMode::Anisotropic );
+                        // (compatibility)
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
+                else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
+                        ::rtl::OUString::createFromAscii("tabpagecontainer") ) )
+                {
+                    pNewWindow = new TabControl( pParent, nWinBits );
+                    *ppNewComp = new VCLXTabPageContainer;
+                }
+                else if ( aServiceName.EqualsAscii( "animatedimages" ) )
+                {
+                    pNewWindow = new Throbber( pParent, nWinBits );
+                    *ppNewComp = new ::toolkit::AnimatedImagesPeer;
+                }
             break;
-            default:    DBG_ERRORFILE( "UNO3!" );
+            default:
+                OSL_ENSURE( false, "VCLXToolkit::ImplCreateWindow: unknown window type!" );
+                break;
         }
     }
 
