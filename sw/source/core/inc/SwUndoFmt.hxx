@@ -24,11 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_UNDO_TXT_FMT_COLL_HXX
-#define _SW_UNDO_TXT_FMT_COLL_HXX
+#ifndef SW_UNDO_TXT_FMT_COLL_HXX
+#define SW_UNDO_TXT_FMT_COLL_HXX
 
 #include <undobj.hxx>
 #include <swundo.hxx>
+#include <numrule.hxx>
+
 
 class SwDoc;
 class SwTxtFmtColl;
@@ -53,8 +55,8 @@ public:
                     SwDoc * pDoc);
     virtual ~SwUndoFmtCreate();
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     virtual SwRewriter GetRewriter() const;
 
@@ -77,8 +79,8 @@ public:
     SwUndoFmtDelete(SwUndoId nUndoId, SwFmt * pOld, SwDoc * pDoc);
     ~SwUndoFmtDelete();
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     virtual SwRewriter GetRewriter() const;
 
@@ -100,8 +102,8 @@ public:
                     SwDoc * pDoc);
     ~SwUndoRenameFmt();
 
-    void Undo(SwUndoIter & rIter);
-    void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     SwRewriter GetRewriter() const;
 
@@ -213,8 +215,8 @@ class SwUndoNumruleCreate : public SwUndo
 public:
     SwUndoNumruleCreate(const SwNumRule * pNew, SwDoc * pDoc);
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     SwRewriter GetRewriter() const;
 };
@@ -227,8 +229,8 @@ class SwUndoNumruleDelete : public SwUndo
 public:
     SwUndoNumruleDelete(const SwNumRule  & aRule, SwDoc * pDoc);
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     SwRewriter GetRewriter() const;
 };
@@ -242,9 +244,10 @@ class SwUndoNumruleRename : public SwUndo
     SwUndoNumruleRename(const String & aOldName, const String & aNewName,
                         SwDoc * pDoc);
 
-    virtual void Undo(SwUndoIter & rIter);
-    virtual void Redo(SwUndoIter & rIter);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     SwRewriter GetRewriter() const;
 };
-#endif // _SW_UNDO_TXT_FMT_COLL_HXX
+
+#endif // SW_UNDO_TXT_FMT_COLL_HXX

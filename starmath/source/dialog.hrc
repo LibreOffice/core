@@ -31,17 +31,18 @@
 
 #define FL_PRINTOPTIONS         10
 #define CB_TITLEROW             11
-#define CB_EQUATION_TEXT    12
+#define CB_EQUATION_TEXT        12
 #define CB_FRAME                13
 
 #define FL_PRINT_FORMAT         20
-#define RB_ORIGINAL_SIZE    21
-#define RB_FIT_TO_PAGE      22
+#define RB_ORIGINAL_SIZE        21
+#define RB_FIT_TO_PAGE          22
 #define RB_ZOOM                 23
 #define MF_ZOOM                 24
 
 #define FL_MISC_OPTIONS         30
-#define CB_IGNORE_SPACING   31
+#define CB_IGNORE_SPACING       31
+#define CB_SAVE_ONLY_USED_SYMBOLS       32
 
 #define FT_FONTS_SUBSET         110
 #define LB_FONTS_SUBSET         111

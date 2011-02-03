@@ -1613,8 +1613,11 @@ public:
 void SmXMLSubContext_Impl::GenericEndElement(SmTokenType eType, SmSubSup eSubSup)
 {
     /*The <msub> element requires exactly 2 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
-        "Sub has not two arguments");
+    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    if (!bNodeCheck)
+        return;
+
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
@@ -1672,8 +1675,10 @@ void SmXMLSubSupContext_Impl::GenericEndElement(SmTokenType eType,
         SmSubSup aSub,SmSubSup aSup)
 {
     /*The <msub> element requires exactly 3 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 3,
-        "SubSup has not three arguments");
+    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 3;
+    DBG_ASSERT( bNodeCheck, "SubSup has not three arguments" );
+    if (!bNodeCheck)
+        return;
 
     SmToken aToken;
     aToken.cMathChar = '\0';
@@ -1721,8 +1726,10 @@ void SmXMLUnderContext_Impl::StartElement(const uno::Reference<
 
 void SmXMLUnderContext_Impl::HandleAccent()
 {
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
-        "Sub has not two arguments");
+    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    if (!bNodeCheck)
+        return;
 
     /*Just one special case for the underline thing*/
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
@@ -1803,8 +1810,11 @@ void SmXMLOverContext_Impl::EndElement()
 
 void SmXMLOverContext_Impl::HandleAccent()
 {
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
-        "Sub has not two arguments");
+    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    DBG_ASSERT( bNodeCheck, "Sub has not two arguments" );
+    if (!bNodeCheck)
+        return;
+
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
@@ -2352,6 +2362,12 @@ void SmXMLDocContext_Impl::EndElement()
 
 void SmXMLFracContext_Impl::EndElement()
 {
+    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
+    const bool bNodeCheck = rNodeStack.Count() - nElementCount == 2;
+    DBG_ASSERT( bNodeCheck, "Fraction (mfrac) tag is missing component" );
+    if (!bNodeCheck)
+        return;
+
     SmToken aToken;
     aToken.cMathChar = '\0';
     aToken.nGroup = 0;
@@ -2359,23 +2375,19 @@ void SmXMLFracContext_Impl::EndElement()
     aToken.eType = TOVER;
     SmStructureNode *pSNode = new SmBinVerNode(aToken);
     SmNode *pOper = new SmRectangleNode(aToken);
-    SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
-    DBG_ASSERT(rNodeStack.Count() - nElementCount == 2,
-        "Fraction (mfrac) tag is missing component");
-    if (rNodeStack.Count() - nElementCount == 2)
-    {
-        SmNode *pSecond = rNodeStack.Pop();
-        SmNode *pFirst = rNodeStack.Pop();
-        pSNode->SetSubNodes(pFirst,pOper,pSecond);
-        rNodeStack.Push(pSNode);
-    }
+    SmNode *pSecond = rNodeStack.Pop();
+    SmNode *pFirst = rNodeStack.Pop();
+    pSNode->SetSubNodes(pFirst,pOper,pSecond);
+    rNodeStack.Push(pSNode);
 }
 
 void SmXMLRootContext_Impl::EndElement()
 {
     /*The <mroot> element requires exactly 2 arguments.*/
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount == 2,
-        "Root tag is missing component");
+    const bool bNodeCheck = GetSmImport().GetNodeStack().Count() - nElementCount == 2;
+    DBG_ASSERT( bNodeCheck, "Root tag is missing component" );
+    if (!bNodeCheck)
+        return;
 
     SmToken aToken;
     aToken.cMathChar = MS_SQRT;  //Temporary: alert, based on StarSymbol font
@@ -2612,9 +2624,8 @@ void SmXMLMultiScriptsContext_Impl::MiddleElement()
 {
     bHasPrescripts=sal_True;
 
-    DBG_ASSERT(GetSmImport().GetNodeStack().Count() - nElementCount > 0,
-        "Sub has no arguments");
     SmNodeStack &rNodeStack = GetSmImport().GetNodeStack();
+    DBG_ASSERT( rNodeStack.Count() - nElementCount > 0, "Sub has no arguments" );
     if (rNodeStack.Count()-nElementCount > 1)
     {
         SmToken aToken;
@@ -3168,8 +3179,14 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
                         if ( xInfo->hasPropertyByName( pValues->Name ) )
                             xProps->setPropertyValue( pValues->Name, pValues->Value );
                     }
-                    catch( Exception& )
+                    catch (beans::PropertyVetoException &e)
                     {
+                        (void) e;
+                        // dealing with read-only properties here. Nothing to do...
+                    }
+                    catch( Exception& e)
+                    {
+                        (void) e;
                         DBG_ERROR( "SmXMLImport::SetConfigurationSettings: Exception!" );
                     }
                 }

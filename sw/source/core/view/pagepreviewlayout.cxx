@@ -71,8 +71,7 @@ SwPagePreviewLayout::SwPagePreviewLayout( ViewShell& _rParentViewShell,
     mbBookPreview = false;
     mbBookPreviewModeToggled = false;
 
-    const SwPrintData* pPrintData = mrParentViewShell.getIDocumentDeviceAccess()->getPrintData();
-    mbPrintEmptyPages = pPrintData ? pPrintData->IsPrintEmptyPages() : true;
+    mbPrintEmptyPages = mrParentViewShell.getIDocumentDeviceAccess()->getPrintData().IsPrintEmptyPages();
 }
 
 void SwPagePreviewLayout::_Clear()

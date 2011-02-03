@@ -27,13 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <tools/bigint.hxx>
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
 #include "cntfrm.hxx"
 #include "flyfrm.hxx"
 #include "txtfrm.hxx"
-#include "doc.hxx"
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include "viewsh.hxx"
 #include "viewimp.hxx"
 #include "pam.hxx"
@@ -1370,7 +1372,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
                 nX = rNew.X() - pFrm->Frm().Left() - nBaseOfstForFly;
         }
     }
-    GetFmt()->GetDoc()->StartUndo( UNDO_START, NULL );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     if( pCnt != GetAnchorFrm() || ( IsAutoPos() && pCnt->IsTxtFrm() &&
                                   GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE)) )
@@ -1421,7 +1423,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     const Point aRelPos = bVert ? Point( -nY, nX ) : Point( nX, nY );
     ChgRelPos( aRelPos );
 
-    GetFmt()->GetDoc()->EndUndo( UNDO_END, NULL );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     if ( pOldPage != FindPageFrm() )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,

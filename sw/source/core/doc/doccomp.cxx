@@ -37,11 +37,12 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
-#include <undobj.hxx>
+#include <UndoRedline.hxx>
 #include <section.hxx>
 #include <tox.hxx>
 #include <docsh.hxx>
@@ -1216,14 +1217,12 @@ BOOL SwCompareLine::ChangesInLine( const SwCompareLine& rLine,
             if( nStt != nSEnd )
             {
                 {
-                    BOOL bUndo = pDoc->DoesUndo();
-                    pDoc->DoUndo( FALSE );
+                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     SwPaM aCpyPam( rSrcNd, nStt );
                     aCpyPam.SetMark();
                     aCpyPam.GetPoint()->nContent = nSEnd;
                     aCpyPam.GetDoc()->CopyRange( aCpyPam, *aPam.GetPoint(),
                             false );
-                    pDoc->DoUndo( bUndo );
                 }
 
                 SwPaM* pTmp = new SwPaM( *aPam.GetPoint(), rpDelRing );
@@ -1494,8 +1493,11 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
 
             rDoc.DeleteRedline( *pTmp, false, USHRT_MAX );
 
-            if( rDoc.DoesUndo() )
-                rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, FALSE ));
+            if (rDoc.GetIDocumentUndoRedo().DoesUndo())
+            {
+                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, FALSE )) ;
+                rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            }
             rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true );
 
         } while( pDelRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
@@ -1560,8 +1562,11 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
 
         do {
             if( rDoc.AppendRedline( new SwRedline( aRedlnData, *pTmp ), true) &&
-                rDoc.DoesUndo() )
-                rDoc.AppendUndo( new SwUndoCompDoc( *pTmp, TRUE ));
+                rDoc.GetIDocumentUndoRedo().DoesUndo())
+            {
+                SwUndo *const pUndo(new SwUndoCompDoc( *pTmp, TRUE ));
+                rDoc.GetIDocumentUndoRedo().AppendUndo(pUndo);
+            }
         } while( pInsRing != ( pTmp = (SwPaM*)pTmp->GetNext() ));
     }
 }
@@ -1578,7 +1583,7 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    StartUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
     BOOL bDocWasModified = IsModified();
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     BOOL bSrcModified = rSrcDoc.IsModified();
@@ -1609,13 +1614,11 @@ long SwDoc::CompareDoc( const SwDoc& rDoc )
     if( !bSrcModified )
         rSrcDoc.ResetModified();
 
-    EndUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
     return nRet;
 }
 
-
-typedef void (SwDoc::*FNInsUndo)( SwUndo* );
 
 class _SaveMergeRedlines : public Ring
 {
@@ -1624,7 +1627,7 @@ class _SaveMergeRedlines : public Ring
 public:
     _SaveMergeRedlines( const SwNode& rDstNd,
                         const SwRedline& rSrcRedl, Ring* pRing );
-    USHORT InsertRedline( FNInsUndo pFn );
+    USHORT InsertRedline();
 
     SwRedline* GetDestRedline() { return pDestRedl; }
 };
@@ -1655,7 +1658,7 @@ _SaveMergeRedlines::_SaveMergeRedlines( const SwNode& rDstNd,
     }
 }
 
-USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
+USHORT _SaveMergeRedlines::InsertRedline()
 {
     USHORT nIns = 0;
     SwDoc* pDoc = pDestRedl->GetDoc();
@@ -1663,8 +1666,7 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
     if( nsRedlineType_t::REDLINE_INSERT == pDestRedl->GetType() )
     {
         // der Teil wurde eingefuegt, also kopiere ihn aus dem SourceDoc
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         SwNodeIndex aSaveNd( pDestRedl->GetPoint()->nNode, -1 );
         xub_StrLen nSaveCnt = pDestRedl->GetPoint()->nContent.GetIndex();
@@ -1677,7 +1679,6 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                 *pDestRedl->GetPoint(), false );
 
         pDoc->SetRedlineMode_intern( eOld );
-        pDoc->DoUndo( bUndo );
 
         pDestRedl->SetMark();
         aSaveNd++;
@@ -1739,13 +1740,16 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
                         pCpyRedl->SetMark();
                         *pCpyRedl->GetPoint() = *pRStt;
 
-                        SwUndoCompDoc* pUndo = pDoc->DoesUndo()
+                        SwUndoCompDoc *const pUndo =
+                            (pDoc->GetIDocumentUndoRedo().DoesUndo())
                                     ? new SwUndoCompDoc( *pCpyRedl ) : 0;
 
                         // now modify doc: append redline, undo (and count)
                         pDoc->AppendRedline( pCpyRedl, true );
                         if( pUndo )
-                            (pDoc->*pFn)( pUndo );
+                        {
+                            pDoc->GetIDocumentUndoRedo().AppendUndo(pUndo);
+                        }
                         ++nIns;
 
                         *pDStt = *pREnd;
@@ -1772,12 +1776,15 @@ USHORT _SaveMergeRedlines::InsertRedline( FNInsUndo pFn )
 
     if( pDestRedl )
     {
-        SwUndoCompDoc* pUndo = pDoc->DoesUndo() ? new SwUndoCompDoc( *pDestRedl ) : 0;
+        SwUndoCompDoc *const pUndo = (pDoc->GetIDocumentUndoRedo().DoesUndo())
+            ? new SwUndoCompDoc( *pDestRedl ) : 0;
 
         // now modify doc: append redline, undo (and count)
         bool bRedlineAccepted = pDoc->AppendRedline( pDestRedl, true );
         if( pUndo )
-            (pDoc->*pFn)( pUndo );
+        {
+            pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
+        }
         ++nIns;
 
         // if AppendRedline has deleted our redline, we may not keep a
@@ -1796,7 +1803,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     long nRet = 0;
 
-    StartUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     SwDoc& rSrcDoc = (SwDoc&)rDoc;
     BOOL bSrcModified = rSrcDoc.IsModified();
@@ -1853,7 +1860,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
             _SaveMergeRedlines* pTmp = pRing;
 
             do {
-                nRet += pTmp->InsertRedline( &SwDoc::AppendUndo );
+                nRet += pTmp->InsertRedline();
             } while( pRing != ( pTmp = (_SaveMergeRedlines*)pTmp->GetNext() ));
 
             while( pRing != pRing->GetNext() )
@@ -1868,7 +1875,7 @@ long SwDoc::MergeDoc( const SwDoc& rDoc )
 
     SetRedlineMode((RedlineMode_t)(nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
 
-    EndUndo(UNDO_EMPTY, NULL);
+    GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
     return nRet;
 }

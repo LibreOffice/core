@@ -43,6 +43,7 @@
 #include <swcrsr.hxx>
 #include <unocrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
@@ -58,9 +59,7 @@
 #include <crsskip.hxx>
 #include <vcl/msgbox.hxx>
 #include <mdiexp.hxx>           // ...Percent()
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <redline.hxx>      // SwRedline
 
 
@@ -743,7 +742,7 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                         BOOL bInReadOnly, BOOL& bCancel )
 {
     SwDoc* pDoc = pCurCrsr->GetDoc();
-    BOOL bDoesUndo = pDoc->DoesUndo();
+    bool const bDoesUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
     int nFndRet = 0;
     ULONG nFound = 0;
     int bSrchBkwrd = fnMove == fnMoveBackward, bEnde = FALSE;
@@ -806,14 +805,15 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
                 break;
             }
 
-            if( coSrchRplcThreshold == nFound && pDoc->DoesUndo()
+            if ((coSrchRplcThreshold == nFound)
+                && pDoc->GetIDocumentUndoRedo().DoesUndo()
                 && rParas.IsReplaceMode())
             {
                 short nRet = pCurCrsr->MaxReplaceArived();
                 if( RET_YES == nRet )
                 {
-                    pDoc->DelAllUndoObj();
-                    pDoc->DoUndo( FALSE );
+                    pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+                    pDoc->GetIDocumentUndoRedo().DoUndo(false);
                 }
                 else
                 {
@@ -858,7 +858,7 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
         pFndRing = pCurCrsr->Create();
 
     delete pPHdl;
-    pDoc->DoUndo( bDoesUndo );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
     return nFound;
 }
 

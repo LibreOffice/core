@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SW_UNDO_PAGE_DESC_HXX
-#define _SW_UNDO_PAGE_DESC_HXX
+#ifndef SW_UNDO_PAGE_DESC_HXX
+#define SW_UNDO_PAGE_DESC_HXX
 
 #include <undobj.hxx>
 #include <pagedesc.hxx>
@@ -48,9 +48,8 @@ public:
                    SwDoc * pDoc);
     virtual ~SwUndoPageDesc();
 
-    virtual void Undo(SwUndoIter & rIt);
-    virtual void Redo(SwUndoIter & rIt);
-    virtual void Repeat(SwUndoIter & rIt);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     virtual SwRewriter GetRewriter() const;
 };
@@ -61,13 +60,15 @@ class SwUndoPageDescCreate : public SwUndo
     SwPageDescExt aNew;
     SwDoc * pDoc;
 
+    void DoImpl();
+
 public:
     SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc); // #116530#
     virtual ~SwUndoPageDescCreate();
 
-    virtual void Undo(SwUndoIter & rIt);
-    virtual void Redo(SwUndoIter & rIt);
-    virtual void Repeat(SwUndoIter & rIt);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     virtual SwRewriter GetRewriter() const;
 };
@@ -77,13 +78,15 @@ class SwUndoPageDescDelete : public SwUndo
     SwPageDescExt aOld;
     SwDoc * pDoc;
 
+    void DoImpl();
+
 public:
     SwUndoPageDescDelete(const SwPageDesc & aOld, SwDoc * pDoc);
     virtual ~SwUndoPageDescDelete();
 
-    virtual void Undo(SwUndoIter & rIt);
-    virtual void Redo(SwUndoIter & rIt);
-    virtual void Repeat(SwUndoIter & rIt);
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     virtual SwRewriter GetRewriter() const;
 };

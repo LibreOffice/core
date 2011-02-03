@@ -4320,8 +4320,14 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             !GetConnectMetaFile() &&
                             rSh.VisArea().IsInside( aDocPt ))
                         {
-                            if( UNDO_INS_FROM_SHADOWCRSR == rSh.GetUndoIds() )
-                                rSh.Undo();
+                            SwUndoId nLastUndoId(UNDO_EMPTY);
+                            if (rSh.GetLastUndoInfo(0, & nLastUndoId))
+                            {
+                                if (UNDO_INS_FROM_SHADOWCRSR == nLastUndoId)
+                                {
+                                    rSh.Undo();
+                                }
+                            }
                             SwFillMode eMode = (SwFillMode)rSh.GetViewOptions()->GetShdwCrsrFillMode();
                             rSh.SetShadowCrsrPos( aDocPt, eMode );
                         }
