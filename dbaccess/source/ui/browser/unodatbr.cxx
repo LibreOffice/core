@@ -3245,7 +3245,7 @@ sal_Bool SbaTableQueryBrowser::getExistentConnectionFor( SvLBoxEntry* _pAnyEntry
     return _rConnection.is();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 0
 // -----------------------------------------------------------------------------
 bool SbaTableQueryBrowser::impl_isDataSourceEntry( SvLBoxEntry* _pEntry ) const
 {
