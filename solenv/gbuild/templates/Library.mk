@@ -56,25 +56,8 @@ $(eval $(call gb_Library_set_defs,LIB,\
 # add libraries to be linked to LIB; again these names need to be given as
 # specified in Repository.mk
 $(eval $(call gb_Library_add_linked_libs,LIB,\
+    $(gb_STDLIBS) \
 ))
-
-# this code usually will be platform specific; these libraries are also defined in Repository.mk
-ifeq ($(OS),LINUX)
-$(eval $(call gb_Library_add_linked_libs,LIB,\
-    dl \
-    m \
-    pthread \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Library_add_linked_libs,LIB,\
-    kernel32 \
-    msvcrt \
-    oldnames \
-    user32 \
-))
-endif
 
 # add all source files that shall be compiled with exceptions enabled
 # the name is relative to $(SRCROOT) and must not contain an extension
@@ -91,14 +74,13 @@ $(eval $(call gb_SdiTarget_set_include,MODULE/sdi/ROOT_SDI_FILE,\
     $$(INCLUDE) \
 ))
 
-# this is an example how files can be added that require special compiler settings
+# this is an example how files can be added that require special compiler settings, e.g. building without optimizing
 ifeq ($(OS),WNT)
 $(eval $(call gb_Library_add_cxxobjects,LIB,\
     MODULE/source/foo/bar \
-    , $(gb_LinkTarget_EXCEPTIONFLAGS) -nologo -UPRECOMPILED_HEADERS \
+    , $(gb_COMPILERNOOPTFLAGS) $(gb_LinkTarget_EXCEPTIONFLAGS) \
 ))
 
 endif
 
 # vim: set noet sw=4 ts=4:
-
