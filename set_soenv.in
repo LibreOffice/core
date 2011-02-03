@@ -1139,7 +1139,7 @@ if ($platform =~ m/cygwin|os2/)
 }
 
 # The general environment path.
-if ($platform =~ m/linux|netbsd|odf1|freebsd|aix|solaris|openbsd/)
+if ($platform =~ m/linux|netbsd|osf1|freebsd|aix|solaris|openbsd/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
