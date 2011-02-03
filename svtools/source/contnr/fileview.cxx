@@ -99,8 +99,6 @@ using ::rtl::OUString;
 #define COLUMN_SIZE         3
 #define COLUMN_DATE         4
 
-DECLARE_LIST( StringList_Impl, OUString* )
-
 #define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
 #define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
 
