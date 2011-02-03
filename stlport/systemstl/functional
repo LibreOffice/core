@@ -56,7 +56,11 @@ namespace std
 }
 
 #else
+#ifdef _MSC_VER
+#include <../include/functional>
+#else
 # error UNSUPPORTED COMPILER
+#endif
 #endif
 
 #endif

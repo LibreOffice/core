@@ -44,7 +44,11 @@ namespace std
 }
 
 #else
+#ifdef _MSC_VER
+#include <../include/vector>
+#else
 #error UNSUPPORTED COMPILER
+#endif
 #endif
 #endif
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

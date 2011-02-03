@@ -47,7 +47,11 @@ namespace std
 # endif
 
 #else
+#ifdef _MSC_VER
+#include <../include/numeric>
+#else
 # error UNSUPPORTED COMPILER
+#endif
 #endif
 
 #endif

@@ -74,7 +74,16 @@ namespace std
 }
 
 #else
+#ifdef _MSC_VER
+#define USE_MSVC_HASH_MAP
+#include <../include/hash_map>
+namespace std
+{
+	using namespace stdext;
+}
+#else
 # error UNSUPPORTED COMPILER
+#endif
 #endif
 
 

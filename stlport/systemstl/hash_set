@@ -46,7 +46,16 @@ namespace std
 	using __gnu_cxx::hash_multiset;
 }
 #else
+#ifdef _MSC_VER
+#define USE_MSVC_HASH_SET
+#include <../include/hash_set>
+namespace std
+{
+	using namespace stdext;
+}
+#else
 # error UNSUPPORTED COMPILER
+#endif
 #endif
 
 #endif
