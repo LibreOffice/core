@@ -96,8 +96,21 @@ struct VoidPtrHash : ::std::unary_function<void const*, ::std::size_t> {
     }
 };
 
+#ifdef USE_MSVC_HASH_SET
+namespace stdext
+{
+    inline ::std::size_t hash_value( void const* p ) {
+        ::std::size_t const d = static_cast< ::std::size_t >(
+            reinterpret_cast< ::std::ptrdiff_t >(p) );
+        return d + (d >> 3);
+    }
+}
+
+typedef ::std::hash_set<void const*> VoidPointerSet;
+#else
 typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
                         ::rtl::Allocator<void const*> > VoidPointerSet;
+#endif
 
 struct ObjectRegistryData {
     ObjectRegistryData( ::std::type_info const& rTypeInfo )
