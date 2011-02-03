@@ -3298,7 +3298,7 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
     ww::WordVersion eVersion = pWwFib->GetFIBVersion();
 
     // Font-Position in HalfPoints
-    short nPos = eVersion <= ww::eWW2 ? *pData : SVBT16ToShort( pData );
+    short nPos = eVersion <= ww::eWW2 ? static_cast< sal_Int8 >( *pData ) : SVBT16ToShort( pData );
     INT32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
         = (const SvxFontHeightItem*)GetFmtAttr(RES_CHRATR_FONTSIZE);
