@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <osl/conditn.h>
 
@@ -60,7 +60,7 @@ namespace cppu_threadpool {
             }
     };
 
-    typedef ::std::hash_map
+    typedef ::boost::unordered_map
     <
         ByteSequence, // ThreadID
         ::std::pair < JobQueue * , JobQueue * >,

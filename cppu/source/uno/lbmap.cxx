@@ -31,7 +31,7 @@
 
 #include "IdentityMapping.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 #include <algorithm>
 
@@ -142,9 +142,9 @@ struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
         { return (size_t)pKey; }
 };
 
-typedef hash_map<
+typedef boost::unordered_map<
     OUString, MappingEntry *, FctOUStringHash, equal_to< OUString > > t_OUString2Entry;
-typedef hash_map<
+typedef boost::unordered_map<
     uno_Mapping *, MappingEntry *, FctPtrHash, equal_to< uno_Mapping * > > t_Mapping2Entry;
 
 typedef set< uno_getMappingFunc > t_CallbackSet;
