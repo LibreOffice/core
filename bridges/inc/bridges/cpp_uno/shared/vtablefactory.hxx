@@ -35,7 +35,7 @@
 #include "sal/types.h"
 #include "typelib/typedescription.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 /*See: http://people.redhat.com/drepper/selinux-mem.html*/
 #if defined(LINUX) || defined(OPENBSD) || defined(FREEBSD) \
@@ -203,7 +203,7 @@ private:
     static void flushCode(
         unsigned char const * begin, unsigned char const * end);
 
-    typedef std::hash_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
+    typedef boost::unordered_map< rtl::OUString, Vtables, rtl::OUStringHash > Map;
 
     osl::Mutex m_mutex;
     Map m_map;

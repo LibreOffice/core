@@ -30,7 +30,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <cxxabi.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -101,7 +101,7 @@ namespace CPPU_CURRENT_NAMESPACE
     //=====================================================================
     class RTTI
     {
-        typedef hash_map< OUString, type_info *, OUStringHash > t_rtti_map;
+        typedef boost::unordered_map< OUString, type_info *, OUStringHash > t_rtti_map;
 
         Mutex m_mutex;
         t_rtti_map m_rttis;

@@ -30,7 +30,7 @@
 #include "precompiled_bridges.hxx"
 
 #pragma warning( disable : 4237 )
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sal/config.h>
 #include <malloc.h>
 #include <new.h>
@@ -97,7 +97,7 @@ static inline OUString toRTTIname( OUString const & rUNOname ) throw ()
 //##################################################################################################
 
 
-typedef hash_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
+typedef boost::unordered_map< OUString, void *, OUStringHash, equal_to< OUString > > t_string2PtrMap;
 
 //==================================================================================================
 class RTTInfos

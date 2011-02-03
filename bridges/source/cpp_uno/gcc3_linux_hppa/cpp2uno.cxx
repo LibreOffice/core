@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #include <malloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/alloc.h>
 #include <osl/mutex.hxx>
