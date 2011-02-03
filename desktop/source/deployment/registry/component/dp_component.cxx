@@ -1779,17 +1779,23 @@ void BackendImpl::ComponentsPackageImpl::processPackage_(
     if (doRegisterPackage) {
         ComponentBackendDb::Data data;
         data.javaTypeLibrary = false;
-        std::vector< css::uno::Reference< css::uno::XInterface > > factories;
-        css::uno::Reference< css::uno::XComponentContext > context(
-            that->getObject(url), css::uno::UNO_QUERY);
-        if (!context.is()) {
-            context.set(
-                that->insertObject(
-                    url,
-                    raise_uno_process(
-                        that->getComponentContext(), abortChannel)),
-                css::uno::UNO_QUERY_THROW);
+                css::uno::Reference< css::uno::XComponentContext > context;
+        if (startup) {
+            context = that->getComponentContext();
+        } else {
+            context.set(that->getObject(url), css::uno::UNO_QUERY);
+            if (!context.is()) {
+                context.set(
+                    that->insertObject(
+                        url,
+                        raise_uno_process(
+                            that->getComponentContext(), abortChannel)),
+                    css::uno::UNO_QUERY_THROW);
+            }
         }
+
+        std::vector< css::uno::Reference< css::uno::XInterface > > factories;
+
         css::uno::Reference< css::registry::XSimpleRegistry > registry(
             css::uno::Reference< css::lang::XMultiComponentFactory >(
                 that->getComponentContext()->getServiceManager(),
