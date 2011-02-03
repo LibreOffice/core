@@ -763,7 +763,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
         BOOL bUndoAction = ( rCurSel.HasRange() || bDoOverwrite );
 
         if ( bUndoAction )
-            UndoActionStart( TEXTUNDO_INSERT );
+            UndoActionStart();
 
         if ( rCurSel.HasRange() )
         {
@@ -847,7 +847,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
         TextModified();
 
         if ( bUndoAction )
-            UndoActionEnd( TEXTUNDO_INSERT );
+            UndoActionEnd();
     }
 
     return aPaM;
@@ -856,7 +856,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
 TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString& rStr )
 {
-    UndoActionStart( TEXTUNDO_INSERT );
+    UndoActionStart();
 
     TextPaM aPaM;
 
@@ -908,7 +908,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const XubString
             break;
     }
 
-    UndoActionEnd( TEXTUNDO_INSERT );
+    UndoActionEnd();
 
     TextModified();
     return aPaM;
@@ -1430,7 +1430,7 @@ void TextEngine::EnableUndo( BOOL bEnable )
     mbUndoEnabled = bEnable;
 }
 
-SfxUndoManager& TextEngine::GetUndoManager()
+::svl::IUndoManager& TextEngine::GetUndoManager()
 {
     if ( !mpUndoManager )
         mpUndoManager = new TextUndoManager( this );
@@ -1447,7 +1447,7 @@ void TextEngine::UndoActionStart( USHORT nId )
     }
 }
 
-void TextEngine::UndoActionEnd( USHORT )
+void TextEngine::UndoActionEnd()
 {
     if ( IsUndoEnabled() && !IsInUndo() )
         GetUndoManager().LeaveListAction();
@@ -2640,7 +2640,7 @@ BOOL TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
     BOOL bUpdate = GetUpdateMode();
     SetUpdateMode( FALSE );
 
-    UndoActionStart( TEXTUNDO_READ );
+    UndoActionStart();
     TextSelection aSel;
     if ( pSel )
         aSel = *pSel;
@@ -2666,7 +2666,7 @@ BOOL TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
             aSel = ImpInsertParaBreak( aSel.GetEnd() );
     }
 
-    UndoActionEnd( TEXTUNDO_READ );
+    UndoActionEnd();
 
     TextSelection aNewSel( aSel.GetEnd(), aSel.GetEnd() );
 

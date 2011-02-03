@@ -1801,6 +1801,11 @@ struct UnoControlListBoxModel_Data
         return aItems;
     }
 
+    void copyItems( const UnoControlListBoxModel_Data& i_copySource )
+    {
+        m_aListItems = i_copySource.m_aListItems;
+    }
+
     void    setAllItems( const ::std::vector< ListItem >& i_rItems )
     {
         m_aListItems = i_rItems;
@@ -1852,6 +1857,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_
     ,m_pData( new UnoControlListBoxModel_Data( *this ) )
     ,m_aItemListListeners( GetMutex() )
 {
+    m_pData->copyItems( *i_rSource.m_pData );
 }
 UnoControlListBoxModel::~UnoControlListBoxModel()
 {
@@ -4356,3 +4362,4 @@ sal_Bool UnoFixedLineControl::isTransparent() throw(uno::RuntimeException)
 {
     return sal_True;
 }
+

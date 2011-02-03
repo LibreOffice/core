@@ -56,6 +56,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\image.hxx %_DEST%\inc%_EXT%\vcl\image.hxx
 ..\inc\vcl\imagerepository.hxx %_DEST%\inc%_EXT%\vcl\imagerepository.hxx
 ..\inc\vcl\imgctrl.hxx %_DEST%\inc%_EXT%\vcl\imgctrl.hxx
+..\inc\vcl\throbber.hxx %_DEST%\inc%_EXT%\vcl\throbber.hxx
 ..\inc\vcl\impdel.hxx %_DEST%\inc%_EXT%\vcl\impdel.hxx
 ..\inc\vcl\inputctx.hxx %_DEST%\inc%_EXT%\vcl\inputctx.hxx
 ..\inc\vcl\javachild.hxx %_DEST%\inc%_EXT%\vcl\javachild.hxx
