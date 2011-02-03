@@ -76,7 +76,7 @@
 
 #include <rtl/ustrbuf.hxx>
 #include <rtl/strbuf.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -174,7 +174,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     sal_Int32,
@@ -186,7 +186,7 @@ IntrospectionNameMap;
 
 // Hashtable zur Zuordnung der exakten Namen zu den zu Lower-Case
 // konvertierten Namen, dient zur Unterst�tzung von XExactName
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     OUString,
@@ -1567,7 +1567,7 @@ struct hashIntrospectionAccessCache_Impl
 
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashIntrospectionKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1666,7 +1666,7 @@ size_t TypeProviderAccessCache_Impl::operator()(const hashTypeProviderKey_Impl &
 }
 
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     hashTypeProviderKey_Impl,
     IntrospectionAccessStatic_Impl*,
@@ -1993,7 +1993,7 @@ struct eqInterface_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     void*,
     void*,

@@ -31,7 +31,7 @@
 
 
 // streams
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 #include <com/sun/star/io/XObjectInputStream.hpp>
@@ -951,7 +951,7 @@ struct hashObjectContainer_Impl
     }
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     Reference< XInterface >,
     sal_Int32,

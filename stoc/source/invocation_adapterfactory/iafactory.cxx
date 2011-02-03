@@ -29,8 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
@@ -111,8 +111,8 @@ struct hash_ptr
     inline size_t operator() ( void * p ) const
         { return (size_t)p; }
 };
-typedef hash_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
-typedef hash_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
+typedef boost::unordered_set< void *, hash_ptr, equal_to< void * > > t_ptr_set;
+typedef boost::unordered_map< void *, t_ptr_set, hash_ptr, equal_to< void * > > t_ptr_map;
 
 //==============================================================================
 class FactoryImpl

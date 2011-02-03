@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_stoc.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/mutex.hxx>
 #include <osl/diagnose.h>
 #include <uno/dispatcher.h>
@@ -103,7 +103,7 @@ struct hashOWString_Impl
         { return rName.hashCode(); }
 };
 
-typedef hash_map
+typedef boost::unordered_map
 <
     OUString,
     Reference<XInterface >,
