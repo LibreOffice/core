@@ -25,7 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include    <hash_map>
+#include    <boost/unordered_map.hpp>
 
 #ifndef _CODEMAKER_TYPEMANAGER_HXX_
 #define _CODEMAKER_TYPEMANAGER_HXX_
@@ -33,24 +33,13 @@
 
 typedef ::std::list< Registry* >    RegistryList;
 
-#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
-    EqualString,
-    NewAlloc
-> T2TypeClassMap;
-#else
-typedef ::std::hash_map
+typedef ::boost::unordered_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
     HashString,
     EqualString
 > T2TypeClassMap;
-#endif
 
 struct TypeManagerImpl
 {
