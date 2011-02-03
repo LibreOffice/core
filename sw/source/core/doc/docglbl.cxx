@@ -43,6 +43,7 @@
 #include <fmtinfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -181,7 +182,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
         return FALSE;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( FALSE );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
@@ -254,7 +255,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath,
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();
@@ -542,7 +543,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
         return FALSE;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( FALSE );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
@@ -605,7 +606,7 @@ BOOL SwDoc::SplitDoc( USHORT eDocType, const String& rPath, int nOutlineLevel )
             String sFileName;
             if( pSttNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
-                SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
+                SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_INTERNAL ));
                 if( xDocSh->DoInitNew( 0 ) )
                 {
                     SwDoc* pDoc = ((SwDocShell*)(&xDocSh))->GetDoc();

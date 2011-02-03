@@ -88,6 +88,7 @@
 #include <shellio.hxx>
 #include <ddefld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -132,7 +133,6 @@
 // #109590#
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <globals.hrc>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -228,7 +228,7 @@ public:
     }
     ~SwTrnsfrActionAndUndo()
     {
-        pSh->EndUndo( eUndoId );
+        pSh->EndUndo();
         pSh->EndAllAction();
     }
 };
@@ -454,14 +454,14 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
         pClpDocFac = new SwDocFac;
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+        aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetRefForDocShell( 0 );
+        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
         if( nSelectionType & nsSelectionType::SEL_TXT && !pWrtShell->HasMark() )
         {
@@ -869,7 +869,6 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
 
         SwDoc *const pTmpDoc = lcl_GetDoc(*pClpDocFac);
 
-        pTmpDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
         pWrtShell->Copy( pTmpDoc );
 
@@ -892,9 +891,10 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
         }
 
         // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+        aDocShellRef = pTmpDoc->GetTmpDocShell();
         if( aDocShellRef.Is() )
             SwTransferable::InitOle( aDocShellRef, *pTmpDoc );
-        pTmpDoc->SetRefForDocShell( 0 );
+        pTmpDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
         if( pWrtShell->IsObjSelected() )
             eBufferType = TRNSFR_DRAWING;
@@ -1052,15 +1052,15 @@ int SwTransferable::CopyGlossary( SwTextBlocks& rGlossary,
     SwCntntNode* pCNd = rNds.GoNext( &aNodeIdx ); // gehe zum 1. ContentNode
     SwPaM aPam( *pCNd );
 
-    pCDoc->SetRefForDocShell( boost::addressof(aDocShellRef) );
     pCDoc->LockExpFlds();   // nie die Felder updaten - Text so belassen
 
     pCDoc->InsertGlossary( rGlossary, rStr, aPam, 0 );
 
     // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
+    aDocShellRef = pCDoc->GetTmpDocShell();
     if( aDocShellRef.Is() )
         SwTransferable::InitOle( aDocShellRef, *pCDoc );
-    pCDoc->SetRefForDocShell( 0 );
+    pCDoc->SetTmpDocShell( (SfxObjectShell*)NULL );
 
     eBufferType = TRNSFR_DOCUMENT;
 
@@ -3434,7 +3434,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 // nicht in sich selbst kopieren/verschieben
                 rSh.DestroyCrsr();
-                rSh.EndUndo( eUndoId );
+                rSh.EndUndo();
                 rSh.EndAction();
                 rSh.EndAction();
                 return 0;
@@ -3542,8 +3542,8 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSrcSh.LeaveSelFrmMode();
 
     if( rSrcSh.GetDoc() != rSh.GetDoc() )
-        rSrcSh.EndUndo( eUndoId );
-    rSh.EndUndo( eUndoId );
+        rSrcSh.EndUndo();
+    rSh.EndUndo();
 
         // Shell in den richtigen Status versetzen
     if( &rSrcSh != &rSh && ( rSh.IsFrmSelected() || rSh.IsObjSelected() ))
@@ -3797,8 +3797,7 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
     if( bDelBookmrk && refObj.Is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
-        BOOL bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( FALSE );
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // --> OD, CD, OS 2005-11-25 #i58448#
         Link aSavedOle2Link( pDoc->GetOle2Link() );
@@ -3815,7 +3814,6 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
         pDoc->SetOle2Link( aSavedOle2Link );
         // <--
 
-        pDoc->DoUndo( bUndo );
         bDelBookmrk = FALSE;
     }
 

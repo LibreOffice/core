@@ -35,6 +35,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 #if STLPORT_VERSION>=321
 #include <math.h>   // prevent conflict between exception and std::exception
@@ -101,7 +102,6 @@
 // -> #111827#
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
 // <- #111827#
 
 #include <toolkit/helper/vclunohelper.hxx>
@@ -277,7 +277,7 @@ JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
     if( bStarted )
     {
         EndAllAction();
-        EndUndo(UNDO_REPLACE);
+        EndUndo();
     }
 //    delete pChgFlg;
 }
@@ -377,7 +377,7 @@ void SwWrtShell::Insert( const String &rPath, const String &rFilter,
     if ( bOwnMgr )
         delete pFrmMgr;
 
-    EndUndo(UNDO_INSERT);
+    EndUndo();
     EndAllAction();
 }
 
@@ -603,6 +603,31 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef& xRef, SwFlyFrmFm
 
     if (pFlyFrmFmt)
         *pFlyFrmFmt = pFmt;
+
+    if ( SotExchange::IsChart( aCLSID ) )
+    {
+        uno::Reference< embed::XEmbeddedObject > xEmbeddedObj( xRef.GetObject(), uno::UNO_QUERY );
+        if ( xEmbeddedObj.is() )
+        {
+            bool bDisableDataTableDialog = false;
+            svt::EmbeddedObjectRef::TryRunningState( xEmbeddedObj );
+            uno::Reference< beans::XPropertySet > xProps( xEmbeddedObj->getComponent(), uno::UNO_QUERY );
+            if ( xProps.is() &&
+                 ( xProps->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ) ) >>= bDisableDataTableDialog ) &&
+                 bDisableDataTableDialog )
+            {
+                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableDataTableDialog" ) ),
+                    uno::makeAny( sal_False ) );
+                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DisableComplexChartTypes" ) ),
+                    uno::makeAny( sal_False ) );
+                uno::Reference< util::XModifiable > xModifiable( xProps, uno::UNO_QUERY );
+                if ( xModifiable.is() )
+                {
+                    xModifiable->setModified( sal_True );
+                }
+            }
+        }
+    }
 
     EndAllAction();
     GetView().AutoCaption(OLE_CAP, &aCLSID);

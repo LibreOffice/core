@@ -201,6 +201,7 @@ static BOOL LoadFromURL_impl(
     }
     else
     {
+        // SfxObjectShellRef is ok here, since the document will be explicitly closed
         SfxObjectShellRef xTmpDocSh = pTmpDocShell;
         CloseModelAndDocSh( xTmpModel, xTmpDocSh );
     }
@@ -711,11 +712,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     uno::Reference< mail::XMailService > xInService;
     if (MailMergeType::PRINTER == nCurOutputType)
     {
-        SwPrintData aPrtData = *SW_MOD()->GetPrtOptions( FALSE );
         IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-        SwPrintData* pShellPrintData = pIDDA->getPrintData();
-        if (pShellPrintData)
-            aPrtData = *pShellPrintData;
+        SwPrintData aPrtData( pIDDA->getPrintData() );
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
         pIDDA->setPrintData( aPrtData );
         // #i25686# printing should not be done asynchronously to prevent dangling offices

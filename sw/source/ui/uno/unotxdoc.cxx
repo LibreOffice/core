@@ -198,10 +198,9 @@ SwPrintUIOptions * lcl_GetPrintUIOptions(
     const bool bHasPostIts      = lcl_GetPostIts( pDocShell->GetDoc(), 0 );
 
     // get default values to use in dialog from documents SwPrintData
-    const SwPrintData *pPrintData = pDocShell->GetDoc()->getPrintData();
-    DBG_ASSERT( pPrintData, "failed to get SwPrintData from document" );
+    const SwPrintData &rPrintData = pDocShell->GetDoc()->getPrintData();
 
-    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, *pPrintData );
+    return new SwPrintUIOptions( bWebDoc, bSwSrcView, bHasSelection, bHasPostIts, rPrintData );
 }
 
 ////////////////////////////////////////////////////////////
@@ -2591,7 +2590,7 @@ SwDoc * SwXTextDocument::GetRenderDoc(
             const TypeId aSwViewTypeId = TYPE(SwView);
             if (rpView  &&  rpView->IsA(aSwViewTypeId))
             {
-                SfxObjectShellRef xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
+                SfxObjectShellLock xDocSh(((SwView*)rpView)->GetOrCreateTmpSelectionDoc());
                 if (xDocSh.Is())
                 {
                     pDoc = ((SwDocShell*)&xDocSh)->GetDoc();
@@ -2616,33 +2615,28 @@ static void lcl_SavePrintUIOptionsToDocumentPrintData(
     const SwPrintUIOptions &rPrintUIOptions,
     bool bIsPDFEXport )
 {
-    if (!rDoc.getPrintData())
-    {
-        SwPrintData *pTmpData = new SwPrintData;
-        rDoc.setPrintData ( *pTmpData );
-        delete pTmpData;    // setPrintData does make its own copy!
-    }
+    SwPrintData aDocPrintData( rDoc.getPrintData() );
 
-    SwPrintData *pDocPrintData = rDoc.getPrintData();
+    aDocPrintData.SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
+    aDocPrintData.SetPrintTable( rPrintUIOptions.IsPrintTables() );
+    aDocPrintData.SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
+    aDocPrintData.SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
+    aDocPrintData.SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
+    aDocPrintData.SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
+    aDocPrintData.SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
+    aDocPrintData.SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
+    aDocPrintData.SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
+    aDocPrintData.SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
+    aDocPrintData.SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
+    aDocPrintData.SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
+    aDocPrintData.SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
+    aDocPrintData.SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
+    // aDocPrintData.SetPrintSingleJobs( b ); handled by File/Print dialog itself
+    // arDocPrintData.SetFaxName( s ); n/a in File/Print dialog
+    aDocPrintData.SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
+    aDocPrintData.SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
 
-    pDocPrintData->SetPrintGraphic( rPrintUIOptions.IsPrintGraphics() );
-    pDocPrintData->SetPrintTable( rPrintUIOptions.IsPrintTables() );
-    pDocPrintData->SetPrintDraw( rPrintUIOptions.IsPrintDrawings() );
-    pDocPrintData->SetPrintControl( rPrintUIOptions.IsPrintFormControls() );
-    pDocPrintData->SetPrintLeftPage( rPrintUIOptions.IsPrintLeftPages() );
-    pDocPrintData->SetPrintRightPage( rPrintUIOptions.IsPrintRightPages() );
-    pDocPrintData->SetPrintReverse( rPrintUIOptions.IsPrintReverse() );
-    pDocPrintData->SetPaperFromSetup( rPrintUIOptions.IsPaperFromSetup() );
-    pDocPrintData->SetPrintEmptyPages( rPrintUIOptions.IsPrintEmptyPages( bIsPDFEXport ) );
-    pDocPrintData->SetPrintPostIts( rPrintUIOptions.GetPrintPostItsType() );
-    pDocPrintData->SetPrintProspect( rPrintUIOptions.IsPrintProspect() );
-    pDocPrintData->SetPrintProspect_RTL( rPrintUIOptions.IsPrintProspectRTL() );
-    pDocPrintData->SetPrintPageBackground( rPrintUIOptions.IsPrintPageBackground() );
-    pDocPrintData->SetPrintBlackFont( rPrintUIOptions.IsPrintWithBlackTextColor() );
-    // pDocPrintData->SetPrintSingleJobs( b ); handled by File/Print dialog itself
-    // pDocPrintData->SetFaxName( s ); n/a in File/Print dialog
-    pDocPrintData->SetPrintHiddenText( rPrintUIOptions.IsPrintHiddenText() );
-    pDocPrintData->SetPrintTextPlaceholder( rPrintUIOptions.IsPrintTextPlaceholders() );
+    rDoc.setPrintData( aDocPrintData );
 }
 
 
@@ -3170,8 +3164,12 @@ uno::Reference< util::XCloneable > SwXTextDocument::createClone(  ) throw (uno::
     ::vos::OGuard aGuard(Application::GetSolarMutex());
     if(!IsValid())
         throw RuntimeException();
-    //create a new document - hidden - copy the storage and return it
-    SfxObjectShell* pShell = pDocShell->GetDoc()->CreateCopy(false);
+
+    // create a new document - hidden - copy the storage and return it
+    // SfxObjectShellRef is used here, since the model should control object lifetime after creation
+    // and thus SfxObjectShellLock is not allowed here
+    // the model holds reference to the shell, so the shell will not destructed at the end of method
+    SfxObjectShellRef pShell = pDocShell->GetDoc()->CreateCopy(false);
     uno::Reference< frame::XModel > xNewModel = pShell->GetModel();
     uno::Reference< embed::XStorage > xNewStorage = ::comphelper::OStorageHelper::GetTemporaryStorage( );
     uno::Sequence< beans::PropertyValue > aTempMediaDescriptor;

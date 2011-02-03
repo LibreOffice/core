@@ -353,4 +353,8 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
     return 0;
 }
 
+::sw::IShellCursorSupplier * SwDoc::GetIShellCursorSupplier()
+{
+    return GetEditShell(0);
+}
 

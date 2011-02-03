@@ -39,7 +39,6 @@
 #include <svl/eitem.hxx>
 #include <unotools/undoopt.hxx>
 #include <unotools/lingucfg.hxx>
-#include <svtools/printdlg.hxx>
 #include <unotools/useroptions.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
@@ -75,12 +74,12 @@
 #include <beziersh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
-#include <globdoc.hxx>
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -183,7 +182,7 @@ void SwView::ImpSetVerb( int nSelType )
     }
     if ( bResetVerbs )
     {
-        SetVerbs( 0 );
+        SetVerbs( Sequence< embed::VerbDescriptor >() );
         bVerbsActive = sal_False;
     }
 }
@@ -974,9 +973,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
-    SwEditShell::SetUndoActionCount(
-        static_cast< USHORT >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
-    pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
+    pWrtShell->DoUndo( 0 != SW_MOD()->GetUndoOptions().GetUndoCount() );
 
     const BOOL bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SetNewWindowAllowed(!bBrowse);
@@ -1021,7 +1018,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     //              so setze das Modified NICHT zurueck.
     // --> OD 2005-02-11 #i38810# - no reset of modified state, if document
     // was already modified.
-    if ( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
+    if (!pWrtShell->GetDoc()->GetIDocumentUndoRedo().IsUndoNoResetModified() &&
          ( !pFirst || pFirst == pVFrame ) &&
          !bIsDocModified )
     // <--
@@ -1898,16 +1895,16 @@ void SwView::NotifyDBChanged()
 /* -----------------------------28.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetTmpSelectionDoc()
 {
     return GetViewImpl()->GetTmpSelectionDoc();
 }
 /* -----------------------------31.10.02 13:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-SfxObjectShellRef & SwView::GetOrCreateTmpSelectionDoc()
+SfxObjectShellLock & SwView::GetOrCreateTmpSelectionDoc()
 {
-    SfxObjectShellRef &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
+    SfxObjectShellLock &rxTmpDoc = GetViewImpl()->GetTmpSelectionDoc();
     if (!rxTmpDoc.Is())
     {
         SwXTextView *pImpl = GetViewImpl()->GetUNOObject_Impl();

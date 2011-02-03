@@ -81,6 +81,7 @@
 #include <shellio.hxx>      // I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -468,7 +469,9 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
             // will set the wrong class id.
             SvGlobalName aClassName;
             String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh =
+
+            // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
+            SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
             // the global document can not be a template
             xDocSh->SetupStorage( xStor, SotStorage::GetVersion( xStor ), sal_False );
@@ -492,7 +495,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Modified-Flag merken und erhalten ohne den Link zu Callen
         // (fuer OLE; nach Anweisung von MM)
         BOOL bIsModified = pDoc->IsModified();
-        SwUndoNoModifiedPosition aOldPos = pDoc->getUndoNoModifiedPosition();
+        pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
@@ -519,7 +522,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if( bIsModified )
         {
             pDoc->SetModified();
-            pDoc->setUndoNoModifiedPosition( aOldPos );
+            pDoc->GetIDocumentUndoRedo().UnLockUndoNoModifiedPosition();
         }
         pDoc->SetOle2Link( aOldOLELnk );
 
@@ -699,25 +702,6 @@ BOOL SwDocShell::ConvertTo( SfxMedium& rMedium )
             GetDoc()->set(IDocumentSettingAccess::HTML_MODE, bIsHTMLModeSave );
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT, bIsGlobalDocSave);
             GetDoc()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bIsGlblDocSaveLinksSave);
-        }
-
-        if( bRet && nMyType != nSaveType )
-        {
-            SvGlobalName aClassName;
-            String aAppName, aLongUserName, aUserName;
-            SfxObjectShellRef xDocSh;
-            switch( nSaveType )
-            {
-            case 0:
-                xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 1:
-                xDocSh = new SwWebDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            case 2:
-                xDocSh = new SwGlobalDocShell( SFX_CREATE_MODE_INTERNAL );
-                break;
-            }
         }
 
         return bRet;

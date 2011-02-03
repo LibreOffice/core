@@ -58,7 +58,6 @@
 #include <swserv.hxx>
 #include <swundo.hxx>
 #include <tools/pstm.hxx>
-#include <undobj.hxx>
 #include <unocrsr.hxx>
 #include <viscrs.hxx>
 #include <stdio.h>

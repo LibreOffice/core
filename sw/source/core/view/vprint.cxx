@@ -60,6 +60,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
@@ -270,10 +271,10 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
         if( rOld.GetLandscape() != bNewOri )
         {
             SwPageDesc aNew( rOld );
-            const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-            GetDoc()->DoUndo( sal_False );
-            GetDoc()->CopyPageDesc(rOld, aNew);
-            GetDoc()->DoUndo( bDoesUndo );
+            {
+                ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+                GetDoc()->CopyPageDesc(rOld, aNew);
+            }
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
@@ -313,10 +314,10 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     {
         const SwPageDesc &rOld = const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i );
         SwPageDesc aNew( rOld );
-        const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-        GetDoc()->DoUndo( sal_False );
-        GetDoc()->CopyPageDesc( rOld, aNew );
-        GetDoc()->DoUndo( bDoesUndo );
+        {
+            ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+            GetDoc()->CopyPageDesc( rOld, aNew );
+        }
         SwFrmFmt& rPgFmt = aNew.GetMaster();
         Size aSz( rSz );
         const BOOL bOri = aNew.GetLandscape();
@@ -443,8 +444,8 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     }
 
     // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+//REMOVE    //      if( aDocShellRef.Is() )
+//REMOVE    //          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
     // und fuellen es mit dem selektierten Bereich
     pFESh->Copy( pPrtDoc );
 
@@ -502,10 +503,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     // eine neue Shell fuer den Printer erzeugen
     ViewShell *pShell;
     SwDoc *pOutDevDoc;
-
-    //!! muss warum auch immer hier in diesem scope existieren !!
-    //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
-    SfxObjectShellRef aDocShellRef;
 
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.

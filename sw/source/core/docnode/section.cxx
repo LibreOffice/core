@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <stdlib.h>
+
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -46,6 +46,7 @@
 #include <fmtpdsc.hxx>
 #include <errhdl.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -274,10 +275,8 @@ SwSection::~SwSection()
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
             //          geschehen sein!!
-            BOOL bUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( FALSE );
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             pDoc->DelSectionFmt( pFmt );    // und loeschen
-            pDoc->DoUndo( bUndo );
         }
     }
     if (m_RefObj.Is())
@@ -1319,9 +1318,10 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 // Der Return-Wert gibt an, was mit der Shell zu geschehen hat:
 //  0 - Fehler, konnte DocShell nicht finden
 //  1 - DocShell ist ein existieren Document
-//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden
+//  2 - DocShell wurde neu angelegt, muss also wieder geschlossen werden ( will be assigned to xLockRef additionaly )
 
 int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+                        SfxObjectShellLock& xLockRef,
                         const String& rFileName,
                         const String& rPasswd,
                         String& rFilter,
@@ -1407,7 +1407,9 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
             // ohne Filter geht gar nichts
             pMed->SetFilter( pSfxFlt );
 
-            xDocSh = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            // if the new shell is created, SfxObjectShellLock should be used to let it be closed later for sure
+            xLockRef = new SwDocShell( SFX_CREATE_MODE_INTERNAL );
+            xDocSh = (SfxObjectShell*)xLockRef;
             if( xDocSh->DoLoad( pMed ) )
                 return 2;
         }
@@ -1444,8 +1446,8 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     // <--
 
     // Undo immer abschalten
-    BOOL bWasUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( FALSE );
+    bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     BOOL bWasVisibleLinks = pDoc->IsVisibleLinks();
     pDoc->SetVisibleLinks( FALSE );
 
@@ -1504,6 +1506,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
 
             RedlineMode_t eOldRedlineMode = nsRedlineMode_t::REDLINE_NONE;
             SfxObjectShellRef xDocSh;
+            SfxObjectShellLock xLockRef;
             int nRet;
             if( !sFileName.Len() )
             {
@@ -1512,7 +1515,7 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
             }
             else
             {
-                nRet = lcl_FindDocShell( xDocSh, sFileName,
+                nRet = lcl_FindDocShell( xDocSh, xLockRef, sFileName,
                                     rSection.GetLinkFilePassword(),
                                     sFilter, 0, pDoc->GetDocShell() );
                 if( nRet )
@@ -1681,9 +1684,9 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     }
 
 
-    // Alle UndoActions entfernen und Undo wieder einschalten
-    pDoc->DelAllUndoObj();
-    pDoc->DoUndo( bWasUndo );
+    // remove all undo actions and turn undo on again
+    pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+    pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
     pDoc->SetVisibleLinks( bWasVisibleLinks );
 
     pDoc->UnlockExpFlds();

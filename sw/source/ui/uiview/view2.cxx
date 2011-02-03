@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -43,7 +44,7 @@
 #include <docary.hxx>
 #include <hintids.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 #include <caption.hxx>
 #include <svl/PasswordHelper.hxx>
@@ -86,6 +87,7 @@
 #include <uivwimp.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>
@@ -469,7 +471,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.Done();
         }
 
-        rSh.EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
+        rSh.EndUndo(); // due to possible change of Shell
     }
 
     delete pFileDlg;
@@ -2105,10 +2107,8 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                     }
                     else
                     {
-                        sal_Bool bUndo = pDoc->DoesUndo();
-                        pDoc->DoUndo( sal_False );
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
-                        pDoc->DoUndo( bUndo );
                     }
 
                 }
@@ -2125,7 +2125,9 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
                 { // Disable Undo for .sdw (136991) or
                   // if the number of page styles with header/footer has changed (#i67305)
                     if( !pRead || nUndoCheck != lcl_PageDescWithHeader( *pDoc ) )
-                        pDoc->DelAllUndoObj();
+                    {
+                        pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+                    }
                 }
 
                 pWrtShell->EndAllAction();
@@ -2142,14 +2144,15 @@ long SwView::InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion )
     else
     {
         SfxObjectShellRef xDocSh;
+        SfxObjectShellLock xLockRef;
 
-extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
+extern int lcl_FindDocShell( SfxObjectShellRef& xDocSh, SfxObjectShellLock& xLockRef,
                             const String& rFileName, const String& rPasswd,
                             String& rFilter, INT16 nVersion,
                             SwDocShell* pDestSh );
 
         String sFltNm;
-        int nRet = lcl_FindDocShell( xDocSh, pMedium->GetName(), aEmptyStr,
+        int nRet = lcl_FindDocShell( xDocSh, xLockRef, pMedium->GetName(), aEmptyStr,
                                     sFltNm, nVersion, pDocSh );
         if( nRet )
         {
