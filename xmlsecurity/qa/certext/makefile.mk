@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -23,26 +23,26 @@
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
-#*************************************************************************
+#***********************************************************************/
 
-PRJ=..$/..$/..
-
+PRJ = ../..
 PRJNAME = xmlsecurity
-TARGET = xs_nss
+TARGET = qa_certext
 
 ENABLE_EXCEPTIONS = TRUE
 
-# --- Settings -----------------------------------------------------
+.IF "$(OS)" == "WNT"
+my_file = file:///
+.ELSE
+my_file = file://
+.END
 
-.INCLUDE :  settings.mk
+
+.INCLUDE: settings.mk
 .INCLUDE :	$(PRJ)$/util$/target.pmk
 
 .IF "$(SYSTEM_LIBXML)" == "YES"
 CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
-.ENDIF
-
-.IF "$(CRYPTO_ENGINE)" != "nss"
-LIBTARGET=NO
 .ENDIF
 
 .IF "$(CRYPTO_ENGINE)" == "nss"
@@ -91,26 +91,9 @@ INCPOST += \
 $(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
-#.IF "$(OS)" == "LINUX"
-#CFLAGS +=   -fPIC -g
-#CFLAGSCXX += \
-#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-#            -Wno-long-long -pthread
-#CDEFS     += -DTRACING
-#.ELIF "$(OS)" == "NETBSD"
-#CFLAGS +=   -fPIC
-#CFLAGSCXX += \
-#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-#            -Wno-long-long
-#CDEFS     += -DTRACING
-#.ENDIF
 .ENDIF
 
 CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
-
-# --- Files --------------------------------------------------------
 
 SOLARINC += \
  -I$(MOZ_INC) \
@@ -122,22 +105,73 @@ SOLARINC += -DSYSTEM_MOZILLA $(NSS_INC)
 .ELSE
 SOLARINC += -I$(NSS_INC)
 .ENDIF
-
-SLOFILES = \
-    $(SLO)$/securityenvironment_nssimpl.obj \
-    $(SLO)$/xmlencryption_nssimpl.obj \
-    $(SLO)$/xmlsecuritycontext_nssimpl.obj \
-    $(SLO)$/xmlsignature_nssimpl.obj \
-    $(SLO)$/x509certificate_nssimpl.obj \
-    $(SLO)$/seinitializer_nssimpl.obj \
-    $(SLO)$/xsec_nss.obj \
-    $(SLO)$/sanextension_nssimpl.obj \
-    $(SLO)$/secerror.obj
-
-
-    
 .ENDIF
 
-# --- Targets ------------------------------------------------------
 
-.INCLUDE :  target.mk
+
+
+CFLAGSCXX += $(CPPUNIT_CFLAGS)
+
+SHL1IMPLIB = i$(SHL1TARGET)
+SHL1OBJS = $(SLOFILES)
+SHL1RPATH = NONE
+SHL1STDLIBS = $(CPPUNITLIB)     \
+              $(SALLIB)         \
+              $(NEON3RDLIB)     \
+              $(CPPULIB)        \
+              $(XMLOFFLIB)      \
+              $(CPPUHELPERLIB)	\
+              $(SVLLIB)			\
+              $(TOOLSLIB)	    \
+              $(COMPHELPERLIB)
+              
+    
+    
+.IF "$(OS)"=="SOLARIS"
+SHL1STDLIBS +=-ldl
+.ENDIF
+
+.IF "$(SYSTEM_MOZILLA)" == "YES"
+.IF "$(NSPR_LIB)" != ""
+SHL1STDLIBS += $(NSPR_LIB)
+.ENDIF
+.IF "$(NSS_LIB)" != ""
+SHL1STDLIBS += $(NSS_LIB)
+.ENDIF
+.ENDIF
+
+.IF "$(CRYPTO_ENGINE)" == "mscrypto"
+SHL1STDLIBS+= $(MSCRYPTOLIBS)
+.ELSE
+CDEFS += -DNSS_ENGINE
+SHL1STDLIBS+= $(NSSCRYPTOLIBS)
+.ENDIF	
+
+.IF "$(ENABLE_NSS_MODULE)"=="YES" || "$(SYSTEM_MOZILLA)" == "YES"
+
+SHL1LIBS= \
+    $(SLB)$/xs_comm.lib
+
+.IF "$(CRYPTO_ENGINE)" == "mscrypto"
+SHL1LIBS += \
+    $(SLB)$/xs_mscrypt.lib
+.ELSE
+SHL1LIBS += \
+    $(SLB)$/xs_nss.lib
+.ENDIF
+
+.ENDIF	
+
+SHL1TARGET = qa_CertExt
+SHL1VERSIONMAP = $(PRJ)/qa/certext/export.map
+DEF1NAME = $(SHL1TARGET)
+
+SLOFILES = $(SLO)/SanCertExt.obj
+
+.INCLUDE: target.mk
+
+ALLTAR : test
+
+test .PHONY : $(SHL1TARGETN)
+    $(CPPUNITTESTER) $(SHL1TARGETN) \
+        -env:UNO_TYPES=$(my_file)$(SOLARBINDIR)/types.rdb
