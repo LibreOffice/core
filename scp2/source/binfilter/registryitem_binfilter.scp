@@ -71,7 +71,7 @@ RegistryItem gid_Regitem__Sdw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".sdw";
-    Value = "loffice.StarWriterDocument.5";
+    Value = "soffice.StarWriterDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdw
@@ -79,7 +79,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sdw";
-    Value = "loffice.StarWriterDocument.5";
+    Value = "soffice.StarWriterDocument.5";
     Styles = ();
 End
 
@@ -88,7 +88,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sgl";
-    Value = "loffice.StarWriterGlobalDocument.5";
+    Value = "soffice.StarWriterGlobalDocument.5";
     Styles = ();
 End
 
@@ -96,12 +96,12 @@ RegistryItem gid_Regitem__Sgl
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sgl";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "loffice.StarWriterGlobalDocument.5";
+    Value = "soffice.StarWriterGlobalDocument.5";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterDocument.5";
+    Subkey = "soffice.StarWriterDocument.5";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(SO52_TEXT_OOO)
 End
@@ -109,104 +109,104 @@ End
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\DefaultIcon";
+    Subkey = "soffice.StarWriterDocument.5\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,27";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell";
+    Subkey = "soffice.StarWriterDocument.5\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell\new";
+    Subkey = "soffice.StarWriterDocument.5\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell\new\command";
+    Subkey = "soffice.StarWriterDocument.5\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell\open\command";
+    Subkey = "soffice.StarWriterDocument.5\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell\print\command";
+    Subkey = "soffice.StarWriterDocument.5\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarWriterDocument.5\shell\printto\command";
+    Subkey = "soffice.StarWriterDocument.5\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5";
+    Subkey = "soffice.StarWriterGlobalDocument.5";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(SO51_MASTERDOC_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\DefaultIcon";
+    Subkey = "soffice.StarWriterGlobalDocument.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "<progpath>\program\soffice.exe,35";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell\new";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell\new";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell\new\command";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell\new\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell\open\command";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell\open\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell\print\command";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell\print\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starwriterglobaldocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarWriterGlobalDocument.5\shell\printto\command";
+    Subkey = "soffice.StarWriterGlobalDocument.5\shell\printto\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -240,56 +240,56 @@ End
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5";
+    Subkey = "soffice.StarCalcDocument.5";
     REG_VALUE_LNG(SO51_SPREADSHEET_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\DefaultIcon";
+    Subkey = "soffice.StarCalcDocument.5\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,29";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell";
+    Subkey = "soffice.StarCalcDocument.5\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell\new";
+    Subkey = "soffice.StarCalcDocument.5\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell\new\command";
+    Subkey = "soffice.StarCalcDocument.5\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell\open\command";
+    Subkey = "soffice.StarCalcDocument.5\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell\print\command";
+    Subkey = "soffice.StarCalcDocument.5\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starcalcdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarCalcDocument.5\shell\printto\command";
+    Subkey = "soffice.StarCalcDocument.5\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -297,7 +297,7 @@ RegistryItem gid_Regitem__Sdc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".sdc";
-    Value = "loffice.StarCalcDocument.5";
+    Value = "soffice.StarCalcDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdc
@@ -305,7 +305,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sdc";
-    Value = "loffice.StarCalcDocument.5";
+    Value = "soffice.StarCalcDocument.5";
     Styles = ();
 End
 
@@ -353,56 +353,56 @@ End
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5";
+    Subkey = "soffice.StarImpressDocument.5";
     REG_VALUE_LNG(SO51_PRESENT_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\DefaultIcon";
+    Subkey = "soffice.StarImpressDocument.5\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,33";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell";
+    Subkey = "soffice.StarImpressDocument.5\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell\new";
+    Subkey = "soffice.StarImpressDocument.5\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell\new\command";
+    Subkey = "soffice.StarImpressDocument.5\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell\open\command";
+    Subkey = "soffice.StarImpressDocument.5\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell\print\command";
+    Subkey = "soffice.StarImpressDocument.5\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starimpressdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarImpressDocument.5\shell\printto\command";
+    Subkey = "soffice.StarImpressDocument.5\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -410,7 +410,7 @@ RegistryItem gid_Regitem__Sdd
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".sdd";
-    Value = "loffice.StarImpressDocument.5";
+    Value = "soffice.StarImpressDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sdd
@@ -418,7 +418,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sdd";
-    Value = "loffice.StarImpressDocument.5";
+    Value = "soffice.StarImpressDocument.5";
     Styles = ();
 End
 
@@ -426,7 +426,7 @@ RegistryItem gid_Regitem__Sdp
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".sdp";
-    Value = "loffice.StarStorageDocument.5";
+    Value = "soffice.StarStorageDocument.5";
 End
 
 // .sdp no longer supported
@@ -435,7 +435,7 @@ End
 //     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
 //     ModuleID = gid_Module_Optional_Binfilter;
 //     Name = ".sdp";
-//     Value = "loffice.StarStorageDocument.5";
+//     Value = "soffice.StarStorageDocument.5";
 //     Styles = ();
 // End
 
@@ -468,56 +468,56 @@ End
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5";
+    Subkey = "soffice.StarDrawDocument.5";
     REG_VALUE_LNG(SO51_DRAWING_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\DefaultIcon";
+    Subkey = "soffice.StarDrawDocument.5\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,31";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell";
+    Subkey = "soffice.StarDrawDocument.5\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell\new";
+    Subkey = "soffice.StarDrawDocument.5\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell\new\command";
+    Subkey = "soffice.StarDrawDocument.5\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell\open\command";
+    Subkey = "soffice.StarDrawDocument.5\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell\print\command";
+    Subkey = "soffice.StarDrawDocument.5\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Stardrawdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarDrawDocument.5\shell\printto\command";
+    Subkey = "soffice.StarDrawDocument.5\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -525,7 +525,7 @@ RegistryItem gid_Regitem__Sda
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".sda";
-    Value = "loffice.StarDrawDocument.5";
+    Value = "soffice.StarDrawDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sda
@@ -533,7 +533,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sda";
-    Value = "loffice.StarDrawDocument.5";
+    Value = "soffice.StarDrawDocument.5";
     Styles = ();
 End
 
@@ -564,119 +564,119 @@ End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5";
+    Subkey = "soffice.StarChartDocument.5";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(SO52_CHART_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\DefaultIcon";
+    Subkey = "soffice.StarChartDocument.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "<progpath>\program\soffice.exe,36";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell";
+    Subkey = "soffice.StarChartDocument.5\shell";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell\new";
+    Subkey = "soffice.StarChartDocument.5\shell\new";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell\new\command";
+    Subkey = "soffice.StarChartDocument.5\shell\new\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell\open\command";
+    Subkey = "soffice.StarChartDocument.5\shell\open\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell\print\command";
+    Subkey = "soffice.StarChartDocument.5\shell\print\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument.5\shell\printto\command";
+    Subkey = "soffice.StarChartDocument.5\shell\printto\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starchartdocument_Curver
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarChartDocument\CurVer";
+    Subkey = "soffice.StarChartDocument\CurVer";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "loffice.StarChartDocument.5";
+    Value = "soffice.StarChartDocument.5";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5";
+    Subkey = "soffice.StarOfficeTemplate.5";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(SO50_TEMPLATE_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\DefaultIcon";
+    Subkey = "soffice.StarOfficeTemplate.5\DefaultIcon";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "<progpath>\program\soffice.exe,15";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell";
+    Subkey = "soffice.StarOfficeTemplate.5\shell";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "new";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell\new";
+    Subkey = "soffice.StarOfficeTemplate.5\shell\new";
     ModuleID = gid_Module_Optional_Binfilter;
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell\new\command";
+    Subkey = "soffice.StarOfficeTemplate.5\shell\new\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell\open\command";
+    Subkey = "soffice.StarOfficeTemplate.5\shell\open\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell\print\command";
+    Subkey = "soffice.StarOfficeTemplate.5\shell\print\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starofficetemplate_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
-    Subkey = "loffice.StarOfficeTemplate.5\shell\printto\command";
+    Subkey = "soffice.StarOfficeTemplate.5\shell\printto\command";
     ModuleID = gid_Module_Optional_Binfilter;
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
@@ -685,7 +685,7 @@ RegistryItem gid_Regitem__Sds
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sds";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "loffice.StarChartDocument.5";
+    Value = "soffice.StarChartDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_sds
@@ -693,7 +693,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".sds";
-    Value = "loffice.StarChartDocument.5";
+    Value = "soffice.StarChartDocument.5";
     Styles = ();
 End
 
@@ -701,7 +701,7 @@ RegistryItem gid_Regitem__Vor
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor";
     ModuleID = gid_Module_Optional_Binfilter;
-    Value = "loffice.StarOfficeTemplate.5";
+    Value = "soffice.StarOfficeTemplate.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_vor
@@ -709,7 +709,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".vor";
-    Value = "loffice.StarOfficeTemplate.5";
+    Value = "soffice.StarOfficeTemplate.5";
     Styles = ();
 End
 
@@ -741,56 +741,56 @@ End
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5";
+    Subkey = "soffice.StarMathDocument.5";
     REG_VALUE_LNG(SO51_FORMULA_OOO)
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Defaulticon
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\DefaultIcon";
+    Subkey = "soffice.StarMathDocument.5\DefaultIcon";
     Value = "<progpath>\program\soffice.exe,38";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell";
+    Subkey = "soffice.StarMathDocument.5\shell";
     Value = "open";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_New
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell\new";
+    Subkey = "soffice.StarMathDocument.5\shell\new";
     REG_VALUE_LNG(NEW)
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_New_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell\new\command";
+    Subkey = "soffice.StarMathDocument.5\shell\new\command";
     Value = "\"<progpath>\program\soffice.exe\" -n \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Open_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell\open\command";
+    Subkey = "soffice.StarMathDocument.5\shell\open\command";
     Value = "\"<progpath>\program\soffice.exe\" -o \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Print_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell\print\command";
+    Subkey = "soffice.StarMathDocument.5\shell\print\command";
     Value = "\"<progpath>\program\soffice.exe\" -p \"%1\"";
 End
 
 RegistryItem gid_Regitem_Soffice_Starmathdocument_5_Shell_Printto_Command
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
-    Subkey = "loffice.StarMathDocument.5\shell\printto\command";
+    Subkey = "soffice.StarMathDocument.5\shell\printto\command";
     Value = "\"<progpath>\program\soffice.exe\" -pt \"%2\" \"%1\"";
 End
 
@@ -798,7 +798,7 @@ RegistryItem gid_Regitem__Smf
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     ModuleID = gid_Module_Optional_Binfilter;
     Subkey = ".smf";
-    Value = "loffice.StarMathDocument.5";
+    Value = "soffice.StarMathDocument.5";
 End
 
 RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabilities_FileAssociations_smf
@@ -806,7 +806,7 @@ RegistryItem gid_Regitem_Software_Manufacturer_Productname_Productversion_Capabi
     Subkey = "Software\%MANUFACTURER\%PRODUCTNAME%PRODUCTADDON\%PRODUCTVERSION\Capabilities\FileAssociations";
     ModuleID = gid_Module_Optional_Binfilter;
     Name = ".smf";
-    Value = "loffice.StarMathDocument.5";
+    Value = "soffice.StarMathDocument.5";
     Styles = ();
 End
 
@@ -816,7 +816,7 @@ RegistryItem gid_Regitem_OpenOffice_SDW_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdw\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarWriterDocument.5";
+    Name = "soffice.StarWriterDocument.5";
     Value = " ";
 End
 
@@ -825,7 +825,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarWriterDocument.5";
+    Name = "soffice.StarWriterDocument.5";
     Value = " ";
 End
 
@@ -834,7 +834,7 @@ RegistryItem gid_Regitem_OpenOffice_SGL_OpenWith_Writer
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sgl\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarWriterGlobalDocument.5";
+    Name = "soffice.StarWriterGlobalDocument.5";
     Value = " ";
 End
 
@@ -843,7 +843,7 @@ RegistryItem gid_Regitem_OpenOffice_SDC_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdc\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarCalcDocument.5";
+    Name = "soffice.StarCalcDocument.5";
     Value = " ";
 End
 
@@ -852,7 +852,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Calc
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarCalcDocument.5";
+    Name = "soffice.StarCalcDocument.5";
     Value = " ";
 End
 
@@ -861,7 +861,7 @@ RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarImpressDocument.5";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -870,7 +870,7 @@ RegistryItem gid_Regitem_OpenOffice_SDP_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdp\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarImpressDocument.5";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -879,7 +879,7 @@ RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarImpressDocument.5";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -888,7 +888,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Impress
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarImpressDocument.5";
+    Name = "soffice.StarImpressDocument.5";
     Value = " ";
 End
 
@@ -897,7 +897,7 @@ RegistryItem gid_Regitem_OpenOffice_SDA_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sda\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarDrawDocument.5";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -906,7 +906,7 @@ RegistryItem gid_Regitem_OpenOffice_SDD_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".sdd\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarDrawDocument.5";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -915,7 +915,7 @@ RegistryItem gid_Regitem_OpenOffice_VOR_OpenWith_Draw
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".vor\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarDrawDocument.5";
+    Name = "soffice.StarDrawDocument.5";
     Value = " ";
 End
 
@@ -924,7 +924,7 @@ RegistryItem gid_Regitem_OpenOffice_SMF_OpenWith_Math
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = ".smf\OpenWithProgIDs";
     ModuleID = gid_Module_Optional_Binfilter;
-    Name = "loffice.StarMathDocument.5";
+    Name = "soffice.StarMathDocument.5";
     Value = " ";
 End
 
