@@ -704,6 +704,18 @@ void OGenericUnoController::InvalidateFeature_Impl()
 // -----------------------------------------------------------------------
 void OGenericUnoController::ImplInvalidateFeature( sal_Int32 _nId, const Reference< XStatusListener >& _xListener, sal_Bool _bForceBroadcast )
 {
+#if OSL_DEBUG_LEVEL > 0
+    if ( _nId != -1 )
+    {
+        SupportedFeatures::iterator aFeaturePos = ::std::find_if(
+            m_aSupportedFeatures.begin(),
+            m_aSupportedFeatures.end(),
+            ::std::bind2nd( CompareFeatureById(), _nId )
+        );
+        OSL_ENSURE( aFeaturePos != m_aSupportedFeatures.end(), "OGenericUnoController::ImplInvalidateFeature: invalidating an unsupported feature is suspicious, at least!" );
+    }
+#endif
+
     FeatureListener aListener;
     aListener.nId               = _nId;
     aListener.xListener         = _xListener;

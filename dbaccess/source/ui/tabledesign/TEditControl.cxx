@@ -263,9 +263,9 @@ OTableEditorCtrl::OTableEditorCtrl(Window* pWindow)
 }
 
 //------------------------------------------------------------------------------
-SfxUndoManager* OTableEditorCtrl::GetUndoManager() const
+SfxUndoManager& OTableEditorCtrl::GetUndoManager() const
 {
-    return GetView()->getController().getUndoMgr();
+    return GetView()->getController().GetUndoManager();
 }
 
 //------------------------------------------------------------------------------
@@ -388,7 +388,7 @@ OTableEditorCtrl::~OTableEditorCtrl()
     DBG_DTOR(OTableEditorCtrl,NULL);
     //////////////////////////////////////////////////////////////////////
     // Undo-Manager zuruecksetzen
-    GetUndoManager()->Clear();
+    GetUndoManager().Clear();
 
     //////////////////////////////////////////////////////////////////////
     // Moegliche Events aus Queue entfernen
@@ -677,7 +677,7 @@ sal_Bool OTableEditorCtrl::SaveData(long nRow, sal_uInt16 nColId)
                 // Wenn FieldDescr existiert, wurde Feld geloescht und alter Inhalt wird wiederhergestellt
                 if (pActFieldDescr)
                 {
-                    GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
+                    GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, nRow, FIELD_TYPE, pActFieldDescr->getTypeInfo()));
                     SwitchType(TOTypeInfoSP());
                     pActFieldDescr = pActRow->GetActFieldDescr();
                 }
@@ -852,7 +852,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     default:            sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ) ); break;
     }
 
-    GetUndoManager()->EnterListAction( sActionDescription, String() );
+    GetUndoManager().EnterListAction( sActionDescription, String() );
     if (!pActFieldDescr)
     {
         const OTypeInfoMap* pTypeInfoMap = GetView()->getController().getTypeInfo();
@@ -869,20 +869,20 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
         nInvalidateTypeEvent = Application::PostUserEvent( LINK(this, OTableEditorCtrl, InvalidateFieldType) );
         pActFieldDescr = pActRow->GetActFieldDescr();
         pDescrWin->DisplayData( pActFieldDescr );
-        GetUndoManager()->AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
+        GetUndoManager().AddUndoAction( new OTableEditorTypeSelUndoAct(this, nRow, nColId+1, TOTypeInfoSP()) );
     }
 
     if( nColId != FIELD_TYPE )
-        GetUndoManager()->AddUndoAction( new OTableDesignCellUndoAct(this, nRow, nColId) );
+        GetUndoManager().AddUndoAction( new OTableDesignCellUndoAct(this, nRow, nColId) );
     else
     {
-        GetUndoManager()->AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
+        GetUndoManager().AddUndoAction(new OTableEditorTypeSelUndoAct(this, GetCurRow(), nColId, GetFieldDescr(GetCurRow())->getTypeInfo()));
         resetType();
     }
 
     SaveData(nRow,nColId);
     // SaveData could create a undo action as well
-    GetUndoManager()->LeaveListAction();
+    GetUndoManager().LeaveListAction();
     RowModified(nRow);
     CellControllerRef xController(Controller());
     if(xController.Is())
@@ -1045,7 +1045,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
 
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
-    GetUndoManager()->AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
+    GetUndoManager().AddUndoAction( new OTableEditorInsUndoAct(this, nRow,vInsertedUndoRedoRows) );
     GetView()->getController().setModified( sal_True );
     InvalidateFeatures();
 }
@@ -1057,7 +1057,7 @@ void OTableEditorCtrl::DeleteRows()
     OSL_ENSURE(GetView()->getController().isDropAllowed(),"Call of DeleteRows not valid here. Please check isDropAllowed!");
     //////////////////////////////////////////////////////////////////////
     // Undo-Action erzeugen
-    GetUndoManager()->AddUndoAction( new OTableEditorDelUndoAct(this) );
+    GetUndoManager().AddUndoAction( new OTableEditorDelUndoAct(this) );
 
 
     //////////////////////////////////////////////////////////////////////
@@ -1105,7 +1105,7 @@ void OTableEditorCtrl::InsertNewRows( long nRow )
     long nInsertRows = GetSelectRowCount();
     if( !nInsertRows )
         nInsertRows = 1;
-    GetUndoManager()->AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
+    GetUndoManager().AddUndoAction( new OTableEditorInsNewUndoAct(this, nRow, nInsertRows) );
     //////////////////////////////////////////////////////////////////////
     // Zahl der selektierten Zeilen werden neu eingefuegt
     for( long i=nRow; i<(nRow+nInsertRows); i++ )
@@ -1883,7 +1883,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
         }
     }
 
-    GetUndoManager()->AddUndoAction( new OPrimKeyUndoAct(this, aDeletedPrimKeys, aInsertedPrimKeys) );
+    GetUndoManager().AddUndoAction( new OPrimKeyUndoAct(this, aDeletedPrimKeys, aInsertedPrimKeys) );
 
     //////////////////////////////////////////////////////////////////////
     // Handle-Spalte invalidieren
