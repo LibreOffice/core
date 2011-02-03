@@ -25,53 +25,50 @@
  *
  ************************************************************************/
 
-#include "GraphicImport.hxx"
-#include "GraphicHelpers.hxx"
+#include <string.h>
 
-#include <dmapper/DomainMapper.hxx>
-#include <PropertyMap.hxx>
-#include <doctok/resourceids.hxx>
-#include <ooxml/resourceids.hxx>
-#include <ConversionHelper.hxx>
-#include <com/sun/star/uno/XComponentContext.hpp>
-#include <com/sun/star/io/XInputStream.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
-
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/drawing/PointSequenceSequence.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/table/BorderLine.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
-#include <com/sun/star/text/XTextContent.hpp>
-#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/text/XTextContent.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ustrbuf.hxx>
 
+#include <dmapper/DomainMapper.hxx>
+#include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
+#include <resourcemodel/ResourceModelHelper.hxx>
 
-#include <iostream>
-#include <resourcemodel/QNameToString.hxx>
-#include <string.h>
-
-#ifdef DEBUG_DOMAINMAPPER
-#include <resourcemodel/TagLogger.hxx>
-#endif
+#include "ConversionHelper.hxx"
+#include "GraphicHelpers.hxx"
+#include "GraphicImport.hxx"
+#include "PropertyMap.hxx"
+#include "WrapPolygonHandler.hxx"
+#include "dmapperLoggers.hxx"
 
 namespace writerfilter {
+
+using resourcemodel::resolveSprmProps;
+
 namespace dmapper
 {
 using namespace ::std;
 using namespace ::com::sun::star;
-
-#ifdef DEBUG_DOMAINMAPPER
-extern TagLogger::Pointer_t dmapper_logger;
-#endif
 
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
@@ -230,6 +227,8 @@ public:
     sal_Int32 nWrap;
     bool      bOpaque;
     bool      bContour;
+    bool      bContourOutside;
+    WrapPolygon::Pointer_t mpWrapPolygon;
     bool      bIgnoreWRK;
 
     sal_Int32 nLeftMargin;
@@ -292,6 +291,7 @@ public:
         ,nWrap(0)
         ,bOpaque( true )
         ,bContour(false)
+        ,bContourOutside(true)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
         ,nRightMargin(319)
@@ -354,9 +354,12 @@ GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xCompo
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
                              GraphicImportType eImportType )
-: m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
-  ,m_xComponentContext( xComponentContext )
-  ,m_xTextFactory( xTextFactory)
+: LoggedProperties(dmapper_logger, "GraphicImport")
+, LoggedTable(dmapper_logger, "GraphicImport")
+, LoggedStream(dmapper_logger, "GraphicImport")
+, m_pImpl( new GraphicImport_Impl( eImportType, rDMapper ))
+, m_xComponentContext( xComponentContext )
+, m_xTextFactory( xTextFactory)
 {
 }
 /*-- 01.11.2006 09:42:42---------------------------------------------------
@@ -366,15 +369,32 @@ GraphicImport::~GraphicImport()
 {
     delete m_pImpl;
 }
+
+void GraphicImport::handleWrapTextValue(sal_uInt32 nVal)
+{
+    switch (nVal)
+    {
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
+        m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
+        m_pImpl->nWrap = text::WrapTextMode_LEFT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
+        m_pImpl->nWrap = text::WrapTextMode_RIGHT;
+        break;
+    case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
+        m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
+        break;
+    default:;
+    }
+}
+
 /*-- 01.11.2006 09:45:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::attribute(Id nName, Value & val)
+void GraphicImport::lcl_attribute(Id nName, Value & val)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("attribute");
-    dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
-#endif
     sal_Int32 nIntValue = val.getInt();
     /* WRITERFILTERSTATUS: table: PICFattribute */
     switch( nName )
@@ -1018,26 +1038,24 @@ void GraphicImport::attribute(Id nName, Value & val)
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->bContour = true;
-            //no break;
+            m_pImpl->bContourOutside = true;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
+        case NS_ooxml::LN_CT_WrapThrough_wrapText:
+            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
+            m_pImpl->bContour = true;
+            m_pImpl->bContourOutside = false;
+
+            handleWrapTextValue(val.getInt());
+
+            break;
         case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            switch ( val.getInt() )
-            {
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
-                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
-                    m_pImpl->nWrap = text::WrapTextMode_LEFT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
-                    m_pImpl->nWrap = text::WrapTextMode_RIGHT;
-                break;
-                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
-                    m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
-                break;
-                default:;
-            }
-        break;
+
+            handleWrapTextValue(val.getInt());
+            break;
         case NS_ooxml::LN_shape:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             {
@@ -1130,18 +1148,11 @@ void GraphicImport::attribute(Id nName, Value & val)
             //TODO: does it need to be handled?
         break;
         default:
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "GraphicImport::attribute() - Id: ");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
-            sMessage += ::rtl::OString(" / 0x");
-            sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
-            OSL_ENSURE( false, sMessage.getStr())
+#ifdef DEBUG_DMAPPER_GRAPHIC_IMPORT
+            dmapper_logger->element("unhandled");
 #endif
             ;
     }
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("attribute");
-#endif
 }
 
 uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
@@ -1357,13 +1368,8 @@ void GraphicImport::ProcessShapeOptions(Value& val)
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::sprm(Sprm & rSprm)
+void GraphicImport::lcl_sprm(Sprm & rSprm)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("sprm");
-    dmapper_logger->chars(rSprm.toString());
-#endif
-
     sal_uInt32 nSprmId = rSprm.getId();
     Value::Pointer_t pValue = rSprm.getValue();
 
@@ -1386,12 +1392,12 @@ void GraphicImport::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
         case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
         case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
+        case NS_ooxml::LN_EG_WrapType_wrapThrough:
         case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
         case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
         case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
         case NS_ooxml::LN_CT_WrapPath_start: // 90924;
         case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
-        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933;
         case NS_ooxml::LN_graphic_graphic:
         case NS_ooxml::LN_pic_pic:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -1403,6 +1409,17 @@ void GraphicImport::sprm(Sprm & rSprm)
             }
         }
         break;
+        case NS_ooxml::LN_CT_WrapTight_wrapPolygon:
+        case NS_ooxml::LN_CT_WrapThrough_wrapPolygon:
+            /* WRITERFILTERSTATUS: done: 100, planned: 4, spent: 2 */
+            {
+                WrapPolygonHandler aHandler;
+
+                resolveSprmProps(aHandler, rSprm);
+
+                m_pImpl->mpWrapPolygon = aHandler.getPolygon();
+            }
+            break;
         case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
         {
             // Use a special handler for the positionning
@@ -1453,10 +1470,6 @@ void GraphicImport::sprm(Sprm & rSprm)
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             m_pImpl->nWrap = text::WrapTextMode_NONE;
         break;
-        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
-        break;
         case 0xf010:
         case 0xf011:
             //ignore - doesn't contain useful members
@@ -1481,17 +1494,11 @@ void GraphicImport::sprm(Sprm & rSprm)
 #endif
             ;
     }
-
-
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
-#endif
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 16.11.2006 16:14:32---------------------------------------------------
@@ -1640,7 +1647,7 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
-                    uno::makeAny(true));
+                    uno::makeAny(m_pImpl->bContourOutside));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_LEFT_MARGIN ),
                     uno::makeAny(m_pImpl->nLeftMargin));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_RIGHT_MARGIN ),
@@ -1650,8 +1657,6 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BOTTOM_MARGIN ),
                     uno::makeAny(m_pImpl->nBottomMargin));
 
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
-                    uno::Any());
                 if( m_pImpl->eColorMode == drawing::ColorMode_STANDARD &&
                     m_pImpl->nContrast == -70 &&
                     m_pImpl->nBrightness == 70 )
@@ -1679,16 +1684,31 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_HORI_MIRRORED_ON_ODD_PAGES ),
                         uno::makeAny( m_pImpl->bHoriFlip ));
                 }
+
                 if( m_pImpl->bVertFlip )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
                         uno::makeAny( m_pImpl->bVertFlip ));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
+
                 //there seems to be no way to detect the original size via _real_ API
                 uno::Reference< beans::XPropertySet > xGraphicProperties( xGraphic, uno::UNO_QUERY_THROW );
                 awt::Size aGraphicSize, aGraphicSizePixel;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE100th_M_M )) >>= aGraphicSize;
                 xGraphicProperties->getPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PIXEL )) >>= aGraphicSizePixel;
+
+                uno::Any aContourPolyPolygon;
+                if( aGraphicSize.Width && aGraphicSize.Height &&
+                    m_pImpl->mpWrapPolygon.get() != NULL)
+                {
+                    awt::Size aDstSize(m_pImpl->getXSize(), m_pImpl->getYSize());
+                    WrapPolygon::Pointer_t pCorrected = m_pImpl->mpWrapPolygon->correctWordWrapPolygon(aGraphicSize, aDstSize);
+                    aContourPolyPolygon <<= pCorrected->getPointSequenceSequence();
+                }
+
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_POLY_POLYGON),
+                                                           aContourPolyPolygon);
+
                 if( aGraphicSize.Width && aGraphicSize.Height )
                 {
                     //todo: i71651 graphic size is not provided by the GraphicDescriptor
@@ -1697,9 +1717,11 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
                     lcl_CalcCrop( m_pImpl->nLeftCrop, aGraphicSize.Width );
                     lcl_CalcCrop( m_pImpl->nRightCrop, aGraphicSize.Width );
 
+
                     xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
                         uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
                 }
+
             }
 
             if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
@@ -1747,81 +1769,81 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startSectionGroup()
+void GraphicImport::lcl_startSectionGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endSectionGroup()
+void GraphicImport::lcl_endSectionGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startParagraphGroup()
+void GraphicImport::lcl_startParagraphGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endParagraphGroup()
+void GraphicImport::lcl_endParagraphGroup()
 {
 }
 /*-- 01.11.2006 09:45:03---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::startCharacterGroup()
+void GraphicImport::lcl_startCharacterGroup()
 {
 }
 /*-- 01.11.2006 09:45:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::endCharacterGroup()
+void GraphicImport::lcl_endCharacterGroup()
 {
 }
 /*-- 01.11.2006 09:45:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
+void GraphicImport::lcl_text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
+void GraphicImport::lcl_utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::lcl_props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
+void GraphicImport::lcl_table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
+void GraphicImport::lcl_substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::info(const string & /*info*/)
+void GraphicImport::lcl_info(const string & /*info*/)
 {
 }
 
-void GraphicImport::startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
+void GraphicImport::lcl_startShape( ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > /*xShape*/ )
 {
 }
 
-void GraphicImport::endShape( )
+void GraphicImport::lcl_endShape( )
 {
 }
 

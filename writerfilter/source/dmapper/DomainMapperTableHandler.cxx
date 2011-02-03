@@ -32,7 +32,7 @@
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <dmapperLoggers.hxx>
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
 #include <PropertyMapHelper.hxx>
 #endif
 
@@ -45,7 +45,7 @@ using namespace ::std;
 #define DEF_BORDER_DIST 190  //0,19cm
 #define DEFAULT_CELL_MARGIN 108 //default cell margin, not documented
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
 static void  lcl_printProperties( PropertyMapPtr pProps )
 {
     if( pProps.get() )
@@ -104,7 +104,7 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
     m_pTableSeq = TableSequencePointer_t(new TableSequence_t(nRows));
     m_nRowIndex = 0;
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("tablehandler.table");
     dmapper_logger->attribute("rows", nRows);
 
@@ -118,11 +118,6 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
   -----------------------------------------------------------------------*/
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->startElement("lcl_SearchParentStyleSheetAndMergeProperties");
-    dmapper_logger->addTag(pStyleSheet->toTag());
-#endif
-
     PropertyMapPtr pRet;
     if( pStyleSheet->sBaseStyleIdentifier.getLength())
     {
@@ -135,10 +130,6 @@ PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntr
     }
 
     pRet->insert(  pStyleSheet->pProperties, true );
-
-#ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("lcl_SearchParentStyleSheetAndMergeProperties");
-#endif
 
     return pRet;
 }
@@ -241,7 +232,7 @@ void lcl_computeCellBorders( PropertyMapPtr pTableBorders, PropertyMapPtr pCellP
     }
 }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
 
 void lcl_debug_BorderLine(table::BorderLine & rLine)
 {
@@ -334,7 +325,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
                 PropertyMapPtr pMergedProperties = lcl_SearchParentStyleSheetAndMergeProperties(pStyleSheet, pStyleSheetTable);
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("mergedProps");
                 dmapper_logger->addTag(pMergedProperties->toTag());
                 dmapper_logger->endElement("mergedProps");
@@ -343,7 +334,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
                 m_aTableProperties->insert( pMergedProperties );
                 m_aTableProperties->insert( pTableProps );
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("TableProperties");
                 dmapper_logger->addTag(m_aTableProperties->toTag());
                 dmapper_logger->endElement("TableProperties");
@@ -354,7 +345,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
         // Set the table default attributes for the cells
         rInfo.pTableDefaults->insert( m_aTableProperties );
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("TableDefaults");
         dmapper_logger->addTag(rInfo.pTableDefaults->toTag());
         dmapper_logger->endElement("TableDefaults");
@@ -472,7 +463,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         m_aTableProperties->Insert( PROP_TABLE_BORDER, false, uno::makeAny( aTableBorder ) );
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         lcl_debug_TableBorder(aTableBorder);
 #endif
 
@@ -501,7 +492,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
         rInfo.aTableProperties = m_aTableProperties->GetPropertyValues();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("debug.tableprops");
         dmapper_logger->addTag(m_aTableProperties->toTag());
         dmapper_logger->endElement("debug.tableprops");
@@ -514,7 +505,7 @@ TableStyleSheetEntry * DomainMapperTableHandler::endTableGetTableStyle(TableInfo
 
 CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(TableInfo & rInfo)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("getCellProperties");
 #endif
 
@@ -593,7 +584,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                 pAllCellProps->insert( *aCellIterator );
                 aCellIterator->get( )->swap( *pAllCellProps.get( ) );
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->startElement("cell");
                 dmapper_logger->attribute("cell", nCell);
                 dmapper_logger->attribute("row", nRow);
@@ -626,14 +617,14 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
                                                  uno::makeAny((sal_Int32) rInfo.nBottomBorderDistance ) );
 
                 pSingleCellProperties[nCell] = aCellIterator->get()->GetPropertyValues();
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
                 dmapper_logger->endElement("cell");
 #endif
             }
             ++nCell;
             ++aCellIterator;
         }
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         //-->debug cell properties
         {
             ::rtl::OUString sNames;
@@ -660,7 +651,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
         ++aRowOfCellsIterator;
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->endElement("getCellProperties");
 #endif
 
@@ -669,7 +660,7 @@ CellPropertyValuesSeq_t DomainMapperTableHandler::endTableGetCellProperties(Tabl
 
 RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("getRowProperties");
 #endif
 
@@ -679,7 +670,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
     sal_Int32 nRow = 0;
     while( aRowIter != aRowIterEnd )
     {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->startElement("rowProps.row");
 #endif
         if( aRowIter->get() )
@@ -689,19 +680,19 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
                 aRowIter->get()->Insert( PROP_IS_SPLIT_ALLOWED, false, uno::makeAny(sal_True ) );
 
             aRowProperties[nRow] = (*aRowIter)->GetPropertyValues();
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->addTag((*aRowIter)->toTag());
             dmapper_logger->addTag(lcl_PropertyValuesToTag(aRowProperties[nRow]));
 #endif
         }
         ++nRow;
         ++aRowIter;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
         dmapper_logger->endElement("rowProps.row");
 #endif
     }
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->endElement("getRowProperties");
 #endif
 
@@ -710,7 +701,7 @@ RowPropertyValuesSeq_t DomainMapperTableHandler::endTableGetRowProperties()
 
 void DomainMapperTableHandler::endTable()
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("tablehandler.endTable");
 #endif
 
@@ -722,7 +713,7 @@ void DomainMapperTableHandler::endTable()
 
     RowPropertyValuesSeq_t aRowProperties = endTableGetRowProperties();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->addTag(lcl_PropertyValueSeqToTag(aRowProperties));
 #endif
 
@@ -739,25 +730,25 @@ void DomainMapperTableHandler::endTable()
         }
         catch (lang::IllegalArgumentException e)
         {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->chars("failed to import table!");
 #endif
         }
-#ifdef DEBUG_DOMAINMAPPER
         catch ( uno::Exception e )
         {
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
             dmapper_logger->startElement("exception");
             dmapper_logger->chars(rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ));
             dmapper_logger->endElement("exeception");
-        }
 #endif
+        }
     }
 
     m_aTableProperties.reset();
     m_aCellProperties.clear();
     m_aRowProperties.clear();
 
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->endElement("tablehandler.endTable");
     dmapper_logger->endElement("tablehandler.table");
 #endif
@@ -769,7 +760,7 @@ void DomainMapperTableHandler::startRow(unsigned int nCells,
     m_aRowProperties.push_back( pProps );
     m_aCellProperties.push_back( PropertyMapVector1() );
 
-#if DEBUG_DOMAINMAPPER
+#if DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.row");
     dmapper_logger->attribute("cells", nCells);
     if (pProps != NULL)
@@ -785,7 +776,7 @@ void DomainMapperTableHandler::endRow()
     (*m_pTableSeq)[m_nRowIndex] = *m_pRowSeq;
     ++m_nRowIndex;
     m_nCellIndex = 0;
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->endElement("table.row");
 #endif
 }
@@ -804,7 +795,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
         m_aCellProperties[nRow - 1].push_back( pEmptyProps );
     }
 
-#if DEBUG_DOMAINMAPPER
+#if DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.cell");
     dmapper_logger->startElement("table.cell.start");
     dmapper_logger->chars(toString(start));
@@ -824,7 +815,7 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 
 void DomainMapperTableHandler::endCell(const Handle_t & end)
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_TABLE_HANDLER
     dmapper_logger->startElement("table.cell.end");
     dmapper_logger->chars(toString(end));
     dmapper_logger->endElement("table.cell.end");

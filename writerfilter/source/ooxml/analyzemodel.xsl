@@ -98,6 +98,7 @@
 				</xsl:for-each>
 			</xsl:when>
 		</xsl:choose>
+        <xsl:copy-of select="@tag"/>
 	</xsl:for-each>
 </xsl:template>
 </xsl:stylesheet>
