@@ -736,7 +736,7 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
     const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
         xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
-
+#if 0
     {
         const Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY );
         const Reference< XSingleSelectQueryAnalyzer > xAnalyzer( xRowSetProps->getPropertyValue( PROPERTY_SINGLESELECTQUERYCOMPOSER ), UNO_QUERY );
@@ -756,6 +756,7 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
             }
         }
     }
+#endif
 
     Reference< XWarningsSupplier > xWarnings( _rxLoadable, UNO_QUERY );
     if ( xWarnings.is() )
