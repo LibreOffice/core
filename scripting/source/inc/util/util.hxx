@@ -29,21 +29,6 @@
 #ifndef _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 #define _COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_
 
-#include <rtl/ustrbuf.hxx>
-#include <osl/diagnose.h>
-
 #define OUSTR(x) ::rtl::OUString( ::rtl::OUString::createFromAscii(x) )
 
-namespace scripting_util
-{
-    inline void validateXRef(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xRef, const sal_Char* Msg) throw (::com::sun::star::uno::RuntimeException)
-    {
-        OSL_ENSURE( xRef.is(), Msg );
-
-        if(!xRef.is())
-        {
-            throw ::com::sun::star::uno::RuntimeException(OUSTR(Msg), ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >());
-        }
-    }
-}
 #endif //_COM_SUN_STAR_SCRIPTING_UTIL_UTIL_HXX_

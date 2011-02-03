@@ -49,7 +49,7 @@ namespace connectivity
             OColumns(   OFileTable* _pTable,
                         ::osl::Mutex& _rMutex,
                         const TStringVector &_rVector
-                    ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
+                    ) : sdbcx::OCollection(*_pTable,_pTable->getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers(),_rMutex,_rVector)
                 ,m_pTable(_pTable)
             {}
         };

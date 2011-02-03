@@ -3119,6 +3119,14 @@ namespace xmloff { namespace token {
         XML_HIGH, //#i28760#
         XML_WIDE, //#i28760#
 
+        XML_AXIS_TYPE, //#i25706#
+        XML_DATE_SCALE,
+        XML_BASE_TIME_UNIT,
+        XML_MAJOR_INTERVAL_VALUE,
+        XML_MINOR_INTERVAL_VALUE,
+        XML_MAJOR_INTERVAL_UNIT,
+        XML_MINOR_INTERVAL_UNIT,
+
         XML_MIN_VALUE,
         XML_MAX_VALUE,
 

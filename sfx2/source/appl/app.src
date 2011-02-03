@@ -75,60 +75,6 @@ InfoBox RID_DOCALREADYLOADED_DLG
     Message [ en-US ] = "Document already open." ;
 };
 
-ErrorBox RID_CANTLOADDOC_DLG
-{
-    Message [ en-US ] = "Cannot open document." ;
-};
-
-ErrorBox MSG_ERR_READ_CFG
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error reading configuration file." ;
-};
-
-ErrorBox MSG_ERR_WRITE_CFG
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error writing configuration file." ;
-};
-
-ErrorBox MSG_ERR_OPEN_CFG
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error opening configuration file." ;
-};
-
-ErrorBox MSG_ERR_FILETYPE_CFG
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "File is not a configuration file." ;
-};
-
-ErrorBox MSG_ERR_VERSION_CFG
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Configuration file contains the wrong version." ;
-};
-
-ErrorBox MSG_ERR_WRITE_SBL
-{
-    BUTTONS = WB_OK ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "Error recording BASIC library in\n'@'." ;
-};
-
-ErrorBox MSG_SIGNAL
-{
-    BUTTONS = WB_YES_NO ;
-    DEFBUTTON = WB_DEF_YES ;
-    Message [ en-US ] = "An unexpected program error has occurred.\n\nDo you want to try to save your changes in all open documents before the program is terminated?" ;
-};
-
 ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
 {
     BUTTONS = WB_OK ;
@@ -139,89 +85,6 @@ ErrorBox MSG_ERR_NO_WEBBROWSER_FOUND
 Resource SID_UNKNOWN
 {
     String 1 "-" ;
-};
-
-Resource BMP_SFX_COLOR
-{
-    ExtraData =
-    {
-        SID_NEWDOC;             // 043
-        SID_OPENDOC;            // 044
-        SID_CLOSEDOC;           // 045
-        SID_RELOAD;             // 046
-        SID_SAVEASDOC;          // 047
-        SID_PRINTDOC;           // 051
-        SID_SETUPPRINTER;       // 053
-        SID_QUITAPP;            // 054
-        SID_UNDO;               // 055
-        SID_REDO;               // 056
-        SID_REPEAT;             // 057
-        SID_CUT;                // 058
-        SID_COPY;               // 059
-        SID_PASTE;              // 060
-        SID_DELETE;             // 061
-        SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
-        SID_RECORDMACRO;        // 095
-        SID_EDITMACRO;          // 096
-        SID_HELPMENU;           // 098
-        SID_CONFIG;             // 123
-        SID_CONFIGTOOLBOX;      // 124
-        0;
-    };
-    Bitmap BMP_SFX_SMALL { File = "sco.bmp" ; };
-    Bitmap BMP_SFX_LARGE { File = "lco.bmp" ; };
-};
-
-Resource BMP_SFX_MONO
-{
-    ExtraData =
-    {
-        SID_NEWDOC;             // 043
-        SID_OPENDOC;            // 044
-        SID_CLOSEDOC;           // 045
-        SID_RELOAD;             // 046
-        SID_SAVEASDOC;          // 047
-        SID_PRINTDOC;           // 051
-        SID_SETUPPRINTER;       // 053
-        SID_QUITAPP;            // 054
-        SID_UNDO;               // 055
-        SID_REDO;               // 056
-        SID_REPEAT;             // 057
-        SID_CUT;                // 058
-        SID_COPY;               // 059
-        SID_PASTE;              // 060
-        SID_DELETE;             // 061
-        SID_SELECTALL;          // 062
-        SID_SAVEDOC;            // 063 vormals 046
-        SID_EXITANDRETURN;      // 064 vormals 054
-        SID_RECORDMACRO;        // 095
-        SID_EDITMACRO;          // 096
-        SID_HELPMENU;           // 098
-        SID_CONFIG;             // 123
-        SID_CONFIGTOOLBOX;      // 124
-        0;
-    };
-    Bitmap BMP_SFX_SMALL { File = "smo.bmp" ; };
-    Bitmap BMP_SFX_LARGE { File = "lmo.bmp" ; };
-};
-
-WarningBox RID_WARN_POST_MAILTO
-{
-    BUTTONS = WB_OK_CANCEL ;
-    DEFBUTTON = WB_DEF_OK ;
-    Message [ en-US ] = "A form is to be sent by e-mail.\nThis means that the receiver will get to see your e-mail address." ;
-};
-
-String STR_RECOVER_TITLE
-{
-    Text [ en-US ] = "File Recovery" ;
-};
-
-String STR_RECOVER_QUERY
-{
-    Text [ en-US ] = "Should the file \"$1\" be restored?" ;
 };
 
 String GID_INTERN
@@ -354,153 +217,14 @@ String GID_CONTROLS
     Text [ en-US ] = "Controls" ;
 };
 
-TabDialog SID_OPTIONS
-{
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 244 , 155 ) ;
-    Text [ en-US ] = "Options" ;
-    Moveable = TRUE ;
-    Closeable = TRUE ;
-    TabControl 1
-    {
-        SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 3 , 15 ) ;
-        Size = MAP_APPFONT ( 221 , 130 ) ;
-        PageList =
-        {
-            PageItem
-            {
-                Identifier = RID_SFXPAGE_GENERAL ;
-                Text [ en-US ] = "General" ;
-                PageResID = 256 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SFXPAGE_SAVE ;
-                Text [ en-US ] = "Save" ;
-                PageResID = 257 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SFXPAGE_PATH ;
-                Text [ en-US ] = "Paths" ;
-                PageResID = 258 ;
-            };
-            PageItem
-            {
-                Identifier = RID_SFXPAGE_SPELL ;
-                Text [ en-US ] = "Spellcheck" ;
-                PageResID = 259 ;
-            };
-        };
-    };
-};
-
 InfoBox MSG_CANT_QUIT
 {
     Message [ en-US ] = "The application cannot be terminated at the moment.\nPlease wait until all print jobs and/or\nOLE actions have finished and close all dialogs." ;
 };
 
-QueryBox MSG_IS_SERVER
-{
-    Buttons = WB_YES_NO ;
-    DefButton = WB_DEF_NO ;
-    Message [ en-US ] = "This application is as object or print server active.\nDo you want to terminate anyway?" ;
-};
-
-String STR_NODOUBLE
-{
-    Text [ en-US ] = "%PRODUCTNAME cannot be started more than once." ;
-};
-
-String STR_NOPRINTER
-{
-    Text [ en-US ] = "Some %PRODUCTNAME functions will not work properly without a printer driver.\nPlease install a printer driver." ;
-};
-
 String STR_ISMODIFIED
 {
     Text [ en-US ] = "Do you want to save the changes to %1?" ;
-};
-
-String STR_AUTOSAVE
-{
-    Text [ en-US ] = "AutoSave" ;
-};
-
-String STR_RESWARNING
-{
-    Text [ en-US ] = "Limited system resources. Please quit other applications or close some windows before continuing." ;
-};
-String STR_RESEXCEPTION
-{
-    Text [ en-US ] = "There are files missing. Please check application setup." ;
-};
-
-String STR_DOUBLEEXCEPTION
-{
-    Text [ en-US ] = "Another error occurred during the save recovery.\nPossibly, the data could not be entirely saved." ;
-};
-
-String STR_SYSRESEXCEPTION
-{
-    Text [ en-US ] = "System resources exhausted. Please restart the application." ;
-};
-
-ErrorBox MSG_ERR_SOINIT
-{
-    Message [ en-US ] = "Error initializing object-system." ;
-};
-
-String MSG_IOERR_FILE_NOT_FOUND
-{
-    Text [ en-US ] = "The file $(FILE) doesn't exist." ;
-};
-
-String MSG_IOERR_PATH_NOT_FOUND
-{
-    Text [ en-US ] = "The path to file $(FILE) doesn't exist." ;
-};
-
-String MSG_IOERR_TOO_MANY_OPEN_FILES
-{
-    Text [ en-US ] = "The file $(FILE) could not be opened,\nbecause too many files are open.\nPlease close some files and try again." ;
-};
-
-String MSG_IOERR_ACCESS_DENIED
-{
-    Text [ en-US ] = "The file $(FILE) could not be opened due to missing access rights." ;
-};
-
-String MSG_IOERR_INVALID_ACCESS
-{
-    Text [ en-US ] = "The file $(FILE) could not be accessed." ;
-};
-
-String MSG_IOERR_INVALID_HANDLE
-{
-    Text [ en-US ] = "The file $(FILE) could not be opened due to an invalid file handle." ;
-};
-
-String MSG_IOERR_CANNOT_MAKE
-{
-    Text [ en-US ] = "The file $(FILE) could not be created." ;
-};
-
-String MSG_IOERR_SHARING
-{
-    Text [ en-US ] = "Error by shared access to $(FILE)." ;
-};
-
-String MSG_IOERR_INVALID_PARAMETER
-{
-    Text [ en-US ] = "" ;
-};
-
-String MSG_IOERR_GENERAL
-{
-    Text [ en-US ] = "General I/O error accessing $(FILE)." ;
 };
 
 String RID_FULLSCREENTOOLBOX
@@ -538,39 +262,9 @@ ToolBox RID_FULLSCREENTOOLBOX
     };
 };
 
-String STR_ERR_NOTEMPLATE
-{
-    Text [ en-US ] = "The selected template has an incorrect format" ;
-};
-
-String STR_ERR_NOFILE
-{
-    Text [ en-US ] = "Can't open file $." ;
-};
-
 String STR_QUITAPP
 {
     Text [ en-US ] = "E~xit" ;
-};
-
-String STR_EXITANDRETURN
-{
-    Text [ en-US ] = "E~xit & return to " ;
-};
-
-String STR_EXTHELPSTATUS
-{
-    Text [ en-US ] = "Select a command or click to select a theme." ;
-};
-
-String STR_MAIL
-{
-    Text [ en-US ] = "Mail" ;
-};
-
-String STR_ADDRESS_NAME
-{
-    Text [ en-US ] = "Addresses" ;
 };
 
 String RID_STR_HELP
@@ -581,11 +275,6 @@ String RID_STR_HELP
 String RID_STR_NOAUTOSTARTHELPAGENT
 {
     Text [ en-US ] = "No automatic start at 'XX'" ;
-};
-
-String RID_STR_NOWELCOMESCREEN
-{
-    Text [ en-US ] = "Don't display tips" ;
 };
 
 String RID_HELPBAR
@@ -653,11 +342,6 @@ String RID_STR_HLPFILENOTEXIST
     Text [ en-US ] = "The help file for this topic is not installed." ;
 };
 
-String RID_STR_HLPAPPNOTSTARTED
-{
-    Text [ en-US ] = "The help system could not be started" ;
-};
-
  //----------------------------------------------------------------------------
 
 String RID_ENVTOOLBOX
@@ -670,129 +354,6 @@ String RID_SPECIALCONFIG_ERROR
     Text [ en-US ] = "An error has occurred in the special configuration.\nPlease contact your administrator." ;
 };
 
-String STR_MEMINFO_HEADER
-{
-};
-
-String STR_MEMINFO_FOOTER
-{
-    Text = "</table>" ;
-};
-
-String STR_MEMINFO_OBJINFO
-{
-    Text = "<tr><td >$(VISIBLE)</td><td>$(CACHED)</td><td>$(EXPIRE)</td><td>$(JSDIRTY)</td><td>$(JSEXEC)</td><td>$(FORBID)</td><td>$(FACTORY)</td><td>$(URL)</td><td>$(ORIGURL)</td><td>$(POSTSTRING)</td></tr>" ;
-};
-
-String RID_PLUGIN
-{
-    Text [ en-US ] = "Enable plug-ins" ;
-};
-
-String STR_CORRUPT_INSTALLATION
-{
-    Text [ en-US ] = "Important program components could not be initialized correctly.\nPlease start the setup program with the option /Repair." ;
-};
-
-String IDS_SBERR_STOREREF
-{
-    Text [ en-US ] = "Reference will not be saved: " ;
-};
-
-String STR_KEY_CONFIG_DIR
-{
-    Text [ en-US ] = "Configuration" ;
-};
-String STR_KEY_WORK_PATH
-{
-    Text [ en-US ] = "My Documents" ;
-};
-String STR_KEY_GRAPHICS_PATH
-{
-    Text [ en-US ] = "Graphics" ;
-};
-String STR_KEY_BITMAP_PATH
-{
-    Text [ en-US ] = "Icons" ;
-};
-String STR_KEY_BASIC_PATH
-{
-    Text = "BASIC" ;
-};
-
-String STR_KEY_PALETTE_PATH
-{
-    Text [ en-US ] = "Palettes" ;
-};
-String STR_KEY_BACKUP_PATH
-{
-    Text [ en-US ] = "Backups" ;
-};
-String STR_KEY_MODULES_PATH
-{
-    Text [ en-US ] = "Modules" ;
-};
-String STR_KEY_TEMPLATE_PATH
-{
-    Text [ en-US ] = "Templates" ;
-};
-String STR_KEY_GLOSSARY_PATH
-{
-    Text [ en-US ] = "AutoText" ;
-};
-String STR_KEY_DICTIONARY_PATH
-{
-    Text [ en-US ] = "Dictionaries" ;
-};
-String STR_KEY_HELP_DIR
-{
-    Text [ en-US ] = "Help" ;
-};
-String STR_KEY_GALLERY_DIR
-{
-    Text [ en-US ] = "Gallery" ;
-};
-
-String STR_KEY_STORAGE_DIR
-{
-    Text [ en-US ] = "Message Storage" ;
-};
-String STR_KEY_TEMP_PATH
-{
-    Text [ en-US ] = "Temporary files" ;
-};
-String STR_KEY_PLUGINS_PATH
-{
-    Text [ en-US ] = "Plug-ins" ;
-};
-String STR_KEY_FAVORITES_DIR
-{
-    Text [ en-US ] = "Folder Bookmarks" ;
-};
-String STR_KEY_FILTER_PATH
-{
-    Text [ en-US ] = "Filters" ;
-};
-String STR_KEY_ADDINS_PATH
-{
-    Text [ en-US ] = "Add-ins" ;
-};
-String STR_KEY_USERCONFIG_PATH
-{
-    Text [ en-US ] = "User Configuration" ;
-};
-String STR_KEY_USERDICTIONARY_DIR
-{
-    Text [ en-US ] = "User-defined dictionaries" ;
-};
-String STR_KEY_AUTOCORRECT_DIR
-{
-    Text [ en-US ] = "AutoCorrect" ;
-};
-String STR_KEY_LINGUISTIC_DIR
-{
-    Text [ en-US ] = "Writing aids" ;
-};
 String STR_QUICKSTART_EXIT
 {
     Text [ en-US ] = "Exit Quickstarter" ;
@@ -867,17 +428,6 @@ String RID_SECURITY_WARNING_TITLE
     Text [ en-US ] = "Security Warning" ;
 };
 
-ErrorBox RID_INVALID_URL_MSG
-{
-    Buttons = WB_OK ;
-    Message [ en-US ] = "The URL is not valid." ;
-};
-
-String RID_INVALID_URL_TITLE
-{
-    Text = "%PRODUCTNAME %PRODUCTVERSION" ;
-};
-
 String RID_DESKTOP
 {
     Text = "%PRODUCTNAME" ;
@@ -908,26 +458,6 @@ InfoBox RID_XMLSEC_INFO_WRONGDOCFORMAT
 String RID_XMLSEC_DOCUMENTSIGNED
 {
     Text [ en-US ] = " (Signed)" ;
-};
-
-Image IMG_MISSING_1
-{
-    ImageBitmap = Bitmap { File = "sc05539.bmp" ; };
-};
-
-Image IMG_MISSING_2
-{
-    ImageBitmap = Bitmap { File = "sc05700.bmp" ; };
-};
-
-Image IMG_MISSING_3
-{
-    ImageBitmap = Bitmap { File = "sc06302.bmp" ; };
-};
-
-Image IMG_MISSING_4
-{
-    ImageBitmap = Bitmap { File = "sn064.bmp" ; };
 };
 
 String STR_STANDARD

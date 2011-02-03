@@ -69,6 +69,14 @@ public class DataSource
         return m_dataSource;
     }
 
+    /**
+     * retrieves the data source's settings
+     */
+    public XPropertySet geSettings()
+    {
+        return UnoRuntime.queryInterface( XPropertySet.class, impl_getPropertyValue( "Settings" ) );
+    }
+
     /** creates a query with a given name and SQL command
      */
     public void createQuery(final String _name, final String _sqlCommand) throws ElementExistException, WrappedTargetException, com.sun.star.lang.IllegalArgumentException
@@ -121,6 +129,26 @@ public class DataSource
         return suppQueries.getQueryDefinitions();
     }
 
+    /**
+     * retrieves a property value from the data source
+     * @param i_propertyName
+     *      the name of the property whose value is to be returned.
+     */
+    private Object impl_getPropertyValue( final String i_propertyName )
+    {
+        Object propertyValue = null;
+        try
+        {
+            final XPropertySet dataSourceProps = UnoRuntime.queryInterface( XPropertySet.class, m_dataSource );
+            propertyValue = dataSourceProps.getPropertyValue( i_propertyName );
+        }
+        catch (Exception ex)
+        {
+            Logger.getLogger(DataSource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return propertyValue;
+    }
+
     /** returns the name of the data source
      *
      * If a data source is registered at the database context, the name is the registration
@@ -130,16 +158,6 @@ public class DataSource
      */
     public String getName()
     {
-        String name = null;
-        try
-        {
-            final XPropertySet dataSourceProps = UnoRuntime.queryInterface( XPropertySet.class, m_dataSource );
-            name = (String) dataSourceProps.getPropertyValue("Name");
-        }
-        catch (Exception ex)
-        {
-            Logger.getLogger(DataSource.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return name;
+        return (String)impl_getPropertyValue( "Name" );
     }
 };

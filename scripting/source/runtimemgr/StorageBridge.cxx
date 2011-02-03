@@ -54,9 +54,8 @@ const int STORAGEPROXY = 0;
 //*************************************************************************
 // StorageBridge Constructor
 StorageBridge::StorageBridge( const Reference< XComponentContext >& xContext,
-                              sal_Int32 sid ) : m_xContext( xContext ), m_sid( sid )
+                              sal_Int32 sid ) : m_xContext( xContext, UNO_SET_THROW ), m_sid( sid )
 {
-    validateXRef( m_xContext, "StorageBridge::StorageBridge: invalid context" );
     try
     {
         initStorage();
@@ -74,31 +73,12 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
 {
     try
     {
-        Reference< lang::XMultiComponentFactory > xMultiComFac =
-            m_xContext->getServiceManager();
-        validateXRef( xMultiComFac,
-                      "StorageBridge::StorageBridge: cannot get multicomponentfactory from multiservice factory" );
-        Reference< XInterface > temp;
-
-        Any a = m_xContext->getValueByName(
-                    OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
-        if ( sal_False == ( a >>= temp ) )
-        {
-            throw RuntimeException(
-                OUSTR( "StorageBridge::StorageBridge: could not obtain ScriptStorageManager singleton" ),
-                Reference< XInterface >() );
-        }
-        validateXRef( temp,
-                      "StorageBridge::StorageBridge: cannot get Storage service" );
+        Reference< lang::XMultiComponentFactory > xMultiComFac( m_xContext->getServiceManager(), UNO_SET_THROW );
+        Reference< XInterface > temp( m_xContext->getValueByName(
+                    OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) ), UNO_QUERY_THROW );
         Reference< storage::XScriptStorageManager > xScriptStorageManager( temp, UNO_QUERY_THROW );
-        validateXRef( xScriptStorageManager,
-                      "StorageBridge::StorageBridge: cannot get Script Storage Manager service" );
-        Reference< XInterface > xScriptStorage =
-            xScriptStorageManager->getScriptStorage( m_sid );
-        validateXRef( xScriptStorage,
-                      "StorageBridge::StorageBridge: cannot get Script Storage service" );
-        m_xScriptInfoAccess =
-            Reference< storage::XScriptInfoAccess > ( xScriptStorage, UNO_QUERY_THROW );
+        Reference< XInterface > xScriptStorage( xScriptStorageManager->getScriptStorage( m_sid ), UNO_SET_THROW );
+        m_xScriptInfoAccess.set( xScriptStorage, UNO_QUERY_THROW );
     }
     catch ( RuntimeException & re )
     {
