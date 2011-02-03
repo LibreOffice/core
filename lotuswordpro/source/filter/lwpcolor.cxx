@@ -141,12 +141,14 @@ void LwpColor::ResolveRGB()
             m_nBlue = 0;
         }
 }
-void LwpColor::operator = (const LwpColor& rOther)
+LwpColor& LwpColor::operator = (const LwpColor& rOther)
 {
     m_nRed = rOther.m_nRed;
     m_nGreen = rOther.m_nGreen;
     m_nBlue = rOther.m_nBlue;
     m_nExtra = rOther.m_nExtra;
+
+    return *this;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
