@@ -66,7 +66,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
 
 public:
-    UnoControlTabPageContainerModel();
+    UnoControlTabPageContainerModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     UnoControlTabPageContainerModel( const UnoControlTabPageContainerModel& rModel ) : UnoControlTabPageContainerModel_Base( rModel ),maContainerListeners( *this ) {;}
 
     UnoControlModel*    Clone() const { return new UnoControlTabPageContainerModel( *this ); }
@@ -113,7 +113,7 @@ typedef ::cppu::AggImplInheritanceHelper1   <   ControlContainerBase
 class UnoControlTabPageContainer : public UnoControlTabPageContainer_Base
 {
 public:
-    UnoControlTabPageContainer();
+    UnoControlTabPageContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ::rtl::OUString             GetComponentServiceName();
 
     // ::com::sun::star::lang::XComponent

@@ -53,8 +53,11 @@
   <implementation name="stardiv.Toolkit.DefaultGridDataModel">
     <service name="com.sun.star.awt.grid.DefaultGridDataModel"/>
   </implementation>
-  <implementation name="stardiv.Toolkit.GridColumn">
+  <implementation name="org.openoffice.comp.toolkit.GridColumn">
     <service name="com.sun.star.awt.grid.GridColumn"/>
+  </implementation>
+  <implementation name="org.openoffice.comp.toolkit.SortableGridDataModel">
+    <service name="com.sun.star.awt.grid.SortableGridDataModel"/>
   </implementation>
   <implementation name="stardiv.Toolkit.GridControl">
     <service name="com.sun.star.awt.grid.UnoControlGrid"/>

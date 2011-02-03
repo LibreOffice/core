@@ -36,6 +36,7 @@
 #include "vcl/help.hxx"
 #include "vcl/helpwin.hxx"
 #include "tools/debug.hxx"
+#include "tools/diagnose_ex.h"
 #include "tools/time.hxx"
 
 // =======================================================================
@@ -274,18 +275,32 @@ BOOL Help::ShowQuickHelp( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-ULONG Help::ShowTip( Window* pParent, const Rectangle& rRect,
+ULONG Help::ShowTip( Window* pParent, const Rectangle& rScreenRect,
                      const XubString& rText, USHORT nStyle )
 {
-    USHORT nHelpWinStyle = HELPWINSTYLE_QUICK;
+    USHORT nHelpWinStyle = ( ( nStyle & QUICKHELP_TIP_STYLE_BALLOON ) != 0 ) ? HELPWINSTYLE_BALLOON : HELPWINSTYLE_QUICK;
     HelpTextWindow* pHelpWin = new HelpTextWindow( pParent, rText, nHelpWinStyle, nStyle );
+
+    ULONG nId = reinterpret_cast< ULONG >( pHelpWin );
+    UpdateTip( nId, pParent, rScreenRect, rText );
+
+    pHelpWin->ShowHelp( HELPDELAY_NONE );
+    return nId;
+}
+
+// -----------------------------------------------------------------------
+
+void Help::UpdateTip( ULONG nId, Window* pParent, const Rectangle& rScreenRect, const XubString& rText )
+{
+    HelpTextWindow* pHelpWin = reinterpret_cast< HelpTextWindow* >( nId );
+    ENSURE_OR_RETURN_VOID( pHelpWin != NULL, "Help::UpdateTip: invalid ID!" );
 
     Size aSz = pHelpWin->CalcOutSize();
     pHelpWin->SetOutputSizePixel( aSz );
-    ImplSetHelpWindowPos( pHelpWin, nHelpWinStyle, nStyle,
-        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rRect );
-    pHelpWin->ShowHelp( HELPDELAY_NONE );
-    return (ULONG)pHelpWin;
+    ImplSetHelpWindowPos( pHelpWin, pHelpWin->GetWinStyle(), pHelpWin->GetStyle(),
+        pParent->OutputToScreenPixel( pParent->GetPointerPosPixel() ), &rScreenRect );
+
+    pHelpWin->SetHelpText( rText );
 }
 
 // -----------------------------------------------------------------------
@@ -590,10 +605,14 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     {
         DBG_ASSERT( pHelpWin != pParent, "HelpInHelp ?!" );
 
-            if ( (( pHelpWin->GetHelpText() != rHelpText ) ||
-                 ( pHelpWin->GetWinStyle() != nHelpWinStyle ) ||
-                 ( pHelpArea && ( pHelpWin->GetHelpArea() != *pHelpArea ) ) )
-                 && pSVData->maHelpData.mbRequestingHelp )
+        if  (   (   ( pHelpWin->GetHelpText() != rHelpText )
+                ||  ( pHelpWin->GetWinStyle() != nHelpWinStyle )
+                ||  (   pHelpArea
+                    &&  ( pHelpWin->GetHelpArea() != *pHelpArea )
+                    )
+                )
+            &&  pSVData->maHelpData.mbRequestingHelp
+            )
         {
             // remove help window if no HelpText or other HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
@@ -605,8 +624,8 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         }
         else
         {
-            bool bTextChanged = rHelpText != pHelpWin->GetHelpText();
-            if( bTextChanged )
+            bool const bTextChanged = rHelpText != pHelpWin->GetHelpText();
+            if ( bTextChanged || ( ( nStyle & QUICKHELP_FORCE_REPOSITION ) != 0 ) )
             {
                 Window * pWindow = pHelpWin->GetParent()->ImplGetFrameWindow();
                 Rectangle aInvRect( pHelpWin->GetWindowExtentsRelative( pWindow ) );
@@ -625,7 +644,9 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
     if ( !pHelpWin && rHelpText.Len() )
     {
         ULONG nCurTime = Time::GetSystemTicks();
-        if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+        if  (   ( ( nCurTime - pSVData->maHelpData.mnLastHelpHideTime ) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+            ||  ( ( nStyle & QUICKHELP_NO_DELAY ) != 0 )
+            )
             nDelayMode = HELPDELAY_NONE;
 
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );

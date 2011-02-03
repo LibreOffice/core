@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.toolkit;
+package complex.toolkit.accessibility;
 
 import com.sun.star.lang.EventObject;
 import com.sun.star.awt.Rectangle;
@@ -33,13 +33,11 @@ import com.sun.star.awt.PosSize;
 import com.sun.star.awt.XWindow;
 import com.sun.star.accessibility.AccessibleEventObject;
 import com.sun.star.accessibility.XAccessible;
-// import com.sun.star.accessibility.XAccessibleComponent;
 import com.sun.star.accessibility.XAccessibleEventBroadcaster;
 import com.sun.star.accessibility.XAccessibleEventListener;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.uno.XInterface;
 import com.sun.star.uno.UnoRuntime;
-// import share.LogWriter;
 
 /**
  * Testing <code>
@@ -62,12 +60,7 @@ import com.sun.star.uno.UnoRuntime;
  */
 public class _XAccessibleEventBroadcaster {
 
-    // private LogWriter log;
-    private static final String className =
-            "com.sun.star.accessibility.XAccessibleEventBroadcaster" ;
-
     public XAccessibleEventBroadcaster oObj = null;
-    public String EventMsg = "";
     EventProducer prod = null ;
     EvListener list = new EvListener();
 
@@ -120,11 +113,9 @@ public class _XAccessibleEventBroadcaster {
      * @param eventMessage
      * @param window
      */
-    public _XAccessibleEventBroadcaster(XInterface object, String eventMessage, XWindow window) {
+    public _XAccessibleEventBroadcaster(XInterface object, XWindow window) {
         oObj = UnoRuntime.queryInterface(XAccessibleEventBroadcaster.class, object);
-        // this.log = log;
         prod = new EventProducer(window);
-        EventMsg = eventMessage;
     }
 
     /**
@@ -157,7 +148,6 @@ public class _XAccessibleEventBroadcaster {
             oObj.removeEventListener(list);
         }
 
-//        System.out.println(EventMsg);
         return works;
     }
 

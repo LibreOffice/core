@@ -76,7 +76,8 @@ using namespace ::com::sun::star::util;
 //  ----------------------------------------------------
 //  class UnoControlDialogModel
 //  ----------------------------------------------------
-UnoControlDialogModel::UnoControlDialogModel()
+UnoControlDialogModel::UnoControlDialogModel( const Reference< XMultiServiceFactory >& i_factory )
+    :ControlModelContainerBase( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
 //  ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -153,9 +154,10 @@ Reference< XPropertySetInfo > UnoControlDialogModel::getPropertySetInfo(  ) thro
 // = class UnoDialogControl
 // ============================================================================
 
-UnoDialogControl::UnoDialogControl() :
-    maTopWindowListeners( *this ),
-    mbWindowListener(false)
+UnoDialogControl::UnoDialogControl( const uno::Reference< lang::XMultiServiceFactory >& i_factory )
+    :ControlContainerBase( i_factory )
+    ,maTopWindowListeners( *this )
+    ,mbWindowListener(false)
 {
     maComponentInfos.nWidth = 300;
     maComponentInfos.nHeight = 450;
@@ -186,7 +188,8 @@ Any UnoDialogControl::queryAggregation( const Type & rType ) throw(RuntimeExcept
             aRet = ::cppu::queryInterface( rType, SAL_STATIC_CAST( awt::XWindowListener*, this ) );
     return (aRet.hasValue() ? aRet : ControlContainerBase::queryAggregation( rType ));
 }
-//lang::XTypeProvider
+
+ //lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( UnoDialogControl)
     getCppuType( ( uno::Reference< awt::XTopWindow>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XDialog>* ) NULL ),

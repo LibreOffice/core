@@ -49,6 +49,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/implbase9.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/awt/XVclWindowPeer.hpp>
 
@@ -95,6 +96,7 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclWindowPeer >   mxVclWindowPeer; // just to avoid the query_interface thing
 
 protected:
+    const ::comphelper::ComponentContext    maContext;
     EventListenerMultiplexer            maDisposeListeners;
     WindowListenerMultiplexer           maWindowListeners;
     FocusListenerMultiplexer            maFocusListeners;
@@ -144,8 +146,11 @@ protected:
 
     virtual sal_Bool   requiresNewPeer( const ::rtl::OUString& _rPropertyName ) const;
 
-public:
+protected:
                 UnoControl();
+
+public:
+                UnoControl( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
                 ~UnoControl();
 
                 UnoControlComponentInfos&           GetComponentInfos() { return maComponentInfos; }

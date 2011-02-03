@@ -54,7 +54,9 @@ using namespace ::com::sun::star::view;
 //  ----------------------------------------------------
 //  class UnoControlTabPageContainerModel
 //  ----------------------------------------------------
-UnoControlTabPageContainerModel::UnoControlTabPageContainerModel() : maContainerListeners( *this )
+UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoControlTabPageContainerModel_Base( i_factory )
+    ,maContainerListeners( *this )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -176,8 +178,9 @@ void UnoControlTabPageContainerModel::removeContainerListener( const Reference< 
 //  ----------------------------------------------------
 //  class UnoControlTabPageContainer
 //  ----------------------------------------------------
-UnoControlTabPageContainer::UnoControlTabPageContainer():
-    m_aTabPageListeners( *this )
+UnoControlTabPageContainer::UnoControlTabPageContainer( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoControlTabPageContainer_Base( i_factory )
+    ,m_aTabPageListeners( *this )
 {
 }
 
@@ -290,12 +293,3 @@ void SAL_CALL UnoControlTabPageContainer::addControl( const ::rtl::OUString& Nam
     xContainerListener->elementInserted( aEvent );
 }
 
-Reference< XInterface > SAL_CALL UnoControlTabPageContainer_CreateInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new UnoControlTabPageContainer );
-}
-
-Reference< XInterface > SAL_CALL UnoControlTabPageContainerModel_CreateInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new OGeometryControlModel<UnoControlTabPageContainerModel>() );
-}

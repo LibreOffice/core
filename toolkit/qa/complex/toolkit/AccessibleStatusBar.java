@@ -27,12 +27,15 @@
 
 package complex.toolkit;
 
-// import complexlib.ComplexTestCase;
-import lib.TestParameters;
+import complex.toolkit.accessibility._XAccessibleEventBroadcaster;
+import complex.toolkit.accessibility._XAccessibleExtendedComponent;
+import complex.toolkit.accessibility._XAccessibleComponent;
+import complex.toolkit.accessibility._XAccessibleContext;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import util.SOfficeFactory;
 import util.AccessibilityTools;
 import com.sun.star.awt.XWindow;
-// import com.sun.star.chart.XChartDocument;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XServiceInfo;
@@ -45,11 +48,8 @@ import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
 import com.sun.star.accessibility.XAccessibleContext;
 import com.sun.star.awt.XExtendedToolkit;
-// import java.io.PrintWriter;
 
-// import org.junit.After;
 import org.junit.AfterClass;
-// import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openoffice.test.OfficeConnection;
@@ -58,26 +58,12 @@ import static org.junit.Assert.*;
 /**
  *
  */
-public class CheckAccessibleStatusBar {
+public class AccessibleStatusBar {
 
     XInterface testObject = null;
     XMultiServiceFactory xMSF = null;
     XWindow xWindow = null;
 
-    /**
-     * The test parameters
-     */
-    private static TestParameters param = null;
-
-//    public String[] getTestMethodNames() {
-//        return new String[]{"checkDocs"};//WriterDoc", "checkDrawDoc",
-////                    "checkMathDoc", "checkImpressDoc", "checkCalcDoc"};
-//    }
-
-/*    public String getTestObjectName() {
-        return "com.sun.star.awt.AccessibleStatusBar";
-    }
-*/
     private XMultiServiceFactory getMSF()
     {
         final XMultiServiceFactory xMSF1 = UnoRuntime.queryInterface(XMultiServiceFactory.class, connection.getComponentContext().getServiceManager());
@@ -100,41 +86,13 @@ public class CheckAccessibleStatusBar {
     /**
      * Check document types
      */
-    @Test public void checkDocs() {
-        Object doc = param.get("DocType");
-        String testDocType;
-        if (doc == null)
-        {
-            testDocType = "all";
-        }
-        else
-        {
-            testDocType = (String)doc;
-        }
-
-        System.out.println("Param was " + doc);
-        System.out.println("DocType " + testDocType);
-        if (testDocType.equalsIgnoreCase("writer") || testDocType.equalsIgnoreCase("all"))
-        {
-            checkWriterDoc();
-        }
-        if (testDocType.equalsIgnoreCase("math") || testDocType.equalsIgnoreCase("all"))
-        {
-            checkMathDoc();
-        }
-        if (testDocType.equalsIgnoreCase("draw") || testDocType.equalsIgnoreCase("all"))
-        {
-            checkDrawDoc();
-        }
-        if (testDocType.equalsIgnoreCase("impress") || testDocType.equalsIgnoreCase("all"))
-        {
-            checkImpressDoc();
-        }
-        if (testDocType.equalsIgnoreCase("calc") || testDocType.equalsIgnoreCase("all"))
-        {
-            checkCalcDoc();
-        }
-
+    @Test
+    public void checkDocs() {
+        checkWriterDoc();
+        checkMathDoc();
+        checkDrawDoc();
+        checkImpressDoc();
+        checkCalcDoc();
     }
 
     /**
@@ -150,7 +108,7 @@ public class CheckAccessibleStatusBar {
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
 
@@ -160,7 +118,7 @@ public class CheckAccessibleStatusBar {
                 xClose.close(false);
             }
             catch(com.sun.star.util.CloseVetoException e) {
-                e.printStackTrace();
+                Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
             }
         }
     }
@@ -178,7 +136,7 @@ public class CheckAccessibleStatusBar {
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
 
@@ -188,7 +146,7 @@ public class CheckAccessibleStatusBar {
                 xClose.close(false);
             }
             catch(com.sun.star.util.CloseVetoException e) {
-                e.printStackTrace();
+                Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
             }
         }
     }
@@ -206,7 +164,7 @@ public class CheckAccessibleStatusBar {
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
 
@@ -216,7 +174,7 @@ public class CheckAccessibleStatusBar {
                 xClose.close(false);
             }
             catch(com.sun.star.util.CloseVetoException e) {
-                e.printStackTrace();
+                Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
             }
         }
     }
@@ -234,7 +192,7 @@ public class CheckAccessibleStatusBar {
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
 
@@ -244,7 +202,7 @@ public class CheckAccessibleStatusBar {
                 xClose.close(false);
             }
             catch(com.sun.star.util.CloseVetoException e) {
-                e.printStackTrace();
+                Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
             }
         }
     }
@@ -262,7 +220,7 @@ public class CheckAccessibleStatusBar {
             getTestObject();
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         runAllInterfaceTests();
 
@@ -272,7 +230,7 @@ public class CheckAccessibleStatusBar {
                 xClose.close(false);
             }
             catch(com.sun.star.util.CloseVetoException e) {
-                e.printStackTrace();
+                Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
             }
         }
     }
@@ -287,12 +245,11 @@ public class CheckAccessibleStatusBar {
             xWindow = UnoRuntime.queryInterface(XWindow.class, tk.getActiveTopWindow());
 
             shortWait();
-            AccessibilityTools at = new AccessibilityTools();
-            XAccessible xRoot = at.getAccessibleObject(xWindow);
+            XAccessible xRoot = AccessibilityTools.getAccessibleObject(xWindow);
             XAccessibleContext parentContext = null;
 
             System.out.println("Get the accessible status bar.");
-            parentContext = at.getAccessibleObjectForRole(
+            parentContext = AccessibilityTools.getAccessibleObjectForRole(
                                         xRoot, AccessibleRole.STATUS_BAR, "");
             shortWait();
             System.out.println("...OK.");
@@ -309,11 +266,11 @@ public class CheckAccessibleStatusBar {
             testObject=parentContext;
         }
         catch(com.sun.star.uno.Exception e) {
-            e.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", e );
         }
         catch(Throwable t) {
             System.out.println("Got throwable:");
-            t.printStackTrace();
+            Logger.getLogger( this.getClass().getName() ).log( Level.SEVERE, "caught an exception", t );
         }
     }
 
@@ -354,7 +311,7 @@ public class CheckAccessibleStatusBar {
 
         System.out.println("*** Now testing XAccessibleEventBroadcaster ***");
         _XAccessibleEventBroadcaster _xAccEvBcast =
-                                new _XAccessibleEventBroadcaster(testObject, "Pfff", xWindow);
+                                new _XAccessibleEventBroadcaster(testObject, xWindow);
         assertTrue("failed: XAccessibleEventBroadcaster::addEventListener", _xAccEvBcast._addEventListener());
         assertTrue("failed: XAccessibleEventBroadcaster::removeEventListener", _xAccEvBcast._removeEventListener());
     }
@@ -362,12 +319,14 @@ public class CheckAccessibleStatusBar {
 
 
 
-    @BeforeClass public static void setUpConnection() throws Exception {
+    @BeforeClass
+    public static void setUpConnection() throws Exception {
         System.out.println("setUpConnection()");
         connection.setUp();
     }
 
-    @AfterClass public static void tearDownConnection()
+    @AfterClass
+    public static void tearDownConnection()
         throws InterruptedException, com.sun.star.uno.Exception
     {
         System.out.println("tearDownConnection()");

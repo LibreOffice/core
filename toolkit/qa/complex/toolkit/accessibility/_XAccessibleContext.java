@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-package complex.toolkit;
+package complex.toolkit.accessibility;
 
 import com.sun.star.lang.Locale;
 import com.sun.star.uno.XInterface;

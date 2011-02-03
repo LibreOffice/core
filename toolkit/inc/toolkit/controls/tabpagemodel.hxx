@@ -93,12 +93,11 @@
 class UnoControlTabPageModel :  public ControlModelContainerBase
                                 //public TabPageModel
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xCompContext;
 protected:
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 public:
-    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & i_xCompContext);
+    UnoControlTabPageModel( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > const & i_factory);
 
     // ::com::sun::star::io::XPersistObject
     ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
@@ -127,7 +126,7 @@ private:
     bool            m_bWindowListener;
 public:
 
-    UnoControlTabPage();
+    UnoControlTabPage( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     ~UnoControlTabPage();
     ::rtl::OUString             GetComponentServiceName();
 
