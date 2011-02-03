@@ -33,15 +33,15 @@
 #include <svtools/brwhead.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/image.hxx>
-#include <tools/list.hxx>
 #include <svtools/transfer.hxx>
+#include <vector>
 
 //===================================================================
 
 #define MIN_COLUMNWIDTH  2
 #define DRAG_CRITICAL    4
 
-DECLARE_LIST( RectangleList, Rectangle* )
+typedef ::std::vector< Rectangle* > RectangleList;
 
 //===================================================================
 

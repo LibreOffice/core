@@ -232,6 +232,10 @@ BrowserDataWin::~BrowserDataWin()
 {
     if( pDtorNotify )
         *pDtorNotify = TRUE;
+
+    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
+        delete aInvalidRegion[ i ];
+    aInvalidRegion.clear();
 }
 
 //-------------------------------------------------------------------
@@ -315,7 +319,7 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
     {
         if ( bInPaint )
         {
-            aInvalidRegion.Insert( new Rectangle( rRect ) );
+            aInvalidRegion.push_back( new Rectangle( rRect ) );
             return;
         }
         bInPaint = TRUE;
@@ -324,7 +328,7 @@ void BrowserDataWin::Paint( const Rectangle& rRect )
         DoOutstandingInvalidations();
     }
     else
-        aInvalidRegion.Insert( new Rectangle( rRect ) );
+        aInvalidRegion.push_back( new Rectangle( rRect ) );
 }
 
 //-------------------------------------------------------------------
@@ -685,8 +689,7 @@ BrowserExecuteDropEvent::BrowserExecuteDropEvent( BrowserDataWin *pWindow, const
 
 void BrowserDataWin::SetUpdateMode( BOOL bMode )
 {
-    DBG_ASSERT( !bUpdateMode || aInvalidRegion.Count() == 0,
-                "invalid region not empty" );
+    DBG_ASSERT( !bUpdateMode || aInvalidRegion.empty(), "invalid region not empty" );
     if ( bMode == bUpdateMode )
         return;
 
@@ -698,14 +701,11 @@ void BrowserDataWin::SetUpdateMode( BOOL bMode )
 //-------------------------------------------------------------------
 void BrowserDataWin::DoOutstandingInvalidations()
 {
-    for ( Rectangle* pRect = aInvalidRegion.First();
-          pRect;
-          pRect = aInvalidRegion.Next() )
-    {
-        Control::Invalidate( *pRect );
-        delete pRect;
+    for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i ) {
+        Control::Invalidate( *aInvalidRegion[ i ] );
+        delete aInvalidRegion[ i ];
     }
-    aInvalidRegion.Clear();
+    aInvalidRegion.clear();
 }
 
 //-------------------------------------------------------------------
@@ -714,12 +714,10 @@ void BrowserDataWin::Invalidate( USHORT nFlags )
 {
     if ( !GetUpdateMode() )
     {
-        for ( Rectangle* pRect = aInvalidRegion.First();
-              pRect;
-              pRect = aInvalidRegion.Next() )
-            delete pRect;
-        aInvalidRegion.Clear();
-        aInvalidRegion.Insert( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
+        for ( size_t i = 0, n = aInvalidRegion.size(); i < n; ++i )
+            delete aInvalidRegion[ i ];
+        aInvalidRegion.clear();
+        aInvalidRegion.push_back( new Rectangle( Point( 0, 0 ), GetOutputSizePixel() ) );
     }
     else
         Window::Invalidate( nFlags );
@@ -730,7 +728,7 @@ void BrowserDataWin::Invalidate( USHORT nFlags )
 void BrowserDataWin::Invalidate( const Rectangle& rRect, USHORT nFlags )
 {
     if ( !GetUpdateMode() )
-        aInvalidRegion.Insert( new Rectangle( rRect ) );
+        aInvalidRegion.push_back( new Rectangle( rRect ) );
     else
         Window::Invalidate( rRect, nFlags );
 }

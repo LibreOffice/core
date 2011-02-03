@@ -365,20 +365,21 @@ void BrowseBox::ToggleSelection( BOOL bForce )
         Rectangle aAddRect(
             Point( nOfsX, (nRow-nTopRow)*GetDataRowHeight() ),
             Size( pDataWin->GetSizePixel().Width(), GetDataRowHeight() ) );
-        if ( aHighlightList.Count() && nLastRowInRect == ( nRow - 1 ) )
-            aHighlightList.First()->Union( aAddRect );
+        if ( aHighlightList.size() && nLastRowInRect == ( nRow - 1 ) )
+            aHighlightList[ 0 ]->Union( aAddRect );
         else
-            aHighlightList.Insert( new Rectangle( aAddRect ), (ULONG) 0 );
+            aHighlightList.insert( aHighlightList.begin(), new Rectangle( aAddRect ) );
         nLastRowInRect = nRow;
     }
 
     // unhighlight the old selection (if any)
-    while ( aHighlightList.Count() )
+    for ( size_t i = aHighlightList.size(); i > 0; )
     {
-        Rectangle *pRect = aHighlightList.Remove( aHighlightList.Count() - 1 );
+        Rectangle *pRect = aHighlightList[ --i ];
         pDataWin->Invalidate( *pRect );
         delete pRect;
     }
+    aHighlightList.clear();
 
     // unhighlight old column selection (if any)
     for ( long nColId = pColSel ? pColSel->FirstSelected() : BROWSER_ENDOFSELECTION;
