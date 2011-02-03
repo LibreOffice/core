@@ -24,34 +24,33 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_XUndoSupplier_idl
-#define com_sun_star_chart2_XUndoSupplier_idl
+#ifndef __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
+#define __com_sun_star_awt_tab_UnoControlTabPageModel_idl__
 
-#include <com/sun/star/chart2/XUndoManager.idl>
+#include <com/sun/star/awt/tab/XTabPageModel.idl>
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+//=============================================================================
 
-/** An interface for providing an UndoManager based on frame::XModel
-    objects.
+module com {  module sun {  module star {  module awt { module tab {
+
+//=============================================================================
+
+/** specifies the standard model of a XTabPageModel.
+    @since OOo 3.4
  */
-interface XUndoSupplier : ::com::sun::star::uno::XInterface
+service UnoControlTabPageModel : XTabPageModel
 {
-    /** @return an undo manager that allows doing undo and redo of a
-                frame::XModel based object
-     */
-    XUndoManager getUndoManager();
+    /** Creates a new XTabPageModel with a given ID.
+    */
+    create([in] short tabPageID);
+
+    /** Creates a new XTabPageModel with a given ID and a url which is used to load teh tab page model.
+    */
+    load([in] short tabPageID,[in] string url);
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+//=============================================================================
+
+}; }; }; }; };
 
 #endif

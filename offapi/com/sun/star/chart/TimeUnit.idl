@@ -24,19 +24,23 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_Break_idl
-#define com_sun_star_chart2_Break_idl
+#ifndef __com_sun_star_chart_TimeUnit_idl__
+#define __com_sun_star_chart_TimeUnit_idl__
 
 //=============================================================================
 
-module com {  module sun {  module star {  module chart2 {
+ module com {  module sun {  module star {  module chart {
 
 //=============================================================================
 
-struct Break
+/** Specifies a unit for intervals on a date-time axis
+@since OOo 3.4
+ */
+published constants TimeUnit
 {
-    double Min;
-    double Max;
+    const long DAY = 0;
+    const long MONTH = 1;
+    const long YEAR = 2;
 };
 
 //=============================================================================

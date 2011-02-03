@@ -25,37 +25,30 @@
 #
 #*************************************************************************
 
-PRJ=.
-PRJNAME:=udkapi
+PRJ=..$/..$/..$/..$/..
+
+PRJNAME=api
+
+TARGET=cssawttab
+PACKAGE=com$/sun$/star$/awt$/tab
 
 # --- Settings -----------------------------------------------------
 
-OUT!:=$(PRJ)$/out
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
+# ------------------------------------------------------------------------
+IDLFILES=\
+    TabPageActivatedEvent.idl\
+    XTabPageContainerListener.idl\
+    XTabPageModel.idl\
+    XTabPage.idl\
+    XTabPageContainerModel.idl\
+    XTabPageContainer.idl\
+    UnoControlTabPage.idl\
+    UnoControlTabPageModel.idl\
+    UnoControlTabPageContainer.idl\
+    UnoControlTabPageContainerModel.idl
 # ------------------------------------------------------------------
 
-INCLUDES= \
-    com$/sun$/star$/container$/makefile.mk \
-    com$/sun$/star$/io$/makefile.mk \
-    com$/sun$/star$/reflection$/makefile.mk \
-    com$/sun$/star$/beans$/makefile.mk \
-    com$/sun$/star$/lang$/makefile.mk \
-    com$/sun$/star$/uno$/makefile.mk \
-    com$/sun$/star$/uno$/util$/logging$/makefile.mk \
-    com$/sun$/star$/corba$/makefile.mk			\
-    com$/sun$/star$/corba$/iop$/makefile.mk 	\
-    com$/sun$/star$/corba$/giop$/makefile.mk 	\
-    com$/sun$/star$/corba$/iiop$/makefile.mk 	\
-    com$/sun$/star$/script$/makefile.mk \
-    com$/sun$/star$/test$/makefile.mk \
-    com$/sun$/star$/registry$/makefile.mk \
-    com$/sun$/star$/loader$/makefile.mk \
-    com$/sun$/star$/bridge$/makefile.mk 
-
-.INCLUDE: $(INCLUDES)
-
-out$/$(PRJNAME).rdb:: $(ALLIDLFILES)
-    unoidl @$(mktmp -I$(PRJ) -Burd -OHout $(ALLIDLFILES:+"\n"))
-    regmerge @$(mktmp  $@ /UCR out$/{$(?:f:s/.idl/.urd/:+"\n")} )
-    touch $@
-
+.INCLUDE :  target.mk
+.INCLUDE :  $(PRJ)$/util$/target.pmk
