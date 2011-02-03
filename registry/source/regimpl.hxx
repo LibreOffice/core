@@ -168,7 +168,11 @@ private:
                         const rtl::OUString& sName,
                         sal_Int16 nSpace) const;
 
+#ifdef USE_MSVC_HASH_MAP
+    typedef std::hash_map< rtl::OUString, ORegKey* > KeyMap;
+#else
     typedef std::hash_map< rtl::OUString, ORegKey*, rtl::OUStringHash > KeyMap;
+#endif
 
     sal_uInt32      m_refCount;
     osl::Mutex          m_mutex;
