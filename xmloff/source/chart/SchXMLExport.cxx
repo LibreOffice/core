@@ -243,8 +243,9 @@ public:
     void exportText( const ::rtl::OUString& rText, bool bConvertTabsLFs = false );
     void exportErrorBarRanges();
 
+private:
     SchXMLExportHelper_Impl(SchXMLExportHelper_Impl &); // not defined
-    void operator =(SchXMLExportHelper_Impl &); // not defined
+    SchXMLExportHelper_Impl operator =(SchXMLExportHelper_Impl &); // not defined
 
 public:
     SvXMLExport& mrExport;
