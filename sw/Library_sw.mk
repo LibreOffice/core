@@ -727,24 +727,6 @@ $(eval $(call gb_Library_add_exception_objects,sw,\
     sw/source/ui/wrtsh/wrtundo \
 ))
 
-ifeq ($(OS),WNT)
-ifneq ($(USE_MINGW),)
-$(eval $(call gb_Library_add_linked_libs,sw,\
-    mingwthrd \
-    $(gb_MINGW_LIBSTDCPP) \
-    mingw32 \
-    $(gb_MINGW_LIBGCC) \
-    uwinapi \
-    moldname \
-    mingwex \
-    advapi32 \
-    kernel32 \
-    msvcrt \
-    user32 \
-))
-endif
-endif
-
 $(eval $(call gb_SdiTarget_SdiTarget,sw/sdi/swslots,sw/sdi/swriter))
 
 $(eval $(call gb_SdiTarget_set_include,sw/sdi/swslots,\
