@@ -608,7 +608,9 @@ struct bootstrap_map {
     // thus there is no need to link against the stlport:
 #ifdef USE_MSVC_HASH_MAP
     typedef std::hash_map<
-        rtl::OUString, Bootstrap_Impl *> t;
+        rtl::OUString, Bootstrap_Impl *,
+        std::hash_compare<rtl::OUString>,
+        rtl::Allocator< OUString> > t;
 #else
     typedef std::hash_map<
         rtl::OUString, Bootstrap_Impl *,

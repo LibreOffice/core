@@ -168,7 +168,10 @@ namespace stdext
 
 typedef std::hash_map<
     oslModule,
-    std::pair<sal_uInt32, component_canUnloadFunc> > ModuleMap;
+    std::pair<sal_uInt32, component_canUnloadFunc>,
+    std::hash_compare<oslModule>,
+    rtl::Allocator<oslModule>
+> ModuleMap;
 #else
 typedef std::hash_map<
     oslModule,
@@ -323,7 +326,10 @@ struct hashListener
 #ifdef USE_MSVC_HASH_MAP
 typedef std::hash_map<
     sal_Int32,
-    std::pair<rtl_unloadingListenerFunc, void*> > ListenerMap;
+    std::pair<rtl_unloadingListenerFunc, void*>,
+    std::hash_compare<sal_Int32>,
+    rtl::Allocator<sal_Int32>
+> ListenerMap;
 #else
 typedef std::hash_map<
     sal_Int32,

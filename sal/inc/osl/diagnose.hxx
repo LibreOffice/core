@@ -106,7 +106,8 @@ namespace stdext
     }
 }
 
-typedef ::std::hash_set<void const*> VoidPointerSet;
+typedef ::std::hash_set<void const*, ::std::hash_compare<void const *>,
+                        ::rtl::Allocator<void const*> > VoidPointerSet;
 #else
 typedef ::std::hash_set<void const*, VoidPtrHash, ::std::equal_to<void const*>,
                         ::rtl::Allocator<void const*> > VoidPointerSet;
