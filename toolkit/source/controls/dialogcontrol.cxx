@@ -68,7 +68,7 @@
 #include "grid/gridcontrol.hxx"
 
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 #include <functional>
 #include "tools/urlobj.hxx"
@@ -250,7 +250,7 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > SimpleNameContainer
 template< typename T >
 class SimpleNamedThingContainer : public SimpleNameContainer_BASE
 {
-    typedef std::hash_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
+    typedef boost::unordered_map< rtl::OUString, Reference< T >, ::rtl::OUStringHash,
        ::std::equal_to< ::rtl::OUString > > NamedThingsHash;
     NamedThingsHash things;
     ::osl::Mutex m_aMutex;

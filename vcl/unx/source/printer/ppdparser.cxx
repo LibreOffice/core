@@ -32,7 +32,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "vcl/ppdparser.hxx"
 #include "vcl/strhelper.hxx"
@@ -80,8 +80,8 @@ namespace psp
             }
         };
 
-        typedef std::hash_map< com::sun::star::lang::Locale, rtl::OUString, LocaleHash, LocaleEqual > translation_map;
-        typedef std::hash_map< rtl::OUString, translation_map, rtl::OUStringHash > key_translation_map;
+        typedef boost::unordered_map< com::sun::star::lang::Locale, rtl::OUString, LocaleHash, LocaleEqual > translation_map;
+        typedef boost::unordered_map< rtl::OUString, translation_map, rtl::OUStringHash > key_translation_map;
 
         key_translation_map     m_aTranslations;
         public:
@@ -251,7 +251,7 @@ namespace psp
     {
     public:
         std::list< PPDParser* > aAllParsers;
-        std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >* pAllPPDFiles;
+        boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >* pAllPPDFiles;
         PPDCache()
             : pAllPPDFiles(NULL)
         {}
@@ -485,7 +485,7 @@ void PPDParser::initPPDFiles()
     if( rPPDCache.pAllPPDFiles )
         return;
 
-    rPPDCache.pAllPPDFiles = new std::hash_map< OUString, OUString, OUStringHash >();
+    rPPDCache.pAllPPDFiles = new boost::unordered_map< OUString, OUString, OUStringHash >();
 
     // check installation directories
     std::list< OUString > aPathList;
@@ -527,7 +527,7 @@ void PPDParser::getKnownPPDDrivers( std::list< rtl::OUString >& o_rDrivers, bool
     initPPDFiles();
     o_rDrivers.clear();
 
-    std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+    boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
     for( it = rPPDCache.pAllPPDFiles->begin(); it != rPPDCache.pAllPPDFiles->end(); ++it )
         o_rDrivers.push_back( it->first );
 }
@@ -539,7 +539,7 @@ String PPDParser::getPPDFile( const String& rFile )
     PPDDecompressStream aStream( aPPD.PathToFileName() );
     if( ! aStream.IsOpen() )
     {
-        std::hash_map< OUString, OUString, OUStringHash >::const_iterator it;
+        boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator it;
         PPDCache &rPPDCache = thePPDCache::get();
 
         bool bRetry = true;

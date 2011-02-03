@@ -193,7 +193,7 @@ OUString DefaultFontConfiguration::tryLocale( const Locale& rLocale, const OUStr
 {
     OUString aRet;
 
-    std::hash_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
+    boost::unordered_map< Locale, LocaleAccess, LocaleHash >::const_iterator it =
         m_aConfig.find( rLocale );
     if( it != m_aConfig.end() )
     {
@@ -1093,7 +1093,7 @@ unsigned long FontSubstConfiguration::getSubstType( const com::sun::star::uno::R
 
 void FontSubstConfiguration::readLocaleSubst( const com::sun::star::lang::Locale& rLocale ) const
 {
-    std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
+    boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator it =
         m_aSubst.find( rLocale );
     if( it != m_aSubst.end() )
     {
@@ -1193,7 +1193,7 @@ const FontNameAttr* FontSubstConfiguration::getSubstInfo( const String& rFontNam
 
     while( aLocale.Language.getLength() )
     {
-        std::hash_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
+        boost::unordered_map< Locale, LocaleSubst, LocaleHash >::const_iterator lang = m_aSubst.find( aLocale );
         if( lang != m_aSubst.end() )
         {
             if( ! lang->second.bConfigRead )

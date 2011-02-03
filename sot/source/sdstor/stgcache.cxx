@@ -32,7 +32,7 @@
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/presys.h>
 #endif
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #if defined(_MSC_VER) && (_MSC_VER<1200)
 #include <tools/postsys.h>
 #endif
@@ -50,7 +50,7 @@
 
 /*************************************************************************/
 //-----------------------------------------------------------------------------
-typedef std::hash_map
+typedef boost::unordered_map
 <
     INT32,
     StgPage *,

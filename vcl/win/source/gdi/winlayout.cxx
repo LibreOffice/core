@@ -65,10 +65,10 @@
 #undef ULONG
 #endif // USE_UNISCRIBE
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 
-typedef std::hash_map<int,int> IntMap;
+typedef boost::unordered_map<int,int> IntMap;
 typedef std::set<int> IntSet;
 
 // Graphite headers

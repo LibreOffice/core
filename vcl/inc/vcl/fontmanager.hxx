@@ -29,7 +29,7 @@
 #ifndef _PSPRINT_FONTMANAGER_HXX_
 #define _PSPRINT_FONTMANAGER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include <list>
 #include <set>
@@ -242,7 +242,7 @@ class VCL_DLLPUBLIC PrintFontManager
         // upper byte contains: 0 for horizontal metric
         //                      1 for vertical metric
         // highest byte: 0 for now
-        std::hash_map< int, CharacterMetric >     m_aMetrics;
+        boost::unordered_map< int, CharacterMetric >     m_aMetrics;
         // contains the unicode blocks for which metrics were queried
         // this implies that metrics should be queried in terms of
         // unicode blocks. here a unicode block is identified
@@ -257,7 +257,7 @@ class VCL_DLLPUBLIC PrintFontManager
         bool                                        m_bKernPairsQueried;
         std::list< KernPair >                     m_aXKernPairs;
         std::list< KernPair >                     m_aYKernPairs;
-        std::hash_map< sal_Unicode, bool >      m_bVerticalSubstitutions;
+        boost::unordered_map< sal_Unicode, bool >       m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
 
@@ -371,8 +371,8 @@ class VCL_DLLPUBLIC PrintFontManager
     static rtl::OString s_aEmptyOString;
 
     fontID                                      m_nNextFontID;
-    std::hash_map< fontID, PrintFont* >       m_aFonts;
-    std::hash_map< int, family::type >        m_aFamilyTypes;
+    boost::unordered_map< fontID, PrintFont* >       m_aFonts;
+    boost::unordered_map< int, family::type >        m_aFamilyTypes;
     std::list< rtl::OUString >              m_aPrinterDrivers;
     std::list< rtl::OString >               m_aFontDirectories;
     std::list< int >                            m_aPrivateFontDirectories;
@@ -380,20 +380,20 @@ class VCL_DLLPUBLIC PrintFontManager
     m_aXLFD_Aliases;
     utl::MultiAtomProvider*                   m_pAtoms;
     // for speeding up findFontFileID
-    std::hash_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
+    boost::unordered_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
                                                 m_aFontFileToFontID;
 
-    std::hash_map< rtl::OString, int, rtl::OStringHash >
+    boost::unordered_map< rtl::OString, int, rtl::OStringHash >
     m_aDirToAtom;
-    std::hash_map< int, rtl::OString >     m_aAtomToDir;
+    boost::unordered_map< int, rtl::OString >     m_aAtomToDir;
     int                                        m_nNextDirAtom;
 
-    std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >
+    boost::unordered_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >
         m_aAdobenameToUnicode;
-    std::hash_multimap< sal_Unicode, rtl::OString >
+    boost::unordered_multimap< sal_Unicode, rtl::OString >
         m_aUnicodeToAdobename;
-    std::hash_multimap< sal_Unicode, sal_uInt8 >    m_aUnicodeToAdobecode;
-    std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
+    boost::unordered_multimap< sal_Unicode, sal_uInt8 > m_aUnicodeToAdobecode;
+    boost::unordered_multimap< sal_uInt8, sal_Unicode > m_aAdobecodeToUnicode;
 
     mutable FontCache*                                                        m_pFontCache;
     bool m_bFontconfigSuccess;
@@ -418,7 +418,7 @@ class VCL_DLLPUBLIC PrintFontManager
 
     PrintFont* getFont( fontID nID ) const
     {
-        std::hash_map< fontID, PrintFont* >::const_iterator it;
+        boost::unordered_map< fontID, PrintFont* >::const_iterator it;
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
@@ -438,7 +438,7 @@ class VCL_DLLPUBLIC PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool initFontconfig();
-    int  countFontconfigFonts( std::hash_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
+    int  countFontconfigFonts( boost::unordered_map<rtl::OString, int, rtl::OStringHash>& o_rVisitedPaths );
     /* deinitialize fontconfig
      */
     void deinitFontconfig();
@@ -618,15 +618,15 @@ public:
     // helper for type 1 fonts
     std::list< rtl::OString > getAdobeNameFromUnicode( sal_Unicode aChar ) const;
 
-    std::pair< std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
-               std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
+    std::pair< boost::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
+               boost::unordered_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
     getAdobeCodeFromUnicode( sal_Unicode aChar ) const
     {
         return m_aUnicodeToAdobecode.equal_range( aChar );
     }
     std::list< sal_Unicode >  getUnicodeFromAdobeName( const rtl::OString& rName ) const;
-    std::pair< std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                 std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
+    std::pair< boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator,
+                 boost::unordered_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
     {
         return m_aAdobecodeToUnicode.equal_range( aChar );

@@ -136,7 +136,7 @@ FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-typedef ::std::hash_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+typedef ::boost::unordered_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------
@@ -2001,7 +2001,7 @@ ULONG FreetypeServerFont::GetKernPairs( ImplKernPairData** ppKernPairs ) const
         // prepare glyphindex to character mapping
         // TODO: this is needed to support VCL's existing kerning infrastructure,
         // eliminate it up by redesigning kerning infrastructure to work with glyph indizes
-        typedef std::hash_multimap<USHORT,sal_Unicode> Cmap;
+        typedef boost::unordered_multimap<USHORT,sal_Unicode> Cmap;
         Cmap aCmap;
         for( sal_Unicode aChar = 0x0020; aChar < 0xFFFE; ++aChar )
         {

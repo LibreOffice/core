@@ -38,7 +38,7 @@
 
 #include "osl/thread.h"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 
 using namespace rtl;
@@ -1073,7 +1073,7 @@ String AddPrinterDialog::uniquePrinterName( const String& rBase )
     int nVersion = 1;
     list< OUString > aPrinterList;
     rManager.listPrinters( aPrinterList );
-    hash_set< OUString, OUStringHash > aPrinters;
+    boost::unordered_set< OUString, OUStringHash > aPrinters;
     for( list< OUString >::const_iterator it = aPrinterList.begin(); it != aPrinterList.end(); ++it )
         aPrinters.insert( *it );
     while( aPrinters.find( aResult ) != aPrinters.end() )

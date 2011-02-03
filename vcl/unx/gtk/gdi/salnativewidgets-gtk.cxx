@@ -40,7 +40,7 @@
 #include <cmath>
 #include <vector>
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "saldata.hxx"
 #include "saldisp.hxx"
@@ -151,7 +151,7 @@ struct NWFWidgetData
 // Keep a hash table of Widgets->default flags so that we can
 // easily and quickly reset each to a default state before using
 // them
-static std::hash_map<long, guint>   gWidgetDefaultFlags;
+static boost::unordered_map<long, guint>    gWidgetDefaultFlags;
 static std::vector<NWFWidgetData>   gWidgetData;
 
 static const GtkBorder aDefDefBorder        = { 1, 1, 1, 1 };

@@ -31,10 +31,10 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef std::hash_map<ByteString , ByteString , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , ByteString , hashByteString,equalByteString>
                                 ByteStringHashMap;
 
 

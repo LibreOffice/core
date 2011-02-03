@@ -78,7 +78,7 @@
 
 #include "i18npool/mslangid.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #ifdef ENABLE_GRAPHITE
 #include <vcl/graphite_layout.hxx>
@@ -129,7 +129,7 @@ class FontLookup
 
         struct hash;
         struct equal;
-        typedef ::std::hash_set< FontLookup,
+        typedef ::boost::unordered_set< FontLookup,
                                  FontLookup::hash,
                                  FontLookup::equal > fl_hashset;
 
@@ -1987,7 +1987,7 @@ public:
     bool FindFontSubstitute( ImplFontSelectData& ) const;
 
 private:
-    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >
         CachedFontMapType;
     mutable CachedFontMapType maCachedFontMap;
 };

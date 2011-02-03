@@ -33,7 +33,7 @@
 #include "vcl/dllapi.h"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
@@ -59,7 +59,7 @@ struct ImplPrnQueueData
 class VCL_DLLPUBLIC ImplPrnQueueList
 {
 public:
-    std::hash_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
+    boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash >
                                         m_aNameToIndex;
     std::vector< ImplPrnQueueData >     m_aQueueInfos;
     std::vector< rtl::OUString >        m_aPrinterList;

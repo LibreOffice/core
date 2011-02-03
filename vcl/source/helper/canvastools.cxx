@@ -72,7 +72,7 @@
 
 #include <vcl/canvasbitmap.hxx>
 #include <vcl/canvastools.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace ::com::sun::star;
@@ -187,8 +187,8 @@ namespace vcl
 
         const uno::Sequence< sal_Int8 > getTunnelIdentifier( TunnelIdentifierType eType )
         {
-            static std::hash_map< int, uno::Sequence< sal_Int8 > > aIds;
-            std::hash_map< int, uno::Sequence< sal_Int8 > >::iterator it =
+            static boost::unordered_map< int, uno::Sequence< sal_Int8 > > aIds;
+            boost::unordered_map< int, uno::Sequence< sal_Int8 > >::iterator it =
                 aIds.find( eType );
             if( it == aIds.end() )
             {

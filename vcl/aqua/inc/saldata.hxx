@@ -43,7 +43,7 @@
 #include <list>
 #include <vector>
 #include <map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 #include <cstdio>
 #include <cstdarg>
@@ -85,7 +85,7 @@ struct SalData
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // pointer of first frame
-    std::hash_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
+    boost::unordered_set<const AquaSalFrame*,FrameHash>  maFrameCheck;     // for fast check of frame existance
     SalObject                                    *mpFirstObject;    // pointer of first object window
     SalVirtualDevice                             *mpFirstVD;        // first VirDev
     SalPrinter                                   *mpFirstPrinter;   // first printing printer

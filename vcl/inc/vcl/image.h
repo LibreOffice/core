@@ -31,7 +31,7 @@
 
 #include <vcl/bitmapex.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // ----------------
 // - ImplImageBmp -
@@ -112,7 +112,7 @@ struct ImageAryData
 struct ImplImageList
 {
     typedef std::vector<ImageAryData *> ImageAryDataVec;
-    typedef std::hash_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
+    typedef boost::unordered_map< rtl::OUString, ImageAryData *, rtl::OUStringHash >
         ImageAryDataNameHash;
 
     ImageAryDataVec             maImages;

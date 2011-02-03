@@ -46,7 +46,7 @@
 #include <itemholder1.hxx>
 
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -143,7 +143,7 @@ class SvtCmdOptions
         }
 
     private:
-        class CommandHashMap : public ::std::hash_map< ::rtl::OUString      ,
+        class CommandHashMap : public ::boost::unordered_map< ::rtl::OUString       ,
                                                         sal_Int32           ,
                                                         OUStringHashCode    ,
                                                         ::std::equal_to< ::rtl::OUString >  >
@@ -292,7 +292,7 @@ SvtCommandOptions_Impl::SvtCommandOptions_Impl()
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
+    // Set size of boost::unordered_map reach a used size of approx. 60%
     m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
 
     // Get names/values for disabled commands.
@@ -343,7 +343,7 @@ void SvtCommandOptions_Impl::Notify( const Sequence< OUString >& )
     sal_Int32   nItem     = 0 ;
     OUString    sCmd          ;
 
-    // Set size of hash_map reach a used size of approx. 60%
+    // Set size of boost::unordered_map reach a used size of approx. 60%
     m_aDisabledCommands.Clear();
     m_aDisabledCommands.SetContainerSize( lNames.getLength() * 10 / 6 );
 

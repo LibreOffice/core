@@ -34,7 +34,7 @@
 
  *************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/ucb/ContentAction.hpp>
 #include <com/sun/star/ucb/CommandInfoChange.hpp>
 #include <com/sun/star/ucb/XPersistentPropertySet.hpp>
@@ -102,7 +102,7 @@ struct hashPtr
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     XPropertiesChangeListenerPtr,
     PropertyEventSequence*,

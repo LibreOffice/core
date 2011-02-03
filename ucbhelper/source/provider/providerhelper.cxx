@@ -35,7 +35,7 @@
 
  *************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/container/XNamed.hpp>
@@ -77,7 +77,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,
     uno::WeakReference< ucb::XContent >,

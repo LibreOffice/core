@@ -36,7 +36,7 @@
 #include <vcl/impfont.hxx>
 
 #include "boost/scoped_ptr.hpp"
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 class ImplFontSelectData;
 class ImplWinFontEntry;
@@ -119,7 +119,7 @@ private:
 #ifdef GNG_VERT_HACK
     void                    ReadGsubTable( HDC ) const;
 
-    typedef std::hash_set<sal_UCS4> UcsHashSet;
+    typedef boost::unordered_set<sal_UCS4> UcsHashSet;
     mutable UcsHashSet      maGsubTable;
     mutable bool            mbGsubRead;
 public:

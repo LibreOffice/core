@@ -33,14 +33,14 @@
 #include <unotools/configitem.hxx>
 #include <vcl/dllapi.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //........................................................................
 namespace vcl
 {
 //........................................................................
 
-    typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
+    typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > OUStrMap;
     class SmallOUStrMap : public OUStrMap { public: SmallOUStrMap() : OUStrMap(1) {} };
 
     //====================================================================
@@ -49,7 +49,7 @@ namespace vcl
     class VCL_DLLPUBLIC SettingsConfigItem : public ::utl::ConfigItem
     {
 
-        std::hash_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
+        boost::unordered_map< rtl::OUString, SmallOUStrMap, rtl::OUStringHash > m_aSettings;
 
         virtual void Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
 

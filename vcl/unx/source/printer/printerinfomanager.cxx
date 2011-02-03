@@ -58,7 +58,7 @@
 // the group of the global defaults
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 
 using namespace psp;
 using namespace rtl;
@@ -534,7 +534,7 @@ void PrinterInfoManager::initialize()
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
-                std::hash_map< OUString, Printer, OUStringHash >::const_iterator find_it =
+                boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator find_it =
                 m_aPrinters.find( aPrinterName );
                 if( find_it != m_aPrinters.end() )
                 {
@@ -613,7 +613,7 @@ void PrinterInfoManager::initialize()
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
-    ::std::hash_map< OUString, Printer, OUStringHash >::const_iterator it;
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator it;
     rList.clear();
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
         rList.push_back( it->first );
@@ -624,7 +624,7 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
     static PrinterInfo aEmptyInfo;
-    ::std::hash_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::const_iterator it = m_aPrinters.find( rPrinter );
 
     DBG_ASSERT( it != m_aPrinters.end(), "Do not ask for info about nonexistant printers" );
 
@@ -635,7 +635,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinter );
 
     DBG_ASSERT( it != m_aPrinters.end(), "Do not change nonexistant printers" );
 
@@ -666,9 +666,9 @@ static bool checkWriteability( const OUString& rUniPath )
 bool PrinterInfoManager::writePrinterConfig()
 {
     // find at least one writeable config
-    ::std::hash_map< OUString, Config*, OUStringHash > files;
-    ::std::hash_map< OUString, int, OUStringHash > rofiles;
-    ::std::hash_map< OUString, Config*, OUStringHash >::iterator file_it;
+    ::boost::unordered_map< OUString, Config*, OUStringHash > files;
+    ::boost::unordered_map< OUString, int, OUStringHash > rofiles;
+    ::boost::unordered_map< OUString, Config*, OUStringHash >::iterator file_it;
 
     for( ::std::list< WatchFile >::const_iterator wit = m_aWatchFiles.begin(); wit != m_aWatchFiles.end(); ++wit )
     {
@@ -686,7 +686,7 @@ bool PrinterInfoManager::writePrinterConfig()
     pGlobal->SetGroup( GLOBAL_DEFAULTS_GROUP );
     pGlobal->WriteKey( "DisableCUPS", m_bDisableCUPS ? "true" : "false" );
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it;
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it;
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         if( ! it->second.m_bModified )
@@ -788,7 +788,7 @@ bool PrinterInfoManager::writePrinterConfig()
 
             // write font substitution table
             pConfig->WriteKey( "PerformFontSubstitution", it->second.m_aInfo.m_bPerformFontSubstitution ? "true" : "false" );
-            for( ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
+            for( ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst = it->second.m_aInfo.m_aFontSubstitutes.begin();
             subst != it->second.m_aInfo.m_aFontSubstitutes.end(); ++subst )
             {
                 ByteString aKey( "SubstFont_" );
@@ -867,7 +867,7 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
 {
     bool bSuccess = true;
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         if( it->second.m_aFile.getLength() )
@@ -921,7 +921,7 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
     bool bSuccess = false;
 
-    ::std::hash_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
+    ::boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.find( rPrinterName );
     if( it != m_aPrinters.end() )
     {
         bSuccess = true;
@@ -952,7 +952,7 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
     return;
 
     ::std::list< FastPrintFontInfo > aFonts;
-    ::std::hash_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
+    ::boost::unordered_map< OUString, ::std::list< FastPrintFontInfo >, OUStringHash > aPrinterFonts;
     rFontManager.getFontListWithFastInfo( aFonts, rInfo.m_pParser );
 
     // get builtin fonts
@@ -962,8 +962,8 @@ void PrinterInfoManager::fillFontSubstitutions( PrinterInfo& rInfo ) const
             aPrinterFonts[ it->m_aFamilyName.toAsciiLowerCase() ].push_back( *it );
 
     // map lower case, so build a local copy of the font substitutions
-    ::std::hash_map< OUString, OUString, OUStringHash > aSubstitutions;
-    ::std::hash_map< OUString, OUString, OUStringHash >::const_iterator subst;
+    ::boost::unordered_map< OUString, OUString, OUStringHash > aSubstitutions;
+    ::boost::unordered_map< OUString, OUString, OUStringHash >::const_iterator subst;
     for( subst = rInfo.m_aFontSubstitutes.begin(); subst != rInfo.m_aFontSubstitutes.end(); ++subst )
     {
         OUString aFamily( subst->first.toAsciiLowerCase() );
@@ -1104,7 +1104,7 @@ int PrinterInfoManager::endSpool( const OUString& /*rPrintername*/, const OUStri
 
 void PrinterInfoManager::setupJobContextData( JobData& rData )
 {
-    std::hash_map< OUString, Printer, OUStringHash >::iterator it =
+    boost::unordered_map< OUString, Printer, OUStringHash >::iterator it =
     m_aPrinters.find( rData.m_aPrinterName );
     if( it != m_aPrinters.end() )
     {
@@ -1214,8 +1214,8 @@ static void lpgetSysQueueTokenHandler(
     const SystemCommandParameters* )
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::hash_set< OUString, OUStringHash > aUniqueSet;
-    std::hash_set< OUString, OUStringHash > aOnlySet;
+    boost::unordered_set< OUString, OUStringHash > aUniqueSet;
+    boost::unordered_set< OUString, OUStringHash > aOnlySet;
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_all" ) ) );
     aUniqueSet.insert( OUString( RTL_CONSTASCII_USTRINGPARAM( "_default" ) ) );
 
@@ -1311,7 +1311,7 @@ static void standardSysQueueTokenHandler(
     const SystemCommandParameters* i_pParms)
 {
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-    std::hash_set< OUString, OUStringHash > aUniqueSet;
+    boost::unordered_set< OUString, OUStringHash > aUniqueSet;
     rtl::OString aForeToken( i_pParms->pForeToken );
     rtl::OString aAftToken( i_pParms->pAftToken );
     /* Normal Unix print queue discovery, also used for Darwin 5 LPR printing

@@ -43,7 +43,7 @@ class   SalXLib;
 #include <osl/mutex.h>
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <tools/gen.hxx>
 #include <vcl/salwtype.hxx>
 #include <vcl/dllapi.h>
@@ -292,7 +292,7 @@ public:
         RenderEntry() : m_aPixmap( 0 ), m_aPicture( 0 ) {}
     };
 
-    typedef std::hash_map<int,RenderEntry> RenderEntryMap;
+    typedef boost::unordered_map<int,RenderEntry> RenderEntryMap;
 
     struct ScreenData
     {

@@ -55,7 +55,7 @@
 
 #include <functional>
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <set>
 
@@ -103,7 +103,7 @@ class InternalResMgr
     OUString                        aResName;
     bool                            bSingular;
     com::sun::star::lang::Locale    aLocale;
-    std::hash_map<sal_uInt64, int>* pResUseDump;
+    boost::unordered_map<sal_uInt64, int>* pResUseDump;
 
                             InternalResMgr( const OUString& rFileURL,
                                             const OUString& aPrefix,
@@ -141,7 +141,7 @@ class ResMgrContainer
             {}
     };
 
-    std::hash_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
+    boost::unordered_map< OUString, ContainerElement, OUStringHash> m_aResFiles;
     com::sun::star::lang::Locale                             m_aDefLocale;
 
     ResMgrContainer() { init(); }
@@ -178,7 +178,7 @@ ResMgrContainer& ResMgrContainer::get()
 
 ResMgrContainer::~ResMgrContainer()
 {
-    for( std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it =
+    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
         OSL_TRACE( "Resource file %s loaded %d times\n",
@@ -263,7 +263,7 @@ void ResMgrContainer::init()
         #endif
     }
     #if OSL_DEBUG_LEVEL > 1
-    for( std::hash_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
+    for( boost::unordered_map< OUString, ContainerElement, OUStringHash >::const_iterator it =
             m_aResFiles.begin(); it != m_aResFiles.end(); ++it )
     {
         OSL_TRACE( "ResMgrContainer: %s -> %s\n",
@@ -284,7 +284,7 @@ InternalResMgr* ResMgrContainer::getResMgr( const OUString& rPrefix,
 {
     com::sun::star::lang::Locale aLocale( rLocale );
     OUStringBuffer aSearch( rPrefix.getLength() + 16 );
-    std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
+    boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it = m_aResFiles.end();
 
     int nTries = 0;
     if( aLocale.Language.getLength() > 0 )
@@ -466,7 +466,7 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
         delete pResMgr;
     else
     {
-        std::hash_map< OUString, ContainerElement, OUStringHash >::iterator it =
+        boost::unordered_map< OUString, ContainerElement, OUStringHash >::iterator it =
         m_aResFiles.find( pResMgr->aResName );
         if( it != m_aResFiles.end() )
         {
@@ -578,7 +578,7 @@ InternalResMgr::~InternalResMgr()
             aLine.Append( ByteString( OUStringToOString( aFileName, RTL_TEXTENCODING_UTF8 ) ) );
             aStm.WriteLine( aLine );
 
-            for( std::hash_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
+            for( boost::unordered_map<sal_uInt64, int>::const_iterator it = pResUseDump->begin();
                  it != pResUseDump->end(); ++it )
             {
                 sal_uInt64 nKeyId = it->first;
@@ -635,7 +635,7 @@ BOOL InternalResMgr::Create()
             const sal_Char* pLogFile = getenv( "STAR_RESOURCE_LOGGING" );
             if ( pLogFile )
             {
-                pResUseDump = new std::hash_map<sal_uInt64, int>;
+                pResUseDump = new boost::unordered_map<sal_uInt64, int>;
                 for( sal_uInt32 i = 0; i < nEntries; ++i )
                     (*pResUseDump)[pContent[i].nTypeAndId] = 1;
             }

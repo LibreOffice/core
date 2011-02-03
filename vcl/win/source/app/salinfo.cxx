@@ -58,7 +58,7 @@
 
 #include "rtl/ustrbuf.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 SalSystem* WinSalInstance::CreateSalSystem()
 {
@@ -143,7 +143,7 @@ bool WinSalSystem::initMonitors()
         DISPLAY_DEVICEW aDev;
         aDev.cb = sizeof( aDev );
         DWORD nDevice = 0;
-        std::hash_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
+        boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
         while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
         {
             if( (aDev.StateFlags & DISPLAY_DEVICE_ACTIVE)
@@ -169,7 +169,7 @@ bool WinSalSystem::initMonitors()
         EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
 
         // append monitor numbers to name strings
-        std::hash_map< rtl::OUString, int, rtl::OUStringHash > aDevCount( aDeviceStringCount );
+        boost::unordered_map< rtl::OUString, int, rtl::OUStringHash > aDevCount( aDeviceStringCount );
         unsigned int nMonitors = m_aMonitors.size();
         for( unsigned int i = 0; i < nMonitors; i++ )
         {

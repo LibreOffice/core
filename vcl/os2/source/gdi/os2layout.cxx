@@ -49,8 +49,8 @@
 // for GetMirroredChar
 #include <vcl/svapp.hxx>
 
-#include <hash_map>
-typedef std::hash_map<int,int> IntMap;
+#include <boost/unordered_map.hpp>
+typedef boost::unordered_map<int,int> IntMap;
 
 #define DROPPED_OUTGLYPH 0xFFFF
 

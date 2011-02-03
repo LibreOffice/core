@@ -31,7 +31,7 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <hash_map> /* std::hashmap*/
+#include <boost/unordered_map.hpp> /* std::hashmap*/
 #include <vector>
 
 class GSILine;
@@ -65,7 +65,7 @@ struct hashByteString{
 
 
 
-typedef std::hash_map<ByteString , String , hashByteString,equalByteString>
+typedef boost::unordered_map<ByteString , String , hashByteString,equalByteString>
                                 StringHashMap;
 
 class TokenInfo

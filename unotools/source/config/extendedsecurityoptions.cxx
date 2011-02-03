@@ -45,7 +45,7 @@
 
 #include <unotools/pathoptions.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <rtl/logfile.hxx>
 #include "itemholder1.hxx"
@@ -86,7 +86,7 @@ struct OUStringHashCode
     }
 };
 
-class ExtensionHashMap : public ::std::hash_map< ::rtl::OUString,
+class ExtensionHashMap : public ::boost::unordered_map< ::rtl::OUString,
                                                  sal_Int32,
                                                  OUStringHashCode,
                                                  ::std::equal_to< ::rtl::OUString > >

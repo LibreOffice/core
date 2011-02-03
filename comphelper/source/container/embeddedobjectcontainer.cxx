@@ -52,7 +52,7 @@
 #include <comphelper/embeddedobjectcontainer.hxx>
 #include <comphelper/sequence.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 #include <rtl/logfile.hxx>
@@ -78,7 +78,7 @@ struct eqObjectName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OUString,
     ::com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >,

@@ -54,7 +54,7 @@ public:
     ATSUFontFallbacks maFontFallbacks;
 
 private:
-    typedef std::hash_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
+    typedef boost::unordered_map<ATSUFontID,ImplMacFontData*> MacFontContainer;
     MacFontContainer maFontContainer;
 
     void InitGlyphFallbacks();

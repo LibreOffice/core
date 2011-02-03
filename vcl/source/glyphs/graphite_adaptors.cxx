@@ -66,7 +66,7 @@ namespace
     inline float from_hinted(const int x) {
         return static_cast<float>(x + 32) / 64.0;
     }
-    typedef std::hash_map<long,bool> SilfMap;
+    typedef boost::unordered_map<long,bool> SilfMap;
 }
 extern FT_Error (*pFTEmbolden)(FT_GlyphSlot);
 extern FT_Error (*pFTOblique)(FT_GlyphSlot);

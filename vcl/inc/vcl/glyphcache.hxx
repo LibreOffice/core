@@ -43,8 +43,8 @@ struct ImplKernPairData;
 class ImplFontOptions;
 
 #include <tools/gen.hxx>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 namespace basegfx { class B2DPolyPolygon; }
 
@@ -98,7 +98,7 @@ private:
     // the FontList key's mpFontData member is reinterpreted as integer font id
     struct IFSD_Equal{  bool operator()( const ImplFontSelectData&, const ImplFontSelectData& ) const; };
     struct IFSD_Hash{ size_t operator()( const ImplFontSelectData& ) const; };
-    typedef ::std::hash_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
+    typedef ::boost::unordered_map<ImplFontSelectData,ServerFont*,IFSD_Hash,IFSD_Equal > FontList;
     FontList                    maFontList;
     ULONG                       mnMaxSize;      // max overall cache size in bytes
     mutable ULONG               mnBytesUsed;
@@ -227,7 +227,7 @@ protected:
     virtual ServerFontLayoutEngine* GetLayoutEngine() { return NULL; }
 
 private:
-    typedef ::std::hash_map<int,GlyphData> GlyphList;
+    typedef ::boost::unordered_map<int,GlyphData> GlyphList;
     mutable GlyphList           maGlyphList;
 
     const ImplFontSelectData    maFontSelData;
@@ -373,7 +373,7 @@ protected:
                           { return (rA.mnChar1 == rB.mnChar1) && (rA.mnChar2 == rB.mnChar2); } };
     struct PairHash{ int operator()(const ImplKernPairData& rA) const
                          { return (rA.mnChar1) * 256 ^ rA.mnChar2; } };
-    typedef std::hash_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
+    typedef boost::unordered_set< ImplKernPairData, PairHash, PairEqual > UnicodeKernPairs;
     mutable UnicodeKernPairs maUnicodeKernPairs;
 };
 

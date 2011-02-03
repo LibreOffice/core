@@ -28,7 +28,7 @@
 #ifndef _PSTM_HXX
 #define _PSTM_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include "tools/toolsdllapi.h"
 
 #include <tools/table.hxx>
@@ -49,7 +49,7 @@ typedef void * (*SvCreateInstancePersist)( SvPersistBase ** );
 
 class TOOLS_DLLPUBLIC SvClassManager
 {
-    typedef std::hash_map< USHORT, SvCreateInstancePersist > Map;
+    typedef boost::unordered_map< USHORT, SvCreateInstancePersist > Map;
     Map aAssocTable;
 public:
     void        Register( USHORT nClassId, SvCreateInstancePersist pFunc );

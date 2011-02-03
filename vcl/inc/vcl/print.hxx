@@ -43,7 +43,7 @@
 #include "com/sun/star/view/PrintableState.hpp"
 
 #include <boost/shared_ptr.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 
 struct SalPrinterInfoQueue;
@@ -540,7 +540,7 @@ public:
 class VCL_DLLPUBLIC PrinterOptionsHelper
 {
     protected:
-    std::hash_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >        m_aPropertyMap;
+    boost::unordered_map< rtl::OUString, com::sun::star::uno::Any, rtl::OUStringHash >        m_aPropertyMap;
     com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >              m_aUIProperties;
 
     public:
