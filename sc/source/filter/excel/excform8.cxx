@@ -874,7 +874,6 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 {
     BYTE                    nOp, nLen;//, nByte;
     BOOL                    bError = FALSE;
-    BOOL                    bArrayFormula = FALSE;
     const BOOL              bRangeName = eFT == FT_RangeName;
     const BOOL              bSharedFormula = eFT == FT_SharedFormula;
     const BOOL              bRNorSF = bRangeName || bSharedFormula;
@@ -908,8 +907,6 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
             case 0x01: // Array Formula                         [325    ]
                        // Array Formula or Shared Formula       [    277]
                 aIn.Ignore( 4 );
-
-                bArrayFormula = TRUE;
                 break;
             case 0x02: // Data Table                            [325 277]
                 aIn.Ignore( 4 );
