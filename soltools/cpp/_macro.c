@@ -52,7 +52,7 @@ void
         if (tp->type != RP)
         {
             /* macro with args */
-            int narg = 0;
+            size_t narg = 0;
             int err = 0;
 
             for (;;)

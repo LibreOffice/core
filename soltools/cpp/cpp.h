@@ -65,7 +65,7 @@ typedef struct tokenrow
     Token *tp;                          /* current one to scan */
     Token *bp;                          /* base (allocated value) */
     Token *lp;                          /* last+1 token used */
-    int max;                            /* number allocated */
+    size_t max;                         /* number allocated */
 }   Tokenrow;
 
 typedef struct source
