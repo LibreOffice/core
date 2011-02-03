@@ -34,7 +34,6 @@
 
 #define _ZFORLIST_DECLARE_TABLE
 #include "scitems.hxx"
-#include <svl/slstitm.hxx>
 #include <svl/stritem.hxx>
 #include <svl/whiter.hxx>
 #include <svl/zformat.hxx>
@@ -735,92 +734,6 @@ void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
         nWhich = aIter.NextWhich();
     }
 }
-
-//------------------------------------------------------------------
-
-void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
-{
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
-
-    const SfxItemSet* pReqArgs = rReq.GetArgs();
-    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-
-    USHORT nSlot = rReq.GetSlot();
-    switch ( nSlot )
-    {
-        case SID_UNDO:
-        case SID_REDO:
-            if ( pUndoManager )
-            {
-                BOOL bIsUndo = ( nSlot == SID_UNDO );
-
-                USHORT nCount = 1;
-                const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
-                    nCount = ((const SfxUInt16Item*)pItem)->GetValue();
-
-                // lock paint for more than one cell undo action (not for editing within a cell)
-                BOOL bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
-                if ( bLockPaint )
-                    pDocSh->LockPaint();
-
-                for (USHORT i=0; i<nCount; i++)
-                {
-                    if ( bIsUndo )
-                        pUndoManager->Undo(0);
-                    else
-                        pUndoManager->Redo(0);
-                }
-
-                if ( bLockPaint )
-                    pDocSh->UnlockPaint();
-
-                GetViewFrame()->GetBindings().InvalidateAll(sal_False);
-            }
-            break;
-//      default:
-//          GetViewFrame()->ExecuteSlot( rReq );
-    }
-}
-
-void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
-{
-    SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
-
-    SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
-    while ( nWhich )
-    {
-        switch (nWhich)
-        {
-            case SID_GETUNDOSTRINGS:
-            case SID_GETREDOSTRINGS:
-                {
-                    SfxStringListItem aStrLst( nWhich );
-                    if ( pUndoManager )
-                    {
-                        List* pList = aStrLst.GetList();
-                        BOOL bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
-                        USHORT nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
-                        for (USHORT i=0; i<nCount; i++)
-                            pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
-                                                                 pUndoManager->GetRedoActionComment(i) ),
-                                           LIST_APPEND );
-                    }
-                    rSet.Put( aStrLst );
-                }
-                break;
-            default:
-                // get state from sfx view frame
-                GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
-        }
-
-        nWhich = aIter.NextWhich();
-    }
-}
-
 
 //------------------------------------------------------------------
 

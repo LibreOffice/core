@@ -1137,7 +1137,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
+        ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
         ScNoteData aOldData;
         ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
@@ -1741,8 +1741,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMark, 
         }
 
         rDocShell.GetUndoManager()->LeaveListAction();
-        SfxUndoManager* pMgr = rDocShell.GetUndoManager();
-        pMgr->RemoveLastUndoAction();
+        rDocShell.GetUndoManager()->RemoveLastUndoAction();
 
         delete pRefUndoDoc;
         delete pUndoData;
@@ -2618,7 +2617,6 @@ script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sSource )
 {
-    SFX_APP()->EnterBasicCall();
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
@@ -2662,12 +2660,10 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         }
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
 {
-    SFX_APP()->EnterBasicCall();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
@@ -2689,7 +2685,6 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
             xVBAModuleInfo->removeModuleInfo( sModuleName );
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 
@@ -3126,6 +3121,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                                         ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord, BOOL bApi )
 {
+    ScDocShellModificator aModificator( rDocShell );
+
     if (!nRangeCnt)
         return TRUE;
 
@@ -3287,6 +3284,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     pDoc->UpdatePageBreaks( nTab );
 
     rDocShell.PostPaint(0,0,nTab,MAXCOL,MAXROW,nTab,PAINT_ALL);
+    aModificator.SetDocumentModified();
 
     return bSuccess;
 }
@@ -4866,9 +4864,11 @@ BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
     }
 
     //  Update hat sein eigenes Undo
-
-    pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
-    pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    if (pDoc->IsExecuteLinkEnabled())
+    {
+        pLink->SetDoInsert(bFitBlock);  // beim ersten Update ggf. nichts einfuegen
+        pLink->Update();                // kein SetInCreate -> Update ausfuehren
+    }
     pLink->SetDoInsert(TRUE);       // Default = TRUE
 
     SfxBindings* pBindings = rDocShell.GetViewBindings();

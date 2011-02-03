@@ -49,11 +49,8 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 // header for class SvxShape
 #include <svx/unoshape.hxx>
-// header for GetSdrObjectFromXShape
-#include <svx/unoapi.hxx>
 // header for class E3dScene
 #include <svx/scene3d.hxx>
-#include <rtl/math.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
 //.............................................................................
@@ -107,7 +104,7 @@ VDiagram::~VDiagram()
     delete m_pShapeFactory;
 }
 
-void SAL_CALL VDiagram::init(
+void VDiagram::init(
                 const uno::Reference< drawing::XShapes >& xLogicTarget
               , const uno::Reference< drawing::XShapes >& xFinalTarget
               , const uno::Reference< lang::XMultiServiceFactory >& xFactory )

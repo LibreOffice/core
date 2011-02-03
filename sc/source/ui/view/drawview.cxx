@@ -530,19 +530,15 @@ void ScDrawView::MarkListHasChanged()
 
     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
     BOOL bOle = pViewSh->GetViewFrame()->GetFrame().IsInPlace();
+    uno::Sequence< embed::VerbDescriptor > aVerbs;
     if ( pOle2Obj && !bOle )
     {
         uno::Reference < embed::XEmbeddedObject > xObj = pOle2Obj->GetObjRef();
+        DBG_ASSERT( xObj.is(), "SdrOle2Obj ohne ObjRef" );
         if (xObj.is())
-            pViewSh->SetVerbs( xObj->getSupportedVerbs() );
-        else
-        {
-            DBG_ERROR("SdrOle2Obj ohne ObjRef");
-            pViewSh->SetVerbs( 0 );
-        }
+            aVerbs = xObj->getSupportedVerbs();
     }
-    else
-        pViewSh->SetVerbs( 0 );
+    pViewSh->SetVerbs( aVerbs );
 
     //  Image-Map Editor
 
@@ -767,7 +763,7 @@ void ScDrawView::DeleteMarked()
         (void)pCaptObj; // prevent 'unused variable' compiler warning in pro builds
         ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
         ScDocShell* pDocShell = pViewData ? pViewData->GetDocShell() : 0;
-        SfxUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : 0;
+        ::svl::IUndoManager* pUndoMgr = pDocShell ? pDocShell->GetUndoManager() : 0;
         bool bUndo = pDrawLayer && pDocShell && pUndoMgr && pDoc->IsUndoEnabled();
 
         // remove the cell note from document, we are its owner now

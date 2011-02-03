@@ -45,7 +45,6 @@
 
 class ScEditEngineDefaulter;
 class FontList;
-class PrintDialog;
 class SfxStyleSheetBasePool;
 class SfxStyleSheetHint;
 struct ChartSelectionInfo;
@@ -188,7 +187,8 @@ public:
     virtual void    Activate();
     virtual void    Deactivate();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                    GetUndoManager();
 
     virtual void    FillClass( SvGlobalName * pClassName,
                                sal_uInt32 * pFormat,
@@ -303,13 +303,6 @@ public:
     void            DoRecalc( BOOL bApi );
     void            DoHardRecalc( BOOL bApi );
 
-    bool            CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData,
-                                bool bForceSelected, bool bIsAPI );
-    void            PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData );
-    void            Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
-                            ScMarkData* pMarkData, Window* pDialogParent,
-                            BOOL bForceSelected, BOOL bIsAPI );
-
     void            UpdateOle( const ScViewData* pViewData, BOOL bSnapSize = FALSE );
     BOOL            IsOle();
 
@@ -332,6 +325,8 @@ public:
     void            PostPaintCell( const ScAddress& rPos );
     void            PostPaintGridAll();
     void            PostPaintExtras();
+
+    bool            IsPaintLocked() const { return pPaintLockData != NULL; }
 
     void            PostDataChanged();
 

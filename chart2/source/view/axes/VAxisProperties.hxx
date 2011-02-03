@@ -111,7 +111,6 @@ struct AxisProperties
 
     bool        m_bCrossingAxisHasReverseDirection;
     bool        m_bCrossingAxisIsCategoryAxes;
-    bool        m_bAxisBetweenCategories;
 
     //this direction is used to indicate in which direction the labels are to be drawn
     double          m_fLabelDirectionSign;

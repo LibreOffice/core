@@ -528,6 +528,7 @@
 #define SC_UNO_ZOOMTYPE             "ZoomType"
 #define SC_UNO_ZOOMVALUE            "ZoomValue"
 #define SC_UNO_UPDTEMPL             "UpdateFromTemplate"
+#define SC_UNO_VISAREASCREEN        "VisibleAreaOnScreen"
 
 /*Stampit enable/disable print cancel */
 #define SC_UNO_ALLOWPRINTJOBCANCEL  "AllowPrintJobCancel"
@@ -610,6 +611,7 @@
 #define SC_UNONAME_ADDRESS          "Address"
 #define SC_UNONAME_UIREPR           "UserInterfaceRepresentation"
 #define SC_UNONAME_PERSREPR         "PersistentRepresentation"
+#define SC_UNONAME_XLA1REPR         "XLA1Representation"
 #define SC_UNONAME_REFSHEET         "ReferenceSheet"
 
 // --> PB 2004-08-23 #i33095# Security Options

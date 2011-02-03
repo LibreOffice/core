@@ -41,8 +41,9 @@
 // for filter manager
 #include "excrecds.hxx"
 
-#include <oox/core/tokens.hxx>
 #include <formula/grammar.hxx>
+
+using namespace ::oox;
 
 using ::rtl::OString;
 
