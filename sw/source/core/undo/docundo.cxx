@@ -48,6 +48,7 @@
 #include <editsh.hxx>
 #include <unobaseclass.hxx>
 
+#include <limits>
 
 using namespace ::com::sun::star;
 
