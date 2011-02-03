@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@oracle.com
+'*  owner : gregor.hartmann@oracle.com
 '*
 '*  short description : Usage tracking
 '*
@@ -88,7 +88,7 @@ testcase tUsageTracking3
         endif
         
         if ( ShowData.isEnabled() ) then
-            warnlog( "#i97340# - Show data button should not be enabled if nothing is logged" )
+            warnlog( "#i116461# - Show data button should not be enabled if nothing is logged" )
     
             ShowData.click()
             
@@ -100,7 +100,7 @@ testcase tUsageTracking3
             
             kontext "Active"
             if ( Active.exists( 2 ) ) then
-                warnlog( "Messagebox not required as control should not be enabled (see #i97340#)" )
+                warnlog( "Messagebox not required as control should not be enabled (see #i116461#)" )
                 Active.ok()
             
                 kontext "TextImport"

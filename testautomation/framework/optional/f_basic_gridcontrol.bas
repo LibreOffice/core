@@ -39,6 +39,7 @@ sub main
 
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_LOW )
     call tGridcontrolLoad
+    call tTabcontrolLoad
     hSetMacroSecurityAPI( GC_MACRO_SECURITY_LEVEL_DEFAULT )
 
     call hStatusOut()
