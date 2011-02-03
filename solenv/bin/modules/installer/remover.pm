@@ -37,8 +37,8 @@ sub remove_leading_and_ending_whitespaces
 {
     my ( $stringref ) = @_;
 
-    $$stringref =~ s/^\s*//;
-    $$stringref =~ s/\s*$//;
+    $$stringref =~ s/^\s+//;
+    $$stringref =~ s/\s+$//;
 }
 
 sub remove_leading_and_ending_quotationmarks
