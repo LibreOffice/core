@@ -35,6 +35,7 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <swrect.hxx>
+#include <vector>
 
 class SwDoc;
 class SwFrm;
@@ -167,8 +168,13 @@ public:
 
 class SwLayCacheIoImpl
 {
-    SvBytes         aRecTypes;
-    SvULongs        aRecSizes;
+private:
+    struct RecTypeSize {
+        BYTE  type;
+        ULONG size;
+        RecTypeSize(BYTE typ, ULONG siz) : type(typ), size(siz) {}
+    };
+    std::vector<RecTypeSize> aRecords;
 
     SvStream        *pStream;
 

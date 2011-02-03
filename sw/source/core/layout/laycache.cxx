@@ -1186,13 +1186,10 @@ SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, BOOL bWrtMd ) :
 BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )
 {
     BOOL bRes = TRUE;
-    UINT16 nLvl = aRecTypes.Count();
-    OSL_ENSURE( nLvl == aRecSizes.Count(), "OpenRec: Level" );
     UINT32 nPos = pStream->Tell();
     if( bWriteMode )
     {
-        aRecTypes.Insert( cType, nLvl );
-        aRecSizes.Insert( nPos, nLvl );
+        aRecords.push_back( RecTypeSize(cType, nPos) );
         *pStream << (UINT32) 0;
     }
     else
@@ -1200,19 +1197,19 @@ BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )
         UINT32 nVal;
         *pStream >> nVal;
         BYTE cRecTyp = (BYTE)nVal;
-        aRecTypes.Insert( cRecTyp, nLvl );
-        sal_uInt32 nSize = nVal >> 8;
-        aRecSizes.Insert( nPos + nSize, nLvl );
         if( !nVal || cRecTyp != cType ||
             pStream->GetErrorCode() != SVSTREAM_OK || pStream->IsEof() )
         {
             OSL_ENSURE( nVal, "OpenRec: Record-Header is 0" );
-            OSL_ENSURE( cRecTyp == cType,
-                    "OpenRec: Wrong Record Type" );
-            aRecTypes[nLvl] = 0;
-            aRecSizes[nLvl] = pStream->Tell();
+            OSL_ENSURE( cRecTyp == cType, "OpenRec: Wrong Record Type" );
+            aRecords.push_back( RecTypeSize(0, pStream->Tell()) );
             bRes = sal_False;
             bError = TRUE;
+        }
+        else
+        {
+            sal_uInt32 nSize = nVal >> 8;
+            aRecords.push_back( RecTypeSize(cRecTyp, nPos+nSize) );
         }
     }
     return bRes;
@@ -1223,19 +1220,16 @@ BOOL SwLayCacheIoImpl::OpenRec( BYTE cType )
 BOOL SwLayCacheIoImpl::CloseRec( BYTE )
 {
     BOOL bRes = TRUE;
-    UINT16 nLvl = aRecTypes.Count();
-    OSL_ENSURE( nLvl == aRecSizes.Count(), "CloseRec: wrong Level" );
-    OSL_ENSURE( nLvl, "CloseRec: no levels" );
-    if( nLvl )
+    OSL_ENSURE( !aRecords.empty(), "CloseRec: no levels" );
+    if( !aRecords.empty() )
     {
-        nLvl--;
         UINT32 nPos = pStream->Tell();
         if( bWriteMode )
         {
-            UINT32 nBgn = aRecSizes[nLvl];
+            UINT32 nBgn = aRecords.back().size;
             pStream->Seek( nBgn );
             UINT32 nSize = nPos - nBgn;
-            UINT32 nVal = ( nSize << 8 ) | aRecTypes[nLvl];
+            UINT32 nVal = ( nSize << 8 ) | aRecords.back().type;
             *pStream << nVal;
             pStream->Seek( nPos );
             if( pStream->GetError() != SVSTREAM_OK )
@@ -1243,7 +1237,7 @@ BOOL SwLayCacheIoImpl::CloseRec( BYTE )
         }
         else
         {
-            UINT32 n = aRecSizes[nLvl];
+            UINT32 n = aRecords.back().size;
             OSL_ENSURE( n >= nPos, "CloseRec: to much data read" );
             if( n != nPos )
             {
@@ -1254,9 +1248,7 @@ BOOL SwLayCacheIoImpl::CloseRec( BYTE )
             if( pStream->GetErrorCode() != SVSTREAM_OK )
                 bRes = FALSE;
         }
-
-        aRecTypes.Remove( nLvl, 1 );
-        aRecSizes.Remove( nLvl, 1 );
+        aRecords.pop_back();
     }
 
     if( !bRes )
@@ -1267,16 +1259,14 @@ BOOL SwLayCacheIoImpl::CloseRec( BYTE )
 
 UINT32 SwLayCacheIoImpl::BytesLeft()
 {
-    UINT16 nLvl = aRecSizes.Count();
     UINT32 n = 0;
-    if( !bError && nLvl )
+    if( !bError && !aRecords.empty() )
     {
-        UINT32 nEndPos = aRecSizes[ nLvl-1 ];
+        UINT32 nEndPos = aRecords.back().size;
         UINT32 nPos = pStream->Tell();
         if( nEndPos > nPos )
             n = nEndPos - nPos;
     }
-
     return n;
 }
 
@@ -1301,7 +1291,7 @@ void SwLayCacheIoImpl::SkipRec()
 {
     BYTE c = Peek();
     OpenRec( c );
-    pStream->Seek( aRecSizes[aRecSizes.Count()-1] );
+    pStream->Seek( aRecords.back().size );
     CloseRec( c );
 }
 
