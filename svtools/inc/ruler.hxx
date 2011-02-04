@@ -41,62 +41,57 @@ class DataChangedEvent;
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class Ruler
 
-Diese Klasse dient zur Anzeige eines Lineals. Dabei kann diese Klasse nicht
-nur als Anzeige-Control verwendet werden, sondern auch als aktives Control
-zum Setzen/Verschieben von Tabulatoren und Raendern.
+This class is used for displaying a ruler, but it can also be used
+for setting or moving tabs and margins.
 
 --------------------------------------------------------------------------
 
 WinBits
 
-WB_HORZ             Lineal wird horizontal dargestellt
-WB_VERT             Lineal wird vertikal dargestellt
-WB_3DLOOK           3D-Darstellung
-WB_BORDER           Border am unteren/rechten Rand
-WB_EXTRAFIELD       Feld in der linken/oberen Ecke zur Anzeige und
-                    Auswahl von Tabs, Null-Punkt, ...
+WB_HORZ             ruler is displayed horizontally
+WB_VERT             ruler is displayed vertically
+WB_3DLOOK           3D look
+WB_BORDER           border at the bottom/right margin
+WB_EXTRAFIELD       Field in the upper left corner for
+                    displaying and selecting tabs, origin of coordinates, ...
 WB_RIGHT_ALIGNED    Marks the vertical ruler as right aligned
 
 --------------------------------------------------------------------------
 
-Beim Lineal werden alle Werte als Pixel-Werte eingestellt. Dadurch werden
-doppelte Umrechnungen und Rundungsfehler vermieden und die Raender werden
-im Lineal auch an der Position angezeigt, den Sie auch im Dokument haben.
-Dadurch kann die Applikation zum Beispiel bei Tabellendarstellung auch
-eigene Rundungen vornehmen und die Positionen im Lineal passen trotzdem noch
-zu denen im Dokument. Damit aber das Lineal weiss, wie das Dokument auf dem
-Bildschirm dargestellt wird, muessen noch ein paar zusaetzliche Werte
-eingestellt werden.
+All ruler parameters are set in pixel units. This way double conversions
+and rounding errors are avoided and the ruler displays the margins
+at their actual position in the document. Because of this, the application can,
+for example in tables, do its own roundings and the positions on the ruler will
+still match those in the document. However, for the ruler to know how the
+document is displayed on the screen, some additional values have to be configured
 
-Mit SetWinPos() wird der Offset des Edit-Fenster zum Lineal eingestellt.
-Dabei kann auch die Breite des Fensters eingestellt werden. Wenn bei den
-Werten 0 uebergeben wird, wird die Position/Breite vom Fenster automatisch
-so breit gesetzt, wie das Lineal breit ist.
+SetWinPos() sets the offset of the ruler's edit window. In doing so,
+the width of the window can also be configured. If there is a 0 among the
+values passed to the function, the position/width is automatically set to
+the width of the ruler.
 
-Mit SetPagePos() wird der Offset der Seite zum Edit-Fenster eingestellt und
-die Breite der Seite eingestellt. Wenn bei den Werten 0 uebergeben wird,
-wird die Position/Breite automatisch so gesetzt, als ob die Seite das ganze
-Editfenster ausfuellen wuerde.
+SetPagePos() sets the offset of the page relative to the edit window and the
+width of the page. If there is a 0 among the values passed to the function,
+the position/width is automatically set as if the page filled the whole edit window.
 
-Mit SetBorderPos() kann der Offset eingestellt werden, ab dem der
-Border ausgegeben wird. Die Position bezieht sich auf die linke bzw. obere
-Fensterkante. Dies wird gebraucht, wenn ein horizontales und vertikales
-Lineal gleichzeitig sichtbar sind. Beispiel:
+SetBorderPos() sets the offset of the border. The position is relative to
+the upper/left margin of the window. This is needed when there are a horizontal
+and a vertical ruler visible at the same time. Example:
         aHRuler.SetBorderPos( aVRuler.GetSizePixel().Width()-1 );
 
-Mit SetNullOffset() wird der Null-Punkt bezogen auf die Seite gesetzt.
+SetNullOffset() sets the origin relative to the page.
 
-Alle anderen Werte (Raender, Einzug, Tabs, ...) beziehen sich auf den 0 Punkt,
-der mit SetNullOffset() eingestellt wird.
+All the other values (margins, indentation, tabs, ...) refer to the origin,
+which is set with SetNullOffset().
 
-Die Werte werden zum Beispiel folgendermassen berechnet:
+The values are computed as described below:
 
-- WinPos (wenn beide Fenster den gleichen Parent haben)
+- WinPos (if both windows have the same parent)
 
     Point aHRulerPos = aHRuler.GetPosPixel();
     Point aEditWinPos = aEditWin.GetPosPixel();
@@ -107,16 +102,15 @@ Die Werte werden zum Beispiel folgendermassen berechnet:
     Point aPagePos = aEditWin.LogicToPixel( aEditWin.GetPagePos() );
     aHRuler.SetPagePos( aPagePos().X() );
 
-- Alle anderen Werte
+- All other values
 
-    Die logischen Werte zusammenaddieren, als Position umrechnen und
-    die vorher gemerkten Pixel-Positionen (von PagePos und NullOffset)
-    entsprechend abziehen.
+    Add the logical values, recompute as position and subtract the
+    previously saved pixel positions (of PagePos and Null Offset).
 
 --------------------------------------------------------------------------
 
-Mit SetUnit() und SetZoom() wird eingestellt, in welcher Einheit das Lineal
-die Werte anzeigt. Folgende Einheiten werden akzeptiert:
+SetUnit() and SetZoom() configure which unit is used to display
+the values on the ruler. The following units are accepted:
 
     FUNIT_MM
     FUNIT_CM (Default)
