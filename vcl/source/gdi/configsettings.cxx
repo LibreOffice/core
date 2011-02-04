@@ -134,7 +134,6 @@ void SettingsConfigItem::getValues()
     m_aSettings.clear();
 
     Sequence< OUString > aNames( GetNodeNames( OUString() ) );
-    m_aSettings.resize( aNames.getLength() );
 
     for( int j = 0; j < aNames.getLength(); j++ )
     {
