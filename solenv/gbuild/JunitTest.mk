@@ -28,7 +28,7 @@
 
 # JunitTest class
 
-gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER)
+gb_JunitTest_JAVACOMMAND := $(JAVAINTERPRETER) $(JAVAIFLAGS)
 
 .PHONY : $(call gb_JunitTest_get_clean_target,%)
 $(call gb_JunitTest_get_clean_target,%) : $(call gb_JavaClassSet_get_clean_target,$(call gb_JunitTest_get_classsetname,%))
@@ -45,10 +45,7 @@ $(call gb_JunitTest_get_target,%) :
 define gb_JunitTest_JunitTest
 $(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
 $(call gb_JunitTest_get_target,$(1)) : CLASSES :=
-$(call gb_JunitTest_get_target,$(1)) : DEFS := \
-    -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/openoffice.org3/program/soffice \
-    -Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
-    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
+$(call gb_JunitTest_JunitTest_platform,$(1))
 
 $(call gb_JavaClassSet_JavaClassSet,$(call gb_JunitTest_get_classsetname,$(1)))
 $(call gb_JunitTest_get_target,$(1)) : $(call gb_JavaClassSet_get_target,$(call gb_JunitTest_get_classsetname,$(1)))

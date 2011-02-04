@@ -362,6 +362,16 @@ $(call gb_LinkTarget_get_target,$(2)) : RPATH :=
 
 endef
 
+# JunitTest class
+
+define gb_JunitTest_JunitTest_platform
+$(call gb_JunitTest_get_target,$(1)) : DEFS := \
+    -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/openoffice.org3/program/soffice \
+    -Dorg.openoffice.test.arg.env=LD_LIBRARY_PATH \
+    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
+
+endef
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib

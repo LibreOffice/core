@@ -409,6 +409,15 @@ $(call gb_LinkTarget_get_target,$(2)) : LAYER := NONE
 
 endef
 
+# JunitTest class
+
+define gb_JunitTest_JunitTest_platform
+$(call gb_JunitTest_get_target,$(1)) : DEFS := \
+    -Dorg.openoffice.test.arg.soffice=path:$(OUTDIR)/installation/opt/OpenOffice.org.app/Contents/MacOS/soffice \
+    -Dorg.openoffice.test.arg.env=DYLD_LIBRARY_PATH \
+    -Dorg.openoffice.test.arg.user=file://$(call gb_JunitTest_get_userdir,$(1)) \
+
+endef
 
 # SdiTarget class
 
