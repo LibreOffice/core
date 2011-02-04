@@ -161,11 +161,11 @@ bool Options_Impl::initOptions_Impl(std::vector< std::string > & rArgs)
                     return badOption("invalid", option.c_str());
                 }
                 return printUsage();
-                break;
+                // break; // unreachable
             }
         default:
             return badOption("unknown", option.c_str());
-            break;
+            // break; // unreachable
         }
     }
     return true;
