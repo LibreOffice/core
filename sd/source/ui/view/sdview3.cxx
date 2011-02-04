@@ -223,6 +223,7 @@ if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
                 case META_GRADIENTEX_ACTION:
                 case META_BMPSCALEPART_ACTION:
                 case META_BMPEXSCALEPART_ACTION:
+                case META_RENDERGRAPHIC_ACTION:
                     bVector = true;
                     break;
                 case META_BMP_ACTION:
