@@ -35,6 +35,7 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 
 #include <svgfilter.hxx>
+#include <svgdialog.hxx>
 
 using ::rtl::OUString;
 using namespace ::cppu;
@@ -56,13 +57,26 @@ extern "C"
     {
         void * pRet = 0;
 
-        OUString implName = OUString::createFromAscii( pImplName );
-        if ( pServiceManager && implName.equals(SVGFilter_getImplementationName()) )
+        const OUString aImplName = OUString::createFromAscii( pImplName );
+
+        if( pServiceManager  )
         {
-            Reference< XSingleServiceFactory > xFactory( createSingleFactory(
-                reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
-                OUString::createFromAscii( pImplName ),
-                SVGFilter_createInstance, SVGFilter_getSupportedServiceNames() ) );
+            Reference< XSingleServiceFactory > xFactory;
+
+            if( aImplName.equals( SVGFilter_getImplementationName() ) )
+            {
+                xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+                    reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                    OUString::createFromAscii( pImplName ),
+                    SVGFilter_createInstance, SVGFilter_getSupportedServiceNames() ) );
+            }
+            else if( aImplName.equals( SVGDialog_getImplementationName() ) )
+            {
+                xFactory = Reference< XSingleServiceFactory >( createSingleFactory(
+                    reinterpret_cast< XMultiServiceFactory * >( pServiceManager ),
+                    OUString::createFromAscii( pImplName ),
+                    SVGDialog_createInstance, SVGDialog_getSupportedServiceNames() ) );
+            }
 
             if (xFactory.is())
             {

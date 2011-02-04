@@ -2,9 +2,13 @@
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
 # 
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# Copyright 2008 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
+#
+# $RCSfile: makefile.mk,v $
+#
+# $Revision: 1.10.110.6 $
 #
 # This file is part of OpenOffice.org.
 #
@@ -39,6 +43,8 @@ VISIBILITY_HIDDEN=TRUE
 # --- Types -------------------------------------
 
 SLOFILES=	$(SLO)$/svguno.obj			\
+            $(SLO)$/svgdialog.obj		\
+            $(SLO)$/impsvgdialog.obj	\
             $(SLO)$/svgfilter.obj		\
             $(SLO)$/svgexport.obj		\
             $(SLO)$/svgfontexport.obj	\
@@ -52,17 +58,18 @@ SLOFILES+=		$(SLO)$/svgimport.obj
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)
 
 SHL1STDLIBS=\
-    $(EDITENGLIB)			\
     $(SVXCORELIB)			\
+    $(EDITENGLIB)			\
     $(XMLOFFLIB)		\
-    $(SVTOOLLIB)		\
     $(VCLLIB)			\
     $(UNOTOOLSLIB)		\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB) 
+    $(SALLIB) 			\
+    $(BASEGFXLIB) 		\
+    $(SVTOOLLIB)		
 
 .IF "$(SOLAR_JAVA)"!=""
 SHL1STDLIBS+=\
