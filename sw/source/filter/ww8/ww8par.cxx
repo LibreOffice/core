@@ -3699,6 +3699,34 @@ void wwSectionManager::InsertSegments()
             SwFmtPageDesc aDesc(SetSwFmtPageDesc(aIter, aStart, bIgnoreCols));
             if (!aDesc.GetPageDesc())
                 continue;
+
+            // special case handling for odd/even section break
+            // a) as before create a new page style for the section break
+            // b) set Layout of generated page style to right/left ( according
+            //    to section break odd/even )
+            // c) create a new style to follow the break page style
+            if ( aIter->maSep.bkc == 3 || aIter->maSep.bkc == 4 )
+            {
+                // SetSwFmtPageDesc calls some methods that could
+                // modify aIter (e.g. wwSection ).
+                // Since  we call SetSwFmtPageDesc below to generate the
+                // 'Following' style of the Break style, it is safer
+                // to take  a copy of the contents of aIter.
+                wwSection aTmpSection = *aIter;
+                // create a new following page style
+                SwFmtPageDesc aFollow(SetSwFmtPageDesc(aIter, aStart, bIgnoreCols));
+                // restore any contents of aIter trashed by SetSwFmtPageDesc
+                *aIter = aTmpSection;
+
+                // Handle the section break
+                UseOnPage eUseOnPage = nsUseOnPage::PD_LEFT;
+                if ( aIter->maSep.bkc == 4 ) // Odd ( right ) Section break
+                    eUseOnPage = nsUseOnPage::PD_RIGHT;
+
+                aDesc.GetPageDesc()->WriteUseOn( eUseOnPage );
+                aDesc.GetPageDesc()->SetFollow( aFollow.GetPageDesc() );
+            }
+
             GiveNodePageDesc(aIter->maStart, aDesc, mrReader.rDoc);
         }
 
