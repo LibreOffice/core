@@ -132,35 +132,6 @@ throw ( RuntimeException )
     //need to check if storage has any scripts
     try
     {
-        /* need to replace this with something better, now logical names are
-         * gone
-
-        Reference< XInterface > xInterface;
-        Any a = m_xContext->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPTSTORAGEMANAGER_SERVICE )) );
-        if ( sal_False == ( a >>= xInterface ) )
-        {
-            throw RuntimeException(
-                OUSTR( "ScriptSecurityManager::addScriptStorage: could not obtain ScriptStorageManager singleton" ),
-            Reference< XInterface >() );
-        }
-        validateXRef( xInterface,
-            "ScriptSecurityManager::addScriptStorage: cannot get Storage service" );
-        Reference< storage::XScriptStorageManager > xScriptStorageManager(
-            xInterface, UNO_QUERY_THROW );
-        Reference< XInterface > xScriptStorage =
-            xScriptStorageManager->getScriptStorage( storageID );
-        validateXRef( xScriptStorage,
-          "ScriptNameResolverImpl::getStorageInstance: cannot get Script Storage service" );
-        Reference< storage::XScriptInfoAccess > xScriptInfoAccess =
-            Reference< storage::XScriptInfoAccess > ( xScriptStorage,
-            UNO_QUERY_THROW );
-        Sequence< ::rtl::OUString > logicalNames = xScriptInfoAccess->getScriptLogicalNames();
-        if( !logicalNames.getLength() ) // we have no logical names
-        {
-            return;
-        } */
-
         // we have some scripts so read config & decide on that basis
         // Setup flags: m_runMacroSetting, m_warning, m_confirmationRequired,
         readConfiguration();
