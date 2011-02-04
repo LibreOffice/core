@@ -490,58 +490,6 @@ LifeTimeGuard::~LifeTimeGuard()
     }
 }
 
-/*
-the XCloseable::close method has to be implemented in the following way:
-::close
-{
-    //hold no mutex
-
-    if( !m_aLifeTimeManager.g_close_startTryClose( bDeliverOwnership ) )
-        return;
-    //no mutex is acquired
-
-    // At the end of this method may we must dispose ourself ...
-    // and may nobody from outside hold a reference to us ...
-    // then it's a good idea to do that by ourself.
-    uno::Reference< uno::XInterface > xSelfHold( static_cast< ::cppu::OWeakObject* >(this) );
-
-    //the listeners have had no veto
-    //check wether we self can close
-    {
-        util::CloseVetoException aVetoException = util::CloseVetoException(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "the model itself could not be closed" ) )
-                        , static_cast< ::cppu::OWeakObject* >(this));
-
-        if( m_aLifeTimeManager.g_close_isNeedToCancelLongLastingCalls( bDeliverOwnership, aVetoException ) )
-        {
-            ////you can empty this block, if you never start longlasting calls or
-            ////if your longlasting calls are per default not cancelable (check how you have constructed your LifeTimeManager)
-
-            sal_Bool bLongLastingCallsAreCanceled = sal_False;
-            try
-            {
-                //try to cancel running longlasting calls
-                //// @todo
-            }
-            catch( uno::Exception& ex )
-            {
-                //// @todo
-                //do not throw anything here!! (without endTryClose)
-            }
-            //if not successful canceled
-            if(!bLongLastingCallsAreCanceled)
-            {
-                m_aLifeTimeManager.g_close_endTryClose( bDeliverOwnership, sal_True );
-                throw aVetoException;
-            }
-        }
-
-    }
-    m_aLifeTimeManager.g_close_endTryClose_doClose();
-}
-*/
-
 }//end namespace apphelper
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include <rsc/rscsfx.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
@@ -126,11 +123,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
 
-    // Get data source ...
-
-//  uno::Reference< uno::XInterface > xPipe;
-//  uno::Reference< io::XActiveDataSource > xSource;
-
     sal_Bool bEncrypted = sal_False;
     rtl::OUString sStream(sDocName);
     if( xStorage.is() )
@@ -167,32 +159,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             return SCERR_IMPORT_UNKNOWN;
         }
     }
-    // #99667#; no longer necessary
-/*  else if ( pMedium )
-    {
-        // if there is a medium and if this medium has a load environment,
-        // we get an active data source from the medium.
-        pMedium->GetInStream()->Seek( 0 );
-        xSource = pMedium->GetDataSource();
-        DBG_ASSERT( xSource.is(), "got no data source from medium" );
-        if( !xSource.is() )
-            return sal_False;
-
-        // get a pipe for connecting the data source to the parser
-        xPipe = xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) );
-        DBG_ASSERT( xPipe.is(),
-                "XMLReader::Read: com.sun.star.io.Pipe service missing" );
-        if( !xPipe.is() )
-            return sal_False;
-
-        // connect pipe's output stream to the data source
-        uno::Reference<io::XOutputStream> xPipeOutput( xPipe, uno::UNO_QUERY );
-        xSource->setOutputStream( xPipeOutput );
-
-        aParserInput.aInputStream =
-            uno::Reference< io::XInputStream >( xPipe, uno::UNO_QUERY );
-    }*/
     else
         return SCERR_IMPORT_UNKNOWN;
 
@@ -223,14 +189,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
     // connect parser and filter
     uno::Reference<xml::sax::XParser> xParser( xXMLParser, uno::UNO_QUERY );
     xParser->setDocumentHandler( xDocHandler );
-
-    // parse
-/*  if( xSource.is() )
-    {
-        uno::Reference<io::XActiveDataControl> xSourceControl( xSource, uno::UNO_QUERY );
-        if( xSourceControl.is() )
-            xSourceControl->start();
-    }*/
 
     try
     {
@@ -677,11 +635,6 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
         xOut = xStream->getOutputStream();
     }
-    // #99667#; no longer necessary
-/*  else if ( pMedium )
-    {
-        xOut = pMedium->GetDataSink();
-    }*/
 
     // set Base URL
     uno::Reference< beans::XPropertySet > xInfoSet;
@@ -761,10 +714,6 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
 
         pSharedData = pExport->GetSharedData();
 
-        //stream is closed by SAX parser
-        //if (xOut.is())
-        //    xOut->closeOutput();
-    }
     return bRet;
 }
 

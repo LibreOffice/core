@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 #include "XMLExportDataPilot.hxx"
 #include <xmloff/xmltoken.hxx>
@@ -180,14 +178,6 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
         nQueryEntryCount = nEntries;
         if (nQueryEntryCount)
         {
-            // There is never a target range in a data pilot.
-/*          if (!aQueryParam.bInplace)
-            {
-                ScAddress aTargetAddress(aQueryParam.nDestCol, aQueryParam.nDestRow, aQueryParam.nDestTab);
-                rtl::OUString sAddress;
-                ScXMLConverter::GetStringFromAddress( sAddress, aTargetAddress, pDoc );
-                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TARGET_RANGE_ADDRESS, sAddress);
-            }*/
             if(!((aQueryParam.nCol1 == aQueryParam.nCol2) && (aQueryParam.nRow1 == aQueryParam.nRow2) &&
                         (static_cast<SCCOLROW>(aQueryParam.nCol1) == static_cast<SCCOLROW>(aQueryParam.nRow1)) &&
                         (aQueryParam.nCol1 == 0) && (aQueryParam.nTab == SCTAB_MAX)))

@@ -285,8 +285,6 @@ class ScXMLChangeCellContext : public SvXMLImportContext
     double&                 rDateTimeValue;
     double                  fValue;
     sal_uInt16&             rType;
-//    sal_Bool                bIsMatrix;
-//    sal_Bool                bIsCoveredMatrix;
     sal_Bool                bEmpty;
     sal_Bool                bFirstParagraph;
     sal_Bool                bString;
@@ -1293,7 +1291,6 @@ void ScXMLChangeCellContext::EndElement()
             if (GetScImport().GetDocument())
                 rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
             GetScImport().GetTextImport()->ResetCursor();
-            // delete pEditTextObj;
             pEditTextObj->release();
         }
         else
@@ -1306,24 +1303,6 @@ void ScXMLChangeCellContext::EndElement()
                     rOldCell = new ScValueCell(fValue);
                 if (rType == NUMBERFORMAT_DATE || rType == NUMBERFORMAT_TIME)
                     rInputString = sText;
-            }
-            else
-            {
-                // do nothing, this has to do later (on another place)
-                /*ScAddress aCellPos;
-                rOldCell = new ScFormulaCell(GetScImport().GetDocument(), aCellPos, sFormula);
-                if (bString)
-                    static_cast<ScFormulaCell*>(rOldCell)->SetString(sValue);
-                else
-                    static_cast<ScFormulaCell*>(rOldCell)->SetDouble(fValue);
-                static_cast<ScFormulaCell*>(rOldCell)->SetInChangeTrack(sal_True);
-                if (bIsCoveredMatrix)
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatrixFlag(MM_REFERENCE);
-                else if (bIsMatrix && nMatrixRows && nMatrixCols)
-                {
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatrixFlag(MM_FORMULA);
-                    static_cast<ScFormulaCell*>(rOldCell)->SetMatColsRows(static_cast<SCCOL>(nMatrixCols), static_cast<SCROW>(nMatrixRows));
-                }*/
             }
         }
     }

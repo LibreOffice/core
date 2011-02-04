@@ -71,8 +71,6 @@ private:
     PushButton      aBtnClose;
     ScrollBar       aSlider;
     FixedText       aFixedText;
-    //FixedText       aFixedText1;
-    //Edit            aEdit1;
 
     ScTabViewShell* pTabViewShell;
     ScDocument*     pDoc;

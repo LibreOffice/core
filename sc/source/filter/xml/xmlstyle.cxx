@@ -105,7 +105,6 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_ALLPADDING ),
     MAP( "ParaBottomMargin", XML_NAMESPACE_FO, XML_PADDING_BOTTOM, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING ),
     MAP( "ParaIndent", XML_NAMESPACE_FO, XML_MARGIN_LEFT, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_MEASURE16, 0 ),
-//  MAP( "ParaIsHyphenation", XML_NAMESPACE_FO, XML_HYPHENATE, XML_TYPE_PROP_TEXT|XML_TYPE_BOOL, 0 ),
     MAP( "ParaLeftMargin", XML_NAMESPACE_FO, XML_PADDING_LEFT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_LEFTPADDING ),
     MAP( "ParaRightMargin", XML_NAMESPACE_FO, XML_PADDING_RIGHT, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING ),
     MAP( "ParaTopMargin", XML_NAMESPACE_FO, XML_PADDING_TOP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_MEASURE, CTF_SC_TOPPADDING ),
@@ -122,7 +121,6 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
     MAP( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),
-//    MAP( "WritingMode", XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_TYPE_PROP_PARAGRAPH|XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
 
     MAP_END()
 };
@@ -132,7 +130,6 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
     MAP( "IsManualPageBreak", XML_NAMESPACE_FO, XML_BREAK_BEFORE, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_BREAKBEFORE, 0),
     MAP( "IsVisible", XML_NAMESPACE_TABLE, XML_DISPLAY, XML_TYPE_PROP_TABLE_COLUMN|XML_SC_TYPE_EQUAL|MID_FLAG_SPECIAL_ITEM, CTF_SC_ISVISIBLE ),
     MAP( "Width", XML_NAMESPACE_STYLE, XML_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_MEASURE, 0 ),
-//  MAP( "OptimalWidth", XML_NAMESPACE_STYLE, XML_USE_OPTIMAL_COLUMN_WIDTH, XML_TYPE_PROP_TABLE_COLUMN|XML_TYPE_BOOL, 0),
     MAP_END()
 };
 
@@ -543,31 +540,6 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
     uno::Reference< beans::XPropertySet > /* rPropSet */ ) const
 {
     //#108550#; don't filter the height, so other applications know the calculated height
-
-/*  XMLPropertyState* pHeight = NULL;
-    XMLPropertyState* pOptimalHeight = NULL;
-
-    for( ::std::vector< XMLPropertyState >::iterator propertie = rProperties.begin();
-         propertie != rProperties.end();
-         ++propertie )
-    {
-        switch( getPropertySetMapper()->GetEntryContextId( propertie->mnIndex ) )
-        {
-            case CTF_SC_ROWHEIGHT:              pHeight = propertie; break;
-            case CTF_SC_ROWOPTIMALHEIGHT:       pOptimalHeight = propertie; break;
-        }
-    }
-    if ((pHeight && pOptimalHeight && ::cppu::any2bool( pOptimalHeight->maValue )) ||
-        (pHeight && !pOptimalHeight))
-    {
-        pHeight->mnIndex = -1;
-        pHeight->maValue.clear();
-    }
-    if (pOptimalHeight)
-    {
-        pOptimalHeight->mnIndex = -1;
-        pOptimalHeight->maValue.clear();
-    }*/
 }
 
 ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(

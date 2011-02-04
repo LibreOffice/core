@@ -32,7 +32,6 @@
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
-
 #include <memory>
 #include "AccessibleText.hxx"
 #include "AccessibleCell.hxx"
@@ -964,18 +963,6 @@ SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
 SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool /* bCreate */ )
 {
     //#102219#; there should no EditViewForwarder be, because the cell is now readonly in this interface
-/*  if (!mpEditViewForwarder)
-    {
-        SCCOL nCol;
-        SCROW nRow;
-        EditView* pEditView;
-        mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
-
-        mpEditViewForwarder = new ScEditViewForwarder(pEditView, mpViewShell->GetWindowByPos(meSplitPos));
-    }
-    else if (bCreate)
-        mpEditViewForwarder->GrabFocus();
-    return mpEditViewForwarder;*/
     return NULL;
 }
 
@@ -1179,9 +1166,6 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 pEnginePool->FreezeIdRanges();
                 mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
                 mbEditEngineCreated = sal_True;
-                //  currently, GetPortions doesn't work if UpdateMode is FALSE,
-                //  this will be fixed (in EditEngine) by src600
-        //      pEditEngine->SetUpdateMode( FALSE );
                 mpEditEngine->EnableUndo( FALSE );
                 mpEditEngine->SetRefMapMode( MAP_100TH_MM );
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
@@ -1402,9 +1386,6 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             pEnginePool->FreezeIdRanges();
             pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
-        //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
         pEditEngine->EnableUndo( FALSE );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
@@ -1638,9 +1619,6 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
             pEnginePool->FreezeIdRanges();
             mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
         }
-        //  currently, GetPortions doesn't work if UpdateMode is FALSE,
-        //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( FALSE );
         mpEditEngine->EnableUndo( FALSE );
         if (mpDocSh)
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());

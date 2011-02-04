@@ -2499,27 +2499,7 @@ void lcl_removeEmptyGroupShapes( const Reference< drawing::XShapes>& xParent )
 
 bool ChartView::impl_AddInDrawsAllByItself()
 {
-    bool bRet = false;
-    /*
-    uno::Reference< beans::XPropertySet > xProp( m_xChartModel, uno::UNO_QUERY );
-    if( xProp.is()) try
-    {
-        uno::Reference< util::XRefreshable > xAddIn;
-        xProp->getPropertyValue( C2U( "AddIn" ) ) >>= xAddIn;
-        if( xAddIn.is() )
-        {
-            rtl::OUString aBaseDiagram;
-            xProp->getPropertyValue( C2U( "BaseDiagram" ) ) >>= aBaseDiagram;
-            if(aBaseDiagram.getLength())
-                bRet = true;
-        }
-    }
-    catch( uno::Exception& e )
-    {
-        ASSERT_EXCEPTION( e );
-    }
-    */
-    return bRet;
+    return false;
 }
 
 void ChartView::impl_refreshAddIn()

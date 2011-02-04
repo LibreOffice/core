@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 
@@ -328,27 +325,10 @@ void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeData)
         rStream.Read(&rTypeData.LabelText[i], sizeof(Sc10ChartText));
     rStream.Read(&rTypeData.LeftTitle, sizeof(rTypeData.LeftTitle));
     rStream.Read(&rTypeData.Reserved, sizeof(rTypeData.Reserved));
-    //rStream.Read(&rTypeData, sizeof(rTypeData));
 }
 
 double lcl_PascalToDouble(sal_Char* tp6)
 {
-// #i68483# bah! this was broken forever...
-//   struct
-//   {
-//        sal_uInt8       be  ;     /* biased exponent           */
-//        sal_uInt16      v1  ;     /* lower 16 bits of mantissa */
-//        sal_uInt16      v2  ;     /* next  16 bits of mantissa */
-//        sal_uInt8       v3:7;     /* upper  7 bits of mantissa */
-//        sal_uInt8       s :1;     /* sign bit                  */
-//   } real;
-//
-//   memcpy (&real, tp6, 6);
-//   if (real.be == 0)
-//         return 0.0;
-//   return (((((128 +real.v3) * 65536.0) + real.v2) * 65536.0 + real.v1) *
-//         ldexp ((real.s? -1.0: 1.0), real.be - (129+39)));
-
     sal_uInt8* pnUnsigned = reinterpret_cast< sal_uInt8* >( tp6 );
     // biased exponent
     sal_uInt8 be = pnUnsigned[ 0 ];
@@ -408,7 +388,6 @@ String lcl_MakeOldPageStyleFormatName( USHORT i )
 // Font
 //--------------------------------------------
 
-
 Sc10FontData::Sc10FontData(SvStream& rStream)
 {
     rStream >> Height;
@@ -443,11 +422,9 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
   }
 }
 
-
 //--------------------------------------------
 // Benannte-Bereiche
 //--------------------------------------------
-
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -490,12 +467,9 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
 // Vorlagen
 //--------------------------------------------
 
-
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
 {
   rStream.Read(Name, sizeof(Name));
-  //rStream.Read(&ValueFormat, sizeof(ValueFormat));
-  //rStream.Read(&LogFont, sizeof(LogFont));
   lcl_ReadValueFormat(rStream, ValueFormat);
   lcl_ReadLogFont(rStream, LogFont);
 
@@ -534,15 +508,12 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
 }
 
-
 //--------------------------------------------
 // Datenbank
 //--------------------------------------------
 
-
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
-    //rStream.Read(&DataBaseRec, sizeof(DataBaseRec));
     rStream.Read(&DataBaseRec.Name, sizeof(DataBaseRec.Name));
     rStream >> DataBaseRec.Tab;
     lcl_ReadBlockRect(rStream, DataBaseRec.Block);
@@ -1041,7 +1012,6 @@ ULONG Sc10Import::Import()
 void Sc10Import::LoadFileHeader()
 {
     Sc10FileHeader FileHeader;
-    //rStream.Read(&FileHeader, sizeof(FileHeader));
     lcl_ReadFileHeader(rStream, FileHeader);
 
     nError = rStream.GetError();
@@ -1084,7 +1054,6 @@ void Sc10Import::LoadEditStateInfo()
 
 void Sc10Import::LoadProtect()
 {
-    //rStream.Read(&SheetProtect, sizeof(SheetProtect));
     lcl_ReadSheetProtect(rStream, SheetProtect);
     nError = rStream.GetError();
 
@@ -1115,10 +1084,6 @@ void Sc10Import::LoadScrZoom()
 
 void Sc10Import::LoadPalette()
 {
-    //rStream.Read(TextPalette, sizeof(TextPalette));
-    //rStream.Read(BackPalette, sizeof(BackPalette));
-    //rStream.Read(RasterPalette, sizeof(RasterPalette));
-    //rStream.Read(FramePalette, sizeof(FramePalette));
     lcl_ReadPalette(rStream, TextPalette);
     lcl_ReadPalette(rStream, BackPalette);
     lcl_ReadPalette(rStream, RasterPalette);
@@ -1248,9 +1213,6 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
 
                 INT16 Margin = Max( ( USHORT ) 20, ( USHORT ) ( EJustify * 20 ) );
-//              if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) ||
-//                  ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
-// vielleicht so?
                 if( ( ( OJustify & ojBottomTop ) == ojBottomTop ) )
                     rItemSet.Put( SvxMarginItem( 20, Margin, 20, Margin, ATTR_MARGIN ) );
                 else
@@ -1431,7 +1393,6 @@ void Sc10Import::LoadTables()
         String           aStr;  // Universal-Konvertierungs-String
 
 
-        //rStream.Read(&PageFormat, sizeof(PageFormat));
         lcl_ReadPageFormat(rStream, PageFormat);
 
         USHORT nAt = aPageCollection.InsertFormat(PageFormat);
@@ -1441,7 +1402,6 @@ void Sc10Import::LoadTables()
 
         rStream >> DataBaseIndex;
 
-        //rStream.Read(&TabProtect, sizeof(TabProtect));
         lcl_ReadTabProtect(rStream, TabProtect);
 
         ScTableProtection aProtection;
@@ -1487,18 +1447,6 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
 
-    /*  wofuer wird das benoetigt? Da in SC 1.0 die Anzeigeflags pro Tabelle gelten und nicht pro View
-        Dieses Flag in die ViewOptions eintragen bei Gelegenheit, Sollte der Stephan Olk machen
-        USHORT nDisplayMask = 0xFFFF;
-        USHORT nDisplayValue = 0;
-        if (Tab == 0)
-            nDisplayValue = Display;
-        else
-        {
-            USHORT nDiff = Display ^ nDisplayValue;
-            nDisplayMask &= ~nDiff;
-        }
-    */
         //--------------------------------------------------------------------
         rStream >> Visible;
 
@@ -1687,7 +1635,6 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     /*double Value =*/ ScfTools::ReadLongDouble(rStream);
                     BYTE Len;
                     sal_Char s[256];
-                    //rStream.Read(&Value, sizeof(Value));
                     rStream >> Len;
                     rStream.Read(&s[1], Len);
                     s[0] = '=';
@@ -1761,13 +1708,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         pColData = aFont.pData;
         for( i = 0 ; i < nLimit ; i++, pColData++ )
         {
-            //nEnd = aFont.pData[i].Row;
             nEnd = static_cast<SCROW>(pColData->Row);
-            //if ((nStart <= nEnd) && (aFont.pData[i].Value != 0))
             if ((nStart <= nEnd) && (pColData->Value))
             {
                 FontFamily eFam = FAMILY_DONTKNOW;
-                //Sc10FontData* pFont = pFontCollection->At(aFont.pData[i].Value);
                 Sc10FontData* pFont = pFontCollection->At(pColData->Value);
                 switch (pFont->PitchAndFamily & 0xF0)
                 {
@@ -1795,9 +1739,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     pColData = aColor.pData;
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
-        //nEnd = aColor.pData[i].Row;
         nEnd = static_cast<SCROW>(pColData->Row);
-        //if ((nStart <= nEnd) && (aColor.pData[i].Value != 0))
         if ((nStart <= nEnd) && (pColData->Value))
         {
             Color TextColor(COL_BLACK);
@@ -2196,7 +2138,6 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
       rStream >> rAttr.pData[i].Row;
       rStream >> rAttr.pData[i].Value;
     }
-    //rStream.Read(rAttr.pData, rAttr.Count * sizeof(Sc10ColData));
     nError = rStream.GetError();
   }
   else
@@ -2367,7 +2308,6 @@ void Sc10Import::LoadObjects()
       for (USHORT i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
         rStream >> ObjectType;
-        //rStream.Read(&GraphHeader, sizeof(GraphHeader));
         lcl_ReadGraphHeader(rStream, GraphHeader);
 
         double nPPTX = ScGlobal::nScreenPPTX;
@@ -2395,7 +2335,6 @@ void Sc10Import::LoadObjects()
           case otImage :
           {
            Sc10ImageHeader ImageHeader;
-           //rStream.Read(&ImageHeader, sizeof(ImageHeader));
            lcl_ReadImageHeaer(rStream, ImageHeader);
 
            // Achtung nun kommen die Daten (Bitmap oder Metafile)
@@ -2412,16 +2351,12 @@ void Sc10Import::LoadObjects()
             Sc10ChartHeader ChartHeader;
             Sc10ChartSheetData ChartSheetData;
             Sc10ChartTypeData* pTypeData = new Sc10ChartTypeData;
-            //rStream.Read(&ChartHeader, sizeof(ChartHeader));
             lcl_ReadChartHeader(rStream, ChartHeader);
 
             //! altes Metafile verwenden ??
             rStream.SeekRel(ChartHeader.Size);
 
-            //rStream.Read(&ChartSheetData, sizeof(ChartSheetData));
             lcl_ReadChartSheetData(rStream, ChartSheetData);
-
-            //rStream.Read(pTypeData, sizeof(Sc10ChartTypeData));
             lcl_ReadChartTypeData(rStream, *pTypeData);
 
             Rectangle aRect( Point(nStartX,nStartY), Size(nSizeX,nSizeY) );
@@ -2447,9 +2382,6 @@ void Sc10Import::LoadObjects()
     nError = errUnknownID;
   }
 }
-
-
-
 
 //-----------------------------------------------------------------------------------------------
 

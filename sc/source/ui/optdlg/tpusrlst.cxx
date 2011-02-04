@@ -31,10 +31,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 //------------------------------------------------------------------
-
 #include <vcl/msgbox.hxx>
 
 #include "global.hxx"
@@ -97,7 +94,6 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
         aStrCopyList    ( ScResId( STR_COPYLIST ) ),
         aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
         aStrCopyErr     ( ScResId( STR_COPYERR ) ),
-        //
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
         pUserLists      ( NULL ),
         pDoc            ( NULL ),
@@ -167,8 +163,6 @@ void ScTpUserLists::Init()
         aFtCopyFrom.Disable();
         aEdCopyFrom.Disable();
     }
-
-//  aLbLists.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -232,8 +226,6 @@ void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
         aEdCopyFrom .Enable();
         aBtnCopy    .Enable();
     }
-
-//  aLbLists.GrabFocus();
 }
 
 // -----------------------------------------------------------------------
@@ -354,7 +346,6 @@ void ScTpUserLists::MakeListStr( String& rListStr )
     xub_StrLen  c       = 0;
 
     aInputStr.ConvertLineEnd( LINEEND_LF );
-    //aStr.EraseAllChars( ' ' );
 
     xub_StrLen nToken=rListStr.GetTokenCount(LF);
 
@@ -366,18 +357,6 @@ void ScTpUserLists::MakeListStr( String& rListStr )
         aStr+=aString;
         aStr+=cDelimiter;
     }
-
-    /*
-    // '\n' durch cDelimiter ersetzen:
-    for ( c=0;
-          (c < nLen) && (nFound != STRING_NOTFOUND);
-          c++ )
-    {
-        nFound = aStr.Search( LF, nFound );
-        if ( nFound != STRING_NOTFOUND )
-            aStr[nFound] = cDelimiter;
-    }
-    */
 
     aStr.EraseLeadingChars( cDelimiter );
     aStr.EraseTrailingChars( cDelimiter );

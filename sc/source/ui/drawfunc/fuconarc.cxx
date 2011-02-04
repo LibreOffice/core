@@ -109,18 +109,9 @@ BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 
     if ( pView->IsCreateObj() && rMEvt.IsLeft() )
     {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj( SDRCREATE_NEXTPOINT );
         bReturn = TRUE;
     }
-/*
-    else if ( pView->IsCreateObj() && rMEvt.IsRight() )
-    {
-        // Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
-        pView->EndCreateObj( SDRCREATE_FORCEEND );
-        bReturn = TRUE;
-    }
-*/
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
 }
 

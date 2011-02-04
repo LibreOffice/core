@@ -37,7 +37,6 @@
 #include "scresid.hxx"
 #include "datafdlg.hrc"
 #include "viewdata.hxx"
-//#include "document.hxx"
 #include "docsh.hxx"
 #include "refundo.hxx"
 #include "undodat.hxx"
@@ -51,7 +50,6 @@ using ::rtl::OUStringBuffer;
 //zhangyun
 ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DATAFORM ) ),
-    //
     aBtnNew          ( this, ScResId( BTN_DATAFORM_NEW ) ),
     aBtnDelete          ( this, ScResId( BTN_DATAFORM_DELETE ) ),
     aBtnRestore          ( this, ScResId( BTN_DATAFORM_RESTORE ) ),
@@ -173,7 +171,6 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
         Size    nFixedSize(FIXED_WIDTH, CTRL_HEIGHT );
         Size    nEditSize(EDIT_WIDTH, CTRL_HEIGHT );
 
-        //pFtArray = new FixedText(this);
         aColLength = nEndCol - nStartCol + 1;
 
         //new the controls
@@ -193,7 +190,6 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
                 pEdits[nIndex]->SetSizePixel(nEditSize);
                 pFixedTexts[nIndex]->SetPosPixel(Point(FIXED_LEFT, nTop));
                 pEdits[nIndex]->SetPosPixel(Point(EDIT_LEFT, nTop));
-                //pFixedTexts[nIndex]->SetText(String::CreateFromAscii("W4W-Filter Nr. "));
                 pFixedTexts[nIndex]->SetText(aFieldName);
                 pFixedTexts[nIndex]->Show();
                 pEdits[nIndex]->Show();
@@ -238,9 +234,6 @@ ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri
     aSlider.SetEndScrollHdl( HDL( Impl_ScrollHdl ) );
 
     SetButtonState();
-
-    //end
-    //FreeResource();
 }
 
 ScDataFormDlg::~ScDataFormDlg()
@@ -260,8 +253,6 @@ ScDataFormDlg::~ScDataFormDlg()
 
 void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
 {
-    //ScViewData*   pViewData = pTabViewShell->GetViewData();
-
     String  aFieldName;
     for (sal_uInt16 i = 0; i < aColLength; ++i)
     {

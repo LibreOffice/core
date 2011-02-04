@@ -29,10 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
-
 #include <editeng/editview.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -735,16 +732,6 @@ SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */
 #************************************************************************/
 void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
-//    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
-    /*
-    if ( pPoolItemHint
-         && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
-    {
-        // Die Liste der Farben hat sich geaendert
-        pColorTable = ( (SvxColorTableItem*) pPoolItemHint->GetObject() )->GetColorTable();
-        FillValueSet();
-    }
-    */
 }
 
 

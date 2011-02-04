@@ -790,15 +790,6 @@ void ChartController::executeDispatch_InsertAxisTitle()
             xTitle = TitleHelper::createTitle( eTitleType, ObjectNameProvider::getTitleNameByType(eTitleType), getModel(), m_xCC, apRefSizeProvider.get() );
             aUndoGuard.commitAction();
         }
-
-        /*
-        if( xTitle.is() )
-        {
-            OUString aTitleCID = ObjectIdentifier::createClassifiedIdentifierForObject( xTitle, getModel() );
-            select( uno::makeAny(aTitleCID) );
-            executeDispatch_EditText();
-        }
-        */
     }
     catch( uno::RuntimeException& e)
     {

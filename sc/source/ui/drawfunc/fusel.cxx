@@ -370,12 +370,6 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
-        //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
-        //((VCManager*)(pForm->GetVCContainer()))->
-        //    MouseMove( pWindow, rMEvt );
         bReturn = TRUE;
     }
 
@@ -396,7 +390,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FuDraw::MouseButtonUp(rMEvt);
-//  BOOL bOle    = pViewShell->GetViewData()->IsOle();
     BOOL bOle = pViewShell->GetViewFrame()->GetFrame().IsInPlace();
 
     if (aDragTimer.IsActive() )
@@ -458,14 +451,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
         }
     }
 
-/*
-    if ( pView->IsObjEdit() )
-    {
-        BOOL bShowCursor = TRUE;
-//!     pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
-        bReturn = TRUE;
-    }
-*/
     /**************************************************************************
     * Ggf. OLE-Objekt beruecksichtigen
     **************************************************************************/
@@ -510,7 +495,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                         {
                             if (((SdrOle2Obj*) pObj)->GetObjRef().is())
                             {
-                                //HMHpView->HideMarkHdl();
                                 pViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0 );
                             }
                         }
@@ -551,13 +535,6 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     // Event an den Manager weiterleiten
     if( bVCAction )
     {
-        //  GetSbxForm gibts nicht mehr - Basic-Controls sind tot
-        //SdrPageView* pPgView = pView->GetPageViewByIndex(0);
-        //ScDrawPage*  pPage     = (ScDrawPage*)pPgView->GetPage();
-        //VCSbxForm* pForm = (VCSbxForm*)(SbxObject*)(pPage->GetSbxForm());
-        //((VCManager*)(pForm->GetVCContainer()))->
-        //    MouseButtonUp( pWindow, rMEvt );
-        //HMHpView->ShowMarkHdl();
         bVCAction = FALSE;
         bReturn = TRUE;
     }
@@ -606,26 +583,8 @@ BOOL FuSelection::KeyInput(const KeyEvent& rKEvt)
 
 void FuSelection::Activate()
 {
-/*
-    SdrDragMode eMode;
-    switch (aSfxRequest.GetSlot() )
-    {
-        case SID_OBJECT_SELECT:
-            eMode = SDRDRAG_MOVE;
-            break;
-        case SID_OBJECT_ROTATE:
-            eMode = SDRDRAG_ROTATE;
-            break;
-        case SID_OBJECT_MIRROR:
-            eMode = SDRDRAG_MIRROR;
-            break;
-    }
-    pView->SetDragMode(eMode);
-*/
     FuDraw::Activate();
 }
-
-
 
 /*************************************************************************
 |*
@@ -638,10 +597,6 @@ void FuSelection::Deactivate()
     /**************************************************************************
     * Hide Cursor
     **************************************************************************/
-//    BOOL bShowCursor = FALSE;
-//! pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
-
-//  pView->SetDragMode(SDRDRAG_MOVE);
     FuDraw::Deactivate();
 }
 
@@ -649,9 +604,5 @@ void FuSelection::Deactivate()
 #ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
-
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

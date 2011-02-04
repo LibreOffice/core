@@ -31,8 +31,6 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
-
 #include <vcl/msgbox.hxx>
 #include <i18npool/mslangid.hxx>
 #include <svtools/collatorres.hxx>
@@ -331,7 +329,6 @@ BOOL ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 // -----------------------------------------------------------------------
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
-// void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 
 void ScTabPageSortFields::ActivatePage()
 {
@@ -618,9 +615,6 @@ ScTabPageSortOptions::~ScTabPageSortOptions()
 
 void ScTabPageSortOptions::Init()
 {
-//  aStrAreaLabel = aFtAreaLabel.GetText();
-//  aStrAreaLabel.Append( (sal_Unicode) ' ' );
-
     //  CollatorRessource has user-visible names for sort algorithms
     pColRes = new CollatorRessource();
 
@@ -848,7 +842,6 @@ BOOL ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 // -----------------------------------------------------------------------
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
-// void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
 void ScTabPageSortOptions::ActivatePage()
 {
     if ( pDlg )
