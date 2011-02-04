@@ -158,6 +158,8 @@ class Parser
     sal_Int32                                    m_nNextToken;
     sal_Int32                                    m_nCharIndex;
 
+    const double                                 minAreaThreshold;
+    const double                                 minLineWidth;
 
     ::rtl::OString readNextToken();
     void           readInt32( sal_Int32& o_Value );
@@ -167,7 +169,7 @@ class Parser
     double         readDouble();
     void           readBinaryData( uno::Sequence<sal_Int8>& rBuf );
 
-    uno::Reference<rendering::XPolyPolygon2D> readPath();
+    uno::Reference<rendering::XPolyPolygon2D> readPath( double* );
 
     void                 readChar();
     void                 readLineCap();
@@ -199,7 +201,9 @@ public:
         m_aLine(),
         m_aFontMap(101),
         m_nNextToken(-1),
-        m_nCharIndex(-1)
+        m_nCharIndex(-1),
+        minAreaThreshold( 300.0 ),
+        minLineWidth( 12 )
     {}
 
     void parseLine( const ::rtl::OString& rLine );
@@ -306,7 +310,7 @@ void Parser::readBinaryData( uno::Sequence<sal_Int8>& rBuf )
     OSL_PRECOND(nRes==osl_File_E_None, "inconsistent data");
 }
 
-uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
+uno::Reference<rendering::XPolyPolygon2D> Parser::readPath( double* pArea = NULL )
 {
     const rtl::OString aSubPathMarker( "subpath" );
 
@@ -364,6 +368,15 @@ uno::Reference<rendering::XPolyPolygon2D> Parser::readPath()
         aResult.append( aSubPath );
         if( m_nCharIndex != -1 )
             readNextToken();
+    }
+
+    if( pArea )
+    {
+        basegfx::B2DRange aRange( aResult.getB2DRange() );
+        if( aRange.getWidth() <= minLineWidth || aRange.getHeight() <= minLineWidth)
+            *pArea = 0.0;
+        else
+            *pArea = aRange.getWidth() * aRange.getHeight();
     }
 
     return static_cast<rendering::XLinePolyPolygon2D*>(
@@ -805,9 +818,25 @@ void Parser::parseLine( const ::rtl::OString& rLine )
         case EOCLIPPATH:
             m_pSink->intersectEoClip(readPath()); break;
         case EOFILLPATH:
-            m_pSink->eoFillPath(readPath()); break;
+        {
+            double area = 0.0;
+            uno::Reference<rendering::XPolyPolygon2D> path = readPath( &area );
+            m_pSink->eoFillPath(path);
+            // if area is smaller than required, add borders.
+            if(area < minAreaThreshold)
+                m_pSink->strokePath(path);
+        }
+        break;
         case FILLPATH:
-            m_pSink->fillPath(readPath()); break;
+        {
+            double area = 0.0;
+            uno::Reference<rendering::XPolyPolygon2D> path = readPath( &area );
+            m_pSink->fillPath(path);
+            // if area is smaller than required, add borders.
+            if(area < minAreaThreshold)
+                m_pSink->strokePath(path);
+        }
+        break;
         case RESTORESTATE:
             m_pSink->popState(); break;
         case SAVESTATE:
