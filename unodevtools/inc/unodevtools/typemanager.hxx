@@ -39,16 +39,6 @@ class RegistryKey;
 
 namespace typereg { class Reader; }
 
-#if defined( _MSC_VER ) && ( _MSC_VER < 1200 )
-typedef ::std::__hash_map__
-<
-    ::rtl::OString, // Typename
-    RTTypeClass,    // TypeClass
-    HashString,
-    EqualString,
-    NewAlloc
-> T2TypeClassMap;
-#else
 typedef boost::unordered_map
 <
     ::rtl::OString, // Typename
@@ -56,7 +46,6 @@ typedef boost::unordered_map
     HashString,
     EqualString
 > T2TypeClassMap;
-#endif
 
 namespace unodevtools {
 
