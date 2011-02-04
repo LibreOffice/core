@@ -33,7 +33,6 @@
 #include "MinimumAndMaximumSupplier.hxx"
 #include "LegendEntryProvider.hxx"
 #include "ExplicitCategoriesProvider.hxx"
-#include <com/sun/star/chart2/LegendSymbolStyle.hpp>
 #include <com/sun/star/chart2/XChartType.hpp>
 #include <com/sun/star/drawing/Direction3D.hpp>
 
@@ -207,8 +206,7 @@ public:
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
 
-    virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntries(
+    virtual std::vector< ViewLegendEntry > createLegendEntries(
             ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
@@ -218,11 +216,10 @@ public:
                 ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                )
-        throw (::com::sun::star::uno::RuntimeException);
+                );
 
 
-    virtual ::com::sun::star::chart2::LegendSymbolStyle getLegendSymbolStyle();
+    virtual LegendSymbolStyle getLegendSymbolStyle();
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForSeries(
@@ -236,21 +233,8 @@ public:
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
-    virtual std::vector<
-        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntriesForSeries(
+    virtual std::vector< ViewLegendEntry > createLegendEntriesForSeries(
             const VDataSeries& rSeries,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xTextProperties,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::uno::XComponentContext >& xContext
-                );
-
-    virtual std::vector<
-        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntriesForChartType(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
             const ::com::sun::star::uno::Reference<

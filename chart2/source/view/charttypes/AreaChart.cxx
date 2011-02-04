@@ -152,8 +152,8 @@ bool AreaChart::isSeperateStackingForDifferentSigns( sal_Int32 /*nDimensionIndex
 LegendSymbolStyle AreaChart::getLegendSymbolStyle()
 {
     if( m_bArea || m_nDimension == 3 )
-        return chart2::LegendSymbolStyle_BOX;
-    return chart2::LegendSymbolStyle_LINE_WITH_SYMBOL;
+        return LegendSymbolStyle_BOX;
+    return LegendSymbolStyle_LINE_WITH_SYMBOL;
 }
 
 uno::Any AreaChart::getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex )

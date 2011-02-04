@@ -207,58 +207,10 @@ Legend::Legend( const Legend & rOther ) :
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
-    ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );
 }
 
 Legend::~Legend()
 {
-    try
-    {
-        ModifyListenerHelper::removeListenerFromAllElements( m_aLegendEntries, m_xModifyEventForwarder );
-    }
-    catch( const uno::Exception & ex )
-    {
-        ASSERT_EXCEPTION( ex );
-    }
-}
-
-// ____ XLegend ____
-void SAL_CALL Legend::registerEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException)
-{
-    if( ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ) != m_aLegendEntries.end())
-        throw lang::IllegalArgumentException();
-
-    m_aLegendEntries.push_back( xEntry );
-    ModifyListenerHelper::addListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-void SAL_CALL Legend::revokeEntry( const Reference< chart2::XLegendEntry >& xEntry )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException)
-{
-    tLegendEntries::iterator aIt(
-        ::std::find( m_aLegendEntries.begin(),
-                     m_aLegendEntries.end(),
-                     xEntry ));
-
-    if( aIt == m_aLegendEntries.end())
-        throw container::NoSuchElementException();
-
-    m_aLegendEntries.erase( aIt );
-    ModifyListenerHelper::removeListener( xEntry, m_xModifyEventForwarder );
-    fireModifyEvent();
-}
-
-Sequence< Reference< chart2::XLegendEntry > > SAL_CALL Legend::getEntries()
-    throw (uno::RuntimeException)
-{
-    return ContainerHelper::ContainerToSequence( m_aLegendEntries );
 }
 
 // ____ XCloneable ____

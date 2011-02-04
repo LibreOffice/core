@@ -27,21 +27,63 @@
 #ifndef CHART2_VIEW_LEGENDENTRYPROVIDER_HXX
 #define CHART2_VIEW_LEGENDENTRYPROVIDER_HXX
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
-
-#ifndef _COM_SUN_STAR_CHART2_VIEWLEGENDENTRYP_HPP_
-#include <com/sun/star/chart2/ViewLegendEntry.hpp>
-#endif
+#include <com/sun/star/chart2/XFormattedString.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+
+#include <vector>
 
 namespace chart
 {
 
+enum LegendSymbolStyle
+{
+    /** A square box with border.
+     */
+    LegendSymbolStyle_BOX,
+
+    /** A line extending from the top edge to the bottom edge
+     */
+    LegendSymbolStyle_VERTICAL_LINE,
+
+    /** A line spanning the diagonal of the box you would get with
+        <member>BOX</member>.
+     */
+    LegendSymbolStyle_DIAGONAL_LINE,
+
+    /** A line like with a symbol.
+     */
+    LegendSymbolStyle_LINE_WITH_SYMBOL,
+
+    /** A bordered circle which has the same bounding-box as the
+        <member>BOX</member>.
+     */
+    LegendSymbolStyle_CIRCLE
+};
+
+struct ViewLegendEntry
+{
+    /** The legend symbol that represents a data series or other
+        information contained in the legend
+     */
+    ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::XShape > aSymbol;
+
+    /** The descriptive text for a legend entry.
+     */
+    ::com::sun::star::uno::Sequence<
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XFormattedString > >  aLabel;
+};
+
 class LegendEntryProvider
 {
 public:
-    virtual ::com::sun::star::uno::Sequence<
-        ::com::sun::star::chart2::ViewLegendEntry > SAL_CALL createLegendEntries(
+    virtual std::vector< ViewLegendEntry > createLegendEntries(
             ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
@@ -51,10 +93,7 @@ public:
                 ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
-                )
-        throw (::com::sun::star::uno::RuntimeException) = 0;
-
-private:
+                ) = 0;
 };
 
 } //  namespace chart

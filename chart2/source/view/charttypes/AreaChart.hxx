@@ -71,7 +71,7 @@ public:
 
     //-------------------------------------------------------------------------
 
-    virtual ::com::sun::star::chart2::LegendSymbolStyle getLegendSymbolStyle();
+    virtual LegendSymbolStyle getLegendSymbolStyle();
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
     //-------------------------------------------------------------------------

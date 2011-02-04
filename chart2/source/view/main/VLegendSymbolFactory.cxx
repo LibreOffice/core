@@ -106,7 +106,7 @@ namespace chart
 
 Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     const Reference< drawing::XShapes > xSymbolContainer,
-    chart2::LegendSymbolStyle eStyle,
+    LegendSymbolStyle eStyle,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< beans::XPropertySet > & xLegendEntryProperties,
     tPropertyType ePropertyType, const uno::Any& rExplicitSymbol )
@@ -131,23 +131,17 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     // add an invisible square box to maintain aspect ratio
     switch( eStyle )
     {
-        case chart2::LegendSymbolStyle_BOX:
-        case chart2::LegendSymbolStyle_HORIZONTAL_LINE:
-        case chart2::LegendSymbolStyle_VERTICAL_LINE:
-        case chart2::LegendSymbolStyle_DIAGONAL_LINE:
-        case chart2::LegendSymbolStyle_LINE_WITH_BOX:
-        case chart2::LegendSymbolStyle_LINE_WITH_SYMBOL:
-        case chart2::LegendSymbolStyle_CIRCLE:
+        case LegendSymbolStyle_BOX:
+        case LegendSymbolStyle_VERTICAL_LINE:
+        case LegendSymbolStyle_DIAGONAL_LINE:
+        case LegendSymbolStyle_LINE_WITH_SYMBOL:
+        case LegendSymbolStyle_CIRCLE:
         {
             Reference< drawing::XShape > xBound( ShapeFactory(xShapeFactory).createInvisibleRectangle(
                 xResultGroup, aBoundSize  ));
             break;
         }
 
-        case chart2::LegendSymbolStyle_BAR:
-        case chart2::LegendSymbolStyle_RECTANGLE:
-        case chart2::LegendSymbolStyle_STRETCHED_RECTANGLE:
-        case chart2::LegendSymbolStyle_USER_DEFINED:
         default:
             break;
     }
@@ -155,17 +149,14 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     // create symbol
     switch( eStyle )
     {
-        case chart2::LegendSymbolStyle_BOX:
-        case chart2::LegendSymbolStyle_BAR:
-        case chart2::LegendSymbolStyle_RECTANGLE:
-        case chart2::LegendSymbolStyle_STRETCHED_RECTANGLE:
-        case chart2::LegendSymbolStyle_CIRCLE:
+        case LegendSymbolStyle_BOX:
+        case LegendSymbolStyle_CIRCLE:
         {
             try
             {
                 Reference< drawing::XShape > xShape;
 
-                if( eStyle == chart2::LegendSymbolStyle_CIRCLE )
+                if( eStyle == LegendSymbolStyle_CIRCLE )
                     xShape.set( xShapeFactory->createInstance(
                                     C2U( "com.sun.star.drawing.EllipseShape" )), uno::UNO_QUERY );
                 else
@@ -175,8 +166,8 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
                 if( xShape.is())
                 {
                     xResultGroup->add( xShape );
-                    if( eStyle == chart2::LegendSymbolStyle_BOX ||
-                        eStyle == chart2::LegendSymbolStyle_CIRCLE )
+                    if( eStyle == LegendSymbolStyle_BOX ||
+                        eStyle == LegendSymbolStyle_CIRCLE )
                     {
                         xShape->setSize( awt::Size( 2000, 2000 ));
                         xShape->setPosition( awt::Point( 500, 0 ));
@@ -211,30 +202,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             break;
         }
 
-        case chart2::LegendSymbolStyle_HORIZONTAL_LINE:
-        {
-            try
-            {
-                Reference< drawing::XShape > xLine(
-                    xShapeFactory->createInstance(
-                        C2U( "com.sun.star.drawing.LineShape" )), uno::UNO_QUERY );
-                if( xLine.is())
-                {
-                    xResultGroup->add( xLine );
-                    xLine->setSize(  awt::Size( 3000, 0 ));
-                    xLine->setPosition( awt::Point( 0, 1000 ));
-
-                    lcl_setPropetiesToShape( xLegendEntryProperties, xLine, ePropertyType ); // PROP_TYPE_LINE_SERIES );
-                }
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-            break;
-        }
-
-        case chart2::LegendSymbolStyle_VERTICAL_LINE:
+        case LegendSymbolStyle_VERTICAL_LINE:
         {
             try
             {
@@ -257,7 +225,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             break;
         }
 
-        case chart2::LegendSymbolStyle_DIAGONAL_LINE:
+        case LegendSymbolStyle_DIAGONAL_LINE:
         {
             try
             {
@@ -280,10 +248,7 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             break;
         }
 
-        case chart2::LegendSymbolStyle_LINE_WITH_BOX:
-            bUseBox = true;
-            // fall-through intended
-        case chart2::LegendSymbolStyle_LINE_WITH_SYMBOL:
+        case LegendSymbolStyle_LINE_WITH_SYMBOL:
             try
             {
                 Reference< drawing::XShape > xLine(
@@ -300,56 +265,38 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
 
                 Reference< drawing::XShape > xSymbol;
                 const sal_Int32 nSize = 1500;
-                if( bUseBox )
+                chart2::Symbol aSymbol;
+                if( rExplicitSymbol >>= aSymbol )
                 {
-                    xSymbol.set( xShapeFactory->createInstance(
-                                     C2U( "com.sun.star.drawing.RectangleShape" )), uno::UNO_QUERY );
-                    xResultGroup->add( xSymbol );
-
-                    if( xSymbol.is())
+                    drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
+                    drawing::Position3D aPos( 1500, 1000, 0 );
+                    ShapeFactory aFactory( xShapeFactory );
+                    if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
                     {
-                        xSymbol->setSize( awt::Size( nSize, nSize ));
-                        xSymbol->setPosition( awt::Point( 1500 - nSize/2, 1000 - nSize/2 ));
+                        // take series color as fill color
+                        xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
+                        // border of symbols always same as fill color
+                        aSymbol.BorderColor = aSymbol.FillColor;
 
-                        lcl_setPropetiesToShape( xLegendEntryProperties, xSymbol, ePropertyType );
+                        xSymbol.set( aFactory.createSymbol2D(
+                                         xResultGroup,
+                                         aPos,
+                                         aSymbolSize,
+                                         aSymbol.StandardSymbol,
+                                         aSymbol.BorderColor,
+                                         aSymbol.FillColor ));
                     }
-                }
-                else
-                {
-                    chart2::Symbol aSymbol;
-
-                    if( rExplicitSymbol >>= aSymbol )
+                    else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
                     {
-                        drawing::Direction3D aSymbolSize( nSize, nSize, 0 );
-                        drawing::Position3D aPos( 1500, 1000, 0 );
-                        ShapeFactory aFactory( xShapeFactory );
-                        if( aSymbol.Style == chart2::SymbolStyle_STANDARD )
-                        {
-                            // take series color as fill color
-                            xLegendEntryProperties->getPropertyValue( C2U("Color")) >>= aSymbol.FillColor;
-                            // border of symbols always same as fill color
-                            aSymbol.BorderColor = aSymbol.FillColor;
-
-                            xSymbol.set( aFactory.createSymbol2D(
-                                             xResultGroup,
-                                             aPos,
-                                             aSymbolSize,
-                                             aSymbol.StandardSymbol,
-                                             aSymbol.BorderColor,
-                                             aSymbol.FillColor ));
-                        }
-                        else if( aSymbol.Style == chart2::SymbolStyle_GRAPHIC )
-                        {
-                            xSymbol.set( aFactory.createGraphic2D(
-                                             xResultGroup,
-                                             aPos,
-                                             aSymbolSize,
-                                             aSymbol.Graphic ));
-                        }
-                        else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
-                        {
-                            DBG_ERROR("the given parameter is not allowed to contain an automatic symbol style");
-                        }
+                        xSymbol.set( aFactory.createGraphic2D(
+                                         xResultGroup,
+                                         aPos,
+                                         aSymbolSize,
+                                         aSymbol.Graphic ));
+                    }
+                    else if( aSymbol.Style == chart2::SymbolStyle_AUTO )
+                    {
+                        DBG_ERROR("the given parameter is not allowed to contain an automatic symbol style");
                     }
                 }
             }
@@ -357,9 +304,6 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
             {
                 ASSERT_EXCEPTION( ex );
             }
-            break;
-
-        case chart2::LegendSymbolStyle_USER_DEFINED:
             break;
 
         default:

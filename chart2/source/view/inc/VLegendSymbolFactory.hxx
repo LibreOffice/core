@@ -27,7 +27,7 @@
 #ifndef CHART2_VLEGENDSYMBOLFACTORY_HXX
 #define CHART2_VLEGENDSYMBOLFACTORY_HXX
 
-#include <com/sun/star/chart2/LegendSymbolStyle.hpp>
+#include "LegendEntryProvider.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -52,7 +52,7 @@ public:
         createSymbol(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes > xSymbolContainer,
-            ::com::sun::star::chart2::LegendSymbolStyle eStyle,
+            LegendSymbolStyle eStyle,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::lang::XMultiServiceFactory > & xShapeFactory,
             const ::com::sun::star::uno::Reference<

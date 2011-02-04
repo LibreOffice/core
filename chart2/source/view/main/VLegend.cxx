@@ -794,14 +794,6 @@ awt::Point lcl_calculatePositionAndRemainingSpace(
     return aResult;
 }
 
-template< class T >
-void lcl_appendSeqToVector( const Sequence< T > & rSource, ::std::vector< T > & rDest )
-{
-    const sal_Int32 nCount = rSource.getLength();
-    for( sal_Int32 i = 0; i < nCount; ++i )
-        rDest.push_back( rSource[ i ] );
-}
-
 bool lcl_shouldSymbolsBePlacedOnTheLeftSide( const Reference< beans::XPropertySet >& xLegendProp, sal_Int16 nDefaultWritingMode )
 {
     bool bSymbolsLeftSide = true;
@@ -962,9 +954,8 @@ void VLegend::createShapes(
                     LegendEntryProvider* pLegendEntryProvider( *aIter );
                     if( pLegendEntryProvider )
                     {
-                        lcl_appendSeqToVector< ViewLegendEntry >(
-                            pLegendEntryProvider->createLegendEntries( eExpansion, xLegendProp, xLegendContainer, m_xShapeFactory, m_xContext )
-                            , aViewEntries );
+                        std::vector< ViewLegendEntry > aNewEntries = pLegendEntryProvider->createLegendEntries( eExpansion, xLegendProp, xLegendContainer, m_xShapeFactory, m_xContext );
+                        aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
                     }
                 }
             }

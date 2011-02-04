@@ -1818,13 +1818,13 @@ bool VSeriesPlotter::shouldSnapRectToUsedArea()
     return true;
 }
 
-Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
+std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
               ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
             , const Reference< uno::XComponentContext >& xContext
-            ) throw (uno::RuntimeException)
+            )
 {
     std::vector< ViewLegendEntry > aResult;
 
@@ -1880,22 +1880,15 @@ Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
                 }
             }
         }
-
-        //add charttype specific entries if any
-        {
-            std::vector< ViewLegendEntry > aChartTypeEntries( this->createLegendEntriesForChartType(
-                                xTextProperties, xTarget, xShapeFactory, xContext ) );
-            aResult.insert( aResult.end(), aChartTypeEntries.begin(), aChartTypeEntries.end() );
-        }
     }
 
-    return ::chart::ContainerHelper::ContainerToSequence( aResult );
+    return aResult;
 }
 
 
 LegendSymbolStyle VSeriesPlotter::getLegendSymbolStyle()
 {
-    return chart2::LegendSymbolStyle_BOX;
+    return LegendSymbolStyle_BOX;
 }
 
 
@@ -1920,10 +1913,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_HORIZONTAL_LINE:
         case LegendSymbolStyle_VERTICAL_LINE:
         case LegendSymbolStyle_DIAGONAL_LINE:
-        case LegendSymbolStyle_LINE_WITH_BOX:
         case LegendSymbolStyle_LINE_WITH_SYMBOL:
             ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
             break;
@@ -1954,10 +1945,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_HORIZONTAL_LINE:
         case LegendSymbolStyle_VERTICAL_LINE:
         case LegendSymbolStyle_DIAGONAL_LINE:
-        case LegendSymbolStyle_LINE_WITH_BOX:
         case LegendSymbolStyle_LINE_WITH_SYMBOL:
             ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
             break;
@@ -1995,7 +1984,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     return xShape;
 }
 
-std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSeries(
+std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
               const VDataSeries& rSeries
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
@@ -2098,7 +2087,7 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
 
                     // create the symbol
                     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol(
-                        xSymbolGroup, chart2::LegendSymbolStyle_DIAGONAL_LINE, xShapeFactory,
+                        xSymbolGroup, LegendSymbolStyle_DIAGONAL_LINE, xShapeFactory,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
                         VLegendSymbolFactory::PROP_TYPE_LINE, uno::Any() ));
 
@@ -2125,16 +2114,6 @@ std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForSe
         ASSERT_EXCEPTION( ex );
     }
     return aResult;
-}
-
-std::vector< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntriesForChartType(
-            const Reference< beans::XPropertySet >& /* xTextProperties */,
-            const Reference< drawing::XShapes >& /* xTarget */,
-            const Reference< lang::XMultiServiceFactory >& /* xShapeFactory */,
-            const Reference< uno::XComponentContext >& /* xContext */
-                )
-{
-    return std::vector< ViewLegendEntry >();
 }
 
 VSeriesPlotter* VSeriesPlotter::createSeriesPlotter(
