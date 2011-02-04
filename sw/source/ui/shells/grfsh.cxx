@@ -519,6 +519,8 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetCurAttr( aCoreSet );
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
+    const GraphicObject* pGrfObj = ( bIsGrfCntnt ? rSh.GetGraphicObj() : NULL );
+    BOOL bIsRenderGraphicGrfCntnt = ( pGrfObj && pGrfObj->IsRenderGraphic() );
     // --> OD 2006-11-03 #i59688#
 //    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
 //    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
@@ -701,7 +703,3 @@ SwGrfShell::SwGrfShell(SwView &_rView) :
     SetName(String::CreateFromAscii("Graphic"));
     SetHelpId(SW_GRFSHELL);
 }
-
-
-
-
