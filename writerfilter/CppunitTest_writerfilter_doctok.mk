@@ -32,15 +32,19 @@ $(eval $(call gb_CppunitTest_add_exception_objects,writerfilter_doctok, \
 ))
 
 $(eval $(call gb_CppunitTest_add_linked_libs,writerfilter_doctok, \
-	ucbhelper \
 	cppuhelper \
+	cppunit \
 	cppu \
 	sal \
-	cppunit \
+	ucbhelper \
+	writerfilter \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,writerfilter_doctok,\
 	$$(INCLUDE) \
+	-I$(OUTDIR)/inc/offuh \
+	-I$(OUTDIR)/inc \
+	-I$(SRCDIR)/writerfilter/inc \
 ))
 
 # vim: set noet sw=4 ts=4:

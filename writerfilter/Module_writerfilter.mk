@@ -34,10 +34,9 @@ $(eval $(call gb_Module_add_targets,writerfilter,\
 	Library_writerfilter_debug \
 ))
 
-# does not build
-#$(eval $(call gb_Module_add_check_targets,writerfilter,\
-#	CppunitTest_writerfilter_doctok \
-#))
+$(eval $(call gb_Module_add_check_targets,writerfilter,\
+	CppunitTest_writerfilter_doctok \
+))
 
 # does not run
 #$(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
