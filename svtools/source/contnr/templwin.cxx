@@ -130,7 +130,6 @@ struct FolderHistory
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
 };
 
-DECLARE_LIST( HistoryList_Impl, FolderHistory* )
 DECLARE_LIST( NewDocList_Impl, ::rtl::OUString* )
 
 ODocumentInfoPreview::ODocumentInfoPreview( Window* pParent ,WinBits _nBits) : Window(pParent,WB_DIALOGCONTROL)
@@ -1106,8 +1105,9 @@ SvtTemplateWindow::~SvtTemplateWindow()
     delete pFrameWin;
     if ( pHistoryList )
     {
-        for ( UINT32 i = 0; i < pHistoryList->Count(); ++i )
-            delete pHistoryList->GetObject(i);
+        for ( size_t i = 0, n = pHistoryList->size(); i < n; ++i )
+            delete (*pHistoryList)[ i ];
+        pHistoryList->clear();
         delete pHistoryList;
     }
 }
@@ -1239,17 +1239,17 @@ void SvtTemplateWindow::AppendHistoryURL( const String& rURL, ULONG nGroup )
     sal_Bool bInsert = sal_True;
     if ( !pHistoryList )
         pHistoryList = new HistoryList_Impl;
-    else if ( pHistoryList->Count() > 0 )
+    else if ( pHistoryList->size() > 0 )
     {
-        FolderHistory* pLastEntry = pHistoryList->GetObject( pHistoryList->Count() - 1 );
+        FolderHistory* pLastEntry = pHistoryList->back();
         bInsert = ( rURL != pLastEntry->m_sURL);
     }
 
     if ( bInsert )
     {
         FolderHistory* pEntry = new FolderHistory( rURL, nGroup );
-        pHistoryList->Insert( pEntry, LIST_APPEND );
-        aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
+        pHistoryList->push_back( pEntry );
+        aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->size() > 1 );
     }
 }
 
@@ -1257,9 +1257,11 @@ void SvtTemplateWindow::AppendHistoryURL( const String& rURL, ULONG nGroup )
 
 void SvtTemplateWindow::OpenHistory()
 {
-    FolderHistory* pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
-    pEntry = pHistoryList->Remove( pHistoryList->Count() - 1 );
-    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->Count() > 1 );
+    delete pHistoryList->back();
+    pHistoryList->pop_back();
+    FolderHistory* pEntry = pHistoryList->back();
+    pHistoryList->pop_back();
+    aFileViewTB.EnableItem( TI_DOCTEMPLATE_BACK, pHistoryList->size() > 1 );
     pFileWin->OpenFolder( pEntry->m_sURL );
     pIconWin->SetCursorPos( pEntry->m_nGroup );
     delete pEntry;
@@ -1273,7 +1275,7 @@ void SvtTemplateWindow::DoAction( USHORT nAction )
     {
         case TI_DOCTEMPLATE_BACK :
         {
-            if ( pHistoryList && pHistoryList->Count() > 1 )
+            if ( pHistoryList && pHistoryList->size() > 1 )
                 OpenHistory();
             break;
         }
@@ -1522,7 +1524,11 @@ void SvtTemplateWindow::SetPrevLevelButtonState( const String& rURL )
 void SvtTemplateWindow::ClearHistory()
 {
     if( pHistoryList )
-        pHistoryList->Clear();
+    {
+        for ( size_t i = 0, n = pHistoryList->size(); i < n; ++i )
+            delete (*pHistoryList)[ i ];
+        pHistoryList->clear();
+    }
 }
 
 // ------------------------------------------------------------------------
