@@ -93,7 +93,6 @@ const sal_Char *dbg_dump(rtl_uString *pStr)
 MacSpellChecker::MacSpellChecker() :
     aEvtListeners   ( GetLinguMutex() )
 {
-//    aDicts = NULL;
     aDEncs = NULL;
     aDLocs = NULL;
     aDNames = NULL;
@@ -110,14 +109,6 @@ MacSpellChecker::MacSpellChecker() :
 
 MacSpellChecker::~MacSpellChecker()
 {
-  // if (aDicts) {
-  //    for (int i = 0; i < numdict; i++) {
-  //           if (aDicts[i]) delete aDicts[i];
-  //           aDicts[i] = NULL;
-  //    }
-  //    delete[] aDicts;
-  // }
-  // aDicts = NULL;
   numdict = 0;
   if (aDEncs) delete[] aDEncs;
   aDEncs = NULL;
@@ -162,7 +153,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         rtl_TextEncoding aEnc = RTL_TEXTENCODING_UTF8;
 
         std::vector<objc_object *> postspdict;
-        //std::vector<dictentry *> postspdict;
         std::vector<dictentry *> postupdict;
 
 
@@ -224,11 +214,7 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
                     numlocs++;
                 }
                 aDLocs[k] = nLoc;
-                //pointer to Hunspell dictionary - not needed for MAC
-                //aDicts[k] = NULL;
                 aDEncs[k] = 0;
-                // Dictionary file names not valid for Mac Spell
-                //aDNames[k] = aPathOpt.GetLinguisticPath() + A2OU("/ooo/") + A2OU(postspdict[i]->filename);
                 k++;
             }
 
@@ -237,7 +223,6 @@ Sequence< Locale > SAL_CALL MacSpellChecker::getLocales()
         } else {
             /* no dictionary.lst found so register no dictionaries */
             numdict = 0;
-            //aDicts = NULL;
                 aDEncs  = NULL;
                 aDLocs = NULL;
                 aDNames = NULL;

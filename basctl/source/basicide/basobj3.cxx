@@ -102,7 +102,6 @@ SbMethod* CreateMacro( SbModule* pModule, const String& rMacroName )
         {
             BOOL bValid = FALSE;
             String aStdMacroText( RTL_CONSTASCII_USTRINGPARAM( "Macro" ) );
-            //String aStdMacroText( IDEResId( RID_STR_STDMACRONAME ) );
             USHORT nMacro = 1;
             while ( !bValid )
             {
@@ -385,15 +384,6 @@ void BasicStopped( BOOL* pbAppWindowDisabled,
         if ( pnWaitCount )
             *pnWaitCount = nWait;
     }
-
-    /*
-    // Interactive = FALSE ?
-    if ( SFX_APP()->IsDispatcherLocked() )
-    {
-        SFX_APP()->LockDispatcher( FALSE );
-        if ( pbDispatcherLocked )
-            *pbDispatcherLocked = TRUE;
-    } */
 
     Window* pDefParent = Application::GetDefDialogParent();
     if ( pDefParent && !pDefParent->IsEnabled() )

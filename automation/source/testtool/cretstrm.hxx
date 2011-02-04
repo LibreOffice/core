@@ -45,10 +45,8 @@ public:
     using CmdBaseStream::Read;
     void Read ( comm_USHORT &nNr ){CmdBaseStream::Read ( nNr );}
     void Read ( comm_ULONG &nNr ){CmdBaseStream::Read ( nNr );}
-//  void Read ( comm_UniChar* &aString, comm_USHORT &nLenInChars ){CmdBaseStream::Read ( aString, nLenInChars );}
     virtual void Read ( SmartId* &pId ){CmdBaseStream::Read ( pId );}
     void Read ( comm_BOOL &bBool ){CmdBaseStream::Read ( bBool );}
-//  new
     void Read( String &aString );
     void Read( SbxValue &aValue );
 };

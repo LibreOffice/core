@@ -580,27 +580,8 @@ BOOL DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
         if (pView->IsAction() )
         {
             pView->EndAction();
-            //if( bMarkAction )
-                //pParent->UnmarkDialog();
         }
     }
-
-//  USHORT nClicks = rMEvt.GetClicks();
-//  if (nClicks == 2)
-//  {
-//      if ( pView->AreObjectsMarked() )
-//      {
-//          const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
-//
-//          if (rMarkList.GetMarkCount() == 1)
-//          {
-//              SdrMark* pMark = rMarkList.GetMark(0);
-//              SdrObject* pObj = pMark->GetMarkedSdrObj();
-//
-//              // edit objects here
-//          }
-//      }
-//  }
 
     bMarkAction = FALSE;
 

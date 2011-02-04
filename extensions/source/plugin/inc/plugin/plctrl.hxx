@@ -82,7 +82,6 @@ public:
     { return _xContext; }
 
     virtual sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & Model ) throw( ::com::sun::star::uno::RuntimeException ) = 0;
-//  { DBG_ERROR( "### setModel() illegal on plugincontrol!" ); return sal_False; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > SAL_CALL getModel() throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView > SAL_CALL getView() throw( ::com::sun::star::uno::RuntimeException )

@@ -125,7 +125,6 @@ SvxBitmapTabPage::SvxBitmapTabPage
     // Setzen des Output-Devices
     rXFSet.Put( aXFStyleItem );
     rXFSet.Put( aXBitmapItem );
-    //aCtlPreview.SetAttributes( aXFillAttr );
 
     aBtnAdd.SetClickHdl( LINK( this, SvxBitmapTabPage, ClickAddHdl_Impl ) );
     aBtnImport.SetClickHdl(
@@ -357,14 +356,6 @@ IMPL_LINK( SvxBitmapTabPage, ChangeBitmapHdl_Impl, void *, EMPTYARG )
     }
     if( pXOBitmap )
     {
-        //WorkWindow        aTmpWW( DLGWIN );
-        //VirtualDevice aVD( aTmpWW );
-        //USHORT    nLines = aCtlPixel.GetLineCount();
-        //Color aPixelColor, aBackColor;
-        //BOOL  bPixelColor = FALSE;
-        //USHORT    nWidth  = pBitmap->GetSizePixel().Width();
-        //USHORT    nHeight = pBitmap->GetSizePixel().Height();
-
         // #85339# try to convert bitmapped item to array item.
         if(pXOBitmap->GetBitmapType() == XBITMAP_IMPORT)
         {
@@ -576,9 +567,7 @@ long SvxBitmapTabPage::CheckChanges_Impl()
                 break;
 
                 case RET_CANCEL:
-                    // return( -1L );
                 break;
-                // return( TRUE ); // Abbruch
             }
             delete aMessDlg;
         }
@@ -647,7 +636,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
     delete pDlg;
     delete pWarnBox;
 
@@ -778,7 +766,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 if( pWarnBox->Execute() != RET_OK )
                     break;
             }
-            //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
             delete pDlg;
             delete pWarnBox;
 
@@ -798,7 +785,6 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
                 if( TRUE ) {                // ??? overlapped with pDlg
                                             // and srolling
                     Invalidate( aRect );
-                    //aLbBitmaps.Invalidate();
                 }
 #endif
 

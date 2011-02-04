@@ -390,7 +390,6 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
 
                 if ( dwSTClientExitCode == ERR_NO_RECORDS_FOUND )
                 {
-                    // output=`${STCLIENT} -a [-i "${INSTANCE_URN}"] -p "${PRODUCT_NAME}" -e "${PRODUCT_VERSION}" -t "${TARGET_URN}" -S "${PRODUCT_SOURCE}" -P "${PARENT_PRODUCT_NAME}" -m "Sun Microsystems, Inc." -A ${uname} -z global`
                     lpCommandLine = new TCHAR[MAXCMDLINELEN];
 
                     _tcscpy( lpCommandLine, TEXT( "\"" ));

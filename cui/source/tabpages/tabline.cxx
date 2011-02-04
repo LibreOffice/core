@@ -121,13 +121,11 @@ SvxLineTabDialog::SvxLineTabDialog
 
     AddTabPage( RID_SVXPAGE_LINE_DEF, SvxLineDefTabPage::Create, 0);
     AddTabPage( RID_SVXPAGE_LINEEND_DEF, SvxLineEndDefTabPage::Create, 0);
-//  AddTabPage( RID_SVXPAGE_COLOR, SvxColorTabPage::Create, 0 );
 
     SetCurPageId( RID_SVXPAGE_LINE );
 
     CancelButton& rBtnCancel = GetCancelButton();
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
-//! rBtnCancel.SetText( CUI_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
 // -----------------------------------------------------------------------
@@ -279,18 +277,6 @@ void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxShadowTabPage&) rPage ).Construct();
         }
         break;
-/*
-        case RID_SVXPAGE_COLOR:
-            ( (SvxColorTabPage&) rPage ).SetColorTable( pColorTab );
-            ( (SvxColorTabPage&) rPage ).SetPageType( &nPageType );
-            ( (SvxColorTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxColorTabPage&) rPage ).SetPos( &mnPos );
-            ( (SvxColorTabPage&) rPage ).SetAreaTP( &mbAreaTP );
-            ( (SvxColorTabPage&) rPage ).SetColorChgd( &mnColorTableState );
-            ( (SvxColorTabPage&) rPage ).SetDeleteColorTable( mbDeleteColorTable );
-            ( (SvxColorTabPage&) rPage ).Construct();
-        break;
-*/
     }
 }
 

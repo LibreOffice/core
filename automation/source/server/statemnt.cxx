@@ -4155,10 +4155,6 @@ BOOL StatementControl::HandleCommonMethods( Window *pControl )
                 if ( (pControl->GetType() == WINDOW_TOOLBOX) && pTB->IsMenuEnabled() )
                 {
                     pTB->ExecuteCustomMenu();
-/*                    Rectangle aRect = pTB->GetMenubuttonRect();
-                    AnimateMouse( pControl, aRect.Center() );
-                    MouseEvent aMEvnt(aRect.Center(),1,MOUSE_SIMPLECLICK,MOUSE_LEFT);
-                    ImplMouseButtonDown( pTB, aMEvnt );*/
                 }
                 else
                 {
@@ -4657,10 +4653,6 @@ BOOL StatementControl::Execute()
                                 for ( anz=0 ; anz < pTControl->GetPageCount() && !aID.Matches( aWantedID ) ; anz++ )
                                 {
                                     pTControl->SelectTabPage( pTControl->GetPageId(i) );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( pTControl->GetPageId(i) );
-                                    pTControl->ActivatePage();*/
                                     aID = pTControl->GetTabPage(pTControl->GetCurPageId())->GetSmartUniqueOrHelpId();
                                     i++;
                                     if ( i >= pTControl->GetPageCount() )
@@ -4671,10 +4663,6 @@ BOOL StatementControl::Execute()
                                 if ( !aID.Matches( aWantedID ) )
                                 {
                                     pTControl->SelectTabPage( nActive );
-                                    /*if (pTControl->GetCurPageId())
-                                        pTControl->DeactivatePage();
-                                    pTControl->SetCurPageId( nActive );
-                                    pTControl->ActivatePage();*/
                                     ReportError( aWantedID, GEN_RES_STR1( S_TABPAGE_NOT_FOUND, MethodString( nMethodId ) ) );
                                 }
                             }
@@ -5841,10 +5829,6 @@ BOOL StatementControl::Execute()
                                             else
                                                    pRet->GenReturn ( RET_Value, aUId, comm_ULONG( pELB->getSelIndex() +1));
                                             break;
-/*                                      xxxcase M_SetNoSelection :
-                                            ((ListBox*)pControl)->SetNoSelection();
-                                            ((ListBox*)pControl)->Select();
-                                            break; */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "RoadMap" ) );
                                             break;
@@ -5875,22 +5859,11 @@ BOOL StatementControl::Execute()
                                                     {
                                                         ::svt::table::PTableModel pModel = pTC->GetModel();
                                                         Any aCell = pModel->getCellContent()[nNr2-1][nNr1-1];
-                                                        /* doesn't work ATM since it gets casted to SbxDATE in VCLTestTool unfortunately
-                                                        SbxVariableRef xRes = new SbxVariable( SbxVARIANT );
-                                                        unoToSbxValue( xRes, aCell );
-                                                        pRet->GenReturn ( RET_Value, aUId, *xRes );*/
 
                                                         Type aType = aCell.getValueType();
                                                         TypeClass eTypeClass = aType.getTypeClass();
                                                         switch( eTypeClass )
                                                         {
-                                                            /*case TypeClass_ENUM:
-                                                                {
-                                                                    sal_Int32 nEnum = 0;
-                                                                    enum2int( nEnum, aValue );
-                                                                    pRet->GenReturn ( RET_Value, aUId, (comm_ULONG)nEnum );
-                                                                }
-                                                                break;*/
                                                             case TypeClass_BOOLEAN:
                                                                 pRet->GenReturn ( RET_Value, aUId, *(sal_Bool*)aCell.getValue() );
                                                                 break;
@@ -5986,18 +5959,6 @@ BOOL StatementControl::Execute()
                                                 if ( ValueOK( aUId, CUniString("GetSelIndex"), nNr1, pTC->GetSelectedRows().size() ) )
                                                     pRet->GenReturn ( RET_Value, aUId, comm_USHORT( pTC->GetSelectedRows()[nNr1-1] +1 ) );
                                                 break;
-/*                                          case M_GetSelText :
-                                                if ( ! (nParams & PARAM_USHORT_1) )
-                                                    nNr1 = 1;
-                                                if ( ValueOK(aUId, CUniString("GetSelText"),nNr1,((SvLBox*)pControl)->GetSelectionCount()) )
-                                                {
-                                                    nNr1--;
-                                                    COUNT_LBOX( FirstSelected, NextSelected, nNr1);
-                                                    GetFirstValidTextItem( pThisEntry );
-                                                    pRet->GenReturn ( RET_Value, aUId, pItem->GetText() );
-                                                }
-                                                break;
-                                                */
                                         default:
                                             ReportError( aUId, GEN_RES_STR2c2( S_UNKNOWN_METHOD, MethodString(nMethodId), "TableControl" ) );
                                             break;

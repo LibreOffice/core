@@ -285,9 +285,7 @@ long SvxHatchTabPage::CheckChanges_Impl()
             break;
 
             case RET_CANCEL:
-                // return( -1L ); <-- wuerde die Seite nicht verlassen
             break;
-            // return( TRUE ); // Abbruch
         }
         delete aMessDlg;
     }
@@ -338,7 +336,6 @@ BOOL SvxHatchTabPage::FillItemSet( SfxItemSet& rSet )
 
 void SvxHatchTabPage::Reset( const SfxItemSet& rSet )
 {
-    // aLbHatchings.SelectEntryPos( 0 );
     ChangeHatchHdl_Impl( this );
 
     // Status der Buttons ermitteln
@@ -461,19 +458,6 @@ IMPL_LINK( SvxHatchTabPage, ChangeHatchHdl_Impl, void *, EMPTYARG )
             default:  aCtlAngle.SetActualRP( RP_MM ); break;
         }
 
-        // Backgroundcolor
-        /*
-        const SfxPoolItem* pPoolItem = NULL;
-        if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLBACKGROUND ), TRUE, &pPoolItem ) )
-        {
-            rXFSet.Put ( XFillBackgroundItem( ( ( XFillBackgroundItem* )pPoolItem)->GetValue() ) );
-            if( SFX_ITEM_SET == rOutAttrs.GetItemState( GetWhich( XATTR_FILLCOLOR ), TRUE, &pPoolItem ) )
-            {
-                Color aColor( ( ( const XFillColorItem* ) pPoolItem )->GetValue() );
-                rXFSet.Put( XFillColorItem( String(), aColor ) );
-            }
-        }
-        */
         // ItemSet fuellen und an aCtlPreview weiterleiten
         rXFSet.Put( XFillHatchItem( String(), *pHatch ) );
         aCtlPreview.SetAttributes( aXFillAttr.GetItemSet() );
@@ -548,7 +532,6 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( pWarnBox->Execute() != RET_OK )
             break;
     }
-    //Rectangle aDlgRect( pDlg->GetPosPixel(), pDlg->GetSizePixel() );
     delete pDlg;
     delete pWarnBox;
 
@@ -572,7 +555,6 @@ IMPL_LINK( SvxHatchTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         if( TRUE ) {                // ??? overlapped with pDlg
                                     // and srolling
             Invalidate( aRect );
-            //aLbHatchings.Invalidate();
         }
 #endif
 

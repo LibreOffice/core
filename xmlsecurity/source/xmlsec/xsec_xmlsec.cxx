@@ -121,7 +121,6 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
     Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
 
     if( xKey.is() ) {
-        //  try {
         // XMLElementWrapper_XmlSecImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLElementWrapper_XmlSecImpl_getImplementationName() ;
@@ -169,11 +168,6 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
         if( !result )
             return sal_False ;
 #endif
-
-        //} catch( InvalidRegistryException & ) {
-        //  //we should not ignore exceptions
-        //  return sal_False ;
-        //}
     }
 
     return result;

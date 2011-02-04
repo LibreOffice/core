@@ -328,7 +328,7 @@ int  SvxSingleNumPickTabPage::DeactivatePage(SfxItemSet *_pSet)
 void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
+
     //im Draw gibt es das Item als WhichId, im Writer nur als SlotId
     SfxItemState eState = rSet.GetItemState(SID_ATTR_NUMBERING_RULE, FALSE, &pItem);
     if(eState != SFX_ITEM_SET)
@@ -401,11 +401,6 @@ IMPL_LINK(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     rOk.GetClickHdl().Call(&rOk);
     return 0;
 }
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
 
 
 SvxBulletPickTabPage::SvxBulletPickTabPage(Window* pParent,
@@ -514,8 +509,6 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
-
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -572,11 +565,6 @@ void SvxBulletPickTabPage::PageCreated(SfxAllItemSet aSet)
 
 
 }
-
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
 
 
 SvxNumPickTabPage::SvxNumPickTabPage(Window* pParent,
@@ -721,7 +709,6 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
     delete pSaveNum;
     pSaveNum = new SvxNumRule(*((SvxNumBulletItem*)pItem)->GetNumRule());
 
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
     if(!pActNum)
         pActNum = new  SvxNumRule(*pSaveNum);
     else if(*pSaveNum != *pActNum)
@@ -850,10 +837,6 @@ void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
     }
 }
 
-/**************************************************************************/
-/*                                                                        */
-/*                                                                        */
-/**************************************************************************/
 
 SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
@@ -877,7 +860,6 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
     aLinkedCB.SetClickHdl(LINK(this, SvxBitmapPickTabPage, LinkBmpHdl_Impl));
 
     // Grafiknamen ermitteln
-
     GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
     pExamplesVS->SetHelpId(HID_VALUESET_NUMBMP    );
     for(USHORT i = 0; i < aGrfNames.Count(); i++)
@@ -925,7 +907,6 @@ void  SvxBitmapPickTabPage::ActivatePage(const SfxItemSet& rSet)
     const SfxPoolItem* pItem;
     bPreset = FALSE;
     BOOL bIsPreset = FALSE;
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
     const SfxItemSet* pExampleSet = GetTabDialog()->GetExampleSet();
     if(pExampleSet)
     {
@@ -967,8 +948,6 @@ BOOL  SvxBitmapPickTabPage::FillItemSet( SfxItemSet& rSet )
 {
     if ( !aGrfNames.Count() )
     {
-// das ist im SfxItemSet leider nicht zulaessig #52134#
-//      rSet.DisableItem(SID_ATTR_NUMBERING_RULE);
         return FALSE;
     }
     if( (bPreset || bModified) && pActNum)
@@ -1356,7 +1335,6 @@ void    SvxNumOptionsTabPage::Reset( const SfxItemSet& rSet )
     else
         aLevelLB.SelectEntryPos(aLevelLB.GetEntryCount() - 1);
 
-//  nActNumLvl = ((SwNumBulletTabDialog*)GetTabDialog())->GetActNumLevel();
     USHORT nMask = 1;
     aLevelLB.SetUpdateMode(FALSE);
     aLevelLB.SetNoSelection();
@@ -1636,12 +1614,6 @@ void SvxNumOptionsTabPage::InitControls()
                 aStartED.SetText(aEmptyStr);
         break;
         case SHOW_BULLET:
-        {
-//              const Font* pFnt = aNumFmtArr[Lvl]->GetBulletFont();
-//              if(pFnt)
-//                  ChgTxtFont(aBulletFT, *pFnt);
-//              aBulletFT.SetText(String((char)aNumFmtArr[nLvl]->GetBulletChar()));
-        }
         break;
         case SHOW_BITMAP:
         break;
@@ -1855,8 +1827,6 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
                     aNumFmt.SetBulletChar( SVX_DEF_BULLET );
                 pActNum->SetLevel(i, aNumFmt);
                 SwitchNumberType(SHOW_BULLET);
-                //ChgTxtFont(aBulletFT, *aNumFmt.GetBulletFont());
-                //aBulletFT.SetText( aNumFmt.GetBulletChar() );
                 // Zuweisung der Zeichenvorlage automatisch
                 if(bAutomaticCharStyles)
                 {
@@ -1867,7 +1837,6 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
             {
                 aNumFmt.SetPrefix( aPrefixED.GetText() );
                 aNumFmt.SetSuffix( aSuffixED.GetText() );
-//              aNumFmt.SetBulletFont(0);
                 SwitchNumberType(SHOW_NUMBERING);
                 pActNum->SetLevel(i, aNumFmt);
                 CheckForStartValue_Impl(nNumberingType);
@@ -1897,7 +1866,6 @@ IMPL_LINK( SvxNumOptionsTabPage, NumberTypeSelectHdl_Impl, ListBox *, pBox )
     {
         aCharFmtLB.SelectEntry(sSelectStyle);
         CharFmtHdl_Impl(&aCharFmtLB);
-        // bAutomaticCharStyles wird im CharFmtHdl_Impl zurueckgesetzt
         bAutomaticCharStyles = TRUE;
     }
     return 0;
@@ -2005,7 +1973,6 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     Size                    aSize;
     sal_Bool                bSucc(sal_False);
     SvxOpenGraphicDialog    aGrfDlg( CUI_RES(RID_STR_EDIT_GRAPHIC) );
-//  aGrfDlg.SetDialogHelpId( HID_NUMBERINGOPT_SEL_GRF_FROM_FILE );
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {
@@ -2436,7 +2403,6 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
         aStdFont.SetColor(aTextColor);
         aStdFont.SetFillColor(aBackColor);
 
-        //
         USHORT nFontHeight = nYStep * 6 / 10;
         if(bPosition)
             nFontHeight = nYStep * 15 / 10;
@@ -3040,7 +3006,6 @@ void SvxNumPositionTabPage::ActivatePage(const SfxItemSet& rSet)
         if(SFX_ITEM_SET == pExampleSet->GetItemState(SID_PARAM_CUR_NUM_LEVEL, FALSE, &pItem))
             nTmpNumLvl = ((const SfxUInt16Item*)pItem)->GetValue();
     }
-    //
     if(SFX_ITEM_SET == rSet.GetItemState(nNumItemId, FALSE, &pItem))
     {
         delete pSaveNum;

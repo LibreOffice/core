@@ -342,7 +342,6 @@ void ExtraIdle::Timeout()
         {
 
 #if OSL_DEBUG_LEVEL > 1
-//#define TT_NO_DECRYPT
 #define TT_CODE
 #else
 #define TT_CODE
@@ -485,11 +484,7 @@ void ExtraIdle::Timeout()
 "1EIGpcw0WfiaOul1s19ZIECoLBx-#S";
 
 
-//#if OSL_DEBUG_LEVEL > 1
-//          SvFileStream aStream( "d:\\gh_writeback.jpg" , STREAM_STD_READWRITE | STREAM_TRUNC );
-//#else
             SvMemoryStream aStream;
-//#endif
             xub_StrLen c;
             xub_StrLen cRest = 0;
 
@@ -528,43 +523,6 @@ void ExtraIdle::Timeout()
             {
                 ::svt::OStringTransfer::CopyString( CUniString("\nSorry! no bitmap"), StatementList::GetFirstDocFrame() );
             }
-
-/***********************************************************************
-//          USHORT nBC = pBmp->GetBitCount();
-//          pBmp->Scale( 0.02, 0.02 );
-//          nBC = pBmp->GetBitCount();
-//          SvMemoryStream aStream;
-            SvFileStream aStream( "d:\gh_small50.jpg", STREAM_STD_READ );
-
-            aStream.Seek( 0 );
-            xub_StrLen c;
-            String aOut;
-            String aDreierGruppe;
-            xub_StrLen cRest=0;
-            aStream >> c;
-            while ( !aStream.IsEof() )
-            {
-                cRest <<= 2;        // Im ersten Durchgang egal, da immer 0
-                cRest |= ( c & 0x03 );
-                c >>= 2;
-                aDreierGruppe += aTr.GetChar( c );
-
-                if ( aDreierGruppe.Len() == 3 )
-                {
-                    aOut += aTr.GetChar( cRest );
-                    aOut += aDreierGruppe;
-                    cRest = 0;
-                    aDreierGruppe = "";
-                }
-                aStream >> c;
-            }
-            if ( aDreierGruppe.Len() )
-            {
-                aOut += cRest;
-                aOut += aDreierGruppe;
-            }
-            ::svt::OStringTransfer::CopyString( aOut );
-**********************************************************************************/
 
             new StatementSlot( StatementList::pTTProperties->nSidPaste );
             return;
@@ -646,9 +604,6 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
 #endif
         StatementList *pC = StatementList::pFirst;
 
-//      MessBox MB( pMainWin, WB_DEF_OK|WB_OK, "Pause ...", "... und Weiter" );
-//      MB.Execute();
-
         if ( !StatementList::bCatchGPF )
         {
             if (!pC->CheckWindowWait()  ||  !pC->Execute())
@@ -697,23 +652,10 @@ IMPL_LINK( ImplRemoteControl, CommandHdl, Application*, EMPTYARG )
             }
         }
 
-/*  #i46293# remove reschedules
-        for (int xx = 1;xx < 20;xx++)
-            StatementList::NormalReschedule();
-*/
         m_bInsideExecutionLoop = FALSE;
     }
 
     StatementList::aWindowWaitUId = SmartId();  // Warten rücksetzen, da handler sowieso verlassen wird
-
-/*    if( StatementList::pFirst && !StatementList::bReadingCommands )
-         // Abfrage nötig, da andere CommandHdl aktiv sein können oder
-         // neue Commands gelesen werden können
-    {
-        delete StatementList::pFirst;     // Löscht die gesamte Liste !!
-        StatementList::pFirst   = NULL;
-        StatementList::pCurrent = NULL;   // Nur zur Sicherheit, sollte hier sowieso NULL sein
-    }*/
 
 #if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Leaving CommandHdl\n" );
@@ -731,7 +673,6 @@ IMPL_LINK( ImplRemoteControl, QueCommandsEvent, CommunicationLink*, pCL )
 
 BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 {
-//    return TRUE;
     USHORT nId;
 
     if( !m_bIdleInserted )

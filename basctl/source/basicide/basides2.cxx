@@ -67,44 +67,10 @@ IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, E
 }
 IMPL_LINK_INLINE_END( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
 
-/*
-IMPL_LINK( BasicIDEShell, ObjectDialogInsertHdl, ObjectCatalog *, pObjCat )
-{
-    if ( !pCurWin )
-        return 0;
-
-    if ( pCurWin->IsA( TYPE( ModulWindow ) ) )
-    {
-        ModulWindow* pEditWin = (ModulWindow*)pCurWin;
-        pEditWin->InsertFromObjectCatalog( pObjCat );
-    }
-    else
-        Sound::Beep();
-
-    return 0;
-}
-*/
-
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {
     return Reference< view::XRenderable >( new basicide::BasicRenderable( pCurWin ) );
 }
-
-#if 0
-USHORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
-{
-    if ( pCurWin )
-    {
-        SfxPrinter* pPrinter = GetPrinter( TRUE );
-        if ( pPrinter )
-        {
-            SfxViewShell::Print( rProgress, bIsAPI, pPrintDialog );
-            pCurWin->PrintData( pPrinter );
-        }
-    }
-    return 0;
-}
-#endif
 
 BOOL BasicIDEShell::HasSelection( BOOL /* bText */ ) const
 {
@@ -128,10 +94,7 @@ String BasicIDEShell::GetSelectionText( BOOL bWholeWord )
         {
             if ( bWholeWord && !pEditView->HasSelection() )
             {
-                // String aStrCurrentDelimiters = pEngine->GetWordDelimiters();
-                // pEngine->SetWordDelimiters( " .,;\"'" );
                 aText = pEditView->GetTextEngine()->GetWord( pEditView->GetSelection().GetEnd() );
-                // pEngine->SetWordDelimiters( aStrCurrentDelimiters );
             }
             else
             {

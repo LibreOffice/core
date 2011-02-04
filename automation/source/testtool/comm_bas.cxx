@@ -145,7 +145,6 @@ CommunicationWrapper::CommunicationWrapper( const String& rClass ) : SbxObject( 
 , m_bCatchOpen( FALSE )
 , m_pNewLink( NULL )
 {
-//  SetName( CUniString("Manager") );
     m_pMethods = &aManagerMethods[0];
     m_pManager = new CommunicationManagerClientViaSocket;
     m_pManager->SetConnectionOpenedHdl( LINK( this, CommunicationWrapper, Open ) );

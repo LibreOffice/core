@@ -81,8 +81,6 @@ using namespace linguistic;
 #define CAPTYPE_MIXED   4
 
 // min, max
-
-//#define Min(a,b) (a < b ? a : b)
 #define Max(a,b) (a > b ? a : b)
 
 ///////////////////////////////////////////////////////////////////////////
@@ -208,12 +206,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
             // add dictionary information
             aDicts = new HDInfo[numdict];
-/*
-            aTEncs  = new rtl_TextEncoding [numdict];
-            aTLocs  = new Locale [numdict];
-            aTNames = new OUString [numdict];
-            aCharSetInfo = new CharClass* [numdict];
-*/
+
             k = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
             {
@@ -626,7 +619,6 @@ Reference< XPossibleHyphens > SAL_CALL
       int n = wordlen-1;
       while((n >=0) && (lcword[n] == '.')) n--;
       n++;
-      // fprintf(stderr,"hyphenate... %s\n",lcword); fflush(stderr);
       if (n > 0) {
          if (hnj_hyphen_hyphenate3(dict, lcword, n, hyphens, NULL, &rep, &pos, &cut,
             minLead, minTrail, Max(dict->clhmin, Max(dict->clhmin, 2) + Max(0, minLead - Max(dict->lhmin, 2))),
@@ -650,7 +642,6 @@ Reference< XPossibleHyphens > SAL_CALL
       // now backfill hyphens[] for any removed periods
       for (int c = n; c < wordlen; c++) hyphens[c] = '0';
       hyphens[wordlen] = '\0';
-      // fprintf(stderr,"... %s\n",hyphens); fflush(stderr);
 
       INT16 nHyphCount = 0;
       INT16 i;
@@ -676,8 +667,6 @@ Reference< XPossibleHyphens > SAL_CALL
       }
 
       hyphenatedWord = hyphenatedWordBuffer.makeStringAndClear();
-      //fprintf(stderr,"result is %s\n",OU2A(hyphenatedWord));
-      //fflush(stderr);
 
       xRes = new PossibleHyphens( aWord, LocaleToLanguage( aLocale ),
                 hyphenatedWord, aHyphPos );

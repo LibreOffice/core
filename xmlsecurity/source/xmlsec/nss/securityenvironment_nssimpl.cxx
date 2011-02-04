@@ -206,9 +206,6 @@ Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInsta
 }
 
 Reference< XSingleServiceFactory > SecurityEnvironment_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 
@@ -794,7 +791,6 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         int ncvinCount=0;
 
 #if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 0 )
-        // cert_pi_useAIACertFetch was added in NSS 3.12.1
         cvin[ncvinCount].type = cert_pi_useAIACertFetch;
         cvin[ncvinCount].value.scalar.b = PR_TRUE;
         ncvinCount++;
@@ -828,7 +824,6 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         rev.leafTests.preferred_methods = NULL;
         rev.leafTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
-//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
         rev.chainTests.number_of_defined_methods = 2;
         rev.chainTests.cert_rev_flags_per_method = revFlagsChain;
@@ -842,7 +837,6 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         rev.chainTests.preferred_methods = NULL;
         rev.chainTests.cert_rev_method_independent_flags =
             CERT_REV_MI_TEST_ALL_LOCAL_INFORMATION_FIRST;
-//            | CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE;
 
 
         cvin[ncvinCount].type = cert_pi_revocationFlags;

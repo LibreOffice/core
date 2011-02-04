@@ -31,12 +31,6 @@
 **   Es gibt immer nur eine Statementliste, die verpointert ist.
 **       jederzeit kann das der Anfang der Kette abgefragt werden.
 **
-**
-**
-**
-**
-**
-**
 ***************************************************************************/
 #ifndef _STATEMNT_HXX
 #define _STATEMNT_HXX
@@ -117,7 +111,6 @@ BOOL IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Ka
 BOOL IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
 
 
-//class SafePointer : CriticalSection
 class SafePointer
 {
     SafePointer *pSelf;
@@ -125,8 +118,6 @@ public:
     SafePointer()   { pSelf = this; }
     virtual ~SafePointer()  { DBG_ASSERT(pSelf==this,"Destructor von Nicht existierendem Objekt aufgerufen");
                               pSelf = NULL; }
-//  static BOOL IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
-// virtual      operator -> (); { DBG_ASSERT(pMyself == this,"-> von Nicht existierendem Objekt aufgerufen"); }
 };
 
 
@@ -216,7 +207,6 @@ public:
 
         if ( pLastFocusWindow != GetpApp()->GetFocusWindow()
             || ( Application::GetModalModeCount() > nModalCount )
-//          || ( DragManager::GetDragManager() && !bWasDragManager )
             || ( PopupMenu::GetActivePopupMenu() && !bWasPopupMenu )
             || ( StarBASIC::IsRunning() && !bBasicWasRunning ) )
         {
@@ -256,8 +246,6 @@ protected:
     USHORT GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
 
 public:
-//  void AddStatement( StatementList *pNewStatement );
-
     virtual ~StatementList();
     void Advance();
     virtual BOOL Execute() = 0;

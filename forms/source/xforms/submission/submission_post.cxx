@@ -66,7 +66,6 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         ucbhelper::Content aContent(m_aURLObj.GetMainURL(INetURLObject::NO_DECODE), aEnvironment);
 
         // use post command
-
         OUString aCommandName(RTL_CONSTASCII_USTRINGPARAM("post"));
         PostCommandArgument2 aPostArgument;
         aPostArgument.Source = apSerialization->getInputStream();
@@ -78,25 +77,16 @@ CSubmission::SubmissionResult CSubmissionPost::submit(const CSS::uno::Reference<
         aCommandArgument <<= aPostArgument;
         aContent.executeCommand( aCommandName, aCommandArgument);
 
-        // wait for command to finish
-        // pProgressHelper->m_cFinished.wait();
-
-        // CSS::uno::Reference< XOutputStream > xOut(aSink, UNO_QUERY_THROW);
-        // xOut->closeOutput();
-
         try {
-            // m_aResultStream = CSS::uno::Reference< XInputStream >(aSink, UNO_QUERY_THROW);
             m_aResultStream = aSink->getInputStream();
         } catch (Exception&) {
             OSL_ENSURE(sal_False, "Cannot open reply stream from content");
         }
     } catch (Exception&)
     {
-        // XXX
         OSL_ENSURE(sal_False, "Exception during UCB operatration.");
         return UNKNOWN_ERROR;
     }
-
 
     return SUCCESS;
 }

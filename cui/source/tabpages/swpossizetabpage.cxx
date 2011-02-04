@@ -1167,32 +1167,6 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
     else
         m_bAtVertPosModified = TRUE;
 
-    // OD 12.11.2003 #i22341# - following special handling no longer needed
-    /*
-    if (!bHori && m_pVMap == aVCharMap)
-    {
-        // Ausrichtung Vertikal
-        String sEntry;
-        USHORT nMapPos = GetMapPos(m_pVMap, m_aVertLB);
-        USHORT nAlign = GetAlignment(m_pVMap, nMapPos, m_aVertLB, m_aVertToLB);
-        USHORT nRel = GetRelation(m_pVMap, m_aVertToLB);
-
-        if (nRel == SwFPos::REL_CHAR)
-            sEntry = m_aFramePosString.GetString(SwFPos::FROMBOTTOM);
-        else
-            sEntry = m_aFramePosString.GetString(SwFPos::FROMTOP);
-
-        USHORT nOldPos = m_aVertLB.GetSelectEntryPos();
-
-        String sName = m_aVertLB.GetEntry(m_aVertLB.GetEntryCount() - 1);
-        if (sName != sEntry)
-        {
-            m_aVertLB.RemoveEntry(m_aVertLB.GetEntryCount() - 1);
-            m_aVertLB.InsertEntry(sEntry);
-            m_aVertLB.SelectEntryPos(nOldPos);
-        }
-    }
-    */
     if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) // wieder Sonderbehandlung
     {
         if(bHori)

@@ -855,12 +855,6 @@ IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
         p = aSyntaxLineTable.Next();
     }
 
-    // MT: Removed, because of idle format now when set/remove attribs...
-    // pEditView->SetAutoScroll( FALSE );  // #101043# Don't scroll because of syntax highlight
-    // pEditEngine->SetUpdateMode( TRUE );
-    // pEditView->ShowCursor( FALSE, TRUE );
-    // pEditView->SetAutoScroll( TRUE );
-
     // #i45572#
     if ( pEditView )
         pEditView->ShowCursor( FALSE, TRUE );
@@ -1454,7 +1448,6 @@ IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )
 
     sal_Int32 nPos = 0;
     USHORT nTabs = aHeaderBar.GetItemCount();
-    // OSL_ASSERT( m_treelb->TabCount() == nTabs );
     for( USHORT i = 1 ; i < nTabs ; ++i )
     {
         nPos += aHeaderBar.GetItemSize( i );

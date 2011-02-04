@@ -170,23 +170,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         if (aChild.is() && aChild->getNodeType() == NodeType_ELEMENT_NODE)
             serialize_node(aChild);
     }
-
-    // siblings...
-//    Reference< XNode > aSibling = aNode->getNextSibling();
-//    if (aSibling.is())
-//        serialize_node(aSibling);
-
 }
-
-/*
-void CSerializationURLEncoded::serialize_nodeset()
-{
-    Reference< XNodeList > aNodeList = m_aXPathObject->getNodeList();
-    for (sal_Int32 i=0; i<aNodeList->getLength(); i++)
-        serialize_node(aNodeList->item(i));
-    m_aPipe->closeOutput();
-}
-*/
 
 void CSerializationURLEncoded::serialize()
 {

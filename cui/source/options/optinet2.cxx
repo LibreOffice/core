@@ -156,23 +156,6 @@ String lcl_MakeTabEntry(const SfxFilter* pFilter)
 BOOL IsJavaInstalled_Impl( /*!!!SfxIniManager* pIniMgr*/ )
 {
     BOOL bRet = FALSE;
-/*!!! (pb) needs new implementation
-    String aIniEntry;
-    String aFullName = Config::GetConfigName( pIniMgr->Get( SFX_KEY_USERCONFIG_PATH ),
-                                              String::CreateFromAscii("java") );
-    INetURLObject aIniFileObj( aFullName, INET_PROT_FILE );
-    String aIniPath = aIniFileObj.getName();
-    if ( pIniMgr->SearchFile( aIniPath ) )
-    {
-        Config aJavaCfg( aIniPath );
-        aJavaCfg.SetGroup( "Java" );
-        ByteString sTemp = aJavaCfg.ReadKey( ByteString(::rtl::OUStringToOString(pIniMgr->GetKeyName( SFX_KEY_JAVA_SYSTEMCLASSPATH ),RTL_TEXTENCODING_UTF8)) );
-        String aJavaSystemClassPath = ::rtl::OStringToOUString(sTemp,RTL_TEXTENCODING_UTF8);
-        String aJavaRuntimeLib = ::rtl::OStringToOUString(aJavaCfg.ReadKey( "RuntimeLib" ),RTL_TEXTENCODING_UTF8);
-        if ( aJavaSystemClassPath.Len() && aJavaRuntimeLib.Len() )
-            bRet = TRUE;
-    }
-*/
     return bRet;
 }
 
@@ -216,12 +199,9 @@ void SvxNoSpaceEdit::Modify()
 }
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxProxyTabPage                                                 */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -683,12 +663,9 @@ IMPL_LINK( SvxProxyTabPage, LoseFocusHdl_Impl, Edit *, pEdit )
 
 
 /********************************************************************/
-/********************************************************************/
 /*                                                                  */
 /*  SvxSearchTabPage                                                */
 /*                                                                  */
-/*                                                                  */
-/********************************************************************/
 /********************************************************************/
 
 SvxSearchTabPage::SvxSearchTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -1098,104 +1075,6 @@ IMPL_LINK( SvxSearchTabPage, SearchPartHdl_Impl, RadioButton *, EMPTYARG )
     aCaseED.SelectEntryPos( (USHORT)nCase );
     return 0;
 }
-
-// -----------------------------------------------------------------------
-
-/********************************************************************/
-/********************************************************************/
-/*                                                                  */
-/*  SvxOtherTabPage                                                 */
-/*                                                                  */
-/********************************************************************/
-/********************************************************************/
-
-/*
-SvxPatternField::SvxPatternField( Window* pParent, const ResId& rResId ) :
-
-    PatternField( pParent, rResId ),
-
-    sMsg233 ( ResId( ST_MSG_233 ) ),
-    sMsg255 ( ResId( ST_MSG_255 ) )
-
-{
-    FreeResource();
-    SelectFixedFont();
-} */
-
-/*void SvxPatternField::KeyInput( const KeyEvent& rKEvt )
-{
-    PatternField::KeyInput( rKEvt );
-    BOOL bDelete = ( rKEvt.GetKeyCode().GetCode() == KEY_DELETE );
-    String sEntry( GetText() );
-    sEntry[(USHORT)3] = '.';
-    sEntry[(USHORT)7] = '.';
-    sEntry[(USHORT)11] = '.';
-    Selection aSelection( GetSelection() );
-    String sPart( sEntry.GetToken( 0, '.' ) );
-    USHORT i, nPart( sPart.EraseLeadingChars() );
-    BOOL bSet = FALSE;
-
-    if ( sPart.Len() && ( !nPart || nPart > 255 ) )
-    {
-        // der erste Part darf nicht 0 und nicht gr"osser 255 sein
-        String sMsg( sPart );
-        sMsg += ' ';
-        sMsg += sMsg233;
-        InfoBox( this, sMsg ).Execute();
-
-        if ( nPart == 0 )
-            sPart = "  1";
-        else
-            sPart = "255";
-        sEntry.SetToken( 0, '.', sPart );
-        bSet = TRUE;
-    };
-
-    for ( i = 1; i < 4; i++ )
-    {
-        // die anderen Parts d"urfen nicht gr"osser 255 sein
-        sPart = sEntry.GetToken( i, '.' );
-        nPart = sPart.EraseLeadingChars();
-
-        if ( nPart > 255 )
-        {
-            String sMsg( sPart );
-            sMsg += ' ';
-            sMsg += sMsg255;
-            InfoBox( this, sMsg ).Execute();
-
-            if ( nPart == 0 )
-                sPart = "  1";
-            else
-                sPart = "255";
-            sEntry.SetToken( i, '.', sPart );
-            bSet = TRUE;
-        };
-    }
-
-    if ( bSet )
-    {
-        SetText( sEntry );
-        SetSelection( aSelection );
-    }
-}
-*/
-// -----------------------------------------------------------------------
-#if 0
-long SvxPatternField::Notify( NotifyEvent& rNEvt )
-{
-    return PatternField::Notify( rNEvt );
-/*! long nHandled = 0;
-
-    if ( rNEvt.GetType() == EVENT_KEYUP )
-    {
-        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
-        KeyInput( *pKEvt );
-        nHandled = 1;
-    }
-    return nHandled;*/
-}
-#endif
 
 // class JavaScriptDisableQueryBox_Impl --------------------------------------
 
@@ -1607,18 +1486,9 @@ int SvxSecurityTabPage::DeactivatePage( SfxItemSet* _pSet )
 
 namespace
 {
-/*    bool Enable( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, Control& _rCtrl, FixedImage& _rImg )
-    {
-        bool    b = _rOpt.IsOptionEnabled( _eOpt );
-        _rCtrl.Enable( b );
-        _Img.Show( !b );
-        return b;
-    }
-*/
     bool EnableAndSet( const SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt,
                                                         CheckBox& _rCtrl, FixedImage& _rImg )
     {
-//        bool    b = Enable( _rOpt, _eOpt, _rCtrl, _rImg );
         bool    b = _rOpt.IsOptionEnabled( _eOpt );
         _rCtrl.Enable( b );
         _rImg.Show( !b );
@@ -1729,7 +1599,6 @@ inline bool getDllURL(rtl::OString * path)
         return false;
     }
     dirPath = dirPath.copy(0, dirPath.lastIndexOf('/'));
-//    osl::FileBase::getAbsoluteFileURL(dirPath, libPath, dllPath);
     ::rtl::OUString sysDirPath;
     osl::FileBase::getSystemPathFromFileURL(dirPath, sysDirPath);
     *path = OUStringToOString(sysDirPath, RTL_TEXTENCODING_ASCII_US);

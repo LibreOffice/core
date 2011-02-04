@@ -432,21 +432,6 @@ void SAXHelper::setDocumentLocator(
     const cssu::Reference< cssxs::XLocator > &)
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
-    //--Pseudo code if necessary
-    //--m_pSaxLocator is a member defined as xmlSAXHabdlerPtr
-    //--m_pSaxLocatorHdl is a member defined as Sax_Locator
-
-    //if( m_pSaxLocator != NULL ) {
-    //  //Deallocate the memory
-    //}
-    //if( m_pSaxLocatorHdl != NULL ) {
-    //  //Deallocate the memory
-    //}
-
-    //m_pSaxLocatorHdl = new Sax_Locator( xLocator ) ;
-    //m_pSaxLocator = { m_pSaxLocatorHdl->getPublicId , m_pSaxLocatorHdl->getSystemId , m_pSaxLocatorHdl->getLineNumber , m_pSaxLocatorHdl->getColumnNumber } ;
-
-    //m_pSaxHandler->setDocumentLocator( m_pParserCtxt , m_pSaxLocator ) ;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

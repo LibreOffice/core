@@ -82,16 +82,6 @@ SvxJavaTable::~SvxJavaTable()
 void SvxJavaTable::SetTabs()
 {
     SvxSimpleTable::SetTabs();
-/*
-    USHORT nAdjust = SV_LBOXTAB_ADJUST_RIGHT | SV_LBOXTAB_ADJUST_LEFT |
-                     SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_ADJUST_NUMERIC | SV_LBOXTAB_FORCE;
-    if ( aTabs.Count() > 0 )
-    {
-        SvLBoxTab* pTab = (SvLBoxTab*)aTabs.GetObject(0);
-        pTab->nFlags &= ~nAdjust;
-        pTab->nFlags |= SV_LBOXTAB_PUSHABLE | SV_LBOXTAB_ADJUST_CENTER | SV_LBOXTAB_FORCE;
-    }
-*/
 }
 
 void SvxJavaTable::MouseButtonUp( const MouseEvent& _rMEvt )
@@ -181,8 +171,6 @@ SvxJavaOptionsPage::SvxJavaOptionsPage( Window* pParent, const SfxItemSet& rSet 
     m_aResetTimer.SetTimeoutHdl( LINK( this, SvxJavaOptionsPage, ResetHdl_Impl ) );
     m_aResetTimer.SetTimeout( RESET_TIMEOUT );
 
-//!   m_aJavaList.EnableCheckButton( new SvLBoxButtonData( &m_aJavaList, true ) );
-
     static long aStaticTabs[]=
     {
         5, 0, 15, 90, 130, 300
@@ -243,13 +231,7 @@ SvxJavaOptionsPage::~SvxJavaOptionsPage()
         JavaInfo* pInfo = *pIter;
         jfw_freeJavaInfo( pInfo );
     }
-/*
-    rtl_uString** pParamArr = m_parParameters;
-    for ( sal_Int32 i = 0; i < m_nParamSize; ++i )
-        rtl_uString_release( *pParamArr++ );
-    rtl_freeMemory( m_parParameters );
-    rtl_uString_release( m_pClassPath );
-*/
+
     jfw_unlock();
 }
 

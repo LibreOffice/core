@@ -68,9 +68,6 @@ namespace ole_adapter
 {
 
 #include <initguid.h>
-// prior 5.2 ( src569 ver m)
-// {3ECF78F0-B149-11D2-8EBE-00105AD848AF}
-//DEFINE_GUID(OID_ServiceManager, 0x3ECF78F0, 0xB149, 0x11d2, 0x8E, 0xBE, 0x00, 0x10, 0x5A, 0xD8, 0x48, 0xAF);
 
 #ifndef OWNGUID
 // GUID used since 5.2 ( src569 m)

@@ -483,12 +483,6 @@ void PropBrw::implSetNewObject( const Reference< XPropertySet >& _rxObject )
     {
         aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_NO_PROPERTIES)));
     }
-    // #i73075 Handled in implSetNewObjectSequence
-    //else    // multiselection
-    //{
-    //  aName = ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_PROPERTIES)));
-    //  aName += ::rtl::OUString(String(IDEResId(RID_STR_BRWTITLE_MULTISELECT)));
-    //}
 
     return aName;
 }

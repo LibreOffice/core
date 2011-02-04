@@ -33,7 +33,6 @@
 
 #include <vcl/sound.hxx>
 
-// #define ITEMID_SEARCH SID_SEARCH_ITEM
 #define _SVX_NOIDERESIDS
 #include <brkdlg.hxx>
 #include <brkdlg.hrc>
@@ -96,7 +95,6 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aOKButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aNewButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
     aDelButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
-//  aShowButton.SetClickHdl( LINK( this, BreakPointDialog, ButtonHdl ) );
 
     aCheckBox.SetClickHdl( LINK( this, BreakPointDialog, CheckBoxHdl ) );
     aComboBox.SetSelectHdl( LINK( this, BreakPointDialog, ComboBoxHighlightHdl ) );
@@ -247,10 +245,6 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
         }
         CheckButtons();
     }
-//  else if ( pButton == &aShowButton )
-//  {
-//      ;
-//  }
 
     return 0;
 }

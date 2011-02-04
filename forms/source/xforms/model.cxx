@@ -234,60 +234,12 @@ void Model::dbg_assertInvariant() const
 {
     OSL_ENSURE( mpInstances != NULL, "no instances found" );
     OSL_ENSURE( mxInstances.is(), "No instance container!" );
-    //    OSL_ENSURE( mxInstances->hasElements(), "no instance!" );
 
     OSL_ENSURE( mpBindings != NULL, "no bindings element" );
     OSL_ENSURE( mxBindings.is(), "No Bindings container" );
 
     OSL_ENSURE( mpSubmissions != NULL, "no submissions element" );
     OSL_ENSURE( mxSubmissions.is(), "No Submission container" );
-
-
-
-    /*
-    // check bindings, and things that have to do with our binding
-    std::vector<MIP*> aAllMIPs; // check MIP map
-    sal_Int32 nCount = mpBindings->countItems();
-    for( sal_Int32 i = 0; i < nCount; i++ )
-    {
-        Binding* pBind = Binding::getBinding(
-            mpBindings->Collection<XPropertySet_t>::getItem( i ) );
-
-        // examine and check binding
-        OSL_ENSURE( pBind != NULL, "invalid binding found" );
-
-        OSL_ENSURE( Model::getModel( pBind->getModel() ) == this,
-                    "our binding doesn't know us.");
-        // check this binding's MIP against MIP map
-        MIP* pMIP = const_cast<MIP*>( pBind->_getMIP() );
-        sal_Int32 nFound = 0;
-        if( pMIP != NULL )
-        {
-            aAllMIPs.push_back( pMIP );
-            for( MIPs_t::const_iterator aIter = maMIPs.begin();
-                 aIter != maMIPs.end();
-                 aIter++ )
-            {
-                if( pMIP == aIter->second )
-                    nFound++;
-            }
-        }
-        OSL_ENSURE( ( pMIP == NULL ) == ( nFound == 0 ), "MIP-map wrong" );
-    }
-
-    // check MIP map for left-over MIPs
-    for( MIPs_t::const_iterator aIter = maMIPs.begin();
-         aIter != maMIPs.end();
-         aIter++ )
-    {
-        MIP* pMIP = aIter->second;
-        std::vector<MIP*>::iterator aFound =
-            std::find( aAllMIPs.begin(), aAllMIPs.end(), pMIP );
-        if( aFound != aAllMIPs.end() )
-            aAllMIPs.erase( aFound );
-    }
-    OSL_ENSURE( aAllMIPs.empty(), "lonely MIPs found!" );
-    */
 }
 #endif
 
@@ -325,8 +277,6 @@ void Model::removeMIPs( void* pTag )
 
 MIP Model::queryMIP( const XNode_t& xNode ) const
 {
-    //    OSL_ENSURE( xNode.is(), "no node" );
-
     // travel up inheritance chain and inherit MIPs
     MIP aRet;
     for( XNode_t xCurrent = xNode;
@@ -716,15 +666,6 @@ Model::XSet_t Model::getSubmissions()
     DBG_INVARIANT();
     return mxSubmissions;
 }
-
-
-
-//
-// implementation of XFormsUIHelper1 interface
-//   can be found in file model_ui.cxx
-//
-
-
 
 //
 // implement XPropertySet & friends

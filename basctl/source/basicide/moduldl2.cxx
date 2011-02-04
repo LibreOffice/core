@@ -29,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
 #define GLOBALOVERFLOW
 
 #include <ide_pch.hxx>
 
 #include <svtools/filedlg.hxx>
-
 
 #include <sot/storinfo.hxx>
 
@@ -331,16 +329,6 @@ BOOL BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
     // TODO: check if library is reference/link
 
-    // Prueffen, ob Referenz...
-    /*
-    USHORT nLib = pBasMgr->GetLibId( GetEntryText( pEntry, 0 ) );
-    DBG_ASSERT( nLib != LIB_NOTFOUND, "LibId ?!" );
-    if ( pBasMgr->IsReference( nLib ) )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_CANNOTCHANGENAMEREFLIB ) ) ).Execute();
-        return FALSE;
-    }
-    */
     return TRUE;
 }
 

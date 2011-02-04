@@ -203,19 +203,7 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         if ( SUCCEEDED( hr ) )
         {
             WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
-//            // reinit the handler
-//            ComSmart< IRunnableObject > pIRunObj;
-//            hr = m_pDefHandler->QueryInterface( IID_IRunnableObject, (void**)&pIRunObj );
-//
-//            if ( SUCCEEDED( hr ) && pIRunObj )
             {
-//                {
-//                    ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-//                    hr = pIRunObj->Run( NULL );
-//                }
-//
-//                if ( SUCCEEDED( hr ) )
-                {
                     if ( m_nInitMode == INIT_FROM_STORAGE )
                     {
                         WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
@@ -247,7 +235,6 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                             hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
                     }
                     WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
-                }
             }
         }
 
@@ -1187,18 +1174,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unadvise( DWORD dwConnection )
 STDMETHODIMP InprocEmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvise*/ )
 {
     return E_NOTIMPL;
-
-//    if ( CheckDefHandler() )
-//    {
-//        ComSmart< IOleObject > pOleObject;
-//        HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
-//
-//        ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-//        if ( SUCCEEDED( hr ) && pOleObject )
-//            return pOleObject->EnumAdvise( ppenumAdvise );
-//    }
-//
-//    return E_FAIL;
 }
 
 //-------------------------------------------------------------------------------

@@ -96,17 +96,6 @@ CSerializationAppXML::serialize_node(const CSS::uno::Reference< CSS::xml::dom::X
     }
 }
 
-/*
-void
-CSerializationAppXML::serialize_nodeset()
-{
-    CSS::uno::Reference< CSS::xml::dom::XNodeList > aNodeList = m_aXPathObject->getNodeList();
-    for (sal_Int32 i=0; i<aNodeList->getLength(); i++)
-        serialize_node(aNodeList->item(i));
-    m_aPipe->closeOutput();
-}
-*/
-
 void
 CSerializationAppXML::serialize()
 {

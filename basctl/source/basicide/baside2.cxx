@@ -29,9 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
 #include <ide_pch.hxx>
-
 
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
@@ -49,7 +47,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sfx2/docfile.hxx>
 #include <basic/basrdll.hxx>
-
 
 #include <baside2.hrc>
 #include <baside2.hxx>
@@ -252,9 +249,7 @@ void ModulWindow::DoInit()
     if ( GetVScrollBar() )
         GetVScrollBar()->Hide();
     GetHScrollBar()->Show();
-//  GetEditorWindow().SetScrollBarRanges();
     GetEditorWindow().InitScrollBars();
-//  GetEditorWindow().GrabFocus();
 }
 
 
@@ -460,8 +455,6 @@ BOOL ModulWindow::LoadBasic()
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
 
-    //xFP->setTitle( String( IDEResId( RID_STR_OPEN ) ) );
-
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
     xFltMgr->appendFilter( String( IDEResId( RID_STR_FILTER_ALLFILES ) ), String( RTL_CONSTASCII_USTRINGPARAM( FILTERMASK_ALL ) ) );
@@ -521,8 +514,6 @@ BOOL ModulWindow::SaveBasicSource()
 
     if ( aCurPath.Len() )
         xFP->setDisplayDirectory ( aCurPath );
-
-    //xFP->setTitle( String( IDEResId( RID_STR_SAVE ) ) );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
     xFltMgr->appendFilter( String( RTL_CONSTASCII_USTRINGPARAM( "BASIC" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.bas" ) ) );
@@ -719,8 +710,6 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     BOOL bMarkError = ( pBasic == GetBasic() ) ? TRUE : FALSE;
     if ( bMarkError )
         aXEditorWindow.GetBrkWindow().SetMarkerPos( nErrorLine, TRUE );
-//  ErrorBox( this, WB_OK | WB_DEF_OK, String( aErrorTextPrefix + aErrorText ) ).Execute();
-//  ErrorHandler::HandleError( pBasic->GetErrorCode() );
 
     // #i47002#
     Reference< awt::XWindow > xWindow = VCLUnoHelper::GetInterface( this );
@@ -740,9 +729,6 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
 long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
-    // Ein GoOnTop aktiviert da Fenster, das veraendert aber den Context fuer
-    // das Programm!
-//  GoOnTop();
 
     // #i69280 Required in Window despite normal usage in next command!
     (void)pBasic;
@@ -795,7 +781,6 @@ void ModulWindow::BasicAddWatch()
     BOOL bAdd = TRUE;
     if ( !GetEditView()->HasSelection() )
     {
-//      bAdd = GetEditView()->SelectCurrentWord();
         TextPaM aWordStart;
         String aWord = GetEditEngine()->GetWord( GetEditView()->GetSelection().GetEnd(), &aWordStart );
         if ( aWord.Len() )
@@ -803,7 +788,6 @@ void ModulWindow::BasicAddWatch()
             TextSelection aSel( aWordStart );
             USHORT& rIndex = aSel.GetEnd().GetIndex();
             rIndex = rIndex + aWord.Len();
-            // aSel.GetEnd().GetIndex() += sal::static_int_cast<int>( aWord.Len() );
             GetEditView()->SetSelection( aSel );
             bAdd = TRUE;
         }
@@ -890,9 +874,6 @@ void ModulWindow::StoreData()
     // => Keine Unterbrechungen erwuenscht!
     // Und bei SAVE, wenn AppBasic...
     GetEditorWindow().SetSourceInBasic( TRUE );
-    // Nicht das Modify loeschen, sonst wird das Basic nicht gespeichert
-    // Es wird beim Speichern sowieso geloescht.
-//  xModule->SetModified( FALSE );
 }
 
 BOOL ModulWindow::CanClose()
@@ -956,7 +937,6 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
     MapMode eOldMapMode( pPrinter->GetMapMode() );
     Font aOldFont( pPrinter->GetFont() );
 
-//  Font aFont( GetEditEngine()->CreateFontFromItemSet( GetEditEngine()->GetEmptyItemSet() ) );
     Font aFont( GetEditEngine()->GetFont() );
     aFont.SetAlign( ALIGN_BOTTOM );
     aFont.SetTransparent( TRUE );
@@ -1240,8 +1220,6 @@ String ModulWindow::GetTitle()
 
 void ModulWindow::FrameWindowMoved()
 {
-//  if ( GetEditEngine() && GetEditEngine()->IsInSelectionMode() )
-//      GetEditEngine()->StopSelectionMode();
 }
 
 
@@ -1512,7 +1490,6 @@ void ModulWindowLayout::Resize()
 {
     // ScrollBars, etc. passiert in BasicIDEShell:Adjust...
     ArrangeWindows();
-//  Invalidate();
 }
 
 void ModulWindowLayout::Paint( const Rectangle& )

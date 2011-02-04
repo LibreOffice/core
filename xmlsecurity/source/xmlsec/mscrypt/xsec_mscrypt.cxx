@@ -62,7 +62,6 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
     Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey* >( pRegistryKey ) ) ;
 
     if( xKey.is() ) {
-        //  try {
         // XMLSignature_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSignature_MSCryptImpl::impl_getImplementationName() ;
@@ -124,10 +123,6 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         }
 
         return sal_True;
-        //} catch( InvalidRegistryException & ) {
-        //  //we should not ignore exceptions
-        //  return sal_False ;
-        //}
     }
     return result;
 }

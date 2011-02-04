@@ -627,7 +627,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     }
 
     aDocInfoCB.Check(aSaveOpt.IsDocInfoSave());
-//    aDocInfoCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOCINFSAVE));
 
     aBackupCB.Check(aSaveOpt.IsBackup());
     BOOL bBackupRO = aSaveOpt.IsReadOnly(SvtSaveOptions::E_BACKUP);
@@ -637,22 +636,16 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aAutoSaveCB.Check(aSaveOpt.IsAutoSave());
     aWarnAlienFormatCB.Check(aSaveOpt.IsWarnAlienFormat());
     aWarnAlienFormatCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_WARNALIENFORMAT));
-//    aAutoSaveCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVE));
 
     // the pretty printing
     aSizeOptimizationCB.Check( !aSaveOpt.IsPrettyPrinting());
-//    aSizeOptimizationCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_DOPRETTYPRINTING ));
-
 
     aAutoSaveEdit.SetValue( aSaveOpt.GetAutoSaveTime() );
-//    aAutoSaveEdit.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_AUTOSAVETIME));
 
     // relativ speichern
     aRelativeFsysCB.Check( aSaveOpt.IsSaveRelFSys() );
-//    aRelativeFsysCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELFSYS));
 
     aRelativeInetCB.Check( aSaveOpt.IsSaveRelINet() );
-//    aRelativeInetCB.Enable(!aSaveOpt.IsReadOnly(SvtSaveOptions::E_SAVERELINET));
 
     void* pDefaultVersion = (void*)long( aSaveOpt.GetODFDefaultVersion() );
     aODFVersionLB.SelectEntryPos( aODFVersionLB.GetEntryPos( pDefaultVersion ) );
@@ -666,7 +659,6 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
     aSizeOptimizationCB.SaveValue();
     aAutoSaveCB.SaveValue();
     aAutoSaveEdit.SaveValue();
-//  aAutoSavePromptBtn.SaveValue();
 
     aRelativeFsysCB.SaveValue();
     aRelativeInetCB.SaveValue();
@@ -683,14 +675,12 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
         {
             aAutoSaveEdit.Enable();
             aMinuteFT.Enable();
-//          aAutoSavePromptBtn.Enable();
             aAutoSaveEdit.GrabFocus();
         }
         else
         {
             aAutoSaveEdit.Disable();
             aMinuteFT.Disable();
-//          aAutoSavePromptBtn.Disable();
         }
     }
     return 0;
@@ -706,7 +696,6 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
         if(!pProperties[nProp].Name.compareToAscii("UIName"))
         {
             pProperties[nProp].Value >>= sRet;
-//!            break;
         }
         else if(!pProperties[nProp].Name.compareToAscii("Flags"))
         {

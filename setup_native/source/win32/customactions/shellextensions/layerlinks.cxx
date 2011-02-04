@@ -117,11 +117,6 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     stripFinalBackslash(&sBasisInstallPath);
     stripFinalBackslash(&sUreInstallPath);
 
-    // string myText1 = TEXT("Creating Basis-Link: ") + sBasisLinkPath;
-    // string myText2 = TEXT("Creating Ure-Link: ") + sUreLinkPath;
-    // MessageBox(NULL, myText1.c_str(), "DEBUG", MB_OK);
-    // MessageBox(NULL, myText2.c_str(), "DEBUG", MB_OK);
-
     // creating basis-link in brand layer
 
     HANDLE h1file = CreateFile(
@@ -151,7 +146,6 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
                     LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
                     WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
 
-                    // WriteFile( h1file, sBasisInstallPath.c_str(), sBasisInstallPath.size() ,&dummy, 0 );
                     WriteFile( h1file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
 
                     delete lpPathUTF8;
@@ -193,7 +187,6 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
                     LPSTR   lpPathUTF8 = new CHAR[nCharsRequired];
                     WideCharToMultiByte( CP_UTF8, 0, lpPathW, -1, lpPathUTF8, nCharsRequired, NULL, NULL );
 
-                    // WriteFile( h2file, sUreInstallPath.c_str(), sUreInstallPath.size() ,&dummy, 0 );
                     WriteFile( h2file, lpPathUTF8, strlen(lpPathUTF8) ,&dummy, 0 );
 
                     delete lpPathUTF8;
@@ -221,12 +214,7 @@ extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
     string sUreLinkPath = sBasisInstallPath + TEXT("ure-link");
     string sUreDirName = sUreInstallPath + TEXT("bin");
 
-    // string myText2 = TEXT("Deleting Ure-Link: ") + sUreLinkPath;
-    // MessageBox(NULL, myText2.c_str(), "DEBUG", MB_OK);
-
     // Deleting link to basis layer
-    // string myText1 = TEXT("Deleting Basis-Link: ") + sBasisLinkPath;
-    // MessageBox(NULL, myText1.c_str(), "DEBUG", MB_OK);
     DeleteFile(sBasisLinkPath.c_str());
 
     // Check, if URE is still installed
@@ -236,22 +224,10 @@ extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
     if ( hFindContent == INVALID_HANDLE_VALUE ) { ureDirExists = false; }
     FindClose( hFindContent );
 
-    // if ( ureDirExists )
-    // {
-    //     string myText3 = TEXT("URE directory still exists: ") + sUreDirName;
-    //     MessageBox(NULL, myText3.c_str(), "DEBUG", MB_OK);
-    //     string myText4 = TEXT("URE link NOT removed: ") + sUreLinkPath;
-    //     MessageBox(NULL, myText4.c_str(), "DEBUG", MB_OK);
-    // }
-
     // Deleting link to URE layer, if URE dir no longer exists
     if ( ! ureDirExists )
     {
-    //     string myText5 = TEXT("URE directory does not exist: ") + sUreDirName;
-    //     MessageBox(NULL, myText5.c_str(), "DEBUG", MB_OK);
         DeleteFile(sUreLinkPath.c_str());
-    //     string myText6 = TEXT("URE link removed: ") + sUreLinkPath;
-    //     MessageBox(NULL, myText6.c_str(), "DEBUG", MB_OK);
     }
 
     return ERROR_SUCCESS;
