@@ -35,6 +35,7 @@
 #include <vcl/outdev.hxx>
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
+#include <drawinglayer/primitive2d/rendergraphicprimitive2d.hxx>
 #include <vclhelperbitmaptransform.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <vclhelperbitmaprender.hxx>
@@ -60,6 +61,7 @@
 #include <vcl/metric.hxx>
 #include <drawinglayer/primitive2d/textenumsprimitive2d.hxx>
 #include <drawinglayer/primitive2d/epsprimitive2d.hxx>
+#include <vcl/rendergraphicrasterizer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // control support
@@ -417,6 +419,75 @@ namespace drawinglayer
                     }
 
                     RenderBitmapPrimitive2D_self(*mpOutputDevice, aBitmapEx, aLocalTransform);
+                }
+            }
+        }
+
+        void VclProcessor2D::RenderRenderGraphicPrimitive2D(const primitive2d::RenderGraphicPrimitive2D& rRenderGraphicCandidate)
+        {
+            // create local transform
+            basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rRenderGraphicCandidate.getTransform());
+            vcl::RenderGraphic aRenderGraphic(rRenderGraphicCandidate.getRenderGraphic());
+            bool bPainted(false);
+
+            if(maBColorModifierStack.count())
+            {
+                // !!! TODO
+                // aRenderGraphic = impModifyRenderGraphic(maBColorModifierStack, aRenderGraphic);
+
+                if(aRenderGraphic.IsEmpty())
+                {
+                    // color gets completely replaced, get it
+                    const basegfx::BColor aModifiedColor(maBColorModifierStack.getModifiedColor(basegfx::BColor()));
+                    basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
+                    aPolygon.transform(aLocalTransform);
+
+                    mpOutputDevice->SetFillColor(Color(aModifiedColor));
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->DrawPolygon(aPolygon);
+
+                    bPainted = true;
+                }
+            }
+
+            if(!bPainted)
+            {
+                // decompose matrix to check for shear, rotate and mirroring
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
+                aLocalTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+                basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
+
+                if( basegfx::fTools::equalZero( fRotate ) )
+                {
+                    aOutlineRange.transform( aLocalTransform );
+                }
+                else
+                {
+                    // !!! TODO
+                    // if rotated, create the unrotated output rectangle for the GraphicManager paint
+                    /*
+                    const basegfx::B2DHomMatrix aSimpleObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
+                        fabs(aScale.getX()), fabs(aScale.getY()),
+                        aTranslate.getX(), aTranslate.getY()));
+
+                    aOutlineRange.transform(aSimpleObjectMatrix);
+                    */
+                }
+
+                // prepare dest coordinates
+                const Point                         aPoint( basegfx::fround(aOutlineRange.getMinX() ),
+                                                            basegfx::fround(aOutlineRange.getMinY() ) );
+                const Size                          aSize( basegfx::fround(aOutlineRange.getWidth() ),
+                                                           basegfx::fround(aOutlineRange.getHeight() ) );
+                const Size                          aSizePixel( mpOutputDevice->LogicToPixel( aSize ) );
+                const vcl::RenderGraphicRasterizer  aRasterizer( aRenderGraphic );
+                const BitmapEx                      aBitmapEx( aRasterizer.Rasterize( aSizePixel, fRotate, fShearX ) );
+
+                if( !aBitmapEx.IsEmpty() )
+                {
+                    mpOutputDevice->DrawBitmapEx( aPoint, aSize, aBitmapEx );
                 }
             }
         }

@@ -153,7 +153,7 @@ SvXMLGraphicInputStream::SvXMLGraphicInputStream( const ::rtl::OUString& rGraphi
                 {
                     pStm->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStm->SetCompressMode( COMPRESSMODE_ZBITMAP );
-                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
+                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
                     bRet = ( pStm->GetError() == 0 );
                 }
             }
@@ -543,7 +543,8 @@ String SvXMLGraphicHelper::ImplGetGraphicMimeType( const String& rFileName ) con
         { "gif", "image/gif" },
         { "png", "image/png" },
         { "jpg", "image/jpeg" },
-        { "tif", "image/tiff" }
+        { "tif", "image/tiff" },
+        { "svg", "image/svg+xml" }
     };
 
     String aMimeType;
@@ -648,7 +649,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                         pStream->Write( rLink.GetData(), rLink.GetDataSize() );
                     }
                     else
-                        rMtf.Write( *pStream );
+                        rMtf.Write( *pStream, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
 
                     bRet = ( pStream->GetError() == 0 );
                 }
@@ -728,6 +729,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                         case( GFX_LINK_TYPE_NATIVE_WMF ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".met" ) ); break;
                         case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ); break;
+                        case( GFX_LINK_TYPE_NATIVE_SVG ): aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".svg" ) ); break;
 
                         default:
                             aExtension = String( RTL_CONSTASCII_USTRINGPARAM( ".grf" ) );
@@ -1160,4 +1162,3 @@ Sequence< ::rtl::OUString > SAL_CALL SvXMLGraphicExportHelper_getSupportedServic
 }
 
 } // namespace svx
-

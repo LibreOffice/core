@@ -148,6 +148,7 @@ public:
     // Keep ATM for SD.
     sal_Bool IsAnimated() const;
     sal_Bool IsEPS() const;
+    sal_Bool IsRenderGraphic() const;
     sal_Bool IsSwappedOut() const;
 
     const MapMode&          GetGrafPrefMapMode() const;

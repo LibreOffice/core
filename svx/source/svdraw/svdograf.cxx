@@ -504,6 +504,11 @@ sal_Bool SdrGrafObj::IsEPS() const
     return pGraphic->IsEPS();
 }
 
+sal_Bool SdrGrafObj::IsRenderGraphic() const
+{
+    return pGraphic->IsRenderGraphic();
+}
+
 sal_Bool SdrGrafObj::IsSwappedOut() const
 {
     return mbIsPreview ? sal_True : pGraphic->IsSwappedOut();
@@ -658,6 +663,7 @@ void SdrGrafObj::ReleaseGraphicLink()
 void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     FASTBOOL bAnim = pGraphic->IsAnimated();
+    FASTBOOL bRenderGraphic = pGraphic->HasRenderGraphic();
     FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
@@ -665,11 +671,11 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
                                aGeo.nDrehWink % 27000 == 0;
 
     rInfo.bResizePropAllowed = TRUE;
-    rInfo.bRotateFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.bRotate90Allowed = bNoPresGrf && !bAnim;
-    rInfo.bMirrorFreeAllowed = bNoPresGrf && !bAnim;
-    rInfo.bMirror45Allowed = bNoPresGrf && !bAnim;
-    rInfo.bMirror90Allowed = !bEmptyPresObj;
+    rInfo.bRotateFreeAllowed = bNoPresGrf && !bAnim && !bRenderGraphic;
+    rInfo.bRotate90Allowed = bNoPresGrf && !bAnim && !bRenderGraphic;
+    rInfo.bMirrorFreeAllowed = bNoPresGrf && !bAnim && !bRenderGraphic;
+    rInfo.bMirror45Allowed = bNoPresGrf && !bAnim && !bRenderGraphic;
+    rInfo.bMirror90Allowed = !bEmptyPresObj && !bRenderGraphic;
     rInfo.bTransparenceAllowed = FALSE;
     rInfo.bGradientAllowed = FALSE;
     rInfo.bShearAllowed = FALSE;
@@ -677,7 +683,7 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     rInfo.bCanConvToPath = FALSE;
     rInfo.bCanConvToPathLineToArea = FALSE;
     rInfo.bCanConvToPolyLineToArea = FALSE;
-    rInfo.bCanConvToPoly = !IsEPS();
+    rInfo.bCanConvToPoly = !IsEPS() && !bRenderGraphic;
     rInfo.bCanConvToContour = (rInfo.bCanConvToPoly || LineGeometryUsageIsNecessary());
 }
 

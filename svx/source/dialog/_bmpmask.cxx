@@ -1001,6 +1001,9 @@ GDIMetaFile SvxBmpMask::ImpMask( const GDIMetaFile& rMtf )
 
                 default:
                 {
+                    OSL_ENSURE( pAction->GetType() != META_RENDERGRAPHIC_ACTION,
+                                "META_RENDERGRAPHIC_ACTION currently not supported at masking" );
+
                     pAction->Duplicate();
                     aMtf.AddAction( pAction );
                 }
