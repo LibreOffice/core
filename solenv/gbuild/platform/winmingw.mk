@@ -505,15 +505,6 @@ gb_Library_IARCEXT := .a
 
 gb_Library_ILIBEXT := .lib
 
-define gb_CppunitTest_CppunitTest_platform
-$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
-
-$(call gb_LinkTarget_set_auxtargets,$(2),\
-    $(patsubst %.dll,%.map,$(3)) \
-)
-
-endef
- 
 define gb_Library_Library_platform
 $(call gb_LinkTarget_set_dlltarget,$(2),$(3))
 
@@ -563,6 +554,15 @@ gb_CppunitTest_SYSPRE := itest_
 gb_CppunitTest_EXT := .lib
 gb_CppunitTest_get_filename = $(gb_CppunitTest_SYSPRE)$(1)$(gb_CppunitTest_EXT)
 gb_CppunitTest_get_libfilename = test_$(1).dll
+
+define gb_CppunitTest_CppunitTest_platform
+$(call gb_LinkTarget_set_dlltarget,$(2),$(3))
+
+$(call gb_LinkTarget_set_auxtargets,$(2),\
+    $(patsubst %.dll,%.map,$(3)) \
+)
+
+endef
 
 # SdiTarget class
 
