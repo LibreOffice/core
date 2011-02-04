@@ -170,6 +170,40 @@ sub assign_sequencenumbers_to_files
     }
 }
 
+#########################################################
+# Create a shorter version of a long component name,
+# because maximum length in msi database is 72.
+# Attention: In multi msi installation sets, the short
+# names have to be unique over all packages, because
+# this string is used to create the globally unique id
+# -> no resetting of
+# %installer::globals::allshortcomponents
+# after a package was created.
+#########################################################
+
+sub generate_new_short_componentname
+{
+    my ($componentname) = @_;
+
+    my $shortcomponentname = "";
+    my $counter = 1;
+
+    my $startversion = substr($componentname, 0, 60); # taking only the first 60 characters
+    $startversion = $startversion . "_";
+
+    $shortcomponentname = $startversion . $counter;
+
+    while ( exists($installer::globals::allshortcomponents{$shortcomponentname}) )
+    {
+        $counter++;
+        $shortcomponentname = $startversion . $counter;
+    }
+
+    $installer::globals::allshortcomponents{$shortcomponentname} = 1;
+
+    return $shortcomponentname;
+}
+
 ###############################################
 # Generating the component name from a file
 ###############################################
@@ -178,77 +212,139 @@ sub get_file_component_name
 {
     my ($fileref, $filesref) = @_;
 
-    # In this function exists the rule to create components from files
-    # Rule:
-    # Two files get the same componentid, if:
-    # both have the same destination directory.
-    # both have the same "gid" -> both were packed in the same zip file
-    # All other files are included into different components!
+    my $componentname = "";
 
-    # my $componentname = $fileref->{'gid'} . "_" . $fileref->{'Dir'};
-
-    # $fileref->{'Dir'} is not sufficient! All files in a zip file have the same $fileref->{'Dir'},
-    # but can be in different subdirectories.
-    # Solution: destination=share\Scripts\beanshell\Capitalise\capitalise.bsh
-    # in which the filename (capitalise.bsh) has to be removed and all backslashes (slashes) are
-    # converted into underline.
-
-    my $destination = $fileref->{'destination'};
-    installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
-    $destination =~ s/\s//g;
-    $destination =~ s/\\/\_/g;
-    $destination =~ s/\//\_/g;
-    $destination =~ s/\_\s*$//g;    # removing ending underline
-
-    my $componentname = $fileref->{'gid'} . "__" . $destination;
-
-    # Files with different languages, need to be packed into different components.
-    # Then the installation of the language specific component is determined by a language condition.
-
-    if ( $fileref->{'ismultilingual'} )
-    {
-        my $officelanguage = $fileref->{'specificlanguage'};
-        $componentname = $componentname . "_" . $officelanguage;
-    }
-
-    $componentname = lc($componentname);    # componentnames always lowercase
-
-    $componentname =~ s/\-/\_/g;            # converting "-" to "_"
-    $componentname =~ s/\./\_/g;            # converting "-" to "_"
-
-    # Attention: Maximum length for the componentname is 72
-
-    $componentname =~ s/gid_file_/g_f_/g;
-    $componentname =~ s/_extra_/_e_/g;
-    $componentname =~ s/_config_/_c_/g;
-    $componentname =~ s/_org_openoffice_/_o_o_/g;
-    $componentname =~ s/_program_/_p_/g;
-    $componentname =~ s/_typedetection_/_td_/g;
-    $componentname =~ s/_linguistic_/_l_/g;
-    $componentname =~ s/_module_/_m_/g;
-    $componentname =~ s/_optional_/_opt_/g;
-    $componentname =~ s/_packages/_pack/g;
-    $componentname =~ s/_menubar/_mb/g;
-    $componentname =~ s/_common_/_cm_/g;
-    $componentname =~ s/_export_/_exp_/g;
-    $componentname =~ s/_table_/_tb_/g;
-    $componentname =~ s/_sofficecfg_/_sc_/g;
-    $componentname =~ s/_startmodulecommands_/_smc_/g;
-    $componentname =~ s/_drawimpresscommands_/_dic_/g;
-    $componentname =~ s/_basiccommands_/_bac_/g;
-    $componentname =~ s/_basicidecommands_/_baic_/g;
-    $componentname =~ s/_genericcommands_/_genc_/g;
-    $componentname =~ s/_bibliographycommands_/_bibc_/g;
-    $componentname =~ s/_share_/_s_/g;
-    $componentname =~ s/_modules_/_ms_/g;
-    $componentname =~ s/_uiconfig_zip_/_ucz_/g;
-    $componentname =~ s/_soffice_cfg_/_sc_/g;
-
-    # All this is not necessary for files, which have the flag ASSIGNCOMPOMENT
+    # Special handling for files with ASSIGNCOMPOMENT
 
     my $styles = "";
     if ( $fileref->{'Styles'} ) { $styles = $fileref->{'Styles'}; }
-    if ( $styles =~ /\bASSIGNCOMPOMENT\b/ ) { $componentname = get_component_from_assigned_file($fileref->{'AssignComponent'}, $filesref); }
+    if ( $styles =~ /\bASSIGNCOMPOMENT\b/ )
+    {
+        $componentname = get_component_from_assigned_file($fileref->{'AssignComponent'}, $filesref);
+    }
+    else
+    {
+        # In this function exists the rule to create components from files
+        # Rule:
+        # Two files get the same componentid, if:
+        # both have the same destination directory.
+        # both have the same "gid" -> both were packed in the same zip file
+        # All other files are included into different components!
+
+        # my $componentname = $fileref->{'gid'} . "_" . $fileref->{'Dir'};
+
+        # $fileref->{'Dir'} is not sufficient! All files in a zip file have the same $fileref->{'Dir'},
+        # but can be in different subdirectories.
+        # Solution: destination=share\Scripts\beanshell\Capitalise\capitalise.bsh
+        # in which the filename (capitalise.bsh) has to be removed and all backslashes (slashes) are
+        # converted into underline.
+
+        my $destination = $fileref->{'destination'};
+        installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
+        $destination =~ s/\s//g;
+        $destination =~ s/\\/\_/g;
+        $destination =~ s/\//\_/g;
+        $destination =~ s/\_\s*$//g;    # removing ending underline
+
+        $componentname = $fileref->{'gid'} . "__" . $destination;
+
+        # Files with different languages, need to be packed into different components.
+        # Then the installation of the language specific component is determined by a language condition.
+
+        if ( $fileref->{'ismultilingual'} )
+        {
+            my $officelanguage = $fileref->{'specificlanguage'};
+            $componentname = $componentname . "_" . $officelanguage;
+        }
+
+        $componentname = lc($componentname);    # componentnames always lowercase
+
+        $componentname =~ s/\-/\_/g;            # converting "-" to "_"
+        $componentname =~ s/\./\_/g;            # converting "-" to "_"
+
+        # Attention: Maximum length for the componentname is 72
+        # %installer::globals::allcomponents_in_this_database : resetted for each database
+        # %installer::globals::allcomponents : not resetted for each database
+        # Component strings must be unique for the complete product, because they are used for
+        # the creation of the globally unique identifier.
+
+        my $fullname = $componentname;  # This can be longer than 72
+
+        if (( exists($installer::globals::allcomponents{$fullname}) ) && ( ! exists($installer::globals::allcomponents_in_this_database{$fullname}) ))
+        {
+            # This is not allowed: One component cannot be installed with different packages.
+            installer::exiter::exit_program("ERROR: Component \"$fullname\" is already included into another package. This is not allowed.", "get_file_component_name");
+        }
+
+        if ( exists($installer::globals::allcomponents{$fullname}) )
+        {
+            $componentname = $installer::globals::allcomponents{$fullname};
+        }
+        else
+        {
+            if ( length($componentname) > 72 )
+            {
+                # Using md5sum needs much time
+                # chomp(my $shorter = `echo $componentname | md5sum | sed -e "s/ .*//g"`);
+                # $componentname = "comp_$shorter";
+                $componentname = generate_new_short_componentname($componentname); # This has to be unique for the complete product, not only one package
+            }
+
+            $installer::globals::allcomponents{$fullname} = $componentname;
+            $installer::globals::allcomponents_in_this_database{$fullname} = 1;
+        }
+
+        # $componentname =~ s/gid_file_/g_f_/g;
+        # $componentname =~ s/_extra_/_e_/g;
+        # $componentname =~ s/_config_/_c_/g;
+        # $componentname =~ s/_org_openoffice_/_o_o_/g;
+        # $componentname =~ s/_program_/_p_/g;
+        # $componentname =~ s/_typedetection_/_td_/g;
+        # $componentname =~ s/_linguistic_/_l_/g;
+        # $componentname =~ s/_module_/_m_/g;
+        # $componentname =~ s/_optional_/_opt_/g;
+        # $componentname =~ s/_packages/_pack/g;
+        # $componentname =~ s/_menubar/_mb/g;
+        # $componentname =~ s/_common_/_cm_/g;
+        # $componentname =~ s/_export_/_exp_/g;
+        # $componentname =~ s/_table_/_tb_/g;
+        # $componentname =~ s/_sofficecfg_/_sc_/g;
+        # $componentname =~ s/_soffice_cfg_/_sc_/g;
+        # $componentname =~ s/_startmodulecommands_/_smc_/g;
+        # $componentname =~ s/_drawimpresscommands_/_dic_/g;
+        # $componentname =~ s/_basiccommands_/_bac_/g;
+        # $componentname =~ s/_basicidecommands_/_baic_/g;
+        # $componentname =~ s/_genericcommands_/_genc_/g;
+        # $componentname =~ s/_bibliographycommands_/_bibc_/g;
+        # $componentname =~ s/_gentiumbookbasicbolditalic_/_gbbbi_/g;
+        # $componentname =~ s/_share_/_s_/g;
+        # $componentname =~ s/_extension_/_ext_/g;
+        # $componentname =~ s/_extensions_/_exs_/g;
+        # $componentname =~ s/_modules_/_ms_/g;
+        # $componentname =~ s/_uiconfig_zip_/_ucz_/g;
+        # $componentname =~ s/_productivity_/_pr_/g;
+        # $componentname =~ s/_wizard_/_wz_/g;
+        # $componentname =~ s/_import_/_im_/g;
+        # $componentname =~ s/_javascript_/_js_/g;
+        # $componentname =~ s/_template_/_tpl_/g;
+        # $componentname =~ s/_tplwizletter_/_twl_/g;
+        # $componentname =~ s/_beanshell_/_bs_/g;
+        # $componentname =~ s/_presentation_/_bs_/g;
+        # $componentname =~ s/_columns_/_cls_/g;
+        # $componentname =~ s/_python_/_py_/g;
+
+        # $componentname =~ s/_tools/_ts/g;
+        # $componentname =~ s/_transitions/_trs/g;
+        # $componentname =~ s/_scriptbinding/_scrb/g;
+        # $componentname =~ s/_spreadsheet/_ssh/g;
+        # $componentname =~ s/_publisher/_pub/g;
+        # $componentname =~ s/_presenter/_pre/g;
+        # $componentname =~ s/_registry/_reg/g;
+
+        # $componentname =~ s/screen/sc/g;
+        # $componentname =~ s/wordml/wm/g;
+        # $componentname =~ s/openoffice/oo/g;
+    }
 
     return $componentname;
 }
