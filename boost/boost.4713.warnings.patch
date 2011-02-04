@@ -1,16 +1,52 @@
---- misc/build/boost_1_39_0/boost/spirit/home/classic/error_handling/exceptions.hpp
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/error_handling/exceptions.hpp
-@@ -126,8 +126,8 @@
-         typedef unary<ParserT, parser<self_t> >         base_t;
-         typedef unary_parser_category                   parser_category_t;
+--- misc/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/map_iterator.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -49,7 +49,7 @@
+             : first(rp->first), second(rp->second)
+             { }
+             
+-            const ref_pair* const operator->() const
++            const ref_pair* operator->() const
+             {
+                 return this;
+             }
+--- misc/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2008-06-24 22:37:35.000000000 +0200
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_map_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -477,6 +477,7 @@
+         }
+                 
+         ptr_map_adapter( const ptr_map_adapter& r )
++          : base_type()
+         {
+             map_basic_clone_and_insert( r.begin(), r.end() );      
+         }
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2009-11-01 12:07:12.000000000 +0100
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -476,19 +476,19 @@
+     public: // C-array support
+     
+         void transfer( iterator before, value_type* from, 
+-                       size_type size, bool delete_from = true ) // strong 
++                       size_type size_, bool delete_from = true ) // strong 
+         {
+             BOOST_ASSERT( from != 0 );
+             if( delete_from )
+             {
+                 BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
+-                    deleter( from, size );                                // nothrow
+-                this->base().insert( before.base(), from, from + size );  // strong
++                    deleter( from, size_ );                                // nothrow
++                this->base().insert( before.base(), from, from + size_ );  // strong
+                 deleter.release();                                        // nothrow
+             }
+             else
+             {
+-                this->base().insert( before.base(), from, from + size ); // strong
++                this->base().insert( before.base(), from, from + size_ ); // strong
+             }
+         }
  
--        assertive_parser(ParserT const& parser, ErrorDescrT descriptor)
--        : base_t(parser), descriptor(descriptor) {}
-+        assertive_parser(ParserT const& parser, ErrorDescrT descriptor_)
-+        : base_t(parser), descriptor(descriptor_) {}
- 
-         template <typename ScannerT>
-         struct result
+--- misc/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2010-04-07 02:41:42.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/error_handling/exceptions.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -222,9 +222,9 @@
  
          error_status(
@@ -23,8 +59,28 @@
  
          result_t        result;
          std::ptrdiff_t  length;
---- misc/build/boost_1_39_0/boost/spirit/home/classic/utility/functor_parser.hpp
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/utility/functor_parser.hpp
+--- misc/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/symbols/symbols.hpp	2011-02-04 16:39:19.000000000 +0100
+@@ -102,13 +102,13 @@
+     {
+         typedef typename ScannerT::iterator_t iterator_t;
+         iterator_t first = scan.first;
+-        typename SetT::search_info result = SetT::find(scan);
++        typename SetT::search_info result_ = SetT::find(scan);
+ 
+-        if (result.data)
++        if (result_.data)
+             return scan.
+                 create_match(
+-                    result.length,
+-                    symbol_ref_t(*result.data),
++                    result_.length,
++                    symbol_ref_t(*result_.data),
+                     first,
+                     scan.first);
+         else
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/functor_parser.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -54,13 +54,13 @@
              typedef typename ScannerT::iterator_t   iterator_t;
  
@@ -42,8 +98,8 @@
          }
      };
  
---- misc/build/boost_1_39_0/boost/spirit/home/classic/utility/loops.hpp
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/utility/loops.hpp
+--- misc/boost_1_44_0/boost/spirit/home/classic/utility/loops.hpp	2008-06-22 17:05:38.000000000 +0200
++++ misc/build/boost_1_44_0/boost/spirit/home/classic/utility/loops.hpp	2011-02-04 16:39:19.000000000 +0100
 @@ -47,8 +47,8 @@
          typedef fixed_loop<ParserT, ExactT>     self_t;
          typedef unary<ParserT, parser<self_t> >  base_t;
@@ -106,640 +162,3 @@
                  m_min,
                  m_max);
         }
---- misc/build/boost_1_39_0/boost/spirit/home/classic/symbols/symbols.hpp
-+++ misc/build/boost_1_39_0/boost/spirit/home/classic/symbols/symbols.hpp
-@@ -102,13 +102,13 @@
-     {
-         typedef typename ScannerT::iterator_t iterator_t;
-         iterator_t first = scan.first;
--        typename SetT::search_info result = SetT::find(scan);
-+        typename SetT::search_info result_ = SetT::find(scan);
- 
--        if (result.data)
-+        if (result_.data)
-             return scan.
-                 create_match(
--                    result.length,
--                    symbol_ref_t(*result.data),
-+                    result_.length,
-+                    symbol_ref_t(*result_.data),
-                     first,
-                     scan.first);
-         else
-
---- misc/build/boost_1_39_0/boost/date_time/posix_time/posix_time_config.hpp
-+++ misc/build/boost_1_39_0/boost/date_time/posix_time/posix_time_config.hpp
-@@ -82,8 +82,8 @@
-     //Give duration access to ticks constructor -- hide from users
-     friend class date_time::time_duration<time_duration, time_res_traits>;
-   private:
--    explicit time_duration(impl_type ticks) :
--      date_time::time_duration<time_duration, time_res_traits>(ticks)
-+    explicit time_duration(impl_type _ticks) :
-+      date_time::time_duration<time_duration, time_res_traits>(_ticks)
-     {}
-   };
- 
---- misc/build/boost_1_39_0/boost/ptr_container/detail/map_iterator.hpp
-+++ misc/build/boost_1_39_0/boost/ptr_container/detail/map_iterator.hpp
-@@ -49,7 +49,7 @@
-             : first(rp->first), second(rp->second)
-             { }
-             
--            const ref_pair* const operator->() const
-+            const ref_pair* operator->() const
-             {
-                 return this;
-             }
---- misc/build/boost_1_39_0/boost/ptr_container/ptr_sequence_adapter.hpp
-+++ misc/build/boost_1_39_0/boost/ptr_container/ptr_sequence_adapter.hpp
-@@ -476,19 +476,19 @@
-     public: // C-array support
-     
-         void transfer( iterator before, value_type* from, 
--                       size_type size, bool delete_from = true ) // strong 
-+                       size_type size_, bool delete_from = true ) // strong 
-         {
-             BOOST_ASSERT( from != 0 );
-             if( delete_from )
-             {
-                 BOOST_DEDUCED_TYPENAME base_type::scoped_deleter 
--                    deleter( from, size );                                // nothrow
--                this->base().insert( before.base(), from, from + size );  // strong
-+                    deleter( from, size_ );                                // nothrow
-+                this->base().insert( before.base(), from, from + size_ );  // strong
-                 deleter.release();                                        // nothrow
-             }
-             else
-             {
--                this->base().insert( before.base(), from, from + size ); // strong
-+                this->base().insert( before.base(), from, from + size_ ); // strong
-             }
-         }
- 
-@@ -510,72 +510,72 @@
- 
-     public: // resize
- 
--        void resize( size_type size ) // basic
-+        void resize( size_type size_ ) // basic
-         {
-             size_type old_size = this->size();
--            if( old_size > size )
-+            if( old_size > size_ )
-             {
--                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
-             }
--            else if( size > old_size )
-+            else if( size_ > old_size )
-             {
--                for( ; old_size != size; ++old_size )
-+                for( ; old_size != size_; ++old_size )
-                     this->push_back( new BOOST_DEDUCED_TYPENAME 
-                                      boost::remove_pointer<value_type>::type ); 
-             }
- 
--            BOOST_ASSERT( this->size() == size );
-+            BOOST_ASSERT( this->size() == size_ );
-         }
- 
--        void resize( size_type size, value_type to_clone ) // basic
-+        void resize( size_type size_, value_type to_clone ) // basic
-         {
-             size_type old_size = this->size();
--            if( old_size > size )
-+            if( old_size > size_ )
-             {
--                this->erase( boost::next( this->begin(), size ), this->end() );  
-+                this->erase( boost::next( this->begin(), size_ ), this->end() );  
-             }
--            else if( size > old_size )
-+            else if( size_ > old_size )
-             {
--                for( ; old_size != size; ++old_size )
-+                for( ; old_size != size_; ++old_size )
-                     this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
-             }
- 
--            BOOST_ASSERT( this->size() == size );        
-+            BOOST_ASSERT( this->size() == size_ );        
-         }
- 
--        void rresize( size_type size ) // basic
-+        void rresize( size_type size_ ) // basic
-         {
-             size_type old_size = this->size();
--            if( old_size > size )
-+            if( old_size > size_ )
-             {
-                 this->erase( this->begin(), 
--                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
-             }
--            else if( size > old_size )
-+            else if( size_ > old_size )
-             {
--                for( ; old_size != size; ++old_size )
-+                for( ; old_size != size_; ++old_size )
-                     this->push_front( new BOOST_DEDUCED_TYPENAME 
-                                       boost::remove_pointer<value_type>::type ); 
-             }
- 
--            BOOST_ASSERT( this->size() == size );
-+            BOOST_ASSERT( this->size() == size_ );
-         }
- 
--        void rresize( size_type size, value_type to_clone ) // basic
-+        void rresize( size_type size_, value_type to_clone ) // basic
-         {
-             size_type old_size = this->size();
--            if( old_size > size )
-+            if( old_size > size_ )
-             {
-                 this->erase( this->begin(), 
--                             boost::next( this->begin(), old_size - size ) );  
-+                             boost::next( this->begin(), old_size - size_ ) );  
-             }
--            else if( size > old_size )
-+            else if( size_ > old_size )
-             {
--                for( ; old_size != size; ++old_size )
-+                for( ; old_size != size_; ++old_size )
-                     this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
-             }
- 
--            BOOST_ASSERT( this->size() == size );
-+            BOOST_ASSERT( this->size() == size_ );
-         }           
-                 
-     public: // algorithms
---- misc/build/boost_1_39_0/boost/ptr_container/ptr_map_adapter.hpp
-+++ misc/build/boost_1_39_0/boost/ptr_container/ptr_map_adapter.hpp
-@@ -477,6 +477,7 @@
-         }
-                 
-         ptr_map_adapter( const ptr_map_adapter& r )
-+          : base_type()
-         {
-             map_basic_clone_and_insert( r.begin(), r.end() );      
-         }
---- misc/build/boost_1_39_0/boost/unordered/detail/hash_table_impl.hpp
-+++ misc/build/boost_1_39_0/boost/unordered/detail/hash_table_impl.hpp
-@@ -423,17 +423,17 @@
-             void delete_buckets()
-             {
-                 if(buckets_) {
--                    bucket_ptr begin = cached_begin_bucket_;
--                    bucket_ptr end = buckets_end();
--                    while(begin != end) {
--                        clear_bucket(begin);
--                        ++begin;
-+                    bucket_ptr begin_ = cached_begin_bucket_;
-+                    bucket_ptr end_ = buckets_end();
-+                    while(begin_ != end_) {
-+                        clear_bucket(begin_);
-+                        ++begin_;
-                     }
- 
-                     // Destroy an extra bucket for the sentinels.
--                    ++end;
--                    for(begin = buckets_; begin != end; ++begin)
--                        allocators_.bucket_alloc_.destroy(begin);
-+                    ++end_;
-+                    for(begin_ = buckets_; begin_ != end_; ++begin_)
-+                        allocators_.bucket_alloc_.destroy(begin_);
- 
-                     allocators_.bucket_alloc_.deallocate(buckets_,
-                         bucket_manager_.bucket_count() + 1);
-@@ -680,11 +680,11 @@
-                     // The deleted node is at the end of the group, so the
-                     // first node in the group is pointing to it.
-                     // Find that to change its pointer.
--                    link_ptr it = n->group_prev_;
--                    while(prev_in_group(it) != *pos) {
--                        it = prev_in_group(it);
-+                    link_ptr it2 = n->group_prev_;
-+                    while(prev_in_group(it2) != *pos) {
-+                        it2 = prev_in_group(it2);
-                     }
--                    prev_in_group(it) = n->group_prev_;
-+                    prev_in_group(it2) = n->group_prev_;
-                 }
-                 *pos = next;
-                 --size_;
-@@ -721,25 +721,25 @@
-                 size_ -= node_count(n.node_);
-             }
- 
--            void unlink_nodes(iterator_base begin, iterator_base end)
-+            void unlink_nodes(iterator_base begin_, iterator_base end_)
-             {
--                BOOST_ASSERT(begin.bucket_ == end.bucket_);
--                size_ -= node_count(begin.node_, end.node_);
--                link_ptr* it = get_for_erase(begin);
--                split_group(*it, end.node_);
--                *it = end.node_;
-+                BOOST_ASSERT(begin_.bucket_ == end_.bucket_);
-+                size_ -= node_count(begin_.node_, end_.node_);
-+                link_ptr* it = get_for_erase(begin_);
-+                split_group(*it, end_.node_);
-+                *it = end_.node_;
-             }
- 
--            void unlink_nodes(bucket_ptr base, iterator_base end)
-+            void unlink_nodes(bucket_ptr base, iterator_base end_)
-             {
--                BOOST_ASSERT(base == end.bucket_);
-+                BOOST_ASSERT(base == end_.bucket_);
- 
--                split_group(end.node_);
-+                split_group(end_.node_);
- 
-                 link_ptr ptr(base->next_);
--                base->next_ = end.node_;
-+                base->next_ = end_.node_;
- 
--                size_ -= node_count(ptr, end.node_);
-+                size_ -= node_count(ptr, end_.node_);
-             }
- 
- #if BOOST_UNORDERED_EQUIVALENT_KEYS
-@@ -797,12 +797,12 @@
-             {
-                 node_constructor a(allocators_);
- 
--                link_ptr end = next_group(it);
-+                link_ptr end_ = next_group(it);
- 
-                 a.construct(get_value(it));                     // throws
-                 link_ptr n = link_node_in_bucket(a, dst);
- 
--                for(it = it->next_; it != end; it = it->next_) {
-+                for(it = it->next_; it != end_; it = it->next_) {
-                     a.construct(get_value(it));                 // throws
-                     link_node(a, n);
-                 }
-@@ -824,21 +824,21 @@
-             //
-             // no throw
- 
--            void delete_to_bucket_end(link_ptr begin)
-+            void delete_to_bucket_end(link_ptr begin_)
-             {
--                while(begin) {
--                    link_ptr node = begin;
--                    begin = begin->next_;
--                    allocators_.destroy(node);
-+                while(begin_) {
-+                    link_ptr node_ = begin_;
-+                    begin_ = begin_->next_;
-+                    allocators_.destroy(node_);
-                 }
-             }
- 
--            void delete_nodes(link_ptr begin, link_ptr end)
-+            void delete_nodes(link_ptr begin_, link_ptr end_)
-             {
--                while(begin != end) {
--                    link_ptr node = begin;
--                    begin = begin->next_;
--                    allocators_.destroy(node);
-+                while(begin_ != end_) {
-+                    link_ptr node_ = begin_;
-+                    begin_ = begin_->next_;
-+                    allocators_.destroy(node_);
-                 }
-             }
- 
-@@ -848,9 +848,9 @@
-                 delete_nodes(first_node, prev_in_group(first_node)->next_);
-             }
- #else
--            void delete_group(link_ptr node)
-+            void delete_group(link_ptr node_)
-             {
--                allocators_.destroy(node);
-+                allocators_.destroy(node_);
-             }
- #endif
- 
-@@ -869,15 +869,15 @@
- 
-             void clear()
-             {
--                bucket_ptr begin = cached_begin_bucket_;
--                bucket_ptr end = buckets_end();
-+                bucket_ptr begin_ = cached_begin_bucket_;
-+                bucket_ptr end_ = buckets_end();
- 
-                 size_ = 0;
--                cached_begin_bucket_ = end;
-+                cached_begin_bucket_ = end_;
- 
--                while(begin != end) {
--                    clear_bucket(begin);
--                    ++begin;
-+                while(begin_ != end_) {
-+                    clear_bucket(begin_);
-+                    ++begin_;
-                 }
-             }
- 
-@@ -974,13 +974,13 @@
-                     cached_begin_bucket_ = b2;
-             }
- 
--            size_type erase_group(link_ptr* it, bucket_ptr bucket)
-+            size_type erase_group(link_ptr* it, bucket_ptr bucket_)
-             {
-                 link_ptr pos = *it;
-                 size_type count = unlink_group(it);
-                 delete_group(pos);
- 
--                this->recompute_begin_bucket(bucket);
-+                this->recompute_begin_bucket(bucket_);
- 
-                 return count;
-             }
-@@ -1541,8 +1541,8 @@
-                                 hf(extract_key(data::get_value(src_bucket->next_))));
- 
-                         link_ptr n = src_bucket->next_;
--                        size_type count = src.unlink_group(&src_bucket->next_);
--                        dst.link_group(n, dst_bucket, count);
-+                        size_type count_ = src.unlink_group(&src_bucket->next_);
-+                        dst.link_group(n, dst_bucket, count_);
-                     }
-                 }
-             }
-@@ -1651,20 +1651,20 @@
-             {
-                 key_type const& k = extract_key(a.get()->value());
-                 size_type hash_value = hash_function()(k);
--                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                link_ptr position = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                link_ptr position = find_iterator(bucket_, k);
- 
-                 // reserve has basic exception safety if the hash function
-                 // throws, strong otherwise.
-                 if(reserve_for_insert(size() + 1))
--                    bucket = data_.bucket_ptr_from_hash(hash_value);
-+                    bucket_ = data_.bucket_ptr_from_hash(hash_value);
- 
-                 // I'm relying on link_ptr not being invalidated by
-                 // the rehash here.
--                return iterator_base(bucket,
-+                return iterator_base(bucket_,
-                     (BOOST_UNORDERED_BORLAND_BOOL(position)) ?
-                     data_.link_node(a, position) :
--                    data_.link_node_in_bucket(a, bucket)
-+                    data_.link_node_in_bucket(a, bucket_)
-                 );
-             }
- 
-@@ -1718,13 +1718,13 @@
-                         a.construct(*i);
- 
-                         key_type const& k = extract_key(a.get()->value());
--                        bucket_ptr bucket = get_bucket(k);
--                        link_ptr position = find_iterator(bucket, k);
-+                        bucket_ptr bucket_ = get_bucket(k);
-+                        link_ptr position = find_iterator(bucket_, k);
- 
-                         if(BOOST_UNORDERED_BORLAND_BOOL(position))
-                             data_.link_node(a, position);
-                         else
--                            data_.link_node_in_bucket(a, bucket);
-+                            data_.link_node_in_bucket(a, bucket_);
-                     }
-                 }
-             }
-@@ -1761,8 +1761,8 @@
-                 typedef BOOST_DEDUCED_TYPENAME value_type::second_type mapped_type;
- 
-                 size_type hash_value = hash_function()(k);
--                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                link_ptr pos = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                link_ptr pos = find_iterator(bucket_, k);
- 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(pos))
-                     return data::get_value(pos);
-@@ -1778,11 +1778,11 @@
-                     // reserve has basic exception safety if the hash function
-                     // throws, strong otherwise.
-                     if(reserve_for_insert(size() + 1))
--                        bucket = data_.bucket_ptr_from_hash(hash_value);
-+                        bucket_ = data_.bucket_ptr_from_hash(hash_value);
- 
-                     // Nothing after this point can throw.
- 
--                    return data::get_value(data_.link_node_in_bucket(a, bucket));
-+                    return data::get_value(data_.link_node_in_bucket(a, bucket_));
-                 }
-             }
- 
-@@ -1797,13 +1797,13 @@
-                 // No side effects in this initial code
-                 key_type const& k = extract_key(v);
-                 size_type hash_value = hash_function()(k);
--                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                link_ptr pos = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                link_ptr pos = find_iterator(bucket_, k);
- 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                     // Found an existing key, return it (no throw).
-                     return std::pair<iterator_base, bool>(
--                        iterator_base(bucket, pos), false);
-+                        iterator_base(bucket_, pos), false);
- 
-                 } else {
-                     // Doesn't already exist, add to bucket.
-@@ -1817,14 +1817,14 @@
-                     // reserve has basic exception safety if the hash function
-                     // throws, strong otherwise.
-                     if(reserve_for_insert(size() + 1))
--                        bucket = data_.bucket_ptr_from_hash(hash_value);
-+                        bucket_ = data_.bucket_ptr_from_hash(hash_value);
- 
-                     // Nothing after this point can throw.
- 
--                    link_ptr n = data_.link_node_in_bucket(a, bucket);
-+                    link_ptr n = data_.link_node_in_bucket(a, bucket_);
- 
-                     return std::pair<iterator_base, bool>(
--                        iterator_base(bucket, n), true);
-+                        iterator_base(bucket_, n), true);
-                 }
-             }
- 
-@@ -1864,13 +1864,13 @@
-             {
-                 // No side effects in this initial code
-                 size_type hash_value = hash_function()(k);
--                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                link_ptr pos = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                link_ptr pos = find_iterator(bucket_, k);
- 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                     // Found an existing key, return it (no throw).
-                     return std::pair<iterator_base, bool>(
--                        iterator_base(bucket, pos), false);
-+                        iterator_base(bucket_, pos), false);
- 
-                 } else {
-                     // Doesn't already exist, add to bucket.
-@@ -1884,12 +1884,12 @@
-                     // reserve has basic exception safety if the hash function
-                     // throws, strong otherwise.
-                     if(reserve_for_insert(size() + 1))
--                        bucket = data_.bucket_ptr_from_hash(hash_value);
-+                        bucket_ = data_.bucket_ptr_from_hash(hash_value);
- 
-                     // Nothing after this point can throw.
- 
--                    return std::pair<iterator_base, bool>(iterator_base(bucket,
--                        data_.link_node_in_bucket(a, bucket)), true);
-+                    return std::pair<iterator_base, bool>(iterator_base(bucket_,
-+                        data_.link_node_in_bucket(a, bucket_)), true);
-                 }
-             }
- 
-@@ -1904,23 +1904,23 @@
-                 // No side effects in this initial code
-                 key_type const& k = extract_key(a.get()->value());
-                 size_type hash_value = hash_function()(k);
--                bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                link_ptr pos = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                link_ptr pos = find_iterator(bucket_, k);
-                 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                     // Found an existing key, return it (no throw).
-                     return std::pair<iterator_base, bool>(
--                        iterator_base(bucket, pos), false);
-+                        iterator_base(bucket_, pos), false);
-                 } else {
-                     // reserve has basic exception safety if the hash function
-                     // throws, strong otherwise.
-                     if(reserve_for_insert(size() + 1))
--                        bucket = data_.bucket_ptr_from_hash(hash_value);
-+                        bucket_ = data_.bucket_ptr_from_hash(hash_value);
- 
-                     // Nothing after this point can throw.
- 
--                    return std::pair<iterator_base, bool>(iterator_base(bucket,
--                        data_.link_node_in_bucket(a, bucket)), true);
-+                    return std::pair<iterator_base, bool>(iterator_base(bucket_,
-+                        data_.link_node_in_bucket(a, bucket_)), true);
-                 }
-             }
- 
-@@ -1969,8 +1969,8 @@
-                 for (; i != j; ++i) {
-                     // No side effects in this initial code
-                     size_type hash_value = hash_function()(extract_key(*i));
--                    bucket_ptr bucket = data_.bucket_ptr_from_hash(hash_value);
--                    link_ptr pos = find_iterator(bucket, extract_key(*i));
-+                    bucket_ptr bucket_ = data_.bucket_ptr_from_hash(hash_value);
-+                    link_ptr pos = find_iterator(bucket_, extract_key(*i));
- 
-                     if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
-                         // Doesn't already exist, add to bucket.
-@@ -1984,11 +1984,11 @@
-                         // throws, strong otherwise.
-                         if(size() + 1 >= max_load_) {
-                             reserve_for_insert(size() + insert_size(i, j));
--                            bucket = data_.bucket_ptr_from_hash(hash_value);
-+                            bucket_ = data_.bucket_ptr_from_hash(hash_value);
-                         }
- 
-                         // Nothing after this point can throw.
--                        data_.link_node_in_bucket(a, bucket);
-+                        data_.link_node_in_bucket(a, bucket_);
-                     }
-                 }
-             }
-@@ -2001,11 +2001,11 @@
-             size_type erase_key(key_type const& k)
-             {
-                 // No side effects in initial section
--                bucket_ptr bucket = get_bucket(k);
--                link_ptr* it = find_for_erase(bucket, k);
-+                bucket_ptr bucket_ = get_bucket(k);
-+                link_ptr* it = find_for_erase(bucket_, k);
- 
-                 // No throw.
--                return *it ? data_.erase_group(it, bucket) : 0;
-+                return *it ? data_.erase_group(it, bucket_) : 0;
-             }
- 
-             // count
-@@ -2022,19 +2022,19 @@
-             // strong exception safety, no side effects
-             iterator_base find(key_type const& k) const
-             {
--                bucket_ptr bucket = get_bucket(k);
--                link_ptr it = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = get_bucket(k);
-+                link_ptr it = find_iterator(bucket_, k);
- 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(it))
--                    return iterator_base(bucket, it);
-+                    return iterator_base(bucket_, it);
-                 else
-                     return data_.end();
-             }
- 
-             value_type& at(key_type const& k) const
-             {
--                bucket_ptr bucket = get_bucket(k);
--                link_ptr it = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = get_bucket(k);
-+                link_ptr it = find_iterator(bucket_, k);
- 
-                 if (BOOST_UNORDERED_BORLAND_BOOL(it))
-                     return data::get_value(it);
-@@ -2047,10 +2047,10 @@
-             // strong exception safety, no side effects
-             std::pair<iterator_base, iterator_base> equal_range(key_type const& k) const
-             {
--                bucket_ptr bucket = get_bucket(k);
--                link_ptr it = find_iterator(bucket, k);
-+                bucket_ptr bucket_ = get_bucket(k);
-+                link_ptr it = find_iterator(bucket_, k);
-                 if (BOOST_UNORDERED_BORLAND_BOOL(it)) {
--                    iterator_base first(iterator_base(bucket, it));
-+                    iterator_base first(iterator_base(bucket_, it));
-                     iterator_base second(first);
-                     second.increment_group();
-                     return std::pair<iterator_base, iterator_base>(first, second);
-@@ -2074,10 +2074,10 @@
-             }
- 
-             // strong exception safety, no side effects
--            link_ptr find_iterator(bucket_ptr bucket,
-+            link_ptr find_iterator(bucket_ptr bucket_,
-                     key_type const& k) const
-             {
--                link_ptr it = data_.begin(bucket);
-+                link_ptr it = data_.begin(bucket_);
-                 while (BOOST_UNORDERED_BORLAND_BOOL(it) && !equal(k, data::get_value(it)))
-                     it = data::next_group(it);
- 
-@@ -2085,9 +2085,9 @@
-             }
- 
-             // strong exception safety, no side effects
--            link_ptr* find_for_erase(bucket_ptr bucket, key_type const& k) const
-+            link_ptr* find_for_erase(bucket_ptr bucket_, key_type const& k) const
-             {
--                link_ptr* it = &bucket->next_;
-+                link_ptr* it = &bucket_->next_;
-                 while(BOOST_UNORDERED_BORLAND_BOOL(*it) && !equal(k, data::get_value(*it)))
-                     it = &data::next_group(*it);
- 

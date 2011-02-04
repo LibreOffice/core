@@ -48,11 +48,11 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=boost_1_39_0
-TARFILE_MD5=fcc6df1160753d0b8c835d17fdeeb0a7
+TARFILE_NAME=boost_1_44_0
+TARFILE_MD5=f02578f5218f217a9f20e9c30e119c6a
 PATCH_FILES=$(TARFILE_NAME).patch
 # See https://svn.boost.org/trac/boost/ticket/3780
-PATCH_FILES+=aliasing.patch
+#PATCH_FILES+=aliasing.patch
 
 #https://svn.boost.org/trac/boost/ticket/4713
 PATCH_FILES+=boost.4713.warnings.patch
