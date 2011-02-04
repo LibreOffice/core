@@ -135,14 +135,20 @@ sub make_short_dir_version
 
 sub create_unique_directorynames
 {
-    my ($directoryref) = @_;
+    my ($directoryref, $allvariables) = @_;
 
     $installer::globals::officeinstalldirectoryset = 0;
+
+    my %conversionhash = ();
+    my $infoline = "";
+    my $errorcount = 0;
 
     for ( my $i = 0; $i <= $#{$directoryref}; $i++ )
     {
         my $onedir = ${$directoryref}[$i];
-        my $uniquename = $onedir->{'HostName'};
+        my $hostname = $onedir->{'HostName'};
+
+        my $uniquename = $hostname;
         my $styles = "";
         if ( $onedir->{'Styles'} ) { $styles = $onedir->{'Styles'}; }
         # get_path_from_fullqualifiedname(\$uniqueparentname);
@@ -160,16 +166,36 @@ sub create_unique_directorynames
         $uniquename =~ s/_extension/_ext/g;
         $uniquename =~ s/_frame/_frm/g;
         $uniquename =~ s/_table/_tbl/g;
+        $uniquename =~ s/_chart/_crt/g;
 
         my $startlength = 5;
-        $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
+
+        if ( ! $allvariables->{'NOSHORTDIRECTORYNAMES'} )
+        {
+            # This process does not work for SDK, because of its long and similar pathes
+            $uniquename = make_short_dir_version($uniquename, $startlength, $hostname); # taking care of underlines!
+        }
 
         if ( exists($installer::globals::alluniquedirectorynames{$uniquename}) )
         {
-            installer::exiter::exit_program("ERROR: Failed to create unique directory name for \"$hostname\".", "create_unique_directorynames");
+            # This is an error, that must stop the packaging process
+            $errorcount++;
+
+            $infoline = "$errorcount: Already existing unique directory: $uniquename\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $infoline = "$errorcount: First full directory: $conversionhash{$uniquename}\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            $infoline = "$errorcount: Current full directory: $hostname\n";
+            push( @installer::globals::logfileinfo, $infoline);
         }
 
+        $conversionhash{$uniquename} = $hostname;
+
         $installer::globals::alluniquedirectorynames{$uniquename} = 1;
+
+        # Important: The unique parent is generated from the string $uniquename. Therefore counters
+        # like adding "_1" is not allowed to achive uniqueness, because this depends from other directories
+        # and does not deliver always the same result.
 
         my $uniqueparentname = $uniquename;
 
@@ -215,6 +241,11 @@ sub create_unique_directorynames
             $installer::globals::vendordirectory = $uniquename;
             $installer::globals::vendordirectoryset = 1;
         }
+    }
+
+    if ( $errorcount > 0 )
+    {
+        installer::exiter::exit_program("ERROR: Failed to create unique directory names.", "create_unique_directorynames");
     }
 }
 
@@ -503,8 +534,9 @@ sub create_directory_table
     my $infoline;
 
     overwrite_programfilesfolder($allvariableshashref);
-    create_unique_directorynames($directoryref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1.log", $directoryref); }
+    create_unique_directorynames($directoryref, $allvariableshashref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_1a.log", $directoryref); }
     create_defaultdir_directorynames($directoryref, $shortdirnamehashref);  # only destdir!
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforidt_local_2.log", $directoryref); }
     set_installlocation_directory($directoryref, $allvariableshashref);
