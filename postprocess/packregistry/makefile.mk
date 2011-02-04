@@ -522,7 +522,7 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
     - $(RM) $(MISC)/$(@:b).list
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip -name [^.]\*.xcu -size +0c -print) \
+        find $(@:b).unzip -name \*.xcu -size +0c -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
@@ -541,7 +541,7 @@ $(MISC)/lang/registry_%.xcd .ERRREMOVE :
         unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
     - $(RM) $(MISC)/$(@:b).list
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
-        find $(@:b).unzip fcfg_drivers_$*.unzip -name [^.]\*.xcu -print) \
+        find $(@:b).unzip fcfg_drivers_$*.unzip -name \*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
