@@ -636,7 +636,7 @@ throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException )
 {
     osl::ClearableMutexGuard aGuard( GetMutex() );
-    sal_Int16 nCount = m_nRequestCount;
+    sal_Int16 nCount = --m_nRequestCount;
     aGuard.clear();
     OfficeIPCThread::RequestsCompleted( 1 );
 /*
