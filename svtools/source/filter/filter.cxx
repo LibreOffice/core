@@ -39,6 +39,7 @@
 #include <vcl/salctype.hxx>
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
+#include <vcl/svgread.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <osl/file.hxx>
@@ -677,10 +678,22 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
         return TRUE;
     }
 
+    //--------------------------- SVG ------------------------------------
+    if( !bTest || ( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL ) )
+    {
+        bSomethingTested=TRUE;
+
+        // just a simple test for the extension
+        if( rFormatExtension.CompareToAscii( "SVG", 3 ) == COMPARE_EQUAL )
+            return TRUE;
+    }
+
     //--------------------------- TGA ------------------------------------
     if( !bTest || ( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = TRUE;
+
+        // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "TGA", 3 ) == COMPARE_EQUAL )
             return TRUE;
     }
@@ -689,6 +702,8 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
     if( !bTest || ( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = TRUE;
+
+        // just a simple test for the extension
         if( rFormatExtension.CompareToAscii( "SGV", 3 ) == COMPARE_EQUAL )
             return TRUE;
     }
@@ -1486,6 +1501,27 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvS
             else
                 eLinkType = GFX_LINK_TYPE_NATIVE_JPG;
         }
+        else if( aFilterName.EqualsIgnoreCaseAscii( IMP_SVG ) )
+        {
+            if( rGraphic.GetContext() == (GraphicReader*) 1 )
+                rGraphic.SetContext( NULL );
+
+            vcl::SVGReader  aSVGReader( rIStream );
+            GDIMetaFile     aSVGMtf;
+
+            if( 0 == aSVGReader.Read( aSVGMtf ).GetActionCount() )
+                nStatus = GRFILTER_FILTERERROR;
+            else
+                rGraphic = Graphic( aSVGMtf );
+
+            // Dont set any GfxLink here, since the MetaRenderGraphicAction
+            // inside the just read MetaFile contains excatly this native data;
+            // setting a ǴfxLink would also affect other program parts, since
+            // GfxLinks are preferably written to the file format in general,
+            // which would be a bad idea in case of SVG files, since earlier
+            // implementations are not able to handle native SVG data in any
+            // case. (KA 01/19/2011)
+        }
         else if( aFilterName.EqualsIgnoreCaseAscii( IMP_XBM ) )
         {
             if( rGraphic.GetContext() == (GraphicReader*) 1 )
@@ -1826,7 +1862,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     aMTF.SetPrefSize( aGraphic.GetPrefSize() );
                     aMTF.SetPrefMapMode( aGraphic.GetPrefMapMode() );
                 }
-                rOStm << aMTF;
+                aMTF.Write( rOStm, GDIMETAFILE_WRITE_REPLACEMENT_RENDERGRAPHIC );
                 if( rOStm.GetError() )
                     nStatus = GRFILTER_IOERROR;
             }
@@ -1943,44 +1979,69 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
             }
             else if( aFilterName.EqualsIgnoreCaseAscii( EXP_SVG ) )
             {
-                try
+                bool bDone = false;
+
+                // do we have a native SVG RenderGraphic, whose data can be written directly?
+                if( ( GRAPHIC_GDIMETAFILE == eType ) && aGraphic.IsRenderGraphic() )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+                    const ::vcl::RenderGraphic aRenderGraphic( aGraphic.GetRenderGraphic() );
 
-                    if( xMgr.is() )
+                    if( aRenderGraphic.GetGraphicDataLength() &&
+                        aRenderGraphic.GetGraphicDataMimeType().equalsIgnoreAsciiCase(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "image/svg+xml" ) ) ) )
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+                        rOStm.Write( aRenderGraphic.GetGraphicData().get(),
+                                     aRenderGraphic.GetGraphicDataLength() );
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
-
-                        if( xSaxWriter.is() && xSVGWriter.is() )
+                           if( rOStm.GetError() )
                         {
-                            ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
-                                xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
-
-                            if( xActiveDataSource.is() )
-                            {
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
-                                    static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
-
-                                SvMemoryStream aMemStm( 65535, 65535 );
-
-                                aMemStm.SetCompressMode( COMPRESSMODE_FULL );
-                                ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
-
-                                xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
-                                    xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
-                                ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
-                                xSVGWriter->write( xSaxWriter, aMtfSeq );
-                            }
+                            nStatus = GRFILTER_IOERROR;
                         }
                     }
                 }
-                catch( ::com::sun::star::uno::Exception& )
+
+                if( !bDone )
                 {
-                    nStatus = GRFILTER_IOERROR;
+                    // do the normal GDIMetaFile export instead
+                    try
+                    {
+                        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+
+                        if( xMgr.is() )
+                        {
+                            ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                            ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
+                                ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+
+                            if( xSaxWriter.is() && xSVGWriter.is() )
+                            {
+                                ::com::sun::star::uno::Reference< ::com::sun::star::io::XActiveDataSource > xActiveDataSource(
+                                    xSaxWriter, ::com::sun::star::uno::UNO_QUERY );
+
+                                if( xActiveDataSource.is() )
+                                {
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xStmIf(
+                                        static_cast< ::cppu::OWeakObject* >( new ImpFilterOutputStream( rOStm ) ) );
+
+                                    SvMemoryStream aMemStm( 65535, 65535 );
+
+                                    aMemStm.SetCompressMode( COMPRESSMODE_FULL );
+                                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( aMemStm );
+
+                                    xActiveDataSource->setOutputStream( ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >(
+                                        xStmIf, ::com::sun::star::uno::UNO_QUERY ) );
+                                    ::com::sun::star::uno::Sequence< sal_Int8 > aMtfSeq( (sal_Int8*) aMemStm.GetData(), aMemStm.Tell() );
+                                    xSVGWriter->write( xSaxWriter, aMtfSeq );
+                                }
+                            }
+                        }
+                    }
+                    catch( ::com::sun::star::uno::Exception& )
+                    {
+                        nStatus = GRFILTER_IOERROR;
+                    }
                 }
             }
             else
@@ -2127,6 +2188,7 @@ IMPL_LINK( GraphicFilter, FilterCallback, ConvertData*, pData )
             case( CVT_TIF ): aShortName = TIF_SHORTNAME; break;
             case( CVT_WMF ): aShortName = WMF_SHORTNAME; break;
             case( CVT_EMF ): aShortName = EMF_SHORTNAME; break;
+            case( CVT_SVG ): aShortName = SVG_SHORTNAME; break;
 
             default:
             break;
@@ -2196,4 +2258,3 @@ int GraphicFilter::LoadGraphic( const String &rPath, const String &rFilterName,
 
     return nRes;
 }
-
