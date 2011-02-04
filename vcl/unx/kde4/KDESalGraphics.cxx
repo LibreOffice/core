@@ -354,7 +354,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {   // reduce paint area only to the handle area
         const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
-        clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
+        QRegion* clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
 
         QStyleOption option;
         option.state = QStyle::State_Horizontal;
