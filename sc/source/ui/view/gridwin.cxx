@@ -424,7 +424,6 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pFilterFloat( NULL ),
             mpDPFieldPopup(NULL),
             mpFilterButton(NULL),
-            nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),
             bEEMouse( FALSE ),
@@ -4476,31 +4475,10 @@ void ScGridWindow::UpdateListValPos( BOOL bVisible, const ScAddress& rPos )
 
 void ScGridWindow::HideCursor()
 {
-    ++nCursorHideCount;
-    if (nCursorHideCount==1)
-    {
-        DrawCursor();
-        DrawAutoFillMark();
-    }
 }
 
 void ScGridWindow::ShowCursor()
 {
-    if (nCursorHideCount==0)
-    {
-        DBG_ERROR("zuviel ShowCursor");
-        return;
-    }
-
-    if (nCursorHideCount==1)
-    {
-        // #i57745# Draw the cursor before setting the variable, in case the
-        // GetSizePixel call from drawing causes a repaint (resize handler is called)
-        DrawAutoFillMark();
-        DrawCursor();
-    }
-
-    --nCursorHideCount;
 }
 
 void ScGridWindow::GetFocus()
@@ -5442,7 +5420,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
     DeleteAutoFillOverlay();
 
     //
-    //  get the AutoFill handle rectangle in pixels (moved from ScGridWindow::DrawAutoFillMark)
+    //  get the AutoFill handle rectangle in pixels
     //
 
     if ( bAutoMarkVisible && aAutoMarkPos.Tab() == pViewData->GetTabNo() &&

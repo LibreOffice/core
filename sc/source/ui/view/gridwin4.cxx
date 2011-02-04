@@ -1702,16 +1702,6 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
 
 // -------------------------------------------------------------------------
 
-void ScGridWindow::DrawCursor()
-{
-}
-
-void ScGridWindow::DrawAutoFillMark()
-{
-}
-
-// -------------------------------------------------------------------------
-
 void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged(rDCEvt);
