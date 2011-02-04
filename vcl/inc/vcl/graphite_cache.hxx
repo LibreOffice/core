@@ -96,7 +96,7 @@ private:
     friend class GraphiteSegmentCache;
 };
 
-typedef boost::unordered_map<long, GrSegRecord*, std::hash<long> > GraphiteSegMap;
+typedef boost::unordered_map<long, GrSegRecord*, boost::hash<long> > GraphiteSegMap;
 typedef boost::unordered_multimap<size_t, GrSegRecord*> GraphiteRopeMap;
 typedef std::pair<GraphiteRopeMap::iterator, GraphiteRopeMap::iterator> GrRMEntry;
 
@@ -230,7 +230,7 @@ private:
   const xub_Unicode * m_prevKey;
 };
 
-typedef boost::unordered_map<int, GraphiteSegmentCache *, std::hash<int> > GraphiteCacheMap;
+typedef boost::unordered_map<int, GraphiteSegmentCache *, boost::hash<int> > GraphiteCacheMap;
 
 /**
 * GraphiteCacheHandler maps a particular font, style, size to a GraphiteSegmentCache

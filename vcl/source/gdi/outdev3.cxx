@@ -996,8 +996,8 @@ ImplFontEntry::~ImplFontEntry()
 
 size_t ImplFontEntry::GFBCacheKey_Hash::operator()( const GFBCacheKey& rData ) const
 {
-    std::hash<sal_UCS4> a;
-    std::hash<int > b;
+    boost::hash<sal_UCS4> a;
+    boost::hash<int > b;
     return a(rData.first) ^ b(rData.second);
 }
 

@@ -136,7 +136,7 @@ FT_Error (*pFTOblique)(FT_GlyphSlot);
 static bool bEnableSizeFT = false;
 
 struct EqStr{ bool operator()(const char* a, const char* b) const { return !strcmp(a,b); } };
-typedef ::boost::unordered_map<const char*,FtFontFile*,::std::hash<const char*>, EqStr> FontFileList;
+typedef ::boost::unordered_map<const char*,FtFontFile*,::boost::hash<const char*>, EqStr> FontFileList;
 namespace { struct vclFontFileList : public rtl::Static< FontFileList, vclFontFileList > {}; }
 
 // -----------------------------------------------------------------------

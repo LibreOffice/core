@@ -58,7 +58,7 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                std::hash< const char* > myHash;
+                boost::hash< const char* > myHash;
                 return myHash( rName.GetBuffer() );
     }
 };

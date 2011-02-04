@@ -50,7 +50,7 @@ namespace utl {
     class AtomProvider
     {
         int                                     m_nAtoms;
-        ::boost::unordered_map< int, ::rtl::OUString, ::std::hash< int > > m_aStringMap;
+        ::boost::unordered_map< int, ::rtl::OUString, ::boost::hash< int > > m_aStringMap;
         ::boost::unordered_map< ::rtl::OUString, int, ::rtl::OUStringHash >    m_aAtomMap;
     public:
         AtomProvider();
@@ -72,7 +72,7 @@ namespace utl {
 
     class UNOTOOLS_DLLPUBLIC MultiAtomProvider
     {
-        ::boost::unordered_map< int, AtomProvider*, ::std::hash< int > > m_aAtomLists;
+        ::boost::unordered_map< int, AtomProvider*, ::boost::hash< int > > m_aAtomLists;
     public:
         MultiAtomProvider();
         ~MultiAtomProvider();

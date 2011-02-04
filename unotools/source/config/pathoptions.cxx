@@ -112,7 +112,7 @@ class NameToHandleMap : public ::boost::unordered_map<  ::rtl::OUString, sal_Int
         inline void free() { NameToHandleMap().swap( *this ); }
 };
 
-class EnumToHandleMap : public ::boost::unordered_map< sal_Int32, sal_Int32, std::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
+class EnumToHandleMap : public ::boost::unordered_map< sal_Int32, sal_Int32, boost::hash< sal_Int32 >, std::equal_to< sal_Int32 > >
 {
     public:
         inline void free() { EnumToHandleMap().swap( *this ); }

@@ -71,10 +71,10 @@ class SystemFontList;
 // -----------
 
 class AquaSalFrame;
-struct FrameHash : public std::hash<sal_IntPtr>
+struct FrameHash : public boost::hash<sal_IntPtr>
 {
     size_t operator()(const AquaSalFrame* frame) const
-    { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
+    { return boost::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef

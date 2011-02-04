@@ -54,7 +54,7 @@ typedef boost::unordered_map
 <
     INT32,
     StgPage *,
-    std::hash< INT32 >,
+    boost::hash< INT32 >,
     std::equal_to< INT32 >
 > UsrStgPagePtr_Impl;
 #ifdef _MSC_VER
