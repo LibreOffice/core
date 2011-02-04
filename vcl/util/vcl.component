@@ -46,4 +46,7 @@
   <implementation name="vcl::FontIdentificator">
     <service name="com.sun.star.awt.FontIdentificator"/>
   </implementation>
+  <implementation name="vcl::rsvg::Rasterizer">
+    <service name="com.sun.star.graphic.GraphicRasterizer_RSVG"/>
+  </implementation>
 </component>

@@ -60,7 +60,7 @@ $(eval $(call gb_SrsTarget_add_files,svt/res,\
     svtools/source/dialogs/prnsetup.src \
     svtools/source/dialogs/so3res.src \
     svtools/source/dialogs/wizardmachine.src \
-    svtools/source/filter.vcl/filter/exportdialog.src \
+    svtools/source/filter/exportdialog.src \
     svtools/source/java/javaerror.src \
     svtools/source/misc/ehdl.src \
     svtools/source/misc/helpagent.src \

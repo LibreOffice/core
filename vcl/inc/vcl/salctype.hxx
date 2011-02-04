@@ -48,6 +48,7 @@
 #define CVT_TIF     (0x00000008UL)
 #define CVT_WMF     (0x00000009UL)
 #define CVT_EMF     (0x0000000aUL)
+#define CVT_SVG     (0x0000000bUL)
 
 // ---------------
 // - ConvertData -

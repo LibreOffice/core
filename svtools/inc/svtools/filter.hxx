@@ -83,6 +83,7 @@ class Graphic;
 #define IMP_JPEG                "SVIJPEG"
 #define IMP_XBM                 "SVIXBM"
 #define IMP_XPM                 "SVIXPM"
+#define IMP_SVG                 "SVISVG"
 #define EXP_BMP                 "SVBMP"
 #define EXP_SVMETAFILE          "SVMETAFILE"
 #define EXP_WMF                 "SVWMF"
@@ -101,6 +102,7 @@ class Graphic;
 #define TIF_SHORTNAME           "TIF"
 #define WMF_SHORTNAME           "WMF"
 #define EMF_SHORTNAME           "EMF"
+#define SVG_SHORTNAME           "SVG"
 
 // ------------------------------------
 // - Info-Klasse fuer alle von uns
@@ -132,6 +134,7 @@ class Graphic;
 #define GFF_WMF ( (USHORT)0x00f6 )
 #define GFF_SGV ( (USHORT)0x00f7 )
 #define GFF_EMF ( (USHORT)0x00f8 )
+#define GFF_SVG ( (USHORT)0x00f9 )
 #define GFF_XXX ( (USHORT)0xffff )
 
 // ---------------------
@@ -177,6 +180,7 @@ class SVT_DLLPUBLIC GraphicDescriptor
     BOOL                ImpDetectWMF( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectSGV( SvStream& rStm, BOOL bExtendedInfo );
     BOOL                ImpDetectEMF( SvStream& rStm, BOOL bExtendedInfo );
+    BOOL                ImpDetectSVG( SvStream& rStm, BOOL bExtendedInfo );
 
     GraphicDescriptor( const GraphicDescriptor& );
     GraphicDescriptor& operator=( const GraphicDescriptor& );

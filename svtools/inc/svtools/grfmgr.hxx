@@ -213,14 +213,15 @@ private:
     ULONG                   mnAnimationLoopCount;
     void*                   mpDummy1;
     void*                   mpDummy2;
-    BOOL                    mbAutoSwapped   : 1;
-    BOOL                    mbTransparent   : 1;
-    BOOL                    mbAnimated      : 1;
-    BOOL                    mbEPS           : 1;
-    BOOL                    mbIsInSwapIn    : 1;
-    BOOL                    mbIsInSwapOut   : 1;
-    BOOL                    mbAlpha         : 1;
-    BOOL                    mbDummyFlag8    : 1;
+    BOOL                    mbAutoSwapped       : 1;
+    BOOL                    mbTransparent       : 1;
+    BOOL                    mbAnimated          : 1;
+    BOOL                    mbEPS               : 1;
+    BOOL                    mbIsInSwapIn        : 1;
+    BOOL                    mbIsInSwapOut       : 1;
+    BOOL                    mbAlpha             : 1;
+    BOOL                    mbIsRenderGraphic   : 1;
+    BOOL                    mbHasRenderGraphic  : 1;
 
     void                    SVT_DLLPRIVATE ImplConstruct();
     void                    SVT_DLLPRIVATE ImplAssignGraphicData();
@@ -402,6 +403,8 @@ public:
     BOOL                    IsAlpha() const { return mbAlpha; }
     BOOL                    IsAnimated() const { return mbAnimated; }
     BOOL                    IsEPS() const { return mbEPS; }
+    BOOL                    IsRenderGraphic() const { return mbIsRenderGraphic; }
+    BOOL                    HasRenderGraphic() const { return mbHasRenderGraphic; }
 
     void                    ResetAnimationLoopCount();
     List*                   GetAnimationInfoList() const;
@@ -568,4 +571,3 @@ public:
 };
 
 #endif // _GRFMGR_HXX
-
