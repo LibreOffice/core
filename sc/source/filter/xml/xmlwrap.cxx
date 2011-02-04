@@ -713,6 +713,7 @@ sal_Bool ScXMLImportWrapper::ExportToComponent(uno::Reference<lang::XMultiServic
             bRet = xFilter->filter( aDescriptor );
 
         pSharedData = pExport->GetSharedData();
+    }
 
     return bRet;
 }
