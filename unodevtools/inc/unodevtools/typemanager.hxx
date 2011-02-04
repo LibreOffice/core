@@ -49,7 +49,7 @@ typedef ::std::__hash_map__
     NewAlloc
 > T2TypeClassMap;
 #else
-typedef ::std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OString, // Typename
     RTTypeClass,    // TypeClass
