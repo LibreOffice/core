@@ -520,7 +520,7 @@ FontWorkAlignmentControl::FontWorkAlignmentControl( const Reference< lang::XMult
 
 OUString SAL_CALL FontWorkAlignmentControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontWorkAlignmentController" ));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontworkAlignmentController" ));
 }
 
 // --------------------------------------------------------------------
@@ -758,7 +758,7 @@ FontWorkCharacterSpacingControl::FontWorkCharacterSpacingControl( const Referenc
 
 OUString SAL_CALL FontWorkCharacterSpacingControl_getImplementationName()
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontWorkCharacterSpacingController" ));
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svx.FontworkCharacterSpacingController" ));
 }
 
 // --------------------------------------------------------------------
