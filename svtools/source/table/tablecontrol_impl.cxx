@@ -43,7 +43,7 @@
 #include <com/sun/star/accessibility/AccessibleTableModelChangeType.hpp>
 /** === end UNO includes === **/
 
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <vcl/scrbar.hxx>
 #include <vcl/seleng.hxx>
 #include <rtl/ref.hxx>
