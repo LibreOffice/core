@@ -125,11 +125,14 @@ namespace connectivity
 
         OSQLParseNodes                  m_aChildren;
         OSQLParseNode*                  m_pParent;      // pParent for reverse linkage in the tree
-        ::rtl::OUString                 m_aNodeValue;   // token name, or empty in case of rules, or ::rtl::OUString in case of
+        ::rtl::OUString                 m_aNodeValue;   // token name, or empty in case of rules,
+                                                        // or ::rtl::OUString in case of
                                                         // ::rtl::OUString, INT, etc.
-        SQLNodeType                     m_eNodeType;    // s. o.
-        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule()) or Token ID (if !IsRule())
-                                            // ::com::sun::star::chaos::Rule IDs and Token IDs can't be distinguished by their values,
+        SQLNodeType                     m_eNodeType;    // see above
+        sal_uInt32                      m_nNodeID;      // ::com::sun::star::chaos::Rule ID (if IsRule())
+                                                        // or Token ID (if !IsRule())
+                                            // ::com::sun::star::chaos::Rule IDs and Token IDs can't
+                                            // be distinguished by their values,
                                             // IsRule has to be used for that!
     public:
         enum Rule
@@ -260,7 +263,7 @@ namespace connectivity
 
         sal_Bool operator==(OSQLParseNode& rParseNode) const;
 
-        // destructor destruct the tree recursively
+        // destructor destructs the tree recursively
         virtual ~OSQLParseNode();
 
         OSQLParseNode* getParent() const {return m_pParent;};
@@ -358,12 +361,11 @@ namespace connectivity
         sal_uInt32 getRuleID() const {return m_nNodeID;}
 
         /** returns the ID of the rule represented by the node
-
             If the node does not represent a rule, UNKNOWN_RULE is returned
         */
         Rule getKnownRuleID() const;
 
-            // returns the TokenId of the node's tokenRuleId (only if !isRule())
+            // returns the TokenId of the node's token (only if !isRule())
         sal_uInt32 getTokenID() const {return m_nNodeID;}
 
             // IsRule tests whether a node is a rule (NonTerminal)
@@ -372,7 +374,7 @@ namespace connectivity
             { return (m_eNodeType == SQL_NODE_RULE) || (m_eNodeType == SQL_NODE_LISTRULE)
                 || (m_eNodeType == SQL_NODE_COMMALISTRULE);}
 
-            // IsToken tests whether a Node is a Token (Terminal)
+            // IsToken tests whether a Node is a Token (Terminal but not a rule)
         sal_Bool isToken() const {return !isRule();}
 
         const ::rtl::OUString& getTokenValue() const {return m_aNodeValue;}
@@ -417,7 +419,7 @@ namespace connectivity
         static ::rtl::OUString getTableRange(const OSQLParseNode* _pTableRef);
 
     protected:
-        // ParseNodeToStr konkateniert alle Token (Blaetter) des ParseNodes
+        // ParseNodeToStr konkateniert alle Token (leaves) des ParseNodes
         void parseNodeToStr(::rtl::OUString& rString,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter,
