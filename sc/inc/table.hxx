@@ -90,7 +90,7 @@ struct ScSetStringParam;
 struct ScColWidthParam;
 struct ScColWidthParam;
 
-typedef std::hash_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
+typedef boost::unordered_map< ::rtl::OUString, rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > NameToNameMap;
 
 class ScTable
 {

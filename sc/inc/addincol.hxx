@@ -44,7 +44,7 @@
 
 #include "scmatrix.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 class String;
@@ -54,7 +54,7 @@ class ScMatrix;
 class ScFuncDesc;
 
 
-typedef ::std::hash_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
+typedef ::boost::unordered_map< String, const ScUnoAddInFuncData*, ScStringHashCode, ::std::equal_to< String > > ScAddInHashMap;
 
 
 enum ScAddInArgumentType

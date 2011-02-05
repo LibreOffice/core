@@ -61,13 +61,13 @@
 #include "scabstdlg.hxx"
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::sheet::DataPilotFieldOrientation;
 using ::std::vector;
 using ::std::auto_ptr;
-using ::std::hash_map;
+using ::boost::unordered_map;
 using ::rtl::OUString;
 using ::rtl::OUStringHash;
 
@@ -543,8 +543,8 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
 
 void ScGridWindow::UpdateDPFromFieldPopupMenu()
 {
-    typedef hash_map<OUString, OUString, OUStringHash> MemNameMapType;
-    typedef hash_map<OUString, bool, OUStringHash> MemVisibilityType;
+    typedef boost::unordered_map<OUString, OUString, OUStringHash> MemNameMapType;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> MemVisibilityType;
 
     if (!mpDPFieldPopup.get())
         return;

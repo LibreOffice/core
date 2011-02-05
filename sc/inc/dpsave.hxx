@@ -36,7 +36,7 @@
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include "scdllapi.h"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <memory>
 
@@ -121,7 +121,7 @@ private:
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo* pLayoutInfo; // (level)
 
 public:
-    typedef std::hash_map <rtl::OUString, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
+    typedef boost::unordered_map <rtl::OUString, ScDPSaveMember*, rtl::OUStringHash> MemberHash;
     typedef std::list <ScDPSaveMember*> MemberList;
 
 private:
@@ -227,7 +227,7 @@ public:
     void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource ,
                       const std::list<rtl::OUString> & deletedDims);
 
-    void UpdateMemberVisibility(const ::std::hash_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
+    void UpdateMemberVisibility(const ::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 
     bool HasInvisibleMember() const;
 };

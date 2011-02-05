@@ -9572,7 +9572,7 @@ struct ScPatternHashCode
 };
 
 // Hash map to find a range by its start row
-typedef ::std::hash_map< SCROW, ScRange > ScRowRangeHashMap;
+typedef ::boost::unordered_map< SCROW, ScRange > ScRowRangeHashMap;
 
 typedef ::std::vector<ScRange> ScRangeVector;
 
@@ -9691,7 +9691,7 @@ const ScRangeList& ScUniqueFormatsEntry::GetRanges()
     return *aReturnRanges;
 }
 
-typedef ::std::hash_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
+typedef ::boost::unordered_map< const ScPatternAttr*, ScUniqueFormatsEntry, ScPatternHashCode > ScUniqueFormatsHashMap;
 
 // function object to sort the range lists by start of first range
 struct ScUniqueFormatsOrder

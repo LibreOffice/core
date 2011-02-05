@@ -61,7 +61,8 @@ using namespace ScDPGlobal;
 #include <com/sun/star/sheet/DataPilotFieldReferenceItemType.hpp>
 using namespace com::sun::star::sheet;
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -69,7 +70,6 @@ using ::com::sun::star::uno::Any;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUStringHash;
-using ::std::hash_map;
 using ::std::auto_ptr;
 
 #define SC_DPSAVEMODE_NO 0
@@ -703,9 +703,9 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         ScUnoHelpFunctions::SetOptionalPropertyValue(xDimProp, SC_UNO_HAS_HIDDEN_MEMBER, bHasHiddenMember);
 }
 
-void ScDPSaveDimension::UpdateMemberVisibility(const hash_map<OUString, bool, OUStringHash>& rData)
+void ScDPSaveDimension::UpdateMemberVisibility(const boost::unordered_map<OUString, bool, OUStringHash>& rData)
 {
-    typedef hash_map<OUString, bool, OUStringHash> DataMap;
+    typedef boost::unordered_map<OUString, bool, OUStringHash> DataMap;
     MemberList::iterator itrMem = maMemberList.begin(), itrMemEnd = maMemberList.end();
     for (; itrMem != itrMemEnd; ++itrMem)
     {
@@ -1208,7 +1208,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         return;
 
     // First, build a dimension name-to-index map.
-    typedef hash_map<OUString, long, ::rtl::OUStringHash> NameIndexMap;
+    typedef boost::unordered_map<OUString, long, ::rtl::OUStringHash> NameIndexMap;
     NameIndexMap aMap;
     long nColCount = pData->GetColumnCount();
     for (long i = 0; i < nColCount; ++i)

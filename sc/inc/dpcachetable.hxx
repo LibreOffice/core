@@ -35,8 +35,7 @@
 #include "collect.hxx"
 
 #include <vector>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
@@ -153,7 +152,7 @@ public:
 
     /** Set filter on/off flag to each row to control visibility.  The caller
         must ensure that the table is filled before calling this function. */
-    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+    void filterByPageDimension(const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     /** Get the cell instance at specified location within the data grid. Note
         that the data grid doesn't include the header row.  Don't delete the
@@ -172,7 +171,7 @@ public:
         a drill-down data table. */
     void filterTable(const ::std::vector<Criterion>& rCriteria,
                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rTabData,
-                     const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims);
+                     const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims);
 
     void clear();
     bool empty() const;
@@ -187,7 +186,7 @@ private:
      * @param nRow index of row to be tested.
      * @param rCriteria a list of criteria
      */
-    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rRepeatIfEmptyDims) const;
+    bool isRowQualified(sal_Int32 nRow, const ::std::vector<Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rRepeatIfEmptyDims) const;
     void getValueData(ScDocument* pDoc, const ScAddress& rPos, ScDPCacheCell& rCell);
     void initNoneCache( ScDocument* pDoc );
 

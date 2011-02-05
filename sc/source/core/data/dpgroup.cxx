@@ -54,8 +54,8 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <vector>
-#include <hash_set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Any;
@@ -67,8 +67,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringHash;
 
 using ::std::vector;
-using ::std::hash_set;
-using ::std::hash_map;
 using ::boost::shared_ptr;
 
 #define D_TIMEFACTOR              86400.0
@@ -1191,12 +1189,12 @@ void ScDPGroupTableData::CreateCacheTable()
 
 void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>& rCriteria)
 {
-    typedef hash_map<long, const ScDPGroupDimension*> GroupFieldMapType;
+    typedef boost::unordered_map<long, const ScDPGroupDimension*> GroupFieldMapType;
     GroupFieldMapType aGroupFieldIds;
     {
         ScDPGroupDimensionVec::const_iterator itr = aGroups.begin(), itrEnd = aGroups.end();
         for (; itr != itrEnd; ++itr)
-            aGroupFieldIds.insert( hash_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
+            aGroupFieldIds.insert( boost::unordered_map<long, const ScDPGroupDimension*>::value_type(itr->GetGroupDim(), &(*itr)) );
     }
 
     vector<ScDPCacheTable::Criterion> aNewCriteria;
@@ -1289,14 +1287,14 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
     rCriteria.swap(aNewCriteria);
 }
 
-void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims)
+void ScDPGroupTableData::FilterCacheTable(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);
     pSourceData->FilterCacheTable(aNewCriteria, rCatDims);
 }
 
-void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const hash_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
+void ScDPGroupTableData::GetDrillDownData(const vector<ScDPCacheTable::Criterion>& rCriteria, const boost::unordered_set<sal_Int32>& rCatDims, Sequence< Sequence<Any> >& rData)
 {
     vector<ScDPCacheTable::Criterion> aNewCriteria(rCriteria);
     ModifyFilterCriteria(aNewCriteria);

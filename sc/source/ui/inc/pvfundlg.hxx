@@ -43,7 +43,7 @@
 #include <sfx2/itemconnect.hxx>
 #include "pivot.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 // ============================================================================
 
@@ -69,7 +69,7 @@ private:
 
 class ScDPFunctionDlg : public ModalDialog
 {
-    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
 public:
     explicit            ScDPFunctionDlg( Window* pParent, const ScDPLabelDataVec& rLabelVec,
                             const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
@@ -212,7 +212,7 @@ private:
     ScDPObject&         mrDPObj;            /// The DataPilot object (for member names).
     ScDPLabelData       maLabelData;        /// Cache for members data.
 
-    typedef ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
+    typedef ::boost::unordered_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash > NameMapType;
     NameMapType maDataFieldNameMap; /// Cache for displayed name to field name mapping.
 };
 
@@ -242,7 +242,7 @@ private:
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
 
-    typedef ::std::hash_map<String, long, ScStringHashCode> DimNameIndexMap;
+    typedef ::boost::unordered_map<String, long, ScStringHashCode> DimNameIndexMap;
     DimNameIndexMap     maNameIndexMap;
     ScDPObject&         mrDPObj;
 };

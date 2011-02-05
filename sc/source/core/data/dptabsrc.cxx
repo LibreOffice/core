@@ -37,8 +37,8 @@
 #include <algorithm>
 #include <vector>
 #include <set>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
@@ -77,8 +77,6 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::set;
-using ::std::hash_map;
-using ::std::hash_set;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
@@ -438,7 +436,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
 {
     long nColumnCount = GetData()->GetColumnCount();
 
-    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
+    typedef boost::unordered_map<String, long, ScStringHashCode> FieldNameMapType;
     FieldNameMapType aFieldNames;
     for (long i = 0; i < nColumnCount; ++i)
     {
@@ -481,7 +479,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
     aResVisData.fillFieldFilters(aFilterCriteria);
 
     Sequence< Sequence<Any> > aTabData;
-    hash_set<sal_Int32> aCatDims;
+    boost::unordered_set<sal_Int32> aCatDims;
     GetCategoryDimensionIndices(aCatDims);
     pData->GetDrillDownData(aFilterCriteria, aCatDims, aTabData);
     return aTabData;
@@ -701,9 +699,9 @@ void ScDPSource::FillCalcInfo(bool bIsRow, ScDPTableData::CalcInfo& rInfo, bool 
     }
 }
 
-void ScDPSource::GetCategoryDimensionIndices(hash_set<sal_Int32>& rCatDims)
+void ScDPSource::GetCategoryDimensionIndices(boost::unordered_set<sal_Int32>& rCatDims)
 {
-    hash_set<sal_Int32> aCatDims;
+    boost::unordered_set<sal_Int32> aCatDims;
     for (long i = 0; i < nColDimCount; ++i)
     {
         sal_Int32 nDim = static_cast<sal_Int32>(nColDims[i]);
@@ -773,7 +771,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
     }
     if (!aCriteria.empty())
     {
-        hash_set<sal_Int32> aCatDims;
+        boost::unordered_set<sal_Int32> aCatDims;
         GetCategoryDimensionIndices(aCatDims);
         pData->FilterCacheTable(aCriteria, aCatDims);
     }

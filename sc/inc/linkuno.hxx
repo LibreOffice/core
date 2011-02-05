@@ -53,7 +53,7 @@
 
 #include "externalrefmgr.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class ScAreaLink;

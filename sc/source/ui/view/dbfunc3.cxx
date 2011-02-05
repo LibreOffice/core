@@ -79,8 +79,8 @@
 #include "cell.hxx"
 #include "userlist.hxx"
 
-#include <hash_set>
-#include <hash_map>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 #include <memory>
 #include <list>
 #include <vector>
@@ -99,8 +99,6 @@ using ::rtl::OUStringBuffer;
 using ::std::auto_ptr;
 using ::std::list;
 using ::std::vector;
-using ::std::hash_map;
-using ::std::hash_set;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -1779,7 +1777,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
         typedef ScDPSaveDimension::MemberList MemList;
         const MemList& rDimMembers = pSaveDim->GetMembers();
         list<OUString> aMembers;
-        hash_set<OUString, ::rtl::OUStringHash> aMemberSet;
+        boost::unordered_set<OUString, ::rtl::OUStringHash> aMemberSet;
         size_t nMemberCount = 0;
         for (MemList::const_iterator itr = rDimMembers.begin(), itrEnd = rDimMembers.end();
               itr != itrEnd; ++itr)
@@ -1796,7 +1794,7 @@ bool ScDBFunc::DataPilotSort( const ScAddress& rPos, bool bAscending, sal_uInt16
 
         // Collect and rank those custom sort strings that also exist in the member name list.
 
-        typedef hash_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
+        typedef boost::unordered_map<OUString, sal_uInt16, OUStringHash> UserSortMap;
         UserSortMap aSubStrs;
         sal_uInt16 nSubCount = 0;
         if (pUserListId)
@@ -1900,7 +1898,7 @@ BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
         bool bValid = ( aDestData.Dimension >= 0 );        // dropping onto a field
 
         // look through the source range
-        std::hash_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
+        boost::unordered_set< rtl::OUString, rtl::OUStringHash, std::equal_to<rtl::OUString> > aMembersSet;   // for lookup
         std::vector< rtl::OUString > aMembersVector;  // members in original order, for inserting
         aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
                                           static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );

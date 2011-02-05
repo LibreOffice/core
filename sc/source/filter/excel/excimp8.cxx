@@ -125,7 +125,7 @@ typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideCont
 class OleNameOverrideContainer : public OleNameOverrideContainer_BASE
 {
 private:
-    typedef std::hash_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
+    typedef boost::unordered_map< rtl::OUString, uno::Reference< container::XIndexContainer >, ::rtl::OUStringHash,
        ::std::equal_to< ::rtl::OUString > > NamedIndexToOleName;
     NamedIndexToOleName  IdToOleNameHash;
     ::osl::Mutex m_aMutex;

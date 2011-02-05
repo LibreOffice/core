@@ -35,6 +35,7 @@
 #include "scdllapi.h"
 #include "queryparam.hxx"
 
+#include <boost/unordered_set.hpp>
 #include <vector>
 
 namespace com { namespace sun { namespace star { namespace sheet {
@@ -128,9 +129,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rCatDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rCatDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

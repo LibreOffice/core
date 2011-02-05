@@ -49,7 +49,7 @@
 #include <boost/intrusive_ptr.hpp>
 
 #ifndef INCLUDED_HASH_MAP
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #define INCLUDED_HASH_MAP
 #endif
 

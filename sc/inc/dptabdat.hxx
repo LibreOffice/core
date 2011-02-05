@@ -37,8 +37,8 @@
 
 #include <vector>
 #include <set>
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star { namespace sheet {
     struct DataPilotFieldFilter;
@@ -146,9 +146,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable() = 0;
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims) = 0;
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims) = 0;
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData) = 0;
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow) = 0;
     virtual const ScDPCacheTable&   GetCacheTable() const = 0;

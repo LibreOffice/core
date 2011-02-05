@@ -83,7 +83,6 @@ using ::std::vector;
 using ::std::list;
 using ::std::distance;
 using ::std::unary_function;
-using ::std::hash_set;
 using ::boost::shared_ptr;
 
 namespace
@@ -2666,8 +2665,8 @@ void ScChart2DataSequence::StopListeningToAllExternalRefs()
     if (!m_pExtRefListener.get())
         return;
 
-    const hash_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
-    hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+    const boost::unordered_set<sal_uInt16>& rFileIds = m_pExtRefListener->getAllFileIds();
+    boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
     ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
     for (; itr != itrEnd; ++itr)
         pRefMgr->removeLinkListener(*itr, m_pExtRefListener.get());
@@ -2699,8 +2698,8 @@ void ScChart2DataSequence::CopyData(const ScChart2DataSequence& r)
 
         ScExternalRefManager* pRefMgr = m_pDocument->GetExternalRefManager();
         m_pExtRefListener.reset(new ExternalRefListener(*this, m_pDocument));
-        const hash_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
-        hash_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
+        const boost::unordered_set<sal_uInt16>& rFileIds = r.m_pExtRefListener->getAllFileIds();
+        boost::unordered_set<sal_uInt16>::const_iterator itr = rFileIds.begin(), itrEnd = rFileIds.end();
         for (; itr != itrEnd; ++itr)
         {
             pRefMgr->addLinkListener(*itr, m_pExtRefListener.get());
@@ -2884,7 +2883,7 @@ void ScChart2DataSequence::ExternalRefListener::removeFileId(sal_uInt16 nFileId)
     maFileIds.erase(nFileId);
 }
 
-const hash_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
+const boost::unordered_set<sal_uInt16>& ScChart2DataSequence::ExternalRefListener::getAllFileIds()
 {
     return maFileIds;
 }

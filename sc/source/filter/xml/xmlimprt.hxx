@@ -53,7 +53,7 @@
 #include <com/sun/star/sheet/XSheetCellRangeContainer.hpp>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ScRangeList;
 class ScMyStyleNumberFormats;
@@ -671,7 +671,7 @@ class ScMyStylesImportHelper;
 
 class ScXMLImport: public SvXMLImport
 {
-    typedef ::std::hash_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >  CellTypeMap;
+    typedef ::boost::unordered_map< ::rtl::OUString, sal_Int16, ::rtl::OUStringHash >   CellTypeMap;
     CellTypeMap             aCellTypeMap;
 
     ScDocument*             pDoc;

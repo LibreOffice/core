@@ -63,7 +63,7 @@ public:
                             const OUString& rNamespace );
 
 private:
-    typedef ::std::hash_map<
+    typedef ::boost::unordered_map<
         OUString,
         Reference< XSingleComponentFactory >,
         OUStringHash,

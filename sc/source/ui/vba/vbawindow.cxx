@@ -47,7 +47,7 @@
 #include <tabvwsh.hxx>
 #include <docuno.hxx>
 #include <sc.hrc>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <vcl/wrkwin.hxx>
 #include "unonames.hxx"
@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlWindowState;
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 SCTAB, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 

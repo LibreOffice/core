@@ -36,7 +36,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include "scdllapi.h"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class ImageList;
 class Bitmap;

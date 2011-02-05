@@ -30,7 +30,7 @@
 #define SC_DPGROUP_HXX
 
 #include <vector>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "dptabdat.hxx"
@@ -179,7 +179,7 @@ public:
 
 class ScDPGroupTableData : public ScDPTableData
 {
-    typedef ::std::hash_set< ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > StringHashSet;
+    typedef ::boost::unordered_set< ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > StringHashSet;
 
     ::boost::shared_ptr<ScDPTableData> pSourceData;
     long                    nSourceCount;
@@ -224,9 +224,9 @@ public:
     virtual bool                    IsRepeatIfEmpty();
 
     virtual void                    CreateCacheTable();
-    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::std::hash_set<sal_Int32>& rDataDims);
+    virtual void                    FilterCacheTable(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria, const ::boost::unordered_set<sal_Int32>& rDataDims);
     virtual void                    GetDrillDownData(const ::std::vector<ScDPCacheTable::Criterion>& rCriteria,
-                                                     const ::std::hash_set<sal_Int32>& rCatDims,
+                                                     const ::boost::unordered_set<sal_Int32>& rCatDims,
                                                      ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& rData);
     virtual void                    CalcResults(CalcInfo& rInfo, bool bAutoShow);
     virtual const ScDPCacheTable&   GetCacheTable() const;

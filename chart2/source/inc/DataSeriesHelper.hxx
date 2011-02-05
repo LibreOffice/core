@@ -40,7 +40,7 @@
 
 #include <vector>
 #include <functional>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
 
 namespace chart
 {

@@ -36,11 +36,11 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <vbahelper/vbacollectionimpl.hxx>
 #include "excelvbahelper.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 typedef CollTestImplHelper< ov::excel::XChartObjects > ChartObjects_BASE;
 /* #TODO see if this hash table is 'really' necessary
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
 css::uno::Reference< ov::excel::XChartObject >,
     ::rtl::OUStringHash,
     ::std::equal_to< ::rtl::OUString > > aHashTable;

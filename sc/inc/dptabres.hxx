@@ -36,8 +36,8 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include "global.hxx"       // enum ScSubTotalFunc
 #include "dpcachetable.hxx"
-#include <hash_map>
-#include <hash_set>
+#include <boost/unordered_map.hpp>
+#include <boost/unordered_set.hpp>
 #include <vector>
 #include <memory>
 
@@ -248,7 +248,7 @@ public:
 };
 
 typedef std::vector <ScDPParentDimData *>                 DimMemberArray;
-typedef std::hash_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
+typedef boost::unordered_map < SCROW, ScDPParentDimData *, MemberHashIndexFunc>  DimMemberHash;
 
 class ResultMembers
 {
@@ -669,8 +669,8 @@ private:
     {
         size_t operator()(const ScDPItemData& r) const;
     };
-    typedef ::std::hash_set<ScDPItemData, MemberHash> VisibleMemberType;
-    typedef ::std::hash_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
+    typedef ::boost::unordered_set<ScDPItemData, MemberHash> VisibleMemberType;
+    typedef ::boost::unordered_map<String, VisibleMemberType, ScStringHashCode> DimMemberType;
     DimMemberType maDimensions;
 
     ScDPSource* mpSource;

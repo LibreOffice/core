@@ -49,7 +49,7 @@
 #include <math.h>
 #include <float.h>          //! Test !!!
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -63,7 +63,6 @@
 using namespace com::sun::star;
 using ::std::vector;
 using ::std::pair;
-using ::std::hash_map;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 
@@ -3856,7 +3855,7 @@ void ScDPResultVisibilityData::addVisibleMember(const String& rDimName, const Sc
 
 void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion>& rFilters) const
 {
-    typedef hash_map<String, long, ScStringHashCode> FieldNameMapType;
+    typedef boost::unordered_map<String, long, ScStringHashCode> FieldNameMapType;
     FieldNameMapType aFieldNames;
     ScDPTableData* pData = mpSource->GetData();
     long nColumnCount = pData->GetColumnCount();

@@ -36,7 +36,7 @@
 #include "xiroot.hxx"
 
 #include "rangenam.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 
 class ScDocument;
@@ -176,7 +176,7 @@ class ShrfmlaBuffer : public ExcRoot
     {
         size_t operator() (const ScAddress &addr) const;
     };
-    typedef std::hash_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
+    typedef boost::unordered_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
     typedef std::list <ScRange>                                  ShrfmlaList;
 
     ShrfmlaHash  index_hash;
