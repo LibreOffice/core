@@ -395,9 +395,7 @@ void PieChart::createShapes()
             if( !bIsVisible )
                 continue;
 
-            double fLogicZ = -0.5;//as defined
             double fDepth  = this->getTransformedDepth();
-//=============================================================================
 
             uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes = getSeriesGroupShape(pSeries, xSeriesTarget);
             //collect data point information (logic coordinates, style ):
@@ -448,6 +446,7 @@ void PieChart::createShapes()
                 }
 
                 //create data point
+                double fLogicZ = -0.5;//as defined
                 uno::Reference<drawing::XShape> xPointShape(
                     createDataPoint( xSeriesGroupShape_Shapes, xPointProperties
                                     , fUnitCircleStartAngleDegree, fUnitCircleWidthAngleDegree
