@@ -67,19 +67,6 @@
 #include <table.hrc>
 #include "swtablerep.hxx"
 
-#ifdef DEBUG_TBLDLG
-
-void DbgTColumn(TColumn* pTColumn, USHORT nCount)
-{
-    for(USHORT i = 0; i < nCount; i++)
-    {
-        String sMsg(i);
-        sMsg += pTColumn[i].bVisible ? " v " : " h ";
-        sMsg += pTColumn[i].nWidth;
-        OSL_ENSURE(false, sMsg);
-    }
-}
-#endif
 
 SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
     :
@@ -133,10 +120,6 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
             break;
         }
 
-#ifdef DEBUG_TBLDLG
-#define DbgTColumn(pTColumns, nAllCols);
-#endif
-
     SwTwips nPos = 0;
     SwTwips nLeft = GetLeftSpace();
     rTabCols.SetLeft(nLeft);
@@ -156,10 +139,6 @@ BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
         }
         pOldTColumns[nAllCols - 1].nWidth = rTabCols.GetRight() - rTabCols.GetLeft() - nStart;
         pOldTColumns[nAllCols - 1].bVisible = TRUE;
-
-#ifdef DEBUG_TBLDLG
-#define DbgTColumn(pOldTColumns, nAllCols);
-#endif
 
         USHORT nOldPos = 0;
         USHORT nNewPos = 0;

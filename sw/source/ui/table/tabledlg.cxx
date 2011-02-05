@@ -77,40 +77,6 @@
 
 using namespace ::com::sun::star;
 
-#ifdef DEBUG_TBLDLG
-void DbgTblRep(SwTableRep* pRep)
-{
-    OSL_ENSURE(false, String(pRep->GetColCount()));
-    OSL_ENSURE(false, String(pRep->GetAllColCount()));
-    SwTwips nSum = 0;
-    for(USHORT i = 0; i < pRep->GetAllColCount(); i++)
-    {
-        String sMsg(i);
-        sMsg += pRep->GetColumns()[i].bVisible ? " v " : " h ";
-        sMsg += pRep->GetColumns()[i].nWidth;
-        nSum +=pRep->GetColumns()[i].nWidth;
-        OSL_ENSURE(false, sMsg);
-    }
-    String sMsg("Column sum: ");
-    sMsg += nSum;
-    sMsg += " table width: ";
-    sMsg += pRep->GetWidth();
-    OSL_ENSURE(false, sMsg);
-    sMsg = "Gesamt/Links/Rechts: ";
-    sMsg += pRep->GetSpace();
-    sMsg += '/';
-    sMsg += pRep->GetLeftSpace();
-    sMsg += '/';
-    sMsg += pRep->GetRightSpace();
-    OSL_ENSURE(false, sMsg);
-    sMsg = "Align: ";
-    sMsg += pRep->GetAlign();
-    OSL_ENSURE(false, sMsg);
-
-};
-
-#endif
-
 
 SwFormatTablePage::SwFormatTablePage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_FORMAT_TABLE ), rSet ),
@@ -791,9 +757,6 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
             if(pTblData->HasWidthChanged())
                 _pSet->Put(SwPtrItem(FN_TABLE_REP, pTblData));
         }
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
     }
     return TRUE;
 }
@@ -1162,10 +1125,6 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
         nTableWidth += nAdd;
     }
 
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
-
     if(!bPercentMode)
         aSpaceED.SetValue(aSpaceED.Normalize( pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
@@ -1282,9 +1241,6 @@ int  SwTableColumnPage::DeactivatePage( SfxItemSet* _pSet )
             }
             pTblData->SetWidthChanged();
         }
-#ifdef DEBUG_TBLDLG
-DbgTblRep(pTblData)
-#endif
         _pSet->Put(SwPtrItem( FN_TABLE_REP, pTblData ));
     }
     return TRUE;
