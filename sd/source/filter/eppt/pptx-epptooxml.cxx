@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdio.h>
 #include <oox/drawingml/chart/chartconverter.hxx>
 #include <oox/core/tokens.hxx>

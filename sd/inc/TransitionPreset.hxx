@@ -35,7 +35,7 @@
 #include <comphelper/stl_types.hxx>
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace animations { class XAnimationNode; }
@@ -50,7 +50,7 @@ namespace sd {
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
-typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {

@@ -34,7 +34,7 @@
 #include <algorithm>
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <set>
 #include <vector>
 #include <svl/lstner.hxx>
@@ -93,7 +93,7 @@ private:
         size_t operator()(SdDrawDocument* argument) const
         { return reinterpret_cast<unsigned long>(argument); }
     };
-    typedef ::std::hash_map<SdDrawDocument*,
+    typedef ::boost::unordered_map<SdDrawDocument*,
                             MasterPageObserver::MasterPageNameSet,
                             DrawDocHash>
         MasterPageContainer;
@@ -194,7 +194,7 @@ void MasterPageObserver::Implementation::RegisterDocument (
     SdDrawDocument& rDocument)
 {
     // Gather the names of all the master pages in the given document.
-    MasterPageContainer::data_type aMasterPageSet;
+    MasterPageContainer::mapped_type aMasterPageSet;
     USHORT nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     for (USHORT nIndex=0; nIndex<nMasterPageCount; nIndex++)
     {

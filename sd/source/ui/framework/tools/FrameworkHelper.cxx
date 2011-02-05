@@ -54,6 +54,7 @@
 #include <osl/doublecheckedlocking.h>
 #include <osl/getglobalmutex.hxx>
 #include <tools/diagnose_ex.h>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -301,7 +302,7 @@ namespace
     drawing framework and the enums defined in the ViewShell class.
 */
 class FrameworkHelper::ViewURLMap
-    : public ::std::hash_map<
+    : public ::boost::unordered_map<
           rtl::OUString,
           ViewShell::ShellType,
           ::comphelper::UStringHash,

@@ -50,7 +50,7 @@
 #include <animations/animationnodehelper.hxx>
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 
 using namespace ::com::sun::star;
@@ -142,7 +142,7 @@ namespace animcore
              */
             sal_Int16                           mnParagraphIndex;
 
-            /// Comparison needed for hash_map
+            /// Comparison needed for boost::unordered_map
             bool operator==( const ShapeHashKey& rRHS ) const
             {
                 return mxRef == rRHS.mxRef && mnParagraphIndex == rRHS.mnParagraphIndex;
@@ -150,7 +150,7 @@ namespace animcore
         };
 
         // A hash map which maps a XShape to the corresponding vector of initial properties
-        typedef ::std::hash_map< ShapeHashKey,
+        typedef ::boost::unordered_map< ShapeHashKey,
                                  VectorOfNamedValues,
                                  ::std::size_t (*)(const ShapeHashKey&) > XShapeHash;
 
