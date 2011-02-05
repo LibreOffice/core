@@ -29,7 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+//#include <cppunit/plugin/TestPlugIn.h>
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
@@ -47,7 +49,7 @@ private:
 
 } }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::Compare, "alltest");
+CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::Compare);
 
 void test::oustring::Compare::equalsIgnoreAsciiCaseAscii()
 {

@@ -29,7 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
 #include "rtl/strbuf.hxx"
 #include "rtl/string.h"
 #include "rtl/string.hxx"
@@ -52,7 +53,7 @@ private:
 
 } }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test::oustring::EndsWith, "alltest");
+CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::EndsWith);
 
 namespace {
 
