@@ -50,10 +50,8 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 //end
-#ifndef INCLUDED_HASH_MAP
+
 #include <boost/unordered_map.hpp>
-#define INCLUDED_HASH_MAP
-#endif
 
 class ToolBox;
 

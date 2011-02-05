@@ -40,10 +40,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
-#ifndef INCLUDED_HASH_MAP
 #include <boost/unordered_map.hpp>
-#define INCLUDED_HASH_MAP
-#endif
 
 namespace svt
 {
