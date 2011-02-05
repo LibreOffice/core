@@ -33,7 +33,7 @@
 
 class SwTxtNode;
 class SwTxtFrm;
-// --> OD 2004-10-05 #i26945#
+// --> #i26945#
 class SwRowFrm;
 // <--
 
@@ -54,14 +54,14 @@ class SwMovedFwdFrmsByObjPos
         void Insert( const SwTxtFrm& _rMovedFwdFrmByObjPos,
                      const sal_uInt32 _nToPageNum );
 
-        // --> OD 2005-01-12 #i40155#
+        // --> #i40155#
         void Remove( const SwTxtFrm& _rTxtFrm );
         // <--
 
         bool FrmMovedFwdByObjPos( const SwTxtFrm& _rTxtFrm,
                                   sal_uInt32& _ornToPageNum ) const;
 
-        // --> OD 2004-10-05 #i26945#
+        // --> #i26945#
         bool DoesRowContainMovedFwdFrm( const SwRowFrm& _rRowFrm ) const;
         // <--
 

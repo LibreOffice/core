@@ -67,7 +67,7 @@ protected:
     long CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const;
 
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
@@ -113,7 +113,6 @@ public:
     inline SwCntntFrm *ContainsCntnt();
     const SwCellFrm *FirstCell() const;
     inline SwCellFrm *FirstCell();
-    // --> OD 2006-02-01 #130797#
     // Method <ContainsAny()> doesn't investigate content of footnotes by default.
     // But under certain circumstances this investigation is intended.
     // Thus, introduce new optional parameter <_bInvestigateFtnForSections>.
@@ -121,7 +120,6 @@ public:
     // investigated for sections.
     const SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false ) const;
     inline SwFrm *ContainsAny( const bool _bInvestigateFtnForSections = false );
-    // <--
     BOOL IsAnLower( const SwFrm * ) const;
 
     const SwFrmFmt *GetFmt() const { return (const SwFrmFmt*)GetDep(); }
@@ -134,8 +132,8 @@ public:
     BOOL MoveLowerFtns( SwCntntFrm *pStart, SwFtnBossFrm *pOldBoss,
                         SwFtnBossFrm *pNewBoss, const BOOL bFtnNums );
 
-    // --> OD 2004-07-01 #i28701# - change purpose of method and its name
-    // --> OD 2005-03-11 #i44016# - add parameter <_bUnlockPosOfObjs> to
+    // --> #i28701# - change purpose of method and its name
+    // --> #i44016# - add parameter <_bUnlockPosOfObjs> to
     // force an unlockposition call for the lower objects.
     void NotifyLowerObjs( const bool _bUnlockPosOfObjs = false );
     // <--
@@ -156,7 +154,7 @@ public:
     /** method to check relative position of layout frame to
         a given layout frame.
 
-        OD 08.11.2002 - refactoring of pseudo-local method <lcl_Apres(..)> in
+        refactoring of pseudo-local method <lcl_Apres(..)> in
         <txtftn.cxx> for #104840#.
 
         @param _aCheckRefLayFrm
@@ -184,12 +182,10 @@ inline SwCellFrm* SwLayoutFrm::FirstCell()
     return (SwCellFrm*)(((const SwLayoutFrm*)this)->FirstCell());
 }
 
-// --> OD 2006-02-01 #130797#
 inline SwFrm* SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections )
 {
     return (SwFrm*)(((const SwLayoutFrm*)this)->ContainsAny( _bInvestigateFtnForSections ));
 }
-// <--
 
 // Diese SwFrm-inlines sind hier, damit frame.hxx nicht layfrm.hxx includen muss
 inline BOOL SwFrm::IsColBodyFrm() const

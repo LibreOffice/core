@@ -38,22 +38,22 @@ class SwPageFrm;
 class SwLooping;
 class IDocumentLayoutAccess;
 
-// --> OD 2004-06-23 #i28701#
+// --> #i28701#
 class SwMovedFwdFrmsByObjPos;
 class SwTxtFrm;
 // <--
-// --> OD 2004-10-05 #i26945#
+// --> #i26945#
 class SwRowFrm;
 // <--
-// --> OD 2004-10-22 #i35911#
+// --> #i35911#
 class SwObjsMarkedAsTmpConsiderWrapInfluence;
 class SwAnchoredObject;
 // <--
-// --> OD 2005-01-12 #i40155#
+// --> #i40155#
 #include <vector>
 class SwFrm;
 // <--
-// --> OD 2006-05-10 #i65250#
+// --> #i65250#
 #include <swtypes.hxx>
 #include <boost/unordered_map.hpp>
 class SwFlowFrm;
@@ -69,19 +69,19 @@ class SwLayouter
     void _CollectEndnotes( SwSectionFrm* pSect );
     BOOL StartLooping( SwPageFrm* pPage );
 
-    // --> OD 2004-06-23 #i28701#
+    // --> #i28701#
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
     // <--
-    // --> OD 2004-10-22 #i35911#
+    // --> #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
     // <--
-    // --> OD 2005-01-12 #i40155# - data structure to collect frames, which are
+    // --> #i40155# - data structure to collect frames, which are
     // marked not to wrap around objects.
     std::vector< const SwFrm* > maFrmsNotToWrap;
     // <--
 
 public:
-    // --> OD 2006-05-10 #i65250#
+    // --> #i65250#
     // - data structure to collect moving backward layout information
     struct tMoveBwdLayoutInfoKey
     {
@@ -137,7 +137,7 @@ public:
     static BOOL Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn );
     static BOOL StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage );
 
-    // --> OD 2004-06-23 #i28701#
+    // --> #i28701#
     static void ClearMovedFwdFrms( const SwDoc& _rDoc );
     static void InsertMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rMovedFwdFrmByObjPos,
@@ -146,29 +146,29 @@ public:
                                      const SwTxtFrm& _rTxtFrm,
                                      sal_uInt32& _ornToPageNum );
     // <--
-    // --> OD 2005-01-12 #i40155# - ummark given frame as to be moved forward.
+    // --> #i40155# - ummark given frame as to be moved forward.
     static void RemoveMovedFwdFrm( const SwDoc& _rDoc,
                                    const SwTxtFrm& _rTxtFrm );
     // <--
-    // --> OD 2004-10-05 #i26945#
+    // --> #i26945#
     static bool DoesRowContainMovedFwdFrm( const SwDoc& _rDoc,
                                            const SwRowFrm& _rRowFrm );
     // <--
 
-    // --> OD 2004-10-22 #i35911#
+    // --> #i35911#
     static void ClearObjsTmpConsiderWrapInfluence( const SwDoc& _rDoc );
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
     // <--
-    // --> OD 2005-01-12 #i40155#
+    // --> #i40155#
     static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
     static void InsertFrmNotToWrap( const SwDoc& _rDoc,
                                     const SwFrm& _rFrm );
     static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
                               const SwFrm& _rFrm );
     // <--
-    // --> OD 2006-05-10 #i65250#
+    // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrm& p_rFlowFrm,
                                    const SwLayoutFrm& p_rNewUpperFrm );

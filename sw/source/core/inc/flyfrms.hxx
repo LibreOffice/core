@@ -28,7 +28,7 @@
 #ifndef _FLYFRMS_HXX
 #define _FLYFRMS_HXX
 #include "flyfrm.hxx"
-// --> OD 2004-06-23 #i28701#
+// --> #i28701#
 class SwFlyAtCntFrm;
 
 //Basisklasse fuer diejenigen Flys, die sich relativ frei Bewegen koennen -
@@ -37,12 +37,12 @@ class SwFlyFreeFrm : public SwFlyFrm
 {
     SwPageFrm *pPage;   //Bei dieser Seite ist der Fly angemeldet.
 
-    // --> OD 2004-11-15 #i34753# - flag for at-page anchored Writer fly frames
+    // --> #i34753# - flag for at-page anchored Writer fly frames
     // to prevent a positioning - call of method <MakeObjPos()> -, if Writer
     // fly frame is already clipped during its format by the object formatter.
     bool mbNoMakePos;
     // <--
-    // --> OD 2004-11-12 #i37068# - flag to prevent move in method
+    // --> #i37068# - flag to prevent move in method
     // <CheckClip(..)>
     bool mbNoMoveOnCheckClip;
     // <--
@@ -50,7 +50,7 @@ class SwFlyFreeFrm : public SwFlyFrm
 
     /** determines, if direct environment of fly frame has 'auto' size
 
-        OD 07.08.2003 #i17297#, #111066#, #111070#
+        #i17297#
         start with anchor frame and search for a header, footer, row or fly frame
         stopping at page frame.
         return <true>, if such a frame is found and it has 'auto' size.
@@ -63,7 +63,7 @@ class SwFlyFreeFrm : public SwFlyFrm
     bool HasEnvironmentAutoSize() const;
 
 protected:
-    // OD 2004-05-12 #i28701# - new friend class <SwFlyNotify> for access to
+    // #i28701# - new friend class <SwFlyNotify> for access to
     // method <NotifyBackground>
     friend class SwFlyNotify;
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -72,14 +72,14 @@ protected:
     SwFlyFreeFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
 
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     virtual ~SwFlyFreeFrm();
 
     virtual void MakeAll();
 
-    // --> OD 2004-11-12 #i37068# - accessors for member <mbNoMoveOnCheckClip>
+    // --> #i37068# - accessors for member <mbNoMoveOnCheckClip>
     inline void SetNoMoveOnCheckClip( const bool _bNewNoMoveOnCheckClip )
     {
         mbNoMoveOnCheckClip = _bNewNoMoveOnCheckClip;
@@ -89,7 +89,7 @@ public:
         return mbNoMoveOnCheckClip;
     }
     // <--
-    // --> OD 2004-11-15 #i34753# - accessors for member <mbNoMakePos>
+    // --> #i34753# - accessors for member <mbNoMakePos>
     inline void SetNoMakePos( const bool _bNoMakePos )
     {
         if ( IsFlyLayFrm() )
@@ -112,7 +112,7 @@ public:
 
     /** method to determine, if a format on the Writer fly frame is possible
 
-        OD 2004-05-11 #i28701#
+        #i28701#
         refine 'IsFormatPossible'-conditions of method
         <SwFlyFrm::IsFormatPossible()> by:
         format isn't possible, if Writer fly frame isn't registered at a page frame
@@ -128,7 +128,7 @@ public:
 class SwFlyLayFrm : public SwFlyFreeFrm
 {
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     SwFlyLayFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
@@ -144,20 +144,20 @@ class SwFlyAtCntFrm : public SwFlyFreeFrm
 protected:
     virtual void MakeAll();
 
-    // OD 2004-05-12 #i28701#
+    // #i28701#
     virtual bool _InvalidationAllowed( const InvalidationType _nInvalid ) const;
 
     /** method to assure that anchored object is registered at the correct
         page frame
 
-        OD 2004-07-02 #i28701#
+        #i28701#
 
         @author OD
     */
     virtual void RegisterAtCorrectPage();
 
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     SwFlyAtCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
@@ -166,12 +166,12 @@ public:
 
     void SetAbsPos( const Point &rNew );
 
-    // OD 2004-03-23 #i26791#
+    // #i26791#
     virtual void MakeObjPos();
 
     /** method to determine, if a format on the Writer fly frame is possible
 
-        OD 2004-05-11 #i28701#
+        #i28701#
         refine 'IsFormatPossible'-conditions of method
         <SwFlyFreeFrm::IsFormatPossible()> by:
         format isn't possible, if method <MakeAll()> is already in progress.
@@ -196,7 +196,7 @@ protected:
     virtual void MakeAll();
 
 public:
-    // --> OD 2004-06-29 #i28701#
+    // --> #i28701#
     TYPEINFO();
 
     SwFlyInCntFrm( SwFlyFrmFmt*, SwFrm *pAnchor );
@@ -230,10 +230,10 @@ public:
     //siehe layact.cxx
     void AddRefOfst( long nOfst ) { aRef.Y() += nOfst; }
 
-    // OD 2004-03-23 #i26791#
+    // #i26791#
     virtual void MakeObjPos();
 
-    // --> OD 2004-12-02 #115759# - invalidate anchor frame on invalidation
+    // --> #115759# - invalidate anchor frame on invalidation
     // of the position, because the position is calculated during the
     // format of the anchor frame
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
