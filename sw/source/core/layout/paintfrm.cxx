@@ -31,7 +31,6 @@
 
 #include <com/sun/star/text/HoriOrientation.hpp>
 
-
 #include <hintids.hxx>
 
 #include <vcl/sound.hxx>
@@ -2089,7 +2088,6 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
     OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
-#if OSL_DEBUG_LEVEL > 1
     Rectangle aTestNewRect( aSizedRect );
     /// check Left()
     --aSizedRect.Left();
@@ -2115,7 +2113,6 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
     OSL_ENSURE( aTestOrgPxRect.Bottom() <= (aTestNewPxRect.Bottom()-1),
             "Error in lcl_AlignRectToPixelSize(..): Bottom() not correct adjusted");
     --aSizedRect.Bottom();
-#endif
 #endif
 }
 

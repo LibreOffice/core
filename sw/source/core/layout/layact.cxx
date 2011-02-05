@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include <time.h>
 #include "rootfrm.hxx"
 #include "pagefrm.hxx"
@@ -2306,7 +2304,6 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 
 
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
 |*
@@ -2336,9 +2333,6 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #else
 #define SHOW_IDLE( ColorData )
 #endif
-#else
-#define SHOW_IDLE( ColorData )
-#endif
 
 /*************************************************************************
 |*
@@ -2349,9 +2343,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
-#endif
 #endif
 {
     pImp->pIdleAct = this;
@@ -2533,7 +2525,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         pImp->FireAccessibleEvents();
 
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {
         // #i75172# Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
@@ -2551,7 +2542,6 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             pImp->GetShell()->GetWin()->Invalidate( aRect );
         }
     }
-#endif
 #endif
 }
 

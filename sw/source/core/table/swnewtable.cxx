@@ -2129,9 +2129,6 @@ void SwTable::CheckConsistency() const
             if( nRowSp < 0 )
             {
                 OSL_ENSURE( aIter != aRowSpanCells.end(), "Missing master box" );
-#if OSL_DEBUG_LEVEL > 1
-                //RowSpanCheck &rCheck = *aIter;
-#endif
                 OSL_ENSURE( aIter->nLeft == nWidth && aIter->nRight == nNewWidth,
                     "Wrong position/size of overlapped table box" );
                 --(aIter->nRowSpan);

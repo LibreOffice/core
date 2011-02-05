@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <txtftn.hxx>
 #include <fmtftn.hxx>
 #include <ftnidx.hxx>
@@ -518,7 +517,6 @@ void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
 
 SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-#if OSL_DEBUG_LEVEL > 1
     static USHORT nNum = USHRT_MAX;
     SwTxtFtn* pTxtFtn = GetAttr();
     if ( pTxtFtn->GetFtn().GetNumber() == nNum )
@@ -527,14 +525,12 @@ SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         (void)bla;
 
     }
-#endif
     return SwLayoutFrm::GrowFrm( nDist, bTst, bInfo );
 }
 
 
 SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 {
-#if OSL_DEBUG_LEVEL > 1
     static USHORT nNum = USHRT_MAX;
     if( nNum != USHRT_MAX )
     {
@@ -545,7 +541,6 @@ SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             (void)bla;
         }
     }
-#endif
     return SwLayoutFrm::ShrinkFrm( nDist, bTst, bInfo );
 }
 #endif

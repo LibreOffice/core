@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "layouter.hxx"
 #include "doc.hxx"
 #include "sectfrm.hxx"
@@ -200,15 +198,11 @@ void SwLooping::Control( SwPageFrm* pPage )
     else if( ++nCount > LOOP_DETECT )
     {
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
         static BOOL bNoLouie = FALSE;
         if( bNoLouie )
             return;
-#endif
-#endif
 
         // FME 2007-08-30 #i81146# new loop control
-#if OSL_DEBUG_LEVEL > 1
         OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
         OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
         OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );

@@ -1666,9 +1666,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
         if( pDoc->GetLayoutCache() )
         {
 #if OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
             pDoc->GetLayoutCache()->CompareLayout( *pDoc );
-#endif
 #endif
             pDoc->GetLayoutCache()->ClearImpl();
         }

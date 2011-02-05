@@ -1892,7 +1892,6 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                 pOut->SetLineColor( rClosedColor );
             pOut->DrawPolygon( rPol );
         }
-#if OSL_DEBUG_LEVEL > 1
         static KSHORT nRadius = 0;
         if( nRadius )
         {
@@ -1912,7 +1911,6 @@ void SwContourCache::ShowContour( OutputDevice* pOut, const SdrObject* pObj,
                 }
             }
         }
-#endif
     }
 }
 #endif
