@@ -293,8 +293,6 @@ struct ImpLineListData
     USHORT  nStyle;
 };
 
-DECLARE_LIST( ImpLineList, ImpLineListData* )
-
 // -----------------------------------------------------------------------
 
 inline const Color& LineListBox::GetPaintColor( void ) const
@@ -498,7 +496,7 @@ void LineListBox::ImplInit()
 {
     aTxtSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "99,99 mm" ) ) );
     aTxtSize.Height() = GetTextHeight();
-    pLineList   = new ImpLineList;
+    pLineList   = new ImpLineList();
     eUnit       = FUNIT_POINT;
     eSourceUnit = FUNIT_POINT;
 
@@ -532,15 +530,12 @@ LineListBox::LineListBox( Window* pParent, const ResId& rResId ) :
 
 LineListBox::~LineListBox()
 {
-    ULONG n = 0;
-    ULONG nCount = pLineList->Count();
-    while ( n < nCount )
-    {
-        ImpLineListData* pData = pLineList->GetObject( n );
-        if ( pData )
-            delete pData;
-        n++;
+    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
+        if ( (*pLineList)[ i ] ) {
+            delete (*pLineList)[ i ];
+        }
     }
+    pLineList->clear();
     delete pLineList;
 }
 
@@ -549,8 +544,15 @@ LineListBox::~LineListBox()
 USHORT LineListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 {
     nPos = ListBox::InsertEntry( rStr, nPos );
-    if ( nPos != LISTBOX_ERROR )
-        pLineList->Insert( NULL, nPos );
+    if ( nPos != LISTBOX_ERROR ) {
+        if ( nPos < pLineList->size() ) {
+            ImpLineList::iterator it = pLineList->begin();
+            ::std::advance( it, nPos );
+            pLineList->insert( it, NULL );
+        } else {
+            pLineList->push_back( NULL );
+        }
+    }
     return nPos;
 }
 
@@ -570,7 +572,13 @@ USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
         pData->nLine2    = nLine2;
         pData->nDistance = nDistance;
         pData->nStyle    = nStyle;
-        pLineList->Insert( pData, nPos );
+        if ( nPos < pLineList->size() ) {
+            ImpLineList::iterator it = pLineList->begin();
+            ::std::advance( it, nPos );
+            pLineList->insert( it, pData );
+        } else {
+            pLineList->push_back( pData );
+        }
     }
 
     return nPos;
@@ -581,26 +589,26 @@ USHORT LineListBox::InsertEntry( long nLine1, long nLine2, long nDistance,
 void LineListBox::RemoveEntry( USHORT nPos )
 {
     ListBox::RemoveEntry( nPos );
-    ImpLineListData* pData = pLineList->Remove( nPos );
-    if ( pData )
-        delete pData;
+
+    if ( nPos < pLineList->size() ) {
+        ImpLineList::iterator it = pLineList->begin();
+        ::std::advance( it, nPos );
+        if ( *it ) delete *it;
+        pLineList->erase( it );
+    }
 }
 
 // -----------------------------------------------------------------------
 
 void LineListBox::Clear()
 {
-    ULONG n = 0;
-    ULONG nCount = pLineList->Count();
-    while ( n < nCount )
-    {
-        ImpLineListData* pData = pLineList->GetObject( n );
-        if ( pData )
-            delete pData;
-        n++;
+    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
+        if ( (*pLineList)[ i ] ) {
+            delete (*pLineList)[ i ];
+        }
     }
+    pLineList->clear();
 
-    pLineList->Clear();
     ListBox::Clear();
 }
 
@@ -609,23 +617,19 @@ void LineListBox::Clear()
 USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
                                 long nDistance, USHORT nStyle ) const
 {
-    ULONG n = 0;
-    ULONG nCount = pLineList->Count();
-    while ( n < nCount )
-    {
-        ImpLineListData* pData = pLineList->GetObject( n );
+    for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
+        ImpLineListData* pData = (*pLineList)[ n ];
         if ( pData )
         {
-            if ( (pData->nLine1    == nLine1) &&
-                (pData->nLine2    == nLine2) &&
-                (pData->nDistance == nDistance) &&
-                (pData->nStyle == nStyle) )
-            return (USHORT)n;
+            if (  (pData->nLine1    == nLine1)
+               && (pData->nLine2    == nLine2)
+               && (pData->nDistance == nDistance)
+               && (pData->nStyle    == nStyle)
+            ) {
+                return (USHORT)i;
+            }
         }
-
-        n++;
     }
-
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
@@ -633,45 +637,32 @@ USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
 
 long LineListBox::GetEntryLine1( USHORT nPos ) const
 {
-    ImpLineListData* pData = pLineList->GetObject( nPos );
-    if ( pData )
-        return pData->nLine1;
-    else
-        return 0;
+    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    return ( pData ) ? pData->nLine1 : 0;
 }
 
 // -----------------------------------------------------------------------
 
 long LineListBox::GetEntryLine2( USHORT nPos ) const
 {
-    ImpLineListData* pData = pLineList->GetObject( nPos );
-    if ( pData )
-        return pData->nLine2;
-    else
-        return 0;
+    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    return ( pData ) ? pData->nLine2 : 0;
 }
 
 // -----------------------------------------------------------------------
 
 long LineListBox::GetEntryDistance( USHORT nPos ) const
 {
-    ImpLineListData* pData = pLineList->GetObject( nPos );
-    if ( pData )
-        return pData->nDistance;
-    else
-        return 0;
+    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    return ( pData ) ? pData->nDistance : 0;
 }
 
 // -----------------------------------------------------------------------
 
 USHORT LineListBox::GetEntryStyle( USHORT nPos ) const
 {
-    USHORT nStyle = STYLE_SOLID;
-    ImpLineListData* pData = pLineList->GetObject( nPos );
-    if ( pData )
-        nStyle = pData->nStyle;
-
-    return nStyle;
+    ImpLineListData* pData = (nPos < pLineList->size()) ? (*pLineList)[ nPos ] : NULL;
+    return ( pData ) ? pData->nStyle : STYLE_SOLID;
 }
 
 // -----------------------------------------------------------------------
@@ -680,7 +671,7 @@ void LineListBox::UpdateLineColors( void )
 {
     if( UpdatePaintLineColor() )
     {
-        ULONG       nCount = pLineList->Count();
+        size_t nCount = pLineList->size();
         if( !nCount )
             return;
 
@@ -690,10 +681,10 @@ void LineListBox::UpdateLineColors( void )
         // exchange entries which containing lines
         SetUpdateMode( FALSE );
 
-        USHORT      nSelEntry = GetSelectEntryPos();
-        for( ULONG n = 0 ; n < nCount ; ++n )
+        USHORT nSelEntry = GetSelectEntryPos();
+        for( size_t n = 0 ; n < nCount ; ++n )
         {
-            ImpLineListData*    pData = pLineList->GetObject( n );
+            ImpLineListData* pData = (*pLineList)[ n ];
             if( pData )
             {
                 // exchange listbox data

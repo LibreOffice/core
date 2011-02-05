@@ -39,11 +39,12 @@
 #include <vcl/field.hxx>
 
 class ImplFontList;
-class ImpLineList;
 class FontList;
 class ImplColorListData;
+class ImpLineListData;
 
 typedef ::std::vector< ImplColorListData* > ImpColorList;
+typedef ::std::vector< ImpLineListData* > ImpLineList;
 
 #define STYLE_SOLID     ( ( USHORT ) 0 )
 #define STYLE_DOTTED    ( ( USHORT ) 1 )
