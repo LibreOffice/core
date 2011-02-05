@@ -1554,18 +1554,6 @@ USHORT SwTransferable::GetSotDestination( const SwWrtShell& rSh,
 // was mmchen wir bei Mehrfachselektion???
     default:
         {
-/*
-JP 13.07.98: Bug 52637: es wird ein URL-Feld erkannt also werden nur die
-                        Inhalte zugelassen. Das ist aber bestimmt nicht das
-                        gewollte.
-            SwContentAtPos aCntntAtPos( SwContentAtPos::SW_INETATTR );
-            SfxItemSet aSet( (SfxItemPool&)rSh.GetAttrPool(),
-                            RES_TXTATR_INETFMT, RES_TXTATR_INETFMT );
-            if( pPt ? ((SwWrtShell&)rSh).GetContentAtPos( *pPt, aCntntAtPos, FALSE )
-                     : (rSh.GetAttr( aSet ) && aSet.Count()) )
-                nRet = EXCHG_DEST_DOC_URLFIELD;
-            else
-*/
             if( rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 nRet = EXCHG_DEST_SWDOC_FREE_AREA_WEB;
             else

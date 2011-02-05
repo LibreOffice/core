@@ -731,20 +731,6 @@ void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
         case SVX_ADJUST_BLOCK:
         {
             // disabled for #i13507#
-            // 8311: In Zeilen mit LineBreaks gibt es keinen Blocksatz!
-/*          if( pCurrent->GetLen() &&
-                CH_BREAK == GetInfo().GetChar( nStart + pCurrent->GetLen() - 1 ) &&
-                !IsLastBlock() )
-            {
-                if( IsLastCenter() )
-                {
-                    CalcFlyAdjust( pCurrent );
-                    pPara->GetRepaint()->SetOfst( 0 );
-                    break;
-                }
-                return;
-            }
-*/          FormatBlock();
             break;
         }
         default : return;

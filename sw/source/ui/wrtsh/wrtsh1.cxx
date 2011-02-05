@@ -406,37 +406,8 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
                 // TODO/LATER: recording! Convert properties to items
                 case SID_INSERT_PLUGIN:
-                    /*
-                    if(pReq)
-                    {
-                        INetURLObject* pURL = aDlg.GetURL();
-                        if(pURL)
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_2, pURL->GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    } */
                 case SID_INSERT_APPLET:
-                    /*
-                    if(pReq)
-                    {
-                        SvAppletObjectRef xApplet ( xIPObj );
-                        if(xApplet.Is())
-                            pReq->AppendItem(SfxStringItem(FN_PARAM_1 , xApplet->GetCodeBase()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_2 , aDlg.GetClass()));
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_3 , aDlg.GetCommands()));
-                    }*/
                 case SID_INSERT_FLOATINGFRAME:
-                    /*
-                    if(pReq && xFloatingFrame.Is())
-                    {
-                        const SfxFrameDescriptor* pDescriptor = xFloatingFrame->GetFrameDescriptor();
-                        pReq->AppendItem(SfxStringItem(FN_PARAM_1, pDescriptor->GetName()));
-                        pReq->AppendItem(
-                                SfxStringItem( FN_PARAM_2,
-                                    pDescriptor->GetURL().GetMainURL(INetURLObject::NO_DECODE)));
-                        pReq->AppendItem(SvxSizeItem(FN_PARAM_3, pDescriptor->GetMargin()));
-                        pReq->AppendItem(SfxByteItem(FN_PARAM_4, pDescriptor->GetScrollingMode()));
-                        pReq->AppendItem(SfxBoolItem(FN_PARAM_5, pDescriptor->HasFrameBorder()));
-                    }*/
                 {
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     SfxAbstractInsertObjectDialog* pDlg =
@@ -492,8 +463,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
                 pClient->DoVerb( SVVERB_SHOW );
 
                 // TODO/LATER: set document name - should be done in Client
-                //if ( !ERRCODE_TOERROR( nErr ) )
-                //    xIPObj->SetDocumentName( GetView().GetDocShell()->GetTitle() );
             }
         }
     }

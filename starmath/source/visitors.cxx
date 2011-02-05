@@ -682,7 +682,6 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     //  This is done by shifting it's output-position to a point that
     //  corresponds exactly to a pixel on the output device.
     Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
-    //aDrawPos.X( ) = aBar.Left( );     //! don't change X position
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
@@ -1051,11 +1050,8 @@ SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNod
 }
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmLineNode* pNode ){
-    //pRightMost = NULL;
     SmNodeIterator it( pNode );
     while( it.Next( ) ){
-        //if( !pRightMost )
-        //    pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
         it->Accept( this );
     }
 }

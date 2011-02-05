@@ -193,20 +193,6 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             {
                 SwDBField* pDBFld = (SwDBField*)pFld;
                 pDBFld->ChgBodyTxtFlag( ::lcl_IsInBody( pFrame ) );
-/* Solange das ChangeExpansion auskommentiert ist.
- * Aktualisieren in Kopf/Fuszeilen geht aktuell nicht.
-                if( !::lcl_IsInBody( pFrame ) )
-                {
-                    pDBFld->ChgBodyTxtFlag( sal_False );
-                    pDBFld->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
-                }
-                else if( !pDBFld->IsInBodyTxt() )
-                {
-                    // war vorher anders, also erst expandieren, dann umsetzen!!
-                    pDBFld->ChangeExpansion( pFrame, (SwTxtFld*)pHint );
-                    pDBFld->ChgBodyTxtFlag( sal_True );
-                }
-*/
             }
             pRet = new SwFldPortion( pFld->GetCntnt( bName ) );
             break;
@@ -321,9 +307,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     SwLinePortion *pRet = 0;
     if( !pHint )
     {
-#if OSL_DEBUG_LEVEL > 1
-//        aDbstream << "NewExtraPortion: hint not found?" << endl;
-#endif
         pRet = new SwTxtPortion;
         pRet->SetLen( 1 );
         rInf.SetLen( 1 );
@@ -366,9 +349,6 @@ SwLinePortion *SwTxtFormatter::NewExtraPortion( SwTxtFormatInfo &rInf )
     }
     if( !pRet )
     {
-#if OSL_DEBUG_LEVEL > 1
-//        aDbstream << "NewExtraPortion: unknown hint" << endl;
-#endif
         const XubString aNothing;
         pRet = new SwFldPortion( aNothing );
         rInf.SetLen( 1 );
@@ -489,7 +469,6 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // use method <SwNumRule::MakeNumString(..)> instead of
                 // method <SwTxtNode::GetNumString()>, because for levels with
                 // numbering none the prefix and the suffix strings have to be provided.
-//                XubString aTxt( pTxtNd->GetNumString() );
                 XubString aTxt( pNumRule->MakeNumString( *(pTxtNd->GetNum()) ) );
                 // <--
                 if ( aTxt.Len() > 0 )

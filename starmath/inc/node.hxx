@@ -35,24 +35,6 @@
 #include <stdio.h>
 
 #define j_assert(cond, msg) DBG_ASSERT(cond, msg)
-#if 0
-// easier to read assert macro
-    do{                                                             \
-                                    if(!(cond))                                                 \
-                                    {                                                           \
-                                        std::cerr<<"Failed assertion: "<<msg<<", at line ";     \
-                                        char* f = (char*)__FILE__;                              \
-                                        f += strlen(f);                                         \
-                                        do f--; while(*f != '/');                               \
-                                        do f--; while(*f != '/');                               \
-                                        do f--; while(*f != '/');                               \
-                                        fprintf(stderr, "%d in %s\n", __LINE__, f + 1);         \
-                                    }                                                           \
-                                } while(false)
-#endif
-
-// Comment out below to disable dumpasdot
-//#define DEBUG_ENABLE_DUMPASDOT
 
 #include "parse.hxx"
 #include "types.hxx"

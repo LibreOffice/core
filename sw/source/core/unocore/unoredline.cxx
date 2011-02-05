@@ -197,8 +197,6 @@ SwXRedlinePortion::SwXRedlinePortion(   const SwRedline* pRed,
                         const SwUnoCrsr* pPortionCrsr,
                         uno::Reference< text::XText >  xParent, BOOL bStart) :
     SwXTextPortion(pPortionCrsr, xParent, bStart ? PORTION_REDLINE_START : PORTION_REDLINE_END),
-//  SwXText(pPortionCrsr->GetDoc(), CURSOR_REDLINE),
-//  SwXRedlineText(pPortionCrsr->GetDoc(), *pRed->GetContentIdx()),
     pRedline(pRed)
 {
     SetCollapsed(!pRedline->HasMark());
@@ -445,9 +443,6 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_DATE_TIME)))
     {
         DBG_ERROR("currently not available");
-//      util::DateTime aDT;
-//      if(aValue >>= aDT)
-//              pRedline->SetTimeStamp(lcl_DateTimeFromUno(aDT));
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_COMMENT)))
     {
@@ -460,41 +455,11 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
         OUString sTmp; aValue >>= sTmp;
         if(!sTmp.getLength())
             throw lang::IllegalArgumentException();
-//      pRedline->SetType(lcl_OUStringToRedlineType(sTmp));
     }
     else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_REDLINE_SUCCESSOR_DATA)))
     {
         DBG_ERROR("currently not available");
-/*      SwRedlineData* pNext = pRedline->GetRedlineData().Next();
-        uno::Sequence<beans::PropertyValue> aValues;
-        if(!(aValue =>> aValues) || !pNext)
-            throw lang::IllegalArgumentException();
-
-        const beans::PropertyValue* pValues = aValues.getConstArray();
-        for(sal_Int32 nValue = 0; nValue < aValues.getLength(); nValue++)
-        {
-            if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_AUTHOR.pName)
-            {
-                DBG_ERROR("currently not available");
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_DATE_TIME.pName))
-            {
-                util::DateTime aDT;
-                if(pValues[nValue].Value >>= aDT)
-                    pNext->SetTimeStamp(lcl_DateTimeFromUno(aDT));
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_COMMENT.pName))
-            {
-                OUString sTmp; pValues[nValue].Value >>= sTmp;
-                pNext->SetComment(sTmp);
-            }
-            else if(pValues[nValue].Name.equalsAscii(UNO_NAME_REDLINE_TYPE.pName))
-            {
-                OUString sTmp; pValues[nValue].Value >>= sTmp;
-                pNext->SetType(lcl_OUStringToRedlineType(sTmp);
-            }
-        }
-*/  }
+    }
     else
     {
         throw lang::IllegalArgumentException();

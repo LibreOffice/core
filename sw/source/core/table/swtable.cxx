@@ -44,7 +44,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <editeng/boxitem.hxx>
 
-
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>
@@ -264,7 +263,6 @@ void _InsTblBox( SwDoc* pDoc, SwTableNode* pTblNd,
 |*
 |*  SwTable::SwTable()
 |*
-|*
 |*************************************************************************/
 SwTable::SwTable( SwTableFmt* pFmt )
     : SwClient( pFmt ),
@@ -330,7 +328,6 @@ SwTable::~SwTable()
 /*************************************************************************
 |*
 |*  SwTable::Modify()
-|*
 |*
 |*************************************************************************/
 inline void FmtInArr( SvPtrarr& rFmtArr, SwFmt* pBoxFmt )
@@ -449,7 +446,6 @@ void SwTable::AdjustWidths( const long nOld, const long nNew )
 /*************************************************************************
 |*
 |*  SwTable::GetTabCols()
-|*
 |*
 |*************************************************************************/
 void lcl_RefreshHidden( SwTabCols &rToFill, USHORT nPos )
@@ -702,7 +698,6 @@ void SwTable::GetTabCols( SwTabCols &rToFill, const SwTableBox *pStart,
 |*
 |*  SwTable::SetTabCols()
 |*
-|*
 |*************************************************************************/
 //Struktur zur Parameteruebergabe
 struct Parm
@@ -820,11 +815,6 @@ void lcl_ProcessBoxSet( SwTableBox *pBox, Parm &rParm )
                     nRightDiff = (long)rParm.rNew[nLeftPos] -
                                  (long)rParm.rOld[nLeftPos];
             }
-//MA 11. Feb. 99: #61577# 0 sollte doch gerade richtig sein, weil die
-//Kante doch schon in SetTabCols() korrigiert wurde.
-//          else
-//              nRightDiff = (long)rParm.rNew.GetRight() -
-//                           (long)rParm.rOld.GetRight();
         }
 
         if( pBox->getRowSpan() == 1 )
@@ -926,8 +916,6 @@ void lcl_AdjustBox( SwTableBox *pBox, const long nDiff, Parm &rParm )
     //Groesse der Box anpassen.
     SwFmtFrmSize aFmtFrmSize( pBox->GetFrmFmt()->GetFrmSize() );
     aFmtFrmSize.SetWidth( aFmtFrmSize.GetWidth() + nDiff );
-//#30009#       if ( aFmtFrmSize.GetWidth() < 0 )
-//          aFmtFrmSize.SetWidth( -aFmtFrmSize.GetWidth() );
 
     rParm.aShareFmts.SetSize( *pBox, aFmtFrmSize );
 }
@@ -1396,7 +1384,6 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
 |*  const SwTableBox* SwTable::GetTblBox( const Strn?ng& rName ) const
 |*      gebe den Pointer auf die benannte Box zurueck.
 |*
-|*
 |*************************************************************************/
 
 BOOL IsValidRowName( const String& rStr )
@@ -1582,7 +1569,6 @@ BOOL SwTable::IsTblComplex() const
 |*
 |*  SwTableLine::SwTableLine()
 |*
-|*
 |*************************************************************************/
 SwTableLine::SwTableLine( SwTableLineFmt *pFmt, USHORT nBoxes,
                             SwTableBox *pUp )
@@ -1605,7 +1591,6 @@ SwTableLine::~SwTableLine()
 /*************************************************************************
 |*
 |*  SwTableLine::ClaimFrmFmt(), ChgFrmFmt()
-|*
 |*
 |*************************************************************************/
 SwFrmFmt* SwTableLine::ClaimFrmFmt()
@@ -1731,7 +1716,6 @@ SwTwips SwTableLine::GetTableLineHeight( bool& bLayoutAvailable ) const
 |*
 |*  SwTableBox::SwTableBox()
 |*
-|*
 |*************************************************************************/
 SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, USHORT nLines, SwTableLine *pUp )
     : SwClient( 0 ),
@@ -1834,7 +1818,6 @@ SwTableBoxFmt* SwTableBox::CheckBoxFmt( SwTableBoxFmt* pFmt )
 |*
 |*  SwTableBox::ClaimFrmFmt(), ChgFrmFmt()
 |*
-|*
 |*************************************************************************/
 SwFrmFmt* SwTableBox::ClaimFrmFmt()
 {
@@ -1918,7 +1901,6 @@ void SwTableBox::ChgFrmFmt( SwTableBoxFmt* pNewFmt )
 |*  String SwTableBox::GetName() const
 |*      gebe den Namen dieser Box zurueck. Dieser wird dynamisch bestimmt
 |*      und ergibt sich aus der Position in den Lines/Boxen/Tabelle
-|*
 |*
 |*************************************************************************/
 void lcl_GetTblBoxColStr( USHORT nCol, String& rNm )
@@ -2468,13 +2450,6 @@ void SwTableBoxFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                     }
                     else if( bNewIsTxtFmt && nOldFmt != nNewFmt )
                     {
-                        // auf jedenfall muessen jetzt die Formeln/Values
-                        // geloescht werden!
-    //                  LockModify();
-    //                  ResetAttr( RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
-    //                  UnlockModify();
-
-
                         ChgNumToText( *pBox, nNewFmt );
                     }
                 }
@@ -2518,21 +2493,6 @@ BOOL SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
             rFmtIndex = 0;
 
         bRet = pNumFmtr->IsNumberFormat( aTxt, rFmtIndex, rNum );
-
-/*
-// wie bekommt man aus dem neuen String den neuen Wert?
-// denn der Numberformater erkennt aus "123.--DM" kein Zahlenformat!
-        if( !bRet && rFmtIndex && !pNumFmtr->IsTextFormat( rFmtIndex ) &&
-            SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_VALUE,
-            FALSE, &pItem ))
-        {
-            Color* pCol;
-            String sNewTxt;
-            pNumFmtr->GetOutputString( ((SwTblBoxValue*)pItem)->GetValue(),
-                                        rFmtIndex, sNewTxt, &pCol );
-            bRet = aTxt == sNewTxt;
-        }
-*/
     }
     else
         rIsEmptyTxtNd = FALSE;
@@ -2589,14 +2549,13 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
         {
             const SwNode* pNode = pSttNd->GetNodes()[nIndex];
             if( pNode->IsTableNode() )
-            {    /*return ULONG_MAX if the cell contains a table(in table)*/
                 pTextNode = 0;
                 break;
             }
             if( pNode->IsTxtNode() )
             {
                 if( pTextNode )
-                {    /*return ULONG_MAX if the cell contains complex paragraphs*/
+                {
                     pTextNode = 0;
                     break;
                 }
