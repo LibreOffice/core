@@ -38,13 +38,14 @@
 #include <vcl/metric.hxx>
 #include <vcl/field.hxx>
 
-class ImplFontList;
 class FontList;
 class ImplColorListData;
 class ImpLineListData;
+class ImplFontNameListData;
 
-typedef ::std::vector< ImplColorListData* > ImpColorList;
-typedef ::std::vector< ImpLineListData* > ImpLineList;
+typedef ::std::vector< ImplColorListData*    > ImpColorList;
+typedef ::std::vector< ImpLineListData*      > ImpLineList;
+typedef ::std::vector< ImplFontNameListData* > ImplFontList;
 
 #define STYLE_SOLID     ( ( USHORT ) 0 )
 #define STYLE_DOTTED    ( ( USHORT ) 1 )

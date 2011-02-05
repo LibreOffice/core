@@ -745,8 +745,6 @@ struct ImplFontNameListData
                 {}
 };
 
-DECLARE_LIST( ImplFontList, ImplFontNameListData* )
-
 // -------------------------------------------------------------------
 
 FontNameBox::FontNameBox( Window* pParent, WinBits nWinStyle ) :
@@ -801,12 +799,10 @@ void FontNameBox::ImplDestroyFontList()
 {
     if ( mpFontList )
     {
-        ImplFontNameListData* pInfo = mpFontList->First();
-        while ( pInfo )
-        {
-            delete pInfo;
-            pInfo = mpFontList->Next();
+        for ( size_t i = 0, n = mpFontList->size(); i < n; ++i ) {
+            delete (*mpFontList)[ i ];
         }
+        mpFontList->clear();
         delete mpFontList;
     }
 }
@@ -832,7 +828,13 @@ void FontNameBox::Fill( const FontList* pList )
         {
             USHORT nType = pList->GetFontNameType( i );
             ImplFontNameListData* pData = new ImplFontNameListData( rFontInfo, nType );
-            mpFontList->Insert( pData, nIndex );
+            if ( nIndex < mpFontList->size() ) {
+                ImplFontList::iterator it = mpFontList->begin();
+                ::std::advance( it, nIndex );
+                mpFontList->insert( it, pData );
+            } else {
+                mpFontList->push_back( pData );
+            }
         }
     }
 
@@ -975,7 +977,7 @@ namespace
 
 void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    ImplFontNameListData*   pData = mpFontList->GetObject( rUDEvt.GetItemId() );
+    ImplFontNameListData*   pData = (*mpFontList)[ rUDEvt.GetItemId() ];
     const FontInfo&         rInfo = pData->maInfo;
     USHORT                  nType = pData->mnType;
     Point                   aTopLeft = rUDEvt.GetRect().TopLeft();
