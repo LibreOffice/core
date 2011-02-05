@@ -352,18 +352,6 @@ void SetEditEngineDefaultFonts(
                     rFntDta.nFallbackLang : rFntDta.nLang;
             Font aFont = Application::GetDefaultDevice()->GetDefaultFont(
                         rFntDta.nFontType, nLang, DEFAULTFONT_FLAGS_ONLYONE );
-#ifdef DEBUG_TL
-            ByteString aFntName( aFont.GetName(), 1 );
-            int eFntFamily = aFont.GetFamily();
-            ByteString aFntStyleName( aFont.GetStyleName(), 1 );
-            int ePitch = aFont.GetPitch();
-            int eCharSet = aFont.GetCharSet();
-            fprintf(stderr, "\nFontName %s \n", aFntName.GetBuffer() );
-            fprintf(stderr, "StyleName %s \n", aFntStyleName.GetBuffer() );
-            fprintf(stderr, "eFntFamily %d \n", eFntFamily );
-            fprintf(stderr, "ePitch %d \n", ePitch );
-            fprintf(stderr, "eCharSet %d \n", eCharSet );
-#endif
             rEditEngineItemPool.SetPoolDefaultItem(
                     SvxFontItem( aFont.GetFamily(), aFont.GetName(),
                         aFont.GetStyleName(), aFont.GetPitch(), aFont.GetCharSet(),
