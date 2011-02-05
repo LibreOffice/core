@@ -45,7 +45,7 @@ namespace css = ::com::sun::star;
 
 namespace dp_manager {
 
-typedef ::std::hash_map<
+typedef ::boost::unordered_map<
     ::rtl::OUString,
     ::std::vector<css::uno::Reference<css::deployment::XPackage> >,
     ::rtl::OUStringHash > id2extensions;

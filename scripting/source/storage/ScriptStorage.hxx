@@ -29,7 +29,7 @@
 #define __SCRIPTING_STORAGE_SCRIPTSTORAGE_HXX_
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <osl/mutex.hxx>
 #include <cppuhelper/implbase5.hxx> // helper for component factory
@@ -58,20 +58,20 @@ namespace scripting_impl
 typedef ::std::vector< ScriptData > Datas_vec;
 //-----------------------------------------------------------------------------
 // function name -> ScriptData
-typedef ::std::hash_map < ::rtl::OUString, ScriptData, ::rtl::OUStringHash,
+typedef ::boost::unordered_map < ::rtl::OUString, ScriptData, ::rtl::OUStringHash,
             ::std::equal_to< ::rtl::OUString > > ScriptFunction_hash;
 //-----------------------------------------------------------------------------
 // language -> hash of function name -> ScriptData
-typedef ::std::hash_map < ::rtl::OUString, ScriptFunction_hash,
+typedef ::boost::unordered_map < ::rtl::OUString, ScriptFunction_hash,
             ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptData_hash;
 //-----------------------------------------------------------------------------
-typedef ::std::hash_map < ::rtl::OUString,
+typedef ::boost::unordered_map < ::rtl::OUString,
 css::uno::Reference< css::xml::sax::XExtendedDocumentHandler >,
 ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptOutput_hash;
 //-----------------------------------------------------------------------------
-typedef ::std::hash_map < ::rtl::OUString,
+typedef ::boost::unordered_map < ::rtl::OUString,
 ::rtl::OUString, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
 ScriptLanguages_hash;
 

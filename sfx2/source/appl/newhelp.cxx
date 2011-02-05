@@ -46,7 +46,7 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
@@ -605,7 +605,7 @@ namespace sfx2 {
         }
     };
 
-    typedef ::std::hash_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
+    typedef ::boost::unordered_map< ::rtl::OUString, int, hashOUString, equalOUString > KeywordInfo;
 }
 
 #define UNIFY_AND_INSERT_TOKEN( aToken )                                                            \

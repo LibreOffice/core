@@ -42,7 +42,7 @@
 #include <com/sun/star/reflection/XServiceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 class SbUnoObject: public SbxObject
 {
@@ -321,7 +321,7 @@ public:
     virtual void Clear();
 };
 
-typedef std::hash_map< ::rtl::OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
+typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::uno::Any, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > VBAConstantsHash;
 
 typedef std::vector< rtl::OUString > VBAConstantsVector;
 

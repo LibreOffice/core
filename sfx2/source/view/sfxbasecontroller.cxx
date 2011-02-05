@@ -91,7 +91,7 @@
 #include <comphelper/processfactory.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <sfx2/event.hxx>
 #include "viewfac.hxx"
@@ -178,7 +178,7 @@ static GroupIDToCommandGroup    GroupIDCommandGroupMap[] =
     { 0                 ,   0                                                   }
 };
 
-typedef std::hash_map< sal_Int16, sal_Int16 > GroupHashMap;
+typedef boost::unordered_map< sal_Int16, sal_Int16 > GroupHashMap;
 
 
 sal_Int16 MapGroupIDToCommandGroup( sal_Int16 nGroupID )

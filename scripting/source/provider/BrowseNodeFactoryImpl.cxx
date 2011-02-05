@@ -170,7 +170,7 @@ public:
 
 
 //typedef ::std::map< ::rtl::OUString, Reference< browse::XBrowseNode > >
-typedef ::std::hash_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
+typedef ::boost::unordered_map< ::rtl::OUString, Reference< browse::XBrowseNode >,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > >
         BrowseNodeAggregatorHash;
 typedef ::std::vector< ::rtl::OUString > vString;

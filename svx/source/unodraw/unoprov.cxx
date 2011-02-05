@@ -42,7 +42,7 @@
 #include <com/sun/star/media/ZoomLevel.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vcl/fldunit.hxx>
 #include <tools/shl.hxx>
 #include <osl/mutex.hxx>
@@ -839,7 +839,7 @@ comphelper::PropertyMapEntry* ImplGetAdditionalWriterDrawingDefaultsPropertyMap(
 * class UHashMap                                                       *
 ***********************************************************************/
 
-typedef ::std::hash_map< rtl::OUString, sal_uInt32, rtl::OUStringHash > UHashMapImpl;
+typedef ::boost::unordered_map< rtl::OUString, sal_uInt32, rtl::OUStringHash > UHashMapImpl;
 
 namespace {
   static const UHashMapImpl &GetUHashImpl()

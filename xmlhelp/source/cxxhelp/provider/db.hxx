@@ -36,7 +36,7 @@
 
 #include "com/sun/star/ucb/XSimpleFileAccess.hpp"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/string.hxx>
 
 extern "C" {
@@ -114,8 +114,8 @@ namespace berkeleydbproxy {
             { return m_pBuffer; }
     };
 
-    typedef std::hash_map< rtl::OString,std::pair<int,int>,ha,eq >  StringToValPosMap;
-    typedef std::hash_map< rtl::OString,rtl::OString,ha,eq >        StringToDataMap;
+    typedef boost::unordered_map< rtl::OString,std::pair<int,int>,ha,eq >   StringToValPosMap;
+    typedef boost::unordered_map< rtl::OString,rtl::OString,ha,eq >     StringToDataMap;
 
     class DBHelp
     {

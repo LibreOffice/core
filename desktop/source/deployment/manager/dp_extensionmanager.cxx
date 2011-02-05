@@ -65,7 +65,7 @@
 #include "boost/bind.hpp"
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 
 namespace deploy = com::sun::star::deployment;

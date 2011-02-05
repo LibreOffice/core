@@ -41,7 +41,7 @@
 
 #include <com/sun/star/script/XScriptEventsSupplier.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //.........................................................................
 namespace dlgprov
@@ -51,7 +51,7 @@ namespace dlgprov
     // =============================================================================
     // class DialogEventsAttacherImpl
     // =============================================================================
-    typedef std::hash_map< rtl::OUString,
+    typedef boost::unordered_map< rtl::OUString,
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >,
         ::rtl::OUStringHash,
         ::std::equal_to< ::rtl::OUString > > ListenerHash;

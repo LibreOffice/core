@@ -39,7 +39,7 @@
 #include <boost/bind.hpp>
 
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <algorithm>
 #if OSL_DEBUG_LEVEL > 0
@@ -402,11 +402,11 @@ XmlIdRegistry::GetXmlIdForElement(const Metadatable& i_rObject) const
 /// generate unique xml:id
 template< typename T >
 /*static*/ ::rtl::OUString create_id(const
-    ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
+    ::boost::unordered_map< ::rtl::OUString, T, ::rtl::OUStringHash > & i_rXmlIdMap)
 {
     static rtlRandomPool s_Pool( rtl_random_createPool() );
     const ::rtl::OUString prefix(RTL_CONSTASCII_USTRINGPARAM(s_prefix));
-    typename ::std::hash_map< ::rtl::OUString, T, ::rtl::OUStringHash >
+    typename ::boost::unordered_map< ::rtl::OUString, T, ::rtl::OUStringHash >
         ::const_iterator iter;
     ::rtl::OUString id;
     do
@@ -427,7 +427,7 @@ template< typename T >
 typedef ::std::list< Metadatable* > XmlIdList_t;
 
 /// Idref -> (content.xml element list, styles.xml element list)
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
     ::std::pair< XmlIdList_t, XmlIdList_t >, ::rtl::OUStringHash > XmlIdMap_t;
 
 /// pointer hash template
@@ -440,7 +440,7 @@ template<typename T> struct PtrHash
 };
 
 /// element -> (stream name, idref)
-typedef ::std::hash_map< const Metadatable*,
+typedef ::boost::unordered_map< const Metadatable*,
     ::std::pair< ::rtl::OUString, ::rtl::OUString>, PtrHash<Metadatable> >
     XmlIdReverseMap_t;
 
@@ -923,13 +923,13 @@ struct RMapEntry
 };
 
 /// element -> (stream name, idref, source)
-typedef ::std::hash_map< const Metadatable*,
+typedef ::boost::unordered_map< const Metadatable*,
     struct RMapEntry,
     PtrHash<Metadatable> >
     ClipboardXmlIdReverseMap_t;
 
 /// Idref -> (content.xml element, styles.xml element)
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
     ::std::pair< Metadatable*, Metadatable* >, ::rtl::OUStringHash >
     ClipboardXmlIdMap_t;
 

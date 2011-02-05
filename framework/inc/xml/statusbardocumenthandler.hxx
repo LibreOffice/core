@@ -44,7 +44,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stdtypes.h>
 
 //_________________________________________________________________________________________________________________
@@ -125,7 +125,7 @@ class OReadStatusBarDocumentHandler :   private ThreadHelpBase, // Struct for ri
     private:
         ::rtl::OUString getErrorLineString();
 
-        class StatusBarHashMap : public ::std::hash_map< ::rtl::OUString                ,
+        class StatusBarHashMap : public ::boost::unordered_map< ::rtl::OUString             ,
                                                          StatusBar_XML_Entry            ,
                                                          OUStringHashCode               ,
                                                          ::std::equal_to< ::rtl::OUString > >

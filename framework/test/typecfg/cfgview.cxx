@@ -55,7 +55,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

@@ -35,7 +35,7 @@
 #include <macros/xserviceinfo.hxx>
 #include <stdtypes.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <svtools/statusbarcontroller.hxx>
 #include <vcl/image.hxx>
 

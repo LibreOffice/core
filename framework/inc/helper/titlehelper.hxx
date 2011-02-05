@@ -51,7 +51,7 @@
 
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_______________________________________________
 // namespace

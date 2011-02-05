@@ -39,7 +39,7 @@
 #include <comphelper/stl_types.hxx>
 #include <rtl/ustrbuf.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -48,7 +48,7 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 class XMLTransformerOOoEventMap_Impl:
-    public ::std::hash_map< ::rtl::OUString, NameKey_Impl,
+    public ::boost::unordered_map< ::rtl::OUString, NameKey_Impl,
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:

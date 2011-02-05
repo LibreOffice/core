@@ -30,7 +30,7 @@
 #ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_SCRIPTSTORAGEMANAGER_HXX_
 #define _DRAFTS_COM_SUN_STAR_SCRIPT_FRAMEWORK_STORAGE_SCRIPTSTORAGEMANAGER_HXX_
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 #include <osl/mutex.hxx>
@@ -59,7 +59,7 @@ namespace scripting_impl
 typedef ::std::map < sal_Int32, css::uno::Reference < css::uno::XInterface > >
     ScriptStorage_map;
 
-typedef ::std::hash_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash>
+typedef ::boost::unordered_map < ::rtl::OUString, sal_Int32, ::rtl::OUStringHash>
     StorageId_hash;
 
 class ScriptStorageManager : public

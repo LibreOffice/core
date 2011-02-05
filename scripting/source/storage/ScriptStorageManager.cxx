@@ -171,7 +171,7 @@ SAL_THROW ( ( RuntimeException ) )
 
         validateXRef( xInterface, "ScriptStorageManager:: setupAnyStorage: Can't create ScriptStorage for share" );
 
-        // and place it in the hash_map. Increment the counter
+        // and place it in the boost::unordered_map. Increment the counter
         m_ScriptStorageMap[ m_count++ ] = xInterface;
         sal_Int32 sid =  m_count - 1;
 

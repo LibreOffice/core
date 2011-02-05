@@ -31,14 +31,14 @@
 
 #include <rtl/ustring.hxx>
 #include <comphelper/stl_types.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <xmloff/xmltoken.hxx>
 #include "TransformerTokenMap.hxx"
 
 
 
 class XMLTransformerTokenMap :
-    public ::std::hash_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
+    public ::boost::unordered_map< ::rtl::OUString, ::xmloff::token::XMLTokenEnum,
                             ::rtl::OUStringHash, ::comphelper::UStringEqual >
 {
 public:

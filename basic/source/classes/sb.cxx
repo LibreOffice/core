@@ -56,7 +56,7 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -946,7 +946,7 @@ struct ClassModuleRunInitItem
     {}
 };
 
-typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+typedef boost::unordered_map< ::rtl::OUString, ClassModuleRunInitItem,
     ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
 
 static ModuleInitDependencyMap* GpMIDMap = NULL;

@@ -29,7 +29,7 @@
 #ifndef BASIC_NAMECONTAINER_HXX
 #define BASIC_NAMECONTAINER_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -101,7 +101,7 @@ struct eqName_Impl
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     ::rtl::OUString,
     sal_Int32,

@@ -38,7 +38,7 @@
 #include <comphelper/stl_types.hxx>
 #include <osl/thread.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace connectivity
 {
@@ -47,7 +47,7 @@ namespace connectivity
         class MQueryHelperResultEntry
         {
         private:
-            typedef ::std::hash_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
+            typedef ::boost::unordered_map< ::rtl::OString, ::rtl::OUString, ::rtl::OStringHash >  FieldMap;
 
             mutable ::osl::Mutex    m_aMutex;
             FieldMap                m_Fields;

@@ -750,7 +750,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
         aCommand = aURL.Path;
 
-    // Make hash_map lookup if the current URL is in the disabled list
+    // Make boost::unordered_map lookup if the current URL is in the disabled list
     if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
         return css::uno::Reference< css::frame::XDispatch >();
     else

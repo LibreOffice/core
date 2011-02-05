@@ -35,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 //_________________________________________________________________________________________________________________
 //  my own includes
@@ -169,7 +169,7 @@ namespace framework
 
             struct UIElementType;
             friend struct UIElementType;
-            typedef ::std::hash_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementData, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementDataHashMap;
 
             struct UIElementType
             {
@@ -189,7 +189,7 @@ namespace framework
 
             typedef ::std::vector< UIElementType > UIElementTypesVector;
             typedef ::std::vector< ::com::sun::star::ui::ConfigurationEvent > ConfigEventNotifyContainer;
-            typedef ::std::hash_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
+            typedef ::boost::unordered_map< rtl::OUString, UIElementInfo, OUStringHashCode, ::std::equal_to< rtl::OUString > > UIElementInfoHashMap;
 
             // private methods
             void            impl_Initialize();

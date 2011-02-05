@@ -32,7 +32,7 @@
 #include <svl/eitem.hxx>
 #include <tools/list.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>

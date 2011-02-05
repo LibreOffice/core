@@ -34,7 +34,7 @@
 
 #include <osl/mutex.hxx>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace connectivity
 {
@@ -59,7 +59,7 @@ namespace connectivity
                 {
                 }
             };
-            typedef ::std::hash_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
+            typedef ::boost::unordered_map< ::rtl::OUString, AliasEntry, ::rtl::OUStringHash > AliasMap;
 
         private:
             AliasMap    m_aAliasMap;

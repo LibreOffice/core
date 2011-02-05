@@ -30,7 +30,7 @@
 
 #include "TResultSetHelper.hxx"
 #include <rtl/alloc.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 #include "connectivity/dbtoolsdllapi.hxx"
 

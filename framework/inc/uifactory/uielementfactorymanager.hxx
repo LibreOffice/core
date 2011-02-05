@@ -91,7 +91,7 @@ namespace framework
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
-        class FactoryManagerMap : public std::hash_map< rtl::OUString,
+        class FactoryManagerMap : public boost::unordered_map< rtl::OUString,
                                                      rtl::OUString,
                                                      OUStringHashCode,
                                                      ::std::equal_to< ::rtl::OUString > >

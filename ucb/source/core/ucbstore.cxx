@@ -36,7 +36,7 @@
   *************************************************************************/
 
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
@@ -132,7 +132,7 @@ struct hashString_Impl
 //
 //=========================================================================
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     OUString,
     PersistentPropertySet*,

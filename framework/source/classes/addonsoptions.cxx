@@ -50,7 +50,7 @@
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <algorithm>
 #include <vector>
 
@@ -297,10 +297,10 @@ class AddonsOptions_Impl : public ConfigItem
             Image   aImageBigNoScale;
         };
 
-        typedef std::hash_map< ::rtl::OUString, ImageEntry, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ImageManager;
-        typedef std::hash_map< ::rtl::OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > StringToIndexMap;
+        typedef boost::unordered_map< ::rtl::OUString, ImageEntry, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ImageManager;
+        typedef boost::unordered_map< ::rtl::OUString, sal_uInt32, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > StringToIndexMap;
         typedef std::vector< Sequence< Sequence< PropertyValue > > > AddonToolBars;
-        typedef ::std::hash_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarMergingInstructions;
+        typedef ::boost::unordered_map< ::rtl::OUString, MergeToolbarInstructionContainer, OUStringHashCode, ::std::equal_to< ::rtl::OUString > > ToolbarMergingInstructions;
 
         enum ImageSize
         {

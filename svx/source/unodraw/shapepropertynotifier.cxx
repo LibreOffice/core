@@ -39,7 +39,7 @@
 #include <cppuhelper/weak.hxx>
 #include <tools/diagnose_ex.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace
 {
@@ -76,7 +76,7 @@ namespace svx
     using ::com::sun::star::beans::XPropertySet;
     /** === end UNO using === **/
 
-    typedef ::std::hash_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
+    typedef ::boost::unordered_map< ShapeProperty, PPropertyValueProvider, ShapePropertyHash  >    PropertyProviders;
 
     typedef ::cppu::OMultiTypeInterfaceContainerHelperVar   <   ::rtl::OUString
                                                             ,   ::comphelper::UStringHash

@@ -142,7 +142,7 @@ public:
 };
 
 //============================================================================
-typedef std::hash_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
+typedef boost::unordered_map< ::rtl::OUString, ::com::sun::star::script::ModuleInfo, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInfoMap;
 
 typedef ::cppu::ImplHelper1 <   ::com::sun::star::script::vba::XVBAModuleInfo
                             >   SfxScriptLibrary_BASE;

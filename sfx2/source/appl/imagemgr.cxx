@@ -53,7 +53,7 @@
 #include <sfx2/objsh.hxx>
 #include <sfx2/docfac.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::frame;
 
-typedef std::hash_map< ::rtl::OUString,
+typedef boost::unordered_map< ::rtl::OUString,
                        WeakReference< XImageManager >,
                        ::rtl::OUStringHash,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;

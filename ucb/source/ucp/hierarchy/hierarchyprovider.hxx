@@ -29,7 +29,7 @@
 #ifndef _HIERARCHYPROVIDER_HXX
 #define _HIERARCHYPROVIDER_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <ucbhelper/providerhelper.hxx>
 #include <com/sun/star/lang/XInitialization.hpp>
 
@@ -89,7 +89,7 @@ struct hashString
     }
 };
 
-typedef std::hash_map
+typedef boost::unordered_map
 <
     rtl::OUString,  // servcie specifier
     ConfigProviderMapEntry,

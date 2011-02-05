@@ -35,7 +35,7 @@
 */
 #include <vector>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <memory>
 
 //_________________________________________________________________________________________________________________

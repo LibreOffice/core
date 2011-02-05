@@ -79,7 +79,7 @@ class AcceleratorCache : public ThreadHelpBase // attention! Must be the first b
         /** TODO document me
             keys -> commands
         */
-        typedef ::std::hash_map< css::awt::KeyEvent ,
+        typedef ::boost::unordered_map< css::awt::KeyEvent ,
                                  ::rtl::OUString    ,
                                  KeyEventHashCode   ,
                                  KeyEventEqualsFunc > TKey2Commands;

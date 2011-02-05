@@ -52,7 +52,7 @@
 #include <tools/urlobj.hxx>
 #include <vbahelper/vbahelper.hxx>
 #include <vbahelper/vbadocumentbase.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/file.hxx>
 
 using namespace ::ooo::vba;
@@ -61,7 +61,7 @@ using namespace ::com::sun::star;
 static const rtl::OUString sSpreadsheetDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
 static const rtl::OUString sTextDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
 
-typedef  std::hash_map< rtl::OUString,
+typedef  boost::unordered_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 

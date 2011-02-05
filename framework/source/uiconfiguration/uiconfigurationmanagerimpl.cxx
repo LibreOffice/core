@@ -257,7 +257,7 @@ void UIConfigurationManagerImpl::impl_preloadUIElementTypeList( Layer eLayer, sa
                             aUIElementData.bDefaultNode = false;
                         }
 
-                        // Create hash_map entries for all user interface elements inside the storage. We don't load the
+                        // Create boost::unordered_map entries for all user interface elements inside the storage. We don't load the
                         // settings to speed up the process.
                         rHashMap.insert( UIElementDataHashMap::value_type( aUIElementData.aResourceURL, aUIElementData ));
                     }
@@ -378,7 +378,7 @@ UIConfigurationManagerImpl::UIElementData*  UIConfigurationManagerImpl::impl_fin
     if ( m_bUseDefault )
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-    // first try to look into our user-defined vector/hash_map combination
+    // first try to look into our user-defined vector/boost::unordered_map combination
     UIElementDataHashMap& rUserHashMap = m_aUIElements[LAYER_USERDEFINED][nElementType].aElementsHashMap;
     UIElementDataHashMap::iterator pIter = rUserHashMap.find( aResourceURL );
     if ( pIter != rUserHashMap.end() )
@@ -394,7 +394,7 @@ UIConfigurationManagerImpl::UIElementData*  UIConfigurationManagerImpl::impl_fin
 
     if ( m_bUseDefault )
     {
-        // Not successfull, we have to look into our default vector/hash_map combination
+        // Not successfull, we have to look into our default vector/boost::unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         pIter = rDefaultHashMap.find( aResourceURL );
         if ( pIter != rDefaultHashMap.end() )
@@ -1536,7 +1536,7 @@ throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::la
         // preload list of element types on demand
         impl_preloadUIElementTypeList( LAYER_DEFAULT, nElementType );
 
-        // Look into our default vector/hash_map combination
+        // Look into our default vector/boost::unordered_map combination
         UIElementDataHashMap& rDefaultHashMap = m_aUIElements[LAYER_DEFAULT][nElementType].aElementsHashMap;
         UIElementDataHashMap::iterator pIter = rDefaultHashMap.find( ResourceURL );
         if ( pIter != rDefaultHashMap.end() )

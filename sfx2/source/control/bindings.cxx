@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <svl/itempool.hxx>
 #include <svl/itemiter.hxx>
 #include <svl/eitem.hxx>
@@ -99,7 +99,7 @@ static USHORT nTimeOut = 300;
 static sal_uInt32 nCache1 = 0;
 static sal_uInt32 nCache2 = 0;
 
-typedef std::hash_map< USHORT, bool > InvalidateSlotMap;
+typedef boost::unordered_map< USHORT, bool > InvalidateSlotMap;
 
 //====================================================================
 
