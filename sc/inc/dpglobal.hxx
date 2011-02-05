@@ -143,7 +143,7 @@ public:
     // case insensitive equality
     static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     void    dump() const;
 #endif
 

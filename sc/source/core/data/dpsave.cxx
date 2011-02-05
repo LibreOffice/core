@@ -1342,7 +1342,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
 
         if ( pReferenceValue && pReferenceValue->ReferenceItemType == DataPilotFieldReferenceItemType::NAMED )
         {//check pReferenceValue
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
             switch( pReferenceValue->ReferenceType)
             {
             case sheet::DataPilotFieldReferenceType::ITEM_PERCENTAGE: //both

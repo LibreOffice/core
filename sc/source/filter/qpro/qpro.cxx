@@ -55,7 +55,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     sal_uInt16 nStyle;
     bool bEndOfSheet = false;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "Read sheet (%d)\n", nTab );
 #endif
 

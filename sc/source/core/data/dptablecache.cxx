@@ -277,7 +277,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
         return ScGlobal::GetCollator()->compareString( rA.aString, rB.aString );
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void    ScDPItemData::dump() const
 {
     DBG_TRACE1( "Numberformat= %o",  nNumFormat );
