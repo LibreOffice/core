@@ -30,7 +30,9 @@
 #include "sal/config.h"
 
 #include "comphelper/string.hxx"
-#include "testshl/simpleheader.hxx"
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
@@ -38,20 +40,20 @@
 
 namespace {
 
-class Test: public CppUnit::TestFixture {
+class TestString: public CppUnit::TestFixture {
 public:
     void test();
 
-    CPPUNIT_TEST_SUITE(Test);
+    CPPUNIT_TEST_SUITE(TestString);
     CPPUNIT_TEST(test);
     CPPUNIT_TEST_SUITE_END();
 };
 
-void Test::test() {
+void TestString::test() {
     rtl::OUString s1(RTL_CONSTASCII_USTRINGPARAM("foobarbar"));
     sal_Int32 n1;
     rtl::OUString s2(
-        comphelper::string::searchAndReplace(
+        comphelper::string::searchAndReplaceAsciiL(
             s1, RTL_CONSTASCII_STRINGPARAM("bar"),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baaz")), 0, &n1));
     CPPUNIT_ASSERT(
@@ -59,7 +61,7 @@ void Test::test() {
     CPPUNIT_ASSERT(n1 == 3);
     sal_Int32 n2;
     rtl::OUString s3(
-        comphelper::string::searchAndReplace(
+        comphelper::string::searchAndReplaceAsciiL(
             s2, RTL_CONSTASCII_STRINGPARAM("bar"),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bz")),
             n1 + RTL_CONSTASCII_LENGTH("baaz"), &n2));
@@ -68,7 +70,7 @@ void Test::test() {
     CPPUNIT_ASSERT(n2 == 7);
     sal_Int32 n3;
     rtl::OUString s4(
-        comphelper::string::searchAndReplace(
+        comphelper::string::searchAndReplaceAsciiL(
             s3, RTL_CONSTASCII_STRINGPARAM("bar"),
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("baz")),
             n2 + RTL_CONSTASCII_LENGTH("bz"), &n3));
@@ -76,10 +78,10 @@ void Test::test() {
     CPPUNIT_ASSERT(n3 == -1);
 }
 
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(Test, "alltests");
+CPPUNIT_TEST_SUITE_REGISTRATION(TestString);
 
 }
 
-NOADDITIONAL;
+//NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
