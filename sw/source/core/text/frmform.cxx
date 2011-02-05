@@ -1767,25 +1767,6 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
     }
 #endif
 
-#ifdef DEBUG_FTN
-    //Fussnote darf nicht auf einer Seite vor ihrer Referenz stehen.
-    if( IsInFtn() )
-    {
-        const SwFtnFrm *pFtn = (SwFtnFrm*)GetUpper();
-        const SwPageFrm *pFtnPage = pFtn->GetRef()->FindPageFrm();
-        const MSHORT nFtnPageNr = pFtnPage->GetPhyPageNum();
-        if( !IsLocked() )
-        {
-            if( nFtnPageNr > nDbgPageNr )
-            {
-                SwTxtFrmLocker aLock(this);
-                OSL_ENSURE( nFtnPageNr <= nDbgPageNr, "!Ftn steht vor der Referenz." );
-                MSHORT i = 0;
-            }
-        }
-    }
-#endif
-
     SWRECTFN( this )
 
     CalcAdditionalFirstLineOffset();
