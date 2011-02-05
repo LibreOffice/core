@@ -51,7 +51,7 @@ PATCH_FILES=\
 
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) configure
-CONFIGURE_FLAGS= --disable-shared --with-pic
+CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic
 .IF "$(COMNAME)"=="sunpro5"
 CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 .ENDIF                  # "$(COMNAME)"=="sunpro5"
@@ -81,7 +81,7 @@ PATCH_FILES=\
     hunspell-mingw.patch
 
 CONFIGURE_ACTION=configure
-CONFIGURE_FLAGS= --disable-shared --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
+CONFIGURE_FLAGS= --disable-shared --disable-nls --with-pic LDFLAGS=-Wl,--enable-runtime-pseudo-reloc-v2
 BUILD_ACTION=make
 OUT2LIB=$(BUILD_DIR)$/src$/hunspell$/.libs$/libhunspell-1.2.a
 .ELSE
