@@ -636,3 +636,59 @@
      }
  
  #if defined(BOOST_UNORDERED_STD_FORWARD)
+--- misc/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:42:56.074932485 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/exception.hpp	2011-02-05 09:43:00.350931536 +0000
+@@ -24,7 +24,7 @@
+     {
+         const char* what_;
+     public:
+-        bad_ptr_container_operation( const char* what ) : what_( what )
++        bad_ptr_container_operation( const char* _what ) : what_( _what )
+         { }
+         
+         virtual const char* what() const throw()
+@@ -38,7 +38,7 @@
+     class bad_index : public bad_ptr_container_operation
+     {
+     public:
+-        bad_index( const char* what ) : bad_ptr_container_operation( what )
++        bad_index( const char* _what ) : bad_ptr_container_operation( _what )
+         { }
+     };
+ 
+--- misc/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:30.373931807 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/reversible_ptr_container.hpp	2011-02-05 09:49:34.804931932 +0000
+@@ -278,9 +278,9 @@
+ 
+     private:
+         template< class ForwardIterator >
+-        ForwardIterator advance( ForwardIterator begin, size_type n ) 
++        ForwardIterator advance( ForwardIterator begin_, size_type n ) 
+         {
+-            ForwardIterator iter = begin;
++            ForwardIterator iter = begin_;
+             std::advance( iter, n );
+             return iter;
+         }        
+--- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp.orig	2011-02-05 09:55:44.846931338 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
+@@ -151,7 +151,7 @@
+     deleter_const_reference get_deleter() const { return impl_.second(); }
+ private:
+     template<typename TT, typename DD>
+-    void check(const static_move_ptr<TT, DD>& ptr)
++    void check(const static_move_ptr<TT, DD>&)
+         {
+             typedef move_ptrs::is_smart_ptr_convertible<TT, T> convertible;
+             BOOST_STATIC_ASSERT(convertible::value);
+--- misc/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:21.156931884 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/detail/move.hpp	2011-02-05 10:01:14.160931007 +0000
+@@ -20,7 +20,7 @@
+ template<typename Ptr>
+ class move_source {
+ public:
+-    move_source(Ptr& ptr) : ptr_(ptr) {}
++    move_source(Ptr& _ptr) : ptr_(_ptr) {}
+     Ptr& ptr() const { return ptr_; }
+ private:
+     Ptr& ptr_;
