@@ -1,6 +1,6 @@
 --- misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
 +++ misc/build/boost_1_44_0/libs/thread/src/win32/makefile.mk
-@@ -1,1 +1,21 @@
+@@ -1,1 +1,20 @@
 -dummy
 +PRJ=..$/..$/..$/..$/..$/..$/..$/..
 +
@@ -12,8 +12,7 @@
 +
 +.INCLUDE :  settings.mk
 +
-+SLOFILES=	$(SLO)$/exceptions.obj \
-+			$(SLO)$/thread.obj \
++SLOFILES=	$(SLO)$/thread.obj \
 +			$(SLO)$/tss_dll.obj \
 +			$(SLO)$/tss_pe.obj
 +
