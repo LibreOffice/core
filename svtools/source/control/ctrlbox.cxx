@@ -74,13 +74,11 @@ struct ImplColorListData
                 ImplColorListData( const Color& rColor ) : aColor( rColor ) { bColor = TRUE; }
 };
 
-DECLARE_LIST( ImpColorList, ImplColorListData* )
-
 // -----------------------------------------------------------------------
 
 void ColorListBox::ImplInit()
 {
-    pColorList = new ImpColorList( 256, 64 );
+    pColorList = new ImpColorList();
     aImageSize.Width()  = GetTextWidth( XubString( RTL_CONSTASCII_USTRINGPARAM( "xxx" ) ) );
     aImageSize.Height() = GetTextHeight();
     aImageSize.Height() -= 2;
@@ -93,12 +91,9 @@ void ColorListBox::ImplInit()
 
 void ColorListBox::ImplDestroyColorEntries()
 {
-    for ( USHORT n = (USHORT) pColorList->Count(); n; )
-    {
-        ImplColorListData* pData = pColorList->GetObject( --n );
-        delete pData;
-    }
-    pColorList->Clear();
+    for ( size_t n = pColorList->size(); n; )
+        delete (*pColorList)[ --n ];
+    pColorList->clear();
 }
 
 // -----------------------------------------------------------------------
@@ -133,7 +128,17 @@ USHORT ColorListBox::InsertEntry( const XubString& rStr, USHORT nPos )
     if ( nPos != LISTBOX_ERROR )
     {
         ImplColorListData* pData = new ImplColorListData;
-        pColorList->Insert( pData, nPos );
+        if ( nPos < pColorList->size() )
+        {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            pColorList->insert( it, pData );
+        }
+        else
+        {
+            pColorList->push_back( pData );
+            nPos = pColorList->size() - 1;
+        }
     }
     return nPos;
 }
@@ -147,7 +152,17 @@ USHORT ColorListBox::InsertEntry( const Color& rColor, const XubString& rStr,
     if ( nPos != LISTBOX_ERROR )
     {
         ImplColorListData* pData = new ImplColorListData( rColor );
-        pColorList->Insert( pData, nPos );
+        if ( nPos < pColorList->size() )
+        {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            pColorList->insert( it, pData );
+        }
+        else
+        {
+            pColorList->push_back( pData );
+            nPos = pColorList->size() - 1;
+        }
     }
     return nPos;
 }
@@ -165,7 +180,13 @@ void ColorListBox::InsertAutomaticEntry()
 void ColorListBox::RemoveEntry( USHORT nPos )
 {
     ListBox::RemoveEntry( nPos );
-    delete pColorList->Remove( nPos );
+    if ( nPos < pColorList->size() )
+    {
+            ImpColorList::iterator it = pColorList->begin();
+            ::std::advance( it, nPos );
+            delete *it;
+            pColorList->erase( it );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -184,13 +205,24 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
     ImplDestroyColorEntries();
 
     // Daten kopieren
-    USHORT nCount = (USHORT) rBox.pColorList->Count();
-    for ( USHORT n = 0; n < nCount; n++ )
+    size_t nCount = rBox.pColorList->size();
+    for ( size_t n = 0; n < nCount; n++ )
     {
-        ImplColorListData* pData = rBox.pColorList->GetObject( n );
+        ImplColorListData* pData = (*rBox.pColorList)[ n ];
         USHORT nPos = InsertEntry( rBox.GetEntry( n ), LISTBOX_APPEND );
         if ( nPos != LISTBOX_ERROR )
-            pColorList->Insert( new ImplColorListData( *pData ), nPos );
+        {
+            if ( nPos < pColorList->size() )
+            {
+                ImpColorList::iterator it = pColorList->begin();
+                ::std::advance( it, nPos );
+                pColorList->insert( it, new ImplColorListData( *pData ) );
+            }
+            else
+            {
+                pColorList->push_back( new ImplColorListData( *pData ) );
+            }
+        }
     }
 }
 
@@ -198,9 +230,9 @@ void ColorListBox::CopyEntries( const ColorListBox& rBox )
 
 USHORT ColorListBox::GetEntryPos( const Color& rColor ) const
 {
-    for( USHORT n = (USHORT) pColorList->Count(); n; )
+    for( USHORT n = (USHORT) pColorList->size(); n; )
     {
-        ImplColorListData* pData = pColorList->GetObject( --n );
+        ImplColorListData* pData = (*pColorList)[ --n ];
         if ( pData->bColor && ( pData->aColor == rColor ) )
             return n;
     }
@@ -212,7 +244,7 @@ USHORT ColorListBox::GetEntryPos( const Color& rColor ) const
 Color ColorListBox::GetEntryColor( USHORT nPos ) const
 {
     Color aColor;
-    ImplColorListData* pData = pColorList->GetObject( nPos );
+    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : NULL;
     if ( pData && pData->bColor )
         aColor = pData->aColor;
     return aColor;
@@ -222,7 +254,8 @@ Color ColorListBox::GetEntryColor( USHORT nPos ) const
 
 void ColorListBox::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    ImplColorListData* pData = pColorList->GetObject( rUDEvt.GetItemId() );
+    size_t nPos = rUDEvt.GetItemId();
+    ImplColorListData* pData = ( nPos < pColorList->size() ) ? (*pColorList)[ nPos ] : NULL;
     if ( pData )
     {
         if ( pData->bColor )
