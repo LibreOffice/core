@@ -68,9 +68,9 @@ private:
     {
         bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    struct SVX_DLLPRIVATE PropertyPairHash
+    struct PropertyPairHash
     {
-        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair &r1 ) const;
+        size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
     typedef boost::unordered_map < PropertyPair, sal_Int32, PropertyPairHash, PropertyPairEq > PropertyPairHashMap;
     typedef boost::unordered_map< rtl::OUString, sal_Int32, rtl::OUStringHash, PropertyEq > PropertyHashMap;
