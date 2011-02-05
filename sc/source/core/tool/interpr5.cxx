@@ -968,15 +968,11 @@ void ScInterpreter::ScMatInv()
                             for (SCSIZE j=0; j < nR; ++j)
                             {
                                 double fTmp = pR->GetDouble( j, i);
-#if OSL_DEBUG_LEVEL > 1
                                 fprintf( stderr, "%8.2g  ", fTmp);
-#endif
                                 if (fabs( fTmp - (i == j)) > fInvEpsilon)
                                     SetError( errIllegalArgument);
                             }
-#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "\n%s\n", "");
-#endif
                         }
                     }
 #endif
