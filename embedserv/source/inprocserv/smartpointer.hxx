@@ -29,20 +29,6 @@
 #ifndef _INPROCSERV_SMARTPOINTER_HXX_
 #define _INPROCSERV_SMARTPOINTER_HXX_
 
-// #define OWNDEBUG
-
-#ifdef OWNDEBUG
-#define WRITEDEBUGINFOINTERN( x ) WriteDebugInfo( (DWORD)this, x, sizeof( x ) )
-#define WRITEDEBUGINFO( x ) WRITEDEBUGINFOINTERN( x ":" MY_STRING_LINE "\n" )
-#define TO_STRING( x ) #x
-#define MACRO_VALUE_TO_STRING( x ) TO_STRING( x )
-#define MY_STRING_LINE MACRO_VALUE_TO_STRING( __LINE__ )
-#else
-#define WRITEDEBUGINFO( x ) void()
-#define MY_STRING_LINE
-#endif
-
-
 namespace inprocserv{
 
 void WriteDebugInfo( DWORD pThis, char* pString, DWORD nToWrite );

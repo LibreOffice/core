@@ -32,33 +32,6 @@
 namespace inprocserv
 {
 
-#ifdef OWNDEBUG
-//-------------------------------------------------------------------------------
-void WriteDebugInfo( DWORD pThis, char* pString, DWORD nToWrite )
-{
-    if ( nToWrite )
-    {
-        char pNumber[12];
-        pNumber[0] = '0';
-        pNumber[1] = 'x';
-        for ( int nInd = 0; nInd < 8; nInd++ )
-            pNumber[nInd+2] = (char)( ( pThis / ( 1 << ( 7 - nInd ) ) ) % 16 ) + 48;
-        pNumber[10] = ' ';
-        pNumber[11] = 0;
-
-        HANDLE pFile = CreateFileA( "h:\\inproc.log", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, 0, NULL );
-        if ( pFile )
-        {
-            DWORD dwWritten = 0;
-            SetFilePointer( pFile, 0, 0, FILE_END );
-            WriteFile( pFile, pNumber, 11, &dwWritten, NULL );
-            WriteFile( pFile, pString, nToWrite - 1, &dwWritten, NULL );
-            CloseHandle( pFile );
-        }
-    }
-}
-#endif
-
 //-------------------------------------------------------------------------------
 BOOL StringsEqual( LPCOLESTR pszNameFromOutside, wchar_t* pOwnName )
 {
@@ -113,29 +86,23 @@ void InprocEmbedDocument_Impl::SetName( LPCOLESTR pszNameFromOutside, wchar_t*& 
 //-------------------------------------------------------------------------------
 BOOL InprocEmbedDocument_Impl::CheckDefHandler()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
     // set the own listener
     if ( m_pOleAdvises[0] == NULL )
     {
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         m_pOleAdvises[0] = new OleWrapperAdviseSink();
     }
     else
     {
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         if ( m_pOleAdvises[0]->IsClosed() )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             if ( m_pDefHandler )
             {
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                 // deregister all the listeners
 
                 ComSmart< IOleObject > pOleObject;
                 HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
                 if ( SUCCEEDED( hr ) && pOleObject )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                     for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
                         if ( m_pOleAdvises[nInd] )
                         {
@@ -147,12 +114,10 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                     pOleObject->SetClientSite( NULL );
                 }
 
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                 ComSmart< IDataObject > pIDataObject;
                 hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
                 if ( SUCCEEDED( hr ) && pIDataObject )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                     for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
                         if ( m_pDataAdvises[nInd] )
                         {
@@ -162,23 +127,18 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                         }
                 }
 
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                 ComSmart< IViewObject > pIViewObject;
                 hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
                 if ( SUCCEEDED( hr ) && pIViewObject )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                     if ( m_pViewAdvise )
                         pIViewObject->SetAdvise( m_pViewAdvise->GetAspect(), m_pViewAdvise->GetViewAdviseFlag(), NULL );
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                 }
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
 
                 ComSmart< IPersistStorage > pPersist;
                 hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
                 if ( SUCCEEDED( hr ) && pPersist )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                     // disconnect the old wrapper from the storage
                     pPersist->HandsOffStorage();
                 }
@@ -186,7 +146,6 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                 m_pDefHandler = NULL;
             }
 
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             m_pOleAdvises[0]->UnsetClosed();
         }
     }
@@ -194,19 +153,15 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
     if ( m_nCallsOnStack )
         return FALSE;
 
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
     if ( !m_pDefHandler )
     {
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         // create a new default inprocess handler
         HRESULT hr = OleCreateDefaultHandler( m_guid, NULL, IID_IUnknown, (void**)&m_pDefHandler );
         if ( SUCCEEDED( hr ) )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             {
                     if ( m_nInitMode == INIT_FROM_STORAGE )
                     {
-                        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                         ComSmart< IPersistStorage > pPersist;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
@@ -216,7 +171,6 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                     }
                     else if ( m_nInitMode == LOAD_FROM_STORAGE )
                     {
-                        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                         ComSmart< IPersistStorage > pPersist;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
@@ -226,7 +180,6 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                     }
                     else if ( m_nInitMode == LOAD_FROM_FILE )
                     {
-                        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                         ComSmart< IPersistFile > pPersistFile;
                         hr = m_pDefHandler->QueryInterface( IID_IPersistFile, (void**)&pPersistFile );
 
@@ -234,14 +187,11 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                         if ( SUCCEEDED( hr ) && pPersistFile && m_pFileName )
                             hr = pPersistFile->Load( m_pFileName, m_nFileOpenMode );
                     }
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             }
         }
 
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         if ( !SUCCEEDED( hr ) || !m_pDefHandler )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             m_pDefHandler = NULL;
             return FALSE;
         }
@@ -252,11 +202,9 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
         hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
         if ( SUCCEEDED( hr ) && pOleObject )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             if ( m_pClientSite )
                 pOleObject->SetClientSite( m_pClientSite );
 
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
                 if ( m_pOleAdvises[nInd] )
                 {
@@ -266,36 +214,28 @@ BOOL InprocEmbedDocument_Impl::CheckDefHandler()
                 }
         }
 
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         ComSmart< IDataObject > pIDataObject;
         hr = m_pDefHandler->QueryInterface( IID_IDataObject, (void**)&pIDataObject );
         if ( SUCCEEDED( hr ) && pIDataObject )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             for ( DWORD nInd = 0; nInd < DEFAULT_ARRAY_LEN; nInd++ )
                 if ( m_pDataAdvises[nInd] )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                     DWORD nRegID = 0;
                     if ( SUCCEEDED( pIDataObject->DAdvise( m_pDataAdvises[nInd]->GetFormatEtc(), m_pDataAdvises[nInd]->GetDataAdviseFlag(), m_pDataAdvises[nInd], &nRegID ) ) && nRegID > 0 )
                         m_pDataAdvises[nInd]->SetRegID( nRegID );
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
                 }
         }
 
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         ComSmart< IViewObject > pIViewObject;
         hr = m_pDefHandler->QueryInterface( IID_IViewObject, (void**)&pIViewObject );
         if ( SUCCEEDED( hr ) && pIViewObject )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
             if ( m_pViewAdvise )
                 pIViewObject->SetAdvise( m_pViewAdvise->GetAspect(), m_pViewAdvise->GetViewAdviseFlag(), m_pViewAdvise );
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
         }
     }
 
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::CheckDefHandler()" );
 
     return TRUE;
 }
@@ -494,11 +434,9 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClassID( CLSID* pClassId )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::IsDirty()1" );
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
         return S_FALSE;
 
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::IsDirty()2" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistStorage > pPersist;
@@ -515,7 +453,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsDirty()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InitNew( IStorage *pStg )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistStorage > pPersist;
@@ -548,28 +485,23 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitNew( IStorage *pStg )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( IStorage *pStg )" );
     if ( CheckDefHandler() )
     {
-        WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( IStorage *pStg )" );
         ComSmart< IPersistStorage > pPersist;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IPersistStorage, (void**)&pPersist );
 
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
         if ( SUCCEEDED( hr ) && pPersist )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( IStorage *pStg )" );
             hr = pPersist->Load( pStg );
             if ( SUCCEEDED( hr ) )
             {
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( IStorage *pStg )" );
                 m_nInitMode = LOAD_FROM_STORAGE;
                 m_pStorage = pStg;
 
                 m_nFileOpenMode = 0;
                 if ( m_pFileName )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( IStorage *pStg )" );
                     delete[] m_pFileName;
                     m_pFileName = NULL;
                 }
@@ -585,11 +517,9 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( IStorage *pStg )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )" );
     if ( fSameAsLoad && ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() ) )
         return S_OK;
 
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistStorage > pPersist;
@@ -606,7 +536,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoa
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )" );
     if ( m_pDefHandler == NULL || m_pOleAdvises[0] == NULL || m_pOleAdvises[0]->IsClosed() )
     {
         if ( pStgNew )
@@ -615,7 +544,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
         return S_OK;
     }
 
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistStorage > pPersist;
@@ -627,11 +555,9 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
             hr = pPersist->SaveCompleted( pStgNew );
             if ( SUCCEEDED( hr ) )
             {
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )" );
                 m_nInitMode = LOAD_FROM_STORAGE;
                 if ( pStgNew )
                 {
-                    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )" );
                     m_pStorage = pStgNew;
                 }
 
@@ -653,7 +579,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::HandsOffStorage()" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistStorage > pPersist;
@@ -666,7 +591,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
             if ( SUCCEEDED( hr ) )
             {
                 m_pStorage = NULL;
-                WRITEDEBUGINFO( "InprocEmbedDocument_Impl::HandsOffStorage()" );
             }
 
             return hr;
@@ -680,7 +604,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::HandsOffStorage()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode )" );
     if ( CheckDefHandler() && pszFileName )
     {
         ComSmart< IPersistFile > pPersist;
@@ -711,7 +634,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD dwMode
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistFile > pPersist;
@@ -728,7 +650,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRememb
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistFile > pPersist;
@@ -758,7 +679,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IPersistFile > pPersist;
@@ -776,7 +696,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )" );
     if ( pSite == m_pClientSite )
         return S_OK;
 
@@ -824,7 +743,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -841,7 +759,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetClientSite( IOleClientSite** pSite )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )" );
 
     if ( CheckDefHandler() )
     {
@@ -851,7 +768,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
         if ( SUCCEEDED( hr ) && pOleObject )
         {
-            WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, LPCOLESTR szContainerObj )" );
             hr = pOleObject->SetHostNames( szContainerApp, szContainerObj );
         }
     }
@@ -862,7 +778,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetHostNames( LPCOLESTR szContainerApp, L
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )" );
     if ( m_pDefHandler && CheckDefHandler() )
     {
         // no need to close if there is no default handler.
@@ -886,7 +801,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Close( DWORD dwSaveOption )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker * pmk )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMoniker * pmk )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -903,7 +817,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetMoniker( DWORD dwWhichMoniker, IMonike
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker ** ppmk )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhichMoniker, IMoniker ** ppmk )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -920,7 +833,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMoniker( DWORD dwAssign, DWORD dwWhich
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, BOOL fCreation, DWORD dwReserved )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, BOOL fCreation, DWORD dwReserved )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -937,7 +849,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InitFromData( IDataObject * pDataObject, 
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject ** ppDataObject )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetClipboardData( DWORD dwReserved, IDataObject ** ppDataObject )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -960,29 +871,22 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
     HWND hWin,
     LPCRECT pRect )
 {
-    WRITEDEBUGINFO( "DoVerb" );
     if ( CheckDefHandler() )
     {
-        WRITEDEBUGINFO( "DoVerb" MY_STRING_LINE "n" );
         ComSmart< IOleObject > pOleObject;
         HRESULT hr = m_pDefHandler->QueryInterface( IID_IOleObject, (void**)&pOleObject );
 
-        WRITEDEBUGINFO( "DoVerb" );
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
-        WRITEDEBUGINFO( "DoVerb" );
         if ( SUCCEEDED( hr ) && pOleObject )
         {
-            WRITEDEBUGINFO( "DoVerb" );
             hr = pOleObject->DoVerb( iVerb, pMsg, pActiveSite, nLong, hWin, pRect );
             if ( SUCCEEDED( hr ) )
             {
-                WRITEDEBUGINFO( "DoVerb" );
             }
 
             return hr;
         }
 
-        WRITEDEBUGINFO( "DoVerb" );
     }
 
     return E_FAIL;
@@ -991,7 +895,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::DoVerb(
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1008,7 +911,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumVerbs( IEnumOLEVERB ** ppEnumOleVerb 
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Update()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Update()" );
 
     if ( m_pDefHandler && CheckDefHandler() )
     {
@@ -1026,7 +928,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Update()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::IsUpToDate()" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1043,7 +944,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::IsUpToDate()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )" );
     if ( pClsid )
         *pClsid = m_guid;
 
@@ -1053,7 +953,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserClassID( CLSID *pClsid )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR * pszUserType )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR * pszUserType )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1070,7 +969,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetUserType( DWORD dwFormOfType, LPOLESTR
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psizel )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1087,7 +985,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetExtent( DWORD dwDrawAspect, SIZEL *psi
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * psizel )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * psizel )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1104,7 +1001,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, SIZEL * ps
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Advise( IAdviseSink *pAdvSink, DWORD *pdwConnection )" );
 
     if ( !pdwConnection )
         return E_FAIL;
@@ -1179,7 +1075,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumAdvise( IEnumSTATDATA ** /*ppenumAdvi
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pdwStatus )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pdwStatus )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1196,7 +1091,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetMiscStatus( DWORD dwAspect, DWORD * pd
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleObject > pOleObject;
@@ -1214,7 +1108,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetColorScheme( LOGPALETTE * pLogpal )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1231,7 +1124,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetData( FORMATETC * pFormatetc, STGMEDIU
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pMedium )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGMEDIUM * pMedium )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1248,7 +1140,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetDataHere( FORMATETC * pFormatetc, STGM
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1265,7 +1156,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::QueryGetData( FORMATETC * pFormatetc )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pFormatetcIn, FORMATETC * pFormatetcOut )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1282,7 +1172,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetCanonicalFormatEtc( FORMATETC * pForma
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIUM * pMedium, BOOL fRelease )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1299,7 +1188,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetData( FORMATETC * pFormatetc, STGMEDIU
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC ** ppFormatetc )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1316,7 +1204,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumFormatEtc( DWORD dwDirection, IEnumFO
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD advf, IAdviseSink * pAdvSink, DWORD * pdwConnection )" );
 
     if ( !pdwConnection )
         return E_FAIL;
@@ -1358,7 +1245,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::DAdvise( FORMATETC * pFormatetc, DWORD ad
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )" );
     if ( m_pDefHandler && DEFAULT_ARRAY_LEN > dwConnection && dwConnection > 0 && m_pDataAdvises[dwConnection] )
     {
         if ( CheckDefHandler() )
@@ -1386,7 +1272,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::DUnadvise( DWORD dwConnection )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvise )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDataObject > pIDataObject;
@@ -1404,7 +1289,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::EnumDAdvise( IEnumSTATDATA ** ppenumAdvis
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
@@ -1421,7 +1305,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetRunningClass( LPCLSID lpClsid )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
@@ -1438,7 +1321,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Run( LPBINDCTX pbc )
 //-------------------------------------------------------------------------------
 BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::IsRunning()" );
    if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
@@ -1456,7 +1338,6 @@ BOOL STDMETHODCALLTYPE InprocEmbedDocument_Impl::IsRunning()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlockCloses )" );
    if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
@@ -1473,7 +1354,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::LockRunning( BOOL fLock, BOOL fLastUnlock
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)" );
    if ( CheckDefHandler() )
     {
         ComSmart< IRunnableObject > pIRunObj;
@@ -1492,7 +1372,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetContainedObject( BOOL fContained)
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcWBounds, BOOL ( STDMETHODCALLTYPE *pfnContinue )( ULONG_PTR dwContinue ), ULONG_PTR dwContinue )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hdcTargetDev, HDC hdcDraw, LPCRECTL lprcBounds, LPCRECTL lprcWBounds, BOOL ( STDMETHODCALLTYPE *pfnContinue )( ULONG_PTR dwContinue ), ULONG_PTR dwContinue )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IViewObject > pIViewObject;
@@ -1509,7 +1388,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Draw( DWORD dwDrawAspect, LONG lindex, vo
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hicTargetDev, LOGPALETTE **ppColorSet )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DVTARGETDEVICE *ptd, HDC hicTargetDev, LOGPALETTE **ppColorSet )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IViewObject > pIViewObject;
@@ -1526,7 +1404,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetColorSet( DWORD dwDrawAspect, LONG lin
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DWORD *pdwFreeze )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, void *pvAspect, DWORD *pdwFreeze )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IViewObject > pIViewObject;
@@ -1543,7 +1420,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Freeze( DWORD dwDrawAspect, LONG lindex, 
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IViewObject > pIViewObject;
@@ -1560,7 +1436,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::Unfreeze( DWORD dwFreeze )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAdviseSink *pAdvSink )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetAdvise( DWORD aspects, DWORD advf, IAdviseSink *pAdvSink )" );
 
     // CheckDefHandler will set the listener, avoid reusing of old listener
     if ( m_pViewAdvise )
@@ -1618,7 +1493,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetAdvise( DWORD *pAspects, DWORD *pAdvf,
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG lindex, DVTARGETDEVICE *ptd, LPSIZEL lpsizel )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG lindex, DVTARGETDEVICE *ptd, LPSIZEL lpsizel )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IViewObject2 > pIViewObject2;
@@ -1638,7 +1512,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetExtent( DWORD dwDrawAspect, LONG linde
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleWindow > pIOleWindow;
@@ -1655,7 +1528,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetWindow( HWND *phwnd )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleWindow > pIOleWindow;
@@ -1674,7 +1546,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::ContextSensitiveHelp( BOOL fEnterMode )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InPlaceDeactivate( void )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
@@ -1691,7 +1562,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InPlaceDeactivate( void )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::UIDeactivate( void )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
@@ -1708,7 +1578,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::UIDeactivate( void )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCRECT lprcClipRect )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCRECT lprcClipRect )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
@@ -1725,7 +1594,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetObjectRects( LPCRECT lprcPosRect, LPCR
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::ReactivateAndUndo( void )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IOleInPlaceObject > pIOleInPlaceObject;
@@ -1744,7 +1612,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::ReactivateAndUndo( void )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDispatch > pIDispatch;
@@ -1761,7 +1628,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfoCount( UINT *pctinfo )
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITypeInfo **ppTInfo )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDispatch > pIDispatch;
@@ -1778,7 +1644,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetTypeInfo( UINT iTInfo, LCID lcid, ITyp
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgszNames, UINT cNames, LCID lcid, DISPID *rgDispId )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDispatch > pIDispatch;
@@ -1795,7 +1660,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::GetIDsOfNames( REFIID riid, LPOLESTR *rgs
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::Invoke( DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pDispParams, VARIANT *pVarResult, EXCEPINFO *pExcepInfo, UINT *puArgErr )" );
     if ( CheckDefHandler() )
     {
         ComSmart< IDispatch > pIDispatch;
@@ -1837,7 +1701,6 @@ STDMETHODIMP_(ULONG) InprocEmbedDocument_Impl::InternalCacheWrapper::Release()
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *pformatetc, DWORD advf, DWORD *pdwConnection )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *pformatetc, DWORD advf, DWORD *pdwConnection )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache > pIOleCache;
@@ -1854,7 +1717,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Cache( FORMATETC *p
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwConnection )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwConnection )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache > pIOleCache;
@@ -1871,7 +1733,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::Uncache( DWORD dwCo
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTATDATA **ppenumSTATDATA )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTATDATA **ppenumSTATDATA )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache > pIOleCache;
@@ -1888,7 +1749,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::EnumCache( IEnumSTA
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObject *pDataObject )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObject *pDataObject )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache > pIOleCache;
@@ -1905,7 +1765,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::InitCache( IDataObj
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache > pIOleCache;
@@ -1923,7 +1782,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::SetData( FORMATETC 
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATAOBJECT pDataObject, DWORD grfUpdf, LPVOID pReserved )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATAOBJECT pDataObject, DWORD grfUpdf, LPVOID pReserved )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache2 > pIOleCache2;
@@ -1940,7 +1798,6 @@ STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::UpdateCache( LPDATA
 //-------------------------------------------------------------------------------
 STDMETHODIMP InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD dwDiscardOptions )
 {
-    WRITEDEBUGINFO( "InprocEmbedDocument_Impl::InternalCacheWrapper::DiscardCache( DWORD dwDiscardOptions )" );
     if ( m_rOwnDocument.CheckDefHandler() )
     {
         ComSmart< IOleCache2 > pIOleCache2;
