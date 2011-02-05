@@ -522,8 +522,6 @@ void PspKernInfo::Initialize() const
     if( rKernPairs.empty() )
         return;
 
-    // feed psprint's kerning list into a lookup-friendly container
-    maUnicodeKernPairs.resize( rKernPairs.size() );
     PspKernPairs::const_iterator it = rKernPairs.begin();
     for(; it != rKernPairs.end(); ++it )
     {
