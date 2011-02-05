@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 #include <osl/diagnose.h>
@@ -568,7 +568,7 @@ void TimingSheet::insert( const sal_Char * pText, sal_Int64 nLoop, sal_uInt32 nT
 }
 
 //==================================================================================================
-typedef std::hash_map< std::string, TimingSheet > t_TimingSheetMap;
+typedef boost::unordered_map< std::string, TimingSheet > t_TimingSheetMap;
 
 //--------------------------------------------------------------------------------------------------
 static void benchmark(
