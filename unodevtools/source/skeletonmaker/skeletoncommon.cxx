@@ -155,7 +155,7 @@ bool containsAttribute(AttributeInfo& attributes, OString const & attrname)
 void checkAttributes(TypeManager const & manager,
                      const typereg::Reader& reader,
                      AttributeInfo& attributes,
-                     std::hash_set< OString, OStringHash >& propinterfaces)
+                     boost::unordered_set< OString, OStringHash >& propinterfaces)
 {
     OString typeName = codemaker::convertString(reader.getTypeName());
     if ( typeName.equals("com/sun/star/beans/XPropertySet") ||
@@ -196,8 +196,8 @@ void checkAttributes(TypeManager const & manager,
 
 void checkType(TypeManager const & manager,
                OString const & type,
-               std::hash_set< OString, OStringHash >& interfaceTypes,
-               std::hash_set< OString, OStringHash >& serviceTypes,
+               boost::unordered_set< OString, OStringHash >& interfaceTypes,
+               boost::unordered_set< OString, OStringHash >& serviceTypes,
                AttributeInfo& properties)
 {
 
@@ -290,8 +290,8 @@ void checkType(TypeManager const & manager,
 }
 
 void checkDefaultInterfaces(
-         std::hash_set< OString, OStringHash >& interfaces,
-         const std::hash_set< OString, OStringHash >& services,
+         boost::unordered_set< OString, OStringHash >& interfaces,
+         const boost::unordered_set< OString, OStringHash >& services,
        const OString & propertyhelper)
 {
     if ( services.empty() ) {
@@ -340,13 +340,13 @@ bool checkServiceProperties(TypeManager const & manager,
 OString checkPropertyHelper(
     ProgramOptions const & options,
     TypeManager const & manager,
-    const std::hash_set< OString, OStringHash >& services,
-    const std::hash_set< OString, OStringHash >& interfaces,
+    const boost::unordered_set< OString, OStringHash >& services,
+    const boost::unordered_set< OString, OStringHash >& interfaces,
     AttributeInfo& attributes,
-    std::hash_set< OString, OStringHash >& propinterfaces)
+    boost::unordered_set< OString, OStringHash >& propinterfaces)
 {
-    std::hash_set< OString, OStringHash >::const_iterator iter;
-    std::hash_set< OString, OStringHash >::const_iterator end;
+    boost::unordered_set< OString, OStringHash >::const_iterator iter;
+    boost::unordered_set< OString, OStringHash >::const_iterator end;
 
     if ( !services.empty() ) {
         iter = services.begin();
@@ -428,12 +428,12 @@ bool checkXComponentSupport(TypeManager const & manager,
 // if XComponent is directly specified, return true and remove it from the
 // supported interfaces list
 bool checkXComponentSupport(TypeManager const & manager,
-         std::hash_set< OString, OStringHash >& interfaces)
+         boost::unordered_set< OString, OStringHash >& interfaces)
 {
     if ( interfaces.empty() )
         return false;
 
-    std::hash_set< OString, OStringHash >::const_iterator iter =
+    boost::unordered_set< OString, OStringHash >::const_iterator iter =
         interfaces.begin();
     while ( iter != interfaces.end() ) {
         if ( (*iter).equals("com.sun.star.lang.XComponent") ) {
@@ -700,11 +700,11 @@ void generateFunctionParamterMap(std::ostream& o,
 void generateFunctionParameterMap(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
-         const std::hash_set< OString, OStringHash >& interfaces)
+         const boost::unordered_set< OString, OStringHash >& interfaces)
 {
     ::codemaker::GeneratedTypeSet generated;
     bool bFirst = true;
-    std::hash_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
+    boost::unordered_set< OString, OStringHash >::const_iterator iter = interfaces.begin();
     while ( iter != interfaces.end() ) {
         typereg::Reader reader(manager.getTypeReader((*iter).replace('.','/')));
         if (!reader.isValid()) {

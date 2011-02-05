@@ -46,7 +46,7 @@ void generatePackage(std::ostream & o, const OString & implname)
 }
 
 void generateImports(std::ostream & o, ProgramOptions const & options,
-         const std::hash_set< OString, OStringHash >& /*interfaces*/,
+         const boost::unordered_set< OString, OStringHash >& /*interfaces*/,
          const OString & propertyhelper,
          bool serviceobject, bool supportxcomponent)
 {
@@ -80,7 +80,7 @@ void generateImports(std::ostream & o, ProgramOptions const & options,
     }
 
 
-//     std::hash_set< OString, OStringHash >::const_iterator iter =
+//     boost::unordered_set< OString, OStringHash >::const_iterator iter =
 //                    interfaces.begin();
 //     while (iter != interfaces.end())
 //     {
@@ -524,10 +524,10 @@ void generateXDispatchProviderBodies(std::ostream& o, ProgramOptions const & opt
 void generateMethodBodies(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
-         const std::hash_set< OString, OStringHash >& interfaces,
+         const boost::unordered_set< OString, OStringHash >& interfaces,
          const OString& indentation, bool usepropertymixin)
 {
-    std::hash_set< OString, OStringHash >::const_iterator iter =
+    boost::unordered_set< OString, OStringHash >::const_iterator iter =
         interfaces.begin();
     codemaker::GeneratedTypeSet generated;
     while (iter != interfaces.end()) {
@@ -596,8 +596,8 @@ static const char* propcomment=
 void generateAddinConstructorAndHelper(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager, const OString & classname,
-         const std::hash_set< OString, OStringHash >& services,
-         const std::hash_set< OString, OStringHash >& interfaces)
+         const boost::unordered_set< OString, OStringHash >& services,
+         const boost::unordered_set< OString, OStringHash >& interfaces)
 {
     o << "    private com.sun.star.lang.Locale m_locale = "
         "new com.sun.star.lang.Locale();\n";
@@ -611,7 +611,7 @@ void generateAddinConstructorAndHelper(std::ostream& o,
 
 
     // get the one and only add-in service for later use
-    std::hash_set< OString, OStringHash >::const_iterator iter = services.begin();
+    boost::unordered_set< OString, OStringHash >::const_iterator iter = services.begin();
     OString sAddinService = (*iter).replace('/', '.');
     if (sAddinService.equals("com.sun.star.sheet.AddIn")) {
         sAddinService = (*(++iter)).replace('/', '.');
@@ -742,8 +742,8 @@ void generateClassDefinition(std::ostream& o,
          ProgramOptions const & options,
          TypeManager const & manager,
          const OString & classname,
-         const std::hash_set< OString, OStringHash >& services,
-         const std::hash_set< OString, OStringHash >& interfaces,
+         const boost::unordered_set< OString, OStringHash >& services,
+         const boost::unordered_set< OString, OStringHash >& interfaces,
          const AttributeInfo& properties,
          const AttributeInfo& attributes,
          const OString& propertyhelper, bool supportxcomponent)
@@ -760,7 +760,7 @@ void generateClassDefinition(std::ostream& o,
                 o << "WeakBase\n";
         }
         o << "   implements ";
-        std::hash_set< OString, OStringHash >::const_iterator iter =
+        boost::unordered_set< OString, OStringHash >::const_iterator iter =
             interfaces.begin();
         while (iter != interfaces.end()) {
             o << (*iter);
@@ -787,7 +787,7 @@ void generateClassDefinition(std::ostream& o,
 
     if (!services.empty()) {
         o << "    private static final String[] m_serviceNames = {\n";
-        std::hash_set< OString, OStringHash >::const_iterator iter =
+        boost::unordered_set< OString, OStringHash >::const_iterator iter =
             services.begin();
         while (iter != services.end()) {
             o << "        \"" << (*iter).replace('/','.') << "\"";
@@ -864,11 +864,11 @@ void generateSkeleton(ProgramOptions const & options,
                       std::vector< OString > const & types,
                       OString const & /*delegate*/)
 {
-    std::hash_set< OString, OStringHash > interfaces;
-    std::hash_set< OString, OStringHash > services;
+    boost::unordered_set< OString, OStringHash > interfaces;
+    boost::unordered_set< OString, OStringHash > services;
     AttributeInfo properties;
     AttributeInfo attributes;
-    std::hash_set< OString, OStringHash > propinterfaces;
+    boost::unordered_set< OString, OStringHash > propinterfaces;
     bool serviceobject = false;
     bool supportxcomponent = false;
 

@@ -32,7 +32,7 @@
 #include <codemaker/typemanager.hxx>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class RegistryKey;
