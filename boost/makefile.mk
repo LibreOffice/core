@@ -53,6 +53,8 @@ TARFILE_MD5=f02578f5218f217a9f20e9c30e119c6a
 PATCH_FILES=$(TARFILE_NAME).patch
 #https://svn.boost.org/trac/boost/ticket/4713
 PATCH_FILES+=boost.4713.warnings.patch
+#https://svn.boost.org/trac/boost/ticket/5119
+PATCH_FILES+=unordered_map-doesnt-support-cp-ctor.patch
 
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk
