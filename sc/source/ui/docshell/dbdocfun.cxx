@@ -885,12 +885,14 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                                                     nCol, nAttrRow, nDestTab );
                 DBG_ASSERT(pSrcPattern,"Pattern ist 0");
                 if (pSrcPattern)
+                {
                     pDoc->ApplyPatternAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pSrcPattern );
-                const ScStyleSheet* pStyle = pSrcPattern->GetStyleSheet();
-                if (pStyle)
-                    pDoc->ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
+                    const ScStyleSheet* pStyle = pSrcPattern->GetStyleSheet();
+                    if (pStyle)
+                        pDoc->ApplyStyleAreaTab( nCol, nAttrRow, nCol, aLocalParam.nRow2,
                                                     nDestTab, *pStyle );
+                }
             }
 
             delete pAttribDoc;

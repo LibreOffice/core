@@ -2920,8 +2920,11 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
                                 pDoc->GetValue( aCellPos ));
                     }
                     else
-                        GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
+                    {
+                        if (pDoc)
+                          GetNumberFormatAttributesExportHelper()->SetNumberFormatAttributes(
                             aCell.nNumberFormat, pDoc->GetValue( aCellPos ));
+                    }
                 }
                 else
                 {

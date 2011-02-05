@@ -168,12 +168,12 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersion */ ) c
 {
     String* pStr;
     BOOL    bHasStyle;
-    short   eFamDummy;
 
     rStream >> bHasStyle;
 
     if ( bHasStyle )
     {
+        short   eFamDummy;
         pStr = new String;
         rStream.ReadByteString( *pStr, rStream.GetStreamCharSet() );
         rStream >> eFamDummy; // wg. altem Dateiformat

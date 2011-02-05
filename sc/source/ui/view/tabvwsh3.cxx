@@ -694,10 +694,14 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");
                     }
-                    pDlg->SetLimits( MINZOOM, MAXZOOM );
+                    if (pDlg)
+                    {
+                       pDlg->SetLimits( MINZOOM, MAXZOOM );
 
-                    bCancel = ( RET_CANCEL == pDlg->Execute() );
-
+                       bCancel = ( RET_CANCEL == pDlg->Execute() );
+                    }
+                    // bCancel is True only if we were in the previous if block,
+                    // so no need to check again pDlg
                     if ( !bCancel )
                     {
                         const SvxZoomItem&  rZoomItem = (const SvxZoomItem&)
