@@ -100,6 +100,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\preprocessor\tuple
 mkdir: %_DEST%\inc%_EXT%\boost\ptr_container
 mkdir: %_DEST%\inc%_EXT%\boost\ptr_container\detail
 mkdir: %_DEST%\inc%_EXT%\boost\range
+mkdir: %_DEST%\inc%_EXT%\boost\range\algorithm
 mkdir: %_DEST%\inc%_EXT%\boost\range\detail
 mkdir: %_DEST%\inc%_EXT%\boost\spirit
 mkdir: %_DEST%\inc%_EXT%\boost\spirit\actor
@@ -288,6 +289,7 @@ mkdir: %_DEST%\inc%_EXT%\boost\variant\detail
 ..\%__SRC%\inc\boost\ptr_container\* %_DEST%\inc%_EXT%\boost\ptr_container
 ..\%__SRC%\inc\boost\ptr_container\detail\* %_DEST%\inc%_EXT%\boost\ptr_container\detail
 ..\%__SRC%\inc\boost\range\* %_DEST%\inc%_EXT%\boost\range
+..\%__SRC%\inc\boost\range\algorithm\* %_DEST%\inc%_EXT%\boost\range\algorithm
 ..\%__SRC%\inc\boost\range\detail\* %_DEST%\inc%_EXT%\boost\range\detail
 ..\%__SRC%\inc\boost\spirit\* %_DEST%\inc%_EXT%\boost\spirit
 ..\%__SRC%\inc\boost\spirit\actor\* %_DEST%\inc%_EXT%\boost\spirit\actor
