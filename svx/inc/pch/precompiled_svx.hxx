@@ -750,7 +750,7 @@
 #include "sot/formats.hxx"
 #include <map>
 #include <set>
-#include <slist>
+#include <list>
 #include <vector>
 #include "svtools/FilterConfigItem.hxx"
 #include "svtools/accessibilityoptions.hxx"

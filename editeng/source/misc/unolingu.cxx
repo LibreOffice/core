@@ -32,7 +32,7 @@
 #include <map>
 #include <set>
 #include <vector>
-#include <slist>
+#include <list>
 #include <memory>
 #include <editeng/unolingu.hxx>
 #include <tools/debug.hxx>
