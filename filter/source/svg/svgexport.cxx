@@ -706,10 +706,6 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
 
                     if( mpObjects->find( xDrawPage ) != mpObjects->end() )
                     {
-#ifdef DEBUG
-fprintf( stderr, "Trying to get (Page): %p -- %p\n", xDrawPage.get(), SvxDrawPage::getImplementation( xDrawPage ) );
-#endif
-
                         const GDIMetaFile& rMtf = (*mpObjects)[ xDrawPage ].GetRepresentation();
                         mpSVGWriter->WriteMetaFile( aNullPt, rMtf.GetPrefSize(), rMtf, SVGWRITER_WRITE_FILL );
                     }
@@ -833,10 +829,6 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
             {
                  Reference< XText >                  xText( rxShape, UNO_QUERY );
                 ::com::sun::star::awt::Rectangle    aBoundRect;
-#ifdef DEBUG
-fprintf( stderr, "Trying to get (Shape): %p -- %p\n", rxShape.get(), SvxShape::getImplementation( rxShape ) );
-#endif
-
                 const GDIMetaFile&                  rMtf = (*mpObjects)[ rxShape ].GetRepresentation();
 
                 xShapePropSet->getPropertyValue( B2UCONST( "BoundRect" ) ) >>= aBoundRect;
@@ -879,6 +871,7 @@ fprintf( stderr, "Trying to get (Shape): %p -- %p\n", rxShape.get(), SvxShape::g
                             }
                             else
                             {
+                                SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", true, true );
                                 mpSVGWriter->WriteMetaFile( aTopLeft, aSize, rMtf, SVGWRITER_WRITE_FILL | SVGWRITER_WRITE_TEXT, &aId );
                             }
                         }
@@ -1029,10 +1022,6 @@ sal_Bool SVGFilter::implCreateObjectsFromShape( const Reference< XShape >& rxSha
                 else
                     (*mpObjects)[ rxShape ] = ObjectRepresentation( rxShape, aGraphic.GetGDIMetaFile() );
 
-#ifdef DEBUG
-fprintf( stderr, "Put (Shape): %p -- %p\n", rxShape.get(), pObj );
-#endif
-
                 bRet = sal_True;
             }
         }
@@ -1069,10 +1058,6 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
         aMtf.Read( *aFile.GetStream( STREAM_READ ) );
 
         (*mpObjects)[ rxMasterPage ] = ObjectRepresentation( rxMasterPage, aMtf );
-
-#ifdef DEBUG
-fprintf( stderr, "Put (Page): %p -- %p\n", rxMasterPage.get(), SvxDrawPage::getImplementation( rxMasterPage ) );
-#endif
 
         bRet = sal_True;
     }

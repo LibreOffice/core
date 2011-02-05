@@ -192,9 +192,6 @@ struct HashReferenceXInterface
 {
     size_t operator()( const Reference< XInterface >& rxIf ) const
     {
-#ifdef DEBUG
-        fprintf( stderr, "HashCode for %p\n", (void*)rxIf.get() );
-#endif
         return reinterpret_cast< size_t >( rxIf.get() );
     }
 };
