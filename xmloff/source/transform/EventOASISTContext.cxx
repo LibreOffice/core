@@ -66,7 +66,7 @@ XMLTransformerOASISEventMap_Impl::XMLTransformerOASISEventMap_Impl( XMLTransform
     if( pInit )
     {
         XMLTransformerOASISEventMap_Impl::key_type aKey;
-        XMLTransformerOASISEventMap_Impl::data_type aData;
+        XMLTransformerOASISEventMap_Impl::mapped_type aData;
         while( pInit->m_pOASISName )
         {
             aKey.m_nPrefix = pInit->m_nOASISPrefix;

@@ -63,7 +63,7 @@ public:
 void XMLTransformerOOoEventMap_Impl::AddMap( XMLTransformerEventMapEntry *pInit )
 {
     XMLTransformerOOoEventMap_Impl::key_type aKey;
-    XMLTransformerOOoEventMap_Impl::data_type aData;
+    XMLTransformerOOoEventMap_Impl::mapped_type aData;
     while( pInit->m_pOOoName )
     {
         aKey = OUString::createFromAscii(pInit->m_pOOoName);
