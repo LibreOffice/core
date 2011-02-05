@@ -1926,7 +1926,6 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         }
         else if( pVSh->ISA( SwFEShell ) )
         {
-            sal_uInt16 nObjCount;
             const SwFEShell *pFESh = static_cast< const SwFEShell * >( pVSh );
             const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
             if( pFlyFrm )
@@ -1935,7 +1934,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                         "cursor is not contained in fly frame" );
                 aFrmOrObj = pFlyFrm;
             }
-            else if( (nObjCount = pFESh->IsObjSelected()) > 0 )
+            else if( pFESh->IsObjSelected() > 0 )
             {
                 bShapeSelected = sal_True;
                 aFrmOrObj = static_cast<const SwFrm *>( 0 );
