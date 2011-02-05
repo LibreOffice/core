@@ -389,6 +389,17 @@
          
  #if defined(BOOST_UNORDERED_STD_FORWARD)
  
+@@ -135,8 +135,8 @@
+         if(this->size_ != other.size_) return false;
+         if(!this->size_) return true;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i)
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i)
+         {
+             node_ptr it1 = i->next_;
+             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
 @@ -159,13 +159,13 @@
      template <class T>
      inline BOOST_DEDUCED_TYPENAME hash_unique_table<T>::node_ptr
@@ -551,3 +562,77 @@
              }
          } while(++i != j);
      }
+--- misc/boost_1_44_0/boost/unordered/detail/equivalent.hpp	2010-06-09 01:23:43.000000000 +0200
++++ misc/build/boost_1_44_0/boost/unordered/detail/equivalent.hpp	2011-02-05 04:15:47.000000000 +0100
+@@ -57,7 +57,7 @@
+         bool equals(hash_equivalent_table const&) const;
+ 
+         inline node_ptr add_node(node_constructor& a,
+-            bucket_ptr bucket, node_ptr pos);
++            bucket_ptr bucket_, node_ptr pos);
+ 
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
+ 
+@@ -117,8 +117,8 @@
+         if(this->size_ != other.size_) return false;
+         if(!this->size_) return true;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i)
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i)
+         {
+             node_ptr it1 = i->next_;
+             while(BOOST_UNORDERED_BORLAND_BOOL(it1))
+@@ -149,16 +149,16 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME hash_equivalent_table<T>::node_ptr
+         hash_equivalent_table<T>
+-            ::add_node(node_constructor& a, bucket_ptr bucket, node_ptr pos)
++            ::add_node(node_constructor& a, bucket_ptr bucket_, node_ptr pos)
+     {
+         node_ptr n = a.release();
+         if(BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             node::add_after_node(n, pos);                
+         }
+         else {
+-            node::add_to_bucket(n, *bucket);
+-            if(bucket < this->cached_begin_bucket_)
+-                this->cached_begin_bucket_ = bucket;
++            node::add_to_bucket(n, *bucket_);
++            if(bucket_ < this->cached_begin_bucket_)
++                this->cached_begin_bucket_ = bucket_;
+         }
+         ++this->size_;
+         return n;
+@@ -179,15 +179,15 @@
+             return this->emplace_empty_impl_with_node(a, 1);
+         }
+         else {
+-            bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-            node_ptr position = this->find_iterator(bucket, k);
++            bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++            node_ptr position = this->find_iterator(bucket_, k);
+ 
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+-            return iterator_base(bucket, add_node(a, bucket, position));
++            return iterator_base(bucket_, add_node(a, bucket_, position));
+         }
+     }
+     
+@@ -196,8 +196,8 @@
+             ::emplace_impl_no_rehash(node_constructor& a)
+     {
+         key_type const& k = this->get_key(a.value());
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        add_node(a, bucket, this->find_iterator(bucket, k));
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        add_node(a, bucket_, this->find_iterator(bucket_, k));
+     }
+ 
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
