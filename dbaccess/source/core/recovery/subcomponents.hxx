@@ -35,7 +35,7 @@
 
 #include <rtl/ustring.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 //........................................................................
@@ -78,7 +78,7 @@ namespace dbaccess
     };
 
     // -------------------------------------------------------------------
-    typedef ::std::hash_map< ::rtl::OUString, SubComponentDescriptor, ::rtl::OUStringHash > MapStringToCompDesc;
+    typedef ::boost::unordered_map< ::rtl::OUString, SubComponentDescriptor, ::rtl::OUStringHash > MapStringToCompDesc;
     typedef ::std::map< SubComponentType, MapStringToCompDesc > MapCompTypeToCompDescs;
 
 

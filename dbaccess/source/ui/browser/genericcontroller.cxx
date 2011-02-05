@@ -64,7 +64,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 #include <algorithm>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>
 
@@ -90,7 +90,7 @@ using namespace ::comphelper;
 #define LAST_USER_DEFINED_FEATURE   ( ::std::numeric_limits< sal_uInt16 >::max()        )
 
 // -------------------------------------------------------------------------
-typedef ::std::hash_map< sal_Int16, sal_Int16 > CommandHashMap;
+typedef ::boost::unordered_map< sal_Int16, sal_Int16 > CommandHashMap;
 typedef ::std::list< DispatchInformation > DispatchInfoList;
 
 
