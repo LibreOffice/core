@@ -112,7 +112,7 @@ private:
 
 //  String Hex( ULONG nNr );
     String Dec( ULONG nNr );    // Ergebnis = nNr / 100 mit 2 Dezimalen
-    String Pad( const String aS, xub_StrLen nLen );     // Fügt blanks links an den String an
+    String Pad( const String &aS, xub_StrLen nLen );        // Fügt blanks links an den String an
 
 /*  Ab hier werden die Methoden Systemabhängig in den entsprechenden cxx implementiert
     Sie werden von den oberen Methoden gerufen.

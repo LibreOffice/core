@@ -50,7 +50,7 @@ public:
     virtual ~ITransmiter() {}
     virtual comm_USHORT TransferBytes( const void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastSent() { return nLastSent; }
+    comm_ULONG GetLastSent() const { return nLastSent; }
 };
 
 class IReceiver
@@ -62,7 +62,7 @@ public:
     virtual ~IReceiver() {;}
     virtual comm_USHORT ReceiveBytes( void* pBuffer, comm_UINT32 nLen ) = 0;
 
-    comm_ULONG GetLastReceived() { return nLastReceived; }
+    comm_ULONG GetLastReceived() const { return nLastReceived; }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
