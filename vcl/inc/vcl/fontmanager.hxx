@@ -39,6 +39,8 @@
 
 #include "com/sun/star/lang/Locale.hpp"
 
+#include <vector>
+
 #define ATOM_FAMILYNAME                     2
 #define ATOM_PSNAME                         3
 
