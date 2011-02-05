@@ -254,7 +254,7 @@ void SwPagePreviewLayout::_ApplyNewZoomAtViewShell( sal_uInt8 _aNewZoom )
     if ( aNewViewOptions.GetZoom() != _aNewZoom )
     {
         aNewViewOptions.SetZoom( _aNewZoom );
-        // OD 24.09.2003 #i19975# - consider zoom type.
+        //#i19975# - consider zoom type.
         enum SvxZoomType eZoomType = SVX_ZOOM_PERCENT;
         aNewViewOptions.SetZoomType( eZoomType );
         mrParentViewShell.ApplyViewOptions( aNewViewOptions );
@@ -750,8 +750,6 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 
 /** determines, if page with given page number is visible in preview
 
-    OD 12.12.2002 #103492#
-
     @author OD, _nPageNum is absolut!
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
@@ -761,8 +759,6 @@ bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 }
 
 /** calculate data to bring new selected page into view.
-
-    OD 12.12.2002 #103492#
 
     @author OD, IN/OUT parameters are absolute page numbers!!!
 */
@@ -777,7 +773,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     sal_uInt16 nTmpRelSelPageNum = ConvertAbsoluteToRelativePageNum( mnSelectedPageNum );
     sal_uInt16 nNewRelSelectedPageNum = nTmpRelSelPageNum;
 
-    // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
+    // leaving left-top-corner blank is controlled
     // by <mbBookPreview>.
     if ( mbBookPreview )
     {
@@ -828,13 +824,13 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
         sal_Int16 nTotalRows = GetRowOfPage( mnPages );
         if ( (_nHoriMove > 0 || _nVertMove > 0) &&
              mbDoesLayoutRowsFitIntoWindow &&
-             mbDoesLayoutColsFitIntoWindow && // OD 20.02.2003 #107369# - add condition
+             mbDoesLayoutColsFitIntoWindow &&
              nCurrRow > nTotalRows - mnRows )
         {
             // new proposed start page = left-top-corner of last possible
             // preview page.
             nNewStartPage = (nTotalRows - mnRows) * mnCols + 1;
-            // OD 19.02.2003 #107369# - leaving left-top-corner blank is controlled
+            // leaving left-top-corner blank is controlled
             // by <mbBookPreview>.
             if ( mbBookPreview )
             {
@@ -859,8 +855,6 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
 }
 
 /** checks, if given position is inside a shown document page
-
-    OD 17.12.2002 #103492#
 
     @author OD
 */
@@ -924,8 +918,6 @@ bool SwPagePreviewLayout::IsPrevwPosInDocPrevwPage( const Point  _aPrevwPos,
 
 /** determine window page scroll amount
 
-    OD 17.12.2002 #103492#
-
     @author OD
 */
 SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
@@ -939,14 +931,14 @@ SwTwips SwPagePreviewLayout::GetWinPagesScrollAmount(
     else
         nScrollAmount = _nWinPagesToScroll * maPaintedPrevwDocRect.GetHeight();
 
-    // OD 19.02.2003 #107369# - check, if preview layout size values are valid.
+    // check, if preview layout size values are valid.
     // If not, the checks for an adjustment of the scroll amount aren't useful.
     if ( mbLayoutSizesValid )
     {
         if ( (maPaintedPrevwDocRect.Top() + nScrollAmount) <= 0 )
             nScrollAmount = -maPaintedPrevwDocRect.Top();
 
-        // OD 14.02.2003 #107369# - correct scroll amount
+        // correct scroll amount
         if ( nScrollAmount > 0 &&
              maPaintedPrevwDocRect.Bottom() == maPreviewDocRect.Bottom()
            )

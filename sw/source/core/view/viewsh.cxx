@@ -330,7 +330,7 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                         DLPostPaint2(true);
                     }
 
-                    // --> OD 2009-12-03 #i107365#
+                    // #i107365#
                     // Direct paint has been performed. Thus, take care of
                     // transparent child windows.
                     if ( GetWin() )
@@ -359,7 +359,6 @@ void ViewShell::ImplEndAction( const BOOL bIdleEnd )
                             }
                         }
                     }
-                    // <--
                 }
 
                 delete pVout;
@@ -665,7 +664,7 @@ void lcl_InvalidateAllCntnt( ViewShell& rSh, BYTE nInv )
     objects (Writer fly frame and drawing objects), which are anchored
     to paragraph or to character.
 
-    OD 2004-03-16 #i11860#
+    #i11860#
 
     @author OD
 */
@@ -1664,7 +1663,7 @@ void ViewShell::Paint(const Rectangle &rRect)
         return;
     }
 
-    //MA 30. Jul. 95: fix(16787): mit !nStartAction versuche ich mal mich gegen
+    // mit !nStartAction versuche ich mal mich gegen
     //fehlerhaften Code an anderen Stellen zu wehren. Hoffentlich fuehrt das
     //nicht zu Problemen!?
     if ( bPaintWorks && !nStartAction )
@@ -2243,7 +2242,7 @@ void ViewShell::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibility
         pAccOptions->SetStopAnimatedGraphics(! rAccessibilityOptions.GetIsAllowAnimatedGraphics());
         pAccOptions->SetStopAnimatedText(! rAccessibilityOptions.GetIsAllowAnimatedText());
 
-        // --> FME 2004-06-29 #114856# Formular view
+        // Formular view
         // Always set this option, not only if document is read-only:
         pOpt->SetSelectionInReadonly(rAccessibilityOptions.IsSelectionInReadonly());
     }
