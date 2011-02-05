@@ -1945,12 +1945,11 @@ uno::Any SwDoc::Spell( SwPaM& rPaM,
                                 uno::Reference< text::XFlatParagraph > xFlatPara = new SwXFlatParagraph( *((SwTxtNode*)pNd), aExpandText, pConversionMap );
 
                                 // get error position of cursor in XFlatParagraph
-                                sal_Int32 nGrammarErrorPosInText;
                                 linguistic2::ProofreadingResult aResult;
                                 sal_Int32 nGrammarErrors;
                                 do
                                 {
-                                    nGrammarErrorPosInText = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
+                                    ModelToViewHelper::ConvertToViewPosition( pConversionMap, nBeginGrammarCheck );
                                     aResult = xGCIterator->checkSentenceAtPosition(
                                             xDoc, xFlatPara, aExpandText, lang::Locale(), nBeginGrammarCheck, -1, -1 );
 

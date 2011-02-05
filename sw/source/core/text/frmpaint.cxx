@@ -721,9 +721,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
                 //DBG_LOOP; shadows declaration above.
                 //resolved into:
 #if  OSL_DEBUG_LEVEL > 1
-#if OSL_DEBUG_LEVEL > 1
                 DbgLoop aDbgLoop2( (const void*) this );
-#endif
 #endif
                 aLine.DrawTextLine( rRect, aClip, IsUndersized() );
 

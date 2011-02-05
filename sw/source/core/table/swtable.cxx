@@ -2549,6 +2549,7 @@ ULONG SwTableBox::IsValidNumTxtNd( BOOL bCheckAttr ) const
         {
             const SwNode* pNode = pSttNd->GetNodes()[nIndex];
             if( pNode->IsTableNode() )
+            {
                 pTextNode = 0;
                 break;
             }
