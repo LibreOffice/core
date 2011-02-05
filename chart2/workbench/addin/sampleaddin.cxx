@@ -388,30 +388,6 @@ void SAL_CALL SampleAddIn::refresh() throw( uno::RuntimeException )
             }
         }
     }
-
-    // set axis scale to 200
-//      uno::Reference< beans::XPropertySet > xXAxis( getXAxis(), uno::UNO_QUERY );
-//      if( xXAxis.is())
-//      {
-//          uno::Any aAny;
-//          aAny <<= (sal_Bool)(sal_False);
-//          xXAxis->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AutoStepMain" )),
-//                                    aAny );
-//          aAny <<= (double)(200.0);
-//          xXAxis->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StepMain" )),
-//                                    aAny );
-//      }
-
-// try setting symbols
-//      uno::Reference< beans::XPropertySet > xProp = getDataRowProperties( 0 );
-//      if( xProp.is())
-//      {
-//          uno::Any aAny;
-//          aAny <<= (sal_Int32)(-1);
-//          xProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SymbolType" )), aAny );
-//          aAny <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "http://mib-1168/www/images/go.gif" ));
-//          xProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "SymbolBitmapURL" )), aAny );
-//      }
 }
 
 void SAL_CALL SampleAddIn::addRefreshListener( const uno::Reference< util::XRefreshListener >&  )

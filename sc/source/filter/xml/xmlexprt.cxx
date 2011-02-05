@@ -240,8 +240,6 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLOOoExport_getSupportedServiceNames(
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_ALL);
     return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_ALL );
 }
 
@@ -259,8 +257,6 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLOOoExport_Meta_getSupportedServiceN
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Meta_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_META);
     return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_META );
 }
 
@@ -278,8 +274,6 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLOOoExport_Styles_getSupportedServic
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Styles_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
     return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
 }
 
@@ -297,8 +291,6 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLOOoExport_Content_getSupportedServi
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Content_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
     return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
 }
 
@@ -316,8 +308,6 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLOOoExport_Settings_getSupportedServ
 uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Settings_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS);
     return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
@@ -1929,7 +1919,6 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
         sal_Int32 nShapesCount(0);
         sal_Int32 nCellCount(pDoc ? pDoc->GetCellCount() : 0);
         CollectSharedData(nTableCount, nShapesCount, nCellCount);
-        //DBG_ERROR("no shared data setted");
     }
     ScXMLStyleExport aStylesExp(*this, rtl::OUString(), GetAutoStylePool().get());
     if (GetModel().is())
@@ -2996,7 +2985,6 @@ void ScXMLExport::WriteCell (ScMyCell& aCell)
 void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, awt::Point* pPoint)
 {
     uno::Reference < beans::XPropertySet > xShapeProps ( xShape, uno::UNO_QUERY );
-//BM    sal_Bool bMemChart(sal_False);  // das muss man jetzt umbenennen :-)
     bool bIsChart( false );
     rtl::OUString sPropCLSID (RTL_CONSTASCII_USTRINGPARAM("CLSID"));
     rtl::OUString sPropModel (RTL_CONSTASCII_USTRINGPARAM("Model"));
@@ -3084,50 +3072,6 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                             }
                         }
                     }
-
-//BM                    rtl::OUString sOUName;
-//BM                    xShapeProps->getPropertyValue(sPersistName) >>= sOUName;
-//BM                    String sName(sOUName);
-//BM                    if (!pChartListener)
-//BM                    {
-//BM                        String aEmptyString;
-//BM                        ScRange aRange;
-//BM                        pChartListener = new ScChartListener ( aEmptyString, GetDocument(), aRange );
-//BM                    }
-//BM                    if(pChartListener)
-//BM                    {
-//BM                        USHORT nIndex(0);
-//BM                        pChartListener->SetString( sName );
-//BM                        if ( GetDocument() && GetDocument()->GetChartListenerCollection()->Search( pChartListener, nIndex ) )
-//BM                        {
-//BM                            const ScRangeListRef& rRangeListRef(((ScChartListener*)
-//BM                                (GetDocument()->GetChartListenerCollection()->
-//BM                                At( nIndex )))->GetRangeList());
-//BM                            if (rRangeListRef.Is())
-//BM                            {
-//BM                                bMemChart = sal_True;
-//BM                                rtl::OUString sRanges;
-//BM                                ScRangeStringConverter::GetStringFromRangeList(sRanges, rRangeListRef, GetDocument());
-//BM                                 SvXMLAttributeList* pAttrList = NULL;
-//BM                                if (sRanges.getLength())
-//BM                                 {
-//BM                                     pAttrList = new SvXMLAttributeList();
-//BM                                     pAttrList->AddAttribute(
-//BM                                         GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), sRanges );
-//BM                                 }
-//BM                                GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
-//BM                            }
-//BM                        }
-//BM                        else
-//BM                        {
-//BM                            bMemChart = sal_True;
-//BM                             SvXMLAttributeList* pAttrList = new SvXMLAttributeList();
-//BM                             pAttrList->AddAttribute(
-//BM                                 GetNamespaceMap().GetQNameByKey( XML_NAMESPACE_DRAW, GetXMLToken(XML_NOTIFY_ON_UPDATE_OF_RANGES) ), rtl::OUString() );
-//BM                            GetShapeExport()->exportShape(xShape, SEF_EXPORT_NO_CHART_DATA | SEF_DEFAULT, pPoint, pAttrList);
-//BM                        }
-//BM                    }
-
                 }
             }
         }

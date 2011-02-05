@@ -53,54 +53,6 @@
 #include "progress.hxx"
 #include "sc.hrc"
 
-
-
-////========================================================================
-////    class ImportProgress
-////
-////  Bemerkung:
-////    Diese Klasse stellt lediglich den Handler fuer den ImportProgress des
-////    Grafikfilters bereit.
-////========================================================================
-//
-//class ImportProgress
-//{
-//public:
-//      ImportProgress( GraphicFilter& rFilter );
-//      ~ImportProgress();
-//
-//  DECL_LINK( Update, GraphicFilter* );
-//
-//private:
-//  ScProgress aProgress;
-//};
-//
-////------------------------------------------------------------------------
-//
-//ImportProgress::ImportProgress( GraphicFilter& rFilter )
-//  : aProgress( NULL, // SfxViewFrame*, NULL == alle Docs locken
-//               String( ScResId(STR_INSERTGRAPHIC) ),
-//               100 )
-//{
-//  rFilter.SetUpdatePercentHdl( LINK( this, ImportProgress, Update) );
-//}
-//
-////------------------------------------------------------------------------
-//
-//ImportProgress::~ImportProgress()
-//{
-//  aProgress.SetState( 100 );
-//}
-//
-////------------------------------------------------------------------------
-//
-//IMPL_LINK( ImportProgress, Update, GraphicFilter*, pGraphicFilter )
-//{
-//  aProgress.SetState( pGraphicFilter->GetPercent() );
-//  return 0;
-//}
-
-
 //------------------------------------------------------------------------
 
 void SC_DLLPUBLIC ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
