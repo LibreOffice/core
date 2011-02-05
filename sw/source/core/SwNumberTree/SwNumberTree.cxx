@@ -172,23 +172,6 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
         // of the previous node determines the start value for the following
         // children loop, if all children have to be validated and the first
         // one doesn't restart the counting.
-//        tSwNumTreeNumber nTmpNumber = 0;
-//        if (aIt != mChildren.end())
-//            nTmpNumber = (*aIt)->mnNumber;
-//        while (aIt != aValidateIt)
-//        {
-//            if (aIt == mChildren.end())
-//                aIt = mChildren.begin();
-//            else
-//            {
-//                aIt++;
-//                if ((*aIt)->IsCounted())
-//                    nTmpNumber++;
-//            }
-//            if ((*aIt)->IsRestart() || aIt == mChildren.begin())
-//                nTmpNumber = (*aIt)->GetStart();
-//            (*aIt)->mnNumber = nTmpNumber;
-//        }
         SwNumberTree::tSwNumTreeNumber nTmpNumber( 0 );
         if (aIt != mChildren.end())
             nTmpNumber = (*aIt)->mnNumber;
@@ -342,7 +325,6 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
 
     // --> OD 2008-05-21 #i74748# - applied patch from garnier_romain
     // number tree node has to be validated.
-//    SetLastValid(aIt);
     SetLastValid( aIt, true );
     // <--
 }
@@ -1051,32 +1033,6 @@ SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
 
     return aItResult;
 }
-
-//String SwNumberTreeNode::print(const String & rIndent,
-//                               const String & rMyIndent,
-//                               int nDepth) const
-//{
-//  String aStr = rIndent;
-//  aStr += ToString();
-//  aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
-
-//  if (nDepth != 0)
-//  {
-//      if (nDepth < 0)
-//          nDepth = -1;
-
-//      tSwNumberTreeChildren::const_iterator aIt;
-//      for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
-//      {
-//          String aTmpStr(rIndent);
-
-//          aTmpStr += rMyIndent;
-//          aStr += (*aIt)->print(aTmpStr, rMyIndent, nDepth - 1);
-//      }
-//  }
-
-//  return aStr;
-//}
 
 #if OSL_DEBUG_LEVEL > 1
 unsigned long SwNumberTreeNode::GetInstances()

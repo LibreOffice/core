@@ -226,7 +226,6 @@ SwTxtNode::SwTxtNode( const SwNodeIndex &rWhere,
     if( pAutoAttr )
         SetAttr( *pAutoAttr );
 
-//    SyncNumberAndNumRule();
     if ( !IsInList() && GetNumRule() && GetListId().Len() > 0 )
     {
         // #i101516#
@@ -2489,7 +2488,6 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
                     // --> OD 2007-07-10 #i75353#
                     // No clear of hard set numbering rule at an outline paragraph at this point.
                     // Only if the paragraph style changes - see below.
-//                    aClearWhichIds.push_back( RES_PARATR_NUMRULE );
                     bClearHardSetNumRuleWhenFmtCollChanges = true;
                     // <--
                 }

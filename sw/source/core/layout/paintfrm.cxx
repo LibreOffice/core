@@ -1524,16 +1524,6 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         pRetoucheFly = 0;
 }
 
-// --> OD 2008-05-16 #i84659# - no longer needed
-//inline BOOL IsShortCut( const SwRect &rRect, const SwRect &rFrmRect )
-//{
-//    //Wenn der Frm vollstaendig rechts neben bzw. unter dem
-//    //Rect sitzt ist's genug mit Painten.
-//        return rFrmRect.Top() > rRect.Bottom();
-//        // PAGES01 || (rFrmRect.Left() > rRect.Right()) );
-//}
-// <--
-
 //---------------- Ausgabe fuer das BrushItem ----------------
 
 /** lcl_DrawGraphicBackgrd - local help method to draw a background for a graphic
@@ -2807,8 +2797,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
     // --> OD 2008-10-07 #i92745#
     // Extend check on certain states of the 'current' <ViewShell> instance to
     // all existing <ViewShell> instances.
-//    if ( !pSh->IsInEndAction() && !pSh->IsPaintInProgress() &&
-//         (!pSh->Imp()->IsAction() || !pSh->Imp()->GetLayAction().IsActionInProgress() ) )
     bool bPerformLayoutAction( true );
     {
         ViewShell* pTmpViewShell = pSh;
@@ -3571,7 +3559,6 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
                 // --> OD 2007-12-13 #i80822#
                 // suppress painting of background in printing area for
                 // non-transparent graphics.
-//                if ( bPaintMarginOnly )
                 if ( bPaintMarginOnly ||
                      ( pNoTxt && !bIsGraphicTransparent ) )
                 // <--
@@ -3589,7 +3576,6 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
                     // used in <SwNoTxtFrm::Paint(..)> to set the clip region
                     // for painting the graphic/OLE. Thus, the clip region is
                     // also applied for the PDF export.
-//                    if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
                     ViewShell *pSh = GetShell();
                     if ( !pOut->GetConnectMetaFile() || !pSh->GetWin() )
                     // <--
@@ -4707,9 +4693,6 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
         {
             const SwFrm* pDirRefFrm = IsCellFrm() ? FindTabFrm() : this;
             SWRECTFN( pDirRefFrm )
-            // OD 19.05.2003 #109667# - use new method <lcl_PaintLeftRightLine(..)>
-            //::lcl_PaintLeftLine  ( this, pPage, aRect, rRect, rAttrs, fnRect );
-            //::lcl_PaintRightLine ( this, pPage, aRect, rRect, rAttrs, fnRect );
             ::lcl_PaintLeftRightLine ( sal_True, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
             ::lcl_PaintLeftRightLine ( sal_False, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
             if ( !IsCntntFrm() || rAttrs.GetTopLine( *(this) ) )
@@ -4722,14 +4705,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(),
                                                 pCellFrmForTopBorderAttrs );
                     const SwBorderAttrs &rTopAttrs = *aAccess.Get();
-                    // OD 19.05.2003 #109667# - use new method <lcl_PaintTopBottomLine(..)>
-                    //::lcl_PaintTopLine( this, pPage, aRect, rRect, rTopAttrs, fnRect );
                     ::lcl_PaintTopBottomLine( sal_True, *(this), *(pPage), aRect, rRect, rTopAttrs, fnRect );
                 }
                 else
                 {
-                    // OD 19.05.2003 #109667# - use new method <lcl_PaintTopBottomLine(..)>
-                    //::lcl_PaintTopLine( this, pPage, aRect, rRect, rAttrs, fnRect );
                     ::lcl_PaintTopBottomLine( sal_True, *(this), *(pPage), aRect, rRect, rAttrs, fnRect );
                 }
             }
@@ -4743,14 +4722,10 @@ void SwFrm::PaintBorder( const SwRect& rRect, const SwPageFrm *pPage,
                     SwBorderAttrAccess aAccess( SwFrm::GetCache(),
                                                 pCellFrmForBottomBorderAttrs );
                     const SwBorderAttrs &rBottomAttrs = *aAccess.Get();
-                    // OD 19.05.2003 #109667# - use new method <lcl_PaintTopBottomLine(..)>
-                    //::lcl_PaintBottomLine(this, pPage, aRect, rRect, rBottomAttrs, fnRect);
                     ::lcl_PaintTopBottomLine(sal_False, *(this), *(pPage), aRect, rRect, rBottomAttrs, fnRect);
                 }
                 else
                 {
-                    // OD 19.05.2003 #109667# - use new method <lcl_PaintTopBottomLine(..)>
-                    //::lcl_PaintBottomLine(this, pPage, aRect, rRect, rAttrs, fnRect);
                     ::lcl_PaintTopBottomLine(sal_False, *(this), *(pPage), aRect, rRect, rAttrs, fnRect);
                 }
             }
@@ -5231,17 +5206,6 @@ void SwPageFrm::PaintMarginArea( const SwRect& _rOutputRect,
         }
     }
 }
-
-// ----------------------------------------------------------------------
-//
-// const SwPageFrm::mnBorderPxWidth, const SwPageFrm::mnShadowPxWidth
-// SwPageFrm::GetBorderRect (..), SwPageFrm::GetRightShadowRect(..),
-// SwPageFrm::GetBottomShadowRect(..),
-// SwPageFrm::PaintBorderAndShadow(..),
-// SwPageFrm::GetBorderAndShadowBoundRect(..)
-//
-// OD 12.02.2003 for #i9719# and #105645#
-// ----------------------------------------------------------------------
 
 const sal_Int8 SwPageFrm::mnBorderPxWidth = 1;
 const sal_Int8 SwPageFrm::mnShadowPxWidth = 2;

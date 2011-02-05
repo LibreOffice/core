@@ -1103,7 +1103,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
                                     // be determined)
                                     // -1: don't know yet, 0: not used, 1: always a single labe cell, ...
                                     // -2: neither/failed
-//     sal_Int32 nValuesSeqLen = -1;   // used to see if all value sequences have the same size
     for (sal_Int32 nDS1 = 0;  nDS1 < nNumDS_LDS;  ++nDS1)
     {
         uno::Reference< chart2::data::XLabeledDataSequence > xLabeledDataSequence( pDS_LDS[nDS1] );
@@ -1587,7 +1586,6 @@ void SwChartDataProvider::InvalidateTable( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
         while (aIt != rSet.end())
         {
-//            uno::Reference< util::XModifiable > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< util::XModifiable > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1621,7 +1619,6 @@ sal_Bool SwChartDataProvider::DeleteBox( const SwTable *pTable, const SwTableBox
             sal_Bool bNowEmpty = sal_False;
 
             // check if weak reference is still valid...
-//            uno::Reference< chart2::data::XDataSequence > xRef( uno::Reference< chart2::data::XDataSequence>(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< chart2::data::XDataSequence > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1669,7 +1666,6 @@ void SwChartDataProvider::DisposeAllDataSequences( const SwTable *pTable )
         Set_DataSequenceRef_t::iterator aEndIt( aSet.end() );
         while (aIt != aEndIt)
         {
-//            uno::Reference< lang::XComponent > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
             uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
             uno::Reference< lang::XComponent > xRef( xTemp, uno::UNO_QUERY );
             if (xRef.is())
@@ -1743,7 +1739,6 @@ void SwChartDataProvider::AddRowCols(
             Set_DataSequenceRef_t::iterator aIt( rSet.begin() );
             while (aIt != rSet.end())
             {
-//               uno::Reference< chart2::data::XTextualDataSequence > xRef( uno::Reference< chart2::data::XDataSequence >(*aIt), uno::UNO_QUERY );
                 uno::Reference< chart2::data::XDataSequence > xTemp(*aIt);  // temporary needed for g++ 3.3.5
                 uno::Reference< chart2::data::XTextualDataSequence > xRef( xTemp, uno::UNO_QUERY );
                 if (xRef.is())
@@ -1807,14 +1802,9 @@ rtl::OUString SAL_CALL SwChartDataProvider::convertRangeToXML( const rtl::OUStri
     {
         String aRange( aRangeRepresentation.GetToken(i, ';') );
         SwFrmFmt    *pTblFmt  = 0;      // pointer to table format
-        // BM: For what should the check be necessary? for #i79009# it is required that NO check is done
-//         SwUnoCrsr   *pUnoCrsr = 0;      // here required to check if the cells in the range do actually exist
-//         std::auto_ptr< SwUnoCrsr > pAuto( pUnoCrsr );  // to end lifetime of object pointed to by pUnoCrsr
         GetFormatAndCreateCursorFromRangeRep( pDoc, aRange, &pTblFmt, NULL );
         if (!pTblFmt)
             throw lang::IllegalArgumentException();
-//    if (!pUnoCrsr)
-//        throw uno::RuntimeException();
         SwTable* pTable = SwTable::FindTable( pTblFmt );
         if  (pTable->IsTblComplex())
             throw uno::RuntimeException();
@@ -1918,7 +1908,6 @@ SwChartDataSource::SwChartDataSource(
 
 SwChartDataSource::~SwChartDataSource()
 {
-//    delete pTblCrsr;
 }
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL SwChartDataSource::getDataSequences(  )
@@ -2364,7 +2353,6 @@ void SAL_CALL SwChartDataSequence::addPropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
     DBG_ERROR( "not implemented" );
 }
 
@@ -2373,7 +2361,6 @@ void SAL_CALL SwChartDataSequence::removePropertyChangeListener(
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
     DBG_ERROR( "not implemented" );
 }
 
@@ -2382,7 +2369,6 @@ void SAL_CALL SwChartDataSequence::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
     DBG_ERROR( "not implemented" );
 }
 
@@ -2391,7 +2377,6 @@ void SAL_CALL SwChartDataSequence::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/ )
     throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //SolarMutexGuard aGuard;
     DBG_ERROR( "not implemented" );
 }
 

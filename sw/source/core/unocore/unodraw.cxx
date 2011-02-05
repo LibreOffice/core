@@ -1466,26 +1466,7 @@ void SwXShape::setPropertyValue(const rtl::OUString& rPropertyName, const uno::A
             }
             else
                 xPrSet->setPropertyValue(rPropertyName, aValue);
-            // --> OD 2004-11-11 #i35007# - adjustment of the position
-            // attributes, if the transformation is set, causes wrong alignments
-            // and is no longer needed.
-            // The position attributes are set, if the drawing object is added
-            // to the draw page - see <SwXDrawPage::add(..)> -  and on its first
-            // positioning - see <SwAnchoredDrawObject::MakeObjPos().
-//            // --> OD 2004-07-28 #i31698# - additionally adjust the position
-//            // properties of the shape, if the transformation is set and
-//            // the shape isn't a group member.
-//            if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Transformation"))) &&
-//                 !_GetTopGroupObj() )
-//            {
-//                drawing::HomogenMatrix3 aMatrix;
-//                aValue >>= aMatrix;
-//                awt::Point aNewPos( basegfx::fround( aMatrix.Line1.Column3 ),
-//                                    basegfx::fround( aMatrix.Line2.Column3 ) );
-//                _AdjustPositionProperties( aNewPos );
-//            }
-            // --> OD 2004-08-05 #i31698# - restore object position, if caption
-            // point is set.
+            // #i31698# - restore object position, if caption point is set.
             if ( rPropertyName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CaptionPoint"))) &&
                  getShapeType().equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CaptionShape"))) )
             {
@@ -2251,36 +2232,11 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException )
             const Rectangle aGroupObjRect = pTopGroupObj->GetSnapRect();
             // --> OD 2005-08-16 #i53320# - relative position of group member and
             // top group object is always given in horizontal left-to-right layout.
-//            const SwFrmFmt::tLayoutDir eLayoutDir = GetFrmFmt()
-//                                                    ? GetFrmFmt()->GetLayoutDir()
-//                                                    : SwFrmFmt::HORI_L2R;
             awt::Point aOffset( 0, 0 );
-//            switch ( eLayoutDir )
-//            {
-//                case SwFrmFmt::HORI_L2R:
                 {
                     aOffset.X = ( aMemberObjRect.Left() - aGroupObjRect.Left() );
                     aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
                 }
-//                break;
-//                case SwFrmFmt::HORI_R2L:
-//                {
-//                    aOffset.X = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
-//                    aOffset.Y = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
-//                }
-//                break;
-//                case SwFrmFmt::VERT_R2L:
-//                {
-//                    aOffset.X = ( aMemberObjRect.Top() - aGroupObjRect.Top() );
-//                    aOffset.Y = ( aGroupObjRect.Right() - aMemberObjRect.Right() );
-//                }
-//                break;
-//                default:
-//                {
-//                    OSL_ENSURE( false,
-//                            "<SwXShape::getPosition()> - unsupported layout direction" );
-//                }
-//            }
             // <--
             aOffset.X = TWIP_TO_MM100(aOffset.X);
             aOffset.Y = TWIP_TO_MM100(aOffset.Y);

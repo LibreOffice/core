@@ -57,8 +57,6 @@ using namespace ::com::sun::star;
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
 
-/*  */
-
 class SwHTMLTableLayoutConstraints
 {
     USHORT nRow;                    // Start-Zeile
@@ -87,7 +85,6 @@ public:
     USHORT GetColumn() const { return nCol; }
 };
 
-/*  */
 
 SwHTMLTableLayoutCnts::SwHTMLTableLayoutCnts( const SwStartNode *pSttNd,
                                           SwHTMLTableLayout* pTab,
@@ -109,8 +106,6 @@ const SwStartNode *SwHTMLTableLayoutCnts::GetStartNode() const
 }
 
 
-/*  */
-
 SwHTMLTableLayoutCell::SwHTMLTableLayoutCell( SwHTMLTableLayoutCnts *pCnts,
                                           USHORT nRSpan, USHORT nCSpan,
                                           USHORT nWidth, BOOL bPrcWidth,
@@ -129,7 +124,6 @@ SwHTMLTableLayoutCell::~SwHTMLTableLayoutCell()
     }
 }
 
-/*  */
 
 SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( USHORT nWidth,
                                                   BOOL bRelWidth,
@@ -141,8 +135,6 @@ SwHTMLTableLayoutColumn::SwHTMLTableLayoutColumn( USHORT nWidth,
     bLeftBorder( bLBorder )
 {}
 
-
-/*  */
 
 SwHTMLTableLayoutConstraints::SwHTMLTableLayoutConstraints(
     ULONG nMin, ULONG nMax, USHORT nRw, USHORT nColumn, USHORT nColSp ):
@@ -185,7 +177,6 @@ SwHTMLTableLayoutConstraints *SwHTMLTableLayoutConstraints::InsertNext(
     return pConstr;
 }
 
-/*  */
 
 typedef SwHTMLTableLayoutColumn *SwHTMLTableLayoutColumnPtr;
 typedef SwHTMLTableLayoutCell *SwHTMLTableLayoutCellPtr;
@@ -1548,7 +1539,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         if( nRelLeftFill && !pLeftFillerBox &&
             ( nWidthSet>0 || nAbsLeftFill<MINLAY+nInhLeftBorderWidth ||
               (HasColTags() && nAbsLeftFill < nAbsLeftSpace+nParentInhAbsLeftSpace+20) ) )
-//          (nAbsLeftFill<MINLAY || nAbsLeftFill<=nAbsLeftSpace) )
         {
             SwHTMLTableLayoutColumn *pColumn = GetColumn( 0 );
             pColumn->SetAbsColWidth( pColumn->GetAbsColWidth()+nAbsLeftFill );
@@ -1559,7 +1549,6 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
         if( nRelRightFill && !pRightFillerBox &&
             ( nWidthSet>0 || nAbsRightFill<MINLAY+nInhRightBorderWidth ||
               (HasColTags() && nAbsRightFill < nAbsRightSpace+nParentInhAbsRightSpace+20) ) )
-//          (nAbsRightFill<MINLAY || nAbsRightFill<=nAbsRightSpace) )
         {
             SwHTMLTableLayoutColumn *pColumn = GetColumn( nCols-1 );
             pColumn->SetAbsColWidth( pColumn->GetAbsColWidth()+nAbsRightFill );

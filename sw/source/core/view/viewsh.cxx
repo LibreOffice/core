@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #define _SVX_PARAITEM_HXX
 #define _SVX_TEXTITEM_HXX
 

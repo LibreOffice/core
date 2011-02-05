@@ -1926,11 +1926,6 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
                 ( rThis.GetUpper()->IsInTab() &&
                   rThis.GetUpper()->FindTabFrm()->IsFwdMoveAllowed() ) ) &&
              0 != const_cast<SwFrm&>(rThis).GetNextCellLeaf( MAKEPAGE_NONE ) )
-/*
-              &&
-            // NEW TABLES
-            // Have a look at our main competitor: We don't move inside row span cells:
-            ( !rThis.GetUpper()->IsCellFrm() || !rThis.GetUpper()->IsLeaveUpperAllowed() ) )*/
         {
             bNoFwd = FALSE;
         }
