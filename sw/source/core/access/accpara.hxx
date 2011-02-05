@@ -35,7 +35,7 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/accessibility/XAccessibleMultiLineText.hpp>
 #include <com/sun/star/accessibility/XAccessibleTextAttributes.hpp>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <accselectionhelper.hxx>
 #include <calbck.hxx> // #i108125#
 
@@ -53,7 +53,7 @@ namespace com { namespace sun { namespace star {
     namespace accessibility { class XAccessibleHyperlink; }
 } } }
 
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::com::sun::star::beans::PropertyValue,
                          ::rtl::OUStringHash,
                          ::std::equal_to< ::rtl::OUString > > tAccParaPropValMap;

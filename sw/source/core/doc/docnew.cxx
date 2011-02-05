@@ -634,7 +634,7 @@ SwDoc::~SwDoc()
     delete pNumRuleTbl;
 
     {
-        for ( std::hash_map< String, SwList*, StringHash >::iterator
+        for ( boost::unordered_map< String, SwList*, StringHash >::iterator
                                                     aListIter = maLists.begin();
               aListIter != maLists.end();
               ++aListIter )

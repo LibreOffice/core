@@ -28,7 +28,7 @@
 #ifndef INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 #define INCLUDED_I_DOCUMENT_EXTERNAL_DATA_HXX
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 
 namespace sw
@@ -54,7 +54,7 @@ typedef ::boost::shared_ptr<ExternalData> tExternalDataPointer;
 class IDocumentExternalData
 {
 protected:
-    typedef ::std::hash_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash>
+    typedef ::boost::unordered_map<sw::tExternalDataType, sw::tExternalDataPointer, sw::ExternalDataTypeHash>
     tExternalData;
 
     tExternalData m_externalData;

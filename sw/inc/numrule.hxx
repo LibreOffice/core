@@ -39,7 +39,7 @@
 #include <errhdl.hxx>       // Fuer die inline ASSERT
 #include <error.h>          // Fuer die inline ASSERT
 #include <hints.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <stringhash.hxx>
 class SwNodeNum;
 #include <SwNumberTreeTypes.hxx>
@@ -127,8 +127,8 @@ private:
     /** container for associated paragraph styles */
     tParagraphStyleList maParagraphStyleList;
 
-    /** hash_map containing "name->rule" relation */
-    std::hash_map<String, SwNumRule *, StringHash> * pNumRuleMap;
+    /** boost::unordered_map containing "name->rule" relation */
+    boost::unordered_map<String, SwNumRule *, StringHash> * pNumRuleMap;
 
     String sName;
     SwNumRuleType eRuleType;
@@ -206,7 +206,7 @@ public:
        @param pNumRuleMap      map to register in
      */
     void SetNumRuleMap(
-                std::hash_map<String, SwNumRule *, StringHash>* pNumRuleMap );
+                boost::unordered_map<String, SwNumRule *, StringHash>* pNumRuleMap );
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
 

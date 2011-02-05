@@ -55,7 +55,7 @@ class SwFrm;
 // <--
 // --> OD 2006-05-10 #i65250#
 #include <swtypes.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 class SwFlowFrm;
 class SwLayoutFrm;
 // <--
@@ -118,7 +118,7 @@ private:
                    p_key1.mnFreeSpaceInNewUpper == p_key2.mnFreeSpaceInNewUpper;
         }
     };
-    std::hash_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
+    boost::unordered_map< const tMoveBwdLayoutInfoKey, sal_uInt16,
                    fMoveBwdLayoutInfoKeyHash,
                    fMoveBwdLayoutInfoKeyEq > maMoveBwdLayoutInfo;
     // <--

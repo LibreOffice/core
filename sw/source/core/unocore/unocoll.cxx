@@ -173,7 +173,7 @@ public:
     }
 };
 
-typedef std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
+typedef boost::unordered_map< rtl::OUString, rtl::OUString, rtl::OUStringHash > StringHashMap;
 class SwVbaProjectNameProvider : public ::cppu::WeakImplHelper1< container::XNameContainer >
 {
     SwDocShell* mpDocShell;

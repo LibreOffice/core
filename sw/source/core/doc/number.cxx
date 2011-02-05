@@ -54,7 +54,7 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include <list.hxx>
 #include <algorithm>
@@ -164,7 +164,7 @@ void SwNumRule::RemoveTxtNode( SwTxtNode& rTxtNode )
 }
 
 
-void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
+void SwNumRule::SetNumRuleMap(boost::unordered_map<String, SwNumRule *, StringHash> *
                               _pNumRuleMap)
 {
     pNumRuleMap = _pNumRuleMap;

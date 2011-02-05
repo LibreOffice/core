@@ -32,7 +32,7 @@
 #include <xmloff/XMLTextTableContext.hxx>
 
 // STL include
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
@@ -88,7 +88,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     // hash map of shared format, indexed by the (XML) style name,
     // the column width, and protection flag
-    typedef std::hash_map<TableBoxIndex,SwTableBoxFmt*,
+    typedef boost::unordered_map<TableBoxIndex,SwTableBoxFmt*,
                           TableBoxIndexHasher> map_BoxFmt;
     map_BoxFmt* pSharedBoxFormats;
 

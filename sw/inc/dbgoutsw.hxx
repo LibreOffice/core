@@ -30,7 +30,7 @@
 
 #ifdef DEBUG
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <tox.hxx>
 class String;
 
@@ -95,11 +95,11 @@ SW_DLLPUBLIC const char * dbg_out(const SwNumRuleTbl & rTbl);
 SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange);
 
 template<typename tKey, typename tMember, typename fHashFunction>
-String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
+String lcl_dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     String aResult("[", RTL_TEXTENCODING_ASCII_US);
 
-    typename std::hash_map<tKey, tMember, fHashFunction>::const_iterator aIt;
+    typename boost::unordered_map<tKey, tMember, fHashFunction>::const_iterator aIt;
 
     for (aIt = rMap.begin(); aIt != rMap.end(); aIt++)
     {
@@ -119,7 +119,7 @@ String lcl_dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
 }
 
 template<typename tKey, typename tMember, typename fHashFunction>
-const char * dbg_out(const std::hash_map<tKey, tMember, fHashFunction> & rMap)
+const char * dbg_out(const boost::unordered_map<tKey, tMember, fHashFunction> & rMap)
 {
     return dbg_out(lcl_dbg_out(rMap));
 }
