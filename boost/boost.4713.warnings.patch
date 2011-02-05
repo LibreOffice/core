@@ -162,3 +162,392 @@
                  m_min,
                  m_max);
         }
+--- misc/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-04 16:55:26.000000000 +0100
++++ misc/build/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-05 03:34:26.000000000 +0100
+@@ -33,10 +33,10 @@
+     template <class T>
+     template <class Key, class Pred>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr
+-        hash_table<T>::find_iterator(bucket_ptr bucket, Key const& k,
++        hash_table<T>::find_iterator(bucket_ptr bucket_, Key const& k,
+             Pred const& eq) const
+     {
+-        node_ptr it = bucket->next_;
++        node_ptr it = bucket_->next_;
+         while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
+             !eq(k, get_key(node::get_value(it))))
+         {
+@@ -50,9 +50,9 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr
+         hash_table<T>::find_iterator(
+-            bucket_ptr bucket, key_type const& k) const
++            bucket_ptr bucket_, key_type const& k) const
+     {
+-        node_ptr it = bucket->next_;
++        node_ptr it = bucket_->next_;
+         while (BOOST_UNORDERED_BORLAND_BOOL(it) &&
+             !equal(k, node::get_value(it)))
+         {
+@@ -75,9 +75,9 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME T::node_ptr*
+         hash_table<T>::find_for_erase(
+-            bucket_ptr bucket, key_type const& k) const
++            bucket_ptr bucket_, key_type const& k) const
+     {
+-        node_ptr* it = &bucket->next_;
++        node_ptr* it = &bucket_->next_;
+         while(BOOST_UNORDERED_BORLAND_BOOL(*it) &&
+             !equal(k, node::get_value(*it)))
+         {
+@@ -475,7 +475,7 @@
+     {    
+         hasher const& hf = this->hash_function();
+         std::size_t size = this->size_;
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
+ 
+         buckets dst(this->node_alloc(), num_buckets);
+         dst.create_buckets();
+@@ -484,10 +484,10 @@
+         src.swap(*this);
+         this->size_ = 0;
+ 
+-        for(bucket_ptr bucket = this->cached_begin_bucket_;
+-            bucket != end; ++bucket)
++        for(bucket_ptr bucket_ = this->cached_begin_bucket_;
++            bucket_ != end_; ++bucket_)
+         {
+-            node_ptr group = bucket->next_;
++            node_ptr group = bucket_->next_;
+             while(group) {
+                 // Move the first group of equivalent nodes in bucket to dst.
+ 
+@@ -496,10 +496,10 @@
+                     hf(get_key_from_ptr(group)));
+ 
+                 node_ptr& next_group = node::next_group(group);
+-                bucket->next_ = next_group;
++                bucket_->next_ = next_group;
+                 next_group = dst_bucket->next_;
+                 dst_bucket->next_ = group;
+-                group = bucket->next_;
++                group = bucket_->next_;
+             }
+         }
+ 
+@@ -525,13 +525,13 @@
+         BOOST_ASSERT(this->buckets_ && !dst.buckets_);
+ 
+         hasher const& hf = this->hash_function();
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
+ 
+         node_constructor a(dst);
+         dst.create_buckets();
+ 
+         // no throw:
+-        for(bucket_ptr i = this->cached_begin_bucket_; i != end; ++i) {
++        for(bucket_ptr i = this->cached_begin_bucket_; i != end_; ++i) {
+             // no throw:
+             for(node_ptr it = i->next_; it;) {
+                 // hash function can throw.
+@@ -579,11 +579,11 @@
+     {
+         if(!this->size_) return this->end();
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(it))
+-            return iterator_base(bucket, it);
++            return iterator_base(bucket_, it);
+         else
+             return this->end();
+     }
+@@ -595,11 +595,11 @@
+     {
+         if(!this->size_) return this->end();
+ 
+-        bucket_ptr bucket = this->get_bucket(h(k) % this->bucket_count_);
+-        node_ptr it = find_iterator(bucket, k, eq);
++        bucket_ptr bucket_ = this->get_bucket(h(k) % this->bucket_count_);
++        node_ptr it = find_iterator(bucket_, k, eq);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(it))
+-            return iterator_base(bucket, it);
++            return iterator_base(bucket_, it);
+         else
+             return this->end();
+     }
+@@ -611,8 +611,8 @@
+         if(!this->size_)
+             boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+ 
+         if (!it)
+             boost::throw_exception(std::out_of_range("Unable to find key in unordered_map."));
+@@ -630,10 +630,10 @@
+         if(!this->size_)
+             return iterator_pair(this->end(), this->end());
+ 
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr it = find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr it = find_iterator(bucket_, k);
+         if (BOOST_UNORDERED_BORLAND_BOOL(it)) {
+-            iterator_base first(iterator_base(bucket, it));
++            iterator_base first(iterator_base(bucket_, it));
+             iterator_base second(first);
+             second.increment_bucket(node::next_group(second.node_));
+             return iterator_pair(first, second);
+@@ -651,26 +651,26 @@
+     {
+         if(!this->size_) return;
+ 
+-        bucket_ptr end = this->get_bucket(this->bucket_count_);
+-        for(bucket_ptr begin = this->buckets_; begin != end; ++begin) {
+-            this->clear_bucket(begin);
++        bucket_ptr end_ = this->get_bucket(this->bucket_count_);
++        for(bucket_ptr begin_ = this->buckets_; begin_ != end_; ++begin_) {
++            this->clear_bucket(begin_);
+         }
+ 
+         this->size_ = 0;
+-        this->cached_begin_bucket_ = end;
++        this->cached_begin_bucket_ = end_;
+     }
+ 
+     template <class T>
+     inline std::size_t hash_table<T>::erase_group(
+-        node_ptr* it, bucket_ptr bucket)
++        node_ptr* it, bucket_ptr bucket_)
+     {
+         node_ptr pos = *it;
+-        node_ptr end = node::next_group(pos);
+-        *it = end;
+-        std::size_t count = this->delete_nodes(pos, end);
+-        this->size_ -= count;
+-        this->recompute_begin_bucket(bucket);
+-        return count;
++        node_ptr end_ = node::next_group(pos);
++        *it = end_;
++        std::size_t count_ = this->delete_nodes(pos, end_);
++        this->size_ -= count_;
++        this->recompute_begin_bucket(bucket_);
++        return count_;
+     }
+     
+     template <class T>
+@@ -679,11 +679,11 @@
+         if(!this->size_) return 0;
+     
+         // No side effects in initial section
+-        bucket_ptr bucket = this->get_bucket(this->bucket_index(k));
+-        node_ptr* it = this->find_for_erase(bucket, k);
++        bucket_ptr bucket_ = this->get_bucket(this->bucket_index(k));
++        node_ptr* it = this->find_for_erase(bucket_, k);
+ 
+         // No throw.
+-        return *it ? this->erase_group(it, bucket) : 0;
++        return *it ? this->erase_group(it, bucket_) : 0;
+     }
+ 
+     template <class T>
+@@ -766,12 +766,12 @@
+         std::size_t hash_value = this->hash_function()(k);
+         if(this->buckets_) this->reserve_for_insert(size);
+         else this->create_for_insert(size);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
+         node_ptr n = a.release();
+-        node::add_to_bucket(n, *bucket);
++        node::add_to_bucket(n, *bucket_);
+         ++this->size_;
+-        this->cached_begin_bucket_ = bucket;
+-        return iterator_base(bucket, n);
++        this->cached_begin_bucket_ = bucket_;
++        return iterator_base(bucket_, n);
+     }
+ }}
+ 
+--- misc/boost_1_44_0/boost/unordered/detail/unique.hpp	2011-02-05 03:28:39.000000000 +0100
++++ misc/build/boost_1_44_0/boost/unordered/detail/unique.hpp	2011-02-05 03:36:54.000000000 +0100
+@@ -57,7 +57,7 @@
+ 
+         bool equals(hash_unique_table const&) const;
+ 
+-        node_ptr add_node(node_constructor& a, bucket_ptr bucket);
++        node_ptr add_node(node_constructor& a, bucket_ptr bucket_);
+         
+ #if defined(BOOST_UNORDERED_STD_FORWARD)
+ 
+@@ -159,13 +159,13 @@
+     template <class T>
+     inline BOOST_DEDUCED_TYPENAME hash_unique_table<T>::node_ptr
+         hash_unique_table<T>::add_node(node_constructor& a,
+-            bucket_ptr bucket)
++            bucket_ptr bucket_)
+     {
+         node_ptr n = a.release();
+-        node::add_to_bucket(n, *bucket);
++        node::add_to_bucket(n, *bucket_);
+         ++this->size_;
+-        if(bucket < this->cached_begin_bucket_)
+-            this->cached_begin_bucket_ = bucket;
++        if(bucket_ < this->cached_begin_bucket_)
++            this->cached_begin_bucket_ = bucket_;
+         return n;
+     }
+         
+@@ -181,7 +181,7 @@
+         typedef BOOST_DEDUCED_TYPENAME value_type::second_type mapped_type;
+ 
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
+         
+         if(!this->buckets_) {
+             node_constructor a(*this);
+@@ -189,7 +189,7 @@
+             return *this->emplace_empty_impl_with_node(a, 1);
+         }
+ 
+-        node_ptr pos = this->find_iterator(bucket, k);
++        node_ptr pos = this->find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             return node::get_value(pos);
+@@ -205,11 +205,11 @@
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+-            return node::get_value(add_node(a, bucket));
++            return node::get_value(add_node(a, bucket_));
+         }
+     }
+ 
+@@ -220,22 +220,22 @@
+         // No side effects in this initial code
+         key_type const& k = this->get_key(a.value());
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-        node_ptr pos = this->find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++        node_ptr pos = this->find_iterator(bucket_, k);
+         
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             // Found an existing key, return it (no throw).
+-            return emplace_return(iterator_base(bucket, pos), false);
++            return emplace_return(iterator_base(bucket_, pos), false);
+         } else {
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+             return emplace_return(
+-                iterator_base(bucket, add_node(a, bucket)),
++                iterator_base(bucket_, add_node(a, bucket_)),
+                 true);
+         }
+     }
+@@ -250,12 +250,12 @@
+     {
+         // No side effects in this initial code
+         std::size_t hash_value = this->hash_function()(k);
+-        bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-        node_ptr pos = this->find_iterator(bucket, k);
++        bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++        node_ptr pos = this->find_iterator(bucket_, k);
+ 
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+             // Found an existing key, return it (no throw).
+-            return emplace_return(iterator_base(bucket, pos), false);
++            return emplace_return(iterator_base(bucket_, pos), false);
+ 
+         } else {
+             // Doesn't already exist, add to bucket.
+@@ -269,12 +269,12 @@
+             // reserve has basic exception safety if the hash function
+             // throws, strong otherwise.
+             if(this->reserve_for_insert(this->size_ + 1))
+-                bucket = this->bucket_ptr_from_hash(hash_value);
++                bucket_ = this->bucket_ptr_from_hash(hash_value);
+ 
+             // Nothing after this point can throw.
+ 
+             return emplace_return(
+-                iterator_base(bucket, add_node(a, bucket)),
++                iterator_base(bucket_, add_node(a, bucket_)),
+                 true);
+         }
+     }
+@@ -313,21 +313,21 @@
+                 BOOST_UNORDERED_FUNCTION_PARAMS(z, num_params))                \
+     {                                                                          \
+         std::size_t hash_value = this->hash_function()(k);                     \
+-        bucket_ptr bucket                                                      \
++        bucket_ptr bucket_                                                      \
+             = this->bucket_ptr_from_hash(hash_value);                          \
+-        node_ptr pos = this->find_iterator(bucket, k);                         \
++        node_ptr pos = this->find_iterator(bucket_, k);                         \
+                                                                                \
+         if (BOOST_UNORDERED_BORLAND_BOOL(pos)) {                               \
+-            return emplace_return(iterator_base(bucket, pos), false);          \
++            return emplace_return(iterator_base(bucket_, pos), false);          \
+         } else {                                                               \
+             node_constructor a(*this);                                         \
+             a.construct(BOOST_UNORDERED_CALL_PARAMS(z, num_params));           \
+                                                                                \
+             if(this->reserve_for_insert(this->size_ + 1))                      \
+-                bucket = this->bucket_ptr_from_hash(hash_value);               \
++                bucket_ = this->bucket_ptr_from_hash(hash_value);               \
+                                                                                \
+-            return emplace_return(iterator_base(bucket,                        \
+-                add_node(a, bucket)), true);                                   \
++            return emplace_return(iterator_base(bucket_,                        \
++                add_node(a, bucket_)), true);                                   \
+         }                                                                      \
+     }                                                                          \
+                                                                                \
+@@ -441,8 +441,8 @@
+             // different second_type.
+             key_type const& k = extractor::extract(*i);
+             std::size_t hash_value = this->hash_function()(k);
+-            bucket_ptr bucket = this->bucket_ptr_from_hash(hash_value);
+-            node_ptr pos = this->find_iterator(bucket, k);
++            bucket_ptr bucket_ = this->bucket_ptr_from_hash(hash_value);
++            node_ptr pos = this->find_iterator(bucket_, k);
+ 
+             if (!BOOST_UNORDERED_BORLAND_BOOL(pos)) {
+                 // Doesn't already exist, add to bucket.
+@@ -456,11 +456,11 @@
+                 // throws, strong otherwise.
+                 if(this->size_ + 1 >= this->max_load_) {
+                     this->reserve_for_insert(this->size_ + insert_size(i, j));
+-                    bucket = this->bucket_ptr_from_hash(hash_value);
++                    bucket_ = this->bucket_ptr_from_hash(hash_value);
+                 }
+ 
+                 // Nothing after this point can throw.
+-                add_node(a, bucket);
++                add_node(a, bucket_);
+             }
+         } while(++i != j);
+     }
