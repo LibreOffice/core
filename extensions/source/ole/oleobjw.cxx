@@ -91,16 +91,16 @@ namespace ole_adapter
 // called.
 // Before UNO object is wrapped to COM object this map is checked
 // to see if the UNO object is already a wrapper.
-hash_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
+boost::unordered_map<sal_uInt32, sal_uInt32> AdapterToWrapperMap;
 // key: XInterface of the wrapper object.
 // value: XInterface of the Interface created by the Invocation Adapter Factory.
 // A COM wrapper is responsible for removing the corresponding entry
 // in AdapterToWrappperMap if it is being destroyed. Because the wrapper does not
 // know about its adapted interface it uses WrapperToAdapterMap to get the
 // adapted interface which is then used to locate the entry in AdapterToWrapperMap.
-hash_map<sal_uInt32,sal_uInt32> WrapperToAdapterMap;
+boost::unordered_map<sal_uInt32,sal_uInt32> WrapperToAdapterMap;
 
-hash_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
+boost::unordered_map<sal_uInt32, WeakReference<XInterface> > ComPtrToWrapperMap;
 /*****************************************************************************
 
     class implementation IUnknownWrapper_Impl
@@ -127,7 +127,7 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 #endif
 
     // remove entries in global maps
-    typedef hash_map<sal_uInt32, sal_uInt32>::iterator _IT;
+    typedef boost::unordered_map<sal_uInt32, sal_uInt32>::iterator _IT;
     _IT it= WrapperToAdapterMap.find( (sal_uInt32) xIntRoot);
     if( it != WrapperToAdapterMap.end())
     {

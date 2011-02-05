@@ -4141,7 +4141,7 @@ bool EntrySort( SvxConfigEntry* a, SvxConfigEntry* b )
 
 SvxEntries* ToolbarSaveInData::GetEntries()
 {
-    typedef ::std::hash_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< ::rtl::OUString,
                              bool,
                              ::rtl::OUStringHash,
                              ::std::equal_to< ::rtl::OUString > > ToolbarInfo;
@@ -4202,7 +4202,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 pEntry->SetStyle( GetSystemStyle( url ) );
 
 
-                // insert into hash_map to filter duplicates from the parent
+                // insert into boost::unordered_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
                 OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
@@ -5290,7 +5290,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 {
     FreeResource();
 
-    typedef ::std::hash_map< ::rtl::OUString,
+    typedef ::boost::unordered_map< ::rtl::OUString,
                              bool,
                              ::rtl::OUStringHash,
                              ::std::equal_to< ::rtl::OUString > > ImageInfo;

@@ -39,10 +39,10 @@
 #include <vcl/lstbox.hxx>
 #include <rtl/ustring.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <vector>
 
-typedef ::std::hash_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
+typedef ::boost::unordered_map< ::rtl::OUString, ::std::pair< ::rtl::OUString, ::rtl::OUString >, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > EventsHash;
 
 struct EventDisplayName
 {

@@ -39,15 +39,15 @@
 #include <oleidl.h>
 #include <objidl.h>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/SEQUENCE.h>
 
 #include "embeddocaccess.hxx"
 #include "docholder.hxx"
 
-typedef ::std::hash_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
-typedef ::std::hash_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
+typedef ::boost::unordered_map< DWORD, IAdviseSink* > AdviseSinkHashMap;
+typedef ::boost::unordered_map< DWORD, IAdviseSink* >::iterator AdviseSinkHashMapIterator;
 
 class GDIMetaFile;
 class CIIAObj;

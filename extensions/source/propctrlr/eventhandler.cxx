@@ -354,7 +354,7 @@ namespace pcr
     class EventHolder : public EventHolder_Base
     {
     private:
-        typedef ::std::hash_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
+        typedef ::boost::unordered_map< ::rtl::OUString, ScriptEventDescriptor, ::rtl::OUStringHash >  EventMap;
         typedef ::std::map< EventId, EventMap::iterator >                                       EventMapIndexAccess;
 
         EventMap            m_aEventNameAccess;

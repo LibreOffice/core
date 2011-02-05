@@ -43,7 +43,7 @@ protected:
     ContentHash& rContents;
     ContentHash::const_iterator aIterator;
 public:
-    //ZipPackageFolderEnumeration (std::hash_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
+    //ZipPackageFolderEnumeration (boost::unordered_map < rtl::OUString, com::sun::star::uno::Reference < com::sun::star::container::XNamed >, hashFunc, eqFunc > &rInput);
     ZipPackageFolderEnumeration (ContentHash &rInput);
     virtual ~ZipPackageFolderEnumeration( void );
 

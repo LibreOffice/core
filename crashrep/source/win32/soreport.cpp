@@ -70,7 +70,7 @@
 #include <io.h>
 #include <fcntl.h>
 #include <string>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <winsock.h>
 #include <malloc.h>
 #include <process.h>
@@ -1700,7 +1700,7 @@ static sal_uInt32 calc_md5_checksum( const char *filename, sal_uInt8 *pChecksum,
 #endif
 //***************************************************************************
 
-static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
+static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
     bool    fSuccess = false;
 
@@ -1823,7 +1823,7 @@ static bool WriteStackFile( FILE *fout, hash_map< string, string >& rLibraries, 
     return fSuccess;
 }
 
-bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibraries )
+bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, string >& rLibraries )
 {
     bool success = false;
 
@@ -1831,7 +1831,7 @@ bool WriteChecksumFile( FILE *fchksum, const hash_map< string, string >& rLibrar
     {
         fprintf( fchksum, "<errormail:Checksums type=\"MD5\">\n" );
 
-        hash_map< string, string >::const_iterator iter;
+        boost::unordered_map< string, string >::const_iterator iter;
 
         for ( iter = rLibraries.begin();
             iter != rLibraries.end();
@@ -2883,7 +2883,7 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int 
 
         if( bGotDumpFile )
         {
-            hash_map< string, string > aLibraries;
+            boost::unordered_map< string, string > aLibraries;
 
             if ( g_bLoadReport )
             {

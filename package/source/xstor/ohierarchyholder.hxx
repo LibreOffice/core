@@ -36,7 +36,7 @@
 
 #include <rtl/ref.hxx>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <list>
 #include <vector>
 
@@ -50,7 +50,7 @@ struct eqFunc
         return r1 == r2;
     }
 };
-typedef ::std::hash_map< ::rtl::OUString,
+typedef ::boost::unordered_map< ::rtl::OUString,
                          ::rtl::Reference< OHierarchyElement_Impl >,
                          ::rtl::OUStringHash,
                          eqFunc > OHierarchyElementList_Impl;

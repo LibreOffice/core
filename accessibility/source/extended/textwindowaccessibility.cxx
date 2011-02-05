@@ -38,7 +38,7 @@
 
 #include <algorithm>
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace css = ::com::sun::star;
 

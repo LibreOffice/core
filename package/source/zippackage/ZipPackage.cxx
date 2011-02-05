@@ -208,7 +208,7 @@ ZipPackage::~ZipPackage( void )
 #if 0
     // As all folders and streams contain references to their parents,
     // we must remove these references so that they will be deleted when
-    // the hash_map of the root folder is cleared, releasing all subfolders
+    // the boost::unordered_map of the root folder is cleared, releasing all subfolders
     // and substreams which in turn release theirs, etc. When m_xRootFolder is
     // released when this destructor completes, the folder tree should be
     // deleted fully (and automagically).
