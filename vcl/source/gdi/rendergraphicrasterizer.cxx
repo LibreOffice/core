@@ -83,7 +83,7 @@ RenderGraphicRasterizer::~RenderGraphicRasterizer()
 
 // -------------------------------------------------------------------------
 
-RenderGraphicRasterizer::RenderGraphicRasterizer& RenderGraphicRasterizer::operator=(
+RenderGraphicRasterizer& RenderGraphicRasterizer::operator=(
     const RenderGraphicRasterizer& rRenderGraphicRasterizer )
 {
     maRenderGraphic = rRenderGraphicRasterizer.maRenderGraphic;
