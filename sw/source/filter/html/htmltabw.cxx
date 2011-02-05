@@ -338,7 +338,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
 #ifndef PURE_HTML
     long nWidth = 0;
-    sal_uInt32 nPrcWidth = ULONG_MAX;
+    sal_uInt32 nPrcWidth = USHRT_MAX;
     if( bOutWidth )
     {
         if( bLayoutExport )
