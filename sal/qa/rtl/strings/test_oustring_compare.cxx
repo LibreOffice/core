@@ -31,7 +31,6 @@
 
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
-//#include <cppunit/plugin/TestPlugIn.h>
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
 
