@@ -89,7 +89,6 @@
 #include <ucbhelper/content.hxx>
 #include <comphelper/string.hxx>
 
-
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -130,7 +129,7 @@ struct FolderHistory
         m_sURL( _rURL ), m_nGroup( _nGroup ) {}
 };
 
-DECLARE_LIST( NewDocList_Impl, ::rtl::OUString* )
+typedef ::std::vector< ::rtl::OUString* > NewDocList_Impl;
 
 ODocumentInfoPreview::ODocumentInfoPreview( Window* pParent ,WinBits _nBits) : Window(pParent,WB_DIALOGCONTROL)
 {
@@ -634,6 +633,7 @@ void GetMenuEntry_Impl
             aDynamicMenuEntry[i].Value >>= rFrame;
     }
 }
+
 Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
 {
     NewDocList_Impl aNewDocs;
@@ -679,16 +679,16 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
             }
 
             ::rtl::OUString* pRow = new ::rtl::OUString( aRow );
-            aNewDocs.Insert( pRow, LIST_APPEND );
+            aNewDocs.push_back( pRow );
         }
     }
 
-    nCount = aNewDocs.Count();
+    nCount = aNewDocs.size();
     Sequence < ::rtl::OUString > aRet( nCount );
     ::rtl::OUString* pRet = aRet.getArray();
     for ( i = 0; i < nCount; ++i )
     {
-        ::rtl::OUString* pNewDoc = aNewDocs.GetObject(i);
+        ::rtl::OUString* pNewDoc = aNewDocs[i];
         pRet[i] = *( pNewDoc );
         delete pNewDoc;
     }
