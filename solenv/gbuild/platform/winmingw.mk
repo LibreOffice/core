@@ -174,6 +174,8 @@ gb_STDLIBS := \
     moldname \
     mingwex \
     kernel32 \
+    msvcrt \
+
 
 # Helper class
 
