@@ -372,7 +372,7 @@ bool Os2SalLayout::LayoutText( ImplLayoutArgs& rArgs )
         if (Ft2FontSupportsUnicodeChar( mhPS, lLcid, TRUE, nCharCode))
             continue;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("Os2SalLayout::LayoutText font does not support unicode char\n");
 #endif
         // request glyph fallback at this position in the string
@@ -594,7 +594,7 @@ void Os2SalLayout::DrawText( SalGraphics& rGraphics ) const
         if (rc == GPI_ERROR) {
             // if *W fails, convert to codepage and use *A (fallback to GPI into ft2)
             ByteString str( mpOutGlyphs, gsl_getSystemTextEncoding() );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalLayout::DrawText HPS %08x PosAtW failed '%s'!\n",static_cast<Os2SalGraphics&>(rGraphics).mhPS,str.GetBuffer());
 #endif
             // gliph size is not recalculated, so it could be wrong!

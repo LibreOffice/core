@@ -228,7 +228,7 @@ void SAL_CALL Os2Clipboard::setContents( const Reference< XTransferable >& xTran
         }
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     // dump list of available mimetypes
     Sequence< DataFlavor > aFlavors( m_aContents->getTransferDataFlavors() );
     for( int i = 0; i < aFlavors.getLength(); i++ )

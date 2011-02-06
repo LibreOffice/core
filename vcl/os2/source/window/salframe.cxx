@@ -52,7 +52,7 @@
 #include <vcl/keycodes.hxx>
 #include <saltimer.h>
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
 extern "C" int debug_printf(const char *f, ...);
 
 static BOOL _bCapture;
@@ -112,7 +112,7 @@ BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
     SWP swpOwner;
     BOOL rc = WinQueryWindowPos( pFrame->mhWndFrame, pswp);
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "> WinQueryWindowPos hwnd %x at %d,%d (%dx%d)\n",
                     pFrame->mhWndFrame, pswp->x, pswp->y, pswp->cx, pswp->cy);
 #endif
@@ -142,7 +142,7 @@ BOOL APIENTRY _WinQueryWindowPos( Os2SalFrame* pFrame, PSWP pswp)
     // invert Y coordinate
     pswp->y = swpOwner.cy - (pswp->y + pswp->cy);
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "< WinQueryWindowPos hwnd %x at %d,%d (%dx%d)\n",
                     pFrame->mhWndFrame, pswp->x, pswp->y, pswp->cx, pswp->cy);
 #endif
@@ -156,7 +156,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
     POINTL  ptlOwner = {0};
     HWND    hParent = NULL;
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( ">WinSetWindowPos hwnd %x at %d,%d (%dx%d) fl 0x%08x\n",
                     pFrame->mhWndFrame, x, y, cx, cy, fl);
 #endif
@@ -208,7 +208,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
         if (fl & SWP_CENTER) {
             ptlOwner.x = (swpOwner.cx - cx) / 2;
             ptlOwner.y = (swpOwner.cy - cy) / 2;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( "_WinSetWindowPos SWP_CENTER\n");
 #endif
             fl = fl & ~SWP_CENTER;
@@ -218,7 +218,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
             ptlOwner.x = x;
             ptlOwner.y = swpOwner.cy - (y + cy);
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( "_WinSetWindowPos owner 0x%x at %d,%d (%dx%d) OS2\n",
                 hParent, ptlOwner.x, ptlOwner.y, swpOwner.cx, swpOwner.cy);
 #endif
@@ -228,13 +228,13 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
         x = ptlOwner.x;
         y = ptlOwner.y;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "_WinSetWindowPos owner 0x%x at %d,%d (%dx%d) MAPPED OS2\n",
             hParent, ptlOwner.x, ptlOwner.y, swpOwner.cx, swpOwner.cy);
 #endif
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "<WinSetWindowPos hwnd %x at %d,%d (%dx%d) fl=%x\n",
                     pFrame->mhWndFrame, x, y, cx, cy, fl);
 #endif
@@ -243,7 +243,7 @@ BOOL APIENTRY _WinSetWindowPos( Os2SalFrame* pFrame, HWND hwndInsertBehind, LONG
 
 // =======================================================================
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
 static void dumpWindowInfo( char* fnc, HWND hwnd)
 {
     SWP aSWP;
@@ -348,7 +348,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
 
         if ( aSWP.fl & SWP_MINIMIZE )
         {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x SAL_FRAMESTATE_MINIMIZED\n",
                     pFrame->mhWndFrame);
 #endif
@@ -358,7 +358,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
         }
         else if ( aSWP.fl & SWP_MAXIMIZE )
         {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x SAL_FRAMESTATE_MAXIMIZED\n",
                     pFrame->mhWndFrame);
 #endif
@@ -384,7 +384,7 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
             pFrame->maState.mnY      = nScreenHeight - (aSWP.y+aSWP.cy)+nTopDeco;
             pFrame->maState.mnWidth  = aSWP.cx-nLeftDeco-nRightDeco;
             pFrame->maState.mnHeight = aSWP.cy-nTopDeco-nBottomDeco;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
             debug_printf("Os2SalFrame::GetWindowState %08x (%dx%d) at %d,%d VCL\n",
                     pFrame->mhWndFrame,
                     pFrame->maState.mnWidth,pFrame->maState.mnHeight,pFrame->maState.mnX,pFrame->maState.mnY);
@@ -445,7 +445,7 @@ static void ImplSalCalcFrameSize( const Os2SalFrame* pFrame,
     else
         nCaptionY = 0;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     //if (_bCapture)
         debug_printf("ImplSalCalcFrameSize 0x%08x x=%d y=%d t=%d\n", pFrame->mhWndFrame, nFrameX, nFrameY, nCaptionY);
 #endif
@@ -570,7 +570,7 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
     ULONG           nClientStyle = WS_CLIPSIBLINGS;
     BOOL            bSubFrame = FALSE;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf(">ImplSalCreateFrame hWndParent 0x%x, nSalFrameStyle 0x%x\n", hWndParent, nSalFrameStyle);
 #endif
 
@@ -944,7 +944,7 @@ static void ImplSalShow( HWND hWnd, ULONG bVisible, ULONG bNoActivate )
         pFrame->mbOverwriteState = TRUE;
         pFrame->mbInShow = TRUE;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "ImplSalShow hwnd %x visible flag %d, no activate: flag %d\n", hWnd, bVisible, bNoActivate);
 #endif
 
@@ -964,7 +964,7 @@ static void ImplSalShow( HWND hWnd, ULONG bVisible, ULONG bNoActivate )
     }
     else
     {
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "ImplSalShow hwnd %x HIDE\n");
 #endif
         WinSetWindowPos(hWnd, NULL, 0, 0, 0, 0, SWP_HIDE);
@@ -1024,7 +1024,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     USHORT  nEvent = 0;
     ULONG   nPosFlags = 0;
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     //dumpWindowInfo( "-Os2SalFrame::SetPosSize", mhWndFrame);
     debug_printf( ">Os2SalFrame::SetPosSize go to %d,%d (%dx%d) VCL\n",nX,nY,nWidth,nHeight);
 #endif
@@ -1047,7 +1047,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     if ( (nFlags & (SAL_FRAME_POSSIZE_X | SAL_FRAME_POSSIZE_Y)) ) {
         nPosFlags |= SWP_MOVE;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize MOVE to %d,%d\n", nX, nY);
 #endif
         //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
@@ -1056,7 +1056,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 
     if ( (nFlags & (SAL_FRAME_POSSIZE_WIDTH | SAL_FRAME_POSSIZE_HEIGHT)) ) {
         nPosFlags |= SWP_SIZE;
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize SIZE to %d,%d\n", nWidth,nHeight);
 #endif
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
@@ -1069,7 +1069,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         mbDefPos = FALSE;
         nPosFlags |= SWP_MOVE | SWP_CENTER;
         nEvent = SALEVENT_MOVERESIZE;
-#if OSL_DEBUG_LEVEL > 10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize CENTER\n");
         debug_printf( "-Os2SalFrame::SetPosSize default position to %d,%d\n", nX, nY);
 #endif
@@ -1117,7 +1117,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if( nEvent )
         CallCallback( nEvent, NULL );
 
-#if OSL_DEBUG_LEVEL > 0
+#if OSL_DEBUG_LEVEL > 1
     dumpWindowInfo( "<Os2SalFrame::SetPosSize (exit)", mhWndFrame);
 #endif
 
@@ -1128,7 +1128,7 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 void Os2SalFrame::SetParent( SalFrame* pNewParent )
 {
     APIRET rc;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetParent mhWndFrame 0x%08x to 0x%08x\n",
             static_cast<Os2SalFrame*>(this)->mhWndFrame,
             static_cast<Os2SalFrame*>(pNewParent)->mhWndClient);
@@ -1197,7 +1197,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
     LONG    nHeight;
     ULONG   nPosSize = 0;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState\n");
     debug_printf("Os2SalFrame::SetWindowState %08x (%dx%d) at %d,%d VCL\n",
         mhWndFrame,
@@ -1243,7 +1243,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
     else
         nHeight = aSWP.cy;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState (%dx%d) at %d,%d\n", nWidth,nHeight,nX,nY);
 #endif
 
@@ -1337,7 +1337,7 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
                          aPlacement.cx, aPlacement.cy, aPlacement.fl );
     }
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalFrame::SetWindowState DONE\n");
 #endif
 }
@@ -1428,7 +1428,7 @@ void Os2SalFrame::SetAlwaysOnTop( BOOL bOnTop )
 static void ImplSalToTop( HWND hWnd, ULONG nFlags )
 {
     Os2SalFrame* pFrame = GetWindowPtr( hWnd );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplSalToTop hWnd %08x, nFlags %x\n", hWnd, nFlags);
 #endif
 
@@ -1614,7 +1614,7 @@ void Os2SalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void Os2SalFrame::CaptureMouse( BOOL bCapture )
 {
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     _bCapture=bCapture;
     debug_printf("Os2SalFrame::CaptureMouse bCapture %d\n", bCapture);
 #endif
@@ -2452,7 +2452,7 @@ static long ImplHandleMouseMsg( HWND hWnd,
     if( !WinIsWindow( pFrame->mhAB, hWnd ) )
         return 0;
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     //if (_bCapture)
         debug_printf("ImplHandleMouseMsg mouse %d,%d\n",aMouseEvt.mnX,aMouseEvt.mnY);
 #endif
@@ -2625,7 +2625,7 @@ static void ImplUpdateInputLang( Os2SalFrame* pFrame )
     // convert uni string to integer
     rc = UniStrtoul(locale_object, pinfo_item, &pinfo_item, 16, &nLang);
     rc = UniFreeMem(pinfo_item);
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplUpdateInputLang nLang %04x\n", nLang);
     char         char_buffer[256];
     rc = UniCreateUconvObject((UniChar *)L"", &uconv_object);
@@ -2637,7 +2637,7 @@ static void ImplUpdateInputLang( Os2SalFrame* pFrame )
     rc = UniFreeLocaleObject(locale_object);
 
     // keep input lang up-to-date
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplUpdateInputLang pFrame %08x lang changed from %d to %d\n",
         pFrame, pFrame->mnInputLang, nLang);
 #endif
@@ -2649,7 +2649,7 @@ static sal_Unicode ImplGetCharCode( Os2SalFrame* pFrame, USHORT nKeyFlags,
                                     sal_Char nCharCode, UCHAR nScanCode )
 {
     ImplUpdateInputLang( pFrame );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("ImplGetCharCode nCharCode %c, %04x\n", nCharCode, nCharCode);
 #endif
     return OUString( &nCharCode, 1, gsl_getSystemTextEncoding()).toChar();
@@ -2731,7 +2731,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
         SalKeyModEvent aModEvt;
         aModEvt.mnTime = WinQueryMsgTime( pFrame->mhAB );
         aModEvt.mnCode = nModCode;
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("SALEVENT_KEYMODCHANGE\n");
 #endif
         nRet = pFrame->CallCallback( SALEVENT_KEYMODCHANGE, &aModEvt );
@@ -2740,7 +2740,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
     {
         nSVCode = ImplSalGetKeyCode( pFrame, nMP1, nMP2 );
         nSVCharCode = ImplConvertKey( pFrame, nMP1, nMP2 );
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
         debug_printf("nSVCode %04x nSVCharCode %04x\n",nSVCode,nSVCharCode );
 #endif
 
@@ -2777,7 +2777,7 @@ static long ImplHandleKeyMsg( HWND hWnd,
             aKeyEvt.mnCharCode  = nSVCharCode;
             aKeyEvt.mnRepeat    = nRepeat;
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
             debug_printf( (nFlags & KC_KEYUP) ? "SALEVENT_KEYUP\n" : "SALEVENT_KEYINPUT\n");
 #endif
             nRet = pFrame->CallCallback( (nFlags & KC_KEYUP) ? SALEVENT_KEYUP : SALEVENT_KEYINPUT,
@@ -2914,7 +2914,7 @@ static void UpdateFrameGeometry( HWND hWnd, Os2SalFrame* pFrame )
     // clamp to zero
     pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
     pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "UpdateFrameGeometry: hwnd %x, frame %x at %d,%d (%dx%d)\n",
         hWnd, pFrame->mhWndFrame,
         pFrame->maGeometry.nX, pFrame->maGeometry.nY,
@@ -3369,7 +3369,7 @@ MRESULT EXPENTRY SalFrameWndProc( HWND hWnd, ULONG nMsg,
     BOOL            bDef        = TRUE;
     bool            bCheckTimers= false;
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     if (nMsg!=WM_TIMER && nMsg!=WM_MOUSEMOVE)
         debug_printf( "SalFrameWndProc hWnd 0x%x nMsg 0x%x\n", hWnd, nMsg);
 #endif

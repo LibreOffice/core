@@ -41,7 +41,7 @@
 
 #define CHAR_POINTER(THE_OUSTRING) ::rtl::OUStringToOString (THE_OUSTRING, RTL_TEXTENCODING_UTF8).pData->buffer
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
 //extern "C" int debug_printf(const char *f, ...);
 #define debug_printf( ...) { 1; }
 #else

@@ -99,7 +99,7 @@ MRESULT EXPENTRY SalSysObjWndProc( HWND hWnd, ULONG nMsg,
     MRESULT     nRet = 0;
     int         bDef = TRUE;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "SalSysObjWndProc hWnd 0x%x nMsg %d\n", hWnd, nMsg);
 #endif
 

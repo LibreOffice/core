@@ -598,7 +598,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         ::rtl::OUString sNormalizedURL = impl_normalizeURL( sURL );
         return impl_openStreamWithURL( sNormalizedURL, bLockFile );
     }
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     catch(const css::uno::Exception& ex)
     {
         ::rtl::OUStringBuffer sMsg(256);

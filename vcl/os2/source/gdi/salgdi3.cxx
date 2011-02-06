@@ -587,7 +587,7 @@ void Os2SalGraphics::SetTextColor( SalColor nSalColor )
 USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, int nFallbackLevel)
 {
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "Os2SalGraphics::ImplDoSetFont\n");
 #endif
 
@@ -651,7 +651,7 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
     if ( i_pFont->meWeight > WEIGHT_MEDIUM )
         aFAttrs.fsSelection |= FATTR_SEL_BOLD;
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     if (pFontMetric->szFacename[0] == 'A') {
         debug_printf( "Os2SalGraphics::SetFont hps %x lMatch '%d'\n", mhPS, pFontMetric->lMatch);
         debug_printf( "Os2SalGraphics::SetFont hps %x fontmetrics facename '%s'\n", mhPS, pFontMetric->szFacename);
@@ -661,7 +661,7 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
 
     Ft2DeleteSetId( mhPS, nFallbackLevel + LCID_BASE);
     if ( (rc=Ft2CreateLogFont( mhPS, NULL, nFallbackLevel + LCID_BASE, &aFAttrs)) == GPI_ERROR ) {
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
         ERRORID nLastError = WinGetLastError( GetSalData()->mhAB );
         debug_printf( "Os2SalGraphics::SetFont hps %x Ft2CreateLogFont failed err %x\n", mhPS, nLastError );
 #endif
@@ -734,7 +734,7 @@ USHORT Os2SalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFon
 
     rc = Ft2SetAttrs( mhPS, PRIM_CHAR, nAttrs, nAttrsDefault, &aBundle );
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     FONTMETRICS aOS2Metric = {0};
     Ft2QueryFontMetrics( mhPS, sizeof( aOS2Metric ), &aOS2Metric );
 #endif
@@ -753,7 +753,7 @@ USHORT Os2SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
         return 0;
     }
 
-#if OSL_DEBUG_LEVEL>10
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "Os2SalGraphics::SetFont\n");
 #endif
 
@@ -814,7 +814,7 @@ void Os2SalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLe
     FONTMETRICS aOS2Metric;
     Ft2QueryFontMetrics( mhPS, sizeof( aOS2Metric ), &aOS2Metric );
 
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
     debug_printf( "Os2SalGraphics::GetFontMetric hps %x\n", mhPS);
     if (aOS2Metric.szFacename[0] == 'A') {
         debug_printf( "Os2SalGraphics::GetFontMetric hps %x fontmetrics facename '%s'\n", mhPS, aOS2Metric.szFacename);
@@ -969,7 +969,7 @@ ImplFontCharMap* Os2SalGraphics::GetImplFontCharMap() const
 bool Os2SalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     const String& rFontFileURL, const String& rFontName )
 {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalGraphics::AddTempDevFont\n");
 #endif
     return false;
@@ -983,7 +983,7 @@ void Os2SalGraphics::GetDevFontList( ImplDevFontList* pList )
     ULONG           nFontMetricCount;
     SalData*        pSalData;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalGraphics::GetDevFontList\n");
 #endif
 
@@ -1131,7 +1131,7 @@ BOOL Os2SalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
 BOOL Os2SalGraphics::GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 1
     debug_printf("Os2SalGraphics::GetGlyphOutline\n");
 #endif
     rB2DPolyPoly.clear();
@@ -1395,7 +1395,7 @@ BOOL Os2SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ScopedFont aOldFont(*this);
     SetFont( &aIFSD, 0 );
 
-#if OSL_DEBUG_LEVEL > 100
+#if OSL_DEBUG_LEVEL > 1
     // get font metrics
     TEXTMETRICA aWinMetric;
     if( !::GetTextMetricsA( mhDC, &aWinMetric ) )
