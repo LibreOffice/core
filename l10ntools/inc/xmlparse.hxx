@@ -51,7 +51,7 @@ class XMLElement;
 using namespace ::rtl;
 using namespace std;
 
-#include <boost/unordered_map.hpp> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <deque>    /* std::deque*/
 #include <iterator> /* std::iterator*/
 #include <list>     /* std::list*/

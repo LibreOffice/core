@@ -31,7 +31,7 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
-#include <boost/unordered_map.hpp> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <vector>
 
 class GSILine;

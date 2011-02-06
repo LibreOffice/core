@@ -41,7 +41,7 @@
 #include <osl/file.hxx>
 #include <osl/file.h>
 
-#include <boost/unordered_map.hpp> /* std::hashmap*/
+#include <boost/unordered_map.hpp>
 #include <iterator> /* std::iterator*/
 #include <set>      /* std::set*/
 #include <vector>   /* std::vector*/
