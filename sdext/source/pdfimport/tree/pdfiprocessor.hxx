@@ -47,7 +47,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <list>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 #include "imagecontainer.hxx"
 #include "pdfihelper.hxx"
@@ -203,11 +203,11 @@ namespace pdfi
 
         void setupImage(ImageId nImage);
 
-        typedef std::hash_map<sal_Int32,FontAttributes> IdToFontMap;
-        typedef std::hash_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
+        typedef boost::unordered_map<sal_Int32,FontAttributes> IdToFontMap;
+        typedef boost::unordered_map<FontAttributes,sal_Int32,FontAttrHash> FontToIdMap;
 
-        typedef std::hash_map<sal_Int32,GraphicsContext> IdToGCMap;
-        typedef std::hash_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
+        typedef boost::unordered_map<sal_Int32,GraphicsContext> IdToGCMap;
+        typedef boost::unordered_map<GraphicsContext,sal_Int32,GraphicsContextHash> GCToIdMap;
 
         typedef std::vector<GraphicsContext> GraphicsContextStack;
 

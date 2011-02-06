@@ -32,7 +32,7 @@
 #include "pppoptimizertoken.hxx"
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <string.h>
 
 struct TCheck
@@ -42,7 +42,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef std::hash_map< const char*, PPPOptimizerTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, PPPOptimizerTokenEnum, std::hash<const char*>, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
