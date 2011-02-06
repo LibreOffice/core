@@ -1722,33 +1722,38 @@ Document::getAccessibleChild(Paragraphs::iterator const & rIt)
 
 void Document::determineVisibleRange()
 {
-    m_aVisibleBegin = m_xParagraphs->end();
-    m_aVisibleEnd = m_aVisibleBegin;
+    Paragraphs::iterator const aEnd = m_xParagraphs->end();
+
+    m_aVisibleBegin = aEnd;
+    m_aVisibleEnd = aEnd;
+    m_nVisibleBeginOffset = 0;
+
     ::sal_Int32 nPos = 0;
-    for (Paragraphs::iterator aIt = m_xParagraphs->begin();;)
+    for (Paragraphs::iterator aIt = m_xParagraphs->begin(); m_aVisibleEnd == aEnd && aIt != aEnd; ++aIt)
     {
-        if (aIt == m_xParagraphs->end())
-        {
-            m_nVisibleBeginOffset = 0;
-            break;
-        }
-        ::sal_Int32 nOldPos = nPos;
+        ::sal_Int32 const nOldPos = nPos;
         nPos += aIt->getHeight(); // XXX  numeric overflow
-        if (m_aVisibleBegin == m_xParagraphs->end() && nPos >= m_nViewOffset)
+        if (m_aVisibleBegin == aEnd)
         {
-            m_aVisibleBegin = aIt;
-            m_nVisibleBeginOffset = m_nViewOffset - nOldPos;
+            if (nPos >= m_nViewOffset)
+            {
+                m_aVisibleBegin = aIt;
+                m_nVisibleBeginOffset = m_nViewOffset - nOldPos;
+            }
         }
-        ++aIt;
-        if (m_aVisibleBegin != m_xParagraphs->end()
-            && (aIt == m_xParagraphs->end()
-                || nPos >= m_nViewOffset + m_nViewHeight))
-            // XXX  numeric overflow
+        else
         {
-            m_aVisibleEnd = aIt;
-            break;
+            if (nPos >= m_nViewOffset + m_nViewHeight) // XXX  numeric overflow
+            {
+                m_aVisibleEnd = aIt;
+            }
         }
     }
+
+    OSL_POSTCOND(
+            (m_aVisibleBegin == m_xParagraphs->end() && m_aVisibleEnd == m_xParagraphs->end() && m_nVisibleBeginOffset == 0)
+            || (m_aVisibleBegin < m_aVisibleEnd && m_nVisibleBeginOffset >= 0),
+            "invalid visible range");
 }
 
 void Document::notifyVisibleRangeChanges(
