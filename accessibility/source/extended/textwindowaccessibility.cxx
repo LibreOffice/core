@@ -1957,7 +1957,7 @@ void Document::handleParagraphNotifications()
                         NotifyAccessibleEvent(
                             ::css::accessibility::AccessibleEventId::
                             CHILD,
-                            ::css::uno::makeAny(getAccessibleChild(aIt)),
+                            ::css::uno::makeAny(xStrong),
                             ::css::uno::Any());
 
                     ::css::uno::Reference< ::css::lang::XComponent > xComponent(
