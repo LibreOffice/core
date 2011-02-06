@@ -80,7 +80,7 @@
 #include <iostream>
 #include <vector>
 
-#define MDDS_HASH_CONTAINER_STLPORT 1
+#define MDDS_HASH_CONTAINER_BOOST 1
 #include <mdds/mixed_type_matrix.hpp>
 
 #define UCALC_DEBUG_OUTPUT 0
