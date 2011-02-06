@@ -35,7 +35,9 @@
 #include <osl/module.hxx>
 #include <osl/file.hxx>
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 
 #if ( defined UNX ) || ( defined OS2 )  //Unix
 #   include <unistd.h>

@@ -29,7 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include <testshl/simpleheader.hxx>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
@@ -68,7 +70,7 @@ public:
 
 //########################################
 #ifdef UNX
-#   define WRITE_DEST_PATH "/mnt/mercury08/muell.tmp"
+#   define WRITE_DEST_PATH "/tmp/muell.tmp"
 #else /* if WNT */
 #   define WRITE_DEST_PATH "d:\\tmp_data.tmp"
 #endif
@@ -82,10 +84,11 @@ public:
         FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(WRITE_DEST_PATH)), dest_url);
 
         File tmp_file(dest_url);
-        rtl::OUString suErrorMsg = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("File creation failed: "))+ dest_url;
+        rtl::OString sErrorMsg = "File creation failed: ";
+        sErrorMsg += rtl::OUStringToOString( dest_url, RTL_TEXTENCODING_ASCII_US );
         FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
-        CPPUNIT_ASSERT_MESSAGE( suErrorMsg, err == FileBase::E_None || err == FileBase::E_EXIST );
+        CPPUNIT_ASSERT_MESSAGE( sErrorMsg.getStr(), err == FileBase::E_None || err == FileBase::E_EXIST );
 
         char buffer[50000];
         sal_uInt64 written = 0;
@@ -105,9 +108,9 @@ public:
 
 //#####################################
 // register test suites
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_writeFile, "test_osl_writeFile");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(test_osl_copyFile,  "test_osl_copyFile");
+CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_writeFile);
+CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_copyFile);
 
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

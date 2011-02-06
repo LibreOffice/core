@@ -46,8 +46,9 @@ using namespace rtl;
 */
 inline void printBool( sal_Bool bOk )
 {
-    t_print("#printBool# " );
-    ( sal_True == bOk ) ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
+    printf("#printBool# " );
+    ( sal_True == bOk ) ? printf( "TRUE!\n" )
+                        : printf( "FALSE!\n" );
 }
 
 /** print a UNI_CODE String.
@@ -56,9 +57,9 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printUString_u# " );
+    printf("#printUString_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 /** get dll file URL.
@@ -85,9 +86,9 @@ inline void printFileName( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    t_print("#printFileName_u# " );
+    printf("#printFileName_u# " );
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    t_print("%s\n", aString.getStr( ) );
+    printf("%s\n", aString.getStr( ) );
 }
 
 inline sal_Bool isURL( const ::rtl::OUString pathname )
@@ -180,7 +181,7 @@ namespace osl_Module
     public:
         static void myFunc()
         {
-            t_print("#Sun Microsystem\n");
+            printf("#Sun Microsystem\n");
         };
     };
 
@@ -504,14 +505,14 @@ namespace osl_Module
     }; // class getFunctionSymbol
 
 // -----------------------------------------------------------------------------
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::ctors, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getUrlFromAddress, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::load, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::unload, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::is, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getSymbol, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::optr_oslModule, "osl_Module");
-CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getFunctionSymbol, "osl_Module");
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::ctors);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getUrlFromAddress);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::load);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::unload);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::is);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getSymbol);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::optr_oslModule);
+CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getFunctionSymbol);
 // -----------------------------------------------------------------------------
 
 } // namespace osl_Module
@@ -520,6 +521,6 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Module::getFunctionSymbol, "osl_Module
 
 // this macro creates an empty function, which will called by the RegisterAllFunctions()
 // to let the user the possibility to also register some functions by hand.
-NOADDITIONAL;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

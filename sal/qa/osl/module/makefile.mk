@@ -44,7 +44,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
 # --- test dll ------------------------------------------------------
 SHL1TARGET     = Module_DLL
 SHL1OBJS       = $(SLO)$/osl_Module_DLL.obj
-SHL1STDLIBS    = $(SALLIB)
+SHL1STDLIBS    = $(SALLIB) $(CPPUNITLIB)
 SHL1IMPLIB     = i$(SHL1TARGET)
 SHL1DEF        = $(MISC)$/$(SHL1TARGET).def
 DEF1NAME       = $(SHL1TARGET)
