@@ -3912,7 +3912,7 @@ sal_Bool OCX_MultiPage::Import(com::sun::star::uno::Reference<
     // need to sort the controls according to the order of the ids
     for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
     {
-        std::hash_map< sal_Int32, OCX_Page* >::iterator it = idToPage.find( *itCtrlId );
+        boost::unordered_map< sal_Int32, OCX_Page* >::iterator it = idToPage.find( *itCtrlId );
         if ( it != idToPage.end() )
         {
             it->second->msTitle = *itCaption;

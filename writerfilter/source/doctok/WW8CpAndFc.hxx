@@ -32,7 +32,7 @@
 #include <sal/types.h>
 #include <doctok/WW8Document.hxx>
 #include <set>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <iostream>
 
 namespace writerfilter {
@@ -351,7 +351,7 @@ struct CpAndFcHash
     }
 };
 
-typedef hash_map<Cp, Fc, CpHash, CpEq> Cp2FcHashMap_t;
+typedef boost::unordered_map<Cp, Fc, CpHash, CpEq> Cp2FcHashMap_t;
 
 } // namespace doctok
 } // namespace writerfilter

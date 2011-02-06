@@ -56,7 +56,7 @@
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <osl/diagnose.h>
 #include <rtl/process.h>
 #include <tools/debug.hxx>
@@ -175,7 +175,7 @@ class SVGFilter : public cppu::WeakImplHelper4 < XFilter,
                                                  XExporter,
                                                  XExtendedFilterDetection >
 {
-    typedef ::std::hash_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
+    typedef ::boost::unordered_map< Reference< XInterface >, ObjectRepresentation, HashReferenceXInterface > ObjectMap;
 
 private:
 

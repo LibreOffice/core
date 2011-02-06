@@ -68,7 +68,7 @@
 #include <math.h>
 #include <vector>
 #include <memory>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 #include <assert.h>
 #include <string>

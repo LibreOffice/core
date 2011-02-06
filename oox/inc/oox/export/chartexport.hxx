@@ -36,7 +36,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <map>
 
 namespace com { namespace sun { namespace star {

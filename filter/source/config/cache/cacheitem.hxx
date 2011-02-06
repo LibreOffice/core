@@ -32,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <deque>
 #include <list>
 #include <com/sun/star/uno/Any.h>
@@ -190,7 +190,7 @@ class CacheItem : public ::comphelper::SequenceAsHashMap
 /** @short  represent an item list of a FilterCache
             instance.
  */
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          CacheItem                          ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemList;
@@ -209,7 +209,7 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
             there we need key-value pairs too, which cant be provided
             by a pur vector!
  */
-typedef ::std::hash_map< ::rtl::OUString                    ,
+typedef ::boost::unordered_map< ::rtl::OUString                    ,
                          OUStringList                       ,
                          ::rtl::OUStringHash                ,
                          ::std::equal_to< ::rtl::OUString > > CacheItemRegistration;

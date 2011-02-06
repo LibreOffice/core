@@ -379,9 +379,9 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
                     catch( Exception& ) { }
                 }
             }
-            typedef  std::hash_map< rtl::OUString, uno::Any, ::rtl::OUStringHash,
+            typedef  boost::unordered_map< rtl::OUString, uno::Any, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameModuleDataHash;
-            typedef  std::hash_map< rtl::OUString, script::ModuleInfo, ::rtl::OUStringHash,
+            typedef  boost::unordered_map< rtl::OUString, script::ModuleInfo, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameModuleInfoHash;
 
             NameModuleDataHash moduleData;

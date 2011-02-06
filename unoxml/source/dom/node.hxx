@@ -56,7 +56,7 @@
 #include <libxml/tree.h>
 
 #include <map>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 using ::rtl::OUString;
 using ::rtl::OString;
@@ -92,7 +92,7 @@ namespace DOM
         };
 
         typedef std::vector< std::vector<Namespace> > NamespaceVectorType;
-        typedef std::hash_map< OUString,
+        typedef boost::unordered_map< OUString,
                                sal_Int32,
                                rtl::OUStringHash > NamespaceMapType;
 

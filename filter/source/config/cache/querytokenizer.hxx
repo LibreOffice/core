@@ -32,7 +32,7 @@
 //_______________________________________________
 // includes
 
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 //_______________________________________________
@@ -61,7 +61,7 @@ namespace filter{
     @attention  This class is not threadsafe implemented. Because its not neccessary.
                 But you have to make shure, that ist not used as such :-)
  */
-class QueryTokenizer : public ::std::hash_map< ::rtl::OUString                    ,
+class QueryTokenizer : public ::boost::unordered_map< ::rtl::OUString                    ,
                                                ::rtl::OUString                    ,
                                                ::rtl::OUStringHash                ,
                                                ::std::equal_to< ::rtl::OUString > >

@@ -317,7 +317,7 @@ private:
             }
     };
 
-    typedef std::hash_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
+    typedef boost::unordered_map<LwpObjectID, IXFStyle*, hashFunc, eqFunc> LwpStyleMap;
     LwpStyleMap m_StyleList;
 public:
     void SetFoundry(LwpFoundry* pFoundry){m_pFoundry = pFoundry;}

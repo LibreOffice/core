@@ -31,8 +31,8 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dlinegeometry.hxx>
 
-#include <hash_set>
-#include <hash_map>
+#include <boost/unordered_set.hpp>
+#include <boost/unordered_map.hpp>
 #include <rtl/ustring.hxx>
 
 namespace svgi
@@ -348,8 +348,8 @@ struct StateHash
     }
 };
 
-typedef std::hash_set<State, StateHash> StatePool;
-typedef std::hash_map<sal_Int32, State> StateMap;
+typedef boost::unordered_set<State, StateHash> StatePool;
+typedef boost::unordered_map<sal_Int32, State> StateMap;
 
 } // namespace svgi
 

@@ -64,7 +64,7 @@
 #include <tools/zcodec.hxx>
 
 #include <boost/bind.hpp>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <map>
 #include <string.h>
 

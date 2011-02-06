@@ -30,7 +30,7 @@
 #define OOX_XLS_WEBQUERYBUFFER_HXX
 
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 #include <boost/shared_ptr.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 #include "oox/xls/workbookhelper.hxx"
@@ -96,7 +96,7 @@ struct Connection
 
 // ============================================================================
 
-typedef ::std::hash_map< ::rtl::OUString, QueryTable, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > QueryTableHashMap;
+typedef ::boost::unordered_map< ::rtl::OUString, QueryTable, ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > QueryTableHashMap;
 
 class WebQueryBuffer : public WorkbookHelper
 {

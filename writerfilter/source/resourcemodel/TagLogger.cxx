@@ -43,7 +43,7 @@ namespace writerfilter
         }
     };
 
-    typedef hash_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
+    typedef boost::unordered_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
     static TagLoggerHashMap_t * tagLoggers = NULL;
 
     TagLogger::TagLogger(const char* name)

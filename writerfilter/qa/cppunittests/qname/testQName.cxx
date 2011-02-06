@@ -32,7 +32,7 @@
 #include <rtl/string.hxx>
 #include <rtl/random.h>
 #include <osl/time.h>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <stdexcept>
 
 

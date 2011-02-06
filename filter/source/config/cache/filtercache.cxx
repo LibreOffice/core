@@ -1418,7 +1418,7 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
     throw(css::uno::Exception)
 {
     CacheItem& rItem = (*pList)[sItem];
-    // In case its a new created entry (automaticly done by the hash_map index operator!)
+    // In case its a new created entry (automaticly done by the boost::unordered_map index operator!)
     // we must be shure, that this entry has its own name as property available.
     // Its needed later at our container interface!
     rItem[PROPNAME_NAME] <<= sItem;

@@ -38,7 +38,7 @@
 //#endif
 #include "filter/msfilter/msfilterdllapi.h"
 #include <vector>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com{namespace sun{namespace star{
         namespace drawing{
@@ -540,7 +540,7 @@ protected:
         com::sun::star::uno::Reference<
                 com::sun::star::container::XNameContainer > mxParent;
     std::vector<OCX_Control*> mpControls;
-        std::hash_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
+        boost::unordered_map<sal_uInt16, sal_uInt16> mActiveXIDMap;
         SotStorageRef mContainerStorage;
         SotStorageStreamRef mContainerStream;
         SotStorageStreamRef mContainedControlsStream;
@@ -630,7 +630,7 @@ private:
     std::vector< rtl::OUString > sCaptions;
     // order of Ids corrosponds to the order of captions above
     std::vector< sal_Int32 > mPageIds;
-    std::hash_map< sal_Int32, OCX_Page* > idToPage;
+    boost::unordered_map< sal_Int32, OCX_Page* > idToPage;
 };
 
 

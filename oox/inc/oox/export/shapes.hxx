@@ -34,7 +34,7 @@
 #include <oox/export/drawingml.hxx>
 #include <sax/fshelper.hxx>
 #include <vcl/mapmod.hxx>
-#include <hash_map>
+#include <boost/unordered_map.hpp>
 
 namespace com { namespace sun { namespace star {
 namespace beans {
@@ -67,7 +67,7 @@ private:
     };
 
 public:
-    typedef std::hash_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
+    typedef boost::unordered_map< const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape>, sal_Int32, ShapeHash, ShapeCheck> ShapeHashMap;
 
 protected:
     sal_Int32           mnShapeIdMax, mnPictureIdMax;
