@@ -46,11 +46,7 @@ all:
 # If you choose to build without stlport, some headers will be used to bring the
 # sgi extensions into the std namespace:
 $(INCCOM)$/stlport$/functional \
-$(INCCOM)$/stlport$/hash_map \
-$(INCCOM)$/stlport$/hash_set \
 $(INCCOM)$/stlport$/numeric \
-$(INCCOM)$/stlport$/slist \
-$(INCCOM)$/stlport$/rope \
 $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
     $(MKDIRHIER) $(@:d)
     $(COPY) $< $@
