@@ -61,7 +61,7 @@ private:
 
     struct ShapeHash
     {
-        std::hash<const char*> maHashFunction;
+        boost::hash<const char*> maHashFunction;
 
         size_t operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > ) const;
     };
