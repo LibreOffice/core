@@ -30,6 +30,7 @@
 #endif
 
 #include <boost/unordered_map.hpp>
+#include <hash_map>
 #include <rtl/ustring.hxx>
 
 #include "osl/mutex.hxx"
