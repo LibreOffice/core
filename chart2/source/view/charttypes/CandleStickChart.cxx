@@ -86,7 +86,7 @@ bool CandleStickChart::isSeperateStackingForDifferentSigns( sal_Int32 /* nDimens
 
 LegendSymbolStyle CandleStickChart::getLegendSymbolStyle()
 {
-    return LegendSymbolStyle_VERTICAL_LINE;
+    return LegendSymbolStyle_LINE;
 }
 
 //-----------------------------------------------------------------

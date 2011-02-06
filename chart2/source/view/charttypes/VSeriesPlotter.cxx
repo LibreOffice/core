@@ -75,6 +75,7 @@
 #include <rtl/math.hxx>
 #include <tools/debug.hxx>
 #include <basegfx/vector/b2dvector.hxx>
+#include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 
 #include <svx/unoshape.hxx>
@@ -107,7 +108,6 @@ VDataSeriesGroup::VDataSeriesGroup()
         , m_bMaxPointCountDirty(true)
         , m_nMaxPointCount(0)
         , m_aListOfCachedYValues()
-
 {
 }
 
@@ -461,13 +461,30 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
         //------------------------------------------------
         //prepare legend symbol
 
+        float fViewFontSize( 10.0 );
+        {
+            uno::Reference< beans::XPropertySet > xProps( rDataSeries.getPropertiesOfPoint( nPointIndex ) );
+            if( xProps.is() )
+                xProps->getPropertyValue( C2U( "CharHeight" )) >>= fViewFontSize;
+            // pt -> 1/100th mm
+            fViewFontSize *= (2540.0 / 72.0);
+        }
         Reference< drawing::XShape > xSymbol;
         if(pLabel->ShowLegendSymbol)
         {
+            sal_Int32 nSymbolHeigth = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
+            awt::Size aCurrentRatio = this->getPreferredLegendKeyAspectRatio();
+            sal_Int32 nSymbolWidth = aCurrentRatio.Width;
+            if( aCurrentRatio.Height > 0 )
+            {
+                nSymbolWidth = nSymbolHeigth* aCurrentRatio.Width/aCurrentRatio.Height;
+            }
+            awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeigth );
+
             if( rDataSeries.isVaryColorsByPoint() )
-                xSymbol.set( VSeriesPlotter::createLegendSymbolForPoint( rDataSeries, nPointIndex, xTarget_, m_xShapeFactory ) );
+                xSymbol.set( VSeriesPlotter::createLegendSymbolForPoint( aMaxSymbolExtent, rDataSeries, nPointIndex, xTarget_, m_xShapeFactory ) );
             else
-                xSymbol.set( VSeriesPlotter::createLegendSymbolForSeries( rDataSeries, xTarget_, m_xShapeFactory ) );
+                xSymbol.set( VSeriesPlotter::createLegendSymbolForSeries( aMaxSymbolExtent, rDataSeries, xTarget_, m_xShapeFactory ) );
 
         }
         //prepare text
@@ -567,25 +584,14 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
             const awt::Point aOldTextPos( xTextShape->getPosition() );
             awt::Point aNewTextPos( aOldTextPos );
 
+            awt::Point aSymbolPosition( aUnrotatedTextPos );
             awt::Size aSymbolSize( xSymbol->getSize() );
             awt::Size aTextSize( xTextShape->getSize() );
 
+            sal_Int32 nXDiff = aSymbolSize.Width + static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
             if( !bMultiLineLabel || nLineCountForSymbolsize <= 0 )
                 nLineCountForSymbolsize = 1;
-            sal_Int32 nYDiff = aTextSize.Height/nLineCountForSymbolsize;
-            sal_Int32 nXDiff = aSymbolSize.Width * nYDiff/aSymbolSize.Height;
-
-            // #i109336# Improve auto positioning in chart
-            nXDiff = nXDiff * 80 / 100;
-            nYDiff = nYDiff * 80 / 100;
-
-            aSymbolSize.Width =  nXDiff * 75/100;
-            aSymbolSize.Height = nYDiff * 75/100;
-
-            awt::Point aSymbolPosition( aUnrotatedTextPos );
-
-            // #i109336# Improve auto positioning in chart
-            aSymbolPosition.Y += ( nYDiff / 4 );
+            aSymbolPosition.Y += ((aTextSize.Height/nLineCountForSymbolsize)/4);
 
             if(LABEL_ALIGN_LEFT==eAlignment
                 || LABEL_ALIGN_LEFT_TOP==eAlignment
@@ -607,10 +613,7 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                 aNewTextPos.X += nXDiff/2;
             }
 
-            xSymbol->setSize( aSymbolSize );
             xSymbol->setPosition( aSymbolPosition );
-
-            //set position
             xTextShape->setPosition( aNewTextPos );
         }
     }
@@ -1819,7 +1822,8 @@ bool VSeriesPlotter::shouldSnapRectToUsedArea()
 }
 
 std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
-              ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion
+              const awt::Size& rEntryKeyAspectRatio
+            , ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
@@ -1851,7 +1855,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
                     if(!pSeries)
                         continue;
 
-                    std::vector< ViewLegendEntry > aSeriesEntries( this->createLegendEntriesForSeries(
+                    std::vector< ViewLegendEntry > aSeriesEntries( this->createLegendEntriesForSeries( rEntryKeyAspectRatio,
                             *pSeries, xTextProperties, xTarget, xShapeFactory, xContext ) );
 
                     //add series entries to the result now
@@ -1885,12 +1889,102 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     return aResult;
 }
 
+::std::vector< VDataSeries* > VSeriesPlotter::getAllSeries()
+{
+    ::std::vector< VDataSeries* > aAllSeries;
+    ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator            aZSlotIter = m_aZSlots.begin();
+    const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotEnd = m_aZSlots.end();
+    for( ; aZSlotIter != aZSlotEnd; aZSlotIter++ )
+    {
+        ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
+        const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
+        for( ; aXSlotIter != aXSlotEnd; aXSlotIter++ )
+        {
+            ::std::vector< VDataSeries* > aSeriesList = aXSlotIter->m_aSeriesVector;
+            aAllSeries.insert( aAllSeries.end(), aSeriesList.begin(), aSeriesList.end() );
+        }
+    }
+    return aAllSeries;
+}
+
+bool VSeriesPlotter::HasDashedLines( const uno::Reference< beans::XPropertySet >& xProps )
+{
+    bool bHasDashedLines = false;
+    drawing::LineStyle aLineStyle = drawing::LineStyle_NONE;
+    if( xProps.is() && ( xProps->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) &&
+                    ( aLineStyle == drawing::LineStyle_DASH ) )
+    {
+        bHasDashedLines = true;
+    }
+    return bHasDashedLines;
+}
+
+bool VSeriesPlotter::HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLines )
+{
+    bool bHasRegressionCurves = false;
+    Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
+    if( xRegrCont.is())
+    {
+        Sequence< Reference< XRegressionCurve > > aCurves( xRegrCont->getRegressionCurves() );
+        sal_Int32 i = 0, nCount = aCurves.getLength();
+        for( i=0; i<nCount; ++i )
+        {
+            if( aCurves[i].is() && !RegressionCurveHelper::isMeanValueLine( aCurves[i] ) )
+            {
+                bHasRegressionCurves = true;
+                if( HasDashedLines( uno::Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ) ) )
+                    rbHasDashedLines = true;
+            }
+        }
+    }
+    return bHasRegressionCurves;
+}
 
 LegendSymbolStyle VSeriesPlotter::getLegendSymbolStyle()
 {
     return LegendSymbolStyle_BOX;
 }
 
+awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
+{
+    awt::Size aRet(1000,1000);
+    if( m_nDimension==3 )
+        return aRet;
+
+    bool bSeriesHasLines = (getLegendSymbolStyle() == LegendSymbolStyle_LINE);
+    bool bHasLines = bSeriesHasLines;
+    bool bHasDashedLines = false;
+    ::std::vector< VDataSeries* > aAllSeries( getAllSeries() );
+    ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = aAllSeries.begin();
+    const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = aAllSeries.end();
+    //iterate through all series
+    for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
+    {
+        if( bSeriesHasLines && HasDashedLines( (*aSeriesIter)->getPropertiesOfSeries() ) )
+        {
+            bHasDashedLines = true;
+            break;
+        }
+        bool bRegressionHasDashedLines=false;
+        if( VSeriesPlotter::HasRegressionCurves( **aSeriesIter, bRegressionHasDashedLines ) )
+        {
+            bHasLines = true;
+            if( bRegressionHasDashedLines )
+            {
+                bHasDashedLines = true;
+                break;
+            }
+        }
+    }
+    if( bHasLines )
+    {
+        if( bHasDashedLines )
+            aRet = awt::Size(1600,-1);
+        else
+            aRet = awt::Size(800,-1);
+    }
+    return aRet;
+}
 
 uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_Int32 /*nPointIndex*/ )
 {
@@ -1898,7 +1992,8 @@ uno::Any VSeriesPlotter::getExplicitSymbol( const VDataSeries& /*rSeries*/, sal_
 }
 
 Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
-                  const VDataSeries& rSeries
+                  const awt::Size& rEntryKeyAspectRatio
+                , const VDataSeries& rSeries
                 , const Reference< drawing::XShapes >& xTarget
                 , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
 {
@@ -1913,15 +2008,13 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_VERTICAL_LINE:
-        case LegendSymbolStyle_DIAGONAL_LINE:
-        case LegendSymbolStyle_LINE_WITH_SYMBOL:
+        case LegendSymbolStyle_LINE:
             ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
             break;
         default:
             break;
     };
-    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol(
+    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory
             , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol ));
 
@@ -1929,7 +2022,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
 }
 
 Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
-                  const VDataSeries& rSeries
+                  const awt::Size& rEntryKeyAspectRatio
+                , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
                 , const Reference< drawing::XShapes >& xTarget
                 , const Reference< lang::XMultiServiceFactory >& xShapeFactory )
@@ -1945,9 +2039,7 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
     // legend-symbol type
     switch( eLegendSymbolStyle )
     {
-        case LegendSymbolStyle_VERTICAL_LINE:
-        case LegendSymbolStyle_DIAGONAL_LINE:
-        case LegendSymbolStyle_LINE_WITH_SYMBOL:
+        case LegendSymbolStyle_LINE:
             ePropType = VLegendSymbolFactory::PROP_TYPE_LINE_SERIES;
             break;
         default:
@@ -1978,14 +2070,15 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
         }
     }
 
-    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol(
+    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory, xPointSet, ePropType, aExplicitSymbol ));
 
     return xShape;
 }
 
 std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
-              const VDataSeries& rSeries
+              const awt::Size& rEntryKeyAspectRatio
+            , const VDataSeries& rSeries
             , const Reference< beans::XPropertySet >& xTextProperties
             , const Reference< drawing::XShapes >& xTarget
             , const Reference< lang::XMultiServiceFactory >& xShapeFactory
@@ -2014,7 +2107,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
 
                 // create the symbol
-                Reference< drawing::XShape > xShape( this->createLegendSymbolForPoint(
+                Reference< drawing::XShape > xShape( this->createLegendSymbolForPoint( rEntryKeyAspectRatio,
                     rSeries, nIdx, xSymbolGroup, xShapeFactory ) );
 
                 // set CID to symbol for selection
@@ -2044,7 +2137,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
             // create the symbol
             Reference< drawing::XShape > xShape( this->createLegendSymbolForSeries(
-                rSeries, xSymbolGroup, xShapeFactory ) );
+                rEntryKeyAspectRatio, rSeries, xSymbolGroup, xShapeFactory ) );
 
             // set CID to symbol for selection
             if( xShape.is())
@@ -2086,8 +2179,8 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     uno::Reference< drawing::XShapes > xSymbolGroup( ShapeFactory(xShapeFactory).createGroup2D( xTarget ));
 
                     // create the symbol
-                    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol(
-                        xSymbolGroup, LegendSymbolStyle_DIAGONAL_LINE, xShapeFactory,
+                    Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
+                        xSymbolGroup, LegendSymbolStyle_LINE, xShapeFactory,
                         Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ),
                         VLegendSymbolFactory::PROP_TYPE_LINE, uno::Any() ));
 

@@ -207,6 +207,7 @@ public:
     //-------------------------------------------------------------------------
 
     virtual std::vector< ViewLegendEntry > createLegendEntries(
+            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
@@ -220,20 +221,25 @@ public:
 
 
     virtual LegendSymbolStyle getLegendSymbolStyle();
+    virtual com::sun::star::awt::Size getPreferredLegendKeyAspectRatio();
+
     virtual ::com::sun::star::uno::Any getExplicitSymbol( const VDataSeries& rSeries, sal_Int32 nPointIndex=-1/*-1 for series symbol*/ );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForSeries(
-                  const VDataSeries& rSeries
+                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
+                , const VDataSeries& rSeries
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > createLegendSymbolForPoint(
-                  const VDataSeries& rSeries
+                  const ::com::sun::star::awt::Size& rEntryKeyAspectRatio
+                , const VDataSeries& rSeries
                 , sal_Int32 nPointIndex
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& xTarget
                 , const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xShapeFactory );
 
     virtual std::vector< ViewLegendEntry > createLegendEntriesForSeries(
+            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             const VDataSeries& rSeries,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,
@@ -244,6 +250,10 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext >& xContext
                 );
+
+    ::std::vector< VDataSeries* > getAllSeries();
+    static bool HasDashedLines( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps );
+    static bool HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLines );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------

@@ -46,18 +46,9 @@ enum LegendSymbolStyle
      */
     LegendSymbolStyle_BOX,
 
-    /** A line extending from the top edge to the bottom edge
-     */
-    LegendSymbolStyle_VERTICAL_LINE,
-
-    /** A line spanning the diagonal of the box you would get with
-        <member>BOX</member>.
-     */
-    LegendSymbolStyle_DIAGONAL_LINE,
-
     /** A line like with a symbol.
      */
-    LegendSymbolStyle_LINE_WITH_SYMBOL,
+    LegendSymbolStyle_LINE,
 
     /** A bordered circle which has the same bounding-box as the
         <member>BOX</member>.
@@ -83,7 +74,10 @@ struct ViewLegendEntry
 class LegendEntryProvider
 {
 public:
+    virtual ::com::sun::star::awt::Size getPreferredLegendKeyAspectRatio()=0;
+
     virtual std::vector< ViewLegendEntry > createLegendEntries(
+            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             ::com::sun::star::chart::ChartLegendExpansion eLegendExpansion,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet >& xTextProperties,

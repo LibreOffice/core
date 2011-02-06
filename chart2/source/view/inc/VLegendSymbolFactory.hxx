@@ -50,6 +50,7 @@ public:
     static ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape >
         createSymbol(
+            const ::com::sun::star::awt::Size& rEntryKeyAspectRatio,
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes > xSymbolContainer,
             LegendSymbolStyle eStyle,
@@ -59,13 +60,6 @@ public:
                 ::com::sun::star::beans::XPropertySet > & xLegendEntryProperties,
             tPropertyType ePropertyType,
             const ::com::sun::star::uno::Any& rExplicitSymbol /*should contain a ::com::sun::star::chart2::Symbol without automatic symbol if the charttype does support symbols else empty*/);
-
-    enum tStockLineType
-    {
-        STOCK_LINE_TYPE_VERT,
-        STOCK_LINE_TYPE_OPEN,
-        STOCK_LINE_TYPE_CLOSE
-    };
 
 private:
      VLegendSymbolFactory();
