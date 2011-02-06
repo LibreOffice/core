@@ -99,16 +99,16 @@ static void oslWorkerWrapperFunction(void* pData)
     BOOL rc;
     osl_TThreadImpl* pThreadImpl= (osl_TThreadImpl*)pData;
 
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("oslWorkerWrapperFunction pThreadImpl %x, pThreadImpl->m_ThreadId %d\n", pThreadImpl, pThreadImpl->m_ThreadId);
 #endif
     /* Inizialize PM for this thread */
     pThreadImpl->m_hab = WinInitialize( 0 );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("pThreadImpl->m_ThreadId %d, pThreadImpl->m_hab %x\n", pThreadImpl->m_ThreadId,pThreadImpl->m_hab);
 #endif
     pThreadImpl->m_hmq = WinCreateMsgQueue( pThreadImpl->m_hab, 0 );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("pThreadImpl->m_ThreadId %d, pThreadImpl->m_hmq %x\n", pThreadImpl->m_ThreadId,pThreadImpl->m_hmq);
 #endif
 
@@ -116,16 +116,16 @@ printf("pThreadImpl->m_ThreadId %d, pThreadImpl->m_hmq %x\n", pThreadImpl->m_Thr
     pThreadImpl->m_WorkerFunction( pThreadImpl->m_pData );
 
     /* Free all PM-resources for this thread */
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("pThreadImpl->m_ThreadId %d, about to destroy queue\n", pThreadImpl->m_ThreadId);
 #endif
     rc = WinDestroyMsgQueue( pThreadImpl->m_hmq );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("pThreadImpl->m_ThreadId %d, WinDestroyMsgQueue rc=%d (should be 1)\n", pThreadImpl->m_ThreadId, rc);
 printf("pThreadImpl->m_ThreadId %d, about to terminate hab\n", pThreadImpl->m_ThreadId);
 #endif
     rc = WinTerminate( pThreadImpl->m_hab );
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("pThreadImpl->m_ThreadId %d, WinTerminate rc=%d (should be 1)\n", pThreadImpl->m_ThreadId, rc);
 #endif
 }
@@ -170,7 +170,7 @@ static oslThread oslCreateThread(oslWorkerFunction pWorker,
             DosSuspendThread( pThreadImpl->m_ThreadId );
         DosReleaseMutexSem( MutexLock);
     }
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
 printf("oslCreateThread pThreadImpl %x, pThreadImpl->m_ThreadId %d\n", pThreadImpl, pThreadImpl->m_ThreadId);
 #endif
     if(pThreadImpl->m_ThreadId == -1)

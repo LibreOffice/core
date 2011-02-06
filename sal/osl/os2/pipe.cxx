@@ -129,7 +129,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
 
     /* create pipe name */
     OString sPipe = OUStringToOString(ustrPipeName, RTL_TEXTENCODING_ASCII_US);
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
     debug_printf("osl_createPipe options 0x%x\n", Options);
 #endif
 
@@ -140,7 +140,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
             APIRET  fPipeAvailable;
 
             sprintf (strPipeNameBuffer, "\\PIPE\\OSL_PIPE_%s", sPipe.getStr());
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
             debug_printf("osl_createPipe %s\n", strPipeNameBuffer);
 #endif
             ngLastError = DosOpen( (PCSZ)strPipeNameBuffer,
@@ -175,7 +175,7 @@ oslPipe SAL_CALL osl_createPipe(rtl_uString *ustrPipeName, oslPipeOptions Option
                 break;
 
             sprintf (strPipeNameBuffer, "\\PIPE\\OSL_PIPE_%s", sPipe.getStr());
-#if OSL_DEBUG_LEVEL>0
+#if OSL_DEBUG_LEVEL > 0
             debug_printf("osl_createPipe %s\n", strPipeNameBuffer);
 #endif
             ngLastError = DosCreateNPipe( (PCSZ)strPipeNameBuffer,
