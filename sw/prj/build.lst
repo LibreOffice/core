@@ -1,4 +1,4 @@
-sw      sw      :    filter l10n connectivity writerperfect lotuswordpro vbahelper svx stoc writerfilter NULL
+sw      sw      :    filter l10n connectivity writerperfect lotuswordpro vbahelper svx stoc writerfilter unoxml NULL
 sw	sw										usr1	-	all	sw_mkout NULL
 sw	sw\inc									nmake		-	all	sw_inc NULL
 sw	sw\uiconfig\layout									nmake	-	all	sw_layout NULL
