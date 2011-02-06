@@ -240,7 +240,7 @@ FmSearchDialog::~FmSearchDialog()
 //------------------------------------------------------------------------
 void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sInitialText)
 {
-    // die Initialisierung all der Controls
+    //the initialization of all the Controls
     m_rbSearchForText.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_rbSearchForNull.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
     m_rbSearchForNotNull.SetClickHdl(LINK(this, FmSearchDialog, OnClickedFieldRadios));
@@ -268,8 +268,8 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     m_aHalfFullFormsCJK.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
     m_aSoundsLikeCJK.SetToggleHdl(LINK(this, FmSearchDialog, OnCheckBoxToggled));
 
-    // die Listboxen fuellen
-    // die Methoden des Feldvergleiches
+    // fill the listboxes
+    // method of field comparison
     USHORT nResIds[] = {
         RID_STR_SEARCH_ANYWHERE,
         RID_STR_SEARCH_BEGINNING,
@@ -280,7 +280,7 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
         m_lbPosition.InsertEntry( String( CUI_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
-    // die Feld-Listbox
+    // the field listbox
     for (USHORT i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
         m_lbField.InsertEntry(strVisibleFields.GetToken(i, ';'));
 
@@ -289,14 +289,15 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
     LoadParams();
 
     m_cmbSearchText.SetText(sInitialText);
-    // wenn die Edit-Zeile den Text veraendert hat (weil er zum Beispiel Steuerzeichen enthielt, wie das bei Memofeldern der Fall
-    // sein kann), nehme ich einen leeren UniString
+    // if the Edit-line has changed the text (e.g. because it contains
+    // control characters, as can be the case with memo fields), I use
+    // an empty UniString.
     UniString sRealSetText = m_cmbSearchText.GetText();
     if (!sRealSetText.Equals(sInitialText))
         m_cmbSearchText.SetText(UniString());
     LINK(this, FmSearchDialog, OnSearchTextModified).Call(&m_cmbSearchText);
 
-    // initial die ganzen UI-Elemente fuer die Suche an
+    // initial
     m_aDelayedPaint.SetTimeoutHdl(LINK(this, FmSearchDialog, OnDelayedPaint));
     m_aDelayedPaint.SetTimeout(500);
     EnableSearchUI(sal_True);
@@ -310,8 +311,10 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
 //------------------------------------------------------------------------
 sal_Bool FmSearchDialog::Close()
 {
-    // Wenn der Close-Button disabled ist und man im Dialog ESC drueckt, dann wird irgendwo vom Frame trotzdem Close aufgerufen,
-    // was ich allerdings nicht will, wenn ich gerade mitten in einer (eventuell in einem extra Thread laufenden) Suche bin
+    // If the close button is disabled and ESC is pressed in a dialog,
+    // then Frame will call Close anyway, which I don't want to happen
+    // while I'm in the middle of a search (maybe one that's running
+    // in its own thread)
     if (!m_pbClose.IsEnabled())
         return sal_False;
     return ModalDialog::Close();
@@ -325,7 +328,7 @@ IMPL_LINK(FmSearchDialog, OnClickedFieldRadios, Button*, pButton)
         EnableSearchForDependees(sal_True);
     }
     else
-        // die Feldlistbox entsprechend en- oder disablen
+        // en- or disable field list box accordingly
         if (pButton == &m_rbSingleField)
         {
             m_lbField.Enable();
