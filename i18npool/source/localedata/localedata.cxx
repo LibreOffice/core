@@ -287,12 +287,12 @@ LocaleData::~LocaleData()
 LocaleDataItem SAL_CALL
 LocaleData::getLocaleItem( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 dataItemCount = 0;
         sal_Unicode **dataItem = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getLocaleItem" );
 
         if ( func ) {
+            sal_Int16 dataItemCount = 0;
             dataItem = func(dataItemCount);
 
             LocaleDataItem item(
@@ -499,12 +499,12 @@ Sequence< Calendar > SAL_CALL
 LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 {
 
-        sal_Int16 calendarsCount = 0;
         sal_Unicode **allCalendars = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllCalendars" );
 
         if ( func ) {
+            sal_Int16 calendarsCount = 0;
             allCalendars = func(calendarsCount);
 
             Sequence< Calendar > calendarsSeq(calendarsCount);
@@ -571,13 +571,12 @@ LocaleData::getAllCalendars( const Locale& rLocale ) throw(RuntimeException)
 Sequence< Currency2 > SAL_CALL
 LocaleData::getAllCurrencies2( const Locale& rLocale ) throw(RuntimeException)
 {
-
-        sal_Int16 currencyCount = 0;
         sal_Unicode **allCurrencies = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getAllCurrencies" );
 
         if ( func ) {
+            sal_Int16 currencyCount = 0;
             allCurrencies = func(currencyCount);
 
             Sequence< Currency2 > seq(currencyCount);
@@ -725,12 +724,12 @@ LocaleData::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& a
 Sequence< Implementation > SAL_CALL
 LocaleData::getCollatorImplementations( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 collatorCount = 0;
         sal_Unicode **collatorArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollatorImplementation" );
 
         if ( func ) {
+            sal_Int16 collatorCount = 0;
             collatorArray = func(collatorCount);
             Sequence< Implementation > seq(collatorCount);
             for(sal_Int16 i = 0; i < collatorCount; i++) {
@@ -750,12 +749,12 @@ LocaleData::getCollatorImplementations( const Locale& rLocale ) throw(RuntimeExc
 Sequence< OUString > SAL_CALL
 LocaleData::getCollationOptions( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 optionsCount = 0;
         sal_Unicode **optionsArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollationOptions" );
 
         if ( func ) {
+            sal_Int16 optionsCount = 0;
             optionsArray = func(optionsCount);
             Sequence< OUString > seq(optionsCount);
             for(sal_Int16 i = 0; i < optionsCount; i++) {
@@ -772,12 +771,12 @@ LocaleData::getCollationOptions( const Locale& rLocale ) throw(RuntimeException)
 Sequence< OUString > SAL_CALL
 LocaleData::getSearchOptions( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 optionsCount = 0;
         sal_Unicode **optionsArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getSearchOptions" );
 
         if ( func ) {
+            sal_Int16 optionsCount = 0;
             optionsArray = func(optionsCount);
             Sequence< OUString > seq(optionsCount);
             for(sal_Int16 i = 0; i < optionsCount; i++) {
@@ -888,12 +887,12 @@ LocaleData::getIndexModuleByAlgorithm( const Locale& rLocale, const OUString& al
 Sequence< UnicodeScript > SAL_CALL
 LocaleData::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 scriptCount = 0;
         sal_Unicode **scriptArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getUnicodeScripts" );
 
         if ( func ) {
+            sal_Int16 scriptCount = 0;
             scriptArray = func(scriptCount);
             Sequence< UnicodeScript > seq(scriptCount);
             for(sal_Int16 i = 0; i < scriptCount; i++) {
@@ -910,12 +909,12 @@ LocaleData::getUnicodeScripts( const Locale& rLocale ) throw(RuntimeException)
 Sequence< OUString > SAL_CALL
 LocaleData::getFollowPageWords( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 wordCount = 0;
         sal_Unicode **wordArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getFollowPageWords" );
 
         if ( func ) {
+            sal_Int16 wordCount = 0;
             wordArray = func(wordCount);
             Sequence< OUString > seq(wordCount);
             for(sal_Int16 i = 0; i < wordCount; i++) {
@@ -933,12 +932,12 @@ Sequence< OUString > SAL_CALL
 LocaleData::getTransliterations( const Locale& rLocale ) throw(RuntimeException)
 {
 
-        sal_Int16 transliterationsCount = 0;
         sal_Unicode **transliterationsArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getTransliterations" );
 
         if ( func ) {
+            sal_Int16 transliterationsCount = 0;
             transliterationsArray = func(transliterationsCount);
 
             Sequence< OUString > seq(transliterationsCount);
@@ -960,12 +959,13 @@ LocaleData::getTransliterations( const Locale& rLocale ) throw(RuntimeException)
 LanguageCountryInfo SAL_CALL
 LocaleData::getLanguageCountryInfo( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 LCInfoCount = 0;
+
         sal_Unicode **LCInfoArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getLCInfo" );
 
         if ( func ) {
+            sal_Int16 LCInfoCount = 0;
             LCInfoArray = func(LCInfoCount);
             LanguageCountryInfo info(LCInfoArray[0],
                                     LCInfoArray[1],
@@ -985,12 +985,12 @@ LocaleData::getLanguageCountryInfo( const Locale& rLocale ) throw(RuntimeExcepti
 ForbiddenCharacters SAL_CALL
 LocaleData::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 LCForbiddenCharactersCount = 0;
         sal_Unicode **LCForbiddenCharactersArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
 
         if ( func ) {
+            sal_Int16 LCForbiddenCharactersCount = 0;
             LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
             ForbiddenCharacters chars(LCForbiddenCharactersArray[0], LCForbiddenCharactersArray[1]);
             return chars;
@@ -1004,12 +1004,12 @@ LocaleData::getForbiddenCharacters( const Locale& rLocale ) throw(RuntimeExcepti
 OUString SAL_CALL
 LocaleData::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException)
 {
-        sal_Int16 LCForbiddenCharactersCount = 0;
         sal_Unicode **LCForbiddenCharactersArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getForbiddenCharacters" );
 
         if ( func ) {
+            sal_Int16 LCForbiddenCharactersCount = 0;
             LCForbiddenCharactersArray = func(LCForbiddenCharactersCount);
             return OUString(LCForbiddenCharactersArray[2]);
         }
@@ -1020,12 +1020,12 @@ LocaleData::getHangingCharacters( const Locale& rLocale ) throw(RuntimeException
 Sequence< OUString > SAL_CALL
 LocaleData::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeException)
 {
-        sal_Int16 LCBreakIteratorRuleCount = 0;
         sal_Unicode **LCBreakIteratorRulesArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getBreakIteratorRules" );
 
         if ( func ) {
+            sal_Int16 LCBreakIteratorRuleCount = 0;
             LCBreakIteratorRulesArray = func(LCBreakIteratorRuleCount);
             Sequence< OUString > seq(LCBreakIteratorRuleCount);
             for(int i = 0; i < (LCBreakIteratorRuleCount); i++) {
@@ -1044,12 +1044,12 @@ LocaleData::getBreakIteratorRules( const Locale& rLocale  ) throw(RuntimeExcepti
 Sequence< OUString > SAL_CALL
 LocaleData::getReservedWord( const Locale& rLocale  ) throw(RuntimeException)
 {
-        sal_Int16 LCReservedWordsCount = 0;
         sal_Unicode **LCReservedWordsArray = NULL;
 
         MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getReservedWords" );
 
         if ( func ) {
+            sal_Int16 LCReservedWordsCount = 0;
             LCReservedWordsArray = func(LCReservedWordsCount);
             Sequence< OUString > seq(LCReservedWordsCount);
             for(int i = 0; i < (LCReservedWordsCount); i++) {
@@ -1074,13 +1074,12 @@ OUString C2U( const char* s )
 Sequence< Sequence<beans::PropertyValue> > SAL_CALL
 LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
-         int i;
-
          // load symbol
          MyFunc_Type2 func = (MyFunc_Type2) getFunctionSymbol( rLocale, "getContinuousNumberingLevels" );
 
          if ( func )
          {
+              int i;
               // invoke function
               sal_Int16 nStyles;
               sal_Int16 nAttributes;
@@ -1140,9 +1139,8 @@ LocaleData::getContinuousNumberingLevels( const lang::Locale& rLocale ) throw(Ru
          return seq1;
 }
 
-// ============================================================================
-// \/ OutlineNumbering helper class \/
-//
+// OutlineNumbering helper class
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/implbase1.hxx>
 
@@ -1164,13 +1162,14 @@ struct OutlineNumberingLevel_Impl
         OUString        sTransliteration;
         sal_Int32               nNatNum;
 };
-//-----------------------------------------------------------------------------
+
 class OutlineNumbering : public cppu::WeakImplHelper1 < container::XIndexAccess >
 {
+        // OutlineNumbering helper class
+
         const OutlineNumberingLevel_Impl* m_pOutlineLevels;
         sal_Int16                         m_nCount;
 public:
-//      OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlineLevels);
         OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlineLevels, int nLevels);
         ~OutlineNumbering();
 
@@ -1183,10 +1182,6 @@ public:
         virtual Type SAL_CALL getElementType(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException);
 };
-
-//
-//     OutlineNumbering helper class
-// ============================================================================
 
 static
 sal_Char* U2C( OUString str )
@@ -1203,13 +1198,12 @@ sal_Char* U2C( OUString str )
 Sequence< Reference<container::XIndexAccess> > SAL_CALL
 LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(RuntimeException)
 {
-    int i;
-
     // load symbol
     MyFunc_Type3 func = (MyFunc_Type3) getFunctionSymbol( rLocale, "getOutlineNumberingLevels" );
 
     if ( func )
     {
+        int i;
         // invoke function
         sal_Int16 nStyles;
         sal_Int16 nLevels;
@@ -1238,18 +1232,13 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
                         case 0: level[j].sPrefix             = tmp;             break;
                         case 1: level[j].nNumType            = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 2: level[j].sSuffix             = tmp;             break;
-                        //case 3: level[j].cBulletChar         = tmp.toChar();    break;
                         case 3: level[j].cBulletChar         = sal::static_int_cast<sal_Unicode>(tmp.toInt32(16)); break; // base 16
                         case 4: level[j].sBulletFontName     = U2C( tmp );      break;
                         case 5: level[j].nParentNumbering    = sal::static_int_cast<sal_Int16>(tmp.toInt32()); break;
                         case 6: level[j].nLeftMargin         = tmp.toInt32();   break;
                         case 7: level[j].nSymbolTextDistance = tmp.toInt32();   break;
                         case 8: level[j].nFirstLineOffset    = tmp.toInt32();   break;
-                        case 9: // Adjust
-                        // these values seem to be hard-coded elsewhere:
-                        // level[j].Value <<= (sal_Int16) text::HoriOrientation::LEFT;
-                        // level[j].Value <<= (sal_Int16) style::HorizontalAlignment::LEFT;
-                            break;
+                        case 9: break;
                         case 10: level[j].sTransliteration = tmp; break;
                         case 11: level[j].nNatNum    = tmp.toInt32();   break;
                         default:
@@ -1278,9 +1267,7 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////helper functions///////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
+// helper functions
 
 oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
         throw(RuntimeException)
@@ -1366,22 +1353,10 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
         return seq;
 }
 
-// ============================================================================
-
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::style;
 using namespace ::com::sun::star::text;
-
-// // bad: can't have empty prefix ...
-// OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevels) :
-//         m_pOutlineLevels(pOutlnLevels),
-//         m_nCount(0)
-// {
-//         const OutlineNumberingLevel_Impl* pTemp = m_pOutlineLevels;
-//         while((pTemp++)->sPrefix)
-//                 m_nCount++;
-// }
 
 OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevels, int nLevels) :
         m_pOutlineLevels(pOutlnLevels),
