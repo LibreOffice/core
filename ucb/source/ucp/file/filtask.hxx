@@ -147,7 +147,7 @@ namespace fileaccess
         };  // end class TaskHandling
 
 
-        typedef boost::unordered_map< sal_Int32,TaskHandling,std::hash< sal_Int32 > > TaskMap;
+        typedef boost::unordered_map< sal_Int32,TaskHandling,boost::hash< sal_Int32 > > TaskMap;
 
 
     private:

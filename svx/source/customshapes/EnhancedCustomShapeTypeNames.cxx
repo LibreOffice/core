@@ -39,7 +39,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef boost::unordered_map< const char*, MSO_SPT, std::hash<const char*>, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, MSO_SPT, boost::hash<const char*>, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
