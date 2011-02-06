@@ -44,7 +44,7 @@ namespace ww
         @author
         <a href="mailto:mikeleib@openoffice.org">Michael Leibowitz</a>
     */
-    template<class C, class HashFcn = std::hash<C> > class WrappedHash
+    template<class C, class HashFcn = boost::hash<C> > class WrappedHash
     {
     private:
         boost::unordered_set<C, HashFcn> mHashSet;
