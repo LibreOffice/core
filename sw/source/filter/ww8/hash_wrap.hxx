@@ -26,16 +26,16 @@
  *
  ************************************************************************/
 
-//this is a shameless rip from sortedarray.hxx but changed to hash_set
+//this is a shameless rip from sortedarray.hxx but changed to boost::unordered_set
 
 #ifndef WW_HASH_WRAP_HXX
 #define WW_HASH_WRAP_HXX
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <tools/debug.hxx>
 #include <errhdl.hxx>       // OSL_ENSURE()
 
-//simple wrapper around hash_set to behave like sorted array
+//simple wrapper around boost::unordered_set to behave like sorted array
 namespace ww
 {
     /** simple template that manages a hash
@@ -47,7 +47,7 @@ namespace ww
     template<class C, class HashFcn = std::hash<C> > class WrappedHash
     {
     private:
-        std::hash_set<C, HashFcn> mHashSet;
+        boost::unordered_set<C, HashFcn> mHashSet;
 
         //No copying
         WrappedHash(const WrappedHash&);
@@ -56,7 +56,7 @@ namespace ww
         //Find an entry, return its address if found and 0 if not
         const C* search(C aSrch) const
         {
-            typename std::hash_set<C, HashFcn>::const_iterator it;
+            typename boost::unordered_set<C, HashFcn>::const_iterator it;
             it= mHashSet.find(aSrch);
             if (it != mHashSet.end())
                 return &(*it);

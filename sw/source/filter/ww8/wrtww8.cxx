@@ -2442,7 +2442,7 @@ struct SwNodeHash
     size_t operator()(SwNode * pNode) const { return reinterpret_cast<size_t>(pNode); }
 };
 
-typedef ::std::hash_set<SwNode *, SwNodeHash> SwNodeHashSet;
+typedef ::boost::unordered_set<SwNode *, SwNodeHash> SwNodeHashSet;
 typedef ::std::deque<SwNode *> SwNodeDeque;
 #endif
 

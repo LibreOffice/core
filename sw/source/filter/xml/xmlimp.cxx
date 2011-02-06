@@ -64,7 +64,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <unotools/saveopt.hxx>
 #include <tools/diagnose_ex.h>
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <stringhash.hxx>
 
 // for locking SolarMutex: svapp + mutex
@@ -1163,7 +1163,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !xInfo.is() )
         return;
 
-    hash_set< String, StringHashRef, StringEqRef > aSet;
+    boost::unordered_set< String, StringHashRef, StringEqRef > aSet;
     aSet.insert(String("ForbiddenCharacters", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("IsKernAsianPunctuation", RTL_TEXTENCODING_ASCII_US));
     aSet.insert(String("CharacterCompressionType", RTL_TEXTENCODING_ASCII_US));

@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hash_set>
+#include <boost/unordered_set.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <unotools/ucbstreamhelper.hxx>
@@ -1266,7 +1266,7 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
     }
 
     bool bFound = false;
-    ::std::hash_set<size_t> aLoopWatch;
+    ::boost::unordered_set<size_t> aLoopWatch;
     while (pSty && !bFound)
     {
         const SfxPoolItem* pTabs;
