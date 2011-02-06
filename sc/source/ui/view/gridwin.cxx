@@ -424,6 +424,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
             pFilterFloat( NULL ),
             mpDPFieldPopup(NULL),
             mpFilterButton(NULL),
+            nCursorHideCount( 0 ),
             bMarking( FALSE ),
             nButtonDown( 0 ),
             bEEMouse( FALSE ),
@@ -4475,10 +4476,12 @@ void ScGridWindow::UpdateListValPos( BOOL bVisible, const ScAddress& rPos )
 
 void ScGridWindow::HideCursor()
 {
+    ++nCursorHideCount;
 }
 
 void ScGridWindow::ShowCursor()
 {
+    --nCursorHideCount;
 }
 
 void ScGridWindow::GetFocus()
