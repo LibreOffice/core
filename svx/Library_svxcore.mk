@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Library_Library,svxcore))
 
-$(eval $(call gb_Library_set_componentfile,svx,svx/util/svxcore))
+$(eval $(call gb_Library_set_componentfile,svxcore,svx/util/svxcore))
 
 $(eval $(call gb_Library_add_sdi_headers,svx,svx/sdi/svxslots))
 
