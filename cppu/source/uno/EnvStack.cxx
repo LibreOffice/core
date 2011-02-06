@@ -88,10 +88,7 @@ static void s_setCurrent(uno_Environment * pEnv)
         rThreadMap[threadId] = pEnv;
 
     else
-    {
-        ThreadMap::iterator iEnv = rThreadMap.find(threadId);
-        rThreadMap.erase(iEnv);
-    }
+        rThreadMap.erase(threadId);
 }
 
 static uno_Environment * s_getCurrent(void)
