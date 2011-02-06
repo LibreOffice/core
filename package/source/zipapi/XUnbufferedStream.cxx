@@ -169,10 +169,12 @@ sal_Int32 SAL_CALL XUnbufferedStream::readBytes( Sequence< sal_Int8 >& aData, sa
     if ( mnMyCurrent + nRequestedBytes > mnZipSize + maHeader.getLength() )
         nRequestedBytes = static_cast < sal_Int32 > ( mnZipSize + maHeader.getLength() - mnMyCurrent );
 
-    sal_Int32 nRead = 0, nLastRead = 0, nTotal = 0;
+    sal_Int32 nTotal = 0;
     aData.realloc ( nRequestedBytes );
     if ( nRequestedBytes )
     {
+        sal_Int32 nRead = 0;
+        sal_Int32 nLastRead = 0;
         if ( mbRawStream )
         {
             sal_Int64 nDiff = mnZipEnd - mnZipCurrent;

@@ -877,6 +877,7 @@ void IconChoiceDialog::ActivatePageImpl ()
     DBG_ASSERT( !maPageList.empty(), "keine Pages angemeldet" );
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
     DBG_ASSERT( pData, "Id nicht bekannt" );
+    BOOL bReadOnly = FALSE;
     if ( pData )
     {
         if ( !pData->pPage )
@@ -916,11 +917,11 @@ void IconChoiceDialog::ActivatePageImpl ()
 
         if ( pExampleSet )
             pData->pPage->ActivatePage( *pExampleSet );
+        SetHelpId( pData->pPage->GetHelpId() );
+        bReadOnly = pData->pPage->IsReadOnly();
     }
 
-    SetHelpId( pData->pPage->GetHelpId() );
 
-    BOOL bReadOnly = pData->pPage->IsReadOnly();
     if ( bReadOnly || bHideResetBtn )
         aResetBtn.Hide();
     else

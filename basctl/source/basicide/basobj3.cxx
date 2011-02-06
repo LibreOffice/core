@@ -372,10 +372,10 @@ void BasicStopped( BOOL* pbAppWindowDisabled,
         *ppSWLockViewCount = 0;
 
     // AppWait ?
-    USHORT nWait = 0;
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if( pIDEShell )
     {
+        USHORT nWait = 0;
         while ( pIDEShell->GetViewFrame()->GetWindow().IsWait() )
         {
             pIDEShell->GetViewFrame()->GetWindow().LeaveWait();

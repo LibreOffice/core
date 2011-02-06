@@ -1758,13 +1758,13 @@ namespace svx
 
             //fill found entries into boxes
             sal_uInt32 nCnt = aEntries.getLength();
-            sal_uInt32 n = 0;
             if( nCnt )
             {
                 if( !m_pSuggestions )
                     m_pSuggestions = new SuggestionList( MAXNUM_SUGGESTIONS );
 
                 const OUString* pSugg = aEntries.getConstArray();
+                sal_uInt32 n = 0;
                 while( nCnt )
                 {
                     m_pSuggestions->Set( pSugg[ n ], sal_uInt16( n ) );

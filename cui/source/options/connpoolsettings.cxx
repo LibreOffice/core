@@ -75,7 +75,7 @@ namespace offapp
     //====================================================================
     TYPEINIT1( DriverPoolingSettingsItem, SfxPoolItem )
     //--------------------------------------------------------------------
-    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings _rSettings )
+    DriverPoolingSettingsItem::DriverPoolingSettingsItem( sal_uInt16 _nId, const DriverPoolingSettings &_rSettings )
         :SfxPoolItem(_nId)
         ,m_aSettings(_rSettings)
     {

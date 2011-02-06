@@ -342,15 +342,15 @@ void SvxProxyTabPage::ReadConfigData_Impl()
         }
     }
 
-    catch(container::NoSuchElementException e) {
+    catch(container::NoSuchElementException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: NoSuchElementException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::ReadConfigData_Impl: RuntimeException caught" );
     }
 
@@ -400,16 +400,16 @@ void SvxProxyTabPage::ReadConfigDefaults_Impl()
             aNoProxyForED.SetText( aStringValue );
         }
     }
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -434,16 +434,16 @@ void SvxProxyTabPage::RestoreConfigDefaults_Impl()
         xChangesBatch->commitChanges();
     }
 
-    catch(beans::UnknownPropertyException e)
+    catch(beans::UnknownPropertyException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: UnknownPropertyException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e)
+    catch(RuntimeException &e)
     {
         OSL_TRACE( "SvxProxyTabPage::RestoreConfigDefaults_Impl: RuntimeException caught" );
     }
@@ -539,23 +539,23 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
         xChangesBatch->commitChanges();
     }
 
-    catch(com::sun::star::lang::IllegalArgumentException e) {
+    catch(com::sun::star::lang::IllegalArgumentException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: IllegalArgumentException caught" );
     }
 
-    catch(beans::UnknownPropertyException e) {
+    catch(beans::UnknownPropertyException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: UnknownPropertyException caught" );
     }
 
-    catch(beans::PropertyVetoException e) {
+    catch(beans::PropertyVetoException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: PropertyVetoException caught" );
     }
 
-    catch(com::sun::star::lang::WrappedTargetException e) {
+    catch(com::sun::star::lang::WrappedTargetException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: WrappedTargetException caught" );
     }
 
-    catch(RuntimeException e) {
+    catch(RuntimeException &e) {
         OSL_TRACE( "SvxProxyTabPage::FillItemSet: RuntimeException caught" );
     }
 
