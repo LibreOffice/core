@@ -1929,7 +1929,7 @@ bool VSeriesPlotter::HasRegressionCurves( const VDataSeries& rSeries, bool& rbHa
         sal_Int32 i = 0, nCount = aCurves.getLength();
         for( i=0; i<nCount; ++i )
         {
-            if( aCurves[i].is() && !RegressionCurveHelper::isMeanValueLine( aCurves[i] ) )
+            if( aCurves[i].is() )
             {
                 bHasRegressionCurves = true;
                 if( HasDashedLines( uno::Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ) ) )
@@ -2167,7 +2167,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             sal_Int32 i = 0, nCount = aCurves.getLength();
             for( i=0; i<nCount; ++i )
             {
-                if( aCurves[i].is() && !RegressionCurveHelper::isMeanValueLine( aCurves[i] ) )
+                if( aCurves[i].is() )
                 {
                     //label
                     OUString aResStr( SchResId::getResString( STR_STATISTICS_IN_LEGEND ));
@@ -2189,7 +2189,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                     {
                         aEntry.aSymbol = uno::Reference< drawing::XShape >( xSymbolGroup, uno::UNO_QUERY );
 
-                        bool bAverageLine = false;//@todo find out wether this is an average line or a regression curve
+                        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[i] );
                         ObjectType eObjectType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
                         OUString aChildParticle( ObjectIdentifier::createChildParticleWithIndex( eObjectType, i ) );
                         aChildParticle = ObjectIdentifier::addChildParticle( aChildParticle, ObjectIdentifier::createChildParticleWithIndex( OBJECTTYPE_LEGEND_ENTRY, 0 ) );
