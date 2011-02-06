@@ -52,9 +52,6 @@
 #define EXTRAFONTSIZE 5
 #define MAXPREVIEWWIDTH 150
 
-static sal_Unicode aImplSymbolFontText[] = {0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
-static sal_Unicode aImplStarSymbolText[] = {0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
-
 using namespace ::com::sun::star;
 
 // ========================================================================
@@ -894,10 +891,224 @@ void FontNameBox::ImplCalcUserItemSize()
     SetUserItemSize( aUserItemSz );
 }
 
-#define MKTAG(s) ((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
+#define MKTAG(s) sal_uInt32((((((s[0]<<8)+s[1])<<8)+s[2])<<8)+s[3])
 
 namespace
 {
+    rtl::OUString getRepresentativeText(sal_uInt32 nScript)
+    {
+        rtl::OUString sSampleText;
+        if (nScript == MKTAG("arab"))
+        {
+            const sal_Unicode aArab[] = {
+                0x0623, 0x0628, 0x062C, 0x062F, 0x064A, 0x0629, 0x0020, 0x0639,
+                0x0631, 0x0628, 0x064A, 0x0629
+            };
+            sSampleText = rtl::OUString(aArab, SAL_N_ELEMENTS(aArab));
+        }
+        else if (nScript == MKTAG("cyrl"))
+        {
+            const sal_Unicode aCyrl[] = {
+                0x041A, 0x0438, 0x0440, 0x0438, 0x043B, 0x043B, 0x0438, 0x0446,
+                0x0430
+            };
+            sSampleText = rtl::OUString(aCyrl, SAL_N_ELEMENTS(aCyrl));
+        }
+        else if (nScript == MKTAG("beng"))
+        {
+            const sal_Unicode aBeng[] = {
+                0x09AC, 0x09BE, 0x0982, 0x09B2, 0x09BE, 0x0020, 0x09B2, 0x09BF,
+                0x09AA, 0x09BF
+            };
+            sSampleText = rtl::OUString(aBeng, SAL_N_ELEMENTS(aBeng));
+        }
+        else if (nScript == MKTAG("deva"))
+        {
+            const sal_Unicode aDeva[] = {
+                0x0926, 0x0947, 0x0935, 0x0928, 0x093E, 0x0917, 0x0930, 0x0940
+            };
+            sSampleText = rtl::OUString(aDeva, SAL_N_ELEMENTS(aDeva));
+        }
+        else if (nScript == MKTAG("ethi"))
+        {
+            const sal_Unicode aEthi[] = {
+                0x130D, 0x12D5, 0x12DD
+            };
+            sSampleText = rtl::OUString(aEthi, SAL_N_ELEMENTS(aEthi));
+        }
+        else if (nScript == MKTAG("grek"))
+        {
+            const sal_Unicode aGrek[] = {
+                0x0391, 0x03BB, 0x03C6, 0x03AC, 0x03B2, 0x03B7, 0x03C4, 0x03BF
+            };
+            sSampleText = rtl::OUString(aGrek, SAL_N_ELEMENTS(aGrek));
+        }
+        else if (nScript == MKTAG("gujr"))
+        {
+            const sal_Unicode aGujr[] = {
+                0x0A97, 0x0AC1, 0x0A9C, 0x0AB0, 0x0ABE, 0x0AA4, 0x0aC0, 0x0020,
+                0x0AB2, 0x0ABF, 0x0AAA, 0x0ABF
+            };
+            sSampleText = rtl::OUString(aGujr, SAL_N_ELEMENTS(aGujr));
+        }
+        else if (nScript == MKTAG("guru"))
+        {
+            const sal_Unicode aGuru[] = {
+                0x0A17, 0x0A41, 0x0A30, 0x0A2E, 0x0A41, 0x0A16, 0x0A40
+            };
+            sSampleText = rtl::OUString(aGuru, SAL_N_ELEMENTS(aGuru));
+        }
+        else if (nScript == MKTAG("hani"))
+        {
+            const sal_Unicode aHani[] = {
+                0x6C49, 0x5B57
+            };
+            sSampleText = rtl::OUString(aHani, SAL_N_ELEMENTS(aHani));
+        }
+        else if (nScript == MKTAG("hebr"))
+        {
+            const sal_Unicode aHebr[] = {
+                0x05D0, 0x05B8, 0x05DC, 0x05B6, 0x05E3, 0x05D1, 0x05B5, 0x05BC,
+                0x05D9, 0x05EA, 0x0020, 0x05E2, 0x05B4, 0x05D1, 0x05B0, 0x05E8,
+                0x05B4, 0x05D9
+            };
+            sSampleText = rtl::OUString(aHebr, SAL_N_ELEMENTS(aHebr));
+        }
+        else if (nScript == MKTAG("kana"))
+        {
+            const sal_Unicode aKana[] = {
+                0x7247, 0x4EEE, 0x540D
+            };
+            sSampleText = rtl::OUString(aKana, SAL_N_ELEMENTS(aKana));
+        }
+        else if (nScript == MKTAG("khmr"))
+        {
+            const sal_Unicode aKhmr[] = {
+                0x17A2, 0x1780, 0x17D2, 0x1781, 0x179A, 0x1780, 0x17D2, 0x179A,
+                0x1798, 0x1781, 0x17C1, 0x1798, 0x179A, 0x1797, 0x17B6, 0x179F,
+                0x17B6
+            };
+            sSampleText = rtl::OUString(aKhmr, SAL_N_ELEMENTS(aKhmr));
+        }
+        else if (nScript == MKTAG("knda"))
+        {
+            const sal_Unicode aKnda[] = {
+                0x0C95, 0x0CA8, 0x0CCD, 0x0CA8, 0x0CA1, 0x0020, 0x0CB2, 0x0CBF,
+                0x0CAA, 0x0CBF
+            };
+            sSampleText = rtl::OUString(aKnda, SAL_N_ELEMENTS(aKnda));
+        }
+        else if (nScript == MKTAG("latf"))
+            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Fraktur"));
+        else if (nScript == MKTAG("latn"))
+            sSampleText = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Latin"));
+        else if (nScript == MKTAG("latg"))
+        {
+            const sal_Unicode aLatg[] = {
+              0x0063, 0x006C, 0x00F3, 0x0020, 0x0047, 0x0061, 0x0065, 0x006C,
+              0x0061, 0x0063, 0x0068
+            };
+            sSampleText = rtl::OUString(aLatg, SAL_N_ELEMENTS(aLatg));
+        }
+        else if (nScript == MKTAG("mlym"))
+        {
+            const sal_Unicode aMlym[] = {
+                0x0D2E, 0x0D32, 0x0D2F, 0x0D3E, 0x0D33, 0x0D32, 0x0D3F, 0x0D2A,
+                0x0D3F
+            };
+            sSampleText = rtl::OUString(aMlym, SAL_N_ELEMENTS(aMlym));
+        }
+        else if (nScript == MKTAG("mymr"))
+        {
+            const sal_Unicode aMymr[] = {
+                0x1019, 0x103C, 0x1014, 0x103A, 0x1019, 0x102C, 0x1021, 0x1000,
+                0x1039, 0x1001, 0x101B, 0x102C
+            };
+            sSampleText = rtl::OUString(aMymr, SAL_N_ELEMENTS(aMymr));
+        }
+        else if (nScript == MKTAG("orya"))
+        {
+            const sal_Unicode aOrya[] = {
+                0x0B09, 0x0B24, 0x0B4D, 0x0B15, 0x0B33, 0x0020, 0x0B32, 0x0B3F,
+                0x0B2A, 0x0B3F
+            };
+            sSampleText = rtl::OUString(aOrya, SAL_N_ELEMENTS(aOrya));
+        }
+        else if (nScript == MKTAG("thai"))
+        {
+            const sal_Unicode aThai[] = {
+                0x0E2D, 0x0E31, 0x0E01, 0x0E29, 0x0E23, 0x0E44, 0x0E17, 0x0E22
+            };
+            sSampleText = rtl::OUString(aThai, SAL_N_ELEMENTS(aThai));
+        }
+        else if (nScript == MKTAG("taml"))
+        {
+            const sal_Unicode aTaml[] = {
+                0x0B85, 0x0BB0, 0x0BBF, 0x0B9A, 0x0BCD, 0x0B9A, 0x0BC1, 0x0BB5,
+                0x0B9F, 0x0BBF
+            };
+            sSampleText = rtl::OUString(aTaml, SAL_N_ELEMENTS(aTaml));
+        }
+        else if (nScript == MKTAG("telu"))
+        {
+            const sal_Unicode aTelu[] = {
+                0x0C24, 0x0C46, 0x0C32, 0x0C41, 0x0C17, 0x0C41
+            };
+            sSampleText = rtl::OUString(aTelu, SAL_N_ELEMENTS(aTelu));
+        }
+        else if (nScript == MKTAG("tibt"))
+        {
+            const sal_Unicode aTibt[] = {
+                0x0F51, 0x0F56, 0x0F74, 0x0F0B, 0x0F45, 0x0F53, 0x0F0B
+            };
+            sSampleText = rtl::OUString(aTibt, SAL_N_ELEMENTS(aTibt));
+        }
+        else if (nScript == MKTAG("sinh"))
+        {
+            const sal_Unicode aSinh[] = {
+                0x0DC1, 0x0DD4, 0x0DAF, 0x0DCA, 0x0DB0, 0x0020, 0x0DC3, 0x0DD2,
+                0x0D82, 0x0DC4, 0x0DBD
+            };
+            sSampleText = rtl::OUString(aSinh, SAL_N_ELEMENTS(aSinh));
+        }
+        else if (nScript == (MKTAG("hani") | MKTAG("kana")))
+        {
+            const sal_Unicode aKana[] = {
+                0x7247, 0x4EEE, 0x540D, ' ', 0x6C49, 0x5B57
+            };
+            sSampleText = rtl::OUString(aKana, SAL_N_ELEMENTS(aKana));
+        }
+
+        return sSampleText;
+    }
+
+    sal_uInt32 getSingleNonLatnTag(const FontLayoutCapabilities &rFontLayoutCapabilities)
+    {
+        FontLayoutCapabilities aTmp(rFontLayoutCapabilities);
+
+        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("DFLT")), aTmp.end());
+        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("dflt")), aTmp.end());
+        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("latn")), aTmp.end());
+
+        //Tuned for a single non-latin script
+        if (aTmp.size() == 1)
+            return aTmp[0];
+
+        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("deva")), aTmp.end());
+
+        //Probably strongly tuned for a single Indic script
+        if (aTmp.size() == 1)
+            return aTmp[0];
+
+        if (aTmp.size() == 2)
+        {
+            const sal_uInt32 nHaniKaniTag = MKTAG("hani") | MKTAG("kana");
+            if ((aTmp[0] | aTmp[1]) == nHaniKaniTag)
+                return nHaniKaniTag;
+        }
+        return 0;
+    }
+
     rtl::OUString makeRepresentativeSymbolText(bool bOpenSymbol, OutputDevice &rDevice)
     {
         rtl::OUString sSampleText;
@@ -911,11 +1122,11 @@ namespace
 
             // start just above the PUA used by most symbol fonts
             sal_uInt32 cNewChar = 0xFF00;
-    #ifdef QUARTZ
+#ifdef QUARTZ
             // on MacOSX there are too many non-presentable symbols above the codepoint 0x0192
             if( !bOpenSymbol )
                 cNewChar = 0x0192;
-    #endif
+#endif
 
             const int nMaxCount = sizeof(aText)/sizeof(*aText) - 1;
             int nSkip = aFontCharMap.GetCharCount() / nMaxCount;
@@ -938,9 +1149,15 @@ namespace
         }
         else
         {
+            static sal_Unicode aImplSymbolFontText[] = {
+                0xF021,0xF032,0xF043,0xF054,0xF065,0xF076,0xF0B7,0xF0C8,0};
             const sal_Unicode* pText = aImplSymbolFontText;
             if( bOpenSymbol )
+            {
+                static sal_Unicode aImplStarSymbolText[] = {
+                    0x2706,0x2704,0x270D,0xE033,0x2211,0x2288,0};
                 pText = aImplStarSymbolText;
+            }
             sSampleText = rtl::OUString(pText);
         }
 
@@ -1077,13 +1294,73 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
         rtl::OUString sSampleText;
         bool bHasSampleTextGlyphs=false;
 
-        //TO-DO: for non-symbol fonts pull GPOS/GSUB features through vcl to
-        //and map to suitable strings for Arabic, Hebrew, etc fonts
+        if (!bSymbolFont)
+        {
+            const bool bNameBeginsWithLatinText = rInfo.GetName().GetChar(0) <= 'z';
+            if (bNameBeginsWithLatinText)
+            {
+                //If this font is probably tuned to display a single non-Latin
+                //script and the font name is itself in Latin, then show a small
+                //chunk of representative text for that script
+                FontLayoutCapabilities aFontLayoutCapabilities;
+                rUDEvt.GetDevice()->GetFontLayoutCapabilities( aFontLayoutCapabilities );
+                sal_uInt32 nLangTag = getSingleNonLatnTag(aFontLayoutCapabilities);
+                if (nLangTag)
+                {
+                    sSampleText = getRepresentativeText(nLangTag);
+                    bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
+                    if (!bHasSampleTextGlyphs && (nLangTag == (MKTAG("hani")|MKTAG("kana"))))
+                    {
+                        sSampleText = getRepresentativeText(MKTAG("kana"));
+                        bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
+                        if (!bHasSampleTextGlyphs)
+                        {
+                            sSampleText = getRepresentativeText(MKTAG("hani"));
+                            bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
+                        }
+                    }
+                }
+            }
+        }
+
+        //If we're not a symbol font, but could neither render our own name and
+        //we can't determine what script it would like to render, then try a
+        //few well known scripts
+        if (!sSampleText.getLength() && !bUsingCorrectFont)
+        {
+            static const sal_Int32 tags[] =
+            {
+                MKTAG("arab"), MKTAG("hebr"),
+
+                MKTAG("beng"), MKTAG("gujr"), MKTAG("guru"), MKTAG("knda"),
+                MKTAG("mlym"), MKTAG("mymr"), MKTAG("orya"), MKTAG("taml"),
+                MKTAG("telu"), MKTAG("sinh"),
+
+                MKTAG("tibt"), MKTAG("thai"), MKTAG("khmr"), MKTAG("ethi"),
+
+                (MKTAG("hani")|MKTAG("kana")), MKTAG("hani"), MKTAG("kana"),
+
+                MKTAG("deva"),
+
+                MKTAG("grek"), MKTAG("cyrl")
+            };
+
+            for (size_t i = 0; i < SAL_N_ELEMENTS(tags); ++i)
+            {
+                sSampleText = getRepresentativeText(tags[i]);
+                if (sSampleText.getLength())
+                {
+                    bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
+                    if (bHasSampleTextGlyphs)
+                        break;
+                }
+            }
+        }
 
         //If we're a symbol font, or for some reason the font still couldn't
         //render something representative of what it would like to render then
         //make up some semi-random text that it *can* display
-        if (bSymbolFont || !bUsingCorrectFont)
+        if (bSymbolFont || (!bUsingCorrectFont && !bHasSampleTextGlyphs))
         {
             sSampleText = makeRepresentativeSymbolText(bOpenSymbol, *rUDEvt.GetDevice());
             bHasSampleTextGlyphs = (STRING_LEN == rUDEvt.GetDevice()->HasGlyphs(aFont, sSampleText));
