@@ -323,9 +323,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             ::rtl::OUString::createFromAscii(argv[4]),
             ::rtl::OUString::createFromAscii(argv[5]) );
     }
-    catch ( Exception& )
+    catch ( Exception &e )
     {
-        printf( "Exception on createRegistryServiceFactory\n" );
+        printf( "Exception on createRegistryServiceFactory %s\n",
+            OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).getStr() );
         exit(1);
     }
 
