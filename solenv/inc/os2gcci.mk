@@ -128,7 +128,7 @@ CFLAGSOUTOBJ=-o
 #   (this_type(p).swap(*this))
 # - truncwarn: "conversion of 64 bit type value to smaller type causes
 #   truncation" at least with CC 5.8 is reported only at the end of a
-#   compilation unit that uses std::hash_map<sal_Int64, sal_Int64> (see
+#   compilation unit that uses boost::unordered_map<sal_Int64, sal_Int64> (see
 #   sfx2/source/toolbox/imgmgr.cxx:1.27) and thus unfortunately needs to be
 #   disabled globally
 CFLAGSWARNCC=
