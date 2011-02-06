@@ -105,9 +105,9 @@ private:
     { // check for stlport
         osl::Mutex m;
         std::auto_ptr< cppu::OMultiTypeInterfaceContainerHelperVar<
-            int, std::hash< int >, std::equal_to< int > > > dummy(
+            int, boost::hash< int >, std::equal_to< int > > > dummy(
                 new cppu::OMultiTypeInterfaceContainerHelperVar<
-                int, std::hash< int >, std::equal_to< int > >(m));
+                int, boost::hash< int >, std::equal_to< int > >(m));
     }
     static char const * const services[] = {
         "com.sun.star.beans.Introspection",
