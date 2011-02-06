@@ -41,6 +41,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <osl/file.h>
 #include <mutexholder.hxx>
+#include <vector>
 
 class ZipOutputStream;
 class ZipPackageFolder;

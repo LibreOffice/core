@@ -34,6 +34,7 @@
 #include <HashMaps.hxx>
 #include <ZipPackageEntry.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <vector>
 
 namespace com { namespace sun { namespace star {
 namespace beans
