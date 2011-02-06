@@ -69,7 +69,7 @@
 #include <unochart.hxx>
 #include <comphelper/makesequence.hxx>
 #include <comphelper/sequence.hxx>
-#include <slist>
+#include <list>
 #include <iterator>
 
 #include <unosection.hxx>
@@ -1067,7 +1067,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::slist< Any > frmcontainer_t;
+            typedef ::std::list< Any > frmcontainer_t;
             frmcontainer_t m_aFrames;
         protected:
             virtual ~SwXFrameEnumeration() {};

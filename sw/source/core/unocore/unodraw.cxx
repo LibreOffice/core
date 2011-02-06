@@ -85,7 +85,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <vcl/svapp.hxx>
-#include <slist>
+#include <list>
 #include <iterator>
 
 using ::rtl::OUString;
@@ -414,7 +414,7 @@ namespace
         : public SwSimpleEnumeration_Base
     {
         private:
-            typedef ::std::slist< ::com::sun::star::uno::Any > shapescontainer_t;
+            typedef ::std::list< ::com::sun::star::uno::Any > shapescontainer_t;
             shapescontainer_t m_aShapes;
         protected:
             virtual ~SwXShapesEnumeration() {};
