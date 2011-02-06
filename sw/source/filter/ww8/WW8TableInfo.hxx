@@ -34,6 +34,7 @@
 #include <set>
 #include <functional>
 #include <boost/shared_ptr.hpp>
+#include <vector>
 #include <sal/types.h>
 #include <swrect.hxx>
 
