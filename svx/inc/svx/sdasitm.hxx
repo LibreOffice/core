@@ -68,7 +68,7 @@ private:
     {
         bool operator()( const SdrCustomShapeGeometryItem::PropertyPair&, const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
-    struct PropertyPairHash
+    struct SVX_DLLPUBLIC PropertyPairHash
     {
         size_t operator()( const SdrCustomShapeGeometryItem::PropertyPair& ) const;
     };
