@@ -43,6 +43,7 @@
 #include <com/sun/star/reflection/XSingletonTypeDescription.hpp>
 #include <rtl/ustring.hxx>
 #include <boost/unordered_map.hpp>
+#include <vector>
 
 class SbUnoObject: public SbxObject
 {

@@ -39,7 +39,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "filerror.hxx"
-
+#include <hash_map>
 
 namespace fileaccess
 {
@@ -183,15 +183,6 @@ namespace fileaccess
         void SAL_CALL installError( sal_Int32 CommandId,
                                     sal_Int32 ErrorCode,
                                     sal_Int32 minorCode = TASKHANDLER_NO_ERROR );
-
-
-//          void SAL_CALL installError( sal_Int32 CommandId,
-//                                      sal_Int32 ErrorCode,
-//                                      rtl::OUString message );
-
-//          void SAL_CALL installError( sal_Int32 CommandId,
-//                                      sal_Int32 ErrorCode,
-//                                      rtl::OUString message );
 
         void SAL_CALL retrieveError( sal_Int32 CommandId,
                                      sal_Int32 &ErrorCode,
