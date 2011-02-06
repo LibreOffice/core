@@ -39,7 +39,6 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include "filerror.hxx"
-#include <hash_map>
 
 namespace fileaccess
 {

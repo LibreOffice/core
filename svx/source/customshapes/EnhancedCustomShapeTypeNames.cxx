@@ -31,7 +31,6 @@
 #include "EnhancedCustomShapeTypeNames.hxx"
 #include <osl/mutex.hxx>
 #include <boost/unordered_map.hpp>
-#include <hash_map>
 
 struct TCheck
 {

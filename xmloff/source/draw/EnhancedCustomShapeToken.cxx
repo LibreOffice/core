@@ -31,7 +31,6 @@
 #include "EnhancedCustomShapeToken.hxx"
 #include <osl/mutex.hxx>
 #include <boost/unordered_map.hpp>
-#include <hash_map>
 #include <string.h>
 
 namespace xmloff { namespace EnhancedCustomShapeToken {
