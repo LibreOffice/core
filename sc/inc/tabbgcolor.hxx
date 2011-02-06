@@ -40,9 +40,6 @@ struct ScUndoTabColorInfo
     Color maOldTabBgColor;
     Color maNewTabBgColor;
 
-    bool IsDefaultOldTabBgColor() const;
-    bool IsDefaultNewTabBgColor() const;
-
     explicit ScUndoTabColorInfo(SCTAB nTab);
     ScUndoTabColorInfo(const ScUndoTabColorInfo& r);
 

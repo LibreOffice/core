@@ -961,15 +961,6 @@ void ScValidationDataList::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos )
         (*this)[i]->UpdateMoveTab( nOldPos, nNewPos );
 }
 
-bool ScValidationDataList::MarkUsedExternalReferences() const
-{
-    bool bAllMarked = false;
-    USHORT nCount = Count();
-    for (USHORT i=0; !bAllMarked && i<nCount; i++)
-        bAllMarked = (*this)[i]->MarkUsedExternalReferences();
-    return bAllMarked;
-}
-
 BOOL ScValidationDataList::operator==( const ScValidationDataList& r ) const
 {
     // fuer Ref-Undo - interne Variablen werden nicht verglichen

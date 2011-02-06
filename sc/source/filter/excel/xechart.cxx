@@ -322,16 +322,6 @@ XclChRectangle XclExpChRoot::CalcChartRectFromHmm( const ::com::sun::star::awt::
     return aRect;
 }
 
-sal_Int32 XclExpChRoot::CalcChartXFromRelative( double fPosX ) const
-{
-    return CalcChartXFromHmm( static_cast< sal_Int32 >( fPosX * mxChData->maChartRect.GetWidth() + 0.5 ) );
-}
-
-sal_Int32 XclExpChRoot::CalcChartYFromRelative( double fPosY ) const
-{
-    return CalcChartYFromHmm( static_cast< sal_Int32 >( fPosY * mxChData->maChartRect.GetHeight() + 0.5 ) );
-}
-
 void XclExpChRoot::ConvertLineFormat( XclChLineFormat& rLineFmt,
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode ) const
 {

@@ -349,51 +349,6 @@ void ScCompressedArrayIterator<A,D>::Resync( A nPos )
 }
 
 
-// === ScSummableCompressedArray =============================================
-
-/** Data type D must be of a type that is convertable to unsigned long. The
-    advantage is that specialized methods exist to act on a region of values
-    for performance reasons.
- */
-
-template< typename A, typename D > class ScSummableCompressedArray : public ScCompressedArray<A,D>
-{
-public:
-                                ScSummableCompressedArray( A nMaxAccessP,
-                                        const D& rValue,
-                                        size_t nDeltaP = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            rValue, nDeltaP)
-                                    {}
-                                ScSummableCompressedArray( A nMaxAccessP,
-                                        const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccessP,
-                                            pDataArray, nDataCount)
-                                    {}
-
-    /** Returns the sum of all values for a region. If an overflow would occur,
-        ::std::numeric_limits<unsigned long>::max() is returned. */
-    unsigned long               SumValues( A nStart, A nEnd ) const;
-
-    /** Returns the sum of all values for a region. If an overflow would occur,
-        ::std::numeric_limits<unsigned long>::max() is returned.
-        The caller has to assure that nIndex matches an entry belonging to
-        nStart, for example, by calling Search(nStart) first! */
-    unsigned long               SumValuesContinuation( A nStart, A nEnd,
-                                    size_t& nIndex ) const;
-
-    /** Returns the sum of all scaled values for a region. If an overflow would
-        occur, ::std::numeric_limits<unsigned long>::max() is returned.
-        Summed values are treated as if for each row the expression
-        (sum += (unsigned long) (scale * value)) had been applied.
-        The caller has to assure that nIndex matches an entry belonging to
-        nStart, for example, by calling Search(nStart) first! */
-    unsigned long               SumScaledValuesContinuation( A nStart, A nEnd,
-                                    size_t& nIndex, double fScale ) const;
-
-};
-
-
 // === ScBitMaskCompressedArray ==============================================
 
 /** The data type represents bits, managable by bitwise operations.

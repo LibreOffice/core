@@ -334,63 +334,6 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
     pData[nCount-1].nEnd = nMaxAccess;
 }
 
-// === ScSummableCompressedArray =============================================
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumValues( A nStart, A nEnd ) const
-{
-    size_t nIndex = Search( nStart);
-    unsigned long nSum = SumValuesContinuation( nStart, nEnd, nIndex);
-    if (nEnd > this->nMaxAccess)
-        nSum += this->pData[this->nCount-1].aValue * (nEnd - this->nMaxAccess);
-    return nSum;
-}
-
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumValuesContinuation(
-        A nStart, A nEnd, size_t& nIndex ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    while (nIndex < this->nCount && nS <= nEnd)
-    {
-        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-        // FIXME: test for overflow in a single region?
-        unsigned long nNew = (unsigned long) this->pData[nIndex].aValue * (nE - nS + 1);
-        nSum += nNew;
-        if (nSum < nNew)
-            return ::std::numeric_limits<unsigned long>::max();
-        nS = nE + 1;
-        if (nS <= nEnd)
-            ++nIndex;
-    }
-    return nSum;
-}
-
-
-template< typename A, typename D >
-unsigned long ScSummableCompressedArray<A,D>::SumScaledValuesContinuation(
-        A nStart, A nEnd, size_t& nIndex, double fScale ) const
-{
-    unsigned long nSum = 0;
-    A nS = nStart;
-    while (nIndex < this->nCount && nS <= nEnd)
-    {
-        A nE = ::std::min( this->pData[nIndex].nEnd, nEnd);
-        unsigned long nScaledVal = (unsigned long) (this->pData[nIndex].aValue * fScale);
-        // FIXME: test for overflow in a single region?
-        unsigned long nNew = nScaledVal * (nE - nS + 1);
-        nSum += nNew;
-        if (nSum < nNew)
-            return ::std::numeric_limits<unsigned long>::max();
-        nS = nE + 1;
-        if (nS <= nEnd)
-            ++nIndex;
-    }
-    return nSum;
-}
-
 
 // === ScBitMaskCompressedArray ==============================================
 
@@ -544,7 +487,6 @@ void ScCompressedArrayIterator<A,D>::Follow(
 // === Force instantiation of specializations ================================
 
 template class ScCompressedArray< SCROW, USHORT>;           // heights, base class
-template class ScSummableCompressedArray< SCROW, USHORT>;   // heights
 template class ScCompressedArray< SCROW, BYTE>;             // flags, base class
 template class ScBitMaskCompressedArray< SCROW, BYTE>;      // flags
 template void ScCompressedArrayIterator< SCROW, USHORT>::Follow(

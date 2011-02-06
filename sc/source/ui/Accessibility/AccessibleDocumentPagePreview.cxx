@@ -101,7 +101,7 @@ public:
     uno::Reference<XAccessible> GetAt(const awt::Point& rPoint) const;
 
     void DataChanged(const Rectangle& rVisRect);
-    void SetOffset(sal_Int32 nNewOffset);
+
 private:
     ScPreviewShell*         mpViewShell;
     ScAccessibleDocumentPagePreview* mpAccDoc;
@@ -500,17 +500,6 @@ struct ScChangeOffset
             rNote.mpTextHelper->SetStartIndex(rNote.mpTextHelper->GetStartIndex() + mnDiff);
     }
 };
-
-void ScNotesChilds::SetOffset(sal_Int32 nNewOffset)
-{
-    sal_Int32 nDiff(nNewOffset - mnOffset);
-    if (nDiff != 0)
-    {
-        std::for_each(maMarks.begin(), maMarks.end(), ScChangeOffset(nDiff));
-        std::for_each(maNotes.begin(), maNotes.end(), ScChangeOffset(nDiff));
-        mnOffset = nNewOffset;
-    }
-}
 
 inline ScDocument* ScNotesChilds::GetDocument() const
 {

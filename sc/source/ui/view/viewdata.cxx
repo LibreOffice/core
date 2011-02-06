@@ -540,19 +540,6 @@ void ScViewData::MoveTab( SCTAB nSrcTab, SCTAB nDestTab )
     aMarkData.InsertTab( nInsTab );         // ggf. angepasst
 }
 
-void ScViewData::SetViewShell( ScTabViewShell* pViewSh )
-{
-    if (pViewSh)
-    {
-        pViewShell  = pViewSh;
-        pView       = pViewSh;
-    }
-    else
-    {
-        pViewShell  = NULL;
-        pView       = NULL;
-    }
-}
 void ScViewData::CreateTabData( std::vector< SCTAB >& rvTabs )
 {
     std::vector< SCTAB >::iterator it_end = rvTabs.end();

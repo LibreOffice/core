@@ -42,7 +42,7 @@ typedef CollTestImplHelper< ov::excel::XWindows > ScVbaWindows_BASE;
 class ScVbaWindows : public ScVbaWindows_BASE
 {
 public:
-    ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    //]AE] ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
     ScVbaWindows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~ScVbaWindows() {}
 

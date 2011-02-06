@@ -62,7 +62,6 @@ SLOFILES= \
         $(SLO)$/vbachart.obj \
         $(SLO)$/vbachartobject.obj \
         $(SLO)$/vbachartobjects.obj \
-        $(SLO)$/vbacharts.obj \
         $(SLO)$/vbacharttitle.obj \
         $(SLO)$/vbacomment.obj \
         $(SLO)$/vbacomments.obj \
@@ -104,7 +103,6 @@ SLOFILES= \
         $(SLO)$/vbapivottables.obj \
         $(SLO)$/vbaquerytable.obj \
         $(SLO)$/vbarange.obj \
-        $(SLO)$/vbaseriescollection.obj \
         $(SLO)$/vbasheetobject.obj \
         $(SLO)$/vbasheetobjects.obj \
         $(SLO)$/vbastyle.obj \

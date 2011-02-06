@@ -120,11 +120,6 @@ public:
     /** Converts the passed rectangle from 1/100 mm to Excel chart units. */
     XclChRectangle      CalcChartRectFromHmm( const ::com::sun::star::awt::Rectangle& rRect ) const;
 
-    /** Converts the passed horizontal coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartXFromRelative( double fPosX ) const;
-    /** Converts the passed vertical coordinate from a relative position to Excel chart units. */
-    sal_Int32           CalcChartYFromRelative( double fPosY ) const;
-
     /** Reads all line properties from the passed property set. */
     void                ConvertLineFormat(
                             XclChLineFormat& rLineFmt,

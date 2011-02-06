@@ -203,10 +203,6 @@ public:
                                 const ScRange& rRange, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     void    UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos );
 
-    /** Temporarily during save, returns RefManager's decision whether ALL
-     *  references are marked now. */
-    bool    MarkUsedExternalReferences() const;
-
     BOOL    operator==( const ScValidationDataList& r ) const;      // fuer Ref-Undo
 };
 

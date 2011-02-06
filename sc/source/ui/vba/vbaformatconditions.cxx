@@ -46,18 +46,6 @@ static rtl::OUString FORMULA2( RTL_CONSTASCII_USTRINGPARAM("Formula2") );
 static rtl::OUString STYLENAME( RTL_CONSTASCII_USTRINGPARAM("StyleName") );
 static rtl::OUString sStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM("Excel_CondFormat") );
 
-ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntries >& _xSheetConditionalEntries, const uno::Reference< frame::XModel >& /*xModel*/ ) : ScVbaFormatConditions_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( _xSheetConditionalEntries, uno::UNO_QUERY_THROW ) ), mxSheetConditionalEntries( _xSheetConditionalEntries )
-{
-    mxRangeParent.set( xParent, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XApplication> xApp( Application(), uno::UNO_QUERY_THROW );
-    mxStyles.set( xApp->getThisWorkbook()->Styles( uno::Any() ), uno::UNO_QUERY_THROW );
-    uno::Reference< sheet::XCellRangeAddressable > xCellRange( mxRangeParent->getCellRange(), uno::UNO_QUERY_THROW );
-    mxParentRangePropertySet.set( xCellRange, uno::UNO_QUERY_THROW );
-
-    table::CellRangeAddress rangeAddress = xCellRange->getRangeAddress();
-    maCellAddress = table::CellAddress( rangeAddress.Sheet, rangeAddress.StartColumn,  rangeAddress.StartRow );
-}
-
 void SAL_CALL
 ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {

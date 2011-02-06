@@ -271,11 +271,6 @@ ScCellRangeObj* ScVbaRange::getCellRangeObj() throw ( uno::RuntimeException )
     return dynamic_cast< ScCellRangeObj* >( getCellRangesBase() );
 }
 
-ScCellRangesObj* ScVbaRange::getCellRangesObj() throw ( uno::RuntimeException )
-{
-    return dynamic_cast< ScCellRangesObj* >( getCellRangesBase() );
-}
-
 SfxItemSet*  ScVbaRange::getCurrentDataSet( ) throw ( uno::RuntimeException )
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
