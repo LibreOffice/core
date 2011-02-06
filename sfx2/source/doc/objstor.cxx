@@ -1733,7 +1733,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             struct _ea eaType;
             strcpy( filePath, CHAR_POINTER( aSystemFileURL));
             strcpy( docType, CHAR_POINTER( rMedium.GetFilter()->GetServiceName()));
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
             printf( "file name: %s\n", filePath);
             printf( "filter name: %s\n", CHAR_POINTER(rMedium.GetFilter()->GetFilterName()));
             printf( "service name: %s\n", docType);
@@ -1760,7 +1760,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
             eaType.value = &eaAscii;
             // put EA to file
             rc = _ea_put( &eaType, filePath, 0, ".TYPE");
-#if OSL_DEBUG_LEVEL>1
+#if OSL_DEBUG_LEVEL > 1
             printf( "ea name: %s, rc %d, errno %d\n", eaAscii.szType, rc, errno);
 #endif
         }
