@@ -205,6 +205,7 @@ protected:
     int                         ApplyGlyphTransform( int nGlyphFlags, FT_GlyphRec_*, bool ) const;
     virtual void                InitGlyphData( int nGlyphIndex, GlyphData& ) const;
     virtual bool                GetFontCodeRanges( CmapResult& ) const;
+    virtual bool                GetFontLayoutCapabilities(FontLayoutCapabilities &) const;
     bool                        ApplyGSUB( const ImplFontSelectData& );
     virtual ServerFontLayoutEngine* GetLayoutEngine();
 

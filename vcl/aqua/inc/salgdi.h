@@ -61,6 +61,7 @@ public:
     virtual sal_IntPtr      GetFontId() const;
 
     ImplFontCharMap*        GetImplFontCharMap() const;
+    bool                    GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
     bool                    HasChar( sal_uInt32 cChar ) const;
 
     void                    ReadOs2Table() const;
@@ -70,10 +71,12 @@ public:
 private:
     const ATSUFontID            mnFontId;
     mutable ImplFontCharMap*    mpCharMap;
+    mutable FontLayoutCapabilities maFontLayoutCapabilities;
     mutable bool                mbOs2Read;       // true if OS2-table related info is valid
     mutable bool                mbHasOs2Table;
     mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
     mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
+    mutable bool                mbFontLayoutCapabilitiesRead;
 };
 
 // abstracting quartz color instead of having to use an CGFloat[] array
@@ -283,6 +286,7 @@ public:
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied

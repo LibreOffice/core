@@ -48,6 +48,8 @@
 #include "osl/file.hxx"
 #include "osl/thread.hxx"
 
+#include "sft.hxx"
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 #include FT_GLYPH_H
@@ -590,7 +592,7 @@ long FreetypeManager::AddFontDir( const String& rUrlName )
                 aDFA.maName        = String::CreateFromAscii( aFaceFT->family_name );
 
             if ( aFaceFT->style_name )
-                aDFA.maStyleName   = String::CreateFromAscii( aFaceFT->style_name );
+                aDFA.maStyleName = String::CreateFromAscii( aFaceFT->style_name );
 
             aDFA.mbSymbolFlag = false;
             for( int i = aFaceFT->num_charmaps; --i >= 0; )
@@ -1766,6 +1768,31 @@ bool FreetypeServerFont::GetFontCodeRanges( CmapResult& rResult ) const
     rResult.mpRangeCodes = pCodes;
     rResult.mnRangeCount = nCount / 2;
     return true;
+}
+
+bool FreetypeServerFont::GetFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+{
+    rFontLayoutCapabilities.clear();
+
+    ULONG nLength = 0;
+    const FT_Byte* pBase;
+    // load GSUB table
+    pBase = mpFontInfo->GetTable("GSUB", &nLength);
+    if( pBase )
+        vcl::getTTFontLayoutCapabilities(rFontLayoutCapabilities, pBase);
+#if 0
+    //If there's any need for it, we could check the GPOS as well
+    // load GPOS table
+    pBase = mpFontInfo->GetTable("GPOS", &nLength);
+    if( pBase )
+        vcl::getTTFontLayoutCapabilities(rFontLayoutCapabilities, pBase);
+#endif
+
+    std::sort(rFontLayoutCapabilities.begin(), rFontLayoutCapabilities.end());
+    rFontLayoutCapabilities.erase(std::unique(rFontLayoutCapabilities.begin(), rFontLayoutCapabilities.end()),
+        rFontLayoutCapabilities.end());
+
+    return !rFontLayoutCapabilities.empty();
 }
 
 // -----------------------------------------------------------------------

@@ -780,6 +780,13 @@ ImplFontCharMap* PspGraphics::GetImplFontCharMap() const
     return new ImplFontCharMap( aCmapResult );
 }
 
+bool PspGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const
+{
+    if (!m_pServerFont[0])
+        return NULL;
+    return !m_pServerFont[0]->GetFontLayoutCapabilities(rGetImplFontLayoutCapabilities);
+}
+
 USHORT PspGraphics::SetFont( ImplFontSelectData *pEntry, int nFallbackLevel )
 {
     // release all fonts that are to be overridden

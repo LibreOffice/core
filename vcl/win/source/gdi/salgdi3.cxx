@@ -1107,6 +1107,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbHasGraphiteSupport( false ),
 #endif
     mbHasArabicSupport ( false ),
+    mbFontLayoutCapabilities( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
@@ -1206,6 +1207,12 @@ ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
         return NULL;
     mpUnicodeMap->AddReference();
     return mpUnicodeMap;
+}
+
+bool ImplWinFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+{
+    rFontLayoutCapabilities = maFontLayoutCapabilities;
+    return !rFontLayoutCapabilities.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -1310,6 +1317,23 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 
     if( !mpUnicodeMap )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
+}
+
+void ImplWinFontData::GetFontLayoutCapabilities( HDC hDC ) const
+{
+    mbFontLayoutCapabilitiesRead = true;
+
+    // check the existence of a GSUB table
+    const DWORD GsubTag = CalcTag( "GSUB" );
+    DWORD nLength = ::GetFontData( hDC, GsubTag, 0, NULL, 0 );
+    if( (nLength == GDI_ERROR) || !nLength )
+        return;
+
+    std::vector<unsigned char> aTable( nLength );
+    unsigned char* pTable = &Table[0];
+    ::GetFontData( hDC, GsubTag, 0, pTable, nLength );
+
+    vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pTable);
 }
 
 // =======================================================================
@@ -1852,6 +1876,13 @@ ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
     if( !mpWinFontData[0] )
         return ImplFontCharMap::GetDefaultMap();
     return mpWinFontData[0]->GetImplFontCharMap();
+}
+
+bool WinSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
+{
+    if( !mpWinFontData[0] )
+        return false;
+    return mpWinFontData[0]->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
 }
 
 // -----------------------------------------------------------------------

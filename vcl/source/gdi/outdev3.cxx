@@ -1499,40 +1499,21 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
 
 void ImplDevFontList::Add( ImplFontData* pNewData )
 {
-    int nAliasQuality = pNewData->mnQuality - 100;
-    String aMapNames = pNewData->maMapNames;
-    pNewData->maMapNames = String();
+    String aSearchName = pNewData->maName;
+    GetEnglishSearchFontName( aSearchName );
 
-    bool bKeepNewData = false;
-    xub_StrLen nMapNameIndex = 0;
-    while( true )
+    DevFontList::const_iterator it = maDevFontList.find( aSearchName );
+    ImplDevFontListData* pFoundData = NULL;
+    if( it != maDevFontList.end() )
+        pFoundData = (*it).second;
+
+    if( !pFoundData )
     {
-        String aSearchName = pNewData->maName;
-        GetEnglishSearchFontName( aSearchName );
-
-        DevFontList::const_iterator it = maDevFontList.find( aSearchName );
-        ImplDevFontListData* pFoundData = NULL;
-        if( it != maDevFontList.end() )
-            pFoundData = (*it).second;
-
-        if( !pFoundData )
-        {
-            pFoundData = new ImplDevFontListData( aSearchName );
-            maDevFontList[ aSearchName ] = pFoundData;
-        }
-
-        bKeepNewData = pFoundData->AddFontFace( pNewData );
-
-        // add (another) font alias if available
-        // a font alias should never win against an original font with similar quality
-        if( aMapNames.Len() <= nMapNameIndex )
-            break;
-        if( bKeepNewData ) // try to recycle obsoleted object
-            pNewData = pNewData->CreateAlias();
-        bKeepNewData = false;
-        pNewData->mnQuality = nAliasQuality;
-        pNewData->maName = GetNextFontToken( aMapNames, nMapNameIndex );
+        pFoundData = new ImplDevFontListData( aSearchName );
+        maDevFontList[ aSearchName ] = pFoundData;
     }
+
+    bool bKeepNewData = pFoundData->AddFontFace( pNewData );
 
     if( !bKeepNewData )
         delete pNewData;
@@ -7935,6 +7916,24 @@ BOOL OutputDevice::GetTextOutline( PolyPolygon& rPolyPoly,
             rPolyPoly.Insert(Polygon((*aIt).getB2DPolygon( i ))); // #i76339#
 
     return TRUE;
+}
+
+bool OutputDevice::GetFontLayoutCapabilities( FontLayoutCapabilities& rFontLayoutCapabilities ) const
+{
+    rFontLayoutCapabilities.clear();
+
+    // we need a graphics
+    if( !mpGraphics && !ImplGetGraphics() )
+        return false;
+
+    if( mbNewFont )
+        ImplNewFont();
+    if( mbInitFont )
+        ImplInitFont();
+    if( !mpFontEntry )
+        return false;
+
+    return mpGraphics->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
 }
 
 // -----------------------------------------------------------------------

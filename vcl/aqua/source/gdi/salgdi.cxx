@@ -73,6 +73,7 @@ ImplMacFontData::ImplMacFontData( const ImplDevFontAttributes& rDFA, ATSUFontID 
 ,   mbHasOs2Table( false )
 ,   mbCmapEncodingRead( false )
 ,   mbHasCJKSupport( false )
+,   mbFontLayoutCapabilitiesRead( false )
 {}
 
 // -----------------------------------------------------------------------
@@ -155,6 +156,39 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
 
     mpCharMap = new ImplFontCharMap( aCmapResult );
     return mpCharMap;
+}
+
+bool ImplMacFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities)
+{
+    // read this only once per font
+    if( mbFontLayoutCapabilitiesRead )
+    {
+        rFontLayoutCapabilities = maFontLayoutCapabilities;
+        return !rFontLayoutCapabilities.empty();
+    }
+    mbFontLayoutCapabilitiesRead = true;
+
+    // prepare to get the GSUB table raw data
+    ATSFontRef rFont = FMGetATSFontRefFromFont( mnFontId );
+    ByteCount nBufSize = 0;
+    OSStatus eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, 0, NULL, &nBufSize );
+    if( eStatus != noErr )
+        return false;
+
+    // allocate a buffer for the GSUB raw data
+    ByteVector aBuffer( nBufSize );
+
+    // get the GSUB raw data
+    ByteCount nRawLength = 0;
+    eStatus = ATSFontGetTable( rFont, GetTag("GSUB"), 0, nBufSize, (void*)&aBuffer[0], &nRawLength );
+    if( eStatus != noErr )
+        return false;
+
+    const unsigned char* pGSUBTable = &aBuffer[0];
+    vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pGSUBTable);
+    rFontLayoutCapabilities = maFontLayoutCapabilities;
+
+    return !rFontLayoutCapabilities.empty()
 }
 
 // -----------------------------------------------------------------------
@@ -1982,6 +2016,14 @@ ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
         return ImplFontCharMap::GetDefaultMap();
 
     return mpMacFontData->GetImplFontCharMap();
+}
+
+bool AquaSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities)
+{
+    if( !mpMacFontData )
+        return false;
+
+    return mpMacFontData->GetImplFontLayoutCapabilities(rFontLayoutCapabilities);
 }
 
 // -----------------------------------------------------------------------

@@ -71,6 +71,8 @@
 
 #include <vector>
 
+typedef std::vector< sal_uInt32 > FontLayoutCapabilities;
+
 namespace vcl
 {
 
@@ -300,6 +302,8 @@ namespace vcl
  */
     int OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
+
+    void getTTFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities, const unsigned char* pTable);
 
 /**
  * TrueTypeFont destructor. Deallocates the memory.

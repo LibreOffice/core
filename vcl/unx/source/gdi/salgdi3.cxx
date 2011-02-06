@@ -1497,6 +1497,13 @@ ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
     return new ImplFontCharMap( aCmapResult );
 }
 
+bool X11SalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const
+{
+    if (!mpServerFont[0])
+        return NULL;
+    return !mpServerFont[0]->GetFontLayoutCapabilities(rGetImplFontLayoutCapabilities);
+}
+
 // ----------------------------------------------------------------------------
 //
 // SalGraphics

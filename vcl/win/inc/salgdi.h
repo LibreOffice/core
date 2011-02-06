@@ -84,6 +84,7 @@ public:
 #endif
 
     ImplFontCharMap*        GetImplFontCharMap() const;
+    bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
     const Ucs2SIntMap* GetEncodingVector() const { return mpEncodingVector; }
     void SetEncodingVector( const Ucs2SIntMap* pNewVec ) const
     {
@@ -102,8 +103,10 @@ private:
     mutable bool                    mbHasGraphiteSupport;
 #endif
     mutable bool                    mbHasArabicSupport;
+    mutable bool                    mbFontLayoutCapabilitiesRead;
     mutable ImplFontCharMap*        mpUnicodeMap;
     mutable const Ucs2SIntMap*      mpEncodingVector;
+    mutable FontLayoutCapabilities  maFontLayoutCapabilities;
 
     // TODO: get rid of the members below needed to work with the Win9x non-unicode API
     BYTE*                   mpFontCharSets;     // all Charsets for the current font (used on W98 for kerning)

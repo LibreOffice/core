@@ -57,6 +57,8 @@ class CmapResult;
 class ServerFontLayout;
 #include <vcl/sallayout.hxx>
 
+typedef std::vector< sal_uInt32 > FontLayoutCapabilities;
+
 // =======================================================================
 
 class VCL_DLLPUBLIC GlyphCache
@@ -192,6 +194,7 @@ public:
     virtual ULONG               GetKernPairs( ImplKernPairData** ) const      { return 0; }
     virtual int                 GetGlyphKernValue( int, int ) const           { return 0; }
     virtual bool                GetFontCodeRanges( CmapResult& ) const        { return false; }
+    virtual bool                GetFontLayoutCapabilities(FontLayoutCapabilities &) const { return false; }
     Point                       TransformPoint( const Point& ) const;
 
     GlyphData&                  GetGlyphData( int nGlyphIndex );
