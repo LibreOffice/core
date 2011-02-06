@@ -734,7 +734,7 @@ OString generateClassDefinition(std::ostream& o,
 
     if (options.componenttype == 2) {
         o << "    typedef boost::unordered_map< ::sal_Int32, rtl::OUString, "
-            "std::hash<::sal_Int32> > ParamMap;\n"
+            "boost::hash<::sal_Int32> > ParamMap;\n"
             "    typedef boost::unordered_map< rtl::OUString, ParamMap, "
             "rtl::OUStringHash > FunctionMap;\n\n"
             "    ::rtl::OUString SAL_CALL getAddinProperty(const ::rtl::OUString & "
