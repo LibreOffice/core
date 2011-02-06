@@ -392,9 +392,6 @@ static void ImplSaveFrameState( Os2SalFrame* pFrame )
             if ( bVisible )
                 pFrame->mnShowState = SWP_SHOWNORMAL;
             pFrame->mbRestoreMaximize = FALSE;
-            //debug_printf( "ImplSaveFrameState: window %08x at %d,%d (size %dx%d)\n",
-            //  pFrame->mhWndFrame,
-            //  pFrame->maState.mnX, pFrame->maState.mnY, pFrame->maState.mnWidth, pFrame->maState.mnHeight);
         }
     }
 }
@@ -446,7 +443,6 @@ static void ImplSalCalcFrameSize( const Os2SalFrame* pFrame,
         nCaptionY = 0;
 
 #if OSL_DEBUG_LEVEL > 1
-    //if (_bCapture)
         debug_printf("ImplSalCalcFrameSize 0x%08x x=%d y=%d t=%d\n", pFrame->mhWndFrame, nFrameX, nFrameY, nCaptionY);
 #endif
 }
@@ -616,12 +612,8 @@ SalFrame* ImplSalCreateFrame( Os2SalInstance* pInst, HWND hWndParent, ULONG nSal
 
     if ( nSalFrameStyle & SAL_FRAME_STYLE_FLOAT )
     {
-        //nExSysStyle |= WS_EX_TOOLWINDOW;
         pFrame->mbFloatWin = TRUE;
     }
-    //if( nSalFrameStyle & SAL_FRAME_STYLE_TOOLTIP )
-    //    nExSysStyle |= WS_EX_TOPMOST;
-
     // init frame data
     pFrame->mnStyle = nSalFrameStyle;
 
@@ -762,7 +754,6 @@ Os2SalFrame::Os2SalFrame()
     mbConversionMode    = FALSE;
     mbCandidateMode     = FALSE;
     mbCaption           = FALSE;
-    //mhDefIMEContext     = 0;
     mpGraphics          = NULL;
     mnShowState         = SWP_SHOWNORMAL;
     mnWidth             = 0;
@@ -779,23 +770,16 @@ Os2SalFrame::Os2SalFrame()
     mbFixBorder         = FALSE;
     mbSizeBorder        = FALSE;
     mbFullScreen        = FALSE;
-    //mbPresentation      = FALSE;
     mbInShow            = FALSE;
     mbRestoreMaximize   = FALSE;
     mbInMoveMsg         = FALSE;
     mbInSizeMsg         = FALSE;
-    //mbFullScreenToolWin = FALSE;
     mbDefPos            = TRUE;
     mbOverwriteState    = TRUE;
-    //mbIME               = FALSE;
     mbHandleIME         = FALSE;
-    //mbSpezIME           = FALSE;
-    //mbAtCursorIME       = FALSE;
     mbCandidateMode     = FALSE;
     mbFloatWin          = FALSE;
     mbNoIcon            = FALSE;
-    //mSelectedhMenu      = 0;
-    //mLastActivatedhMenu = 0;
     mpParentFrame       = NULL;
 
     memset( &maState, 0, sizeof( SalFrameState ) );
@@ -1025,7 +1009,6 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     ULONG   nPosFlags = 0;
 
 #if OSL_DEBUG_LEVEL > 1
-    //dumpWindowInfo( "-Os2SalFrame::SetPosSize", mhWndFrame);
     debug_printf( ">Os2SalFrame::SetPosSize go to %d,%d (%dx%d) VCL\n",nX,nY,nWidth,nHeight);
 #endif
 
@@ -1050,7 +1033,6 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
 #if OSL_DEBUG_LEVEL > 1
         debug_printf( "-Os2SalFrame::SetPosSize MOVE to %d,%d\n", nX, nY);
 #endif
-        //DBG_ASSERT( nX && nY, " Windowposition of (0,0) requested!" );
         nEvent = SALEVENT_MOVE;
     }
 
@@ -1103,11 +1085,6 @@ void Os2SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
             nY = 0;
     }
 
-    // bring floating windows always to top
-    // do not change zorder, otherwise tooltips will bring main window to top (ticket:14)
-    //if( (mnStyle & SAL_FRAME_STYLE_FLOAT) )
-    //    nPosFlags |= SWP_ZORDER; // do not change z-order
-
     // set new position
     _WinSetWindowPos( this, HWND_TOP, nX, nY, nWidth, nHeight, nPosFlags); // | SWP_RESTORE
 
@@ -1134,8 +1111,6 @@ void Os2SalFrame::SetParent( SalFrame* pNewParent )
             static_cast<Os2SalFrame*>(pNewParent)->mhWndClient);
 #endif
     Os2SalFrame::mbInReparent = TRUE;
-    //rc = WinSetParent(static_cast<Os2SalFrame*>(this)->mhWndFrame,
-    //                  static_cast<Os2SalFrame*>(pNewParent)->mhWndClient, TRUE);
     rc = WinSetOwner(static_cast<Os2SalFrame*>(this)->mhWndFrame,
                       static_cast<Os2SalFrame*>(pNewParent)->mhWndClient);
     mpParentFrame = static_cast<Os2SalFrame*>(pNewParent);
@@ -1251,9 +1226,6 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
     // if it does not fit into the screen do nothing, ie default pos/size will be used
     // if there is an overlap with the screen border move the window while keeping its size
 
-    //if( nWidth > nScreenWidth || nHeight > nScreenHeight )
-    //    nPosSize |= (SWP_NOMOVE | SWP_NOSIZE);
-
     if ( nX+nWidth > nScreenWidth )
         nX = (nScreenWidth) - nWidth;
     if ( nY+nHeight > nScreenHeight )
@@ -1296,8 +1268,6 @@ void Os2SalFrame::SetWindowState( const SalFrameState* pState )
         {
             if ( pState->mnState & SAL_FRAMESTATE_MINIMIZED )
             {
-                //if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
-                //    aPlacement.flags |= WPF_RESTORETOMAXIMIZED;
                 aPlacement.fl = SWP_SHOWMINIMIZED;
             }
             else if ( pState->mnState & SAL_FRAMESTATE_MAXIMIZED )
@@ -1349,9 +1319,6 @@ BOOL Os2SalFrame::GetWindowState( SalFrameState* pState )
     if ( maState.mnWidth && maState.mnHeight )
     {
         *pState = maState;
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - Don't save minimize
-        //if ( !(pState->mnState & SAL_FRAMESTATE_MAXIMIZED) )
         if ( !(pState->mnState & (SAL_FRAMESTATE_MINIMIZED | SAL_FRAMESTATE_MAXIMIZED)) )
             pState->mnState |= SAL_FRAMESTATE_NORMAL;
         return TRUE;
@@ -1412,7 +1379,6 @@ void Os2SalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 
 void Os2SalFrame::StartPresentation( BOOL bStart )
 {
-    // SysSetObjectData("<WP_DESKTOP>","Autolockup=no"); oder OS2.INI: PM_Lockup
 }
 
 // -----------------------------------------------------------------------
@@ -1587,8 +1553,6 @@ void Os2SalFrame::SetPointer( PointerStyle ePointerStyle )
 #error New Pointer must be defined!
 #endif
 
-    //debug_printf("Os2SalFrame::SetPointer\n");
-
     // Mousepointer loaded ?
     if ( !aImplPtrTab[ePointerStyle].mhPointer )
     {
@@ -1669,8 +1633,6 @@ void Os2SalFrame::SetInputContext( SalInputContext* pContext )
                     nInputMode &= ~IMI_IM_IME_DISABLE;
                     if ( pContext->mnOptions & SAL_INPUTCONTEXT_EXTTEXTINPUT_OFF )
                         nInputMode &= ~IMI_IM_IME_ON;
-// !!! Da derzeit ueber das OS2-IME-UI der IME-Mode nicht einschaltbar ist !!!
-//                    if ( SAL_INPUTCONTEXT_EXTTEXTINPUT_ON )
                         nInputMode |= IMI_IM_IME_ON;
                 }
                 else
@@ -2453,7 +2415,6 @@ static long ImplHandleMouseMsg( HWND hWnd,
         return 0;
 
 #if OSL_DEBUG_LEVEL > 1
-    //if (_bCapture)
         debug_printf("ImplHandleMouseMsg mouse %d,%d\n",aMouseEvt.mnX,aMouseEvt.mnY);
 #endif
 
@@ -2461,10 +2422,6 @@ static long ImplHandleMouseMsg( HWND hWnd,
     {
         if ( nEvent == SALEVENT_MOUSEBUTTONDOWN )
             WinUpdateWindow( pFrame->mhWndClient );
-
-        // --- RTL --- (mirror mouse pos)
-        //if( Application::GetSettings().GetLayoutRTL() )
-        //    aMouseEvt.mnX = pFrame->maGeometry.nWidth-1-aMouseEvt.mnX;
 
         nRet = pFrame->CallCallback( nEvent, &aMouseEvt );
         if ( nMsg == WM_MOUSEMOVE )
@@ -3038,7 +2995,6 @@ static int SalImplHandleProcessMenu( Os2SalFrame* pFrame, ULONG nMsg, MPARAM nMP
 {
     long nRet = 0;
 debug_printf("SalImplHandleProcessMenu\n");
-    //return (nRet != 0);
     return (nRet == 0);
 }
 
@@ -3088,28 +3044,6 @@ static long ImplHandleIMEStartConversion( Os2SalFrame* pFrame )
             }
             if ( pFrame->mbHandleIME )
             {
-/* Windows-Code, der noch nicht angepasst wurde !!!
-                // Cursor-Position ermitteln und aus der die Default-Position fuer
-                // das Composition-Fenster berechnen
-                SalCursorPosEvent aCursorPosEvt;
-                pFrame->CallCallback( pFrame->mpInst, pFrame,
-                                            SALEVENT_CURSORPOS, (void*)&aCursorPosEvt );
-                COMPOSITIONFORM aForm;
-                memset( &aForm, 0, sizeof( aForm ) );
-                if ( !aCursorPosEvt.mnWidth || !aCursorPosEvt.mnHeight )
-                    aForm.dwStyle |= CFS_DEFAULT;
-                else
-                {
-                    aForm.dwStyle          |= CFS_POINT;
-                    aForm.ptCurrentPos.x    = aCursorPosEvt.mnX;
-                    aForm.ptCurrentPos.y    = aCursorPosEvt.mnY;
-                }
-                ImmSetCompositionWindow( hIMC, &aForm );
-
-                // Den InputContect-Font ermitteln und diesem dem Composition-Fenster
-                // bekannt machen
-*/
-
                 pFrame->mbConversionMode = TRUE;
                 pFrame->CallCallback( SALEVENT_STARTEXTTEXTINPUT, (void*)NULL );
                 nRet = TRUE;
@@ -3182,24 +3116,6 @@ static long ImplHandleIMEConversion( Os2SalFrame* pFrame, MPARAM nMP2Param )
                         pIMEData->mpGetConversionString( hIMI, IMR_CONV_CONVERSIONATTR, pAttrBuf, &nAttrBufLen );
                     }
 
-/* !!! Wir bekommen derzeit nur falsche Daten, deshalb zeigen wir derzeit
-   !!! auch keine Cursor an
-                    ULONG nTempBufLen;
-                    ULONG nCursorPos = 0;
-                    ULONG nCursorAttr = 0;
-                    ULONG nChangePos = 0;
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORPOS, &nCursorPos, &nTempBufLen );
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORATTR, &nCursorAttr, &nTempBufLen );
-                    nTempBufLen = sizeof( ULONG );
-                    pIMEData->mpGetConversionString( hIMI, IMR_CONV_CHANGESTART, &nChangePos, &nTempBufLen );
-
-                    aEvt.mnCursorPos = nCursorPos;
-                    aEvt.mnDeltaStart = nChangePos;
-                    if ( nCursorAttr & CP_CURSORATTR_INVISIBLE )
-                        aEvt.mbCursorVisible = FALSE;
-*/
                     aEvt.mnCursorPos = 0;
                     aEvt.mnDeltaStart = 0;
                     aEvt.mbCursorVisible = FALSE;
@@ -3291,11 +3207,6 @@ static void ImplHandleIMEOpenCandidate( Os2SalFrame* pFrame )
             pIMEData->mpGetConversionString( hIMI, IMR_CONV_CONVERSIONSTRING, 0, &nBufLen );
             if ( nBufLen > 0 )
             {
-/* !!! Wir bekommen derzeit nur falsche Daten steht der Cursor immer bei 0
-                ULONG nTempBufLen = sizeof( ULONG );
-                ULONG nCursorPos = 0;
-                pIMEData->mpGetConversionString( hIMI, IMR_CONV_CURSORPOS, &nCursorPos, &nTempBufLen );
-*/
                 ULONG nCursorPos = 0;
 
                 SalExtTextInputPosEvent aEvt;

@@ -953,9 +953,6 @@ SalLayout* Os2SalGraphics::GetTextLayout( ImplLayoutArgs& rArgs, int nFallbackLe
         }
 #endif // GCP_KERN_HACK
 
-        //BYTE eCharSet = ANSI_CHARSET;
-        //if( mpLogFont )
-        //    eCharSet = mpLogFont->lfCharSet;
         pLayout = new Os2SalLayout( mhPS, 0, rFontFace, rFontInstance );
     }
 
@@ -1039,7 +1036,6 @@ ImplFontData* ImplOs2FontData::Clone() const
 
 ImplFontEntry* ImplOs2FontData::CreateFontInstance( ImplFontSelectData& rFSD ) const
 {
-    //debug_printf("ImplOs2FontData::CreateFontInstance\n");
     ImplFontEntry* pEntry = new ImplOs2FontEntry( rFSD );
     return pEntry;
 }

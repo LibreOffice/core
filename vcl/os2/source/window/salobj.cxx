@@ -202,11 +202,6 @@ MRESULT EXPENTRY SalSysObjChildWndProc( HWND hWnd, ULONG nMsg,
     switch( nMsg )
     {
         case WM_ERASEBACKGROUND:
-            // Wegen PlugIn's loeschen wir erstmal den Hintergrund
-/*
-            nRet = (MRESULT)FALSE;
-            bDef = FALSE;
-*/
             break;
         case WM_PAINT:
             {

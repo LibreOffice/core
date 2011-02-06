@@ -75,7 +75,6 @@ MRESULT EXPENTRY DtransObjWndProc( HWND hWnd, ULONG nMsg, MPARAM nMP1, MPARAM nM
             Os2Clipboard* os2Clipboard = GetWindowPtr( hWnd);
             if (os2Clipboard)
             {
-                //MutexGuard aGuard(os2Clipboard->m_aMutex);
                 debug_printf("WM_DRAWCLIPBOARD os2Clipboard %08x\n", os2Clipboard);
                 if (os2Clipboard->m_bInSetClipboardData)
                 {

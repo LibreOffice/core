@@ -68,9 +68,6 @@ namespace css = ::com::sun::star;
 //_______________________________________________
 // definitions
 
-/*-----------------------------------------------
-    10.03.2004 07:35
------------------------------------------------*/
 const ::rtl::OUString& MediaDescriptor::PROP_ABORTED()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Aborted"));
@@ -390,33 +387,21 @@ MediaDescriptor::MediaDescriptor()
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Any& aSource)
     : SequenceAsHashMap(aSource)
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::PropertyValue >& lSource)
     : SequenceAsHashMap(lSource)
 {
 }
 
-/*-----------------------------------------------
-    10.03.2004 08:09
------------------------------------------------*/
 MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::NamedValue >& lSource)
     : SequenceAsHashMap(lSource)
 {
 }
 
-/*-----------------------------------------------
-    18.11.2004 13:37
------------------------------------------------*/
 sal_Bool MediaDescriptor::isStreamReadOnly() const
 {
     static ::rtl::OUString CONTENTSCHEME_FILE(     RTL_CONSTASCII_USTRINGPARAM( "file" ));
@@ -529,9 +514,6 @@ void MediaDescriptor::clearComponentDataEntry( const ::rtl::OUString& rName )
     }
 }
 
-/*-----------------------------------------------
-    10.03.2004 09:02
------------------------------------------------*/
 sal_Bool MediaDescriptor::addInputStream()
 {
     return impl_addInputStream( sal_True );
@@ -614,9 +596,6 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
     return sal_False;
 }
 
-/*-----------------------------------------------
-    25.03.2004 12:38
------------------------------------------------*/
 sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -688,10 +667,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 }
 
 /*-----------------------------------------------*/
-
-/*-----------------------------------------------
-    25.03.2004 12:29
------------------------------------------------*/
 sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, sal_Bool bLockFile )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -827,9 +802,6 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
     return xInputStream.is();
 }
 
-/*-----------------------------------------------
-    10.09.2004 10:51
------------------------------------------------*/
 ::rtl::OUString MediaDescriptor::impl_normalizeURL(const ::rtl::OUString& sURL)
 {
     /* Remove Jumpmarks (fragments) of an URL only here.
