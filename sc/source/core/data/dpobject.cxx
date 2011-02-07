@@ -2496,7 +2496,7 @@ ScDPObject* ScDPCollection::GetByName(const String& rName) const
 
 String ScDPCollection::CreateNewName( USHORT nMin ) const
 {
-    String aBase( RTL_CONSTASCII_USTRINGPARAM( "PivotTable" ) );
+    String aBase( RTL_CONSTASCII_USTRINGPARAM( "Pivot" ) );
     //! from Resource?
 
     for (USHORT nAdd=0; nAdd<=nCount; nAdd++)   //  nCount+1 tries
