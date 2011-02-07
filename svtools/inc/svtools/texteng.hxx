@@ -39,7 +39,6 @@ class TextAttrib;
 class TextCharAttrib;
 class TextUndo;
 class TextUndoManager;
-class SfxUndoManager;
 class EditSelFunctionSet;
 class EditSelEngine;
 class IdleFormatter;
@@ -48,6 +47,11 @@ class OutputDevice;
 class SfxUndoAction;
 class KeyEvent;
 class Timer;
+
+namespace svl
+{
+    class IUndoManager;
+}
 
 class TextLine;
 class TETextPortion;
@@ -279,12 +283,13 @@ public:
     void                SetRightToLeft( sal_Bool bR2L );
     sal_Bool                IsRightToLeft() const { return mbRightToLeft; }
 
-    sal_Bool                HasUndoManager() const { return mpUndoManager ? sal_True : sal_False; }
-    SfxUndoManager&     GetUndoManager();
-    void                UndoActionStart( sal_uInt16 nId );
-    void                UndoActionEnd( sal_uInt16 nId );
+    sal_Bool            HasUndoManager() const { return mpUndoManager ? sal_True : sal_False; }
+    ::svl::IUndoManager&
+                        GetUndoManager();
+    void                UndoActionStart( sal_uInt16 nId = 0 );
+    void                UndoActionEnd();
     void                InsertUndo( TextUndo* pUndo, sal_Bool bTryMerge = sal_False );
-    sal_Bool                IsInUndo()                  { return mbIsInUndo; }
+    sal_Bool            IsInUndo()                  { return mbIsInUndo; }
     void                SetIsInUndo( sal_Bool bInUndo ) { mbIsInUndo = bInUndo; }
     void                ResetUndo();
 

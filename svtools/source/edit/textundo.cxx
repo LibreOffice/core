@@ -54,7 +54,7 @@ TextUndoManager::~TextUndoManager()
 {
 }
 
-sal_Bool __EXPORT TextUndoManager::Undo( sal_uInt16 nCount )
+sal_Bool __EXPORT TextUndoManager::Undo()
 {
     if ( GetUndoActionCount() == 0 )
         return sal_False;
@@ -62,7 +62,7 @@ sal_Bool __EXPORT TextUndoManager::Undo( sal_uInt16 nCount )
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Undo( nCount );
+    sal_Bool bDone = SfxUndoManager::Undo();
     mpTextEngine->SetIsInUndo( sal_False );
 
     UndoRedoEnd();
@@ -70,7 +70,7 @@ sal_Bool __EXPORT TextUndoManager::Undo( sal_uInt16 nCount )
     return bDone;
 }
 
-sal_Bool __EXPORT TextUndoManager::Redo( sal_uInt16 nCount )
+sal_Bool __EXPORT TextUndoManager::Redo()
 {
     if ( GetRedoActionCount() == 0 )
         return sal_False;
@@ -79,7 +79,7 @@ sal_Bool __EXPORT TextUndoManager::Redo( sal_uInt16 nCount )
     UndoRedoStart();
 
     mpTextEngine->SetIsInUndo( sal_True );
-    sal_Bool bDone = SfxUndoManager::Redo( nCount );
+    sal_Bool bDone = SfxUndoManager::Redo();
     mpTextEngine->SetIsInUndo( sal_False );
 
     UndoRedoEnd();
@@ -110,20 +110,13 @@ void TextUndoManager::UndoRedoEnd()
 }
 
 
-TextUndo::TextUndo( sal_uInt16 nI, TextEngine* p )
+TextUndo::TextUndo( TextEngine* p )
 {
-    mnId = nI;
     mpTextEngine = p;
 }
 
 TextUndo::~TextUndo()
 {
-}
-
-sal_uInt16 __EXPORT TextUndo::GetId() const
-{
-    //nId sollte mal entfallen => GetId ueberall ueberladen...
-    return mnId;
 }
 
 XubString __EXPORT TextUndo::GetComment() const
@@ -140,7 +133,7 @@ void TextUndo::SetSelection( const TextSelection& rSel )
 
 
 TextUndoDelPara::TextUndoDelPara( TextEngine* pTextEngine, TextNode* pNode, sal_uLong nPara )
-                    : TextUndo( TEXTUNDO_DELCONTENT, pTextEngine )
+                    : TextUndo( pTextEngine )
 {
     mpNode = pNode;
     mnPara = nPara;
@@ -191,7 +184,7 @@ void __EXPORT TextUndoDelPara::Redo()
 // TextUndoConnectParas
 // ------------------------------------------------------------------------
 TextUndoConnectParas::TextUndoConnectParas( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
-                    :   TextUndo( TEXTUNDO_CONNECTPARAS, pTextEngine )
+                    :   TextUndo( pTextEngine )
 {
     mnPara = nPara;
     mnSepPos = nPos;
@@ -215,7 +208,7 @@ void __EXPORT TextUndoConnectParas::Redo()
 
 
 TextUndoSplitPara::TextUndoSplitPara( TextEngine* pTextEngine, sal_uLong nPara, sal_uInt16 nPos )
-                    : TextUndo( TEXTUNDO_SPLITPARA, pTextEngine )
+                    : TextUndo( pTextEngine )
 {
     mnPara = nPara;
     mnSepPos = nPos;
@@ -239,7 +232,7 @@ void __EXPORT TextUndoSplitPara::Redo()
 
 
 TextUndoInsertChars::TextUndoInsertChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
-                    : TextUndo( TEXTUNDO_INSERTCHARS, pTextEngine ),
+                    : TextUndo( pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
 }
@@ -281,7 +274,7 @@ sal_Bool __EXPORT TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 
 
 TextUndoRemoveChars::TextUndoRemoveChars( TextEngine* pTextEngine, const TextPaM& rTextPaM, const XubString& rStr )
-                    : TextUndo( TEXTUNDO_REMOVECHARS, pTextEngine ),
+                    : TextUndo( pTextEngine ),
                         maTextPaM( rTextPaM ), maText( rStr )
 {
 }
@@ -304,7 +297,7 @@ void __EXPORT TextUndoRemoveChars::Redo()
 
 
 TextUndoSetAttribs::TextUndoSetAttribs( TextEngine* pTextEngine, const TextSelection& rSel )
-    : TextUndo( TEXTUNDO_ATTRIBS, pTextEngine ), maSelection( rSel )
+    : TextUndo( pTextEngine ), maSelection( rSel )
 {
     maSelection.Justify();
 //  aNewAttribs.Set( rNewItems );

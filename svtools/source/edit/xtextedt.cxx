@@ -327,7 +327,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
 
         sal_Bool bFound = pTextEngine->Search( aSel, rSearchOptions, sal_True );
         if ( bFound )
-            pTextEngine->UndoActionStart( XTEXTUNDO_REPLACEALL );
+            pTextEngine->UndoActionStart();
         while ( bFound )
         {
             nFound++;
@@ -341,7 +341,7 @@ sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_
         {
             SetSelection( aSel.GetStart() );
             pTextEngine->FormatAndUpdate( this );
-            pTextEngine->UndoActionEnd( XTEXTUNDO_REPLACEALL );
+            pTextEngine->UndoActionEnd();
         }
     }
     return nFound;
@@ -355,7 +355,7 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
     aSel.Justify();
 
     HideSelection();
-    GetTextEngine()->UndoActionStart( bRight ? XTEXTUNDO_INDENTBLOCK : XTEXTUNDO_UNINDENTBLOCK );
+    GetTextEngine()->UndoActionStart();
 
     sal_uLong nStartPara = aSel.GetStart().GetPara();
     sal_uLong nEndPara = aSel.GetEnd().GetPara();
@@ -386,7 +386,7 @@ sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
         }
     }
 
-    GetTextEngine()->UndoActionEnd( bRight ? XTEXTUNDO_INDENTBLOCK : XTEXTUNDO_UNINDENTBLOCK );
+    GetTextEngine()->UndoActionEnd();
 
     sal_Bool bRange = aSel.HasRange();
     if ( bRight )
