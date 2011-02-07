@@ -386,7 +386,6 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
 ////////////////////////////////////////////////////////////
 
-// #110680#
 SmXMLExport::SmXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
     sal_uInt16 nExportFlags)
@@ -441,7 +440,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
     // EXPORT_OASIS is required here allthough there is no differrence between
     // OOo and OASIS, because without the flag, a transformation to OOo would
     // be chained in.
@@ -467,7 +465,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMetaOOO_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_META );
 }
 
@@ -490,7 +487,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_META );
 }
 
@@ -513,7 +509,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettingsOOO_createInstance
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
@@ -536,7 +531,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_SETTINGS );
 }
 
@@ -559,7 +553,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExportContent_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     // The EXPORT_OASIS flag is only required to avoid that a transformer is
     // chanied in
     return (cppu::OWeakObject*)new SmXMLExport( rSMgr, EXPORT_OASIS|EXPORT_CONTENT );

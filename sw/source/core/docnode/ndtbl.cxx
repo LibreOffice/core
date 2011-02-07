@@ -402,10 +402,10 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
             rInsTblOpts.mnRowsToRepeat :
             0;
 
-    /* #106283# Save content node to extract FRAMEDIR from. */
+    /* Save content node to extract FRAMEDIR from. */
     const SwCntntNode * pCntntNd = rPos.nNode.GetNode().GetCntntNode();
 
-    /* #109161# If we are called from a shell pass the attrset from
+    /* If we are called from a shell pass the attrset from
         pCntntNd (aka the node the table is inserted at) thus causing
         SwNodes::InsertTable to propagate an adjust item if
         necessary. */
@@ -422,7 +422,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     SwTableLineFmt* pLineFmt = MakeTableLineFmt();
     SwTableFmt* pTableFmt = MakeTblFrmFmt( aTblName, GetDfltFrmFmt() );
 
-    /* #106283# If the node to insert the table at is a context node and has a
+    /* If the node to insert the table at is a context node and has a
        non-default FRAMEDIR propagate it to the table. */
     if (pCntntNd)
     {
@@ -620,7 +620,6 @@ SwTableNode* SwNodes::InsertTable( const SwNodeIndex& rNdIdx,
             SwTxtNode * pTmpNd = new SwTxtNode( aIdx, pTxtColl );
 
             // --> FME 2006-04-13 #i60422# Propagate some more attributes.
-            // Adjustment was done for #109161#
             const SfxPoolItem* pItem = NULL;
             if ( NULL != pAttrSet )
             {
@@ -666,7 +665,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
                 return 0;
     }
 
-    /* #106283# Save first node in the selection if it is a context node. */
+    /* Save first node in the selection if it is a context node. */
     SwCntntNode * pSttCntntNd = pStt->nNode.GetNode().GetCntntNode();
 
     SwPaM aOriginal( *pStt, *pEnd );
@@ -739,7 +738,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFmt->SetFmtAttr( SwFmtLayoutSplit( FALSE ));
 
-    /* #106283# If the first node in the selection is a context node and if it
+    /* If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
        replacing table. */
     if (pSttCntntNd)
@@ -1103,7 +1102,7 @@ SwTableNode* SwNodes::TextToTable( const SwNodeRange& rRange, sal_Unicode cCh,
 
 const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >& rTableNodes )
 {
-    /* #106283# Save first node in the selection if it is a content node. */
+    /* Save first node in the selection if it is a content node. */
     SwCntntNode * pSttCntntNd = rTableNodes.begin()->begin()->aStart.GetNode().GetCntntNode();
 
     /**debug**/
@@ -1179,7 +1178,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     // die Tabelle bekommt USHRT_MAX als default SSize
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
 
-    /* #106283# If the first node in the selection is a context node and if it
+    /* If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
        replacing table. */
     if (pSttCntntNd)
@@ -2589,10 +2588,9 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
 {
     OSL_ENSURE( pBoxFrm, "GetTabRows called without pBoxFrm" );
 
-    // --> FME 2005-09-12 #121591# Make code robust:
+    // Make code robust:
     if ( !pBoxFrm )
         return;
-    // <--
 
     // --> FME 2005-01-06 #i39552# Collection of the boxes of the current
     // column has to be done at the beginning of this function, because
@@ -2609,20 +2607,18 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     }
     // <--
 
-    // --> FME 2005-09-12 #121591# Make code robust:
+    // Make code robust:
     if ( aDelCheck.HasBeenDeleted() )
     {
         OSL_ENSURE( false, "Current box has been deleted during GetTabRows()" );
         return;
     }
-    // <--
 
-    // --> FME 2005-09-12 #121591# Make code robust:
+    // Make code robust:
     const SwTabFrm* pTab = pBoxFrm->FindTabFrm();
     OSL_ENSURE( pTab, "GetTabRows called without a table" );
     if ( !pTab )
         return;
-    // <--
 
     const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
 

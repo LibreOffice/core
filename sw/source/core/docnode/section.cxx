@@ -65,9 +65,7 @@
 #include <fmtftntx.hxx>
 #include <ftnidx.hxx>
 #include <doctxm.hxx>
-// --> FME 2004-06-22 #114856# edit in readonly sections
-#include <fmteiro.hxx>
-// <--
+#include <fmteiro.hxx> // edit in readonly sections
 #include <swerror.h>
 #include <unosection.hxx>
 
@@ -117,9 +115,7 @@ SwSectionData::SwSectionData(SectionType const eType, String const& rName)
     , m_sSectionName(rName)
     , m_bHiddenFlag(false)
     , m_bProtectFlag(false)
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    , m_bEditInReadonlyFlag(false)
-    // <--
+    , m_bEditInReadonlyFlag(false) // edit in readonly sections
     , m_bHidden(false)
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(true)

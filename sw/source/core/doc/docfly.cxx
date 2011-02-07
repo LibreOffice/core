@@ -579,9 +579,9 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     //Hori und Vert nur dann resetten, wenn in der Vorlage eine
     //automatische Ausrichtung eingestellt ist, anderfalls den alten Wert
     //wieder hineinstopfen.
-    //JP 09.06.98: beim Update der RahmenVorlage sollte der Fly NICHT
+    // beim Update der RahmenVorlage sollte der Fly NICHT
     //              seine Orientierng verlieren (diese wird nicht geupdatet!)
-    //OS: #96584# text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
+    // text::HoriOrientation::NONE and text::VertOrientation::NONE are allowed now
     if (!bKeepOrient)
     {
         rFmt.ResetFmtAttr(RES_VERT_ORIENT);

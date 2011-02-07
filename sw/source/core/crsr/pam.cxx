@@ -44,13 +44,12 @@
 #include <swtable.hxx>
 #include <crsskip.hxx>
 
-// --> FME 2004-06-29 #114856# Formular view
+// Formular view
 #include <flyfrm.hxx>
 #include <fmteiro.hxx>
 #include <section.hxx>
 #include <sectfrm.hxx>
-// <--
-#include <ndtxt.hxx> // #111827#
+#include <ndtxt.hxx>
 
 #include <IMark.hxx>
 #include <hints.hxx>
@@ -641,8 +640,7 @@ USHORT SwPaM::GetPageNum( BOOL bAtPoint, const Point* pLayPos )
     return 0;
 }
 
-// --> FME 2004-06-29 #114856# Formular view
-// See also SwCrsrShell::IsCrsrReadonly()
+// Formular view - See also SwCrsrShell::IsCrsrReadonly()
 const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 {
     const SwFrm* pRet = 0;
@@ -666,7 +664,6 @@ const SwFrm* lcl_FindEditInReadonlyFrm( const SwFrm& rFrm )
 
     return pRet;
 }
-// <--
 
 // steht in etwas geschuetztem oder in die Selektion umspannt
 // etwas geschuetztes.
@@ -1168,7 +1165,6 @@ BOOL GoPrevSection( SwPaM & rPam, SwMoveFn fnMove )
     return TRUE;
 }
 
-// #111827#
 String SwPaM::GetTxt() const
 {
     String aResult;

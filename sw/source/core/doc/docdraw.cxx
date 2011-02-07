@@ -533,7 +533,6 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
 // des Drawing Layers auftrat. In diesem Fall wird der Layer komplett
 // neu aufgebaut.
 
-// #75371#
 #include <svx/sxenditm.hxx>
 
 void SwDoc::InitDrawModel()
@@ -548,11 +547,9 @@ void SwDoc::InitDrawModel()
     //DrawPool und EditEnginePool anlegen, diese gehoeren uns und werden
     //dem Drawing nur mitgegeben. Im ReleaseDrawModel werden die Pools wieder
     //zerstoert.
-    // 17.2.99: for Bug 73110 - for loading the drawing items. This must
-    //                          be loaded without RefCounts!
+    // for loading the drawing items. This must be loaded without RefCounts!
     SfxItemPool *pSdrPool = new SdrItemPool( &GetAttrPool() );
-    // #75371# change DefaultItems for the SdrEdgeObj distance items
-    // to TWIPS.
+    // change DefaultItems for the SdrEdgeObj distance items to TWIPS.
     if(pSdrPool)
     {
         const long nDefEdgeDist = ((500 * 72) / 127); // 1/100th mm in twips
@@ -573,7 +570,7 @@ void SwDoc::InitDrawModel()
     else
         pSdrPool->FreezeIdRanges();
 
-    // SJ: #95129# set FontHeight pool defaults without changing static SdrEngineDefaults
+    // set FontHeight pool defaults without changing static SdrEngineDefaults
      GetAttrPool().SetPoolDefaultItem(SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT ));
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create DrawDocument" );

@@ -96,7 +96,6 @@ class SmXMLImport : public SvXMLImport
         String aText;
 
 public:
-    // #110680#
     SmXMLImport(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         sal_uInt16 nImportFlags=IMPORT_ALL);

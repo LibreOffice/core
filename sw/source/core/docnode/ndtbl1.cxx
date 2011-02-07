@@ -700,9 +700,8 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
                 //Grundsaetzlich nichts setzen in HeadlineRepeats.
                 if ( pTab->IsFollow() &&
                      ( pTab->IsInHeadline( *pCell ) ||
-                       // --> FME 2006-02-07 #126092# Same holds for follow flow rows.
+                       // Same holds for follow flow rows.
                        pCell->IsInFollowFlowRow() ) )
-                       // <--
                     continue;
 
                 SvxBoxItem aBox( pCell->GetFmt()->GetBox() );
@@ -1279,11 +1278,10 @@ USHORT lcl_CalcCellFit( const SwLayoutFrm *pCell )
         const SwTwips nAdd = (pFrm->Frm().*fnRect->fnGetWidth)() -
                              (pFrm->Prt().*fnRect->fnGetWidth)();
 
-        // --> FME 2005-12-02 #127801# pFrm does not necessarily have to be a SwTxtFrm!
+        // pFrm does not necessarily have to be a SwTxtFrm!
         const SwTwips nCalcFitToContent = pFrm->IsTxtFrm() ?
                                           ((SwTxtFrm*)pFrm)->CalcFitToContent() :
                                           (pFrm->Prt().*fnRect->fnGetWidth)();
-        // <--
 
         nRet = Max( nRet, nCalcFitToContent + nAdd );
         pFrm = pFrm->GetNext();

@@ -101,7 +101,6 @@
 #define RID_PRINTUIOPTIONS          (RID_APP_START + 11)
 
 #define RID_MATH_TOOLBOX            (RID_APP_START + 50)
-// wegen #58705# entfernt
 //#define RID_DRAW_OBJECTBAR            (RID_APP_START + 51)
 
 #define RID_DEFAULTSAVEQUERY        (RID_APP_START + 102)

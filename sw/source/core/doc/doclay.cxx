@@ -377,7 +377,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 
     SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
 
-    // #108784# may we copy this object?
+    // May we copy this object?
     // We may, unless it's 1) it's a control (and therfore a draw)
     //                     2) anchored in a header/footer
     //                     3) anchored (to paragraph?)
@@ -746,7 +746,7 @@ SwFlyFrmFmt* SwDoc::MakeFlySection( RndStdIds eAnchorType,
         sal_uInt16 nCollId = static_cast<sal_uInt16>(
             get(IDocumentSettingAccess::HTML_MODE) ? RES_POOLCOLL_TEXT : RES_POOLCOLL_FRAME );
 
-        /* #109161# If there exists no adjust item in the paragraph
+        /* If there exists no adjust item in the paragraph
             style for the content node of the new fly section
             propagate an existing adjust item at the anchor to the new
             content node. */

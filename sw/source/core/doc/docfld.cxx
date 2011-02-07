@@ -2424,7 +2424,7 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
         SwNodeIndex aIdx( rTxtNd );
         bIsInBody = rDoc.GetNodes().GetEndOfExtras().GetIndex() < aIdx.GetIndex();
 
-        // #104291# dvo: We don't want to update fields in redlines, or those
+        // We don't want to update fields in redlines, or those
         // in frames whose anchor is in redline. However, we do want to update
         // fields in hidden sections. So: In order to be updated, a field 1)
         // must have a frame, or 2) it must be in the document body.
@@ -2586,7 +2586,6 @@ SwDocUpdtFld::~SwDocUpdtFld()
         delete aFldTypeTable[n];
 }
 
-// #111840#
 bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                       SwMsgPoolItem * pMsgHnt,
                       bool bUpdateFlds)

@@ -347,11 +347,9 @@ void DelFlyInRange( const SwNodeIndex& rMkNdIdx,
 
                 pDoc->DelLayoutFmt( pFmt );
 
-                // --> FME 2004-10-06 #117913# DelLayoutFmt can also
-                // trigger the deletion of objects.
+                // DelLayoutFmt can also trigger the deletion of objects.
                 if( i > rTbl.Count() )
                     i = rTbl.Count();
-                // <--
             }
         }
     }
@@ -1246,8 +1244,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     return sal_True;
 }
 
-/* #107318# Convert list of ranges of whichIds to a corresponding list
-    of whichIds*/
+// Convert list of ranges of whichIds to a corresponding list of whichIds
 SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
 {
     SvUShorts * pResult = new SvUShorts();
@@ -1408,7 +1405,7 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
                 pDelNd->FmtToTxtAttr( pTxtNd );
             else
             {
-                /* #107318# This case was missed:
+                /* This case was missed:
 
                    <something></something>   <-- pTxtNd
                    <other>ccc</other>        <-- pDelNd

@@ -528,7 +528,6 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
     }
 }
 
-// #116530#
 void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily,
                                     USHORT nOp)
 {
@@ -556,11 +555,9 @@ void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 
     SwPageDesc *pDel = aPageDescs[i];
 
-    // -> #116530#
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PAGE,
                                 SFX_STYLESHEET_ERASED);
-    // <- #116530#
 
     if (DoesUndo())
     {
@@ -583,7 +580,7 @@ void SwDoc::DelPageDesc( USHORT i, BOOL bBroadcast )
 |*************************************************************************/
 
 USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
-                            BOOL bRegardLanguage, BOOL bBroadcast) // #116530#
+                            BOOL bRegardLanguage, BOOL bBroadcast)
 {
     SwPageDesc *pNew;
     if( pCpy )
@@ -612,14 +609,12 @@ USHORT SwDoc::MakePageDesc( const String &rName, const SwPageDesc *pCpy,
     }
     aPageDescs.Insert( pNew, aPageDescs.Count() );
 
-    // -> #116530#
     if (bBroadcast)
         BroadcastStyleOperation(rName, SFX_STYLE_FAMILY_PAGE,
                                 SFX_STYLESHEET_CREATED);
-    // <- #116530#
 
     if (DoesUndo())
-        AppendUndo(new SwUndoPageDescCreate(pNew, this));    //  #116530#
+        AppendUndo(new SwUndoPageDescCreate(pNew, this));
 
     SetModified();
     return (aPageDescs.Count()-1);
@@ -901,12 +896,12 @@ SwPageDesc * SwDoc::GetPageDesc( const String & rName )
     return aResult;
 }
 
-void SwDoc::DelPageDesc( const String & rName, BOOL bBroadcast ) // #116530#
+void SwDoc::DelPageDesc( const String & rName, BOOL bBroadcast )
 {
     sal_uInt16 nI;
 
     if (FindPageDesc(rName, &nI))
-        DelPageDesc(nI, bBroadcast); // #116530#
+        DelPageDesc(nI, bBroadcast);
 }
 
 void SwDoc::ChgPageDesc( const String & rName, const SwPageDesc & rDesc)

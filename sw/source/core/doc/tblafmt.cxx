@@ -72,11 +72,11 @@ const USHORT AUTOFORMAT_DATA_ID_641 = 10002;
 const USHORT AUTOFORMAT_ID_680DR14      = 10011;
 const USHORT AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
-// --- from 680/dr25 on: #21549# store strings as UTF-8
+// --- from 680/dr25 on: store strings as UTF-8
 const USHORT AUTOFORMAT_ID_680DR25      = 10021;
 const USHORT AUTOFORMAT_DATA_ID_680DR25 = 10022;
 
-// --- from DEV300/overline2 on: #5991# overline
+// --- from DEV300/overline2 on: overline
 const USHORT AUTOFORMAT_ID_300OVRLN      = 10031;
 const USHORT AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
@@ -399,7 +399,7 @@ BOOL SwBoxAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions, USHOR
     if( 0 == rVersions.nNumFmtVersion )
     {
         USHORT eSys, eLge;
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         rStream.ReadByteString( sNumFmtString, eCharSet )
                 >> eSys >> eLge;
@@ -485,7 +485,7 @@ BOOL SwBoxAutoFmt::Save( SvStream& rStream ) const
     aRotateAngle.Store( rStream, aRotateAngle.GetVersion(SOFFICE_FILEFORMAT_40) );
     aRotateMode.Store( rStream, aRotateMode.GetVersion(SOFFICE_FILEFORMAT_40) );
 
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     rStream.WriteByteString( sNumFmtString, RTL_TEXTENCODING_UTF8 )
         << (USHORT)eSysLanguage << (USHORT)eNumFmtLanguage;
 
@@ -692,7 +692,7 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
             rSet.Put( rChg.GetHeight() );
             rSet.Put( rChg.GetWeight() );
             rSet.Put( rChg.GetPosture() );
-            // #103065# do not insert empty CJK font
+            // do not insert empty CJK font
             const SvxFontItem& rCJKFont = rChg.GetCJKFont();
             if( rCJKFont.GetStyleName().Len() )
             {
@@ -707,7 +707,7 @@ void SwTableAutoFmt::UpdateToSet( BYTE nPos, SfxItemSet& rSet,
                 rSet.Put( rChg.GetWeight(), RES_CHRATR_CJK_WEIGHT );
                 rSet.Put( rChg.GetPosture(), RES_CHRATR_CJK_POSTURE );
             }
-            // #103065# do not insert empty CTL font
+            // do not insert empty CTL font
             const SvxFontItem& rCTLFont = rChg.GetCTLFont();
             if( rCTLFont.GetStyleName().Len() )
             {
@@ -778,7 +778,7 @@ BOOL SwTableAutoFmt::Load( SvStream& rStream, const SwAfVersions& rVersions )
             (AUTOFORMAT_DATA_ID_504 <= nVal && nVal <= AUTOFORMAT_DATA_ID)) )
     {
         BOOL b;
-        // --- from 680/dr25 on: #21549# store strings as UTF-8
+        // --- from 680/dr25 on: store strings as UTF-8
         CharSet eCharSet = (nVal >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         rStream.ReadByteString( aName, eCharSet );
         if( AUTOFORMAT_DATA_ID_552 <= nVal )
@@ -860,7 +860,7 @@ BOOL SwTableAutoFmt::Save( SvStream& rStream ) const
     USHORT nVal = AUTOFORMAT_DATA_ID;
     BOOL b;
     rStream << nVal;
-    // --- from 680/dr25 on: #21549# store strings as UTF-8
+    // --- from 680/dr25 on: store strings as UTF-8
     rStream.WriteByteString( aName, RTL_TEXTENCODING_UTF8 );
     rStream << nStrResId;
     rStream << ( b = bInclFont );

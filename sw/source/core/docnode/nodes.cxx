@@ -736,7 +736,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
         case ND_TABLENODE:
         case ND_STARTNODE:
             {
-                // Bug #78589# - empty section -> nothing to do
+                // empty section -> nothing to do
                 //  and only if it's a top level section
                 if( !nInsPos && !nLevel )
                 {
@@ -2292,7 +2292,7 @@ SwNode* SwNodes::FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                     : pSttNd->FindSectionNode();
         if( !( pSectNd && pSectNd->GetSection().CalcHiddenFlag()/*IsHiddenFlag()*/ ) )
         {
-            // #130650# in a table in table situation we have to assure that we don't leave the
+            // in a table in table situation we have to assure that we don't leave the
             // outer table cell when the inner table is looking for a PrvNxt...
             SwTableNode* pTableNd = pSttNd->IsTableNode()
                     ? pSttNd->StartOfSectionNode()->FindTableNode()

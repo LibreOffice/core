@@ -998,7 +998,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
-                /* #107213#: Safe numrule item at destination. */
+                // Safe numrule item at destination.
                 // #i86492# - Safe also <ListId> item of destination.
                 int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
@@ -1022,7 +1022,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
                 // <--
-                /* #107213# */
 
                 if( !bCopyOk )
                 {
@@ -1136,7 +1135,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 aDestIdx.Assign( pDestTxtNd, 0  );
                 aInsPos--;
 
-                // #112756# #98130# if we have to insert an extra text node
+                // if we have to insert an extra text node
                 // at the destination, this node will be our new destination
                 // (text) node, and thus we set bStartisTxtNode to true. This
                 // will ensure that this node will be deleted during Undo
@@ -1145,7 +1144,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 bStartIsTxtNode = TRUE;
             }
 
-            /* #107213# Save numrule at destination */
+            // Save numrule at destination
             // #i86492# - Safe also <ListId> item of destination.
             int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
@@ -1169,7 +1168,6 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
             }
             // <--
-            /* #107213# */
 
             const bool bEmptyDestNd = 0 == pDestTxtNd->GetTxt().Len();
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
@@ -1182,7 +1180,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 if ( bOneNode )
                 {
-                    /* #107213# If only a part of one paragraph is copied
+                    /* If only a part of one paragraph is copied
                        restore the numrule at the destination. */
                     // #i86492# - restore also <ListId> item
                     if ( !lcl_MarksWholeNode(rPam) )

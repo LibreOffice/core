@@ -226,7 +226,6 @@ void lcl_ClearArea( const SwFrm &rFrm,
                 ::DrawGraphic( pItem, &rOut, aOrigRect, aRegion[i] );
         else
         {
-            // #116347#
             rOut.Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             rOut.SetFillColor( rFrm.GetShell()->Imp()->GetRetoucheColor());
             rOut.SetLineColor();
@@ -970,7 +969,6 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
             pJobSetup = new JobSetup();
 
         // #i42323#
-        // The reason for #114233# is gone, so i remove it again
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 

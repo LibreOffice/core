@@ -147,7 +147,7 @@ SmEditWindow::~SmEditWindow()
 
     StartCursorMove();
 
-    // #112565# clean up of classes used for accessibility
+    // clean up of classes used for accessibility
     // must be done before EditView (and thus EditEngine) is no longer
     // available for those classes.
     if (pAccessible)

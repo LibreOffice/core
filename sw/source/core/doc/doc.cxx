@@ -870,11 +870,10 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
     }
     else
     {           // ist Undo und Gruppierung eingeschaltet, ist alles anders !
-        SwUndoInsert * pUndo = NULL; // #111827#
+        SwUndoInsert * pUndo = NULL;
 
         // don't group the start if hints at the start should be expanded
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
-        // -> #111827#
         {
             USHORT const nUndoSize = pUndos->Count();
             if (0 != nUndoSize)
@@ -897,7 +896,6 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
                 }
             }
         }
-        // <- #111827#
 
         CharClass const& rCC = GetAppCharClass();
         xub_StrLen nInsPos = rPos.nContent.GetIndex();
@@ -2590,7 +2588,6 @@ void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
     }
 }
 
-// #111827#
 String SwDoc::GetPaMDescr(const SwPaM & rPam) const
 {
     String aResult;
@@ -2629,7 +2626,6 @@ String SwDoc::GetPaMDescr(const SwPaM & rPam) const
     return aResult;
 }
 
-// -> #111840#
 SwField * SwDoc::GetField(const SwPosition & rPos)
 {
     SwTxtFld * const pAttr = GetTxtFld(rPos);
@@ -2646,7 +2642,6 @@ SwTxtFld * SwDoc::GetTxtFld(const SwPosition & rPos)
                     rPos.nContent.GetIndex(), RES_TXTATR_FIELD) )
         : 0;
 }
-// <- #111840#
 
 bool SwDoc::ContainsHiddenChars() const
 {

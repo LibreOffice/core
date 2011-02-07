@@ -252,7 +252,7 @@ SwFmt::~SwFmt()
         bFmtInDTOR = TRUE;
 
         SwFmt *pParentFmt = DerivedFrom();
-        if (!pParentFmt)        // see #112405#
+        if (!pParentFmt)
         {
             DBG_ERROR( "~SwFmt: parent format missing" );
         }

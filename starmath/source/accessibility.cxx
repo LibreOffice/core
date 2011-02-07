@@ -510,10 +510,10 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
         if (!pDoc)
             throw RuntimeException();
         String aTxt( GetAccessibleText_Impl() );
-        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // #108812# aTxt.Len() is valid
+        if (!(0 <= nIndex  &&  nIndex <= aTxt.Len()))   // aTxt.Len() is valid
             throw IndexOutOfBoundsException();
 
-        // #108812# find a reasonable rectangle for position aTxt.Len().
+        // find a reasonable rectangle for position aTxt.Len().
         bool bWasBehindText = (nIndex == aTxt.Len());
         if (bWasBehindText && nIndex)
             --nIndex;
@@ -559,7 +559,7 @@ awt::Rectangle SAL_CALL SmGraphicAccessible::getCharacterBounds( sal_Int32 nInde
             }
         }
 
-        // #108812# take rectangle from last character and move it to the right
+        // take rectangle from last character and move it to the right
         if (bWasBehindText)
             aRes.X += aRes.Width;
     }
@@ -1285,7 +1285,7 @@ Rectangle SmTextForwarder::GetCharBounds( USHORT nPara, USHORT nIndex ) const
 
     if (pEditEngine)
     {
-        // #108900# Handle virtual position one-past-the end of the string
+        // Handle virtual position one-past-the end of the string
         if( nIndex >= pEditEngine->GetTextLen(nPara) )
         {
             if( nIndex )
@@ -1684,7 +1684,7 @@ void SmEditAccessible::Init()
 
 void SmEditAccessible::ClearWin()
 {
-    // #112565# remove handler before current object gets destroyed
+    // remove handler before current object gets destroyed
     // (avoid handler being called for already dead object)
     EditEngine *pEditEngine = GetEditEngine();
     if (pEditEngine)

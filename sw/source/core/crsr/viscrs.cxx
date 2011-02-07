@@ -673,10 +673,8 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
     {
         pTmp->SwSelPaintRects::Invalidate( rRect );
 
-        // --> FME 2005-08-18 #125102#
         // skip any non SwShellCrsr objects in the ring
         // (see:SwAutoFormat::DeleteSel()
-        // <--
         Ring* pTmpRing = pTmp;
         pTmp = 0;
         do

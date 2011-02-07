@@ -620,7 +620,7 @@ USHORT lcl_FindOutlineNum( const SwNodes& rNds, String& rName )
     // Gliederung:
     const SwOutlineNodes& rOutlNds = rNds.GetOutLineNds();
     // OS: ohne OutlineNodes lohnt die Suche nicht
-    // und man spart sich einen Absturz #42958#
+    // und man spart sich einen Absturz
     if(!rOutlNds.Count())
         return USHRT_MAX;
     SwTxtNode* pNd;
@@ -1561,7 +1561,7 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
                 const SwNumRule * pNumRule = pTxtNd->GetNumRule();
                 if (pNumRule)
                 {
-                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) && // #115901#
+                    if ( ( pNumRule->IsOutlineRule() == ( bOutline ? TRUE : FALSE ) ) &&
                          ( ( bNum && pNumRule->Get(0).IsEnumeration()) ||
                            ( !bNum && pNumRule->Get(0).IsItemize() ) ) ) // #i22362#, #i29560#
                     {
@@ -1617,7 +1617,7 @@ BOOL SwDoc::NumUpDown( const SwPaM& rPam, BOOL bDown )
         ULONG nTmp = nStt; nStt = nEnd; nEnd = nTmp;
     }
 
-    // -> #115901# outline nodes are promoted or demoted differently
+    // -> outline nodes are promoted or demoted differently
     bool bOnlyOutline = true;
     bool bOnlyNonOutline = true;
     for (ULONG n = nStt; n <= nEnd; n++)
@@ -1917,7 +1917,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             BOOL bDelLastPara = !aInsPos.nNode.GetNode().IsCntntNode();
 
-            /* #101076# When copying to a non-content node Copy will
+            /* When copying to a non-content node Copy will
                insert a paragraph before that node and insert before
                that inserted node. Copy creates an SwUndoInserts that
                does not cover the extra paragraph. Thus we insert the
@@ -1988,7 +1988,7 @@ BOOL SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv )
 
             SwRedline* pNewRedline = new SwRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
 
-            // #101654# prevent assertion from aPam's target being deleted
+            // prevent assertion from aPam's target being deleted
             // (Alternatively, one could just let aPam go out of scope, but
             //  that requires touching a lot of code.)
             aPam.GetBound(TRUE).nContent.Assign( NULL, 0 );

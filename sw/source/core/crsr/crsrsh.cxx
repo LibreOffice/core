@@ -271,7 +271,7 @@ if( GetWin() )
         // mit der Basic-Klammerung entkoppelt; die Shells werden umgeschaltet
         if( !BasicActionPend() )
         {
-            //JP 12.01.98: Bug #46496# - es muss innerhalb einer BasicAction
+            // es muss innerhalb einer BasicAction
             //              der Cursor geupdatet werden; um z.B. den
             //              TabellenCursor zu erzeugen. Im UpdateCrsr wird
             //              das jetzt beruecksichtigt!
@@ -1307,7 +1307,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     ClearUpCrsrs();
 
-    //JP 12.01.98: Bug #46496# - es muss innerhalb einer BasicAction der
+    // es muss innerhalb einer BasicAction der
     //              Cursor geupdatet werden; um z.B. den TabellenCursor zu
     //              erzeugen. Im EndAction wird jetzt das UpdateCrsr gerufen!
     if( ActionPend() && BasicActionPend() )
@@ -1363,8 +1363,8 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
         OSL_ENSURE( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
-        // --> FME 2005-12-02 #126107# Make code robust. The table
-        // cursor may point to a table in a currently inactive header.
+        // --> Make code robust. The table cursor may point
+        // to a table in a currently inactive header.
         SwTabFrm *pTab = pTblFrm ? pTblFrm->FindTabFrm() : 0;
         // <--
 
@@ -1384,12 +1384,11 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                     SwTabFrm* pMarkTab = pMarkTblFrm->FindTabFrm();
                     OSL_ENSURE( pMarkTab, "Tabelle Crsr nicht im Content ??" );
 
-                    // --> FME 2005-11-28 #120360# Make code robust:
+                    // Make code robust:
                     if ( pMarkTab )
                     {
                         bInRepeatedHeadline = pMarkTab->IsFollow() && pMarkTab->IsInHeadline( *pMarkTblFrm );
                     }
-                    // <--
                 }
             }
 
@@ -1544,7 +1543,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     UpdateCrsrPos();
 
-    // #100722# The cursor must always point into content; there's some code
+    // The cursor must always point into content; there's some code
     // that relies on this. (E.g. in SwEditShell::GetScriptType, which always
     // loops _behind_ the last node in the selection, which always works if you
     // are in content.) To achieve this, we'll force cursor(s) to point into
@@ -1602,7 +1601,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
-                //Wir stellen sicher, dass anstaendig Formatiert wurde #42224#
+                //Wir stellen sicher, dass anstaendig Formatiert wurde
                 pFrm->PrepareCrsr();
 
             // im geschuetzten Fly? aber bei Rahmenselektion ignorieren
@@ -2325,9 +2324,8 @@ BOOL SwCrsrShell::IsOverReadOnlyPos( const Point& rPt ) const
     Point aPt( rPt );
     SwPaM aPam( *pCurCrsr->GetPoint() );
     GetLayout()->GetCrsrOfst( aPam.GetPoint(), aPt );
-    // --> FME 2004-06-29 #114856# Formular view
+    // Formular view
     return aPam.HasReadonlySel( GetViewOptions()->IsFormView() );
-    // <--
 }
 
 
@@ -2592,7 +2590,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     bSetCrsrInReadOnly = TRUE;
 
     pVisCrsr = new SwVisCrsr( this );
-    mbMacroExecAllowed = true; // #100556#
+    mbMacroExecAllowed = true;
 }
 
 
@@ -2893,9 +2891,8 @@ void SwCrsrShell::NewCoreSelection()
 BOOL SwCrsrShell::IsCrsrReadonly() const
 {
     if ( GetViewOptions()->IsReadonly() ||
-         // --> FME 2004-06-29 #114856# Formular view
+         // Formular view
          GetViewOptions()->IsFormView() )
-         // <--
     {
         SwFrm *pFrm = GetCurrFrm( FALSE );
         const SwFlyFrm* pFly;
@@ -2909,14 +2906,13 @@ BOOL SwCrsrShell::IsCrsrReadonly() const
         {
             return FALSE;
         }
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // edit in readonly sections
         else if ( pFrm && pFrm->IsInSct() &&
                   0 != ( pSection = pFrm->FindSctFrm()->GetSection() ) &&
                   pSection->IsEditInReadonlyFlag() )
         {
             return FALSE;
         }
-        // <--
 
         return TRUE;
     }
@@ -3236,7 +3232,6 @@ void SwCrsrShell::ClearUpCrsrs()
         TblCrsrToCursor();
 }
 
-// #111827#
 String SwCrsrShell::GetCrsrDescr() const
 {
     String aResult;

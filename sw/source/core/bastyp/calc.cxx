@@ -567,7 +567,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, USHORT ins )
 
     // Name(p)=Adress.PLZ oder Adress.DATENSATZNUMMER
     // DBSETNUMBERFLD = DatenSATZ-nummernfeld (NICHT "setze Datensatznummer!!!")
-    // #101436#: At this point the "real" case variable has to be used
+    // At this point the "real" case variable has to be used
     String sTmpName( rStr );
     ::ReplacePoint( sTmpName );
 
@@ -1430,7 +1430,6 @@ SwSbxValue SwCalc::Prim()
             eError = CALC_OVERFLOW;
     }
 
-    // added here because of #77448# (=2*3^2 should be 18)
     if( bChkPow && eCurrOper == CALC_POW )
     {
         double dleft = nErg.GetDouble();

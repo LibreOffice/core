@@ -495,7 +495,7 @@ void SwHTMLTableLayout::AutoLayoutPass1()
             SwHTMLTableLayoutCell *pCell = GetCell(j,i);
             SwHTMLTableLayoutCnts *pCnts = pCell->GetContents();
 
-            // fix #31488#: Zum Ermitteln der naechsten zu berechnenden
+            // Zum Ermitteln der naechsten zu berechnenden
             // Spalte muessen alle Zeilen herangezogen werden
             USHORT nColSpan = pCell->GetColSpan();
             if( nColSpan < nColSkip )
@@ -1181,7 +1181,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
             // Weil bei Tabellen in Rahmen kein Resize aufgerufen wird,
             // wenn der Rahmen eine nicht-relative Breite besitzt, koennen
             // wir da solche Spielchen nicht spielen
-            // MIB 19.2.98: Wegen fix #47394# spielen wir solche Spielchen
+            // Spielen wir solche Spielchen
             // jetzt doch. Dort war eine Grafik in einer 1%-breiten
             // Tabelle und hat da natuerlich nicht hineingepasst.
             nAbsTabWidth = (USHORT)( ((ULONG)nAbsAvail * nWidthOption) / 100 );
@@ -1361,7 +1361,7 @@ void SwHTMLTableLayout::AutoLayoutPass2( USHORT nAbsAvail, USHORT nRelAvail,
             // die ihre Maximalbreite genau einhalten, also weder
             // schmaler noch breiter werden. Beim zurueckrechnen der
             // absoluten Breite aus der relativen Breite kann es
-            // zu Rundungsfehlern kommen (bug #45598#). Um die auszugeleichen
+            // zu Rundungsfehlern kommen. Um die auszugeleichen
             // werden zuerst die fixen Breiten entsprechend korrigiert
             // eingestellt und erst danach die relativen.
 

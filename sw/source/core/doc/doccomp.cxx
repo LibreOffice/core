@@ -1410,8 +1410,7 @@ void SwCompareData::SetRedlinesToDoc( BOOL bUseDocInfo )
 {
     SwPaM* pTmp = pDelRing;
 
-    // Bug #83296#: get the Author / TimeStamp from the "other"
-    //              document info
+    // get the Author / TimeStamp from the "other" document info
     USHORT nAuthor = rDoc.GetRedlineAuthor();
     DateTime aTimeStamp;
     SwDocShell *pDocShell(rDoc.GetDocShell());

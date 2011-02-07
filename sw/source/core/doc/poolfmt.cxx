@@ -386,7 +386,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     {
     // allgemeine Inhaltsformen
     case RES_POOLCOLL_STANDARD:
-        /* #111214# koreans do not like SvxScriptItem(TRUE) */
+        /* koreans do not like SvxScriptItem(TRUE) */
         if (bRegardLanguage)
         {
             ULONG nAppLanguage = GetAppLanguage();
@@ -2471,13 +2471,13 @@ USHORT GetPoolParent( USHORT nId )
 
 void SwDoc::RemoveAllFmtLanguageDependencies()
 {
-    /* #106748# Restore the language independ pool defaults and styles. */
+    /* Restore the language independ pool defaults and styles. */
     GetAttrPool().ResetPoolDefaultItem( RES_PARATR_ADJUST );
 
     SwTxtFmtColl * pTxtFmtColl = GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
     pTxtFmtColl->ResetFmtAttr( RES_PARATR_ADJUST );
-    /* #111214# koreans do not like SvxScriptItem(TRUE) */
+    /* koreans do not like SvxScriptItem(TRUE) */
     pTxtFmtColl->ResetFmtAttr( RES_PARATR_SCRIPTSPACE );
 
     SvxFrameDirectionItem aFrameDir( FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR );

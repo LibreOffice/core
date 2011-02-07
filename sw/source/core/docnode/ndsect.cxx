@@ -702,7 +702,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         // <--
     }
 
-    // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
+    // Der LinkFileName koennte auch nur aus Separatoren bestehen
     String sCompareString = sfx2::cTokenSeperator;
     sCompareString += sfx2::cTokenSeperator;
     const bool bUpdate =
@@ -722,7 +722,7 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
     /// Either it is set to TRUE using corresponding method <SwSection.SetCondHidden(..)>,
     /// or it is set to the value of SwSection which is assigned to it.
     /// Discussion with AMA results that the adjustment to the assignment operator
-    /// could be very risky -> see notes in bug #102894#.
+    /// could be very risky.
     pSection->SetSectionData(rNewData);
 
     if( pAttr )
@@ -1341,10 +1341,9 @@ SwSectionNode* SwSectionNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) c
         pNewSect->SetHidden( TRUE );
     if( !pNewSect->IsProtectFlag() && GetSection().IsProtect() )
         pNewSect->SetProtect( TRUE );
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     if( !pNewSect->IsEditInReadonlyFlag() && GetSection().IsEditInReadonly() )
         pNewSect->SetEditInReadonly( TRUE );
-    // <--
 
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );  // (wo stehe in denn nun ??)
     rNds._Copy( aRg, aInsPos, FALSE );

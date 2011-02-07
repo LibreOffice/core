@@ -38,9 +38,7 @@
 // --> OD 2007-10-31 #i83479#
 #include <IDocumentListItems.hxx>
 // <--
-// --> OD 2010-01-13 #b6912256#
 #include <doc.hxx>
-// <--
 
 SwNodeNum::SwNodeNum( SwTxtNode* pTxtNode )
     : SwNumberTreeNode(),
@@ -333,7 +331,6 @@ SwNumberTree::tSwNumTreeNumber SwNodeNum::GetStartValue() const
     return aResult;
 }
 
-// --> OD 2006-03-07 #131436#
 void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
 {
     SwNodeNum* pRootNode = rNodeNum.GetParent()
@@ -384,8 +381,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         if ( pTxtNode )
         {
             pTxtNode->RemoveFromList();
-            // --> OD 2010-01-13 #b6912256#
-            // clear all list attributes and the list style
+            // --> clear all list attributes and the list style
             SvUShortsSort aResetAttrsArray;
             aResetAttrsArray.Insert( RES_PARATR_LIST_ID );
             aResetAttrsArray.Insert( RES_PARATR_LIST_LEVEL );

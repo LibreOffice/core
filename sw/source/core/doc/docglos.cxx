@@ -116,8 +116,6 @@ BOOL SwDoc::InsertGlossary( SwTextBlocks& rBlock, const String& rEntry,
     USHORT nIdx = rBlock.GetIndex( rEntry );
     if( (USHORT) -1 != nIdx )
     {
-        // Bug #70238# ask the TextOnly-Flag before BeginGetDoc, because
-        //              the method closed the Storage!
         BOOL bSav_IsInsGlossary = mbInsOnlyTxtGlssry;
         mbInsOnlyTxtGlssry = rBlock.IsOnlyTextBlock( nIdx );
 

@@ -263,7 +263,6 @@ public:
     // return the TOX base class if the section is a TOX section
     const SwTOXBase* GetTOXBase() const;
 
-    // #b6521322#
     void BreakLink();
 
 };

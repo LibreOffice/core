@@ -444,12 +444,12 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         }
                         else if ( POS_OUTSIDE == eCmpPos )
                         {
-                            // #107164# own insert-over-insert
-                            // redlines: just scrap the inside ones
+                            // own insert-over-insert redlines:
+                            // just scrap the inside ones
                             pRedlineTbl->Remove( n );
                             bDec = true;
                         }
-                        // <- #107164#
+                        // <--
                         else if( POS_OVERLAP_BEHIND == eCmpPos )
                         {
                             *pStt = *pREnd;
@@ -498,8 +498,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     }
                     else if ( POS_OUTSIDE == eCmpPos )
                     {
-                        // #102366# handle overlapping redlines in broken
-                        // documents
+                        // handle overlapping redlines in broken documents
 
                         // split up the new redline, since it covers the
                         // existing redline. Insert the first part, and
@@ -517,14 +516,12 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     }
                     else if ( POS_OVERLAP_BEHIND == eCmpPos )
                     {
-                        // #107164# handle overlapping redlines in broken
-                        // documents
+                        // handle overlapping redlines in broken documents
                         pNewRedl->SetStart( *pREnd );
                     }
                     else if ( POS_OVERLAP_BEFORE == eCmpPos )
                     {
-                        // #107164# handle overlapping redlines in broken
-                        // documents
+                        // handle overlapping redlines in broken documents
                         *pEnd = *pRStt;
                         if( ( *pStt == *pEnd ) &&
                             ( pNewRedl->GetContentIdx() == NULL ) )
@@ -561,8 +558,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     }
                     else if ( POS_OUTSIDE == eCmpPos )
                     {
-                        // #102366# handle overlapping redlines in broken
-                        // documents
+                        // handle overlapping redlines in broken documents
 
                         // split up the new redline, since it covers the
                         // existing redline. Insert the first part, and
@@ -580,13 +576,13 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     }
                     else if ( POS_EQUAL == eCmpPos )
                     {
-                        // #112895# handle identical redlines in broken
-                        // documents - delete old (delete) redline
+                        // handle identical redlines in broken documents
+                        // delete old (delete) redline
                         pRedlineTbl->DeleteAndDestroy( n );
                         bDec = true;
                     }
                     else if ( POS_OVERLAP_BEHIND == eCmpPos )
-                    {   // Another workaround for broken redlines (#107164#)
+                    {   // Another workaround for broken redlines
                         pNewRedl->SetStart( *pREnd );
                     }
                     break;
@@ -729,8 +725,6 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             USHORT nToBeDeleted = n;
                             bDec = true;
 
-                            // #107359# Do it again, Sam!
-                            // If you can do it for them, you can do it for me.
                             if( *(pNewRedl->Start()) <= *pREnd )
                             {
                                 // Whoooah, we just extended the new 'redline'
@@ -777,7 +771,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                             {
                               eRedlineMode = (RedlineMode_t)(eRedlineMode | nsRedlineMode_t::REDLINE_IGNOREDELETE_REDLINES);
 
-                                // #98863# DeleteAndJoin does not yield the
+                                // DeleteAndJoin does not yield the
                                 // desired result if there is no paragraph to
                                 // join with, i.e. at the end of the document.
                                 // For this case, we completely delete the
@@ -1557,7 +1551,6 @@ const SwRedline* SwDoc::GetRedline( const SwPosition& rPos,
                     ? *pStt == rPos
                     : ( *pStt <= rPos && rPos < *pEnd ) )
             {
-                /* #107318# returned wrong redline ???*/
                 while( nM && rPos == *(*pRedlineTbl)[ nM - 1 ]->End() &&
                     rPos == *(*pRedlineTbl)[ nM - 1 ]->Start() )
                 {
@@ -2005,13 +1998,12 @@ const SwRedline* lcl_FindCurrRedline( const SwPosition& rSttPos,
     return pFnd;
 }
 
-// #111827#
 int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                             SwRedlineTbl& rArr, BOOL bCallDelete,
                             const SwPaM& rPam)
 {
     USHORT n = 0;
-    int nCount = 0; // #111827#
+    int nCount = 0;
 
     const SwPosition* pStt = rPam.Start(),
                     * pEnd = pStt == rPam.GetPoint() ? rPam.GetMark()
@@ -2022,7 +2014,7 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
     {
         // dann nur die TeilSelektion aufheben
         if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
-            nCount++; // #111827#
+            nCount++;
         ++n;
     }
 
@@ -2034,7 +2026,7 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
             if( *pTmp->End() <= *pEnd )
             {
                 if( (*fn_AcceptReject)( rArr, n, bCallDelete, 0, 0 ))
-                    nCount++; // #111827#
+                    nCount++;
             }
             else
             {
@@ -2042,13 +2034,13 @@ int lcl_AcceptRejectRedl( Fn_AcceptReject fn_AcceptReject,
                 {
                     // dann nur in der TeilSelektion aufheben
                     if( (*fn_AcceptReject)( rArr, n, bCallDelete, pStt, pEnd ))
-                        nCount++; // #111827#
+                        nCount++;
                 }
                 break;
             }
         }
     }
-    return nCount; // #111827#
+    return nCount;
 }
 
 void lcl_AdjustRedlineRange( SwPaM& rPam )
@@ -2102,7 +2094,6 @@ bool SwDoc::AcceptRedline( USHORT nPos, bool bCallDelete )
     {
         if( DoesUndo() )
         {
-            // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
@@ -2169,7 +2160,6 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
         AppendUndo( new SwUndoAcceptRedline( aPam ));
     }
 
-    // #111827#
     int nRet = lcl_AcceptRejectRedl( lcl_AcceptRedline, *pRedlineTbl,
                                      bCallDelete, aPam );
     if( nRet > 0 )
@@ -2179,7 +2169,6 @@ bool SwDoc::AcceptRedline( const SwPaM& rPam, bool bCallDelete )
     }
     if( DoesUndo() )
     {
-        // #111827#
         String aTmpStr;
 
         {
@@ -2210,7 +2199,6 @@ bool SwDoc::RejectRedline( USHORT nPos, bool bCallDelete )
     {
         if( DoesUndo() )
         {
-            // #111827#
             SwRewriter aRewriter;
 
             aRewriter.AddRule(UNDO_ARG1, pTmp->GetDescr());
@@ -2277,7 +2265,6 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
         AppendUndo( new SwUndoRejectRedline( aPam ));
     }
 
-    // #111827#
     int nRet = lcl_AcceptRejectRedl( lcl_RejectRedline, *pRedlineTbl,
                                         bCallDelete, aPam );
     if( nRet > 0 )
@@ -2287,7 +2274,6 @@ bool SwDoc::RejectRedline( const SwPaM& rPam, bool bCallDelete )
     }
     if( DoesUndo() )
     {
-        // #111827#
         String aTmpStr;
 
         {
@@ -3051,7 +3037,6 @@ void SwRedlineData::SetExtraData( const SwRedlineExtraData* pData )
         pExtraData = 0;
 }
 
-// #111827#
 String SwRedlineData::GetDescr() const
 {
     String aResult;
@@ -3420,11 +3405,11 @@ void SwRedline::CopyToSection()
              bSaveRdlMoveFlg = pDoc->IsRedlineMove();
         pDoc->SetCopyIsMove( TRUE );
 
-        // #100619# The IsRedlineMove() flag causes the behaviour of the
+        // The IsRedlineMove() flag causes the behaviour of the
         // SwDoc::_CopyFlyInFly method to change, which will eventually be
         // called by the pDoc->Copy line below (through SwDoc::_Copy,
-        // SwDoc::CopyWithFlyInFly). This rather obscure bugfix was introduced
-        // for #63198# and #64896#, and apparently never really worked.
+        // SwDoc::CopyWithFlyInFly). This rather obscure bugfix
+        // apparently never really worked.
         pDoc->SetRedlineMove( pStt->nContent == 0 );
 
         if( pCSttNd )
@@ -3442,7 +3427,7 @@ void SwRedline::CopyToSection()
             SwPosition aPos( aNdIdx, SwIndex( pTxtNd ));
             pDoc->CopyRange( *this, aPos, false );
 
-            // JP 08.10.98: die Vorlage vom EndNode ggfs. mit uebernehmen
+            // die Vorlage vom EndNode ggfs. mit uebernehmen
             //              - ist im Doc::Copy nicht erwuenscht
             if( pCEndNd && pCEndNd != pCSttNd )
             {
@@ -3521,7 +3506,7 @@ void SwRedline::DelCopyOfSection()
 
             if( bDelLastPara )
             {
-                // #100611# To prevent dangling references to the paragraph to
+                // To prevent dangling references to the paragraph to
                 // be deleted, redline that point into this paragraph should be
                 // moved to the new end position. Since redlines in the redline
                 // table are sorted and the pEnd position is an endnode (see
@@ -3679,7 +3664,7 @@ void SwRedline::MoveFromSection()
         // <--
         delete pCntntSect, pCntntSect = 0;
 
-        // #100611# adjustment of redline table positions must take start and
+        // adjustment of redline table positions must take start and
         // end into account, not point and mark.
         for( n = 0; n < aBeforeArr.Count(); ++n )
             *(SwPosition*)aBeforeArr[ n ] = *Start();
@@ -3749,7 +3734,6 @@ USHORT SwRedline::GetStackCount() const
     return nRet;
 }
 
-// -> #111827#
 USHORT SwRedline::GetAuthor( USHORT nPos ) const
 {
     return GetRedlineData(nPos).nAuthor;
@@ -3774,7 +3758,6 @@ const String& SwRedline::GetComment( USHORT nPos ) const
 {
     return GetRedlineData(nPos).sComment;
 }
-// <- #111827#
 
 int SwRedline::operator==( const SwRedline& rCmp ) const
 {
@@ -3794,7 +3777,6 @@ int SwRedline::operator<( const SwRedline& rCmp ) const
     return nResult;
 }
 
-// -> #111827#
 const SwRedlineData & SwRedline::GetRedlineData(USHORT nPos) const
 {
     SwRedlineData * pCur = pRedlineData;
@@ -3850,7 +3832,6 @@ String SwRedline::GetDescr(USHORT nPos)
 
     return aResult;
 }
-// <- #111827#
 
 
 bool SwDoc::IsInRedlines(const SwNode & rNode) const

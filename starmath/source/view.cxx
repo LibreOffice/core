@@ -817,7 +817,7 @@ void SmCmdBoxWindow::StateChanged( StateChangedType nStateChange )
 {
     if (STATE_CHANGE_INITSHOW == nStateChange)
     {
-        Resize();   // #98848# avoid SmEditWindow not being painted correctly
+        Resize();   // avoid SmEditWindow not being painted correctly
 
         // set initial position of window in floating mode
         if (true == IsFloatingMode())

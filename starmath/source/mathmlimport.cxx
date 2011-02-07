@@ -469,7 +469,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLImport(rSMgr, IMPORT_ALL);
 }
 
@@ -492,7 +491,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
 throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -515,7 +513,6 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
     return (cppu::OWeakObject*)new SmXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 
