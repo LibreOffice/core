@@ -2605,7 +2605,9 @@ void ScDocShell::SetDocumentModified( BOOL bIsModified /* = TRUE */ )
 
     if ( pPaintLockData && bIsModified )
     {
-        //! BCA_BRDCST_ALWAYS etc. also needed here?
+        // #i115009# broadcast BCA_BRDCST_ALWAYS, so a component can read recalculated results
+        // of RecalcModeAlways formulas (like OFFSET) after modifying cells
+        aDocument.Broadcast( SC_HINT_DATACHANGED, BCA_BRDCST_ALWAYS, NULL );
         aDocument.InvalidateTableArea();    // #i105279# needed here
         aDocument.BroadcastUno( SfxSimpleHint( SFX_HINT_DATACHANGED ) );
 
