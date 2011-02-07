@@ -924,10 +924,10 @@ public:
                         selection, but the bounds of the sheet's data area
                         instead.
 
-                        @returns TRUE if the area passed intersected the data
-                                 area, FALSE if not, in which case the values
+                        @returns sal_True if the area passed intersected the data
+                                 area, sal_False if not, in which case the values
                                  obtained may be out of bounds, not in order or
-                                 unmodified. TRUE does not mean that there
+                                 unmodified. sal_True does not mean that there
                                  actually is any data within the selection.
                      */
     bool            ShrinkToDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
@@ -935,9 +935,9 @@ public:
                     /** Shrink a range to only include used data area.
 
                         @param o_bShrunk
-                               Out parameter, TRUE if area was shrunk, FALSE if not.
+                               Out parameter, sal_True if area was shrunk, sal_False if not.
 
-                        @returns TRUE if there is any data, FALSE if not.
+                        @returns sal_True if there is any data, sal_False if not.
                      */
     bool            ShrinkToUsedDataArea( bool& o_bShrunk,
                                           SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,

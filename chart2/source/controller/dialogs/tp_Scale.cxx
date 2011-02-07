@@ -398,7 +398,7 @@ enum AxisTypeListBoxEntry
 
 IMPL_LINK( ScaleTabPage, SelectAxisTypeHdl, void *, EMPTYARG )
 {
-    USHORT nPos = m_aLB_AxisType.GetSelectEntryPos();
+    sal_uInt16 nPos = m_aLB_AxisType.GetSelectEntryPos();
     if( nPos==TYPE_DATE )
         m_nAxisType = chart2::AxisType::DATE;
     else
@@ -458,17 +458,17 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
         return;
 
     const SfxPoolItem *pPoolItem = NULL;
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_ALLOW_DATEAXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
         m_bAllowDateAxis = (bool) ((const SfxBoolItem*)pPoolItem)->GetValue();
     m_nAxisType=chart2::AxisType::REALNUMBER;
-    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, sal_True, &pPoolItem) == SFX_ITEM_SET)
         m_nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
     if( m_nAxisType==chart2::AxisType::DATE && !m_bAllowDateAxis )
         m_nAxisType=chart2::AxisType::CATEGORY;
     if( m_bAllowDateAxis )
     {
         bool bAutoDateAxis = false;
-        if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_DATEAXIS, TRUE, &pPoolItem) == SFX_ITEM_SET)
+        if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_DATEAXIS, sal_True, &pPoolItem) == SFX_ITEM_SET)
             bAutoDateAxis = (bool) ((const SfxBoolItem*)pPoolItem)->GetValue();
 
         sal_uInt16 nPos = 0;
@@ -495,7 +495,7 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     aCbxAutoOrigin.Check( true );
     m_aCbx_AutoTimeResolution.Check( true );
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,TRUE,&pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_MIN,sal_True,&pPoolItem) == SFX_ITEM_SET)
         aCbxAutoMin.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
 
     if (rInAttrs.GetItemState(SCHATTR_AXIS_MIN,sal_True, &pPoolItem) == SFX_ITEM_SET)
@@ -541,20 +541,20 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
         lcl_setValue( aFmtFldOrigin, fOrigin );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
         m_aCbx_AutoTimeResolution.Check(((const SfxBoolItem*)pPoolItem)->GetValue());
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_TIME_RESOLUTION,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nTimeResolution = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_aLB_TimeResolution.SelectEntryPos( m_nTimeResolution );
     }
 
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_MAIN_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nMainTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_aLB_MainTimeUnit.SelectEntryPos( m_nMainTimeUnit );
     }
-    if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,TRUE, &pPoolItem) == SFX_ITEM_SET)
+    if (rInAttrs.GetItemState(SCHATTR_AXIS_HELP_TIME_UNIT,sal_True, &pPoolItem) == SFX_ITEM_SET)
     {
         m_nHelpTimeUnit = ((const SfxInt32Item*)pPoolItem)->GetValue();
         m_aLB_HelpTimeUnit.SelectEntryPos( m_nHelpTimeUnit );

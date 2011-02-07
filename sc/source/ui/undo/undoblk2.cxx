@@ -184,7 +184,7 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 
     // SetWidthOrHeight aendert aktuelle Tabelle !
     if ( pViewShell )
-        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
+        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, sal_False, sal_True, &aMarkData );
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)

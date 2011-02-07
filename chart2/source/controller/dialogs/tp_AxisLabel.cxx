@@ -259,7 +259,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 <<<<<<< local
         aState = rInAttrs.GetItemState( SCHATTR_TEXT_ORDER, sal_False, &pPoolItem );
 =======
-        aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, FALSE, &pPoolItem );
+        aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, sal_False, &pPoolItem );
 >>>>>>> other
         if( aState == SFX_ITEM_SET )
         {

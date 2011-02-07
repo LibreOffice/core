@@ -85,7 +85,7 @@ namespace chart
                 ,m_aUndoManager()
                 ,m_aUndoHelper( *this )
             {
-                m_aUndoManager.SetMaxUndoActionCount( (USHORT)SvtUndoOptions().GetUndoCount() );
+                m_aUndoManager.SetMaxUndoActionCount( (sal_uInt16)SvtUndoOptions().GetUndoCount() );
             }
 
             virtual ~UndoManager_Impl()

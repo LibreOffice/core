@@ -499,28 +499,28 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
 
-    USHORT nSlot = rReq.GetSlot();
+    sal_uInt16 nSlot = rReq.GetSlot();
     switch ( nSlot )
     {
         case SID_UNDO:
         case SID_REDO:
             if ( pUndoManager )
             {
-                BOOL bIsUndo = ( nSlot == SID_UNDO );
+                sal_Bool bIsUndo = ( nSlot == SID_UNDO );
 
-                USHORT nCount = 1;
+                sal_uInt16 nCount = 1;
                 const SfxPoolItem* pItem;
-                if ( pReqArgs && pReqArgs->GetItemState( nSlot, TRUE, &pItem ) == SFX_ITEM_SET )
+                if ( pReqArgs && pReqArgs->GetItemState( nSlot, sal_True, &pItem ) == SFX_ITEM_SET )
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
                 // lock paint for more than one cell undo action (not for editing within a cell)
-                BOOL bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
+                sal_Bool bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
                 if ( bLockPaint )
                     pDocSh->LockPaint();
 
                 try
                 {
-                    for (USHORT i=0; i<nCount; i++)
+                    for (sal_uInt16 i=0; i<nCount; i++)
                     {
                         if ( bIsUndo )
                             pUndoManager->Undo();
@@ -551,7 +551,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
     ::svl::IUndoManager* pUndoManager = pSh->GetUndoManager();
 
     SfxWhichIter aIter(rSet);
-    USHORT nWhich = aIter.FirstWhich();
+    sal_uInt16 nWhich = aIter.FirstWhich();
     while ( nWhich )
     {
         switch (nWhich)
@@ -563,7 +563,7 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     if ( pUndoManager )
                     {
                         List* pList = aStrLst.GetList();
-                        BOOL bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
+                        sal_Bool bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
                         size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (size_t i=0; i<nCount; i++)
                             pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
