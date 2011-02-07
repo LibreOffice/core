@@ -193,8 +193,8 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
 {
     if ( io_nType != DataType::VARCHAR )
     {
-        BOOL bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
-        ULONG  nIndex = 0;
+        sal_Bool bNumeric = io_nType == DataType::SQLNULL || io_nType == DataType::DOUBLE || io_nType == DataType::DECIMAL || io_nType == DataType::INTEGER;
+        sal_uLong  nIndex = 0;
 
         if ( bNumeric )
         {
@@ -204,7 +204,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
             if (aField.Len() == 0 ||
                 (m_cStringDelimiter && m_cStringDelimiter == aField.GetChar(0)))
             {
-                bNumeric = FALSE;
+                bNumeric = sal_False;
                 if ( m_cStringDelimiter != '\0' )
                     aFirstLine.GetTokenSpecial(aField,nStartPosFirstLine2,m_cFieldDelimiter,m_cStringDelimiter);
                 else
@@ -220,11 +220,11 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
 
                 if (aField2.Len() == 0)
                 {
-                    bNumeric = FALSE;
+                    bNumeric = sal_False;
                 }
                 else
                 {
-                    bNumeric = TRUE;
+                    bNumeric = sal_True;
                     xub_StrLen nDot = 0;
                     xub_StrLen nDecimalDelCount = 0;
                     xub_StrLen nSpaceCount = 0;
@@ -242,7 +242,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                             !aCharClass.isDigit(aField2,j)                      &&
                             ( j != 0 || (c != '+' && c != '-' ) ) )
                         {
-                            bNumeric = FALSE;
+                            bNumeric = sal_False;
                             break;
                         }
                         if (cDecimalDelimiter && c == cDecimalDelimiter)
@@ -256,7 +256,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                     }
 
                     if (nDecimalDelCount > 1 || nDot > 1 ) // if there is more than one dot it isn't a number
-                        bNumeric = FALSE;
+                        bNumeric = sal_False;
                     if (bNumeric && cThousandDelimiter)
                     {
                         // Ist der Trenner richtig angegeben?
@@ -269,7 +269,7 @@ void OFlatTable::impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,x
                                 continue;
                             else
                             {
-                                bNumeric = FALSE;
+                                bNumeric = sal_False;
                                 break;
                             }
                         }
