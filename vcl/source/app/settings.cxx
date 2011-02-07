@@ -712,6 +712,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
         case STYLE_SYMBOLS_TANGO:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tango"));
         case STYLE_SYMBOLS_OXYGEN:     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oxygen"));
         case STYLE_SYMBOLS_CLASSIC:    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic"));
+        case STYLE_SYMBOLS_HUMAN:      return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human"));
     }
 
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("auto"));
@@ -735,6 +736,8 @@ ULONG StyleSettings::ImplNameToSymbolsStyle( const ::rtl::OUString &rName ) cons
         return STYLE_SYMBOLS_OXYGEN;
     else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("classic")) )
         return STYLE_SYMBOLS_CLASSIC;
+    else if ( rName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("human")) )
+        return STYLE_SYMBOLS_HUMAN;
 
     return STYLE_SYMBOLS_AUTO;
 }
