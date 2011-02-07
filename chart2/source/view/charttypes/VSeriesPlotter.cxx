@@ -1907,19 +1907,24 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntries(
     return aAllSeries;
 }
 
-bool VSeriesPlotter::HasDashedLines( const uno::Reference< beans::XPropertySet >& xProps )
+namespace
 {
-    bool bHasDashedLines = false;
+bool lcl_HasVisibleLine( const uno::Reference< beans::XPropertySet >& xProps, bool& rbHasDashedLine )
+{
+    bool bHasVisibleLine = false;
+    rbHasDashedLine = false;
     drawing::LineStyle aLineStyle = drawing::LineStyle_NONE;
-    if( xProps.is() && ( xProps->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) &&
-                    ( aLineStyle == drawing::LineStyle_DASH ) )
+    if( xProps.is() && ( xProps->getPropertyValue( C2U("LineStyle")) >>= aLineStyle ) )
     {
-        bHasDashedLines = true;
+        if( aLineStyle != drawing::LineStyle_NONE )
+            bHasVisibleLine = true;
+        if( aLineStyle == drawing::LineStyle_DASH )
+            rbHasDashedLine = true;
     }
-    return bHasDashedLines;
+    return bHasVisibleLine;
 }
 
-bool VSeriesPlotter::HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLines )
+bool lcl_HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLine )
 {
     bool bHasRegressionCurves = false;
     Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
@@ -1932,14 +1937,13 @@ bool VSeriesPlotter::HasRegressionCurves( const VDataSeries& rSeries, bool& rbHa
             if( aCurves[i].is() )
             {
                 bHasRegressionCurves = true;
-                if( HasDashedLines( uno::Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ) ) )
-                    rbHasDashedLines = true;
+                lcl_HasVisibleLine( uno::Reference< beans::XPropertySet >( aCurves[i], uno::UNO_QUERY ), rbHasDashedLine );
             }
         }
     }
     return bHasRegressionCurves;
 }
-
+}
 LegendSymbolStyle VSeriesPlotter::getLegendSymbolStyle()
 {
     return LegendSymbolStyle_BOX;
@@ -1951,8 +1955,8 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     if( m_nDimension==3 )
         return aRet;
 
-    bool bSeriesHasLines = (getLegendSymbolStyle() == LegendSymbolStyle_LINE);
-    bool bHasLines = bSeriesHasLines;
+    bool bSeriesAllowsLines = (getLegendSymbolStyle() == LegendSymbolStyle_LINE);
+    bool bHasLines = false;
     bool bHasDashedLines = false;
     ::std::vector< VDataSeries* > aAllSeries( getAllSeries() );
     ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = aAllSeries.begin();
@@ -1960,13 +1964,21 @@ awt::Size VSeriesPlotter::getPreferredLegendKeyAspectRatio()
     //iterate through all series
     for( ; aSeriesIter != aSeriesEnd; aSeriesIter++ )
     {
-        if( bSeriesHasLines && HasDashedLines( (*aSeriesIter)->getPropertiesOfSeries() ) )
+        if( bSeriesAllowsLines )
         {
-            bHasDashedLines = true;
-            break;
+            bool bCurrentDashed = false;
+            if( lcl_HasVisibleLine( (*aSeriesIter)->getPropertiesOfSeries(), bCurrentDashed ) )
+            {
+                bHasLines = true;
+                if( bCurrentDashed )
+                {
+                    bHasDashedLines = true;
+                    break;
+                }
+            }
         }
         bool bRegressionHasDashedLines=false;
-        if( VSeriesPlotter::HasRegressionCurves( **aSeriesIter, bRegressionHasDashedLines ) )
+        if( lcl_HasRegressionCurves( **aSeriesIter, bRegressionHasDashedLines ) )
         {
             bHasLines = true;
             if( bRegressionHasDashedLines )

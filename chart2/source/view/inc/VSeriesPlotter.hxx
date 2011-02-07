@@ -252,8 +252,6 @@ public:
                 );
 
     ::std::vector< VDataSeries* > getAllSeries();
-    static bool HasDashedLines( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xProps );
-    static bool HasRegressionCurves( const VDataSeries& rSeries, bool& rbHasDashedLines );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
