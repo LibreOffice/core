@@ -37,6 +37,7 @@
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -82,7 +83,6 @@
 
 #if DEBUG
 #include <stdio.h>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #endif
 
