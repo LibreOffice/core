@@ -1754,10 +1754,10 @@ namespace
 {
     class OParameterWrapper : public ::cppu::WeakImplHelper1< XIndexAccess >
     {
-        ::std::bit_vector       m_aSet;
+        ::std::vector<bool, std::allocator<bool> >       m_aSet;
         Reference<XIndexAccess> m_xSource;
     public:
-        OParameterWrapper(const ::std::bit_vector& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
+        OParameterWrapper(const ::std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
     private:
         // ::com::sun::star::container::XElementAccess
         virtual Type SAL_CALL getElementType() throw(RuntimeException)
@@ -1784,8 +1784,8 @@ namespace
             if ( m_aSet.size() < (size_t)Index )
                 throw IndexOutOfBoundsException();
 
-            ::std::bit_vector::iterator aIter = m_aSet.begin();
-            ::std::bit_vector::iterator aEnd = m_aSet.end();
+            ::std::vector<bool, std::allocator<bool> >::iterator aIter = m_aSet.begin();
+            ::std::vector<bool, std::allocator<bool> >::iterator aEnd = m_aSet.end();
             sal_Int32 i = 0;
             sal_Int32 nParamPos = -1;
             for(; aIter != aEnd && i <= Index; ++aIter)
@@ -1806,7 +1806,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
                       const Reference<XParameters>& _xParameters,
                       const Reference< XConnection>& _xConnection,
                       const Reference< XInteractionHandler >& _rxHandler,
-                      const ::std::bit_vector& _aParametersSet)
+                      const ::std::vector<bool, std::allocator<bool> >& _aParametersSet)
 {
     OSL_ENSURE(_xComposer.is(),"dbtools::askForParameters XSQLQueryComposer is null!");
     OSL_ENSURE(_xParameters.is(),"dbtools::askForParameters XParameters is null!");
@@ -1819,7 +1819,7 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
     Reference<XIndexAccess>  xParamsAsIndicies = xParameters.is() ? xParameters->getParameters() : Reference<XIndexAccess>();
     Reference<XNameAccess>   xParamsAsNames(xParamsAsIndicies, UNO_QUERY);
     sal_Int32 nParamCount = xParamsAsIndicies.is() ? xParamsAsIndicies->getCount() : 0;
-    ::std::bit_vector aNewParameterSet( _aParametersSet );
+    ::std::vector<bool, std::allocator<bool> > aNewParameterSet( _aParametersSet );
     if ( nParamCount || ::std::count(aNewParameterSet.begin(),aNewParameterSet.end(),true) != nParamCount )
     {
         static const ::rtl::OUString PROPERTY_NAME(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME));
