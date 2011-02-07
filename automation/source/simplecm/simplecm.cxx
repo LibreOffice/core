@@ -45,7 +45,7 @@ void debug_printf( const char *chars )
     static BOOL bPrint = (getenv("DEBUG") != NULL);
     if ( bPrint )
     {
-        printf( chars );
+        printf( "%c\n", chars );
         fflush( stdout );
     }
 }
