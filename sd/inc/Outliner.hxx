@@ -141,8 +141,8 @@ public:
 
     /** Initiate a find and/or replace on the next relevant text object.
         @return
-            Returns </TRUE> when the search/replace is finished (as
-            indicated by user input to the search dialog).  A </FALSE> value
+            Returns </sal_True> when the search/replace is finished (as
+            indicated by user input to the search dialog).  A </sal_False> value
             indicates that another call to this method is required.
     */
     bool StartSearchAndReplace (const SvxSearchItem* pSearchItem);
@@ -215,9 +215,9 @@ private:
 
     /** This flag indicates whether there may exist a match of the search
         string before/after the current position in the document.  It can be
-        set to </FALSE> only when starting from the beginning/end of the
+        set to </sal_False> only when starting from the beginning/end of the
         document.  When reaching the end/beginning with it still be set to
-        </FALSE> then there exists no match and the search can be terminated.
+        </sal_False> then there exists no match and the search can be terminated.
     */
     bool mbMatchMayExist;
 
@@ -234,7 +234,7 @@ private:
 
     /** Set to <TRUE/> when an object has been prepared successfully for
         searching/spell checking.  This flag directs the internal iteration
-        which stops when set to </TRUE>.
+        which stops when set to </sal_True>.
     */
     bool mbFoundObject;
 
@@ -369,8 +369,8 @@ private:
 
     /** Do search and replace for next match.
         @return
-            The return value specifies whether the search ended (</TRUE>) or
-            another call to this method is required (</FALSE>).
+            The return value specifies whether the search ended (</sal_True>) or
+            another call to this method is required (</sal_False>).
     */
     bool SearchAndReplaceOnce (void);
 
@@ -409,7 +409,7 @@ private:
 
     /** Handle the situation that the iterator has reached the last object.
         This may result in setting the <member>mbEndOfSearch</member> flag
-        back to </FALSE>.  This method may show either the end-of-search
+        back to </sal_False>.  This method may show either the end-of-search
         dialog or the wrap-arround dialog.
     */
     void EndOfSearch (void);

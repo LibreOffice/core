@@ -47,7 +47,7 @@ void UndoManager::EnterListAction(const UniString &rComment, const UniString& rR
     }
 }
 
-void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = FALSE */ )
+void UndoManager::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg /* = sal_False */ )
 {
     if( !IsDoing() )
     {
