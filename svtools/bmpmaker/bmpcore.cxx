@@ -162,7 +162,7 @@ void BmpCreator::ImplCreate( const ::std::vector< DirEntry >& rInDirs,
             Message( aInfo );
 
             // create bit vector to hold flags for valid bitmaps
-            ::std::bit_vector   aValidBmpBitVector( aNameVector.size(), false );
+            ::std::vector<bool, std::allocator<bool> >   aValidBmpBitVector( aNameVector.size(), false );
             BitmapEx            aBmpEx;
 
             for( sal_uInt32 n = 0; n < aNameVector.size(); n++ )
