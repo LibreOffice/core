@@ -6,3 +6,5 @@ Type=Application
 Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;
 Exec=${UNIXBASISROOTNAME}-printeradmin
 Name=%PRODUCTNAME Printer Administration
+Name[pt_BR]=%PRODUCTNAME_BR Printer Administration
+

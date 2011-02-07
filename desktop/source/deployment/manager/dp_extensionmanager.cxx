@@ -729,9 +729,13 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                     if (repository.equals(OUSTR("user")))
                         bUserDisabled2 = false;
 
+                    // pass the two values via variables to workaround gcc-4.3.4 specific bug (bnc#655912)
+                    OUString sNewExtensionIdentifier = dp_misc::getIdentifier(xNewExtension);
+                    OUString sNewExtensionFileName = xNewExtension->getName();
+
                     activateExtension(
-                        dp_misc::getIdentifier(xNewExtension),
-                        xNewExtension->getName(), bUserDisabled2, false, xAbortChannel,
+                        sNewExtensionIdentifier, sNewExtensionFileName,
+                        bUserDisabled2, false, xAbortChannel,
                         Reference<ucb::XCommandEnvironment>());
                 }
                 else

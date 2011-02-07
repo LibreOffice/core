@@ -6,4 +6,5 @@ Categories=Office;
 Exec=${UNIXBASISROOTNAME} --quickstart --nologo --nodefault
 NoDisplay=true
 Name=%PRODUCTNAME Quickstarter
+Name[pt_BR]=%PRODUCTNAME_BR Quickstarter
 Comment=Hook for quickstarter startup

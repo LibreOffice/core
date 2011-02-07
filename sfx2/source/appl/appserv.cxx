@@ -157,20 +157,42 @@ long QuitAgain_Impl( void* pObj, void* pArg )
     return 0;
 }
 
-namespace {
-  sal_Bool checkURL( const char *pName, rtl::OUString &rURL )
-    {
-        using namespace osl;
-        DirectoryItem aDirItem;
+/// Find the correct location of the document (LICENSE.odt, etc.), and return
+/// it in rURL if found.
+static sal_Bool checkURL( const char *pName, const char *pExt, rtl::OUString &rURL )
+{
+    using namespace osl;
+    DirectoryItem aDirItem;
 
-        rURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/") );
-        rURL += rtl::OUString::createFromAscii( pName );
-        rtl::Bootstrap::expandMacros( rURL );
+    rURL = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("$BRAND_BASE_DIR/") );
+    rURL += rtl::OUString::createFromAscii( pName );
+    rURL += rtl::OUString::createFromAscii( pExt );
+    rtl::Bootstrap::expandMacros( rURL );
 
-        if (rURL.getLength() != 0)
-            return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
-        else
-            return sal_False;
+    if (rURL.getLength() != 0)
+        return DirectoryItem::get( rURL, aDirItem ) == DirectoryItem::E_None;
+    else
+        return sal_False;
+}
+
+/// Displays CREDITS or LICENSE in any of the available version
+static void showDocument( const char* pBaseName )
+{
+    try {
+        Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
+        Sequence < com::sun::star::beans::PropertyValue > args(2);
+        args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
+        args[0].Value <<= sal_True;
+        args[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+        args[1].Value <<= sal_True;
+
+        rtl::OUString aURL;
+        if ( checkURL ( pBaseName, ".odt", aURL ) ||
+                checkURL ( pBaseName, ".html", aURL ) ||
+                checkURL ( pBaseName, "", aURL ) ) {
+            xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
+        }
+    } catch (const ::com::sun::star::uno::Exception &) {
     }
 }
 
@@ -354,43 +376,51 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_SHOW_CREDITS:
         case SID_SHOW_LICENSE:
         {
-            try {
-              Reference < XComponentLoader > xLoader( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), UNO_QUERY );
-              Sequence < com::sun::star::beans::PropertyValue > args(2);
-              args[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ViewOnly"));
-              args[0].Value <<= sal_True;
-              args[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-              args[1].Value <<= sal_True;
+            ModalDialog aDialog( NULL, SfxResId( DLG_HELP_LICENSING ) );
 
-              rtl::OUString aURL;
-              char const** pNames;
-              if( rReq.GetSlot() == SID_SHOW_LICENSE )
-              {
-                  static char const* pLicenseStrings[] =
-                  {
-                      "LICENSE.odt", "LICENSE.html", "LICENSE"
-                  };
-                  pNames = pLicenseStrings;
-              }
-              else
-              {
-                  static char const* pCreditsStrings[] =
-                  {
-                      "CREDITS.odt", "CREDITS.html", "CREDITS"
-                  };
-                  pNames = pCreditsStrings;
-              }
-
-              if ( checkURL ( pNames[0], aURL ) ||
-                   checkURL ( pNames[1], aURL ) ||
-                   checkURL ( pNames[2], aURL ) ) {
-                  xLoader->loadComponentFromURL( aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, args );
-              }
-            } catch (const ::com::sun::star::uno::Exception &) {
+            String aLicensing;
+            for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
+            {
+                if ( i != STR_LICENSING_INFORMATION_1 )
+                    aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+                aLicensing += String( SfxResId( i ) );
             }
+
+            FixedText aText( &aDialog );
+            aText.SetText( aLicensing );
+            OKButton aShow( &aDialog, SfxResId( PB_LICENSING_SHOW ) );
+            CancelButton aClose( &aDialog, SfxResId( PB_LICENSING_CLOSE ) );
+
+            // positions and sizes are computed to always fit the language
+            Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+            Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+            Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+
+            long nDelimX = 12;
+            long nDelimY = 12;
+            long nWidth = aTextSize.Width() + 2*nDelimX;
+            long nButtonY = aTextSize.Height() + 2*nDelimY;
+            Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
+                    std::max( aShowSize.Height(), aCloseSize.Height() ) );
+
+            aDialog.SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
+            aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
+            aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
+            aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
+
+            aText.Show();
+
+            if ( aDialog.Execute() == RET_OK )
+                showDocument( "LICENSE" );
+
+            break;
+        }
+
+        case SID_SHOW_CREDITS:
+        {
+            showDocument( "CREDITS" );
             break;
         }
 

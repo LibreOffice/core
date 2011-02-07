@@ -132,8 +132,6 @@ using namespace ::com::sun::star::ui;
 
 using namespace ::comphelper;
 
-extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
-
 // defines ---------------------------------------------------------------
 
 #define SPLITSET_ID         0
@@ -645,7 +643,7 @@ void IndexTabPage_Impl::InitializeIndex()
         aURL += ::rtl::OUString( sFactory );
 
         String aTemp = aURL;
-        AppendConfigToken_Impl( aTemp, sal_True );
+        AppendConfigToken( aTemp, sal_True );
         aURL = aTemp;
 
         Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
@@ -1090,7 +1088,7 @@ IMPL_LINK( SearchTabPage_Impl, SearchHdl, PushButton*, EMPTYARG )
         if ( !aFullWordsCB.IsChecked() )
             aSearchText = sfx2::PrepareSearchString( aSearchText, xBreakIterator, true );
         aSearchURL += aSearchText;
-        AppendConfigToken_Impl( aSearchURL, sal_False );
+        AppendConfigToken( aSearchURL, sal_False );
         if ( aScopeCB.IsChecked() )
             aSearchURL += DEFINE_CONST_UNICODE("&Scope=Heading");
         Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aSearchURL );
@@ -1515,7 +1513,7 @@ sal_Bool SfxHelpWindow_Impl::splitHelpURL(const ::rtl::OUString& sHelpURL,
     sHelpURL.append(sFactory);
     sHelpURL.append(sContent);
     String sURL = String(sHelpURL.makeStringAndClear());
-    AppendConfigToken_Impl(sURL, bUseQuestionMark);
+    AppendConfigToken(sURL, bUseQuestionMark);
     if (sAnchor.getLength())
         sURL += String(sAnchor);
     return ::rtl::OUString(sURL);
@@ -1634,7 +1632,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
 void SfxHelpIndexWindow_Impl::Initialize()
 {
     String aHelpURL = HELP_URL;
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpURL );
     const ::rtl::OUString* pFacs  = aFactories.getConstArray();
     UINT32 i, nCount = aFactories.getLength();

@@ -7,6 +7,7 @@ Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-MoreApplicat
 Exec=${UNIXBASISROOTNAME} --base %U
 MimeType=application/vnd.oasis.opendocument.database;application/vnd.sun.xml.base;
 Name=%PRODUCTNAME Base
+Name[pt_BR]=%PRODUCTNAME_BR Base
 GenericName=Database Development
 Comment=Manage databases, create queries and reports to track and manage your information by using Base.
 InitialPreference=5

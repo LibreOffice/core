@@ -7,6 +7,7 @@ Categories=Office;X-Red-Hat-Base;X-SuSE-Core-Office;X-MandrivaLinux-Office-Drawi
 Exec=${UNIXBASISROOTNAME} --draw %U
 MimeType=application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.sun.xml.draw;application/vnd.sun.xml.draw.template;application/vnd.stardivision.draw;
 Name=%PRODUCTNAME Draw
+Name[pt_BR]=%PRODUCTNAME_BR Draw
 GenericName=Drawing Program
 Comment=Create and edit drawings, flow charts, and logos by using Draw.
 InitialPreference=5

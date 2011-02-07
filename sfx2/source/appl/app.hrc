@@ -240,6 +240,16 @@
 #define RID_SVXSTR_GRFILTER_FILTERERROR         (RID_SFX_APP_START + 202)
 #define RID_SVXSTR_GRFILTER_TOOBIG              (RID_SFX_APP_START + 203)
 
+// For the License Information dialog box
+#define DLG_HELP_LICENSING                      (RID_SFX_APP_START + 204)
+#define STR_LICENSING_INFORMATION_1             (RID_SFX_APP_START + 205)
+#define STR_LICENSING_INFORMATION_2             (RID_SFX_APP_START + 206)
+#define STR_LICENSING_INFORMATION_3             (RID_SFX_APP_START + 207)
+#define STR_LICENSING_INFORMATION_4             (RID_SFX_APP_START + 208)
+#define STR_LICENSING_INFORMATION_5             (RID_SFX_APP_START + 209)
+#define PB_LICENSING_SHOW                       (RID_SFX_APP_START + 210)
+#define PB_LICENSING_CLOSE                      (RID_SFX_APP_START + 211)
+
 #define MD_DDE_LINKEDIT                         (RID_SFX_APP_START + 1)
 
 #endif // #ifndef _SFX_APP_HRC
