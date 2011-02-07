@@ -33,9 +33,11 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "comphelper/weakbag.hxx"
 #include "cppuhelper/weak.hxx"
+#include "preextstl.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
 
 namespace {
 
