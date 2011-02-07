@@ -39,8 +39,8 @@ $(eval $(call gb_Module_add_check_targets,writerfilter,\
 ))
 
 # does not run
-#$(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
-#	JunitTest_writerfilter_complex \
-#))
+$(eval $(call gb_Module_add_subsequentcheck_targets,writerfilter,\
+	JunitTest_writerfilter_complex \
+))
 
 # vim: set noet sw=4 ts=4:

@@ -29,7 +29,7 @@ $(eval $(call gb_JunitTest_JunitTest,writerfilter_complex))
 
 $(eval $(call gb_JunitTest_set_defs,writerfilter_complex,\
 	$$(DEFS) \
-	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/writerfilter/qa/documents \
+	-Dorg.openoffice.test.arg.tdoc=$(SRCDIR)/writerfilter/qa/complex/ooxml/testdocuments \
 ))
 
 $(eval $(call gb_JunitTest_add_jars,writerfilter_complex,\
@@ -41,6 +41,7 @@ $(eval $(call gb_JunitTest_add_jars,writerfilter_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,writerfilter_complex,\
+	writerfilter/qa/complex/ooxml/TestDocument \
 	writerfilter/qa/complex/ooxml/LoadDocuments \
 ))
 
