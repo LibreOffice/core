@@ -1371,9 +1371,13 @@ public:
 
 class SwUndoDelNum : public SwUndo, private SwUndRng
 {
-    typedef std::vector< std::pair< ULONG, int > > SvNode;
-    SvNode aNodes;
-    SvBools aRstLRSpaces;
+    struct NodeLevel
+    {
+        ULONG index;
+        int level;
+        inline NodeLevel(ULONG idx, int lvl) : index(idx), level(lvl) {};
+    };
+    std::vector<NodeLevel> aNodes;
     SwHistory* pHistory;
 public:
     SwUndoDelNum( const SwPaM& rPam );

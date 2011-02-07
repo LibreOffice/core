@@ -214,11 +214,11 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    for( SvNode::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
+    for( std::vector<NodeLevel>::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
     {
-        SwTxtNode* pNd = rDoc.GetNodes()[ i->first ]->GetTxtNode();
-        OSL_ENSURE( pNd, "wo ist der TextNode geblieben?" );
-        pNd->SetAttrListLevel( i->second );
+        SwTxtNode* pNd = rDoc.GetNodes()[ i->index ]->GetTxtNode();
+        OSL_ENSURE( pNd, "Where has the TextNode gone?" );
+        pNd->SetAttrListLevel( i->level );
 
         if( pNd->GetCondFmtColl() )
             pNd->ChkCondColl();
@@ -246,7 +246,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
 {
     if( rNd.GetNumRule() )
     {
-        aNodes.push_back( SvNode::value_type( rNd.GetIndex(), rNd.GetActualListLevel() ) );
+        aNodes.push_back( NodeLevel( rNd.GetIndex(), rNd.GetActualListLevel() ) );
     }
 }
 
