@@ -2170,8 +2170,7 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
                 if( aCurves[i].is() )
                 {
                     //label
-                    OUString aResStr( SchResId::getResString( STR_STATISTICS_IN_LEGEND ));
-                    replaceParamterInString( aResStr, C2U("%REGRESSIONCURVE"), RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ));
+                    OUString aResStr( RegressionCurveHelper::getUINameForRegressionCurve( aCurves[i] ) );
                     replaceParamterInString( aResStr, C2U("%SERIESNAME"), aLabelText );
                     aEntry.aLabel = FormattedStringHelper::createFormattedStringSequence( xContext, aResStr, xTextProperties );
 

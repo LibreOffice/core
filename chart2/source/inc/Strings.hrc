@@ -156,6 +156,7 @@
 #define STR_REGRESSION_LOG                  (RID_APP_START + 136)
 #define STR_REGRESSION_EXP                  (RID_APP_START + 137)
 #define STR_REGRESSION_POWER                (RID_APP_START + 138)
+#define STR_REGRESSION_MEAN                 (RID_APP_START + 180)
 
 //-----------------------------------------------------------------------------
 //for scale tab page
@@ -264,8 +265,6 @@
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
 
 #define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
-#define STR_STATISTICS_IN_LEGEND            (RID_APP_START + 180)
-
 #define STR_OBJECT_SHAPE                    (RID_APP_START + 290)
 
 //-----------------------------------------------------------------------------

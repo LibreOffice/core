@@ -608,7 +608,7 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
     if( aServiceName.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
     {
-        aResult = ::chart::SchResId::getResString( STR_OBJECT_AVERAGE_LINE );
+        aResult = ::chart::SchResId::getResString( STR_REGRESSION_MEAN );
     }
     else if( aServiceName.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.LinearRegressionCurve" )))
