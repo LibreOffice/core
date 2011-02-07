@@ -509,6 +509,11 @@ sal_Bool SdrGrafObj::IsRenderGraphic() const
     return pGraphic->IsRenderGraphic();
 }
 
+sal_Bool SdrGrafObj::HasRenderGraphic() const
+{
+    return pGraphic->HasRenderGraphic();
+}
+
 sal_Bool SdrGrafObj::IsSwappedOut() const
 {
     return mbIsPreview ? sal_True : pGraphic->IsSwappedOut();
