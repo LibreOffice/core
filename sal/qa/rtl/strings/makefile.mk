@@ -34,6 +34,9 @@ ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
 
+# cppunittester is built in the same project; cannot use delivered version
+CPPUNITTESTER=$(AUGMENT_LIBRARY_PATH_LOCAL) $(GDBCPPUNITTRACE) $(VALGRINDTOOL) $(BIN)/cppunittester
+
 #building with stlport, but cppunit was not built with stlport
 .IF "$(USE_SYSTEM_STL)"!="YES"
 .IF "$(SYSTEM_CPPUNIT)"=="YES"
