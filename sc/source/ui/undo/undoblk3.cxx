@@ -147,10 +147,8 @@ void ScUndoDeleteContents::SetChangeTrack()
 void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     sal_uInt16 nExtFlags = 0;
 
@@ -195,6 +193,7 @@ void ScUndoDeleteContents::DoChange( const sal_Bool bUndo )
         SetChangeTrack();
     }
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustRowHeight(
                                 aRange.aStart.Row(), aRange.aEnd.Row() ) ) )
 /*A*/   pDocShell->PostPaint( aRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
@@ -341,10 +340,8 @@ void ScUndoFillTable::SetChangeTrack()
 void ScUndoFillTable::DoChange( const sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     if (bUndo)  // nur Undo
     {
@@ -379,6 +376,7 @@ void ScUndoFillTable::DoChange( const sal_Bool bUndo )
 
     //  CellContentChanged kommt mit der Markierung
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -485,10 +483,8 @@ String __EXPORT ScUndoSelectionAttr::GetComment() const
 void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     ScRange aEffRange( aRange );
     if ( pDoc->HasAttrib( aEffRange, HASATTR_MERGED ) )         // zusammengefasste Zellen?
@@ -515,6 +511,7 @@ void ScUndoSelectionAttr::DoChange( const sal_Bool bUndo )
             pDoc->ApplySelectionFrame( aMarkData, pLineOuter, pLineInner );
     }
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aEffRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
@@ -1165,8 +1162,7 @@ void __EXPORT ScUndoReplace::Undo()
         DBG_ASSERT(pSearchItem->GetCommand() == SVX_SEARCHCMD_REPLACE_ALL,
                    "ScUndoReplace:: Falscher Modus");
 
-        if (pViewShell)
-            pViewShell->SetMarkData( aMarkData );
+        SetViewMarkData( aMarkData );
 
 //! markierte Tabellen
 //! Bereich merken ?
@@ -1243,7 +1239,7 @@ void __EXPORT ScUndoReplace::Redo()
     {
         if (pViewShell)
         {
-            pViewShell->SetMarkData( aMarkData );
+            SetViewMarkData( aMarkData );
 
             pViewShell->SearchAndReplace( pSearchItem, sal_False, sal_True );
         }
@@ -1466,9 +1462,7 @@ void ScUndoConversion::DoChange( ScDocument* pRefDoc, const ScAddress& rCursorPo
         ScDocument* pDoc = pDocShell->GetDocument();
         ShowTable( rCursorPos.Tab() );
 
-        ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-        if (pViewShell)
-            pViewShell->SetMarkData( aMarkData );
+        SetViewMarkData( aMarkData );
 
         SCTAB nTabCount = pDoc->GetTableCount();
         //  Undo/Redo-doc has only selected tables
@@ -1575,9 +1569,7 @@ void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
 
     ShowTable(aRange);
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     ScRange aCopyRange = aRange;
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -1586,6 +1578,7 @@ void ScUndoRefConversion::DoChange( ScDocument* pRefDoc)
     pRefDoc->CopyToDocument( aCopyRange, nFlags, bMulti, pDoc, &aMarkData );
     pDocShell->PostPaint( aRange, PAINT_GRID);
     pDocShell->PostDataChanged();
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->CellContentChanged();
 }

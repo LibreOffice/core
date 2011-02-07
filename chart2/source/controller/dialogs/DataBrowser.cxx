@@ -47,7 +47,7 @@
 #include "ChartModelHelper.hxx"
 #include "CommonConverters.hxx"
 #include "macros.hxx"
-#include "chartview/NumberFormatterWrapper.hxx"
+#include "NumberFormatterWrapper.hxx"
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
@@ -64,6 +64,7 @@
 #include <com/sun/star/chart2/XChartType.hpp>
 
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -696,6 +697,23 @@ String DataBrowser::GetCellText( long nRow, sal_uInt16 nColumnId ) const
                                       GetNumberFormatKey( nRow, nColumnId ),
                                       fData, nLabelColor, bColorChanged ));
         }
+        else if( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXTORDATE )
+        {
+            uno::Any aAny = m_apDataBrowserModel->getCellAny( nColIndex, nRow );
+            OUString aText;
+            double fDouble=0.0;
+            if( aAny>>=aText )
+                aResult = aText;
+            else if( aAny>>=fDouble )
+            {
+                sal_Int32 nLabelColor;
+                bool bColorChanged = false;
+                sal_Int32 nDateNumberFormat = DiagramHelper::getDateNumberFormat( Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY) );
+                if( ! ::rtl::math::isNan( fDouble ) && m_spNumberFormatterWrapper.get() )
+                    aResult = String( m_spNumberFormatterWrapper->getFormattedString(
+                        nDateNumberFormat, fDouble, nLabelColor, bColorChanged ));
+            }
+        }
         else
         {
             OSL_ASSERT( m_apDataBrowserModel->getCellType( nColIndex, nRow ) == DataBrowserModel::TEXT );
@@ -853,6 +871,9 @@ void DataBrowser::SetDataFromModel(
     m_spNumberFormatterWrapper.reset(
         new NumberFormatterWrapper(
             Reference< util::XNumberFormatsSupplier >( m_xChartDoc, uno::UNO_QUERY )));
+
+    if( m_spNumberFormatterWrapper.get() )
+        m_aNumberEditField.SetFormatter( m_spNumberFormatterWrapper->getSvNumberFormatter() );
 
     RenewTable();
 
@@ -1134,6 +1155,22 @@ sal_uInt32 DataBrowser::GetNumberFormatKey( sal_Int32 nRow, sal_uInt16 nCol ) co
     return m_apDataBrowserModel->getNumberFormatKey( lcl_getColumnInData( nCol ), lcl_getRowInData( nRow ));
 }
 
+bool DataBrowser::isDateString( rtl::OUString aInputString, double& fOutDateValue )
+{
+    sal_uInt32 nNumberFormat=0;
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
+    if( aInputString.getLength() > 0 &&  pSvNumberFormatter && pSvNumberFormatter->IsNumberFormat( aInputString, nNumberFormat, fOutDateValue ) )
+    {
+        Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( m_xChartDoc, uno::UNO_QUERY );
+        Reference< util::XNumberFormats > xNumberFormats;
+        if( xNumberFormatsSupplier.is() )
+             xNumberFormats = Reference< util::XNumberFormats >( xNumberFormatsSupplier->getNumberFormats() );
+        if( DiagramHelper::isDateNumberFormat( nNumberFormat, xNumberFormats ) )
+            return true;
+    }
+    return false;
+}
+
 sal_Bool DataBrowser::SaveModified()
 {
     if( ! IsModified() )
@@ -1146,6 +1183,7 @@ sal_Bool DataBrowser::SaveModified()
 
     DBG_ASSERT( nRow >= 0 || nCol >= 0, "This cell should not be modified!" );
 
+    SvNumberFormatter* pSvNumberFormatter = m_spNumberFormatterWrapper.get() ? m_spNumberFormatterWrapper->getSvNumberFormatter() : 0;
     switch( m_apDataBrowserModel->getCellType( nCol, nRow ))
     {
         case DataBrowserModel::NUMBER:
@@ -1155,11 +1193,8 @@ sal_Bool DataBrowser::SaveModified()
             String aText( m_aNumberEditField.GetText());
             // an empty string is valid, if no numberformatter exists, all
             // values are treated as valid
-            if( aText.Len() > 0 &&
-                m_spNumberFormatterWrapper.get() &&
-                m_spNumberFormatterWrapper->getSvNumberFormatter() &&
-                ! m_spNumberFormatterWrapper->getSvNumberFormatter()->IsNumberFormat(
-                    aText, nDummy, fDummy ))
+            if( aText.Len() > 0 && pSvNumberFormatter &&
+                ! pSvNumberFormatter->IsNumberFormat( aText, nDummy, fDummy ) )
             {
                 bChangeValid = sal_False;
             }
@@ -1168,6 +1203,17 @@ sal_Bool DataBrowser::SaveModified()
                 double fData = m_aNumberEditField.GetValue();
                 bChangeValid = m_apDataBrowserModel->setCellNumber( nCol, nRow, fData );
             }
+        }
+        break;
+        case DataBrowserModel::TEXTORDATE:
+        {
+            OUString aText( m_aTextEditField.GetText() );
+            double fDateValue=0.0;
+            bChangeValid = sal_False;
+            if( isDateString( aText, fDateValue ) )
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( fDateValue ) );
+            if(!bChangeValid)
+                bChangeValid = m_apDataBrowserModel->setCellAny( nCol, nRow, uno::makeAny( aText ) );
         }
         break;
         case DataBrowserModel::TEXT:

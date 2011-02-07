@@ -45,8 +45,7 @@ namespace
 
 const sal_uInt16 nTitleWhichPairs[] =
 {
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
@@ -60,24 +59,17 @@ const sal_uInt16 nAxisWhichPairs[] =
     CHARACTER_WHICHPAIRS,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, // 11432          svx/svxids.hrc
-    SCHATTR_AXISTYPE, SCHATTR_AXISTYPE,                         //    39          sch/schattr.hxx
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,                       //     4 -     6  sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,                  //    53          sch/schattr.hxx
-    SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,                 //    54          sch/schattr.hxx
-    SCHATTR_AXIS_START, SCHATTR_AXIS_END,                       //    70 -    95  sch/schattr.hxx
-    SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,                       // 30587          sch/schattr.hxx
+    SCHATTR_AXIS_START, SCHATTR_AXIS_END,
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
 const sal_uInt16 nAllAxisWhichPairs[] =
 {
-    XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
+    XATTR_LINE_FIRST, XATTR_LINE_LAST,
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_START, SCHATTR_TEXT_END,           //     4 -     6  sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
-    SCHATTR_TEXT_OVERLAP, SCHATTR_TEXT_OVERLAP,     //    54          sch/schattr.hxx
-    SCHATTR_AXIS_SHOWDESCR, SCHATTR_AXIS_SHOWDESCR, //    85          sch/schattr.hxx
-    SCHATTR_TEXTBREAK, SCHATTR_TEXTBREAK,           // 30587          sch/schattr.hxx
+    SCHATTR_AXIS_LABEL_START, SCHATTR_AXIS_LABEL_END,
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
@@ -102,8 +94,6 @@ const sal_uInt16 nDataLabelWhichPairs[] =
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END,
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
-    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
-    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,
     EE_PARA_WRITINGDIR,EE_PARA_WRITINGDIR,
     0
@@ -117,8 +107,6 @@ const sal_uInt16 nDataLabelWhichPairs[] =
     SCHATTR_DATADESCR_START, SCHATTR_DATADESCR_END, /*     1 -     2  sch/schattr.hxx*/ \
     SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_INFO,    /* 10585 - 10585  svx/svxids.hrc */ \
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
-    SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
-    SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
     SCHATTR_TEXT_DEGREES, SCHATTR_TEXT_DEGREES, \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
@@ -165,16 +153,14 @@ const sal_uInt16 nAreaWhichPairs[] =
 const sal_uInt16 nTextWhichPairs[] =
 {
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 
 const sal_uInt16 nTextOrientWhichPairs[] =
 {
     CHARACTER_WHICHPAIRS,
-    SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,       //     4          sch/schattr.hxx
-    SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
+    SCHATTR_TEXT_START, SCHATTR_TEXT_END,
     0
 };
 

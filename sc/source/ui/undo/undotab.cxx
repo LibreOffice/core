@@ -891,9 +891,7 @@ void ScUndoMakeScenario::Undo()
 
 void ScUndoMakeScenario::Redo()
 {
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     RedoSdrUndoAction( pDrawUndo );             // Draw Redo first
 
@@ -905,6 +903,7 @@ void ScUndoMakeScenario::Redo()
     bDrawIsInUndo = sal_False;
     pDocShell->SetInUndo( sal_False );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
         pViewShell->SetTabNo( nDestTab, sal_True );
 

@@ -24,12 +24,11 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
-#define _CHART2_VIEW_NUMBERFORMATTERWRAPPER_HXX
+#ifndef _CHART2_DATEHELPER_HXX
+#define _CHART2_DATEHELPER_HXX
 
-#include <svl/zforlist.hxx>
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#include "chartviewdllapi.hxx"
+#include <com/sun/star/chart2/XScaling.hpp>
+#include <tools/date.hxx>
 
 //.............................................................................
 namespace chart
@@ -39,41 +38,20 @@ namespace chart
 //-----------------------------------------------------------------------------
 /**
 */
-class FixedNumberFormatter;
 
-class OOO_DLLPUBLIC_CHARTVIEW NumberFormatterWrapper
+class DateHelper
 {
 public:
-    NumberFormatterWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier );
-    virtual ~NumberFormatterWrapper();
+    static bool IsInSameYear( const Date& rD1, const Date& rD2 );
+    static bool IsInSameMonth( const Date& rD1, const Date& rD2 );
 
-    SvNumberFormatter* getSvNumberFormatter() const;
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
-                getNumberFormatsSupplier() { return m_xNumberFormatsSupplier; };
+    static long GetMonthsBetweenDates( Date aD1, Date aD2 );
+    static Date GetDateSomeMonthsAway( const Date& rD, long nMonthDistance );
+    static Date GetDateSomeYearsAway( const Date& rD, long nYearDistance );
+    static bool IsLessThanOneMonthAway( const Date& rD1, const Date& rD2 );
+    static bool IsLessThanOneYearAway( const Date& rD1, const Date& rD2 );
 
-    rtl::OUString getFormattedString( sal_Int32 nNumberFormatKey, double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
-
-private: //private member
-    ::com::sun::star::uno::Reference< com::sun::star::util::XNumberFormatsSupplier >
-                        m_xNumberFormatsSupplier;
-
-    SvNumberFormatter* m_pNumberFormatter;
-    ::com::sun::star::uno::Any m_aNullDate;
-};
-
-
-class FixedNumberFormatter
-{
-public:
-    FixedNumberFormatter( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xSupplier
-        , sal_Int32 nNumberFormatKey );
-    virtual ~FixedNumberFormatter();
-
-    rtl::OUString getFormattedString( double fValue, sal_Int32& rLabelColor, bool& rbColorChanged ) const;
-
-private:
-    NumberFormatterWrapper      m_aNumberFormatterWrapper;
-    sal_uLong                       m_nNumberFormatKey;
+    static double RasterizeDateValue( double fValue, const Date& rNullDate, long TimeResolution );
 };
 
 //.............................................................................

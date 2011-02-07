@@ -93,6 +93,8 @@ public:
     */
     double GetCellNumber( long nRow, sal_uInt16 nColumnId ) const;
 
+    bool isDateString( rtl::OUString aInputString, double& fOutDateValue );
+
     // Window
     virtual void Resize();
 

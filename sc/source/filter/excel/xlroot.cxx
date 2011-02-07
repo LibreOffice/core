@@ -326,6 +326,12 @@ DateTime XclRoot::GetNullDate() const
     return *GetFormatter().GetNullDate();
 }
 
+sal_uInt16 XclRoot::GetBaseYear() const
+{
+    // return 1904 for 1904-01-01, and 1900 for 1899-12-30
+    return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
+}
+
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
     double fValue = rDateTime - GetNullDate();

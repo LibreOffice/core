@@ -919,13 +919,29 @@ public:
     sal_uInt16          GetErrCode( const ScAddress& ) const;
 
                     /** Shrink a range to only include data area.
+
                         This is not the actually used area within the
                         selection, but the bounds of the sheet's data area
-                        instead. */
+                        instead.
+
+                        @returns TRUE if the area passed intersected the data
+                                 area, FALSE if not, in which case the values
+                                 obtained may be out of bounds, not in order or
+                                 unmodified. TRUE does not mean that there
+                                 actually is any data within the selection.
+                     */
     bool            ShrinkToDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow ) const;
 
-                    /** Shrink a range to only include used data area. */
-    bool            ShrinkToUsedDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow, SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
+                    /** Shrink a range to only include used data area.
+
+                        @param o_bShrunk
+                               Out parameter, TRUE if area was shrunk, FALSE if not.
+
+                        @returns TRUE if there is any data, FALSE if not.
+                     */
+    bool            ShrinkToUsedDataArea( bool& o_bShrunk,
+                                          SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
+                                          SCCOL& rEndCol, SCROW& rEndRow, bool bColumnsOnly ) const;
 
     SC_DLLPUBLIC void           GetDataArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
                                     SCCOL& rEndCol, SCROW& rEndRow, sal_Bool bIncludeOld, bool bOnlyDown ) const;

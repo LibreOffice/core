@@ -1137,7 +1137,7 @@ bool ScDocFunc::ReplaceNote( const ScAddress& rPos, const String& rNoteText, con
     if (aTester.IsEditable())
     {
         ScDrawLayer* pDrawLayer = rDoc.GetDrawLayer();
-        SfxUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
+        ::svl::IUndoManager* pUndoMgr = (pDrawLayer && rDoc.IsUndoEnabled()) ? rDocShell.GetUndoManager() : 0;
 
         ScNoteData aOldData;
         ScPostIt* pOldNote = rDoc.ReleaseNote( rPos );
@@ -1741,8 +1741,7 @@ sal_Bool ScDocFunc::InsertCells( const ScRange& rRange, const ScMarkData* pTabMa
         }
 
         rDocShell.GetUndoManager()->LeaveListAction();
-        SfxUndoManager* pMgr = rDocShell.GetUndoManager();
-        pMgr->RemoveLastUndoAction();
+        rDocShell.GetUndoManager()->RemoveLastUndoAction();
 
         delete pRefUndoDoc;
         delete pUndoData;
@@ -2618,7 +2617,6 @@ script::ModuleInfo lcl_InitModuleInfo( SfxObjectShell& rDocSh, String& sModule )
 
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sSource )
 {
-    SFX_APP()->EnterBasicCall();
     SfxObjectShell& rDocSh = *rDoc.GetDocumentShell();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
@@ -2662,12 +2660,10 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         }
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
 {
-    SFX_APP()->EnterBasicCall();
     uno::Reference< script::XLibraryContainer > xLibContainer = rDocSh.GetBasicContainer();
     DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
@@ -2689,7 +2685,6 @@ void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName )
             xVBAModuleInfo->removeModuleInfo( sModuleName );
 
     }
-    SFX_APP()->LeaveBasicCall();
 }
 
 

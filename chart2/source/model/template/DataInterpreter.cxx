@@ -390,6 +390,14 @@ bool DataInterpreter::HasCategories(
     return bHasCategories;
 }
 
+bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > & rArguments )
+{
+    bool bUseCategoriesAsX = true;
+    if( rArguments.getLength() > 0 )
+        GetProperty( rArguments, C2U(("UseCategoriesAsX"))) >>= bUseCategoriesAsX;
+    return bUseCategoriesAsX;
+}
+
 // ------------------------------------------------------------
 
 Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()

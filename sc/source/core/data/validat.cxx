@@ -288,8 +288,6 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 
     sal_Bool bDone = sal_False;
     sal_Bool bRet = sal_False;                      // Standard: kein Abbruch
-    SfxApplication* pSfxApp = SFX_APP();
-    pSfxApp->EnterBasicCall();              // Dok-Basic anlegen etc.
 
     //  Wenn das Dok waehrend eines Basic-Calls geladen wurde,
     //  ist das Sbx-Objekt evtl. nicht angelegt (?)
@@ -368,7 +366,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         if ( pCell )
             pDocument->LockTable( rPos.Tab() );
         SbxVariableRef refRes = new SbxVariable;
-        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, NULL, refPar, refRes );
+        ErrCode eRet = pDocSh->CallBasic( aMacroStr, aBasicStr, refPar, refRes );
         if ( pCell )
             pDocument->UnlockTable( rPos.Tab() );
 
@@ -380,7 +378,6 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             bRet = sal_True;
         bDone = sal_True;
     }
-    pSfxApp->LeaveBasicCall();
 
     if ( !bDone && !pCell )         // Makro nicht gefunden (nur bei Eingabe)
     {

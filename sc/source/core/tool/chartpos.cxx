@@ -36,6 +36,22 @@
 #include "document.hxx"
 #include "rechead.hxx"
 
+namespace
+{
+    bool lcl_hasValueDataButNoDates( ScDocument* pDocument, SCCOL nCol, SCROW nRow, SCTAB nTab )
+    {
+        bool bReturn = false;
+        if (pDocument->HasValueData( nCol, nRow, nTab ))
+        {
+            //treat dates like text #i25706#
+            sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
+            short nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
+            bool bIsDate = (nType & NUMBERFORMAT_DATE);
+            bReturn = !bIsDate;
+        }
+        return bReturn;
+    }
+}
 
 ScChartPositioner::ScChartPositioner( ScDocument* pDoc, SCTAB nTab,
                     SCCOL nStartColP, SCROW nStartRowP, SCCOL nEndColP, SCROW nEndRowP) :
@@ -290,12 +306,12 @@ void ScChartPositioner::CheckColRowHeaders()
         {
             for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
             {
-                if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
+                if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
                         bColStrings = sal_False;
             }
             for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
             {
-                if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
+                if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
                         bRowStrings = sal_False;
             }
         }
@@ -315,7 +331,7 @@ void ScChartPositioner::CheckColRowHeaders()
                 if ( nCol1 <= nCol2 )
                     for (iRow=nRow1; iRow<=nRow2 && bRowStrings; iRow++)
                     {
-                        if (pDocument->HasValueData( nCol1, iRow, nTab1 ))
+                        if (lcl_hasValueDataButNoDates( pDocument, nCol1, iRow, nTab1 ))
                                 bRowStrings = sal_False;
                     }
             }
@@ -324,7 +340,7 @@ void ScChartPositioner::CheckColRowHeaders()
                 if ( nRow1 <= nRow2 )
                     for (iCol=nCol1; iCol<=nCol2 && bColStrings; iCol++)
                     {
-                        if (pDocument->HasValueData( iCol, nRow1, nTab1 ))
+                        if (lcl_hasValueDataButNoDates( pDocument, iCol, nRow1, nTab1 ))
                                 bColStrings = sal_False;
                     }
             }

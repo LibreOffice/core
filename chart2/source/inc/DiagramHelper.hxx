@@ -38,6 +38,8 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
+#include <com/sun/star/util/XNumberFormats.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 
 #include <utility>
 #include <vector>
@@ -239,6 +241,21 @@ public:
         generateAutomaticCategoriesFromCooSys(
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XCoordinateSystem > & xCooSys );
+
+    static void switchToDateCategories(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    static void switchToTextCategories(
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    static bool isSupportingDateAxis( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDiagram >& xDiagram );
+    static bool isDateNumberFormat( sal_Int32 nNumberFormat, const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& xNumberFormats );
+    static sal_Int32 getDateNumberFormat( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
+    static sal_Int32 getPercentNumberFormat( const ::com::sun::star::uno::Reference<
+                ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
 
     static ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XChartType >

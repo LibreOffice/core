@@ -160,7 +160,7 @@ void lcl_createRoleIndexMap( lcl_tRoleIndexMap & rOutMap )
 struct lcl_DataSeriesContainerAppend : public
     ::std::iterator< ::std::output_iterator_tag, Reference< XDataSeriesContainer > >
 {
-    typedef ::std::vector< chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
+    typedef ::std::vector< ::chart::DialogModel::tSeriesWithChartTypeByName > tContainerType;
 
     explicit lcl_DataSeriesContainerAppend( tContainerType & rCnt )
             : m_rDestCnt( rCnt )
@@ -180,7 +180,7 @@ struct lcl_DataSeriesContainerAppend : public
                 for( sal_Int32 nI = 0; nI < aSeq.getLength(); ++ nI )
                 {
                     m_rDestCnt.push_back(
-                        chart::DialogModel::tSeriesWithChartTypeByName(
+                        ::chart::DialogModel::tSeriesWithChartTypeByName(
                             ::chart::DataSeriesHelper::getDataSeriesLabel( aSeq[nI], aRole ),
                             ::std::make_pair( aSeq[nI], xCT )));
                 }

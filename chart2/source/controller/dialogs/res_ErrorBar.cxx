@@ -474,12 +474,12 @@ IMPL_LINK( ErrorBarResources, ChooseRange, RangeSelectionButton *, pButton )
     if( pButton == &m_aIbRangePositive )
     {
         m_pCurrentRangeChoosingField = &m_aEdRangePositive;
-        aUIString = ::rtl::OUString( String( SchResId( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS )));
+        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_POSITIVE_ERRORBARS ));
     }
     else
     {
         m_pCurrentRangeChoosingField = &m_aEdRangeNegative;
-        aUIString = ::rtl::OUString( String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS )));
+        aUIString = String( SchResId( STR_DATA_SELECT_RANGE_FOR_NEGATIVE_ERRORBARS ));
     }
 
     OSL_ASSERT( m_pParentDialog );

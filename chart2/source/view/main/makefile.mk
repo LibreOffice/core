@@ -43,7 +43,6 @@ ENABLE_EXCEPTIONS=	TRUE
 SLOFILES =  \
             $(SLO)$/ChartItemPool.obj \
             $(SLO)$/DrawModelWrapper.obj \
-            $(SLO)$/NumberFormatterWrapper.obj \
             $(SLO)$/PropertyMapper.obj \
             $(SLO)$/Stripe.obj \
             $(SLO)$/VLineProperties.obj \

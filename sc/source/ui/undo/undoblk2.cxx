@@ -113,18 +113,13 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     SCCOLROW nPaintStart = nStart > 0 ? nStart-1 : static_cast<SCCOLROW>(0);
 
     if (eMode==SC_SIZE_OPTIMAL)
     {
-        if (pViewShell)
-        {
-            pViewShell->SetMarkData( aMarkData );
-
+        if ( SetViewMarkData( aMarkData ) )
             nPaintStart = 0;        // paint all, because of changed selection
-        }
     }
 
     //! outlines from all tables?
@@ -155,6 +150,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
 
     DoSdrUndoAction( pDrawUndo, pDoc );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         pViewShell->UpdateScrollBars();
@@ -171,19 +167,14 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-
     sal_Bool bPaintAll = sal_False;
     if (eMode==SC_SIZE_OPTIMAL)
     {
-        if (pViewShell)
-        {
-            pViewShell->SetMarkData( aMarkData );
-
+        if ( SetViewMarkData( aMarkData ) )
             bPaintAll = sal_True;       // paint all, because of changed selection
-        }
     }
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -192,7 +183,8 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     }
 
     // SetWidthOrHeight aendert aktuelle Tabelle !
-    pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, sal_False, sal_True, &aMarkData );
+    if ( pViewShell )
+        pViewShell->SetWidthOrHeight( bWidth, nRangeCnt, pRanges, eMode, nNewSize, FALSE, TRUE, &aMarkData );
 
     // paint grid if selection was changed directly at the MarkData
     if (bPaintAll)

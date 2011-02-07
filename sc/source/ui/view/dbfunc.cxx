@@ -159,7 +159,10 @@ ScDBData* ScDBFunc::GetDBData( sal_Bool bMark, ScGetDBMode eMode, ScGetDBSelecti
                     ScDocument* pDoc = pDocSh->GetDocument();
                     SCCOL nCol1 = aRange.aStart.Col(), nCol2 = aRange.aEnd.Col();
                     SCROW nRow1 = aRange.aStart.Row(), nRow2 = aRange.aEnd.Row();
-                    if (pDoc->ShrinkToUsedDataArea( aRange.aStart.Tab(), nCol1, nRow1, nCol2, nRow2, bShrinkColumnsOnly))
+                    bool bShrunk;
+                    pDoc->ShrinkToUsedDataArea( bShrunk, aRange.aStart.Tab(),
+                            nCol1, nRow1, nCol2, nRow2, bShrinkColumnsOnly);
+                    if (bShrunk)
                     {
                         aRange.aStart.SetCol(nCol1);
                         aRange.aEnd.SetCol(nCol2);

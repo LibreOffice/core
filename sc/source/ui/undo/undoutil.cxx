@@ -43,10 +43,13 @@
 #include "globstr.hrc"
 #include "global.hxx"
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* /* pDocShell */,
+void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
+    if ( pDocShell->IsPaintLocked() )
+        return;
+
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {

@@ -346,7 +346,7 @@ public:
     sal_Bool            IsDrawTextShell() const;
     sal_Bool            IsAuditShell() const;
 
-    void            SetDrawTextUndo( SfxUndoManager* pUndoMgr );
+    void            SetDrawTextUndo( ::svl::IUndoManager* pUndoMgr );
 
     void            FillFieldData( ScHeaderFieldData& rData );
 

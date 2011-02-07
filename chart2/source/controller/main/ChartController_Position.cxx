@@ -139,7 +139,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
         ActionDescriptionProvider::createDescription(
             ActionDescriptionProvider::POS_SIZE,
             ObjectNameProvider::getName( ObjectIdentifier::getObjectType( aCID ))),
-        m_xUndoManager, getModel() );
+        m_xUndoManager );
 
     SfxAbstractTabDialog * pDlg = NULL;
     try
@@ -174,7 +174,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
                             , awt::Rectangle(aObjectRect.getX(),aObjectRect.getY(),aObjectRect.getWidth(),aObjectRect.getHeight())
                             , awt::Rectangle(aPageRect.getX(),aPageRect.getY(),aPageRect.getWidth(),aPageRect.getHeight()) );
                 if( bChanged )
-                    aUndoGuard.commitAction();
+                    aUndoGuard.commit();
             }
         }
         delete pDlg;

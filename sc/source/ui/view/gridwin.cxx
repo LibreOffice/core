@@ -1884,7 +1884,7 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
     if (nMouseStatus == SC_GM_WATERUNDO)    // Undo im Giesskannenmodus
     {
-        SfxUndoManager* pMgr = pViewData->GetDocShell()->GetUndoManager();
+        ::svl::IUndoManager* pMgr = pViewData->GetDocShell()->GetUndoManager();
         if ( pMgr->GetUndoActionCount() && pMgr->GetUndoActionId() == STR_UNDO_APPLYCELLSTYLE )
             pMgr->Undo();
         else

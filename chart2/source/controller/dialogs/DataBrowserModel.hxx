@@ -81,13 +81,15 @@ public:
     enum eCellType
     {
         NUMBER,
-        TEXT
+        TEXT,
+        TEXTORDATE
     };
 
-    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow );
+    eCellType getCellType( sal_Int32 nAtColumn, sal_Int32 nAtRow ) const;
     /// If getCellType( nAtColumn, nAtRow ) returns TEXT, the result will be Nan
     double getCellNumber( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     ::rtl::OUString getCellText( sal_Int32 nAtColumn, sal_Int32 nAtRow );
+    ::com::sun::star::uno::Any getCellAny( sal_Int32 nAtColumn, sal_Int32 nAtRow );
     sal_uInt32 getNumberFormatKey( sal_Int32 nAtColumn, sal_Int32 nAtRow );
 
     /// returns </sal_True> if the number could successfully be set at the given position

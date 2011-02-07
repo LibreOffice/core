@@ -1600,10 +1600,8 @@ String __EXPORT ScUndoSelectionStyle::GetComment() const
 void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
-    if (pViewShell)
-        pViewShell->SetMarkData( aMarkData );
+    SetViewMarkData( aMarkData );
 
     ScRange aWorkRange( aRange );
     if ( pDoc->HasAttrib( aWorkRange, HASATTR_MERGED ) )        // zusammengefasste Zellen?
@@ -1635,6 +1633,7 @@ void ScUndoSelectionStyle::DoChange( const sal_Bool bUndo )
 
     pDocShell->UpdatePaintExt( nExtFlags, aWorkRange );
 
+    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if ( !( (pViewShell) && pViewShell->AdjustBlockHeight() ) )
 /*A*/   pDocShell->PostPaint( aWorkRange, PAINT_GRID | PAINT_EXTRAS, nExtFlags );
 
