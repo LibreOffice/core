@@ -295,6 +295,8 @@ LibraryWrapper::LibraryWrapper() :
     OSL_ENSURE( mpCairoLib, "cairo library could not be loaded" );
     OSL_ENSURE( mpRSVGLib, "librsvg library could not be loaded" );
 
+    bCont = bCont && mpGObjectLib != NULL && mpCairoLib != NULL && mpRSVGLib != NULL;
+
     // unload all libraries in case of failure
     if( !bCont )
     {
@@ -316,6 +318,8 @@ LibraryWrapper::LibraryWrapper() :
             mpGObjectLib = NULL;
         }
     }
+    else
+        rsvg_init();
 }
 
 // ---------------------------
@@ -379,21 +383,14 @@ Rasterizer::Rasterizer() :
     mnDefaultHeight( 0 ),
     mbLibInit( true )
 {
-    static bool bLibInitialized = false;
-
-    if( !bLibInitialized )
+    try
     {
-        try
-        {
-            LibraryWrapper& rLib = LibraryWrapper::get();
-            rLib.rsvg_init();
-        }
-        catch( ... )
-        {
-            mbLibInit = false;
-        }
-
-        bLibInitialized = true;
+        LibraryWrapper& rLib = LibraryWrapper::get();
+        mbLibInit = rLib.isValid();
+    }
+    catch( ... )
+    {
+        mbLibInit = false;
     }
 }
 
