@@ -24,17 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
- //---------------------------------------------------------------------------
- //
- // (c) Copyright 1996 - 2000 by Star Division GmbH, Hamburg, Germany
- //
- // Ersterstellung:
- // JN
- //
- // Letzte Aenderung:
- // $Author: rt $ $Date: 2008-04-10 14:52:17 $ $Revision: 1.32 $
- //
- //---------------------------------------------------------------------------
 
 #ifndef DBAUI_DLGSIZE_HRC
 #include "dlgsize.hrc"
