@@ -34,8 +34,6 @@
     #include <sal/types.h>
 #endif
 
-//     #include <rtl/tres.h>
-
 #include <testshl/tresstatewrapper.hxx>
 
 #ifndef _RTL_STRING_HXX_
