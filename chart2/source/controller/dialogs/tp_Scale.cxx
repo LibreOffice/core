@@ -440,7 +440,7 @@ void ScaleTabPage::SetNumFormatter( SvNumberFormatter* pFormatter )
     aFmtFldStepMain.SetFormatter( pNumFormatter );
     aFmtFldOrigin.SetFormatter( pNumFormatter );
 
-    // #101318#, #i6278# allow more decimal places than the output format.  As
+    // #i6278# allow more decimal places than the output format.  As
     // the numbers shown in the edit fields are used for input, it makes more
     // sense to display the values in the input format rather than the output
     // format.

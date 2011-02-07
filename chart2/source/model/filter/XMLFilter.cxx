@@ -381,7 +381,7 @@ sal_Int32 XMLFilter::impl_Import(
         /** property map for import info set */
         comphelper::PropertyMapEntry aImportInfoMap[] =
         {
-            // #80365# necessary properties for XML progress bar at load time
+            // necessary properties for XML progress bar at load time
             { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
             { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},

@@ -329,11 +329,11 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
         for ( ; i < nCount; i++ )
         {
             SCROW nOldRow = pItems[i].nRow;
-            // #43940# Aenderung Quelle broadcasten
+            // Aenderung Quelle broadcasten
             rAddress.SetRow( nOldRow );
             pDocument->AreaBroadcast( aHint );
             SCROW nNewRow = (pItems[i].nRow -= nSize);
-            // #43940# Aenderung Ziel broadcasten
+            // Aenderung Ziel broadcasten
             if ( nLastBroadcast != nNewRow )
             {   // direkt aufeinanderfolgende nicht doppelt broadcasten
                 rAddress.SetRow( nNewRow );
@@ -875,7 +875,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
             }
             else if ( (bCloneValue || bCloneDateTime || bCloneString) && !rDestDoc.IsUndo() )
             {
-                //  #48491# ins Undo-Dokument immer nur die Original-Zelle kopieren,
+                //  ins Undo-Dokument immer nur die Original-Zelle kopieren,
                 //  aus Formeln keine Value/String-Zellen erzeugen
                 ScFormulaCell& rForm = (ScFormulaCell&)rSource;
                 USHORT nErr = rForm.GetErrCode();
@@ -901,7 +901,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags, ScDocument& rDestD
                 {
                     String aString;
                     rForm.GetString( aString );
-                    // #33224# do not clone empty string
+                    // do not clone empty string
                     if (aString.Len() > 0)
                     {
                         if ( rForm.IsMultilineResult() )

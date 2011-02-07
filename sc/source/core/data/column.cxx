@@ -969,7 +969,7 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
         }
     }
 
-    //  hier kein UpdateReference wegen #30529# - mitsortiert werden nur noch relative Referenzen
+    //  mitsortiert werden nur noch relative Referenzen
 //  long dy = (long)nRow2 - (long)nRow1;
 
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
@@ -1143,14 +1143,14 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
         for ( ; i < nCount; i++)
         {
             SCROW nOldRow = pItems[i].nRow;
-            // #43940# Aenderung Quelle broadcasten
+            // Aenderung Quelle broadcasten
             if ( nLastBroadcast != nOldRow )
             {   // direkt aufeinanderfolgende nicht doppelt broadcasten
                 rAddress.SetRow( nOldRow );
                 pDocument->AreaBroadcast( aHint );
             }
             SCROW nNewRow = (pItems[i].nRow += nSize);
-            // #43940# Aenderung Ziel broadcasten
+            // Aenderung Ziel broadcasten
             rAddress.SetRow( nNewRow );
             pDocument->AreaBroadcast( aHint );
             nLastBroadcast = nNewRow;
@@ -1514,7 +1514,7 @@ void ScColumn::SwapCol(ScColumn& rCol)
     rCol.pAttrArray = pAttrArray;
     pAttrArray = pTempAttr;
 
-    // #38415# AttrArray muss richtige Spaltennummer haben
+    // AttrArray muss richtige Spaltennummer haben
     pAttrArray->SetCol(nCol);
     rCol.pAttrArray->SetCol(rCol.nCol);
 
@@ -1595,7 +1595,7 @@ void ScColumn::MoveTo(SCROW nStartRow, SCROW nEndRow, ScColumn& rCol)
             ScAddress& rAddress = aHint.GetAddress();
             ScNoteCell* pNoteCell = new ScNoteCell;     // Dummy like in DeleteRange
 
-            // #121990# must iterate backwards, because indexes of following cells become invalid
+            // must iterate backwards, because indexes of following cells become invalid
             for (EntryPosPairs::reverse_iterator it( aEntries.rbegin());
                     it != aEntries.rend(); ++it)
             {
@@ -1640,7 +1640,7 @@ void ScColumn::UpdateReference( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW
         }
         else
         {
-            // #90279# For performance reasons two loop bodies instead of
+            // For performance reasons two loop bodies instead of
             // testing for update mode in each iteration.
             // Anyways, this is still a bottleneck on large arrays with few
             // formulas cells.

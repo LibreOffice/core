@@ -111,7 +111,7 @@
 #define SC_VERSION_EDITPOOL 0x0203          // EditCells with EditPool
 #define SC_SUBTOTAL_BUGFIX  0x0204          // bSubTotal of formula cell (true)
 //-------------------------------- ab 5.2
-#define SC_CONVERT_RECALC_ON_LOAD 0x0205    // #73616# CONVERT function recalculated on each load
+#define SC_CONVERT_RECALC_ON_LOAD 0x0205    // CONVERT function recalculated on each load
 //--------------------------------
 #define SC_CURRENT_VERSION  0x0205
 

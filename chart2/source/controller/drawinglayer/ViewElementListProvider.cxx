@@ -222,7 +222,7 @@ FontList* ViewElementListProvider::getFontList() const
     if(!m_pFontList)
     {
         OutputDevice* pRefDev    = m_pDrawModelWrapper ? m_pDrawModelWrapper->getReferenceDevice() : NULL;
-        OutputDevice* pDefaultOut = Application::GetDefaultDevice();    // #67730#
+        OutputDevice* pDefaultOut = Application::GetDefaultDevice();
         m_pFontList = new FontList( pRefDev ? pRefDev    : pDefaultOut
                                 , pRefDev ? pDefaultOut : NULL
                                 , FALSE );

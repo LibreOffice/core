@@ -426,7 +426,7 @@ void ScConditionEntry::CompileAll()
 
 void ScConditionEntry::CompileXML()
 {
-    //  #b4974740# First parse the formula source position if it was stored as text
+    //  First parse the formula source position if it was stored as text
 
     if ( aSrcString.Len() )
     {
@@ -1459,7 +1459,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
             {
                 if ( !bAttrTested )
                 {
-                    // #116562# Look at the style's content only if the repaint is necessary
+                    // Look at the style's content only if the repaint is necessary
                     // for any condition, to avoid the time-consuming Find() if there are many
                     // conditional formats and styles.
                     for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)

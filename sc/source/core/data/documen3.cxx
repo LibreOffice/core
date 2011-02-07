@@ -728,7 +728,7 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
 
         if ( bInUnoBroadcast )
         {
-            //  #107294# Broadcasts from ScDocument::BroadcastUno are the only way that
+            //  Broadcasts from ScDocument::BroadcastUno are the only way that
             //  uno object methods are called without holding a reference.
             //
             //  If RemoveUnoObject is called from an object dtor in the finalizer thread
@@ -901,7 +901,7 @@ void ScDocument::UpdateReference( UpdateRefMode eUpdateRefMode,
         }
         SetExpandRefs( bExpandRefsOld );
 
-        // #30428# after moving, no clipboard move ref-updates are possible
+        // after moving, no clipboard move ref-updates are possible
         if ( eUpdateRefMode != URM_COPY && IsClipboardSource() )
         {
             ScDocument* pClipDoc = SC_MOD()->GetClipDoc();

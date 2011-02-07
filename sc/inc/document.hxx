@@ -688,7 +688,6 @@ public:
     sal_Int64       GetNewUnoId();
     void            AddUnoRefChange( sal_Int64 nId, const ScRangeList& rOldRanges );
 
-    // #109985#
     sal_Bool IsChart( const SdrObject* pObject );
 
     SC_DLLPUBLIC void           UpdateAllCharts();
@@ -1367,7 +1366,7 @@ public:
 
     SCCOL           GetNextDifferentChangedCol( SCTAB nTab, SCCOL nStart) const;
 
-                    // #108550#; if bCareManualSize is set then the row
+                    // if bCareManualSize is set then the row
                     // heights are compared only if the manual size flag for
                     // the row is set. If the bCareManualSize is not set then
                     // the row heights are always compared.

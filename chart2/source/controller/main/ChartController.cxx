@@ -1069,7 +1069,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
             , const uno::Sequence< beans::PropertyValue >& rArgs )
             throw (uno::RuntimeException)
 {
-    //@todo avoid OString (see Mathias mail on bug #104387#)
+    //@todo avoid OString
     rtl::OString aCommand( rtl::OUStringToOString( rURL.Path, RTL_TEXTENCODING_ASCII_US ) );
 
     if(aCommand.equals("Paste"))

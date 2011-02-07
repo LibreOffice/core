@@ -571,10 +571,10 @@
 #define SID_FOCUS_INPUTLINE             (SC_VIEW_START + 89)
 #define SID_SELECT_TABLES               (SC_VIEW_START + 90)
 
-// #97776# new entry "Filter..." in DP popup menu
+// new entry "Filter..." in DP popup menu
 #define SID_DP_FILTER                   (SC_VIEW_START + 91)
 
-// #101160# Replace cell contents warning
+// Replace cell contents warning
 #define SID_SC_INPUT_REPLCELLSWARN      (SC_VIEW_START + 92)
 
 // additional IDs for list/range validity
@@ -1239,14 +1239,13 @@
 #define SCSTR_CHG_PROTECT       (STR_START + 86)
 #define SCSTR_CHG_UNPROTECT     (STR_START + 87)
 
-// #98185#
 #define STR_CAPTION_DEFAULT_TEXT    (STR_START + 88)
 
 // dialog: Select Sheets
 #define STR_DLG_SELECTTABLES_TITLE  (STR_START + 89)
 #define STR_DLG_SELECTTABLES_LBNAME (STR_START + 90)
 
-// #101160# Replace cell contents warning
+// Replace cell contents warning
 #define STR_REPLCELLSWARN           (STR_START + 91)
 
 #define SCSTR_DPFUNCLISTBOX         (STR_START + 92)

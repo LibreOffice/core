@@ -941,7 +941,7 @@ void ScFormulaCell::Compile( const String& rFormula, BOOL bNoListening,
     if( !pCode->GetCodeError() )
     {
         if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == aResult.GetHybridFormula() )
-        {   // #65994# nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
+        {   // nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
             if ( rFormula.GetChar(0) == '=' )
                 pCode->AddBad( rFormula.GetBuffer() + 1 );
             else
@@ -1159,7 +1159,7 @@ void ScFormulaCell::Interpret()
 
         return;
     }
-    // #63038# no multiple interprets for GetErrCode, IsValue, GetValue and
+    // no multiple interprets for GetErrCode, IsValue, GetValue and
     // different entry point recursions. Would also lead to premature
     // convergence in iterations.
     if (pDocument->GetRecursionHelper().GetIteration() && nSeenInIteration ==
@@ -1733,12 +1733,12 @@ void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
                 bForceTrack = !bDirty;
                 SetDirtyVar();
             }
-            // #35962# Don't remove from FormulaTree to put in FormulaTrack to
+            // Don't remove from FormulaTree to put in FormulaTrack to
             // put in FormulaTree again and again, only if necessary.
             // Any other means except RECALCMODE_ALWAYS by which a cell could
             // be in FormulaTree if it would notify other cells through
             // FormulaTrack which weren't in FormulaTrack/FormulaTree before?!?
-            // #87866# Yes. The new TableOpDirty made it necessary to have a
+            // Yes. The new TableOpDirty made it necessary to have a
             // forced mode where formulas may still be in FormulaTree from
             // TableOpDirty but have to notify dependents for normal dirty.
             if ( (bForceTrack || !pDocument->IsInFormulaTree( this )

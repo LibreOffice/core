@@ -779,7 +779,7 @@ BOOL ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos )
                 for (i = 0; i <= MAXTAB; i++)
                     if (pTab[i])
                         pTab[i]->StartAllListeners();
-                // #81844# sheet names of references may not be valid until sheet is moved
+                // sheet names of references may not be valid until sheet is moved
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
                 SetDirty();
                 SetAutoCalc( bOldAutoCalc );
@@ -868,7 +868,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                     pCondFormList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
                 if ( pValidationList )
                     pValidationList->UpdateReference( URM_INSDEL, aRange, 0,0,1 );
-                // #81844# sheet names of references may not be valid until sheet is copied
+                // sheet names of references may not be valid until sheet is copied
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
@@ -891,7 +891,7 @@ BOOL ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         pTab[nOldPos]->UpdateInsertTab(nNewPos);
 
         pTab[nOldPos]->UpdateCompile();
-        pTab[nNewPos]->UpdateCompile( TRUE );   // #67996# maybe already compiled in Clone, but used names need recompilation
+        pTab[nNewPos]->UpdateCompile( TRUE );   //  maybe already compiled in Clone, but used names need recompilation
         SetNoListening( FALSE );
         pTab[nOldPos]->StartAllListeners();
         pTab[nNewPos]->StartAllListeners();

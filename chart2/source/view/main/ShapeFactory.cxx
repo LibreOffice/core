@@ -1609,7 +1609,7 @@ uno::Reference< drawing::XShapes >
 
         xTarget->add(xShape);
 
-        //it is necessary to set the transform matrix to initialize the scene properly (bug #106316#)
+        //it is necessary to set the transform matrix to initialize the scene properly
         //otherwise all objects which are placed into this Group will not be visible
         //the following should be unnecessary after a the bug is fixed
         {

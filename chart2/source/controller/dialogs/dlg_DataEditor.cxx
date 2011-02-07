@@ -94,7 +94,7 @@ DataEditor::DataEditor(
         bReadOnly = xStor->isReadonly();
     SetReadOnly( bReadOnly );
 
-    // #101228# change buttons to flat-look if set so by user
+    // change buttons to flat-look if set so by user
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
     // react on changes

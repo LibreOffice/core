@@ -1518,7 +1518,7 @@ BOOL lcl_IsRangeNameInUse(USHORT nIndex, ScTokenArray* pCode, ScRangeName* pName
                 return TRUE;
             else
             {
-                //  RangeData kann Null sein in bestimmten Excel-Dateien (#31168#)
+                //  RangeData kann Null sein in bestimmten Excel-Dateien
                 ScRangeData* pSubName = pNames->FindIndex(p->GetIndex());
                 if (pSubName && lcl_IsRangeNameInUse(nIndex,
                                     pSubName->GetCode(), pNames))
@@ -1604,7 +1604,7 @@ void ScFormulaCell::CompileDBFormula( BOOL bCreateFormulaString )
             switch ( p->GetOpCode() )
             {
                 case ocBad:             // DB-Bereich evtl. zugefuegt
-                case ocColRowName:      // #36762# falls Namensgleichheit
+                case ocColRowName:      // falls Namensgleichheit
                 case ocDBArea:          // DB-Bereich
                     bRecompile = TRUE;
                 break;
@@ -1655,7 +1655,7 @@ void ScFormulaCell::CompileNameFormula( BOOL bCreateFormulaString )
             switch ( p->GetOpCode() )
             {
                 case ocBad:             // RangeName evtl. zugefuegt
-                case ocColRowName:      // #36762# falls Namensgleichheit
+                case ocColRowName:      // falls Namensgleichheit
                     bRecompile = TRUE;
                 break;
                 default:

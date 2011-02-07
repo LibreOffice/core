@@ -71,7 +71,7 @@ class ScDocShell;
 #define SC_SERVICE_IMAP_CIRC    25
 #define SC_SERVICE_IMAP_POLY    26
 
-// #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #define SC_SERVICE_EXPORT_GOR   27
 #define SC_SERVICE_IMPORT_GOR   28
 #define SC_SERVICE_EXPORT_EOR   29
