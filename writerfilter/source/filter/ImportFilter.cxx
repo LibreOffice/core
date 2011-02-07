@@ -85,7 +85,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             return sal_False;
         }
 
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_IMPORT
         OUString sURL = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_URL(), OUString() );
         ::std::string sURLc = OUStringToOString(sURL, RTL_TEXTENCODING_ASCII_US).getStr();
 
@@ -130,7 +130,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         pDocument->resolve(*pStream);
     }
 
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_IMPORT
     writerfilter::TagLogger::dump("DOMAINMAPPER");
     dmapperLogger->endDocument();
     writerfilter::TagLogger::dump("DEBUG");

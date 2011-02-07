@@ -114,7 +114,6 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
         return false;
 
     bool bRet = true;
-    SFX_APP()->EnterBasicCall();
     try
     {
         Reference<XMultiServiceFactory> xSF(comphelper::getProcessServiceFactory());
@@ -192,7 +191,6 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
         DBG_ERRORFILE( "SvxImportMSVBasic::ImportForms_Impl - any exception caught" );
         //bRet = false;
     }
-    SFX_APP()->LeaveBasicCall();
     return bRet;
 }
 
@@ -248,7 +246,6 @@ sal_Bool SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
     VBA_Impl aVBA( *xRoot, bAsComment );
     if( aVBA.Open(rStorageName,rSubStorageName) )
     {
-        SFX_APP()->EnterBasicCall();
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
@@ -492,7 +489,6 @@ sal_Bool SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
             }
             bRet = true;
         }
-        SFX_APP()->LeaveBasicCall();
     }
     return bRet;
 }
