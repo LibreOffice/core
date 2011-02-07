@@ -1233,7 +1233,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
     impl_restoreDataColumnsWriteable_throw();
     TDataColumns::iterator aIter = m_aDataColumns.begin();
     m_aReadOnlyDataColumns.resize(m_aDataColumns.size(),false);
-    ::std::bit_vector::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aIter != m_aDataColumns.end();++aIter,++aReadIter)
     {
         sal_Bool bReadOnly = sal_False;
@@ -1247,7 +1247,7 @@ void ORowSet::impl_setDataColumnsWriteable_throw()
 void ORowSet::impl_restoreDataColumnsWriteable_throw()
 {
     TDataColumns::iterator aIter = m_aDataColumns.begin();
-    ::std::bit_vector::iterator aReadIter = m_aReadOnlyDataColumns.begin();
+    ::std::vector<bool, std::allocator<bool> >::iterator aReadIter = m_aReadOnlyDataColumns.begin();
     for(;aReadIter != m_aReadOnlyDataColumns.end();++aIter,++aReadIter)
     {
         (*aIter)->setPropertyValue(PROPERTY_ISREADONLY,makeAny((sal_Bool)*aReadIter ));
