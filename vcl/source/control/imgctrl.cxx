@@ -95,7 +95,7 @@ namespace
 
 // -----------------------------------------------------------------------
 
-void ImageControl::ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const
+void ImageControl::ImplDraw( OutputDevice& rDev, sal_uLong nDrawFlags, const Point& rPos, const Size& rSize ) const
 {
     sal_uInt16 nStyle = 0;
     if ( !(nDrawFlags & WINDOW_DRAW_NODISABLE) )
@@ -193,7 +193,7 @@ void ImageControl::Paint( const Rectangle& /*rRect*/ )
 }
 
 // -----------------------------------------------------------------------
-void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags )
+void ImageControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
     const Point     aPos  = pDev->LogicToPixel( rPos );
     const Size      aSize = pDev->LogicToPixel( rSize );

@@ -51,7 +51,7 @@ public:
     ::sal_Int16     GetScaleMode() const { return mnScaleMode; }
 
     virtual void    Resize();
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    GetFocus();
     virtual void    LoseFocus();
