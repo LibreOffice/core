@@ -327,6 +327,14 @@ css::util::ChangesSet RootAccess::getPendingChanges()
     return changes.getAsConstList();
 }
 
+rtl::OUString RootAccess::getImplementationName() throw (css::uno::RuntimeException)
+{
+    OSL_ASSERT(thisIs(IS_ANY));
+    osl::MutexGuard g(*lock_);
+    checkLocalizedPropertyAccess();
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.RootAccess" ) );
+}
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

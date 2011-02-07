@@ -86,6 +86,11 @@ public:
 
     bool isUpdate() const;
 
+protected:
+
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (com::sun::star::uno::RuntimeException);
+
 private:
     virtual ~RootAccess();
 
