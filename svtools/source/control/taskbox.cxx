@@ -50,8 +50,6 @@ struct ImplTaskItem
     XubString           maText;
 };
 
-DECLARE_LIST( ImplTaskItemList, ImplTaskItem* )
-
 // =======================================================================
 
 TaskToolBox::TaskToolBox( Window* pParent, WinBits nWinStyle ) :
@@ -72,13 +70,10 @@ TaskToolBox::TaskToolBox( Window* pParent, WinBits nWinStyle ) :
 
 TaskToolBox::~TaskToolBox()
 {
-    ImplTaskItem* pItem = mpItemList->First();
-    while ( pItem )
-    {
-        delete pItem;
-        pItem = mpItemList->Next();
+    for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
+        delete (*mpItemList)[ i ];
     }
-
+    mpItemList->clear();
     delete mpItemList;
 }
 
@@ -136,8 +131,8 @@ void TaskToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 void TaskToolBox::Resize()
 {
-    mnOldItemCount  = mpItemList->Count();
-    mnUpdatePos     = (USHORT)mnOldItemCount;
+    mnOldItemCount  = mpItemList->size();
+    mnUpdatePos     = mnOldItemCount;
     mnUpdateNewPos  = TOOLBOX_ITEM_NOTFOUND;
     ImplFormatTaskToolBox();
     ToolBox::Resize();
@@ -169,11 +164,11 @@ void TaskToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
     {
-        USHORT nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+        size_t nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
         if ( nItemId )
         {
-            ImplTaskItem* pItem = mpItemList->GetObject( nItemId-1 );
+            ImplTaskItem* pItem = ( nItemId-1 < mpItemList->size() ) ? (*mpItemList)[ nItemId-1 ] : NULL;
             if ( pItem )
             {
                 if ( pItem->maText != GetItemText( nItemId ) )
@@ -209,21 +204,23 @@ void TaskToolBox::ImplFormatTaskToolBox()
     if ( mnUpdateNewPos == TOOLBOX_ITEM_NOTFOUND )
     {
         // Eintraege aus der Liste entfernen
-        while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (ULONG)mnUpdatePos );
+        while ( mpItemList->size() > mnUpdatePos ) {
+            delete mpItemList->back();
+            mpItemList->pop_back();
+        }
         mnUpdateNewPos = mnUpdatePos;
     }
 
     // Maximale Itemgroesse berechnen
     long nOldMaxTextWidth = mnMaxTextWidth;
     mnMaxTextWidth = 70;
-    if ( mpItemList->Count() )
+    if ( !mpItemList->empty() )
     {
         long nWinSize = GetOutputSizePixel().Width()-8;
-        long nItemSize = mpItemList->GetObject(0)->maImage.GetSizePixel().Width()+7+TASKBOX_TASKOFF+2;
-        nWinSize -= mpItemList->Count()*nItemSize;
+        long nItemSize = (*mpItemList)[ 0 ]->maImage.GetSizePixel().Width()+7+TASKBOX_TASKOFF+2;
+        nWinSize -= mpItemList->size()*nItemSize;
         if ( nWinSize > 0 )
-            nWinSize /= mpItemList->Count();
+            nWinSize /= mpItemList->size();
         else
             nWinSize = 0;
         if ( nWinSize < mnMaxTextWidth )
@@ -245,10 +242,10 @@ void TaskToolBox::ImplFormatTaskToolBox()
         mnActiveItemId = 0;
 
     // Neue Eintrage einfuegen
-    USHORT i = mnUpdateNewPos;
-    while ( i < mpItemList->Count() )
+    size_t i = mnUpdateNewPos;
+    while ( i < mpItemList->size() )
     {
-        ImplTaskItem* pItem = mpItemList->GetObject( i );
+        ImplTaskItem* pItem = (*mpItemList)[ i ];
 
         // Textlaenge berechnen
         XubString aText = pItem->maText;
@@ -294,7 +291,7 @@ void TaskToolBox::ImplFormatTaskToolBox()
 
 void TaskToolBox::StartUpdateTask()
 {
-    mnOldItemCount  = mpItemList->Count();
+    mnOldItemCount  = mpItemList->size();
     mnUpdatePos     = 0;
     mnUpdateNewPos  = TOOLBOX_ITEM_NOTFOUND;
     mnNewActivePos  = 0xFFFE;
@@ -305,14 +302,16 @@ void TaskToolBox::StartUpdateTask()
 void TaskToolBox::UpdateTask( const Image& rImage, const String& rText,
                               BOOL bActive )
 {
-    ImplTaskItem* pItem = mpItemList->GetObject( mnUpdatePos );
+    ImplTaskItem* pItem = ( mnUpdatePos < mpItemList->size() ) ? (*mpItemList)[ mnUpdatePos ] : NULL;
     if ( pItem )
     {
         if ( (pItem->maText != rText) || (pItem->maImage != rImage) )
         {
             // Eintraege aus der Liste entfernen
-            while ( mpItemList->Count() > mnUpdatePos )
-                delete mpItemList->Remove( (ULONG)mnUpdatePos );
+            while ( mpItemList->size() > mnUpdatePos ) {
+                delete mpItemList->back();
+                mpItemList->pop_back();
+            }
             pItem = NULL;
         }
     }
@@ -325,7 +324,7 @@ void TaskToolBox::UpdateTask( const Image& rImage, const String& rText,
         pItem           = new ImplTaskItem;
         pItem->maImage  = rImage;
         pItem->maText   = rText;
-        mpItemList->Insert( pItem, LIST_APPEND );
+        mpItemList->push_back( pItem );
     }
 
     if ( bActive )
@@ -341,8 +340,10 @@ void TaskToolBox::EndUpdateTask()
     if ( mnUpdateNewPos == TOOLBOX_ITEM_NOTFOUND )
     {
         // Eintraege aus der Liste entfernen
-        while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (ULONG)mnUpdatePos );
+        while ( mpItemList->size() > mnUpdatePos ) {
+            delete mpItemList->back();
+            mpItemList->pop_back();
+        }
         mnUpdateNewPos = mnUpdatePos;
     }
 

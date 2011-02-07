@@ -38,10 +38,13 @@
 
 class TaskBar;
 class TaskStatusFieldItem;
-class ImplTaskItemList;
 class ImplTaskSBItemList;
 class ImplTaskBarFloat;
 struct ImplTaskSBFldItem;
+
+struct ImplTaskItem;
+typedef ::std::vector< ImplTaskItem* > ImplTaskItemList;
+
 
 // -----------------
 // - Dokumentation -
@@ -161,7 +164,7 @@ public:
 // - TaskToolBox-Types -
 // ---------------------
 
-#define TASKTOOLBOX_TASK_NOTFOUND       ((USHORT)0xFFFF)
+#define TASKTOOLBOX_TASK_NOTFOUND       ((size_t)-1)
 
 // ---------------
 // - TaskToolBox -
@@ -175,13 +178,13 @@ private:
     ImplTaskItemList*   mpItemList;
     TaskBar*            mpNotifyTaskBar;
     Point               maContextMenuPos;
-    ULONG               mnOldItemCount;
+    size_t              mnOldItemCount;
     long                mnMaxTextWidth;
     long                mnDummy1;
-    USHORT              mnUpdatePos;
-    USHORT              mnUpdateNewPos;
-    USHORT              mnActiveItemId;
-    USHORT              mnNewActivePos;
+    size_t              mnUpdatePos;
+    size_t              mnUpdateNewPos;
+    size_t              mnActiveItemId;
+    size_t              mnNewActivePos;
     USHORT              mnTaskItem;
     USHORT              mnSmallItem;
     USHORT              mnDummy2;
