@@ -1499,21 +1499,40 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
 
 void ImplDevFontList::Add( ImplFontData* pNewData )
 {
-    String aSearchName = pNewData->maName;
-    GetEnglishSearchFontName( aSearchName );
+    int nAliasQuality = pNewData->mnQuality - 100;
+    String aMapNames = pNewData->maMapNames;
+    pNewData->maMapNames = String();
 
-    DevFontList::const_iterator it = maDevFontList.find( aSearchName );
-    ImplDevFontListData* pFoundData = NULL;
-    if( it != maDevFontList.end() )
-        pFoundData = (*it).second;
-
-    if( !pFoundData )
+    bool bKeepNewData = false;
+    xub_StrLen nMapNameIndex = 0;
+    while( true )
     {
-        pFoundData = new ImplDevFontListData( aSearchName );
-        maDevFontList[ aSearchName ] = pFoundData;
-    }
+        String aSearchName = pNewData->maName;
+        GetEnglishSearchFontName( aSearchName );
 
-    bool bKeepNewData = pFoundData->AddFontFace( pNewData );
+        DevFontList::const_iterator it = maDevFontList.find( aSearchName );
+        ImplDevFontListData* pFoundData = NULL;
+        if( it != maDevFontList.end() )
+            pFoundData = (*it).second;
+
+        if( !pFoundData )
+        {
+            pFoundData = new ImplDevFontListData( aSearchName );
+            maDevFontList[ aSearchName ] = pFoundData;
+        }
+
+        bKeepNewData = pFoundData->AddFontFace( pNewData );
+
+        // add (another) font alias if available
+        // a font alias should never win against an original font with similar quality
+        if( aMapNames.Len() <= nMapNameIndex )
+            break;
+        if( bKeepNewData ) // try to recycle obsoleted object
+            pNewData = pNewData->CreateAlias();
+        bKeepNewData = false;
+        pNewData->mnQuality = nAliasQuality;
+        pNewData->maName = GetNextFontToken( aMapNames, nMapNameIndex );
+    }
 
     if( !bKeepNewData )
         delete pNewData;
