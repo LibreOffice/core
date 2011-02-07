@@ -29,7 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
 #include <editeng/brkitem.hxx>
@@ -53,8 +52,6 @@
 #include <fmtfld.hxx>
 #include <comcore.hrc> // #111827#
 #include <undo.hrc>
-
-// using namespace comphelper;
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
