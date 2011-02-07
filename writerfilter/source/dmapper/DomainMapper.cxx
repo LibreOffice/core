@@ -111,7 +111,6 @@ namespace dmapper{
 TagLogger::Pointer_t dmapper_logger(TagLogger::getInstance("DOMAINMAPPER"));
 #endif
 
-/* ---- Fridrich's mess begins here ---- */
 struct _PageSz
 {
     sal_Int32 code;
@@ -121,11 +120,6 @@ struct _PageSz
 } CT_PageSz;
 
 
-/* ---- Fridrich's mess (hopefully) ends here ---- */
-
-/*-- 09.06.2006 09:52:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< io::XInputStream > xInputStream,
                             uno::Reference< lang::XComponent > xModel,
@@ -163,9 +157,7 @@ DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xCon
         (void)rEx;
     }
 }
-/*-- 09.06.2006 09:52:12---------------------------------------------------
 
------------------------------------------------------------------------*/
 DomainMapper::~DomainMapper()
 {
     try
@@ -191,9 +183,7 @@ DomainMapper::~DomainMapper()
 
     delete m_pImpl;
 }
-/*-- 09.06.2006 09:52:12---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -208,10 +198,9 @@ void DomainMapper::attribute(Id nName, Value & val)
 
     SectionPropertyMap * pSectionContext = m_pImpl->GetSectionContext();
 
-    // printf ( "DomainMapper::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nName, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( nName, nIntValue );
-    else //if( !m_pImpl->getTableManager().attribute( nName, val) )
+    else
     {
 
 
@@ -219,219 +208,112 @@ void DomainMapper::attribute(Id nName, Value & val)
         {
             /* attributes to be ignored */
         case NS_rtf::LN_UNUSED1_3:
-
         case NS_rtf::LN_UNUSED1_7:
-
         case NS_rtf::LN_UNUSED8_3:
-
         case NS_rtf::LN_FWRITERESERVATION:
-
         case NS_rtf::LN_FLOADOVERRIDE:
-
         case NS_rtf::LN_FFAREAST:
-
         case NS_rtf::LN_FCRYPTO:
-
         case NS_rtf::LN_NFIBBACK:
-
         case NS_rtf::LN_LKEY:
-
         case NS_rtf::LN_ENVR:
-
         case NS_rtf::LN_FMAC:
-
         case NS_rtf::LN_FWORD97SAVED:
-
         case NS_rtf::LN_FCMAC:
-
         case NS_rtf::LN_PNFBPCHPFIRST_W6:
-
         case NS_rtf::LN_PNCHPFIRST_W6:
-
         case NS_rtf::LN_CPNBTECHP_W6:
-
         case NS_rtf::LN_PNFBPPAPFIRST_W6:
-
         case NS_rtf::LN_PNPAPFIRST_W6:
-
         case NS_rtf::LN_CPNBTEPAP_W6:
-
         case NS_rtf::LN_PNFBPLVCFIRST_W6:
-
         case NS_rtf::LN_PNLVCFIRST_W6:
-
         case NS_rtf::LN_CPNBTELVC_W6:
-
         case NS_rtf::LN_CBMAC:
-
         case NS_rtf::LN_LPRODUCTCREATED:
-
         case NS_rtf::LN_LPRODUCTREVISED:
-
         case NS_rtf::LN_CCPMCR:
-
         case NS_rtf::LN_PNFBPCHPFIRST:
-
         case NS_rtf::LN_PNFBPPAPFIRST:
-
         case NS_rtf::LN_PNFBPLVCFIRST:
-
         case NS_rtf::LN_FCISLANDFIRST:
-
         case NS_rtf::LN_FCISLANDLIM:
-
         case NS_rtf::LN_FCSTSHFORIG:
-
         case NS_rtf::LN_LCBSTSHFORIG:
-
         case NS_rtf::LN_FCPLCFPAD:
-
         case NS_rtf::LN_LCBPLCFPAD:
-
         case NS_rtf::LN_FCSTTBFGLSY:
-
         case NS_rtf::LN_LCBSTTBFGLSY:
-
         case NS_rtf::LN_FCPLCFGLSY:
-
         case NS_rtf::LN_LCBPLCFGLSY:
-
         case NS_rtf::LN_FCPLCFSEA:
-
         case NS_rtf::LN_LCBPLCFSEA:
-
         case NS_rtf::LN_FCPLCFFLDMCR:
-
         case NS_rtf::LN_LCBPLCFFLDMCR:
-
         case NS_rtf::LN_FCCMDS:
-
         case NS_rtf::LN_LCBCMDS:
-
         case NS_rtf::LN_FCPLCMCR:
-
         case NS_rtf::LN_LCBPLCMCR:
-
         case NS_rtf::LN_FCSTTBFMCR:
-
         case NS_rtf::LN_LCBSTTBFMCR:
-
         case NS_rtf::LN_FCPRDRVR:
-
         case NS_rtf::LN_LCBPRDRVR:
-
         case NS_rtf::LN_FCPRENVPORT:
-
         case NS_rtf::LN_LCBPRENVPORT:
-
         case NS_rtf::LN_FCPRENVLAND:
-
         case NS_rtf::LN_LCBPRENVLAND:
-
         case NS_rtf::LN_FCWSS:
-
         case NS_rtf::LN_LCBWSS:
-
         case NS_rtf::LN_FCPLCFPGDFTN:
-
         case NS_rtf::LN_LCBPLCFPGDFTN:
-
         case NS_rtf::LN_FCAUTOSAVESOURCE:
-
         case NS_rtf::LN_LCBAUTOSAVESOURCE:
-
         case NS_rtf::LN_FCPLCDOAMOM:
-
         case NS_rtf::LN_LCBPLCDOAMOM:
-
         case NS_rtf::LN_FCPLCDOAHDR:
-
         case NS_rtf::LN_LCBPLCDOAHDR:
-
         case NS_rtf::LN_FCPMS:
-
         case NS_rtf::LN_LCBPMS:
-
         case NS_rtf::LN_FCPLCFPGDEDN:
-
         case NS_rtf::LN_LCBPLCFPGDEDN:
-
         case NS_rtf::LN_FCPLCFWKB:
-
         case NS_rtf::LN_LCBPLCFWKB:
-
         case NS_rtf::LN_FCPLCFSPL:
-
         case NS_rtf::LN_LCBPLCFSPL:
-
         case NS_rtf::LN_FCSTWUSER:
-
         case NS_rtf::LN_LCBSTWUSER:
-
         case NS_rtf::LN_FCUNUSED:
-
         case NS_rtf::LN_LCBUNUSED:
-
         case NS_rtf::LN_FCSTTBFINTLFLD:
-
         case NS_rtf::LN_LCBSTTBFINTLFLD:
-
         case NS_rtf::LN_FCROUTESLIP:
-
         case NS_rtf::LN_LCBROUTESLIP:
-
         case NS_rtf::LN_FCSTTBSAVEDBY:
-
         case NS_rtf::LN_LCBSTTBSAVEDBY:
-
         case NS_rtf::LN_FCSTTBFNM:
-
         case NS_rtf::LN_LCBSTTBFNM:
-
         case NS_rtf::LN_FCDOCUNDO:
-
         case NS_rtf::LN_LCBDOCUNDO:
-
         case NS_rtf::LN_FCRGBUSE:
-
         case NS_rtf::LN_LCBRGBUSE:
-
         case NS_rtf::LN_FCUSP:
-
         case NS_rtf::LN_LCBUSP:
-
         case NS_rtf::LN_FCUSKF:
-
         case NS_rtf::LN_LCBUSKF:
-
         case NS_rtf::LN_FCPLCUPCRGBUSE:
-
         case NS_rtf::LN_LCBPLCUPCRGBUSE:
-
         case NS_rtf::LN_FCPLCUPCUSP:
-
         case NS_rtf::LN_LCBPLCUPCUSP:
-
         case NS_rtf::LN_FCPLGOSL:
-
         case NS_rtf::LN_LCBPLGOSL:
-
         case NS_rtf::LN_FCPLCOCX:
-
         case NS_rtf::LN_LCBPLCOCX:
-
         case NS_rtf::LN_DWLOWDATETIME:
-
         case NS_rtf::LN_DWHIGHDATETIME:
-
         case NS_rtf::LN_FCPLCASUMY:
-
         case NS_rtf::LN_LCBPLCASUMY:
-
         case NS_rtf::LN_FCPLCFGRAM:
-
         case NS_rtf::LN_LCBPLCFGRAM:
-
         case NS_rtf::LN_FCSTTBFUSSR:
             break;
 
@@ -579,306 +461,153 @@ void DomainMapper::attribute(Id nName, Value & val)
         case NS_rtf::LN_FGLSY:
         case NS_rtf::LN_FCOMPLEX:
         case NS_rtf::LN_FHASPIC:
-
         case NS_rtf::LN_CQUICKSAVES:
-
         case NS_rtf::LN_FENCRYPTED:
-
         case NS_rtf::LN_FWHICHTBLSTM:
-
         case NS_rtf::LN_FREADONLYRECOMMENDED:
-
         case NS_rtf::LN_FEXTCHAR:
-
         case NS_rtf::LN_FEMPTYSPECIAL:
-
         case NS_rtf::LN_FLOADOVERRIDEPAGE:
-
         case NS_rtf::LN_FFUTURESAVEDUNDO:
-
         case NS_rtf::LN_FSPARE0:
-
         case NS_rtf::LN_CHSTABLES:
-
         case NS_rtf::LN_FCMIN:
-
         case NS_rtf::LN_CSW:
-
         case NS_rtf::LN_WMAGICCREATED:
-
         case NS_rtf::LN_WMAGICREVISED:
-
         case NS_rtf::LN_WMAGICCREATEDPRIVATE:
-
-
         case NS_rtf::LN_WMAGICREVISEDPRIVATE:
-
         case NS_rtf::LN_LIDFE:
-
         case NS_rtf::LN_CLW:
-
         case NS_rtf::LN_CCPTEXT:
-
-
         case NS_rtf::LN_CCPFTN:
-
         case NS_rtf::LN_CCPHDD:
-
         case NS_rtf::LN_CCPATN:
-
         case NS_rtf::LN_CCPEDN:
-
         case NS_rtf::LN_CCPTXBX:
-
         case NS_rtf::LN_CCPHDRTXBX:
-
         case NS_rtf::LN_PNCHPFIRST:
-
         case NS_rtf::LN_CPNBTECHP:
-
         case NS_rtf::LN_PNPAPFIRST:
-
         case NS_rtf::LN_CPNBTEPAP:
-
         case NS_rtf::LN_PNLVCFIRST:
-
         case NS_rtf::LN_CPNBTELVC:
-
         case NS_rtf::LN_CFCLCB:
-
         case NS_rtf::LN_FCSTSHF:
-
         case NS_rtf::LN_LCBSTSHF:
-
         case NS_rtf::LN_FCPLCFFNDREF:
-
         case NS_rtf::LN_LCBPLCFFNDREF:
-
         case NS_rtf::LN_FCPLCFFNDTXT:
-
         case NS_rtf::LN_LCBPLCFFNDTXT:
-
         case NS_rtf::LN_FCPLCFANDREF:
-
         case NS_rtf::LN_LCBPLCFANDREF:
-
         case NS_rtf::LN_FCPLCFANDTXT:
-
         case NS_rtf::LN_LCBPLCFANDTXT:
-
         case NS_rtf::LN_FCPLCFSED:
-
         case NS_rtf::LN_LCBPLCFSED:
-
         case NS_rtf::LN_FCPLCFPHE:
-
         case NS_rtf::LN_LCBPLCFPHE:
-
         case NS_rtf::LN_FCPLCFHDD:
-
         case NS_rtf::LN_LCBPLCFHDD:
-
         case NS_rtf::LN_FCPLCFBTECHPX:
-
         case NS_rtf::LN_LCBPLCFBTECHPX:
-
-
         case NS_rtf::LN_FCPLCFBTEPAPX:
-
         case NS_rtf::LN_LCBPLCFBTEPAPX:
-
         case NS_rtf::LN_FCSTTBFFFN:
-
         case NS_rtf::LN_LCBSTTBFFFN:
-
         case NS_rtf::LN_FCPLCFFLDMOM:
-
         case NS_rtf::LN_LCBPLCFFLDMOM:
-
         case NS_rtf::LN_FCPLCFFLDHDR:
-
         case NS_rtf::LN_LCBPLCFFLDHDR:
-
-
         case NS_rtf::LN_FCPLCFFLDFTN:
-
         case NS_rtf::LN_LCBPLCFFLDFTN:
-
         case NS_rtf::LN_FCPLCFFLDATN:
-
         case NS_rtf::LN_LCBPLCFFLDATN:
-
         case NS_rtf::LN_FCSTTBFBKMK:
-
         case NS_rtf::LN_LCBSTTBFBKMK:
-
         case NS_rtf::LN_FCPLCFBKF:
-
         case NS_rtf::LN_LCBPLCFBKF:
-
         case NS_rtf::LN_FCPLCFBKL:
-
         case NS_rtf::LN_LCBPLCFBKL:
-
         case NS_rtf::LN_FCDOP:
-
         case NS_rtf::LN_LCBDOP:
-
         case NS_rtf::LN_FCSTTBFASSOC:
-
         case NS_rtf::LN_LCBSTTBFASSOC:
-
         case NS_rtf::LN_FCCLX:
-
         case NS_rtf::LN_LCBCLX:
-
         case NS_rtf::LN_FCGRPXSTATNOWNERS:
-
         case NS_rtf::LN_LCBGRPXSTATNOWNERS:
-
         case NS_rtf::LN_FCSTTBFATNBKMK:
-
         case NS_rtf::LN_LCBSTTBFATNBKMK:
-
         case NS_rtf::LN_FCPLCSPAMOM:
-
         case NS_rtf::LN_LCBPLCSPAMOM:
-
         case NS_rtf::LN_FCPLCSPAHDR:
-
-
         case NS_rtf::LN_LCBPLCSPAHDR:
-
         case NS_rtf::LN_FCPLCFATNBKF:
-
         case NS_rtf::LN_LCBPLCFATNBKF:
-
         case NS_rtf::LN_FCPLCFATNBKL:
-
         case NS_rtf::LN_LCBPLCFATNBKL:
-
         case NS_rtf::LN_FCFORMFLDSTTBF:
-
         case NS_rtf::LN_LCBFORMFLDSTTBF:
-
         case NS_rtf::LN_FCPLCFENDREF:
-
-
         case NS_rtf::LN_LCBPLCFENDREF:
-
         case NS_rtf::LN_FCPLCFENDTXT:
-
         case NS_rtf::LN_LCBPLCFENDTXT:
-
         case NS_rtf::LN_FCPLCFFLDEDN:
-
         case NS_rtf::LN_LCBPLCFFLDEDN:
-
         case NS_rtf::LN_FCDGGINFO:
-
         case NS_rtf::LN_LCBDGGINFO:
-
         case NS_rtf::LN_FCSTTBFRMARK:
-
-
         case NS_rtf::LN_LCBSTTBFRMARK:
-
         case NS_rtf::LN_FCSTTBFCAPTION:
-
         case NS_rtf::LN_LCBSTTBFCAPTION:
-
         case NS_rtf::LN_FCSTTBFAUTOCAPTION:
-
         case NS_rtf::LN_LCBSTTBFAUTOCAPTION:
-
         case NS_rtf::LN_LCBPLCFTXBXTXT:
-
         case NS_rtf::LN_FCPLCFFLDTXBX:
-
         case NS_rtf::LN_LCBPLCFFLDTXBX:
-
         case NS_rtf::LN_FCPLCFHDRTXBXTXT:
-
         case NS_rtf::LN_LCBPLCFHDRTXBXTXT:
-
         case NS_rtf::LN_FCPLCFFLDHDRTXBX:
-
         case NS_rtf::LN_LCBPLCFFLDHDRTXBX:
-
         case NS_rtf::LN_FCSTTBTTMBD:
-
         case NS_rtf::LN_LCBSTTBTTMBD:
-
         case NS_rtf::LN_FCPGDMOTHER:
-
         case NS_rtf::LN_LCBPGDMOTHER:
-
         case NS_rtf::LN_FCBKDMOTHER:
-
         case NS_rtf::LN_LCBBKDMOTHER:
-
         case NS_rtf::LN_FCPGDFTN:
-
         case NS_rtf::LN_LCBPGDFTN:
-
         case NS_rtf::LN_FCBKDFTN:
-
         case NS_rtf::LN_LCBBKDFTN:
-
         case NS_rtf::LN_FCPGDEDN:
-
         case NS_rtf::LN_LCBPGDEDN:
-
-
         case NS_rtf::LN_FCBKDEDN:
-
         case NS_rtf::LN_LCBBKDEDN:
-
         case NS_rtf::LN_FCPLCFLST:
-
-
         case NS_rtf::LN_LCBPLCFLST:
-
         case NS_rtf::LN_FCPLFLFO:
-
         case NS_rtf::LN_LCBPLFLFO:
-
         case NS_rtf::LN_FCPLCFTXBXBKD:
-
         case NS_rtf::LN_LCBPLCFTXBXBKD:
-
         case NS_rtf::LN_FCPLCFTXBXHDRBKD:
-
         case NS_rtf::LN_LCBPLCFTXBXHDRBKD:
-
         case NS_rtf::LN_FCSTTBGLSYSTYLE:
-
-
         case NS_rtf::LN_LCBSTTBGLSYSTYLE:
-
         case NS_rtf::LN_FCPLCFBTELVC:
-
         case NS_rtf::LN_LCBPLCFBTELVC:
-
         case NS_rtf::LN_FCPLCFLVC:
-
         case NS_rtf::LN_LCBPLCFLVC:
-
         case NS_rtf::LN_FCSTTBLISTNAMES:
-
         case NS_rtf::LN_LCBSTTBLISTNAMES:
-
         case NS_rtf::LN_LCBSTTBFUSSR:
             {
                 m_pImpl->GetFIB().SetData( nName, nIntValue );
             }
             break;
         case NS_rtf::LN_FN:
-
         case NS_rtf::LN_FCSEPX:
-
         case NS_rtf::LN_FNMPR:
-
         case NS_rtf::LN_FCMPR:
 
             //section descriptor, unused or internally used
@@ -944,8 +673,6 @@ void DomainMapper::attribute(Id nName, Value & val)
                     eBorderDistId = PROP_TOP_BORDER_DISTANCE;
                 break;
                 case NS_rtf::LN_BRCLEFT:
-//                    eBorderId = PROP_LEFT_BORDER;
-//                    eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
                 break;
                 case NS_rtf::LN_BRCBOTTOM:
                     eBorderId = PROP_BOTTOM_BORDER         ;
@@ -1679,9 +1406,6 @@ void DomainMapper::attribute(Id nName, Value & val)
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 10 );
             sMessage += ::rtl::OString(" / 0x");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nName ), 16 );
-//            sMessage += ::rtl::OString(" / ");
-//            sMessage += ::rtl::OString
-//                ((*QNameToString::Instance())(nName).c_str());
             sMessage += ::rtl::OString(" value: ");
             sMessage += ::rtl::OString::valueOf( sal_Int32( nIntValue ), 10 );
             sMessage += ::rtl::OString(" / 0x");
@@ -1692,17 +1416,13 @@ void DomainMapper::attribute(Id nName, Value & val)
         }
     }
 }
-/*-- 09.06.2006 09:52:12---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::sprm(Sprm & rSprm)
 {
     if( !m_pImpl->getTableManager().sprm(rSprm))
         DomainMapper::sprm( rSprm, m_pImpl->GetTopContext() );
 }
-/*-- 20.06.2006 09:58:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmType )
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1719,12 +1439,9 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 
     //TODO: In rtl-paragraphs the meaning of left/right are to be exchanged
     bool bExchangeLeftRight = false;
-    // if( nSprmId == NS_sprm::LN_PJcExtra && AlreadyInRTLPara() )
-    //      bExchangeLeftRight = true;
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
-    // printf ( "DomainMapper::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
     switch(nSprmId)
     {
@@ -2652,7 +2369,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
          * WW8_FOOTER_ODD = 0x08, WW8_HEADER_FIRST = 0x10, WW8_FOOTER_FIRST = 0x20
          */
 
-//        if(pSectionContext)
     break;  // sprmSGprfIhdt
     case NS_sprm::LN_SDyaHdrTop: // sprmSDyaHdrTop
         // default 720 twip
@@ -3281,9 +2997,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  true, uno::makeAny( nProp ) );
     }
     break;
-//    case NS_ooxml::LN_CT_FtnEdn_type
-//    case NS_ooxml::LN_CT_FtnEdn_id
-//    case NS_ooxml::LN_EG_FtnEdnNumProps_numRestart
     case NS_ooxml::LN_CT_FtnProps_pos:
     //footnotes in word can be at page end or beneath text - writer supports only the first
     //endnotes in word can be at section end or document end - writer supports only the latter
@@ -3364,10 +3077,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         }
     }
     break;
-//    case NS_ooxml::LN_CT_EdnProps_pos
-//    case NS_ooxml::LN_CT_EdnProps_numFmt
-//    case NS_ooxml::LN_CT_FtnDocProps_footnote
-//    case NS_ooxml::LN_CT_EdnDocProps_endnote
     //break;
     case NS_ooxml::LN_EG_HdrFtrReferences_headerReference: // header reference - not needed
     case NS_ooxml::LN_EG_HdrFtrReferences_footerReference: // footer reference - not needed
@@ -3425,16 +3134,12 @@ void DomainMapper::entry(int /*pos*/,
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:13---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::data(const sal_uInt8* /*buf*/, size_t /*len*/,
                         writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-- 09.06.2006 09:52:13---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::startSectionGroup()
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3442,9 +3147,7 @@ void DomainMapper::startSectionGroup()
 #endif
     m_pImpl->PushProperties(CONTEXT_SECTION);
 }
-/*-- 09.06.2006 09:52:13---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::endSectionGroup()
 {
     PropertyMapPtr pContext = m_pImpl->GetTopContextOfType(CONTEXT_SECTION);
@@ -3458,9 +3161,7 @@ void DomainMapper::endSectionGroup()
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:13---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::startParagraphGroup()
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3480,9 +3181,7 @@ void DomainMapper::startParagraphGroup()
     }
     m_pImpl->clearDeferredBreaks();
 }
-/*-- 09.06.2006 09:52:14---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::endParagraphGroup()
 {
     m_pImpl->PopProperties(CONTEXT_PARAGRAPH);
@@ -3519,18 +3218,13 @@ void DomainMapper::endShape( )
 #endif
 }
 
-/*-- 13.06.2007 16:15:55---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void DomainMapper::PushStyleSheetProperties( PropertyMapPtr pStyleProperties, bool bAffectTableMngr )
 {
     m_pImpl->PushStyleProperties( pStyleProperties );
     if ( bAffectTableMngr )
         m_pImpl->getTableManager( ).SetStyleProperties( pStyleProperties );
 }
-/*-- 13.06.2007 16:15:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
 {
     m_pImpl->PopProperties( CONTEXT_STYLESHEET );
@@ -3540,23 +3234,16 @@ void DomainMapper::PopStyleSheetProperties( bool bAffectTableMngr )
         m_pImpl->getTableManager( ).SetStyleProperties( emptyPtr );
     }
 }
-/*-- 28.01.2008 14:52:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void DomainMapper::PushListProperties( ::boost::shared_ptr<PropertyMap> pListProperties )
 {
     m_pImpl->PushListProperties( pListProperties );
 }
-/*-- 28.01.2008 14:52:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void DomainMapper::PopListProperties()
 {
     m_pImpl->PopProperties( CONTEXT_LIST );
 }
-/*-- 09.06.2006 09:52:14---------------------------------------------------
-
------------------------------------------------------------------------*/
 
 void DomainMapper::startCharacterGroup()
 {
@@ -3572,9 +3259,7 @@ void DomainMapper::startCharacterGroup()
         rTableManager.CopyTextProperties(pTopContext, m_pImpl->GetStyleSheetTable());
     }
 }
-/*-- 09.06.2006 09:52:14---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::endCharacterGroup()
 {
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
@@ -3583,9 +3268,7 @@ void DomainMapper::endCharacterGroup()
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:14---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
     //TODO: Determine the right text encoding (FIB?)
@@ -3654,10 +3337,6 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
             m_pImpl->SetFieldResult( sText );
         else
         {
-            //--> debug
-            //sal_uInt32 nSize = pContext->size();
-            //<--
-
             if (pContext == NULL)
                 pContext.reset(new PropertyMap());
 
@@ -3669,9 +3348,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
         std::clog << __FILE__ << "(l" << __LINE__ << ")" << std::endl;
     }
 }
-/*-- 09.06.2006 09:52:15---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 {
     OUString sText;
@@ -3704,15 +3381,6 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
                 m_pImpl->clearDeferredBreaks();
             }
 
-            /* doesn't seem to be working
-            if( pContext->GetFootnote().is() )
-            {
-                //todo: the check for 0x0a is a hack!
-                if( *data_ != 0x0a && !pContext->GetFootnoteSymbol() )
-                    pContext->GetFootnote()->setLabel( sText );
-                //otherwise ignore sText
-            }
-            else */
             if( pContext && pContext->GetFootnote().is() )
             {
                 if( !pContext->GetFootnoteSymbol() )
@@ -3739,9 +3407,7 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
     {
     }
 }
-/*-- 09.06.2006 09:52:15---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3764,9 +3430,7 @@ void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:15---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3824,9 +3488,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:16---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -3836,9 +3498,6 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     m_pImpl->appendTableManager( );
     m_pImpl->getTableManager().startLevel();
 
-    //->debug
-    //string sName = (*QNameToString::Instance())(rName);
-    //--<debug
     //import of page header/footer
 
     switch( rName )
@@ -3902,9 +3561,7 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:16---------------------------------------------------
 
------------------------------------------------------------------------*/
 void DomainMapper::info(const string & /*info_*/)
 {
 }
@@ -4078,34 +3735,22 @@ sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)
         return sal_Unicode(0x0020); // blank space
     }
 }
-/*-- 18.07.2007 14:59:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool DomainMapper::IsOOXMLImport() const
 {
     return m_pImpl->IsOOXMLImport();
 }
-/*-- 18.07.2007 16:03:14---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 uno::Reference < lang::XMultiServiceFactory > DomainMapper::GetTextFactory() const
 {
     return m_pImpl->GetTextFactory();
 }
-/*-- 12.11.2007 10:41:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
-/*-- 31.01.2008 18:19:44---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 uno::Reference< text::XTextRange > DomainMapper::GetCurrentTextRange()
 {
     return m_pImpl->GetTopTextAppend()->getEnd();
 }
 
-/*-- 05.02.2008 10:26:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ::rtl::OUString DomainMapper::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
     StyleSheetTablePtr pStyleSheets = m_pImpl->GetStyleSheetTable();
