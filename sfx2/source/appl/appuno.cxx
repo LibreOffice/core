@@ -1857,7 +1857,7 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL, com::sun::star::
                 if ( bSetDocMacroMode )
                 {
                     // mark document: it executes an own macro, so it's in a modal mode
-                    pDoc->SetMacroMode_Impl( TRUE );
+                    pDoc->SetMacroMode_Impl( sal_True );
                 }
 
                 if ( bSetGlobalThisComponent )
