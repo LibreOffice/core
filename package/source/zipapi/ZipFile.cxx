@@ -844,13 +844,18 @@ sal_Int32 ZipFile::recover()
 
         aGrabber.seek( 0 );
 
-        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, 32000 ) && aBuffer.getLength() > 30; )
+        const sal_Int32 nToRead = 32000;
+        for( sal_Int32 nGenPos = 0; aGrabber.readBytes( aBuffer, nToRead ) && aBuffer.getLength() > 16; )
         {
             const sal_Int8 *pBuffer = aBuffer.getConstArray();
             sal_Int32 nBufSize = aBuffer.getLength();
 
             sal_Int32 nPos = 0;
-            while( nPos < nBufSize - 16 )
+            // the buffer should contain at least one header,
+            // or if it is end of the file, at least the postheader with sizes and hash
+            while( nPos < nBufSize - 30
+                || ( nBufSize < nToRead && nPos < nBufSize - 16 ) )
+
             {
                 if ( nPos < nBufSize - 30 && pBuffer[nPos] == 'P' && pBuffer[nPos+1] == 'K' && pBuffer[nPos+2] == 3 && pBuffer[nPos+3] == 4 )
                 {
