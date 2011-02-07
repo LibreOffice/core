@@ -252,7 +252,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
     unset INCLUDE && \
     $(gb_CC) \
-        $(DEFS) $(CFLAGS) \
+        $(DEFS) $(CFLAGS)  -Fd$(PDBFILE) \
         $(PCHFLAGS) \
         -I$(dir $(3)) \
         $(INCLUDE) \
