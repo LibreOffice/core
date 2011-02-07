@@ -700,6 +700,11 @@ bool ChartController::executeDispatch_Delete()
                     bReturn = lcl_deleteDataSeries( aCID, getModel(), m_xUndoManager );
                 else if( eParentObjectType == OBJECTTYPE_DATA_CURVE )
                     bReturn = lcl_deleteDataCurve( aCID, getModel(), m_xUndoManager );
+                else if( eParentObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
+                {
+                    executeDispatch_DeleteMeanValue();
+                    bReturn = true;
+                }
                 break;
             }
 
