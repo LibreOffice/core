@@ -912,11 +912,7 @@ rtl::OUString Access::getImplementationName() throw (css::uno::RuntimeException)
     OSL_ASSERT(thisIs(IS_ANY));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    throw css::uno::RuntimeException(
-        rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "configmgr Access has no service implementation name")),
-        static_cast< cppu::OWeakObject * >(this));
+    return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "configmgr.Access" ) );
 }
 
 sal_Bool Access::supportsService(rtl::OUString const & ServiceName)
@@ -2095,7 +2091,9 @@ css::beans::Property Access::asProperty() {
     default:
         type = cppu::UnoType< css::uno::XInterface >::get(); //TODO: correct?
         nillable = false;
-        removable = getParentNode()->kind() == Node::KIND_SET;
+        removable = false;
+        if ( getParentNode() != NULL )
+            removable = getParentNode()->kind() == Node::KIND_SET;
         break;
     }
     return css::beans::Property(
