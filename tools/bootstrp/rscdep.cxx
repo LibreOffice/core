@@ -205,7 +205,7 @@ int main( int argc, char** argv )
             case 'h' :
             case 'H' :
             case '?' :
-                printf("RscDep 1.0 (c)2000 StarOffice\n");
+                printf("RscDep 1.0\n");
                 break;
 
             default:
