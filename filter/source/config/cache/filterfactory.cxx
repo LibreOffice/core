@@ -278,7 +278,6 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
 
         if (lTokens.find(QUERY_IDENTIFIER_GETPREFERREDFILTERFORTYPE) != lTokens.end())
             OSL_ENSURE(sal_False, "DEPRECATED!\nPlease use prop search at the TypeDetection container!");
-//            lEnumSet = impl_queryGetPreferredFilterForType(lTokens);
         else
         if (lTokens.find(QUERY_IDENTIFIER_MATCHBYDOCUMENTSERVICE) != lTokens.end())
             lEnumSet = impl_queryMatchByDocumentService(lTokens);
@@ -290,48 +289,10 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     // pack list of item names as an enum list
     // Attention: Do not return empty reference for empty list!
     // The outside check "hasMoreElements()" should be enough, to detect this state :-)
-//  size_t c = lEnumSet.size();
     css::uno::Sequence< ::rtl::OUString > lSet = lEnumSet.getAsConstList();
     ::comphelper::OEnumerationByName* pEnum = new ::comphelper::OEnumerationByName(this, lSet);
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
-/*
-        if (lEnumSet.empty())
-        {
-            //-------------------------------------------
-            // 1) getDefaultFilterForType=<internal_typename>
-
-            pIt = lTokens.find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getDefaultFilterForType")));
-            if (pIt != lTokens.end())
-            {
-                // SAFE ->
-                ::osl::ResettableMutexGuard aLock(m_aLock);
-
-                // might not all types was loaded till now!
-                impl_loadOnDemand();
-
-                ::rtl::OUString sType  = pIt->second;
-                FilterCache*    pCache = impl_getWorkingCache();
-                if (pCache->hasItem(FilterCache::E_TYPE, sType))
-                {
-                    CacheItem aType = pCache->getItem(FilterCache::E_TYPE, sType);
-                    ::rtl::OUString sPreferredFilter;
-                    aType[PROPNAME_PREFERREDFILTER] >>= sPreferredFilter;
-
-                    if (
-                        (sPreferredFilter.getLength()                              ) &&
-                        (pCache->hasItem(FilterCache::E_FILTER, sPreferredFilter))
-                       )
-                    {
-                        lEnumSet.push_back(sPreferredFilter);
-                    }
-                }
-
-                aLock.clear();
-                // <- SAFE
-            }
-        }
-*/
 
 /*-----------------------------------------------
     11.03.2004 08:33

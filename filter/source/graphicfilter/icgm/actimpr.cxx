@@ -58,9 +58,6 @@
 using namespace ::com::sun::star;
 
 // ---------------------------------------------------------------
-// ---------------------------------------------------------------
-// ---------------------------------------------------------------
-// ---------------------------------------------------------------
 
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
         CGMOutAct       ( rCGM ),
@@ -323,15 +320,6 @@ void CGMImpressOutAct::ImplSetFillBundle()
             case ET_DOTDOTSPACE :
             case ET_LONGDASH :
             case ET_DASHDASHDOT :
-//          {
-//              eLS = LineStyle_DASH;
-//              aAny.setValue( &eLS, ::getCppuType((const drawing::LineStyle*)0) );
-//              maXPropSet->setPropertyValue( L"LineStyle", aAny );
-//              drawing::LineDash   aLineDash( DashStyle_RECTRELATIVE, 1, 160, 1, 160, 190 );
-//              aAny.setValue( &aLineDash, ::getCppuType((const drawing::LineDash*)0) );
-//              maXPropSet->setPropertyValue( L"DashStyle", aAny );
-//          }
-//          break;
             default:            // case ET_SOLID :
             {
                 eLS = drawing::LineStyle_SOLID;
@@ -463,8 +451,6 @@ void CGMImpressOutAct::EndGroup()
             if( aAny >>= aXShapeGrouper )
             {
                 uno::Reference< drawing::XShapes >  aXShapes;
-//              if ( maXServiceManagerSC->createInstance( L"stardiv.one.drawing.ShapeCollection" )->queryInterface( ::getCppuType((const Reference< drawing::XShapes >*)0), aXShapes ) )
-
                 uno::Reference< drawing::XShape >  aXShapeCollection( maXServiceManagerSC->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ShapeCollection" )) ), uno::UNO_QUERY );
                 if ( aXShapeCollection.is() )
                 {
@@ -990,120 +976,7 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
 // nCount != 0 -> Append Text
 sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
 {
-
 return 0;
-
-/*
-    uno::Reference< drawing::XShape >  aShape;
-
-    if ( nObjCount )
-    {
-         aShape = (drawing::XShape*) maXShapes->getElementByIndex( nObjCount - 1 )->queryInterface( ::getCppuType((const Reference< drawing::XShape >*)0) );
-    }
-    else
-    {
-        aShape = maXShapes->insertShape( maXShapeFactory->createShape( L"ShapeText", rNodeFrameSet.nSize ), rNodeFrameSet.nTopLeft );
-    }
-    if ( aShape.is() )
-    {
-        uno::Reference< text::XText >  xText = (text::XText*)aShape->queryInterface( ::getCppuType((const Reference< text::XText >*)0) );
-        if ( xText.is() )
-        {
-            uno::Reference< text::XTextCursor >  aXTextCursor = (text::XTextCursor*)xText->createTextCursor()->queryInterface( ::getCppuType((const Reference< text::XTextCursor >*)0) );
-            if ( aXTextCursor.is() )
-            {
-                uno::Any    aAny;
-                sal_uInt32  nTextOfs = 0;
-                TextAttribute* pTAttr = pTextEntry->pAttribute;
-                do
-                {
-                    if ( pTAttr->nTextAttribSize > 0.3 )    // is text readable
-                    {
-                        aXTextCursor->gotoEnd( sal_False );
-                        char nPushedChar = pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ];
-                        pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ] = 0;
-                        UString aStr( StringToOUString( pTextEntry->pText +  nTextOfs, CHARSET_SYSTEM ) );
-
-                        uno::Reference< text::XText >  aCursorText = (text::XText*)aXTextCursor->queryInterface( ::getCppuType((const Reference< text::XText >*)0) );
-                        if ( aCursorText.is() )
-                        {
-                            uno::Reference< beans::XPropertySet >  aPropSet = (beans::XPropertySet*)aCursorText->queryInterface( ::getCppuType((const Reference< beans::XPropertySet >*)0) );
-                            if ( aPropSet.is() )
-                            {
-                                if ( pTextEntry->nRowOrLineNum )
-                                {
-                                    uno::Reference< XControlCharacterInsertable >  aCRef = (XControlCharacterInsertable*)aXTextCursor->queryInterface( ::getCppuType((const Reference< XControlCharacterInsertable >*)0) );
-                                    if ( aCRef.is() )
-                                    {
-                                        aCRef->insertControlCharacter( TEXTCONTROLCHAR_PARAGRAPH_BREAK );
-                                    }
-                                }
-                                aCursorText->setText( aStr );
-                                aXTextCursor->gotoEnd( sal_True );
-                                double nSize = mpCGM->mnOutdx;
-                                if ( mpCGM->mnOutdx < mpCGM->mnOutdy )
-                                    nSize = mpCGM->mnOutdy;
-                                nSize = ( nSize * (double)pTAttr->nTextAttribSize * (double)1.5 ) / 100;
-
-                                aAny <<= (sal_Int32)( (sal_Int32)nSize );
-                                aPropSet->setPropertyValue( L"CharHeight", aAny );
-
-                                sal_uInt32 nTextColor = pTAttr->nTextColorIndex;
-                                if ( nTextColor == 0xff )
-                                {
-                                    nTextColor = ( pTAttr->nTextColorBlue << 16 ) + ( pTAttr->nTextColorGreen << 8 ) + pTAttr->nTextColorRed;
-                                }
-                                else
-                                {
-                                    nTextColor = mpCGM->pElement->aColorTable[ nTextColor ];
-                                }
-
-                                sal_uInt32 nFontType = 0;
-
-                                if (  pTAttr->nTextFontType == 0xff )
-                                {
-                                    FontEntry* pFontEntry = mpCGM->pElement->aFontList.GetFontEntry( pTAttr->nTextFontFamily );
-                                    if ( pFontEntry )
-                                    {
-                                        nFontType = pFontEntry->nFontType;
-                                        if ( mpCGM->pElement->nAspectSourceFlags & ASF_TEXTCOLOR )
-                                            nTextColor = mpCGM->pElement->pTextBundle->GetColor();
-                                        else
-                                            nTextColor = mpCGM->pElement->aTextBundle.GetColor();
-                                    }
-                                    FontItalic eFontItalic = ITALIC_NONE;
-                                    if ( nFontType & 1 )
-                                        eFontItalic = ITALIC_NORMAL;
-                                    aAny.setValue( &eFontItalic, ::getCppuType((const FontItalic*)0) );
-                                    aPropSet->setPropertyValue( L"CharPosture", aAny );
-                                }
-                                aAny <<= (sal_Int32)( (sal_Int32)nTextColor );
-                                aPropSet->setPropertyValue( L"CharColor", aAny );
-
-                                awt::FontWeight eFontWeight = WEIGHT_NORMAL;
-                                if ( nFontType & 2 )
-                                    eFontWeight = WEIGHT_BOLD;
-                                aAny.setValue( &eFontWeight, ::getCppuType((const awt::FontWeight*)0) );
-                                aPropSet->setPropertyValue( L"CharWeight", aAny );
-
-                                if ( pTAttr->nTextAttribBits & 0x4000 )
-                                {
-                                    awt::FontUnderline eUnderline = UNDERLINE_SINGLE;
-                                    aAny.setValue( &eUnderline, ::getCppuType((const awt::FontUnderline*)0) );
-                                    aPropSet->setPropertyValue( L"CharUnderline", aAny );
-                                }
-                            }
-                        }
-                        pTextEntry->pText[ nTextOfs + pTAttr->nTextAttribCount ] = nPushedChar;
-                    }
-                    nTextOfs += pTAttr->nTextAttribCount;
-                }
-                while ( ( ( pTAttr = pTAttr->pNextAttribute ) != NULL ) );
-            }
-        }
-    }
-    return ( nObjCount ) ? nObjCount : maXShapes->getCount();
-*/
 }
 
 // ---------------------------------------------------------------

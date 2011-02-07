@@ -509,19 +509,6 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
                 }
             }
         }
-
-        /*
-            Comment ... why the following line of code should be comened out .-)
-
-            This type does not seem to fit the requirements
-            But its an existing and well known type.
-            At least - [because may be the extension was missing :-( ]
-            we should try to detect this type deep ...
-            So we accept it here :-)
-
-        if (!bBreakDetection)
-            sType = ::rtl::OUString();
-        */
     }
 
     // if its a valid type - set it on all return values!

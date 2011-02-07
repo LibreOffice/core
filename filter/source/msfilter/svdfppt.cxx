@@ -1027,7 +1027,6 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     }
                     break;
                     case TSS_TYPE_BODY :
-    //              case TSS_TYPE_SUBTITLE :
                     case TSS_TYPE_HALFBODY :
                     case TSS_TYPE_QUARTERBODY :
                         nDestinationInstance = TSS_TYPE_BODY;
@@ -1182,23 +1181,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                     sal_Int32 nAngle = ( rObjData.nSpFlags & SP_FFLIPV ) ? -mnFix16Angle : mnFix16Angle;    // #72116# vertical flip -> rotate by using the other way
                     nAngle += nTextRotationAngle;
 
-                    if ( pTObj->ISA( SdrObjCustomShape ) )
-                    {
-/*
-                        if ( nTextRotationAngle )
-                        {
-                            double fTextRotateAngle = (double)nTextRotationAngle / 100.0;
-                            SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)((SdrObjCustomShape*)pTObj)->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                            const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
-                            PropertyValue aPropValue;
-                            aPropValue.Name = sTextRotateAngle;
-                            aPropValue.Value <<= fTextRotateAngle;
-                            aGeometryItem.SetPropertyValue( aPropValue );
-                            ((SdrObjCustomShape*)pTObj)->SetMergedItem( aGeometryItem );
-                        }
-*/
-                    }
-                    else
+                    if ( !pTObj->ISA( SdrObjCustomShape ) )
                     {
                         if ( rObjData.nSpFlags & SP_FFLIPV )
                         {
@@ -1342,8 +1325,6 @@ void SdrEscherImport::CheckTimesNewRoman() const
     ((SdrEscherImport*)this)->bTimesNewRomanChecked = TRUE;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const String& rBaseURL ) :
@@ -1741,7 +1722,6 @@ sal_Bool PPTConvertOCXControls::InsertControl(
                 if ( xShape.is() )
                 {
                     xShape->setSize(rSize);
-//                  GetShapes()->add( xShape );
                     // Das Control-Model am Control-Shape setzen
                     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XControlShape >  xControlShape( xShape,
                         ::com::sun::star::uno::UNO_QUERY );
@@ -2073,8 +2053,6 @@ void SdrPowerPointImport::SeekOle( SfxObjectShell* pShell, sal_uInt32 nFilterOpt
                                         if ( i && bCopied )
                                         {
                                             SvxImportMSVBasic aMSVBas( *pShell, *xDest, TRUE, FALSE );
-                                            //int nSuccess = aMSVBas.Import( String( RTL_CONSTASCII_USTRINGPARAM( "MACROS" ) ),
-                                            //      String( RTL_CONSTASCII_USTRINGPARAM( "VBA" ) ), TRUE, FALSE );
 
                                             uno::Reference < embed::XStorage > xDoc( pShell->GetStorage() );
                                             if ( xDoc.is() )
@@ -2451,7 +2429,6 @@ SdrObject* SdrPowerPointImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* 
                 if ( !aSelection.nStartPos )    // in PPT empty paragraphs never gets a bullet
                 {
                     aParagraphAttribs.Put( SfxBoolItem( EE_PARA_BULLETSTATE, FALSE ) );
-//                  rOutliner.SetDepth( rOutliner.GetParagraph( nParaIndex ), -1 );
                 }
                 aSelection.nStartPos = 0;
                 rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
@@ -2741,9 +2718,6 @@ BOOL SdrPowerPointImport::SeekToShape( SvStream& rSt, void* pClientData, UINT32 
                                     case TSS_TYPE_BODY :
                                         nShapePos = pPersist->pPresentationObjects[ TSS_TYPE_BODY ];
                                     break;
-//                                  case TSS_TYPE_NOTES :
-//                                  case TSS_TYPE_UNUSED :
-//                                  case TSS_TYPE_TEXT_IN_SHAPE :
                                 }
                                 if ( nShapePos )
                                 {
@@ -2770,25 +2744,6 @@ SdrPage* SdrPowerPointImport::MakeBlancPage( sal_Bool bMaster ) const
     SdrPage* pRet = pSdrModel->AllocPage( bMaster );
     pRet->SetSize( GetPageSize() );
 
-/*
-    SJ (21.08.00) : since bug #77576# i decided not to set a border size.
-
-    Size aPageSize( aDocAtom.GetSlidesPageSize() ); // PageSize in 576DPI-Units
-    long nHMarg = aPageSize.Width() - aDocAtom.aSlidesPageSize.Width();
-    long nVMarg = aPageSize.Height() - aDocAtom.aSlidesPageSize.Height();
-    if ( nHMarg > 0 )
-    {
-        Scale( nHMarg );
-        pRet->SetLftBorder( nHMarg / 2 );
-        pRet->SetRgtBorder( nHMarg - nHMarg / 2 );
-    }
-    if ( nVMarg > 0 )
-    {
-        Scale( nVMarg );
-        pRet->SetUppBorder( nVMarg / 2 );
-        pRet->SetLwrBorder( nVMarg - nVMarg / 2 );
-    }
-*/
     return pRet;
 }
 
@@ -3294,77 +3249,6 @@ void SdrEscherImport::ImportHeaderFooterContainer( DffRecordHeader& rHd, HeaderF
         aHd.SeekToEndOfRecord( rStCtrl );
     }
 }
-
-//static sal_Unicode PPTExportMapper( sal_Unicode nUni, BOOL& bNeedsStarBats )
-//{
-//  bNeedsStarBats = FALSE;
-//
-//  sal_Unicode cLo, cReplace;
-//  cLo = cReplace = 0;
-//  switch ( nUni )
-//  {
-//      case 132 : cLo = 175; break;
-//      case 147 : cLo = 174; break;
-//      // Currency
-//      case 0x00A2:    cReplace = 224; break;
-//      case 0x00A4:    cReplace = 225; break;
-//      case 0x00A5:    cReplace = 226; break;
-//      case 0x20A1:    cReplace = 228; break;
-//      case 0x20A2:    cReplace = 229; break;
-//      case 0x20A3:    cReplace = 230; break;
-//      case 0x20A4:    cReplace = 231; break;
-//      case 0x20A7:    cReplace = 227; break;
-//      case 0x20A8:    cReplace = 234; break;
-//      case 0x20A9:    cReplace = 232; break;
-//      case 0x20AB:    cReplace = 233; break;
-//      case 0x20AC:    cReplace = 128; break;
-//      // Punctuation and other
-//      case 0x201A:    cReplace = 130; break;      // SINGLE LOW-9 QUOTATION MARK
-//      case 0x0192:    cReplace = 131; break;      // LATIN SMALL LETTER F WITH HOOK
-//      case 0x201E:                                // DOUBLE LOW-9 QUOTATION MARK
-//      case 0x301F:                                // LOW DOUBLE PRIME QUOTATION MARK
-//                      cReplace = 132; break;
-//      case 0x2026:    cReplace = 133; break;      // HORIZONTAL ELLIPSES
-//      case 0x2020:    cReplace = 134; break;      // DAGGER
-//      case 0x2021:    cReplace = 135; break;      // DOUBLE DAGGER
-//      case 0x02C6:    cReplace = 136; break;      // MODIFIER LETTER CIRCUMFLEX ACCENT
-//      case 0x2030:    cReplace = 137; break;      // PER MILLE SIGN
-//      case 0x0160:    cReplace = 138; break;      // LATIN CAPITAL LETTER S WITH CARON
-//      case 0x2039:    cReplace = 139; break;      // SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-//      case 0x0152:    cReplace = 140; break;      // LATIN CAPITAL LIGATURE OE
-//      case 0x017D:    cReplace = 142; break;      // LATIN CAPITAL LETTER Z WITH CARON
-//      case 0x2018:                                // LEFT SINGLE QUOTATION MARK
-//      case 0x02BB:                                // MODIFIER LETTER TURNED COMMA
-//                      cReplace = 145; break;
-//      case 0x2019:                                // RIGHT SINGLE QUOTATION MARK
-//      case 0x02BC:                                // MODIFIER LETTER APOSTROPHE
-//                      cReplace = 146; break;
-//      case 0x201C:                                // LEFT DOUBLE QUOTATION MARK
-//      case 0x301D:                                // REVERSED DOUBLE PRIME QUOTATION MARK
-//                      cReplace = 147; break;
-//      case 0x201D:                                // RIGHT DOUBLE QUOTATION MARK
-//      case 0x301E:                                // REVERSED DOUBLE PRIME QUOTATION MARK
-//                      cReplace = 148; break;
-//      case 0x2022:    cReplace = 149; break;      // BULLET
-//      case 0x2013:    cReplace = 150; break;      // EN DASH
-//      case 0x2014:    cReplace = 151; break;      // EM DASH
-//      case 0x02DC:    cReplace = 152; break;      // SMALL TILDE
-//      case 0x2122:    cReplace = 153; break;      // TRADE MARK SIGN
-//      case 0x0161:    cReplace = 154; break;      // LATIN SMALL LETTER S WITH CARON
-//      case 0x203A:    cReplace = 155; break;      // SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-//      case 0x0153:    cReplace = 156; break;      // LATIN SMALL LIGATURE OE
-//      case 0x017E:    cReplace = 158; break;      // LATIN SMALL LETTER Z WITH CARON
-//      case 0x0178:    cReplace = 159; break;      // LATIN CAPITAL LETTER Y WITH DIAERESIS
-//      case 0x00B6:    cReplace = 222; break;      // PILCROW SIGN / PARAGRAPH SIGN
-//  }
-//  if ( cReplace )
-//  {
-//      bNeedsStarBats = TRUE;
-//      return cReplace;
-//  }
-//  else
-//      return cLo;
-//}
 
 // no longer needed
 sal_Unicode SdrPowerPointImport::PPTSubstitute( UINT16 /*nFont*/, sal_Unicode /*nChar*/,
@@ -4035,12 +3919,6 @@ PPTParaSheet::PPTParaSheet( UINT32 nInstance )
         case TSS_TYPE_NOTES :
             nUpperDist = 0x1e;
         break;
-/*
-        default :
-        case TSS_TYPE_UNUSED :
-        case TSS_TYPE_TEXT_IN_SHAPE :
-        break;
-*/
     }
     for ( UINT32 i = 0; i < 5; i++ )
     {
@@ -5808,7 +5686,6 @@ void PPTPortionObj::ApplyTo(  SfxItemSet& rSet, SdrPowerPointImport& rManager, U
                 }
             }
             break;
-//          case mso_fillPicture :
             default: break;
         }
         rSet.Put( SvxColorItem( aDefColor, EE_CHAR_COLOR ) );

@@ -578,29 +578,6 @@ void EscherPropertyContainer::CreateTextProperties(
     if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "TextLowerDistance" ) ) ) )
         aAny >>= nBottom;
 
-/*
-    if ( rObj.ImplGetPropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")) ) )
-    {
-        ::com::sun::star::text::WritingMode eMode;
-        rObj.GetUsrAny() >>= eMode;
-        switch (eMode)
-        {
-            case ::com::sun::star::text::WritingMode_TB_RL:
-                //Well if it so happens that we are fliped 180 we can use
-                //this instead.
-                if (rObj.GetAngle() == 18000)
-                    eFlow = ESCHER_txflBtoT;
-                else
-                    eFlow = ESCHER_txflTtoBA;
-                break;
-            case ::com::sun::star::text::WritingMode_RL_TB:
-                eDir = ESCHER_txdirRTL;
-                break;
-        }
-    }
-*/
-
     ESCHER_AnchorText eAnchor = ESCHER_AnchorTop;
     ESCHER_WrapMode eWrapMode = ESCHER_WrapSquare;
     sal_uInt32 nTextAttr = 0x40004;     // rotate text with shape
@@ -1879,29 +1856,6 @@ sal_Bool EscherPropertyContainer::CreateConnectorProperties(
                             aAny >>= aShapeA;
                         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, aXPropSet, sEdgeEndConnection ) )
                             aAny >>= aShapeB;
-/*
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine1Delta" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine2Delta" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeLine3Delta" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode1HorzDist" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode1VertDist" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode2HorzDist" ) ) ) )
-                        {
-                        }
-                        if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "EdgeNode2VertDist" ) ) ) )
-                        {
-                        }
-*/
                         rSolverContainer.AddConnector( rXShape, aStartPoint, aShapeA, aEndPoint, aShapeB );
                         switch ( eCt )
                         {
@@ -2013,14 +1967,6 @@ sal_Int32 GetValueForEnhancedCustomShapeParameter( const com::sun::star::drawing
 
         }
         break;
-/* not sure if it is allowed to set following values
-(but they are not yet used)
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::ADJUSTMENT :
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::BOTTOM :
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::RIGHT :
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::TOP :
-        case com::sun::star::drawing::EnhancedCustomShapeParameterType::LEFT :
-*/
     }
     return nValue;
 }
@@ -2156,7 +2102,6 @@ sal_Bool EscherPropertyContainer::IsDefaultObject( SdrObjCustomShape* pCustoShap
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_SEGMENTS )
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHX )
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_STRETCHY )
-//                  && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_HANDLES )
            && pCustoShape->IsDefaultGeometry( SdrObjCustomShape::DEFAULT_TEXTFRAMES ) )
         bIsDefaultObject = sal_True;
     }
@@ -3117,7 +3062,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                         const rtl::OUString sMirroredY          ( RTL_CONSTASCII_USTRINGPARAM( "MirroredY" ) );
                                         const rtl::OUString sSwitched           ( RTL_CONSTASCII_USTRINGPARAM( "Switched" ) );
                                         const rtl::OUString sPolar              ( RTL_CONSTASCII_USTRINGPARAM( "Polar" ) );
-    //                                  const rtl::OUString sMap                ( RTL_CONSTASCII_USTRINGPARAM( "Map" ) );
                                         const rtl::OUString sRadiusRangeMinimum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMinimum" ) );
                                         const rtl::OUString sRadiusRangeMaximum ( RTL_CONSTASCII_USTRINGPARAM( "RadiusRangeMaximum" ) );
                                         const rtl::OUString sRangeXMinimum      ( RTL_CONSTASCII_USTRINGPARAM( "RangeXMinimum" ) );
@@ -3173,20 +3117,6 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                                                 nFlags |= 8;
                                             }
                                         }
-    /* seems not to be used.
-                                        else if ( rPropVal.Name.equals( sMap ) )
-                                        {
-                                            com::sun::star::drawing::EnhancedCustomShapeParameterPair aMap;
-                                            if ( rPropVal.Value >>= aMap )
-                                            {
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nXMap, aMap.First ) )
-                                                    nFlags |= 0x800;
-                                                if ( GetValueForEnhancedCustomShapeHandleParameter( nYMap, aMap.Second ) )
-                                                    nFlags |= 0x1000;
-                                                nFlags |= 0x10;
-                                            }
-                                        }
-    */
                                         else if ( rPropVal.Name.equals( sRadiusRangeMinimum ) )
                                         {
                                             nYRangeMin = (sal_Int32)0xff4c0000; // the range of angles seems to be a not
@@ -3398,7 +3328,6 @@ UINT32 EscherPersistTable::PtDelete( UINT32 nID )
     {
         if ( ((EscherPersistEntry*)pPtr)->mnID == nID )
         {
-//          UINT32 nRetValue = ((EscherPersistEntry*)pPtr)->mnOffset;
             delete (EscherPersistEntry*) maPersistTable.Remove();
         }
     }
@@ -3836,7 +3765,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
             {
                 sal_uInt32 nErrCode;
                 if ( !aGraphic.IsAnimated() )
-// !EMF             nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_WMF );
                     nErrCode = GraphicConverter::Export( aStream, aGraphic, ( eGraphicType == GRAPHIC_BITMAP ) ? CVT_PNG  : CVT_EMF );
                 else
                 {   // to store a animation, a gif has to be included into the msOG chunk of a png  #I5583#
@@ -3865,7 +3793,6 @@ sal_uInt32 EscherGraphicProvider::GetBlibID( SvStream& rPicOutStrm, const ByteSt
                 }
                 if ( nErrCode == ERRCODE_NONE )
                 {
-// !EMF             p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : WMF;
                     p_EscherBlibEntry->meBlibType = ( eGraphicType == GRAPHIC_BITMAP ) ? PNG : EMF;
                     aStream.Seek( STREAM_SEEK_TO_END );
                     p_EscherBlibEntry->mnSize = aStream.Tell();

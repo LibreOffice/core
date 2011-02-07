@@ -612,22 +612,6 @@ void Writer::Impl_writeText( const Point& rPos, const String& rText, const sal_I
 
         // write text element
 
-/* test code to create a bound rect, not realy working for rotated text
-            Size        aTextSize( map( Size( mpVDev->GetTextWidth( rText ), mpVDev->GetTextHeight() ) ) );
-            Point       aMetricPoint( map( Point( aMetric.GetLeading(), aMetric.GetAscent() )  ) );
-
-            Point       aTmpPoint( map( Point( - aMetric.GetLeading(), - aMetric.GetAscent() )  ) ); ;
-            Rectangle   aTmpRectangle(aTmpPoint, aTextSize );
-            Polygon     aPoly( aTmpRectangle );
-
-            aPoly.Rotate( aTmpPoint, (USHORT) nOrientation );
-
-            Rectangle   aTextBoundRect( aPoly.GetBoundRect() );
-
-            aPoly.Move( aPt.X(), aPt.Y() - map( Size( 0, aMetric.GetDescent() ) ).Height() );
-
-*/
-
 #if 0 // makes the calculated bound rect visible for debuging
 {
         Polygon aTmpPoly( aPoly );
@@ -1885,20 +1869,11 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             case( META_MOVECLIPREGION_ACTION ):
             {
                 ( (MetaAction*) pAction )->Execute( mpVDev );
-//              mbClipAttrChanged = sal_True;
             }
             break;
 
             case( META_MAPMODE_ACTION ):
             {
-//              const MetaMapModeAction *pA = (const MetaMapModeAction*) pAction;
-//              MapMode mm = pA->GetMapMode();
-//              MapUnit mu = mm.GetMapUnit();
-//
-//              Point pt = mm.GetOrigin();
-//              Fraction fx = mm.GetScaleX();
-//              Fraction fy = mm.GetScaleY();
-
                 bMap++;
             }
             case( META_REFPOINT_ACTION ):
@@ -1929,7 +1904,6 @@ void Writer::Impl_writeActions( const GDIMetaFile& rMtf )
             break;
 
             default:
-                //DBG_ERROR( "FlashActionWriter::ImplWriteActions: unsupported MetaAction #" );
             break;
         }
     }

@@ -2050,21 +2050,12 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_MASK_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASK_ACTION!" );
-            }
             break;
 
             case META_MASKSCALE_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALE_ACTION!" );
-            }
             break;
 
             case META_MASKSCALEPART_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MASKSCALEPART_ACTION!" );
-            }
             break;
 
             case META_GRADIENT_ACTION:
@@ -2092,15 +2083,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_WALLPAPER_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_WALLPAPER_ACTION!" );
-            }
             break;
 
             case META_CLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_CLIPREGION_ACTION!" );
-            }
             break;
 
             case META_ISECTRECTCLIPREGION_ACTION:
@@ -2111,15 +2096,9 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_ISECTREGIONCLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_ISECTREGIONCLIPREGION_ACTION!" );
-            }
             break;
 
             case META_MOVECLIPREGION_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_MOVECLIPREGION_ACTION!" );
-            }
             break;
 
             case META_LINECOLOR_ACTION:
@@ -2163,9 +2142,6 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
             break;
 
             case META_TEXTALIGN_ACTION:
-            {
-//              DBG_ERROR( "Unsupported MET-Action: META_TEXTALIGN_ACTION!" );
-            }
             break;
 
             case META_MAPMODE_ACTION:
