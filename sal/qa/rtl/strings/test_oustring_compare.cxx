@@ -43,9 +43,9 @@ class Compare: public CppUnit::TestFixture
 private:
     void equalsIgnoreAsciiCaseAscii();
 
-    CPPUNIT_TEST_SUITE(Compare);
-    CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
-    CPPUNIT_TEST_SUITE_END();
+CPPUNIT_TEST_SUITE(Compare);
+CPPUNIT_TEST(equalsIgnoreAsciiCaseAscii);
+CPPUNIT_TEST_SUITE_END();
 };
 
 } }
