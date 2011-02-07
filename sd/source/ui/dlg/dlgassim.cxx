@@ -52,7 +52,7 @@ SdPageListControl::SdPageListControl(
     // Tree-ListBox mit Linien versehen
     SetWindowBits( WinBits( WB_TABSTOP | WB_BORDER | WB_HASLINES |
                             WB_HASBUTTONS |  WB_HASLINESATROOT |
-                            WB_HSCROLL | // #31562#
+                            WB_HSCROLL |
                             WB_HASBUTTONSATROOT ) );
 
     SetNodeDefaultImages ();

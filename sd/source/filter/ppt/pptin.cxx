@@ -431,7 +431,7 @@ sal_Bool ImplSdPPTImport::Import()
                                         if ( !aPropItem.Read( pHyperlink->aTarget, VT_EMPTY ) )
                                             break;
 
-                                        // #n382718# (and #n261623#) Convert '\\' notation to 'smb://'
+                                        // Convert '\\' notation to 'smb://'
                                         INetURLObject aUrl( pHyperlink->aTarget, INET_PROT_FILE );
                                         pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
 

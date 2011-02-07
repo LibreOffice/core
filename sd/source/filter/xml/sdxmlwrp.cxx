@@ -67,7 +67,7 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <unotools/saveopt.hxx>
 
-// #80365# include necessary for XML progress bar at load time
+// include necessary for XML progress bar at load time
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
@@ -493,7 +493,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     /** property map for export info set */
     PropertyMapEntry aImportInfoMap[] =
     {
-        // #80365# necessary properties for XML progress bar at load time
+        // necessary properties for XML progress bar at load time
         { MAP_LEN( "ProgressRange" ),   0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressMax" ),     0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
         { MAP_LEN( "ProgressCurrent" ), 0, &::getCppuType((const sal_Int32*)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -550,7 +550,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
 
     // -------------------------------------
 
-    // #80365# try to get an XStatusIndicator from the Medium
+    // try to get an XStatusIndicator from the Medium
     if( mbShowProgress )
     {
         SfxItemSet* pSet = mrMedium.GetItemSet();

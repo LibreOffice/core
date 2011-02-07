@@ -130,7 +130,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
             pObj->TakeObjInfo( aInfoRec );
 
 
-            // #91929#; don't show original size entry if not possible
+            // don't show original size entry if not possible
             if ( pObj->ISA( SdrOle2Obj ) )
             {
                 SdrOle2Obj* pOleObj = PTR_CAST(SdrOle2Obj, pObj);

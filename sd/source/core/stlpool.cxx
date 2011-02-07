@@ -614,7 +614,7 @@ void SdStyleSheetPool::CopySheets(SdStyleSheetPool& rSourcePool, SfxStyleFamily 
 
                 xNewSheet->SetMask( xSheet->GetMask() );
 
-                // #91588# Also set parent relation for copied style sheets
+                // Also set parent relation for copied style sheets
                 String aParent( xSheet->GetParent() );
                 if( aParent.Len() )
                     aNewStyles.push_back( std::pair< rtl::Reference< SfxStyleSheetBase >, String >( xNewSheet, aParent ) );
@@ -1017,7 +1017,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
         break;
 
         case HID_PSEUDOSHEET_TITLE:
-            /* #84013# title gets same bullet as subtitle and not that page symbol anymore */
+            /* title gets same bullet as subtitle and not that page symbol anymore */
         case HID_PSEUDOSHEET_SUBTITLE :
         {
             // Untertitel-Vorlage

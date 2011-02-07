@@ -664,7 +664,6 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 
     ViewShell::SetZoomRect(aRect);
 
-    // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }

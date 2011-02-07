@@ -220,7 +220,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_NEWSD:
             {
                 SfxFrame* pFrame = ExecuteNewDocument( rReq );
-                // #94442# if a frame was created, set it as return value
+                // if a frame was created, set it as return value
                 if(pFrame)
                     rReq.SetReturnValue(SfxFrameItem(0, pFrame));
             }
@@ -739,7 +739,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             pDocShell->SetUseUserData(TRUE);
 
-                            // #94652# clear UNDO stack after autopilot
+                            // clear UNDO stack after autopilot
                             pDocShell->ClearUndoBuffer();
 
                             bMakeLayoutVisible = true;
@@ -1045,7 +1045,7 @@ void OutlineToImpressFinalizer::operator() (bool)
     }
 
 
-    // #97231# Undo-Stack needs to be cleared, else the user may remove the
+    // Undo-Stack needs to be cleared, else the user may remove the
     // only drawpage and this is a state we cannot handle ATM.
     ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
     if( pDocShell )

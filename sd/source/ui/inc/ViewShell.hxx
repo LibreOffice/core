@@ -508,7 +508,7 @@ protected:
 
     ::std::auto_ptr<Implementation> mpImpl;
 
-    // #96090# Support methods for centralized UNDO/REDO
+    // Support methods for centralized UNDO/REDO
     virtual SfxUndoManager* ImpGetUndoManager (void) const;
     void ImpGetUndoStrings(SfxItemSet &rSet) const;
     void ImpGetRedoStrings(SfxItemSet &rSet) const;

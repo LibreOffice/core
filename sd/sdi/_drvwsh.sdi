@@ -1232,7 +1232,6 @@ interface DrawView
     [
         ExecMethod = FuPermanent ;
     ]
-    // #98721#
     SID_FM_CREATE_FIELDCONTROL
     [
     SlotType = SfxBoolItem ;

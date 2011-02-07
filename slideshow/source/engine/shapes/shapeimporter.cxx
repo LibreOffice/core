@@ -367,7 +367,7 @@ ShapeSharedPtr ShapeImporter::createShape(
         // animation frame)
         if( !importShapeGraphic( aGraphicObject, xPropSet ) )
             return ShapeSharedPtr(); // error loading graphic -
-                                     // #142147# no placeholders in
+                                     // no placeholders in
                                      // slideshow
 
         if( !aGraphicObject.IsAnimated() )

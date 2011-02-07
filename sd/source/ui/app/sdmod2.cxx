@@ -620,7 +620,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             INT32 nY = ( (SfxInt32Item*) pItem )->GetValue();
             pOptions->SetScale( nX, nY );
 
-            // #92067# Apply to document only if doc type match
+            // Apply to document only if doc type match
             if( pDocSh && pDoc && eDocType == pDoc->GetDocumentType() )
             {
                 pDoc->SetUIScale( Fraction( nX, nY ) );
@@ -745,7 +745,7 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
 
         if (pViewShell)
         {
-            // #74495# make sure no one is in text edit mode, cause there
+            // make sure no one is in text edit mode, cause there
             // are some pointers remembered else (!)
             if(pViewShell->GetView())
                 pViewShell->GetView()->SdrEndTextEdit();

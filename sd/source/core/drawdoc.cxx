@@ -192,7 +192,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
 
-    // #92067# Allow UI scale only for draw documents.
+    // Allow UI scale only for draw documents.
     if( eType == DOCUMENT_TYPE_DRAW )
         SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
     else
@@ -569,7 +569,7 @@ void SdDrawDocument::SetChanged(sal_Bool bFlag)
 
 void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 {
-    // #100237# forward to baseclass
+    // forward to baseclass
     FmFormModel::SetChanged(bFlag);
 }
 
@@ -678,7 +678,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         USHORT nPage, nPageCount;
 
-        // #96323# create missing layout style sheets for broken documents
+        // create missing layout style sheets for broken documents
         //         that where created with the 5.2
         nPageCount = GetMasterSdPageCount( PK_STANDARD );
         for (nPage = 0; nPage < nPageCount; nPage++)

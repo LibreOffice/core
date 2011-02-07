@@ -1206,7 +1206,7 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 aFile = aUrl.PathToFileName();
                             else if ( INET_PROT_SMB == aUrl.GetProtocol() )
                             {
-                                // #n382718# (and #n261623#) Convert smb notation to '\\'
+                                // Convert smb notation to '\\'
                                 aFile = aUrl.GetMainURL( INetURLObject::NO_DECODE );
                                 aFile = String( aFile.GetBuffer() + 4 ); // skip the 'smb:' part
                                 aFile.SearchAndReplaceAll( '/', '\\' );

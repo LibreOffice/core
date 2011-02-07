@@ -277,7 +277,7 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
                                            SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase& rPageIterator )
 {
     //
-    // #96029# Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
+    // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
     //
     int nPos, nEndPos;
 
@@ -515,7 +515,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
     List* pLayoutsToTransfer = new List;
 
     //
-    // #96029# Refactored copy'n'pasted layout name collection into IterateBookmarkPages
+    // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( pLayoutsToTransfer, pBookmarkDoc,
                                                               pBookmarkList, nBMSdPageCount );
@@ -591,12 +591,12 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 aNameList.Insert(new String(pName), nBMSdPage);
             }
 
-            // #95677# Have to check for duplicate names here, too
-            // #67905# don't change name if source and dest model are the same!
+            // Have to check for duplicate names here, too
+            // don't change name if source and dest model are the same!
             if( pBookmarkDoc != this &&
                 GetPageByName(pName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
             {
-                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+                // delay renaming *after* pages are copied (might destroy source otherwise)
                 aRenameSet.insert(nBMSdPage);
             }
         }
@@ -616,7 +616,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             SdPage* pNotesPage  = (SdPage*) GetPage(nActualInsertPos+1);
             String* pName       = (String*) aNameList.GetObject(nBMSdPage);
 
-            // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
+            // delay renaming *after* pages are copied (might destroy source otherwise)
             if( aRenameSet.find(nBMSdPage) != aRenameSet.end() )
             {
                 // Seitenname schon vorhanden -> Defaultname
@@ -678,9 +678,9 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                 **************************************************************/
                 sal_Bool bMustRename = sal_False;
 
-                // #95991# delay renaming *after* pages are copied (might destroy source otherwise)
-                // #67905# don't change name if source and dest model are the same!
-                // #96029# avoid renaming if replacing the same page
+                // delay renaming *after* pages are copied (might destroy source otherwise)
+                // don't change name if source and dest model are the same!
+                // avoid renaming if replacing the same page
                 USHORT nPageSameName = GetPageByName(aPgName, bIsMasterPage);
                 if( pBookmarkDoc != this &&
                     nPageSameName != SDRPAGE_NOTFOUND &&
@@ -747,7 +747,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                     {
                         if( bPreservePageNames )
                         {
-                            // #96029# Take old slide names for inserted pages
+                            // Take old slide names for inserted pages
                             SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
                             pPage->SetName( pStandardPage->GetRealName() );
                         }
@@ -772,7 +772,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
                     {
                         if( bPreservePageNames )
                         {
-                            // #96029# Take old slide names for inserted pages
+                            // Take old slide names for inserted pages
                             SdPage* pNewNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
                             if( pNewNotesPage )
                                 pNewNotesPage->SetName( pStandardPage->GetRealName() );
@@ -816,7 +816,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
             SdPage* pTest = (SdPage*) GetMasterPage(nTest);
             String aTest(pTest->GetLayoutName());
 
-            // #96029# nInsertPos > 2 is always true when inserting into non-empty models
+            // nInsertPos > 2 is always true when inserting into non-empty models
             if ( nInsertPos > 2 &&
                  aTest == aMPLayout &&
                  eKind == pTest->GetPageKind() )
@@ -834,7 +834,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-    // #96029# nInsertPos > 2 is always true when inserting into non-empty models
+    // nInsertPos > 2 is always true when inserting into non-empty models
     if (nInsertPos > 0)
     {
         USHORT nSdPageStart = (nInsertPos - 1) / 2;
@@ -944,7 +944,7 @@ BOOL SdDrawDocument::InsertBookmarkAsPage(
         }
     }
 
-    // #91146# Make absolutely sure no double masterpages are there
+    // Make absolutely sure no double masterpages are there
     RemoveUnnecessaryMasterPages(NULL, TRUE, TRUE);
 
     if( bUndo )

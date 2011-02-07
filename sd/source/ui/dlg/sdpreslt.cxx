@@ -245,7 +245,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     }
 
     USHORT nResult = pDlg->Execute();
-    // #96072# OJ: Inserted update to force repaint
+    // Inserted update to force repaint
     Update();
 
     String aFile;

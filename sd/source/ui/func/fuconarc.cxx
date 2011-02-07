@@ -52,7 +52,6 @@
 #include "ViewShellBase.hxx"
 #include "ToolBarManager.hxx"
 
-// #97016#
 #include <svx/sxciaitm.hxx>
 
 namespace sd {

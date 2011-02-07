@@ -175,8 +175,7 @@ protected:
     USHORT mnMinZoom;
     USHORT mnMaxZoom;
     /** This flag tells whether to re-calculate the minimal zoom factor
-        depening on the current zoom factor.  According to task #105436# its
-        default value is now FALSE.
+        depening on the current zoom factor.  Its default value is now FALSE.
     */
     bool mbMinZoomAutoCalc;
     bool mbCalcMinZoomByMinSide;

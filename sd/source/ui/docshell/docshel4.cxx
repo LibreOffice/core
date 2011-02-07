@@ -325,7 +325,7 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
     {
         UpdateTablePointers();
 
-        // #108451# If we're an embedded OLE object, use tight bounds
+        // If we're an embedded OLE object, use tight bounds
         // for our visArea. No point in showing the user lots of empty
         // space. Had to remove the check for empty VisArea below,
         // since XML load always sets a VisArea before.
@@ -380,31 +380,6 @@ BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
         pWait = new WaitObject( (Window*) mpViewShell->GetActiveWindow() );
 
     BOOL bRet = FALSE;
-
-        /*
-        // #90691# return to old behaviour (before #80365#): construct own medium
-        SfxMedium aMedium(xStorage);
-
-        // #90691# for having a progress bar nonetheless for XML copy it
-        // from the local DocShell medium (GetMedium()) to the constructed one
-        SfxMedium* pLocalMedium = GetMedium();
-        if(pLocalMedium)
-        {
-            SfxItemSet* pLocalItemSet = pLocalMedium->GetItemSet();
-            SfxItemSet* pDestItemSet = aMedium.GetItemSet();
-
-            if(pLocalItemSet && pDestItemSet)
-            {
-                const SfxUnoAnyItem* pItem = static_cast<
-                    const SfxUnoAnyItem*>(
-                        pLocalItemSet->GetItem(SID_PROGRESS_STATUSBAR_CONTROL));
-
-                if(pItem)
-                {
-                    pDestItemSet->Put(*pItem);
-                }
-            }
-        }                           */
 
         mpDoc->NewOrLoadCompleted( NEW_DOC );
         mpDoc->CreateFirstPages();
@@ -571,7 +546,7 @@ BOOL DrawDocShell::Save()
 
     if( bRet )
     {
-        // #86834# Call UpdateDocInfoForSave() before export
+        // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
 
         bRet = SdXMLFilter( *GetMedium(), *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( GetMedium()->GetStorage() ) ).Export();
@@ -599,7 +574,7 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
 
     if( bRet )
     {
-        // #86834# Call UpdateDocInfoForSave() before export
+        // Call UpdateDocInfoForSave() before export
         UpdateDocInfoForSave();
         bRet = SdXMLFilter( rMedium, *this, sal_True, SDXMLMODE_Normal, SotStorage::GetVersion( rMedium.GetStorage() ) ).Export();
     }
@@ -882,7 +857,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
                 // Make the bookmarked page the current page.  This is done
                 // by using the API because this takes care of all the
                 // little things to be done.  Especially writing the view
-                // data to the frame view (see bug #107803#).
+                // data to the frame view.
                 USHORT nSdPgNum = (nPageNumber - 1) / 2;
                 Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
                 if (xController.is())

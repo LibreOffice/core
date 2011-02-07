@@ -1035,7 +1035,7 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 |*
 \************************************************************************/
 
-// #91457# removed link and replaced with Imp method
+// removed link and replaced with Imp method
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete mpOnlineSearchItem;
@@ -1044,7 +1044,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     USHORT nCommand = pInfo->nCommand;
 
     if (nCommand == SPELLCMD_IGNOREWORD
-        // #91457# restart when add to dictionary takes place, too.
+        // restart when add to dictionary takes place, too.
         || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
@@ -1393,7 +1393,7 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
 {
     LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
 
-    //  #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+    //  If the UI language is Korean, the default Latin font has to
     //  be queried for Korean, too (the Latin language from the document can't be Korean).
     //  This is the same logic as in SwDocShell::InitNew.
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();

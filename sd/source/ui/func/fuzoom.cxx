@@ -105,7 +105,7 @@ FunctionReference FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, ::sd::
 
 BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
@@ -180,7 +180,7 @@ BOOL FuZoom::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if (bVisible)

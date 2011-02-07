@@ -203,7 +203,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_COMBINE:  // BASIC
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -240,7 +240,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_MERGE:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -261,7 +261,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_SUBSTRACT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 
@@ -282,7 +282,7 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
 
         case SID_POLY_INTERSECT:
         {
-            // #88224# End text edit to avoid conflicts
+            // End text edit to avoid conflicts
             if(mpDrawView->IsTextEdit())
                 mpDrawView->SdrEndTextEdit();
 

@@ -66,7 +66,6 @@ public:
     void SetAttributes(SfxItemSet& rAttr, SdrObject* pObj);
     void SetLineEnds(SfxItemSet& rAttr, SdrObject* pObj);
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 protected:

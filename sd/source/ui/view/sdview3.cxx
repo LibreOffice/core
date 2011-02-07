@@ -109,7 +109,6 @@ namespace sd {
 |*
 \************************************************************************/
 
-// #83525#
 struct ImpRememberOrigAndClone
 {
     SdrObject*      pOrig;
@@ -126,7 +125,7 @@ SdrObject* ImpGetClone(Container& aConnectorContainer, SdrObject* pConnObj)
     return 0L;
 }
 
-// #90129# restrict movement to WorkArea
+// restrict movement to WorkArea
 void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkArea)
 {
     if(!rWorkArea.IsEmpty())
@@ -251,7 +250,7 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     if( !bVector && (aGraphic.GetType() == GRAPHIC_NONE) )
         bVector = true;
 
-    // #90129# restrict movement to WorkArea
+    // restrict movement to WorkArea
     Point aInsertPos( rPos );
     Size aImageSize;
     aImageSize = bVector ? aMtf.GetPrefSize() : aGraphic.GetSizePixel();
@@ -440,7 +439,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                                 pMarkList->ForceSort();
 
-                                // #83525# stuff to remember originals and clones
+                                // stuff to remember originals and clones
                                 Container   aConnectorContainer(0);
                                 sal_uInt32  a, nConnectorCount(0L);
                                 Point       aCurPos;
@@ -470,7 +469,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                     {
                                         if(!bDropOnTabBar)
                                         {
-                                            // #83525# do a NbcMove(...) instead of setting SnapRects here
+                                            // do a NbcMove(...) instead of setting SnapRects here
                                             pObj->NbcMove(aVector);
                                         }
 
@@ -483,7 +482,6 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                             EndUndo();
                                         }
 
-                                        // #83525#
                                         ImpRememberOrigAndClone* pRem = new ImpRememberOrigAndClone;
                                         pRem->pOrig = pM->GetMarkedSdrObj();
                                         pRem->pClone = pObj;
@@ -494,7 +492,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                     }
                                 }
 
-                                // #83525# try to re-establish connections at clones
+                                // try to re-establish connections at clones
                                 if(nConnectorCount)
                                 {
                                     for(a = 0; a < aConnectorContainer.Count(); a++)
@@ -573,7 +571,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                                     }
                                 }
 
-                                // #83525# cleanup remember classes
+                                // cleanup remember classes
                                 for(a = 0; a < aConnectorContainer.Count(); a++)
                                     delete (ImpRememberOrigAndClone*)aConnectorContainer.GetObject(a);
 
@@ -631,7 +629,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // #104148# Use SnapRect, not BoundRect
+            // Use SnapRect, not BoundRect
             Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
             maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -784,7 +782,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #104148# Use SnapRect, not BoundRect
+                        // Use SnapRect, not BoundRect
                         Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -850,7 +848,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     if( pOwnData )
                     {
-                        // #104148# Use SnapRect, not BoundRect
+                        // Use SnapRect, not BoundRect
                         Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                         maDropPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -1165,14 +1163,14 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // #104148# Use SnapRect, not BoundRect
+                // Use SnapRect, not BoundRect
                 Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
-            // #90129# restrict movement to WorkArea
+            // restrict movement to WorkArea
             Size aImageMapSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
                 aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM));
 
@@ -1196,7 +1194,7 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
             pWorkPage->SetRectsDirty();
 
-            // #104148# Use SnapRect, not BoundRect
+            // Use SnapRect, not BoundRect
             Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
             aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
@@ -1222,14 +1220,14 @@ BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
 
                 pWorkPage->SetRectsDirty();
 
-                // #104148# Use SnapRect, not BoundRect
+                // Use SnapRect, not BoundRect
                 Size aSize( pWorkPage->GetAllObjSnapRect().GetSize() );
 
                 aInsertPos.X() = pOwnData->GetStartPos().X() + ( aSize.Width() >> 1 );
                 aInsertPos.Y() = pOwnData->GetStartPos().Y() + ( aSize.Height() >> 1 );
             }
 
-            // #90129# restrict movement to WorkArea
+            // restrict movement to WorkArea
             Size aImageMapSize(aBmp.GetPrefSize());
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 

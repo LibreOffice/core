@@ -56,7 +56,6 @@ public:
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 
-    // #97016#
     virtual SdrObject* CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle);
 
 private:
@@ -67,7 +66,6 @@ private:
         SdDrawDocument* pDoc,
         SfxRequest& rReq);
 
-    // #97016#
     void ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene);
     E3dCompoundObject* ImpCreateBasic3DShape();
 };

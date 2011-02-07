@@ -263,7 +263,7 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_STYLE_FAMILY2 );
                 }
             }
-/* #96983# GrabFocus moved to stylist
+/* GrabFocus moved to stylist
             pWin->GrabFocus();
 */
         break;

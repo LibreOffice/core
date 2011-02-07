@@ -1234,7 +1234,6 @@ void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
         pOutlinerView->SetOutputArea(aWin);
     }
 
-    // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }

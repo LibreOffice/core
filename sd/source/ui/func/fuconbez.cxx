@@ -384,7 +384,6 @@ void FuConstructBezierPolygon::SetEditMode(USHORT nMode)
     rBindings.Invalidate(SID_BEZIER_INSERT);
 }
 
-// #97016#
 SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:

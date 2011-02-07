@@ -386,7 +386,7 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
                 mpBindings->GetDispatcher()->Execute(
                     SID_NAVIGATOR_OBJECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-                // #98821# moved here from SetGetFocusHdl. Reset the
+                // moved here from SetGetFocusHdl. Reset the
                 // focus only if something has been selected in the
                 // document.
                 SfxViewShell* pCurSh = SfxViewShell::Current();

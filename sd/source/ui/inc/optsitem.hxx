@@ -249,7 +249,6 @@ class SD_DLLPUBLIC SdOptionsMisc : public SdOptionsGeneric
 {
 private:
 
-    // #97016#
     ULONG   nDefaultObjectSizeWidth;
     ULONG   nDefaultObjectSizeHeight;
 
@@ -268,7 +267,6 @@ private:
     BOOL    bSolidDragging          : 1;    // Misc/ModifyWithAttributes
     BOOL    bSolidMarkHdl           : 1;    // /Misc/SimpleHandles
     BOOL    bSummationOfParagraphs  : 1;    // misc/SummationOfParagraphs
-    // #90356#
     BOOL    bShowUndoDeleteWarning  : 1;    // Misc/ShowUndoDeleteWarning
     // #i75315#
     BOOL    bSlideshowRespectZOrder : 1;    // Misc/SlideshowRespectZOrder
@@ -323,10 +321,8 @@ public:
             is disabled.  Other values are reserved for future use.
     */
     USHORT  GetPrinterIndependentLayout() const { Init(); return mnPrinterIndependentLayout; };
-    // #90356#
     BOOL    IsShowUndoDeleteWarning() const { Init(); return (BOOL) bShowUndoDeleteWarning; }
     BOOL    IsSlideshowRespectZOrder() const { Init(); return (BOOL) bSlideshowRespectZOrder; }
-    // #97016#
     ULONG   GetDefaultObjectSizeWidth() const { Init(); return nDefaultObjectSizeWidth; }
     ULONG   GetDefaultObjectSizeHeight() const { Init(); return nDefaultObjectSizeHeight; }
 
@@ -359,10 +355,8 @@ public:
     void    SetPrinterIndependentLayout (USHORT nOn = 1 ){ if ( nOn != mnPrinterIndependentLayout ) { OptionsChanged(); mnPrinterIndependentLayout = nOn; } }
     void    SetSolidDragging( BOOL bOn = TRUE ) { if( bSolidDragging != bOn ) { OptionsChanged(); bSolidDragging = bOn; } }
     void    SetSolidMarkHdl( BOOL bOn = TRUE ) { if( bSolidMarkHdl != bOn ) { OptionsChanged(); bSolidMarkHdl = bOn; } }
-    // #90356#
     void    SetShowUndoDeleteWarning( BOOL bOn = TRUE ) { if( bShowUndoDeleteWarning != bOn ) { OptionsChanged(); bShowUndoDeleteWarning = bOn; } }
     void    SetSlideshowRespectZOrder( BOOL bOn = TRUE ) { if( bSlideshowRespectZOrder != bOn ) { OptionsChanged(); bSlideshowRespectZOrder = bOn; } }
-    // #97016#
     void    SetDefaultObjectSizeWidth( ULONG nWidth ) { if( nDefaultObjectSizeWidth != nWidth ) { OptionsChanged(); nDefaultObjectSizeWidth = nWidth; } }
     void    SetDefaultObjectSizeHeight( ULONG nHeight ) { if( nDefaultObjectSizeHeight != nHeight ) { OptionsChanged(); nDefaultObjectSizeHeight = nHeight; } }
 

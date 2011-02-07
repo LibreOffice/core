@@ -83,7 +83,6 @@
 #include "fuvect.hxx"
 #include "stlpool.hxx"
 
-// #90356#
 #include "optsitem.hxx"
 #include "sdabstdlg.hxx"
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
@@ -171,7 +170,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 BOOL bMergeUndo = FALSE;
                 SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
 
-                // Anpassungen Start/EndWidth #63083#
+                // Anpassungen Start/EndWidth
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
                     SdrObject* pObj = NULL;
@@ -192,7 +191,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             BOOL bSetItemSet(FALSE);
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINESTARTWIDTH))
                             {
                                 INT32 nValAct = ((const XLineStartWidthItem&)aAttr.Get(XATTR_LINESTARTWIDTH)).GetValue();
@@ -203,7 +202,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                                 aAttr.Put(XLineStartWidthItem(nValNew));
                             }
 
-                            // #86265# do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
+                            // do this for SFX_ITEM_DEFAULT and for SFX_ITEM_SET
                             if(SFX_ITEM_DONTCARE != aAttr.GetItemState(XATTR_LINEENDWIDTH))
                             {
                                 INT32 nValAct = ((const XLineEndWidthItem&)aAttr.Get(XATTR_LINEENDWIDTH)).GetValue();

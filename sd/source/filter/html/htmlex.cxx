@@ -1880,7 +1880,7 @@ bool HtmlExport::CreateContentPage()
 
     aStr.AppendAscii( "<h2>" );
 
-    // #92564# Solaris compiler bug workaround
+    // Solaris compiler bug workaround
     if( mbFrames )
         aStr += CreateLink( maFramePage,
                             RESTOHTML(STR_HTMLEXP_CLICKSTART) );

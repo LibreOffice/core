@@ -122,7 +122,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
     ViewShell::UIActivating(pCli);
 
-    // #94252# Disable own controls
+    // Disable own controls
     maTabControl.Disable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Disable();
@@ -130,7 +130,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 
 void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
-    // #94252# Enable own controls
+    // Enable own controls
     maTabControl.Enable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Enable();
@@ -283,7 +283,7 @@ void DrawViewShell::SelectionHasChanged (void)
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
     }
 
-    // #96124# Invalidate for every subshell
+    // Invalidate for every subshell
     GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
     mpDrawView->UpdateSelectionClipboard( FALSE );
@@ -596,7 +596,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
-    // #96629# Metric same as HRuler, use document setting
+    // Metric same as HRuler, use document setting
     UINT16 nMetric = (UINT16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )

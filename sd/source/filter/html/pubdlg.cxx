@@ -899,7 +899,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= OUString( pPage4_Email->GetText() );
     aProps.push_back( aValue );
 
-    // #92433# try to guess protocol for user's homepage
+    // try to guess protocol for user's homepage
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
                             INET_PROT_HTTP,     // default proto is HTTP
                             INetURLObject::ENCODE_ALL );

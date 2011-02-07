@@ -110,7 +110,7 @@ void FuSlideShowDlg::DoExecute( SfxRequest& )
     List* pCustomShowList = mpDoc->GetCustomShowList(); // No Create
 
     BOOL bStartWithActualPage = SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsStartWithActualPage();
-/* #109180# change in behaviour, even when always start with current page is enabled, range settings are
+/* change in behaviour, even when always start with current page is enabled, range settings are
             still used
     if( bStartWithActualPage )
     {

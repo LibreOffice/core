@@ -639,7 +639,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                     {
-                        //  #73279# Math objects change their object size during InsertObject.
+                        //  Math objects change their object size during InsertObject.
                         //  New size must be set in SdrObject, or a wrong scale will be set at
                         //  ActivateObject.
 

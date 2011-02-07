@@ -220,8 +220,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if (mpDrawView == NULL)
     {
-        // This assertion and return are here to prevent crashes like that
-        // of issue #126202#.
+        // This assertion and return are here to prevent crashes.
         DBG_ASSERT(mpDrawView!=NULL, "Please report this assertion to the Impress team.");
         return;
     }
@@ -597,7 +596,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if ( !mpClipEvtLstnr )
         {
-            // SSA: #108717# avoid clipboard initialization for
+            // avoid clipboard initialization for
             // read-only presentation views (workaround for NT4.0
             // clipboard prob...)
             if( !ISA(PresentationViewShell) )
@@ -635,9 +634,8 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
 
     if (mpDrawView == NULL)
     {
-        // When we come to this line then we probably have another
-        // incarnation of issue #126202#.  The mpDrawView was not NULL but is
-        // now.  The reason for this may be that the DrawViewShell has been
+        // The mpDrawView was not NULL but is now.
+        // The reason for this may be that the DrawViewShell has been
         // destroyed in the mean time.
         // We can only return immediately and hope that the deleted
         // DrawViewShell is not called again.
@@ -1466,11 +1464,6 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem (SID_ATTR_GRAF_CROP);
     }
 
-    // #96090# moved SID_UNDO to ViewShell::GetMenuState()
-    // #96090# moved SID_REDO to ViewShell::GetMenuState()
-    // #96090# moved SID_GETUNDOSTRINGS to ViewShell::GetMenuState()
-    // #96090# moved SID_GETREDOSTRINGS to ViewShell::GetMenuState()
-
     ///////////////////////////////////////////////////////////////////////
     // Menuoption: Edit->Hyperlink
     // Disable, if there is no hyperlink
@@ -1607,7 +1600,7 @@ void DrawViewShell::GetModeSwitchingMenuState (SfxItemSet &rSet)
         rSet.Put(SfxBoolItem(SID_HANDOUTMODE, FALSE));
     }
 
-    // #101976# Removed [GetDocSh()->GetCurrentFunction() ||] from the following
+    // Removed [GetDocSh()->GetCurrentFunction() ||] from the following
     // clause because the current function of the docshell can only be
     // search and replace or spell checking and in that case switching the
     // view mode is allowed.

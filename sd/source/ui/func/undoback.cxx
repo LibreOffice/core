@@ -72,7 +72,6 @@ void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
     delete mpItemSet;
     mpItemSet = pNew;
 
-    // #110094#-15
     // tell the page that it's visualization has changed
     mrPage.ActionChanged();
 }

@@ -57,7 +57,6 @@
 #include <editeng/outlobj.hxx>
 #include <svtools/langtab.hxx>
 
-// #104122#
 #include <editeng/frmdiritem.hxx>
 
 #include <svx/svdetc.hxx>
@@ -564,7 +563,7 @@ void FuText::ImpSetAttributesForNewTextObject(SdrTextObj* pTxtObj)
             // Set defaults for vertical klick-n'drag text object, pool defaults are:
             // SdrTextVertAdjustItem: SDRTEXTVERTADJUST_TOP
             // SdrTextHorzAdjustItem: SDRTEXTHORZADJUST_BLOCK
-            // Analog to that (thus, #91508# was not completely correct):
+            // Analog to that:
             aSet.Put(SdrTextVertAdjustItem(SDRTEXTVERTADJUST_BLOCK));
             aSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_RIGHT));
 
@@ -700,7 +699,6 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
                 || nSlotId == SID_TEXT_FITTOSIZE_VERTICAL);
             rOutl.SetVertical(bVertical);
 
-            // #107235#
             // Before ImpSetAttributesForNewTextObject the vertical writing mode
             // needs to be set at the object. This is done here at the OutlinerParaObject
             // directly to not mirror the layout text items involved. These items will be set
@@ -847,8 +845,7 @@ BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 
                     // Analog to the else case below, for vertical simple click texts
                     // one of the defaulted setted items from ImpSetAttributesForNewTextObject
-                    // needs to be adapted to non-block mode. This could have been done with the
-                    // #104122#, but was obviously overseen.
+                    // needs to be adapted to non-block mode.
                     const SfxItemSet& rSet = mpView->GetDefaultAttr();
                     SvxFrameDirection eDirection = (SvxFrameDirection)((SvxFrameDirectionItem&)rSet.Get(EE_PARA_WRITINGDIR)).GetValue();
 

@@ -164,7 +164,7 @@ DrawViewShell::~DrawViewShell()
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
 
-    // #96642# Remove references to items within Svx3DWin
+    // Remove references to items within Svx3DWin
     // (maybe do a listening sometime in Svx3DWin)
     USHORT nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
@@ -203,7 +203,7 @@ DrawViewShell::~DrawViewShell()
     if ( mpClipEvtLstnr )
     {
         mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
-        mpClipEvtLstnr->ClearCallbackLink();        // #103849# prevent callback if another thread is waiting
+        mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
         mpClipEvtLstnr->release();
     }
 

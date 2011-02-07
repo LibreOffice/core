@@ -82,7 +82,6 @@
 #include "optsitem.hxx"
 #include "sdresid.hxx"
 
-// #96090#
 #include <svx/svxids.hrc>
 #include <sfx2/request.hxx>
 #include <svl/aeitem.hxx>
@@ -132,19 +131,16 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.Put(SfxUInt16Item(SID_STYLE_FAMILY, nFamily ));
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETUNDOSTRINGS))
     {
         ImpGetUndoStrings(rSet);
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_GETREDOSTRINGS))
     {
         ImpGetRedoStrings(rSet);
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
         SfxUndoManager* pUndoManager = ImpGetUndoManager();
@@ -160,7 +156,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // #87229# Set the necessary string like in
+            // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
             String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetUndoActionComment(0);
@@ -172,7 +168,6 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         }
     }
 
-    // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
         SfxUndoManager* pUndoManager = ImpGetUndoManager();
@@ -188,7 +183,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // #87229# Set the necessary string like in
+            // Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
             String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetRedoActionComment(0);

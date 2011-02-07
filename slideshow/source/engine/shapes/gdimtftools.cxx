@@ -481,7 +481,6 @@ bool getAnimationFromGraphic( VectorOfMtfAnimationFrames&   o_rFrames,
         pMtf->SetPrefMapMode( MapMode() );
         pMtf->SetPrefSize( aAnimSize );
 
-        // #115934#
         // Take care of special value for MultiPage TIFFs. ATM these shall just
         // show their first page for _quite_ some time.
         sal_Int32 nWaitTime100thSeconds( rAnimBmp.nWait );

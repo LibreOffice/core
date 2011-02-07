@@ -1350,7 +1350,7 @@ void PPTWriter::ImplWriteOLE( )
                         SvMemoryStream aStream;
                         SvStorageRef xCleanStorage( new SvStorage( FALSE, aStream ) );
                         xTempStorage->CopyTo( xCleanStorage );
-                        // SJ: #99809# create a dummy content stream, the dummy content is necessary for ppt, but not for
+                        // create a dummy content stream, the dummy content is necessary for ppt, but not for
                         // doc files, so we can't share code.
                         SotStorageStreamRef xStm = xCleanStorage->OpenSotStream( aPersistStream, STREAM_STD_READWRITE );
                         *xStm   << (sal_uInt32)0        // no ClipboardId
