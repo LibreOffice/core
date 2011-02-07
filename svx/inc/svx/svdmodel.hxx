@@ -269,7 +269,6 @@ public:
 
     UINT16          nStarDrawPreviewMasterPageNum;
     // Reserven fuer kompatible Erweiterungen
-//-/    SfxItemPool*    pUndoItemPool;
     SotStorage*     pModelStorage;
     SvxForbiddenCharactersTable* mpForbiddenCharactersTable;
     ULONG           nSwapGraphicsMode;

@@ -108,7 +108,6 @@
 #include <comphelper/uieventslogger.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 
-//using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::frame::status;

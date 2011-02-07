@@ -282,9 +282,6 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aTbxShadow.SetSizePixel(aSize);
     aTbxShadow.SetSelectHdl( LINK(this, SvxFontWorkDialog, SelectShadowHdl_Impl) );
 
-//  aFbShadowX.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_XDIST)));
-//  aFbShadowY.SetBitmap(Bitmap(FW_RESID(RID_SVXBMP_SHADOW_YDIST)));
-
     Link aLink = LINK(this, SvxFontWorkDialog, ModifyInputHdl_Impl);
     aMtrFldDistance.SetModifyHdl( aLink );
     aMtrFldTextStart.SetModifyHdl( aLink );
@@ -338,21 +335,10 @@ SvxFontWorkDialog::~SvxFontWorkDialog()
         DELETEZ(pCtrlItems[i]);
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 void SvxFontWorkDialog::Zoom()
 {
     SfxDockingWindow::Roll();
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign,
                                                      SfxChildAlignment eAlign )
@@ -604,8 +590,6 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 nId = TBI_SHADOW_NORMAL;
                 const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
 
-//              aFbShadowX.SetBitmap( Bitmap( ResId(RID_SVXBMP_SHADOW_XDIST, _pMgr ) ) );
-                //aMtrFldShadowX.SetUnit(FUNIT_MM);
                 aMtrFldShadowX.SetUnit( eDlgUnit );
                 aMtrFldShadowX.SetDecimalDigits(2);
                 aMtrFldShadowX.SetMin(LONG_MIN);
@@ -615,8 +599,6 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                 else
                     aMtrFldShadowX.SetSpinSize( 10 );
 
-//              aFbShadowY.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_YDIST, _pMgr ) ) );
-                //aMtrFldShadowY.SetUnit(FUNIT_MM);
                 aMtrFldShadowY.SetUnit( eDlgUnit );
                 aMtrFldShadowY.SetDecimalDigits(2);
                 aMtrFldShadowY.SetMin(LONG_MIN);
@@ -642,14 +624,12 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
             {
                 nId = TBI_SHADOW_SLANT;
 
-//              aFbShadowX.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_ANGLE, _pMgr ) ) );
                 aMtrFldShadowX.SetUnit(FUNIT_CUSTOM);
                 aMtrFldShadowX.SetDecimalDigits(1);
                 aMtrFldShadowX.SetMin(-1800);
                 aMtrFldShadowX.SetMax( 1800);
                 aMtrFldShadowX.SetSpinSize(10);
 
-//              aFbShadowY.SetBitmap( Bitmap( ResId( RID_SVXBMP_SHADOW_SIZE, _pMgr ) ) );
                 aMtrFldShadowY.SetUnit(FUNIT_CUSTOM);
                 aMtrFldShadowY.SetDecimalDigits(0);
                 aMtrFldShadowY.SetMin(-999);
@@ -758,10 +738,6 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     }
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
 {
     USHORT nId = aTbxStyle.GetCurItemId();
@@ -790,10 +766,6 @@ IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxFontWorkDialog, SelectAdjustHdl_Impl, void *, EMPTYARG )
 {
     USHORT nId = aTbxAdjust.GetCurItemId();
@@ -820,10 +792,6 @@ IMPL_LINK( SvxFontWorkDialog, SelectAdjustHdl_Impl, void *, EMPTYARG )
     }
     return 0;
 }
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
 {
@@ -865,20 +833,12 @@ IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK_INLINE_START( SvxFontWorkDialog, ModifyInputHdl_Impl, void *, EMPTYARG )
 {
     aInputTimer.Start();
     return 0;
 }
 IMPL_LINK_INLINE_END( SvxFontWorkDialog, ModifyInputHdl_Impl, void *, EMPTYARG )
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
 {
@@ -934,10 +894,6 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
 {
     XFormTextStdFormItem aItem;
@@ -951,24 +907,13 @@ IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-/*************************************************************************
-|*
-\************************************************************************/
-
 IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
 {
-// Changed by obo. Linux-Compiler can't parse commented lines
     XFormTextShadowColorItem aItem( (const String &) String(),
                                     (const Color &) aShadowColorLB.GetSelectEntryColor() );
-//  XFormTextShadowColorItem aItem( String(),
-//                                  aShadowColorLB.GetSelectEntryColor() );
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_SHDWCOLOR, SFX_CALLMODE_RECORD, &aItem, 0L );
     return 0;
 }
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 void SvxFontWorkDialog::SetColorTable(const XColorTable* pTable)
 {
@@ -979,10 +924,6 @@ void SvxFontWorkDialog::SetColorTable(const XColorTable* pTable)
         aShadowColorLB.Fill(pColorTable);
     }
 }
-
-/*************************************************************************
-|*
-\************************************************************************/
 
 void SvxFontWorkDialog::SetActive(BOOL /*bActivate*/)
 {
@@ -1005,7 +946,6 @@ void SvxFontWorkDialog::CreateStdFormObj(SdrView& rView, SdrPageView& rPV,
     Rectangle   aRect;
     XFormTextAdjust eAdjust = XFT_AUTOSIZE;
 
-//-/    rOldObj.TakeAttributes(aAttr, TRUE, FALSE);
     aAttr.Put(rOldObj.GetMergedItemSet());
 
     const XFormTextStdFormItem& rOldForm = (const XFormTextStdFormItem&)
@@ -1256,7 +1196,6 @@ void SvxFontWorkDialog::ApplyImageList()
         aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_ANGLE ) );
         aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_SIZE ) );
         break;
-//  case TBI_SHADOW_NORMAL:
     default:
         aFbShadowX.SetImage( rImgLst.GetImage( TBI_SHADOW_XDIST ) );
         aFbShadowY.SetImage( rImgLst.GetImage( TBI_SHADOW_YDIST ) );

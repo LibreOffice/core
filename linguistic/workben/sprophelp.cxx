@@ -42,7 +42,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-//using namespace utl;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;

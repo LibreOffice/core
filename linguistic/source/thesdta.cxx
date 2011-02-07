@@ -35,7 +35,6 @@
 
 #include "thesdta.hxx"
 
-//using namespace utl;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;

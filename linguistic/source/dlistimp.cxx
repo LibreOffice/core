@@ -60,7 +60,6 @@
 #include "dicimp.hxx"
 #include "lngopt.hxx"
 
-//using namespace utl;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;
@@ -184,7 +183,6 @@ void SAL_CALL DicEvtListenerHelper::processDictionaryEvent(
                 || xDicEntry.is(),
                 "lng : missing dictionary entry" );
 
-    /*BOOL bActiveDicsModified = FALSE;*/
     //
     // evaluate DictionaryEvents and update data for next DictionaryListEvent
     //

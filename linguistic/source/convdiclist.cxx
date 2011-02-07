@@ -55,7 +55,6 @@
 #include "misc.hxx"
 #include "defs.hxx"
 
-//using namespace utl;
 using namespace osl;
 using namespace rtl;
 using namespace com::sun::star;
@@ -543,8 +542,6 @@ uno::Sequence< OUString > SAL_CALL ConvDicList::queryConversions(
     throw (IllegalArgumentException, NoSupportException, RuntimeException)
 {
     MutexGuard  aGuard( GetLinguMutex() );
-
-    /*INT16 nLang = LocaleToLanguage( rLocale );*/
 
     INT32 nCount = 0;
     uno::Sequence< OUString > aRes( 20 );

@@ -43,14 +43,11 @@
 #include <comphelper/property.hxx>
 
 using namespace ::comphelper;
-
-
 using namespace connectivity::adabas;
 using namespace connectivity::sdbcx;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;

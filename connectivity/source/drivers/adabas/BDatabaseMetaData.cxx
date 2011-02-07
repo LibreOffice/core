@@ -35,7 +35,6 @@
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -131,11 +130,7 @@ Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
                     switch((sal_Int32)aRow[2]->getValue())
                     {
                         case DataType::FLOAT:
-//                          aRow[3] = sal_Int32(15);
-//                          break;
                         case DataType::REAL:
-//                          aRow[3] = sal_Int32(16);
-//                          break;
                         case DataType::DOUBLE:
                             aRow[2]->setValue(DataType::DOUBLE);
                             aRow[3]->setValue(sal_Int32(18));

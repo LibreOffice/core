@@ -40,9 +40,6 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 
-
-//using namespace ::com::sun::star::text;
-
 using ::rtl::OUString;
 using ::com::sun::star::beans::PropertyValue;
 using ::com::sun::star::beans::PropertyValues;

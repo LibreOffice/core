@@ -121,8 +121,6 @@ namespace dbtools
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::task;
-//  using namespace cppu;
-//  using namespace osl;
 
 //==============================================================================
 //==============================================================================

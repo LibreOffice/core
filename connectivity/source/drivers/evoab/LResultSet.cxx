@@ -45,8 +45,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-//  using namespace com::sun::star::container;
-//  using namespace com::sun::star::util;
+
 //------------------------------------------------------------------------------
 OEvoabResultSet::OEvoabResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTreeIterator&   _aSQLIterator)
                 : file::OResultSet(pStmt,_aSQLIterator)

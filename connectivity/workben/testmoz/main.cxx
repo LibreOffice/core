@@ -80,7 +80,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 
-//using namespace com::sun::star;
 using namespace connectivity;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;
@@ -103,7 +102,6 @@ void printColumns( Reference<XResultSet> &xRes )
         printf( "ColumnCount = %d\n", xMeta->getColumnCount());
         for(sal_Int32 i=1;i<=xMeta->getColumnCount();++i)
         {
-            // printf(aPat.getStr(), xMeta->getColumnName(i).getStr());
             const char *str = OUtoCStr(xMeta->getColumnName(i));
             printf( aPat, str );
         }

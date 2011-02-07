@@ -85,7 +85,6 @@ using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 
-//using namespace com::sun::star;
 using namespace connectivity;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::sdbc;

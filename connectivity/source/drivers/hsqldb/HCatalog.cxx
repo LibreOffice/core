@@ -40,7 +40,6 @@
 // -------------------------------------------------------------------------
 using namespace connectivity;
 using namespace connectivity::hsqldb;
-//using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
