@@ -74,7 +74,7 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_PEN_MODE;
-            Text [ en-US ] = "Mouse Pointer as ~Pen";
+            Text [ en-US ] = "Mouse pointer as ~Pen";
         };
         MenuItem
         {
