@@ -93,7 +93,7 @@ SwUndoRedline::~SwUndoRedline()
     delete pRedlSaveData;
 }
 
-USHORT SwUndoRedline::GetRedlSaveCount() const
+sal_uInt16 SwUndoRedline::GetRedlSaveCount() const
 {
     return pRedlSaveData ? pRedlSaveData->Count() : 0;
 }
@@ -133,7 +133,7 @@ void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
     if( pRedlSaveData && bHiddenRedlines )
     {
         sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        FillSaveData(rPam, *pRedlSaveData, FALSE,
+        FillSaveData(rPam, *pRedlSaveData, sal_False,
                         UNDO_REJECT_REDLINE != nUserId );
 
         nEndExtra -= pDoc->GetNodes().GetEndOfExtras().GetIndex();

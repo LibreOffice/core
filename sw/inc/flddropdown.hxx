@@ -220,8 +220,8 @@ public:
 
        @param rItem the item to be set
 
-       @retval TRUE the selected item was successfully set
-       @retval TRUE failure (empty selection)
+       @retval sal_True the selected item was successfully set
+       @retval sal_True failure (empty selection)
     */
     sal_Bool SetSelectedItem(const String & rItem);
 

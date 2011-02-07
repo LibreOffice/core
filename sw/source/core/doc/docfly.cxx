@@ -392,7 +392,7 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
 
 static bool
 lcl_SetFlyFrmAttr(SwDoc & rDoc,
-        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, BOOL),
+        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, sal_Bool),
         SwFrmFmt & rFlyFmt, SfxItemSet & rSet)
 {
     // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
@@ -403,8 +403,8 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     //desselben einer Spezialmethode. Sie Returnt sal_True wenn der Fly neu
     //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
     sal_Int8 const nMakeFrms =
-        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE ))
-             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, FALSE )
+        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False ))
+             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, sal_False )
              :  DONTMAKEFRMS;
 
     const SfxPoolItem* pItem;
@@ -450,10 +450,10 @@ lcl_SetFlyFrmAttr(SwDoc & rDoc,
     return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
 }
 
-BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 {
     if( !rSet.Count() )
-        return FALSE;
+        return sal_False;
 
     ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
 

@@ -717,10 +717,10 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
         rDoc.RstTxtAttrs(rPam);
         break;
     case RES_TXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, FALSE, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_False, pIdArr );
         break;
     case RES_CONDTXTFMTCOLL:
-        rDoc.ResetAttrs(rPam, TRUE, pIdArr );
+        rDoc.ResetAttrs(rPam, sal_True, pIdArr );
 
         break;
     case RES_TXTATR_TOXMARK:

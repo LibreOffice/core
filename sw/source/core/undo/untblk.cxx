@@ -46,7 +46,7 @@
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
     pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pRedlData( 0 ),
-    bSttWasTxtNd( TRUE ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
+    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -214,7 +214,7 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if (m_FlyUndos.size())
     {
-        ULONG nTmp = pPam->GetPoint()->nNode.GetIndex();
+        sal_uLong nTmp = pPam->GetPoint()->nNode.GetIndex();
         for (size_t n = m_FlyUndos.size(); 0 < n; --n)
         {
             m_FlyUndos[ n-1 ]->UndoImpl(rContext);

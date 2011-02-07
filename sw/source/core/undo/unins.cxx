@@ -483,7 +483,7 @@ class SwUndoReplace::Impl
 {
     ::rtl::OUString m_sOld;
     ::rtl::OUString m_sIns;
-    ULONG m_nSttNd, m_nEndNd, m_nOffset;
+    sal_uLong m_nSttNd, m_nEndNd, m_nOffset;
     xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
     bool m_bSplitNext : 1;
     bool m_bRegExp : 1;
@@ -529,7 +529,7 @@ void SwUndoReplace::RedoImpl(::sw::UndoRedoContext & rContext)
 }
 
 SwRewriter
-MakeUndoReplaceRewriter(ULONG const occurrences,
+MakeUndoReplaceRewriter(sal_uLong const occurrences,
         ::rtl::OUString const& sOld, ::rtl::OUString const& sNew)
 {
     SwRewriter aResult;
@@ -666,10 +666,10 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    SwIndex aIdx( pNd, USHORT( m_nSttCnt ) );
+    SwIndex aIdx( pNd, sal_uInt16( m_nSttCnt ) );
     if( m_nSttNd == m_nEndNd )
     {
-        pNd->EraseText( aIdx, USHORT( m_sIns.getLength() ) );
+        pNd->EraseText( aIdx, sal_uInt16( m_sIns.getLength() ) );
     }
     else
     {
@@ -978,7 +978,7 @@ void SwUndoInsertLabel::RedoImpl(::sw::UndoRedoContext & rContext)
             SwTableNode *pNd = rDoc.GetNodes()[
                         rDoc.GetNodes()[NODE.nNode-1]->StartOfSectionIndex()]->GetTableNode();
             if ( pNd )
-                pNd->GetTable().GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem(TRUE, RES_KEEP) );
+                pNd->GetTable().GetFrmFmt()->SetFmtAttr( SvxFmtKeepItem(sal_True, RES_KEEP) );
         }
         NODE.pUndoInsNd->UndoImpl(rContext);
         delete NODE.pUndoInsNd, NODE.pUndoInsNd = 0;

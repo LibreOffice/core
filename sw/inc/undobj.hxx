@@ -69,7 +69,7 @@ protected:
     void RemoveIdxFromRange( SwPaM& rPam, sal_Bool bMoveNext );
     void RemoveIdxRel( sal_uLong, const SwPosition& );
 
-    static BOOL CanRedlineGroup( SwRedlineSaveDatas& rCurr,
+    static sal_Bool CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
                                 sal_Bool bCurrIsEnd );
 
@@ -81,7 +81,7 @@ protected:
     */
     virtual SwRewriter GetRewriter() const;
 
-    // return type is USHORT because this overrides SfxUndoAction::GetId()
+    // return type is sal_uInt16 because this overrides SfxUndoAction::GetId()
     virtual sal_uInt16 GetId() const { return static_cast<sal_uInt16>(m_nId); }
 
     // the 4 methods that derived classes have to override
@@ -99,7 +99,7 @@ private:
     virtual void UndoWithContext(SfxUndoContext &);
     virtual void RedoWithContext(SfxUndoContext &);
     virtual void Repeat(SfxRepeatTarget &);
-    virtual BOOL CanRepeat(SfxRepeatTarget &) const;
+    virtual sal_Bool CanRepeat(SfxRepeatTarget &) const;
 
 public:
     SwUndo(SwUndoId const nId);

@@ -181,8 +181,8 @@ public:
     /**
        Checks if this node is in redlines.
 
-       @retval TRUE       this node is in redlines
-       @retval FALSE      else
+       @retval sal_True       this node is in redlines
+       @retval sal_False      else
      */
     sal_Bool IsInRedlines() const;
 

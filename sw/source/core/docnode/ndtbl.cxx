@@ -395,7 +395,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     if( GetIDocumentUndoRedo().DoesUndo() )
     {
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoInsTbl( rPos, nCols, nRows, static_cast<USHORT>(eAdjust),
+            new SwUndoInsTbl( rPos, nCols, nRows, static_cast<sal_uInt16>(eAdjust),
                                       rInsTblOpts, pTAFmt, pColArr,
                                       aTblName));
     }
@@ -698,7 +698,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     {
         GetIDocumentUndoRedo().StartUndo( UNDO_TEXTTOTABLE, NULL );
         pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh,
-                    static_cast<USHORT>(eAdjust), pTAFmt );
+                    static_cast<sal_uInt16>(eAdjust), pTAFmt );
         GetIDocumentUndoRedo().AppendUndo( pUndo );
 
         // das Splitten vom TextNode nicht in die Undohistory aufnehmen
@@ -2243,7 +2243,7 @@ sal_Bool SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             if (pUndo)
                 pUndo->ReNewBoxes( aSelBoxes );
         }
-        bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, TRUE, TRUE );
+        bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, sal_True, sal_True );
         if (bRet)
         {
             SetModified();
@@ -3045,7 +3045,7 @@ void SwDoc::SetTabCols(SwTable& rTab, const SwTabCols &rNew, const SwTabCols &rO
     if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(
-            new SwUndoAttrTbl( *rTab.GetTableNode(), TRUE ));
+            new SwUndoAttrTbl( *rTab.GetTableNode(), sal_True ));
     }
     rTab.SetTabCols( rNew, rOld, pStart, bCurRowOnly );
       ::ClearFEShellTabCols();
@@ -4368,7 +4368,7 @@ sal_Bool SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             bRet = pSrcTblNd->GetTable().MakeCopy( this, rInsPos, rBoxes,
-                                                TRUE, bCpyName );
+                                                sal_True, bCpyName );
         }
 
         if( pUndo )

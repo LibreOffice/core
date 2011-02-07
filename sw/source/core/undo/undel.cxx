@@ -253,7 +253,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                     SwPosition aSplitPos( *pEndTxtNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, TRUE );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aEnd, sal_True );
                     aRg.aEnd--;
                 }
                 else
@@ -277,7 +277,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, sal_Bool bFullPara, sal_Bool bCalledByT
                     SwPosition aSplitPos( *pSttTxtNd );
                     ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                     pDoc->SplitNode( aSplitPos, false );
-                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, TRUE );
+                    rDocNds._MoveNodes( aMvRg, rDocNds, aRg.aStart, sal_True );
                     aRg.aStart--;
                 }
             }

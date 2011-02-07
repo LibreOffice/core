@@ -91,8 +91,8 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
        @param rVal             the value
        @param nMId
 
-       @retval TRUE            putting of value was successful
-       @retval FALSE           else
+       @retval sal_True            putting of value was successful
+       @retval sal_False           else
     */
     virtual bool PutValueToField(const SwPosition & rPos, const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich) = 0;
 
@@ -107,8 +107,8 @@ namespace com { namespace sun { namespace star { namespace uno { class Any; } } 
         @param pMsgHnt
         @param bUpdateTblFlds TRUE: update table fields, too.
 
-        @retval TRUE             update was successful
-        @retval FALSE            else
+        @retval sal_True             update was successful
+        @retval sal_False            else
     */
     virtual bool UpdateFld(SwTxtFld * rDstFmtFld, SwField & rSrcFld, SwMsgPoolItem * pMsgHnt, bool bUpdateTblFlds) = 0;
 

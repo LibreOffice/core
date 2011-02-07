@@ -755,7 +755,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         return sal_False;
     StartAllAction();
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
-    BOOL bInsTxt = sal_True;
+    sal_Bool bInsTxt = sal_True;
 
     if( rStr.Len() )
     {

@@ -306,7 +306,7 @@ UndoManager::GetLastUndoInfo(
     }
     if (o_pId)
     {
-        USHORT const nId(pAction->GetId());
+        sal_uInt16 const nId(pAction->GetId());
         *o_pId = static_cast<SwUndoId>(nId);
     }
 
@@ -319,8 +319,8 @@ SwUndoComments_t UndoManager::GetUndoComments() const
             "GetUndoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    USHORT const nUndoCount(SfxUndoManager::GetUndoActionCount(TopLevel));
-    for (USHORT n = 0; n < nUndoCount; ++n)
+    sal_uInt16 const nUndoCount(SfxUndoManager::GetUndoActionCount(TopLevel));
+    for (sal_uInt16 n = 0; n < nUndoCount; ++n)
     {
         ::rtl::OUString const comment(
                 SfxUndoManager::GetUndoActionComment(n, TopLevel));
@@ -355,8 +355,8 @@ SwUndoComments_t UndoManager::GetRedoComments() const
             "GetRedoComments() called while in list action?");
 
     SwUndoComments_t ret;
-    USHORT const nRedoCount(SfxUndoManager::GetRedoActionCount(TopLevel));
-    for (USHORT n = 0; n < nRedoCount; ++n)
+    sal_uInt16 const nRedoCount(SfxUndoManager::GetRedoActionCount(TopLevel));
+    for (sal_uInt16 n = 0; n < nRedoCount; ++n)
     {
         ::rtl::OUString const comment(
                 SfxUndoManager::GetRedoActionComment(n, TopLevel));
@@ -552,7 +552,7 @@ UndoManager::Repeat(::sw::RepeatContext & rContext,
 
     ::rtl::OUString const comment(pRepeatAction->GetComment());
     ::rtl::OUString const rcomment(pRepeatAction->GetRepeatComment(rContext));
-    USHORT const nId(pRepeatAction->GetId());
+    sal_uInt16 const nId(pRepeatAction->GetId());
     if (DoesUndo())
     {
         EnterListAction(comment, rcomment, nId);
@@ -560,7 +560,7 @@ UndoManager::Repeat(::sw::RepeatContext & rContext,
 
     SwPaM *const pFirstCursor(& rContext.GetRepeatPaM());
     do {    // iterate over ring
-        for (USHORT nRptCnt = nRepeatCount; nRptCnt > 0; --nRptCnt)
+        for (sal_uInt16 nRptCnt = nRepeatCount; nRptCnt > 0; --nRptCnt)
         {
             pRepeatAction->Repeat(rContext);
         }

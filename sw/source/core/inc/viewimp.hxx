@@ -116,8 +116,8 @@ class SwViewImp
     /**
        Returns if printer shall be stopped.
 
-       @retval TRUE The printer shall be stopped.
-       @retval FALSE else
+       @retval sal_True The printer shall be stopped.
+       @retval sal_False else
     */
     sal_Bool IsStopPrt() { return bStopPrt; }
 

@@ -256,8 +256,8 @@ struct SW_DLLPUBLIC SwFormToken
     @param _eType  the type to check for
     @param rToken  the token to check
 
-    @retval TRUE   the token has the given type
-    @retval FALSE  else
+    @retval sal_True   the token has the given type
+    @retval sal_False  else
 */
 struct SwFormTokenEqualToFormTokenType
 {

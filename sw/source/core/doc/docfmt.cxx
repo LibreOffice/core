@@ -1504,7 +1504,7 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
         for ( sal_uInt16 i = nCount; i; )
 =======
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
-        for ( USHORT i = nCount; i; )
+        for ( sal_uInt16 i = nCount; i; )
 >>>>>>> other
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
@@ -1528,7 +1528,7 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
         for ( sal_uInt16 i = 0; i <= nFmt; i++ )
 =======
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
-        for ( USHORT i = 0; i <= nFmt; i++ )
+        for ( sal_uInt16 i = 0; i <= nFmt; i++ )
 >>>>>>> other
         {
             while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))

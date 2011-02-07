@@ -1282,7 +1282,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pUndo->SetInsertRange( aCpyPam, TRUE, bStartIsTxtNode );
+        pUndo->SetInsertRange( aCpyPam, sal_True, bStartIsTxtNode );
     }
 
     if( pCpyRange )

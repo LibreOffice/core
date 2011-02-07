@@ -313,7 +313,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                         // this looks fishy if pDestDoc != 0
                         bool const bToUndo = !pDestDoc &&
                             GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
-                        for( USHORT i = pHts->Count(); i; )
+                        for( sal_uInt16 i = pHts->Count(); i; )
                         {
                             sal_uInt16 nDelMsg = 0;
                             SwTxtAttr * const pAttr = pHts->GetTextHint( --i );
@@ -1883,7 +1883,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             pInsDoc->DoUndo( bIsUndo );
             bCopyCollFmt = sal_False;
 =======
-            bCopyCollFmt = FALSE;
+            bCopyCollFmt = sal_False;
 >>>>>>> other
         }
 

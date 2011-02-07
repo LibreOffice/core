@@ -102,7 +102,7 @@ SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
     }
 }
 
-bool SwEditShell::Undo(USHORT const nCount)
+bool SwEditShell::Undo(sal_uInt16 const nCount)
 >>>>>>> other
 {
     SET_CURR_SHELL( this );
@@ -113,7 +113,7 @@ bool SwEditShell::Undo(USHORT const nCount)
     sal_Bool bSaveDoesUndo = GetDoc()->DoesUndo();
 =======
     ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 >>>>>>> other
 
 <<<<<<< local
@@ -172,7 +172,7 @@ bool SwEditShell::Undo(USHORT const nCount)
         }
 =======
         try {
-            for (USHORT i = 0; i < nCount; ++i)
+            for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
@@ -231,7 +231,7 @@ bool SwEditShell::Undo(USHORT const nCount)
 <<<<<<< local
 sal_uInt16 SwEditShell::Redo( sal_uInt16 nCnt )
 =======
-bool SwEditShell::Redo(USHORT const nCount)
+bool SwEditShell::Redo(sal_uInt16 const nCount)
 >>>>>>> other
 {
     SET_CURR_SHELL( this );
@@ -314,7 +314,7 @@ bool SwEditShell::Redo(USHORT const nCount)
             GoNextCrsr();                   // Redo zur alten Undo-Position !!
 =======
         try {
-            for (USHORT i = 0; i < nCount; ++i)
+            for (sal_uInt16 i = 0; i < nCount; ++i)
             {
                 bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
@@ -347,7 +347,7 @@ bool SwEditShell::Redo(USHORT const nCount)
 <<<<<<< local
 sal_uInt16 SwEditShell::Repeat( sal_uInt16 nCount )
 =======
-bool SwEditShell::Repeat(USHORT const nCount)
+bool SwEditShell::Repeat(sal_uInt16 const nCount)
 >>>>>>> other
 {
     SET_CURR_SHELL( this );

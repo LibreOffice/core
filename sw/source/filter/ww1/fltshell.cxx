@@ -368,7 +368,7 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
                     SwPaM& rRegion, sal_Bool bCheck )
 {
     if (pEntry->MakeRegion(pDoc, rRegion, bCheck )){
-//      BOOL b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
+//      sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
 //      const SwStartNode* p1 = rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode();
 //      const SwStartNode* p2 = rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode();
         if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()

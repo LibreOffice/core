@@ -891,7 +891,7 @@ if( GetIDocumentUndoRedo().DoesUndo() )
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 sal_Bool bOldFlag = mbCopyIsMove;
                 bool const bOldUndo = GetIDocumentUndoRedo().DoesUndo();
-                mbCopyIsMove = TRUE;
+                mbCopyIsMove = sal_True;
                 GetIDocumentUndoRedo().DoUndo(false);
                 do {
                     if( pTmp->HasMark() &&
@@ -1538,7 +1538,7 @@ SwFlyFrmFmt *
 SwDoc::InsertLabel(
         SwLabelType const eType, String const& rTxt, String const& rSeparator,
         String const& rNumberingSeparator,
-        sal_Bool const bBefore, sal_uInt16 const nId, ULONG const nNdIdx,
+        sal_Bool const bBefore, sal_uInt16 const nId, sal_uLong const nNdIdx,
         String const& rCharacterStyle,
         sal_Bool const bCpyBrd )
 {

@@ -806,7 +806,7 @@ sal_Bool SwScanner::NextWord()
             ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
 
             // restrict boundaries to script boundaries and nEndPos
-            const USHORT nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
+            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
             XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
             const sal_Int32 nScriptEnd = nBegin +
                 pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
@@ -829,7 +829,7 @@ sal_Bool SwScanner::NextWord()
         }
         else
         {
-            const USHORT nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
+            const sal_uInt16 nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
             XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
                                              static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
             const sal_Int32 nScriptEnd = aBound.startPos +

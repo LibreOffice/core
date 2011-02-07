@@ -134,7 +134,7 @@ public:
     /** Query if redlining is on.
 
         @returns
-        </TRUE> if redlining is on </FALSE> otherwise
+        <TRUE/> if redlining is on <FALSE/> otherwise
     */
     virtual bool IsRedlineOn() const = 0;
 

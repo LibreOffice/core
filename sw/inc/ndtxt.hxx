@@ -460,8 +460,8 @@ public:
           - it has a SwNodeNum and it has a numbering rule and the according
             SwNumFmt defines a numbering type that is an enumeration.
 
-       @retval TRUE      this text node may be numbered
-       @retval FALSE     else
+       @retval sal_True      this text node may be numbered
+       @retval sal_False     else
      */
     //sal_Bool MayBeNumbered() const;
 
@@ -503,8 +503,8 @@ public:
        @param the first line indent of this text node taking the
                numbering into account (return parameter)
 
-       @retval TRUE   this node has SwNodeNum and has numbering rule
-       @retval FALSE  else
+       @retval sal_True   this node has SwNodeNum and has numbering rule
+       @retval sal_False  else
      */
     sal_Bool GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
@@ -533,8 +533,8 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of an enumeration type.
 
-        @retval TRUE    This text node has a number.
-        @retval FALSE   else
+        @retval sal_True    This text node has a number.
+        @retval sal_False   else
      */
     sal_Bool HasNumber() const;
 
@@ -545,8 +545,8 @@ public:
         numbering rule and the numbering format specified for the
         level of the SwNodeNum is of a bullet type.
 
-        @retval TRUE    This text node has a bullet.
-        @retval FALSE   else
+        @retval sal_True    This text node has a bullet.
+        @retval sal_False   else
      */
     sal_Bool HasBullet() const;
 
@@ -559,8 +559,8 @@ public:
         ATTENTION: Returns sal_True even if the SwNumFmt has type
         SVX_NUM_NUMBER_NONE.
 
-        @retval TRUE      This node is numbered.
-        @retval FALSE     else
+        @retval sal_True      This node is numbered.
+        @retval sal_False     else
      */
     sal_Bool IsNumbered() const;
 

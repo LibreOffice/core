@@ -273,7 +273,7 @@ void SwUndo::Repeat(SfxRepeatTarget & rContext)
     RepeatImpl(*pRepeatContext);
 }
 
-BOOL SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
+sal_Bool SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
 {
     ::sw::RepeatContext *const pRepeatContext(
             dynamic_cast< ::sw::RepeatContext * >(& rContext));

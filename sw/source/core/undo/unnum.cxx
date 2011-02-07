@@ -312,7 +312,7 @@ void SwUndoMoveNum::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else
     {
-        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, FALSE);
+        rDoc.MoveParagraph(rContext.GetRepeatPaM(), nOffset, sal_False);
     }
 }
 
