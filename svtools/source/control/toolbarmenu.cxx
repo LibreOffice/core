@@ -1493,6 +1493,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
+                            aPos.setX( aPos.getX() + nCtrlHeight + 1 );
                         }
                         else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
                         {
@@ -1514,6 +1515,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
                             Rectangle aRect( aTmpPos, aSymbolSize );
                             aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
+                            aPos.setX( aPos.getX() + aSymbolSize.getWidth( ) + 1 );
                         }
                     }
                 }
