@@ -328,7 +328,7 @@ awt::Size lcl_placeLegendEntries(
 
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
-    sal_Int32 nMaxTextWidth = rAvailableSpace.Width - (2 * nXOffset) - nSymbolPlusDistanceWidth;
+    sal_Int32 nMaxTextWidth = rAvailableSpace.Width - (2 * nXPadding) - nSymbolPlusDistanceWidth;
     rtl::OUString aPropNameTextMaximumFrameWidth( C2U("TextMaximumFrameWidth") );
     uno::Any* pFrameWidthAny = PropertyMapper::getValuePointer( rTextProperties.second, rTextProperties.first, aPropNameTextMaximumFrameWidth);
     if(pFrameWidthAny)
@@ -346,7 +346,7 @@ awt::Size lcl_placeLegendEntries(
     awt::Size aMaxEntryExtent = lcl_createTextShapes( rEntries, xShapeFactory, xTarget, aTextShapes, rTextProperties );
     OSL_ASSERT( aTextShapes.size() == rEntries.size());
 
-    sal_Int32 nMaxEntryWidth = 2 * nXOffset + nSymbolPlusDistanceWidth + aMaxEntryExtent.Width;
+    sal_Int32 nMaxEntryWidth = nXOffset + nSymbolPlusDistanceWidth + aMaxEntryExtent.Width;
     sal_Int32 nMaxEntryHeight = nYOffset + aMaxEntryExtent.Height;
     sal_Int32 nNumberOfEntries = rEntries.size();
 
