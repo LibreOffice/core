@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Soffice
     Name = "%PRODUCTNAME";
+    Name (pt-BR) = "%PRODUCTNAME_BR";
     ModuleID = gid_Module_Root;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_Brand_File_Bin_Soffice;
@@ -42,6 +43,7 @@ End
 
 FolderItem gid_Folderitem_Soffice_Desktop
     Name = "%PRODUCTNAME %PRODUCTVERSION";
+    Name (pt-BR) = "%PRODUCTNAME_BR %PRODUCTVERSION";
     ModuleID = gid_Module_Root;
     FolderID = PREDEFINED_DESKTOP;
     FileID = gid_Brand_File_Bin_Soffice;

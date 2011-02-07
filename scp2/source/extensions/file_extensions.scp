@@ -111,9 +111,9 @@ End
 File gid_File_Oxt_LightProof
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Install;
-    Name (hu) = "lightproof-hu-1.2.oxt";
+    Dir = gid_Brand_Dir_Share_Extensions_LightProof;
     Name (en-US) = "lightproof-en-US-0.1.oxt";
+    Name (hu) = "lightproof-hu-1.2.oxt";
 End
 
 #endif
@@ -216,7 +216,7 @@ End
 File gid_File_Oxt_Barcode
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
-    Dir = gid_Brand_Dir_Share_Extensions_Validator;
+    Dir = gid_Brand_Dir_Share_Extensions_Barcode;
     Name = "Barcode.oxt";
 End
 

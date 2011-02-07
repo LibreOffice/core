@@ -1186,23 +1186,19 @@ AC_ARG_WITH(dict,
     ],
 ,)
 
-AC_ARG_WITH(intro-bitmaps,
-    AS_HELP_STRING([--with-intro-bitmaps],
-        [Prefer the specified intro bitmaps over the the default one.
-         Can be more than one (separated by commas), the order means priority of
-         fallback if the first does not exist (in the installed tree).])
-    [
-                          Usage:     --with-intro-bitmaps=/path/my_lo_intro.bmp
-    ],
-,)
+AC_ARG_WITH(intro-bitmap,
+[  --with-intro-bitmap    Prefer the specified intro bitmap over the
+                          the default one.
 
-AC_ARG_WITH(about-bitmaps,
-    AS_HELP_STRING([--with-about-bitmaps],
-        [Similarly to --with-intro-bitmaps, this allows specification of bitmaps for the About box.])
-    [
-                          Usage:     --with-about-bitmaps=/path/my_lo_about.bmp
-    ],
-,)
+                          Usage: --with-intro-bitmap=/path/my_ooo_intro.png
+],,)
+
+AC_ARG_WITH(about-bitmap,
+[  --with-about-bitmap    Similarly to --with-intro-bitmap, this allows
+                          specification of bitmap for the About box.
+
+                          Usage: --with-about-bitmap=/path/my_ooo_about.png
+],,)
 
 AC_ARG_WITH(vendor,
     AS_HELP_STRING([--with-vendor],
@@ -4391,12 +4387,16 @@ int main(int argc, char **argv) {
        else return 1;
 }
     ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
-    save_LIBS="$LIBS"
+    DB_LIB=
     for dbver in '' -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4; do
-        AC_CHECK_LIB(db$dbver, db_create, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; LIBS="-ldb$dbver $LIBS"; break ])
+        AC_CHECK_LIB(db$dbver, dbopen, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ] ,
+            AC_CHECK_LIB(db$dbver, __db185_open, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; break; ]
+            )
+        )
     done
-    AC_CHECK_FUNC(db_create, [], [ AC_MSG_ERROR([db not installed or functional]) ])
-    LIBS="$save_LIBS"
+    if test -z "$DB_LIB" ; then 
+        AC_MSG_ERROR([db not installed or functional])
+    fi
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
 else
     AC_MSG_RESULT([internal])
@@ -7846,43 +7846,33 @@ else
 fi
 AC_SUBST(WITH_DICT)
 
-AC_MSG_CHECKING([for additional 'intro' bitmaps])
-INTRO_BITMAPS=
-if test -z "$with_intro_bitmaps" -o "$with_intro_bitmaps" = "no" ; then
-   INTRO_BITMAPS=
+AC_MSG_CHECKING([for another 'intro' bitmap])
+INTRO_BITMAP=
+if test -z "$with_intro_bitmap" -o "$with_intro_bitmap" = "no" ; then
+   INTRO_BITMAP=
    AC_MSG_RESULT([none])
 else
-   for bitmap in `echo $with_intro_bitmaps | tr ',' ' '` ; do
-      case "$bitmap" in
-         *.bmp) ;;
-         *)     bitmap= ; AC_MSG_WARN([Intro bitmaps should be .bmp files!]) ;;
-      esac
-      if test -n "$bitmap" ; then
-         INTRO_BITMAPS="$INTRO_BITMAPS $bitmap"
-      fi
-   done
-   AC_MSG_RESULT([$INTRO_BITMAPS])
+   case "$with_intro_bitmap" in
+      *.png) INTRO_BITMAP="$with_intro_bitmap" ;;
+      *)     AC_MSG_WARN([Intro bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$INTRO_BITMAP])
 fi
-AC_SUBST(INTRO_BITMAPS)
+AC_SUBST(INTRO_BITMAP)
 
-AC_MSG_CHECKING([for additional 'about' bitmaps])
-ABOUT_BITMAPS=
-if test -z "$with_about_bitmaps" -o "$with_about_bitmaps" = "no" ; then
-   ABOUT_BITMAPS=
+AC_MSG_CHECKING([for another 'about' bitmap])
+ABOUT_BITMAP=
+if test -z "$with_about_bitmap" -o "$with_about_bitmap" = "no" ; then
+   ABOUT_BITMAP=
    AC_MSG_RESULT([none])
 else
-   for bitmap in `echo $with_about_bitmaps | tr ',' ' '` ; do
-      case "$bitmap" in
-         *.bmp) ;;
-         *)     bitmap= ; AC_MSG_WARN([About bitmaps should be .bmp files!]) ;;
-      esac
-      if test -n "$bitmap" ; then
-         ABOUT_BITMAPS="$ABOUT_BITMAPS $bitmap"
-      fi
-   done
-   AC_MSG_RESULT([$ABOUT_BITMAPS])
+   case "$with_about_bitmap" in
+      *.png) ABOUT_BITMAP="$with_about_bitmap" ;;
+      *)     AC_MSG_WARN([About bitmap should be a .png file!]) ;;
+   esac
+   AC_MSG_RESULT([$ABOUT_BITMAP])
 fi
-AC_SUBST(ABOUT_BITMAPS)
+AC_SUBST(ABOUT_BITMAP)
 
 OOO_VENDOR=
 AC_MSG_CHECKING([for vendor])

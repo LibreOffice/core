@@ -190,7 +190,7 @@ $(foreach,i,$(alllangiso) ooodevhelppack_$i) : $(ADDDEPS)
 $(foreach,i,$(alllangiso) sdkoo_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) sdkoodev_$i) : $(ADDDEPS)
-             
+
 $(foreach,i,$(alllangiso) ure_$i) : $(ADDDEPS)
 
 $(foreach,i,$(alllangiso) broffice_$i) : $(ADDDEPS)
@@ -340,11 +340,21 @@ hack_msitemplates .PHONY:
     $(RM) $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
+    $(RM) $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(RM) $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(RM) $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(RM) $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(RM) $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSIURETEMPLATEDIR)$/Binary$/Image.bmp
     $(COPY) $(PRJ)$/res$/nologoinstall.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Image.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIOFFICETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSILANGPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIHELPPACKTEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSIURETEMPLATEDIR)$/Binary$/Banner.bmp
+    $(COPY) $(PRJ)$/res$/nologobanner.bmp $(MSISDKOOTEMPLATEDIR)$/Binary$/Banner.bmp
 
 .IF "$(OS)" == "WNT"
 

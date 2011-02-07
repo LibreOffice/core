@@ -343,6 +343,12 @@ en-US = "Catalan"
 [STR_DESC_MODULE_HELPPACK_CA]
 en-US = "Installs Catalan help in %PRODUCTNAME %PRODUCTVERSION"
 
+[STR_NAME_MODULE_HELPPACK_CA_XV]
+en-US = "Catalan (Valencian)"
+
+[STR_DESC_MODULE_HELPPACK_CA_XV]
+en-US = "Installs Catalan (Valencian) help in %PRODUCTNAME %PRODUCTVERSION"
+
 [STR_NAME_MODULE_HELPPACK_DA]
 en-US = "Danish"
 
@@ -516,6 +522,12 @@ en-US = "Assamese"
 
 [STR_DESC_MODULE_HELPPACK_AS_IN]
 en-US = "Installs Assamese help in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_HELPPACK_AST]
+en-US = "Asturian"
+
+[STR_DESC_MODULE_HELPPACK_AST]
+en-US = "Installs Asturian help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_RW]
 en-US = "Kinyarwanda"

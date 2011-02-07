@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Simpress
     Name = "%PRODUCTNAME Impress";
+    Name (pt-BR) = "%PRODUCTNAME_BR Impress";
     ModuleID = gid_Module_Prg_Impress_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Simpress;

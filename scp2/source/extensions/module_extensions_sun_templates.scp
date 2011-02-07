@@ -46,8 +46,7 @@ Module gid_Module_Optional_Extensions_Sun_T_Pack_Template
     Name = "gid_Module_Optional_Extensions_Sun_T_Pack_Template";
     Description = "gid_Module_Optional_Extensions_Sun_T_Pack_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (
-        gid_File_Optional_Extensions_Sun_Template_Pack );
+    Files = ( gid_File_Optional_Extensions_Sun_Template_Pack );
     Minimal = NO;
     Default = YES;
 End

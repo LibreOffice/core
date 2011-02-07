@@ -1609,8 +1609,8 @@ else
 }
 # Languages
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
-ToFile( "INTRO_BITMAPS",     "@INTRO_BITMAPS@",  "e" );
-ToFile( "ABOUT_BITMAPS",     "@ABOUT_BITMAPS@",  "e" );
+ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );
+ToFile( "ABOUT_BITMAP",      "@ABOUT_BITMAP@",   "e" );
 ToFile( "OOO_VENDOR",        "@OOO_VENDOR@",     "e" );
 ToFile( "OOODMAKEMODE",      "YES",              "e" );
 ToFile( "WITH_POOR_HELP_LOCALIZATIONS", "@WITH_POOR_HELP_LOCALIZATIONS@", "e" );

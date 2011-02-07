@@ -29,6 +29,7 @@
 
 FolderItem gid_Folderitem_Smath
     Name = "%PRODUCTNAME Math";
+    Name (pt-BR) = "%PRODUCTNAME_BR Math";
     ModuleID = gid_Module_Prg_Math_Bin;
     FolderID = gid_Folder_Staroffice51;
     FileID = gid_File_Exe_Smath;
