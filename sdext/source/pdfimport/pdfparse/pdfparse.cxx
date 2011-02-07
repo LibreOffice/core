@@ -38,7 +38,6 @@
 #include "pdfparse.hxx"
 
 // workaround windows compiler: do not include multi_pass.hpp
-//#include <boost/spirit.hpp>
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_utility.hpp>
 #include <boost/spirit/include/classic_error_handling.hpp>
