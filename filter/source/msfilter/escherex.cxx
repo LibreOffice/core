@@ -4299,6 +4299,10 @@ sal_uInt32 EscherExGlobal::GenerateDrawingId()
 sal_uInt32 EscherExGlobal::GenerateShapeId( sal_uInt32 nDrawingId, bool bIsInSpgr )
 {
     // drawing identifier is one-based
+    // make sure the drawing is valid (bnc#656503)
+    if ( nDrawingId == 0 )
+        return 0;
+    // create index from the identifier
     size_t nDrawingIdx = nDrawingId - 1;
     OSL_ENSURE( nDrawingIdx < maDrawingInfos.size(), "EscherExGlobal::GenerateShapeId - invalid drawing ID" );
     if( nDrawingIdx >= maDrawingInfos.size() )
@@ -4398,6 +4402,8 @@ SvStream* EscherExGlobal::ImplQueryPictureStream()
 EscherEx::EscherEx( const EscherExGlobalRef& rxGlobal, SvStream& rOutStrm ) :
     mxGlobal                ( rxGlobal ),
     mpOutStrm               ( &rOutStrm ),
+
+    mnCurrentDg                         ( 0 ),
 
     mnGroupLevel            ( 0 ),
     mnHellLayerId           ( USHRT_MAX ),
