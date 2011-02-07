@@ -44,7 +44,6 @@ using namespace uno;
 using namespace uno::util;
 using namespace unoidl::com::sun::star::uno;
 using namespace unoidl::com::sun::star::lang;
-//using namespace unoidl::com::sun::star::test::bridge;
 using namespace unoidl::test::testtools::bridgetest;
 namespace foo
 {
@@ -580,9 +579,6 @@ static bool performSequenceTest(XBridgeTest* xBT)
     arObject[0] = new WeakBase(); arObject[1] =  new WeakBase();
     arObject[1] = new WeakBase();
 
-    //TestEnum arEnum[] = new TestEnum[3];
-    //arEnum[0] = TestEnum::ONE; arEnum[1] = TestEnum::TWO;
-    //arEnum[2] = TestEnum::CHECK;
     Console::WriteLine(new String("cli_cpp_bridgetest: Workaround for C++ compiler bug:"
         " using Array of Int32 instead of Array of enums w"));
     Int32 arEnum[] = new Int32[3];
@@ -605,21 +601,7 @@ static bool performSequenceTest(XBridgeTest* xBT)
             0x123456789abcdef0, 0xfedcba9876543210, 17.0815f, 3.1415926359,
             TestEnum::CHECK, Constants::STRING_TEST_CONSTANT, arObject[2],
             Any( __typeof(Object), arObject[2] ) );
-
-
-//     int[][][] arLong3 = new int[][][]{
-//         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} },
-//         new int [][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}},
-//         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}}};
-
     {
-
-//      Console::WriteLine(new String("cli_cpp_bridgetest:
-//     int[][] seqSeqRet = xBT2->setDim2(arLong3[0]);
-//     bRet = check( compareData(seqSeqRet, arLong3[0]), "sequence test") && bRet;
-//     int[][][] seqSeqRet2 = xBT2->setDim3(arLong3);
-//     bRet = check( compareData(seqSeqRet2, arLong3), "sequence test") && bRet;
-
     Any seqAnyRet[] = xBT2->setSequenceAny(arAny);
     bRet = check( compareData(seqAnyRet, arAny), "sequence test") && bRet;
     Boolean seqBoolRet[] = xBT2->setSequenceBool(arBool);
@@ -643,7 +625,6 @@ static bool performSequenceTest(XBridgeTest* xBT)
     //types because of workaround. arEnum is Int32[].
     Console::WriteLine(new String("cli_cpp_bridgetest: Test omitted because "
         "of C++ compiler bug. XBridgeTest2::setSequenceEnum(sequence<TestEnum>)"));
-//    bRet = check( compareData(seqEnumRet, arEnum), "sequence test") && bRet;
     UInt16 seqUShortRet[] = xBT2->setSequenceUShort(arUShort);
     bRet = check( compareData(seqUShortRet, arUShort), "sequence test") && bRet;
     UInt32 seqULongRet[] = xBT2->setSequenceULong(arULong);
@@ -658,107 +639,11 @@ static bool performSequenceTest(XBridgeTest* xBT)
     bRet = check( compareData(seqStructRet, arStruct), "sequence test") && bRet;
     }
     {
-//     Boolean arBoolTemp[] = static_cast<Boolean[]>( arBool->Clone());
-//     Char arCharTemp[] = static_cast<Char[]>(arChar->Clone());
-//     Byte arByteTemp[] = static_cast<Byte[]>(arByte->Clone());
-//     Int16 arShortTemp[] = static_cast<Int16[]>(arShort->Clone());
-//     UInt16 arUShortTemp[] = static_cast<UInt16[]>(arUShort->Clone());
-//     Int32 arLongTemp[] = static_cast<Int32[]>(arLong->Clone());
-//     UInt32 arULongTemp[] = static_cast<UInt32[]>(arULong->Clone());
-//     Int64 arHyperTemp[] = static_cast<Int64[]>(arHyper->Clone());
-//     UInt64 arUHyperTemp[] = static_cast<UInt64[]>(arUHyper->Clone());
-//     Single arFloatTemp[] = static_cast<Single[]>(arFloat->Clone());
-//     Double arDoubleTemp[] = static_cast<Double[]>(arDouble->Clone());
-//     TestEnum arEnumTemp[] = static_cast<TestEnum[]>(arEnum->Clone());
-//     String* arStringTemp[] = static_cast<String*[]>(arString->Clone());
-//     Object* arObjectTemp = static_cast<Object*[]>(arObject->Clone());
-//     Any arAnyTemp[] = static_cast<Any[]>(arAny->Clone());
-//     // make sure this are has the same contents as arLong3[0]
-//     int[][] arLong2Temp = new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} };
-//     // make sure this are has the same contents as arLong3
-//     int[][][] arLong3Temp = new int[][][]{
-//         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9} },
-//         new int [][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}},
-//         new int[][]{new int[]{1,2,3},new int[]{4,5,6}, new int[]{7,8,9}}};
     Console::WriteLine(new String("cli_cpp_bridgetest: no test of "
         "XBridgeTest2::setSequencesInOut and XBridgeTest2.setSequencesOut "
         "because jagged arrays are not supported by C++ compiler"));
-//     xBT2->setSequencesInOut(& arBoolTemp, & arCharTemp, & arByteTemp,
-//                            & arShortTemp, & arUShortTemp, & arLongTemp,
-//                            & arULongTemp,& arHyperTemp, & arUHyperTemp,
-//                            & arFloatTemp,& arDoubleTemp, & arEnumTemp,
-//                            & arStringTemp, &  arObjectTemp,
-//                            & arAnyTemp, & arLong2Temp, & arLong3Temp);
-//     bRet = check(
-//         compareData(arBoolTemp, arBool) &&
-//         compareData(arCharTemp , arChar) &&
-//         compareData(arByteTemp , arByte) &&
-//         compareData(arShortTemp , arShort) &&
-//         compareData(arUShortTemp , arUShort) &&
-//         compareData(arLongTemp , arLong) &&
-//         compareData(arULongTemp , arULong) &&
-//         compareData(arHyperTemp , arHyper) &&
-//         compareData(arUHyperTemp , arUHyper) &&
-//         compareData(arFloatTemp , arFloat) &&
-//         compareData(arDoubleTemp , arDouble) &&
-//         compareData(arEnumTemp , arEnum) &&
-//         compareData(arStringTemp , arString) &&
-//         compareData(arObjectTemp , arObject) &&
-//         compareData(arAnyTemp , arAny) &&
-//         compareData(arLong2Temp , arLong3[0]) &&
-//         compareData(arLong3Temp , arLong3), "sequence test") && bRet;
-
-    //Boolean arBoolOut[];
-    //Char arCharOut[];
-    //Byte arByteOut[];
-    //Int16 arShortOut[];
-    //UInt16 arUShortOut[];
-    //Int32 arLongOut[];
-    //UInt32 arULongOut[];
-    //Int64 arHyperOut[];
-    //UInt64 arUHyperOut[];
-    //Single arFloatOut[];
-    //Double arDoubleOut[];
-    //TestEnum arEnumOut[];
-    //String* arStringOut[];
-    //Object* arObjectOut[];
-    //Any arAnyOut[];
-//     int[][] arLong2Out;
-//     int[][][] arLong3Out;
-
-//     xBT2->setSequencesOut(out arBoolOut, out arCharOut, out arByteOut,
-//                          out arShortOut, out arUShortOut, out arLongOut,
-//                          out arULongOut, out arHyperOut, out arUHyperOut,
-//                          out arFloatOut, out arDoubleOut, out arEnumOut,
-//                          out arStringOut, out arObjectOut, out arAnyOut,
-//                          out arLong2Out, out arLong3Out);
-//     bRet = check(
-//         compareData(arBoolOut, arBool) &&
-//         compareData(arCharOut, arChar) &&
-//         compareData(arByteOut, arByte) &&
-//         compareData(arShortOut, arShort) &&
-//         compareData(arUShortOut, arUShort) &&
-//         compareData(arLongOut, arLong) &&
-//         compareData(arULongOut, arULong) &&
-//         compareData(arHyperOut, arHyper) &&
-//         compareData(arUHyperOut, arUHyper) &&
-//         compareData(arFloatOut, arFloat) &&
-//         compareData(arDoubleOut, arDouble) &&
-//         compareData(arEnumOut, arEnum) &&
-//         compareData(arStringOut, arString) &&
-//         compareData(arObjectOut, arObject) &&
-//         compareData(arAnyOut, arAny) &&
-//         compareData(arLong2Out, arLong3[0]) &&
-//         compareData(arLong3Out, arLong3), "sequence test") && bRet;
     }
     {
-    //test with empty sequences
-   //  int[][] _arLong2 = new int[0][];
-//     int[][] seqSeqRet = xBT2->setDim2(_arLong2);
-//     bRet = check( compareData(seqSeqRet, _arLong2), "sequence test") && bRet;
-//     int[][][] _arLong3 = new int[0][][];
-//     int[][][] seqSeqRet2 = xBT2->setDim3(_arLong3);
-//    bRet = check( compareData(seqSeqRet2, _arLong3), "sequence test") && bRet;
     Any _arAny[] = new Any[0];
     Any seqAnyRet[] = xBT2->setSequenceAny(_arAny);
     bRet = check( compareData(seqAnyRet, _arAny), "sequence test") && bRet;
@@ -788,8 +673,6 @@ static bool performSequenceTest(XBridgeTest* xBT)
     bRet = check( compareData(seqDoubleRet, _arDouble), "sequence test") && bRet;
     TestEnum _arEnum[] = new TestEnum[0];
     xBT2->setSequenceEnum(_arEnum);
-//  compiler bug: _arEnum has type System.Enum and not TestEnum
-//    bRet = check( compareData(seqEnumRet, _arEnum), "sequence test") && bRet;
     UInt16 _arUShort[] = new UInt16[0];
     UInt16 seqUShortRet[] = xBT2->setSequenceUShort(_arUShort);
     bRet = check( compareData(seqUShortRet, _arUShort), "sequence test") && bRet;
