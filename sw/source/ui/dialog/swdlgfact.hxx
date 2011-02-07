@@ -181,9 +181,9 @@ class AbstractDropDownFieldDialog_Impl : public AbstractDropDownFieldDialog //ad
 //add for DropDownFieldDialog end
 
 
-class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
+class AbstractSwLabDlg_Impl  : public AbstractSwLabDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwLabDlg_Impl,SwLabDlg)
+    DECL_ABSTDLG_BASE(AbstractSwLabDlg_Impl,SwLabDlg)
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
@@ -197,9 +197,9 @@ class AbstarctSwLabDlg_Impl  : public AbstarctSwLabDlg
 //add for SwLabDlg end
 
 //add for SwSelGlossaryDlg begin
-class AbstarctSwSelGlossaryDlg_Impl : public AbstarctSwSelGlossaryDlg
+class AbstractSwSelGlossaryDlg_Impl : public AbstractSwSelGlossaryDlg
 {
-    DECL_ABSTDLG_BASE(AbstarctSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
+    DECL_ABSTDLG_BASE(AbstractSwSelGlossaryDlg_Impl,SwSelGlossaryDlg)
     virtual void InsertGlos(const String &rRegion, const String &rGlosName);    // inline
     virtual USHORT GetSelectedIdx() const;  // inline
     virtual void SelectEntryPos(USHORT nIdx);   // inline
@@ -454,7 +454,7 @@ public:
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
                                 SwField* pField,int nResId, BOOL bNextButton = FALSE );
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert,int nResId ); //add for SwEnvDlg
-    virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, BOOL bLabel,int nResId  );
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod (); //add for SwLabDlg
@@ -467,7 +467,7 @@ public:
                                                     BOOL bDraw = FALSE,
                                                     UINT16 nDefPage = 0);
 
-    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ); //add for SwSelGlossaryDlg
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ); //add for  SwTableHeightDlg SwSortDlg
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ); //add for  SwSplitTblDlg
 

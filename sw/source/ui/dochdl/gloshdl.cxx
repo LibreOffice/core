@@ -489,7 +489,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "SwAbstractDialogFactory fail!");
 
-                AbstarctSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
+                AbstractSwSelGlossaryDlg* pDlg = pFact->CreateSwSelGlossaryDlg( 0, aShortName, DLG_SEL_GLOS );
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
                 for(USHORT i = 0; i < aFoundArr.Count(); ++i)
                 {

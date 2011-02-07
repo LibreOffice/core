@@ -256,14 +256,14 @@ public:
      virtual void            SetWindowState( const ByteString& rStr ) =0;//this method inherit from SystemWindow
 };
 
-class AbstarctSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
+class AbstractSwLabDlg  : public SfxAbstractTabDialog //add for SwLabDlg
 {
 public:
      virtual const String& GetBusinessCardStr() const = 0;
      virtual Printer *GetPrt() =0;
 };
 
-class AbstarctSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossaryDlg
+class AbstractSwSelGlossaryDlg : public VclAbstractDialog //add for SwSelGlossaryDlg
 {
 public:
     virtual void InsertGlos(const String &rRegion, const String &rGlosName) = 0;    // inline
@@ -372,7 +372,7 @@ public:
     virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert,int nResId ) = 0; //add for SwEnvDlg
 
 
-    virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
+    virtual AbstractSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
                                                      SwNewDBMgr* pNewDBMgr, BOOL bLabel,int nResId  ) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;//add for SwLabDlg
@@ -386,7 +386,7 @@ public:
                                                     BOOL bDraw = FALSE,
                                                     UINT16 nDefPage = 0) = 0;
 
-    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
+    virtual AbstractSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
 
     virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg
     virtual AbstractSplitTableDialog * CreateSplitTblDialog ( Window * pParent, SwWrtShell &rSh ) = 0; //add for  SwSplitTblDlg
