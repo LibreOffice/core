@@ -164,14 +164,12 @@ void test::oustring::Convert::convertToString()
                   | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,
               0,
               "" },
-            // the next also tests that a short source produces a long target:
-            /* FIXME: fails currently
-            { { 0xB800 },
-              1,
+            { { 0x3001,  0xB800 },
+              2,
               RTL_TEXTENCODING_ISO_2022_JP,
               OUSTRING_TO_OSTRING_CVTFLAGS,
-              "\x1B(B?",
-              "\x1B(B?" }, */
+              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f",
+              "\x1b\x24\x42\x21\x22\x1b\x28\x42\x3f" },
             { { 0x0041,0x0100,0x0042 },
               3,
               RTL_TEXTENCODING_ISO_8859_1,
