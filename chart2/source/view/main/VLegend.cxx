@@ -446,10 +446,11 @@ awt::Size lcl_placeLegendEntries(
                         DrawModelWrapper::removeShape( aTextShapes[nEntry] );
                         aTextShapes.pop_back();
                     }
-                    if( nEntry < static_cast<sal_Int32>(rEntries.size()) )
+                    if( nEntry < nNumberOfEntries )
                     {
                         DrawModelWrapper::removeShape( rEntries[ nEntry ].aSymbol );
                         rEntries.pop_back();
+                        nNumberOfEntries--;
                     }
                 }
                 nSumHeight -= aRowHeights[nR];
