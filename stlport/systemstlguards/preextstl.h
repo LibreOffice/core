@@ -68,6 +68,7 @@
 #           include _STLP_NATIVE_HEADER(vector)
 #           include _STLP_NATIVE_HEADER(string)
 #           include _STLP_NATIVE_HEADER(numeric)
+#           include _STLP_NATIVE_HEADER(functional)
 #           include _STLP_NATIVE_HEADER(algorithm)
 #       endif
 #       include _STLP_NATIVE_HEADER(streambuf)
