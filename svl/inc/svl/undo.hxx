@@ -233,7 +233,7 @@ namespace svl
         virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount ) = 0;
         virtual size_t          GetMaxUndoActionCount() const = 0;
 
-        virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=FALSE ) = 0;
+        virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False ) = 0;
 
         virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const = 0;
         virtual sal_uInt16      GetUndoActionId() const = 0;
@@ -348,7 +348,7 @@ public:
     // IUndoManager overridables
     virtual void            SetMaxUndoActionCount( size_t nMaxUndoActionCount );
     virtual size_t          GetMaxUndoActionCount() const;
-    virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=FALSE );
+    virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
     virtual size_t          GetUndoActionCount( bool const i_currentLevel = CurrentLevel ) const;
     virtual sal_uInt16      GetUndoActionId() const;
     virtual UniString       GetUndoActionComment( size_t nNo=0, bool const i_currentLevel = CurrentLevel ) const;
