@@ -113,7 +113,7 @@ void NoHelpErrorBox::RequestHelp( const HelpEvent& )
 
 #define STARTERLIST 0
 
-static bool impl_hasHelpInstalled();
+static bool impl_hasHelpInstalled( const rtl::OUString &rLang );
 
 /// Return the locale we prefer for displaying help
 static rtl::OUString HelpLocaleString()
@@ -121,13 +121,16 @@ static rtl::OUString HelpLocaleString()
     static rtl::OUString aLocaleStr;
     if (!aLocaleStr.getLength())
     {
+        const rtl::OUString aEnglish( RTL_CONSTASCII_USTRINGPARAM( "en" ) );
         // detect installed locale
         Any aLocale =
             ::utl::ConfigManager::GetConfigManager().GetDirectConfigProperty(
                ::utl::ConfigManager::LOCALE );
         aLocale >>= aLocaleStr;
         bool bOk = aLocaleStr.getLength() != 0;
-        if ( impl_hasHelpInstalled() && bOk )
+        if ( !bOk )
+            aLocaleStr = aEnglish;
+        else
         {
             rtl::OUString aBaseInstallPath;
             // utl::Bootstrap::PathStatus aBaseLocateResult =
@@ -154,15 +157,19 @@ static rtl::OUString HelpLocaleString()
                 }
             }
         }
-        if (!bOk)
-            aLocaleStr = rtl::OUString( DEFINE_CONST_UNICODE("en") );
+        // if not OK, and not even English installed, we use online help, and
+        // have to preserve the full locale name
+        if ( !bOk && impl_hasHelpInstalled( aEnglish ) )
+            aLocaleStr = aEnglish;
     }
     return aLocaleStr;
 }
 
-void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
+void AppendConfigToken( String& rURL, sal_Bool bQuestionMark, const rtl::OUString &rLang )
 {
-    ::rtl::OUString aLocaleStr(HelpLocaleString());
+    ::rtl::OUString aLocaleStr( rLang );
+    if ( !aLocaleStr.getLength() )
+        aLocaleStr = HelpLocaleString();
 
     // query part exists?
     if ( bQuestionMark )
@@ -338,7 +345,7 @@ void SfxHelp_Impl::Load()
     // fill modules list
     // create the help url (empty, without module and helpid)
     String sHelpURL( DEFINE_CONST_UNICODE("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( sHelpURL, sal_True );
+    AppendConfigToken( sHelpURL, sal_True );
 
     // open ucb content and get the list of the help modules
     // the list contains strings with three tokens "ui title \t type \t url"
@@ -621,11 +628,11 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
             aHelpURL += String::CreateFromInt64( nHelpId );
 
             String aTempURL = aHelpURL;
-            AppendConfigToken_Impl( aTempURL, sal_True );
+            AppendConfigToken( aTempURL, sal_True );
             bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
         }
 
-        AppendConfigToken_Impl( aHelpURL, sal_True );
+        AppendConfigToken( aHelpURL, sal_True );
 
         if ( bHasAnchor )
         {
@@ -683,11 +690,11 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
                                               RTL_TEXTENCODING_ASCII_US ));
 
         String aTempURL = aHelpURL;
-        AppendConfigToken_Impl( aTempURL, sal_True );
+        AppendConfigToken( aTempURL, sal_True );
         bHasAnchor = GetHelpAnchor_Impl( aTempURL, aAnchor );
     }
 
-    AppendConfigToken_Impl( aHelpURL, sal_True );
+    AppendConfigToken( aHelpURL, sal_True );
 
     if ( bHasAnchor )
     {
@@ -749,10 +756,10 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
 }
 
 /// Check for built-in help
-static bool impl_hasHelpInstalled()
+static bool impl_hasHelpInstalled( const rtl::OUString &rLang = rtl::OUString() )
 {
     String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    AppendConfigToken( aHelpRootURL, sal_True, rLang );
     Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
 
     return ( aFactories.getLength() != 0 );
