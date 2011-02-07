@@ -210,8 +210,6 @@ void BasicIDEShell::Init()
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "BasicIDE" ) ) );
     SetHelpId( SVX_INTERFACE_BASIDE_VIEWSH );
 
-    SFX_APP()->EnterBasicCall();
-
     LibBoxControl::RegisterControl( SID_BASICIDE_LIBSELECTOR );
     LanguageBoxControl::RegisterControl( SID_BASICIDE_CURRENT_LANG );
 
@@ -289,7 +287,6 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
     // ObjSh loslaesst. Es wusste auch keiner mehr wozu das gut war.
     // GetViewFrame()->GetObjectShell()->Broadcast( SfxSimpleHint( SFX_HINT_DYING ) );
 
-    SFX_APP()->LeaveBasicCall();
     IDE_DLL()->GetExtraData()->ShellInCriticalSection() = sal_False;
 
     GnBasicIDEShellCount--;
@@ -554,9 +551,9 @@ void BasicIDEShell::ArrangeTabBar()
 
 
 
-SfxUndoManager* BasicIDEShell::GetUndoManager()
+::svl::IUndoManager* BasicIDEShell::GetUndoManager()
 {
-    SfxUndoManager* pMgr = NULL;
+    ::svl::IUndoManager* pMgr = NULL;
     if( pCurWin )
         pMgr = pCurWin->GetUndoManager();
 

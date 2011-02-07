@@ -36,7 +36,6 @@
 #include <dialmgr.hxx>
 
 #include <sfx2/msg.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
@@ -1442,9 +1441,6 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
         const SfxPoolItem* pFontItem=0;
         if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, sal_True, &pFontItem ) )
             m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
-
-        if ( m_pStringItem )
-            pGroupLBox->AddAndSelect( m_pStringItem, m_pFontItem );
     }
 }
 

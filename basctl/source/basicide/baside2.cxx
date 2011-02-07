@@ -1332,7 +1332,7 @@ sal_uInt16 ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem,
     return nFound;
 }
 
-SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
+::svl::IUndoManager* __EXPORT ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();

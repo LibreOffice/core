@@ -164,8 +164,12 @@ public:
 #define BASWIN_INRESCHEDULE     0x08
 
 class Printer;
-class SfxUndoManager;
 class BasicEntryDescriptor;
+
+namespace svl
+{
+    class IUndoManager;
+}
 
 class IDEBaseWindow : public Window
 {
@@ -228,7 +232,8 @@ public:
 
     virtual Window* GetLayoutWindow();
 
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                    GetUndoManager();
 
     virtual sal_uInt16  GetSearchOptions();
 

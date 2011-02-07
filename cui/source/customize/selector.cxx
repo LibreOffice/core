@@ -39,7 +39,6 @@
 #include <sfx2/app.hxx>
 #include <sfx2/msg.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/minfitem.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>

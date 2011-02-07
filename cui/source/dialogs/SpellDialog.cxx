@@ -88,14 +88,16 @@ struct SpellDialog_Impl
 // -----------------------------------------------------------------------
 //#define VENDOR_IMAGE_HEIGHT 44 //as specified
 
-#define SPELLUNDO_CHANGE_LANGUAGE           (TEXTUNDO_USER + 1)
-#define SPELLUNDO_CHANGE_TEXTENGINE         (TEXTUNDO_USER + 2)
-#define SPELLUNDO_CHANGE_NEXTERROR          (TEXTUNDO_USER + 3)
-#define SPELLUNDO_CHANGE_ADD_TO_DICTIONARY  (TEXTUNDO_USER + 4)
-#define SPELLUNDO_CHANGE_GROUP              (TEXTUNDO_USER + 5) //undo list
-#define SPELLUNDO_MOVE_ERROREND             (TEXTUNDO_USER + 6)
-#define SPELLUNDO_UNDO_EDIT_MODE            (TEXTUNDO_USER + 7)
-#define SPELLUNDO_ADD_IGNORE_RULE           (TEXTUNDO_USER + 8)
+#define SPELLUNDO_START                     200
+
+#define SPELLUNDO_CHANGE_LANGUAGE           (SPELLUNDO_START + 1)
+#define SPELLUNDO_CHANGE_TEXTENGINE         (SPELLUNDO_START + 2)
+#define SPELLUNDO_CHANGE_NEXTERROR          (SPELLUNDO_START + 3)
+#define SPELLUNDO_CHANGE_ADD_TO_DICTIONARY  (SPELLUNDO_START + 4)
+#define SPELLUNDO_CHANGE_GROUP              (SPELLUNDO_START + 5) //undo list
+#define SPELLUNDO_MOVE_ERROREND             (SPELLUNDO_START + 6)
+#define SPELLUNDO_UNDO_EDIT_MODE            (SPELLUNDO_START + 7)
+#define SPELLUNDO_ADD_IGNORE_RULE           (SPELLUNDO_START + 8)
 
 namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
@@ -628,7 +630,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
         aSentenceED.ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
         bModified = false;
-        aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+        aSentenceED.UndoActionEnd();
     }
     if(!aChangePB.IsEnabled())
         aIgnorePB.GrabFocus();
@@ -670,7 +672,7 @@ IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
     aSentenceED.ChangeMarkedWord(aString, eLang);
     SpellContinue_Impl();
     bModified = false;
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 1;
 }
 // -----------------------------------------------------------------------
@@ -715,7 +717,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
 
     SpellContinue_Impl();
     bModified = false;
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 1;
 }
 /*-- 06.11.2003 11:24:08---------------------------------------------------
@@ -1044,7 +1046,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
 
     // go on
     SpellContinue_Impl();
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 0;
 }
 /*-------------------------------------------------------------------------
@@ -1755,7 +1757,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     TextSelection aSel(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd));
     //Remove spell errror attribute
     ExtTextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+    pTextEngine->UndoActionStart();
     const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
     DBG_ASSERT(pErrorAttrib, "no error attribute found");
 //  Reference <XSpellAlternatives> xAlternatives;
@@ -1808,7 +1810,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     if(pSpellErrorDescription)
         SetAttrib( SpellErrorAttrib(*pSpellErrorDescription), 0, m_nErrorStart, m_nErrorEnd );
     SetAttrib( SpellLanguageAttrib(eLanguage), 0, m_nErrorStart, m_nErrorEnd );
-    pTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+    pTextEngine->UndoActionEnd();
 }
 /* -----------------08.10.2003 13:18-----------------
 
@@ -2032,7 +2034,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
   -----------------------------------------------------------------------*/
 void SentenceEditWindow_Impl::Undo()
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
@@ -2060,7 +2062,7 @@ void SentenceEditWindow_Impl::ResetUndo()
   -----------------------------------------------------------------------*/
 void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg )
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     rUndoMgr.AddUndoAction(pAction, bTryMerg);
     GetSpellDialog()->aUndoPB.Enable();
 }
@@ -2082,9 +2084,9 @@ void SentenceEditWindow_Impl::UndoActionStart( sal_uInt16 nId )
 /*-- 12.11.2003 12:12:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::UndoActionEnd( sal_uInt16 nId )
+void SentenceEditWindow_Impl::UndoActionEnd()
 {
-    GetTextEngine()->UndoActionEnd(nId);
+    GetTextEngine()->UndoActionEnd();
 }
 /*-- 12.11.2003 12:12:38---------------------------------------------------
 

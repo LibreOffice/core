@@ -106,7 +106,8 @@ public:
     virtual sal_Bool        IsModified();
     virtual sal_Bool        IsPasteAllowed();
 
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                        GetUndoManager();
     // return number of pages to be printed
     virtual sal_Int32 countPages( Printer* pPrinter );
     // print page
