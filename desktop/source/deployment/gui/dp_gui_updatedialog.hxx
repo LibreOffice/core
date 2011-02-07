@@ -46,6 +46,7 @@
 #include "vcl/dialog.hxx"
 #include "vcl/fixed.hxx"
 #include <svtools/fixedhyper.hxx>
+#include <vcl/throbber.hxx>
 
 #include "descedit.hxx"
 #include "dp_gui_updatedata.hxx"
@@ -59,7 +60,6 @@ class ResId;
 class Window;
 
 namespace com { namespace sun { namespace star {
-    namespace awt { class XThrobber; }
     namespace deployment { class XExtensionManager;
                            class XPackage; }
     namespace uno { class XComponentContext; }
@@ -184,7 +184,7 @@ private:
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
     FixedText m_checking;
-    com::sun::star::uno::Reference< com::sun::star::awt::XThrobber > m_throbber;
+    Throbber m_throbber;
     FixedText m_update;
     UpdateDialog::CheckListBox m_updates;
     CheckBox m_all;

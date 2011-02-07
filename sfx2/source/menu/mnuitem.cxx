@@ -64,7 +64,6 @@
 #include <sfx2/dispatch.hxx>
 #include "idpool.hxx"
 #include "sfxtypes.hxx"
-#include <sfx2/macrconf.hxx>
 #include "virtmenu.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/tbxctrl.hxx>
@@ -232,8 +231,6 @@ SfxMenuControl::SfxMenuControl(sal_uInt16 nSlotId, SfxBindings& rBindings):
 
 SfxMenuControl::~SfxMenuControl()
 {
-    if ( SfxMacroConfig::IsMacroSlot( GetId() ) )
-        SFX_APP()->GetMacroConfig()->ReleaseSlotId(GetId());
     delete pSubMenu;
 }
 

@@ -88,7 +88,6 @@
 #include <sfx2/evntconf.hxx>
 #include "appdata.hxx"
 #include "workwin.hxx"
-#include <sfx2/macrconf.hxx>
 #include "helper.hxx"   // SfxContentHelper::...
 #include "app.hrc"
 #include "sfx2/sfxresid.hxx"
@@ -718,7 +717,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
                   pSh;
                   ++nIdx, pSh = pDispat->GetShell(nIdx) )
             {
-                SfxUndoManager *pShUndoMgr = pSh->GetUndoManager();
+                ::svl::IUndoManager *pShUndoMgr = pSh->GetUndoManager();
                 if ( pShUndoMgr )
                     pShUndoMgr->SetMaxUndoActionCount( nUndoCount );
             }
@@ -987,26 +986,9 @@ sal_Bool SfxApplication::SaveAll_Impl(sal_Bool bPrompt, sal_Bool bAutoSave)
 
 //--------------------------------------------------------------------
 
-SfxMacroConfig* SfxApplication::GetMacroConfig() const
-{
-    return SfxMacroConfig::GetOrCreate();
-}
-
-//--------------------------------------------------------------------
-SfxEventConfiguration* SfxApplication::GetEventConfig() const
-{
-    if (!pAppData_Impl->pEventConfig)
-        pAppData_Impl->pEventConfig = new SfxEventConfiguration;
-    return pAppData_Impl->pEventConfig;
-}
-
-//--------------------------------------------------------------------
-
 //--------------------------------------------------------------------
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
-    //DBG_ASSERT(pAppData_Impl->pEventConfig,"Keine Events angemeldet!");
-
     SfxObjectShell *pDoc = rEventHint.GetObjShell();
     if ( pDoc && ( pDoc->IsPreview() || !pDoc->Get_Impl()->bInitialized ) )
         return;

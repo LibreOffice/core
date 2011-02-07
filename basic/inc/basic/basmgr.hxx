@@ -237,6 +237,13 @@ public:
     */
     bool            LegacyPsswdBinaryLimitExceeded( ::com::sun::star::uno::Sequence< rtl::OUString >& _out_rModuleNames );
 
+    /// determines whether the Basic Manager has a given macro, given by fully qualified name
+    bool            HasMacro( String const& i_fullyQualifiedName ) const;
+    /// executes a given macro
+    ErrCode         ExecuteMacro( String const& i_fullyQualifiedName, SbxArray* i_arguments, SbxValue* i_retValue );
+    /// executes a given macro
+    ErrCode         ExecuteMacro( String const& i_fullyQualifiedName, String const& i_commaSeparatedArgs, SbxValue* i_retValue );
+
 private:
     sal_Bool            IsReference( sal_uInt16 nLib );
 

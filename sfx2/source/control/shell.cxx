@@ -46,7 +46,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
-#include "sfxbasic.hxx"
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
@@ -55,7 +54,6 @@
 #include <sfx2/request.hxx>
 #include <sfx2/mnumgr.hxx>
 #include "statcach.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/msgpool.hxx>
 
 //====================================================================
@@ -483,7 +481,7 @@ SfxBroadcaster* SfxShell::GetBroadcaster()
 
 //--------------------------------------------------------------------
 
-SfxUndoManager* SfxShell::GetUndoManager()
+::svl::IUndoManager* SfxShell::GetUndoManager()
 
 /*  [Beschreibung]
 
@@ -501,7 +499,7 @@ SfxUndoManager* SfxShell::GetUndoManager()
 
 //--------------------------------------------------------------------
 
-void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
+void SfxShell::SetUndoManager( ::svl::IUndoManager *pNewUndoMgr )
 
 /*  [Beschreibung]
 
@@ -517,6 +515,12 @@ void SfxShell::SetUndoManager( SfxUndoManager *pNewUndoMgr )
 */
 
 {
+    OSL_ENSURE( ( pUndoMgr == NULL ) || ( pNewUndoMgr == NULL ) || ( pUndoMgr == pNewUndoMgr ),
+        "SfxShell::SetUndoManager: exchanging one non-NULL manager with another non-NULL manager? Suspicious!" );
+    // there's at least one client of our UndoManager - the DocumentUndoManager at the SfxBaseModel - which
+    // caches the UndoManager, and registers itself as listener. If exchanging non-NULL UndoManagers is really
+    // a supported scenario (/me thinks it is not), then we would need to notify all such clients instances.
+
     pUndoMgr = pNewUndoMgr;
     if ( pUndoMgr )
         pUndoMgr->SetMaxUndoActionCount( (sal_uInt16) SvtUndoOptions().GetUndoCount() );
@@ -947,13 +951,6 @@ const SfxPoolItem* SfxShell::ExecuteSlot
         pSlot = GetVerbSlot_Impl(nSlot);
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlot);
-    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlot ) )
-    {
-        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlot);
-        if ( pInfo )
-            pSlot = pInfo->GetSlot();
-    }
-
     DBG_ASSERT( pSlot, "slot not supported" );
 
     SfxExecFunc pFunc = pSlot->GetExecFnc();
@@ -1022,13 +1019,6 @@ const SfxPoolItem* SfxShell::GetSlotState
         pSlot = GetVerbSlot_Impl(nSlotId);
     if ( !pSlot )
         pSlot = pIF->GetSlot(nSlotId);
-    if ( !pSlot && SfxMacroConfig::IsMacroSlot( nSlotId ) )
-    {
-        SfxMacroInfo* pInfo = SFX_APP()->GetMacroConfig()->GetMacroInfo(nSlotId);
-        if ( pInfo )
-            pSlot = pInfo->GetSlot();
-    }
-
     if ( pSlot )
         // ggf. auf Which-Id mappen
         nSlotId = pSlot->GetWhich( rPool );

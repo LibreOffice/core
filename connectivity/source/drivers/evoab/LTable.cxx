@@ -119,7 +119,7 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
     m_aPrecisions.reserve(nFieldCount);
     m_aScales.reserve(nFieldCount);
 
-    sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     CharClass aCharClass(pConnection->getDriver()->getFactory(),_aLocale);
     // read description
     sal_Unicode cDecimalDelimiter  = pConnection->getDecimalDelimiter();
@@ -674,7 +674,7 @@ sal_Bool OEvoabTable::setColumnAliases()
             aColumnFinalName = aColumnReadName;
         sColumnFinalName = aColumnFinalName;
 
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         ::rtl::OUString aTypeName;
         aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(sColumnFinalName,aTypeName,::rtl::OUString(),

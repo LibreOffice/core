@@ -1227,7 +1227,7 @@ void Outliner::ImpFilterIndents( sal_uLong nFirstPara, sal_uLong nLastPara )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-SfxUndoManager& Outliner::GetUndoManager()
+::svl::IUndoManager& Outliner::GetUndoManager()
 {
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->GetUndoManager();

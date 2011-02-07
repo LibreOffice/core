@@ -73,7 +73,6 @@ class BasicManager;
 class SfxMedium;
 class SfxObjectFactory;
 class SfxDocumentInfoDialog;
-class SfxEventConfigItem_Impl;
 class SfxStyleSheetBasePool;
 class INote;
 class SfxStyleSheetPool;
@@ -189,12 +188,6 @@ f"ur Dokumente und Teile von Dokumenten, die als selbst"andige Objekte
 in fremde Objekte integriert werden k"onnen.
 
 ----------------------------------------------------------------------*/
-
-enum SfxTitleQuery
-{
-    SFX_TITLE_QUERY_SAVE_NAME_PROPOSAL
-};
-
 
 class SfxToolBoxConfig;
 struct TransferableObjectDescriptor;
@@ -363,36 +356,11 @@ public:
     sal_uInt16                  GetScriptingSignatureState();
     void                        SignScriptingContent();
 
-    virtual String              QueryTitle( SfxTitleQuery ) const;
     virtual SfxDocumentInfoDialog* CreateDocumentInfoDialog(
                                         Window *pParent, const SfxItemSet& );
-    sal_Bool                    IsBasic( const String & rCode, SbxObject * pVCtrl = NULL );
 
     ErrCode                     CallBasic( const String& rMacro, const String& rBasicName,
-                                    SbxObject* pVCtrl, SbxArray* pArgs = 0, SbxValue* pRet = 0 );
-    ErrCode                     Call( const String & rCode, sal_Bool bIsBasicReturn, SbxObject * pVCtrl = NULL );
-
-    ErrCode                     CallScript(
-        const String & rScriptType, const String & rCode, const void* pArgs = NULL, void* pRet = NULL );
-
-    /** calls a StarBasic script without magic
-    @param _rMacroName
-        specifies the name of the method to execute
-    @param _rLocation
-        specifies the location of the script to execute. Allowed values are "application" and "document".
-    @param _pArguments
-        This is a pointer to a Sequence< Any >. All elements of the Sequence are wrapped into Basic objects
-        and passed as arguments to the method specified by <arg>_rMacroName</arg>
-    @param _pReturn
-        If not <NULL/>, the Any pointed to by this argument contains the return value of the (synchronous) call
-        to the StarBasic macro
-    */
-    ErrCode     CallStarBasicScript(
-        const String& _rMacroName,
-        const String& _rLocation,
-        const void* _pArguments = NULL,
-        void* _pReturn = NULL
-    );
+                                    SbxArray* pArgs = 0, SbxValue* pRet = 0 );
 
     ErrCode     CallXScript(
         const String& rScriptURL,
@@ -787,7 +755,6 @@ public:
     SAL_DLLPRIVATE SfxObjectShell* GetParentShellByModel_Impl();
 
     // configuration items
-    SAL_DLLPRIVATE SfxEventConfigItem_Impl* GetEventConfig_Impl( sal_Bool bForce=sal_False );
     SAL_DLLPRIVATE SfxToolBoxConfig* GetToolBoxConfig_Impl();
     SAL_DLLPRIVATE sal_uInt16 ImplGetSignatureState( sal_Bool bScriptingContent = sal_False );
 

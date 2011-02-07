@@ -147,7 +147,7 @@ struct SvxShapeImpl
      *  SdrObject so a multiple call to SvxShape::Create() with same SdrObject
      *  is prohibited.
      */
-    SdrObject*      mpCreatedObj;
+    ::tools::WeakReference< SdrObject > mpCreatedObj;
 
     // for xComponent
     ::cppu::OInterfaceContainerHelper   maDisposeListeners;
@@ -160,7 +160,7 @@ struct SvxShapeImpl
         ,mpMaster( NULL )
         ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
-        ,mpCreatedObj( NULL )
+        ,mpCreatedObj()
         ,maDisposeListeners( _rMutex )
         ,maPropertyNotifier( _rAntiImpl, _rMutex )
     {
@@ -468,11 +468,12 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( !pNewObj )
         return;
 
-    OSL_ENSURE( ( mpImpl->mpCreatedObj == NULL ) || ( mpImpl->mpCreatedObj == pNewObj ),
+    SdrObject* pCreatedObj = mpImpl->mpCreatedObj.get();
+    OSL_ENSURE( ( pCreatedObj == NULL ) || ( pCreatedObj == pNewObj ),
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
     // --> CL, OD 2005-07-19 #i52126# - correct condition
-    if ( mpImpl->mpCreatedObj != pNewObj )
+    if ( pCreatedObj != pNewObj )
     // <--
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );

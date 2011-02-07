@@ -54,7 +54,6 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/viewsh.hxx>
 #include "sfxpicklist.hxx"
-#include <sfx2/macrconf.hxx>
 #include "sfx2/sfxresid.hxx"
 #include "menu.hrc"
 #include "sfx2/imagemgr.hxx"
@@ -476,24 +475,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     SfxMenuControl *pMnuCtrl=0;
                     String aCmd( pSVMenu->GetItemCommand( nSlotId ) );
-                    if ( aCmd.CompareToAscii("slot:", 5) == 0 )
-                    {
-                        SfxMacroConfig* pCfg = SFX_APP()->GetMacroConfig();
-                        if ( pCfg->IsMacroSlot( nSlotId ) )
-                        {
-                            if ( pCfg->GetMacroInfo( nSlotId ) )
-                            {
-                                pCfg->RegisterSlotId( nSlotId );
-                                pSVMenu->SetItemCommand( nSlotId, String() );
-                                aCmd.Erase();
-                            }
-                            else
-                            {
-                                pSVMenu->SetItemCommand( nSlotId, String::CreateFromAscii("macro:///macro.not.founc") );
-                            }
-                        }
-                    }
-
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name

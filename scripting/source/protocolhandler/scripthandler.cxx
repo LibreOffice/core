@@ -49,10 +49,12 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include <vcl/abstdlg.hxx>
+#include <tools/diagnose_ex.h>
 
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <util/util.hxx>
+#include <framework/documentundoguard.hxx>
 
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
@@ -69,7 +71,6 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::script::provider;
 using namespace ::com::sun::star::document;
-using namespace ::scripting_util;
 
 namespace scripting_protocolhandler
 {
@@ -97,8 +98,7 @@ void SAL_CALL ScriptProtocolHandler::initialize(
         throw RuntimeException( temp, Reference< XInterface >() );
     }
 
-    validateXRef( m_xFactory,
-        "ScriptProtocolHandler::initialize: No Service Manager available" );
+    ENSURE_OR_THROW( m_xFactory.is(), "ScriptProtocolHandler::initialize: No Service Manager available" );
     m_bInitialised = true;
 }
 
@@ -162,7 +162,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
     {
         try
         {
-            bool bIsDocumentScript = ( aURL.Complete.indexOf( ::rtl::OUString::createFromAscii( "document" ) ) !=-1 );
+            bool bIsDocumentScript = ( aURL.Complete.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "document" ) ) !=-1 );
                 // TODO: isn't this somewhat strange? This should be a test for a location=document parameter, shouldn't it?
 
             if ( bIsDocumentScript )
@@ -182,7 +182,7 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             Reference< provider::XScript > xFunc =
                 m_xScriptProvider->getScript( aURL.Complete );
-            validateXRef( xFunc,
+            ENSURE_OR_THROW( xFunc.is(),
                 "ScriptProtocolHandler::dispatchWithNotification: validate xFunc - unable to obtain XScript interface" );
 
 
@@ -206,6 +206,11 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
                    }
                }
             }
+
+            // attempt to protect the document against the script tampering with its Undo Context
+            ::std::auto_ptr< ::framework::DocumentUndoGuard > pUndoGuard;
+            if ( bIsDocumentScript )
+                pUndoGuard.reset( new ::framework::DocumentUndoGuard( m_xScriptInvocation ) );
 
             bSuccess = sal_False;
             while ( !bSuccess )
@@ -248,16 +253,6 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
 
             bCaughtException = sal_True;
         }
-#ifdef _DEBUG
-        catch ( ... )
-        {
-            ::rtl::OUString reason = ::rtl::OUString::createFromAscii(
-                "ScriptProtocolHandler::dispatch: caught unknown exception" );
-
-            invokeResult <<= reason;
-        }
-#endif
-
     }
     else
     {
@@ -358,13 +353,11 @@ ScriptProtocolHandler::getScriptInvocation()
     return m_xScriptInvocation.is();
 }
 
-void
-ScriptProtocolHandler::createScriptProvider()
+void ScriptProtocolHandler::createScriptProvider()
 {
     if ( m_xScriptProvider.is() )
-    {
         return;
-    }
+
     try
     {
         // first, ask the component supporting the XScriptInvocationContext interface
@@ -397,6 +390,7 @@ ScriptProtocolHandler::createScriptProvider()
                 m_xScriptProvider = xSPS->getScriptProvider();
         }
 
+        // if nothing of this is successful, use the master script provider
         if ( !m_xScriptProvider.is() )
         {
             Reference< XPropertySet > xProps( m_xFactory, UNO_QUERY_THROW );
@@ -430,15 +424,6 @@ ScriptProtocolHandler::createScriptProvider()
         ::rtl::OUString temp = OUSTR( "ScriptProtocolHandler::createScriptProvider: " );
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
-#ifdef _DEBUG
-    catch ( ... )
-    {
-        throw RuntimeException(
-        OUSTR( "ScriptProtocolHandler::createScriptProvider: UnknownException: " ),
-            Reference< XInterface > () );
-    }
-#endif
-
 }
 
 ScriptProtocolHandler::ScriptProtocolHandler(

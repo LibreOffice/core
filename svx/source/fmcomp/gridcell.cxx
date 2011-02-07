@@ -1193,7 +1193,7 @@ String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Re
     if ( _rxField.is() )
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
         }
         catch( const Exception& )
         {
@@ -1534,7 +1534,7 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
             ((FormattedField*)m_pPainter)->SetValue(dValue);
@@ -1578,7 +1578,7 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 m_pWindow->SetText(String());
             else
@@ -2556,7 +2556,7 @@ String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn
     if (_rxField.is())
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
         }
         catch( const Exception& )
         {
@@ -3167,7 +3167,7 @@ void DbFilterField::Update()
 
             while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max anzahl eintraege
             {
-                aStr = getValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
+                aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
                 aStringList.push_back(aStr);
                 xListCursor->next();
             }

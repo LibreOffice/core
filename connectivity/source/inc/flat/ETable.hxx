@@ -33,6 +33,7 @@
 #include "connectivity/CommonTools.hxx"
 #include <tools/urlobj.hxx>
 #include "file/quotedstring.hxx"
+#include <unotools/syslocale.hxx>
 
 namespace connectivity
 {
@@ -67,6 +68,9 @@ namespace connectivity
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             sal_Bool CreateFile(const INetURLObject& aFile, sal_Bool& bCreateMemo);
             sal_Bool readLine(sal_Int32& _rnCurrentPos);
+            void impl_fillColumnInfo_nothrow(QuotedTokenizedString& aFirstLine,xub_StrLen& nStartPosFirstLine,xub_StrLen& nStartPosFirstLine2
+                                             ,sal_Int32& io_nType,sal_Int32& io_nPrecisions,sal_Int32& io_nScales,String& o_sTypeName
+                                             ,const sal_Unicode cDecimalDelimiter,const sal_Unicode cThousandDelimiter,const CharClass& aCharClass);
         public:
             virtual void refreshColumns();
 

@@ -77,7 +77,6 @@
 #include <sfx2/bindings.hxx>
 #include "mnucfga.hxx"
 #include "sfx2/sfxresid.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/sfx.hrc>
 #include "menu.hrc"

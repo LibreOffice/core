@@ -211,11 +211,8 @@ public:
                                       Window *pWin, const Point *pPosPixel,
                                       const SfxPoolItem *pArg1, ...  );
 
-    void                EnterAction( const String& rName );
-    void                LeaveAction();
-
-    sal_Bool                IsAppDispatcher() const;
-    sal_Bool                IsFlushed() const;
+    sal_Bool            IsAppDispatcher() const;
+    sal_Bool            IsFlushed() const;
     void                Flush();
     void                Lock( sal_Bool bLock );
     sal_Bool                IsLocked( sal_uInt16 nSID = 0 ) const;

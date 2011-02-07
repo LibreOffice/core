@@ -74,10 +74,15 @@ class SfxItemSet;
 class SvxNumBulletItem;
 class SvxNumberFormat;
 class SvxLRSpaceItem;
-class SfxUndoManager;
 class EditEngine;
 class SvKeyValueIterator;
 class SvxForbiddenCharactersTable;
+
+namespace svl
+{
+    class IUndoManager;
+}
+
 #include <com/sun/star/uno/Reference.h>
 
 #include <vos/ref.hxx>
@@ -938,7 +943,8 @@ public:
     // nFormat muss ein Wert aus dem enum EETextFormat sein (wg.CLOOKS)
     sal_uLong           Read( SvStream& rInput, const String& rBaseURL, sal_uInt16, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
 
-    SfxUndoManager& GetUndoManager();
+    ::svl::IUndoManager&
+                    GetUndoManager();
 
     void            QuickSetAttribs( const SfxItemSet& rSet, const ESelection& rSel );
     void            QuickInsertField( const SvxFieldItem& rFld, const ESelection& rSel );

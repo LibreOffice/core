@@ -31,6 +31,7 @@
 #include "sfx2/dllapi.h"
 #include "sal/types.h"
 #include <tools/solar.h>
+#include <tools/errcode.hxx>
 #include <svl/smplhint.hxx>
 #include <svl/poolitem.hxx>
 #include <vcl/image.hxx>
@@ -98,6 +99,8 @@ struct SfxStbCtrlFactory;
 struct SfxTbxCtrlFactory;
 class SimpleResMgr;
 class ModalDialog;
+class SbxArray;
+class SbxValue;
 
 namespace sfx2
 {
@@ -218,28 +221,26 @@ public:
 
     // members
     SfxFilterMatcher&           GetFilterMatcher();
-    SfxMacroConfig*             GetMacroConfig() const;
     SfxProgress*                GetProgress() const;
     const String&               GetLastSaveDirectory() const;
-    sal_uInt16                      GetFreeIndex();
+    sal_uInt16                  GetFreeIndex();
     void                        ReleaseIndex(sal_uInt16 i);
-    SfxEventConfiguration*      GetEventConfig() const;
 
     // Basic/Scripting
     static sal_Bool             IsXScriptURL( const String& rScriptURL );
     static ::rtl::OUString      ChooseScript();
     static void                 MacroOrganizer( sal_Int16 nTabId );
+    static ErrCode              CallBasic( const String&, BasicManager*, SbxArray *pArgs, SbxValue *pRet );
+    static ErrCode              CallAppBasic( const String& i_macroName, SbxArray* i_args = NULL, SbxValue* i_ret = NULL )
+                                { return CallBasic( i_macroName, SfxApplication::GetOrCreate()->GetBasicManager(), i_args, i_ret ); }
     BasicManager*               GetBasicManager();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetDialogContainer();
     com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer >
                                 GetBasicContainer();
     StarBASIC*                  GetBasic();
-    sal_uInt16                      SaveBasicManager() const;
-    sal_uInt16                      SaveBasicAndDialogContainer() const;
-    void                        EnterBasicCall();
-    bool                        IsInBasicCall() const;
-    void                        LeaveBasicCall();
+    sal_uInt16                  SaveBasicManager() const;
+    sal_uInt16                  SaveBasicAndDialogContainer() const;
     void                        RegisterBasicConstants( const char *pPrefix,
                                                         const SfxConstant *pConsts,
                                                         sal_uInt16 nCount );
@@ -293,8 +294,6 @@ public:
     SAL_DLLPRIVATE void         MiscState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         PropExec_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         PropState_Impl(SfxItemSet &);
-    SAL_DLLPRIVATE void         MacroExec_Impl(SfxRequest &);
-    SAL_DLLPRIVATE void         MacroState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         INetExecute_Impl(SfxRequest &);
     SAL_DLLPRIVATE void         INetState_Impl(SfxItemSet &);
     SAL_DLLPRIVATE void         OfaExec_Impl(SfxRequest &);
@@ -303,7 +302,6 @@ public:
     SAL_DLLPRIVATE void         SetProgress_Impl(SfxProgress *);
     SAL_DLLPRIVATE const String& GetLastDir_Impl() const;
     SAL_DLLPRIVATE void         SetLastDir_Impl( const String & );
-    SAL_DLLPRIVATE void         PlayMacro_Impl( SfxRequest &rReq, StarBASIC *pBas );
 
     SAL_DLLPRIVATE void         EnterAsynchronCall_Impl();
     SAL_DLLPRIVATE bool         IsInAsynchronCall_Impl() const;

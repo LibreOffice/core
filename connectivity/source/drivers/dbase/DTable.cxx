@@ -340,7 +340,7 @@ void ODbaseTable::fillColumns()
     aStrFieldName.AssignAscii("Column");
     ::rtl::OUString aTypeName;
     static const ::rtl::OUString sVARCHAR(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
-    const sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+    const sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
     const bool bFoxPro = m_aHeader.db_typ == VisualFoxPro || m_aHeader.db_typ == VisualFoxProAuto || m_aHeader.db_typ == FoxProMemo;
 
     sal_Int32 i = 0;
@@ -2208,7 +2208,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
         if(xOldColumn.is())
             xCopyColumn = xOldColumn->createDataDescriptor();
         else
-            xCopyColumn = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+            xCopyColumn = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
 
         ::comphelper::copyProperties(descriptor,xCopyColumn);
 
@@ -2233,7 +2233,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                xCpy = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
             ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
@@ -2249,7 +2249,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
             if(xColumn.is())
                 xCpy = xColumn->createDataDescriptor();
             else
-                xCpy = new OColumn(getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers());
+                xCpy = new OColumn(getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers());
             ::comphelper::copyProperties(xProp,xCpy);
             xAppend->appendByDescriptor(xCpy);
         }
@@ -2390,7 +2390,7 @@ void ODbaseTable::addColumn(const Reference< XPropertySet >& _xNewColumn)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {
@@ -2463,7 +2463,7 @@ void ODbaseTable::dropColumn(sal_Int32 _nPos)
     pNewTable->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(::rtl::OUString(sTempName)));
     {
         Reference<XAppend> xAppend(pNewTable->getColumns(),UNO_QUERY);
-        sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
+        sal_Bool bCase = getConnection()->getMetaData()->supportsMixedCaseQuotedIdentifiers();
         // copy the structure
         for(sal_Int32 i=0;i < m_pColumns->getCount();++i)
         {

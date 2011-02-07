@@ -145,7 +145,7 @@ sal_Bool EditEngine::IsInUndo()
     return pImpEditEngine->IsInUndo();
 }
 
-SfxUndoManager& EditEngine::GetUndoManager()
+::svl::IUndoManager& EditEngine::GetUndoManager()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetUndoManager();

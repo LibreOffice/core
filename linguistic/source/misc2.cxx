@@ -249,7 +249,10 @@ String  GetWritableDictionaryURL( const String &rDicName )
     aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
-    return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
+    // NO_DECODE preserves the escape sequences that might be included in aDirName
+    // depending on the characters used in the path string. (Needed when comparing
+    // the dictionary URL with GetDictionaryWriteablePath in DicList::createDictionary.)
+    return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 }
 
 

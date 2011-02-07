@@ -44,6 +44,7 @@
 
 #include "app.hrc"
 #include <sfx2/app.hxx>
+#include <sfx2/evntconf.hxx>
 #include <sfx2/unoctitm.hxx>
 #include "appdata.hxx"
 #include <sfx2/viewsh.hxx>
@@ -52,7 +53,6 @@
 #include "arrdecl.hxx"
 #include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -149,8 +149,6 @@ void SfxApplication::Deinitialize()
     delete pAppData_Impl->pLabelResMgr;
 
     DELETEX(pAppData_Impl->pSlotPool);
-    DELETEX(pAppData_Impl->pEventConfig);
-    SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 
