@@ -30,9 +30,9 @@
 
 #include <tools/solar.h>
 #include "swdllapi.h"
-#include <errhdl.hxx>       // fuer ASSERT
-#include <swatrset.hxx>     // fuer SfxItemPool/-Set, Attr forward decl.
-#include <calbck.hxx>       // fuer SwModify
+#include <errhdl.hxx>       // For ASSERT.
+#include <swatrset.hxx>     // For SfxItemPool/-Set, Attr forward decl.
+#include <calbck.hxx>       // For SwModify.
 #include <hintids.hxx>
 
 class IDocumentSettingAccess;
@@ -50,18 +50,18 @@ class SW_DLLPUBLIC SwFmt : public SwModify
     SwAttrSet aSet;
 
     USHORT nWhichId;
-    USHORT nFmtId;          // Format-ID fuer Lesen/Schreiben
-    USHORT nPoolFmtId;      // Id-fuer "automatich" erzeugte Formate
-                            // (ist keine harte Attributierung !!)
-    USHORT nPoolHelpId;     // HelpId fuer diese Pool-Vorlage
-    BYTE nPoolHlpFileId;    // FilePos ans Doc auf die Vorlagen-Hilfen
-    BOOL   bWritten : 1;    // TRUE: bereits geschrieben
-    BOOL   bAutoFmt : 1;    // FALSE: es handelt sich um eine Vorlage
-                            // ist dflt immer auf TRUE !
-    BOOL   bFmtInDTOR : 1;  // TRUE: das Format wird geloscht. Damit man in
-                            // der FmtChg-Message das erkennen kann!!!
-    BOOL   bAutoUpdateFmt : 1;  // TRUE: am Format werden die Attribute
-                            // eines kompletten Absatzes gesetzt (UI-seitig!)
+    USHORT nFmtId;            // Format-ID for reading / writing.
+    USHORT nPoolFmtId;        // Id for "automatically" created formats.
+                              // (is not hard attribution!!!)
+    USHORT nPoolHelpId;       // HelpId for this Pool-style.
+    BYTE nPoolHlpFileId;      // FilePos to Doc to these style helps.
+    BOOL   bWritten : 1;      // TRUE: already written.
+    BOOL   bAutoFmt : 1;      // FALSE: it is a template.
+                              // default is true!
+    BOOL   bFmtInDTOR : 1;    // TRUE: Format becomes deleted. In order to be able
+                              // to recognize this in FmtChg-message!!
+    BOOL   bAutoUpdateFmt : 1;// TRUE: Set attributes of a whole paragraph
+                              // at format (UI-side!).
 
 protected:
     SwFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
@@ -71,30 +71,30 @@ protected:
     SwFmt( const SwFmt& rFmt );
 
 public:
-    TYPEINFO();     //Bereits in Basisklasse Client drin.
+    TYPEINFO();     // Already in base class Client.
 
     virtual ~SwFmt();
     SwFmt &operator=(const SwFmt&);
 
-    // fuer die Abfrage der Writer-Funktionen
+    // for Querying of Writer-functions.
     USHORT Which() const { return nWhichId; }
 
     virtual void Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue );
-        // erfrage vom Format Informationen
+
+    // Query format information.
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
-    // kopiere Attribute; auch ueber Dokumentgrenzen hinweg
+    // Copy attributes even among documents.
     void CopyAttrs( const SwFmt&, BOOL bReplace=TRUE );
 
-    // loesche alle Attribute, die nicht in rFmt stehen
+    // Delete all attributes that are not in rFmt.
     void DelDiffs( const SfxItemSet& rSet );
     void DelDiffs( const SwFmt& rFmt ) { DelDiffs( rFmt.GetAttrSet() ); }
 
-    // Umhaengen des Formats (0 = Default)
+    // 0 is Default.
     BOOL SetDerivedFrom(SwFmt *pDerivedFrom = 0);
 
-    // Ist bInParents FALSE,
-    // wird nur in diesem Format nach dem Attribut gesucht.
+    // If bInParents is FALSE, search only in this format for attribute.
     inline const SfxPoolItem& GetFmtAttr( USHORT nWhich,
                                           BOOL bInParents = TRUE ) const;
     inline SfxItemState GetItemState( USHORT nWhich, BOOL bSrchInParent = TRUE,
@@ -103,9 +103,8 @@ public:
     virtual BOOL SetFmtAttr( const SfxItemSet& rSet );
     virtual BOOL ResetFmtAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
 
-
-    // Nimmt alle Hints aus dem Delta-Array,
-    // liefert die Anzahl der geloeschten Hints
+    // Takes all hints from Delta-Array,
+    // returns count of deleted hints.
     virtual USHORT ResetAllFmtAttr();
 
     inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
@@ -116,7 +115,7 @@ public:
     inline void SetName( const sal_Char* pNewName,
                          sal_Bool bBroadcast=sal_False);
 
-    // zur Abfrage des Attribute Arrays
+    // For querying the attribute array.
     inline const SwAttrSet& GetAttrSet() const { return aSet; }
 
     // Das Doc wird jetzt am SwAttrPool gesetzt. Dadurch hat man es immer
@@ -124,62 +123,59 @@ public:
     const SwDoc *GetDoc() const         { return aSet.GetDoc(); }
           SwDoc *GetDoc()               { return aSet.GetDoc(); }
 
-    /** Provides access to the document settings interface
-     */
+    /// Provides access to the document settings interface.
     const IDocumentSettingAccess* getIDocumentSettingAccess() const;
 
-    /** Provides access to the document draw model interface
-     */
+    /// Provides access to the document draw model interface.
     const IDocumentDrawModelAccess* getIDocumentDrawModelAccess() const;
           IDocumentDrawModelAccess* getIDocumentDrawModelAccess();
 
-    /** Provides access to the document layout interface
-     */
+    /// Provides access to the document layout interface.
     const IDocumentLayoutAccess* getIDocumentLayoutAccess() const;
           IDocumentLayoutAccess* getIDocumentLayoutAccess();
 
-     /** Provides access to the document idle timer interface
-     */
-    IDocumentTimerAccess* getIDocumentTimerAccess();
+     /// Provides access to the document idle timer interface.
+     IDocumentTimerAccess* getIDocumentTimerAccess();
 
-     /** Provides access to the document idle timer interface
-     */
+     /// Provides access to the document idle timer interface.
     IDocumentFieldsAccess* getIDocumentFieldsAccess();
 
-     /** gives access to the chart data-provider
-     */
+     /// Gives access to the chart data-provider.
     IDocumentChartDataProviderAccess* getIDocumentChartDataProviderAccess();
 
-    // erfragen und setzen der Poolvorlagen-Id's
+    // Get and set Pool style IDs.
     USHORT GetPoolFmtId() const { return nPoolFmtId; }
     void SetPoolFmtId( USHORT nId ) { nPoolFmtId = nId; }
 
-    // erfragen und setzen der Hilfe-Id's fuer die Document-Vorlagen
+    // Get and set Help-IDs for document templates.
     USHORT GetPoolHelpId() const { return nPoolHelpId; }
     void SetPoolHelpId( USHORT nId ) { nPoolHelpId = nId; }
     BYTE GetPoolHlpFileId() const { return nPoolHlpFileId; }
     void SetPoolHlpFileId( BYTE nId ) { nPoolHlpFileId = nId; }
-    // erfrage die Attribut-Beschreibung, returnt den reingereichten String
+
+    // Get attribute-description. Returns passed string.
     void GetPresentation( SfxItemPresentation ePres,
         SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText ) const
         { aSet.GetPresentation( ePres, eCoreMetric, ePresMetric, rText ); }
-    // Das Format-ID fuer Lesen/Schreiben:
+
+    // Format-ID for reading/writing:
     void   ResetWritten()    { bWritten = FALSE; }
 
-    // Abfragen/Setzen vom AutoFmt-Flag
+    // Query / set AutoFmt-flag.
     BOOL IsAuto() const                 { return bAutoFmt; }
     void SetAuto( BOOL bNew = FALSE )   { bAutoFmt = bNew; }
 
-    // Abfragen/Setzen vom bAutoUpdateFmt-Flag
+    // Query / set bAutoUpdateFmt-flag.
     BOOL IsAutoUpdateFmt() const                { return bAutoUpdateFmt; }
     void SetAutoUpdateFmt( BOOL bNew = TRUE )   { bAutoUpdateFmt = bNew; }
 
     BOOL IsFmtInDTOR() const { return bFmtInDTOR; }
 
-    // GetMethoden: das Bool gibt an, ob nur im Set (FALSE) oder auch in
-    //              den Parents gesucht werden soll. Wird nichts gefunden,
-    //              wird das deflt. Attribut returnt.
-    // Charakter-Attribute  - impl. steht im charatr.hxx
+    // GetMethods: Bool indicates whether to search only in Set (FALSE)
+    // or also in Parents.
+    // If nothing is found the defaulted attribute is returned.
+
+    // Character-attributes - implemented in charatr.hxx
     inline const SvxPostureItem      &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem       &GetWeight( BOOL = TRUE ) const;
     inline const SvxShadowedItem     &GetShadowed( BOOL = TRUE ) const;
@@ -220,7 +216,7 @@ public:
     inline const SvxCharReliefItem     &GetCharRelief( BOOL = TRUE ) const;
     inline const SvxCharHiddenItem   &GetCharHidden( BOOL = TRUE ) const;
 
-    // Frame-Attribute  - impl. steht im frmatr.hxx,
+    // Frame-attributes - implemented in frmatr.hxx.
     inline const SwFmtFillOrder           &GetFillOrder( BOOL = TRUE ) const;
     inline const SwFmtFrmSize             &GetFrmSize( BOOL = TRUE ) const;
     inline const SwFmtHeader          &GetHeader( BOOL = TRUE ) const;
@@ -261,7 +257,7 @@ public:
     // #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
-    // Grafik-Attribute - impl. steht im grfatr.hxx
+    // Graphics-attributes - implemented in grfatr.hxx
     inline const SwMirrorGrf          &GetMirrorGrf( BOOL = TRUE ) const;
     inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
     inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
@@ -275,7 +271,7 @@ public:
     inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
     inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
 
-    // Paragraph-Attribute  - impl. steht im paratr.hxx
+    // Paragraph-attributes - implemented in paratr.hxx.
     inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
     inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
     inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
@@ -293,7 +289,7 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
-    // TabellenBox-Attribute    - impl. steht im cellatr.hxx
+    // TableBox attributes - implemented in cellatr.hxx.
     inline  const SwTblBoxNumFormat     &GetTblBoxNumFmt( BOOL = TRUE ) const;
     inline  const SwTblBoxFormula       &GetTblBoxFormula( BOOL = TRUE ) const;
     inline  const SwTblBoxValue         &GetTblBoxValue( BOOL = TRUE ) const;

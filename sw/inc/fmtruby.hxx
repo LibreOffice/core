@@ -38,12 +38,12 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
 {
     friend class SwTxtRuby;
 
-    String sRubyTxt;                    // the ruby txt
-    String sCharFmtName;                // name of the charformat
-    SwTxtRuby* pTxtAttr;                // the TextAttribut
-    USHORT nCharFmtId;                  // PoolId of the charformat
-    USHORT nPosition;                   // Position of the Ruby-Character
-    USHORT nAdjustment;                 // specific adjustment of the Ruby-Ch.
+    String sRubyTxt;                    // The ruby txt.
+    String sCharFmtName;                // Name of the charformat.
+    SwTxtRuby* pTxtAttr;                // The TextAttribute.
+    USHORT nCharFmtId;                  // PoolId of the charformat.
+    USHORT nPosition;                   // Position of the Ruby-character.
+    USHORT nAdjustment;                 // Specific adjustment of the Ruby-ch.
 
 public:
     SwFmtRuby( const String& rRubyTxt );
@@ -52,7 +52,7 @@ public:
 
     SwFmtRuby& operator=( const SwFmtRuby& rAttr );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

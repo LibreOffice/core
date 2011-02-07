@@ -36,9 +36,7 @@
 #include <fmtsrndenum.hxx>
 class IntlWrapper;
 
-//SwFmtSurround, wie soll sich der ---------------
-//  Dokumentinhalt unter dem Rahmen verhalten ---
-
+// SwFmtSurround: How document content under the frame shall behave.
 class SW_DLLPUBLIC SwFmtSurround: public SfxEnumItem
 {
     BOOL    bAnchorOnly :1;
@@ -49,7 +47,7 @@ public:
     SwFmtSurround( const SwFmtSurround & );
     inline SwFmtSurround &operator=( const SwFmtSurround &rCpy );
 
-    // "pure virtual Methods" of SfxPoolItem
+    // "Pure virtual Methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual USHORT          GetValueCount() const;

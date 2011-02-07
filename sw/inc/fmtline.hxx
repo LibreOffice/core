@@ -38,8 +38,8 @@ class IntlWrapper;
 
 class SW_DLLPUBLIC SwFmtLineNumber: public SfxPoolItem
 {
-    ULONG nStartValue   :24; //Startwert fuer den Absatz, 0 == kein Startwert
-    ULONG bCountLines   :1;  //Zeilen des Absatzes sollen mitgezaehlt werden.
+    ULONG nStartValue   :24; // Starting value for the paragraph. 0 == no starting value.
+    ULONG bCountLines   :1;  // Also count lines of paragraph.
 
 public:
     SwFmtLineNumber();
@@ -47,7 +47,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

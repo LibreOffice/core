@@ -40,22 +40,22 @@ class SwHistory;
 class SwPaM;
 class IntlWrapper;
 
-//Pagedescriptor
-//Client vom SwPageDesc der durch das Attribut "beschrieben" wird.
+// Pagedescriptor
+// Client of SwPageDesc that is "described" by the attribute.
 
 #define IVER_FMTPAGEDESC_NOAUTO ((USHORT)0x0001)
 #define IVER_FMTPAGEDESC_LONGPAGE   ((USHORT)0x0002)
 
 class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
 {
-    // diese "Doc"-Funktion ist friend, um nach dem kopieren das
-    // Auto-Flag setzen zu koennen !!
+    // This "Doc"-function is made friend in order to be able
+    // to set the auto-flag after copying!!
     friend BOOL InsAttr( SwDoc*, const SwPaM &, const SfxItemSet&, USHORT,
                         SwHistory* );
-    USHORT nNumOffset;          // Seitennummer Offset
-    USHORT nDescNameIdx;        // SW3-Reader: Stringpool-Index des Vorlagennamens
-    SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
-                                // Attribut gesetzt wurde (CntntNode/Format)
+    USHORT nNumOffset;          // Offset page number.
+    USHORT nDescNameIdx;        // SW3-Reader: stringpool-index of style name.
+    SwModify* pDefinedIn;       // Points to the object in which the
+                                // attribute was set (CntntNode/Format).
 
 public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
@@ -65,7 +65,7 @@ public:
 
     TYPEINFO();
 
-    // "pure virtual methods" of SfxPoolItem
+    // "Pure virtual methods" of SfxPoolItem.
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -84,7 +84,7 @@ public:
     USHORT  GetNumOffset() const        { return nNumOffset; }
     void    SetNumOffset( USHORT nNum ) { nNumOffset = nNum; }
 
-    // erfrage/setze, wo drin das Attribut verankert ist
+    // Query / set where attribute is anchored.
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     void ChgDefinedIn( const SwModify* pNew ) { pDefinedIn = (SwModify*)pNew; }
 };

@@ -73,7 +73,7 @@ public:
 
     void GetFtnText( String& rStr ) const;
 
-    // returnt den anzuzeigenden String der Fuss-/Endnote
+    // Returns string to be displayed of footnote / endnote.
     String GetViewNumStr( const SwDoc& rDoc, BOOL bInclStrs = FALSE ) const;
 };
 
