@@ -107,7 +107,7 @@ void test::oustring::EndsWith::endsWith()
           RTL_CONSTASCII_STRINGPARAM("b\0c"), true },
         { RTL_CONSTASCII_STRINGPARAM("a\0b\0c"),
           RTL_CONSTASCII_STRINGPARAM("b"), false } };
-    for (int i = 0; i < SAL_N_ELEMENTS(data); ++i) {
+    for (size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         rtl::OStringBuffer msg;
         appendString(msg, rtl::OString(data[i].str1, data[i].str1Len));
         msg.append(
