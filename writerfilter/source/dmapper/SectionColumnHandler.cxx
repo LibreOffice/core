@@ -35,11 +35,8 @@ namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-//using namespace ::std;
 
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SectionColumnHandler::SectionColumnHandler() :
     bEqualWidth( false ),
     nSpace( 0 ),
@@ -47,15 +44,11 @@ SectionColumnHandler::SectionColumnHandler() :
     bSep( false )
 {
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SectionColumnHandler::~SectionColumnHandler()
 {
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SectionColumnHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -84,9 +77,7 @@ void SectionColumnHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "SectionColumnHandler: unknown attribute");
     }
 }
-/*-- 02.06.2008 13:36:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SectionColumnHandler::sprm(Sprm & rSprm)
 {
     switch( rSprm.getId())

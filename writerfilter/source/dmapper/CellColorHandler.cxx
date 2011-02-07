@@ -39,11 +39,8 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
-//using namespace ::std;
 
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::CellColorHandler() :
     m_nShadowType( 0 ),
     m_nColor( 0xffffffff ),
@@ -51,15 +48,11 @@ CellColorHandler::CellColorHandler() :
     m_bParagraph( false )
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellColorHandler::~CellColorHandler()
 {
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -91,16 +84,6 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             //color of the shading
             m_nColor = nIntValue;
         break;
-//        case NS_rtf::LN_rgbrc:
-//        {
-//            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
-//            if( pProperties.get())
-//            {
-//                pProperties->resolve(*this);
-//                //
-//            }
-//        }
-//        break;
         case NS_ooxml::LN_CT_Shd_themeFill:
         case NS_ooxml::LN_CT_Shd_themeFillTint:
         case NS_ooxml::LN_CT_Shd_themeFillShade:
@@ -110,16 +93,12 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 24.04.2007 09:06:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellColorHandler::sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
-/*-- 24.04.2007 09:09:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);

@@ -36,11 +36,8 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::writerfilter;
-//using namespace ::std;
 
-/*-- 18.02.2008 12:36:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellMarginHandler::CellMarginHandler() :
     m_nValue( 0 ),
     m_nLeftMargin( 0 ),
@@ -53,15 +50,11 @@ CellMarginHandler::CellMarginHandler() :
     m_bBottomMarginValid( false )
 {
 }
-/*-- 18.02.2008 12:36:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 CellMarginHandler::~CellMarginHandler()
 {
 }
-/*-- 18.02.2008 12:36:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellMarginHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
@@ -79,9 +72,7 @@ void CellMarginHandler::attribute(Id rName, Value & rVal)
             OSL_ENSURE( false, "unknown attribute");
     }
 }
-/*-- 18.02.2008 12:36:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void CellMarginHandler::sprm(Sprm & rSprm)
 {
     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
