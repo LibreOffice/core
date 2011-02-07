@@ -71,7 +71,7 @@ VCNUM=8
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 BUILD_ACTION=nmake VERBOSE=1
-.IF "$(debug)"=="true"
+.IF "x$(debug)"!="x"
 BUILD_FLAGS= "CFG=DEBUG"
 CFLAGSWITHPATH= $(CFLAGS:s!-Fd.!-Fd../../../../../!)
 .ELSE
@@ -90,7 +90,7 @@ BUILD_FLAGS+= "CFLAGS4MSC=$(CFLAGS4MSC)" /F makefile.vc$(VCNUM) lib_dll
 .IF "$(COM)"=="GCC"
 
 # Does linux want --disable-shared?
-.IF "$(debug)"=="true"
+.IF "x$(debug)"!="x"
 GR_CONFIGURE_FLAGS= --enable-debug=yes --disable-final --enable-static --disable-shared
 .ELSE
 GR_CONFIGURE_FLAGS= --enable-final=yes --enable-static --disable-shared
@@ -123,7 +123,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 
 .IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
 #OUT2LIB=win32$/bin.msvc$/*.lib
-.IF "$(debug)"=="true"
+.IF "x$(debug)"!="x"
 OUT2LIB=engine$/debug$/*.lib
 .ELSE
 OUT2LIB=engine$/release$/*.lib
@@ -141,7 +141,7 @@ OUT2LIB+=src$/.libs$/libgraphite.*.dylib
 .ELSE
 .IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
 #OUT2LIB+=engine$/src$/.libs$/libgraphite*.dll
-.IF "$(debug)"=="true"
+.IF "x$(debug)"!="x"
 OUT2BIN= \
 #    engine$/debug$/*.dll \
     engine$/debug$/*.pdb
