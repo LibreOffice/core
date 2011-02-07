@@ -45,13 +45,14 @@
 #include <fchrfmt.hxx>
 #include <charfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swcrsr.hxx>
 #include <editsh.hxx>
 #include <ndtxt.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <crsskip.hxx>
-#include <undobj.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -1287,9 +1288,11 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     sal_Bool bReplace = ( pSearchOpt && ( pSearchOpt->replaceString.getLength() ||
                                     !rSet.Count() ) ) ||
                     (pReplSet && pReplSet->Count());
-    sal_Bool bSttUndo = pDoc->DoesUndo() && bReplace;
-    if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE, NULL );
+    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
+    if (bStartUndo)
+    {
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
+    }
 
     SwFindParaAttr aSwFindParaAttr( rSet, bNoCollections, pSearchOpt,
                                     pReplSet, *this );
@@ -1299,8 +1302,10 @@ sal_uLong SwCursor::Find( const SfxItemSet& rSet, sal_Bool bNoCollections,
     if( nRet && bReplace )
         pDoc->SetModified();
 
-    if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE, NULL );
+    if (bStartUndo)
+    {
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, NULL );
+    }
 
     return nRet;
 }

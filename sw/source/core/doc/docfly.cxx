@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
 #include <svx/svdobj.hxx>
@@ -43,6 +42,7 @@
 
 #include <ndgrf.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndindex.hxx>
 #include <docary.hxx>
 #include <fmtcntnt.hxx>
@@ -61,7 +61,8 @@
 #include <swundo.hxx>
 #include <swtable.hxx>
 #include <crstate.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoAttribute.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 
@@ -389,34 +390,26 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, sal_Bool bNew
     return MAKEFRMS;
 }
 
-sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+static bool
+lcl_SetFlyFrmAttr(SwDoc & rDoc,
+        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, BOOL),
+        SwFrmFmt & rFlyFmt, SfxItemSet & rSet)
 {
-    if( !rSet.Count() )
-        return sal_False;
-
-    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
-    const bool bDoesUndo = DoesUndo();
-
-    if( DoesUndo() )
-    {
-        ClearRedo();
-        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
-        // --> FME 2004-10-13 #i32968#
-        // Inserting columns in the frame causes MakeFrmFmt to put two
-        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        DoUndo( sal_False );
-        // <--
-    }
+    // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
+    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
     //desselben einer Spezialmethode. Sie Returnt sal_True wenn der Fly neu
     //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
-    sal_Int8 nMakeFrms = SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, sal_False )?
-                         SetFlyFrmAnchor( rFlyFmt, rSet, sal_False ) : DONTMAKEFRMS;
+    sal_Int8 const nMakeFrms =
+        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE ))
+             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, FALSE )
+             :  DONTMAKEFRMS;
 
     const SfxPoolItem* pItem;
     SfxItemIter aIter( rSet );
-    SfxItemSet aTmpSet( GetAttrPool(), aFrmFmtSetRange );
+    SfxItemSet aTmpSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
     sal_uInt16 nWhich = aIter.GetCurItem()->Which();
     do {
         switch( nWhich )
@@ -426,7 +419,7 @@ sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         case RES_PAGEDESC:
         case RES_CNTNT:
         case RES_FOOTER:
-            ASSERT( !this, ":-) Unbekanntes Attribut fuer Fly." );
+            OSL_ENSURE(false, ":-) unknown Attribute for Fly.");
             // kein break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
@@ -454,21 +447,36 @@ sal_Bool SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
 
+    return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
+}
+
+BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+{
+    if( !rSet.Count() )
+        return FALSE;
+
+    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
+        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
+    }
+
+    bool const bRet =
+        lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
+
     if ( pSaveUndo.get() )
     {
-        // --> FME 2004-10-13 #i32968#
-        DoUndo( bDoesUndo );
-        // <--
-
         if ( pSaveUndo->GetUndo() )
         {
-            AppendUndo( pSaveUndo->ReleaseUndo() );
+            GetIDocumentUndoRedo().AppendUndo( pSaveUndo->ReleaseUndo() );
         }
     }
 
     SetModified();
 
-    return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
+    return bRet;
 }
 
 // --> OD 2009-07-20 #i73249#
@@ -480,21 +488,17 @@ void SwDoc::SetFlyFrmTitle( SwFlyFrmFmt& rFlyFrmFmt,
         return;
     }
 
-    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
-    SetNoDrawUndoObj( true );
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
 
-    if ( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
                                           UNDO_FLYFRMFMT_TITLE,
                                           rFlyFrmFmt.GetObjTitle(),
                                           sNewTitle ) );
     }
 
     rFlyFrmFmt.SetObjTitle( sNewTitle, true );
-
-    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
 
     SetModified();
 }
@@ -507,21 +511,17 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
         return;
     }
 
-    const bool bFormerIsNoDrawUndoObj( IsNoDrawUndoObj() );
-    SetNoDrawUndoObj( true );
+    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
 
-    if ( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoFlyStrAttr( rFlyFrmFmt,
                                           UNDO_FLYFRMFMT_DESCRIPTION,
                                           rFlyFrmFmt.GetObjDescription(),
                                           sNewDescription ) );
     }
 
     rFlyFrmFmt.SetObjDescription( sNewDescription, true );
-
-    SetNoDrawUndoObj( bFormerIsNoDrawUndoObj );
 
     SetModified();
 }
@@ -544,16 +544,16 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     const SwFmtHoriOrient aHori( rFmt.GetHoriOrient() );
 
     SwUndoSetFlyFmt* pUndo = 0;
-    if( DoesUndo() )
+    bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
+    if (bUndo)
     {
-        ClearRedo();
-        AppendUndo( pUndo = new SwUndoSetFlyFmt( rFmt, rNewFmt ) );
-        // --> FME 2004-10-13 #i32968#
-        // Inserting columns in the section causes MakeFrmFmt to put two
-        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        DoUndo( sal_False );
-        // <--
+        pUndo = new SwUndoSetFlyFmt( rFmt, rNewFmt );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
+
+    // #i32968# Inserting columns in the section causes MakeFrmFmt to put
+    // 2 objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     //Erstmal die Spalten setzen, sonst gibts nix als Aerger mit dem
     //Set/Reset/Abgleich usw.
@@ -621,11 +621,6 @@ sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
 
     SetModified();
 
-    // --> FME 2004-10-13 #i32968#
-    if ( pUndo )
-        DoUndo( sal_True );
-    // <--
-
     return bChgAnchor;
 }
 
@@ -660,7 +655,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         return false;
     }
 
-    StartUndo( UNDO_INSATTR, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_INSATTR, NULL );
 
     sal_Bool bUnmark = sal_False;
     for ( sal_uInt16 i = 0; i < _rMrkList.GetMarkCount(); ++i )
@@ -891,7 +886,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
         }
     }
 
-    EndUndo( UNDO_END, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     SetModified();
 
     return bUnmark;
@@ -1007,7 +1002,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
     int nErr = Chainable( rSource, rDest );
     if ( !nErr )
     {
-        StartUndo( UNDO_CHAINE, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_CHAINE, NULL );
 
         SwFlyFrmFmt& rDestFmt = (SwFlyFrmFmt&)rDest;
 
@@ -1041,7 +1036,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         }
         SetAttr( aSet, rSource );
 
-        EndUndo( UNDO_CHAINE, NULL );
+        GetIDocumentUndoRedo().EndUndo( UNDO_CHAINE, NULL );
     }
     return nErr;
 }
@@ -1053,14 +1048,14 @@ void SwDoc::Unchain( SwFrmFmt &rFmt )
     SwFmtChain aChain( rFmt.GetChain() );
     if ( aChain.GetNext() )
     {
-        StartUndo( UNDO_UNCHAIN, NULL );
+        GetIDocumentUndoRedo().StartUndo( UNDO_UNCHAIN, NULL );
         SwFrmFmt *pFollow = aChain.GetNext();
         aChain.SetNext( 0 );
         SetAttr( aChain, rFmt );
         aChain = pFollow->GetChain();
         aChain.SetPrev( 0 );
         SetAttr( aChain, *pFollow );
-        EndUndo( UNDO_UNCHAIN, NULL );
+        GetIDocumentUndoRedo().EndUndo( UNDO_UNCHAIN, NULL );
     }
 }
 

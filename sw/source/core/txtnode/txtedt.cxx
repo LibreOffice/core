@@ -70,7 +70,7 @@
 #include <txttypes.hxx>
 #include <breakit.hxx>
 #include <crstate.hxx>
-#include <undobj.hxx>
+#include <UndoOverwrite.hxx>
 #include <txatritr.hxx>
 #include <redline.hxx>      // SwRedline
 #include <docary.hxx>       // SwRedlineTbl
@@ -736,6 +736,7 @@ sal_Bool SwScanner::NextWord()
         // get the word boundaries
         aBound = pBreakIt->GetBreakIter()->getWordBoundary( rText, nBegin,
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
+        ASSERT( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
@@ -750,9 +751,10 @@ sal_Bool SwScanner::NextWord()
 
     rCC.setLocale( aOldLocale );
 
-    // we have to differenciate between these cases:
-    if ( aBound.startPos <= nBegin )
+    // #i89042, as discussed with HDU: don't evaluate script changes for word count. Use whole word.
+    if ( nWordType == i18n::WordType::WORD_COUNT )
     {
+<<<<<<< local
         ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
 
         // restrict boundaries to script boundaries and nEndPos
@@ -778,9 +780,16 @@ sal_Bool SwScanner::NextWord()
 
         nBegin = (xub_StrLen)Max( aBound.startPos, nScriptBegin );
         nLen = (xub_StrLen)(nEnd - nBegin);
+=======
+        nBegin = Max( static_cast< xub_StrLen >(aBound.startPos), nBegin );
+        nLen   = 0;
+        if (static_cast< xub_StrLen >(aBound.endPos) > nBegin)
+            nLen = static_cast< xub_StrLen >(aBound.endPos) - nBegin;
+>>>>>>> other
     }
     else
     {
+<<<<<<< local
         const sal_uInt16 nCurrScript =
                 pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
         XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
@@ -790,6 +799,46 @@ sal_Bool SwScanner::NextWord()
         const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
         nBegin = (xub_StrLen)aBound.startPos;
         nLen = (xub_StrLen)(nEnd - nBegin);
+=======
+        // we have to differenciate between these cases:
+        if ( aBound.startPos <= nBegin )
+        {
+            ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
+
+            // restrict boundaries to script boundaries and nEndPos
+            const USHORT nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, nBegin );
+            XubString aTmpWord = rText.Copy( nBegin, static_cast<xub_StrLen>(aBound.endPos - nBegin) );
+            const sal_Int32 nScriptEnd = nBegin +
+                pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
+            const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
+
+            // restrict word start to last script change position
+            sal_Int32 nScriptBegin = 0;
+            if ( aBound.startPos < nBegin )
+            {
+                // search from nBegin backwards until the next script change
+                aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
+                                       static_cast<xub_StrLen>(nBegin - aBound.startPos + 1) );
+                nScriptBegin = aBound.startPos +
+                    pBreakIt->GetBreakIter()->beginOfScript( aTmpWord, nBegin - aBound.startPos,
+                                                    nCurrScript );
+            }
+
+            nBegin = (xub_StrLen)Max( aBound.startPos, nScriptBegin );
+            nLen = (xub_StrLen)(nEnd - nBegin);
+        }
+        else
+        {
+            const USHORT nCurrScript = pBreakIt->GetBreakIter()->getScriptType( rText, aBound.startPos );
+            XubString aTmpWord = rText.Copy( static_cast<xub_StrLen>(aBound.startPos),
+                                             static_cast<xub_StrLen>(aBound.endPos - aBound.startPos) );
+            const sal_Int32 nScriptEnd = aBound.startPos +
+                pBreakIt->GetBreakIter()->endOfScript( aTmpWord, 0, nCurrScript );
+            const sal_Int32 nEnd = Min( aBound.endPos, nScriptEnd );
+            nBegin = (xub_StrLen)aBound.startPos;
+            nLen = (xub_StrLen)(nEnd - nBegin);
+        }
+>>>>>>> other
     }
 
     // optionally clip the result of getWordBoundaries:

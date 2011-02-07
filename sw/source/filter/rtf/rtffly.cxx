@@ -115,7 +115,7 @@ int SwFlySave::IsEqualFly( const SwPaM& rPos, SfxItemSet& rSet )
     else
     {
         SwNodeIndex aIdx( nEndNd );
-        SwCntntNode* pCNd = rPos.GetDoc()->GetNodes()[ aIdx ]->GetCntntNode();
+        SwCntntNode *const pCNd = aIdx.GetNode().GetCntntNode();
         if( !GoNextNds( &aIdx, sal_True ) ||
             aIdx.GetIndex() != rPos.GetPoint()->nNode.GetIndex() ||
             ( pCNd && pCNd->Len() != nEndCnt ))
@@ -287,7 +287,7 @@ void SwRTFParser::SetFlysInDoc()
         if( n + 1 < aFlyArr.Count() && pFlySave->nEndCnt &&
             pFlySave->nEndNd == aFlyArr[ n + 1 ]->nSttNd )
         {
-            SwCntntNode* pCNd = rNds[ pFlySave->nEndNd ]->GetCntntNode();
+            SwCntntNode *const pCNd = pFlySave->nEndNd.GetNode().GetCntntNode();
             if( pCNd )
             {
                 SwPosition aPos( pFlySave->nEndNd,
@@ -1375,7 +1375,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
     }
 
     //steht der Fly etwa in einer Tabelle ?
-    const SwNode* pAnchorNd = pDoc->GetNodes()[ rAnchor ];
+    const SwNode* pAnchorNd = & rAnchor.GetNode();
     const SwTableNode* pTblNd = pAnchorNd->FindTableNode();
     if( pTblNd )
     {

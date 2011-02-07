@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <svx/svdview.hxx>
@@ -45,7 +46,7 @@
 #include "edtwin.hxx"
 #include "caption.hxx"
 #include "swundo.hxx"
-#include "undobj.hxx"
+#include <SwRewriter.hxx>
 #include "comcore.hrc"
 
 using namespace ::com::sun::star;
@@ -363,7 +364,9 @@ sal_Bool SwDrawBase::MouseButtonUp(const MouseEvent& rMEvt)
                 }
             }
             if (m_pWin->GetSdrDrawMode() == OBJ_NONE)
-                m_pSh->EndUndo(UNDO_INSERT);
+            {
+                m_pSh->EndUndo();
+            }
         }
 
         bReturn = sal_True;

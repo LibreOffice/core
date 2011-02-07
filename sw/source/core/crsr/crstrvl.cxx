@@ -37,6 +37,7 @@
 #include <svx/svdobj.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <rootfrm.hxx>
@@ -1705,7 +1706,8 @@ sal_Bool SwCrsrShell::GetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode,
     SET_CURR_SHELL( this );
     sal_Bool bRet = sal_False;
 
-    if( !IsTableMode() && !HasSelection() && GetDoc()->DoesUndo() )
+    if (!IsTableMode() && !HasSelection()
+        && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
         Point aPt( rPt );
         SwPosition aPos( *pCurCrsr->GetPoint() );
@@ -1730,7 +1732,8 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
     SET_CURR_SHELL( this );
     sal_Bool bRet = sal_False;
 
-    if( !IsTableMode() && !HasSelection() && GetDoc()->DoesUndo() )
+    if (!IsTableMode() && !HasSelection()
+        && GetDoc()->GetIDocumentUndoRedo().DoesUndo())
     {
         Point aPt( rPt );
         SwPosition aPos( *pCurCrsr->GetPoint() );
@@ -1754,7 +1757,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 pCNd && pCNd->Len() )
                 nUndoId = UNDO_EMPTY;
 
-            GetDoc()->StartUndo( nUndoId, NULL );
+            GetDoc()->GetIDocumentUndoRedo().StartUndo( nUndoId, NULL );
 
             SwTxtFmtColl* pNextFmt = 0;
             SwTxtNode* pTNd = pCNd->GetTxtNode();
@@ -1860,7 +1863,7 @@ sal_Bool SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 break;
             }
 
-            GetDoc()->EndUndo( nUndoId, NULL );
+            GetDoc()->GetIDocumentUndoRedo().EndUndo( nUndoId, NULL );
             EndAction();
 
             bRet = sal_True;

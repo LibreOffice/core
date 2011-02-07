@@ -54,12 +54,14 @@
 #include <fmtcntnt.hxx>
 #include <frmatr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
 #include <hints.hxx>            // fuer SwHyphenBug (in SetDefault)
 #include <ndtxt.hxx>
 #include <pam.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoAttribute.hxx>
 #include <ndgrf.hxx>
 #include <pagedesc.hxx>         // Fuer Sonderbehandlung in InsFrmFmt
 #include <rolbck.hxx>           // Undo-Attr
@@ -357,12 +359,11 @@ void SwDoc::RstTxtAttrs(const SwPaM &rRg, sal_Bool bInclRefToxMark )
 {
     SwHistory* pHst = 0;
     SwDataChanged aTmp( rRg, 0 );
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg, RES_CHRFMT );
         pHst = &pUndo->GetHistory();
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
@@ -441,9 +442,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     }
     // <--
     SwHistory* pHst = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         SwUndoResetAttr* pUndo = new SwUndoResetAttr( rRg,
             static_cast<sal_uInt16>(bTxtAttr ? RES_CONDTXTFMTCOLL : RES_TXTFMTCOLL ));
         if( pAttrs && pAttrs->Count() )
@@ -451,7 +451,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
             pUndo->SetAttrs( *pAttrs );
         }
         pHst = &pUndo->GetHistory();
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
@@ -1125,9 +1125,9 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
 {
     SwDataChanged aTmp( rRg, 0 );
     SwUndoAttr* pUndoAttr = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndoAttr = new SwUndoAttr( rRg, rHt, nFlags );
     }
 
@@ -1135,8 +1135,10 @@ bool SwDoc::InsertPoolItem( const SwPaM &rRg, const SfxPoolItem &rHt,
     aSet.Put( rHt );
     bool bRet = lcl_InsAttr( this, rRg, aSet, nFlags, pUndoAttr );
 
-    if( DoesUndo() )
-        AppendUndo( pUndoAttr );
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().AppendUndo( pUndoAttr );
+    }
 
     if( bRet )
         SetModified();
@@ -1148,16 +1150,18 @@ bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
 {
     SwDataChanged aTmp( rRg, 0 );
     SwUndoAttr* pUndoAttr = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         pUndoAttr = new SwUndoAttr( rRg, rSet, nFlags );
     }
 
     bool bRet = lcl_InsAttr( this, rRg, rSet, nFlags, pUndoAttr );
 
-    if( DoesUndo() )
-        AppendUndo( pUndoAttr );
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().AppendUndo( pUndoAttr );
+    }
 
     if( bRet )
         SetModified();
@@ -1179,14 +1183,17 @@ void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFmt& rFmt )
     // das alte in die Undo-History aufgenommen
 void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
 {
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         SwUndoFmtAttrHelper aTmp( rFmt );
         rFmt.SetFmtAttr( rSet );
         if ( aTmp.GetUndo() )
         {
-            AppendUndo( aTmp.ReleaseUndo() );
+            GetIDocumentUndoRedo().AppendUndo( aTmp.ReleaseUndo() );
+        }
+        else
+        {
+            GetIDocumentUndoRedo().ClearRedo();
         }
     }
     else
@@ -1200,16 +1207,18 @@ void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
 void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
                                SwFmt& rChangedFormat )
 {
-    SwUndo* pUndo = 0;
-    if ( DoesUndo() )
-        pUndo = new SwUndoFmtResetAttr( rChangedFormat, nWhichId );
+    SwUndo *const pUndo = (GetIDocumentUndoRedo().DoesUndo())
+        ?   new SwUndoFmtResetAttr( rChangedFormat, nWhichId )
+        :   0;
 
     const sal_Bool bAttrReset = rChangedFormat.ResetFmtAttr( nWhichId );
 
     if ( bAttrReset )
     {
         if ( pUndo )
-            AppendUndo( pUndo );
+        {
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
+        }
 
         SetModified();
     }
@@ -1326,10 +1335,9 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
 
     if( aNew.Count() && aCallMod.GetDepends() )
     {
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoDefaultAttr( aOld ) );
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoDefaultAttr( aOld ) );
         }
 
         const SfxPoolItem* pTmpItem;
@@ -1396,12 +1404,12 @@ void SwDoc::DelCharFmt(sal_uInt16 nFmt, sal_Bool bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_CHAR,
                                 SFX_STYLESHEET_ERASED);
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo * pUndo =
             new SwUndoCharFmtDelete(pDel, this);
 
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     pCharFmtTbl->DeleteAndDestroy(nFmt);
@@ -1438,11 +1446,11 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, sal_Bool bBroadcast )
                                         SFX_STYLE_FAMILY_FRAME,
                                         SFX_STYLESHEET_ERASED);
 
-            if (DoesUndo())
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndo * pUndo = new SwUndoFrmFmtDelete(pFmt, this);
 
-                AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             pFrmFmtTbl->DeleteAndDestroy( nPos );
@@ -1491,8 +1499,13 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
     sal_uInt16 nCount = pTblFrmFmtTbl->Count();
     if(bUsed)
     {
+<<<<<<< local
         SwAutoFmtGetDocNode aGetHt( &aNodes );
         for ( sal_uInt16 i = nCount; i; )
+=======
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
+        for ( USHORT i = nCount; i; )
+>>>>>>> other
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
 
@@ -1509,9 +1522,14 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
     sal_uInt16 nRemoved = 0;
     if(bUsed)
     {
+<<<<<<< local
         SwAutoFmtGetDocNode aGetHt( &aNodes );
 
         for ( sal_uInt16 i = 0; i <= nFmt; i++ )
+=======
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
+        for ( USHORT i = 0; i <= nFmt; i++ )
+>>>>>>> other
         {
             while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
             {
@@ -1548,11 +1566,11 @@ SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
         BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
                                 SFX_STYLESHEET_CREATED);
 
-        if (DoesUndo())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
 
-            AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
     }
 
@@ -1581,11 +1599,11 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
     pFmt->SetAuto( sal_False );
     SetModified();
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo * pUndo = new SwUndoCharFmtCreate(pFmt, pDerivedFrom, this);
 
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     if (bBroadcast)
@@ -1624,11 +1642,11 @@ SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
     pFmtColl->SetAuto( sal_False );
     SetModified();
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo * pUndo = new SwUndoTxtFmtCollCreate(pFmtColl, pDerivedFrom,
                                                     this);
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     if (bBroadcast)
@@ -1693,12 +1711,12 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, sal_Bool bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
                                 SFX_STYLESHEET_ERASED);
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndoTxtFmtCollDelete * pUndo =
             new SwUndoTxtFmtCollDelete(pDel, this);
 
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     // Die FmtColl austragen
@@ -1807,16 +1825,15 @@ sal_Bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     SwHistory* pHst = 0;
     sal_Bool bRet = sal_True;
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         // --> OD 2008-04-15 #refactorlists#
         SwUndoFmtColl* pUndo = new SwUndoFmtColl( rRg, pFmt,
                                                   bReset,
                                                   bResetListAttrs );
         // <--
         pHst = pUndo->GetHistory();
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     ParaRstFmt aPara( pStt, pEnd, pHst );
@@ -2261,8 +2278,12 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
 void SwDoc::ReplaceStyles( SwDoc& rSource )
 {
+<<<<<<< local
     sal_Bool bIsUndo = DoesUndo();
     DoUndo( sal_False );
+=======
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+>>>>>>> other
 
     CopyFmtArr( *rSource.pCharFmtTbl, *pCharFmtTbl,
                 &SwDoc::_MakeCharFmt, *pDfltCharFmt );
@@ -2313,15 +2334,13 @@ void SwDoc::ReplaceStyles( SwDoc& rSource )
         }
     }
 
-    if( bIsUndo )
+    if (undoGuard.UndoWasEnabled())
     {
-        // es wurde am Nodes-Array gedreht!
-        ClearRedo();
-        DelAllUndoObj();
+        // nodes array was modified!
+        GetIDocumentUndoRedo().DelAllUndoObj();
     }
 
     SetModified();
-    DoUndo( bIsUndo );
 }
 
 SwFmt* SwDoc::FindFmtByName( const SvPtrarr& rFmtArr,
@@ -2343,13 +2362,12 @@ SwFmt* SwDoc::FindFmtByName( const SvPtrarr& rFmtArr,
 void SwDoc::MoveLeftMargin( const SwPaM& rPam, sal_Bool bRight, sal_Bool bModulus )
 {
     SwHistory* pHistory = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         SwUndoMoveLeftMargin* pUndo = new SwUndoMoveLeftMargin( rPam, bRight,
                                                                 bModulus );
         pHistory = &pUndo->GetHistory();
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 
     const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDefault( RES_PARATR_TABSTOP );
@@ -2409,10 +2427,9 @@ sal_Bool SwDoc::DontExpandFmt( const SwPosition& rPos, sal_Bool bFlag )
     if( pTxtNd )
     {
         bRet = pTxtNd->DontExpandFmt( rPos.nContent, bFlag );
-        if( bRet && DoesUndo() )
+        if( bRet && GetIDocumentUndoRedo().DoesUndo() )
         {
-            ClearRedo();
-            AppendUndo( new SwUndoDontExpandFmt( rPos ));
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoDontExpandFmt(rPos) );
         }
     }
     return bRet;
@@ -2560,7 +2577,7 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 
 void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 {
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         // copying <rSet> to <aSet>
         SfxItemSet aSet(rSet);
@@ -2588,7 +2605,7 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 
         SwUndo * pUndo = new SwUndoFmtAttr(aOldSet, rFmt);
 
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     rFmt.SetFmtAttr(rSet);
@@ -2599,7 +2616,7 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
 {
     SfxStyleFamily eFamily = SFX_STYLE_FAMILY_ALL;
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo * pUndo = NULL;
 
@@ -2623,7 +2640,9 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
         }
 
         if (pUndo)
-            AppendUndo(pUndo);
+        {
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
+        }
     }
 
     rFmt.SetName(sNewName);

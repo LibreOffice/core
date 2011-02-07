@@ -65,6 +65,7 @@
 #include <fmtmeta.hxx>
 #include <breakit.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <errhdl.hxx>
 #include <fldbas.hxx>
 #include <pam.hxx>
@@ -1318,11 +1319,9 @@ bool SwTxtNode::InsertHint( SwTxtAttr * const pAttr, const SetAttrMode nMode )
                             SwIndex aTmpIdx( this, *pAttr->GetStart() );
                             Update( aTmpIdx, 1, sal_True );
                         }
-                        // Format loeschen nicht ins Undo aufnehmen!!
-                        sal_Bool bUndo = pDoc->DoesUndo();
-                        pDoc->DoUndo( sal_False );
+                        // do not record deletion of Format!
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         DestroyAttr( pAttr );
-                        pDoc->DoUndo( bUndo );
                         return false;
                     }
                 }
@@ -3047,12 +3046,19 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
             cRet = CH_TXTATR_INWORD;
-            break;
+        break;
 
         case RES_TXTATR_FIELD:
         case RES_TXTATR_FLYCNT:
+        {
             cRet = CH_TXTATR_BREAKWORD;
-            break;
+
+            // #i78149: PostIt fields should not break words for spell and grammar checking
+            if (rAttr.Which() == RES_TXTATR_FIELD &&
+                RES_POSTITFLD == rAttr.GetFld().GetFld()->GetTyp()->Which())
+                cRet = CH_TXTATR_INWORD;
+        }
+        break;
 
         default:
             ASSERT(false, "GetCharOfTxtAttr: unknown attr");

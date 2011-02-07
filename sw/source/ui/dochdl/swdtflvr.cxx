@@ -88,6 +88,7 @@
 #include <shellio.hxx>
 #include <ddefld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <IMark.hxx>
 #include <docary.hxx>
@@ -132,7 +133,6 @@
 // #109590#
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <globals.hrc>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -228,7 +228,7 @@ public:
     }
     ~SwTrnsfrActionAndUndo()
     {
-        pSh->EndUndo( eUndoId );
+        pSh->EndUndo();
         pSh->EndAllAction();
     }
 };
@@ -3434,7 +3434,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
             {
                 // nicht in sich selbst kopieren/verschieben
                 rSh.DestroyCrsr();
-                rSh.EndUndo( eUndoId );
+                rSh.EndUndo();
                 rSh.EndAction();
                 rSh.EndAction();
                 return 0;
@@ -3542,8 +3542,8 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         rSrcSh.LeaveSelFrmMode();
 
     if( rSrcSh.GetDoc() != rSh.GetDoc() )
-        rSrcSh.EndUndo( eUndoId );
-    rSh.EndUndo( eUndoId );
+        rSrcSh.EndUndo();
+    rSh.EndUndo();
 
         // Shell in den richtigen Status versetzen
     if( &rSrcSh != &rSh && ( rSh.IsFrmSelected() || rSh.IsObjSelected() ))
@@ -3797,8 +3797,7 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
     if( bDelBookmrk && refObj.Is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
-        sal_Bool bUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( sal_False );
+        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
         // --> OD, CD, OS 2005-11-25 #i58448#
         Link aSavedOle2Link( pDoc->GetOle2Link() );
@@ -3815,7 +3814,6 @@ void SwTrnsfrDdeLink::Disconnect( sal_Bool bRemoveDataAdvise )
         pDoc->SetOle2Link( aSavedOle2Link );
         // <--
 
-        pDoc->DoUndo( bUndo );
         bDelBookmrk = sal_False;
     }
 

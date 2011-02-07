@@ -1769,10 +1769,9 @@ SwTableBox::SwTableBox( SwTableBoxFmt* pFmt, const SwNodeIndex &rIdx,
     pUpper( pUp ),
     pImpl( 0 )
 {
-    SwDoc* pDoc = pFmt->GetDoc();
     CheckBoxFmt( pFmt )->Add( this );
 
-    pSttNd = pDoc->GetNodes()[ rIdx ]->GetStartNode();
+    pSttNd = rIdx.GetNode().GetStartNode();
 
     // an der Table eintragen
     const SwTableNode* pTblNd = pSttNd->FindTableNode();

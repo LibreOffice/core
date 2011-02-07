@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
@@ -43,7 +44,7 @@
 #include <docary.hxx>
 #include <hintids.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 #include <caption.hxx>
 #include <svl/PasswordHelper.hxx>
@@ -86,6 +87,7 @@
 #include <uivwimp.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wrtsh.hxx>
 #include <viewopt.hxx>
 #include <basesh.hxx>
@@ -469,7 +471,7 @@ sal_Bool SwView::InsertGraphicDlg( SfxRequest& rReq )
             rReq.Done();
         }
 
-        rSh.EndUndo(UNDO_INSERT); // wegen moegl. Shellwechsel
+        rSh.EndUndo(); // due to possible change of Shell
     }
 
     delete pFileDlg;
@@ -2105,10 +2107,8 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                     }
                     else
                     {
-                        sal_Bool bUndo = pDoc->DoesUndo();
-                        pDoc->DoUndo( sal_False );
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
                         nErrno = pDocSh->InsertFrom( *pMedium ) ? 0 : ERR_SWG_READ_ERROR;
-                        pDoc->DoUndo( bUndo );
                     }
 
                 }
@@ -2125,7 +2125,9 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 { // Disable Undo for .sdw (136991) or
                   // if the number of page styles with header/footer has changed (#i67305)
                     if( !pRead || nUndoCheck != lcl_PageDescWithHeader( *pDoc ) )
-                        pDoc->DelAllUndoObj();
+                    {
+                        pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+                    }
                 }
 
                 pWrtShell->EndAllAction();

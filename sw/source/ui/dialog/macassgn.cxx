@@ -61,8 +61,6 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
-// SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage*, const String& );
-
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {
     // const SfxItemSet& rSet = rPg.GetItemSet();
@@ -163,34 +161,3 @@ sal_Bool SwMacroAssignDlg::INetFmtDlg( Window* pParent, SwWrtShell& rSh,
     }
     return bRet;
 }
-
-/*
-SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage* , const String& rLanguage )
-{
-    SvStringsDtor* pNew = new SvStringsDtor;
-
-    SfxApplication* pSfxApp = SFX_APP();
-    if ( !rLanguage.EqualsAscii(SVX_MACRO_LANGUAGE_JAVASCRIPT) )
-    {
-        pSfxApp->EnterBasicCall();
-
-        String* pNewEntry = new String( pSfxApp->GetName() );
-        pNew->Insert( pNewEntry, pNew->Count() );
-
-        TypeId aType( TYPE( SwDocShell ));
-        SfxObjectShell* pDoc = SfxObjectShell::GetFirst( &aType );
-        while( pDoc )
-        {
-            pNewEntry = new String( pDoc->GetTitle() );
-            pNew->Insert( pNewEntry, pNew->Count() );
-            pDoc = SfxObjectShell::GetNext( *pDoc, &aType );
-        }
-        pSfxApp->LeaveBasicCall();
-    }
-
-    return pNew;
-}
-*/
-
-
-

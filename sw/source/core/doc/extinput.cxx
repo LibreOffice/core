@@ -28,19 +28,23 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <com/sun/star/i18n/ScriptType.hpp>
 
-#include <hintids.hxx>
+#include <editeng/langitem.hxx>
+#include <editeng/scripttypeitem.hxx>
+
 #include <vcl/keycodes.hxx>
 #include <vcl/cmdevt.hxx>
+
+#include <hintids.hxx>
 #include <extinput.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <index.hxx>
 #include <ndtxt.hxx>
 #include <txtfrm.hxx>
 #include <swundo.hxx>
-#include <editeng/langitem.hxx>
-#include <editeng/scripttypeitem.hxx>
-#include <com/sun/star/i18n/ScriptType.hpp>
+
 
 using namespace ::com::sun::star;
 
@@ -106,12 +110,14 @@ SwExtTextInput::~SwExtTextInput()
                     if( bInsText )
                     {
                         rIdx = nSttCnt;
-                        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
+                        pDoc->GetIDocumentUndoRedo().StartUndo(
+                                UNDO_OVERWRITE, NULL );
                         pDoc->Overwrite( *this, sTxt.Copy( 0,
                                                     sOverwriteText.Len() ));
                         pDoc->InsertString( *this,
                             sTxt.Copy( sOverwriteText.Len() ) );
-                        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
+                        pDoc->GetIDocumentUndoRedo().EndUndo(
+                                UNDO_OVERWRITE, NULL );
                     }
                 }
                 else

@@ -188,8 +188,9 @@ SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &
     aSizeScaled     (this, SmResId( RB_FIT_TO_PAGE )),
     aSizeZoomed     (this, SmResId( RB_ZOOM )),
     aZoom           (this, SmResId( MF_ZOOM )),
-    aFixedLine3      (this, SmResId( FL_MISC_OPTIONS )),
-    aNoRightSpaces  (this, SmResId( CB_IGNORE_SPACING ))
+    aFixedLine3     (this, SmResId( FL_MISC_OPTIONS )),
+    aNoRightSpaces  (this, SmResId( CB_IGNORE_SPACING )),
+    aSaveOnlyUsedSymbols  (this, SmResId( CB_SAVE_ONLY_USED_SYMBOLS ))
 {
     FreeResource();
 
@@ -217,6 +218,7 @@ sal_Bool SmPrintOptionsTabPage::FillItemSet(SfxItemSet& rSet)
     rSet.Put(SfxBoolItem(GetWhich(SID_PRINTTEXT), aText.IsChecked()));
     rSet.Put(SfxBoolItem(GetWhich(SID_PRINTFRAME), aFrame.IsChecked()));
     rSet.Put(SfxBoolItem(GetWhich(SID_NO_RIGHT_SPACES), aNoRightSpaces.IsChecked()));
+    rSet.Put(SfxBoolItem(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS), aSaveOnlyUsedSymbols.IsChecked()));
 
     return sal_True;
 }
@@ -238,6 +240,7 @@ void SmPrintOptionsTabPage::Reset(const SfxItemSet& rSet)
     aText.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTTEXT))).GetValue());
     aFrame.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_PRINTFRAME))).GetValue());
     aNoRightSpaces.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_NO_RIGHT_SPACES))).GetValue());
+    aSaveOnlyUsedSymbols.Check(((const SfxBoolItem &)rSet.Get(GetWhich(SID_SAVE_ONLY_USED_SYMBOLS))).GetValue());
 }
 
 

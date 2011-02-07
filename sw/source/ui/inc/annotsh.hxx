@@ -71,7 +71,8 @@ public:
     void            StateSearch(SfxItemSet &);
 
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                GetUndoManager();
 };
 
 #endif

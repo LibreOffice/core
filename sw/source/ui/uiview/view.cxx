@@ -74,12 +74,12 @@
 #include <beziersh.hxx>
 #include <globdoc.hxx>
 #include <scroll.hxx>
-#include <globdoc.hxx>
 #include <navipi.hxx>
 #include <gloshdl.hxx>
 #include <usrpref.hxx>
 #include <srcview.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <drawdoc.hxx>
 #include <wdocsh.hxx>
 #include <wview.hxx>
@@ -973,9 +973,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         !pDocSh->GetVisArea(ASPECT_CONTENT).IsEmpty() )
         SetVisArea( pDocSh->GetVisArea(ASPECT_CONTENT),sal_False);
 
-    SwEditShell::SetUndoActionCount(
-        static_cast< sal_uInt16 >( SW_MOD()->GetUndoOptions().GetUndoCount() ) );
-    pWrtShell->DoUndo( 0 != SwEditShell::GetUndoActionCount() );
+    pWrtShell->DoUndo( 0 != SW_MOD()->GetUndoOptions().GetUndoCount() );
 
     const sal_Bool bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
     SetNewWindowAllowed(!bBrowse);
@@ -1020,7 +1018,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     //              so setze das Modified NICHT zurueck.
     // --> OD 2005-02-11 #i38810# - no reset of modified state, if document
     // was already modified.
-    if ( !pWrtShell->GetDoc()->IsUndoNoResetModified() &&
+    if (!pWrtShell->GetDoc()->GetIDocumentUndoRedo().IsUndoNoResetModified() &&
          ( !pFirst || pFirst == pVFrame ) &&
          !bIsDocModified )
     // <--

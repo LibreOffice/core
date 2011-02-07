@@ -87,6 +87,7 @@
 #include <docary.hxx>
 #include <docstat.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>           // ...Percent()
@@ -109,9 +110,7 @@
 
 #include <sfx2/viewfrm.hxx>
 
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>          // ResId fuer Statusleiste
-#endif
 #include <swerror.h>
 
 #define FONTSIZE_MASK           7
@@ -631,8 +630,8 @@ void __EXPORT SwHTMLParser::Continue( int nToken )
     pDoc->SetOle2Link( Link() );
 
     sal_Bool bModified = pDoc->IsModified();
-    sal_Bool bWasUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // Wenn der Import abgebrochen wird, kein Continue mehr rufen.
     // Falls ein Pending-Stack existiert aber durch einen Aufruf
@@ -889,8 +888,8 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
     {
         if( bWasUndo )
         {
-            pDoc->DelAllUndoObj();
-            pDoc->DoUndo( sal_True );
+            pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            pDoc->GetIDocumentUndoRedo().DoUndo(true);
         }
         else if( !pInitVSh )
         {
@@ -900,7 +899,9 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( sal_False ).nNode.GetIndex() )
             // wir muessen das Undo noch anschalten.
             ViewShell *pTmpVSh = CheckActionViewShell();
             if( pTmpVSh )
-                pDoc->DoUndo( sal_True );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            }
         }
 
         pDoc->SetOle2Link( aOLELink );
@@ -951,7 +952,7 @@ void SwHTMLParser::DocumentDetected()
 
         CallEndAction( sal_True, sal_True );
 
-        pDoc->DoUndo( sal_False );
+        pDoc->GetIDocumentUndoRedo().DoUndo(false);
         // Durch das DocumentDetected wurde im allgemeinen eine
         // ViewShell angelegt. Es kann aber auch sein, dass sie
         // erst spaeter angelegt wird, naemlich dann, wenn die UI
@@ -1461,8 +1462,7 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
             if( nPos )
             {
                 const String& rText =
-                    pDoc->GetNodes()[ pPam->GetPoint()->nNode ]->GetTxtNode()
-                                                               ->GetTxt();
+                    pPam->GetPoint()->nNode.GetNode().GetTxtNode()->GetTxt();
                 sal_Unicode cLast = rText.GetChar(--nPos);
                 if( ' ' == cLast || '\x0a' == cLast)
                     aToken.Erase(0,1);
@@ -2111,7 +2111,7 @@ sal_Bool SwHTMLParser::AppendTxtNode( SwHTMLAppendMode eMode, sal_Bool bUpdateNu
     if( AM_SPACE==eMode || AM_NOSPACE==eMode )
     {
         SwTxtNode *pTxtNode =
-            pDoc->GetNodes()[pPam->GetPoint()->nNode]->GetTxtNode();
+            pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
         const SvxULSpaceItem& rULSpace =
             (const SvxULSpaceItem&)pTxtNode->SwCntntNode::GetAttr( RES_UL_SPACE );
@@ -2426,8 +2426,10 @@ void SwHTMLParser::Show()
     // ist der aktuelle Node nicht mehr sichtbar, dann benutzen wir
     // eine groessere Schrittweite
     if( pVSh )
-        nParaCnt = pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                       ->IsInVisibleArea(pVSh) ? 5 : 50;
+    {
+        nParaCnt = (pPam->GetPoint()->nNode.GetNode().IsInVisibleArea(pVSh))
+            ? 5 : 50;
+    }
 }
 
 void SwHTMLParser::ShowStatline()
@@ -2656,7 +2658,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                 }
 
 
-                pCNd = pDoc->GetNodes()[ pAttr->nSttPara ]->GetCntntNode();
+                pCNd = pAttr->nSttPara.GetNode().GetCntntNode();
                 if( !pCNd )
                 {
                     // durch die elende Loescherei von Nodes kann auch mal
@@ -2696,7 +2698,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
                 if ( (pAttr->GetSttPara() != pAttr->GetEndPara()) &&
                          !isTXTATR_NOEND(nWhich) )
                 {
-                    pCNd = pDoc->GetNodes()[ pAttr->nEndPara ]->GetCntntNode();
+                    pCNd = pAttr->nEndPara.GetNode().GetCntntNode();
                     if( !pCNd )
                     {
                         pCNd = pDoc->GetNodes().GoPrevious( &(pAttr->nEndPara) );
@@ -2888,7 +2890,7 @@ void SwHTMLParser::_SetAttr( sal_Bool bChkEnd, sal_Bool bBeforeTable,
     {
         pAttr = aFields[0];
 
-        pCNd = pDoc->GetNodes()[ pAttr->nSttPara ]->GetCntntNode();
+        pCNd = pAttr->nSttPara.GetNode().GetCntntNode();
         pAttrPam->GetPoint()->nNode = pAttr->nSttPara;
         pAttrPam->GetPoint()->nContent.Assign( pCNd, pAttr->nSttCntnt );
 

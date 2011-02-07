@@ -29,18 +29,20 @@
 
 #define SMDLL   1
 
-#include <sot/storage.hxx>
-#include <sot/sotref.hxx>
-#include <sfx2/objsh.hxx>
-#include <svl/lstner.hxx>
+#include <rtl/ustring.hxx>
 #include <sfx2/docfac.hxx>
+#include <sfx2/objsh.hxx>
+#include <sot/sotref.hxx>
+#include <sot/storage.hxx>
+#include <svl/lstner.hxx>
+#include <vcl/jobset.hxx>
 #include <vcl/virdev.hxx>
+
+#include <set>
 
 #include "format.hxx"
 #include "parse.hxx"
 #include "smmod.hxx"
-
-#include <vcl/jobset.hxx>
 
 class SmNode;
 class SfxMenuBarManager;
@@ -121,8 +123,10 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         nRightBorder,
                         nTopBorder,
                         nBottomBorder;
-    sal_uInt16              nModifyCount;
-    sal_Bool                bIsFormulaArranged;
+    sal_uInt16          nModifyCount;
+    sal_Bool            bIsFormulaArranged;
+
+    std::set< rtl::OUString >    aUsedSymbols;   // to export used symbols only when saving
 
 
 
@@ -200,6 +204,8 @@ public:
     const SmNode *  GetFormulaTree() const  { return pTree; }
     void            SetFormulaTree(SmNode *&rTree) { pTree = rTree; }
 
+    const std::set< rtl::OUString > &    GetUsedSymbols() const  { return aUsedSymbols; }
+
     String          GetAccessibleText();
 
     EditEngine &    GetEditEngine();
@@ -210,7 +216,7 @@ public:
 
     void        Repaint();
 
-    virtual     SfxUndoManager *GetUndoManager ();
+    virtual     ::svl::IUndoManager *GetUndoManager ();
 
     virtual     SfxItemPool& GetPool() const;
 

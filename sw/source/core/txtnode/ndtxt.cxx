@@ -64,6 +64,7 @@
 #include <charfmt.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>                  // fuer SwPosition
 #include <fldbas.hxx>
@@ -163,8 +164,8 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
         // 1. den Nachfolger nehmen
         // 2. den Vorgaenger
 
-        SwNode *pNd;
-        switch( ( pNd = (*this)[aTmp] )->GetNodeType() )
+        SwNode * pNd = & aTmp.GetNode();
+        switch (pNd->GetNodeType())
         {
         case ND_TABLENODE:
             ((SwTableNode*)pNd)->MakeFrms( aIdx );
@@ -1628,7 +1629,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         }
     }
 
-    const bool bUndoNodes = !pOtherDoc && GetDoc()->GetUndoNds() == &GetNodes();
+    bool const bUndoNodes = !pOtherDoc
+        && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
     // Ende erst jetzt holen, weil beim Kopieren in sich selbst der
     // Start-Index und alle Attribute vorher aktualisiert werden.
@@ -2098,8 +2100,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         const xub_StrLen nEnd = rStart.GetIndex() + nLen;
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc())
             ? pDest->GetDoc() : 0;
-        const bool bUndoNodes =
-            !pOtherDoc && GetDoc()->GetUndoNds() == &GetNodes();
+        bool const bUndoNodes = !pOtherDoc
+            && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
         ASSERT(!pOtherDoc,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
@@ -5084,7 +5086,7 @@ bool SwTxtNode::IsInClipboard() const
 
 bool SwTxtNode::IsInUndo() const
 {
-    return &GetNodes() == GetDoc()->GetUndoNds();
+    return GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 }
 
 bool SwTxtNode::IsInContent() const

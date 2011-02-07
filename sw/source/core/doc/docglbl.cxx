@@ -43,6 +43,7 @@
 #include <fmtinfmt.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -181,7 +182,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath,
         return sal_False;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( sal_False );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );
@@ -542,7 +543,7 @@ sal_Bool SwDoc::SplitDoc( sal_uInt16 eDocType, const String& rPath, int nOutline
         return sal_False;
 
     // Undo/Redline aufjedenfall abschalten
-    DoUndo( sal_False );
+    GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
     String sExt( pFilter->GetSuffixes().GetToken(0, ',') );

@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _DOC_HXX
-#define _DOC_HXX
+#ifndef SW_DOC_HXX
+#define SW_DOC_HXX
 
 /** SwDoc interfaces */
 
@@ -34,7 +34,6 @@
 #include <IDocumentDeviceAccess.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentRedlineAccess.hxx>
-#include <IDocumentUndoRedo.hxx>
 #include <IDocumentLinksAdministration.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -63,7 +62,6 @@ class SwList;
 #include <vcl/timer.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
-#include <ndarr.hxx>
 #include <swatrset.hxx>
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
@@ -154,6 +152,7 @@ class SwNewDBMgr;
 class SwNoTxtNode;
 class SwNodeIndex;
 class SwNodeRange;
+class SwNodes;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
@@ -187,10 +186,6 @@ class SwTextBlocks;
 class SwTxtFmtColl;
 class SwTxtFmtColls;
 class SwURLStateChanged;
-class SwUndo;
-class SwUndoIds;
-class SwUndoIter;
-class SwUndos;
 class SwUnoCrsr;
 class SwUnoCrsrTbl;
 class ViewShell;
@@ -220,12 +215,15 @@ class SwPrintData;
 class SwRenderData;
 class SwPageFrm;
 class SwViewOption;
+class IDocumentUndoRedo;
 
 namespace sw { namespace mark {
     class MarkManager;
 }}
 namespace sw {
     class MetaFieldManager;
+    class UndoManager;
+    class IShellCursorSupplier;
 }
 
 namespace com { namespace sun { namespace star {
@@ -261,7 +259,6 @@ class SW_DLLPUBLIC SwDoc :
     public IDocumentSettingAccess,
     public IDocumentDeviceAccess,
     public IDocumentRedlineAccess,
-    public IDocumentUndoRedo,
     public IDocumentLinksAdministration,
     public IDocumentFieldsAccess,
     public IDocumentContentOperations,
@@ -289,9 +286,7 @@ class SW_DLLPUBLIC SwDoc :
     //---------------- private Member --------------------------------
 
     // -------------------------------------------------------------------
-    // die Objecte
-    SwNodes     aNodes;                 // Inhalt des Dokumentes
-    SwNodes     aUndoNodes;             // Inhalt fuer das Undo
+    ::boost::scoped_ptr<SwNodes> m_pNodes;  /// document content (Nodes Array)
     SwAttrPool* mpAttrPool;             // der Attribut Pool
     SwPageDescs aPageDescs;             // PageDescriptoren
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
@@ -310,6 +305,7 @@ class SW_DLLPUBLIC SwDoc :
 
     const ::boost::scoped_ptr< ::sw::mark::MarkManager> pMarkManager;
     const ::boost::scoped_ptr< ::sw::MetaFieldManager > m_pMetaFieldManager;
+    const ::boost::scoped_ptr< ::sw::UndoManager > m_pUndoManager;
 
     // -------------------------------------------------------------------
     // die Pointer
@@ -334,8 +330,6 @@ class SW_DLLPUBLIC SwDoc :
 
     SwRootFrm       *pLayout;           // Rootframe des spezifischen Layouts.
     SdrModel        *pDrawModel;        // StarView Drawing
-
-    SwUndos         *pUndos;            // Undo/Redo History
 
     SwDocUpdtFld    *pUpdtFlds;         // Struktur zum Field-Update
     SwFldTypes      *pFldTypes;         // Feldtypen
@@ -426,11 +420,6 @@ private:
 
     // -------------------------------------------------------------------
     // sonstige
-    sal_uInt16  nUndoPos;           // akt. Undo-InsertPosition (fuers Redo!)
-    sal_uInt16  nUndoSavePos;       // Position im Undo-Array, ab der das Doc
-                                    // nicht als modifiziert gilt
-    sal_uInt16  nUndoCnt;           // Anzahl von Undo Aktionen
-    sal_uInt16  nUndoSttEnd;        // != 0 -> innerhalb einer Klammerung
 
     sal_uInt16 nAutoFmtRedlnCommentNo;  // SeqNo fuers UI-seitige zusammenfassen
                                     // von AutoFmt-Redlines. Wird vom SwAutoFmt
@@ -462,28 +451,25 @@ private:
                                          //      leider auch temporaer von
                                          //      SwSwgReader::InLayout(), wenn fehlerhafte
                                          //      Frames geloescht werden muessen
-    bool mbUndo                  : 1;    // sal_True: Undo eingeschaltet
-    bool mbGroupUndo             : 1;    // sal_True: Undos werden gruppiert
-    bool mbPageNums              : 1;    // sal_True: es gibt virtuelle Seitennummern
-    bool mbLoaded                : 1;    // sal_True: ein geladenes Doc
-    bool mbUpdateExpFld          : 1;    // sal_True: Expression-Felder updaten
-    bool mbNewDoc                : 1;    // sal_True: neues Doc
-    bool mbNewFldLst             : 1;    // sal_True: Felder-Liste neu aufbauen
-    bool mbCopyIsMove            : 1;    // sal_True: Copy ist ein verstecktes Move
-    bool mbNoDrawUndoObj         : 1;    // sal_True: keine DrawUndoObjecte speichern
-    bool mbVisibleLinks          : 1;    // sal_True: Links werden sichtbar eingefuegt
-    bool mbBrowseMode            : 1;    // sal_True: Dokument im BrowseModus anzeigen
-    bool mbInReading             : 1;    // sal_True: Dokument wird gerade gelesen
-    bool mbInXMLImport           : 1;    // sal_True: During xml import, attribute portion building is not necessary
-    bool mbUpdateTOX             : 1;    // sal_True: nach Dokument laden die TOX Updaten
-    bool mbInLoadAsynchron       : 1;    // sal_True: Dokument wird gerade asynchron geladen
-    bool mbHTMLMode              : 1;    // sal_True: Dokument ist im HTMLMode
-    bool mbInCallModified        : 1;    // sal_True: im Set/Reset-Modified Link
-    bool mbIsGlobalDoc           : 1;    // sal_True: es ist ein GlobalDokument
-    bool mbGlblDocSaveLinks      : 1;    // sal_True: im GlobalDoc. gelinkte Sect. mit speichern
-    bool mbIsLabelDoc            : 1;    // sal_True: es ist ein Etiketten-Dokument
-    bool mbIsAutoFmtRedline      : 1;    // sal_True: die Redlines werden vom Autoformat aufgezeichnet
-    bool mbOLEPrtNotifyPending   : 1;    // sal_True: Printer  ist geaendert und beim
+    bool mbPageNums              : 1;    // TRUE: es gibt virtuelle Seitennummern
+    bool mbLoaded                : 1;    // TRUE: ein geladenes Doc
+    bool mbUpdateExpFld          : 1;    // TRUE: Expression-Felder updaten
+    bool mbNewDoc                : 1;    // TRUE: neues Doc
+    bool mbNewFldLst             : 1;    // TRUE: Felder-Liste neu aufbauen
+    bool mbCopyIsMove            : 1;    // TRUE: Copy ist ein verstecktes Move
+    bool mbVisibleLinks          : 1;    // TRUE: Links werden sichtbar eingefuegt
+    bool mbBrowseMode            : 1;    // TRUE: Dokument im BrowseModus anzeigen
+    bool mbInReading             : 1;    // TRUE: Dokument wird gerade gelesen
+    bool mbInXMLImport           : 1;    // TRUE: During xml import, attribute portion building is not necessary
+    bool mbUpdateTOX             : 1;    // TRUE: nach Dokument laden die TOX Updaten
+    bool mbInLoadAsynchron       : 1;    // TRUE: Dokument wird gerade asynchron geladen
+    bool mbHTMLMode              : 1;    // TRUE: Dokument ist im HTMLMode
+    bool mbInCallModified        : 1;    // TRUE: im Set/Reset-Modified Link
+    bool mbIsGlobalDoc           : 1;    // TRUE: es ist ein GlobalDokument
+    bool mbGlblDocSaveLinks      : 1;    // TRUE: im GlobalDoc. gelinkte Sect. mit speichern
+    bool mbIsLabelDoc            : 1;    // TRUE: es ist ein Etiketten-Dokument
+    bool mbIsAutoFmtRedline      : 1;    // TRUE: die Redlines werden vom Autoformat aufgezeichnet
+    bool mbOLEPrtNotifyPending   : 1;    // TRUE: Printer  ist geaendert und beim
                                          //       Erzeugen der ::com::sun::star::sdbcx::View ist eine Benachrichtigung
                                          //       der OLE-Objekte PrtOLENotify() notwendig.
     bool mbAllOLENotify          : 1;    // True: Benachrichtigung aller Objekte ist notwendig
@@ -614,13 +600,10 @@ private:
     sal_Bool    mbStartIdleTimer                 ;    // idle timer mode start/stop
 
     static SwAutoCompleteWord *pACmpltWords;    // Liste aller Worte fuers AutoComplete
-    static sal_uInt16 nUndoActions;     // anzahl von Undo ::com::sun::star::chaos::Action
 
     //---------------- private Methoden ------------------------------
     void checkRedlining(RedlineMode_t& _rReadlineMode);
 
-    sal_Bool DelUndoObj( sal_uInt16 nEnde  );   // loescht alle UndoObjecte vom Anfang
-                                        // bis zum angegebenen Ende
     DECL_LINK( AddDrawUndo, SdrUndoAction * );
                                         // DrawModel
     void DrawNotifyUndoHdl();   // wegen CLOOKs
@@ -735,8 +718,8 @@ public:
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
     */
-          SwNodes& GetNodes()                   { return aNodes; }
-    const SwNodes& GetNodes() const             { return aNodes; }
+    SwNodes      & GetNodes()       { return *m_pNodes; }
+    SwNodes const& GetNodes() const { return *m_pNodes; }
 
     /** IInterface
     */
@@ -769,7 +752,7 @@ public:
     virtual void setReferenceDeviceType(/*[in]*/ bool bNewVirtual,/*[in]*/ bool bNewHiRes );
     virtual const JobSetup* getJobsetup() const;
     virtual void setJobsetup(/*[in]*/ const JobSetup& rJobSetup );
-    virtual SwPrintData* getPrintData() const;
+    virtual const SwPrintData & getPrintData() const;
     virtual void setPrintData(/*[in]*/ const SwPrintData& rPrtData);
 
     /** IDocumentMarkAccess
@@ -810,37 +793,8 @@ public:
 
     /** IDocumentUndoRedo
     */
-    virtual void SetUndoNoResetModified();
-    virtual bool IsUndoNoResetModified() const;
-    virtual void DoUndo(bool bUn);
-    virtual bool DoesUndo() const;
-    virtual void DoGroupUndo(bool bUn);
-    virtual bool DoesGroupUndo() const;
-    virtual bool Undo(SwUndoIter& );
-    virtual SwUndoId StartUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
-    virtual SwUndoId EndUndo(SwUndoId eUndoId, const SwRewriter * pRewriter);
-    virtual void DelAllUndoObj();
-    virtual SwUndoId GetUndoIds(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual String GetUndoIdsStr(String* pStr, SwUndoIds *pUndoIds) const;
-    virtual bool HasUndoId(SwUndoId eId) const;
-    virtual const SwNodes* GetUndoNds() const;
-    virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId);
-    virtual bool HasTooManyUndos() const;
-    virtual bool Redo(SwUndoIter&);
-    virtual SwUndoId GetRedoIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRedoIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual bool Repeat(SwUndoIter&, sal_uInt16 nRepeatCnt);
-    virtual SwUndoId GetRepeatIds(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual String GetRepeatIdsStr(String* pStr, SwUndoIds *pRedoIds) const;
-    virtual void AppendUndo(SwUndo*);
-    virtual void ClearRedo();
-    virtual void setUndoNoModifiedPosition( SwUndoNoModifiedPosition );
-    virtual SwUndoNoModifiedPosition getUndoNoModifiedPosition() const;
-
-
-    /** abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions */
-    static sal_uInt16 GetUndoActionCount();
-    static void SetUndoActionCount(sal_uInt16 nNew);
+    IDocumentUndoRedo      & GetIDocumentUndoRedo();
+    IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
 
     /** IDocumentLinksAdministration
     */
@@ -1803,6 +1757,7 @@ public:
 
     // suche ueber das Layout eine EditShell und ggfs. eine ViewShell
     SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;
+    ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-Benachrichtung
     inline       void  SetOle2Link(const Link& rLink) {aOle2Link = rLink;}
@@ -1856,9 +1811,6 @@ public:
     bool IsCopyIsMove() const              { return mbCopyIsMove; }
     void SetCopyIsMove( bool bFlag )        { mbCopyIsMove = bFlag; }
 
-    // fuers Draw-Undo: Aktionen auf Flys wollen wir selbst behandeln
-    bool IsNoDrawUndoObj() const           { return mbNoDrawUndoObj; }
-    void SetNoDrawUndoObj( bool bFlag )    { mbNoDrawUndoObj = bFlag; }
     SwDrawContact* GroupSelection( SdrView& );
     void UnGroupSelection( SdrView& );
     sal_Bool DeleteSelection( SwDrawView& );
@@ -1898,12 +1850,11 @@ public:
     inline       SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True );
     inline const SvNumberFormatter* GetNumberFormatter( sal_Bool bCreate = sal_True ) const;
 
-    // loesche den nicht sichtbaren ::com::sun::star::ucb::Content aus dem Document, wie z.B.:
-    // versteckte Bereiche, versteckte Absaetze
-    sal_Bool RemoveInvisibleContent();
-    sal_Bool HasInvisibleContent() const;
-    //restore the invisible content if it's available on the undo stack
-    sal_Bool RestoreInvisibleContent();
+    bool HasInvisibleContent() const;
+    /// delete invisible content, like hidden sections and paragraphs
+    bool RemoveInvisibleContent();
+    /// restore the invisible content if it's available on the undo stack
+    bool RestoreInvisibleContent();
     // replace fields by text - mailmerge support
     sal_Bool ConvertFieldsToText();
 
@@ -2138,6 +2089,8 @@ public:
 #endif
     ::sfx2::IXmlIdRegistry& GetXmlIdRegistry();
     ::sw::MetaFieldManager & GetMetaFieldManager();
+    ::sw::UndoManager      & GetUndoManager();
+    ::sw::UndoManager const& GetUndoManager() const;
     SfxObjectShell* CreateCopy(bool bCallInitNew) const;
 };
 

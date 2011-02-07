@@ -804,11 +804,8 @@ bool SwMailMergeDlg::ExecQryShell()
             }
         }
     }
-    SwPrintData aPrtData = *SW_MOD()->GetPrtOptions(sal_False);
     IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-    SwPrintData* pShellPrintData = pIDDA->getPrintData();
-    if(pShellPrintData)
-        aPrtData = *pShellPrintData;
+    SwPrintData aPrtData( pIDDA->getPrintData() );
     aPrtData.SetPrintSingleJobs(aSingleJobsCB.IsChecked());
     pIDDA->setPrintData(aPrtData);
 

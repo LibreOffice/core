@@ -2894,7 +2894,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection
     const SwStartNode *pStNd;
     if( pTable && pTable->bFirstCell )
     {
-        SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
+        SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
         pNd->GetTxtNode()->ChgFmtColl( pColl );
         pStNd = pNd->FindTableBoxStartNode();
         pTable->bFirstCell = sal_False;
@@ -2937,7 +2937,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
 
     SwTxtFmtColl *pColl = pCSS1Parser->GetTxtCollFromPool( nPoolId );
 
-    SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
+    SwNode *const pNd = & pPam->GetPoint()->nNode.GetNode();
     const SwStartNode *pStNd;
     if( pTable && pTable->bFirstCell )
     {
@@ -3453,7 +3453,7 @@ void _CellSaveStruct::EndNoBreak( const SwPosition& rPos )
     }
 }
 
-void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc *pDoc )
+void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc * /*pDoc*/ )
 {
     if( pCnts && pCurrCnts==pCnts )
     {
@@ -3472,8 +3472,7 @@ void _CellSaveStruct::CheckNoBreak( const SwPosition& rPos, SwDoc *pDoc )
             }
             else if( nNoBreakEndCntntPos + 1 == rPos.nContent.GetIndex() )
             {
-                const SwTxtNode *pTxtNd =
-                    pDoc->GetNodes()[rPos.nNode]->GetTxtNode();
+                SwTxtNode const*const pTxtNd(rPos.nNode.GetNode().GetTxtNode());
                 if( pTxtNd )
                 {
                     sal_Unicode cLast =
@@ -3866,11 +3865,11 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     pPam->Move( fnMoveBackward );
                 }
 
-                const SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
+                SwNode const*const pNd = & pPam->GetPoint()->nNode.GetNode();
                 if( !bAppended && !bForceFrame )
                 {
-                    SwTxtNode* pOldTxtNd =
-                        pDoc->GetNodes()[pSavePos->nNode]->GetTxtNode();
+                    SwTxtNode *const pOldTxtNd =
+                        pSavePos->nNode.GetNode().GetTxtNode();
                     ASSERT( pOldTxtNd, "Wieso stehen wir in keinem Txt-Node?" );
                     SwFrmFmt *pFrmFmt = pSwTable->GetFrmFmt();
 
@@ -3939,7 +3938,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     }
                 }
 
-                const SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
+                SwNode const*const pNd = & pPam->GetPoint()->nNode.GetNode();
                 const SwStartNode *pStNd = (pTable->bFirstCell ? pNd->FindTableNode()
                                                             : pNd->FindTableBoxStartNode() );
 
@@ -4043,8 +4042,8 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                         // koennen wir erneut eine echte Tabelle aufmachen.
                         // Wir erkennen das daran, dass wir keinen
                         // Tabellen-Node mehr finden.
-                        bTopTable = pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                                        ->FindTableNode() == 0;
+                        bTopTable = (0 ==
+                            pPam->GetPoint()->nNode.GetNode().FindTableNode());
 
                         // Wenn im aktuellen Absatz Flys verankert sind,
                         // muss die neue Tabelle in einen Rahmen.

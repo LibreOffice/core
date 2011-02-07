@@ -33,6 +33,7 @@
 #include <editsh.hxx>
 #include <edimp.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <swundo.hxx>
@@ -153,12 +154,12 @@ sal_Bool SwEditShell::NoNum()
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NoNum( aRangeArr.SetPam( n, aPam ));
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     else
         bRet = GetDoc()->NoNum( *pCrsr );
@@ -217,14 +218,14 @@ void SwEditShell::DelNumRules()
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
         {
             GetDoc()->DelNumRules( aRangeArr.SetPam( n, aPam ) );
         }
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->DelNumRules( *pCrsr );
@@ -255,12 +256,12 @@ sal_Bool SwEditShell::NumUpDown( sal_Bool bDown )
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->NumUpDown( aRangeArr.SetPam( n, aPam ), bDown );
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
 
@@ -517,13 +518,13 @@ sal_Bool SwEditShell::OutlineUpDown( short nOffset )
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             bRet = bRet && GetDoc()->OutlineUpDown(
                                     aRangeArr.SetPam( n, aPam ), nOffset );
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     GetDoc()->SetModified();
     EndAllAction();
@@ -698,10 +699,11 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
 {
     StartAllAction();
 
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
@@ -715,21 +717,17 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
             // <--
             GetDoc()->SetCounted( aPam, true );
           }
-        GetDoc()->EndUndo( UNDO_END, NULL );
     }
     else
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
-
         // --> OD 2008-02-08 #newlistlevelattrs#
         // --> OD 2008-03-17 #refactorlists#
         GetDoc()->SetNumRule( *pCrsr, rRule,
                               bCreateNewList, sContinuedListId,
                               sal_True, bResetIndentAttrs );
         GetDoc()->SetCounted( *pCrsr, true );
-
-        GetDoc()->EndUndo( UNDO_END, NULL );
     }
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
 
     EndAllAction();
 }
@@ -761,12 +759,12 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNumRuleStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), bFlag );
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNumRuleStart( *pCrsr->GetPoint(), bFlag );
@@ -790,12 +788,12 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )         // Mehrfachselektion ?
     {
-        GetDoc()->StartUndo( UNDO_START, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
         for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->SetNodeNumStart( *aRangeArr.SetPam( n, aPam ).GetPoint(), nStt );
-        GetDoc()->EndUndo( UNDO_END, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     }
     else
         GetDoc()->SetNodeNumStart( *pCrsr->GetPoint(), nStt );

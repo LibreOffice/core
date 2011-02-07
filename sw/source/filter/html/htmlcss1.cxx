@@ -2077,7 +2077,7 @@ void SwHTMLParser::SetAnchorAndAdjustment( const SfxItemSet & /*rItemSet*/,
             // sie nicht schon in einem Rahmen stehen und sonst
             // Rahmengebunden.
             const SwStartNode *pFlySttNd =
-                pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
+                pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
             if( pFlySttNd )
             {
                 aAnchor.SetType( FLY_AT_FLY );

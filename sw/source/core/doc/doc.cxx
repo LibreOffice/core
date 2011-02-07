@@ -27,7 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <doc.hxx>
+#include <UndoManager.hxx>
 #include <hintids.hxx>
 
 #include <tools/shl.hxx>
@@ -80,7 +82,10 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoInsert.hxx>
+#include <UndoSplitMove.hxx>
+#include <UndoTable.hxx>
 #include <pagedesc.hxx> //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>
@@ -112,15 +117,15 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
+#include <wdocsh.hxx>           // SwWebDocShell
+#include <prtopt.hxx>           // SwPrintOptions
 
 #include <vector>
 #include <map>
 
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
-#ifdef FUTURE_VBA
 #include <vbahelper/vbaaccesshelper.hxx>
-#endif
 
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
@@ -632,11 +637,23 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
         PrtDataChanged();
 }
 
-SwPrintData* SwDoc::getPrintData() const
+const SwPrintData & SwDoc::getPrintData() const
 {
     if(!pPrtData)
-        ((SwDoc*)this)->pPrtData = new SwPrintData;
-    return pPrtData;
+    {
+        SwDoc * pThis = const_cast< SwDoc * >(this);
+        pThis->pPrtData = new SwPrintData;
+
+        // SwPrintData should be initialized from the configuration,
+        // the respective config item is implememted by SwPrintOptions which
+        // is also derived from SwPrintData
+        const SwDocShell *pDocSh = GetDocShell();
+        DBG_ASSERT( pDocSh, "pDocSh is 0, can't determine if this is a WebDoc or not" );
+        bool bWeb = 0 != dynamic_cast< const SwWebDocShell * >(pDocSh);
+        SwPrintOptions aPrintOptions( bWeb );
+        *pThis->pPrtData = aPrintOptions;
+    }
+    return *pPrtData;
 }
 
 void SwDoc::setPrintData(/*[in]*/ const SwPrintData& rPrtData )
@@ -677,14 +694,14 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     }
 
     SwUndoSplitNode* pUndo = 0;
-    if ( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo();
         // einfuegen vom Undo-Object, z.Z. nur beim TextNode
         if( pNode->IsTxtNode() )
         {
             pUndo = new SwUndoSplitNode( this, rPos, bChkTableStart );
-            AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
     }
 
@@ -791,10 +808,8 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
 
 bool SwDoc::AppendTxtNode( SwPosition& rPos )
 {
-    /*
-     * Neuen Node vor EndOfContent erzeugen.
-     */
-    SwTxtNode *pCurNode = GetNodes()[ rPos.nNode ]->GetTxtNode();
+    // create new node before EndOfContent
+    SwTxtNode * pCurNode = rPos.nNode.GetNode().GetTxtNode();
     if( !pCurNode )
     {
         // dann kann ja einer angelegt werden!
@@ -808,10 +823,9 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
     rPos.nNode++;
     rPos.nContent.Assign( pCurNode, 0 );
 
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        AppendUndo( new SwUndoInsert( rPos.nNode ));
+        GetIDocumentUndoRedo().AppendUndo( new SwUndoInsert( rPos.nNode ) );
     }
 
     if( IsRedlineOn() || (!IsIgnoreRedline() && pRedlineTbl->Count() ))
@@ -832,9 +846,9 @@ bool SwDoc::AppendTxtNode( SwPosition& rPos )
 bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         const enum InsertFlags nInsertMode )
 {
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo not always called!
     }
 
     const SwPosition& rPos = *rRg.GetPoint();
@@ -856,15 +870,16 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
 
     SwDataChanged aTmp( rRg, 0 );
 
-    if( !DoesUndo() || !DoesGroupUndo() )
+    if (!GetIDocumentUndoRedo().DoesUndo() ||
+        !GetIDocumentUndoRedo().DoesGroupUndo())
     {
         pNode->InsertText( rStr, rPos.nContent, nInsertMode );
 
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwUndoInsert * const pUndo( new SwUndoInsert(
                 rPos.nNode, rPos.nContent.GetIndex(), rStr.Len(), nInsertMode));
-            AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
     }
     else
@@ -875,25 +890,12 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         if (!(nInsertMode & IDocumentContentOperations::INS_FORCEHINTEXPAND))
         // -> #111827#
         {
-            sal_uInt16 const nUndoSize = pUndos->Count();
-            if (0 != nUndoSize)
+            SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
+            SwUndoInsert *const pUndoInsert(
+                dynamic_cast<SwUndoInsert *>(pLastUndo) );
+            if (pUndoInsert && pUndoInsert->CanGrouping(rPos))
             {
-                SwUndo * const pLastUndo = (*pUndos)[ nUndoSize - 1 ];
-
-                switch (pLastUndo->GetId())
-                {
-                    case UNDO_INSERT:
-                    case UNDO_TYPING:
-                        if (static_cast<SwUndoInsert*>(pLastUndo)
-                                ->CanGrouping( rPos ))
-                        {
-                            pUndo = static_cast<SwUndoInsert*>(pLastUndo);
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
+                pUndo = pUndoInsert;
             }
         }
         // <- #111827#
@@ -905,7 +907,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         {
             pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 0, nInsertMode,
                             !rCC.isLetterNumeric( rStr, 0 ) );
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
 
         pNode->InsertText( rStr, rPos.nContent, nInsertMode );
@@ -918,7 +920,7 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
             {
                 pUndo = new SwUndoInsert( rPos.nNode, nInsPos, 1, nInsertMode,
                             !rCC.isLetterNumeric( rStr, i ) );
-                AppendUndo( pUndo );
+                GetIDocumentUndoRedo().AppendUndo( pUndo );
             }
         }
     }
@@ -1339,12 +1341,14 @@ void SwDoc::CalculatePagesForPrinting(
 
     // get PageRange value to use
     OUString aPageRange;
-    if (bIsPDFExport)
-    {
-        // ?? rOptions.getValue( C2U("Selection") );
-        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
-    }
-    else
+    // --> PL, OD #i116085# - adjusting fix for i113919
+//    if (bIsPDFExport)
+//    {
+//        aPageRange = rOptions.getStringValue( "PageRange", OUString() );
+//    }
+//    else
+    if ( !bIsPDFExport )
+    // <--
     {
         // PageContent :
         // 0 -> print all pages (default if aPageRange is empty)
@@ -1997,7 +2001,7 @@ void SwDoc::ResetModified()
     // it is correct. In this case we reset the modified flag.
     if ( 0 != pDocStat->nChar )
         pDocStat->bModified = sal_False;
-    nUndoSavePos = nUndoPos;
+    GetIDocumentUndoRedo().SetUndoNoModifiedPosition();
     if( nCall && aOle2Link.IsSet() )
     {
         mbInCallModified = sal_True;
@@ -2016,10 +2020,9 @@ void SwDoc::ReRead( SwPaM& rPam, const String& rGrfName,
          || rPam.GetPoint()->nNode.GetIndex() == rPam.GetMark()->nNode.GetIndex() )
          && 0 != ( pGrfNd = rPam.GetPoint()->nNode.GetNode().GetGrfNode() ) )
     {
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoReRead( rPam, *pGrfNd ) );
+            GetIDocumentUndoRedo().AppendUndo(new SwUndoReRead(rPam, *pGrfNd));
         }
 
         // Weil nicht bekannt ist, ob sich die Grafik spiegeln laesst,
@@ -2231,10 +2234,10 @@ void SwDoc::Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool
 
     // loesche den nicht sichtbaren Content aus dem Document, wie z.B.:
     // versteckte Bereiche, versteckte Absaetze
-sal_Bool SwDoc::RemoveInvisibleContent()
+bool SwDoc::RemoveInvisibleContent()
 {
     sal_Bool bRet = sal_False;
-    StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
 
     {
         SwTxtNode* pTxtNd;
@@ -2398,13 +2401,13 @@ sal_Bool SwDoc::RemoveInvisibleContent()
 
     if( bRet )
         SetModified();
-    EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
 /*-- 25.08.2010 14:18:12---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Bool SwDoc::HasInvisibleContent() const
+bool SwDoc::HasInvisibleContent() const
 {
     sal_Bool bRet = sal_False;
 
@@ -2449,6 +2452,21 @@ sal_Bool SwDoc::HasInvisibleContent() const
     }
     return bRet;
 }
+
+bool SwDoc::RestoreInvisibleContent()
+{
+    bool bRet = false;
+    SwUndoId nLastUndoId(UNDO_EMPTY);
+    if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
+        && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
+    {
+        GetIDocumentUndoRedo().Undo();
+        GetIDocumentUndoRedo().ClearRedo();
+        bRet = true;
+    }
+    return bRet;
+}
+
 /*-- 11.06.2004 08:34:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2456,7 +2474,7 @@ sal_Bool SwDoc::ConvertFieldsToText()
 {
     sal_Bool bRet = sal_False;
     LockExpFlds();
-    StartUndo( UNDO_UI_REPLACE, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_UI_REPLACE, NULL );
 
     const SwFldTypes* pMyFldTypes = GetFldTypes();
     sal_uInt16 nCount = pMyFldTypes->Count();
@@ -2526,7 +2544,7 @@ sal_Bool SwDoc::ConvertFieldsToText()
 
     if( bRet )
         SetModified();
-    EndUndo( UNDO_UI_REPLACE, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_UI_REPLACE, NULL );
     UnlockExpFlds();
     return bRet;
 
@@ -2593,8 +2611,7 @@ bool SwDoc::EmbedAllLinks()
     const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
     if( rLinks.Count() )
     {
-        sal_Bool bDoesUndo = DoesUndo();
-        DoUndo( sal_False );
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
         ::sfx2::SvBaseLink* pLnk = 0;
         while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
@@ -2610,8 +2627,7 @@ bool SwDoc::EmbedAllLinks()
             bRet = sal_True;
         }
 
-        DelAllUndoObj();
-        DoUndo( bDoesUndo );
+        GetIDocumentUndoRedo().DelAllUndoObj();
         SetModified();
     }
     return bRet;
@@ -2650,26 +2666,26 @@ void SwDoc::AppendUndoForInsertFromDB( const SwPaM& rPam, sal_Bool bIsTable )
         {
             SwUndoCpyTbl* pUndo = new SwUndoCpyTbl;
             pUndo->SetTableSttIdx( pTblNd->GetIndex() );
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
     }
     else if( rPam.HasMark() )
     {
         SwUndoCpyDoc* pUndo = new SwUndoCpyDoc( rPam );
         pUndo->SetInsertRange( rPam, sal_False );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 }
 
 void SwDoc::ChgTOX(SwTOXBase & rTOX, const SwTOXBase & rNew)
 {
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        DelAllUndoObj();
+        GetIDocumentUndoRedo().DelAllUndoObj();
 
         SwUndo * pUndo = new SwUndoTOXChange(&rTOX, rNew);
 
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     rTOX = rNew;

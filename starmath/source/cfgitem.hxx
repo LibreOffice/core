@@ -196,11 +196,14 @@ public:
     sal_uInt16          GetPrintZoomFactor() const;
     void            SetPrintZoomFactor( sal_uInt16 nVal );
 
-    sal_Bool            IsIgnoreSpacesRight() const;
+    sal_Bool        IsSaveOnlyUsedSymbols() const;
+    void            SetSaveOnlyUsedSymbols( sal_Bool bVal );
+
+    sal_Bool        IsIgnoreSpacesRight() const;
     void            SetIgnoreSpacesRight( sal_Bool bVal );
-    sal_Bool            IsAutoRedraw() const;
+    sal_Bool        IsAutoRedraw() const;
     void            SetAutoRedraw( sal_Bool bVal );
-    sal_Bool            IsShowFormulaCursor() const;
+    sal_Bool        IsShowFormulaCursor() const;
     void            SetShowFormulaCursor( sal_Bool bVal );
 };
 

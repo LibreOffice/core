@@ -712,11 +712,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     uno::Reference< mail::XMailService > xInService;
     if (MailMergeType::PRINTER == nCurOutputType)
     {
-        SwPrintData aPrtData = *SW_MOD()->GetPrtOptions( sal_False );
         IDocumentDeviceAccess* pIDDA = rSh.getIDocumentDeviceAccess();
-        SwPrintData* pShellPrintData = pIDDA->getPrintData();
-        if (pShellPrintData)
-            aPrtData = *pShellPrintData;
+        SwPrintData aPrtData( pIDDA->getPrintData() );
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
         pIDDA->setPrintData( aPrtData );
         // #i25686# printing should not be done asynchronously to prevent dangling offices

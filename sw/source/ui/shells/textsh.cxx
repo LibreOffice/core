@@ -79,9 +79,7 @@
 #include <doc.hxx>
 #include <uitool.hxx>
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <frmmgr.hxx>
 #include <textsh.hxx>
 #include <frmfmt.hxx>
@@ -100,12 +98,8 @@
 #include <modcfg.hxx>
 #include <column.hxx>
 #include <edtwin.hxx>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _POPUP_HRC
 #include <popup.hrc>
-#endif
 #include <swerror.h>
 #include <SwAppletImpl.hxx>
 #include <unochart.hxx>
@@ -120,10 +114,7 @@
 #include <sfx2/msg.hxx>
 #include <swslots.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -1217,7 +1208,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         }
 
         rSh.EndAllAction();
-        rSh.EndUndo( UNDO_INSERT );
+        rSh.EndUndo();
 
         if ( aChars.Len() )
         {

@@ -30,6 +30,8 @@
 
 #include <vector>
 
+#include <boost/utility.hpp>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svl/svarray.hxx>
@@ -82,7 +84,9 @@ typedef sal_Bool (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 
 SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0, 10 )
 
-class SW_DLLPUBLIC SwNodes: private BigPtrArray
+class SW_DLLPUBLIC SwNodes
+    : private BigPtrArray
+    , private ::boost::noncopyable
 {
     friend class SwDoc;
     friend class SwNode;
@@ -140,10 +144,6 @@ public:
 
     SwNodePtr operator[]( sal_uLong n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
-
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
-    inline SwNodePtr operator[]( const SwNodeIndex& rIdx ) const;
 
     sal_uLong Count() const { return BigPtrArray::Count(); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = 0 )
@@ -342,11 +342,6 @@ public:
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
     //<- #112139#
-private:
-    // privater Constructor, weil nie kopiert werden darf !!
-    SwNodes( const SwNodes & rNodes );
 };
-
-
 
 #endif

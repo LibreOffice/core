@@ -100,7 +100,7 @@ sal_Bool SwDoc::ExecMacro( const SvxMacro& rMacro, String* pRet, SbxArray* pArgs
             aRef = pRetValue;
             eErr = pDocShell->CallBasic( rMacro.GetMacName(),
                                          rMacro.GetLibName(),
-                                         0, pArgs, pRet ? pRetValue : 0 );
+                                         pArgs, pRet ? pRetValue : 0 );
 
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
@@ -231,7 +231,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             if( STARBASIC == rMacro.GetScriptType() )
             {
                 nRet += 0 == pDocShell->CallBasic( rMacro.GetMacName(),
-                                    rMacro.GetLibName(), 0, pArgs ) ? 1 : 0;
+                                    rMacro.GetLibName(), pArgs ) ? 1 : 0;
             }
             else if( EXTENDED_STYPE == rMacro.GetScriptType() )
             {

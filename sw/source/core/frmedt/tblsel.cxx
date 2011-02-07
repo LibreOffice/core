@@ -28,15 +28,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-#include <hintids.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/protitem.hxx>
+
+#include <hintids.hxx>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
 #include <frmatr.hxx>
 #include <tblsel.hxx>
 #include <crsrsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -50,7 +52,7 @@
 #include <rootfrm.hxx>
 #include <viscrs.hxx>
 #include <swtblfmt.hxx>
-#include <undobj.hxx>
+#include <UndoTable.hxx>
 #include <mvsave.hxx>
 // OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>
@@ -1449,11 +1451,16 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
             // ein Node muss in der Box erhalten bleiben (sonst wird beim
             // Move die gesamte Section geloescht)
+            bool const bUndo(pDoc->GetIDocumentUndoRedo().DoesUndo());
             if( pUndo )
-                pDoc->DoUndo( sal_False );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            }
             pDoc->AppendTxtNode( *aPam.GetPoint() );
             if( pUndo )
-                pDoc->DoUndo( sal_True );
+            {
+                pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
+            }
             SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
             rInsPosNd++;
             if( pUndo )

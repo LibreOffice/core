@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoSection.hxx>
 
 #include <sfx2/linkmgr.hxx>
 #include <fmtcntnt.hxx>
@@ -36,7 +37,7 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <section.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
@@ -47,8 +48,6 @@
 /// class Calc needed for calculation of the hidden condition of a section.
 #include <calc.hxx>
 
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
@@ -122,9 +121,9 @@ SwUndoInsSection::~SwUndoInsSection()
 {
 }
 
-void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
+void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     RemoveIdxFromSection( rDoc, m_nSectionNodePos );
 
@@ -167,25 +166,23 @@ void SwUndoInsSection::Undo( SwUndoIter& rUndoIter )
         rDoc.GetFtnIdxs().UpdateFtn( aIdx );
     }
 
-    SetPaM( rUndoIter );
+    AddUndoRedoPaM(rContext);
 }
 
-
-void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
+void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
-    SetPaM( rUndoIter );
+    SwDoc & rDoc = rContext.GetDoc();
+    SwPaM & rPam( AddUndoRedoPaM(rContext) );
 
     const SwTOXBaseSection* pUpdateTOX = 0;
     if (m_pTOXBase.get())
     {
-        pUpdateTOX = rDoc.InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
+        pUpdateTOX = rDoc.InsertTableOf( *rPam.GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
-        rDoc.InsertSwSection(*rUndoIter.pAktPam,
-                *m_pSectionData, 0, m_pAttrSet.get(), true);
+        rDoc.InsertSwSection(rPam, *m_pSectionData, 0, m_pAttrSet.get(), true);
     }
 
     if (m_pHistory.get())
@@ -224,21 +221,20 @@ void SwUndoInsSection::Redo( SwUndoIter& rUndoIter )
     }
 }
 
-
-void SwUndoInsSection::Repeat( SwUndoIter& rUndoIter )
+void SwUndoInsSection::RepeatImpl(::sw::RepeatContext & rContext)
 {
+    SwDoc & rDoc = rContext.GetDoc();
     if (m_pTOXBase.get())
     {
-        rUndoIter.GetDoc().InsertTableOf( *rUndoIter.pAktPam->GetPoint(),
+        rDoc.InsertTableOf(*rContext.GetRepeatPaM().GetPoint(),
                                         *m_pTOXBase, m_pAttrSet.get(), true);
     }
     else
     {
-        rUndoIter.GetDoc().InsertSwSection( *rUndoIter.pAktPam,
+        rDoc.InsertSwSection(rContext.GetRepeatPaM(),
             *m_pSectionData, 0, m_pAttrSet.get());
     }
 }
-
 
 void SwUndoInsSection::Join( SwDoc& rDoc, sal_uLong nNode )
 {
@@ -300,9 +296,11 @@ private:
 public:
     SwUndoDelSection(
         SwSectionFmt const&, SwSection const&, SwNodeIndex const*const);
+
     virtual ~SwUndoDelSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const& rFormat)
@@ -330,9 +328,9 @@ SwUndoDelSection::~SwUndoDelSection()
 {
 }
 
-void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
+void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     if (m_pTOXBase.get())
     {
@@ -383,13 +381,13 @@ void SwUndoDelSection::Undo( SwUndoIter& rUndoIter )
     }
 }
 
-void SwUndoDelSection::Redo( SwUndoIter& rUndoIter )
+void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
-    ASSERT( pNd, "wo ist mein SectionNode?" );
+    OSL_ENSURE(pNd, "SwUndoDelSection::RedoImpl(): no SectionNode?");
     // einfach das Format loeschen, der Rest erfolgt automatisch
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
@@ -409,9 +407,11 @@ private:
 public:
     SwUndoUpdateSection(
         SwSection const&, SwNodeIndex const*const, bool const bOnlyAttr);
+
     virtual ~SwUndoUpdateSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 SW_DLLPRIVATE SwUndo *
@@ -436,9 +436,9 @@ SwUndoUpdateSection::~SwUndoUpdateSection()
 {
 }
 
-void SwUndoUpdateSection::Undo( SwUndoIter& rUndoIter )
+void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
     SwSectionNode *const pSectNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
     ASSERT( pSectNd, "wo ist mein SectionNode?" );
@@ -492,8 +492,8 @@ void SwUndoUpdateSection::Undo( SwUndoIter& rUndoIter )
     }
 }
 
-void SwUndoUpdateSection::Redo( SwUndoIter& rUndoIter )
+void SwUndoUpdateSection::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    Undo( rUndoIter );
+    UndoImpl(rContext);
 }
 

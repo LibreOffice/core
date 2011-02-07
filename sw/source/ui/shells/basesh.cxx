@@ -27,14 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <sot/factory.hxx>
 #include <hintids.hxx>
 #include <svl/urihelper.hxx>
 #include <svl/languageoptions.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <sfx2/linkmgr.hxx>
 #include <svx/htmlmode.hxx>
 #include <svx/imapdlg.hxx>
@@ -97,15 +96,9 @@
 #include <caption.hxx>
 #include <swwait.hxx>
 #include <cmdid.h>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <globals.h>
 #include <unotxdoc.hxx>
 #include <crsskip.hxx>
@@ -120,10 +113,7 @@
 #include <instable.hxx>
 #include <svx/fmshell.hxx> // for FN_XFORMS_DESIGN_MODE
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 
 #include <unomid.h>
 
@@ -553,35 +543,41 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if( rSh.GetUndoIds() )
+                if (rSh.GetLastUndoInfo(0, 0))
+                {
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
+                }
                 else
                     rSet.DisableItem(nWhich);
                 break;
             }
             case SID_REDO:
             {
-                if(rSh.GetRedoIds())
+                if (rSh.GetFirstRedoInfo(0))
+                {
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
+                }
                 else
                     rSet.DisableItem(nWhich);
                 break;
             }
             case SID_REPEAT:
             {   // Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
-                if(rSh.GetRedoIds() == UNDO_EMPTY &&
+                if ((!rSh.GetFirstRedoInfo(0)) &&
                     !rSh.IsSelFrmMode() &&
-                    rSh.GetRepeatIds() )
+                    (UNDO_EMPTY != rSh.GetRepeatInfo(0)))
+                {
                     rSet.Put(SfxStringItem(nWhich, rSh.GetRepeatString()));
+                }
                 else
                     rSet.DisableItem(nWhich);
                 break;
             }
 
             case SID_GETUNDOSTRINGS:
-                if( rSh.GetUndoIds() )
+                if (rSh.GetLastUndoInfo(0, 0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::UNDO, aStrLst );
@@ -592,7 +588,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
 
             case SID_GETREDOSTRINGS:
-                if( rSh.GetRedoIds() )
+                if (rSh.GetFirstRedoInfo(0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::REDO, aStrLst );

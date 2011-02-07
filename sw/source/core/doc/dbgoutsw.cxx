@@ -42,6 +42,7 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <undobj.hxx>
+#include <numrule.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>
@@ -808,42 +809,9 @@ String lcl_dbg_out(const SwUndo & rUndo)
 {
     String aStr("[ ", RTL_TEXTENCODING_ASCII_US);
 
-    aStr += String::CreateFromInt32(rUndo.GetId());
+    aStr += String::CreateFromInt32(
+                static_cast<SfxUndoAction const&>(rUndo).GetId());
     aStr += String(": ", RTL_TEXTENCODING_ASCII_US);
-
-    switch(rUndo.GetId())
-    {
-    case UNDO_START:
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr +=
-            String::CreateFromInt32(dynamic_cast
-                                    <const SwUndoStart &>(rUndo).
-                                    GetUserId());
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(dynamic_cast
-                                        <const SwUndoStart &>(rUndo).
-                                        GetEndOffset());
-        aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-
-    case UNDO_END:
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr +=
-            String::CreateFromInt32(dynamic_cast
-                                    <const SwUndoEnd &>(rUndo).
-                                    GetId());
-        aStr += String(", ", RTL_TEXTENCODING_ASCII_US);
-        aStr += String::CreateFromInt32(dynamic_cast
-                                        <const SwUndoEnd &>(rUndo).
-                                        GetSttOffset());
-        aStr += String(" ", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-
-    default:
-        break;
-    }
 
     aStr += rUndo.GetComment();
     aStr += String(" ]", RTL_TEXTENCODING_ASCII_US);
@@ -874,39 +842,6 @@ String lcl_dbg_out(SwOutlineNodes & rNodes)
 SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
 {
     return dbg_out(lcl_dbg_out(rNodes));
-}
-
-String lcl_dbg_out(const SwUndos & rUndos)
-{
-    sal_uInt16 nIndent = 0;
-
-    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
-
-    for (sal_uInt16 n = 0; n < rUndos.Count(); n++)
-    {
-        SwUndo * pUndo = rUndos[n];
-
-        if (pUndo->GetId() == UNDO_END)
-            nIndent--;
-
-        for (sal_uInt16 nI = 0; n < nIndent; nI++)
-            aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
-
-        aStr += lcl_dbg_out(*pUndo);
-        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
-
-        if (pUndo->GetId() == UNDO_START)
-            nIndent++;
-    }
-
-    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
-
-    return aStr;
-}
-
-SW_DLLPUBLIC const char * dbg_out(const SwUndos & rUndos)
-{
-    return dbg_out(lcl_dbg_out(rUndos));
 }
 
 String lcl_dbg_out(const SwRewriter & rRewriter)

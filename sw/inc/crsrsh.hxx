@@ -24,14 +24,16 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _CRSRSH_HXX
-#define _CRSRSH_HXX
+#ifndef SW_CRSRSH_HXX
+#define SW_CRSRSH_HXX
 
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <tools/string.hxx>
 #include <tools/link.hxx>
 #include <tools/rtti.hxx>
+
+#include <IShellCursorSupplier.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>          // fuer SWPOSDOC
 #include <viewsh.hxx>           // fuer ViewShell
@@ -152,7 +154,10 @@ const int CRSR_POSOLD = 0x01,   // Cursor bleibt an alter Doc-Position
 String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 // die Cursor - Shell
-class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
+class SW_DLLPUBLIC SwCrsrShell
+    : public ViewShell
+    , public SwModify
+    , public ::sw::IShellCursorSupplier
 {
     friend class SwCallLink;
     friend class SwVisCrsr;
@@ -330,6 +335,10 @@ public:
     virtual ~SwCrsrShell();
 
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+
+    // IShellCursorSupplier
+    virtual SwPaM & CreateNewShellCursor();
+    virtual SwPaM & GetCurrentShellCursor();
 
     // neuen Cusror erzeugen und den alten anhaengen
     SwPaM * CreateCrsr();

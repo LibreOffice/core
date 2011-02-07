@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <editsh.hxx>
 #include <doc.hxx>      // fuer aNodes
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>      // fuer SwPaM
 #include <edimp.hxx>    // fuer MACROS
 #include <swundo.hxx>   // fuer die UndoIds
@@ -49,7 +49,9 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
     StartAllAction();
     sal_Bool bUndoGroup = GetCrsr()->GetNext() != GetCrsr();
     if( bUndoGroup )
-        GetDoc()->StartUndo(UNDO_RESETATTR, NULL);
+    {
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_RESETATTR, NULL);
+    }
 
         FOREACHPAM_START(this)
             // if ( PCURCRSR->HasMark() )
@@ -57,7 +59,9 @@ void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
         FOREACHPAM_END()
 
     if( bUndoGroup )
-        GetDoc()->EndUndo(UNDO_RESETATTR, NULL);
+    {
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_RESETATTR, NULL);
+    }
     CallChgLnk();
     EndAllAction();
 }
@@ -71,12 +75,14 @@ void SwEditShell::GCAttr()
 //              Sonst Probleme im MouseBut.DownHdl - Bug 35562
 //  StartAllAction();
     FOREACHPAM_START(this)
-        SwTxtNode *pTxtNode;
         if ( !PCURCRSR->HasMark() )
         {
-            if( 0 != (pTxtNode = GetDoc()->GetNodes()[
-                                PCURCRSR->GetPoint()->nNode]->GetTxtNode()))
+            SwTxtNode *const pTxtNode =
+                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+            if (pTxtNode)
+            {
                 pTxtNode->GCAttr();
+            }
         }
         else
         {
@@ -133,7 +139,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
         sal_Bool bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -143,7 +149,7 @@ void SwEditShell::SetAttr( const SfxPoolItem& rHint, sal_uInt16 nFlags )
             }
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -163,7 +169,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
     if( pCrsr->GetNext() != pCrsr )     // Ring von Cursorn
     {
         sal_Bool bIsTblMode = IsTableMode();
-        GetDoc()->StartUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && ( bIsTblMode ||
@@ -173,7 +179,7 @@ void SwEditShell::SetAttr( const SfxItemSet& rSet, sal_uInt16 nFlags )
             }
         FOREACHPAM_END()
 
-        GetDoc()->EndUndo(UNDO_INSATTR, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {

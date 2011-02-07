@@ -335,7 +335,8 @@ public:
 
     /** Provides access to the document undo/redo interface
      */
-    IDocumentUndoRedo* getIDocumentUndoRedoAccess();
+    IDocumentUndoRedo const& GetIDocumentUndoRedo() const;
+    IDocumentUndoRedo      & GetIDocumentUndoRedo();
 
     // --> OD 2007-11-14 #i83479#
     const IDocumentListItems* getIDocumentListItemsAccess() const;

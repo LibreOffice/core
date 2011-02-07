@@ -28,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
-#include <svx/svdmodel.hxx>
 
+#include <svx/svdmodel.hxx>
 
 #include <calbck.hxx>
 #include <calc.hxx>
 #include <usrfld.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <dpage.hxx>
 #include <unofldmid.h>
@@ -302,7 +302,9 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
         sal_Bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
         if( !bModified )    // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
+        {
+            GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+        }
     }
 }
 

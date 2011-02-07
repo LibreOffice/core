@@ -30,6 +30,7 @@
 
 #include <tools/resid.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
 #include <pagedesc.hxx>
 #include <SwUndoPageDesc.hxx>
@@ -325,34 +326,20 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     }
 }
 
-void SwUndoPageDesc::Undo(SwUndoIter &)
+void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aNew, (SwPageDesc&)aOld );
     pDoc->ChgPageDesc(aOld.GetName(), aOld);
-    pDoc->DoUndo(bUndo);
 }
 
-void SwUndoPageDesc::Redo(SwUndoIter &)
+void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     // Move (header/footer)content node responsibility from old page descriptor to new one again.
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
     pDoc->ChgPageDesc(aNew.GetName(), aNew);
-    pDoc->DoUndo(bUndo);
-}
-
-void SwUndoPageDesc::Repeat(SwUndoIter &)
-{
 }
 
 SwRewriter SwUndoPageDesc::GetRewriter() const
@@ -379,12 +366,8 @@ SwUndoPageDescCreate::~SwUndoPageDescCreate()
 {
 }
 
-void SwUndoPageDescCreate::Undo(SwUndoIter &)
+void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     // -> #116530#
     if (pDesc)
     {
@@ -393,26 +376,24 @@ void SwUndoPageDescCreate::Undo(SwUndoIter &)
     }
     // <- #116530#
 
-    pDoc->DelPageDesc(aNew.GetName(), sal_True);
-    pDoc->DoUndo(bUndo);
+    pDoc->DelPageDesc(aNew.GetName(), TRUE);
 }
 
-
-void SwUndoPageDescCreate::Redo(SwUndoIter &)
+void SwUndoPageDescCreate::DoImpl()
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     SwPageDesc aPageDesc = aNew;
-    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, sal_False, sal_True); // #116530#
-
-    pDoc->DoUndo(bUndo);
+    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
 }
 
-void SwUndoPageDescCreate::Repeat(SwUndoIter & rIt)
+void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIt);
+    DoImpl();
+}
+
+void SwUndoPageDescCreate::RepeatImpl(::sw::RepeatContext &)
+{
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    DoImpl();
 }
 
 SwRewriter SwUndoPageDescCreate::GetRewriter() const
@@ -439,29 +420,26 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 {
 }
 
-void SwUndoPageDescDelete::Undo(SwUndoIter &)
+void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     SwPageDesc aPageDesc = aOld;
-    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, sal_False, sal_True); // #116530#
-    pDoc->DoUndo(bUndo);
+    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
 }
 
-void SwUndoPageDescDelete::Redo(SwUndoIter &)
+void SwUndoPageDescDelete::DoImpl()
 {
-    sal_Bool bUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-    pDoc->DelPageDesc(aOld.GetName(), sal_True); // #116530#
-    pDoc->DoUndo(bUndo);
+    pDoc->DelPageDesc(aOld.GetName(), TRUE); // #116530#
 }
 
-void SwUndoPageDescDelete::Repeat(SwUndoIter & rIt)
+void SwUndoPageDescDelete::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIt);
+    DoImpl();
+}
+
+void SwUndoPageDescDelete::RepeatImpl(::sw::RepeatContext &)
+{
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    DoImpl();
 }
 
 SwRewriter SwUndoPageDescDelete::GetRewriter() const

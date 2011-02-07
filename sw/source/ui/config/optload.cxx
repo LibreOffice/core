@@ -34,13 +34,9 @@
 
 #include <tools/shl.hxx>
 #include <swtypes.hxx>
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
 #include <uiitems.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include "swmodule.hxx"
 #include "usrpref.hxx"
 #include "wrtsh.hxx"
@@ -65,9 +61,7 @@
 #include <sot/clsids.hxx>
 #include <unotools/configmgr.hxx>
 #include <docsh.hxx>
-#ifndef _CONFIG_HRC
 #include <config.hrc>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>

@@ -29,10 +29,6 @@
 #include "precompiled_sw.hxx"
 
 
-#ifdef WTC
-#define private public
-#endif
-
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -49,7 +45,8 @@
 #include <cntfrm.hxx>
 #include <txtfrm.hxx>
 #include <svx/svxids.hrc>
-#include "doc.hxx"
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include "pam.hxx"
 #include "swcrsr.hxx"
 #include "viscrs.hxx"
@@ -59,7 +56,8 @@
 #include "swtblfmt.hxx"
 #include "docary.hxx"
 #include "ndindex.hxx"
-#include "undobj.hxx"
+#include <UndoTable.hxx>
+
 
 using namespace ::com::sun::star;
 
@@ -337,10 +335,9 @@ void SwDoc::SetRowSplit( const SwCursor& rCursor, const SwFmtRowSplit &rNew )
 
         if( aRowArr.Count() )
         {
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+                GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
             SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
@@ -398,10 +395,9 @@ void SwDoc::SetRowHeight( const SwCursor& rCursor, const SwFmtFrmSize &rNew )
 
         if( aRowArr.Count() )
         {
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+                GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
             SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
@@ -472,10 +468,10 @@ sal_Bool SwDoc::BalanceRowHeight( const SwCursor& rCursor, sal_Bool bTstOnly )
                 }
                 SwFmtFrmSize aNew( ATT_MIN_SIZE, 0, nHeight );
 
-                if( DoesUndo() )
+                if (GetIDocumentUndoRedo().DoesUndo())
                 {
-                    ClearRedo();
-                    AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+                    GetIDocumentUndoRedo().AppendUndo(
+                            new SwUndoAttrTbl(*pTblNd));
                 }
 
                 SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
@@ -504,10 +500,9 @@ void SwDoc::SetRowBackground( const SwCursor& rCursor, const SvxBrushItem &rNew 
 
         if( aRowArr.Count() )
         {
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+                GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
             }
 
             SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aRowArr.Count()) ), 255 );
@@ -600,10 +595,9 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
     if( aUnions.Count() )
     {
         SwTable& rTable = pTblNd->GetTable();
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
         SvPtrarr aFmtCmp( 255, 255 );
@@ -849,10 +843,9 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
     if( aUnions.Count() )
     {
         SwTable& rTable = pTblNd->GetTable();
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+            GetIDocumentUndoRedo().AppendUndo(new SwUndoAttrTbl(*pTblNd));
         }
 
         for( sal_uInt16 i = 0; i < aUnions.Count(); ++i )
@@ -1132,10 +1125,9 @@ void SwDoc::SetBoxAttr( const SwCursor& rCursor, const SfxPoolItem &rNew )
     if( pTblNd && ::lcl_GetBoxSel( rCursor, aBoxes, sal_True ) )
     {
         SwTable& rTable = pTblNd->GetTable();
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            AppendUndo( new SwUndoAttrTbl( *pTblNd ));
+            GetIDocumentUndoRedo().AppendUndo( new SwUndoAttrTbl(*pTblNd) );
         }
 
         SvPtrarr aFmtCmp( Max( sal_uInt8(255), sal_uInt8(aBoxes.Count()) ), 255 );

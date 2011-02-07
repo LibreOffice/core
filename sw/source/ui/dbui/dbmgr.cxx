@@ -643,7 +643,8 @@ sal_Bool SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
     else
     {
         rtl::OUString sDBName(rDBName);
-        xConnection = RegisterConnection( sDBName );
+        if ( sDBName.getLength() )
+            xConnection = RegisterConnection( sDBName );
     }
     if(xConnection.is())
     {
@@ -1750,7 +1751,7 @@ String SwNewDBMgr::GetDBField(uno::Reference<XPropertySet> xColumnProps,
             try
             {
                 SwDbtoolsClient& aClient = SwNewDBMgr::GetDbtoolsClient();
-                sRet = aClient.getValue(
+                sRet = aClient.getFormattedValue(
                     xColumnProps,
                     rDBFormatData.xFormatter,
                     rDBFormatData.aLocale,
@@ -2948,8 +2949,14 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
                 pWorkDoc->SetNewDBMgr( this );
                 pWorkDoc->EmbedAllLinks();
-                if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
-                    rWorkShell.Undo();
+                SwUndoId nLastUndoId(UNDO_EMPTY);
+                if (rWorkShell.GetLastUndoInfo(0, & nLastUndoId))
+                {
+                    if (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId)
+                    {
+                        rWorkShell.Undo();
+                    }
+                }
                 // #i69485# lock fields to prevent access to the result set while calculating layout
                 rWorkShell.LockExpFlds();
                 // create a layout

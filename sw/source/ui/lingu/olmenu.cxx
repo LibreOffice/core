@@ -47,7 +47,6 @@
 #include "swtypes.hxx"
 #include "swundo.hxx"
 #include "uitool.hxx"
-#include "undobj.hxx"
 #include "unomid.h"
 #include "view.hxx"
 #include "viewopt.hxx"
@@ -789,7 +788,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                of temporary auto correction is now undoable two and
                must reside in the same undo group.*/
             pSh->EndAction();
-            pSh->EndUndo(UNDO_UI_REPLACE);
+            pSh->EndUndo();
 
             pSh->SetInsMode( bOldIns );
         }

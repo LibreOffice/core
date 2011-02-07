@@ -57,7 +57,8 @@ public:
                 SwDrawTextShell(SwView &rView);
     virtual     ~SwDrawTextShell();
 
-    virtual SfxUndoManager*     GetUndoManager();
+    virtual ::svl::IUndoManager*
+                GetUndoManager();
 
     void        StateDisableItems(SfxItemSet &);
 

@@ -31,6 +31,7 @@
 
 #include <hintids.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
@@ -39,7 +40,6 @@
 #include <IMark.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <globals.hrc>
 
 #include <comcore.hrc>
@@ -68,7 +68,7 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
         // in Tabellen das Undo gruppieren
         if( pUndo && !*pUndo )
         {
-            GetDoc()->StartUndo( UNDO_START, NULL );
+            GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
             *pUndo = sal_True;
         }
         SwPaM aDelPam( *rPam.Start() );
@@ -129,7 +129,7 @@ long SwEditShell::Delete()
             SwRewriter aRewriter;
             aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_MULTISEL)));
 
-            GetDoc()->StartUndo( UNDO_DELETE, &aRewriter );
+            GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_DELETE, &aRewriter);
         }
 
         FOREACHPAM_START(this)
@@ -138,7 +138,9 @@ long SwEditShell::Delete()
 
         // falls eine Undo-Klammerung, dann hier beenden
         if( bUndo )
-            GetDoc()->EndUndo( UNDO_DELETE, NULL );
+        {
+            GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
+        }
         EndAllAction();
         nRet = 1;
     }
@@ -207,7 +209,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     // For block selection this list is filled with the insert positions
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
-    pDestShell->GetDoc()->StartUndo( UNDO_START, NULL );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     FOREACHPAM_START(this)
 
         if( !pPos )
@@ -289,7 +291,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 #endif
 
     // Undo-Klammerung hier beenden
-    pDestShell->GetDoc()->EndUndo( UNDO_END, NULL );
+    pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     pDestShell->EndAllAction();
 
     pDestShell->SaveTblBoxCntnt( pDestShell->GetCrsr()->GetPoint() );
@@ -312,7 +314,7 @@ sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
     if( !HasReadonlySel() )
     {
         StartAllAction();
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
         FOREACHPAM_START(this)
             if( PCURCRSR->HasMark() && *PCURCRSR->GetMark() != *PCURCRSR->GetPoint() )
@@ -324,7 +326,7 @@ sal_Bool SwEditShell::Replace( const String& rNewStr, sal_Bool bRegExpRplc )
         FOREACHPAM_END()
 
         // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         EndAllAction();
     }
     return bRet;

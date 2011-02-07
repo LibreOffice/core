@@ -81,6 +81,7 @@
 #include <shellio.hxx>      // I/O
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docstat.hxx>
 #include <pagedesc.hxx>
 #include <pview.hxx>
@@ -494,7 +495,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         // Modified-Flag merken und erhalten ohne den Link zu Callen
         // (fuer OLE; nach Anweisung von MM)
         sal_Bool bIsModified = pDoc->IsModified();
-        SwUndoNoModifiedPosition aOldPos = pDoc->getUndoNoModifiedPosition();
+        pDoc->GetIDocumentUndoRedo().LockUndoNoModifiedPosition();
         Link aOldOLELnk( pDoc->GetOle2Link() );
         pDoc->SetOle2Link( Link() );
 
@@ -521,7 +522,7 @@ sal_Bool SwDocShell::SaveAs( SfxMedium& rMedium )
         if( bIsModified )
         {
             pDoc->SetModified();
-            pDoc->setUndoNoModifiedPosition( aOldPos );
+            pDoc->GetIDocumentUndoRedo().UnLockUndoNoModifiedPosition();
         }
         pDoc->SetOle2Link( aOldOLELnk );
 

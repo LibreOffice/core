@@ -29,8 +29,10 @@
 #include "precompiled_sw.hxx"
 
 #include <stdlib.h>
+
 #include <node.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <txtfld.hxx>
 #include <fmtfld.hxx>
@@ -226,9 +228,12 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
     }
     else
     {
-        int bSavePersData = GetDoc()->GetUndoNds() == &rNds;
-        int bRestPersData = GetDoc()->GetUndoNds() == this;
+        bool bSavePersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds));
+        bool bRestPersData(GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this));
         SwDoc* pDestDoc = rNds.GetDoc() != GetDoc() ? rNds.GetDoc() : 0;
+        OSL_ENSURE(!pDestDoc, "SwNodes::ChgNode(): "
+            "the code to handle text fields here looks broken\n"
+            "if the target is in a different document.");
         if( !bRestPersData && !bSavePersData && pDestDoc )
             bSavePersData = bRestPersData = sal_True;
 
@@ -305,8 +310,10 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, sal_uLong nSz,
                     // Sonderbehandlung fuer die Felder!
                     if( pHts && pHts->Count() )
                     {
-                        int bToUndo = &pDestDoc->GetNodes() != &rNds;
-                        for( sal_uInt16 i = pHts->Count(); i; )
+                        // this looks fishy if pDestDoc != 0
+                        bool const bToUndo = !pDestDoc &&
+                            GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNds);
+                        for( USHORT i = pHts->Count(); i; )
                         {
                             sal_uInt16 nDelMsg = 0;
                             SwTxtAttr * const pAttr = pHts->GetTextHint( --i );
@@ -658,7 +665,8 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             }
                         }
 
-                        if( GetDoc()->GetUndoNds() == &rNodes )
+                        if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
+                                    rNodes))
                         {
                             SwFrmFmt* pTblFmt = pTblNd->GetTable().GetFrmFmt();
                             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
@@ -695,8 +703,8 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             // noch den EndNode erzeugen
                             new SwEndNode( aIdx, *pTmp );
                         }
-                        else if( (const SwNodes*)&rNodes ==
-                                GetDoc()->GetUndoNds() )
+                        else if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(
+                                    rNodes))
                         {
                             // im UndoNodes-Array spendieren wir einen
                             // Platzhalter
@@ -762,7 +770,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
 
         case ND_SECTIONNODE:
             if( !nLevel &&
-                ( (const SwNodes*)&rNodes == GetDoc()->GetUndoNds() ) )
+                GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(rNodes))
             {
                 // dann muss an der akt. InsPos ein SectionDummyNode
                 // eingefuegt werden
@@ -889,7 +897,7 @@ sal_Bool SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
             break;
 
         case ND_SECTIONDUMMY:
-            if( (const SwNodes*)this == GetDoc()->GetUndoNds() )
+            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 if( &rNodes == this )       // innerhalb vom UndoNodesArray
                 {
@@ -1461,8 +1469,7 @@ sal_uInt16 SwNodes::GetSectionLevel(const SwNodeIndex &rIdx) const {
      * Keine Rekursion! - hier wird das SwNode::GetSectionLevel
      * aufgerufen
      */
-    return (*this)[rIdx]->GetSectionLevel();
-
+    return rIdx.GetNode().GetSectionLevel();
 }
 
 void SwNodes::GoStartOfSection(SwNodeIndex *pIdx) const
@@ -1790,8 +1797,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     SwNodeIndex aEndIdx( pEnd->nNode );
     SwNodeIndex aSttIdx( pStt->nNode );
-    SwTxtNode* const pSrcNd = (*this)[ aSttIdx ]->GetTxtNode();
-    SwTxtNode* pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
+    SwTxtNode *const pSrcNd = aSttIdx.GetNode().GetTxtNode();
+    SwTxtNode * pDestNd = rPos.nNode.GetNode().GetTxtNode();
     sal_Bool bSplitDestNd = sal_True;
     sal_Bool bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
 
@@ -1841,10 +1848,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( rNodes.IsDocNodes() )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                const bool bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( false );
+                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                 pInsDoc->SplitNode( rPos, false );
-                pInsDoc->DoUndo( bIsUndo );
             }
             else
             {
@@ -1872,11 +1877,14 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         if( bCopyCollFmt )
         {
             SwDoc* const pInsDoc = pDestNd->GetDoc();
-            const bool bIsUndo = pInsDoc->DoesUndo();
-            pInsDoc->DoUndo( false );
+            ::sw::UndoGuard const undoGuard(pInsDoc->GetIDocumentUndoRedo());
             pSrcNd->CopyCollFmt( *pDestNd );
+<<<<<<< local
             pInsDoc->DoUndo( bIsUndo );
             bCopyCollFmt = sal_False;
+=======
+            bCopyCollFmt = FALSE;
+>>>>>>> other
         }
 
         if( bOneNd )        // das wars schon
@@ -1911,10 +1919,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
                 if( rNodes.IsDocNodes() )
                 {
                     SwDoc* const pInsDoc = pDestNd->GetDoc();
-                    const bool bIsUndo = pInsDoc->DoesUndo();
-                    pInsDoc->DoUndo( false );
+                    ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                     pInsDoc->SplitNode( rPos, false );
-                    pInsDoc->DoUndo( bIsUndo );
                 }
                 else
                 {
@@ -1933,7 +1939,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         bSplitDestNd = sal_True;
     }
 
-    SwTxtNode* const pEndSrcNd = (*this)[ aEndIdx ]->GetTxtNode();
+    SwTxtNode* const pEndSrcNd = aEndIdx.GetNode().GetTxtNode();
     if ( pEndSrcNd )
     {
         {
@@ -1952,7 +1958,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             else
             {
-                pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
+                pDestNd = rPos.nNode.GetNode().GetTxtNode();
             }
 
             if( pDestNd && pEnd->nContent.GetIndex() )
@@ -1966,10 +1972,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             if( bCopyCollFmt )
             {
                 SwDoc* const pInsDoc = pDestNd->GetDoc();
-                const bool bIsUndo = pInsDoc->DoesUndo();
-                pInsDoc->DoUndo( false );
+                ::sw::UndoGuard const ug(pInsDoc->GetIDocumentUndoRedo());
                 pEndSrcNd->CopyCollFmt( *pDestNd );
-                pInsDoc->DoUndo( bIsUndo );
             }
         }
     }
@@ -2009,7 +2013,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         ASSERT( bSuccess, "Move() - no ContentNode here" );
         (void) bSuccess;
     }
-    pStt->nContent.Assign( (*this)[ pStt->nNode ]->GetCntntNode(),
+    pStt->nContent.Assign( pStt->nNode.GetNode().GetCntntNode(),
                             pStt->nContent.GetIndex() );
     // der PaM wird korrigiert, denn falls ueber Nodegrenzen verschoben
     // wurde, so stehen sie in unterschielichen Nodes. Auch die Selektion
@@ -2054,7 +2058,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     SwNodeRange aRg( rRange );
 
     // "einfache" StartNodes oder EndNodes ueberspringen
-    while( ND_STARTNODE == (pAktNode = (*this)[ aRg.aStart ])->GetNodeType()
+    while( ND_STARTNODE == (pAktNode = & aRg.aStart.GetNode())->GetNodeType()
             || ( pAktNode->IsEndNode() &&
                 !pAktNode->pStartOfSection->IsSectionNode() ) )
         aRg.aStart++;
@@ -2066,7 +2070,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     // special section nodes and then one before the first.
     if (aRg.aEnd.GetNode().StartOfSectionIndex() != 0)
     {
-        while( (( pAktNode = (*this)[ aRg.aEnd ])->GetStartNode() &&
+        while( ((pAktNode = & aRg.aEnd.GetNode())->GetStartNode() &&
                 !pAktNode->IsSectionNode() ) ||
                 ( pAktNode->IsEndNode() &&
                 ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) )
@@ -2214,12 +2218,12 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
             break;
 
         case ND_SECTIONDUMMY:
-            if( (const SwNodes*)this == GetDoc()->GetUndoNds() )
+            if (GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(*this))
             {
                 // dann muss an der akt. InsPos auch ein SectionNode
                 // (Start/Ende) stehen; dann diesen ueberspringen.
                 // Andernfalls nicht weiter beachten.
-                SwNode* pTmpNd = pDoc->GetNodes()[ aInsPos ];
+                SwNode *const pTmpNd = & aInsPos.GetNode();
                 if( pTmpNd->IsSectionNode() ||
                     pTmpNd->StartOfSectionNode()->IsSectionNode() )
                     aInsPos++;  // ueberspringen
@@ -2294,7 +2298,8 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
     const SwNode* pNd;
     while( aTmp < Count() - 1 )
     {
-        if( ND_SECTIONNODE == ( pNd = (*this)[aTmp])->GetNodeType() )
+        pNd = & aTmp.GetNode();
+        if (ND_SECTIONNODE == pNd->GetNodeType())
         {
             const SwSection& rSect = ((SwSectionNode*)pNd)->GetSection();
             if( (bSkipHidden && rSect.IsHiddenFlag()) ||
@@ -2346,7 +2351,8 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
     const SwNode* pNd;
     while( aTmp > 0 )
     {
-        if( ND_ENDNODE == ( pNd = (*this)[aTmp])->GetNodeType() )
+        pNd = & aTmp.GetNode();
+        if (ND_ENDNODE == pNd->GetNodeType())
         {
             if( pNd->pStartOfSection->IsSectionNode() )
             {

@@ -32,13 +32,14 @@
 #include <tblsel.hxx>
 #include <tblrwcl.hxx>
 #include <node.hxx>
-#include <undobj.hxx>
+#include <UndoTable.hxx>
 #include <pam.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <cellfrm.hxx>
 #include <fmtfsize.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <vector>
 #include <set>
 #include <list>
@@ -897,11 +898,16 @@ bool SwTable::PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
                     sal_uInt16 nL = pCNd ? pCNd->Len() : 0;
                     aPam.GetPoint()->nContent.Assign( pCNd, nL );
                     SwNodeIndex aSttNdIdx( *pBox->GetSttNd(), 1 );
+                    bool const bUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
                     if( pUndo )
-                        pDoc->DoUndo( sal_False );
+                    {
+                        pDoc->GetIDocumentUndoRedo().DoUndo(false);
+                    }
                     pDoc->AppendTxtNode( *aPam.GetPoint() );
                     if( pUndo )
-                        pDoc->DoUndo( sal_True );
+                    {
+                        pDoc->GetIDocumentUndoRedo().DoUndo(bUndo);
+                    }
                     SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
                     if( pUndo )
                         pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );

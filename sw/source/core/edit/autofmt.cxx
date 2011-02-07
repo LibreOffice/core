@@ -36,7 +36,11 @@
 #include <hintids.hxx>
 
 #include <svl/svstdarr.hxx>
+
 #include <unotools/charclass.hxx>
+
+#include <vcl/msgbox.hxx>
+
 #include <editeng/boxitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
@@ -46,12 +50,13 @@
 #include <editeng/langitem.hxx>
 #include <editeng/cscoitem.hxx>
 #include <editeng/unolingu.hxx>
-
 #include <editeng/acorrcfg.hxx>
+
 #include <swwait.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <index.hxx>
@@ -72,13 +77,8 @@
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#include <vcl/msgbox.hxx>
 #include <numrule.hxx>
 
 using namespace ::com::sun::star;
@@ -2253,7 +2253,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pDoc->SetRedlineMode( eRedlMode );
 
     // save undo state (might be turned off)
-    sal_Bool bUndoState = pDoc->DoesUndo();
+    bool const bUndoState = pDoc->GetIDocumentUndoRedo().DoesUndo();
 
     // wenn mehrere Zeilen, dann erstmal nicht mit
     // dem nachfolgenden Absatz zusammenfassen.
@@ -2271,51 +2271,6 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     eStat = READ_NEXT_PARA;
     while( !bEnde )
     {
-        // #95884# limit redline array size to prevent overflow and to conserve
-        // memory
-        if( pDoc->HasTooManyUndos() )
-        {
-            DBG_ASSERT( bUndoState, "undo overflow without undo?" );
-
-            //ask user
-            short nResult = m_nActionWhileAutoformatUndoBufferOverflow; // TODO: #102007# read the last decision of the user from configuration
-            if(m_bAskForCancelUndoWhileBufferOverflow) // #102007# TODO: read the last decision of the user from configuration
-            {
-                Window* pParent = pEditShell?pEditShell->GetWin():NULL;
-                WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_UNDO_QUESTION));
-                aWarning.SetDefaultCheckBoxText();
-                sal_uInt16 nDefaultButton = nResult==RET_YES?BUTTONID_YES:(nResult==RET_NO?BUTTONID_NO:BUTTONID_CANCEL);
-                aWarning.SetFocusButton(nDefaultButton);
-                nResult     = aWarning.Execute();
-                m_bAskForCancelUndoWhileBufferOverflow = !aWarning.GetCheckBoxState();
-                m_nActionWhileAutoformatUndoBufferOverflow = nResult;
-                // TODO: #102007# store m_bAskForCancelUndoWhileBufferOverflow in configuration
-                // TODO: #102007# store m_nActionWhileAutoformatUndoBufferOverflow in configuration
-            }
-
-            DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL) || (nResult == RET_NO),
-                        "unexpected result" );
-
-            if( nResult == RET_YES )
-            {
-                // turn off undo and continue
-                pDoc->DoUndo( sal_False );
-                pDoc->DelAllUndoObj();
-            }
-            else if( nResult == RET_NO )
-            {
-                //stop autoformatting and keep changes
-                eStat = IS_ENDE;
-            }
-            else if( nResult == RET_CANCEL )
-            {
-                //cancel autoformatting and undo changes
-                eStat = IS_ENDE;
-
-                // TODO: #102004# undo changes
-            }
-        }
-
         switch( eStat )
         {
         case READ_NEXT_PARA:
@@ -2709,7 +2664,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     pDoc->SetRedlineMode( eOldMode );
 
     // restore undo (in case it has been changed)
-    pDoc->DoUndo( bUndoState );
+    pDoc->GetIDocumentUndoRedo().DoUndo(bUndoState);
 
     // Prozent-Anzeige wieder abschalten
     if( !aFlags.bAFmtByInput )

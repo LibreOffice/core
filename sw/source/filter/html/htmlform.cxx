@@ -544,7 +544,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
             SwNode *pANd;
             SwTableNode *pTblNd;
             if( pAPos &&
-                0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
+                0 != (pANd = & pAPos->nNode.GetNode()) &&
                 0 != (pTblNd = pANd->FindTableNode()) )
             {
                 const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
@@ -1171,7 +1171,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
         {
             const SwStartNode *pFlySttNd =
-                pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
+                pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
 
             if( pFlySttNd )
             {

@@ -24,14 +24,15 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _NDINDEX_HXX
-#define _NDINDEX_HXX
+#ifndef SW_NDINDEX_HXX
+#define SW_NDINDEX_HXX
 
 #include <limits.h>
+
 #include <tools/solar.h>
 
-#include "node.hxx"
-#include "ndarr.hxx"
+#include <node.hxx>
+
 
 class SwNode;
 class SwNodes;
@@ -238,15 +239,5 @@ inline SwNodeIndex& SwNodeIndex::operator=( sal_uLong nWert )
     pNd = GetNodes()[ nWert ];
     return *this;
 }
-
-
-
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
-inline SwNode* SwNodes::operator[]( const SwNodeIndex& rIdx ) const
-{
-    return &rIdx.GetNode();
-}
-
 
 #endif

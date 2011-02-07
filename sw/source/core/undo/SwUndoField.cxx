@@ -27,10 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <tools/rtti.hxx>
+
 #include <SwUndoField.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <txtfld.hxx>
 #include <fldbas.hxx>
 #include <ndtxt.hxx>
@@ -83,43 +86,41 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
     delete pNewField;
 }
 
-void SwUndoFieldFromDoc::Undo( SwUndoIter& )
+void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
 
     if (pField)
     {
-        sal_Bool bUndo = pDoc->DoesUndo();
-
-        pDoc->DoUndo(sal_False);
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
-        pDoc->DoUndo(bUndo);
     }
 }
 
-void SwUndoFieldFromDoc::Redo( SwUndoIter& )
+void SwUndoFieldFromDoc::DoImpl()
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
 
     if (pField)
     {
-        sal_Bool bUndo = pDoc->DoesUndo();
-
-        pDoc->DoUndo(sal_False);
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
         if ( pDoc->GetFldType(RES_POSTITFLD, aEmptyStr,false) == pDstFmtFld->GetFld()->GetTyp() )
             pDoc->GetDocShell()->Broadcast( SwFmtFldHint( pDstFmtFld, SWFMTFLD_INSERTED ) );
-        pDoc->DoUndo(bUndo);
     }
 }
 
-void SwUndoFieldFromDoc::Repeat(SwUndoIter & rIt)
+void SwUndoFieldFromDoc::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIt);
+    DoImpl();
+}
+
+void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
+{
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+    DoImpl();
 }
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
@@ -133,7 +134,7 @@ SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
 {
 }
 
-void SwUndoFieldFromAPI::Undo( SwUndoIter& )
+void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
@@ -141,7 +142,7 @@ void SwUndoFieldFromAPI::Undo( SwUndoIter& )
         pField->PutValue(aOldVal, nWhich);
 }
 
-void SwUndoFieldFromAPI::Redo( SwUndoIter& )
+void SwUndoFieldFromAPI::DoImpl()
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
@@ -149,8 +150,13 @@ void SwUndoFieldFromAPI::Redo( SwUndoIter& )
         pField->PutValue(aNewVal, nWhich);
 }
 
-
-void SwUndoFieldFromAPI::Repeat(SwUndoIter & rIter)
+void SwUndoFieldFromAPI::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIter);
+    DoImpl();
 }
+
+void SwUndoFieldFromAPI::RepeatImpl(::sw::RepeatContext &)
+{
+    DoImpl();
+}
+

@@ -28,6 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <stdlib.h>
+
+#include <memory>
+#include <iostream>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -57,12 +61,12 @@
 #include <unoredline.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <undobj.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <docsh.hxx>
 #include <docary.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <section.hxx>
@@ -72,10 +76,7 @@
 #include <crsskip.hxx>
 #include <ndtxt.hxx>
 
-#include <memory>
-#include <stdlib.h>
 
-#include <iostream>
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
@@ -404,12 +405,9 @@ throw (uno::RuntimeException)
         // so the text is inserted before
         UnoActionContext aContext(GetDoc());
         SwPaM aInsertPam(*pPam->Start());
-        const sal_Bool bGroupUndo = GetDoc()->DoesGroupUndo();
-        GetDoc()->DoGroupUndo(sal_False);
-
+        ::sw::GroupUndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
         SwUnoCursorHelper::DocInsertStringSplitCR(
             *GetDoc(), aInsertPam, rString, bForceExpandHints );
-        GetDoc()->DoGroupUndo(bGroupUndo);
     }
 }
 
@@ -991,7 +989,7 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
         throw uno::RuntimeException();
     }
 
-    GetDoc()->StartUndo(UNDO_START, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
     //insert an empty paragraph at the start and at the end to ensure that
     //all tables and sections can be removed by the selecting text::XTextCursor
     if (CURSOR_META != m_pImpl->m_eType)
@@ -1029,14 +1027,14 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     const uno::Reference< text::XTextCursor > xRet = CreateCursor();
     if(!xRet.is())
     {
-        GetDoc()->EndUndo(UNDO_END, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
         uno::RuntimeException aRuntime;
         aRuntime.Message = C2U(cInvalidObject);
         throw aRuntime;
     }
     xRet->gotoEnd(sal_True);
     xRet->setString(rString);
-    GetDoc()->EndUndo(UNDO_END, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
 }
 
 //FIXME why is CheckForOwnMember duplicated in some insert methods?
@@ -1373,7 +1371,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
-    m_pDoc->StartUndo(UNDO_START , NULL);
+    m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , NULL);
     // find end node, go backward - don't skip tables because the new
     // paragraph has to be the last node
     //aPam.Move( fnMoveBackward, fnGoNode );
@@ -1425,11 +1423,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
     }
-    m_pDoc->EndUndo(UNDO_END, NULL);
+    m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aPam, UNDO_EMPTY );
-        m_pDoc->Undo(aUndoIter);
+        m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1483,7 +1480,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
-    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
 //        SwPaM aPam(*pStartNode->EndOfSectionNode());
     //aPam.Move( fnMoveBackward, fnGoNode );
@@ -1538,11 +1535,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
     }
-    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( pCursor, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1584,7 +1580,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     uno::Reference< text::XTextRange > xRet;
-    m_pImpl->m_pDoc->StartUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
     // find end node, go backward - don't skip tables because the
     // new paragraph has to be the last node
     SwPaM aPam(*pStartNode->EndOfSectionNode());
@@ -1619,7 +1615,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             throw uno::RuntimeException();
         }
     }
-    m_pImpl->m_pDoc->EndUndo(UNDO_INSERT, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     return xRet;
 }
 
@@ -1666,7 +1662,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         pEndRange->Invalidate();
     }
 
-    m_pImpl->m_pDoc->StartUndo( UNDO_START, NULL );
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
     bool bIllegalException = false;
     bool bRuntimeException = false;
     ::rtl::OUString sMessage;
@@ -1817,11 +1813,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
     }
 
-    m_pImpl->m_pDoc->EndUndo(UNDO_END, NULL);
+    m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aStartPam, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -2301,8 +2296,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if(bExcept)
     {
-        SwUndoIter aUndoIter( &aLastPaM, UNDO_EMPTY );
-        m_pImpl->m_pDoc->Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         throw lang::IllegalArgumentException();
     }
 

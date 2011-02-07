@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
@@ -35,11 +36,14 @@
 #include <ftninfo.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <doctxm.hxx>       // pTOXBaseRing
 #include <poolfmt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoRedline.hxx>
+#include <UndoNumbering.hxx>
 #include <swundo.hxx>
 #include <SwUndoFmt.hxx>
 #include <rolbck.hxx>
@@ -49,9 +53,7 @@
 #include <txtfrm.hxx>
 #include <pamtyp.hxx>
 #include <redline.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <editeng/adjitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>
@@ -371,11 +373,11 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         return sal_False;
 
     /* <-- #i13747 # */
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        StartUndo(UNDO_OUTLINE_LR, NULL);
-        AppendUndo( new SwUndoOutlineLeftRight( rPam, nOffset ) );
+        GetIDocumentUndoRedo().StartUndo(UNDO_OUTLINE_LR, NULL);
+        SwUndo *const pUndoOLR( new SwUndoOutlineLeftRight( rPam, nOffset ) );
+        GetIDocumentUndoRedo().AppendUndo(pUndoOLR);
     }
 
     // 2. allen Nodes die neue Vorlage zuweisen
@@ -417,8 +419,10 @@ sal_Bool SwDoc::OutlineUpDown( const SwPaM& rPam, short nOffset )
         n++;
         // Undo ???
     }
-    if (DoesUndo())
-        EndUndo(UNDO_OUTLINE_LR, NULL);
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().EndUndo(UNDO_OUTLINE_LR, NULL);
+    }
 
     ChkCondColls();
     SetModified();
@@ -436,9 +440,11 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
     if( !GetNodes().GetOutLineNds().Count() || !nOffset ||
-        rStt.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() ||
-        rEnd.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() )
+        (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
+        (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))
+    {
         return sal_False;
+    }
 
     sal_uInt16 nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
@@ -572,7 +578,7 @@ sal_Bool SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // setze die Position auf den Dokumentanfang.
     // Sollten da Bereiche oder Tabellen stehen, so werden sie nach
     // hinten verschoben.
-    nNewPos = Max( nNewPos, aNodes.GetEndOfExtras().GetIndex() + 2 );
+    nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );
@@ -976,11 +982,12 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
                         const bool bResetIndentAttrs )
 {
     SwUndoInsNum * pUndo = NULL;
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        StartUndo( UNDO_INSNUM, NULL );     // Klammerung fuer die Attribute!
-        AppendUndo( pUndo = new SwUndoInsNum( rPam, rRule ) );
+        // Start/End for attributes!
+        GetIDocumentUndoRedo().StartUndo( UNDO_INSNUM, NULL );
+        pUndo = new SwUndoInsNum( rPam, rRule );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     SwNumRule * pNew = FindNumRulePtr( rRule.GetName() );
@@ -1112,8 +1119,10 @@ void SwDoc::SetNumRule( const SwPaM& rPam,
     }
     // <--
 
-    if (DoesUndo())
-        EndUndo( UNDO_INSNUM, NULL );
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().EndUndo( UNDO_INSNUM, NULL );
+    }
 
     SetModified();
 }
@@ -1158,10 +1167,10 @@ void SwDoc::SetNumRuleStart( const SwPosition& rPos, sal_Bool bFlag )
         const SwNumRule* pRule = pTxtNd->GetNumRule();
         if( pRule && !bFlag != !pTxtNd->IsListRestart())
         {
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoNumRuleStart( rPos, bFlag ));
+                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, bFlag) );
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             pTxtNd->SetListRestart(bFlag ? true : false);
@@ -1193,10 +1202,10 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt )
         if ( !pTxtNd->HasAttrListRestartValue() ||
              pTxtNd->GetAttrListRestartValue() != nStt )
         {
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoNumRuleStart( rPos, nStt ));
+                SwUndo *const pUndo( new SwUndoNumRuleStart(rPos, nStt) );
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
             pTxtNd->SetAttrListRestartValue( nStt );
 
@@ -1222,12 +1231,11 @@ sal_Bool SwDoc::DelNumRule( const String& rName, sal_Bool bBroadcast )
 
     if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
     {
-        if (DoesUndo())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwUndo * pUndo =
                 new SwUndoNumruleDelete(*(*pNumRuleTbl)[nPos], this);
-
-            AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         if (bBroadcast)
@@ -1279,12 +1287,11 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
     if( pRule )
     {
         SwUndoInsNum* pUndo = 0;
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
             pUndo = new SwUndoInsNum( *pRule, rRule );
             pUndo->GetHistory();
-            AppendUndo( pUndo );
+            GetIDocumentUndoRedo().AppendUndo( pUndo );
         }
         ::lcl_ChgNumRule( *this, rRule );
 
@@ -1303,11 +1310,10 @@ sal_Bool SwDoc::RenameNumRule(const String & rOldName, const String & rNewName,
 
     if (pNumRule)
     {
-        if (DoesUndo())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwUndo * pUndo = new SwUndoNumruleRename(rOldName, rNewName, this);
-
-            AppendUndo(pUndo);
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         // --> OD 2008-02-19 #refactorlists#
@@ -1390,11 +1396,12 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
     {
         // --> OD 2008-02-19 #refactorlists#
         SwUndoInsNum* pUndo = 0;
-        if( DoesUndo() )
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
-            ClearRedo();
-            StartUndo( UNDO_START, NULL );      // Klammerung fuer die Attribute!
-            AppendUndo( pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule ) );
+            // Start/End for attributes!
+            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+            pUndo = new SwUndoInsNum( rPos, *pNewRule, rOldRule );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         // --> OD 2008-02-19 #refactorlists#
@@ -1477,7 +1484,7 @@ sal_Bool SwDoc::ReplaceNumRule( const SwPosition& rPos,
                     pTxtNd->NumRuleChgd();
                 }
             }
-            EndUndo( UNDO_END, NULL );
+            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
             bRet = sal_True;     // #106897#
@@ -1615,10 +1622,10 @@ void SwDoc::DelNumRules( const SwPaM& rPam )
     }
 
     SwUndoDelNum* pUndo;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
-        AppendUndo( pUndo = new SwUndoDelNum( rPam ) );
+        pUndo = new SwUndoDelNum( rPam );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
     else
         pUndo = 0;
@@ -1919,8 +1926,8 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
             pNode = &aIdx.GetNode();
         }
-        while (! (pNode == aNodes.DocumentSectionStartNode(pStartFromNode) ||
-                  pNode == aNodes.DocumentSectionEndNode(pStartFromNode)));
+        while (!(pNode == GetNodes().DocumentSectionStartNode(pStartFromNode) ||
+                 pNode == GetNodes().DocumentSectionEndNode(pStartFromNode)));
         // <--
     }
 
@@ -2003,10 +2010,10 @@ sal_Bool SwDoc::NumUpDown( const SwPaM& rPam, sal_Bool bDown )
         if( bRet )
         {
             /* <-- #i24560# */
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
-                ClearRedo();
-                AppendUndo( new SwUndoNumUpDown( rPam, nDiff ) );
+                SwUndo *const pUndo( new SwUndoNumUpDown(rPam, nDiff) );
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             String sNumRule;
@@ -2233,7 +2240,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
         if( !pOwnRedl )
         {
-            StartUndo( UNDO_START, NULL );
+            GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
             // zuerst das Insert, dann das Loeschen
             SwPosition aInsPos( aIdx );
@@ -2308,12 +2315,13 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
             RedlineMode_t eOld = GetRedlineMode();
             checkRedlining(eOld);
-            if( DoesUndo() )
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
                 //JP 06.01.98: MUSS noch optimiert werden!!!
                 SetRedlineMode(
                    (RedlineMode_t)(nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE));
-                AppendUndo( new SwUndoRedlineDelete( aPam, UNDO_DELETE ));
+                SwUndo *const pUndo(new SwUndoRedlineDelete(aPam, UNDO_DELETE));
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
 
             SwRedline* pNewRedline = new SwRedline( nsRedlineType_t::REDLINE_DELETE, aPam );
@@ -2328,7 +2336,7 @@ sal_Bool SwDoc::MoveParagraph( const SwPaM& rPam, long nOffset, sal_Bool bIsOutl
 
 //JP 06.01.98: MUSS noch optimiert werden!!!
 SetRedlineMode( eOld );
-            EndUndo( UNDO_END, NULL );
+            GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
             SetModified();
 
             return sal_True;
@@ -2351,7 +2359,7 @@ SetRedlineMode( eOld );
 
     SwUndoMoveNum* pUndo = 0;
     sal_uLong nMoved = 0;
-    if( DoesUndo() )
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoMoveNum( rPam, nOffset, bIsOutlMv );
         nMoved = rPam.End()->nNode.GetIndex() - rPam.Start()->nNode.GetIndex() + 1;
@@ -2362,13 +2370,12 @@ SetRedlineMode( eOld );
 
     if( pUndo )
     {
-        ClearRedo();
         // i57907: Under circumstances (sections at the end of a chapter)
         // the rPam.Start() is not moved to the new position.
         // But aIdx should be at the new end position and as long as the number of moved paragraphs
         // is nMoved, I know, where the new position is.
         pUndo->SetStartNode( aIdx.GetIndex() - nMoved );
-        AppendUndo( pUndo );
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     if( pOwnRedl )
@@ -2410,12 +2417,12 @@ sal_Bool SwDoc::NumOrNoNum( const SwNodeIndex& rIdx, sal_Bool bDel )
 
             bResult = sal_True;
 
-            if (DoesUndo())
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
                 SwUndoNumOrNoNum * pUndo =
                     new SwUndoNumOrNoNum(rIdx, bOldNum, bNewNum);
 
-                AppendUndo(pUndo);
+                GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
         }
         else if (bDel && pTxtNd->GetNumRule(sal_False) &&
@@ -2529,11 +2536,10 @@ sal_uInt16 SwDoc::MakeNumRule( const String &rName,
 
     AddNumRule(pNew); // #i36749#
 
-    if (DoesUndo())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo * pUndo = new SwUndoNumruleCreate(pNew, this);
-
-        AppendUndo(pUndo);
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
     if (bBroadcast)

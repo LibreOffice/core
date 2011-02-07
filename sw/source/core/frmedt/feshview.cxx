@@ -71,6 +71,7 @@
 #include "pagefrm.hxx"
 #include "sectfrm.hxx"
 #include "doc.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include "dview.hxx"
 #include "dflyobj.hxx"
 #include "dcontact.hxx"
@@ -722,7 +723,7 @@ long SwFEShell::EndDrag( const Point *, sal_Bool )
         pView->EndDragObj();
         // JP 18.08.95: DrawUndo-Action auf FlyFrames werden nicht gespeichert
         //              Die Fly aendern das Flag
-        GetDoc()->SetNoDrawUndoObj( sal_False );
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
         ChgAnchor( 0, sal_True );
 
         EndUndo( UNDO_END );
@@ -1623,7 +1624,9 @@ sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
     // das Undo abschalten
     ASSERT( Imp()->HasDrawView(), "EndCreate without DrawView?" );
     if( !Imp()->GetDrawView()->IsGroupEntered() )
-        GetDoc()->SetNoDrawUndoObj( sal_True );
+    {
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
+    }
     sal_Bool bCreate = Imp()->GetDrawView()->EndCreateObj(
                                     SdrCreateCmd( eSdrCreateCmd ) );
     GetDoc()->SetNoDrawUndoObj( sal_False );
@@ -1852,7 +1855,7 @@ sal_Bool SwFEShell::ImpEndCreate()
 
         //Erzeugtes Object wegwerfen, so kann der Fly am elegentesten
         //ueber vorhandene SS erzeugt werden.
-        GetDoc()->SetNoDrawUndoObj( sal_True );         // siehe oben
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false); // see above
         // --> OD 2005-08-08 #i52858# - method name changed
         SdrPage *pPg = getIDocumentDrawModelAccess()->GetOrCreateDrawModel()->GetPage( 0 );
         // <--
@@ -1865,7 +1868,7 @@ sal_Bool SwFEShell::ImpEndCreate()
         pPg->RecalcObjOrdNums();
         SdrObject* pRemovedObject = pPg->RemoveObject( rSdrObj.GetOrdNumDirect() );
         SdrObject::Free( pRemovedObject );
-        GetDoc()->SetNoDrawUndoObj( sal_False );
+        GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
         SwFlyFrm* pFlyFrm;
         if( NewFlyFrm( aSet, sal_True ) &&

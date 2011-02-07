@@ -33,11 +33,16 @@
 #include <tools/list.hxx>
 #include <tools/string.hxx>
 
+#include <set>
+#include <stack>
+#include <list>
+
 #include "types.hxx"
 
 class SmNode;
 class SmDocShell;
 
+//////////////////////////////////////////////////////////////////////
 
 // TokenGroups
 #define TGOPER          0x00000001
@@ -113,17 +118,18 @@ enum SmTokenType
 
 struct SmToken
 {
-    // token text
-    String  aText;
-    // token info
-    SmTokenType eType;
+
+    String          aText;      // token text
+    SmTokenType     eType;      // token info
     sal_Unicode     cMathChar;
+
     // parse-help info
     sal_uLong       nGroup;
     sal_uInt16      nLevel;
+
     // token position
     sal_uInt16      nRow;
-    xub_StrLen  nCol;
+    xub_StrLen      nCol;
 
     SmToken();
 };
@@ -152,6 +158,7 @@ struct SmErrorDesc
     String        Text;
 };
 
+
 DECLARE_STACK(SmNodeStack,  SmNode *)
 DECLARE_LIST(SmErrDescList, SmErrorDesc *)
 
@@ -170,19 +177,22 @@ enum SmConvert
 
 class SmParser
 {
-    String          BufferString;
-    SmToken         CurToken;
-    SmNodeStack     NodeStack;
-    SmErrDescList   ErrDescList;
-    int             CurError;
-    LanguageType    nLang;
-    xub_StrLen      BufferIndex,
-                    nTokenIndex;
-    sal_uInt16          Row,
-                    ColOff;
-    SmConvert       eConversion;
-    sal_Bool            bImportSymNames,
-                    bExportSymNames;
+    String          m_aBufferString;
+    SmToken         m_aCurToken;
+    SmNodeStack     m_aNodeStack;
+    SmErrDescList   m_aErrDescList;
+    int             m_nCurError;
+    LanguageType    m_nLang;
+    xub_StrLen      m_nBufferIndex,
+                    m_nTokenIndex;
+    USHORT          m_Row,
+                    m_nColOff;
+    SmConvert       m_eConversion;
+    sal_Bool        m_bImportSymNames,
+                    m_bExportSymNames;
+
+    // map of used symbols (used to reduce file size by exporting only actually used symbols)
+    std::set< rtl::OUString >   m_aUsedSymbols;
 
     // declare copy-constructor and assignment-operator private
     SmParser(const SmParser &);
@@ -193,9 +203,9 @@ protected:
     sal_Bool            IsDelimiter( const String &rTxt, xub_StrLen nPos );
 #endif
     void            NextToken();
-    xub_StrLen      GetTokenIndex() const   { return nTokenIndex; }
+    xub_StrLen      GetTokenIndex() const   { return m_nTokenIndex; }
     void            Insert(const String &rText, sal_uInt16 nPos);
-    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
+    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
 
     inline sal_Bool     TokenInGroup(sal_uLong nGroup);
 
@@ -231,37 +241,43 @@ protected:
     void    GlyphSpecial();
     // end of grammar
 
-    LanguageType    GetLanguage() const { return nLang; }
-    void            SetLanguage( LanguageType nNewLang ) { nLang = nNewLang; }
+    LanguageType    GetLanguage() const { return m_nLang; }
+    void            SetLanguage( LanguageType nNewLang ) { m_nLang = nNewLang; }
 
     void    Error(SmParseError Error);
+
+    void    ClearUsedSymbols()                              { m_aUsedSymbols.clear(); }
+    void    AddToUsedSymbols( const String &rSymbolName )   { m_aUsedSymbols.insert( rSymbolName ); }
 
 public:
                  SmParser();
 
     SmNode      *Parse(const String &rBuffer);
 
-    const String & GetText() const { return BufferString; };
+    const String & GetText() const { return m_aBufferString; };
 
-    SmConvert    GetConversion() const              { return eConversion; }
-    void         SetConversion(SmConvert eConv)     { eConversion = eConv; }
+    SmConvert    GetConversion() const              { return m_eConversion; }
+    void         SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
 
-    sal_Bool         IsImportSymbolNames() const        { return bImportSymNames; }
-    void         SetImportSymbolNames(sal_Bool bVal)    { bImportSymNames = bVal; }
-    sal_Bool         IsExportSymbolNames() const        { return bExportSymNames; }
-    void         SetExportSymbolNames(sal_Bool bVal)    { bExportSymNames = bVal; }
+    sal_Bool     IsImportSymbolNames() const        { return m_bImportSymNames; }
+    void         SetImportSymbolNames(BOOL bVal)    { m_bImportSymNames = bVal; }
+    sal_Bool     IsExportSymbolNames() const        { return m_bExportSymNames; }
+    void         SetExportSymbolNames(BOOL bVal)    { m_bExportSymNames = bVal; }
 
     sal_uInt16       AddError(SmParseError Type, SmNode *pNode);
 
     const SmErrorDesc * NextError();
     const SmErrorDesc * PrevError();
     const SmErrorDesc * GetError(sal_uInt16 i = 0xFFFF);
+
+    bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
+    std::set< rtl::OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
 
 inline sal_Bool SmParser::TokenInGroup(sal_uLong nGroup)
 {
-    return (CurToken.nGroup & nGroup) ? sal_True : sal_False;
+    return (m_aCurToken.nGroup & nGroup) ? sal_True : sal_False;
 }
 
 

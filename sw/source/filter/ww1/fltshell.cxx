@@ -79,7 +79,7 @@ using namespace com::sun::star;
 
 static SwCntntNode* GetCntntNode(SwDoc* pDoc, SwNodeIndex& rIdx, sal_Bool bNext)
 {
-    SwCntntNode* pCNd = pDoc->GetNodes()[ rIdx ]->GetCntntNode();
+    SwCntntNode * pCNd = rIdx.GetNode().GetCntntNode();
     if(!pCNd && 0 == (pCNd = bNext ? pDoc->GetNodes().GoNext(&rIdx)
                                      : pDoc->GetNodes().GoPrevious(&rIdx)))
     {
@@ -368,12 +368,12 @@ static void MakeBookRegionOrPoint(SwFltStackEntry* pEntry, SwDoc* pDoc,
                     SwPaM& rRegion, sal_Bool bCheck )
 {
     if (pEntry->MakeRegion(pDoc, rRegion, bCheck )){
-        const SwNodes& rNds = pDoc->GetNodes();
-//      sal_Bool b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
+//      BOOL b1 = rNds[rRegion.GetPoint()->nNode]->FindTableNode() != 0;
 //      const SwStartNode* p1 = rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode();
 //      const SwStartNode* p2 = rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode();
-        if( rNds[rRegion.GetPoint()->nNode]->FindTableBoxStartNode()
-              != rNds[rRegion.GetMark()->nNode]->FindTableBoxStartNode() ){
+        if (rRegion.GetPoint()->nNode.GetNode().FindTableBoxStartNode()
+              != rRegion.GetMark()->nNode.GetNode().FindTableBoxStartNode())
+        {
             rRegion.Exchange();         // Ungueltiger Bereich
             rRegion.DeleteMark();       // -> beide auf Mark
         }
@@ -632,7 +632,7 @@ const SfxPoolItem* SwFltControlStack::GetFmtAttr(const SwPosition& rPos, sal_uIn
 
     // im Stack ist das Attribut nicht vorhanden, also befrage das Dokument
 //  SwCntntNode * pNd = rPaM.GetCntntNode();
-    SwCntntNode * pNd = pDoc->GetNodes()[ rPos.nNode ]->GetCntntNode();
+    SwCntntNode * pNd = rPos.nNode.GetNode().GetCntntNode();
 
     if (!pNd)           // kein ContentNode, dann das dflt. Attribut
         return &pDoc->GetAttrPool().GetDefaultItem(nWhich);
@@ -1205,8 +1205,7 @@ const SfxPoolItem& SwFltFormatCollection::GetAttr(sal_uInt16 nWhich)
 
 const SfxPoolItem& SwFltOutDoc::GetNodeOrStyAttr(sal_uInt16 nWhich)
 {
-    SwCntntNode * pNd = GetDoc().GetNodes()[ pPaM->GetPoint()->nNode ]
-                            ->GetCntntNode();
+    SwCntntNode * pNd = pPaM->GetPoint()->nNode.GetNode().GetCntntNode();
     if (pNd)            // ContentNode: Attribut mit Parent
         return pNd->GetAttr(nWhich);
     else                // kein ContentNode, dann das dflt. Attribut

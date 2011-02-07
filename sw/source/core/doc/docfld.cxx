@@ -43,6 +43,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -69,9 +70,7 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
-#endif
 
 #include <SwUndoField.hxx>
 
@@ -2725,13 +2724,14 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
     if (pDstFld->GetTyp()->Which() ==
         rSrcFld.GetTyp()->Which())
     {
-        if (DoesUndo())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwPosition aPosition( pDstTxtFld->GetTxtNode() );
             aPosition.nContent = *pDstTxtFld->GetStart();
 
-            AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
-                                              pMsgHnt, bUpdateFlds));
+            SwUndo *const pUndo( new SwUndoFieldFromDoc(
+                        aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         // Das gefundene Feld wird angepasst ...
@@ -2818,8 +2818,12 @@ bool SwDoc::PutValueToField(const SwPosition & rPos,
     SwField * pField = GetField(rPos);
 
 
-    if (DoesUndo() && pField->QueryValue(aOldVal, nWhich))
-        AppendUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
+    if (GetIDocumentUndoRedo().DoesUndo() &&
+        pField->QueryValue(aOldVal, nWhich))
+    {
+        SwUndo *const pUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
 
     return pField->PutValue(rVal, nWhich);
 }

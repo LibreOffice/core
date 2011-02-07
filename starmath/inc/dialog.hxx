@@ -71,6 +71,7 @@ class SmPrintOptionsTabPage : public SfxTabPage
     MetricField     aZoom;
     FixedLine       aFixedLine3;
     CheckBox        aNoRightSpaces;
+    CheckBox        aSaveOnlyUsedSymbols;
 
     DECL_LINK(SizeButtonClickHdl, Button *);
 

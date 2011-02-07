@@ -294,7 +294,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             pSh->StartAllAction();
 
                             // --> OD 2004-07-14 #i30451#
-                            pSh->StartUndo();
+                            pSh->StartUndo(UNDO_INSFMTATTR);
 
                             pSdrView->SetGeoAttrToMarked(*pOutSet);
 

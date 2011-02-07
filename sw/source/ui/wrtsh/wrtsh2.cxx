@@ -51,6 +51,7 @@
 #include <reffld.hxx>
 #include <swundo.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <viewopt.hxx>      // SwViewOptions
 #include <frmfmt.hxx>       // fuer UpdateTable
 #include <swtable.hxx>      // fuer UpdateTable
@@ -67,8 +68,7 @@
 #include <wrtsh.hrc>
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
-
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
@@ -97,7 +97,7 @@ void SwWrtShell::Insert(SwField &rFld)
     }
 
     SwEditShell::Insert2(rFld, bDeleted);
-    EndUndo(UNDO_INSERT);
+    EndUndo();
     EndAllAction();
 }
 
@@ -229,10 +229,11 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
 
         if (pSet == NULL)
         {
-            SwDoc * _pDoc = GetDoc();
-
-            if (_pDoc != NULL)
-                _pDoc->DelAllUndoObj();
+            SwDoc *const pDoc_ = GetDoc();
+            if (pDoc_)
+            {
+                pDoc_->GetIDocumentUndoRedo().DelAllUndoObj();
+            }
         }
     }
 
@@ -480,8 +481,14 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // the undostack. Then the change of the section dont create
             // any undoobject. -  BUG 69145
             sal_Bool bDoesUndo = DoesUndo();
-            if( UNDO_INSSECTION != GetUndoIds() )
-                DoUndo( sal_False );
+            SwUndoId nLastUndoId(UNDO_EMPTY);
+            if (GetLastUndoInfo(0, & nLastUndoId))
+            {
+                if (UNDO_INSSECTION != nLastUndoId)
+                {
+                    DoUndo(false);
+                }
+            }
             UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );
         }

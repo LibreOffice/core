@@ -27,38 +27,40 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
-
 #include <tools/urlobj.hxx>
-#include <svtools/txtcmp.hxx>
-#ifndef SVTOOLS_FSTATHELPER_HXX
+
 #include <svl/fstathelper.hxx>
-#endif
+
+#include <svtools/txtcmp.hxx>
+
 #include <sfx2/docfile.hxx>
-#include "editeng/unolingu.hxx"
+
+#include <xmloff/odffields.hxx>
+
+#include <editeng/unolingu.hxx>
+
 #include <swtypes.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <viewopt.hxx>
 #include <ndtxt.hxx>
 #include <errhdl.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
 #include <txttxmrk.hxx>
 #include <edimp.hxx>
 #include <tox.hxx>
 #include <doctxm.hxx>
 #include <docary.hxx>
 #include <mdiexp.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
 #include <bookmrk.hxx>
-#include <xmloff/odffields.hxx>
 
 
 using namespace ::com::sun::star;
@@ -211,7 +213,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
         ::StartProgress( STR_STATSTR_TOX_UPDATE, 0, 0, pDocSh );
         ::SetProgressText( STR_STATSTR_TOX_UPDATE, pDocSh );
 
-        pMyDoc->StartUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
 
         // Verzeichnisrumpf erzeugen
         pTOX->Update(pSet);
@@ -226,7 +228,7 @@ sal_Bool SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pS
         // Seitennummern eintragen
         pTOX->UpdatePageNum();
 
-        pMyDoc->EndUndo(UNDO_TOXCHANGE, NULL);
+        pMyDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
 
         ::EndProgress( pDocSh );
         EndAllAction();

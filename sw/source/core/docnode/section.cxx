@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <stdlib.h>
+
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -46,6 +46,7 @@
 #include <fmtpdsc.hxx>
 #include <errhdl.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <frmtool.hxx>
@@ -274,10 +275,8 @@ SwSection::~SwSection()
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
             //          geschehen sein!!
-            sal_Bool bUndo = pDoc->DoesUndo();
-            pDoc->DoUndo( sal_False );
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             pDoc->DelSectionFmt( pFmt );    // und loeschen
-            pDoc->DoUndo( bUndo );
         }
     }
     if (m_RefObj.Is())
@@ -1447,8 +1446,8 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     // <--
 
     // Undo immer abschalten
-    sal_Bool bWasUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    bool const bWasUndo = pDoc->GetIDocumentUndoRedo().DoesUndo();
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     sal_Bool bWasVisibleLinks = pDoc->IsVisibleLinks();
     pDoc->SetVisibleLinks( sal_False );
 
@@ -1685,9 +1684,9 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
     }
 
 
-    // Alle UndoActions entfernen und Undo wieder einschalten
-    pDoc->DelAllUndoObj();
-    pDoc->DoUndo( bWasUndo );
+    // remove all undo actions and turn undo on again
+    pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+    pDoc->GetIDocumentUndoRedo().DoUndo(bWasUndo);
     pDoc->SetVisibleLinks( bWasVisibleLinks );
 
     pDoc->UnlockExpFlds();

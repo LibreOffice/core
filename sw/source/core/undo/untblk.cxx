@@ -28,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
 
@@ -45,8 +45,8 @@
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
-    pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pFlyUndos(0), pRedlData( 0 ),
-    bSttWasTxtNd( sal_True ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
+    pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pRedlData( 0 ),
+    bSttWasTxtNd( TRUE ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
     SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
@@ -116,7 +116,6 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
     {
         // dann alle neuen Flys zusammen sammeln !!
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
-        pFlyUndos = new SwUndos();
         sal_uInt16 nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->Count();
         for( sal_uInt16 n = 0; n < nArrLen; ++n )
         {
@@ -130,16 +129,15 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, sal_Bool bScanFlys,
                 if( !pFrmFmts ||
                     USHRT_MAX == ( nFndPos = pFrmFmts->GetPos( pFmt ) ) )
                 {
-                    SwUndoInsLayFmt* pFlyUndo = new SwUndoInsLayFmt( pFmt,0,0 );
-                    pFlyUndos->Insert( pFlyUndo, pFlyUndos->Count() );
+                    ::boost::shared_ptr<SwUndoInsLayFmt> const pFlyUndo(
+                        new SwUndoInsLayFmt(pFmt, 0, 0));
+                    m_FlyUndos.push_back(pFlyUndo);
                 }
                 else
                     pFrmFmts->Remove( nFndPos );
             }
         }
         delete pFrmFmts, pFrmFmts = 0;
-        if( !pFlyUndos->Count() )
-            delete pFlyUndos, pFlyUndos = 0;
     }
 }
 
@@ -166,18 +164,14 @@ SwUndoInserts::~SwUndoInserts()
         delete pPos;
     }
     delete pFrmFmts;
-    delete pFlyUndos;
     delete pRedlData;
 }
 
 
-void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
+void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM * pPam = rUndoIter.pAktPam;
-    SwDoc* pDoc = pPam->GetDoc();
-    SetPaM( rUndoIter );
-    sal_Bool bUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
@@ -200,7 +194,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
 
         RemoveIdxFromRange( *pPam, sal_False );
-        SetPaM( rUndoIter );
+        SetPaM(*pPam);
 
         // sind Fussnoten oder CntntFlyFrames im Text ??
         nSetPos = pHistory->Count();
@@ -218,11 +212,13 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
     }
 
-    if( pFlyUndos )
+    if (m_FlyUndos.size())
     {
-        sal_uLong nTmp = pPam->GetPoint()->nNode.GetIndex();
-        for( sal_uInt16 n = pFlyUndos->Count(); n; )
-            (*pFlyUndos)[ --n ]->Undo( rUndoIter );
+        ULONG nTmp = pPam->GetPoint()->nNode.GetIndex();
+        for (size_t n = m_FlyUndos.size(); 0 < n; --n)
+        {
+            m_FlyUndos[ n-1 ]->UndoImpl(rContext);
+        }
         nNdDiff += nTmp - pPam->GetPoint()->nNode.GetIndex();
     }
 
@@ -268,16 +264,12 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
             pHistory->TmpRollback( pDoc, 0, false );
         }
     }
-
-    pDoc->DoUndo( bUndo );
-    if( pPam != rUndoIter.pAktPam )
-        delete pPam;
 }
 
-void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
+void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // setze noch den Cursor auf den Redo-Bereich
-    SwPaM* pPam = rUndoIter.pAktPam;
+    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
     SwDoc* pDoc = pPam->GetDoc();
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nSttNode - nNdDiff;
@@ -321,9 +313,10 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
             pTxtNd->ChgFmtColl( pLastNdColl );
     }
 
-    if( pFlyUndos )
-        for( sal_uInt16 n = pFlyUndos->Count(); n; )
-            (*pFlyUndos)[ --n ]->Redo( rUndoIter );
+    for (size_t n = m_FlyUndos.size(); 0 < n; --n)
+    {
+        m_FlyUndos[ n-1 ]->RedoImpl(rContext);
+    }
 
     pHistory->Rollback( pDoc, nSetPos );
 
@@ -339,21 +332,16 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
         pDoc->SplitRedline( *pPam );
 }
 
-void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
+void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    if( GetId() == rUndoIter.GetLastUndoId() )
-        return;
-
-    SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
+    SwPaM aPam( rContext.GetDoc().GetNodes().GetEndOfContent() );
     SetPaM( aPam );
-    aPam.GetDoc()->CopyRange( aPam, *rUndoIter.pAktPam->GetPoint(), false );
-
-    rUndoIter.pLastUndoObj = this;
+    SwPaM & rRepeatPaM( rContext.GetRepeatPaM() );
+    aPam.GetDoc()->CopyRange( aPam, *rRepeatPaM.GetPoint(), false );
 }
 
 
-/*  */
-
+//////////////////////////////////////////////////////////////////////////
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )
     : SwUndoInserts( UNDO_INSDOKUMENT, rPam )

@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <wrtsh.hxx>
 #include <shellres.hxx>
 #include <swwait.hxx>
@@ -34,10 +35,9 @@
 #include <toxmgr.hxx>
 #include <crsskip.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <swundo.hxx>
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 
 /*--------------------------------------------------------------------
     Beschreibung: Handhabung der Verzeichnisse durch TOXMgr
@@ -450,12 +450,14 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     {
         SwDoc * pDoc = pSh->GetDoc();
 
-        if (pDoc->DoesUndo())
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             if (pNewTOX != NULL)
-                pDoc->DelAllUndoObj();
+            {
+                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            }
 
-            pDoc->StartUndo(UNDO_TOXCHANGE, NULL);
+            pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
         }
 
         if (pNewTOX != NULL) // => pTOX != NULL
@@ -463,12 +465,14 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
 
-        if (pDoc->DoesUndo())
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            pDoc->EndUndo(UNDO_TOXCHANGE, NULL);
+            pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_TOXCHANGE, NULL);
 
             if (pNewTOX == NULL)
-                pDoc->DelAllUndoObj();
+            {
+                pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            }
         }
     }
 

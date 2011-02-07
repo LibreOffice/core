@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <rtl/math.hxx>
 #include <unotools/collatorwrapper.hxx>
@@ -39,6 +40,7 @@
 #include <fmtanchr.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <node.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -46,7 +48,9 @@
 #include <swundo.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
-#include <undobj.hxx>
+#include <UndoSort.hxx>
+#include <UndoRedline.hxx>
+#include <hints.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
 #include <redline.hxx>
@@ -357,9 +361,11 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
                 return sal_False;
     }
 
-    sal_Bool bUndo = DoesUndo();
+    bool const bUndo = GetIDocumentUndoRedo().DoesUndo();
     if( bUndo )
-        StartUndo( UNDO_START, NULL );
+    {
+        GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
+    }
 
     SwPaM* pRedlPam = 0;
     SwUndoRedlineSort* pRedlUndo = 0;
@@ -377,7 +383,7 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
             if( bUndo )
             {
                 pRedlUndo = new SwUndoRedlineSort( *pRedlPam,rOpt );
-                DoUndo( sal_False );
+                GetIDocumentUndoRedo().DoUndo(false);
             }
             // erst den Bereich kopieren, dann
             SwNodeIndex aEndIdx( pEnd->nNode, 1 );
@@ -430,9 +436,12 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwNodeRange aRg( aStart, aStart );
 
     if( bUndo && !pRedlUndo )
-        AppendUndo( pUndoSort = new SwUndoSort( rPaM, rOpt ) );
+    {
+        pUndoSort = new SwUndoSort(rPaM, rOpt);
+        GetIDocumentUndoRedo().AppendUndo(pUndoSort);
+    }
 
-    DoUndo( sal_False );
+    GetIDocumentUndoRedo().DoUndo(false);
 
     for ( sal_uInt16 n = 0; n < aSortArr.Count(); ++n )
     {
@@ -458,7 +467,10 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         if( pRedlUndo )
         {
             pRedlUndo->SetSaveRange( *pRedlPam );
-            AppendUndo( pRedlUndo );
+            // UGLY: temp. enable Undo
+            GetIDocumentUndoRedo().DoUndo(true);
+            GetIDocumentUndoRedo().AppendUndo( pRedlUndo );
+            GetIDocumentUndoRedo().DoUndo(false);
         }
 
         // nBeg is start of sorted range
@@ -495,9 +507,11 @@ sal_Bool SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
 
         delete pRedlPam, pRedlPam = 0;
     }
-    DoUndo( bUndo );
+    GetIDocumentUndoRedo().DoUndo( bUndo );
     if( bUndo )
-        EndUndo( UNDO_END, NULL );
+    {
+        GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
 
     return sal_True;
 }
@@ -575,18 +589,15 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     pTblNd->DelFrms();
     // ? TL_CHART2: ?
 
-    // Redo loeschen bevor Undo
-    sal_Bool bUndo = DoesUndo();
     SwUndoSort* pUndoSort = 0;
-    if(bUndo)
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
-        ClearRedo();
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes[rBoxes.Count()-1]->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );
-        AppendUndo(pUndoSort);
-        DoUndo(sal_False);
+        GetIDocumentUndoRedo().AppendUndo(pUndoSort);
     }
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // SchluesselElemente einsortieren
     sal_uInt16 nCount = (rOpt.eDirection == SRT_ROWS) ?
@@ -630,9 +641,6 @@ sal_Bool SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // Alle Elemente aus dem SortArray loeschen
     aSortList.DeleteAndDestroy( 0, aSortList.Count() );
     SwSortElement::Finit();
-
-    // Undo wieder aktivieren
-    DoUndo(bUndo);
 
     SetModified();
     return sal_True;

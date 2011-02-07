@@ -43,6 +43,7 @@
 #include "cntfrm.hxx"
 #include "frmatr.hxx"
 #include "doc.hxx"
+#include <IDocumentUndoRedo.hxx>
 #include "dview.hxx"
 #include "dflyobj.hxx"
 #include "flyfrm.hxx"
@@ -884,7 +885,7 @@ void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
-    GetFmt()->GetDoc()->SetNoDrawUndoObj( sal_True );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 
@@ -893,7 +894,7 @@ void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
 {
     NbcResize( rRef, xFact, yFact );
     SetChanged();
-    GetFmt()->GetDoc()->SetNoDrawUndoObj( sal_True );
+    GetFmt()->GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(false);
 }
 
 

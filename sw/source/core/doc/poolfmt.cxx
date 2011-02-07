@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <i18npool/mslangid.hxx>
 #include <unotools/localedatawrapper.hxx>
@@ -54,6 +55,7 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <viewopt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <fmtanchr.hxx>
 #include <fmtornt.hxx>
 #include <fmtsrnd.hxx>
@@ -67,9 +69,7 @@
 #include <fmtcol.hxx>
 #include <ndtxt.hxx>
 #include <fmtline.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 #include <GetMetricVal.hxx>
 #include <numrule.hxx>
 
@@ -1085,7 +1085,7 @@ bool SwDoc::IsPoolTxtCollUsed( sal_uInt16 nId ) const
     if( !bFnd || !pNewColl->GetDepends() )
         return sal_False;
 
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewColl->GetInfo( aGetHt );
 }
 
@@ -1164,23 +1164,20 @@ SwFmt* SwDoc::GetFmtFromPool( sal_uInt16 nId )
     {
         sal_Bool bIsModified = IsModified();
 
-        sal_Bool bDoesUndo = DoesUndo();
-        DoUndo(sal_False);
-        switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
         {
-        case POOLGRP_CHARFMT:
-            pNewFmt = _MakeCharFmt( aNm, pDeriveFmt, sal_False, sal_True );
-
-            break;
-        case POOLGRP_FRAMEFMT:
-            pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, sal_False, sal_True );
-
-            break;
-        default:
-            break;
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            switch (nId & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID) )
+            {
+                case POOLGRP_CHARFMT:
+                    pNewFmt = _MakeCharFmt(aNm, pDeriveFmt, FALSE, TRUE);
+                break;
+                case POOLGRP_FRAMEFMT:
+                    pNewFmt = _MakeFrmFmt(aNm, pDeriveFmt, FALSE, TRUE);
+                break;
+                default:
+                break;
+            }
         }
-
-        DoUndo(bDoesUndo);
 
         if( !bIsModified )
             ResetModified();
@@ -1436,7 +1433,7 @@ bool SwDoc::IsPoolFmtUsed( sal_uInt16 nId ) const
     {
         // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
         // (auch indirekte fuer Format-Ableitung! )
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         bFnd = !pNewFmt->GetInfo( aGetHt );
     }
     else
@@ -1486,10 +1483,10 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     {
         sal_Bool bIsModified = IsModified();
 
-        sal_Bool bDoesUndo = DoesUndo();
-        DoUndo(sal_False);
-        n = MakePageDesc( aNm, 0, bRegardLanguage );
-        DoUndo(bDoesUndo);
+        {
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            n = MakePageDesc( aNm, 0, bRegardLanguage );
+        }
 
         pNewPgDsc = aPageDescs[ n ];
         pNewPgDsc->SetPoolFmtId( nId );
@@ -2359,7 +2356,7 @@ bool SwDoc::IsPoolPageDescUsed( sal_uInt16 nId ) const
 
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
@@ -2368,7 +2365,7 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !rModify.GetInfo( aGetHt );
 }
 

@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoRedline.hxx>
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
@@ -35,7 +36,8 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
+#include <UndoDelete.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <docary.hxx>
@@ -45,9 +47,6 @@ extern void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev );
 extern void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev );
 
 //------------------------------------------------------------------
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
 
 SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     : SwUndo( UNDO_REDLINE ), SwUndRng( rRange ),
@@ -94,13 +93,18 @@ SwUndoRedline::~SwUndoRedline()
     delete pRedlSaveData;
 }
 
-void SwUndoRedline::Undo( SwUndoIter& rIter )
+USHORT SwUndoRedline::GetRedlSaveCount() const
 {
-    SwDoc* pDoc = &rIter.GetDoc();
-    SetPaM( *rIter.pAktPam );
+    return pRedlSaveData ? pRedlSaveData->Count() : 0;
+}
 
-// RedlineMode setzen?
-    _Undo( rIter );
+
+void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
+{
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM & rPam( AddUndoRedoPaM(rContext) );
+
+    UndoRedlineImpl(*pDoc, rPam);
 
     if( pRedlSaveData )
     {
@@ -114,47 +118,47 @@ void SwUndoRedline::Undo( SwUndoIter& rIter )
             nSttNode += nEndExtra;
             nEndNode += nEndExtra;
         }
-        SetPaM( *rIter.pAktPam, sal_True );
+        SetPaM(rPam, true);
     }
 }
 
 
-void SwUndoRedline::Redo( SwUndoIter& rIter )
+void SwUndoRedline::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc* pDoc = &rIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
-    SetPaM( *rIter.pAktPam );
+    SwPaM & rPam( AddUndoRedoPaM(rContext) );
     if( pRedlSaveData && bHiddenRedlines )
     {
         sal_uLong nEndExtra = pDoc->GetNodes().GetEndOfExtras().GetIndex();
-        FillSaveData( *rIter.pAktPam, *pRedlSaveData, sal_False,
+        FillSaveData(rPam, *pRedlSaveData, FALSE,
                         UNDO_REJECT_REDLINE != nUserId );
 
         nEndExtra -= pDoc->GetNodes().GetEndOfExtras().GetIndex();
         nSttNode -= nEndExtra;
         nEndNode -= nEndExtra;
     }
-    _Redo( rIter );
 
-    SetPaM( *rIter.pAktPam, sal_True );
+    RedoRedlineImpl(*pDoc, rPam);
+
+    SetPaM(rPam, true);
     pDoc->SetRedlineMode_intern( eOld );
 }
 
-// default ist leer
-void SwUndoRedline::_Undo( SwUndoIter& )
+void SwUndoRedline::UndoRedlineImpl(SwDoc &, SwPaM &)
 {
 }
 
-// default ist Redlines entfernen
-void SwUndoRedline::_Redo( SwUndoIter& rIter )
+// default: remove redlines
+void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rIter.GetDoc().DeleteRedline( *rIter.pAktPam, true, USHRT_MAX );
+    rDoc.DeleteRedline(rPam, true, USHRT_MAX);
 }
 
 
-/*  */
+// SwUndoRedlineDelete ///////////////////////////////////////////////////
 
 SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     : SwUndoRedline( nUsrId = (nUsrId ? nUsrId : UNDO_DELETE), rRange ),
@@ -178,15 +182,17 @@ SwUndoRedlineDelete::SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUsrId )
     bCacheComment = false;
 }
 
-void SwUndoRedlineDelete::_Undo( SwUndoIter& rIter )
+void SwUndoRedlineDelete::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rIter.GetDoc().DeleteRedline( *rIter.pAktPam, true, USHRT_MAX );
+    rDoc.DeleteRedline(rPam, true, USHRT_MAX);
 }
 
-void SwUndoRedlineDelete::_Redo( SwUndoIter& rIter )
+void SwUndoRedlineDelete::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    if( *rIter.pAktPam->GetPoint() != *rIter.pAktPam->GetMark() )
-        rIter.GetDoc().AppendRedline( new SwRedline( *pRedlData, *rIter.pAktPam ), sal_False );
+    if (rPam.GetPoint() != rPam.GetMark())
+    {
+        rDoc.AppendRedline( new SwRedline(*pRedlData, rPam), sal_False );
+    }
 }
 
 sal_Bool SwUndoRedlineDelete::CanGrouping( const SwUndoRedlineDelete& rNext )
@@ -238,14 +244,13 @@ SwUndoRedlineSort::~SwUndoRedlineSort()
     delete pOpt;
 }
 
-void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
+void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    // im rIter.pAktPam ist der sortiete Bereich,
-    // im aSaveRange steht der kopierte, sprich der originale.
-    SwDoc& rDoc = rIter.GetDoc();
+    // rPam contains the sorted range
+    // aSaveRange contains copied (i.e. original) range
 
-    SwPosition* pStart = rIter.pAktPam->Start();
-    SwPosition* pEnd   = rIter.pAktPam->End();
+    SwPosition *const pStart = rPam.Start();
+    SwPosition *const pEnd   = rPam.End();
 
     SwNodeIndex aPrevIdx( pStart->nNode, -1 );
     sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
@@ -266,7 +271,7 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
     }
 
     {
-        SwPaM aTmp( *rIter.pAktPam->GetMark() );
+        SwPaM aTmp( *rPam.GetMark() );
         aTmp.GetMark()->nContent = 0;
         aTmp.SetMark();
         aTmp.GetPoint()->nNode = nSaveEndNode;
@@ -274,9 +279,9 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
         rDoc.DeleteRedline( aTmp, true, USHRT_MAX );
     }
 
-    rDoc.DelFullPara( *rIter.pAktPam );
+    rDoc.DelFullPara(rPam);
 
-    SwPaM*  pPam = rIter.pAktPam;
+    SwPaM *const pPam = & rPam;
     pPam->DeleteMark();
     pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
     SwCntntNode* pCNd = pPam->GetCntntNode();
@@ -289,13 +294,11 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
 
     SetValues( *pPam );
 
-    SetPaM( *rIter.pAktPam );
+    SetPaM(rPam);
 }
 
-void SwUndoRedlineSort::_Redo( SwUndoIter& rIter )
+void SwUndoRedlineSort::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    SwPaM& rPam = *rIter.pAktPam;
-
     SwPaM* pPam = &rPam;
     SwPosition* pStart = pPam->Start();
     SwPosition* pEnd   = pPam->End();
@@ -304,7 +307,7 @@ void SwUndoRedlineSort::_Redo( SwUndoIter& rIter )
     sal_uLong nOffsetTemp = pEnd->nNode.GetIndex() - pStart->nNode.GetIndex();
     xub_StrLen nCntStt  = pStart->nContent.GetIndex();
 
-    rIter.GetDoc().SortText( rPam, *pOpt );
+    rDoc.SortText(rPam, *pOpt);
 
     pPam->DeleteMark();
     pPam->GetPoint()->nNode.Assign( aPrevIdx.GetNode(), +1 );
@@ -326,9 +329,9 @@ void SwUndoRedlineSort::_Redo( SwUndoIter& rIter )
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nSaveEndCntnt );
 }
 
-void SwUndoRedlineSort::Repeat( SwUndoIter& rIter )
+void SwUndoRedlineSort::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rIter.GetDoc().SortText( *rIter.pAktPam, *pOpt );
+    rContext.GetDoc().SortText( rContext.GetRepeatPaM(), *pOpt );
 }
 
 void SwUndoRedlineSort::SetSaveRange( const SwPaM& rRange )
@@ -343,21 +346,21 @@ void SwUndoRedlineSort::SetOffset( const SwNodeIndex& rIdx )
     nOffset = rIdx.GetIndex() - nSttNode;
 }
 
-/*  */
+// SwUndoAcceptRedline ///////////////////////////////////////////////////
 
 SwUndoAcceptRedline::SwUndoAcceptRedline( const SwPaM& rRange )
     : SwUndoRedline( UNDO_ACCEPT_REDLINE, rRange )
 {
 }
 
-void SwUndoAcceptRedline::_Redo( SwUndoIter& rIter )
+void SwUndoAcceptRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rIter.GetDoc().AcceptRedline( *rIter.pAktPam, false );
+    rDoc.AcceptRedline(rPam, false);
 }
 
-void SwUndoAcceptRedline::Repeat( SwUndoIter& rIter )
+void SwUndoAcceptRedline::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rIter.GetDoc().AcceptRedline( *rIter.pAktPam, true );
+    rContext.GetDoc().AcceptRedline(rContext.GetRepeatPaM(), true);
 }
 
 SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange )
@@ -365,17 +368,17 @@ SwUndoRejectRedline::SwUndoRejectRedline( const SwPaM& rRange )
 {
 }
 
-void SwUndoRejectRedline::_Redo( SwUndoIter& rIter )
+void SwUndoRejectRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    rIter.GetDoc().RejectRedline( *rIter.pAktPam, false );
+    rDoc.RejectRedline(rPam, false);
 }
 
-void SwUndoRejectRedline::Repeat( SwUndoIter& rIter )
+void SwUndoRejectRedline::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    rIter.GetDoc().RejectRedline( *rIter.pAktPam, true );
+    rContext.GetDoc().RejectRedline(rContext.GetRepeatPaM(), true);
 }
 
-/*  */
+// SwUndoCompDoc /////////////////////////////////////////////////////////
 
 SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRg ), pRedlData( 0 ),
@@ -416,12 +419,10 @@ SwUndoCompDoc::~SwUndoCompDoc()
     delete pRedlSaveData;
 }
 
-void SwUndoCompDoc::Undo( SwUndoIter& rIter )
+void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM* pPam = rIter.pAktPam;
-    SwDoc* pDoc = pPam->GetDoc();
-
-    SetPaM( *pPam );
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pPam( & AddUndoRedoPaM(rContext) );
 
     if( !bInsert )
     {
@@ -481,22 +482,17 @@ void SwUndoCompDoc::Undo( SwUndoIter& rIter )
             if( pRedlSaveData )
                 SetSaveData( *pDoc, *pRedlSaveData );
         }
-        SetPaM( rIter, sal_True );
+        SetPaM(*pPam, true);
     }
 }
 
-void SwUndoCompDoc::Redo( SwUndoIter& rIter )
+void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // setze noch den Cursor auf den Redo-Bereich
-    SwPaM* pPam = rIter.pAktPam;
-    SwDoc* pDoc = pPam->GetDoc();
-
-    rIter.pLastUndoObj = 0;
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pPam( & AddUndoRedoPaM(rContext) );
 
     if( bInsert )
     {
-        SetPaM( *pPam );
-
         if( pRedlData && IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         {
             SwRedline* pTmp = new SwRedline( *pRedlData, *pPam );
@@ -521,10 +517,10 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
 
         if( pUnDel2 )
         {
-            pUnDel2->Undo( rIter );
+            pUnDel2->UndoImpl(rContext);
             delete pUnDel2, pUnDel2 = 0;
         }
-        pUnDel->Undo( rIter );
+        pUnDel->UndoImpl(rContext);
         delete pUnDel, pUnDel = 0;
 
         SetPaM( *pPam );
@@ -537,7 +533,6 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
 //      pDoc->SetRedlineMode_intern( eOld );
     }
 
-    SetPaM( rIter, sal_True );
+    SetPaM(*pPam, true);
 }
-
 

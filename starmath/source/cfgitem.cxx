@@ -111,7 +111,8 @@ static const char * aMathPropNames[] =
     "Print/Frame",
     "Print/Size",
     "Print/ZoomFactor",
-    //"Misc/NoSymbolsWarning",
+    "LoadSave/IsSaveOnlyUsedSymbols",
+    //"Misc/NoSymbolsWarning",  @deprecated
     "Misc/IgnoreSpacesRight",
     "View/ToolboxVisible",
     "View/AutoRedraw",
@@ -202,15 +203,16 @@ static Sequence< OUString > GetOtherPropertyNames()
 struct SmCfgOther
 {
     SmPrintSize     ePrintSize;
-    sal_uInt16          nPrintZoomFactor;
-    sal_Bool            bPrintTitle;
-    sal_Bool            bPrintFormulaText;
-    sal_Bool            bPrintFrame;
-    sal_Bool            bIgnoreSpacesRight;
-    sal_Bool            bToolboxVisible;
-    sal_Bool            bAutoRedraw;
-    sal_Bool            bFormulaCursor;
-    //sal_Bool            bNoSymbolsWarning;
+    sal_uInt16      nPrintZoomFactor;
+    sal_Bool        bPrintTitle;
+    sal_Bool        bPrintFormulaText;
+    sal_Bool        bPrintFrame;
+    sal_Bool        bIsSaveOnlyUsedSymbols;
+    sal_Bool        bIgnoreSpacesRight;
+    sal_Bool        bToolboxVisible;
+    sal_Bool        bAutoRedraw;
+    sal_Bool        bFormulaCursor;
+    //BOOL            bNoSymbolsWarning;
 
     SmCfgOther();
 };
@@ -223,7 +225,7 @@ SmCfgOther::SmCfgOther()
     bPrintTitle         = bPrintFormulaText   =
     bPrintFrame         = bIgnoreSpacesRight  =
     bToolboxVisible     = bAutoRedraw         =
-    bFormulaCursor      = /*bNoSymbolsWarning   =*/ sal_True;
+    bFormulaCursor      = bIsSaveOnlyUsedSymbols = sal_True;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -900,6 +902,10 @@ void SmMathConfig::LoadOther()
         // Print/ZoomFactor
         if (pVal->hasValue()  &&  (*pVal >>= nTmp16))
             pOther->nPrintZoomFactor = nTmp16;
+        ++pVal;
+        // LoadSave/IsSaveOnlyUsedSymbols
+        if (pVal->hasValue()  &&  (*pVal >>= bTmp))
+            pOther->bIsSaveOnlyUsedSymbols = bTmp;
 /*        ++pVal;
         // Misc/NoSymbolsWarning
         if (pVal->hasValue()  &&  (*pVal >>= bTmp))
@@ -951,6 +957,8 @@ void SmMathConfig::SaveOther()
     *pValue++ <<= (sal_Int16) pOther->ePrintSize;
     // Print/ZoomFactor
     *pValue++ <<= (sal_Int16) pOther->nPrintZoomFactor;
+    // LoadSave/IsSaveOnlyUsedSymbols
+    *pValue++ <<= (sal_Bool) pOther->bIsSaveOnlyUsedSymbols;
 /*    // Misc/NoSymbolsWarning
     *pValue++ <<= (sal_Bool) pOther->bNoSymbolsWarning;
 */
@@ -1232,6 +1240,22 @@ void SmMathConfig::SetPrintFrame( sal_Bool bVal )
     if (!pOther)
         LoadOther();
     SetOtherIfNotEqual( pOther->bPrintFrame, bVal );
+}
+
+
+sal_Bool SmMathConfig::IsSaveOnlyUsedSymbols() const
+{
+    if (!pOther)
+        ((SmMathConfig *) this)->LoadOther();
+    return pOther->bIsSaveOnlyUsedSymbols;
+}
+
+
+void SmMathConfig::SetSaveOnlyUsedSymbols( BOOL bVal )
+{
+    if (!pOther)
+        LoadOther();
+    SetOtherIfNotEqual( pOther->bIsSaveOnlyUsedSymbols, bVal );
 }
 
 

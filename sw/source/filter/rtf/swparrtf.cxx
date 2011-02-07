@@ -1015,8 +1015,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
             }
 
             const SwPosition* pPos  = aSectPaM.GetPoint();
-            const SwTxtNode* pSttNd =
-                mrReader.pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
+            SwTxtNode const*const pSttNd = pPos->nNode.GetNode().GetTxtNode();
             const SwTableNode* pTableNd = pSttNd ? pSttNd->FindTableNode() : 0;
             if (pTableNd)
             {

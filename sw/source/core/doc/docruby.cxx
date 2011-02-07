@@ -28,18 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <string.h>         // fuer strchr()
-#include <hintids.hxx>
 
-#ifndef _COM_SUN_STAR_I18N_UNICODETYPE_HDL
 #include <com/sun/star/i18n/UnicodeType.hdl>
-#endif
-#ifndef _COM_SUN_STAR_I18N_WORDTYPE_HDL
 #include <com/sun/star/i18n/WordType.hdl>
-#endif
+
 #include <unotools/charclass.hxx>
+
+#include <hintids.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <mvsave.hxx>       // Strukturen zum Sichern beim Move/Delete
 #include <ndtxt.hxx>
@@ -47,7 +45,6 @@
 #include <rubylist.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
-#include <undobj.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
 
@@ -112,7 +109,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
 sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                             sal_uInt16 nMode )
 {
-    StartUndo( UNDO_SETRUBYATTR, NULL );
+    GetIDocumentUndoRedo().StartUndo( UNDO_SETRUBYATTR, NULL );
     SvUShortsSort aDelArr;
     aDelArr.Insert( RES_TXTATR_CJK_RUBY );
 
@@ -193,7 +190,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
     } while( 30 > rList.Count() &&
         (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
 
-    EndUndo( UNDO_SETRUBYATTR, NULL );
+    GetIDocumentUndoRedo().EndUndo( UNDO_SETRUBYATTR, NULL );
 
     return nListEntry;
 }

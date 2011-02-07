@@ -246,8 +246,8 @@ SfxItemSet*  SwModule::CreateItemSet( sal_uInt16 nId )
     /*-----------------01.02.97 13.02-------------------
         Optionen fuer PrintTabPage
     --------------------------------------------------*/
-    SwPrintData* pOpt = pAppView ?
-                        pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
+    const SwPrintData* pOpt = pAppView ?
+                        &pAppView->GetWrtShell().getIDocumentDeviceAccess()->getPrintData() :
                         0;
 
     if(!pOpt)

@@ -60,6 +60,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
@@ -270,10 +271,10 @@ void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
         if( rOld.GetLandscape() != bNewOri )
         {
             SwPageDesc aNew( rOld );
-            const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-            GetDoc()->DoUndo( sal_False );
-            GetDoc()->CopyPageDesc(rOld, aNew);
-            GetDoc()->DoUndo( bDoesUndo );
+            {
+                ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+                GetDoc()->CopyPageDesc(rOld, aNew);
+            }
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
@@ -313,10 +314,10 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     {
         const SwPageDesc &rOld = const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i );
         SwPageDesc aNew( rOld );
-        const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-        GetDoc()->DoUndo( sal_False );
-        GetDoc()->CopyPageDesc( rOld, aNew );
-        GetDoc()->DoUndo( bDoesUndo );
+        {
+            ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+            GetDoc()->CopyPageDesc( rOld, aNew );
+        }
         SwFrmFmt& rPgFmt = aNew.GetMaster();
         Size aSz( rSz );
         const sal_Bool bOri = aNew.GetLandscape();

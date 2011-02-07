@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#include <doc.hxx>
 #include <editsh.hxx>
+#include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
@@ -50,7 +50,7 @@ SwEditShell::InsertSection(
     if( !IsTableMode() )
     {
         StartAllAction();
-        GetDoc()->StartUndo( UNDO_INSSECTION, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
         FOREACHPAM_START(this)
             SwSection const*const pNew =
@@ -59,8 +59,7 @@ SwEditShell::InsertSection(
                 pRet = pNew;
         FOREACHPAM_END()
 
-        // Undo-Klammerung hier beenden
-        GetDoc()->EndUndo( UNDO_INSSECTION, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
         EndAllAction();
     }
     return pRet;

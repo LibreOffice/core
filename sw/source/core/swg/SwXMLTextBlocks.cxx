@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <tools/urlobj.hxx>
@@ -39,9 +38,8 @@
 
 #include <comphelper/storagehelper.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
-#endif
 #include <pam.hxx>
 #include <swblocks.hxx>
 #include <ndtxt.hxx>
@@ -81,7 +79,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
-    pDoc->DoUndo( sal_False );      // always sal_False
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
     uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
@@ -124,7 +122,7 @@ SwXMLTextBlocks::SwXMLTextBlocks( const uno::Reference < embed::XStorage >& rStg
     pDoc = pDocSh->GetDoc();
     xDocShellRef = pDocSh;
     pDoc->SetOle2Link( Link() );
-    pDoc->DoUndo( sal_False );
+    pDoc->GetIDocumentUndoRedo().DoUndo(false);
     pDoc->acquire();
 
     InitBlockMode ( rStg );

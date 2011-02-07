@@ -27,15 +27,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/util/SearchFlags.hpp>
-
-
 
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #include <svl/svstdarr.hxx>
+
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+
 #include <txatritr.hxx>
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
@@ -43,15 +45,16 @@
 #include <txtfld.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
+#include <UndoInsert.hxx>
 #include <breakit.hxx>
 
 #include <docsh.hxx>
 #include <PostItMgr.hxx>
 #include <viewsh.hxx>
-#include <vcl/window.hxx>
 
 using namespace ::com::sun::star;
 using namespace util;
@@ -643,9 +646,11 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
-    sal_Bool bSttUndo = pDoc->DoesUndo() && bReplace;
-    if( bSttUndo )
-        pDoc->StartUndo( UNDO_REPLACE, NULL );
+    bool const bStartUndo = pDoc->GetIDocumentUndoRedo().DoesUndo() && bReplace;
+    if (bStartUndo)
+    {
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_REPLACE, NULL );
+    }
 
     sal_Bool bSearchSel = 0 != (rSearchOpt.searchFlag & SearchFlags::REG_NOT_BEGINOFLINE);
     if( bSearchSel )
@@ -656,8 +661,12 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
     if( nRet && bReplace )
         pDoc->SetModified();
 
-    if( bSttUndo )
-        pDoc->EndUndo( UNDO_REPLACE, NULL );
+    if (bStartUndo)
+    {
+        SwRewriter rewriter(MakeUndoReplaceRewriter(
+                nRet, rSearchOpt.searchString, rSearchOpt.replaceString));
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, & rewriter );
+    }
     return nRet;
 }
 

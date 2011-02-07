@@ -35,6 +35,7 @@
 #include <svl/zforlist.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swtable.hxx>
@@ -47,7 +48,8 @@
 #include <mvsave.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
-#include <undobj.hxx>
+#include <hints.hxx>
+#include <UndoTable.hxx>
 #include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <list>
@@ -558,9 +560,8 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxBefore( *pDstBox, bDelCntnt );
 
-    sal_Bool bUndo = pDoc->DoesUndo();
     bool bUndoRedline = pUndo && pDoc->IsRedlineOn();
-    pDoc->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodeIndex aSavePos( aInsIdx, -1 );
     if( pRg.get() )
@@ -628,8 +629,8 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelCntnt );
 
-    // Ueberschrift
-    SwTxtNode* pTxtNd = pDoc->GetNodes()[ aSavePos ]->GetTxtNode();
+    // heading
+    SwTxtNode *const pTxtNd = aSavePos.GetNode().GetTxtNode();
     if( pTxtNd )
     {
         sal_uInt16 nPoolId = pTxtNd->GetTxtColl()->GetPoolFmtId();
@@ -685,8 +686,6 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
         }
     }
-
-    pDoc->DoUndo( bUndo );
 }
 
 sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,

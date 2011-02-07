@@ -28,16 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <editeng/brkitem.hxx>
 
 #define _ZFORLIST_DECLARE_TABLE
 #include <hintids.hxx>
-
-
-#include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <fldbas.hxx>
@@ -142,8 +141,7 @@ namespace
         const SwDoc* pSrcDoc = rPam.GetDoc();
         SwDoc* pDestDoc =  rCpyPam.GetDoc();
         const IDocumentMarkAccess* const pSrcMarkAccess = pSrcDoc->getIDocumentMarkAccess();
-        bool bDoesUndo = pDestDoc->DoesUndo();
-        pDestDoc->DoUndo(false);
+        ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
         const SwPosition &rStt = *rPam.Start(), &rEnd = *rPam.End();
         SwPosition* pCpyStt = rCpyPam.Start();
@@ -209,7 +207,6 @@ namespace
                 pNewMetadatable->RegisterAsCopyOf(*pMetadatable);
             }
         }
-        pDestDoc->DoUndo(bDoesUndo);
     }
 }
 
@@ -647,8 +644,7 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
             RedlineMode_t eOld = pDestDoc->GetRedlineMode();
             pDestDoc->SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-            sal_Bool bDoesUndo = pDestDoc->DoesUndo();
-            pDestDoc->DoUndo( sal_False );
+            ::sw::UndoGuard const undoGuard(pDestDoc->GetIDocumentUndoRedo());
 
             do {
                 pDestDoc->DeleteAndJoin( *(SwPaM*)pDelPam->GetNext() );
@@ -658,7 +654,6 @@ void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
             } while( sal_True );
             delete pDelPam;
 
-            pDestDoc->DoUndo( bDoesUndo );
             pDestDoc->SetRedlineMode_intern( eOld );
         }
     }
@@ -737,49 +732,50 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
                 "please tell me what you did to get here!");
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        sal_Bool bDoUndo = pDoc->DoesUndo();
-        pDoc->DoUndo( sal_False );  // Auf jedenfall Undo abschalten
         // dann kopiere den Bereich im unteren DokumentBereich,
         // (mit Start/End-Nodes geklammert) und verschiebe diese
         // dann an die gewuenschte Stelle.
 
         SwUndoCpyDoc* pUndo = 0;
         SwPaM aPam( rPos );         // UndoBereich sichern
-        if( bDoUndo )
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            pDoc->ClearRedo();
+            pDoc->GetIDocumentUndoRedo().ClearRedo();
             pUndo = new SwUndoCpyDoc( aPam );
         }
 
-        SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
+        {
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+            SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
                                 SwNodeIndex( GetNodes().GetEndOfAutotext() ));
-        aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
-        // copy without Frames
-        pDoc->CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, 0 );
+            aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
+            // copy without Frames
+            pDoc->CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, 0 );
 
-        aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
-        aPam.SetMark();
-        SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
-        pNode->MakeEndIndex( &aPam.GetMark()->nContent );
+            aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
+            aPam.SetMark();
+            SwCntntNode* pNode =
+                pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
+            pNode->MakeEndIndex( &aPam.GetMark()->nContent );
 
-        aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
-        pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
-        pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
-        // move to desired position
-        pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
+            aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
+            pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
+            pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
+            // move to desired position
+            pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
 
-        pNode = aPam.GetCntntNode();
-        *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
-        aPam.SetMark();                 // auch den Mark umsetzen !!
-        aPam.DeleteMark();              // aber keinen Bereich makieren !!
-        pDoc->DeleteSection( pNode );           // Bereich wieder loeschen
+            pNode = aPam.GetCntntNode();
+            *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
+            aPam.SetMark();                 // auch den Mark umsetzen !!
+            aPam.DeleteMark();              // aber keinen Bereich makieren !!
+            pDoc->DeleteSection( pNode );           // Bereich wieder loeschen
+        }
 
-        // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
-        pDoc->DoUndo( bDoUndo );
-        if( bDoUndo )
+        // if Undo is enabled, store the insertion range
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo->SetInsertRange( aPam );
-            pDoc->AppendUndo( pUndo );
+            pDoc->GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         if( pRedlineRange )
@@ -889,11 +885,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     SwTblNumFmtMerge aTNFM( *this, *pDoc );
 
-    if( pDoc->DoesUndo() )
+    if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
-        pDoc->ClearRedo();
         pUndo = new SwUndoCpyDoc( aCpyPam );
-        pDoc->AppendUndo( pUndo );
+        pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
 
     RedlineMode_t eOld = pDoc->GetRedlineMode();
@@ -976,10 +971,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 else if( !bOneNode || bColumnSel )
                 {
                     xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
-                    sal_Bool bDoesUndo = pDoc->DoesUndo();
-                    pDoc->DoUndo( sal_False );
-                    pDoc->SplitNode( rPos, false );
-                    pDoc->DoUndo( bDoesUndo );
+                    {
+                        ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                        pDoc->SplitNode( rPos, false );
+                    }
 
                     if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                     {
@@ -1106,10 +1101,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 // splitte den TextNode, bei dem Eingefuegt wird.
 
                 xub_StrLen nCntntEnd = pEnd->nContent.GetIndex();
-                sal_Bool bDoesUndo = pDoc->DoesUndo();
-                pDoc->DoUndo( sal_False );
-                pDoc->SplitNode( rPos, false );
-                pDoc->DoUndo( bDoesUndo );
+                {
+                    ::sw::UndoGuard const ug(pDoc->GetIDocumentUndoRedo());
+                    pDoc->SplitNode( rPos, false );
+                }
 
                 if( bCanMoveBack && rPos == *aCpyPam.GetPoint() )
                 {
@@ -1285,8 +1280,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         lcl_DeleteRedlines( rPam, aCpyPam );
 
     // falls Undo eingeschaltet ist, so speicher den eingefuegten Bereich
-    if( pDoc->DoesUndo() )
-        pUndo->SetInsertRange( aCpyPam, sal_True, bStartIsTxtNode );
+    if (pDoc->GetIDocumentUndoRedo().DoesUndo())
+    {
+        pUndo->SetInsertRange( aCpyPam, TRUE, bStartIsTxtNode );
+    }
 
     if( pCpyRange )
     {
@@ -1349,11 +1346,10 @@ void SwDoc::CopyWithFlyInFly( const SwNodeRange& rRg, const xub_StrLen nEndConte
     }
 #endif
 
-    // Undo abschalten
-    sal_Bool bUndo = pDest->DoesUndo();
-    pDest->DoUndo( sal_False );
-    CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly );
-    pDest->DoUndo( bUndo );
+    {
+        ::sw::UndoGuard const undoGuard(pDest->GetIDocumentUndoRedo());
+        CopyFlyInFlyImpl( rRg, nEndContentIndex, aSavePos, bCopyFlyAtFly );
+    }
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
@@ -1440,7 +1436,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                         //last node information is only necessary to know for the last TextNode
                         SwNodeIndex aTmp( pAPos->nNode );
                         ++aTmp;//goto next node
-                        while( rNodes[aTmp ]->IsEndNode() )
+                        while (aTmp.GetNode().IsEndNode())
                         {
                             if( aTmp == rNodes.GetEndOfContent().GetIndex() )
                             {

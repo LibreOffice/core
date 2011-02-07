@@ -28,9 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <rolbck.hxx>
 
-#include <hintids.hxx>
+#include <tools/resid.hxx>
+
 #include <svl/itemiter.hxx>
+
+#include <editeng/brkitem.hxx>
+
+#include <hints.hxx>
+#include <hintids.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
 #include <fmtflcnt.hxx>
@@ -47,6 +54,7 @@
 #include <frmfmt.hxx>
 #include <ftnidx.hxx>
 #include <doc.hxx>              // SwDoc.GetNodes()
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <ndtxt.hxx>            // SwTxtNode
 #include <paratr.hxx>           //
@@ -54,19 +62,12 @@
 #include <fldbas.hxx>           // fuer Felder
 #include <pam.hxx>              // fuer SwPaM
 #include <swtable.hxx>
-#include <rolbck.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
-#include <undobj.hxx>           // fuer UndoDelete
+#include <UndoCore.hxx>
 #include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
-#include <tools/resid.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
-#include <editeng/brkitem.hxx>
 #include <bookmrk.hxx>
 
 SV_IMPL_PTRARR( SwpHstry, SwHistoryHintPtr)
@@ -580,9 +581,10 @@ SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()
 
 void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwPaM aPam( pDoc->GetNodes().GetEndOfPostIts() );
-    SwUndoIter aUndoIter( &aPam );
-    m_pUndo->Undo( aUndoIter );
+    ::sw::IShellCursorSupplier *const pISCS(pDoc->GetIShellCursorSupplier());
+    OSL_ASSERT(pISCS);
+    ::sw::UndoRedoContext context(*pDoc, *pISCS);
+    m_pUndo->UndoImpl(context);
 }
 
 
@@ -626,8 +628,7 @@ SwHistoryBookmark::SwHistoryBookmark(
 
 void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
 {
-    bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo(false);
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNodes& rNds = pDoc->GetNodes();
     IDocumentMarkAccess* pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -698,7 +699,6 @@ void SwHistoryBookmark::SetInDoc( SwDoc* pDoc, bool )
             }
         }
     }
-    pDoc->DoUndo(bDoesUndo);
 }
 
 
@@ -793,8 +793,7 @@ SwHistorySetAttrSet::SwHistorySetAttrSet( const SfxItemSet& rSet,
 
 void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwNode * pNode = pDoc->GetNodes()[ m_nNodeIndex ];
     if ( pNode->IsCntntNode() )
@@ -815,8 +814,6 @@ void SwHistorySetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             rFmt.ResetFmtAttr( *m_ResetArray.GetData() );
         }
     }
-
-    pDoc->DoUndo( bDoesUndo );
 }
 
 /*************************************************************************/
@@ -879,8 +876,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
 
 void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
     ASSERT( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
@@ -906,8 +902,6 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
             }
         }
     }
-
-    pDoc->DoUndo( bDoesUndo );
 }
 
 
@@ -927,8 +921,7 @@ SwHistoryChangeFlyAnchor::SwHistoryChangeFlyAnchor( SwFrmFmt& rFmt )
 
 void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     sal_uInt16 nPos = pDoc->GetSpzFrmFmts()->GetPos( &m_rFmt );
     if ( USHRT_MAX != nPos )    // Format does still exist
@@ -956,7 +949,6 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
 
         m_rFmt.SetFmtAttr( aTmp );
     }
-    pDoc->DoUndo( bDoesUndo );
 }
 
 
@@ -1276,7 +1268,7 @@ sal_uInt16 SwHistory::SetTmpEnd( sal_uInt16 nNewTmpEnd )
         if ( HSTRY_FLYCNT == (*this)[ n ]->Which() )
         {
             static_cast<SwHistoryTxtFlyCnt*>((*this)[ n ])
-                ->GetUDelLFmt()->Redo();
+                ->GetUDelLFmt()->RedoForRollback();
         }
     }
 

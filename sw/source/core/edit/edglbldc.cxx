@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <editsh.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -52,7 +52,9 @@ void SwEditShell::SetGlblDocSaveLinks( sal_Bool bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
     if( !GetDoc()->IsModified() )   // Bug 57028
-        GetDoc()->SetUndoNoResetModified();
+    {
+        GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
+    }
     GetDoc()->SetModified();
 }
 
@@ -163,13 +165,13 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     sal_Bool bEndUndo = sal_False;
     SwDoc* pMyDoc = GetDoc();
-    SwTxtNode* pTxtNd = pMyDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
     {
         bEndUndo = sal_True;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
         pCrsr->SetMark();
@@ -178,7 +180,9 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertSection( rNew );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
     return sal_True;
@@ -209,7 +213,7 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     else
     {
         bEndUndo = sal_True;
-        pMyDoc->StartUndo( UNDO_START, NULL );
+        pMyDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         rPos.nNode--;
         pMyDoc->AppendTxtNode( rPos );
     }
@@ -217,7 +221,9 @@ sal_Bool SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
     InsertTableOf( rTOX );
 
     if( bEndUndo )
-        pMyDoc->EndUndo( UNDO_END, NULL );
+    {
+        pMyDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
+    }
     EndAllAction();
 
     return sal_True;
@@ -365,7 +371,7 @@ sal_Bool SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCrsrPos.nNode = rPos.GetDocPos();
 
     SwDoc* pMyDoc = GetDoc();
-    SwCntntNode* pCNd = pMyDoc->GetNodes()[ rCrsrPos.nNode ]->GetCntntNode();
+    SwCntntNode * pCNd = rCrsrPos.nNode.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = pMyDoc->GetNodes().GoNext( &rCrsrPos.nNode );
 

@@ -44,9 +44,7 @@
 #include <svl/zformat.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/transfer.hxx>
-#ifndef _SFXSIDS_HRC //autogen
 #include <sfx2/dialogs.hrc>
-#endif
 #include <sfx2/dinfdlg.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -57,9 +55,7 @@
 #include <svtools/sfxecode.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/docfilt.hxx>
-#ifndef _SVX_SVXIDS_HRC //autogen
 #include <svx/svxids.hrc>
-#endif
 #include <svx/drawitem.hxx>
 #include <editeng/svxacorr.hxx>
 #include <editeng/langitem.hxx>
@@ -86,6 +82,7 @@
 #include <redlndlg.hxx>
 #include <docstyle.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <pagedesc.hxx>
 #include <shellio.hxx>
 #include <pview.hxx>
@@ -103,15 +100,9 @@
 #include <cmdid.h>
 #include <globals.h>
 #include <helpid.h>
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <com/sun/star/ui/dialogs/XFilePicker.hpp>
 #include <com/sun/star/ui/dialogs/XFilterManager.hpp>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -342,8 +333,7 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
     // --> OD 2005-05-10 #i48949# - actions aren't undoable. Thus, allow no undo
     // actions
     // Note: The undo action stack is cleared at the end of this method.
-    bool bDoesUndo( GetDoc()->DoesUndo() );
-    GetDoc()->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
     // <--
 
     sal_Bool bRet = sal_False;
@@ -542,11 +532,10 @@ sal_Bool SwDocShell::Insert( SfxObjectShell &rSource,
 
     // --> OD 2005-05-10 #i48949# - actions aren't undoable and could have change
     // the document node array. Thus, clear the undo action stack.
-    if ( bDoesUndo )
+    if (undoGuard.UndoWasEnabled())
     {
-        GetDoc()->DelAllUndoObj();
+        GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
     }
-    GetDoc()->DoUndo( bDoesUndo );
     // <--
 
     return bRet;
@@ -947,12 +936,11 @@ void SwDocShell::Execute(SfxRequest& rReq)
                         aTempFile.EnableKillingFile();
                         pSrcView->SaveContent(aTempFile.GetURL());
                         bDone = sal_True;
-                        SfxEventConfiguration* pEvent = SFX_APP()->GetEventConfig();
                         SvxMacro aMac(aEmptyStr, aEmptyStr, STARBASIC);
-                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
-                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
-                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ),    aMac, this);
-                        pEvent->ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_OPENDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_PREPARECLOSEDOC ), aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_ACTIVATEDOC ),     aMac, this);
+                        SfxEventConfiguration::ConfigureEvent(GlobalEventConfig::GetEventName( STR_EVENT_DEACTIVATEDOC ), aMac, this);
                         ReloadFromHtml(aTempFile.GetURL(), pSrcView);
                         nSlot = 0;
                     }
@@ -1637,7 +1625,9 @@ void SwDocShell::SetModified( sal_Bool bSet )
                 sal_Bool bOld = pDoc->IsModified();
                 pDoc->SetModified();
                 if( !bOld )
-                    pDoc->SetUndoNoResetModified();
+                {
+                    pDoc->GetIDocumentUndoRedo().SetUndoNoResetModified();
+                }
             }
             else
                 pDoc->ResetModified();
@@ -1697,9 +1687,6 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
     ClearHeaderAttributesForSourceViewHack();
 
     // MIB 24.07.97: Das Dokument-Basic muss auch noch d'ran glauben ...
-    // Ein EnterBasicCall braucht man hier nicht, weil man nichts ruft und
-    // in HTML-Dokument kein Dok-Basic vorhanden sein kann, das noch nicht
-    // geladen wurde.
     SvxHtmlOptions* pHtmlOptions = SvxHtmlOptions::Get();
     //#59620# HasBasic() zeigt an, dass es schon einen BasicManager an der DocShell
     //          gibt. Der wurde im HTML-Import immer angelegt, wenn Macros im Quelltext

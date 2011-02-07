@@ -32,9 +32,7 @@
 #define _STD_VAR_ARRAYS
 #include <hintids.hxx>
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include <editeng/langitem.hxx>
 #include <fmtinfmt.hxx>
 #include <txtatr.hxx>
@@ -96,17 +94,19 @@ void _PaMIntoCrsrShellRing::RemoveFromRing( SwPaM& rPam, Ring* pPrev )
 
 SwAutoCorrDoc::SwAutoCorrDoc( SwEditShell& rEditShell, SwPaM& rPam,
                                 sal_Unicode cIns )
-    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 ),
-    nUndoId( UNDO_EMPTY  ),
-    bUndoIdInitialized( cIns ? false : true )
+    : rEditSh( rEditShell ), rCrsr( rPam ), pIdx( 0 )
+    , m_nEndUndoCounter(0)
+    , bUndoIdInitialized( cIns ? false : true )
 {
 }
 
 
 SwAutoCorrDoc::~SwAutoCorrDoc()
 {
-    if( UNDO_EMPTY != nUndoId )
-        rEditSh.EndUndo( nUndoId );
+    for (int i = 0; i < m_nEndUndoCounter; ++i)
+    {
+        rEditSh.EndUndo();
+    }
     delete pIdx;
 }
 
@@ -146,7 +146,10 @@ sal_Bool SwAutoCorrDoc::Insert( xub_StrLen nPos, const String& rTxt )
     {
         bUndoIdInitialized = true;
         if( 1 == rTxt.Len() )
-            rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
+        {
+            rEditSh.StartUndo( UNDO_AUTOCORRECT );
+            ++m_nEndUndoCounter;
+        }
     }
     return sal_True;
 }
@@ -215,7 +218,10 @@ sal_Bool SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
         {
             bUndoIdInitialized = true;
             if( 1 == rTxt.Len() )
-                rEditSh.StartUndo( nUndoId = UNDO_AUTOCORRECT );
+            {
+                rEditSh.StartUndo( UNDO_AUTOCORRECT );
+                ++m_nEndUndoCounter;
+            }
         }
     }
 

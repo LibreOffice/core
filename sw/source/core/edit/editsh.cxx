@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/list.hxx>
 #include <tools/urlobj.hxx>
@@ -41,6 +42,7 @@
 #include <frmfmt.hxx>
 #include <charfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <editsh.hxx>
 #include <frame.hxx>
@@ -201,7 +203,7 @@ void SwEditShell::Overwrite(const String &rStr)
 long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
 {
     StartAllAction();
-    GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     FOREACHPAM_START(this)
         // eine Tabellen Zelle wird jetzt zu einer normalen Textzelle!
@@ -209,7 +211,7 @@ long SwEditShell::SplitNode( sal_Bool bAutoFormat, sal_Bool bCheckTableStart )
         GetDoc()->SplitNode( *PCURCRSR->GetPoint(), bCheckTableStart );
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
     if( bAutoFormat )
         AutoFmtBySplitNode();
@@ -227,14 +229,14 @@ sal_Bool SwEditShell::AppendTxtNode()
 {
     sal_Bool bRet = sal_False;
     StartAllAction();
-    GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
 
     FOREACHPAM_START(this)
         GetDoc()->ClearBoxNumAttrs( PCURCRSR->GetPoint()->nNode );
         bRet = GetDoc()->AppendTxtNode( *PCURCRSR->GetPoint()) || bRet;
     FOREACHPAM_END()
 
-    GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+    GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
 
     ClearTblBoxCntnt();
 
@@ -752,8 +754,8 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
     if( !rFmt.GetValue().Len() ||   ( !rStr.Len() && !HasSelection() ) )
         return sal_False;
     StartAllAction();
-    GetDoc()->StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
-    sal_Bool bInsTxt = sal_True;
+    GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_UI_INSERT_URLTXT, NULL);
+    BOOL bInsTxt = sal_True;
 
     if( rStr.Len() )
     {
@@ -796,7 +798,7 @@ sal_Bool SwEditShell::InsertURL( const SwFmtINetFmt& rFmt, const String& rStr, s
         ClearMark();
     if( bInsTxt )
         DontExpandFmt();
-    GetDoc()->EndUndo( UNDO_UI_INSERT_URLTXT, NULL );
+    GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_UI_INSERT_URLTXT, NULL );
     EndAllAction();
     return sal_True;
 }
@@ -1169,14 +1171,14 @@ void SwEditShell::TransliterateText( sal_uInt32 nType )
     SwPaM* pCrsr = GetCrsr();
     if( pCrsr->GetNext() != pCrsr )
     {
-        GetDoc()->StartUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
         FOREACHPAM_START( this )
 
         if( PCURCRSR->HasMark() )
             GetDoc()->TransliterateText( *PCURCRSR, aTrans );
 
         FOREACHPAM_END()
-        GetDoc()->EndUndo(UNDO_EMPTY, NULL);
+        GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     }
     else
         GetDoc()->TransliterateText( *pCrsr, aTrans );

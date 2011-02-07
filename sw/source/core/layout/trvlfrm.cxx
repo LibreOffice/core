@@ -892,7 +892,7 @@ sal_Bool SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly 
 sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
     ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
-    const SwFrm *pActFrm = GetFmt()->GetDoc()->GetNodes()[pActualCrsr->GetPoint()->nNode]->
+    SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
                                     GetCntntNode()->GetFrm( 0,
                                                     pActualCrsr->GetPoint(),
                                                     sal_False );
@@ -2011,7 +2011,6 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
 
 void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 {
-    const SwNodes &rNds = GetFmt()->GetDoc()->GetNodes();
     SwPosition *pStartPos = rCrsr.Start(),
                *pEndPos   = rCrsr.GetPoint() == pStartPos ?
                             rCrsr.GetMark() : rCrsr.GetPoint();
@@ -2047,10 +2046,10 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
     //jedenfall.
-    const SwCntntFrm *pStartFrm = rNds[ pStartPos->nNode ]->
+    SwCntntFrm const* pStartFrm = pStartPos->nNode.GetNode().
         GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
 
-    const SwCntntFrm *pEndFrm   = rNds[ pEndPos->nNode ]->
+    SwCntntFrm const* pEndFrm   = pEndPos->nNode.GetNode().
         GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
 
     ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );

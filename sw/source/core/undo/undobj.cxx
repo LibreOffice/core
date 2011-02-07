@@ -29,28 +29,26 @@
 #include "precompiled_sw.hxx"
 
 
+#include <IShellCursorSupplier.hxx>
 #include <txtftn.hxx>
 #include <fmtanchr.hxx>
 #include <ftnidx.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <UndoManager.hxx>
 #include <docary.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <ndnotxt.hxx>
 #include <IMark.hxx>
 #include <mvsave.hxx>
 #include <redline.hxx>
 #include <crossrefbookmark.hxx>
-#ifndef _UNDO_HRC
 #include <undo.hrc>
-#endif
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <docsh.hxx>
 
 class SwRedlineSaveData : public SwUndRng, public SwRedlineData,
@@ -70,20 +68,8 @@ public:
 #endif
 };
 
-SV_IMPL_PTRARR( SwUndos, SwUndo*)
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
-SwUndoIter::SwUndoIter( SwPaM* pPam, SwUndoId nId )
-{
-    nUndoId = nId;
-    bWeiter = nId ? sal_True : sal_False;
-    bUpdateAttr = sal_False;
-    pAktPam = pPam;
-    nEndCnt = 0;
-    pSelFmt = 0;
-    pMarkList = 0;
-}
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //------------------------------------------------------------
 
@@ -147,11 +133,14 @@ void SwUndRng::SetPaM( SwPaM & rPam, sal_Bool bCorrToCntnt ) const
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 }
 
-void SwUndRng::SetPaM( SwUndoIter& rIter, sal_Bool bCorrToCntnt ) const
+SwPaM & SwUndRng::AddUndoRedoPaM(
+        ::sw::UndoRedoContext & rContext, bool bCorrToCntnt) const
 {
-    if( rIter.pAktPam )
-        SetPaM( *rIter.pAktPam, bCorrToCntnt );
+    SwPaM & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SetPaM( rPaM, bCorrToCntnt );
+    return rPaM;
 }
+
 
 //------------------------------------------------------------
 
@@ -201,8 +190,8 @@ void SwUndo::RemoveIdxRel( sal_uLong nIdx, const SwPosition& rPos )
     ::PaMCorrRel( aIdx, rPos );
 }
 
-SwUndo::SwUndo( SwUndoId nI )
-    : nId(nI), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
+SwUndo::SwUndo(SwUndoId const nId)
+    : m_nId(nId), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
       bCacheComment(true), pComment(NULL)
 {
 }
@@ -218,9 +207,89 @@ SwUndo::~SwUndo()
     delete pComment;
 }
 
-void SwUndo::Repeat( SwUndoIter& rIter )
+
+class UndoRedoRedlineGuard
 {
-    rIter.pLastUndoObj = this;
+public:
+    UndoRedoRedlineGuard(::sw::UndoRedoContext & rContext, SwUndo & rUndo)
+        : m_rRedlineAccess(rContext.GetDoc())
+        , m_eMode(m_rRedlineAccess.GetRedlineMode())
+    {
+        RedlineMode_t const eTmpMode =
+            static_cast<RedlineMode_t>(rUndo.GetRedlineMode());
+        if ((nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) !=
+            (nsRedlineMode_t::REDLINE_SHOW_MASK & m_eMode))
+        {
+            m_rRedlineAccess.SetRedlineMode( eTmpMode );
+        }
+        m_rRedlineAccess.SetRedlineMode_intern( static_cast<RedlineMode_t>(
+                eTmpMode | nsRedlineMode_t::REDLINE_IGNORE) );
+    }
+    ~UndoRedoRedlineGuard()
+    {
+        m_rRedlineAccess.SetRedlineMode(m_eMode);
+    }
+private:
+    IDocumentRedlineAccess & m_rRedlineAccess;
+    RedlineMode_t const m_eMode;
+};
+
+void SwUndo::Undo()
+{
+    OSL_ENSURE(false, "SwUndo::Undo(): ERROR: must call Undo(context) instead");
+}
+
+void SwUndo::Redo()
+{
+    OSL_ENSURE(false, "SwUndo::Redo(): ERROR: must call Redo(context) instead");
+}
+
+void SwUndo::UndoWithContext(SfxUndoContext & rContext)
+{
+    ::sw::UndoRedoContext *const pContext(
+            dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
+    OSL_ASSERT(pContext);
+    if (!pContext) { return; }
+    UndoRedoRedlineGuard(*pContext, *this);
+    UndoImpl(*pContext);
+}
+
+void SwUndo::RedoWithContext(SfxUndoContext & rContext)
+{
+    ::sw::UndoRedoContext *const pContext(
+            dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
+    OSL_ASSERT(pContext);
+    if (!pContext) { return; }
+    UndoRedoRedlineGuard(*pContext, *this);
+    RedoImpl(*pContext);
+}
+
+void SwUndo::Repeat(SfxRepeatTarget & rContext)
+{
+    ::sw::RepeatContext *const pRepeatContext(
+            dynamic_cast< ::sw::RepeatContext * >(& rContext));
+    OSL_ASSERT(pRepeatContext);
+    if (!pRepeatContext) { return; }
+    RepeatImpl(*pRepeatContext);
+}
+
+BOOL SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
+{
+    ::sw::RepeatContext *const pRepeatContext(
+            dynamic_cast< ::sw::RepeatContext * >(& rContext));
+    OSL_ASSERT(pRepeatContext);
+    if (!pRepeatContext) { return false; }
+    return CanRepeatImpl(*pRepeatContext);
+}
+
+void SwUndo::RepeatImpl( ::sw::RepeatContext & )
+{
+}
+
+bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
+{
+//    return false;
+    return ((REPEAT_START <= GetId()) && (GetId() < REPEAT_END));
 }
 
 String SwUndo::GetComment() const
@@ -231,7 +300,7 @@ String SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment = new String(SW_RES(UNDO_BASE + nId));
+            pComment = new String(SW_RES(UNDO_BASE + GetId()));
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -242,7 +311,7 @@ String SwUndo::GetComment() const
     }
     else
     {
-        aResult = String(SW_RES(UNDO_BASE + nId));
+        aResult = String(SW_RES(UNDO_BASE + GetId()));
 
         SwRewriter aRewriter = GetRewriter();
 
@@ -252,17 +321,13 @@ String SwUndo::GetComment() const
     return aResult;
 }
 
-SwUndoId SwUndo::GetEffectiveId() const
-{
-    return GetId();
-}
-
 SwRewriter SwUndo::GetRewriter() const
 {
     SwRewriter aResult;
 
     return aResult;
 }
+
 
 //------------------------------------------------------------
 
@@ -289,13 +354,12 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
                     SwIndex* pCntIdx, sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     SwDoc& rDoc = *rPaM.GetDoc();
-    sal_Bool bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwNoTxtNode* pCpyNd = rPaM.GetNode()->GetNoTxtNode();
 
     // jetzt kommt das eigentliche Loeschen(Verschieben)
-    SwNodes& rNds = (SwNodes&)*rDoc.GetUndoNds();
+    SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     SwPosition aPos( pEndNdIdx ? rNds.GetEndOfPostIts()
                                : rNds.GetEndOfExtras() );
     aPos.nNode--;
@@ -371,8 +435,6 @@ void SwUndoSaveCntnt::MoveToUndoNds( SwPaM& rPaM, SwNodeIndex* pNodeIdx,
         else
             pCntIdx->Assign( 0, 0 );
     }
-
-    rDoc.DoUndo( bUndo );
 }
 
 void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
@@ -380,12 +442,11 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
                             sal_uLong* pEndNdIdx, xub_StrLen* pEndCntIdx )
 {
     // jetzt kommt das wiederherstellen
-    SwNodes& rNds = (SwNodes&)*rDoc.GetUndoNds();
+    SwNodes & rNds = rDoc.GetUndoManager().GetUndoNodes();
     if( nNodeIdx == rNds.GetEndOfPostIts().GetIndex() )
         return;     // nichts gespeichert
 
-    sal_Bool bUndo = rDoc.DoesUndo();
-    rDoc.DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwPaM aPaM( rInsPos );
     if( pEndNdIdx )         // dann hole aus diesem den Bereich
@@ -440,8 +501,6 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, sal_uLong nNodeIdx,
     else {
         ASSERT( sal_False, "was ist es denn nun?" );
     }
-
-    rDoc.DoUndo( bUndo );
 }
 
 // diese beiden Methoden bewegen den Point vom Pam zurueck/vor. Damit
@@ -501,8 +560,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
 
     SwDoc* pDoc = rMark.nNode.GetNode().GetDoc();
 
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-    pDoc->DoUndo( sal_False );
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // 1. Fussnoten
     if( nsDelCntntType::DELCNT_FTN & nDelCntntType )
@@ -599,7 +657,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     {
                         if( !pHistory )
                             pHistory = new SwHistory;
-                        SwTxtNode* pTxtNd = pDoc->GetNodes()[ pAPos->nNode]->GetTxtNode();
+                        SwTxtNode *const pTxtNd =
+                            pAPos->nNode.GetNode().GetTxtNode();
                         SwTxtAttr* const pFlyHnt = pTxtNd->GetTxtAttrForCharAt(
                             pAPos->nContent.GetIndex());
                         ASSERT( pFlyHnt, "kein FlyAttribut" );
@@ -813,8 +872,6 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
             }
         }
     }
-
-    pDoc->DoUndo( bDoesUndo );
 }
 
 
@@ -882,8 +939,8 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     {
         // ueberpruefe, ob der Inhalt an der alten Position steht
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
-        ASSERT( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
-                "Position in irgendeiner Section" );
+        OSL_ENSURE(!aSttIdx.GetNode().GetCntntNode(),
+                "RestoreSection(): Position on content node");
 
         // move den Inhalt aus dem UndoNodes-Array in den Fly
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,
@@ -917,128 +974,6 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     }
 }
 
-// START
-SwUndoStart::SwUndoStart( SwUndoId nInitId )
-    : SwUndo( UNDO_START ), nUserId( nInitId ), nEndOffset( 0 )
-{
-}
-
-void SwUndoStart::Undo( SwUndoIter& rUndoIter )
-{
-    if( !( --rUndoIter.nEndCnt ) && rUndoIter.bWeiter &&
-        ( rUndoIter.GetId() ? ( rUndoIter.GetId() == nUserId ||
-        ( UNDO_END == rUndoIter.GetId() && UNDO_START == GetId() )) : sal_True ))
-        rUndoIter.bWeiter = sal_False;
-}
-
-void SwUndoStart::Redo( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = sal_True;
-    ++rUndoIter.nEndCnt;
-}
-
-void SwUndoStart::Repeat( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = sal_False;
-}
-
-String SwUndoStart::GetComment() const
-{
-    String sResult;
-
-    switch (nUserId)
-    {
-    case UNDO_START:
-    case UNDO_END:
-        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-
-    default:
-        sResult = String(SW_RES(UNDO_BASE + nUserId));
-        sResult = GetRewriter().Apply(sResult);
-    }
-
-    return sResult;
-}
-
-SwRewriter SwUndoStart::GetRewriter() const
-{
-    return mRewriter;
-}
-
-SwUndoId SwUndoStart::GetEffectiveId() const
-{
-    return GetUserId();
-}
-
-void SwUndoStart::SetRewriter(const SwRewriter & rRewriter)
-{
-    mRewriter = rRewriter;
-}
-
-// END
-SwUndoEnd::SwUndoEnd( SwUndoId nInitId )
-    : SwUndo( UNDO_END ), nUserId( nInitId ), nSttOffset( 0 )
-{
-}
-
-void SwUndoEnd::Undo( SwUndoIter& rUndoIter )
-{
-    if( rUndoIter.GetId() == GetId() || !rUndoIter.GetId() )
-        rUndoIter.bWeiter = sal_True;
-    if( rUndoIter.bWeiter )
-        ++rUndoIter.nEndCnt;
-}
-
-void SwUndoEnd::Redo( SwUndoIter& rUndoIter )
-{
-    if( !( --rUndoIter.nEndCnt ) && rUndoIter.bWeiter &&
-        ( rUndoIter.GetId() ? ( rUndoIter.GetId() == nUserId ||
-        ( UNDO_END == rUndoIter.GetId() && UNDO_START == GetId() )) : sal_True ))
-        rUndoIter.bWeiter = sal_False;
-}
-
-void SwUndoEnd::Repeat( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = sal_False;
-}
-
-String SwUndoEnd::GetComment() const
-{
-    String sResult;
-
-    switch (nUserId)
-    {
-    case UNDO_START:
-    case UNDO_END:
-        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-    default:
-        sResult = SW_RES(UNDO_BASE + nUserId);
-        sResult = GetRewriter().Apply(sResult);
-    }
-
-    return sResult;
-}
-
-void SwUndoEnd::SetRewriter(const SwRewriter & rRewriter)
-{
-    mRewriter = rRewriter;
-}
-
-SwUndoId SwUndoEnd::GetEffectiveId() const
-{
-    return GetUserId();
-}
-
-SwRewriter SwUndoEnd::GetRewriter() const
-{
-    return mRewriter;
-}
-
-/*  */
         // sicher und setze die RedlineDaten
 
 SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,

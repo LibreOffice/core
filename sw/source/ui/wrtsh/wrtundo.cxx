@@ -36,6 +36,7 @@
 #include <svl/slstitm.hxx>
 #include <wrtsh.hxx>
 #include <swundo.hxx>                   // fuer Undo-Ids
+#include <IDocumentUndoRedo.hxx>
 #include <swdtflvr.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
@@ -60,7 +61,7 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
             DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Undo(UNDO_EMPTY, nCnt );
+            SwEditShell::Undo(nCnt);
             break;
         case REDO:
             DoUndo(sal_False); // #i21739#
@@ -113,70 +114,66 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 
 String SwWrtShell::GetDoString( DoType eDoType ) const
 {
-    String aStr, aUndoStr;
+    ::rtl::OUString aUndoStr;
     sal_uInt16 nResStr = STR_UNDO;
     switch( eDoType )
     {
     case UNDO:
         nResStr = STR_UNDO;
-        aUndoStr = GetUndoIdsStr();
+        GetLastUndoInfo(& aUndoStr, 0);
         break;
     case REDO:
         nResStr = STR_REDO;
-        aUndoStr = GetRedoIdsStr();
+        GetFirstRedoInfo(& aUndoStr);
         break;
     default:;//prevent warning
     }
 
-    aStr.Insert( String( SvtResId( nResStr)), 0 );
-    aStr += aUndoStr;
+    ::rtl::OUStringBuffer buf = ::rtl::OUStringBuffer( String( SvtResId( nResStr ) ) );
+    buf.append(aUndoStr);
 
-    return aStr;
+    return buf.makeStringAndClear();
 }
 
 sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) const
 {
-    SwUndoIds aIds;
+    SwUndoComments_t comments;
     switch( eDoType )
     {
     case UNDO:
-        GetUndoIds( NULL, &aIds );
+        comments = GetIDocumentUndoRedo().GetUndoComments();
         break;
     case REDO:
-        GetRedoIds( NULL, &aIds );
+        comments = GetIDocumentUndoRedo().GetRedoComments();
         break;
     default:;//prevent warning
     }
 
-    String sList;
-    for( sal_uInt16 n = 0, nEnd = aIds.Count(); n < nEnd; ++n )
+    ::rtl::OUStringBuffer buf;
+    for (size_t i = 0; i < comments.size(); ++i)
     {
-        const SwUndoIdAndName& rIdNm = *aIds[ n ];
-        if( rIdNm.GetUndoStr() )
-            sList += *rIdNm.GetUndoStr();
-        else
-        {
-            ASSERT( !this, "no Undo/Redo Test set" );
-        }
-        sList += '\n';
+        OSL_ENSURE(comments[i].getLength(), "no Undo/Redo Text set");
+        buf.append(comments[i]);
+        buf.append(sal_Unicode('\n'));
     }
-    rStrs.SetString( sList );
-    return aIds.Count();
+    rStrs.SetString(buf.makeStringAndClear());
+    return static_cast<sal_uInt16>(comments.size());
 }
 
 
 String SwWrtShell::GetRepeatString() const
 {
-    String aStr;
-    String aUndoStr = GetRepeatIdsStr();
+    ::rtl::OUString str;
+    GetRepeatInfo(& str);
 
-    if (aUndoStr.Len() > 0)
+    if (str.getLength() == 0)
     {
-        aStr.Insert( SvtResId( STR_REPEAT ), 0 );
-        aStr += aUndoStr;
+        return str;
     }
 
-    return aStr;
+    ::rtl::OUStringBuffer buf( String(SvtResId(STR_REPEAT)) );
+    buf.append(str);
+    return buf.makeStringAndClear();
 }
 
 

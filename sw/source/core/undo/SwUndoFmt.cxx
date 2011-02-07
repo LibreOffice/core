@@ -29,6 +29,8 @@
 #include "precompiled_sw.hxx"
 
 #include <tools/resid.hxx>
+#include <tools/string.hxx>
+
 #include <poolfmt.hxx>
 #include <charfmt.hxx>
 #include <frmfmt.hxx>
@@ -37,8 +39,8 @@
 #include <swundo.hxx>
 #include <undobj.hxx>
 #include <fmtcol.hxx>
-#include <tools/string.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <comcore.hrc>
 
 SwUndoFmtCreate::SwUndoFmtCreate
@@ -54,7 +56,7 @@ SwUndoFmtCreate::~SwUndoFmtCreate()
 {
 }
 
-void SwUndoFmtCreate::Undo(SwUndoIter &)
+void SwUndoFmtCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (pNew)
     {
@@ -70,20 +72,13 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
             nId = pNew->GetPoolFmtId() & COLL_GET_RANGE_BITS;
             bAuto = pNew->IsAuto();
 
-            sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-            pDoc->DoUndo(sal_False);
             Delete();
-            pDoc->DoUndo(bDoesUndo);
         }
     }
 }
 
-void SwUndoFmtCreate::Redo(SwUndoIter &)
+void SwUndoFmtCreate::RedoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
     SwFmt * pFmt = Create(pDerivedFrom);
 
@@ -99,8 +94,6 @@ void SwUndoFmtCreate::Redo(SwUndoIter &)
     }
     else
         pNew = NULL;
-
-    pDoc->DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoFmtCreate::GetRewriter() const
@@ -130,12 +123,8 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 {
 }
 
-void SwUndoFmtDelete::Undo(SwUndoIter &)
+void SwUndoFmtDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
 
     SwFmt * pFmt = Create(pDerivedFrom);
@@ -147,23 +136,16 @@ void SwUndoFmtDelete::Undo(SwUndoIter &)
         pFmt->SetPoolFmtId((pFmt->GetPoolFmtId() &
                                 ~COLL_GET_RANGE_BITS)
                                | nId);
-
     }
-
-    pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoFmtDelete::Redo(SwUndoIter &)
+void SwUndoFmtDelete::RedoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pOld = Find(sOldName);
 
     if (pOld)
     {
-        sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-        pDoc->DoUndo(sal_False);
         Delete(pOld);
-        pDoc->DoUndo(bDoesUndo);
     }
 }
 
@@ -190,31 +172,23 @@ SwUndoRenameFmt::~SwUndoRenameFmt()
 {
 }
 
-void SwUndoRenameFmt::Undo(SwUndoIter &)
+void SwUndoRenameFmt::UndoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pFmt = Find(sNewName);
 
     if (pFmt)
     {
-        sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-        pDoc->DoUndo(sal_False);
         pDoc->RenameFmt(*pFmt, sOldName, sal_True);
-        pDoc->DoUndo(bDoesUndo);
     }
 }
 
-void SwUndoRenameFmt::Redo(SwUndoIter &)
+void SwUndoRenameFmt::RedoImpl(::sw::UndoRedoContext &)
 {
     SwFmt *  pFmt = Find(sOldName);
 
     if (pFmt)
     {
-        sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-        pDoc->DoUndo(sal_False);
         pDoc->RenameFmt(*pFmt, sNewName, sal_True);
-        pDoc->DoUndo(bDoesUndo);
     }
 }
 
@@ -399,12 +373,8 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 {
 }
 
-void SwUndoNumruleCreate::Undo(SwUndoIter &)
+void SwUndoNumruleCreate::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
-
     if (! bInitialized)
     {
         aNew = *pNew;
@@ -412,16 +382,11 @@ void SwUndoNumruleCreate::Undo(SwUndoIter &)
     }
 
     pDoc->DelNumRule(aNew.GetName(), sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleCreate::Redo(SwUndoIter &)
+void SwUndoNumruleCreate::RedoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     pDoc->MakeNumRule(aNew.GetName(), &aNew, sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleCreate::GetRewriter() const
@@ -445,22 +410,14 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 {
 }
 
-void SwUndoNumruleDelete::Undo(SwUndoIter &)
+void SwUndoNumruleDelete::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     pDoc->MakeNumRule(aOld.GetName(), &aOld, sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleDelete::Redo(SwUndoIter &)
+void SwUndoNumruleDelete::RedoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     pDoc->DelNumRule(aOld.GetName(), sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleDelete::GetRewriter() const
@@ -480,22 +437,14 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 {
 }
 
-void SwUndoNumruleRename::Undo(SwUndoIter &)
+void SwUndoNumruleRename::UndoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     pDoc->RenameNumRule(aNewName, aOldName, sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
-void SwUndoNumruleRename::Redo(SwUndoIter &)
+void SwUndoNumruleRename::RedoImpl(::sw::UndoRedoContext &)
 {
-    sal_Bool bDoesUndo = pDoc->DoesUndo();
-
-    pDoc->DoUndo(sal_False);
     pDoc->RenameNumRule(aOldName, aNewName, sal_True);
-    pDoc->DoUndo(bDoesUndo);
 }
 
 SwRewriter SwUndoNumruleRename::GetRewriter() const

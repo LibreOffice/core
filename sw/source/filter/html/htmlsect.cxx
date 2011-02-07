@@ -204,7 +204,7 @@ void SwHTMLParser::NewDivision( int nToken )
             aDelPam.SetMark();
 
             const SwStartNode *pStNd =
-                (const SwStartNode *)pDoc->GetNodes()[rCntntStIdx];
+                (const SwStartNode *) &rCntntStIdx.GetNode();
             aDelPam.GetPoint()->nNode = pStNd->EndOfSectionIndex() - 1;
 
             pDoc->DelFullPara( aDelPam );
@@ -261,7 +261,7 @@ void SwHTMLParser::NewDivision( int nToken )
         if( !bAppended )
         {
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
-            if( (pDoc->GetNodes()[aPrvNdIdx])->IsSectionNode() )
+            if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTxtNode();
                 bAppended = sal_True;
@@ -350,8 +350,7 @@ void SwHTMLParser::NewDivision( int nToken )
         }
 
         SwTxtNode* pOldTxtNd =
-            bAppended ? 0 : pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                                ->GetTxtNode();
+            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
         pPam->Move( fnMoveBackward );
 
@@ -438,7 +437,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     sal_uLong nPrvNxtIdx;
     if( bHeader )
     {
-        nPrvNxtIdx = pDoc->GetNodes()[rCntntStIdx]->EndOfSectionIndex()-1;
+        nPrvNxtIdx = rCntntStIdx.GetNode().EndOfSectionIndex()-1;
     }
     else
     {
@@ -689,7 +688,7 @@ void SwHTMLParser::NewMultiCol()
             // node must be inserted. Otherwise, the new section will be
             // inserted in front of the old one.
             SwNodeIndex aPrvNdIdx( pPam->GetPoint()->nNode, -1 );
-            if( (pDoc->GetNodes()[aPrvNdIdx])->IsSectionNode() )
+            if (aPrvNdIdx.GetNode().IsSectionNode())
             {
                 AppendTxtNode();
                 bAppended = sal_True;
@@ -745,8 +744,7 @@ void SwHTMLParser::NewMultiCol()
         }
 
         SwTxtNode* pOldTxtNd =
-            bAppended ? 0 : pDoc->GetNodes()[pPam->GetPoint()->nNode]
-                                ->GetTxtNode();
+            (bAppended) ? 0 : pPam->GetPoint()->nNode.GetNode().GetTxtNode();
 
         pPam->Move( fnMoveBackward );
 

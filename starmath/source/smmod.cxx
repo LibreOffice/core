@@ -352,6 +352,7 @@ SfxItemSet*  SmModule::CreateItemSet( sal_uInt16 nId )
                              SID_PRINTTEXT,         SID_PRINTTEXT,
                              SID_PRINTFRAME,        SID_PRINTFRAME,
                              SID_NO_RIGHT_SPACES,   SID_NO_RIGHT_SPACES,
+                             SID_SAVE_ONLY_USED_SYMBOLS, SID_SAVE_ONLY_USED_SYMBOLS,
                              0 );
 
             GetConfig()->ConfigToItemSet(*pRet);

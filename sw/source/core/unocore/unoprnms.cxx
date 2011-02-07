@@ -779,6 +779,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0737 UNO_NAME_DESCRIPTION */         {MAP_CHAR_LEN("Description")},
 /* 0738 UNO_NAME_META */        {MAP_CHAR_LEN("InContentMetadata")},
 /* 0739 UNO_NAME_NESTED_TEXT_CONTENT */ {MAP_CHAR_LEN("NestedTextContent")},
+/* 0740 UNO_NAME_EMBEDDED_OBJECT */ {MAP_CHAR_LEN("EmbeddedObject")},
 };
 
 const SwPropNameLen& SwGetPropName( sal_uInt16 nId )

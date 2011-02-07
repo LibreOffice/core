@@ -73,7 +73,6 @@ class SwFmtRefMark;
 class SwNumRule;        // Numerierung
 //class SwNodeNum;      // Numerierung
 
-class SwUndoIds;        // fuer Undo
 class SwTxtFmtColl;
 class SwGrfNode;
 class SwFlyFrmFmt;
@@ -121,6 +120,10 @@ typedef std::vector<SpellPortion> SpellPortions;
 
 namespace sfx2{
 class LinkManager;
+}
+
+namespace sw {
+    class UndoRedoContext;
 }
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
@@ -533,35 +536,22 @@ public:
     SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
-    // liefert die Id der letzten undofaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit User-UndoIds
-    SwUndoId GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
-    String GetUndoIdsStr( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
-        // abfragen/setzen der Anzahl von wiederherstellbaren Undo-Actions
-    static sal_uInt16 GetUndoActionCount();
-    static void SetUndoActionCount( sal_uInt16 nNew );
+    bool     GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                             SwUndoId *const o_pId) const;
+    bool     GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
 
-    // Redo
-    // liefert die Id der letzten Redofaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit RedoIds
-    SwUndoId GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
-    String GetRedoIdsStr( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
+    /// is it forbidden to modify cursors via API calls?
+    bool CursorsLocked() const;
+    /// set selections to those contained in the UndoRedoContext
+    /// should only be called by sw::UndoManager!
+    void HandleUndoRedoContext(::sw::UndoRedoContext & rContext);
 
-    // Repeat
-    // liefert die Id der letzten Repeatfaehigen Aktion zurueck
-    // fuellt ggf. VARARR mit RedoIds
-    SwUndoId GetRepeatIds( String* pRepeatStr = 0, SwUndoIds *pRedoIds = 0) const;
-    String GetRepeatIdsStr( String* pRepeatStr = 0,
-                            SwUndoIds *pRedoIds = 0) const;
+    bool Undo(sal_uInt16 const nCount = 1);
+    bool Redo(sal_uInt16 const nCount = 1);
+    bool Repeat(sal_uInt16 const nCount);
 
-    // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
-    // mit KillPaMs, ClearMark
-    sal_Bool Undo(SwUndoId nUndoId = UNDO_EMPTY, sal_uInt16 nCnt = 1 );
-    // wiederholt
-    sal_uInt16 Repeat( sal_uInt16 nCount );
-    // wiederholt
-    sal_uInt16 Redo( sal_uInt16 nCnt = 1 );
     // fuer alle Sichten auf dieses Dokument
     void StartAllAction();
     void EndAllAction();

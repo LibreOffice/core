@@ -49,18 +49,13 @@
 #include <view.hxx>
 #include <glshell.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <glosdoc.hxx>
 #include <shellio.hxx>
 #include <initui.hxx>                   // fuer ::GetGlossaries()
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _SWERROR_H
 #include <swerror.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
 
 
 #define SwWebGlosDocShell
@@ -311,8 +306,9 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         aDocTitle += ' ';
         aDocTitle += sLongName;
 
-        sal_Bool bDoesUndo = xDocSh->GetDoc()->DoesUndo();
-        xDocSh->GetDoc()->DoUndo( sal_False );
+        bool const bDoesUndo =
+            xDocSh->GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+        xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( false );
 
         xDocSh->GetWrtShell()->InsertGlossary( *pGroup, rShortName );
         if( !xDocSh->GetDoc()->getPrinter( false ) )
@@ -340,7 +336,7 @@ SwDocShellRef SwGlossaries::EditGroupDoc( const String& rGroup, const String& rS
         catch( uno::Exception& )
         {}
 
-        xDocSh->GetDoc()->DoUndo( bDoesUndo );
+        xDocSh->GetDoc()->GetIDocumentUndoRedo().DoUndo( bDoesUndo );
         xDocSh->GetDoc()->ResetModified();
         if ( bShow )
             pFrame->GetFrame().Appear();

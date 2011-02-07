@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoSplitMove.hxx>
 
 #include "doc.hxx"
 #include "pam.hxx"
@@ -37,13 +38,11 @@
 #include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 #include "rolbck.hxx"
 #include "redline.hxx"
 #include "docary.hxx"
-
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
+#include <IShellCursorSupplier.hxx>
 
 
 //------------------------------------------------------------------
@@ -57,8 +56,8 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         nCntnt( rPos.nContent.GetIndex() ),
         bTblFlag( sal_False ), bChkTblStt( bChkTable )
 {
-    SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "nur beim TextNode rufen!" );
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
+    OSL_ENSURE(pTxtNd, "SwUndoSplitNode: TextNode expected!");
     if( pTxtNd->GetpSwpHints() )
     {
         pHistory = new SwHistory;
@@ -75,21 +74,16 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
     }
 }
 
-
-
-
 SwUndoSplitNode::~SwUndoSplitNode()
 {
     delete pHistory;
     delete pRedlData;
 }
 
-
-
-void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
+void SwUndoSplitNode::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc* pDoc = &rUndoIter.GetDoc();
-    SwPaM& rPam = *rUndoIter.pAktPam;
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.DeleteMark();
     if( bTblFlag )
     {
@@ -163,23 +157,13 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
     rPam.GetPoint()->nContent.Assign( rPam.GetCntntNode(), nCntnt );
 }
 
-
-void SwUndoSplitNode::Repeat( SwUndoIter& rUndoIter )
+void SwUndoSplitNode::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    if( UNDO_SPLITNODE == rUndoIter.GetLastUndoId() )
-        return;
-    rUndoIter.GetDoc().SplitNode( *rUndoIter.pAktPam->GetPoint(), bChkTblStt );
-    rUndoIter.pLastUndoObj = this;
-}
-
-
-void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
-{
-    SwPaM& rPam = *rUndoIter.pAktPam;
-    sal_uLong nOldNode = rPam.GetPoint()->nNode.GetIndex();
+    SwPaM & rPam( rContext.GetCursorSupplier().CreateNewShellCursor() );
     rPam.GetPoint()->nNode = nNode;
     SwTxtNode * pTNd = rPam.GetNode()->GetTxtNode();
-    if( pTNd )              // sollte eigentlich immer ein TextNode sein !!
+    OSL_ENSURE(pTNd, "SwUndoSplitNode::RedoImpl(): SwTxtNode expected");
+    if (pTNd)
     {
         rPam.GetPoint()->nContent.Assign( pTNd, nCntnt );
 
@@ -210,7 +194,11 @@ void SwUndoSplitNode::Redo( SwUndoIter& rUndoIter )
             rPam.DeleteMark();
         }
     }
-    else
-        rPam.GetPoint()->nNode = nOldNode;
+}
+
+void SwUndoSplitNode::RepeatImpl(::sw::RepeatContext & rContext)
+{
+    rContext.GetDoc().SplitNode(
+        *rContext.GetRepeatPaM().GetPoint(), bChkTblStt );
 }
 

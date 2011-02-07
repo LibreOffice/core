@@ -553,7 +553,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             case SID_UNDO:
             case SID_REDO:
             {
-                SfxUndoManager& rMgr = pTextView->GetTextEngine()->GetUndoManager();
+                ::svl::IUndoManager& rMgr = pTextView->GetTextEngine()->GetUndoManager();
                 sal_uInt16 nCount = 0;
                 if(nWhich == SID_UNDO)
                 {

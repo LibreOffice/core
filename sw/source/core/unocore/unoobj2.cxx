@@ -37,6 +37,7 @@
 #include <bookmrk.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <unocrsr.hxx>
@@ -357,7 +358,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     UnoActionContext aAction(pDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->StartUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         SwPaM *pCurrent = &rPam;
         do
@@ -371,7 +372,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
             pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
         } while (pCurrent != &rPam);
 
-        pDoc->EndUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -923,7 +924,7 @@ throw (uno::RuntimeException)
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.StartUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
         if (aCursor.HasMark())
         {
             m_pImpl->m_rDoc.DeleteAndJoin(aCursor);
@@ -938,7 +939,7 @@ throw (uno::RuntimeException)
             aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
         }
         SetPositions(aCursor);
-        m_pImpl->m_rDoc.EndUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     }
 }
 
@@ -1794,7 +1795,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     // Start/EndAction
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    pDoc->StartUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
     if (rCursor.HasMark())
     {
         pDoc->DeleteAndJoin(rCursor);
@@ -1809,7 +1810,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         SwUnoCursorHelper::SelectPam(rCursor, true);
         rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
     }
-    pDoc->EndUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
 /******************************************************************

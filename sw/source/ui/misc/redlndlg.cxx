@@ -37,9 +37,7 @@
 #include <redline.hxx>
 #include <tools/datetime.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVSTDARR_HXX
 #include <svl/svstdarr.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -47,9 +45,7 @@
 #include <svx/postattr.hxx>
 #include <swtypes.hxx>
 #include <wrtsh.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
 #include <swmodule.hxx>
 #ifndef _REDLNDLG_HXX
 #define _REDLNACCEPTDLG
@@ -58,26 +54,15 @@
 #include <swwait.hxx>
 #include <uitool.hxx>
 
-#ifndef _HELPID_H
 #include <helpid.h>
-#endif
-#ifndef _CMDID_H
 #include <cmdid.h>
-#endif
-#ifndef _MISC_HRC
 #include <misc.hrc>
-#endif
-#ifndef _REDLNDLG_HRC
 #include <redlndlg.hrc>
-#endif
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 
 // -> #111827#
 #include <comcore.hrc>
 #include <swundo.hxx>
-#include <undobj.hxx>
 #include <SwRewriter.hxx>
 // <- #111827#
 
@@ -975,7 +960,9 @@ void SwRedlineAcceptDlg::CallAcceptReject( sal_Bool bSelect, sal_Bool bAccept )
 
     // #111827#
     if (aRedlines.size() > 1)
-        pSh->EndUndo(bAccept? UNDO_ACCEPT_REDLINE : UNDO_REJECT_REDLINE);
+    {
+        pSh->EndUndo();
+    }
 
     pSh->EndAction();
 
