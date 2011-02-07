@@ -40,7 +40,7 @@ namespace com { namespace sun { namespace star {
     namespace container { class XIndexContainer; }
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
@@ -124,7 +124,7 @@ public:
 
     /** Creates a new index container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >
-                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                        createIndexContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /** Inserts an object into an indexed container.
 
@@ -146,7 +146,7 @@ public:
 
     /** Creates a new name container object from scratch. */
     static ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                        createNameContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
     /** Returns a name that is not used in the passed name container.
 

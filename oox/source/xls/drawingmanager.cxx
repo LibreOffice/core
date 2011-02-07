@@ -1374,8 +1374,7 @@ Reference< XShape > BiffDrawingBase::createAndInsertXShape( const OUString& rSer
     Reference< XShape > xShape;
     if( (rService.getLength() > 0) && rxShapes.is() ) try
     {
-        Reference< XMultiServiceFactory > xFactory( getDocumentFactory(), UNO_SET_THROW );
-        xShape.set( xFactory->createInstance( rService ), UNO_QUERY_THROW );
+        xShape.set( getBaseFilter().getModelFactory()->createInstance( rService ), UNO_QUERY_THROW );
         // insert shape into passed shape collection (maybe drawpage or group shape)
         rxShapes->add( xShape );
         xShape->setPosition( Point( rShapeRect.X, rShapeRect.Y ) );

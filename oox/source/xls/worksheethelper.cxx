@@ -681,7 +681,7 @@ Reference< XSheetCellRanges > WorksheetData::getCellRangeList( const ApiCellRang
     Reference< XSheetCellRanges > xRanges;
     if( mxSheet.is() && !rRanges.empty() ) try
     {
-        xRanges.set( getDocumentFactory()->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
+        xRanges.set( getBaseFilter().getModelFactory()->createInstance( maSheetCellRanges ), UNO_QUERY_THROW );
         Reference< XSheetCellRangeContainer > xRangeCont( xRanges, UNO_QUERY_THROW );
         xRangeCont->addRangeAddresses( ContainerHelper::vectorToSequence( rRanges ), sal_False );
     }
@@ -1359,7 +1359,7 @@ void WorksheetData::insertHyperlink( const CellAddress& rAddress, const OUString
             if( xText.is() )
             {
                 // create a URL field object and set its properties
-                Reference< XTextContent > xUrlField( getDocumentFactory()->createInstance( maUrlTextField ), UNO_QUERY );
+                Reference< XTextContent > xUrlField( getBaseFilter().getModelFactory()->createInstance( maUrlTextField ), UNO_QUERY );
                 OSL_ENSURE( xUrlField.is(), "WorksheetData::insertHyperlink - cannot create text field" );
                 if( xUrlField.is() )
                 {

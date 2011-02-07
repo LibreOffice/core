@@ -577,7 +577,7 @@ class OpCodeProvider : public FunctionProvider // not derived from WorkbookHelpe
 {
 public:
     explicit            OpCodeProvider(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             FilterType eFilter, BiffType eBiff, bool bImportFilter );
     virtual             ~OpCodeProvider();
 
@@ -604,7 +604,7 @@ class ApiParserWrapper : public OpCodeProvider
 {
 public:
     explicit            ApiParserWrapper(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             const OpCodeProvider& rOpCodeProv );
 
     /** Returns read/write access to the formula parser property set. */

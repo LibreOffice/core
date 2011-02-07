@@ -133,9 +133,6 @@ public:
 
     /** Returns the base filter object (base class of all filters). */
     ::oox::core::FilterBase& getBaseFilter() const;
-    /** Returns a reference to the global service factory. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        getGlobalFactory() const;
     /** Returns the file type of the current filter. */
     FilterType          getFilterType() const;
     /** Returns the filter progress bar. */
@@ -157,9 +154,6 @@ public:
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                         getDocument() const;
-    /** Returns a reference to the service factory of the spreadsheet document model. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        getDocumentFactory() const;
 
     /** Returns a reference to the specified spreadsheet in the document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet >

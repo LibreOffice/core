@@ -46,10 +46,10 @@ class OOXMLFormulaPrinterImpl;
 typedef ::cppu::WeakImplHelper3<
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::lang::XInitialization,
-    ::com::sun::star::sheet::XFilterFormulaParser > OOXMLFormulaParserBase;
+    ::com::sun::star::sheet::XFilterFormulaParser > OOXMLFormulaParser_BASE;
 
 /** OOXML formula parser/compiler service for usage in ODF filters. */
-class OOXMLFormulaParser : public OOXMLFormulaParserBase
+class OOXMLFormulaParser : public OOXMLFormulaParser_BASE
 {
 public:
     explicit            OOXMLFormulaParser();

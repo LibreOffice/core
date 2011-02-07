@@ -595,11 +595,6 @@ FilterBase& WorkbookHelper::getBaseFilter() const
     return mrBookData.getBaseFilter();
 }
 
-Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
-{
-    return mrBookData.getBaseFilter().getServiceFactory();
-}
-
 FilterType WorkbookHelper::getFilterType() const
 {
     return mrBookData.getFilterType();
@@ -664,11 +659,6 @@ void WorkbookHelper::finalizeWorkbookImport()
 Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 {
     return mrBookData.getDocument();
-}
-
-Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
-{
-    return mrBookData.getBaseFilter().getModelFactory();
 }
 
 Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const

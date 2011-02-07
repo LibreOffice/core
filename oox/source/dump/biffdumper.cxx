@@ -166,7 +166,7 @@ void BiffCtlsStreamObject::implDump()
         {
             IndentGuard aIndGuard( mxOut );
             mxStrm->seek( mnStartPos );
-            RelativeInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, mnLength ) );
+            BinaryInputStreamRef xRelStrm( new RelativeInputStream( *mxStrm, mnLength ) );
             FormControlStreamObject( *this, xRelStrm ).dump();
         }
         writeEmptyItem( "CTLS-END" );
@@ -356,7 +356,7 @@ bool BiffObjectBase::implStartRecord( BinaryInputStream&, sal_Int64& ornRecPos, 
         break;
     }
 
-    ornRecSize = mxBiffStrm->getLength();
+    ornRecSize = mxBiffStrm->size();
     return bValid;
 }
 
@@ -810,7 +810,7 @@ void FormulaObject::implDump()
     if( mnSize == 0 ) return;
 
     sal_Int64 nStartPos = mxStrm->tell();
-    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->getLength() );
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, mxStrm->size() );
 
     bool bValid = mxTokens.get();
     mxStack.reset( new FormulaStack );
@@ -1603,7 +1603,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 {
     BiffInputStream& rStrm = getBiffStream();
     sal_uInt16 nRecId = rStrm.getRecId();
-    sal_Int64 nRecSize = rStrm.getLength();
+    sal_Int64 nRecSize = rStrm.size();
     BiffType eBiff = getBiff();
 
     switch( nRecId )
@@ -4524,7 +4524,7 @@ RootStorageObject::RootStorageObject( const DumperBase& rParent )
     addPreferredStream( "Workbook" );
 }
 
-void RootStorageObject::implDumpStream( const BinaryInputStreamRef& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
+void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( (rStrgPath.getLength() == 0) && (rStrmName.equalsAscii( "Book" ) || rStrmName.equalsAscii( "Workbook" )) )
         WorkbookStreamObject( *this, rxStrm, rSysFileName ).dump();
@@ -4562,13 +4562,13 @@ Dumper::Dumper( const FilterBase& rFilter )
     DumperBase::construct( xCfg );
 }
 
-Dumper::Dumper( const Reference< XMultiServiceFactory >& rxFactory, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
+Dumper::Dumper( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm, const OUString& rSysFileName )
 {
-    if( rxFactory.is() && rxInStrm.is() )
+    if( rxContext.is() && rxInStrm.is() )
     {
-        StorageRef xStrg( new ::oox::ole::OleStorage( rxFactory, rxInStrm, true ) );
+        StorageRef xStrg( new ::oox::ole::OleStorage( rxContext, rxInStrm, true ) );
         MediaDescriptor aMediaDesc;
-        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxFactory, xStrg, rSysFileName, aMediaDesc ) );
+        ConfigRef xCfg( new Config( DUMP_BIFF_CONFIG_ENVVAR, rxContext, xStrg, rSysFileName, aMediaDesc ) );
         DumperBase::construct( xCfg );
     }
 }

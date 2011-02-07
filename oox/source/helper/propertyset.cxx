@@ -48,6 +48,26 @@ void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
 {
     mxPropSet = rxPropSet;
     mxMultiPropSet.set( mxPropSet, UNO_QUERY );
+    if( mxPropSet.is() ) try
+    {
+        mxPropSetInfo = mxPropSet->getPropertySetInfo();
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+bool PropertySet::hasProperty( sal_Int32 nPropId ) const
+{
+    if( mxPropSetInfo.is() ) try
+    {
+        const OUString& rPropName = PropertyMap::getPropertyName( nPropId );
+        return mxPropSetInfo->hasPropertyByName( rPropName );
+    }
+    catch( Exception& )
+    {
+    }
+    return false;
 }
 
 // Get properties -------------------------------------------------------------

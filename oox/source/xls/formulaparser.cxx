@@ -1313,7 +1313,7 @@ private:
 
 OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
     FormulaParserImpl( rParent ),
-    maApiParser( rParent.getDocumentFactory(), rParent ),
+    maApiParser( rParent.getBaseFilter().getModelFactory(), rParent ),
     mnAddDataPos( 0 ),
     mbNeedExtRefs( true )
 {

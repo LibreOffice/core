@@ -31,7 +31,7 @@
 #include "oox/helper/storagebase.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox {
@@ -43,11 +43,11 @@ class ZipStorage : public StorageBase
 {
 public:
     explicit            ZipStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxInStream );
 
     explicit            ZipStorage(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& rxStream );
 
     virtual             ~ZipStorage();

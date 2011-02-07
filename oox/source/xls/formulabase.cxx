@@ -1025,7 +1025,7 @@ struct OpCodeProviderImpl : public ApiOpCodes
 
     explicit            OpCodeProviderImpl(
                             const FunctionInfoVector& rFuncInfos,
-                            const Reference< XMultiServiceFactory >& rxFactory );
+                            const Reference< XMultiServiceFactory >& rxModelFactory );
 
 private:
     typedef ::std::map< OUString, ApiToken >    ApiTokenMap;
@@ -1047,11 +1047,11 @@ private:
 // ----------------------------------------------------------------------------
 
 OpCodeProviderImpl::OpCodeProviderImpl( const FunctionInfoVector& rFuncInfos,
-        const Reference< XMultiServiceFactory >& rxFactory )
+        const Reference< XMultiServiceFactory >& rxModelFactory )
 {
-    if( rxFactory.is() ) try
+    if( rxModelFactory.is() ) try
     {
-        Reference< XFormulaOpCodeMapper > xMapper( rxFactory->createInstance(
+        Reference< XFormulaOpCodeMapper > xMapper( rxModelFactory->createInstance(
             CREATE_OUSTRING( "com.sun.star.sheet.FormulaOpCodeMapper" ) ), UNO_QUERY_THROW );
 
         // op-codes provided as attributes
@@ -1297,10 +1297,10 @@ bool OpCodeProviderImpl::initFuncOpCodes( const ApiTokenMap& rIntFuncTokenMap, c
 
 // ----------------------------------------------------------------------------
 
-OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxFactory,
+OpCodeProvider::OpCodeProvider( const Reference< XMultiServiceFactory >& rxModelFactory,
         FilterType eFilter, BiffType eBiff, bool bImportFilter ) :
     FunctionProvider( eFilter, eBiff, bImportFilter ),
-    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxFactory ) )
+    mxOpCodeImpl( new OpCodeProviderImpl( getFuncs(), rxModelFactory ) )
 {
 }
 
@@ -1335,12 +1335,12 @@ Sequence< FormulaOpCodeMapEntry > OpCodeProvider::getOoxParserMap() const
 // API formula parser wrapper =================================================
 
 ApiParserWrapper::ApiParserWrapper(
-        const Reference< XMultiServiceFactory >& rxFactory, const OpCodeProvider& rOpCodeProv ) :
+        const Reference< XMultiServiceFactory >& rxModelFactory, const OpCodeProvider& rOpCodeProv ) :
     OpCodeProvider( rOpCodeProv )
 {
-    if( rxFactory.is() ) try
+    if( rxModelFactory.is() ) try
     {
-        mxParser.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
+        mxParser.set( rxModelFactory->createInstance( CREATE_OUSTRING( "com.sun.star.sheet.FormulaParser" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -1483,7 +1483,7 @@ TokenToRangeListState lclProcessClose( sal_Int32& ornParenLevel )
 // ----------------------------------------------------------------------------
 
 FormulaProcessorBase::FormulaProcessorBase( const WorkbookHelper& rHelper ) :
-    OpCodeProvider( rHelper.getDocumentFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
+    OpCodeProvider( rHelper.getBaseFilter().getModelFactory(), rHelper.getFilterType(), rHelper.getBiff(), rHelper.getBaseFilter().isImportFilter() ),
     ApiOpCodes( getOpCodes() ),
     WorkbookHelper( rHelper )
 {

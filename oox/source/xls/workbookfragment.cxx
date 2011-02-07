@@ -289,7 +289,7 @@ void WorkbookFragment::finalizeImport()
     {
         Reference< XInputStream > xInStrm = getBaseFilter().openInputStream( aVbaFragmentPath );
         if( xInStrm.is() )
-            setVbaProjectStorage( StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), xInStrm, false ) ) );
+            setVbaProjectStorage( StorageRef( new ::oox::ole::OleStorage( getBaseFilter().getComponentContext(), xInStrm, false ) ) );
     }
 
     // final conversions, e.g. calculation settings and view settings

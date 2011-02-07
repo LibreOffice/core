@@ -274,9 +274,10 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
             xShape = implConvertAndInsert( rxShapes, aShapeRect );
             if( xShape.is() )
             {
-                // set shape name (imported or generated)
+                // set imported or generated shape name (not supported by form controls)
                 PropertySet aShapeProp( xShape );
-                aShapeProp.setProperty( PROP_Name, getShapeName() );
+                if( aShapeProp.hasProperty( PROP_Name ) )
+                    aShapeProp.setProperty( PROP_Name, getShapeName() );
 
                 /*  Notify the drawing that a new shape has been inserted. For
                     convenience, pass the rectangle that contains position and

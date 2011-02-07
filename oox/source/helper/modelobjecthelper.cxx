@@ -48,12 +48,12 @@ using ::rtl::OUString;
 
 // ============================================================================
 
-ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxFactory, const OUString& rServiceName ) :
-    mxFactory( rxFactory ),
+ObjectContainer::ObjectContainer( const Reference< XMultiServiceFactory >& rxModelFactory, const OUString& rServiceName ) :
+    mxModelFactory( rxModelFactory ),
     maServiceName( rServiceName ),
     mnIndex( 0 )
 {
-    OSL_ENSURE( mxFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
+    OSL_ENSURE( mxModelFactory.is(), "ObjectContainer::ObjectContainer - missing service factory" );
 }
 
 ObjectContainer::~ObjectContainer()
@@ -94,9 +94,10 @@ OUString ObjectContainer::insertObject( const OUString& rObjName, const Any& rOb
 
 void ObjectContainer::createContainer() const
 {
-    if( !mxContainer.is() && mxFactory.is() ) try
+    if( !mxContainer.is() && mxModelFactory.is() ) try
     {
-        mxContainer.set( mxFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+        mxContainer.set( mxModelFactory->createInstance( maServiceName ), UNO_QUERY_THROW );
+        mxModelFactory.clear();
     }
     catch( Exception& )
     {

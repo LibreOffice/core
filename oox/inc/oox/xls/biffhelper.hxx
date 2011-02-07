@@ -621,7 +621,7 @@ public:
     // BIFF12 import ----------------------------------------------------------
 
     /** Reads a BIFF12 string with leading 16-bit or 32-bit length field. */
-    static ::rtl::OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true );
+    static ::rtl::OUString readString( SequenceInputStream& rStrm, bool b32BitLen = true, bool bAllowNulChars = false );
 
     // BIFF2-BIFF8 import -----------------------------------------------------
 

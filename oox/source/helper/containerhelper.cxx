@@ -30,6 +30,7 @@
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/helper.hxx"
 
@@ -46,12 +47,13 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XMultiServiceFactory >& rxFactory )
+Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Reference< XComponentContext >& rxContext )
 {
     Reference< XIndexContainer > xContainer;
-    if( rxFactory.is() ) try
+    if( rxContext.is() ) try
     {
-        xContainer.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.IndexedPropertyValues" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.IndexedPropertyValues" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -78,12 +80,13 @@ bool ContainerHelper::insertByIndex(
     return bRet;
 }
 
-Reference< XNameContainer > ContainerHelper::createNameContainer( const Reference< XMultiServiceFactory >& rxFactory )
+Reference< XNameContainer > ContainerHelper::createNameContainer( const Reference< XComponentContext >& rxContext )
 {
     Reference< XNameContainer > xContainer;
-    if( rxFactory.is() ) try
+    if( rxContext.is() ) try
     {
-        xContainer.set( rxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.NamedPropertyValues" ) ), UNO_QUERY_THROW );
+        Reference< XMultiServiceFactory > xFactory( rxContext->getServiceManager(), UNO_QUERY_THROW );
+        xContainer.set( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.document.NamedPropertyValues" ) ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {

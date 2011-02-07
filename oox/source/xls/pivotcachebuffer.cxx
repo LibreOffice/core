@@ -737,7 +737,7 @@ void PivotCacheField::importPCDFRangePr( BiffInputStream& rStrm )
 
 void PivotCacheField::importPCDFDiscretePr( BiffInputStream& rStrm )
 {
-    sal_Int32 nCount = static_cast< sal_Int32 >( rStrm.getLength() / 2 );
+    sal_Int32 nCount = static_cast< sal_Int32 >( rStrm.size() / 2 );
     for( sal_Int32 nIndex = 0; !rStrm.isEof() && (nIndex < nCount); ++nIndex )
         maDiscreteItems.push_back( rStrm.readuInt16() );
 }

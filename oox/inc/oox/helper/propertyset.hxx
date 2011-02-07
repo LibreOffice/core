@@ -28,8 +28,9 @@
 #ifndef OOX_HELPER_PROPERTYSET_HXX
 #define OOX_HELPER_PROPERTYSET_HXX
 
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include "oox/token/properties.hxx"
 
 namespace oox {
@@ -81,6 +82,9 @@ public:
     /** Returns the contained XPropertySet interface. */
     inline ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getXPropertySet() const { return mxPropSet; }
+
+    /** Returns true, if the specified property is supported by the property set. */
+    bool                hasProperty( sal_Int32 nPropId ) const;
 
     // Get properties ---------------------------------------------------------
 
@@ -141,6 +145,8 @@ private:
                         mxPropSet;          /// The mandatory property set interface.
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
                         mxMultiPropSet;     /// The optional multi property set interface.
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
+                        mxPropSetInfo;      /// Property information.
 };
 
 // ============================================================================

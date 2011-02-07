@@ -48,7 +48,7 @@ class ObjectContainer
 {
 public:
     explicit            ObjectContainer(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
                             const ::rtl::OUString& rServiceName );
                         ~ObjectContainer();
 
@@ -68,8 +68,8 @@ private:
     void                createContainer() const;
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxFactory;              /// Factory to create the container.
+    mutable ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
+                        mxModelFactory;         /// Factory to create the container.
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxContainer;            /// Container for the objects.
     ::rtl::OUString     maServiceName;          /// Service name to create the container.
