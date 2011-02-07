@@ -653,6 +653,51 @@ void ToolbarMenu::initWindow()
 
 // --------------------------------------------------------------------
 
+static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
+{
+    rMaxWidth = rCheckHeight = rRadioHeight = 0;
+
+    ImplControlValue aVal;
+    Rectangle aNativeBounds;
+    Rectangle aNativeContent;
+    Point tmp( 0, 0 );
+    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
+    {
+        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                          ControlPart(PART_MENU_ITEM_CHECK_MARK),
+                                          aCtrlRegion,
+                                          ControlState(CTRL_STATE_ENABLED),
+                                          aVal,
+                                          OUString(),
+                                          aNativeBounds,
+                                          aNativeContent )
+        )
+        {
+            rCheckHeight = aNativeBounds.GetHeight();
+            rMaxWidth = aNativeContent.GetWidth();
+        }
+    }
+    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
+    {
+        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
+                                          ControlPart(PART_MENU_ITEM_RADIO_MARK),
+                                          aCtrlRegion,
+                                          ControlState(CTRL_STATE_ENABLED),
+                                          aVal,
+                                          OUString(),
+                                          aNativeBounds,
+                                          aNativeContent )
+        )
+        {
+            rRadioHeight = aNativeBounds.GetHeight();
+            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
+        }
+    }
+    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
+}
+
+
 Size ToolbarMenu::implCalcSize()
 {
     const long nFontHeight = GetTextHeight();
@@ -724,6 +769,28 @@ Size ToolbarMenu::implCalcSize()
                 pEntry->maSize.Height() = aControlSize.Height() + 1;
             }
 
+            if( pEntry->HasCheck() && !pEntry->mbHasImage )
+            {
+                if( this->IsNativeControlSupported( CTRL_MENU_POPUP,
+                                                     (pEntry->mnBits & MIB_RADIOCHECK)
+                                                     ? PART_MENU_ITEM_CHECK_MARK
+                                                     : PART_MENU_ITEM_RADIO_MARK ) )
+                {
+                    long nCheckHeight = 0, nRadioHeight = 0, nMaxCheckWidth = 0;
+                    ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
+
+                    long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
+                    nMaxTextWidth += nCtrlHeight + 1;
+                }
+                else if( pEntry->mbChecked )
+                {
+                    long nSymbolWidth = (nFontHeight*25)/40;
+                    if ( pEntry->mnBits & MIB_RADIOCHECK )
+                        nSymbolWidth = nFontHeight/2;
+
+                    nMaxTextWidth += nSymbolWidth;
+                }
+            }
         }
     }
 
@@ -1328,50 +1395,6 @@ static void ImplPaintCheckBackground( Window* i_pWindow, const Rectangle& i_rRec
         Color aColor( i_bHighlight ? rSettings.GetMenuHighlightTextColor() : rSettings.GetHighlightColor() );
         i_pWindow->DrawSelectionBackground( i_rRect, 0, i_bHighlight, TRUE, FALSE, 2, NULL, &aColor );
     }
-}
-
-static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, long& rRadioHeight, long &rMaxWidth )
-{
-    rMaxWidth = rCheckHeight = rRadioHeight = 0;
-
-    ImplControlValue aVal;
-    Rectangle aNativeBounds;
-    Rectangle aNativeContent;
-    Point tmp( 0, 0 );
-    Rectangle aCtrlRegion( tmp, Size( 100, 15 ) );
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_CHECK_MARK ) )
-    {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_CHECK_MARK),
-                                          aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
-        )
-        {
-            rCheckHeight = aNativeBounds.GetHeight();
-            rMaxWidth = aNativeContent.GetWidth();
-        }
-    }
-    if( pWin->IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM_RADIO_MARK ) )
-    {
-        if( pWin->GetNativeControlRegion( ControlType(CTRL_MENU_POPUP),
-                                          ControlPart(PART_MENU_ITEM_RADIO_MARK),
-                                          aCtrlRegion,
-                                          ControlState(CTRL_STATE_ENABLED),
-                                          aVal,
-                                          OUString(),
-                                          aNativeBounds,
-                                          aNativeContent )
-        )
-        {
-            rRadioHeight = aNativeBounds.GetHeight();
-            rMaxWidth = Max (rMaxWidth, aNativeContent.GetWidth());
-        }
-    }
-    return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
 
 void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
