@@ -29,18 +29,12 @@
 #ifndef ADC_CPP_PE_ENUM_HXX
 #define ADC_CPP_PE_ENUM_HXX
 
-
-
-
 // USED SERVICES
     // BASE CLASSES
 #include "cpp_pe.hxx"
     // COMPONENTS
 #include <semantic/callf.hxx>
 #include <semantic/sub_peu.hxx>
-    // PARAMETERS
-// #include "all_toks.hxx"
-
 
 namespace cpp {
 

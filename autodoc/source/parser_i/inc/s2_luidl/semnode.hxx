@@ -29,15 +29,12 @@
 #ifndef ADC_SEMNODE_HXX
 #define ADC_SEMNODE_HXX
 
-
-
 // USED SERVICES
     // BASE CLASSES
 #include <s2_luidl/tokproct.hxx>
     // COMPONENTS
     // PARAMETERS
 #include <ary/qualiname.hxx>
-// #include <udm/ref.hxx>
 
 
 namespace ary
@@ -92,38 +89,6 @@ class SemanticNode : private TokenProcessing_Types
     TokenProcessing_Result *
                         pTokenResult;
 };
-
-
-/*
-class Trying_PE
-{
-  public:
-   virtual              ~Trying_PE() {}
-
-  protected:
-                        Trying_PE();
-
-    virtual void        ProcessToken(
-                            const Token &       i_rToken );
-
-    void                StartTry(
-                            UnoIDL_PE &         i_rFirstTry );
-    void                Add2Try(
-                            UnoIDL_PE &         i_rTry );
-    bool                AmITrying() const;
-    UnoIDL_PE *         NextTry() const;
-    void                FinishTry();
-
-  private:
-    std::vector<UnoIDL_PE*>
-                        aTryableSubEnvironments;
-    uintt               nTryCounter;
-};
-
-*/
-
-
-// IMPLEMENTATION
 
 
 }   // namespace uidl

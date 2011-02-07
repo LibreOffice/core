@@ -29,12 +29,8 @@
 #ifndef ADC_UIDL_PE_FUNC2_HXX
 #define ADC_UIDL_PE_FUNC2_HXX
 
-
-
 // USED SERVICES
     // BASE CLASSES
-// #include <ary/idl/i_gate.hxx>
-// #include <ary/idl/ip_ce.hxx>
 #include <s2_luidl/parsenv2.hxx>
 #include <s2_luidl/pestate.hxx>
     // COMPONENTS
