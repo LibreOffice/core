@@ -29,7 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+#include "preextstl.h"
 #include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
