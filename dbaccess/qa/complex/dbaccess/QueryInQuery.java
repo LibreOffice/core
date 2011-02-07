@@ -38,37 +38,16 @@ import com.sun.star.sdbc.XStatement;
 import com.sun.star.sdbc.XResultSet;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
 public class QueryInQuery extends CRMBasedTestCase
 {
     private static final String QUERY_PRODUCTS = "query products";
-//    // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "executeSimpleSelect",
-//            "executeAliasedSelect",
-//            "checkNameCollisions",
-//            "checkCyclicReferences",
-//            "checkStatementQiQSupport"
-//        };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "QueryInQuery";
-//    }
 
     // --------------------------------------------------------------------------------------------------------
+    @Override
     protected void createTestCase()
     {
         try
@@ -113,7 +92,8 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** executes a SQL statement simply selecting all columns from a query
      */
-    @Test public void executeSimpleSelect() throws SQLException
+    @Test
+    public void executeSimpleSelect() throws SQLException
     {
         verifyEqualRowSetContent(
             CommandType.COMMAND, "SELECT * FROM \"query products\"",
@@ -123,7 +103,8 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test public void executeAliasedSelect() throws SQLException
+    @Test
+    public void executeAliasedSelect() throws SQLException
     {
         verifyEqualRowSetContent(
             CommandType.COMMAND, "SELECT \"PROD\".\"ID\" FROM \"query products\" AS \"PROD\"",
@@ -136,7 +117,8 @@ public class QueryInQuery extends CRMBasedTestCase
     // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test public void checkNameCollisions()
+    @Test
+    public void checkNameCollisions()
     {
         // create a query with a name which is used by a table
         boolean caughtExpected = false;
@@ -168,7 +150,8 @@ public class QueryInQuery extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void checkCyclicReferences() throws ElementExistException, WrappedTargetException, IllegalArgumentException
+    @Test
+    public void checkCyclicReferences() throws ElementExistException, WrappedTargetException, IllegalArgumentException
     {
         // some queries which create a cycle in the sub query tree
         m_database.getDatabase().getDataSource().createQuery( "orders level 1", "SELECT * FROM \"orders level 0\"" );
@@ -186,7 +169,8 @@ public class QueryInQuery extends CRMBasedTestCase
     }
 
     // --------------------------------------------------------------------------------------------------------
-    @Test public void checkStatementQiQSupport()
+    @Test
+    public void checkStatementQiQSupport()
     {
         try
         {

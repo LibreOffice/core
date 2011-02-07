@@ -67,6 +67,7 @@
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XGridColumnFactory.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/form/XReset.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -419,8 +420,146 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
-sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star::sdbc::XRowSet > & _rxForm)
+// ---------------------------------------------------------------------------------------------------------------------
+namespace
+{
+    // -----------------------------------------------------------------------------------------------------------------
+    struct SelectValueByName : public ::std::unary_function< ::rtl::OUString, Any >
+    {
+        const Any& operator()( ::rtl::OUString const& i_name ) const
+        {
+            return m_rCollection.get( i_name );
+        }
+
+        SelectValueByName( ::comphelper::NamedValueCollection const& i_collection )
+            :m_rCollection( i_collection )
+        {
+        }
+
+        ::comphelper::NamedValueCollection const&   m_rCollection;
+    };
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+void SbaTableQueryBrowser::impl_sanitizeRowSetClauses_nothrow()
+{
+    try
+    {
+        Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
+        sal_Bool bEscapeProcessing = sal_False;
+        OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        if ( !bEscapeProcessing )
+            // don't touch or interpret anything if escape processing is disabled
+            return;
+
+        Reference< XSingleSelectQueryComposer > xComposer( createParser_nothrow() );
+        if ( !xComposer.is() )
+            // can't do anything. Already reported via assertion in createParser_nothrow.
+            return;
+
+        // the tables participating in the statement
+        const Reference< XTablesSupplier > xSuppTables( xComposer, UNO_QUERY_THROW );
+        const Reference< XNameAccess > xTableNames( xSuppTables->getTables(), UNO_QUERY_THROW );
+
+        // the columns participating in the statement
+        const Reference< XColumnsSupplier > xSuppColumns( xComposer, UNO_QUERY_THROW );
+        const Reference< XNameAccess > xColumnNames( xSuppColumns->getColumns(), UNO_QUERY_THROW );
+
+        // .............................................................................................................
+        // check if the order columns apply to tables which really exist in the statement
+        const Reference< XIndexAccess > xOrderColumns( xComposer->getOrderColumns(), UNO_SET_THROW );
+        const sal_Int32 nOrderColumns( xOrderColumns->getCount() );
+        bool invalidColumn = false;
+        for ( sal_Int32 c=0; ( c < nOrderColumns ) && !invalidColumn; ++c )
+        {
+            const Reference< XPropertySet > xOrderColumn( xOrderColumns->getByIndex(c), UNO_QUERY_THROW );
+            ::rtl::OUString sTableName;
+            OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName );
+            ::rtl::OUString sColumnName;
+            OSL_VERIFY( xOrderColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName );
+
+            if ( sTableName.getLength() == 0 )
+            {
+                if ( !xColumnNames->hasByName( sColumnName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+            }
+            else
+            {
+                if ( !xTableNames->hasByName( sTableName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+
+                const Reference< XColumnsSupplier > xSuppTableColumns( xTableNames->getByName( sTableName ), UNO_QUERY_THROW );
+                const Reference< XNameAccess > xTableColumnNames( xSuppTableColumns->getColumns(), UNO_QUERY_THROW );
+                if ( !xTableColumnNames->hasByName( sColumnName ) )
+                {
+                    invalidColumn = true;
+                    break;
+                }
+            }
+        }
+
+        if ( invalidColumn )
+        {
+            // reset the complete order statement at both the row set and the parser
+            const ::rtl::OUString sEmptyOrder;
+            xRowSetProps->setPropertyValue( PROPERTY_ORDER, makeAny( sEmptyOrder ) );
+            xComposer->setOrder( sEmptyOrder );
+        }
+
+        // .............................................................................................................
+        // check if the columns participating in the filter refer to existing tables
+        // TODO: there's no API at all for this. The method which comes nearest to what we need is
+        // "getStructuredFilter", but it returns pure column names only. That is, for a statement like
+        // "SELECT * FROM <table> WHERE <other_table>.<column> = <value>", it will return "<column>". But
+        // there's no API at all to retrieve the information about  "<other_table>" - which is what would
+        // be needed here.
+        // That'd be a chance to replace getStructuredFilter with something more reasonable. This method
+        // has at least one other problem: For a clause like "<column> != <value>", it will return "<column>"
+        // as column name, "NOT_EQUAL" as operator, and "!= <value>" as value, effectively duplicating the
+        // information about the operator, and beding all clients to manually remove the "!=" from the value
+        // string.
+        // So, what really would be handy, is some
+        //   XNormalizedFilter getNormalizedFilter();
+        // with
+        //   interface XDisjunctiveFilterExpression
+        //   {
+        //     XConjunctiveFilterTerm getTerm( int index );
+        //   }
+        //   interface XConjunctiveFilterTerm
+        //   {
+        //     ComparisonPredicate getPredicate( int index );
+        //   }
+        //   struct ComparisonPredicate
+        //   {
+        //     XComparisonOperand   Lhs;
+        //     SQLFilterOperator    Operator;
+        //     XComparisonOperand   Rhs;
+        //   }
+        //   interface XComparisonOperand
+        //   {
+        //     SQLFilterOperand Type;
+        //     XPropertySet     getColumn();
+        //     string           getLiteral();
+        //     ...
+        //   }
+        //   enum SQLFilterOperand { Column, Literal, ... }
+        //
+        // ... or something like this ....
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::InitializeForm( const Reference< XPropertySet > & i_formProperties )
 {
     if(!m_pCurrentlyDisplayed)
         return sal_True;
@@ -428,49 +567,45 @@ sal_Bool SbaTableQueryBrowser::InitializeForm(const Reference< ::com::sun::star:
     // this method set all format settings from the orignal table or query
     try
     {
-        // we send all properties at once, maybe the implementation is clever enough to handle one big PropertiesChanged
-        // more effective than many small PropertyChanged ;)
-        Sequence< ::rtl::OUString> aProperties(3);
-        Sequence< Any> aValues(3);
-
         DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(m_pCurrentlyDisplayed->GetUserData());
-        OSL_ENSURE( pData, "SbaTableQueryBrowser::InitializeForm: No user data set at the currently displayed entry!" );
-        OSL_ENSURE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeForm: No table available!" );
+        ENSURE_OR_RETURN_FALSE( pData, "SbaTableQueryBrowser::InitializeForm: No user data set at the currently displayed entry!" );
+        ENSURE_OR_RETURN_FALSE( pData->xObjectProperties.is(), "SbaTableQueryBrowser::InitializeForm: No table available!" );
 
-        if ( pData->xObjectProperties.is() )
+        Reference< XPropertySetInfo > xPSI( pData->xObjectProperties->getPropertySetInfo(), UNO_SET_THROW );
+
+        ::comphelper::NamedValueCollection aPropertyValues;
+
+        const ::rtl::OUString aTransferProperties[] =
         {
-            sal_Int32 nPos = 0;
-            // is the filter intially applied ?
-            aProperties.getArray()[nPos]    = PROPERTY_APPLYFILTER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_APPLYFILTER);
-
-            // the initial filter
-            aProperties.getArray()[nPos]    = PROPERTY_FILTER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_FILTER);
-
-            if ( pData->xObjectProperties->getPropertySetInfo()->hasPropertyByName(PROPERTY_HAVING_CLAUSE) )
-            {
-                aProperties.realloc(aProperties.getLength()+1);
-                aValues.realloc(aValues.getLength()+1);
-                // the initial having clause
-                aProperties.getArray()[nPos]    = PROPERTY_HAVING_CLAUSE;
-                aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_HAVING_CLAUSE);
-            }
-
-            // the initial ordering
-            aProperties.getArray()[nPos]    = PROPERTY_ORDER;
-            aValues.getArray()[nPos++]      = pData->xObjectProperties->getPropertyValue(PROPERTY_ORDER);
-
-            Reference< XMultiPropertySet >  xFormMultiSet(_rxForm, UNO_QUERY);
-            xFormMultiSet->setPropertyValues(aProperties, aValues);
+            PROPERTY_APPLYFILTER,
+            PROPERTY_FILTER,
+            PROPERTY_HAVING_CLAUSE,
+            PROPERTY_ORDER
+        };
+        for ( size_t i=0; i < sizeof( aTransferProperties ) / sizeof( aTransferProperties[0] ); ++i )
+        {
+            if ( !xPSI->hasPropertyByName( aTransferProperties[i] ) )
+                continue;
+            aPropertyValues.put( aTransferProperties[i], pData->xObjectProperties->getPropertyValue( aTransferProperties[i] ) );
         }
+
+        const ::std::vector< ::rtl::OUString > aNames( aPropertyValues.getNames() );
+        Sequence< ::rtl::OUString > aPropNames( aNames.size() );
+        ::std::copy( aNames.begin(), aNames.end(), aPropNames.getArray() );
+
+        Sequence< Any > aPropValues( aNames.size() );
+        ::std::transform( aNames.begin(), aNames.end(), aPropValues.getArray(), SelectValueByName( aPropertyValues ) );
+
+        Reference< XMultiPropertySet > xFormMultiSet( i_formProperties, UNO_QUERY_THROW );
+        xFormMultiSet->setPropertyValues( aPropNames, aPropValues );
+
+        impl_sanitizeRowSetClauses_nothrow();
     }
-    catch(Exception&)
+    catch ( const Exception& )
     {
-        DBG_ERROR("SbaTableQueryBrowser::InitializeForm : something went wrong !");
+        DBG_UNHANDLED_EXCEPTION();
         return sal_False;
     }
-
 
     return sal_True;
 }
@@ -601,6 +736,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
                 ::std::vector< NamedValue > aInitialValues;
                 ::std::vector< ::rtl::OUString > aCopyProperties;
+                Any aDefault;
 
                 switch(nType)
                 {
@@ -617,6 +753,8 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "TriState" ) ),
                             makeAny( sal_Bool( ColumnValue::NO_NULLS != nNullable ) )
                         ) );
+                        if ( ColumnValue::NO_NULLS == nNullable )
+                            aDefault <<= (sal_Int16)STATE_NOCHECK;
                     }
                     break;
 
@@ -658,18 +796,17 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                 Reference< XPropertySetInfo > xGridColPSI( xGridCol->getPropertySetInfo(), UNO_SET_THROW );
 
                 // calculate the default
-                Any aDefault;
                 if ( xGridColPSI->hasPropertyByName( PROPERTY_CONTROLDEFAULT ) )
-                    aDefault = xColumn->getPropertyValue( PROPERTY_CONTROLDEFAULT );
-
-                // default value
-                if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
                 {
-                    if ( aDefault.hasValue() )
-                        aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
-                    else
-                        aDefault <<= ((sal_Int16)STATE_DONTKNOW);
-
+                    aDefault = xColumn->getPropertyValue( PROPERTY_CONTROLDEFAULT );
+                    // default value
+                    if ( nType == DataType::BIT || nType == DataType::BOOLEAN )
+                    {
+                        if ( aDefault.hasValue() )
+                            aDefault <<= (comphelper::getString(aDefault).toInt32() == 0) ? (sal_Int16)STATE_NOCHECK : (sal_Int16)STATE_CHECK;
+                        else
+                            aDefault <<= ((sal_Int16)STATE_DONTKNOW);
+                    }
                 }
 
                 if ( aDefault.hasValue() )
@@ -2293,76 +2430,81 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::svx::ODataAccessDescriptor& _r
 sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSourceName, const ::rtl::OUString& _rCommand,
     const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing, const SharedConnection& _rxConnection)
 {
-    Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
-    if(xProp.is())
+    try
     {
-        Reference< ::com::sun::star::form::XLoadable >  xLoadable(xProp,UNO_QUERY);
-        try
-        {
-            // the values allowing the RowSet to re-execute
-            xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
-            if(_rxConnection.is())
-                xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( _rxConnection.getTyped() ) );
+        Reference<XPropertySet> xProp( getRowSet(), UNO_QUERY_THROW );
+        Reference< XLoadable >  xLoadable( xProp, UNO_QUERY_THROW );
+        // the values allowing the RowSet to re-execute
+        xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
+        if(_rxConnection.is())
+            xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( _rxConnection.getTyped() ) );
 
-                // set this _before_ setting the connection, else the rowset would rebuild it ...
-            xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, makeAny(_nCommandType));
-            xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
-            xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+            // set this _before_ setting the connection, else the rowset would rebuild it ...
+        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, makeAny(_nCommandType));
+        xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
+        xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+        if ( m_bPreview )
+        {
+            xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));
+        }
+
+        // the formatter depends on the data source we're working on, so rebuild it here ...
+        initFormatter();
+
+        // switch the grid to design mode while loading
+        getBrowserView()->getGridControl()->setDesignMode(sal_True);
+        InitializeForm( xProp );
+
+        sal_Bool bSuccess = sal_True;
+
+        {
+            {
+                Reference< XNameContainer >  xColContainer(getFormComponent(), UNO_QUERY);
+                // first we have to clear the grid
+                clearGridColumns(xColContainer);
+            }
+            FormErrorHelper aHelper(this);
+            // load the form
+            bSuccess = reloadForm(xLoadable);
+
+            // initialize the model
+            InitializeGridModel(getFormComponent());
+
+            Any aVal = xProp->getPropertyValue(PROPERTY_ISNEW);
+            if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
+            {
+                // then set the default values and the parameters given from the parent
+                Reference< XReset> xReset(xProp, UNO_QUERY);
+                xReset->reset();
+            }
+
             if ( m_bPreview )
-            {
-                xProp->setPropertyValue(PROPERTY_FETCHDIRECTION, makeAny(FetchDirection::FORWARD));
-            }
+                initializePreviewMode();
 
-            // the formatter depends on the data source we're working on, so rebuild it here ...
-            initFormatter();
-
-            // switch the grid to design mode while loading
-            getBrowserView()->getGridControl()->setDesignMode(sal_True);
-            InitializeForm(getRowSet());
-
-            sal_Bool bSuccess = sal_True;
-
-            {
-                {
-                    Reference< XNameContainer >  xColContainer(getFormComponent(), UNO_QUERY);
-                    // first we have to clear the grid
-                    clearGridColumns(xColContainer);
-                }
-                FormErrorHelper aHelper(this);
-                // load the form
-                bSuccess = reloadForm(xLoadable);
-
-                // initialize the model
-                InitializeGridModel(getFormComponent());
-
-                if ( m_bPreview )
-                    initializePreviewMode();
-
-                LoadFinished(sal_True);
-            }
-
-            InvalidateAll();
-            return bSuccess;
+            LoadFinished(sal_True);
         }
-        catch( const SQLException& e )
-        {
-            Any aException( ::cppu::getCaughtException() );
-            showError( SQLExceptionInfo( aException ) );
-        }
-        catch( const WrappedTargetException& e )
-        {
-            SQLException aSql;
-            if  ( e.TargetException.isExtractableTo( ::cppu::UnoType< SQLException >::get() ) )
-                showError( SQLExceptionInfo( e.TargetException ) );
-            else
-            {
-                DBG_UNHANDLED_EXCEPTION();
-            }
-        }
-        catch(Exception&)
+
+        InvalidateAll();
+        return bSuccess;
+    }
+    catch( const SQLException& e )
+    {
+        Any aException( ::cppu::getCaughtException() );
+        showError( SQLExceptionInfo( aException ) );
+    }
+    catch( const WrappedTargetException& e )
+    {
+        SQLException aSql;
+        if  ( e.TargetException.isExtractableTo( ::cppu::UnoType< SQLException >::get() ) )
+            showError( SQLExceptionInfo( e.TargetException ) );
+        else
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     InvalidateAll();

@@ -145,7 +145,7 @@ Reference< XRowSet >  SbaExternalSourceBrowser::CreateForm()
 }
 
 //------------------------------------------------------------------------------
-sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XRowSet > & /*xForm*/)
+sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XPropertySet > & /*i_formProperties*/)
 {
     return sal_True;
 }

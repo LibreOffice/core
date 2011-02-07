@@ -79,7 +79,8 @@ namespace dbaccess
         OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& i_xConnection,
                       const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xComposer,
-                      const ORowSetValueVector& _aParameterValueForCache);
+                      const ORowSetValueVector& _aParameterValueForCache,
+                      sal_Int32 i_nMaxRows);
 
         // late ctor which can throw exceptions
         virtual void construct(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>& _xDriverSet,const ::rtl::OUString& i_sRowSetFilter);

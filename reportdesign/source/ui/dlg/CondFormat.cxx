@@ -465,8 +465,8 @@ namespace rptui
         short nRet = ModalDialog::Execute();
         if ( nRet == RET_OK )
         {
-            String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
-            UndoManagerListAction aListAction(*m_rController.getUndoMgr(),sUndoAction);
+            const String sUndoAction( ModuleRes( RID_STR_UNDO_CONDITIONAL_FORMATTING ) );
+            const UndoContext aUndoContext( m_rController.getUndoManager(), sUndoAction );
             try
             {
                 sal_Int32 j(0), i(0);;

@@ -97,9 +97,12 @@ namespace dbaui
         ,m_pPrimaryKeySupport(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
+        ,m_pMaxRowScanLabel( NULL )
+        ,m_pMaxRowScan( NULL )
         ,m_aControlDependencies()
         ,m_aBooleanSettings()
         ,m_bHasBooleanComparisonMode( _rDSMeta.getFeatureSet().has( DSID_BOOLEANCOMPARISON ) )
+        ,m_bHasMaxRowScan( _rDSMeta.getFeatureSet().has( DSID_MAX_ROW_SCAN ) )
     {
         impl_initBooleanSettings();
 
@@ -164,6 +167,21 @@ namespace dbaui
             m_pBooleanComparisonModeLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
             m_pBooleanComparisonMode->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
         }
+        // create the controls for the max row scan
+        if ( m_bHasMaxRowScan )
+        {
+            m_pMaxRowScanLabel = new FixedText( this, ModuleRes( FT_MAXROWSCAN ) );
+            m_pMaxRowScan = new NumericField( this, ModuleRes( NF_MAXROWSCAN ) );
+            m_pMaxRowScan->SetModifyHdl(getControlModifiedLink());
+            m_pMaxRowScan->SetUseThousandSep(sal_False);
+
+            Point aLabelPos( m_pMaxRowScanLabel->GetPosPixel() );
+            Point aControlPos( m_pMaxRowScan->GetPosPixel() );
+            long nMoveUp = aControlPos.Y() - aPos.Y();
+
+            m_pMaxRowScanLabel->SetPosPixel( Point( aLabelPos.X(), aLabelPos.Y() - nMoveUp ) );
+            m_pMaxRowScan->SetPosPixel( Point( aControlPos.X(), aControlPos.Y() - nMoveUp ) );
+        }
 
         FreeResource();
     }
@@ -190,6 +208,8 @@ namespace dbaui
         DELETEZ( m_pPrimaryKeySupport );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
+        DELETEZ( m_pMaxRowScanLabel );
+        DELETEZ( m_pMaxRowScan );
     }
 
     // -----------------------------------------------------------------------
@@ -230,6 +250,10 @@ namespace dbaui
         {
             _rControlList.push_back( new ODisableWrapper< FixedText >( m_pBooleanComparisonModeLabel ) );
         }
+        if ( m_bHasMaxRowScan )
+        {
+            _rControlList.push_back( new ODisableWrapper< FixedText >( m_pMaxRowScanLabel ) );
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -248,6 +272,8 @@ namespace dbaui
 
         if ( m_bHasBooleanComparisonMode )
             _rControlList.push_back( new OSaveValueWrapper< ListBox >( m_pBooleanComparisonMode ) );
+        if ( m_bHasMaxRowScan )
+            _rControlList.push_back(new OSaveValueWrapper<NumericField>(m_pMaxRowScan));
     }
 
     // -----------------------------------------------------------------------
@@ -306,6 +332,12 @@ namespace dbaui
             m_pBooleanComparisonMode->SelectEntryPos( static_cast< sal_uInt16 >( pBooleanComparison->GetValue() ) );
         }
 
+        if ( m_bHasMaxRowScan )
+        {
+            SFX_ITEMSET_GET(_rSet, pMaxRowScan, SfxInt32Item, DSID_MAX_ROW_SCAN, sal_True);
+            m_pMaxRowScan->SetValue(pMaxRowScan->GetValue());
+        }
+
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
@@ -333,6 +365,10 @@ namespace dbaui
                 _rSet.Put( SfxInt32Item( DSID_BOOLEANCOMPARISON, m_pBooleanComparisonMode->GetSelectEntryPos() ) );
                 bChangedSomething = sal_True;
             }
+        }
+        if ( m_bHasMaxRowScan )
+        {
+            fillInt32(_rSet,m_pMaxRowScan,DSID_MAX_ROW_SCAN,bChangedSomething);
         }
         return bChangedSomething;
     }

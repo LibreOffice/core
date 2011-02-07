@@ -375,7 +375,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
     OSQLWarningBox aDlg( this, ModuleRes( STR_QUERY_REL_DELETE_WINDOW ), WB_YES_NO | WB_DEF_YES );
     if ( m_bInRemove || aDlg.Execute() == RET_YES )
     {
-        m_pView->getController().getUndoMgr()->Clear();
+        m_pView->getController().ClearUndoManager();
         OJoinTableView::RemoveTabWin( pTabWin );
 
         m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);
@@ -383,30 +383,7 @@ void ORelationTableView::RemoveTabWin( OTableWindow* pTabWin )
         m_pView->getController().InvalidateFeature(ID_BROWSER_REDO);
     }
 }
-// -----------------------------------------------------------------------------
-//namespace
-//{
-//    class OReleationAskDialog : public ButtonDialog
-//    {
-//        FixedImage        m_aInfoImage;
-//        FixedText     m_aTitle;
-//      FixedText       m_aMessage;
-//    public:
-//        OReleationDialog(Window* _pParent) : ButtonDialog(_pParent,WB_HORZ | WB_STDDIALOG)
-//            ,m_aInfoImage(this)
-//            ,m_aTitle(this,WB_WORDBREAK | WB_LEFT)
-//          ,m_aMessage(this,WB_WORDBREAK | WB_LEFT)
-//        {
-//            m_aMessage.SetText(ModuleRes(STR_QUERY_REL_EDIT_RELATION));
-//            m_aMessage.Show();
-//
-//            // Changed as per BugID 79541 Branding/Configuration
-//            String sDialogTitle( lcl_getProductName() );
-//            SetText( sDialogTitle.AppendAscii( " Base" ) );
-//            m_aTitle.Show();
-//        }
-//    };
-//}
+
 // -----------------------------------------------------------------------------
 void ORelationTableView::lookForUiActivities()
 {
@@ -469,7 +446,7 @@ void ORelationTableView::_elementRemoved( const container::ContainerEvent& _rEve
         OTableWindow* pTableWindow = GetTabWindow(sName);
         if ( pTableWindow )
         {
-            m_pView->getController().getUndoMgr()->Clear();
+            m_pView->getController().ClearUndoManager();
             OJoinTableView::RemoveTabWin( pTableWindow );
 
             m_pView->getController().InvalidateFeature(SID_RELATION_ADD_RELATION);

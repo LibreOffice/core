@@ -33,7 +33,7 @@ import com.sun.star.sdb.RowChangeEvent;
 import com.sun.star.lang.EventObject;
 import com.sun.star.beans.XPropertyChangeListener;
 
-public class RowSetEventListener implements XRowSetApproveListener,XRowSetListener,XPropertyChangeListener
+public final class RowSetEventListener implements XRowSetApproveListener,XRowSetListener,XPropertyChangeListener
 {
     public static final int APPROVE_CURSOR_MOVE = 0;
     public static final int APPROVE_ROW_CHANGE  = 1;

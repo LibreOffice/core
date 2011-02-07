@@ -38,36 +38,17 @@ import com.sun.star.util.XCloseable;
 import connectivity.tools.CRMDatabase;
 
 // ---------- junit imports -----------------
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.openoffice.test.OfficeConnection;
 import static org.junit.Assert.*;
 // ------------------------------------------
 
 public class UISettings extends TestCase
 {
     // --------------------------------------------------------------------------------------------------------
-//    public String[] getTestMethodNames()
-//    {
-//        return new String[] {
-//            "checkTableFormattingPersistence",
-//            "checkTransparentQueryColumnSettings"
-//        };
-//    }
-//
-//    // --------------------------------------------------------------------------------------------------------
-//    public String getTestObjectName()
-//    {
-//        return "UISettings";
-//    }
-
-    // --------------------------------------------------------------------------------------------------------
     /** verifies that aliases for inner queries work as expected
      */
-    @Test public void checkTableFormattingPersistence() throws java.lang.Exception
+    @Test
+    public void checkTableFormattingPersistence() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
         CRMDatabase database = new CRMDatabase( getMSF(), true );
@@ -107,7 +88,7 @@ public class UISettings extends TestCase
 
         // verify the properties
         assertEquals( "wrong font name", "Andale Sans UI", (String)tableControlModel.getPropertyValue( "FontName" ) );
-        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue() );
+        assertEquals( "wrong font height", (float)20, ((Float)tableControlModel.getPropertyValue( "FontHeight" )).floatValue(), 0 );
         assertEquals( "wrong font slant", FontSlant.ITALIC, (FontSlant)tableControlModel.getPropertyValue( "FontSlant" ) );
 
         // close the doc
@@ -119,7 +100,8 @@ public class UISettings extends TestCase
      * settings
      * @throws java.lang.Exception
      */
-    @Test public void checkTransparentQueryColumnSettings() throws java.lang.Exception
+    @Test
+    public void checkTransparentQueryColumnSettings() throws java.lang.Exception
     {
         // create, load, and connect a DB doc
         CRMDatabase database = new CRMDatabase( getMSF(), true );

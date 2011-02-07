@@ -265,7 +265,7 @@ namespace dbaui
 
     protected:
         // SbaXDataBrowserController overridables
-        virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm);
+        virtual sal_Bool InitializeForm( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties );
         virtual sal_Bool InitializeGridModel(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > & xGrid);
 
         virtual sal_Bool preReloadForm();
@@ -531,6 +531,10 @@ namespace dbaui
             of the load process
         */
         void initializePreviewMode();
+
+        /** checks whether the Order/Filter clauses set at our row set are valid, removes them if not so
+        */
+        void    impl_sanitizeRowSetClauses_nothrow();
     };
 
 // .........................................................................

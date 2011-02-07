@@ -102,8 +102,9 @@ DBG_NAME(OptimisticSet)
 OptimisticSet::OptimisticSet(const ::comphelper::ComponentContext& _rContext,
                              const Reference< XConnection>& i_xConnection,
                              const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                             const ORowSetValueVector& _aParameterValueForCache)
-            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache)
+                             const ORowSetValueVector& _aParameterValueForCache,
+                             sal_Int32 i_nMaxRows)
+            :OKeySet(NULL,NULL,::rtl::OUString(),_xComposer,_aParameterValueForCache,i_nMaxRows)
             ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
             ,m_aSqlIterator( i_xConnection, Reference<XTablesSupplier>(_xComposer,UNO_QUERY)->getTables(), m_aSqlParser, NULL )
             ,m_bResultSetChanged(false)
@@ -124,7 +125,7 @@ void OptimisticSet::construct(const Reference< XResultSet>& _xDriverSet,const ::
     initColumns();
 
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
     Reference<XColumnsSupplier> xQueryColSup(m_xComposer,UNO_QUERY);
     const Reference<XNameAccess> xQueryColumns = xQueryColSup->getColumns();
     const Reference<XTablesSupplier> xTabSup(m_xComposer,UNO_QUERY);

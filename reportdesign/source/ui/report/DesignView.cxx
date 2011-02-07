@@ -248,7 +248,12 @@ long ODesignView::PreNotify( NotifyEvent& rNEvt )
     switch(rNEvt.GetType())
     {
         case EVENT_KEYINPUT:
-            //if ( nRet != 1L )
+            if ( (m_pPropWin && m_pPropWin->HasChildPathFocus()) )
+                return 0L;
+            if ( (m_pAddField && m_pAddField->HasChildPathFocus()) )
+                return 0L;
+            if ( (m_pReportExplorer && m_pReportExplorer->HasChildPathFocus()) )
+                return 0L;
             {
                 const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
                 if ( handleKeyEvent(*pKeyEvent) )

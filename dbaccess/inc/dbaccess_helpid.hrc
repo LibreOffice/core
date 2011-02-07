@@ -292,6 +292,7 @@
 #define HID_DSADMIN_ADVANCED                              "DBACCESS_HID_DSADMIN_ADVANCED"
 #define HID_DSADMIN_BOOLEANCOMPARISON                     "DBACCESS_HID_DSADMIN_BOOLEANCOMPARISON"
 #define HID_DSADMIN_ORACLE_DATABASE                       "DBACCESS_HID_DSADMIN_ORACLE_DATABASE"
+#define HID_DSADMIN_MAXROWSCAN                            "DBACCESS_HID_DSADMIN_MAXROWSCAN"
 
 #define UID_APP_VIEW                                      "DBACCESS_UID_APP_VIEW"
 #define HID_APP_TABLE_TREE                                "DBACCESS_HID_APP_TABLE_TREE"

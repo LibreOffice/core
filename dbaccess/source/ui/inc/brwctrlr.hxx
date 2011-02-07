@@ -254,7 +254,8 @@ namespace dbaui
             // (probably this needs not to be overloaded, but you may return anything you want as long as it
             // supports the ::com::sun::star::form::DatabaseForm service. For instance you may want to create an adapter here which
             // is synchronized with a foreign ::com::sun::star::form::DatabaseForm you got elsewhere)
-        virtual sal_Bool InitializeForm(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > & xForm) = 0;
+        virtual sal_Bool InitializeForm(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& i_formProperties ) = 0;
             // called immediately after a successfull CreateForm
             // do any initialization (data source etc.) here. the form should be fully functional after that.
             // return sal_False if you didn't succeed (don't throw exceptions, they won't be caught)
@@ -325,8 +326,11 @@ namespace dbaui
         /// loads or reloads the form
         virtual sal_Bool reloadForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >& _rxLoadable);
 
-        virtual sal_Bool preReloadForm(){ return sal_False; }
-        virtual void postReloadForm(){}
+        virtual sal_Bool    preReloadForm(){ return sal_False; }
+        virtual void        postReloadForm(){}
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >
+                            createParser_nothrow();
 
     private:
         void setCurrentModified( sal_Bool _bSet );
@@ -346,7 +350,6 @@ namespace dbaui
         void        addColumnListeners(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel);
 
         void        impl_checkForCannotSelectUnfiltered( const ::dbtools::SQLExceptionInfo& _rError );
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   createParser_nothrow();
 
         // time to check the CUT/COPY/PASTE-slot-states
         DECL_LINK( OnInvalidateClipboard, AutoTimer* );

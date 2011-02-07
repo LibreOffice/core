@@ -316,8 +316,8 @@ void OFieldExpressionControl::moveGroups(const uno::Sequence<uno::Any>& _aGroups
         m_bIgnoreEvent = true;
         {
             sal_Int32 nRow = _nRow;
-            String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
-            UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+            const String sUndoAction(ModuleRes(RID_STR_UNDO_MOVE_GROUP));
+            const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
             uno::Reference< report::XGroups> xGroups = m_pParent->getGroups();
             const uno::Any* pIter = _aGroups.getConstArray();
@@ -455,7 +455,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
             {
                 bAppend = sal_True;
                 String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
                 xGroup = m_pParent->getGroups()->createGroup();
                 xGroup->setHeaderOn(sal_True);
 
@@ -499,7 +499,7 @@ sal_Bool OFieldExpressionControl::SaveModified(bool _bAppendRow)
                 ::rptui::adjustSectionName(xGroup,nPos);
 
                 if ( bAppend )
-                    m_pParent->m_pController->getUndoMgr()->LeaveListAction();
+                    m_pParent->m_pController->getUndoManager().LeaveListAction();
             }
 
             if ( Controller() )
@@ -824,7 +824,7 @@ void OFieldExpressionControl::DeleteRows()
             {
                 bFirstTime = false;
                 String sUndoAction(ModuleRes(RID_STR_UNDO_REMOVE_SELECTION));
-                m_pParent->m_pController->getUndoMgr()->EnterListAction( sUndoAction, String() );
+                m_pParent->m_pController->getUndoManager().EnterListAction( sUndoAction, String() );
             }
 
             sal_Int32 nGroupPos = m_aGroupPositions[nIndex];
@@ -844,7 +844,7 @@ void OFieldExpressionControl::DeleteRows()
     } // while( nIndex >= 0 )
 
     if ( !bFirstTime )
-        m_pParent->m_pController->getUndoMgr()->LeaveListAction();
+        m_pParent->m_pController->getUndoManager().LeaveListAction();
 
     m_nDataPos = GetCurRow();
     InvalidateStatusCell( nOldDataPos );
@@ -930,8 +930,8 @@ void OFieldExpressionControl::InsertRows( long nRow )
         {
             m_bIgnoreEvent = false;
             {
-                String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
-                UndoManagerListAction aListAction(*m_pParent->m_pController->getUndoMgr(),sUndoAction);
+                const String sUndoAction(ModuleRes(RID_STR_UNDO_APPEND_GROUP));
+                const UndoContext aUndoContext( m_pParent->m_pController->getUndoManager(), sUndoAction );
 
                 uno::Reference<report::XGroups> xGroups = m_pParent->getGroups();
                 sal_Int32 nGroupPos = 0;

@@ -153,8 +153,10 @@ OKeySet::OKeySet(const connectivity::OSQLTable& _xTable,
                  const Reference< XIndexAccess>& _xTableKeys,
                  const ::rtl::OUString& _rUpdateTableName,    // this can be the alias or the full qualified name
                  const Reference< XSingleSelectQueryAnalyzer >& _xComposer,
-                 const ORowSetValueVector& _aParameterValueForCache)
-            :m_aParameterValueForCache(_aParameterValueForCache)
+                 const ORowSetValueVector& _aParameterValueForCache,
+                 sal_Int32 i_nMaxRows)
+            :OCacheSet(i_nMaxRows)
+            ,m_aParameterValueForCache(_aParameterValueForCache)
             ,m_pKeyColumnNames(NULL)
             ,m_pColumnNames(NULL)
             ,m_pParameterNames(NULL)
@@ -191,7 +193,7 @@ OKeySet::~OKeySet()
 void OKeySet::initColumns()
 {
     Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
-    bool bCase = (xMeta.is() && xMeta->storesMixedCaseQuotedIdentifiers()) ? true : false;
+    bool bCase = (xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers()) ? true : false;
     m_pKeyColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pColumnNames.reset( new SelectColumnsMetaData(bCase) );
     m_pParameterNames.reset( new SelectColumnsMetaData(bCase) );
@@ -984,8 +986,8 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     SelectColumnsMetaData::const_iterator aPosEnd = (*m_pKeyColumnNames).end();
     for(;aPosIter != aPosEnd;++aPosIter,++aIter)
     {
+        impl_convertValue_throw(_rInsertRow,aPosIter->second);
         *aIter = (_rInsertRow->get())[aPosIter->second.nPosition];
-        impl_convertValue_throw(_rKeyRow,aPosIter->second);
         aIter->setTypeKind(aPosIter->second.nType);
     }
 }
@@ -1382,7 +1384,7 @@ sal_Bool OKeySet::fetchRow()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OKeySet::fetchRow" );
     // fetch the next row and append on the keyset
     sal_Bool bRet = sal_False;
-    if ( !m_bRowCountFinal )
+    if ( !m_bRowCountFinal && (!m_nMaxRows || sal_Int32(m_aKeyMap.size()) < m_nMaxRows) )
         bRet = m_xDriverSet->next();
     if ( bRet )
     {

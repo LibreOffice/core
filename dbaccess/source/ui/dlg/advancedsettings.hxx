@@ -37,6 +37,7 @@
 #include <svtools/dialogcontrolling.hxx>
 
 #include <vcl/lstbox.hxx>
+#include <vcl/field.hxx>
 
 #include <vector>
 
@@ -76,12 +77,16 @@ namespace dbaui
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;
 
+        FixedText*          m_pMaxRowScanLabel;
+        NumericField*       m_pMaxRowScan;
+
         ::svt::ControlDependencyManager
                             m_aControlDependencies;
 
         BooleanSettingDescs m_aBooleanSettings;
 
         bool                m_bHasBooleanComparisonMode;
+        bool                m_bHasMaxRowScan;
 
     public:
         virtual sal_Bool        FillItemSet ( SfxItemSet& _rCoreAttrs );

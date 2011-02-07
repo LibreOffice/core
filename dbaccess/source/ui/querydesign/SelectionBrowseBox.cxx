@@ -1021,7 +1021,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         strOldCellContents = pEntry->GetField();
                         bListAction = sal_True;
                         if ( !m_bInUndoMode )
-                            rController.getUndoMgr()->EnterListAction(String(),String());
+                            rController.GetUndoManager().EnterListAction(String(),String());
 
                         sal_uInt16 nPos = m_pFieldCell->GetEntryPos(aFieldName);
                         String aAliasName = pEntry->GetAlias();
@@ -1050,7 +1050,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                 {
                     sNewValue = aFieldName;
                     if ( !m_bInUndoMode )
-                        static_cast<OQueryController&>(getDesignView()->getController()).getUndoMgr()->LeaveListAction();
+                        static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().LeaveListAction();
                     bListAction = sal_False;
                 }
                 else
@@ -1282,7 +1282,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
     }
 
     if ( bListAction && !m_bInUndoMode )
-        static_cast<OQueryController&>(getDesignView()->getController()).getUndoMgr()->LeaveListAction();
+        static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().LeaveListAction();
 
     return pEntry != NULL && !bError;
 }
@@ -2644,7 +2644,7 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
         if ( !_bListAction )
         {
             _bListAction = sal_True;
-            static_cast<OQueryController&>(getDesignView()->getController()).getUndoMgr()->EnterListAction(String(),String());
+            static_cast<OQueryController&>(getDesignView()->getController()).GetUndoManager().EnterListAction(String(),String());
         }
         appendUndoAction(_rOldValue,_rNewValue,_nRow);
     }
