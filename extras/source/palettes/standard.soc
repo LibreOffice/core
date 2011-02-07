@@ -99,20 +99,4 @@
   <draw:color draw:name="Chart 10" draw:color="#ff950e"/>
   <draw:color draw:name="Chart 11" draw:color="#c5000b"/>
   <draw:color draw:name="Chart 12" draw:color="#0084d1"/>
-  <draw:color draw:name="LibreGreen 1" draw:color="#18a303"/>
-  <draw:color draw:name="LibreGreen 2" draw:color="#2cee0e"/>
-  <draw:color draw:name="LibreGreen 3" draw:color="#84f671"/>
-  <draw:color draw:name="LibreGreen 4" draw:color="#c2f6ba"/>
-  <draw:color draw:name="LibreBlue 1" draw:color="#0369a3"/>
-  <draw:color draw:name="LibreBlue 2" draw:color="#0e9cee"/>
-  <draw:color draw:name="LibreBlue 3" draw:color="#49bafb"/>
-  <draw:color draw:name="LibreBlue 4" draw:color="#9fd7f6"/>
-  <draw:color draw:name="LibreMaroon 1" draw:color="#a33e03"/>
-  <draw:color draw:name="LibreMaroon 2" draw:color="#f25f0a"/>
-  <draw:color draw:name="LibreMaroon 3" draw:color="#fc9b63"/>
-  <draw:color draw:name="LibreMaroon 4" draw:color="#f8c9ac"/>
-  <draw:color draw:name="LibrePurple 1" draw:color="#8e03a3"/>
-  <draw:color draw:name="LibrePurple 2" draw:color="#cf42e4"/>
-  <draw:color draw:name="LibrePurple 3" draw:color="#db76ea"/>
-  <draw:color draw:name="LibrePurple 4" draw:color="#f2c4fa"/>
 </office:color-table>
