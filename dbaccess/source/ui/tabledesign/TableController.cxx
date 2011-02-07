@@ -379,7 +379,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
         // check the columns for double names
         if(!checkColumns(bNew || !xTables->hasByName(m_sName)))
         {
-            // #105323# OJ
             return sal_False;
         }
 
@@ -1016,7 +1015,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pNewRow->SetFieldType( pTypeInfo );
             OFieldDescription* pActFieldDescr = pNewRow->GetActFieldDescr();
 
-            pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
+            pActFieldDescr->SetAutoIncrement(sal_False);
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
             pActFieldDescr->SetName( createUniqueName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) ));

@@ -616,8 +616,7 @@ OCopyTableWizard::OCopyTableWizard( Window * pParent, const ::rtl::OUString& _rD
     impl_loadSourceData();
 
     bool bAllowViews = true;
-    // if the source is a, don't allow creating views #100644# (oj)
-    // (fs: Hmm? A SELECT * FROM <view> would be created, where #100644# claims this is nonsense. Why?
+    // if the source is a, don't allow creating views
     if ( m_rSourceObject.isView() )
         bAllowViews = false;
     // no views if the target connection does not support creating them

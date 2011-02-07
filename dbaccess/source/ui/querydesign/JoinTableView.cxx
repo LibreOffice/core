@@ -473,7 +473,6 @@ namespace
         BOOL bFitsVert= (aUpperLeft.Y() >= 0) && (aLowerRight.Y() <= aSize.Height());
         if (!bFitsHor || !bFitsVert)
         {
-            // #100386# OJ
             if (!bFitsHor)
             {
                 // ensure the visibility of the right border

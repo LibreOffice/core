@@ -379,14 +379,13 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const rtl::OUStr
     aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableFilter"));
     aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableFilter;
     aInfoCopy[nPos].Name      = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableTypeFilter"));
-    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter; // #22377# OJ
+    aInfoCopy[nPos++].Value <<= _pDataSource->m_pImpl->m_aTableTypeFilter;
 
     ::rtl::OUString sUser = user;
     ::rtl::OUString sPassword = password;
     if ((0 == sUser.getLength()) && (0 == sPassword.getLength()) && (0 != _pDataSource->m_pImpl->m_sUser.getLength()))
     {   // ease the usage of this method. data source which are intended to have a user automatically
         // fill in the user/password combination if the caller of this method does not specify otherwise
-        // 86951 - 05/08/2001 - frank.schoenheit@germany.sun.com
         sUser = _pDataSource->m_pImpl->m_sUser;
         if (0 != _pDataSource->m_pImpl->m_aPassword.getLength())
             sPassword = _pDataSource->m_pImpl->m_aPassword;

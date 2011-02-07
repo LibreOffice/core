@@ -1426,7 +1426,7 @@ sal_Int8 OSelectionBrowseBox::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     {
         if ( IsEditing() )
         {
-            // #100271# OJ allow the asterix again
+            // allow the asterix again
             m_bDisableErrorBox = sal_True;
             SaveModified();
             m_bDisableErrorBox = sal_False;

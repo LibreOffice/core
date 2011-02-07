@@ -55,7 +55,6 @@
 #include <comphelper/types.hxx>
 
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
 #include <svl/filenotation.hxx>

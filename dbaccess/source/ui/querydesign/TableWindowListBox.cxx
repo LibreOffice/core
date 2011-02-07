@@ -223,7 +223,7 @@ void OTableWindowListBox::StartDrag( sal_Int8 /*nAction*/, const Point& /*rPosPi
     OJoinTableView* pCont = m_pTabWin->getTableView();
     if (!pCont->getDesignView()->getController().isReadOnly() && pCont->getDesignView()->getController().isConnected())
     {
-        // #100271# OJ asterix was not allowed to be copied to selection browsebox
+        // asterix was not allowed to be copied to selection browsebox
         sal_Bool bFirstNotAllowed = FirstSelected() == First() && m_pTabWin->GetData()->IsShowAll();
         EndSelection();
         // create a description of the source

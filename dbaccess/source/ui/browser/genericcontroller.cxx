@@ -539,7 +539,6 @@ void OGenericUnoController::ImplBroadcastFeatureState(const ::rtl::OUString& _rF
         // it is possible that listeners are registered or revoked while
         // we are notifying them, so we must use a copy of m_arrStatusListener, not
         // m_arrStatusListener itself
-        // #121276# / 2005-05-19 / frank.schoenheit@sun.com
         Dispatch aNotifyLoop( m_arrStatusListener );
         DispatchIterator iterSearch = aNotifyLoop.begin();
         DispatchIterator iterEnd = aNotifyLoop.end();
@@ -762,7 +761,7 @@ void OGenericUnoController::setMasterDispatchProvider(const Reference< XDispatch
 void OGenericUnoController::dispatch(const URL& _aURL, const Sequence< PropertyValue >& aArgs) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    // Since the fix for #123967#, the SolarMutex is not locked anymore when the framework calls into
+    // The SolarMutex is not locked anymore when the framework calls into
     // here. So, lock it ourself. The real solution would be to lock it only in the places
     // where it's needed, but a) this might turn out difficult, since we then also need to care
     // for locking in the proper order (SolarMutex and m_aMutex), and b) this would be too many places

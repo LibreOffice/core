@@ -56,7 +56,6 @@
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
-// #106016# ------------------------------------
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>

@@ -2095,7 +2095,6 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 // should be intercepted by GetState. Normally.
                 // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
                 // enabled. This would be really deadly herein if the current cell has no controller ...
-                // (FS - 13.04.99 - #64694#)
                 return;
 
             Edit& rEdit = (Edit&)xCurrentController->GetWindow();

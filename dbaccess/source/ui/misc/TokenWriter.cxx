@@ -1041,7 +1041,7 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     if ( bStrikeout )   TAG_ON( OOO_STRING_SVTOOLS_HTML_strike );
 
     if ( !rValue.Len() )
-        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // #42573# keine komplett leere Zelle
+        TAG_ON( OOO_STRING_SVTOOLS_HTML_linebreak );        // keine komplett leere Zelle
     else
         HTMLOutFuncs::Out_String( (*m_pStream), rValue ,m_eDestEnc);
 

@@ -543,7 +543,6 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
             // simply silent this. The strange algorithm here does a lot of things even if no files at all were
             // created or accessed, so it's possible that the file we're trying to delete does not even exist,
             // and this is a valid condition.
-            // 2003-05-15 - #109677# - fs@openoffice.org
         }
     }
 }

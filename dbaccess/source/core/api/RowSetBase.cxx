@@ -1135,7 +1135,6 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
         OSL_ENSURE(rRow.is() ,"Invalid size of vector!");
 #endif
         // the cache could repositioned so we need to adjust the cache
-        // #104144# OJ
         if ( _bMoved && m_aCurrentRow.isNull() )
         {
             positionCache( MOVE_NONE_REFRESH_ONLY );
@@ -1281,7 +1280,7 @@ void ORowSetBase::firePropertyChange(const ORowSetRow& _rOldRow)
     try
     {
         TDataColumns::iterator aEnd = m_aDataColumns.end();
-        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i) // #104278# OJ ++i inserted
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != aEnd;++aIter,++i)
             (*aIter)->fireValueChange(_rOldRow.is() ? (_rOldRow->get())[i+1] : ::connectivity::ORowSetValue());
     }
     catch(Exception&)

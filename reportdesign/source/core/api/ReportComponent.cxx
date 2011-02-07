@@ -55,7 +55,7 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
 {
         LanguageType eLatin = _eLatin;
 
-        //      #108374# / #107782#: If the UI language is Korean, the default Latin font has to
+        //      If the UI language is Korean, the default Latin font has to
         //      be queried for Korean, too (the Latin language from the document can't be Korean).
         //      This is the same logic as in SwDocShell::InitNew.
         LanguageType eUiLanguage = Application::GetSettings().GetUILanguage();
