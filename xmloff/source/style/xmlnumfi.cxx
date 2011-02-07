@@ -41,9 +41,6 @@
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 
-// #110680#
-//#include <comphelper/processfactory.hxx>
-
 #include <xmloff/xmlnumfi.hxx>
 #include <xmloff/xmltkmap.hxx>
 #include "xmlnmspe.hxx"
@@ -103,12 +100,9 @@ class SvXMLNumImpData
     LocaleDataWrapper*  pLocaleData;
     SvXMLNumFmtEntryArr aNameEntries;
 
-    // #110680#
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > mxServiceFactory;
 
 public:
-    // #110680#
-    // SvXMLNumImpData( SvNumberFormatter* pFmt );
     SvXMLNumImpData(
         SvNumberFormatter* pFmt,
         const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory );
@@ -394,8 +388,6 @@ SV_IMPL_OP_PTRARR_SORT( SvXMLEmbeddedElementArr, SvXMLEmbeddedElementPtr );
 //  SvXMLNumImpData
 //
 
-// #110680#
-// SvXMLNumImpData::SvXMLNumImpData( SvNumberFormatter* pFmt ) :
 SvXMLNumImpData::SvXMLNumImpData(
     SvNumberFormatter* pFmt,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -406,7 +398,6 @@ SvXMLNumImpData::SvXMLNumImpData(
     pStyleElemAttrTokenMap(NULL),
     pLocaleData(NULL),
 
-    // #110680#
     mxServiceFactory(xServiceFactory)
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
@@ -615,11 +606,6 @@ const SvXMLTokenMap& SvXMLNumImpData::GetStyleElemAttrTokenMap()
 const LocaleDataWrapper& SvXMLNumImpData::GetLocaleData( LanguageType nLang )
 {
     if ( !pLocaleData )
-        // #110680#
-        //pLocaleData = new LocaleDataWrapper(
-        //  (pFormatter ? pFormatter->GetServiceManager() :
-        //  ::comphelper::getProcessServiceFactory()),
-        //  MsLangId::convertLanguageToLocale( nLang ) );
         pLocaleData = new LocaleDataWrapper(
             (pFormatter ? pFormatter->GetServiceManager() :
             mxServiceFactory),
@@ -1093,7 +1079,6 @@ void SvXMLNumFmtElementContext::EndElement()
 
                 if ( rParent.ReplaceNfKeyword( NF_KEY_NNN, NF_KEY_NNNN ) )
                 {
-                    //!aContent.setLength(0);       //! doesn't work, #76293#
                     aContent = OUStringBuffer();
                 }
 
@@ -1327,7 +1312,6 @@ SvXMLNumFormatContext::SvXMLNumFormatContext( SvXMLImport& rImport,
         switch (nToken)
         {
             case XML_TOK_STYLE_ATTR_NAME:
-//              aName = sValue;
                 break;
             case XML_TOK_STYLE_ATTR_LANGUAGE:
                 sLanguage = sValue;
@@ -1709,7 +1693,6 @@ sal_Int32 SvXMLNumFormatContext::CreateAndInsert(SvNumberFormatter* pFormatter)
 void SvXMLNumFormatContext::Finish( sal_Bool bOverwrite )
 {
     SvXMLStyleContext::Finish( bOverwrite );
-//  AddCondition();
 }
 
 const LocaleDataWrapper& SvXMLNumFormatContext::GetLocaleData() const
@@ -1865,10 +1848,6 @@ void SvXMLNumFormatContext::AddCurrency( const rtl::OUString& rContent, Language
     OUString aSymbol = rContent;
     if ( aSymbol.getLength() == 0 )
     {
-        //  get currency symbol for language
-
-        //aSymbol = pData->GetLocaleData( nFormatLang ).getCurrSymbol();
-
         SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
         if ( pFormatter )
         {
@@ -2185,9 +2164,6 @@ sal_Bool SvXMLNumFormatContext::IsSystemLanguage()
 //  SvXMLNumFmtHelper
 //
 
-// #110680#
-//SvXMLNumFmtHelper::SvXMLNumFmtHelper(
-//                      const uno::Reference<util::XNumberFormatsSupplier>& rSupp )
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     const uno::Reference<util::XNumberFormatsSupplier>& rSupp,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -2201,13 +2177,9 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     if (pObj)
         pFormatter = pObj->GetNumberFormatter();
 
-    // #110680#
-    // pData = new SvXMLNumImpData( pFormatter );
     pData = new SvXMLNumImpData( pFormatter, mxServiceFactory );
 }
 
-// #110680#
-// SvXMLNumFmtHelper::SvXMLNumFmtHelper( SvNumberFormatter* pNumberFormatter )
 SvXMLNumFmtHelper::SvXMLNumFmtHelper(
     SvNumberFormatter* pNumberFormatter,
     const uno::Reference<lang::XMultiServiceFactory>& xServiceFactory )
@@ -2215,8 +2187,6 @@ SvXMLNumFmtHelper::SvXMLNumFmtHelper(
 {
     DBG_ASSERT( mxServiceFactory.is(), "got no service manager" );
 
-    // #110680#
-    // pData = new SvXMLNumImpData( pNumberFormatter );
     pData = new SvXMLNumImpData( pNumberFormatter, mxServiceFactory );
 }
 
@@ -2259,11 +2229,5 @@ const SvXMLTokenMap& SvXMLNumFmtHelper::GetStylesElemTokenMap()
 {
     return pData->GetStylesElemTokenMap();
 }
-
-/*sal_uInt32 SvXMLNumFmtHelper::GetKeyForName( const rtl::OUString& rName )
-{
-    return pData->GetKeyForName( rName );
-}*/
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

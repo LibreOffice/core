@@ -107,8 +107,6 @@
 #define SQL_FETCH_PRIOR SQL_FETCH_PREV
 #define SQL_NO_TOTAL (-4)
 
-//  #include "odbc3defs.hxx"
-
 #endif
 
 // In der ODBC.H von Watcom werden Strings als char * erwartet

@@ -34,12 +34,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-
 #include <com/sun/star/uno/Exception.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-
-// #110680#
-//#include <comphelper/processfactory.hxx>
 #include <comphelper/genericpropertyset.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "xmlnmspe.hxx"
@@ -55,7 +51,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// #110680#
 XMLMetaExportComponent::XMLMetaExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags )
@@ -214,8 +209,6 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportComponent_createInstance
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
     return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META|EXPORT_OASIS);
 }
 
@@ -237,8 +230,6 @@ uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
     throw( uno::Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new XMLMetaExportComponent;
     return (cppu::OWeakObject*)new XMLMetaExportComponent(rSMgr, EXPORT_META);
 }
 

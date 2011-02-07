@@ -42,9 +42,7 @@
 SV_IMPL_META_FACTORY1( SvMetaModule, SvMetaExtern );
 
 /*************************************************************************
-|*
 |*    SvMetaModule::SvMetaModule()
-|*
 *************************************************************************/
 SvMetaModule::SvMetaModule()
 #ifdef IDL_COMPILER
@@ -63,9 +61,7 @@ SvMetaModule::SvMetaModule( const String & rIdlFileName, BOOL bImp )
 #endif
 
 /*************************************************************************
-|*
 |*    SvMetaModule::Load()
-|*
 *************************************************************************/
 #define MODULE_VER      0x0001
 void SvMetaModule::Load( SvPersistStream & rStm )
@@ -102,9 +98,7 @@ void SvMetaModule::Load( SvPersistStream & rStm )
 }
 
 /*************************************************************************
-|*
 |*    SvMetaModule::Save()
-|*
 *************************************************************************/
 void SvMetaModule::Save( SvPersistStream & rStm )
 {
@@ -138,9 +132,7 @@ void SvMetaModule::Save( SvPersistStream & rStm )
 }
 
 /*************************************************************************
-|*
 |*    SvMetaModule::SetName()
-|*
 *************************************************************************/
 BOOL SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 {
@@ -155,8 +147,6 @@ BOOL SvMetaModule::SetName( const ByteString & rName, SvIdlDataBase * pBase )
 #ifdef IDL_COMPILER
 /*************************************************************************
 |*    SvMetaModule::GetNextName()
-|*
-|*    Beschreibung
 *************************************************************************/
 BOOL SvMetaModule::FillNextName( SvGlobalName * pName )
 {
@@ -173,8 +163,6 @@ BOOL SvMetaModule::FillNextName( SvGlobalName * pName )
 
 /*************************************************************************
 |*    SvMetaModule::ReadSvIdl()
-|*
-|*    Beschreibung
 *************************************************************************/
 void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
@@ -201,8 +189,6 @@ void SvMetaModule::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
 /*************************************************************************
 |*    SvMetaModule::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
 *************************************************************************/
 void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                          SvStream & rOutStm,
@@ -234,8 +220,6 @@ void SvMetaModule::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 
 /*************************************************************************
 |*    SvMetaModule::ReadContextSvIdl()
-|*
-|*    Beschreibung
 *************************************************************************/
 void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
                                      SvTokenStream & rInStm )
@@ -348,8 +332,6 @@ void SvMetaModule::ReadContextSvIdl( SvIdlDataBase & rBase,
 
 /*************************************************************************
 |*    SvMetaModule::WriteContextSvIdl()
-|*
-|*    Beschreibung
 *************************************************************************/
 void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
                                       SvStream & rOutStm,
@@ -377,11 +359,7 @@ void SvMetaModule::WriteContextSvIdl( SvIdlDataBase & rBase,
 }
 
 /*************************************************************************
-|*
 |*    SvMetaModule::ReadSvIdl()
-|*
-|*    Beschreibung
-|*
 *************************************************************************/
 BOOL SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
@@ -425,11 +403,7 @@ BOOL SvMetaModule::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 }
 
 /*************************************************************************
-|*
 |*    SvMetaModule::WriteSvIdl()
-|*
-|*    Beschreibung
-|*
 *************************************************************************/
 void SvMetaModule::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                                USHORT nTab )
@@ -590,7 +564,6 @@ void SvMetaModule::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
 void SvMetaModule::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
-//  rOutStm << "#pragma CHARSET IBMPC" << endl;
     if( aSlotIdFile.Len() )
         rOutStm << "//#include <" << aSlotIdFile.GetBuffer() << '>' << endl;
     for( ULONG n = 0; n < aClassList.Count(); n++ )

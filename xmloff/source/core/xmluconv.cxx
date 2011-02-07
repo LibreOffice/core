@@ -42,16 +42,12 @@
 
 #ifndef _TOOLS_DATE_HXX
 #include <tools/date.hxx>
-
 #include <tools/string.hxx>
-
 #endif
 
 #include <tools/time.hxx>
 #include <tools/fldunit.hxx>
 
-// #110680#
-//#include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XNumberingTypeInfo.hpp>
@@ -87,12 +83,6 @@ void SvXMLUnitConverter::initXMLStrings()
 
 void SvXMLUnitConverter::createNumTypeInfo() const
 {
-    // #110680#
-    //Reference< lang::XMultiServiceFactory > xServiceFactory =
-    //        comphelper::getProcessServiceFactory();
-    //OSL_ENSURE( xServiceFactory.is(),
-    //        "XMLUnitConverter: got no service factory" );
-
     if( mxServiceFactory.is() )
     {
         ((SvXMLUnitConverter *)this)->xNumTypeInfo =
@@ -107,9 +97,6 @@ void SvXMLUnitConverter::createNumTypeInfo() const
     the default unit for textual measures
 */
 
-// #110680#
-//SvXMLUnitConverter::SvXMLUnitConverter( MapUnit eCoreMeasureUnit,
-//                                        MapUnit eXMLMeasureUnit ) :
 SvXMLUnitConverter::SvXMLUnitConverter(
     MapUnit eCoreMeasureUnit,
     MapUnit eXMLMeasureUnit,
@@ -147,11 +134,6 @@ MapUnit SvXMLUnitConverter::GetMapUnit(sal_Int16 nFieldUnit)
     case FUNIT_PICA:
         eUnit = MAP_POINT;
         break;
-//  case FUNIT_INCH:
-//  case FUNIT_FOOT:
-//  case FUNIT_MILE:
-//      eUnit = MAP_INCH;
-//      break;
     case FUNIT_100TH_MM:
         eUnit = MAP_100TH_MM;
         break;
@@ -279,11 +261,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('e'):
                 case sal_Unicode('E'):
-        //          pCmp1 = sXML_unit_em;
-        //          nToken1 = CSS1_EMS;
-
-        //          pCmp2 = sXML_unit_ex;
-        //          nToken2 = CSS1_EMX;
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
@@ -306,9 +283,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
                     aScales[1] = 12.*20.; // twip
-
-        //          pCmp3 = sXML_unit_px;
-        //          nToken3 = CSS1_PIXLENGTH;
                     break;
                 }
             }
@@ -325,11 +299,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     break;
                 case sal_Unicode('e'):
                 case sal_Unicode('E'):
-        //          pCmp1 = sXML_unit_em;
-        //          nToken1 = CSS1_EMS;
-
-        //          pCmp2 = sXML_unit_ex;
-        //          nToken2 = CSS1_EMX;
                     break;
                 case sal_Unicode('i'):
                 case sal_Unicode('I'):
@@ -352,9 +321,6 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
                     aCmpsL[1] = "pc";
                     aCmpsU[1] = "PC";
                     aScales[1] = (10.0 * nScaleFactor*2.54)/12.; // mm/100
-
-        //          pCmp3 = sXML_unit_px;
-        //          nToken3 = CSS1_PIXLENGTH;
                     break;
                 }
             }
@@ -1361,8 +1327,6 @@ sal_Int32 SvXMLUnitConverter::indexOfComma( const OUString& rStr,
     return -1;
 }
 
-// ---
-
 SvXMLTokenEnumerator::SvXMLTokenEnumerator( const OUString& rString, sal_Unicode cSeperator /* = sal_Unicode(' ') */ )
 : maTokenString( rString ), mnNextTokenPos(0), mcSeperator( cSeperator )
 {
@@ -1394,7 +1358,6 @@ sal_Bool SvXMLTokenEnumerator::getNextToken( OUString& rToken )
     return sal_True;
 }
 
-// ---
 bool lcl_getPositions(const OUString& _sValue,OUString& _rContentX,OUString& _rContentY,OUString& _rContentZ)
 {
     if(!_sValue.getLength() || _sValue[0] != '(')
@@ -1778,8 +1741,6 @@ void SvXMLUnitConverter::convertNumLetterSync( OUStringBuffer& rBuffer,
     case NumberingType::ROMAN_LOWER:
     case NumberingType::ARABIC:
     case NumberingType::NUMBER_NONE:
-        // default
-        // eSync = XML_FALSE;
         break;
 
     case NumberingType::CHARS_UPPER_LETTER_N:

@@ -37,11 +37,7 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
-
 #include <com/sun/star/uno/Exception.hpp>
-
-// #110680#
-//#include <comphelper/processfactory.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
@@ -53,8 +49,6 @@
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// #110680#
-// using ::comphelper::getProcessServiceFactory;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::std::set;
@@ -77,7 +71,6 @@ using ::com::sun::star::xml::sax::XDocumentHandler;
 const sal_Char sAPI_AutoText[] = "com.sun.star.text.AutoTextContainer";
 
 
-// #110680#
 XMLAutoTextEventExport::XMLAutoTextEventExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
         sal_uInt16 nFlags
@@ -88,7 +81,6 @@ XMLAutoTextEventExport::XMLAutoTextEventExport(
 {
 }
 
-// #110680#
 XMLAutoTextEventExport::XMLAutoTextEventExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString& rFileName,
@@ -262,8 +254,6 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new XMLAutoTextEventExport;
     return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr, EXPORT_ALL|EXPORT_OASIS);
 }
 
@@ -287,8 +277,6 @@ Reference< XInterface > SAL_CALL XMLAutoTextEventExportOOO_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
     throw( Exception )
 {
-    // #110680#
-    // return (cppu::OWeakObject*)new XMLAutoTextEventExport;
     return (cppu::OWeakObject*)new XMLAutoTextEventExport(rSMgr,EXPORT_ALL);
 }
 

@@ -44,9 +44,6 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <rtl/ustrbuf.hxx>
 
-// #110680#
-//#include <comphelper/processfactory.hxx>
-
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
@@ -74,8 +71,6 @@ using namespace ::svt;
 
 //-------------------------------------------------------------------------
 
-//  4th condition for text formats doesn't work
-//#define XMLNUM_MAX_PARTS  4
 #define XMLNUM_MAX_PARTS    3
 
 //-------------------------------------------------------------------------
@@ -270,9 +265,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        // #110680#
-        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
         pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
@@ -308,9 +300,6 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
     {
         lang::Locale aLocale( MsLangId::convertLanguageToLocale( MsLangId::getSystemLanguage() ) );
 
-        // #110680#
-        // pCharClass = new CharClass( ::comphelper::getProcessServiceFactory(), aLocale );
-        // pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), aLocale );
         pCharClass = new CharClass( rExport.getServiceFactory(), aLocale );
         pLocaleData = new LocaleDataWrapper( rExport.getServiceFactory(), aLocale );
     }
@@ -814,9 +803,6 @@ sal_Bool SvXMLNumFmtExport::WriteTextWithCurrency_Impl( const OUString& rString,
     //  returns TRUE if currency element was written
 
     sal_Bool bRet = sal_False;
-
-//  pLocaleData->setLocale( rLocale );
-//  String sCurString = pLocaleData->getCurrSymbol();
 
     LanguageType nLang = MsLangId::convertLocaleToLanguage( rLocale );
     pFormatter->ChangeIntl( nLang );

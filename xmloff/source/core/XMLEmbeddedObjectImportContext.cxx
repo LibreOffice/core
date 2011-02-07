@@ -32,9 +32,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XModifiable2.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
-
-// #110680#
-//#include <comphelper/processfactory.hxx>
 #include <tools/globname.hxx>
 #include <sot/clsids.hxx>
 #include <tools/globname.hxx>
@@ -166,8 +163,6 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 
     Sequence<Any> aArgs( 0 );
 
-    // #110680#
-    // Reference< XMultiServiceFactory > xServiceFactory = comphelper::getProcessServiceFactory();
     Reference< XMultiServiceFactory > xServiceFactory = GetImport().getServiceFactory();
 
     xHandler = Reference < XDocumentHandler >(
@@ -331,30 +326,6 @@ void XMLEmbeddedObjectImportContext::EndElement()
                                     GetPrefix(), GetLocalName() ) );
         xHandler->endDocument();
 
-
-        // storing part is commented out since it should be done through the object, not the model
-        // TODO/LATER: probably an object should be provided here an be stored here
-
-//      // Save the object. That's required because the object should not be
-//      // modified (it has been loaded just now). Setting it to unmodified
-//      // only does not work, because it is then assumed that it has been
-//      // stored.
-//      Reference < XStorable > xStorable( xComp, UNO_QUERY );
-//      if( xStorable.is() )
-//      {
-//          try
-//          {
-//              xStorable->store();
-//          }
-//          catch( ::com::sun::star::beans::PropertyVetoException& )
-//          {
-//              Sequence<OUString> aSeq( 0 );
-//              GetImport().SetError( XMLERROR_FLAG_WARNING |
-//                                XMLERROR_API,
-//                                aSeq );
-//          }
-//      }
-
     try
     {
         Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
@@ -364,25 +335,6 @@ void XMLEmbeddedObjectImportContext::EndElement()
     catch( Exception& )
     {
     }
-
-
-//      // reset modifies state for the object since it has been imported
-//      // completly and therfor hasn't been modified.
-//      Reference < XModifiable > xModifiable( xComp, UNO_QUERY );
-//      if( xModifiable.is() )
-//      {
-//          try
-//          {
-//              xModifiable->setModified( sal_False );
-//          }
-//          catch( ::com::sun::star::beans::PropertyVetoException& e )
-//          {
-//              Sequence<OUString> aSeq( 0 );
-//              GetImport().SetError( XMLERROR_FLAG_WARNING |
-//                                XMLERROR_API,
-//                                aSeq );
-//          }
-//      }
     }
 }
 
@@ -391,6 +343,5 @@ void XMLEmbeddedObjectImportContext::Characters( const ::rtl::OUString& rChars )
     if( xHandler.is() )
         xHandler->characters( rChars );
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
