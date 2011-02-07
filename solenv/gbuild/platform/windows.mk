@@ -590,6 +590,41 @@ $(call gb_LinkTarget_get_headers_target,$(2)) : PDBFILE = $(call gb_LinkTarget_g
 
 endef
 
+# JunitTest class
+
+gb_defaultlangiso := en-US
+gb_smoketest_instset := $(SRCDIR)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(gb_defaultlangiso)/OOo_*_install-arc_$(gb_defaultlangiso).zip
+
+define gb_JunitTest_JunitTest_platform
+
+ifeq ($(OOO_TEST_SOFFICE),)
+
+# Work around Windows problems with long pathnames (see issue 50885) by
+# installing into the temp directory instead of the module output tree (in which
+# case $(target).instpath contains the path to the temp installation,
+# which is removed after smoketest); can be removed once issue 50885 is fixed;
+# on other platforms, a single installation to solver is created in
+# smoketestoo_native.
+
+$(call gb_JunitTest_get_target,$(1)) : $(call gb_JunitTest_get_target,$(1)).instpath
+$(call gb_JunitTest_get_target,$(1)) : CLEAN_CMD = $(call gb_Helper_abbreviate_dirs,rm -rf `cat $$@.instpath` $$@.instpath)
+$(call gb_JunitTest_get_target,$(1)).instpath : $(shell ls $(gb_smoketest_instset))
+    INST_DIR=$$$$(cygpath -m `mktemp -d -t testinst.XXXXXX`) \
+    && unzip -d "$$$${INST_DIR}" "$$<" \
+    && mv "$$$${INST_DIR}"/OOo_*_install-arc_$$(gb_defaultlangiso) "$$$${INST_DIR}"/opt\
+    && mkdir -p $$(dir $$@) \
+    && echo "$$$${INST_DIR}" > $$@
+
+endif # OOO_TEST_SOFFICE
+
+$(call gb_JunitTest_get_target,$(1)) : DEFS := \
+    -Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:`cat $(call gb_JunitTest_get_target,$(1)).instpath`/opt/OpenOffice.org 3/program/soffice.exe}" \
+    -Dorg.openoffice.test.arg.env=PATH \
+    -Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1)) \
+
+endef
+
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"

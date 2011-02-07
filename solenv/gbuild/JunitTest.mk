@@ -41,6 +41,7 @@ $(call gb_JunitTest_get_target,%) :
     $(call gb_Helper_abbreviate_dirs_native,\
         mkdir -p $(call gb_JunitTest_get_userdir,$*) && \
         $(gb_JunitTest_JAVACOMMAND) -cp "$(CLASSPATH)" $(DEFS) org.junit.runner.JUnitCore $(CLASSES) 2>&1 > $@.log || (cat $@.log && false))
+    $(CLEAN_CMD)
 
 define gb_JunitTest_JunitTest
 $(call gb_JunitTest_get_target,$(1)) : CLASSPATH := $(value XCLASSPATH)$(gb_CLASSPATHSEP)$(call gb_JavaClassSet_get_classdir,$(call gb_JunitTest_get_classsetname,$(1)))$(gb_CLASSPATHSEP)$(OOO_JUNIT_JAR)$(gb_CLASSPATHSEP)$(OUTDIR)/lib
