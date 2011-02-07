@@ -212,7 +212,7 @@ struct SmCfgOther
     sal_Bool        bToolboxVisible;
     sal_Bool        bAutoRedraw;
     sal_Bool        bFormulaCursor;
-    //BOOL            bNoSymbolsWarning;
+    //sal_Bool            bNoSymbolsWarning;
 
     SmCfgOther();
 };
@@ -1251,7 +1251,7 @@ sal_Bool SmMathConfig::IsSaveOnlyUsedSymbols() const
 }
 
 
-void SmMathConfig::SetSaveOnlyUsedSymbols( BOOL bVal )
+void SmMathConfig::SetSaveOnlyUsedSymbols( sal_Bool bVal )
 {
     if (!pOther)
         LoadOther();

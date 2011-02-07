@@ -101,7 +101,7 @@ void SmConfig::ItemSetToConfig(const SfxItemSet &rSet)
             Broadcast(SfxSimpleHint(HINT_FORMATCHANGED));
         }
     }
-    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, TRUE, &pItem) == SFX_ITEM_SET)
+    if (rSet.GetItemState(SID_SAVE_ONLY_USED_SYMBOLS, sal_True, &pItem) == SFX_ITEM_SET)
     {   bVal = ((const SfxBoolItem *) pItem)->GetValue();
         SetSaveOnlyUsedSymbols( bVal );
     }

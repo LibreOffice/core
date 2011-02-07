@@ -185,7 +185,7 @@ class SmParser
     LanguageType    m_nLang;
     xub_StrLen      m_nBufferIndex,
                     m_nTokenIndex;
-    USHORT          m_Row,
+    sal_uInt16          m_Row,
                     m_nColOff;
     SmConvert       m_eConversion;
     sal_Bool        m_bImportSymNames,
@@ -205,7 +205,7 @@ protected:
     void            NextToken();
     xub_StrLen      GetTokenIndex() const   { return m_nTokenIndex; }
     void            Insert(const String &rText, sal_uInt16 nPos);
-    void            Replace( USHORT nPos, USHORT nLen, const String &rText );
+    void            Replace( sal_uInt16 nPos, sal_uInt16 nLen, const String &rText );
 
     inline sal_Bool     TokenInGroup(sal_uLong nGroup);
 
@@ -260,9 +260,9 @@ public:
     void         SetConversion(SmConvert eConv)     { m_eConversion = eConv; }
 
     sal_Bool     IsImportSymbolNames() const        { return m_bImportSymNames; }
-    void         SetImportSymbolNames(BOOL bVal)    { m_bImportSymNames = bVal; }
+    void         SetImportSymbolNames(sal_Bool bVal)    { m_bImportSymNames = bVal; }
     sal_Bool     IsExportSymbolNames() const        { return m_bExportSymNames; }
-    void         SetExportSymbolNames(BOOL bVal)    { m_bExportSymNames = bVal; }
+    void         SetExportSymbolNames(sal_Bool bVal)    { m_bExportSymNames = bVal; }
 
     sal_uInt16       AddError(SmParseError Type, SmNode *pNode);
 

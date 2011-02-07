@@ -243,7 +243,7 @@ void SmGraphicWindow::LoseFocus()
 }
 
 void SmGraphicWindow::ShowCursor(sal_Bool bShow)
-    // shows or hides the formula-cursor depending on 'bShow' is TRUE or not
+    // shows or hides the formula-cursor depending on 'bShow' is sal_True or not
 {
     sal_Bool  bInvert = bShow != IsCursorVisible();
 

@@ -62,7 +62,7 @@ static xub_Unicode __READONLY_DATA aMathAlpha[] =
 };
 
 sal_Bool SmIsMathAlpha(const XubString &rText)
-    // ergibt genau dann TRUE, wenn das Zeichen (aus dem StarMath Font) wie ein
+    // ergibt genau dann sal_True, wenn das Zeichen (aus dem StarMath Font) wie ein
     // Buchstabe behandelt werden soll.
 {
     if (rText.Len() == 0)
