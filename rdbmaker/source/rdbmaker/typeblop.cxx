@@ -50,7 +50,6 @@ using namespace com::sun::star::reflection;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 using namespace cppu;
-//using namespace osl;
 using namespace rtl;
 
 static Reference< XHierarchicalNameAccess > xNameAccess;
@@ -155,21 +154,6 @@ sal_uInt32 getInheritedMemberCount( Reference< XTypeDescription >& xType )
 
         memberCount += xIFace->getMembers().getLength();
     }
-//  } else
-//  if ( xType->getTypeClass() == TypeClass_Struct || xType->getTypeClass() == TypeClass_Exception )
-//  {
-//      Reference< XCompoundTypeDescription > xComp(xType, UNO_QUERY);
-//
-//      if ( xComp.is() )
-//          return membercount;
-//
-//      Reference< XTypeDescription > xSuperType = xComp->getBaseType();
-//
-//      if ( xSuperType.is() )
-//          memberCount = getInheritedMemberCount( xSuperType );
-//
-//      memberCount += xComp->getMemberNames().getLength();
-//  }
 
     return memberCount;
 }
