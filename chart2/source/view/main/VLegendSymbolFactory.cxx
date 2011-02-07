@@ -121,8 +121,6 @@ Reference< drawing::XShape > VLegendSymbolFactory::createSymbol(
     if( ! xResultGroup.is())
         return xResult;
 
-    bool bUseBox = false;
-
     // add an invisible square box to maintain aspect ratio
     Reference< drawing::XShape > xBound( ShapeFactory(xShapeFactory).createInvisibleRectangle(
                 xResultGroup, rEntryKeyAspectRatio  ));
