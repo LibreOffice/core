@@ -356,7 +356,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                 break;
             }
 
-            SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+            ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
             SdLayerModifyUndoAction* pAction = new SdLayerModifyUndoAction(
                 GetDoc(),
                 pLayer,
@@ -748,9 +748,9 @@ bool DrawViewShell::RenameSlide( sal_uInt16 nPageId, const String & rName  )
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
         // (#67720#)
-        SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
+        ::svl::IUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-            pManager, GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
+            GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),
             aVisibleLayers.IsSet( nBackground ),
             aVisibleLayers.IsSet( nBgObj ));
         pManager->AddUndoAction( pAction );

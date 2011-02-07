@@ -56,15 +56,13 @@ TYPEINIT1(ModifyPageUndoAction, SdUndoAction);
 \************************************************************************/
 
 ModifyPageUndoAction::ModifyPageUndoAction(
-    SfxUndoManager* pTheManager, // #67720#
     SdDrawDocument* pTheDoc,
     SdPage* pThePage,
     String aTheNewName,
     AutoLayout  eTheNewAutoLayout,
     sal_Bool bTheNewBckgrndVisible,
     sal_Bool bTheNewBckgrndObjsVisible)
-:   SdUndoAction(pTheDoc),
-    mpManager(pTheManager)
+:   SdUndoAction(pTheDoc)
 {
     DBG_ASSERT(pThePage, "Undo ohne Seite ???");
 

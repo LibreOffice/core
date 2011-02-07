@@ -151,7 +151,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
-        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
         sal_Bool bActivate(sal_False);
 
         if(pUndoManager)
@@ -179,7 +179,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
-        SfxUndoManager* pUndoManager = ImpGetUndoManager();
+        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
         sal_Bool bActivate(sal_False);
 
         if(pUndoManager)

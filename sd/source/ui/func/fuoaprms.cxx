@@ -94,7 +94,7 @@ FunctionReference FuObjectAnimationParameters::Create( ViewShell* pViewSh, ::sd:
 
 void FuObjectAnimationParameters::DoExecute( SfxRequest& rReq )
 {
-    SfxUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
+    ::svl::IUndoManager* pUndoMgr = mpViewShell->GetViewFrame()->GetObjectShell()->GetUndoManager();
 
     const SdrMarkList& rMarkList  = mpView->GetMarkedObjectList();
     sal_uLong        nCount     = rMarkList.GetMarkCount();

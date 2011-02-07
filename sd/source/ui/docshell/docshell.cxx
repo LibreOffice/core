@@ -462,7 +462,7 @@ void DrawDocShell::Deactivate( sal_Bool )
 |*
 \************************************************************************/
 
-SfxUndoManager* DrawDocShell::GetUndoManager()
+::svl::IUndoManager* DrawDocShell::GetUndoManager()
 {
     return mpUndoManager;
 }
@@ -600,7 +600,7 @@ void DrawDocShell::ClearUndoBuffer()
         pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, false);
     }
 
-    SfxUndoManager* pUndoManager = GetUndoManager();
+    ::svl::IUndoManager* pUndoManager = GetUndoManager();
     if(pUndoManager && pUndoManager->GetUndoActionCount())
         pUndoManager->Clear();
 }

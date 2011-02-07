@@ -212,7 +212,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         SdPage* pUndoPage =
             bHandoutMode ? pHandoutMPage : pCurrentPage;
 
-        SfxUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
+        ::svl::IUndoManager* pUndoManager = mrViewShell.GetDocSh()->GetUndoManager();
         DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
 
         if( pUndoManager )
@@ -220,7 +220,7 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             String aComment( SdResId(STR_UNDO_MODIFY_PAGE) );
             pUndoManager->EnterListAction(aComment, aComment);
             ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
-                pUndoManager, pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
+                pDocument, pUndoPage, aNewName, aNewAutoLayout, bBVisible, bBObjsVisible);
             pUndoManager->AddUndoAction(pAction);
 
             // Clear the selection because the selectec object may be removed as

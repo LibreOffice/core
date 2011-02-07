@@ -49,6 +49,7 @@ class SfxPrinter;
 struct SdrDocumentStreamInfo;
 struct SpellCallbackInfo;
 class AbstractSvxNameDialog;
+class SfxUndoManager;
 
 namespace sd {
 
@@ -100,7 +101,8 @@ public:
 
     virtual Rectangle       GetVisArea(sal_uInt16 nAspect) const;
     virtual void            Draw(OutputDevice*, const JobSetup& rSetup, sal_uInt16 nAspect = ASPECT_CONTENT);
-    virtual SfxUndoManager* GetUndoManager();
+    virtual ::svl::IUndoManager*
+                            GetUndoManager();
     virtual Printer*        GetDocumentPrinter();
     virtual void            OnDocumentPrinterChanged(Printer* pNewPrinter);
     virtual SfxStyleSheetBasePool* GetStyleSheetPool();

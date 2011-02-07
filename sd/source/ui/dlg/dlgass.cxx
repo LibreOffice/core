@@ -1556,7 +1556,7 @@ void AssistentDlgImpl::UpdatePreview( sal_Bool bDocPreview )
         {
             SfxObjectShell* pShell = xDocShell;
             DrawDocShell* pDocShell = PTR_CAST(DrawDocShell,pShell);
-            SfxUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
+            ::svl::IUndoManager* pUndoMgr = pDocShell?pDocShell->GetUndoManager():NULL;
             if(pUndoMgr)
                 pUndoMgr->Undo();
             mbUserDataDirty = sal_True;

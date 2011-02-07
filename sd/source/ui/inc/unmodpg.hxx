@@ -36,9 +36,6 @@ class SdPage;
 
 class ModifyPageUndoAction : public SdUndoAction
 {
-    // #67720#
-    SfxUndoManager* mpManager;
-
     SdPage*         mpPage;
     String          maOldName;
     String          maNewName;
@@ -54,7 +51,6 @@ class ModifyPageUndoAction : public SdUndoAction
 public:
     TYPEINFO();
     ModifyPageUndoAction(
-        SfxUndoManager*         pManager, // #67720#
         SdDrawDocument*         pTheDoc,
         SdPage*                 pThePage,
         String                  aTheNewName,

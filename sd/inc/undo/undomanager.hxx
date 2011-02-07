@@ -40,31 +40,21 @@ public:
     UndoManager( sal_uInt16 nMaxUndoActionCount = 20 );
 
     virtual void            EnterListAction(const UniString &rComment, const UniString& rRepeatComment, sal_uInt16 nId=0);
-    virtual void            LeaveListAction();
 
     virtual void            AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg=sal_False );
 
-    bool                    isInListAction() const { return mnListLevel != 0; }
-    bool                    isInUndo() const { return maIsInUndoLock.isLocked(); }
-
-    virtual sal_Bool            Undo( sal_uInt16 nCount=1 );
-    virtual sal_Bool            Redo( sal_uInt16 nCount=1 );
-
     /** Set or reset the undo manager linked with the called undo manager.
     */
-    void SetLinkedUndoManager (SfxUndoManager* pLinkedUndoManager);
+    void SetLinkedUndoManager (::svl::IUndoManager* pLinkedUndoManager);
 
 private:
     using SfxUndoManager::Undo;
     using SfxUndoManager::Redo;
 
-    int mnListLevel;
-    ScopeLock maIsInUndoLock;
-
     /** Used when the outline view is visible as a last resort to
         synchronize the undo managers.
     */
-    SfxUndoManager* mpLinkedUndoManager;
+    ::svl::IUndoManager* mpLinkedUndoManager;
 
     /** Call ClearRedo() at the linked undo manager, when present.
 

@@ -535,7 +535,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     |* den Seiten transferieren, sonst verlieren die Textobjekte
     |* beim Transfer den Bezug zur Vorlage
     \*************************************************************************/
-    SfxUndoManager* pUndoMgr = NULL;
+    ::svl::IUndoManager* pUndoMgr = NULL;
     if( mpDocSh )
     {
         pUndoMgr = mpDocSh->GetUndoManager();
@@ -1356,7 +1356,7 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) 
 void SdDrawDocument::RemoveUnnecessaryMasterPages(SdPage* pMasterPage, sal_Bool bOnlyDuplicatePages, sal_Bool bUndo)
 {
     ::sd::View* pView = NULL;
-    SfxUndoManager* pUndoMgr = NULL;
+    ::svl::IUndoManager* pUndoMgr = NULL;
 
     if( bUndo && !IsUndoEnabled() )
         bUndo = sal_False;
@@ -1525,7 +1525,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_True );
 
-    SfxUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
+    ::svl::IUndoManager* pUndoMgr = mpDocSh->GetUndoManager();
 
     const bool bUndo = IsUndoEnabled();
 

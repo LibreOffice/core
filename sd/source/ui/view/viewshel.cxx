@@ -85,6 +85,7 @@
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
+#include <tools/diagnose_ex.h>
 
 // #96090#
 #include <svl/slstitm.hxx>
@@ -1040,7 +1041,7 @@ void ViewShell::UpdatePreview (SdPage*, sal_Bool )
     // usefull is still done.
 }
 
-SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
+::svl::IUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
     const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
@@ -1081,7 +1082,7 @@ SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 
 void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
@@ -1116,7 +1117,7 @@ void ViewShell::ImpGetUndoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     if(pUndoManager)
     {
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
@@ -1151,7 +1152,7 @@ void ViewShell::ImpGetRedoStrings(SfxItemSet &rSet) const
 
 void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1166,11 +1167,19 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageUndoAction
-            // the nCount may have changed, so test GetUndoActionCount()
-            while(nNumber-- && pUndoManager->GetUndoActionCount())
+            try
             {
-                pUndoManager->Undo();
+                // #94637# when UndoStack is cleared by ModifyPageUndoAction
+                // the nCount may have changed, so test GetUndoActionCount()
+                while(nNumber-- && pUndoManager->GetUndoActionCount())
+                {
+                    pUndoManager->Undo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
@@ -1192,7 +1201,7 @@ void ViewShell::ImpSidUndo(sal_Bool, SfxRequest& rReq)
 
 void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
 {
-    SfxUndoManager* pUndoManager = ImpGetUndoManager();
+    ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
     sal_uInt16 nNumber(1);
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
@@ -1207,11 +1216,19 @@ void ViewShell::ImpSidRedo(sal_Bool, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageRedoAction
-            // the nCount may have changed, so test GetRedoActionCount()
-            while(nNumber-- && pUndoManager->GetRedoActionCount())
+            try
             {
-                pUndoManager->Redo();
+                // #94637# when UndoStack is cleared by ModifyPageRedoAction
+                // the nCount may have changed, so test GetRedoActionCount()
+                while(nNumber-- && pUndoManager->GetRedoActionCount())
+                {
+                    pUndoManager->Redo();
+                }
+            }
+            catch( const Exception& e )
+            {
+                // no need to handle. By definition, the UndoManager handled this by clearing the
+                // Undo/Redo stacks
             }
         }
 
