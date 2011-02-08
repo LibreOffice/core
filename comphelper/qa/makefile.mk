@@ -32,6 +32,7 @@ TARGET := qa
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 #building with stlport, but cppunit was not built with stlport
 .IF "$(USE_SYSTEM_STL)"!="YES"
