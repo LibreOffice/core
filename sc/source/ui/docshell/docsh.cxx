@@ -191,7 +191,6 @@ static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 SFX_IMPL_INTERFACE(ScDocShell,SfxObjectShell, ScResId(SCSTR_DOCSHELL))
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 //  GlobalName der aktuellen Version:
