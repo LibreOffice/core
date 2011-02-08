@@ -28,35 +28,38 @@
 <!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
 <dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="OptionsDlg" dlg:left="173" dlg:top="100" dlg:width="223" dlg:height="214" dlg:closeable="true" dlg:moveable="true" dlg:title="Options for smoketest">
  <dlg:bulletinboard>
-  <dlg:titledbox dlg:id="fmTests" dlg:tab-index="0" dlg:left="114" dlg:top="7" dlg:width="101" dlg:height="157">
+  <dlg:titledbox dlg:id="fmTests" dlg:tab-index="0" dlg:left="114" dlg:top="7" dlg:width="100" dlg:height="157">
    <dlg:title dlg:value="Tests"/>
   </dlg:titledbox>
-  <dlg:titledbox dlg:id="fmInstalls" dlg:tab-index="1" dlg:left="7" dlg:top="7" dlg:width="100" dlg:height="157">
+  <dlg:checkbox dlg:id="cbWriterTest" dlg:tab-index="1" dlg:left="19" dlg:top="21" dlg:width="80" dlg:height="8" dlg:value="Writer" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbCalcTest" dlg:tab-index="2" dlg:left="19" dlg:top="35" dlg:width="80" dlg:height="8" dlg:value="Calc" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbImpressTest" dlg:tab-index="3" dlg:left="19" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Impress" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbDrawTest" dlg:tab-index="4" dlg:left="19" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Draw" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbHTMLTest" dlg:tab-index="5" dlg:left="19" dlg:top="77" dlg:width="80" dlg:height="8" dlg:value="HTML" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbMathTest" dlg:tab-index="6" dlg:left="19" dlg:top="91" dlg:width="80" dlg:height="8" dlg:value="Math" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbChartTest" dlg:tab-index="7" dlg:left="19" dlg:top="105" dlg:width="80" dlg:height="8" dlg:value="Chart" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbJavaTest" dlg:tab-index="8" dlg:left="19" dlg:top="119" dlg:width="80" dlg:height="8" dlg:value="Java" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbDatabaseTest" dlg:tab-index="9" dlg:left="19" dlg:top="133" dlg:width="80" dlg:height="8" dlg:value="Database" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbExtensionTest" dlg:tab-index="10" dlg:left="19" dlg:top="147" dlg:width="80" dlg:height="8" dlg:value="Extension" dlg:checked="false"/>
+
+  <dlg:titledbox dlg:id="fmInstalls" dlg:tab-index="11" dlg:left="7" dlg:top="7" dlg:width="100" dlg:height="157">
    <dlg:title dlg:value="Functions"/>
   </dlg:titledbox>
-  <dlg:checkbox dlg:id="cbWriterTest" dlg:tab-index="2" dlg:left="126" dlg:top="21" dlg:width="80" dlg:height="8" dlg:value="Writer" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbCalcTest" dlg:tab-index="3" dlg:left="126" dlg:top="35" dlg:width="80" dlg:height="8" dlg:value="Calc" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbImpressTest" dlg:tab-index="4" dlg:left="126" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Impress" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbDrawTest" dlg:tab-index="5" dlg:left="126" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Draw" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbHTMLTest" dlg:tab-index="6" dlg:left="126" dlg:top="77" dlg:width="80" dlg:height="8" dlg:value="HTML" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbMathTest" dlg:tab-index="7" dlg:left="126" dlg:top="91" dlg:width="80" dlg:height="8" dlg:value="Math" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbChartTest" dlg:tab-index="8" dlg:left="126" dlg:top="105" dlg:width="80" dlg:height="8" dlg:value="Chart" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbSaveOpenXMLTest" dlg:tab-index="9" dlg:left="19" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Save / Open XML" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbSaveOpen50Test" dlg:tab-index="10" dlg:left="19" dlg:top="63" dlg:width="80" dlg:height="8" dlg:value="Save / Open V5.0" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbTerminateAfterTest" dlg:tab-index="11" dlg:disabled="true" dlg:left="19" dlg:top="174" dlg:width="190" dlg:height="8" dlg:value="Terminate Office after test" dlg:checked="false"/>
-  <dlg:titledbox dlg:id="fmBroker" dlg:tab-index="12" dlg:left="7" dlg:top="169" dlg:width="208" dlg:height="17"/>
-  <dlg:button dlg:id="btOk" dlg:tab-index="13" dlg:left="7" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Ok" dlg:button-type="ok">
+  <dlg:checkbox dlg:id="cbSaveOpen8Test" dlg:tab-index="12" dlg:left="126" dlg:top="21" dlg:width="80" dlg:height="8" dlg:value="Save / Open V8.0" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbSaveOpenXMLTest" dlg:tab-index="13" dlg:left="126" dlg:top="35" dlg:width="80" dlg:height="8" dlg:value="Save / Open XML" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="cbSaveOpen50Test" dlg:tab-index="14" dlg:left="126" dlg:top="49" dlg:width="80" dlg:height="8" dlg:value="Save / Open V5.0" dlg:checked="false"/>
+
+  <dlg:titledbox dlg:id="fmBroker" dlg:tab-index="15" dlg:left="7" dlg:top="169" dlg:width="208" dlg:height="17"/>
+  <dlg:checkbox dlg:id="cbTerminateAfterTest" dlg:tab-index="16" dlg:disabled="true" dlg:left="19" dlg:top="174" dlg:width="190" dlg:height="8" dlg:value="Terminate Office after test" dlg:checked="false"/>
+
+  <dlg:button dlg:id="btOk" dlg:tab-index="17" dlg:left="7" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Ok" dlg:button-type="ok" dlg:default="true">
    <script:event script:event-name="on-performaction" script:location="document" script:macro-name="Standard.Events.PressOk" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="btCancel" dlg:tab-index="14" dlg:left="80" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Cancel" dlg:button-type="ok">
+  <dlg:button dlg:id="btCancel" dlg:tab-index="18" dlg:left="80" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Cancel" dlg:button-type="ok">
    <script:event script:event-name="on-performaction" script:location="document" script:macro-name="Standard.Events.PressCancel" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="btStart" dlg:tab-index="15" dlg:left="152" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Smoketest">
+  <dlg:button dlg:id="btStart" dlg:tab-index="19" dlg:left="152" dlg:top="193" dlg:width="65" dlg:height="15" dlg:value="Smoketest">
    <script:event script:event-name="on-performaction" script:location="vnd.sun.star.script" script:macro-name="Standard.Events.PressTest?language=Basic&amp;location=document" script:language="Script"/>
   </dlg:button>
-  <dlg:checkbox dlg:id="cbJavaTest" dlg:tab-index="16" dlg:left="126" dlg:top="119" dlg:width="80" dlg:height="8" dlg:value="Java" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbSaveOpen8Test" dlg:tab-index="17" dlg:left="19" dlg:top="35" dlg:width="80" dlg:height="8" dlg:value="Save / Open V8.0" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbDatabaseTest" dlg:tab-index="18" dlg:left="126" dlg:top="133" dlg:width="80" dlg:height="8" dlg:value="Database" dlg:checked="false"/>
-  <dlg:checkbox dlg:id="cbExtensionTest" dlg:tab-index="19" dlg:left="126" dlg:top="147" dlg:width="80" dlg:height="8" dlg:value="Extension" dlg:checked="false"/>
  </dlg:bulletinboard>
 </dlg:window>
