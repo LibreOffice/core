@@ -281,8 +281,8 @@ sal_Int32 BinaryInputStream::readArray( ::std::vector< Type >& orVector, sal_Int
 template< typename Type >
 void BinaryInputStream::skipArray( sal_Int32 nElemCount )
 {
-    sal_Int32 nSkipSize = getLimitedValue< sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
-    implSkip( nSkipSize, sizeof( Type ) );
+    sal_Int32 nSkipSize = getLimitedValue< sal_Int32, sal_Int32 >( nElemCount, 0, SAL_MAX_INT32 / sizeof( Type ) ) * sizeof( Type );
+    skip( nSkipSize, sizeof( Type ) );
 }
 
 // ============================================================================
