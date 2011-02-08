@@ -1739,7 +1739,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
         if( pProperties.get())
         {
             CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
-            pCellColorHandler->setParagraph();
+            pCellColorHandler->setOutputFormat( CellColorHandler::Paragraph );
             pProperties->resolve(*pCellColorHandler);
             rContext->insert( pCellColorHandler->getProperties(), true );
         }
@@ -2189,7 +2189,18 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_sprm::LN_CBrc:
         break;  // sprmCBrc
     case NS_sprm::LN_CShd:
-        break;  // sprmCShd
+        {
+            //contains fore color, back color and shadow percentage, results in a brush
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+            {
+                CellColorHandlerPtr pCellColorHandler( new CellColorHandler );
+                pCellColorHandler->setOutputFormat( CellColorHandler::Character );
+                pProperties->resolve(*pCellColorHandler);
+                rContext->insert( pCellColorHandler->getProperties(), true );
+            }
+            break;
+        }
     case NS_sprm::LN_CIdslRMarkDel:
         break;  // sprmCIdslRMarkDel
     case NS_sprm::LN_CFUsePgsuSettings:

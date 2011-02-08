@@ -45,7 +45,7 @@ CellColorHandler::CellColorHandler() :
     m_nShadowType( 0 ),
     m_nColor( 0xffffffff ),
     m_nFillColor( 0xffffffff ),
-    m_bParagraph( false )
+    m_OutputFormat( Form )
 {
 }
 
@@ -200,8 +200,9 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
 
-    pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
-                            uno::makeAny( nApplyColor ));
+    pPropertyMap->Insert( m_OutputFormat == Form ? PROP_BACK_COLOR
+                        : m_OutputFormat == Paragraph ? PROP_PARA_BACK_COLOR
+                        : PROP_CHAR_BACK_COLOR, false, uno::makeAny( nApplyColor ));
     return pPropertyMap;
 }
 } //namespace dmapper

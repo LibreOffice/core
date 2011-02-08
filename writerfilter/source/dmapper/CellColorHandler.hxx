@@ -39,11 +39,12 @@ class TablePropertyMap;
 class WRITERFILTER_DLLPRIVATE CellColorHandler : public Properties
 {
 public:
+    enum OutputFormat { Form, Paragraph, Character }; // for what part of the document
+private:
     sal_Int32 m_nShadowType;
     sal_Int32 m_nColor;
     sal_Int32 m_nFillColor;
-    bool      m_bParagraph;
-private:
+    OutputFormat m_OutputFormat;
 
 public:
     CellColorHandler( );
@@ -55,7 +56,7 @@ public:
 
     ::boost::shared_ptr<TablePropertyMap>            getProperties();
 
-    void setParagraph() { m_bParagraph = true; }
+    void setOutputFormat( OutputFormat format ) { m_OutputFormat = format; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
 }}
