@@ -35,8 +35,8 @@
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
 
 #ifdef WNT
-#include <tools/prewin.h>
-#include <tools/postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #include <odma_lib.hxx>
 #endif
 

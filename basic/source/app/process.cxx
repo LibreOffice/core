@@ -31,9 +31,9 @@
 
 
 #ifdef WNT
-#include    <tools/prewin.h>
+#include    <prewin.h>
 #include "winbase.h"
-#include    <tools/postwin.h>
+#include    <postwin.h>
 #endif
 #include <tools/errcode.hxx>
 #include <basic/sbxcore.hxx>

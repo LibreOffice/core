@@ -102,9 +102,9 @@
 #endif
 
 #ifdef WNT
-#include "tools/prewin.h"
+#include "prewin.h"
 #include <objbase.h>
-#include "tools/postwin.h"
+#include "postwin.h"
 #endif
 
 

@@ -52,9 +52,9 @@
 #include "runtime.hxx"
 #include "sbunoobj.hxx"
 #ifdef WNT
-#include <tools/prewin.h>
+#include <prewin.h>
 #include "winbase.h"
-#include <tools/postwin.h>
+#include <postwin.h>
 #include <tools/fsys.hxx>
 #else
 #include <osl/file.hxx>
