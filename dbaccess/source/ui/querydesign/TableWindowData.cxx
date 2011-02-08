@@ -64,7 +64,7 @@ OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
     ,m_sComposedName(_rComposedName)
     ,m_aPosition( Point(-1,-1) )
     ,m_aSize( Size(-1,-1) )
-    ,m_bShowAll( TRUE )
+    ,m_bShowAll( sal_True )
     ,m_bIsQuery(false)
     ,m_bIsValid(true)
 {
@@ -85,13 +85,13 @@ OTableWindowData::~OTableWindowData()
 }
 
 //------------------------------------------------------------------------------
-BOOL OTableWindowData::HasPosition() const
+sal_Bool OTableWindowData::HasPosition() const
 {
     return ( (m_aPosition.X() != -1) && (m_aPosition.Y() != -1) );
 }
 
 //------------------------------------------------------------------------------
-BOOL OTableWindowData::HasSize() const
+sal_Bool OTableWindowData::HasSize() const
 {
     return ( (m_aSize.Width() != -1) && (m_aSize.Height() !=-1) );
 }

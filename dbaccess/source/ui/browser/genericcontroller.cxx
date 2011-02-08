@@ -403,7 +403,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
             throw RuntimeException( ::rtl::OUString::createFromAscii( "unable to create a view" ), *this );
 
         if ( m_bReadOnly || m_bPreview )
-            pView->EnableInput( FALSE );
+            pView->EnableInput( sal_False );
 
         impl_initialize();
     }

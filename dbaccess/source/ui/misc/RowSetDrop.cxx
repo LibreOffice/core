@@ -106,19 +106,19 @@ void ORowSetImportExport::initialize()
     }
 }
 // -----------------------------------------------------------------------------
-BOOL ORowSetImportExport::Write()
+sal_Bool ORowSetImportExport::Write()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Write" );
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
-BOOL ORowSetImportExport::Read()
+sal_Bool ORowSetImportExport::Read()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "ORowSetImportExport::Read" );
     // check if there is any column to copy
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
-        return FALSE;
+        return sal_False;
     sal_Int32 nCurrentRow = 0;
     sal_Int32 nRowFilterIndex = 0;
     sal_Bool bContinue = sal_True;
@@ -164,7 +164,7 @@ BOOL ORowSetImportExport::Read()
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 sal_Bool ORowSetImportExport::insertNewRow()

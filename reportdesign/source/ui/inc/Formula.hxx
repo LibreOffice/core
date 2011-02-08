@@ -72,11 +72,11 @@ public:
     virtual void notifyChange();
     virtual void fill();
     virtual bool calculateValue(const String& _sExpression,String& _rResult);
-    virtual void doClose(BOOL _bOk);
+    virtual void doClose(sal_Bool _bOk);
     virtual void insertEntryToLRUList(const formula::IFunctionDescription*  pDesc);
     virtual void showReference(const String& _sFormula);
-    virtual void dispatch(BOOL _bOK,BOOL _bMartixChecked);
-    virtual void setDispatcherLock( BOOL bLock );
+    virtual void dispatch(sal_Bool _bOK,sal_Bool _bMartixChecked);
+    virtual void setDispatcherLock( sal_Bool bLock );
     virtual void setReferenceInput(const formula::FormEditData* _pData);
     virtual void deleteFormData();
     virtual void clear();
@@ -96,7 +96,7 @@ public:
 
     // IControlReferenceHandler
     virtual void ShowReference(const String& _sRef);
-    virtual void HideReference( BOOL bDoneRefMode = TRUE );
+    virtual void HideReference( sal_Bool bDoneRefMode = sal_True );
     virtual void ReleaseFocus( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
     virtual void ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton* pButton = NULL );
 

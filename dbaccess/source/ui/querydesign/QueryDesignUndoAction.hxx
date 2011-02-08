@@ -43,7 +43,7 @@ namespace dbaui
         OJoinTableView* m_pOwner;       // in diesem Container spielt sich alles ab
 
     public:
-        OQueryDesignUndoAction(OJoinTableView* pOwner, USHORT nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }
+        OQueryDesignUndoAction(OJoinTableView* pOwner, sal_uInt16 nCommentID) : OCommentUndoAction(nCommentID), m_pOwner(pOwner) { }
     };
 }
 #endif // DBAUI_QUERYDESIGNUNDOACTION_HXX

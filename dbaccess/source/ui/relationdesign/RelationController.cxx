@@ -370,7 +370,7 @@ namespace
         if ( aFind == m_aTableData.end() )
         {
             aFind = m_aTableData.insert(TTableDataHelper::value_type(sSourceName,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xTableProp,sSourceName, sSourceName)))).first;
-            aFind->second->ShowAll(FALSE);
+            aFind->second->ShowAll(sal_False);
             bAdded = true;
         }
         TTableWindowData::value_type pReferencingTable = aFind->second;
@@ -405,7 +405,7 @@ namespace
                         {
                             Reference<XPropertySet>  xReferencedTable(m_xTables->getByName(sReferencedTable),UNO_QUERY);
                             aRefFind = m_aTableData.insert(TTableDataHelper::value_type(sReferencedTable,::boost::shared_ptr<OTableWindowData>(new OTableWindowData(xReferencedTable,sReferencedTable, sReferencedTable)))).first;
-                            aRefFind->second->ShowAll(FALSE);
+                            aRefFind->second->ShowAll(sal_False);
                         }
                         else
                             continue; // table name could not be found so we do not show this table releation

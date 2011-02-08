@@ -157,7 +157,7 @@ DBG_NAME(OTableEditorCtrl)
 //==================================================================
 DBG_NAME(ClipboardInvalidator)
 //------------------------------------------------------------------
-OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(ULONG nTimeout,OTableEditorCtrl* _pOwner)
+OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(sal_uLong nTimeout,OTableEditorCtrl* _pOwner)
 : m_pOwner(_pOwner)
 {
     DBG_CTOR(ClipboardInvalidator,NULL);
@@ -269,7 +269,7 @@ SfxUndoManager& OTableEditorCtrl::GetUndoManager() const
 }
 
 //------------------------------------------------------------------------------
-BOOL OTableEditorCtrl::IsReadOnly()
+sal_Bool OTableEditorCtrl::IsReadOnly()
 {
     DBG_CHKTHIS(OTableEditorCtrl,NULL);
     return bReadOnly;
@@ -902,7 +902,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
 // -----------------------------------------------------------------------------
 void OTableEditorCtrl::resetType()
 {
-    USHORT nPos = pTypeCell->GetSelectEntryPos();
+    sal_uInt16 nPos = pTypeCell->GetSelectEntryPos();
     if(nPos != LISTBOX_ENTRY_NOTFOUND)
         SwitchType( GetView()->getController().getTypeInfo(nPos) );
     else
@@ -1653,7 +1653,7 @@ void OTableEditorCtrl::Command(const CommandEvent& rEvt)
                 if  ( 1 == GetSelectColumnCount() )
                 {
                     sal_uInt16 nSelId = GetColumnId(
-                        sal::static_int_cast< USHORT >(
+                        sal::static_int_cast< sal_uInt16 >(
                             FirstSelectedColumn() ) );
                     ::Rectangle aColRect( GetFieldRectPixel( 0, nSelId, sal_False ) );
 
@@ -1951,7 +1951,7 @@ void OTableEditorCtrl::SwitchType( const TOTypeInfoSP& _pType )
             ||  ( GetView()->getController().getTypeInfo( nCurrentlySelected ) != _pType )
             )
         {
-            USHORT nEntryPos = 0;
+            sal_uInt16 nEntryPos = 0;
             const OTypeInfoMap* pTypeInfo = GetView()->getController().getTypeInfo();
             OTypeInfoMap::const_iterator aIter = pTypeInfo->begin();
             OTypeInfoMap::const_iterator aEnd = pTypeInfo->end();

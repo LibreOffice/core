@@ -64,7 +64,7 @@ namespace dbaui
         :Window(_pContainer)
         ,m_pData( _pTabConnData )
         ,m_pParent( _pContainer )
-        ,m_bSelected( FALSE )
+        ,m_bSelected( sal_False )
     {
         DBG_CTOR(OTableConnection,NULL);
         Init();
@@ -179,19 +179,19 @@ namespace dbaui
     //------------------------------------------------------------------------
     void OTableConnection::Select()
     {
-        m_bSelected = TRUE;
+        m_bSelected = sal_True;
         m_pParent->Invalidate( GetBoundingRect(), INVALIDATE_NOCHILDREN);
     }
 
     //------------------------------------------------------------------------
     void OTableConnection::Deselect()
     {
-        m_bSelected = FALSE;
+        m_bSelected = sal_False;
         InvalidateConnection();
     }
 
     //------------------------------------------------------------------------
-    BOOL OTableConnection::CheckHit( const Point& rMousePos ) const
+    sal_Bool OTableConnection::CheckHit( const Point& rMousePos ) const
     {
         //////////////////////////////////////////////////////////////////////
         // check if the point hit our line

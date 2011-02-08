@@ -41,7 +41,7 @@ namespace dbaui
         Window*                             m_pRight;
         sal_Bool                            m_bVertical;
 
-        void ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+        void ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
         DECL_LINK( SplitHdl, Splitter* );
     protected:
         virtual void DataChanged(const DataChangedEvent& rDCEvt);
