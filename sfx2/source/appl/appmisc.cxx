@@ -154,48 +154,6 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
 }
 
 //--------------------------------------------------------------------
-<<<<<<< local
-=======
-
-void SfxApplication::InitializeDisplayName_Impl()
-{
-    SfxAppData_Impl* pAppData = Get_Impl();
-    if ( !pAppData->pLabelResMgr )
-        return;
-
-    String aTitle = Application::GetDisplayName();
-    if ( !aTitle.Len() )
-    {
-        OClearableGuard aGuard( OMutex::getGlobalMutex() );
-
-        // create version string
-/*!!! (pb) don't show a version number at the moment
-        sal_uInt16 nProductVersion = ProductVersion::GetVersion().ToInt32();
-        String aVersion( String::CreateFromInt32( nProductVersion / 10 ) );
-        aVersion += 0x002E ; // 2Eh ^= '.'
-        aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
-*/
-        // load application title
-        aTitle = String( ResId( RID_APPTITLE, *pAppData->pLabelResMgr ) );
-        // merge version into title
-        aTitle.SearchAndReplaceAscii( "$(VER)", String() /*aVersion*/ );
-
-        aGuard.clear();
-
-#ifdef DBG_UTIL
-        ::rtl::OUString aDefault;
-        aTitle += DEFINE_CONST_UNICODE(" [");
-
-        String aVerId( utl::Bootstrap::getBuildIdData( aDefault ));
-        aTitle += aVerId;
-        aTitle += ']';
-#endif
-        Application::SetDisplayName( aTitle );
-    }
-}
-
-//--------------------------------------------------------------------
->>>>>>> other
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Beschreibung]

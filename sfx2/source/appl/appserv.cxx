@@ -432,77 +432,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 VclAbstractDialog* pDlg = pFact->CreateVclDialog( 0, RID_DEFAULTABOUT );
                 pDlg->Execute();
                 delete pDlg;
-                bDone = TRUE;
+                bDone = sal_True;
             }
-<<<<<<< local
-=======
-
-            String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
-            OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
-
-            // the product source is something like "DEV300", where the
-            // build id is something like "300m12(Build:12345)". For better readability,
-            // strip the duplicate UPD ("300").
-            if ( sProductSource.Len() )
-            {
-                bool bMatchingUPD =
-                        ( sProductSource.Len() >= 3 )
-                    &&  ( sBuildId.Len() >= 3 )
-                    &&  ( sProductSource.Copy( sProductSource.Len() - 3 ) == sBuildId.Copy( 0, 3 ) );
-                OSL_ENSURE( bMatchingUPD, "BUILDID and ProductSource do not match in their UPD" );
-                if ( bMatchingUPD )
-                    sProductSource = sProductSource.Copy( 0, sProductSource.Len() - 3 );
-
-                // prepend the product source
-                sBuildId.Insert( sProductSource, 0 );
-            }
-
-            // --> PB 2008-10-30 #i94693#
-            /* if the build ids of the basis or ure layer are different from the build id
-             * of the brand layer then show them */
-            rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
-                "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-            rtl::Bootstrap::expandMacros( aBasisProductBuildId );
-            rtl::OUString aUREProductBuildId( DEFINE_CONST_OUSTRING(
-                "${$URE_BIN_DIR/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-            rtl::Bootstrap::expandMacros( aUREProductBuildId );
-            if ( sBuildId.Search( String( aBasisProductBuildId ) ) == STRING_NOTFOUND
-                || sBuildId.Search( String( aUREProductBuildId ) ) == STRING_NOTFOUND )
-            {
-                String sTemp( '-' );
-                sTemp += String( aBasisProductBuildId );
-                sTemp += '-';
-                sTemp += String( aUREProductBuildId );
-                sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
-            }
-            // <--
-
-            // the build id format is "milestone(build)[cwsname]". For readability, it would
-            // be nice to have some more spaces in there.
-            xub_StrLen nPos = 0;
-            if ( ( nPos = sBuildId.Search( sal_Unicode( '(' ) ) ) != STRING_NOTFOUND )
-                sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-            if ( ( nPos = sBuildId.Search( sal_Unicode( '[' ) ) ) != STRING_NOTFOUND )
-                sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-
-            // search for the resource of the about box
-            ResId aDialogResId( RID_DEFAULTABOUT, *pAppData_Impl->pLabelResMgr );
-            ResMgr* pResMgr = pAppData_Impl->pLabelResMgr;
-            if( ! pResMgr->IsAvailable( aDialogResId.SetRT( RSC_MODALDIALOG ) ) )
-                pResMgr = GetOffResManager_Impl();
-
-            aDialogResId.SetResMgr( pResMgr );
-            if ( !pResMgr->IsAvailable( aDialogResId ) )
-            {
-                DBG_ERRORFILE( "No RID_DEFAULTABOUT in label-resource-dll" );
-            }
-
-            // then show the about box
-            AboutDialog* pDlg = new AboutDialog( 0, aDialogResId, sBuildId );
-            pDlg->Execute();
-            delete pDlg;
-            bDone = sal_True;
->>>>>>> other
             break;
         }
 
