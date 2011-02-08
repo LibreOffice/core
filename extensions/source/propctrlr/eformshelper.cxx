@@ -47,6 +47,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace pcr
@@ -715,7 +716,7 @@ namespace pcr
         }
 
         _rElementNames.resize( rMapUINameToElement.size() );
-        ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::std::select1st< MapStringToPropertySet::value_type >() );
+        ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::o3tl::select1st< MapStringToPropertySet::value_type >() );
     }
 
     //--------------------------------------------------------------------

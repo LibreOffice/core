@@ -46,6 +46,7 @@
 #include <cppuhelper/extract.hxx>
 
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_GenericPropertyHandler()
@@ -614,7 +615,7 @@ namespace pcr
 
         Sequence< Property > aReturn( m_aProperties.size() );
         ::std::transform( m_aProperties.begin(), m_aProperties.end(),
-            aReturn.getArray(), ::std::select2nd< PropertyMap::value_type >() );
+            aReturn.getArray(), ::o3tl::select2nd< PropertyMap::value_type >() );
         return aReturn;
     }
 
