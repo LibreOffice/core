@@ -48,7 +48,7 @@ public:
                             TYPEINFO();
                             SvxColorTableItem();
                             SvxColorTableItem( XColorTable* pTable,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxColorTableItem( const SvxColorTableItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -58,8 +58,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XColorTable*            GetColorTable() const { return pColorTable; }
     void                    SetColorTable( XColorTable* pTable ) {
@@ -82,7 +82,7 @@ public:
                             TYPEINFO();
                             SvxGradientListItem();
                             SvxGradientListItem( XGradientList* pList,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxGradientListItem( const SvxGradientListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -92,8 +92,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XGradientList*          GetGradientList() const { return pGradientList; }
     void                    SetGradientList( XGradientList* pList ) {
@@ -117,7 +117,7 @@ public:
                             TYPEINFO();
                             SvxHatchListItem();
                             SvxHatchListItem( XHatchList* pList,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxHatchListItem( const SvxHatchListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -127,8 +127,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XHatchList*             GetHatchList() const { return pHatchList; }
     void                    SetHatchList( XHatchList* pList ) {
@@ -152,7 +152,7 @@ public:
                             TYPEINFO();
                             SvxBitmapListItem();
                             SvxBitmapListItem( XBitmapList* pBL,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxBitmapListItem( const SvxBitmapListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -162,8 +162,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XBitmapList*            GetBitmapList() const { return pBitmapList; }
     void                    SetBitmapList( XBitmapList* pList ) {
@@ -187,7 +187,7 @@ public:
                             TYPEINFO();
                             SvxDashListItem();
                             SvxDashListItem( XDashList* pList,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxDashListItem( const SvxDashListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -197,8 +197,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XDashList*              GetDashList() const { return pDashList; }
     void                    SetDashList( XDashList* pList );
@@ -221,7 +221,7 @@ public:
                             TYPEINFO();
                             SvxLineEndListItem();
                             SvxLineEndListItem( XLineEndList* pList,
-                                    USHORT nWhich  );
+                                    sal_uInt16 nWhich  );
                             SvxLineEndListItem( const SvxLineEndListItem& );
 
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -231,8 +231,8 @@ public:
 
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId );
+    virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     XLineEndList*           GetLineEndList() const { return pLineEndList; }
     void                    SetLineEndList( XLineEndList* pList ) {

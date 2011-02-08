@@ -39,7 +39,7 @@ namespace desktop
 class WizardResId : public ResId
 {
 public:
-    WizardResId( USHORT nId );
+    WizardResId( sal_uInt16 nId );
 };
 
 class FirstStartWizard : public svt::RoadmapWizard

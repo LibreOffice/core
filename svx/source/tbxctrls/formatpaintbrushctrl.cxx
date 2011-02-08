@@ -49,12 +49,12 @@ using namespace ::com::sun::star::beans;
 
 SFX_IMPL_TOOLBOX_CONTROL( FormatPaintBrushToolBoxControl, SfxBoolItem );
 
-FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox& rTbx )
+FormatPaintBrushToolBoxControl::FormatPaintBrushToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx )
     : SfxToolBoxControl( nSlotId, nId, rTbx )
     , m_bPersistentCopy(false)
     , m_aDoubleClickTimer()
 {
-    ULONG nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
+    sal_uIntPtr nDblClkTime = rTbx.GetSettings().GetMouseSettings().GetDoubleClickTime();
 
     m_aDoubleClickTimer.SetTimeoutHdl( LINK(this, FormatPaintBrushToolBoxControl, WaitDoubleClickHdl) );
     m_aDoubleClickTimer.SetTimeout(nDblClkTime);
@@ -102,12 +102,12 @@ IMPL_LINK(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl, void*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-void FormatPaintBrushToolBoxControl::Select( BOOL )
+void FormatPaintBrushToolBoxControl::Select( sal_Bool )
 {
 }
 
 // -----------------------------------------------------------------------
-void FormatPaintBrushToolBoxControl::StateChanged( USHORT nSID, SfxItemState eState,
+void FormatPaintBrushToolBoxControl::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                 const SfxPoolItem* pState )
 {
     if( ( eState & SFX_ITEM_SET ) == 0 )

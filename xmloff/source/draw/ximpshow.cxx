@@ -210,7 +210,7 @@ SdXMLShowsContext::~SdXMLShowsContext()
     delete mpImpl;
 }
 
-SvXMLImportContext * SdXMLShowsContext::CreateChildContext( USHORT p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
+SvXMLImportContext * SdXMLShowsContext::CreateChildContext( sal_uInt16 p_nPrefix, const OUString& rLocalName, const Reference< XAttributeList>& xAttrList )
 {
     if( mpImpl && p_nPrefix == XML_NAMESPACE_PRESENTATION && IsXMLToken( rLocalName, XML_SHOW ) )
     {

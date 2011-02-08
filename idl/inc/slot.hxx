@@ -75,108 +75,108 @@ class SvMetaSlot : public SvMetaAttribute
     SvString        aDisableFlags;
     SvMetaSlot*     pLinkedSlot;
     SvMetaSlot*     pNextSlot;
-    ULONG           nListPos;
+    sal_uLong           nListPos;
     SvMetaEnumValue* pEnumValue;
     SvString    aUnoName;
 
 #ifdef IDL_COMPILER
     void            WriteSlot( const ByteString & rShellName,
-                            USHORT nCount, const ByteString & rSlotId,
+                            sal_uInt16 nCount, const ByteString & rSlotId,
                             SvSlotElementList &rList,
                             const ByteString & rPrefix,
                                SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void    Write( SvIdlDataBase & rBase,
-                            SvStream & rOutStm, USHORT nTab,
+                            SvStream & rOutStm, sal_uInt16 nTab,
                              WriteType, WriteAttribute = 0 );
 
     void            SetEnumValue(SvMetaEnumValue *p)
                     { pEnumValue = p; }
 #endif
 protected:
-    void    SetCachable( BOOL bSet )
+    void    SetCachable( sal_Bool bSet )
             {
                 aCachable = bSet;
                 if( bSet )
-                    aVolatile = FALSE;
+                    aVolatile = sal_False;
             }
-    void    SetVolatile( BOOL bSet )
+    void    SetVolatile( sal_Bool bSet )
             {
                 aVolatile = bSet;
                 if( bSet )
-                    aCachable = FALSE;
+                    aCachable = sal_False;
             }
-    void    SetToggle( BOOL bSet )
+    void    SetToggle( sal_Bool bSet )
             {
                 aToggle = bSet;
             }
-    void    SetAutoUpdate( BOOL bSet )
+    void    SetAutoUpdate( sal_Bool bSet )
             {
                 aAutoUpdate = bSet;
             }
 
-    void    SetSynchron( BOOL bSet )
+    void    SetSynchron( sal_Bool bSet )
             {
                 aSynchron = bSet;
                 if( bSet )
-                    aAsynchron = FALSE;
+                    aAsynchron = sal_False;
             }
-    void    SetAsynchron( BOOL bSet )
+    void    SetAsynchron( sal_Bool bSet )
             {
                 aAsynchron = bSet;
                 if( bSet )
-                    aSynchron = FALSE;
+                    aSynchron = sal_False;
             }
 
-    void    SetRecordPerItem( BOOL bSet )
+    void    SetRecordPerItem( sal_Bool bSet )
             {
                 aRecordPerItem = bSet;
                 if( bSet )
-                    aRecordPerSet = aRecordManual = aNoRecord = FALSE;
+                    aRecordPerSet = aRecordManual = aNoRecord = sal_False;
             }
-    void    SetRecordPerSet( BOOL bSet )
+    void    SetRecordPerSet( sal_Bool bSet )
             {
                 aRecordPerSet = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordManual = aNoRecord = FALSE;
+                    aRecordPerItem = aRecordManual = aNoRecord = sal_False;
             }
-    void    SetRecordManual( BOOL bSet )
+    void    SetRecordManual( sal_Bool bSet )
             {
                 aRecordManual = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordPerSet = aNoRecord = FALSE;
+                    aRecordPerItem = aRecordPerSet = aNoRecord = sal_False;
             }
-    void    SetNoRecord( BOOL bSet )
+    void    SetNoRecord( sal_Bool bSet )
             {
                 aNoRecord = bSet;
                 if( bSet )
-                    aRecordPerItem = aRecordPerSet = aRecordManual = FALSE;
+                    aRecordPerItem = aRecordPerSet = aRecordManual = sal_False;
             }
-    void    SetRecordAbsolute( BOOL bSet )
+    void    SetRecordAbsolute( sal_Bool bSet )
             { aRecordAbsolute = bSet; }
-    void    SetHasDialog( BOOL bSet )
+    void    SetHasDialog( sal_Bool bSet )
             { aHasDialog = bSet; }
-    void    SetMenuConfig( BOOL bSet )
+    void    SetMenuConfig( sal_Bool bSet )
             { aMenuConfig = bSet; }
-    void    SetToolBoxConfig( BOOL bSet )
+    void    SetToolBoxConfig( sal_Bool bSet )
             { aToolBoxConfig = bSet; }
-    void    SetStatusBarConfig( BOOL bSet )
+    void    SetStatusBarConfig( sal_Bool bSet )
             { aStatusBarConfig = bSet; }
-    void    SetAccelConfig( BOOL bSet )
+    void    SetAccelConfig( sal_Bool bSet )
             { aAccelConfig = bSet; }
-    void    SetAllConfig( BOOL bSet )
+    void    SetAllConfig( sal_Bool bSet )
             {
                 aMenuConfig     = bSet;
                 aToolBoxConfig  = bSet;
                 aStatusBarConfig = bSet;
                 aAccelConfig    = bSet;
             }
-    void    SetFastCall( BOOL bSet )
+    void    SetFastCall( sal_Bool bSet )
             { aFastCall = bSet; }
-    void    SetContainer( BOOL bSet )
+    void    SetContainer( sal_Bool bSet )
             { aContainer = bSet; }
-    void    SetImageRotation( BOOL bSet )
+    void    SetImageRotation( sal_Bool bSet )
             { aImageRotation = bSet; }
-    void    SetImageReflection( BOOL bSet )
+    void    SetImageReflection( sal_Bool bSet )
             { aImageReflection = bSet; }
 
 public:
@@ -187,84 +187,84 @@ public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
 
-    virtual BOOL    IsVariable() const;
-    virtual BOOL    IsMethod() const;
-    virtual ByteString  GetMangleName( BOOL bVariable ) const;
+    virtual sal_Bool    IsVariable() const;
+    virtual sal_Bool    IsMethod() const;
+    virtual ByteString  GetMangleName( sal_Bool bVariable ) const;
 
     SvMetaAttribute *   GetMethod() const;
     SvMetaType *        GetSlotType() const;
-    BOOL                GetHasCoreId() const;
+    sal_Bool                GetHasCoreId() const;
     const ByteString &      GetGroupId() const;
     const ByteString &      GetConfigId() const;
     const ByteString &      GetExecMethod() const;
     const ByteString &      GetStateMethod() const;
     const ByteString &      GetDefault() const;
     const ByteString &      GetDisableFlags() const;
-    BOOL                GetPseudoSlots() const;
+    sal_Bool                GetPseudoSlots() const;
     /*
-    BOOL                GetGet() const;
-    BOOL                GetSet() const;
+    sal_Bool                GetGet() const;
+    sal_Bool                GetSet() const;
     */
-    BOOL                GetCachable() const;
-    BOOL                GetVolatile() const;
-    BOOL                GetToggle() const;
-    BOOL                GetAutoUpdate() const;
+    sal_Bool                GetCachable() const;
+    sal_Bool                GetVolatile() const;
+    sal_Bool                GetToggle() const;
+    sal_Bool                GetAutoUpdate() const;
 
-    BOOL                GetSynchron() const;
-    BOOL                GetAsynchron() const;
+    sal_Bool                GetSynchron() const;
+    sal_Bool                GetAsynchron() const;
 
-    BOOL                GetRecordPerItem() const;
-    BOOL                GetRecordPerSet() const;
-    BOOL                GetRecordManual() const;
-    BOOL                GetNoRecord() const;
-    BOOL                GetRecordAbsolute() const;
+    sal_Bool                GetRecordPerItem() const;
+    sal_Bool                GetRecordPerSet() const;
+    sal_Bool                GetRecordManual() const;
+    sal_Bool                GetNoRecord() const;
+    sal_Bool                GetRecordAbsolute() const;
 
-    BOOL                GetHasDialog() const;
+    sal_Bool                GetHasDialog() const;
     const ByteString &      GetPseudoPrefix() const;
     const ByteString &      GetUnoName() const;
-    BOOL                GetMenuConfig() const;
-    BOOL                GetToolBoxConfig() const;
-    BOOL                GetStatusBarConfig() const;
-    BOOL                GetAccelConfig() const;
-    BOOL                GetFastCall() const;
-    BOOL                GetContainer() const;
-    BOOL                GetImageRotation() const;
-    BOOL                GetImageReflection() const;
+    sal_Bool                GetMenuConfig() const;
+    sal_Bool                GetToolBoxConfig() const;
+    sal_Bool                GetStatusBarConfig() const;
+    sal_Bool                GetAccelConfig() const;
+    sal_Bool                GetFastCall() const;
+    sal_Bool                GetContainer() const;
+    sal_Bool                GetImageRotation() const;
+    sal_Bool                GetImageReflection() const;
     SvMetaSlot*         GetLinkedSlot() const
                         { return pLinkedSlot; }
     SvMetaSlot*         GetNextSlot() const
                         { return pNextSlot; }
-    ULONG               GetListPos() const
+    sal_uLong               GetListPos() const
                         { return nListPos; }
-    void                SetListPos(ULONG n)
+    void                SetListPos(sal_uLong n)
                         { nListPos = n; }
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
-//    void                FillSbxObject( SvIdlDataBase & rBase, SbxObject *, BOOL bProp );
+//    void                FillSbxObject( SvIdlDataBase & rBase, SbxObject *, sal_Bool bProp );
 #ifdef IDL_COMPILER
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }
-    virtual BOOL        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
     virtual void        WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                              SvStream & rOutStm, USHORT nTab );
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+                                              SvStream & rOutStm, sal_uInt16 nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, USHORT nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab );
     virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
                                 SvIdlDataBase& );
     void                WriteSlotStubs( const ByteString & rShellName,
                                     ByteStringList & rList,
                                     SvStream & rOutStm );
-    USHORT              WriteSlotMap( const ByteString & rShellName,
-                                    USHORT nCount,
+    sal_uInt16              WriteSlotMap( const ByteString & rShellName,
+                                    sal_uInt16 nCount,
                                     SvSlotElementList&,
                                     const ByteString &,
                                     SvIdlDataBase & rBase,
                                     SvStream & rOutStm );
-    USHORT              WriteSlotParamArray( SvIdlDataBase & rBase,
+    sal_uInt16              WriteSlotParamArray( SvIdlDataBase & rBase,
                                             SvStream & rOutStm );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
                                   Table * pIdTable );

@@ -371,7 +371,7 @@ class DetectorFactory : // interfaces
             @param  sName
                     the name of the queried container entry.
 
-            @return TRUE if the requested item exist; FALSE otherwise.
+            @return sal_True if the requested item exist; sal_False otherwise.
          */
 
         virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& sName )
@@ -393,7 +393,7 @@ class DetectorFactory : // interfaces
 
         /** @short  return fill state of this cache.
 
-            @return TRUE if any item exist inside this conatiner; FALSE otherwhise.
+            @return sal_True if any item exist inside this conatiner; sal_False otherwhise.
          */
 
         virtual sal_Bool SAL_CALL hasElements()

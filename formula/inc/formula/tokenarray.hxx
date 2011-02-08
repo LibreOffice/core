@@ -40,7 +40,7 @@ namespace formula
 
 // RecalcMode access only via TokenArray SetRecalcMode / IsRecalcMode...
 
-typedef BYTE ScRecalcMode;
+typedef sal_uInt8 ScRecalcMode;
 // Only one of the exclusive bits can be set,
 // handled by TokenArray SetRecalcMode... methods
 #define RECALCMODE_NORMAL       0x01    // exclusive
@@ -73,13 +73,13 @@ class FORMULA_DLLPUBLIC FormulaTokenArray
 protected:
     FormulaToken**  pCode;                  // Token code array
     FormulaToken**  pRPN;                   // RPN array
-    USHORT          nLen;                   // Length of token array
-    USHORT          nRPN;                   // Length of RPN array
-    USHORT          nIndex;                 // Current step index
-    USHORT          nError;                 // Error code
+    sal_uInt16          nLen;                   // Length of token array
+    sal_uInt16          nRPN;                   // Length of RPN array
+    sal_uInt16          nIndex;                 // Current step index
+    sal_uInt16          nError;                 // Error code
     short           nRefs;                  // Count of cell references
     ScRecalcMode    nMode;                  // Flags to indicate when to recalc this code
-    BOOL            bHyperLink;             // If HYPERLINK() occurs in the formula.
+    sal_Bool            bHyperLink;             // If HYPERLINK() occurs in the formula.
 
 protected:
     void                    Assign( const FormulaTokenArray& );
@@ -116,7 +116,7 @@ public:
     FormulaToken* GetNextColRowName();
     FormulaToken* GetNextOpCodeRPN( OpCode );
     /// Peek at nIdx-1 if not out of bounds, decrements nIdx if successful. Returns NULL if not.
-    FormulaToken* PeekPrev( USHORT & nIdx );
+    FormulaToken* PeekPrev( sal_uInt16 & nIdx );
     FormulaToken* PeekNext();
     FormulaToken* PeekPrevNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
     FormulaToken* PeekNextNoSpaces();    /// Only after Reset/First/Next/Last/Prev!
@@ -125,22 +125,22 @@ public:
     FormulaToken* LastRPN() { nIndex = nRPN; return PrevRPN(); }
     FormulaToken* PrevRPN();
 
-    BOOL    HasOpCode( OpCode ) const;
-    BOOL    HasOpCodeRPN( OpCode ) const;
+    sal_Bool    HasOpCode( OpCode ) const;
+    sal_Bool    HasOpCodeRPN( OpCode ) const;
     /// Token of type svIndex or opcode ocColRowName
-    BOOL    HasNameOrColRowName() const;
+    sal_Bool    HasNameOrColRowName() const;
 
     FormulaToken** GetArray() const  { return pCode; }
     FormulaToken** GetCode()  const  { return pRPN; }
-    USHORT    GetLen() const     { return nLen; }
-    USHORT    GetCodeLen() const { return nRPN; }
+    sal_uInt16    GetLen() const     { return nLen; }
+    sal_uInt16    GetCodeLen() const { return nRPN; }
     void      Reset()            { nIndex = 0; }
-    USHORT    GetCodeError() const      { return nError; }
-    void      SetCodeError( USHORT n )  { nError = n; }
+    sal_uInt16    GetCodeError() const      { return nError; }
+    void      SetCodeError( sal_uInt16 n )  { nError = n; }
     short     GetRefs()  const { return nRefs;  }
     void      IncrementRefs() { ++nRefs; }
-    void      SetHyperLink( BOOL bVal ) { bHyperLink = bVal; }
-    BOOL      IsHyperLink() const       { return bHyperLink; }
+    void      SetHyperLink( sal_Bool bVal ) { bHyperLink = bVal; }
+    sal_Bool      IsHyperLink() const       { return bHyperLink; }
 
     inline  ScRecalcMode    GetRecalcMode() const { return nMode; }
                             /** Bits aren't set directly but validated and
@@ -165,17 +165,17 @@ public:
                                 { nMode |= RECALCMODE_ONREFMOVE; }
     inline  void            ClearRecalcModeOnRefMove()
                                 { nMode &= ~RECALCMODE_ONREFMOVE; }
-    inline  BOOL            IsRecalcModeNormal() const
+    inline  sal_Bool            IsRecalcModeNormal() const
                                 { return (nMode & RECALCMODE_NORMAL) != 0; }
-    inline  BOOL            IsRecalcModeAlways() const
+    inline  sal_Bool            IsRecalcModeAlways() const
                                 { return (nMode & RECALCMODE_ALWAYS) != 0; }
-    inline  BOOL            IsRecalcModeOnLoad() const
+    inline  sal_Bool            IsRecalcModeOnLoad() const
                                 { return (nMode & RECALCMODE_ONLOAD) != 0; }
-    inline  BOOL            IsRecalcModeOnLoadOnce() const
+    inline  sal_Bool            IsRecalcModeOnLoadOnce() const
                                 { return (nMode & RECALCMODE_ONLOAD_ONCE) != 0; }
-    inline  BOOL            IsRecalcModeForced() const
+    inline  sal_Bool            IsRecalcModeForced() const
                                 { return (nMode & RECALCMODE_FORCED) != 0; }
-    inline  BOOL            IsRecalcModeOnRefMove() const
+    inline  sal_Bool            IsRecalcModeOnRefMove() const
                                 { return (nMode & RECALCMODE_ONREFMOVE) != 0; }
 
                             /** Get OpCode of the most outer function */
@@ -183,7 +183,7 @@ public:
 
                             /** Operators +,-,*,/,^,&,=,<>,<,>,<=,>=
                                 with DoubleRef in Formula? */
-    BOOL                    HasMatrixDoubleRefOps();
+    sal_Bool                    HasMatrixDoubleRefOps();
 
     virtual FormulaToken* AddOpCode(OpCode e);
 
@@ -204,7 +204,7 @@ public:
     FormulaToken* AddString( const sal_Unicode* pStr );
     FormulaToken* AddString( const String& rStr );
     FormulaToken* AddDouble( double fVal );
-    FormulaToken* AddName( USHORT n );
+    FormulaToken* AddName( sal_uInt16 n );
     FormulaToken* AddExternal( const sal_Unicode* pStr );
     /** Xcl import may play dirty tricks with OpCode!=ocExternal.
         Others don't use! */

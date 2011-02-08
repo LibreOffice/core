@@ -230,7 +230,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 //====================================================================
 
-FASTBOOL SfxApplication::Initialize_Impl()
+bool SfxApplication::Initialize_Impl()
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 

@@ -83,7 +83,7 @@ struct UpdateData
     aUpdateSource;
 
     // ID to find this entry in the update listbox
-    USHORT  m_nID;
+    sal_uInt16  m_nID;
     bool    m_bIgnored;
 };
 }

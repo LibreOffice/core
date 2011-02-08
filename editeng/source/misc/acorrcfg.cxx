@@ -53,18 +53,18 @@ static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
     aSwConfig(*this),
-    bFileRel(TRUE),
-    bNetRel(TRUE),
-    bAutoTextTip(TRUE),
-    bAutoTextPreview(FALSE),
-    bAutoFmtByInput(TRUE),
-    bSearchInAllCategories(FALSE)
+    bFileRel(sal_True),
+    bNetRel(sal_True),
+    bAutoTextTip(sal_True),
+    bAutoTextPreview(sal_False),
+    bAutoFmtByInput(sal_True),
+    bSearchInAllCategories(sal_False)
 {
     SvtPathOptions aPathOpt;
     String sSharePath, sUserPath, sAutoPath( aPathOpt.GetAutoCorrectPath() );
 
     String* pS = &sSharePath;
-    for( USHORT n = 0; n < 2; ++n, pS = &sUserPath )
+    for( sal_uInt16 n = 0; n < 2; ++n, pS = &sUserPath )
     {
         *pS = sAutoPath.GetToken( n, ';' );
         INetURLObject aPath( *pS );
@@ -224,8 +224,8 @@ void SvxBaseAutoCorrCfg::Load(sal_Bool bInit)
             }
         }
         if( nFlags )
-            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags, TRUE );
-        rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), FALSE );
+            rParent.pAutoCorrect->SetAutoCorrFlag( nFlags, sal_True );
+        rParent.pAutoCorrect->SetAutoCorrFlag( ( 0xffff & ~nFlags ), sal_False );
 
     }
 }
@@ -254,7 +254,7 @@ void SvxBaseAutoCorrCfg::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     const long nFlags = rParent.pAutoCorrect->GetFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
@@ -470,7 +470,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nRightMargin =
-                            sal::static_int_cast< BYTE >(nVal);
+                            sal::static_int_cast< sal_uInt8 >(nVal);
                     }
                     break; // "Format/Option/CombineValue",
                     case  23: rSwFlags.bAFmtDelSpacesAtSttEnd =  *(sal_Bool*)pValues[nProp].getValue(); break; // "Format/Option/DelSpacesAtStartEnd",
@@ -488,14 +488,14 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltWordLen =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MinWordLen",
                     case  35:
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltListLen =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/MaxListLen",
                     case  36: rSwFlags.bAutoCmpltCollectWords = *(sal_Bool*)pValues[nProp].getValue(); break; // "Completion/CollectWords",
@@ -506,7 +506,7 @@ void SvxSwAutoCorrCfg::Load(sal_Bool bInit)
                     {
                         sal_Int32 nVal = 0; pValues[nProp] >>= nVal;
                         rSwFlags.nAutoCmpltExpandKey =
-                            sal::static_int_cast< USHORT >(nVal);
+                            sal::static_int_cast< sal_uInt16 >(nVal);
                     }
                     break; // "Completion/AcceptKey"
                     case 41 :rSwFlags.bAutoCmpltKeepList = *(sal_Bool*)pValues[nProp].getValue(); break;//"Completion/KeepList"
@@ -571,7 +571,7 @@ void SvxSwAutoCorrCfg::Commit()
     Any* pValues = aValues.getArray();
 
     const Type& rType = ::getBooleanCppuType();
-    BOOL bVal;
+    sal_Bool bVal;
     SvxSwAutoFmtFlags& rSwFlags = rParent.pAutoCorrect->GetSwFlags();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
