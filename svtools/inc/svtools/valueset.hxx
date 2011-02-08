@@ -34,6 +34,7 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/timer.hxx>
+#include <vector>
 
 class MouseEvent;
 class TrackingEvent;
@@ -41,9 +42,11 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-class ValueItemList;
-struct ValueSetItem;
 struct ValueSet_Impl;
+
+struct ValueSetItem;
+typedef ::std::vector< ValueSetItem* > ValueItemList;
+
 #ifdef _SV_VALUESET_CXX
 class ValueSetAcc;
 class ValueItemAcc;
@@ -234,8 +237,8 @@ gewuenschten WinBits (vor Show) mit SetStyle() gesetzt werden.
 // - ValueSet -
 // ------------
 
-#define VALUESET_APPEND         ((USHORT)0xFFFF)
-#define VALUESET_ITEM_NOTFOUND  ((USHORT)0xFFFF)
+#define VALUESET_APPEND         ((size_t)-1)
+#define VALUESET_ITEM_NOTFOUND  ((size_t)-1)
 
 class SVT_DLLPUBLIC ValueSet : public Control
 {
@@ -254,7 +257,7 @@ private:
     USHORT          mnOldItemId;
     USHORT          mnSelItemId;
     USHORT          mnHighItemId;
-    USHORT          mnDropPos;
+    size_t          mnDropPos;
     USHORT          mnCols;
     USHORT          mnCurCol;
     USHORT          mnUserCols;
@@ -284,7 +287,7 @@ private:
     SVT_DLLPRIVATE void         ImplInit();
     SVT_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
     SVT_DLLPRIVATE void         ImplInitScrollBar();
-    SVT_DLLPRIVATE void            ImplDeleteItems();
+    SVT_DLLPRIVATE void         ImplDeleteItems();
     SVT_DLLPRIVATE void         ImplFormatItem( ValueSetItem* pItem );
     SVT_DLLPRIVATE void         ImplDrawItemText( const XubString& rStr );
     SVT_DLLPRIVATE void         ImplDrawSelect();
@@ -294,8 +297,8 @@ private:
     SVT_DLLPRIVATE void         ImplDraw();
     using Window::ImplScroll;
     SVT_DLLPRIVATE BOOL         ImplScroll( const Point& rPos );
-    SVT_DLLPRIVATE USHORT           ImplGetItem( const Point& rPoint, BOOL bMove = FALSE ) const;
-    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( USHORT nPos );
+    SVT_DLLPRIVATE size_t       ImplGetItem( const Point& rPoint, BOOL bMove = FALSE ) const;
+    SVT_DLLPRIVATE ValueSetItem*    ImplGetItem( size_t nPos );
     SVT_DLLPRIVATE ValueSetItem*    ImplGetFirstItem();
     SVT_DLLPRIVATE USHORT          ImplGetVisibleItemCount() const;
     SVT_DLLPRIVATE ValueSetItem*    ImplGetVisibleItem( USHORT nVisiblePos );
@@ -303,8 +306,8 @@ private:
     SVT_DLLPRIVATE BOOL            ImplHasAccessibleListeners();
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, BOOL bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, BOOL bCancel );
-                    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
-                    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
+    DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
+    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
 #endif
 
     // Forbidden and not implemented.
@@ -345,27 +348,27 @@ public:
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
     void            InsertItem( USHORT nItemId, const Image& rImage,
-                                USHORT nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( USHORT nItemId, const Color& rColor,
-                                USHORT nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( USHORT nItemId,
                                 const Image& rImage, const XubString& rStr,
-                                USHORT nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( USHORT nItemId,
                                 const Color& rColor, const XubString& rStr,
-                                USHORT nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertItem( USHORT nItemId,
-                                USHORT nPos = VALUESET_APPEND );
+                                size_t nPos = VALUESET_APPEND );
     void            InsertSpace( USHORT nItemId,
-                                 USHORT nPos = VALUESET_APPEND );
+                                 size_t nPos = VALUESET_APPEND );
     void            RemoveItem( USHORT nItemId );
 
     void            CopyItems( const ValueSet& rValueSet );
     void            Clear();
 
-    USHORT          GetItemCount() const;
-    USHORT          GetItemPos( USHORT nItemId ) const;
-    USHORT          GetItemId( USHORT nPos ) const;
+    size_t          GetItemCount() const;
+    size_t          GetItemPos( USHORT nItemId ) const;
+    USHORT          GetItemId( size_t nPos ) const;
     USHORT          GetItemId( const Point& rPos ) const;
     Rectangle       GetItemRect( USHORT nItemId ) const;
 

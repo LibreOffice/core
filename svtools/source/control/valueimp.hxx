@@ -100,9 +100,7 @@ struct ValueSetItem
      void               ClearAccessible();
 };
 
-// -----------------------------------------------------------------------------
-
-DECLARE_LIST( ValueItemList, ValueSetItem* )
+typedef ::std::vector< ValueSetItem* > ValueItemList;
 
 // -----------------------------------------------------------------------------
 
