@@ -78,9 +78,9 @@
 
 #ifdef _ADO_DATALINK_BROWSE_
 #if defined( WNT )
-    #include <tools/prewin.h>
+    #include <prewin.h>
     #include <windows.h>
-    #include <tools/postwin.h>
+    #include <postwin.h>
 #endif
 #include <vcl/sysdata.hxx>
 #include "adodatalinks.hxx"
