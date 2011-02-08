@@ -256,11 +256,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     // text order ----------
     if( m_bShowStaggeringControls )
     {
-<<<<<<< local
-        aState = rInAttrs.GetItemState( SCHATTR_TEXT_ORDER, sal_False, &pPoolItem );
-=======
         aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, sal_False, &pPoolItem );
->>>>>>> other
         if( aState == SFX_ITEM_SET )
         {
             SvxChartTextOrder eOrder = static_cast< const SvxChartTextOrderItem * >( pPoolItem )->GetValue();
