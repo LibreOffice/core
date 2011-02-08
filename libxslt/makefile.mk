@@ -67,7 +67,7 @@ xslt_CC+=-shared-libgcc
 .ENDIF
 xslt_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
-xslt_LIBS+=-lstdc++_s
+xslt_LIBS+=$(MINGW_SHARED_LIBSTDCPP)
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
