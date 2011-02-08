@@ -121,10 +121,16 @@ private:
     SvXub_StrLens aKashidaInvalid;
     SvXub_StrLens aNoKashidaLine;
     SvXub_StrLens aNoKashidaLineEnd;
-    SvXub_StrLens aCompChg;
-    SvXub_StrLens aCompLen;
     SvXub_StrLens aHiddenChg;
-    SvBytes aCompType;
+    //! Records a single change in compression.
+    struct CompressionChangeInfo
+    {
+        xub_StrLen position; //!< Character position where the change occurs.
+        xub_StrLen length;   //!< Length of the segment.
+        BYTE       type;     //!< Type of compression that we change to.
+        inline CompressionChangeInfo(xub_StrLen pos, xub_StrLen len, BYTE typ) : position(pos), length(len), type(typ) {};
+    };
+    std::vector<CompressionChangeInfo> aCompressionChanges;
     xub_StrLen nInvalidityPos;
     BYTE nDefaultDir;
 
@@ -403,22 +409,22 @@ inline xub_StrLen SwScriptInfo::GetKashida( const USHORT nCnt ) const
     return aKashida[ nCnt ];
 }
 
-inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
+inline USHORT SwScriptInfo::CountCompChg() const { return aCompressionChanges.size(); };
 inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
 {
-    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionStart today!");
-    return aCompChg[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionStart today!");
+    return aCompressionChanges[ nCnt ].position;
 }
 inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
 {
-    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionLen today!");
-    return aCompLen[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionLen today!");
+    return aCompressionChanges[ nCnt ].length;
 }
 
 inline BYTE SwScriptInfo::GetCompType( const USHORT nCnt ) const
 {
-    OSL_ENSURE( nCnt < aCompChg.Count(),"No CompressionType today!");
-    return aCompType[ nCnt ];
+    OSL_ENSURE( nCnt < aCompressionChanges.size(),"No CompressionType today!");
+    return aCompressionChanges[ nCnt ].type;
 }
 
 inline USHORT SwScriptInfo::CountHiddenChg() const { return aHiddenChg.Count(); };

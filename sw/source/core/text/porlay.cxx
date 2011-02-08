@@ -931,10 +931,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 
     // remove invalid entries from compression information arrays
-    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
-    aCompChg.Remove( nCntComp, nCompRemove );
-    aCompLen.Remove( nCntComp, nCompRemove );
-    aCompType.Remove( nCntComp, nCompRemove );
+    aCompressionChanges.erase(aCompressionChanges.begin() + nCntComp, aCompressionChanges.end() );
 
     // get the start of the last kashida group
     USHORT nLastKashida = nChg;
@@ -1085,10 +1082,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                              ePrevState != KANA )
                         {
-                            aCompChg.Insert( nPrevChg, nCntComp );
-                            BYTE nTmpType = ePrevState;
-                            aCompType.Insert( nTmpType, nCntComp );
-                            aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                            aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
                         }
                     }
 
@@ -1106,10 +1100,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                      ePrevState != KANA )
                 {
-                    aCompChg.Insert( nPrevChg, nCntComp );
-                    BYTE nTmpType = ePrevState;
-                    aCompType.Insert( nTmpType, nCntComp );
-                    aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                    aCompressionChanges.push_back( CompressionChangeInfo(nPrevChg, nLastCompression - nPrevChg, ePrevState) );
                 }
             }
         }
