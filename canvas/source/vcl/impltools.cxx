@@ -60,6 +60,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include <canvas/canvastools.hxx>
+#include <o3tl/compat_functional.hxx>
 
 #include "impltools.hxx"
 #include "canvasbitmap.hxx"
@@ -302,7 +303,7 @@ namespace vclcanvas
                 {
                     // source already has alpha channel - 1:1 mapping,
                     // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
-                    ::std::iota( aAlphaMap, &aAlphaMap[256], 0 );
+                    ::o3tl::iota( aAlphaMap, &aAlphaMap[256], 0 );
                 }
                 else
                 {

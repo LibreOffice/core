@@ -25,7 +25,8 @@
  */
 
 /*
- * Lifted and paraphrased from STLport
+ * Lifted and paraphrased from STLport - with additions from Fridrich
+ * Strba and Thorsten Behrens
  */
 
 #ifndef INCLUDED_O3TL_COMPAT_FUNCTIONAL_HXX
@@ -36,6 +37,7 @@
 namespace o3tl
 {
 
+/// Identity functor - return the input value
 template<class T>
 struct identity : public std::unary_function<T, T>
 {
@@ -45,6 +47,7 @@ struct identity : public std::unary_function<T, T>
      }
 };
 
+/// Functor, given two parameters, return the first
 template<class T1,class T2>
 struct project1st : public std::binary_function<T1, T2, T1>
 {
@@ -54,6 +57,7 @@ struct project1st : public std::binary_function<T1, T2, T1>
     }
 };
 
+/// Functor, given two parameters, return the second
 template<class T1,class T2>
 struct project2nd : public std::binary_function<T1, T2, T2>
 {
@@ -63,6 +67,7 @@ struct project2nd : public std::binary_function<T1, T2, T2>
     }
 };
 
+/// Select first value of a pair
 template<class P>
 struct select1st : public std::unary_function<P, typename P::first_type>
 {
@@ -72,6 +77,7 @@ struct select1st : public std::unary_function<P, typename P::first_type>
     }
 };
 
+/// Select second value of a pair
 template<class P>
 struct select2nd : public std::unary_function<P, typename P::second_type>
 {
@@ -81,6 +87,7 @@ struct select2nd : public std::unary_function<P, typename P::second_type>
     }
 };
 
+/// Call F1 with the result of F2 applied to the one input parameter
 template<class F1, class F2>
 class unary_compose : public std::unary_function<typename F2::argument_type, typename F1::result_type>
 {
@@ -97,12 +104,14 @@ class unary_compose : public std::unary_function<typename F2::argument_type, typ
         F2 ftor2;
 };
 
+/// Create functor that calls F1 with the result of F2 applied to the one input parameter
 template<class F1, class F2>
 inline unary_compose<F1, F2> compose1(const F1& fnction1, const F2& fnction2)
 {
     return (unary_compose<F1, F2>(fnction1, fnction2));
 }
 
+/// Calls F2 and F3 for the two args of F1, respectively
 template<class F1, class F2, class F3>
 class binary_compose : public std::unary_function<typename F2::argument_type,typename F1::result_type>
 {
@@ -120,10 +129,19 @@ class binary_compose : public std::unary_function<typename F2::argument_type,typ
         F3 ftor3;
 };
 
+/// Creates functor that calls F2 and F3 for the two args of F1, respectively
 template<class F1, class F2, class F3>
 inline binary_compose<F1, F2, F3> compose2(const F1& fnction1, const F2& fnction2, const F3& fnction3)
 {
     return (binary_compose<F1, F2, F3>(fnction1, fnction2, fnction3));
+}
+
+/// Algo that assigns val, val+1, ... to the given range
+template<typename FwdIter, typename ValueType>
+inline void iota(FwdIter first, FwdIter last, ValueType val)
+{
+    while(first != last)
+        *first++ = val++;
 }
 
 }   // namespace o3tl
