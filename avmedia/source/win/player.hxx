@@ -53,10 +53,11 @@ namespace avmedia { namespace win {
 // ----------
 // - Player -
 // ----------
+typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
+                                          ::com::sun::star::lang::XServiceInfo > Player_BASE;
 
 class Player :  public cppu::BaseMutex,
-                public ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XServiceInfo >
+                public Player_BASE
 {
 public:
 

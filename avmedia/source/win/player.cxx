@@ -70,6 +70,7 @@ bool isWindowsVistaOrHigher()
 // ----------------
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
+    Player_BASE(m_aMutex),
     mxMgr( rxMgr ),
     mpGB( NULL ),
     mpOMF( NULL ),
@@ -99,7 +100,7 @@ Player::~Player()
 
 void SAL_CALL Player::disposing()
 {
-    MutexGuard aGuard(m_aMutex);
+    ::osl::MutexGuard aGuard(m_aMutex);
     stop();
     if( mpBA )
         mpBA->Release();

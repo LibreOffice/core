@@ -70,6 +70,7 @@ struct GstBusSource : public GSource
 // - Player -
 // ---------------
 Player::Player( GString* pURI ) :
+    Player_BASE(m_aMutex),
     mpMutex( g_mutex_new() ),
     mpCond( g_cond_new() ),
     mpThread( NULL ),
