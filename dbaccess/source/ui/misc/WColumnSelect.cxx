@@ -389,7 +389,7 @@ USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
                                                                     ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, sColumnString),
-                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
             OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
