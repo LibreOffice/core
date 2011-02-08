@@ -57,6 +57,7 @@
 #include <toolkit/helper/convert.hxx>
 #include <algorithm>
 #include <numeric>
+#include <o3tl/compat_functional.hxx>
 
 namespace rptui
 {
@@ -338,9 +339,9 @@ void OViewsWindow::removeSection(USHORT _nPosition)
 void OViewsWindow::toggleGrid(BOOL _bVisible)
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OReportSection::SetGridVisible,_1,_bVisible),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(&OReportSection::SetGridVisible,_1,_bVisible),TReportPairHelper()));
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OReportSection::Window::Invalidate,_1,INVALIDATE_NOERASE),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(&OReportSection::Window::Invalidate,_1,INVALIDATE_NOERASE),TReportPairHelper()));
 }
 //------------------------------------------------------------------------------
 sal_Int32 OViewsWindow::getTotalHeight() const
@@ -379,7 +380,7 @@ rtl::OUString OViewsWindow::GetInsertObjString() const
 void OViewsWindow::SetMode( DlgEdMode eNewMode )
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OReportSection::SetMode,_1,eNewMode),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(&OReportSection::SetMode,_1,eNewMode),TReportPairHelper()));
 }
 //----------------------------------------------------------------------------
 BOOL OViewsWindow::HasSelection() const
@@ -395,7 +396,7 @@ void OViewsWindow::Delete()
 {
     m_bInUnmark = sal_True;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::mem_fn(&OReportSection::Delete),TReportPairHelper()));
+        ::o3tl::compose1(::boost::mem_fn(&OReportSection::Delete),TReportPairHelper()));
     m_bInUnmark = sal_False;
 }
 //----------------------------------------------------------------------------
@@ -403,7 +404,7 @@ void OViewsWindow::Copy()
 {
     uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OReportSection::Copy,_1,::boost::ref(aAllreadyCopiedObjects)),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(&OReportSection::Copy,_1,::boost::ref(aAllreadyCopiedObjects)),TReportPairHelper()));
 
     OReportExchange* pCopy = new OReportExchange(aAllreadyCopiedObjects);
     uno::Reference< datatransfer::XTransferable> aEnsureDelete = pCopy;
@@ -416,7 +417,7 @@ void OViewsWindow::Paste()
     OReportExchange::TSectionElements aCopies = OReportExchange::extractCopies(aTransferData);
     if ( aCopies.getLength() > 1 )
         ::std::for_each(m_aSections.begin(),m_aSections.end(),
-            ::std::compose1(::boost::bind(&OReportSection::Paste,_1,aCopies,false),TReportPairHelper()));
+            ::o3tl::compose1(::boost::bind(&OReportSection::Paste,_1,aCopies,false),TReportPairHelper()));
     else
     {
         ::boost::shared_ptr<OSectionWindow> pMarkedSection = getMarkedSection();
@@ -518,7 +519,7 @@ void OViewsWindow::SelectAll(const sal_uInt16 _nObjectType)
 {
     m_bInUnmark = sal_True;
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(::boost::mem_fn(&OReportSection::SelectAll),_1,_nObjectType),TReportPairHelper()));
+        ::o3tl::compose1(::boost::bind(::boost::mem_fn(&OReportSection::SelectAll),_1,_nObjectType),TReportPairHelper()));
     m_bInUnmark = sal_False;
 }
 //-----------------------------------------------------------------------------
@@ -561,9 +562,9 @@ void OViewsWindow::MouseButtonDown( const MouseEvent& rMEvt )
 void OViewsWindow::showRuler(sal_Bool _bShow)
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OStartMarker::showRuler,_1,_bShow),TStartMarkerHelper()));
+        ::o3tl::compose1(::boost::bind(&OStartMarker::showRuler,_1,_bShow),TStartMarkerHelper()));
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::bind(&OStartMarker::Window::Invalidate,_1,USHORT(INVALIDATE_NOERASE)),TStartMarkerHelper()));
+        ::o3tl::compose1(::boost::bind(&OStartMarker::Window::Invalidate,_1,USHORT(INVALIDATE_NOERASE)),TStartMarkerHelper()));
 }
 //----------------------------------------------------------------------------
 void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
@@ -1634,7 +1635,7 @@ void OViewsWindow::handleKey(const KeyCode& _rCode)
 void OViewsWindow::stopScrollTimer()
 {
     ::std::for_each(m_aSections.begin(),m_aSections.end(),
-        ::std::compose1(::boost::mem_fn(&OReportSection::stopScrollTimer),TReportPairHelper()));
+        ::o3tl::compose1(::boost::mem_fn(&OReportSection::stopScrollTimer),TReportPairHelper()));
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::fillCollapsedSections(::std::vector<sal_uInt16>& _rCollapsedPositions) const
