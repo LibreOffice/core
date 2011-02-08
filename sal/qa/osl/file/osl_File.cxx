@@ -42,9 +42,11 @@
 #include <osl/file.hxx>
 #include <osl_File_Const.h>
 
+#include "preextstl.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
 
 // #ifdef WNT
 // #   define UNICODE

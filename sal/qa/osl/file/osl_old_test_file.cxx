@@ -49,9 +49,11 @@
 #define TEST_VOLUME "c:/"
 #endif
 
+#include "preextstl.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
 
 namespace osl_test_file
 {

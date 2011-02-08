@@ -32,10 +32,12 @@
 //------------------------------------------------------------------------
 // include files
 //------------------------------------------------------------------------
+#include "preextstl.h"
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
+#include "postextstl.h"
 #include <osl_Mutex_Const.h>
 
 using namespace osl;
