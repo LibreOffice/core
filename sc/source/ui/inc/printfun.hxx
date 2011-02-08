@@ -269,7 +269,7 @@ public:
     void            ApplyPrintSettings();       // aus DoPrint() schon gerufen
     long            DoPrint( const MultiSelection& rPageRanges,
                                 long nStartPage, long nDisplayStart, BOOL bDoPrint,
-                                SfxProgress* pProgress, ScPreviewLocationData* pLocationData );
+                                ScPreviewLocationData* pLocationData );
 
                     //  Werte abfragen - sofort
 

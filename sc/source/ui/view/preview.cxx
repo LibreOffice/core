@@ -406,7 +406,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
         aPage.SetTotalRange( Range(0,RANGE_MAX) );
         aPage.Select( aPageRange );
 
-        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, bDoPrint, NULL, pFillLocation );
+        long nPrinted = pPrintFunc->DoPrint( aPage, nTabStart, nDisplayStart, bDoPrint, pFillLocation );
         DBG_ASSERT(nPrinted<=1, "was'n nu los?");
 
         SetMapMode(aMMMode);
