@@ -126,7 +126,14 @@ Sub ClearAllText
     call ClearStatus
 end Sub
 
+Sub AssertionHandler( sMessage as String )
+    LogTestResult( cDocNew, &quot;assertion caught: &quot; + sMessage, FALSE )
+        &apos;TODO: get the proper test case number
+End Sub
+
 Sub Main
+  CaptureAssertions( &quot;AssertionHandler&quot; )
+
     call SetGlobalDoc
     if bShowTable then
         call ClearDoc (gOutPutDoc)
@@ -143,6 +150,8 @@ Sub Main
         call CreateSecondState
         gOutputDoc.CurrentController.ViewCursor.JumpToFirstPage
     end if
+
+  CaptureAssertions( &quot;&quot; )
 End Sub
 
 Sub CreateStatusTable
@@ -362,10 +371,21 @@ Function GetRangeName (nColumn as integer, nRow as integer) as string
     GetRangeName = chr (nColumn+66) + Trim(Str(nRow+1))
 end Function
 
-Sub SetStatus (nDocType as Integer, nAction as Integer, bState as Boolean)
+Sub LogTestResult( nTestCase as Integer, sTestCaseDescription as String, bSuccess as Boolean )
+    If ( nTestCase = cLogfileFailed ) Then
+        LogState( FALSE, &quot;creating logfile &apos;&quot; + GetLogFileName( g_CurrentDocTest ) + &quot;&apos; failed&quot;, MainFileChannel )
+        SetStatus( 0, FALSE )
+    Else
+        LogState( bSuccess, sTestCaseDescription, FileChannel )
+        LogState( bSuccess, sTestCaseDescription, MainFileChannel )
+        SetStatus( nTestCase, bSuccess )
+    End If
+End Sub
+
+Sub SetStatus( nAction as Integer, bState as Boolean )
     Dim nStatusType as Integer
     Dim nState as integer
-    nStatusType = GetStatusType (nDocType)
+    nStatusType = GetStatusType( g_CurrentDocTest )
     If nStatusType = cStNone then Exit Sub
 
     if bState then
@@ -373,6 +393,11 @@ Sub SetStatus (nDocType as Integer, nAction as Integer, bState as Boolean)
     else
         nState = cLogFalse
     end If
+
+  If ( gErrorState( nStatusType, nAction ) = cLogFalse ) Then
+    &apos; don't overwrite a previous &quot;failed&quot; state for this this
+    nState = cLogFalse
+  End If
 
     gErrorState (nStatusType, nAction) = nState
 end Sub

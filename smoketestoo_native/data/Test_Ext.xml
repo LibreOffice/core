@@ -32,7 +32,7 @@ const cMessageExtensionService = &quot;Extension Service&quot;
 const cMessageExtensionInstall = &quot;Install Extension&quot;
 const cMessageExtensionUninstall = &quot;Uninstall Extension&quot;
 
-Sub TestExtensions (FilterType as Integer)
+Sub TestExtensions
 Dim oTestExtension as Object, obj_null as Object
 Dim sCurrentMessage as String
 Dim nCurrentAction as Integer
@@ -43,7 +43,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     On Local Error GoTo EXTERROR
 
     nCurrentAction = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+    FileChannel% = OpenLogDat (GetLogFileName(g_CurrentDocTest))
 
     sCurrentMessage = cMessageExtensionService
     nCurrentAction = cEXTService
@@ -58,11 +58,9 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     ctx = getDefaultContext
     ext_mgr = ctx.getValueByName(&quot;/singletons/&quot; + cExtensionManager)
 
-    LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, FileChannel)
-    LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, MainFileChannel)
-    SetStatus (FilterType, cEXTService, not IsNull (ext_mgr))
+    LogTestResult( cEXTService, &quot;Extension &quot;+ cMessageExtensionService, not IsNull (ext_mgr) )
     if (IsNull(ext_mgr)) then
-          Close #FileChannel%
+        Close #FileChannel%
         Exit Sub
     End If
 
@@ -79,11 +77,9 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     &apos;Check if the extension has been added by creating a service which is contained in the extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
     bResult = (oTestExtension.getImplementationName = sImplementationNameString)
-    LogState (bResult, &quot;Extension &quot;+ cMessageExtensionInstall, FileChannel)
-    LogState (bResult, &quot;Extension &quot;+ cMessageExtensionInstall, MainFileChannel)
-    SetStatus (FilterType, cEXTInstall, bResult)
+    LogTestResult( cEXTInstall, &quot;Extension &quot;+ cMessageExtensionInstall, bResult )
     if (not bResult) then
-           Close #FileChannel%
+        Close #FileChannel%
         Exit Sub
     End If
 
@@ -97,9 +93,7 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
 
     &apos;The service must not be available anymore. Therefor isNull must return true.
-    LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, FileChannel)
-    LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, MainFileChannel)
-    SetStatus (FilterType, cEXTUninstall, IsNull (oTestExtension))
+    LogTestResult( cEXTUninstall, &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
 
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
@@ -107,12 +101,10 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
 
     EXTERROR:
     If  (nCurrentAction = cLogfileFailed) then
-        SetStatus (FilterType, cEXTService, False)
+        LogTestResult( cLogfileFailed, "", False )
         Exit Sub
     else
-        LogState (False, &quot;Extension &quot;+ sCurrentMessage, FileChannel)
-        LogState (False, &quot;Extension &quot;+ sCurrentMessage, MainFileChannel)
-        SetStatus (FilterType, nCurrentAction, False)
+        LogTestResult( nCurrentAction, &quot;Extension &quot;+ sCurrentMessage, False )
         Close #FileChannel%
     End If
     Exit Sub &apos; With error
