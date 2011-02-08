@@ -104,7 +104,7 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
 
     Stream * mpStream;
-#ifdef DEBUG_ELEMENT
+#ifdef DEBUG_PROTOCOL
     Stream::Pointer_t mpTmpStream;
 #endif
     OOXMLDocument * mpDocument;
