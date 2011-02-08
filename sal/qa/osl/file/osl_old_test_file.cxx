@@ -217,7 +217,7 @@ void oldtestfile::test_file_003()
                         }
                         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
                         OString obase = OUStringToOString( base3 , RTL_TEXTENCODING_ASCII_US );
-                        fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource3[i], o.pData->buffer );
+                        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource3[i], o.pData->buffer );
                     }
                     unlink( "/tmp/c" );
                 }
@@ -265,7 +265,7 @@ void oldtestfile::test_file_004()
         }
         OString o = OUStringToOString( target , RTL_TEXTENCODING_ASCII_US );
         OString obase = OUStringToOString( base4 , RTL_TEXTENCODING_ASCII_US );
-        fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
+        //fprintf( stderr, "%d %s + %s = %s\n" ,e, obase.getStr(), aSource1[i], o.pData->buffer );
     }
 
 
