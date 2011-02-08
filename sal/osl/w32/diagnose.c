@@ -130,6 +130,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
     else if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
     {
         TCHAR   szBoxMessage[1024];
+        int     nCode;
 
         /* active popup window for the current thread */
         hWndParent = GetActiveWindow();
@@ -147,7 +148,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
                    szMessage);
 
-        int nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
+        nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
 
         if (nCode == IDYES)
             FatalExit(-1);
