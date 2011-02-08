@@ -32,7 +32,6 @@
 #include <time.h>
 #ifdef WNT
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 #else
 #include <unistd.h>

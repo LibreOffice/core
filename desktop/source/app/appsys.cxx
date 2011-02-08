@@ -36,7 +36,6 @@
 #include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <prewin.h>
-#include <winreg.h>
 #include <postwin.h>
 #include <tools/urlobj.hxx>
 

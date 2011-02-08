@@ -53,7 +53,6 @@
 #include "sbunoobj.hxx"
 #ifdef WNT
 #include <prewin.h>
-#include "winbase.h"
 #include <postwin.h>
 #include <tools/fsys.hxx>
 #else

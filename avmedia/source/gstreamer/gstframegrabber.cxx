@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <prewin.h>
-#include <windows.h>
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
