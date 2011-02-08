@@ -220,7 +220,11 @@ LibraryWrapper::LibraryWrapper() :
     bool bCont = true;
 
     // GObject
-    if( bCont && ( NULL != ( mpGObjectLib = osl_loadModule( aGObjectLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ) )
+    if( bCont && ( NULL != ( mpGObjectLib = osl_loadModule( aGObjectLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ||
+                   NULL != ( mpGObjectLib = osl_loadModuleRelative( (oslGenericFunction)LibraryWrapper::get,
+                                                                   aGObjectLibName.pData, SAL_LOADMODULE_DEFAULT ) )
+
+                  ) )
     {
         mp_g_object_unref = ( gpointer (*)( gpointer ) ) osl_getAsciiFunctionSymbol( mpGObjectLib, "g_object_unref" );
 
@@ -232,7 +236,10 @@ LibraryWrapper::LibraryWrapper() :
     }
 
     // Cairo
-    if( bCont && ( NULL != ( mpCairoLib = osl_loadModule( aCairoLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ) )
+    if( bCont && ( NULL != ( mpCairoLib = osl_loadModule( aCairoLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ||
+                   NULL != ( mpCairoLib = osl_loadModuleRelative( (oslGenericFunction)LibraryWrapper::get,
+                                                                   aCairoLibName.pData, SAL_LOADMODULE_DEFAULT ) )
+                  ) )
     {
         mp_image_surface_create = ( cairo_surface_t* (*)( cairo_format_t, int, int ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_image_surface_create" );
         mp_surface_destroy = ( void (*)( cairo_surface_t* ) ) osl_getAsciiFunctionSymbol( mpCairoLib, "cairo_surface_destroy" );
@@ -270,7 +277,10 @@ LibraryWrapper::LibraryWrapper() :
     }
 
     // LibRSVG
-    if( bCont && ( NULL != ( mpRSVGLib = osl_loadModule( aRSVGLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ) )
+    if( bCont && ( NULL != ( mpRSVGLib = osl_loadModule( aRSVGLibName.pData, SAL_LOADMODULE_DEFAULT ) ) ||
+                   NULL != ( mpRSVGLib = osl_loadModuleRelative( (oslGenericFunction)LibraryWrapper::get,
+                                                                   aRSVGLibName.pData, SAL_LOADMODULE_DEFAULT ) )
+                  ) )
     {
         mp_rsvg_init = ( void (*)( void ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_init" );
         mp_rsvg_handle_new_from_data = ( RsvgHandle* (*)( const guint8*, gsize, GError** ) ) osl_getAsciiFunctionSymbol( mpRSVGLib, "rsvg_handle_new_from_data" );
