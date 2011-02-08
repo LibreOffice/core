@@ -47,6 +47,7 @@
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <comphelper/types.hxx>
 #include <ucbhelper/contentidentifier.hxx>
+#include <o3tl/compat_functional.hxx>
 
 
 using namespace ::com::sun::star::uno;
@@ -79,9 +80,9 @@ ODefinitionContainer_Impl::const_iterator ODefinitionContainer_Impl::find( TCont
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::std::select2nd< NamedDefinitions::value_type >()
+            ::o3tl::select2nd< NamedDefinitions::value_type >()
         )
     );
 }
@@ -91,9 +92,9 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     return ::std::find_if(
         m_aDefinitions.begin(),
         m_aDefinitions.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             ::std::bind2nd( ::std::equal_to< TContentPtr >(), _pDefinition ),
-            ::std::select2nd< NamedDefinitions::value_type >()
+            ::o3tl::select2nd< NamedDefinitions::value_type >()
         )
     );
 }

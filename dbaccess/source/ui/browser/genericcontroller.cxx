@@ -64,6 +64,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 #include <boost/unordered_map.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <limits>
@@ -1558,7 +1559,7 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     ::std::transform( aCmdHashMap.begin(),
         aCmdHashMap.end(),
         aCommandGroups.getArray(),
-        ::std::select1st< CommandHashMap::value_type >()
+        ::o3tl::select1st< CommandHashMap::value_type >()
     );
 
     return aCommandGroups;

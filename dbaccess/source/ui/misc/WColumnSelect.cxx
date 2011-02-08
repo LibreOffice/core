@@ -43,6 +43,7 @@
 #include <com/sun/star/sdb/application/CopyTableOperation.hpp>
 #include "dbustrings.hrc"
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -336,9 +337,9 @@ void OWizColumnSelect::moveColumn(  ListBox* _pRight,
     {
         // find the new column in the dest name mapping to obtain the old column
         OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                ::std::compose1(
+                                                                ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, _sColumnName),
-                                                                    ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
+                                                                    ::o3tl::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );
 
         OSL_ENSURE(aIter != m_pParent->m_mNameMapping.end(),"Column must be defined");
@@ -386,7 +387,7 @@ USHORT OWizColumnSelect::adjustColumnPosition( ListBox* _pLeft,
         {
             // find the new column in the dest name mapping to obtain the old column
             OCopyTableWizard::TNameMapping::iterator aIter = ::std::find_if(m_pParent->m_mNameMapping.begin(),m_pParent->m_mNameMapping.end(),
-                                                                    ::std::compose1(
+                                                                    ::o3tl::compose1(
                                                                     ::std::bind2nd(_aCase, sColumnString),
                                                                     ::std::select2nd<OCopyTableWizard::TNameMapping::value_type>())
                                                                     );

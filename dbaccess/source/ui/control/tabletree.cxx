@@ -55,6 +55,7 @@
 #include <connectivity/dbmetadata.hxx>
 
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //.........................................................................
 namespace dbaui
@@ -287,9 +288,9 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
         {
             String sRootEntryText;
             TNames::const_iterator aViews = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::std::select2nd<TNames::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_False),::o3tl::select2nd<TNames::value_type>()));
             TNames::const_iterator aTables = ::std::find_if(_rTables.begin(),_rTables.end(),
-            ::std::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::std::select2nd<TNames::value_type>()));
+            ::o3tl::compose1(::std::bind2nd(::std::equal_to<sal_Bool>(),sal_True),::o3tl::select2nd<TNames::value_type>()));
 
             if ( aViews == _rTables.end() )
                 sRootEntryText  = String(ModuleRes(STR_ALL_TABLES));
