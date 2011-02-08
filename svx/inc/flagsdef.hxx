@@ -30,22 +30,22 @@
 
 // defines ---------------------------------------------------------------
 
-//CHINA001 copy from border.hxx
+// copy from border.hxx
 // Border-Modes for paragraphs, textframes and tables
 #define SW_BORDER_MODE_PARA     0x01
 #define SW_BORDER_MODE_TABLE    0x02
 #define SW_BORDER_MODE_FRAME    0x04
 
-//CHINA001 flags for SvxBackgroundTabPage
+// flags for SvxBackgroundTabPage
 #define SVX_SHOW_SELECTOR       0x01
 #define SVX_SHOW_PARACTL        0x02
 #define SVX_ENABLE_TRANSPARENCY     0x04
 #define SVX_SHOW_TBLCTL         0x08
 
-//CHINA001 flags for SvxBorderTabPage
+// flags for SvxBorderTabPage
 #define SVX_HIDESHADOWCTL   0x01
 
-//CHINA001 copy from chardlg.hxx
+// copy from chardlg.hxx
 #define DISABLE_CASEMAP             ((USHORT)0x0001)
 #define DISABLE_WORDLINE            ((USHORT)0x0002)
 #define DISABLE_BLINK               ((USHORT)0x0004)
@@ -54,15 +54,15 @@
 #define DISABLE_LANGUAGE            ((USHORT)0x0010)
 #define DISABLE_HIDE_LANGUAGE       ((USHORT)0x0020)
 
-//CHINA001 flags for SvxCharBasePage's child class
+// flags for SvxCharBasePage's child class
 #define SVX_PREVIEW_CHARACTER   0x01
-//CHINA001 flags for SvxCharNamePage
+// flags for SvxCharNamePage
 #define SVX_RELATIVE_MODE       0x02
-//CHINA001 flags for SvxCharEffectsPage
+// flags for SvxCharEffectsPage
 #define SVX_ENABLE_FLASH    0x04
 
 
-//CHINA001 copy from numfmt.hxx
+// copy from numfmt.hxx
 #define SVX_NUMVAL_STANDARD     -1234.12345678901234
 #define SVX_NUMVAL_CURRENCY     -1234
 #define SVX_NUMVAL_PERCENT      -0.1295
@@ -70,7 +70,7 @@
 #define SVX_NUMVAL_DATE         36525.5678935185
 #define SVX_NUMVAL_BOOLEAN      1
 
-//CHINA001 copy from page.hxx
+// copy from page.hxx
 // enum ------------------------------------------------------------------
 
 enum SvxModeType
