@@ -81,6 +81,7 @@ module com { module sun { module star { module linguistic2 {
         <li>ka : Georgian</li>
         <li>ko : Korean</li>
         <li>la : Latin</li>
+        <li>lb : Luxembourgish (added with OOo 3.3)</li>
         <li>lt : Lithuanian</li>
         <li>lv : Latvian</li>
         <li>mr : Marathi</li>
@@ -96,10 +97,11 @@ module com { module sun { module star { module linguistic2 {
         <li>ru : Russian</li>
         <li>sa : Sanskrit</li>
         <li>sco : Scots</li>
-        <li>sh-YU : Serbian (written with latin characters)</li>
+        <li>sh : Serbian (written with latin characters)</li>
         <li>sk-SK : Slovak (written with latin characters)</li>
         <li>sl : Slovenian</li>
         <li>sq : Albanian</li>
+        <li>sr : Serbian (written with cyrillic characters) (added with OOo 3.4)</li>
         <li>sv : Swedish</li>
         <li>sw : Swahili</li>
         <li>ta : Tamil</li>

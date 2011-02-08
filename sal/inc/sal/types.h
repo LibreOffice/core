@@ -291,7 +291,7 @@ typedef void *                   sal_Handle;
    These macros are used for inline declarations of exception classes, as in
    rtl/malformeduriexception.hxx.
 */
-#if defined __GNUC__
+#if defined(__GNUC__) && ! defined(__MINGW32__)
 #define SAL_EXCEPTION_DLLPUBLIC_EXPORT SAL_DLLPUBLIC_EXPORT
 #define SAL_EXCEPTION_DLLPRIVATE SAL_DLLPRIVATE
 #else
