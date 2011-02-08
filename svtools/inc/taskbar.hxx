@@ -38,13 +38,14 @@
 
 class TaskBar;
 class TaskStatusFieldItem;
-class ImplTaskSBItemList;
 class ImplTaskBarFloat;
 struct ImplTaskSBFldItem;
 
 struct ImplTaskItem;
 typedef ::std::vector< ImplTaskItem* > ImplTaskItemList;
 
+struct ImplTaskSBFldItem;
+typedef ::std::vector< ImplTaskSBFldItem* > ImplTaskSBItemList;
 
 // -----------------
 // - Dokumentation -

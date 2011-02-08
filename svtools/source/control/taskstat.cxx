@@ -56,8 +56,6 @@ struct ImplTaskSBFldItem
     long                    mnOffX;
 };
 
-DECLARE_LIST( ImplTaskSBItemList, ImplTaskSBFldItem* )
-
 // =======================================================================
 
 BOOL ITaskStatusNotify::MouseButtonDown( USHORT, const MouseEvent& )
@@ -170,13 +168,10 @@ TaskStatusBar::~TaskStatusBar()
 {
     if ( mpFieldItemList )
     {
-        ImplTaskSBFldItem* pItem = mpFieldItemList->First();
-        while ( pItem )
-        {
-            delete pItem;
-            pItem = mpFieldItemList->Next();
+        for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i ) {
+            delete (*mpFieldItemList)[ i ];
         }
-
+        mpFieldItemList->clear();
         delete mpFieldItemList;
     }
 }
@@ -201,15 +196,11 @@ ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( USHORT nItemId ) const
     if ( !mpFieldItemList )
         return NULL;
 
-    ImplTaskSBFldItem* pItem = mpFieldItemList->First();
-    while ( pItem )
-    {
-        if ( pItem->mnId == nItemId )
-            return pItem;
-
-        pItem = mpFieldItemList->Next();
+    for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i ) {
+        if ( (*mpFieldItemList)[ i ]->mnId == nItemId ) {
+            return  (*mpFieldItemList)[ i ];
+        }
     }
-
     return NULL;
 }
 
@@ -224,13 +215,11 @@ ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( const Point& rPos, BOOL& rFi
         if ( mpFieldItemList )
         {
             long nX = rPos.X()-GetItemRect( TASKSTATUSBAR_STATUSFIELDID ).Left();
-            ImplTaskSBFldItem* pItem = mpFieldItemList->First();
-            while ( pItem )
-            {
-                if ( nX < pItem->mnOffX+pItem->maItem.GetImage().GetSizePixel().Width() )
+            for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i ) {
+                ImplTaskSBFldItem* pItem = (*mpFieldItemList)[ i ];
+                if ( nX < pItem->mnOffX + pItem->maItem.GetImage().GetSizePixel().Width() ) {
                     return pItem;
-
-                pItem = mpFieldItemList->Next();
+                }
             }
         }
     }
@@ -291,19 +280,17 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
 
     if ( bItems )
     {
-        ImplTaskSBFldItem* pItem = mpFieldItemList->First();
         mnItemWidth = 0;
         mbFlashItems = FALSE;
         mbOutInterval = FALSE;
-        while ( pItem )
-        {
+        for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i ) {
+            ImplTaskSBFldItem* pItem = (*mpFieldItemList)[ i ];
             mnItemWidth += TASKSTATUSBAR_IMAGEOFFX;
             pItem->mnOffX = mnItemWidth;
             mnItemWidth += pItem->maItem.GetImage().GetSizePixel().Width();
-            if ( pItem->maItem.GetFlags() & TASKSTATUSFIELDITEM_FLASH )
+            if ( pItem->maItem.GetFlags() & TASKSTATUSFIELDITEM_FLASH ) {
                 mbFlashItems = TRUE;
-
-            pItem = mpFieldItemList->Next();
+            }
         }
     }
     else
@@ -543,9 +530,9 @@ void TaskStatusBar::UserDraw( const UserDrawEvent& rUDEvt )
 
         if ( mpFieldItemList )
         {
-            ImplTaskSBFldItem* pItem = mpFieldItemList->First();
-            while ( pItem )
+            for ( size_t i = 0, n = mpFieldItemList->size(); i < n; ++i )
             {
+                ImplTaskSBFldItem* pItem = (*mpFieldItemList)[ i ];
                 if ( !mbOutInterval || !(pItem->maItem.GetFlags() & TASKSTATUSFIELDITEM_FLASH) )
                 {
                     const Image& rImage = pItem->maItem.GetImage();
@@ -554,8 +541,6 @@ void TaskStatusBar::UserDraw( const UserDrawEvent& rUDEvt )
                                             aRect.Top()+((aRect.GetHeight()-aImgSize.Width())/2) ),
                                      rImage );
                 }
-
-                pItem = mpFieldItemList->Next();
             }
         }
 
@@ -606,7 +591,13 @@ void TaskStatusBar::AddStatusFieldItem( USHORT nItemId, const TaskStatusFieldIte
     pItem->maItem   = rItem;
     pItem->mnId     = nItemId;
     pItem->mnOffX   = 0;
-    mpFieldItemList->Insert( pItem, (ULONG)nPos );
+    if ( nPos < mpFieldItemList->size() ) {
+        ImplTaskSBItemList::iterator it = mpFieldItemList->begin();
+        ::std::advance( it, nPos );
+        mpFieldItemList->insert( it, pItem );
+    } else {
+        mpFieldItemList->push_back( pItem );
+    }
 
     ImplUpdateField( TRUE );
 }
@@ -633,8 +624,16 @@ void TaskStatusBar::RemoveStatusFieldItem( USHORT nItemId )
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( nItemId );
     if ( pItem )
     {
-        mpFieldItemList->Remove( pItem );
-        delete pItem;
+        for ( ImplTaskSBItemList::iterator it = mpFieldItemList->begin();
+              it < mpFieldItemList->end();
+              ++it
+        ) {
+            if ( *it == pItem ) {
+                delete *it;
+                mpFieldItemList->erase( it );
+                break;
+            }
+        }
         ImplUpdateField( TRUE );
     }
 }
