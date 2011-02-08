@@ -254,7 +254,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 
     OSL_ENSURE(!mbCreatingPeer, "FmXGridControl::createPeer : recursion!");
         // see the base class' createPeer for a comment on this
-        // 14.05.2001 - 86836 - frank.schoenheit@germany.sun.com
 
     // TODO: why the hell this whole class does not use any mutex?
 

@@ -312,7 +312,7 @@ String OFieldDescControl::BoolStringUI(const String& rPersistentString) const
     static String aOne('1');
     static String aNone(ModuleRes(STR_VALUE_NONE));
 
-    // FS - 66161 - 14.05.1999 - aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
+    // aeltere Versionen haben eventuell einen sprachabhaengigen String als Default gespeichert
     if (rPersistentString.Equals(aYes) || rPersistentString.Equals(aNo))
         return rPersistentString;
 

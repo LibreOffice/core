@@ -155,7 +155,6 @@ SvButtonState OMarkableTreeListBox::implDetermineState(SvLBoxEntry* _pEntry)
         // but this means that we did not finish all the siblings of pChildLoop,
         // so their checking may be incorrect at the moment
         // -> correct this
-        // 88485 - 20.06.2001 - frank.schoenheit@sun.com
         while (pChildLoop)
         {
             implDetermineState(pChildLoop);

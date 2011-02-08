@@ -36,7 +36,7 @@
 #include "dlgpage.hxx"
 #include "ModuleHelper.hxx"
 #include "RptResId.hrc"
-#include <svl/intitem.hxx> //add CHINA001
+#include <svl/intitem.hxx>
 #include <svl/cjkoptions.hxx>
 #include <svl/aeitem.hxx>
 

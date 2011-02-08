@@ -833,7 +833,6 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
         // * are known as indirect properties
         // * but not relevant for the current data source type
         // These settings have to be removed: If they're not relevant, we have no UI for changing them.
-        // 25.06.2001 - 88004/87182 - frank.schoenheit@sun.com
 
         // for this, we need a string-controlled quick access to m_aIndirectPropTranslator
         StringSet aIndirectProps;

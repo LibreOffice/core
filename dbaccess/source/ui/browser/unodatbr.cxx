@@ -1873,7 +1873,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
                     if ( !pGrid->IsAllSelected() )
                     {   // transfer the selected rows only if not all rows are selected
                         // (all rows means the whole table)
-                        // i3832 - 03.04.2002 - fs@openoffice.org
+                        // #i3832#
                         if (pSelection != NULL)
                         {
                             aSelection.realloc(pSelection->GetSelectCount());

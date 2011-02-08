@@ -398,7 +398,6 @@ void OTableTreeListBox::implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, 
     OSL_ENSURE(_pEntry, "OTableTreeListBox::implEmphasize: invalid entry (NULL)!");
 
     // special emphasizing handling for the "all objects" entry
-    // 89709 - 16.07.2001 - frank.schoenheit@sun.com
     sal_Bool bAllObjectsEntryAffected = haveVirtualRoot() && (getAllObjectsEntry() == _pEntry);
     if  (   GetModel()->HasChilds(_pEntry)              // the entry has children
         ||  bAllObjectsEntryAffected                    // or it is the "all objects" entry
