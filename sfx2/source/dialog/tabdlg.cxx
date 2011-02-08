@@ -388,11 +388,7 @@ const SfxPoolItem* SfxTabPage::GetItem( const SfxItemSet& rSet, USHORT nSlot, sa
     const SfxItemPool* pPool = rSet.GetPool();
     USHORT nWh = pPool->GetWhich( nSlot, bDeep );
     const SfxPoolItem* pItem = 0;
-#ifdef DEBUG
-    SfxItemState eState;
-    eState =
-#endif
-            rSet.GetItemState( nWh, TRUE, &pItem );  // -Wall required??
+    rSet.GetItemState( nWh, TRUE, &pItem );
 
     if ( !pItem && nWh != nSlot )
         pItem = &pPool->GetDefaultItem( nWh );
