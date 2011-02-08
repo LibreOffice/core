@@ -44,6 +44,8 @@
 #endif
 #include "resource/ado_res.hrc"
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace connectivity::ado;
 using namespace connectivity;
 using namespace comphelper;
@@ -95,11 +97,11 @@ sdbcx::ObjectType OColumns::appendObject( const ::rtl::OUString&, const Referenc
     // search for typeinfo where the typename is equal sTypeName
     OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                         pTypeInfoMap->end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(aCase, sTypeName),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                                 ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                             )
 
                                                 );

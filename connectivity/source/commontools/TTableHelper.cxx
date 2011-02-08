@@ -45,6 +45,8 @@
 #include <unotools/sharedunocomponent.hxx>
 #include "TConnection.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
@@ -302,7 +304,7 @@ void OTableHelper::refreshColumns()
             aSortedColumns.begin(),
             aSortedColumns.end(),
             ::std::insert_iterator< TStringVector >( aVector, aVector.begin() ),
-            ::std::select2nd< ::std::map< OrdinalPosition, ::rtl::OUString >::value_type >()
+            ::o3tl::select2nd< ::std::map< OrdinalPosition, ::rtl::OUString >::value_type >()
         );
     }
 

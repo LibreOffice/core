@@ -30,7 +30,8 @@
 #include "precompiled_connectivity.hxx"
 #include "TSortIndex.hxx"
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace connectivity;
 //------------------------------------------------------------------
@@ -95,7 +96,7 @@ struct TKeyValueFunc : ::std::binary_function<OSortIndex::TIntValuePairVector::v
     ::std::transform(m_aKeyValues.begin()
                     ,m_aKeyValues.end()
                     ,::std::back_inserter(pKeySet->get())
-                    ,::std::select1st<TIntValuePairVector::value_type>());
+                    ,::o3tl::select1st<TIntValuePairVector::value_type>());
     pKeySet->setFrozen();
     return pKeySet;
 }

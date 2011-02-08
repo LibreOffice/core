@@ -38,6 +38,8 @@
 #include <comphelper/types.hxx>
 #include "ado/ACatalog.hxx"
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace ::comphelper;
 
 using namespace connectivity::ado;
@@ -225,11 +227,11 @@ void OAdoColumn::fillPropertyValues()
             ::comphelper::TStringMixEqualFunctor aCase(sal_False);
             OTypeInfoMap::const_iterator aFind = ::std::find_if(pTypeInfoMap->begin(),
                                                             pTypeInfoMap->end(),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                             ::std::bind2nd(aCase, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VarBinary"))),
-                                                                ::std::compose1(
+                                                                ::o3tl::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                                 )
 
                                                     );

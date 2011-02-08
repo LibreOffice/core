@@ -44,6 +44,8 @@
 #include <algorithm>
 #include <osl/file.hxx>
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace com::sun::star;
 using namespace odma;
 
@@ -505,9 +507,9 @@ void ContentProvider::append(const ::rtl::Reference<ContentProperties>& _rProp)
     ::rtl::Reference<ContentProperties> aReturn;
     ContentsMap::const_iterator aFind = ::std::find_if( m_aContents.begin(),
                                                         m_aContents.end(),
-                                                        ::std::compose1(
+                                                        ::o3tl::compose1(
                                                             ::std::bind2nd(_aFunctor,_sName),
-                                                            ::std::select2nd<ContentsMap::value_type>()
+                                                            ::o3tl::select2nd<ContentsMap::value_type>()
                                                         )
                                                     );
     if(aFind != m_aContents.end())

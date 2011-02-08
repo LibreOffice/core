@@ -44,6 +44,8 @@
 #include <osl/file.hxx>
 #include "resource/ado_res.hrc"
 
+#include <o3tl/compat_functional.hxx>
+
 using namespace dbtools;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -605,11 +607,11 @@ const OExtendedTypeInfo* OConnection::getTypeInfoFromType(const OTypeInfoMap& _r
         // search for typeinfo where the typename is equal _sTypeName
         OTypeInfoMap::const_iterator aFind = ::std::find_if(_rTypeInfo.begin(),
                                                             _rTypeInfo.end(),
-                                                            ::std::compose1(
+                                                            ::o3tl::compose1(
                                                                 ::std::bind2nd(aCase, _sTypeName),
-                                                                ::std::compose1(
+                                                                ::o3tl::compose1(
                                                                     ::std::mem_fun(&OExtendedTypeInfo::getDBName),
-                                                                    ::std::select2nd<OTypeInfoMap::value_type>())
+                                                                    ::o3tl::select2nd<OTypeInfoMap::value_type>())
                                                                 )
                                                             );
         if(aFind != _rTypeInfo.end())

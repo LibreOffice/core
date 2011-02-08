@@ -94,7 +94,8 @@
 #include <rtl/logfile.hxx>
 
 #include <algorithm>
-#include <functional>
+
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::comphelper;
@@ -522,7 +523,7 @@ struct UpdateAllListeners : public ::std::unary_function< Reference< XDispatch >
     bool operator()( const Reference< XDispatch >& _rxDispatcher ) const
     {
         static_cast< ::svx::OSingleFeatureDispatcher* >( _rxDispatcher.get() )->updateAllListeners();
-        // the return is a dummy only so we can use this struct in a std::compose1 call
+        // the return is a dummy only so we can use this struct in a o3tl::compose1 call
         return true;
     }
 };
@@ -2651,9 +2652,9 @@ void FormController::updateAllDispatchers() const
     ::std::for_each(
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
-        ::std::compose1(
+        ::o3tl::compose1(
             UpdateAllListeners(),
-            ::std::select2nd< DispatcherContainer::value_type >()
+            ::o3tl::select2nd< DispatcherContainer::value_type >()
         )
     );
 }
@@ -4107,7 +4108,7 @@ void SAL_CALL FormController::invalidateAllFeatures(  ) throw (RuntimeException)
         m_aFeatureDispatchers.begin(),
         m_aFeatureDispatchers.end(),
         aInterceptedFeatures.getArray(),
-        ::std::select1st< DispatcherContainer::value_type >()
+        ::o3tl::select1st< DispatcherContainer::value_type >()
     );
 
     aGuard.clear();
