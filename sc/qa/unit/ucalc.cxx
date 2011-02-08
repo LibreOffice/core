@@ -42,9 +42,9 @@
 #include "precompiled_sc.hxx"
 
 #ifdef WNT
-# include <tools/prewin.h>
+# include <prewin.h>
 # include <windows.h>
-# include <tools/postwin.h>
+# include <postwin.h>
 # undef ERROR
 #endif
 
