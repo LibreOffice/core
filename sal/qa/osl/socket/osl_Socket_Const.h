@@ -82,7 +82,6 @@ extern "C"
 #endif
 #if ( defined WNT )                     // Windows
 #include <prewin.h>
-// #    include <windows.h>
 #   include <winsock.h>
 #   include <string.h>
 #include <postwin.h>
