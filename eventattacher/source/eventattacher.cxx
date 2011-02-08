@@ -374,7 +374,7 @@ void SAL_CALL EventAttacherImpl::initialize(const Sequence< Any >& Arguments) th
 }
 
 //*************************************************************************
-//*** Private Help-Methods ***
+//*** Private helper methods ***
 Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -387,7 +387,7 @@ Reference< XIntrospection > EventAttacherImpl::getIntrospection() throw( Excepti
 }
 
 //*************************************************************************
-//*** Private Hilfs-Methoden ***
+//*** Private helper methods ***
 Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -400,7 +400,7 @@ Reference< XIdlReflection > EventAttacherImpl::getReflection() throw( Exception 
 }
 
 //*************************************************************************
-//*** Private Help-Methods ***
+//*** Private helper methods ***
 Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterService() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -414,7 +414,7 @@ Reference< XInvocationAdapterFactory > EventAttacherImpl::getInvocationAdapterSe
 
 
 //*************************************************************************
-//*** Private Hilfs-Methods ***
+//*** Private helper methods ***
 Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 {
     Guard< Mutex > aGuard( m_aMutex );
@@ -429,7 +429,7 @@ Reference< XTypeConverter > EventAttacherImpl::getConverter() throw( Exception )
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
-// Implementation of a EventAttacher-related AllListeners, which brings
+// Implementation of an EventAttacher-related AllListeners, which brings
 // a few Events to a general AllListener
 class FilterAllListenerImpl : public WeakImplHelper1< XAllListener  >
 {
@@ -581,10 +581,10 @@ Reference< XEventListener > EventAttacherImpl::attachListener
     if( !xReflection.is() )
         throw ServiceNotRegisteredException();
 
-    // Sign in, Call the fitting addListener-Method
+    // Sign in, Call the fitting addListener method
     // First Introspection, as the Methods can be analyzed in the same way
     // For better perfomance it is implemented here again or make the Impl-Method
-    // of the Introspection for this more configurable.
+    // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
         return xRet;
@@ -634,7 +634,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
             else if( nParamCount == 2 )
                 xListenerType = params.getConstArray()[1];
 
-            // Send Adapter to its own Listener-Type
+            // Request Adapter for the actual Listener type
             Reference< XInterface > xAdapter = createAllListenerAdapter
                 ( xInvocationAdapterFactory, xListenerType, AllListener, Helper );
 
@@ -657,20 +657,20 @@ Reference< XEventListener > EventAttacherImpl::attachListener
                     throw IntrospectionException();
                 }
             }
-            // Else, Give the other parameters now
+            // Else, pass the other parameter now
             else if( nParamCount == 2 )
             {
                 Sequence< Any > args( 2 );
                 Any* pAnys = args.getArray();
 
-                // Search the type of the 1st parameter
+                // Check the type of the 1st parameter
                 Reference< XIdlClass > xParamClass = params.getConstArray()[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                 {
                     pAnys[0] <<= AddListenerParam;
                 }
 
-                // 2. Parameter == Listener? TODO: Test!
+                // 2nd Parameter == Listener? TODO: Test!
                 pAnys[1] <<= xAdapter;
 
                 // TODO: Convert String -> ?
@@ -686,7 +686,7 @@ Reference< XEventListener > EventAttacherImpl::attachListener
             }
             break;
             // else...
-            // Anything else will not be supported
+            // Anything else is not supported
         }
     }
 
@@ -728,10 +728,10 @@ void EventAttacherImpl::removeListener
     if( !xReflection.is() )
         throw IntrospectionException();
 
-    // Sign in, Call the fitting removeListener-Method
+    // Sign off, Call the fitting removeListener method
     // First Introspection, as the Methods can be analyzed in the same way
     // For better perfomance it is implemented here again or make the Impl-Method
-    // of the Introspection for this more configurable.
+    // of the Introspection configurable for this purpose.
     Reference< XIntrospection > xIntrospection = getIntrospection();
     if( !xIntrospection.is() )
         throw IntrospectionException();
@@ -757,7 +757,7 @@ void EventAttacherImpl::removeListener
         aListenerName = aListenerName.copy( nIndex +1 );
     aRemoveListenerName = OUString( RTL_CONSTASCII_USTRINGPARAM("remove") ) + aListenerName;
 
-    // Send Methods to the correct removeListener-Method
+    // Search methods for the correct removeListener method
     Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( MethodConcept::LISTENER );
     sal_uInt32 i, nLen = aMethodSeq.getLength();
     const Reference< XIdlMethod >* pMethods = aMethodSeq.getConstArray();
@@ -786,18 +786,18 @@ void EventAttacherImpl::removeListener
                     throw IntrospectionException();
                 }
             }
-            // Else give the other parameters
+            // Else pass the other parameter
             else if( nParamCount == 2 )
             {
                 Sequence< Any > args( 2 );
                 Any* pAnys = args.getArray();
 
-                // Search the type of the 1st parameter
+                // Check the type of the 1st parameter
                 Reference< XIdlClass > xParamClass = params.getConstArray()[0];
                 if( xParamClass->getTypeClass() == TypeClass_STRING )
                     pAnys[0] <<= AddListenerParam;
 
-                // 2. Parameter == Listener? TODO: Test!
+                // 2nd parameter == Listener? TODO: Test!
                 pAnys[1] <<= aToRemoveListener;
 
                 // TODO: Convert String -> ?
