@@ -5944,7 +5944,7 @@ namespace osl_Directory
         {
             //create directory in /tmpname
             nError1 = ::osl::Directory::create( aTmpName7 );
-#if defined (WNT )
+#if defined ( WNT ) || defined ( MACOSX )
             nError1 = osl::FileBase::E_ACCES;  /// in Windows, you can create directory in c:/ any way.
             deleteTestDirectory( aTmpName7 );
 #endif

@@ -89,7 +89,12 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   include <sys/statfs.h>
+#   if !defined MACOSX
+#       include <sys/statfs.h>
+#   else
+#       include <sys/param.h>
+#       include <sys/mount.h>
+#   endif
 #   include <sys/statvfs.h>
 #   include <sys/types.h>
 #   define TEST_PLATFORM        ""
@@ -98,14 +103,14 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_LIST_DELIMITER  ":"
 #   define PATH_SEPERATOR       "/"
 #endif
+
 #if (defined WNT )                      // Windows
-#include <prewin.h>
-// #    include <windows.h>
-#   include <tchar.h>
-#   include <io.h>
-#   include <stdio.h>
-#   include <stdlib.h>
-#include <postwin.h>
+#   include <prewin.h>
+#       include <tchar.h>
+#       include <io.h>
+#       include <stdio.h>
+#       include <stdlib.h>
+#   include <postwin.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"
