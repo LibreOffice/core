@@ -99,9 +99,9 @@ class FixedText;
 
 struct depper_head
 {
-    ULONG nID;
-    ULONG nObjectCount;
-    ULONG nCnctrCount;
+    sal_uIntPtr nID;
+    sal_uIntPtr nObjectCount;
+    sal_uIntPtr nCnctrCount;
 
 };
 
@@ -115,14 +115,14 @@ enum DistType
 
 class Depper : public SolDevDll, public Window
 {
-    BOOL    mbIsPrjView;
-    ULONG   mnMinDynXOffs;
+    sal_Bool    mbIsPrjView;
+    sal_uIntPtr mnMinDynXOffs;
     Point   maDefPos;
     Size    maDefSize;
 
     long    nZoomed;
 
-    ULONG   mnViewMask;
+    sal_uIntPtr mnViewMask;
 
     ProgressBar*    pSubBar;
     ProgressBar*    pMainBar;
@@ -137,10 +137,10 @@ protected:
     SolIdMapper*    mpPrjIdMapper;
     StarWriter*     mpStarWriter;
     StarWriter*     mpPrjStarWriter;        //for inside prj-view
-    ULONG           mnSolWinCount;
-    ULONG           mnSolLastId;
-    ULONG           mnPrjWinCount;
-    ULONG           mnPrjLastId;
+    sal_uIntPtr         mnSolWinCount;
+    sal_uIntPtr         mnSolLastId;
+    sal_uIntPtr         mnPrjWinCount;
+    sal_uIntPtr         mnPrjLastId;
     ObjectList*         mpObjectList;           //Extended ObjWinList class
     ObjectList*         mpObjectPrjList;        //for module internal dependencies
     DepWin*             mpBaseWin;
@@ -149,50 +149,50 @@ protected:
     GraphWin*           mpGraphPrjWin;          //for inside prj-view
     Window*             mpProcessWin;
     Window*             mpParentProcessWin;
-    ObjectWin*          ObjIdToPtr( ObjectList* pObjLst, ULONG nId );
+    ObjectWin*          ObjIdToPtr( ObjectList* pObjLst, sal_uIntPtr nId );
     SoldepToolBox       maToolBox;
     FloatingWindow      maTaskBarFrame; // For ToolBox
 
-    ULONG       AddObjectToList(DepWin* pParentWin, ObjectList* pObjLst, ULONG &LastID, ULONG &WinCount, ByteString& rBodyText, BOOL bInteract=TRUE );
-    ULONG       AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, ULONG &LastID, ULONG &WinCount, ByteString& rBodyText, Point& rPos, Size& rSize );
-    ObjectWin*  RemoveObjectFromList( ObjectList* pObjLst, ULONG &WinCount, USHORT nId, BOOL bDelete );
-    USHORT      AddConnectorToObjects( ObjectList* pObjLst, ULONG nStartId, ULONG nEndId );
-    USHORT      RemoveConnectorFromObjects( ObjectList* pObjLst, ULONG nStartId, ULONG nEndId );
-    USHORT      AddConnectorToObjects( ObjectWin* pStartWin, ObjectWin* pEndWin );
-    USHORT      RemoveConnectorFromObjects( ObjectWin* pStartWin, ObjectWin* pEndWin );
+    sal_uIntPtr       AddObjectToList(DepWin* pParentWin, ObjectList* pObjLst, sal_uIntPtr &LastID, sal_uIntPtr &WinCount, ByteString& rBodyText, sal_Bool bInteract=sal_True );
+    sal_uIntPtr       AddObjectToList( DepWin* pParentWin, ObjectList* pObjLst, sal_uIntPtr &LastID, sal_uIntPtr &WinCount, ByteString& rBodyText, Point& rPos, Size& rSize );
+    ObjectWin*  RemoveObjectFromList( ObjectList* pObjLst, sal_uIntPtr &WinCount, sal_uInt16 nId, sal_Bool bDelete );
+    sal_uInt16      AddConnectorToObjects( ObjectList* pObjLst, sal_uIntPtr nStartId, sal_uIntPtr nEndId );
+    sal_uInt16      RemoveConnectorFromObjects( ObjectList* pObjLst, sal_uIntPtr nStartId, sal_uIntPtr nEndId );
+    sal_uInt16      AddConnectorToObjects( ObjectWin* pStartWin, ObjectWin* pEndWin );
+    sal_uInt16      RemoveConnectorFromObjects( ObjectWin* pStartWin, ObjectWin* pEndWin );
 
 public:
     Depper( Window* pBaseWindow );
     ~Depper();
-    BOOL                TogglePrjViewStatus();
-    void                SetPrjViewStatus(BOOL state) { mbIsPrjView = state; }
-    BOOL                IsPrjView() { return mbIsPrjView; }
+    sal_Bool                TogglePrjViewStatus();
+    void                SetPrjViewStatus(sal_Bool state) { mbIsPrjView = state; }
+    sal_Bool                IsPrjView() { return mbIsPrjView; }
     GraphWin*           GetGraphWin() { return (!mbIsPrjView) ? mpGraphWin : mpGraphPrjWin; }   //scrollbar window
     DepWin*             GetDepWin() { return (!mbIsPrjView) ? mpBaseWin : mpBasePrjWin; }       //content of scrollbar window
     ProgressBar*        GetMainProgressBar() { return pMainBar; }
-    void                SetMainProgressBar( USHORT i);
-    void                UpdateMainProgressBar(USHORT i, USHORT nScaleVal, USHORT &nStep, BOOL bCountingDown = FALSE);
-    void                UpdateSubProgrssBar(ULONG i);
+    void                SetMainProgressBar( sal_uInt16 i);
+    void                UpdateMainProgressBar(sal_uInt16 i, sal_uInt16 nScaleVal, sal_uInt16 &nStep, sal_Bool bCountingDown = sal_False);
+    void                UpdateSubProgrssBar(sal_uIntPtr i);
     void                SetTitle( const String &rTitle ) { mpProcessWin->SetText( rTitle ); }
     virtual void        RemoveAllObjects( ObjectList* ObjLst );
-    USHORT              Save( const ByteString& rFileName );
-//  USHORT              Load( const ByteString& rFileName );
-    virtual USHORT      WriteSource();
-    virtual USHORT      ReadSource( BOOL bUpdater );
-    virtual USHORT      OpenSource();
+    sal_uInt16              Save( const ByteString& rFileName );
+//  sal_uInt16              Load( const ByteString& rFileName );
+    virtual sal_uInt16      WriteSource();
+    virtual sal_uInt16      ReadSource( sal_Bool bUpdater );
+    virtual sal_uInt16      OpenSource();
     void                SetDefPos( Point& rPos ) { maDefPos = rPos; };
     Point&              GetDefPos() { return maDefPos; };
     void                SetDefSize( Size& rSize ) { maDefSize = rSize; };
     Size&               GetDefSize() { return maDefSize; };
-    virtual USHORT      AutoArrangeDlgStart();
-    virtual USHORT      AutoArrangeDlgStop();
-    virtual USHORT      Zoom( MapMode& rMapMode );
-    virtual BOOL        ViewContent( ByteString& ) { return FALSE; };
-    virtual USHORT      CloseWindow() { return 0; };
+    virtual sal_uInt16      AutoArrangeDlgStart();
+    virtual sal_uInt16      AutoArrangeDlgStop();
+    virtual sal_uInt16      Zoom( MapMode& rMapMode );
+    virtual sal_Bool        ViewContent( ByteString& ) { return sal_False; };
+    virtual sal_uInt16      CloseWindow() { return 0; };
     virtual void        ShowHelp(){};
     ObjectList*         GetObjectList() { return (!mbIsPrjView) ? mpObjectList : mpObjectPrjList; }
-    ULONG               HandleNewPrjDialog( ByteString &rBodyText );
-    ULONG               HandleNewDirectoryDialog( ByteString &rBodyText );
+    sal_uIntPtr               HandleNewPrjDialog( ByteString &rBodyText );
+    sal_uIntPtr               HandleNewDirectoryDialog( ByteString &rBodyText );
     void                HideObjectsAndConnections( ObjectList* pObjLst );
     void                ShowObjectsAndConnections( ObjectList* pObjLst );
     //virtual void        MouseButtonDown( const MouseEvent& rMEvt );
@@ -201,8 +201,8 @@ public:
     DECL_LINK( PopupSelected, PopupMenu* );
 //#endif
 
-    //void SetViewMask( ULONG nMask );
-    ULONG GetViewMask() { return mnViewMask; }
+    //void SetViewMask( sal_uIntPtr nMask );
+    sal_uIntPtr GetViewMask() { return mnViewMask; }
 };
 
 #endif
