@@ -399,10 +399,13 @@ BOOL KillFile( const INetURLObject& rURL )
 // -------------------
 // - GalleryProgress -
 // -------------------
+DBG_NAME(GalleryProgress)
 
 GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
     mpFilter( pFilter )
 {
+    DBG_CTOR(GalleryProgress,NULL);
+
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::utl::getProcessServiceFactory() );
 
     if( xMgr.is() )
@@ -442,6 +445,8 @@ GalleryProgress::~GalleryProgress()
 {
 //  if( mpFilter )
 //      mpFilter->SetUpdatePercentHdl( Link() );
+
+    DBG_DTOR(GalleryProgress,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -455,6 +460,7 @@ void GalleryProgress::Update( ULONG nVal, ULONG nMaxVal )
 // -----------------------
 // - GalleryTransferable -
 // -----------------------
+DBG_NAME(GalleryTransferable)
 
 GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos, bool bLazy ) :
     mpTheme( pTheme ),
@@ -464,6 +470,8 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos
     mpImageMap( NULL ),
     mpURL( NULL )
 {
+    DBG_CTOR(GalleryTransferable,NULL);
+
     InitData( bLazy );
 }
 
@@ -471,6 +479,8 @@ GalleryTransferable::GalleryTransferable( GalleryTheme* pTheme, ULONG nObjectPos
 
 GalleryTransferable::~GalleryTransferable()
 {
+
+    DBG_DTOR(GalleryTransferable,NULL);
 }
 
 // ------------------------------------------------------------------------
