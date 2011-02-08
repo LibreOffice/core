@@ -344,7 +344,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellUpperCase            = bIsSpellUpperCase;
     bResIsSpellWithDigits           = bIsSpellWithDigits;
     bResIsSpellCapitalization       = bIsSpellCapitalization;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {

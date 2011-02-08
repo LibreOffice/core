@@ -790,7 +790,7 @@ uno::Sequence< rtl::OUString > DicList::getSupportedServiceNames_Static() throw(
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
-    uno::Sequence< rtl::OUString > aSNS( 1 );   // auch mehr als 1 Service moeglich
+    uno::Sequence< rtl::OUString > aSNS( 1 );   // more than 1 service possible
     aSNS.getArray()[0] = A2OU( SN_DICTIONARY_LIST );
     return aSNS;
 }

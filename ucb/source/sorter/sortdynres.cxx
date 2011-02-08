@@ -320,8 +320,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 
     SortedResultSet *pCurSet = NULL;
 
-    // mxNew und mxOld vertauschen und anschliessend die Tabellen von Old
-    // nach New kopieren
+    // exchange mxNew and mxOld and immediately afterwards copy the tables
+    // from Old to New
     if ( mbGotWelcome )
     {
         if ( mbUseOne )

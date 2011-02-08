@@ -528,7 +528,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {
@@ -690,7 +690,7 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
-    //
+
     INT32 nLen = rPropVals.getLength();
     if (nLen)
     {

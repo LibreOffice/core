@@ -298,7 +298,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
     ULONG nErr = sal::static_int_cast< ULONG >(-1);
 
-    // Header einlesen
+    // read header
     BOOL bNegativ;
     USHORT nLang;
     nDicVersion = ReadDicVersion(pStream, nLang, bNegativ);
@@ -321,7 +321,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
         USHORT  nLen = 0;
         sal_Char aWordBuf[ BUFSIZE ];
 
-        // Das erste Wort einlesen
+        // Read the first word
         if (!pStream->IsEof())
         {
             *pStream >> nLen;
@@ -338,8 +338,8 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
 
         while(!pStream->IsEof())
         {
-            // Aus dem File einlesen
-            // Einfuegen ins Woerterbuch ohne Konvertierung
+            // Read from file
+            // Paste in dictionary without converting
             if(*aWordBuf)
             {
                 ByteString aDummy( aWordBuf );
@@ -350,7 +350,7 @@ ULONG DictionaryNeo::loadEntries(const OUString &rMainURL)
             }
 
             *pStream >> nLen;
-            if (pStream->IsEof())   // #75082# GPF in online-spelling
+            if (pStream->IsEof())
                 break;
             if (0 != (nErr = pStream->GetError()))
                 return nErr;
@@ -493,7 +493,7 @@ ULONG DictionaryNeo::saveEntries(const OUString &rURL)
             pVerStr = pVerStr6;
         else
             pVerStr = eDicType == DictionaryType_POSITIVE ? pVerStr2 : pVerStr5;
-        strcpy( aWordBuf, pVerStr );    // #100211# - checked
+        strcpy( aWordBuf, pVerStr );
         USHORT nLen = sal::static_int_cast< USHORT >(strlen( aWordBuf ));
         *pStream << nLen;
         if (0 != (nErr = pStream->GetError()))
