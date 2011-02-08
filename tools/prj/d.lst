@@ -27,9 +27,6 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\weakbase.hxx %_DEST%\inc%_EXT%\tools\weakbase.hxx
 ..\inc\tools\weakbase.h %_DEST%\inc%_EXT%\tools\weakbase.h
 
-..\inc\tools\postwin.h %_DEST%\inc%_EXT%\tools\postwin.h
-..\inc\tools\prewin.h %_DEST%\inc%_EXT%\tools\prewin.h
-
 ..\inc\tools\postx.h %_DEST%\inc%_EXT%\tools\postx.h
 ..\inc\tools\prex.h %_DEST%\inc%_EXT%\tools\prex.h
 

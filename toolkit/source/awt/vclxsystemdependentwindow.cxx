@@ -41,9 +41,9 @@
 #include <cppuhelper/typeprovider.hxx>
 
 #ifdef WNT
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <windows.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"
 #include <Cocoa/Cocoa.h>

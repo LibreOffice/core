@@ -32,9 +32,9 @@
 #include <string.h>
 #include <malloc.h>
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <windows.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #include <vcl/sysdata.hxx>
 #include "tools/svwin.h"
 

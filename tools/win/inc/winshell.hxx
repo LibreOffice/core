@@ -31,9 +31,9 @@
 
 #if defined WNT
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include "shutil.h"
-#include <tools/postwin.h>
+#include <postwin.h>
 
 #include <tools/string.hxx>
 

@@ -39,9 +39,9 @@
 #include <vcl/virdev.hxx>
 
 #ifdef WNT
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <windows.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #ifdef max
 #undef max
 #endif
