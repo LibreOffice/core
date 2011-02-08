@@ -144,9 +144,7 @@ void DocListenerBox::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ 
 
 void DocListenerBox::onDocumentClosed( const ScriptDocument& /*_rDocument*/ )
 {
-    if ( SFX_APP()->IsInBasicCall() )
-        // Nicht wenn Office beendet
-        FillBox();
+    FillBox();
 }
 
 void DocListenerBox::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )

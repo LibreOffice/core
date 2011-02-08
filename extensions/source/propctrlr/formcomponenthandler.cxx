@@ -1418,7 +1418,7 @@ namespace pcr
 
         if ( aDescriptor.PrimaryButtonId.getLength() )
             aDescriptor.HasPrimaryButton = sal_True;
-        if ( aDescriptor.SecondaryButtonId )
+        if ( aDescriptor.SecondaryButtonId.getLength() )
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;

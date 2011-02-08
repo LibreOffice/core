@@ -30,6 +30,7 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Configuration;
 import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.PropertyNames;
 
 public class CGTable
 {
@@ -78,7 +79,7 @@ public class CGTable
             }
             else
             {
-                fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, "Name");
+                fieldnames = Configuration.getNodeChildNames(xNameAccessFieldsNode, PropertyNames.PROPERTY_NAME);
             }
             for (int i = 0; i < fieldnames.length; i++)
             {

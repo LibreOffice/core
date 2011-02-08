@@ -30,6 +30,7 @@ import com.sun.star.awt.XControl;
 import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.PropertyNames;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Hashtable;
@@ -128,6 +129,6 @@ public class AbstractListener
     public static String getEventSourceName(EventObject eventObject)
     {
         XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, eventObject.Source);
-        return (String) Helper.getUnoPropertyValue(xControl.getModel(), "Name", String.class);
+        return (String) Helper.getUnoPropertyValue(xControl.getModel(), PropertyNames.PROPERTY_NAME, String.class);
     }
 }

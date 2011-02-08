@@ -121,7 +121,7 @@ public:
     void            AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg=FALSE );
     USHORT          GetUndoActionCount();
     void            UndoActionStart( USHORT nId );
-    void            UndoActionEnd( USHORT nId );
+    void            UndoActionEnd();
 
     void            MoveErrorEnd(long nOffset);
 
