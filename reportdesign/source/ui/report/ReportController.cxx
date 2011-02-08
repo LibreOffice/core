@@ -1042,7 +1042,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
         case SID_UNDO:
         {
             const OXUndoEnvironment::OUndoMode aLock( m_aReportModel->GetUndoEnv() );
-            BOOL ( SfxUndoManager::*doXDo )() =
+            sal_Bool ( SfxUndoManager::*doXDo )() =
                 ( _nId == SID_UNDO ) ? &SfxUndoManager::Undo : &SfxUndoManager::Redo;
 
             SfxUndoManager& rUndoManager( getUndoManager() );
