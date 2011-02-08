@@ -65,7 +65,7 @@ using namespace ::com::sun::star;
     Beschreibung:
  --------------------------------------------------------------------*/
 
-static USHORT __FAR_DATA aWrapPageRg[] = {
+static sal_uInt16 __FAR_DATA aWrapPageRg[] = {
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PROTECT, RES_SURROUND,
     RES_PRINT, RES_PRINT,
@@ -79,14 +79,14 @@ static USHORT __FAR_DATA aWrapPageRg[] = {
 
 
 
-SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode) :
+SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode) :
     SfxSingleTabDialog(pParent, rSet, 0),
     pWrtShell(pSh)
 
 {
     // TabPage erzeugen
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(this, rSet);
-    pNewPage->SetFormatUsed(FALSE, bDrawMode);
+    pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
     SetTabPage(pNewPage);
 
@@ -142,10 +142,10 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
 
     pWrtSh(0),
 
-    bFormat(FALSE),
-    bNew(TRUE),
-    bHtmlMode(FALSE),
-    bContourImage(FALSE)
+    bFormat(sal_False),
+    bNew(sal_True),
+    bHtmlMode(sal_False),
+    bContourImage(sal_False)
 
 {
     FreeResource();
@@ -219,14 +219,14 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
     else
     {
-        BOOL bShowCB = bFormat;
+        sal_Bool bShowCB = bFormat;
         if( !bFormat )
         {
             int nSelType = pWrtSh->GetSelectionType();
             if( ( nSelType & nsSelectionType::SEL_GRF ) ||
                 ( nSelType & nsSelectionType::SEL_OLE && GRAPHIC_NONE !=
                             pWrtSh->GetIMapGraphic().GetType() ))
-                bShowCB = TRUE;
+                bShowCB = sal_True;
         }
         if( bShowCB )
         {
@@ -236,7 +236,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
 
     nHtmlMode = ::GetHtmlMode((const SwDocShell*)SfxObjectShell::Current());
-    bHtmlMode = nHtmlMode & HTMLMODE_ON ? TRUE : FALSE;
+    bHtmlMode = nHtmlMode & HTMLMODE_ON ? sal_True : sal_False;
 
     FieldUnit aMetric = ::GetDfltMetric(bHtmlMode);
     SetMetric( aLeftMarginED  , aMetric );
@@ -257,10 +257,10 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     }
     else
     {
-        aWrapAnchorOnlyCB.Enable( FALSE );
+        aWrapAnchorOnlyCB.Enable( sal_False );
     }
 
-    BOOL bContour = rSurround.IsContour();
+    sal_Bool bContour = rSurround.IsContour();
     aWrapOutlineCB.Check( bContour );
     aWrapOutsideCB.Check( rSurround.IsOutside() );
     aWrapThroughRB.Enable(!aWrapOutlineCB.IsChecked());
@@ -340,9 +340,9 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 
 
 
-BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
+sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
 {
-    BOOL bModified = FALSE;
+    sal_Bool bModified = sal_False;
     const SfxPoolItem* pOldItem;
 
     const SwFmtSurround& rOldSur = (const SwFmtSurround&)GetItemSet().Get(RES_SURROUND);
@@ -354,7 +354,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     {
         const SvxOpaqueItem& rOpaque = (const SvxOpaqueItem&)GetItemSet().Get(RES_OPAQUE);
         aOp = rOpaque;
-        aOp.SetValue(TRUE);
+        aOp.SetValue(sal_True);
     }
 
     if (aNoWrapRB.IsChecked())
@@ -369,13 +369,13 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
     {
         aSur.SetSurround(SURROUND_THROUGHT);
         if (aWrapTransparentCB.IsChecked() && !bDrawMode)
-            aOp.SetValue(FALSE);
+            aOp.SetValue(sal_False);
     }
     else if (aIdealWrapRB.IsChecked())
         aSur.SetSurround(SURROUND_IDEAL);
 
     aSur.SetAnchorOnly( aWrapAnchorOnlyCB.IsChecked() );
-    BOOL bContour = aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled();
+    sal_Bool bContour = aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled();
     aSur.SetContour( bContour );
 
     if ( bContour )
@@ -385,7 +385,7 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aSur != *pOldItem )
     {
         rSet.Put(aSur);
-        bModified = TRUE;
+        bModified = sal_True;
     }
 
     if (!bDrawMode)
@@ -394,16 +394,16 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                     aOp != *pOldItem )
         {
             rSet.Put(aOp);
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
-    BOOL bTopMod = aTopMarginED.IsValueModified();
-    BOOL bBottomMod = aBottomMarginED.IsValueModified();
+    sal_Bool bTopMod = aTopMarginED.IsValueModified();
+    sal_Bool bBottomMod = aBottomMarginED.IsValueModified();
 
     SvxULSpaceItem aUL( RES_UL_SPACE );
-    aUL.SetUpper((USHORT)aTopMarginED.Denormalize(aTopMarginED.GetValue(FUNIT_TWIP)));
-    aUL.SetLower((USHORT)aBottomMarginED.Denormalize(aBottomMarginED.GetValue(FUNIT_TWIP)));
+    aUL.SetUpper((sal_uInt16)aTopMarginED.Denormalize(aTopMarginED.GetValue(FUNIT_TWIP)));
+    aUL.SetLower((sal_uInt16)aBottomMarginED.Denormalize(aBottomMarginED.GetValue(FUNIT_TWIP)));
 
     if ( bTopMod || bBottomMod )
     {
@@ -411,16 +411,16 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aUL != *pOldItem )
         {
             rSet.Put( aUL, RES_UL_SPACE );
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
-    BOOL bLeftMod = aLeftMarginED.IsValueModified();
-    BOOL bRightMod = aRightMarginED.IsValueModified();
+    sal_Bool bLeftMod = aLeftMarginED.IsValueModified();
+    sal_Bool bRightMod = aRightMarginED.IsValueModified();
 
     SvxLRSpaceItem aLR( RES_LR_SPACE );
-    aLR.SetLeft((USHORT)aLeftMarginED.Denormalize(aLeftMarginED.GetValue(FUNIT_TWIP)));
-    aLR.SetRight((USHORT)aRightMarginED.Denormalize(aRightMarginED.GetValue(FUNIT_TWIP)));
+    aLR.SetLeft((sal_uInt16)aLeftMarginED.Denormalize(aLeftMarginED.GetValue(FUNIT_TWIP)));
+    aLR.SetRight((sal_uInt16)aRightMarginED.Denormalize(aRightMarginED.GetValue(FUNIT_TWIP)));
 
     if ( bLeftMod || bRightMod )
     {
@@ -428,13 +428,13 @@ BOOL SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
                 aLR != *pOldItem )
         {
             rSet.Put(aLR, RES_LR_SPACE);
-            bModified = TRUE;
+            bModified = sal_True;
         }
     }
 
     if ( bDrawMode )
     {
-        BOOL bChecked = aWrapTransparentCB.IsChecked() & aWrapTransparentCB.IsEnabled();
+        sal_Bool bChecked = aWrapTransparentCB.IsChecked() & aWrapTransparentCB.IsEnabled();
         if (aWrapTransparentCB.GetSavedValue() != bChecked)
             bModified |= 0 != rSet.Put(SfxInt16Item(FN_DRAW_WRAP_DLG, bChecked ? 0 : 1));
     }
@@ -453,7 +453,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     // Anchor
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
-    BOOL bEnable = (nAnchorId != FLY_AS_CHAR);
+    sal_Bool bEnable = (nAnchorId != FLY_AS_CHAR);
 
     if (!bDrawMode)
     {
@@ -468,10 +468,10 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         // Rand
         const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
-        nOldLeftMargin  = static_cast< USHORT >(rLR.GetLeft());
-        nOldRightMargin = static_cast< USHORT >(rLR.GetRight());
-        nOldUpperMargin = static_cast< USHORT >(rUL.GetUpper());
-        nOldLowerMargin = static_cast< USHORT >(rUL.GetLower());
+        nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
+        nOldRightMargin = static_cast< sal_uInt16 >(rLR.GetRight());
+        nOldUpperMargin = static_cast< sal_uInt16 >(rUL.GetUpper());
+        nOldLowerMargin = static_cast< sal_uInt16 >(rUL.GetLower());
 
         // Position
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
@@ -562,7 +562,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
     aWrapTransparentCB.Enable( bEnable && !bHtmlMode && nSur == SURROUND_THROUGHT );
     if(bHtmlMode)
     {
-        BOOL bSomeAbsPos = 0 != (nHtmlMode & HTMLMODE_SOME_ABS_POS);
+        sal_Bool bSomeAbsPos = 0 != (nHtmlMode & HTMLMODE_SOME_ABS_POS);
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         sal_Int16 eHOrient = rHori.GetHoriOrient();
         sal_Int16 eHRelOrient = rHori.GetRelationOrient();
@@ -572,12 +572,12 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                             (eHOrient == text::HoriOrientation::RIGHT || eHOrient == text::HoriOrientation::LEFT);
         aWrapAnchorOnlyCB.Enable( bAllHtmlModes && nSur != SURROUND_NONE );
         aWrapOutsideCB.Hide();
-        aIdealWrapRB.Enable( FALSE );
+        aIdealWrapRB.Enable( sal_False );
 
 
-        aWrapTransparentCB.Enable( FALSE );
+        aWrapTransparentCB.Enable( sal_False );
         aNoWrapRB.Enable( FLY_AT_PARA == nAnchorId );
-        aWrapParallelRB.Enable( FALSE  );
+        aWrapParallelRB.Enable( sal_False  );
         aWrapLeftRB       .Enable
                     (  (FLY_AT_PARA == nAnchorId)
                     || (   (FLY_AT_CHAR == nAnchorId)
@@ -599,7 +599,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         if(aNoWrapRB.IsChecked() && !aNoWrapRB.IsEnabled())
         {
             if(aWrapThroughRB.IsEnabled())
-                aWrapThroughRB.Check(TRUE);
+                aWrapThroughRB.Check(sal_True);
             else if(aWrapLeftRB.IsEnabled())
                 aWrapLeftRB.Check();
             else if(aWrapRightRB.IsEnabled())
@@ -649,7 +649,7 @@ int SwWrapTabPage::DeactivatePage(SfxItemSet* _pSet)
     if(_pSet)
         FillItemSet(*_pSet);
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -703,7 +703,7 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
 
 IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 {
-    BOOL bWrapThrough = (pBtn == &aWrapThroughRB);
+    sal_Bool bWrapThrough = (pBtn == &aWrapThroughRB);
     aWrapTransparentCB.Enable( bWrapThrough && !bHtmlMode );
     bWrapThrough |= ( nAnchorId == FLY_AS_CHAR );
     aWrapOutlineCB.Enable( !bWrapThrough && pBtn != &aNoWrapRB);
@@ -724,7 +724,7 @@ IMPL_LINK( SwWrapTabPage, WrapTypeHdl, ImageRadioButton *, pBtn )
 
 IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
 {
-    BOOL bEnable = !(aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled());
+    sal_Bool bEnable = !(aWrapOutlineCB.IsChecked() && aWrapOutlineCB.IsEnabled());
 
     aWrapOutsideCB.Enable(!bEnable);
 
@@ -741,7 +741,7 @@ IMPL_LINK( SwWrapTabPage, ContourHdl, CheckBox *, EMPTYARG )
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
-USHORT* SwWrapTabPage::GetRanges()
+sal_uInt16* SwWrapTabPage::GetRanges()
 {
     return aWrapPageRg;
 }
@@ -765,7 +765,7 @@ void SwWrapTabPage::ApplyImageList()
         aWrapILH : aWrapIL;
 
     aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
-    BOOL bWrapOutline =  !aWrapOutlineCB.IsChecked();
+    sal_Bool bWrapOutline =  !aWrapOutlineCB.IsChecked();
     if(bWrapOutline)
     {
         aNoWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_NONE));

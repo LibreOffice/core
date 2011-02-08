@@ -199,7 +199,7 @@ void lcl_SetViewMarks(SwViewOption& rVOpt, sal_Bool bOn )
     rVOpt.SetHardBlank(bOn);
     rVOpt.SetSoftHyph(bOn);
     SwViewOption::SetAppearanceFlag(
-            VIEWOPT_FIELD_SHADINGS, bOn, TRUE);
+            VIEWOPT_FIELD_SHADINGS, bOn, sal_True);
 }
 
 void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
@@ -243,7 +243,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
         {
             case FN_RULER:
             {
-                if(!pOpt->IsViewHRuler(TRUE) && !pOpt->IsViewVRuler(TRUE))
+                if(!pOpt->IsViewHRuler(sal_True) && !pOpt->IsViewVRuler(sal_True))
                 {
                     rSet.DisableItem(nWhich);
                     nWhich = 0;
@@ -345,7 +345,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         eState = bSet ? STATE_ON : STATE_OFF;
     }
 
-    BOOL bFlag = STATE_ON == eState;
+    sal_Bool bFlag = STATE_ON == eState;
     uno::Reference< beans::XPropertySet >  xLngProp( ::GetLinguPropertySet() );
 
     switch ( nSlot )
@@ -360,13 +360,13 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         case FN_VIEW_FIELDS:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsFieldShadings() ;
-                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, TRUE );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_FIELD_SHADINGS, bFlag, sal_True );
                 break;
 
         case FN_VIEW_BOUNDS:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsDocBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, TRUE );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_DOC_BOUNDARIES, bFlag, sal_True );
                 break;
 
         case SID_GRID_VISIBLE:
@@ -446,7 +446,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         case FN_VIEW_TABLEGRID:
                 if( STATE_TOGGLE == eState )
                     bFlag = !SwViewOption::IsTableBoundaries();
-                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, TRUE );
+                SwViewOption::SetAppearanceFlag(VIEWOPT_TABLE_BOUNDARIES, bFlag, sal_True );
                 break;
 
         case FN_VIEW_FIELDNAME:
@@ -535,15 +535,15 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
-    const BOOL bLockedView = rSh.IsViewLocked();
-    rSh.LockView( TRUE );    //lock visible section
+    const sal_Bool bLockedView = rSh.IsViewLocked();
+    rSh.LockView( sal_True );    //lock visible section
     GetWrtShell().EndAction();
     rSh.LockView( bLockedView );
 
     delete pOpt;
     Invalidate(rReq.GetSlot());
     if(!pArgs)
-        rReq.AppendItem(SfxBoolItem(nSlot, (BOOL)bFlag));
+        rReq.AppendItem(SfxBoolItem(nSlot, (sal_Bool)bFlag));
     rReq.Done();
 }
 

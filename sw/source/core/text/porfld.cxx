@@ -222,8 +222,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
     String aTxt;
     if( GetExpTxt( rInf, aTxt ) && aTxt.Len() && pBreakIt->GetBreakIter().is() )
     {
-        BYTE nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
-        USHORT nScript;
+        sal_uInt8 nActual = pFnt ? pFnt->GetActual() : rInf.GetFont()->GetActual();
+        sal_uInt16 nScript;
         {
             nScript = pBreakIt->GetBreakIter()->getScriptType( aTxt, 0 );
             xub_StrLen nChg = 0;
@@ -243,7 +243,7 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
                 nNextScriptChg = aTxt.Len();
 
         }
-        BYTE nTmp;
+        sal_uInt8 nTmp;
         switch ( nScript ) {
             case i18n::ScriptType::LATIN : nTmp = SW_LATIN; break;
             case i18n::ScriptType::ASIAN : nTmp = SW_CJK; break;
@@ -254,8 +254,8 @@ void SwFldPortion::CheckScript( const SwTxtSizeInfo &rInf )
         // #i16354# Change script type for RTL text to CTL.
         const SwScriptInfo& rSI = rInf.GetParaPortion()->GetScriptInfo();
         // --> OD 2009-01-29 #i98418#
-//        const BYTE nFldDir = IsNumberPortion() ?
-        const BYTE nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
+//        const sal_uInt8 nFldDir = IsNumberPortion() ?
+        const sal_uInt8 nFldDir = ( IsNumberPortion() || IsFtnNumPortion() ) ?
                              rSI.GetDefaultDir() :
                              rSI.DirType( IsFollow() ? rInf.GetIdx() - 1 : rInf.GetIdx() );
         // <--
@@ -700,8 +700,8 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
     // calculate the width of the number portion, including follows
     const KSHORT nOldWidth = Width();
-    USHORT nSumWidth = 0;
-    USHORT nOffset = 0;
+    sal_uInt16 nSumWidth = 0;
+    sal_uInt16 nOffset = 0;
 
     const SwLinePortion* pTmp = this;
     while ( pTmp && pTmp->InNumberGrp() )
@@ -864,7 +864,7 @@ SwGrfNumPortion::SwGrfNumPortion(
         nYPos = 0;
         eOrient = text::VertOrientation::TOP;
     }
-    Width( static_cast<USHORT>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
+    Width( static_cast<sal_uInt16>(rGrfSize.Width() + 2 * GRFNUM_SECURE) );
     nFixWidth = Width();
     nGrfHeight = rGrfSize.Height() + 2 * GRFNUM_SECURE;
     Height( KSHORT(nGrfHeight) );
@@ -901,7 +901,7 @@ sal_Bool SwGrfNumPortion::Format( SwTxtFormatInfo &rInf )
     const sal_Bool bFull = rInf.Width() < rInf.X() + Width();
     const sal_Bool bFly = rInf.GetFly() ||
         ( rInf.GetLast() && rInf.GetLast()->IsFlyPortion() );
-    SetAscent( static_cast<USHORT>(GetRelPos() > 0 ? GetRelPos() : 0) );
+    SetAscent( static_cast<sal_uInt16>(GetRelPos() > 0 ? GetRelPos() : 0) );
     if( GetAscent() > Height() )
         Height( GetAscent() );
 
@@ -1139,10 +1139,10 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
     // the arrays of width and position are filled by the format function
     if( pBreakIt->GetBreakIter().is() )
     {
-        BYTE nScr = SW_SCRIPTS;
-        for( USHORT i = 0; i < rTxt.Len(); ++i )
+        sal_uInt8 nScr = SW_SCRIPTS;
+        for( sal_uInt16 i = 0; i < rTxt.Len(); ++i )
         {
-            USHORT nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
+            sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rTxt, i );
             switch ( nScript ) {
                 case i18n::ScriptType::LATIN : nScr = SW_LATIN; break;
                 case i18n::ScriptType::ASIAN : nScr = SW_CJK; break;
@@ -1153,7 +1153,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
     }
     else
     {
-        for( USHORT i = 0; i < 6; aScrType[i++] = 0 )
+        for( sal_uInt16 i = 0; i < 6; aScrType[i++] = 0 )
             ; // nothing
     }
     memset( &aWidth, 0, sizeof(aWidth) );
@@ -1175,19 +1175,19 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
-        USHORT nCount = aExpand.Len();
+        sal_uInt16 nCount = aExpand.Len();
         if( !nCount )
             return;
         ASSERT( nCount < 7, "Too much combined characters" );
 
         // the first character of the second row
-        USHORT nTop = ( nCount + 1 ) / 2;
+        sal_uInt16 nTop = ( nCount + 1 ) / 2;
 
         SwFont aTmpFont( *rInf.GetFont() );
         aTmpFont.SetProportion( nProportion );  // a smaller font
         SwFontSave aFontSave( rInf, &aTmpFont );
 
-        USHORT i = 0;
+        sal_uInt16 i = 0;
         Point aOldPos = rInf.GetPos();
         Point aOutPos( aOldPos.X(), aOldPos.Y() - nUpPos );// Y of the first row
         while( i < nCount )
@@ -1195,7 +1195,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( i == nTop ) // change the row
                 aOutPos.Y() = aOldPos.Y() + nLowPos;    // Y of the second row
             aOutPos.X() = aOldPos.X() + aPos[i];        // X position
-            const BYTE nAct = aScrType[i];              // script type
+            const sal_uInt8 nAct = aScrType[i];             // script type
             aTmpFont.SetActual( nAct );
             // if there're more than 4 characters to display, we choose fonts
             // with 2/3 of the original font width.
@@ -1223,7 +1223,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 {
-    USHORT nCount = aExpand.Len();
+    sal_uInt16 nCount = aExpand.Len();
     if( !nCount )
     {
         Width( 0 );
@@ -1233,7 +1233,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     ASSERT( nCount < 7, "Too much combined characters" );
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
-    USHORT i = 0;
+    sal_uInt16 i = 0;
     while( i < nCount && SW_SCRIPTS == aScrType[i] )
         aScrType[i++] = rInf.GetFont()->GetActual();
     if( nCount > 4 )
@@ -1247,22 +1247,22 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );
                 aWidth[ aScrType[i] ] =
-                        static_cast<USHORT>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
+                        static_cast<sal_uInt16>(2 * rInf.GetOut()->GetFontMetric().GetSize().Width() / 3);
             }
             ++i;
         }
     }
 
-    USHORT nTop = ( nCount + 1 ) / 2; // the first character of the second line
+    sal_uInt16 nTop = ( nCount + 1 ) / 2; // the first character of the second line
     ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;
     // In nMainAscent/Descent we store the ascent and descent
     // of the original surrounding font
-    USHORT nMaxDescent, nMaxAscent, nMaxWidth;
-    USHORT nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
-    const USHORT nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
+    sal_uInt16 nMaxDescent, nMaxAscent, nMaxWidth;
+    sal_uInt16 nMainDescent = rInf.GetFont()->GetHeight( pSh, *rInf.GetOut() );
+    const sal_uInt16 nMainAscent = rInf.GetFont()->GetAscent( pSh, *rInf.GetOut() );
     nMainDescent = nMainDescent - nMainAscent;
     // we start with a 50% font, but if we notice that the combined portion
     // becomes bigger than the surrounding font, we check 45% and maybe 40%.
@@ -1284,7 +1284,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         // local nMaxAscent, nMaxDescent and nMaxWidth variables.
         while( i < nCount )
         {
-            BYTE nScrp = aScrType[i];
+            sal_uInt8 nScrp = aScrType[i];
             aTmpFont.SetActual( nScrp );
             if( aWidth[ nScrp ] )
             {
@@ -1295,8 +1295,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
 
             SwDrawTextInfo aDrawInf( pSh, *rInf.GetOut(), 0, aExpand, i, 1 );
             Size aSize = aTmpFont._GetTxtSize( aDrawInf );
-            USHORT nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
-            aPos[ i ] = (USHORT)aSize.Width();
+            sal_uInt16 nAsc = aTmpFont.GetAscent( pSh, *rInf.GetOut() );
+            aPos[ i ] = (sal_uInt16)aSize.Width();
             if( i == nTop ) // enter the second line
             {
                 nLowPos = nMaxDescent;
@@ -1311,7 +1311,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
             if( nAsc > nMaxAscent )
                 nMaxAscent = nAsc;
             if( aSize.Height() - nAsc > nMaxDescent )
-                nMaxDescent = static_cast<USHORT>(aSize.Height() - nAsc);
+                nMaxDescent = static_cast<sal_uInt16>(aSize.Height() - nAsc);
         }
         // for one or two characters we double the width of the portion
         if( nCount < 3 )
@@ -1340,8 +1340,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         Height( nMainAscent + nMainDescent );
 
     // We calculate the x positions of the characters in both lines..
-    USHORT nTopDiff = 0;
-    USHORT nBotDiff = 0;
+    sal_uInt16 nTopDiff = 0;
+    sal_uInt16 nBotDiff = 0;
     if( nMaxWidth > Width() )
     {
         nTopDiff = ( nMaxWidth - Width() ) / 2;
@@ -1370,7 +1370,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
     {
         if( rInf.GetLineStart() == rInf.GetIdx() && (!rInf.GetLast()->InFldGrp()
             || !((SwFldPortion*)rInf.GetLast())->IsFollow() ) )
-            Width( (USHORT)( rInf.Width() - rInf.X() ) );
+            Width( (sal_uInt16)( rInf.Width() - rInf.X() ) );
         else
         {
             Truncate();

@@ -953,11 +953,11 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
     }
     SwRect aTmpObjRect( aTmpPos, aObjBoundRect.SSize() );
 
-    const UINT32 nObjOrdNum = GetObject().GetOrdNum();
+    const sal_uInt32 nObjOrdNum = GetObject().GetOrdNum();
     const SwPageFrm* pObjPage = rFlyAtCntFrm.FindPageFrm();
     const SwFrm* pObjContext = ::FindKontext( &rAnchorTxtFrm, FRM_COLUMN );
-    ULONG nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
-    SwOrderIter aIter( pObjPage, TRUE );
+    sal_uLong nObjIndex = rAnchorTxtFrm.GetTxtNode()->GetIndex();
+    SwOrderIter aIter( pObjPage, sal_True );
     const SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)aIter.Bottom())->GetFlyFrm();
     while ( pFly && nObjOrdNum > pFly->GetVirtDrawObj()->GetOrdNumDirect() )
     {
@@ -1053,7 +1053,7 @@ SwTwips SwAnchoredObjectPosition::_AdjustHoriRelPosForDrawAside(
 bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
                                               const SwRect&   _rObjRect,
                                               const SwFrm*    _pObjContext,
-                                              const ULONG     _nObjIndex,
+                                              const sal_uLong     _nObjIndex,
                                               const bool      _bEvenPage,
                                               const sal_Int16 _eHoriOrient,
                                               const sal_Int16 _eRelOrient
@@ -1068,7 +1068,7 @@ bool SwAnchoredObjectPosition::_DrawAsideFly( const SwFlyFrm* _pFly,
          (_rObjRect.*fnRect->fnBottomDist)( (_pFly->Frm().*fnRect->fnGetTop)() ) < 0 &&
          ::FindKontext( _pFly->GetAnchorFrm(), FRM_COLUMN ) == _pObjContext )
     {
-        ULONG nOtherIndex =
+        sal_uLong nOtherIndex =
             static_cast<const SwTxtFrm*>(_pFly->GetAnchorFrm())->GetTxtNode()->GetIndex();
         if( _nObjIndex >= nOtherIndex )
         {
@@ -1111,11 +1111,11 @@ bool SwAnchoredObjectPosition::_Minor( sal_Int16 _eRelOrient1,
 
     // draw aside order for left horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aLeft[ 10 ] =
+    static sal_uInt16 __READONLY_DATA aLeft[ 10 ] =
         { 5, 6, 0, 1, 8, 4, 7, 2, 3, 9 };
     // draw aside order for right horizontal position
     //! one array entry for each value in text::RelOrientation
-    static USHORT __READONLY_DATA aRight[ 10 ] =
+    static sal_uInt16 __READONLY_DATA aRight[ 10 ] =
         { 5, 6, 0, 8, 1, 7, 4, 2, 3, 9 };
 
     // decide depending on given order, which frame has to draw aside another frame

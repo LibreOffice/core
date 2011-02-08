@@ -49,10 +49,10 @@
 // Pure debug help function to have a quick look at the header/footer attributes.
 void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
 {
-    ULONG nHeaderMaster = ULONG_MAX;
-    ULONG nHeaderLeft = ULONG_MAX;
-    ULONG nFooterMaster = ULONG_MAX;
-    ULONG nFooterLeft = ULONG_MAX;
+    sal_uLong nHeaderMaster = ULONG_MAX;
+    sal_uLong nHeaderLeft = ULONG_MAX;
+    sal_uLong nFooterMaster = ULONG_MAX;
+    sal_uLong nFooterLeft = ULONG_MAX;
     int nHeaderCount = 0;
     int nLeftHeaderCount = 0;
     int nFooterCount = 0;
@@ -236,7 +236,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         // Let the destination page descrition point to the source node position,
         // from now on this descriptor is responsible for the content nodes!
         const SfxPoolItem* pItem;
-        rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
+        rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt* pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #ifdef DEBUG
@@ -250,7 +250,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
         // Let the source page description point to zero node position,
         // it loses the responsible and can be destroyed without removing the content nodes.
-        rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
+        rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -260,7 +260,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         {
             // Same procedure for unshared header..
             const SwFmtHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
-            rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
+            rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
 #ifdef DEBUG
@@ -271,7 +271,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 #endif
             pNewFmt->SetFmtAttr( rSourceLeftHead.GetHeaderFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, FALSE, &pItem );
+            rSource.GetLeft().GetAttrSet().GetItemState( RES_HEADER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -284,7 +284,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     if( rDestFoot.IsActive() )
     {
         const SfxPoolItem* pItem;
-        rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
+        rDest.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
         SwFrmFmt *pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( rSourceFoot.GetFooterFmt()->GetCntnt() );
@@ -296,7 +296,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         const SwFmtCntnt& rFooterDestCntnt = rDestFoot.GetFooterFmt()->GetCntnt();
         (void)rFooterDestCntnt;
 #endif
-        rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
+        rSource.GetMaster().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
         pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -312,12 +312,12 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             (void)rFooterSourceCntnt2;
             (void)rFooterDestCntnt2;
 #endif
-            rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
+            rDest.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( rSourceLeftFoot.GetFooterFmt()->GetCntnt() );
             delete pNewItem;
-            rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, FALSE, &pItem );
+            rSource.GetLeft().GetAttrSet().GetItemState( RES_FOOTER, sal_False, &pItem );
             pNewItem = pItem->Clone();
             pNewFmt = ((SwFmtFooter*)pNewItem)->GetFooterFmt();
             pNewFmt->SetFmtAttr( SwFmtCntnt() );
@@ -376,13 +376,13 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
     }
     // <- #116530#
 
-    pDoc->DelPageDesc(aNew.GetName(), TRUE);
+    pDoc->DelPageDesc(aNew.GetName(), sal_True);
 }
 
 void SwUndoPageDescCreate::DoImpl()
 {
     SwPageDesc aPageDesc = aNew;
-    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
+    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, sal_False, sal_True); // #116530#
 }
 
 void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -423,12 +423,12 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
     SwPageDesc aPageDesc = aOld;
-    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
+    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, sal_False, sal_True); // #116530#
 }
 
 void SwUndoPageDescDelete::DoImpl()
 {
-    pDoc->DelPageDesc(aOld.GetName(), TRUE); // #116530#
+    pDoc->DelPageDesc(aOld.GetName(), sal_True); // #116530#
 }
 
 void SwUndoPageDescDelete::RedoImpl(::sw::UndoRedoContext &)

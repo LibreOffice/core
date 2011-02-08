@@ -199,7 +199,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 }
             break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(::GetDfltMetric(bWebView))));
+                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(::GetDfltMetric(bWebView))));
             break;
             case FN_SET_MODOPT_TBLNUMFMT:
                 rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
@@ -222,7 +222,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
-        SfxBoolItem aHidden( SID_HIDDEN, TRUE );
+        SfxBoolItem aHidden( SID_HIDDEN, sal_True );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
@@ -334,7 +334,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 m_pMMConfig->SetSourceView( m_pView );
             m_pView->SetMailMergeConfigItem(0, 0, sal_True);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
-            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, FALSE);
+            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, sal_False);
             DBG_ASSERT(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }
@@ -747,7 +747,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(rHint.ISA(SfxSimpleHint))
     {
-        USHORT nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt16 nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -795,7 +795,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 {
     if( pBrdCst == pUserOptions )
     {
-        bAuthorInitialised = FALSE;
+        bAuthorInitialised = sal_False;
     }
     else if( pBrdCst == pUndoOptions )
     {
@@ -945,11 +945,11 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
     {
         // im Load der SwMasterUsrPref wird der SpellChecker gebraucht, dort darf
         // er aber nicht angelegt werden #58256#
-        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(TRUE);
+        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(sal_True);
     }
     else if(!bWeb && !pUsrPref)
     {
-        pNonConstModule->pUsrPref = new SwMasterUsrPref(FALSE);
+        pNonConstModule->pUsrPref = new SwMasterUsrPref(sal_False);
     }
     return  bWeb ? pWebUsrPref : pUsrPref;
 }

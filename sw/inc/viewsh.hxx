@@ -114,7 +114,7 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
-    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, BOOL bPDFExport = FALSE );
+    friend void SetSwVisArea( ViewShell *pSh, const SwRect &, sal_Bool bPDFExport = sal_False );
 
     // --> PB 2007-05-30 #146850#
     static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
@@ -272,7 +272,7 @@ public:
     Point GetPagePos( sal_uInt16 nPageNum ) const;
 
     sal_uInt16 GetNumPages();   //Anzahl der aktuellen Seiten Layout erfragen.
-    sal_Bool   IsDummyPage( USHORT nPageNum ) const;  // An empty page?
+    sal_Bool   IsDummyPage( sal_uInt16 nPageNum ) const;  // An empty page?
 
     //Invalidierung der ersten Sichtbaren Seite fuer alle Shells im Ring.
     void SetFirstVisPageInvalid();
@@ -504,7 +504,7 @@ public:
     //wenn sich der BrowdseModus aendert, bBrowseChgd == sal_True
     //oder, im BrowseModus, wenn sich die Groessenverhaeltnisse
     //aendern (bBrowseChgd == sal_False)
-    void CheckBrowseView( BOOL bBrowseChgd );
+    void CheckBrowseView( sal_Bool bBrowseChgd );
 
     const Size& GetBrowseBorder() const;
     sal_Int32 GetBrowseWidth() const;

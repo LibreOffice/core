@@ -105,16 +105,16 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
     aText.EraseAllChars( '\r' );
 
 
-    USHORT nTokenPos = 0;
+    sal_uInt16 nTokenPos = 0;
     while( STRING_NOTFOUND != nTokenPos )
     {
         String aLine = aText.GetToken( 0, '\n', nTokenPos );
         while ( aLine.Len() )
         {
             String sTmpText;
-            BOOL bField = FALSE;
+            sal_Bool bField = sal_False;
 
-            USHORT nPos = aLine.Search( '<' );
+            sal_uInt16 nPos = aLine.Search( '<' );
             if ( nPos )
             {
                 sTmpText = aLine.Copy( 0, nPos );
@@ -138,14 +138,14 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
 
                     // Datenbankfelder muesen mind. 3 Punkte beinhalten!
                     String sDBName( sTmpText.Copy( 1, sTmpText.Len() - 2));
-                    USHORT nCnt = sDBName.GetTokenCount('.');
+                    sal_uInt16 nCnt = sDBName.GetTokenCount('.');
                     if (nCnt >= 3)
                     {
-                        ::ReplacePoint(sDBName, TRUE);
+                        ::ReplacePoint(sDBName, sal_True);
                         SwInsertFld_Data aData(TYP_DBFLD, 0, sDBName, aEmptyStr, 0, &rSh );
                         rFldMgr.InsertFld( aData );
                         sRet = sDBName;
-                        bField = TRUE;
+                        bField = sal_True;
                     }
                 }
             }
@@ -162,11 +162,11 @@ String InsertLabEnvText( SwWrtShell& rSh, SwFldMgr& rFldMgr, const String& rText
 // ----------------------------------------------------------------------------
 
 
-void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
+void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, sal_uInt16 nCollId)
 {
-    USHORT nCollCnt = pOldSh->GetTxtFmtCollCount();
+    sal_uInt16 nCollCnt = pOldSh->GetTxtFmtCollCount();
     SwTxtFmtColl* pColl;
-    for( USHORT nCnt = 0; nCnt < nCollCnt; ++nCnt )
+    for( sal_uInt16 nCnt = 0; nCnt < nCollCnt; ++nCnt )
         if(nCollId == (pColl = &pOldSh->GetTxtFmtColl(nCnt))->GetPoolFmtId())
             pNewSh->GetTxtCollFromPool(nCollId)->SetFmtAttr(pColl->GetAttrSet());
 }
@@ -176,7 +176,7 @@ void lcl_CopyCollAttr(SwWrtShell* pOldSh, SwWrtShell* pNewSh, USHORT nCollId)
 
 void SwModule::InsertEnv( SfxRequest& rReq )
 {
-static USHORT nTitleNo = 0;
+static sal_uInt16 nTitleNo = 0;
 
     SwDocShell      *pMyDocSh;
     SfxViewFrame    *pFrame;
@@ -212,7 +212,7 @@ static USHORT nTitleNo = 0;
     SwEnvCfgItem aEnvCfg;
 
     //Haben wir schon einen Briefumschlag.
-    BOOL bEnvChange = FALSE;
+    sal_Bool bEnvChange = sal_False;
 
     SfxItemSet aSet(GetPool(), FN_ENVELOP, FN_ENVELOP, 0);
     aSet.Put(aEnvCfg.GetItem());
@@ -260,7 +260,7 @@ static USHORT nTitleNo = 0;
 
     if (nMode == ENV_NEWDOC || nMode == ENV_INSERT)
     {
-        SwWait aWait( (SwDocShell&)*xDocSh, TRUE );
+        SwWait aWait( (SwDocShell&)*xDocSh, sal_True );
 
         // Dialog auslesen, Item in Config speichern
         const SwEnvItem& rItem = pItem ? *pItem : (const SwEnvItem&) pDlg->GetOutputItemSet()->Get(FN_ENVELOP);
@@ -275,7 +275,7 @@ static USHORT nTitleNo = 0;
         {
             ASSERT(pOldSh, "Kein Dokument - war 'Einfuegen' nicht disabled???");
             SvxPaperBinItem aItem( RES_PAPER_BIN );
-            aItem.SetValue((BYTE)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
+            aItem.SetValue((sal_uInt8)pSh->getIDocumentDeviceAccess()->getPrinter(true)->GetPaperBin());
             pOldSh->GetPageDescFromPool(RES_POOLPAGE_JAKET)->GetMaster().SetFmtAttr(aItem);
         }
 
@@ -300,7 +300,7 @@ static USHORT nTitleNo = 0;
             // Los geht's (Einfuegen)
             pSh->StartUndo(UNDO_UI_INSERT_ENVELOPE, NULL);
             pSh->StartAllAction();
-            pSh->SttEndDoc(TRUE);
+            pSh->SttEndDoc(sal_True);
 
             if (bEnvChange)
             {
@@ -308,8 +308,8 @@ static USHORT nTitleNo = 0;
                 pFollow = pSh->GetPageDesc(pSh->GetCurPageDesc()).GetFollow();
 
                 // Text der ersten Seite loeschen
-                if ( !pSh->SttNxtPg(TRUE) )
-                    pSh->EndPg(TRUE);
+                if ( !pSh->SttNxtPg(sal_True) )
+                    pSh->EndPg(sal_True);
                 pSh->DelRight();
                 // Rahmen der ersten Seite loeschen
                 if( pSh->GotoFly( rSendMark ) )
@@ -322,7 +322,7 @@ static USHORT nTitleNo = 0;
                     pSh->EnterSelFrmMode();
                     pSh->DelRight();
                 }
-                pSh->SttEndDoc(TRUE);
+                pSh->SttEndDoc(sal_True);
             }
             else
                 // Folgevorlage: Seite 1
@@ -332,21 +332,21 @@ static USHORT nTitleNo = 0;
             if ( pSh->IsCrsrInTbl() )
             {
                 pSh->SplitNode();
-                pSh->Right( CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                pSh->Right( CRSR_SKIP_CHARS, sal_False, 1, sal_False );
                 SfxItemSet aBreakSet( pSh->GetAttrPool(), RES_BREAK, RES_BREAK, 0 );
                 aBreakSet.Put( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE, RES_BREAK) );
                 pSh->SetTblAttr( aBreakSet );
             }
             else
-                pSh->InsertPageBreak(0, FALSE);
-            pSh->SttEndDoc(TRUE);
+                pSh->InsertPageBreak(0, sal_False);
+            pSh->SttEndDoc(sal_True);
         }
         else
         {
             pFollow = &pSh->GetPageDesc(pSh->GetCurPageDesc());
             // Los geht's (Drucken)
             pSh->StartAllAction();
-            pSh->DoUndo(FALSE);
+            pSh->DoUndo(sal_False);
 
             // Neue Collections "Absender" und "Empfaenger" wieder in neues
             // Dokument kopieren
@@ -383,8 +383,8 @@ static USHORT nTitleNo = 0;
         long lLeft  = rItem.lShiftRight,
              lUpper = rItem.lShiftDown;
 
-        USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
-               nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
+        sal_uInt16 nPageW = (sal_uInt16) Max(rItem.lWidth, rItem.lHeight),
+               nPageH = (sal_uInt16) Min(rItem.lWidth, rItem.lHeight);
 
         switch (rItem.eAlign)
         {
@@ -401,18 +401,18 @@ static USHORT nTitleNo = 0;
         }
         SvxLRSpaceItem aLRMargin( RES_LR_SPACE );
         SvxULSpaceItem aULMargin( RES_UL_SPACE );
-        aLRMargin.SetLeft ((USHORT) lLeft );
-        aULMargin.SetUpper((USHORT) lUpper);
+        aLRMargin.SetLeft ((sal_uInt16) lLeft );
+        aULMargin.SetUpper((sal_uInt16) lUpper);
         aLRMargin.SetRight(0);
         aULMargin.SetLower(0);
         rFmt.SetFmtAttr(aLRMargin);
         rFmt.SetFmtAttr(aULMargin);
 
         // Kopf-, Fusszeilen
-        rFmt.SetFmtAttr(SwFmtHeader(BOOL(FALSE)));
-        pDesc->ChgHeaderShare(FALSE);
-        rFmt.SetFmtAttr(SwFmtFooter(BOOL(FALSE)));
-        pDesc->ChgFooterShare(FALSE);
+        rFmt.SetFmtAttr(SwFmtHeader(sal_Bool(sal_False)));
+        pDesc->ChgHeaderShare(sal_False);
+        rFmt.SetFmtAttr(SwFmtFooter(sal_Bool(sal_False)));
+        pDesc->ChgFooterShare(sal_False);
 
         // Seitennumerierung
         pDesc->SetUseOn(nsUseOnPage::PD_ALL);
@@ -436,9 +436,9 @@ static USHORT nTitleNo = 0;
 
         // Page-Desc anwenden
 
-        USHORT nPos;
+        sal_uInt16 nPos;
         pSh->FindPageDescByName( pDesc->GetName(),
-                                    FALSE,
+                                    sal_False,
                                     &nPos );
 
 
@@ -446,7 +446,7 @@ static USHORT nTitleNo = 0;
         pSh->ChgCurPageDesc(*pDesc);
 
         // Rahmen einfuegen
-        SwFlyFrmAttrMgr aMgr(FALSE, pSh, FRMMGR_TYPE_ENVELP);
+        SwFlyFrmAttrMgr aMgr(sal_False, pSh, FRMMGR_TYPE_ENVELP);
         SwFldMgr aFldMgr;
         aMgr.SetHeightSizeType(ATT_VAR_SIZE);
 
@@ -458,7 +458,7 @@ static USHORT nTitleNo = 0;
         // Absender
         if (rItem.bSend)
         {
-            pSh->SttEndDoc(TRUE);
+            pSh->SttEndDoc(sal_True);
             aMgr.InsertFlyFrm(FLY_AT_PAGE,
                 Point(rItem.lSendFromLeft + lLeft, rItem.lSendFromTop  + lUpper),
                 Size (rItem.lAddrFromLeft - rItem.lSendFromLeft, 0));
@@ -473,7 +473,7 @@ static USHORT nTitleNo = 0;
         }
 
         // Empfaenger
-        pSh->SttEndDoc(TRUE);
+        pSh->SttEndDoc(sal_True);
 
         aMgr.InsertFlyFrm(FLY_AT_PAGE,
             Point(rItem.lAddrFromLeft + lLeft, rItem.lAddrFromTop  + lUpper),
@@ -490,12 +490,12 @@ static USHORT nTitleNo = 0;
             pSh->SetPageObjsNewPage(aFlyArr, 1);
 
         // Fertig
-        pSh->SttEndDoc(TRUE);
+        pSh->SttEndDoc(sal_True);
 
         pSh->EndAllAction();
 
         if (nMode == ENV_NEWDOC)
-            pSh->DoUndo(TRUE);
+            pSh->DoUndo(sal_True);
         else
             pSh->EndUndo(UNDO_UI_INSERT_ENVELOPE);
 
@@ -505,7 +505,7 @@ static USHORT nTitleNo = 0;
 
             if ( rItem.aAddrText.indexOf('<') >= 0 )
             {
-                static USHORT __READONLY_DATA aInva[] =
+                static sal_uInt16 __READONLY_DATA aInva[] =
                                     {
                                         SID_SBA_BRW_UPDATE,
                                         SID_SBA_BRW_INSERT,
@@ -523,7 +523,7 @@ static USHORT nTitleNo = 0;
         {
             rReq.AppendItem( rItem );
             if ( nMode == ENV_NEWDOC )
-                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, TRUE ) );
+                rReq.AppendItem( SfxBoolItem( FN_PARAM_1, sal_True ) );
         }
 
         rReq.Done();

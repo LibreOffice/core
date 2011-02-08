@@ -69,38 +69,38 @@
 
 // Maske fuer Erkennung von COLLPOOL-Ids:
 
-const USHORT POOLGRP_NOCOLLID       =  (1 << 10);
+const sal_uInt16 POOLGRP_NOCOLLID       =  (1 << 10);
 
 // POLLCOLL-Gruppen:
 
-const USHORT USER_FMT               =  (1 << 15);
-const USHORT POOL_FMT               =  (0 << 15);
+const sal_uInt16 USER_FMT               =  (1 << 15);
+const sal_uInt16 POOL_FMT               =  (0 << 15);
 
-const USHORT COLL_TEXT_BITS         =  (1 << 11);
-const USHORT COLL_LISTS_BITS        =  (2 << 11);
-const USHORT COLL_EXTRA_BITS        =  (3 << 11);
-const USHORT COLL_REGISTER_BITS     =  (4 << 11);
-const USHORT COLL_DOC_BITS          =  (5 << 11);
-const USHORT COLL_HTML_BITS         =  (6 << 11);
-const USHORT COLL_GET_RANGE_BITS    = (15 << 11);
+const sal_uInt16 COLL_TEXT_BITS         =  (1 << 11);
+const sal_uInt16 COLL_LISTS_BITS        =  (2 << 11);
+const sal_uInt16 COLL_EXTRA_BITS        =  (3 << 11);
+const sal_uInt16 COLL_REGISTER_BITS     =  (4 << 11);
+const sal_uInt16 COLL_DOC_BITS          =  (5 << 11);
+const sal_uInt16 COLL_HTML_BITS         =  (6 << 11);
+const sal_uInt16 COLL_GET_RANGE_BITS    = (15 << 11);
 
 // Sonstige Gruppen:
 
-const USHORT POOLGRP_CHARFMT        = (0 << 11) + POOLGRP_NOCOLLID;
-const USHORT POOLGRP_FRAMEFMT       = (1 << 11) + POOLGRP_NOCOLLID;
-const USHORT POOLGRP_PAGEDESC       = (2 << 11) + POOLGRP_NOCOLLID;
-const USHORT POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
-//const USHORT POOLGRP_GRFFMT           = (4 << 11) + POOLGRP_NOCOLLID; // ?
+const sal_uInt16 POOLGRP_CHARFMT        = (0 << 11) + POOLGRP_NOCOLLID;
+const sal_uInt16 POOLGRP_FRAMEFMT       = (1 << 11) + POOLGRP_NOCOLLID;
+const sal_uInt16 POOLGRP_PAGEDESC       = (2 << 11) + POOLGRP_NOCOLLID;
+const sal_uInt16 POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
+//const sal_uInt16 POOLGRP_GRFFMT           = (4 << 11) + POOLGRP_NOCOLLID; // ?
 
 // fuer Erkennung ob Benutzer-Vorlage oder nicht:
-const USHORT POOL_IDUSER_FMT =
+const sal_uInt16 POOL_IDUSER_FMT =
         USHRT_MAX & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
 
-inline BOOL IsPoolUserFmt( USHORT nId )
+inline sal_Bool IsPoolUserFmt( sal_uInt16 nId )
 {
     return POOL_IDUSER_FMT ==
                 (nId & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID))
-        ? TRUE : FALSE;
+        ? sal_True : sal_False;
 }
 
 
@@ -423,11 +423,11 @@ RES_POOLCOLL_HTML_END
 //  returnt:    0           -> Standard
 //              USHRT_MAX   -> kein Parent
 //              sonst       -> den Parent
-USHORT GetPoolParent( USHORT nId );
+sal_uInt16 GetPoolParent( sal_uInt16 nId );
 
-SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage);
+SvxFrameDirection GetDefaultFrameDirection(sal_uLong nLanguage);
 
-inline BOOL IsConditionalByPoolId(USHORT nId)
+inline sal_Bool IsConditionalByPoolId(sal_uInt16 nId)
     {
         return RES_POOLCOLL_TEXT == nId;
     }
