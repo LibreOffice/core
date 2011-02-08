@@ -35,21 +35,21 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocSaveOpen50 = 3, cDocClose = 4, cDocWrite = 5
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocSaveOpen50 = 3, cDocClose = 4
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cLogfileFailed = 255
 
 global const cStWriter = 0, cStCalc = 1, cStPraesentation = 2, cStZeichnen = 3
-global const cStMessage = 12, cStHTML = 6, cStChart = 4, cStJava = 7
+global const cStHTML = 6, cStChart = 4, cStJava = 7
 global const cStMath = 5, cStDataBase = 9
 global const cStExtension = 11
 global const cStNone = -1
 
 global const cFlt8 = 0, cFlt50 = 32, cFltNewDoc = 64, cFltXML = 128
 
-global const frmWriter = 1, frmCalc = 2, frmMessage = 3, frmImpress = 4
-global const frmMath = 5, frmImage = 6, frmChart = 7, frmHyperText = 8, frmDraw = 9
+global const frmWriter = 1, frmCalc = 2, frmImpress = 4
+global const frmMath = 5, frmChart = 7, frmHyperText = 8, frmDraw = 9
 global const frmDataBase = 10, frmJava = 13
 global const frmExtension = 14
 
@@ -156,31 +156,27 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableColums(3) as string
-    tableColums(cDocNew) = &quot;new&quot;
-    tableColums(cDocSaveOpen8) = &quot;V8.0&quot;
-    tableColums(cDocSaveOpenXML) = &quot;XML&quot;
-    tableColums(cDocSaveOpen50) = &quot;V5.0&quot;
-&apos;  tableColums(cDocClose) = &quot;close&quot;
+  dim tableRows(4) as string
+  tableRows(cDocNew) = &quot;new&quot;
+  tableRows(cDocSaveOpen8) = &quot;V8.0&quot;
+  tableRows(cDocSaveOpenXML) = &quot;XML&quot;
+  tableRows(cDocSaveOpen50) = &quot;V5.0&quot;
+  tableRows(cDocClose) = &quot;close&quot;
 
-    aDoc = gOutPutDoc
+  aDoc = gOutPutDoc
 
-    xText = aDoc.Text
-    xCursor = xText.createTextCursor()
+  xText = aDoc.Text
+  xCursor = xText.createTextCursor()
 
-&apos;  xCursor.gotoStart(FALSE)
-&apos;  xCursor.GoRight (2, False)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
-    xCursor.gotoStart(FALSE)
-    xCursor.GoRight (4, False)
-    SetParagraphBreak (xCursor)
-    xCursor.GoRight (1, False)
-    SetParagraphBreak (xCursor)
-    xCursor.GoRight (1, False)
+  xCursor.gotoStart(FALSE)
+  xCursor.GoRight (4, False)
+  SetParagraphBreak (xCursor)
+  xCursor.GoRight (1, False)
+  SetParagraphBreak (xCursor)
+  xCursor.GoRight (1, False)
 
-    table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
-    table.initialize(7,9)
+  table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
+    table.initialize(6,9)
     table.Name = &quot;StTab1&quot;
     xText.insertTextContent(xCursor, table, FALSE)
 
@@ -200,8 +196,6 @@ Sub CreateStatusTable
     next i%
 
     xCursor.gotoStart(FALSE)
-&apos;  SetParagraphBreak (xCursor)
-&apos;  SetParagraphBreak (xCursor)
 
     tableCursor.gotoStart(FALSE)
     cName = tableCursor.getRangeName()
@@ -209,11 +203,11 @@ Sub CreateStatusTable
       xCell.BackTransparent = False
       xCell.BackColor = cCoGrey
 
-    for i% = 0 to 3
+    for i% = 0 to 4
         tableCursor.goDown(1,FALSE)
          cName = tableCursor.getRangeName()
           xCell = table.getCellByName(cName)
-          xCell.String=tableColums(i%)
+          xCell.String=tableRows(i%)
 
           xCell.BackTransparent = False
           xCell.BackColor = cCoGrey
@@ -228,13 +222,13 @@ Sub CreateStatusTable2
     tableHeaders(3) = &quot;&quot;
     tableHeaders(4) = &quot;&quot;
 
-    dim tableColums(5) as string
-    tableColums(cDBService ) = &quot;services&quot;
-    tableColums(cDBOpen ) = &quot;open&quot;
-    tableColums(cDBInsert ) = &quot;insert&quot;
-    tableColums(cDBDelete  ) = &quot;delete&quot;
-    tableColums(cDBSeek ) = &quot;seek&quot;
-    tableColums(cDBClose ) = &quot;close&quot;
+  dim tableRows(5) as string
+  tableRows(cDBService ) = &quot;services&quot;
+  tableRows(cDBOpen ) = &quot;open&quot;
+  tableRows(cDBInsert ) = &quot;insert&quot;
+  tableRows(cDBDelete  ) = &quot;delete&quot;
+  tableRows(cDBSeek ) = &quot;seek&quot;
+  tableRows(cDBClose ) = &quot;close&quot;
 
     dim tableColums2(3) as string
     tableColums2(cEXTService ) = &quot;services&quot;
@@ -284,11 +278,11 @@ Sub CreateStatusTable2
     for i% = 0 to 5
         tableCursor.goDown(1,FALSE)
          cName = tableCursor.getRangeName()
-          xCell = table.getCellByName(cName)
-          xCell.String=tableColums(i%)
+      xCell = table.getCellByName(cName)
+      xCell.String=tableRows(i%)
 
-          xCell.BackTransparent = False
-          xCell.BackColor = cCoGrey
+      xCell.BackTransparent = False
+      xCell.BackColor = cCoGrey
     next i%
 
     tableCursor.gotoStart(FALSE)
@@ -312,7 +306,7 @@ Sub CreateDocState
     &apos;table = aDoc.TextTables.GetByName (&quot;StTab1&quot;)
 
     for j% = 0 to 7
-        for i% = 0 to 5
+        for i% = 0 to 4
             sRangeName = GetRangeName(j%, i%+1)
 
             tableCursor = table.createCursorByCellName(sRangeName)
@@ -386,23 +380,19 @@ end Sub
 Function GetStatusType (nDocType as Integer) as Integer
     Select Case ( nDocType )
         case frmWriter
-            GetStatusType = cStWriter &apos; Textdokument
+            GetStatusType = cStWriter &apos; text document
         case frmCalc
-            GetStatusType = cStCalc &apos;Tabellendokument
-        case frmMessage
-            GetStatusType = cStMessage &apos;Nachricht
+            GetStatusType = cStCalc &apos; spreadsheet document
         case frmImpress
-            GetStatusType = cStPraesentation &apos;Präsentation
+            GetStatusType = cStPraesentation &apos; presentation
         case frmDraw
-            GetStatusType = cStZeichnen &apos;Zeichnen
+            GetStatusType = cStZeichnen &apos; drawing
         case frmMath
-            GetStatusType = cStMath &apos;Formel
-        case frmImage
-            GetStatusType = cStBild &apos;Bild
+            GetStatusType = cStMath &apos; formula
         case frmHyperText
-            GetStatusType = cStHTML &apos;Hypertext-Dokument
+            GetStatusType = cStHTML &apos; HTML document
         case frmChart
-            GetStatusType = cStChart &apos;Diagramm
+            GetStatusType = cStChart &apos; chart
         case frmJava
             GetStatusType = cStJava &apos;Java
         case frmDataBase
