@@ -35,7 +35,7 @@ const cParagraphBreak = 0
 
 global const cExtensionFileName = &quot;TestExtension.oxt&quot;
 
-global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocSaveOpen50 = 3, cDocClose = 4
+global const cDocNew = 0, cDocSaveOpen8 = 1, cDocSaveOpenXML = 2, cDocClose = 3
 global const cDBService = 0, cDBOpen = 1, cDBInsert = 2, cDBDelete = 3, cDBSeek = 4, cDBClose = 5
 global const cEXTService = 0, cEXTInstall = 1, cEXTUninstall = 2
 global const cOtherSetupDoc = 0, cOtherWriteStatus = 1
@@ -89,7 +89,7 @@ Global const cUserFieldTestWriter = &quot;Writer&quot;, cUserFieldTestCalc = &qu
 Global const cUserFieldTestDraw = &quot;Draw&quot;, cUserFieldTestMath = &quot;Math&quot;, cUserFieldTestChart = &quot;Chart&quot;
 Global const cUserFieldTestHTML = &quot;HTML&quot;, cUserFieldTestJava = &quot;Java&quot;, cUserFieldTestDatabase = &quot;Database&quot;
 Global const cUserFieldTestExtension = &quot;Extension&quot;
-Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;, cUserFieldTestOpenSave50 = &quot;SaveOpen50&quot;
+Global const cUserFieldTestOpenSaveXML = &quot;SaveOpenXML&quot;
 Global const cUserFieldTestTerminateAfterTest = &quot;Terminate&quot;, cUserFieldTestOpenSave8 = &quot;SaveOpen8&quot;
 
 Global const cOptionsDialogName = &quot;OptionsDlg&quot;, cTest10Modul = &quot;Standard&quot;
@@ -107,7 +107,7 @@ Global bMakeWriterTest as boolean, bMakeCalcTest as  boolean, bMakeImpressTest a
 Global bMakeDrawTest as Boolean, bMakeMathTest as boolean, bMakeChartTest as boolean
 Global bMakeHTMLTest as boolean, bMakeJavaTest as boolean, bMakeDBTest as boolean
 Global bMakeExtensionTest as boolean
-Global bMakeSaveOpenXMLTest as boolean, bMakeSaveOpen50Test as boolean
+Global bMakeSaveOpenXMLTest as boolean
 Global bMakeTerminateAfterTest as boolean, bShowTable as boolean
 Global bMakeSaveOpen8Test as boolean
 
@@ -139,10 +139,11 @@ Sub AssertionHandler( sMessage as String )
 End Sub
 
 Sub Main
-    CaptureAssertions( &quot;AssertionHandler&quot; )
-
     gCurrentDocTest = frmTestGlue
     gCurrentTestCase = cOtherSetupDoc
+
+    On Local Error Goto MainError
+    CaptureAssertions( &quot;AssertionHandler&quot; )
 
     call SetGlobalDoc
 
@@ -155,14 +156,18 @@ Sub Main
 
     call ClearStatus
 
+    LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
+
     Call Test_10er.Main
 
+    gCurrentDocTest = frmTestGlue
+    gCurrentTestCase = cOtherWriteStatus
     if bShowTable then
-        gCurrentDocTest = frmTestGlue
-        gCurrentTestCase = cOtherWriteStatus
         call CreateStatusTable2
         call CreateStatusTable
         call CreateDocState
+        LogTestResult( GetTestGlueDescription( gCurrentTestCase ), TRUE )
+            &apos; do this LogTestResult call before CreateSecondState, since the latter accesses (and displays) the result
         call CreateSecondState
         gOutputDoc.CurrentController.ViewCursor.JumpToFirstPage
     end if
@@ -170,7 +175,22 @@ Sub Main
     gOutputDoc.setModified( bWasModified )
 
     CaptureAssertions( &quot;&quot; )
+    Exit Sub
+
+MainError:
+    LogTestResult( GetTestGlueDescription( gCurrentTestCase ), FALSE )
 End Sub
+
+Function GetTestGlueDescription( nTestCase as Integer )
+    Select Case ( nTestCase )
+        case cOtherSetupDoc
+            GetTestGlueDescription = &quot;setup test document&quot;
+        case cOtherWriteStatus
+            GetTestGlueDescription = &quot;write test status&quot;
+        case Else
+            GetTestGlueDescription = &quot;&quot;
+    End Select
+End Function
 
 Sub CreateStatusTable
     dim tableHeaders(7) as string
@@ -183,11 +203,10 @@ Sub CreateStatusTable
     tableHeaders(cStHTML) = &quot;HTML&quot;
     tableHeaders(cStJava) = &quot;Java&quot;
 
-    dim tableRows(4) as string
+    dim tableRows(3) as string
     tableRows(cDocNew) = &quot;new&quot;
     tableRows(cDocSaveOpen8) = &quot;V8.0&quot;
     tableRows(cDocSaveOpenXML) = &quot;XML&quot;
-    tableRows(cDocSaveOpen50) = &quot;V5.0&quot;
     tableRows(cDocClose) = &quot;close&quot;
 
     aDoc = gOutputDoc
@@ -205,6 +224,7 @@ Sub CreateStatusTable
     table = aDoc.createInstance(&quot;com.sun.star.text.TextTable&quot;)
     table.initialize(6,9)
     table.Name = &quot;StTab1&quot;
+  table.BackColor = cCoGrey
     xText.insertTextContent(xCursor, table, FALSE)
 
     tableCursor = table.createCursorByCellName(table.CellNames(0))
@@ -212,37 +232,13 @@ Sub CreateStatusTable
     tableCursor.goRight(1,FALSE)
 
     for i% = 0 to 7
-        cName = tableCursor.getRangeName()
-        xCell = table.getCellByName(cName)
-        xCell.String=tableHeaders(i%)
-
-        xCell.BackTransparent = False
-        xCell.BackColor = cCoGrey
-
-        tableCursor.goRight(1,FALSE)
-    next i%
-
-    xCursor.gotoStart(FALSE)
-
-    tableCursor.gotoStart(FALSE)
-    cName = tableCursor.getRangeName()
-    xCell = table.getCellByName(cName)
-    xCell.BackTransparent = False
-    xCell.BackColor = cCoGrey
-
-    for i% = 0 to 4
-        tableCursor.goDown(1,FALSE)
-        cName = tableCursor.getRangeName()
-        xCell = table.getCellByName(cName)
-        xCell.String=tableRows(i%)
-
-        xCell.BackTransparent = False
-        xCell.BackColor = cCoGrey
+        tableCell = table.getCellByPosition( i% + 1, 0 )
+        tableCell.String = tableHeaders( i% )
     next i%
 end Sub
 
 Sub CreateStatusTable2
-    dim tableHeaders(5) as string
+    dim tableHeaders(4) as string
     tableHeaders(0) = &quot;Database&quot;
     tableHeaders(1) = &quot;&quot;
     tableHeaders(2) = &quot;Extension&quot;
@@ -263,8 +259,8 @@ Sub CreateStatusTable2
     tableRows2(cEXTUninstall ) = &quot;uninstall&quot;
 
     dim tableRows3(1) as string
-    tableRows3(cOtherSetupDoc ) = &quot;setup doc&quot;
-    tableRows3(cOtherWriteStatus ) = &quot;write status&quot;
+    tableRows3(cOtherSetupDoc ) = &quot;setup test&quot;
+    tableRows3(cOtherWriteStatus ) = &quot;write test result&quot;
 
     aDoc = gOutputDoc
 
@@ -284,62 +280,24 @@ Sub CreateStatusTable2
 
     xText.insertTextContent(xCursor, table, FALSE)
 
-    tableCursor = table.createCursorByCellName(table.CellNames(0))
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(1,FALSE)
-
     for i% = LBound( tableHeaders ) to UBound( tableHeaders )
-      cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.String=tableHeaders(i%)
-
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
-
-      tableCursor.goRight(1,FALSE)
+        tableCell = table.getCellByPosition( i% + 1, 0 )
+        tableCell.String = tableHeaders(i%)
     next i%
-
-    tableCursor.gotoStart(FALSE)
-
-    cName = tableCursor.getRangeName()
-    xCell = table.getCellByName(cName)
-    xCell.BackTransparent = False
-    xCell.BackColor = cCoGrey
 
     for i% = LBound( tableRows ) to UBound( tableRows )
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-      xCell = table.getCellByName(cName)
-      xCell.String=tableRows(i%)
-
-      xCell.BackTransparent = False
-      xCell.BackColor = cCoGrey
+        tableCell = table.getCellByPosition( 0, i% + 1 )
+      tableCell.String=tableRows(i%)
     next i%
-
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(2,FALSE)
 
     for i% = LBound( tableRows2 ) to UBound( tableRows2 )
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-        xCell = table.getCellByName(cName)
-        xCell.String=tableRows2(i%)
-
-        xCell.BackTransparent = False
-        xCell.BackColor = cCoGrey
+        tableCell = table.getCellByPosition( 2, i% + 1 )
+      tableCell.String=tableRows2(i%)
     next i%
 
-    tableCursor.gotoStart(FALSE)
-    tableCursor.goRight(4,FALSE)
-
     for i% = LBound( tableRows3 ) to UBound( tableRows3 )
-        tableCursor.goDown(1,FALSE)
-         cName = tableCursor.getRangeName()
-        xCell = table.getCellByName(cName)
-        xCell.String=tableRows3(i%)
-
-        xCell.BackTransparent = False
-        xCell.BackColor = cCoGrey
+        tableCell = table.getCellByPosition( 4, i% + 1 )
+      tableCell.String=tableRows3(i%)
     next i%
 end Sub
 
@@ -579,7 +537,6 @@ Sub SetOptions
     SetUserFieldState (cUserFieldTestDatabase, -(gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestExtension, -(gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestOpenSaveXML, -(gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).getState), gOutputDoc)
-    SetUserFieldState (cUserFieldTestOpenSave50, -(gOptionsDialog.getControl(&quot;cbSaveOpen50Test&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestOpenSave8, -(gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).getState), gOutputDoc)
     SetUserFieldState (cUserFieldTestTerminateAfterTest, -(gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).getState), gOutputDoc)
 end Sub
@@ -597,7 +554,6 @@ Sub GetOptions
     gOptionsDialog.getControl(&quot;cbDatabaseTest&quot;).setState( -( GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbExtensionTest&quot;).setState( -( GetUserFieldState (cUserFieldTestExtension, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpenXMLTest&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)))
-    gOptionsDialog.getControl(&quot;cbSaveOpen50Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave50, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbSaveOpen8Test&quot;).setState( -( GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)))
     gOptionsDialog.getControl(&quot;cbTerminateAfterTest&quot;).setState( -( GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)))
 End Sub
@@ -615,7 +571,6 @@ Sub ReadOptions
     bMakeDBTest = GetUserFieldState (cUserFieldTestDatabase, gOutputDoc)
     bMakeExtensionTest = GetUserFieldState (cUserFieldTestExtension, gOutputDoc)
     bMakeSaveOpenXMLTest = GetUserFieldState (cUserFieldTestOpenSaveXML, gOutputDoc)
-    bMakeSaveOpen50Test = GetUserFieldState (cUserFieldTestOpenSave50, gOutputDoc)
     bMakeSaveOpen8Test = GetUserFieldState (cUserFieldTestOpenSave8, gOutputDoc)
     bMakeTerminateAfterTest = GetUserFieldState (cUserFieldTestTerminateAfterTest, gOutputDoc)
 end Sub
@@ -639,11 +594,6 @@ Sub SetDefaultOptions
     End If
     bMakeSaveOpenXMLTest = true
     REM Disable StarOffice 5.0 tests in case binfilter has not been included
-    if Environ(&quot;WITH_BINFILTER&quot;) = &quot;NO&quot; then
-        bMakeSaveOpen50Test = false
-    else
-        bMakeSaveOpen50Test = true
-    End If
     bMakeSaveOpen8Test = true
     bMakeTerminateAfterTest = false
 end Sub
@@ -678,11 +628,10 @@ Function StartTestWithDefaultOptions
     component(cStJava) = &quot;Java&quot;
     component(cStDataBase) = &quot;Base&quot;
     component(cStExtension) = &quot;Extensions&quot;
-    dim action(3) as string
+    dim action(2) as string
     action(cDocNew) = &quot;new&quot;
     action(cDocSaveOpen8) = &quot;V8.0&quot;
     action(cDocSaveOpenXML) = &quot;XML&quot;
-    action(cDocSaveOpen50) = &quot;V5.0&quot;
     dim baseAction(5) as string
     baseAction(cDBService) = &quot;services&quot;
     baseAction(cDBOpen) = &quot;open&quot;
