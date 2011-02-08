@@ -41,11 +41,11 @@ Sub TestExtensions
 
     On Local Error GoTo EXTERROR
 
-    g_CurrentTestCase = cLogfileFailed
-    FileChannel% = OpenLogDat (GetLogFileName(g_CurrentDocTest))
+    gCurrentTestCase = cLogfileFailed
+    LocalFileChannel% = OpenLogDat (GetLogFileName(gCurrentDocTest))
 
     sCurrentMessage = cMessageExtensionService
-    g_CurrentTestCase = cEXTService
+    gCurrentTestCase = cEXTService
 
     &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for
     &apos;adding the extension. The implementation is in
@@ -59,12 +59,13 @@ Sub TestExtensions
 
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionService, not IsNull (ext_mgr) )
     if (IsNull(ext_mgr)) then
-        Close #FileChannel%
+        Close #LocalFileChannel%
+        LocalFileChannel = 0
         Exit Sub
     End If
 
     sCurrentMessage = cMessageExtensionInstall
-    g_CurrentTestCase = cEXTInstall
+    gCurrentTestCase = cEXTInstall
 
     &apos;Add the extension. We must provide a file URL here.
     &apos;By passing &quot;user&quot; we determine that the actions we perform on
@@ -78,12 +79,13 @@ Sub TestExtensions
     bResult = (oTestExtension.getImplementationName = sImplementationNameString)
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionInstall, bResult )
     if (not bResult) then
-        Close #FileChannel%
+        Close #LocalFileChannel%
+        LocalFileChannel = 0
         Exit Sub
     End If
 
     sCurrentMessage = cMessageExtensionUninstall
-    g_CurrentTestCase = cEXTUninstall
+    gCurrentTestCase = cEXTUninstall
 
     &apos;Remove the package
     ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
@@ -94,17 +96,19 @@ Sub TestExtensions
     &apos;The service must not be available anymore. Therefor isNull must return true.
     LogTestResult( &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
 
-    Print #FileChannel, &quot;---&quot;
-    Close #FileChannel%
+    Print #LocalFileChannel, &quot;---&quot;
+    Close #LocalFileChannel%
+    LocalFileChannel = 0
     Exit Sub &apos; Without error
 
     EXTERROR:
-    If ( g_CurrentTestCase = cLogfileFailed ) then
+    If ( gCurrentTestCase = cLogfileFailed ) then
         LogTestResult( "", False )
         Exit Sub
     else
         LogTestResult( &quot;Extension &quot;+ sCurrentMessage, False )
-        Close #FileChannel%
+        Close #LocalFileChannel%
+        LocalFileChannel = 0
     End If
     Exit Sub &apos; With error
 
