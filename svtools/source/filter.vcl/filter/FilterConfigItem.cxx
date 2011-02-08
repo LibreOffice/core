@@ -428,11 +428,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
         Any aAny;
         if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
-<<<<<<< local
-            sal_Bool bOldValue = sal_False;
-=======
             sal_Bool bOldValue(sal_True);
->>>>>>> other
             if ( aAny >>= bOldValue )
             {
                 if ( bOldValue != bNewValue )

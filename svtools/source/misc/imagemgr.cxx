@@ -639,13 +639,9 @@ static Image GetOfficeImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sa
 
     return aImage;
 }
-<<<<<<< local
 */
-static Image GetImageFromList_Impl( USHORT nImageId, BOOL bBig, BOOL bHighContrast )
-=======
 
 static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig, sal_Bool bHighContrast )
->>>>>>> other
 {
     if ( !bBig && IMG_FOLDER == nImageId && !bHighContrast )
         // return our new small folder image (256 colors)
