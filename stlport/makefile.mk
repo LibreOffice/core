@@ -45,9 +45,7 @@ all:
 #
 # If you choose to build without stlport, some headers will be used to bring the
 # sgi extensions into the std namespace:
-$(INCCOM)$/stlport$/functional \
-$(INCCOM)$/stlport$/numeric \
-$(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
+$(INCCOM)$/stlport$/functional: systemstl$/$$(@:f)
     $(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 .ENDIF #"$(OS)"=="SOLARIS" && "$(COM)"!="GCC"
