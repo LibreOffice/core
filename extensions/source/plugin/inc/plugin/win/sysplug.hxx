@@ -33,11 +33,7 @@
 #pragma warning (disable:4005)
 
 #include <prewin.h>
-
-#include <windows.h>
 #include <tchar.h>
-#include <winbase.h>
-
 #include <postwin.h>
 
 #pragma pack( push, 8 )
