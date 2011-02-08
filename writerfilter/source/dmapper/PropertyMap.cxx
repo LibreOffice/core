@@ -257,7 +257,7 @@ const uno::Reference< text::XFootnote>&  PropertyMap::GetFootnote() const
   -----------------------------------------------------------------------*/
 void PropertyMap::insertTableProperties( const PropertyMap* )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_PROPERTY_MAP
     dmapper_logger->element("PropertyMap.insertTableProperties");
 #endif
 }
@@ -1244,7 +1244,7 @@ void TablePropertyMap::setValue( TablePropertyMapTarget eWhich, sal_Int32 nSet )
   -----------------------------------------------------------------------*/
 void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_PROPERTY_MAP
     dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
     dmapper_logger->addTag(pMap->toTag());
 #endif
@@ -1262,7 +1262,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
             }
         }
     }
-#ifdef DEBUG_DOMAINMAPPER
+#ifdef DEBUG_DMAPPER_PROPERTY_MAP
     dmapper_logger->addTag(toTag());
     dmapper_logger->endElement("TablePropertyMap.insertTableProperties");
 #endif

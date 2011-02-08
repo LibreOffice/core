@@ -495,7 +495,7 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
         default:
         {
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+            dmapper_logger->element("StyleSheetTable.unhandled");
 #endif
         }
         break;

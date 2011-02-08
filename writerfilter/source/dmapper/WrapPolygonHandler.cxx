@@ -180,7 +180,7 @@ void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
         break;
     default:
 #ifdef DEBUG_WRAP_POLYGON_HANDLER
-        dmapper_logger->element("unhandled");
+        dmapper_logger->element("WrapPolygonHandler.unhandled");
 #endif
         break;
     }
@@ -202,7 +202,7 @@ void WrapPolygonHandler::lcl_sprm(Sprm & _sprm)
         break;
     default:
 #ifdef DEBUG_WRAP_POLYGON_HANDLER
-        dmapper_logger->element("unhandled");
+        dmapper_logger->element("WrapPolygonHandler.unhandled");
 #endif
         break;
     }

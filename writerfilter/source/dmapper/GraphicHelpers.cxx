@@ -89,7 +89,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             break;
         default:
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+            dmapper_logger->element("PositionHandler.unhandled");
 #endif
             break;
     }
@@ -161,7 +161,7 @@ void PositionHandler::lcl_sprm( Sprm& rSprm )
             m_nPosition = ConversionHelper::convertEMUToMM100( nIntValue );
         default:
 #ifdef DEBUG_DOMAINMAPPER
-            dmapper_logger->element("unhandled");
+            dmapper_logger->element("PositionHandler.unhandled");
 #endif
             break;
     }
