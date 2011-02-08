@@ -35,9 +35,9 @@
 
 #include <WindowsAccessBridgeAdapter.h>
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <wtypes.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #include <rtl/process.h>
 #include <tools/link.hxx>
 

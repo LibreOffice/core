@@ -36,9 +36,9 @@
 ////////////////////////////////////////////////////////////////////////////
 
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include "winreg.h"
-#include <tools/postwin.h>
+#include <postwin.h>
 // as we define it ourselves further down the line we remove it here
 #ifdef IS_ERROR
 //    #undef IS_ERROR

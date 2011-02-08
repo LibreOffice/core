@@ -32,13 +32,13 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-#include <tools/prewin.h>
+#include <prewin.h>
 
 #include <windows.h>
 #include <tchar.h>
 #include <winbase.h>
 
-#include <tools/postwin.h>
+#include <postwin.h>
 
 #pragma pack( push, 8 )
 #include <npsdk/npapi.h>

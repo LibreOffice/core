@@ -49,12 +49,12 @@
 #pragma warning (disable:4005)
 #pragma warning (disable:4548)
 
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <tchar.h>
 #if (_MSC_VER >= 1200) || defined(__MINGW32__)
 #include <dispex.h>
 #endif
-#include <tools/postwin.h>
+#include <postwin.h>
 
 #include <tools/presys.h>
 #include <list>

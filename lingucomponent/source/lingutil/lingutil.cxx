@@ -30,7 +30,7 @@
 #include "precompiled_lingucomponent.hxx"
 
 #if defined(WNT)
-#include <tools/prewin.h>
+#include <prewin.h>
 #endif
 
 #if defined(WNT)
@@ -38,7 +38,7 @@
 #endif
 
 #if defined(WNT)
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 

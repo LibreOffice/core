@@ -34,7 +34,7 @@
 #pragma warning (push,1)
 #pragma warning (disable:4005)
 
-    #include <tools/prewin.h>
+    #include <prewin.h>
 
     #include <windows.h>
     #include <string.h>
@@ -43,7 +43,7 @@
     #include <winbase.h>
     #include <objbase.h>
 
-    #include <tools/postwin.h>
+    #include <postwin.h>
 
 #pragma warning (pop)
 
