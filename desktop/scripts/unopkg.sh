@@ -55,6 +55,12 @@ NetBSD|OpenBSD|FreeBSD)
         export JAVA_HOME
     fi
     ;;
+AIX)
+    sd_prog1="$sd_prog/../basis-link/program"
+    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+    LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:${LIBPATH}}
+    export LIBPATH
+    ;;
 esac
 
 #collect all bootstrap variables specified on the command line
