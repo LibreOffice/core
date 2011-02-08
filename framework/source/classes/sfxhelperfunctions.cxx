@@ -153,8 +153,8 @@ bool SAL_CALL IsDockingWindowVisible( const ::com::sun::star::uno::Reference< ::
         pCall = pIsDockingWindowVisible;
     }
 
-    if ( pIsDockingWindowVisible )
-        return (*pIsDockingWindowVisible)( rFrame, rResourceURL );
+    if ( pCall )
+        return (*pCall)( rFrame, rResourceURL );
     else
         return false;
 }
