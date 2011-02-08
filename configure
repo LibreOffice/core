@@ -926,6 +926,7 @@ STLPORT4
 EXCEPTIONS
 MINGW_GXXDLL
 MINGW_GCCDLL
+MINGW_SHARED_LIBSTDCPP
 MINGW_SHARED_GXXLIB
 MINGW_GCCLIB_EH
 MINGW_SHARED_GCCLIB
@@ -10999,16 +11000,25 @@ $as_echo "no" >&6; }
   fi
   { $as_echo "$as_me:$LINENO: checking whether to use dynamic libstdc++" >&5
 $as_echo_n "checking whether to use dynamic libstdc++... " >&6; }
+  MINGW_SHARED_LIBSTDCPP=
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++_s
+  fi
+  if test -e "$MINGW_CLIB_DIR/libstdc++.dll.a" ; then
+    MINGW_SHARED_LIBSTDCPP=stdc++.dll
+  fi
+  if test -n "$MINGW_SHARED_LIBSTDCPP" ; then
     { $as_echo "$as_me:$LINENO: checking dynamic libstdc++ name" >&5
 $as_echo_n "checking dynamic libstdc++ name... " >&6; }
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/lib$MINGW_SHARED_LIBSTDCPP.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
+        MINGW_SHARED_LIBSTDCPP=-l$MINGW_SHARED_LIBSTDCPP
         MINGW_SHARED_GXXLIB=YES
         { $as_echo "$as_me:$LINENO: result: use $MINGW_GXXDLL" >&5
 $as_echo "use $MINGW_GXXDLL" >&6; }
     else
+        MINGW_SHARED_LIBSTDCPP=
         { $as_echo "$as_me:$LINENO: result: no" >&5
 $as_echo "no" >&6; }
     fi
@@ -11017,6 +11027,7 @@ $as_echo "no" >&6; }
 $as_echo "no" >&6; }
   fi
   MINGW_CLIB_DIR=`cygpath $MINGW_CLIB_DIR`
+
 
 
 

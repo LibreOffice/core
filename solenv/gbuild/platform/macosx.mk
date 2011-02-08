@@ -28,7 +28,7 @@
 GUI := UNX
 COM := GCC
 
-gb_MKTEMP := TMPDIR= mktemp -t
+gb_MKTEMP := TMPDIR= /usr/bin/mktemp -t
 
 gb_CC := $(CC)
 gb_CXX := $(CXX)
