@@ -109,8 +109,14 @@ private:
     //TODO - This is sorted, so should probably be a std::set rather than vector.
     //       But we also use random access (probably unnecessarily).
     std::vector<ScriptChangeInfo> aScriptChanges;
-    SvXub_StrLens aDirChg;
-    SvBytes aDirType;
+    //! Records a single change in direction.
+    struct DirectionChangeInfo
+    {
+        xub_StrLen position; //!< Character position at which we change direction.
+        BYTE       type;     //!< Direction that we change to.
+        inline DirectionChangeInfo(xub_StrLen pos, BYTE typ) : position(pos), type(typ) {};
+    };
+    std::vector<DirectionChangeInfo> aDirectionChanges;
     SvXub_StrLens aKashida;
     SvXub_StrLens aKashidaInvalid;
     SvXub_StrLens aNoKashidaLine;
@@ -378,16 +384,16 @@ inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
     return aScriptChanges[nCnt].type;
 }
 
-inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
+inline USHORT SwScriptInfo::CountDirChg() const { return aDirectionChanges.size(); }
 inline xub_StrLen SwScriptInfo::GetDirChg( const USHORT nCnt ) const
 {
-    OSL_ENSURE( nCnt < aDirChg.Count(),"No DirChange today!");
-    return aDirChg[ nCnt ];
+    OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirChange today!");
+    return aDirectionChanges[ nCnt ].position;
 }
 inline BYTE SwScriptInfo::GetDirType( const xub_StrLen nCnt ) const
 {
-    OSL_ENSURE( nCnt < aDirChg.Count(),"No DirType today!");
-    return aDirType[ nCnt ];
+    OSL_ENSURE( nCnt < aDirectionChanges.size(),"No DirType today!");
+    return aDirectionChanges[ nCnt ].type;
 }
 
 inline USHORT SwScriptInfo::CountKashida() const { return aKashida.Count(); }

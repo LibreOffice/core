@@ -1304,9 +1304,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 #endif
 
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirectionChanges.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
     bool bPerformUBA = UBIDI_LTR != nDefaultDir;
@@ -1326,7 +1324,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // 1. All text in RTL runs will use the CTL font
         // #i89825# change the script type also to CTL (hennerdrewes)
         // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for ( USHORT nDirIdx = 0; nDirIdx < aDirChg.Count(); ++nDirIdx )
+        for ( USHORT nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
         {
             const BYTE nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
@@ -1395,10 +1393,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 {
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
-
+    aDirectionChanges.clear();
     //
     // Bidi functions from icu 2.0
     //
@@ -1413,14 +1408,10 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     int32_t nStart = 0;
     int32_t nEnd;
     UBiDiLevel nCurrDir;
-    // counter for direction information arrays
-    USHORT nCntDir = 0;
-
     for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirChg.Insert( (USHORT)nEnd, nCntDir );
-        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        aDirectionChanges.push_back( DirectionChangeInfo(nEnd, nCurrDir) );
         nStart = nEnd;
     }
 
