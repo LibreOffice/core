@@ -618,7 +618,7 @@ USHORT LineListBox::GetEntryPos( long nLine1, long nLine2,
                                 long nDistance, USHORT nStyle ) const
 {
     for ( size_t i = 0, n = pLineList->size(); i < n; ++i ) {
-        ImpLineListData* pData = (*pLineList)[ n ];
+        ImpLineListData* pData = (*pLineList)[ i ];
         if ( pData )
         {
             if (  (pData->nLine1    == nLine1)
