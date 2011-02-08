@@ -338,7 +338,7 @@ void DocumentHelper::AssignMasterPageToPageList (
                 aCleanedList.push_back(*iPage);
             }
         }
-        if (aCleanedList.size() == 0)
+        if (aCleanedList.empty() )
             break;
 
         ::svl::IUndoManager* pUndoMgr = rTargetDocument.GetDocSh()->GetUndoManager();
