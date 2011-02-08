@@ -915,9 +915,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     //
 
     // remove invalid entries from script information arrays
-    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
-    aScriptChg.Remove( nCnt, nScriptRemove );
-    aScriptType.Remove( nCnt, nScriptRemove );
+    aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
 
     // get the start of the last compression group
     USHORT nLastCompression = nChg;
@@ -981,8 +979,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         if ( nScript != nNextScript )
         {
-            aScriptChg.Insert( nEnd, nCnt );
-            aScriptType.Insert( nScript, nCnt++ );
+            aScriptChanges.push_back( ScriptChangeInfo(nEnd, nScript) );
+            nCnt++;
             nScript = nNextScript;
         }
     }
@@ -991,7 +989,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    while ( nChg < rTxt.Len() || ( !aScriptChg.Count() && !rTxt.Len() ) )
+    while ( nChg < rTxt.Len() || ( !aScriptChanges.empty() && !rTxt.Len() ) )
     {
         OSL_ENSURE( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
@@ -1032,18 +1030,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                aScriptChg.Insert( nChg - 1, nCnt );
+                aScriptChanges.push_back( ScriptChangeInfo(nChg-1, nScript) );
             }
             else
             {
-                aScriptChg.Insert( nChg, nCnt );
+                aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
             }
         }
         else
         {
-            aScriptChg.Insert( nChg, nCnt );
+            aScriptChanges.push_back( ScriptChangeInfo(nChg, nScript) );
         }
-        aScriptType.Insert( nScript, nCnt++ );
+        ++nCnt;
 
         // if current script is asian, we search for compressable characters
         // in this range
@@ -1360,37 +1358,33 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // we have to insert a new script change:
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
-                    aScriptChg.Insert( nStart, nScriptIdx );
-                    aScriptType.Insert( nScriptTypeOfGroup, nScriptIdx );
+                    aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                                          ScriptChangeInfo(nStart, nScriptTypeOfGroup) );
                     ++nScriptIdx;
                 }
 
                 // Remove entries in ScriptArray which end inside the RTL run:
-                while ( nScriptIdx < aScriptChg.Count() && GetScriptChg( nScriptIdx ) <= nEnd )
+                while ( nScriptIdx < aScriptChanges.size() && GetScriptChg( nScriptIdx ) <= nEnd )
                 {
-                    aScriptChg.Remove( nScriptIdx, 1 );
-                    aScriptType.Remove( nScriptIdx, 1 );
+                    aScriptChanges.erase(aScriptChanges.begin() + nScriptIdx);
                 }
 
                 // Insert a new entry in ScriptArray for the end of the RTL run:
-                aScriptChg.Insert( nEnd, nScriptIdx );
-                aScriptType.Insert( i18n::ScriptType::COMPLEX, nScriptIdx );
+                aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
+                                      ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
 
 #if OSL_DEBUG_LEVEL > 1
-                BYTE nScriptType;
-                BYTE nLastScriptType = i18n::ScriptType::WEAK;
-                xub_StrLen nScriptChg;
-                xub_StrLen nLastScriptChg = 0;
-                (void) nLastScriptChg;
-                (void) nLastScriptType;
-
-                for ( USHORT i2 = 0; i2 < aScriptChg.Count(); ++i2 )
+                // Check that ScriptChangeInfos are in increasing order of
+                // position and that we don't have "empty" changes.
+                BYTE nLastTyp = i18n::ScriptType::WEAK;
+                xub_StrLen nLastPos = 0;
+                for (aScriptChanges::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
                 {
-                    nScriptChg = GetScriptChg( i2 );
-                    nScriptType = GetScriptType( i2 );
-                    OSL_ENSURE( nLastScriptType != nScriptType &&
-                            nLastScriptChg < nScriptChg,
+                    OSL_ENSURE( nLastTyp != i2->type &&
+                            nLastPos < i2->position,
                             "Heavy InitScriptType() confusion" );
+                    nLastPos = i2->position;
+                    nLastTyp = i2->type;
                 }
 #endif
             }

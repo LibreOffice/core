@@ -99,8 +99,16 @@ public:
 class SwScriptInfo
 {
 private:
-    SvXub_StrLens aScriptChg;
-    SvBytes aScriptType;
+    //! Records a single change in script type.
+    struct ScriptChangeInfo
+    {
+        xub_StrLen position; //!< Character position at which we change script
+        BYTE       type;     //!< Script type (Latin/Asian/Complex) that we change to.
+        inline ScriptChangeInfo(xub_StrLen pos, BYTE typ) : position(pos), type(typ) {};
+    };
+    //TODO - This is sorted, so should probably be a std::set rather than vector.
+    //       But we also use random access (probably unnecessarily).
+    std::vector<ScriptChangeInfo> aScriptChanges;
     SvXub_StrLens aDirChg;
     SvBytes aDirType;
     SvXub_StrLens aKashida;
@@ -357,16 +365,17 @@ inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
     if ( nPos < nInvalidityPos )
         nInvalidityPos = nPos;
 };
-inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
+
+inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChanges.size(); }
 inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
 {
-    OSL_ENSURE( nCnt < aScriptChg.Count(),"No ScriptChange today!");
-    return aScriptChg[ nCnt ];
+    OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptChange today!");
+    return aScriptChanges[nCnt].position;
 }
 inline BYTE SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
 {
-    OSL_ENSURE( nCnt < aScriptChg.Count(),"No ScriptType today!");
-    return aScriptType[ nCnt ];
+    OSL_ENSURE( nCnt < aScriptChanges.size(),"No ScriptType today!");
+    return aScriptChanges[nCnt].type;
 }
 
 inline USHORT SwScriptInfo::CountDirChg() const { return aDirChg.Count(); }
