@@ -833,8 +833,7 @@ void Application::ImplCallEventListeners( ULONG nEvent, Window *pWin, void* pDat
     VclWindowEvent aEvent( pWin, nEvent, pData );
 
     if ( pSVData->maAppData.mpEventListeners )
-        if ( !pSVData->maAppData.mpEventListeners->empty() )
-            pSVData->maAppData.mpEventListeners->Call( &aEvent );
+        pSVData->maAppData.mpEventListeners->Call( &aEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -844,8 +843,7 @@ void Application::ImplCallEventListeners( VclSimpleEvent* pEvent )
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maAppData.mpEventListeners )
-        if ( !pSVData->maAppData.mpEventListeners->empty() )
-            pSVData->maAppData.mpEventListeners->Call( pEvent );
+        pSVData->maAppData.mpEventListeners->Call( pEvent );
 }
 
 // -----------------------------------------------------------------------
@@ -855,7 +853,7 @@ void Application::AddEventListener( const Link& rEventListener )
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpEventListeners )
         pSVData->maAppData.mpEventListeners = new VclEventListeners;
-    pSVData->maAppData.mpEventListeners->push_back( rEventListener );
+    pSVData->maAppData.mpEventListeners->addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -864,7 +862,7 @@ void Application::RemoveEventListener( const Link& rEventListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpEventListeners )
-        pSVData->maAppData.mpEventListeners->remove( rEventListener );
+        pSVData->maAppData.mpEventListeners->removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
@@ -873,7 +871,7 @@ void Application::AddKeyListener( const Link& rKeyListener )
     ImplSVData* pSVData = ImplGetSVData();
     if( !pSVData->maAppData.mpKeyListeners )
         pSVData->maAppData.mpKeyListeners = new VclEventListeners;
-    pSVData->maAppData.mpKeyListeners->push_back( rKeyListener );
+    pSVData->maAppData.mpKeyListeners->addListener( rKeyListener );
 }
 
 // -----------------------------------------------------------------------
@@ -882,7 +880,7 @@ void Application::RemoveKeyListener( const Link& rKeyListener )
 {
     ImplSVData* pSVData = ImplGetSVData();
     if( pSVData->maAppData.mpKeyListeners )
-        pSVData->maAppData.mpKeyListeners->remove( rKeyListener );
+        pSVData->maAppData.mpKeyListeners->removeListener( rKeyListener );
 }
 
 // -----------------------------------------------------------------------
@@ -896,8 +894,7 @@ BOOL Application::HandleKey( ULONG nEvent, Window *pWin, KeyEvent* pKeyEvent )
     BOOL bProcessed = FALSE;
 
     if ( pSVData->maAppData.mpKeyListeners )
-        if ( !pSVData->maAppData.mpKeyListeners->empty() )
-            bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
+        bProcessed = pSVData->maAppData.mpKeyListeners->Process( &aEvent );
 
     return bProcessed;
 }

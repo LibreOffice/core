@@ -5245,8 +5245,7 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     if ( aDelData.IsDelete() )
         return;
 
-    if ( !mpWindowImpl->maEventListeners.empty() )
-        mpWindowImpl->maEventListeners.Call( &aEvent );
+    mpWindowImpl->maEventListeners.Call( &aEvent );
 
     if ( aDelData.IsDelete() )
         return;
@@ -5258,8 +5257,7 @@ void Window::CallEventListeners( ULONG nEvent, void* pData )
     {
         pWindow->ImplAddDel( &aDelData );
 
-        if ( !pWindow->mpWindowImpl->maChildEventListeners.empty() )
-            pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
+        pWindow->mpWindowImpl->maChildEventListeners.Call( &aEvent );
 
         if ( aDelData.IsDelete() )
             return;
@@ -5279,28 +5277,28 @@ void Window::FireVclEvent( VclSimpleEvent* pEvent )
 
 void Window::AddEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.push_back( rEventListener );
+    mpWindowImpl->maEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maEventListeners.remove( rEventListener );
+    mpWindowImpl->maEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::AddChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.push_back( rEventListener );
+    mpWindowImpl->maChildEventListeners.addListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
 
 void Window::RemoveChildEventListener( const Link& rEventListener )
 {
-    mpWindowImpl->maChildEventListeners.remove( rEventListener );
+    mpWindowImpl->maChildEventListeners.removeListener( rEventListener );
 }
 
 // -----------------------------------------------------------------------
