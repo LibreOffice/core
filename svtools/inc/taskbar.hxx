@@ -63,17 +63,12 @@ Task's und danach EndUpdateTask() wo dann die TaskButtons entsprechend
 neu angeordnet werden.
 
 ActivateTask()
-Handler der gerufen wird, wenn ein Task aktiviert werden muss. Mit
-GetTaskItem() kann abgefragt werden, welcher Task aktiviert werden muss.
+Handler der gerufen wird, wenn ein Task aktiviert werden muss.
 
 ContextMenu()
 Dieser Handler wird gerufen, wenn ein ContextMenu angezeigt werden soll.
 Mit GetTaskMode() kann abgefragt werden, ob fuer einen Task oder ein
 Item.
-
-GetTaskItem()
-Diese Methode liefert das Item zurueck, welches bei UpdateTask an der
-entsprechenden Position eingefuegt wurde.
 
 GetContextMenuPos()
 Liefert die Position zurueck, wo das Contextmenu angezeigt werden soll.
@@ -161,12 +156,6 @@ public:
                             { RemoveItem( nItemId ); }
 };
 
-// ---------------------
-// - TaskToolBox-Types -
-// ---------------------
-
-#define TASKTOOLBOX_TASK_NOTFOUND       ((size_t)-1)
-
 // ---------------
 // - TaskToolBox -
 // ---------------
@@ -186,7 +175,6 @@ private:
     size_t              mnUpdateNewPos;
     size_t              mnActiveItemId;
     size_t              mnNewActivePos;
-    USHORT              mnTaskItem;
     USHORT              mnSmallItem;
     USHORT              mnDummy2;
     BOOL                mbMinActivate;
@@ -208,7 +196,6 @@ public:
 
     void                ActivateTaskItem( USHORT nItemId,
                                           BOOL bMinActivate = FALSE );
-    USHORT              GetTaskItem( const Point& rPos ) const;
 
     virtual void        ActivateTask();
     virtual void        ContextMenu();
@@ -226,7 +213,6 @@ public:
     void                EndUpdateTask();
 
     const Point&        GetContextMenuPos() const { return maContextMenuPos; }
-    USHORT              GetTaskItem() const { return mnTaskItem; }
     BOOL                IsMinActivate() const { return mbMinActivate; }
 
     void                SetActivateTaskHdl( const Link& rLink ) { maActivateTaskHdl = rLink; }
@@ -234,15 +220,6 @@ public:
     void                SetContextMenuHdl( const Link& rLink ) { maContextMenuHdl = rLink; }
     const Link&         GetContextMenuHdl() const { return maContextMenuHdl; }
 };
-
-inline USHORT TaskToolBox::GetTaskItem( const Point& rPos ) const
-{
-    USHORT nId = GetItemId( rPos );
-    if ( nId )
-        return nId-1;
-    else
-        return TASKTOOLBOX_TASK_NOTFOUND;
-}
 
 // ---------------------
 // - ITaskStatusNotify -

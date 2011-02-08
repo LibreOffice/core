@@ -58,7 +58,6 @@ TaskToolBox::TaskToolBox( Window* pParent, WinBits nWinStyle ) :
     mpItemList      = new ImplTaskItemList;
     mnMaxTextWidth  = 0;
     mnActiveItemId  = 0;
-    mnTaskItem      = 0;
     mnSmallItem     = TOOLBOX_ITEM_NOTFOUND;
     mbMinActivate   = FALSE;
 
@@ -98,9 +97,7 @@ void TaskToolBox::ActivateTaskItem( USHORT nItemId, BOOL bMinActivate )
             mbMinActivate = TRUE;
         }
 
-        mnTaskItem = nItemId-1;
         ActivateTask();
-        mnTaskItem = 0;
         mbMinActivate = FALSE;
     }
 }
@@ -144,15 +141,9 @@ void TaskToolBox::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        USHORT nItemId = GetItemId( rCEvt.GetMousePosPixel() );
-// Dies machen wir nicht mehr, da es von zu vielen als stoerend empfunden wurde
-//        ActivateTaskItem( nItemId );
-        mnTaskItem = nItemId-1;
-
         maContextMenuPos = rCEvt.GetMousePosPixel();
         ContextMenu();
         maContextMenuPos = Point();
-        mnTaskItem = 0;
     }
     else
         ToolBox::Command( rCEvt );
