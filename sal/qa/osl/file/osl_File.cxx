@@ -6284,7 +6284,7 @@ namespace osl_Directory
 
 
 
-CPPUNIT_PLUGIN_IMPLEMENT();;
+CPPUNIT_PLUGIN_IMPLEMENT();
 
 
 
