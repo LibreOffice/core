@@ -70,7 +70,7 @@ public:
     static Player* create( const ::rtl::OUString& rURL );
 
     ~Player();
-protected:
+//protected:
     // XPlayer
     virtual void SAL_CALL start()
      throw( ::com::sun::star::uno::RuntimeException );
@@ -166,6 +166,7 @@ protected:
         return( g_atomic_int_get( &mnInitialized ) > 0 );
     }
 
+    static gpointer implThreadFunc( gpointer pData );
 
 private:
 
@@ -186,7 +187,6 @@ private:
 
     static gboolean implIdleFunc( gpointer pData );
 
-    static gpointer implThreadFunc( gpointer pData );
 
     static GstBusSyncReply implHandleCreateWindowFunc( GstBus* pBus,
                                                        GstMessage* pMsg,
