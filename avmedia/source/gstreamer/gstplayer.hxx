@@ -46,6 +46,8 @@ typedef struct _GOptionGroup GOptionGroup;
 
 #include <gst/gst.h>
 #include "com/sun/star/media/XPlayer.hdl"
+#include <cppuhelper/compbase2.hxx>
+#include <cppuhelper/basemutex.hxx>
 
 namespace avmedia
 {
@@ -57,8 +59,8 @@ class Window;
 // - Player_Impl -
 // ---------------
 
-class Player : public ::cppu::WeakImplHelper3< ::com::sun::star::media::XPlayer,
-                                               ::com::sun::star::lang::XComponent,
+class Player :  public cppu::BaseMutex,
+                public ::cppu::WeakComponentImplHelper2< ::com::sun::star::media::XPlayer,
                                                ::com::sun::star::lang::XServiceInfo >
 {
 public:
@@ -67,7 +69,7 @@ public:
     static Player* create( const ::rtl::OUString& rURL );
 
     ~Player();
-
+protected:
     // XPlayer
     virtual void SAL_CALL start()
      throw( ::com::sun::star::uno::RuntimeException );
@@ -127,18 +129,6 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::media::XFrameGrabber > SAL_CALL createFrameGrabber()
      throw( ::com::sun::star::uno::RuntimeException );
 
-    // XComponent
-    virtual void SAL_CALL dispose()
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL addEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener )
-     throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual void SAL_CALL removeEventListener(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener )
-     throw( ::com::sun::star::uno::RuntimeException );
-
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
      throw( ::com::sun::star::uno::RuntimeException );
@@ -150,7 +140,9 @@ public:
      throw( ::com::sun::star::uno::RuntimeException );
 
 
-protected:
+
+    // ::cppu::OComponentHelper
+    virtual void SAL_CALL disposing(void);
 
     Player( GString* pURI = NULL );
 

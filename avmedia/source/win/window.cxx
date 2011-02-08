@@ -374,7 +374,7 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
 
                         mrPlayer.setNotifyWnd( mnFrameWnd );
 
-                        meZoomLevel = media::ZoomLevel_ORIGINAL;
+                        meZoomLevel = media::ZoomLevel_FIT_TO_WINDOW;
                         ImplLayoutVideoWindow();
 #ifdef DDRAW_TEST_OUTPUT
                     }

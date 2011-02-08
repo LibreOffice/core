@@ -188,6 +188,7 @@ Player* Player::create( const ::rtl::OUString& rURL )
 void SAL_CALL Player::start()
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() && !isPlaying() )
     {
         gst_element_set_state( mpPlayer, GST_STATE_PLAYING );
@@ -198,6 +199,7 @@ void SAL_CALL Player::start()
 void SAL_CALL Player::stop()
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() && isPlaying() )
     {
         gst_element_set_state( mpPlayer, GST_STATE_PAUSED );
@@ -209,7 +211,7 @@ sal_Bool SAL_CALL Player::isPlaying()
      throw( uno::RuntimeException )
 {
     GstState aState = GST_STATE_NULL;
-
+    MutexGuard aGuard(m_aMutex);
     if( mpPlayer )
     {
         gst_element_get_state( mpPlayer, &aState, NULL, GST_MAX_TIMEOUT );
@@ -222,6 +224,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 double SAL_CALL Player::getDuration()
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     gint64 nDuration = 0;
 
     if( implInitPlayer() )
@@ -243,6 +246,7 @@ double SAL_CALL Player::getDuration()
 void SAL_CALL Player::setMediaTime( double fTime )
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() )
     {
         fTime = ::std::min( ::std::max( fTime, 0.0 ), getDuration() );
@@ -258,7 +262,7 @@ double SAL_CALL Player::getMediaTime()
      throw( uno::RuntimeException )
 {
     double fRet = 0.0;
-
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() )
     {
         GstFormat aFormat = GST_FORMAT_TIME;
@@ -298,7 +302,7 @@ double SAL_CALL Player::getStopTime()
         Currently no need for implementation since higher levels of code don't set a stop time ATM
         !!! TODO: needs to be fully implemented if this functionality is needed at a later point of time
     */
-
+    MutexGuard aGuard(m_aMutex);
     return( getDuration() );
 }
 
@@ -329,6 +333,7 @@ double SAL_CALL Player::getRate()
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( bSet && !isPlaybackLoop() )
         g_atomic_int_inc( &mnLooping );
     else if( !bSet && isPlaybackLoop() )
@@ -339,6 +344,7 @@ void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
 sal_Bool SAL_CALL Player::isPlaybackLoop()
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     return( g_atomic_int_get( &mnLooping ) > 0 );
 }
 
@@ -346,6 +352,7 @@ sal_Bool SAL_CALL Player::isPlaybackLoop()
 void SAL_CALL Player::setMute( sal_Bool bSet )
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() && ( bSet != isMute() ) )
     {
         if( bSet )
@@ -364,6 +371,7 @@ sal_Bool SAL_CALL Player::isMute()
      throw( uno::RuntimeException )
 {
     gdouble fGstVolume = 1.0;
+    MutexGuard aGuard(m_aMutex);
 
     if( implInitPlayer() )
     {
@@ -377,6 +385,7 @@ sal_Bool SAL_CALL Player::isMute()
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     if( implInitPlayer() )
     {
         g_mutex_lock( mpMutex );
@@ -395,6 +404,7 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 sal_Int16 SAL_CALL Player::getVolumeDB()
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     return( static_cast< sal_Int16 >( g_atomic_int_get( &mnVolumeDB ) ) );
 }
 
@@ -403,6 +413,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
      throw( uno::RuntimeException )
 {
     awt::Size aSize( 0, 0 );
+    MutexGuard aGuard(m_aMutex);
 
     if( implInitPlayer() && ( g_atomic_int_get( &mnIsVideoSource ) > 0 ) )
     {
@@ -427,6 +438,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
     const uno::Sequence< uno::Any >& rArguments )
      throw( uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     uno::Reference< ::media::XPlayerWindow > xRet;
     awt::Size aSize( getPreferredPlayerWindowSize() );
 
@@ -470,6 +482,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow(
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
      throw( ::com::sun::star::uno::RuntimeException )
 {
+    MutexGuard aGuard(m_aMutex);
     FrameGrabber* pFrameGrabber = NULL;
     const awt::Size aPrefSize( getPreferredPlayerWindowSize() );
 
@@ -482,9 +495,9 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 }
 
 // ------------------------------------------------------------------------------
-void SAL_CALL Player::dispose()
-     throw( uno::RuntimeException )
+void SAL_CALL Player::disposing()
 {
+    MutexGuard aGuard(m_aMutex);
     if( mpPlayer )
     {
         stop();
@@ -493,16 +506,6 @@ void SAL_CALL Player::dispose()
 
     OSL_ASSERT( NULL == mpPlayer );
 }
-
-// ------------------------------------------------------------------------------
-void SAL_CALL Player::addEventListener( const uno::Reference< lang::XEventListener >& /*rxListener*/ )
-     throw( uno::RuntimeException )
-{}
-
-// ------------------------------------------------------------------------------
-void SAL_CALL Player::removeEventListener( const uno::Reference< lang::XEventListener >& /*rxListener*/ )
-     throw( uno::RuntimeException )
-{}
 
 // ------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL Player::getImplementationName()

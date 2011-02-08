@@ -92,6 +92,15 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
 Player::~Player()
 {
+    ::CoUninitialize();
+}
+
+// ------------------------------------------------------------------------------
+
+void SAL_CALL Player::disposing()
+{
+    MutexGuard aGuard(m_aMutex);
+    stop();
     if( mpBA )
         mpBA->Release();
 
@@ -121,12 +130,8 @@ Player::~Player()
 
     if( mpGB )
         mpGB->Release();
-
-    ::CoUninitialize();
 }
-
 // ------------------------------------------------------------------------------
-
 bool Player::create( const ::rtl::OUString& rURL )
 {
     HRESULT hR;
