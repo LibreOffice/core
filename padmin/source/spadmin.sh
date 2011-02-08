@@ -50,6 +50,12 @@ case "`uname -s`" in
         LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}
         export LD_LIBRARY_PATH
         ;;
+    AIX)
+        sd_prog1="$sd_prog/../basis-link/program"
+        sd_prog2="$sd_prog/../basis-link/ure-link/lib"
+        LIBPATH=$sd_prog1:$sd_prog2${LIBPATH:+:$LIBPATH}
+        export LIBPATH
+        ;;
 esac
 
 #collect all bootstrap variables specified on the command line
