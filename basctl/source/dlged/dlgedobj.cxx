@@ -59,6 +59,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -646,7 +647,7 @@ void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (Ru
             ::std::transform(
                     aIndexToNameMap.begin(), aIndexToNameMap.end(),
                     aNameList.begin(),
-                    ::std::select2nd< IndexToNameMap::value_type >( )
+                    ::o3tl::select2nd< IndexToNameMap::value_type >( )
                 );
 
             // check tab index

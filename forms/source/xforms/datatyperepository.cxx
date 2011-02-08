@@ -43,6 +43,7 @@
 
 #include <functional>
 #include <algorithm>
+#include <o3tl/compat_functional.hxx>
 
 //........................................................................
 namespace xforms
@@ -205,7 +206,7 @@ namespace xforms
             m_aRepository.begin(),
             m_aRepository.end(),
             aNames.getArray(),
-            ::std::select1st< Repository::value_type >()
+            ::o3tl::select1st< Repository::value_type >()
         );
         return aNames;
     }
