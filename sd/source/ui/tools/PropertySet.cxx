@@ -150,7 +150,7 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
         ::std::find_if(
             aRange.first,
             aRange.second,
-            std::compose1(
+            o3tl::compose1(
                 std::bind1st(std::equal_to<Reference<beans::XPropertyChangeListener> >(),
                     rxListener),
                 o3tl::select2nd<ChangeListenerContainer::value_type>())));
