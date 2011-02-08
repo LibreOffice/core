@@ -1537,7 +1537,7 @@ void SwUndoTblAutoFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoTblAutoFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    UndoRedo( sal_False, rUndoIter );
+    UndoRedo(false, rContext);
 }
 
 

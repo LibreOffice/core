@@ -194,8 +194,8 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
 
-        bUndo = pFmt->GetDoc()->DoesUndo();
-        pFmt->GetDoc()->DoUndo( sal_False );
+        ::sw::UndoGuard const undoGuardFmt(
+            pFmt->GetDoc()->GetIDocumentUndoRedo());
         pFmt->GetDoc()->DelLayoutFmt( pFmt );
         ((SwFmtFlyCnt&)GetFlyCnt()).SetFlyFmt( pNew );
     }

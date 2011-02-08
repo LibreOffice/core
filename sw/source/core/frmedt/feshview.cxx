@@ -1629,7 +1629,7 @@ sal_Bool SwFEShell::EndCreate( sal_uInt16 eSdrCreateCmd )
     }
     sal_Bool bCreate = Imp()->GetDrawView()->EndCreateObj(
                                     SdrCreateCmd( eSdrCreateCmd ) );
-    GetDoc()->SetNoDrawUndoObj( sal_False );
+    GetDoc()->GetIDocumentUndoRedo().DoDrawUndo(true);
 
     if ( !bCreate )
     {

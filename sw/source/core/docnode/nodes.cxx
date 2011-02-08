@@ -1879,12 +1879,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             SwDoc* const pInsDoc = pDestNd->GetDoc();
             ::sw::UndoGuard const undoGuard(pInsDoc->GetIDocumentUndoRedo());
             pSrcNd->CopyCollFmt( *pDestNd );
-<<<<<<< local
-            pInsDoc->DoUndo( bIsUndo );
             bCopyCollFmt = sal_False;
-=======
-            bCopyCollFmt = sal_False;
->>>>>>> other
         }
 
         if( bOneNd )        // das wars schon

@@ -255,9 +255,11 @@ void SwInputWindow::ShowWin()
                     SW_MOD()->GetUndoOptions().SetUndoCount(1);
                 }
 
-                bDoesUndo = pWrtShell->DoesUndo();
-                if( !bDoesUndo )
+                m_bDoesUndo = pWrtShell->DoesUndo();
+                if( !m_bDoesUndo )
+                {
                     pWrtShell->DoUndo( sal_True );
+                }
 
                 if( !pWrtShell->SwCrsrShell::HasSelection() )
                 {

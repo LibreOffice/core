@@ -1499,13 +1499,8 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const
     sal_uInt16 nCount = pTblFrmFmtTbl->Count();
     if(bUsed)
     {
-<<<<<<< local
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
-        for ( sal_uInt16 i = nCount; i; )
-=======
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( sal_uInt16 i = nCount; i; )
->>>>>>> other
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
 
@@ -1522,14 +1517,8 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed ) const
     sal_uInt16 nRemoved = 0;
     if(bUsed)
     {
-<<<<<<< local
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
-
-        for ( sal_uInt16 i = 0; i <= nFmt; i++ )
-=======
         SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( sal_uInt16 i = 0; i <= nFmt; i++ )
->>>>>>> other
         {
             while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
             {
@@ -2278,12 +2267,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
 
 void SwDoc::ReplaceStyles( SwDoc& rSource )
 {
-<<<<<<< local
-    sal_Bool bIsUndo = DoesUndo();
-    DoUndo( sal_False );
-=======
     ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
->>>>>>> other
 
     CopyFmtArr( *rSource.pCharFmtTbl, *pCharFmtTbl,
                 &SwDoc::_MakeCharFmt, *pDfltCharFmt );
