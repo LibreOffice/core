@@ -99,13 +99,13 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define PATH_SEPERATOR       "/"
 #endif
 #if (defined WNT )                      // Windows
-#include <tools/prewin.h>
+#include <prewin.h>
 // #    include <windows.h>
 #   include <tchar.h>
 #   include <io.h>
 #   include <stdio.h>
 #   include <stdlib.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"

@@ -43,11 +43,11 @@
 #include <sal/macros.h>
 
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
+#include <prewin.h>
 #   define WIN32_LEAN_AND_MEAN
 // #    include <windows.h>
 #   include <tchar.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 #include "rtl/allocator.hxx"

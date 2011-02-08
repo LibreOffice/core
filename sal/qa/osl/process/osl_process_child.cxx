@@ -33,13 +33,13 @@
 // includes
 
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
+#include <prewin.h>
 #   define UNICODE
 #   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
 // #    include <windows.h>
 #   include <tchar.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #else
 #   include <unistd.h>
 #endif

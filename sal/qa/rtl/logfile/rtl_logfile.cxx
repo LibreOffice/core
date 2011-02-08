@@ -46,9 +46,9 @@
 
 #include <osl/file.hxx>
 #if ( defined WNT )                     // Windows
-#include <tools/prewin.h>
+#include <prewin.h>
 #include <tchar.h>
-#include <tools/postwin.h>
+#include <postwin.h>
 #endif
 
 using namespace ::osl;
