@@ -301,7 +301,7 @@ SwField* SwEditShell::GetCurFld() const
     SwTxtFld *pTxtFld = GetDocTxtFld( pCrsr->Start() );
     SwField *pCurFld = NULL;
 
-    /* #108536# Field was only recognized if no selection was
+    /* Field was only recognized if no selection was
         present. Now it is recognized if either the cursor is in the
         field or the selection spans exactly over the field. */
     if( pTxtFld &&
@@ -320,7 +320,7 @@ SwField* SwEditShell::GetCurFld() const
 
     }
 
-    /* #108536# removed handling of multi-selections */
+    /* removed handling of multi-selections */
 
     return pCurFld;
 }
@@ -383,7 +383,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
             if (pTxtFld != 0)
-                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, TRUE); // #111840#
+                GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, TRUE);
         }
 
         // bOkay (statt return wg. EndAllAction) wird FALSE,
@@ -430,7 +430,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                             bOkay = FALSE;
 
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
-                                                           pMsgHnt, FALSE); // #111840#
+                                                           pMsgHnt, FALSE);
                     }
                     // Der Suchbereich wird um den gefundenen Bereich
                     // verkuerzt.

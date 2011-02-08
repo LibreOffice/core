@@ -181,7 +181,6 @@ BOOL SwEditShell::HasNumber() const
     {
         bResult = pTxtNd->HasNumber();
 
-        // --> OD 2005-10-26 #b6340308#
         // special case: outline numbered, not counted paragraph
         if ( bResult &&
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
@@ -189,7 +188,6 @@ BOOL SwEditShell::HasNumber() const
         {
             bResult = FALSE;
         }
-        // <--
     }
 
     return bResult;
@@ -234,10 +232,9 @@ void SwEditShell::DelNumRules()
     // ueberfluessig sein, aber VB hatte darueber eine Bugrep.
     CallChgLnk();
 
-    // --> OD 2005-10-24 #126346# - cursor can not be anymore in
-    // front of a label, because numbering/bullet is deleted.
+    // cursor can not be anymore in front of a label,
+    // because numbering/bullet is deleted.
     SetInFrontOfLabel( FALSE );
-    // <--
 
     GetDoc()->SetModified();
     EndAllAction();
@@ -608,7 +605,7 @@ BOOL SwEditShell::IsOutlineCopyable( USHORT nIdx ) const
 }
 
 
-BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
+BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart )
 {
     BOOL bRet = FALSE;
     SwPaM* pCrsr = GetCrsr();
@@ -616,7 +613,6 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
         StartAllAction();       // Klammern fuers Updaten !!
-        // #115901#
         bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
         EndAllAction();
     }
@@ -651,11 +647,9 @@ BYTE SwEditShell::GetNumLevel() const
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
-    // --> FME 2005-09-12 #124972# Made code robust:
     OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
     if ( !pTxtNd )
         return nLevel;
-    // <--
 
     const SwNumRule* pRule = pTxtNd->GetNumRule();
     if(pRule)

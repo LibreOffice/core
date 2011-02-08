@@ -59,9 +59,7 @@
 using namespace ::com::sun::star;
 
 
-// --> OD 2004-11-22 #117958#
 #include <svx/sdr/properties/defaultproperties.hxx>
-// <--
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -127,14 +125,13 @@ namespace sdr
 
 sdr::properties::BaseProperties* SwFlyDrawObj::CreateObjectSpecificProperties()
 {
-    // --> OD 2004-11-22 #117958# - create default properties
+    // create default properties
     return new sdr::properties::DefaultProperties(*this);
-    // <--
 }
 
 sdr::contact::ViewContact* SwFlyDrawObj::CreateObjectSpecificViewContact()
 {
-    // #i95264# needs an own VC since createViewIndependentPrimitive2DSequence()
+    // needs an own VC since createViewIndependentPrimitive2DSequence()
     // is called when RecalcBoundRect() is used
     return new sdr::contact::VCOfSwFlyDrawObj(*this);
 }

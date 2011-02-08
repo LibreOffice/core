@@ -127,7 +127,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     }
 
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
-    // #87795# Implementation for asian compression
+    // Implementation for asian compression
     SetCharCompressType( static_cast<UINT16>(pD->getCharacterCompressionType() ));
 }
 
@@ -142,9 +142,7 @@ SwDrawDocument::~SwDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
-    // #116168#
     ClearModel(sal_True);
-    //Clear();
 }
 
 /*************************************************************************
@@ -212,7 +210,6 @@ SdrLayerID SwDrawDocument::GetControlExportLayerId( const SdrObject & ) const
     return (SdrLayerID)pDoc->GetHeavenId();
 }
 
-// --> OD 2006-03-01 #b6382898#
 uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
 {
 
@@ -234,6 +231,5 @@ uno::Reference< uno::XInterface > SwDrawDocument::createUnoModel()
     return xModel;
 }
 
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

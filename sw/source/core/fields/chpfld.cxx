@@ -163,12 +163,10 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 
         if ( pTxtNd->IsOutline() )
         {
-            // --> OD 2005-11-17 #128041#
             // correction of refactoring done by cws swnumtree:
             // retrieve numbering string without prefix and suffix strings
             // as stated in the above german comment.
             sNumber = pTxtNd->GetNumString( false );
-            // <--
 
             SwNumRule* pRule( pTxtNd->GetNumRule() );
             if ( pTxtNd->IsCountedInList() && pRule )

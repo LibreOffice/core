@@ -511,7 +511,6 @@ SwDBData SwDBNameInfField::GetDBData(SwDoc* pDoc)
     return aRet;
 }
 
-// #111840#
 void SwDBNameInfField::SetDBData(const SwDBData & rDBData)
 {
     aDBData = rDBData;

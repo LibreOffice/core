@@ -2248,15 +2248,14 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
     eStat = READ_NEXT_PARA;
     while( !bEnde )
     {
-        // #95884# limit redline array size to prevent overflow and to conserve
-        // memory
+        // limit redline array size to prevent overflow and to conserve memory
         if( pDoc->HasTooManyUndos() )
         {
             DBG_ASSERT( bUndoState, "undo overflow without undo?" );
 
             //ask user
-            short nResult = m_nActionWhileAutoformatUndoBufferOverflow; // TODO: #102007# read the last decision of the user from configuration
-            if(m_bAskForCancelUndoWhileBufferOverflow) // #102007# TODO: read the last decision of the user from configuration
+            short nResult = m_nActionWhileAutoformatUndoBufferOverflow; // TODO: read the last decision of the user from configuration
+            if(m_bAskForCancelUndoWhileBufferOverflow) // TODO: read the last decision of the user from configuration
             {
                 Window* pParent = pEditShell?pEditShell->GetWin():NULL;
                 WarningBox aWarning( pParent,SW_RES(MSG_DISABLE_UNDO_QUESTION));
@@ -2266,8 +2265,8 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 nResult     = aWarning.Execute();
                 m_bAskForCancelUndoWhileBufferOverflow = !aWarning.GetCheckBoxState();
                 m_nActionWhileAutoformatUndoBufferOverflow = nResult;
-                // TODO: #102007# store m_bAskForCancelUndoWhileBufferOverflow in configuration
-                // TODO: #102007# store m_nActionWhileAutoformatUndoBufferOverflow in configuration
+                // TODO: store m_bAskForCancelUndoWhileBufferOverflow in configuration
+                // TODO: store m_nActionWhileAutoformatUndoBufferOverflow in configuration
             }
 
             DBG_ASSERT( (nResult == RET_YES) || (nResult == RET_CANCEL) || (nResult == RET_NO),
@@ -2289,7 +2288,7 @@ SwAutoFormat::SwAutoFormat( SwEditShell* pEdShell, SvxSwAutoFmtFlags& rFlags,
                 //cancel autoformatting and undo changes
                 eStat = IS_ENDE;
 
-                // TODO: #102004# undo changes
+                // TODO: undo changes
             }
         }
 

@@ -132,9 +132,8 @@ SwSectionData::SwSectionData(SwSection const& rSection)
     , m_Password(rSection.GetPassword())
     , m_bHiddenFlag(rSection.IsHiddenFlag())
     , m_bProtectFlag(rSection.IsProtect())
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     , m_bEditInReadonlyFlag(rSection.IsEditInReadonly())
-    // <--
     , m_bHidden(rSection.IsHidden())
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(rSection.IsConnectFlag())
@@ -151,9 +150,8 @@ SwSectionData::SwSectionData(SwSectionData const& rOther)
     , m_Password(rOther.m_Password)
     , m_bHiddenFlag(rOther.m_bHiddenFlag)
     , m_bProtectFlag(rOther.m_bProtectFlag)
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     , m_bEditInReadonlyFlag(rOther.m_bEditInReadonlyFlag)
-    // <--
     , m_bHidden(rOther.m_bHidden)
     , m_bCondHiddenFlag(true)
     , m_bConnectFlag(rOther.m_bConnectFlag)
@@ -213,9 +211,8 @@ SwSection::SwSection(
         }
 
         m_Data.SetProtectFlag( pParentSect->IsProtectFlag() );
-        // --> FME 2004-06-22 #114856# edit in readonly sections
+        // edit in readonly sections
         m_Data.SetEditInReadonlyFlag( pParentSect->IsEditInReadonlyFlag() );
-        // <--
     }
 
     if (!m_Data.IsProtectFlag())
@@ -223,12 +220,10 @@ SwSection::SwSection(
         m_Data.SetProtectFlag( rFormat.GetProtect().IsCntntProtected() );
     }
 
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    if (!m_Data.IsEditInReadonlyFlag())
+    if (!m_Data.IsEditInReadonlyFlag()) // edit in readonly sections
     {
         m_Data.SetEditInReadonlyFlag( rFormat.GetEditInReadonly().GetValue() );
     }
-    // <--
 }
 
 
@@ -373,7 +368,7 @@ bool SwSection::IsProtect() const
         :   IsProtectFlag();
 }
 
-// --> FME 2004-06-22 #114856# edit in readonly sections
+// edit in readonly sections
 bool SwSection::IsEditInReadonly() const
 {
     SwSectionFmt *const pFmt( GetFmt() );
@@ -382,7 +377,6 @@ bool SwSection::IsEditInReadonly() const
         ?   pFmt->GetEditInReadonly().GetValue()
         :   IsEditInReadonlyFlag();
 }
-// <--
 
 void SwSection::SetHidden(bool const bFlag)
 {
@@ -411,7 +405,7 @@ void SwSection::SetProtect(bool const bFlag)
     }
 }
 
-// --> FME 2004-06-22 #114856# edit in readonly sections
+// edit in readonly sections
 void SwSection::SetEditInReadonly(bool const bFlag)
 {
     SwSectionFmt *const pFormat( GetFmt() );
@@ -428,7 +422,6 @@ void SwSection::SetEditInReadonly(bool const bFlag)
         m_Data.SetEditInReadonlyFlag(bFlag);
     }
 }
-// <--
 
 void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
@@ -451,7 +444,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 pOldSet->ClearItem( RES_PROTECT );
             }
 
-            // --> FME 2004-06-22 #114856# edit in readonly sections
+            // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                         RES_EDIT_IN_READONLY, FALSE, &pItem ) )
             {
@@ -498,7 +491,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             m_Data.SetProtectFlag( bNewFlag );
         }
         return;
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     case RES_EDIT_IN_READONLY:
         if( pNew )
         {
@@ -507,7 +500,6 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             m_Data.SetEditInReadonlyFlag( bNewFlag );
         }
         return;
-    // <--
 
     case RES_SECTION_HIDDEN:
         m_Data.SetHiddenFlag(true);
@@ -771,11 +763,10 @@ void SwSectionFmt::DelFrms()
     }
     if( pIdx )
     {
-        //JP 22.09.98:
         //Hint fuer Pagedesc versenden. Das mueste eigntlich das Layout im
         //Paste der Frames selbst erledigen, aber das fuehrt dann wiederum
         //zu weiteren Folgefehlern, die mit Laufzeitkosten geloest werden
-        //muesten. #56977# #55001# #56135#
+        //muesten.
         SwNodeIndex aNextNd( *pIdx );
         SwCntntNode* pCNd = GetDoc()->GetNodes().GoNextSection( &aNextNd, TRUE, FALSE );
         if( pCNd )
@@ -832,7 +823,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
                 pOldSet->ClearItem( RES_PROTECT );
             }
 
-            // --> FME 2004-06-22 #114856# edit in readonly sections
+            // --> edit in readonly sections
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                         RES_EDIT_IN_READONLY, FALSE, &pItem ) )
             {
@@ -886,9 +877,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 
 
     case RES_PROTECT:
-    // --> FME 2004-06-22 #114856# edit in readonly sections
-    case RES_EDIT_IN_READONLY:
-    // <--
+    case RES_EDIT_IN_READONLY: // edit in readonly sections
         // diese Messages bis zum Ende des Baums durchreichen !
         if( GetDepends() )
         {
@@ -1071,9 +1060,8 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
 
     SwSectionPtr pSection = 0;
     const SvxProtectItem* pProtect(0);
-    // --> FME 2004-06-22 #114856# edit in readonly sections
+    // edit in readonly sections
     const SwFmtEditInReadonly* pEditInReadonly = 0;
-    // <--
     bool bIsHidden = false;
 
     SwClientIter aIter( *this );
@@ -1089,17 +1077,15 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     {
                         const SwSectionPtr pPS = GetParentSection();
                         pProtect = &pPS->GetFmt()->GetProtect();
-                        // --> FME 2004-06-22 #114856# edit in readonly sections
+                        // edit in readonly sections
                         pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
-                        // <--
                         bIsHidden = pPS->IsHiddenFlag();
                     }
                     else
                     {
                         pProtect = &GetProtect();
-                        // --> FME 2004-06-22 #114856# edit in readonly sections
+                        // edit in readonly sections
                         pEditInReadonly = &GetEditInReadonly();
-                        // <--
                         bIsHidden = pSection->IsHidden();
                     }
                 }
@@ -1110,14 +1096,13 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                                     (SfxPoolItem*)pProtect );
                 }
 
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // edit in readonly sections
                 if (!pEditInReadonly->GetValue() !=
                     !pSection->IsEditInReadonlyFlag())
                 {
                     pLast->Modify( (SfxPoolItem*)pEditInReadonly,
                                     (SfxPoolItem*)pEditInReadonly );
                 }
-                // <--
 
                 if( bIsHidden == pSection->IsHiddenFlag() )
                 {
@@ -1135,17 +1120,15 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                 {
                     const SwSectionPtr pPS = GetParentSection();
                     pProtect = &pPS->GetFmt()->GetProtect();
-                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    // edit in readonly sections
                     pEditInReadonly = &pPS->GetFmt()->GetEditInReadonly();
-                    // <--
                     bIsHidden = pPS->IsHiddenFlag();
                 }
                 else
                 {
                     pProtect = &GetProtect();
-                    // --> FME 2004-06-22 #114856# edit in readonly sections
+                    // edit in readonly sections
                     pEditInReadonly = &GetEditInReadonly();
-                    // <--
                     bIsHidden = pSection->IsHidden();
                 }
             }
@@ -1710,9 +1693,8 @@ void SwIntrnlSectRefLink::Closed()
                 aSectionData.SetLinkFileName( aEmptyStr );
                 aSectionData.SetHidden( false );
                 aSectionData.SetProtectFlag( false );
-                // --> FME 2004-06-22 #114856# edit in readonly sections
+                // edit in readonly sections
                 aSectionData.SetEditInReadonlyFlag( false );
-                // <--
 
                 aSectionData.SetConnectFlag( false );
 

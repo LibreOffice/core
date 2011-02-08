@@ -313,8 +313,7 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
     if(nVal < 0)
     {
         // for compatibility with old documents
-        // OD 05.11.2002 #104308# - introduce rounding as for SO 6.0 PP2
-        // introduced by fix of #104293#.
+        // introduce rounding as for SO 6.0 PP2
         nVal = ( ( nVal * 128 ) - (99/2) ) / 100;
         nVal += 128;
     }

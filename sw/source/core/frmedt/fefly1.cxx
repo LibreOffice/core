@@ -70,14 +70,11 @@
 #include <fldbas.hxx>
 #include <fmtfld.hxx>
 #include <swundo.hxx>
-// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
-// <--
 #include <frmatr.hxx>
-// --> OD 2009-12-29 #i89920#
-#include <fmtsrnd.hxx>
+
+#include <fmtsrnd.hxx> // #i89920#
 #include <editeng/opaqitem.hxx>
-// <--
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -339,7 +336,7 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         Point aPoint( aTmpPos );
         aPoint.X() -= 1;                    //nicht im Fly landen!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
-        // #108784# - determine text frame by left-top-corner of object
+        // determine text frame by left-top-corner of object
         pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aTmpPos, 0, sal_False );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
@@ -442,7 +439,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             pFooterOrHeader = pCntnt->FindFooterOrHeader();
         }
     }
-    // OD 26.06.2003 #108784# - set <pFooterOrHeader> also for drawing
+    // set <pFooterOrHeader> also for drawing
     // objects, but not for control objects.
     // Necessary for moving 'anchor symbol' at the user interface inside header/footer.
     else if ( !::CheckControlLayer( pObj ) )
@@ -551,8 +548,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
                 if( bMoveIt )
                 {
                     StartAllAction();
-                    // --> OD 2006-02-28 #125892#
-                    // handle change of anchor node:
+                    // --> handle change of anchor node:
                     // if count of the anchor frame also change, the fly frames have to be
                     // re-created. Thus, delete all fly frames except the <this> before the
                     // anchor attribute is change and re-create them afterwards.
@@ -749,7 +745,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
         GetDoc()->EndUndo( UNDO_INSLAYFMT, NULL );
     }
     else
-        /* #109161# If called from a shell try to propagate an
+        /* If called from a shell try to propagate an
             existing adjust item from rPos to the content node of the
             new frame. */
         pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, TRUE );
@@ -1015,7 +1011,6 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
     SwFlyFrm *pFly = FindFlyFrm();
     if ( !pFly )
     {
-        // --> OD 2006-11-08 #139670# - make code robust
         SwFrm* pCurrFrm( GetCurrFrm() );
         if ( !pCurrFrm )
         {
@@ -1023,7 +1018,6 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
                     "<SwFEShell::GetFlyFrmAttr(..)> - missing current frame. This is a serious defect, please inform OD." );
             return sal_False;
         }
-        // <--
         pFly = GetCurrFrm()->FindFlyFrm();
         if ( !pFly )
         {
@@ -1057,7 +1051,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         }
     }
     rSet.SetParent( pFly->GetFmt()->GetAttrSet().GetParent() );
-    //JP 11.02.97: Bug #35894#: die Attribute MUESSEN entfern werden!
+    // die Attribute MUESSEN entfern werden!
     rSet.ClearItem( RES_FILL_ORDER );
     rSet.ClearItem( RES_CNTNT );
     //MA: Ersteinmal entfernen (Template by example usw.)
@@ -1693,7 +1687,7 @@ ObjCntType SwFEShell::GetObjCntType( const SdrObject& rObj ) const
 {
     ObjCntType eType = OBJCNT_NONE;
 
-    // OD 23.06.2003 #108784# - investigate 'master' drawing object, if method
+    // investigate 'master' drawing object, if method
     // is called for a 'virtual' drawing object.
     const SdrObject* pInvestigatedObj;
     if ( rObj.ISA(SwDrawVirtObj) )

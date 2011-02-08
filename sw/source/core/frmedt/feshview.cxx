@@ -87,11 +87,8 @@
 #include "txtfrm.hxx"
 #include "txatbase.hxx"
 #include "mdiexp.hxx"                   // fuer Update der Statuszeile bei drag
-// OD 2004-05-24 #i28701#
-#include <sortedobjs.hxx>
-// --> OD 2006-03-06 #125892#
+#include <sortedobjs.hxx> // #i28701#
 #include <HandleAnchorNodeChg.hxx>
-// <--
 #include <basegfx/polygon/b2dpolygon.hxx>
 
 #define SCROLLVAL 75
@@ -132,8 +129,7 @@ extern BOOL bNoInterrupt;       // in swapp.cxx
     }
     else if( !pFlyFmt || RES_DRAWFRMFMT == pFlyFmt->Which() )
     {
-        // --> OD 2007-07-25 #136039#
-        // assure consistent cursor
+        // --> assure consistent cursor
         pSh->KillPams();
         pSh->ClearMark();
         // <--
@@ -504,8 +500,7 @@ sal_Bool SwFEShell::MoveAnchor( USHORT nDir )
         if( bRet )
         {
             StartAllAction();
-            // --> OD 2006-02-28 #125892#
-            // handle change of anchor node:
+            // --> handle change of anchor node:
             // if count of the anchor frame also change, the fly frames have to be
             // re-created. Thus, delete all fly frames except the <this> before the
             // anchor attribute is change and re-create them afterwards.
@@ -580,7 +575,7 @@ USHORT SwFEShell::GetSelFrmType() const
     return eType;
 }
 
-// #108784# does the draw selection contain a control?
+// does the draw selection contain a control?
 bool SwFEShell::IsSelContainsControl() const
 {
     bool bRet = false;
@@ -752,8 +747,7 @@ const SwFrmFmt* SwFEShell::SelFlyGrabCrsr()
             if ( pCFrm )
             {
                 SwCntntNode *pCNode = pCFrm->GetNode();
-                // --> OD 2007-07-25 #126039#
-                // assure, that the cursor is consistent.
+                // --> assure, that the cursor is consistent.
                 KillPams();
                 ClearMark();
                 // <--
@@ -942,7 +936,6 @@ short SwFEShell::GetLayerId() const
 |*  Beschreibung        Objekt ueber/unter dem Dokument
 |*
 *************************************************************************/
-// OD 25.06.2003 #108784#
 // Note: only visible objects can be marked. Thus, objects with invisible
 //       layer IDs have not to be considered.
 //       If <SwFEShell> exists, layout exists!!
@@ -952,13 +945,13 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
     {
         const SdrMarkList &rMrkList = Imp()->GetDrawView()->GetMarkedObjectList();
         const IDocumentDrawModelAccess* pIDDMA = getIDocumentDrawModelAccess();
-        // OD 25.06.2003 #108784# - correct type of <nControls>
+        // correct type of <nControls>
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            // OD 21.08.2003 #i18447# - no change of layer for controls
+            // #i18447# - no change of layer for controls
             // or group objects containing controls.
-            // --> OD 2010-09-14 #i113730#
+            // --> #i113730#
             // consider that a member of a drawing group has been selected.
             const SwContact* pContact = ::GetUserCall( pObj );
             OSL_ENSURE( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
@@ -1134,7 +1127,6 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
 #endif
 }
 
-// #107513#
 // Test if there is a object at that position and if it should be selected.
 sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
 {
@@ -1665,7 +1657,7 @@ BOOL SwFEShell::ImpEndCreate()
 
     if( !bCharBound )
     {
-        // OD 16.05.2003 #108784# - allow native drawing objects in header/footer.
+        // allow native drawing objects in header/footer.
         // Thus, set <bBodyOnly> to <false> for these objects using value
         // of <nIdent> - value <0xFFFF> indicates control objects, which aren't
         // allowed in header/footer.
@@ -1897,7 +1889,7 @@ BOOL SwFEShell::ImpEndCreate()
 
         pContact->ConnectToLayout();
 
-        // OD 25.06.2003 #108784# - mark object at frame the object is inserted at.
+        // mark object at frame the object is inserted at.
         {
             SdrObject* pMarkObj = pContact->GetDrawObjectByAnchorFrm( *pAnch );
             if ( pMarkObj )
@@ -2220,10 +2212,10 @@ BOOL SwFEShell::IsGroupSelected()
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
             SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
-            // OD 30.06.2003 #108784# - consider 'virtual' drawing objects.
+            // consider 'virtual' drawing objects.
             // Thus, use corresponding method instead of checking type.
             if ( pObj->IsGroupObject() &&
-                 // --> FME 2004-12-08 #i38505# No ungroup allowed for 3d objects
+                 // --> #i38505# No ungroup allowed for 3d objects
                  !pObj->Is3DObj() &&
                  // <--
                  FLY_AS_CHAR != ((SwDrawContact*)GetUserCall(pObj))->
@@ -2236,8 +2228,8 @@ BOOL SwFEShell::IsGroupSelected()
     return FALSE;
 }
 
-// OD 27.06.2003 #108784# - change return type.
-// OD 27.06.2003 #108784# - adjustments for drawing objects in header/footer:
+// Change return type.
+// Adjustments for drawing objects in header/footer:
 //      allow group, only if all selected objects are in the same header/footer
 //      or not in header/footer.
 bool SwFEShell::IsGroupAllowed() const
@@ -2272,7 +2264,7 @@ bool SwFEShell::IsGroupAllowed() const
                 }
             }
 
-            // OD 27.06.2003 #108784# - check, if all selected objects are in the
+            // check, if all selected objects are in the
             // same header/footer or not in header/footer.
             if ( bIsGroupAllowed )
             {
@@ -2522,7 +2514,7 @@ BOOL SwFEShell::GetObjAttr( SfxItemSet &rSet ) const
     {
         SdrObject *pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        // --> OD 2007-07-24 #143008# - make code robust
+        // --> make code robust
         OSL_ENSURE( pContact, "<SwFEShell::GetObjAttr(..)> - missing <pContact> - please inform OD." );
         if ( pContact )
         {
@@ -3007,8 +2999,6 @@ void SwFEShell::CreateDefaultShape( UINT16 eSdrObjectKind, const Rectangle& rRec
 }
 
 /** SwFEShell::GetShapeBackgrd
-
-    OD 02.09.2002 for #102450#:
     method determines background color of the page the selected drawing
     object is on and returns this color.
     If no color is found, because no drawing object is selected or ...,
@@ -3060,8 +3050,6 @@ const Color SwFEShell::GetShapeBackgrd() const
 }
 
 /** Is default horizontal text direction for selected drawing object right-to-left
-
-    OD 09.12.2002 #103045#
     Because drawing objects only painted for each page only, the default
     horizontal text direction of a drawing object is given by the corresponding
     page property.

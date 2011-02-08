@@ -451,8 +451,8 @@ String SwFileNameFieldType::Expand(ULONG nFmt) const
                     {
                         INetURLObject aTemp(rURLObj);
                         aTemp.removeSegment();
-                        // #101947# last slash should belong to the pathname
-                        aRet = aTemp.PathToFileName();//GetFull();
+                        // last slash should belong to the pathname
+                        aRet = aTemp.PathToFileName();
                     }
                     else
                     {
@@ -1442,7 +1442,7 @@ void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
         else
             sTmpName = aFALSETxt;
 
-// OS 21.08.97: #42943# Datenbankausdruecke muessen sich von
+// Datenbankausdruecke muessen sich von
 //              einfachem Text unterscheiden. also wird der einfache Text
 //              bevorzugt in Anfuehrungszeichen gesetzt.
 //              Sind diese vorhanden werden umschliessende entfernt.

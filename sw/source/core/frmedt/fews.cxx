@@ -56,14 +56,10 @@
 #include <edimp.hxx>
 #include <pagedesc.hxx>
 #include <fmtanchr.hxx>
-// OD 29.10.2003 #113049#
 #include <environmentofanchoredobject.hxx>
-// OD 12.11.2003 #i22341#
-#include <ndtxt.hxx>
-// OD 27.11.2003 #112045#
+#include <ndtxt.hxx> // #i22341#
 #include <dflyobj.hxx>
-// OD 2004-03-29 #i26791#
-#include <dcontact.hxx>
+#include <dcontact.hxx> // #i26791#
 
 
 using namespace com::sun::star;
@@ -493,7 +489,7 @@ void SwFEShell::InsertLabel( const SwLabelType eType, const String &rTxt, const 
                 const SdrMarkList& rMrkList = pDView->GetMarkedObjectList();
                 StartUndo();
 
-                // OD 27.11.2003 #112045# - copy marked drawing objects to
+                // copy marked drawing objects to
                 // local list to perform the corresponding action for each object
                 std::vector<SdrObject*> aDrawObjs;
                 {
@@ -570,7 +566,7 @@ BOOL SwFEShell::Sort(const SwSortOptions& rOpt)
         while( !pFrm->IsCellFrm() )
             pFrm = pFrm->GetUpper();
         {
-            /* #107993# ParkCursor->ParkCursorTab */
+            /* ParkCursor->ParkCursorTab */
             ParkCursorInTab();
         }
 
@@ -704,11 +700,11 @@ SwFEShell::~SwFEShell()
     delete pChainTo;
 }
 
-// OD 18.09.2003 #i17567#, #108749#, #110354# - adjustments for allowing
+// #i17567# - adjustments for allowing
 //          negative vertical positions for fly frames anchored to paragraph/to character.
-// OD 06.11.2003 #i22305# - adjustments for option 'Follow text flow'
+// #i22305# - adjustments for option 'Follow text flow'
 //          for to frame anchored objects.
-// OD 12.11.2003 #i22341# - adjustments for vertical alignment at top of line
+// #i22341# - adjustments for vertical alignment at top of line
 //          for to character anchored objects.
 void SwFEShell::CalcBoundRect( SwRect& _orRect,
                                const RndStdIds _nAnchorId,
@@ -873,7 +869,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             aPos = pFrm->Frm().TopRight();
         else
             aPos = (pFrm->Frm().*fnRect->fnGetPos)();
-        // OD 08.09.2003 #i17567#, #108749#, #110354# - allow negative positions
+        // #i17567# - allow negative positions
         // for fly frames anchor to paragraph/to character.
         if ((_nAnchorId == FLY_AT_PARA) || (_nAnchorId == FLY_AT_CHAR))
         {
@@ -882,7 +878,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             // and vertically by the printing area of the vertical environment,
             // if the object follows the text flow, or by the frame area of the
             // vertical environment, if the object doesn't follow the text flow.
-            // OD 29.10.2003 #113049# - new class <SwEnvironmentOfAnchoredObject>
+            // new class <SwEnvironmentOfAnchoredObject>
             objectpositioning::SwEnvironmentOfAnchoredObject aEnvOfObj(
                                                             _bFollowTextFlow );
             const SwLayoutFrm& rHoriEnvironLayFrm =
@@ -895,7 +891,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
             {
                 aVertEnvironRect = rVertEnvironLayFrm.Prt();
                 aVertEnvironRect.Pos() += rVertEnvironLayFrm.Frm().Pos();
-                // OD 19.09.2003 #i18732# - adjust vertical 'virtual' anchor position
+                // #i18732# - adjust vertical 'virtual' anchor position
                 // (<aPos.Y()> respectively <aPos.X()>), if object is vertical aligned
                 // to page areas.
                 if ( _eVertRelOrient == text::RelOrientation::PAGE_FRAME || _eVertRelOrient == text::RelOrientation::PAGE_PRINT_AREA )
@@ -945,7 +941,7 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 }
             }
 
-            // OD 12.11.2003 #i22341# - adjust vertical 'virtual' anchor position
+            // #i22341# - adjust vertical 'virtual' anchor position
             // (<aPos.Y()> respectively <aPos.X()>), if object is anchored to
             // character and vertical aligned at character or top of line
             // --> OD 2005-12-29 #125800#
@@ -1223,33 +1219,27 @@ BOOL SwFEShell::IsFrmVertical(BOOL bEnvironment, BOOL& bRTL) const
             return bVert;
 
         SdrObject* pObj = rMrkList.GetMark( 0 )->GetMarkedSdrObj();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pObj )
         {
             OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing SdrObject instance in marked object list -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
-        // OD 2004-03-29 #i26791#
+        // #i26791#
         SwContact* pContact = static_cast<SwContact*>(GetUserCall( pObj ));
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pContact )
         {
             OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing SwContact instance at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
         const SwFrm* pRef = pContact->GetAnchoredObj( pObj )->GetAnchorFrm();
-        // --> OD 2006-01-06 #123831# - make code robust:
         if ( !pRef )
         {
             OSL_ENSURE( false,
                     "<SwFEShell::IsFrmVertical(..)> - missing anchor frame at marked object -> This is a serious situation, please inform OD" );
             return bVert;
         }
-        // <--
 
         if ( pObj->ISA(SwVirtFlyDrawObj) && !bEnvironment )
             pRef = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm();

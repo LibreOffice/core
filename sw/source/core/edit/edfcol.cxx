@@ -38,9 +38,7 @@
 #include <ndtxt.hxx>
 #include <paratr.hxx>
 #include <fmtpdsc.hxx>
-// --> FME 2004-06-29 #114856# Formular view
-#include <viewopt.hxx>
-// <--
+#include <viewopt.hxx>  // Formular view
 #include <SwRewriter.hxx>
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -82,9 +80,8 @@ void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
     FOREACHPAM_START(this)
 
         if( !PCURCRSR->HasReadonlySel(
-                    // --> FME 2004-06-29 #114856# Formular view
+                    // Formular view
                     GetViewOptions()->IsFormView() ) )
-                    // <--
             GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
