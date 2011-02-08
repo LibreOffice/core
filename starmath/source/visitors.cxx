@@ -2131,7 +2131,7 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
             LineToText( it.Current( ) );
             if( it.Next( ) ) {
                 Separate( );
-                Append( "## " );
+                Append( "# " );
             }else
                 break;
         }
@@ -2447,7 +2447,6 @@ void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmSpecialNode* pNode )
 {
-    Append( "%" );
     Append( pNode->GetToken( ).aText );
 }
 
