@@ -72,6 +72,7 @@ using namespace ::com::sun::star;
 // ------------
 // - SgaTheme -
 // ------------
+DBG_NAME(GalleryTheme)
 
 GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) :
         pParent               ( pGallery ),
@@ -81,6 +82,8 @@ GalleryTheme::GalleryTheme( Gallery* pGallery, GalleryThemeEntry* pThemeEntry ) 
         nDragPos              ( 0 ),
         bDragging             ( FALSE )
 {
+    DBG_CTOR(GalleryTheme,NULL);
+
     ImplCreateSvDrawStorage();
 
     if( pThm->IsImported() )
@@ -99,6 +102,8 @@ GalleryTheme::~GalleryTheme()
         delete pEntry;
         Broadcast( GalleryHint( GALLERY_HINT_OBJECT_REMOVED, GetName(), reinterpret_cast< ULONG >( pEntry ) ) );
     }
+
+    DBG_DTOR(GalleryTheme,NULL);
 }
 
 // ------------------------------------------------------------------------
@@ -1187,18 +1192,13 @@ BOOL GalleryTheme::InsertFileOrDirURL( const INetURLObject& rFileOrDirURL, ULONG
             uno::Sequence< OUString > aProps( 1 );
             aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
             uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
-
-            if( xResultSet.is() )
+            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
+            if( xContentAccess.is() )
             {
-                uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-
-                if( xContentAccess.is() )
+                while( xResultSet->next() )
                 {
-                    while( xResultSet->next() )
-                    {
-                        aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
-                        aURLVector.push_back( aURL );
-                    }
+                    aURL.SetSmartURL( xContentAccess->queryContentIdentifierString() );
+                    aURLVector.push_back( aURL );
                 }
             }
         }

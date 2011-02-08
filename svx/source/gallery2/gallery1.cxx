@@ -175,6 +175,8 @@ SvStream& operator>>( SvStream& rIn, GalleryImportThemeEntry& rEntry )
 // - GalleryThemeCacheEntry -
 // --------------------------
 
+class GalleryThemeCacheEntry;
+DBG_NAME(GalleryThemeCacheEntry)
 class GalleryThemeCacheEntry
 {
 private:
@@ -185,8 +187,8 @@ private:
 public:
 
                                 GalleryThemeCacheEntry( const GalleryThemeEntry* pThemeEntry, GalleryTheme* pTheme ) :
-                                    mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {}
-                                ~GalleryThemeCacheEntry() { delete mpTheme; }
+                                    mpThemeEntry( pThemeEntry ), mpTheme( pTheme ) {DBG_CTOR(GalleryThemeCacheEntry,NULL);}
+                                ~GalleryThemeCacheEntry() { delete mpTheme;DBG_DTOR(GalleryThemeCacheEntry,NULL); }
 
     const GalleryThemeEntry*        GetThemeEntry() const { return mpThemeEntry; }
     GalleryTheme*                           GetTheme() const { return mpTheme; }
@@ -195,7 +197,6 @@ public:
 // -----------
 // - Gallery -
 // -----------
-
 Gallery::Gallery( const String& rMultiPath )
 :       nReadTextEncoding   ( gsl_getSystemTextEncoding() )
 ,       nLastFileNumber     ( 0 )
@@ -327,16 +328,20 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
             if( xContentAccess.is() )
             {
+                static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
+                static const ::rtl::OUString s_sIsReadOnly(RTL_CONSTASCII_USTRINGPARAM("IsReadOnly"));
+                static const ::rtl::OUString s_sSDG_EXT(RTL_CONSTASCII_USTRINGPARAM("sdg"));
+                static const ::rtl::OUString s_sSDV_EXT(RTL_CONSTASCII_USTRINGPARAM("sdv"));
+
                 while( xResultSet->next() )
                 {
                     INetURLObject aThmURL( xContentAccess->queryContentIdentifierString() );
 
                     if(aThmURL.GetExtension().equalsIgnoreAsciiCaseAscii("thm"))
                     {
-                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
-                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
-                        const OUString  aTitleProp( OUString::createFromAscii( "Title" ) );
-                        const OUString  aReadOnlyProp( OUString::createFromAscii( "IsReadOnly" ) );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( s_sSDG_EXT );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( s_sSDV_EXT );
+
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 
@@ -348,7 +353,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                             try
                             {
-                                aThmCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                aThmCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                             }
                             catch( const uno::RuntimeException& )
                             {
@@ -361,7 +366,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                             {
                                 try
                                 {
-                                    aThmCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                    aThmCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                 }
                                 catch( const uno::RuntimeException& )
                                 {
@@ -374,7 +379,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     try
                                     {
-                                        aSdgCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                        aSdgCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
                                     catch( const ::com::sun::star::uno::RuntimeException& )
                                     {
@@ -387,7 +392,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                         try
                                         {
-                                            aSdgCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                            aSdgCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
                                         catch( const uno::RuntimeException& )
                                         {
@@ -402,7 +407,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                 {
                                     try
                                     {
-                                        aSdvCnt.getPropertyValue( aTitleProp ) >>= aTitle;
+                                        aSdvCnt.getPropertyValue( s_sTitle ) >>= aTitle;
                                     }
                                     catch( const ::com::sun::star::uno::RuntimeException& )
                                     {
@@ -415,7 +420,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
                                     {
                                         try
                                         {
-                                            aSdvCnt.getPropertyValue( aReadOnlyProp ) >>= bReadOnly;
+                                            aSdvCnt.getPropertyValue( s_sIsReadOnly ) >>= bReadOnly;
                                         }
                                         catch( const uno::RuntimeException& )
                                         {
@@ -594,7 +599,6 @@ String Gallery::GetThemeName( ULONG nThemeId ) const
             case( GALLERY_THEME_3D ): aFallback = "3D"; break;
             case( GALLERY_THEME_BULLETS ): aFallback = "Bullets"; break;
             case( GALLERY_THEME_HOMEPAGE ): aFallback = "Homepage"; break;
-            case( GALLERY_THEME_HTMLBUTTONS ): aFallback = "private://gallery/hidden/HtmlExportButtons"; break;
             case( GALLERY_THEME_POWERPOINT ): aFallback = "private://gallery/hidden/imgppt"; break;
             case( GALLERY_THEME_FONTWORK ): aFallback = "private://gallery/hidden/fontwork"; break;
             case( GALLERY_THEME_FONTWORK_VERTICAL ): aFallback = "private://gallery/hidden/fontworkvertical"; break;
