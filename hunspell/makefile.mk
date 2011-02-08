@@ -36,16 +36,13 @@ TARGET=hunspell
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=hunspell-1.2.9
-TARFILE_MD5=68dd2e8253d9a7930e9fd50e2d7220d0
+TARFILE_NAME=hunspell-1.3.1
+TARFILE_MD5=9ed97fce60a9a65852402248a6659492
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
     hunspell-wntconfig.patch \
-    hunspell-solaris.patch \
-    hunspell-stacksmash.patch \
-    hunspell-valgrind.patch \
-    hunspell-1.2.9-crashfix.patch
+    hunspell-solaris.patch
 
 .IF "$(GUI)"=="UNX"
 
