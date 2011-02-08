@@ -83,9 +83,6 @@ ElementCollector::ElementCollector(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -129,9 +126,6 @@ void ElementCollector::notifyListener()
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -166,9 +160,6 @@ void ElementCollector::setReferenceResolvedListener(
  *   RESULT
  *  empty
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -195,9 +186,6 @@ void ElementCollector::setSecurityId(sal_Int32 nSecurityId)
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -229,9 +217,6 @@ void ElementCollector::doNotify()
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -268,9 +253,6 @@ ElementCollector* ElementCollector::clone(
  *
  *   RESULT
  *  clone -     a new ElementCollector
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

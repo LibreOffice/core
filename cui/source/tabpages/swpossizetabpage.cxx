@@ -95,11 +95,11 @@ struct StringIdPair_Impl
 #define LB_REL_CHAR             0x00020000L // as char, relative to character
 #define LB_REL_ROW              0x00040000L // as char, relative to line
 
-// OD 10.11.2003 #i22305#
+// #i22305#
 #define LB_FLY_VERT_FRAME       0x00100000L // vertical entire frame
 #define LB_FLY_VERT_PRTAREA     0x00200000L // vertical frame text area
 
-// OD 11.11.2003 #i22341#
+// #i22341#
 #define LB_VERT_LINE            0x00400000L // vertical text line
 
 static RelationMap aRelationMap[] =
@@ -122,11 +122,11 @@ static RelationMap aRelationMap[] =
     {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB_VERT_FRAME,          RelOrientation::FRAME},
     {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB_VERT_PRTAREA,        RelOrientation::PRINT_AREA},
 
-    // OD 10.11.2003 #i22305#
+    // #i22305#
     {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB_FLY_VERT_FRAME,      RelOrientation::FRAME},
     {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB_FLY_VERT_PRTAREA,    RelOrientation::PRINT_AREA},
 
-    // OD 11.11.2003 #i22341#
+    // #i22341#
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB_VERT_LINE,   RelOrientation::TEXT_LINE}
 };
 
@@ -193,8 +193,8 @@ static FrmMap aHFlyHtmlMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
 };
 
-// OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
-// OD 10.11.2003 #i22305#
+// #i18732# - own vertical alignment map for to frame anchored objects
+// #i22305#
 #define VERT_FRAME_REL   (LB_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
 static FrmMap aVFrameMap[] =
@@ -298,14 +298,14 @@ static FrmMap aHCharHtmlAbsMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
-// OD 19.09.2003 #i18732# - allow vertical alignment at page areas
-// OD 12.11.2003 #i22341# - handle <LB_REL_CHAR> on its own
+// #i18732# - allow vertical alignment at page areas
+// #i22341# - handle <LB_REL_CHAR> on its own
 #define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap aVCharMap[] =
 {
-    // OD 11.11.2003 #i22341#
+    // #i22341#
     // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
     // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
     // Note: Because of these adjustments the map becomes ambigous in its values
@@ -477,7 +477,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
     }
     return eStringId;
 }
-// OD 12.11.2003 #i22341# - helper method in order to determine all possible
+// #i22341# - helper method in order to determine all possible
 // listbox relations in a relation map for a given relation
 ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
 {
@@ -494,7 +494,7 @@ ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
     return nLBRelations;
 }
 
-// OD 14.11.2003 #i22341# - helper method on order to determine all possible
+// #i22341# - helper method on order to determine all possible
 // listbox relations in a relation map for a given string ID
 ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
                                   const SvxSwFramePosString::StringId _eStrId,
@@ -913,15 +913,15 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         }
         m_aHoriMirrorCB.Show(FALSE);
         m_aKeepRatioCB.Enable(FALSE);
-        // OD 19.09.2003 #i18732# - hide checkbox in HTML mode
+        // #i18732# - hide checkbox in HTML mode
         m_aFollowCB.Show(FALSE);
     }
     else
     {
-        // OD 06.11.2003 #i18732# correct enable/disable of check box 'Mirror on..'
+        // #i18732# correct enable/disable of check box 'Mirror on..'
         m_aHoriMirrorCB.Enable(!m_aAsCharRB.IsChecked() && !m_bIsMultiSelection);
 
-        // OD 06.11.2003 #i18732# - enable/disable check box 'Follow text flow'.
+        // #i18732# - enable/disable check box 'Follow text flow'.
         m_aFollowCB.Enable( m_aToParaRB.IsChecked() ||
                                   m_aToCharRB.IsChecked() );
     }
@@ -979,7 +979,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
         m_aVertByMF.SaveValue();
         m_aHoriByMF.SaveValue();
-        // OD 19.09.2003 #i18732#
+        // #i18732#
         m_aFollowCB.SaveValue();
 
         RangeModifyHdl(&m_aWidthMF);  // initially set maximum values
@@ -1053,7 +1053,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
     aVal.bAutoHeight = false;
     aVal.bAutoWidth = false;
     aVal.bMirror = m_aHoriMirrorCB.IsChecked();
-    // OD 18.09.2003 #i18732#
+    // #i18732#
     aVal.bFollowTextFlow = m_aFollowCB.IsChecked();
 
     if ( m_pHMap )
@@ -1131,7 +1131,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
 {
     m_aHoriMirrorCB.Enable(!m_aAsCharRB.IsChecked() && !m_bIsMultiSelection);
 
-    // OD 06.11.2003 #i18732# - enable check box 'Follow text flow' for anchor
+    // #i18732# - enable check box 'Follow text flow' for anchor
     // type to-paragraph' and to-character
     m_aFollowCB.Enable( m_aToParaRB.IsChecked() || m_aToCharRB.IsChecked() );
 
@@ -1340,7 +1340,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &/
 {
     short nAlign = 0;
 
-    // OD 14.11.2003 #i22341# - special handling also for map <aVCharMap>,
+    // #i22341# - special handling also for map <aVCharMap>,
     // because it contains ambigous items for alignment
     if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
             pMap == aVCharMap )
@@ -1443,7 +1443,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     }
     else if ( nAnchor == TextContentAnchorType_AT_FRAME )
     {
-        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame
+        // #i18732# - own vertical alignment map for to frame
         // anchored objects.
         m_pVMap = m_bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         m_pHMap = m_bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
@@ -1490,7 +1490,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
         nH    = m_nOldH;
         nHRel = m_nOldHRel;
     }
-    // OD 12.11.2003 #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
+    // #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
     USHORT nMapPos = FillPosLB(m_pHMap, nH, nHRel, m_aHoriLB);
     FillRelLB(m_pHMap, nMapPos, nH, nHRel, m_aHoriToLB, m_aHoriToFT);
 
@@ -1500,7 +1500,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
         nV    = m_nOldV;
         nVRel = m_nOldVRel;
     }
-    // OD 12.11.2003 #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
+    // #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
     nMapPos = FillPosLB(m_pVMap, nV, nVRel, m_aVertLB);
     FillRelLB(m_pVMap, nMapPos, nV, nVRel, m_aVertToLB, m_aVertToFT);
 
@@ -1649,7 +1649,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
         {
             USHORT nRelCount = SAL_N_ELEMENTS(aRelationMap);
 
-            // OD 14.11.2003 #i22341# - special handling for map <aVCharMap>,
+            // #i22341# - special handling for map <aVCharMap>,
             // because its ambigous in its <eStrId>/<eMirrorStrId>.
             if ( pMap == aVCharMap )
             {
@@ -1742,7 +1742,7 @@ USHORT SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
 
     _rLB.Clear();
 
-    // OD 12.11.2003 #i22341# - determine all possible listbox relations for
+    // #i22341# - determine all possible listbox relations for
     // given relation for map <aVCharMap>
     const ULONG nLBRelations = (_pMap != aVCharMap)
                                ? 0L
@@ -1763,7 +1763,7 @@ USHORT SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                 // bei zeichengebundenen Rahmen keine doppelten Eintraege einfuegen
                 _rLB.InsertEntry(sEntry);
             }
-            // OD 12.11.2003 #i22341# - add condition to handle map <aVCharMap>
+            // #i22341# - add condition to handle map <aVCharMap>
             // that is ambigous in the alignment.
             if ( _pMap[i].nAlign == _nAlign &&
                  ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )

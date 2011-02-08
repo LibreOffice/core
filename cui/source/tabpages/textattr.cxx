@@ -755,7 +755,6 @@ bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
     return bLeftToRightDirection;
 }
 
-//add CHINA001 begin
 void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 {
     SFX_ITEMSET_ARG (&aSet,pViewItem,OfaPtrItem,SID_SVXTEXTATTRPAGE_VIEW,sal_False);
@@ -765,7 +764,5 @@ void SvxTextAttrPage::PageCreated(SfxAllItemSet aSet)
 
     Construct();
 }
-
-//end of CHINA001
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

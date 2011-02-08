@@ -934,7 +934,6 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
             if ( ( e.X < 0 ) || ( e.Y < 0 ) )
             {   // context menu triggered by keyboard
                 // position it in the center of the control
-                // 102205 - 16.08.2002 - fs@openoffice.org
                 Reference< XWindow > xWindow( static_cast< ::cppu::OWeakObject* >( this ), UNO_QUERY );
                 OSL_ENSURE( xWindow.is(), "OImageControlControl::mousePressed: me not a window? How this?" );
                 if ( xWindow.is() )

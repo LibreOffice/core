@@ -72,9 +72,6 @@ bool EncryptionEngine::checkReady() const
  *   RESULT
  *  bReady - true if all conditions are satisfied, false otherwise
  *
- *   HISTORY
- *  05.01.2004 -    implemented
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
@@ -122,9 +119,6 @@ void EncryptionEngine::tryToPerform( )
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi
@@ -178,9 +172,6 @@ void EncryptionEngine::clearUp( ) const
  *
  *   RESULT
  *  empty
- *
- *   HISTORY
- *  05.01.2004 -    implemented
  *
  *   AUTHOR
  *  Michael Mi

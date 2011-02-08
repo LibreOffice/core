@@ -56,9 +56,6 @@ class EncryptorImpl : public cppu::ImplInheritanceHelper4
  *  Collects all resources for an encryption generation, then generates the
  *  encryption by invoking a xmlsec-based encryption bridge component.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XInitialization, XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

@@ -296,7 +296,6 @@ namespace frm
                     // * at the UI, show only the mark
                     // * !!!! recognize every SAVEAS on the document, so the absolute URL can be adjusted. This seems
                     // rather impossible !!!
-                    // 89752 - 23.07.2001 - frank.schoenheit@sun.com
                     aURL.Mark = aURL.Complete;
                     aURL.Complete = xModel->getURL();
                     aURL.Complete += aURL.Mark;
@@ -699,7 +698,6 @@ namespace frm
                 pImgProd->SetImage( sURL );
             else
                 // caution: the medium may be NULL if somebody gave us a invalid URL to work with
-                // 11/24/2000 - 79667 - FS
                 pImgProd->SetImage(String());
             m_bDownloading = sal_False;
             return;
@@ -733,7 +731,6 @@ namespace frm
         }
 
         // the SfxMedium is not allowed to be created with an invalid URL, so we have to check this first
-        // 23.01.2001 - 81927 - FS
         INetURLObject aUrl(rURL);
         if (INET_PROT_NOT_VALID == aUrl.GetProtocol())
             // we treat an invalid URL like we would treat no URL

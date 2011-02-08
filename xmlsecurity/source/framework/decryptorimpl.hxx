@@ -54,10 +54,6 @@ class DecryptorImpl : public cppu::ImplInheritanceHelper3
  *  Collects all resources for decrypting an encryption, then decrypts the
  *  encryption by invoking a xmlsec-based encryption bridge component.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XDecryptionResultBroadcaster,
- *                  XInitialization, XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

@@ -480,14 +480,12 @@ void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggre
     // same for FormatKey
     // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
     // But we have for the format key ...)
-    // 25.06.2001 - 87862 - frank.schoenheit@sun.com
     ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
 
     RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
         // no strict format property for formatted fields: it does not make sense, 'cause
         // there is no general way to decide which characters/sub strings are allowed during the input of an
         // arbitraryly formatted control
-        // 81441 - 12/07/00 - FS
 }
 
 //------------------------------------------------------------------------------

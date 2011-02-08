@@ -3596,15 +3596,13 @@ void SAL_CALL ODatabaseForm::moveToInsertRow() throw( SQLException, RuntimeExcep
         // * in reset_impl
         //   - set the control defaults into the columns if not void
         //   - do _not_ set the columns to NULL if no control default is set
-        // This fixes both #88888# and #97955#
         //
         // Still, there is #72756#. During fixing this bug, DG introduced not calling the aggregate here. So
         // in theory, we re-introduced #72756#. But the bug described therein does not happen anymore, as the
         // preliminaries for it changed (no display of guessed values for new records with autoinc fields)
         //
-        // BTW: the public Issuezilla bug for #97955# is #i2815#
+        // BTW: the public Issuezilla bug is #i2815#
         //
-        // 16.04.2002 - 97955 - fs@openoffice.org
         xUpdate->moveToInsertRow();
 
         // then set the default values and the parameters given from the parent
@@ -3866,7 +3864,6 @@ Sequence< ::rtl::OUString > SAL_CALL ODatabaseForm::getSupportedServiceNames() t
     // the compatible names
     // This is maily to be consistent with the implementation before fixing #97083#, though the
     // better solution _may_ be to return the compatible names at runtime, too
-    // 04.03.2002 - fs@openoffice.org
 }
 
 //------------------------------------------------------------------------------

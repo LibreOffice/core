@@ -2443,7 +2443,6 @@ void SvxCharEffectsPage::Reset( const SfxItemSet& rSet )
     m_aUnderlineLB.GetSelectHdl().Call(NULL);
         // don't call SelectHdl_Impl directly!
         // in DisableControls, we may have re-reouted the select handler
-        // 30.05.2001 - 86262 - frank.schoenheit@germany.sun.com
 
     // the select handler for the emphasis listbox
 //  SelectHdl_Impl( &m_aEmphasisLB );

@@ -233,8 +233,8 @@ void SvxLineTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxLineTabPage&) rPage ).SetColorTable( pColorTab );
             ( (SvxLineTabPage&) rPage ).SetDashList( pDashList );
             ( (SvxLineTabPage&) rPage ).SetLineEndList( pLineEndList );
-            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetDlgType( &nDlgType );
-            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );//CHINA001 ( (SvxLineTabPage&) rPage ).SetPageType( &nPageType );
+            ( (SvxLineTabPage&) rPage ).SetDlgType( nDlgType );
+            ( (SvxLineTabPage&) rPage ).SetPageType( nPageType );
             ( (SvxLineTabPage&) rPage ).SetPosDashLb( &nPosDashLb );
             ( (SvxLineTabPage&) rPage ).SetPosLineEndLb( &nPosLineEndLb );
             ( (SvxLineTabPage&) rPage ).SetDashChgd( &nDashListState );

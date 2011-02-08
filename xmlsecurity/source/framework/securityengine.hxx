@@ -53,10 +53,6 @@ class SecurityEngine : public cppu::WeakImplHelper3
  *  Maintains common members and methods related with security engine
  *  operation.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XReferenceResolvedListener,
- *          XKeyCollector, and XMissionTaker
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com

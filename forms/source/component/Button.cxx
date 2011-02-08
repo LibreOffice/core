@@ -480,7 +480,6 @@ IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
                 // catch exceptions
                 // and catch them on a per-listener basis - if one listener fails, the others still need
                 // to get notified
-                // 97676 - 21.02.2002 - fs@openoffice.org
                 try
                 {
                     static_cast< XActionListener* >( aIter.next() )->actionPerformed(aEvt);

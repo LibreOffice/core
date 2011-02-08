@@ -1680,7 +1680,6 @@ void SAL_CALL OBoundControlModel::write( const Reference<stario::XObjectOutputSt
     // in anything from data loss to crash.
     // (use writeCommonProperties instead, this is called in derived classes write-method)
     // !!! EOIN !!!
-    // FS - 68876 - 28.09.1999
 }
 
 //------------------------------------------------------------------------------

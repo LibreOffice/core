@@ -650,7 +650,6 @@ namespace frm
 
             case FormFeature::MoveToInsertRow:
                 // move to the last row before moving to the insert row
-                // 21.01.2002 - 96480 - fs@openoffice.org
                 m_xCursor->last();
                 m_xUpdateCursor->moveToInsertRow();
                 break;

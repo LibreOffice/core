@@ -56,10 +56,6 @@ class SignatureCreatorImpl : public cppu::ImplInheritanceHelper4
  *  Collects all resources for a signature generation, then generates the
  *  signature by invoking a xmlsec-based signature bridge component.
  *
- *   HISTORY
- *  05.01.2004 -    Interface supported: XBlockerMonitor,
- *          XInitialization, XServiceInfo
- *
  *   AUTHOR
  *  Michael Mi
  *  Email: michael.mi@sun.com
