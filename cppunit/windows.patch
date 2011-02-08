@@ -1,6 +1,18 @@
 --- misc/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:25.084658287 +0100
 +++ misc/build/cppunit-1.12.1/include/cppunit/plugin/TestPlugIn.h	2010-01-11 14:42:18.660706180 +0100
-@@ -149,6 +149,9 @@
+@@ -133,9 +133,8 @@
+ /*! \def CPPUNIT_PLUGIN_IMPLEMENT_MAIN()
+  * \brief Implements the 'main' function for the plug-in.
+  *
+- * This macros implements the main() function for dynamic library.
+- * For example, WIN32 requires a DllMain function, while some Unix 
+- * requires a main() function. This macros takes care of the implementation.
++ * This macros implements the main() function for dynamic library
++ * on Unix for some weird reason.
+  */
+ 
+ // Win32
+@@ -149,12 +149,11 @@
  #define NOMINMAX
  #define BLENDFUNCTION void    // for mingw & gcc
  #include <windows.h>
@@ -9,4 +21,10 @@
 +#endif
  #endif
  #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
-   BOOL APIENTRY DllMain( HANDLE, DWORD, LPVOID )      \
+-  BOOL APIENTRY DllMain( HANDLE, DWORD, LPVOID )      \
+-  {                                                   \
+-      return TRUE;                                    \
+-  }                                                   \
+   typedef char __CppUnitPlugInImplementMainDummyTypeDef
+ 
+ // Unix
