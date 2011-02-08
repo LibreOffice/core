@@ -85,9 +85,9 @@ __EXPORT ScDocStatPage::~ScDocStatPage()
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
+sal_Bool __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
-    return FALSE;
+    return sal_False;
 }
 
 //------------------------------------------------------------------------

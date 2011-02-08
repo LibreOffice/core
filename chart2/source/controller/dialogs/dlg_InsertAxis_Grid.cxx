@@ -63,7 +63,7 @@ InsertAxisOrGridDialogData::InsertAxisOrGridDialogData()
 //==============================
 
 SchAxisDlg::SchAxisDlg( Window* pWindow
-                       , const InsertAxisOrGridDialogData& rInput, BOOL bAxisDlg )
+                       , const InsertAxisOrGridDialogData& rInput, sal_Bool bAxisDlg )
                        :
         ModalDialog( pWindow, SchResId( DLG_AXIS_OR_GRID )),
 

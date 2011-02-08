@@ -183,7 +183,7 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
 
 IMPL_LINK( LegendPositionResources, PositionEnableHdl, void*, EMPTYARG )
 {
-    BOOL bEnable = m_aCbxShow.IsChecked();
+    sal_Bool bEnable = m_aCbxShow.IsChecked();
 
     m_aRbtLeft.Enable( bEnable );
     m_aRbtTop.Enable( bEnable );
@@ -201,7 +201,7 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
 
     const SfxPoolItem* pPoolItem = NULL;
     if( rInAttrs.GetItemState( SCHATTR_LEGEND_POS,
-                               TRUE, &pPoolItem ) != SFX_ITEM_SET )
+                               sal_True, &pPoolItem ) != SFX_ITEM_SET )
         pPoolItem = &(rInAttrs.GetPool()->GetDefaultItem( SCHATTR_LEGEND_POS ));
 
     if( pPoolItem )
@@ -210,16 +210,16 @@ void LegendPositionResources::initFromItemSet( const SfxItemSet& rInAttrs )
     switch( ePos )
     {
         case CHLEGEND_LEFT:
-            m_aRbtLeft.Check(TRUE);
+            m_aRbtLeft.Check(sal_True);
             break;
         case CHLEGEND_TOP:
-            m_aRbtTop.Check(TRUE);
+            m_aRbtTop.Check(sal_True);
             break;
         case CHLEGEND_RIGHT:
-            m_aRbtRight.Check(TRUE);
+            m_aRbtRight.Check(sal_True);
             break;
         case CHLEGEND_BOTTOM:
-            m_aRbtBottom.Check(TRUE);
+            m_aRbtBottom.Check(sal_True);
             break;
         default:
             break;

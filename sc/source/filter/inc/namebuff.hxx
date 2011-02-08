@@ -50,16 +50,16 @@ class StringHashEntry
 private:
     friend class NameBuffer;
     String          aString;
-    UINT32          nHash;
+    sal_uInt32          nHash;
 
-    static UINT32   MakeHashCode( const String& );
+    static sal_uInt32   MakeHashCode( const String& );
 public:
     inline          StringHashEntry( const String& );
     inline          StringHashEntry( void );
     inline void     operator =( const sal_Char* );
     inline void     operator =( const String& );
     inline void     operator =( const StringHashEntry& );
-    inline BOOL     operator ==( const StringHashEntry& ) const;
+    inline sal_Bool     operator ==( const StringHashEntry& ) const;
 };
 
 
@@ -95,7 +95,7 @@ inline void StringHashEntry::operator =( const StringHashEntry& r )
 }
 
 
-inline BOOL StringHashEntry::operator ==( const StringHashEntry& r ) const
+inline sal_Bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 {
     return ( nHash == r.nHash && aString ==  r.aString );
 }
@@ -105,16 +105,16 @@ inline BOOL StringHashEntry::operator ==( const StringHashEntry& r ) const
 class NameBuffer : private List, public ExcRoot
 {
 private:
-    UINT16                  nBase;      // Index-Basis
+    sal_uInt16                  nBase;      // Index-Basis
 public:
 //    inline                  NameBuffer( void );   //#94039# prevent empty rootdata
     inline                  NameBuffer( RootData* );
-    inline                  NameBuffer( RootData*, UINT16 nNewBase );
+    inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
 
     virtual                 ~NameBuffer();
-    inline const String*    Get( UINT16 nIndex );
-    inline UINT16           GetLastIndex( void );
-    inline void             SetBase( UINT16 nNewBase = 0 );
+    inline const String*    Get( sal_uInt16 nIndex );
+    inline sal_uInt16           GetLastIndex( void );
+    inline void             SetBase( sal_uInt16 nNewBase = 0 );
     void                    operator <<( const String& rNewString );
 };
 
@@ -131,13 +131,13 @@ inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
 }
 
 
-inline NameBuffer::NameBuffer( RootData* p, UINT16 nNewBase ) : ExcRoot( p )
+inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
 {
     nBase = nNewBase;
 }
 
 
-inline const String* NameBuffer::Get( UINT16 n )
+inline const String* NameBuffer::Get( sal_uInt16 n )
 {
     if( n < nBase )
         return NULL;
@@ -153,15 +153,15 @@ inline const String* NameBuffer::Get( UINT16 n )
 }
 
 
-inline UINT16 NameBuffer::GetLastIndex( void )
+inline sal_uInt16 NameBuffer::GetLastIndex( void )
 {
     DBG_ASSERT( Count() + nBase <= 0xFFFF, "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
 
-    return ( UINT16 ) ( Count() + nBase );
+    return ( sal_uInt16 ) ( Count() + nBase );
 }
 
 
-inline void NameBuffer::SetBase( UINT16 nNewBase )
+inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
 {
     nBase = nNewBase;
 }
@@ -175,7 +175,7 @@ class ShrfmlaBuffer : public ExcRoot
     {
         size_t operator() (const ScAddress &addr) const;
     };
-    typedef std::hash_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
+    typedef std::hash_map <ScAddress, sal_uInt16, ScAddressHashFunc> ShrfmlaHash;
     typedef std::list <ScRange>                                  ShrfmlaList;
 
     ShrfmlaHash  index_hash;
@@ -187,7 +187,7 @@ public:
     virtual                 ~ShrfmlaBuffer();
     void                    Clear();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
-    USHORT                  Find (const ScAddress & rAddress ) const;
+    sal_uInt16                  Find (const ScAddress & rAddress ) const;
 
     static String           CreateName( const ScRange& );
     };
@@ -203,9 +203,9 @@ private:
         StringHashEntry     aStrHashEntry;
         ScComplexRefData        aScComplexRefDataRel;
         String              aScAbsName;
-        UINT16              nAbsInd;        // == 0 -> noch keine Abs-Name!
-        UINT16              nRelInd;
-        BOOL                bSingleRef;
+        sal_uInt16              nAbsInd;        // == 0 -> noch keine Abs-Name!
+        sal_uInt16              nRelInd;
+        sal_Bool                bSingleRef;
                             ENTRY( const String& rName, const String& rScName, const ScComplexRefData& rCRD ) :
                                 aStrHashEntry( rName ),
                                 aScComplexRefDataRel( rCRD ),
@@ -217,14 +217,14 @@ private:
         };
 
     ScTokenArray*           pScTokenArray;
-    UINT16                  nIntCount;
+    sal_uInt16                  nIntCount;
 public:
                             RangeNameBufferWK3( void );
     virtual                 ~RangeNameBufferWK3();
     void                    Add( const String& rName, const ScComplexRefData& rCRD );
     inline void             Add( const String& rName, const ScRange& aScRange );
-    BOOL                    FindRel( const String& rRef, UINT16& rIndex );
-    BOOL                    FindAbs( const String& rRef, UINT16& rIndex );
+    sal_Bool                    FindRel( const String& rRef, sal_uInt16& rIndex );
+    sal_Bool                    FindAbs( const String& rRef, sal_uInt16& rIndex );
 };
 
 
@@ -236,27 +236,27 @@ inline void RangeNameBufferWK3::Add( const String& rName, const ScRange& aScRang
 
     pSRD = &aCRD.Ref1;
     pScAddr = &aScRange.aStart;
-    pSRD->SetFlag3D( TRUE );
+    pSRD->SetFlag3D( sal_True );
     pSRD->nCol = pScAddr->Col();
     pSRD->nRow = pScAddr->Row();
     pSRD->nTab = pScAddr->Tab();
 
     // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( FALSE );
-    pSRD->SetRowRel( FALSE );
-    pSRD->SetTabRel( FALSE );
+    pSRD->SetColRel( sal_False );
+    pSRD->SetRowRel( sal_False );
+    pSRD->SetTabRel( sal_False );
 
     pSRD = &aCRD.Ref2;
     pScAddr = &aScRange.aEnd;
-    pSRD->SetFlag3D( TRUE );
+    pSRD->SetFlag3D( sal_True );
     pSRD->nCol = pScAddr->Col();
     pSRD->nRow = pScAddr->Row();
     pSRD->nTab = pScAddr->Tab();
 
     // zunaechst ALLE Refs nur absolut
-    pSRD->SetColRel( FALSE );
-    pSRD->SetRowRel( FALSE );
-    pSRD->SetTabRel( FALSE );
+    pSRD->SetColRel( sal_False );
+    pSRD->SetRowRel( sal_False );
+    pSRD->SetTabRel( sal_False );
 
     Add( rName, aCRD );
 }
@@ -271,26 +271,26 @@ private:
         {
         String      aFile;
         String      aTab;
-        UINT16      nTabNum;    // 0xFFFF -> noch nicht angelegt
+        sal_uInt16      nTabNum;    // 0xFFFF -> noch nicht angelegt
                                 // 0xFFFE -> versucht anzulegen, ging aber schief
                                 // 0xFFFD -> soll im selben Workbook sein, findet's aber nicht
-        BOOL        bSWB;
-        BOOL        bLink;
+        sal_Bool        bSWB;
+        sal_Bool        bLink;
                     Cont( const String& rFilePathAndName, const String& rTabName ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
                         nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
-                        bSWB = bLink = FALSE;
+                        bSWB = bLink = sal_False;
                     }
                     Cont( const String& rFilePathAndName, const String& rTabName,
-                        const BOOL bSameWB ) :
+                        const sal_Bool bSameWB ) :
                         aFile( rFilePathAndName ),
                         aTab( rTabName )
                     {
                         nTabNum = 0xFFFF;   // -> Tabelle noch nicht erzeugt
                         bSWB = bSameWB;
-                        bLink = FALSE;
+                        bLink = sal_False;
                     }
         };
 public:
@@ -298,11 +298,11 @@ public:
     virtual         ~ExtSheetBuffer();
 
     sal_Int16       Add( const String& rFilePathAndName,
-                        const String& rTabName, const BOOL bSameWorkbook = FALSE );
+                        const String& rTabName, const sal_Bool bSameWorkbook = sal_False );
 
-    BOOL            GetScTabIndex( UINT16 nExcSheetIndex, UINT16& rIn_LastTab_Out_ScIndex );
-    BOOL            IsLink( const UINT16 nExcSheetIndex ) const;
-    BOOL            GetLink( const UINT16 nExcSheetIndex, String &rAppl, String &rDoc ) const;
+    sal_Bool            GetScTabIndex( sal_uInt16 nExcSheetIndex, sal_uInt16& rIn_LastTab_Out_ScIndex );
+    sal_Bool            IsLink( const sal_uInt16 nExcSheetIndex ) const;
+    sal_Bool            GetLink( const sal_uInt16 nExcSheetIndex, String &rAppl, String &rDoc ) const;
 
     void            Reset( void );
 };
@@ -318,13 +318,13 @@ inline ExtSheetBuffer::ExtSheetBuffer( RootData* p ) : ExcRoot( p )
 struct ExtName
 {
     String          aName;
-    UINT32          nStorageId;
-    UINT16          nFlags;
+    sal_uInt32          nStorageId;
+    sal_uInt16          nFlags;
 
     inline          ExtName( const String& r, sal_uInt16 n ) : aName( r ), nStorageId( 0 ), nFlags( n ) {}
 
-    BOOL            IsDDE( void ) const;
-    BOOL            IsOLE( void ) const;
+    sal_Bool            IsDDE( void ) const;
+    sal_Bool            IsOLE( void ) const;
 };
 
 
@@ -336,7 +336,7 @@ public:
     explicit        ExtNameBuff( const XclImpRoot& rRoot );
 
     void            AddDDE( const String& rName, sal_Int16 nRefIdx );
-    void            AddOLE( const String& rName, sal_Int16 nRefIdx, UINT32 nStorageId );
+    void            AddOLE( const String& rName, sal_Int16 nRefIdx, sal_uInt32 nStorageId );
     void            AddName( const String& rName, sal_Int16 nRefIdx );
 
     const ExtName*  GetNameByIndex( sal_Int16 nRefIdx, sal_uInt16 nNameIdx ) const;

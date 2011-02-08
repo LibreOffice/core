@@ -126,26 +126,26 @@ enum ScUnoCollectMode
 class ScUnoEditEngine : public ScEditEngineDefaulter
 {
     ScUnoCollectMode    eMode;
-    USHORT              nFieldCount;
+    sal_uInt16              nFieldCount;
     TypeId              aFieldType;
     SvxFieldData*       pFound;         // lokale Kopie
-    USHORT              nFieldPar;
+    sal_uInt16              nFieldPar;
     xub_StrLen          nFieldPos;
-    USHORT              nFieldIndex;
+    sal_uInt16              nFieldIndex;
 
 public:
                 ScUnoEditEngine(ScEditEngineDefaulter* pSource);
                 ~ScUnoEditEngine();
 
                     //! nPos should be xub_StrLen
-    virtual String  CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+    virtual String  CalcFieldValue( const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
                                     Color*& rTxtColor, Color*& rFldColor );
 
-    USHORT          CountFields(TypeId aType);
-    SvxFieldData*   FindByIndex(USHORT nIndex, TypeId aType);
-    SvxFieldData*   FindByPos(USHORT nPar, xub_StrLen nPos, TypeId aType);
+    sal_uInt16          CountFields(TypeId aType);
+    SvxFieldData*   FindByIndex(sal_uInt16 nIndex, TypeId aType);
+    SvxFieldData*   FindByPos(sal_uInt16 nPar, xub_StrLen nPos, TypeId aType);
 
-    USHORT          GetFieldPar() const     { return nFieldPar; }
+    sal_uInt16          GetFieldPar() const     { return nFieldPar; }
     xub_StrLen      GetFieldPos() const     { return nFieldPos; }
 };
 
@@ -170,7 +170,7 @@ ScUnoEditEngine::~ScUnoEditEngine()
 }
 
 String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-            USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor )
+            sal_uInt16 nPara, sal_uInt16 nPos, Color*& rTxtColor, Color*& rFldColor )
 {
     String aRet(EditEngine::CalcFieldValue( rField, nPara, nPos, rTxtColor, rFldColor ));
     if (eMode != SC_UNO_COLLECT_NONE)
@@ -199,7 +199,7 @@ String ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-USHORT ScUnoEditEngine::CountFields(TypeId aType)
+sal_uInt16 ScUnoEditEngine::CountFields(TypeId aType)
 {
     eMode = SC_UNO_COLLECT_COUNT;
     aFieldType = aType;
@@ -211,7 +211,7 @@ USHORT ScUnoEditEngine::CountFields(TypeId aType)
     return nFieldCount;
 }
 
-SvxFieldData* ScUnoEditEngine::FindByIndex(USHORT nIndex, TypeId aType)
+SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex, TypeId aType)
 {
     eMode = SC_UNO_COLLECT_FINDINDEX;
     nFieldIndex = nIndex;
@@ -224,7 +224,7 @@ SvxFieldData* ScUnoEditEngine::FindByIndex(USHORT nIndex, TypeId aType)
     return pFound;
 }
 
-SvxFieldData* ScUnoEditEngine::FindByPos(USHORT nPar, xub_StrLen nPos, TypeId aType)
+SvxFieldData* ScUnoEditEngine::FindByPos(sal_uInt16 nPar, xub_StrLen nPos, TypeId aType)
 {
     eMode = SC_UNO_COLLECT_FINDPOS;
     nFieldPar = nPar;
@@ -291,15 +291,15 @@ void ScCellFieldsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // XIndexAccess (via XTextFields)
 
-ScCellFieldObj* ScCellFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
+ScCellFieldObj* ScCellFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScCellEditSource*)pEditSource)->GetEditEngine();
     ScUnoEditEngine aTempEngine(pEditEngine);
 
-    if ( aTempEngine.FindByIndex( (USHORT)Index, NULL ) )   // in der Zelle ist der Typ egal
+    if ( aTempEngine.FindByIndex( (sal_uInt16)Index, NULL ) )   // in der Zelle ist der Typ egal
     {
-        USHORT nPar = aTempEngine.GetFieldPar();
+        sal_uInt16 nPar = aTempEngine.GetFieldPar();
         xub_StrLen nPos = aTempEngine.GetFieldPos();
         ESelection aSelection( nPar, nPos, nPar, nPos+1 );      // Feld ist 1 Zeichen
         return new ScCellFieldObj( pDocShell, aCellPos, aSelection );
@@ -634,7 +634,7 @@ void SAL_CALL ScCellFieldObj::attach( const uno::Reference<text::XTextRange>& xT
         uno::Reference<text::XText> xText(xTextRange->getText());
         if (xText.is())
         {
-            xText->insertTextContent( xTextRange, this, TRUE );
+            xText->insertTextContent( xTextRange, this, sal_True );
         }
     }
 }
@@ -700,7 +700,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
         {
             SvxURLField* pURL = (SvxURLField*)pField;   // ist eine Kopie in der ScUnoEditEngine
 
-            BOOL bOk = TRUE;
+            sal_Bool bOk = sal_True;
             if ( aNameString.EqualsAscii( SC_UNONAME_URL ) )
             {
                 if (aValue >>= aStrVal)
@@ -717,7 +717,7 @@ void SAL_CALL ScCellFieldObj::setPropertyValue(
                     pURL->SetTargetFrame( aStrVal );
             }
             else
-                bOk = FALSE;
+                bOk = sal_False;
 
             if (bOk)
             {
@@ -870,7 +870,7 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellFieldObj::getSupportedServiceNames()
 
 //------------------------------------------------------------------------
 
-ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, USHORT nP, USHORT nT) :
+ScHeaderFieldsObj::ScHeaderFieldsObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP, sal_uInt16 nT) :
     pContentObj( pContent ),
     nPart( nP ),
     nType( nT ),
@@ -911,7 +911,7 @@ ScHeaderFieldsObj::~ScHeaderFieldsObj()
 
 // XIndexAccess (via XTextFields)
 
-ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
+ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(sal_Int32 Index) const
 {
     //! Feld-Funktionen muessen an den Forwarder !!!
     ScEditEngineDefaulter* pEditEngine = ((ScHeaderFooterEditSource*)pEditSource)->GetEditEngine();
@@ -929,13 +929,13 @@ ScHeaderFieldObj* ScHeaderFieldsObj::GetObjectByIndex_Impl(INT32 Index) const
         case SC_SERVICE_SHEETFIELD: aTypeId = TYPE(SvxTableField);   break;
         // bei SC_SERVICE_INVALID bleibt TypeId Null
     }
-    SvxFieldData* pData = aTempEngine.FindByIndex( (USHORT)Index, aTypeId );
+    SvxFieldData* pData = aTempEngine.FindByIndex( (sal_uInt16)Index, aTypeId );
     if ( pData )
     {
-        USHORT nPar = aTempEngine.GetFieldPar();
+        sal_uInt16 nPar = aTempEngine.GetFieldPar();
         xub_StrLen nPos = aTempEngine.GetFieldPos();
 
-        USHORT nFieldType = nType;
+        sal_uInt16 nFieldType = nType;
         if ( nFieldType == SC_SERVICE_INVALID )
         {
             if ( pData->ISA( SvxPageField ) )         nFieldType = SC_SERVICE_PAGEFIELD;
@@ -1125,8 +1125,8 @@ sal_Int16 lcl_SvxToUnoFileFormat( SvxFileFormat nSvxValue )
 //UNUSED2008-05      pEditSource = NULL;
 //UNUSED2008-05  }
 
-ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, USHORT nP,
-                                            USHORT nT, const ESelection& rSel) :
+ScHeaderFieldObj::ScHeaderFieldObj(ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
+                                            sal_uInt16 nT, const ESelection& rSel) :
     OComponentHelper( getMutex() ),
     pPropSet( (nT == SC_SERVICE_FILEFIELD) ? lcl_GetFileFieldPropertySet() : lcl_GetHeaderFieldPropertySet() ),
     pContentObj( pContent ),
@@ -1208,7 +1208,7 @@ void SAL_CALL ScHeaderFieldObj::release() throw()
     OComponentHelper::release();
 }
 
-void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, USHORT nP,
+void ScHeaderFieldObj::InitDoc( ScHeaderFooterContentObj* pContent, sal_uInt16 nP,
                                         const ESelection& rSel )
 {
     if ( pContent && !pEditSource )
@@ -1328,7 +1328,7 @@ void SAL_CALL ScHeaderFieldObj::attach( const uno::Reference<text::XTextRange>& 
         uno::Reference<text::XText> xText(xTextRange->getText());
         if (xText.is())
         {
-            xText->insertTextContent( xTextRange, this, TRUE );
+            xText->insertTextContent( xTextRange, this, sal_True );
         }
     }
 }

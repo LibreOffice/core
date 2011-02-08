@@ -73,7 +73,7 @@ ChartItemPool::ChartItemPool():
 
     //text
     ppPoolDefaults[SCHATTR_TEXT_DEGREES             - SCHATTR_START] = new SfxInt32Item(SCHATTR_TEXT_DEGREES, 0);
-    ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,FALSE);
+    ppPoolDefaults[SCHATTR_TEXT_STACKED             - SCHATTR_START] = new SfxBoolItem(SCHATTR_TEXT_STACKED,sal_False);
 
     //statistic
     ppPoolDefaults[SCHATTR_STAT_AVERAGE             - SCHATTR_START] = new SfxBoolItem (SCHATTR_STAT_AVERAGE);
@@ -132,8 +132,8 @@ ChartItemPool::ChartItemPool():
     //axis label
     ppPoolDefaults[SCHATTR_AXIS_SHOWDESCR       - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_SHOWDESCR,0);
     ppPoolDefaults[SCHATTR_AXIS_LABEL_ORDER     - SCHATTR_START] = new SvxChartTextOrderItem(CHTXTORDER_SIDEBYSIDE, SCHATTR_AXIS_LABEL_ORDER);
-    ppPoolDefaults[SCHATTR_AXIS_LABEL_OVERLAP   - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_OVERLAP,FALSE);
-    ppPoolDefaults[SCHATTR_AXIS_LABEL_BREAK     - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_BREAK, FALSE );
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_OVERLAP   - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_OVERLAP,sal_False);
+    ppPoolDefaults[SCHATTR_AXIS_LABEL_BREAK     - SCHATTR_START] = new SfxBoolItem(SCHATTR_AXIS_LABEL_BREAK, sal_False );
 
     //--
     ppPoolDefaults[SCHATTR_SYMBOL_BRUSH         - SCHATTR_START] = new SvxBrushItem(SCHATTR_SYMBOL_BRUSH);
@@ -144,18 +144,18 @@ ChartItemPool::ChartItemPool():
     // new for New Chart
     ppPoolDefaults[SCHATTR_BAR_OVERLAP          - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_OVERLAP,0);
     ppPoolDefaults[SCHATTR_BAR_GAPWIDTH         - SCHATTR_START] = new SfxInt32Item(SCHATTR_BAR_GAPWIDTH,0);
-    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT, FALSE);
+    ppPoolDefaults[SCHATTR_BAR_CONNECT          - SCHATTR_START] = new SfxBoolItem(SCHATTR_BAR_CONNECT, sal_False);
     ppPoolDefaults[SCHATTR_NUM_OF_LINES_FOR_BAR - SCHATTR_START] = new SfxInt32Item( SCHATTR_NUM_OF_LINES_FOR_BAR, 0 );
     ppPoolDefaults[SCHATTR_SPLINE_ORDER         - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_ORDER, 3 );
     ppPoolDefaults[SCHATTR_SPLINE_RESOLUTION    - SCHATTR_START] = new SfxInt32Item( SCHATTR_SPLINE_RESOLUTION, 20 );
     ppPoolDefaults[SCHATTR_DIAGRAM_STYLE        - SCHATTR_START] = new SvxChartStyleItem( CHSTYLE_2D_COLUMN, SCHATTR_DIAGRAM_STYLE );
-    ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, FALSE);
+    ppPoolDefaults[SCHATTR_GROUP_BARS_PER_AXIS  - SCHATTR_START] = new SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, sal_False);
     ppPoolDefaults[SCHATTR_STARTING_ANGLE       - SCHATTR_START] = new SfxInt32Item( SCHATTR_STARTING_ANGLE, 90 );
-    ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, FALSE );
+    ppPoolDefaults[SCHATTR_CLOCKWISE            - SCHATTR_START] = new SfxBoolItem( SCHATTR_CLOCKWISE, sal_False );
 
     ppPoolDefaults[SCHATTR_MISSING_VALUE_TREATMENT    - SCHATTR_START] = new SfxInt32Item(SCHATTR_MISSING_VALUE_TREATMENT, 0);
     ppPoolDefaults[SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS - SCHATTR_START] = new SfxIntegerListItem(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS,aTmp);
-    ppPoolDefaults[SCHATTR_INCLUDE_HIDDEN_CELLS - SCHATTR_START] = new SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, TRUE);
+    ppPoolDefaults[SCHATTR_INCLUDE_HIDDEN_CELLS - SCHATTR_START] = new SfxBoolItem(SCHATTR_INCLUDE_HIDDEN_CELLS, sal_True);
 
     ppPoolDefaults[SCHATTR_AXIS_FOR_ALL_SERIES  - SCHATTR_START] = new SfxInt32Item(SCHATTR_AXIS_FOR_ALL_SERIES, 0);
 
@@ -168,7 +168,7 @@ ChartItemPool::ChartItemPool():
     **************************************************************************/
     pItemInfos = new SfxItemInfo[SCHATTR_END - SCHATTR_START + 1];
 
-    USHORT i;
+    sal_uInt16 i;
     for( i = SCHATTR_START; i <= SCHATTR_END; i++ )
     {
         pItemInfos[i - SCHATTR_START]._nSID = 0;
@@ -197,8 +197,8 @@ ChartItemPool::~ChartItemPool()
 
     delete[] pItemInfos;
 
-    const USHORT nMax = SCHATTR_END - SCHATTR_START + 1;
-    for( USHORT i=0; i<nMax; ++i )
+    const sal_uInt16 nMax = SCHATTR_END - SCHATTR_START + 1;
+    for( sal_uInt16 i=0; i<nMax; ++i )
     {
         SetRefCount(*ppPoolDefaults[i], 0);
         delete ppPoolDefaults[i];
@@ -212,7 +212,7 @@ SfxItemPool* ChartItemPool::Clone() const
     return new ChartItemPool(*this);
 }
 
-SfxMapUnit ChartItemPool::GetMetric(USHORT /* nWhich */) const
+SfxMapUnit ChartItemPool::GetMetric(sal_uInt16 /* nWhich */) const
 {
     return SFX_MAPUNIT_100TH_MM;
 }

@@ -63,19 +63,19 @@ inline long Diff( const Point& rP1, const Point& rP2 )
     return nX+nY;
 }
 
-BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
+sal_Bool FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
 {
     if (!pPV)
-        return FALSE;
+        return sal_False;
 
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
     while (pObject && !bFound)
     {
         if (ScDetectiveFunc::IsNonAlienArrow( pObject ))
         {
-            USHORT nHitLog = (USHORT) pWindow->PixelToLogic(
+            sal_uInt16 nHitLog = (sal_uInt16) pWindow->PixelToLogic(
                                 Size(pView->GetHitTolerancePixel(),0)).Width();
             if (SdrObjectPrimitiveHit(*pObject, rPos, nHitLog, *pPV, 0, false))
             {
@@ -93,11 +93,11 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
                 SCsCOL nCurX = (SCsCOL) pViewData->GetCurX();
                 SCsROW nCurY = (SCsROW) pViewData->GetCurY();
-                BOOL bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
+                sal_Bool bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
                 if ( nCurX == nStartCol && nCurY == nStartRow )
-                    bStart = FALSE;
+                    bStart = sal_False;
                 else if ( nCurX == nEndCol && nCurY == nEndRow )
-                    bStart = TRUE;
+                    bStart = sal_True;
 
                 SCsCOL nDifX;
                 SCsROW nDifY;
@@ -111,9 +111,9 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                     nDifX = nEndCol - nCurX;
                     nDifY = nEndRow - nCurY;
                 }
-                pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, FALSE );
+                pViewShell->MoveCursorRel( nDifX, nDifY, SC_FOLLOW_JUMP, sal_False );
 
-                bFound = TRUE;
+                bFound = sal_True;
             }
         }
 
@@ -148,7 +148,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
         // search the last object (on top) in the object list
-        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, TRUE );
+        SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, sal_True );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
             if( pObj->GetLogicRect().IsInside( rPos ) )

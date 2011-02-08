@@ -126,7 +126,7 @@ public:
         @param rOutEqualRect is filled with a rectangle that denotes the region
                              in which the quick help does not change.
 
-        @return </TRUE>, if a quick help should be shown.
+        @return </sal_True>, if a quick help should be shown.
      */
     virtual bool requestQuickHelp(
         ::Point aAtLogicPosition, bool bIsBalloonHelp,
@@ -703,7 +703,7 @@ private:
         MOVE_OBJECT,
         CENTERED_RESIZE_OBJECT
     };
-    /// @return </TRUE>, if resize/move was successful
+    /// @return </sal_True>, if resize/move was successful
     bool impl_moveOrResizeObject(
         const ::rtl::OUString & rCID, eMoveOrResizeType eType, double fAmountLogicX, double fAmountLogicY );
     bool impl_DragDataPoint( const ::rtl::OUString & rCID, double fOffset );

@@ -126,12 +126,12 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XRangeSelectionListener >
         getSelectionRangeListener();
 
-    /** @return </TRUE>, if the edit field contains a valid range entry. if no
-        XCellRangesAccess can be obtained, </TRUE> is returned.
+    /** @return </sal_True>, if the edit field contains a valid range entry. if no
+        XCellRangesAccess can be obtained, </sal_True> is returned.
      */
     bool isRangeFieldContentValid( Edit & rEdit );
 
-    /** @return </TRUE>, if the tab-page is in a consistent (commitable) state
+    /** @return </sal_True>, if the tab-page is in a consistent (commitable) state
      */
     bool isValid();
     void setDirty();

@@ -107,7 +107,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     SdrModel*   pDoc    = pView->GetModel();
 
     const SfxItemSet *pArgs = rReq.GetArgs();
-    USHORT nNewId = rReq.GetSlot();
+    sal_uInt16 nNewId = rReq.GetSlot();
 
     if ( nNewId == SID_DRAW_CHART )
     {
@@ -124,7 +124,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if (nNewId == SID_INSERT_DRAW && pArgs)
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( SID_INSERT_DRAW, TRUE, &pItem ) == SFX_ITEM_SET &&
+        if ( pArgs->GetItemState( SID_INSERT_DRAW, sal_True, &pItem ) == SFX_ITEM_SET &&
              pItem->ISA( SvxDrawToolItem ) )
         {
             SvxDrawToolEnum eSel = (SvxDrawToolEnum)((const SvxDrawToolItem*)pItem)->GetValue();
@@ -147,7 +147,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
                 case SVX_SNAP_DRAW_CAPTION_VERTICAL: nNewId = SID_DRAW_CAPTION_VERTICAL; break;
             }
         }
-        else                    // USHORT-Item vom Controller
+        else                    // sal_uInt16-Item vom Controller
         {
             rReq.Done();
             return;
@@ -157,11 +157,11 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( nNewId == SID_DRAW_SELECT )
         nNewId = SID_OBJECT_SELECT;
 
-    USHORT nNewFormId = 0;
+    sal_uInt16 nNewFormId = 0;
     if ( nNewId == SID_FM_CREATE_CONTROL && pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, TRUE, &pItem ) == SFX_ITEM_SET &&
+        if ( pArgs->GetItemState( SID_FM_CONTROL_IDENTIFIER, sal_True, &pItem ) == SFX_ITEM_SET &&
              pItem->ISA( SfxUInt16Item ) )
             nNewFormId = ((const SfxUInt16Item*)pItem)->GetValue();
     }
@@ -170,7 +170,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     if ( pArgs )
     {
         const SfxPoolItem* pItem;
-        if ( pArgs->GetItemState( nNewId, TRUE, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
+        if ( pArgs->GetItemState( nNewId, sal_True, &pItem ) == SFX_ITEM_SET && pItem->ISA( SfxStringItem ) )
             sStringItemValue = static_cast<const SfxStringItem*>(pItem)->GetValue();
     }
     bool bSwitchCustom = ( sStringItemValue.Len() && sDrawCustom.Len() && sStringItemValue != sDrawCustom );
@@ -181,15 +181,15 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     //  #97016# CTRL-SID_OBJECT_SELECT is used to select the first object,
     //  but not if SID_OBJECT_SELECT is the result of clicking a create function again,
     //  so this must be tested before changing nNewId below.
-    BOOL bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
+    sal_Bool bSelectFirst = ( nNewId == SID_OBJECT_SELECT && (rReq.GetModifier() & KEY_MOD1) );
 
-    BOOL bEx = IsDrawSelMode();
+    sal_Bool bEx = IsDrawSelMode();
     if ( rReq.GetModifier() & KEY_MOD1 )
     {
         //  #97016# always allow keyboard selection also on background layer
         //  #98185# also allow creation of default objects if the same object type
         //  was already active
-        bEx = TRUE;
+        bEx = sal_True;
     }
     else if ( nNewId == nDrawSfxId && ( nNewId != SID_FM_CREATE_CONTROL ||
                                     nNewFormId == nFormSfxId || nNewFormId == 0 ) && !bSwitchCustom )
@@ -203,7 +203,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         if ( nNewId == SID_FM_CREATE_CONTROL )
         {
             GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-            GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+            GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
         }
 
@@ -211,13 +211,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         nNewId = SID_OBJECT_SELECT;
     }
     else
-        bEx = TRUE;
+        bEx = sal_True;
 
     if ( nDrawSfxId == SID_FM_CREATE_CONTROL && nNewId != nDrawSfxId )
     {
         //  Wechsel von Control- zu Zeichenfunktion -> im Control-Controller deselektieren
         GetViewData()->GetDispatcher().Execute(SID_FM_LEAVE_CREATE);
-        GetViewFrame()->GetBindings().InvalidateAll(FALSE);
+        GetViewFrame()->GetBindings().InvalidateAll(sal_False);
         //! was fuer einen Slot braucht der komische Controller wirklich, um das anzuzeigen????
     }
 
@@ -232,7 +232,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         {
             // select first object
             pView->UnmarkAllObj();
-            pView->MarkNextObj(TRUE);
+            pView->MarkNextObj(sal_True);
 
             // ...and make it visible
             if(pView->AreObjectsMarked())
@@ -247,13 +247,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     {
         if ( nNewId == SID_DRAW_TEXT || nNewId == SID_DRAW_TEXT_VERTICAL ||
                 nNewId == SID_DRAW_TEXT_MARQUEE || nNewId == SID_DRAW_NOTEEDIT )
-            SetDrawTextShell( TRUE );
+            SetDrawTextShell( sal_True );
         else
         {
             if ( bEx || pView->GetMarkedObjectList().GetMarkCount() != 0 )
                 SetDrawShellOrSub();
             else
-                SetDrawShell( FALSE );
+                SetDrawShell( sal_False );
         }
     }
 
@@ -287,7 +287,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
         case SID_DRAW_CAPTION:
         case SID_DRAW_CAPTION_VERTICAL:
             pTabView->SetDrawFuncPtr(new FuConstRectangle(this, pWin, pView, pDoc, aNewReq));
-            pView->SetFrameDragSingles( FALSE );
+            pView->SetFrameDragSingles( sal_False );
             rBindings.Invalidate( SID_BEZIER_EDIT );
             break;
 
@@ -312,13 +312,13 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
             break;
 
         case SID_FM_CREATE_CONTROL:
-            SetDrawFormShell(TRUE);
+            SetDrawFormShell(sal_True);
             pTabView->SetDrawFuncPtr(new FuConstUnoControl(this, pWin, pView, pDoc, aNewReq));
             nFormSfxId = nNewFormId;
             break;
 
         case SID_DRAW_CHART:
-//UNUSED2008-05  bChartDlgIsEdit = FALSE;
+//UNUSED2008-05  bChartDlgIsEdit = sal_False;
             pTabView->SetDrawFuncPtr(new FuMarkRect(this, pWin, pView, pDoc, aNewReq));
             break;
 
@@ -410,7 +410,7 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
 void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 {
     SfxWhichIter    aIter(rSet);
-    USHORT          nWhich = aIter.FirstWhich();
+    sal_uInt16          nWhich = aIter.FirstWhich();
 
     while ( nWhich )
     {
@@ -419,7 +419,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
             case SID_INSERT_DRAW:
                 {
                     //  SID_OBJECT_SELECT nur, wenn "harter" Selektionsmodus
-                    USHORT nPutId = nDrawSfxId;
+                    sal_uInt16 nPutId = nDrawSfxId;
                     if ( nPutId == SID_OBJECT_SELECT && !IsDrawSelMode() )
                         nPutId = USHRT_MAX;
                     // nur die Images, die auch auf dem Controller liegen
@@ -451,7 +451,7 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
 
             case SID_DRAW_CHART:
                 {
-                    BOOL bOle = GetViewFrame()->GetFrame().IsInPlace();
+                    sal_Bool bOle = GetViewFrame()->GetFrame().IsInPlace();
                     if ( bOle || !SvtModuleOptions().IsChart() )
                         rSet.DisableItem( nWhich );
                 }
@@ -465,13 +465,13 @@ void ScTabViewShell::GetDrawState(SfxItemSet &rSet)
     }
 }
 
-BOOL ScTabViewShell::SelectObject( const String& rName )
+sal_Bool ScTabViewShell::SelectObject( const String& rName )
 {
     ScDrawView* pView = GetViewData()->GetScDrawView();
     if (!pView)
-        return FALSE;
+        return sal_False;
 
-    BOOL bFound = pView->SelectObject( rName );
+    sal_Bool bFound = pView->SelectObject( rName );
     // DrawShell etc. is handled in MarkListHasChanged
 
     return bFound;

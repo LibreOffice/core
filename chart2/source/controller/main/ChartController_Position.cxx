@@ -72,16 +72,16 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, Rectangle& r
 
     const SfxPoolItem* pPoolItem=NULL;
     //read position
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,sal_True,&pPoolItem))
         nPosX=((const SfxInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,sal_True,&pPoolItem))
         nPosY=((const SfxInt32Item*)pPoolItem)->GetValue();
     //read size
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,sal_True,&pPoolItem))
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,sal_True,&pPoolItem))
         nSizY=((const SfxUInt32Item*)pPoolItem)->GetValue();
-    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,TRUE,&pPoolItem))
+    if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_SIZE_POINT,sal_True,&pPoolItem))
         eRP=(RECT_POINT)((const SfxAllEnumItem*)pPoolItem)->GetValue();
 
     switch( eRP )
