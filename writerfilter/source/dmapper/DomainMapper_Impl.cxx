@@ -602,6 +602,59 @@ void lcl_MoveBorderPropertiesToFrame(PropertySequence & aPropSequence,
    }
 }
 
+void lcl_CorrectIndents(PropertySequence & aPropSeq)
+{
+    try
+    {
+        ::rtl::OUString str(RTL_CONSTASCII_USTRINGPARAM(__FUNCTION__));
+
+        uno::Any aAny;
+
+        sal_Int32 nLeftMargin = 0;
+        aAny = aPropSeq.get(PROP_PARA_LEFT_MARGIN);
+        if (aAny.hasValue())
+            aAny >>= nLeftMargin;
+
+        aAny = aPropSeq.get(PROP_LEFT_BORDER_DISTANCE);
+
+        if (aAny.hasValue())
+        {
+            sal_Int32 nLeftBorderDistance = 0;
+            aAny >>= nLeftBorderDistance;
+
+            nLeftMargin -= nLeftBorderDistance;
+
+            aPropSeq.set(PROP_PARA_LEFT_MARGIN, nLeftMargin);
+        }
+
+        sal_Int32 nRightMargin = 0;
+        aAny = aPropSeq.get(PROP_PARA_RIGHT_MARGIN);
+        if (aAny.hasValue())
+            aAny >>= nRightMargin;
+
+        aAny = aPropSeq.get(PROP_RIGHT_BORDER_DISTANCE);
+
+        if (aAny.hasValue())
+        {
+            sal_Int32 nRightBorderDistance = 0;
+            aAny >>= nRightBorderDistance;
+
+            nRightMargin -= nRightBorderDistance;
+
+            aPropSeq.set(PROP_PARA_RIGHT_MARGIN, nRightMargin);
+        }
+    }
+    catch (const uno::Exception& rEx)
+    {
+        (void) rEx;
+    }
+    catch (const dmapper::Exception & rEx)
+    {
+        (void) rEx;
+    }
+
+}
+
 /*-- 04.01.2008 10:59:19---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -896,6 +949,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                             lcl_MoveBorderPropertiesToFrame(aPropSequence,
                                                             rAppendContext.pLastParagraphProperties->GetStartingRange(),
                                                             rAppendContext.pLastParagraphProperties->GetEndingRange());
+                            lcl_CorrectIndents(aPropSequence);
                         }
                         //frame conversion has to be executed after table conversion
                         RegisterFrameConversion(rAppendContext.pLastParagraphProperties->GetStartingRange(),
@@ -941,6 +995,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
                     pPropSeq->set(PROP_DROP_CAP_FORMAT, aAny);
                 }
+
+                lcl_CorrectIndents(*pPropSeq);
 
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( pPropSeq->getSequence() );
