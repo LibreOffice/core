@@ -2,7 +2,6 @@ http://hg.services.openoffice.org/binaries
 63ddc5116488985e820075e65fbe6aa4-openssl-0.9.8o.tar.gz
 09357cc74975b01714e00c5899ea1881-pixman-0.12.0.tar.gz
 0b49ede71c21c0599b0cc19b353a6cb3-README_apache-commons.txt
-68dd2e8253d9a7930e9fd50e2d7220d0-hunspell-1.2.9.tar.gz
 128cfc86ed5953e57fe0f5ae98b62c2e-libtextcat-2.2.tar.gz
 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
 1756c4fa6c616ae15973c104cd8cb256-Adobe-Core35_AFMs-314.tar.gz
@@ -80,6 +79,7 @@ e3738abd0d3ce1870dc1fd1f22bba5b1-icu4c-4_2_1-src.tgz
 9e436bff44c60dc8b97cba0c7fc11a5c-libwps-0.2.0.tar.bz2
 5d991377b0ee1ae396c82963bc0084c1-mdds_0.5.1.tar.bz2
 f02578f5218f217a9f20e9c30e119c6a-boost_1_44_0.tar.bz2
+9ed97fce60a9a65852402248a6659492-hunspell-1.3.1.tar.gz
 http://download.go-oo.org/extern
 185d60944ea767075d27247c3162b3bc-unowinreg.dll
 http://www.numbertext.org/linux
