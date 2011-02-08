@@ -71,7 +71,6 @@ void SAL_CALL osl_breakDebug(void)
 void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
 {
     va_list args;
-    int written = 0;
 
     va_start(args, lpszFormat);
 
@@ -88,7 +87,7 @@ void SAL_CALL osl_trace(const sal_Char* lpszFormat, ...)
     if ( IsDebuggerPresent() )
     {
         sal_Char    szMessage[512];
-        written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
+        int written = _vsnprintf( szMessage, sizeof(szMessage) - 2, lpszFormat, args );
         if ( written == -1 )
             written = sizeof(szMessage) - 2;
         szMessage[ written++ ] = '\n';
@@ -112,7 +111,6 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 #else
     HWND hWndParent;
     UINT nFlags;
-    int  nCode;
 
     /* get app name or NULL if unknown (don't call assert) */
     LPCSTR lpszAppName = "Error";
@@ -149,7 +147,7 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
         _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
                    szMessage);
 
-        nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
+        int nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
 
         if (nCode == IDYES)
             FatalExit(-1);
