@@ -866,13 +866,13 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
         }
     }
     Color aTextColor;
-    BOOL bSetTextColor = FALSE;
+    sal_Bool bSetTextColor = sal_False;
     //#104195# when the window color is the same as the text color it has to be changed
     Color aWinCol = rStyleSettings.GetWindowColor();
     Color aRCheckCol = rStyleSettings.GetRadioCheckTextColor();
     if(aWinCol == aRCheckCol )
     {
-        bSetTextColor = TRUE;
+        bSetTextColor = sal_True;
         aRCheckCol.Invert();
         //if inversion didn't work (gray) then it's set to black
         if(aRCheckCol == aWinCol)
@@ -1121,11 +1121,11 @@ ColorConfigCtrl_Impl::ColorConfigCtrl_Impl(
     sal_Int32 nThirdWidth = aScrollWindow.aWindows[0]->GetPosPixel().X() - nFirstWidth - nSecondWidth;
 
     const WinBits nHeadBits = HIB_VCENTER | HIB_FIXED| HIB_FIXEDPOS;
-    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (USHORT)nHeadBits|HIB_CENTER);
-    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (USHORT)nHeadBits|HIB_LEFT);
-    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 1, sOn, nFirstWidth, (sal_uInt16)nHeadBits|HIB_CENTER);
+    aHeaderHB.InsertItem( 2, sUIElem, nSecondWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
+    aHeaderHB.InsertItem( 3, sColSetting, nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
     aHeaderHB.InsertItem( 4, sPreview,
-            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (USHORT)nHeadBits|HIB_LEFT);
+            aHeaderHB.GetSizePixel().Width() - nFirstWidth - nSecondWidth - nThirdWidth, (sal_uInt16)nHeadBits|HIB_LEFT);
     aHeaderHB.Show();
 
     aVScroll.SetRangeMin(0);
@@ -1197,7 +1197,7 @@ void ColorConfigCtrl_Impl::Update()
         if(ANCHOR == i)
             continue;
         const ColorConfigValue& rColorEntry = pColorConfig->GetColorValue(ColorConfigEntry(i));
-        if(COL_AUTO == (UINT32)rColorEntry.nColor)
+        if(COL_AUTO == (sal_uInt32)rColorEntry.nColor)
         {
             if(aScrollWindow.aColorBoxes[i])
                 aScrollWindow.aColorBoxes[i]->SelectEntryPos(0);
@@ -1257,7 +1257,7 @@ void ColorConfigCtrl_Impl::Update()
  ---------------------------------------------------------------------------*/
 sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, bool _bShow)
 {
-    BOOL bHide = TRUE;
+    sal_Bool bHide = sal_True;
     if(pWindow)
     {
         Point aPos = pWindow->GetPosPixel();
@@ -1271,7 +1271,7 @@ sal_Bool lcl_MoveAndShow(Window* pWindow, long nOffset, long nMaxVisible, bool _
 }
 IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
 {
-    aScrollWindow.SetUpdateMode(TRUE);
+    aScrollWindow.SetUpdateMode(sal_True);
     sal_Int16 i;
     long nOffset = aScrollWindow.aColorBoxes[1]->GetPosPixel().Y() - aScrollWindow.aColorBoxes[0]->GetPosPixel().Y();
     nOffset *= (nScrollPos - pScrollBar->GetThumbPos());
@@ -1291,7 +1291,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
         lcl_MoveAndShow(aScrollWindow.aCheckBoxes[i], nOffset, nWindowHeight, bShowCtrl);
         lcl_MoveAndShow(aScrollWindow.aFixedTexts[i], nOffset, nWindowHeight, bShowCtrl);
         lcl_MoveAndShow(aScrollWindow.aWindows[i]   , nOffset, nWindowHeight, bShowCtrl);
-        BOOL bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl);
+        sal_Bool bShow = lcl_MoveAndShow(aScrollWindow.aColorBoxes[i], nOffset, nWindowHeight, bShowCtrl);
         if(bShow)
         {
             if(nFirstVisible == -1)
@@ -1345,7 +1345,7 @@ IMPL_LINK(ColorConfigCtrl_Impl, ScrollHdl, ScrollBar*, pScrollBar)
         Point aPos = aScrollWindow.aChapters[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapters[i]->SetPosPixel(aPos);
         aPos = aScrollWindow.aChapterWins[i]->GetPosPixel(); aPos.Y() += nOffset; aScrollWindow.aChapterWins[i]->SetPosPixel(aPos);
     }
-    aScrollWindow.SetUpdateMode(TRUE);
+    aScrollWindow.SetUpdateMode(sal_True);
     return 0;
 }
 /* -----------------------------29.04.2002 17:02------------------------------
@@ -1356,7 +1356,7 @@ long ColorConfigCtrl_Impl::PreNotify( NotifyEvent& rNEvt )
     if(rNEvt.GetType() == EVENT_COMMAND)
     {
         const CommandEvent* pCEvt = rNEvt.GetCommandEvent();
-        USHORT nCmd = pCEvt->GetCommand();
+        sal_uInt16 nCmd = pCEvt->GetCommand();
         if( COMMAND_WHEEL == nCmd )
         {
             Command(*pCEvt);
@@ -1530,7 +1530,7 @@ SvxColorOptionsTabPage::SvxColorOptionsTabPage(
        aSaveSchemePB(   this, CUI_RES( PB_SAVESCHEME) ),
        aDeleteSchemePB( this, CUI_RES( PB_DELETESCHEME ) ),
        aCustomColorsFL( this, CUI_RES( FL_CUSTOMCOLORS ) ),
-       bFillItemSetCalled(FALSE),
+       bFillItemSetCalled(sal_False),
        pColorConfig(0),
        pExtColorConfig(0),
        pColorConfigCT(  new ColorConfigCtrl_Impl(this, CUI_RES( CT_COLORCONFIG ) ))
@@ -1575,9 +1575,9 @@ SfxTabPage* SvxColorOptionsTabPage::Create( Window* pParent, const SfxItemSet& r
 /* -----------------------------25.03.2002 10:47------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
+sal_Bool SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
 {
-    bFillItemSetCalled = TRUE;
+    bFillItemSetCalled = sal_True;
     if(aColorSchemeLB.GetSavedValue() != aColorSchemeLB.GetSelectEntryPos())
     {
         pColorConfig->SetModified();
@@ -1587,7 +1587,7 @@ BOOL SvxColorOptionsTabPage::FillItemSet( SfxItemSet&  )
         pColorConfig->Commit();
     if(pExtColorConfig->IsModified())
         pExtColorConfig->Commit();
-    return TRUE;
+    return sal_True;
 }
 /* -----------------------------25.03.2002 10:47------------------------------
 

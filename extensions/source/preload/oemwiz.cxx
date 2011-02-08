@@ -126,7 +126,7 @@ namespace preload
     {
           FreeResource();
           aDlgTitle = GetText();
-          aPrevPB.Enable(FALSE);
+          aPrevPB.Enable(sal_False);
           aNextST = aNextPB.GetText();
           aPrevPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
           aNextPB.SetClickHdl(LINK(this, OEMPreloadDialog, NextPrevPageHdl));
@@ -178,7 +178,7 @@ namespace preload
         {
             case OEM_WELCOME:
                 aNextPB.SetText(aNextST);
-                aNextPB.Enable(TRUE);
+                aNextPB.Enable(sal_True);
             break;
             case OEM_LICENSE:
                 sTitle += aLicense;
@@ -208,7 +208,7 @@ namespace preload
         sFileName = aURLObject.GetMainURL(INetURLObject::DECODE_TO_IURI);
         sFileName += rFileName;
 
-        SfxMedium aMedium( sFileName,STREAM_READ, TRUE );
+        SfxMedium aMedium( sFileName,STREAM_READ, sal_True );
         SvStream* pInStream = aMedium.GetInStream();
         if( !pInStream )
             return sal_False;
@@ -258,7 +258,7 @@ namespace preload
         aArrow(this, ModuleRes(IMG_ARROW)),
         aStrAccept( ModuleRes(LICENCE_ACCEPT) ),
         aStrNotAccept( ModuleRes(LICENCE_NOTACCEPT) ),
-        bEndReached(FALSE),
+        bEndReached(sal_False),
         pPreloadDialog(pParent)
     {
         FreeResource();
@@ -324,7 +324,7 @@ namespace preload
     //------------------------------------------------------------------------
     IMPL_LINK( OEMLicenseTabPage, EndReachedHdl, LicenceView *, EMPTYARG )
     {
-        bEndReached = TRUE;
+        bEndReached = sal_True;
 
         EnableControls();
         aCBAccept.GrabFocus();
@@ -345,7 +345,7 @@ namespace preload
     {
         if( !bEndReached &&
             ( aLicenseML.IsEndReached() || !aLicenseML.GetText().Len() ) )
-            bEndReached = TRUE;
+            bEndReached = sal_True;
 
         if ( bEndReached )
         {
@@ -371,7 +371,7 @@ namespace preload
             if ( ! pNext->IsEnabled() )
             {
                 pPreloadDialog->SetCancelString( aOldCancelText );
-                pNext->Enable(TRUE);
+                pNext->Enable(sal_True);
             }
         }
         else
@@ -380,7 +380,7 @@ namespace preload
             if ( pNext->IsEnabled() )
             {
                 pPreloadDialog->SetCancelString( aStrNotAccept );
-                pNext->Enable(FALSE);
+                pNext->Enable(sal_False);
             }
         }
     }
@@ -417,20 +417,20 @@ namespace preload
     }
 
     //------------------------------------------------------------------------
-    BOOL LicenceView::IsEndReached() const
+    sal_Bool LicenceView::IsEndReached() const
     {
-        BOOL bEndReached;
+        sal_Bool bEndReached;
 
         ExtTextView*    pView = GetTextView();
         ExtTextEngine*  pEdit = GetTextEngine();
-        ULONG           nHeight = pEdit->GetTextHeight();
+        sal_uLong           nHeight = pEdit->GetTextHeight();
         Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
         Point           aBottom( 0, aOutSize.Height() );
 
-        if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-            bEndReached = TRUE;
+        if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+            bEndReached = sal_True;
         else
-            bEndReached = FALSE;
+            bEndReached = sal_False;
 
         return bEndReached;
     }
@@ -440,8 +440,8 @@ namespace preload
     {
         if ( rHint.IsA( TYPE(TextHint) ) )
         {
-            BOOL    bLastVal = EndReached();
-            ULONG   nId = ((const TextHint&)rHint).GetId();
+            sal_Bool    bLastVal = EndReached();
+            sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
             if ( nId == TEXT_HINT_PARAINSERTED )
             {

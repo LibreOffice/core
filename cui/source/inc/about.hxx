@@ -64,10 +64,10 @@ private:
     long            m_nDeltaWidth;
     int             m_nPendingScrolls;
 
-    BOOL            bNormal;
+    sal_Bool            bNormal;
 
 protected:
-    virtual BOOL    Close();
+    virtual sal_Bool    Close();
     virtual void    Paint( const Rectangle& );
 
 public:

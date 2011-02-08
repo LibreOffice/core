@@ -194,7 +194,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 
     m_aOk.SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
 
-//    m_aOk.Enable( FALSE );
+//    m_aOk.Enable( sal_False );
 
     if (nMaxPasswdLen)
     {
@@ -212,7 +212,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 
     m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
     if (!bIsPasswordToModify)
-        m_aMoreFewerOptionsBTN.Hide( TRUE );
+        m_aMoreFewerOptionsBTN.Hide( sal_True );
 }
 
 
