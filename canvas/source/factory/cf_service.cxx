@@ -47,7 +47,7 @@
 #include <boost/bind.hpp>
 #include <vector>
 #include <utility>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
@@ -270,7 +270,7 @@ Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     std::transform(m_aAvailableImplementations.begin(),
                    m_aAvailableImplementations.end(),
                    aServiceNames.getArray(),
-                   std::select1st<AvailPair>());
+                   o3tl::select1st<AvailPair>());
     return aServiceNames;
 }
 
@@ -355,7 +355,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                              boost::bind(&OUString::equals,
                                          boost::cref(serviceName),
                                          boost::bind(
-                                             std::select1st<CachePair>(),
+                                             o3tl::select1st<CachePair>(),
                                              _1)))) != aEnd )
     {
         Reference<XInterface> xCanvas( use( aMatch->second, args, xContext ) );
@@ -371,7 +371,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                                        boost::bind(&OUString::equals,
                                                    boost::cref(serviceName),
                                                    boost::bind(
-                                                       std::select1st<AvailPair>(),
+                                                       o3tl::select1st<AvailPair>(),
                                                        _1)))) == aAvailEnd )
     {
         return Reference<XInterface>();
@@ -384,7 +384,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                                     boost::bind(&OUString::equals,
                                                 boost::cref(serviceName),
                                                 boost::bind(
-                                                    std::select1st<AvailPair>(),
+                                                    o3tl::select1st<AvailPair>(),
                                                     _1)))) == aAAEnd )
     {
         return Reference<XInterface>();
@@ -397,7 +397,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                                        boost::bind(&OUString::equals,
                                                    boost::cref(serviceName),
                                                    boost::bind(
-                                                       std::select1st<AvailPair>(),
+                                                       o3tl::select1st<AvailPair>(),
                                                        _1)))) == aAccelEnd )
     {
         return Reference<XInterface>();

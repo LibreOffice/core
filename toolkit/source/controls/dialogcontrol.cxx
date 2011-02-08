@@ -70,7 +70,7 @@
 #include <map>
 #include <boost/unordered_map.hpp>
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 #include "tools/urlobj.hxx"
 #include "osl/file.hxx"
 #include <com/sun/star/awt/XSimpleTabController.hpp>
@@ -477,7 +477,7 @@ void SAL_CALL UnoControlDialogModel::dispose(  ) throw(RuntimeException)
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aChildModels.begin(),                           // target location
-        ::std::select1st< UnoControlModelHolder >( )    // operation to apply -> select the XControlModel part
+        ::o3tl::select1st< UnoControlModelHolder >( )   // operation to apply -> select the XControlModel part
     );
 
     // now dispose
@@ -780,7 +780,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getElementNames() throw(Runti
     ::std::transform(
         maModels.begin(), maModels.end(),               // source range
         aNames.getArray(),                              // target range
-        ::std::select2nd< UnoControlModelHolder >()     // operator to apply: select the second element (the name)
+        ::o3tl::select2nd< UnoControlModelHolder >()        // operator to apply: select the second element (the name)
     );
 
     return aNames;
@@ -992,7 +992,7 @@ Sequence< Reference< XControlModel > > SAL_CALL UnoControlDialogModel::getContro
     ::std::transform(
             aSortedModels.begin(), aSortedModels.end(),
             ::std::copy( aUnindexedModels.begin(), aUnindexedModels.end(), aReturn.getArray() ),
-            ::std::select2nd< MapIndexToModel::value_type >( )
+            ::o3tl::select2nd< MapIndexToModel::value_type >( )
         );
 
     return aReturn;
