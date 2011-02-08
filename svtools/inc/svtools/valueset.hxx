@@ -237,8 +237,8 @@ gewuenschten WinBits (vor Show) mit SetStyle() gesetzt werden.
 // - ValueSet -
 // ------------
 
-#define VALUESET_APPEND         ((size_t)-1)
-#define VALUESET_ITEM_NOTFOUND  ((size_t)-1)
+#define VALUESET_APPEND         ((USHORT)-1)
+#define VALUESET_ITEM_NOTFOUND  ((USHORT)-1)
 
 class SVT_DLLPUBLIC ValueSet : public Control
 {
