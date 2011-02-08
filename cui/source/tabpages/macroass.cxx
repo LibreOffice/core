@@ -169,7 +169,7 @@ void _SfxMacroTabPage::EnableButtons()
         mpImpl->pAssignPB->Enable( !mpImpl->bReadOnly && !sScriptURI.EqualsIgnoreCaseAscii( sEventMacro ) );
     }
     else
-        mpImpl->pAssignPB->Enable( FALSE );
+        mpImpl->pAssignPB->Enable( sal_False );
 }
 
 _SfxMacroTabPage::_SfxMacroTabPage( Window* pParent, const ResId& rResId, const SfxItemSet& rAttrSet )

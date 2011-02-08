@@ -356,7 +356,7 @@ namespace
                     if ( xLimitToDocument != aDocument.getDocument() )
                     {
                         // error
-                        bError = TRUE;
+                        bError = sal_True;
                         ErrorBox( NULL, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_ERRORCHOOSEMACRO ) ) ).Execute();
                     }
                 }
