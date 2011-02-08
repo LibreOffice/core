@@ -78,7 +78,6 @@
 #ifdef _ADO_DATALINK_BROWSE_
 #if defined( WNT )
     #include <prewin.h>
-    #include <windows.h>
     #include <postwin.h>
 #endif
 #include <vcl/sysdata.hxx>
