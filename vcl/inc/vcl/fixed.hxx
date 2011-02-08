@@ -167,10 +167,10 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
-                              const Point& rPos, const Size& rSize );
 
 protected:
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+                              const Point& rPos, const Size& rSize );
     SAL_DLLPRIVATE void    ImplLoadRes( const ResId& rResId );
 
 public:

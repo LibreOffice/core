@@ -178,7 +178,6 @@ toolkit.UnoControlDialogModel::com::sun::star::lang::XComponent
 toolkit.UnoControlFileControlModel::com::sun::star::lang::XComponent
 toolkit.UnoControlGroupBox::com::sun::star::lang::XComponent
 toolkit.UnoControlContainer::com::sun::star::lang::XComponent
-toolkit.MutableTreeDataModel::com::sun::star::lang::XComponent
 toolkit.UnoControlFixedText::com::sun::star::lang::XComponent
 toolkit.UnoControlListBox::com::sun::star::lang::XComponent
 toolkit.UnoControlCheckBoxModel::com::sun::star::lang::XComponent

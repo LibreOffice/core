@@ -59,7 +59,6 @@ $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/mutexhelper.hxx
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/property.hxx,toolkit/helper/property.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/servicenames.hxx,toolkit/helper/servicenames.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/solarrelease.hxx,toolkit/helper/solarrelease.hxx))
-$(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/throbberimpl.hxx,toolkit/helper/throbberimpl.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/tkresmgr.hxx,toolkit/helper/tkresmgr.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unomemorystream.hxx,toolkit/helper/unomemorystream.hxx))
 $(eval $(call gb_Package_add_file,toolkit_inc,inc/toolkit/helper/unopropertyarrayhelper.hxx,toolkit/helper/unopropertyarrayhelper.hxx))

@@ -291,7 +291,7 @@ IMPL_LINK( MyWin, SelectHdl, ListBox*, )
         aFixedSize.Width() += 10;
         aFixedSize.Height() += 10;
         m_aImage.SetSizePixel( aFixedSize );
-        m_aImage.SetBitmap( BitmapEx( aBitmap ) );
+        m_aImage.SetImage( Image( BitmapEx( aBitmap ) ) );
     }
     return 0;
 }

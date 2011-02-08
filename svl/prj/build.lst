@@ -1,3 +1,4 @@
 sl	svl	:	l10n rsc offuh ucbhelper unotools cppu cppuhelper comphelper sal sot  LIBXSLT:libxslt NULL
 sl	svl								usr1	-	all	svl_mkout NULL
 sl	svl\prj	nmake	-	all	svl_prj NULL
+sl svl\qa\complex\passwordcontainer nmake - all svl_qa_complex_passwordcontainer NULL

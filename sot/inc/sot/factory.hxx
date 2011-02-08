@@ -73,7 +73,6 @@ public:
     void                PutSuperClass( const SotFactory * );
     virtual void *      CreateInstance( SotObject ** ppObj = NULL ) const;
     void *              CastAndAddRef( SotObject * ) const;
-    void *              AggCastAndAddRef( SotObject * ) const;
 
     BOOL                Is( const SotFactory * pSuperClass ) const;
     const SotFactory *  GetSuper( USHORT nPos ) const

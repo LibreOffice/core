@@ -311,9 +311,9 @@ void TextView::DeleteSelected()
 {
 //  HideSelection();
 
-    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DELETE );
+    mpImpl->mpTextEngine->UndoActionStart();
     TextPaM aPaM = mpImpl->mpTextEngine->ImpDeleteText( mpImpl->maSelection );
-    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_DELETE );
+    mpImpl->mpTextEngine->UndoActionEnd();
 
     ImpSetSelection( aPaM );
     mpImpl->mpTextEngine->FormatAndUpdate( this );
@@ -695,7 +695,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                     default: break;
                     }
 
-                    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DELETE );
+                    mpImpl->mpTextEngine->UndoActionStart();
                     if(mpImpl->mbSupportProtectAttribute)
                     {
                         //expand selection to include all protected content - if there is any
@@ -717,7 +717,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                         }
                     }
                     aCurSel = ImpDelete( nDel, nMode );
-                    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_DELETE );
+                    mpImpl->mpTextEngine->UndoActionEnd();
                     bModified = TRUE;
                     bAllowIdle = FALSE;
                 }
@@ -745,7 +745,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                 if ( !mpImpl->mbReadOnly && !rKeyEvent.GetKeyCode().IsMod1() &&
                         !rKeyEvent.GetKeyCode().IsMod2() && ImplCheckTextLen( 'x' ) )
                 {
-                    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+                    mpImpl->mpTextEngine->UndoActionStart();
                     aCurSel = mpImpl->mpTextEngine->ImpInsertParaBreak( aCurSel );
                     if ( mpImpl->mbAutoIndent )
                     {
@@ -760,7 +760,7 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
                         if ( n )
                             aCurSel = mpImpl->mpTextEngine->ImpInsertText( aCurSel, pPrev->GetText().Copy( 0, n ) );
                     }
-                    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+                    mpImpl->mpTextEngine->UndoActionEnd();
                     bModified = TRUE;
                 }
                 else
@@ -1122,21 +1122,21 @@ void TextView::Scroll( long ndX, long ndY )
 void TextView::Undo()
 {
     mpImpl->mpTextEngine->SetActiveView( this );
-    mpImpl->mpTextEngine->GetUndoManager().Undo( 1 );
+    mpImpl->mpTextEngine->GetUndoManager().Undo();
 }
 
 void TextView::Redo()
 {
     mpImpl->mpTextEngine->SetActiveView( this );
-    mpImpl->mpTextEngine->GetUndoManager().Redo( 0 );
+    mpImpl->mpTextEngine->GetUndoManager().Redo();
 }
 
 void TextView::Cut()
 {
-    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_CUT );
+    mpImpl->mpTextEngine->UndoActionStart();
     Copy();
     DeleteSelected();
-    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_CUT );
+    mpImpl->mpTextEngine->UndoActionEnd();
 }
 
 void TextView::Copy( uno::Reference< datatransfer::clipboard::XClipboard >& rxClipboard )
@@ -1370,7 +1370,7 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
 {
 //  HideSelection();
-    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+    mpImpl->mpTextEngine->UndoActionStart();
 
     /* #i87633#
     break inserted text into chunks that fit into the underlying String
@@ -1405,7 +1405,7 @@ void TextView::InsertNewText( const rtl::OUString& rStr, BOOL bSelect )
         nLen -= nChunkLen;
         nPos += nChunkLen;
     }
-    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+    mpImpl->mpTextEngine->UndoActionEnd();
 
     mpImpl->mpTextEngine->FormatAndUpdate( this );
 }
@@ -1417,9 +1417,9 @@ void TextView::InsertText( const XubString& rStr, BOOL bSelect )
 
     TextSelection aNewSel( mpImpl->maSelection );
 
-    mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+    mpImpl->mpTextEngine->UndoActionStart();
     TextPaM aPaM = mpImpl->mpTextEngine->ImpInsertText( mpImpl->maSelection, rStr );
-    mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+    mpImpl->mpTextEngine->UndoActionEnd();
 
     if ( bSelect )
     {
@@ -2169,7 +2169,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
         HideSelection();
         ImpSetSelection( mpImpl->mpDDInfo->maDropPos );
 
-        mpImpl->mpTextEngine->UndoActionStart( TEXTUNDO_DRAGANDDROP );
+        mpImpl->mpTextEngine->UndoActionStart();
 
         String aText;
         uno::Reference< datatransfer::XTransferable > xDataObj = rDTDE.Transferable;
@@ -2247,7 +2247,7 @@ void TextView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEv
             mpImpl->mpTextEngine->ImpDeleteText( aPrevSel );
         }
 
-        mpImpl->mpTextEngine->UndoActionEnd( TEXTUNDO_DRAGANDDROP );
+        mpImpl->mpTextEngine->UndoActionEnd();
 
         delete mpImpl->mpDDInfo;
         mpImpl->mpDDInfo = 0;

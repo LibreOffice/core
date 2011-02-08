@@ -137,6 +137,7 @@ class SvtPathOptions_Impl
         std::vector< String >               m_aPathArray;
         Reference< XFastPropertySet >       m_xPathSettings;
         Reference< XStringSubstitution >    m_xSubstVariables;
+        Reference< XMacroExpander >         m_xMacroExpander;
         mutable EnumToHandleMap             m_aMapEnumToPropHandle;
         VarNameToEnumMap                    m_aMapVarNamesToEnum;
 
@@ -199,9 +200,9 @@ class SvtPathOptions_Impl
         void            SetUserConfigPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_USERCONFIG, rPath ); }
         void            SetWorkPath( const String& rPath ) { SetPath( SvtPathOptions::PATH_WORK, rPath ); }
 
-        rtl::OUString   SubstVar( const rtl::OUString& rVar );
-        rtl::OUString   SubstituteAndConvert( const rtl::OUString& rPath );
-        rtl::OUString   UsePathVariables( const rtl::OUString& rPath );
+        rtl::OUString   SubstVar( const rtl::OUString& rVar ) const;
+        rtl::OUString   ExpandMacros( const rtl::OUString& rPath ) const;
+        rtl::OUString   UsePathVariables( const rtl::OUString& rPath ) const;
 
         ::com::sun::star::lang::Locale  GetLocale() const { return m_aLocale; }
 
@@ -282,33 +283,31 @@ const String& SvtPathOptions_Impl::GetPath( SvtPathOptions::Pathes ePath )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    if ( ePath < SvtPathOptions::PATH_COUNT )
+    if ( ePath >= SvtPathOptions::PATH_COUNT )
+        return m_aEmptyString;
+
+    OUString    aPathValue;
+    String      aResult;
+    sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
+
+    // Substitution is done by the service itself using the substition service
+    Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
+    a >>= aPathValue;
+    if( ePath == SvtPathOptions::PATH_ADDIN     ||
+        ePath == SvtPathOptions::PATH_FILTER    ||
+        ePath == SvtPathOptions::PATH_HELP      ||
+        ePath == SvtPathOptions::PATH_MODULE    ||
+        ePath == SvtPathOptions::PATH_PLUGIN    ||
+        ePath == SvtPathOptions::PATH_STORAGE
+      )
     {
-        OUString    aPathValue;
-        String      aResult;
-        sal_Int32   nHandle = m_aMapEnumToPropHandle[ (sal_Int32)ePath ];
-
-        // Substitution is done by the service itself using the substition service
-        Any         a = m_xPathSettings->getFastPropertyValue( nHandle );
-        a >>= aPathValue;
-        if( ePath == SvtPathOptions::PATH_ADDIN     ||
-            ePath == SvtPathOptions::PATH_FILTER    ||
-            ePath == SvtPathOptions::PATH_HELP      ||
-            ePath == SvtPathOptions::PATH_MODULE    ||
-            ePath == SvtPathOptions::PATH_PLUGIN    ||
-            ePath == SvtPathOptions::PATH_STORAGE
-          )
-        {
-            // These office paths have to be converted to system pathes
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
-            aPathValue = aResult;
-        }
-
-        m_aPathArray[ ePath ] = aPathValue;
-        return m_aPathArray[ ePath ];
+        // These office paths have to be converted to system pathes
+        utl::LocalFileHelper::ConvertURLToPhysicalName( aPathValue, aResult );
+        aPathValue = aResult;
     }
 
-    return m_aEmptyString;
+    m_aPathArray[ ePath ] = aPathValue;
+    return m_aPathArray[ ePath ];
 }
 // -----------------------------------------------------------------------
 BOOL SvtPathOptions_Impl::IsPathReadonly(SvtPathOptions::Pathes ePath)const
@@ -372,23 +371,29 @@ void SvtPathOptions_Impl::SetPath( SvtPathOptions::Pathes ePath, const String& r
     }
 }
 
-// -----------------------------------------------------------------------
+//-------------------------------------------------------------------------
 
-OUString SvtPathOptions_Impl::SubstituteAndConvert( const rtl::OUString& rPath )
+OUString SvtPathOptions_Impl::ExpandMacros( const rtl::OUString& rPath ) const
 {
-    return SubstVar( rPath );
+    ::rtl::OUString sExpanded( rPath );
+
+    const INetURLObject aParser( rPath );
+    if ( aParser.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
+        sExpanded = m_xMacroExpander->expandMacros( aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET ) );
+
+    return sExpanded;
 }
 
 //-------------------------------------------------------------------------
 
-OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath )
+OUString SvtPathOptions_Impl::UsePathVariables( const OUString& rPath ) const
 {
     return m_xSubstVariables->reSubstituteVariables( rPath );
 }
 
 // -----------------------------------------------------------------------
 
-OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar )
+OUString SvtPathOptions_Impl::SubstVar( const OUString& rVar ) const
 {
     // Don't work at parameter-string directly. Copy it.
     OUString aWorkText = rVar;
@@ -483,18 +488,9 @@ SvtPathOptions_Impl::SvtPathOptions_Impl() :
             Reference< XInterface >() );
     }
 
-    m_xSubstVariables = Reference< XStringSubstitution >( xSMgr->createInstance(
-                                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                        "com.sun.star.util.PathSubstitution" ))),
-                                                UNO_QUERY );
-    if ( !m_xSubstVariables.is() )
-    {
-        // #112719#: check for existance
-        DBG_ERROR( "SvtPathOptions_Impl::SvtPathOptions_Impl(): #112719# happened again!" );
-        throw RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Service com.sun.star.util.PathSubstitution cannot be created" )),
-            Reference< XInterface >() );
-    }
+    ::comphelper::ComponentContext aContext( xSMgr );
+    m_xSubstVariables.set( aContext.createComponent( "com.sun.star.util.PathSubstitution" ), UNO_QUERY_THROW );
+    m_xMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
 
     // Create temporary hash map to have a mapping between property names and property handles
     Reference< XPropertySet > xPropertySet = Reference< XPropertySet >( m_xPathSettings, UNO_QUERY );
@@ -905,13 +901,22 @@ void SvtPathOptions::SetWorkPath( const String& rPath )
 
 // -----------------------------------------------------------------------
 
-String SvtPathOptions::SubstituteVariable( const String& rVar )
+String SvtPathOptions::SubstituteVariable( const String& rVar ) const
 {
-    String aRet = pImp->SubstituteAndConvert( rVar );
+    String aRet = pImp->SubstVar( rVar );
     return aRet;
 }
 
-String SvtPathOptions::UseVariable( const String& rPath )
+// -----------------------------------------------------------------------
+
+String SvtPathOptions::ExpandMacros( const String& rPath ) const
+{
+    return pImp->ExpandMacros( rPath );
+}
+
+// -----------------------------------------------------------------------
+
+String SvtPathOptions::UseVariable( const String& rPath ) const
 {
     String aRet = pImp->UsePathVariables( rPath );
     return aRet;
@@ -982,7 +987,7 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
                 case PATH_TEMPLATE:     aPath = GetTemplatePath();      break;
                 case PATH_WORK:         aPath = GetWorkPath();          break;
                 case PATH_UICONFIG:     aPath = GetUIConfigPath();      break;
-                case PATH_FINGERPRINT:  aPath = GetFingerprintPath();    break;
+                case PATH_FINGERPRINT:  aPath = GetFingerprintPath();   break;
                 case PATH_USERCONFIG:/*-Wall???*/           break;
                 case PATH_COUNT: /*-Wall???*/ break;
             }

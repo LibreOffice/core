@@ -344,45 +344,6 @@ void * SotFactory::CastAndAddRef
     return pObj ? pObj->CastAndAddRef( this ) : NULL;
 }
 
-//=========================================================================
-void * SotFactory::AggCastAndAddRef
-(
-    SotObject * pObj /* Das Objekt von dem der Typ gepr"uft wird. */
-) const
-/*  [Beschreibung]
-
-    Ist eine Optimierung, damit die Ref-Klassen k"urzer implementiert
-    werden k"onnen. pObj wird auf den Typ der Factory gecastet.
-    In c++ (wenn es immer erlaubt w"are) w"urde der void * wie im
-    Beispiel gebildet.
-    Factory der Klasse SvPersist.
-    void * p = (void *)(SvPersist *)pObj;
-    Hinzu kommt noch, dass ein Objekt aus meheren c++ Objekten
-    zusammengesetzt sein kann. Diese Methode sucht nach einem
-    passenden Objekt.
-
-    [R"uckgabewert]
-
-    void *,     NULL, pObj war NULL oder das Objekt war nicht vom Typ
-                der Factory.
-                Ansonsten wird pObj zuerst auf den Typ der Factory
-                gecastet und dann auf void *.
-
-    [Querverweise]
-
-    <SvObject::AggCast>
-*/
-{
-    void * pRet = NULL;
-    if( pObj )
-    {
-        pRet = pObj->AggCast( this );
-        if( pRet )
-            pObj->AddRef();
-    }
-    return pRet;
-}
-
 /*************************************************************************
 |*    SotFactory::Is()
 |*

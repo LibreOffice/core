@@ -556,7 +556,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     if (returnVal)
     {
-        GC gc = SelectFont();
+        GC gc = GetFontGC();
 
         if( gc )
         {
