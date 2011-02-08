@@ -53,6 +53,9 @@ global const frmMath = 5, frmChart = 7, frmHyperText = 8, frmDraw = 9
 global const frmDataBase = 10, frmJava = 13
 global const frmExtension = 14
 
+Global g_CurrentDocTest As Integer
+Global g_CurrentTestCase As Integer
+
 global const cLogUnknown = 0, cLogFalse = 1, cLogTrue = 2
 
 &apos;UserFieldKennungen
@@ -127,8 +130,7 @@ Sub ClearAllText
 end Sub
 
 Sub AssertionHandler( sMessage as String )
-    LogTestResult( cDocNew, &quot;assertion caught: &quot; + sMessage, FALSE )
-        &apos;TODO: get the proper test case number
+    LogTestResult( &quot;assertion caught: &quot; + sMessage, FALSE )
 End Sub
 
 Sub Main
@@ -371,14 +373,14 @@ Function GetRangeName (nColumn as integer, nRow as integer) as string
     GetRangeName = chr (nColumn+66) + Trim(Str(nRow+1))
 end Function
 
-Sub LogTestResult( nTestCase as Integer, sTestCaseDescription as String, bSuccess as Boolean )
-    If ( nTestCase = cLogfileFailed ) Then
+Sub LogTestResult( sTestCaseDescription as String, bSuccess as Boolean )
+    If ( g_CurrentTestCase = cLogfileFailed ) Then
         LogState( FALSE, &quot;creating logfile &apos;&quot; + GetLogFileName( g_CurrentDocTest ) + &quot;&apos; failed&quot;, MainFileChannel )
         SetStatus( 0, FALSE )
     Else
         LogState( bSuccess, sTestCaseDescription, FileChannel )
         LogState( bSuccess, sTestCaseDescription, MainFileChannel )
-        SetStatus( nTestCase, bSuccess )
+        SetStatus( g_CurrentTestCase, bSuccess )
     End If
 End Sub
 

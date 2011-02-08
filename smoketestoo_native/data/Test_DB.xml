@@ -37,32 +37,31 @@ const cMessageDatabaseClose = &quot;Close Database&quot;
 
 Sub TestDB
 
-Dim oDBConnection as Object, oDataSource as Object, oDBContext as Object
-Dim sDBName as String, sTable as String, sCurrentMessage as String
-Dim nRowCount as Integer, nCurrentAction as Integer
-Dim bResult as Boolean
-Const sTestString = &quot;Automatical Test&quot;
-
+    Dim oDBConnection as Object, oDataSource as Object, oDBContext as Object
+    Dim sDBName as String, sTable as String, sCurrentMessage as String
+    Dim nRowCount as Integer
+    Dim bResult as Boolean
+    Const sTestString = &quot;Automatical Test&quot;
 
     On Local Error GoTo DBERROR
 
-    nCurrentAction = cLogfileFailed
+    g_CurrentTestCase = cLogfileFailed
     FileChannel% = OpenLogDat (GetLogFileName(g_CurrentDocTest))
 
-    nCurrentAction = cDBService
+    g_CurrentTestCase = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
 
     oDBContext = CreateUnoService(cUnoDatabaseContext)
     sDBName=oDBContext.ElementNames(0) &apos;Names of Databases
 
-    nCurrentAction = cDBOpen
+    g_CurrentTestCase = cDBOpen
     sCurrentMessage = cMessageDatabaseOpen
 
     oDataSource = oDBContext.GetByName(sDBName)
     sTable=oDataSource.Tables.ElementNames(0)
     oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
 
-    LogTestResult( cDBOpen, &quot;Database &quot;+ cMessageDatabaseOpen, not IsNull (oDBConnection) )
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseOpen, not IsNull (oDBConnection) )
     if (IsNull(oDBConnection)) then
            Close #FileChannel%
         Exit Sub
@@ -70,18 +69,18 @@ Const sTestString = &quot;Automatical Test&quot;
 
     &apos; Database is open now
 
-    nCurrentAction = cDBService
+    g_CurrentTestCase = cDBService
     sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoRowSet
     oRowSet = createUnoService(cUnoRowSet)
 
     if (IsNull(oRowSet)) then
-        LogTestResult( cDBService, &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, not IsNull (oRowSet) )
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, not IsNull (oRowSet) )
         Exit Sub
     else
-        LogTestResult( cDBService, &quot;Database &quot;+ cMessageDatabaseService, TRUE )
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseService, TRUE )
     End If
 
-    nCurrentAction = cDBInsert
+    g_CurrentTestCase = cDBInsert
     sCurrentMessage = cMessageDatabaseInsert
 
     oRowSet.ActiveConnection = oDBConnection
@@ -99,12 +98,12 @@ Const sTestString = &quot;Automatical Test&quot;
     oRowSet.moveToCurrentRow()
 
     bResult = (oRowSet.getString(5) = sTestString)
-    LogTestResult( cDBInsert, &quot;Database &quot;+ cMessageDatabaseInsert, bResult )
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseInsert, bResult )
 
     &apos;delete only if insert passed
 
     if (bResult) Then
-        nCurrentAction = cDBDelete
+        g_CurrentTestCase = cDBDelete
         sCurrentMessage = cMessageDatabaseDelete
         oRowSet.deleteRow()
         bResult = (nRowCount - oRowSet.RowCount = 0)
@@ -112,32 +111,32 @@ Const sTestString = &quot;Automatical Test&quot;
             oRowSet.next()
             bResult = (nRowCount - oRowSet.RowCount = 1)
         End If
-        LogTestResult( cDBDelete, &quot;Database &quot;+ cMessageDatabaseDelete, bResult )
+        LogTestResult( &quot;Database &quot;+ cMessageDatabaseDelete, bResult )
     End If
 
     &apos; read other record
 
-    nCurrentAction = cDBSeek
+    g_CurrentTestCase = cDBSeek
     sCurrentMessage = cMessageDatabaseSeek
     oRowSet.first()
     bResult = not (oRowSet.getString(5) = sTestString)
-    LogTestResult( cDBSeek, &quot;Database &quot;+ cMessageDatabaseSeek, bResult )
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseSeek, bResult )
 
-    nCurrentAction = cDBClose
+    g_CurrentTestCase = cDBClose
     sCurrentMessage = cMessageDatabaseClose
     oDBConnection.Dispose()
-    LogTestResult( cDBClose, &quot;Database &quot;+ cMessageDatabaseClose, True )
+    LogTestResult( &quot;Database &quot;+ cMessageDatabaseClose, True )
 
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
     Exit Sub &apos; Without error
 
     DBERROR:
-    If  (nCurrentAction = cLogfileFailed) then
-        LogTestResult( cLogfileFailed, "", False )
+    If ( g_CurrentTestCase = cLogfileFailed ) then
+        LogTestResult( "", False )
         Exit Sub
     else
-        LogTestResult( nCurrentAction, &quot;Database &quot;+ sCurrentMessage, FALSE )
+        LogTestResult( &quot;Database &quot;+ sCurrentMessage, FALSE )
         Close #FileChannel%
     End If
     Exit Sub &apos; With error

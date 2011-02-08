@@ -33,20 +33,19 @@ const cMessageExtensionInstall = &quot;Install Extension&quot;
 const cMessageExtensionUninstall = &quot;Uninstall Extension&quot;
 
 Sub TestExtensions
-Dim oTestExtension as Object, obj_null as Object
-Dim sCurrentMessage as String
-Dim nCurrentAction as Integer
-Dim bResult as Boolean
-Dim sImplementationNameString as String
-sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&quot;
+    Dim oTestExtension as Object, obj_null as Object
+    Dim sCurrentMessage as String
+    Dim bResult as Boolean
+    Dim sImplementationNameString as String
+    sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&quot;
 
     On Local Error GoTo EXTERROR
 
-    nCurrentAction = cLogfileFailed
+    g_CurrentTestCase = cLogfileFailed
     FileChannel% = OpenLogDat (GetLogFileName(g_CurrentDocTest))
 
     sCurrentMessage = cMessageExtensionService
-    nCurrentAction = cEXTService
+    g_CurrentTestCase = cEXTService
 
     &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for
     &apos;adding the extension. The implementation is in
@@ -58,14 +57,14 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     ctx = getDefaultContext
     ext_mgr = ctx.getValueByName(&quot;/singletons/&quot; + cExtensionManager)
 
-    LogTestResult( cEXTService, &quot;Extension &quot;+ cMessageExtensionService, not IsNull (ext_mgr) )
+    LogTestResult( &quot;Extension &quot;+ cMessageExtensionService, not IsNull (ext_mgr) )
     if (IsNull(ext_mgr)) then
         Close #FileChannel%
         Exit Sub
     End If
 
     sCurrentMessage = cMessageExtensionInstall
-    nCurrentAction = cEXTInstall
+    g_CurrentTestCase = cEXTInstall
 
     &apos;Add the extension. We must provide a file URL here.
     &apos;By passing &quot;user&quot; we determine that the actions we perform on
@@ -77,14 +76,14 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     &apos;Check if the extension has been added by creating a service which is contained in the extension.
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
     bResult = (oTestExtension.getImplementationName = sImplementationNameString)
-    LogTestResult( cEXTInstall, &quot;Extension &quot;+ cMessageExtensionInstall, bResult )
+    LogTestResult( &quot;Extension &quot;+ cMessageExtensionInstall, bResult )
     if (not bResult) then
         Close #FileChannel%
         Exit Sub
     End If
 
     sCurrentMessage = cMessageExtensionUninstall
-    nCurrentAction = cEXTUninstall
+    g_CurrentTestCase = cEXTUninstall
 
     &apos;Remove the package
     ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
@@ -93,18 +92,18 @@ sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&q
     oTestExtension = createUnoService(cUnoSmoketestTestExtension)
 
     &apos;The service must not be available anymore. Therefor isNull must return true.
-    LogTestResult( cEXTUninstall, &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
+    LogTestResult( &quot;Extension &quot;+ cMessageExtensionUninstall, IsNull (oTestExtension) )
 
     Print #FileChannel, &quot;---&quot;
     Close #FileChannel%
     Exit Sub &apos; Without error
 
     EXTERROR:
-    If  (nCurrentAction = cLogfileFailed) then
-        LogTestResult( cLogfileFailed, "", False )
+    If ( g_CurrentTestCase = cLogfileFailed ) then
+        LogTestResult( "", False )
         Exit Sub
     else
-        LogTestResult( nCurrentAction, &quot;Extension &quot;+ sCurrentMessage, False )
+        LogTestResult( &quot;Extension &quot;+ sCurrentMessage, False )
         Close #FileChannel%
     End If
     Exit Sub &apos; With error
