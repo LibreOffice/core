@@ -76,20 +76,20 @@ extern void NotifyDocumentEvent( SdDrawDocument* pDocument, const rtl::OUString&
 |*                   - Die entsprechenden StyleSheets muessen bereits im
 |*                     im StyleSheetPool sein.
 |*
-|*  bReplaceStyleSheets = TRUE : Benannte StyleSheets werden ausgetauscht
-|*                        FALSE: Alle StyleSheets werden neu zugewiesen
+|*  bReplaceStyleSheets = sal_True : Benannte StyleSheets werden ausgetauscht
+|*                        sal_False: Alle StyleSheets werden neu zugewiesen
 |*
-|*  bSetMasterPage      = TRUE : MasterPage suchen und zuweisen
+|*  bSetMasterPage      = sal_True : MasterPage suchen und zuweisen
 |*
-|*  bReverseOrder       = FALSE: MasterPages von vorn nach hinten suchen
-|*                        TRUE : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
+|*  bReverseOrder       = sal_False: MasterPages von vorn nach hinten suchen
+|*                        sal_True : MasterPages von hinten nach vorn suchen (fuer Undo-Action)
 |*
 \************************************************************************/
 
 void SdPage::SetPresentationLayout(const String& rLayoutName,
-                                   BOOL bReplaceStyleSheets,
-                                   BOOL bSetMasterPage,
-                                   BOOL bReverseOrder)
+                                   sal_Bool bReplaceStyleSheets,
+                                   sal_Bool bSetMasterPage,
+                                   sal_Bool bReverseOrder)
 {
     /*********************************************************************
     |* Layoutname der Seite
@@ -106,8 +106,8 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     {
         SdPage* pMaster;
         SdPage* pFoundMaster = 0;
-        USHORT nMaster = 0;
-        USHORT nMasterCount = pModel->GetMasterPageCount();
+        sal_uInt16 nMaster = 0;
+        sal_uInt16 nMasterCount = pModel->GetMasterPageCount();
 
         if( !bReverseOrder )
         {
@@ -153,11 +153,11 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
     List aOutlineStyles;
     List aOldOutlineStyles;
     List aReplList;
-    BOOL bListsFilled = FALSE;
+    sal_Bool bListsFilled = sal_False;
 
-    ULONG nObjCount = GetObjCount();
+    sal_uLong nObjCount = GetObjCount();
 
-    for (ULONG nObj = 0; nObj < nObjCount; nObj++)
+    for (sal_uLong nObj = 0; nObj < nObjCount; nObj++)
     {
         SdrTextObj* pObj = (SdrTextObj*) GetObj(nObj);
 
@@ -207,7 +207,7 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
                     }
                 }
 
-                bListsFilled = TRUE;
+                bListsFilled = sal_True;
             }
 
             SfxStyleSheet* pSheet = (SfxStyleSheet*)aOutlineStyles.First();
@@ -247,18 +247,18 @@ void SdPage::SetPresentationLayout(const String& rLayoutName,
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(PRESOBJ_TITLE);
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, TRUE);
+                pObj->SetStyleSheet(pSheet, sal_True);
         }
         else
         {
             SfxStyleSheet* pSheet = GetStyleSheetForPresObj(GetPresObjKind(pObj));
 
             if (pSheet)
-                pObj->SetStyleSheet(pSheet, TRUE);
+                pObj->SetStyleSheet(pSheet, sal_True);
         }
     }
 
-    for (ULONG i = 0; i < aReplList.Count(); i++)
+    for (sal_uLong i = 0; i < aReplList.Count(); i++)
     {
         delete (StyleReplaceData*) aReplList.GetObject(i);
     }
@@ -318,7 +318,7 @@ void SdPage::SetModel(SdrModel* pNewModel)
 
 FASTBOOL SdPage::IsReadOnly() const
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -393,7 +393,7 @@ SdPage::SdPage(const SdPage& rSrcPage)
     while((pObj = rSrcPage.maPresentationShapeList.getNextShape(pObj)) != 0)
         InsertPresObj(GetObj(pObj->GetOrdNum()), rSrcPage.GetPresObjKind(pObj));
 
-    mbSelected           = FALSE;
+    mbSelected           = sal_False;
     mnTransitionType    = rSrcPage.mnTransitionType;
     mnTransitionSubtype = rSrcPage.mnTransitionSubtype;
     mbTransitionDirection = rSrcPage.mbTransitionDirection;

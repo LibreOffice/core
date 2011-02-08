@@ -40,7 +40,7 @@ namespace sd { namespace slidesorter {
 
 SlideSorterChildWindow::SlideSorterChildWindow (
     ::Window* pParentWindow,
-    USHORT nId,
+    sal_uInt16 nId,
     SfxBindings* pBindings,
     SfxChildWinInfo* pInfo)
     : SfxChildWindow (pParentWindow, nId)
@@ -51,7 +51,7 @@ SlideSorterChildWindow::SlideSorterChildWindow (
         pParentWindow);
     eChildAlignment = SFX_ALIGN_LEFT;
     static_cast<SfxDockingWindow*>(pWindow)->Initialize (pInfo);
-    //  SetHideNotDelete (TRUE);
+    //  SetHideNotDelete (sal_True);
 }
 
 
