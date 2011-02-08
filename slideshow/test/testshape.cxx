@@ -41,6 +41,8 @@
 #include "tests.hxx"
 #include "com/sun/star/presentation/XSlideShowView.hpp"
 
+#include <o3tl/compat_functional.hxx>
+
 #include <boost/bind.hpp>
 
 namespace target = slideshow::internal;
@@ -143,7 +145,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( std::select1st<ViewVector::value_type>(),
+                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))) == maViewLayers.end() )
             throw std::exception();
 
@@ -153,7 +155,7 @@ private:
                 maViewLayers.end(),
                 boost::bind( std::equal_to< target::ViewLayerSharedPtr >(),
                              boost::cref( rNewLayer ),
-                             boost::bind( std::select1st<ViewVector::value_type>(),
+                             boost::bind( o3tl::select1st<ViewVector::value_type>(),
                                           _1 ))));
         return true;
     }

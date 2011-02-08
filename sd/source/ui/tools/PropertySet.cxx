@@ -31,7 +31,7 @@
 #include "tools/PropertySet.hxx"
 #include <boost/bind.hpp>
 #include <algorithm>
-#include <functional>
+#include <o3tl/compat_functional.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -153,7 +153,7 @@ void SAL_CALL PropertySet::removePropertyChangeListener (
             std::compose1(
                 std::bind1st(std::equal_to<Reference<beans::XPropertyChangeListener> >(),
                     rxListener),
-                std::select2nd<ChangeListenerContainer::value_type>())));
+                o3tl::select2nd<ChangeListenerContainer::value_type>())));
     if (iListener != mpChangeListeners->end())
     {
         mpChangeListeners->erase(iListener);

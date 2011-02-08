@@ -55,6 +55,7 @@
 #include "rehearsetimingsactivity.hxx"
 
 #include <boost/bind.hpp>
+#include <o3tl/compat_functional.hxx>
 #include <algorithm>
 
 using namespace com::sun::star;
@@ -374,7 +375,7 @@ void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))),
+                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))),
         maViews.end() );
 }
 
@@ -389,7 +390,7 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ))));
+                boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
