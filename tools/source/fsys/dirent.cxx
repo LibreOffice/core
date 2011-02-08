@@ -130,11 +130,11 @@ int Sys2SolarError_Impl( int nSysErr )
 #ifndef BOOTSTRAP
 
 FSysRedirector* FSysRedirector::_pRedirector = 0;
-BOOL FSysRedirector::_bEnabled = TRUE;
+sal_Bool FSysRedirector::_bEnabled = sal_True;
 #ifdef UNX
-BOOL bInRedirection = TRUE;
+sal_Bool bInRedirection = sal_True;
 #else
-BOOL bInRedirection = FALSE;
+sal_Bool bInRedirection = sal_False;
 #endif
 static vos:: OMutex * pRedirectMutex = 0;
 
@@ -172,7 +172,7 @@ void FSysRedirector::DoRedirect( String &rPath )
                 return;
 
         // dont redirect on nested calls
-        bInRedirection = TRUE;
+        bInRedirection = sal_True;
 
         // convert to URL
 #ifndef UNX
@@ -186,7 +186,7 @@ void FSysRedirector::DoRedirect( String &rPath )
         // do redirection
         Redirector();
 
-        bInRedirection = FALSE;
+        bInRedirection = sal_False;
         return;
 }
 
@@ -289,12 +289,12 @@ const char* ImpCheckDirEntry( const void* p )
 |*
 *************************************************************************/
 
-ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
+ByteString ImplCutPath( const ByteString& rStr, sal_uInt16 nMax, char cAccDel )
 {
-    USHORT  nMaxPathLen = nMax;
+    sal_uInt16  nMaxPathLen = nMax;
     ByteString  aCutPath( rStr );
-    BOOL    bInsertPrefix = FALSE;
-    USHORT  nBegin = aCutPath.Search( cAccDel );
+    sal_Bool    bInsertPrefix = sal_False;
+    sal_uInt16  nBegin = aCutPath.Search( cAccDel );
 
     if( nBegin == STRING_NOTFOUND )
         nBegin = 0;
@@ -303,14 +303,14 @@ ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
 
     while( aCutPath.Len() > nMaxPathLen )
     {
-        USHORT nEnd = aCutPath.Search( cAccDel, nBegin + 1 );
-        USHORT nCount;
+        sal_uInt16 nEnd = aCutPath.Search( cAccDel, nBegin + 1 );
+        sal_uInt16 nCount;
 
         if ( nEnd != STRING_NOTFOUND )
         {
             nCount = nEnd - nBegin;
             aCutPath.Erase( nBegin, nCount );
-            bInsertPrefix = TRUE;
+            bInsertPrefix = sal_True;
         }
         else
             break;
@@ -318,7 +318,7 @@ ByteString ImplCutPath( const ByteString& rStr, USHORT nMax, char cAccDel )
 
     if ( aCutPath.Len() > nMaxPathLen )
     {
-        for ( USHORT n = nMaxPathLen; n > nMaxPathLen/2; --n )
+        for ( sal_uInt16 n = nMaxPathLen; n > nMaxPathLen/2; --n )
             if ( !ByteString(aCutPath.GetChar(n)).IsAlphaNumericAscii() )
             {
                 aCutPath.Erase( n );
@@ -362,7 +362,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
         // der Rest immer ohne die fuehrenden '\\'.
         // ein ":" trennt ebenfalls, gehoert aber zum Namen
         // den ersten '\\', '/' oder ':' suchen
-        USHORT nPos;
+        sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.Len() &&                             //?O
                   aPfad.GetChar(nPos) != '\\' && aPfad.GetChar(nPos) != '/' &&      //?O
@@ -499,7 +499,7 @@ FSysError DirEntry::ImpParseOs2Name( const ByteString& rPfad, FSysPathStyle eSty
     }
     while ( aPfad.Len() );
 
-    ULONG nErr = ERRCODE_NONE;
+    sal_uIntPtr nErr = ERRCODE_NONE;
     // Haupt-Entry (selbst) zuweisen
     if ( aStack.Count() == 0 )
     {
@@ -639,7 +639,7 @@ void DirEntry::ImpTrim( FSysPathStyle eStyle )
     {
         case FSYS_STYLE_FAT:
         {
-            USHORT nPunktPos = aName.Search( '.' );
+            sal_uInt16 nPunktPos = aName.Search( '.' );
             if ( nPunktPos == STRING_NOTFOUND )
             {
                 if ( aName.Len() > 8 )
@@ -1010,7 +1010,7 @@ DirEntry* DirEntry::ImpGetPreTopPtr()
 |*
 *************************************************************************/
 
-DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize )
+DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, sal_Bool bNormalize )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1037,14 +1037,14 @@ DirEntry* DirEntry::ImpChangeParent( DirEntry* pNewParent, BOOL bNormalize )
 |*
 *************************************************************************/
 
-BOOL DirEntry::Exists( FSysAccess nAccess ) const
+sal_Bool DirEntry::Exists( FSysAccess nAccess ) const
 {
 #ifndef BOOTSTRAP
     static vos::OMutex aLocalMutex;
     vos::OGuard aGuard( aLocalMutex );
 #endif
         if ( !IsValid() )
-                return FALSE;
+                return sal_False;
 
 #if defined WNT || defined OS2
     // spezielle Filenamen sind vom System da
@@ -1060,14 +1060,14 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
            aName.CompareIgnoreCaseToAscii("LPT3") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("NUL") == COMPARE_EQUAL ||
            aName.CompareIgnoreCaseToAscii("PRN") == COMPARE_EQUAL ) )
-        return TRUE;
+        return sal_True;
 #endif
 
         FSysFailOnErrorImpl();
         DirEntryKind eKind = FileStat( *this, nAccess ).GetKind();
         if ( eKind & ( FSYS_KIND_FILE | FSYS_KIND_DIR ) )
         {
-                return TRUE;
+                return sal_True;
         }
 
 #if defined WNT || defined OS2
@@ -1090,7 +1090,7 @@ BOOL DirEntry::Exists( FSysAccess nAccess ) const
 |*
 *************************************************************************/
 
-BOOL DirEntry::First()
+sal_Bool DirEntry::First()
 {
     FSysFailOnErrorImpl();
 
@@ -1120,12 +1120,12 @@ BOOL DirEntry::First()
                         {
                                 aName = aFound;
                                 closedir( pDir );
-                                return TRUE;
+                                return sal_True;
                         }
                 }
                 closedir( pDir );
         }
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -1138,8 +1138,8 @@ BOOL DirEntry::First()
 |*
 *************************************************************************/
 
-String DirEntry::GetFull( FSysPathStyle eStyle, BOOL bWithDelimiter,
-                          USHORT nMaxChars ) const
+String DirEntry::GetFull( FSysPathStyle eStyle, sal_Bool bWithDelimiter,
+                          sal_uInt16 nMaxChars ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1463,18 +1463,18 @@ StringCompare DirEntry::NameCompare( const DirEntry &rWith ) const
 |*
 *************************************************************************/
 
-BOOL DirEntry::operator==( const DirEntry& rEntry ) const
+sal_Bool DirEntry::operator==( const DirEntry& rEntry ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
     // test wheather the contents are textual the same
 
     if ( nError && ( nError == rEntry.nError ) )
-        return TRUE;
+        return sal_True;
     if ( nError || rEntry.nError ||
          ( eFlag == FSYS_FLAG_INVALID ) ||
          ( rEntry.eFlag == FSYS_FLAG_INVALID ) )
-        return FALSE;
+        return sal_False;
 
 #ifndef OS2
     const
@@ -1547,10 +1547,10 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 #ifdef DBG_UTIL
-        static BOOL bTested = FALSE;
+        static sal_Bool bTested = sal_False;
         if ( !bTested )
         {
-                bTested = TRUE;
+                bTested = sal_True;
                 FSysTest();
         }
 #endif
@@ -1572,7 +1572,7 @@ DirEntry DirEntry::operator+( const DirEntry& rEntry ) const
         (eFlag == FSYS_FLAG_RELROOT && !aName.Len()) ||
         (
          (pEntryTop->aName.Len()  ||
-          ((rEntry.Level()>1)?(rEntry[rEntry.Level()-2].aName.CompareIgnoreCaseToAscii(RFS_IDENTIFIER)==COMPARE_EQUAL):FALSE))
+          ((rEntry.Level()>1)?(rEntry[rEntry.Level()-2].aName.CompareIgnoreCaseToAscii(RFS_IDENTIFIER)==COMPARE_EQUAL):sal_False))
           &&
          (pEntryTop->eFlag == FSYS_FLAG_ABSROOT ||
           pEntryTop->eFlag == FSYS_FLAG_RELROOT ||
@@ -1767,23 +1767,23 @@ void DirEntry::SetName( const String& rName, FSysPathStyle eFormatter )
 |*    Letzte Aenderung  MA 02.12.91
 |*
 *************************************************************************/
-BOOL DirEntry::Find( const String& rPfad, char cDelim )
+sal_Bool DirEntry::Find( const String& rPfad, char cDelim )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
         if ( ImpGetTopPtr()->eFlag == FSYS_FLAG_ABSROOT )
-                return TRUE;
+                return sal_True;
 
-        BOOL bWild = aName.Search( '*' ) != STRING_NOTFOUND ||
+        sal_Bool bWild = aName.Search( '*' ) != STRING_NOTFOUND ||
                                  aName.Search( '?' ) != STRING_NOTFOUND;
         if ( !cDelim )
                 cDelim = SEARCHDELIM(DEFSTYLE)[0];
 
-        USHORT nTokenCount = rPfad.GetTokenCount( cDelim );
-        USHORT nIndex = 0;
+        sal_uInt16 nTokenCount = rPfad.GetTokenCount( cDelim );
+        sal_uInt16 nIndex = 0;
         ByteString aThis = ACCESSDELIM(DEFSTYLE);
         aThis += ByteString(GetFull(), osl_getThreadTextEncoding());
-        for ( USHORT nToken = 0; nToken < nTokenCount; ++nToken )
+        for ( sal_uInt16 nToken = 0; nToken < nTokenCount; ++nToken )
         {
             ByteString aPath = ByteString(rPfad, osl_getThreadTextEncoding()).GetToken( 0, cDelim, nIndex );
 
@@ -1797,11 +1797,11 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
                          ( ( !bWild && aEntry.Exists() ) || ( bWild && aEntry.First() ) ) )
                 {
                         (*this) = aEntry;
-                        return TRUE;
+                        return sal_True;
                 }
             }
         }
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -1814,7 +1814,7 @@ BOOL DirEntry::Find( const String& rPfad, char cDelim )
 |*
 *************************************************************************/
 
-BOOL DirEntry::ImpToRel( String aCurStr )
+sal_Bool DirEntry::ImpToRel( String aCurStr )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1831,7 +1831,7 @@ BOOL DirEntry::ImpToRel( String aCurStr )
     }
 
     // "Ubereinstimmung pr"ufen
-    USHORT nPos = aThisCompareStr.Match( aCurCompareStr );
+    sal_uInt16 nPos = aThisCompareStr.Match( aCurCompareStr );
     if ( nPos == STRING_MATCH && aThisStr.Len() != aCurStr.Len() )
         nPos = Min( aThisStr.Len(), aCurStr.Len() );
 
@@ -1840,7 +1840,7 @@ BOOL DirEntry::ImpToRel( String aCurStr )
     {
         // dann ist der relative Pfad das aktuelle Verzeichnis
         *this = DirEntry();
-        return TRUE;
+        return sal_True;
     }
 
     // Sonderfall, die DirEntries sind total verschieden
@@ -1848,7 +1848,7 @@ BOOL DirEntry::ImpToRel( String aCurStr )
     {
         // dann ist der relativste Pfad absolut
         *this = aThis;
-        return FALSE;
+        return sal_False;
     }
 
     // sonst nehmen wir die identischen Einzelteile vorne weg
@@ -1864,7 +1864,7 @@ BOOL DirEntry::ImpToRel( String aCurStr )
 
     // das ist dann unser relativer Pfad
     *this = DirEntry( aThisStr, FSYS_STYLE_HPFS );
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -1877,7 +1877,7 @@ BOOL DirEntry::ImpToRel( String aCurStr )
 |*
 *************************************************************************/
 
-USHORT DirEntry::CutRelParents()
+sal_uInt16 DirEntry::CutRelParents()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1891,7 +1891,7 @@ USHORT DirEntry::CutRelParents()
         pDir = pPar;
 
     // '..' zaehlen
-    USHORT nParCount = 0;
+    sal_uInt16 nParCount = 0;
     while ( pPar && pPar->eFlag == FSYS_FLAG_PARENT )
     {
         ++nParCount;
@@ -1917,7 +1917,7 @@ USHORT DirEntry::CutRelParents()
 |*
 *************************************************************************/
 
-BOOL DirEntry::ToRel()
+sal_Bool DirEntry::ToRel()
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -1936,7 +1936,7 @@ BOOL DirEntry::ToRel()
 |*
 *************************************************************************/
 
-BOOL DirEntry::ToRel( const DirEntry& rStart )
+sal_Bool DirEntry::ToRel( const DirEntry& rStart )
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -2030,7 +2030,7 @@ String DirEntry::GetSearchDelimiter( FSysPathStyle eFormatter )
 |*
 *************************************************************************/
 
-USHORT DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
+sal_uInt16 DirEntry::GetMaxNameLen( FSysPathStyle eFormatter )
 {
     eFormatter = GetStyle( eFormatter );
     switch ( eFormatter )
@@ -2075,7 +2075,7 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
         {
             // Create the directory and only on success give all rights to
             // everyone. Use mkdir instead of DirEntry::MakeDir because
-            // this returns TRUE even if directory already exists.
+            // this returns sal_True even if directory already exists.
 
             if ( !mkdir( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO ) )
                 chmod( aName.GetBuffer(), S_IRWXU | S_IRWXG | S_IRWXO );
@@ -2259,7 +2259,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 |*
 *************************************************************************/
 
-const DirEntry &DirEntry::operator[]( USHORT nParentLevel ) const
+const DirEntry &DirEntry::operator[]( sal_uInt16 nParentLevel ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
@@ -2295,7 +2295,7 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
         // falls '/' am Anfang, ist der Name '/',
         // der Rest immer ohne die fuehrenden '/'.
         // den ersten '/' suchen
-        USHORT nPos;
+        sal_uInt16 nPos;
         for ( nPos = 0;
               nPos < aPfad.Len() && aPfad.GetChar(nPos) != '/';
               nPos++ )
@@ -2321,8 +2321,8 @@ FSysError DirEntry::ImpParseUnixName( const ByteString& rPfad, FSysPathStyle eSt
                         else if ( aName == "~" )
                         {
                                 DirEntry aHome( String( (const char *) getenv( "HOME" ), osl_getThreadTextEncoding()) );
-                                for ( USHORT n = aHome.Level(); n; --n )
-                                        aStack.Push( new DirEntry( aHome[ (USHORT) n-1 ] ) );
+                                for ( sal_uInt16 n = aHome.Level(); n; --n )
+                                        aStack.Push( new DirEntry( aHome[ (sal_uInt16) n-1 ] ) );
                         }
 #endif
 
@@ -2427,11 +2427,11 @@ ErrCode CreateEntry_Impl( const DirEntry &rPath, DirEntryKind eKind )
     return eErr;
 }
 
-BOOL IsValidEntry_Impl( const DirEntry &rPath,
+sal_Bool IsValidEntry_Impl( const DirEntry &rPath,
                         const String &rLongName,
                         DirEntryKind eKind,
-                        BOOL bIsShortened,
-                        BOOL bUseDelim )
+                        sal_Bool bIsShortened,
+                        sal_Bool bUseDelim )
 {
     // Parameter-Pr"uefung
     DBG_ASSERT( eKind == FSYS_KIND_NONE || eKind == FSYS_KIND_ALL ||
@@ -2445,16 +2445,16 @@ BOOL IsValidEntry_Impl( const DirEntry &rPath,
     DirEntry aPath(rPath);
     DirEntry aName(rLongName, eStyle);
     if ( !aName.IsValid() || aName.Level() != 1 )
-        return FALSE;
+        return sal_False;
     aPath += aName;
     if ( 1 == aPath.Level() )
-        return FALSE;
+        return sal_False;
     if ( eStyle == FSYS_STYLE_FAT || eStyle == FSYS_STYLE_NWFS ||
          eStyle == FSYS_STYLE_UNKNOWN )
     {
         DirEntry aDosEntry( rLongName, FSYS_STYLE_FAT );
         if ( !aDosEntry.IsValid() )
-            return FALSE;
+            return sal_False;
     }
 
         // Pfad-Trenner sind nicht erlaubt (bei ungek"urzten auch nicht FSYS_SHORTNAME_DELIMITER)
@@ -2464,12 +2464,12 @@ BOOL IsValidEntry_Impl( const DirEntry &rPath,
          (!bIsShortened && rLongName.Search(cDelim) != STRING_NOTFOUND)
        )
     {
-        return FALSE;
+        return sal_False;
     }
 
     // MI: Abfrage nach 'CON:' etc. wird jetzt in Exists() mitgemacht
     if ( aPath.Exists() )
-        return FALSE;
+        return sal_False;
 
     return (ERRCODE_NONE == CreateEntry_Impl( aPath, eKind ));
 }
@@ -2488,8 +2488,8 @@ BOOL IsValidEntry_Impl( const DirEntry &rPath,
 #define MAX_LEN_MAX       255
 #define INVALID_CHARS_DEF   "\\/\"':|^<>?*"
 
-BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
-                              BOOL bUseDelim, FSysPathStyle eStyle )
+sal_Bool DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
+                              sal_Bool bUseDelim, FSysPathStyle eStyle )
 {
         String aLongName(rLongName);
 
@@ -2507,7 +2507,7 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 #if 0
         if ( FSYS_STYLE_NWFS == GetPathStyle( ImpGetTopPtr()->GetName() ) )
         {
-                for ( USHORT n = aLongName.Len(); n; --n )
+                for ( sal_uInt16 n = aLongName.Len(); n; --n )
                 {
                         short nChar = aLongName(n-1);
                         if ( nChar < 32 || nChar >= 127 )
@@ -2525,14 +2525,14 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         }
 
         // ist der Langname direkt verwendbar?
-        if ( IsValidEntry_Impl( *this, aLongName, eKind, FALSE, bUseDelim ) )
+        if ( IsValidEntry_Impl( *this, aLongName, eKind, sal_False, bUseDelim ) )
         {
             operator+=( DirEntry(aLongName) );
-            return TRUE;
+            return sal_True;
         }
 
         // max L"angen feststellen
-        USHORT nMaxExt, nMaxLen;
+        sal_uInt16 nMaxExt, nMaxLen;
         if ( FSYS_STYLE_DETECT == eStyle )
             eStyle = DirEntry::GetPathStyle( GetDevice().GetName() );
         ByteString aInvalidChars;
@@ -2604,11 +2604,11 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
         operator+=( DirEntry(String(aNewName, osl_getThreadTextEncoding())) );
         if ( FSYS_KIND_ALL == eKind && CMP_LOWER(aName) == aOldName )
         if ( FSYS_KIND_ALL == eKind && CMP_LOWER(ByteString(GetName(), osl_getThreadTextEncoding())) == aOldName )
-            return TRUE;
+            return sal_True;
 
         // kann der gek"urzte Name direkt verwendet werden?
         if ( !Exists() && (ERRCODE_NONE == CreateEntry_Impl( *this, eKind )) )
-            return TRUE;
+            return sal_True;
 
         // darf '?##' verwendet werden, um eindeutigen Name zu erzeugen?
         if ( bUseDelim )
@@ -2639,7 +2639,7 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 
         // keine ## mehr frei / ?## soll nicht verwendet werden
         nError = ERRCODE_IO_ALREADYEXISTS;
-        return FALSE;
+        return sal_False;
 }
 
 /*************************************************************************
@@ -2652,34 +2652,34 @@ BOOL DirEntry::MakeShortName( const String& rLongName, DirEntryKind eKind,
 |*
 *************************************************************************/
 
-BOOL DirEntry::MakeDir( BOOL bSloppy ) const
+sal_Bool DirEntry::MakeDir( sal_Bool bSloppy ) const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
         // Schnellpruefung, ob vorhanden
         if ( FileStat( *this ).IsKind( FSYS_KIND_DIR ) )
-                return TRUE;
+                return sal_True;
         if ( bSloppy && pParent )
                  if ( FileStat( *pParent ).IsKind( FSYS_KIND_DIR ) )
-                          return TRUE;
+                          return sal_True;
 
         const DirEntry *pNewDir = bSloppy ? pParent : this;
         if ( pNewDir )
         {
                 // den Path zum Dir erzeugen
-                if ( pNewDir->pParent && !pNewDir->pParent->MakeDir(FALSE) )
-                        return FALSE;
+                if ( pNewDir->pParent && !pNewDir->pParent->MakeDir(sal_False) )
+                        return sal_False;
 
                 // das Dir selbst erzeugen
                 if ( pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
                          pNewDir->eFlag == FSYS_FLAG_ABSROOT ||
                          pNewDir->eFlag == FSYS_FLAG_VOLUME )
-                        return TRUE;
+                        return sal_True;
                 else
                 {
                         //? nError = ???
                         if ( FileStat( *pNewDir ).IsKind( FSYS_KIND_DIR ) )
-                                return TRUE;
+                                return sal_True;
                         else
                         {
                                 FSysFailOnErrorImpl();
@@ -2693,7 +2693,7 @@ BOOL DirEntry::MakeDir( BOOL bSloppy ) const
 #ifdef WIN32
                                 SetLastError(0);
 #endif
-                                BOOL bResult = (0 == _mkdir( (char*) bDirName.GetBuffer() ));
+                                sal_Bool bResult = (0 == _mkdir( (char*) bDirName.GetBuffer() ));
                                 if ( !bResult )
                                 {
                                     // Wer hat diese Methode const gemacht ?
@@ -2708,7 +2708,7 @@ BOOL DirEntry::MakeDir( BOOL bSloppy ) const
                         }
                 }
         }
-        return TRUE;
+        return sal_True;
 }
 
 /*************************************************************************
@@ -2820,7 +2820,7 @@ FSysError DirEntry::MoveTo( const DirEntry& rNewName ) const
             // ja, also intra-device-move mit MoveFile
             MoveFile( bFrom.GetBuffer(), bTo.GetBuffer() );
             // MoveFile ist buggy bei cross-device operationen.
-            // Der R?ckgabewert ist auch dann TRUE, wenn nur ein Teil der Operation geklappt hat.
+            // Der R?ckgabewert ist auch dann sal_True, wenn nur ein Teil der Operation geklappt hat.
             // Zudem zeigt MoveFile unterschiedliches Verhalten bei unterschiedlichen NT-Versionen.
             return Sys2SolarError_Impl( GetLastError() );
         }
@@ -2942,10 +2942,10 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
         pName[bTmpName.Len()+1] = (char) 0;
 
         //read-only files sollen auch geloescht werden koennen
-        BOOL isReadOnly = FileStat::GetReadOnlyFlag(*this);
+        sal_Bool isReadOnly = FileStat::GetReadOnlyFlag(*this);
         if (isReadOnly)
         {
-            FileStat::SetReadOnlyFlag(*this, FALSE);
+            FileStat::SetReadOnlyFlag(*this, sal_False);
         }
 
         // directory?
@@ -2955,7 +2955,7 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
                 if ( FSYS_ACTION_RECURSIVE == (nActions & FSYS_ACTION_RECURSIVE) )
                 {
                         Dir aDir( *this, FSYS_KIND_DIR|FSYS_KIND_FILE );
-                        for ( USHORT n = 0; eError == FSYS_ERR_OK && n < aDir.Count(); ++n )
+                        for ( sal_uInt16 n = 0; eError == FSYS_ERR_OK && n < aDir.Count(); ++n )
                         {
                                 const DirEntry &rSubDir = aDir[n];
                                 DirEntryFlag flag = rSubDir.GetFlag();
@@ -3058,20 +3058,20 @@ FSysError DirEntry::Kill(  FSysAction nActions ) const
 |*
 *************************************************************************/
 
-BOOL DirEntry::Contains( const DirEntry &rSubEntry ) const
+sal_Bool DirEntry::Contains( const DirEntry &rSubEntry ) const
 {
     DBG_ASSERT( IsAbs() && rSubEntry.IsAbs(), "must be absolute entries" );
 
-        USHORT nThisLevel = Level();
-    USHORT nSubLevel = rSubEntry.Level();
+        sal_uInt16 nThisLevel = Level();
+    sal_uInt16 nSubLevel = rSubEntry.Level();
     if ( nThisLevel < nSubLevel )
     {
         for ( ; nThisLevel; --nThisLevel, --nSubLevel )
             if ( (*this)[nThisLevel-1] != rSubEntry[nSubLevel-1] )
-                return FALSE;
-        return TRUE;
+                return sal_False;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -3084,11 +3084,11 @@ BOOL DirEntry::Contains( const DirEntry &rSubEntry ) const
 |*
 *************************************************************************/
 
-USHORT DirEntry::Level() const
+sal_uInt16 DirEntry::Level() const
 {
     DBG_CHKTHIS( DirEntry, ImpCheckDirEntry );
 
-    USHORT nLevel = 0;
+    sal_uInt16 nLevel = 0;
     const DirEntry *pRes = this;
     while ( pRes )
     {
@@ -3139,7 +3139,7 @@ String DirEntry::ConvertSystemToName( const String &rName )
 |*
 *************************************************************************/
 
-BOOL DirEntry::IsValid() const
+sal_Bool DirEntry::IsValid() const
 {
         return (nError == FSYS_ERR_OK);
 }
@@ -3154,9 +3154,9 @@ BOOL DirEntry::IsValid() const
 |*
 *************************************************************************/
 
-BOOL DirEntry::IsRFSAvailable()
+sal_Bool DirEntry::IsRFSAvailable()
 {
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -3171,18 +3171,18 @@ BOOL DirEntry::IsRFSAvailable()
 |*
 *************************************************************************/
 
-BOOL DirEntry::IsLongNameOnFAT() const
+sal_Bool DirEntry::IsLongNameOnFAT() const
 {
         // FAT-System?
         DirEntry aTempDirEntry(*this);
         aTempDirEntry.ToAbs();
         if (DirEntry::GetPathStyle(aTempDirEntry.GetDevice().GetName().GetChar(0)) != FSYS_STYLE_FAT)
         {
-            return FALSE;       // nein, also false
+            return sal_False;       // nein, also false
         }
 
         // DirEntry-Kette auf lange Dateinamen pr?fen
-        for( USHORT iLevel = this->Level(); iLevel > 0; iLevel-- )
+        for( sal_uInt16 iLevel = this->Level(); iLevel > 0; iLevel-- )
         {
             const DirEntry& rEntry = (const DirEntry&) (*this)[iLevel-1];
             String  aBase( rEntry.GetBase() );
@@ -3190,15 +3190,15 @@ BOOL DirEntry::IsLongNameOnFAT() const
 
             if (aBase.Len()>8)  // Name > 8?
             {
-                return TRUE;
+                return sal_True;
             }
 
             if (aExtension.Len()>3) // Extension > 3?
             {
-                return TRUE;
+                return sal_True;
             }
         }
-        return FALSE;
+        return sal_False;
 }
 
 //========================================================================

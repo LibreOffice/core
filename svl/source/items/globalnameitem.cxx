@@ -52,7 +52,7 @@ SfxGlobalNameItem::SfxGlobalNameItem()
 
 // -----------------------------------------------------------------------
 
-SfxGlobalNameItem::SfxGlobalNameItem( USHORT nW, const SvGlobalName& rName )
+SfxGlobalNameItem::SfxGlobalNameItem( sal_uInt16 nW, const SvGlobalName& rName )
 :   SfxPoolItem( nW ),
     m_aName( rName )
 {
@@ -80,7 +80,7 @@ SfxPoolItem* SfxGlobalNameItem::Clone(SfxItemPool *) const
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
+sal_Bool SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Reference < com::sun::star::script::XTypeConverter > xConverter
             ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
@@ -94,21 +94,21 @@ BOOL SfxGlobalNameItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE )
     if ( aSeq.getLength() == 16 )
     {
         m_aName.MakeFromMemory( (void*) aSeq.getConstArray() );
-        return TRUE;
+        return sal_True;
     }
 
     DBG_ERROR( "SfxGlobalNameItem::PutValue - Wrong type!" );
-    return FALSE;
+    return sal_False;
 }
 
 //----------------------------------------------------------------------------
 // virtual
-BOOL SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE ) const
+sal_Bool SfxGlobalNameItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
        com::sun::star::uno::Sequence< sal_Int8 > aSeq( 16 );
     void* pData = ( void* ) &m_aName.GetCLSID();
     memcpy( aSeq.getArray(), pData, 16 );
     rVal <<= aSeq;
-    return TRUE;
+    return sal_True;
 }
 

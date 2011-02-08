@@ -34,7 +34,7 @@
 // - Pointer-Types -
 // -----------------
 
-typedef USHORT PointerStyle;
+typedef sal_uInt16 PointerStyle;
 
 #define POINTER_ARROW                   ((PointerStyle)0)
 #define POINTER_NULL                    ((PointerStyle)1)

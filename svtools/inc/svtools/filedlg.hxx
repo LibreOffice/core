@@ -53,7 +53,7 @@ protected:
     UniString           aDfltExt;       // Default - Extension
 
 public:
-                        PathDialog( Window* pParent, WinBits nWinStyle = 0, BOOL bCreateDir = TRUE );
+                        PathDialog( Window* pParent, WinBits nWinStyle = 0, sal_Bool bCreateDir = sal_True );
                         ~PathDialog();
 
     virtual long        OK();
@@ -92,9 +92,9 @@ public:
     void                RemoveAllFilter();
     void                SetCurFilter( const UniString& rFilter );
     UniString               GetCurFilter() const;
-    USHORT              GetFilterCount() const;
-    UniString               GetFilterName( USHORT nPos ) const;
-    UniString               GetFilterType( USHORT nPos ) const;
+    sal_uInt16              GetFilterCount() const;
+    UniString               GetFilterName( sal_uInt16 nPos ) const;
+    UniString               GetFilterType( sal_uInt16 nPos ) const;
 
     void                SetFileSelectHdl( const Link& rLink ) { aFileHdlLink = rLink; }
     const Link&         GetFileSelectHdl() const { return aFileHdlLink; }

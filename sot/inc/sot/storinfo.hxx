@@ -39,14 +39,14 @@ class SvStorageInfo
 friend class SvStorage;
     String          aName;
     SvGlobalName    aClassName;
-    ULONG           nSize;
-    BOOL            bStream:1,
+    sal_uLong           nSize;
+    sal_Bool            bStream:1,
                     bStorage:1;
 
                             SvStorageInfo(){}; // Fuer SvStorage
 public:
                             SvStorageInfo( const StgDirEntry& );
-                            SvStorageInfo( const String& rName, ULONG nSz, BOOL bIsStorage )
+                            SvStorageInfo( const String& rName, sal_uLong nSz, sal_Bool bIsStorage )
                                 : aName( rName )
                                 , nSize( nSz )
                                 , bStream( !bIsStorage )
@@ -55,9 +55,9 @@ public:
 
     const SvGlobalName &    GetClassName() const { return aClassName; }
     const String &          GetName() const { return aName; }
-    BOOL                    IsStream() const { return bStream; }
-    BOOL                    IsStorage() const { return bStorage; }
-    ULONG                   GetSize() const { return nSize;      }
+    sal_Bool                    IsStream() const { return bStream; }
+    sal_Bool                    IsStorage() const { return bStorage; }
+    sal_uLong                   GetSize() const { return nSize;      }
 };
 
 class SOT_DLLPUBLIC SvStorageInfoList
@@ -66,7 +66,7 @@ class SOT_DLLPUBLIC SvStorageInfoList
     const SvStorageInfo * Get( const String & rName );
 };
 
-SOT_DLLPUBLIC ULONG ReadClipboardFormat( SvStream & rStm );
-SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, ULONG nFormat );
+SOT_DLLPUBLIC sal_uLong ReadClipboardFormat( SvStream & rStm );
+SOT_DLLPUBLIC void WriteClipboardFormat( SvStream & rStm, sal_uLong nFormat );
 
 #endif // _STORINFO_HXX

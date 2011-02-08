@@ -75,7 +75,7 @@ private:
     bool m_bJavaNotFound_Handled;
     bool m_bVMCreationFailure_Handled;
     bool m_bRestartRequired_Handled;
-    USHORT m_nResult_JavaDisabled;
+    sal_uInt16 m_nResult_JavaDisabled;
 };
 }
 

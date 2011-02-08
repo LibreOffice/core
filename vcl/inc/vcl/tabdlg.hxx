@@ -45,7 +45,7 @@ private:
     FixedLine*          mpFixedLine;
     Window*             mpViewWindow;
     WindowAlign         meViewAlign;
-    BOOL                mbPosControls;
+    sal_Bool                mbPosControls;
 
     SAL_DLLPRIVATE void ImplInitTabDialogData();
     SAL_DLLPRIVATE void ImplPosControls();

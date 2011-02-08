@@ -39,45 +39,45 @@
 class TextPaM
 {
 private:
-    ULONG           mnPara;
-    USHORT          mnIndex;
+    sal_uLong           mnPara;
+    sal_uInt16          mnIndex;
 
 public:
                     TextPaM()                               { mnPara = 0, mnIndex = 0; }
-                    TextPaM( ULONG nPara, USHORT nIndex )   { mnPara = nPara, mnIndex = nIndex; }
+                    TextPaM( sal_uLong nPara, sal_uInt16 nIndex )   { mnPara = nPara, mnIndex = nIndex; }
 
-    ULONG           GetPara() const     { return mnPara; }
-    ULONG&          GetPara()           { return mnPara; }
+    sal_uLong           GetPara() const     { return mnPara; }
+    sal_uLong&          GetPara()           { return mnPara; }
 
-    USHORT          GetIndex() const    { return mnIndex; }
-    USHORT&         GetIndex()          { return mnIndex; }
+    sal_uInt16          GetIndex() const    { return mnIndex; }
+    sal_uInt16&         GetIndex()          { return mnIndex; }
 
-    inline BOOL     operator == ( const TextPaM& rPaM ) const;
-    inline BOOL     operator != ( const TextPaM& rPaM ) const;
-    inline BOOL     operator < ( const TextPaM& rPaM ) const;
-    inline BOOL     operator > ( const TextPaM& rPaM ) const;
+    inline sal_Bool     operator == ( const TextPaM& rPaM ) const;
+    inline sal_Bool     operator != ( const TextPaM& rPaM ) const;
+    inline sal_Bool     operator < ( const TextPaM& rPaM ) const;
+    inline sal_Bool     operator > ( const TextPaM& rPaM ) const;
 };
 
-inline BOOL TextPaM::operator == ( const TextPaM& rPaM ) const
+inline sal_Bool TextPaM::operator == ( const TextPaM& rPaM ) const
 {
-    return ( ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex ) ) ? TRUE : FALSE;
+    return ( ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
-inline BOOL TextPaM::operator != ( const TextPaM& rPaM ) const
+inline sal_Bool TextPaM::operator != ( const TextPaM& rPaM ) const
 {
     return !( *this == rPaM );
 }
 
-inline BOOL TextPaM::operator < ( const TextPaM& rPaM ) const
+inline sal_Bool TextPaM::operator < ( const TextPaM& rPaM ) const
 {
     return ( ( mnPara < rPaM.mnPara ) ||
-             ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex ) ) ? TRUE : FALSE;
+             ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
-inline BOOL TextPaM::operator > ( const TextPaM& rPaM ) const
+inline sal_Bool TextPaM::operator > ( const TextPaM& rPaM ) const
 {
     return ( ( mnPara > rPaM.mnPara ) ||
-             ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? TRUE : FALSE;
+             ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? sal_True : sal_False;
 }
 
 class SVT_DLLPUBLIC TextSelection
@@ -99,18 +99,18 @@ public:
 
     void            Justify();
 
-    BOOL            HasRange() const    { return maStartPaM != maEndPaM; }
+    sal_Bool            HasRange() const    { return maStartPaM != maEndPaM; }
 
-    inline BOOL     operator == ( const TextSelection& rSel ) const;
-    inline BOOL     operator != ( const TextSelection& rSel ) const;
+    inline sal_Bool     operator == ( const TextSelection& rSel ) const;
+    inline sal_Bool     operator != ( const TextSelection& rSel ) const;
 };
 
-inline BOOL TextSelection::operator == ( const TextSelection& rSel ) const
+inline sal_Bool TextSelection::operator == ( const TextSelection& rSel ) const
 {
     return ( ( maStartPaM == rSel.maStartPaM ) && ( maEndPaM == rSel.maEndPaM ) );
 }
 
-inline BOOL TextSelection::operator != ( const TextSelection& rSel ) const
+inline sal_Bool TextSelection::operator != ( const TextSelection& rSel ) const
 {
     return !( *this == rSel );
 }
@@ -133,30 +133,30 @@ inline BOOL TextSelection::operator != ( const TextSelection& rSel ) const
 class SVT_DLLPUBLIC TextHint : public SfxSimpleHint
 {
 private:
-    ULONG   mnValue;
+    sal_uLong   mnValue;
 
 public:
             TYPEINFO();
-            TextHint( ULONG nId );
-            TextHint( ULONG nId, ULONG nValue );
+            TextHint( sal_uLong nId );
+            TextHint( sal_uLong nId, sal_uLong nValue );
 
-    ULONG   GetValue() const        { return mnValue; }
-    void    SetValue( ULONG n )     { mnValue = n; }
+    sal_uLong   GetValue() const        { return mnValue; }
+    void    SetValue( sal_uLong n )     { mnValue = n; }
 };
 
 struct TEIMEInfos
 {
     String  aOldTextAfterStartPos;
-    USHORT* pAttribs;
+    sal_uInt16* pAttribs;
     TextPaM aPos;
-    USHORT  nLen;
-    BOOL    bCursor;
-    BOOL    bWasCursorOverwrite;
+    sal_uInt16  nLen;
+    sal_Bool    bCursor;
+    sal_Bool    bWasCursorOverwrite;
 
             TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos );
             ~TEIMEInfos();
 
-    void    CopyAttribs( const USHORT* pA, USHORT nL );
+    void    CopyAttribs( const sal_uInt16* pA, sal_uInt16 nL );
     void    DestroyAttribs();
 };
 
@@ -175,11 +175,11 @@ struct TEIMEInfos
 template <class T> class ToolsList : public ::std::vector< T >
 {
 public:
-    ULONG           Count() const { return static_cast<ULONG>(::std::vector< T >::size()); }
-    ULONG           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
-    T               GetObject( ULONG nIndex ) const { return (*this)[nIndex]; }
-    void            Insert( T pObject, ULONG nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
-    void            Remove( ULONG nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
+    sal_uLong           Count() const { return static_cast<sal_uLong>(::std::vector< T >::size()); }
+    sal_uLong           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    T               GetObject( sal_uLong nIndex ) const { return (*this)[nIndex]; }
+    void            Insert( T pObject, sal_uLong nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
+    void            Remove( sal_uLong nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
 };
 
 #endif // _TEXTDATA_HXX

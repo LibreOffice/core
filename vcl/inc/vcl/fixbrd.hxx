@@ -50,8 +50,8 @@
 class VCL_DLLPUBLIC FixedBorder : public Control
 {
 private:
-    USHORT          mnType;
-    BOOL            mbTransparent;
+    sal_uInt16          mnType;
+    sal_Bool            mbTransparent;
 
 private:
     using Control::ImplInitSettings;
@@ -59,7 +59,7 @@ private:
     SAL_DLLPRIVATE void    ImplInit( Window* pParent, WinBits nStyle );
     SAL_DLLPRIVATE WinBits ImplInitStyle( WinBits nStyle );
     SAL_DLLPRIVATE void    ImplInitSettings();
-    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
+    SAL_DLLPRIVATE void    ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                               const Point& rPos, const Size& rSize );
 
 public:
@@ -68,15 +68,15 @@ public:
                     ~FixedBorder();
 
     virtual void    Paint( const Rectangle& rRect );
-    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void    Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    void            SetTransparent( BOOL bTransparent );
-    BOOL            IsTransparent() const { return mbTransparent; }
-    void            SetBorderType( USHORT nType );
-    USHORT          GetBorderType() const { return mnType; }
+    void            SetTransparent( sal_Bool bTransparent );
+    sal_Bool            IsTransparent() const { return mbTransparent; }
+    void            SetBorderType( sal_uInt16 nType );
+    sal_uInt16          GetBorderType() const { return mnType; }
 };
 
 #endif  // _SV_FIXBRD_HXX

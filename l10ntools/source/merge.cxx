@@ -61,12 +61,12 @@ ByteString PFormEntrys::Dump()
     return sRet;
 }
 
-BOOL PFormEntrys::GetTransex3Text( ByteString &rReturn,
-    USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
+sal_Bool PFormEntrys::GetTransex3Text( ByteString &rReturn,
+    sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel )
 {
-    BOOL rc = GetText( rReturn , nTyp , nLangIndex , bDel );
+    sal_Bool rc = GetText( rReturn , nTyp , nLangIndex , bDel );
     ByteString test( rReturn );
-    for( USHORT idx = 0; idx < rReturn.Len(); idx++ )
+    for( sal_uInt16 idx = 0; idx < rReturn.Len(); idx++ )
     {
         if( rReturn.GetChar( idx ) == '\"' && ( idx >= 1 )  &&  rReturn.GetChar( idx-1 ) == '\\' )
         {
@@ -78,18 +78,18 @@ BOOL PFormEntrys::GetTransex3Text( ByteString &rReturn,
     return rc;
 }
 /*****************************************************************************/
-BOOL PFormEntrys::GetText( ByteString &rReturn,
-    USHORT nTyp, const ByteString &nLangIndex, BOOL bDel )
+sal_Bool PFormEntrys::GetText( ByteString &rReturn,
+    sal_uInt16 nTyp, const ByteString &nLangIndex, sal_Bool bDel )
 {
 
-    BOOL bReturn=TRUE;
+    sal_Bool bReturn=sal_True;
     switch ( nTyp ) {
         case STRING_TYP_TEXT :
             rReturn = sText[ nLangIndex ];
             if ( bDel )
                 sText[ nLangIndex ] = "";
             bReturn = bTextFirst[ nLangIndex ];
-            bTextFirst[ nLangIndex ] = FALSE;
+            bTextFirst[ nLangIndex ] = sal_False;
             break;
         case STRING_TYP_HELPTEXT :
             rReturn = sHelpText;
@@ -99,14 +99,14 @@ BOOL PFormEntrys::GetText( ByteString &rReturn,
             if ( bDel )
                 sQuickHelpText[ nLangIndex ] = "";
             bReturn = bQuickHelpTextFirst[ nLangIndex ];
-            bQuickHelpTextFirst[ nLangIndex ] = FALSE;
+            bQuickHelpTextFirst[ nLangIndex ] = sal_False;
             break;
         case STRING_TYP_TITLE :
             rReturn = sTitle[ nLangIndex ];
             if ( bDel )
                 sTitle[ nLangIndex ] = "";
             bReturn = bTitleFirst[ nLangIndex ];
-            bTitleFirst[ nLangIndex ] = FALSE;
+            bTitleFirst[ nLangIndex ] = sal_False;
             break;
     }
     return bReturn;
@@ -163,7 +163,7 @@ PFormEntrys *MergeData::InsertEntry( const ByteString &rPForm )
     return pFEntrys;
 }
 
-BOOL MergeData::operator==( ResData *pData )
+sal_Bool MergeData::operator==( ResData *pData )
 {
     ByteString sResTyp_upper( pData->sResTyp );
     sResTyp_upper.ToUpperAscii();
@@ -188,7 +188,7 @@ BOOL MergeData::operator==( ResData *pData )
 MergeDataFile::MergeDataFile(
     const ByteString &rFileName,
     const ByteString& sFile,
-    BOOL bErrLog,
+    sal_Bool bErrLog,
     CharSet aCharSet,
     bool bCaseSensitive)
     : bErrorLog( bErrLog )

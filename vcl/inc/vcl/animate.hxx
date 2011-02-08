@@ -70,7 +70,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
     Size        aSizePix;
     long        nWait;
     Disposal    eDisposal;
-    BOOL        bUserInput;
+    sal_Bool        bUserInput;
 
                 AnimationBitmap() {}
                 AnimationBitmap( const BitmapEx& rBmpEx, const Point& rPosPix,
@@ -81,9 +81,9 @@ struct VCL_DLLPUBLIC AnimationBitmap
                             aSizePix    ( rSizePix ),
                             nWait       ( _nWait ),
                             eDisposal   ( _eDisposal ),
-                            bUserInput  ( FALSE ) {}
+                            bUserInput  ( sal_False ) {}
 
-    BOOL        operator==( const AnimationBitmap& rAnimBmp ) const
+    sal_Bool        operator==( const AnimationBitmap& rAnimBmp ) const
                 {
                     return( rAnimBmp.aBmpEx == aBmpEx &&
                             rAnimBmp.aPosPix == aPosPix &&
@@ -93,9 +93,9 @@ struct VCL_DLLPUBLIC AnimationBitmap
                             rAnimBmp.bUserInput == bUserInput );
                 }
 
-    BOOL        operator!=( const AnimationBitmap& rAnimBmp ) const { return !( *this == rAnimBmp ); }
+    sal_Bool        operator!=( const AnimationBitmap& rAnimBmp ) const { return !( *this == rAnimBmp ); }
 
-    BOOL        IsEqual( const AnimationBitmap& rAnimBmp ) const
+    sal_Bool        IsEqual( const AnimationBitmap& rAnimBmp ) const
                 {
                     return( rAnimBmp.aPosPix == aPosPix &&
                             rAnimBmp.aSizePix == aSizePix &&
@@ -105,7 +105,7 @@ struct VCL_DLLPUBLIC AnimationBitmap
                             rAnimBmp.aBmpEx.IsEqual( aBmpEx ) );
                 }
 
-    ULONG       GetChecksum() const;
+    sal_uLong       GetChecksum() const;
 };
 
 // -------------------
@@ -124,14 +124,14 @@ struct AInfo
     OutputDevice*   pOutDev;
     void*           pViewData;
     long            nExtraData;
-    BOOL            bWithSize;
-    BOOL            bPause;
+    sal_Bool            bWithSize;
+    sal_Bool            bPause;
 
                     AInfo() : pOutDev( NULL ),
                               pViewData( NULL ),
                               nExtraData( 0L ),
-                              bWithSize( FALSE ),
-                              bPause( FALSE ) {}
+                              bWithSize( sal_False ),
+                              bPause( sal_False ) {}
 };
 
 // -------------------
@@ -140,7 +140,7 @@ struct AInfo
 
 class VCL_DLLPUBLIC Animation
 {
-    SAL_DLLPRIVATE static ULONG         mnAnimCount;
+    SAL_DLLPRIVATE static sal_uLong         mnAnimCount;
 
     List                    maList;
     List                    maAInfoList;
@@ -155,22 +155,22 @@ class VCL_DLLPUBLIC Animation
     long                    mnPos;
     Disposal                meLastDisposal;
     CycleMode               meCycleMode;
-    BOOL                    mbFirst;
-    BOOL                    mbIsInAnimation;
-    BOOL                    mbWithSize;
-    BOOL                    mbLoopTerminated;
-    BOOL                    mbIsWaiting;
+    sal_Bool                    mbFirst;
+    sal_Bool                    mbIsInAnimation;
+    sal_Bool                    mbWithSize;
+    sal_Bool                    mbLoopTerminated;
+    sal_Bool                    mbIsWaiting;
 
 //#if 0 // _SOLAR__PRIVATE
 
-    SAL_DLLPRIVATE void     ImplRestartTimer( ULONG nTimeout );
+    SAL_DLLPRIVATE void     ImplRestartTimer( sal_uLong nTimeout );
     DECL_DLLPRIVATE_LINK(   ImplTimeoutHdl, Timer* );
 
 public:
 
     SAL_DLLPRIVATE static void  ImplIncAnimCount() { mnAnimCount++; }
     SAL_DLLPRIVATE static void  ImplDecAnimCount() { mnAnimCount--; }
-    SAL_DLLPRIVATE ULONG        ImplGetCurPos() const { return mnPos; }
+    SAL_DLLPRIVATE sal_uLong        ImplGetCurPos() const { return mnPos; }
 
 //#endif
 
@@ -180,28 +180,28 @@ public:
                             ~Animation();
 
     Animation&              operator=( const Animation& rAnimation );
-    BOOL                    operator==( const Animation& rAnimation ) const;
-    BOOL                    operator!=( const Animation& rAnimation ) const { return !(*this==rAnimation); }
+    sal_Bool                    operator==( const Animation& rAnimation ) const;
+    sal_Bool                    operator!=( const Animation& rAnimation ) const { return !(*this==rAnimation); }
 
-    BOOL                    IsEqual( const Animation& rAnimation ) const;
+    sal_Bool                    IsEqual( const Animation& rAnimation ) const;
 
-    BOOL                    IsEmpty() const;
+    sal_Bool                    IsEmpty() const;
     void                    SetEmpty();
 
     void                    Clear();
 
-    BOOL                    Start( OutputDevice* pOutDev, const Point& rDestPt, long nExtraData = 0,
+    sal_Bool                    Start( OutputDevice* pOutDev, const Point& rDestPt, long nExtraData = 0,
                                    OutputDevice* pFirstFrameOutDev = NULL );
-    BOOL                    Start( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz, long nExtraData = 0,
+    sal_Bool                    Start( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz, long nExtraData = 0,
                                    OutputDevice* pFirstFrameOutDev = NULL );
     void                    Stop( OutputDevice* pOutDev = NULL, long nExtraData = 0 );
 
     void                    Draw( OutputDevice* pOutDev, const Point& rDestPt ) const;
     void                    Draw( OutputDevice* pOutDev, const Point& rDestPt, const Size& rDestSz ) const;
 
-    BOOL                    IsInAnimation() const { return mbIsInAnimation; }
-    BOOL                    IsTransparent() const;
-    BOOL                    IsTerminated() const { return mbLoopTerminated; }
+    sal_Bool                    IsInAnimation() const { return mbIsInAnimation; }
+    sal_Bool                    IsTransparent() const;
+    sal_Bool                    IsTerminated() const { return mbLoopTerminated; }
 
     const Size&             GetDisplaySizePixel() const { return maGlobalSize; }
     void                    SetDisplaySizePixel( const Size& rSize ) { maGlobalSize = rSize; }
@@ -209,8 +209,8 @@ public:
     const BitmapEx&         GetBitmapEx() const { return maBitmapEx; }
     void                    SetBitmapEx( const BitmapEx& rBmpEx ) { maBitmapEx = rBmpEx; }
 
-    ULONG                   GetLoopCount() const { return mnLoopCount; }
-    void                    SetLoopCount( const ULONG nLoopCount );
+    sal_uLong                   GetLoopCount() const { return mnLoopCount; }
+    void                    SetLoopCount( const sal_uLong nLoopCount );
     void                    ResetLoopCount();
 
     void                    SetCycleMode( CycleMode eMode );
@@ -219,31 +219,31 @@ public:
     void                    SetNotifyHdl( const Link& rLink ) { maNotifyLink = rLink; }
     const Link&             GetNotifyHdl() const { return maNotifyLink; }
 
-    USHORT                  Count() const { return (USHORT) maList.Count(); }
-    BOOL                    Insert( const AnimationBitmap& rAnimationBitmap );
-    const AnimationBitmap&  Get( USHORT nAnimation ) const;
-    void                    Replace( const AnimationBitmap& rNewAnimationBmp, USHORT nAnimation );
+    sal_uInt16                  Count() const { return (sal_uInt16) maList.Count(); }
+    sal_Bool                    Insert( const AnimationBitmap& rAnimationBitmap );
+    const AnimationBitmap&  Get( sal_uInt16 nAnimation ) const;
+    void                    Replace( const AnimationBitmap& rNewAnimationBmp, sal_uInt16 nAnimation );
 
     List*                   GetAInfoList() { return &maAInfoList; }
-    ULONG                   GetSizeBytes() const;
-    ULONG                   GetChecksum() const;
+    sal_uLong                   GetSizeBytes() const;
+    sal_uLong                   GetChecksum() const;
 
 public:
 
-    BOOL                    Convert( BmpConversion eConversion );
-    BOOL                    ReduceColors( USHORT nNewColorCount,
+    sal_Bool                    Convert( BmpConversion eConversion );
+    sal_Bool                    ReduceColors( sal_uInt16 nNewColorCount,
                                           BmpReduce eReduce = BMP_REDUCE_SIMPLE );
-    BOOL                    Invert();
-    BOOL                    Mirror( ULONG nMirrorFlags );
-    BOOL                    Dither( ULONG nDitherFlags = BMP_DITHER_MATRIX );
-    BOOL                    Adjust( short nLuminancePercent = 0,
+    sal_Bool                    Invert();
+    sal_Bool                    Mirror( sal_uLong nMirrorFlags );
+    sal_Bool                    Dither( sal_uLong nDitherFlags = BMP_DITHER_MATRIX );
+    sal_Bool                    Adjust( short nLuminancePercent = 0,
                                     short nContrastPercent = 0,
                                     short nChannelRPercent = 0,
                                     short nChannelGPercent = 0,
                                     short nChannelBPercent = 0,
                                     double fGamma = 1.0,
-                                    BOOL bInvert = FALSE );
-    BOOL                    Filter( BmpFilter eFilter,
+                                    sal_Bool bInvert = sal_False );
+    sal_Bool                    Filter( BmpFilter eFilter,
                                     const BmpFilterParam* pFilterParam = NULL,
                                     const Link* pProgress = NULL );
 

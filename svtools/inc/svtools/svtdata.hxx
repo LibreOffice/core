@@ -60,8 +60,8 @@ public:
 class SVT_DLLPUBLIC SvtResId: public ResId
 {
 public:
-    SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale);
-    SvtResId(USHORT nId);
+    SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale);
+    SvtResId(sal_uInt16 nId);
      // VCL dependant, only available in SVT, not in SVL!
 };
 

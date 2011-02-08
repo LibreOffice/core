@@ -50,7 +50,7 @@ DBG_NAMEEX( OutputDevice )
 // =======================================================================
 
 void OutputDevice::DrawRect( const Rectangle& rRect,
-                             ULONG nHorzRound, ULONG nVertRound )
+                             sal_uLong nHorzRound, sal_uLong nVertRound )
 {
     DBG_TRACE( "OutputDevice::DrawRoundRect()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );

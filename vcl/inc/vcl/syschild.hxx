@@ -43,7 +43,7 @@ class VCL_DLLPUBLIC SystemChildWindow : public Window
 {
 private:
     using Window::ImplInit;
-    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = FALSE );
+    SAL_DLLPRIVATE void     ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_False );
     SAL_DLLPRIVATE void     ImplTestJavaException( void* pEnv );
 
     // Copy assignment is forbidden and not implemented.
@@ -53,7 +53,7 @@ private:
 public:
                             SystemChildWindow( Window* pParent, WinBits nStyle = 0 );
                             // create a SystemChildWindow using the given SystemWindowData
-                            SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow = TRUE );
+                            SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow = sal_True );
                             SystemChildWindow( Window* pParent, const ResId& rResId );
                             ~SystemChildWindow();
 
@@ -61,8 +61,8 @@ public:
 
     //  per default systemchildwindows erase their background for better plugin support
     //  however, this might not always be required
-    void                    EnableEraseBackground( BOOL bEnable = TRUE );
-    BOOL                    IsEraseBackgroundEnabled();
+    void                    EnableEraseBackground( sal_Bool bEnable = sal_True );
+    sal_Bool                    IsEraseBackgroundEnabled();
 
     // return the platform specific handle/id of this window;
     // in case the flag bUseJava is set, a java compatible overlay window
