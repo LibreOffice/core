@@ -1522,8 +1522,7 @@ void SortedResultSet::CheckProperties( long nOldCount, sal_Bool bWasFinal )
 //-------------------------------------------------------------------------
 void SortedResultSet::InsertNew( long nPos, long nCount )
 {
-    // in der maS2O Liste alle Einträge, die >= nPos sind, um nCount
-    // erhöhen
+    // for all entries in the msS20-list, which are >= nPos, increase by nCount
     SortListData    *pData;
     long            i, nEnd;
 
@@ -1537,15 +1536,15 @@ void SortedResultSet::InsertNew( long nPos, long nCount )
         }
     }
 
-    // und die neuen einträge hinten an die maS2O Liste anhängen bzw
-    // an der Position nPos in der maO2S Liste einfügen
+    // and append the new entries at the end of the maS20-list or insert at the
+    // position nPos in the maS2O-list
     for ( i=0; i<nCount; i++ )
     {
         nEnd += 1;
         pData = new SortListData( nEnd );
 
-        maS2O.Insert( pData, nEnd );    // Insert( Wert, Position )
-        maO2S.Insert( (void*)nEnd, (sal_uInt32)(nPos+i) );  // Insert( Wert, Position )
+        maS2O.Insert( pData, nEnd );    // Insert( Value, Position )
+        maO2S.Insert( (void*)nEnd, (sal_uInt32)(nPos+i) );  // Insert( Value, Position )
     }
 
     mnCount += nCount;
