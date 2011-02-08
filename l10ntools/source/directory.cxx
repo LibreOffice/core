@@ -103,7 +103,6 @@ void Directory::readDirectory()
 
 #ifdef WNT
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 
 void Directory::readDirectory ( const rtl::OUString& sFullpath )

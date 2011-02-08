@@ -34,7 +34,6 @@
 
 #ifdef WNT
 # include <prewin.h>
-# include <windows.h>
 # include <postwin.h>
 #endif
 

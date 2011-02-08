@@ -37,7 +37,6 @@
  ************************************************************************/
 
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 
 #include <osl/diagnose.h>

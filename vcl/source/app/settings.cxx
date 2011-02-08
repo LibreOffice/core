@@ -48,9 +48,8 @@
 #include <unotools/syslocaleoptions.hxx>
 
 #ifdef WNT
-#include "prewin.h"
-#include <windows.h>
-#include "postwin.h"
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 using namespace rtl;

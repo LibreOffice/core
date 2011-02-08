@@ -40,7 +40,6 @@
 
 #ifdef WNT
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 #elif defined ( QUARTZ )
 #include "premac.h"

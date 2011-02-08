@@ -33,7 +33,6 @@
 #include <malloc.h>
 
 #include <prewin.h>
-#include <windows.h>
 #include <postwin.h>
 #include <vcl/sysdata.hxx>
 #include "tools/svwin.h"
