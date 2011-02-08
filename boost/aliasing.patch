@@ -1,0 +1,43 @@
+--- misc/boost_1_44_0/boost/function/function_base.hpp
++++ misc/build/boost_1_44_0/boost/function/function_base.hpp
+@@ -2,6 +2,7 @@
+ 
+ //  Copyright Douglas Gregor 2001-2006
+ //  Copyright Emil Dotchevski 2007
++//  Copyright Dean Michael Berris 2009
+ //  Use, modification and distribution is subject to the Boost Software License, Version 1.0.
+ //  (See accompanying file LICENSE_1_0.txt or copy at
+ //  http://www.boost.org/LICENSE_1_0.txt)
+@@ -44,6 +45,13 @@
+ #   pragma warning( disable : 4127 ) // "conditional expression is constant"
+ #endif       
+ 
++#if defined(__GNUC__)
++// Because GCC complains of strict aliasing problems, we make it
++// treat the header as a system header, becoming more forgiving with
++// treating implementation details that may be potentially harmful.
++# pragma GCC system_header
++#endif
++
+ // Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
+ #ifdef BOOST_NO_STD_TYPEINFO
+ // Embedded VC++ does not have type_info in namespace std
+@@ -314,15 +322,15 @@
+         {
+           if (op == clone_functor_tag || op == move_functor_tag) {
+             const functor_type* in_functor = 
+-              reinterpret_cast<const functor_type*>(&in_buffer.data);
++              static_cast<const functor_type*>(static_cast<void*>(&in_buffer.data));
+             new ((void*)&out_buffer.data) functor_type(*in_functor);
+ 
+             if (op == move_functor_tag) {
+-              reinterpret_cast<functor_type*>(&in_buffer.data)->~Functor();
++              static_cast<functor_type*>(static_cast<void*>(&in_buffer.data))->~Functor();
+             }
+           } else if (op == destroy_functor_tag) {
+             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
+-            reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
++            static_cast<functor_type*>(static_cast<void*>(&out_buffer.data))->~Functor();
+           } else if (op == check_functor_type_tag) {
+             const detail::sp_typeinfo& check_type 
+               = *out_buffer.type.type;
