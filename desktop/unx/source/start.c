@@ -375,7 +375,7 @@ send_args( int fd, rtl_uString *pCwdPath )
              for ( ; index < len; ++index )
              {
                  if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
-                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 1  )
+                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 0  )
                  {
                      bIsSpecialURL = sal_True;
                      break;
