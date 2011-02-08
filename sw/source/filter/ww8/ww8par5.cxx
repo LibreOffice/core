@@ -1532,8 +1532,6 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
 {
     String aSequenceName;
     String aBook;
-    bool bFormat    = false;
-    bool bShowLast  = false;
     bool bCountOn   = true;
     String sStart;
     SvxExtNumType eNumFormat = SVX_NUM_ARABIC;
@@ -1554,14 +1552,12 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
 
         case '*':
-            bFormat = true;                 // Format-Flag aktivieren
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet )
                 eNumFormat = GetNumTypeFromName( aReadParam.GetResult() );
             break;
 
         case 'r':
-            bShowLast = false;              // Zaehler neu setzen
             bCountOn  = false;
             nRet = aReadParam.SkipToNextToken();
             if( -2 == nRet )
@@ -1569,13 +1565,11 @@ eF_ResT SwWW8ImplReader::Read_F_Seq( WW8FieldDesc*, String& rStr )
             break;
 
         case 'c':
-            bShowLast = true;           // zuletzt verwendete Nummer anzeigen
             bCountOn  = false;
             break;
 
         case 'n':
             bCountOn  = true;               // Nummer um eins erhoehen (default)
-            bShowLast = false;
             break;
 
         case 's':                       // Outline Level
@@ -1822,7 +1816,6 @@ eF_ResT SwWW8ImplReader::Read_F_TemplName( WW8FieldDesc*, String& )
 eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
 {
     bool bHijri = false;
-    bool bSaka = false;
     _ReadFieldParams aReadParam(rStr);
     long nTok;
     while (-1 != (nTok = aReadParam.SkipToNextToken()))
@@ -1837,7 +1830,7 @@ eF_ResT SwWW8ImplReader::Read_F_DateTime( WW8FieldDesc*pF, String& rStr )
                 bHijri = true;
                 break;
             case 's':
-                bSaka = true;
+                //Saka Calendar, should we do something with this ?
                 break;
         }
     }
@@ -2166,7 +2159,6 @@ eF_ResT SwWW8ImplReader::Read_F_Ref( WW8FieldDesc*, String& rStr )
 eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
 {
     String aBkmName;
-    bool bChapterNr = false;
     bool bAboveBelow = false;
 
     long nRet;
@@ -2180,7 +2172,7 @@ eF_ResT SwWW8ImplReader::Read_F_NoteReference( WW8FieldDesc*, String& rStr )
                 aBkmName = aReadParam.GetResult();
             break;
         case 'r':
-            bChapterNr = true; // activate flag 'Chapter Number'
+            // activate flag 'Chapter Number'
             break;
         case 'p':
             bAboveBelow = true;
