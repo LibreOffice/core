@@ -541,7 +541,7 @@ Convert::Types_t Convert::getTypes()
 {
     Types_t aTypes( maMap.size() );
     transform( maMap.begin(), maMap.end(), aTypes.getArray(),
-               select1st<Map_t::value_type>() );
+               o3tl::select1st<Map_t::value_type>() );
     return aTypes;
 }
 
