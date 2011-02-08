@@ -212,7 +212,7 @@ inline void printError( const ::osl::FileBase::RC nError )
 inline void printInt( sal_Int64 i )
 {
     printf( "#printInt_i64# " );
-    printf( "The Integer64 is %lld\n", i);
+    printf( "The Integer64 is %"SAL_PRIdINT64"\n", i);
 }
 
 /** print an unsigned Integer Number.
@@ -220,7 +220,7 @@ inline void printInt( sal_Int64 i )
 inline void printInt( sal_uInt64 i )
 {
     printf( "#printInt_u64# " );
-    printf( "The unsigned Integer64 is %llu\n", i);
+    printf( "The unsigned Integer64 is %"SAL_PRIuUINT64"\n", i);
 }
 
 /** print Boolean value.
@@ -2906,7 +2906,6 @@ namespace osl_FileStatus
         CPPUNIT_TEST( getFileType_001 );
         CPPUNIT_TEST( getFileType_002 );
         CPPUNIT_TEST( getFileType_003 );
-        CPPUNIT_TEST( getFileType_004 );
         // LLA: CPPUNIT_TEST( getFileType_005 );
         //CPPUNIT_TEST( getFileType_006 );
         CPPUNIT_TEST( getFileType_007 );
@@ -5785,27 +5784,27 @@ namespace osl_Directory
                 {
                     // within Linux, df / * 1024 bytes is the result
                     sal_uInt64 nSize = _aVolumeInfo.getTotalSpace();
-                    printf("Total space: %lld\n", nSize);
+                    printf("Total space: %"SAL_PRIuUINT64"\n", nSize);
                 }
                 if (_nMask == VolumeInfoMask_UsedSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getUsedSpace();
-                    printf(" Used space: %lld\n", nSize);
+                    printf(" Used space: %"SAL_PRIuUINT64"\n", nSize);
                 }
                 if (_nMask == VolumeInfoMask_FreeSpace)
                 {
                     sal_uInt64 nSize = _aVolumeInfo.getFreeSpace();
-                    printf(" Free space: %lld\n", nSize);
+                    printf(" Free space: %"SAL_PRIuUINT64"\n", nSize);
                 }
                 if (_nMask == VolumeInfoMask_MaxNameLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxNameLength();
-                    printf("max name length: %ld\n", nLength);
+                    printf("max name length: %"SAL_PRIuUINT32"\n", nLength);
                 }
                 if (_nMask == VolumeInfoMask_MaxPathLength)
                 {
                     sal_uInt32 nLength = _aVolumeInfo.getMaxPathLength();
-                    printf("max path length: %ld\n", nLength);
+                    printf("max path length: %"SAL_PRIuUINT32"\n", nLength);
                 }
                 if (_nMask == VolumeInfoMask_FileSystemCaseHandling)
                 {
