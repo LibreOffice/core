@@ -359,14 +359,30 @@ send_args( int fd, rtl_uString *pCwdPath )
 
         // this is not a param, we have to prepend filenames with file://
         // FIXME: improve the check
-        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) &&
-             ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer, pTmp->length, "slot:", 5 /* length */ ) ) )
+        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) )
         {
             sal_Int32 nFirstColon = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, ':' );
             sal_Int32 nFirstSlash = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, '/' );
 
             // check that pTmp is not an URI yet
-            if ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) )
+            // note ".uno" ".slot" & "vnd.sun.star.script" are special urls that
+            // don't expect a following '/'
+
+             const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
+             sal_Bool bIsSpecialURL = sal_False;
+             int index = 0;
+             int len =  SAL_N_ELEMENTS(schemes);
+             for ( ; index < len; ++index )
+             {
+                 if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
+                     , pTmp->length , schemes[ index ], strlen(schemes[ index ] ))  == 1  )
+                 {
+                     bIsSpecialURL = sal_True;
+                     break;
+                 }
+             }
+
+            if ( !bIsSpecialURL && ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) ) )
             {
                 // some of the switches (currently just -pt) don't want to
                 // have the filenames as URIs
