@@ -1928,15 +1928,6 @@ namespace drawinglayer
                                 aBufferProcessor.process(rTransparence);
                                 const AlphaMask aBmAlpha(aBufferDevice.GetBitmap(aEmptyPoint, aSizePixel));
 
-#ifdef DBG_UTIL
-                                static bool bDoSaveForVisualControl(false);
-                                if(bDoSaveForVisualControl)
-                                {
-                                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                                    aNew << aBmContent;
-                                }
-#endif
-
                                 // paint
                                 mpOutputDevice->DrawBitmapEx(
                                     aRectLogic.TopLeft(),

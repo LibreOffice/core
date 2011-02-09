@@ -97,28 +97,15 @@ namespace drawinglayer
         const Point aEmptyPoint;
         const Size aSizePixel(maContent.GetOutputSizePixel());
         const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
-        static bool bDoSaveForVisualControl(false);
 
         mrOutDev.EnableMapMode(false);
         maContent.EnableMapMode(false);
         Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
 
-        if(bDoSaveForVisualControl)
-        {
-            SvFileStream aNew((const String&)String(ByteString( "c:\\content.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-            aNew << aContent;
-        }
-
         if(mpAlpha)
         {
             mpAlpha->EnableMapMode(false);
             const AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
-
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew((const String&)String(ByteString( "c:\\transparence.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                aNew << aAlphaMask.GetBitmap();
-            }
 
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
         }
@@ -126,12 +113,6 @@ namespace drawinglayer
         {
             mpMask->EnableMapMode(false);
             const Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
-
-            if(bDoSaveForVisualControl)
-            {
-                SvFileStream aNew((const String&)String(ByteString( "c:\\mask.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
-                aNew << aMask;
-            }
 
             mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
         }
