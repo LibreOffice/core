@@ -121,20 +121,6 @@ SHL1STDLIBS+= -z allextract -staticlib=Crun -z defaultextract
 SHL1STDLIBS=pthread.lib
 .ENDIF # OS2
 
-# If we compile sal with STLport checking iterators
-# we need to link against the STLport
-.IF "$(USE_STLP_DEBUG)" != ""
-SHL1STDLIBS+=$(LIBSTLPORT)
-.ENDIF
-
-#The irony that using the system STL instead of
-#stlport requires that we link libsal with the
-#LIBSTLPORT alias which is not required when using
-#stlport is not lost on me
-.IF "$(USE_SYSTEM_STL)"=="YES"
-SHL1STDLIBS+=$(LIBSTLPORT)
-.ENDIF
-
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS+=-framework CoreFoundation -framework Carbon
 .ENDIF

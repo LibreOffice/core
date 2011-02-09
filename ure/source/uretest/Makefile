@@ -120,7 +120,7 @@ out.sdk/cppmain.uno.$(SHAREDLIB_EXT): out.sdk/cppmain.$(OBJ_EXT) version.map | \
             out.sdk
 	$(LINK) $(COMP_LINK_FLAGS) $(link_output_switch)$@ $< $(LINK_LIBS) \
             $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) \
-            $(STLPORTLIB) $(link_std_libs)
+            $(link_std_libs)
 
 out.sdk/cppmain.$(OBJ_EXT): cppmain.cc out.sdk/cpputypes.cppumaker.flag \
             out.sdk/types.cppumaker.flag | out.sdk
