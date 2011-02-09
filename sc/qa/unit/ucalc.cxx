@@ -47,12 +47,10 @@
 # undef ERROR
 #endif
 
-#include "preextstl.h"
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "postextstl.h"
 
 #include <sal/config.h>
 
