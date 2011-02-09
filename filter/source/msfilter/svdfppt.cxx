@@ -70,15 +70,6 @@
 #include <editeng/unoprnms.hxx>
 #include <editeng/editids.hrc>
 
-#if defined(JOEENV) && defined(JOEDEBUG)
-#include "impinccv.h" // etwas Testkram
-#endif
-
-#if defined(DBG_EXTRACTOLEOBJECTS) || defined(DBG_EXTRACTFONTMETRICS)
-#include <tools/urlobj.hxx>
-#include <unotools/localfilehelper.hxx>
-#endif
-
 #define ITEMVALUE(ItemSet,Id,Cast)  ((const Cast&)(ItemSet).Get(Id)).GetValue()
 #include <editeng/adjitem.hxx>
 #include <editeng/escpitem.hxx>
@@ -2183,63 +2174,6 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 if ( mbTracing && !pFont->bAvailable )
                     mpTracer->Trace( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sd1000" )), pFont->aName );
 
-#ifdef DBG_EXTRACTFONTMETRICS
-
-                SvxFont aTmpFont( aFont );
-
-                if ( !pVDev )
-                    pVDev = new VirtualDevice;
-                aTmpFont.SetPhysFont( pVDev );
-                FontMetric aMetric( pVDev->GetFontMetric() );
-                sal_uInt16 nTxtHeight = (sal_uInt16)aMetric.GetAscent() + (sal_uInt16)aMetric.GetDescent();
-
-                String  aFileURLStr;
-                if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( Application::GetAppFileName(), aFileURLStr ) )
-                {
-                    INetURLObject   aURL( aFileURLStr );
-                    aURL.SetName( String( RTL_CONSTASCII_STRINGPARAM( "dbgfontmetrics.txt" ) ) );
-
-                    SvStream* pDbgOut = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE );
-                    if( pDbgOut )
-                    {
-                        pDbgOut->Seek( STREAM_SEEK_TO_END );
-
-                        Printer* pPrinter = NULL;
-                        if ( pSdrModel->GetRefDevice() && pSdrModel->GetRefDevice()->GetOutDevType() == OUTDEV_PRINTER )
-                            pPrinter = (Printer*)pSdrModel->GetRefDevice();
-                        if ( pPrinter )
-                        {
-                            Font aOldFont( pPrinter->GetFont() );
-                            aFont.SetKerning( TRUE );
-                            pPrinter->SetFont( aFont );
-                            aMetric = pPrinter->GetFontMetric();
-                            pPrinter->SetFont( aOldFont );
-                        }
-
-                        if ( ( pPrinter == NULL ) || ( aMetric.GetIntLeading() == 0 ) )
-                        {
-                            VirtualDevice aVirDev( 1 );
-                            aVirDev.SetFont( aFont );
-                            aMetric = aVirDev.GetFontMetric();
-                        }
-                        ByteString aFontName( aFont.GetName(), RTL_TEXTENCODING_UTF8 );
-                        ByteString aHeight( ByteString::CreateFromInt32( aMetric.GetLineHeight() ) );
-                        ByteString aAscent( ByteString::CreateFromInt32( aMetric.GetAscent() ) );
-                        ByteString aDescent( ByteString::CreateFromInt32( aMetric.GetDescent() ) );
-                        ByteString aLeading( ByteString::CreateFromInt32( aMetric.GetIntLeading() ) );
-                        ByteString aPhysHeight( ByteString::CreateFromInt32( nTxtHeight ) );
-
-                        *pDbgOut                                             << (sal_uInt8)0xa
-                                 << "FontName  : " << aFontName.GetBuffer()  << (sal_uInt8)0xa
-                                 << "    Height: " << aHeight.GetBuffer()    << (sal_uInt8)0xa
-                                 << "    Ascent: " << aAscent.GetBuffer()    << (sal_uInt8)0xa
-                                 << "    Descent:" << aDescent.GetBuffer()   << (sal_uInt8)0xa
-                                 << "    Leading:" << aLeading.GetBuffer()   << (sal_uInt8)0xa
-                                 << "PhysHeight :" << aPhysHeight.GetBuffer()<< (sal_uInt8)0xa;
-                    }
-                    delete pDbgOut;
-                 }
-#endif
                 // following block is necessary, because our old PowerPoint export did not set the
                 // correct charset
                 if ( pFont->aName.EqualsIgnoreCaseAscii( "Wingdings" ) ||
