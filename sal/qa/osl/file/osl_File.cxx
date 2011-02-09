@@ -180,25 +180,6 @@ inline void printFileAttributes( const sal_Int64 nAttributes )
     printf( ") file!\n" );
 }
 
-/** print a UNI_CODE file name.
-*/
-inline void printFileName( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    printf( "#printFileName_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf( "%s\n", aString.getStr( ) );
-}
-
-/** print a ASCII_CODE file name.
-*/
-inline void printFileName( const sal_Char * str )
-{
-    printf( "#printFileName_a# " );
-    printf( "%s\n", str );
-}
-
 /** print an output wrong message.
 */
 inline void printError( const ::osl::FileBase::RC nError )
@@ -465,10 +446,8 @@ inline void createTestDirectory( const ::rtl::OUString basename, const ::rtl::OU
 */
 inline void deleteTestDirectory( const ::rtl::OUString dirname )
 {
-    // LLA: printf("deleteTestDirectory\n");
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
-    // LLA: printFileName(aPathURL);
     if ( !isURL( dirname ) )
         ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
 
@@ -1482,7 +1461,6 @@ namespace osl_FileBase
         {
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
-            //printFileName(*pUStr_FileURL);
             nError2 = testFile.open( osl_File_OpenFlag_Create );
             if ( osl::FileBase::E_EXIST == nError2 )  {
                 osl_closeFile( *pHandle );
@@ -2678,7 +2656,6 @@ namespace osl_FileStatus
                     sal_uInt32 mask_link = FileStatusMask_FileName | FileStatusMask_LinkTargetURL;
                     ::osl::FileStatus   rFileStatus( mask_link );
                     rItem_link.getFileStatus( rFileStatus );
-                    //printFileName( rFileStatus.getFileName( ) );
                     if ( compareFileName( rFileStatus.getFileName( ), aFileName) == sal_True )
                     {
                         //printf("find the link file");
@@ -2754,7 +2731,6 @@ namespace osl_FileStatus
             //        use $ROOT/staroffice as volume ---> use dev/fd as volume.
             // and get their directory item.
             createTestDirectory( aTmpName3 );
-            //printFileName( aTmpName2);
             createTestFile( aTmpName3, aTmpName2 );
             createTestDirectory( aTmpName3, aTmpName1 );
 
@@ -3023,7 +2999,6 @@ namespace osl_FileStatus
         {
             ::rtl::OUString aUserHiddenFileURL (RTL_CONSTASCII_USTRINGPARAM("file:///c:/AUTOEXEC.BAT"));
             nError = ::osl::DirectoryItem::get( aUserHiddenFileURL, rItem_hidden );
-            //printFileName( aUserHiddenFileURL );
             CPPUNIT_ASSERT_MESSAGE("get item fail", nError == FileBase::E_None );
               ::osl::FileStatus   rFileStatus( FileStatusMask_Attributes );
             nError = rItem_hidden.getFileStatus( rFileStatus );
@@ -4491,7 +4466,6 @@ namespace osl_File
         createTestDirectory( aTmpName8 );
         //move directory $TEMP/tmpname to $TEMP/tmpname/tmpdir/tmpname
         rtl::OUString newName = aTmpName8 + OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpname"));
-        //printFileName( newName );
         nError1 = ::osl::File::move( aTmpName3, newName );
         //deleteTestDirectory( newName + OUString(RTL_CONSTASCII_USTRINGPARAM("/tmpname")) );
         //deleteTestDirectory( newName );

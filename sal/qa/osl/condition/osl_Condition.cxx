@@ -62,23 +62,6 @@ inline void printUString( const ::rtl::OUString & str )
     printf("%s\n", aString.getStr( ) );
 }
 
-/** wait _nSec seconds.
-*/
-void thread_sleep( sal_Int32 _nSec )
-{
-    /// print statement in thread process must use fflush() to force display.
-    printf("# wait %d seconds. ", (int) _nSec );
-    fflush( stdout );
-
-#ifdef WNT                               //Windows
-    Sleep( _nSec * 1000 );
-#endif
-#if ( defined UNX ) || ( defined OS2 )   //Unix
-    sleep( _nSec );
-#endif
-    printf("# done\n" );
-}
-
 enum ConditionType
 {
     thread_type_set,
@@ -189,11 +172,10 @@ namespace osl_Condition
 
             ConditionThread myThread2( aCond, thread_type_set );
             myThread2.create();
-            thread_sleep(1);
-            bRes1 = myThread1.isRunning( );
-            bRes2 = aCond.check( );
 
             myThread1.join( );
+            bRes1 = myThread1.isRunning( );
+            bRes2 = aCond.check( );
             myThread2.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: use one thread to set the condition in order to release another thread.",
@@ -284,15 +266,14 @@ namespace osl_Condition
             cond1.set();
             cond2.set();
 
-osl::Condition::Result r1=cond1.wait(tv1);
-osl::Condition::Result r2=cond2.wait();
-osl::Condition::Result r3=cond3.wait(tv1);
-fprintf(stderr,"%d %d %d\n",r1,r2,r3);
-            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
-                                    (cond1.wait(tv1) == ::osl::Condition::result_ok) &&
-                                    (cond2.wait() == ::osl::Condition::result_ok) &&
-                                    (cond3.wait(tv1) == ::osl::Condition::result_timeout) );
+            osl::Condition::Result r1=cond1.wait(tv1);
+            osl::Condition::Result r2=cond2.wait();
+            osl::Condition::Result r3=cond3.wait(tv1);
 
+            CPPUNIT_ASSERT_MESSAGE( "#test comment#: test three types of wait.",
+                                    (r1 == ::osl::Condition::result_ok) &&
+                                    (r2 == ::osl::Condition::result_ok) &&
+                                    (r3 == ::osl::Condition::result_timeout) );
         }
 
         void wait_002( )

@@ -80,17 +80,6 @@ inline ::rtl::OUString getDllURL( void )
     return dllPath;
 }
 
-/** print a UNI_CODE file name.
-*/
-inline void printFileName( const ::rtl::OUString & str )
-{
-    rtl::OString aString;
-
-    printf("#printFileName_u# " );
-    aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    printf("%s\n", aString.getStr( ) );
-}
-
 inline sal_Bool isURL( const ::rtl::OUString pathname )
 {
     ::rtl::OUString aPreURL( RTL_CONSTASCII_USTRINGPARAM("file:///") );
@@ -507,8 +496,6 @@ namespace osl_Module
             ::rtl::OUString aLibraryURL;
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();
-            printFileName( aLibraryURL );
-
             CPPUNIT_ASSERT_MESSAGE( "#test comment#: load a dll and get its function addr and get its URL.",
                  sal_True == bRes && aLibraryURL.equalsIgnoreAsciiCase( getDllURL() ) );
 #endif
