@@ -35,13 +35,6 @@
 #include <tools/color.hxx>
 #include "tabbgcolor.hxx"
 
-#ifndef _SVSTDARR_SHORTS
-
-#define _SVSTDARR_SHORTS
-#include <svl/svstdarr.hxx>
-
-#endif
-
 #ifndef _SVSTDARR_STRINGS
 
 #define _SVSTDARR_STRINGS
