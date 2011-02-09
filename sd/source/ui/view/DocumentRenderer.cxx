@@ -1917,8 +1917,7 @@ private:
 
             // Create a printer page when we have found one page for each
             // placeholder or when this is the last (and special) loop.
-            if (aPageIndices.size() == nShapeCount
-                || bLastLoop)
+            if (!aPageIndices.empty() && (aPageIndices.size() == nShapeCount || bLastLoop))
             {
                 maPrinterPages.push_back(
                     ::boost::shared_ptr<PrinterPage>(
