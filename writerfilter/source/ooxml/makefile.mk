@@ -114,9 +114,9 @@ DEFLIB1NAME=$(TARGET)
 
 .INCLUDE :	target.mk
 
-.PHONY : test
+.PHONY : check
 
-test:
+check:
     echo $(SLOFILES)
 
 OOXMLCXXOUTDIR=$(MISC)
