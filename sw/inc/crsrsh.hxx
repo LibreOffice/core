@@ -337,15 +337,10 @@ public:
     SwCrsrShell( SwCrsrShell& rShell, Window *pWin );
     virtual ~SwCrsrShell();
 
-<<<<<<< local
-=======
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
     // IShellCursorSupplier
     virtual SwPaM & CreateNewShellCursor();
     virtual SwPaM & GetCurrentShellCursor();
 
->>>>>>> other
     // neuen Cusror erzeugen und den alten anhaengen
     SwPaM * CreateCrsr();
     // loesche den aktuellen Cursor und der folgende wird zum Aktuellen

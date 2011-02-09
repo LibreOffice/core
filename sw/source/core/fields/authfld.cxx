@@ -191,12 +191,7 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
     return nRet;
 }
 
-<<<<<<< local
-BOOL SwAuthorityFieldType::AddField(long nHandle)
-=======
- --------------------------------------------------*/
 sal_Bool SwAuthorityFieldType::AddField(long nHandle)
->>>>>>> other
 {
     sal_Bool bRet = sal_False;
     for( sal_uInt16 j = 0; j < m_pDataArr->Count(); j++ )
@@ -302,14 +297,7 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return nRet;
 }
 
-<<<<<<< local
-long    SwAuthorityFieldType::GetHandle(USHORT nPos)
-=======
-/*-- 11.10.99 08:49:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
->>>>>>> other
 {
     long nRet = 0;
     if( nPos < m_pDataArr->Count() )
@@ -320,12 +308,7 @@ long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
     return nRet;
 }
 
-<<<<<<< local
-USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
-=======
- --------------------------------------------------*/
 sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
->>>>>>> other
 {
     //find the field in a sorted array of handles,
 #ifdef DBG_UTIL
@@ -421,12 +404,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
     return nRet;
 }
 
-<<<<<<< local
-BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool    SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -481,12 +459,7 @@ sal_Bool    SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) c
     return sal_True;
 }
 
-<<<<<<< local
-BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     String sTmp;
@@ -566,22 +539,12 @@ void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *p
     NotifyClients( pOld, pNew );
 }
 
-<<<<<<< local
-USHORT SwAuthorityFieldType::GetSortKeyCount() const
-=======
- --------------------------------------------------*/
 sal_uInt16 SwAuthorityFieldType::GetSortKeyCount() const
->>>>>>> other
 {
     return m_pSortKeyArr->Count();
 }
 
-<<<<<<< local
-const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(USHORT nIdx) const
-=======
- --------------------------------------------------*/
 const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
->>>>>>> other
 {
     SwTOXSortKey* pRet = 0;
     if(m_pSortKeyArr->Count() > nIdx)
@@ -590,12 +553,7 @@ const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
     return pRet;
 }
 
-<<<<<<< local
-void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
-=======
- --------------------------------------------------*/
 void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[])
->>>>>>> other
 {
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
     sal_uInt16 nArrIdx = 0;
@@ -713,12 +671,7 @@ const char* aFieldNames[] =
     "ISBN"
 };
 
-<<<<<<< local
-BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
->>>>>>> other
 {
     if(!GetTyp())
         return sal_False;

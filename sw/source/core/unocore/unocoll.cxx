@@ -1092,12 +1092,7 @@ OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextFrames");
 }
 
-<<<<<<< local
-BOOL SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
@@ -1128,12 +1123,7 @@ OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeExcept
     return C2U("SwXTextGraphicObjects");
 }
 
-<<<<<<< local
-BOOL SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextGraphicObjects") == rServiceName;
 }
@@ -1163,12 +1153,7 @@ OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeExcep
     return C2U("SwXTextEmbeddedObjects");
 }
 
-<<<<<<< local
-BOOL SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextEmbeddedObjects") == rServiceName;
 }
@@ -1199,12 +1184,7 @@ OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextSections");
 }
 
-<<<<<<< local
-BOOL SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextSections") == rServiceName;
 }
@@ -1561,12 +1541,7 @@ OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXFootnotes");
 }
 
-<<<<<<< local
-BOOL SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.Footnotes") == rServiceName;
 }
@@ -1669,12 +1644,7 @@ OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXReferenceMarks");
 }
 
-<<<<<<< local
-BOOL SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.ReferenceMarks") == rServiceName;
 }

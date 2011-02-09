@@ -60,23 +60,14 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove =
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
-<<<<<<< local
     friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
-=======
-    friend void AppendObjs   ( const SwSpzFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
-    friend void AppendAllObjs( const SwSpzFrmFmts * );
->>>>>>> other
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 
     void InitDrawObj( sal_Bool bNotify );   //Wird von den CToren gerufen.
     void FinitDrawObj();                //Wird vom CTor gerufen.
 
-<<<<<<< local
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
-=======
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
->>>>>>> other
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     using SwLayoutFrm::CalcRel;

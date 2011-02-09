@@ -111,13 +111,8 @@ public:
     virtual sal_uInt16 ResetAllFmtAttr();
     // <--
 
-<<<<<<< local
     inline SwFmt* DerivedFrom() const { return (SwFmt*)GetRegisteredIn(); }
-    inline BOOL IsDefault() const { return DerivedFrom() == 0; }
-=======
-    inline SwFmt* DerivedFrom() const { return (SwFmt*)pRegisteredIn; }
     inline sal_Bool IsDefault() const { return DerivedFrom() == 0; }
->>>>>>> other
 
     inline const String& GetName() const        { return aFmtName; }
     void SetName( const String& rNewName, sal_Bool bBroadcast=sal_False );

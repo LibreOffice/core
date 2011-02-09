@@ -272,11 +272,7 @@ sal_Bool SwViewImp::IsDragPossible( const Point &rPoint )
     SdrObject *pO = rMrkList.GetMark(rMrkList.GetMarkCount()-1)->GetMarkedSdrObj();
 
     SwRect aRect;
-<<<<<<< local
-    if( pO && ::CalcClipRect( pO, aRect, FALSE ) )
-=======
-    if( ::CalcClipRect( pO, aRect, sal_False ) )
->>>>>>> other
+    if( pO && ::CalcClipRect( pO, aRect, sal_False ) )
     {
         SwRect aTmp;
         ::CalcClipRect( pO, aTmp, sal_True );

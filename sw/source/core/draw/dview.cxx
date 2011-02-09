@@ -1084,16 +1084,10 @@ void SwDrawView::ReplaceMarkedDrawVirtObjs( SdrMarkView& _rMarkView )
 void SwDrawView::DeleteMarked()
 {
     SwDoc* pDoc = Imp().GetShell()->GetDoc();
-<<<<<<< local
     SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
     pDoc->StartUndo(UNDO_EMPTY, NULL);
-=======
-    if ( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->StartAllAction();
-    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
->>>>>>> other
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
     {
@@ -1112,14 +1106,8 @@ void SwDrawView::DeleteMarked()
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
-<<<<<<< local
     pDoc->EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )
         pTmpRoot->EndAllAction();   //swmod 080218
-=======
-    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
-    if( pDoc->GetRootFrm() )
-        pDoc->GetRootFrm()->EndAllAction();
->>>>>>> other
 }
 

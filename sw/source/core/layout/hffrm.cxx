@@ -119,13 +119,8 @@ static void lcl_LayoutFrmEnsureMinHeight(SwLayoutFrm & rFrm,
     }
 }
 
-<<<<<<< local
-SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, USHORT nTypeIn)
+SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, SwFrm* pSib, sal_uInt16 nTypeIn)
     : SwLayoutFrm( pFmt, pSib )
-=======
-SwHeadFootFrm::SwHeadFootFrm( SwFrmFmt * pFmt, sal_uInt16 nTypeIn)
-    : SwLayoutFrm(pFmt)
->>>>>>> other
 {
     nType = nTypeIn;
     SetDerivedVert( sal_False );
@@ -717,12 +712,8 @@ void SwPageFrm::PrepareHeader()
 
     const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
 
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
-=======
-    const sal_Bool bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
+    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rH.IsActive() )
     {   //Header einsetzen, vorher entfernen falls vorhanden.
@@ -772,12 +763,8 @@ void SwPageFrm::PrepareFooter()
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
-=======
-    const sal_Bool bOn = !((SwFrmFmt*)pRegisteredIn)->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
+    const sal_Bool bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
 
     if ( bOn && rF.IsActive() )
     {   //Footer einsetzen, vorher entfernen falls vorhanden.

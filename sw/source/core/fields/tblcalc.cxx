@@ -181,14 +181,7 @@ void SwTblField::SetPar2(const String& rStr)
 }
 
 
-<<<<<<< local
-BOOL SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------04.03.98 10:33-------------------
-
---------------------------------------------------*/
 sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch ( nWhichId )
@@ -220,12 +213,7 @@ sal_Bool SwTblField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return bRet;
 }
 
-<<<<<<< local
-BOOL SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwTblField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     String sTmp;

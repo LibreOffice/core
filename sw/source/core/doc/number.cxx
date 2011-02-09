@@ -333,13 +333,8 @@ SwNumFmt& SwNumFmt::operator=( const SwNumFmt& rNumFmt)
  ---------------------------------------------------------------------------*/
 sal_Bool SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
 {
-<<<<<<< local
-    BOOL bRet = SvxNumberFormat::operator==(rNumFmt) &&
-        GetRegisteredIn() == rNumFmt.GetRegisteredIn();
-=======
     sal_Bool bRet = SvxNumberFormat::operator==(rNumFmt) &&
-        pRegisteredIn == rNumFmt.pRegisteredIn;
->>>>>>> other
+        GetRegisteredIn() == rNumFmt.GetRegisteredIn();
     return bRet;
 }
 

@@ -892,13 +892,8 @@ sal_Bool SwCntntFrm::UnitDown( SwPaM* pPam, const SwTwips, sal_Bool bInReadOnly 
 sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
     ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
-<<<<<<< local
-    const SwFrm *pActFrm = GetFmt()->GetDoc()->GetNodes()[pActualCrsr->GetPoint()->nNode]->
-                                    GetCntntNode()->getLayoutFrm( this, 0,
-=======
     SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
                                     GetCntntNode()->GetFrm( 0,
->>>>>>> other
                                                     pActualCrsr->GetPoint(),
                                                     sal_False );
     return pActFrm->FindPageFrm()->GetPhyPageNum();
@@ -1883,13 +1878,8 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
     const SwCntntNode* pTmpStartNode = rTblCrsr.GetCntntNode();
     const SwCntntNode* pTmpEndNode   = rTblCrsr.GetCntntNode(sal_False);
 
-<<<<<<< local
-    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, FALSE ) : 0;
-    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, FALSE ) : 0;
-=======
-    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->GetFrm( &aPtPt, 0, sal_False ) : 0;
-    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->GetFrm( &aMkPt, 0, sal_False ) : 0;
->>>>>>> other
+    const SwFrm* pTmpStartFrm = pTmpStartNode ? pTmpStartNode->getLayoutFrm( this, &aPtPt, 0, sal_False ) : 0;
+    const SwFrm* pTmpEndFrm   = pTmpEndNode   ?   pTmpEndNode->getLayoutFrm( this, &aMkPt, 0, sal_False ) : 0;
 
     const SwLayoutFrm* pStart = pTmpStartFrm ? pTmpStartFrm->GetUpper() : 0;
     const SwLayoutFrm* pEnd   = pTmpEndFrm   ? pTmpEndFrm->GetUpper() : 0;
@@ -2056,21 +2046,11 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, sal_Bool bIsTblMode )
 
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
     //jedenfall.
-<<<<<<< local
-    const SwCntntFrm *pStartFrm = rNds[ pStartPos->nNode ]->
-        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetSttPos(), pStartPos );
-=======
     SwCntntFrm const* pStartFrm = pStartPos->nNode.GetNode().
-        GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
->>>>>>> other
+        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetSttPos(), pStartPos );
 
-<<<<<<< local
-    const SwCntntFrm *pEndFrm   = rNds[ pEndPos->nNode ]->
-        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetEndPos(), pEndPos );
-=======
     SwCntntFrm const* pEndFrm   = pEndPos->nNode.GetNode().
-        GetCntntNode()->GetFrm( &rCrsr.GetEndPos(), pEndPos );
->>>>>>> other
+        GetCntntNode()->getLayoutFrm( this, &rCrsr.GetEndPos(), pEndPos );
 
     ASSERT( (pStartFrm && pEndFrm), "Keine CntntFrms gefunden." );
 

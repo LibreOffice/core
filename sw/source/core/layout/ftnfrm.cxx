@@ -270,7 +270,6 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 
     if ( !bValidSize )
     {
-<<<<<<< local
         bool bGrow = pPage->IsFtnPage();
         if( bGrow )
         {
@@ -279,11 +278,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
                 bGrow = false;
         }
         if( bGrow )
-                Grow( LONG_MAX, FALSE );
-=======
-        if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                 Grow( LONG_MAX, sal_False );
->>>>>>> other
         else
         {
             //Die Groesse in der VarSize wird durch den Inhalt plus den
@@ -726,13 +721,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
 |*
 |*  Beschreibung        Liefert das naechste LayoutBlatt in den das
 |*      Frame gemoved werden kann.
-<<<<<<< local
-|*      Neue Seiten werden nur dann erzeugt, wenn der Parameter TRUE ist.
-=======
 |*      Neue Seiten werden nur dann erzeugt, wenn der Parameter sal_True ist.
-|*  Ersterstellung      MA 16. Nov. 92
-|*  Letzte Aenderung    AMA 09. Nov. 98
->>>>>>> other
 |*
 |*************************************************************************/
 
@@ -1340,17 +1329,10 @@ void SwFtnBossFrm::ResetFtn( const SwFtnFrm *pCheck )
     SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
     if ( !pNd )
         pNd = pCheck->GetFmt()->GetDoc()->
-<<<<<<< local
-              GetNodes().GoNextSection( &aIdx, TRUE, FALSE );
+              GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
     SwIterator<SwFrm,SwCntntNode> aIter( *pNd );
     SwFrm* pFrm = aIter.First();
     while( pFrm )
-=======
-              GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
-    SwClientIter aIter( *pNd );
-    SwClient* pLast = aIter.GoStart();
-    while( pLast )
->>>>>>> other
     {
             if( pFrm->getRootFrm() == pCheck->getRootFrm() )
             {
@@ -2788,14 +2770,9 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     else
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
-<<<<<<< local
     const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        nMaxFtnHeight += pBody->Grow( LONG_MAX, TRUE );
-=======
-    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         nMaxFtnHeight += pBody->Grow( LONG_MAX, sal_True );
->>>>>>> other
     if ( IsInSct() )
         nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, sal_True );
 
@@ -3244,11 +3221,7 @@ SwCntntFrm* SwFtnFrm::GetRefFromAttr()
     ASSERT( pAttr, "invalid Attribute" );
     SwTxtNode& rTNd = (SwTxtNode&)pAttr->GetTxtNode();
     SwPosition aPos( rTNd, SwIndex( &rTNd, *pAttr->GetStart() ));
-<<<<<<< local
-    SwCntntFrm* pCFrm = rTNd.getLayoutFrm( getRootFrm(), 0, &aPos, FALSE );
-=======
-    SwCntntFrm* pCFrm = rTNd.GetFrm( 0, &aPos, sal_False );
->>>>>>> other
+    SwCntntFrm* pCFrm = rTNd.getLayoutFrm( getRootFrm(), 0, &aPos, sal_False );
     return pCFrm;
 }
 

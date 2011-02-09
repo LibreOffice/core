@@ -123,14 +123,7 @@ void SwDBFieldType::ReleaseRef()
     }
 }
 
-<<<<<<< local
-BOOL SwDBFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/* -----------------24.02.99 14:51-------------------
- *
- * --------------------------------------------------*/
 sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -151,15 +144,8 @@ sal_Bool SwDBFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     }
     return sal_True;
 }
-<<<<<<< local
 
-BOOL SwDBFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
-/* -----------------24.02.99 14:51-------------------
- *
- * --------------------------------------------------*/
 sal_Bool SwDBFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -421,12 +407,7 @@ void SwDBField::SetSubType(sal_uInt16 nType)
 }
 
 
-<<<<<<< local
-BOOL SwDBField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -458,12 +439,7 @@ sal_Bool SwDBField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 
 }
 
-<<<<<<< local
-BOOL SwDBField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDBField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -566,14 +542,7 @@ String SwDBNameInfField::GetFieldName() const
     return lcl_DBTrennConv(sStr);
 }
 
-<<<<<<< local
-BOOL SwDBNameInfField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------06.03.98 16:55-------------------
-
---------------------------------------------------*/
 sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -598,12 +567,7 @@ sal_Bool SwDBNameInfField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwDBNameInfField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -635,22 +599,12 @@ sal_Bool SwDBNameInfField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return sal_True;
 }
 
-<<<<<<< local
-USHORT SwDBNameInfField::GetSubType() const
-=======
- --------------------------------------------------*/
 sal_uInt16 SwDBNameInfField::GetSubType() const
->>>>>>> other
 {
     return nSubType;
 }
 
-<<<<<<< local
-void SwDBNameInfField::SetSubType(USHORT nType)
-=======
- --------------------------------------------------*/
 void SwDBNameInfField::SetSubType(sal_uInt16 nType)
->>>>>>> other
 {
     nSubType = nType;
 }
@@ -725,12 +679,7 @@ void SwDBNextSetField::SetPar1(const String& rStr)
     aCond = rStr;
 }
 
-<<<<<<< local
-BOOL SwDBNextSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )
@@ -744,12 +693,7 @@ sal_Bool SwDBNextSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     return bRet;
 }
 
-<<<<<<< local
-BOOL SwDBNextSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDBNextSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )
@@ -852,12 +796,7 @@ void SwDBNumSetField::SetPar2(const String& rStr)
     aPar2 = rStr;
 }
 
-<<<<<<< local
-BOOL SwDBNumSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )
@@ -874,12 +813,7 @@ sal_Bool SwDBNumSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     return bRet;
 }
 
-<<<<<<< local
-BOOL    SwDBNumSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool    SwDBNumSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )
@@ -959,22 +893,12 @@ SwField* SwDBNameField::Copy() const
 }
 
 
-<<<<<<< local
-BOOL SwDBNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwDBNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     return SwDBNameInfField::QueryValue(rAny, nWhichId );
 }
 
-<<<<<<< local
-BOOL SwDBNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDBNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     return SwDBNameInfField::PutValue(rAny, nWhichId );
 }
@@ -1014,12 +938,7 @@ String SwDBSetNumberField::Expand() const
     if(0 !=(GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE) || nNumber == 0)
         return aEmptyStr;
     else
-<<<<<<< local
-        return FormatNumber((USHORT)nNumber, GetFormat());
-=======
         return FormatNumber((sal_uInt16)nNumber, GetFormat());
-    //return(nNumber == 0 ? aEmptyStr : FormatNumber(nNumber, GetFormat()));
->>>>>>> other
 }
 
 //------------------------------------------------------------------------------
@@ -1048,12 +967,7 @@ SwField* SwDBSetNumberField::Copy() const
     return pTmp;
 }
 
-<<<<<<< local
-BOOL SwDBSetNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )
@@ -1070,12 +984,7 @@ sal_Bool SwDBSetNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) c
     return bRet;
 }
 
-<<<<<<< local
-BOOL SwDBSetNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDBSetNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     switch( nWhichId )

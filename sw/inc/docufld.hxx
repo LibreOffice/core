@@ -688,15 +688,7 @@ protected:
 public:
     SwRefPageGetFieldType( SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
-<<<<<<< local
-    USHORT MakeSetList( _SetGetExpFlds& rTmpLst );
-=======
-
-    // ueberlagert, um alle RefPageGet-Felder zu updaten
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
     sal_uInt16 MakeSetList( _SetGetExpFlds& rTmpLst );
-
->>>>>>> other
     SwDoc*  GetDoc() const                  { return pDoc; }
 };
 

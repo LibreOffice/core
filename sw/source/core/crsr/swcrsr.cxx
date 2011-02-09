@@ -1175,11 +1175,7 @@ sal_Bool SwCursor::GoPrevWord()
     return GoPrevWordWT( WordType::ANYWORD_IGNOREWHITESPACES );
 }
 
-<<<<<<< local
-BOOL SwCursor::SelectWord( ViewShell* pViewShell, const Point* pPt )
-=======
-sal_Bool SwCursor::SelectWord( const Point* pPt )
->>>>>>> other
+sal_Bool SwCursor::SelectWord( ViewShell* pViewShell, const Point* pPt )
 {
     return SelectWordWT( pViewShell, WordType::ANYWORD_IGNOREWHITESPACES, pPt );
 }
@@ -1357,11 +1353,7 @@ sal_Bool SwCursor::GoPrevWordWT( sal_Int16 nWordType )
     return bRet;
 }
 
-<<<<<<< local
-BOOL SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt )
-=======
-sal_Bool SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
->>>>>>> other
+sal_Bool SwCursor::SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt )
 {
     SwCrsrSaveState aSave( *this );
 

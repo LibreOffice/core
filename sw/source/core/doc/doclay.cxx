@@ -1935,12 +1935,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
 
         if( pTmpRoot->IsNeedGrammarCheck() )
         {
-<<<<<<< local
-            BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
-=======
             sal_Bool bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
-
->>>>>>> other
             sal_Bool bIsAutoGrammar = sal_False;
             SvtLinguConfig().GetProperty( ::rtl::OUString::createFromAscii(
                         UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;

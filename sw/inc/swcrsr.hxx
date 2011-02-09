@@ -127,17 +127,6 @@ public:
                 const SfxItemSet* rReplSet = 0 );
 
     // UI versions
-<<<<<<< local
-    BOOL IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
-    BOOL IsStartEndSentence( bool bEnd ) const;
-    BOOL GoStartWord();
-    BOOL GoEndWord();
-    BOOL GoNextWord();
-    BOOL GoPrevWord();
-    BOOL SelectWord( ViewShell* pViewShell, const Point* pPt = 0 );
-=======
     sal_Bool IsStartWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     sal_Bool IsEndWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
     sal_Bool IsInWord( sal_Int16 nWordType = com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES ) const;
@@ -147,20 +136,9 @@ public:
     sal_Bool GoNextWord();
     sal_Bool GoPrevWord();
     sal_Bool SelectWord( const Point* pPt = 0 );
->>>>>>> other
 
     // API versions of above functions (will be used with a different
     // WordType for the break iterator)
-<<<<<<< local
-    BOOL IsStartWordWT( sal_Int16 nWordType ) const;
-    BOOL IsEndWordWT( sal_Int16 nWordType ) const;
-    BOOL IsInWordWT( sal_Int16 nWordType ) const;
-    BOOL GoStartWordWT( sal_Int16 nWordType );
-    BOOL GoEndWordWT( sal_Int16 nWordType );
-    BOOL GoNextWordWT( sal_Int16 nWordType );
-    BOOL GoPrevWordWT( sal_Int16 nWordType );
-    BOOL SelectWordWT( ViewShell* pViewShell, sal_Int16 nWordType, const Point* pPt = 0 );
-=======
     sal_Bool IsStartWordWT( sal_Int16 nWordType ) const;
     sal_Bool IsEndWordWT( sal_Int16 nWordType ) const;
     sal_Bool IsInWordWT( sal_Int16 nWordType ) const;
@@ -169,7 +147,6 @@ public:
     sal_Bool GoNextWordWT( sal_Int16 nWordType );
     sal_Bool GoPrevWordWT( sal_Int16 nWordType );
     sal_Bool SelectWordWT( sal_Int16 nWordType, const Point* pPt = 0 );
->>>>>>> other
 
     enum SentenceMoveType
     {

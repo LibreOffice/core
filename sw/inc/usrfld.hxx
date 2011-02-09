@@ -71,15 +71,11 @@ public:
     sal_Bool                    IsDeleted() const       { return bDeleted; }
     void                    SetDeleted( sal_Bool b )    { bDeleted = b; }
 
-<<<<<<< local
-    virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
-    virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
-=======
     virtual sal_Bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nMId ) const;
     virtual sal_Bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nMId );
->>>>>>> other
+
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 };
 
 inline sal_Bool SwUserFieldType::IsValid() const

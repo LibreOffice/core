@@ -45,15 +45,9 @@ public:
     SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtCharFmt( );
 
-<<<<<<< local
     // werden vom SwFmtCharFmt hierher weitergeleitet (no derivation from SwClient!)
     void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
     bool GetInfo( SfxPoolItem& rInfo ) const;
-=======
-    // werden vom SwFmtCharFmt hierher weitergeleitet
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
-    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
->>>>>>> other
 
     // get and set TxtNode pointer
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
@@ -101,12 +95,7 @@ public:
     virtual ~SwTxtRuby();
     TYPEINFO();
 
-<<<<<<< local
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
-=======
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
->>>>>>> other
 
     SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 

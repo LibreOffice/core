@@ -28,10 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-<<<<<<< local
-=======
-
->>>>>>> other
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -59,13 +55,9 @@
 #include "swtblfmt.hxx"
 #include "docary.hxx"
 #include "ndindex.hxx"
-<<<<<<< local
 #include "undobj.hxx"
 #include "switerator.hxx"
-=======
 #include <UndoTable.hxx>
-
->>>>>>> other
 
 using namespace ::com::sun::star;
 

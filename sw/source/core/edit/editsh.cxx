@@ -437,13 +437,8 @@ void SwEditShell::ClearAutomaticContour()
     if( pNd->HasAutomaticContour() )
     {
         StartAllAction();
-<<<<<<< local
-        pNd->SetContour( NULL, FALSE );
-        SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
-=======
         pNd->SetContour( NULL, sal_False );
-        SwFlyFrm *pFly = (SwFlyFrm*)pNd->GetFrm()->GetUpper();
->>>>>>> other
+        SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
         pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
         GetDoc()->SetModified();
@@ -484,13 +479,8 @@ sal_Bool SwEditShell::HasOLEObj( const String &rName ) const
         SwNode& rNd = aIdx.GetNode();
         if( rNd.IsOLENode() &&
             rName == ((SwOLENode&)rNd).GetChartTblName() &&
-<<<<<<< local
             ((SwOLENode&)rNd).getLayoutFrm( GetLayout() ) )
-            return TRUE;
-=======
-            ((SwOLENode&)rNd).GetFrm() )
             return sal_True;
->>>>>>> other
 
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }

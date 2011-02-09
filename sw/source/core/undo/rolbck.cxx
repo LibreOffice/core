@@ -942,11 +942,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         aTmp.SetAnchor( &aPos );
 
         // so the Layout does not get confused
-<<<<<<< local
-        if ( !pCNd || !pCNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, FALSE ) )
-=======
-        if ( !pCNd || !pCNd->GetFrm( 0, 0, sal_False ) )
->>>>>>> other
+        if ( !pCNd || !pCNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_False ) )
         {
             m_rFmt.DelFrms();
         }

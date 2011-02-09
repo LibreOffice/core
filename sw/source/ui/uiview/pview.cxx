@@ -1251,30 +1251,6 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
 
     SwViewOption aOpt( *pPrefs );
-<<<<<<< local
-    aOpt.SetPagePreview(TRUE);
-    aOpt.SetTab( FALSE );
-    aOpt.SetBlank( FALSE );
-    aOpt.SetHardBlank( FALSE );
-    aOpt.SetParagraph( FALSE );
-    aOpt.SetLineBreak( FALSE );
-    aOpt.SetPageBreak( FALSE );
-    aOpt.SetColumnBreak( FALSE );
-    aOpt.SetSoftHyph( FALSE );
-    aOpt.SetFldName( FALSE );
-    aOpt.SetPostIts( FALSE );
-    aOpt.SetShowHiddenChar( FALSE );
-    aOpt.SetShowHiddenField( FALSE );
-    aOpt.SetShowHiddenPara( FALSE );
-    aOpt.SetViewHRuler( FALSE );
-    aOpt.SetViewVRuler( FALSE );
-    aOpt.SetGraphic( TRUE );
-    aOpt.SetTable( TRUE );
-    aOpt.SetSnap( FALSE );
-    aOpt.SetGridVisible( FALSE );
-    aOpt.setBrowseMode( FALSE );
-
-=======
     aOpt.SetPagePreview(sal_True);
     aOpt.SetTab( sal_False );
     aOpt.SetBlank( sal_False );
@@ -1295,7 +1271,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     aOpt.SetTable( sal_True );
     aOpt.SetSnap( sal_False );
     aOpt.SetGridVisible( sal_False );
->>>>>>> other
+
     GetViewShell()->ApplyViewOptions( aOpt );
     GetViewShell()->ApplyAccessiblityOptions(SW_MOD()->GetAccessibilityOptions());
 
@@ -1303,16 +1279,6 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
     SwPrintData const aPrintOptions = *SW_MOD()->GetPrtOptions(false);
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
-<<<<<<< local
-=======
-    IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
-    if( pIDSA->get(IDocumentSettingAccess::BROWSE_MODE))
-    {
-        pIDSA->set(IDocumentSettingAccess::BROWSE_MODE, false);
-        pESh->CheckBrowseView( sal_True );
-    }
-
->>>>>>> other
     GetViewShell()->CalcLayout();
     DocSzChgd( GetViewShell()->GetDocSize() );
 

@@ -454,11 +454,7 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
-<<<<<<< local
-            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, FALSE );
-=======
-            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, sal_False );
->>>>>>> other
+            const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, sal_False );
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -815,13 +811,8 @@ short SwShellCrsr::MaxReplaceArived()
         // alte Actions beenden; die Tabellen-Frames werden angelegt und
         // eine SSelection kann erzeugt werden
         SvUShorts aArr;
-<<<<<<< local
-        USHORT nActCnt;
-        ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
-=======
         sal_uInt16 nActCnt;
-        ViewShell *pShell = GetDoc()->GetRootFrm()->GetCurrShell(),
->>>>>>> other
+        ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )

@@ -909,35 +909,6 @@ Rectangle SwDocShell::GetVisArea( sal_uInt16 nAspect ) const
 
         const SwRect aPageRect = pNd->FindPageFrmRect( sal_False, 0, sal_False );
         return aPageRect.SVRect();
-<<<<<<< local
-=======
-
-        // Why does this have to be that complicated? I replaced this by the
-        // call of FindPageFrmRect():
-        /*
-        //PageDesc besorgen, vom ersten Absatz oder den default.
-        const SwFmtPageDesc &rDesc = pNd->GetSwAttrSet().GetPageDesc();
-        const SwPageDesc* pDesc = rDesc.GetPageDesc();
-        if( !pDesc )
-            pDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-
-        //Das Format wird evtl. von der virtuellen Seitennummer bestimmt.
-        const sal_uInt16 nPgNum = rDesc.GetNumOffset();
-        const sal_Bool bOdd = nPgNum % 2 ? sal_True : sal_False;
-        const SwFrmFmt *pFmt = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-        if ( !pFmt ) //#40568#
-            pFmt = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
-
-        if ( pFmt->GetFrmSize().GetWidth() == LONG_MAX )
-            //Jetzt wird es aber Zeit fuer die Initialisierung
-            pDoc->getPrinter( true );
-
-        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
-        const Size aSz( rFrmSz.GetWidth(), rFrmSz.GetHeight() );
-        const Point aPt( DOCUMENTBORDER, DOCUMENTBORDER );
-        const Rectangle aRect( aPt, aSz );
-        return aRect;*/
->>>>>>> other
     }
     return SfxObjectShell::GetVisArea( nAspect );
 }
@@ -1017,12 +988,8 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         {
         case SID_PRINTPREVIEW:
         {
-<<<<<<< local
-            BOOL bDisable = IsInPlaceActive();
-            // Disable "multiple layout"
-=======
             sal_Bool bDisable = IsInPlaceActive();
->>>>>>> other
+            // Disable "multiple layout"
             if ( !bDisable )
             {
                 SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this);

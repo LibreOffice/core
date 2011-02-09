@@ -45,11 +45,7 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
 {
     SwSection* pSection;
 
-<<<<<<< local
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
-=======
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
->>>>>>> other
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
     void _Cut( sal_Bool bRemove );
     // Is there a FtnContainer?
@@ -67,13 +63,8 @@ protected:
     virtual void SwClientNotify( const SwModify&, const SfxHint& );
 
 public:
-<<<<<<< local
     SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!
-    SwSectionFrm( SwSectionFrm &, BOOL bMaster );//_Nur_ zum Erzeugen von Master/Follows
-=======
-    SwSectionFrm( SwSection & );                 //Inhalt wird nicht erzeugt!
     SwSectionFrm( SwSectionFrm &, sal_Bool bMaster );//_Nur_ zum Erzeugen von Master/Follows
->>>>>>> other
     ~SwSectionFrm();
 
     void Init();

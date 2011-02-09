@@ -118,13 +118,11 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
-<<<<<<< local
 #include <attrhint.hxx>
-=======
+
 #include <wdocsh.hxx>           // SwWebDocShell
 #include <prtopt.hxx>           // SwPrintOptions
 
->>>>>>> other
 #include <vector>
 #include <map>
 
@@ -377,13 +375,8 @@ const i18n::ForbiddenCharacters*
     return pRet;
 }
 
-<<<<<<< local
-void SwDoc::setForbiddenCharacters(/*[in]*/ USHORT nLang,
-                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
-=======
 void SwDoc::setForbiddenCharacters(/*[in]*/ sal_uInt16 nLang,
-                                   /*[in]*/ const i18n::ForbiddenCharacters& rFChars )
->>>>>>> other
+                                   /*[in]*/ const com::sun::star::i18n::ForbiddenCharacters& rFChars )
 {
     if( !xForbiddenCharsTable.isValid() )
     {
@@ -1104,16 +1097,9 @@ sal_uInt16 _PostItFld::GetPageNo(
     //sondern die des ersten Auftretens des PostIts innerhalb des selektierten
     //Bereichs ermittelt werden.
     rVirtPgNo = 0;
-<<<<<<< local
-    USHORT nPos = GetCntnt();
+    sal_uInt16 nPos = GetCntnt();
     SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
     for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
-=======
-    sal_uInt16 nPos = GetCntnt();
-    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
-            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
->>>>>>> other
     {
         if( pFrm->GetOfst() > nPos ||
             (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
@@ -1772,13 +1758,8 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
             }
         }
 
-<<<<<<< local
         rStat.nPage     = GetCurrentLayout() ? GetCurrentLayout()->GetPageNum() : 0;    //swmod 080218
-        rStat.bModified = FALSE;
-=======
-        rStat.nPage     = GetRootFrm() ? GetRootFrm()->GetPageNum() : 0;
         rStat.bModified = sal_False;
->>>>>>> other
         SetDocStat( rStat );
 
         com::sun::star::uno::Sequence < com::sun::star::beans::NamedValue > aStat( rStat.nPage ? 7 : 6);
@@ -2102,19 +2083,9 @@ void SwDoc::InvalidateAutoCompleteFlag()
     SwRootFrm* pTmpRoot = GetCurrentLayout();
     if( pTmpRoot )
     {
-<<<<<<< local
         std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllInvalidateAutoCompleteWords));//swmod 080305
-        for( ULONG nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
-=======
-        SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
-        while ( pPage )
-        {
-            pPage->InvalidateAutoCompleteWords();
-            pPage = (SwPageFrm*)pPage->GetNext();
-        }
         for( sal_uLong nNd = 1, nCnt = GetNodes().Count(); nNd < nCnt; ++nNd )
->>>>>>> other
         {
             SwTxtNode* pTxtNode = GetNodes()[ nNd ]->GetTxtNode();
             if ( pTxtNode ) pTxtNode->SetAutoCompleteWordDirty( true );

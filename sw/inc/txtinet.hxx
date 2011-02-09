@@ -50,12 +50,7 @@ public:
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
-<<<<<<< local
-    virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
-=======
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
->>>>>>> other
 
     SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
 

@@ -1687,11 +1687,7 @@ sal_Bool SwFEShell::ImpEndCreate()
             // die naechste nicht READONLY Position suchen?
             bAtPage = true;
 
-<<<<<<< local
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, FALSE );
-=======
-        pAnch = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aPoint, 0, sal_False );
->>>>>>> other
+        pAnch = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(), &aPoint, 0, sal_False );
 
         if( !bAtPage )
         {
@@ -2831,19 +2827,9 @@ long SwFEShell::GetSectionWidth( SwFmt& rFmt ) const
                 return pSct->Frm().Width();
     return 0;
 }
-<<<<<<< local
-=======
-/* -----------------------------2002/06/24 15:07------------------------------
->>>>>>> other
 
-<<<<<<< local
-void SwFEShell::CreateDefaultShape( UINT16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
-                USHORT nSlotId)
-=======
- ---------------------------------------------------------------------------*/
 void SwFEShell::CreateDefaultShape( sal_uInt16 /*SdrObjKind ?*/ eSdrObjectKind, const Rectangle& rRect,
                 sal_uInt16 nSlotId)
->>>>>>> other
 {
     SdrView* pDrawView = GetDrawView();
     SdrModel* pDrawModel = pDrawView->GetModel();

@@ -589,13 +589,8 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
 
 // changing this method very likely requires changing of
 // "GetScalingOfSelectedText"
-<<<<<<< local
-void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
-                               ULONG& rAbsMin, OutputDevice* pOut ) const//swmodtest 080307
-=======
 void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin, OutputDevice* pOut ) const
->>>>>>> other
 {
     ViewShell* pSh = 0;
     GetDoc()->GetEditShell( &pSh );

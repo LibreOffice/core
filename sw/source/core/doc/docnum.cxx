@@ -1353,23 +1353,6 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
 {
     for( sal_uInt16 n = GetNumRuleTbl().Count(); n; )
     {
-<<<<<<< local
-=======
-        // --> OD 2008-02-19 #refactorlists#
-//        SwNumRuleInfo aUpd( GetNumRuleTbl()[ --n ]->GetName() );
-//        aUpd.MakeList( *this );
-
-//        for( sal_uLong nFirst = 0, nLast = aUpd.GetList().Count();
-//                nFirst < nLast; ++nFirst )
-//        {
-//            SwTxtNode* pTNd = aUpd.GetList().GetObject( nFirst );
-//            SwClientIter aIter( *pTNd );
-//            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-//                    pFrm; pFrm = (SwFrm*)aIter.Next() )
-//                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
-//                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
-//        }
->>>>>>> other
         SwNumRule::tTxtNodeList aTxtNodeList;
         GetNumRuleTbl()[ --n ]->GetTxtNodeList( aTxtNodeList );
         for ( SwNumRule::tTxtNodeList::iterator aTxtNodeIter = aTxtNodeList.begin();

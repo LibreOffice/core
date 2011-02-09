@@ -426,14 +426,7 @@ void SwGetExpField::SetLanguage(sal_uInt16 nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-<<<<<<< local
-BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------07.03.98 16:08-------------------
-
---------------------------------------------------*/
 sal_Bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -470,12 +463,7 @@ sal_Bool SwGetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Int32 nTmp = 0;
     String sTmp;
@@ -515,15 +503,7 @@ sal_Bool SwGetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     return sal_True;
 }
 
-<<<<<<< local
-SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, USHORT nTyp )
-=======
-/*-----------------JP: 17.06.93 -------------------
- Set-Expression-Type
- --------------------------------------------------*/
-
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, sal_uInt16 nTyp )
->>>>>>> other
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
     pOutlChgNd( 0 ),
@@ -666,14 +646,7 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
     }
 }
 
-<<<<<<< local
-BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/* -----------------24.03.99 09:44-------------------
- *
- * --------------------------------------------------*/
 sal_Bool SwSetExpFieldType::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -1073,14 +1046,7 @@ String SwInputField::Expand() const
     return sRet;
 }
 
-<<<<<<< local
-BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------06.03.98 11:12-------------------
-
---------------------------------------------------*/
 sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -1102,12 +1068,7 @@ sal_Bool SwInputField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -1191,12 +1152,7 @@ void SwInputField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub;
 }
 
-<<<<<<< local
-BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -1261,12 +1217,7 @@ sal_Bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Int32 nTmp32 = 0;
     sal_Int16 nTmp16 = 0;

@@ -86,13 +86,8 @@ SwSectionFrm::SwSectionFrm( SwSection &rSect, SwFrm* pSib ) :
     CalcEndAtEndFlag();
 }
 
-<<<<<<< local
-SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, BOOL bMaster ) :
-    SwLayoutFrm( rSect.GetFmt(), rSect.getRootFrm() ),
-=======
 SwSectionFrm::SwSectionFrm( SwSectionFrm &rSect, sal_Bool bMaster ) :
-    SwLayoutFrm( rSect.GetFmt() ),
->>>>>>> other
+    SwLayoutFrm( rSect.GetFmt(), rSect.getRootFrm() ),
     SwFlowFrm( (SwFrm&)*this ),
     pSection( rSect.GetSection() )
 {
@@ -1339,14 +1334,8 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
 {
     if( !pSection ) // Durch DelEmpty
     {
-<<<<<<< local
         ASSERT( getRootFrm()->IsInDelList( this ), "SectionFrm without Section" );
-        bValidSize = bValidPos = bValidPrtArea = TRUE;
-=======
-        ASSERT( GetFmt()->GetDoc()->GetRootFrm()->IsInDelList( this ),
-                 "SectionFrm without Section" );
         bValidSize = bValidPos = bValidPrtArea = sal_True;
->>>>>>> other
         return;
     }
     SWRECTFN( this )
@@ -1421,16 +1410,10 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             // OD 15.10.2002 #103517# - allow grow in online layout
             // Thus, set <..IsBrowseMode()> as parameter <bGrow> on calling
             // method <_CheckClipping(..)>.
-<<<<<<< local
             const ViewShell *pSh = getRootFrm()->GetCurrShell();
             _CheckClipping( pSh && pSh->GetViewOptions()->getBrowseMode(), bMaximize );
-            bMaximize = ToMaximize( FALSE );
-            bValidSize = TRUE;
-=======
-            _CheckClipping( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE), bMaximize );
             bMaximize = ToMaximize( sal_False );
             bValidSize = sal_True;
->>>>>>> other
         }
 
         //Breite der Spalten pruefen und ggf. einstellen.
@@ -2494,7 +2477,6 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-<<<<<<< local
 void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
@@ -2505,11 +2487,7 @@ void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 }
 
 void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            BYTE &rInvFlags,
-=======
-void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                             sal_uInt8 &rInvFlags,
->>>>>>> other
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     sal_Bool bClear = sal_True;

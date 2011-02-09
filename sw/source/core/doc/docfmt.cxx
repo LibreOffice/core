@@ -2045,14 +2045,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
             continue;
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
-<<<<<<< local
-        pDest->SetAuto( FALSE );
-=======
         pDest->SetAuto( sal_False );
-//      pDest->ResetAllAttr();
-//      pDest->CopyAttrs( *pSrc, sal_True );            // kopiere Attribute
-//JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
->>>>>>> other
         pDest->DelDiffs( *pSrc );
 
         // #i94285#: existing <SwFmtPageDesc> instance, before copying attributes
@@ -2176,12 +2169,8 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
 void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                             sal_Bool bCopyPoolIds )
 {
-<<<<<<< local
-    BOOL bNotifyLayout = FALSE;
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
-=======
     sal_Bool bNotifyLayout = sal_False;
->>>>>>> other
+    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
 
     rDstDesc.SetLandscape( rSrcDesc.GetLandscape() );
     rDstDesc.SetNumType( rSrcDesc.GetNumType() );

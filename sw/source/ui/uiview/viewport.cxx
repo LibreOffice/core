@@ -196,7 +196,7 @@ aDocSz = rSz;
     //Wenn Text geloescht worden ist, kann es sein, dass die VisArea hinter
     //den sichtbaren Bereich verweist
     Rectangle aNewVisArea( aVisArea );
-    sal_Bool bModified = false;
+    bool bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
 
@@ -205,11 +205,7 @@ aDocSz = rSz;
         lTmp = aNewVisArea.Right() - lTmp;
         aNewVisArea.Right() -= lTmp;
         aNewVisArea.Left() -= lTmp;
-<<<<<<< local
         bModified = true;
-=======
-        bModified = sal_True;
->>>>>>> other
     }
 
     lTmp = aDocSz.Height() + lGreenOffset;
@@ -218,11 +214,7 @@ aDocSz = rSz;
         lTmp = aNewVisArea.Bottom() - lTmp;
         aNewVisArea.Bottom() -= lTmp;
         aNewVisArea.Top() -= lTmp;
-<<<<<<< local
         bModified = true;
-=======
-        bModified = sal_True;
->>>>>>> other
     }
 
     if ( bModified )
@@ -1129,17 +1121,10 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
     bInOuterResizePixel = sal_True;
 
 // feststellen, ob Scrollbars angezeigt werden duerfen
-<<<<<<< local
-    BOOL bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
-    BOOL bShowH = FALSE,
-         bShowV = FALSE,
-         bAuto  = FALSE,
-=======
-    sal_Bool bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    sal_Bool bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
     sal_Bool bShowH = sal_False,
          bShowV = sal_False,
          bAuto  = sal_False,
->>>>>>> other
          bHAuto = bBrowse;
     switch( GetScrollingMode() )
     {
@@ -1229,13 +1214,8 @@ void SwView::OuterResizePixel( const Point &rOfst, const Size &rSize )
             pDocSh->SetVisArea(
                             pDocSh->SfxInPlaceObject::GetVisArea() );*/
         if ( pWrtShell->GetViewOptions()->GetZoomType() != SVX_ZOOM_PERCENT &&
-<<<<<<< local
              !pWrtShell->GetViewOptions()->getBrowseMode() )
-            _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, TRUE );
-=======
-             !pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             _SetZoom( aEditSz, (SvxZoomType)pWrtShell->GetViewOptions()->GetZoomType(), 100, sal_True );
->>>>>>> other
         pWrtShell->EndAction();
 
         bRepeat = bScroll1 != pVScrollbar->IsVisible(sal_True);

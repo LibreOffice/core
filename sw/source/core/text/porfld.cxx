@@ -1243,13 +1243,8 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         }
     }
 
-<<<<<<< local
-    USHORT nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
-=======
     sal_uInt16 nTop = ( nCount + 1 ) / 2; // the first character of the second line
-    ViewShell *pSh = rInf.GetTxtFrm()->GetShell();
->>>>>>> other
+    ViewShell *pSh = rInf.GetTxtFrm()->getRootFrm()->GetCurrShell();
     SwFont aTmpFont( *rInf.GetFont() );
     SwFontSave aFontSave( rInf, &aTmpFont );
     nProportion = 55;

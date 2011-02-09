@@ -75,13 +75,7 @@ public:
     virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
     virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
-    // an das SwTxtCharFmt weiterleiten (vom SwClient)
-<<<<<<< local
-    virtual BOOL    GetInfo( SfxPoolItem& rInfo ) const;
-=======
-    virtual void    Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool    GetInfo( SfxPoolItem& rInfo ) const;
->>>>>>> other
 
     void SetCharFmt( SwFmt* pFmt ) { pFmt->Add(this); }
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)GetRegisteredIn(); }

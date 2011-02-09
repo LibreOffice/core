@@ -623,13 +623,8 @@ sal_Bool SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     //Lines fuer das Layout-Update herausuchen.
-<<<<<<< local
-    const BOOL bLayout = !IsNewModel() &&
-        0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
-=======
     const sal_Bool bLayout = !IsNewModel() &&
-        0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
->>>>>>> other
+        0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
 
     if ( bLayout )
     {
@@ -750,11 +745,7 @@ sal_Bool SwTable::AppendRow( SwDoc* pDoc, sal_uInt16 nCnt )
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
     //Lines fuer das Layout-Update herausuchen.
-<<<<<<< local
-    const BOOL bLayout = 0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
-=======
-    const sal_Bool bLayout = 0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
->>>>>>> other
+    bool bLayout = 0 != SwIterator<SwTabFrm,SwFmt>::FirstElement( *GetFrmFmt() );
     if( bLayout )
     {
         aFndBox.SetTableLines( *this );

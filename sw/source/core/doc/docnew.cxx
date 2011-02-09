@@ -313,11 +313,6 @@ SwDoc::SwDoc()
     mbUpdateExpFld =
     mbNewDoc =
     mbCopyIsMove =
-<<<<<<< local
-    mbNoDrawUndoObj =
-=======
-    mbBrowseMode =
->>>>>>> other
     mbInReading =
     mbInXMLImport =
     mbUpdateTOX =

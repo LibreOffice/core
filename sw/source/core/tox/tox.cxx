@@ -116,15 +116,8 @@ const PatternIni aPatternIni[] =
     {AUTH_FIELD_AUTHOR, AUTH_FIELD_TITLE, AUTH_FIELD_YEAR, USHRT_MAX, USHRT_MAX},     //AUTH_FIELD_CUSTOM5,
     {USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX, USHRT_MAX}
 };
-<<<<<<< local
-SwFormTokens lcl_GetAuthPattern(USHORT nTypeId)
-=======
-/* -----------------23.09.99 13:58-------------------
 
- --------------------------------------------------*/
-// -> #i21237#
 SwFormTokens lcl_GetAuthPattern(sal_uInt16 nTypeId)
->>>>>>> other
 {
     SwFormTokens aRet;
 

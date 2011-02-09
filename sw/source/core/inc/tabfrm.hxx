@@ -102,11 +102,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-<<<<<<< local
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
-=======
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
->>>>>>> other
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool bHead, sal_Bool &rReformat );
@@ -114,13 +110,10 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
 protected:
     virtual void MakeAll();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
-        //Aendert nur die Framesize, nicht die PrtArea-SSize
-<<<<<<< local
-    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-=======
+        //Aendert nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
->>>>>>> other
+
 public:
     SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
@@ -136,12 +129,7 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-<<<<<<< local
-    virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
-=======
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem &rHnt ) const;
->>>>>>> other
     virtual void Paint( SwRect const&,
                         SwPrintData const*const pPrintData = NULL ) const;
     virtual void  CheckDirection( sal_Bool bVert );

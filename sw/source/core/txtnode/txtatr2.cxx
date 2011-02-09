@@ -81,12 +81,7 @@ void SwTxtCharFmt::ModifyNotification( const SfxPoolItem* pOld, const SfxPoolIte
     }
 }
 
-    // erfrage vom Modify Informationen
-<<<<<<< local
-bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
-=======
 sal_Bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
->>>>>>> other
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )

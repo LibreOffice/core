@@ -546,91 +546,6 @@ void SwFlyDrawContact::SetMaster( SdrObject* _pNewMaster )
 
 /*************************************************************************
 |*
-<<<<<<< local
-=======
-|*  SwFlyDrawContact::CreateNewRef()
-|*
-|*  Ersterstellung      MA 14. Dec. 94
-|*  Letzte Aenderung    MA 24. Apr. 95
-|*
-|*************************************************************************/
-
-SwVirtFlyDrawObj *SwFlyDrawContact::CreateNewRef( SwFlyFrm *pFly )
-{
-    SwVirtFlyDrawObj *pDrawObj = new SwVirtFlyDrawObj( *GetMaster(), pFly );
-    pDrawObj->SetModel( GetMaster()->GetModel() );
-    pDrawObj->SetUserCall( this );
-
-    //Der Reader erzeugt die Master und setzt diese, um die Z-Order zu
-    //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
-    //die Master aus der Liste entfernt und fuehren von da an ein
-    //Schattendasein.
-    SdrPage* pPg( 0L );
-    if ( 0 != ( pPg = GetMaster()->GetPage() ) )
-    {
-        const sal_uInt32 nOrdNum = GetMaster()->GetOrdNum();
-        pPg->ReplaceObject( pDrawObj, nOrdNum );
-    }
-    // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
-    // into drawing page with correct order number
-    else
-    {
-        GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
-                        InsertObject( pDrawObj, _GetOrdNumForNewRef( pFly ) );
-    }
-    // <--
-    // --> OD 2004-12-13 #i38889# - assure, that new <SwVirtFlyDrawObj> instance
-    // is in a visible layer.
-    MoveObjToVisibleLayer( pDrawObj );
-    // <--
-    return pDrawObj;
-}
-
-/** method to determine new order number for new instance of <SwVirtFlyDrawObj>
-
-    OD 2004-08-16 #i27030#
-    Used in method <CreateNewRef(..)>
-
-    @author OD
-*/
-sal_uInt32 SwFlyDrawContact::_GetOrdNumForNewRef( const SwFlyFrm* _pFlyFrm )
-{
-    sal_uInt32 nOrdNum( 0L );
-
-    // search for another Writer fly frame registered at same frame format
-    SwClientIter aIter( *GetFmt() );
-    const SwFlyFrm* pFlyFrm( 0L );
-    for ( pFlyFrm = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
-          pFlyFrm;
-          pFlyFrm = (SwFlyFrm*)aIter.Next() )
-    {
-        if ( pFlyFrm != _pFlyFrm )
-        {
-            break;
-        }
-    }
-
-    if ( pFlyFrm )
-    {
-        // another Writer fly frame found. Take its order number
-        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetOrdNum();
-    }
-    else
-    {
-        // no other Writer fly frame found. Take order number of 'master' object
-        // --> OD 2004-11-11 #i35748# - use method <GetOrdNumDirect()> instead
-        // of method <GetOrdNum()> to avoid a recalculation of the order number,
-        // which isn't intended.
-        nOrdNum = GetMaster()->GetOrdNumDirect();
-        // <--
-    }
-
-    return nOrdNum;
-}
-
-/*************************************************************************
-|*
->>>>>>> other
 |*  SwFlyDrawContact::Modify()
 |*
 |*  Ersterstellung      OK 08.11.94 10:21
@@ -2002,15 +1917,11 @@ void SwDrawContact::ConnectToLayout( const SwFmtAnchor* pAnch )
     {
         case FLY_AT_PAGE:
                 {
-<<<<<<< local
-                USHORT nPgNum = pAnch->GetPageNum();
+                sal_uInt16 nPgNum = pAnch->GetPageNum();
                 ViewShell *pShell = pDrawFrmFmt->getIDocumentLayoutAccess()->GetCurrentViewShell();
                 if( !pShell )
                     break;
                 SwRootFrm* pRoot = pShell->GetLayout();
-=======
-                sal_uInt16 nPgNum = pAnch->GetPageNum();
->>>>>>> other
                 SwPageFrm *pPage = static_cast<SwPageFrm*>(pRoot->Lower());
 
                 for ( sal_uInt16 i = 1; i < nPgNum && pPage; ++i )

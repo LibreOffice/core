@@ -330,13 +330,8 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 
             if( aNew.Count() )
                 // keine mehr gesetzt, dann Ende !!
-<<<<<<< local
-                NotifyClients( &aOld, &aNew );
-            bWeiter = FALSE;
-=======
-                SwModify::Modify( &aOld, &aNew );
+            NotifyClients( &aOld, &aNew );
             bWeiter = sal_False;
->>>>>>> other
         }
         break;
     case RES_FMT_CHG:
@@ -358,20 +353,11 @@ void SwFmt::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
             // Formate (und keine Frames) propagieren.
             // mba: the code does the opposite from what is written in the comment!
             ResetWritten();
-<<<<<<< local
             // mba: here we don't use the additional stuff from NotifyClients().
             // should we?!
             // mba: move the code that ignores this event to the clients
             ModifyBroadcast( pOldValue, pNewValue, TYPE(SwFmt) );
-            bWeiter = FALSE;
-=======
-            SwClientIter aIter( *this );
-            for( SwClient *pClient = aIter.First( TYPE(SwFmt) ); pClient;
-                        pClient = aIter.Next() )
-                pClient->Modify( pOldValue, pNewValue );
-
             bWeiter = sal_False;
->>>>>>> other
         }
         break;
 

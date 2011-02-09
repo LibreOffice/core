@@ -291,13 +291,8 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
         }
         const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
         const SwLayoutFrm *pStart = pCntNd ?
-<<<<<<< local
             pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aPtPos )->GetUpper() : 0;
-        pCntNd = rCrsr.GetCntntNode(FALSE);
-=======
-            pCntNd->GetFrm( &aPtPos )->GetUpper() : 0;
         pCntNd = rCrsr.GetCntntNode(sal_False);
->>>>>>> other
         const SwLayoutFrm *pEnd = pCntNd ?
             pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(), &aMkPos )->GetUpper() : 0;
         if( pStart && pEnd )
@@ -508,13 +503,8 @@ sal_Bool ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
     // OD 07.11.2003 #i22135# - Also the content of the table could be
     //                          invisible - e.g. in a hidden section
     // Robust: check, if content was found (e.g. empty table cells)
-<<<<<<< local
     if ( !pCNd || pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) == NULL )
-            return FALSE;
-=======
-    if ( !pCNd || pCNd->GetFrm() == NULL )
             return sal_False;
->>>>>>> other
 
     const SwLayoutFrm *pStart = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aNullPos )->GetUpper() : 0;
     ASSERT( pStart, "ohne Frame geht gar nichts" );
@@ -787,11 +777,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
 
     const SwLayoutFrm *pStart = pCrsr->GetCntntNode()->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetPtPos() )->GetUpper(),
-<<<<<<< local
-                      *pEnd   = pCrsr->GetCntntNode(FALSE)->getLayoutFrm( rShell.GetLayout(),
-=======
-                      *pEnd   = pCrsr->GetCntntNode(sal_False)->GetFrm(
->>>>>>> other
+                      *pEnd   = pCrsr->GetCntntNode(sal_False)->getLayoutFrm( rShell.GetLayout(),
                       &pCrsr->GetMkPos() )->GetUpper();
 
     const SwLayoutFrm* pSttCell = pStart;
@@ -1029,18 +1015,12 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
 //              das die 1. Headline mit drin ist.
 //  Point aPt( rShell.GetCharRect().Pos() );
     Point aPt( 0, 0 );
-<<<<<<< local
 
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
-    pCntNd = rPam.GetCntntNode(FALSE);
-    const SwLayoutFrm *pEnd = rPam.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
-=======
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                        &aPt )->GetUpper(),
-                      *pEnd = rPam.GetCntntNode(sal_False)->GetFrm(
->>>>>>> other
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
 
     SwSelUnions aUnions;
@@ -1554,17 +1534,11 @@ sal_uInt16 CheckMergeSel( const SwPaM& rPam )
 //              richtig. Warum nicht Point 0,0 benutzen? Dann ist garantiert,
 //              das die 1. Headline mit drin ist.
     Point aPt;
-<<<<<<< local
     const SwCntntNode* pCntNd = rPam.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPt )->GetUpper();
-    pCntNd = rPam.GetCntntNode(FALSE);
-    const SwLayoutFrm *pEnd = rPam.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
-=======
-    const SwLayoutFrm *pStart = rPam.GetCntntNode()->GetFrm(
-                                                    &aPt )->GetUpper(),
-                        *pEnd = rPam.GetCntntNode(sal_False)->GetFrm(
->>>>>>> other
+    pCntNd = rPam.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                     &aPt )->GetUpper();
     GetTblSel( pStart, pEnd, aBoxes, 0 );
     return CheckMergeSel( aBoxes );
@@ -2094,18 +2068,12 @@ sal_Bool CheckSplitCells( const SwCursor& rCrsr, sal_uInt16 nDiv,
         aPtPos = pShCrsr->GetPtPos();
         aMkPos = pShCrsr->GetMkPos();
     }
-<<<<<<< local
 
     const SwCntntNode* pCntNd = rCrsr.GetCntntNode();
     const SwLayoutFrm *pStart = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                                         &aPtPos )->GetUpper();
-    pCntNd = rCrsr.GetCntntNode(FALSE);
-    const SwLayoutFrm *pEnd = rCrsr.GetCntntNode(FALSE)->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
-=======
-    const SwLayoutFrm *pStart = rCrsr.GetCntntNode()->GetFrm(
-                                &aPtPos )->GetUpper(),
-                      *pEnd   = rCrsr.GetCntntNode(sal_False)->GetFrm(
->>>>>>> other
+    pCntNd = rCrsr.GetCntntNode(sal_False);
+    const SwLayoutFrm *pEnd = pCntNd->getLayoutFrm( pCntNd->GetDoc()->GetCurrentLayout(),
                                 &aMkPos )->GetUpper();
 
     SWRECTFN( pStart->GetUpper() )
@@ -2492,15 +2460,9 @@ void _FndBox::MakeFrms( SwTable &rTable )
                     i >= 0 && !pSibling; --i )
             {
                 SwTableLine *pLine = pLineBehind ? pLineBehind :
-<<<<<<< local
-                                                    rTable.GetTabLines()[static_cast<USHORT>(i)];
+                                                    rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
                 SwIterator<SwRowFrm,SwFmt> aIter( *pLine->GetFrmFmt() );
                 pSibling = aIter.First();
-=======
-                                                    rTable.GetTabLines()[static_cast<sal_uInt16>(i)];
-                SwClientIter aIter( *pLine->GetFrmFmt() );
-                pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
->>>>>>> other
                 while ( pSibling && (
                             pSibling->GetTabLine() != pLine ||
                             !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||

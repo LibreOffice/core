@@ -344,11 +344,7 @@ class SwFrm: public SwClient, public SfxBroadcaster
     SwCntntFrm* _FindPrevCnt( const bool _bInSameFtn = false );
 
 
-<<<<<<< local
-    void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, BYTE & );
-=======
-    void _UpdateAttrFrm( SfxPoolItem*, SfxPoolItem*, sal_uInt8 & );
->>>>>>> other
+    void _UpdateAttrFrm( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 & );
     SwFrm* _GetIndNext();
     void SetDirFlags( sal_Bool bVert );
 
@@ -404,14 +400,10 @@ protected:
     void ColLock()      { bColLocked = sal_True; }
     void ColUnlock()    { bColLocked = sal_False; }
 
-<<<<<<< local
     // Only used by SwRootFrm Ctor to get 'this' into mpRoot...
     void setRootFrm( SwRootFrm* pRoot ) { mpRoot = pRoot; }
 
-    SwPageFrm *InsertPage( SwPageFrm *pSibling, BOOL bFtn );
-=======
     SwPageFrm *InsertPage( SwPageFrm *pSibling, sal_Bool bFtn );
->>>>>>> other
     void PrepareMake();
     void OptPrepareMake();
     void MakePos();
@@ -653,12 +645,7 @@ public:
     // <--
     inline SwFrm        *FindPrev();
     inline const SwPageFrm *FindPageFrm() const;
-<<<<<<< local
-    inline const SwFtnBossFrm *FindFtnBossFrm( BOOL bFtn = FALSE ) const;
-=======
-    inline const SwRootFrm *FindRootFrm() const;
     inline const SwFtnBossFrm *FindFtnBossFrm( sal_Bool bFtn = sal_False ) const;
->>>>>>> other
     inline const SwFrm     *FindColFrm() const;
     inline const SwFrm     *FindFooterOrHeader() const;
     inline const SwTabFrm  *FindTabFrm() const;
@@ -923,13 +910,9 @@ public:
     bool IsInCoveredCell() const;
 
     // FME 2007-08-30 #i81146# new loop control
-<<<<<<< local
-    void ValidateThisAndAllLowers( const USHORT nStage );
     bool KnowsFormat( const SwFmt& rFmt ) const;
     void RegisterToFormat( SwFmt& rFmt );
-=======
     void ValidateThisAndAllLowers( const sal_uInt16 nStage );
->>>>>>> other
 };
 
 inline sal_Bool SwFrm::IsInDocBody() const

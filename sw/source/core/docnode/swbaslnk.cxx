@@ -218,13 +218,8 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         if ( (!pSh || !pSh->ActionPend()) && (!pESh || !pESh->ActionPend()) )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-<<<<<<< local
             pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
-            bUpdate = FALSE;
-=======
-            pCntntNode->Modify( &aMsgHint, &aMsgHint );
             bUpdate = sal_False;
->>>>>>> other
         }
     }
 
@@ -443,23 +438,7 @@ sal_Bool SwBaseLink::SwapIn( sal_Bool bWaitForData, sal_Bool bNativFormat )
     else
         bRes = Update();
 
-<<<<<<< local
-    bSwapIn = FALSE;
-=======
     bSwapIn = sal_False;
-
-    // --> OD 2005-04-11 #i46300# - deactivate fix for issues i9861 and i33293
-//    if ( pTBIS && pTBIS->isTouched() )
-//    {
-//        // --> OD 2005-04-11 #i46300# - determine correct URL for the graphic
-//        String sGrfNm;
-//        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
-//        (m_pReReadThread = new ReReadThread(
-//                this, sGrfNm, bWaitForData, bNativFormat))->create();
-//        // <--
-//    }
-    // <--
->>>>>>> other
     return bRes;
 }
 

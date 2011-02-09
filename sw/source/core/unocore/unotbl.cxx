@@ -1241,17 +1241,8 @@ OUString SwXCell::getImplementationName(void) throw( uno::RuntimeException )
 {
     return C2U("SwXCell");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:20--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXCell::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     String sServiceName(rServiceName);
     return sServiceName.EqualsAscii("com.sun.star.text.CellProperties");
@@ -1273,17 +1264,8 @@ OUString SwXTextTableRow::getImplementationName(void) throw( uno::RuntimeExcepti
 {
     return C2U("SwXTextTableRow");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:20--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextTableRow::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextTableRow") == rServiceName;
 }
@@ -1470,17 +1452,8 @@ OUString SwXTextTableCursor::getImplementationName(void) throw( uno::RuntimeExce
 {
     return C2U("SwXTextTableCursor");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:21--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTextTableCursor::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TextTableCursor") == rServiceName;
 }
@@ -1918,15 +1891,8 @@ SwTableProperties_Impl::SwTableProperties_Impl()
 SwTableProperties_Impl::~SwTableProperties_Impl()
 {
 }
-<<<<<<< local
 
-void SwTableProperties_Impl::SetProperty(USHORT nWhichId, USHORT nMemberId, const uno::Any& rVal)
-=======
-/* -----------------22.06.98 09:51-------------------
- *
- * --------------------------------------------------*/
 void SwTableProperties_Impl::SetProperty(sal_uInt16 nWhichId, sal_uInt16 nMemberId, const uno::Any& rVal)
->>>>>>> other
 {
     aAnyMap.SetValue( nWhichId, nMemberId, rVal );
 }
@@ -3621,17 +3587,8 @@ OUString SwXCellRange::getImplementationName(void) throw( uno::RuntimeException 
 {
     return C2U("SwXCellRange");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:21--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXCellRange::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return
         rServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "com.sun.star.text.CellRange" ) ) ||
@@ -4596,17 +4553,8 @@ OUString SwXTableRows::getImplementationName(void) throw( uno::RuntimeException 
 {
     return C2U("SwXTableRows");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:22--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTableRows::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TableRows") == rServiceName;
 }
@@ -4822,17 +4770,8 @@ OUString SwXTableColumns::getImplementationName(void) throw( uno::RuntimeExcepti
 {
     return C2U("SwXTableColumns");
 }
-<<<<<<< local
-=======
-/* -----------------------------19.04.00 15:23--------------------------------
->>>>>>> other
 
-<<<<<<< local
-BOOL SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXTableColumns::supportsService(const OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.text.TableColumns") == rServiceName;
 }

@@ -378,7 +378,6 @@ void SwFlyFrm::DeleteCnt()
 |*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
-<<<<<<< local
 
 sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
 {
@@ -446,10 +445,7 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
 
 
 
-void SwFlyFrm::InitDrawObj( BOOL bNotify )
-=======
 void SwFlyFrm::InitDrawObj( sal_Bool bNotify )
->>>>>>> other
 {
     //ContactObject aus dem Format suchen. Wenn bereits eines existiert, so
     //braucht nur eine neue Ref erzeugt werden, anderfalls ist es jetzt an
@@ -865,24 +861,13 @@ void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     // <--
 }
 
-<<<<<<< local
 void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            BYTE &rInvFlags,
-=======
-void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                             sal_uInt8 &rInvFlags,
->>>>>>> other
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
-<<<<<<< local
-    BOOL bClear = TRUE;
-    const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
-=======
     sal_Bool bClear = sal_True;
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ViewShell *pSh = GetShell();
->>>>>>> other
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     switch( nWhich )
     {
         case RES_VERT_ORIENT:

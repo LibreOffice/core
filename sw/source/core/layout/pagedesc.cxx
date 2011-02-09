@@ -289,13 +289,8 @@ void SwPageDesc::RegisterChange()
 
 void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-<<<<<<< local
-    const USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    NotifyClients( pOld, pNew );
-=======
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    SwModify::Modify( pOld, pNew );
->>>>>>> other
+    NotifyClients( pOld, pNew );
 
     if ( (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich)
         || isCHRATR(nWhich) || (RES_PARATR_LINESPACING == nWhich) )
@@ -322,11 +317,7 @@ static const SwFrm* lcl_GetFrmOfNode( const SwNode& rNd )
         pMod = 0;
 
     Point aNullPt;
-<<<<<<< local
-    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, FALSE )
-=======
-    return pMod ? ::GetFrmOfModify( *pMod, nFrmType, &aNullPt, 0, sal_False )
->>>>>>> other
+    return pMod ? ::GetFrmOfModify( 0, *pMod, nFrmType, &aNullPt, 0, sal_False )
                 : 0;
 }
 

@@ -191,11 +191,7 @@ SwCallLink::~SwCallLink()
 
     const SwFrm* pFrm;
     const SwFlyFrm *pFlyFrm;
-<<<<<<< local
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,FALSE) ) &&
-=======
-    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->GetFrm(0,0,sal_False) ) &&
->>>>>>> other
+    if( !rShell.ActionPend() && 0 != ( pFrm = pCNd->getLayoutFrm(rShell.GetLayout(),0,0,sal_False) ) &&
         0 != ( pFlyFrm = pFrm->FindFlyFrm() ) && !rShell.IsTableMode() )
     {
         const SwNodeIndex* pIndex = pFlyFrm->GetFmt()->GetCntnt().GetCntntIdx();
@@ -212,11 +208,7 @@ SwCallLink::~SwCallLink()
     }
 }
 
-<<<<<<< local
-long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm )
-=======
-long SwCallLink::GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
->>>>>>> other
+long SwCallLink::getLayoutFrm( const SwRootFrm* pRoot, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm )
 {
     SwTxtFrm* pFrm = (SwTxtFrm*)rNd.getLayoutFrm(pRoot,0,0,bCalcFrm), *pNext = pFrm;
     if ( pFrm && !pFrm->IsHiddenNow() )

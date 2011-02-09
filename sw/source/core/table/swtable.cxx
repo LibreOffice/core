@@ -2498,24 +2498,6 @@ sal_Bool SwTableBox::HasNumCntnt( double& rNum, sal_uInt32& rFmtIndex,
             rFmtIndex = 0;
 
         bRet = pNumFmtr->IsNumberFormat( aTxt, rFmtIndex, rNum );
-<<<<<<< local
-=======
-
-/*
-// wie bekommt man aus dem neuen String den neuen Wert?
-// denn der Numberformater erkennt aus "123.--DM" kein Zahlenformat!
-        if( !bRet && rFmtIndex && !pNumFmtr->IsTextFormat( rFmtIndex ) &&
-            SFX_ITEM_SET == GetFrmFmt()->GetItemState( RES_BOXATR_VALUE,
-            sal_False, &pItem ))
-        {
-            Color* pCol;
-            String sNewTxt;
-            pNumFmtr->GetOutputString( ((SwTblBoxValue*)pItem)->GetValue(),
-                                        rFmtIndex, sNewTxt, &pCol );
-            bRet = aTxt == sNewTxt;
-        }
-*/
->>>>>>> other
     }
     else
         rIsEmptyTxtNd = sal_False;

@@ -1178,63 +1178,6 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 SW_MOD()->CheckSpellChanges(sal_False, sal_True, sal_True, sal_False );
             break;
 
-<<<<<<< local
-=======
-            case SID_BROWSER_MODE:
-            case FN_PRINT_LAYOUT:   //Fuer Web, genau umgekehrt zum BrowserMode
-            {
-                int eState = STATE_TOGGLE;
-                sal_Bool bSet = sal_True;
-                const SfxPoolItem* pAttr=NULL;
-                if ( pArgs && SFX_ITEM_SET == pArgs->GetItemState( nWhich , sal_False, &pAttr ))
-                {
-                    bSet = ((SfxBoolItem*)pAttr)->GetValue();
-                    if ( nWhich == FN_PRINT_LAYOUT )
-                        bSet = !bSet;
-                    eState = bSet ? STATE_ON : STATE_OFF;
-                }
-
-                if ( STATE_TOGGLE == eState )
-                    bSet = !GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE);
-
-                ToggleBrowserMode(bSet, 0);
-
-                // OS: numerische Reihenfolge beachten!
-                static sal_uInt16 __READONLY_DATA aInva[] =
-                                    {
-                                        SID_NEWWINDOW,/*5620*/
-                                        SID_BROWSER_MODE, /*6313*/
-                                        SID_RULER_BORDERS, SID_RULER_PAGE_POS,
-                                        SID_ATTR_LONG_LRSPACE,
-                                        SID_HTML_MODE,
-                                        SID_RULER_PROTECT,
-                                        SID_AUTOSPELL_CHECK,
-                                        FN_RULER,       /*20211*/
-                                        FN_VIEW_GRAPHIC,    /*20213*/
-                                        FN_VIEW_BOUNDS,     /**/
-                                        FN_VIEW_FIELDS,     /*20215*/
-                                        FN_VLINEAL,             /*20216*/
-                                        FN_VSCROLLBAR,      /*20217*/
-                                        FN_HSCROLLBAR,      /*20218*/
-                                        FN_VIEW_META_CHARS, /**/
-                                        FN_VIEW_MARKS,      /**/
-                                        FN_VIEW_FIELDNAME,  /**/
-                                        FN_VIEW_TABLEGRID,  /*20227*/
-                                        FN_PRINT_LAYOUT, /*20237*/
-                                        FN_QRY_MERGE,   /*20364*/
-                                        0
-                                    };
-                // the view must not exist!
-                SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst( this );
-                if( pTmpFrm )
-                    pTmpFrm->GetBindings().Invalidate( aInva );
-                if ( !pAttr )
-                    rReq.AppendItem( SfxBoolItem( nWhich, bSet ) );
-                rReq.Done();
-            }
-            break;
-
->>>>>>> other
         case SID_MAIL_PREPAREEXPORT:
         {
             //pWrtShell is not set in page preview
@@ -1820,84 +1763,8 @@ void SwDocShell::ReloadFromHtml( const String& rStreamName, SwSrcView* pSrcView 
         pDoc->ResetModified();
 }
 
-<<<<<<< local
-ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
-                    SwgReaderOption& rOpt, BOOL bUnoCall )
-=======
-/* -----------------------------14.12.99 16:52--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
-{
-    GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
-    UpdateFontList();
-    SwView* pTempView = _pView ? _pView : (SwView*)GetView();
-    if( pTempView )
-    {
-        SfxBindings& rBind = pTempView->GetViewFrame()->GetBindings();
-        rBind.Invalidate(FN_SHADOWCURSOR);
-        rBind.Invalidate(SID_BROWSER_MODE);
-        rBind.Invalidate(FN_PRINT_LAYOUT);
-
-        if( !GetDoc()->getPrinter( false ) )
-        {
-            pTempView->SetPrinter( GetDoc()->getPrinter( false ),
-                                   SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
-        }
-
-        // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
-        // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
-        GetDoc()->CheckDefaultPageFmt();
-        // <--
-
-        // Currently there can be only one view (layout) if the document is viewed in Web layout
-        // So if there are more views we are in print layout and for toggling to Web layout all other views must be closed
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
-        do {
-            if( pTmpFrm != pTempView->GetViewFrame() )
-            {
-                pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
-            }
-            else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, sal_False);
-
-        } while ( pTmpFrm );
-
-        const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-
-        // set view columns before toggling:
-        if ( bSet )
-        {
-            const sal_uInt16 nColumns  = rViewOptions.GetViewLayoutColumns();
-            const bool   bBookMode = rViewOptions.IsViewLayoutBookMode();
-            if ( 1 != nColumns || bBookMode )
-            {
-                ((SwView*)GetView())->SetViewLayout( 1, false );
-            }
-        }
-
-        // Triggeres a formatting:
-        pTempView->GetWrtShell().CheckBrowseView( sal_True );
-        pTempView->CheckVisArea();
-
-        if( GetDoc()->get(IDocumentSettingAccess::BROWSE_MODE) )
-        {
-            const SvxZoomType eType = (SvxZoomType)rViewOptions.GetZoomType();
-
-            if ( SVX_ZOOM_PERCENT != eType)
-            {
-                ((SwView*)GetView())->SetZoom( eType );
-            }
-        }
-        pTempView->InvalidateBorder();
-        pTempView->SetNewWindowAllowed(!bSet);
-    }
-}
-
 sal_uLong SwDocShell::LoadStylesFromFile( const String& rURL,
                     SwgReaderOption& rOpt, sal_Bool bUnoCall )
->>>>>>> other
 {
     sal_uLong nErr = 0;
 

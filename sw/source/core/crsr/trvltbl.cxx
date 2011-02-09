@@ -193,13 +193,8 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
         const SwFrm* pStartFrm = pFrm;
-<<<<<<< local
-        const SwCntntNode *pCNd = pCrsr->GetCntntNode( FALSE );
-        const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : 0;
-=======
         const SwCntntNode *pCNd = pCrsr->GetCntntNode( sal_False );
-        const SwFrm* pEndFrm   = pCNd ? pCNd->GetFrm( &pCrsr->GetMkPos() ) : 0;
->>>>>>> other
+        const SwFrm* pEndFrm   = pCNd ? pCNd->getLayoutFrm( GetLayout(), &pCrsr->GetMkPos() ) : 0;
 
         if ( bRow )
         {

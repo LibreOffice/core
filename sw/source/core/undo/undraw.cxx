@@ -63,14 +63,7 @@ struct SwUndoGroupObjImpl
 {
     SwDrawFrmFmt* pFmt;
     SdrObject* pObj;
-<<<<<<< local
-    ULONG nNodeIdx;
-=======
     sal_uLong nNodeIdx;
-
-    // OD 2004-04-15 #i26791# - keeping the anchor and the relative position
-    // of drawing objects no longer needed
->>>>>>> other
 };
 
 
@@ -392,12 +385,7 @@ void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = sal_True;
 
-<<<<<<< local
-    // remove from array
-    SwDoc* pDoc = &rIter.GetDoc();
-=======
     SwDoc *const pDoc = & rContext.GetDoc();
->>>>>>> other
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
 
     // remove from array
@@ -569,14 +557,9 @@ void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-<<<<<<< local
-    }
-    rIter.pMarkList = pMarkLst;
-=======
         // <--
     }
     rContext.SetSelections(0, pMarkLst);
->>>>>>> other
 }
 
 void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)

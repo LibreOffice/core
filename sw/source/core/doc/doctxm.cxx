@@ -272,11 +272,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
         if( pTOXMark != &rCurTOXMark &&
             0 != ( pMark = pTOXMark->GetTxtTOXMark()) &&
             0 != ( pTOXSrc = pMark->GetpTxtNd() ) &&
-<<<<<<< local
-            0 != ( pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, FALSE )) &&
-=======
-            0 != ( pCFrm = pTOXSrc->GetFrm( &aPt, 0, sal_False )) &&
->>>>>>> other
+            0 != ( pCFrm = pTOXSrc->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False )) &&
             ( bInReadOnly || !pCFrm->IsProtected() ))
         {
             CompareNodeCntnt aAbsNew( pTOXSrc->GetIndex(), *pMark->GetStart() );
@@ -491,12 +487,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     return pFmt->GetAttrSet();
 }
 
-<<<<<<< local
-const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
-=======
- --------------------------------------------------*/
 const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, sal_Bool bCreate )
->>>>>>> other
 {
     SwTOXBase** prBase = 0;
     switch(eTyp)
@@ -644,12 +635,7 @@ sal_uInt16 SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
     return nCnt;
 }
 
-<<<<<<< local
-const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
-=======
- --------------------------------------------------------------------*/
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, sal_uInt16 nId ) const
->>>>>>> other
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
     sal_uInt16 nCnt = 0;
@@ -721,14 +707,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-<<<<<<< local
-BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
-=======
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
 sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
->>>>>>> other
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
                     "keine TOXBaseSection!" );
@@ -1295,15 +1274,9 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
-<<<<<<< local
-            //USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
-            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
-            pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
-=======
             //sal_uInt16(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
             sal_uInt16( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
-            pTxtNd->GetFrm() &&
->>>>>>> other
+            pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() ) &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
             ( !IsFromChapter() ||
@@ -1752,11 +1725,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     long nRightMargin;
                     if( pPageDesc )
                     {
-<<<<<<< local
-                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, TRUE );
-=======
-                        const SwFrm* pFrm = pTOXNd->GetFrm( 0, 0, sal_True );
->>>>>>> other
+                        const SwFrm* pFrm = pTOXNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0, 0, sal_True );
                         if( !pFrm || 0 == ( pFrm = pFrm->FindPageFrm() ) ||
                             pPageDesc != ((SwPageFrm*)pFrm)->GetPageDesc() )
                             // dann muss man ueber den PageDesc gehen

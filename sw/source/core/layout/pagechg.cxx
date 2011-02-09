@@ -575,13 +575,8 @@ void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-<<<<<<< local
 void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                             BYTE &rInvFlags,
-=======
-void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                              sal_uInt8 &rInvFlags,
->>>>>>> other
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     sal_Bool bClear = sal_True;
@@ -1367,13 +1362,8 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, sal_Bool bFtn )
     {
         if ( bCheckPages )
         {
-<<<<<<< local
-            CheckPageDescs( pSibling, FALSE );
-            ViewShell *pSh = getRootFrm()->GetCurrShell();
-=======
             CheckPageDescs( pSibling, sal_False );
-            ViewShell *pSh = GetShell();
->>>>>>> other
+            ViewShell *pSh = getRootFrm()->GetCurrShell();
             SwViewImp *pImp = pSh ? pSh->Imp() : 0;
             if ( pImp && pImp->IsAction() && !pImp->GetLayAction().IsCheckPages() )
             {
@@ -1787,13 +1777,8 @@ void SwRootFrm::ImplCalcBrowseWidth()
     if ( !pFrm )
         return;
 
-<<<<<<< local
-    bBrowseWidthValid = TRUE;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
-=======
     bBrowseWidthValid = sal_True;
-    ViewShell *pSh = GetShell();
->>>>>>> other
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
     nBrowseWidth = pSh
                     ? MINLAY + 2 * pSh->GetOut()->
                                 PixelToLogic( pSh->GetBrowseBorder() ).Width()

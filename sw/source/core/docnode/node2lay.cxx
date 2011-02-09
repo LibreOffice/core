@@ -77,7 +77,6 @@ public:
  * vor oder hinter den eingefuegt werden soll.
  * --------------------------------------------------*/
 
-<<<<<<< local
 SwNode* GoNextWithFrm(const SwNodes& rNodes, SwNodeIndex *pIdx)
 {
     if( pIdx->GetIndex() >= rNodes.Count() - 1 )
@@ -143,12 +142,8 @@ SwNode* GoPreviousWithFrm(SwNodeIndex *pIdx)
 }
 
 
-SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, ULONG nIdx, BOOL bSearch )
-    : pUpperFrms( NULL ), nIndex( nIdx ), bInit( FALSE )
-=======
 SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bSearch )
     : pUpperFrms( NULL ), nIndex( nIdx ), bInit( sal_False )
->>>>>>> other
 {
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
@@ -166,13 +161,8 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, sal_Bool bS
         else
         {
             SwNodeIndex aTmp( rNode, -1 );
-<<<<<<< local
             pNd = GoNextWithFrm( rNode.GetNodes(), &aTmp );
-            bMaster = TRUE;
-=======
-            pNd = rNode.GetNodes().GoNextWithFrm( &aTmp );
             bMaster = sal_True;
->>>>>>> other
             if( !bSearch && pNd && rNode.EndOfSectionIndex() < pNd->GetIndex() )
                 pNd = NULL; // Nicht ueber den Bereich hinausschiessen
         }
@@ -218,13 +208,8 @@ SwFrm* SwNode2LayImpl::NextFrm()
         return sal_False;
     if( !bInit )
     {
-<<<<<<< local
          pRet = pIter->First();
-         bInit = TRUE;
-=======
-         pRet = (SwFrm*)pIter->First(TYPE(SwFrm));
          bInit = sal_True;
->>>>>>> other
     }
     else
         pRet = pIter->Next();

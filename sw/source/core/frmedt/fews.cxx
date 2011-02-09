@@ -429,13 +429,8 @@ void SwFEShell::SetNewPageOffset( sal_uInt16 nOffset )
 
 void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
 {
-<<<<<<< local
-    const SwPageFrm *pPage = GetCurrFrm( FALSE )->FindPageFrm();
-    const SwRootFrm* pDocLayout = GetLayout();
-=======
     const SwPageFrm *pPage = GetCurrFrm( sal_False )->FindPageFrm();
-    const SwRootFrm* pLayout = GetLayout();
->>>>>>> other
+    const SwRootFrm* pDocLayout = GetLayout();
     while ( pPage )
     {
         const SwFrm *pFlow = pPage->FindFirstBodyCntnt();
@@ -446,11 +441,7 @@ void SwFEShell::SetPageOffset( sal_uInt16 nOffset )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if ( rPgDesc.GetNumOffset() )
             {
-<<<<<<< local
-                pDocLayout->SetVirtPageNum( TRUE );
-=======
-                pLayout->SetVirtPageNum( sal_True );
->>>>>>> other
+                pDocLayout->SetVirtPageNum( sal_True );
                 lcl_SetAPageOffset( nOffset, (SwPageFrm*)pPage, this );
                 break;
             }

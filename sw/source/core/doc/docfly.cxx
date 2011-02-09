@@ -73,14 +73,7 @@ extern sal_uInt16 GetHtmlMode( const SwDocShell* );
 
 using namespace ::com::sun::star;
 
-<<<<<<< local
-USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
-=======
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 sal_uInt16 SwDoc::GetFlyCount( FlyCntType eType ) const
->>>>>>> other
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
     sal_uInt16 nSize = rFmts.Count();
@@ -183,11 +176,7 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
             {
                 const SwPosition *pPos = rAnch.GetCntntAnchor();
                 const SwCntntNode* pNd = pPos->nNode.GetNode().GetCntntNode();
-<<<<<<< local
-                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, FALSE ) : 0;
-=======
-                const SwFrm* pOld = pNd ? pNd->GetFrm( &aRet, 0, sal_False ) : 0;
->>>>>>> other
+                const SwFrm* pOld = pNd ? pNd->getLayoutFrm( rDoc.GetCurrentLayout(), &aRet, 0, sal_False ) : 0;
                 if( pOld )
                     aRet = pOld->Frm().Pos();
             }
@@ -206,15 +195,9 @@ Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
 
         case FLY_AT_PAGE:
             {
-<<<<<<< local
-                USHORT nPgNum = rAnch.GetPageNum();
-                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
-                for( USHORT i = 1; (i <= nPgNum) && pPage; ++i,
-=======
                 sal_uInt16 nPgNum = rAnch.GetPageNum();
-                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetRootFrm()->Lower();
+                const SwPageFrm *pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
                 for( sal_uInt16 i = 1; (i <= nPgNum) && pPage; ++i,
->>>>>>> other
                                     pPage = (const SwPageFrm*)pPage->GetNext() )
                     if( i == nPgNum )
                     {
@@ -526,20 +509,8 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 }
 // <--
 
-<<<<<<< local
-BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
-                            SfxItemSet* pSet, BOOL bKeepOrient )
-=======
-/***************************************************************************
- *  Methode     :   sal_Bool SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
- *  Beschreibung:
- *  Erstellt    :   OK 14.04.94 15:40
- *  Aenderung   :   JP 23.04.98
- ***************************************************************************/
-
 sal_Bool SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, sal_Bool bKeepOrient )
->>>>>>> other
 {
     sal_Bool bChgAnchor = sal_False, bFrmSz = sal_False;
 
@@ -744,11 +715,7 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                         // OD 20.06.2003 #108784# - consider that drawing objects
                         // can be in header/footer. Thus, <GetFrm()> by left-top-corner
                         pTxtFrm = aPos.nNode.GetNode().
-<<<<<<< local
-                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, FALSE );
-=======
-                                        GetCntntNode()->GetFrm( &aPt, 0, sal_False );
->>>>>>> other
+                                        GetCntntNode()->getLayoutFrm( GetCurrentLayout(), &aPt, 0, sal_False );
                     }
                     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aPt );
                     pNewAnchorFrm = pTmp->FindFlyFrm();

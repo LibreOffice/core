@@ -201,12 +201,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     Push();
     SwPaM* pPaM = GetCrsr();
 
-<<<<<<< local
     SwFieldHint aHint( pPaM );
-=======
-    sal_Bool bDDEFld = RES_DDEFLD == pType->Which();
-    // Modify-Object gefunden, trage alle Felder ins Array ein
->>>>>>> other
     SwClientIter aIter( *pType );
     for ( SwClient* pClient = aIter.GoStart(); pClient; aIter++ )
     {
@@ -557,13 +552,8 @@ sal_Bool SwEditShell::IsAnyDatabaseFieldInDoc()const
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
-<<<<<<< local
-                            return TRUE;
-                        pFld = aIter.Next();
-=======
                             return sal_True;
-                        pFld = (SwFmtFld*)aIter.Next();
->>>>>>> other
+                        pFld = aIter.Next();
                     }
                 }
                 break;

@@ -1651,26 +1651,16 @@ void ViewShell::PaintDesktop( const SwRect &rRect )
     //Kann z.B. waehrend des Idle'ns zwischenzeitlich auftreten.
     //Die Rechtecke neben den Seiten muessen wir leider auf jedenfall Painten,
     //den diese werden spaeter beim VisPortChgd ausgespart.
-<<<<<<< local
-    BOOL bBorderOnly = FALSE;
-    const SwRootFrm *pRoot = GetLayout();//swmod 080305
-=======
     sal_Bool bBorderOnly = sal_False;
-    const SwRootFrm *pRoot = GetDoc()->GetRootFrm();
->>>>>>> other
+    const SwRootFrm *pRoot = GetLayout();//swmod 080305
     if ( rRect.Top() > pRoot->Frm().Bottom() )
     {
         const SwFrm *pPg = pRoot->Lower();
         while ( pPg && pPg->GetNext() )
             pPg = pPg->GetNext();
         if ( !pPg || !pPg->Frm().IsOver( VisArea() ) )
-<<<<<<< local
-            bBorderOnly = TRUE;
-    }   //swmod 071108//swmod 071225
-=======
             bBorderOnly = sal_True;
     }
->>>>>>> other
 
     const bool bBookMode = GetViewOptions()->IsViewLayoutBookMode();
 
@@ -2312,29 +2302,18 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // Wenn kein ReferenzDevice (Drucker) zum Formatieren benutzt wird,
         // sondern der Bildschirm, muss bei Zoomfaktoraenderung neu formatiert
         // werden.
-<<<<<<< local
         if( pOpt->getBrowseMode() )
-            bReformat = TRUE;
-=======
-        if( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             bReformat = sal_True;
->>>>>>> other
     }
 
-<<<<<<< local
     bool bBrowseModeChanged = false;
     if( pOpt->getBrowseMode() != rOpt.getBrowseMode() )
     {
         bBrowseModeChanged = true;
-        bReformat = TRUE;
+        bReformat = sal_True;
     }
     else if( pOpt->getBrowseMode() && pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
-        bReformat = TRUE;
-=======
-    if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) &&
-         pOpt->IsPrtFormat() != rOpt.IsPrtFormat() )
         bReformat = sal_True;
->>>>>>> other
 
     if ( HasDrawView() || rOpt.IsGridVisible() )
     {
@@ -2476,14 +2455,8 @@ void  ViewShell::SetPDFExportOption(sal_Bool bSet)
 {
     if( bSet != pOpt->IsPDFExport() )
     {
-<<<<<<< local
         if( bSet && pOpt->getBrowseMode() )
-            pOpt->SetPrtFormat( TRUE );
-=======
-        if( bSet &&
-            getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
             pOpt->SetPrtFormat( sal_True );
->>>>>>> other
         pOpt->SetPDFExport(bSet);
     }
 }

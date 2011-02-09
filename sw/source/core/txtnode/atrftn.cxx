@@ -366,12 +366,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
     if ( !m_pTxtNode )
         return;
 
-<<<<<<< local
     const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
-    BOOL bFrmFnd = FALSE;
-=======
     sal_Bool bFrmFnd = sal_False;
->>>>>>> other
     {
         SwIterator<SwCntntFrm,SwTxtNode> aIter( *m_pTxtNode );
         for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )

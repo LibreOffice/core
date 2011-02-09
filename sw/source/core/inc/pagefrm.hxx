@@ -92,11 +92,7 @@ class SwPageFrm: public SwFtnBossFrm
     static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
-<<<<<<< local
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
-=======
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
->>>>>>> other
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten

@@ -341,23 +341,13 @@ void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 {
     SET_CURR_SHELL( this );
 
-<<<<<<< local
     SwRootFrm* pMyLayout = GetLayout();
-=======
-    SwRootFrm* pLayout = GetLayout();
-    // sal_uLong nStatMax = pLayout->GetPageNum();
->>>>>>> other
 
     const SwFrm *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
 
-<<<<<<< local
     pMyLayout->StartAllAction();
-    for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
-=======
-    pLayout->StartAllAction();
     for ( sal_uInt16 i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
->>>>>>> other
     {
         pPage->Calc();
         SwRect aOldVis( VisArea() );
@@ -636,13 +626,8 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         if ( pSh->GetViewOptions()->getBrowseMode() &&
              pSh->GetNext() == pSh )
         {
-<<<<<<< local
-            pSh->CheckBrowseView( FALSE );
-            pSh->GetLayout()->Lower()->InvalidateSize();
-=======
             pSh->CheckBrowseView( sal_False );
-            pDoc->GetRootFrm()->Lower()->InvalidateSize();
->>>>>>> other
+            pSh->GetLayout()->Lower()->InvalidateSize();
         }
 
         // --> FME 2005-02-10 #119474#

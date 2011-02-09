@@ -32,10 +32,7 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
-<<<<<<< local
-=======
 #include <IDocumentUndoRedo.hxx>
->>>>>>> other
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>

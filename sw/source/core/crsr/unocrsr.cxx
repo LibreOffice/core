@@ -244,15 +244,9 @@ void SwUnoTableCrsr::MakeBoxSels()
     const SwCntntNode* pCNd;
     bool bMakeTblCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
-<<<<<<< local
             0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
-            0 != ( pCNd = GetCntntNode(FALSE) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
-        bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );    //swmod 080218
-=======
-            0 != ( pCNd = GetCntntNode() ) && pCNd->GetFrm() &&
-            0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->GetFrm() )
-        bMakeTblCrsrs = GetDoc()->GetRootFrm()->MakeTblCrsrs( *this );
->>>>>>> other
+            0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
+        bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );
 
     if ( !bMakeTblCrsrs )
     {

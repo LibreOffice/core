@@ -920,13 +920,8 @@ SwSectionNode* SwNodes::InsertTextSection(SwNodeIndex const& rNdIdx,
 
     // Hier bietet sich als Optimierung an, vorhandene Frames nicht zu
     // zerstoeren und wieder neu anzulegen, sondern nur umzuhaengen.
-<<<<<<< local
-    BOOL bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
-                   GetDoc()->GetCurrentViewShell(); //swmod 071108//swmod 071225
-=======
     sal_Bool bInsFrm = bCreateFrms && !pSectNd->GetSection().IsHidden() &&
-                   GetDoc()->GetRootFrm();
->>>>>>> other
+                   GetDoc()->GetCurrentViewShell(); //swmod 071108//swmod 071225
     SwNode2Layout *pNode2Layout = NULL;
     if( bInsFrm )
     {
@@ -1071,29 +1066,8 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 
 SwSectionNode::~SwSectionNode()
 {
-<<<<<<< local
     // mba: test if iteration works as clients will be removed in callback
     m_pSection->GetFmt()->CallSwClientNotify( SfxSimpleHint( SFX_HINT_DYING ) );
-
-    SwDoc* pDoc = GetDoc();
-=======
-    {
-        SwClientIter aIter( *(m_pSection->GetFmt()) );
-        SwClient *pLast = aIter.GoStart();
-        while ( pLast )
-        {
-            if ( pLast->IsA( TYPE(SwFrm) ) )
-            {
-                SwSectionFrm *pSectFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pSectFrm, sal_True );
-                pLast = aIter.GoStart();
-            }
-            else
-                pLast = aIter++;
-        }
-    }
->>>>>>> other
-
     SwSectionFmt* pFmt = m_pSection->GetFmt();
     if( pFmt )
     {

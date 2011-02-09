@@ -654,12 +654,8 @@ void SwDoc::InitDrawModel()
         nInvisibleControls = pDrawModel->GetLayerAdmin().NewLayer( sLayerNm )->GetID();
     }
 
-<<<<<<< local
-    SdrPage* pMasterPage = pDrawModel->AllocPage( FALSE );
+    SdrPage* pMasterPage = pDrawModel->AllocPage( sal_False );
     pDrawModel->InsertPage( pMasterPage );
-=======
-    pDrawModel->InsertPage( pDrawModel->AllocPage( sal_False ) );
->>>>>>> other
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "after create DrawDocument" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create Spellchecker/Hyphenator" );

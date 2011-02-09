@@ -599,13 +599,8 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
         if ( FLY_AT_PAGE == pAnch->GetAnchorId() )
         {
-<<<<<<< local
-            USHORT nPgNum = pAnch->GetPageNum();
-            SwRootFrm *pRoot = getRootFrm();
-=======
             sal_uInt16 nPgNum = pAnch->GetPageNum();
-            SwRootFrm *pRoot = FindRootFrm();
->>>>>>> other
+            SwRootFrm *pRoot = getRootFrm();
             SwPageFrm *pTmpPage = (SwPageFrm*)pRoot->Lower();
             for ( sal_uInt16 i = 1; (i <= nPgNum) && pTmpPage; ++i,
                                 pTmpPage = (SwPageFrm*)pTmpPage->GetNext() )
@@ -627,11 +622,7 @@ void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         {
             SwNodeIndex aIdx( pAnch->GetCntntAnchor()->nNode );
             SwCntntFrm *pCntnt = GetFmt()->GetDoc()->GetNodes().GoNext( &aIdx )->
-<<<<<<< local
-                         GetCntntNode()->getLayoutFrm( getRootFrm(), 0, 0, FALSE );
-=======
-                         GetCntntNode()->GetFrm( 0, 0, sal_False );
->>>>>>> other
+                         GetCntntNode()->getLayoutFrm( getRootFrm(), 0, 0, sal_False );
             if( pCntnt )
             {
                 SwFlyFrm *pTmp = pCntnt->FindFlyFrm();
@@ -773,13 +764,8 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
 
 void SwPageFrm::RemoveFlyFromPage( SwFlyFrm *pToRemove )
 {
-<<<<<<< local
-    const UINT32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
-    getRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
-=======
     const sal_uInt32 nOrdNum = pToRemove->GetVirtDrawObj()->GetOrdNum();
-    FindRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
->>>>>>> other
+    getRootFrm()->GetDrawPage()->RemoveObject( nOrdNum );
     pToRemove->GetVirtDrawObj()->ReferencedObj().SetOrdNum( nOrdNum );
 
     if ( GetUpper() )

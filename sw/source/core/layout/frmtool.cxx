@@ -1122,11 +1122,7 @@ void AppendObjs( const SwSpzFrmFmts *pTbl, sal_uLong nIndex,
     }
 }
 
-<<<<<<< local
 bool lcl_ObjConnected( SwFrmFmt *pFmt, const SwFrm* pSib )
-=======
-sal_Bool MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
->>>>>>> other
 {
     SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
     if ( RES_FLYFRMFMT == pFmt->Which() )
@@ -1145,11 +1141,7 @@ sal_Bool MA_FASTCALL lcl_ObjConnected( SwFrmFmt *pFmt )
         if ( pContact )
             return pContact->GetAnchorFrm() != 0;
     }
-<<<<<<< local
     return false;
-=======
-    return sal_False;
->>>>>>> other
 }
 
 /** helper method to determine, if a <SwFrmFmt>, which has an object connected,
@@ -1201,11 +1193,7 @@ void AppendAllObjs( const SwSpzFrmFmts *pTbl, const SwFrm* pSib )
                 //will ich hier nicht.
                 bRemove = sal_True;
             }
-<<<<<<< local
-            else if ( FALSE == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
-=======
-            else if ( sal_False == (bRemove = ::lcl_ObjConnected( pFmt )) ||
->>>>>>> other
+            else if ( sal_False == (bRemove = ::lcl_ObjConnected( pFmt, pSib )) ||
                       ::lcl_InHeaderOrFooter( *pFmt ) )
             {
             // OD 23.06.2003 #108784# - correction: for objects in header
@@ -1251,23 +1239,12 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
                              SwFrm *pPrv )
 {
     pDoc->BlockIdling();
-<<<<<<< local
     SwRootFrm* pLayout = pLay->getRootFrm();
-    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : FALSE;
+    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
     if( bOldCallbackActionEnabled )
-        pLayout->SetCallbackActionEnabled( FALSE );
-=======
-    SwRootFrm* pLayout = pDoc->GetRootFrm();
-    const sal_Bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
-    if(pLayout)
         pLayout->SetCallbackActionEnabled( sal_False );
->>>>>>> other
 
-<<<<<<< local
-    //Bei der Erzeugung des Layouts wird bPages mit TRUE uebergeben. Dann
-=======
     //Bei der Erzeugung des Layouts wird bPages mit sal_True uebergeben. Dann
->>>>>>> other
     //werden schon mal alle x Absaetze neue Seiten angelegt. Bei umbruechen
     //und/oder Pagedescriptorwechseln werden gleich die entsprechenden Seiten
     //angelegt.
@@ -1636,13 +1613,8 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     if ( bPages )       //Jetzt noch die Flys verbinden lassen.
     {
         if ( !bDontCreateObjects )
-<<<<<<< local
             AppendAllObjs( pTbl, pLayout );
-        bObjsDirect = TRUE;
-=======
-            AppendAllObjs( pTbl );
         bObjsDirect = sal_True;
->>>>>>> other
     }
 
     if( pPageMaker )
@@ -1870,13 +1842,8 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 // und damit ruhig zerstoert werden.
                 if( !pSct->ContainsCntnt() )
                 {
-<<<<<<< local
-                    pSct->DelEmpty( TRUE );
-                    pUpper->getRootFrm()->RemoveFromList( pSct );
-=======
                     pSct->DelEmpty( sal_True );
-                    pDoc->GetRootFrm()->RemoveFromList( pSct );
->>>>>>> other
+                    pUpper->getRootFrm()->RemoveFromList( pSct );
                     delete pSct;
                 }
             }
@@ -3380,8 +3347,6 @@ const SwFrm* MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage )
     return pPage;
 }
 
-<<<<<<< local
-
 #include <svl/smplhint.hxx>
 class SwFrmHolder : private SfxListener
 {
@@ -3420,12 +3385,8 @@ void SwFrmHolder::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     }
 }
 
-SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, USHORT const nFrmType,
-        const Point* pPoint, const SwPosition *pPos, const BOOL bCalcFrm )
-=======
-SwFrm* GetFrmOfModify( SwModify const& rMod, sal_uInt16 const nFrmType,
+SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt16 const nFrmType,
         const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm )
->>>>>>> other
 {
     SwFrm *pMinFrm = 0, *pTmpFrm;
     SwFrmHolder aHolder;

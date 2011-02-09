@@ -275,16 +275,9 @@ void SwView::ExecTabWin( SfxRequest& rReq )
     SwWrtShell &rSh         = GetWrtShell();
     const sal_uInt16 nFrmType   = rSh.IsObjSelected() ?
                                     FRMTYPE_DRAWOBJ :
-<<<<<<< local
-                                        rSh.GetFrmType(0,TRUE);
-    const BOOL  bFrmSelection = rSh.IsFrmSelected();
-    const BOOL bBrowse = rSh.GetViewOptions()->getBrowseMode();
-=======
                                         rSh.GetFrmType(0,sal_True);
-    const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
-    const sal_Bool bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
-
->>>>>>> other
+    const sal_Bool bFrmSelection = rSh.IsFrmSelected();
+    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
 
     const sal_uInt16 nSlot      = rReq.GetSlot();
     const sal_uInt16 nDescId    = rSh.GetCurPageDesc();
@@ -920,12 +913,7 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                 : rSh.GetFrmType( pPt, sal_True );
 
     const sal_Bool  bFrmSelection = rSh.IsFrmSelected();
-
-<<<<<<< local
-    const BOOL bBrowse = rSh.GetViewOptions()->getBrowseMode();
-=======
-    const sal_Bool bBrowse = rSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
+    const sal_Bool bBrowse = rSh.GetViewOptions()->getBrowseMode();
     // PageOffset/Begrenzer
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, pPt );
     const SwRect& rPagePrtRect = rSh.GetAnyCurRect( RECT_PAGE_PRT, pPt );

@@ -72,6 +72,9 @@ enum REFERENCEMARK
 class SwGetRefFieldType : public SwFieldType
 {
     SwDoc* pDoc;
+protected:
+    // ueberlagert, um alle Ref-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 public:
     SwGetRefFieldType(SwDoc* pDoc );
     virtual SwFieldType*    Copy() const;
@@ -81,16 +84,8 @@ public:
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
-<<<<<<< local
-                                        USHORT nSubType, USHORT nSeqNo,
-                                        USHORT* pStt, USHORT* pEnd = 0 );
-protected:
-    // ueberlagert, um alle Ref-Felder zu updaten
-   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
-=======
                                         sal_uInt16 nSubType, sal_uInt16 nSeqNo,
                                         sal_uInt16* pStt, sal_uInt16* pEnd = 0 );
->>>>>>> other
 };
 
 /*--------------------------------------------------------------------

@@ -45,14 +45,7 @@
 using namespace com::sun::star;
 using ::rtl::OUString;
 
-<<<<<<< local
-BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
-=======
-/* -----------------28.11.2002 17:53-----------------
- *
- * --------------------------------------------------*/
 sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
->>>>>>> other
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
     const sal_uInt16 nSize = pFldTypes->Count();

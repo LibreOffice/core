@@ -157,22 +157,12 @@ BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
 {
 }
 
-<<<<<<< local
-void BaseFrameProperties_Impl::SetProperty(USHORT nWID, BYTE nMemberId, const uno::Any& rVal)
-=======
- ---------------------------------------------------------------------------*/
 void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal)
->>>>>>> other
 {
     aAnyMap.SetValue( nWID, nMemberId, rVal );
 }
 
-<<<<<<< local
-sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, const uno::Any*& rpAny)
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& rpAny)
->>>>>>> other
 {
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
@@ -742,12 +732,7 @@ OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXFrame");
 }
 
-<<<<<<< local
-BOOL SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return !rServiceName.compareToAscii("com.sun.star.text.BaseFrame")||
                 !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||

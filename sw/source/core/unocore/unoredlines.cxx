@@ -111,12 +111,7 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXRedlines");
 }
 
-<<<<<<< local
-BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
-=======
-  -----------------------------------------------------------------------*/
 sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
->>>>>>> other
     throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented");
@@ -157,12 +152,7 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
-<<<<<<< local
-BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
-=======
-  -----------------------------------------------------------------------*/
 sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
->>>>>>> other
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -188,12 +178,7 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
     return C2U("SwXRedlineEnumeration");
 }
 
-<<<<<<< local
-BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
-=======
-  -----------------------------------------------------------------------*/
 sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
->>>>>>> other
 {
     return sal_False;
 }

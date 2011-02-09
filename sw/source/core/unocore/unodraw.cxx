@@ -489,12 +489,7 @@ rtl::OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXDrawPage");
 }
 
-<<<<<<< local
-BOOL SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
-=======
- ---------------------------------------------------------------------------*/
 sal_Bool SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
->>>>>>> other
 {
     return C2U("com.sun.star.drawing.GenericDrawPage") == rServiceName;
 }

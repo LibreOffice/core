@@ -303,12 +303,8 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                 //pTmpRoot->UpdateFtnNums();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 080304
                 if ( bFtnDesc )
-<<<<<<< local
                     //pTmpRoot->CheckFtnPageDescs( FALSE );
-                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), FALSE));//swmod 080304
-=======
-                    GetRootFrm()->CheckFtnPageDescs( sal_False );
->>>>>>> other
+                    std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));//swmod 080304
                 if ( bExtra )
                 {
                     //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns
@@ -375,15 +371,11 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         if ( pTmpRoot )
         {
             if ( bFtnDesc )
-<<<<<<< local
                 //pTmpRoot->CheckFtnPageDescs( TRUE );
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), TRUE));//swmod 080304
+                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_True));//swmod 080304
             }
-=======
-                GetRootFrm()->CheckFtnPageDescs( sal_True );
->>>>>>> other
             if ( bExtra )
             {
                 //Fuer die Benachrichtung bezueglich ErgoSum usw. sparen wir uns

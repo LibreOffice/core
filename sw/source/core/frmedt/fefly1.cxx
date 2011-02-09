@@ -492,11 +492,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
-<<<<<<< local
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,FALSE );
-=======
-        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm(0,&aPos,sal_False );
->>>>>>> other
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,sal_False );
     }
     const SwFrm *pNewAnch;
     if( pTxtFrm )

@@ -357,15 +357,9 @@ sal_Bool SwTxtFmtColl::IsAtDocNodeSet() const
 {
     SwIterator<SwCntntNode,SwFmtColl> aIter( *this );
     const SwNodes& rNds = GetDoc()->GetNodes();
-<<<<<<< local
     for( SwCntntNode* pNode = aIter.First(); pNode; pNode = aIter.Next() )
         if( &(pNode->GetNodes()) == &rNds )
-            return TRUE;
-=======
-    for( SwClient* pC = aIter.First(TYPE(SwCntntNode)); pC; pC = aIter.Next() )
-        if( &((SwCntntNode*)pC)->GetNodes() == &rNds )
             return sal_True;
->>>>>>> other
 
     return sal_False;
 }

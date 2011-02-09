@@ -2751,11 +2751,7 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
             }
 
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
-<<<<<<< local
-            pViewShell->UpdateFlds(TRUE);
-=======
-            pWrtShell->ViewShell::UpdateFlds(sal_True);
->>>>>>> other
+            pViewShell->ViewShell::UpdateFlds(sal_True);
             // <--
             if( bStateChanged )
                 pRenderDocShell->EnableSetModified( sal_True );

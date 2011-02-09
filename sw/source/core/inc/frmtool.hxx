@@ -139,11 +139,7 @@ const SwFrm * MA_FASTCALL FindPage( const SwRect &rRect, const SwFrm *pPage );
 
 // JP 07.05.98: wird von SwCntntNode::GetFrm und von SwFlyFrm::GetFrm
 //              gerufen
-<<<<<<< local
-SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const&, USHORT const nFrmType, const Point* = 0,
-=======
-SwFrm* GetFrmOfModify( SwModify const&, sal_uInt16 const nFrmType, const Point* = 0,
->>>>>>> other
+SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const&, sal_uInt16 const nFrmType, const Point* = 0,
                         const SwPosition *pPos = 0,
                         const sal_Bool bCalcFrm = sal_False );
 

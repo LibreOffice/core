@@ -277,11 +277,7 @@ sal_Bool SwCrsrShell::SetCrsrInHdFt( sal_uInt16 nDescNo, sal_Bool bInHeader )
             const SwFrm* pFrm;
             Point aPt( pCurCrsr->GetPtPos() );
 
-<<<<<<< local
-            if( pCNd && 0 != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE ) ))
-=======
-            if( pCNd && 0 != ( pFrm = pCNd->GetFrm( &aPt, 0, sal_False ) ))
->>>>>>> other
+            if( pCNd && 0 != ( pFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) ))
             {
                 // dann kann der Cursor ja auch hinein gesetzt werden
                 SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
@@ -483,14 +479,8 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
 
     if( rPos.nNode < GetDoc()->GetNodes().GetEndOfExtras() )
         // auch beim Einsammeln wird nur der erste Frame benutzt!
-<<<<<<< local
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),
-                                &aPt, &rPos, FALSE ) );
-=======
-        aCurGEF.SetBodyPos( *rPos.nNode.GetNode().GetCntntNode()->GetFrm(
                                 &aPt, &rPos, sal_False ) );
->>>>>>> other
-
     {
         const SfxPoolItem* pItem;
         const SwTableBox* pTBox;
@@ -508,11 +498,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTblFormula( sal_Bool bNext, sal_Bool bOnlyErrors
                 const SwCntntFrm* pCFrm;
                 SwNodeIndex aIdx( *pTBox->GetSttNd() );
                 const SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aIdx );
-<<<<<<< local
-                if( pCNd && 0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE ) ) &&
-=======
-                if( pCNd && 0 != ( pCFrm = pCNd->GetFrm( &aPt, 0, sal_False ) ) &&
->>>>>>> other
+                if( pCNd && 0 != ( pCFrm = pCNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False ) ) &&
                     (IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
                 {
                     _SetGetExpFld aCmp( *pTBox );
@@ -563,12 +549,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
     if( rPos.nNode.GetIndex() < GetDoc()->GetNodes().GetEndOfExtras().GetIndex() )
         // auch beim Einsammeln wird nur der erste Frame benutzt!
         aCurGEF.SetBodyPos( *rPos.nNode.GetNode().
-<<<<<<< local
-                        GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, FALSE ) );
-=======
-                        GetCntntNode()->GetFrm( &aPt, &rPos, sal_False ) );
->>>>>>> other
-
+                        GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
     {
         const SfxPoolItem* pItem;
         const SwCntntFrm* pCFrm;
@@ -581,11 +562,7 @@ sal_Bool SwCrsrShell::GotoNxtPrvTOXMark( sal_Bool bNext )
                                         RES_TXTATR_TOXMARK, n ) ) &&
                 0 != (pTxtTOX = ((SwTOXMark*)pItem)->GetTxtTOXMark() ) &&
                 ( pTxtNd = &pTxtTOX->GetTxtNode())->GetNodes().IsDocNodes() &&
-<<<<<<< local
-                0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, FALSE )) &&
-=======
-                0 != ( pCFrm = pTxtNd->GetFrm( &aPt, 0, sal_False )) &&
->>>>>>> other
+                0 != ( pCFrm = pTxtNd->getLayoutFrm( GetLayout(), &aPt, 0, sal_False )) &&
                 ( IsReadOnlyAvailable() || !pCFrm->IsProtected() ))
             {
                 SwNodeIndex aNdIndex( *pTxtNd );    // UNIX benoetigt dieses Obj.
@@ -652,17 +629,10 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
     // es muss immer der 1. Frame gesucht werden
     Point aPt;
     SwTxtFld* pTxtFld;
-<<<<<<< local
     SwIterator<SwFmtFld,SwFieldType> aIter(rFldType);
-    BOOL bSubType = nSubType != USHRT_MAX;
+    bool bSubType = nSubType != USHRT_MAX;
     for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         if( 0 != ( pTxtFld = pFmtFld->GetTxtFld() ) &&
-=======
-    SwClientIter aIter( (SwFieldType&)rFldType );
-    sal_Bool bSubType = nSubType != USHRT_MAX;
-    for( SwClient* pLast = aIter.First( TYPE( SwFmtFld )); pLast; pLast = aIter.Next() )
-        if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
->>>>>>> other
             ( !bChkInpFlag || ((SwSetExpField*)pTxtFld->GetFld().GetFld())
                                 ->GetInputFlag() ) &&
             (!bSubType || (pFmtFld->GetFld()->GetSubType()
@@ -670,11 +640,7 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
         {
             SwCntntFrm* pCFrm;
             const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
-<<<<<<< local
-            if( 0 != ( pCFrm = rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE )) &&
-=======
-            if( 0 != ( pCFrm = rTxtNode.GetFrm( &aPt, 0, sal_False )) &&
->>>>>>> other
+            if( 0 != ( pCFrm = rTxtNode.getLayoutFrm( rTxtNode.GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False )) &&
                 ( bInReadOnly || !pCFrm->IsProtected() ))
             {
                 _SetGetExpFld* pNew = new _SetGetExpFld(
@@ -759,11 +725,7 @@ sal_Bool SwCrsrShell::MoveFldType( const SwFieldType* pFldType, sal_Bool bNext,
         {
             // auch beim Einsammeln wird nur der erste Frame benutzt!
             Point aPt;
-<<<<<<< local
-            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, FALSE ) );
-=======
-            aSrch.SetBodyPos( *pTNd->GetFrm( &aPt, &rPos, sal_False ) );
->>>>>>> other
+            aSrch.SetBodyPos( *pTNd->getLayoutFrm( GetLayout(), &aPt, &rPos, sal_False ) );
         }
 
         sal_Bool bFound = aSrtLst.Seek_Entry( &aSrch, &nPos );
@@ -1626,13 +1588,10 @@ sal_Bool SwContentAtPos::IsInProtectSect() const
 
     const SwCntntFrm* pFrm;
     return pNd && ( pNd->IsInProtectSect() ||
-<<<<<<< local
-                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0,0,FALSE)) &&
-=======
-                    ( 0 != ( pFrm = pNd->GetFrm(0,0,sal_False)) &&
->>>>>>> other
+                    ( 0 != ( pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), 0,0,sal_False)) &&
                         pFrm->IsProtected() ));
 }
+
 bool SwContentAtPos::IsInRTLText()const
 {
     bool bRet = false;

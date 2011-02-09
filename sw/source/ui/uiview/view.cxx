@@ -848,15 +848,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
         bOldShellWasPagePreView = sal_True;
     }
-<<<<<<< local
-        else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
-        bOldShellWasSrcView = TRUE;
-    }
-=======
-    else if( pExistingSh &&
-             pExistingSh->IsA( TYPE( SwSrcView ) ) )
+    else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
         bOldShellWasSrcView = sal_True;
->>>>>>> other
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
     if(PTR_CAST( SwView, pExistingSh))
@@ -984,12 +977,8 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     pWrtShell->DoUndo( 0 != SW_MOD()->GetUndoOptions().GetUndoCount() );
 
-<<<<<<< local
-    const BOOL bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
+    const sal_Bool bBrowse = pWrtShell->GetViewOptions()->getBrowseMode();
     // Disable "multiple window"
-=======
-    const sal_Bool bBrowse = pWrtShell->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
     SetNewWindowAllowed(!bBrowse);
     // End of disabled multiple window
 

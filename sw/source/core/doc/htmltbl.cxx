@@ -414,16 +414,9 @@ sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 
 sal_uInt16 SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
 {
-<<<<<<< local
-    USHORT nBrowseWidth = 0;
+    sal_uInt16 nBrowseWidth = 0;
     SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *pSwTable->GetFrmFmt() );
     if( pFrm )
-=======
-    sal_uInt16 nBrowseWidth = 0;
-    SwClientIter aIter( *(SwModify*)pSwTable->GetFrmFmt() );
-    SwClient* pCli = aIter.First( TYPE( SwTabFrm ));
-    if( pCli )
->>>>>>> other
     {
         nBrowseWidth = GetBrowseWidthByTabFrm( *pFrm );
     }
@@ -1801,11 +1794,7 @@ void SwHTMLTableLayout::_Resize( sal_uInt16 nAbsAvail, sal_Bool bRecalc )
     SetWidths( sal_True, nAbsAvail );
 
     if ( pRoot && pRoot->IsCallbackActionEnabled() )
-<<<<<<< local
-        pRoot->EndAllAction( TRUE );    //True per VirDev (Browsen ruhiger) //swmod 071108//swmod 071225
-=======
-        pRoot->EndAllAction( sal_True );    //True per VirDev (Browsen ruhiger)
->>>>>>> other
+        pRoot->EndAllAction( sal_True );    //True per VirDev (Browsen ruhiger) //swmod 071108//swmod 071225
 }
 
 IMPL_STATIC_LINK( SwHTMLTableLayout, DelayedResize_Impl, void*, EMPTYARG )

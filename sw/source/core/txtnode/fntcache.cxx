@@ -836,13 +836,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     // true if pOut is the printer and the printer has been used for formatting
     const sal_Bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
                       OUTDEV_PRINTER == rRefDev.GetOutDevType();
-<<<<<<< local
-    const BOOL bBrowse = ( pWin &&
-                           rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
-=======
     const sal_Bool bBrowse = ( pWin &&
-                           pIDSA->get(IDocumentSettingAccess::BROWSE_MODE) &&
->>>>>>> other
+                           rInf.GetShell()->GetViewOptions()->getBrowseMode() &&
                           !rInf.GetShell()->GetViewOptions()->IsPrtFormat() &&
                           !rInf.GetBullet() &&
                            ( rInf.GetSpace() || !rInf.GetKern() ) &&

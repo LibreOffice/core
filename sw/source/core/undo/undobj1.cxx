@@ -341,14 +341,8 @@ void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
     }
     else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
-<<<<<<< local
-        aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( rUndoIter.pAktPam ));
+        aAnchor.SetPageNum( pDoc->GetCurrentLayout()->GetCurrPage( &rContext.GetRepeatPaM() ));
     }
-=======
-        aAnchor.SetPageNum(
-                pDoc->GetRootFrm()->GetCurrPage(& rContext.GetRepeatPaM()) );
-    }
->>>>>>> other
     else {
         ASSERT( sal_False, "was fuer ein Anker ist es denn nun?" );
     }

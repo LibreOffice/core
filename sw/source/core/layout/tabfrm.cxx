@@ -265,13 +265,8 @@ SwRowFrm* lcl_InsertNewFollowFlowLine( SwTabFrm& rTab, const SwFrm& rTmpRow, boo
     ASSERT( rTmpRow.IsRowFrm(), "No row frame to copy for FollowFlowLine" )
     const SwRowFrm& rRow = (SwRowFrm&)rTmpRow;
 
-<<<<<<< local
-    rTab.SetFollowFlowLine( TRUE );
-    SwRowFrm *pFollowFlowLine = new SwRowFrm(*rRow.GetTabLine(), &rTab, false );
-=======
     rTab.SetFollowFlowLine( sal_True );
-    SwRowFrm *pFollowFlowLine = new SwRowFrm(*rRow.GetTabLine(), false );
->>>>>>> other
+    SwRowFrm *pFollowFlowLine = new SwRowFrm(*rRow.GetTabLine(), &rTab, false );
     pFollowFlowLine->SetRowSpanLine( bRowSpanLine );
     SwFrm* pFirstRow = rTab.GetFollow()->GetFirstNonHeadlineRow();
     pFollowFlowLine->InsertBefore( rTab.GetFollow(), pFirstRow );
@@ -3331,13 +3326,8 @@ void SwTabFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-<<<<<<< local
 void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                            BYTE &rInvFlags,
-=======
-void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                             sal_uInt8 &rInvFlags,
->>>>>>> other
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     sal_Bool bClear = sal_True;
@@ -3359,13 +3349,8 @@ void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 const sal_uInt16 nNewRepeat = GetTable()->GetRowsToRepeat();
                 for ( sal_uInt16 nIdx = 0; nIdx < nNewRepeat; ++nIdx )
                 {
-<<<<<<< local
-                    bDontCreateObjects = TRUE;          //frmtool
-                    SwRowFrm* pHeadline = new SwRowFrm( *GetTable()->GetTabLines()[ nIdx ], this );
-=======
                     bDontCreateObjects = sal_True;          //frmtool
-                    SwRowFrm* pHeadline = new SwRowFrm( *GetTable()->GetTabLines()[ nIdx ] );
->>>>>>> other
+                    SwRowFrm* pHeadline = new SwRowFrm( *GetTable()->GetTabLines()[ nIdx ], this );
                     pHeadline->SetRepeatedHeadline( true );
                     bDontCreateObjects = sal_False;
                     pHeadline->Paste( this, pLowerRow );
@@ -3637,14 +3622,9 @@ sal_Bool SwTabFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool &r
                         nSpace = nTmpSpace;
                     // <--
 
-<<<<<<< local
                     const ViewShell *pSh = getRootFrm()->GetCurrShell();
                     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-                        nSpace += pNewUpper->Grow( LONG_MAX, TRUE );
-=======
-                    if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
                         nSpace += pNewUpper->Grow( LONG_MAX, sal_True );
->>>>>>> other
                 }
             }
             else if( !bLockBackMove )

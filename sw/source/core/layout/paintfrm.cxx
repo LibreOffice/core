@@ -3086,24 +3086,14 @@ void SwRootFrm::HackPrepareLongTblPaint( int nMode )
         case HACK_TABLEMODE_INIT       : ASSERT( !pLines, "HackPrepare: already prepared" );
                                          pLines = new SwLineRects;
                                          ASSERT( !pGlobalShell, "old GlobalShell lost" );
-<<<<<<< local
                                          pGlobalShell = GetCurrShell();
-                                         bTableHack = TRUE;
-=======
-                                         pGlobalShell = GetShell();
                                          bTableHack = sal_True;
->>>>>>> other
                                          break;
         case HACK_TABLEMODE_LOCKLINES  : pLines->LockLines( sal_True ); break;
         case HACK_TABLEMODE_PAINTLINES : pLines->PaintLines( GetShell()->GetOut() );
                                          break;
-<<<<<<< local
-        case HACK_TABLEMODE_UNLOCKLINES: pLines->LockLines( FALSE ); break;
-        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetCurrShell()->GetOut() );
-=======
         case HACK_TABLEMODE_UNLOCKLINES: pLines->LockLines( sal_False ); break;
-        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetShell()->GetOut() );
->>>>>>> other
+        case HACK_TABLEMODE_EXIT       : pLines->PaintLines( GetCurrShell()->GetOut() );
                                          DELETEZ( pLines );
                                          pGlobalShell = 0;
                                          bTableHack = sal_False;
@@ -5728,12 +5718,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     {
         if ( bBack || bPageFrm || !bLowerMode )
         {
-<<<<<<< local
-            const BOOL bBrowse = pSh->GetViewOptions()->getBrowseMode();
-=======
-            const sal_Bool bBrowse = pSh->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
-
+            const sal_Bool bBrowse = pSh->GetViewOptions()->getBrowseMode();
             SwRect aRect;
             if ( (bPageFrm && bBrowse) ||
                  (IsTxtFrm() && Prt().SSize() == Frm().SSize()) )

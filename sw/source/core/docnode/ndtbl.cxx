@@ -30,10 +30,6 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-<<<<<<< local
-=======
-
->>>>>>> other
 #include <hintids.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
@@ -1151,13 +1147,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     bool const bUndo(GetIDocumentUndoRedo().DoesUndo());
     if (bUndo)
     {
-<<<<<<< local
-=======
-//        GetIDocumentUndoRedo().StartUndo( UNDO_TEXTTOTABLE );
-//        pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh, eAdjust, pTAFmt );
-//        GetIDocumentUndoRedo().AppendUndo(pUndo);
-
->>>>>>> other
         // das Splitten vom TextNode nicht in die Undohistory aufnehmen
         GetIDocumentUndoRedo().DoUndo(false);
     }
@@ -1209,11 +1198,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
-<<<<<<< local
-=======
-//    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
-//        pTableFmt->SetAttr( SwFmtLayoutSplit( sal_False ));
->>>>>>> other
 
     /* #106283# If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1236,17 +1220,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
-<<<<<<< local
     pNdTbl->RegisterToFormat( *pTableFmt );
-=======
-   pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
-
-//    const sal_uInt16 nRowsToRepeat =
-//            tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
-//            rInsTblOpts.mnRowsToRepeat :
-//            0;
-//    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
->>>>>>> other
 
     sal_Bool bUseBoxFmt = sal_False;
     if( !pBoxFmt->GetDepends() )
@@ -1258,32 +1232,9 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         delete pBoxFmt;
     }
 
-<<<<<<< local
-    ULONG nIdx = pTblNd->GetIndex();
-=======
-    //Orientation am Fmt der Table setzen
-//    pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
-//    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
-
-
     sal_uLong nIdx = pTblNd->GetIndex();
->>>>>>> other
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
 
-<<<<<<< local
-=======
-    {
-//        SwPaM& rTmp = (SwPaM&)rRange;   // Point immer an den Anfang
-//        rTmp.DeleteMark();
-//        rTmp.GetPoint()->nNode = *pTblNd;
-//        SwCntntNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
-//        rTmp.GetPoint()->nContent.Assign( pCNd, 0 );
-    }
-
-//    if( pUndo )
-//        GetIDocumentUndoRedo().EndUndo( UNDO_TEXTTOTABLE );
-
->>>>>>> other
     SetModified();
     SetFieldsDirty( true, NULL, 0 );
     return pNdTbl;
@@ -2575,12 +2526,7 @@ void SwTableNode::DelFrms()
     SwTabFrm *pFrm = aIter.First();
     while ( pFrm )
     {
-<<<<<<< local
-        BOOL bAgain = FALSE;
-=======
         sal_Bool bAgain = sal_False;
-        if ( pLast->IsA( TYPE(SwFrm) ) )
->>>>>>> other
         {
             if ( !pFrm->IsFollow() )
             {
@@ -2647,11 +2593,7 @@ void SwDoc::GetTabCols( SwTabCols &rFill, const SwCursor* pCrsr,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-<<<<<<< local
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE );
-=======
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, sal_False );
->>>>>>> other
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );
@@ -2876,11 +2818,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, sal_Bool bCurRowOnly,
         if( pShCrsr )
             aPt = pShCrsr->GetPtPos();
 
-<<<<<<< local
-        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE );
-=======
-        const SwFrm* pTmpFrm = pCNd->GetFrm( &aPt, 0, sal_False );
->>>>>>> other
+        const SwFrm* pTmpFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
         do {
             pTmpFrm = pTmpFrm->GetUpper();
         } while ( !pTmpFrm->IsCellFrm() );

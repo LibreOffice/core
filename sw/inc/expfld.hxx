@@ -160,19 +160,13 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
 {
     String      sName;
     const SwNode* pOutlChgNd;
-//  sal_Unicode cDelim;
     String      sDelim;
-<<<<<<< local
-    USHORT      nType;
-    BYTE        nLevel;
-    BOOL        bDeleted;
-protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
-=======
     sal_uInt16      nType;
     sal_uInt8       nLevel;
     sal_Bool        bDeleted;
->>>>>>> other
+
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,

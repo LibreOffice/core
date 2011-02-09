@@ -640,11 +640,7 @@ sal_uInt16 SwPaM::GetPageNum( sal_Bool bAtPoint, const Point* pLayPos )
     const SwPosition* pPos = bAtPoint ? m_pPoint : m_pMark;
 
     if( 0 != ( pNd = pPos->nNode.GetNode().GetCntntNode() ) &&
-<<<<<<< local
-        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, FALSE )) &&
-=======
-        0 != ( pCFrm = pNd->GetFrm( pLayPos, pPos, sal_False )) &&
->>>>>>> other
+        0 != ( pCFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), pLayPos, pPos, sal_False )) &&
         0 != ( pPg = pCFrm->FindPageFrm() ))
         return pPg->GetPhyPageNum();
     return 0;
@@ -687,11 +683,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     const SwCntntFrm *pFrm;
 
     if( 0 != ( pNd = GetPoint()->nNode.GetNode().GetCntntNode() ))
-<<<<<<< local
-        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), FALSE );
-=======
-        pFrm = pNd->GetFrm( &aTmpPt, GetPoint(), sal_False );
->>>>>>> other
+        pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetPoint(), sal_False );
     else
         pFrm = 0;
 
@@ -719,11 +711,7 @@ sal_Bool SwPaM::HasReadonlySel( bool bFormView ) const
     if( !bRet && HasMark() && GetPoint()->nNode != GetMark()->nNode )
     {
         if( 0 != ( pNd = GetMark()->nNode.GetNode().GetCntntNode() ))
-<<<<<<< local
-            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), FALSE );
-=======
-            pFrm = pNd->GetFrm( &aTmpPt, GetMark(), sal_False );
->>>>>>> other
+            pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aTmpPt, GetMark(), sal_False );
         else
             pFrm = 0;
 

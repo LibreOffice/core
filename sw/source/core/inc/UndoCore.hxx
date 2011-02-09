@@ -177,7 +177,7 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     sal_Bool bAnchorChgd;
 
     void PutAttr( sal_uInt16 nWhich, const SfxPoolItem* pItem );
-    void Modify( SfxPoolItem*, SfxPoolItem* );
+    void Modify( const SfxPoolItem*, const SfxPoolItem* );
     void GetAnchor( SwFmtAnchor& rAnhor, sal_uLong nNode, xub_StrLen nCntnt );
 
 public:

@@ -137,13 +137,8 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                         else if( pSh )
                             pSh->StartAction();
                     }
-<<<<<<< local
                     pLast->ModifyNotification( 0, &aUpdateDDE );
-                    bCallModify = TRUE;
-=======
-                    pLast->Modify( 0, &aUpdateDDE );
                     bCallModify = sal_True;
->>>>>>> other
                 }
             } while( 0 != ( pLast = aIter++ ));
 

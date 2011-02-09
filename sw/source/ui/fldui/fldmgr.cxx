@@ -1034,13 +1034,8 @@ sal_Bool SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             sal_uInt16 nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator );
             sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
-<<<<<<< local
-            SwDDEFieldType aTyp( rData.sPar1, sCmd, (USHORT)nFormatId );
-            SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType( aTyp );
-=======
             SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType(
                     SwDDEFieldType( rData.sPar1, sCmd, (sal_uInt16)nFormatId ));
->>>>>>> other
             pFld = new SwDDEField( pTyp );
             break;
         }

@@ -247,14 +247,7 @@ sal_uInt16 SwPageNumberField::GetSubType() const
     return nSubType;
 }
 
-<<<<<<< local
-BOOL SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 10:25-------------------
-
---------------------------------------------------*/
 sal_Bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -285,12 +278,7 @@ sal_Bool SwPageNumberField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwPageNumberField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_True;
     sal_Int16 nSet = 0;
@@ -388,14 +376,7 @@ SwField* SwAuthorField::Copy() const
     return pTmp;
 }
 
-<<<<<<< local
-BOOL SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 11:15-------------------
-
---------------------------------------------------*/
 sal_Bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     sal_Bool bVal;
     switch( nWhichId )
@@ -420,12 +401,7 @@ sal_Bool SwAuthorField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwAuthorField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -541,14 +517,7 @@ SwField* SwFileNameField::Copy() const
     return pTmp;
 }
 
-<<<<<<< local
-BOOL SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 sal_Bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -588,12 +557,7 @@ sal_Bool SwFileNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwFileNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -724,14 +688,7 @@ SwField* SwTemplNameField::Copy() const
     return pTmp;
 }
 
-<<<<<<< local
-BOOL SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 sal_Bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch ( nWhichId )
     {
@@ -757,12 +714,7 @@ sal_Bool SwTemplNameField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) con
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwTemplNameField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch ( nWhichId )
     {
@@ -886,14 +838,7 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
-<<<<<<< local
-BOOL SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 11:38-------------------
-
---------------------------------------------------*/
 sal_Bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch ( nWhichId )
     {
@@ -906,12 +851,7 @@ sal_Bool SwDocStatField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwDocStatField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     sal_Bool bRet = sal_False;
     switch ( nWhichId )
@@ -1770,12 +1710,7 @@ SwField* SwHiddenParaField::Copy() const
     return pFld;
 }
 
-<<<<<<< local
-BOOL SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch ( nWhichId )
     {
@@ -1795,12 +1730,7 @@ sal_Bool SwHiddenParaField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch ( nWhichId )
     {
@@ -1940,14 +1870,7 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
     return (mpText) ? mpText->Count() : 1;
 }
 
-<<<<<<< local
-BOOL SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2007,15 +1930,7 @@ sal_Bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
-
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 sal_Bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2156,14 +2071,7 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
     nType = nSub;
 }
 
-<<<<<<< local
-BOOL SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 14:14-------------------
-
---------------------------------------------------*/
 sal_Bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2189,12 +2097,7 @@ sal_Bool SwExtUserField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwExtUserField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2283,14 +2186,7 @@ void SwRefPageSetField::SetPar2(const String& rStr)
     SetOffset( (short) rStr.ToInt32() );
 }
 
-<<<<<<< local
-BOOL SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 14:52-------------------
-
---------------------------------------------------*/
 sal_Bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2306,12 +2202,7 @@ sal_Bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwRefPageSetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2558,12 +2449,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
     }
 }
 
-<<<<<<< local
-BOOL SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
---------------------------------------------------*/
 sal_Bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2579,12 +2465,7 @@ sal_Bool SwRefPageGetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) co
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwRefPageGetField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2699,14 +2580,7 @@ void SwJumpEditField::SetPar2(const String& rStr)
     sHelp = rStr;
 }
 
-<<<<<<< local
-BOOL SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
-=======
-/*-----------------05.03.98 15:00-------------------
-
---------------------------------------------------*/
 sal_Bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
->>>>>>> other
 {
     switch( nWhichId )
     {
@@ -2738,12 +2612,7 @@ sal_Bool SwJumpEditField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) cons
     return sal_True;
 }
 
-<<<<<<< local
-BOOL SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
-=======
---------------------------------------------------*/
 sal_Bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
->>>>>>> other
 {
     switch( nWhichId )
     {

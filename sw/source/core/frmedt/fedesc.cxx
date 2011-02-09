@@ -240,23 +240,14 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
     FOREACHPAM_START(this)
 
         if( 0 != (pCNd = PCURCRSR->GetCntntNode() ) &&
-<<<<<<< local
-            0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, FALSE )) )
-=======
-            0 != ( pPtFrm = pCNd->GetFrm( &aNulPt, 0, sal_False )) )
->>>>>>> other
+            0 != ( pPtFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )
             pPtFrm = pPtFrm->FindPageFrm();
         else
             pPtFrm = 0;
 
         if( PCURCRSR->HasMark() &&
-<<<<<<< local
-            0 != (pCNd = PCURCRSR->GetCntntNode( FALSE ) ) &&
-            0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, FALSE )) )
-=======
             0 != (pCNd = PCURCRSR->GetCntntNode( sal_False ) ) &&
-            0 != ( pMkFrm = pCNd->GetFrm( &aNulPt, 0, sal_False )) )
->>>>>>> other
+            0 != ( pMkFrm = pCNd->getLayoutFrm( GetLayout(), &aNulPt, 0, sal_False )) )
             pMkFrm = pMkFrm->FindPageFrm();
         else
             pMkFrm = pPtFrm;

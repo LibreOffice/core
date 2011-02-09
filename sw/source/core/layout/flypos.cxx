@@ -47,7 +47,7 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
                             sal_uInt16 nArrPos )
     : pFrmFmt( pFmt ), pNdIdx( (SwNodeIndex*) &rIdx )
 {
-    sal_Bool bFnd = sal_False;
+    bool bFnd = false;
     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
     if (FLY_AT_PAGE == rAnchor.GetAnchorId())
     {
@@ -58,35 +58,23 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
         if( RES_FLYFRMFMT == pFmt->Which() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-<<<<<<< local
             SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*pFmt);
             if( pFly )
             {
                 nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
-                bFnd = TRUE;
-=======
-            if( aIter.First( TYPE( SwFlyFrm) ) )
-                nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum(),
-                bFnd = sal_True;
->>>>>>> other
-        }
+                bFnd = true;
+            }
         }
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-<<<<<<< local
             SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
             if( pContact )
             {
                 nOrdNum = pContact->GetMaster()->GetOrdNum();
-                bFnd = TRUE;
-=======
-            if( aIter.First( TYPE(SwDrawContact) ) )
-                nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum(),
-                bFnd = sal_True;
->>>>>>> other
+                bFnd = true;
+            }
         }
-    }
     }
 
     if( !bFnd )

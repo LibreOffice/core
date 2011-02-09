@@ -64,14 +64,9 @@ public:
     const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
           SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
-<<<<<<< local
-    BOOL IsActive() const { return bActive; }
-    void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
     void RegisterToFormat( SwFmt& rFmt );
-=======
     sal_Bool IsActive() const { return bActive; }
     void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
->>>>>>> other
 };
 
 
@@ -103,22 +98,12 @@ public:
     const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
           SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
-<<<<<<< local
-    BOOL IsActive() const { return bActive; }
-    void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
     void RegisterToFormat( SwFmt& rFmt );
-=======
     sal_Bool IsActive() const { return bActive; }
     void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
->>>>>>> other
 };
 
-<<<<<<< local
-
-inline const SwFmtHeader &SwAttrSet::GetHeader(BOOL bInP) const
-=======
 inline const SwFmtHeader &SwAttrSet::GetHeader(sal_Bool bInP) const
->>>>>>> other
     { return (const SwFmtHeader&)Get( RES_HEADER,bInP); }
 inline const SwFmtFooter &SwAttrSet::GetFooter(sal_Bool bInP) const
     { return (const SwFmtFooter&)Get( RES_FOOTER,bInP); }

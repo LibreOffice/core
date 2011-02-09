@@ -128,12 +128,7 @@ void SwFrm::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
-<<<<<<< local
-void SwFrm::CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse )
-=======
-
 void SwFrm::CheckDir( sal_uInt16 nDir, sal_Bool bVert, sal_Bool bOnlyBiDi, sal_Bool bBrowse )
->>>>>>> other
 {
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
     {
@@ -297,13 +292,8 @@ void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-<<<<<<< local
 void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
-                         BYTE &rInvFlags )
-=======
-void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
                          sal_uInt8 &rInvFlags )
->>>>>>> other
 {
     sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
@@ -1410,12 +1400,8 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     if ( !nDiff || !GetUpper()->IsFtnBossFrm() ) // nur innerhalb von Seiten/Spalten
         return 0L;
 
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-=======
-    sal_Bool bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     //Der (Page)Body veraendert sich nur im BrowseMode, aber nicht wenn er
     //Spalten enthaelt.
@@ -1912,14 +1898,9 @@ SwTwips SwCntntFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
          nDist > (LONG_MAX - nFrmHeight ) )
         nDist = LONG_MAX - nFrmHeight;
 
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const USHORT nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
-=======
-    const sal_Bool bBrowse = GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
->>>>>>> other
     if( !(GetUpper()->GetType() & nTmpType) && GetUpper()->HasFixSize() )
     {
         if ( !bTst )
@@ -2217,13 +2198,8 @@ void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-<<<<<<< local
 void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
-                              BYTE &rInvFlags,
-=======
-void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
                               sal_uInt8 &rInvFlags,
->>>>>>> other
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
     sal_Bool bClear = sal_True;
@@ -2445,14 +2421,9 @@ SwTwips SwLayoutFrm::InnerHeight() const
 |*************************************************************************/
 SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const USHORT nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
-=======
-    const sal_Bool bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
->>>>>>> other
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
@@ -2617,14 +2588,9 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*************************************************************************/
 SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 {
-<<<<<<< local
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-    const USHORT nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
-=======
-    const sal_Bool bBrowse = GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
     const sal_uInt16 nTmpType = bBrowse ? 0x2084: 0x2004; //Row+Cell, Browse mit Body
->>>>>>> other
     if( !(GetType() & nTmpType) && HasFixSize() )
         return 0;
 
@@ -3475,23 +3441,12 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
     //3. Weiter mit 1. bis zur Stabilitaet.
 
     const SwFmtCol &rCol = rAttrs.GetAttrSet().GetCol();
-<<<<<<< local
-    const USHORT nNumCols = rCol.GetNumCols();
-=======
     const sal_uInt16 nNumCols = rCol.GetNumCols();
->>>>>>> other
 
-<<<<<<< local
-    BOOL bEnd = FALSE;
-    BOOL bBackLock = FALSE;
-    ViewShell *pSh = getRootFrm()->GetCurrShell();
-
-    SwViewImp *pImp = pSh ? pSh->Imp() : 0;
-=======
     sal_Bool bEnd = sal_False;
     sal_Bool bBackLock = sal_False;
-    SwViewImp *pImp = GetShell() ? GetShell()->Imp() : 0;
->>>>>>> other
+    ViewShell *pSh = getRootFrm()->GetCurrShell();
+    SwViewImp *pImp = pSh ? pSh->Imp() : 0;
     {
         // Zugrunde liegender Algorithmus
         // Es wird versucht, eine optimale Hoehe fuer die Spalten zu finden.

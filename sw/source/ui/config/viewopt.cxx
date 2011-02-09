@@ -216,20 +216,11 @@ SwViewOption::SwViewOption() :
     bIsPagePreview(sal_False),
     bSelectionInReadonly(sal_False),
     // --> FME 2004-06-29 #114856# Formular view
-<<<<<<< local
-    mbFormView(FALSE),
-=======
     bFormView(sal_False),
->>>>>>> other
     // <--
-<<<<<<< local
-    mbBookview(FALSE),
-    mbBrowseMode(FALSE),
-    mbViewLayoutBookMode(FALSE),
-=======
     bBookview(sal_False),
+    mbBrowseMode(sal_False),
     mbViewLayoutBookMode(sal_False),
->>>>>>> other
     bShowPlaceHolderFields( sal_True ),
 
     nZoom( 100 ),

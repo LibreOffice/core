@@ -139,13 +139,8 @@ public:
                 sal_Bool bSaveFml = sal_True );
     ~_SaveTable();
 
-<<<<<<< local
-    USHORT AddFmt( SwFrmFmt* pFmt, bool bIsLine );
-    void NewFrmFmt( const SwTableLine* , const SwTableBox*, USHORT nFmtPos,
-=======
     sal_uInt16 AddFmt( SwFrmFmt* pFmt, bool bIsLine );
-    void NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine, sal_uInt16 nFmtPos,
->>>>>>> other
+    void NewFrmFmt( const SwTableLine* , const SwTableBox*, sal_uInt16 nFmtPos,
                     SwFrmFmt* pOldFmt );
 
     void RestoreAttr( SwTable& rTbl, sal_Bool bModifyBox = sal_False );
@@ -1133,13 +1128,8 @@ void _SaveTable::CreateNew( SwTable& rTbl, sal_Bool bCreateFrms,
 }
 
 
-<<<<<<< local
 void _SaveTable::NewFrmFmt( const SwTableLine* pTblLn, const SwTableBox* pTblBx,
-                            USHORT nFmtPos, SwFrmFmt* pOldFmt )
-=======
-void _SaveTable::NewFrmFmt( const SwClient* pLnBx, sal_Bool bIsLine,
                             sal_uInt16 nFmtPos, SwFrmFmt* pOldFmt )
->>>>>>> other
 {
     SwDoc* pDoc = pOldFmt->GetDoc();
 
@@ -1216,11 +1206,7 @@ _SaveLine::~_SaveLine()
 
 void _SaveLine::RestoreAttr( SwTableLine& rLine, _SaveTable& rSTbl )
 {
-<<<<<<< local
     rSTbl.NewFrmFmt( &rLine, 0, nItemSet, rLine.GetFrmFmt() );
-=======
-    rSTbl.NewFrmFmt( &rLine, sal_True, nItemSet, rLine.GetFrmFmt() );
->>>>>>> other
 
     _SaveBox* pBx = pBox;
     for( sal_uInt16 n = 0; n < rLine.GetTabBoxes().Count(); ++n, pBx = pBx->pNext )
@@ -1310,11 +1296,7 @@ _SaveBox::~_SaveBox()
 
 void _SaveBox::RestoreAttr( SwTableBox& rBox, _SaveTable& rSTbl )
 {
-<<<<<<< local
     rSTbl.NewFrmFmt( 0, &rBox, nItemSet, rBox.GetFrmFmt() );
-=======
-    rSTbl.NewFrmFmt( &rBox, sal_False, nItemSet, rBox.GetFrmFmt() );
->>>>>>> other
 
     if( ULONG_MAX == nSttNode )     // keine EndBox
     {

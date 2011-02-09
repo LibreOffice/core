@@ -444,14 +444,9 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     nAccessibleShells( 0 )
 {
     nType = FRMC_ROOT;
-<<<<<<< local
-    bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = TRUE;
-    bCheckSuperfluous = bBrowseWidthValid = FALSE;
-    setRootFrm( this );
-=======
     bIdleFormat = bTurboAllowed = bAssertFlyPages = bIsNewLayout = sal_True;
     bCheckSuperfluous = bBrowseWidthValid = sal_False;
->>>>>>> other
+    setRootFrm( this );
 
     InitCurrShells( this );
 
@@ -460,13 +455,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-<<<<<<< local
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );     //Fuer das Erzeugen der Flys durch MakeFrms()   //swmod 071108//swmod 071225
-    bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
-=======
-    pLayoutAccess->SetRootFrm( this );      //Fuer das Erzeugen der Flys durch MakeFrms()
     bCallbackActionEnabled = sal_False; //vor Verlassen auf sal_True setzen!
->>>>>>> other
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )

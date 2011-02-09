@@ -49,11 +49,7 @@ public:
                                     bool bAktSelection );
     ~SwCallLink();
 
-<<<<<<< local
-    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm );
-=======
-    static long GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
->>>>>>> other
+    static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
 };
 
 

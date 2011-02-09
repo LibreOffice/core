@@ -29,10 +29,6 @@
 #include "precompiled_sw.hxx"
 
 #include <stdlib.h>
-<<<<<<< local
-=======
-
->>>>>>> other
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
@@ -704,26 +700,9 @@ SwSectionFmt::~SwSectionFmt()
                     rSect.SetHidden(false);
                 }
             }
-<<<<<<< local
-
             // mba: test iteration; objects are removed while iterating
             CallSwClientNotify( SfxSimpleHint(SFX_HINT_DYING) );
 
-=======
-            SwClientIter aIter( *this );
-            SwClient *pLast = aIter.GoStart();
-            while ( pLast )
-            {
-                if ( pLast->IsA( TYPE(SwFrm) ) )
-                {
-                    SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                    SwSectionFrm::MoveCntntAndDelete( pFrm, sal_True );
-                    pLast = aIter.GoStart();
-                }
-                else
-                    pLast = aIter++;
-            }
->>>>>>> other
             // hebe die Section doch mal auf
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
             GetDoc()->GetNodes().SectionUp( &aRg );
@@ -737,18 +716,7 @@ SwSectionFmt::~SwSectionFmt()
 
 SwSection * SwSectionFmt::GetSection() const
 {
-<<<<<<< local
     return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
-=======
-    if( GetDepends() )
-    {
-        SwClientIter aIter( *(SwSectionFmt*)this );
-        return (SwSectionPtr)aIter.First( TYPE(SwSection) );
-    }
-
-    ASSERT( sal_False, "keine Section als Client." )
-    return 0;
->>>>>>> other
 }
 
 extern void lcl_DeleteFtn( SwSectionNode *pNd, sal_uLong nStt, sal_uLong nEnd );
@@ -770,41 +738,12 @@ void SwSectionFmt::DelFrms()
         SwSectionFmt *pLast = aIter.First();
         while ( pLast )
         {
-<<<<<<< local
             pLast->DelFrms();
             pLast = aIter.Next();
-=======
-            if ( pLast->IsA( TYPE(SwFrm) ) )
-            {
-                SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pFrm, sal_False );
-                pLast = aIter.GoStart();
-            }
-            else
-            {
-                pLast = aIter++;
-            }
->>>>>>> other
         }
-<<<<<<< local
 
-        ULONG nEnde = pSectNd->EndOfSectionIndex();
-        ULONG nStart = pSectNd->GetIndex()+1;
-=======
-        // Then delete frames of the nested <SwSectionFmt> instances
-        pLast = aIter.GoStart();
-        while ( pLast )
-        {
-            if ( pLast->IsA( TYPE(SwSectionFmt) ) )
-            {
-                ((SwSectionFmt*)pLast)->DelFrms();
-            }
-            pLast = aIter++;
-        }
-        // <--
         sal_uLong nEnde = pSectNd->EndOfSectionIndex();
         sal_uLong nStart = pSectNd->GetIndex()+1;
->>>>>>> other
         lcl_DeleteFtn( pSectNd, nStart, nEnde );
     }
     if( pIdx )
@@ -1036,11 +975,7 @@ sal_uInt16 SwSectionFmt::GetChildSections( SwSections& rArr,
         const SwNodeIndex* pIdx;
         for( SwSectionFmt* pLast = aIter.First(); pLast; pLast = aIter.Next() )
             if( bAllSections ||
-<<<<<<< local
-                ( 0 != ( pIdx = pLast->GetCntnt(FALSE).
-=======
-                ( 0 != ( pIdx = ((SwSectionFmt*)pLast)->GetCntnt(sal_False).
->>>>>>> other
+                ( 0 != ( pIdx = pLast->GetCntnt(sal_False).
                 GetCntntIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
             {
                 const SwSection* Dummy = pLast->GetSection();

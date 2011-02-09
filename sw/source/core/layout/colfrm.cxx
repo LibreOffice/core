@@ -249,11 +249,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
-<<<<<<< local
-            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), TRUE, FALSE );    //swmod 080218
-=======
-            pDoc->GetRootFrm()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );
->>>>>>> other
+            pDoc->GetCurrentLayout()->RemoveFtns( (SwPageFrm*)GetUpper(), sal_True, sal_False );    //swmod 080218
         pSave = ::SaveCntnt( this );
 
         //Wenn Spalten existieren, jetzt aber eine Spaltenanzahl von

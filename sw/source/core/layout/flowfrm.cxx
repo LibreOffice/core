@@ -1157,14 +1157,9 @@ sal_Bool SwFlowFrm::IsPrevObjMove() const
     //     und fuer diesen ggf. Umbrechen.
 
     //!!!!!!!!!!!Hack!!!!!!!!!!!
-<<<<<<< local
     const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-        return FALSE;
-=======
-    if ( rThis.GetUpper()->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
         return sal_False;
->>>>>>> other
 
     SwFrm *pPre = rThis.FindPrev();
 
@@ -2667,13 +2662,8 @@ sal_Bool SwFlowFrm::MoveBwd( sal_Bool &rbReformat )
         SwPageFrm *pNewPage = rThis.FindPageFrm();
         if( pNewPage != pOldPage )
         {
-<<<<<<< local
-            rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, FALSE );
-            ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
-=======
             rThis.Prepare( PREP_BOSS_CHGD, (const void*)pOldPage, sal_False );
-            ViewShell *pSh = rThis.GetShell();
->>>>>>> other
+            ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
             if ( pSh && !pSh->Imp()->IsUpdateExpFlds() )
                 pSh->GetDoc()->SetNewFldLst(true);  //Wird von CalcLayout() hinterher eledigt!
 

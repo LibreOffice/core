@@ -437,14 +437,9 @@ sal_Bool SwLayAction::RemoveEmptyBrowserPages()
 {
     //Beim umschalten vom normalen in den Browsermodus bleiben u.U. einige
     //unangenehm lange stehen. Diese beseiten wir mal schnell.
-<<<<<<< local
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const ViewShell *pSh = pRoot->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-=======
-    sal_Bool bRet = sal_False;
-    if ( pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
->>>>>>> other
     {
         SwPageFrm *pPage = (SwPageFrm*)pRoot->Lower();
         do
@@ -1196,14 +1191,9 @@ static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
 
 sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
-<<<<<<< local
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const ViewShell *pSh = pRoot->GetCurrShell();
     const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-=======
-    sal_Bool bRet = sal_False;
-    const sal_Bool bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
 
     //Wenn die Seite nicht Gueltig ist wird sie schnell formatiert, sonst
     //gibts nix als Aerger.
@@ -1456,17 +1446,10 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         {
             const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
             //Einschraenkungen wegen Kopf-/Fusszeilen
-<<<<<<< local
             if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
                 !( pLay->IsCompletePaint() && pLay->FindPageFrm()->FindFtnCont() ) )
-                bNoPaint = TRUE;
-=======
-            if ( !( pLay->IsCompletePaint() &&
-                   pLay->FindPageFrm()->FindFtnCont() ) )
-            {
                 bNoPaint = sal_True;
->>>>>>> other
-            }
+        }
 
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
@@ -1860,12 +1843,8 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 {
     const SwCntntFrm *pCntnt = pPage->ContainsCntnt();
-<<<<<<< local
     const ViewShell *pSh = pRoot->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
-=======
-    const sal_Bool bBrowse = pRoot->GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE);
->>>>>>> other
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {

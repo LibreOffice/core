@@ -443,20 +443,14 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     else
         pNd = GetCntntNode();
 
-<<<<<<< local
-=======
     const SwFrm* pFrm;
     if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, sal_False ) ) )
     {
->>>>>>> other
         if( !pSh )
             // dann die Shell vom Doc besorgen:
             GetDoc()->GetEditShell( &pSh );
 
         if( pSh )
-        {
-        const SwFrm* pFrm;
-        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, FALSE ) ) )
         {
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
@@ -861,13 +855,8 @@ const SwTxtNode* SwNode::FindOutlineNodeOfLevel( sal_uInt8 nLvl ) const
             const SwCntntNode* pCNd = GetCntntNode();
 
             Point aPt( 0, 0 );
-<<<<<<< local
-            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE ),
-                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, FALSE ) : 0;
-=======
-            const SwFrm* pFrm = pRet->GetFrm( &aPt, 0, sal_False ),
-                       * pMyFrm = pCNd ? pCNd->GetFrm( &aPt, 0, sal_False ) : 0;
->>>>>>> other
+            const SwFrm* pFrm = pRet->getLayoutFrm( pRet->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ),
+                       * pMyFrm = pCNd ? pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False ) : 0;
             const SwPageFrm* pPgFrm = pFrm ? pFrm->FindPageFrm() : 0;
             if( pPgFrm && pMyFrm &&
                 pPgFrm->Frm().Top() > pMyFrm->Frm().Top() )
@@ -1161,28 +1150,15 @@ sal_Bool SwCntntNode::InvalidateNumRule()
     return 0 != pRule;
 }
 
-<<<<<<< local
 SwCntntFrm *SwCntntNode::getLayoutFrm( const SwRootFrm* _pRoot,
-    const Point* pPoint, const SwPosition *pPos, const BOOL bCalcFrm ) const
-=======
-
-SwCntntFrm *SwCntntNode::GetFrm( const Point* pPoint,
-                                const SwPosition *pPos,
-                                const sal_Bool bCalcFrm ) const
->>>>>>> other
+    const Point* pPoint, const SwPosition *pPos, const sal_Bool bCalcFrm ) const
 {
     return (SwCntntFrm*) ::GetFrmOfModify( _pRoot, *(SwModify*)this, FRM_CNTNT,
                                             pPoint, pPos, bCalcFrm );
 }
 
-<<<<<<< local
-
-SwRect SwCntntNode::FindLayoutRect( const BOOL bPrtArea, const Point* pPoint,
-                                    const BOOL bCalcFrm ) const
-=======
 SwRect SwCntntNode::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
                                     const sal_Bool bCalcFrm ) const
->>>>>>> other
 {
     SwRect aRet;
     SwCntntFrm* pFrm = (SwCntntFrm*)::GetFrmOfModify( 0, *(SwModify*)this,
@@ -1400,64 +1376,7 @@ void SwCntntNode::DelFrms()
     if( !GetDepends() )
         return;
 
-<<<<<<< local
     SwCntntFrm::DelFrms(*this);
-=======
-    SwClientIter aIter( *this );
-    SwCntntFrm *pFrm;
-
-    for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
-         pFrm = (SwCntntFrm*)aIter.Next() )
-    {
-        // --> OD 2005-12-01 #i27138#
-        // notify accessibility paragraphs objects about changed
-        // CONTENT_FLOWS_FROM/_TO relation.
-        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
-        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrm->IsTxtFrm() )
-        {
-            ViewShell* pViewShell( pFrm->GetShell() );
-            if ( pViewShell && pViewShell->GetLayout() &&
-                 pViewShell->GetLayout()->IsAnyShellAccessible() )
-            {
-                pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
-            }
-        }
-        // <--
-        if( pFrm->HasFollow() )
-            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
-        if( pFrm->IsFollow() )
-        {
-            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
-            pMaster->SetFollow( pFrm->GetFollow() );
-            pFrm->_SetIsFollow( sal_False );
-        }
-        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
-                                //Andernfalls kann es sein, dass ein Follow
-                                //vor seinem Master zerstoert wird, der Master
-                                //greift dann ueber den ungueltigen
-                                //Follow-Pointer auf fremdes Memory zu.
-                                //Die Kette darf hier zerknauscht werden, weil
-                                //sowieso alle zerstoert werden.
-        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
-            !pFrm->GetIndPrev() )
-        {
-            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            ASSERT( pFtn, "You promised a FtnFrm?" );
-            SwCntntFrm* pCFrm;
-            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
-                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
-            {
-                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
-            }
-        }
-        pFrm->Cut();
-        delete pFrm;
-    }
->>>>>>> other
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
@@ -2066,11 +1985,7 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
 
     // --> OD 2007-01-10 #i72024#
     // No format of the frame, because this can cause recursive layout actions
-<<<<<<< local
-    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, FALSE );
-=======
-    SwFrm* pFrm = GetFrm( &aPt, &rPos, sal_False );
->>>>>>> other
+    SwFrm* pFrm = getLayoutFrm( GetDoc()->GetCurrentLayout(), &aPt, &rPos, sal_False );
     // <--
 
     if ( pFrm )

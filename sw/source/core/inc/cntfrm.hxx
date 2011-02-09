@@ -53,11 +53,7 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     // <--
     virtual void MakeAll();
 
-<<<<<<< local
-    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
-=======
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
->>>>>>> other
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, sal_uInt8 &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool& );
@@ -68,15 +64,9 @@ protected:
 
     sal_Bool MakePrtArea( const SwBorderAttrs & );
 
-<<<<<<< local
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
-=======
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
     virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
->>>>>>> other
 
     SwCntntFrm( SwCntntNode * const, SwFrm* );
 
