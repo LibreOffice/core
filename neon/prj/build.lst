@@ -1,3 +1,3 @@
-xh      neon  :  OPENSSL:openssl ZLIB:zlib stlport soltools external EXPAT:expat LIBXML2:libxml2 NULL
+xh      neon  :  OPENSSL:openssl ZLIB:zlib soltools external EXPAT:expat LIBXML2:libxml2 NULL
 xh      neon     usr1           -       all     xh_mkout NULL
 xh      neon     nmake          -       all     xh_neon NULL
