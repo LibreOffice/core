@@ -31,9 +31,7 @@
 
 #include <com/sun/star/text/NotePrintMode.hpp>
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <cmdid.h>
 

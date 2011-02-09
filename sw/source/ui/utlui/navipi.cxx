@@ -33,7 +33,7 @@
 
 #define NAVIPI_CXX
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <tools/list.hxx>
 #include <svl/urlbmk.hxx>
 #include <svl/stritem.hxx>
