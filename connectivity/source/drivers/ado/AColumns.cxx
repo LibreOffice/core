@@ -39,9 +39,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/types.hxx>
 #include <connectivity/dbexception.hxx>
-#ifdef __MINGW32__
 #include <algorithm>
-#endif
 #include "resource/ado_res.hrc"
 
 #include <o3tl/compat_functional.hxx>
