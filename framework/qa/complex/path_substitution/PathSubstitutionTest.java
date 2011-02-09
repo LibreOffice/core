@@ -66,17 +66,17 @@ public class PathSubstitutionTest
     @Before private void initialize()
     {
         substVars = new VariableContainer();
-        substVars.add("$(prog)", false, true);
-        substVars.add("$(inst)", false, true);
-        substVars.add("$(user)", false, true);
-        substVars.add("$(work)", false, true);
-        substVars.add("$(home)", false, true);
-        substVars.add("$(temp)", false, true);
+        substVars.add("$(prog)", true, true);
+        substVars.add("$(inst)", true, true);
+        substVars.add("$(user)", true, true);
+        substVars.add("$(work)", true, true);
+        substVars.add("$(home)", true, true);
+        substVars.add("$(temp)", true, true);
         substVars.add("$(lang)", false, false);
         substVars.add("$(langid)", false, false);
         substVars.add("$(vlang)", false, false);
         // path won't resubstitute
-        substVars.add("$(path)", false, false);
+        substVars.add("$(path)", true, false);
     }
 
     /**
@@ -105,8 +105,6 @@ public class PathSubstitutionTest
             fail("Could not create an instance of the test object.");
             return;
         }
-
-//        initialize();
 
         for (int i = 0; i < substVars.size(); i++)
         {
@@ -148,6 +146,12 @@ public class PathSubstitutionTest
                 //in middle of text works
                 substString = "file:///starting/" + var + "/path";
 
+                String sCanSubstAllPos;
+                if (substVars.onlySubstituteAtBegin(i))
+                    sCanSubstAllPos = "NO";
+                else
+                    sCanSubstAllPos = "YES";
+                System.out.println("Variable can substitute within string: "+sCanSubstAllPos);
                 System.out.println("Substitute '" + substString + "'");
                 newValue = oObj.substituteVariables(substString, false);
                 System.out.println("Return value '" + newValue + "'");
