@@ -158,7 +158,7 @@ ImplFontCharMap* ImplMacFontData::GetImplFontCharMap() const
     return mpCharMap;
 }
 
-bool ImplMacFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities)
+bool ImplMacFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
 {
     // read this only once per font
     if( mbFontLayoutCapabilitiesRead )
@@ -188,7 +188,7 @@ bool ImplMacFontData::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFon
     vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pGSUBTable);
     rFontLayoutCapabilities = maFontLayoutCapabilities;
 
-    return !rFontLayoutCapabilities.empty()
+    return !rFontLayoutCapabilities.empty();
 }
 
 // -----------------------------------------------------------------------
@@ -2018,7 +2018,7 @@ ImplFontCharMap* AquaSalGraphics::GetImplFontCharMap() const
     return mpMacFontData->GetImplFontCharMap();
 }
 
-bool AquaSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities)
+bool AquaSalGraphics::GetImplFontLayoutCapabilities(FontLayoutCapabilities &rFontLayoutCapabilities) const
 {
     if( !mpMacFontData )
         return false;
