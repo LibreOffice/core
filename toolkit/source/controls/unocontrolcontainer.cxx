@@ -75,8 +75,6 @@ public:
     inline const uno::Reference< awt::XControl >&   getControl() const { return mxControl; }
 };
 
-//DECLARE_LIST( UnoControlHolderList, UnoControlHolder* );
-
 class UnoControlHolderList
 {
 public:
