@@ -37,48 +37,12 @@
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/objsh.hxx>
-
 #include <svl/eitem.hxx>
-
-
 #include <xmlsecurity/stbcontrl.hxx>
 
 #define PAINT_OFFSET    5
 
 SFX_IMPL_STATUSBAR_CONTROL( XmlSecStatusBarControl, SfxBoolItem );
-
-/*
-class FunctionPopup_Impl : public PopupMenu
-{
-public:
-    FunctionPopup_Impl( USHORT nCheck );
-
-    USHORT          GetSelected() const { return nSelected; }
-
-private:
-    USHORT          nSelected;
-
-    virtual void    Select();
-};
-
-// -----------------------------------------------------------------------
-
-FunctionPopup_Impl::FunctionPopup_Impl( USHORT nCheck ) :
-    PopupMenu( ResId( RID_SVXMNU_PSZ_FUNC, DIALOG_MGR() ) ),
-    nSelected( 0 )
-{
-    if (nCheck)
-        CheckItem( nCheck );
-}
-
-// -----------------------------------------------------------------------
-
-void FunctionPopup_Impl::Select()
-{
-    nSelected = GetCurItemId();
-}
-*/
-
 
 
 struct XmlSecStatusBarControl::XmlSecStatusBarControl_Impl
@@ -96,7 +60,6 @@ XmlSecStatusBarControl::XmlSecStatusBarControl( USHORT _nId, StatusBar& _rStb, S
     ,mpImpl( new XmlSecStatusBarControl_Impl )
 {
     mpImpl->mbSigned = false;
-//  pImp->maImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
 }
 
 XmlSecStatusBarControl::~XmlSecStatusBarControl()
