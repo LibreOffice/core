@@ -57,13 +57,13 @@ endif
 
 
 .PHONY: ALL
-ALL: test
+ALL: check
 
 include $(PRJ)/settings/stdtarget.mk
 
 
-.PHONY: test
-test: test-cpptest test-javatest test-javanative test-clientserver
+.PHONY: check
+check: test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-cpptest
 test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
