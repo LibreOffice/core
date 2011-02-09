@@ -77,7 +77,6 @@ USHORT SvPtrarrPlain::GetPos( const VoidPtr aElement ) const
 
 
 SV_IMPL_VARARR( SvBools, BOOL )
-SV_IMPL_VARARR( SvBytes, BYTE )
 SV_IMPL_VARARR( SvULongs, ULONG )
 SV_IMPL_VARARR( SvUShorts, USHORT )
 SV_IMPL_VARARR( SvLongs, long)
