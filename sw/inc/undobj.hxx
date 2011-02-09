@@ -40,7 +40,6 @@
 #define _SVSTDARR_USHORTS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #endif
