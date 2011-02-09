@@ -129,7 +129,7 @@ SVGAttributeWriter::~SVGAttributeWriter()
 
 double SVGAttributeWriter::ImplRound( double fValue, sal_Int32 nDecs )
 {
-      return( floor( fValue * pow( 10.0, nDecs ) + 0.5 ) / pow( 10.0, nDecs ) );
+      return( floor( fValue * pow( 10.0, (int)nDecs ) + 0.5 ) / pow( 10.0, (int)nDecs ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -870,7 +870,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
     if( !mrExport.IsUseNativeTextDecoration() )
     {
-        if( rFont.GetStrikeout() || rFont.GetUnderline() )
+        if( rFont.GetStrikeout() != STRIKEOUT_NONE || rFont.GetUnderline() != UNDERLINE_NONE )
         {
             Polygon     aPoly( 4 );
             const long  nLineHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );

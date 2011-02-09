@@ -82,7 +82,9 @@ protected:
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     // XPropertyAccess
+    using cppu::OPropertySetHelper::getPropertyValues;
     virtual com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (com::sun::star::uno::RuntimeException);
+    using cppu::OPropertySetHelper::setPropertyValues;
     virtual void SAL_CALL setPropertyValues( const com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (com::sun::star::beans::UnknownPropertyException, com::sun::star::beans::PropertyVetoException, com::sun::star::lang::IllegalArgumentException, com::sun::star::lang::WrappedTargetException, com::sun::star::uno::RuntimeException);
 
        // XExporter
