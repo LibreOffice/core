@@ -993,7 +993,7 @@ File gid_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcr80.dll";
 #else
     Name = "msvcr80d.dll";
@@ -1010,7 +1010,7 @@ File gid_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcp80.dll";
 #else
     Name = "msvcp80d.dll";
@@ -1027,7 +1027,7 @@ File gid_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcm80.dll";
 #else
     Name = "msvcm80d.dll";
@@ -1070,7 +1070,7 @@ File gid_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "Microsoft.VC80.CRT.manifest";
 #else
     Name = "Microsoft.VC80.DebugCRT.manifest";
@@ -1782,7 +1782,7 @@ End
 STD_UNO_LIB_FILE( gid_File_Lib_Oooimprovecore , oooimprovecore)
 
 #if defined WNT && !defined _gcc3 && !defined SYSTEM_MOZILLA && !defined WITHOUT_MOZILLA && \
-    !(defined M1400 && defined PROF_EDITION && !defined _STLP_DEBUG)
+    !(defined M1400 && defined PROF_EDITION && !defined _DEBUG_RUNTIME)
         // see common_brand.scp gid_Brand_File_Lib_Msvcp80 and
         // gid_Brand_File_Lib_Msvcr80
 File gid_File_Moz_Msvcp80

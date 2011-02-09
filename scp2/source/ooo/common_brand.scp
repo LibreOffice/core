@@ -792,7 +792,7 @@ File gid_Brand_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcr80.dll";
 #else
     Name = "msvcr80d.dll";
@@ -835,7 +835,7 @@ File gid_Brand_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcp80.dll";
 #else
     Name = "msvcp80d.dll";
@@ -852,7 +852,7 @@ File gid_Brand_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcm80.dll";
 #else
     Name = "msvcm80d.dll";
@@ -869,7 +869,7 @@ File gid_Brand_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "Microsoft.VC80.CRT.manifest";
 #else
     Name = "Microsoft.VC80.DebugCRT.manifest";

@@ -296,38 +296,23 @@ LINKFLAGSOPT=
 
 UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
-.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(USE_DEBUG_RUNTIME)" != ""
 LIBCMT=msvcrtd.lib
-.ELSE  # "$(USE_STLP_DEBUG)" != ""
-LIBCMT=msvcrt.lib
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
-.ELSE # "$(DYNAMIC_CRT)"!=""
-.IF "$(USE_STLP_DEBUG)" != ""
-LIBCMT=libcmtd.lib
-CDEFS+=-D_DEBUG
-.ELSE  # "$(USE_STLP_DEBUG)" != ""
-LIBCMT=libcmt.lib
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
-.ENDIF # "$(DYNAMIC_CRT)"!=""
-
-.IF "$(USE_SYSTEM_STL)"=="YES"
-.IF "$(DYNAMIC_CRT)"!=""
-.IF "$(USE_STLP_DEBUG)" != ""
 LIBCPMT=msvcprtd.lib
-.ELSE  # "$(USE_STLP_DEBUG)" != ""
+.ELSE  # "$(USE_DEBUG_RUNTIME)" != ""
+LIBCMT=msvcrt.lib
 LIBCPMT=msvcprt.lib
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
+.ENDIF # "$(USE_DEBUG_RUNTIME)" != ""
 .ELSE # "$(DYNAMIC_CRT)"!=""
-.IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+LIBCMT=libcmtd.lib
 LIBCPMT=libcpmtd.lib
 CDEFS+=-D_DEBUG
-.ELSE  # "$(USE_STLP_DEBUG)" != ""
+.ELSE  # "$(USE_DEBUG_RUNTIME)" != ""
+LIBCMT=libcmt.lib
 LIBCPMT=libcpmt.lib
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
+.ENDIF # "$(USE_DEBUG_RUNTIME)" != ""
 .ENDIF # "$(DYNAMIC_CRT)"!=""
-.ELSE # "$(USE_SYSTEM_STL)"=="YES"
-LIBCPMT=
-.ENDIF # "$(USE_SYSTEM_STL)"=="YES"
 
 STDOBJVCL=$(L)/salmain.obj
 STDOBJGUI=

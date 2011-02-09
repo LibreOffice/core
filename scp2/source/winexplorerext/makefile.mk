@@ -50,10 +50,6 @@ PARFILES= \
         registryitem_winexplorerext.par
 .ENDIF
 
-.IF "$(USE_SYSTEM_STL)" == "YES" || "$(STLPORT4)" != "NO_STLPORT4"
-SCPDEFS+=-DUSE_SYSTEM_STL
-.ENDIF
-
 ULFFILES= \
         module_winexplorerext.ulf
 

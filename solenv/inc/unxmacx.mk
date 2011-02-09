@@ -39,9 +39,6 @@ LINKOUTPUT_FILTER=
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
 CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -D_USE_NAMESPACE=1
-.IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
-CDEFS+=-DX_LOCALE
-.ENDIF
 .IF "$(GUIBASE)"=="aqua"
 # MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
 # build can assume functions/libraries of that version to be available

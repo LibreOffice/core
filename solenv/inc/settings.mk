@@ -479,7 +479,7 @@ DBG_LEVEL*=0
 optimize!=true
 dbgutil!=true
 DBG_LEVEL*=1
-USE_STLP_DEBUG*=TRUE
+USE_DEBUG_RUNTIME*=TRUE
 .ENDIF
 
 .IF "$(debug)"!=""
@@ -856,8 +856,8 @@ LIB:=$(LB);$(BIN);$(ILIB)
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
-.IF "$(USE_STLP_DEBUG)" != ""
-SCPCDEFS+=-D_STLP_DEBUG
+.IF "$(USE_DEBUG_RUNTIME)" != ""
+SCPCDEFS+=-D_DEBUG_RUNTIME
 .ENDIF
 
 .IF "$(UDK_MAJOR)"!=""
@@ -883,8 +883,8 @@ UNOIDLINC+=-I. -I.. -I$(PRJ) -I$(PRJ)/inc -I$(PRJ)/$(INPATH)/idl -I$(OUT)/inc -I
 
 CDEFS= -D$(OS) -D$(GUI) -D$(GVER) -D$(COM) -D$(CVER) -D$(CPUNAME)
 
-.IF "$(USE_STLP_DEBUG)" != "" && "$(GUI)"!="OS2"
-CDEFS+=-D_STLP_DEBUG
+.IF "$(USE_DEBUG_RUNTIME)" != "" && "$(GUI)"!="OS2"
+CDEFS+=-D_DEBUG_RUNTIME
 .ENDIF
 
 .IF "$(CDEFS_PRESET)" != ""

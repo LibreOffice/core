@@ -177,7 +177,7 @@ File gid_File_Lib_Msvcr80_Ure
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcr80.dll";
 #else
     Name = "msvcr80d.dll";
@@ -194,7 +194,7 @@ File gid_File_Lib_Msvcp80_Ure
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcp80.dll";
 #else
     Name = "msvcp80d.dll";
@@ -211,7 +211,7 @@ File gid_File_Lib_Msvcm80_Ure
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "msvcm80.dll";
 #else
     Name = "msvcm80d.dll";
@@ -228,7 +228,7 @@ File gid_File_Msvcm80crt_Manifest_Ure
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = SCP2_URE_DL_DIR;
-#ifndef _STLP_DEBUG
+#ifndef _DEBUG_RUNTIME
     Name = "Microsoft.VC80.CRT.manifest";
 #else
     Name = "Microsoft.VC80.DebugCRT.manifest";
@@ -961,19 +961,18 @@ Unixlink gid_Unixlink_File_Dl_Libxml2
 End
 #endif
 
-#if !defined USE_SYSTEM_STL || \
-    (defined USE_SYSTEM_STL && defined _C52 && defined IS_LP64)
+#if defined WITH_STLPORT
 File gid_File_Dl_Stlport
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
 #if defined _gcc3 && defined WNT
-#if defined _STLP_DEBUG
+#if defined _DEBUG_RUNTIME
     Name = SCP2_URE_DL_NORMAL("libstlport_gcc_stldebug");
 #else
     Name = SCP2_URE_DL_NORMAL("libstlport_gcc");
 #endif
 #elif defined _gcc3
-#if defined _STLP_DEBUG
+#if defined _DEBUG_RUNTIME
     Name = SCP2_URE_DL_NORMAL("stlport_gcc_stldebug");
 #else
     Name = SCP2_URE_DL_NORMAL("stlport_gcc");
@@ -982,20 +981,18 @@ File gid_File_Dl_Stlport
 #if defined IS_LP64
     Name = SCP2_URE_DL_VER("stlport", "1");
 #else
-#if defined _STLP_DEBUG
+#if defined _DEBUG_RUNTIME
     Name = SCP2_URE_DL_NORMAL("stlport_sunpro_debug");
 #else
     Name = SCP2_URE_DL_NORMAL("stlport_sunpro");
 #endif
 #endif
 #elif defined WNT && (defined(M1310) || defined(M1400) || defined(M1500) || defined (M1600) )
-#if defined _STLP_DEBUG
+#if defined _DEBUG_RUNTIME
     Name = SCP2_URE_DL_NORMAL("stlport_vc71_stldebug45");
 #else
     Name = SCP2_URE_DL_NORMAL("stlport_vc7145");
 #endif
-#else
-#error "stlport dynamic library: unsupported platform"
 #endif
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "D976338D-D2A5-4D29-B765-D3AC43181C7F";
