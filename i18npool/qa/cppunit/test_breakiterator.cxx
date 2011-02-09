@@ -26,13 +26,11 @@
  */
 #include "precompiled_i18npool.hxx"
 
-#include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/bootstrap.hxx>

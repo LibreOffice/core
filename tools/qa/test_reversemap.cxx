@@ -34,11 +34,9 @@
 #include "precompiled_tools.hxx"
 #include "sal/config.h"
 
-#include "preextstl.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "postextstl.h"
 
 #include <rtl/ustring.hxx>
 #include <vector>

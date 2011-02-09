@@ -48,11 +48,9 @@
 #include "vcl/dllapi.h"
 
 // Libraries
-#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
-#include <postextstl.h>
 
 // Module type definitions and forward declarations.
 //
@@ -112,7 +110,7 @@ public:
     const grutils::GrFeatureParser * features() const { return mpFeatures; };
 
 private:
-    virtual void UniqueCacheInfo(ext_std::wstring &, bool &, bool &);
+    virtual void UniqueCacheInfo(std::wstring &, bool &, bool &);
 
     FreetypeServerFont& mrFont;
     FontProperties        maFontProperties;
