@@ -136,7 +136,6 @@ APP9STDLIBS+= \
             $(TOOLSLIB) \
             $(ICUINLIB) \
             $(ICUUCLIB) \
-            $(STLPORTLIB) \
             $(SALLIB)
 
 DEPOBJFILES=$(APP1OBJS) $(APP2OBJS) $(APP3OBJS) $(APP4OBJS) $(APP5OBJS) $(APP6OBJS) $(APP7OBJS) $(APP8OBJS) $(APP9OBJS)

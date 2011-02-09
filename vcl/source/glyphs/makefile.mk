@@ -64,8 +64,6 @@ SLOFILES+=	$(SLO)$/graphite_adaptors.obj	\
 
 .IF "$(ENABLE_GRAPHITE)" == "TRUE"
 # Graphite support on non-UNX platforms
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
 SLOFILES=\
         $(SLO)$/graphite_textsrc.obj	\
         $(SLO)$/graphite_cache.obj	\
