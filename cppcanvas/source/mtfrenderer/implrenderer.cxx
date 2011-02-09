@@ -852,8 +852,8 @@ namespace cppcanvas
                 *rParms.mrParms.maFontLetterForm :
                 (rFont.GetItalic() == ITALIC_NONE) ? 0 : 9;
             aFontRequest.FontDescription.FontDescription.Proportion =
-                rParms.mrParms.maFontProportion.isValid() ?
-                rParms.mrParms.maFontProportion.getValue() :
+                rParms.mrParms.maFontProportion.is_initialized() ?
+                *rParms.mrParms.maFontProportion :
                 (rFont.GetPitch() == PITCH_FIXED)
                     ? rendering::PanoseProportion::MONO_SPACED
                     : rendering::PanoseProportion::ANYTHING;

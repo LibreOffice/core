@@ -137,7 +137,7 @@ namespace cppcanvas
             ::boost::optional< sal_Int8 >                   maFontLetterForm;
 
             /// Optionally forces the given font proportion (condensed, monospaced etc.) for all text actions
-            ::comphelper::OptionalValue< sal_Int8 >                 maFontProportion;
+            ::boost::optional< sal_Int8 >                   maFontProportion;
 
             /// Optionally forces underlining for all text actions
             ::boost::optional< bool >                       maFontUnderline;
