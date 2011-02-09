@@ -29,14 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-// INCLUDE ---------------------------------------------------------------
-
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
-
-
 #include <vcl/timer.hxx>
 #include <vcl/msgbox.hxx>
 #include <sfx2/app.hxx>
@@ -912,27 +906,6 @@ void ScTabView::PaintBlock( BOOL bReset )
                         rMark.ResetMark();
                         UpdateSelectionOverlay();
                         bDidReset = TRUE;
-                    }
-
-                    //  repaint if controls are touched (#69680# in both cases)
-                    // #i74768# Forms are rendered by DrawingLayer's EndDrawLayers()
-                    static bool bSuppressControlExtraStuff(true);
-
-                    if(!bSuppressControlExtraStuff)
-                    {
-                        Rectangle aMMRect = pDoc->GetMMRect(nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY, nTab);
-                        if (pDoc->HasControl( nTab, aMMRect ))
-                        {
-                            for (i=0; i<4; i++)
-                            {
-                                if (pGridWin[i] && pGridWin[i]->IsVisible())
-                                {
-                                    //  MapMode muss logischer (1/100mm) sein !!!
-                                    pDoc->InvalidateControls( pGridWin[i], nTab, aMMRect );
-                                    pGridWin[i]->Update();
-                                }
-                            }
-                        }
                     }
                 }
             }
