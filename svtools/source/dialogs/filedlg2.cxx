@@ -43,7 +43,6 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 
 #include <svtools/stdctrl.hxx>
-#include <vector>
 
 #ifdef _MSC_VER
 #pragma optimize ("", off)
@@ -725,12 +724,10 @@ ImpFileDialog::ImpFileDialog( PathDialog* pDlg, WinBits nWinBits, RESOURCE_TYPE 
 
 ImpFileDialog::~ImpFileDialog()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        delete aFilterList[ i ];
     }
+    aFilterList.clear();
 
     delete pFileTitel;
     if (pFileList && ( pFileList != pDirList ) )
@@ -913,16 +910,13 @@ IMPL_LINK( ImpFileDialog, DblClickHdl, ListBox *, pBox )
     if( pBox == pTypeList )
     {
         // Neue Maske setzen, und Listboxen updaten
-        USHORT nCurPos = pTypeList->GetSelectEntryPos();
-        if( nCurPos+1 > (USHORT)aFilterList.Count() )
+        size_t nCurPos = pTypeList->GetSelectEntryPos();
+        if( nCurPos+1 > aFilterList.size() )
             aMask = UniString::CreateFromAscii( ALLFILES );
         else
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurPos )->aMask;
-//                      if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
-//                              aMask = WildCard( aFilterListMask, '\0' );
-//                      else // ; muss beruecksichtigt werden
-                aMask = WildCard( aFilterListMask, ';' );
+            UniString aFilterListMask = aFilterList[ nCurPos ]->aMask;
+            aMask = WildCard( aFilterListMask, ';' );
         }
 
         pEdit->SetText( aMask() );
@@ -1191,7 +1185,7 @@ void ImpFileDialog::SetPath( Edit const& rEdit )
 
 void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask )
 {
-    aFilterList.Insert( new ImpFilterItem( rFilter, rMask ), LIST_APPEND );
+    aFilterList.push_back( new ImpFilterItem( rFilter, rMask ) );
     if( pTypeList )
         pTypeList->InsertEntry( rFilter, LISTBOX_APPEND );
 
@@ -1201,27 +1195,24 @@ void ImpFileDialog::AddFilter( const UniString& rFilter, const UniString& rMask 
 
 void ImpFileDialog::RemoveFilter( const UniString& rFilter )
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
-
-    if( pItem )
-    {
-        delete aFilterList.Remove();
-        if( pTypeList )
-            pTypeList->RemoveEntry( rFilter );
+    for ( ImpFilterList::iterator it = aFilterList.begin(); it < aFilterList.end(); ++it ) {
+        if ( (*it)->aName == rFilter ) {
+            delete *it;
+            aFilterList.erase( it );
+            if ( pTypeList ) {
+                pTypeList->RemoveEntry( rFilter );
+            }
+            break;
+        }
     }
 }
 
 void ImpFileDialog::RemoveAllFilter()
 {
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n ; ++i ) {
+        delete aFilterList[ i ];
     }
-    aFilterList.Clear();
+    aFilterList.clear();
 
     if( pTypeList )
         pTypeList->Clear();
@@ -1232,14 +1223,14 @@ void ImpFileDialog::SetCurFilter( const UniString& rFilter )
     if( !pTypeList )
         return;
 
-    ImpFilterItem* pItem = aFilterList.First();
-    while( pItem && pItem->aName != rFilter )
-        pItem = aFilterList.Next();
+    for ( size_t i = 0, n = aFilterList.size(); i < n; ++i ) {
+        if ( aFilterList[ i ]->aName == rFilter ) {
+            pTypeList->SelectEntryPos( USHORT( i ) );
+            return;
+        }
+    }
 
-    if( pItem )
-        pTypeList->SelectEntryPos( (USHORT)aFilterList.GetCurPos() );
-    else
-        pTypeList->SetNoSelection();
+    pTypeList->SetNoSelection();
 }
 
 UniString ImpFileDialog::GetCurFilter() const
@@ -1269,9 +1260,9 @@ void ImpFileDialog::PreExecute()
     if( pTypeList )
     {
         USHORT nCurType = pTypeList->GetSelectEntryPos();
-        if( nCurType < aFilterList.Count() )
+        if( nCurType < aFilterList.size() )
         {
-            UniString aFilterListMask = aFilterList.GetObject( nCurType )->aMask;
+            UniString aFilterListMask = aFilterList[ nCurType ]->aMask;
             if( aFilterListMask.Search( ';' ) == STRING_NOTFOUND ) // kein ; in der Maske
                 aMask = WildCard( aFilterListMask, '\0' );
             else // ; in der Maske, muss in der Wildcard beruecksichtigt werden
