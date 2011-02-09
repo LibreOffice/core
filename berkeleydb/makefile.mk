@@ -135,7 +135,7 @@ db_LIBS=
 CFLAGS+=-D_GLIBCXX_DLL
 db_LIBS+=-lstdc++_s
 .ENDIF
-db_LIBXSO_LIBS=$(LIBSTLPORT) $(db_LIBS)
+db_LIBXSO_LIBS=$(db_LIBS)
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 db_LIBXSO_LIBS+=-lgcc_s
 .ENDIF
@@ -156,9 +156,6 @@ OUT2INC= \
 .ENDIF
 
 .ELSE
-# make use of stlport headerfiles
-EXT_USE_STLPORT=TRUE
-
 BUILD_DIR=
 BUILD_ACTION=dmake
 

@@ -66,7 +66,7 @@
 +### HDU: disabled building with the normal compile flags
 +###CPPFLAGS= /Zc:wchar_t- /nologo /W4 /GR /EHsc /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /Fd"$(INTDIR)\\" /FD /c
 +### HDU: because for full binary compatibility with the rest of OOo all compile flags must match exactly
-+###       which is especially true for template-heavy C++ code with non-default config (e.g. _STLP_DEBUG enabled)
++###       which is especially true for template-heavy C++ code with non-default config (e.g. _DEBUG_RUNTIME enabled)
 +CPPFLAGS= $(CFLAGS4MSC) /nologo /W4 /I "./src/font" /I "./src/painter" /I "./src/segment" /I "./src/textsource" /I "./src/generic" /I "./include/graphite" /I "../wrappers/win32" /D "GR_NAMESPACE" /D "WIN32" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "TRACING"  /Fp"$(INTDIR)\graphite.pch" /FD /c
 +
  # /Wp62
