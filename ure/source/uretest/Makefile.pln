@@ -40,8 +40,8 @@ GXX_INCLUDE_PATH ?= /usr/include/g++
 .DELETE_ON_ERROR:
 
 
-.PHONY: test
-test: test-regview test-cpptest test-javatest test-javanative test-clientserver
+.PHONY: check
+check: test-regview test-cpptest test-javatest test-javanative test-clientserver
 
 .PHONY: test-regview
 test-regview: out.pln/services.rdb
