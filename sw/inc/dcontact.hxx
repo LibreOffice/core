@@ -78,8 +78,8 @@ SwRect GetBoundRectOfAnchoredObj( const SdrObject* pObj );
 // OD 2004-03-31 #i26791# - change return type
 SwContact* GetUserCall( const SdrObject* );
 
-// liefert TRUE falls das SrdObject ein Marquee-Object (Lauftext) ist
-BOOL IsMarqueeTextObj( const SdrObject& rObj );
+// liefert sal_True falls das SrdObject ein Marquee-Object (Lauftext) ist
+sal_Bool IsMarqueeTextObj( const SdrObject& rObj );
 
 //Basisklasse fuer die folgenden KontaktObjekte (Rahmen+Zeichenobjekte)
 class SwContact : public SdrObjUserCall, public SwClient
@@ -330,7 +330,7 @@ class SwDrawVirtObj : public SdrVirtObj
         virtual ::basegfx::B2DPolyPolygon TakeXorPoly() const;
         virtual ::basegfx::B2DPolyPolygon TakeContour() const;
         virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
-        virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, USHORT nPlNum) const;
+        virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt16 nPlNum) const;
         virtual void NbcMove(const Size& rSiz);
         virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
         virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
@@ -405,7 +405,7 @@ class SwDrawContact : public SwContact
         // method <_Changed(..)>
         bool mbUserCallActive : 1;
         // event type, which is handled for <mpSdrObjHandledByCurrentUserCall>.
-        // Note: value only valid, if <mbUserCallActive> is TRUE.
+        // Note: value only valid, if <mbUserCallActive> is sal_True.
         SdrUserCallType meEventTypeOfCurrentUserCall;
 
         friend class NestedUserCallHdl;

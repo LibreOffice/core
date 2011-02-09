@@ -75,55 +75,55 @@ long SwFrm::GetPrtRight() const
 long SwFrm::GetPrtTop() const
     { return Frm().Top() + Prt().Top(); }
 
-BOOL SwFrm::SetMinLeft( long nDeadline )
+sal_Bool SwFrm::SetMinLeft( long nDeadline )
 {
     SwTwips nDiff = nDeadline - Frm().Left();
     if( nDiff > 0 )
     {
         Frm().Left( nDeadline );
         Prt().Width( Prt().Width() - nDiff );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwFrm::SetMaxBottom( long nDeadline )
+sal_Bool SwFrm::SetMaxBottom( long nDeadline )
 {
     SwTwips nDiff = Frm().Top() + Frm().Height() - nDeadline;
     if( nDiff > 0 )
     {
         Frm().Height( Frm().Height() - nDiff );
         Prt().Height( Prt().Height() - nDiff );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwFrm::SetMinTop( long nDeadline )
+sal_Bool SwFrm::SetMinTop( long nDeadline )
 {
     SwTwips nDiff = nDeadline - Frm().Top();
     if( nDiff > 0 )
     {
         Frm().Top( nDeadline );
         Prt().Height( Prt().Height() - nDiff );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwFrm::SetMaxRight( long nDeadline )
+sal_Bool SwFrm::SetMaxRight( long nDeadline )
 {
     SwTwips nDiff = Frm().Left() + Frm().Width() - nDeadline;
     if( nDiff > 0 )
     {
         Frm().Width( Frm().Width() - nDiff );
         Prt().Width( Prt().Width() - nDiff );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
-void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
@@ -139,7 +139,7 @@ void SwFrm::MakeBelowPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
         aFrm.Pos().Y() += 1;
 }
 
-void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
@@ -156,7 +156,7 @@ void SwFrm::MakeUpperPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
         aFrm.Pos().Y() -= 1;
 }
 
-void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
@@ -173,7 +173,7 @@ void SwFrm::MakeLeftPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
         aFrm.Pos().X() -= 1;
 }
 
-void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, BOOL bNotify )
+void SwFrm::MakeRightPos( const SwFrm* pUp, const SwFrm* pPrv, sal_Bool bNotify )
 {
     if( pPrv )
     {
@@ -213,7 +213,7 @@ void SwFrm::SetRightLeftMargins( long nRight, long nLeft)
     Prt().Width( Frm().Width() - nLeft - nRight );
 }
 
-const USHORT nMinVertCellHeight = 1135;
+const sal_uInt16 nMinVertCellHeight = 1135;
 
 /*-----------------------------------
  * SwFrm::CheckDirChange(..)
@@ -223,12 +223,12 @@ const USHORT nMinVertCellHeight = 1135;
 
 void SwFrm::CheckDirChange()
 {
-    BOOL bOldVert = GetVerticalFlag();
-    BOOL bOldRev = IsReverse();
-    BOOL bOldR2L = GetRightToLeftFlag();
-    SetInvalidVert( TRUE );
-    SetInvalidR2L( TRUE );
-    BOOL bChg = bOldR2L != IsRightToLeft();
+    sal_Bool bOldVert = GetVerticalFlag();
+    sal_Bool bOldRev = IsReverse();
+    sal_Bool bOldR2L = GetRightToLeftFlag();
+    SetInvalidVert( sal_True );
+    SetInvalidR2L( sal_True );
+    sal_Bool bChg = bOldR2L != IsRightToLeft();
     if( ( IsVertical() != bOldVert ) || bChg || IsReverse() != bOldRev )
     {
         InvalidateAll();
@@ -279,7 +279,7 @@ void SwFrm::CheckDirChange()
                 pFrm = pFrm->GetNext();
             }
             if( pCol )
-                pBody->AdjustColumns( pCol, TRUE );
+                pBody->AdjustColumns( pCol, sal_True );
         }
         else if( IsTxtFrm() )
             ((SwTxtFrm*)this)->Prepare( PREP_CLEAR );
@@ -469,8 +469,8 @@ SwCntntFrm::~SwCntntFrm()
         {
             SwTxtNode *pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
             const SwFtnIdxs &rFtnIdxs = pCNd->GetDoc()->GetFtnIdxs();
-            USHORT nPos;
-            ULONG nIndex = pCNd->GetIndex();
+            sal_uInt16 nPos;
+            sal_uLong nIndex = pCNd->GetIndex();
             rFtnIdxs.SeekEntry( *pTxtNd, &nPos );
             SwTxtFtn* pTxtFtn;
             if( nPos < rFtnIdxs.Count() )
@@ -658,13 +658,13 @@ const SwRect SwFrm::PaintArea() const
     // NEW TABLES
     // Cell frames may not leave their upper:
     SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
-    const BOOL bVert = IsVertical();
+    const sal_Bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
     long nLeft  = (aRect.*fnRect->fnGetLeft)();
     const SwFrm* pTmp = this;
-    BOOL bLeft = TRUE;
-    BOOL bRight = TRUE;
+    sal_Bool bLeft = sal_True;
+    sal_Bool bRight = sal_True;
     long nRowSpan = 0;
     while( pTmp )
     {
@@ -694,25 +694,25 @@ const SwRect SwFrm::PaintArea() const
                 nRight = nTmpRight;
             if( pTmp->IsPageFrm() || pTmp->IsFlyFrm() || pTmp->IsRootFrm() )
                 break;
-            bLeft = FALSE;
-            bRight = FALSE;
+            bLeft = sal_False;
+            bRight = sal_False;
         }
         else if( pTmp->IsColumnFrm() )  // nobody enters neightbour columns
         {
-            BOOL bR2L = pTmp->IsRightToLeft();
+            sal_Bool bR2L = pTmp->IsRightToLeft();
             // the first column has _no_ influence to the left range
             if( bR2L ? pTmp->GetNext() : pTmp->GetPrev() )
             {
                 if( bLeft || nLeft < nTmpLeft )
                     nLeft = nTmpLeft;
-                bLeft = FALSE;
+                bLeft = sal_False;
             }
              // the last column has _no_ influence to the right range
             if( bR2L ? pTmp->GetPrev() : pTmp->GetNext() )
             {
                 if( bRight || nTmpRight < nRight )
                     nRight = nTmpRight;
-                bRight = FALSE;
+                bRight = sal_False;
             }
         }
         else if( bVert && pTmp->IsBodyFrm() )
@@ -726,14 +726,14 @@ const SwRect SwFrm::PaintArea() const
             if( pTmp->GetPrev() && ( bLeft || nLeft < nTmpLeft ) )
             {
                 nLeft = nTmpLeft;
-                bLeft = FALSE;
+                bLeft = sal_False;
             }
             if( pTmp->GetNext() &&
                 ( pTmp->GetNext()->IsFooterFrm() || pTmp->GetNext()->GetNext() )
                 && ( bRight || nTmpRight < nRight ) )
             {
                 nRight = nTmpRight;
-                bRight = FALSE;
+                bRight = sal_False;
             }
         }
         pTmp = pTmp->GetUpper();
@@ -752,9 +752,9 @@ const SwRect SwFrm::PaintArea() const
 |*
 |*************************************************************************/
 
-const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
+const SwRect SwFrm::UnionFrm( sal_Bool bBorder ) const
 {
-    BOOL bVert = IsVertical();
+    sal_Bool bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     long nLeft = (Frm().*fnRect->fnGetLeft)();
     long nWidth = (Frm().*fnRect->fnGetWidth)();

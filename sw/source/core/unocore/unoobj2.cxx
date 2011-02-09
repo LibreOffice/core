@@ -37,6 +37,7 @@
 #include <bookmrk.hxx>
 #include <frmfmt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <ndtxt.hxx>
 #include <ndnotxt.hxx>
 #include <unocrsr.hxx>
@@ -198,14 +199,14 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          const bool _bAtCharAnchoredObjs )
 {
     // _bAtCharAnchoredObjs:
-    // <TRUE>: at-character anchored objects are collected
-    // <FALSE>: at-paragraph anchored objects are collected
+    // <sal_True>: at-character anchored objects are collected
+    // <sal_False>: at-paragraph anchored objects are collected
 
     // alle Rahmen, Grafiken und OLEs suchen, die an diesem Absatz
     // gebunden sind
     SwDoc* pDoc = rIdx.GetNode().GetDoc();
 
-    USHORT nChkType = static_cast< USHORT >((_bAtCharAnchoredObjs)
+    sal_uInt16 nChkType = static_cast< sal_uInt16 >((_bAtCharAnchoredObjs)
             ? FLY_AT_CHAR : FLY_AT_PARA);
     const SwCntntFrm* pCFrm;
     const SwCntntNode* pCNd;
@@ -215,7 +216,7 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     {
         const SwSortedObjs *pObjs = pCFrm->GetDrawObjs();
         if( pObjs )
-            for( USHORT i = 0; i < pObjs->Count(); ++i )
+            for( sal_uInt16 i = 0; i < pObjs->Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
@@ -237,8 +238,8 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
     else
     {
         const SwSpzFrmFmts& rFmts = *pDoc->GetSpzFrmFmts();
-        USHORT nSize = rFmts.Count();
-        for ( USHORT i = 0; i < nSize; i++)
+        sal_uInt16 nSize = rFmts.Count();
+        for ( sal_uInt16 i = 0; i < nSize; i++)
         {
             const SwFrmFmt* pFmt = rFmts[ i ];
             const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
@@ -345,7 +346,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
     UnoActionContext aAction(pDoc);
     if (rPam.GetNext() != &rPam)    // Ring of Cursors
     {
-        pDoc->StartUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSATTR, NULL);
 
         SwPaM *pCurrent = &rPam;
         do
@@ -359,7 +360,7 @@ void SwUnoCursorHelper::SetCrsrAttr(SwPaM & rPam,
             pCurrent= static_cast<SwPaM *>(pCurrent->GetNext());
         } while (pCurrent != &rPam);
 
-        pDoc->EndUndo(UNDO_INSATTR, NULL);
+        pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSATTR, NULL);
     }
     else
     {
@@ -393,8 +394,8 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
     {
         SwPosition const & rStart( *pCurrent->Start() );
         SwPosition const & rEnd( *pCurrent->End() );
-        const ULONG nSttNd = rStart.nNode.GetIndex();
-        const ULONG nEndNd = rEnd  .nNode.GetIndex();
+        const sal_uLong nSttNd = rStart.nNode.GetIndex();
+        const sal_uLong nEndNd = rEnd  .nNode.GetIndex();
 
         if (nEndNd - nSttNd >= nMaxLookup)
         {
@@ -405,7 +406,7 @@ void SwUnoCursorHelper::GetCrsrAttr(SwPaM & rPam,
 
         // the first node inserts the values into the get set
         // all other nodes merge their values into the get set
-        for (ULONG n = nSttNd; n <= nEndNd; ++n)
+        for (sal_uLong n = nSttNd; n <= nEndNd; ++n)
         {
             SwNode *const pNd = rPam.GetDoc()->GetNodes()[ n ];
             switch (pNd->GetNodeType())
@@ -465,7 +466,7 @@ public:
     /// embedded tables.
     SwStartNode const*const m_pOwnStartNode;
     SwTable const*const     m_pOwnTable;
-    const ULONG             m_nEndIndex;
+    const sal_uLong             m_nEndIndex;
     sal_Int32               m_nFirstParaStart;
     sal_Int32               m_nLastParaEnd;
     bool                    m_bFirstParagraph;
@@ -889,7 +890,7 @@ throw (uno::RuntimeException)
     if (GetPositions(aCursor))
     {
         UnoActionContext aAction(& m_pImpl->m_rDoc);
-        m_pImpl->m_rDoc.StartUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
         if (aCursor.HasMark())
         {
             m_pImpl->m_rDoc.DeleteAndJoin(aCursor);
@@ -901,10 +902,10 @@ throw (uno::RuntimeException)
                     m_pImpl->m_rDoc, aCursor, rText, bForceExpandHints);
 
             SwUnoCursorHelper::SelectPam(aCursor, true);
-            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
+            aCursor.Left(rText.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
         }
         SetPositions(aCursor);
-        m_pImpl->m_rDoc.EndUndo(UNDO_INSERT, NULL);
+        m_pImpl->m_rDoc.GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     }
 }
 
@@ -1157,7 +1158,7 @@ lcl_IsStartNodeInFormat(const bool bHeader, SwStartNode *const pSttNode,
     const SfxItemSet& rSet = pFrmFmt->GetAttrSet();
     const SfxPoolItem* pItem;
     if (SFX_ITEM_SET == rSet.GetItemState(
-            static_cast<USHORT>(bHeader ? RES_HEADER : RES_FOOTER),
+            static_cast<sal_uInt16>(bHeader ? RES_HEADER : RES_FOOTER),
             sal_True, &pItem))
     {
         SfxPoolItem *const pItemNonConst(const_cast<SfxPoolItem *>(pItem));
@@ -1325,7 +1326,7 @@ throw (uno::RuntimeException)
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     const ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, FALSE));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1347,7 +1348,7 @@ SwXTextRange::createEnumeration() throw (uno::RuntimeException)
     }
     const SwPosition aPos(GetDoc()->GetNodes().GetEndOfContent());
     ::std::auto_ptr<SwUnoCrsr> pNewCrsr(
-            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, FALSE));
+            m_pImpl->m_rDoc.CreateUnoCrsr(aPos, sal_False));
     if (!GetPositions(*pNewCrsr))
     {
         throw uno::RuntimeException();
@@ -1721,7 +1722,7 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
     // Start/EndAction
     SwDoc *const pDoc = rCursor.GetDoc();
     UnoActionContext aAction(pDoc);
-    pDoc->StartUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
     if (rCursor.HasMark())
     {
         pDoc->DeleteAndJoin(rCursor);
@@ -1734,9 +1735,9 @@ void SwUnoCursorHelper::SetString(SwCursor & rCursor, const OUString& rString)
         DBG_ASSERT( bSuccess, "DocInsertStringSplitCR" );
         (void) bSuccess;
         SwUnoCursorHelper::SelectPam(rCursor, true);
-        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, FALSE, FALSE);
+        rCursor.Left(rString.getLength(), CRSR_SKIP_CHARS, sal_False, sal_False);
     }
-    pDoc->EndUndo(UNDO_INSERT, NULL);
+    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
 }
 
 /******************************************************************
@@ -1891,7 +1892,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
             SwPosFlyFrms aFlyFrms;
             //get all frames that are bound at paragraph or at character
             rPaM.GetDoc()->GetAllFlyFmts(aFlyFrms, m_pImpl->GetCursor());
-            for(USHORT i = 0; i < aFlyFrms.Count(); i++)
+            for(sal_uInt16 i = 0; i < aFlyFrms.Count(); i++)
             {
                 SwPosFlyFrm* pPosFly = aFlyFrms[i];
                 SwFrmFmt *const pFrmFmt =
@@ -1911,7 +1912,7 @@ SwXParaFrameEnumeration::SwXParaFrameEnumeration(
                     lcl_FillFrame(*m_pImpl.get(), *m_pImpl->GetCursor(),
                             m_pImpl->m_Frames);
                     m_pImpl->GetCursor()->Right(
-                            1, CRSR_SKIP_CHARS, FALSE, FALSE);
+                            1, CRSR_SKIP_CHARS, sal_False, sal_False);
                 }
                 while (*m_pImpl->GetCursor()->GetPoint() <
                         *m_pImpl->GetCursor()->GetMark());

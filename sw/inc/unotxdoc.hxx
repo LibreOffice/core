@@ -363,7 +363,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     // css::drawing::XDrawPageSupplier
@@ -474,7 +474,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
     //
@@ -529,7 +529,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
 };
@@ -560,7 +560,7 @@ public:
 
     //XServiceInfo
     virtual rtl::OUString SAL_CALL getImplementationName(void) throw( css::uno::RuntimeException );
-    virtual BOOL SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
+    virtual sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 };
 #endif

@@ -64,21 +64,21 @@
 
 // wenn Selektion groesser Max Nodes oder mehr als Max Selektionen
 // => keine Attribute
-const USHORT& getMaxLookup()
+const sal_uInt16& getMaxLookup()
 {
-    static const USHORT nMaxLookup = 1000;
+    static const sal_uInt16 nMaxLookup = 1000;
     return nMaxLookup;
 }
 
 // --> OD 2008-01-16 #newlistlevelattrs#
-BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
+sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 // <--
 {
     if( GetCrsrCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
-        return FALSE;
+        return sal_False;
     }
 
     SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
@@ -100,7 +100,7 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
                 if (pNumRule)
                 {
                     const String & aCharFmtName =
-                        pNumRule->Get(static_cast<USHORT>(pTxtNd->GetActualListLevel())).GetCharFmtName();
+                        pNumRule->Get(static_cast<sal_uInt16>(pTxtNd->GetActualListLevel())).GetCharFmtName();
                     SwCharFmt * pCharFmt =
                         GetDoc()->FindCharFmtByName(aCharFmtName);
 
@@ -112,14 +112,14 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
             continue;
         }
 
-        ULONG nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
+        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
         xub_StrLen nSttCnt = PCURCRSR->GetMark()->nContent.GetIndex(),
                    nEndCnt = PCURCRSR->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
-            ULONG nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
+            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
             nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
         }
 
@@ -127,12 +127,12 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
         {
             rSet.ClearItem();
             rSet.InvalidateAllItems();
-            return FALSE;
+            return sal_False;
         }
 
         // beim 1.Node traegt der Node die Werte in den GetSet ein (Initial)
         // alle weiteren Nodes werden zum GetSet zu gemergt
-        for( ULONG n = nSttNd; n <= nEndNd; ++n )
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             switch( pNd->GetNodeType() )
@@ -144,7 +144,7 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
                                         : ((SwTxtNode*)pNd)->GetTxt().Len();
                     // --> OD 2008-01-16 #newlistlevelattrs#
                     ((SwTxtNode*)pNd)->GetAttr( *pSet, nStt, nEnd,
-                                                FALSE, TRUE,
+                                                sal_False, sal_True,
                                                 bMergeIndentValuesOfNumRule );
                     // <--
                 }
@@ -171,7 +171,7 @@ BOOL SwEditShell::GetCurAttr( SfxItemSet& rSet,
 
     FOREACHPAM_END()
 
-    return TRUE;
+    return sal_True;
 }
 
 SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
@@ -183,14 +183,14 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
 
     FOREACHPAM_START(this)
 
-        ULONG nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
+        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
         xub_StrLen nSttCnt = PCURCRSR->GetMark()->nContent.GetIndex(),
                    nEndCnt = PCURCRSR->GetPoint()->nContent.GetIndex();
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
-            ULONG nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
+            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
             nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
         }
 
@@ -200,7 +200,7 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
             break;
         }
 
-        for( ULONG n = nSttNd; n <= nEndNd; ++n )
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             if( pNd->IsTxtNode() )
@@ -218,13 +218,13 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl() const
 
 
 
-BOOL SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
+sal_Bool SwEditShell::GetCurFtn( SwFmtFtn* pFillFtn )
 {
     // der Cursor muss auf dem akt. Fussnoten-Anker stehen:
     SwPaM* pCrsr = GetCrsr();
     SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
     if( !pTxtNd )
-        return FALSE;
+        return sal_False;
 
     SwTxtAttr *const pFtn = pTxtNd->GetTxtAttrForCharAt(
         pCrsr->GetPoint()->nContent.GetIndex(), RES_TXTATR_FTN);
@@ -258,11 +258,11 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 
 
 
-/*USHORT SwEditShell::GetFtnCnt( BOOL bEndNotes = FALSE ) const
+/*sal_uInt16 SwEditShell::GetFtnCnt( sal_Bool bEndNotes = sal_False ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
-    USHORT nCnt = 0;
-    for ( USHORT i = 0; i < rIdxs.Count(); ++i )
+    sal_uInt16 nCnt = 0;
+    for ( sal_uInt16 i = 0; i < rIdxs.Count(); ++i )
     {
         const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
         if ( bEndNotes == rFtn.IsEndNote() )
@@ -275,23 +275,23 @@ bool SwEditShell::SetCurFtn( const SwFmtFtn& rFillFtn )
 bool SwEditShell::HasFtns( bool bEndNotes ) const
 {
     const SwFtnIdxs &rIdxs = pDoc->GetFtnIdxs();
-    for ( USHORT i = 0; i < rIdxs.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < rIdxs.Count(); ++i )
     {
         const SwFmtFtn &rFtn = rIdxs[i]->GetFtn();
         if ( bEndNotes == rFtn.IsEndNote() )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 
     // gebe Liste aller Fussnoten und deren Anfangstexte
-USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
+sal_uInt16 SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 {
     if( rList.Count() )
         rList.Remove( 0, rList.Count() );
 
-    USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
     SwTxtFtn* pTxtFtn;
     for( n = 0; n < nFtnCnt; ++n )
     {
@@ -329,28 +329,28 @@ USHORT SwEditShell::GetSeqFtnList( SwSeqFldList& rList, bool bEndNotes )
 
 // linken Rand ueber Objectleiste einstellen (aenhlich dem Stufen von
 // Numerierungen)
-BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
+sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) const
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     const SvxTabStopItem& rTabItem = (SvxTabStopItem&)GetDoc()->
                                 GetDefault( RES_PARATR_TABSTOP );
-    USHORT nDefDist = static_cast<USHORT>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
+    sal_uInt16 nDefDist = static_cast<sal_uInt16>(rTabItem.Count() ? rTabItem[0].GetTabPos() : 1134);
     if( !nDefDist )
-        return FALSE;
+        return sal_False;
 
     FOREACHPAM_START(this)
 
-        ULONG nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
+        sal_uLong nSttNd = PCURCRSR->GetMark()->nNode.GetIndex(),
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
 
         if( nSttNd > nEndNd )
         {
-            ULONG nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
+            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
         }
 
         SwCntntNode* pCNd;
-        for( ULONG n = nSttNd; bRet && n <= nEndNd; ++n )
+        for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )
             if( 0 != ( pCNd = GetDoc()->GetNodes()[ n ]->GetTxtNode() ))
             {
                 const SvxLRSpaceItem& rLS = (SvxLRSpaceItem&)
@@ -363,13 +363,13 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
                     SwFrm* pFrm = pCNd->getLayoutFrm( GetLayout() );
                     if ( pFrm )
                     {
-                        const USHORT nFrmWidth = static_cast<USHORT>( pFrm->IsVertical() ?
+                        const sal_uInt16 nFrmWidth = static_cast<sal_uInt16>( pFrm->IsVertical() ?
                                                  pFrm->Frm().Height() :
                                                  pFrm->Frm().Width() );
                         bRet = nFrmWidth > ( nNext + MM50 );
                     }
                     else
-                        bRet = FALSE;
+                        bRet = sal_False;
                 }
             }
 
@@ -380,7 +380,7 @@ BOOL SwEditShell::IsMoveLeftMargin( BOOL bRight, BOOL bModulus ) const
     return bRet;
 }
 
-void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
+void SwEditShell::MoveLeftMargin( sal_Bool bRight, sal_Bool bModulus )
 {
     StartAllAction();
     StartUndo( UNDO_START );
@@ -390,7 +390,7 @@ void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
-        for( USHORT n = 0; n < aRangeArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
             GetDoc()->MoveLeftMargin( aRangeArr.SetPam( n, aPam ),
                                         bRight, bModulus );
     }
@@ -402,9 +402,9 @@ void SwEditShell::MoveLeftMargin( BOOL bRight, BOOL bModulus )
 }
 
 
-inline USHORT lcl_SetScriptFlags( USHORT nType )
+inline sal_uInt16 lcl_SetScriptFlags( sal_uInt16 nType )
 {
-    USHORT nRet;
+    sal_uInt16 nRet;
        switch( nType )
     {
     case ::com::sun::star::i18n::ScriptType::LATIN:     nRet = SCRIPTTYPE_LATIN;    break;
@@ -415,17 +415,17 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     return nRet;
 }
 
-BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
-                            USHORT &rScrpt, BOOL bInSelection, BOOL bNum )
+sal_Bool lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+                            sal_uInt16 &rScrpt, sal_Bool bInSelection, sal_Bool bNum )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const String& rTxt = rTNd.GetTxt();
     String sExp;
 
     // consider numbering
     if ( bNum )
     {
-        bRet = FALSE;
+        bRet = sal_False;
 
         // --> OD 2008-03-19 #refactorlists#
         if ( rTNd.IsInList() )
@@ -433,7 +433,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
             ASSERT( rTNd.GetNumRule(),
                     "<lcl_IsNoEndTxtAttrAtPos(..)> - no list style found at text node. Serious defect -> please inform OD." );
             const SwNumRule* pNumRule = rTNd.GetNumRule();
-            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<USHORT>(rTNd.GetActualListLevel()) );
+            const SwNumFmt &rNumFmt = pNumRule->Get( static_cast<sal_uInt16>(rTNd.GetActualListLevel()) );
             if( SVX_NUM_BITMAP != rNumFmt.GetNumberingType() )
             {
                 if ( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
@@ -450,7 +450,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         const SwTxtAttr* const pAttr = rTNd.GetTxtAttrForCharAt( nPos );
         if (pAttr)
         {
-            bRet = TRUE; // all other than fields can be
+            bRet = sal_True; // all other than fields can be
                          // defined as weak-script ?
             if ( RES_TXTATR_FIELD == pAttr->Which() )
             {
@@ -469,7 +469,7 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
         xub_StrLen n;
         if( bInSelection )
         {
-            USHORT nScript;
+            sal_uInt16 nScript;
             for( n = 0; n < nEnd; n = (xub_StrLen)
                     pBreakIt->GetBreakIter()->endOfScript( sExp, n, nScript ))
             {
@@ -487,9 +487,9 @@ BOOL lcl_IsNoEndTxtAttrAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
 
 
 // returns the scripttpye of the selection
-USHORT SwEditShell::GetScriptType() const
+sal_uInt16 SwEditShell::GetScriptType() const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     //if( pBreakIt->GetBreakIter().is() )
     {
         FOREACHPAM_START(this)
@@ -516,7 +516,7 @@ USHORT SwEditShell::GetScriptType() const
                             nPos = aIdx.GetIndex();
                     }
 
-                    USHORT nScript;
+                    sal_uInt16 nScript;
 
                     if ( pTNd->GetTxt().Len() )
                     {
@@ -525,15 +525,15 @@ USHORT SwEditShell::GetScriptType() const
                                   pBreakIt->GetBreakIter()->getScriptType( pTNd->GetTxt(), nPos );
                     }
                     else
-                        nScript = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
+                        nScript = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 
-                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, FALSE, FALSE ))
+                    if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nPos, nRet, sal_False, sal_False ))
                         nRet |= lcl_SetScriptFlags( nScript );
                 }
             }
             else if ( pBreakIt->GetBreakIter().is() )
             {
-                ULONG nEndIdx = pEnd->nNode.GetIndex();
+                sal_uLong nEndIdx = pEnd->nNode.GetIndex();
                 SwNodeIndex aIdx( pStt->nNode );
                 for( ; aIdx.GetIndex() <= nEndIdx; aIdx++ )
                     if( aIdx.GetNode().IsTxtNode() )
@@ -555,7 +555,7 @@ USHORT SwEditShell::GetScriptType() const
                         if( nEndPos > rTxt.Len() )
                             nEndPos = rTxt.Len();
 
-                        USHORT nScript;
+                        sal_uInt16 nScript;
                         while( nChg < nEndPos )
                         {
                             nScript = pScriptInfo ?
@@ -563,7 +563,7 @@ USHORT SwEditShell::GetScriptType() const
                                       pBreakIt->GetBreakIter()->getScriptType(
                                                                 rTxt, nChg );
 
-                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, TRUE,
+                            if( !lcl_IsNoEndTxtAttrAtPos( *pTNd, nChg, nRet, sal_True,
                                                           0 == nChg && rTxt.Len() == nEndPos ) )
                                 nRet |= lcl_SetScriptFlags( nScript );
 
@@ -600,12 +600,12 @@ USHORT SwEditShell::GetScriptType() const
 }
 
 
-USHORT SwEditShell::GetCurLang() const
+sal_uInt16 SwEditShell::GetCurLang() const
 {
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition& rPos = *pCrsr->GetPoint();
     const SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-    USHORT nLang;
+    sal_uInt16 nLang;
     if( pTNd )
     {
         //JP 24.9.2001: if exist no selection, then get the language before
@@ -620,14 +620,14 @@ USHORT SwEditShell::GetCurLang() const
     return nLang;
 }
 
-USHORT SwEditShell::GetScalingOfSelectedText() const
+sal_uInt16 SwEditShell::GetScalingOfSelectedText() const
 {
     const SwPaM* pCrsr = GetCrsr();
     const SwPosition* pStt = pCrsr->Start();
     const SwTxtNode* pTNd = pStt->nNode.GetNode().GetTxtNode();
     ASSERT( pTNd, "no textnode available" );
 
-    USHORT nScaleWidth;
+    sal_uInt16 nScaleWidth;
     if( pTNd )
     {
         xub_StrLen nStt = pStt->nContent.GetIndex(), nEnd;

@@ -42,6 +42,15 @@ TYPEINIT0(SwClient);
 SwClient::SwClient(SwModify *pToRegisterIn)
     : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall(false)
 {
+<<<<<<< local
+=======
+    bModifyLocked =
+    bInModify =
+    bInDocDTOR =
+    bInCache = sal_False;
+    bInSwFntCache = sal_False;
+
+>>>>>>> other
     if(pToRegisterIn)
         // connect to SwModify
         pToRegisterIn->Add(this);
@@ -92,10 +101,19 @@ SwClient::~SwClient()
 }
 
 
+<<<<<<< local
 /*************************************************************************/
 BOOL SwClient::GetInfo( SfxPoolItem& ) const
+=======
+    // erfrage vom Client Informationen
+sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
+>>>>>>> other
 {
+<<<<<<< local
     return TRUE;        // no information here, return TRUE to enable continuation
+=======
+    return sal_True;        // und weiter
+>>>>>>> other
 }
 
 
@@ -170,7 +188,7 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
 {
     if (IsInCache() || IsInSwFntCache())
     {
-        const USHORT nWhich = pOldValue ? pOldValue->Which() :
+        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                                         pNewValue ? pNewValue->Which() : 0;
         CheckCaching( nWhich );
     }
@@ -180,9 +198,19 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
 
     LockModify();
 
+<<<<<<< local
     // mba: WTF?!
+=======
+#ifndef DBG_UTIL
+    bInModify = sal_True;
+#else
+>>>>>>> other
     if( !pOldValue )
+<<<<<<< local
         bLockClientList = TRUE;
+=======
+        bInModify = sal_True;
+>>>>>>> other
     else
     {
         // following Modifies shouldn't call an ASSERT
@@ -197,21 +225,53 @@ void SwModify::NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *p
         case RES_REFMARK_DELETED:
         case RES_TOXMARK_DELETED:
         case RES_FIELD_DELETED:
+<<<<<<< local
             bLockClientList = FALSE;
+=======
+            bInModify = sal_False;
+>>>>>>> other
             break;
         default:
+<<<<<<< local
             bLockClientList = TRUE;
+=======
+            bInModify = sal_True;
+>>>>>>> other
         }
     }
 
+<<<<<<< local
     ModifyBroadcast( pOldValue, pNewValue );
     bLockClientList = FALSE;
+=======
+    SwClientIter aIter( *this );
+    SwClient * pLast = aIter.GoStart();
+    if( pLast )     // konnte zum Anfang gesprungen werden ??
+        do
+        {
+            pLast->Modify( pOldValue, pNewValue );
+            if( !pRoot )    // Baum schon Weg ??
+                break;
+        } while( 0 != ( pLast = aIter++ ));
+
+    bInModify = sal_False;
+>>>>>>> other
     UnlockModify();
 }
 
+<<<<<<< local
 BOOL SwModify::GetInfo( SfxPoolItem& rInfo ) const
+=======
+// erfrage vom Modify Informationen
+
+sal_Bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
+>>>>>>> other
 {
+<<<<<<< local
     BOOL bRet = TRUE;       // means: continue with next one
+=======
+    sal_Bool bRet = sal_True;       // bedeutet weiter zum naechsten
+>>>>>>> other
 
     if( pRoot )
     {
@@ -304,9 +364,14 @@ SwClient* SwModify::Remove(SwClient * pDepend)
         pDepend->pLeft = 0;
         pDepend->pRight = 0;
     }
+<<<<<<< local
     else
     {
         ASSERT( false, "SwModify::Remove(): pDepend nicht gefunden" );
+=======
+    else {
+        ASSERT( sal_False, "SwModify::Remove(): pDepend nicht gefunden");
+>>>>>>> other
     }
 
     // disconnect client from me
@@ -327,13 +392,24 @@ int SwModify::GetClientCount() const
     return nRet;
 }
 
+<<<<<<< local
 /*************************************************************************/
+=======
+/*************************************************************************
+|*    SwModify::CheckCaching( const sal_uInt16 nWhich )
+|*
+|*    Ersterstellung    JP 25.06.95
+|*    Letzte Aenderung  JP 25.06.95
+*************************************************************************/
 
-void SwModify::CheckCaching( const USHORT nWhich )
+
+>>>>>>> other
+
+void SwModify::CheckCaching( const sal_uInt16 nWhich )
 {
     if (isCHRATR(nWhich))
     {
-        SetInSwFntCache( FALSE );
+        SetInSwFntCache( sal_False );
     }
     else
         switch ( nWhich )
@@ -341,7 +417,7 @@ void SwModify::CheckCaching( const USHORT nWhich )
         case RES_OBJECTDYING:
         case RES_FMT_CHG:
         case RES_ATTRSET_CHG:
-            SetInSwFntCache( FALSE );
+            SetInSwFntCache( sal_False );
 
         case RES_UL_SPACE:
         case RES_LR_SPACE:
@@ -353,7 +429,7 @@ void SwModify::CheckCaching( const USHORT nWhich )
             if ( IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( FALSE );
+                SetInCache( sal_False );
             }
             break;
         }
@@ -409,9 +485,14 @@ void SwDepend::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
         pToTell->SwClientNotifyCall( rMod, rHint );
 }
 
+<<<<<<< local
 BOOL SwDepend::GetInfo( SfxPoolItem& rInfo ) const
+=======
+    // erfrage vom Modify Informationen
+sal_Bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
+>>>>>>> other
 {
-    return pToTell ? pToTell->GetInfo( rInfo ) : TRUE;
+    return pToTell ? pToTell->GetInfo( rInfo ) : sal_True;
 }
 
 /********************************************************************/

@@ -45,6 +45,7 @@
 #include <memory>
 #include <hints.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <editsh.hxx>
 #include <swcli.hxx>
@@ -141,8 +142,8 @@ class BaseFrameProperties_Impl
 public:
     virtual ~BaseFrameProperties_Impl();
 
-    void            SetProperty(USHORT nWID, BYTE nMemberId, const uno::Any& rVal);
-    sal_Bool        GetProperty(USHORT nWID, BYTE nMemberId, const uno::Any*& pAny );
+    void            SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal);
+    sal_Bool        GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& pAny );
 //    void          GetProperty(const OUString &rPropertyName, const uno::Reference < beans::XPropertySet > &rxPropertySet, uno::Any& rAny );
 
 //    const SfxItemPropertyMap*       GetMap() const {return _pMap;}
@@ -156,12 +157,22 @@ BaseFrameProperties_Impl::~BaseFrameProperties_Impl()
 {
 }
 
+<<<<<<< local
 void BaseFrameProperties_Impl::SetProperty(USHORT nWID, BYTE nMemberId, const uno::Any& rVal)
+=======
+ ---------------------------------------------------------------------------*/
+void BaseFrameProperties_Impl::SetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any& rVal)
+>>>>>>> other
 {
     aAnyMap.SetValue( nWID, nMemberId, rVal );
 }
 
+<<<<<<< local
 sal_Bool BaseFrameProperties_Impl::GetProperty(USHORT nWID, BYTE nMemberId, const uno::Any*& rpAny)
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId, const uno::Any*& rpAny)
+>>>>>>> other
 {
     return aAnyMap.FillValue( nWID, nMemberId, rpAny );
 }
@@ -650,7 +661,7 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     }
 
 
-    static const :: USHORT nIDs[] =
+    static const :: sal_uInt16 nIDs[] =
     {
         RES_GRFATR_CROPGRF,
         RES_GRFATR_ROTATION,
@@ -668,7 +679,7 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     const ::uno::Any* pAny;
     for(sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++)
     {
-        BYTE nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
+        sal_uInt8 nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
         if(GetProperty(nIDs[nIndex], nMId, pAny ))
         {
             SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
@@ -696,10 +707,10 @@ sal_Bool  SwOLEProperties_Impl::AnyToItemSet(
 {
     const ::uno::Any* pTemp;
     if(!GetProperty(FN_UNO_CLSID, 0, pTemp) && !GetProperty(FN_UNO_STREAM_NAME, 0, pTemp) )
-        return FALSE;
+        return sal_False;
     SwFrameProperties_Impl::AnyToItemSet( pDoc, rFrmSet, rSet, rSizeFound);
     //
-    return TRUE;
+    return sal_True;
 }
 
 /******************************************************************
@@ -731,7 +742,12 @@ OUString SwXFrame::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXFrame");
 }
 
+<<<<<<< local
 BOOL SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXFrame::supportsService(const :: OUString& rServiceName) throw( uno::RuntimeException )
+>>>>>>> other
 {
     return !rServiceName.compareToAscii("com.sun.star.text.BaseFrame")||
                 !rServiceName.compareToAscii("com.sun.star.text.TextContent") ||
@@ -970,17 +986,17 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                         pNoTxt->SetContour(0);
                     else if(aValue >>= aParam)
                     {
-                        PolyPolygon aPoly((USHORT)aParam.getLength());
+                        PolyPolygon aPoly((sal_uInt16)aParam.getLength());
                         for(sal_Int32 i = 0; i < aParam.getLength(); i++)
                         {
                             const :: drawing::PointSequence* pPointSeq = aParam.getConstArray();
                             sal_Int32 nPoints = pPointSeq[i].getLength();
                             const :: awt::Point* pPoints = pPointSeq[i].getConstArray();
-                            Polygon aSet( (USHORT)nPoints );
+                            Polygon aSet( (sal_uInt16)nPoints );
                             for(sal_Int32 j = 0; j < nPoints; j++)
                             {
                                 Point aPoint(pPoints[j].X, pPoints[j].Y);
-                                aSet.SetPoint(aPoint, (USHORT)j);
+                                aSet.SetPoint(aPoint, (sal_uInt16)j);
                             }
                             // Close polygon if it isn't closed already.
                             aSet.Optimize( POLY_OPTIMIZE_CLOSE );
@@ -1091,7 +1107,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
                 // <--
 
-                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, FALSE );
+                pFmt->GetDoc()->SetFrmFmtToFly( *pFmt, *pFrmFmt, pSet, sal_False );
                 delete pSet;
             }
             else
@@ -1445,12 +1461,12 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     {
                         drawing::PointSequenceSequence aPtSeq(aContour.Count());
                         drawing::PointSequence* pPSeq = aPtSeq.getArray();
-                        for(USHORT i = 0; i < aContour.Count(); i++)
+                        for(sal_uInt16 i = 0; i < aContour.Count(); i++)
                         {
                             const Polygon& rPoly = aContour.GetObject(i);
                             pPSeq[i].realloc(rPoly.GetSize());
                             awt::Point* pPoints = pPSeq[i].getArray();
-                            for(USHORT j = 0; j < rPoly.GetSize(); j++)
+                            for(sal_uInt16 j = 0; j < rPoly.GetSize(); j++)
                             {
                                 const Point& rPoint = rPoly.GetPoint(j);
                                 pPoints[j].X = rPoint.X();
@@ -1462,12 +1478,12 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                 }
                 else if(pEntry->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR )
                 {
-                    BOOL bValue = pNoTxt->HasAutomaticContour();
+                    sal_Bool bValue = pNoTxt->HasAutomaticContour();
                     aAny.setValue( &bValue, ::getBooleanCppuType() );
                 }
                 else if(pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
                 {
-                    BOOL bValue = pNoTxt->IsPixelContour();
+                    sal_Bool bValue = pNoTxt->IsPixelContour();
                     aAny.setValue( &bValue, ::getBooleanCppuType() );
                 }
                 else
@@ -1586,7 +1602,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             }
         }
         else if(FN_UNO_CLSID == pEntry->nWID || FN_UNO_MODEL == pEntry->nWID||
-                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID)
+                FN_UNO_COMPONENT == pEntry->nWID ||FN_UNO_STREAM_NAME == pEntry->nWID||
+                FN_EMBEDDED_OBJECT == pEntry->nWID)
         {
             SwDoc* pDoc = pFmt->GetDoc();
             const SwFmtCntnt* pCnt = &pFmt->GetCntnt();
@@ -1607,7 +1624,15 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                     {
                         uno::Reference < lang::XComponent > xComp( xIP->getComponent(), uno::UNO_QUERY );
                         uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
-                        if ( xModel.is() )
+                        if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
+                        {
+                            // ensure the
+                            ASSERT( pDoc->GetDocShell(), "no doc shell => no client site" );
+                            if ( pDoc->GetDocShell() )
+                                pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
+                            aAny <<= xIP;
+                        }
+                        else if ( xModel.is() )
                             aAny <<= xModel;
                         else if ( FN_UNO_COMPONENT == pEntry->nWID )
                             aAny <<= xComp;
@@ -1741,13 +1766,13 @@ uno::Sequence< beans::PropertyState > SwXFrame::getPropertyStates(
                         SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
                         SfxItemSet aSet(pNoTxt->GetSwAttrSet());
                         aSet.GetItemState(pEntry->nWID);
-                        if(SFX_ITEM_SET == aSet.GetItemState( pEntry->nWID, FALSE ))
+                        if(SFX_ITEM_SET == aSet.GetItemState( pEntry->nWID, sal_False ))
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     }
                 }
                 else
                 {
-                    if(SFX_ITEM_SET == rFmtSet.GetItemState( pEntry->nWID, FALSE ))
+                    if(SFX_ITEM_SET == rFmtSet.GetItemState( pEntry->nWID, sal_False ))
                         pStates[i] = beans::PropertyState_DIRECT_VALUE;
                     else
                         pStates[i] = beans::PropertyState_DEFAULT_VALUE;
@@ -1778,7 +1803,7 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
         if ( pEntry->nFlags & beans::PropertyAttribute::READONLY)
             throw uno::RuntimeException( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "setPropertyToDefault: property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
 
-        BOOL bNextFrame;
+        sal_Bool bNextFrame;
         if( pEntry->nWID &&
             pEntry->nWID != FN_UNO_ANCHOR_TYPES &&
             pEntry->nWID != FN_PARAM_LINK_DISPLAY_NAME)
@@ -2209,7 +2234,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
 
                     UnoActionContext aAction(pDoc);
-                    pDoc->StartUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
                     if(!bSizeFound)
                     {
                         //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
@@ -2256,7 +2281,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
                     ASSERT( pFmt2, "Doc->Insert(notxt) failed." );
 
-                    pDoc->EndUndo(UNDO_INSERT, NULL);
+                    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                     pFmt2->Add(this);
                     if(sName.Len())
                         pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt2, sName);
@@ -2266,11 +2291,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             {
                 ::rtl::OUString sStreamName;
                 (*pStreamName) >>= sStreamName;
-                pDoc->StartUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
                 SwFlyFrmFmt* pFrmFmt = 0;
                 pFrmFmt = pDoc->InsertOLE( aPam, sStreamName, embed::Aspects::MSOLE_CONTENT, &aFrmSet, NULL, NULL );
-                pDoc->EndUndo(UNDO_INSERT, NULL);
+                pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
                 pFrmFmt->Add(this);
                 if(sName.Len())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFrmFmt, sName);

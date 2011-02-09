@@ -184,8 +184,8 @@ class SwFlyInCntFrm : public SwFlyFrm
     Point aRef;  //Relativ zu diesem Point wird die AbsPos berechnet.
     long  nLine; //Zeilenhoehe, Ref.Y() - nLine == Zeilenanfang.
 
-    BOOL bInvalidLayout :1;
-    BOOL bInvalidCntnt  :1;
+    sal_Bool bInvalidLayout :1;
+    sal_Bool bInvalidCntnt  :1;
 
 protected:
     virtual void NotifyBackground( SwPageFrm *pPage,
@@ -212,9 +212,9 @@ public:
     inline void InvalidateCntnt() const;
     inline void ValidateLayout() const;
     inline void ValidateCntnt() const;
-    BOOL IsInvalid() const { return (bInvalidLayout || bInvalidCntnt); }
-    BOOL IsInvalidLayout() const { return bInvalidLayout; }
-    BOOL IsInvalidCntnt() const { return bInvalidCntnt; }
+    sal_Bool IsInvalid() const { return (bInvalidLayout || bInvalidCntnt); }
+    sal_Bool IsInvalidLayout() const { return bInvalidLayout; }
+    sal_Bool IsInvalidCntnt() const { return bInvalidCntnt; }
 
 
     //BP 26.11.93: vgl. tabfrm.hxx, gilt bestimmt aber fuer andere auch...
@@ -239,19 +239,19 @@ public:
 
 inline void SwFlyInCntFrm::InvalidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = TRUE;
+    ((SwFlyInCntFrm*)this)->bInvalidLayout = sal_True;
 }
 inline void SwFlyInCntFrm::InvalidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = TRUE;
+    ((SwFlyInCntFrm*)this)->bInvalidCntnt = sal_True;
 }
 inline void SwFlyInCntFrm::ValidateLayout() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidLayout = FALSE;
+    ((SwFlyInCntFrm*)this)->bInvalidLayout = sal_False;
 }
 inline void SwFlyInCntFrm::ValidateCntnt() const
 {
-    ((SwFlyInCntFrm*)this)->bInvalidCntnt = FALSE;
+    ((SwFlyInCntFrm*)this)->bInvalidCntnt = sal_False;
 }
 
 #endif

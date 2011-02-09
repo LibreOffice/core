@@ -101,7 +101,7 @@ SwFmtFld::~SwFmtFld()
     // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
     if( pType && pType->IsLastDepend() )
     {
-        BOOL bDel = FALSE;
+        sal_Bool bDel = sal_False;
         switch( pType->Which() )
         {
         case RES_USERFLD:
@@ -251,27 +251,27 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     pTxtAttr->Expand();
 }
 
-BOOL SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwFmtFld::GetInfo( SfxPoolItem& rInfo ) const
 {
     const SwTxtNode* pTxtNd;
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() ||
         !pTxtAttr || 0 == ( pTxtNd = pTxtAttr->GetpTxtNode() ) ||
         &pTxtNd->GetNodes() != ((SwAutoFmtGetDocNode&)rInfo).pNodes )
-        return TRUE;
+        return sal_True;
 
     ((SwAutoFmtGetDocNode&)rInfo).pCntntNode = pTxtNd;
-    return FALSE;
+    return sal_False;
 }
 
 
-BOOL SwFmtFld::IsFldInDoc() const
+sal_Bool SwFmtFld::IsFldInDoc() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
             pTxtNd->GetNodes().IsDocNodes();
 }
 
-BOOL SwFmtFld::IsProtect() const
+sal_Bool SwFmtFld::IsProtect() const
 {
     const SwTxtNode* pTxtNd;
     return pTxtAttr && 0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -328,7 +328,7 @@ void SwTxtFld::Expand() const
     if( aNewExpand == m_aExpand )
     {
         // Bei Seitennummernfeldern
-        const USHORT nWhich = pFld->GetTyp()->Which();
+        const sal_uInt16 nWhich = pFld->GetTyp()->Which();
         if( RES_CHAPTERFLD != nWhich && RES_PAGENUMBERFLD != nWhich &&
             RES_REFPAGEGETFLD != nWhich &&
             // --> FME 2005-05-23 #122919# Page count fields to not use aExpand
@@ -368,7 +368,7 @@ void SwTxtFld::CopyFld( SwTxtFld *pDest ) const
     IDocumentFieldsAccess* pDestIDFA = pDest->m_pTxtNode->getIDocumentFieldsAccess();
 
     SwFmtFld& rFmtFld = (SwFmtFld&)pDest->GetFld();
-    const USHORT nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
+    const sal_uInt16 nFldWhich = rFmtFld.GetFld()->GetTyp()->Which();
 
     if( pIDFA != pDestIDFA )
     {

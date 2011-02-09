@@ -41,10 +41,10 @@ class SwFmt;
 
 class SW_DLLPUBLIC SwFmtHeader: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    sal_Bool bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 
 public:
-    SwFmtHeader( BOOL bOn = FALSE );
+    SwFmtHeader( sal_Bool bOn = sal_False );
     SwFmtHeader( SwFrmFmt *pHeaderFmt );
     SwFmtHeader( const SwFmtHeader &rCpy );
     ~SwFmtHeader();
@@ -64,9 +64,14 @@ public:
     const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
           SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
+<<<<<<< local
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
     void RegisterToFormat( SwFmt& rFmt );
+=======
+    sal_Bool IsActive() const { return bActive; }
+    void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
+>>>>>>> other
 };
 
 
@@ -75,10 +80,10 @@ public:
 
 class SW_DLLPUBLIC SwFmtFooter: public SfxPoolItem, public SwClient
 {
-    BOOL bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
+    sal_Bool bActive;       //Nur zur Steuerung (Erzeugung des Inhaltes)
 
 public:
-    SwFmtFooter( BOOL bOn = FALSE );
+    SwFmtFooter( sal_Bool bOn = sal_False );
     SwFmtFooter( SwFrmFmt *pFooterFmt );
     SwFmtFooter( const SwFmtFooter &rCpy );
     ~SwFmtFooter();
@@ -98,20 +103,29 @@ public:
     const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
           SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
+<<<<<<< local
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
     void RegisterToFormat( SwFmt& rFmt );
+=======
+    sal_Bool IsActive() const { return bActive; }
+    void SetActive( sal_Bool bNew = sal_True ) { bActive = bNew; }
+>>>>>>> other
 };
 
+<<<<<<< local
 
 inline const SwFmtHeader &SwAttrSet::GetHeader(BOOL bInP) const
+=======
+inline const SwFmtHeader &SwAttrSet::GetHeader(sal_Bool bInP) const
+>>>>>>> other
     { return (const SwFmtHeader&)Get( RES_HEADER,bInP); }
-inline const SwFmtFooter &SwAttrSet::GetFooter(BOOL bInP) const
+inline const SwFmtFooter &SwAttrSet::GetFooter(sal_Bool bInP) const
     { return (const SwFmtFooter&)Get( RES_FOOTER,bInP); }
 
-inline const SwFmtHeader &SwFmt::GetHeader(BOOL bInP) const
+inline const SwFmtHeader &SwFmt::GetHeader(sal_Bool bInP) const
     { return aSet.GetHeader(bInP); }
-inline const SwFmtFooter &SwFmt::GetFooter(BOOL bInP) const
+inline const SwFmtFooter &SwFmt::GetFooter(sal_Bool bInP) const
     { return aSet.GetFooter(bInP); }
 
 #endif

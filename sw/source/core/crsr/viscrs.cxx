@@ -89,9 +89,9 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 //  Window* pWin = GetShell()->GetWin();
 //
 //  RasterOp eOld( pWin->GetRasterOp() );
-//  BOOL bLCol = pWin->IsLineColor();
+//  sal_Bool bLCol = pWin->IsLineColor();
 //  Color aLCol( pWin->GetLineColor() );
-//  BOOL bFCol = pWin->IsFillColor();
+//  sal_Bool bFCol = pWin->IsFillColor();
 //  Color aFCol( pWin->GetFillColor() );
 //
 //  pWin->SetRasterOp( ROP_XOR );
@@ -112,7 +112,7 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 //
 //     const SwBookmarks& rBkmkTbl = GetShell()->getIDocumentMarkAccess()->getBookmarks();
 //  SwShellCrsr* pCrsr = 0;
-//  for( USHORT n = 0; n < rBkmkTbl.Count(); ++n )
+//  for( sal_uInt16 n = 0; n < rBkmkTbl.Count(); ++n )
 //  {
 //      const SwBookmark& rBkmk = *rBkmkTbl[ n ];
 //      if( rBkmk.IsBookMark() && rBkmk.GetOtherPos() )
@@ -126,7 +126,7 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 //              *pCrsr->GetPoint() = rBkmk.GetPos();
 //          *pCrsr->GetMark() = *rBkmk.GetOtherPos();
 //          pCrsr->FillRects();
-//          for( USHORT i = 0; i < pCrsr->Count(); ++i )
+//          for( sal_uInt16 i = 0; i < pCrsr->Count(); ++i )
 //              aReg -= (*pCrsr)[ i ];
 //
 //          pCrsr->Remove( 0, i );
@@ -174,14 +174,14 @@ MapMode* SwSelPaintRects::pMapMode = 0;
 
 class SwRedlineRects : public SwSelPaintRects
 {
-    USHORT nMode;
-    USHORT nNm;
+    sal_uInt16 nMode;
+    sal_uInt16 nNm;
 
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects();
 
 public:
-    SwRedlineRects( const SwCrsrShell& rSh, USHORT nName, USHORT n )
+    SwRedlineRects( const SwCrsrShell& rSh, sal_uInt16 nName, sal_uInt16 n )
         : SwSelPaintRects( rSh ), nMode( n ), nNm( nName )
     {}
 };
@@ -191,15 +191,15 @@ void SwRedlineRects::Paint( const Rectangle& rRect )
     Window* pWin = GetShell()->GetWin();
 
     RasterOp eOld( pWin->GetRasterOp() );
-    BOOL bLCol = pWin->IsLineColor();
+    sal_Bool bLCol = pWin->IsLineColor();
     Color aLCol( pWin->GetLineColor() );
-    BOOL bFCol = pWin->IsFillColor();
+    sal_Bool bFCol = pWin->IsFillColor();
     Color aFCol( pWin->GetFillColor() );
 
     pWin->SetRasterOp( ROP_XOR );
     Color aCol;
 
-    UINT8 nVal = 0xc8 - ( (nMode / 4) * 16 );
+    sal_uInt8 nVal = 0xc8 - ( (nMode / 4) * 16 );
     switch( nMode % 4 )
     {
     case 0: aCol = RGB_COLORDATA( nVal, nVal, 0xFF );   break;
@@ -225,7 +225,7 @@ void SwRedlineRects::FillRects()
 
     const SwRedlineTbl& rTbl = GetShell()->GetDoc()->GetRedlineTbl();
     SwShellCrsr* pCrsr = 0;
-    for( USHORT n = 0; n < rTbl.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rTbl.Count(); ++n )
     {
         const SwRedline& rRed = *rTbl[ n ];
         if( rRed.HasMark() && (nMode % 4 ) == rRed.GetType() &&
@@ -240,7 +240,7 @@ void SwRedlineRects::FillRects()
                 *pCrsr->GetPoint() = *rRed.GetPoint();
             *pCrsr->GetMark() = *rRed.GetMark();
             pCrsr->FillRects();
-            for( USHORT i = 0; i < pCrsr->Count(); ++i )
+            for( sal_uInt16 i = 0; i < pCrsr->Count(); ++i )
                 aReg -= (*pCrsr)[ i ];
 
             pCrsr->Remove( 0, i );
@@ -253,20 +253,20 @@ void SwRedlineRects::FillRects()
 }
 
 SwRedlineRects* aRedlines[ 10 * 4 ];
-static int bFirstCall = TRUE;
+static int bFirstCall = sal_True;
 
 void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
 {
     if( bFirstCall )
     {
         memset( aRedlines, 0, sizeof(aRedlines));
-        bFirstCall = FALSE;
+        bFirstCall = sal_False;
     }
 
     const SwRedlineTbl& rTbl = pSh->GetDoc()->GetRedlineTbl();
     const SwRedlineAuthorTbl& rAuthorTbl = pSh->GetDoc()->GetRedlineAuthorTbl();
 
-    for( USHORT n = 0; n < rAuthorTbl.Count(); ++n )
+    for( sal_uInt16 n = 0; n < rAuthorTbl.Count(); ++n )
     {
         for( int i = 0; i < 4; ++i  )
         {
@@ -304,7 +304,7 @@ void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 
     if( GetDoc()->GetRedlineTbl().Count() )
     {
         SwRedlineTbl& rRedlineTbl = (SwRedlineTbl&)GetDoc()->GetRedlineTbl();
-        for( USHORT i = 0; i < rRedlineTbl.Count(); ++i )
+        for( sal_uInt16 i = 0; i < rRedlineTbl.Count(); ++i )
             rRedlineTbl[ i ]->HideRects( *GetShell() );
     }
 #endif
@@ -316,11 +316,11 @@ SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
 {
     pCShell->GetWin()->SetCursor( &aTxtCrsr );
     bIsVisible = aTxtCrsr.IsVisible();
-    bIsDragCrsr = FALSE;
+    bIsDragCrsr = sal_False;
     aTxtCrsr.SetWidth( 0 );
 
 #ifdef SW_CRSR_TIMER
-    bTimerOn = TRUE;
+    bTimerOn = sal_True;
     SetTimeout( 50 );       // 50msec Verzoegerung
 #endif
 }
@@ -347,7 +347,7 @@ void SwVisCrsr::Show()
 {
     if( !bIsVisible )
     {
-        bIsVisible = TRUE;
+        bIsVisible = sal_True;
 
         // muss ueberhaupt angezeigt werden ?
         if( pCrsrShell->VisArea().IsOver( pCrsrShell->aCharRect ) )
@@ -375,7 +375,7 @@ void SwVisCrsr::Hide()
 {
     if( bIsVisible )
     {
-        bIsVisible = FALSE;
+        bIsVisible = sal_False;
 
 #ifdef SW_CRSR_TIMER
         if( IsActive() )
@@ -401,13 +401,13 @@ void __EXPORT SwVisCrsr::Timeout()
     }
 }
 
-BOOL SwCrsrShell::ChgCrsrTimerFlag( BOOL bTimerOn )
+sal_Bool SwCrsrShell::ChgCrsrTimerFlag( sal_Bool bTimerOn )
 {
     return pVisCrsr->ChgTimerFlag( bTimerOn );
 }
 
 
-BOOL SwVisCrsr::ChgTimerFlag( BOOL bFlag )
+sal_Bool SwVisCrsr::ChgTimerFlag( sal_Bool bFlag )
 {
     bOld = bTimerOn;
     if( !bFlag && bIsVisible && IsActive() )
@@ -454,7 +454,11 @@ void SwVisCrsr::_SetPosAndShow()
         if( rNode.IsTxtNode() )
         {
             const SwTxtNode& rTNd = *rNode.GetTxtNode();
+<<<<<<< local
             const SwFrm* pFrm = rTNd.getLayoutFrm( pCrsrShell->GetLayout(), 0, 0, FALSE );
+=======
+            const SwFrm* pFrm = rTNd.GetFrm( 0, 0, sal_False );
+>>>>>>> other
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
@@ -500,7 +504,7 @@ void SwVisCrsr::_SetPosAndShow()
             ((SwDrawView*)pCrsrShell->GetDrawView())->SetAnimationEnabled(
                     !pCrsrShell->IsSelection() );
 
-        USHORT nStyle = bIsDragCrsr ? CURSOR_SHADOW : 0;
+        sal_uInt16 nStyle = bIsDragCrsr ? CURSOR_SHADOW : 0;
         if( nStyle != aTxtCrsr.GetStyle() )
         {
             aTxtCrsr.SetStyle( nStyle );
@@ -631,7 +635,7 @@ void SwSelPaintRects::Show()
 
 void SwSelPaintRects::Invalidate( const SwRect& rRect )
 {
-    USHORT nSz = Count();
+    sal_uInt16 nSz = Count();
     if( !nSz )
         return;
 
@@ -811,8 +815,13 @@ short SwShellCrsr::MaxReplaceArived()
         // alte Actions beenden; die Tabellen-Frames werden angelegt und
         // eine SSelection kann erzeugt werden
         SvUShorts aArr;
+<<<<<<< local
         USHORT nActCnt;
         ViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
+=======
+        sal_uInt16 nActCnt;
+        ViewShell *pShell = GetDoc()->GetRootFrm()->GetCurrShell(),
+>>>>>>> other
                   *pSh = pShell;
         do {
             for( nActCnt = 0; pSh->ActionPend(); ++nActCnt )
@@ -824,7 +833,7 @@ short SwShellCrsr::MaxReplaceArived()
             nRet = QueryBox( pDlg, SW_RES( MSG_COMCORE_ASKSEARCH )).Execute();
         }
 
-        for( USHORT n = 0; n < aArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aArr.Count(); ++n )
         {
             for( nActCnt = aArr[n]; nActCnt--; )
                 pSh->StartAction();
@@ -843,7 +852,7 @@ void SwShellCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
     ((SwCrsrShell*)GetShell())->SaveTblBoxCntnt( pPos );
 }
 
-BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
+sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
 {
     return SwCursor::UpDown( bUp, nCnt,
                             &GetPtPos(), GetShell()->GetUpDownX() );
@@ -854,21 +863,21 @@ BOOL SwShellCrsr::UpDown( BOOL bUp, USHORT nCnt )
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
 
-BOOL SwShellCrsr::IsSelOvr( int eFlags )
+sal_Bool SwShellCrsr::IsSelOvr( int eFlags )
 {
     return SwCursor::IsSelOvr( eFlags );
 }
 
 #endif
 
-// TRUE: an die Position kann der Cursor gesetzt werden
-BOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
+// sal_True: an die Position kann der Cursor gesetzt werden
+sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
         GetShell()->GetViewOptions()->IsReadonly() ||
         ( GetShell()->Imp()->GetDrawView() &&
           GetShell()->Imp()->GetDrawView()->GetMarkedObjectList().GetMarkCount() )))
-        return TRUE;
+        return sal_True;
 
     return SwCursor::IsAtValidPos( bPoint );
 }
@@ -920,13 +929,13 @@ void SwShellTableCrsr::FillRects()
 
     SwRegionRects aReg( GetShell()->VisArea() );
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
         const SwStartNode* pSttNd = (*(aSelBoxes.GetData() + n ))->GetSttNd();
         const SwTableNode* pSelTblNd = pSttNd->FindTableNode();
 
         SwNodeIndex aIdx( *pSttNd );
-           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+           SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
 
         // TABLE IN TABLE
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
@@ -935,7 +944,7 @@ void SwShellTableCrsr::FillRects()
         while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
             aIdx = pCurTblNd->EndOfSectionIndex();
-            pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+            pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
             pCurTblNd = pCNd->FindTableNode();
         }
 
@@ -962,19 +971,19 @@ void SwShellTableCrsr::FillRects()
 
 
 // Pruefe, ob sich der SPoint innerhalb der Tabellen-SSelection befindet
-BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
+sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
     // die neuen Rechtecke berechnen
     // JP 16.01.98: wenn der Cursor noch "geparkt" ist nichts machen!!
     if( !aSelBoxes.Count() || bParked ||
         !GetPoint()->nNode.GetIndex()  )
-        return FALSE;
+        return sal_False;
 
     SwNodes& rNds = GetDoc()->GetNodes();
-    for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
+    for( sal_uInt16 n = 0; n < aSelBoxes.Count(); ++n )
     {
         SwNodeIndex aIdx( *(*(aSelBoxes.GetData() + n ))->GetSttNd() );
-        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
+        SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, sal_True, sal_False );
         if( !pCNd )
             continue;
 
@@ -983,23 +992,23 @@ BOOL SwShellTableCrsr::IsInside( const Point& rPt ) const
             pFrm = pFrm->GetUpper();
         ASSERT( pFrm, "Node nicht in einer Tabelle" );
         if( pFrm && pFrm->Frm().IsInside( rPt ) )
-            return TRUE;
+            return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 #ifdef DBG_UTIL
 
 // JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
 //              am sichtbaren Cursor
-BOOL SwShellTableCrsr::IsSelOvr( int eFlags )
+sal_Bool SwShellTableCrsr::IsSelOvr( int eFlags )
 {
     return SwShellCrsr::IsSelOvr( eFlags );
 }
 
 #endif
 
-BOOL SwShellTableCrsr::IsAtValidPos( BOOL bPoint ) const
+sal_Bool SwShellTableCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     return SwShellCrsr::IsAtValidPos( bPoint );
 }

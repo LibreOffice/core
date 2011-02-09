@@ -45,21 +45,28 @@
 using namespace com::sun::star;
 using ::rtl::OUString;
 
+<<<<<<< local
 BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
+=======
+/* -----------------28.11.2002 17:53-----------------
+ *
+ * --------------------------------------------------*/
+sal_Bool SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
+>>>>>>> other
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();
-    const USHORT nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->Count();
     uno::Reference< lang::XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
     if( !xMgr.is() )
-        return FALSE;
+        return sal_False;
     uno::Reference<uno::XInterface> xInstance = xMgr->createInstance( OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ));
     uno::Reference<container::XNameAccess> xDBContext(xInstance, uno::UNO_QUERY) ;
     if(!xDBContext.is())
-        return FALSE;
-    for(USHORT i = 0; i < nSize; ++i)
+        return sal_False;
+    for(sal_uInt16 i = 0; i < nSize; ++i)
     {
         SwFieldType& rFldType = *((*pFldTypes)[i]);
-        USHORT nWhich = rFldType.Which();
+        sal_uInt16 nWhich = rFldType.Which();
         if(IsUsed(rFldType))
         {
             switch(nWhich)
@@ -81,7 +88,7 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
                             catch(uno::Exception const &)
                             {
                                 rUsedDataSource = rData.sDataSource;
-                                return FALSE;
+                                return sal_False;
                             }
                         }
                         pFld = aIter.Next();
@@ -91,7 +98,7 @@ BOOL SwEditShell::IsFieldDataSourceAvailable(String& rUsedDataSource) const
             }
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 

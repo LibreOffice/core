@@ -56,7 +56,7 @@ class SwIntrnlRefLink : public SwBaseLink
 {
     SwDDEFieldType& rFldType;
 public:
-    SwIntrnlRefLink( SwDDEFieldType& rType, USHORT nUpdateType, USHORT nFmt )
+    SwIntrnlRefLink( SwDDEFieldType& rType, sal_uInt16 nUpdateType, sal_uInt16 nFmt )
         : SwBaseLink( nUpdateType, nFmt ),
         rFldType( rType )
     {}
@@ -66,7 +66,7 @@ public:
                                 const uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
-    virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
+    virtual sal_Bool IsInRange( sal_uLong nSttNd, sal_uLong nEndNd, xub_StrLen nStt = 0,
                             xub_StrLen nEnd = STRING_NOTFOUND ) const;
 };
 
@@ -93,7 +93,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
             if( n && 0x0d == sStr.GetChar( n-1 ) )
                 --n;
 
-            BOOL bDel = n != sStr.Len();
+            sal_Bool bDel = n != sStr.Len();
             if( bDel )
                 sStr.Erase( n );
 
@@ -119,7 +119,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         // dann suchen wir uns mal alle Felder. Wird kein gueltiges
         // gefunden, dann Disconnecten wir uns!
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
-        int bCallModify = FALSE;
+        int bCallModify = sal_False;
         rFldType.LockModify();
 
         SwClientIter aIter( rFldType );     // TODO
@@ -137,8 +137,13 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
                         else if( pSh )
                             pSh->StartAction();
                     }
+<<<<<<< local
                     pLast->ModifyNotification( 0, &aUpdateDDE );
                     bCallModify = TRUE;
+=======
+                    pLast->Modify( 0, &aUpdateDDE );
+                    bCallModify = sal_True;
+>>>>>>> other
                 }
             } while( 0 != ( pLast = aIter++ ));
 
@@ -206,7 +211,7 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
     return pNd;
 }
 
-BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
+sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 xub_StrLen nStt, xub_StrLen nEnd ) const
 {
     // hier sollte irgend ein Anchor aus dem normalen Nodes-Array reichen
@@ -225,7 +230,7 @@ BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
                 if( pTblNd->GetNodes().IsDocNodes() &&
                     nSttNd < pTblNd->EndOfSectionIndex() &&
                     nEndNd > pTblNd->GetIndex() )
-                    return TRUE;
+                    return sal_True;
             }
             else if( ((SwFmtFld*)pLast)->GetTxtFld() )
             {
@@ -233,24 +238,24 @@ BOOL SwIntrnlRefLink::IsInRange( ULONG nSttNd, ULONG nEndNd,
                 const SwTxtNode* pNd = pTFld->GetpTxtNode();
                 if( pNd && pNds == &pNd->GetNodes() )
                 {
-                    ULONG nNdPos = pNd->GetIndex();
+                    sal_uLong nNdPos = pNd->GetIndex();
                     if( nSttNd <= nNdPos && nNdPos <= nEndNd &&
                         ( nNdPos != nSttNd || *pTFld->GetStart() >= nStt ) &&
                         ( nNdPos != nEndNd || *pTFld->GetStart() < nEnd ))
-                        return TRUE;
+                        return sal_True;
                 }
             }
         } while( 0 != ( pLast = aIter++ ));
 
-    return FALSE;
+    return sal_False;
 }
 
 SwDDEFieldType::SwDDEFieldType(const String& rName,
-                                const String& rCmd, USHORT nUpdateType )
+                                const String& rCmd, sal_uInt16 nUpdateType )
     : SwFieldType( RES_DDEFLD ),
     aName( rName ), pDoc( 0 ), nRefCnt( 0 )
 {
-    bCRLFFlag = bDeleted = FALSE;
+    bCRLFFlag = bDeleted = sal_False;
     refLink = new SwIntrnlRefLink( *this, nUpdateType, FORMAT_STRING );
     SetCmd( rCmd );
 }
@@ -329,9 +334,9 @@ void SwDDEFieldType::_RefCntChgd()
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
+sal_Bool SwDDEFieldType::QueryValue( uno::Any& rVal, sal_uInt16 nWhichId ) const
 {
-    BYTE nPart = 0;
+    sal_uInt8 nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
@@ -339,7 +344,7 @@ BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
         {
-            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? TRUE : FALSE;
+            sal_Bool bSet = GetType() == sfx2::LINKUPDATE_ALWAYS ? sal_True : sal_False;
             rVal.setValue(&bSet, ::getBooleanCppuType());
         }
         break;
@@ -351,21 +356,21 @@ BOOL SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     }
     if( nPart )
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
-    return TRUE;
+    return sal_True;
 }
 /* -----------------------------28.08.00 16:23--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
+sal_Bool SwDDEFieldType::PutValue( const uno::Any& rVal, sal_uInt16 nWhichId )
 {
-    BYTE nPart = 0;
+    sal_uInt8 nPart = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR2:      nPart = 3; break;
     case FIELD_PROP_PAR4:      nPart = 2; break;
     case FIELD_PROP_SUBTYPE:   nPart = 1; break;
     case FIELD_PROP_BOOL1:
-        SetType( static_cast<USHORT>(*(sal_Bool*)rVal.getValue() ?
+        SetType( static_cast<sal_uInt16>(*(sal_Bool*)rVal.getValue() ?
                                      sfx2::LINKUPDATE_ALWAYS :
                                      sfx2::LINKUPDATE_ONCALL ) );
         break;
@@ -387,7 +392,7 @@ BOOL SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
         sCmd.SetToken( nPart-1, sfx2::cTokenSeperator, ::GetString( rVal, sTmp ) );
         SetCmd( sCmd );
     }
-    return TRUE;
+    return sal_True;
 }
 /* ---------------------------------------------------------------------------
 

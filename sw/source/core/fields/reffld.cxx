@@ -75,7 +75,7 @@ using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::lang;
 using ::rtl::OUString;
 
-extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
+extern void InsertSort( SvUShorts& rArr, sal_uInt16 nIdx, sal_uInt16* pInsPos = 0 );
 
 void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 {
@@ -101,11 +101,16 @@ void lcl_GetLayTree( const SwFrm* pFrm, SvPtrarr& rArr )
 }
 
 
-BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
-                    const SwTxtNode& rBehindNd, USHORT nSttPos )
+sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
+                    const SwTxtNode& rBehindNd, sal_uInt16 nSttPos )
 {
+<<<<<<< local
     const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.getLayoutFrm( rMyNd.GetDoc()->GetCurrentLayout(), 0,0,FALSE),
                    *pFrm = (SwTxtFrm*)rBehindNd.getLayoutFrm( rBehindNd.GetDoc()->GetCurrentLayout(), 0,0,FALSE);
+=======
+    const SwTxtFrm *pMyFrm = (SwTxtFrm*)rMyNd.GetFrm(0,0,sal_False),
+                   *pFrm = (SwTxtFrm*)rBehindNd.GetFrm(0,0,sal_False);
+>>>>>>> other
 
     while( pFrm && !pFrm->IsInside( nSttPos ) )
         pFrm = (SwTxtFrm*)pFrm->GetFollow();
@@ -113,15 +118,15 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
         pMyFrm = (SwTxtFrm*)pMyFrm->GetFollow();
 
     if( !pFrm || !pMyFrm || pFrm == pMyFrm )
-        return FALSE;
+        return sal_False;
 
     SvPtrarr aRefArr( 10, 10 ), aArr( 10, 10 );
     ::lcl_GetLayTree( pFrm, aRefArr );
     ::lcl_GetLayTree( pMyFrm, aArr );
 
-    USHORT nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
-    BOOL bVert = FALSE;
-    BOOL bR2L = FALSE;
+    sal_uInt16 nRefCnt = aRefArr.Count() - 1, nCnt = aArr.Count() - 1;
+    sal_Bool bVert = sal_False;
+    sal_Bool bR2L = sal_False;
 
     // solange bis ein Frame ungleich ist ?
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
@@ -145,7 +150,7 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
     const SwFrm* pFldFrm = (const SwFrm*)aArr[ nCnt ];
 
     // unterschiedliche Frames, dann ueberpruefe deren Y-/X-Position
-    BOOL bRefIsLower = FALSE;
+    sal_Bool bRefIsLower = sal_False;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {
@@ -210,8 +215,8 @@ BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
 
 
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
-                              const String& rSetRef, USHORT nSubTyp,
-                              USHORT nSeqenceNo, ULONG nFmt )
+                              const String& rSetRef, sal_uInt16 nSubTyp,
+                              sal_uInt16 nSeqenceNo, sal_uLong nFmt )
     : SwField( pFldType, nFmt ),
       sSetRefName( rSetRef ),
       nSubType( nSubTyp ),
@@ -228,12 +233,12 @@ String SwGetRefField::GetDescription() const
     return SW_RES(STR_REFERENCE);
 }
 
-USHORT SwGetRefField::GetSubType() const
+sal_uInt16 SwGetRefField::GetSubType() const
 {
     return nSubType;
 }
 
-void SwGetRefField::SetSubType( USHORT n )
+void SwGetRefField::SetSubType( sal_uInt16 n )
 {
     nSubType = n;
 }
@@ -254,7 +259,7 @@ bool SwGetRefField::IsRefToNumItemCrossRefBookmark() const
 const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
 {
     SwDoc* pDoc = dynamic_cast<SwGetRefFieldType*>(GetTyp())->GetDoc();
-    USHORT nDummy = USHRT_MAX;
+    sal_uInt16 nDummy = USHRT_MAX;
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 // <--
@@ -287,8 +292,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     sTxt.Erase();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-    USHORT nStt = USHRT_MAX;
-    USHORT nEnd = USHRT_MAX;
+    sal_uInt16 nStt = USHRT_MAX;
+    sal_uInt16 nEnd = USHRT_MAX;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor( pDoc, sSetRefName,
                                         nSubType, nSeqNo, &nStt, &nEnd );
     if ( !pTxtNd )
@@ -355,7 +360,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
             case REF_ENDNOTE:
                 {
                     // die Nummer oder den NumString besorgen
-                    USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+                    sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
                     SwTxtFtn* pFtnIdx;
                     for( n = 0; n < nFtnCnt; ++n )
                         if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
@@ -391,14 +396,18 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_PAGE:
     case REF_PAGE_PGDESC:
         {
+<<<<<<< local
             const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout(), 0,0,FALSE),
+=======
+            const SwTxtFrm* pFrm = (SwTxtFrm*)pTxtNd->GetFrm(0,0,sal_False),
+>>>>>>> other
                         *pSave = pFrm;
             while( pFrm && !pFrm->IsInside( nStt ) )
                 pFrm = (SwTxtFrm*)pFrm->GetFollow();
 
             if( pFrm || 0 != ( pFrm = pSave ))
             {
-                USHORT nPageNo = pFrm->GetVirtPageNum();
+                sal_uInt16 nPageNo = pFrm->GetVirtPageNum();
                 const SwPageFrm *pPage;
                 if( REF_PAGE_PGDESC == GetFormat() &&
                     0 != ( pPage = pFrm->FindPageFrm() ) &&
@@ -419,7 +428,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 SwChapterFieldType aFldTyp;
                 SwChapterField aFld( &aFldTyp, 0 );
                 aFld.SetLevel( MAXLEVEL - 1 );
-                aFld.ChangeExpansion( pFrm, pTxtNd, TRUE );
+                aFld.ChangeExpansion( pFrm, pTxtNd, sal_True );
                 sTxt = aFld.GetNumber();
             }
         }
@@ -576,7 +585,14 @@ String SwGetRefField::GetPar2() const
     return Expand();
 }
 
+<<<<<<< local
 BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
+=======
+/*-----------------06.03.98 13:34-------------------
+
+--------------------------------------------------*/
+sal_Bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
+>>>>>>> other
 {
     switch( nWhichId )
     {
@@ -645,10 +661,15 @@ BOOL SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 
+<<<<<<< local
 BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
+=======
+--------------------------------------------------*/
+sal_Bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
+>>>>>>> other
 {
     String sTmp;
     switch( nWhichId )
@@ -672,7 +693,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
             // <--
-            default: return FALSE;
+            default: return sal_False;
             }
             SetFormat(nPart);
         }
@@ -720,7 +741,7 @@ BOOL SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 
 void SwGetRefField::ConvertProgrammaticToUIName()
@@ -733,7 +754,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
-            USHORT nResId = USHRT_MAX;
+            sal_uInt16 nResId = USHRT_MAX;
             switch( nPoolId )
             {
                 case RES_POOLCOLL_LABEL_ABB:
@@ -796,8 +817,8 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
 }
 
 SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
-                                        USHORT nSubType, USHORT nSeqNo,
-                                        USHORT* pStt, USHORT* pEnd )
+                                        sal_uInt16 nSubType, sal_uInt16 nSeqNo,
+                                        sal_uInt16* pStt, sal_uInt16* pEnd )
 {
     ASSERT( pStt, "warum wird keine StartPos abgefragt?" );
 
@@ -849,7 +870,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
                 const ::sw::mark::IMark* pBkmk = ppMark->get();
                 const SwPosition* pPos = &pBkmk->GetMarkStart();
 
-                pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
+                pTxtNd = pPos->nNode.GetNode().GetTxtNode();
                 *pStt = pPos->nContent.GetIndex();
                 if(pEnd)
                 {
@@ -880,7 +901,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const String& rRefMark,
     case REF_FOOTNOTE:
     case REF_ENDNOTE:
         {
-            USHORT n, nFtnCnt = pDoc->GetFtnIdxs().Count();
+            sal_uInt16 n, nFtnCnt = pDoc->GetFtnIdxs().Count();
             SwTxtFtn* pFtnIdx;
             for( n = 0; n < nFtnCnt; ++n )
                 if( nSeqNo == (pFtnIdx = pDoc->GetFtnIdxs()[ n ])->GetSeqRefNo() )
@@ -910,24 +931,24 @@ struct _RefIdsMap
     String aName;
     SvUShortsSort aIds, aDstIds, aIdsMap;
     SvUShorts aMap;
-    BOOL bInit;
+    sal_Bool bInit;
 
     _RefIdsMap( const String& rName )
         : aName( rName ), aIds( 16, 16 ), aIdsMap( 16, 16 ), aMap( 16, 16 ),
-        bInit( FALSE )
+        bInit( sal_False )
     {}
 
     void Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                    BOOL bField = TRUE );
+                    sal_Bool bField = sal_True );
 
-    BOOL IsInit() const { return bInit; }
+    sal_Bool IsInit() const { return bInit; }
 };
 
 SV_DECL_PTRARR_DEL( _RefIdsMaps, _RefIdsMap*, 5, 5 )
 SV_IMPL_PTRARR( _RefIdsMaps, _RefIdsMap* )
 
 void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
-                        BOOL bField )
+                        sal_Bool bField )
 {
 
     if( !bInit )
@@ -957,19 +978,19 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
         }
         else
         {
-            USHORT n;
+            sal_uInt16 n;
 
             for( n = rDestDoc.GetFtnIdxs().Count(); n; )
                 aIds.Insert( rDestDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
             for( n = rDoc.GetFtnIdxs().Count(); n; )
                 aDstIds.Insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
         }
-        bInit = TRUE;
+        bInit = sal_True;
     }
 
     // dann teste mal, ob die Nummer schon vergeben ist
     // oder ob eine neue bestimmt werden muss.
-    USHORT nPos, nSeqNo = rFld.GetSeqNo();
+    sal_uInt16 nPos, nSeqNo = rFld.GetSeqNo();
     if( aIds.Seek_Entry( nSeqNo ) && aDstIds.Seek_Entry( nSeqNo ))
     {
         // ist schon vergeben, also muss eine neue
@@ -978,7 +999,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             rFld.SetSeqNo( aMap[ nPos ] );
         else
         {
-            USHORT n;
+            sal_uInt16 n;
 
             for( n = 0; n < aIds.Count(); ++n )
                 if( n != aIds[ n ] )
@@ -1007,7 +1028,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
             else
             {
                 SwTxtFtn* pFtnIdx;
-                for( USHORT i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
+                for( sal_uInt16 i = 0, nCnt = rDoc.GetFtnIdxs().Count(); i < nCnt; ++i )
                     if( nSeqNo == (pFtnIdx = rDoc.GetFtnIdxs()[ i ])->GetSeqRefNo() )
                     {
                         pFtnIdx->SetSeqNo( n );
@@ -1045,7 +1066,7 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
             case REF_SEQUENCEFLD:
                 {
                     _RefIdsMap* pMap = 0;
-                    for( USHORT n = aFldMap.Count(); n; )
+                    for( sal_uInt16 n = aFldMap.Count(); n; )
                         if( aFldMap[ --n ]->aName == rRefFld.GetSetRefName() )
                         {
                             pMap = aFldMap[ n ];
@@ -1057,13 +1078,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                         aFldMap.C40_INSERT( _RefIdsMap, pMap, aFldMap.Count() );
                     }
 
-                    pMap->Check( *pDoc, rDestDoc, rRefFld, TRUE );
+                    pMap->Check( *pDoc, rDestDoc, rRefFld, sal_True );
                 }
                 break;
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
-                aFntMap.Check( *pDoc, rDestDoc, rRefFld, FALSE );
+                aFntMap.Check( *pDoc, rDestDoc, rRefFld, sal_False );
                 break;
             }
         }

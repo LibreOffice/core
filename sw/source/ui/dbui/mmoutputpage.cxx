@@ -105,7 +105,7 @@ using namespace ::com::sun::star::uno;
 /*-- 01.07.2004 16:47:49---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-String lcl_GetExtensionForDocType(ULONG nDocType)
+String lcl_GetExtensionForDocType(sal_uLong nDocType)
 {
     String sExtension;
     switch( nDocType )
@@ -507,7 +507,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
         &m_aSendAllRB, &m_aSendDocumentsPB,
         0
     };
-    SetUpdateMode(TRUE);
+    SetUpdateMode(sal_True);
     Control** pControl = aControls;
     do
     {
@@ -603,7 +603,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             String sAttach( m_sDefaultAttachmentST );
             sAttach += '.';
             sAttach += lcl_GetExtensionForDocType(
-                        (ULONG)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos()));
+                        (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos()));
             m_aAttachmentED.SetText( sAttach );
 
         }
@@ -649,7 +649,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
     }
     m_aFromRB.GetClickHdl().Call(m_aFromRB.IsChecked() ? &m_aFromRB : 0);
 
-    SetUpdateMode(FALSE);
+    SetUpdateMode(sal_False);
     return 0;
 }
 /*-- 22.08.2005 12:15:10---------------------------------------------------
@@ -714,9 +714,9 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
 
             rConfigItem.AddSavedDocument(
                     aURL.GetMainURL(INetURLObject::DECODE_TO_IURI));
-            pButton->Enable(FALSE);
+            pButton->Enable(sal_False);
             m_pWizard->enableButtons(WZB_FINISH, sal_True);
-            pButton->Enable(FALSE);
+            pButton->Enable(sal_False);
 
         }
     }
@@ -853,7 +853,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             aSaveMonitor.aPrintInfo.SetText(sStat);
 
             //now extract a document from the target document
-            SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+            // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+            SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
 //            pTempFrame->GetFrame().Appear();
@@ -869,7 +870,7 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
                     sTargetTempURL, aOpt, sal_True );
 
             pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-                    (USHORT)rInfo.nStartPageInTarget, (USHORT)rInfo.nEndPageInTarget );
+                    (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
             pTargetView->GetWrtShell().EndAction();
             //then save it
             String sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
@@ -987,7 +988,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrintHdl_Impl, PushButton*, EMPTYARG)
         if(nEnd > rConfigItem.GetMergedDocumentCount())
             nEnd = rConfigItem.GetMergedDocumentCount();
     }
-    rConfigItem.SetPrintRange( (USHORT)nBegin, (USHORT)nEnd );
+    rConfigItem.SetPrintRange( (sal_uInt16)nBegin, (sal_uInt16)nEnd );
     SwDocMergeInfo& rStartInfo = rConfigItem.GetDocumentMergeInfo(nBegin);
     SwDocMergeInfo& rEndInfo = rConfigItem.GetDocumentMergeInfo(nEnd - 1);
 
@@ -1040,7 +1041,7 @@ IMPL_LINK(SwMailMergeOutputPage, PrinterSetupHdl_Impl, PushButton*, pButton)
   -----------------------------------------------------------------------*/
 IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
 {
-    ULONG nDocType = (ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
+    sal_uLong nDocType = (sal_uLong)pBox->GetEntryData(pBox->GetSelectEntryPos());
     sal_Bool bEnable = MM_DOCTYPE_HTML != nDocType && MM_DOCTYPE_TEXT != nDocType;
     m_aSendAsPB.Enable( bEnable );
     m_aAttachmentFT.Enable( bEnable );
@@ -1094,7 +1095,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
             !SwMailMergeHelper::CheckMailAddress(rConfigItem.GetMailAddress()) )
     {
         QueryBox aQuery(pButton, WB_YES_NO_CANCEL, m_sConfigureMail);
-        USHORT nRet = aQuery.Execute();
+        sal_uInt16 nRet = aQuery.Execute();
         if(RET_YES == nRet )
         {
             SfxAllItemSet aSet(pTargetView->GetPool());
@@ -1126,7 +1127,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     rtl_TextEncoding eEncoding = ::gsl_getSystemTextEncoding();
     SfxFilterContainer* pFilterContainer = SwDocShell::Factory().GetFilterContainer();
     const SfxFilter *pSfxFlt = 0;
-    ULONG nDocType = (ULONG)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos());
+    sal_uLong nDocType = (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos());
     String sExtension = lcl_GetExtensionForDocType(nDocType);
     switch( nDocType )
     {
@@ -1216,7 +1217,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 ++nTokenCount;
             }
             sAttach.SetToken( nTokenCount - 1, '.', lcl_GetExtensionForDocType(
-                     (ULONG)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos())));
+                     (sal_uLong)m_aSendAsLB.GetEntryData(m_aSendAsLB.GetSelectEntryPos())));
             m_aAttachmentED.SetText(sAttach);
         }
         else
@@ -1234,8 +1235,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     if(MM_DOCTYPE_TEXT == nDocType)
     {
         SwAsciiOptions aOpt;
-        USHORT nAppScriptType = GetI18NScriptTypeOfLanguage( (USHORT)GetAppLanguage() );
-        USHORT nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
+        sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
+        sal_uInt16 nWhich = GetWhichOfScript( RES_CHRATR_LANGUAGE, nAppScriptType);
         aOpt.SetLanguage( ((SvxLanguageItem&)pTargetView->GetWrtShell().
                             GetDefault( nWhich )).GetLanguage());
         aOpt.SetParaFlags( LINEEND_CR );
@@ -1271,7 +1272,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
 
         //now extract a document from the target document
-        SfxObjectShellRef xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
+        // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+        SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
 //        pTempFrame->GetFrame().Appear();
@@ -1286,7 +1288,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         pTempView->GetDocShell()->LoadStylesFromFile(
                 sTargetTempURL, aOpt, sal_True );
         pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
-                (USHORT)rInfo.nStartPageInTarget, (USHORT)rInfo.nEndPageInTarget );
+                (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
         pTargetView->GetWrtShell().EndAction();
 
         //then save it
@@ -1333,7 +1335,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         {
             {
                 //read in the temporary file and use it as mail body
-                SfxMedium aMedium( aName.GetValue(),    STREAM_READ, TRUE);
+                SfxMedium aMedium( aName.GetValue(),    STREAM_READ, sal_True);
                 SvStream* pInStream = aMedium.GetInStream();
                 if(pInStream)
                     pInStream->SetStreamCharSet( eEncoding );

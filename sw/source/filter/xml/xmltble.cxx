@@ -637,7 +637,7 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                 pColumn->SetWidthOpt( nColAbsWidth, sal_False );
             }
 
-            ULONG nExpPos = 0;
+            sal_uLong nExpPos = 0;
             if( rExpCols.Seek_Entry( pColumn, &nExpPos ) )
             {
                 pColumn->SetStyleName(
@@ -1025,7 +1025,7 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
 
 void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
-                                    USHORT nHeaderRows )
+                                    sal_uInt16 nHeaderRows )
 {
     ASSERT( pTableLines && pTableLines->Count(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );

@@ -123,22 +123,22 @@ void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
 
 // weiterleiten an das TextAttribut
-BOOL SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
-    return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : FALSE;
+    return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : sal_False;
 }
-BOOL SwFmtCharFmt::QueryValue( uno::Any& rVal, BYTE ) const
+sal_Bool SwFmtCharFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     String sCharFmtName;
     if(GetCharFmt())
         SwStyleNameMapper::FillProgName(GetCharFmt()->GetName(), sCharFmtName,  nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
     rVal <<= OUString( sCharFmtName );
-    return TRUE;
+    return sal_True;
 }
-BOOL SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
+sal_Bool SwFmtCharFmt::PutValue( const uno::Any& , sal_uInt8   )
 {
     DBG_ERROR("Zeichenvorlage kann mit PutValue nicht gesetzt werden!");
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -150,7 +150,7 @@ BOOL SwFmtCharFmt::PutValue( const uno::Any& , BYTE   )
 |*
 *************************************************************************/
 
-SwFmtAutoFmt::SwFmtAutoFmt( USHORT nInitWhich )
+SwFmtAutoFmt::SwFmtAutoFmt( sal_uInt16 nInitWhich )
     : SfxPoolItem( nInitWhich )
 {
 }
@@ -175,17 +175,17 @@ SfxPoolItem* SwFmtAutoFmt::Clone( SfxItemPool* ) const
     return new SwFmtAutoFmt( *this );
 }
 
-BOOL SwFmtAutoFmt::QueryValue( uno::Any& rVal, BYTE ) const
+sal_Bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
     String sCharFmtName = StylePool::nameOf( mpHandle );
     rVal <<= OUString( sCharFmtName );
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SwFmtAutoFmt::PutValue( const uno::Any& , BYTE )
+sal_Bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 {
     //the format is not renameable via API
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
@@ -242,7 +242,7 @@ SwFmtINetFmt::~SwFmtINetFmt()
 int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    BOOL bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
+    sal_Bool bRet = SfxPoolItem::operator==( (SfxPoolItem&) rAttr )
                 && aURL == ((SwFmtINetFmt&)rAttr).aURL
                 && aName == ((SwFmtINetFmt&)rAttr).aName
                 && aTargetFrame == ((SwFmtINetFmt&)rAttr).aTargetFrame
@@ -252,7 +252,7 @@ int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
                 && nVisitedId == ((SwFmtINetFmt&)rAttr).nVisitedId;
 
     if( !bRet )
-        return FALSE;
+        return sal_False;
 
     const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).pMacroTbl;
     if( !pMacroTbl )
@@ -265,19 +265,19 @@ int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 
     // Anzahl unterschiedlich => auf jeden Fall ungleich
     if( rOwn.Count() != rOther.Count() )
-        return FALSE;
+        return sal_False;
 
     // einzeln vergleichen; wegen Performance ist die Reihenfolge wichtig
-    for( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
     {
         const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
         const SvxMacro *pOtherMac = rOther.GetObject(nNo);
         if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
                 pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
                 pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return FALSE;
+            return sal_False;
     }
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -304,7 +304,7 @@ void SwFmtINetFmt::SetMacroTbl( const SvxMacroTableDtor* pNewTbl )
 
 
 
-void SwFmtINetFmt::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
+void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     if( !pMacroTbl )
         pMacroTbl = new SvxMacroTableDtor;
@@ -321,7 +321,7 @@ void SwFmtINetFmt::SetMacro( USHORT nEvent, const SvxMacro& rMacro )
 
 
 
-const SvxMacro* SwFmtINetFmt::GetMacro( USHORT nEvent ) const
+const SvxMacro* SwFmtINetFmt::GetMacro( sal_uInt16 nEvent ) const
 {
     const SvxMacro* pRet = 0;
     if( pMacroTbl && pMacroTbl->IsKeyValid( nEvent ) )
@@ -331,9 +331,9 @@ const SvxMacro* SwFmtINetFmt::GetMacro( USHORT nEvent ) const
 
 
 
-BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     XubString sVal;
     nMemberId &= ~CONVERT_TWIPS;
     switch(nMemberId)
@@ -379,9 +379,9 @@ BOOL SwFmtINetFmt::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     rVal <<= OUString(sVal);
     return bRet;
 }
-BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
+sal_Bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     nMemberId &= ~CONVERT_TWIPS;
 
     // all properties except HyperlinkEvents are of type string, hence
@@ -403,14 +403,14 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
         else
         {
             // wrong type!
-            bRet = FALSE;
+            bRet = sal_False;
         }
     }
     else
     {
         // all string properties:
         if(rVal.getValueType() != ::getCppuType((rtl::OUString*)0))
-            return FALSE;
+            return sal_False;
         XubString sVal = *(rtl::OUString*)rVal.getValue();
         switch(nMemberId)
         {
@@ -441,7 +441,7 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
             }
             break;
             default:
-                bRet = FALSE;
+                bRet = sal_False;
         }
     }
     return bRet;
@@ -503,10 +503,10 @@ SfxPoolItem* SwFmtRuby::Clone( SfxItemPool* ) const
     return new SwFmtRuby( *this );
 }
 
-BOOL SwFmtRuby::QueryValue( uno::Any& rVal,
-                            BYTE nMemberId ) const
+sal_Bool SwFmtRuby::QueryValue( uno::Any& rVal,
+                            sal_uInt8 nMemberId ) const
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -526,14 +526,14 @@ BOOL SwFmtRuby::QueryValue( uno::Any& rVal,
         }
         break;
         default:
-            bRet = FALSE;
+            bRet = sal_False;
     }
     return bRet;
 }
-BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
-                            BYTE nMemberId  )
+sal_Bool SwFmtRuby::PutValue( const uno::Any& rVal,
+                            sal_uInt8 nMemberId  )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     nMemberId &= ~CONVERT_TWIPS;
     switch( nMemberId )
     {
@@ -573,7 +573,7 @@ BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
         }
         break;
         default:
-            bRet = FALSE;
+            bRet = sal_False;
     }
     return bRet;
 }
@@ -583,12 +583,12 @@ BOOL SwFmtRuby::PutValue( const uno::Any& rVal,
  class SwFmtMeta
  ************************************************************************/
 
-SwFmtMeta * SwFmtMeta::CreatePoolDefault(const USHORT i_nWhich)
+SwFmtMeta * SwFmtMeta::CreatePoolDefault(const sal_uInt16 i_nWhich)
 {
     return new SwFmtMeta(i_nWhich);
 }
 
-SwFmtMeta::SwFmtMeta(const USHORT i_nWhich)
+SwFmtMeta::SwFmtMeta(const sal_uInt16 i_nWhich)
     : SfxPoolItem( i_nWhich )
     , m_pMeta()
     , m_pTxtAttr( 0 )
@@ -598,7 +598,7 @@ SwFmtMeta::SwFmtMeta(const USHORT i_nWhich)
 }
 
 SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
-                        const USHORT i_nWhich )
+                        const sal_uInt16 i_nWhich )
     : SfxPoolItem( i_nWhich )
     , m_pMeta( i_pMeta )
     , m_pTxtAttr( 0 )

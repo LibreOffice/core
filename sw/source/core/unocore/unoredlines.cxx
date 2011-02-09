@@ -75,7 +75,7 @@ uno::Any SwXRedlines::getByIndex(sal_Int32 nIndex)
     uno::Any aRet;
     if(rRedTbl.Count() > nIndex && nIndex >= 0)
     {
-        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((USHORT)nIndex), *GetDoc() );
+        uno::Reference <beans::XPropertySet> xRet = SwXRedlines::GetObject( *rRedTbl.GetObject((sal_uInt16)nIndex), *GetDoc() );
         aRet <<= xRet;
     }
     else
@@ -111,11 +111,16 @@ OUString SwXRedlines::getImplementationName(void) throw( uno::RuntimeException )
     return C2U("SwXRedlines");
 }
 
+<<<<<<< local
 BOOL SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+=======
+  -----------------------------------------------------------------------*/
+sal_Bool SwXRedlines::supportsService(const rtl::OUString& /*ServiceName*/)
+>>>>>>> other
     throw( uno::RuntimeException )
 {
     DBG_ERROR("not implemented");
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlines::getSupportedServiceNames(void)
@@ -152,7 +157,12 @@ SwXRedlineEnumeration::~SwXRedlineEnumeration()
 {
 }
 
+<<<<<<< local
 BOOL SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+=======
+  -----------------------------------------------------------------------*/
+sal_Bool SwXRedlineEnumeration::hasMoreElements(void) throw( uno::RuntimeException )
+>>>>>>> other
 {
     if(!pDoc)
         throw uno::RuntimeException();
@@ -178,9 +188,14 @@ rtl::OUString SwXRedlineEnumeration::getImplementationName(void) throw( uno::Run
     return C2U("SwXRedlineEnumeration");
 }
 
+<<<<<<< local
 BOOL SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+=======
+  -----------------------------------------------------------------------*/
+sal_Bool SwXRedlineEnumeration::supportsService(const rtl::OUString& /*ServiceName*/) throw( uno::RuntimeException )
+>>>>>>> other
 {
-    return FALSE;
+    return sal_False;
 }
 
 uno::Sequence< OUString > SwXRedlineEnumeration::getSupportedServiceNames(void) throw( uno::RuntimeException )

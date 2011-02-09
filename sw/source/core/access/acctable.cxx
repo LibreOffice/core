@@ -1468,7 +1468,7 @@ void SAL_CALL SwAccessibleTable::selectAccessibleChild(
         const SwTableLine* pUpper = pBox->GetUpper();
         while( pUpper->GetUpper() != NULL )
             pUpper = pUpper->GetUpper()->GetUpper();
-        USHORT nPos =
+        sal_uInt16 nPos =
             pSelectedTable->GetTable().GetTabLines().GetPos( pUpper );
         if( nPos == USHRT_MAX )
             pSelectedTable = NULL;

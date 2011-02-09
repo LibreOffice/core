@@ -32,9 +32,9 @@
 
 class SwUnoCrsr : public virtual SwCursor, public SwModify
 {
-    BOOL bRemainInSection : 1;
-    BOOL bSkipOverHiddenSections : 1;
-    BOOL bSkipOverProtectSections : 1;
+    sal_Bool bRemainInSection : 1;
+    sal_Bool bSkipOverHiddenSections : 1;
+    sal_Bool bSkipOverProtectSections : 1;
 
 public:
     SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing = 0 );
@@ -43,7 +43,7 @@ public:
 protected:
 
     virtual const SwCntntFrm* DoSetBidiLevelLeftRight(
-        BOOL & io_rbLeft, BOOL bVisualAllowed, BOOL bInsertCrsr);
+        sal_Bool & io_rbLeft, sal_Bool bVisualAllowed, sal_Bool bInsertCrsr);
     virtual void DoSetBidiLevelUpDown();
 
 public:
@@ -52,24 +52,24 @@ public:
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual BOOL IsSelOvr( int eFlags =
+    virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));
 
     virtual bool IsReadOnlyAvailable() const;
 
-    BOOL IsRemainInSection() const          { return bRemainInSection; }
-    void SetRemainInSection( BOOL bFlag )   { bRemainInSection = bFlag; }
+    sal_Bool IsRemainInSection() const          { return bRemainInSection; }
+    void SetRemainInSection( sal_Bool bFlag )   { bRemainInSection = bFlag; }
 
-    virtual BOOL IsSkipOverProtectSections() const
+    virtual sal_Bool IsSkipOverProtectSections() const
                                     { return bSkipOverProtectSections; }
-    void SetSkipOverProtectSections( BOOL bFlag )
+    void SetSkipOverProtectSections( sal_Bool bFlag )
                                     { bSkipOverProtectSections = bFlag; }
 
-    virtual BOOL IsSkipOverHiddenSections() const
+    virtual sal_Bool IsSkipOverHiddenSections() const
                                     { return bSkipOverHiddenSections; }
-    void SetSkipOverHiddenSections( BOOL bFlag )
+    void SetSkipOverHiddenSections( sal_Bool bFlag )
                                     { bSkipOverHiddenSections = bFlag; }
 
     // make copy of cursor
@@ -97,7 +97,7 @@ public:
 
     // gibt es eine Selection vom Content in die Tabelle
     // Return Wert gibt an, ob der Crsr auf der alten Position verbleibt
-    virtual BOOL IsSelOvr( int eFlags =
+    virtual sal_Bool IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                   nsSwCursorSelOverFlags::SELOVER_CHANGEPOS ));

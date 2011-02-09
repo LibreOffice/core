@@ -47,7 +47,7 @@ class SwTableRep;
 struct TColumn
 {
     SwTwips nWidth;
-    BOOL    bVisible;
+    sal_Bool    bVisible;
 };
 
 class SwFormatTablePage : public SfxTabPage
@@ -84,10 +84,10 @@ class SwFormatTablePage : public SfxTabPage
     SwTableRep*     pTblData;
     SwTwips         nSaveWidth;
     SwTwips         nMinTableWidth;
-    USHORT          nOldAlign;
-    BOOL            bModified;
-    BOOL            bFull:1;
-    BOOL            bHtmlMode : 1;
+    sal_uInt16          nOldAlign;
+    sal_Bool            bModified;
+    sal_Bool            bFull:1;
+    sal_Bool            bHtmlMode : 1;
 
     void        Init();
     void        ModifyHdl( Edit* pEdit );
@@ -104,7 +104,7 @@ public:
     SwFormatTablePage( Window* pParent, const SfxItemSet& rSet );
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -143,24 +143,24 @@ class SwTableColumnPage : public SfxTabPage
     FixedText*      pTextArr[MET_FIELDS];
     SwTwips         nTableWidth;
     SwTwips         nMinWidth;
-    USHORT          nNoOfCols;
-    USHORT          nNoOfVisibleCols;
+    sal_uInt16          nNoOfCols;
+    sal_uInt16          nNoOfVisibleCols;
     //Breite merken, wenn auf autom. Ausrichtung gestellt wird
-    USHORT          aValueTbl[MET_FIELDS];//primaere Zuordnung der MetricFields
-    BOOL            bModified:1;
-    BOOL            bModifyTbl:1;
-    BOOL            bPercentMode:1;
+    sal_uInt16          aValueTbl[MET_FIELDS];//primaere Zuordnung der MetricFields
+    sal_Bool            bModified:1;
+    sal_Bool            bModifyTbl:1;
+    sal_Bool            bPercentMode:1;
 
-    void        Init(BOOL bWeb);
+    void        Init(sal_Bool bWeb);
     DECL_LINK( AutoClickHdl, CheckBox * );
     void        ModifyHdl( PercentField* pEdit );
     DECL_LINK( UpHdl, PercentField * );
     DECL_LINK( DownHdl, PercentField * );
     DECL_LINK( LoseFocusHdl, PercentField * );
     DECL_LINK( ModeHdl, CheckBox * );
-    void        UpdateCols( USHORT nAktPos );
-    SwTwips     GetVisibleWidth(USHORT nPos);
-    void        SetVisibleWidth(USHORT nPos, SwTwips nNewWidth);
+    void        UpdateCols( sal_uInt16 nAktPos );
+    SwTwips     GetVisibleWidth(sal_uInt16 nPos);
+    void        SetVisibleWidth(sal_uInt16 nPos, SwTwips nNewWidth);
 
     using TabPage::ActivatePage;
     using TabPage::DeactivatePage;
@@ -170,7 +170,7 @@ public:
     ~SwTableColumnPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
     virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
@@ -210,8 +210,8 @@ class SwTextFlowPage : public SfxTabPage
 
     SwWrtShell*     pShell;
 
-    BOOL            bPageBreak;
-    BOOL            bHtmlMode;
+    sal_Bool            bPageBreak;
+    sal_Bool            bHtmlMode;
 
 
     DECL_LINK( PageBreakHdl_Impl, CheckBox* );
@@ -228,7 +228,7 @@ class SwTextFlowPage : public SfxTabPage
 
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet);
-    virtual BOOL        FillItemSet( SfxItemSet& rSet );
+    virtual sal_Bool        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetShell(SwWrtShell* pSh);

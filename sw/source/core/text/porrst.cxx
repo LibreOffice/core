@@ -212,7 +212,7 @@ SwArrowPortion::SwArrowPortion( const SwLinePortion &rPortion ) :
 SwArrowPortion::SwArrowPortion( const SwTxtPaintInfo &rInf )
     : bLeft( sal_False )
 {
-    Height( (USHORT)(rInf.GetTxtFrm()->Prt().Height()) );
+    Height( (sal_uInt16)(rInf.GetTxtFrm()->Prt().Height()) );
     aPos.X() = rInf.GetTxtFrm()->Frm().Left() +
                rInf.GetTxtFrm()->Prt().Right();
     aPos.Y() = rInf.GetTxtFrm()->Frm().Top() +
@@ -522,7 +522,7 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
         {
             SwFont aTmpFont( *rInf.GetFont() );
             aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
-            const USHORT nProp = 40;
+            const sal_uInt16 nProp = 40;
             aTmpFont.SetProportion( nProp );  // a smaller font
             SwFontSave aFontSave( rInf, &aTmpFont );
 

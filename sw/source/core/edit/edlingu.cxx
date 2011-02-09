@@ -47,6 +47,7 @@
 #include <charatr.hxx>
 #include <editsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <rootfrm.hxx>      // SwRootFrm
 #include <pam.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
@@ -119,8 +120,8 @@ public:
 // the content positions of each portion need to be saved
 struct SpellContentPosition
 {
-    USHORT nLeft;
-    USHORT nRight;
+    sal_uInt16 nLeft;
+    sal_uInt16 nRight;
 };
 typedef std::vector<SpellContentPosition>  SpellContentPositions;
 class SwSpellIter : public SwLinguIter
@@ -711,7 +712,7 @@ bool SwEditShell::HasLastSentenceGotGrammarChecked() const
  *                      SwEditShell::HasConvIter
  *************************************************************************/
 
-BOOL SwEditShell::HasConvIter() const
+sal_Bool SwEditShell::HasConvIter() const
 {
     return 0 != pConvIter;
 }
@@ -720,7 +721,7 @@ BOOL SwEditShell::HasConvIter() const
  *                      SwEditShell::HasHyphIter
  *************************************************************************/
 
-BOOL SwEditShell::HasHyphIter() const
+sal_Bool SwEditShell::HasHyphIter() const
 {
     return 0 != pHyphIter;
 }
@@ -732,7 +733,7 @@ BOOL SwEditShell::HasHyphIter() const
 void SwEditShell::SetLinguRange( SwDocPositions eStart, SwDocPositions eEnd )
 {
     SwPaM *pCrsr = GetCrsr();
-    MakeFindRange( static_cast<USHORT>(eStart), static_cast<USHORT>(eEnd), pCrsr );
+    MakeFindRange( static_cast<sal_uInt16>(eStart), static_cast<sal_uInt16>(eEnd), pCrsr );
     if( *pCrsr->GetPoint() > *pCrsr->GetMark() )
         pCrsr->Exchange();
 }
@@ -1047,7 +1048,7 @@ uno::Reference< XSpellAlternatives >
                     Sequence< PropertyValue > aPropVals(1);
                     PropertyValue &rVal = aPropVals.getArray()[0];
                     rVal.Name = C2U( UPN_MAX_NUMBER_OF_SUGGESTIONS );
-                    rVal.Value <<= (INT16) 7;
+                    rVal.Value <<= (sal_Int16) 7;
 
                     xSpellAlt = xSpell->spell( aWord, eActLang, aPropVals );
                 }
@@ -1061,7 +1062,7 @@ uno::Reference< XSpellAlternatives >
                 xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
-                Pop(FALSE);
+                Pop(sal_False);
 
                 // make sure the selection build later from the
                 // data below does not include footnotes and other
@@ -1092,16 +1093,20 @@ uno::Reference< XSpellAlternatives >
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = TRUE;
+                aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
+<<<<<<< local
                 SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), FALSE);
+=======
+                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), sal_False);
+>>>>>>> other
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd;
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(FALSE);
+                Pop(sal_False);
             }
         }
     }
@@ -1201,7 +1206,7 @@ bool SwEditShell::GetGrammarCorrection(
                 xub_StrLen nLineStart = GetCrsr()->GetPoint()->nContent.GetIndex();
                 RightMargin();
                 xub_StrLen nLineEnd = GetCrsr()->GetPoint()->nContent.GetIndex();
-                Pop(FALSE);
+                Pop(sal_False);
 
 #if OSL_DEBUG_LEVEL > 1
 //                pNode->GetGrammarCheck()->Invalidate( 0, STRING_LEN );
@@ -1236,16 +1241,20 @@ bool SwEditShell::GetGrammarCorrection(
                 rContent = nWordStart;
                 SwRect aStartRect;
                 SwCrsrMoveState aState;
-                aState.bRealWidth = TRUE;
+                aState.bRealWidth = sal_True;
                 SwCntntNode* pCntntNode = pCrsr->GetCntntNode();
+<<<<<<< local
                 SwCntntFrm *pCntntFrame = pCntntNode->getLayoutFrm( GetLayout(), pPt, pCrsr->GetPoint(), FALSE);
+=======
+                SwCntntFrm *pCntntFrame = pCntntNode->GetFrm(pPt, pCrsr->GetPoint(), sal_False);
+>>>>>>> other
 
                 pCntntFrame->GetCharRect( aStartRect, *pCrsr->GetPoint(), &aState );
                 rContent = nWordEnd;
                 SwRect aEndRect;
                 pCntntFrame->GetCharRect( aEndRect, *pCrsr->GetPoint(),&aState );
                 rSelectRect = aStartRect.Union( aEndRect );
-                Pop(FALSE);
+                Pop(sal_False);
             }
         }
     }
@@ -1328,7 +1337,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // iterate over the new portions, beginning at the end to take advantage of the previously
         // saved content positions
 
-        pDoc->StartUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_OVERWRITE, NULL );
         StartAction();
 
         SwPaM *pCrsr = GetCrsr();
@@ -1372,8 +1381,8 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
                     pCrsr->SetMark();
                 pCrsr->GetPoint()->nContent = aCurrentOldPosition->nLeft;
                 pCrsr->GetMark()->nContent = aCurrentOldPosition->nRight;
-                USHORT nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
-                USHORT nLangWhichId = RES_CHRATR_LANGUAGE;
+                sal_uInt16 nScriptType = GetI18NScriptTypeOfLanguage( aCurrentNewPortion->eLanguage );
+                sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
                 switch(nScriptType)
                 {
                     case SCRIPTTYPE_ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
@@ -1421,8 +1430,8 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
             while(aCurrentNewPortion != rNewPortions.end())
             {
                 //set the language attribute
-                USHORT nScriptType = GetScriptType();
-                USHORT nLangWhichId = RES_CHRATR_LANGUAGE;
+                sal_uInt16 nScriptType = GetScriptType();
+                sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
                 switch(nScriptType)
                 {
                     case SCRIPTTYPE_ASIAN : nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
@@ -1445,7 +1454,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // restore cursor to the end of the sentence
         // (will work also if the sentence length has changed,
         // since cursors get updated automatically!)
-        Pop( FALSE );
+        Pop( sal_False );
 
         // collapse cursor to the end of the modified sentence
         *pCrsr->Start() = *pCrsr->End();
@@ -1457,7 +1466,7 @@ void SwEditShell::ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions,
         // set continuation position for spell/grammar checking to the end of this sentence
         pSpellIter->SetCurr( new SwPosition( *pCrsr->Start() ) );
 
-        pDoc->EndUndo( UNDO_OVERWRITE, NULL );
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_OVERWRITE, NULL );
         EndAction();
     }
 }
@@ -1476,7 +1485,7 @@ SpellContentPositions lcl_CollectDeletedRedlines(SwEditShell* pSh)
         const SwPosition* pStartPos = pCrsr->Start();
         const SwTxtNode* pTxtNode = pCrsr->GetNode()->GetTxtNode();
 
-        USHORT nAct = pDoc->GetRedlinePos( *pTxtNode, USHRT_MAX );
+        sal_uInt16 nAct = pDoc->GetRedlinePos( *pTxtNode, USHRT_MAX );
         const xub_StrLen nStartIndex = pStartPos->nContent.GetIndex();
         for ( ; nAct < pDoc->GetRedlineTbl().Count(); nAct++ )
         {
@@ -1618,7 +1627,7 @@ bool SwSpellIter::SpellSentence(::svx::SpellPortions& rPortions, bool bIsGrammar
         //the cursor has to be collapsed on the left to go to the start of the sentence - if sentence ends inside of the error
         pCrsr->DeleteMark();
         pCrsr->SetMark();
-        BOOL bStartSent = 0 != pMySh->GoStartSentence();
+        sal_Bool bStartSent = 0 != pMySh->GoStartSentence();
         SpellContentPositions aDeletedRedlines = lcl_CollectDeletedRedlines(pMySh);
         if(bStartSent)
         {
@@ -1757,8 +1766,8 @@ void SwSpellIter::ToSentenceStart()
   -----------------------------------------------------------------------*/
 LanguageType lcl_GetLanguage(SwEditShell& rSh)
 {
-    USHORT nScriptType = rSh.GetScriptType();
-    USHORT nLangWhichId = RES_CHRATR_LANGUAGE;
+    sal_uInt16 nScriptType = rSh.GetScriptType();
+    sal_uInt16 nLangWhichId = RES_CHRATR_LANGUAGE;
 
     switch(nScriptType)
     {
@@ -1875,9 +1884,9 @@ void    SwSpellIter::AddPortion(uno::Reference< XSpellAlternatives > xAlt,
                 {
                     const SwTxtAttr* pTxtAttr = pTxtNode->GetTxtAttrForCharAt(
                         pCrsr->GetMark()->nContent.GetIndex() );
-                    const USHORT nWhich = pTxtAttr
+                    const sal_uInt16 nWhich = pTxtAttr
                         ? pTxtAttr->Which()
-                        : static_cast<USHORT>(RES_TXTATR_END);
+                        : static_cast<sal_uInt16>(RES_TXTATR_END);
                     switch (nWhich)
                     {
                         case RES_TXTATR_FIELD:

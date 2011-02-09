@@ -38,15 +38,15 @@ class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
 
     const SwTableLine *pTabLine;
     SwRowFrm* pFollowRow;
     // --> collapsing borders FME 2005-05-27 #i29550#
-    USHORT mnTopMarginForLowers;
-    USHORT mnBottomMarginForLowers;
-    USHORT mnBottomLineSize;
+    sal_uInt16 mnTopMarginForLowers;
+    sal_uInt16 mnBottomMarginForLowers;
+    sal_uInt16 mnBottomLineSize;
     // <-- collapsing
     bool bIsFollowFlowRow;
     bool bIsRepeatedHeadline;
@@ -72,7 +72,7 @@ public:
 
     //Passt die Zellen auf die aktuelle Hoehe an, invalidiert die Zellen
     //wenn die Direction nicht der Hoehe entspricht.
-    void AdjustCells( const SwTwips nHeight, const BOOL bHeight );
+    void AdjustCells( const SwTwips nHeight, const sal_Bool bHeight );
 
     //
     //
@@ -80,12 +80,12 @@ public:
     void SetFollowRow( SwRowFrm* pNew ) { pFollowRow = pNew; }
 
     // --> collapsing borders FME 2005-05-27 #i29550#
-    USHORT GetTopMarginForLowers() const { return mnTopMarginForLowers; }
-    void   SetTopMarginForLowers( USHORT nNew ) { mnTopMarginForLowers = nNew; }
-    USHORT GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
-    void   SetBottomMarginForLowers( USHORT nNew ) { mnBottomMarginForLowers = nNew; }
-    USHORT GetBottomLineSize() const { return mnBottomLineSize; }
-    void   SetBottomLineSize( USHORT nNew ) { mnBottomLineSize = nNew; }
+    sal_uInt16 GetTopMarginForLowers() const { return mnTopMarginForLowers; }
+    void   SetTopMarginForLowers( sal_uInt16 nNew ) { mnTopMarginForLowers = nNew; }
+    sal_uInt16 GetBottomMarginForLowers() const { return mnBottomMarginForLowers; }
+    void   SetBottomMarginForLowers( sal_uInt16 nNew ) { mnBottomMarginForLowers = nNew; }
+    sal_uInt16 GetBottomLineSize() const { return mnBottomLineSize; }
+    void   SetBottomLineSize( sal_uInt16 nNew ) { mnBottomLineSize = nNew; }
     // <-- collapsing
 
     bool IsRepeatedHeadline() const { return bIsRepeatedHeadline; }

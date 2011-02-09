@@ -37,19 +37,23 @@ class SwCallLink
 {
 public:
     SwCrsrShell & rShell;
-    ULONG nNode;
+    sal_uLong nNode;
     xub_StrLen nCntnt;
-    BYTE nNdTyp;
+    sal_uInt8 nNdTyp;
     long nLeftFrmPos;
     bool bHasSelection;
 
     SwCallLink( SwCrsrShell & rSh );
-    SwCallLink( SwCrsrShell & rSh, ULONG nAktNode, xub_StrLen nAktCntnt,
-                                    BYTE nAktNdTyp, long nLRPos,
+    SwCallLink( SwCrsrShell & rSh, sal_uLong nAktNode, xub_StrLen nAktCntnt,
+                                    sal_uInt8 nAktNdTyp, long nLRPos,
                                     bool bAktSelection );
     ~SwCallLink();
 
+<<<<<<< local
     static long getLayoutFrm( const SwRootFrm*, SwTxtNode& rNd, xub_StrLen nCntPos, BOOL bCalcFrm );
+=======
+    static long GetFrm( SwTxtNode& rNd, xub_StrLen nCntPos, sal_Bool bCalcFrm );
+>>>>>>> other
 };
 
 

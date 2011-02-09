@@ -111,10 +111,10 @@ public:
 class SwHistorySetFmt : public SwHistoryHint
 {
     ::std::auto_ptr<SfxPoolItem> m_pAttr;
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
 
 public:
-    SwHistorySetFmt( const SfxPoolItem* pFmtHt, ULONG nNode );
+    SwHistorySetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNode );
     virtual ~SwHistorySetFmt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     virtual String GetDescription() const;
@@ -123,12 +123,12 @@ public:
 
 class SwHistoryResetFmt : public SwHistoryHint
 {
-    const ULONG m_nNodeIndex;
-    const USHORT m_nWhich;
+    const sal_uLong m_nNodeIndex;
+    const sal_uInt16 m_nWhich;
 
 public:
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-    SwHistoryResetFmt( const SfxPoolItem* pFmtHt, ULONG nNodeIdx );
+    SwHistoryResetFmt( const SfxPoolItem* pFmtHt, sal_uLong nNodeIdx );
     // <--
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
@@ -137,12 +137,12 @@ public:
 class SwHistorySetTxt : public SwHistoryHint
 {
     ::std::auto_ptr<SfxPoolItem> m_pAttr;
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
 
 public:
-    SwHistorySetTxt( SwTxtAttr* pTxtHt, ULONG nNode );
+    SwHistorySetTxt( SwTxtAttr* pTxtHt, sal_uLong nNode );
     virtual ~SwHistorySetTxt();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
@@ -155,12 +155,12 @@ class SwHistorySetTxtFld : public SwHistoryHint
     ::std::auto_ptr<SwFieldType> m_pFldType;
     const ::std::auto_ptr<SwFmtFld> m_pFld;
 
-    ULONG m_nNodeIndex;
+    sal_uLong m_nNodeIndex;
     xub_StrLen m_nPos;
-    USHORT m_nFldWhich;
+    sal_uInt16 m_nFldWhich;
 
 public:
-    SwHistorySetTxtFld( SwTxtFld* pTxtFld, ULONG nNode );
+    SwHistorySetTxtFld( SwTxtFld* pTxtFld, sal_uLong nNode );
     virtual ~SwHistorySetTxtFld();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
@@ -171,12 +171,12 @@ public:
 class SwHistorySetRefMark : public SwHistoryHint
 {
     const String m_RefName;
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
 
 public:
-    SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNode );
+    SwHistorySetRefMark( SwTxtRefMark* pTxtHt, sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
@@ -186,12 +186,12 @@ class SwHistorySetTOXMark : public SwHistoryHint
     SwTOXMark m_TOXMark;
     const String m_TOXName;
     const TOXTypes m_eTOXTypes;
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
 
 public:
-    SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNode );
+    SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
     int IsEqual( const SwTOXMark& rCmp ) const;
 
@@ -199,18 +199,18 @@ public:
 
 class SwHistoryResetTxt : public SwHistoryHint
 {
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
-    const USHORT m_nAttr;
+    const sal_uInt16 m_nAttr;
 
 public:
-    SwHistoryResetTxt( USHORT nWhich, xub_StrLen nStt, xub_StrLen nEnd,
-                       ULONG nNode );
+    SwHistoryResetTxt( sal_uInt16 nWhich, xub_StrLen nStt, xub_StrLen nEnd,
+                       sal_uLong nNode );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
-    USHORT GetWhich() const         { return m_nAttr; }
-    ULONG GetNode() const           { return m_nNodeIndex; }
+    sal_uInt16 GetWhich() const         { return m_nAttr; }
+    sal_uLong GetNode() const           { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const     { return m_nStart; }
 
 };
@@ -219,12 +219,12 @@ class SwHistorySetFootnote : public SwHistoryHint
 {
     const ::std::auto_ptr<SwUndoSaveSection> m_pUndo;
     const String m_FootnoteNumber;
-    ULONG m_nNodeIndex;
+    sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const bool m_bEndNote;
 
 public:
-    SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNode );
+    SwHistorySetFootnote( SwTxtFtn* pTxtFtn, sal_uLong nNode );
     SwHistorySetFootnote( const SwTxtFtn& );
     virtual ~SwHistorySetFootnote();
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
@@ -236,11 +236,11 @@ public:
 class SwHistoryChangeFmtColl : public SwHistoryHint
 {
     SwFmtColl * const m_pColl;
-    const ULONG m_nNodeIndex;
-    const BYTE m_nNodeType;
+    const sal_uLong m_nNodeIndex;
+    const sal_uInt8 m_nNodeType;
 
 public:
-    SwHistoryChangeFmtColl( SwFmtColl* pColl, ULONG nNode, BYTE nNodeWhich );
+    SwHistoryChangeFmtColl( SwFmtColl* pColl, sal_uLong nNode, sal_uInt8 nNodeWhich );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
@@ -272,8 +272,8 @@ class SwHistoryBookmark : public SwHistoryHint
         const ::rtl::OUString m_aName;
         ::rtl::OUString m_aShortName;
         KeyCode m_aKeycode;
-        const ULONG m_nNode;
-        const ULONG m_nOtherNode;
+        const sal_uLong m_nNode;
+        const sal_uLong m_nOtherNode;
         const xub_StrLen m_nCntnt;
         const xub_StrLen m_nOtherCntnt;
         const bool m_bSavePos;
@@ -287,10 +287,10 @@ class SwHistorySetAttrSet : public SwHistoryHint
 {
     SfxItemSet m_OldSet;
     SvUShorts m_ResetArray;
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
 
 public:
-    SwHistorySetAttrSet( const SfxItemSet& rSet, ULONG nNode,
+    SwHistorySetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
                          const SvUShortsSort& rSetArr );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
@@ -299,19 +299,19 @@ public:
 
 class SwHistoryResetAttrSet : public SwHistoryHint
 {
-    const ULONG m_nNodeIndex;
+    const sal_uLong m_nNodeIndex;
     const xub_StrLen m_nStart;
     const xub_StrLen m_nEnd;
     SvUShorts m_Array;
 
 public:
-    SwHistoryResetAttrSet( const SfxItemSet& rSet, ULONG nNode,
+    SwHistoryResetAttrSet( const SfxItemSet& rSet, sal_uLong nNode,
                         xub_StrLen nStt = STRING_MAXLEN,
                         xub_StrLen nEnd = STRING_MAXLEN );
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
     const SvUShorts& GetArr() const     { return m_Array; }
-    ULONG GetNode() const               { return m_nNodeIndex; }
+    sal_uLong GetNode() const               { return m_nNodeIndex; }
     xub_StrLen GetCntnt() const         { return m_nStart; }
 
 };
@@ -319,7 +319,7 @@ public:
 class SwHistoryChangeFlyAnchor : public SwHistoryHint
 {
     SwFrmFmt & m_rFmt;
-    const ULONG m_nOldNodeIndex;
+    const sal_uLong m_nOldNodeIndex;
     const xub_StrLen m_nOldContentIndex;
 
 public:
@@ -363,41 +363,41 @@ class SwHistory
     friend class SwRegHistory;  // for inserting History attributes
 
     SwpHstry m_SwpHstry;
-    USHORT m_nEndDiff;
+    sal_uInt16 m_nEndDiff;
 
 public:
-    SwHistory( USHORT nInitSz = 0, USHORT nGrowSz = 2 );
+    SwHistory( sal_uInt16 nInitSz = 0, sal_uInt16 nGrowSz = 2 );
     ~SwHistory();
 
     // delete History from nStart to array end
-    void Delete( USHORT nStart = 0 );
+    void Delete( sal_uInt16 nStart = 0 );
     // call and delete all objects between nStart and array end
-    bool Rollback( SwDoc* pDoc, USHORT nStart = 0 );
+    bool Rollback( SwDoc* pDoc, sal_uInt16 nStart = 0 );
     // call all objects between nStart and TmpEnd; store nStart as TmpEnd
-    bool TmpRollback( SwDoc* pDoc, USHORT nStart, bool ToFirst = true );
+    bool TmpRollback( SwDoc* pDoc, sal_uInt16 nStart, bool ToFirst = true );
 
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
-              ULONG nNodeIdx );
+              sal_uLong nNodeIdx );
     // <--
-    void Add( SwTxtAttr* pTxtHt, ULONG nNodeIdx, bool bNewAttr = true );
-    void Add( SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
+    void Add( SwTxtAttr* pTxtHt, sal_uLong nNodeIdx, bool bNewAttr = true );
+    void Add( SwFmtColl*, sal_uLong nNodeIdx, sal_uInt8 nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( SwFrmFmt& rFmt );
-    void Add( SwFlyFrmFmt&, USHORT& rSetPos );
+    void Add( SwFlyFrmFmt&, sal_uInt16& rSetPos );
     void Add( const SwTxtFtn& );
     void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt); // #i27615#
 
-    USHORT Count() const { return m_SwpHstry.Count(); }
-    USHORT GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
-    USHORT SetTmpEnd( USHORT nTmpEnd );        // return previous value
-    SwHistoryHint      * operator[]( USHORT nPos ) { return m_SwpHstry[nPos]; }
-    SwHistoryHint const* operator[]( USHORT nPos ) const
+    sal_uInt16 Count() const { return m_SwpHstry.Count(); }
+    sal_uInt16 GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
+    sal_uInt16 SetTmpEnd( sal_uInt16 nTmpEnd );        // return previous value
+    SwHistoryHint      * operator[]( sal_uInt16 nPos ) { return m_SwpHstry[nPos]; }
+    SwHistoryHint const* operator[]( sal_uInt16 nPos ) const
         { return m_SwpHstry[nPos]; }
 
     // for SwUndoDelete::Undo/Redo
-    void Move( USHORT nPos, SwHistory *pIns,
-               USHORT nStart = 0, USHORT nEnd = USHRT_MAX )
+    void Move( sal_uInt16 nPos, SwHistory *pIns,
+               sal_uInt16 nStart = 0, sal_uInt16 nEnd = USHRT_MAX )
     {
         m_SwpHstry.Insert( &pIns->m_SwpHstry, nPos, nStart, nEnd );
         pIns->m_SwpHstry.Remove( nStart, (nEnd == USHRT_MAX)
@@ -407,10 +407,10 @@ public:
 
     // helper methods for recording attribute in History
     // used by Undo classes (Delete/Overwrite/Inserts)
-    void CopyAttr( SwpHints* pHts, ULONG nNodeIdx, xub_StrLen nStart,
+    void CopyAttr( SwpHints* pHts, sal_uLong nNodeIdx, xub_StrLen nStart,
                     xub_StrLen nEnd, bool bFields );
     // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
-    void CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx );
+    void CopyFmtAttr( const SfxItemSet& rSet, sal_uLong nNodeIdx );
     // <--
 };
 
@@ -421,7 +421,7 @@ class SwRegHistory : public SwClient
 private:
     SvUShortsSort m_WhichIdSet;
     SwHistory * const m_pHistory;
-    ULONG m_nNodeIndex;
+    sal_uLong m_nNodeIndex;
 
     void _MakeSetWhichIds();
 
@@ -443,7 +443,7 @@ public:
     void AddHint( SwTxtAttr* pHt, const bool bNew = false );
 
     void RegisterInModify( SwModify* pRegIn, const SwNode& rNd );
-    void ChangeNodeIndex( ULONG nNew ) { m_nNodeIndex = nNew; }
+    void ChangeNodeIndex( sal_uLong nNew ) { m_nNodeIndex = nNew; }
 };
 
 #endif

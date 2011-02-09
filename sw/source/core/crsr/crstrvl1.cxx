@@ -33,72 +33,72 @@
 #include <viscrs.hxx>
 #include <callnk.hxx>
 
-BOOL SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
+sal_Bool SwCrsrShell::IsStartWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsStartWord( nWordType );
 }
 
-BOOL SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
+sal_Bool SwCrsrShell::IsEndWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsEndWord( nWordType );
 }
 
-BOOL SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
+sal_Bool SwCrsrShell::IsInWord( sal_Int16 nWordType ) const
 {
     return pCurCrsr->IsInWord( nWordType );
 }
 
-BOOL SwCrsrShell::IsStartSentence() const
+sal_Bool SwCrsrShell::IsStartSentence() const
 {
     return pCurCrsr->IsStartEndSentence( false );
 }
 
-BOOL SwCrsrShell::IsEndSentence() const
+sal_Bool SwCrsrShell::IsEndSentence() const
 {
     return pCurCrsr->IsStartEndSentence( true );
 }
 
 
-BOOL SwCrsrShell::GoStartWord()
+sal_Bool SwCrsrShell::GoStartWord()
 {
     return CallCrsrFN( &SwCursor::GoStartWord );
 }
-BOOL SwCrsrShell::GoEndWord()
+sal_Bool SwCrsrShell::GoEndWord()
 {
     return CallCrsrFN( &SwCursor::GoEndWord );
 }
-BOOL SwCrsrShell::GoNextWord()
+sal_Bool SwCrsrShell::GoNextWord()
 {
     return CallCrsrFN( &SwCursor::GoNextWord );
 }
-BOOL SwCrsrShell::GoPrevWord()
+sal_Bool SwCrsrShell::GoPrevWord()
 {
     return CallCrsrFN( &SwCursor::GoPrevWord );
 }
-BOOL SwCrsrShell::GoNextSentence()
+sal_Bool SwCrsrShell::GoNextSentence()
 {
     return CallCrsrFN( &SwCursor::GoNextSentence );
 }
-BOOL SwCrsrShell::GoEndSentence()
+sal_Bool SwCrsrShell::GoEndSentence()
 {
     return CallCrsrFN( &SwCursor::GoEndSentence );
 }
 
-BOOL SwCrsrShell::GoPrevSentence()
+sal_Bool SwCrsrShell::GoPrevSentence()
 {
     return CallCrsrFN( &SwCursor::GoPrevSentence );
 }
-BOOL SwCrsrShell::GoStartSentence()
+sal_Bool SwCrsrShell::GoStartSentence()
 {
     return CallCrsrFN( &SwCursor::GoStartSentence );
 }
 
-BOOL SwCrsrShell::SelectWord( const Point* pPt )
+sal_Bool SwCrsrShell::SelectWord( const Point* pPt )
 {
     return pCurCrsr->SelectWord( this, pPt );
 }
 
-BOOL SwCrsrShell::ExpandToSentenceBorders()
+sal_Bool SwCrsrShell::ExpandToSentenceBorders()
 {
     return pCurCrsr->ExpandToSentenceBorders();
 }

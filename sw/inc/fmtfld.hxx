@@ -74,7 +74,12 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
+<<<<<<< local
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+=======
+    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+>>>>>>> other
 
     const SwField *GetFld() const   { return pField; }
     SwField *GetFld()               { return pField; }
@@ -92,9 +97,14 @@ public:
     const SwTxtFld *GetTxtFld() const   { return pTxtAttr; }
     SwTxtFld *GetTxtFld()               { return pTxtAttr; }
 
+<<<<<<< local
     BOOL IsFldInDoc() const;
     BOOL IsProtect() const;
     void RegisterToFieldType( SwFieldType& );
+=======
+    sal_Bool IsFldInDoc() const;
+    sal_Bool IsProtect() const;
+>>>>>>> other
 };
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint

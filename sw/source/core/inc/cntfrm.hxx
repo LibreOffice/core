@@ -37,7 +37,7 @@ class SwAttrSetChg;
 class SwTxtFrm;
 
 //Implementiert in cntfrm.cxx, wird von cntfrm.cxx und crsrsh.cxx angezogen
-extern BOOL GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
+extern sal_Bool GetFrmInPage( const SwCntntFrm*, SwWhichPage, SwPosPage, SwPaM* );
 
 class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
@@ -46,27 +46,37 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
     // --> OD 2007-11-26 #b6614158#
     // parameter <bObjsInNewUpper>, indicating that objects are existing in
     // remaining area of new upper
-    BOOL _WouldFit( SwTwips nSpace,
+    sal_Bool _WouldFit( SwTwips nSpace,
                     SwLayoutFrm *pNewUpper,
-                    BOOL bTstMove,
+                    sal_Bool bTstMove,
                     const bool bObjsInNewUpper );
     // <--
     virtual void MakeAll();
 
+<<<<<<< local
     void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
+=======
+    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, sal_uInt8 &,
+>>>>>>> other
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
-    virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL& );
+    virtual sal_Bool ShouldBwdMoved( SwLayoutFrm *pNewUpper, sal_Bool, sal_Bool& );
 
     const SwCntntFrm* ImplGetNextCntntFrm( bool bFwd ) const;
 
 protected:
 
-    BOOL MakePrtArea( const SwBorderAttrs & );
+    sal_Bool MakePrtArea( const SwBorderAttrs & );
 
+<<<<<<< local
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+=======
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual SwTwips ShrinkFrm( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+    virtual SwTwips GrowFrm  ( SwTwips, sal_Bool bTst = sal_False, sal_Bool bInfo = sal_False );
+>>>>>>> other
 
     SwCntntFrm( SwCntntNode * const, SwFrm* );
 
@@ -79,32 +89,32 @@ public:
 
     inline       SwCntntNode *GetNode();
     inline const SwCntntNode *GetNode() const;
-                 USHORT       GetSectionLevel();
+                 sal_uInt16       GetSectionLevel();
 
     inline const SwCntntFrm *GetFollow() const;
     inline       SwCntntFrm *GetFollow();
     SwTxtFrm* FindMaster() const;
 
         //Layoutabhaengiges Cursortravelling
-    virtual BOOL    LeftMargin( SwPaM * ) const;
-    virtual BOOL    RightMargin( SwPaM *, BOOL bAPI = FALSE ) const;
-    virtual BOOL    UnitUp( SwPaM *, const SwTwips nOffset = 0,
-                            BOOL bSetInReadOnly = FALSE ) const;
-    virtual BOOL    UnitDown( SwPaM *, const SwTwips nOffset = 0,
-                            BOOL bSetInReadOnly = FALSE ) const;
-    inline  BOOL    StartNextPage( SwPaM * ) const;
-    inline  BOOL    StartPrevPage( SwPaM * ) const;
-    inline  BOOL    StartCurrPage( SwPaM * ) const;
-    inline  BOOL    EndCurrPage( SwPaM * ) const;
-    inline  BOOL    EndNextPage( SwPaM * ) const;
-    inline  BOOL    EndPrevPage( SwPaM * ) const;
+    virtual sal_Bool    LeftMargin( SwPaM * ) const;
+    virtual sal_Bool    RightMargin( SwPaM *, sal_Bool bAPI = sal_False ) const;
+    virtual sal_Bool    UnitUp( SwPaM *, const SwTwips nOffset = 0,
+                            sal_Bool bSetInReadOnly = sal_False ) const;
+    virtual sal_Bool    UnitDown( SwPaM *, const SwTwips nOffset = 0,
+                            sal_Bool bSetInReadOnly = sal_False ) const;
+    inline  sal_Bool    StartNextPage( SwPaM * ) const;
+    inline  sal_Bool    StartPrevPage( SwPaM * ) const;
+    inline  sal_Bool    StartCurrPage( SwPaM * ) const;
+    inline  sal_Bool    EndCurrPage( SwPaM * ) const;
+    inline  sal_Bool    EndNextPage( SwPaM * ) const;
+    inline  sal_Bool    EndPrevPage( SwPaM * ) const;
 
     // nMaxHeight is the required height
     // bSplit indicates, that the paragraph has to be split
     // bTst indicates, that we are currently doing a test formatting
     virtual sal_Bool WouldFit( SwTwips &nMaxHeight, sal_Bool &bSplit, sal_Bool bTst );
 
-    BOOL MoveFtnCntFwd( BOOL, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
+    sal_Bool MoveFtnCntFwd( sal_Bool, SwFtnBossFrm* );//von MoveFwd gerufen bei Ftn-Inhalt
 
     inline  SwCntntFrm* GetNextCntntFrm() const;
     inline  SwCntntFrm* GetPrevCntntFrm() const;

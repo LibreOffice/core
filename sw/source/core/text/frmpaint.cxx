@@ -95,7 +95,7 @@ class SwExtraPainter
     const SwLineNumberInfo &rLineInf;
     SwTwips nX;
     SwTwips nRedX;
-    ULONG nLineNr;
+    sal_uLong nLineNr;
     MSHORT nDivider;
     sal_Bool bGoLeft;
     sal_Bool bLineNum;

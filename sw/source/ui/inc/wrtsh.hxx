@@ -106,7 +106,7 @@ public:
 
     using SwEditShell::Insert;
 
-    typedef long (SwWrtShell::*SELECTFUNC)(const Point *, BOOL bProp );
+    typedef long (SwWrtShell::*SELECTFUNC)(const Point *, sal_Bool bProp );
 
     SELECTFUNC  fnDrag;
     SELECTFUNC  fnSetCrsr;
@@ -114,160 +114,160 @@ public:
     SELECTFUNC  fnKillSel;
 
     // Alle Selektionen aufheben
-    long ResetSelect( const Point *, BOOL );
+    long ResetSelect( const Point *, sal_Bool );
 
     //setzt den Cursorstack nach dem Bewegen mit PageUp/-Down
     //zurueck, falls ein Stack aufgebaut ist
     inline void ResetCursorStack();
     SelectionType   GetSelectionType() const;
 
-    BOOL    IsModePushed() const { return 0 != pModeStack; }
+    sal_Bool    IsModePushed() const { return 0 != pModeStack; }
     void    PushMode();
     void    PopMode();
 
     void    SttSelect();
     void    EndSelect();
-    BOOL    IsInSelect() const { return bInSelect; }
-    void    SetInSelect(BOOL bSel = TRUE) { bInSelect = bSel; }
+    sal_Bool    IsInSelect() const { return bInSelect; }
+    void    SetInSelect(sal_Bool bSel = sal_True) { bInSelect = bSel; }
         // Liegt eine Text- oder Rahmenselektion vor?
-    BOOL    HasSelection() const { return SwCrsrShell::HasSelection() ||
+    sal_Bool    HasSelection() const { return SwCrsrShell::HasSelection() ||
                                         IsMultiSelection() || IsSelFrmMode() || IsObjSelected(); }
-    BOOL Pop( BOOL bOldCrsr = TRUE );
+    sal_Bool Pop( sal_Bool bOldCrsr = sal_True );
 
     void    EnterStdMode();
-    BOOL    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
+    sal_Bool    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
 
     void    EnterExtMode();
     void    LeaveExtMode();
     long    ToggleExtMode();
-    BOOL    IsExtMode() const { return bExtMode; }
+    sal_Bool    IsExtMode() const { return bExtMode; }
 
     void    EnterAddMode();
     void    LeaveAddMode();
     long    ToggleAddMode();
-    BOOL    IsAddMode() const { return bAddMode; }
+    sal_Bool    IsAddMode() const { return bAddMode; }
 
     void    EnterBlockMode();
     void    LeaveBlockMode();
     long    ToggleBlockMode();
-    BOOL    IsBlockMode() const { return bBlockMode; }
+    sal_Bool    IsBlockMode() const { return bBlockMode; }
 
-    void    SetInsMode( BOOL bOn = TRUE );
+    void    SetInsMode( sal_Bool bOn = sal_True );
     void    ToggleInsMode() { SetInsMode( !bIns ); }
-    BOOL    IsInsMode() const { return bIns; }
-    void    SetRedlineModeAndCheckInsMode( USHORT eMode );
+    sal_Bool    IsInsMode() const { return bIns; }
+    void    SetRedlineModeAndCheckInsMode( sal_uInt16 eMode );
 
     void    EnterSelFrmMode(const Point *pStartDrag = 0);
     void    LeaveSelFrmMode();
-    BOOL    IsSelFrmMode() const { return bLayoutMode; }
+    sal_Bool    IsSelFrmMode() const { return bLayoutMode; }
         // Selektion von Rahmen aufheben
     void    UnSelectFrm();
 
     void    Invalidate();
 
     // Tabellenzellen selektieren fuer Bearbeiten von Formeln in der Ribbonbar
-    inline void SelTblCells( const Link &rLink, BOOL bMark = TRUE );
+    inline void SelTblCells( const Link &rLink, sal_Bool bMark = sal_True );
     inline void EndSelTblCells();
 
     //Wortweisen oder zeilenweisen Selektionsmodus verlassen. Wird
     //in der Regel in MB-Up gerufen.
-    BOOL    IsExtSel() const { return bSelWrd || bSelLn; }
+    sal_Bool    IsExtSel() const { return bSelWrd || bSelLn; }
 
     // erfrage, ob der akt. fnDrag - Pointer auf BeginDrag gesetzt ist
     // Wird fuer MouseMove gebraucht, um die Bugs 55592/55931 zu umgehen.
-    inline BOOL Is_FnDragEQBeginDrag() const;
+    inline sal_Bool Is_FnDragEQBeginDrag() const;
 
     //Basisabfragen
-    BOOL    IsInWrd()           { return IsInWord(); }
-    BOOL    IsSttWrd()          { return IsStartWord(); }
-    BOOL    IsEndWrd();
-    BOOL    IsSttOfPara() const { return IsSttPara(); }
-    BOOL    IsEndOfPara() const { return IsEndPara(); }
+    sal_Bool    IsInWrd()           { return IsInWord(); }
+    sal_Bool    IsSttWrd()          { return IsStartWord(); }
+    sal_Bool    IsEndWrd();
+    sal_Bool    IsSttOfPara() const { return IsSttPara(); }
+    sal_Bool    IsEndOfPara() const { return IsEndPara(); }
 
     //Word bzw. Satz selektieren.
-    BOOL    SelNearestWrd();
-    BOOL    SelWrd      (const Point * = 0, BOOL bProp=FALSE );
+    sal_Bool    SelNearestWrd();
+    sal_Bool    SelWrd      (const Point * = 0, sal_Bool bProp=sal_False );
     // --> FME 2004-07-30 #i32329# Enhanced selection
-    void    SelSentence (const Point * = 0, BOOL bProp=FALSE );
-    void    SelPara     (const Point * = 0, BOOL bProp=FALSE );
+    void    SelSentence (const Point * = 0, sal_Bool bProp=sal_False );
+    void    SelPara     (const Point * = 0, sal_Bool bProp=sal_False );
     // <--
     long    SelAll();
 
     //Basiscursortravelling
-typedef BOOL (SwWrtShell:: *FNSimpleMove)();
-    BOOL SimpleMove( FNSimpleMove, BOOL bSelect );
+typedef sal_Bool (SwWrtShell:: *FNSimpleMove)();
+    sal_Bool SimpleMove( FNSimpleMove, sal_Bool bSelect );
 
-    BOOL Left       ( USHORT nMode, BOOL bSelect,
-                            USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    BOOL Right      ( USHORT nMode, BOOL bSelect,
-                            USHORT nCount, BOOL bBasicCall, BOOL bVisual = FALSE );
-    BOOL Up         ( BOOL bSelect = FALSE, USHORT nCount = 1,
-                            BOOL bBasicCall = FALSE );
-    BOOL Down       ( BOOL bSelect = FALSE, USHORT nCount = 1,
-                            BOOL bBasicCall = FALSE );
-    BOOL NxtWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
-    BOOL PrvWrd     ( BOOL bSelect = FALSE ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
+    sal_Bool Left       ( sal_uInt16 nMode, sal_Bool bSelect,
+                            sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual = sal_False );
+    sal_Bool Right      ( sal_uInt16 nMode, sal_Bool bSelect,
+                            sal_uInt16 nCount, sal_Bool bBasicCall, sal_Bool bVisual = sal_False );
+    sal_Bool Up         ( sal_Bool bSelect = sal_False, sal_uInt16 nCount = 1,
+                            sal_Bool bBasicCall = sal_False );
+    sal_Bool Down       ( sal_Bool bSelect = sal_False, sal_uInt16 nCount = 1,
+                            sal_Bool bBasicCall = sal_False );
+    sal_Bool NxtWrd     ( sal_Bool bSelect = sal_False ) { return SimpleMove( &SwWrtShell::_NxtWrd, bSelect ); }
+    sal_Bool PrvWrd     ( sal_Bool bSelect = sal_False ) { return SimpleMove( &SwWrtShell::_PrvWrd, bSelect ); }
 
-    BOOL LeftMargin ( BOOL bSelect, BOOL bBasicCall );
-    BOOL RightMargin( BOOL bSelect, BOOL bBasicCall );
+    sal_Bool LeftMargin ( sal_Bool bSelect, sal_Bool bBasicCall );
+    sal_Bool RightMargin( sal_Bool bSelect, sal_Bool bBasicCall );
 
-    BOOL SttDoc     ( BOOL bSelect = FALSE );
-    BOOL EndDoc     ( BOOL bSelect = FALSE );
+    sal_Bool SttDoc     ( sal_Bool bSelect = sal_False );
+    sal_Bool EndDoc     ( sal_Bool bSelect = sal_False );
 
-    BOOL SttNxtPg   ( BOOL bSelect = FALSE );
-    BOOL SttPrvPg   ( BOOL bSelect = FALSE );
-    BOOL EndNxtPg   ( BOOL bSelect = FALSE );
-    BOOL EndPrvPg   ( BOOL bSelect = FALSE );
-    BOOL SttPg      ( BOOL bSelect = FALSE );
-    BOOL EndPg      ( BOOL bSelect = FALSE );
-    BOOL SttPara    ( BOOL bSelect = FALSE );
-    BOOL EndPara    ( BOOL bSelect = FALSE );
-    BOOL FwdPara    ( BOOL bSelect = FALSE )
+    sal_Bool SttNxtPg   ( sal_Bool bSelect = sal_False );
+    sal_Bool SttPrvPg   ( sal_Bool bSelect = sal_False );
+    sal_Bool EndNxtPg   ( sal_Bool bSelect = sal_False );
+    sal_Bool EndPrvPg   ( sal_Bool bSelect = sal_False );
+    sal_Bool SttPg      ( sal_Bool bSelect = sal_False );
+    sal_Bool EndPg      ( sal_Bool bSelect = sal_False );
+    sal_Bool SttPara    ( sal_Bool bSelect = sal_False );
+    sal_Bool EndPara    ( sal_Bool bSelect = sal_False );
+    sal_Bool FwdPara    ( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_FwdPara, bSelect ); }
-    BOOL BwdPara    ( BOOL bSelect = FALSE )
+    sal_Bool BwdPara    ( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_BwdPara, bSelect ); }
-    BOOL FwdSentence( BOOL bSelect = FALSE )
+    sal_Bool FwdSentence( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_FwdSentence, bSelect ); }
-    BOOL BwdSentence( BOOL bSelect = FALSE )
+    sal_Bool BwdSentence( sal_Bool bSelect = sal_False )
                 { return SimpleMove( &SwWrtShell::_BwdSentence, bSelect ); }
 
     // --> FME 2004-07-30 #i20126# Enhanced table selection
-    BOOL SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
+    sal_Bool SelectTableRowCol( const Point& rPt, const Point* pEnd = 0, bool bRowDrag = false );
     // <--
-    BOOL SelectTableRow();
-    BOOL SelectTableCol();
-    BOOL SelectTableCell();
+    sal_Bool SelectTableRow();
+    sal_Bool SelectTableCol();
+    sal_Bool SelectTableCell();
 
-    BOOL SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr = 0 );
+    sal_Bool SelectTxtAttr( sal_uInt16 nWhich, const SwTxtAttr* pAttr = 0 );
 
     // Spaltenweise Spruenge
-    BOOL StartOfColumn      ( BOOL bSelect = FALSE );
-    BOOL EndOfColumn        ( BOOL bSelect = FALSE );
-    BOOL StartOfNextColumn  ( BOOL bSelect = FALSE );
-    BOOL EndOfNextColumn    ( BOOL bSelect = FALSE );
-    BOOL StartOfPrevColumn  ( BOOL bSelect = FALSE );
-    BOOL EndOfPrevColumn    ( BOOL bSelect = FALSE );
+    sal_Bool StartOfColumn      ( sal_Bool bSelect = sal_False );
+    sal_Bool EndOfColumn        ( sal_Bool bSelect = sal_False );
+    sal_Bool StartOfNextColumn  ( sal_Bool bSelect = sal_False );
+    sal_Bool EndOfNextColumn    ( sal_Bool bSelect = sal_False );
+    sal_Bool StartOfPrevColumn  ( sal_Bool bSelect = sal_False );
+    sal_Bool EndOfPrevColumn    ( sal_Bool bSelect = sal_False );
 
     // setze den Cursor auf die Seite "nPage" an den Anfang
     // zusaetzlich zu der gleichnamigen Implementierung in crsrsh.hxx
     // werden hier alle bestehenden Selektionen vor dem Setzen des
     // Cursors aufgehoben
-    BOOL    GotoPage( USHORT nPage, BOOL bRecord );
+    sal_Bool    GotoPage( sal_uInt16 nPage, sal_Bool bRecord );
 
     //setzen des Cursors; merken der alten Position fuer Zurueckblaettern.
     DECL_LINK( ExecFlyMac, void * );
 
-    BOOL    PageCrsr(SwTwips lOffset, BOOL bSelect);
+    sal_Bool    PageCrsr(SwTwips lOffset, sal_Bool bSelect);
 
     // Felder Update
-    void    UpdateInputFlds( SwInputFieldList* pLst = 0, BOOL bOnlyInSel = FALSE );
+    void    UpdateInputFlds( SwInputFieldList* pLst = 0, sal_Bool bOnlyInSel = sal_False );
 
-    void    NoEdit(BOOL bHideCrsr = TRUE);
+    void    NoEdit(sal_Bool bHideCrsr = sal_True);
     void    Edit();
-    BOOL    IsNoEdit() const { return bNoEdit; }
+    sal_Bool    IsNoEdit() const { return bNoEdit; }
 
-    BOOL IsRetainSelection() const { return mbRetainSelection; }
-    void SetRetainSelection( BOOL bRet ) { mbRetainSelection = bRet; }
+    sal_Bool IsRetainSelection() const { return mbRetainSelection; }
+    void SetRetainSelection( sal_Bool bRet ) { mbRetainSelection = bRet; }
 
     // change current data base and notify
     void ChgDBData(const SwDBData& SwDBData);
@@ -279,7 +279,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     long    DelLeft();
 
     // loescht auch Rahmen bzw. setzt den Cursor in den Rahmen,
-    // wenn bDelFrm == FALSE ist
+    // wenn bDelFrm == sal_False ist
     long    DelRight();
     long    DelToEndOfPara();
     long    DelToStartOfPara();
@@ -298,7 +298,7 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
             WORD_SPACE_AFTER = 2,
             WORD_NO_SPACE = 3
         };
-    int     IntelligentCut(int nSelectionType, BOOL bCut = TRUE);
+    int     IntelligentCut(int nSelectionType, sal_Bool bCut = sal_True);
 
     // Editieren
     void    Insert(SwField &);
@@ -306,28 +306,28 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     // Graphic
     void    Insert( const String &rPath, const String &rFilter,
                     const Graphic &, SwFlyFrmAttrMgr * = 0,
-                    BOOL bRule = FALSE );
+                    sal_Bool bRule = sal_False );
 
     void    InsertByWord( const String & );
-    void    InsertPageBreak(const String *pPageDesc = 0, USHORT nPgNum = 0 );
+    void    InsertPageBreak(const String *pPageDesc = 0, sal_uInt16 nPgNum = 0 );
     void    InsertLineBreak();
     void    InsertColumnBreak();
-    void    InsertFootnote(const String &, BOOL bEndNote = FALSE, BOOL bEdit = TRUE );
-    void    SplitNode( BOOL bAutoFormat = FALSE, BOOL bCheckTableStart = TRUE );
-    BOOL    CanInsert();
+    void    InsertFootnote(const String &, sal_Bool bEndNote = sal_False, sal_Bool bEdit = sal_True );
+    void    SplitNode( sal_Bool bAutoFormat = sal_False, sal_Bool bCheckTableStart = sal_True );
+    sal_Bool    CanInsert();
 
     // Verzeichnisse
     void    InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
-    BOOL    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
+    sal_Bool    UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet = 0);
 
     // Numerierung und Bullets
     /**
        Turns on numbering or bullets.
 
-       @param bNum    TRUE: turn on numbering
-                      FALSE: turn on bullets
+       @param bNum    sal_True: turn on numbering
+                      sal_False: turn on bullets
     */
-    void    NumOrBulletOn(BOOL bNum); // #i29560#
+    void    NumOrBulletOn(sal_Bool bNum); // #i29560#
     void    NumOrBulletOff(); // #i29560#
     void    NumOn();
     void    BulletOn();
@@ -336,12 +336,12 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void    InsertObject(     /*SvInPlaceObjectRef *pObj, */       // != 0 fuer Clipboard
                           const svt::EmbeddedObjectRef&,
                           SvGlobalName *pName = 0,      // != 0 entspr. Object erzeugen.
-                          BOOL bActivate = TRUE,
-                          USHORT nSlotId = 0);       // SlotId fuer Dialog
+                          sal_Bool bActivate = sal_True,
+                          sal_uInt16 nSlotId = 0);       // SlotId fuer Dialog
 
-    BOOL    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
+    sal_Bool    InsertOleObject( const svt::EmbeddedObjectRef& xObj, SwFlyFrmFmt **pFlyFrmFmt = 0 );
     void    LaunchOLEObj( long nVerb = 0 );             // Server starten
-    BOOL    IsOLEObj() const { return GetCntType() == CNT_OLE;}
+    sal_Bool    IsOLEObj() const { return GetCntType() == CNT_OLE;}
     virtual void MoveObjectIfActive( svt::EmbeddedObjectRef& xObj, const Point& rOffset );
     virtual void CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                                   const SwRect *pFlyPrtRect = 0,
@@ -364,32 +364,32 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
 
     void    SetPageStyle(const String &rCollName);
 
-    String  GetCurPageStyle( const BOOL bCalcFrm = TRUE ) const;
+    String  GetCurPageStyle( const sal_Bool bCalcFrm = sal_True ) const;
 
     // Aktuelle Vorlage anhand der geltenden Attribute aendern
     void    QuickUpdateStyle();
 
     enum DoType { UNDO, REDO, REPEAT };
 
-    void    Do( DoType eDoType, USHORT nCnt = 1 );
+    void    Do( DoType eDoType, sal_uInt16 nCnt = 1 );
     String  GetDoString( DoType eDoType ) const;
     String  GetRepeatString() const;
-    USHORT  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
+    sal_uInt16  GetDoStrings( DoType eDoType, SfxStringListItem& rStrLstItem ) const;
 
     //Suchen oder Ersetzen
-    ULONG SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
-                         BOOL bSearchInNotes,
+    sal_uLong SearchPattern(const com::sun::star::util::SearchOptions& rSearchOpt,
+                         sal_Bool bSearchInNotes,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
-                         int bReplace = FALSE );
+                         int bReplace = sal_False );
 
-    ULONG SearchTempl  (const String &rTempl,
+    sal_uLong SearchTempl  (const String &rTempl,
                          SwDocPositions eStart, SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
                          const String* pReplTempl = 0 );
 
-    ULONG SearchAttr   (const SfxItemSet& rFindSet,
-                         BOOL bNoColls,
+    sal_uLong SearchAttr   (const SfxItemSet& rFindSet,
+                         sal_Bool bNoColls,
                          SwDocPositions eStart,SwDocPositions eEnde,
                          FindRanges eFlags = FND_IN_BODY,
                          const com::sun::star::util::SearchOptions* pSearchOpt = 0,
@@ -399,30 +399,30 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
 
     // Aktion vor Cursorbewegung
     // Hebt gfs. Selektionen auf, triggert Timer und GCAttr()
-    void    MoveCrsr( BOOL bWithSelect = FALSE );
+    void    MoveCrsr( sal_Bool bWithSelect = sal_False );
 
     // Eingabefelder updaten
-    BOOL    StartInputFldDlg(SwField*, BOOL bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
+    sal_Bool    StartInputFldDlg(SwField*, sal_Bool bNextButton, Window* pParentWin = 0, ByteString* pWindowState = 0);
     // update DropDown fields
-    BOOL    StartDropDownFldDlg(SwField*, BOOL bNextButton, ByteString* pWindowState = 0);
+    sal_Bool    StartDropDownFldDlg(SwField*, sal_Bool bNextButton, ByteString* pWindowState = 0);
 
     //"Handler" fuer Anederungen an der DrawView - fuer Controls.
     virtual void DrawSelChanged( );
 
     // springe zum Bookmark und setze die "Selections-Flags" wieder richtig
-    BOOL GotoMark( const ::sw::mark::IMark* const pMark );
-    BOOL GotoMark( const ::sw::mark::IMark* const pMark, BOOL bSelect, BOOL bStart );
-    BOOL GotoMark( const ::rtl::OUString& rName );
-    BOOL GoNextBookmark(); // TRUE, wenn's noch eine gab
-    BOOL GoPrevBookmark();
+    sal_Bool GotoMark( const ::sw::mark::IMark* const pMark );
+    sal_Bool GotoMark( const ::sw::mark::IMark* const pMark, sal_Bool bSelect, sal_Bool bStart );
+    sal_Bool GotoMark( const ::rtl::OUString& rName );
+    sal_Bool GoNextBookmark(); // sal_True, wenn's noch eine gab
+    sal_Bool GoPrevBookmark();
 
     bool GotoFieldmark(::sw::mark::IFieldmark const * const pMark);
 
-    BOOL GotoField( const SwFmtFld& rFld );
+    sal_Bool GotoField( const SwFmtFld& rFld );
 
     // jump to the next / previous hyperlink - inside text and also
     // on graphics
-    BOOL SelectNextPrevHyperlink( BOOL bNext = TRUE );
+    sal_Bool SelectNextPrevHyperlink( sal_Bool bNext = sal_True );
 
     // Zugehoerige SwView ermitteln
     const SwView&       GetView() const { return rView; }
@@ -431,23 +431,23 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     //Weil es sonst keiner macht, gibt es hier eine ExecMacro()
     void ExecMacro( const SvxMacro& rMacro, String* pRet = 0, SbxArray* pArgs = 0 );
     // rufe ins dunkle Basic/JavaScript
-    USHORT CallEvent( USHORT nEvent, const SwCallMouseEvent& rCallEvent,
-                        BOOL bCheckPtr = FALSE, SbxArray* pArgs = 0,
+    sal_uInt16 CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
+                        sal_Bool bCheckPtr = sal_False, SbxArray* pArgs = 0,
                         const Link* pCallBack = 0 );
 
     // ein Klick aus das angegebene Feld. Der Cursor steht auf diesem.
     // Fuehre die vor definierten Aktionen aus.
     void ClickToField( const SwField& rFld );
-    void ClickToINetAttr( const SwFmtINetFmt& rItem, USHORT nFilter = URLLOAD_NOFILTER );
-    BOOL ClickToINetGrf( const Point& rDocPt, USHORT nFilter = URLLOAD_NOFILTER );
-    inline BOOL IsInClickToEdit() const ;
+    void ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter = URLLOAD_NOFILTER );
+    sal_Bool ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter = URLLOAD_NOFILTER );
+    inline sal_Bool IsInClickToEdit() const ;
 
     // fall ein URL-Button selektiert ist, dessen URL returnen, ansonsten
     // einen LeerString
-    BOOL GetURLFromButton( String& rURL, String& rDescr ) const;
+    sal_Bool GetURLFromButton( String& rURL, String& rDescr ) const;
 
     void NavigatorPaste( const NaviContentBookmark& rBkmk,
-                         const USHORT nAction );
+                         const sal_uInt16 nAction );
 
     // die Core erzeugt eine Selektion, das SttSelect muss gerufen werden
     virtual void NewCoreSelection();
@@ -467,14 +467,14 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
                 const SwViewOption *pViewOpt = 0);
     virtual ~SwWrtShell();
 
-    BOOL TryRemoveIndent(); // #i23725#
+    sal_Bool TryRemoveIndent(); // #i23725#
 
     String GetSelDescr() const;
 
 private:
 
     SW_DLLPRIVATE void  OpenMark();
-    SW_DLLPRIVATE void  CloseMark( BOOL bOkFlag );
+    SW_DLLPRIVATE void  CloseMark( sal_Bool bOkFlag );
 
     SW_DLLPRIVATE String    GetWrdDelim();
     SW_DLLPRIVATE String    GetSDelim();
@@ -483,11 +483,11 @@ private:
     struct ModeStack
     {
         ModeStack   *pNext;
-        BOOL        bAdd,
+        sal_Bool        bAdd,
                     bBlock,
                     bExt,
                     bIns;
-        ModeStack(ModeStack *pNextMode, BOOL _bIns, BOOL _bExt, BOOL _bAdd, BOOL _bBlock):
+        ModeStack(ModeStack *pNextMode, sal_Bool _bIns, sal_Bool _bExt, sal_Bool _bAdd, sal_Bool _bBlock):
             pNext(pNextMode),
             bAdd(_bAdd),
             bBlock(_bBlock),
@@ -508,11 +508,11 @@ private:
     {
         Point aDocPos;
         CrsrStack *pNext;
-        BOOL bValidCurPos : 1;
-        BOOL bIsFrmSel : 1;
+        sal_Bool bValidCurPos : 1;
+        sal_Bool bIsFrmSel : 1;
         SwTwips lOffset;
 
-        CrsrStack( BOOL bValid, BOOL bFrmSel, const Point &rDocPos,
+        CrsrStack( sal_Bool bValid, sal_Bool bFrmSel, const Point &rDocPos,
                     SwTwips lOff, CrsrStack *pN )
             : aDocPos(rDocPos),
             pNext(pN),
@@ -529,39 +529,39 @@ private:
     SwView  &rView;
 
     Point   aDest;
-    BOOL    bDestOnStack;
-    BOOL    HasCrsrStack() const { return 0 != pCrsrStack; }
-    SW_DLLPRIVATE BOOL  PushCrsr(SwTwips lOffset, BOOL bSelect);
-    SW_DLLPRIVATE BOOL  PopCrsr(BOOL bUpdate, BOOL bSelect = FALSE);
+    sal_Bool    bDestOnStack;
+    sal_Bool    HasCrsrStack() const { return 0 != pCrsrStack; }
+    SW_DLLPRIVATE sal_Bool  PushCrsr(SwTwips lOffset, sal_Bool bSelect);
+    SW_DLLPRIVATE sal_Bool  PopCrsr(sal_Bool bUpdate, sal_Bool bSelect = sal_False);
 
     // ENDE Cursor bei PageUp / -Down mitnehmen
-    SW_DLLPRIVATE BOOL _SttWrd();
-    SW_DLLPRIVATE BOOL _EndWrd();
-    SW_DLLPRIVATE BOOL _NxtWrd();
-    SW_DLLPRIVATE BOOL _PrvWrd();
+    SW_DLLPRIVATE sal_Bool _SttWrd();
+    SW_DLLPRIVATE sal_Bool _EndWrd();
+    SW_DLLPRIVATE sal_Bool _NxtWrd();
+    SW_DLLPRIVATE sal_Bool _PrvWrd();
     // --> OD 2008-08-06 #i92468#
-    SW_DLLPRIVATE BOOL _NxtWrdForDelete();
-    SW_DLLPRIVATE BOOL _PrvWrdForDelete();
+    SW_DLLPRIVATE sal_Bool _NxtWrdForDelete();
+    SW_DLLPRIVATE sal_Bool _PrvWrdForDelete();
     // <--
-    SW_DLLPRIVATE BOOL _FwdSentence();
-    SW_DLLPRIVATE BOOL _BwdSentence();
-    BOOL _FwdPara();
-    SW_DLLPRIVATE BOOL _BwdPara();
+    SW_DLLPRIVATE sal_Bool _FwdSentence();
+    SW_DLLPRIVATE sal_Bool _BwdSentence();
+    sal_Bool _FwdPara();
+    SW_DLLPRIVATE sal_Bool _BwdPara();
 
         //  Selektionen
-    BOOL    bIns            :1;
-    BOOL    bInSelect       :1;
-    BOOL    bExtMode        :1;
-    BOOL    bAddMode        :1;
-    BOOL    bBlockMode      :1;
-    BOOL    bLayoutMode     :1;
-    BOOL    bNoEdit         :1;
-    BOOL    bCopy           :1;
-    BOOL    bSelWrd         :1;
-    BOOL    bSelLn          :1;
-    BOOL    bIsInClickToEdit:1;
-    BOOL    bClearMark      :1;     // Selektion fuer ChartAutoPilot nicht loeschen
-    BOOL    mbRetainSelection :1; // Do not remove selections
+    sal_Bool    bIns            :1;
+    sal_Bool    bInSelect       :1;
+    sal_Bool    bExtMode        :1;
+    sal_Bool    bAddMode        :1;
+    sal_Bool    bBlockMode      :1;
+    sal_Bool    bLayoutMode     :1;
+    sal_Bool    bNoEdit         :1;
+    sal_Bool    bCopy           :1;
+    sal_Bool    bSelWrd         :1;
+    sal_Bool    bSelLn          :1;
+    sal_Bool    bIsInClickToEdit:1;
+    sal_Bool    bClearMark      :1;     // Selektion fuer ChartAutoPilot nicht loeschen
+    sal_Bool    mbRetainSelection :1; // Do not remove selections
 
     Point   aStart;
     Link    aSelTblLink;
@@ -574,37 +574,37 @@ private:
     SW_DLLPRIVATE void  SttDragDrop(Timer *);
 
     using SwCrsrShell::SetCrsr;
-    SW_DLLPRIVATE long  SetCrsr(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  SetCrsr(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  SetCrsrKillSel(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  SetCrsrKillSel(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  StdSelect(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  BeginDrag(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  Drag(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  EndDrag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  StdSelect(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  BeginDrag(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  Drag(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  EndDrag(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  ExtSelWrd(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  ExtSelLn(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  ExtSelWrd(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  ExtSelLn(const Point *, sal_Bool bProp=sal_False );
 
     //Verschieben von Text aus Drag and Drop; Point ist
     //Destination fuer alle Selektionen.
-    SW_DLLPRIVATE long  MoveText(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  MoveText(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  BeginFrmDrag(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  BeginFrmDrag(const Point *, sal_Bool bProp=sal_False );
 
     //nach SSize/Move eines Frames Update; Point ist Destination.
-    SW_DLLPRIVATE long  UpdateLayoutFrm(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  UpdateLayoutFrm(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE long  SttLeaveSelect(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  AddLeaveSelect(const Point *, BOOL bProp=FALSE );
-    SW_DLLPRIVATE long  Ignore(const Point *, BOOL bProp=FALSE );
+    SW_DLLPRIVATE long  SttLeaveSelect(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  AddLeaveSelect(const Point *, sal_Bool bProp=sal_False );
+    SW_DLLPRIVATE long  Ignore(const Point *, sal_Bool bProp=sal_False );
 
-    SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = FALSE;}
-    SW_DLLPRIVATE BOOL  _CanInsert();
+    SW_DLLPRIVATE void  LeaveExtSel() { bSelWrd = bSelLn = sal_False;}
+    SW_DLLPRIVATE sal_Bool  _CanInsert();
 
-    SW_DLLPRIVATE BOOL  GoStart(BOOL KeepArea = FALSE, BOOL * = 0,
-            BOOL bSelect = FALSE, BOOL bDontMoveRegion = FALSE);
-    SW_DLLPRIVATE BOOL  GoEnd(BOOL KeepArea = FALSE, BOOL * = 0);
+    SW_DLLPRIVATE sal_Bool  GoStart(sal_Bool KeepArea = sal_False, sal_Bool * = 0,
+            sal_Bool bSelect = sal_False, sal_Bool bDontMoveRegion = sal_False);
+    SW_DLLPRIVATE sal_Bool  GoEnd(sal_Bool KeepArea = sal_False, sal_Bool * = 0);
 
     enum BookMarkMove
     {
@@ -614,7 +614,7 @@ private:
         BOOKMARK_LAST_LAST_ENTRY
     };
 
-    SW_DLLPRIVATE BOOL MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=NULL);
+    SW_DLLPRIVATE sal_Bool MoveBookMark(BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark=NULL);
 };
 
 inline void SwWrtShell::ResetCursorStack()
@@ -623,27 +623,27 @@ inline void SwWrtShell::ResetCursorStack()
         _ResetCursorStack();
 }
 
-inline void SwWrtShell::SelTblCells(const Link &rLink, BOOL bMark )
+inline void SwWrtShell::SelTblCells(const Link &rLink, sal_Bool bMark )
 {
-    SetSelTblCells( TRUE );
+    SetSelTblCells( sal_True );
     bClearMark = bMark;
     aSelTblLink = rLink;
 }
 inline void SwWrtShell::EndSelTblCells()
 {
-    SetSelTblCells( FALSE );
-    bClearMark = TRUE;
+    SetSelTblCells( sal_False );
+    bClearMark = sal_True;
 }
 
-inline BOOL SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
+inline sal_Bool SwWrtShell::IsInClickToEdit() const { return bIsInClickToEdit; }
 
-inline BOOL SwWrtShell::Is_FnDragEQBeginDrag() const
+inline sal_Bool SwWrtShell::Is_FnDragEQBeginDrag() const
 {
 #ifdef GCC
     SELECTFUNC  fnTmp = &SwWrtShell::BeginDrag;
     return fnDrag == fnTmp;
 #else
-    return sal::static_int_cast< BOOL >(fnDrag == &SwWrtShell::BeginDrag);
+    return sal::static_int_cast< sal_Bool >(fnDrag == &SwWrtShell::BeginDrag);
 #endif
 }
 

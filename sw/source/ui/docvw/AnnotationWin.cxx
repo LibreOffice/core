@@ -28,7 +28,6 @@
  *
  ************************************************************************/
 
-
 #include "precompiled_sw.hxx"
 
 #include <AnnotationWin.hxx>
@@ -62,7 +61,9 @@
 #include <wrtsh.hxx>
 #include <docsh.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <SwUndoField.hxx>
+
 
 namespace sw { namespace annotation {
 
@@ -88,7 +89,7 @@ void SwAnnotationWin::SetPostItText()
 {
     // get text from SwPostItField and insert into our textview
     Engine()->SetModifyHdl( Link() );
-    Engine()->EnableUndo( FALSE );
+    Engine()->EnableUndo( sal_False );
     mpFld = static_cast<SwPostItField*>(mpFmtFld->GetFld());
     if( mpFld->GetTextObject() )
         Engine()->SetText( *mpFld->GetTextObject() );
@@ -101,7 +102,7 @@ void SwAnnotationWin::SetPostItText()
 
     Engine()->ClearModifyFlag();
     Engine()->GetUndoManager().Clear();
-    Engine()->EnableUndo( TRUE );
+    Engine()->EnableUndo( sal_True );
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Invalidate();
 }
@@ -116,7 +117,8 @@ void SwAnnotationWin::UpdateData()
         SwField* pOldField = mpFld->Copy();
         mpFld->SetPar2(Engine()->GetEditEngine().GetText());
         mpFld->SetTextObject(Engine()->CreateParaObject());
-        DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+        DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+            new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
         delete pOldField;
         // so we get a new layout of notes (anchor position is still the same and we would otherwise not get one)
         Mgr().SetLayout();
@@ -246,7 +248,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     SwField* pOldField = mpFld->Copy();
     mpFld->SetPar2(Engine()->GetEditEngine().GetText());
     mpFld->SetTextObject(Engine()->CreateParaObject());
-    DocView().GetDocShell()->GetDoc()->AppendUndo(new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
+    DocView().GetDocShell()->GetDoc()->GetIDocumentUndoRedo().AppendUndo(
+        new SwUndoFieldFromDoc(aPosition, *pOldField, *mpFld, 0, true));
     delete pOldField;
     Engine()->SetModifyHdl( LINK( this, SwAnnotationWin, ModifyHdl ) );
     Engine()->ClearModifyFlag();
@@ -256,8 +259,8 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 SvxLanguageItem SwAnnotationWin::GetLanguage(void)
 {
     // set initial language for outliner
-    USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
-    USHORT nLangWhichId = 0;
+    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( mpFld->GetLanguage() );
+    sal_uInt16 nLangWhichId = 0;
     switch (nScriptType)
     {
         case SCRIPTTYPE_LATIN :    nLangWhichId = EE_CHAR_LANGUAGE ; break;

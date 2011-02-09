@@ -80,7 +80,7 @@ using namespace ::com::sun::star;
  *************************************************************************/
 
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
-                          const sal_Bool bRightMargin, const sal_Bool bNoScroll = TRUE )
+                          const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
 {
     // 8810: vgl. 1170, RightMargin in der letzten Masterzeile...
     const xub_StrLen nOffset = rPos.nContent.GetIndex();
@@ -438,7 +438,7 @@ sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
         SwTxtSizeInfo aInf( pFrm );
         SwTxtCursor aLine( pFrm, &aInf );
         SwCrsrMoveState aTmpState( MV_SETONLYTEXT );
-        aTmpState.bRealHeight = TRUE;
+        aTmpState.bRealHeight = sal_True;
         if( aLine.GetCharRect( &rOrig, nOffset, &aTmpState, nMaxY ) )
         {
             if( aTmpState.aRealHeight.X() >= 0 )
@@ -886,7 +886,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
 #ifdef DBG_UTIL
-                const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 // Der Node soll nicht gewechselt werden
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
@@ -955,7 +955,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 //          current position
 void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
                               xub_StrLen& nPos, sal_Bool& bRight,
-                              BYTE& nCrsrLevel, BYTE nDefaultDir )
+                              sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
 {
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
     const SwLinePortion* pLast = 0;
@@ -1010,7 +1010,7 @@ void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
             xub_StrLen nTmpPos = nPos - nIdx;
             sal_Bool bTmpForward = ! bRight;
-            BYTE nTmpCrsrLevel = nCrsrLevel;
+            sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
                                      nTmpCrsrLevel, nDefaultDir + 1 );
 
@@ -1069,7 +1069,7 @@ void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
             const SwLineLayout& rLine = ((SwMultiPortion*)pPor)->GetRoot();
             xub_StrLen nTmpPos = nPos - nIdx;
             sal_Bool bTmpForward = ! bRight;
-            BYTE nTmpCrsrLevel = nCrsrLevel;
+            sal_uInt8 nTmpCrsrLevel = nCrsrLevel;
             lcl_VisualMoveRecursion( rLine, 0, nTmpPos, bTmpForward,
                                      nTmpCrsrLevel, nDefaultDir + 1 );
 
@@ -1098,7 +1098,7 @@ void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
     }
 }
 
-void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
+void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, sal_uInt8& nCrsrLevel,
                                   sal_Bool& bForward, sal_Bool bInsertCrsr )
 {
     if( IsEmpty() || IsHiddenNow() )
@@ -1134,7 +1134,7 @@ void SwTxtFrm::PrepareVisualMove( xub_StrLen& nPos, BYTE& nCrsrLevel,
         return;
     }
 
-    const BYTE nDefaultDir = static_cast<BYTE>(IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR);
+    const sal_uInt8 nDefaultDir = static_cast<sal_uInt8>(IsRightToLeft() ? UBIDI_RTL : UBIDI_LTR);
     const sal_Bool bVisualRight = ( nDefaultDir == UBIDI_LTR && bForward ) ||
                                   ( nDefaultDir == UBIDI_RTL && ! bForward );
 
@@ -1253,7 +1253,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().Width() /= 2;
 #ifdef DBG_UTIL
                 // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
-                const ULONG nOldNode = pPam->GetPoint()->nNode.GetIndex();
+                const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
                     aLine.NextLine();
@@ -1471,7 +1471,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
             nFirst = 0;
         }
         else if( nDist < nFirst )
-            nFirst = nFirst - (USHORT)nDist;
+            nFirst = nFirst - (sal_uInt16)nDist;
         else
             nFirst = 0;
         nDist = Max( nDist, long( GetLineSpace() ) );
@@ -1481,7 +1481,7 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
         if( nDiff > 0 )
         {
             nDiff /= nDist;
-            rFill.Fill().nParaCnt = static_cast<USHORT>(nDiff + 1);
+            rFill.Fill().nParaCnt = static_cast<sal_uInt16>(nDiff + 1);
             rFill.nLineWidth = 0;
             rFill.bInner = sal_False;
             rFill.bEmpty = sal_True;

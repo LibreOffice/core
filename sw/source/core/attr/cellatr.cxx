@@ -49,7 +49,7 @@
 *************************************************************************/
 
 
-SwTblBoxNumFormat::SwTblBoxNumFormat( UINT32 nFormat, BOOL bFlag )
+SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
 {
 }
@@ -136,7 +136,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
     {
         // setze bei allen das Value-Flag zurueck
-        ChgValid( FALSE );
+        ChgValid( sal_False );
         return ;
     }
 
@@ -157,7 +157,7 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
 //          if( VF_CMD & pFld->GetFormat() )
 //              pFld->PtrToBoxNm( pUpdtFld->pTbl );
 //          else
-                ChgValid( FALSE );
+                ChgValid( sal_False );
             break;
         case TBL_BOXNAME:
             // ist es die gesuchte Tabelle ??
@@ -181,20 +181,20 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         case TBL_SPLITTBL:
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
             {
-                USHORT nLnPos = SwTableFormula::GetLnPosInTbl(
+                sal_uInt16 nLnPos = SwTableFormula::GetLnPosInTbl(
                                         pTblNd->GetTable(), GetTableBox() );
                 pUpdtFld->bBehindSplitLine = USHRT_MAX != nLnPos &&
                                             pUpdtFld->nSplitLine <= nLnPos;
             }
             else
-                pUpdtFld->bBehindSplitLine = FALSE;
+                pUpdtFld->bBehindSplitLine = sal_False;
             // kein break
         case TBL_MERGETBL:
             if( pUpdtFld->pHistory )
             {
                 // fuer die History brauche ich aber die unveraenderte Formel
                 SwTblBoxFormula aCopy( *this );
-                pUpdtFld->bModified = FALSE;
+                pUpdtFld->bModified = sal_False;
                 ToSplitMergeBoxNm( *pUpdtFld );
 
                 if( pUpdtFld->bModified )

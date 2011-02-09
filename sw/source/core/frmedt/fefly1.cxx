@@ -55,6 +55,7 @@
 #include <viewimp.hxx>
 #include <viscrs.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <dview.hxx>
 #include <dflyobj.hxx>
 #include <dcontact.hxx>
@@ -123,10 +124,10 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     return bRet;
 }
 
-BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
+sal_Bool lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
                         SfxItemSet& rSet )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     SwFmtAnchor aNewAnch( (SwFmtAnchor&)rSet.Get( RES_ANCHOR ) );
     RndStdIds nNew = aNewAnch.GetAnchorId();
     const SwFrm *pNewAnch;
@@ -146,7 +147,7 @@ BOOL lcl_FindAnchorPos( SwDoc& rDoc, const Point& rPt, const SwFrm& rFrm,
             pNewAnch = ::FindAnchor( pFrm, aTmpPnt );
             if( pNewAnch->IsProtected() )
             {
-                bRet = FALSE;
+                bRet = sal_False;
                 break;
             }
 
@@ -491,7 +492,11 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
         SwPosition aPos( GetDoc()->GetNodes().GetEndOfExtras() );
         Point aTmpPnt( rAbsPos );
         GetLayout()->GetCrsrOfst( &aPos, aTmpPnt, &aState );
+<<<<<<< local
         pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->getLayoutFrm( GetLayout(),0,&aPos,FALSE );
+=======
+        pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm(0,&aPos,sal_False );
+>>>>>>> other
     }
     const SwFrm *pNewAnch;
     if( pTxtFrm )
@@ -617,7 +622,7 @@ Point SwFEShell::FindAnchorPos( const Point& rAbsPos, sal_Bool bMoveIt )
             //TODO: That doesn't seem to be intended
             if( Color(COL_TRANSPARENT) != GetOut()->GetLineColor() )
             {
-                ASSERT( FALSE, "Hey, Joe: Where's my Null Pen?" );
+                ASSERT( sal_False, "Hey, Joe: Where's my Null Pen?" );
                 GetOut()->SetLineColor( Color(COL_TRANSPARENT) );
             }
 #endif
@@ -707,7 +712,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
     SwFlyFrmFmt *pRet;
     if( bMoveCntnt )
     {
-        GetDoc()->StartUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_INSLAYFMT, NULL );
         SwFmtAnchor* pOldAnchor = 0;
         sal_Bool bHOriChgd = sal_False, bVOriChgd = sal_False;
         SwFmtVertOrient aOldV;
@@ -765,9 +770,18 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                 // das verschieben von TabelleSelektion ist noch nicht
                 // Undofaehig - also darf das UmAnkern auch nicht
                 // aufgezeichnet werden.
-                sal_Bool bDoesUndo = GetDoc()->DoesUndo();
-                if( bDoesUndo && UNDO_INSLAYFMT == GetDoc()->GetUndoIds(NULL, NULL) )
-                    GetDoc()->DoUndo( sal_False );
+                bool const bDoesUndo =
+                    GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+                SwUndoId nLastUndoId(UNDO_EMPTY);
+                if (bDoesUndo &&
+                    GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0,
+                        & nLastUndoId))
+                {
+                    if (UNDO_INSLAYFMT == nLastUndoId)
+                    {
+                        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+                    }
+                }
 
                 ((SfxItemSet&)rSet).Put( *pOldAnchor );
 
@@ -777,17 +791,17 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                     ((SfxItemSet&)rSet).Put( aOldV );
 
                 GetDoc()->SetFlyFrmAttr( *pRet, (SfxItemSet&)rSet );
-                GetDoc()->DoUndo( bDoesUndo );
+                GetDoc()->GetIDocumentUndoRedo().DoUndo(bDoesUndo);
             }
             delete pOldAnchor;
         }
-        GetDoc()->EndUndo( UNDO_INSLAYFMT, NULL );
+        GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_INSLAYFMT, NULL );
     }
     else
         /* #109161# If called from a shell try to propagate an
             existing adjust item from rPos to the content node of the
             new frame. */
-        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, TRUE );
+        pRet = GetDoc()->MakeFlySection( eRndId, &rPos, &rSet, pParent, sal_True );
 
     if( pRet )
     {
@@ -1458,7 +1472,7 @@ Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         {
             // search for a sequence field:
             const SfxPoolItem* pItem;
-            for( USHORT n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
+            for( sal_uInt16 n = 0, nEnd = pHts->Count(); n < nEnd; ++n )
                 if( RES_TXTATR_FIELD == ( pItem =
                             &(*pHts)[ n ]->GetAttr())->Which() &&
                     TYP_SEQFLD == ((SwFmtFld*)pItem)->GetFld()->GetTypeId() )
@@ -1640,8 +1654,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
         const SwFmtURL &rURL = pFly->GetFmt()->GetURL();
         if( rURL.GetURL().Len() || rURL.GetMap() )
         {
-            BOOL bSetTargetFrameName = pTargetFrameName != 0;
-            BOOL bSetDescription = pDescription != 0;
+            sal_Bool bSetTargetFrameName = pTargetFrameName != 0;
+            sal_Bool bSetDescription = pDescription != 0;
             if ( rURL.GetMap() )
             {
                 IMapObject *pObject = pFly->GetFmt()->GetIMapObject( rPt, pFly );
@@ -1970,13 +1984,13 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
     return bRet;
 }
 
-static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
+static sal_uInt16 SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 {
     ASSERT(pFmt != NULL, "invalid argument");
 
     SwFlyFrm * pFrm = pFmt->GetFrm();
 
-    USHORT aResult;
+    sal_uInt16 aResult;
 
     if (pFrm != NULL)
         aResult = pFrm->GetPhyPageNum();
@@ -1990,7 +2004,7 @@ static USHORT SwFmtGetPageNum(const SwFlyFrmFmt * pFmt)
 
 void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                                       const String & rReference,
-                                      BOOL bSuccessors,
+                                      sal_Bool bSuccessors,
                                       ::std::vector< String > & aPrevPageVec,
                                       ::std::vector< String > & aThisPageVec,
                                       ::std::vector< String > & aNextPageVec,
@@ -2050,7 +2064,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
         aRestVec.clear();
 
         /* number of page rFmt resides on */
-        USHORT nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
+        sal_uInt16 nPageNum = SwFmtGetPageNum((SwFlyFrmFmt *) &rFmt);
 
         ::std::vector< const SwFrmFmt * >::const_iterator aIt;
 
@@ -2062,7 +2076,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
                itself */
             if (aString != rReference && aString != rFmt.GetName())
             {
-                USHORT nNum1 =
+                sal_uInt16 nNum1 =
                     SwFmtGetPageNum((SwFlyFrmFmt *) *aIt);
 
                 if (nNum1 == nPageNum -1)
@@ -2215,7 +2229,7 @@ void SwFEShell::AlignFormulaToBaseline( const uno::Reference < embed::XEmbeddedO
                 }
                 catch ( uno::Exception& )
                 {
-                    ASSERT( FALSE , "Baseline could not be retrieved from Starmath!" );
+                    ASSERT( sal_False , "Baseline could not be retrieved from Starmath!" );
                 }
             }
         }

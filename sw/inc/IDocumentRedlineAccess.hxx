@@ -49,7 +49,7 @@
  class SwNode;
  class String;
 
-typedef USHORT RedlineMode_t;
+typedef sal_uInt16 RedlineMode_t;
 namespace nsRedlineMode_t
 {
     const RedlineMode_t REDLINE_NONE = 0; // no RedlineMode
@@ -70,7 +70,7 @@ namespace nsRedlineMode_t
     const RedlineMode_t REDLINE_DONTCOMBINE_REDLINES = 0x400;
 }
 
-typedef USHORT RedlineType_t;
+typedef sal_uInt16 RedlineType_t;
 namespace nsRedlineType_t
 {
     // die RedlineTypen gehen von 0 bis 127
@@ -92,16 +92,16 @@ class IDocumentRedlineAccess
 {
      // Static helper functions
 public:
-    static bool IsShowChanges(const USHORT eM)
+    static bool IsShowChanges(const sal_uInt16 eM)
     { return (nsRedlineMode_t::REDLINE_SHOW_INSERT | nsRedlineMode_t::REDLINE_SHOW_DELETE) == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static bool IsHideChanges(const USHORT eM)
+    static bool IsHideChanges(const sal_uInt16 eM)
     { return nsRedlineMode_t::REDLINE_SHOW_INSERT == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static bool IsShowOriginal(const USHORT eM)
+    static bool IsShowOriginal(const sal_uInt16 eM)
     { return nsRedlineMode_t::REDLINE_SHOW_DELETE == (eM & nsRedlineMode_t::REDLINE_SHOW_MASK); }
 
-    static bool IsRedlineOn(const USHORT eM)
+    static bool IsRedlineOn(const sal_uInt16 eM)
     { return nsRedlineMode_t::REDLINE_ON == (eM & (nsRedlineMode_t::REDLINE_ON | nsRedlineMode_t::REDLINE_IGNORE )); }
 
 public:
@@ -134,7 +134,7 @@ public:
     /** Query if redlining is on.
 
         @returns
-        </TRUE> if redlining is on </FALSE> otherwise
+        <TRUE/> if redlining is on <FALSE/> otherwise
     */
     virtual bool IsRedlineOn() const = 0;
 

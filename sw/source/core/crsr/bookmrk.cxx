@@ -31,6 +31,7 @@
 
 #include <bookmrk.hxx>
 #include <IDocumentMarkAccess.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <doc.hxx>
 #include <errhdl.hxx>
 #include <ndtxt.hxx>
@@ -38,7 +39,7 @@
 #include <swserv.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <swtypes.hxx>
-#include <undobj.hxx>
+#include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>
@@ -79,13 +80,14 @@ namespace
     {
         SwPosition& rStart = pField->GetMarkStart();
         SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
-        SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
+        SwTxtNode const*const pStartTxtNode =
+            rStart.nNode.GetNode().GetTxtNode();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
         SwPaM aStartPaM(rStart);
         SwPaM aEndPaM(rEnd);
-        io_pDoc->StartUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_UI_REPLACE, NULL);
         if(ch_start != aStartMark)
         {
             io_pDoc->InsertString(aStartPaM, aStartMark);
@@ -94,7 +96,7 @@ namespace
         {
             io_pDoc->InsertString(aEndPaM, aEndMark);
         }
-        io_pDoc->EndUndo(UNDO_UI_REPLACE, NULL);
+        io_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_UI_REPLACE, NULL);
     };
 }
 
@@ -231,10 +233,10 @@ namespace sw { namespace mark
 
     void Bookmark::InitDoc(SwDoc* const io_pDoc)
     {
-        if(io_pDoc->DoesUndo())
+        if (io_pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
-            io_pDoc->ClearRedo();
-            io_pDoc->AppendUndo(new SwUndoInsBookmark(*this));
+            io_pDoc->GetIDocumentUndoRedo().AppendUndo(
+                    new SwUndoInsBookmark(*this));
         }
         io_pDoc->SetModified();
     }

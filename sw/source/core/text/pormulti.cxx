@@ -79,7 +79,7 @@ SwMultiPortion::~SwMultiPortion()
 
 void SwMultiPortion::Paint( const SwTxtPaintInfo & ) const
 {
-    ASSERT( FALSE,
+    ASSERT( sal_False,
     "Don't try SwMultiPortion::Paint, try SwTxtPainter::PaintMultiPortion" );
 }
 
@@ -212,7 +212,7 @@ SwRotatedPortion::SwRotatedPortion( const SwMultiCreator& rCreate,
  * SwBidiPortion::SwBidiPortion(..)
  * --------------------------------------------------*/
 
-SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, BYTE nLv )
+SwBidiPortion::SwBidiPortion( xub_StrLen nEnd, sal_uInt8 nLv )
     : SwMultiPortion( nEnd ), nLevel( nLv )
 {
     SetBidi();
@@ -329,7 +329,7 @@ SwDoubleLinePortion::SwDoubleLinePortion( const SwMultiCreator& rCreate,
         pBracket->cPre = 0;
         pBracket->cPost = 0;
     }
-    BYTE nTmp = SW_SCRIPTS;
+    sal_uInt8 nTmp = SW_SCRIPTS;
     if( pBracket->cPre > 255 )
     {
         String aTxt( pBracket->cPre );
@@ -386,7 +386,7 @@ void SwDoubleLinePortion::PaintBracket( SwTxtPaintInfo &rInf,
     aBlank.Height( pBracket->nHeight );
     {
         SwFont* pTmpFnt = new SwFont( *rInf.GetFont() );
-        BYTE nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
+        sal_uInt8 nAct = bOpen ? pBracket->nPreScript : pBracket->nPostScript;
         if( SW_SCRIPTS > nAct )
             pTmpFnt->SetActual( nAct );
         pTmpFnt->SetProportion( 100 );
@@ -433,7 +433,7 @@ void SwDoubleLinePortion::FormatBrackets( SwTxtFormatInfo &rInf, SwTwips& nMaxWi
     if( pBracket->cPre )
     {
         String aStr( pBracket->cPre );
-        BYTE nActualScr = pTmpFnt->GetActual();
+        sal_uInt8 nActualScr = pTmpFnt->GetActual();
         if( SW_SCRIPTS > pBracket->nPreScript )
             pTmpFnt->SetActual( pBracket->nPreScript );
         SwFontSave aSave( rInf, pTmpFnt );
@@ -713,11 +713,11 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
     }
     KSHORT nLeft = 0;   // the space in front of the first letter
     KSHORT nRight = 0;  // the space at the end of the last letter
-    USHORT nSub = 0;
+    sal_uInt16 nSub = 0;
     switch ( nAdjustment )
     {
-        case 1: nRight = static_cast<USHORT>(nLineDiff / 2);    // no break
-        case 2: nLeft  = static_cast<USHORT>(nLineDiff - nRight); break;
+        case 1: nRight = static_cast<sal_uInt16>(nLineDiff / 2);    // no break
+        case 2: nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight); break;
         case 3: nSub   = 1; // no break
         case 4:
         {
@@ -743,8 +743,8 @@ void SwRubyPortion::_Adjust( SwTxtFormatInfo &rInf )
             }
             if( nLineDiff > 1 )
             {
-                nRight = static_cast<USHORT>(nLineDiff / 2);
-                nLeft  = static_cast<USHORT>(nLineDiff - nRight);
+                nRight = static_cast<sal_uInt16>(nLineDiff / 2);
+                nLeft  = static_cast<sal_uInt16>(nLineDiff - nRight);
             }
             break;
         }
@@ -824,7 +824,7 @@ void SwRubyPortion::CalcRubyOffset()
  * lcl_Has2Lines(..)
  * is a little help function for GetMultiCreator(..)
  * It extracts the 2-line-format from a 2-line-attribute or a character style.
- * The rValue is set to TRUE, if the 2-line-attribute's value is set and
+ * The rValue is set to sal_True, if the 2-line-attribute's value is set and
  * no 2-line-format reference is passed. If there is a 2-line-format reference,
  * then the rValue is set only, if the 2-line-attribute's value is set _and_
  * the 2-line-formats has the same brackets.
@@ -853,7 +853,7 @@ sal_Bool lcl_Has2Lines( const SwTxtAttr& rAttr, const SvxTwoLinesItem* &rpRef,
  * lcl_HasRotation(..)
  * is a little help function for GetMultiCreator(..)
  * It extracts the charrotation from a charrotate-attribute or a character style.
- * The rValue is set to TRUE, if the charrotate-attribute's value is set and
+ * The rValue is set to sal_True, if the charrotate-attribute's value is set and
  * no charrotate-format reference is passed.
  * If there is a charrotate-format reference, then the rValue is set only,
  * if the charrotate-attribute's value is set _and_ identical
@@ -884,7 +884,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     SwScriptInfo& rSI = ((SwParaPortion*)GetParaPortion())->GetScriptInfo();
 
     // get the last embedding level
-    BYTE nCurrLevel;
+    sal_uInt8 nCurrLevel;
     if ( pMulti )
     {
         ASSERT( pMulti->IsBidi(), "Nested MultiPortion is not BidiPortion" )
@@ -896,7 +896,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
         nCurrLevel = GetTxtFrm()->IsRightToLeft() ? 1 : 0;
 
     // check if there is a field at rPos:
-    BYTE nNextLevel = nCurrLevel;
+    sal_uInt8 nNextLevel = nCurrLevel;
     sal_Bool bFldBidi = sal_False;
 
     if ( CH_TXTATR_BREAKWORD == GetChar( rPos ) )
@@ -942,7 +942,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     const SvxCharRotateItem* pRotate = NULL;
     const SfxPoolItem* pRotItem;
     if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
-        GetItemState( RES_CHRATR_ROTATE, TRUE, &pRotItem ) &&
+        GetItemState( RES_CHRATR_ROTATE, sal_True, &pRotItem ) &&
         ((SvxCharRotateItem*)pRotItem)->GetValue() )
         pRotate = (SvxCharRotateItem*)pRotItem;
     else
@@ -950,7 +950,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     const SvxTwoLinesItem* p2Lines = NULL;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == pFrm->GetTxtNode()->GetSwAttrSet().
-        GetItemState( RES_CHRATR_TWO_LINES, TRUE, &pItem ) &&
+        GetItemState( RES_CHRATR_TWO_LINES, sal_True, &pItem ) &&
         ((SvxTwoLinesItem*)pItem)->GetValue() )
         p2Lines = (SvxTwoLinesItem*)pItem;
     else
@@ -962,10 +962,10 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
     const SwTxtAttr *pRuby = NULL;
     sal_Bool bTwo = sal_False;
     sal_Bool bRot = sal_False;
-    USHORT n2Lines = USHRT_MAX;
-    USHORT nRotate = USHRT_MAX;
-    USHORT nCount = pHints ? pHints->Count() : 0;
-    USHORT i;
+    sal_uInt16 n2Lines = USHRT_MAX;
+    sal_uInt16 nRotate = USHRT_MAX;
+    sal_uInt16 nCount = pHints ? pHints->Count() : 0;
+    sal_uInt16 i;
     for( i = 0; i < nCount; ++i )
     {
         const SwTxtAttr *pTmp = (*pHints)[i];
@@ -1065,14 +1065,14 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                 continue;
             if( rPos < *pTmp->GetStart() )
             {
-                // If bOn is FALSE and the next attribute starts later than rPos
+                // If bOn is sal_False and the next attribute starts later than rPos
                 // the winner attribute is interrupted at rPos.
                 // If the start of the next atribute is behind the end of
                 // the last attribute on the aEnd-stack, this is the endposition
                 // on the stack is the end of the 2-line portion.
                 if( !bOn || aEnd.back() < *pTmp->GetStart() )
                     break;
-                // At this moment, bOn is TRUE and the next attribute starts
+                // At this moment, bOn is sal_True and the next attribute starts
                 // behind rPos, so we could move rPos to the next startpoint
                 rPos = *pTmp->GetStart();
                 // We clean up the aEnd-stack, endpositions equal to rPos are
@@ -1083,7 +1083,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos,
                     aEnd.pop_back();
                 }
                 // If the endstack is empty, we simulate an attribute with
-                // state TRUE and endposition rPos
+                // state sal_True and endposition rPos
                 if( aEnd.empty() )
                 {
                     aEnd.push_front( rPos );
@@ -1366,8 +1366,8 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
 {
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GetInfo().SnapToGrid();
-    USHORT nGridWidth = 0;
-    USHORT nRubyHeight = 0;
+    sal_uInt16 nGridWidth = 0;
+    sal_uInt16 nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
@@ -1380,7 +1380,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     // do not allow grid mode for first line in ruby portion
     const sal_Bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
 
-    const USHORT nOldHeight = rMulti.Height();
+    const sal_uInt16 nOldHeight = rMulti.Height();
     const sal_Bool bOldGridModeAllowed = GetInfo().SnapToGrid();
 
     if ( bRubyInGrid )
@@ -1390,9 +1390,9 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     }
 
     SwLayoutModeModifier aLayoutModeModifier( *GetInfo().GetOut() );
-    BYTE nEnvDir = 0;
-    BYTE nThisDir = 0;
-    BYTE nFrmDir = 0;
+    sal_uInt8 nEnvDir = 0;
+    sal_uInt8 nThisDir = 0;
+    sal_uInt8 nFrmDir = 0;
     if ( rMulti.IsBidi() )
     {
         // these values are needed for the calculation of the x coordinate
@@ -1511,7 +1511,7 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
         {
             if( rMulti.HasRotation() )
             {
-                const USHORT nAdjustment = ( pLay->Height() - pPor->Height() ) / 2 +
+                const sal_uInt16 nAdjustment = ( pLay->Height() - pPor->Height() ) / 2 +
                                             pPor->GetAscent();
                 if( rMulti.IsRevers() )
                     GetInfo().X( nOfst - nAdjustment );
@@ -1744,7 +1744,7 @@ void lcl_TruncateMultiPortion( SwMultiPortion& rMulti, SwTxtFormatInfo& rInf,
  * SwTxtFrm::_Format with multiple BuildPortions
  *---------------------------------------------------------------------------*/
 
-BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
+sal_Bool SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     SwMultiPortion& rMulti )
 {
     SwTwips nMaxWidth = rInf.Width();
@@ -1868,13 +1868,13 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
 
     SwLinePortion *pNextFirst = NULL;
     SwLinePortion *pNextSecond = NULL;
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     GETGRID( pFrm->FindPageFrm() )
     const sal_Bool bHasGrid = pGrid && GRID_LINES_CHARS == pGrid->GetGridType();
 
-    USHORT nGridWidth = 0;
-    USHORT nRubyHeight = 0;
+    sal_uInt16 nGridWidth = 0;
+    sal_uInt16 nRubyHeight = 0;
     sal_Bool bRubyTop = sal_False;
 
     if ( bHasGrid )
@@ -1888,7 +1888,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     {
         pCurr = &rMulti.GetRoot();
         nStart = nStartIdx;
-        bRet = FALSE;
+        bRet = sal_False;
         FormatReset( aInf );
         aInf.X( nTmpX );
         aInf.Width( KSHORT(nActWidth) );
@@ -2016,7 +2016,7 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
         }
         delete pNextFirst;
         pNextFirst = NULL;
-    } while ( TRUE );
+    } while ( sal_True );
 
     pMulti = pOldMulti;
 
@@ -2358,7 +2358,7 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
 SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
                                   SwMultiPortion* pMulti,
                                   SwTwips nY,
-                                  USHORT& nX,
+                                  sal_uInt16& nX,
                                   xub_StrLen nCurrStart,
                                   long nSpaceAdd )
 {
@@ -2377,7 +2377,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
     {
         bSpaceChg = pMulti->ChgSpaceAdd( pTxtCursor->pCurr, nSpaceAdd );
 
-        USHORT nSpaceCnt;
+        sal_uInt16 nSpaceCnt;
         if ( pMulti->IsDouble() )
         {
             pTxtCursor->SetPropFont( 50 );
@@ -2392,7 +2392,7 @@ SwTxtCursorSave::SwTxtCursorSave( SwTxtCursor* pTxtCursor,
         }
 
         if( nSpaceAdd > 0 && !pMulti->HasTabulator() )
-            pTxtCursor->pCurr->Width( static_cast<USHORT>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
+            pTxtCursor->pCurr->Width( static_cast<sal_uInt16>(nWidth + nSpaceAdd * nSpaceCnt / SPACING_PRECISION_FACTOR ) );
 
         // For a BidiPortion we have to calculate the offset from the
         // end of the portion

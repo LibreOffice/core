@@ -32,7 +32,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
 
-#include <oox/core/tokens.hxx>
+#include <oox/token/tokens.hxx>
 #include <oox/export/drawingml.hxx>
 #include <oox/export/vmlexport.hxx>
 
@@ -62,6 +62,7 @@
 
 using namespace ::comphelper;
 using namespace ::com::sun::star;
+using namespace ::oox;
 
 using oox::vml::VMLExport;
 
@@ -82,7 +83,7 @@ MSWordSections& DocxExport::Sections() const
     return *m_pSections;
 }
 
-bool DocxExport::CollapseScriptsforWordOk( USHORT nScript, USHORT nWhich )
+bool DocxExport::CollapseScriptsforWordOk( sal_uInt16 nScript, sal_uInt16 nWhich )
 {
     // TODO FIXME is this actually true for docx? - this is ~copied from WW8
     if ( nScript == i18n::ScriptType::ASIAN )
@@ -186,7 +187,7 @@ bool DocxExport::DisallowInheritingOutlineNumbering( const SwFmt& rFmt )
     return bRet;
 }
 
-void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
+void DocxExport::WriteHeadersFooters( sal_uInt8 nHeadFootFlags,
         const SwFrmFmt& rFmt, const SwFrmFmt& rLeftFmt, const SwFrmFmt& rFirstPageFmt )
 {
     // headers
@@ -210,7 +211,7 @@ void DocxExport::WriteHeadersFooters( BYTE nHeadFootFlags,
         WriteHeaderFooter( rFirstPageFmt, false, "first" );
 }
 
-void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, BYTE nMode )
+void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const String& rFldCmd, sal_uInt8 nMode )
 {
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
@@ -305,7 +306,7 @@ void DocxExport::OutputPageSectionBreaks( const SwTxtNode& )
 }
 
 
-void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
+void DocxExport::AppendSection( const SwPageDesc *pPageDesc, const SwSectionFmt* pFmt, sal_uLong nLnNum )
 {
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
     m_pSections->AppendSection( pPageDesc, pFmt, nLnNum );
@@ -335,7 +336,7 @@ void DocxExport::OutputEndNode( const SwEndNode& rEndNode )
             if( !pParentFmt )
                 pParentFmt = (SwSectionFmt*)0xFFFFFFFF;
 
-            ULONG nRstLnNum;
+            sal_uLong nRstLnNum;
             if( rNd.IsCntntNode() )
                 nRstLnNum = const_cast< SwCntntNode* >( rNd.GetCntntNode() )->GetSwAttrSet().GetLineNumber().GetStartValue();
             else
@@ -362,7 +363,7 @@ void DocxExport::OutputOLENode( const SwOLENode& )
     OSL_TRACE( "TODO DocxExport::OutputOLENode( const SwOLENode& )\n" );
 }
 
-ULONG DocxExport::ReplaceCr( BYTE )
+sal_uLong DocxExport::ReplaceCr( sal_uInt8 )
 {
     // Completely unused for Docx export... only here for code sharing
     // purpose with binary export
@@ -378,7 +379,7 @@ void DocxExport::PrepareNewPageDesc( const SfxItemSet* pSet,
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 
     const SwSectionFmt* pFmt = GetSectionFormat( rNd );
-    const ULONG nLnNm = GetSectionLineNo( pSet, rNd );
+    const sal_uLong nLnNm = GetSectionLineNo( pSet, rNd );
 
     ASSERT( pNewPgDescFmt || pNewPgDesc, "Neither page desc format nor page desc provided." );
 

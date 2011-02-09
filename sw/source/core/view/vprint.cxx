@@ -60,6 +60,7 @@
 #include <pagefrm.hxx>
 #include <cntfrm.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <wdocsh.hxx>
 #include <fesh.hxx>
 #include <pam.hxx>
@@ -200,7 +201,7 @@ void SwPaintQueue::Remove( ViewShell *pSh )
  *  Aenderung   :
  ******************************************************************************/
 
-void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, BOOL /*bPDFExport*/ )
+void SetSwVisArea( ViewShell *pSh, const SwRect &rRect, sal_Bool /*bPDFExport*/ )
 {
     ASSERT( !pSh->GetWin(), "Drucken mit Window?" );
     pSh->aVisArea = rRect;
@@ -254,15 +255,15 @@ void ViewShell::InitPrt( OutputDevice *pOutDev )
  ******************************************************************************/
 
 
-void ViewShell::ChgAllPageOrientation( USHORT eOri )
+void ViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
 {
     ASSERT( nStartAction, "missing an Action" );
     SET_CURR_SHELL( this );
 
-    USHORT nAll = GetDoc()->GetPageDescCnt();
-    BOOL bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? FALSE : TRUE;
+    sal_uInt16 nAll = GetDoc()->GetPageDescCnt();
+    sal_Bool bNewOri = Orientation(eOri) == ORIENTATION_PORTRAIT ? sal_False : sal_True;
 
-    for( USHORT i = 0; i < nAll; ++ i )
+    for( sal_uInt16 i = 0; i < nAll; ++ i )
     {
         const SwPageDesc& rOld =
             const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
@@ -270,10 +271,10 @@ void ViewShell::ChgAllPageOrientation( USHORT eOri )
         if( rOld.GetLandscape() != bNewOri )
         {
             SwPageDesc aNew( rOld );
-            const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-            GetDoc()->DoUndo( sal_False );
-            GetDoc()->CopyPageDesc(rOld, aNew);
-            GetDoc()->DoUndo( bDoesUndo );
+            {
+                ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+                GetDoc()->CopyPageDesc(rOld, aNew);
+            }
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
@@ -307,19 +308,19 @@ void ViewShell::ChgAllPageSize( Size &rSz )
     SET_CURR_SHELL( this );
 
     SwDoc* pMyDoc = GetDoc();
-    USHORT nAll = pMyDoc->GetPageDescCnt();
+    sal_uInt16 nAll = pMyDoc->GetPageDescCnt();
 
-    for( USHORT i = 0; i < nAll; ++i )
+    for( sal_uInt16 i = 0; i < nAll; ++i )
     {
         const SwPageDesc &rOld = const_cast<const SwDoc *>(pMyDoc)->GetPageDesc( i );
         SwPageDesc aNew( rOld );
-        const sal_Bool bDoesUndo( GetDoc()->DoesUndo() );
-        GetDoc()->DoUndo( sal_False );
-        GetDoc()->CopyPageDesc( rOld, aNew );
-        GetDoc()->DoUndo( bDoesUndo );
+        {
+            ::sw::UndoGuard const ug(GetDoc()->GetIDocumentUndoRedo());
+            GetDoc()->CopyPageDesc( rOld, aNew );
+        }
         SwFrmFmt& rPgFmt = aNew.GetMaster();
         Size aSz( rSz );
-        const BOOL bOri = aNew.GetLandscape();
+        const sal_Bool bOri = aNew.GetLandscape();
         if( bOri  ? aSz.Height() > aSz.Width()
                   : aSz.Height() < aSz.Width() )
         {
@@ -336,26 +337,36 @@ void ViewShell::ChgAllPageSize( Size &rSz )
 }
 
 
-void ViewShell::CalcPagesForPrint( USHORT nMax )
+void ViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 {
     SET_CURR_SHELL( this );
 
+<<<<<<< local
     SwRootFrm* pMyLayout = GetLayout();
+=======
+    SwRootFrm* pLayout = GetLayout();
+    // sal_uLong nStatMax = pLayout->GetPageNum();
+>>>>>>> other
 
     const SwFrm *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
 
+<<<<<<< local
     pMyLayout->StartAllAction();
     for ( USHORT i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
+=======
+    pLayout->StartAllAction();
+    for ( sal_uInt16 i = 1; pPage && i <= nMax; pPage = pPage->GetNext(), ++i )
+>>>>>>> other
     {
         pPage->Calc();
         SwRect aOldVis( VisArea() );
         aVisArea = pPage->Frm();
         Imp()->SetFirstVisPageInvalid();
         aAction.Reset();
-        aAction.SetPaint( FALSE );
-        aAction.SetWaitAllowed( FALSE );
-        aAction.SetReschedule( TRUE );
+        aAction.SetPaint( sal_False );
+        aAction.SetWaitAllowed( sal_False );
+        aAction.SetReschedule( sal_True );
 
         aAction.Action();
 
@@ -387,7 +398,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
     const SfxPoolItem* pCpyItem;
     const SfxItemPool& rPool = GetAttrPool();
-    for( USHORT nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
+    for( sal_uInt16 nWh = POOLATTR_BEGIN; nWh < POOLATTR_END; ++nWh )
         if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
             pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
 
@@ -443,8 +454,8 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     }
 
     // es wurde in der CORE eine neu angelegt (OLE-Objekte kopiert!)
-//      if( aDocShellRef.Is() )
-//          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
+//REMOVE    //      if( aDocShellRef.Is() )
+//REMOVE    //          SwDataExchange::InitOle( aDocShellRef, pPrtDoc );
     // und fuellen es mit dem selektierten Bereich
     pFESh->Copy( pPrtDoc );
 
@@ -503,10 +514,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     ViewShell *pShell;
     SwDoc *pOutDevDoc;
 
-    //!! muss warum auch immer hier in diesem scope existieren !!
-    //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
-    SfxObjectShellRef aDocShellRef;
-
     // Print/PDF export for (multi-)selection has already generated a
     // temporary document with the selected text.
     // (see XRenderable implementation in unotxdoc.cxx)
@@ -530,7 +537,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
 
         //JP 01.02.99: das ReadOnly Flag wird NIE mitkopiert; Bug 61335
         if( pOpt->IsReadonly() )
-            pShell->pOpt->SetReadonly( TRUE );
+            pShell->pOpt->SetReadonly( sal_True );
 
         // save options at draw view:
         SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
@@ -621,7 +628,7 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
     {
         SET_CURR_SHELL( pSh );
         pSh->PrepareForPrint( rOptions );
-        pSh->SetPrtFormatOption( TRUE );
+        pSh->SetPrtFormatOption( sal_True );
 
         SwRect aSwRect( rRect );
         pSh->aVisArea = aSwRect;
@@ -629,8 +636,13 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
         if ( pSh->GetViewOptions()->getBrowseMode() &&
              pSh->GetNext() == pSh )
         {
+<<<<<<< local
             pSh->CheckBrowseView( FALSE );
             pSh->GetLayout()->Lower()->InvalidateSize();
+=======
+            pSh->CheckBrowseView( sal_False );
+            pDoc->GetRootFrm()->Lower()->InvalidateSize();
+>>>>>>> other
         }
 
         // --> FME 2005-02-10 #119474#
@@ -664,7 +676,7 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 
 
 
-BOOL ViewShell::IsAnyFieldInDoc() const
+sal_Bool ViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -676,9 +688,9 @@ BOOL ViewShell::IsAnyFieldInDoc() const
             //#i101026# mod: do not include postits in field check
             const SwField* pFld = pFmtFld->GetFld();
             if( pTxtFld && pTxtFld->GetTxtNode().GetNodes().IsDocNodes() && (pFld->Which() != RES_POSTITFLD))
-                return TRUE;
+                return sal_True;
         }
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -712,12 +724,12 @@ SwDrawViewSave::~SwDrawViewSave()
 void ViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     // Viewoptions fuer den Drucker setzen
-    pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );
-    pOpt->SetTable   ( TRUE == rOptions.bPrintTable );
-    pOpt->SetDraw    ( TRUE == rOptions.bPrintDraw  );
-    pOpt->SetControl ( TRUE == rOptions.bPrintControl );
-    pOpt->SetPageBack( TRUE == rOptions.bPrintPageBackground );
-    pOpt->SetBlackFont( TRUE == rOptions.bPrintBlackFont );
+    pOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
+    pOpt->SetTable   ( sal_True == rOptions.bPrintTable );
+    pOpt->SetDraw    ( sal_True == rOptions.bPrintDraw  );
+    pOpt->SetControl ( sal_True == rOptions.bPrintControl );
+    pOpt->SetPageBack( sal_True == rOptions.bPrintPageBackground );
+    pOpt->SetBlackFont( sal_True == rOptions.bPrintBlackFont );
 
     if ( HasDrawView() )
     {

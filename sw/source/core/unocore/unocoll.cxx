@@ -858,12 +858,12 @@ SwXFrameEnumeration<T>::SwXFrameEnumeration(const SwDoc* const pDoc)
         return;
     // --> OD 2009-09-10 #i104937#
 //    const SwFrmFmt* const pFmtsEnd = (*pFmts)[pFmts->Count()];
-    const USHORT nSize = pFmts->Count();
+    const sal_uInt16 nSize = pFmts->Count();
     // <--
     ::std::insert_iterator<frmcontainer_t> pInserter = ::std::insert_iterator<frmcontainer_t>(m_aFrames, m_aFrames.begin());
     // --> OD 2009-09-10 #i104937#
     SwFrmFmt* pFmt( 0 );
-    for( USHORT i = 0; i < nSize; ++i )
+    for( sal_uInt16 i = 0; i < nSize; ++i )
 //    for(SwFrmFmt* pFmt = (*pFmts)[0]; pFmt < pFmtsEnd; ++pFmt)
     // <--
     {
@@ -925,7 +925,7 @@ OUString SwXFrames::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXFrames");
 }
 
-BOOL SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
@@ -1092,7 +1092,12 @@ OUString SwXTextFrames::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextFrames");
 }
 
+<<<<<<< local
 BOOL SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextFrames::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.TextFrames") == rServiceName;
 }
@@ -1123,7 +1128,12 @@ OUString SwXTextGraphicObjects::getImplementationName(void) throw( RuntimeExcept
     return C2U("SwXTextGraphicObjects");
 }
 
+<<<<<<< local
 BOOL SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextGraphicObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.TextGraphicObjects") == rServiceName;
 }
@@ -1153,7 +1163,12 @@ OUString SwXTextEmbeddedObjects::getImplementationName(void) throw( RuntimeExcep
     return C2U("SwXTextEmbeddedObjects");
 }
 
+<<<<<<< local
 BOOL SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextEmbeddedObjects::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.TextEmbeddedObjects") == rServiceName;
 }
@@ -1184,7 +1199,12 @@ OUString SwXTextSections::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXTextSections");
 }
 
+<<<<<<< local
 BOOL SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXTextSections::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.TextSections") == rServiceName;
 }
@@ -1373,7 +1393,7 @@ OUString SwXBookmarks::getImplementationName(void) throw( RuntimeException )
     return OUString::createFromAscii("SwXBookmarks");
 }
 
-BOOL SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
+sal_Bool SwXBookmarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
 {
     return OUString::createFromAscii("com.sun.star.text.Bookmarks") == rServiceName;
 }
@@ -1511,7 +1531,7 @@ uno::Any SwXNumberingRulesCollection::getByIndex(sal_Int32 nIndex)
         uno::Reference< XIndexReplace >  xRef;
         if ( nIndex < GetDoc()->GetNumRuleTbl().Count() )
         {
-            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< USHORT >(nIndex) ] );
+            xRef = new SwXNumberingRules( *GetDoc()->GetNumRuleTbl()[ static_cast< sal_uInt16 >(nIndex) ] );
             aRet.setValue(&xRef, ::getCppuType((uno::Reference<XIndexReplace>*)0));
         }
 
@@ -1541,7 +1561,12 @@ OUString SwXFootnotes::getImplementationName(void) throw( RuntimeException )
     return C2U("SwXFootnotes");
 }
 
+<<<<<<< local
 BOOL SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXFootnotes::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.Footnotes") == rServiceName;
 }
@@ -1644,7 +1669,12 @@ OUString SwXReferenceMarks::getImplementationName(void) throw( RuntimeException 
     return C2U("SwXReferenceMarks");
 }
 
+<<<<<<< local
 BOOL SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXReferenceMarks::supportsService(const OUString& rServiceName) throw( RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.text.ReferenceMarks") == rServiceName;
 }

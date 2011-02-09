@@ -42,6 +42,7 @@
 #include <svx/svditer.hxx>
 #include <swunohelper.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <fmtcntnt.hxx>
 #include <fmtflcnt.hxx>
 #include <txtatr.hxx>
@@ -128,7 +129,7 @@ public:
      pLRSpace(0),
      bOpaque(sal_False),
      // OD 2004-04-21 #i26791#
-     mpFollowTextFlow( new SwFmtFollowTextFlow( FALSE ) ),
+     mpFollowTextFlow( new SwFmtFollowTextFlow( sal_False ) ),
      // OD 2004-05-05 #i28701#
      // --> OD 2004-10-18 #i35017# - constant name has changed
      pWrapInfluenceOnObjPos( new SwFmtWrapInfluenceOnObjPos(
@@ -221,7 +222,7 @@ public:
     SwFmtFollowTextFlow* GetFollowTextFlow( sal_Bool _bCreate = sal_False )
     {
         if ( _bCreate && !mpFollowTextFlow )
-            mpFollowTextFlow = new SwFmtFollowTextFlow( FALSE );
+            mpFollowTextFlow = new SwFmtFollowTextFlow( sal_False );
         return mpFollowTextFlow;
     }
     void RemoveFollowTextFlow()
@@ -420,12 +421,12 @@ namespace
             SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 
             //XEnumeration
-            virtual BOOL SAL_CALL hasMoreElements(void) throw(uno::RuntimeException);
+            virtual sal_Bool SAL_CALL hasMoreElements(void) throw(uno::RuntimeException);
             virtual uno::Any SAL_CALL nextElement(void) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 
             //XServiceInfo
             virtual OUString SAL_CALL getImplementationName(void) throw(uno::RuntimeException);
-            virtual BOOL SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException);
+            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException);
             virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames(void) throw(uno::RuntimeException);
     };
 }
@@ -443,7 +444,7 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     }
 }
 
-BOOL SwXShapesEnumeration::hasMoreElements(void) throw(uno::RuntimeException)
+sal_Bool SwXShapesEnumeration::hasMoreElements(void) throw(uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     return !m_aShapes.empty();
@@ -464,7 +465,7 @@ OUString SwXShapesEnumeration::getImplementationName(void) throw(uno::RuntimeExc
     return C2U("SwXShapeEnumeration");
 }
 
-BOOL SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
+sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException)
 {
     return C2U("com.sun.star.container.XEnumeration") == ServiceName;
 }
@@ -488,7 +489,12 @@ rtl::OUString SwXDrawPage::getImplementationName(void) throw( uno::RuntimeExcept
     return C2U("SwXDrawPage");
 }
 
+<<<<<<< local
 BOOL SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool SwXDrawPage::supportsService(const rtl::OUString& rServiceName) throw( uno::RuntimeException )
+>>>>>>> other
 {
     return C2U("com.sun.star.drawing.GenericDrawPage") == rServiceName;
 }
@@ -812,7 +818,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                 if( !bFlyInCnt )
                 {
                     UnoActionContext aContext(pDoc);
-                    pDoc->StartUndo( UNDO_START, NULL );
+                    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
                     SwDrawContact* pContact = pDoc->GroupSelection( *pPage->GetDrawView() );
                     pDoc->ChgAnchor(
@@ -826,7 +832,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
                         uno::Reference< uno::XInterface >  xInt = pPage->GetInterface( pContact->GetMaster() );
                         xRet = uno::Reference< drawing::XShapeGroup >(xInt, uno::UNO_QUERY);
                     }
-                    pDoc->EndUndo( UNDO_END, NULL );
+                    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
             }
             pPage->RemovePageView();
@@ -847,13 +853,13 @@ void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & xShapeG
         {
             pPage->PreUnGroup(xShapeGroup);
             UnoActionContext aContext(pDoc);
-            pDoc->StartUndo( UNDO_START, NULL );
+            pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
             pDoc->UnGroupSelection( *pPage->GetDrawView() );
             pDoc->ChgAnchor( pPage->GetDrawView()->GetMarkedObjectList(),
                         FLY_AT_PARA/*int eAnchorId*/,
                         sal_True, sal_False );
-            pDoc->EndUndo( UNDO_END, NULL );
+            pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
         }
         pPage->RemovePageView();
     }
@@ -1796,7 +1802,7 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
                 else if(pFmt)
                 {
                     const SwAttrSet& rSet = pFmt->GetAttrSet();
-                    SfxItemState eItemState = rSet.GetItemState(pEntry->nWID, FALSE);
+                    SfxItemState eItemState = rSet.GetItemState(pEntry->nWID, sal_False);
 
                     if(SFX_ITEM_SET == eItemState)
                         pRet[nProperty] = beans::PropertyState_DIRECT_VALUE;

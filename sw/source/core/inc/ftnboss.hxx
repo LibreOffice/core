@@ -64,7 +64,7 @@ class SwFtnBossFrm: public SwLayoutFrm
 
     SwFtnContFrm *MakeFtnCont();
     SwFtnFrm     *FindFirstFtn();
-    BYTE _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
+    sal_uInt8 _NeighbourhoodAdjustment( const SwFrm* pFrm ) const;
 protected:
 
     void          InsertFtn( SwFtnFrm * );
@@ -78,16 +78,16 @@ public:
 
     //Fussnotenschnittstelle
     void AppendFtn( SwCntntFrm *, SwTxtFtn * );
-    void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, BOOL bPrep = TRUE );
+    void RemoveFtn( const SwCntntFrm *, const SwTxtFtn *, sal_Bool bPrep = sal_True );
     static       SwFtnFrm     *FindFtn( const SwCntntFrm *, const SwTxtFtn * );
                  SwFtnContFrm *FindFtnCont();
     inline const SwFtnContFrm *FindFtnCont() const;
            const SwFtnFrm     *FindFirstFtn( SwCntntFrm* ) const;
-                 SwFtnContFrm *FindNearestFtnCont( BOOL bDontLeave = FALSE );
+                 SwFtnContFrm *FindNearestFtnCont( sal_Bool bDontLeave = sal_False );
 
     void ChangeFtnRef( const SwCntntFrm *pOld, const SwTxtFtn *,
                        SwCntntFrm *pNew );
-    void RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock = FALSE,
+    void RearrangeFtns( const SwTwips nDeadLine, const sal_Bool bLock = sal_False,
                         const SwTxtFtn *pAttr = 0 );
 
     //SS damit der Textformatierer Temporaer die Fussnotenhoehe begrenzen
@@ -117,11 +117,11 @@ public:
                          SwFtnBossFrm*     _pOld,
                          SvPtrarr&         _rFtnArr,
                          const sal_Bool    _bCollectOnlyPreviousFtns = sal_False );
-    void    _MoveFtns( SvPtrarr &rFtnArr, BOOL bCalc = FALSE );
+    void    _MoveFtns( SvPtrarr &rFtnArr, sal_Bool bCalc = sal_False );
     void    MoveFtns( const SwCntntFrm *pSrc, SwCntntFrm *pDest,
                       SwTxtFtn *pAttr );
     // Sollte AdjustNeighbourhood gerufen werden (oder Grow/Shrink)?
-    BYTE NeighbourhoodAdjustment( const SwFrm* pFrm ) const
+    sal_uInt8 NeighbourhoodAdjustment( const SwFrm* pFrm ) const
         { return IsPageFrm() ? NA_ONLY_ADJUST : _NeighbourhoodAdjustment( pFrm ); }
 };
 

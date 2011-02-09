@@ -32,6 +32,10 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
+<<<<<<< local
+=======
+#include <IDocumentUndoRedo.hxx>
+>>>>>>> other
 #include <docsh.hxx>
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
@@ -57,7 +61,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "ViewShell::Init" );
 
-    bDocSizeChgd = FALSE;
+    bDocSizeChgd = sal_False;
 
     // Wir gehen auf Nummer sicher:
     // Wir muessen die alten Fontinformationen wegschmeissen,
@@ -94,7 +98,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
     //              bevor das Layout angelegt wird. Ansonsten muesste man
     //              nochmals durchformatieren!!
     if( pDShell && pDShell->IsReadOnly() )
-        pOpt->SetReadonly( TRUE );
+        pOpt->SetReadonly( sal_True );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
@@ -191,8 +195,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
     mbInConstructor = true;
 
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = FALSE;
-    bPaintWorks = bEnableSmooth = TRUE;
+    bEndActionByVirDev = sal_False;
+    bPaintWorks = bEnableSmooth = sal_True;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
 
     // --> OD 2005-02-11 #i38810# - Do not reset modified state of document,
@@ -219,7 +223,8 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 
     //In Init wird ein Standard-FrmFmt angelegt.
     // --> OD 2005-02-11 #i38810#
-    if ( !pDoc->IsUndoNoResetModified() && !bIsDocModified )
+    if (   !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified()
+        && !bIsDocModified )
     // <--
     {
         pDoc->ResetModified();
@@ -268,9 +273,9 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     // <SwDrawContact::Changed> during contruction of <ViewShell> instance
     mbInConstructor = true;
 
-    bPaintWorks = bEnableSmooth = TRUE;
+    bPaintWorks = bEnableSmooth = sal_True;
     bPaintInProgress = bViewLocked = bInEndAction = bFrameView =
-    bEndActionByVirDev = FALSE;
+    bEndActionByVirDev = sal_False;
     bPreView = 0 !=( VSHELLFLAG_ISPREVIEW & nFlags );
     if( nFlags & VSHELLFLAG_SHARELAYOUT ) //swmod 080125
         pLayout = rShell.pLayout;//swmod 080125
@@ -278,7 +283,7 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
     SET_CURR_SHELL( this );
 
     pDoc->acquire();
-    BOOL bModified = pDoc->IsModified();
+    sal_Bool bModified = pDoc->IsModified();
 
     pOutput = pOut;
     Init( rShell.GetViewOptions() );    //verstellt ggf. das Outdev (InitPrt())
@@ -292,8 +297,10 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
             SetHiddenFlag( !pOpt->IsShowHiddenField() );
 
     // in Init wird ein Standard-FrmFmt angelegt
-    if( !bModified && !pDoc->IsUndoNoResetModified() )
+    if( !bModified && !pDoc->GetIDocumentUndoRedo().IsUndoNoResetModified() )
+    {
         pDoc->ResetModified();
+    }
 
     //Format-Cache erweitern.
     if ( SwTxtFrm::GetTxtCache()->GetCurMax() < 2550 )
@@ -316,7 +323,7 @@ ViewShell::~ViewShell()
 {
     {
         SET_CURR_SHELL( this );
-        bPaintWorks = FALSE;
+        bPaintWorks = sal_False;
 
         // FME 2004-06-21 #i9684# Stopping the animated graphics is not
         // necessary during printing or pdf export, because the animation
@@ -384,7 +391,7 @@ ViewShell::~ViewShell()
     delete pAccOptions;
 }
 
-BOOL ViewShell::HasDrawView() const
+sal_Bool ViewShell::HasDrawView() const
 {
     return Imp() ? Imp()->HasDrawView() : 0;
 }

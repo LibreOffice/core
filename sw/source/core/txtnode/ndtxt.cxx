@@ -62,6 +62,7 @@
 #include <charfmt.hxx>
 #include <ndtxt.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docary.hxx>
 #include <pam.hxx>                  // fuer SwPosition
 #include <fldbas.hxx>
@@ -144,8 +145,8 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
         // 1. den Nachfolger nehmen
         // 2. den Vorgaenger
 
-        SwNode *pNd;
-        switch( ( pNd = (*this)[aTmp] )->GetNodeType() )
+        SwNode * pNd = & aTmp.GetNode();
+        switch (pNd->GetNodeType())
         {
         case ND_TABLENODE:
             ((SwTableNode*)pNd)->MakeFrms( aIdx );
@@ -177,7 +178,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
             {
                 if( pNd->StartOfSectionNode()->GetSectionNode()->GetSection().IsHiddenFlag())
                 {
-                    if( !GoPrevSection( &aTmp, TRUE, FALSE ) ||
+                    if( !GoPrevSection( &aTmp, sal_True, sal_False ) ||
                         aTmp.GetNode().FindTableNode() !=
                             pNode->FindTableNode() )
                         return pNode;       // schade, das wars
@@ -201,7 +202,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                 return pNode;
             break;
         }
-    } while( TRUE );
+    } while( sal_True );
 }
 
 // --------------------
@@ -264,7 +265,7 @@ SwTxtNode::~SwTxtNode()
         SwpHints* pTmpHints = m_pSwpHints;
         m_pSwpHints = 0;
 
-        for( USHORT j = pTmpHints->Count(); j; )
+        for( sal_uInt16 j = pTmpHints->Count(); j; )
             // erst muss das Attribut aus dem Array entfernt werden,
             // denn sonst wuerde es sich selbst loeschen (Felder) !!!!
             DestroyAttr( pTmpHints->GetTextHint( --j ) );
@@ -313,7 +314,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
         // of node <rNode> in order to invalidate position of its first content.
         // Thus, in its <MakeAll()> it will checked its position relative to its reference.
         SwFtnFrm* pFirstFtnOfNode = 0;
-        for( USHORT j = pSwpHints->Count(); j; )
+        for( sal_uInt16 j = pSwpHints->Count(); j; )
         {
             pHt = pSwpHints->GetTextHint(--j);
             if (RES_TXTATR_FTN == pHt->Which())
@@ -330,7 +331,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
                 if ( !pNd )
                     pNd = pFrm->GetAttrSet()->GetDoc()->
-                            GetNodes().GoNextSection( &aIdx, TRUE, FALSE );
+                            GetNodes().GoNextSection( &aIdx, sal_True, sal_False );
                 if ( !pNd )
                     continue;
 
@@ -351,7 +352,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         {
                             pFtn->SetRef( pFrm );
                             pFtn = pFtn->GetFollow();
-                            ((SwTxtFrm*)pFrm)->SetFtn( TRUE );
+                            ((SwTxtFrm*)pFrm)->SetFtn( sal_True );
                         }
                     }
 #ifdef DBG_UTIL
@@ -383,7 +384,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
     const xub_StrLen nTxtLen = m_Text.Len();
     SwTxtNode* const pNode =
-        _MakeNewTxtNode( rPos.nNode, FALSE, nSplitPos==nTxtLen );
+        _MakeNewTxtNode( rPos.nNode, sal_False, nSplitPos==nTxtLen );
 
     // the first paragraph gets the XmlId,
     // _except_ if it is empty and the second is not empty
@@ -476,7 +477,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
             //              Attribute loeschen
             if ( HasHints() )
             {
-                for ( USHORT j = m_pSwpHints->Count(); j; )
+                for ( sal_uInt16 j = m_pSwpHints->Count(); j; )
                 {
                     SwTxtAttr* const pHt = m_pSwpHints->GetTextHint( --j );
                     if ( RES_TXTATR_FLYCNT == pHt ->Which() )
@@ -509,7 +510,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         if ( IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( FALSE );
+            SetInCache( sal_False );
         }
 
         UnlockModify(); // Benachrichtigungen wieder freischalten
@@ -565,7 +566,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         //              Attribute loeschen
         if ( HasHints() )
         {
-            for ( USHORT j = m_pSwpHints->Count(); j; )
+            for ( sal_uInt16 j = m_pSwpHints->Count(); j; )
             {
                 SwTxtAttr* const pHt = m_pSwpHints->GetTextHint( --j );
                 const xub_StrLen* const pEnd = pHt->GetEnd();
@@ -612,7 +613,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
         //muesten. #56977# #55001# #56135#
         const SfxPoolItem *pItem;
         if( GetDepends() && SFX_ITEM_SET == pNode->GetSwAttrSet().
-            GetItemState( RES_PAGEDESC, TRUE, &pItem ) )
+            GetItemState( RES_PAGEDESC, sal_True, &pItem ) )
         {
             pNode->ModifyNotification( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
         }
@@ -623,7 +624,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 void SwTxtNode::MoveTxtAttr_To_AttrSet()
 {
     ASSERT( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
-    for ( USHORT i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
 
@@ -729,7 +730,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         if( pTxtNode->HasAnyIndex() )
         {
             // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, TRUE );
+            pDoc->CorrAbs( aIdx, SwPosition( *this ), nOldLen, sal_True );
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
@@ -738,7 +739,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         InvalidateNumRule();
     }
     else {
-        ASSERT( FALSE, "kein TxtNode." );
+        ASSERT( sal_False, "kein TxtNode." );
     }
 
     return this;
@@ -824,7 +825,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         if( pTxtNode->HasAnyIndex() )
         {
             // alle Crsr/StkCrsr/UnoCrsr aus dem Loeschbereich verschieben
-            pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, TRUE );
+            pDoc->CorrAbs( aIdx, SwPosition( *this ), nLen, sal_True );
         }
         rNds.Delete(aIdx);
         SetWrong( pList, false );
@@ -833,7 +834,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         InvalidateNumRule();
     }
     else {
-        ASSERT( FALSE, "kein TxtNode." );
+        ASSERT( sal_False, "kein TxtNode." );
     }
 
     return this;
@@ -866,7 +867,7 @@ void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         const bool bNegative, const bool bDelete )
 {
-    SetAutoCompleteWordDirty( TRUE );
+    SetAutoCompleteWordDirty( sal_True );
 
     ::std::auto_ptr<TmpHints> pCollector;
     const xub_StrLen nChangePos = rPos.GetIndex();
@@ -876,7 +877,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
         if ( bNegative )
         {
             const xub_StrLen nChangeEnd = nChangePos + nChangeLen;
-            for ( USHORT n = 0; n < m_pSwpHints->Count(); ++n )
+            for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
                 xub_StrLen * const pStart = pHint->GetStart();
@@ -915,13 +916,13 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
         {
             bool bNoExp = false;
             bool bResort = false;
-            const USHORT coArrSz = static_cast<USHORT>(RES_TXTATR_WITHEND_END) -
-                                   static_cast<USHORT>(RES_CHRATR_BEGIN);
+            const sal_uInt16 coArrSz = static_cast<sal_uInt16>(RES_TXTATR_WITHEND_END) -
+                                   static_cast<sal_uInt16>(RES_CHRATR_BEGIN);
 
-            BOOL aDontExp[ coArrSz ];
-            memset( &aDontExp, 0, coArrSz * sizeof(BOOL) );
+            sal_Bool aDontExp[ coArrSz ];
+            memset( &aDontExp, 0, coArrSz * sizeof(sal_Bool) );
 
-            for ( USHORT n = 0; n < m_pSwpHints->Count(); ++n )
+            for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); ++n )
             {
                 SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(n);
                 xub_StrLen * const pStart = pHint->GetStart();
@@ -942,13 +943,13 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                     }
                     else // *pEnd == nChangePos
                     {
-                        USHORT nWhPos;
-                        const USHORT nWhich = pHint->Which();
+                        sal_uInt16 nWhPos;
+                        const sal_uInt16 nWhich = pHint->Which();
 
                         ASSERT(!isCHRATR(nWhich), "Update: char attr hint?");
                         if (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich))
                         {
-                            nWhPos = static_cast<USHORT>(nWhich -
+                            nWhPos = static_cast<sal_uInt16>(nWhich -
                                         RES_CHRATR_BEGIN);
                         }
                         else
@@ -964,13 +965,13 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                             if ( pHint->IsCharFmtAttr() )
                             {
                                 bNoExp = true;
-                                aDontExp[ static_cast<USHORT>(RES_TXTATR_CHARFMT) - static_cast<USHORT>(RES_CHRATR_BEGIN) ]
-                                    = TRUE;
-                                aDontExp[ static_cast<USHORT>(RES_TXTATR_INETFMT) - static_cast<USHORT>(RES_CHRATR_BEGIN) ]
-                                    = TRUE;
+                                aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_CHARFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
+                                    = sal_True;
+                                aDontExp[ static_cast<sal_uInt16>(RES_TXTATR_INETFMT) - static_cast<sal_uInt16>(RES_CHRATR_BEGIN) ]
+                                    = sal_True;
                             }
                             else
-                                aDontExp[ nWhPos ] = TRUE;
+                                aDontExp[ nWhPos ] = sal_True;
                         }
                         else if( bNoExp )
                         {
@@ -978,8 +979,8 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                              {
                                 pCollector.reset( new TmpHints );
                              }
-                             USHORT nCollCnt = pCollector->Count();
-                             for( USHORT i = 0; i < nCollCnt; ++i )
+                             sal_uInt16 nCollCnt = pCollector->Count();
+                             for( sal_uInt16 i = 0; i < nCollCnt; ++i )
                              {
                                 SwTxtAttr *pTmp = (*pCollector)[ i ];
                                 if( nWhich == pTmp->Which() )
@@ -1013,7 +1014,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
     if ( !bNegative && !bDelete )
     {
         const SwRedlineTbl& rTbl = GetDoc()->GetRedlineTbl();
-        for ( USHORT i = 0; i < rTbl.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < rTbl.Count(); ++i )
         {
             SwRedline *const pRedl = rTbl[ i ];
             if ( pRedl->HasMark() )
@@ -1078,8 +1079,8 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
 
     if ( pCollector.get() )
     {
-        const USHORT nCount = pCollector->Count();
-        for ( USHORT i = 0; i < nCount; ++i )
+        const sal_uInt16 nCount = pCollector->Count();
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             m_pSwpHints->TryInsertHint( (*pCollector)[ i ], *this );
         }
@@ -1095,8 +1096,8 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
     ASSERT( pDoc, "Kein Doc?" );
     // erfrage die OutlineLevel und update gegebenenfalls das Nodes-Array,
     // falls sich die Level geaendert haben !
-    //const BYTE nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;//#outline level,removed by zhaojianwei
-    //const BYTE nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;//<-end,zhaojianwei
+    //const sal_uInt8 nOldLevel = pOldColl ? pOldColl->GetOutlineLevel():NO_NUMBERING;//#outline level,removed by zhaojianwei
+    //const sal_uInt8 nNewLevel = pNewColl ? pNewColl->GetOutlineLevel():NO_NUMBERING;//<-end,zhaojianwei
     const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
                      pOldColl->GetAssignedOutlineStyleLevel() : MAXLEVEL;
     const int nNewLevel = pNewColl && pNewColl->IsAssignedToListLevelOfOutlineStyle() ?
@@ -1138,8 +1139,8 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
 // Wenn man sich genau am Ende einer Text- bzw. INetvorlage befindet,
 // bekommt diese das DontExpand-Flag verpasst
 
-BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
-                                BOOL bFmtToTxtAttributes )
+sal_Bool SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
+                                sal_Bool bFmtToTxtAttributes )
 {
     const xub_StrLen nIdx = rIdx.GetIndex();
     if ( bFmtToTxtAttributes && nIdx == m_Text.Len() )
@@ -1147,11 +1148,11 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
         FmtToTxtAttr( this );
     }
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if ( HasHints() )
     {
-        const USHORT nEndCnt = m_pSwpHints->GetEndCount();
-        USHORT nPos = nEndCnt;
+        const sal_uInt16 nEndCnt = m_pSwpHints->GetEndCount();
+        sal_uInt16 nPos = nEndCnt;
         while( nPos )
         {
             SwTxtAttr *pTmp = m_pSwpHints->GetEnd( --nPos );
@@ -1163,7 +1164,7 @@ BOOL SwTxtNode::DontExpandFmt( const SwIndex& rIdx, bool bFlag,
             else if( bFlag != pTmp->DontExpand() && !pTmp->IsLockExpandFlag()
                      && *pEnd > *pTmp->GetStart())
             {
-                bRet = TRUE;
+                bRet = sal_True;
                 m_pSwpHints->NoteInHistory( pTmp );
                 pTmp->SetDontExpand( bFlag );
             }
@@ -1195,7 +1196,7 @@ lcl_GetTxtAttrs(
     xub_StrLen const nIndex, RES_TXTATR const nWhich,
     enum SwTxtNode::GetTxtAttrMode const eMode)
 {
-    USHORT const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
+    sal_uInt16 const nSize = (pSwpHints) ? pSwpHints->Count() : 0;
     xub_StrLen nPreviousIndex(0); // index of last hint with nWhich
     bool (*pMatchFunc)(xub_StrLen const, xub_StrLen const, xub_StrLen const)=0;
     switch (eMode)
@@ -1206,7 +1207,7 @@ lcl_GetTxtAttrs(
         default: OSL_ASSERT(false);
     }
 
-    for( USHORT i = 0; i < nSize; ++i )
+    for( sal_uInt16 i = 0; i < nSize; ++i )
     {
         SwTxtAttr *const pHint = pSwpHints->GetTextHint(i);
         xub_StrLen const nHintStart( *(pHint->GetStart()) );
@@ -1286,8 +1287,8 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
     if( rName.Len() )
     {
         SwCharFmt* pFmt;
-        USHORT nArrLen = pCharFmts->Count();
-        for( USHORT i = 1; i < nArrLen; i++ )
+        sal_uInt16 nArrLen = pCharFmts->Count();
+        for( sal_uInt16 i = 1; i < nArrLen; i++ )
         {
             pFmt = (*pCharFmts)[ i ];
             if( pFmt->GetName().CompareTo( rName ) == COMPARE_EQUAL )
@@ -1297,7 +1298,7 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
     return NULL;
 }
 
-void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
+void lcl_CopyHint( const sal_uInt16 nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
     ASSERT( nWhich == pHt->Which(), "Falsche Hint-Id" );
@@ -1436,7 +1437,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc()) ?
                 pDest->GetDoc() : 0;
 
-        for ( USHORT i = 0; i < m_pSwpHints->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
         {
             SwTxtAttr *const pHt = m_pSwpHints->GetTextHint(i);
             xub_StrLen const nAttrStartIdx = *pHt->GetStart();
@@ -1450,7 +1451,7 @@ void SwTxtNode::CopyAttr( SwTxtNode *pDest, const xub_StrLen nTxtStartIdx,
                       ( *pEndIdx == nTxtStartIdx &&
                         nAttrStartIdx == nTxtStartIdx ) ) )
                 {
-                    USHORT const nWhich = pHt->Which();
+                    sal_uInt16 const nWhich = pHt->Which();
                     if ( RES_TXTATR_REFMARK != nWhich )
                     {
                         // attribute in the area => copy
@@ -1600,7 +1601,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
         }
     }
 
-    const bool bUndoNodes = !pOtherDoc && GetDoc()->GetUndoNds() == &GetNodes();
+    bool const bUndoNodes = !pOtherDoc
+        && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
     // Ende erst jetzt holen, weil beim Kopieren in sich selbst der
     // Start-Index und alle Attribute vorher aktualisiert werden.
@@ -1610,7 +1612,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // 2. Attribute kopieren
     // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
     // des Attributs hinter dem zu kopierenden Bereich liegt
-    const USHORT nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
+    const sal_uInt16 nSize = m_pSwpHints ? m_pSwpHints->Count() : 0;
 
     // wird in sich selbst kopiert, dann kann beim Einfuegen ein
     // Attribut geloescht werden. Darum erst ins Tmp-Array kopieren und
@@ -1620,9 +1622,9 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
     // Del-Array fuer alle RefMarks ohne Ausdehnung
     SwpHts aRefMrkArr;
 
-    USHORT nDeletedDummyChars(0);
+    sal_uInt16 nDeletedDummyChars(0);
         //Achtung: kann ungueltig sein!!
-    for (USHORT n = 0; ( n < nSize ); ++n)
+    for (sal_uInt16 n = 0; ( n < nSize ); ++n)
     {
         const xub_StrLen nAttrStartIdx = *(*m_pSwpHints)[n]->GetStart();
         if (!( nAttrStartIdx < nEnd))
@@ -1630,7 +1632,7 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
         SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(n);
         const xub_StrLen * const pEndIdx = pHt->GetEnd();
-        const USHORT nWhich = pHt->Which();
+        const sal_uInt16 nWhich = pHt->Which();
 
         // JP 26.04.94: REFMARK's werden nie kopiert. Hat das Refmark aber
         //              keinen Bereich umspannt, so steht im Text ein 255
@@ -1720,14 +1722,14 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 
     // nur falls im Array Attribute stehen (kann nur beim Kopieren
     // sich selbst passieren!!)
-    for ( USHORT i = 0; i < aArr.Count(); ++i )
+    for ( sal_uInt16 i = 0; i < aArr.Count(); ++i )
     {
         InsertHint( aArr[ i ], nsSetAttrMode::SETATTR_NOTXTATRCHR );
     }
 
     if( pDest->GetpSwpHints() )
     {
-        for ( USHORT i = 0; i < aRefMrkArr.Count(); ++i )
+        for ( sal_uInt16 i = 0; i < aRefMrkArr.Count(); ++i )
         {
             SwTxtAttr * const pNewHt = aRefMrkArr[i];
             if( pNewHt->GetEnd() )
@@ -1751,7 +1753,7 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
     ASSERT( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
-    ASSERT( (ULONG)m_Text.Len() + (ULONG)rStr.Len() <= STRING_LEN,
+    ASSERT( (sal_uLong)m_Text.Len() + (sal_uLong)rStr.Len() <= STRING_LEN,
             "SwTxtNode::InsertText: node text with insertion > STRING_LEN." );
 
     xub_StrLen aPos = rIdx.GetIndex();
@@ -1761,10 +1763,10 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     if ( !nLen ) return;
 
-    BOOL bOldExpFlg = IsIgnoreDontExpand();
+    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
     if (nMode & IDocumentContentOperations::INS_FORCEHINTEXPAND)
     {
-        SetIgnoreDontExpand( TRUE );
+        SetIgnoreDontExpand( sal_True );
     }
 
     Update( rIdx, nLen ); // text content changed!
@@ -1776,11 +1778,11 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
 
     // analog zu Insert(char) in txtedt.cxx:
     // 1) bei bHintExp leere Hints an rIdx.GetIndex suchen und aufspannen
-    // 2) bei bHintExp == FALSE mitgezogene Feldattribute zuruecksetzen
+    // 2) bei bHintExp == sal_False mitgezogene Feldattribute zuruecksetzen
 
     if ( HasHints() )
     {
-        for ( USHORT i = 0; i < m_pSwpHints->Count() &&
+        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count() &&
                 rIdx >= *(*m_pSwpHints)[i]->GetStart(); ++i )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint( i );
@@ -1806,7 +1808,7 @@ void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
                         && (*pEndIdx == *pHt->GetStart()) )
                 {
                     *pHt->GetStart() = *pHt->GetStart() - nLen;
-                    const USHORT nAktLen = m_pSwpHints->Count();
+                    const sal_uInt16 nAktLen = m_pSwpHints->Count();
                     m_pSwpHints->DeleteAtPos(i);
                     InsertHint( pHt/* AUTOSTYLES:, nsSetAttrMode::SETATTR_NOHINTADJUST*/ );
                     if ( nAktLen > m_pSwpHints->Count() && i )
@@ -1924,7 +1926,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // 2. Attribute verschieben
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
         // des Attributs hinter dem zu verschiebenden Bereich liegt
-        USHORT nAttrCnt = 0;
+        sal_uInt16 nAttrCnt = 0;
         while ( m_pSwpHints && nAttrCnt < m_pSwpHints->Count() )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
@@ -1932,7 +1934,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             if (!( nAttrStartIdx < nEnd ))
                 break;
             const xub_StrLen * const pEndIdx = pHt->GetEnd();
-            const USHORT nWhich = pHt->Which();
+            const sal_uInt16 nWhich = pHt->Which();
             SwTxtAttr *pNewHt = 0;
 
             if(nAttrStartIdx < nTxtStartIdx)
@@ -1986,7 +1988,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         if( bUpdate )
         {
             // Update aller Indizies
-            Update( rDestStart, nLen, FALSE, TRUE );
+            Update( rDestStart, nLen, sal_False, sal_True );
         }
 #ifdef CUTNOEXPAND
         else
@@ -1995,7 +1997,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 // check if there was the end of an attribute at the insertion
                 // position: if it is not a field, it must be expanded
-                for ( USHORT n = 0; n < m_pSwpHints->Count(); n++ )
+                for ( sal_uInt16 n = 0; n < m_pSwpHints->Count(); n++ )
                 {
                     SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(n);
                     const xub_StrLen * const pEndIdx = pHt->GetEnd();
@@ -2008,7 +2010,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 #endif
         CHECK_SWPHINTS(this);
 
-        Update( rStart, nLen, TRUE, TRUE );
+        Update( rStart, nLen, sal_True, sal_True );
 
         CHECK_SWPHINTS(this);
 
@@ -2022,7 +2024,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             nDestStart = nDestStart - nLen;
         }
 
-        for ( USHORT n = 0; n < aArr.Count(); ++n )
+        for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
         {
             SwTxtAttr *const pNewHt = aArr[n];
             *pNewHt->GetStart() = nDestStart + *pNewHt->GetStart();
@@ -2045,7 +2047,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         if( bUpdate )
         {
             // Update aller Indizies
-            pDest->Update( rDestStart, nLen, FALSE, TRUE);
+            pDest->Update( rDestStart, nLen, sal_False, sal_True);
         }
 #ifdef CUTNOEXPAND
         else
@@ -2054,7 +2056,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             {
                 // check if there was the end of an attribute at the insertion
                 // position: if it is not a field, it must be expanded
-                for ( USHORT n = 0; n < pDest->m_pSwpHints->Count(); n++ )
+                for ( sal_uInt16 n = 0; n < pDest->m_pSwpHints->Count(); n++ )
                 {
                     SwTxtAttr * const pHt = pDest->m_pSwpHints->GetTextHint(n);
                     const xub_StrLen * const pEndIdx = pHt->GetEnd();
@@ -2070,8 +2072,8 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         const xub_StrLen nEnd = rStart.GetIndex() + nLen;
         SwDoc* const pOtherDoc = (pDest->GetDoc() != GetDoc())
             ? pDest->GetDoc() : 0;
-        const bool bUndoNodes =
-            !pOtherDoc && GetDoc()->GetUndoNds() == &GetNodes();
+        bool const bUndoNodes = !pOtherDoc
+            && GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 
         ASSERT(!pOtherDoc,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
@@ -2102,7 +2104,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         // 2. Attribute verschieben
         // durch das Attribute-Array, bis der Anfang des Geltungsbereiches
         // des Attributs hinter dem zu verschiebenden Bereich liegt
-        USHORT nAttrCnt = 0;
+        sal_uInt16 nAttrCnt = 0;
         while ( m_pSwpHints && (nAttrCnt < m_pSwpHints->Count()) )
         {
             SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(nAttrCnt);
@@ -2110,7 +2112,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
             if (!( nAttrStartIdx < nEnd ))
                 break;
             const xub_StrLen * const pEndIdx = pHt->GetEnd();
-            const USHORT nWhich = pHt->Which();
+            const sal_uInt16 nWhich = pHt->Which();
             SwTxtAttr *pNewHt = 0;
 
             // if the hint has a dummy character, then it must not be split!
@@ -2209,9 +2211,9 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
                     ++nAttrCnt;
                 }
             }
-            Update( rStart, nLen, TRUE, TRUE );
+            Update( rStart, nLen, sal_True, sal_True );
 
-            for ( USHORT n = 0; n < aArr.Count(); ++n )
+            for ( sal_uInt16 n = 0; n < aArr.Count(); ++n )
             {
                 SwTxtAttr * const pHt = aArr[ n ];
                 *pHt->GetStart() = *pHt->GetEnd() = rStart.GetIndex();
@@ -2220,7 +2222,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         }
         else
         {
-            Update( rStart, nLen, TRUE, TRUE );
+            Update( rStart, nLen, sal_True, sal_True );
         }
 
         CHECK_SWPHINTS(this);
@@ -2252,7 +2254,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
      * die im Bereich liegen und nicht am Ende des Bereiches liegen
      */
 
-    for ( USHORT i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
 
@@ -2265,7 +2267,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
             break; // hints are sorted by end, so break here
 
         const xub_StrLen* pHtEndIdx = pHt->GetEnd();
-        const USHORT nWhich = pHt->Which();
+        const sal_uInt16 nWhich = pHt->Which();
 
         if( !pHtEndIdx )
         {
@@ -2322,7 +2324,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 
     TryDeleteSwpHints();
 
-    Update( rIdx, nCnt, TRUE );
+    Update( rIdx, nCnt, sal_True );
 
     if( 1 == nCnt )
     {
@@ -2361,12 +2363,12 @@ void SwTxtNode::GCAttr()
         return;
 
     bool   bChanged = false;
-    USHORT nMin = m_Text.Len(),
+    sal_uInt16 nMin = m_Text.Len(),
            nMax = 0;
-    BOOL bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
+    sal_Bool bAll = nMin != 0; // Bei leeren Absaetzen werden nur die
                            // INet-Formate entfernt.
 
-    for ( USHORT i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
+    for ( sal_uInt16 i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr * const pHt = m_pSwpHints->GetTextHint(i);
 
@@ -2399,7 +2401,7 @@ void SwTxtNode::GCAttr()
 }
 
 // #i23726#
-SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
+SwNumRule* SwTxtNode::_GetNumRule(sal_Bool bInParent) const
 {
     SwNumRule* pRet = 0;
 
@@ -2421,12 +2423,12 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
         if ( pRet && pRet == GetDoc()->GetOutlineNumRule() &&
              ( !HasSwAttrSet() ||
                SFX_ITEM_SET !=
-                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ) ) )
+                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False ) ) )
         {
             SwTxtFmtColl* pColl = GetTxtColl();
             if ( pColl )
             {
-                const SwNumRuleItem& rDirectItem = pColl->GetNumRule( FALSE );
+                const SwNumRuleItem& rDirectItem = pColl->GetNumRule( sal_False );
                 if ( rDirectItem.GetValue().Len() == 0 )
                 {
                     pRet = 0L;
@@ -2453,7 +2455,7 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
 //    if ( HasSwAttrSet() ) // does text node has hard attributes ?
 //    {
 //        if ( SFX_ITEM_SET !=
-//                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) )
+//                GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) )
 //        {
 //            pItem = 0L;
 //        }
@@ -2482,7 +2484,7 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
 
 //            if (pColl)
 //            {
-//                const SwNumRuleItem & rItem = pColl->GetNumRule(TRUE);
+//                const SwNumRuleItem & rItem = pColl->GetNumRule(sal_True);
 
 //                pRet = const_cast<SwDoc *>(GetDoc())->
 //                    FindNumRulePtrWithPool(rItem.GetValue());
@@ -2494,7 +2496,7 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
 //                // the outline numbering rule.
 //                if ( pRet && pRet == GetDoc()->GetOutlineNumRule() )
 //                {
-//                    const SwNumRuleItem& rDirectItem = pColl->GetNumRule(FALSE);
+//                    const SwNumRuleItem& rDirectItem = pColl->GetNumRule(sal_False);
 //                    SwNumRule* pNumRuleAtParaStyle = const_cast<SwDoc*>(GetDoc())->
 //                        FindNumRulePtrWithPool(rDirectItem.GetValue());
 //                    if ( !pNumRuleAtParaStyle )
@@ -2515,7 +2517,7 @@ SwNumRule* SwTxtNode::_GetNumRule(BOOL bInParent) const
     return pRet;
 }
 
-SwNumRule* SwTxtNode::GetNumRule(BOOL bInParent) const
+SwNumRule* SwTxtNode::GetNumRule(sal_Bool bInParent) const
 {
     SwNumRule * pRet = _GetNumRule(bInParent);
 
@@ -2538,9 +2540,9 @@ void SwTxtNode::NumRuleChgd()
     if( IsInCache() )
     {
         SwFrm::GetCache().Delete( this );
-        SetInCache( FALSE );
+        SetInCache( sal_False );
     }
-    SetInSwFntCache( FALSE );
+    SetInSwFntCache( sal_False );
 
     // Sending "noop" modify in order to cause invalidations of registered
     // <SwTxtFrm> instances to get the list style change respectively the change
@@ -2553,13 +2555,13 @@ void SwTxtNode::NumRuleChgd()
 }
 
 // -> #i27615#
-BOOL SwTxtNode::IsNumbered() const
+sal_Bool SwTxtNode::IsNumbered() const
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule && IsCountedInList() )
-        bResult = TRUE;
+        bResult = sal_True;
 
     return bResult;
 }
@@ -2580,8 +2582,8 @@ bool SwTxtNode::HasMarkedLabel() const
 // <--
 // <- #i27615#
 
-SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
-                                        BOOL bChgFollow )
+SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, sal_Bool bNext,
+                                        sal_Bool bChgFollow )
 {
     /* hartes PageBreak/PageDesc/ColumnBreak aus AUTO-Set ignorieren */
     SwAttrSet* pNewAttrSet = 0;
@@ -2597,38 +2599,38 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
             pTmpSet = pNewAttrSet;
 
         // PageBreaks/PageDesc/ColBreak rausschmeissen.
-        BOOL bRemoveFromCache = FALSE;
-        std::vector<USHORT> aClearWhichIds;
+        sal_Bool bRemoveFromCache = sal_False;
+        std::vector<sal_uInt16> aClearWhichIds;
         if ( bNext )
             bRemoveFromCache = ( 0 != pNewAttrSet->ClearItem( RES_PAGEDESC ) );
         else
             aClearWhichIds.push_back( RES_PAGEDESC );
 
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_BREAK, FALSE ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_BREAK, sal_False ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_BREAK );
             else
                 aClearWhichIds.push_back( RES_BREAK );
-            bRemoveFromCache = TRUE;
+            bRemoveFromCache = sal_True;
         }
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, FALSE ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_KEEP, sal_False ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_KEEP );
             else
                 aClearWhichIds.push_back( RES_KEEP );
-            bRemoveFromCache = TRUE;
+            bRemoveFromCache = sal_True;
         }
-        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, FALSE ) )
+        if( SFX_ITEM_SET == pTmpSet->GetItemState( RES_PARATR_SPLIT, sal_False ) )
         {
             if ( bNext )
                 pNewAttrSet->ClearItem( RES_PARATR_SPLIT );
             else
                 aClearWhichIds.push_back( RES_PARATR_SPLIT );
-            bRemoveFromCache = TRUE;
+            bRemoveFromCache = sal_True;
         }
-        if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, FALSE))
+        if(SFX_ITEM_SET == pTmpSet->GetItemState(RES_PARATR_NUMRULE, sal_False))
         {
             SwNumRule * pRule = GetNumRule();
 
@@ -2645,7 +2647,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
                     bClearHardSetNumRuleWhenFmtCollChanges = true;
                     // <--
                 }
-                bRemoveFromCache = TRUE;
+                bRemoveFromCache = sal_True;
             }
         }
 
@@ -2655,7 +2657,7 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         if( !bNext && bRemoveFromCache && IsInCache() )
         {
             SwFrm::GetCache().Delete( this );
-            SetInCache( FALSE );
+            SetInCache( sal_False );
         }
     }
     SwNodes& rNds = GetNodes();
@@ -2697,12 +2699,12 @@ SwTxtNode* SwTxtNode::_MakeNewTxtNode( const SwNodeIndex& rPos, BOOL bNext,
         // --> OD 2007-07-10 #i75353#
         if ( bClearHardSetNumRuleWhenFmtCollChanges )
         {
-            std::vector<USHORT> aClearWhichIds;
+            std::vector<sal_uInt16> aClearWhichIds;
             aClearWhichIds.push_back( RES_PARATR_NUMRULE );
             if ( ClearItemsFromAttrSet( aClearWhichIds ) != 0 && IsInCache() )
             {
                 SwFrm::GetCache().Delete( this );
-                SetInCache( FALSE );
+                SetInCache( sal_False );
             }
         }
         // <--
@@ -2717,7 +2719,7 @@ SwCntntNode* SwTxtNode::AppendNode( const SwPosition & rPos )
 {
     // Position hinter dem eingefuegt wird
     SwNodeIndex aIdx( rPos.nNode, 1 );
-    SwTxtNode* pNew = _MakeNewTxtNode( aIdx, TRUE );
+    SwTxtNode* pNew = _MakeNewTxtNode( aIdx, sal_True );
 
     // --> OD 2008-05-14 #refactorlists#
     // reset list attributes at appended text node
@@ -2752,7 +2754,7 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt( const xub_StrLen nIndex,
 {
     if ( HasHints() )
     {
-        for ( USHORT i = 0; i < m_pSwpHints->Count(); ++i )
+        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); ++i )
         {
             SwTxtAttr * const pHint = m_pSwpHints->GetTextHint(i);
             const xub_StrLen nStartPos = *pHint->GetStart();
@@ -2771,14 +2773,14 @@ SwTxtAttr * SwTxtNode::GetTxtAttrForCharAt( const xub_StrLen nIndex,
 }
 
 // -> #i29560#
-BOOL SwTxtNode::HasNumber() const
+sal_Bool SwTxtNode::HasNumber() const
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetActualListLevel())));
+        SwNumFmt aFmt(pRule->Get( static_cast<sal_uInt16>(GetActualListLevel())));
 
         // #i40041#
         bResult = aFmt.IsEnumeration() &&
@@ -2788,14 +2790,14 @@ BOOL SwTxtNode::HasNumber() const
     return bResult;
 }
 
-BOOL SwTxtNode::HasBullet() const
+sal_Bool SwTxtNode::HasBullet() const
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        SwNumFmt aFmt(pRule->Get( static_cast<USHORT>(GetActualListLevel())));
+        SwNumFmt aFmt(pRule->Get( static_cast<sal_uInt16>(GetActualListLevel())));
 
         bResult = aFmt.IsItemize();
     }
@@ -2818,14 +2820,14 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
          IsCountedInList() )
     {
         SvxNumberType const& rNumberType(
-                pRule->Get( static_cast<USHORT>(GetActualListLevel()) ) );
+                pRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) ) );
         if (rNumberType.IsTxtFmt() ||
         // #b6432095#
             (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
         {
             return pRule->MakeNumString( GetNum()->GetNumberVector(),
-                                     _bInclPrefixAndSuffixStrings ? TRUE : FALSE,
-                                     FALSE,
+                                     _bInclPrefixAndSuffixStrings ? sal_True : sal_False,
+                                     sal_False,
                                      _nRestrictToThisLevel );
         }
     }
@@ -2833,13 +2835,13 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
     return aEmptyStr;
 }
 
-long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
+long SwTxtNode::GetLeftMarginWithNum( sal_Bool bTxtLeft ) const
 {
     long nRet = 0;
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if( pRule )
     {
-        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
         // --> OD 2008-01-16 #newlistlevelattrs#
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
@@ -2878,9 +2880,9 @@ long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
     return nRet;
 }
 
-BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
+sal_Bool SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
 {
-    BOOL bRet( FALSE );
+    sal_Bool bRet( sal_False );
     // --> OD 2009-09-08 #i95907#, #b6879723#
     rFLOffset = 0;
     // <--
@@ -2892,10 +2894,10 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
         if ( IsCountedInList() )
         {
             // --> OD 2008-01-16 #newlistlevelattrs#
-            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
             {
-                rFLOffset = pRule->Get( static_cast<USHORT>(GetActualListLevel() )).GetFirstLineOffset();
+                rFLOffset = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() )).GetFirstLineOffset();
 
                 if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
@@ -2907,7 +2909,7 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             {
                 if ( AreListLevelIndentsApplicable() )
                 {
-                    rFLOffset = static_cast<USHORT>(rFmt.GetFirstLineIndent());
+                    rFLOffset = static_cast<sal_uInt16>(rFmt.GetFirstLineIndent());
                 }
                 else if (!getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING))
                 {
@@ -2918,7 +2920,7 @@ BOOL SwTxtNode::GetFirstLineOfsWithNum( short& rFLOffset ) const
             // <--
         }
 
-        bRet = TRUE;
+        bRet = sal_True;
     }
     else
     {
@@ -2936,7 +2938,7 @@ SwTwips SwTxtNode::GetAdditionalIndentForStartingNewList() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule )
     {
-        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION )
         {
             nAdditionalIndent = GetSwAttrSet().GetLRSpace().GetLeft();
@@ -2981,7 +2983,7 @@ void SwTxtNode::ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpac
         const SwNumRule* pRule = GetNumRule();
         if ( pRule && GetActualListLevel() >= 0 )
         {
-            const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+            const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
             if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
             {
                 SvxLRSpaceItem aLR( RES_LR_SPACE );
@@ -3001,7 +3003,7 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if( pRule )
     {
-        const SwNumFmt& rFmt = pRule->Get(static_cast<USHORT>(GetActualListLevel()));
+        const SwNumFmt& rFmt = pRule->Get(static_cast<sal_uInt16>(GetActualListLevel()));
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             if ( AreListLevelIndentsApplicable() )
@@ -3021,7 +3023,7 @@ long SwTxtNode::GetLeftMarginForTabCalculation() const
 // <--
 
 void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
-                            xub_StrLen nEndPos, BOOL bExpandFlds ) const
+                            xub_StrLen nEndPos, sal_Bool bExpandFlds ) const
 {
     if( GetpSwpHints() )
     {
@@ -3099,7 +3101,7 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
 {
     XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
     xub_StrLen nTxtStt = nIdx;
-    Replace0xFF( aTxt, nTxtStt, aTxt.Len(), TRUE );
+    Replace0xFF( aTxt, nTxtStt, aTxt.Len(), sal_True );
     if( bWithNum )
     {
         XubString aListLabelStr = GetNumString();
@@ -3130,12 +3132,12 @@ XubString SwTxtNode::GetExpandTxt( const xub_StrLen nIdx,
 }
 // <--
 
-BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
-                        xub_StrLen nIdx, xub_StrLen nLen, BOOL bWithNum,
-                        BOOL bWithFtn, BOOL bReplaceTabsWithSpaces ) const
+sal_Bool SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
+                        xub_StrLen nIdx, xub_StrLen nLen, sal_Bool bWithNum,
+                        sal_Bool bWithFtn, sal_Bool bReplaceTabsWithSpaces ) const
 {
     if( &rDestNd == this )
-        return FALSE;
+        return sal_False;
 
     SwIndex aDestIdx( &rDestNd, rDestNd.GetTxt().Len() );
     if( pDestIdx )
@@ -3149,7 +3151,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
 
     // mask hidden characters
     const xub_Unicode cChar = CH_TXTATR_BREAKWORD;
-    USHORT nHiddenChrs =
+    sal_uInt16 nHiddenChrs =
         SwScriptInfo::MaskHiddenRanges( *this, sTmpText, 0, sTmpText.Len(), cChar );
 
     sTmpText = sTmpText.Copy( nIdx, nLen );
@@ -3160,11 +3162,11 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
     if ( HasHints() )
     {
         xub_StrLen nInsPos = nDestStt - nIdx;
-        for ( USHORT i = 0; i < m_pSwpHints->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < m_pSwpHints->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*m_pSwpHints)[i];
             const xub_StrLen nAttrStartIdx = *pHt->GetStart();
-            const USHORT nWhich = pHt->Which();
+            const sal_uInt16 nWhich = pHt->Which();
             if (nIdx + nLen <= nAttrStartIdx)
                 break;      // ueber das Textende
 
@@ -3271,7 +3273,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 const ModelToViewHelper::ConversionMap*
@@ -3284,7 +3286,7 @@ const ModelToViewHelper::ConversionMap*
     const SwpHints* pSwpHints2 = GetpSwpHints();
     xub_StrLen nPos = 0;
 
-    for ( USHORT i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
+    for ( sal_uInt16 i = 0; pSwpHints2 && i < pSwpHints2->Count(); ++i )
     {
         const SwTxtAttr* pAttr = (*pSwpHints2)[i];
         if ( RES_TXTATR_FIELD == pAttr->Which() )
@@ -3315,15 +3317,15 @@ const ModelToViewHelper::ConversionMap*
 }
 
 XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
-                                BOOL bExpandFlds, BOOL bWithNum ) const
+                                sal_Bool bExpandFlds, sal_Bool bWithNum ) const
 {
     SvUShorts aRedlArr;
     const SwDoc* pDoc = GetDoc();
-    USHORT nRedlPos = pDoc->GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
+    sal_uInt16 nRedlPos = pDoc->GetRedlinePos( *this, nsRedlineType_t::REDLINE_DELETE );
     if( USHRT_MAX != nRedlPos )
     {
         // es existiert fuer den Node irgendein Redline-Delete-Object
-        const ULONG nNdIdx = GetIndex();
+        const sal_uLong nNdIdx = GetIndex();
         for( ; nRedlPos < pDoc->GetRedlineTbl().Count() ; ++nRedlPos )
         {
             const SwRedline* pTmp = pDoc->GetRedlineTbl()[ nRedlPos ];
@@ -3362,7 +3364,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
     XubString aTxt( GetTxt().Copy( nIdx, nLen ) );
 
     xub_StrLen nTxtStt = nIdx, nIdxEnd = nIdx + aTxt.Len();
-    for( USHORT n = 0; n < aRedlArr.Count(); n += 2 )
+    for( sal_uInt16 n = 0; n < aRedlArr.Count(); n += 2 )
     {
         xub_StrLen nStt = aRedlArr[ n ], nEnd = aRedlArr[ n+1 ];
         if( ( nIdx <= nStt && nStt <= nIdxEnd ) ||
@@ -3418,8 +3420,8 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
         }
     }
 
-    BOOL bOldExpFlg = IsIgnoreDontExpand();
-    SetIgnoreDontExpand( TRUE );
+    sal_Bool bOldExpFlg = IsIgnoreDontExpand();
+    SetIgnoreDontExpand( sal_True );
 
     if( nLen && rText.Len() )
     {
@@ -3467,7 +3469,7 @@ namespace {
                                 const SfxPoolItem* pOldValue,
                                 const SfxPoolItem* pNewValue )
     {
-        const USHORT nWhich = pOldValue ? pOldValue->Which() :
+        const sal_uInt16 nWhich = pOldValue ? pOldValue->Which() :
                               pNewValue ? pNewValue->Which() : 0 ;
         bool bNumRuleSet = false;
         bool bParagraphStyleChanged = false;
@@ -3517,7 +3519,7 @@ namespace {
                 // --> OD 2008-12-19 #i70748#
                 // The former list style set at the paragraph can not be
                 // retrieved from the change set.
-//                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
+//                if ( dynamic_cast<const SwAttrSetChg*>(pOldValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) ==
 //                        SFX_ITEM_SET )
 //                {
 //                    sOldNumRule = dynamic_cast<const SwNumRuleItem*>(pItem)->GetValue();
@@ -3529,7 +3531,7 @@ namespace {
                     sOldNumRule = pFormerNumRuleAtTxtNode->GetName();
                 }
                 // <--
-                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) ==
+                if ( dynamic_cast<const SwAttrSetChg*>(pNewValue)->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) ==
                         SFX_ITEM_SET )
                 {
                     // --> OD 2008-11-19 #i70748#
@@ -3657,7 +3659,7 @@ namespace {
                                                    false );
                     // <--
                     // --> OD 2008-11-19 #i70748#
-                    if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+                    if ( dynamic_cast<const SfxUInt16Item &>(rTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
                     {
                         rTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
                     }
@@ -3823,7 +3825,7 @@ void SwTxtNode::SetAttrOutlineLevel(int nLevel)
     if ( 0 <= nLevel && nLevel <= MAXLEVEL )
     {
         SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
-                                static_cast<UINT16>(nLevel) ) );
+                                static_cast<sal_uInt16>(nLevel) ) );
     }
 }
 //<-end
@@ -3865,7 +3867,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
     }
 
     SfxInt16Item aNewListLevelItem( RES_PARATR_LIST_LEVEL,
-                                    static_cast<INT16>(nLevel) );
+                                    static_cast<sal_Int16>(nLevel) );
     SetAttr( aNewListLevelItem );
 }
 // <--
@@ -3873,7 +3875,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
 bool SwTxtNode::HasAttrListLevel() const
 {
     return GetpSwAttrSet() &&
-           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, FALSE ) == SFX_ITEM_SET;
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_LEVEL, sal_False ) == SFX_ITEM_SET;
 }
 // <--
 // --> OD 2008-02-27 #refactorlists#
@@ -3907,7 +3909,7 @@ void SwTxtNode::SetListRestart( bool bRestart )
     else
     {
         SfxBoolItem aNewIsRestartItem( RES_PARATR_LIST_ISRESTART,
-                                       TRUE );
+                                       sal_True );
         SetAttr( aNewIsRestartItem );
     }
 }
@@ -3938,7 +3940,7 @@ bool SwTxtNode::HasVisibleNumberingOrBullet() const
         // --> OD 2008-03-19 #i87154#
         // Correction of #newlistlevelattrs#:
         // The numbering type has to be checked for bullet lists.
-        const SwNumFmt& rFmt = pRule->Get( static_cast<USHORT>(GetActualListLevel() ));
+        const SwNumFmt& rFmt = pRule->Get( static_cast<sal_uInt16>(GetActualListLevel() ));
         if ( SVX_NUM_NUMBER_NONE != rFmt.GetNumberingType() ||
              pRule->MakeNumString( *(GetNum()) ).Len() > 0 )
         {
@@ -3967,7 +3969,7 @@ void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber 
         else
         {
             SfxInt16Item aNewListRestartValueItem( RES_PARATR_LIST_RESTARTVALUE,
-                                                   static_cast<INT16>(nNumber) );
+                                                   static_cast<sal_Int16>(nNumber) );
             SetAttr( aNewListRestartValueItem );
         }
     }
@@ -3978,7 +3980,7 @@ void SwTxtNode::SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNumber 
 bool SwTxtNode::HasAttrListRestartValue() const
 {
     return GetpSwAttrSet() &&
-           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, FALSE ) == SFX_ITEM_SET;
+           GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_RESTARTVALUE, sal_False ) == SFX_ITEM_SET;
 }
 // <--
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
@@ -4007,7 +4009,7 @@ SwNumberTree::tSwNumTreeNumber SwTxtNode::GetActualListStartValue() const
         if ( pRule )
         {
             const SwNumFmt* pFmt =
-                    pRule->GetNumFmt( static_cast<USHORT>(GetAttrListLevel()) );
+                    pRule->GetNumFmt( static_cast<sal_uInt16>(GetAttrListLevel()) );
             if ( pFmt )
             {
                 nListRestartValue = pFmt->GetStart();
@@ -4046,7 +4048,7 @@ void SwTxtNode::SetCountedInList( bool bCounted )
     }
     else
     {
-        SfxBoolItem aIsCountedInListItem( RES_PARATR_LIST_ISCOUNTED, FALSE );
+        SfxBoolItem aIsCountedInListItem( RES_PARATR_LIST_ISCOUNTED, sal_False );
         SetAttr( aIsCountedInListItem );
     }
 }
@@ -4198,13 +4200,13 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
         bAreListLevelIndentsApplicable = false;
     }
     else if ( HasSwAttrSet() &&
-              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+              GetpSwAttrSet()->GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
     {
         // paragraph has hard-set indent attributes
         bAreListLevelIndentsApplicable = false;
     }
     else if ( HasSwAttrSet() &&
-              GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+              GetpSwAttrSet()->GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
     {
         // list style is directly applied to paragraph and paragraph has no
         // hard-set indent attributes
@@ -4219,14 +4221,14 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
         const SwTxtFmtColl* pColl = GetTxtColl();
         while ( pColl )
         {
-            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, FALSE ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_LR_SPACE, sal_False ) == SFX_ITEM_SET )
             {
                 // indent attributes found in the paragraph style hierarchy.
                 bAreListLevelIndentsApplicable = false;
                 break;
             }
 
-            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, FALSE ) == SFX_ITEM_SET )
+            if ( pColl->GetAttrSet().GetItemState( RES_PARATR_NUMRULE, sal_False ) == SFX_ITEM_SET )
             {
                 // paragraph style with the list style found and until now no
                 // indent attributes are found in the paragraph style hierarchy.
@@ -4262,7 +4264,7 @@ bool SwTxtNode::GetListTabStopPosition( long& nListTabStopPosition ) const
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetActualListLevel()) );
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT &&
              rFmt.GetLabelFollowedBy() == SvxNumberFormat::LISTTAB )
         {
@@ -4305,7 +4307,7 @@ XubString SwTxtNode::GetLabelFollowedBy() const
     const SwNumRule* pNumRule = GetNum() ? GetNum()->GetNumRule() : 0;
     if ( pNumRule && HasVisibleNumberingOrBullet() && GetActualListLevel() >= 0 )
     {
-        const SwNumFmt& rFmt = pNumRule->Get( static_cast<USHORT>(GetActualListLevel()) );
+        const SwNumFmt& rFmt = pNumRule->Get( static_cast<sal_uInt16>(GetActualListLevel()) );
         if ( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
             switch ( rFmt.GetLabelFollowedBy() )
@@ -4478,7 +4480,7 @@ namespace {
                 const SfxBoolItem& aListIsRestartItem =
                                     dynamic_cast<const SfxBoolItem&>(pItem);
                 if ( aListIsRestartItem.GetValue() !=
-                                    (mrTxtNode.IsListRestart() ? TRUE : FALSE) )
+                                    (mrTxtNode.IsListRestart() ? sal_True : sal_False) )
                 {
                     mbUpdateListRestart = true;
                 }
@@ -4504,7 +4506,7 @@ namespace {
                 const SfxBoolItem& aIsCountedInListItem =
                                     dynamic_cast<const SfxBoolItem&>(pItem);
                 if ( aIsCountedInListItem.GetValue() !=
-                                    (mrTxtNode.IsCountedInList() ? TRUE : FALSE) )
+                                    (mrTxtNode.IsCountedInList() ? sal_True : sal_False) )
                 {
                     mbUpdateListCount = true;
                 }
@@ -4541,7 +4543,7 @@ namespace {
     {
         const SfxPoolItem* pItem = 0;
         // handle RES_PARATR_NUMRULE
-        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_NUMRULE, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             mrTxtNode.RemoveFromList();
 
@@ -4557,7 +4559,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ID
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ID, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxStringItem* pListIdItem =
                                     dynamic_cast<const SfxStringItem*>(pItem);
@@ -4574,7 +4576,7 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_LEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_LEVEL, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxInt16Item* pListLevelItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
@@ -4585,19 +4587,19 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ISRESTART
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISRESTART, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxBoolItem* pListIsRestartItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
             if ( pListIsRestartItem->GetValue() !=
-                                    (mrTxtNode.IsListRestart() ? TRUE : FALSE) )
+                                    (mrTxtNode.IsListRestart() ? sal_True : sal_False) )
             {
                 mbUpdateListRestart = true;
             }
         }
 
         // handle RES_PARATR_LIST_RESTARTVALUE
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_RESTARTVALUE, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxInt16Item* pListRestartValueItem =
                                 dynamic_cast<const SfxInt16Item*>(pItem);
@@ -4609,12 +4611,12 @@ namespace {
         }
 
         // handle RES_PARATR_LIST_ISCOUNTED
-        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_LIST_ISCOUNTED, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxBoolItem* pIsCountedInListItem =
                                 dynamic_cast<const SfxBoolItem*>(pItem);
             if ( pIsCountedInListItem->GetValue() !=
-                                (mrTxtNode.IsCountedInList() ? TRUE : FALSE) )
+                                (mrTxtNode.IsCountedInList() ? sal_True : sal_False) )
             {
                 mbUpdateListCount = true;
             }
@@ -4622,7 +4624,7 @@ namespace {
 
         // --> OD 2008-11-19 #i70748#
         // handle RES_PARATR_OUTLINELEVEL
-        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, FALSE, &pItem ) == SFX_ITEM_SET )
+        if ( rItemSet.GetItemState( RES_PARATR_OUTLINELEVEL, sal_False, &pItem ) == SFX_ITEM_SET )
         {
             const SfxUInt16Item* pOutlineLevelItem =
                                 dynamic_cast<const SfxUInt16Item*>(pItem);
@@ -4676,7 +4678,7 @@ namespace {
             {
                 const SfxPoolItem* pItem = 0;
                 if ( mrTxtNode.GetSwAttrSet().GetItemState( RES_PARATR_NUMRULE,
-                                                            TRUE, &pItem )
+                                                            sal_True, &pItem )
                                                                 != SFX_ITEM_SET )
                 {
                     mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
@@ -4688,28 +4690,28 @@ namespace {
     // End of class <HandleSetAttrAtTxtNode>
 }
 
-BOOL SwTxtNode::SetAttr( const SfxPoolItem& pItem )
+sal_Bool SwTxtNode::SetAttr( const SfxPoolItem& pItem )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleSetAttrAtTxtNode aHandleSetAttr( *this, pItem );
 
-    BOOL bRet = SwCntntNode::SetAttr( pItem );
+    sal_Bool bRet = SwCntntNode::SetAttr( pItem );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
 }
 
-BOOL SwTxtNode::SetAttr( const SfxItemSet& rSet )
+sal_Bool SwTxtNode::SetAttr( const SfxItemSet& rSet )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleSetAttrAtTxtNode aHandleSetAttr( *this, rSet );
 
-    BOOL bRet = SwCntntNode::SetAttr( rSet );
+    sal_Bool bRet = SwCntntNode::SetAttr( rSet );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
@@ -4737,8 +4739,8 @@ namespace {
     {
         public:
             HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
-                                      const USHORT nWhich1,
-                                      const USHORT nWhich2 );
+                                      const sal_uInt16 nWhich1,
+                                      const sal_uInt16 nWhich2 );
             HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
                                       const SvUShorts& rWhichArr );
             HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode );
@@ -4754,8 +4756,8 @@ namespace {
     };
 
     HandleResetAttrAtTxtNode::HandleResetAttrAtTxtNode( SwTxtNode& rTxtNode,
-                                                        const USHORT nWhich1,
-                                                        const USHORT nWhich2 )
+                                                        const sal_uInt16 nWhich1,
+                                                        const sal_uInt16 nWhich2 )
         : mrTxtNode( rTxtNode ),
           mbListStyleOrIdReset( false ),
           mbUpdateListLevel( false ),
@@ -4774,7 +4776,7 @@ namespace {
             else if ( nWhich1 <= RES_PARATR_LIST_ID && RES_PARATR_LIST_ID <= nWhich2 )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
-                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
                 // --> OD 2008-10-20 #i92898#
                 mbListStyleOrIdReset = true;
                 // <--
@@ -4819,7 +4821,7 @@ namespace {
             else if ( nWhich1 == RES_PARATR_LIST_ID )
             {
                 bRemoveFromList = mrTxtNode.GetpSwAttrSet() &&
-                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET;
+                    mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET;
                 // --> OD 2008-10-20 #i92898#
                 mbListStyleOrIdReset = true;
                 // <--
@@ -4866,8 +4868,8 @@ namespace {
     {
         bool bRemoveFromList( false );
         {
-            const USHORT nEnd = rWhichArr.Count();
-            for ( USHORT n = 0; n < nEnd; ++n )
+            const sal_uInt16 nEnd = rWhichArr.Count();
+            for ( sal_uInt16 n = 0; n < nEnd; ++n )
             {
                 // RES_PARATR_NUMRULE and RES_PARATR_LIST_ID
                 if ( rWhichArr[ n ] == RES_PARATR_NUMRULE )
@@ -4880,7 +4882,7 @@ namespace {
                 {
                     bRemoveFromList = bRemoveFromList ||
                         ( mrTxtNode.GetpSwAttrSet() &&
-                          mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, FALSE ) == SFX_ITEM_SET );
+                          mrTxtNode.GetpSwAttrSet()->GetItemState( RES_PARATR_LIST_ID, sal_False ) == SFX_ITEM_SET );
                     // --> OD 2008-10-20 #i92898#
                     mbListStyleOrIdReset = true;
                     // <--
@@ -4967,7 +4969,7 @@ namespace {
             // --> OD 2008-11-19 #i70748#
             // --> OD 2010-05-12 #i105562#
             else if ( mrTxtNode.GetpSwAttrSet() &&
-                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, FALSE )).GetValue() > 0 )
+                      dynamic_cast<const SfxUInt16Item &>(mrTxtNode.GetAttr( RES_PARATR_OUTLINELEVEL, sal_False )).GetValue() > 0 )
             {
                 mrTxtNode.SetEmptyListStyleDueToSetOutlineLevelAttr();
             }
@@ -4999,42 +5001,42 @@ namespace {
     // End of class <HandleResetAttrAtTxtNode>
 }
 
-BOOL SwTxtNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
+sal_Bool SwTxtNode::ResetAttr( sal_uInt16 nWhich1, sal_uInt16 nWhich2 )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this, nWhich1, nWhich2 );
 
-    BOOL bRet = SwCntntNode::ResetAttr( nWhich1, nWhich2 );
+    sal_Bool bRet = SwCntntNode::ResetAttr( nWhich1, nWhich2 );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
 }
 
-BOOL SwTxtNode::ResetAttr( const SvUShorts& rWhichArr )
+sal_Bool SwTxtNode::ResetAttr( const SvUShorts& rWhichArr )
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this, rWhichArr );
 
-    BOOL bRet = SwCntntNode::ResetAttr( rWhichArr );
+    sal_Bool bRet = SwCntntNode::ResetAttr( rWhichArr );
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
     return bRet;
 }
 
-USHORT SwTxtNode::ResetAllAttr()
+sal_uInt16 SwTxtNode::ResetAllAttr()
 {
     const bool bOldIsSetOrResetAttr( mbInSetOrResetAttr );
     mbInSetOrResetAttr = true;
 
     HandleResetAttrAtTxtNode aHandleResetAttr( *this );
 
-    USHORT nRet = SwCntntNode::ResetAllAttr();
+    sal_uInt16 nRet = SwCntntNode::ResetAllAttr();
 
     mbInSetOrResetAttr = bOldIsSetOrResetAttr;
 
@@ -5055,7 +5057,7 @@ bool SwTxtNode::IsInClipboard() const
 
 bool SwTxtNode::IsInUndo() const
 {
-    return &GetNodes() == GetDoc()->GetUndoNds();
+    return GetDoc()->GetIDocumentUndoRedo().IsUndoNodes(GetNodes());
 }
 
 bool SwTxtNode::IsInContent() const

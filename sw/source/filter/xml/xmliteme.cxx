@@ -40,7 +40,7 @@
 #include "xmlbrshe.hxx"
 #include <editeng/tstpitem.hxx>
 #include <editeng/brshitem.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/fldunit.hxx>
 #include <swmodule.hxx>
 #include <doc.hxx>
 #include "fmtornt.hxx"

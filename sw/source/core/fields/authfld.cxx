@@ -76,16 +76,16 @@ SV_IMPL_PTRARR( SortKeyArr, TOXSortKeyPtr )
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
 {
-    for(USHORT i = 0; i < AUTH_FIELD_END; i++)
+    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         aAuthFields[i] = rCopy.aAuthFields[i];
 }
 // --------------------------------------------------------
-BOOL    SwAuthEntry::operator==(const SwAuthEntry& rComp)
+sal_Bool    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 {
-    for(USHORT i = 0; i < AUTH_FIELD_END; i++)
+    for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
         if(aAuthFields[i] != rComp.aAuthFields[i])
-            return FALSE;
-    return TRUE;
+            return sal_False;
+    return sal_True;
 }
 // --------------------------------------------------------
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
@@ -96,8 +96,8 @@ SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     m_pSortKeyArr(new SortKeyArr(3, 3)),
     m_cPrefix('['),
     m_cSuffix(']'),
-    m_bIsSequence(FALSE),
-    m_bSortByDocument(TRUE),
+    m_bIsSequence(sal_False),
+    m_bSortByDocument(sal_True),
     m_eLanguage((LanguageType)::GetAppLanguage())
 {
 }
@@ -114,7 +114,7 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
     m_eLanguage(rFType.m_eLanguage),
     m_sSortAlgorithm(rFType.m_sSortAlgorithm)
 {
-    for(USHORT i = 0; i < rFType.m_pSortKeyArr->Count(); i++)
+    for(sal_uInt16 i = 0; i < rFType.m_pSortKeyArr->Count(); i++)
         m_pSortKeyArr->Insert((*rFType.m_pSortKeyArr)[i], i);
 }
 
@@ -135,16 +135,16 @@ SwFieldType*    SwAuthorityFieldType::Copy()  const
 void    SwAuthorityFieldType::RemoveField(long nHandle)
 {
 #ifdef DBG_UTIL
-    BOOL bRemoved = FALSE;
+    sal_Bool bRemoved = sal_False;
 #endif
-    for(USHORT j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         long nRet = (long)(void*)pTemp;
         if(nRet == nHandle)
         {
 #ifdef DBG_UTIL
-            bRemoved = TRUE;
+            bRemoved = sal_True;
 #endif
             pTemp->RemoveRef();
             if(!pTemp->GetRefCount())
@@ -165,11 +165,11 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
 {
     long nRet = 0;
     SwAuthEntry* pEntry = new SwAuthEntry;
-    for( USHORT i = 0; i < AUTH_FIELD_END; ++i )
+    for( sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i )
         pEntry->SetAuthorField( (ToxAuthorityField)i,
                         rFieldContents.GetToken( i, TOX_STYLE_DELIMITER ));
 
-    for(USHORT j = 0; j < m_pDataArr->Count() && pEntry; j++)
+    for(sal_uInt16 j = 0; j < m_pDataArr->Count() && pEntry; j++)
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         if(*pTemp == *pEntry)
@@ -191,16 +191,21 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
     return nRet;
 }
 
+<<<<<<< local
 BOOL SwAuthorityFieldType::AddField(long nHandle)
+=======
+ --------------------------------------------------*/
+sal_Bool SwAuthorityFieldType::AddField(long nHandle)
+>>>>>>> other
 {
-    BOOL bRet = FALSE;
-    for( USHORT j = 0; j < m_pDataArr->Count(); j++ )
+    sal_Bool bRet = sal_False;
+    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); j++ )
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         long nTmp = (long)(void*)pTemp;
         if( nTmp == nHandle )
         {
-            bRet = TRUE;
+            bRet = sal_True;
             pTemp->AddRef();
             //re-generate positions of the fields
             DelSequenceArray();
@@ -214,7 +219,7 @@ BOOL SwAuthorityFieldType::AddField(long nHandle)
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 {
     const SwAuthEntry* pRet = 0;
-    for(USHORT j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
     {
         const SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         long nTmp = (long)(void*)pTemp;
@@ -231,7 +236,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
                 SvStringsDtor& rToFill )const
 {
-    for(USHORT j = 0; j < m_pDataArr->Count(); j++)
+    for(sal_uInt16 j = 0; j < m_pDataArr->Count(); j++)
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         rToFill.Insert( new String( pTemp->GetAuthorField(
@@ -243,7 +248,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
                                 const String& rIdentifier)const
 {
     const SwAuthEntry* pRet = 0;
-    for( USHORT j = 0; j < m_pDataArr->Count(); ++j )
+    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); ++j )
     {
         const SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         if( rIdentifier == pTemp->GetAuthorField( AUTH_FIELD_IDENTIFIER ))
@@ -258,13 +263,13 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
 bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 {
     bool bChanged = false;
-    for( USHORT j = 0; j < m_pDataArr->Count(); ++j )
+    for( sal_uInt16 j = 0; j < m_pDataArr->Count(); ++j )
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
         if(pTemp->GetAuthorField(AUTH_FIELD_IDENTIFIER) ==
                     pNewEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER))
         {
-            for(USHORT i = 0; i < AUTH_FIELD_END; i++)
+            for(sal_uInt16 i = 0; i < AUTH_FIELD_END; i++)
                 pTemp->SetAuthorField((ToxAuthorityField) i,
                     pNewEntry->GetAuthorField((ToxAuthorityField)i));
             bChanged = true;
@@ -277,9 +282,9 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 /*-------------------------------------------------------------------------
   appends a new entry (if new) and returns the array position
   -----------------------------------------------------------------------*/
-USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
+sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     for( nRet = 0; nRet < m_pDataArr->Count(); ++nRet )
     {
         SwAuthEntry* pTemp = m_pDataArr->GetObject( nRet );
@@ -297,7 +302,14 @@ USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return nRet;
 }
 
+<<<<<<< local
 long    SwAuthorityFieldType::GetHandle(USHORT nPos)
+=======
+/*-- 11.10.99 08:49:24---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+long    SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
+>>>>>>> other
 {
     long nRet = 0;
     if( nPos < m_pDataArr->Count() )
@@ -308,7 +320,12 @@ long    SwAuthorityFieldType::GetHandle(USHORT nPos)
     return nRet;
 }
 
+<<<<<<< local
 USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
+=======
+ --------------------------------------------------*/
+sal_uInt16  SwAuthorityFieldType::GetSequencePos(long nHandle)
+>>>>>>> other
 {
     //find the field in a sorted array of handles,
 #ifdef DBG_UTIL
@@ -381,7 +398,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             }
         }
 
-        for(USHORT i = 0; i < aSortArr.Count(); i++)
+        for(sal_uInt16 i = 0; i < aSortArr.Count(); i++)
         {
             const SwTOXSortTabBase& rBase = *aSortArr[i];
             SwFmtFld& rFmtFld = ((SwTOXAuthority&)rBase).GetFldFmt();
@@ -391,8 +408,8 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
         aSortArr.DeleteAndDestroy(0, aSortArr.Count());
     }
     //find nHandle
-    USHORT nRet = 0;
-    for(USHORT i = 0; i < m_pSequArr->Count(); i++)
+    sal_uInt16 nRet = 0;
+    for(sal_uInt16 i = 0; i < m_pSequArr->Count(); i++)
     {
         if((*m_pSequArr)[i] == nHandle)
         {
@@ -404,7 +421,12 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
     return nRet;
 }
 
+<<<<<<< local
 BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool    SwAuthorityFieldType::QueryValue( Any& rVal, sal_uInt16 nWhichId ) const
+>>>>>>> other
 {
     switch( nWhichId )
     {
@@ -456,12 +478,17 @@ BOOL    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
     default:
         DBG_ERROR("illegal property");
     }
-    return TRUE;
+    return sal_True;
 }
 
+<<<<<<< local
 BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
+>>>>>>> other
 {
-    sal_Bool bRet = TRUE;
+    sal_Bool bRet = sal_True;
     String sTmp;
     switch( nWhichId )
     {
@@ -514,7 +541,7 @@ BOOL    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
                             if(nVal >= 0 && nVal < AUTH_FIELD_END)
                                 pSortKey->eField = (ToxAuthorityField) nVal;
                             else
-                                bRet = FALSE;
+                                bRet = sal_False;
                         }
                         else if(pValue[j].Name.equalsAsciiL(SW_PROP_NAME(UNO_NAME_IS_SORT_ASCENDING)))
                         {
@@ -539,12 +566,22 @@ void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *p
     NotifyClients( pOld, pNew );
 }
 
+<<<<<<< local
 USHORT SwAuthorityFieldType::GetSortKeyCount() const
+=======
+ --------------------------------------------------*/
+sal_uInt16 SwAuthorityFieldType::GetSortKeyCount() const
+>>>>>>> other
 {
     return m_pSortKeyArr->Count();
 }
 
+<<<<<<< local
 const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(USHORT nIdx) const
+=======
+ --------------------------------------------------*/
+const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(sal_uInt16 nIdx) const
+>>>>>>> other
 {
     SwTOXSortKey* pRet = 0;
     if(m_pSortKeyArr->Count() > nIdx)
@@ -553,11 +590,16 @@ const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(USHORT nIdx) const
     return pRet;
 }
 
+<<<<<<< local
 void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
+=======
+ --------------------------------------------------*/
+void SwAuthorityFieldType::SetSortKeys(sal_uInt16 nKeyCount, SwTOXSortKey aKeys[])
+>>>>>>> other
 {
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
-    USHORT nArrIdx = 0;
-    for(USHORT i = 0; i < nKeyCount; i++)
+    sal_uInt16 nArrIdx = 0;
+    for(sal_uInt16 i = 0; i < nKeyCount; i++)
         if(aKeys[i].eField < AUTH_FIELD_END)
             m_pSortKeyArr->Insert(new SwTOXSortKey(aKeys[i]), nArrIdx++);
 }
@@ -671,13 +713,18 @@ const char* aFieldNames[] =
     "ISBN"
 };
 
+<<<<<<< local
 BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
+=======
+ ---------------------------------------------------------------------------*/
+sal_Bool    SwAuthorityField::QueryValue( Any& rAny, sal_uInt16 /*nWhichId*/ ) const
+>>>>>>> other
 {
     if(!GetTyp())
-        return FALSE;
+        return sal_False;
     const SwAuthEntry* pAuthEntry = ((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle);
     if(!pAuthEntry)
-        return FALSE;
+        return sal_False;
     Sequence <PropertyValue> aRet(AUTH_FIELD_END);
     PropertyValue* pValues = aRet.getArray();
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
@@ -690,7 +737,7 @@ BOOL    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
             pValues[i].Value <<= OUString(rField);
     }
     rAny <<= aRet;
-    return FALSE;
+    return sal_False;
 }
 
 sal_Int16 lcl_Find(const OUString& rFieldName)
@@ -701,14 +748,14 @@ sal_Int16 lcl_Find(const OUString& rFieldName)
     return -1;
 }
 //----------------------------------------------------------------------------
-BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
+sal_Bool    SwAuthorityField::PutValue( const Any& rAny, sal_uInt16 /*nWhichId*/ )
 {
     if(!GetTyp() || !((SwAuthorityFieldType*)GetTyp())->GetEntryByHandle(m_nHandle))
-        return FALSE;
+        return sal_False;
 
     Sequence <PropertyValue> aParam;
     if(!(rAny >>= aParam))
-        return FALSE;
+        return sal_False;
 
     String sToSet;
     sToSet.Fill(AUTH_FIELD_ISBN, TOX_STYLE_DELIMITER);
@@ -734,7 +781,7 @@ BOOL    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
     ((SwAuthorityFieldType*)GetTyp())->RemoveField(m_nHandle);
     m_nHandle = ((SwAuthorityFieldType*)GetTyp())->AddField(sToSet);
 
-    return FALSE;
+    return sal_False;
 }
 
 SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
@@ -745,7 +792,7 @@ SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
     {
 
         const SwAuthEntry* pEntry = pSrcTyp->GetEntryByHandle( m_nHandle );
-        USHORT nHdlPos = pDstTyp->AppendField( *pEntry );
+        sal_uInt16 nHdlPos = pDstTyp->AppendField( *pEntry );
         pSrcTyp->RemoveField( m_nHandle );
         m_nHandle = pDstTyp->GetHandle( nHdlPos );
         pDstTyp->AddField( m_nHandle );

@@ -41,9 +41,9 @@ IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr, 10, 10 )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
     : SwCursor( rPos, pRing, false ), SwModify( 0 ),
-    bRemainInSection( TRUE ),
-    bSkipOverHiddenSections( FALSE ),
-    bSkipOverProtectSections( FALSE )
+    bRemainInSection( sal_True ),
+    bSkipOverHiddenSections( sal_False ),
+    bSkipOverProtectSections( sal_False )
 
 {}
 
@@ -54,7 +54,7 @@ SwUnoCrsr::~SwUnoCrsr()
     {
         // dann muss der Cursor aus dem Array ausgetragen werden
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
-        USHORT nDelPos = rTbl.GetPos( this );
+        sal_uInt16 nDelPos = rTbl.GetPos( this );
 
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
@@ -104,7 +104,7 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
 }
 
 const SwCntntFrm*
-SwUnoCrsr::DoSetBidiLevelLeftRight( BOOL &, BOOL, BOOL )
+SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool &, sal_Bool, sal_Bool )
 {
     return 0; // not for uno cursor
 }
@@ -114,7 +114,7 @@ void SwUnoCrsr::DoSetBidiLevelUpDown()
     return; // not for uno cursor
 }
 
-BOOL SwUnoCrsr::IsSelOvr( int eFlags )
+sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
 {
     if( bRemainInSection )
     {
@@ -125,8 +125,8 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
                     *pNewSttNd = rPtIdx.GetNode().StartOfSectionNode();
         if( pOldSttNd != pNewSttNd )
         {
-            BOOL bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
-            BOOL bValidPos = FALSE;
+            sal_Bool bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
+            sal_Bool bValidPos = sal_False;
 
             // search the correct surrounded start node - which the index
             // can't leave.
@@ -180,14 +180,14 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
                         }
                     }
                     else
-                        bValidPos = TRUE;
+                        bValidPos = sal_True;
                 } while ( pInvalidNode );
             }
 
             if( bValidPos )
             {
                 SwCntntNode* pCNd = GetCntntNode();
-                USHORT nCnt = 0;
+                sal_uInt16 nCnt = 0;
                 if( pCNd && !bMoveDown )
                     nCnt = pCNd->Len();
                 GetPoint()->nContent.Assign( pCNd, nCnt );
@@ -196,7 +196,7 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
             {
                 rPtIdx = GetSavePos()->nNode;
                 GetPoint()->nContent.Assign( GetCntntNode(), GetSavePos()->nCntnt );
-                return TRUE;
+                return sal_True;
             }
         }
     }
@@ -209,7 +209,7 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
     : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
 {
-    SetRemainInSection(FALSE);
+    SetRemainInSection(sal_False);
 }
 
 SwUnoTableCrsr::~SwUnoTableCrsr()
@@ -226,9 +226,9 @@ SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
 }
 */
 
-BOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
+sal_Bool SwUnoTableCrsr::IsSelOvr( int eFlags )
 {
-    BOOL bRet = SwUnoCrsr::IsSelOvr( eFlags );
+    sal_Bool bRet = SwUnoCrsr::IsSelOvr( eFlags );
     if( !bRet )
     {
         const SwTableNode* pTNd = GetPoint()->nNode.GetNode().FindTableNode();
@@ -244,14 +244,20 @@ void SwUnoTableCrsr::MakeBoxSels()
     const SwCntntNode* pCNd;
     bool bMakeTblCrsrs = true;
     if( GetPoint()->nNode.GetIndex() && GetMark()->nNode.GetIndex() &&
+<<<<<<< local
             0 != ( pCNd = GetCntntNode() ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) &&
             0 != ( pCNd = GetCntntNode(FALSE) ) && pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() ) )
         bMakeTblCrsrs = GetDoc()->GetCurrentLayout()->MakeTblCrsrs( *this );    //swmod 080218
+=======
+            0 != ( pCNd = GetCntntNode() ) && pCNd->GetFrm() &&
+            0 != ( pCNd = GetCntntNode(sal_False) ) && pCNd->GetFrm() )
+        bMakeTblCrsrs = GetDoc()->GetRootFrm()->MakeTblCrsrs( *this );
+>>>>>>> other
 
     if ( !bMakeTblCrsrs )
     {
         SwSelBoxes& rTmpBoxes = (SwSelBoxes&)GetBoxes();
-        USHORT nCount = 0;
+        sal_uInt16 nCount = 0;
         while( nCount < rTmpBoxes.Count() )
             DeleteBox( nCount );
     }

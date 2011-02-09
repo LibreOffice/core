@@ -2688,7 +2688,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                    pFEShell->IsObjSelected() == 0 ) )
             {
                 // get cursor without updating an existing table cursor.
-                pCrsr = pCrsrShell->GetCrsr( FALSE );
+                pCrsr = pCrsrShell->GetCrsr( sal_False );
             }
         }
     }

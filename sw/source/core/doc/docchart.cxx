@@ -66,7 +66,7 @@ void SwTable::UpdateCharts() const
     GetFrmFmt()->GetDoc()->UpdateCharts( GetFrmFmt()->GetName() );
 }
 
-BOOL SwTable::IsTblComplexForChart( const String& rSelection,
+sal_Bool SwTable::IsTblComplexForChart( const String& rSelection,
                                     SwChartLines* pGetCLines ) const
 {
     const SwTableBox* pSttBox, *pEndBox;
@@ -115,7 +115,7 @@ IMPL_LINK( SwDoc, DoUpdateAllCharts, Timer *, EMPTYARG )
     if( pVSh )
     {
         const SwFrmFmts& rTblFmts = *GetTblFrmFmts();
-        for( USHORT n = 0; n < rTblFmts.Count(); ++n )
+        for( sal_uInt16 n = 0; n < rTblFmts.Count(); ++n )
         {
             SwTable* pTmpTbl;
             const SwTableNode* pTblNd;
@@ -171,20 +171,20 @@ void SwDoc::UpdateCharts( const String &rName ) const
 
 void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const String &rNewName )
 {
-//  BOOL bStop = 1;
+//  sal_Bool bStop = 1;
 
     const String aOldName( rTblFmt.GetName() );
 
-    BOOL bNameFound = 0 == rNewName.Len();
+    sal_Bool bNameFound = 0 == rNewName.Len();
     if( !bNameFound )
     {
         SwFrmFmt* pFmt;
         const SwFrmFmts& rTbl = *GetTblFrmFmts();
-        for( USHORT i = rTbl.Count(); i; )
+        for( sal_uInt16 i = rTbl.Count(); i; )
             if( !( pFmt = rTbl[ --i ] )->IsDefault() &&
                 pFmt->GetName() == rNewName && IsUsed( *pFmt ) )
             {
-                bNameFound = TRUE;
+                bNameFound = sal_True;
                 break;
             }
     }

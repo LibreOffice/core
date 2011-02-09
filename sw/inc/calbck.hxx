@@ -74,6 +74,7 @@ class SW_DLLPUBLIC SwClient : ::boost::noncopyable
     friend class SwModify;
     friend class SwClientIter;
 
+<<<<<<< local
     SwClient *pLeft, *pRight;       // double-linked list of other clients
     SwModify *pRegisteredIn;        // event source
 
@@ -87,6 +88,17 @@ class SW_DLLPUBLIC SwClient : ::boost::noncopyable
     // mba: IMHO these methods should be pure virtual
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
     virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
+=======
+    SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
+    sal_Bool bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
+                                        // eigentlich ein Member des SwModify
+                                        // aber aus Platzgruenden hier.
+    sal_Bool bInModify  : 1;                // ist in einem Modify. (Debug!!!)
+    sal_Bool bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
+    sal_Bool bInCache   : 1;                // Ist im BorderAttrCache des Layout,
+                                        // Traegt sich dann im Modify aus!
+    sal_Bool bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
+>>>>>>> other
 
 protected:
     // single argument ctors shall be explicit.
@@ -116,13 +128,37 @@ public:
     // needed for class SwClientIter
     TYPEINFO();
 
+<<<<<<< local
     // get information about attribute
     virtual BOOL GetInfo( SfxPoolItem& ) const;
+=======
+    void LockModify()                   { bModifyLocked = sal_True;  }
+    void UnlockModify()                 { bModifyLocked = sal_False; }
+    void SetInCache( sal_Bool bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( sal_Bool bNew )   { bInSwFntCache = bNew;  }
+    sal_Bool IsModifyLocked() const         { return bModifyLocked;  }
+    sal_Bool IsInDocDTOR()    const         { return bInDocDTOR;     }
+    sal_Bool IsInCache()      const         { return bInCache;       }
+    sal_Bool IsInSwFntCache()  const        { return bInSwFntCache;  }
+
+        // erfrage vom Client Informationen
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+
+private:
+    SwClient( const SwClient& );
+    SwClient &operator=( const SwClient& );
+>>>>>>> other
 };
 
 inline SwClient::SwClient() :
+<<<<<<< local
     pLeft(0), pRight(0), pRegisteredIn(0), mbIsAllowedToBeRemovedInModifyCall(false)
 {}
+=======
+    pLeft(0), pRight(0), pRegisteredIn(0)
+{ bModifyLocked = bInModify = bInDocDTOR = bInCache = bInSwFntCache = sal_False; }
+
+>>>>>>> other
 
 // ----------
 // SwModify
@@ -164,9 +200,15 @@ public:
     SwClient* Remove(SwClient *pDepend);
     const SwClient* GetDepends() const  { return pRoot; }
 
+<<<<<<< local
     // get information about attribute
     virtual BOOL GetInfo( SfxPoolItem& ) const;
+=======
+        // erfrage vom Client Informationen
+    virtual sal_Bool GetInfo( SfxPoolItem& ) const;
+>>>>>>> other
 
+<<<<<<< local
     void LockModify()                   { bModifyLocked = TRUE;  }
     void UnlockModify()                 { bModifyLocked = FALSE; }
     void SetInCache( BOOL bNew )        { bInCache = bNew;       }
@@ -176,10 +218,18 @@ public:
     BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
     BOOL IsInCache()      const         { return bInCache;       }
     BOOL IsInSwFntCache() const         { return bInSwFntCache;  }
+=======
+    void SetInDocDTOR() { bInDocDTOR = sal_True; }
+>>>>>>> other
 
-    void CheckCaching( const USHORT nWhich );
+    void CheckCaching( const sal_uInt16 nWhich );
 
+<<<<<<< local
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
+=======
+    sal_Bool IsLastDepend() const
+        { return pRoot && !pRoot->pLeft && !pRoot->pRight; }
+>>>>>>> other
 
     int GetClientCount() const;
 };
@@ -201,7 +251,12 @@ public:
 
     SwClient* GetToTell() { return pToTell; }
 
+<<<<<<< local
     virtual BOOL GetInfo( SfxPoolItem & ) const;
+=======
+        // erfrage vom Client Informationen
+    virtual sal_Bool GetInfo( SfxPoolItem & ) const;
+>>>>>>> other
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );

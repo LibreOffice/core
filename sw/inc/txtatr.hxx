@@ -39,21 +39,27 @@ class SwCharFmt;
 class SwTxtCharFmt : public SwTxtAttrEnd
 {
     SwTxtNode * m_pTxtNode;
-    USHORT m_nSortNumber;
+    sal_uInt16 m_nSortNumber;
 
 public:
     SwTxtCharFmt( SwFmtCharFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtCharFmt( );
 
+<<<<<<< local
     // werden vom SwFmtCharFmt hierher weitergeleitet (no derivation from SwClient!)
     void ModifyNotification( const SfxPoolItem*, const SfxPoolItem* );
     bool GetInfo( SfxPoolItem& rInfo ) const;
+=======
+    // werden vom SwFmtCharFmt hierher weitergeleitet
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );    // SwClient
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+>>>>>>> other
 
     // get and set TxtNode pointer
     void ChgTxtNode( SwTxtNode* pNew ) { m_pTxtNode = pNew; }
 
-    void SetSortNumber( USHORT nSortNumber ) { m_nSortNumber = nSortNumber; }
-    USHORT GetSortNumber() const { return m_nSortNumber; }
+    void SetSortNumber( sal_uInt16 nSortNumber ) { m_nSortNumber = nSortNumber; }
+    sal_uInt16 GetSortNumber() const { return m_nSortNumber; }
 };
 
 
@@ -95,7 +101,12 @@ public:
     virtual ~SwTxtRuby();
     TYPEINFO();
 
+<<<<<<< local
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+=======
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+>>>>>>> other
 
     SW_DLLPRIVATE void InitRuby(SwTxtNode & rNode);
 

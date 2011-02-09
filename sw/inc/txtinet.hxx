@@ -50,7 +50,12 @@ public:
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
+<<<<<<< local
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+=======
+    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual sal_Bool GetInfo( SfxPoolItem& rInfo ) const;
+>>>>>>> other
 
     SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
 
@@ -69,7 +74,7 @@ public:
     bool IsVisitedValid() const { return m_bVisitedValid; }
     void SetVisitedValid( bool bNew ) { m_bVisitedValid = bNew; }
 
-    BOOL IsProtect() const;
+    sal_Bool IsProtect() const;
 };
 
 inline const SwTxtNode& SwTxtINetFmt::GetTxtNode() const

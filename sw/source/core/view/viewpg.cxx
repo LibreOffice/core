@@ -109,7 +109,7 @@ void ViewShell::PrintProspect(
 
     std::pair< sal_Int32, sal_Int32 > rPagesToPrint =
             rPrintData.GetRenderData().GetPagePairsForProspectPrinting()[ nRenderer ];
-// const USHORT nPageMax = static_cast< USHORT >(rPagesToPrint.first > rPagesToPrint.second ?
+// const sal_uInt16 nPageMax = static_cast< sal_uInt16 >(rPagesToPrint.first > rPagesToPrint.second ?
 //            rPagesToPrint.first : rPagesToPrint.second);
 #if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT( rPagesToPrint.first  == -1 || rPrintData.GetRenderData().GetValidPagesSet().count( rPagesToPrint.first ) == 1, "first Page not valid" );
