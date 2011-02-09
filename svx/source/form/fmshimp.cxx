@@ -116,6 +116,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <vector>
 
 // wird fuer Invalidate verwendet -> mitpflegen
 sal_uInt16 DatabaseSlotMap[] =
@@ -1050,9 +1051,8 @@ void FmXFormShell::InvalidateSlot( sal_Int16 nId, sal_Bool bWithId )
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     if (m_nLockSlotInvalidation)
     {
-        m_arrInvalidSlots.Insert(nId, m_arrInvalidSlots.Count());
         BYTE nFlags = ( bWithId ? 0x01 : 0 );
-        m_arrInvalidSlots_Flags.Insert(nFlags, m_arrInvalidSlots_Flags.Count());
+        m_arrInvalidSlots.push_back( InvalidSlotInfo(nId, nFlags) );
     }
     else
         if (nId)
@@ -1090,21 +1090,14 @@ IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
     ::osl::MutexGuard aGuard(m_aInvalidationSafety);
     m_nInvalidationEvent = 0;
 
-    DBG_ASSERT(m_arrInvalidSlots.Count() == m_arrInvalidSlots_Flags.Count(),
-        "FmXFormShell::OnInvalidateSlots : inconsistent slot arrays !");
-    BYTE nFlags;
-    for (sal_Int16 i=0; i<m_arrInvalidSlots.Count(); ++i)
+    for (std::vector<InvalidSlotInfo>::const_iterator i = m_arrInvalidSlots.begin(); i < m_arrInvalidSlots.end(); ++i)
     {
-        nFlags = m_arrInvalidSlots_Flags[i];
-
-        if (m_arrInvalidSlots[i])
-            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(m_arrInvalidSlots[i], sal_True, (nFlags & 0x01));
+        if (i->id)
+            m_pShell->GetViewShell()->GetViewFrame()->GetBindings().Invalidate(i->id, sal_True, (i->flags & 0x01));
         else
             m_pShell->GetViewShell()->GetViewFrame()->GetBindings().InvalidateShell(*m_pShell);
     }
-
-    m_arrInvalidSlots.Remove(0, m_arrInvalidSlots.Count());
-    m_arrInvalidSlots_Flags.Remove(0, m_arrInvalidSlots_Flags.Count());
+    m_arrInvalidSlots.clear();
     return 0L;
 }
 

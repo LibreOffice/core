@@ -180,8 +180,12 @@ class SAL_DLLPRIVATE FmXFormShell   :public FmXFormShell_BASE
         // We enable a permanent cursor for the grid we found a searched text, it's disabled in the next "found" event.
     FmFormArray         m_aSearchForms;
 
-    SvUShorts   m_arrInvalidSlots;
-    SvBytes     m_arrInvalidSlots_Flags;
+    struct InvalidSlotInfo {
+        USHORT id;
+        BYTE   flags;
+        inline InvalidSlotInfo(USHORT slotId, BYTE flgs) : id(slotId), flags(flgs) {};
+    };
+    std::vector<InvalidSlotInfo> m_arrInvalidSlots;
         // we explicitly switch off the propbrw before leaving the design mode
         // this flag tells us if we have to switch it on again when reentering
 
