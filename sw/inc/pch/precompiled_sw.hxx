@@ -752,7 +752,6 @@
 #include "svtools/htmlcfg.hxx"
 #include "svx/htmlmode.hxx"
 #include "svx/hyperdlg.hxx"
-#include "svx/hyprlink.hxx"
 #include "svx/imapdlg.hxx"
 #include "editeng/itemtype.hxx"
 #include "svx/langbox.hxx"

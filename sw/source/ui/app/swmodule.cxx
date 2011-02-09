@@ -58,7 +58,6 @@
 #include <svx/tbxcolor.hxx>
 #include <svx/clipboardctl.hxx>
 #include <svx/lboxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/tbxcustomshapes.hxx>
 #include <svx/imapdlg.hxx>
 #include <svx/srchdlg.hxx>
