@@ -1222,19 +1222,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                 // end paint and destroy ObjectContact again
                 DLPostPaint2(true);
                 pDrawView->DeleteWindowFromPaintView(pVout);
-
-                // temporary debug paint checking...
-                static bool bDoSaveForVisualControl(false);
-                if(bDoSaveForVisualControl)
-                {
-                    const bool bMapModeWasEnabledVDev(pVout->IsMapModeEnabled());
-                    pVout->EnableMapMode(false);
-                    const Bitmap aBitmap(pVout->GetBitmap(Point(), pVout->GetOutputSizePixel()));
-                    const String aTmpString(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8);
-                    SvFileStream aNew(aTmpString, STREAM_WRITE|STREAM_TRUNC);
-                    aNew << aBitmap;
-                    pVout->EnableMapMode(bMapModeWasEnabledVDev);
-                }
             }
 
             pOut = pOld;
