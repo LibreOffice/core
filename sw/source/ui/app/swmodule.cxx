@@ -390,7 +390,6 @@ void SwDLL::RegisterControls()
     SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
     SvxHlinkDlgWrapper::RegisterChildWindow( sal_False, pMod );
-    SvxHyperlinkDlgWrapper::RegisterChildWindow( sal_False, pMod, SFX_CHILDWIN_FORCEDOCK );
     SvxFontWorkChildWindow::RegisterChildWindow( sal_False, pMod );
     SwFldDlgWrapper::RegisterChildWindow( sal_False, pMod );
     SwFldDataOnlyDlgWrapper::RegisterChildWindow( sal_False, pMod );

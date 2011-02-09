@@ -133,7 +133,6 @@ using namespace ::com::sun::star::container;
 
 SFX_IMPL_INTERFACE( SwDocShell, SfxObjectShell, SW_RES(0) )
 {
-    SFX_CHILDWINDOW_REGISTRATION( SID_HYPERLINK_INSERT );
 }
 
 TYPEINIT2(SwDocShell, SfxObjectShell, SfxListener);
