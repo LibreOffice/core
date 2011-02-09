@@ -1388,12 +1388,6 @@ void PPTWriter::ImplWriteOLE( )
             sal_uInt32 npStrmSize = pStrm->Tell();
             *mpStrm << npStrmSize;                  // uncompressed size
 
-#ifdef DBG_EXTRACTOLEOBJECTS
-            SvFileStream aOut( String::CreateFromAscii( "D:\\OUT.OLE" ), STREAM_TRUNC | STREAM_WRITE );
-            pStrm->Seek( 0 );
-            aOut.Write( pStrm->GetData(), npStrmSize );
-#endif
-
             pStrm->Seek( 0 );
             ZCodec aZCodec( 0x8000, 0x8000 );
             aZCodec.BeginCompression();
