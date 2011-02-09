@@ -36,176 +36,213 @@
 #include <sal/types.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
+#include <osl/diagnose.h>
 #include <vector>
 using std::vector;
 
 using namespace ::rtl;
 
-/* Main Procedure */
+/* Utility gendict:
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+   "BreakIterator_CJK provides input string caching and dictionary searching for
+   longest matching. You can provide a sorted dictionary (the encoding must be
+   UTF-8) by creating the following file:
+            i18npool/source/breakiterator/data/<language>.dict.
+
+   The utility gendict will convert the file to C code, which will be compiled
+   into a shared library for dynamic loading.
+
+   All dictionary searching and loading is performed in the xdictionary class.
+   The only thing you need to do is to derive your class from BreakIterator_CJK
+   and create an instance of the xdictionary with the language name and
+   pass it to the parent class." (from http://wiki.services.openoffice.org/wiki/
+   /Documentation/DevGuide/OfficeDev/Implementing_a_New_Locale - 27/01/2011)
+*/
+
+// C-standard garantees that static variables are automatically initialized to 0
+static sal_uInt8 exists[0x2000];
+static sal_uInt32 charArray[0x10000];
+
+static inline void set_exists(sal_uInt32 index)
 {
-    FILE *sfp, *cfp;
+   exists[index>>3] |= 1 << (index & 0x07);
+}
 
-    if (argc < 3) exit(-1);
+static inline void printIncludes(FILE* source_fp)
+{
+    fputs("/* !!!The file is generated automatically. DO NOT edit the file manually!!! */\n\n", source_fp);
+    fputs("#include <sal/types.h>\n\n", source_fp);
+}
 
-    sfp = fopen(argv[1], "rb"); // open the source file for read;
-    if (sfp == NULL)
-    {
-        printf("Open the dictionary source file failed.");
-        return -1;
-    }
+static inline void printFunctions(FILE* source_fp)
+{
+    fputs ("\tconst sal_uInt8* getExistMark() { return existMark; }\n", source_fp);
+    fputs ("\tconst sal_Int16* getIndex1() { return index1; }\n", source_fp);
+    fputs ("\tconst sal_Int32* getIndex2() { return index2; }\n", source_fp);
+    fputs ("\tconst sal_Int32* getLenArray() { return lenArray; }\n", source_fp);
+    fputs ("\tconst sal_Unicode* getDataArea() { return dataArea; }\n", source_fp);
+}
 
-    // create the C source file to write
-    cfp = fopen(argv[2], "wb");
-    if (cfp == NULL) {
-        fclose(sfp);
-        printf("Can't create the C source file.");
-        return -1;
-    }
-
-    fprintf(cfp, "/*\n");
-    fprintf(cfp, " * Copyright(c) 1999 - 2000, Sun Microsystems, Inc.\n");
-    fprintf(cfp, " * All Rights Reserved.\n");
-    fprintf(cfp, " */\n\n");
-    fprintf(cfp, "/* !!!The file is generated automatically. DONOT edit the file manually!!! */\n\n");
-    fprintf(cfp, "#include <sal/types.h>\n\n");
-    fprintf(cfp, "extern \"C\" {\n");
-
-    sal_Int32 count, i, j;
-    sal_Int32 lenArrayCurr = 0, charArray[0x10000];
-    vector<sal_Int32> lenArray;
-    sal_Bool exist[0x10000];
-    for (i = 0; i < 0x10000; i++) {
-        exist[i] = sal_False;
-        charArray[i] = 0;
-    }
-
+static inline void printDataArea(FILE *dictionary_fp, FILE *source_fp, vector<sal_uInt32>& lenArray)
+{
     // generate main dict. data array
-    fprintf(cfp, "static const sal_Unicode dataArea[] = {");
+    fputs("static const sal_Unicode dataArea[] = {\n\t", source_fp);
     sal_Char str[1024];
+    sal_uInt32 lenArrayCurr = 0;
     sal_Unicode current = 0;
-    count = 0;
-    while (fgets(str, 1024, sfp)) {
+
+    while (fgets(str, 1024, dictionary_fp)) {
         // input file is in UTF-8 encoding
         // don't convert last new line character to Ostr.
         OUString Ostr((const sal_Char *)str, strlen(str) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *u = Ostr.getStr();
 
-        sal_Int32 len = Ostr.getLength();
+        const sal_Int32 len = Ostr.getLength();
 
-        i=0;
+        sal_Int32 i=0;
         Ostr.iterateCodePoints(&i, 1);
-        if (len == i) continue; // skip one character word
+        if (len == i)
+            continue;   // skip one character word
 
-        if (*u != current) {
-        if (*u < current)
-        printf("u %x, current %x, count %d, lenArray.size() %d\n", *u, current,
-                    sal::static_int_cast<int>(count), sal::static_int_cast<int>(lenArray.size()));
-        current = *u;
-        charArray[current] = lenArray.size();
+        if (u[0] != current) {
+            OSL_ENSURE( (u[0] > current), "Dictionary file should be sorted");
+            current = u[0];
+            charArray[current] = lenArray.size();
         }
 
         lenArray.push_back(lenArrayCurr);
 
-        exist[u[0]] = sal_True;
-        for (i = 1; i < len; i++) {     // start from second character,
-        exist[u[i]] = sal_True;     // since the first character is captured in charArray.
-        lenArrayCurr++;
-        if ((count++) % 0x10 == 0)
-            fprintf(cfp, "\n\t");
-        fprintf(cfp, "0x%04x, ", u[i]);
+        set_exists(u[0]);
+        // first character is stored in charArray, so start from second
+        for (i = 1; i < len; i++, lenArrayCurr++) {
+            set_exists(u[i]);
+            fprintf(source_fp, "0x%04x, ", u[i]);
+            if ((lenArrayCurr & 0x0f) == 0x0f)
+                fputs("\n\t", source_fp);
         }
     }
     lenArray.push_back( lenArrayCurr ); // store last ending pointer
-
     charArray[current+1] = lenArray.size();
-    fprintf(cfp, "\n};\n");
+    fputs("\n};\n", source_fp);
+}
 
-    // generate lenArray
-    fprintf(cfp, "static const sal_Int32 lenArray[] = {\n\t");
-    count = 1;
-    fprintf(cfp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
+static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenArray)
+{
+    fprintf(source_fp, "static const sal_Int32 lenArray[] = {\n\t");
+    fprintf(source_fp, "0x%x, ", 0); // insert one slat for skipping 0 in index2 array.
     for (size_t k = 0; k < lenArray.size(); k++)
     {
-        fprintf(cfp, "0x%lx, ", static_cast<long unsigned int>(lenArray[k]));
-        if (count == 0xf)
-        {
-            count = 0;
-            fprintf(cfp, "\n\t");
-        }
-            else count++;
+        if( !(k & 0xf) )
+            fputs("\n\t", source_fp);
+
+        fprintf(source_fp, "0x%x, ", lenArray[k]);
     }
-    fprintf(cfp, "\n};\n");
+    fputs("\n};\n", source_fp );
+}
 
-    // generate index1 array
-    fprintf (cfp, "static const sal_Int16 index1[] = {\n\t");
-    sal_Int16 set[0x100];
-    count = 0;
-    for (i = 0; i < 0x100; i++) {
-        for (j = 0; j < 0x100; j++)
-        if (charArray[(i*0x100) + j] != 0)
-            break;
+/* FIXME?: what happens if in every range i there is at least one charArray != 0
+       => this will make index1[] = {0x00, 0x01, 0x02,... 0xfe, 0xff }
+       => then in index2, the last range will be ignored incorrectly */
+static inline void printIndex1(FILE *source_fp, sal_Int16 *set)
+{
+    fprintf (source_fp, "static const sal_Int16 index1[] = {\n\t");
+    sal_Int16 count = 0;
+    for (sal_Int32 i = 0; i < 0x100; i++) {
+        sal_Int32 j = 0;
+        while( j < 0x100 && charArray[(i<<8) + j] == 0)
+            j++;
 
-        fprintf(cfp, "0x%02x, ", set[i] = (j < 0x100 ? sal::static_int_cast<sal_Int16>(count++) : 0xff));
-        if ((i+1) % 0x10 == 0)
-        fprintf (cfp, "\n\t");
+        fprintf(source_fp, "0x%02x, ", set[i] = (j < 0x100 ? count++ : 0xff));
+        if ((i & 0x0f) == 0x0f)
+            fputs ("\n\t", source_fp);
     }
-    fprintf (cfp, "};\n");
+    fputs("};\n", source_fp);
+}
 
-    // generate index2 array
-    fprintf (cfp, "static const sal_Int32 index2[] = {\n\t");
+static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
+{
+    fputs ("static const sal_Int32 index2[] = {\n\t", source_fp);
     sal_Int32 prev = 0;
-    for (i = 0; i < 0x100; i++) {
+    for (sal_Int32 i = 0; i < 0x100; i++) {
         if (set[i] != 0xff) {
-        for (j = 0; j < 0x100; j++) {
-            sal_Int32 k = (i*0x100) + j;
-            if (prev != 0 && charArray[k] == 0) {
-            for (k++; k < 0x10000; k++)
-                if (charArray[k] != 0)
-                break;
+            for (sal_Int32 j = 0; j < 0x100; j++) {
+                sal_Int32 k = (i<<8) + j;
+                if (prev != 0 )
+                    while( charArray[k] == 0 && k < 0x10000 )
+                        k++;
+
+                prev = charArray[(i<<8) + j];
+                fprintf(source_fp, "0x%x, ",(k < 0x10000 ? charArray[k] + 1 : 0));
+                if ((j & 0x0f) == 0x0f)
+                    fputs ("\n\t", source_fp);
             }
-            prev = charArray[(i*0x100) + j];
-            fprintf(
-                cfp, "0x%lx, ",
-                sal::static_int_cast< unsigned long >(
-                    k < 0x10000 ? charArray[k] + 1 : 0));
-            if ((j+1) % 0x10 == 0)
-            fprintf (cfp, "\n\t");
-        }
-        fprintf (cfp, "\n\t");
+            fputs ("\n\t", source_fp);
         }
     }
-    fprintf (cfp, "\n};\n");
+    fputs ("\n};\n", source_fp);
+}
 
-    // generate existMark array
-    count = 0;
-    fprintf (cfp, "static const sal_uInt8 existMark[] = {\n\t");
-    for (i = 0; i < 0x1FFF; i++) {
-        sal_uInt8 bit = 0;
-        for (j = 0; j < 8; j++)
-        if (exist[i * 8 + j])
-            bit |= 1 << j;
-        fprintf(cfp, "0x%02x, ", bit);
-        if (count == 0xf) {
-        count = 0;
-        fprintf(cfp, "\n\t");
-        } else count++;
+/* Generates a bitmask for the existance of sal_Unicode values in dictionary;
+   it packs 8 sal_Bool values in 1 sal_uInt8 */
+static inline void printExistsMask(FILE *source_fp)
+{
+    fprintf (source_fp, "static const sal_uInt8 existMark[] = {\n\t");
+    for (unsigned int i = 0; i < 0x2000; i++)
+    {
+        fprintf(source_fp, "0x%02x, ", exists[i]);
+        if ( (i & 0xf) == 0xf )
+            fputs("\n\t", source_fp);
     }
-    fprintf (cfp, "\n};\n");
+    fputs("\n};\n", source_fp);
+}
 
-    // create function to return arrays
-    fprintf (cfp, "\tconst sal_uInt8* getExistMark() { return existMark; }\n");
-    fprintf (cfp, "\tconst sal_Int16* getIndex1() { return index1; }\n");
-    fprintf (cfp, "\tconst sal_Int32* getIndex2() { return index2; }\n");
-    fprintf (cfp, "\tconst sal_Int32* getLenArray() { return lenArray; }\n");
-    fprintf (cfp, "\tconst sal_Unicode* getDataArea() { return dataArea; }\n");
-    fprintf (cfp, "}\n");
+SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
+{
+    FILE *dictionary_fp, *source_fp;
 
-    fclose(sfp);
-    fclose(cfp);
+    if (argc == 1 || argc > 3)
+    {
+        fputs("2 arguments required: dictionary_file_name source_file_name", stderr);
+        exit(-1);
+    }
+
+    dictionary_fp = fopen(argv[1], "rb");   // open the source file for read;
+    if (dictionary_fp == NULL)
+    {
+        printf("Open the dictionary source file failed.");
+        return -1;
+    }
+
+    if(argc == 2)
+        source_fp = stdout;
+    else
+    {
+        // create the C source file to write
+        source_fp = fopen(argv[2], "wb");
+        if (source_fp == NULL) {
+            fclose(dictionary_fp);
+            printf("Can't create the C source file.");
+            return -1;
+        }
+    }
+
+    vector<sal_uInt32> lenArray;   // stores the word boundaries in DataArea
+    sal_Int16 set[0x100];
+
+    printIncludes(source_fp);
+    fputs("extern \"C\" {\n", source_fp);
+        printDataArea(dictionary_fp, source_fp, lenArray);
+        printLenArray(source_fp, lenArray);
+        printIndex1(source_fp, set);
+        printIndex2(source_fp, set);
+        printExistsMask(source_fp);
+        printFunctions(source_fp);
+    fputs("}\n", source_fp);
+
+    fclose(dictionary_fp);
+    fclose(source_fp);
 
     return 0;
-}   // End of main
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
