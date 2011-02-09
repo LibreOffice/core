@@ -437,8 +437,7 @@ Primitive2DSequence SdPageObjectSelectPrimitive::create2DDecomposition(const dra
 
     // add colored PolyPolygon
     const svtools::ColorConfig aColorConfig;
-    static bool bTestWithBrightColors(false);
-    const basegfx::BColor aFrameColor(bTestWithBrightColors ? basegfx::BColor(0,1,0) : Application::GetSettings().GetStyleSettings().GetMenuHighlightColor().getBColor());
+    const basegfx::BColor aFrameColor(Application::GetSettings().GetStyleSettings().GetMenuHighlightColor().getBColor());
 
     xRetval[0] = Primitive2DReference(
         new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(aFramePolyPolygon, aFrameColor));
@@ -491,9 +490,8 @@ Primitive2DSequence SdPageObjectBorderPrimitive::create2DDecomposition(const dra
         getPageObjectRange().getMaxX() - aDiscretePixel.getX(), getPageObjectRange().getMaxY() - aDiscretePixel.getY());
 
     // Paint_Border replacement. (use aBorderColor)
-    static bool bTestWithBrightColors(false);
     const svtools::ColorConfig aColorConfig;
-    const basegfx::BColor aBorderColor(bTestWithBrightColors ? basegfx::BColor(1,0,0) : Color(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor).getBColor());
+    const basegfx::BColor aBorderColor(Color(aColorConfig.GetColorValue(svtools::FONTCOLOR).nColor).getBColor());
 
     const Primitive2DReference xReference(
         new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(basegfx::tools::createPolygonFromRect(aAdaptedInnerRange), aBorderColor));
