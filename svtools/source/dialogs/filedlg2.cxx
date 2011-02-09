@@ -43,6 +43,7 @@
 #include <com/sun/star/i18n/XCollator.hpp>
 
 #include <svtools/stdctrl.hxx>
+#include <vector>
 
 #ifdef _MSC_VER
 #pragma optimize ("", off)
@@ -53,8 +54,7 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-
-DECLARE_LIST( UniStringList, UniString* )
+typedef ::std::vector< UniString* > UniStringList;
 
 #define STD_BTN_WIDTH   80
 #define STD_BTN_HEIGHT  26
@@ -463,24 +463,30 @@ void ImpPathDialog::UpdateEntries( const BOOL )
             {
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
-                    ULONG l = 0;
+                    size_t l = 0;
                     if( xCollator.is() )
                     {
-                        for( l = 0; l < aSortDirList.Count(); l++ )
-                            if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
+                        for( l = 0; l < aSortDirList.size(); l++ )
+                            if( xCollator->compareString( *aSortDirList[ l ], aName ) > 0 )
                                 break;
                     }
-                    aSortDirList.Insert( new UniString( aName ), l );
+                    if ( l < aSortDirList.size() ) {
+                        UniStringList::iterator it = aSortDirList.begin();
+                        ::std::advance( it, l );
+                        aSortDirList.insert( it, new UniString( aName ) );
+                    } else {
+                        aSortDirList.push_back( new UniString( aName ) );
+                    }
                 }
             }
         }
 
-        for( ULONG l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
+            aEntryStr += *aSortDirList[ l ];
             pDirList->InsertEntry( aEntryStr );
-            delete aSortDirList.GetObject(l);
+            delete aSortDirList[ l ];
         }
     }
 
@@ -1017,7 +1023,7 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     WildCard aTmpMask( aWildCard, ';' );
     if ( nEntries )
     {
-        UniStringList   aSortDirList;
+        UniStringList aSortDirList;
         for ( USHORT n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -1047,25 +1053,31 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                     }
                     else
                     {
-                        ULONG l = 0;
+                        size_t l = 0;
                         if( xCollator.is() )
                         {
-                            for( l = 0; l < aSortDirList.Count(); l++ )
-                                if( xCollator->compareString( *aSortDirList.GetObject(l), aName ) > 0 )
+                            for( l = 0; l < aSortDirList.size(); l++ )
+                                if( xCollator->compareString( *aSortDirList[ l ], aName ) > 0 )
                                     break;
                         }
-                        aSortDirList.Insert( new UniString( aName ), l );
+                        if ( l < aSortDirList.size() ) {
+                            UniStringList::iterator it = aSortDirList.begin();
+                            ::std::advance( it, l );
+                            aSortDirList.insert( it, new UniString( aName ) );
+                        } else {
+                            aSortDirList.push_back( new UniString( aName ) );
+                        }
+                    }
+                }
             }
         }
-        }
-    }
-    for( ULONG l = 0; l < aSortDirList.Count(); l++ )
+        for( size_t l = 0; l < aSortDirList.size(); l++ )
         {
             UniString aEntryStr( aTabString );
-            aEntryStr += *aSortDirList.GetObject(l);
-        pDirList->InsertEntry( aEntryStr );
-        delete aSortDirList.GetObject(l);
-    }
+            aEntryStr += *aSortDirList[ l ];
+            pDirList->InsertEntry( aEntryStr );
+            delete aSortDirList[ l ];
+        }
     }
 
     if( bWithDirs )
