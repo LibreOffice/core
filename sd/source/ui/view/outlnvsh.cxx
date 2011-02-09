@@ -35,7 +35,6 @@
 #include <memory>
 
 #include "app.hrc"
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/zoomslideritem.hxx>
 

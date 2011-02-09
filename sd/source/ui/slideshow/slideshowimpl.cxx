@@ -64,7 +64,6 @@
 #include <svx/colrctrl.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/galbrws.hxx>
 #include "NavigatorChildWindow.hxx"

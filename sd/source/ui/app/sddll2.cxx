@@ -44,7 +44,6 @@
 #include <svx/fontwork.hxx>
 #include <svx/colrctrl.hxx>
 #include <svx/verttexttbxctrl.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/linectrl.hxx>

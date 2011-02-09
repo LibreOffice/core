@@ -42,7 +42,6 @@
 #include <svx/tbxcustomshapes.hxx>
 
 #include <svx/svxids.hrc>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <avmedia/mediaplayer.hxx>
 
