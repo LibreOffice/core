@@ -190,10 +190,9 @@ void SwUndoInsNum::SaveOldNumRule( const SwNumRule& rOld )
 
 
 SwUndoDelNum::SwUndoDelNum( const SwPaM& rPam )
-    : SwUndo( UNDO_DELNUM ), SwUndRng( rPam ),
-    aNodeIdx( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode )),
-    aLevels( BYTE( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode ))
+    : SwUndo( UNDO_DELNUM ), SwUndRng( rPam )
 {
+    aNodes.reserve( nEndNode - nSttNode > 255 ? 255 : nEndNode - nSttNode );
     pHistory = new SwHistory;
 }
 
@@ -215,11 +214,11 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );
 
-    for( USHORT n = 0; n < aNodeIdx.Count(); ++n )
+    for( SvNode::const_iterator i = aNodes.begin(); i != aNodes.end(); ++i )
     {
-        SwTxtNode* pNd = rDoc.GetNodes()[ aNodeIdx[ n ] ]->GetTxtNode();
+        SwTxtNode* pNd = rDoc.GetNodes()[ i->first ]->GetTxtNode();
         OSL_ENSURE( pNd, "wo ist der TextNode geblieben?" );
-        pNd->SetAttrListLevel(aLevels[ n ] );
+        pNd->SetAttrListLevel( i->second );
 
         if( pNd->GetCondFmtColl() )
             pNd->ChkCondColl();
@@ -247,10 +246,7 @@ void SwUndoDelNum::AddNode( const SwTxtNode& rNd, BOOL )
 {
     if( rNd.GetNumRule() )
     {
-        USHORT nIns = aNodeIdx.Count();
-        aNodeIdx.Insert( rNd.GetIndex(), nIns );
-
-        aLevels.Insert( static_cast<BYTE>(rNd.GetActualListLevel()), nIns );
+        aNodes.push_back( SvNode::value_type( rNd.GetIndex(), rNd.GetActualListLevel() ) );
     }
 }
 

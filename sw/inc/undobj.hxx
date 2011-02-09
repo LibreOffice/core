@@ -1371,8 +1371,8 @@ public:
 
 class SwUndoDelNum : public SwUndo, private SwUndRng
 {
-    SvULongs aNodeIdx;
-    SvBytes aLevels;
+    typedef std::vector< std::pair< ULONG, int > > SvNode;
+    SvNode aNodes;
     SvBools aRstLRSpaces;
     SwHistory* pHistory;
 public:
