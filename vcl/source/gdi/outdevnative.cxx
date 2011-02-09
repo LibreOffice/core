@@ -218,20 +218,6 @@ BOOL OutputDevice::DrawNativeControl( ControlType nType,
     if( !lcl_enableNativeWidget( *this ) )
         return FALSE;
 
-    /*
-    if( !IsInPaint() && IsPaintTransparent() )
-    {
-        // only required if called directly (ie, we're not in Paint() ):
-        // force redraw (Paint()) for transparent controls
-        // to trigger a repaint of the background
-        Region aClipRgn( GetClipRegion() );
-        if( !rControlRegion.IsEmpty() )
-            aClipRgn.Intersect( rControlRegion );
-        Invalidate( aClipRgn, INVALIDATE_UPDATE );
-        return TRUE;
-    }
-    */
-
     // make sure the current clip region is initialized correctly
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
