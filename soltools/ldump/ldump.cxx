@@ -192,7 +192,9 @@ bool LibDump::Dump()
             // und raus damit
             PrintSym( aName, bExportByName );
         }
-        else if ( bAll == true )
+        else if ( bAll == true &&
+                  strncmp(aBuf, "__real@", 7) != 0 &&
+                  strncmp(aBuf, "__TI3?", 6) != 0 )
         {
             int nPreLen = (int) strlen( cAPrefix );
 
