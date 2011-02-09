@@ -34,6 +34,7 @@
 #include <cstring>
 #include <list>
 #include <map>
+#include <vector>
 #include <iostream>
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -202,7 +203,7 @@ namespace XSLT
         OSL_ASSERT(m_transformer->getStyleSheetURL());
         ::std::map<const char*, OString>::iterator pit;
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
-        const char* params[pmap.size() * 2 + 1]; // build parameters
+        ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
         int paramIndex = 0;
         for (pit = pmap.begin(); pit != pmap.end(); pit++)
             {
@@ -220,7 +221,7 @@ namespace XSLT
         if (styleSheet)
             {
                 tcontext = xsltNewTransformContext(styleSheet, doc);
-                xsltQuoteUserParams(tcontext, params);
+                xsltQuoteUserParams(tcontext, &params[0]);
                 result = xsltApplyStylesheetUser(styleSheet, doc, 0, 0, 0,
                         tcontext);
             }
