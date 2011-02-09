@@ -883,15 +883,6 @@ sal_uInt16 Writer::defineBitmap( const BitmapEx &bmpSource, sal_Int32 nJPEGQuali
         aFilterData[0].Value <<= nJPEGQualityLevel;
     }
 
-#if 0
-    // Debug code to see what we export to swf
-    {
-        SvFileStream aDstStm( String( RTL_CONSTASCII_USTRINGPARAM("e:\\test.jpg") ), STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-        aFilter.ExportGraphic( aGraphic, String(), aDstStm,
-                                aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData );
-    }
-#endif
-
     if( aFilter.ExportGraphic( aGraphic, String(), aDstStm,
                                 aFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( JPG_SHORTNAME ) ) ), &aFilterData ) == ERRCODE_NONE )
     {
