@@ -34,14 +34,12 @@
 # include <postwin.h>
 #endif
 
-#include "preextstl.h"
 #include <cppunit/TestSuite.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestCase.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/TestAssert.h>
-#include "postextstl.h"
 
 #include <sal/config.h>
 
@@ -65,9 +63,9 @@ struct assertion_traits<String>
         return x == y;
     }
 
-    static ext_std::string toString(const String& x)
+    static std::string toString(const String& x)
     {
-        ext_std::string text = ByteString(x, RTL_TEXTENCODING_UTF8).GetBuffer();
+        std::string text = ByteString(x, RTL_TEXTENCODING_UTF8).GetBuffer();
         OStringStream ost;
         ost << text;
         return ost.str();
