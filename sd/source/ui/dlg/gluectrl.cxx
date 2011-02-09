@@ -30,7 +30,7 @@
 #include "precompiled_sd.hxx"
 
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 
 #include <svx/dialogs.hrc>
 #include <svx/svdglue.hxx>
