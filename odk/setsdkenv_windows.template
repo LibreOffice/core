@@ -52,12 +52,6 @@ REM Automatic deployment
 REM Example: set SDK_AUTO_DEPLOYMENT=YES
 set SDK_AUTO_DEPLOYMENT=YES
 
-set STLDEBUG=
-REM check stlport lib in 4NT shell
-REM if exist "%OO_SDK_HOME%\windows\lib\stlport_vc71_stldebug.lib". (
-REM   set STLDEBUG=_stldebug
-REM )
-
 REM Check installation path for the StarOffice Development Kit.
 if not defined OO_SDK_HOME (
    echo Error: the variable OO_SDK_HOME is missing!

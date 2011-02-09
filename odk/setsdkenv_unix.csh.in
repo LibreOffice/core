@@ -108,7 +108,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set pltfrm=sunpro
     set soext=so
     set exampleout=SOLARISexample.out
-    set stldebug=_debug
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
@@ -130,7 +129,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set soext=so
     set exampleout=LINUXexample.out
     set platform=Linux
-    set stldebug=_stldebug
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
@@ -152,7 +150,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set soext=dylib
     set exampleout=MACOSXexample.out
     set platform=MacOSX
-    set stldebug=_stldebug
 
     # set DYLD_LIBRARY_PATH
     if ( $?DYLD_LIBRARY_PATH == 0) then
@@ -174,7 +171,6 @@ switch (`${OO_SDK_HOME}/config.guess | cut -d"-" -f3,4`)
     set soext=so
     set exampleout=FREEBSDexample.out
     set platform=FreeBSD
-    set stldebug=_stldebug
 
     # set LD_LIBRARY_PATH
     if ( $?LD_LIBARY_PATH == 0) then
@@ -230,12 +226,6 @@ if ( $?OO_SDK_JAVA_HOME == 0) then
     setenv PATH ${OO_SDK_JAVA_HOME}:${PATH}
 endif
 
-if ( -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${stldebug}.${soext}" ) then
-    setenv STLDEBUG ${stldebug}
-else
-    setenv STLDEBUG ""
-endif
-
 
 if [ "${platform}" == "MacOSX" ] then
 #    For URE, prepare symbolic links for libraries:
@@ -249,10 +239,6 @@ if [ "${platform}" == "MacOSX" ] then
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
 
-    if ( -e "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ) then
-	rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-    endif
-
     if ( "${OO_SDK_URE_HOME}" != "" ) then
 	mkdir -p "${OO_SDK_OUT}/${directoryname}/lib"
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_cppu.${soext}.3" \
@@ -265,11 +251,6 @@ if [ "${platform}" == "MacOSX" ] then
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
-
-	if ( -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ) then
-	    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
-		"${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-	endif
     endif
 endif
 

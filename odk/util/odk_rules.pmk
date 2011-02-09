@@ -88,11 +88,7 @@ $(DESTDIR)/cfgWin.js : $(PRJ)/cfgWin.js
 
 $(DESTDIRSETTINGS)/%.mk : $(PRJ)/settings/%.mk
     @@-rm -f $@
-.IF "$(COMEX)"=="7"
-    $(MY_TEXTCOPY) $< | $(SED) -e 's/stlport_vc7/stlport_vc6/' $@
-.ELSE
     $(MY_TEXTCOPY) $< $@
-.ENDIF
 
 $(DESTDIRXML)/module-description.dtd : $(XMLOUT)/module-description.dtd
     @@-rm -f $@

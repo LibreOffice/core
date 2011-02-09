@@ -157,8 +157,7 @@ INCLUDETOPDIRLIST= \
     $(INCOUT)/cppu \
     $(INCOUT)/cppuhelper \
     $(INCOUT)/bridges \
-    $(INCOUT)/registry \
-    $(INCOUT)/stl
+    $(INCOUT)/registry
 
 .IF "$(GUI)"=="WNT"
 INCLUDETOPDIRLIST += $(INCOUT)/systools

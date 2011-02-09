@@ -72,7 +72,6 @@ CPPUHELPERLIB=icppuhelper.lib
 SALHELPERLIB=isalhelper.lib
 REGLIB=ireg.lib
 STORELIB=istore.lib
-STLPORTLIB=stlport_vc71$(STLDEBUG).lib
 
 BLANK= 
 EMPTYSTRING=
@@ -90,7 +89,6 @@ CC_FLAGS+=-Zi
 endif
 
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/win32"
 
 # define for used compiler necessary for UNO
@@ -185,11 +183,6 @@ CPPUHELPERLIB=-luno_cppuhelperC52
 SALHELPERLIB=-luno_salhelperC52
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(PROCTYPE)" "sparc64"
-STLPORTLIB=-library=stlport4
-else
-STLPORTLIB=-lstlport_sunpro$(STLDEBUG)
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -199,7 +192,6 @@ ifeq "$(DEBUG)" "yes"
 CC_FLAGS+=-g
 endif
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/solaris"
 
 # define for used compiler necessary for UNO
@@ -247,27 +239,23 @@ PLATFORM=linux
 PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
 UNOPKG_PLATFORM=Linux_$(PROCTYPE)
 JAVA_PROC_TYPE=$(PROCTYPE)
-STLPORT=no
 
 ifeq "$(PROCTYPE)" "i386"
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
 PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
-STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "x86_64"
@@ -319,15 +307,6 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT)" "yes"
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
-endif
-else
-STLPORTLIB=
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -345,7 +324,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/linux"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES=-DUNX -DGCC -DLINUX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 # define for used compiler necessary for UNO
@@ -463,7 +441,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I/System/Library/Frameworks/JavaVM.framework/Versions/Current/Headers -I/System/Library/Frameworks/JavaVM.framework/Headers
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES=-DUNX -DGCC -DMACOSX -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 CC_OUTPUT_SWITCH=-o
@@ -566,11 +543,6 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
-ifeq "$(STLPORT_VER)" "500"
-STLPORTLIB=-lstlport
-else
-STLPORTLIB=-lstlport_gcc$(STLDEBUG)
-endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -584,7 +556,6 @@ endif
 
 SDK_JAVA_INCLUDES = -I"$(OO_SDK_JAVA_HOME)/include" -I"$(OO_SDK_JAVA_HOME)/include/freebsd"
 CC_INCLUDES=-I. -I$(OUT)/inc -I$(OUT)/inc/examples -I$(PRJ)/include
-STL_INCLUDES=-I"$(OO_SDK_HOME)/include/stl"
 CC_DEFINES=-DUNX -DGCC -DFREEBSD -DCPPU_ENV=$(CPPU_ENV) -DGXX_INCLUDE_PATH=$(SDK_GXX_INCLUDE_PATH)
 
 CC_OUTPUT_SWITCH=-o

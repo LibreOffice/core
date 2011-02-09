@@ -142,7 +142,6 @@ case ${sdk_platform} in
     pltfrm=sunpro
     soext=so
     exampleout=SOLARISexample.out
-    stldebug=_debug
     LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
@@ -160,7 +159,6 @@ case ${sdk_platform} in
     soext=dylib
     exampleout=MACOSXexample.out
     platform=MacOSX
-    stldebug=_stldebug
     DYLD_LIBRARY_PATH=${OO_SDK_OUT}/${directoryname}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${DYLD_LIBRARY_PATH}
     export DYLD_LIBRARY_PATH
     ;;
@@ -178,7 +176,6 @@ case ${sdk_platform} in
     soext=so
     exampleout=LINUXexample.out
     platform=Linux
-    stldebug=_stldebug
     LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
     ;;
@@ -196,7 +193,6 @@ case ${sdk_platform} in
     soext=so
     exampleout=FREEBSDexample.out
     platform=FreeBSD
-    stldebug=_stldebug
     LD_LIBRARY_PATH=${OO_SDK_HOME}/lib:${OO_SDK_OUT}/${exampleout}/lib:${OO_SDK_URE_LIB_DIR}:.:${LD_LIBRARY_PATH}
     export LD_LIBRARY_PATH
 
@@ -272,12 +268,6 @@ fi
 
 export PATH
 
-if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${stldebug}.${soext}" ]
-then
-    STLDEBUG=${stldebug}
-    export STLDEBUG
-fi
-
 if [ "${platform}" = "MacOSX" ]
 then
 #    For URE, prepare symbolic links for libraries:
@@ -290,11 +280,6 @@ then
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_sal.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
 	"${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
-
-    if [ -L "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
-    then
-	rm -rf "${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-    fi
 
 #    prepare links 
     if [ "${OO_SDK_URE_HOME}" ]
@@ -310,12 +295,6 @@ then
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
 	ln -s "${OO_SDK_URE_LIB_DIR}/libuno_purpenvhelper${comid}.${soext}.3" \
 	    "${OO_SDK_OUT}/${directoryname}/lib/libuno_purpenvhelper${comid}.${soext}"
-
-	if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
-	then
-	    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
-		"${OO_SDK_OUT}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
-	fi
     fi
 fi 
 

@@ -31,7 +31,6 @@ stdout.WriteLine("\n" +
 " NOTE: This script is working only for Windows 2000, Windows XP or newer versions!\n");
 
 var oo_sdk_name=WshSysEnv("OO_SDK_NAME");
-var stldebug="";
 var oo_sdk_home=getSdkHome();
 var oo_user_sdk_dir=WshSysEnv("APPDATA") + "\\" + oo_sdk_name;
 var oo_user_sdk_env_script=oo_user_sdk_dir + "\\setsdkenv_windows.bat";
@@ -120,10 +119,6 @@ function getSdkHome()
                              "the path to a valid SDK installation.");
             continue;
         }
-
-        if (aFileSystemObject.FileExists(sHome + "\\lib\\stlport_vc71_stldebug.lib")) {
-		    stldebug="_stldebug";
-		}
 
         return sHome;
     }   
@@ -841,11 +836,6 @@ function writeBatFile(fdir, file)
         "REM Example: set SDK_AUTO_DEPLOYMENT=YES\n" +
         "set SDK_AUTO_DEPLOYMENT=" + sdk_auto_deployment +
         "\n\n" +
-		"set STLDEBUG=" + stldebug + "\n" +
-		"REM check stlport lib in 4NT shell\n" +
-		"REM if exist \"%OO_SDK_HOME%\\windows\\lib\\stlport_vc71_stldebug.lib\". (\n" +
-		"REM   set STLDEBUG=_stldebug\n" +
-		"REM )\n\n" +
         "REM Check installation path for the Office Development Kit.\n" +
         "if not defined OO_SDK_HOME (\n" +
         "   echo Error: the variable OO_SDK_HOME is missing!\n" +

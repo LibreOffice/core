@@ -82,14 +82,6 @@ LIBLIST = \
     $(DESTDIRLIB)/icppuhelper.lib 	\
     $(DESTDIRLIB)/irmcxt.lib \
     $(DESTDIRLIB)/ipurpenvhelper3MSC.lib
-
-.IF "$(COMEX)"=="8"
-    LIBLIST += $(DESTDIRLIB)/stlport_vc7.lib
-.ELIF "$(COMEX)"=="10" || "$(COMEX)"=="11" || "$(COMEX)"=="12" 
-    LIBLIST += $(DESTDIRLIB)/stlport_vc71.lib
-.ELSE
-    LIBLIST += $(DESTDIRLIB)/stlport_vc6.lib
-.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX"
