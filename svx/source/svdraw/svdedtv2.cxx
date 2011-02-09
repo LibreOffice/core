@@ -1983,7 +1983,6 @@ SdrObject* SdrEditView::ImpConvertOneObj(SdrObject* pObj, BOOL bPath, BOOL bLine
 void SdrEditView::ImpConvertTo(BOOL bPath, BOOL bLineToArea)
 {
     BOOL bMrkChg=FALSE;
-    BOOL bModChg=FALSE;
     if (AreObjectsMarked()) {
         ULONG nMarkAnz=GetMarkedObjectCount();
         USHORT nDscrID=0;
@@ -2018,12 +2017,11 @@ void SdrEditView::ImpConvertTo(BOOL bPath, BOOL bLineToArea)
                 SdrObjListIter aIter(*pGrp,IM_DEEPNOGROUPS);
                 while (aIter.IsMore()) {
                     pObj=aIter.Next();
-                    if (ImpConvertOneObj(pObj,bPath,bLineToArea)) bModChg=TRUE;
+                    ImpConvertOneObj(pObj,bPath,bLineToArea);
                 }
             } else {
                 SdrObject* pNewObj=ImpConvertOneObj(pObj,bPath,bLineToArea);
                 if (pNewObj!=NULL) {
-                    bModChg=TRUE;
                     bMrkChg=TRUE;
                     GetMarkedObjectListWriteAccess().ReplaceMark(SdrMark(pNewObj,pPV),nm);
                 }
