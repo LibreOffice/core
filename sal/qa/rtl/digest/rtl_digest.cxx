@@ -30,12 +30,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "preextstl.h"
 #include <cppunit/TestAssert.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
-#include "postextstl.h"
 
 #include <rtl/digest.h>
 #include <rtl/ustring.hxx>

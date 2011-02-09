@@ -29,11 +29,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-#include "preextstl.h"
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
