@@ -48,14 +48,6 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include "postextstl.h"
 
-// #ifdef WNT
-// #   define UNICODE
-// #    define WIN32_LEAN_AND_MEAN
-// #    include <windows.h>
-// #   include <tchar.h>
-// #endif
-
-
 using namespace osl;
 using namespace rtl;
 
@@ -939,38 +931,6 @@ namespace osl_FileBase
         CPPUNIT_TEST_SUITE_END( );
     };// class SystemPath_FileURL
 
-
-    // test code.
-
-  /*    void getSystemPathFromFileURL::check_getSystemPathFromFileURL(rtl::OString const& _sURL, ::osl::FileBase::RC _nAssumeError, rtl::OString const& _sAssumeResultStr)
-    {
-        // PRE: URL as String
-        rtl::OUString suURL;
-        rtl::OUString suStr;
-        suURL = rtl::OStringToOUString(_sURL, RTL_TEXTENCODING_UTF8);
-        ::osl::FileBase::RC nError =  osl::FileBase::getSystemPathFromFileURL( suURL, suStr ); // start with /
-
-        // if the given string is gt length 0,
-        // we check also this string
-        rtl::OString sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
-        rtl::OString sError = errorToString(nError);
-        printf("getSystemPathFromFileURL('%s') deliver system path: '%s', error '%s'\n", _sURL.getStr(), sStr.getStr(), sError.getStr() );
-
-        // rtl::OUString suStrEncode = rtl::Uri::encode(suStr, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
-        // sStr = rtl::OUStringToOString(suStr, RTL_TEXTENCODING_UTF8);
-        // printf("UTF8: %s\n", sStr.getStr() );
-
-        if (_sAssumeResultStr.getLength() > 0)
-        {
-            sal_Bool bStrAreEqual = _sAssumeResultStr.equals(sStr);
-            CPPUNIT_ASSERT_MESSAGE( "Assumption is wrong",
-                                    nError == _nAssumeError && bStrAreEqual == sal_True );
-        }
-        else
-        {
-            CPPUNIT_ASSERT_MESSAGE( "Assumption is wrong", nError == _nAssumeError );
-        }
-    }*/
 
     // if bDirection==sal_True, check getSystemPathFromFileURL
     // if bDirection==sal_False, check getFileURLFromSystemPath
@@ -6277,84 +6237,6 @@ inline ::rtl::OUString getCurrentPID(  )
 }
 
 
-/** Insert Current PID to the URL to avoid access violation between multiuser execution.
-*/
-inline void insertPID( ::rtl::OUString & pathname )
-{
-    //~ check if the path contain the temp directory, do nothing changes if not;
-    if ( pathname.indexOf( aTempDirectoryURL ) && pathname.indexOf( aTempDirectorySys ) )
-        return;
-
-    //~ format pathname to TEMP/USERPID/URL style;
-    if ( !pathname.indexOf( aTempDirectoryURL ) )
-    {
-        ::rtl::OUString strPID( getCurrentPID( ) );
-        ::rtl::OUString pathLeft = aTempDirectoryURL.copy( 0 );
-        ::rtl::OUString pathRight = pathname.copy( aTempDirectoryURL.getLength( ) );
-        pathname = pathLeft.copy( 0 );
-        ( ( pathname += aSlashURL ) += strPID ) += pathRight;
-    }
-    else
-    {
-        ::rtl::OUString strPID( getCurrentPID( ) );
-        ::rtl::OUString pathLeft = aTempDirectorySys.copy( 0 );
-        ::rtl::OUString pathRight = pathname.copy( aTempDirectorySys.getLength( ) );
-        pathname = pathLeft.copy( 0 );
-        ( ( pathname += aSlashURL ) += strPID ) += pathRight;
-    }
-
-
-}
-
-#if 0
-/** to do some initialized work, we replace the NOADDITIONAL macro with the initialize work which
-      will check the file and directory existence. and set some variables for test use.
-      to simplify the initialize work, we seperate it into UNIX section and Windows section, the main task
-      of initialization is adapt all URL defined in osl_File_Const.h to TEMP/USERPID/URL style format,
-      since there may be an instance that multiuser execute test at the same time, and the temp file
-      may not be clean up in this case due to access right problem.
-*/
-void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
-{
-    (void)_pFunc;
-    printf( "Initializing..." );
-
-    //~ make sure the c:\temp exist, if not, create it.
-#if ( defined WNT )
-    if ( checkDirectory( aTempDirectoryURL, osl_Check_Mode_Exist )  != sal_True ) {
-        printf( "\n#C:\\temp is not exist, now creating\n" );
-        createTestDirectory( aTempDirectoryURL );
-    };
-#endif
-
-    //~ make sure the c:\temp\PID or /tmp/PID exist, if not, create it. initialize the user directory.
-    ( aUserDirectoryURL += aSlashURL ) += getCurrentPID( );
-    ( aUserDirectorySys += aSlashURL ) += getCurrentPID( );
-
-    if ( checkDirectory( aUserDirectoryURL, osl_Check_Mode_Exist )  != sal_True ) {
-        createTestDirectory( aUserDirectoryURL );
-    }
-
-    //~ adapt all URL to the TEMP/USERPID/URL format;
-    insertPID( aCanURL1 );
-    insertPID( aTmpName3 );
-    insertPID( aTmpName4 );
-    insertPID( aTmpName5 );
-    insertPID( aTmpName6 );
-    insertPID( aTmpName8 );
-    insertPID( aTmpName9 );
-    insertPID( aLnkURL1 );
-    insertPID( aFifoSys );
-    insertPID( aSysPath1 );
-    insertPID( aSysPath2 );
-    insertPID( aSysPath3 );
-    insertPID( aSysPath4 );
-
-    printf( "Done.\n" );
-
-}
-#endif
-
 //~ do some clean up work after all test completed.
 class GlobalObject
 {
@@ -6363,13 +6245,6 @@ class GlobalObject
     {
         try
         {
-            //~ make sure the c:\temp\PID or /tmp/PID exist, if yes, delete it.
-            printf( "\n#Do some clean-ups ...\n" );
-            if ( checkDirectory( aUserDirectoryURL, osl_Check_Mode_Exist )  == sal_True ) {
-                deleteTestDirectory( aUserDirectoryURL );
-            }
-
-            // LLA: printf("after deleteTestDirectory\n");
             //~ special clean up task in Windows and Unix seperately;
 #if ( defined UNX ) || ( defined OS2 )
             //~ some clean up task  for UNIX OS
