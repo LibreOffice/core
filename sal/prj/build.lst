@@ -1,4 +1,4 @@
-sa	sal	:	xml2cmp stlport external BOOST:boost CPPUNIT:cppunit NULL 
+sa	sal	:	xml2cmp external BOOST:boost CPPUNIT:cppunit NULL 
 sa	sal										usr1	-	all	sa_mkout NULL
 sa	sal\inc									nmake	-	all	sa_inc NULL
 sa	sal\typesconfig							nmake	-	u	sa_tc sa_inc NULL
