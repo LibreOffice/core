@@ -1296,9 +1296,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 
                     if(!Imp()->bStopSmooth)
                     {
-                        static bool bDoItOnPixels(true);
-                        if(bDoItOnPixels)
-                        {
                             // start paint on logic base
                             const Rectangle aTargetLogic(Imp()->aSmoothRect.SVRect());
                             DLPrePaint2(Region(aTargetLogic));
@@ -1316,21 +1313,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                             rTargetDevice.EnableMapMode(false);
                             pVout->EnableMapMode(false);
 
-                            // copy content
-                            static bool bTestDirectToWindowPaint(false);
-                            if(bTestDirectToWindowPaint)
-                            {
-                                const bool bMapModeWasEnabledWin(GetWin()->IsMapModeEnabled());
-                                GetWin()->EnableMapMode(false);
-
-                                GetWin()->DrawOutDev(
-                                    aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
-                                    aSourceTopLeft, aTargetPixel.GetSize(), // source
-                                    *pVout);
-
-                                GetWin()->EnableMapMode(bMapModeWasEnabledWin);
-                            }
-
                             rTargetDevice.DrawOutDev(
                                 aTargetPixel.TopLeft(), aTargetPixel.GetSize(), // dest
                                 aSourceTopLeft, aTargetPixel.GetSize(), // source
@@ -1342,34 +1324,6 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
 
                             // end paint on logoc base
                             DLPostPaint2(true);
-                        }
-                        else
-                        {
-                            Rectangle aRectangle(Imp()->aSmoothRect.SVRect());
-                            aRectangle.Left() -= aPixSz.Width();
-                            aRectangle.Right() += aPixSz.Width();
-                            aRectangle.Top() -= aPixSz.Height();
-                            aRectangle.Bottom() += aPixSz.Height();
-                            const Point aUpdateTopLeft(aRectangle.TopLeft());
-                            const Size aUpdateSize(aRectangle.GetSize());
-
-                            // #i75172# the part getting visible needs to be handled like a repaint.
-                            // For that, start with DLPrePaint2 and the correct Rectangle
-                            DLPrePaint2(Region(aRectangle));
-
-                            static bool bTestDirectToWindowPaint(false);
-                            if(bTestDirectToWindowPaint)
-                            {
-                                GetWin()->DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
-                            }
-
-                            mpTargetPaintWindow->GetTargetOutputDevice().DrawOutDev(aUpdateTopLeft, aUpdateSize, aUpdateTopLeft, aUpdateSize, *pVout);
-
-                            // #i75172# Corret repaint end
-                            // Note: This also correcty creates the overlay, thus smooth scroll will
-                            // also be allowed now wth selection (see big IF above)
-                            DLPostPaint2(true);
-                        }
                     }
                     else
                         --nLockPaint;

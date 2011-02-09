@@ -2237,15 +2237,6 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence VOCOfDrawVirtObj::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-#if OSL_DEBUG_LEVEL > 1
-            // #i101734#
-            static bool bCheckOtherThanTranslate(false);
-            static double fShearX(0.0);
-            static double fRotation(0.0);
-            static double fScaleX(0.0);
-            static double fScaleY(0.0);
-#endif
-
             const VCOfDrawVirtObj& rVC = static_cast< const VCOfDrawVirtObj& >(GetViewContact());
             const SdrObject& rReferencedObject = rVC.GetSwDrawVirtObj().GetReferencedObj();
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
@@ -2256,20 +2247,8 @@ namespace sdr
 
             if(aLocalOffset.X() || aLocalOffset.Y())
             {
-#if OSL_DEBUG_LEVEL > 1
-                // #i101734# added debug code to check more complex transformations
-                // than just a translation
-                if(bCheckOtherThanTranslate)
-                {
-                    aOffsetMatrix.scale(fScaleX, fScaleY);
-                    aOffsetMatrix.shearX(tan(fShearX * F_PI180));
-                    aOffsetMatrix.rotate(fRotation * F_PI180);
-                }
-#endif
-
                 aOffsetMatrix.set(0, 2, aLocalOffset.X());
                 aOffsetMatrix.set(1, 2, aLocalOffset.Y());
-
             }
 
             if(rReferencedObject.ISA(SdrObjGroup))

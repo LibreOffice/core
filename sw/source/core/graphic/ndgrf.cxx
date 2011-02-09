@@ -801,12 +801,9 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
         // because a changed unique ID of the graphic is calculated.
         // --> recursive calls of <GetUniqueID()> have to be avoided.
         // Thus, use local static boolean to assure this.
-        static bool bInRegenerateStrmName( false );
-        if ( !bInRegenerateStrmName &&
-             ( !_refPics->hasByName( _aStrmName ) ||
-               !_refPics->isStreamElement( _aStrmName ) ) )
+        if ( !_refPics->hasByName( _aStrmName ) ||
+               !_refPics->isStreamElement( _aStrmName ) )
         {
-            bInRegenerateStrmName = true;
             xub_StrLen nExtPos = _aStrmName.Search( '.' );
             String aExtStr = _aStrmName.Copy( nExtPos );
             Graphic aGraphic( GetGrfObj().GetGraphic() );
@@ -815,7 +812,6 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
                 _aStrmName = String( GetGrfObj().GetUniqueID(), RTL_TEXTENCODING_ASCII_US );
                 _aStrmName += aExtStr;
             }
-            bInRegenerateStrmName = false;
         }
         // <--
 
