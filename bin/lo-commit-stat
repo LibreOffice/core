@@ -180,7 +180,7 @@ sub print_weekly_stat($)
 {
     my $pdata = shift;
 
-    foreach my $piece (keys %{$pdata}) {
+    foreach my $piece ( sort { $a cmp $b } keys %{$pdata}) {
         # check if this peice has any entries at all
         if ( %{$pdata->{$piece}} ) {
             print "+ $piece\n";
