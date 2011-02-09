@@ -229,14 +229,11 @@ t_string2string_map PersistentMap::getEntries() const
                 throw_rtexc(err);
 
             ::std::pair<t_string2string_map::iterator, bool > insertion(
-                ret.insert( t_string2string_map::value_type(
-                                t_string2string_map::value_type(
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbKey.get_data()),
-                                             dbKey.get_size() ),
-                                    OString( static_cast< sal_Char const * >(
-                                                 dbData.get_data()),
-                                             dbData.get_size() ) ) ) ) );
+                ret.insert(
+                    t_string2string_map::value_type(
+                        OString( static_cast<sal_Char const*>(dbKey.get_data()), dbKey.get_size() ),
+                        OString( static_cast<sal_Char const*>(dbData.get_data()), dbData.get_size() )
+                        ) ) );
             OSL_ASSERT( insertion.second );
         }
         err = pcurs->close();
