@@ -524,7 +524,6 @@
 ../../basic/source/app/basmsg.src
 ../../basic/source/sbx/format.src
 ../../basic/source/classes/sb.src
-../../basic/workben/basmgr.src
 ../../forms/source/resource/xforms.src
 ../../forms/source/resource/strings.src
 ../../scaddins/source/datefunc/datefunc.src
