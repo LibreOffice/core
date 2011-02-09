@@ -31,7 +31,7 @@
 
 // include ---------------------------------------------------------------
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <vcl/toolbox.hxx>
 #include <vcl/button.hxx>
 #include <svl/intitem.hxx>

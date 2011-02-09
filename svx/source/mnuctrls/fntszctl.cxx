@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headern
+#include <string>
 #include <svl/itempool.hxx>
 #include <svtools/stdmenu.hxx>
 #include <svtools/ctrltool.hxx>

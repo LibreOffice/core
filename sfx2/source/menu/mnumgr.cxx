@@ -34,11 +34,10 @@
 #include <com/sun/star/container/XNamed.hpp>
 
 #ifdef SOLARIS
-// HACK: prevent conflict between STLPORT and Workshop headers on Solaris 8
 #include <ctime>
 #endif
 
-#include <string>   // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <cstdarg>  // std::va_list
 
 #include <vcl/pointr.hxx>

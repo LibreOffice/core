@@ -32,7 +32,7 @@
 // include ---------------------------------------------------------------
 
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <tools/shl.hxx>
 #include <svl/poolitem.hxx>
 #include <svl/eitem.hxx>
