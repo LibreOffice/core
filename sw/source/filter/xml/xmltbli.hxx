@@ -33,6 +33,7 @@
 
 // STL include
 #include <boost/unordered_map.hpp>
+#include <vector>
 
 #if !defined(_SVSTDARR_USHORTS_DECL) || !defined(_SVSTDARR_BOOLS_DECL) || !defined(_SVSTDARR_STRINGSDTOR_DECL)
 #define _SVSTDARR_USHORTS
@@ -68,8 +69,13 @@ class SwXMLTableContext : public XMLTextTableContext
     /// NB: this contains the xml:id only if this table is a subtable!
     ::rtl::OUString     mXmlId;
 
-    SvUShorts           aColumnWidths;
-    SvBools             aColumnRelWidths;
+    //! Holds basic information about a column's width.
+    struct ColumnWidthInfo {
+        USHORT width;      //!< Column width (absolute or relative).
+        bool   isRelative; //!< True for a relative width, false for absolute.
+        inline ColumnWidthInfo(USHORT wdth, bool isRel) : width(wdth), isRelative(isRel) {};
+    };
+    std::vector<ColumnWidthInfo> aColumnWidths;
     SvStringsDtor       *pColumnDefaultCellStyleNames;
 
     ::com::sun::star::uno::Reference <
@@ -210,7 +216,7 @@ inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
 
 inline sal_uInt32 SwXMLTableContext::GetColumnCount() const
 {
-    return aColumnWidths.Count();
+    return aColumnWidths.size();
 }
 
 inline const SwStartNode *SwXMLTableContext::GetLastStartNode() const
