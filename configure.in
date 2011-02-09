@@ -959,17 +959,10 @@ WITH_SYSTEM_MOZILLA=no)
 
 AC_ARG_WITH(stlport,
     AS_HELP_STRING([--with-stlport],
-        [The location that STLport is installed in. The STL header files are assumed
-         to be in stlport-home/stlport and the STLPort library in stlport-home/lib.])
-    [
-                          Usage:     --with-stlport=<abs. path to stlport home>
-
-                          Warning!!, disabling using --without-stlport or
-                          enabling using --with-stlport on a platform that
-                          defaults to the opposite will break ABI compatability.
-    ],
-    WITH_STLPORT=$withval ,
-WITH_STLPORT=auto)
+        [Build the STLPort library for compatibility with old extensions for
+         architectures where STLPort used to be used.]),
+    with_stlport=$withval ,
+with_stlport=auto)
 
 AC_ARG_WITH(jdk-home,
     AS_HELP_STRING([--with-jdk-home],
@@ -2538,7 +2531,7 @@ dnl ===================================================================
 dnl Set the gcc/gxx include directories
 dnl ===================================================================
 # Removed the special FreeBSD treatment. The problem was that with_gxx_include_path
-# often contains an i386 which is expanded as a macro. Solved in stlport.
+# often contains an i386 which is expanded as a macro.
 if test "$GXX" = "yes"; then
    AC_MSG_CHECKING([for g++ include path])
    if test -z "$with_gxx_include_path"; then
@@ -2813,118 +2806,53 @@ fi
 dnl ===================================================================
 dnl Checks for what the default STL should be
 dnl ===================================================================
-   AC_MSG_CHECKING([what the default STL should be])
-   DEFAULT_TO_STLPORT="no"
+   AC_MSG_CHECKING([Whether building STLPort library makes sense])
+   BUILD_STLPORT="no"
    if test "$_os" = "Linux"; then
      case "$host_cpu" in
        i?86)
      case "$host_os" in k*bsd*-gnu*)
-         DEFAULT_TO_STLPORT="no"
+         BUILD_STLPORT="no"
         ;;
      *)
-             DEFAULT_TO_STLPORT="yes"
+             BUILD_STLPORT="yes"
         ;;
       esac
          ;;
        *)
-         DEFAULT_TO_STLPORT="no"
+         BUILD_STLPORT="no"
          ;;
      esac
    elif test "$_os" = "SunOS"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "OS2"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    elif test "$_os" = "FreeBSD"; then
-      DEFAULT_TO_STLPORT="yes"
+      BUILD_STLPORT="yes"
    fi
-   if test "$DEFAULT_TO_STLPORT" = "yes"; then
-      AC_MSG_RESULT([stlport])
+   if test "$BUILD_STLPORT" = "yes" ; then
+      AC_MSG_RESULT([yes])
    else
-      AC_MSG_RESULT([system])
-   fi
-   if test "$WITH_STLPORT" = "auto"; then
-      WITH_STLPORT=$DEFAULT_TO_STLPORT
+      AC_MSG_RESULT([no])
    fi
 
-dnl ===================================================================
-dnl Checks for STLPORT
-dnl ===================================================================
-   AC_MSG_CHECKING([for STL providing headers])
-   STLPORT4=""
-   USE_SYSTEM_STL=""
-   if test "$WITH_STLPORT" = "yes"; then
-      AC_MSG_RESULT([using internal stlport.])
-      if test "$DEFAULT_TO_STLPORT" != "yes"; then
-         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
-         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
-      fi
-   elif test "$WITH_STLPORT" = "no"; then
-      AC_MSG_RESULT([using system STL])
-      USE_SYSTEM_STL="YES"
-      if test "$DEFAULT_TO_STLPORT" != "no"; then
-         AC_MSG_WARN([using system STL. Warning, breaks your ABI compatability!])
-         echo "using system STL. Warning, breaks your ABI compatability!" >>warn
-      fi
+   AC_MSG_CHECKING([Whether STLPort library will be actually built])
+   if test "$with_stlport" = "auto" -o "$BUILD_STLPORT" = "no"; then
+      with_stlport=$BUILD_STLPORT
+   fi
+   if test "$with_stlport" = "yes" ; then
+      AC_MSG_RESULT([yes])
+	  WITH_STLPORT=YES
+	  SCPDEFS+=-DWITH_STLPORT
+	  BUILD_TYPE="$BUILD_TYPE STLPORT"
    else
-      STLPORT4=$WITH_STLPORT
-      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-         AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport headers not found.]))
-      else
-         dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
-         if test -f "$STLPORT4/stlport/hash_map"; then
-            AC_MSG_RESULT([checked.])
-         else
-            AC_MSG_ERROR([STLport headers not found.])
-         fi
-      fi
-      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-         AC_MSG_CHECKING([for STLport libraries])
-         if test "$_os" = "SunOS"; then
-              if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
-                  AC_MSG_RESULT([checked])
-              elif test -f "$STLPORT4/lib/libstlport.so"; then
-                  AC_MSG_RESULT([checked])
-                  STLPORT_VER=500
-              else
-                  AC_MSG_ERROR([STLport libraries not found])
-              fi
-          elif test "$_os" = "Darwin"; then
-              if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
-                  AC_MSG_RESULT([checked])
-              elif test -f "$STLPORT4/lib/libstlport.dylib"; then
-                  AC_MSG_RESULT([checked])
-                  STLPORT_VER=500
-              else
-                  AC_MSG_ERROR([STLport libraries not found])
-              fi
-           else
-               if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
-                   AC_MSG_RESULT([checked])
-               elif test -f "$STLPORT4/lib/libstlport.so"; then
-                   AC_MSG_RESULT([checked])
-                   STLPORT_VER=500
-               else
-                   AC_MSG_ERROR([STLport libraries not found])
-               fi
-           fi
-       fi
-      if test "$DEFAULT_TO_STLPORT" != "yes"; then
-         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
-         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
-      fi
+      WITH_STLPORT=NO
+      AC_MSG_RESULT([no])
    fi
 
-if test -z "$STLPORT4"; then
-  STLPORT4="NO_STLPORT4"
-fi
-if test -z "$STLPORT_VER"; then
-  STLPORT_VER=400
-fi
-AC_SUBST(STLPORT4)
-AC_SUBST(STLPORT_VER)
-AC_SUBST(USE_SYSTEM_STL)
+AC_SUBST(WITH_STLPORT)
 
 dnl ===================================================================
 dnl visibility and c++0x features
@@ -3036,20 +2964,9 @@ dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
 HAVE_GCC_VISIBILITY_BROKEN=
-if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$USE_SYSTEM_STL" = "YES"; then
-   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
+if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) ; then
+
    AC_LANG_PUSH([C++])
-
-   AC_TRY_COMPILE([#include <ext/hash_map>
-using namespace __gnu_cxx;
-],[hash_map<int, int> t; return 0;],
-  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
-
-   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
-      AC_MSG_ERROR([Can't find hash_map. Try with --with-stlport])
-   else
-      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
-   fi
 
    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
       AC_MSG_CHECKING([if STL headers are visibility safe])
@@ -4862,15 +4779,12 @@ if test -n "$with_system_mdds" -o -n "$with_system_headers" && \
     dnl Determine which hash container mdds shall use
     dnl ===================================================================
     AC_MSG_CHECKING([which hash container mdds shall use])
-    if test "x$HAVE_BOOST_UNORDERED_MAP" = "xTRUE"; then
-        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
-        AC_MSG_RESULT([boost::unordered_map])
-    elif test "x$HAVE_CXX0X" = "xTRUE"; then
+    if test "x$HAVE_CXX0X" = "xTRUE"; then
         MDDS_CPPFLAGS="-std=c++0x"
         AC_MSG_RESULT([std::unordered_map])
     else
-        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_STLPORT"
-        AC_MSG_RESULT([std::hash_map])
+        MDDS_CPPFLAGS="-DMDDS_HASH_CONTAINER_BOOST"
+        AC_MSG_RESULT([boost::unordered_map])
     fi
 
     AC_LANG_PUSH([C++])

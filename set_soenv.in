@@ -40,7 +40,7 @@ my ( $outfile, $bootfile, $newline, $comment,
      $compiler, $ds, $ps,
      $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $USE_MINGW, $platform,
-     $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include,
+     $cygwinver, $empty, $no_ant, $no_gcc_include,
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
@@ -71,8 +71,7 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, $DEFIMGS,
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
-     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH, $CL_X64 );
+     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -86,7 +85,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME,
      $USE_DIRECTX5, $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TMPDIR,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
-     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
+     $WIN_GNUCOPY, $WIN_TOUCH, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
      $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
@@ -116,10 +115,8 @@ $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
 $L              = " -L";            # library search path
 $empty          = "";               # used as argument
-$no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
-$STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
 if ($SYSTEM_PYTHON eq "NO") {
     $PYTHON              = "python";
@@ -869,11 +866,6 @@ if ( $platform =~ m/cygwin|os2/ ) {
 # 3. bash path.
 $OOO_SHELL = '@BASH@';
 
-if ( '@STLPORT4@' eq $no_stl )
-{
-   $STLPORT4 = "$no_stl";
-}
-
 # ml.exe assembler path for Windows users.
 if ($platform =~ m/cygwin/)
 {  $ASM_PATH = PathFormat('@ASM_HOME@');
@@ -946,19 +938,6 @@ $USR_CCS              = $USR.$ds."ccs";
 $USR_OPENWIN          = $USR.$ds."openwin";
 $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
-
-if ($STLPORT4 ne $no_stl) {
-	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
-	$L_STLPORT_LIB		= $L.'$STLPORT4'.$LIB64;
-	$STLPORT_stlport 	= $I.'$STLPORT4'.$ds.'stlport';
-	$STLPORT_inc_stlport	= $I.'$STLPORT4'.$ds.'include'.$ds.'stlport';
-} else {
-        $ps_STLPORT_LIB         = "";
-        $L_STLPORT_LIB          = "";
-        $STLPORT_stlport        = $I.$SRC_ROOT.$SOLVER.$ds.$UPD.$ds.$INPATH.$INC.$ds."stl";
-        $STLPORT_inc_stlport    = "";
-}
-
 
 # Windows NT only variables
 if ($platform =~ m/cygwin/)
@@ -1091,10 +1070,6 @@ if ($platform =~ m/cygwin|os2/)
    $JAVAHOME          = '$JAVA_HOME';
 
    $ILIB             = $cur_dir;
-
-   if ($STLPORT4 ne $no_stl) {
-       $ILIB      .=   $wps.$STLPORT4.$LIB64;
-   }
 
    # Mingw is different
    if ( $COM eq "MSC" )
@@ -1249,7 +1224,6 @@ elsif ($platform =~ m/cygwin/)
    if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
       $PATH           .= $ps.$tmppath;
    }
-   $PATH              .= $ps_STLPORT_LIB;
    # nsis path for Windows users.
    $NSIS_PATH = PathFormat('@NSIS_PATH@');
    $tmppath = CygFormat($NSIS_PATH);
@@ -1361,7 +1335,6 @@ if ($platform =~ m/solaris/)
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
                         $L.$JRETHREADDIR.
-                        $L_STLPORT_LIB.
                         $L.$XLIB;
 }
 elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
@@ -1375,8 +1348,7 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
    $SOLARLIB         .= $L.'$JAVA_HOME'.$LIB64.
                         $L.$JRELIBDIR.
                         $L.$JRETOOLKITDIR.
-                        $L.$JRETHREADDIR.
-                        $L_STLPORT_LIB;
+                        $L.$JRETHREADDIR;
 
    if ( $XLIB ne "/usr/lib" && $XLIB ne "/usr/lib64" ) {
       $SOLARLIB       .= $L.$XLIB;
@@ -1385,12 +1357,10 @@ elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
 elsif ($platform =~ m/cygwin|os2/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
                         $L.$par_dir.$LIB.
-                        $L_STLPORT_LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
 }
 elsif ($platform =~ m/darwin/)
 {  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
-                        $L_STLPORT_LIB.
                         $L.$USR_LIB;
     # [ed] 6/15/02 Add in X11 libraries onto the library path
     if ($GUIBASE eq "unx") {
@@ -1415,12 +1385,6 @@ $SOLARINC             = $I.$cur_dir.
 
 if ($platform =~ m/solaris|linux|osf1|freebsd|netbsd|aix|openbsd/)
 {
-$SOLARINC	     .= $STLPORT_stlport;
-if ($platform =~ m/linux|freebsd|netbsd|openbsd/)
-{
-# This simply adds an include path, so even cases that break the FHS work
-$SOLARINC            .= $STLPORT_inc_stlport;
-}
 if ($platform =~ m/solaris/ && ! $CC =~ "gcc")
 {
 $SOLARINC            .= '/SC5 ';
@@ -1430,12 +1394,6 @@ if ($platform =~ m/solaris/)
 {
     $SOLARINC         .= $I.$COMPATH.$INCLUDE;
 }
-if ($platform =~ m/linux/)
-{
-# This simply adds an include path, so even cases that break the FHS work
-   $SOLARINC         .= $STLPORT_inc_stlport;
-}
-
 
 	$SOLARINC      .= $I.'$SOLARENV'.$INC.$ds."Xp31";
 
@@ -1486,8 +1444,7 @@ if ($platform =~ m/linux/)
     }
 }
 elsif ($platform =~ m/cygwin/)
-{  $SOLARINC          .= $STLPORT_stlport;
-   if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
+{  if ($JAVA_HOME ne "" && $JAVA_HOME ne "NO_JAVA_HOME")
    {  $SOLARINC       .= $I.'$JAVA_HOME'.$INCLUDE.$ds."win32".
                          $I.'$JAVA_HOME'.$INCLUDE;
    }
@@ -1524,8 +1481,7 @@ elsif ($platform =~ m/cygwin/)
    }
 }
 elsif ($platform =~ m/darwin/)
-{  $SOLARINC         .= $STLPORT_stlport.
-						$I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
+{  $SOLARINC         .= $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Versions".$ds."Current".$ds."Headers".
                         $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
    # [ed] 6/15/02 Add in X11 headers as appropriate for the build
    if ($GUIBASE eq "unx") {
@@ -1573,8 +1529,6 @@ ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
 ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
 ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
-ToFile( "STLPORT4",          $STLPORT4,          "e" );
-ToFile( "STLPORT_VER",       "@STLPORT_VER@",    "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
 ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
@@ -1842,7 +1796,7 @@ ToFile( "CXX",               $CXX,               "e" );
 ToFile( "USE_CCACHE",        "@USE_CCACHE@",     "e" );
 ToFile( "MINGWCXX",          "@MINGWCXX@",       "e" );
 ToFile( "MINGWSTRIP",        "@MINGWSTRIP@",     "e" );
-ToFile( "USE_SYSTEM_STL",    "@USE_SYSTEM_STL@", "e" );
+ToFile( "WITH_STLPORT",      "@WITH_STLPORT@", "e" );
 ToFile( "ALLOC",             "@ALLOC@",          "e" );
 ToFile( "ENABLE_SYMBOLS",    "@ENABLE_SYMBOLS@",    "e" );
 ToFile( "DISABLE_STRIP",     "@DISABLE_STRIP@",     "e" );

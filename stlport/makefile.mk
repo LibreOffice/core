@@ -34,12 +34,12 @@ TARGET=so_stlport
 
 .INCLUDE :	settings.mk
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
+.IF "$(WITH_STLPORT)"!="YES"
 
 all:
     @echo "Nothing to do"
 
-.ELSE # "$(USE_SYSTEM_STL)"
+.ELSE # "$(WITH_STLPORT)"!="YES"
 
 # --- Files --------------------------------------------------------
 .EXPORT : CC CXX
@@ -188,16 +188,6 @@ OUT2LIB= \
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(STLPORT4)"!="NO_STLPORT4"
-all :
-       @echo "         An already available installation of STLport has been chosen in the configure process."
-       @echo "         Therefore the version provided here does not need to be built in addition."
-.ELIF "$(OS)"=="MACOSX"
-all:
-    @echo '--with-stlport=yes is not supported on Mac OS X'
-    false
-.ENDIF
-
 .INCLUDE : 	set_ext.mk
 .INCLUDE :	target.mk
 .INCLUDE :	tg_ext.mk
@@ -229,4 +219,4 @@ $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
 
-.ENDIF # "$(USE_SYSTEM_STL)"
+.ENDIF # "$(WITH_STLPORT)"!="YES"
