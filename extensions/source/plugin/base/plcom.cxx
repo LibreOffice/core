@@ -39,9 +39,7 @@
 #include <limits>
 #endif
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
-#endif
 
 #include <tools/fsys.hxx>
 #include <plugin/impl.hxx>

@@ -35,10 +35,8 @@
 #undef _LINUX_SOURCE_COMPAT
 #endif
 
-#if STLPORT_VERSION>=321
 #include <cstdarg>
 #include <cstdio>
-#endif
 
 #include <plugin/impl.hxx>
 

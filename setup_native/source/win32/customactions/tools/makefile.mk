@@ -39,10 +39,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(USE_SYSTEM_STL)" != "YES"
-CFLAGS+=-D_STLP_USE_STATIC_LIB
-.ENDIF
-
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
@@ -57,10 +53,6 @@ SHL1OBJS = $(SLOFILES)
 STDSHL+=	\
     $(ADVAPI32LIB)\
     $(MSILIB)
-
-.IF "$(USE_SYSTEM_STL)" != "YES"
-STDSHL+=$(LIBSTLPORTST)								
-.ENDIF
 
 SHL1TARGET = $(TARGET)
 SHL1IMPLIB = i$(TARGET)

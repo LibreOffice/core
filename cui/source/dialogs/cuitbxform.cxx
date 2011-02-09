@@ -29,7 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_cui.hxx"
 
-#include <string> // HACK: prevent conflict between STLPORT and Workshop headers
+#include <string>
 #include <tools/ref.hxx>
 #include <tools/shl.hxx>
 #include <svl/intitem.hxx>

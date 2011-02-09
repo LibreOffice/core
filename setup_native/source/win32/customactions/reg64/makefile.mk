@@ -39,10 +39,6 @@ EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 .INCLUDE : settings.mk
 
-.IF "$(USE_SYSTEM_STL)" != "YES"
-CFLAGS+=-D_STLP_USE_STATIC_LIB
-.ENDIF
-
 #Disable precompiled header
 CDEFS+=-Dnot_used_define_to_disable_pch
 
