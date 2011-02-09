@@ -1,4 +1,4 @@
-cg configmgr : BOOST:boost comphelper cppu cppuhelper offuh sal salhelper stlport NULL
+cg configmgr : BOOST:boost comphelper cppu cppuhelper offuh sal salhelper NULL
 cg configmgr\inc nmake - all cg_inc NULL
 cg configmgr\source nmake - all cg_source cg_inc NULL
 cg configmgr\qa\unoapi nmake - all cg_qa_unoapi NULL
