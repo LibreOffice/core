@@ -51,6 +51,7 @@
 #include <postmac.h>
 
 class DropTarget;
+class AquaSalFrame;
 
 /* The functions declared in this protocol are actually
    declared in vcl/aqua/inc/salframe.h. Because we want
@@ -159,6 +160,7 @@ private:
   com::sun::star::uno::Reference< com::sun::star::datatransfer::clipboard::XClipboard > mXCurrentDragClipboard;
   DataFlavorMapperPtr_t mDataFlavorMapper;
   id  mView;
+  AquaSalFrame* mpFrame;
   DropTargetHelper* mDropTargetHelper;
   bool mbActive;
   sal_Int8 mDragSourceSupportedActions;

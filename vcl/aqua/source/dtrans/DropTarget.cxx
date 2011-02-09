@@ -50,6 +50,8 @@
 #include <Carbon/Carbon.h>
 #include <postmac.h>
 
+#include <salframe.h>
+#include <salframeview.h>
 
 using namespace rtl;
 using namespace cppu;
@@ -149,6 +151,8 @@ namespace /* private */
 
 DropTarget::DropTarget() :
   WeakComponentImplHelper5<XInitialization, XDropTarget, XDropTargetDragContext, XDropTargetDropContext, XServiceInfo>(m_aMutex),
+  mView(nil),
+  mpFrame(NULL),
   mDropTargetHelper(nil),
   mbActive(false),
   mDragSourceSupportedActions(DNDConstants::ACTION_NONE),
@@ -161,8 +165,9 @@ DropTarget::DropTarget() :
 
 DropTarget::~DropTarget()
 {
-  [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
-  [mDropTargetHelper release];
+    if( AquaSalFrame::isAlive( mpFrame ) )
+        [(id <DraggingDestinationHandler>)mView unregisterDraggingDestinationHandler:mDropTargetHelper];
+    [mDropTargetHelper release];
 }
 
 
@@ -396,6 +401,7 @@ MacOSBOOL DropTarget::performDragOperation(id sender)
     sal_uInt64 tmp = 0;
     pNSView >>= tmp;
     mView = (id)tmp;
+    mpFrame = [(SalFrameView*)mView getSalFrame];
 
     mDropTargetHelper = [[DropTargetHelper alloc] initWithDropTarget: this];
 
