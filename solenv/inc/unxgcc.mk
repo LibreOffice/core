@@ -44,7 +44,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)/bin/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -120,13 +120,6 @@ GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 # Compiler flags for enabling optimizations
 .IF "$(PRODUCT)"!=""
 CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
-.IF "$(USE_SYSTEM_STL)"!="YES" || "$(GCCNUMVER)" <= "000400050000"
-#STLPort headers are full of aliasing warnings and
-#At least SLED 10.2 gcc 4.3 overly agressively optimizes
-#uno::Sequence into junk, so only strict-alias on compiler
-#later than 4.5.1
-CFLAGSOPT+=-fno-strict-aliasing
-.ENDIF
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
@@ -249,26 +242,6 @@ STDSHLCUIMT+=-Wl,--as-needed $(DL_LIB) $(PTHREAD_LIBS) -lm -Wl,--no-as-needed
 X11LINK_DYNAMIC = -Wl,--as-needed -lXext -lX11 -Wl,--no-as-needed
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
-
-.IF "$(USE_STLP_DEBUG)" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlportstlg
-LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
-LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
-.ENDIF
-.ELSE # "$(USE_STLP_DEBUG)" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=$(DYNAMIC) -lstlport
-LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
-LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
-.ENDIF
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
-
-#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR*=ar

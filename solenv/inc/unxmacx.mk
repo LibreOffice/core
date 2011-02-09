@@ -38,7 +38,7 @@ LINKOUTPUT_FILTER=
 # Definitions that we may need on the compile line.
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -D_USE_NAMESPACE=1
 .IF "$(GUIBASE)"=="unx" && "$(USE_SYSTEM_STL)"!="YES"
 CDEFS+=-DX_LOCALE
 .ENDIF
@@ -163,27 +163,6 @@ COMPILER_WARN_ERRORS=TRUE
 CDEFS+=$(EXTRA_CDEFS)
 
 STDLIBCPP=-lstdc++
-
-# ---------------------------------
-#  STLport library names
-# ---------------------------------
-.IF "$(USE_STLP_DEBUG)" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=-lstlportstlg
-LIBSTLPORTST=$(STATIC) -lstlportstlg
-.ELSE
-LIBSTLPORT=-lstlport_gcc_stldebug
-LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc_stldebug.a
-.ENDIF
-.ELSE # "$(USE_STLP_DEBUG" != ""
-.IF "$(STLPORT_VER)" >= "500"
-LIBSTLPORT=-lstlport
-LIBSTLPORTST=$(STATIC) -lstlport
-.ELSE
-LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=$(SOLARVERSION)/$(INPATH)/lib/libstlport_gcc.a
-.ENDIF
-.ENDIF # "$(USE_STLP_DEBUG" != ""
 
 # ---------------------------------
 #  Link stage flags

@@ -53,7 +53,7 @@ CDEFS+=-E
 .ENDIF
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DX86 -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=-DX86 -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -255,9 +255,6 @@ STDLIBGUIST=$(STDLIBCPP)
 # libraries for linking shared libraries
 STDSHLGUIMT=$(STDLIBCPP)
 STDSHLCUIMT=$(STDLIBCPP)
-
-LIBSTLPORT=$(DYNAMIC) stlp45.lib
-LIBSTLPORTST=$(STATIC) stlp45.lib $(DYNAMIC)
 
 
 # name of library manager

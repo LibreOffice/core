@@ -1215,15 +1215,6 @@ STDSHL=$(STDSHLCUIMT)
 
 .EXPORT : PICSWITCH
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
-LIBSTLPORT=""
-.ENDIF
-
-.IF "$(NO_DEFAULT_STL)"==""
-STDLIB+=$(LIBSTLPORT)
-STDSHL+=$(LIBSTLPORT)
-.ENDIF			# "$(NO_DEFAULT_STL)"==""
-
 # fill up unresolved symbols not found else where
 .IF "$(FILLUPARC)"!=""
 STDLIB+=$(FILLUPARC)

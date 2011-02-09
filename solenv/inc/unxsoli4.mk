@@ -29,7 +29,7 @@
 ASM=/usr/ccs/bin/as
 AFLAGS=-P
 
-CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER)
+CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS
 
 SOLAR_JAVA*=TRUE
 .IF "$(SOLAR_JAVA)"!=""
@@ -199,14 +199,6 @@ X11LINK_DYNAMIC = -lXext -lX11
 # @@@ interposer needed for -Bdirect @@@
 # LIBSALCPPRT*=-z allextract -lsalcpprt -z defaultextract
 LIBSALCPPRT=
-
-.IF "$(USE_STLP_DEBUG)" != ""
-LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro_debug
-LIBSTLPORTST=$(STATIC) -lstlport_sunpro_debug $(DYNAMIC)
-.ELSE
-LIBSTLPORT=$(DYNAMIC) -lstlport_sunpro
-LIBSTLPORTST=$(STATIC) -lstlport_sunpro $(DYNAMIC)
-.ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 LIBMGR=CC
 LIBFLAGS=-xar -o
