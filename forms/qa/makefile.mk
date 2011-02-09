@@ -65,7 +65,7 @@ ALL: 	ALLDEP
 
 .INCLUDE :  target.mk
 
-test:
+check:
     echo $(SOLARBINDIR)
 
 show_targets:
