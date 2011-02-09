@@ -670,7 +670,7 @@
              std::advance( iter, n );
              return iter;
          }        
---- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp.orig	2011-02-05 09:55:44.846931338 +0000
+--- misc/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:55:44.846931338 +0000
 +++ misc/build/boost_1_44_0/boost/ptr_container/detail/static_move_ptr.hpp	2011-02-05 09:56:42.760931701 +0000
 @@ -151,7 +151,7 @@
      deleter_const_reference get_deleter() const { return impl_.second(); }
@@ -692,7 +692,7 @@
      Ptr& ptr() const { return ptr_; }
  private:
      Ptr& ptr_;
---- misc/boost_1_44_0boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:24:50.817320629 +0000
+--- misc/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:24:50.817320629 +0000
 +++ misc/build/boost_1_44_0/boost/spirit/home/classic/core/non_terminal/subrule.hpp	2011-02-08 09:25:20.496639901 +0000
 @@ -210,7 +210,7 @@
              subrule_list<
@@ -712,3 +712,102 @@
          }
  
          typename DefT::embed_t rhs;
+--- misc/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:49:00.416529470 +0000
++++ misc/build/boost_1_44_0/boost/ptr_container/ptr_sequence_adapter.hpp	2011-02-09 08:50:44.607653864 +0000
+@@ -510,72 +510,72 @@
+ 
+     public: // resize
+ 
+-        void resize( size_type size ) // basic
++        void resize( size_type size_ ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+-                this->erase( boost::next( this->begin(), size ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_back( new BOOST_DEDUCED_TYPENAME 
+                                      boost::remove_pointer<value_type>::type() ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }
+ 
+-        void resize( size_type size, value_type to_clone ) // basic
++        void resize( size_type size_, value_type to_clone ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+-                this->erase( boost::next( this->begin(), size ), this->end() );  
++                this->erase( boost::next( this->begin(), size_ ), this->end() );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_back( this->null_policy_allocate_clone( to_clone ) ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );        
++            BOOST_ASSERT( this->size() == size_ );        
+         }
+ 
+-        void rresize( size_type size ) // basic
++        void rresize( size_type size_ ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+                 this->erase( this->begin(), 
+-                             boost::next( this->begin(), old_size - size ) );  
++                             boost::next( this->begin(), old_size - size_ ) );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_front( new BOOST_DEDUCED_TYPENAME 
+                                       boost::remove_pointer<value_type>::type() ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }
+ 
+-        void rresize( size_type size, value_type to_clone ) // basic
++        void rresize( size_type size_, value_type to_clone ) // basic
+         {
+             size_type old_size = this->size();
+-            if( old_size > size )
++            if( old_size > size_ )
+             {
+                 this->erase( this->begin(), 
+-                             boost::next( this->begin(), old_size - size ) );  
++                             boost::next( this->begin(), old_size - size_ ) );  
+             }
+-            else if( size > old_size )
++            else if( size_ > old_size )
+             {
+-                for( ; old_size != size; ++old_size )
++                for( ; old_size != size_; ++old_size )
+                     this->push_front( this->null_policy_allocate_clone( to_clone ) ); 
+             }
+ 
+-            BOOST_ASSERT( this->size() == size );
++            BOOST_ASSERT( this->size() == size_ );
+         }           
+                 
+     public: // algorithms
