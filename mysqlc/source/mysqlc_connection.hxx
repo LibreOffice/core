@@ -43,9 +43,8 @@
 #include <com/sun/star/sdbc/XWarningsSupplier.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
 
-#include <preextstl.h>
 #include <cppconn/driver.h>
-#include <postextstl.h>
+
 #include <cppuhelper/compbase3.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <rtl/string.hxx>

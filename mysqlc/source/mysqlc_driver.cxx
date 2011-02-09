@@ -35,12 +35,10 @@ using namespace connectivity::mysqlc;
 using ::rtl::OUString;
 #include <stdio.h>
 
-#include <preextstl.h>
 #include <cppconn/exception.h>
 #ifdef SYSTEM_MYSQL_CPPCONN
     #include <mysql_driver.h>
 #endif
-#include <postextstl.h>
 
 
 /* {{{ MysqlCDriver::MysqlCDriver() -I- */

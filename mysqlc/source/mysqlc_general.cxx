@@ -159,14 +159,14 @@ int mysqlToOOOType(int cppConnType)
 }
 
 
-::rtl::OUString convert(const ::ext_std::string& _string, const rtl_TextEncoding encoding)
+::rtl::OUString convert(const ::std::string& _string, const rtl_TextEncoding encoding)
 {
     return ::rtl::OUString( _string.c_str(), _string.size(), encoding );
 }
 
-::ext_std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
+::std::string convert(const ::rtl::OUString& _string, const rtl_TextEncoding encoding)
 {
-    return ::ext_std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
+    return ::std::string( ::rtl::OUStringToOString( _string, encoding ).getStr() );
 }
 
 

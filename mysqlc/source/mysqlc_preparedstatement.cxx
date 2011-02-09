@@ -231,7 +231,7 @@ void SAL_CALL OPreparedStatement::setString(sal_Int32 parameter, const OUString&
     checkParameterIndex(parameter);
 
     try {
-        ext_std::string stringie(::rtl::OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
+        std::string stringie(::rtl::OUStringToOString(x, m_pConnection->getConnectionEncoding()).getStr());
         ((sql::PreparedStatement *)cppStatement)->setString(parameter, stringie);
     } catch (sql::MethodNotImplementedException) {
         mysqlc_sdbc_driver::throwFeatureNotImplementedException("OPreparedStatement::clearParameters", *this);
@@ -341,7 +341,7 @@ void SAL_CALL OPreparedStatement::setDate(sal_Int32 parameter, const Date& aData
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    ext_std::string dateStr;
+    std::string dateStr;
     char buf[20];
     dateStr.append(my_i_to_a(buf, sizeof(buf)-1, aData.Year));
     dateStr.append("-", 1);
@@ -369,7 +369,7 @@ void SAL_CALL OPreparedStatement::setTime(sal_Int32 parameter, const Time& aVal)
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    ext_std::string timeStr;
+    std::string timeStr;
     char buf[20];
     timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Hours));
     timeStr.append(":", 1);
@@ -397,7 +397,7 @@ void SAL_CALL OPreparedStatement::setTimestamp(sal_Int32 parameter, const DateTi
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    ext_std::string timeStr;
+    std::string timeStr;
     char buf[20];
     timeStr.append(my_i_to_a(buf, sizeof(buf)-1, aVal.Year));
     timeStr.append("-", 1);
@@ -802,7 +802,7 @@ void SAL_CALL OPreparedStatement::setBytes(sal_Int32 parameter, const Sequence< 
     checkDisposed(OPreparedStatement::rBHelper.bDisposed);
     checkParameterIndex(parameter);
 
-    ext_std::string blobby((char *)x.getConstArray(), x.getLength());
+    std::string blobby((char *)x.getConstArray(), x.getLength());
     try {
         ((sql::PreparedStatement *)cppStatement)->setString(parameter, blobby);
     } catch (sql::MethodNotImplementedException) {
