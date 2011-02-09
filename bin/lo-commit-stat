@@ -25,24 +25,22 @@ sub search_bugs($$$$)
         # match #i123#
         } elsif ( $line =~ m/(\#i)(\d+)(\#)/ ) {
             $bug_orig = $1 . $2 . $3;
-            $bug = $2;
+            $bug = "i#$2";
         } else {
             $bug = undef;
             next;
         }
+#        print "   found $bug\n";
         $bug_orig =~ s/\#/\\#/;
         $line =~ s/[Rr]esolves:\s*$bug_orig\s*//;
         $line =~ s/\s*-\s*$bug_orig\s*//;
         $line =~ s/\(?$bug_orig\)?[:,]?\s*//;
         %{$pdata->{$piece}{$commit_id}{'bugs'}} = () if (! defined %{$pdata->{$piece}{$commit_id}{'bugs'}});
         $pdata->{$piece}{$commit_id}{'bugs'}{$bug} = 1;
-        $bug = undef;
-        return $line;
     }
 
     return $line;
 }
-
 
 sub standardize_summary($)
 {
