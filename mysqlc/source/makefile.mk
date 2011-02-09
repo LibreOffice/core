@@ -35,9 +35,7 @@ ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
 EXTENSIONNAME:=mysql-connector-ooo
 
-.IF "$(SYSTEM_MYSQL)" == "YES"
 EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -116,9 +114,6 @@ CDEFS+=-DCPPDBC_EXPORTS -DCPPCONN_LIB_BUILD
 CDEFS += -DCPPCONN_LIB=\"$(DLLPRE)mysqlcppconn$(DLLPOST)\"
 .ELSE
 CDEFS += -DCPPCONN_LIB=\"$(shell readlink /usr/lib/libmysqlcppconn.so)\"
-.IF "$(USE_SYSTEM_STL)"!="YES"
-CDEFS += -DADAPT_EXT_STL
-.ENDIF
 .ENDIF
 
 # --------------- MySQL settings ------------------
