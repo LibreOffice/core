@@ -57,7 +57,6 @@
 #include <svl/lstner.hxx>
 
 #define _SVSTDARR_BOOLS
-#define _SVSTDARR_BYTES
 #define _SVSTDARR_LONGS
 #define _SVSTDARR_ULONGS
 #define _SVSTDARR_USHORTS
