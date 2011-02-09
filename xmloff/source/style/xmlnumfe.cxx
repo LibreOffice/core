@@ -156,22 +156,22 @@ void SvXMLNumUsedList_Impl::SetUsed( sal_uInt32 nKey )
 
 sal_Bool SvXMLNumUsedList_Impl::IsUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aUsed.find(nKey);
     return (aItr != aUsed.end());
 }
 
 sal_Bool SvXMLNumUsedList_Impl::IsWasUsed( sal_uInt32 nKey ) const
 {
-    SvXMLuInt32Set::iterator aItr = aWasUsed.find(nKey);
+    SvXMLuInt32Set::const_iterator aItr = aWasUsed.find(nKey);
     return (aItr != aWasUsed.end());
 }
 
 void SvXMLNumUsedList_Impl::Export()
 {
-    SvXMLuInt32Set::iterator aItr = aUsed.begin();
+    SvXMLuInt32Set::const_iterator aItr = aUsed.begin();
     while (aItr != aUsed.end())
     {
-        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *aItr );
+        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *aItr );
         if (aPair.second)
             nWasUsedCount++;
         ++aItr;
@@ -214,7 +214,7 @@ void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
     sal_Int32* pWasUsed = rWasUsed.getArray();
     if (pWasUsed)
     {
-        SvXMLuInt32Set::iterator aItr = aWasUsed.begin();
+        SvXMLuInt32Set::const_iterator aItr = aWasUsed.begin();
         while (aItr != aWasUsed.end())
         {
             *pWasUsed = *aItr;
@@ -231,7 +231,7 @@ void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
     const sal_Int32* pWasUsed = rWasUsed.getConstArray();
     for (sal_uInt16 i = 0; i < nCount; i++, pWasUsed++)
     {
-        std::pair<SvXMLuInt32Set::iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
+        std::pair<SvXMLuInt32Set::const_iterator, bool> aPair = aWasUsed.insert( *pWasUsed );
         if (aPair.second)
             nWasUsedCount++;
     }
