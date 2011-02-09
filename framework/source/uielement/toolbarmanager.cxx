@@ -91,6 +91,7 @@
 #include <unotools/cmdoptions.hxx>
 #include <boost/bind.hpp>
 #include <svtools/acceleratorexecute.hxx>
+#include <vcl/imagerepository.hxx>
 
 //_________________________________________________________________________________________________________________
 //  namespaces
@@ -1558,10 +1559,17 @@ void ToolBarManager::RequestImages()
         if ( !aImage )
         {
             aImage = Image( aModGraphicSeq[i] );
-            // Try also to query for add-on images before giving up and use an
-            // empty image.
+            // Try also to query for add-on images
             if ( !aImage )
                 aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages );
+
+            // Give up and use a placeholder image.
+            if (!aImage)
+            {
+                BitmapEx aBitmap;
+                if (::vcl::ImageRepository::loadDefaultImage(aBitmap))
+                    aImage = Image(aBitmap);
+            }
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }

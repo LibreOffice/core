@@ -63,12 +63,6 @@
 #include <rtl/logfile.hxx>
 #include "svtools/miscopt.hxx"
 
-#include "vcl/imagerepository.hxx"
-
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
-
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -363,15 +357,7 @@ GlobalImageList::~GlobalImageList()
 Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
-    Image aImage = CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
-    if (!aImage)
-    {
-        BitmapEx rBitmap;
-        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
-        if (res)
-            aImage = Image(rBitmap);
-    }
-    return aImage;
+    return CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
 }
 
 bool GlobalImageList::hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
