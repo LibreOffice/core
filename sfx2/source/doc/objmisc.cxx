@@ -60,8 +60,6 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
-
-
 #include <com/sun/star/script/provider/XScript.hpp>
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/script/provider/XScriptProviderSupplier.hpp>
@@ -228,25 +226,6 @@ void SfxObjectShell::FlushDocInfo()
     sal_Int32 delay(xDocProps->getAutoloadSecs());
     SetAutoLoad( INetURLObject(url), delay * 1000,
                  (delay > 0) || url.getLength() );
-/*
-    // bitte beachten:
-    // 1. Titel in DocInfo aber nicht am Doc (nach HTML-Import)
-    //  => auch am Doc setzen
-    // 2. Titel in DocInfo leer (Briefumschlagsdruck)
-    //  => nicht am Doc setzen, da sonst "unbenanntX" daraus wird
-    String aDocInfoTitle = GetDocInfo().GetTitle();
-    if ( aDocInfoTitle.Len() )
-        SetTitle( aDocInfoTitle );
-    else
-    {
-        pImp->aTitle.Erase();
-        SetNamedVisibility_Impl();
-        if ( GetMedium() )
-        {
-            SfxShell::SetName( GetTitle(SFX_TITLE_APINAME) );
-            Broadcast( SfxSimpleHint(SFX_HINT_TITLECHANGED) );
-        }
-    }*/
 }
 
 //-------------------------------------------------------------------------
@@ -454,8 +433,6 @@ void SfxObjectShell::SetReadOnlyUI( sal_Bool bReadOnly )
     if ( bWasRO != IsReadOnly() )
     {
         Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-        //if ( pImp->pDocInfo )
-        //  pImp->pDocInfo->SetReadOnly( IsReadOnly() );
     }
 }
 
@@ -499,12 +476,10 @@ sal_Bool SfxObjectShell::IsInModalMode() const
     return pImp->bModalMode || pImp->bRunningMacro;
 }
 
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 sal_Bool SfxObjectShell::AcceptStateUpdate() const
 {
     return !IsInModalMode();
 }
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 //-------------------------------------------------------------------------
 
@@ -829,9 +804,6 @@ void SfxObjectShell::SetTitle
 
     // Title setzen
     pImp->aTitle = rTitle;
-//  Wieso denn in der DocInfo?
-//  GetDocInfo().SetTitle( rTitle );
-//  FlushDocInfo();
 
     // Benachrichtigungen
     if ( GetMedium() )
@@ -908,18 +880,9 @@ String SfxObjectShell::GetTitle
 */
 
 {
-//    if ( GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-//        return String();
     SfxMedium *pMed = GetMedium();
     if ( IsLoading() )
         return String();
-
-/*    if ( !nMaxLength && pImp->pDocInfo )
-    {
-        String aTitle = pImp->pDocInfo->GetTitle();
-        if ( aTitle.Len() )
-            return aTitle;
-    } */
 
     // Titel erzeugen?
     if ( SFX_TITLE_DETECT == nMaxLength && !pImp->aTitle.Len() )
@@ -1061,8 +1024,6 @@ void SfxObjectShell::InvalidateName()
 {
     // Title neu erzeugen
     pImp->aTitle.Erase();
-//  pImp->nVisualDocumentNumber = USHRT_MAX;
-    //GetTitle( SFX_TITLE_DETECT );
     SetName( GetTitle( SFX_TITLE_APINAME ) );
 
     // Benachrichtigungen
@@ -1575,14 +1536,6 @@ void SfxObjectShell::CancelTransfers()
         AbortImport();
         if( IsLoading() )
             FinishedLoading( SFX_LOADED_ALL );
-
-/*
-        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( this );
-        while( pFrame )
-        {
-            pFrame->CancelTransfers();
-            pFrame = SfxViewFrame::GetNext( *pFrame, this );
-        }*/
     }
 }
 
@@ -1899,32 +1852,6 @@ void SfxObjectShell::SetFlags( SfxObjectShellFlags eFlags )
     pImp->eFlags = eFlags;
 }
 
-/*
-void SfxObjectShell::SetBaseURL( const String& rURL )
-{
-    pImp->aBaseURL = rURL;
-    pImp->bNoBaseURL = FALSE;
-}
-
-const String& SfxObjectShell::GetBaseURLForSaving() const
-{
-    if ( pImp->bNoBaseURL )
-        return String();
-    return GetBaseURL();
-}
-
-const String& SfxObjectShell::GetBaseURL() const
-{
-    if ( pImp->aBaseURL.Len() )
-        return pImp->aBaseURL;
-    return pMedium->GetBaseURL();
-}
-
-void SfxObjectShell::SetEmptyBaseURL()
-{
-    pImp->bNoBaseURL = TRUE;
-}
-*/
 String SfxObjectShell::QueryTitle( SfxTitleQuery eType ) const
 {
     String aRet;
@@ -1989,7 +1916,6 @@ void SfxHeaderAttributes_Impl::SetAttribute( const SvKeyValue& rKV )
         }
         else
         {
-//          DBG_ERROR( "Schlechtes ::com::sun::star::util::DateTime fuer Expired" );
             pDoc->GetMedium()->SetExpired_Impl( Date( 1, 1, 1970 ) );
         }
     }
@@ -2089,7 +2015,6 @@ sal_Bool SfxObjectShell::IsSecure()
         return sal_False;
 
     if ( aOpt.IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
-    //if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL( INetURLObject::NO_DECODE ), aReferer ) )
     {
         if ( GetMedium()->GetContent().is() )
         {

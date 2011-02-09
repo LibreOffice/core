@@ -196,14 +196,8 @@ void SfxApplication::EnterBasicCall()
     {
         DBG_TRACE( "SfxShellObject: BASIC-on-demand" );
 
-        // das kann l"anger dauern, da Progress nicht geht, wenigstens Sanduhr
-//(mba)/task        SfxWaitCursor aWait;
-
         // zuerst das BASIC laden
         GetBasic();
-
-        // Factories anmelden
-//        SbxBase::AddFactory( new SfxSbxObjectFactory_Impl );
     }
 }
 
@@ -228,7 +222,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             {
                 SbxObject* pObject = SbxBase::CreateObject( pItem->GetValue() );
                 pObject->AddRef();
-//(mba)                rReq.SetReturnValue( SfxObjectItem( 0, pObject ) );
                 rReq.Done();
             }
             break;
@@ -237,11 +230,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
         case SID_DELETE_BASICOBJECT:
         {
             SFX_REQUEST_ARG(rReq, pItem, SfxObjectItem, nSID, sal_False);
-            if ( pItem )
-            {
-//(mba)                SbxObject* pObject = pItem->GetObject();
-//(mba)                pObject->ReleaseRef();
-            }
             break;
         }
 

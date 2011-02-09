@@ -291,7 +291,6 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
     // andernfalls Doc-Shell anlegen
     if ( !pEntry->aDocShell.Is() )
     {
-//(mba)/task        SfxWaitCursor aWaitCursor;
         INetURLObject aFileObj( pEntry->aFileName );
         BOOL bDum = FALSE;
         SfxApplication* pSfxApp = SFX_APP();
@@ -366,7 +365,6 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell(USHORT nRegion,
 
 */
 {
-//(mba)/task    SfxWaitCursor aWaitCursor;
     return pTemplates->CreateObjectShell(nRegion, nIdx);
 }
 

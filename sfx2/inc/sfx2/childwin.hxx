@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <com/sun/star/frame/XFrame.hpp>
 
-#ifdef ENABLE_INIMANAGER//MUSTINI
+#ifdef ENABLE_INIMANAGER
 #include "inimgr.hxx"
 #endif
 #include <sfx2/shell.hxx>
@@ -47,11 +47,6 @@ class SfxShell;
 class SfxChildWindow;
 class SfxChildWindowContext;
 class SfxChildWinContextArr_Impl;
-
-//ASDBG #ifndef _XFRAME_REF
-//ASDBG #define _XFRAME_REF
-//ASDBG USR_DECLIMPL_REF( ::com::sun::star::frame::XFrame, ::com::sun::star::uno::XInterface );
-//ASDBG #endif
 
 #define SFX_CHILDWIN_ZOOMIN       0x01      // ganz eingeklapptes Float
 #define SFX_CHILDWIN_SMALL        0x02      // halb eingeklapptes Float
@@ -196,10 +191,8 @@ public:
     void                SetPosSizePixel(const Point& rPoint, Size& rSize);
     Point               GetPosPixel()
                         { return pWindow->GetPosPixel(); }
-//<!--Modified by PengYunQuan for Validity Cell Range Picker
     virtual void                Hide();
     virtual void                Show( USHORT nFlags );
-//-->Modified by PengYunQuan for Validity Cell Range Picker
     sal_uInt16          GetFlags() const
                         { return GetInfo().nFlags; }
     sal_Bool                CanGetFocus() const;
