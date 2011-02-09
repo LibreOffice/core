@@ -135,7 +135,6 @@ void SdDLL::RegisterControllers()
     SvxBmpMaskChildWindow::RegisterChildWindow(0, pMod);
     GalleryChildWindow::RegisterChildWindow(0, pMod);
     SvxIMapDlgChildWindow::RegisterChildWindow(0, pMod);
-    SvxHyperlinkDlgWrapper::RegisterChildWindow(0, pMod, SFX_CHILDWIN_FORCEDOCK);
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
