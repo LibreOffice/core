@@ -3672,21 +3672,11 @@ throw (::com::sun::star::uno::RuntimeException)
     WriteGuard aWriteLock( m_aLock );
     m_xFrame = xFrame;
     aWriteLock.unlock();
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    // if ( xFrame.is() )
-    //    xFrame->getContainerWindow()->addWindowListener( Reference< css::awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 }
 
 void SAL_CALL LayoutManager::reset()
 throw (RuntimeException)
 {
-    sal_Bool bComponentAttached( sal_False );
-
-    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
-    ReadGuard aReadLock( m_aLock );
-    bComponentAttached = m_bComponentAttached;
-    aReadLock.unlock();
-
     implts_reset( sal_True );
 }
 
