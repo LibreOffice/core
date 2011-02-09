@@ -39,6 +39,8 @@ class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
 class SwRedlineSaveData;
+class SwFrm;
+class SwFmt;
 
 namespace sw {
     class UndoManager;
@@ -188,6 +190,7 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     virtual SwRewriter GetRewriter() const;
+    void DeRegisterFromFormat( SwFmt& );
 };
 
 

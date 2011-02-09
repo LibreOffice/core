@@ -356,7 +356,7 @@ void SwNumFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     // dann suche mal in dem Doc nach dem NumRules-Object, in dem dieses
     // NumFormat gesetzt ist. Das Format muss es nicht geben!
     const SwCharFmt* pFmt = 0;
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     switch( nWhich )
     {
     case RES_ATTRSET_CHG:

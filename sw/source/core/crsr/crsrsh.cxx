@@ -1264,7 +1264,7 @@ void SwCrsrShell::UpdateCrsrPos()
     Size aOldSz( GetDocSize() );
     SwCntntNode *pCNode = pShellCrsr->GetCntntNode();
     SwCntntFrm  *pFrm = pCNode ?
-        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), FALSE ) :0;
+        pCNode->getLayoutFrm( GetLayout(), &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False ) :0;
     if( !pFrm || (pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsHiddenNow()) )
     {
         SwCrsrMoveState aTmpState( MV_NONE );
@@ -1401,7 +1401,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
         }
 
         SwCntntFrm *pTblFrm = pPos->nNode.GetNode().GetCntntNode()->
-                              getLayoutFrm( GetLayout(), &aTmpPt, pPos, FALSE );
+                              getLayoutFrm( GetLayout(), &aTmpPt, pPos, sal_False );
 
         ASSERT( pTblFrm, "Tabelle Crsr nicht im Content ??" );
 
@@ -1642,7 +1642,7 @@ void SwCrsrShell::UpdateCrsr( sal_uInt16 eFlags, sal_Bool bIdleEnd )
                 {
                     CalcLayout();
                     pFrm = pShellCrsr->GetCntntNode()->getLayoutFrm( GetLayout(),
-                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), FALSE );
+                                &pShellCrsr->GetPtPos(), pShellCrsr->GetPoint(), sal_False );
                 }  while( !pFrm );
             }
             else if ( Imp()->IsIdleAction() )
@@ -1828,7 +1828,7 @@ void SwCrsrShell::RefreshBlockCursor()
     ASSERT( pBlockCrsr, "Don't call me without a block cursor" );
     SwShellCrsr &rBlock = pBlockCrsr->getShellCrsr();
     Point aPt = rBlock.GetPtPos();
-    SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), FALSE );
+    SwCntntFrm* pFrm = rBlock.GetCntntNode()->getLayoutFrm( GetLayout(), &aPt, rBlock.GetPoint(), sal_False );
     Point aMk;
     if( pBlockCrsr->getEndPoint() && pBlockCrsr->getStartPoint() )
     {

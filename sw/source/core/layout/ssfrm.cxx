@@ -525,7 +525,7 @@ void SwCntntFrm::DelFrms( const SwCntntNode& rNode )
         {
             SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
             pMaster->SetFollow( pFrm->GetFollow() );
-            pFrm->_SetIsFollow( FALSE );
+            pFrm->_SetIsFollow( sal_False );
         }
         pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
                                 //Andernfalls kann es sein, dass ein Follow

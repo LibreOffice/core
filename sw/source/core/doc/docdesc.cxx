@@ -483,30 +483,6 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
             }
         }
     }
-=======
-        sal_Bool bFtnInf = sal_False;
-        if ( sal_True == (bFtnInf = pLast == pFtnInfo->GetPageDescDep()) ||
-             pLast == pEndNoteInfo->GetPageDescDep() )
-        {
-            aPageDescs[0]->Add( pLast );
-            if ( GetRootFrm() )
-                GetRootFrm()->CheckFtnPageDescs( !bFtnInf );
-        }
-    }
-
-    for ( sal_uInt16 j = 0; j < aPageDescs.Count(); ++j )
-    {
-        if ( aPageDescs[j]->GetFollow() == pDel )
-        {
-            aPageDescs[j]->SetFollow( 0 );
-            //Clients des PageDesc sind die Attribute, denen sagen wir bescheid.
-            //die Attribute wiederum reichen die Meldung an die Absaetze weiter.
-
-            //Layot benachrichtigen!
-            if( GetRootFrm() )  // ist nicht immer vorhanden!! (Orginizer)
-                GetRootFrm()->CheckPageDescs( (SwPageFrm*)GetRootFrm()->Lower() );
-        }
-    }
 }
 
 // #116530#
@@ -833,7 +809,7 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                 ::SetProgressState( i, GetDocShell() );
 
                 SwOLENode* pOLENd = (*pNodes)[i];
-                pOLENd->SetOLESizeInvalid( sal_false );
+                pOLENd->SetOLESizeInvalid( sal_False );
 
                 //Kennen wir nicht, also muss das Objekt geladen werden.
                 //Wenn es keine Benachrichtigung wuenscht

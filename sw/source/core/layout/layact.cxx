@@ -1193,7 +1193,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 {
     sal_Bool bRet = sal_False;
     const ViewShell *pSh = pRoot->GetCurrShell();
-    const BOOL bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
     //Wenn die Seite nicht Gueltig ist wird sie schnell formatiert, sonst
     //gibts nix als Aerger.
@@ -1489,12 +1489,12 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                 aPaint.Bottom( aPaint.Bottom() + nBorderWidth + nShadowWidth);
             }
 
-            BOOL bPageInBrowseMode = pLay->IsPageFrm();
+            sal_Bool bPageInBrowseMode = pLay->IsPageFrm();
             if( bPageInBrowseMode )
             {
                 const ViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->getBrowseMode() )
-                    bPageInBrowseMode = FALSE;
+                    bPageInBrowseMode = sal_False;
             }
             if( bPageInBrowseMode )
             {

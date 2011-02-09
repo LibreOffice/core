@@ -179,7 +179,7 @@ void SwSectionFrm::CheckDirection( sal_Bool bVert )
     if( pFmt )
     {
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_True, bBrowseMode );
     }
@@ -193,7 +193,7 @@ void SwFlyFrm::CheckDirection( sal_Bool bVert )
     if( pFmt )
     {
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_False, bBrowseMode );
     }
@@ -207,7 +207,7 @@ void SwTabFrm::CheckDirection( sal_Bool bVert )
     if( pFmt )
     {
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir(((SvxFrameDirectionItem&)pFmt->GetFmtAttr(RES_FRAMEDIR)).GetValue(),
                     bVert, sal_True, bBrowseMode );
     }
@@ -227,7 +227,7 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
     {
         const SvxFrameDirectionItem* pFrmDirItem = static_cast<const SvxFrameDirectionItem*>(pItem);
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         CheckDir( pFrmDirItem->GetValue(), bVert, sal_False, bBrowseMode );
     }
     else
@@ -237,7 +237,7 @@ void SwCellFrm::CheckDirection( sal_Bool bVert )
 void SwTxtFrm::CheckDirection( sal_Bool bVert )
 {
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
-    const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     CheckDir( GetTxtNode()->GetSwAttrSet().GetFrmDir().GetValue(), bVert,
               sal_True, bBrowseMode );
 }
@@ -3343,7 +3343,7 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, sal_Bool ) const
         const SwFrm *pRel = GetUpper();
         long nRel = LONG_MAX;
         const ViewShell *pSh = getRootFrm()->GetCurrShell();
-        const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+        const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
         if( pRel->IsPageBodyFrm() && pSh && bBrowseMode && pSh->VisArea().Width() )
         {
             nRel = pSh->GetBrowseWidth();

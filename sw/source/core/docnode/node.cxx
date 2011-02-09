@@ -443,15 +443,16 @@ sal_Bool SwNode::IsInVisibleArea( ViewShell* pSh ) const
     else
         pNd = GetCntntNode();
 
-    const SwFrm* pFrm;
-    if( pNd && 0 != ( pFrm = pNd->GetFrm( 0, 0, sal_False ) ) )
-    {
-        if( !pSh )
-            // dann die Shell vom Doc besorgen:
-            GetDoc()->GetEditShell( &pSh );
+    if( !pSh )
+        // dann die Shell vom Doc besorgen:
+        GetDoc()->GetEditShell( &pSh );
 
-        if( pSh )
+    if( pSh )
+    {
+        const SwFrm* pFrm;
+        if( pNd && 0 != ( pFrm = pNd->getLayoutFrm( pSh->GetLayout(), 0, 0, sal_False ) ) )
         {
+
             if ( pFrm->IsInTab() )
                 pFrm = pFrm->FindTabFrm();
 

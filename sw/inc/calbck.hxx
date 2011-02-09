@@ -133,11 +133,11 @@ class SW_DLLPUBLIC SwModify: public SwClient
 //  friend class SwClientIter;
 
     SwClient* pRoot;                // the start of the linked list of clients
-    BOOL bModifyLocked : 1;         // don't broadcast changes now
-    BOOL bLockClientList : 1;       // may be set when this instance notifies its clients
-    BOOL bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
-    BOOL bInCache   : 1;
-    BOOL bInSwFntCache : 1;
+    sal_Bool bModifyLocked : 1;         // don't broadcast changes now
+    sal_Bool bLockClientList : 1;       // may be set when this instance notifies its clients
+    sal_Bool bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
+    sal_Bool bInCache   : 1;
+    sal_Bool bInSwFntCache : 1;
 
     // mba: IMHO this method should be pure virtual
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
@@ -169,8 +169,8 @@ public:
 
     void LockModify()                   { bModifyLocked = sal_True;  }
     void UnlockModify()                 { bModifyLocked = sal_False; }
-    void SetInCache( BOOL bNew )        { bInCache = bNew;       }
-    void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
+    void SetInCache( sal_Bool bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( sal_Bool bNew )   { bInSwFntCache = bNew;  }
     void SetInDocDTOR()                 { bInDocDTOR = sal_True; }
     sal_Bool IsModifyLocked() const     { return bModifyLocked;  }
     sal_Bool IsInDocDTOR()    const     { return bInDocDTOR;     }

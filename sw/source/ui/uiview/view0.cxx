@@ -224,7 +224,7 @@ void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 void SwView::RecheckBrowseMode()
 {
     // OS: numerische Reihenfolge beachten!
-    static USHORT __READONLY_DATA aInva[] =
+    static sal_uInt16 __READONLY_DATA aInva[] =
         {
             //SID_NEWWINDOW,/*5620*/
             SID_BROWSER_MODE, /*6313*/

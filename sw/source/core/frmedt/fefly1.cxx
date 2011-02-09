@@ -1780,7 +1780,7 @@ const SwFrmFmt* SwFEShell::GetFmtFromAnyObj( const Point& rPt ) const
         Point aPt( rPt );
         GetLayout()->GetCrsrOfst( &aPos, aPt );
         SwCntntNode *pNd = aPos.nNode.GetNode().GetCntntNode();
-        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, FALSE )->FindFlyFrm();
+        SwFrm* pFrm = pNd->getLayoutFrm( GetLayout(), &rPt, 0, sal_False )->FindFlyFrm();
         pRet = pFrm ? ((SwLayoutFrm*)pFrm)->GetFmt() : 0;
     }
     return pRet;

@@ -130,10 +130,10 @@ const SwRect& SwFEShell::GetAnyCurRect( CurRectType eType, const Point* pPt,
         {
             const bool bOldCallbackActionEnabled = GetLayout()->IsCallbackActionEnabled();
             if( bOldCallbackActionEnabled )
-                GetLayout()->SetCallbackActionEnabled( FALSE );
+                GetLayout()->SetCallbackActionEnabled( sal_False );
             pFrm = GetCurrFrm();
             if( bOldCallbackActionEnabled )
-                GetLayout()->SetCallbackActionEnabled( TRUE );
+                GetLayout()->SetCallbackActionEnabled( sal_True );
         }
     }
 

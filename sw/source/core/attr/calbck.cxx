@@ -102,21 +102,21 @@ sal_Bool SwClient::GetInfo( SfxPoolItem& ) const
 SwModify::SwModify()
     : SwClient(0), pRoot(0)
 {
-    bModifyLocked = FALSE;
-    bLockClientList = FALSE;
-    bInDocDTOR = FALSE;
-    bInCache = FALSE;
-    bInSwFntCache = FALSE;
+    bModifyLocked = sal_False;
+    bLockClientList = sal_False;
+    bInDocDTOR = sal_False;
+    bInCache = sal_False;
+    bInSwFntCache = sal_False;
 }
 
 SwModify::SwModify( SwModify *pToRegisterIn )
     : SwClient(pToRegisterIn), pRoot( 0 )
 {
-    bModifyLocked = FALSE;
-    bLockClientList = FALSE;
-    bInDocDTOR = FALSE;
-    bInCache = FALSE;
-    bInSwFntCache = FALSE;
+    bModifyLocked = sal_False;
+    bLockClientList = sal_False;
+    bInDocDTOR = sal_False;
+    bInCache = sal_False;
+    bInSwFntCache = sal_False;
 }
 
 /*************************************************************************/

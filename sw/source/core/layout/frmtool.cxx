@@ -1240,7 +1240,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
 {
     pDoc->BlockIdling();
     SwRootFrm* pLayout = pLay->getRootFrm();
-    const BOOL bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
+    const sal_Bool bOldCallbackActionEnabled = pLayout ? pLayout->IsCallbackActionEnabled() : sal_False;
     if( bOldCallbackActionEnabled )
         pLayout->SetCallbackActionEnabled( sal_False );
 

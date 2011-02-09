@@ -1087,7 +1087,7 @@ void SwDrawView::DeleteMarked()
     SwRootFrm *pTmpRoot = pDoc->GetCurrentLayout();//swmod 080317
     if ( pTmpRoot )
         pTmpRoot->StartAllAction();
-    pDoc->StartUndo(UNDO_EMPTY, NULL);
+    pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_EMPTY, NULL);
     // OD 18.06.2003 #108784# - replace marked <SwDrawVirtObj>-objects by its
     // reference objects.
     {
@@ -1106,7 +1106,7 @@ void SwDrawView::DeleteMarked()
         FmFormView::DeleteMarked();
         ::FrameNotify( Imp().GetShell(), FLY_DRAG_END );
     }
-    pDoc->EndUndo(UNDO_EMPTY, NULL);
+    pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
     if( pTmpRoot )
         pTmpRoot->EndAllAction();   //swmod 080218
 }

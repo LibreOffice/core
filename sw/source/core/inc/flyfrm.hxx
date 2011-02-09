@@ -60,7 +60,7 @@ sal_Bool CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, sal_Bool bMove =
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
-    friend void AppendObjs   ( const SwSpzFrmFmts *, ULONG, SwFrm *, SwPageFrm * );
+    friend void AppendObjs   ( const SwSpzFrmFmts *, sal_uLong, SwFrm *, SwPageFrm * );
     friend void Notify( SwFlyFrm *, SwPageFrm *pOld, const SwRect &rOld,
                         const SwRect* pOldPrt );
 

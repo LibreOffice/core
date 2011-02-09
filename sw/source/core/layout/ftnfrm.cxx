@@ -371,7 +371,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, sal_Bool bTst, sal_Bool )
         }
     }
     const ViewShell *pSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
-    const BOOL bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
+    const sal_Bool bBrowseMode = pSh && pSh->GetViewOptions()->getBrowseMode();
     SwPageFrm *pPage = pBoss->FindPageFrm();
     if ( bBrowseMode || !pPage->IsFtnPage() )
     {

@@ -425,7 +425,7 @@ SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
     SdrPage* pPg( 0L );
     if ( 0 != ( pPg = pContact->GetMaster()->GetPage() ) )
     {
-        const UINT32 nOrdNum = pContact->GetMaster()->GetOrdNum();
+        const sal_uInt32 nOrdNum = pContact->GetMaster()->GetOrdNum();
         pPg->ReplaceObject( pDrawObj, nOrdNum );
     }
     // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance

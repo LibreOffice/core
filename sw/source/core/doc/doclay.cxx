@@ -1954,7 +1954,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
                 break;
             }
         }
-        BOOL bAllValid = pLayIter == aAllLayouts.end() ? 1 : 0;
+        bool bAllValid = pLayIter == aAllLayouts.end() ? 1 : 0;
         if( bAllValid && ( AUTOUPD_FIELD_ONLY ==
                  ( nFldUpdFlag = getFieldUpdateFlags(true) )
                     || AUTOUPD_FIELD_AND_CHARTS == nFldUpdFlag ) &&

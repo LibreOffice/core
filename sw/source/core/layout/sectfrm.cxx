@@ -2043,7 +2043,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, sal_Bool bTst )
 
         sal_Bool bInCalcCntnt = GetUpper() && IsInFly() && FindFlyFrm()->IsLocked();
         // OD 2004-03-15 #116561# - allow grow in online layout
-        BOOL bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
+        sal_Bool bGrow = !Lower() || !Lower()->IsColumnFrm() || !Lower()->GetNext() ||
              GetSection()->GetFmt()->GetBalancedColumns().GetValue();
         if( !bGrow )
         {
@@ -2482,7 +2482,7 @@ void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
     {
-        SwSectionFrm::MoveCntntAndDelete( this, TRUE );
+        SwSectionFrm::MoveCntntAndDelete( this, sal_True );
     }
 }
 

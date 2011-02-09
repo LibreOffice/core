@@ -160,7 +160,7 @@ SfxDocumentInfoDialog* SwDocShell::CreateDocumentInfoDialog(
 
 // Disable "multiple layout"
 
-void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
+void    SwDocShell::ToggleBrowserMode(sal_Bool bSet, SwView* _pView )
 {
     GetDoc()->set(IDocumentSettingAccess::BROWSE_MODE, bSet );
     UpdateFontList();
@@ -171,19 +171,19 @@ void    SwDocShell::ToggleBrowserMode(BOOL bSet, SwView* _pView )
         if( !GetDoc()->getPrinter( false ) )
             pTempView->SetPrinter( GetDoc()->getPrinter( false ), SFX_PRINTER_PRINTER | SFX_PRINTER_JOBSETUP );
         GetDoc()->CheckDefaultPageFmt();
-        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
+        SfxViewFrame *pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
         do {
             if( pTmpFrm != pTempView->GetViewFrame() )
             {
                 pTmpFrm->DoClose();
-                pTmpFrm = SfxViewFrame::GetFirst(this, FALSE);
+                pTmpFrm = SfxViewFrame::GetFirst(this, sal_False);
             }
             else
-                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, FALSE);
+                pTmpFrm = pTmpFrm->GetNext(*pTmpFrm, this, sal_False);
 
         } while ( pTmpFrm );
         const SwViewOption& rViewOptions = *pTempView->GetWrtShell().GetViewOptions();
-        pTempView->GetWrtShell().CheckBrowseView( TRUE );
+        pTempView->GetWrtShell().CheckBrowseView( sal_True );
         pTempView->CheckVisArea();
         if( bSet )
         {

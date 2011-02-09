@@ -612,7 +612,7 @@ void SwRootFrm::AllRemoveFtns()
 {
     RemoveFtns();
 }
-void SwRootFrm::AllInvalidateSmartTagsOrSpelling(BOOL bSmartTags) const
+void SwRootFrm::AllInvalidateSmartTagsOrSpelling(sal_Bool bSmartTags) const
 {
     SwPageFrm *pPage = (SwPageFrm*)this->Lower();
     while ( pPage )

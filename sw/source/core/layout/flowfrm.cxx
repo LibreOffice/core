@@ -1241,7 +1241,7 @@ sal_Bool SwFlowFrm::IsPageBreak( sal_Bool bAct ) const
     {
         const ViewShell *pSh = rThis.getRootFrm()->GetCurrShell();
         if( pSh && pSh->GetViewOptions()->getBrowseMode() )
-            return FALSE;
+            return sal_False;
         const SwAttrSet *pSet = rThis.GetAttrSet();
 
         //Vorgaenger ermitteln

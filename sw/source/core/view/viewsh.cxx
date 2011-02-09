@@ -2362,7 +2362,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         // page descriptions are still set to (LONG_MAX, LONG_MAX) (html import)
         pDoc->CheckDefaultPageFmt();
         // <--
-        CheckBrowseView( TRUE );
+        CheckBrowseView( sal_True );
     }
 
     pMyWin->Invalidate();

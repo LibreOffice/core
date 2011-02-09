@@ -746,7 +746,6 @@ void SwView::_CheckReadonlySelection()
 
 SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     : SfxViewShell( _pFrame, SWVIEWFLAGS ),
-
     aPageStr( SW_RES( STR_PAGE )),
     nNewPage(USHRT_MAX),
     pNumRuleNodeFromDoc(0), // #i23726#
@@ -827,9 +826,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
 
     //! get lingu options without loading lingu DLL
     SvtLinguOptions aLinguOpt;
-
     SvtLinguConfig().GetOptions( aLinguOpt );
-
     aUsrPref.SetOnlineSpell( aLinguOpt.bIsSpellAuto );
 
     sal_Bool bOldShellWasSrcView = sal_False;
@@ -840,16 +837,17 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if ( pOldSh )
     {
         pExistingSh = pOldSh;
-    // determine type of existing view
+        // determine type of existing view
         if( pExistingSh->IsA( TYPE( SwPagePreView ) ) )
-    {
-        sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
-        sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
-        nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
-        bOldShellWasPagePreView = sal_True;
+        {
+            sSwViewData = ((SwPagePreView*)pExistingSh)->GetPrevSwViewData();
+            sNewCrsrPos = ((SwPagePreView*)pExistingSh)->GetNewCrsrPos();
+            nNewPage = ((SwPagePreView*)pExistingSh)->GetNewPage();
+            bOldShellWasPagePreView = sal_True;
+        }
+        else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
+            bOldShellWasSrcView = sal_True;
     }
-    else if( pExistingSh->IsA( TYPE( SwSrcView ) ) )
-        bOldShellWasSrcView = sal_True;
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "before create WrtShell" );
     if(PTR_CAST( SwView, pExistingSh))
@@ -867,7 +865,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
         SwDoc& rDoc = *((SwDocShell*)pDocSh)->GetDoc();
 
         if( !bOldShellWasSrcView && pWebDShell && !bOldShellWasPagePreView )
-            aUsrPref.setBrowseMode( TRUE );
+            aUsrPref.setBrowseMode( sal_True );
         else if( rDoc.IsLoaded() )
             aUsrPref.setBrowseMode( rDoc.get(IDocumentSettingAccess::BROWSE_MODE) );
 
@@ -1041,10 +1039,6 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     }
 
 
-    /*uno::Reference< awt::XWindow >  aTmpRef;
-    _pFrame->GetFrame().GetFrameInterface()->setComponent( aTmpRef,
-                                            pViewImpl->GetUNOObject_Impl());*/
-
    uno::Reference< frame::XFrame >  xFrame = pVFrame->GetFrame().GetFrameInterface();
 
     uno::Reference< frame::XFrame >  xBeamerFrame = xFrame->findFrame(
@@ -1068,13 +1062,7 @@ SwView::SwView( SfxViewFrame *_pFrame, SfxViewShell* pOldSh )
     if(bOldModifyFlag)
         pDocSh->EnableSetModified( sal_True );
     InvalidateBorder();
-
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 
 SwView::~SwView()
 {
@@ -1122,11 +1110,6 @@ SwView::~SwView()
     delete pEditWin;
     delete pFormatClipboard;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:   DocShell rausgrabbeln ueber das FrameWindow
- --------------------------------------------------------------------*/
-
 
 SwDocShell* SwView::GetDocShell()
 {

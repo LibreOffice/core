@@ -893,7 +893,7 @@ sal_uInt16 SwRootFrm::GetCurrPage( const SwPaM *pActualCrsr ) const
 {
     ASSERT( pActualCrsr, "Welche Seite soll's denn sein?" );
     SwFrm const*const pActFrm = pActualCrsr->GetPoint()->nNode.GetNode().
-                                    GetCntntNode()->GetFrm( 0,
+                                    GetCntntNode()->getLayoutFrm( this, 0,
                                                     pActualCrsr->GetPoint(),
                                                     sal_False );
     return pActFrm->FindPageFrm()->GetPhyPageNum();
