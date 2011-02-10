@@ -965,6 +965,13 @@ namespace
             };
             sSampleText = rtl::OUString(aHani, SAL_N_ELEMENTS(aHani));
         }
+        else if (nScript == MKTAG("hang"))
+        {
+            const sal_Unicode aHang[] = {
+                0xD55C, 0xAE00
+            };
+            sSampleText = rtl::OUString(aHang, SAL_N_ELEMENTS(aHang));
+        }
         else if (nScript == MKTAG("hebr"))
         {
             const sal_Unicode aHebr[] = {
@@ -1095,8 +1102,12 @@ namespace
             return aTmp[0];
 
         aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("deva")), aTmp.end());
-
         //Probably strongly tuned for a single Indic script
+        if (aTmp.size() == 1)
+            return aTmp[0];
+
+        aTmp.erase(std::remove(aTmp.begin(), aTmp.end(), MKTAG("jamo")), aTmp.end());
+        //Probably strongly tuned for a single CJK script (Korean)
         if (aTmp.size() == 1)
             return aTmp[0];
 
@@ -1106,6 +1117,7 @@ namespace
             if ((aTmp[0] | aTmp[1]) == nHaniKaniTag)
                 return nHaniKaniTag;
         }
+
         return 0;
     }
 
@@ -1332,13 +1344,14 @@ void FontNameBox::UserDraw( const UserDrawEvent& rUDEvt )
             {
                 MKTAG("arab"), MKTAG("hebr"),
 
+                (MKTAG("hani")|MKTAG("kana")), MKTAG("hani"), MKTAG("kana"),
+                MKTAG("hang"),
+
                 MKTAG("beng"), MKTAG("gujr"), MKTAG("guru"), MKTAG("knda"),
                 MKTAG("mlym"), MKTAG("mymr"), MKTAG("orya"), MKTAG("taml"),
                 MKTAG("telu"), MKTAG("sinh"),
 
                 MKTAG("tibt"), MKTAG("thai"), MKTAG("khmr"), MKTAG("ethi"),
-
-                (MKTAG("hani")|MKTAG("kana")), MKTAG("hani"), MKTAG("kana"),
 
                 MKTAG("deva"),
 
