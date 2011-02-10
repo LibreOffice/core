@@ -39,7 +39,8 @@ SHL1TARGET=test_tools
 SHL1OBJS=\
     $(SLO)$/pathutils.obj \
     $(SLO)$/test_pathutils.obj \
-    $(SLO)$/test_reversemap.obj
+    $(SLO)$/test_reversemap.obj \
+    $(SLO)$/test_strings.obj
 SHL1STDLIBS = $(TOOLSLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)

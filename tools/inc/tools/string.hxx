@@ -301,6 +301,7 @@ public:
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareTo( const sal_Char* pCharStr,
                                    xub_StrLen nLen = STRING_LEN ) const;
+    StringCompare       CompareToNumeric( const ByteString& rStr ) const;
     StringCompare       CompareIgnoreCaseToAscii( const ByteString& rStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Char* pCharStr,
@@ -597,6 +598,7 @@ public:
                                    xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareToAscii( const sal_Char* pAsciiStr,
                                         xub_StrLen nLen = STRING_LEN ) const;
+    StringCompare       CompareToNumeric( const UniString& rStr ) const;
     StringCompare       CompareIgnoreCaseToAscii( const UniString& rStr,
                                                   xub_StrLen nLen = STRING_LEN ) const;
     StringCompare       CompareIgnoreCaseToAscii( const sal_Unicode* pCharStr,
