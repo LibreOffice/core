@@ -48,7 +48,6 @@ my ( $outfile, $bootfile, $newline, $comment,
 #-------------------------------------------------
 #
 # Platform independent constant values.
-my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
@@ -1576,29 +1575,6 @@ ToFile( "Empty",             $empty,             "n" );
 # Writing the platform independent constant values to file.
 # (c = comment, e = environment variable, a = alias )
 ToFile( "Platform independent constant values.", $empty, "c" );
-# dictionaries
-if ('@WITH_DICT@' =~ m/ALL,/s)
-{
-   foreach $dict (@DICTIONARIES)
-   {
-      ToFile( "DIC_$dict",     "TRUE",          "e" );
-   }
-   ToFile( "DIC_ALL",          "TRUE",          "e" );
-}
-else
-{	
-   foreach $dict (@DICTIONARIES)
-   {   if ('@WITH_DICT@' =~ m/$dict,/s)
-       {   my $val="TRUE";
-           ToFile( "DIC_$dict",     $val,          "e" );
-       }
-       else
-       {   my $val;
-           undef $val;
-           ToFile( "DIC_$dict",     $val,          "e" );
-       }
-   }
-}
 # Languages
 ToFile( "WITH_LANG",         "@WITH_LANG@",      "e" );
 ToFile( "INTRO_BITMAP",      "@INTRO_BITMAP@",   "e" );

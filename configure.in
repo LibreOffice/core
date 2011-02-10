@@ -1168,17 +1168,6 @@ AC_ARG_WITH(poor-help-localizations,
     ],
 ,)
 
-AC_ARG_WITH(dict,
-    AS_HELP_STRING([--with-dict],
-        [Use this option to build LibreOffice with dictionary support.
-         ALL dictionaries are always included by default unless overridden with this option.
-         Separate multiple dictionaries with commas.
-         For all dictionaries, use --with-dict=ALL.])
-    [
-                          Usage:     --with-dict=ENGB,ENUS,ITIT
-    ],
-,)
-
 AC_ARG_WITH(intro-bitmap,
 [  --with-intro-bitmap    Prefer the specified intro bitmap over the
                           the default one.
@@ -7750,16 +7739,6 @@ else
    AC_MSG_RESULT([$WITH_POOR_HELP_LOCALIZATIONS])
 fi
 AC_SUBST(WITH_POOR_HELP_LOCALIZATIONS)
-
-AC_MSG_CHECKING([which dictionaries to include])
-if test -z "$with_dict"; then
-   WITH_DICT=,ALL,
-   AC_MSG_RESULT([ALL])
-else
-   WITH_DICT=","$with_dict","
-   AC_MSG_RESULT([$with_dict])
-fi
-AC_SUBST(WITH_DICT)
 
 AC_MSG_CHECKING([for another 'intro' bitmap])
 INTRO_BITMAP=
