@@ -57,6 +57,8 @@ private:
 
     bool createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                         const ::rtl::OUString & rControlName);
+    bool createDropdown(uno::Reference<text::XTextRange> xTextRange,
+                        const ::rtl::OUString & rControlName);
 };
 
 }

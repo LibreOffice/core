@@ -1833,7 +1833,7 @@ if(!bFilled)
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILESIZE")),      "",                         "", FIELD_FILESIZE     },
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMULA")),     "",                           "", FIELD_FORMULA },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMCHECKBOX")),     "",                           "", FIELD_FORMCHECKBOX},
-//            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROWDOWN},
+            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMDROPDOWN")),     "",                           "", FIELD_FORMDROPDOWN},
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FORMTEXT")),     "Input", "", FIELD_FORMTEXT},
 //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GOTOBUTTON")),    "",                         "", FIELD_GOTOBUTTON   },
             {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HYPERLINK")),     "",                         "", FIELD_HYPERLINK    },
@@ -2320,6 +2320,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                 case FIELD_TOC:
                 case FIELD_TC:
                 case FIELD_FORMCHECKBOX:
+                case FIELD_FORMDROPDOWN:
                     bCreateField = false;
                     break;
                 default:
@@ -2419,17 +2420,20 @@ void DomainMapper_Impl::CloseFieldCommand()
                     case FIELD_FILESIZE     : break;
                     case FIELD_FORMULA : break;
                     case FIELD_FORMCHECKBOX :
+                    case FIELD_FORMDROPDOWN :
                         {
                             FFDataHandler::Pointer_t
                                 pFFDataHandler(pContext->getFFDataHandler());
+                            FieldId eFieldId = FIELD_FORMCHECKBOX;
+                            if ( aIt->second.eFieldId == FIELD_FORMDROPDOWN )
+                                eFieldId = FIELD_FORMDROPDOWN;
                             FormControlHelper::Pointer_t
                                 pFormControlHelper(new FormControlHelper
-                                                   (FIELD_FORMCHECKBOX,
+                                                   (eFieldId,
                                                     m_xTextDocument, pFFDataHandler));
                             pContext->setFormControlHelper(pFormControlHelper);
                         }
                         break;
-                    case FIELD_FORMDROPDOWN : break;
                     case FIELD_FORMTEXT :
                     {
                         FFDataHandler::Pointer_t pFFDataHandler

@@ -153,6 +153,91 @@ FormControlHelper::~FormControlHelper()
 {
 }
 
+bool FormControlHelper::createDropdown(uno::Reference<text::XTextRange> xTextRange,
+                                       const ::rtl::OUString & rControlName)
+{
+    uno::Reference<lang::XMultiServiceFactory>
+        xServiceFactory(m_pImpl->getServiceFactory());
+
+    if (! xServiceFactory.is())
+        return false;
+
+    uno::Reference<uno::XInterface> xInterface =
+        xServiceFactory->createInstance
+        (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.ComboBox")));
+
+    if (!xInterface.is())
+        return false;
+
+    m_pImpl->rFormComponent = uno::Reference<form::XFormComponent>(xInterface, uno::UNO_QUERY);
+    if (!m_pImpl->rFormComponent.is())
+        return false;
+
+    uno::Reference<beans::XPropertySet> xPropSet(xInterface, uno::UNO_QUERY);
+
+    uno::Any aAny;
+
+    aAny <<= rControlName;
+    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aAny);
+    xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dropdown")), uno::makeAny( sal_True ));
+
+    uno::Sequence< rtl::OUString > sItems;
+
+    sal_Int32 nMaxChars = 0;
+    if ( m_pFFData->getDropDownEntries().size() )
+    {
+        sItems.realloc( m_pFFData->getDropDownEntries().size() );
+        FFDataHandler::DropDownEntries_t::const_iterator it_end =  m_pFFData->getDropDownEntries().end();
+        FFDataHandler::DropDownEntries_t::const_iterator it =  m_pFFData->getDropDownEntries().begin();
+
+        rtl::OUString* pItem = sItems.getArray();
+
+        for( ;it != it_end; ++it, ++pItem )
+        {
+           *pItem = *it;
+           if ( (*pItem).getLength() > nMaxChars )
+               nMaxChars = (*pItem).getLength();
+        }
+    }
+
+    if ( sItems.getLength() )
+    {
+        aAny <<= sItems;
+        xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringItemList")), aAny);
+        if ( m_pFFData->getDropDownResult().getLength() )
+        {
+            sal_Int32 nResult = m_pFFData->getDropDownResult().toInt32();
+            if ( nResult )
+            {
+                aAny <<= sItems[ nResult ];
+                xPropSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")), aAny);
+            }
+        }
+    }
+
+    // #FIXME improve the auto height width calculation
+    // some fallback values ( to display something )
+
+    m_pImpl->aSize.Width = 2381;
+    m_pImpl->aSize.Height = 713;
+
+    try
+    {
+        uno::Reference<beans::XPropertySet> xTextRangeProps(xTextRange, uno::UNO_QUERY_THROW);
+        static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
+        float fComboBoxHeight = 0.0;
+        xTextRangeProps->getPropertyValue(sCharHeight) >>= fComboBoxHeight;
+        m_pImpl->aSize.Height = floor(fComboBoxHeight * 35.3);
+        if ( nMaxChars )
+            m_pImpl->aSize.Width = floor(  m_pImpl->aSize.Height * nMaxChars );
+    }
+    catch( uno::Exception& e )
+    {
+    }
+    return true;
+}
+
+
 bool FormControlHelper::createCheckbox(uno::Reference<text::XTextRange> xTextRange,
                                        const ::rtl::OUString & rControlName)
 {
@@ -250,6 +335,9 @@ bool FormControlHelper::insertControl(uno::Reference<text::XTextRange> xTextRang
 
     switch (m_pImpl->m_eFieldId)
     {
+    case FIELD_FORMDROPDOWN:
+        bCreated = createDropdown(xTextRange, sControlName);
+        break;
     case FIELD_FORMCHECKBOX:
         bCreated = createCheckbox(xTextRange, sControlName);
         break;

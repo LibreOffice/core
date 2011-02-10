@@ -15282,7 +15282,7 @@
       <define name="CT_FFDDList">
         <optional>
           <element name="result">
-            <ref name="CT_DecimalNumber"/>
+            <ref name="CT_String"/>
           </element>
         </optional>
         <optional>
