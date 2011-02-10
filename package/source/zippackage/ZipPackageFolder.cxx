@@ -319,7 +319,6 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
     const OUString sDigestProperty ( RTL_CONSTASCII_USTRINGPARAM ( "Digest" ) );
 
     Sequence < PropertyValue > aPropSet (PKG_SIZE_NOENCR_MNFST);
-    ZipPackageStream *pStream = NULL;
 
     OSL_ENSURE( ( rInfo.bFolder && rInfo.pFolder ) || ( !rInfo.bFolder && rInfo.pStream ), "A valid child object is expected!" );
     if ( rInfo.bFolder )
