@@ -610,7 +610,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         {
             if ( ((*it)->mbFullScreen == true) )
                 bIsFullScreenMode = true;
-            it++;
+            ++it;
         }
 
         switch ([pEvent data1])
