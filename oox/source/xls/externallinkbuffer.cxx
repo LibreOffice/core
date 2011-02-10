@@ -242,9 +242,9 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
             // cell references to other internal sheets are stored in hidden external names
             if( bHiddenRef && (getBiff() == BIFF4) && isWorkbookFile() )
             {
-                TokensFormulaContext aContext( true, true );
-                importBiffFormula( aContext, mrParentLink.getCalcSheetIndex(), rStrm );
-                extractReference( aContext.getTokens() );
+                CellAddress aBaseAddr( mrParentLink.getCalcSheetIndex(), 0, 0 );
+                ApiTokenSequence aTokens = importBiffFormula( aBaseAddr, rStrm );
+                extractReference( aTokens );
             }
         break;
 
@@ -252,9 +252,8 @@ void ExternalName::importExternalName( BiffInputStream& rStrm )
             // cell references to other documents are stored in hidden external names
             if( bHiddenRef )
             {
-                TokensFormulaContext aContext( true, true );
-                importBiffFormula( aContext, 0, rStrm );
-                extractExternalReference( aContext.getTokens() );
+                ApiTokenSequence aTokens = importBiffFormula( CellAddress(), rStrm );
+                extractExternalReference( aTokens );
             }
         break;
 

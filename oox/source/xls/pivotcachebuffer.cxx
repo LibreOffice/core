@@ -44,6 +44,7 @@
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/pivotcachefragment.hxx"
+#include "oox/xls/sheetdatabuffer.hxx"
 #include "oox/xls/tablebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
@@ -936,7 +937,8 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
 void PivotCacheField::writeSourceHeaderCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow ) const
 {
-    rSheetHelper.setStringCell( rSheetHelper.getCell( CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow ) ), maFieldModel.maName );
+    CellAddress aCellAddr( rSheetHelper.getSheetIndex(), nCol, nRow );
+    rSheetHelper.getSheetData().setStringCell( rSheetHelper.getCell( aCellAddr ), aCellAddr, maFieldModel.maName );
 }
 
 void PivotCacheField::writeSourceDataCell( WorksheetHelper& rSheetHelper, sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
@@ -982,15 +984,17 @@ void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
 {
     if( rItem.getType() != XML_m )
     {
-        Reference< XCell > xCell = rSheetHelper.getCell( CellAddress( rSheetHelper.getSheetIndex(), nCol, nRow ) );
+        CellAddress aCellAddr( rSheetHelper.getSheetIndex(), nCol, nRow );
+        SheetDataBuffer& rSheetData = rSheetHelper.getSheetData();
+        Reference< XCell > xCell = rSheetHelper.getCell( aCellAddr );
         if( xCell.is() ) switch( rItem.getType() )
         {
-            case XML_s: rSheetHelper.setStringCell( xCell, rItem.getValue().get< OUString >() );                                break;
-            case XML_n: xCell->setValue( rItem.getValue().get< double >() );                                                    break;
-            case XML_i: xCell->setValue( rItem.getValue().get< sal_Int16 >() );                                                 break;
-            case XML_d: rSheetHelper.setDateTimeCell( xCell, rItem.getValue().get< DateTime >() );                              break;
-            case XML_b: rSheetHelper.setBooleanCell( xCell, rItem.getValue().get< bool >() );                                   break;
-            case XML_e: rSheetHelper.setErrorCell( xCell, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) );    break;
+            case XML_s: rSheetData.setStringCell( xCell, aCellAddr, rItem.getValue().get< OUString >() );                               break;
+            case XML_n: rSheetData.setValueCell( xCell, aCellAddr, rItem.getValue().get< double >() );                                  break;
+            case XML_i: rSheetData.setValueCell( xCell, aCellAddr, rItem.getValue().get< sal_Int16 >() );                               break;
+            case XML_d: rSheetData.setDateTimeCell( xCell, aCellAddr, rItem.getValue().get< DateTime >() );                             break;
+            case XML_b: rSheetData.setBooleanCell( xCell, aCellAddr, rItem.getValue().get< bool >() );                                  break;
+            case XML_e: rSheetData.setErrorCell( xCell, aCellAddr, static_cast< sal_uInt8 >( rItem.getValue().get< sal_Int32 >() ) );   break;
             default:    OSL_ENSURE( false, "PivotCacheField::writeItemToSourceDataCell - unexpected item data type" );
         }
     }

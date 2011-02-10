@@ -222,8 +222,10 @@ void WorkbookFragment::finalizeImport()
     /*  Create fragments for all sheets, before importing them. Needed to do
         some preprocessing in the fragment constructors, e.g. loading the table
         fragments for all sheets that are needed before the cell formulas are
-        loaded. */
-    typedef ::std::vector< FragmentHandlerRef > SheetFragmentVector;
+        loaded. Additionally, the instances of the WorkbookGlobals structures
+        have to be stored for every sheet. */
+    typedef ::std::pair< WorksheetGlobalsRef, FragmentHandlerRef > SheetFragmentHandler;
+    typedef ::std::vector< SheetFragmentHandler > SheetFragmentVector;
     SheetFragmentVector aSheetFragments;
     WorksheetBuffer& rWorksheets = getWorksheets();
     sal_Int32 nWorksheetCount = rWorksheets.getWorksheetCount();
@@ -238,34 +240,49 @@ void WorkbookFragment::finalizeImport()
             OSL_ENSURE( aFragmentPath.getLength() > 0, "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( aFragmentPath.getLength() > 0 )
             {
-                ::rtl::Reference< WorksheetFragmentBase > xFragment;
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
-                // create the fragment according to the sheet type
+                // get the sheet type according to the relations type
+                WorksheetType eSheetType = SHEETTYPE_EMPTYSHEET;
                 if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) )
-                {
-                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_WORKSHEET, nCalcSheet ) );
-                }
+                    eSheetType = SHEETTYPE_WORKSHEET;
                 else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "chartsheet" ) )
-                {
-                    xFragment.set( new ChartsheetFragment( *this, aFragmentPath, xSheetSegment, nCalcSheet ) );
-                }
+                    eSheetType = SHEETTYPE_CHARTSHEET;
                 else if( (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlMacrosheet" )) ||
                          (pRelation->maType == CREATE_MSOFFICE_RELATION_TYPE( "xlIntlMacrosheet" )) )
-                {
-                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_MACROSHEET, nCalcSheet ) );
-                }
+                    eSheetType = SHEETTYPE_MACROSHEET;
                 else if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "dialogsheet" ) )
+                    eSheetType = SHEETTYPE_DIALOGSHEET;
+                OSL_ENSURE( eSheetType != SHEETTYPE_EMPTYSHEET, "WorkbookFragment::finalizeImport - unknown sheet type" );
+                if( eSheetType != SHEETTYPE_EMPTYSHEET )
                 {
-                    xFragment.set( new WorksheetFragment( *this, aFragmentPath, xSheetSegment, SHEETTYPE_DIALOGSHEET, nCalcSheet ) );
-                }
+                    // create the WorksheetGlobals object
+                    WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetSegment, eSheetType, nCalcSheet );
+                    OSL_ENSURE( xSheetGlob.get(), "WorkbookFragment::finalizeImport - missing sheet in document" );
+                    if( xSheetGlob.get() )
+                    {
+                        // create the sheet fragment handler
+                        ::rtl::Reference< WorksheetFragmentBase > xFragment;
+                        switch( eSheetType )
+                        {
+                            case SHEETTYPE_WORKSHEET:
+                            case SHEETTYPE_MACROSHEET:
+                            case SHEETTYPE_DIALOGSHEET:
+                                xFragment.set( new WorksheetFragment( *xSheetGlob, aFragmentPath ) );
+                            break;
+                            case SHEETTYPE_CHARTSHEET:
+                                xFragment.set( new ChartsheetFragment( *xSheetGlob, aFragmentPath ) );
+                            break;
+                            default:
+                                OSL_ENSURE( false, "WorkbookFragment::finalizeImport - unexpected sheet type" );
+                        }
 
-                // insert the fragment into the map
-                OSL_ENSURE( xFragment.is(), "WorkbookFragment::finalizeImport - unknown sheet type" );
-                OSL_ENSURE( !xFragment.is() || xFragment->isValidSheet(), "WorkbookFragment::finalizeImport - missing sheet in document" );
-                if( xFragment.is() && xFragment->isValidSheet() )
-                    aSheetFragments.push_back( xFragment.get() );
+                        // insert the fragment into the map
+                        if( xFragment.is() )
+                            aSheetFragments.push_back( SheetFragmentHandler( xSheetGlob, xFragment.get() ) );
+                    }
+                }
             }
         }
     }
@@ -278,9 +295,10 @@ void WorkbookFragment::finalizeImport()
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {
         // import the sheet fragment
-        importOoxFragment( *aIt );
-        // delete fragment object, will free all allocated sheet buffers
-        aIt->clear();
+        importOoxFragment( aIt->second );
+        // delete fragment object and WorkbookGlobals object, will free all allocated sheet buffers
+        aIt->second.clear();
+        aIt->first.reset();
     }
 
     // open the VBA project storage
@@ -715,26 +733,32 @@ bool BiffWorkbookFragment::importSheetFragment( ISegmentProgressBar& rProgressBa
         break;
     }
 
-    // create the worksheet fragment
+    // create the WorksheetGlobals object
     ISegmentProgressBarRef xSheetProgress = rProgressBar.createSegment( rProgressBar.getFreeLength() );
+    WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetProgress, eSheetType, nCalcSheet );
+    OSL_ENSURE( xSheetGlob.get(), "BiffWorkbookFragment::importSheetFragment - missing sheet in document" );
+    if( !xSheetGlob.get() )
+        return false;
+
+    // create the worksheet fragment
     ::boost::shared_ptr< BiffWorksheetFragmentBase > xFragment;
     switch( eSheetType )
     {
         case SHEETTYPE_WORKSHEET:
         case SHEETTYPE_MACROSHEET:
         case SHEETTYPE_DIALOGSHEET:
-            xFragment.reset( new BiffWorksheetFragment( *this, xSheetProgress, eSheetType, nCalcSheet ) );
+            xFragment.reset( new BiffWorksheetFragment( *xSheetGlob, *this ) );
         break;
         case SHEETTYPE_CHARTSHEET:
-            xFragment.reset( new BiffChartsheetFragment( *this, xSheetProgress, nCalcSheet ) );
+            xFragment.reset( new BiffChartsheetFragment( *xSheetGlob, *this ) );
         break;
         case SHEETTYPE_MODULESHEET:
         case SHEETTYPE_EMPTYSHEET:
-            xFragment.reset( new BiffSkipWorksheetFragment( *this, xSheetProgress, nCalcSheet ) );
+            xFragment.reset( new BiffSkipWorksheetFragment( *xSheetGlob, *this ) );
         break;
     }
     // load the sheet fragment records
-    return xFragment->isValidSheet() && xFragment->importFragment();
+    return xFragment.get() && xFragment->importFragment();
 }
 
 // ============================================================================

@@ -81,9 +81,9 @@ SLOFILES =										\
         $(SLO)$/richstringcontext.obj			\
         $(SLO)$/scenariobuffer.obj				\
         $(SLO)$/scenariocontext.obj				\
-        $(SLO)$/sharedformulabuffer.obj			\
         $(SLO)$/sharedstringsbuffer.obj			\
         $(SLO)$/sharedstringsfragment.obj		\
+        $(SLO)$/sheetdatabuffer.obj				\
         $(SLO)$/sheetdatacontext.obj			\
         $(SLO)$/stylesbuffer.obj				\
         $(SLO)$/stylesfragment.obj				\

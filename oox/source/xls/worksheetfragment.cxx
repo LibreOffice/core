@@ -44,6 +44,7 @@
 #include "oox/xls/querytablefragment.hxx"
 #include "oox/xls/scenariobuffer.hxx"
 #include "oox/xls/scenariocontext.hxx"
+#include "oox/xls/sheetdatabuffer.hxx"
 #include "oox/xls/sheetdatacontext.hxx"
 #include "oox/xls/tablefragment.hxx"
 #include "oox/xls/viewsettings.hxx"
@@ -124,32 +125,18 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
     return 0;
 }
 
-namespace {
-
-ApiTokenSequence lclImportDataValFormula( FormulaParser& rParser, const OUString& rFormula, const CellAddress& rBaseAddress )
-{
-    TokensFormulaContext aContext( true, false );
-    aContext.setBaseAddress( rBaseAddress );
-    rParser.importFormula( aContext, rFormula );
-    return aContext.getTokens();
-}
-
-} // namespace
-
 void DataValidationsContext::onCharacters( const OUString& rChars )
 {
     if( mxValModel.get() ) switch( getCurrentElement() )
     {
         case XLS_TOKEN( formula1 ):
-            mxValModel->maTokens1 = lclImportDataValFormula(
-                getFormulaParser(), rChars, mxValModel->maRanges.getBaseAddress() );
+            mxValModel->maTokens1 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
             // process string list of a list validation (convert to list of string tokens)
             if( mxValModel->mnType == XML_list )
                 getFormulaParser().convertStringToStringList( mxValModel->maTokens1, ',', true );
         break;
         case XLS_TOKEN( formula2 ):
-            mxValModel->maTokens2 = lclImportDataValFormula(
-                getFormulaParser(), rChars, mxValModel->maRanges.getBaseAddress() );
+            mxValModel->maTokens2 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
         break;
     }
 }
@@ -213,12 +200,9 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
     // condition formula(s)
     FormulaParser& rParser = getFormulaParser();
-    TokensFormulaContext aContext( true, false );
-    aContext.setBaseAddress( aModel.maRanges.getBaseAddress() );
-    rParser.importFormula( aContext, rStrm );
-    aModel.maTokens1 = aContext.getTokens();
-    rParser.importFormula( aContext, rStrm );
-    aModel.maTokens2 = aContext.getTokens();
+    CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
+    aModel.maTokens1 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
+    aModel.maTokens2 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
     // process string list of a list validation (convert to list of string tokens)
     if( (aModel.mnType == XML_list) && getFlag( nFlags, BIFF_DATAVAL_STRINGLIST ) )
         rParser.convertStringToStringList( aModel.maTokens1, ',', true );
@@ -229,9 +213,8 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
 
 // ============================================================================
 
-WorksheetFragment::WorksheetFragment( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, rxProgressBar, eSheetType, nSheet )
+WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
+    WorksheetFragmentBase( rHelper, rFragmentPath )
 {
     // import data tables related to this worksheet
     RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "table" ) );
@@ -558,7 +541,7 @@ void WorksheetFragment::importMergeCell( const AttributeList& rAttribs )
 {
     CellRangeAddress aRange;
     if( getAddressConverter().convertToCellRange( aRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex(), true, true ) )
-        setMergedRange( aRange );
+        getSheetData().setMergedRange( aRange );
 }
 
 void WorksheetFragment::importHyperlink( const AttributeList& rAttribs )
@@ -682,7 +665,7 @@ void WorksheetFragment::importMergeCell( SequenceInputStream& rStrm )
     rStrm >> aBinRange;
     CellRangeAddress aRange;
     if( getAddressConverter().convertToCellRange( aRange, aBinRange, getSheetIndex(), true, true ) )
-        setMergedRange( aRange );
+        getSheetData().setMergedRange( aRange );
 }
 
 void WorksheetFragment::importHyperlink( SequenceInputStream& rStrm )
@@ -753,9 +736,8 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
 
 // ============================================================================
 
-BiffWorksheetFragment::BiffWorksheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, eSheetType, nSheet )
+BiffWorksheetFragment::BiffWorksheetFragment( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
+    BiffWorksheetFragmentBase( rHelper, rParent )
 {
 }
 
@@ -1047,10 +1029,7 @@ ApiTokenSequence lclReadDataValFormula( BiffInputStream& rStrm, FormulaParser& r
 {
     sal_uInt16 nFmlaSize = rStrm.readuInt16();
     rStrm.skip( 2 );
-    // enable NUL characters, string list is single tStr token with NUL separators
-    TokensFormulaContext aContext( true, false, true );
-    rParser.importFormula( aContext, rStrm, &nFmlaSize );
-    return aContext.getTokens();
+    return rParser.importFormula( CellAddress(), FORMULATYPE_VALIDATION, rStrm, &nFmlaSize );
 }
 
 } // namespace
@@ -1169,7 +1148,7 @@ void BiffWorksheetFragment::importMergedCells( BiffInputStream& rStrm )
     ApiCellRangeList aRanges;
     getAddressConverter().convertToCellRangeList( aRanges, aBiffRanges, getSheetIndex(), true );
     for( ApiCellRangeList::const_iterator aIt = aRanges.begin(), aEnd = aRanges.end(); aIt != aEnd; ++aIt )
-        setMergedRange( *aIt );
+        getSheetData().setMergedRange( *aIt );
 }
 
 void BiffWorksheetFragment::importNote( BiffInputStream& rStrm )

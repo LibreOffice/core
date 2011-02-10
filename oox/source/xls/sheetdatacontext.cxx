@@ -27,8 +27,6 @@
 
 #include "oox/xls/sheetdatacontext.hxx"
 
-#include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/table/CellContentType.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
@@ -39,7 +37,7 @@
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/formulaparser.hxx"
 #include "oox/xls/richstringcontext.hxx"
-#include "oox/xls/sharedformulabuffer.hxx"
+#include "oox/xls/sheetdatabuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 
 namespace oox {
@@ -100,61 +98,13 @@ const sal_uInt32 BIFF_ROW_SHOWPHONETIC      = 0x40000000;
 
 const sal_Int32 BIFF2_CELL_USEIXFE          = 63;
 
-// ----------------------------------------------------------------------------
-
-/** Formula context for cell formulas. */
-class CellFormulaContext : public SimpleFormulaContext
-{
-public:
-    explicit            CellFormulaContext(
-                            const Reference< XFormulaTokens >& rxTokens,
-                            const CellAddress& rCellPos );
-};
-
-CellFormulaContext::CellFormulaContext( const Reference< XFormulaTokens >& rxTokens, const CellAddress& rCellPos ) :
-    SimpleFormulaContext( rxTokens, false, false )
-{
-    setBaseAddress( rCellPos );
-}
-
-// ----------------------------------------------------------------------------
-
-/** Uses the XArrayFormulaTokens interface to set a token sequence. */
-class ArrayFormulaContext : public FormulaContext
-{
-public:
-    explicit            ArrayFormulaContext(
-                            const Reference< XArrayFormulaTokens >& rxTokens,
-                            const CellRangeAddress& rArrayRange );
-
-    virtual void        setTokens( const ApiTokenSequence& rTokens );
-
-private:
-    Reference< XArrayFormulaTokens > mxTokens;
-};
-
-ArrayFormulaContext::ArrayFormulaContext(
-        const Reference< XArrayFormulaTokens >& rxTokens, const CellRangeAddress& rArrayRange ) :
-    FormulaContext( false, false ),
-    mxTokens( rxTokens )
-{
-    OSL_ENSURE( mxTokens.is(), "ArrayFormulaContext::ArrayFormulaContext - missing XArrayFormulaTokens interface" );
-    setBaseAddress( CellAddress( rArrayRange.Sheet, rArrayRange.StartColumn, rArrayRange.StartRow ) );
-}
-
-void ArrayFormulaContext::setTokens( const ApiTokenSequence& rTokens )
-{
-    mxTokens->setArrayTokens( rTokens );
-}
-
-// ----------------------------------------------------------------------------
-
 } // namespace
 
 // ============================================================================
 
 SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
-    WorksheetContextBase( rFragment )
+    WorksheetContextBase( rFragment ),
+    mrSheetData( getSheetData() )
 {
 }
 
@@ -177,10 +127,10 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
                     mxInlineStr.reset( new RichString( *this ) );
                     return new RichStringContext( *this, mxInlineStr );
                 case XLS_TOKEN( v ):
-                    return this;
+                    return this;    // characters contain cell value
                 case XLS_TOKEN( f ):
                     importFormula( rAttribs );
-                    return this;
+                    return this;    // characters contain formula string
             }
         break;
     }
@@ -192,94 +142,112 @@ void SheetDataContext::onCharacters( const OUString& rChars )
     switch( getCurrentElement() )
     {
         case XLS_TOKEN( v ):
-            maCurrCell.maValueStr = rChars;
-            maCurrCell.mbHasValueStr = true;
+            maCurrCell.maValue = rChars;
         break;
-
         case XLS_TOKEN( f ):
-            if( maCurrCell.mxCell.is() ) try
-            {
-                switch( maCurrCell.mnFormulaType )
-                {
-                    case XML_normal:
-                        if( rChars.getLength() > 0 )
-                        {
-                            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
-                            CellFormulaContext aContext( xTokens, maCurrCell.maAddress );
-                            getFormulaParser().importFormula( aContext, rChars );
-                        }
-                    break;
-
-                    case XML_array:
-                        if( (maCurrCell.maFormulaRef.getLength() > 0) && (rChars.getLength() > 0) )
-                        {
-                            CellRangeAddress aArrayRange;
-                            Reference< XArrayFormulaTokens > xTokens( getCellRange( maCurrCell.maFormulaRef, &aArrayRange ), UNO_QUERY_THROW );
-                            ArrayFormulaContext aContext( xTokens, aArrayRange );
-                            getFormulaParser().importFormula( aContext, rChars );
-                        }
-                    break;
-
-                    case XML_shared:
-                        if( maCurrCell.mnSharedId >= 0 )
-                        {
-                            if( rChars.getLength() > 0 )
-                                getSharedFormulas().importSharedFmla( rChars, maCurrCell.maFormulaRef, maCurrCell.mnSharedId, maCurrCell.maAddress );
-                            Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY_THROW );
-                            ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-                            getSharedFormulas().setSharedFormulaCell( aContext, maCurrCell.mnSharedId );
-                        }
-                    break;
-
-                    case XML_dataTable:
-                        if( maCurrCell.maFormulaRef.getLength() > 0 )
-                        {
-                            CellRangeAddress aTableRange;
-                            if( getAddressConverter().convertToCellRange( aTableRange, maCurrCell.maFormulaRef, getSheetIndex(), true, true ) )
-                                setTableOperation( aTableRange, maTableData );
-                        }
-                    break;
-
-                    default:
-                        OSL_ENSURE( false, "SheetDataContext::onCharacters - unknown formula type" );
-                }
-            }
-            catch( Exception& )
-            {
-            }
+            maCurrCell.maFormula = rChars;
         break;
     }
 }
 
 void SheetDataContext::onEndElement()
 {
-    if( isCurrentElement( XLS_TOKEN( c ) ) && maCurrCell.mxCell.is() )
+    switch( getCurrentElement() )
     {
-        if( maCurrCell.mxCell->getType() == CellContentType_EMPTY )
-        {
-            if( maCurrCell.mbHasValueStr )
+        case XLS_TOKEN( c ):
+            if( maCurrCell.mxCell.is() )
             {
-                // implemented in WorksheetHelper class
-                setCell( maCurrCell );
-            }
-            else if( (maCurrCell.mnCellType == XML_inlineStr) && mxInlineStr.get() )
-            {
-                // convert font settings
-                mxInlineStr->finalizeImport();
-                // write string to cell
-                Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
-                if( xText.is() )
-                    mxInlineStr->convert( xText, maCurrCell.mnXfId );
-            }
-            else
-            {
-                // empty cell, update cell type
-                maCurrCell.mnCellType = XML_TOKEN_INVALID;
-            }
-        }
+                // try to create a formula cell
+                if( maCurrCell.mxCell->getType() == CellContentType_EMPTY )
+                {
+                    switch( maCurrCell.mnFormulaType )
+                    {
+                        case XML_normal:
+                            if( maCurrCell.maFormula.getLength() > 0 )
+                            {
+                                ApiTokenSequence aTokens = getFormulaParser().importFormula( maCurrCell.maAddress, maCurrCell.maFormula );
+                                mrSheetData.setFormulaCell( maCurrCell.mxCell, maCurrCell.maAddress, aTokens );
+                            }
+                        break;
 
-        // store the cell formatting data
-        setCellFormat( maCurrCell );
+                        case XML_array:
+                            if( (maCurrCell.maFormula.getLength() > 0) && (maCurrCell.maFormulaRef.getLength() > 0) )
+                            {
+                                CellRangeAddress aArrayRange;
+                                if( getAddressConverter().convertToCellRange( aArrayRange, maCurrCell.maFormulaRef, getSheetIndex(), true, true ) )
+                                {
+                                    CellAddress aBaseAddr( aArrayRange.Sheet, aArrayRange.StartColumn, aArrayRange.StartRow );
+                                    ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, maCurrCell.maFormula );
+                                    mrSheetData.setArrayFormula( aArrayRange, aTokens );
+                                }
+                            }
+                        break;
+
+                        case XML_shared:
+                            if( maCurrCell.mnSharedId >= 0 )
+                            {
+                                if( maCurrCell.maFormula.getLength() > 0 )
+                                    mrSheetData.importSharedFmla( maCurrCell.maFormula, maCurrCell.maFormulaRef, maCurrCell.mnSharedId, maCurrCell.maAddress );
+                                mrSheetData.setFormulaCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.mnSharedId );
+                            }
+                        break;
+
+                        case XML_dataTable:
+                            if( maCurrCell.maFormulaRef.getLength() > 0 )
+                            {
+                                CellRangeAddress aTableRange;
+                                if( getAddressConverter().convertToCellRange( aTableRange, maCurrCell.maFormulaRef, getSheetIndex(), true, true ) )
+                                    mrSheetData.setTableOperation( aTableRange, maTableData );
+                            }
+                        break;
+
+                        default:
+                            OSL_ENSURE( maCurrCell.mnFormulaType == XML_TOKEN_INVALID, "SheetDataContext::onCharacters - unknown formula type" );
+                    }
+                }
+
+                // no formula created: try to set the cell value
+                if( maCurrCell.mxCell->getType() == CellContentType_EMPTY )
+                {
+                    if( maCurrCell.maValue.getLength() > 0 )
+                    {
+                        switch( maCurrCell.mnCellType )
+                        {
+                            case XML_n:
+                                mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.maValue.toDouble() );
+                            break;
+                            case XML_b:
+                                mrSheetData.setBooleanCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.maValue.toDouble() != 0.0 );
+                                // #108770# set 'Standard' number format for all Boolean cells
+                                maCurrCell.mnNumFmtId = 0;
+                            break;
+                            case XML_e:
+                                mrSheetData.setErrorCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.maValue );
+                            break;
+                            case XML_str:
+                                mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.maValue );
+                            break;
+                            case XML_s:
+                                mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, maCurrCell.maValue.toInt32(), maCurrCell.mnXfId );
+                            break;
+                        }
+                    }
+                    else if( (maCurrCell.mnCellType == XML_inlineStr) && mxInlineStr.get() )
+                    {
+                        mxInlineStr->finalizeImport();
+                        mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, *mxInlineStr, maCurrCell.mnXfId );
+                    }
+                    else
+                    {
+                        // empty cell, update cell type
+                        maCurrCell.mnCellType = XML_TOKEN_INVALID;
+                    }
+                }
+
+                // store the cell formatting data
+                mrSheetData.setCellFormat( maCurrCell );
+            }
+        break;
     }
 }
 
@@ -288,10 +256,7 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
     switch( getCurrentElement() )
     {
         case BIFF12_ID_SHEETDATA:
-            switch( nRecId )
-            {
-                case BIFF12_ID_ROW:             importRow( rStrm );                             return this;
-            }
+            if( nRecId == BIFF12_ID_ROW ) { importRow( rStrm ); return this; }
         break;
 
         case BIFF12_ID_ROW:
@@ -409,19 +374,19 @@ void SheetDataContext::importCellBool( SequenceInputStream& rStrm, CellType eCel
         }
         else
         {
-            setBooleanCell( maCurrCell.mxCell, bValue );
+            mrSheetData.setBooleanCell( maCurrCell.mxCell, maCurrCell.maAddress, bValue );
             // #108770# set 'Standard' number format for all Boolean cells
             maCurrCell.mnNumFmtId = 0;
         }
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellBlank( SequenceInputStream& rStrm, CellType eCellType )
 {
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellBlank - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellDouble( SequenceInputStream& rStrm, CellType eCellType )
@@ -434,9 +399,9 @@ void SheetDataContext::importCellDouble( SequenceInputStream& rStrm, CellType eC
         if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
-            maCurrCell.mxCell->setValue( fValue );
+            mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, fValue );
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellError( SequenceInputStream& rStrm, CellType eCellType )
@@ -449,9 +414,9 @@ void SheetDataContext::importCellError( SequenceInputStream& rStrm, CellType eCe
         if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
-            setErrorCell( maCurrCell.mxCell, nErrorCode );
+            mrSheetData.setErrorCell( maCurrCell.mxCell, maCurrCell.maAddress, nErrorCode );
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellRk( SequenceInputStream& rStrm, CellType eCellType )
@@ -460,8 +425,8 @@ void SheetDataContext::importCellRk( SequenceInputStream& rStrm, CellType eCellT
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_n;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
-        maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
-    setCellFormat( maCurrCell );
+        mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType eCellType )
@@ -469,15 +434,14 @@ void SheetDataContext::importCellRString( SequenceInputStream& rStrm, CellType e
     OSL_ENSURE( eCellType != CELLTYPE_FORMULA, "SheetDataContext::importCellRString - no formula cells supported" );
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_inlineStr;
-    Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
-    if( xText.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
+    if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
     {
         RichString aString( *this );
         aString.importString( rStrm, true );
         aString.finalizeImport();
-        aString.convert( xText, maCurrCell.mnXfId );
+        mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, aString, maCurrCell.mnXfId );
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellSi( SequenceInputStream& rStrm, CellType eCellType )
@@ -486,8 +450,8 @@ void SheetDataContext::importCellSi( SequenceInputStream& rStrm, CellType eCellT
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_s;
     if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
-        setSharedStringCell( maCurrCell.mxCell, rStrm.readInt32(), maCurrCell.mnXfId );
-    setCellFormat( maCurrCell );
+        mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, rStrm.readInt32(), maCurrCell.mnXfId );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eCellType )
@@ -495,7 +459,7 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
     importCellHeader( rStrm, eCellType );
     maCurrCell.mnCellType = XML_inlineStr;
     Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
-    if( xText.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
+    if( maCurrCell.mxCell.is() && (maCurrCell.mxCell->getType() == CellContentType_EMPTY) )
     {
         RichString aString( *this );
         aString.importString( rStrm, false );
@@ -503,20 +467,16 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
         if( eCellType == CELLTYPE_FORMULA )
             importCellFormula( rStrm );
         else
-            aString.convert( xText, maCurrCell.mnXfId );
+            mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, aString, maCurrCell.mnXfId );
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void SheetDataContext::importCellFormula( SequenceInputStream& rStrm )
 {
     rStrm.skip( 2 );
-    Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY );
-    if( xTokens.is() )
-    {
-        ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-        getFormulaParser().importFormula( aContext, rStrm );
-    }
+    ApiTokenSequence aTokens = getFormulaParser().importFormula( maCurrCell.maAddress, FORMULATYPE_CELL, rStrm );
+    mrSheetData.setFormulaCell( maCurrCell.mxCell, maCurrCell.maAddress, aTokens );
 }
 
 void SheetDataContext::importRow( SequenceInputStream& rStrm )
@@ -548,19 +508,18 @@ void SheetDataContext::importArray( SequenceInputStream& rStrm )
     BinRange aRange;
     rStrm >> aRange;
     CellRangeAddress aArrayRange;
-    Reference< XCellRange > xRange = getCellRange( aRange, &aArrayRange );
-    Reference< XArrayFormulaTokens > xTokens( xRange, UNO_QUERY );
-    if( xRange.is() && xTokens.is() )
+    if( getAddressConverter().convertToCellRange( aArrayRange, aRange, getSheetIndex(), true, true ) )
     {
         rStrm.skip( 1 );
-        ArrayFormulaContext aContext( xTokens, aArrayRange );
-        getFormulaParser().importFormula( aContext, rStrm );
+        CellAddress aBaseAddr( aArrayRange.Sheet, aArrayRange.StartColumn, aArrayRange.StartRow );
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_ARRAY, rStrm );
+        mrSheetData.setArrayFormula( aArrayRange, aTokens );
     }
 }
 
 void SheetDataContext::importSharedFmla( SequenceInputStream& rStrm )
 {
-    getSharedFormulas().importSharedFmla( rStrm, maCurrCell.maAddress );
+    mrSheetData.importSharedFmla( rStrm, maCurrCell.maAddress );
 }
 
 void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
@@ -580,7 +539,7 @@ void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
         aModel.mb2dTable     = getFlag( nFlags, BIFF12_DATATABLE_2D );
         aModel.mbRef1Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF1DEL );
         aModel.mbRef2Deleted = getFlag( nFlags, BIFF12_DATATABLE_REF2DEL );
-        setTableOperation( aTableRange, aModel );
+        mrSheetData.setTableOperation( aTableRange, aModel );
     }
 }
 
@@ -588,25 +547,27 @@ void SheetDataContext::importDataTable( SequenceInputStream& rStrm )
 
 BiffSheetDataContext::BiffSheetDataContext( const WorksheetHelper& rHelper ) :
     BiffWorksheetContextBase( rHelper ),
+    mrSheetData( getSheetData() ),
     mnBiff2XfId( 0 )
 {
     switch( getBiff() )
     {
         case BIFF2:
-            mnFormulaIgnoreSize = 9;    // double formula result, 1 byte flags
-            mnArrayIgnoreSize = 1;      // recalc-always flag
+            mnFormulaSkipSize = 9;  // double formula result, 1 byte flags
+            mnArraySkipSize = 1;    // recalc-always flag
         break;
         case BIFF3:
         case BIFF4:
-            mnFormulaIgnoreSize = 10;   // double formula result, 2 byte flags
-            mnArrayIgnoreSize = 2;      // 2 byte flags
+            mnFormulaSkipSize = 10; // double formula result, 2 byte flags
+            mnArraySkipSize = 2;    // 2 byte flags
         break;
         case BIFF5:
         case BIFF8:
-            mnFormulaIgnoreSize = 14;   // double formula result, 2 byte flags, 4 bytes nothing
-            mnArrayIgnoreSize = 6;      // 2 byte flags, 4 bytes nothing
+            mnFormulaSkipSize = 14; // double formula result, 2 byte flags, 4 bytes nothing
+            mnArraySkipSize = 6;    // 2 byte flags, 4 bytes nothing
         break;
-        case BIFF_UNKNOWN: break;
+        case BIFF_UNKNOWN:
+        break;
     }
 }
 
@@ -687,7 +648,8 @@ void BiffSheetDataContext::importRecord( BiffInputStream& rStrm )
             }
             break;
 
-            case BIFF_UNKNOWN: break;
+            case BIFF_UNKNOWN:
+            break;
         }
     }
 }
@@ -752,7 +714,7 @@ void BiffSheetDataContext::importCellHeader( BiffInputStream& rStrm, bool bBiff2
 void BiffSheetDataContext::importBlank( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_BLANK );
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
@@ -766,87 +728,77 @@ void BiffSheetDataContext::importBoolErr( BiffInputStream& rStrm )
         {
             case BIFF_BOOLERR_BOOL:
                 maCurrCell.mnCellType = XML_b;
-                setBooleanCell( maCurrCell.mxCell, nValue != 0 );
+                mrSheetData.setBooleanCell( maCurrCell.mxCell, maCurrCell.maAddress, nValue != 0 );
                 // #108770# set 'Standard' number format for all Boolean cells
                 maCurrCell.mnNumFmtId = 0;
             break;
             case BIFF_BOOLERR_ERROR:
                 maCurrCell.mnCellType = XML_e;
-                setErrorCell( maCurrCell.mxCell, nValue );
+                mrSheetData.setErrorCell( maCurrCell.mxCell, maCurrCell.maAddress, nValue );
             break;
             default:
                 OSL_ENSURE( false, "BiffSheetDataContext::importBoolErr - unknown cell type" );
         }
     }
-    setCellFormat( maCurrCell );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importFormula( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, getBiff() == BIFF2 );
     maCurrCell.mnCellType = XML_n;
-    Reference< XFormulaTokens > xTokens( maCurrCell.mxCell, UNO_QUERY );
-    if( xTokens.is() )
-    {
-        rStrm.skip( mnFormulaIgnoreSize );
-        ExtCellFormulaContext aContext( *this, xTokens, maCurrCell.maAddress );
-        getFormulaParser().importFormula( aContext, rStrm );
-    }
-    setCellFormat( maCurrCell );
+    rStrm.skip( mnFormulaSkipSize );
+    ApiTokenSequence aTokens = getFormulaParser().importFormula( maCurrCell.maAddress, FORMULATYPE_CELL, rStrm );
+    mrSheetData.setFormulaCell( maCurrCell.mxCell, maCurrCell.maAddress, aTokens );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importInteger( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, true );
     maCurrCell.mnCellType = XML_n;
-    if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( rStrm.readuInt16() );
-    setCellFormat( maCurrCell );
+    mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, rStrm.readuInt16() );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importLabel( BiffInputStream& rStrm )
 {
+    /*  the deep secrets of BIFF type and record identifier...
+        record id   BIFF    ->  XF type     String type
+        0x0004      2-7     ->  3 byte      8-bit length, byte string
+        0x0004      8       ->  3 byte      16-bit length, unicode string
+        0x0204      2-7     ->  2 byte      16-bit length, byte string
+        0x0204      8       ->  2 byte      16-bit length, unicode string
+     */
     bool bBiff2Xf = rStrm.getRecId() == BIFF2_ID_LABEL;
     importCellHeader( rStrm, bBiff2Xf );
     maCurrCell.mnCellType = XML_inlineStr;
-    Reference< XText > xText( maCurrCell.mxCell, UNO_QUERY );
-    if( xText.is() )
+    RichString aString( *this );
+    if( getBiff() == BIFF8 )
     {
-        /*  the deep secrets of BIFF type and record identifier...
-            record id   BIFF    ->  XF type     String type
-            0x0004      2-7     ->  3 byte      8-bit length, byte string
-            0x0004      8       ->  3 byte      16-bit length, unicode string
-            0x0204      2-7     ->  2 byte      16-bit length, byte string
-            0x0204      8       ->  2 byte      16-bit length, unicode string */
-
-        RichString aString( *this );
-        if( getBiff() == BIFF8 )
-        {
-            aString.importUniString( rStrm );
-        }
-        else
-        {
-            // #i63105# use text encoding from FONT record
-            rtl_TextEncoding eTextEnc = getTextEncoding();
-            if( const Font* pFont = getStyles().getFontFromCellXf( maCurrCell.mnXfId ).get() )
-                eTextEnc = pFont->getFontEncoding();
-            BiffStringFlags nFlags = bBiff2Xf ? BIFF_STR_8BITLENGTH : BIFF_STR_DEFAULT;
-            setFlag( nFlags, BIFF_STR_EXTRAFONTS, rStrm.getRecId() == BIFF_ID_RSTRING );
-            aString.importByteString( rStrm, eTextEnc, nFlags );
-        }
-        aString.finalizeImport();
-        aString.convert( xText, maCurrCell.mnXfId );
+        aString.importUniString( rStrm );
     }
-    setCellFormat( maCurrCell );
+    else
+    {
+        // #i63105# use text encoding from FONT record
+        rtl_TextEncoding eTextEnc = getTextEncoding();
+        if( const Font* pFont = getStyles().getFontFromCellXf( maCurrCell.mnXfId ).get() )
+            eTextEnc = pFont->getFontEncoding();
+        BiffStringFlags nFlags = bBiff2Xf ? BIFF_STR_8BITLENGTH : BIFF_STR_DEFAULT;
+        setFlag( nFlags, BIFF_STR_EXTRAFONTS, rStrm.getRecId() == BIFF_ID_RSTRING );
+        aString.importByteString( rStrm, eTextEnc, nFlags );
+    }
+    aString.finalizeImport();
+    mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, aString, maCurrCell.mnXfId );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importLabelSst( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, false );
     maCurrCell.mnCellType = XML_s;
-    if( maCurrCell.mxCell.is() )
-        setSharedStringCell( maCurrCell.mxCell, rStrm.readInt32(), maCurrCell.mnXfId );
-    setCellFormat( maCurrCell );
+    mrSheetData.setStringCell( maCurrCell.mxCell, maCurrCell.maAddress, rStrm.readInt32(), maCurrCell.mnXfId );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importMultBlank( BiffInputStream& rStrm )
@@ -856,7 +808,7 @@ void BiffSheetDataContext::importMultBlank( BiffInputStream& rStrm )
     {
         setCurrCell( aAddr );
         importXfId( rStrm, false );
-        setCellFormat( maCurrCell );
+        mrSheetData.setCellFormat( maCurrCell );
     }
 }
 
@@ -869,9 +821,8 @@ void BiffSheetDataContext::importMultRk( BiffInputStream& rStrm )
         maCurrCell.mnCellType = XML_n;
         importXfId( rStrm, false );
         sal_Int32 nRkValue = rStrm.readInt32();
-        if( maCurrCell.mxCell.is() )
-            maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( nRkValue ) );
-        setCellFormat( maCurrCell );
+        mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, BiffHelper::calcDoubleFromRk( nRkValue ) );
+        mrSheetData.setCellFormat( maCurrCell );
     }
 }
 
@@ -879,18 +830,16 @@ void BiffSheetDataContext::importNumber( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, rStrm.getRecId() == BIFF2_ID_NUMBER );
     maCurrCell.mnCellType = XML_n;
-    if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( rStrm.readDouble() );
-    setCellFormat( maCurrCell );
+    mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, rStrm.readDouble() );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importRk( BiffInputStream& rStrm )
 {
     importCellHeader( rStrm, false );
     maCurrCell.mnCellType = XML_n;
-    if( maCurrCell.mxCell.is() )
-        maCurrCell.mxCell->setValue( BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
-    setCellFormat( maCurrCell );
+    mrSheetData.setValueCell( maCurrCell.mxCell, maCurrCell.maAddress, BiffHelper::calcDoubleFromRk( rStrm.readInt32() ) );
+    mrSheetData.setCellFormat( maCurrCell );
 }
 
 void BiffSheetDataContext::importRow( BiffInputStream& rStrm )
@@ -939,19 +888,18 @@ void BiffSheetDataContext::importArray( BiffInputStream& rStrm )
     BinRange aRange;
     aRange.read( rStrm, false );    // columns always 8-bit
     CellRangeAddress aArrayRange;
-    Reference< XCellRange > xRange = getCellRange( aRange, &aArrayRange );
-    Reference< XArrayFormulaTokens > xTokens( xRange, UNO_QUERY );
-    if( xRange.is() && xTokens.is() )
+    if( getAddressConverter().convertToCellRange( aArrayRange, aRange, getSheetIndex(), true, true ) )
     {
-        rStrm.skip( mnArrayIgnoreSize );
-        ArrayFormulaContext aContext( xTokens, aArrayRange );
-        getFormulaParser().importFormula( aContext, rStrm );
+        rStrm.skip( mnArraySkipSize );
+        CellAddress aBaseAddr( aArrayRange.Sheet, aArrayRange.StartColumn, aArrayRange.StartRow );
+        ApiTokenSequence aTokens = getFormulaParser().importFormula( aBaseAddr, FORMULATYPE_ARRAY, rStrm );
+        mrSheetData.setArrayFormula( aArrayRange, aTokens );
     }
 }
 
 void BiffSheetDataContext::importSharedFmla( BiffInputStream& rStrm )
 {
-    getSharedFormulas().importSharedFmla( rStrm, maCurrCell.maAddress );
+    mrSheetData.importSharedFmla( rStrm, maCurrCell.maAddress );
 }
 
 void BiffSheetDataContext::importDataTable( BiffInputStream& rStrm )
@@ -991,7 +939,7 @@ void BiffSheetDataContext::importDataTable( BiffInputStream& rStrm )
         }
         aModel.maRef1 = FormulaProcessorBase::generateAddress2dString( aRef1, false );
         aModel.maRef2 = FormulaProcessorBase::generateAddress2dString( aRef2, false );
-        setTableOperation( aTableRange, aModel );
+        mrSheetData.setTableOperation( aTableRange, aModel );
     }
 }
 

@@ -85,13 +85,12 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         {
             // parse the formula string, create a token sequence
             FormulaParser& rParser = getFormulaParser();
-            TokensFormulaContext aContext( true, true );
-            aContext.setBaseAddress( CellAddress( getCurrentSheetIndex(), 0, 0 ) );
-            rParser.importFormula( aContext, rDataSeq.maFormula );
+            CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
+            ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
 
             // create a range list from the token sequence
             ApiCellRangeList aRanges;
-            rParser.extractCellRangeList( aRanges, aContext.getTokens(), false );
+            rParser.extractCellRangeList( aRanges, aTokens, false );
             aRangeRep = rParser.generateApiRangeListString( aRanges );
         }
         else if( !rDataSeq.maData.empty() )

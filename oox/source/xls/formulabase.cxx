@@ -39,7 +39,6 @@
 #include <com/sun/star/sheet/FormulaMapGroupSpecialOffset.hpp>
 #include <com/sun/star/sheet/XFormulaOpCodeMapper.hpp>
 #include <com/sun/star/sheet/XFormulaParser.hpp>
-#include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
@@ -1366,51 +1365,6 @@ ApiTokenSequence ApiParserWrapper::parseFormula( const OUString& rFormula, const
     return aTokenSeq;
 }
 
-// formula contexts ===========================================================
-
-FormulaContext::FormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    maBaseAddress( 0, 0, 0 ),
-    mbRelativeAsOffset( bRelativeAsOffset ),
-    mb2dRefsAs3dRefs( b2dRefsAs3dRefs ),
-    mbAllowNulChars( bAllowNulChars )
-{
-}
-
-FormulaContext::~FormulaContext()
-{
-}
-
-void FormulaContext::setSharedFormula( const CellAddress& )
-{
-}
-
-// ----------------------------------------------------------------------------
-
-TokensFormulaContext::TokensFormulaContext( bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars )
-{
-}
-
-void TokensFormulaContext::setTokens( const ApiTokenSequence& rTokens )
-{
-    maTokens = rTokens;
-}
-
-// ----------------------------------------------------------------------------
-
-SimpleFormulaContext::SimpleFormulaContext( const Reference< XFormulaTokens >& rxTokens,
-        bool bRelativeAsOffset, bool b2dRefsAs3dRefs, bool bAllowNulChars ) :
-    FormulaContext( bRelativeAsOffset, b2dRefsAs3dRefs, bAllowNulChars ),
-    mxTokens( rxTokens )
-{
-    OSL_ENSURE( mxTokens.is(), "SimpleFormulaContext::SimpleFormulaContext - missing XFormulaTokens interface" );
-}
-
-void SimpleFormulaContext::setTokens( const ApiTokenSequence& rTokens )
-{
-    mxTokens->setTokens( rTokens );
-}
-
 // formula parser/printer base class for filters ==============================
 
 namespace {
@@ -1706,6 +1660,12 @@ bool FormulaProcessorBase::extractString( OUString& orString, const ApiTokenSequ
 {
     ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
     return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_PUSH) && (aTokenIt->Data >>= orString) && !(++aTokenIt).is();
+}
+
+bool FormulaProcessorBase::extractSpecialTokenInfo( ApiSpecialTokenInfo& orTokenInfo, const ApiTokenSequence& rTokens ) const
+{
+    ApiTokenIterator aTokenIt( rTokens, OPCODE_SPACES, true );
+    return aTokenIt.is() && (aTokenIt->OpCode == OPCODE_BAD) && (aTokenIt->Data >>= orTokenInfo);
 }
 
 void FormulaProcessorBase::convertStringToStringList(

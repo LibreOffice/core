@@ -440,26 +440,22 @@ class FormulaParserImpl : public FormulaFinalizer, public WorkbookHelper
 public:
     explicit            FormulaParserImpl( const FormulaParser& rParent );
 
-    /** Converts an XML formula string. */
-    virtual void        importOoxFormula(
-                            FormulaContext& rContext,
+    /** Converts an OOXML formula string. */
+    virtual ApiTokenSequence importOoxFormula(
+                            const CellAddress& rBaseAddress,
                             const OUString& rFormulaString );
 
     /** Imports and converts a BIFF12 token array from the passed stream. */
-    virtual void        importBiff12Formula(
-                            FormulaContext& rContext,
+    virtual ApiTokenSequence importBiff12Formula(
+                            const CellAddress& rBaseAddress,
+                            FormulaType eType,
                             SequenceInputStream& rStrm );
 
     /** Imports and converts a BIFF2-BIFF8 token array from the passed stream. */
-    virtual void        importBiffFormula(
-                            FormulaContext& rContext,
+    virtual ApiTokenSequence importBiffFormula(
+                            const CellAddress& rBaseAddress,
+                            FormulaType eType,
                             BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize );
-
-    /** Finalizes the passed token array after import (e.g. adjusts function
-        parameters) and sets the formula using the passed context. */
-    void                setFormula(
-                            FormulaContext& rContext,
-                            const ApiTokenSequence& rTokens );
 
     /** Tries to resolve the passed ref-id to an OLE target URL. */
     OUString            resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const;
@@ -468,18 +464,10 @@ protected:
     typedef ::std::pair< sal_Int32, bool >  WhiteSpace;
     typedef ::std::vector< WhiteSpace >     WhiteSpaceVec;
 
-    /** Sets the current formula context used for import. */
-    inline FormulaContext& getFormulaContext() const { return *mpContext; }
-
-    /** Sets the current formula context used for import. */
-    void                initializeImport( FormulaContext& rContext );
-    /** Finalizes the passed token array after import. */
-    void                finalizeImport( const ApiTokenSequence& rTokens );
+    /** Initializes the formula parser before importing a formula. */
+    void                initializeImport( const CellAddress& rBaseAddress, FormulaType eType );
     /** Finalizes the internal token storage after import. */
-    void                finalizeImport();
-
-    /** Inserts a shared formula using the current formula context and passed base address. */
-    void                setSharedFormula( const BinAddress& rBaseAddr );
+    ApiTokenSequence    finalizeImport();
 
     // token array ------------------------------------------------------------
 
@@ -542,6 +530,7 @@ protected:
     bool                pushExternalFuncOperand( const FunctionInfo& rFuncInfo );
     bool                pushDdeLinkOperand( const OUString& rDdeServer, const OUString& rDdeTopic, const OUString& rDdeItem );
     bool                pushExternalNameOperand( const ExternalNameRef& rxExtName, const ExternalLink& rExtLink );
+    bool                pushSpecialTokenOperand( const BinAddress& rBaseAddr, bool bTable );
 
     bool                pushUnaryPreOperator( sal_Int32 nOpCode );
     bool                pushUnaryPostOperator( sal_Int32 nOpCode );
@@ -575,6 +564,12 @@ protected:
     const sal_Int32     mnMaxXlsCol;                /// Maximum column index in imported document.
     const sal_Int32     mnMaxXlsRow;                /// Maximum row index in imported document.
 
+    CellAddress         maBaseAddr;                 /// Base address for relative references.
+    bool                mbRelativeAsOffset;         /// True = relative row/column index is (signed) offset, false = explicit index.
+    bool                mb2dRefsAs3dRefs;           /// True = convert all 2D references to 3D references in sheet specified by base address.
+    bool                mbSpecialTokens;            /// True = special handling for tExp and tTbl tokens, false = exit with error.
+    bool                mbAllowNulChars;            /// True = keep NUL characters in string tokens.
+
 private:
     typedef ::std::vector< size_t > SizeTypeVector;
 
@@ -584,7 +579,6 @@ private:
     WhiteSpaceVec       maLeadingSpaces;            /// List of whitespaces before next token.
     WhiteSpaceVec       maOpeningSpaces;            /// List of whitespaces before opening parenthesis.
     WhiteSpaceVec       maClosingSpaces;            /// List of whitespaces before closing parenthesis.
-    FormulaContext*     mpContext;                  /// Current formula context.
 };
 
 // ----------------------------------------------------------------------------
@@ -596,7 +590,9 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     mnMaxApiRow( rParent.getAddressConverter().getMaxApiAddress().Row ),
     mnMaxXlsCol( rParent.getAddressConverter().getMaxXlsAddress().Column ),
     mnMaxXlsRow( rParent.getAddressConverter().getMaxXlsAddress().Row ),
-    mpContext( 0 )
+    mbRelativeAsOffset( false ),
+    mb2dRefsAs3dRefs( false ),
+    mbAllowNulChars( false )
 {
     // reserve enough space to make resize(), push_back() etc. cheap
     maTokenStorage.reserve( 0x2000 );
@@ -607,25 +603,22 @@ FormulaParserImpl::FormulaParserImpl( const FormulaParser& rParent ) :
     maClosingSpaces.reserve( 256 );
 }
 
-void FormulaParserImpl::importOoxFormula( FormulaContext&, const OUString& )
+ApiTokenSequence FormulaParserImpl::importOoxFormula( const CellAddress&, const OUString& )
 {
     OSL_ENSURE( false, "FormulaParserImpl::importOoxFormula - not implemented" );
+    return ApiTokenSequence();
 }
 
-void FormulaParserImpl::importBiff12Formula( FormulaContext&, SequenceInputStream& )
+ApiTokenSequence FormulaParserImpl::importBiff12Formula( const CellAddress&, FormulaType, SequenceInputStream& )
 {
     OSL_ENSURE( false, "FormulaParserImpl::importBiff12Formula - not implemented" );
+    return ApiTokenSequence();
 }
 
-void FormulaParserImpl::importBiffFormula( FormulaContext&, BiffInputStream&, const sal_uInt16* )
+ApiTokenSequence FormulaParserImpl::importBiffFormula( const CellAddress&, FormulaType, BiffInputStream&, const sal_uInt16* )
 {
     OSL_ENSURE( false, "FormulaParserImpl::importBiffFormula - not implemented" );
-}
-
-void FormulaParserImpl::setFormula( FormulaContext& rContext, const ApiTokenSequence& rTokens )
-{
-    initializeImport( rContext );
-    finalizeImport( rTokens );
+    return ApiTokenSequence();
 }
 
 OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefSheets ) const
@@ -637,22 +630,41 @@ OUString FormulaParserImpl::resolveOleTarget( sal_Int32 nRefId, bool bUseRefShee
     return OUString();
 }
 
-void FormulaParserImpl::initializeImport( FormulaContext& rContext )
+void FormulaParserImpl::initializeImport( const CellAddress& rBaseAddr, FormulaType eType )
 {
+    maBaseAddr = rBaseAddr;
+    mbRelativeAsOffset = mb2dRefsAs3dRefs = mbSpecialTokens = mbAllowNulChars = false;
+    switch( eType )
+    {
+        case FORMULATYPE_CELL:
+            mbSpecialTokens = true;
+        break;
+        case FORMULATYPE_ARRAY:
+        break;
+        case FORMULATYPE_SHAREDFORMULA:
+            mbRelativeAsOffset = true;
+        break;
+        case FORMULATYPE_CONDFORMAT:
+            mbRelativeAsOffset = true;
+        break;
+        case FORMULATYPE_VALIDATION:
+            mbRelativeAsOffset = true;
+            // enable NUL characters in BIFF import, string list is single tStr token with NUL separators
+            mbAllowNulChars = getFilterType() == FILTER_BIFF;
+        break;
+        case FORMULATYPE_DEFINEDNAME:
+            mbRelativeAsOffset = true;
+            // BIFF2-BIFF4: convert 2D referebces to absolute 3D references
+            mb2dRefsAs3dRefs = (getFilterType() == FILTER_BIFF) && (getBiff() <= BIFF4);
+        break;
+    }
+
     maTokenStorage.clear();
     maTokenIndexes.clear();
     maOperandSizeStack.clear();
-    mpContext = &rContext;
 }
 
-void FormulaParserImpl::finalizeImport( const ApiTokenSequence& rTokens )
-{
-    ApiTokenSequence aFinalTokens = finalizeTokenArray( rTokens );
-    if( aFinalTokens.hasElements() )
-        mpContext->setTokens( aFinalTokens );
-}
-
-void FormulaParserImpl::finalizeImport()
+ApiTokenSequence FormulaParserImpl::finalizeImport()
 {
     ApiTokenSequence aTokens( static_cast< sal_Int32 >( maTokenIndexes.size() ) );
     if( aTokens.hasElements() )
@@ -661,14 +673,7 @@ void FormulaParserImpl::finalizeImport()
         for( SizeTypeVector::const_iterator aIt = maTokenIndexes.begin(), aEnd = maTokenIndexes.end(); aIt != aEnd; ++aIt, ++pToken )
             *pToken = maTokenStorage[ *aIt ];
     }
-    finalizeImport( aTokens );
-}
-
-void FormulaParserImpl::setSharedFormula( const BinAddress& rBaseAddr )
-{
-    CellAddress aApiBaseAddr;
-    if( getAddressConverter().convertToCellAddress( aApiBaseAddr, rBaseAddr, mpContext->getBaseAddress().Sheet, false ) )
-        mpContext->setSharedFormula( aApiBaseAddr );
+    return finalizeTokenArray( aTokens );
 }
 
 // token array ----------------------------------------------------------------
@@ -1018,7 +1023,7 @@ bool FormulaParserImpl::pushNlrOperand( const BinSingleRef2d& rRef )
 
 bool FormulaParserImpl::pushEmbeddedRefOperand( const DefinedNameBase& rName, bool bPushBadToken )
 {
-    Any aRefAny = rName.getReference( mpContext->getBaseAddress() );
+    Any aRefAny = rName.getReference( maBaseAddr );
     if( aRefAny.hasValue() )
         return pushAnyOperand( aRefAny, OPCODE_PUSH );
     if( bPushBadToken && (rName.getModelName().getLength() > 0) && (rName.getModelName()[ 0 ] >= ' ') )
@@ -1088,6 +1093,13 @@ bool FormulaParserImpl::pushExternalNameOperand( const ExternalNameRef& rxExtNam
     return pushBiffErrorOperand( BIFF_ERR_NAME );
 }
 
+bool FormulaParserImpl::pushSpecialTokenOperand( const BinAddress& rBaseAddr, bool bTable )
+{
+    CellAddress aBaseAddr( maBaseAddr.Sheet, rBaseAddr.mnCol, rBaseAddr.mnRow );
+    ApiSpecialTokenInfo aTokenInfo( aBaseAddr, bTable );
+    return mbSpecialTokens && (getFormulaSize() == 0) && pushValueOperand( aTokenInfo, OPCODE_BAD );
+}
+
 bool FormulaParserImpl::pushUnaryPreOperator( sal_Int32 nOpCode )
 {
     return pushUnaryPreOperatorToken( nOpCode, &maLeadingSpaces ) && resetSpaces();
@@ -1122,15 +1134,15 @@ bool FormulaParserImpl::pushFunctionOperator( const FunctionInfo& rFuncInfo, siz
 
 void FormulaParserImpl::initReference2d( SingleReference& orApiRef ) const
 {
-    if( mpContext->is2dRefsAs3dRefs() )
+    if( mb2dRefsAs3dRefs )
     {
-        initReference3d( orApiRef, mpContext->getBaseAddress().Sheet, false );
+        initReference3d( orApiRef, maBaseAddr.Sheet, false );
     }
     else
     {
         orApiRef.Flags = SHEET_RELATIVE;
         // #i10184# absolute sheet index needed for relative references in shared formulas
-        orApiRef.Sheet = mpContext->getBaseAddress().Sheet;
+        orApiRef.Sheet = maBaseAddr.Sheet;
         orApiRef.RelativeSheet = 0;
     }
 }
@@ -1175,9 +1187,9 @@ void FormulaParserImpl::convertReference( SingleReference& orApiRef, const BinSi
         if( !bRelativeAsOffset )
         {
             if( rRef.mbColRel )
-                orApiRef.RelativeColumn -= mpContext->getBaseAddress().Column;
+                orApiRef.RelativeColumn -= maBaseAddr.Column;
             if( rRef.mbRowRel )
-                orApiRef.RelativeRow -= mpContext->getBaseAddress().Row;
+                orApiRef.RelativeRow -= maBaseAddr.Row;
         }
     }
 }
@@ -1264,12 +1276,13 @@ class OoxFormulaParserImpl : public FormulaParserImpl
 public:
     explicit            OoxFormulaParserImpl( const FormulaParser& rParent );
 
-    virtual void        importOoxFormula(
-                            FormulaContext& rContext,
+    virtual ApiTokenSequence importOoxFormula(
+                            const CellAddress& rBaseAddr,
                             const OUString& rFormulaString );
 
-    virtual void        importBiff12Formula(
-                            FormulaContext& rContext,
+    virtual ApiTokenSequence importBiff12Formula(
+                            const CellAddress& rBaseAddr,
+                            FormulaType eType,
                             SequenceInputStream& rStrm );
 
 private:
@@ -1319,20 +1332,19 @@ OoxFormulaParserImpl::OoxFormulaParserImpl( const FormulaParser& rParent ) :
 {
 }
 
-void OoxFormulaParserImpl::importOoxFormula( FormulaContext& rContext, const OUString& rFormulaString )
+ApiTokenSequence OoxFormulaParserImpl::importOoxFormula( const CellAddress& rBaseAddr, const OUString& rFormulaString )
 {
     if( mbNeedExtRefs )
     {
         maApiParser.getParserProperties().setProperty( PROP_ExternalLinks, getExternalLinks().getLinkInfos() );
         mbNeedExtRefs = false;
     }
-    initializeImport( rContext );
-    finalizeImport( maApiParser.parseFormula( rFormulaString, rContext.getBaseAddress() ) );
+    return finalizeTokenArray( maApiParser.parseFormula( rFormulaString, rBaseAddr ) );
 }
 
-void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, SequenceInputStream& rStrm )
+ApiTokenSequence OoxFormulaParserImpl::importBiff12Formula( const CellAddress& rBaseAddr, FormulaType eType, SequenceInputStream& rStrm )
 {
-    initializeImport( rContext );
+    initializeImport( rBaseAddr, eType );
 
     sal_Int32 nFmlaSize = rStrm.readInt32();
     sal_Int64 nFmlaPos = rStrm.tell();
@@ -1345,7 +1357,7 @@ void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, Sequen
     rStrm.seek( nFmlaPos );
 
     bool bOk = (nFmlaSize >= 0) && (nAddDataSize >= 0);
-    bool bRelativeAsOffset = getFormulaContext().isRelativeAsOffset();
+    bool bRelativeAsOffset = mbRelativeAsOffset;
 
     while( bOk && !rStrm.isEof() && (rStrm.tell() < nFmlaEndPos) )
     {
@@ -1422,12 +1434,16 @@ void OoxFormulaParserImpl::importBiff12Formula( FormulaContext& rContext, Sequen
     }
 
     // build and finalize the token sequence
+    ApiTokenSequence aFinalTokens;
     if( bOk && (rStrm.tell() == nFmlaEndPos) && (mnAddDataPos == nAddDataEndPos) )
-        finalizeImport();
+        aFinalTokens = finalizeImport();
 
     // seek behind token array
     if( (nFmlaSize >= 0) && (nAddDataSize >= 0) )
         rStrm.seek( nAddDataEndPos );
+
+    // return the final token sequence
+    return aFinalTokens;
 }
 
 // import token contents and create API formula token -------------------------
@@ -1571,7 +1587,7 @@ bool OoxFormulaParserImpl::importTableToken( SequenceInputStream& rStrm )
                 }
                 else if( bThisRow )
                 {
-                    nStartRow = nEndRow = getFormulaContext().getBaseAddress().Row - xTable->getRange().StartRow;
+                    nStartRow = nEndRow = maBaseAddr.Row - xTable->getRange().StartRow;
                     bFixedHeight = true;
                 }
                 else
@@ -1750,9 +1766,7 @@ bool OoxFormulaParserImpl::importExpToken( SequenceInputStream& rStrm )
     swapStreamPosition( rStrm );
     rStrm >> aBaseAddr.mnCol;
     swapStreamPosition( rStrm );
-    setSharedFormula( aBaseAddr );
-    // formula has been set, exit parser by returning false
-    return false;
+    return pushSpecialTokenOperand( aBaseAddr, false );
 }
 
 LinkSheetRange OoxFormulaParserImpl::readSheetRange( SequenceInputStream& rStrm )
@@ -1867,8 +1881,9 @@ class BiffFormulaParserImpl : public FormulaParserImpl
 public:
     explicit            BiffFormulaParserImpl( const FormulaParser& rParent );
 
-    virtual void        importBiffFormula(
-                            FormulaContext& rContext,
+    virtual ApiTokenSequence importBiffFormula(
+                            const CellAddress& rBaseAddr,
+                            FormulaType eType,
                             BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize );
 
 private:
@@ -1904,7 +1919,8 @@ private:
     bool                importFuncVarToken2( BiffInputStream& rStrm );
     bool                importFuncVarToken4( BiffInputStream& rStrm );
     bool                importFuncCEToken( BiffInputStream& rStrm );
-    bool                importExpToken5( BiffInputStream& rStrm );
+    bool                importExpToken( BiffInputStream& rStrm );
+    bool                importTblToken( BiffInputStream& rStrm );
 
     bool                importNlrAddrToken( BiffInputStream& rStrm, bool bRow );
     bool                importNlrRangeToken( BiffInputStream& rStrm );
@@ -1953,7 +1969,6 @@ private:
     ImportTokenFunc     mpImportFuncToken;          /// Pointer to tFunc import function (function with fixed parameter count).
     ImportTokenFunc     mpImportFuncVarToken;       /// Pointer to tFuncVar import function (function with variable parameter count).
     ImportTokenFunc     mpImportFuncCEToken;        /// Pointer to tFuncCE import function (command macro call).
-    ImportTokenFunc     mpImportExpToken;           /// Pointer to tExp import function (array/shared formula).
     sal_Int64           mnAddDataPos;               /// Current stream position for additional data (tArray, tMemArea, tNlr).
     sal_Int32           mnCurrRefId;                /// Current ref-id from tSheet token (BIFF2-BIFF4 only).
     sal_uInt16          mnAttrDataSize;             /// Size of one tAttr data element.
@@ -1987,7 +2002,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mpImportFuncToken = &BiffFormulaParserImpl::importFuncToken2;
             mpImportFuncVarToken = &BiffFormulaParserImpl::importFuncVarToken2;
             mpImportFuncCEToken = &BiffFormulaParserImpl::importFuncCEToken;
-            mpImportExpToken = &BiffFormulaParserImpl::importTokenNotAvailable;
             mnAttrDataSize = 1;
             mnArraySize = 6;
             mnNameSize = 5;
@@ -2009,7 +2023,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mpImportFuncToken = &BiffFormulaParserImpl::importFuncToken2;
             mpImportFuncVarToken = &BiffFormulaParserImpl::importFuncVarToken2;
             mpImportFuncCEToken = &BiffFormulaParserImpl::importFuncCEToken;
-            mpImportExpToken = &BiffFormulaParserImpl::importTokenNotAvailable;
             mnAttrDataSize = 2;
             mnArraySize = 7;
             mnNameSize = 8;
@@ -2031,7 +2044,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mpImportFuncToken = &BiffFormulaParserImpl::importFuncToken4;
             mpImportFuncVarToken = &BiffFormulaParserImpl::importFuncVarToken4;
             mpImportFuncCEToken = &BiffFormulaParserImpl::importTokenNotAvailable;
-            mpImportExpToken = &BiffFormulaParserImpl::importTokenNotAvailable;
             mnAttrDataSize = 2;
             mnArraySize = 7;
             mnNameSize = 8;
@@ -2053,7 +2065,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mpImportFuncToken = &BiffFormulaParserImpl::importFuncToken4;
             mpImportFuncVarToken = &BiffFormulaParserImpl::importFuncVarToken4;
             mpImportFuncCEToken = &BiffFormulaParserImpl::importTokenNotAvailable;
-            mpImportExpToken = &BiffFormulaParserImpl::importExpToken5;
             mnAttrDataSize = 2;
             mnArraySize = 7;
             mnNameSize = 12;
@@ -2075,7 +2086,6 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
             mpImportFuncToken = &BiffFormulaParserImpl::importFuncToken4;
             mpImportFuncVarToken = &BiffFormulaParserImpl::importFuncVarToken4;
             mpImportFuncCEToken = &BiffFormulaParserImpl::importTokenNotAvailable;
-            mpImportExpToken = &BiffFormulaParserImpl::importExpToken5;
             mnAttrDataSize = 2;
             mnArraySize = 7;
             mnNameSize = 2;
@@ -2087,15 +2097,14 @@ BiffFormulaParserImpl::BiffFormulaParserImpl( const FormulaParser& rParent ) :
     }
 }
 
-void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
-        BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
+ApiTokenSequence BiffFormulaParserImpl::importBiffFormula( const CellAddress& rBaseAddr,
+        FormulaType eType, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
 {
-    initializeImport( rContext );
+    initializeImport( rBaseAddr, eType );
     mnCurrRefId = 0;
 
     sal_uInt16 nFmlaSize = lclReadFmlaSize( rStrm, getBiff(), pnFmlaSize );
     sal_Int64 nEndPos = mnAddDataPos = rStrm.tell() + nFmlaSize;
-    bool bRelativeAsOffset = getFormulaContext().isRelativeAsOffset();
 
     bool bOk = true;
     while( bOk && !rStrm.isEof() && (rStrm.tell() < nEndPos) )
@@ -2113,8 +2122,8 @@ void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
                 // base tokens
                 switch( nBaseId )
                 {
-                    case BIFF_TOKID_EXP:        bOk = (this->*mpImportExpToken)( rStrm );               break;
-                    case BIFF_TOKID_TBL:        bOk = false; /* multiple op. will be set externally */  break;
+                    case BIFF_TOKID_EXP:        bOk = importExpToken( rStrm );                          break;
+                    case BIFF_TOKID_TBL:        bOk = importTblToken( rStrm );                          break;
                     case BIFF_TOKID_ADD:        bOk = pushBinaryOperator( OPCODE_ADD );                 break;
                     case BIFF_TOKID_SUB:        bOk = pushBinaryOperator( OPCODE_SUB );                 break;
                     case BIFF_TOKID_MUL:        bOk = pushBinaryOperator( OPCODE_MULT );                break;
@@ -2170,10 +2179,10 @@ void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
                     case BIFF_TOKID_MEMNOMEMN:  bOk = importMemFuncToken( rStrm );                                      break;
                     case BIFF_TOKID_FUNCCE:     bOk = (this->*mpImportFuncCEToken)( rStrm );                            break;
                     case BIFF_TOKID_NAMEX:      bOk = (this->*mpImportNameXToken)( rStrm );                             break;
-                    case BIFF_TOKID_REF3D:      bOk = (this->*mpImportRef3dToken)( rStrm, false, bRelativeAsOffset );   break;
-                    case BIFF_TOKID_AREA3D:     bOk = (this->*mpImportArea3dToken)( rStrm, false, bRelativeAsOffset );  break;
-                    case BIFF_TOKID_REFERR3D:   bOk = (this->*mpImportRef3dToken)( rStrm, true, bRelativeAsOffset );    break;
-                    case BIFF_TOKID_AREAERR3D:  bOk = (this->*mpImportArea3dToken)( rStrm, true, bRelativeAsOffset );   break;
+                    case BIFF_TOKID_REF3D:      bOk = (this->*mpImportRef3dToken)( rStrm, false, mbRelativeAsOffset );  break;
+                    case BIFF_TOKID_AREA3D:     bOk = (this->*mpImportArea3dToken)( rStrm, false, mbRelativeAsOffset ); break;
+                    case BIFF_TOKID_REFERR3D:   bOk = (this->*mpImportRef3dToken)( rStrm, true, mbRelativeAsOffset );   break;
+                    case BIFF_TOKID_AREAERR3D:  bOk = (this->*mpImportArea3dToken)( rStrm, true, mbRelativeAsOffset );  break;
                     default:                    bOk = false;
                 }
             }
@@ -2181,11 +2190,15 @@ void BiffFormulaParserImpl::importBiffFormula( FormulaContext& rContext,
     }
 
     // build and finalize the token sequence
+    ApiTokenSequence aFinalTokens;
     if( bOk && (rStrm.tell() == nEndPos) )
-        finalizeImport();
+        aFinalTokens = finalizeImport();
 
     // seek behind additional token data of tArray, tMemArea, tNlr tokens
     rStrm.seek( mnAddDataPos );
+
+    // return the final token sequence
+    return aFinalTokens;
 }
 
 // import token contents and create API formula token -------------------------
@@ -2204,13 +2217,13 @@ bool BiffFormulaParserImpl::importRefTokenNotAvailable( BiffInputStream&, bool, 
 
 bool BiffFormulaParserImpl::importStrToken2( BiffInputStream& rStrm )
 {
-    return pushValueOperand( rStrm.readByteStringUC( false, getTextEncoding(), getFormulaContext().isNulCharsAllowed() ) );
+    return pushValueOperand( rStrm.readByteStringUC( false, getTextEncoding(), mbAllowNulChars ) );
 }
 
 bool BiffFormulaParserImpl::importStrToken8( BiffInputStream& rStrm )
 {
     // read flags field for empty strings also
-    return pushValueOperand( rStrm.readUniStringBody( rStrm.readuInt8(), getFormulaContext().isNulCharsAllowed() ) );
+    return pushValueOperand( rStrm.readUniStringBody( rStrm.readuInt8(), mbAllowNulChars ) );
 }
 
 bool BiffFormulaParserImpl::importAttrToken( BiffInputStream& rStrm )
@@ -2340,7 +2353,6 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
     size_t nOpSize = popOperandSize();
     size_t nOldArraySize = getFormulaSize();
     bool bBiff8 = getBiff() == BIFF8;
-    bool bNulChars = getFormulaContext().isNulCharsAllowed();
 
     // read array size
     swapStreamPosition( rStrm );
@@ -2369,8 +2381,8 @@ bool BiffFormulaParserImpl::importArrayToken( BiffInputStream& rStrm )
                 break;
                 case BIFF_DATATYPE_STRING:
                     appendRawToken( OPCODE_PUSH ) <<= bBiff8 ?
-                        rStrm.readUniString( bNulChars ) :
-                        rStrm.readByteStringUC( false, getTextEncoding(), bNulChars );
+                        rStrm.readUniString( mbAllowNulChars ) :
+                        rStrm.readByteStringUC( false, getTextEncoding(), mbAllowNulChars );
                 break;
                 case BIFF_DATATYPE_BOOL:
                     appendRawToken( OPCODE_PUSH ) <<= static_cast< double >( (rStrm.readuInt8() == BIFF_TOK_BOOL_FALSE) ? 0.0 : 1.0 );
@@ -2519,13 +2531,18 @@ bool BiffFormulaParserImpl::importFuncCEToken( BiffInputStream& rStrm )
     return pushBiffFunction( nCmdId, nParamCount );
 }
 
-bool BiffFormulaParserImpl::importExpToken5( BiffInputStream& rStrm )
+bool BiffFormulaParserImpl::importExpToken( BiffInputStream& rStrm )
 {
     BinAddress aBaseAddr;
     aBaseAddr.read( rStrm );
-    setSharedFormula( aBaseAddr );
-    // formula has been set, exit parser by returning false
-    return false;
+    return pushSpecialTokenOperand( aBaseAddr, false );
+}
+
+bool BiffFormulaParserImpl::importTblToken( BiffInputStream& rStrm )
+{
+    BinAddress aBaseAddr;
+    aBaseAddr.read( rStrm );
+    return pushSpecialTokenOperand( aBaseAddr, true );
 }
 
 bool BiffFormulaParserImpl::importNlrAddrToken( BiffInputStream& rStrm, bool bRow )
@@ -2795,22 +2812,35 @@ FormulaParser::~FormulaParser()
 {
 }
 
-void FormulaParser::importFormula( FormulaContext& rContext, const OUString& rFormulaString ) const
+ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, const OUString& rFormulaString ) const
 {
-    mxImpl->importOoxFormula( rContext, rFormulaString );
+    return mxImpl->importOoxFormula( rBaseAddress, rFormulaString );
 }
 
-void FormulaParser::importFormula( FormulaContext& rContext, SequenceInputStream& rStrm ) const
+ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, FormulaType eType, SequenceInputStream& rStrm ) const
 {
-    mxImpl->importBiff12Formula( rContext, rStrm );
+    return mxImpl->importBiff12Formula( rBaseAddress, eType, rStrm );
 }
 
-void FormulaParser::importFormula( FormulaContext& rContext, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
+ApiTokenSequence FormulaParser::importFormula( const CellAddress& rBaseAddress, FormulaType eType, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize ) const
 {
-    mxImpl->importBiffFormula( rContext, rStrm, pnFmlaSize );
+    return mxImpl->importBiffFormula( rBaseAddress, eType, rStrm, pnFmlaSize );
 }
 
-void FormulaParser::convertErrorToFormula( FormulaContext& rContext, sal_uInt8 nErrorCode ) const
+ApiTokenSequence FormulaParser::convertBoolToFormula( bool bValue ) const
+{
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiffFuncId( bValue ? BIFF_FUNC_TRUE : BIFF_FUNC_FALSE ) )
+    {
+        ApiTokenSequence aTokens( 3 );
+        aTokens[ 0 ].OpCode = pFuncInfo->mnApiOpCode;
+        aTokens[ 1 ].OpCode = OPCODE_OPEN;
+        aTokens[ 2 ].OpCode = OPCODE_CLOSE;
+        return aTokens;
+    }
+    return ApiTokenSequence();
+}
+
+ApiTokenSequence FormulaParser::convertErrorToFormula( sal_uInt8 nErrorCode ) const
 {
     ApiTokenSequence aTokens( 3 );
     // HACK: enclose all error codes into an 1x1 matrix
@@ -2818,26 +2848,24 @@ void FormulaParser::convertErrorToFormula( FormulaContext& rContext, sal_uInt8 n
     aTokens[ 1 ].OpCode = OPCODE_PUSH;
     aTokens[ 1 ].Data <<= BiffHelper::calcDoubleFromError( nErrorCode );
     aTokens[ 2 ].OpCode = OPCODE_ARRAY_CLOSE;
-    mxImpl->setFormula( rContext, aTokens );
+    return aTokens;
 }
 
-void FormulaParser::convertNameToFormula( FormulaContext& rContext, sal_Int32 nTokenIndex ) const
+ApiTokenSequence FormulaParser::convertNameToFormula( sal_Int32 nTokenIndex ) const
 {
-    if( nTokenIndex >= 0 )
-    {
-        ApiTokenSequence aTokens( 1 );
-        aTokens[ 0 ].OpCode = OPCODE_NAME;
-        aTokens[ 0 ].Data <<= nTokenIndex;
-        mxImpl->setFormula( rContext, aTokens );
-    }
-    else
-        convertErrorToFormula( rContext, BIFF_ERR_REF );
+    if( nTokenIndex < 0 )
+        return convertErrorToFormula( BIFF_ERR_REF );
+
+    ApiTokenSequence aTokens( 1 );
+    aTokens[ 0 ].OpCode = OPCODE_NAME;
+    aTokens[ 0 ].Data <<= nTokenIndex;
+    return aTokens;
 }
 
-void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OUString& rUrl, double fValue ) const
+ApiTokenSequence FormulaParser::convertNumberToHyperlink( const OUString& rUrl, double fValue ) const
 {
     OSL_ENSURE( rUrl.getLength() > 0, "FormulaParser::convertNumberToHyperlink - missing URL" );
-    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiff12FuncId( BIFF_FUNC_HYPERLINK ) )
+    if( const FunctionInfo* pFuncInfo = getFuncInfoFromBiffFuncId( BIFF_FUNC_HYPERLINK ) )
     {
         ApiTokenSequence aTokens( 6 );
         aTokens[ 0 ].OpCode = pFuncInfo->mnApiOpCode;
@@ -2848,8 +2876,9 @@ void FormulaParser::convertNumberToHyperlink( FormulaContext& rContext, const OU
         aTokens[ 4 ].OpCode = OPCODE_PUSH;
         aTokens[ 4 ].Data <<= fValue;
         aTokens[ 5 ].OpCode = OPCODE_CLOSE;
-        mxImpl->setFormula( rContext, aTokens );
+        return aTokens;
     }
+    return ApiTokenSequence();
 }
 
 OUString FormulaParser::importOleTargetLink( const OUString& rFormulaString )

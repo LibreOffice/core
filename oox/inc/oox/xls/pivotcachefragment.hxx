@@ -81,7 +81,7 @@ class PivotCacheRecordsFragment : public WorksheetFragmentBase
 {
 public:
     explicit            PivotCacheRecordsFragment(
-                            const WorkbookHelper& rHelper,
+                            const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath,
                             const PivotCache& rPivotCache );
 
@@ -126,7 +126,7 @@ class BiffPivotCacheRecordsContext : public BiffWorksheetContextBase
 {
 public:
     explicit            BiffPivotCacheRecordsContext(
-                            const WorkbookHelper& rHelper,
+                            const WorksheetHelper& rHelper,
                             const PivotCache& rPivotCache );
 
     /** Reads the current record from stream and tries to insert a cell into

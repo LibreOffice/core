@@ -45,17 +45,9 @@ class WorkbookContextBase : public ::oox::core::ContextHandler2, public Workbook
 {
 public:
     template< typename ParentType >
-    explicit            WorkbookContextBase( ParentType& rParent );
+    inline explicit     WorkbookContextBase( ParentType& rParent ) :
+                            ::oox::core::ContextHandler2( rParent ), WorkbookHelper( rParent ) {}
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename ParentType >
-WorkbookContextBase::WorkbookContextBase( ParentType& rParent ) :
-    ::oox::core::ContextHandler2( rParent ),
-    WorkbookHelper( rParent )
-{
-}
 
 // ============================================================================
 
@@ -63,36 +55,13 @@ WorkbookContextBase::WorkbookContextBase( ParentType& rParent ) :
 
     Used to import contexts in sheet fragments.
  */
-class WorksheetContextBase : public ::oox::core::ContextHandler2, public WorksheetHelperRoot
+class WorksheetContextBase : public ::oox::core::ContextHandler2, public WorksheetHelper
 {
 public:
     template< typename ParentType >
-    explicit            WorksheetContextBase(
-                            ParentType& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
-
-    template< typename ParentType >
-    explicit            WorksheetContextBase( ParentType& rParent );
+    inline explicit     WorksheetContextBase( ParentType& rParent ) :
+                            ::oox::core::ContextHandler2( rParent ), WorksheetHelper( rParent ) {}
 };
-
-// ----------------------------------------------------------------------------
-
-template< typename ParentType >
-WorksheetContextBase::WorksheetContextBase( ParentType& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    ::oox::core::ContextHandler2( rParent ),
-    WorksheetHelperRoot( rParent, rxProgressBar, eSheetType, nSheet )
-{
-}
-
-template< typename ParentType >
-WorksheetContextBase::WorksheetContextBase( ParentType& rParent ) :
-    ::oox::core::ContextHandler2( rParent ),
-    WorksheetHelperRoot( rParent )
-{
-}
 
 // ============================================================================
 
@@ -114,16 +83,9 @@ public:
 
     Used to import sheet fragments.
  */
-class WorksheetFragmentBase : public ::oox::core::FragmentHandler2, public WorksheetHelperRoot
+class WorksheetFragmentBase : public ::oox::core::FragmentHandler2, public WorksheetHelper
 {
 public:
-    explicit            WorksheetFragmentBase(
-                            const WorkbookHelper& rHelper,
-                            const ::rtl::OUString& rFragmentPath,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
-
     explicit            WorksheetFragmentBase(
                             const WorksheetHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
@@ -164,15 +126,9 @@ protected:
 
     Used to import contexts in sheet fragments.
  */
-class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelperRoot
+class BiffWorksheetContextBase : public BiffContextHandler, public WorksheetHelper
 {
 protected:
-    explicit            BiffWorksheetContextBase(
-                            const WorkbookHelper& rHelper,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
-
     explicit            BiffWorksheetContextBase( const WorksheetHelper& rHelper );
 };
 
@@ -262,14 +218,12 @@ protected:
 
     Used to import sheet fragments.
  */
-class BiffWorksheetFragmentBase : public BiffFragmentHandler, public WorksheetHelperRoot
+class BiffWorksheetFragmentBase : public BiffFragmentHandler, public WorksheetHelper
 {
 protected:
     explicit            BiffWorksheetFragmentBase(
-                            const BiffWorkbookFragmentBase& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            WorksheetType eSheetType,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent );
 };
 
 // ----------------------------------------------------------------------------
@@ -280,9 +234,8 @@ class BiffSkipWorksheetFragment : public BiffWorksheetFragmentBase
 {
 public:
     explicit            BiffSkipWorksheetFragment(
-                            const BiffWorkbookFragmentBase& rParent,
-                            const ISegmentProgressBarRef& rxProgressBar,
-                            sal_Int16 nSheet );
+                            const WorksheetHelper& rHelper,
+                            const BiffWorkbookFragmentBase& rParent );
 
     virtual bool        importFragment();
 };

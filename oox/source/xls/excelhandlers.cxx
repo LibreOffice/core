@@ -51,17 +51,10 @@ WorkbookFragmentBase::WorkbookFragmentBase(
 
 // ============================================================================
 
-WorksheetFragmentBase::WorksheetFragmentBase( const WorkbookHelper& rHelper,
-        const OUString& rFragmentPath, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
-{
-}
-
 WorksheetFragmentBase::WorksheetFragmentBase(
         const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     FragmentHandler2( rHelper.getOoxFilter(), rFragmentPath ),
-    WorksheetHelperRoot( rHelper )
+    WorksheetHelper( rHelper )
 {
 }
 
@@ -81,14 +74,8 @@ BiffWorkbookContextBase::BiffWorkbookContextBase( const WorkbookHelper& rHelper 
 
 // ----------------------------------------------------------------------------
 
-BiffWorksheetContextBase::BiffWorksheetContextBase( const WorkbookHelper& rHelper,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
-    WorksheetHelperRoot( rHelper, rxProgressBar, eSheetType, nSheet )
-{
-}
-
 BiffWorksheetContextBase::BiffWorksheetContextBase( const WorksheetHelper& rHelper ) :
-    WorksheetHelperRoot( rHelper )
+    WorksheetHelper( rHelper )
 {
 }
 
@@ -202,18 +189,16 @@ BiffWorkbookFragmentBase::BiffWorkbookFragmentBase( const WorkbookHelper& rHelpe
 
 // ----------------------------------------------------------------------------
 
-BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
+BiffWorksheetFragmentBase::BiffWorksheetFragmentBase( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
     BiffFragmentHandler( rParent ),
-    WorksheetHelperRoot( rParent, rxProgressBar, eSheetType, nSheet )
+    WorksheetHelper( rHelper )
 {
 }
 
 // ----------------------------------------------------------------------------
 
-BiffSkipWorksheetFragment::BiffSkipWorksheetFragment( const BiffWorkbookFragmentBase& rParent,
-        const ISegmentProgressBarRef& rxProgressBar, sal_Int16 nSheet ) :
-    BiffWorksheetFragmentBase( rParent, rxProgressBar, SHEETTYPE_EMPTYSHEET, nSheet )
+BiffSkipWorksheetFragment::BiffSkipWorksheetFragment( const WorksheetHelper& rHelper, const BiffWorkbookFragmentBase& rParent ) :
+    BiffWorksheetFragmentBase( rHelper, rParent )
 {
 }
 

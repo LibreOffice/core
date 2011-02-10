@@ -37,7 +37,6 @@ namespace com { namespace sun { namespace star {
 namespace oox {
 namespace xls {
 
-class FormulaContext;
 class BiffInputStreamPos;
 
 // ============================================================================
@@ -91,15 +90,15 @@ public:
     /** Returns the original name as imported from or exported to the file. */
     const ::rtl::OUString& getUpcaseModelName() const;
     /** Returns an Any with a SingleReference or ComplexReference, or an empty Any. */
-    ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddress ) const;
+    ::com::sun::star::uno::Any getReference( const ::com::sun::star::table::CellAddress& rBaseAddr ) const;
 
 protected:
-    /** Imports the OOXML formula string, using the passed formula context. */
-    void                importOoxFormula( FormulaContext& rContext, sal_Int16 nBaseSheet );
-    /** Imports the BIFF12 formula, using the passed formula context. */
-    void                importBiff12Formula( FormulaContext& rContext, sal_Int16 nBaseSheet, SequenceInputStream& rStrm );
-    /** Imports the BIFF formula, using the passed formula context. */
-    void                importBiffFormula( FormulaContext& rContext, sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
+    /** Converts the OOXML formula string stored in the own model. */
+    ApiTokenSequence    importOoxFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
+    /** Imports the BIFF12 formula from the passed stream. */
+    ApiTokenSequence    importBiff12Formula( const ::com::sun::star::table::CellAddress& rBaseAddr, SequenceInputStream& rStrm );
+    /** Imports the BIFF formula from the passed stream. */
+    ApiTokenSequence    importBiffFormula( const ::com::sun::star::table::CellAddress& rBaseAddr, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
     /** Tries to convert the passed token sequence to a SingleReference or ComplexReference. */
     void                extractReference( const ApiTokenSequence& rTokens );
@@ -151,10 +150,10 @@ public:
     bool                getAbsoluteRange( ::com::sun::star::table::CellRangeAddress& orRange ) const;
 
 private:
-    /** Imports the OOXML or BIFF12 formula, using the passed formula context. */
-    void                implImportOoxFormula( FormulaContext& rContext );
-    /** Imports the BIFF formula, using the passed formula context. */
-    void                implImportBiffFormula( FormulaContext& rContext );
+    /** Imports the OOXML or BIFF12 definition of the name. */
+    void                implImportOoxFormula();
+    /** Imports the BIFF definition of the name. */
+    void                implImportBiffFormula();
 
 private:
     typedef ::std::auto_ptr< StreamDataSequence >   StreamDataSeqPtr;

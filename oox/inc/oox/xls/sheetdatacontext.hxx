@@ -100,6 +100,7 @@ private:
     void                importDataTable( SequenceInputStream& rStrm );
 
 private:
+    SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
     CellModel           maCurrCell;         /// Position and formatting of current imported cell.
     DataTableModel      maTableData;        /// Additional data for table operation ranges.
     BinAddress          maCurrPos;          /// Current position for binary import.
@@ -158,11 +159,12 @@ private:
     void                importDataTable( BiffInputStream& rStrm );
 
 private:
-    CellModel           maCurrCell;             /// Position and formatting of current imported cell.
-    sal_uInt32          mnFormulaIgnoreSize;    /// Number of bytes to be ignored in FORMULA record.
-    sal_uInt32          mnArrayIgnoreSize;      /// Number of bytes to be ignored in ARRAY record.
-    sal_uInt16          mnBiff2XfId;            /// Current XF identifier from IXFE record.
-    OptValue< bool >    mobBiff2HasXfs;         /// Select XF formatting or direct formatting in BIFF2.
+    SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
+    CellModel           maCurrCell;         /// Position and formatting of current imported cell.
+    sal_uInt32          mnFormulaSkipSize;  /// Number of bytes to be ignored in FORMULA record.
+    sal_uInt32          mnArraySkipSize;    /// Number of bytes to be ignored in ARRAY record.
+    sal_uInt16          mnBiff2XfId;        /// Current XF identifier from IXFE record.
+    OptValue< bool >    mobBiff2HasXfs;     /// Select XF formatting or direct formatting in BIFF2.
 };
 
 // ============================================================================

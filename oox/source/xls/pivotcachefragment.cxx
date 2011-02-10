@@ -208,15 +208,20 @@ void PivotCacheDefinitionFragment::finalizeImport()
     {
         OUString aRecFragmentPath = getRelations().getFragmentPathFromRelId( mrPivotCache.getRecordsRelId() );
         if( aRecFragmentPath.getLength() > 0 )
-            importOoxFragment( new PivotCacheRecordsFragment( *this, aRecFragmentPath, mrPivotCache ) );
+        {
+            sal_Int16 nSheet = mrPivotCache.getSourceRange().Sheet;
+            WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet );
+            if( xSheetGlob.get() )
+                importOoxFragment( new PivotCacheRecordsFragment( *xSheetGlob, aRecFragmentPath, mrPivotCache ) );
+        }
     }
 }
 
 // ============================================================================
 
-PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorkbookHelper& rHelper,
+PivotCacheRecordsFragment::PivotCacheRecordsFragment( const WorksheetHelper& rHelper,
         const OUString& rFragmentPath, const PivotCache& rPivotCache ) :
-    WorksheetFragmentBase( rHelper, rFragmentPath, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
+    WorksheetFragmentBase( rHelper, rFragmentPath ),
     mrPivotCache( rPivotCache ),
     mnCol( 0 ),
     mnRow( 0 ),
@@ -373,10 +378,14 @@ bool BiffPivotCacheFragment::importFragment()
         {
             /*  Last call of lclSeekToPCDField() failed and kept stream position
                 unchanged. Stream should point to source data table now. */
-            BiffPivotCacheRecordsContext aContext( *this, mrPivotCache );
-            if( aContext.isValidSheet() )
+            sal_Int16 nSheet = mrPivotCache.getSourceRange().Sheet;
+            WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, nSheet );
+            if( xSheetGlob.get() )
+            {
+                BiffPivotCacheRecordsContext aContext( *xSheetGlob, mrPivotCache );
                 while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
                     aContext.importRecord( rStrm );
+            }
         }
     }
 
@@ -385,8 +394,8 @@ bool BiffPivotCacheFragment::importFragment()
 
 // ============================================================================
 
-BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorkbookHelper& rHelper, const PivotCache& rPivotCache ) :
-    BiffWorksheetContextBase( rHelper, ISegmentProgressBarRef(), SHEETTYPE_WORKSHEET, rPivotCache.getSourceRange().Sheet ),
+BiffPivotCacheRecordsContext::BiffPivotCacheRecordsContext( const WorksheetHelper& rHelper, const PivotCache& rPivotCache ) :
+    BiffWorksheetContextBase( rHelper ),
     mrPivotCache( rPivotCache ),
     mnColIdx( 0 ),
     mnRow( 0 ),

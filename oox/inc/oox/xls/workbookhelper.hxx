@@ -108,26 +108,31 @@ class TableBuffer;
 class ThemeBuffer;
 class UnitConverter;
 class ViewSettings;
-class WorkbookData;
 class WorkbookSettings;
 class WorksheetBuffer;
+
+class WorkbookGlobals;
+typedef ::boost::shared_ptr< WorkbookGlobals > WorkbookGlobalsRef;
 
 /** Helper class to provice access to global workbook data.
 
     All classes derived from this helper class will have access to a singleton
-    object of type WorkbookData containing global workbook settings, buffers,
-    converters, etc. Nearly all classes in this filter implementation are
-    derived directly or indirectly from this class.
+    object of type WorkbookGlobals containing global workbook settings,
+    buffers, converters, etc. Nearly all classes in this filter implementation
+    are derived directly or indirectly from this class.
 
-    This class contains just a simple reference to the WorkbookData object to
-    prevent circular references, as the WorkbookData object contains a lot of
-    objects derived from this class.
+    This class contains just a simple reference to the WorkbookGlobals object
+    to prevent circular references, as the WorkbookGlobals object contains a
+    lot of objects derived from this class.
  */
 class WorkbookHelper
 {
 public:
-    inline /*implicit*/ WorkbookHelper( WorkbookData& rBookData ) : mrBookData( rBookData ) {}
+    inline /*implicit*/ WorkbookHelper( WorkbookGlobals& rBookGlob ) : mrBookGlob( rBookGlob ) {}
     virtual             ~WorkbookHelper();
+
+    static WorkbookGlobalsRef constructGlobals( ExcelFilter& rFilter );
+    static WorkbookGlobalsRef constructGlobals( ExcelBiffFilter& rFilter, BiffType eBiff );
 
     // filter -----------------------------------------------------------------
 
@@ -139,13 +144,13 @@ public:
     SegmentProgressBar& getProgressBar() const;
     /** Returns true, if the file is a multi-sheet document, or false if single-sheet. */
     bool                isWorkbookFile() const;
-    /** Returns the index of the current sheet in the Calc document. */
+    /** Returns the index of the current Calc sheet, if filter currently processes a sheet. */
     sal_Int16           getCurrentSheetIndex() const;
 
-    /** Sets the index of the current sheet in the Calc document. */
-    void                setCurrentSheetIndex( sal_Int16 nSheet );
-    /** Sets the VBA project storage. */
+    /** Sets the VBA project storage used to import VBA source code and forms. */
     void                setVbaProjectStorage( const StorageRef& rxVbaPrjStrg );
+    /** Sets the index of the current Calc sheet, if filter currently processes a sheet. */
+    void                setCurrentSheetIndex( sal_Int16 nSheet );
     /** Final conversion after importing the workbook. */
     void                finalizeWorkbookImport();
 
@@ -277,38 +282,7 @@ public:
     BiffCodecHelper&    getCodecHelper() const;
 
 private:
-    WorkbookData&       mrBookData;
-};
-
-// ============================================================================
-
-namespace prv {
-
-typedef ::boost::shared_ptr< WorkbookData > WorkbookDataRef;
-
-struct WorkbookDataOwner
-{
-    explicit            WorkbookDataOwner( WorkbookDataRef xBookData );
-    virtual             ~WorkbookDataOwner();
-    WorkbookDataRef     mxBookData;
-};
-
-} // namespace prv
-
-// ----------------------------------------------------------------------------
-
-class WorkbookHelperRoot : private prv::WorkbookDataOwner, public WorkbookHelper
-{
-public:
-    explicit            WorkbookHelperRoot( ExcelFilter& rFilter );
-    explicit            WorkbookHelperRoot( ExcelBiffFilter& rFilter, BiffType eBiff );
-
-    /** Returns true, if this helper refers to a valid document. */
-    bool                isValid() const;
-
-private:
-                        WorkbookHelperRoot( const WorkbookHelperRoot& );
-    WorkbookHelperRoot& operator=( const WorkbookHelperRoot& );
+    WorkbookGlobals&    mrBookGlob;
 };
 
 // ============================================================================
