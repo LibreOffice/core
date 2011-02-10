@@ -229,12 +229,6 @@ void FuConstRectangle::Deactivate()
 // #98185# Create default drawing objects via keyboard
 SdrObject* FuConstRectangle::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_LINE:
-    // case SID_DRAW_RECT:
-    // case SID_DRAW_ELLIPSE:
-    // case SID_DRAW_CAPTION:
-    // case SID_DRAW_CAPTION_VERTICAL:
-
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(),
         0L, pDrDoc);

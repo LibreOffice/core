@@ -377,7 +377,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
 
         case SID_PASTE:
             DBG_ERROR( "SdrView::PasteClipboard not supported anymore" );
-            // pView->PasteClipboard( pWin );
             break;
 
         case SID_SELECTALL:
