@@ -682,21 +682,17 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                 if(pCmp->aName == pEntry->aParent)
                 {
                     // initial sortiert einfuegen
-                    USHORT ii;
-                    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-                    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
-                    for ( ii = 0;
-                         ii < pCmp->Count() && COMPARE_LESS ==
-                         pCollator->compareString( (*pCmp->pChilds)[ii]->aName,
-                                        pEntry->aName);++ii) ;
-                    pCmp->Put(pEntry,ii);
+                    USHORT nPos;
+                    for( nPos = 0 ; nPos < pCmp->Count() &&
+                        (*pCmp->pChilds)[nPos]->aName.CompareToNumeric(pEntry->aName) < 0 ; nPos++);
+                    pCmp->Put(pEntry,nPos);
                     break;
                 }
             }
         }
     }
-    // alle, die schon unter ihrem Parent eingeordnet wurden
-    // entfernen
+
+    // Keep only nodes with no parent in root array
     for(i = 0; i < rArr.Count(); )
     {
         if(rArr[i]->HasParent())
@@ -753,7 +749,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
                                 DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
     pbDeleted               ( NULL ),
 
-    aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT ),
+    aFmtLb                  ( this, WB_BORDER | WB_TABSTOP ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
 
     nActFamily              ( 0xffff ),
@@ -777,7 +773,7 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
 {
     aFmtLb.SetHelpId( HID_TEMPLATE_FMT );
     aFilterLb.SetHelpId( HID_TEMPLATE_FILTER );
-    aFmtLb.SetWindowBits( WB_SORT | WB_HIDESELECTION );
+    aFmtLb.SetWindowBits( WB_HIDESELECTION );
     Font aFont = aFmtLb.GetFont();
     aFont.SetWeight( WEIGHT_NORMAL );
     aFmtLb.SetFont( aFont );
@@ -1228,10 +1224,11 @@ BOOL SfxCommonTemplateDialog_Impl::HasSelectedStyle() const
 
 //-------------------------------------------------------------------------
 
-// intern: Aktualisierung der Anzeige
-void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags, was aktualisiert werden soll (s.o.)
+// internal: Refresh the display
+// nFlags: what we should update.
+void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)
 {
-    DBG_ASSERT(nFlags, "nichts zu tun");
+    DBG_ASSERT(nFlags, "nothing to do");
     const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
     if (!pItem)
     {
@@ -1242,7 +1239,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
         for( n = 0; n < nFamilyCount; n++ )
             if( ppItem[ StyleNrToInfoOffset(n) ] ) break;
         if ( n == nFamilyCount )
-            // passiert gelegentlich bei Beichten, Formularen etc.; weiss der Teufel warum
+            // It happens sometimes, God knows why
             return;
         ppItem += StyleNrToInfoOffset(n);
         nAppFilter = (*ppItem)->GetValue();
@@ -1257,12 +1254,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
     if(!nFilter)    // automatisch
         nFilter = nAppFilter;
 
-    DBG_ASSERT(pStyleSheetPool, "kein StyleSheetPool");
+    DBG_ASSERT(pStyleSheetPool, "no StyleSheetPool");
     if(pStyleSheetPool)
     {
         pStyleSheetPool->SetSearchMask(eFam, nFilter);
         pItem = GetFamilyItem_Impl();
-        if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)
+        if((nFlags & UPDATE_FAMILY) == UPDATE_FAMILY)   // Update view type list (Hierarchical, All, etc.
         {
             CheckItem(nActFamily, TRUE);    // Button in Toolbox checken
             aFilterLb.SetUpdateMode(FALSE);
@@ -1318,17 +1315,10 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
             while( pStyle )
             {
                 //Bubblesort
-                for( USHORT nPos = aStrings.Count() + 1 ; nPos-- ;)
-                {
-                    if( !nPos || *aStrings[nPos-1] < pStyle->GetName() )
-                    {
-                        // Die Namen stehen in den Styles, also nicht kopieren
-                        // Reingefallen!: Writer hat insgesamt nur 1 Style
-                        aStrings.Insert(
-                            new String( pStyle->GetName() ), nPos );
-                        break;
-                    }
-                }
+                USHORT nPos;
+                for( nPos = aStrings.Count() ; nPos &&
+                    aStrings[nPos-1]->CompareToNumeric(pStyle->GetName()) > 0 ; nPos--);
+                aStrings.Insert( new String( pStyle->GetName() ), nPos );
                 pStyle = pStyleSheetPool->Next();
             }
 
@@ -1344,19 +1334,21 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
 
             if( nPos < nCount || pEntry )
             {
-                // Box mit den Vorlagen fuellen
+                // Fills the display box
                 aFmtLb.SetUpdateMode(FALSE);
                 aFmtLb.Clear();
 
                 nPos = 0;
-                while( nPos < nCount )
-                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos++ ));
+                for(nPos = 0 ;  nPos < nCount ; ++nPos )
+                {
+                    aFmtLb.InsertEntry( *aStrings.GetObject( nPos ), 0, FALSE, nPos);
+                }
                 aFmtLb.SetUpdateMode(TRUE);
             }
-                // aktuelle Vorlage anzeigen
+            // Selects the current style if any
             SfxTemplateItem *pState = pFamilyState[nActFamily-1];
             String aStyle;
-            if(pState)  //Aktuellen Eintrag selektieren
+            if(pState)
                 aStyle = pState->GetStyleName();
             SelectStyle(aStyle);
             EnableDelete();
@@ -2298,6 +2290,7 @@ void SfxTemplateDialog_Impl::EnableFamilyItem( USHORT nId, BOOL bEnable )
 }
 
 //-------------------------------------------------------------------------
+// Insert element into dropdown filter "Frame Styles", "List Styles", etc.
 
 void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyItem *pItem)
 {
@@ -2309,7 +2302,7 @@ void SfxTemplateDialog_Impl::InsertFamilyItem(USHORT nId,const SfxStyleFamilyIte
         case SFX_STYLE_FAMILY_FRAME:nHelpId = SID_STYLE_FAMILY3; break;
         case SFX_STYLE_FAMILY_PAGE: nHelpId = SID_STYLE_FAMILY4; break;
         case SFX_STYLE_FAMILY_PSEUDO: nHelpId = SID_STYLE_FAMILY5; break;
-        default: DBG_ERROR("unbekannte StyleFamily"); break;
+        default: DBG_ERROR("unknown StyleFamily"); break;
     }
     m_aActionTbL.InsertItem( nId, pItem->GetImage(), pItem->GetText(), 0, 0);
     m_aActionTbL.SetHelpId( nId, nHelpId );
