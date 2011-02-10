@@ -903,14 +903,14 @@ void GraphicImport::attribute(Id nName, Value & val)
             //enable overlapping - ignored
         break;
         case NS_ooxml::LN_CT_Point2D_x: // 90405;
+            m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nHoriRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nHoriOrient = text::HoriOrientation::NONE;
+        break;
         case NS_ooxml::LN_CT_Point2D_y: // 90406;
-            if( m_pImpl->bUseSimplePos )
-            {
-                //todo: absolute positioning
-                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) :
-                                                        m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
-
-            }
+            m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+            m_pImpl->nVertRelation = text::RelOrientation::PAGE_FRAME;
+            m_pImpl->nVertOrient = text::VertOrientation::NONE;
         break;
         case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
             m_pImpl->bContour = true;
@@ -1271,10 +1271,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nHoriRelation = pHandler->m_nRelation;
-                m_pImpl->nHoriOrient = pHandler->m_nOrient;
-                m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nHoriRelation = pHandler->m_nRelation;
+                    m_pImpl->nHoriOrient = pHandler->m_nOrient;
+                    m_pImpl->nLeftPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
@@ -1286,10 +1288,12 @@ void GraphicImport::sprm(Sprm & rSprm)
             if( pProperties.get( ) )
             {
                 pProperties->resolve( *pHandler );
-
-                m_pImpl->nVertRelation = pHandler->m_nRelation;
-                m_pImpl->nVertOrient = pHandler->m_nOrient;
-                m_pImpl->nTopPosition = pHandler->m_nPosition;
+                if( !m_pImpl->bUseSimplePos )
+                {
+                    m_pImpl->nVertRelation = pHandler->m_nRelation;
+                    m_pImpl->nVertOrient = pHandler->m_nOrient;
+                    m_pImpl->nTopPosition = pHandler->m_nPosition;
+                }
             }
         }
         break;
