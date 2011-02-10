@@ -161,7 +161,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
             ::dbtools::throwFunctionSequenceException(*this);
 
     }
-    catch(const Exception )
+    catch(const Exception& )
     {
         osl_decrementInterlockedCount( &m_refCount );
         throw;

@@ -65,7 +65,7 @@ namespace connectivity
             void setCard(nsIAbCard *card);
             nsIAbCard *getCard();
             sal_Bool setRowStates(sal_Int32 state){m_RowStates = state; return sal_True;};
-            sal_Int32 getRowStates()  { return m_RowStates;};
+            sal_Int32 getRowStates() const { return m_RowStates;};
         };
 
         class MQueryHelper : public nsIAbDirectoryQueryResultListener

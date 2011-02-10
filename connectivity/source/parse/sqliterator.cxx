@@ -885,7 +885,6 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
             ::rtl::OUString aTypeName;
             ::rtl::OUString aTableRange;
             sal_Int32 nType = DataType::VARCHAR;
-            sal_Int32 nLen  = 0;
             aColumnName = pColumnRef->getChild(0)->getTokenValue();
 
             OSQLParseNode *pDatatype = pColumnRef->getChild(1);
@@ -899,7 +898,7 @@ void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNo
                 const OSQLParseNode *pParams = pDatatype->getChild(pDatatype->count()-1);
                 if ( pParams->count() )
                 {
-                    nLen = pParams->getChild(1)->getTokenValue().toInt32();
+                    sal_Int32 nLen = pParams->getChild(1)->getTokenValue().toInt32();
                     (void)nLen;
                 }
             }

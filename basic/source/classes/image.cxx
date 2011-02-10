@@ -149,7 +149,6 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
     ULONG nNext;
     while( ( nNext = r.Tell() ) < nLast )
     {
-        short i;
 
         r >> nSign >> nLen >> nCount;
         nNext += nLen + 8;
@@ -217,6 +216,7 @@ BOOL SbiImage::Load( SvStream& r, UINT32& nVersion )
             case B_STRINGPOOL:
                 if( bBadVer ) break;
                 MakeStrings( nCount );
+                short i;
                 for( i = 0; i < nStrings && SbiGood( r ); i++ )
                 {
                     r >> nOff;

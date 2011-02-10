@@ -289,7 +289,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     short nExp = 0;                     // Exponent
     short nDig = nPrec + 1;             // Anzahl Digits in Zahl
     short nDec;                         // Anzahl Vorkommastellen
-    register int i, digit;
+    register int i;
 
     // Komma besorgen
     sal_Unicode cDecimalSep, cThousandSep;
@@ -339,6 +339,7 @@ static void myftoa( double nNum, char * pBuf, short nPrec, short nExpWidth,
     // Zahl ausgeben:
     if( nDig > 0 )
     {
+        register int digit;
         for( i = 0 ; ; ++i )
         {
             if( i < 16 )
@@ -747,8 +748,6 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         SvNumberFormatter aFormatter( xFactory, eLangType );
 
         sal_uInt32 nIndex;
-        xub_StrLen nCheckPos = 0;
-        short nType;
         double nNumber;
         Color* pCol;
 
@@ -757,6 +756,8 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
         // number format, use SvNumberFormatter to handle it.
         if( bSuccess )
         {
+            xub_StrLen nCheckPos = 0;
+            short nType;
             String aFmtStr = *pFmt;
             VbaFormatInfo* pInfo = getFormatInfo( aFmtStr );
             if( pInfo && pInfo->meType != VBA_FORMAT_TYPE_NULL )

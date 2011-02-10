@@ -75,9 +75,9 @@ namespace connectivity
             MQueryExpressionBase( node_type _eNodeType ) : m_eNodeType( _eNodeType ) {}
 
         public:
-            sal_Bool   isUnknown( ) { return m_eNodeType == Unknown; }
-            sal_Bool   isStringExpr( ) { return m_eNodeType == StringExpr; }
-            sal_Bool   isExpr( ) { return m_eNodeType == Expr; }
+            sal_Bool   isUnknown( ) const { return m_eNodeType == Unknown; }
+            sal_Bool   isStringExpr( ) const { return m_eNodeType == StringExpr; }
+            sal_Bool   isExpr( ) const { return m_eNodeType == Expr; }
         };
 
         class MQueryExpressionString : public MQueryExpressionBase {
@@ -137,7 +137,7 @@ namespace connectivity
                             { return m_aExprVector; }
 
             // All expressions on a peer level use same condition operator
-            bool_cond getExpressionCondition( )
+            bool_cond getExpressionCondition( ) const
                             { return m_aExprCondType; }
 
             MQueryExpression() : MQueryExpressionBase( MQueryExpressionBase::Expr ),

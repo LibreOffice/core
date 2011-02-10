@@ -543,10 +543,9 @@ String MsgEdit::GetSelected()
 
 TextSelection MsgEdit::GetSelection() const
 {
-    ULONG nStart=0,nEnd=0;
-
     if ( aEditTree.FirstSelected() )
     {
+        ULONG nStart=0,nEnd=0;
         nStart = aEditTree.GetModel()->GetAbsPos(aEditTree.FirstSelected() );
         if ( aEditTree.LastSelected() )
             nEnd = aEditTree.GetModel()->GetAbsPos(aEditTree.LastSelected() );

@@ -252,7 +252,6 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 sal_Int16 nFieldType,
                                 sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException)
 {
-    double fValue = 0;
     if (rString.getLength())
     {
             // Muss der String formatiert werden?
@@ -264,7 +263,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             // wirft convertStringToNumber eine NotNumericException
         try
         {
-            fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
+            double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
             sal_Int32 nRealUsedKey = xFormatter->detectNumberFormat(0, rString);
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;

@@ -375,12 +375,12 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 SbxBase* pParObj = pVar->GetObject();
                 SbxDimArray* pSource = PTR_CAST(SbxDimArray,pParObj);
                 SbxDimArray* pDest = new SbxDimArray( pVar->GetType() );
-                INT32 lb = 0;
-                INT32 ub = 0;
 
                 pDest->setHasFixedSize( pSource->hasFixedSize() );
                 if ( pSource->GetDims() && pSource->hasFixedSize() )
                 {
+                    INT32 lb = 0;
+                    INT32 ub = 0;
                     for ( INT32 j = 1 ; j <= pSource->GetDims(); ++j )
                     {
                         pSource->GetDim32( (INT32)j, lb, ub );

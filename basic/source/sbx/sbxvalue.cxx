@@ -1199,7 +1199,6 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
         }
         else if( GetType() == SbxCURRENCY || rOp.GetType() == SbxCURRENCY )
         {
-            double dTest;
             aL.eType = SbxCURRENCY;
             aR.eType = SbxCURRENCY;
 
@@ -1210,6 +1209,7 @@ BOOL SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 
                 if( Get( aL ) ) switch( eOp )
                 {
+                    double dTest;
                     case SbxMUL:
                         // first overflow check: see if product will fit - test real value of product (hence 2 curr factors)
                         dTest = (double)aL.nInt64 * (double)aR.nInt64 / (double)CURRENCY_FACTOR_SQUARE;
