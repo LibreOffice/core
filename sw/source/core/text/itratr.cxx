@@ -372,7 +372,7 @@ public:
     SwMinMaxArgs( OutputDevice* pOutI, ViewShell* pShI, ULONG& rMinI, ULONG &rMaxI, ULONG &rAbsI )
         : pOut( pOutI ), pSh( pShI ), rMin( rMinI ), rMax( rMaxI ), rAbsMin( rAbsI )
         { nRowWidth = nWordWidth = nWordAdd = 0; nNoLineBreak = STRING_LEN; }
-    void Minimum( long nNew ) { if( (long)rMin < nNew ) rMin = nNew; }
+    void Minimum( long nNew ) const { if( (long)rMin < nNew ) rMin = nNew; }
     void NewWord() { nWordAdd = nWordWidth = 0; }
 };
 

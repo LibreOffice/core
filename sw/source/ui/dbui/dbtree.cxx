@@ -98,7 +98,7 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     BOOL                        HasContext();
     SwWrtShell*                 GetWrtShell() { return pWrtSh;}
     void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
-    Reference< XNameAccess >    GetContext() {return xDBContext;}
+    Reference< XNameAccess >    GetContext() const {return xDBContext;}
     Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
 };
 

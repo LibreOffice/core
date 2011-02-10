@@ -3177,11 +3177,11 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
         nMaxCount = static_cast< sal_Int16 >( aAllLangs.size() );
 
     // build return value
-    sal_Int32 nCount = 0;
     uno::Sequence< lang::Locale > aLanguages( nMaxCount );
     lang::Locale* pLanguage = aLanguages.getArray();
     if (nMaxCount > 0)
     {
+        sal_Int32 nCount = 0;
         const SvtLanguageTable aLangTab;
         for (std::set< LanguageType >::const_iterator it = aAllLangs.begin(); it != aAllLangs.end(); ++it)
         {

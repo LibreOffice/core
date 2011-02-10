@@ -136,7 +136,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
-        USHORT nStyle = 0; // style of quick help
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
@@ -152,6 +151,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
         if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
         {
+             USHORT nStyle = 0; // style of quick help
              switch( aCntntAtPos.eCntntAtPos )
             {
             case SwContentAtPos::SW_TABLEBOXFML:

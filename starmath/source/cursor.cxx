@@ -208,11 +208,11 @@ void SmCursor::DeletePrev(OutputDevice* pDev){
         SmNodeList *pLineList = NodeToList(pMergeLine);
         //Find iterator to patch
         SmNodeList::iterator patchPoint = pLineList->end();
-        patchPoint--;
+        --patchPoint;
         //Convert second line to list
         NodeToList(pLine, pLineList);
         //Patch the line list
-        patchPoint++;
+        ++patchPoint;
         SmCaretPos PosAfterDelete = PatchLineList(pLineList, patchPoint);
         //Parse the line
         pLine = SmNodeListParser().Parse(pLineList);
