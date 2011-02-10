@@ -958,7 +958,6 @@ void ScHTMLLayoutParser::TableDataOff( ImportInfo* pInfo )
 void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
 {
     String aTabName;
-    bool bBorderOn = false;
 
     if ( ++nTableLevel > 1 )
     {   // Table in Table
@@ -991,7 +990,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        // Border is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
@@ -1049,7 +1048,7 @@ void ScHTMLLayoutParser::TableOn( ImportInfo* pInfo )
                     }
                     break;
                     case HTML_O_BORDER:
-                        bBorderOn = ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
+                        //BorderOn is: ((pOption->GetString().Len() == 0) || (pOption->GetNumber() != 0));
                     break;
                     case HTML_O_ID:
                         aTabName.Assign( pOption->GetString() );
