@@ -986,7 +986,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    while ( nChg < rTxt.Len() || ( !aScriptChanges.empty() && !rTxt.Len() ) )
+    while ( nChg < rTxt.Len() || ( aScriptChanges.empty() && !rTxt.Len() ) )
     {
         OSL_ENSURE( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
@@ -1275,7 +1275,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         nLastCompression = nChg;
         nLastKashida = nChg;
-    };
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     // check kashida data
