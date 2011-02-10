@@ -12,7 +12,7 @@ if [ "$#" -eq "0" ] ; then
     echo "Usage: g [options] [git commands]"
     echo "   -f         Force - act on all the repos, not only the changed ones"
     echo "   -s         Silent - do not report the repo names."
-    echo "   --rewrite-account [username] re-write an existing tree's config for a new commit account name"
+    echo "   --set-push-user [username] re-write an existing tree's config with an fd.o commit account name"
     exit $?
 fi
 
@@ -53,9 +53,9 @@ while [ "${COMMAND:0:1}" = "-" ] ; do
             ;;
         -s) REPORT_REPOS=0
             ;;
-	--rewrite-account)
+	--set-push-user)
 	    shift
-	    REWRITE_ACCOUNT="$1"
+	    PUSH_USER="$1"
 	    ;;
     esac
     shift
@@ -148,10 +148,9 @@ for REPO in $DIRS ; do
         HOOKDIR="../../git-hooks"
     fi
 
-    if [ "$REWRITE_ACCOUNT" != "" ]; then
-       echo "rewrite $DIR/.git/config"
-       sed -i.bak "s|git://anongit.freedesktop.org/git/libreoffice/|ssh://$REWRITE_ACCOUNT@git.freedesktop.org/git/libreoffice/|" "$DIR/.git/config"
-
+    if [ -d "$DIR" -a "z$PUSH_USER" != "z" ]; then
+       echo "setting up push url for $DIR"
+	   (cd $DIR && git config remote.origin.pushurl "ssh://${PUSH_USER}@git.freedesktop.org/git/libreoffice/${REPO}")
     elif [ \( -d "$DIR" -a -d "$DIR"/.git \) -o \( "$COMMAND" = "clone" \) ] ; then
         (
             # executed in a subshell
