@@ -38,6 +38,7 @@
 
 #define PLATFORM_ALL                "all"
 #define PLATFORM_WIN_X86            "windows_x86"
+#define PLATFORM_WIN_X86_64         "windows_x86_64"
 #define PLATFORM_LINUX_X86          "linux_x86"
 #define PLATFORM_LINUX_X86_64       "linux_x86_64"
 #define PLATFORM_KFREEBSD_X86       "kfreebsd_x86"
@@ -133,6 +134,8 @@ namespace
             ret = true;
         else if (token.equals(OUSTR(PLATFORM_WIN_X86)))
             ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86"));
+        else if (token.equals(OUSTR(PLATFORM_WIN_X86_64)))
+            ret = checkOSandCPU(OUSTR("Windows"), OUSTR("x86_64"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86)))
             ret = checkOSandCPU(OUSTR("Linux"), OUSTR("x86"));
         else if (token.equals(OUSTR(PLATFORM_LINUX_X86_64)))
