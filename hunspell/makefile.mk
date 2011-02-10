@@ -41,6 +41,7 @@ TARFILE_MD5=9ed97fce60a9a65852402248a6659492
 ADDITIONAL_FILES+=config.h
 
 PATCH_FILES=\
+    hunspell-static.patch \
     hunspell-wntconfig.patch \
     hunspell-solaris.patch
 
