@@ -355,38 +355,6 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
 void PPTWriter::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {
-    sal_uInt32 nFillColor = 0xffffff;
-    sal_uInt32 nFillBackColor = 0x000000;
-
-    ::com::sun::star::drawing::FillStyle aFS = ::com::sun::star::drawing::FillStyle_NONE;
-    if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillStyle" ) ) ) )
-        mAny >>= aFS;
-    switch ( aFS )
-    {
-        case ::com::sun::star::drawing::FillStyle_GRADIENT :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
-            {
-                nFillColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
-                nFillBackColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
-            }
-        }
-        break;
-
-        case ::com::sun::star::drawing::FillStyle_SOLID :
-        {
-            if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillColor" ) ) ) )
-            {
-                nFillColor = mpPptEscherEx->GetColor( *((sal_uInt32*)mAny.getValue()) );
-                nFillBackColor = nFillColor ^ 0xffffff;
-            }
-        }
-        break;
-
-        default:
-            break;
-    }
-
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster | nPageNum, mpStrm->Tell() );
     mpPptEscherEx->OpenContainer( EPP_MainMaster );
     mpPptEscherEx->AddAtom( 24, EPP_SlideAtom, 2 );
