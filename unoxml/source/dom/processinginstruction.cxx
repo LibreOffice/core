@@ -105,7 +105,8 @@ namespace DOM
             throw RuntimeException();
         }
 
-        OString const data(OUStringToOString(rData, RTL_TEXTENCODING_UTF8));
+        OString const data(
+                ::rtl::OUStringToOString(rData, RTL_TEXTENCODING_UTF8));
         xmlChar const*const pData(
                 reinterpret_cast<xmlChar const*>(data.getStr()) );
         xmlFree(m_aNodePtr->content);
