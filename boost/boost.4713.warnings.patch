@@ -811,3 +811,43 @@
          }           
                  
      public: // algorithms
+--- misc/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-10 15:04:57.999046223 +0000
++++ misc/build/boost_1_44_0/boost/unordered/detail/table.hpp	2011-02-10 15:05:44.260588237 +0000
+@@ -119,7 +119,7 @@
+ 
+         // From 6.3.1/13:
+         // Only resize when size >= mlf_ * count
+-        return double_to_size_t(ceil((double) mlf_ * this->bucket_count_));
++        return double_to_size_t(ceil((double)mlf_ * (double)this->bucket_count_));
+     }
+ 
+     template <class T>
+@@ -145,7 +145,7 @@
+         //
+         // Or from rehash post-condition:
+         // count > size / mlf_
+-        return next_prime(double_to_size_t(floor(size / (double) mlf_)) + 1);
++        return next_prime(double_to_size_t(floor((double)size / (double)mlf_)) + 1);
+     }
+ 
+     ////////////////////////////////////////////////////////////////////////////
+--- misc/boost_1_44_0/boost/functional/hash/detail/hash_float_generic.hpp	2011-02-10 14:50:52.173229648 +0000
++++ misc/build/boost_1_44_0/boost/functional/hash/detail/hash_float_generic.hpp	2011-02-10 14:52:36.824433976 +0000
+@@ -53,7 +53,7 @@
+ 
+             v = ldexp(v, limits<std::size_t>::digits);
+             std::size_t seed = static_cast<std::size_t>(v);
+-            v -= seed;
++            v -= static_cast<T>(seed);
+ 
+             // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
+             std::size_t const length
+@@ -66,7 +66,7 @@
+             {
+                 v = ldexp(v, limits<std::size_t>::digits);
+                 std::size_t part = static_cast<std::size_t>(v);
+-                v -= part;
++                v -= static_cast<T>(part);
+                 hash_float_combine(seed, part);
+             }
+ 

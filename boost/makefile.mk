@@ -57,6 +57,8 @@ PATCH_FILES+=aliasing.patch
 PATCH_FILES+=boost.4713.warnings.patch
 #https://svn.boost.org/trac/boost/ticket/5119
 PATCH_FILES+=unordered_map-doesnt-support-cp-ctor.patch
+#http://gcc.gnu.org/bugzilla/show_bug.cgi?id=47679
+PATCH_FILES+=boost.gcc47679.patch
 
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk
