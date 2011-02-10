@@ -3607,7 +3607,6 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + sizeof(aFldData)
         + sizeof( aFldHeader.version ) + sizeof( aFldHeader.bits ) + sizeof( aFldHeader.cch ) + sizeof( aFldHeader.hps )
         + 2*ffname.getLength() + 4
-        + 2*ffdeftext.getLength() + 4
         + 2*ffformat.getLength() + 4
         + 2*ffhelptext.getLength() + 4
         + 2*ffstattext.getLength() + 4
@@ -3615,6 +3614,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         + 2*ffexitmcr.getLength() + 4;
     if ( type )
         slen += 2; // wDef
+    else
+        slen += 2*ffdeftext.getLength() + 4; //xstzTextDef
     if ( type==2 ) {
         slen += 2; // sttb ( fExtend )
         slen += 4; // for num of list items
