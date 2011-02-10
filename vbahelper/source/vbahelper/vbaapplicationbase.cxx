@@ -89,7 +89,7 @@ public:
         Time aTimeNow;
          Date aRefDate( 1,1,1900 );
         long nDiffDays = (long)(aDateNow - aRefDate);
-        nDiffDays += 2; // Anpassung VisualBasic: 1.Jan.1900 == 2
+        nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
         return (double)nDiffDays + ((double)nDiffSeconds)/(double)(24*3600);

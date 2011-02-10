@@ -345,7 +345,7 @@ void DicList::SearchForDictionaries(
 
         if(!::IsVers2OrNewer( aURL, nLang, bNeg ))
         {
-            // Wenn kein
+            // When not
             xub_StrLen nPos  = aURL.Search('.');
             String aExt(aURL.Copy(nPos + 1));
             aExt.ToLowerAscii();
@@ -358,9 +358,8 @@ void DicList::SearchForDictionaries(
                 continue;          // andere Files
         }
 
-        // Aufnehmen in die Liste der Dictionaries
-        // Wenn existent nicht aufnehmen
-        //
+        // Record in the list of Dictoinaries
+        // When it already exists don't record
         INT16 nSystemLanguage = MsLangId::getSystemLanguage();
         String aTmp1 = ToLower( aURL, nSystemLanguage );
         xub_StrLen nPos = aTmp1.SearchBackward( '/' );
