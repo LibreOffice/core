@@ -606,11 +606,14 @@ void lcl_CorrectIndents(PropertySequence & aPropSeq)
 {
     try
     {
-        ::rtl::OUString str(RTL_CONSTASCII_USTRINGPARAM(__FUNCTION__));
-
         uno::Any aAny;
 
         sal_Int32 nLeftMargin = 0;
+
+#ifdef DEBUG
+        ::std::string aStr(aPropSeq.toString());
+#endif
+
         aAny = aPropSeq.get(PROP_PARA_LEFT_MARGIN);
         if (aAny.hasValue())
             aAny >>= nLeftMargin;
@@ -621,9 +624,17 @@ void lcl_CorrectIndents(PropertySequence & aPropSeq)
         {
             sal_Int32 nLeftBorderDistance = 0;
             aAny >>= nLeftBorderDistance;
-
             nLeftMargin -= nLeftBorderDistance;
+            aPropSeq.set(PROP_PARA_LEFT_MARGIN, nLeftMargin);
+        }
 
+        aAny = aPropSeq.get(PROP_LEFT_BORDER);
+
+        if (aAny.hasValue())
+        {
+            table::BorderLine aBorderLine;
+            aAny >>= aBorderLine;
+            nLeftMargin -= aBorderLine.OuterLineWidth;
             aPropSeq.set(PROP_PARA_LEFT_MARGIN, nLeftMargin);
         }
 
@@ -638,9 +649,17 @@ void lcl_CorrectIndents(PropertySequence & aPropSeq)
         {
             sal_Int32 nRightBorderDistance = 0;
             aAny >>= nRightBorderDistance;
-
             nRightMargin -= nRightBorderDistance;
+            aPropSeq.set(PROP_PARA_RIGHT_MARGIN, nRightMargin);
+        }
 
+        aAny = aPropSeq.get(PROP_RIGHT_BORDER);
+
+        if (aAny.hasValue())
+        {
+            table::BorderLine aBorderLine;
+            aAny >>= aBorderLine;
+            nRightMargin -= aBorderLine.OuterLineWidth;
             aPropSeq.set(PROP_PARA_RIGHT_MARGIN, nRightMargin);
         }
     }
@@ -997,6 +1016,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                 }
 
                 lcl_CorrectIndents(*pPropSeq);
+
+                ::std::string sTmp(pPropSeq->toString());
+
+                ::std::clog << sTmp << ::std::endl;
 
                 uno::Reference< text::XTextRange > xTextRange =
                     xTextAppend->finishParagraph( pPropSeq->getSequence() );
