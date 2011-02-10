@@ -130,6 +130,14 @@ ifeq ($(SYSTEM_LIBXML),YES)
 gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))
 endif
 
+ifeq ($(SYSTEM_LIBXSLT),YES)
+gb_Library_TARGETS := $(filter-out xslt,$(gb_Library_TARGETS))
+endif
+
+ifeq ($(SYSTEM_REDLAND),YES)
+gb_Library_TARGETS := $(filter-out rdf,$(gb_Library_TARGETS))
+endif
+
 ifeq ($(SYSTEM_ICU),YES)
 gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
 endif
