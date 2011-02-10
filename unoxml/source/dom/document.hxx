@@ -264,16 +264,13 @@ namespace DOM
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
             throw (RuntimeException);
+        virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
+            throw (RuntimeException);
         // --- delegation for XNde base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
             throw (RuntimeException, DOMException)
         {
             return CNode::appendChild(newChild);
-        }
-        virtual Reference< XNode > SAL_CALL cloneNode(sal_Bool deep)
-            throw (RuntimeException)
-        {
-            return CNode::cloneNode(deep);
         }
         virtual Reference< XNamedNodeMap > SAL_CALL getAttributes()
             throw (RuntimeException)

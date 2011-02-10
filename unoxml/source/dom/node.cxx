@@ -724,9 +724,16 @@ namespace DOM
                 pNewChild->next = cur;
                 pNewChild->prev = cur->prev;
                 cur->prev = pNewChild;
-                if( pNewChild->prev != NULL)
+                if (pNewChild->prev != NULL) {
                     pNewChild->prev->next = pNewChild;
+                }
+                pNewChild->parent = cur->parent;
+                if (pNewChild->parent->children == cur) {
+                    pNewChild->parent->children = pNewChild;
+                }
+                // do not update parent->last here!
                 pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
+                break;
             }
             cur = cur->next;
         }
@@ -977,6 +984,14 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
+        if ((0 == m_aNodePtr) ||
+            ((m_aNodePtr->type != XML_ELEMENT_NODE) &&
+             (m_aNodePtr->type != XML_ATTRIBUTE_NODE)))
+        {
+            DOMException e;
+            e.Code = DOMExceptionType_NO_MODIFICATION_ALLOWED_ERR;
+            throw e;
+        }
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         xmlChar *pBuf = (xmlChar*)o1.getStr();
         if (m_aNodePtr != NULL && m_aNodePtr->ns != NULL)

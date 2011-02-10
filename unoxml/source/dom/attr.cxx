@@ -142,8 +142,9 @@ namespace DOM
     sal_Bool SAL_CALL CAttr::getSpecified()
         throw (RuntimeException)
     {
-        // XXX what is this supposed do exactly?
-        return sal_False;
+        // FIXME if this DOM implemenatation supported DTDs it would need
+        // to check that this attribute is not default or something
+        return sal_True;
     }
 
     /**
@@ -160,10 +161,11 @@ namespace DOM
         if (0 == m_aAttrPtr->children) {
             return ::rtl::OUString();
         }
-        OUString const aName((char*)m_aAttrPtr->children->content,
-                strlen((char*)m_aAttrPtr->children->content),
-                RTL_TEXTENCODING_UTF8);
-        return aName;
+        char const*const pContent((m_aAttrPtr->children)
+            ? reinterpret_cast<char const*>(m_aAttrPtr->children->content)
+            : "");
+        OUString const ret(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
+        return ret;
     }
 
     /**

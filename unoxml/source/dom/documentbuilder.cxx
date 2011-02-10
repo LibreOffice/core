@@ -319,6 +319,10 @@ namespace DOM
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
         throw (RuntimeException, SAXParseException, IOException)
     {
+        if (!is.is()) {
+            throw RuntimeException();
+        }
+
         ::osl::MutexGuard const g(m_Mutex);
 
         // encoding...

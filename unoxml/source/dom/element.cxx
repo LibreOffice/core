@@ -555,13 +555,14 @@ namespace DOM
         }
 
         xmlAttrPtr res = NULL;
+        xmlChar const*const pContent(
+                (pAttr->children) ? pAttr->children->content : 0);
 
         if (bNS) {
             xmlNsPtr const pNs( pCAttr->GetNamespace(m_aNodePtr) );
-            res = xmlNewNsProp(m_aNodePtr,
-                    pNs, pAttr->name, pAttr->children->content);
+            res = xmlNewNsProp(m_aNodePtr, pNs, pAttr->name, pContent);
         } else {
-            res = xmlNewProp(m_aNodePtr, pAttr->name, pAttr->children->content);
+            res = xmlNewProp(m_aNodePtr, pAttr->name, pContent);
         }
 
         // get the new attr node
@@ -738,7 +739,6 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        if (!hasAttributes()) { return 0; }
         Reference< XNamedNodeMap > const xMap(
                 new CAttributesMap(this, m_rMutex));
         return xMap;

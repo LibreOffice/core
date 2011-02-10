@@ -916,6 +916,8 @@ namespace DOM
             Reference< XNode > const& xImportedNode, sal_Bool deep)
         throw (RuntimeException, DOMException)
     {
+        if (!xImportedNode.is()) { throw RuntimeException(); }
+
         // NB: this whole operation inherently accesses 2 distinct documents.
         // The imported node could even be from a different DOM implementation,
         // so this implementation cannot make any assumptions about the
@@ -952,6 +954,22 @@ namespace DOM
     {
         // does not need mutex currently
         return OUString();
+    }
+
+    Reference< XNode > SAL_CALL CDocument::cloneNode(sal_Bool bDeep)
+        throw (RuntimeException)
+    {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        OSL_ASSERT(0 != m_aNodePtr);
+        if (0 == m_aNodePtr) {
+            return 0;
+        }
+        xmlDocPtr const pClone(xmlCopyDoc(m_aDocPtr, (bDeep) ? 1 : 0));
+        if (0 == pClone) { return 0; }
+        Reference< XNode > const xRet(
+            static_cast<CNode*>(CDocument::CreateCDocument(pClone).get()));
+        return xRet;
     }
 
     Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)

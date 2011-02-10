@@ -54,7 +54,9 @@ namespace DOM
         , m_pURI((pURI) ? lcl_initXmlString(*pURI) : 0)
         , m_bRebuild(true)
     {
-        registerListener(*m_pElement);
+        if (m_pElement.is()) {
+            registerListener(*m_pElement);
+        }
     }
 
     void CElementList::registerListener(CElement & rElement)
@@ -115,6 +117,8 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_rMutex);
 
+        if (!m_pElement.is()) { return 0; }
+
         // this has to be 'live'
         buildlist(m_pElement->GetNodePtr());
         return m_nodevector.size();
@@ -128,6 +132,8 @@ namespace DOM
         if (index < 0) throw RuntimeException();
 
         ::osl::MutexGuard const g(m_rMutex);
+
+        if (!m_pElement.is()) { return 0; }
 
         buildlist(m_pElement->GetNodePtr());
         if (m_nodevector.size() <= static_cast<size_t>(index)) {

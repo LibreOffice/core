@@ -220,7 +220,7 @@ namespace DOM
     virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
         throw (RuntimeException, DOMException)
     {
-        return CNode::setNodeValue(nodeValue);
+        return CText::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException, DOMException)

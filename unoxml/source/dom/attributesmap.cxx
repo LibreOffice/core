@@ -110,8 +110,9 @@ namespace DOM
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
             xmlChar* xName = (xmlChar*)o1.getStr();
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar* xNs = (xmlChar*)o1.getStr();
-            xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, xNs);
+            xmlChar const*const xNs =
+                reinterpret_cast<xmlChar const*>(o2.getStr());
+            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL && pNs != NULL)
             {
@@ -207,8 +208,9 @@ namespace DOM
             OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
             xmlChar* xName = (xmlChar*)o1.getStr();
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar* xNs = (xmlChar*)o1.getStr();
-            xmlNsPtr pNs = xmlSearchNs(pNode->doc, pNode, xNs);
+            xmlChar const*const xNs =
+                reinterpret_cast<xmlChar const*>(o2.getStr());
+            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
             xmlAttrPtr cur = pNode->properties;
             while (cur != NULL && pNs != NULL)
             {

@@ -154,7 +154,7 @@ namespace XPath
             nsmap_t & rNamespaces, Reference< XNode > const& xNamespaceNode)
     {
         DOM::CNode *const pCNode(DOM::CNode::GetImplementation(xNamespaceNode));
-        if (pCNode) { throw RuntimeException(); }
+        if (!pCNode) { throw RuntimeException(); }
 
         ::osl::MutexGuard const g(pCNode->GetOwnerDocument().GetMutex());
 
