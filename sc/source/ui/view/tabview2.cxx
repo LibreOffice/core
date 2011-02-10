@@ -854,7 +854,6 @@ void ScTabView::UpdateAllOverlays()
 
 void ScTabView::PaintBlock( BOOL bReset )
 {
-    ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
     SCTAB nTab = aViewData.GetTabNo();
     BOOL bMark = rMark.IsMarked();
@@ -894,7 +893,6 @@ void ScTabView::PaintBlock( BOOL bReset )
                 // Invertieren beim Loeschen nur auf aktiver View
                 if ( aViewData.IsActive() )
                 {
-                    USHORT i;
                     if ( bMulti )
                     {
                         rMark.ResetMark();
