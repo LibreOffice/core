@@ -258,6 +258,3 @@ toolkit.AccessibleMenu::com::sun::star::accessibility::XAccessibleSelection
 ### i114636 ###
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleAction
 toolkit.AccessibleScrollBar::com::sun::star::accessibility::XAccessibleContext
-
-### i116814 ###
-toolkit.UnoControlDialogModel::com::sun::star::util::XCloneable
