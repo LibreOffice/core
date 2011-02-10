@@ -64,15 +64,13 @@ private:
     BOOL            mbVisible;          // Ist Cursor sichtbar
     unsigned char   mnDirection;        // indicates direction
 
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void         ImplDraw();
     SAL_DLLPRIVATE void         ImplRestore();
     DECL_DLLPRIVATE_LINK(       ImplTimerHdl, AutoTimer* );
-    SAL_DLLPRIVATE void         ImplShow( BOOL bDrawDirect = TRUE );
-    SAL_DLLPRIVATE void         ImplHide();
+    SAL_DLLPRIVATE void         ImplShow( bool bDrawDirect = true, bool bRestore = false );
+    SAL_DLLPRIVATE bool         ImplHide();
     SAL_DLLPRIVATE void         ImplNew();
-//#endif
 
 public:
                     Cursor();
