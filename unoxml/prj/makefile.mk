@@ -25,50 +25,16 @@
 #
 #*************************************************************************
 
-PRJ=..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=unoxml
-TARGET=domimpl
+.INCLUDE : settings.mk
 
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  settings.mk
-
-.IF "$(SYSTEM_LIBXML)" == "YES"
-CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
 .ENDIF
 
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-    $(SLO)$/attr.obj \
-    $(SLO)$/cdatasection.obj \
-    $(SLO)$/characterdata.obj \
-    $(SLO)$/comment.obj \
-    $(SLO)$/document.obj \
-    $(SLO)$/documentbuilder.obj \
-    $(SLO)$/documentfragment.obj \
-    $(SLO)$/documenttype.obj \
-    $(SLO)$/element.obj \
-    $(SLO)$/entity.obj \
-    $(SLO)$/entityreference.obj \
-    $(SLO)$/node.obj \
-    $(SLO)$/notation.obj \
-    $(SLO)$/processinginstruction.obj \
-    $(SLO)$/text.obj \
-    $(SLO)$/domimplementation.obj \
-    $(SLO)$/elementlist.obj \
-    $(SLO)$/childlist.obj \
-    $(SLO)$/notationsmap.obj \
-    $(SLO)$/entitiesmap.obj \
-    $(SLO)$/attributesmap.obj \
-    $(SLO)$/saxbuilder.obj
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET)
