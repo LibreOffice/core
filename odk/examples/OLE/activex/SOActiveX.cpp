@@ -49,14 +49,12 @@ OLECHAR* pSlotUrl[BARS_NUMBER] =
                         {L"slot:5910" // SID_TOGGLEFUNCTIONBAR
                         ,L"slot:5920" // SID_TOGGLESTATUSBAR
                         ,L"slot:6661" // SID_TOGGLE_MENUBAR
-//                      ,L"slot:10603" // SID_HYPERLINK_INSERT
                         };
 
 OLECHAR* pSlotName[BARS_NUMBER] =
                         {L"FunctionBarVisible"      // SID_TOGGLEFUNCTIONBAR
                         ,L"StatusBarVisible"        // SID_TOGGLESTATUSBAR
                         ,L"MenuBarVisible"          // SID_TOGGLE_MENUBAR
-//                      ,L"InsertHyperlink"         // SID_HYPERLINK_INSERT
                         };
 
 
