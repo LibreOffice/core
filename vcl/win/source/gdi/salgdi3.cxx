@@ -1107,7 +1107,7 @@ ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
     mbHasGraphiteSupport( false ),
 #endif
     mbHasArabicSupport ( false ),
-    mbFontLayoutCapabilities( false ),
+    mbFontLayoutCapabilitiesRead( false ),
     mbAliasSymbolsLow( false ),
     mbAliasSymbolsHigh( false ),
     mnId( 0 ),
@@ -1330,7 +1330,7 @@ void ImplWinFontData::GetFontLayoutCapabilities( HDC hDC ) const
         return;
 
     std::vector<unsigned char> aTable( nLength );
-    unsigned char* pTable = &Table[0];
+    unsigned char* pTable = &aTable[0];
     ::GetFontData( hDC, GsubTag, 0, pTable, nLength );
 
     vcl::getTTFontLayoutCapabilities(maFontLayoutCapabilities, pTable);

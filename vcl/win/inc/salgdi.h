@@ -117,6 +117,7 @@ private:
     bool                    mbAliasSymbolsLow;
 private:
     void                    ReadCmapTable( HDC ) const;
+    void                    GetFontLayoutCapabilities( HDC hDC ) const;
     void                    ReadOs2Table( HDC ) const;
 
 #ifdef GNG_VERT_HACK
@@ -292,6 +293,8 @@ public:
     virtual ULONG           GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs );
     // get the repertoire of the current font
     virtual ImplFontCharMap* GetImplFontCharMap() const;
+    // get the layout capabilities of the current font
+    virtual bool GetImplFontLayoutCapabilities(FontLayoutCapabilities &rGetImplFontLayoutCapabilities) const;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* );
     // graphics should call ImplAddDevFontSubstitute on supplied
