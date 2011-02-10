@@ -130,13 +130,13 @@ bool lcl_checkUIElement(const Reference< XUIElement >& xUIElement,css::awt::Rect
         _rPosSize = _xWindow->getPosSize();
 
         Window* pWindow = VCLUnoHelper::GetWindow( _xWindow );
-        if ( pWindow->GetType() == WINDOW_TOOLBOX )
+        if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
         {
             ::Size aSize = ((ToolBox*)pWindow)->CalcWindowSizePixel( 1 );
             _rPosSize.Width = aSize.Width();
             _rPosSize.Height = aSize.Height();
         }
-    } // if ( xUIElement.is() )
+    }
     return bRet;
 }
 
@@ -1007,9 +1007,9 @@ void LayoutManager::implts_createAddonsToolBars()
                     // Set generic title for add-on toolbar
                     SolarMutexGuard aGuard;
                     Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow->GetText().Len() == 0 )
+                    if ( pWindow && pWindow->GetText().Len() == 0 )
                         pWindow->SetText( aGenericAddonTitle );
-                    if ( pWindow->GetType() == WINDOW_TOOLBOX )
+                    if ( pWindow && pWindow->GetType() == WINDOW_TOOLBOX )
                     {
                         ToolBox* pToolbar = (ToolBox *)pWindow;
                         pToolbar->SetMenuType();
