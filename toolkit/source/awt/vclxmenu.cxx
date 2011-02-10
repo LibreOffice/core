@@ -98,10 +98,8 @@ VCLXMenu::VCLXMenu( Menu* pMenu ) : maMenuListeners( *this )
 VCLXMenu::~VCLXMenu()
 {
     DBG_DTOR( VCLXMenu, 0 );
-    for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
-        delete pRef;
+    for ( size_t n = maPopupMenueRefs.size(); n; ) {
+        delete maPopupMenueRefs[ --n ];
     }
     if ( mpMenu )
     {
@@ -515,7 +513,7 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
         // Selbst eine Ref halten!
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pNewRef = new ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
-        maPopupMenueRefs.Insert( pNewRef, LIST_APPEND );
+        maPopupMenueRefs.push_back( pNewRef );
 
         mpMenu->SetPopupMenu( nItemId, (PopupMenu*) pVCLMenu->GetMenu() );
     }
@@ -530,9 +528,9 @@ void VCLXMenu::setPopupMenu( sal_Int16 nItemId, const ::com::sun::star::uno::Ref
     Menu* pMenu = mpMenu ? mpMenu->GetPopupMenu( nItemId ) : NULL;
     if ( pMenu )
     {
-        for ( sal_uInt32 n = maPopupMenueRefs.Count(); n; )
+        for ( size_t n = maPopupMenueRefs.size(); n; )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs.GetObject( --n );
+            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPopupMenu > * pRef = maPopupMenueRefs[ --n ];
             Menu* pM = ((VCLXMenu*)pRef->get())->GetMenu();
             if ( pM == pMenu )
             {
