@@ -50,7 +50,7 @@
 #define IMGINNERTEXTSPACE 2
 #define IMGOUTERTEXTSPACE 5
 #define EXTRAFONTSIZE 5
-#define MAXPREVIEWWIDTH 150
+#define MAXPREVIEWWIDTH 100
 
 using namespace ::com::sun::star;
 
