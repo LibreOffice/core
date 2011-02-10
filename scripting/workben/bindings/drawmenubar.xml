@@ -87,7 +87,6 @@
      <menu:menuitem menu:id="slot:5910" menu:helpid="5910" menu:label="~Function Bar"/>
      <menu:menuitem menu:id="slot:5905" menu:helpid="5905" menu:label="~Object Bar"/>
      <menu:menuitem menu:id="slot:5909" menu:helpid="5909" menu:label="Main ~Toolbar"/>
-     <menu:menuitem menu:id="slot:10360" menu:helpid="10360" menu:label="~Hyperlink Bar"/>
      <menu:menuitem menu:id="slot:5911" menu:helpid="5911" menu:label="Optio~n Bar"/>
      <menu:menuitem menu:id="slot:10417" menu:helpid="10417" menu:label="~Color Bar"/>
      <menu:menuseparator/>

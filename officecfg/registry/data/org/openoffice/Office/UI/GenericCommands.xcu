@@ -3440,14 +3440,6 @@
                     <value xml:lang="en-US">To Document Begin</value>
                 </prop>
             </node>
-            <node oor:name=".uno:InsertHyperlink" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Hyperlink Bar</value>
-                </prop>
-                <prop oor:name="Properties" oor:type="xs:int">
-                    <value>1</value>
-                </prop>
-            </node>
             <node oor:name=".uno:GoToEndOfRow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">To Document End</value>

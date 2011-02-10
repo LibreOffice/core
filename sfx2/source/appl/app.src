@@ -748,11 +748,6 @@ ToolBox RID_ENVTOOLBOX
         };
         ToolBoxItem
         {
-            Identifier = SID_HYPERLINK_INSERT ;
-            Hide = TRUE;
-        };
-        ToolBoxItem
-        {
             Identifier = SID_WIN_FULLSCREEN ;
             Hide = TRUE;
         };

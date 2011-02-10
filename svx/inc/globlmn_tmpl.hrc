@@ -607,13 +607,6 @@
     HelpID = SID_BROWSER ; \
     Text [ en-US ] = "~Beamer" ; \
 
-
-#define ITEM_INSERT_HYPERLINK_INSERT \
-    Identifier = SID_HYPERLINK_INSERT ; \
-    Command = ".uno:InsertHyperlink" ; \
-    HelpID = SID_HYPERLINK_INSERT ; \
-    Text [ en-US ] = "~Hyperlink Bar" ; \
-
 #define ITEM_INSERT_INSERT_GRAPHIC \
     Identifier = SID_INSERT_GRAPHIC ; \
     Command = ".uno:InsertGraphic" ; \

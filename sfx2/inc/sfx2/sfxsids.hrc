@@ -873,7 +873,6 @@
 #define SID_ZOOM                            (SID_SVX_START + 289)
 #define SID_SEARCH_ITEM                     (SID_SVX_START + 291)
 #define SID_ATTR_CHAR_FONTWIDTH             (SID_SVX_START + 303)
-#define SID_HYPERLINK_INSERT                (SID_SVX_START + 360)
 #define SID_HYPERLINK_GETLINK               (SID_SVX_START + 361)
 #define SID_HYPERLINK_SETLINK               (SID_SVX_START + 362)
 #define SID_NAVIGATOR                       (SID_SVX_START + 366)

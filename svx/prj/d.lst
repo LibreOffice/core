@@ -32,7 +32,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\%__SRC%\inc\svxslots.hxx %_DEST%\inc%_EXT%\svx\svxslots.hxx
 ..\%__SRC%\inc\globlmn.hrc %_DEST%\inc%_EXT%\svx\globlmn.hrc
 ..\source\inc\fmresids.hrc %_DEST%\inc%_EXT%\svx\fmresids.hrc
-..\source\dialog\hyprlink.hxx %_DEST%\inc%_EXT%\svx\hyprlink.hxx
 
 ../source/customshapes/EnhancedCustomShapeTypeNames.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShapeTypeNames.hxx
 ../source/customshapes/EnhancedCustomShapeGeometry.hxx %_DEST%\inc%_EXT%\svx\EnhancedCustomShapeGeometry.hxx
