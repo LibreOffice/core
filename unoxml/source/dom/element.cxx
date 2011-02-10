@@ -31,6 +31,8 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include <rtl/ustrbuf.hxx>
+
 #include <com/sun/star/xml/sax/FastToken.hdl>
 
 #include <comphelper/attributelist.hxx>
@@ -508,8 +510,13 @@ namespace DOM
 
         Reference< XAttr > aAttr;
         if (oldAttr->getNamespaceURI().getLength() > 0) {
+            ::rtl::OUStringBuffer qname(oldAttr->getPrefix());
+            if (0 != qname.getLength()) {
+                qname.append(sal_Unicode(':'));
+            }
+            qname.append(oldAttr->getName());
             aAttr = GetOwnerDocument().createAttributeNS(
-                oldAttr->getNamespaceURI(), oldAttr->getName());
+                oldAttr->getNamespaceURI(), qname.makeStringAndClear());
         } else {
             aAttr = GetOwnerDocument().createAttribute(oldAttr->getName());
         }

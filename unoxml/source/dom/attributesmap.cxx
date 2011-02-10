@@ -167,29 +167,17 @@ namespace DOM
     CAttributesMap::removeNamedItem(OUString const& name)
     throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
-        xmlNodePtr const pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
-        {
-            OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
-            xmlChar* xName = (xmlChar*)o1.getStr();
-            xmlAttrPtr cur = pNode->properties;
-            while (cur != NULL)
-            {
-                if (strcmp((char*)xName, (char*)cur->name) == 0) {
-                    ::rtl::Reference<CNode> const pCNode =
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get();
-                    // this seems to be legal...
-                    xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));
-                    pCNode->m_bUnlinked = true;
-                    return Reference< XNode >(pCNode.get());
-                }
-                cur = cur->next;
-            }
+        // no MutexGuard needed: m_pElement is const
+        Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
+        if (!xAttr.is()) {
+            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "CAttributesMap::removeNamedItem: no such attribute")),
+                static_cast<OWeakObject*>(this),
+                DOMExceptionType_NOT_FOUND_ERR);
         }
-        return 0;
+        Reference< XNode > const xRet(
+            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
+        return xRet;
     }
 
     /**
@@ -200,35 +188,18 @@ namespace DOM
             OUString const& namespaceURI, OUString const& localName)
     throw (RuntimeException)
     {
-        ::osl::MutexGuard const g(m_rMutex);
-
-        xmlNodePtr const pNode = m_pElement->GetNodePtr();
-        if (pNode != NULL)
-        {
-            OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
-            xmlChar* xName = (xmlChar*)o1.getStr();
-            OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
-            xmlChar const*const xNs =
-                reinterpret_cast<xmlChar const*>(o2.getStr());
-            xmlNsPtr const pNs = xmlSearchNsByHref(pNode->doc, pNode, xNs);
-            xmlAttrPtr cur = pNode->properties;
-            while (cur != NULL && pNs != NULL)
-            {
-                if (strcmp((char*)xName, (char*)cur->name) == 0 &&
-                    cur->ns == pNs)
-                {
-                    ::rtl::Reference<CNode> const pCNode =
-                            m_pElement->GetOwnerDocument().GetCNode(
-                                reinterpret_cast<xmlNodePtr>(cur)).get();
-                    // this seems to be legal...
-                    xmlUnlinkNode(reinterpret_cast<xmlNodePtr>(cur));
-                    pCNode->m_bUnlinked = true;
-                    return Reference< XNode >(pCNode.get());
-                }
-                cur = cur->next;
-            }
+        // no MutexGuard needed: m_pElement is const
+        Reference< XAttr > const xAttr(
+            m_pElement->getAttributeNodeNS(namespaceURI, localName));
+        if (!xAttr.is()) {
+            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "CAttributesMap::removeNamedItemNS: no such attribute")),
+                static_cast<OWeakObject*>(this),
+                DOMExceptionType_NOT_FOUND_ERR);
         }
-        return 0;
+        Reference< XNode > const xRet(
+            m_pElement->removeAttributeNode(xAttr), UNO_QUERY);
+        return xRet;
     }
 
     /**
