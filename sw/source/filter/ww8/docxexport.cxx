@@ -223,9 +223,9 @@ void DocxExport::OutputField( const SwField* pFld, ww::eField eFldType, const St
     m_pAttrOutput->WriteField_Impl( pFld, eFldType, rFldCmd, nMode );
 }
 
-void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )
+void DocxExport::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 {
-    OSL_TRACE( "TODO DocxExport::WriteFormData()\n" );
+    m_pAttrOutput->WriteFormData_Impl( rFieldmark );
 }
 
 void DocxExport::WriteHyperlinkData( const ::sw::mark::IFieldmark& /*rFieldmark*/ )

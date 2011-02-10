@@ -133,6 +133,7 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <IMark.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
@@ -151,6 +152,79 @@ using namespace nsFieldFlags;
 using namespace sw::util;
 using namespace ::com::sun::star;
 
+class FFDataWriterHelper
+{
+    ::sax_fastparser::FSHelperPtr m_pSerializer;
+    void writeCommonStart( const rtl::OUString& rName )
+    {
+        m_pSerializer->startElementNS( XML_w, XML_ffData, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_name,
+            FSNS( XML_w, XML_val ), OUStringToOString( rName, RTL_TEXTENCODING_UTF8 ).getStr(),
+            FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_enabled, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_calcOnExit,
+            FSNS( XML_w, XML_val ),
+            "0", FSEND );
+    }
+    void writeFinish()
+    {
+        m_pSerializer->endElementNS( XML_w, XML_ffData );
+    }
+public:
+    FFDataWriterHelper( const ::sax_fastparser::FSHelperPtr pSerializer ) : m_pSerializer( pSerializer ){}
+    void WriteFormCheckbox( const rtl::OUString& rName, const rtl::OUString& rDefault, bool bChecked )
+    {
+       writeCommonStart( rName );
+       // Checkbox specific bits
+       m_pSerializer->startElementNS( XML_w, XML_checkBox, FSEND );
+       // currently hardcoding autosize
+       // #TODO check if this defaulted
+       m_pSerializer->startElementNS( XML_w, XML_sizeAuto, FSEND );
+       m_pSerializer->endElementNS( XML_w, XML_sizeAuto );
+       if ( rDefault.getLength() )
+       {
+           m_pSerializer->singleElementNS( XML_w, XML_default,
+               FSNS( XML_w, XML_val ),
+                   rtl::OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+       }
+       if ( bChecked )
+            m_pSerializer->singleElementNS( XML_w, XML_checked, FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_checkBox );
+       writeFinish();
+    }
+    void WriteFormText(  const rtl::OUString& rName, const rtl::OUString& rDefault )
+    {
+       writeCommonStart( rName );
+       if ( rDefault.getLength() )
+       {
+           m_pSerializer->startElementNS( XML_w, XML_textInput, FSEND );
+           m_pSerializer->singleElementNS( XML_w, XML_default,
+               FSNS( XML_w, XML_val ),
+               rtl::OUStringToOString( rDefault, RTL_TEXTENCODING_UTF8 ).getStr(), FSEND );
+           m_pSerializer->endElementNS( XML_w, XML_textInput );
+       }
+       writeFinish();
+    }
+};
+
+class FieldMarkParamsHelper
+{
+    const sw::mark::IFieldmark& mrFieldmark;
+    public:
+    FieldMarkParamsHelper( const sw::mark::IFieldmark& rFieldmark ) : mrFieldmark( rFieldmark ) {}
+    template < typename T >
+    bool extractParam( const rtl::OUString& rKey, T& rResult )
+    {
+        bool bResult = false;
+        if ( mrFieldmark.GetParameters() )
+        {
+            sw::mark::IFieldmark::parameter_map_t::const_iterator it = mrFieldmark.GetParameters()->find( rKey );
+            if ( it != mrFieldmark.GetParameters()->end() )
+                bResult = ( it->second >>= rResult );
+        }
+        return bResult;
+    }
+};
 void DocxAttributeOutput::RTLAndCJKState( bool bIsRTL, sal_uInt16 /*nScript*/ )
 {
     if (bIsRTL)
@@ -549,6 +623,56 @@ void DocxAttributeOutput::DoWriteBookmarks()
     m_rMarksEnd.clear();
 }
 
+void DocxAttributeOutput::WriteFFData(  const FieldInfos& rInfos )
+{
+    const ::sw::mark::IFieldmark& rFieldmark = *rInfos.pFieldmark;
+    if ( rInfos.eType == ww::eFORMDROPDOWN )
+    {
+        uno::Sequence< ::rtl::OUString> vListEntries;
+        rtl::OUString sName, sHelp, sToolTip, sSelected;
+
+        FieldMarkParamsHelper params( rFieldmark );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_NAME) ), sName );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY) ), vListEntries );
+
+        sal_Int32 nSelectedIndex = 0;
+
+        if ( params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT) ), nSelectedIndex ) )
+        {
+            if (nSelectedIndex < vListEntries.getLength() )
+                sSelected = vListEntries[ nSelectedIndex ];
+        }
+
+        GetExport().DoComboBox( sName, sHelp, sToolTip, sSelected, vListEntries );
+    }
+    else if ( rInfos.eType == ww::eFORMCHECKBOX )
+    {
+        rtl::OUString sName, sDefault;
+        bool bChecked = false;
+
+        FieldMarkParamsHelper params( rFieldmark );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_NAME ) ), sName );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX_DEFAULT ) ), sDefault );
+
+        const sw::mark::ICheckboxFieldmark* pCheckboxFm = dynamic_cast<const sw::mark::ICheckboxFieldmark*>(&rFieldmark);
+        if ( pCheckboxFm && pCheckboxFm->IsChecked() )
+            bChecked = true;
+
+        FFDataWriterHelper ffdataOut( m_pSerializer );
+        ffdataOut.WriteFormCheckbox( sName, sDefault, bChecked );
+    }
+    else if ( rInfos.eType == ww::eFORMTEXT )
+    {
+        rtl::OUString sName, sDefault;
+        FieldMarkParamsHelper params( rFieldmark );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMTEXT_NAME ) ), sName );
+        params.extractParam( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMTEXT_DEFAULT ) ), sDefault );
+
+        FFDataWriterHelper ffdataOut( m_pSerializer );
+        ffdataOut.WriteFormText( sName, sDefault );
+    }
+}
+
 void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRun )
 {
     if ( rInfos.pField && rInfos.eType == ww::eUNKNOWN )
@@ -566,27 +690,37 @@ void DocxAttributeOutput::StartField_Impl( FieldInfos& rInfos, sal_Bool bWriteRu
                 m_pSerializer->startElementNS( XML_w, XML_fldChar,
                     FSNS( XML_w, XML_fldCharType ), "begin",
                     FSEND );
-
-                const SwDropDownField& rFld2 = *(SwDropDownField*)rInfos.pField;
-                uno::Sequence<rtl::OUString> aItems =
-                    rFld2.GetItemSequence();
-                GetExport().DoComboBox(rFld2.GetName(),
-                           rFld2.GetHelp(),
-                           rFld2.GetToolTip(),
-                           rFld2.GetSelectedItem(), aItems);
-
+                if ( rInfos.pFieldmark && !rInfos.pField )
+                    WriteFFData(  rInfos );
+                if ( rInfos.pField )
+                {
+                    const SwDropDownField& rFld2 = *(SwDropDownField*)rInfos.pField;
+                    uno::Sequence<rtl::OUString> aItems =
+                        rFld2.GetItemSequence();
+                    GetExport().DoComboBox(rFld2.GetName(),
+                               rFld2.GetHelp(),
+                               rFld2.GetToolTip(),
+                               rFld2.GetSelectedItem(), aItems);
+                }
                 m_pSerializer->endElementNS( XML_w, XML_fldChar );
 
                 if ( bWriteRun )
                     m_pSerializer->endElementNS( XML_w, XML_r );
+                if ( !rInfos.pField )
+                    CmdField_Impl( rInfos );
 
         }
         else
         {
             // Write the field start
-            m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+            m_pSerializer->startElementNS( XML_w, XML_fldChar,
                 FSNS( XML_w, XML_fldCharType ), "begin",
                 FSEND );
+
+            if ( rInfos.pFieldmark )
+                WriteFFData(  rInfos );
+
+            m_pSerializer->endElementNS( XML_w, XML_fldChar );
 
             if ( bWriteRun )
                 m_pSerializer->endElementNS( XML_w, XML_r );
@@ -673,12 +807,14 @@ void DocxAttributeOutput::EndField_Impl( FieldInfos& rInfos )
     }
 
     // Write the Field end
-    m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
-    m_pSerializer->singleElementNS( XML_w, XML_fldChar,
-          FSNS( XML_w, XML_fldCharType ), "end",
-          FSEND );
-    m_pSerializer->endElementNS( XML_w, XML_r );
-
+    if ( rInfos.bClose  )
+    {
+        m_pSerializer->startElementNS( XML_w, XML_r, FSEND );
+        m_pSerializer->singleElementNS( XML_w, XML_fldChar,
+              FSNS( XML_w, XML_fldCharType ), "end",
+              FSEND );
+        m_pSerializer->endElementNS( XML_w, XML_r );
+    }
     // Write the ref field if a bookmark had to be set and the field
     // should be visible
     if ( rInfos.pField )
@@ -3059,7 +3195,6 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
     infos.eType = eType;
     infos.bClose = WRITEFIELD_CLOSE & nMode;
     infos.bOpen = WRITEFIELD_START & nMode;
-
     m_Fields.push_back( infos );
 
     if ( pFld )
@@ -3079,6 +3214,12 @@ void DocxAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField eType
             m_sFieldBkm = pDropDown->GetName( );
         }
     }
+}
+
+void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark )
+{
+    if ( !m_Fields.empty() )
+        m_Fields.begin()->pFieldmark = &rFieldmark;
 }
 
 void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,

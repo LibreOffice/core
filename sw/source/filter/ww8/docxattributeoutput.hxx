@@ -31,6 +31,7 @@
 
 #include "attributeoutputbase.hxx"
 #include "fields.hxx"
+#include "IMark.hxx"
 
 #include <sax/fshelper.hxx>
 #include <sax/fastattribs.hxx>
@@ -51,10 +52,12 @@ namespace oox { namespace drawingml { class DrawingML; } }
 struct FieldInfos
 {
     const SwField*    pField;
+    const ::sw::mark::IFieldmark* pFieldmark;
     ww::eField  eType;
     bool        bOpen;
     bool        bClose;
     String     sCmd;
+    FieldInfos() : pField(NULL), pFieldmark(NULL), eType(ww::eUNKNOWN), bOpen(false), bClose(false){}
 };
 
 enum DocxColBreakStatus
@@ -259,6 +262,7 @@ public:
         const String &rNumberingString );
 
     void WriteField_Impl( const SwField* pFld, ww::eField eType, const String& rFldCmd, BYTE nMode );
+    void WriteFormData_Impl( const ::sw::mark::IFieldmark& rFieldmark );
 
     void WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds );
 
@@ -305,6 +309,7 @@ private:
     /// End cell, row, and even the entire table if necessary.
     void FinishTableRowCell( ww8::WW8TableNodeInfoInner::Pointer_t pInner, bool bForceEmptyParagraph = false );
 
+    void WriteFFData( const FieldInfos& rInfos );
 protected:
 
     /// Output frames - the implementation.

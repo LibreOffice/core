@@ -175,6 +175,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
         maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        if ( aFormula.sDefault.Len() )
+            maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT_DEFAULT))] = uno::makeAny(::rtl::OUString(aFormula.sDefault));
     }
     return FLD_TEXT;
     }
@@ -229,6 +231,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
             (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_NAME))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
             (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_HELPTEXT))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            if ( aFormula.sDefault.Len() )
+                (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_DEFAULT))] = uno::makeAny(::rtl::OUString(aFormula.sDefault));
+
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
             // set field data here...
@@ -302,6 +307,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
                 uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
                 (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_NAME))] = uno::makeAny(rtl::OUString( aFormula.sTitle ));
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
                 (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = uno::makeAny(nIndex);
                 // set field data here...
@@ -2197,6 +2203,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 OSL_ENSURE(!this, "unknown option, please report to cmc");
                 break;
         }
+        if ( nDefaultChecked )
+            sDefault = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
+        else
+            sDefault = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") );
     }
     else if (nWhich == WW8_CT_DROPDOWN)
         *pDataStream >> nChecked;
