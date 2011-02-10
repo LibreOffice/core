@@ -233,21 +233,39 @@ namespace DOM
     // Adds a node using its nodeName attribute.
     */
     Reference< XNode > SAL_CALL
-    CAttributesMap::setNamedItem(Reference< XNode > const& arg)
+    CAttributesMap::setNamedItem(Reference< XNode > const& xNode)
     throw (RuntimeException)
     {
-      return arg;
-      // return Reference< XNode >();
+        Reference< XAttr > const xAttr(xNode, UNO_QUERY);
+        if (!xNode.is()) {
+            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "CAttributesMap::setNamedItem: XAttr argument expected")),
+                static_cast<OWeakObject*>(this),
+                DOMExceptionType_HIERARCHY_REQUEST_ERR);
+        }
+        // no MutexGuard needed: m_pElement is const
+        Reference< XNode > const xRet(
+            m_pElement->setAttributeNode(xAttr), UNO_QUERY);
+        return xRet;
     }
 
     /**
     Adds a node using its namespaceURI and localName.
     */
     Reference< XNode > SAL_CALL
-    CAttributesMap::setNamedItemNS(Reference< XNode > const& arg)
+    CAttributesMap::setNamedItemNS(Reference< XNode > const& xNode)
     throw (RuntimeException)
     {
-        return arg;
-    // return Reference< XNode >();
+        Reference< XAttr > const xAttr(xNode, UNO_QUERY);
+        if (!xNode.is()) {
+            throw DOMException(OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "CAttributesMap::setNamedItemNS: XAttr argument expected")),
+                static_cast<OWeakObject*>(this),
+                DOMExceptionType_HIERARCHY_REQUEST_ERR);
+        }
+        // no MutexGuard needed: m_pElement is const
+        Reference< XNode > const xRet(
+            m_pElement->setAttributeNodeNS(xAttr), UNO_QUERY);
+        return xRet;
     }
 }
