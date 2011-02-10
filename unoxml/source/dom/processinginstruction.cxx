@@ -54,46 +54,89 @@ namespace DOM
     /**
     The content of this processing instruction.
     */
-    OUString SAL_CALL CProcessingInstruction::getData() throw (RuntimeException)
+    OUString SAL_CALL
+    CProcessingInstruction::getData() throw (RuntimeException)
     {
-        // XXX
-        return OUString();
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
+        }
+
+        char const*const pContent(
+                reinterpret_cast<char const*>(m_aNodePtr->content));
+        if (0 == pContent) {
+            return ::rtl::OUString();
+        }
+        OUString const ret(pContent, strlen(pContent), RTL_TEXTENCODING_UTF8);
+        return ret;
     }
 
     /**
     The target of this processing instruction.
     */
-    OUString SAL_CALL CProcessingInstruction::getTarget() throw (RuntimeException)
+    OUString SAL_CALL
+    CProcessingInstruction::getTarget() throw (RuntimeException)
     {
-        // XXX
-        return OUString();
-    }
+        ::osl::MutexGuard const g(m_rMutex);
 
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
+        }
+
+        char const*const pName(
+                reinterpret_cast<char const*>(m_aNodePtr->name));
+        if (0 == pName) {
+            return ::rtl::OUString();
+        }
+        OUString const ret(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
+        return ret;
+    }
 
     /**
     The content of this processing instruction.
     */
-  void SAL_CALL CProcessingInstruction::setData(const OUString& /*data*/) throw (RuntimeException, DOMException)
-    {
-        // XXX
-    }
-
-
-    OUString SAL_CALL CProcessingInstruction::getNodeName()throw (RuntimeException)
+    void SAL_CALL CProcessingInstruction::setData(OUString const& rData)
+        throw (RuntimeException, DOMException)
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-       OUString aName;
-        if (m_aNodePtr != NULL)
-        {
-            const xmlChar* xName = m_aNodePtr->name;
-            aName = OUString((sal_Char*)xName, strlen((char*)xName), RTL_TEXTENCODING_UTF8);
+        if (0 == m_aNodePtr) {
+            throw RuntimeException();
         }
-        return aName;
+
+        OString const data(OUStringToOString(rData, RTL_TEXTENCODING_UTF8));
+        xmlChar const*const pData(
+                reinterpret_cast<xmlChar const*>(data.getStr()) );
+        xmlFree(m_aNodePtr->content);
+        m_aNodePtr->content = xmlStrdup(pData);
     }
 
-    OUString SAL_CALL CProcessingInstruction::getNodeValue() throw (RuntimeException)
+    OUString SAL_CALL
+    CProcessingInstruction::getNodeName() throw (RuntimeException)
+    {
+        ::osl::MutexGuard const g(m_rMutex);
+
+        if (0 == m_aNodePtr) {
+            return ::rtl::OUString();
+        }
+
+        sal_Char const*const pName =
+            reinterpret_cast<sal_Char const*>(m_aNodePtr->name);
+        OUString const ret(pName, strlen(pName), RTL_TEXTENCODING_UTF8);
+        return ret;
+    }
+
+    OUString SAL_CALL CProcessingInstruction::getNodeValue()
+        throw (RuntimeException)
     {
         return getData();
+    }
+
+    void SAL_CALL
+    CProcessingInstruction::setNodeValue(OUString const& rNodeValue)
+        throw (RuntimeException, DOMException)
+    {
+        return setData(rNodeValue);
     }
 }

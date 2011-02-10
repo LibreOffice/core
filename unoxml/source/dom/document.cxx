@@ -603,7 +603,7 @@ namespace DOM
         xmlChar *xTarget = (xmlChar*)o1.getStr();
         OString o2 = OUStringToOString(data, RTL_TEXTENCODING_UTF8);
         xmlChar *xData = (xmlChar*)o2.getStr();
-        xmlNodePtr const pNode = xmlNewPI(xTarget, xData);
+        xmlNodePtr const pNode = xmlNewDocPI(m_aDocPtr, xTarget, xData);
         pNode->doc = m_aDocPtr;
         Reference< XProcessingInstruction > const xRet(
             static_cast< XNode* >(GetCNode(pNode).get()),

@@ -81,6 +81,9 @@ namespace DOM
             throw (RuntimeException);
         virtual OUString SAL_CALL getNodeValue()
             throw (RuntimeException);
+        virtual void SAL_CALL setNodeValue(OUString const& rNodeValue)
+            throw (RuntimeException, DOMException);
+
     // --- delegation for XNde base.
     virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
         throw (RuntimeException, DOMException)
@@ -188,11 +191,6 @@ namespace DOM
         throw (RuntimeException, DOMException)
     {
         return CNode::replaceChild(newChild, oldChild);
-    }
-    virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-        throw (RuntimeException, DOMException)
-    {
-        return CNode::setNodeValue(nodeValue);
     }
     virtual void SAL_CALL setPrefix(const OUString& prefix)
         throw (RuntimeException, DOMException)
