@@ -1044,7 +1044,6 @@ GalleryButton .uno:Gallery
 Gesamtbild SID_WIN_FULLSCREEN
 GestalterButton SID_STYLE_DESIGNER
 HyperlinkDialog .uno:HyperlinkDialog
-HyperlinkLeisteButton SID_HYPERLINK_INSERT
 Kopieren .uno:Copy
 NavigatorButton .uno:Navigator
 Neu .uno:AddDirect
@@ -1252,7 +1251,6 @@ Hinunterschieben SID_OUTLINE_DOWN
 Hinunterstufen SID_OUTLINE_RIGHT
 Hochschieben SID_OUTLINE_UP
 Hochstufen SID_OUTLINE_LEFT
-Hyperlink .uno:InsertHyperlink
 Insert .uno:InsertToolbox
 InsertGraphic .uno:InsertGraphic
 Interaktion .uno:AnimationObjects
