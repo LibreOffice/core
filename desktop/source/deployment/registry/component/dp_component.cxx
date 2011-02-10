@@ -193,6 +193,42 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     };
     friend class TypelibraryPackageImpl;
 
+    /** Serves for unregistering packages that were registered on a
+        different platform. This can happen if one has remotely mounted
+        /home, for example.
+     */
+    class OtherPlatformPackageImpl : public ::dp_registry::backend::Package
+    {
+    public:
+        OtherPlatformPackageImpl(
+            ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+            OUString const & url, OUString const & name,
+            Reference<deployment::XPackageTypeInfo> const & xPackageType,
+            bool bRemoved, OUString const & identifier, OUString const& rPlatform);
+
+    private:
+        BackendImpl * getMyBackend() const;
+
+        const Reference<registry::XSimpleRegistry> impl_openRDB() const;
+        const Reference<XInterface> impl_createInstance(OUString const& rService) const;
+
+        // Package
+        virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
+            ::osl::ResettableMutexGuard & guard,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+        virtual void processPackage_(
+            ::osl::ResettableMutexGuard & guard,
+            bool registerPackage,
+            bool startup,
+            ::rtl::Reference<AbortChannel> const & abortChannel,
+            Reference<XCommandEnvironment> const & xCmdEnv );
+
+    private:
+        OUString const m_aPlatform;
+    };
+    friend class OtherPlatformPackageImpl;
+
     t_stringlist m_jar_typelibs;
     t_stringlist m_rdb_typelibs;
     t_stringlist & getTypelibs( bool jar ) {
@@ -694,16 +730,30 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
                 INetContentTypeParameter const * param = params.find(
                     ByteString("platform") );
-                if (param == 0 || platform_fits( param->m_sValue )) {
+                bool bPlatformFits(param == 0);
+                String aPlatform;
+                if (!bPlatformFits) // platform is specified, we have to check
+                {
+                    aPlatform = param->m_sValue;
+                    bPlatformFits = platform_fits(aPlatform);
+                }
+                // If the package is being removed, do not care whether
+                // platform fits. We won't be using it anyway.
+                if (bPlatformFits || bRemoved) {
                     param = params.find( ByteString("type") );
                     if (param != 0)
                     {
                         String const & value = param->m_sValue;
                         if (value.EqualsIgnoreCaseAscii("native")) {
-                            return new BackendImpl::ComponentPackageImpl(
-                                this, url, name, m_xDynComponentTypeInfo,
-                                OUSTR("com.sun.star.loader.SharedLibrary"),
-                                bRemoved, identifier);
+                            if (bPlatformFits)
+                                return new BackendImpl::ComponentPackageImpl(
+                                    this, url, name, m_xDynComponentTypeInfo,
+                                    OUSTR("com.sun.star.loader.SharedLibrary"),
+                                    bRemoved, identifier);
+                            else
+                                return new BackendImpl::OtherPlatformPackageImpl(
+                                    this, url, name, m_xDynComponentTypeInfo,
+                                    bRemoved, identifier, aPlatform);
                         }
                         if (value.EqualsIgnoreCaseAscii("Java")) {
                             return new BackendImpl::ComponentPackageImpl(
@@ -1565,6 +1615,110 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
             m_xTDprov.clear();
         }
     }
+}
+
+BackendImpl::OtherPlatformPackageImpl::OtherPlatformPackageImpl(
+    ::rtl::Reference<PackageRegistryBackend> const & myBackend,
+    OUString const & url, OUString const & name,
+    Reference<deployment::XPackageTypeInfo> const & xPackageType,
+    bool bRemoved, OUString const & identifier, OUString const& rPlatform)
+    : Package(myBackend, url, name, name, xPackageType, bRemoved, identifier)
+    , m_aPlatform(rPlatform)
+{
+    OSL_PRECOND(bRemoved, "this class can only be used for removing packages!");
+}
+
+BackendImpl *
+BackendImpl::OtherPlatformPackageImpl::getMyBackend() const
+{
+    BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
+    if (NULL == pBackend)
+    {
+        //Throws a DisposedException
+        check();
+        //We should never get here...
+        throw RuntimeException(
+            OUSTR("Failed to get the BackendImpl"),
+            static_cast<OWeakObject*>(const_cast<OtherPlatformPackageImpl*>(this)));
+    }
+    return pBackend;
+}
+
+Reference<registry::XSimpleRegistry> const
+BackendImpl::OtherPlatformPackageImpl::impl_openRDB() const
+{
+    OUString const aRDB(m_aPlatform + OUString(RTL_CONSTASCII_USTRINGPARAM(".rdb")));
+    OUString const aRDBPath(makeURL(getMyBackend()->getCachePath(), aRDB));
+
+    Reference<registry::XSimpleRegistry> xRegistry;
+
+    try
+    {
+        xRegistry.set(
+                impl_createInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))),
+                UNO_QUERY)
+            ;
+        if (xRegistry.is())
+            xRegistry->open(expandUnoRcUrl(aRDBPath), false, false);
+    }
+    catch (registry::InvalidRegistryException const&)
+    {
+        // If the registry does not exist, we do not need to bother at all
+        xRegistry.set(0);
+    }
+
+    OSL_POSTCOND(xRegistry.is(), "could not create registry for the package's platform");
+    return xRegistry;
+}
+
+Reference<XInterface> const
+BackendImpl::OtherPlatformPackageImpl::impl_createInstance(OUString const& rService)
+const
+{
+    Reference<XComponentContext> const xContext(getMyBackend()->getComponentContext());
+    OSL_ASSERT(xContext.is());
+    Reference<XInterface> xService;
+    if (xContext.is())
+        xService.set(xContext->getServiceManager()->createInstanceWithContext(rService, xContext));
+    return xService;
+}
+
+beans::Optional<beans::Ambiguous<sal_Bool> >
+BackendImpl::OtherPlatformPackageImpl::isRegistered_(
+    ::osl::ResettableMutexGuard& /* guard */,
+    ::rtl::Reference<AbortChannel> const& /* abortChannel */,
+    Reference<XCommandEnvironment> const& /* xCmdEnv */ )
+{
+    return beans::Optional<beans::Ambiguous<sal_Bool> >(sal_True,
+            beans::Ambiguous<sal_Bool>(sal_True, sal_False));
+}
+
+void
+BackendImpl::OtherPlatformPackageImpl::processPackage_(
+    ::osl::ResettableMutexGuard& /* guard */,
+    bool bRegisterPackage,
+    bool /* bStartup */,
+    ::rtl::Reference<AbortChannel> const& /* abortChannel */,
+    Reference<XCommandEnvironment> const& /* xCmdEnv */)
+{
+    OSL_PRECOND(!bRegisterPackage, "this class can only be used for removing packages!");
+    (void) bRegisterPackage;
+
+    OUString const aURL(getURL());
+
+    Reference<registry::XSimpleRegistry> const xServicesRDB(impl_openRDB());
+    Reference<registry::XImplementationRegistration> const xImplReg(
+            impl_createInstance(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
+            UNO_QUERY)
+        ;
+    if (xImplReg.is() && xServicesRDB.is())
+        xImplReg->revokeImplementation(aURL, xServicesRDB);
+    if (xServicesRDB.is())
+        xServicesRDB->close();
+
+    getMyBackend()->deleteDataFromDb(aURL);
 }
 
 } // anon namespace
