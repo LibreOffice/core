@@ -893,18 +893,9 @@ void ScTabView::PaintBlock( BOOL bReset )
                 // Invertieren beim Loeschen nur auf aktiver View
                 if ( aViewData.IsActive() )
                 {
-                    if ( bMulti )
-                    {
-                        rMark.ResetMark();
-                        UpdateSelectionOverlay();
-                        bDidReset = TRUE;
-                    }
-                    else
-                    {
-                        rMark.ResetMark();
-                        UpdateSelectionOverlay();
-                        bDidReset = TRUE;
-                    }
+                    rMark.ResetMark();
+                    UpdateSelectionOverlay();
+                    bDidReset = TRUE;
                 }
             }
             else
