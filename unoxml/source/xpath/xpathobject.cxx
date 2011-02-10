@@ -173,8 +173,10 @@ namespace XPath
     {
         ::osl::MutexGuard const g(m_rMutex);
 
-        const sal_Char* x1 = (sal_Char*) xmlXPathCastToString(m_pXPathObj.get());
-        return OUString(x1, strlen(x1), RTL_TEXTENCODING_UTF8);
+        ::boost::shared_ptr<xmlChar const> str(
+            xmlXPathCastToString(m_pXPathObj.get()), xmlFree);
+        sal_Char const*const pS(reinterpret_cast<sal_Char const*>(str.get()));
+        return OUString(pS, strlen(pS), RTL_TEXTENCODING_UTF8);
     }
 
 }

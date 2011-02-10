@@ -440,11 +440,11 @@ namespace DOM
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
         xmlAttrPtr const pAttr = xmlNewDocProp(m_aDocPtr, xName, NULL);
-        Reference< XAttr > const xRet(
-            static_cast< XNode* >(GetCNode(
-                    reinterpret_cast<xmlNodePtr>(pAttr)).get()),
-            UNO_QUERY_THROW);
-        return xRet;
+        ::rtl::Reference< CAttr > const pCAttr(
+            dynamic_cast< CAttr* >(GetCNode(
+                    reinterpret_cast<xmlNodePtr>(pAttr)).get()));
+        pCAttr->m_bUnlinked = true;
+        return pCAttr.get();
     };
 
     // Creates an attribute of the given qualified name and namespace URI.
@@ -478,6 +478,7 @@ namespace DOM
         if (!pCAttr.is()) { throw RuntimeException(); }
         // store the namespace data!
         pCAttr->m_pNamespace.reset( new stringpair_t(oUri, oPrefix) );
+        pCAttr->m_bUnlinked = true;
 
         return pCAttr.get();
     };
