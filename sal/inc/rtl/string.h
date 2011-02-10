@@ -73,6 +73,29 @@ sal_Int32 SAL_CALL rtl_str_getLength( const sal_Char * str ) SAL_THROW_EXTERN_C(
  */
 sal_Int32 SAL_CALL rtl_str_compare( const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
 
+/** Compare two strings using natural order.
+
+    For non digit characters, the comparison use the same algorithm as
+    rtl_str_compare. When a number is encountered during the comparison,
+    natural order is used. Thus, Heading 10 will be considered as greater
+    than Heading 2. Numerical comparison is done using decimal representation.
+
+    Beware that "MyString 001" and "MyString 1" will be considered as equal
+    since leading 0 are meaningless.
+
+    @param first
+    the first null-terminated string to be compared.
+
+    @param second
+    the second null-terminated string which is compared with the first one.
+
+    @return
+    0 if both strings are equal, a value less than 0 if the first string is
+    less than the second string, and a value greater than 0 if the first
+    string is greater than the second string.
+ */
+sal_Int32 SAL_CALL rtl_str_compare_Numeric( const sal_Char * first, const sal_Char * second ) SAL_THROW_EXTERN_C();
+
 /** Compare two strings.
 
     The comparison is based on the numeric value of each character in the

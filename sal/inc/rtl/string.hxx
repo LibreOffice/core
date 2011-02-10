@@ -283,6 +283,28 @@ public:
     }
 
     /**
+      Compares two strings using natural order.
+
+      For non digit characters, the comparison use the same algorithm as
+      rtl_str_compare. When a number is encountered during the comparison,
+      natural order is used. Thus, Heading 10 will be considered as greater
+      than Heading 2. Numerical comparison is done using decimal representation.
+
+      Beware that "MyString 001" and "MyString 1" will be considered as equal
+      since leading 0 are meaningless.
+
+      @param    str         the object to be compared.
+      @return   0 - if both strings are equal
+                < 0 - if this string is less than the string argument
+                > 0 - if this string is greater than the string argument
+     */
+    sal_Int32 compareToNumeric( const OString & str ) const SAL_THROW(())
+    {
+        return rtl_str_compare_Numeric( pData->buffer,
+                                            str.pData->buffer );
+    }
+
+    /**
       Compares two strings with an maximum count of characters.
 
       The comparison is based on the numeric value of each character in
