@@ -69,6 +69,7 @@ namespace DOM
     Reference< XText > SAL_CALL CText::splitText(sal_Int32 /*offset*/)
          throw (RuntimeException)
     {
+        OSL_ENSURE(false, "CText::splitText: not implemented (#i113683#)");
         return Reference< XText >(this);
     }
 }

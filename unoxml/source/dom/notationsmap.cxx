@@ -45,6 +45,8 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CNotationsMap::getLength() throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::getLength: not implemented (#i113683#)");
         return 0;
     }
 
@@ -55,6 +57,8 @@ namespace DOM
     CNotationsMap::getNamedItem(OUString const& /*name*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::getNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -66,6 +70,8 @@ namespace DOM
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::getNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -75,6 +81,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CNotationsMap::item(sal_Int32 /*index*/) throw (RuntimeException)
     {
+        OSL_ENSURE(false, "CNotationsMap::item: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -85,6 +92,8 @@ namespace DOM
     CNotationsMap::removeNamedItem(OUString const& /*name*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::removeNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -96,6 +105,8 @@ namespace DOM
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::removeNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -106,6 +117,8 @@ namespace DOM
     CNotationsMap::setNamedItem(Reference< XNode > const& /*arg*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::setNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -116,6 +129,8 @@ namespace DOM
     CNotationsMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CNotationsMap::setNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 }

@@ -44,6 +44,8 @@ namespace DOM
     */
     sal_Int32 SAL_CALL CEntitiesMap::getLength() throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getLength: not implemented (#i113683#)");
         return 0;
     }
 
@@ -53,6 +55,8 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CEntitiesMap::getNamedItem(OUString const& /*name*/) throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -64,6 +68,8 @@ namespace DOM
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::getNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -73,6 +79,7 @@ namespace DOM
     Reference< XNode > SAL_CALL
     CEntitiesMap::item(sal_Int32 /*index*/) throw (RuntimeException)
     {
+        OSL_ENSURE(false, "CEntitiesMap::item: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -83,6 +90,8 @@ namespace DOM
     CEntitiesMap::removeNamedItem(OUString const& /*name*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::removeNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -94,6 +103,8 @@ namespace DOM
         OUString const& /*namespaceURI*/, OUString const& /*localName*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::removeNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -104,6 +115,8 @@ namespace DOM
     CEntitiesMap::setNamedItem(Reference< XNode > const& /*arg*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::setNamedItem: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 
@@ -114,6 +127,8 @@ namespace DOM
     CEntitiesMap::setNamedItemNS(Reference< XNode > const& /*arg*/)
     throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CEntitiesMap::setNamedItemNS: not implemented (#i113683#)");
         return Reference< XNode >();
     }
 }

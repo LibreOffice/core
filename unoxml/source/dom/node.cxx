@@ -747,7 +747,7 @@ namespace DOM
   sal_Bool SAL_CALL CNode::isSupported(const OUString& /*feature*/, const OUString& /*ver*/)
         throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false, "CNode::isSupported: not implemented (#i113683#)");
         return sal_False;
     }
 
@@ -762,6 +762,7 @@ namespace DOM
         throw (RuntimeException)
     {
         //XXX combine adjacent text nodes and remove empty ones
+        OSL_ENSURE(false, "CNode::normalize: not implemented (#i113683#)");
     }
 
     /**

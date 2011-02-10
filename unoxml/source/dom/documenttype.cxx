@@ -66,7 +66,8 @@ namespace DOM
     */
     OUString SAL_CALL CDocumentType::getInternalSubset() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+            "CDocumentType::getInternalSubset: not implemented (#i113683#)");
         return OUString();
     }
 

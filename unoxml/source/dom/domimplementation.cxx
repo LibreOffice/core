@@ -58,6 +58,8 @@ namespace DOM
            Reference< XDocumentType > const& /*xDoctype*/)
         throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CDOMImplementation::createDocument: not implemented (#i113683#)");
         return Reference<XDocument>();
     }
 
@@ -69,6 +71,8 @@ namespace DOM
             OUString const& /*rPublicId*/, OUString const& /*rSystemId*/)
         throw (RuntimeException)
     {
+        OSL_ENSURE(false, "CDOMImplementation::createDocumentType: "
+                "not implemented (#i113683#)");
         return Reference<XDocumentType>();
     }
 
@@ -79,6 +83,8 @@ namespace DOM
     CDOMImplementation::hasFeature(OUString const& /*feature*/, OUString const& /*ver*/)
         throw (RuntimeException)
     {
+        OSL_ENSURE(false,
+            "CDOMImplementation::hasFeature: not implemented (#i113683#)");
         return sal_False;
     }
 }

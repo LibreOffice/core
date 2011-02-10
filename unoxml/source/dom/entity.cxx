@@ -61,7 +61,8 @@ namespace DOM
     */
     OUString SAL_CALL CEntity::getNotationName() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+                "CEntity::getNotationName: not implemented (#i113683#)");
         return OUString();
     }
 

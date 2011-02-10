@@ -41,7 +41,8 @@ namespace DOM
 
     OUString SAL_CALL CNotation::getPublicId() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+            "CNotation::getPublicId: not implemented (#i113683#)");
         return OUString();
     }
 
@@ -50,7 +51,8 @@ namespace DOM
     */
     OUString SAL_CALL CNotation::getSystemId() throw (RuntimeException)
     {
-        // XXX
+        OSL_ENSURE(false,
+            "CNotation::getSystemId: not implemented (#i113683#)");
         return OUString();
     }
 
