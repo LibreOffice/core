@@ -206,6 +206,28 @@ namespace DOM
         popContext(i_rContext);
     }
 
+    bool CElement::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            case NodeType_ATTRIBUTE_NODE:
+                /* this is not relly allowed by the DOM spec, but this
+                   implementation has evidently supported it (by special case
+                   handling, so the attribute does not actually become a child)
+                   so allow it for backward compatiblity */
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
     /**
         Retrieves an attribute value by name.
         return empty string if attribute is not set

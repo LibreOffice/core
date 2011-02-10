@@ -66,6 +66,8 @@ namespace DOM
 
         virtual void fastSaxify( Context& i_rContext );
 
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         /**
         Retrieves an attribute value by name.
         */

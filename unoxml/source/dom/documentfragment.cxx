@@ -37,6 +37,21 @@ namespace DOM
     {
     }
 
+    bool CDocumentFragment::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException)
     {
         return OUString::createFromAscii("#document-fragment");

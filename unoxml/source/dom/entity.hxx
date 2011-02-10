@@ -61,6 +61,7 @@ namespace DOM
                 xmlEntityPtr const pEntity);
 
     public:
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
 
         /**
         For unparsed entities, the name of the notation for the entity.

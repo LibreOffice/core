@@ -55,6 +55,8 @@ namespace DOM
                 xmlNodePtr const pNode);
 
     public:
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         // ---- resolve uno inheritance problems...
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()

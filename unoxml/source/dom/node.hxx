@@ -154,6 +154,9 @@ namespace DOM
         // recursively create SAX events
         virtual void fastSaxify( Context& io_rContext );
 
+        // constrains child relationship between nodes based on type
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         // ---- DOM interfaces
 
         /**

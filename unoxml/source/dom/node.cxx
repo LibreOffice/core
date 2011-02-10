@@ -289,6 +289,12 @@ namespace DOM
         // default: do nothing
     }
 
+    bool CNode::IsChildTypeAllowed(NodeType const /*nodeType*/)
+    {
+        // default: no children allowed
+        return false;
+    }
+
     /**
     Adds the node newChild to the end of the list of children of this node.
     */
@@ -319,6 +325,11 @@ namespace DOM
             throw e;
         }
         if (cur->parent != NULL) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+        if (!IsChildTypeAllowed(pNewChild->m_aNodeType)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
@@ -691,6 +702,11 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
+        if (!IsChildTypeAllowed(pNewNode->m_aNodeType)) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
 
         // attributes are unordered anyway, so just do appendChild
         if (XML_ATTRIBUTE_NODE == pNewChild->type) {
@@ -828,7 +844,6 @@ namespace DOM
         if (!xOldChild.is() || !xNewChild.is()) {
             throw RuntimeException();
         }
-        // XXX check node types
 
         if (xNewChild->getOwnerDocument() != getOwnerDocument()) {
             DOMException e;
@@ -863,6 +878,11 @@ namespace DOM
         }
         // already has parent
         if (pNew->parent != NULL) {
+            DOMException e;
+            e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
+            throw e;
+        }
+        if (!IsChildTypeAllowed(pNewNode->m_aNodeType)) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;

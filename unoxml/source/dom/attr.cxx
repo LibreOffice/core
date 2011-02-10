@@ -70,6 +70,17 @@ namespace DOM
         return pNs;
     }
 
+    bool CAttr::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_TEXT_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     OUString SAL_CALL CAttr::getNodeName()
         throw (RuntimeException)
     {

@@ -41,6 +41,21 @@ namespace DOM
     {
     }
 
+    bool CEntity::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_ELEMENT_NODE:
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+            case NodeType_TEXT_NODE:
+            case NodeType_CDATA_SECTION_NODE:
+            case NodeType_ENTITY_REFERENCE_NODE:
+                return true;
+            default:
+                return false;
+        }
+    }
+
     /**
     For unparsed entities, the name of the notation for the entity.
     */

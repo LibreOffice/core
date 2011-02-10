@@ -68,6 +68,8 @@ namespace DOM
         /// return the libxml namespace corresponding to m_pNamespace on pNode
         xmlNsPtr GetNamespace(xmlNodePtr const pNode);
 
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         /**
         Returns the name of this attribute.
         */

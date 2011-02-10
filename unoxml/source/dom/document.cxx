@@ -56,6 +56,20 @@
 
 namespace DOM
 {
+    static xmlNodePtr lcl_getDocumentType(xmlDocPtr const i_pDocument)
+    {
+        // find the doc type
+        xmlNodePtr cur = i_pDocument->children;
+        while (cur != NULL)
+        {
+            if ((cur->type == XML_DOCUMENT_TYPE_NODE) ||
+                (cur->type == XML_DTD_NODE)) {
+                    return cur;
+            }
+        }
+        return 0;
+    }
+
     /// get the pointer to the root element node of the document
     static xmlNodePtr lcl_getDocumentRootPtr(xmlDocPtr const i_pDocument)
     {
@@ -291,6 +305,24 @@ namespace DOM
         }
         rContext.mxDocHandler->endDocument();
     }
+
+    bool CDocument::IsChildTypeAllowed(NodeType const nodeType)
+    {
+        switch (nodeType) {
+            case NodeType_PROCESSING_INSTRUCTION_NODE:
+            case NodeType_COMMENT_NODE:
+                return true;
+            case NodeType_ELEMENT_NODE:
+                 // there may be only one!
+                return 0 == lcl_getDocumentRootPtr(m_aDocPtr);
+            case NodeType_DOCUMENT_TYPE_NODE:
+                 // there may be only one!
+                return 0 == lcl_getDocumentType(m_aDocPtr);
+            default:
+                return false;
+        }
+    }
+
 
     void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
         throw (RuntimeException)
@@ -601,15 +633,9 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // find the doc type
-        xmlNodePtr cur = m_aDocPtr->children;
-        while (cur != NULL)
-        {
-            if (cur->type == XML_DOCUMENT_TYPE_NODE || cur->type == XML_DTD_NODE)
-                break;
-        }
+        xmlNodePtr const pDocType(lcl_getDocumentType(m_aDocPtr));
         Reference< XDocumentType > const xRet(
-            static_cast< XNode* >(GetCNode(cur).get()),
+            static_cast< XNode* >(GetCNode(pDocType).get()),
             UNO_QUERY);
         return xRet;
     }

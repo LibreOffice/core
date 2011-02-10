@@ -131,6 +131,8 @@ namespace DOM
 
         virtual void fastSaxify( Context& rContext );
 
+        virtual bool IsChildTypeAllowed(NodeType const nodeType);
+
         /**
         Creates an Attr of the given name.
         */
