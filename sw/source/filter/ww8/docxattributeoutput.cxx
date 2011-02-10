@@ -1887,12 +1887,15 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     if( isAnchor )
     {
         m_pSerializer->startElementNS( XML_wp, XML_anchor,
-                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
+                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "1",
                 XML_relativeHeight, "0", // TODO
                 XML_behindDoc, rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1",
                 XML_locked, "0", XML_layoutInCell, "1", XML_allowOverlap, "1", // TODO
                 FSEND );
-        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND );
+        Point pos = rGrfNode.GetFlyFmt()->FindLayoutRect().Pos() - rGrfNode.FindPageFrmRect( false, NULL, false ).Pos();
+        OString x( OString::valueOf( pos.X()));
+        OString y( OString::valueOf( pos.Y()));
+        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, x.getStr(), XML_y, y.getStr(), FSEND );
         const char* relativeFromH;
         const char* relativeFromV;
         switch( rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId())
