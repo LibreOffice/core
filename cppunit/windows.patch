@@ -7,19 +7,25 @@
 - * This macros implements the main() function for dynamic library.
 - * For example, WIN32 requires a DllMain function, while some Unix 
 - * requires a main() function. This macros takes care of the implementation.
-+ * This macros implements the main() function for dynamic library
++ * This macro implements the main() function for dynamic library
 + * on Unix for some weird reason.
   */
  
  // Win32
-@@ -149,12 +149,11 @@
- #define NOMINMAX
- #define BLENDFUNCTION void    // for mingw & gcc
- #include <windows.h>
-+#if defined(OPTIONAL) // set within windows.h
-+#undef OPTIONAL
-+#endif
- #endif
+@@ -149,21 +149,7 @@
+ 
+ // Win32
+ #if defined(CPPUNIT_HAVE_WIN32_DLL_LOADER)
+-#if !defined(APIENTRY)
+-#define WIN32_LEAN_AND_MEAN 
+-#define NOGDI
+-#define NOUSER
+-#define NOKERNEL
+-#define NOSOUND
+-#define NOMINMAX
+-#define BLENDFUNCTION void    // for mingw & gcc
+-#include <windows.h>
+-#endif
  #define CPPUNIT_PLUGIN_IMPLEMENT_MAIN()               \
 -  BOOL APIENTRY DllMain( HANDLE, DWORD, LPVOID )      \
 -  {                                                   \
