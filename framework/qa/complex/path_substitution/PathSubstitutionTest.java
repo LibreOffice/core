@@ -63,7 +63,7 @@ public class PathSubstitutionTest
     /**
      * Create an array with all substitution variables
      */
-    @Before private void initialize()
+    @Before public void initialize()
     {
         substVars = new VariableContainer();
         substVars.add("$(prog)", true, true);
