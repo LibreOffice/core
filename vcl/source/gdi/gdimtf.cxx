@@ -512,7 +512,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     if (!win)
         win = Application::GetFirstTopLevelWindow();
 
-    if (win) {
+    if (!win)
+        return false;
+
+    try {
         const uno::Reference<rendering::XCanvas>& xCanvas = win->GetCanvas ();
         Size aSize (rDestSize.Width () + 1, rDestSize.Height () + 1);
         const uno::Reference<rendering::XBitmap>& xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap (vcl::unotools::integerSize2DFromSize( aSize));
@@ -566,6 +569,10 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 }
             }
         }
+    } catch( uno::RuntimeException& ) {
+        throw; // runtime errors are fatal
+    } catch( uno::Exception& ) {
+        // ignore errors, no way of reporting them here
     }
 
     return false;
