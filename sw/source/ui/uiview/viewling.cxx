@@ -104,10 +104,6 @@
 #include <memory>
 #include <editeng/editerr.hxx>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
-#endif
-
 using namespace sw::mark;
 using ::rtl::OUString;
 using namespace ::com::sun::star;
