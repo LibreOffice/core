@@ -1,14 +1,14 @@
---- misc/boost_1_44_0/compare_pointees.hpp	2011-02-10 16:39:05.960176555 +0000
+--- misc/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:39:05.960176555 +0000
 +++ misc/build/boost_1_44_0/boost/utility/compare_pointees.hpp	2011-02-10 16:40:59.091423279 +0000
 @@ -29,7 +29,11 @@
  inline
  bool equal_pointees ( OptionalPointee const& x, OptionalPointee const& y )
  {
 -  return (!x) != (!y) ? false : ( !x ? true : (*x) == (*y) ) ;
-+  if ((!x) != (!y))
-+    return false;
-+  if (!x)
++  if (!x && !y)
 +    return true;
++  if (!x || !y)
++    return false;
 +  return (*x) == (*y);
  }
  
