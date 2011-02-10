@@ -281,11 +281,13 @@ namespace DOM
         return pInput;
     }
 
+#if 0
     static xmlParserInputPtr external_entity_loader(const char *URL, const char * /*ID*/, xmlParserCtxtPtr ctxt)
     {
         // just call our resolver function using the URL as systemId
         return resolve_func(ctxt, 0, (const xmlChar*)URL);
     }
+#endif
 
     // default warning handler triggers assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
@@ -357,40 +359,6 @@ namespace DOM
         Reference< XDocument > const xRet(
                 CDocument::CreateCDocument(pDoc).get());
         return xRet;
-    }
-
-    Reference< XDocument > SAL_CALL CDocumentBuilder::parseSource(const InputSource& is)
-        throw (RuntimeException, SAXParseException, IOException)
-    {
-        ::osl::MutexGuard const g(m_Mutex);
-
-        // if there is an encoding specified in the input source, use it
-        xmlCharEncoding enc = XML_CHAR_ENCODING_NONE;
-        if (is.sEncoding.getLength() > 0) {
-            OString oEncstr = OUStringToOString(is.sEncoding, RTL_TEXTENCODING_UTF8);
-            char *encstr = (char*) oEncstr.getStr();
-            enc = xmlParseCharEncoding(encstr);
-        }
-
-        // set up parser context
-        ::boost::shared_ptr<xmlParserCtxt> const pContext(
-                xmlNewParserCtxt(), xmlFreeParserCtxt);
-
-        // register error functions to prevent errors being printed
-        // on the console
-        pContext->_private = this;
-        pContext->sax->error = error_func;
-        pContext->sax->warning = warning_func;
-
-        // setup entity resolver binding(s)
-        pContext->sax->resolveEntity = resolve_func;
-        xmlSetExternalEntityLoader(external_entity_loader);
-
-        // if an input stream is provided, use it
-
-        // use the systemID
-
-        return Reference< XDocument >();
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)

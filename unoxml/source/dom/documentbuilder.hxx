@@ -142,10 +142,6 @@ namespace DOM
         virtual Reference< XDocument > SAL_CALL parseURI(const OUString& uri)
             throw (RuntimeException, SAXParseException, IOException);
 
-        virtual Reference< XDocument > SAL_CALL parseSource(const InputSource& is)
-            throw (RuntimeException, SAXParseException, IOException);
-
-
         /**
         Specify the EntityResolver to be used to resolve entities present
         in the XML document to be parsed.
