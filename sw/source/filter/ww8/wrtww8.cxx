@@ -3564,7 +3564,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3635,7 +3635,8 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
 
     SwWW8Writer::WriteString_xstz( *pDataStrm, ffname, true ); // Form field name
 
-    SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
+    if ( !type )
+        SwWW8Writer::WriteString_xstz( *pDataStrm, ffdeftext, true );
     if ( type )
         *pDataStrm << sal_uInt16(0);
 

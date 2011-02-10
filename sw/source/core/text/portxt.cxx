@@ -833,8 +833,9 @@ void SwFieldFormPortion::Paint( const SwTxtPaintInfo& rInf ) const
         else if ( pBM->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
         { // a list...
             rtl::OUString aTxt;
+            getCurrentListIndex( pBM, &aTxt );
             rInf.DrawViewOpt( *this, POR_FLD );
-            rInf.DrawText( aTxt, *this, 0, 0/*aTxt.getLength()*/, false );
+            rInf.DrawText( aTxt, *this, 0, aTxt.getLength(), false );
         }
         else
         {
