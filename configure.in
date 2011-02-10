@@ -2845,7 +2845,7 @@ dnl ===================================================================
    if test "$with_stlport" = "yes" ; then
       AC_MSG_RESULT([yes])
 	  WITH_STLPORT=YES
-	  SCPDEFS+=-DWITH_STLPORT
+	  SCPDEFS=SCPDEFS="$SCPDEFS -DWITH_STLPORT"
 	  BUILD_TYPE="$BUILD_TYPE STLPORT"
    else
       WITH_STLPORT=NO
