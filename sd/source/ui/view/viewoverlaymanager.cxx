@@ -206,10 +206,10 @@ extern ::rtl::OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& 
 
 void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
 {
-    int nHighlightId = 0;
 
     if( pHdlList && pHdlList->GetView())
     {
+        int nHighlightId = 0;
         OutputDevice* pDev = pHdlList->GetView()->GetFirstOutputDevice();
         if( pDev == 0 )
             pDev = Application::GetDefaultDevice();

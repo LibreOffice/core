@@ -1336,15 +1336,15 @@ sal_Bool ImplSdPPTImport::Import()
         // this is defaulted, maybe there is no SSDocInfoAtom
         String      aCustomShow;
         sal_uInt32  nFlags = 1;                 // Bit 0:   Auto advance
-        sal_uInt32  nPenColor = 0x1000000;
-        sal_Int32   nRestartTime = 0x7fffffff;
         sal_uInt16  nStartSlide = 0;
-        sal_Int16   nEndSlide = 0;
 
         // read the pres. configuration
         rStCtrl.Seek( maDocHd.GetRecBegFilePos() + 8 );
         if ( SeekToRec( rStCtrl, PPT_PST_SSDocInfoAtom, maDocHd.GetRecEndFilePos(), &aCustomShowHeader ) )
         {
+            sal_uInt32  nPenColor = 0x1000000;
+            sal_Int32   nRestartTime = 0x7fffffff;
+            sal_Int16   nEndSlide = 0;
             rStCtrl >> nPenColor
                     >> nRestartTime
                     >> nStartSlide

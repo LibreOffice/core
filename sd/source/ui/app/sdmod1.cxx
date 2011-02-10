@@ -655,7 +655,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                 if ( pFrameItem )
                                     pFrame = &pFrameItem->GetFrame()->GetFrame();
                             }
-                            catch (::com::sun::star::uno::Exception e)
+                            catch (::com::sun::star::uno::Exception &e)
                             {
                                 DBG_ASSERT (FALSE, "caught IllegalArgumentException while loading document from Impress autopilot");
                             }

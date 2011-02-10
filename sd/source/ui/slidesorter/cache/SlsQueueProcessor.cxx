@@ -220,12 +220,12 @@ void QueueProcessor::ProcessOneRequest (
             }
         }
     }
-    catch (::com::sun::star::uno::RuntimeException aException)
+    catch (::com::sun::star::uno::RuntimeException &aException)
     {
         (void) aException;
         OSL_ASSERT("RuntimeException caught in QueueProcessor");
     }
-    catch (::com::sun::star::uno::Exception aException)
+    catch (::com::sun::star::uno::Exception &aException)
     {
         (void) aException;
         OSL_ASSERT("Exception caught in QueueProcessor");

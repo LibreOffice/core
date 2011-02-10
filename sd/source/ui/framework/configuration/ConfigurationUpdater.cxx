@@ -236,7 +236,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
 #endif
         }
     }
-    catch (RuntimeException e)
+    catch (RuntimeException &e)
     {
         DBG_UNHANDLED_EXCEPTION();
     }

@@ -1088,7 +1088,7 @@ sal_Bool SdXMLFilter::Export()
             }
         }
     }
-    catch(uno::Exception e)
+    catch(uno::Exception &e)
     {
 #if OSL_DEBUG_LEVEL > 1
         ByteString aError( "uno Exception caught while exporting:\n" );
