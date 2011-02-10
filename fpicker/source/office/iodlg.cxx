@@ -1247,7 +1247,12 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
         {
             if ( ::utl::UCBContentHelper::Exists( aFileObj.GetMainURL( INetURLObject::NO_DECODE ) ) )
             {
-                QueryBox aBox( pThis, WB_YES_NO, SvtResId( STR_SVT_ALREADYEXISTOVERWRITE ) );
+                String aMsg = SvtResId( STR_SVT_ALREADYEXISTOVERWRITE );
+                aMsg.SearchAndReplace(
+                    String( RTL_CONSTASCII_USTRINGPARAM( "$filename$" ) ),
+                    aFileObj.getName(INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET)
+                );
+                QueryBox aBox( pThis, WB_YES_NO, aMsg );
                 if ( aBox.Execute() != RET_YES )
                     return 0;
             }
