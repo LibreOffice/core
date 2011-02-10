@@ -47,7 +47,7 @@ HNJLIB=hyphen.lib
 # --- Files --------------------------------------------------------
 
 .IF "$(SYSTEM_HUNSPELL)" != "YES"
-HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell
+HUNSPELL_CFLAGS += -I$(SOLARINCDIR)$/hunspell -DHUNSPELL_STATIC
 .ENDIF
 
 CFLAGS += -I..$/..$/..$/lingutil $(HUNSPELL_CFLAGS)
