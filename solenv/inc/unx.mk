@@ -159,6 +159,10 @@
 .INCLUDE : unxobsd.mk
 .ENDIF
 
+.IF "$(COM)$(OS)" == "GCCDRAGONFLY"
+.INCLUDE : unxdfly.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCMACOSXP"
 .INCLUDE : unxmacxp.mk
 .ENDIF

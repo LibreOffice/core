@@ -23,6 +23,7 @@ chop( $m_str, $s_str );
                "FreeBSD",   "freebsd",
                "NetBSD",    "netbsd",
                "OpenBSD",   "openbsd",
+               "DragonFly", "dragonfly"
                "OSF1",      "decunix",
                "SCO_SV",    "scoosr5",
 #              "SCO_SV",    "scouw21",
@@ -38,6 +39,7 @@ chop( $m_str, $s_str );
                "FreeBSD",   "-DFREEBSD",
                "NetBSD",    "-DNETBSD",
                "OpenBSD",   "-DOPENBSD",
+               "DragonFly", "-DDRAGONFLY",
                "OSF1",      "-DSYSV -DDECUNIX",
                "SCO_SV",    "-DSYSV -DSCO -DSCO_OSR5",
 #              "SCO_SV",    "-DSYSV -DSCO -DSCO_UW21",

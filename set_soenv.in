@@ -807,6 +807,44 @@ elsif ( $platform =~ m/darwin/ )
       $PATH_SEPERATOR = $ps;
       # GUIBASE is set below; may be "aqua" or "unx".
 }
+elsif ( $platform =~ m/dragonfly/ )
+{
+   if ($platform =~ m/^i386/)
+   {  print "Setting DragonFly i386 specific values... ";
+      $outfile        = "DragonFlyX86Env.Set.sh";
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $OUTPATH        = "unxdflyi";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting DragonFly x86-64 specific values... ";
+      $outfile        = "DragonFlyX86-64Env.Set.sh";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxdflyx";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
+   else
+   { print "Unsupported DragonFly architecture: $platform \n";
+     exit 1;
+   }
+   # General DragonFly settings:
+      $CVER           = "C341";
+      $OUTPATH        = $OUTPATH."3";
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@';
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $OS             = "DRAGONFLY";
+      $PATH_SEPERATOR = $ps;
+}
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
@@ -1051,7 +1089,7 @@ if ($platform =~ m/solaris/)
                         $L.$USR_DT.$LIB.
                         $L.$USR_OPENWIN.$LIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix|openbsd/)
+elsif ($platform =~ m/linux|netbsd|osf1|freebsd|aix|openbsd|dragonfly/)
 {
    $SOLAREXTRALIB     = $L.$par_dir.$LIB64;
 }
@@ -1114,7 +1152,7 @@ if ($platform =~ m/cygwin|os2/)
 }
 
 # The general environment path.
-if ($platform =~ m/linux|netbsd|osf1|freebsd|aix|solaris|openbsd/)
+if ($platform =~ m/linux|netbsd|osf1|freebsd|aix|solaris|openbsd|dragonfly/)
 {  $PATH              = $cur_dir.
 #                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
                         $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
@@ -1337,7 +1375,7 @@ if ($platform =~ m/solaris/)
                         $L.$JRETHREADDIR.
                         $L.$XLIB;
 }
-elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd/)
+elsif ($platform =~ m/linux|netbsd|osf1|aix|freebsd|openbsd|dragonfly/)
 {  $SOLARLIB          = $L.$par_dir.$LIB.
                         $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
                         $L.'$SOLARVER'.$ds.'$INPATH'.$LIB.
@@ -1435,7 +1473,7 @@ if ($platform =~ m/solaris/)
         $SOLARINC .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$INCLUDE;
 	}
     #The tail, if needed
-    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd/)
+    if ($platform =~ m/linux|freebsd|netbsd|aix|openbsd|dragonfly/)
     {  $SOLARINC  .= $I.$XINC;
     }
     elsif ($platform =~ m/osf1/)

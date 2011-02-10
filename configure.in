@@ -3722,7 +3722,7 @@ if test "$enable_epm" = "yes"; then
     AIX)
         PKGFORMAT=rpm
         ;;
-    OpenBSD)
+    OpenBSD|DragonFly)
         PKGFORMAT=portable
         ;;
     *BSD)

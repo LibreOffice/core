@@ -236,7 +236,7 @@ in this Software without prior written authorization from the X Consortium.
 #ifdef _CRAY
 #define DEFAULT_CPP "/lib/pcpp"
 #endif
-#if defined(__386BSD__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__)
+#if defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
 #define DEFAULT_CPP "/usr/libexec/cpp"
 #endif
 #ifdef  MACH

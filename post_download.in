@@ -45,6 +45,9 @@ case "$build_os" in
     openbsd*)
         _os=OpenBSD
         ;;
+    dragonfly*)
+        _os=DragonFly
+        ;;
    *)
    AC_MSG_ERROR([$_os operating system is not suitable to build LibreOffice!])
    ;;
