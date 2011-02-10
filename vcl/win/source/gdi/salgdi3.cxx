@@ -1321,6 +1321,10 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 
 void ImplWinFontData::GetFontLayoutCapabilities( HDC hDC ) const
 {
+    // read this only once per font
+    if( mbFontLayoutCapabilitiesRead )
+        return;
+
     mbFontLayoutCapabilitiesRead = true;
 
     // check the existence of a GSUB table
