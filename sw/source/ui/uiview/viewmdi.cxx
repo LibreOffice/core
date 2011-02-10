@@ -123,15 +123,9 @@ void SwView::_SetZoom( const Size &rEditSize, SvxZoomType eZoomType,
 
         if( SVX_ZOOM_OPTIMAL == eZoomType )
         {
-            if (pPostItMgr->HasNotes() && pPostItMgr->ShowNotes())
-            {
-                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
-            }
-            else
-            {
+            if (!pPostItMgr->HasNotes() || !pPostItMgr->ShowNotes())
                 aPageSize.Width() -= ( rLRSpace.GetLeft() + rLRSpace.GetRight() + nLeftOfst * 2 );
-                lLeftMargin = long(rLRSpace.GetLeft()) + aPageRect.Left() + nLeftOfst;
-            }
+            lLeftMargin = long(rLRSpace.GetLeft()) + DOCUMENTBORDER + nLeftOfst;
             nFac = aWindowSize.Width() * 100 / aPageSize.Width();
         }
         else if(SVX_ZOOM_WHOLEPAGE == eZoomType || SVX_ZOOM_PAGEWIDTH == eZoomType )
