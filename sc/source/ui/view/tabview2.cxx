@@ -855,7 +855,6 @@ void ScTabView::PaintBlock( BOOL bReset )
             rMark.SetMarking(bFlag);
 
             bMark = rMark.IsMarked();
-            bMulti = rMark.IsMultiMarked();
         }
         else
             rMark.GetMarkArea(aMarkRange);
