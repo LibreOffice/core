@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
+#include <com/sun/star/sheet/XCellRangeData.hpp>
 #include <com/sun/star/sheet/XFormulaTokens.hpp>
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -66,17 +67,46 @@ using ::rtl::OUStringBuffer;
 
 // ============================================================================
 
-namespace {
-
-bool lclContains( const CellRangeAddress& rRange, const CellAddress& rAddr )
+CellModel::CellModel() :
+    mnCellType( XML_TOKEN_INVALID ),
+    mnXfId( -1 ),
+    mbShowPhonetic( false )
 {
-    return
-        (rRange.Sheet == rAddr.Sheet) &&
-        (rRange.StartColumn <= rAddr.Column) && (rAddr.Column <= rRange.EndColumn) &&
-        (rRange.StartRow <= rAddr.Row) && (rAddr.Row <= rRange.EndRow);
 }
 
-} // namespace
+// ----------------------------------------------------------------------------
+
+CellFormulaModel::CellFormulaModel() :
+    mnFormulaType( XML_TOKEN_INVALID ),
+    mnSharedId( -1 )
+{
+}
+
+bool CellFormulaModel::isValidArrayRef( const CellAddress& rCellAddr )
+{
+    return
+        (maFormulaRef.Sheet == rCellAddr.Sheet) &&
+        (maFormulaRef.StartColumn == rCellAddr.Column) &&
+        (maFormulaRef.StartRow == rCellAddr.Row);
+}
+
+bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
+{
+    return
+        (maFormulaRef.Sheet == rCellAddr.Sheet) &&
+        (maFormulaRef.StartColumn <= rCellAddr.Column) && (rCellAddr.Column <= maFormulaRef.EndColumn) &&
+        (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
+}
+
+// ----------------------------------------------------------------------------
+
+DataTableModel::DataTableModel() :
+    mb2dTable( false ),
+    mbRowTable( false ),
+    mbRef1Deleted( false ),
+    mbRef2Deleted( false )
+{
+}
 
 // ============================================================================
 
@@ -86,127 +116,67 @@ SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
 {
 }
 
-void SheetDataBuffer::importSharedFmla( const OUString& rFormula, const OUString& rSharedRange, sal_Int32 nSharedId, const CellAddress& rBaseAddr )
+void SheetDataBuffer::setValueCell( const CellAddress& rCellAddr, double fValue )
 {
-    CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, rSharedRange, getSheetIndex(), true, true ) ) try
-    {
-        // get or create the defined name representing the shared formula
-        OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SheetDataBuffer::importSharedFmla - invalid range for shared formula" );
-        Reference< XNamedRange > xNamedRange = createSharedFormulaName( BinAddress( nSharedId, 0 ) );
-        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
-        // convert the formula definition
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( rBaseAddr, rFormula );
-        xTokens->setTokens( aTokens );
-        // retry to insert a pending shared formula cell
-        retryPendingSharedFormulaCell();
-    }
-    catch( Exception& )
-    {
-    }
+    Reference< XCell > xCell = getCell( rCellAddr );
+    OSL_ENSURE( xCell.is(), "SheetDataBuffer::setValueCell - missing cell interface" );
+    if( xCell.is() )
+        xCell->setValue( fValue );
 }
 
-void SheetDataBuffer::importSharedFmla( SequenceInputStream& rStrm, const CellAddress& rBaseAddr )
+void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, const OUString& rText )
 {
-    BinRange aRange;
-    rStrm >> aRange;
-    CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true, true ) ) try
-    {
-        // get or create the defined name representing the shared formula
-        OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SheetDataBuffer::importSharedFmla - invalid range for shared formula" );
-        Reference< XNamedRange > xNamedRange = createSharedFormulaName( BinAddress( rBaseAddr ) );
-        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
-        // load the formula definition
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( rBaseAddr, FORMULATYPE_SHAREDFORMULA, rStrm );
-        xTokens->setTokens( aTokens );
-        // retry to insert a pending shared formula cell
-        retryPendingSharedFormulaCell();
-    }
-    catch( Exception& )
-    {
-    }
-}
-
-void SheetDataBuffer::importSharedFmla( BiffInputStream& rStrm, const CellAddress& rBaseAddr )
-{
-    BinRange aRange;
-    aRange.read( rStrm, false );        // always 8bit column indexes
-    CellRangeAddress aFmlaRange;
-    if( getAddressConverter().convertToCellRange( aFmlaRange, aRange, getSheetIndex(), true, true ) ) try
-    {
-        // get or create the defined name representing the shared formula
-        OSL_ENSURE( lclContains( aFmlaRange, rBaseAddr ), "SheetDataBuffer::importSharedFmla - invalid range for shared formula" );
-        Reference< XNamedRange > xNamedRange = createSharedFormulaName( BinAddress( rBaseAddr ) );
-        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
-        // load the formula definition
-        rStrm.skip( 2 );    // flags
-        ApiTokenSequence aTokens = getFormulaParser().importFormula( rBaseAddr, FORMULATYPE_SHAREDFORMULA, rStrm );
-        xTokens->setTokens( aTokens );
-        // retry to insert a pending shared formula cell
-        retryPendingSharedFormulaCell();
-    }
-    catch( Exception& )
-    {
-    }
-}
-
-void SheetDataBuffer::setValueCell( const Reference< XCell >& rxCell, const CellAddress& /*rCellAddr*/, double fValue )
-{
-    OSL_ENSURE( rxCell.is(), "SheetDataBuffer::setDateTimeCell - missing cell interface" );
-    if( rxCell.is() )
-        rxCell->setValue( fValue );
-}
-
-void SheetDataBuffer::setStringCell( const Reference< XCell >& rxCell, const CellAddress& /*rCellAddr*/, const OUString& rText )
-{
-    Reference< XText > xText( rxCell, UNO_QUERY );
+    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
     OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
     if( xText.is() )
         xText->setString( rText );
 }
 
-void SheetDataBuffer::setStringCell( const Reference< XCell >& rxCell, const CellAddress& /*rCellAddr*/, const RichString& rString, sal_Int32 nXfId )
+void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, const RichString& rString, sal_Int32 nXfId )
 {
-    Reference< XText > xText( rxCell, UNO_QUERY );
+    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
     OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
     rString.convert( xText, nXfId );
+    (void)rString;
+    (void)nXfId;
 }
 
-void SheetDataBuffer::setStringCell( const Reference< XCell >& rxCell, const CellAddress& /*rCellAddr*/, sal_Int32 nStringId, sal_Int32 nXfId )
+void SheetDataBuffer::setStringCell( const CellAddress& rCellAddr, sal_Int32 nStringId, sal_Int32 nXfId )
 {
-    Reference< XText > xText( rxCell, UNO_QUERY );
+    Reference< XText > xText( getCell( rCellAddr ), UNO_QUERY );
     OSL_ENSURE( xText.is(), "SheetDataBuffer::setStringCell - missing text interface" );
     getSharedStrings().convertString( xText, nStringId, nXfId );
+    (void)nStringId;
+    (void)nXfId;
 }
 
-void SheetDataBuffer::setDateTimeCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, const DateTime& rDateTime )
+void SheetDataBuffer::setDateTimeCell( const CellAddress& rCellAddr, const DateTime& rDateTime )
 {
     // write serial date/time value into the cell
     double fSerial = getUnitConverter().calcSerialFromDateTime( rDateTime );
-    setValueCell( rxCell, rCellAddr, fSerial );
+    setValueCell( rCellAddr, fSerial );
     // set appropriate number format
     using namespace ::com::sun::star::util::NumberFormat;
     sal_Int16 nStdFmt = (fSerial < 1.0) ? TIME : (((rDateTime.Hours > 0) || (rDateTime.Minutes > 0) || (rDateTime.Seconds > 0)) ? DATETIME : DATE);
     setStandardNumFmt( rCellAddr, nStdFmt );
 }
 
-void SheetDataBuffer::setBooleanCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, bool bValue )
+void SheetDataBuffer::setBooleanCell( const CellAddress& rCellAddr, bool bValue )
 {
-    setFormulaCell( rxCell, rCellAddr, getFormulaParser().convertBoolToFormula( bValue ) );
+    setFormulaCell( rCellAddr, getFormulaParser().convertBoolToFormula( bValue ) );
 }
 
-void SheetDataBuffer::setErrorCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, const OUString& rErrorCode )
+void SheetDataBuffer::setErrorCell( const CellAddress& rCellAddr, const OUString& rErrorCode )
 {
-    setErrorCell( rxCell, rCellAddr, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
+    setErrorCell( rCellAddr, getUnitConverter().calcBiffErrorCode( rErrorCode ) );
 }
 
-void SheetDataBuffer::setErrorCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, sal_uInt8 nErrorCode )
+void SheetDataBuffer::setErrorCell( const CellAddress& rCellAddr, sal_uInt8 nErrorCode )
 {
-    setFormulaCell( rxCell, rCellAddr, getFormulaParser().convertErrorToFormula( nErrorCode ) );
+    setFormulaCell( rCellAddr, getFormulaParser().convertErrorToFormula( nErrorCode ) );
 }
 
-void SheetDataBuffer::setFormulaCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
+void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
 {
     mbPendingSharedFmla = false;
     ApiTokenSequence aTokens;
@@ -234,11 +204,12 @@ void SheetDataBuffer::setFormulaCell( const Reference< XCell >& rxCell, const Ce
                 array formula. In this case, the cell will be remembered. After
                 reading the formula definition it will be retried to insert the
                 formula via retryPendingSharedFormulaCell(). */
-            aTokens = resolveSharedFormula( aTokenInfo.First );
+            BinAddress aBaseAddr( aTokenInfo.First );
+            aTokens = resolveSharedFormula( aBaseAddr );
             if( !aTokens.hasElements() )
             {
                 maSharedFmlaAddr = rCellAddr;
-                maSharedBaseAddr = aTokenInfo.First;
+                maSharedBaseAddr = aBaseAddr;
                 mbPendingSharedFmla = true;
             }
         }
@@ -251,89 +222,42 @@ void SheetDataBuffer::setFormulaCell( const Reference< XCell >& rxCell, const Ce
 
     if( aTokens.hasElements() )
     {
-        Reference< XFormulaTokens > xTokens( rxCell, UNO_QUERY );
+        Reference< XFormulaTokens > xTokens( getCell( rCellAddr ), UNO_QUERY );
         OSL_ENSURE( xTokens.is(), "SheetDataBuffer::setFormulaCell - missing formula interface" );
         if( xTokens.is() )
             xTokens->setTokens( aTokens );
     }
 }
 
-void SheetDataBuffer::setFormulaCell( const Reference< XCell >& rxCell, const CellAddress& rCellAddr, sal_Int32 nSharedId )
+void SheetDataBuffer::setFormulaCell( const CellAddress& rCellAddr, sal_Int32 nSharedId )
 {
-    setFormulaCell( rxCell, rCellAddr, resolveSharedFormula( nSharedId ) );
+    setFormulaCell( rCellAddr, resolveSharedFormula( BinAddress( nSharedId, 0 ) ) );
 }
 
-void SheetDataBuffer::setArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
+void SheetDataBuffer::createArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
 {
-    try
-    {
-        Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY_THROW );
-        xTokens->setArrayTokens( rTokens );
-    }
-    catch( Exception& )
-    {
-    }
+    /*  Array formulas will be inserted later in finalizeImport(). This is
+        needed to not disturb collecting all the cells, which will be put into
+        the sheet in large blocks to increase performance. */
+    maArrayFormulas.push_back( ArrayFormula( rRange, rTokens ) );
 }
 
-void SheetDataBuffer::setTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
+void SheetDataBuffer::createTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
 {
-    OSL_ENSURE( getAddressConverter().checkCellRange( rRange, true, false ), "SheetDataBuffer::setTableOperation - invalid range" );
-    sal_Int16 nSheet = getSheetIndex();
-    bool bOk = false;
-    if( !rModel.mbRef1Deleted && (rModel.maRef1.getLength() > 0) && (rRange.StartColumn > 0) && (rRange.StartRow > 0) )
-    {
-        CellRangeAddress aOpRange = rRange;
-        CellAddress aRef1, aRef2;
-        if( getAddressConverter().convertToCellAddress( aRef1, rModel.maRef1, nSheet, true ) ) try
-        {
-            if( rModel.mb2dTable )
-            {
-                if( !rModel.mbRef2Deleted && getAddressConverter().convertToCellAddress( aRef2, rModel.maRef2, nSheet, true ) )
-                {
-                    // API call expects input values inside operation range
-                    --aOpRange.StartColumn;
-                    --aOpRange.StartRow;
-                    // formula range is top-left cell of operation range
-                    CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow, aOpRange.StartColumn, aOpRange.StartRow );
-                    // set multiple operation
-                    Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                    xMultOp->setTableOperation( aFormulaRange, TableOperationMode_BOTH, aRef2, aRef1 );
-                    bOk = true;
-                }
-            }
-            else if( rModel.mbRowTable )
-            {
-                // formula range is column to the left of operation range
-                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn - 1, aOpRange.StartRow, aOpRange.StartColumn - 1, aOpRange.EndRow );
-                // API call expects input values (top row) inside operation range
-                --aOpRange.StartRow;
-                // set multiple operation
-                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_ROW, aRef1, aRef1 );
-                bOk = true;
-            }
-            else
-            {
-                // formula range is row above operation range
-                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow - 1, aOpRange.EndColumn, aOpRange.StartRow - 1 );
-                // API call expects input values (left column) inside operation range
-                --aOpRange.StartColumn;
-                // set multiple operation
-                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
-                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_COLUMN, aRef1, aRef1 );
-                bOk = true;
-            }
-        }
-        catch( Exception& )
-        {
-        }
-    }
+    /*  Table operations will be inserted later in finalizeImport(). This is
+        needed to not disturb collecting all the cells, which will be put into
+        the sheet in large blocks to increase performance. */
+    maTableOperations.push_back( TableOperation( rRange, rModel ) );
+}
 
-    // on error: fill cell range with error codes
-    if( !bOk )
-        for( CellAddress aPos( nSheet, rRange.StartColumn, rRange.StartRow ); aPos.Row <= rRange.EndRow; ++aPos.Row )
-            for( aPos.Column = rRange.StartColumn; aPos.Column <= rRange.EndColumn; ++aPos.Column )
-                setErrorCell( getCell( aPos ), aPos, BIFF_ERR_REF );
+void SheetDataBuffer::createSharedFormula( sal_Int32 nSharedId, const ApiTokenSequence& rTokens )
+{
+    createSharedFormula( BinAddress( nSharedId, 0 ), rTokens );
+}
+
+void SheetDataBuffer::createSharedFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
+{
+    createSharedFormula( BinAddress( rCellAddr ), rTokens );
 }
 
 void SheetDataBuffer::setRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId, bool bCustomFormat )
@@ -356,9 +280,9 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal
     }
 }
 
-void SheetDataBuffer::setCellFormat( const CellModel& rModel )
+void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId )
 {
-    if( rModel.mxCell.is() && ((rModel.mnXfId >= 0) || (rModel.mnNumFmtId >= 0)) )
+    if( (rModel.mnXfId >= 0) || (nNumFmtId >= 0) )
     {
         // try to merge existing ranges and to write some formatting properties
         if( !maXfIdRanges.empty() )
@@ -366,7 +290,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
             // get row index of last inserted cell
             sal_Int32 nLastRow = maXfIdRanges.rbegin()->second.maRange.StartRow;
             // row changed - try to merge ranges of last row with existing ranges
-            if( rModel.maAddress.Row != nLastRow )
+            if( rModel.maCellAddr.Row != nLastRow )
             {
                 mergeXfIdRanges();
                 // write format properties of all ranges above last row and remove them
@@ -386,8 +310,8 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
         }
 
         // try to expand last existing range, or create new range entry
-        if( maXfIdRanges.empty() || !maXfIdRanges.rbegin()->second.tryExpand( rModel ) )
-            maXfIdRanges[ BinAddress( rModel.maAddress ) ].set( rModel );
+        if( maXfIdRanges.empty() || !maXfIdRanges.rbegin()->second.tryExpand( rModel, nNumFmtId ) )
+            maXfIdRanges[ BinAddress( rModel.maCellAddr ) ].set( rModel, nNumFmtId );
 
         // update merged ranges for 'center across selection' and 'fill'
         if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
@@ -398,9 +322,9 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel )
                 /*  start new merged range, if cell is not empty (#108781#),
                     or try to expand last range with empty cell */
                 if( rModel.mnCellType != XML_TOKEN_INVALID )
-                    maCenterFillRanges.push_back( MergedRange( rModel.maAddress, nHorAlign ) );
+                    maCenterFillRanges.push_back( MergedRange( rModel.maCellAddr, nHorAlign ) );
                 else if( !maCenterFillRanges.empty() )
-                    maCenterFillRanges.rbegin()->tryExpand( rModel.maAddress, nHorAlign );
+                    maCenterFillRanges.rbegin()->tryExpand( rModel.maCellAddr, nHorAlign );
             }
         }
     }
@@ -428,6 +352,14 @@ void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16
 
 void SheetDataBuffer::finalizeImport()
 {
+    // create all array formulas
+    for( ArrayFormulaList::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
+        finalizeArrayFormula( aIt->first, aIt->second );
+
+    // create all table operations
+    for( TableOperationList::iterator aIt = maTableOperations.begin(), aEnd = maTableOperations.end(); aIt != aEnd; ++aIt )
+        finalizeTableOperation( aIt->first, aIt->second );
+
     // write default formatting of remaining row range
     writeXfIdRowRangeProperties( maXfIdRowRange );
 
@@ -438,10 +370,9 @@ void SheetDataBuffer::finalizeImport()
         writeXfIdRangeProperties( aIt->second );
 
     // merge all cached merged ranges and update right/bottom cell borders
-    MergedRangeList::const_iterator aIt, aEnd;
-    for( aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
+    for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         finalizeMergedRange( aIt->maRange );
-    for( aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
+    for( MergedRangeList::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
         finalizeMergedRange( aIt->maRange );
 }
 
@@ -484,21 +415,21 @@ bool SheetDataBuffer::XfIdRowRange::tryExpand( sal_Int32 nFirstRow, sal_Int32 nL
     return false;
 }
 
-void SheetDataBuffer::XfIdRange::set( const CellModel& rModel )
+void SheetDataBuffer::XfIdRange::set( const CellModel& rModel, sal_Int32 nNumFmtId )
 {
-    maRange.Sheet = rModel.maAddress.Sheet;
-    maRange.StartColumn = maRange.EndColumn = rModel.maAddress.Column;
-    maRange.StartRow = maRange.EndRow = rModel.maAddress.Row;
+    maRange.Sheet = rModel.maCellAddr.Sheet;
+    maRange.StartColumn = maRange.EndColumn = rModel.maCellAddr.Column;
+    maRange.StartRow = maRange.EndRow = rModel.maCellAddr.Row;
     mnXfId = rModel.mnXfId;
-    mnNumFmtId = rModel.mnNumFmtId;
+    mnNumFmtId = nNumFmtId;
 }
 
-bool SheetDataBuffer::XfIdRange::tryExpand( const CellModel& rModel )
+bool SheetDataBuffer::XfIdRange::tryExpand( const CellModel& rModel, sal_Int32 nNumFmtId )
 {
-    if( (mnXfId == rModel.mnXfId) && (mnNumFmtId == rModel.mnNumFmtId) &&
-        (maRange.StartRow == rModel.maAddress.Row) &&
-        (maRange.EndRow == rModel.maAddress.Row) &&
-        (maRange.EndColumn + 1 == rModel.maAddress.Column) )
+    if( (mnXfId == rModel.mnXfId) && (mnNumFmtId == nNumFmtId) &&
+        (maRange.StartRow == rModel.maCellAddr.Row) &&
+        (maRange.EndRow == rModel.maCellAddr.Row) &&
+        (maRange.EndColumn + 1 == rModel.maCellAddr.Column) )
     {
         ++maRange.EndColumn;
         return true;
@@ -544,7 +475,83 @@ bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_I
     return false;
 }
 
-Reference< XNamedRange > SheetDataBuffer::createSharedFormulaName( const BinAddress& rMapKey )
+void SheetDataBuffer::finalizeArrayFormula( const CellRangeAddress& rRange, const ApiTokenSequence& rTokens )
+{
+    Reference< XArrayFormulaTokens > xTokens( getCellRange( rRange ), UNO_QUERY );
+    OSL_ENSURE( xTokens.is(), "SheetDataBuffer::finalizeArrayFormula - missing formula token interface" );
+    if( xTokens.is() )
+        xTokens->setArrayTokens( rTokens );
+}
+
+void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, const DataTableModel& rModel )
+{
+    sal_Int16 nSheet = getSheetIndex();
+    bool bOk = false;
+    if( !rModel.mbRef1Deleted && (rModel.maRef1.getLength() > 0) && (rRange.StartColumn > 0) && (rRange.StartRow > 0) )
+    {
+        CellRangeAddress aOpRange = rRange;
+        CellAddress aRef1;
+        if( getAddressConverter().convertToCellAddress( aRef1, rModel.maRef1, nSheet, true ) ) try
+        {
+            if( rModel.mb2dTable )
+            {
+                CellAddress aRef2;
+                if( !rModel.mbRef2Deleted && getAddressConverter().convertToCellAddress( aRef2, rModel.maRef2, nSheet, true ) )
+                {
+                    // API call expects input values inside operation range
+                    --aOpRange.StartColumn;
+                    --aOpRange.StartRow;
+                    // formula range is top-left cell of operation range
+                    CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow, aOpRange.StartColumn, aOpRange.StartRow );
+                    // set multiple operation
+                    Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
+                    xMultOp->setTableOperation( aFormulaRange, TableOperationMode_BOTH, aRef2, aRef1 );
+                    bOk = true;
+                }
+            }
+            else if( rModel.mbRowTable )
+            {
+                // formula range is column to the left of operation range
+                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn - 1, aOpRange.StartRow, aOpRange.StartColumn - 1, aOpRange.EndRow );
+                // API call expects input values (top row) inside operation range
+                --aOpRange.StartRow;
+                // set multiple operation
+                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
+                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_ROW, aRef1, aRef1 );
+                bOk = true;
+            }
+            else
+            {
+                // formula range is row above operation range
+                CellRangeAddress aFormulaRange( nSheet, aOpRange.StartColumn, aOpRange.StartRow - 1, aOpRange.EndColumn, aOpRange.StartRow - 1 );
+                // API call expects input values (left column) inside operation range
+                --aOpRange.StartColumn;
+                // set multiple operation
+                Reference< XMultipleOperation > xMultOp( getCellRange( aOpRange ), UNO_QUERY_THROW );
+                xMultOp->setTableOperation( aFormulaRange, TableOperationMode_COLUMN, aRef1, aRef1 );
+                bOk = true;
+            }
+        }
+        catch( Exception& )
+        {
+        }
+    }
+
+    // on error: fill cell range with #REF! error codes
+    if( !bOk ) try
+    {
+        Reference< XCellRangeData > xCellRangeData( getCellRange( rRange ), UNO_QUERY_THROW );
+        size_t nWidth = static_cast< size_t >( rRange.EndColumn - rRange.StartColumn + 1 );
+        size_t nHeight = static_cast< size_t >( rRange.EndRow - rRange.StartRow + 1 );
+        Matrix< Any > aErrorCells( nWidth, nHeight, Any( getFormulaParser().convertErrorToFormula( BIFF_ERR_REF ) ) );
+        xCellRangeData->setDataArray( ContainerHelper::matrixToSequenceSequence( aErrorCells ) );
+    }
+    catch( Exception& )
+    {
+    }
+}
+
+void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens )
 {
     // create the defined name that will represent the shared formula
     OUString aName = OUStringBuffer().appendAscii( RTL_CONSTASCII_STRINGPARAM( "__shared_" ) ).
@@ -552,38 +559,37 @@ Reference< XNamedRange > SheetDataBuffer::createSharedFormulaName( const BinAddr
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
     Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
+    OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
     PropertySet aNameProps( xNamedRange );
     aNameProps.setProperty( PROP_IsSharedFormula, true );
 
     // get and store the token index of the defined name
-    OSL_ENSURE( maTokenIndexes.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormulaName - key exists already" );
+    OSL_ENSURE( maSharedFormulas.count( rMapKey ) == 0, "SheetDataBuffer::createSharedFormula - shared formula exists already" );
     sal_Int32 nTokenIndex = 0;
-    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) )
-        maTokenIndexes[ rMapKey ] = nTokenIndex;
-
-    return xNamedRange;
-}
-
-ApiTokenSequence SheetDataBuffer::resolveSharedFormula( sal_Int32 nSharedId ) const
-{
-    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maTokenIndexes, BinAddress( nSharedId, 0 ), -1 );
-    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
-}
-
-ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const CellAddress& rBaseAddr ) const
-{
-    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maTokenIndexes, BinAddress( rBaseAddr ), -1 );
-    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
-}
-
-void SheetDataBuffer::retryPendingSharedFormulaCell()
-{
-    if( mbPendingSharedFmla )
+    if( aNameProps.getProperty( nTokenIndex, PROP_TokenIndex ) && (nTokenIndex >= 0) ) try
     {
-        ApiTokenSequence aTokens = resolveSharedFormula( maSharedBaseAddr );
-        setFormulaCell( getCell( maSharedFmlaAddr ), maSharedFmlaAddr, aTokens );
-        mbPendingSharedFmla = false;
+        // store the token index in the map
+        maSharedFormulas[ rMapKey ] = nTokenIndex;
+        // set the formula definition
+        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
+        xTokens->setTokens( rTokens );
+        // retry to insert a pending shared formula cell
+        if( mbPendingSharedFmla )
+        {
+            ApiTokenSequence aTokens = resolveSharedFormula( maSharedBaseAddr );
+            setFormulaCell( maSharedFmlaAddr, aTokens );
+        }
     }
+    catch( Exception& )
+    {
+    }
+    mbPendingSharedFmla = false;
+}
+
+ApiTokenSequence SheetDataBuffer::resolveSharedFormula( const BinAddress& rMapKey ) const
+{
+    sal_Int32 nTokenIndex = ContainerHelper::getMapElement( maSharedFormulas, rMapKey, -1 );
+    return (nTokenIndex >= 0) ? getFormulaParser().convertNameToFormula( nTokenIndex ) : ApiTokenSequence();
 }
 
 void SheetDataBuffer::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const

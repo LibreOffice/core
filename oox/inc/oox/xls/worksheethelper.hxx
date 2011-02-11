@@ -80,42 +80,6 @@ enum WorksheetType
 
 // ============================================================================
 
-/** Stores some data about a cell. */
-struct CellModel
-{
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell > mxCell;
-    ::com::sun::star::table::CellAddress maAddress;
-    ::rtl::OUString     maValue;            /// String containing cell value data.
-    ::rtl::OUString     maFormula;          /// String containing the formula definition.
-    ::rtl::OUString     maFormulaRef;       /// String containing formula range for array/shared formulas.
-    sal_Int32           mnCellType;         /// Data type of the cell value.
-    sal_Int32           mnFormulaType;      /// Type of the formula (regular, array, shared, table).
-    sal_Int32           mnSharedId;         /// Shared formula identifier.
-    sal_Int32           mnXfId;             /// XF (cell formatting) identifier.
-    sal_Int32           mnNumFmtId;         /// Forced number format (overrides XF if set).
-    bool                mbShowPhonetic;     /// True = show phonetic text.
-
-    inline explicit     CellModel() { reset(); }
-    void                reset();
-};
-
-// ----------------------------------------------------------------------------
-
-/** Stores data about a data table a.k.a. multiple operation range. */
-struct DataTableModel
-{
-    ::rtl::OUString     maRef1;             /// String containing first reference cell for data table formulas.
-    ::rtl::OUString     maRef2;             /// String containing second reference cell for data table formulas.
-    bool                mb2dTable;          /// True = 2-dimensional data table.
-    bool                mbRowTable;         /// True = row oriented data table.
-    bool                mbRef1Deleted;      /// True = first reference cell deleted.
-    bool                mbRef2Deleted;      /// True = second reference cell deleted.
-
-    explicit            DataTableModel();
-};
-
-// ----------------------------------------------------------------------------
-
 /** Stores formatting data about a range of columns. */
 struct ColumnModel
 {
@@ -243,17 +207,6 @@ public:
     /** Returns the XCell interface for the passed cell address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
                         getCell( const ::com::sun::star::table::CellAddress& rAddress ) const;
-    /** Returns the XCell interface for the passed cell address string. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell(
-                            const ::rtl::OUString& rAddressStr,
-                            ::com::sun::star::table::CellAddress* opAddress = 0 ) const;
-    /** Returns the XCell interface for the passed cell address. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >
-                        getCell(
-                            const BinAddress& rBinAddress,
-                            ::com::sun::star::table::CellAddress* opAddress = 0 ) const;
-
     /** Returns the XCellRange interface for the passed cell range address. */
     ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange >
                         getCellRange( const ::com::sun::star::table::CellRangeAddress& rRange ) const;

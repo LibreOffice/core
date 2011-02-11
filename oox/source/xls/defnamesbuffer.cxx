@@ -276,22 +276,22 @@ Any DefinedNameBase::getReference( const CellAddress& rBaseAddr ) const
     return Any();
 }
 
-ApiTokenSequence DefinedNameBase::importOoxFormula( const CellAddress& rBaseAddr )
+ApiTokenSequence DefinedNameBase::importOoxFormula( sal_Int16 nBaseSheet )
 {
     return (maModel.maFormula.getLength() > 0) ?
-        getFormulaParser().importFormula( rBaseAddr, maModel.maFormula ) :
+        getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), maModel.maFormula ) :
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
 
-ApiTokenSequence DefinedNameBase::importBiff12Formula( const CellAddress& rBaseAddr, SequenceInputStream& rStrm )
+ApiTokenSequence DefinedNameBase::importBiff12Formula( sal_Int16 nBaseSheet, SequenceInputStream& rStrm )
 {
-    return getFormulaParser().importFormula( rBaseAddr, FORMULATYPE_DEFINEDNAME, rStrm );
+    return getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), FORMULATYPE_DEFINEDNAME, rStrm );
 }
 
-ApiTokenSequence DefinedNameBase::importBiffFormula( const CellAddress& rBaseAddr, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
+ApiTokenSequence DefinedNameBase::importBiffFormula( sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize )
 {
     return (!pnFmlaSize || (*pnFmlaSize > 0)) ?
-        getFormulaParser().importFormula( rBaseAddr, FORMULATYPE_DEFINEDNAME, rStrm, pnFmlaSize ) :
+        getFormulaParser().importFormula( CellAddress( nBaseSheet, 0, 0 ), FORMULATYPE_DEFINEDNAME, rStrm, pnFmlaSize ) :
         getFormulaParser().convertErrorToFormula( BIFF_ERR_NAME );
 }
 
@@ -460,8 +460,7 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcShee
             these names contain a simple cell reference or range reference.
             Other regular defined names and external names rely on existence of
             this reference. */
-        CellAddress aBaseAddr( mnCalcSheet, 0, 0 );
-        ApiTokenSequence aTokens = importBiffFormula( aBaseAddr, rStrm, &mnFmlaSize );
+        ApiTokenSequence aTokens = importBiffFormula( mnCalcSheet, rStrm, &mnFmlaSize );
         extractReference( aTokens );
     }
     else
@@ -521,7 +520,6 @@ void DefinedName::convertFormula()
 
     // convert and set formula of the defined name
     ApiTokenSequence aTokens;
-    CellAddress aBaseAddr( mnCalcSheet, 0, 0 );
     switch( getFilterType() )
     {
         case FILTER_OOXML:
@@ -529,10 +527,10 @@ void DefinedName::convertFormula()
             if( mxFormula.get() )
             {
                 SequenceInputStream aStrm( *mxFormula );
-                aTokens = importBiff12Formula( aBaseAddr, aStrm );
+                aTokens = importBiff12Formula( mnCalcSheet, aStrm );
             }
             else
-                aTokens = importOoxFormula( aBaseAddr );
+                aTokens = importOoxFormula( mnCalcSheet );
         }
         break;
         case FILTER_BIFF:
@@ -543,7 +541,7 @@ void DefinedName::convertFormula()
                 BiffInputStream& rStrm = mxBiffStrm->getStream();
                 BiffInputStreamPosGuard aStrmGuard( rStrm );
                 if( mxBiffStrm->restorePosition() )
-                    aTokens = importBiffFormula( aBaseAddr, rStrm, &mnFmlaSize );
+                    aTokens = importBiffFormula( mnCalcSheet, rStrm, &mnFmlaSize );
             }
         }
         break;

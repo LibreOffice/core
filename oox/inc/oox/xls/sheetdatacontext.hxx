@@ -30,13 +30,28 @@
 
 #include "oox/xls/excelhandlers.hxx"
 #include "oox/xls/richstring.hxx"
-
-namespace com { namespace sun { namespace star {
-    namespace table { class XCell; }
-} } }
+#include "oox/xls/sheetdatabuffer.hxx"
 
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+/** Used as base for sheet data context classes. Provides fast access to often
+    used converter objects and sheet index, to improve performance.
+ */
+struct SheetDataContextBase
+{
+    AddressConverter&   mrAddressConv;      /// The address converter.
+    FormulaParser&      mrFormulaParser;    /// The formula parser.
+    SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
+    CellModel           maCellData;         /// Position, contents, formatting of current imported cell.
+    CellFormulaModel    maFmlaData;         /// Settings for a cell formula.
+    sal_Int16           mnSheet;            /// Index of the current sheet.
+
+    explicit            SheetDataContextBase( const WorksheetHelper& rHelper );
+    virtual             ~SheetDataContextBase();
+};
 
 // ============================================================================
 
@@ -45,7 +60,7 @@ namespace xls {
     The sheetData element contains all row settings and all cells in a single
     sheet of a spreadsheet document.
  */
-class SheetDataContext : public WorksheetContextBase
+class SheetDataContext : public WorksheetContextBase, private SheetDataContextBase
 {
 public:
     explicit            SheetDataContext( WorksheetFragmentBase& rFragment );
@@ -64,12 +79,20 @@ private:
     /** Imports row settings from a row element. */
     void                importRow( const AttributeList& rAttribs );
     /** Imports cell settings from a c element. */
-    void                importCell( const AttributeList& rAttribs );
+    bool                importCell( const AttributeList& rAttribs );
     /** Imports cell settings from an f element. */
     void                importFormula( const AttributeList& rAttribs );
 
-    /** Imports a cell address and the following XF identifier. */
-    void                importCellHeader( SequenceInputStream& rStrm, CellType eCellType );
+    /** Imports row settings from a ROW record. */
+    void                importRow( SequenceInputStream& rStrm );
+
+    /** Reads a cell address and the following XF identifier. */
+    bool                readCellHeader( SequenceInputStream& rStrm, CellType eCellType );
+    /** Reads a cell formula for the current cell. */
+    ApiTokenSequence    readCellFormula( SequenceInputStream& rStrm );
+    /** Reads the formula range used by shared formulas, arrays, and data tables. */
+    bool                readFormulaRef( SequenceInputStream& rStrm );
+
     /** Imports an empty cell from a CELL_BLANK or MULTCELL_BLANK record. */
     void                importCellBlank( SequenceInputStream& rStrm, CellType eCellType );
     /** Imports a boolean cell from a CELL_BOOL, MULTCELL_BOOL, or FORMULA_BOOL record. */
@@ -87,31 +110,28 @@ private:
     /** Imports a string cell from a CELL_STRING, MULTCELL_STRING, or FORMULA_STRING record. */
     void                importCellString( SequenceInputStream& rStrm, CellType eCellType );
 
-    /** Imports a cell formula for the current cell. */
-    void                importCellFormula( SequenceInputStream& rStrm );
-
-    /** Imports row settings from a ROW record. */
-    void                importRow( SequenceInputStream& rStrm );
     /** Imports an array formula from an ARRAY record. */
     void                importArray( SequenceInputStream& rStrm );
-    /** Imports a shared formula from a SHAREDFORMULA record. */
-    void                importSharedFmla( SequenceInputStream& rStrm );
     /** Imports table operation from a DATATABLE record. */
     void                importDataTable( SequenceInputStream& rStrm );
+    /** Imports a shared formula from a SHAREDFORMULA record. */
+    void                importSharedFmla( SequenceInputStream& rStrm );
 
 private:
-    SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
-    CellModel           maCurrCell;         /// Position and formatting of current imported cell.
-    DataTableModel      maTableData;        /// Additional data for table operation ranges.
-    BinAddress          maCurrPos;          /// Current position for binary import.
-    RichStringRef       mxInlineStr;        /// Inline rich string from 'is' element.
+    ::rtl::OUString     maCellValue;        /// Cell value string (OOXML only).
+    RichStringRef       mxInlineStr;        /// Inline rich string (OOXML only).
+    ApiTokenSequence    maTokens;           /// Formula token array (OOXML only).
+    DataTableModel      maTableData;        /// Settings for table operations.
+    BinAddress          maCurrPos;          /// Current cell position (BIFF12 only).
+    bool                mbHasFormula;       /// True = current cell has formula data (OOXML only).
+    bool                mbValidRange;       /// True = maFmlaData.maFormulaRef is valid (OOXML only).
 };
 
 // ============================================================================
 
 /** This class implements importing row settings and all cells of a sheet.
  */
-class BiffSheetDataContext : public BiffWorksheetContextBase
+class BiffSheetDataContext : public BiffWorksheetContextBase, private SheetDataContextBase
 {
 public:
     explicit            BiffSheetDataContext( const WorksheetHelper& rHelper );
@@ -120,13 +140,15 @@ public:
     virtual void        importRecord( BiffInputStream& rStrm );
 
 private:
-    /** Sets current cell according to the passed address. */
-    void                setCurrCell( const BinAddress& rAddr );
+    /** Imports row settings from a ROW record. */
+    void                importRow( BiffInputStream& rStrm );
 
-    /** Imports an XF identifier and sets the mnXfId member. */
-    void                importXfId( BiffInputStream& rStrm, bool bBiff2 );
-    /** Imports a BIFF cell address and the following XF identifier. */
-    void                importCellHeader( BiffInputStream& rStrm, bool bBiff2 );
+    /** Reads an XF identifier and initializes a new cell. */
+    bool                readCellXfId( const BinAddress& rAddr, BiffInputStream& rStrm, bool bBiff2 );
+    /** Reads a BIFF cell address and the following XF identifier. */
+    bool                readCellHeader( BiffInputStream& rStrm, bool bBiff2 );
+    /** Reads the formula range used by shared formulas, arrays, and data tables. */
+    bool                readFormulaRef( BiffInputStream& rStrm );
 
     /** Imports a BLANK record describing a blank but formatted cell. */
     void                importBlank( BiffInputStream& rStrm );
@@ -149,18 +171,14 @@ private:
     /** Imports an RK record describing a numeric cell. */
     void                importRk( BiffInputStream& rStrm );
 
-    /** Imports row settings from a ROW record. */
-    void                importRow( BiffInputStream& rStrm );
     /** Imports an ARRAY record describing an array formula of a cell range. */
     void                importArray( BiffInputStream& rStrm );
-    /** Imports a SHAREDFMLA record describing a shared formula in a cell range. */
-    void                importSharedFmla( BiffInputStream& rStrm );
     /** Imports table operation from a DATATABLE or DATATABLE2 record. */
     void                importDataTable( BiffInputStream& rStrm );
+    /** Imports a SHAREDFMLA record describing a shared formula in a cell range. */
+    void                importSharedFmla( BiffInputStream& rStrm );
 
 private:
-    SheetDataBuffer&    mrSheetData;        /// The sheet data buffer for cell content and formatting.
-    CellModel           maCurrCell;         /// Position and formatting of current imported cell.
     sal_uInt32          mnFormulaSkipSize;  /// Number of bytes to be ignored in FORMULA record.
     sal_uInt32          mnArraySkipSize;    /// Number of bytes to be ignored in ARRAY record.
     sal_uInt16          mnBiff2XfId;        /// Current XF identifier from IXFE record.

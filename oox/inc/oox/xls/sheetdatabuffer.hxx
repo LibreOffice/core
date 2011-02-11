@@ -42,6 +42,53 @@ namespace xls {
 
 // ============================================================================
 
+/** Stores basic data about cell values and formatting. */
+struct CellModel
+{
+    ::com::sun::star::table::CellAddress
+                        maCellAddr;         /// The address of the current cell.
+    sal_Int32           mnCellType;         /// Data type of the cell value.
+    sal_Int32           mnXfId;             /// XF (cell formatting) identifier.
+    bool                mbShowPhonetic;     /// True = show phonetic text.
+
+    explicit            CellModel();
+};
+
+// ----------------------------------------------------------------------------
+
+/** Stores data about cell formulas. */
+struct CellFormulaModel
+{
+    ::com::sun::star::table::CellRangeAddress
+                        maFormulaRef;       /// Formula range for array/shared formulas and data tables.
+    sal_Int32           mnFormulaType;      /// Type of the formula (regular, array, shared, table).
+    sal_Int32           mnSharedId;         /// Identifier of a shared formula (OOXML only).
+
+    explicit            CellFormulaModel();
+
+    /** Returns true, if the passed cell address is valid for an array formula. */
+    bool                isValidArrayRef( const ::com::sun::star::table::CellAddress& rCellAddr );
+    /** Returns true, if the passed cell address is valid for a shared formula. */
+    bool                isValidSharedRef( const ::com::sun::star::table::CellAddress& rCellAddr );
+};
+
+// ----------------------------------------------------------------------------
+
+/** Stores data about table operations. */
+struct DataTableModel
+{
+    ::rtl::OUString     maRef1;             /// First reference cell for table operations.
+    ::rtl::OUString     maRef2;             /// Second reference cell for table operations.
+    bool                mb2dTable;          /// True = 2-dimensional data table.
+    bool                mbRowTable;         /// True = row oriented data table.
+    bool                mbRef1Deleted;      /// True = first reference cell deleted.
+    bool                mbRef2Deleted;      /// True = second reference cell deleted.
+
+    explicit            DataTableModel();
+};
+
+// ============================================================================
+
 /** Manages the cell contents and cell formatting of a sheet.
  */
 class SheetDataBuffer : public WorksheetHelper
@@ -49,81 +96,71 @@ class SheetDataBuffer : public WorksheetHelper
 public:
     explicit            SheetDataBuffer( const WorksheetHelper& rHelper );
 
-    /** Imports a shared formula from a OOXML formula string. */
-    void                importSharedFmla( const ::rtl::OUString& rFormula,
-                            const ::rtl::OUString& rSharedRange, sal_Int32 nSharedId,
-                            const ::com::sun::star::table::CellAddress& rBaseAddr );
-    /** Imports a shared formula from a SHAREDFORMULA record in the passed stream */
-    void                importSharedFmla( SequenceInputStream& rStrm,
-                            const ::com::sun::star::table::CellAddress& rBaseAddr );
-    /** Imports a shared formula from a SHAREDFMLA record in the passed stream. */
-    void                importSharedFmla( BiffInputStream& rStrm,
-                            const ::com::sun::star::table::CellAddress& rBaseAddr );
-
     /** Sets the passed value to the cell. */
     void                setValueCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             double fValue );
     /** Sets the passed string to the cell. */
     void                setStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ::rtl::OUString& rText );
     /** Sets the passed rich-string to the cell. */
     void                setStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const RichString& rString, sal_Int32 nXfId );
     /** Sets the shared string with the passed identifier to the cell. */
     void                setStringCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             sal_Int32 nStringId, sal_Int32 nXfId );
     /** Sets the passed date/time value to the cell and adjusts number format. */
     void                setDateTimeCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ::com::sun::star::util::DateTime& rDateTime );
     /** Sets the passed boolean value to the cell and adjusts number format. */
     void                setBooleanCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             bool bValue );
     /** Sets the passed BIFF error code to the cell (by converting it to a formula). */
     void                setErrorCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ::rtl::OUString& rErrorCode );
     /** Sets the passed BIFF error code to the cell (by converting it to a formula). */
     void                setErrorCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             sal_uInt8 nErrorCode );
     /** Sets the passed formula token sequence to the cell. */
     void                setFormulaCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             const ApiTokenSequence& rTokens );
     /** Sets the shared formula with the passed identifier to the cell (OOXML only). */
     void                setFormulaCell(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::table::XCell >& rxCell,
                             const ::com::sun::star::table::CellAddress& rCellAddr,
                             sal_Int32 nSharedId );
 
     /** Inserts the passed token array as array formula. */
-    void                setArrayFormula(
+    void                createArrayFormula(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const ApiTokenSequence& rTokens );
     /** Sets a multiple table operation to the passed range. */
-    void                setTableOperation(
+    void                createTableOperation(
                             const ::com::sun::star::table::CellRangeAddress& rRange,
                             const DataTableModel& rModel );
+    /** Creates a named range with a special name for a shared formula with the
+        specified identifier and formula definition (OOXML only). */
+    void                createSharedFormula(
+                            sal_Int32 nSharedId,
+                            const ApiTokenSequence& rTokens );
+    /** Creates a named range with a special name for a shared formula with the
+        specified base address and formula definition (BIFF only). */
+    void                createSharedFormula(
+                            const ::com::sun::star::table::CellAddress& rCellAddr,
+                            const ApiTokenSequence& rTokens );
 
     /** Sets default cell formatting for the specified range of rows. */
     void                setRowFormat( sal_Int32 nFirstRow, sal_Int32 nLastRow, sal_Int32 nXfId, bool bCustomFormat );
-    /** Processes the cell formatting data of the passed cell. */
-    void                setCellFormat( const CellModel& rModel );
+    /** Processes the cell formatting data of the passed cell.
+        @param nNumFmtId  If set, overrides number format of the cell XF. */
+    void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
     /** Merges the cells in the passed cell range. */
     void                setMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Sets a standard number format (constant from com.sun.star.util.NumberFormat) to the specified cell. */
@@ -138,21 +175,21 @@ private:
     struct XfIdRowRange;
     struct XfIdRange;
 
-    /** Creates and returns an empty named range with a special name for a
-        shared formula with the specified base position. */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
-                        createSharedFormulaName( const BinAddress& rMapKey );
+    /** Inserts the passed array formula into the sheet. */
+    void                finalizeArrayFormula(
+                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const ApiTokenSequence& rTokens );
+    /** Inserts the passed table operation into the sheet. */
+    void                finalizeTableOperation(
+                            const ::com::sun::star::table::CellRangeAddress& rRange,
+                            const DataTableModel& rModel );
 
+    /** Creates a named range with a special name for a shared formula with the
+        specified base address and formula definition. */
+    void                createSharedFormula( const BinAddress& rMapKey, const ApiTokenSequence& rTokens );
     /** Creates a formula token array representing the shared formula with the
-        passed identifier (OOXML only). */
-    ApiTokenSequence    resolveSharedFormula( sal_Int32 nSharedId ) const;
-    /** Creates a formula token array representing the shared formula at the
-        passed base address. */
-    ApiTokenSequence    resolveSharedFormula( const ::com::sun::star::table::CellAddress& rBaseAddr ) const;
-
-    /** Retries to insert a shared formula that has not been set in the last
-        call to setFormulaCell() due to the missing formula definition. */
-    void                retryPendingSharedFormulaCell();
+        passed identifier. */
+    ApiTokenSequence    resolveSharedFormula( const BinAddress& rMapKey ) const;
 
     /** Writes all cell formatting attributes to the passed row range. */
     void                writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const;
@@ -165,6 +202,9 @@ private:
     void                finalizeMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
 
 private:
+    typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, ApiTokenSequence >  ArrayFormula;
+    typedef ::std::pair< ::com::sun::star::table::CellRangeAddress, DataTableModel >    TableOperation;
+
     struct XfIdRowRange
     {
         sal_Int32           mnFirstRow;         /// Index of first row.
@@ -182,10 +222,10 @@ private:
         ::com::sun::star::table::CellRangeAddress
                             maRange;            /// The formatted cell range.
         sal_Int32           mnXfId;             /// XF identifier for the range.
-        sal_Int32           mnNumFmtId;         /// Number format id overriding the XF.
+        sal_Int32           mnNumFmtId;         /// Number format overriding the XF.
 
-        void                set( const CellModel& rModel );
-        bool                tryExpand( const CellModel& rModel );
+        void                set( const CellModel& rModel, sal_Int32 nNumFmtId );
+        bool                tryExpand( const CellModel& rModel, sal_Int32 nNumFmtId );
         bool                tryMerge( const XfIdRange& rXfIdRange );
     };
 
@@ -200,15 +240,18 @@ private:
         bool                tryExpand( const ::com::sun::star::table::CellAddress& rAddress, sal_Int32 nHorAlign );
     };
 
-    typedef ::std::map< BinAddress, sal_Int32 > TokenIndexMap;
+    typedef ::std::list< ArrayFormula >         ArrayFormulaList;
+    typedef ::std::list< TableOperation >       TableOperationList;
+    typedef ::std::map< BinAddress, sal_Int32 > SharedFormulaMap;
     typedef ::std::map< BinAddress, XfIdRange > XfIdRangeMap;
     typedef ::std::list< MergedRange >          MergedRangeList;
 
-    TokenIndexMap       maTokenIndexes;         /// Maps shared formula base address to defined name token index.
+    ArrayFormulaList    maArrayFormulas;        /// All array formulas in the sheet.
+    TableOperationList  maTableOperations;      /// All table operations in the sheet.
+    SharedFormulaMap    maSharedFormulas;       /// Maps shared formula base address to defined name token index.
     ::com::sun::star::table::CellAddress
                         maSharedFmlaAddr;       /// Address of a cell containing a pending shared formula.
-    ::com::sun::star::table::CellAddress
-                        maSharedBaseAddr;       /// Base address of the pending shared formula.
+    BinAddress          maSharedBaseAddr;       /// Base address of the pending shared formula.
     XfIdRowRange        maXfIdRowRange;         /// Cached XF identifier for a range of rows.
     XfIdRangeMap        maXfIdRanges;           /// Collected XF identifiers for cell ranges.
     MergedRangeList     maMergedRanges;         /// Merged cell ranges.

@@ -94,11 +94,11 @@ public:
 
 protected:
     /** Converts the OOXML formula string stored in the own model. */
-    ApiTokenSequence    importOoxFormula( const ::com::sun::star::table::CellAddress& rBaseAddr );
+    ApiTokenSequence    importOoxFormula( sal_Int16 nBaseSheet );
     /** Imports the BIFF12 formula from the passed stream. */
-    ApiTokenSequence    importBiff12Formula( const ::com::sun::star::table::CellAddress& rBaseAddr, SequenceInputStream& rStrm );
+    ApiTokenSequence    importBiff12Formula( sal_Int16 nBaseSheet, SequenceInputStream& rStrm );
     /** Imports the BIFF formula from the passed stream. */
-    ApiTokenSequence    importBiffFormula( const ::com::sun::star::table::CellAddress& rBaseAddr, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
+    ApiTokenSequence    importBiffFormula( sal_Int16 nBaseSheet, BiffInputStream& rStrm, const sal_uInt16* pnFmlaSize = 0 );
 
     /** Tries to convert the passed token sequence to a SingleReference or ComplexReference. */
     void                extractReference( const ApiTokenSequence& rTokens );

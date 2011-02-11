@@ -184,27 +184,6 @@ void ValueRangeSet::intersect( ValueRangeVector& orRanges, sal_Int32 nFirst, sal
 // ============================================================================
 // ============================================================================
 
-void CellModel::reset()
-{
-    mxCell.clear();
-    maValue = maFormula = maFormulaRef = OUString();
-    mnCellType = mnFormulaType = XML_TOKEN_INVALID;
-    mnSharedId = mnXfId = mnNumFmtId = -1;
-    mbShowPhonetic = false;
-}
-
-// ----------------------------------------------------------------------------
-
-DataTableModel::DataTableModel() :
-    mb2dTable( false ),
-    mbRowTable( false ),
-    mbRef1Deleted( false ),
-    mbRef2Deleted( false )
-{
-}
-
-// ----------------------------------------------------------------------------
-
 ColumnModel::ColumnModel() :
     mnFirstCol( -1 ),
     mnLastCol( -1 ),
@@ -1428,28 +1407,6 @@ const Reference< XSpreadsheet >& WorksheetHelper::getSheet() const
 Reference< XCell > WorksheetHelper::getCell( const CellAddress& rAddress ) const
 {
     return mrSheetGlob.getCell( rAddress );
-}
-
-Reference< XCell > WorksheetHelper::getCell( const OUString& rAddressStr, CellAddress* opAddress ) const
-{
-    CellAddress aAddress;
-    if( getAddressConverter().convertToCellAddress( aAddress, rAddressStr, mrSheetGlob.getSheetIndex(), true ) )
-    {
-        if( opAddress ) *opAddress = aAddress;
-        return mrSheetGlob.getCell( aAddress );
-    }
-    return Reference< XCell >();
-}
-
-Reference< XCell > WorksheetHelper::getCell( const BinAddress& rBinAddress, CellAddress* opAddress ) const
-{
-    CellAddress aAddress;
-    if( getAddressConverter().convertToCellAddress( aAddress, rBinAddress, mrSheetGlob.getSheetIndex(), true ) )
-    {
-        if( opAddress ) *opAddress = aAddress;
-        return mrSheetGlob.getCell( aAddress );
-    }
-    return Reference< XCell >();
 }
 
 Reference< XCellRange > WorksheetHelper::getCellRange( const CellRangeAddress& rRange ) const
