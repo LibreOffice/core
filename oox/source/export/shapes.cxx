@@ -318,6 +318,14 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "mso-spt202", "rect" }
 };
 
+struct StringHash
+{
+    size_t operator()( const char* s ) const
+    {
+        return rtl_str_hashCode(s);
+    }
+};
+
 struct StringCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -326,7 +334,7 @@ struct StringCheck
     }
 };
 
-typedef boost::unordered_map< const char*, const char*, boost::hash<const char*>, StringCheck> CustomShapeTypeTranslationHashMap;
+typedef boost::unordered_map< const char*, const char*, StringHash, StringCheck> CustomShapeTypeTranslationHashMap;
 static CustomShapeTypeTranslationHashMap* pCustomShapeTypeTranslationHashMap = NULL;
 
 static const char* lcl_GetPresetGeometry( const char* sShapeType )
@@ -869,7 +877,7 @@ ShapeExport& ShapeExport::WriteRectangleShape( Reference< XShape > xShape )
 }
 
 typedef ShapeExport& (ShapeExport::*ShapeConverter)( Reference< XShape > );
-typedef boost::unordered_map< const char*, ShapeConverter, boost::hash<const char*>, StringCheck> NameToConvertMapType;
+typedef boost::unordered_map< const char*, ShapeConverter, StringHash, StringCheck> NameToConvertMapType;
 
 static const NameToConvertMapType& lcl_GetConverters()
 {
