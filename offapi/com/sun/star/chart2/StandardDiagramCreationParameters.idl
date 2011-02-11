@@ -49,6 +49,11 @@ service StandardDiagramCreationParameters
         a data-source is used as categories.
      */
     [optional, property]    boolean       HasCategories;
+
+    /** If categories are given they should be used as x values also if a chart type requires x values.
+    Default is true.
+     */
+    [optional, property]    boolean       UseCategoriesAsX;
 };
 
 } ; // chart2

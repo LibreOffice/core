@@ -1,5 +1,4 @@
 /*************************************************************************
- *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * Copyright 2000, 2010 Oracle and/or its affiliates.
@@ -24,34 +23,35 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef com_sun_star_chart2_XUndoSupplier_idl
-#define com_sun_star_chart2_XUndoSupplier_idl
 
-#include <com/sun/star/chart2/XUndoManager.idl>
+#ifndef __com_sun_star_awt_AnimatedImagesControlModel_idl__
+#define __com_sun_star_awt_AnimatedImagesControlModel_idl__
 
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+#include <com/sun/star/awt/UnoControlModel.idl>
 
-/** An interface for providing an UndoManager based on frame::XModel
-    objects.
+//======================================================================================================================
+
+module com { module sun { module star { module awt {
+
+interface XAnimatedImages;
+
+//======================================================================================================================
+
+/** describes the model for a control displaying a series of images
+
+    @since OOo 3.4
  */
-interface XUndoSupplier : ::com::sun::star::uno::XInterface
+service AnimatedImagesControlModel
 {
-    /** @return an undo manager that allows doing undo and redo of a
-                frame::XModel based object
-     */
-    XUndoManager getUndoManager();
+    service com::sun::star::awt::UnoControlModel;
+
+    interface XAnimatedImages;
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+//======================================================================================================================
+
+}; }; }; };
+
+//======================================================================================================================
 
 #endif
