@@ -50,7 +50,7 @@ reportError ()
 			       else
 			          to_mail=`getCommitters "$last_success"`
 			       fi
-			       message="last succes: $rough_time" ;;
+			       message="last success: $rough_time" ;;
 		esac
 	fi
 
