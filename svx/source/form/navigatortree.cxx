@@ -32,12 +32,12 @@
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <svx/svdpagv.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 
 #include "fmhelp.hrc"
 #include "fmexpl.hrc"
 #include "fmexpl.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmshimp.hxx"
 #include "fmservs.hxx"
 #include "fmundo.hxx"
@@ -57,7 +57,7 @@
 #include <com/sun/star/script/XEventAttacherManager.hpp>
 #include <com/sun/star/datatransfer/clipboard/XClipboard.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 
 #include <svx/svxdlg.hxx> //CHINA001
 #include <svx/dialogs.hrc> //CHINA001
@@ -714,7 +714,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, ULONG nRelPos )
+    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uIntPtr nRelPos )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::Insert" );
         //////////////////////////////////////////////////////////////////////
@@ -782,7 +782,7 @@ namespace svxform
 
         // beim eigentlichen Entfernen kann die Selection geaendert werden, da ich aber das SelectionHandling abgeschaltet
         // habe, muss ich mich hinterher darum kuemmern
-        ULONG nExpectedSelectionCount = GetSelectionCount();
+        sal_uIntPtr nExpectedSelectionCount = GetSelectionCount();
 
         if( pEntry )
             GetModel()->Remove( pEntry );
@@ -1760,7 +1760,7 @@ namespace svxform
                     // erstmal die PropertySet-Interfaces der Forms einsammeln
                     for ( sal_Int32 i = 0; i < m_nFormsSelected; ++i )
                     {
-                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
+                        FmFormData* pFormData = (FmFormData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
                         aSelection.insert( pFormData->GetPropertySet().get() );
                     }
                 }
@@ -1770,7 +1770,7 @@ namespace svxform
                     {   // ein MultiSet fuer die Properties der hidden controls
                         for ( sal_Int32 i = 0; i < m_nHiddenControls; ++i )
                         {
-                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((USHORT)i)->GetUserData();
+                            FmEntryData* pEntryData = (FmEntryData*)m_arrCurrentSelection.GetObject((sal_uInt16)i)->GetUserData();
                             aSelection.insert( pEntryData->GetPropertySet().get() );
                         }
                     }
@@ -1802,7 +1802,7 @@ namespace svxform
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::DeleteSelection" );
         // die Root darf ich natuerlich nicht mitloeschen
         sal_Bool bRootSelected = IsSelected(m_pRootEntry);
-        ULONG nSelectedEntries = GetSelectionCount();
+        sal_uIntPtr nSelectedEntries = GetSelectionCount();
         if (bRootSelected && (nSelectedEntries > 1))     // die Root plus andere Elemente ?
             Select(m_pRootEntry, sal_False);                // ja -> die Root raus
 
@@ -1843,7 +1843,7 @@ namespace svxform
         // then go on to the strucure. This means I have to delete the forms *after* the normal controls, so
         // that during UNDO, they're restored in the proper order.
         pFormShell->GetImpl()->EnableTrackProperties(sal_False);
-        USHORT i;
+        sal_uInt16 i;
         for (i = m_arrCurrentSelection.Count(); i>0; --i)
         {
             FmEntryData* pCurrent = (FmEntryData*)(m_arrCurrentSelection.GetObject(i - 1)->GetUserData());
@@ -2103,7 +2103,7 @@ namespace svxform
 
         for (sal_uInt32 i=0; i<m_arrCurrentSelection.Count(); ++i)
         {
-            SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((USHORT)i);
+            SvLBoxEntry* pSelectionLoop = m_arrCurrentSelection.GetObject((sal_uInt16)i);
             // Bei Formselektion alle Controls dieser Form markieren
             if (IsFormEntry(pSelectionLoop) && (pSelectionLoop != m_pRootEntry))
                 MarkViewObj((FmFormData*)pSelectionLoop->GetUserData(), sal_True, sal_False);

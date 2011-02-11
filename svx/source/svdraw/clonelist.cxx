@@ -104,7 +104,7 @@ void CloneList::CopyConnections() const
 
             if(pOriginalNode1)
             {
-                ULONG nPos(maOriginalList.GetPos(pOriginalNode1));
+                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode1));
 
                 if(LIST_ENTRY_NOTFOUND != nPos)
                 {
@@ -117,7 +117,7 @@ void CloneList::CopyConnections() const
 
             if(pOriginalNode2)
             {
-                ULONG nPos(maOriginalList.GetPos(pOriginalNode2));
+                sal_uLong nPos(maOriginalList.GetPos(pOriginalNode2));
 
                 if(LIST_ENTRY_NOTFOUND != nPos)
                 {

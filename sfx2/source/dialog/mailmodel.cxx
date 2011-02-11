@@ -47,9 +47,7 @@
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/security/CertificateValidity.hpp>
-#ifndef _COM_SUN_STAR_SECURITY_DOCUMENTSIGNATURESINFORMATION_HPP_
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
-#endif
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
@@ -57,15 +55,15 @@
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-
+#include <rtl/textenc.h>
 #include <rtl/uri.h>
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <vcl/msgbox.hxx>
 
-#include <mailmodelapi.hxx>
+#include <sfx2/mailmodelapi.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "dialog.hrc"
 
@@ -160,7 +158,7 @@ void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
+        sal_uIntPtr i, nCount = pList->Count();
         for ( i = 0; i < nCount; ++i )
             delete pList->GetObject(i);
         pList->Clear();
@@ -172,7 +170,7 @@ void SfxMailModel::MakeValueList( AddressList_Impl* pList, String& rValueList )
     rValueList.Erase();
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
+        sal_uIntPtr i, nCount = pList->Count();
         for ( i = 0; i < nCount; ++i )
         {
             if ( rValueList.Len() > 0 )
@@ -979,7 +977,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
 
 // functions -------------------------------------------------------------
 
-BOOL CreateFromAddress_Impl( String& rFrom )
+sal_Bool CreateFromAddress_Impl( String& rFrom )
 
 /*  [Beschreibung]
 
@@ -990,8 +988,8 @@ BOOL CreateFromAddress_Impl( String& rFrom )
 
     [R"uckgabewert]
 
-    TRUE:   Adresse konnte erzeugt werden.
-    FALSE:  Adresse konnte nicht erzeugt werden.
+    sal_True:   Adresse konnte erzeugt werden.
+    sal_False:  Adresse konnte nicht erzeugt werden.
 */
 
 {

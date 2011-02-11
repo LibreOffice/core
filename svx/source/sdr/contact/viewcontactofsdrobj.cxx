@@ -40,7 +40,7 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/sdr/primitive2d/sdrprimitivetools.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

@@ -33,7 +33,7 @@
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #ifndef _XMLOFF_TRANSFOERMERBASE_HXX
 #include "TransformerBase.hxx"

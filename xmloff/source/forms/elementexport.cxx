@@ -30,12 +30,12 @@
 
 #include "elementexport.hxx"
 #include "strings.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "eventexport.hxx"
 #include "formenums.hxx"
 #include "formcellbinding.hxx"
 #include "formcellbinding.hxx"
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
 #include "property_meta_data.hxx"
 
 /** === begin UNO includes === **/

@@ -43,11 +43,11 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "hlnkitem.hxx"
+#include "svx/hlnkitem.hxx"
 #include <svx/dialogs.hrc>
 #include "hyprlink.hrc"
 #include <svx/dialmgr.hxx>
-#include "hyprlink.hxx"
+#include "svx/hyprlink.hxx"
 #include "hyprdlg.hxx"
 
 using namespace ::rtl;
@@ -117,10 +117,10 @@ SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
     aLinkPopup          ( SVX_RES( RID_SVXMN_HYPERLINK ) ),
     pTargetMenu         ( NULL ),
 
-    bNoDoc              ( TRUE ),
-    bSend               ( FALSE ),
-    bHasOldName         ( FALSE ),
-    bHtmlMode           ( FALSE )
+    bNoDoc              ( sal_True ),
+    bSend               ( sal_False ),
+    bHasOldName         ( sal_False ),
+    bHtmlMode           ( sal_False )
 
 {
     FreeResource();
@@ -234,14 +234,14 @@ void SvxHyperlinkDlg::Resize()
 
         if (nNewUrlWidth && nNewNameWidth)  // Flackern reduzieren
         {
-            SetUpdateMode(FALSE);
+            SetUpdateMode(sal_False);
 
             // Comboboxen resizen
             aUrlCB.DoResize(nNewUrlWidth);
             aNameCB.DoResize(nNewNameWidth);
             RecalcItems();  // Alle Elemente neu anordnen
 
-            SetUpdateMode(TRUE);
+            SetUpdateMode(sal_True);
         }
     }
 }
@@ -265,16 +265,16 @@ void SvxHyperlinkDlg::Resizing(Size& rSize)
     Beschreibung: Im Dokument selektierten Hyperlink in Leiste anzeigen
  --------------------------------------------------------------------*/
 
-void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
+void SvxHyperlinkDlg::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                                     const SfxPoolItem* pState )
 {
     if ( nSID == SID_HYPERLINK_DIALOG )
     {
         if( eState != SFX_ITEM_DISABLED)
         {
-            EnableItem( BTN_OPENDIALOG, TRUE );
+            EnableItem( BTN_OPENDIALOG, sal_True );
 
-            BOOL bItem = FALSE;
+            sal_Bool bItem = sal_False;
             if ( pState && eState == SFX_ITEM_AVAILABLE )
                     bItem = ((SfxBoolItem*)pState)->GetValue();
             SetItemState ( BTN_OPENDIALOG, bItem ? STATE_CHECK : STATE_NOCHECK );
@@ -282,16 +282,16 @@ void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
         else
         {
             SetItemState ( BTN_OPENDIALOG, STATE_NOCHECK );
-            EnableItem( BTN_OPENDIALOG, FALSE );
+            EnableItem( BTN_OPENDIALOG, sal_False );
         }
     }
 
     if (nSID == SID_HYPERLINK_SETLINK)
     {
         if (eState == SFX_ITEM_DISABLED)
-            bNoDoc = TRUE;
+            bNoDoc = sal_True;
         else
-            bNoDoc = FALSE;
+            bNoDoc = sal_False;
         EnableItem(BTN_TARGET, !bNoDoc);
         EnableLink();
     }
@@ -302,15 +302,15 @@ void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
         {
             const SvxHyperlinkItem& rHLnkItem = *((const SvxHyperlinkItem*)pState);
 
-            USHORT nNamePos = aNameCB.GetEntryPos(aNameCB.GetText());
-            USHORT nUrlPos = aUrlCB.GetEntryPos(aUrlCB.GetText());
-            USHORT nNotFound = COMBOBOX_ENTRY_NOTFOUND;
+            sal_uInt16 nNamePos = aNameCB.GetEntryPos(aNameCB.GetText());
+            sal_uInt16 nUrlPos = aUrlCB.GetEntryPos(aUrlCB.GetText());
+            sal_uInt16 nNotFound = COMBOBOX_ENTRY_NOTFOUND;
 
             if (!bHasOldName &&
                 (nNamePos == nNotFound || nUrlPos == nNotFound))
             {
                 sOldName = aNameCB.GetText();
-                bHasOldName = TRUE;
+                bHasOldName = sal_True;
             }
             if (rHLnkItem.GetName().Len())
             {
@@ -328,7 +328,7 @@ void SvxHyperlinkDlg::StateChanged( USHORT nSID, SfxItemState eState,
                 aUrlCB.SetText(aUrlCB.GetEntry(0));
             }
 
-            TargetMenu(rHLnkItem.GetTargetFrame(), FALSE);
+            TargetMenu(rHLnkItem.GetTargetFrame(), sal_False);
             bHtmlMode = (rHLnkItem.GetInsertMode() & HLINK_HTMLMODE) != 0;
         }
         else
@@ -360,7 +360,7 @@ IMPL_LINK( SvxHyperlinkDlg, TBClickHdl, ToolBox *, pBox )
         break;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -391,7 +391,7 @@ IMPL_LINK( SvxHyperlinkDlg, TBSelectHdl, ToolBox *, pBox )
         break;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
@@ -419,7 +419,7 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
 
             sal_uInt16         nCount = aSearchConfig.Count();
             String sFound;
-            for (USHORT i = 0; i < nCount; i++)
+            for (sal_uInt16 i = 0; i < nCount; i++)
             {
                 const SvxSearchEngineData& rData = aSearchConfig.GetData(i);
                 //check if it's the configured default search engine
@@ -439,9 +439,9 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
                     pMenu->InsertItem( i + 1, rData.sEngineName);
                 }
             }
-            pBox->SetItemDown(BTN_INET_SEARCH, TRUE, TRUE);
+            pBox->SetItemDown(BTN_INET_SEARCH, sal_True, sal_True);
             pMenu->Execute( this, GetItemRect( BTN_INET_SEARCH ), FLOATWIN_POPUPMODE_DOWN );
-            pBox->SetItemDown(BTN_INET_SEARCH, FALSE, TRUE);
+            pBox->SetItemDown(BTN_INET_SEARCH, sal_False, sal_True);
             EndSelection();
             delete pMenu;
         }
@@ -450,24 +450,24 @@ IMPL_LINK( SvxHyperlinkDlg, DropdownClick, ToolBox *, pBox )
         case BTN_TARGET:
         {
             // Target Frame einstellen
-            TargetMenu(GetSelTarget(), TRUE);
+            TargetMenu(GetSelTarget(), sal_True);
             EndSelection();
         }
         break;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
+void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, sal_Bool bExecute)
 {
     if (pTargetMenu && !bExecute)
     {
-        for (USHORT i = 1; i <= pTargetMenu->GetItemCount(); i++)
+        for (sal_uInt16 i = 1; i <= pTargetMenu->GetItemCount(); i++)
         {
             if (pTargetMenu->GetItemText(i) == rSelEntry)
             {
@@ -484,10 +484,10 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
         TargetList aList;
         pVwFrm->GetTopFrame().GetTargetList(aList);
 
-        USHORT nCount = (USHORT)aList.Count();
+        sal_uInt16 nCount = (sal_uInt16)aList.Count();
         if( nCount )
         {
-            BOOL bChecked = FALSE;
+            sal_Bool bChecked = sal_False;
 
             if (pTargetMenu != NULL)
                 delete pTargetMenu;
@@ -495,7 +495,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
             pTargetMenu = new PopupMenu;
             pTargetMenu->SetMenuFlags( pTargetMenu->GetMenuFlags() |
                                        MENU_FLAG_NOAUTOMNEMONICS );
-            USHORT i;
+            sal_uInt16 i;
             for ( i = 0; i < nCount; i++ )
             {
                 String sEntry(*aList.GetObject(i));
@@ -504,7 +504,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
                 if (sEntry == rSelEntry)
                 {
                     pTargetMenu->CheckItem(i + 1);
-                    bChecked = TRUE;
+                    bChecked = sal_True;
                 }
             }
             for ( i = nCount; i; i-- )
@@ -515,7 +515,7 @@ void SvxHyperlinkDlg::TargetMenu(const String& rSelEntry, BOOL bExecute)
 
             if (bExecute)
             {
-                USHORT nEntry = pTargetMenu->Execute(
+                sal_uInt16 nEntry = pTargetMenu->Execute(
                     this, GetItemRect( BTN_TARGET ), FLOATWIN_POPUPMODE_DOWN );
                 if ( nEntry )
                     pTargetMenu->CheckItem( nEntry );
@@ -540,7 +540,7 @@ IMPL_LINK( SvxHyperlinkDlg, LinkPopupSelectHdl, Menu *, pMenu )
             break;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -601,7 +601,7 @@ IMPL_LINK( SvxHyperlinkDlg, SearchPopupSelectHdl, Menu *, pMenu )
 
     if ((nTok = sText.GetTokenCount(cToken)) > 1)
     {
-        for (USHORT i = 0; i < nTok; i++)
+        for (sal_uInt16 i = 0; i < nTok; i++)
         {
             sURL += sText.GetToken(i, cToken);
             if(i < nTok -1)
@@ -620,7 +620,7 @@ IMPL_LINK( SvxHyperlinkDlg, SearchPopupSelectHdl, Menu *, pMenu )
         pViewFrame = pViewFrame->GetTopViewFrame();
     OpenDoc( sURL, pViewFrame );
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -635,7 +635,7 @@ IMPL_LINK( SvxHyperlinkDlg, BookmarkFoundHdl, String *, pUrl )
         ComboModifyHdl(&aUrlCB);
     }
 
-    return TRUE;
+    return sal_True;
 }
 /*--------------------------------------------------------------------
     Beschreibung: Link-Button enablen/disablen
@@ -643,7 +643,7 @@ IMPL_LINK( SvxHyperlinkDlg, BookmarkFoundHdl, String *, pUrl )
 
 void SvxHyperlinkDlg::EnableLink()
 {
-    BOOL bEnable = aUrlCB.GetText().Len() != 0;
+    sal_Bool bEnable = aUrlCB.GetText().Len() != 0;
 
     EnableItem(BTN_LINK, (!bNoDoc) & bEnable);
 }
@@ -652,10 +652,10 @@ void SvxHyperlinkDlg::EnableLink()
     Beschreibung: URL im Dokument einfuegen
  --------------------------------------------------------------------*/
 
-void SvxHyperlinkDlg::SendToApp(USHORT nType)
+void SvxHyperlinkDlg::SendToApp(sal_uInt16 nType)
 {
-    BOOL bIsFile = FALSE;
-    bSend = TRUE;
+    sal_Bool bIsFile = sal_False;
+    bSend = sal_True;
     String sURL( aUrlCB.GetText() );
 
     if ( !sURL.Len() )
@@ -667,13 +667,13 @@ void SvxHyperlinkDlg::SendToApp(USHORT nType)
                                                   INetURLObject::DECODE_UNAMBIGUOUS ) );
     sURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
     if ( aObj.GetProtocol() == INET_PROT_FILE )
-        bIsFile = TRUE;
+        bIsFile = sal_True;
 
     if ( bIsFile )
     {
         EnterWait();
-        SfxMedium aMedium( sURL, STREAM_STD_READ, TRUE );
-        if ( aMedium.Exists( FALSE ) == FALSE )
+        SfxMedium aMedium( sURL, STREAM_STD_READ, sal_True );
+        if ( aMedium.Exists( sal_False ) == sal_False )
         {
             LeaveWait();
             QueryBox aBox( this, SVX_RES( RID_SVXQB_DONTEXIST ) );
@@ -716,7 +716,7 @@ String SvxHyperlinkDlg::GetSelTarget()
 
     if (pTargetMenu != NULL)
     {
-        for (USHORT i = 1; i <= pTargetMenu->GetItemCount(); i++)
+        for (sal_uInt16 i = 1; i <= pTargetMenu->GetItemCount(); i++)
         {
             if (pTargetMenu->IsItemChecked(i))
             {
@@ -740,7 +740,7 @@ void SvxHyperlinkDlg::AddToHistory(const String& rName, const String& rURL)
     if (bHasOldName && sOldName.Len())
     {
         sName = sOldName;
-        bHasOldName = FALSE;
+        bHasOldName = sal_False;
     }
 
     if (!sName.Len())
@@ -748,9 +748,9 @@ void SvxHyperlinkDlg::AddToHistory(const String& rName, const String& rURL)
 
     if (rURL.Len())
     {
-        USHORT nNamePos = aNameCB.GetEntryPos(sName);
-        USHORT nUrlPos = aUrlCB.GetEntryPos(rURL);
-        USHORT nPos = COMBOBOX_ENTRY_NOTFOUND;
+        sal_uInt16 nNamePos = aNameCB.GetEntryPos(sName);
+        sal_uInt16 nUrlPos = aUrlCB.GetEntryPos(rURL);
+        sal_uInt16 nPos = COMBOBOX_ENTRY_NOTFOUND;
 
         if (nNamePos != COMBOBOX_ENTRY_NOTFOUND)
             nPos = nNamePos;
@@ -777,7 +777,7 @@ void SvxHyperlinkDlg::AddToHistory(const String& rName, const String& rURL)
 
 IMPL_LINK( SvxHyperlinkDlg, ComboSelectHdl, ComboBox *, pCombo )
 {
-    USHORT nPos = pCombo->GetEntryPos(pCombo->GetText());
+    sal_uInt16 nPos = pCombo->GetEntryPos(pCombo->GetText());
 
     if (nPos != COMBOBOX_ENTRY_NOTFOUND)
     {
@@ -785,10 +785,10 @@ IMPL_LINK( SvxHyperlinkDlg, ComboSelectHdl, ComboBox *, pCombo )
         aUrlCB.SetText(aUrlCB.GetEntry(nPos));
 
         EnableLink();
-        EnableItem(BTN_INSERT_BOOKMARK, TRUE);
-        EnableItem(BTN_INET_SEARCH, TRUE);
+        EnableItem(BTN_INSERT_BOOKMARK, sal_True);
+        EnableItem(BTN_INET_SEARCH, sal_True);
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -797,10 +797,10 @@ IMPL_LINK( SvxHyperlinkDlg, ComboSelectHdl, ComboBox *, pCombo )
 
 IMPL_LINK( SvxHyperlinkDlg, ComboModifyHdl, ComboBox *, pCombo )
 {
-    BOOL bEnable = TRUE;
+    sal_Bool bEnable = sal_True;
 
     if (!pCombo->GetText().Len())
-        bEnable = FALSE;
+        bEnable = sal_False;
 
     if (pCombo == &aNameCB)
     {
@@ -811,14 +811,14 @@ IMPL_LINK( SvxHyperlinkDlg, ComboModifyHdl, ComboBox *, pCombo )
     EnableLink();
 
     if (aUrlCB.GetText().Len())
-        bEnable = TRUE;
+        bEnable = sal_True;
     else
-        bEnable = FALSE;
+        bEnable = sal_False;
 
     if (IsItemEnabled(BTN_INSERT_BOOKMARK) != bEnable)
         EnableItem(BTN_INSERT_BOOKMARK, bEnable);
 
-    return TRUE;
+    return sal_True;
 }
 
 // --------------------------------------------------------------------
@@ -867,12 +867,12 @@ HyperCombo::HyperCombo( SvxHyperlinkDlg* pDialog, const ResId& rResId ) :
 long HyperCombo::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
-    static BOOL bLocked = FALSE;
+    static sal_Bool bLocked = sal_False;
 
     if (bLocked)    // Keine weiteren RETURNs annehmen (nicht Reentrant!)
         return nHandled;
 
-    bLocked = TRUE;
+    bLocked = sal_True;
 
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
@@ -891,7 +891,7 @@ long HyperCombo::Notify( NotifyEvent& rNEvt )
     if (!nHandled)
         nHandled = ComboBox::Notify( rNEvt );
 
-    bLocked = FALSE;
+    bLocked = sal_False;
 
     return nHandled;
 }
@@ -952,10 +952,10 @@ void SvxHyperlinkDlg::OpenDoc( const String& rURL, SfxViewFrame* pViewFrame )
 {
     SfxStringItem aName( SID_FILE_NAME, rURL );
     SfxStringItem aReferer( SID_REFERER, String::CreateFromAscii("private:user") );
-    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, TRUE );
-    SfxBoolItem aSilent( SID_SILENT, TRUE );
-    SfxBoolItem aReadOnly( SID_DOC_READONLY, TRUE );
-    SfxBoolItem aExternal( SID_BROWSE, TRUE );
+    SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, sal_True );
+    SfxBoolItem aSilent( SID_SILENT, sal_True );
+    SfxBoolItem aReadOnly( SID_DOC_READONLY, sal_True );
+    SfxBoolItem aExternal( SID_BROWSE, sal_True );
     SfxDispatcher* pDisp = SfxViewFrame::Current() ? SfxViewFrame::Current()->GetDispatcher() : NULL;
 
     if ( pViewFrame )
@@ -977,7 +977,7 @@ SFX_IMPL_CHILDWINDOW(SvxHyperlinkDlgWrapper, SID_HYPERLINK_INSERT)
     Beschreibung: Wrapper fuer Hyperlinkleiste
  --------------------------------------------------------------------*/
 
-SvxHyperlinkDlgWrapper::SvxHyperlinkDlgWrapper( Window* _pParent, USHORT nId,
+SvxHyperlinkDlgWrapper::SvxHyperlinkDlgWrapper( Window* _pParent, sal_uInt16 nId,
                                                 SfxBindings* _pBindings, SfxChildWinInfo* /*pInfo*/ ) :
 
     SfxChildWindow( _pParent, nId )

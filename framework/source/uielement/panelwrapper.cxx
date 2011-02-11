@@ -8,7 +8,6 @@
 #include <services.h>
 #include <uielement/panelwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/panelwindow.hxx>
@@ -153,7 +152,7 @@ void SAL_CALL PanelWrapper::initialize( const Sequence< Any >& aArguments ) thro
                 pContentWindow  = VCLUnoHelper::GetWindow( xContentWindow );
                 if ( pWindow )
                 {
-                    ULONG nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
+                    sal_uInt32 nStyles = WB_LINESPACING | WB_BORDER | WB_SCROLL | WB_MOVEABLE | WB_3DLOOK | WB_DOCKABLE | WB_SIZEABLE | WB_CLOSEABLE;
 
                     pPanelWindow = new PanelWindow( pWindow, nStyles );
                     m_xPanelWindow = VCLUnoHelper::GetInterface( pPanelWindow );

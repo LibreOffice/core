@@ -31,7 +31,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <tools/debug.hxx>
 
@@ -47,7 +47,7 @@ struct SvXMLTokenMapEntry aEmptyMap[1] =
 
 
 TokenContext::TokenContext( SvXMLImport& rImport,
-                            USHORT nPrefix,
+                            sal_uInt16 nPrefix,
                             const OUString& rLocalName,
                             const SvXMLTokenMapEntry* pAttributes,
                             const SvXMLTokenMapEntry* pChildren )
@@ -100,7 +100,7 @@ void TokenContext::StartElement(
 }
 
 SvXMLImportContext* TokenContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
 {

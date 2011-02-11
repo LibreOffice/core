@@ -38,13 +38,13 @@
 #include <svx/sdr/animation/objectanimator.hxx>
 #include <svx/sdr/event/eventhandler.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <com/sun/star/rendering/XSpriteCanvas.hpp>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -241,7 +241,7 @@ namespace sdr
                 aViewRange,
                 GetXDrawPageForSdrPage(GetSdrPage()),
                 fCurrentTime,
-                0);
+                uno::Sequence<beans::PropertyValue>());
             updateViewInformation2D(aNewViewInformation2D);
 
             // get whole Primitive2DSequence; this will already make use of updated ViewInformation2D

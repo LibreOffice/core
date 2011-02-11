@@ -39,11 +39,11 @@ private:
     SvxRuler& rRuler;
 
 protected:
-    virtual void StateChanged( USHORT,
+    virtual void StateChanged( sal_uInt16,
                                SfxItemState, const SfxPoolItem* pState );
 
 public:
-    SvxRulerItem( USHORT nId, SvxRuler&, SfxBindings& );
+    SvxRulerItem( sal_uInt16 nId, SvxRuler&, SfxBindings& );
 };
 
 

@@ -30,7 +30,7 @@
 
 #include "impframe.hxx"
 #include "objshimp.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -122,7 +122,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
         if ( pView->GetViewShell() && !pView->GetViewShell()->GetUIActiveIPClient_Impl() && !pFrame->IsInPlace() )
         {
             DBG_TRACE("SfxFrame: GotFocus");
-            pView->MakeActive_Impl( FALSE );
+            pView->MakeActive_Impl( sal_False );
         }
 
         // TODO/LATER: do we still need this code?
@@ -145,7 +145,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
     else if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( pView->GetViewShell()->KeyInput( *rNEvt.GetKeyEvent() ) )
-            return TRUE;
+            return sal_True;
     }
     else if ( rNEvt.GetType() == EVENT_EXECUTEDIALOG /*|| rNEvt.GetType() == EVENT_INPUTDISABLE*/ )
     {
@@ -164,7 +164,7 @@ long SfxFrameWindow_Impl::Notify( NotifyEvent& rNEvt )
 
 long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 {
-    USHORT nType = rNEvt.GetType();
+    sal_uInt16 nType = rNEvt.GetType();
     if ( nType == EVENT_KEYINPUT || nType == EVENT_KEYUP )
     {
         SfxViewFrame* pView = pFrame->GetCurrentViewFrame();
@@ -199,7 +199,7 @@ long SfxFrameWindow_Impl::PreNotify( NotifyEvent& rNEvt )
 void SfxFrameWindow_Impl::GetFocus()
 {
     if ( pFrame && !pFrame->IsClosing_Impl() && pFrame->GetCurrentViewFrame() && pFrame->GetFrameInterface().is() )
-        pFrame->GetCurrentViewFrame()->MakeActive_Impl( TRUE );
+        pFrame->GetCurrentViewFrame()->MakeActive_Impl( sal_True );
 }
 
 void SfxFrameWindow_Impl::Resize()
@@ -212,7 +212,7 @@ void SfxFrameWindow_Impl::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_INITSHOW )
     {
-        pFrame->pImp->bHidden = FALSE;
+        pFrame->pImp->bHidden = sal_False;
         if ( pFrame->IsInPlace() )
             // TODO/MBA: workaround for bug in LayoutManager: the final resize does not get through because the
             // LayoutManager works asynchronously and between resize and time execution the DockingAcceptor was exchanged so that
@@ -250,7 +250,7 @@ Reference < XFrame > SfxFrame::CreateBlankFrame()
     return xFrame;
 }
 
-SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, USHORT nViewId, bool bHidden )
+SfxFrame* SfxFrame::Create( SfxObjectShell& rDoc, Window& rWindow, sal_uInt16 nViewId, bool bHidden )
 {
     SfxFrame* pFrame = NULL;
     try
@@ -341,7 +341,7 @@ SfxFrame::SfxFrame( Window& i_rContainerWindow, bool i_bHidden )
     pWindow->Show();
 }
 
-void SfxFrame::SetPresentationMode( BOOL bSet )
+void SfxFrame::SetPresentationMode( sal_Bool bSet )
 {
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetWindow().SetBorderStyle( bSet ? WINDOW_BORDER_NOBORDER : WINDOW_BORDER_NORMAL );
@@ -362,7 +362,7 @@ void SfxFrame::SetPresentationMode( BOOL bSet )
     if ( GetWorkWindow_Impl() )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
-        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( TRUE );
+        GetCurrentViewFrame()->GetDispatcher()->Update_Impl( sal_True );
 }
 
 SystemWindow* SfxFrame::GetSystemWindow() const
@@ -389,14 +389,14 @@ sal_Bool SfxFrame::Close()
     return sal_True;
 }
 
-void SfxFrame::LockResize_Impl( BOOL bLock )
+void SfxFrame::LockResize_Impl( sal_Bool bLock )
 {
     pImp->bLockResize = bLock;
 }
 
 IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
 {
-    if ( pFrame && !pFrame->PrepareClose_Impl( TRUE ) )
+    if ( pFrame && !pFrame->PrepareClose_Impl( sal_True ) )
         return 0L;
 
     if ( pFrame )
@@ -404,7 +404,7 @@ IMPL_LINK( SfxFrameWindow_Impl, CloserHdl, void*, EMPTYARG )
     return 0L;
 }
 
-void SfxFrame::SetMenuBarOn_Impl( BOOL bOn )
+void SfxFrame::SetMenuBarOn_Impl( sal_Bool bOn )
 {
     pImp->bMenuBarOn = bOn;
 
@@ -428,7 +428,7 @@ void SfxFrame::SetMenuBarOn_Impl( BOOL bOn )
     }
 }
 
-BOOL SfxFrame::IsMenuBarOn_Impl() const
+sal_Bool SfxFrame::IsMenuBarOn_Impl() const
 {
     return pImp->bMenuBarOn;
 }
@@ -472,7 +472,7 @@ void SfxFrame::PrepareForDoc_Impl( SfxObjectShell& i_rDoc )
     // plugin mode
     sal_Int16 nPluginMode = aDocumentArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode && ( nPluginMode != 2 ) )
-        SetInPlace_Impl( TRUE );
+        SetInPlace_Impl( sal_True );
 }
 
 bool SfxFrame::IsMarkedHidden_Impl() const

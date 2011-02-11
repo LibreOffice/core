@@ -28,35 +28,26 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <vcl/msgbox.hxx>
-#ifndef _SV_RESARY_HXX
 #include <tools/resary.hxx>
-#endif
 #include <svl/lstner.hxx>
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <tools/urlobj.hxx>
 #include <basic/sbx.hxx>
-
 #include <sot/storage.hxx>
 #include <unotools/securityoptions.hxx>
 
-#ifndef _RTL_USTRING_
 #include <rtl/ustring.h>
-#endif
-
 #include <com/sun/star/uno/Any.hxx>
 #include <framework/eventsconfiguration.hxx>
 #include <comphelper/processfactory.hxx>
-
 #include <sfx2/evntconf.hxx>
 
-#include <sfx2/macrconf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "config.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "eventsupplier.hxx"
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -68,13 +59,14 @@
 // -----------------------------------------------------------------------
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
+TYPEINIT1(SfxViewEventHint, SfxHint);
 
 using namespace com::sun::star;
 
 SfxEventNamesList& SfxEventNamesList::operator=( const SfxEventNamesList& rTbl )
 {
     DelDtor();
-    for (USHORT n=0; n<rTbl.Count(); n++ )
+    for (sal_uInt16 n=0; n<rTbl.Count(); n++ )
     {
         SfxEventName* pTmp = ((SfxEventNamesList&)rTbl).GetObject(n);
         SfxEventName *pNew = new SfxEventName( *pTmp );
@@ -102,19 +94,19 @@ int SfxEventNamesItem::operator==( const SfxPoolItem& rAttr ) const
     const SfxEventNamesList& rOther = ( (SfxEventNamesItem&) rAttr ).aEventsList;
 
     if ( rOwn.Count() != rOther.Count() )
-        return FALSE;
+        return sal_False;
 
-    for ( USHORT nNo = 0; nNo < rOwn.Count(); ++nNo )
+    for ( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
     {
         const SfxEventName *pOwn = rOwn.GetObject(nNo);
         const SfxEventName *pOther = rOther.GetObject(nNo);
         if (    pOwn->mnId != pOther->mnId ||
                 pOwn->maEventName != pOther->maEventName ||
                 pOwn->maUIName != pOther->maUIName )
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 
 }
 
@@ -133,25 +125,25 @@ SfxPoolItem* SfxEventNamesItem::Clone( SfxItemPool *) const
     return new SfxEventNamesItem(*this);
 }
 
-SfxPoolItem* SfxEventNamesItem::Create(SvStream &, USHORT) const
+SfxPoolItem* SfxEventNamesItem::Create(SvStream &, sal_uInt16) const
 {
     DBG_ERROR("not streamable!");
     return new SfxEventNamesItem(Which());
 }
 
-SvStream& SfxEventNamesItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxEventNamesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_ERROR("not streamable!");
     return rStream;
 }
 
-USHORT SfxEventNamesItem::GetVersion( USHORT ) const
+sal_uInt16 SfxEventNamesItem::GetVersion( sal_uInt16 ) const
 {
     DBG_ERROR("not streamable!");
     return 0;
 }
 
-void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, USHORT nID )
+void SfxEventNamesItem::AddEvent( const String& rName, const String& rUIName, sal_uInt16 nID )
 {
     aEventsList.Insert( new SfxEventName( nID, rName, rUIName.Len() ? rUIName : rName ) );
 }
@@ -295,7 +287,7 @@ void SfxEventConfiguration::ConfigureEvent( rtl::OUString aName, const SvxMacro&
 }
 
 // -------------------------------------------------------------------------------------------------------
-SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, BOOL bBlowUp )
+SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );
 }

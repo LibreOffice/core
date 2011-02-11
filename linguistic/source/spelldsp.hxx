@@ -29,7 +29,7 @@
 #define _LINGUISTIC_SPELLDSP_HXX_
 
 #include "lngopt.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "iprcache.hxx"
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type
@@ -90,16 +90,16 @@ class SpellCheckerDispatcher :
 
     void    ClearSvcList();
 
-    BOOL    isValid_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
+    sal_Bool    isValid_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    BOOL bCheckDics)
+                    sal_Bool bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XSpellAlternatives >
             spell_Impl(const ::rtl::OUString& aWord, LanguageType nLanguage,
                     const ::com::sun::star::beans::PropertyValues& aProperties,
-                    BOOL bCheckDics)
+                    sal_Bool bCheckDics)
                 throw( ::com::sun::star::uno::RuntimeException, ::com::sun::star::lang::IllegalArgumentException );
 
 public:

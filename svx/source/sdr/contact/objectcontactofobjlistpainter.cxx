@@ -37,7 +37,7 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -121,7 +121,7 @@ namespace sdr
                         aViewRange,
                         GetXDrawPageForSdrPage(const_cast< SdrPage* >(mpProcessedPage)),
                         0.0,
-                        0);
+                        com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>());
                     updateViewInformation2D(aNewViewInformation2D);
 
                     // collect primitive data in a sequence; this will already use the updated ViewInformation2D
@@ -149,6 +149,25 @@ namespace sdr
                     }
                 }
             }
+        }
+
+        // VirtualDevice?
+        bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
+        {
+            return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
+        }
+
+        // recording MetaFile?
+        bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
+        {
+            GDIMetaFile* pMetaFile = mrTargetOutputDevice.GetConnectMetaFile();
+            return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+        }
+
+        // pdf export?
+        bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
+        {
+            return (0 != mrTargetOutputDevice.GetPDFWriter());
         }
 
         OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const

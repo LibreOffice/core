@@ -34,7 +34,7 @@
 #include <osl/diagnose.h>
 #include <comphelper/extract.hxx>
 #include "callbacks.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>

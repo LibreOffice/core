@@ -30,10 +30,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef GCC
-#endif
-
-#include "tplpitem.hxx"
+#include "sfx2/tplpitem.hxx"
 #include <com/sun/star/frame/status/Template.hpp>
 
 
@@ -50,9 +47,9 @@ SfxTemplateItem::SfxTemplateItem() :
 
 SfxTemplateItem::SfxTemplateItem
 (
-    USHORT nWhichId,      // Slot-ID
+    sal_uInt16 nWhichId,      // Slot-ID
     const String& rStyle, // Name des aktuellen Styles
-    USHORT nValue         // Flags f"ur das Filtern bei automatischer Anzeige
+    sal_uInt16 nValue         // Flags f"ur das Filtern bei automatischer Anzeige
 ) : SfxFlagItem( nWhichId, nValue ),
     aStyle( rStyle )
 {
@@ -87,7 +84,7 @@ SfxPoolItem* SfxTemplateItem::Clone( SfxItemPool *) const
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
@@ -99,13 +96,13 @@ sal_Bool SfxTemplateItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE /*nMe
 }
 
 //-------------------------------------------------------------------------
-sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     ::com::sun::star::frame::status::Template aTemplate;
 
     if ( rVal >>= aTemplate )
     {
-        SetValue( sal::static_int_cast< USHORT >( aTemplate.Value ) );
+        SetValue( sal::static_int_cast< sal_uInt16 >( aTemplate.Value ) );
         aStyle = aTemplate.StyleName;
         return sal_True;
     }
@@ -115,9 +112,9 @@ sal_Bool SfxTemplateItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE /
 
 //-------------------------------------------------------------------------
 
-BYTE SfxTemplateItem::GetFlagCount() const
+sal_uInt8 SfxTemplateItem::GetFlagCount() const
 {
-    return sizeof(USHORT) * 8;
+    return sizeof(sal_uInt16) * 8;
 }
 
 

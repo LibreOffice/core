@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "ChartOOoTContext.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
 #endif

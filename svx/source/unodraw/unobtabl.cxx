@@ -36,10 +36,10 @@
 #include <svx/xbtmpit.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/xflhtit.hxx>
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/unomid.hxx>
 #include <editeng/unoprnms.hxx>
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 #include <editeng/memberids.hrc>
 
 using namespace ::com::sun::star;

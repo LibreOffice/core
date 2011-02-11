@@ -33,7 +33,7 @@
 #include <com/sun/star/style/LineNumberPosition.hpp>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnume.hxx>
 

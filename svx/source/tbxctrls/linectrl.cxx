@@ -42,10 +42,10 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#include "drawitem.hxx"
-#include "xattr.hxx"
+#include "svx/drawitem.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
-#include "linectrl.hxx"
+#include "svx/linectrl.hxx"
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 
@@ -88,13 +88,13 @@ SFX_IMPL_TOOLBOX_CONTROL( SvxLineEndToolBoxControl,   SfxBoolItem );
 |*
 \************************************************************************/
 
-SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( USHORT nSlotId,
-                                                        USHORT nId,
+SvxLineStyleToolBoxControl::SvxLineStyleToolBoxControl( sal_uInt16 nSlotId,
+                                                        sal_uInt16 nId,
                                                         ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx ),
     pStyleItem      ( NULL ),
     pDashItem       ( NULL ),
-    bUpdate         ( FALSE )
+    bUpdate         ( sal_False )
 {
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )));
     addStatusListener( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:DashListState" )));
@@ -112,7 +112,7 @@ SvxLineStyleToolBoxControl::~SvxLineStyleToolBoxControl()
 
 void SvxLineStyleToolBoxControl::StateChanged (
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
@@ -140,7 +140,7 @@ void SvxLineStyleToolBoxControl::StateChanged (
                 pDashItem = (XLineDashItem*)pState->Clone();
             }
 
-            bUpdate = TRUE;
+            bUpdate = sal_True;
             Update( pState );
         }
         else if ( nSID != SID_DASH_LIST )
@@ -157,7 +157,7 @@ void SvxLineStyleToolBoxControl::Update( const SfxPoolItem* pState )
 {
     if ( pState && bUpdate )
     {
-        bUpdate = FALSE;
+        bUpdate = sal_False;
 
         SvxLineBox* pBox = (SvxLineBox*)GetToolBox().GetItemWindow( GetId() );
         DBG_ASSERT( pBox, "Window not found!" );
@@ -232,7 +232,7 @@ Window* SvxLineStyleToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineWidthToolBoxControl::SvxLineWidthToolBoxControl(
-    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:MetricUnit" )));
@@ -247,7 +247,7 @@ SvxLineWidthToolBoxControl::~SvxLineWidthToolBoxControl()
 //========================================================================
 
 void SvxLineWidthToolBoxControl::StateChanged(
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {
     SvxMetricField* pFld = (SvxMetricField*)
                            GetToolBox().GetItemWindow( GetId() );
@@ -299,7 +299,7 @@ Window* SvxLineWidthToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineColorToolBoxControl::SvxLineColorToolBoxControl(
-    USHORT nSlotId, USHORT nId, ToolBox& rTbx ) :
+    sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:ColorTableState" )));
@@ -315,7 +315,7 @@ SvxLineColorToolBoxControl::~SvxLineColorToolBoxControl()
 
 void SvxLineColorToolBoxControl::StateChanged(
 
-    USHORT nSID, SfxItemState eState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
     SvxColorBox* pBox = (SvxColorBox*)GetToolBox().GetItemWindow( GetId() );
@@ -377,7 +377,7 @@ Window* SvxLineColorToolBoxControl::CreateItemWindow( Window *pParent )
 \************************************************************************/
 
 SvxLineEndWindow::SvxLineEndWindow(
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     const Reference< XFrame >& rFrame,
     const String& rWndTitle ) :
     SfxPopupWindow( nSlotId,
@@ -388,7 +388,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
-    bPopupMode      ( TRUE ),
+    bPopupMode      ( sal_True ),
     mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
@@ -397,7 +397,7 @@ SvxLineEndWindow::SvxLineEndWindow(
 }
 
 SvxLineEndWindow::SvxLineEndWindow(
-    USHORT nSlotId,
+    sal_uInt16 nSlotId,
     const Reference< XFrame >& rFrame,
     Window* pParentWindow,
     const String& rWndTitle ) :
@@ -410,7 +410,7 @@ SvxLineEndWindow::SvxLineEndWindow(
     nCols           ( 2 ),
     nLines          ( 12 ),
     nLineEndWidth   ( 400 ),
-    bPopupMode      ( TRUE ),
+    bPopupMode      ( sal_True ),
     mbInResize      ( false ),
     mxFrame         ( rFrame )
 {
@@ -467,7 +467,7 @@ IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
 {
     XLineEndItem*           pLineEndItem = NULL;
     XLineStartItem*         pLineStartItem = NULL;
-    USHORT                  nId = aLineEndSet.GetSelectItemId();
+    sal_uInt16                  nId = aLineEndSet.GetSelectItemId();
 
     if( nId == 1 )
     {
@@ -543,7 +543,7 @@ void SvxLineEndWindow::FillValueSet()
         DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
 
         aBmpSize = pBmp->GetSizePixel();
-        aVD.SetOutputSizePixel( aBmpSize, FALSE );
+        aVD.SetOutputSizePixel( aBmpSize, sal_False );
         aBmpSize.Width() = aBmpSize.Width() / 2;
         Point aPt0( 0, 0 );
         Point aPt1( aBmpSize.Width(), 0 );
@@ -562,10 +562,10 @@ void SvxLineEndWindow::FillValueSet()
             DBG_ASSERT( pBmp, "UI-Bitmap wurde nicht erzeugt" );
 
             aVD.DrawBitmap( aPt0, *pBmp );
-            aLineEndSet.InsertItem( (USHORT)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
-            aLineEndSet.InsertItem( (USHORT)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem( (sal_uInt16)((i+1L)*2L+1L), aVD.GetBitmap( aPt0, aBmpSize ), pEntry->GetName() );
+            aLineEndSet.InsertItem( (sal_uInt16)((i+2L)*2L),    aVD.GetBitmap( aPt1, aBmpSize ), pEntry->GetName() );
         }
-        nLines = Min( (USHORT)(nCount + 1), (USHORT) MAX_LINES );
+        nLines = Min( (sal_uInt16)(nCount + 1), (sal_uInt16) MAX_LINES );
         aLineEndSet.SetLineCount( nLines );
 
         SetSize();
@@ -609,21 +609,21 @@ void __EXPORT SvxLineEndWindow::Resizing( Size& rNewSize )
     Size aItemSize = aLineEndSet.CalcItemSizePixel( aBitmapSize );  // -> Member
     //Size aOldSize = GetOutputSizePixel(); // fuer Breite
 
-    USHORT nItemCount = aLineEndSet.GetItemCount(); // -> Member
+    sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
 
     // Spalten ermitteln
     long nItemW = aItemSize.Width();
     long nW = rNewSize.Width();
-    nCols = (USHORT) Max( ( (ULONG)(( nW + nItemW ) / ( nItemW * 2 ) )),
-                                            (ULONG) 1L );
+    nCols = (sal_uInt16) Max( ( (sal_uIntPtr)(( nW + nItemW ) / ( nItemW * 2 ) )),
+                                            (sal_uIntPtr) 1L );
     nCols *= 2;
 
     // Reihen ermitteln
     long nItemH = aItemSize.Height();
     long nH = rNewSize.Height();
-    nLines = (USHORT) Max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
+    nLines = (sal_uInt16) Max( ( ( nH + nItemH / 2 ) / nItemH ), 1L );
 
-    USHORT nMaxCols  = nItemCount / nLines;
+    sal_uInt16 nMaxCols  = nItemCount / nLines;
     if( nItemCount % nLines )
         nMaxCols++;
     if( nCols > nMaxCols )
@@ -633,9 +633,9 @@ void __EXPORT SvxLineEndWindow::Resizing( Size& rNewSize )
     // Keine ungerade Anzahl von Spalten
     if( nCols % 2 )
         nCols--;
-    nCols = Max( nCols, (USHORT) 2 );
+    nCols = Max( nCols, (sal_uInt16) 2 );
 
-    USHORT nMaxLines  = nItemCount / nCols;
+    sal_uInt16 nMaxLines  = nItemCount / nCols;
     if( nItemCount % nCols )
         nMaxLines++;
     if( nLines > nMaxLines )
@@ -654,7 +654,7 @@ void SvxLineEndWindow::StartSelection()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxLineEndWindow::Close()
+sal_Bool SvxLineEndWindow::Close()
 {
     return SfxPopupWindow::Close();
 }
@@ -662,7 +662,7 @@ BOOL SvxLineEndWindow::Close()
 // -----------------------------------------------------------------------
 
 void SvxLineEndWindow::StateChanged(
-    USHORT nSID, SfxItemState, const SfxPoolItem* pState )
+    sal_uInt16 nSID, SfxItemState, const SfxPoolItem* pState )
 {
     if ( nSID == SID_LINEEND_LIST )
     {
@@ -688,7 +688,7 @@ void SvxLineEndWindow::PopupModeEnd()
 {
     if ( IsVisible() )
     {
-        bPopupMode = FALSE;
+        bPopupMode = sal_False;
         SetSize();
     }
     SfxPopupWindow::PopupModeEnd();
@@ -701,8 +701,8 @@ void SvxLineEndWindow::SetSize()
     //if( !bPopupMode )
     if( !IsInPopupMode() )
     {
-        USHORT nItemCount = aLineEndSet.GetItemCount(); // -> Member
-        USHORT nMaxLines  = nItemCount / nCols; // -> Member ?
+        sal_uInt16 nItemCount = aLineEndSet.GetItemCount(); // -> Member
+        sal_uInt16 nMaxLines  = nItemCount / nCols; // -> Member ?
         if( nItemCount % nCols )
             nMaxLines++;
 
@@ -740,7 +740,7 @@ void SvxLineEndWindow::GetFocus (void)
 |*
 \************************************************************************/
 
-SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) :
+SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox &rTbx ) :
     SfxToolBoxControl( nSlotId, nId, rTbx )
 {
     rTbx.SetItemBits( nId, TIB_DROPDOWNONLY | rTbx.GetItemBits( nId ) );
@@ -766,7 +766,7 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 {
     SvxLineEndWindow* pLineEndWin =
         new SvxLineEndWindow( GetId(), m_xFrame, &GetToolBox(), SVX_RESSTR( RID_SVXSTR_LINEEND ) );
-    pLineEndWin->StartPopupMode( &GetToolBox(), TRUE );
+    pLineEndWin->StartPopupMode( &GetToolBox(), sal_True );
     pLineEndWin->StartSelection();
     SetPopupWindow( pLineEndWin );
     return pLineEndWin;
@@ -774,9 +774,9 @@ SfxPopupWindow* SvxLineEndToolBoxControl::CreatePopupWindow()
 
 // -----------------------------------------------------------------------
 
-void SvxLineEndToolBoxControl::StateChanged( USHORT, SfxItemState eState, const SfxPoolItem* )
+void SvxLineEndToolBoxControl::StateChanged( sal_uInt16, SfxItemState eState, const SfxPoolItem* )
 {
-    USHORT nId = GetId();
+    sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
 
     rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );

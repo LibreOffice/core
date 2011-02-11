@@ -64,7 +64,10 @@ ULFDIR:=..$/share
 
 .INCLUDE : target.mk
 
+.IF "$(ZIP1TARGETN)"!=""
 ZIP1TARGETN : Info.plist extract_icons_names.pl
+
+.ENDIF          # "$(ZIP1TARGETN)"!=""
 
 ALLTAR : $(COMMONMISC)$/{PkgInfo Info.plist} $(COMMONBIN)$/InfoPlist_{$(alllangiso)}.zip
 

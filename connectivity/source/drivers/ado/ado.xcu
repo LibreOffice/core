@@ -164,6 +164,11 @@
             <value>false</value>
           </prop>
         </node>
+        <node oor:name="TypeInfoSettings" oor:op="replace">
+          <prop oor:name="Value" oor:type="oor:string-list">
+            <value oor:separator=",">Column(2) = 16,Column(3) = 1</value>
+          </prop>
+        </node>
       </node>
       <node oor:name="Features">
         <node oor:name="UseSQL92NamingConstraints" oor:op="replace">

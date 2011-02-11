@@ -30,7 +30,7 @@
 
 #include <xmloff/xmlexppr.hxx>
 #include "txtdrope.hxx"
-#include "xmltabe.hxx"
+#include "xmloff/xmltabe.hxx"
 #include "XMLTextColumnsExport.hxx"
 #ifndef _XMLOFF_XMLBACKGROUNDIMAGEEXPORT_HXX
 #include "XMLBackgroundImageExport.hxx"

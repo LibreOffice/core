@@ -31,7 +31,7 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XEVENTSSUPPLIER_HPP
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #endif
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "XMLTextPropertySetContext.hxx"
 #include <xmloff/xmlimp.hxx>
@@ -70,7 +70,7 @@ public:
     virtual ~XMLTextShapePropertySetContext_Impl();
 
     using SvXMLPropertySetContext::CreateChildContext;
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& xAttrList,
         ::std::vector< XMLPropertyState > &rProperties,

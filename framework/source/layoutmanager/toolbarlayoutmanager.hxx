@@ -52,7 +52,7 @@
 #include <stdtypes.h>
 #include <uiconfiguration/globalsettings.hxx>
 #include <uiconfiguration/windowstateconfiguration.hxx>
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 #include <helper/ilayoutnotifications.hxx>
 

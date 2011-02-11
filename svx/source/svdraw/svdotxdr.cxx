@@ -33,8 +33,8 @@
 #include <svx/svddrag.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdorect.hxx> // fuer SetXPolyDirty in MovCreate bei SolidDragging
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <svx/svdoashp.hxx>
 #include <tools/bigint.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -211,7 +211,7 @@ FASTBOOL SdrTextObj::BegCreate(SdrDragStat& rStat)
     aRect1.Justify();
     rStat.SetActionRect(aRect1);
     aRect = aRect1;
-    return TRUE;
+    return sal_True;
 }
 
 FASTBOOL SdrTextObj::MovCreate(SdrDragStat& rStat)
@@ -222,11 +222,11 @@ FASTBOOL SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.SetActionRect(aRect1);
     aRect=aRect1; // fuer ObjName
     SetBoundRectDirty();
-    bSnapRectDirty=TRUE;
+    bSnapRectDirty=sal_True;
     if (HAS_BASE(SdrRectObj,this)) {
         ((SdrRectObj*)this)->SetXPolyDirty();
     }
-    return TRUE;
+    return sal_True;
 }
 
 FASTBOOL SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
@@ -262,7 +262,7 @@ void SdrTextObj::BrkCreate(SdrDragStat& /*rStat*/)
 
 FASTBOOL SdrTextObj::BckCreate(SdrDragStat& /*rStat*/)
 {
-    return TRUE;
+    return sal_True;
 }
 
 basegfx::B2DPolyPolygon SdrTextObj::TakeCreatePoly(const SdrDragStat& rDrag) const

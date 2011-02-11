@@ -47,13 +47,13 @@
 #include <sfx2/sfx.hrc>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "fltfnc.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/mnumgr.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxuno.hxx>
 #include "syspath.hxx"
 #include <osl/file.hxx>
@@ -381,7 +381,7 @@ const SfxObjectFactory* SfxObjectFactory::GetFactory( const String& rFactoryURL 
 
 const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
 {
-    USHORT nVersion=0;
+    sal_uInt16 nVersion=0;
     SfxFilterMatcher aMatcher ( String::CreateFromAscii( pShortName ) );
     SfxFilterMatcherIter aIter( &aMatcher );
     const SfxFilter *pFilter = 0;
@@ -391,7 +391,7 @@ const SfxFilter* SfxObjectFactory::GetTemplateFilter() const
         if( pTemp->IsOwnFormat() && pTemp->IsOwnTemplateFormat() && ( pTemp->GetVersion() > nVersion ) )
         {
             pFilter = pTemp;
-            nVersion = (USHORT) pTemp->GetVersion();
+            nVersion = (sal_uInt16) pTemp->GetVersion();
         }
 
         pTemp = aIter.Next();
@@ -476,7 +476,7 @@ sal_uInt16 SfxObjectFactory::GetViewNo_Impl( const sal_uInt16 i_nViewId, const s
 
 SfxViewFactory* SfxObjectFactory::GetViewFactoryByViewName( const String& i_rViewName ) const
 {
-    for (   USHORT nViewNo = 0;
+    for (   sal_uInt16 nViewNo = 0;
             nViewNo < GetViewFactoryCount();
             ++nViewNo
         )

@@ -30,7 +30,7 @@
 #include "ChartPlotAreaOASISTContext.hxx"
 #include "TransformerBase.hxx"
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include "DeepTContext.hxx"
 #include "ActionMapTypesOASIS.hxx"

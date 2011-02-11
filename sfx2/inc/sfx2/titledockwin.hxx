@@ -76,7 +76,7 @@ namespace sfx2
             @return
                 the ID of the newly created toolbox item
         */
-        USHORT  AddDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
+        sal_uInt16  AddDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback )
         {
             return impl_addDropDownToolBoxItem( i_rItemText, i_nHelpId, i_rCallback );
         }
@@ -114,7 +114,7 @@ namespace sfx2
         virtual void SetText( const String& i_rText );
 
         // DockingWindow overridables
-        void EndDocking( const Rectangle& rRect, BOOL bFloatMode );
+        void EndDocking( const Rectangle& rRect, sal_Bool bFloatMode );
 
         // own overridables
         virtual void onLayoutDone();
@@ -126,7 +126,7 @@ namespace sfx2
 
         /** internal version of AddDropDownToolBoxItem
         */
-        USHORT  impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback );
+        sal_uInt16  impl_addDropDownToolBoxItem( const String& i_rItemText, const rtl::OString& i_nHelpId, const Link& i_rCallback );
 
         /** returns the current title.
 

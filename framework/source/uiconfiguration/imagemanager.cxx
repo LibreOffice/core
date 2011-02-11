@@ -29,7 +29,7 @@
 #include "precompiled_framework.hxx"
 #include <uiconfiguration/imagemanager.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <xml/imagesconfiguration.hxx>
+#include <framework/imagesconfiguration.hxx>
 #include <uiconfiguration/graphicnameaccess.hxx>
 #include <services.h>
 #include "imagemanagerimpl.hxx"

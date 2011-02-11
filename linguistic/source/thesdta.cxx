@@ -30,7 +30,7 @@
 #include <tools/debug.hxx>
 #include <osl/mutex.hxx>
 
-#include <misc.hxx>
+#include <linguistic/misc.hxx>
 
 #include "thesdta.hxx"
 
@@ -52,7 +52,7 @@ namespace linguistic
 
 
 ThesaurusMeaning::ThesaurusMeaning(const OUString &rText,
-                 const OUString &rLookUpText, INT16 nLookUpLang ) :
+                 const OUString &rLookUpText, sal_Int16 nLookUpLang ) :
     aText               (rText),
     aLookUpText         (rLookUpText),
     nLookUpLanguage     (nLookUpLang)

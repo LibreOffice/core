@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <tools/debug.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlmetai.hxx>
 #include <xmloff/xmlstyle.hxx>
 #include "SchXMLImport.hxx"
@@ -85,7 +85,7 @@ SvXMLImportContext *SchXMLBodyContext_Impl::CreateChildContext(
 
 SchXMLDocContext::SchXMLDocContext( SchXMLImportHelper& rImpHelper,
                                     SvXMLImport& rImport,
-                                    USHORT nPrefix,
+                                    sal_uInt16 nPrefix,
                                     const rtl::OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )
@@ -150,7 +150,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
 SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
         SchXMLImportHelper& i_rImpHelper,
         SchXMLImport& i_rImport,
-        USHORT i_nPrefix, const ::rtl::OUString & i_rLName,
+        sal_uInt16 i_nPrefix, const ::rtl::OUString & i_rLName,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         const uno::Reference<xml::sax::XDocumentHandler>& i_xDocBuilder) :
     SvXMLImportContext(i_rImport, i_nPrefix, i_rLName),
@@ -164,7 +164,7 @@ SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
 
 
 SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
-    USHORT i_nPrefix, const ::rtl::OUString& i_rLocalName,
+    sal_uInt16 i_nPrefix, const ::rtl::OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
     // behave like meta base class iff we encounter office:meta
@@ -183,7 +183,7 @@ SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
 
 SchXMLBodyContext::SchXMLBodyContext( SchXMLImportHelper& rImpHelper,
                                       SvXMLImport& rImport,
-                                      USHORT nPrefix,
+                                      sal_uInt16 nPrefix,
                                       const rtl::OUString& rLName ) :
         SvXMLImportContext( rImport, nPrefix, rLName ),
         mrImportHelper( rImpHelper )

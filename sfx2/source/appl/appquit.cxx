@@ -44,15 +44,15 @@
 
 #include "app.hrc"
 #include <sfx2/app.hxx>
+#include <sfx2/evntconf.hxx>
 #include <sfx2/unoctitm.hxx>
 #include "appdata.hxx"
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
 #include "arrdecl.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/event.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/templdlg.hxx>
 #include <sfx2/msgpool.hxx>
@@ -72,9 +72,9 @@
 using ::basic::BasicManagerRepository;
 
 //===================================================================
-BOOL SfxApplication::QueryExit_Impl()
+sal_Bool SfxApplication::QueryExit_Impl()
 {
-    BOOL bQuit = TRUE;
+    sal_Bool bQuit = sal_True;
 
     // will trotzdem noch jemand, den man nicht abschiessen kann, die App haben?
     if ( !bQuit )
@@ -83,10 +83,10 @@ BOOL SfxApplication::QueryExit_Impl()
         InfoBox aInfoBox( NULL, SfxResId(MSG_CANT_QUIT) );
         aInfoBox.Execute();
         DBG_TRACE( "QueryExit => FALSE (in use)" );
-        return FALSE;
+        return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 //-------------------------------------------------------------------------
@@ -105,7 +105,7 @@ void SfxApplication::Deinitialize()
 
     SaveBasicAndDialogContainer();
 
-    pAppData_Impl->bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
+    pAppData_Impl->bDowning = sal_True; // wegen Timer aus DecAliveCount und QueryExit
 
     DELETEZ( pAppData_Impl->pTemplates );
 
@@ -115,15 +115,15 @@ void SfxApplication::Deinitialize()
     // For more information see:
     // #123501#
     //SetViewFrame(0);
-    pAppData_Impl->bDowning = FALSE;
+    pAppData_Impl->bDowning = sal_False;
     DBG_ASSERT( !SfxViewFrame::GetFirst(),
                 "existing SfxViewFrame after Execute" );
     DBG_ASSERT( !SfxObjectShell::GetFirst(),
                 "existing SfxObjectShell after Execute" );
     pAppData_Impl->pAppDispat->Pop( *this, SFX_SHELL_POP_UNTIL );
     pAppData_Impl->pAppDispat->Flush();
-    pAppData_Impl->bDowning = TRUE;
-    pAppData_Impl->pAppDispat->DoDeactivate_Impl( TRUE, NULL );
+    pAppData_Impl->bDowning = sal_True;
+    pAppData_Impl->pAppDispat->DoDeactivate_Impl( sal_True, NULL );
 
     // call derived application-exit
     Exit();
@@ -146,11 +146,7 @@ void SfxApplication::Deinitialize()
     // ab hier d"urfen keine SvObjects mehr existieren
     DELETEZ(pAppData_Impl->pMatcher);
 
-    delete pAppData_Impl->pLabelResMgr;
-
     DELETEX(pAppData_Impl->pSlotPool);
-    DELETEX(pAppData_Impl->pEventConfig);
-    SfxMacroConfig::Release_Impl();
     DELETEX(pAppData_Impl->pFactArr);
     DELETEX(pAppData_Impl->pInitLinkList);
 

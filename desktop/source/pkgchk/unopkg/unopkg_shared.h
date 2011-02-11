@@ -34,6 +34,7 @@
 #include "tools/resmgr.hxx"
 #include "rtl/ustring.hxx"
 #include "unotools/configmgr.hxx"
+#include "ucbhelper/contentbroker.hxx"
 
 
 #define APP_NAME "unopkg"
@@ -137,15 +138,14 @@ bool isBootstrapVariable(sal_uInt32 * pIndex);
 class DisposeGuard
 {
     css::uno::Reference<css::lang::XComponent> m_xComp;
-
+    bool m_bDeinitUCB;
 public:
-    inline DisposeGuard() {}
-    inline DisposeGuard(
-        css::uno::Reference<css::lang::XComponent> const & xComp )
-        : m_xComp( xComp ) {}
-
+    DisposeGuard(): m_bDeinitUCB(false) {}
     inline ~DisposeGuard()
     {
+        if (m_bDeinitUCB)
+            ::ucbhelper::ContentBroker::deinitialize();
+
         if (m_xComp.is())
             m_xComp->dispose();
     }
@@ -155,6 +155,12 @@ public:
     {
         m_xComp = xComp;
     }
+
+    inline void setDeinitUCB()
+    {
+        m_bDeinitUCB = true;
+    }
+
 };
 
 //==============================================================================

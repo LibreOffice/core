@@ -59,8 +59,8 @@ interface XSelection
     [attribute] long Start;
     [attribute] long End;
 
-    any Tables( [in] any aIndex );
-    any Fields( [in] any aIndex );
+    any Tables( [in] any Index );
+    any Fields( [in] any Index );
     void TypeText( [in] string Text );
     void HomeKey( [in] any Unit, [in] any Extend );
     void EndKey( [in] any Unit, [in] any Extend );

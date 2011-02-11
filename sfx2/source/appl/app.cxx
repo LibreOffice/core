@@ -41,16 +41,14 @@
 #include <tools/simplerm.hxx>
 #include <tools/config.hxx>
 #include <basic/basrdll.hxx>
+#include <basic/sbmeth.hxx>
+#include <basic/sbmod.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/stritem.hxx>
-#ifndef _SOUND_HXX //autogen
 #include <vcl/sound.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <svl/urlbmk.hxx>
-#ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
-#endif
 #include <svtools/sfxecode.hxx>
 #include <svtools/ehdl.hxx>
 
@@ -58,8 +56,6 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <osl/file.hxx>
-#ifndef GCC
-#endif
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
@@ -78,23 +74,18 @@
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
-
 #include <basic/basmgr.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
-
 #include <rtl/logfile.hxx>
-
 #include <sfx2/appuno.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/request.hxx>
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "arrdecl.hxx"
 #include <sfx2/progress.hxx>
 #include <sfx2/objsh.hxx>
@@ -120,9 +111,10 @@
 #include <sfx2/module.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
+#include <tools/svlibrary.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/tbxctrl.hxx>
@@ -234,7 +226,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
                             String aFactory = String::CreateFromAscii("private:factory/");
                             if ( pArgs && *pArgs )
                             {
-                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, FALSE );
+                                SFX_ITEMSET_ARG( &aSet, pFactoryName, SfxStringItem, SID_NEWDOCDIRECT, sal_False );
                                 if ( pFactoryName )
                                     aFactory += pFactoryName->GetValue();
                                 else
@@ -291,7 +283,7 @@ void SfxPropertyHandler::Property( ApplicationProperty& rProp )
 #include <framework/imageproducer.hxx>
 #include <framework/acceleratorinfo.hxx>
 #include <framework/sfxhelperfunctions.hxx>
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include "fwkhelper.hxx"
 
 ::osl::Mutex SfxApplication::gMutex;
@@ -312,7 +304,7 @@ SfxApplication* SfxApplication::GetOrCreate()
         RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::SetApp" );
         pApp = pNew;
 
-        // at the moment a bug may occur when Initialize_Impl returns FALSE, but this is only temporary because all code that may cause such a
+        // at the moment a bug may occur when Initialize_Impl returns sal_False, but this is only temporary because all code that may cause such a
         // fault will be moved outside the SFX
         pApp->Initialize_Impl();
 
@@ -371,20 +363,15 @@ SfxApplication::SfxApplication()
 #endif
 #endif
 
-    if ( !InitLabelResMgr( "iso" ) )
-        // no "iso" resource -> search for "ooo" resource
-        InitLabelResMgr( "ooo", true );
     pBasic   = new BasicDLL;
-
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
-
-
-
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
 }
 
 SfxApplication::~SfxApplication()
 {
+    OSL_ENSURE( GetObjectShells_Impl().Count() == 0, "Memory leak: some object shells were not removed!" );
+
     Broadcast( SfxSimpleHint(SFX_HINT_DYING) );
 
     SfxModule::DestroyModules_Impl();
@@ -486,14 +473,14 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
         // DocWinActivate : both frames belong to the same TopWindow
         // TopWinActivate : both frames belong to different TopWindows
 // not used anymore!
-//      BOOL bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
+//      sal_Bool bDocWinActivate = pOldContainerFrame && pNewContainerFrame &&
 //                  pOldContainerFrame->GetTopViewFrame() == pNewContainerFrame->GetTopViewFrame();
-        BOOL bTaskActivate = pOldContainerFrame != pNewContainerFrame;
+        sal_Bool bTaskActivate = pOldContainerFrame != pNewContainerFrame;
 
         if ( pOldContainerFrame )
         {
             if ( bTaskActivate )
-                NotifyEvent( SfxEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell() ) );
+                NotifyEvent( SfxViewEventHint( SFX_EVENT_DEACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_DEACTIVATEDOC), pOldContainerFrame->GetObjectShell(), pOldContainerFrame->GetFrame().GetController() ) );
             pOldContainerFrame->DoDeactivate( bTaskActivate, pFrame );
 
             if( pOldContainerFrame->GetProgress() )
@@ -517,7 +504,7 @@ void SfxApplication::SetViewFrame_Impl( SfxViewFrame *pFrame )
             if ( bTaskActivate && pNewContainerFrame->GetObjectShell() )
             {
                 pNewContainerFrame->GetObjectShell()->PostActivateEvent_Impl( pNewContainerFrame );
-                NotifyEvent(SfxEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell() ) );
+                NotifyEvent(SfxViewEventHint(SFX_EVENT_ACTIVATEDOC, GlobalEventConfig::GetEventName(STR_EVENT_ACTIVATEDOC), pNewContainerFrame->GetObjectShell(), pNewContainerFrame->GetFrame().GetController() ) );
             }
 
             SfxProgress *pProgress = pNewContainerFrame->GetProgress();
@@ -595,13 +582,6 @@ ResMgr* SfxApplication::GetSfxResManager()
 
 //--------------------------------------------------------------------
 
-ResMgr* SfxApplication::GetLabelResManager() const
-{
-    return pAppData_Impl->pLabelResMgr;
-}
-
-//--------------------------------------------------------------------
-
 SimpleResMgr* SfxApplication::GetSimpleResManager()
 {
     if ( !pAppData_Impl->pSimpleResManager )
@@ -661,7 +641,7 @@ void SfxApplication::LeaveAsynchronCall_Impl()
 
 //--------------------------------------------------------------------
 
-FASTBOOL SfxApplication::IsInAsynchronCall_Impl() const
+bool SfxApplication::IsInAsynchronCall_Impl() const
 {
     return pAppData_Impl->nAsynchronCalls > 0;
 }
@@ -718,7 +698,7 @@ SfxObjectShellArr_Impl&     SfxApplication::GetObjectShells_Impl() const
     return *pAppData_Impl->pObjShells;
 }
 
-void SfxApplication::Invalidate( USHORT nId )
+void SfxApplication::Invalidate( sal_uInt16 nId )
 {
     for( SfxViewFrame* pFrame = SfxViewFrame::GetFirst(); pFrame; pFrame = SfxViewFrame::GetNext( *pFrame ) )
         Invalidate_Impl( pFrame->GetBindings(), nId );
@@ -728,17 +708,15 @@ void SfxApplication::Invalidate( USHORT nId )
 #define STRING( x )                         DOSTRING( x )
 
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, BOOL, rtl_uString*);
-typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, sal_Bool, rtl_uString*);
+typedef void* (SAL_CALL *basicide_macro_organizer)(sal_Int16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -756,7 +734,7 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 
 sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
 {
-    sal_Bool result = FALSE;
+    sal_Bool result = sal_False;
 
     ::com::sun::star::uno::Reference
         < ::com::sun::star::lang::XMultiServiceFactory > xSMgr =
@@ -780,7 +758,7 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
 
             if ( xUrl.is() )
             {
-                result = TRUE;
+                result = sal_True;
             }
         }
         catch ( ::com::sun::star::uno::RuntimeException& )
@@ -806,11 +784,11 @@ SfxApplication::ChooseScript()
         uno::Reference< frame::XFrame > xFrame( pFrame ? pFrame->GetFrameInterface() : uno::Reference< frame::XFrame >() );
 
           AbstractScriptSelectorDialog* pDlg =
-            pFact->CreateScriptSelectorDialog( NULL, FALSE, xFrame );
+            pFact->CreateScriptSelectorDialog( NULL, sal_False, xFrame );
 
         OSL_TRACE("done, now exec it");
 
-          USHORT nRet = pDlg->Execute();
+          sal_uInt16 nRet = pDlg->Execute();
 
         OSL_TRACE("has returned");
 
@@ -824,12 +802,10 @@ SfxApplication::ChooseScript()
     return aScriptURL;
 }
 
-void SfxApplication::MacroOrganizer( INT16 nTabId )
+void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -843,3 +819,7 @@ void SfxApplication::MacroOrganizer( INT16 nTabId )
     pSymbol( nTabId );
 }
 
+ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
+{
+    return pMgr->ExecuteMacro( rCode, pArgs, pRet);
+}

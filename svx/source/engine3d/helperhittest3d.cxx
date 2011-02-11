@@ -32,7 +32,7 @@
 #include <basegfx/point/b2dpoint.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/scene3d.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3d.hxx>
 #include <svx/sdr/contact/viewcontactofe3dscene.hxx>

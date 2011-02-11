@@ -37,7 +37,7 @@
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
@@ -112,8 +112,8 @@ void SfxDocumentTemplateDlg::Init()
     if(!pTemplates->IsConstructed())
         pTemplates->Construct();
 
-    const USHORT nCount = pTemplates->GetRegionCount();
-    for(USHORT i = 0; i < nCount; ++i)
+    const sal_uInt16 nCount = pTemplates->GetRegionCount();
+    for(sal_uInt16 i = 0; i < nCount; ++i)
         aRegionLb.InsertEntry(pTemplates->GetFullRegionName(i));
     if(!nCount)
         aRegionLb.InsertEntry(String(SfxResId(STR_STANDARD)));
@@ -144,10 +144,10 @@ IMPL_LINK( SfxDocumentTemplateDlg, OrganizeHdl, Button *, pButton )
     if(RET_OK == nRet)
     {
         // View aktualisieren
-        aRegionLb.SetUpdateMode( FALSE );
+        aRegionLb.SetUpdateMode( sal_False );
         aRegionLb.Clear();
         Init();
-        aRegionLb.SetUpdateMode( TRUE );
+        aRegionLb.SetUpdateMode( sal_True );
         aRegionLb.Invalidate();
         aRegionLb.Update();
         aCancelBt.SetText(String(SfxResId(STR_CLOSE)));
@@ -177,14 +177,14 @@ IMPL_LINK( SfxDocumentTemplateDlg, OkHdl, Control *, pControl )
 
 IMPL_LINK( SfxDocumentTemplateDlg, RegionSelect, ListBox *, pBox )
 {
-    const USHORT nRegion = pBox->GetSelectEntryPos();
-    const USHORT nCount = pTemplates->GetCount(nRegion);
-    aTemplateLb.SetUpdateMode(FALSE);
+    const sal_uInt16 nRegion = pBox->GetSelectEntryPos();
+    const sal_uInt16 nCount = pTemplates->GetCount(nRegion);
+    aTemplateLb.SetUpdateMode(sal_False);
     aTemplateLb.Clear();
-    for(USHORT i = 0; i < nCount; ++i)
+    for(sal_uInt16 i = 0; i < nCount; ++i)
         aTemplateLb.InsertEntry(pTemplates->GetName(nRegion, i));
     aTemplateLb.SelectEntryPos(0);
-    aTemplateLb.SetUpdateMode(TRUE);
+    aTemplateLb.SetUpdateMode(sal_True);
     aTemplateLb.Invalidate();
     aTemplateLb.Update();
     return 0;

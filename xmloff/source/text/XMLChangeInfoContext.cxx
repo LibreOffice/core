@@ -31,7 +31,7 @@
 #include "XMLChangedRegionImportContext.hxx"
 #include "XMLStringBufferImportContext.hxx"
 #include <com/sun/star/uno/Reference.h>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
@@ -69,7 +69,7 @@ void XMLChangeInfoContext::StartElement(const Reference<XAttributeList> &)
 }
 
 SvXMLImportContext* XMLChangeInfoContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList >& xAttrList )
 {

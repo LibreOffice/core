@@ -28,47 +28,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#ifndef _TOOLS_DEBUG_HXX
-//#include <tools/debug.hxx>
-#endif
 #include <com/sun/star/style/ParagraphStyleCategory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/style/XStyle.hpp>
-
-
 #include <xmloff/xmltoken.hxx>
-
-#ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
-//#include <xmloff/xmlprmap.hxx>
-#endif
-#ifndef _XMLOFF_XMLSMSPE_HXX
-#include "xmlnmspe.hxx"
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/families.hxx>
-#endif
-#ifndef _XMLOFF_TXTPRMAP_HXX
-//#include <xmloff/txtprmap.hxx>
-#endif
-#ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
-#endif
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
-#ifndef _XMLOFF_XMLSECTIONEXPORT_HXX
 #include "XMLSectionExport.hxx"
-#endif
 #include "XMLLineNumberingExport.hxx"
 #include "txtexppr.hxx"
-#ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
-#endif
-
-#ifndef _XMLOFF_STYLEEXP_HXX
-//#include <xmloff/styleexp.hxx>
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

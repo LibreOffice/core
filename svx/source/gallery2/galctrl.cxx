@@ -34,9 +34,9 @@
 #include <avmedia/mediaplayer.hxx>
 #include "helpid.hrc"
 #include "galbrws2.hxx"
-#include "galtheme.hxx"
+#include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
-#include "galctrl.hxx"
+#include "svx/galctrl.hxx"
 #include "editeng/AccessibleStringWrap.hxx"
 #include <editeng/svxfont.hxx>
 #include "galobj.hxx"
@@ -126,11 +126,11 @@ void GalleryPreview::DataChanged( const DataChangedEvent& rDCEvt )
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
+sal_Bool GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangle& rResultRect ) const
 {
     const Size  aWinSize( GetOutputSizePixel() );
     Size        aNewSize( LogicToPixel( rGraphic.GetPrefSize(), rGraphic.GetPrefMapMode() ) );
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
@@ -153,7 +153,7 @@ BOOL GalleryPreview::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rectangl
                              ( aWinSize.Height() - aNewSize.Height() ) >> 1 );
 
         rResultRect = Rectangle( aNewPos, aNewSize );
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
@@ -307,7 +307,7 @@ GalleryIconView::GalleryIconView( GalleryBrowser2* pParent, GalleryTheme* pTheme
         DragSourceHelper( this ),
         mpTheme ( pTheme )
 {
-    EnableFullItemMode( FALSE );
+    EnableFullItemMode( sal_False );
 
     SetHelpId( HID_GALLERY_WINDOW );
     InitSettings();
@@ -346,7 +346,7 @@ void GalleryIconView::DataChanged( const DataChangedEvent& rDCEvt )
 
 void GalleryIconView::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    const USHORT nId = rUDEvt.GetItemId();
+    const sal_uInt16 nId = rUDEvt.GetItemId();
 
     if( nId && mpTheme )
     {
@@ -457,7 +457,7 @@ sal_Int8 GalleryIconView::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 void GalleryIconView::StartDrag( sal_Int8, const Point& )
 {
-    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, TRUE );
+    const CommandEvent  aEvt( GetPointerPosPixel(), COMMAND_STARTDRAG, sal_True );
     Region              aRegion;
 
     // call this to initiate dragging for ValueSet
@@ -473,7 +473,7 @@ GalleryListView::GalleryListView( GalleryBrowser2* pParent, GalleryTheme* pTheme
     BrowseBox( pParent, WB_TABSTOP | WB_3DLOOK | WB_BORDER ),
     mpTheme( pTheme ),
     mnCurRow( 0 ),
-    mbInit( FALSE )
+    mbInit( sal_False )
 {
     SetHelpId( HID_GALLERY_WINDOW );
 
@@ -512,15 +512,15 @@ void GalleryListView::DataChanged( const DataChangedEvent& rDCEvt )
 
 // ------------------------------------------------------------------------
 
-BOOL GalleryListView::SeekRow( long nRow )
+sal_Bool GalleryListView::SeekRow( long nRow )
 {
     mnCurRow = nRow;
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------------
 
-String GalleryListView::GetCellText(long _nRow, USHORT nColumnId) const
+String GalleryListView::GetCellText(long _nRow, sal_uInt16 nColumnId) const
 {
     String sRet;
     if( mpTheme && ( _nRow < static_cast< long >( mpTheme->GetObjectCount() ) ) )
@@ -548,7 +548,7 @@ Rectangle GalleryListView::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nC
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<USHORT>( GetColumnId( sal::static_int_cast<USHORT>(_nColumnPos) ) ) ) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<sal_uInt16>( GetColumnId( sal::static_int_cast<sal_uInt16>(_nColumnPos) ) ) ) );
 
         // get the bounds inside the string
         aStringWrap.GetCharacterBounds(nIndex, aRect);
@@ -567,7 +567,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
     if ( SeekRow(_nRow) )
     {
         SvxFont aFont( GetFont() );
-        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<USHORT>(GetColumnId(sal::static_int_cast<USHORT>(_nColumnPos)))) );
+        AccessibleStringWrap aStringWrap( *this, aFont, GetCellText(_nRow, sal::static_int_cast<sal_uInt16>(GetColumnId(sal::static_int_cast<sal_uInt16>(_nColumnPos)))) );
         nRet = aStringWrap.GetIndexAtPoint(_rPoint);
     }
     return nRet;
@@ -575,7 +575,7 @@ sal_Int32 GalleryListView::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColu
 
 // ------------------------------------------------------------------------
 
-void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId ) const
+void GalleryListView::PaintField( OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
     rDev.Push( PUSH_CLIPREGION );
     rDev.IntersectClipRegion( rRect );

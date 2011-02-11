@@ -26,11 +26,12 @@
  ************************************************************************/
 
 #include <basic/sbstar.hxx>
+#include "sbtrace.hxx"
 
-#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 #define RTLNAME( name ) &SbRtl_##name
 
-typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, BOOL bWrite );
+typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, sal_Bool bWrite );
 
 // Properties
 
@@ -271,6 +272,7 @@ extern RTLFUNC(AboutStarBasic);
 extern RTLFUNC(LoadPicture);
 extern RTLFUNC(SavePicture);
 
+extern RTLFUNC(CallByName);
 extern RTLFUNC(CBool); // JSM
 extern RTLFUNC(CByte); // JSM
 extern RTLFUNC(CCur); // JSM
@@ -344,6 +346,10 @@ extern RTLFUNC(CompatibilityMode);
 extern RTLFUNC(CDec);
 
 extern RTLFUNC(Partition); // Fong
+
+#ifdef DBG_TRACE_BASIC
+extern RTLFUNC(TraceCommand);
+#endif
 
 extern double Now_Impl();
 extern void Wait_Impl( bool bDurationBased, SbxArray& rPar );

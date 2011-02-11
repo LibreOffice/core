@@ -65,7 +65,7 @@
 #include <classes/fwkresid.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
-#include <xml/menuconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
 
 using namespace ::com::sun::star::awt;
@@ -130,7 +130,7 @@ struct ExecuteInfo
 GenericToolbarController::GenericToolbarController( const Reference< XMultiServiceFactory >& rServiceManager,
                                                     const Reference< XFrame >&               rFrame,
                                                     ToolBox*                                 pToolbar,
-                                                    USHORT                                   nID,
+                                                    sal_uInt16                                   nID,
                                                     const ::rtl::OUString&                          aCommand ) :
     svt::ToolboxController( rServiceManager, rFrame, aCommand )
     ,   m_pToolbar( pToolbar )
@@ -222,7 +222,7 @@ throw ( RuntimeException )
     {
         m_pToolbar->EnableItem( m_nID, Event.IsEnabled );
 
-        USHORT nItemBits = m_pToolbar->GetItemBits( m_nID );
+        sal_uInt16 nItemBits = m_pToolbar->GetItemBits( m_nID );
         nItemBits &= ~TIB_CHECKABLE;
         TriState eTri = STATE_NOCHECK;
 
@@ -235,7 +235,7 @@ throw ( RuntimeException )
         {
             // Boolean, treat it as checked/unchecked
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
             m_pToolbar->CheckItem( m_nID, bValue );
             if ( bValue )
                 eTri = STATE_CHECK;
@@ -286,14 +286,14 @@ throw ( RuntimeException )
             }
 
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
         }
         else if (( Event.State >>= aItemState ) && !m_bEnumCommand )
         {
             eTri = STATE_DONTKNOW;
             nItemBits |= TIB_CHECKABLE;
             if ( m_bMadeInvisible )
-                m_pToolbar->ShowItem( m_nID, TRUE );
+                m_pToolbar->ShowItem( m_nID, sal_True );
         }
         else if ( Event.State >>= aItemVisibility )
         {
@@ -301,7 +301,7 @@ throw ( RuntimeException )
             m_bMadeInvisible = !aItemVisibility.bVisible;
         }
         else if ( m_bMadeInvisible )
-            m_pToolbar->ShowItem( m_nID, TRUE );
+            m_pToolbar->ShowItem( m_nID, sal_True );
 
         m_pToolbar->SetItemState( m_nID, eTri );
         m_pToolbar->SetItemBits( m_nID, nItemBits );
@@ -327,7 +327,7 @@ IMPL_STATIC_LINK_NOINSTANCE( GenericToolbarController, ExecuteHdl_Impl, ExecuteI
    return 0;
 }
 
-MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, USHORT   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
+MenuToolbarController::MenuToolbarController( const Reference< XMultiServiceFactory >& rServiceManager, const Reference< XFrame >& rFrame, ToolBox* pToolBar, sal_uInt16   nID, const rtl::OUString& aCommand, const rtl::OUString& aModuleIdentifier, const Reference< XIndexAccess >& xMenuDesc ) : GenericToolbarController( rServiceManager, rFrame, pToolBar, nID, aCommand ), m_xMenuDesc( xMenuDesc ), pMenu( NULL ), m_aModuleIdentifier( aModuleIdentifier )
 {
 }
 

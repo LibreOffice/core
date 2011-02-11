@@ -28,9 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "ofaitem.hxx"
+#include "svx/ofaitem.hxx"
 
-OfaPtrItem::OfaPtrItem( USHORT _nWhich, void *_pPtr )
+OfaPtrItem::OfaPtrItem( sal_uInt16 _nWhich, void *_pPtr )
     : SfxPoolItem( _nWhich ), pPtr( _pPtr )
 {
 
@@ -54,7 +54,7 @@ SfxPoolItem* OfaPtrItem::Clone( SfxItemPool * ) const
 /*
 TYPEINIT1_FACTORY(DashListPtrItem, SvxDashListPtrItem, new DashListPtrItem(0));
 
-DashListPtrItem::DashListPtrItem( USHORT nWhich, SvxDashListItem* pPtr )
+DashListPtrItem::DashListPtrItem( sal_uInt16 nWhich, SvxDashListItem* pPtr )
     : OfaPtrItem( nWhich ), pPtr( pPtr )
 {
 }
@@ -74,11 +74,11 @@ SfxPoolItem* DashListPtrItem::Clone( SfxItemPool *pPool ) const
     return new DashListPtrItem( *this );
 }
 
-sal_Bool DashListPtrItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const
+sal_Bool DashListPtrItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const
 {
 }
 
-sal_Bool DashListPtrItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 )
+sal_Bool DashListPtrItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 )
 {
     sal_Int64 nHyper;
     if ( rVal >>= nHyper )

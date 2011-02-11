@@ -38,7 +38,7 @@
 #include <svl/solar.hrc>
 #include <sfx2/docfile.hxx>
 #include <sfx2/app.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 
@@ -129,7 +129,7 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
 // UNX has got problems with 1x1 bitmaps which are transparent (KA 02.11.1998)
 #ifdef UNX
                 const Size  aBmpSize( aBmp.GetSizePixel() );
-                BOOL        bFullTrans = FALSE;
+                sal_Bool        bFullTrans = sal_False;
 
                 if( aBmpSize.Width() == 1 && aBmpSize.Height() == 1 && rGraphic.IsTransparent() )
                 {
@@ -139,7 +139,7 @@ BitmapEx XOutBitmap::CreateQuickDrawBitmapEx( const Graphic& rGraphic, const Out
                     if( pMAcc )
                     {
                         if( pMAcc->GetColor( 0, 0 ) == BitmapColor( Color( COL_WHITE ) ) )
-                            bFullTrans = TRUE;
+                            bFullTrans = sal_True;
 
                         aTrans.ReleaseAccess( pMAcc );
                     }
@@ -207,7 +207,7 @@ void XOutBitmap::DrawTiledBitmapEx( OutputDevice* pOutDev,
     const long      nBottom = aPixRect.Bottom();
     const long      nRight = aPixRect.Right();
     const long      nLeft = nXPos;
-    const BOOL      bNoSize = ( aPixSize == rBmpEx.GetSizePixel() );
+    const sal_Bool      bNoSize = ( aPixSize == rBmpEx.GetSizePixel() );
 
     pOutDev->Push();
     pOutDev->SetMapMode( MapMode() );
@@ -239,14 +239,14 @@ void XOutBitmap::DrawTiledBitmapEx( OutputDevice* pOutDev,
 
 // ------------------------------------------------------------------------
 
-Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr, BOOL bVMirr )
+Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHMirr, sal_Bool bVMirr )
 {
     Animation aNewAnim( rAnimation );
 
     if( bHMirr || bVMirr )
     {
         const Size& rGlobalSize = aNewAnim.GetDisplaySizePixel();
-        ULONG       nMirrorFlags = 0L;
+        sal_uIntPtr     nMirrorFlags = 0L;
 
         if( bHMirr )
             nMirrorFlags |= BMP_MIRROR_HORZ;
@@ -254,7 +254,7 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr,
         if( bVMirr )
             nMirrorFlags |= BMP_MIRROR_VERT;
 
-        for( USHORT i = 0, nCount = aNewAnim.Count(); i < nCount; i++ )
+        for( sal_uInt16 i = 0, nCount = aNewAnim.Count(); i < nCount; i++ )
         {
             AnimationBitmap aAnimBmp( aNewAnim.Get( i ) );
 
@@ -280,7 +280,7 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, BOOL bHMirr,
 
 // ------------------------------------------------------------------------
 
-Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorFlags )
+Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const sal_uIntPtr nMirrorFlags )
 {
     Graphic aRetGraphic;
 
@@ -318,8 +318,8 @@ Graphic XOutBitmap::MirrorGraphic( const Graphic& rGraphic, const ULONG nMirrorF
 
 // ------------------------------------------------------------------------
 
-USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
-                                 const String& rFilterName, const ULONG nFlags,
+sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
+                                 const String& rFilterName, const sal_uIntPtr nFlags,
                                  const Size* pMtfSize_100TH_MM )
 {
     if( rGraphic.GetType() != GRAPHIC_NONE )
@@ -328,8 +328,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         Graphic         aGraphic;
         String          aExt;
         GraphicFilter*  pFilter = GraphicFilter::GetGraphicFilter();
-        USHORT          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
-        BOOL            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
+        sal_uInt16          nErr = GRFILTER_FILTERERROR, nFilter = GRFILTER_FORMAT_NOTFOUND;
+        sal_Bool            bTransparent = rGraphic.IsTransparent(), bAnimated = rGraphic.IsAnimated();
 
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
@@ -370,7 +370,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
                 aURL.setExtension( aExt );
                 rFileName = aURL.GetMainURL( INetURLObject::NO_DECODE );
 
-                SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+                SfxMedium   aMedium( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, sal_True );
                 SvStream*   pOStm = aMedium.GetOutStream();
 
                 if( pOStm && aGfxLink.GetDataSize() && aGfxLink.GetData() )
@@ -387,7 +387,7 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
         if( GRFILTER_OK != nErr )
         {
             String  aFilter( rFilterName );
-            BOOL    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
+            sal_Bool    bWriteTransGrf = ( aFilter.EqualsIgnoreCaseAscii( "transgrf" ) ) ||
                                      ( aFilter.EqualsIgnoreCaseAscii( "gif" ) ) ||
                                      ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
                                      ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
@@ -493,15 +493,15 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 #pragma optimize ( "", off )
 #endif
 
-USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
-                                  GraphicFilter& rFilter, const USHORT nFormat,
+sal_uInt16 XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
+                                  GraphicFilter& rFilter, const sal_uInt16 nFormat,
                                   const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >* pFilterData )
 {
     DBG_ASSERT( rURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::ExportGraphic(...): invalid URL" );
 
-    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, TRUE );
+    SfxMedium   aMedium( rURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_WRITE | STREAM_SHARE_DENYNONE | STREAM_TRUNC, sal_True );
     SvStream*   pOStm = aMedium.GetOutStream();
-    USHORT      nRet = GRFILTER_IOERROR;
+    sal_uInt16      nRet = GRFILTER_IOERROR;
 
     if( pOStm )
     {
@@ -525,11 +525,11 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
 
 // ------------------------------------------------------------------------
 
-Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
+Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
 {
     const Size  aSize( rBmp.GetSizePixel() );
     Bitmap      aRetBmp;
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     if( ( aSize.Width() > 2L ) && ( aSize.Height() > 2L ) )
     {
@@ -548,8 +548,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
                 const long          nHeight = aSize.Height();
                 const long          nHeight2 = nHeight - 2L;
                 const long          lThres2 = (long) cThreshold * cThreshold;
-                const BitmapColor   aWhite = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) );
-                const BitmapColor   aBlack = (BYTE) pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) );
+                const BitmapColor   aWhite = (sal_uInt8) pWriteAcc->GetBestMatchingColor( Color( COL_WHITE ) );
+                const BitmapColor   aBlack = (sal_uInt8) pWriteAcc->GetBestMatchingColor( Color( COL_BLACK ) );
                 long                nSum1;
                 long                nSum2;
                 long                lGray;
@@ -567,18 +567,18 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
                     {
                         nXTmp = nX;
 
-                        nSum1 = -( nSum2 = lGray = (BYTE) pReadAcc->GetPixel( nY, nXTmp++ ) );
-                        nSum2 += ( (long) (BYTE) pReadAcc->GetPixel( nY, nXTmp++ ) ) << 1;
+                        nSum1 = -( nSum2 = lGray = (sal_uInt8) pReadAcc->GetPixel( nY, nXTmp++ ) );
+                        nSum2 += ( (long) (sal_uInt8) pReadAcc->GetPixel( nY, nXTmp++ ) ) << 1;
                         nSum1 += ( lGray = pReadAcc->GetPixel( nY, nXTmp ) );
                         nSum2 += lGray;
 
-                        nSum1 += ( (long) (BYTE) pReadAcc->GetPixel( nY1, nXTmp ) ) << 1;
-                        nSum1 -= ( (long) (BYTE) pReadAcc->GetPixel( nY1, nXTmp -= 2 ) ) << 1;
+                        nSum1 += ( (long) (sal_uInt8) pReadAcc->GetPixel( nY1, nXTmp ) ) << 1;
+                        nSum1 -= ( (long) (sal_uInt8) pReadAcc->GetPixel( nY1, nXTmp -= 2 ) ) << 1;
 
-                        nSum1 += ( lGray = -(long) (BYTE) pReadAcc->GetPixel( nY2, nXTmp++ ) );
+                        nSum1 += ( lGray = -(long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp++ ) );
                         nSum2 += lGray;
-                        nSum2 -= ( (long) (BYTE) pReadAcc->GetPixel( nY2, nXTmp++ ) ) << 1;
-                        nSum1 += ( lGray = (long) (BYTE) pReadAcc->GetPixel( nY2, nXTmp ) );
+                        nSum2 -= ( (long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp++ ) ) << 1;
+                        nSum1 += ( lGray = (long) (sal_uInt8) pReadAcc->GetPixel( nY2, nXTmp ) );
                         nSum2 -= lGray;
 
                         if( ( nSum1 * nSum1 + nSum2 * nSum2 ) < lThres2 )
@@ -588,7 +588,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
                     }
                 }
 
-                bRet = TRUE;
+                bRet = sal_True;
             }
 
             aWorkBmp.ReleaseAccess( pReadAcc );
@@ -612,8 +612,8 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const BYTE cThreshold )
 
 // ------------------------------------------------------------------------
 
-Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
-                                 const BYTE cEdgeDetectThreshold, const Rectangle* pWorkRectPixel )
+Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
+                                 const sal_uInt8 cEdgeDetectThreshold, const Rectangle* pWorkRectPixel )
 {
     Bitmap      aWorkBmp;
     Polygon     aRetPoly;
@@ -653,7 +653,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
             Point*              pPoints1 = NULL;
             Point*              pPoints2 = NULL;
             long                nX, nY;
-            USHORT              nPolyPos = 0;
+            sal_uInt16              nPolyPos = 0;
             const BitmapColor   aBlack = pAcc->GetBestMatchingColor( Color( COL_BLACK ) );
 
             if( nFlags & XOUTBMP_CONTOUR_VERT )
@@ -674,7 +674,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
                             nY = nStartY2;
 
                             // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
-                            while( TRUE )
+                            while( sal_True )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
                                 {
@@ -711,7 +711,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
                             nX = nStartX2;
 
                             // diese Schleife wird immer gebreaked da hier ja min. ein Pixel ist
-                            while( TRUE )
+                            while( sal_True )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
                                 {
@@ -731,13 +731,13 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
                 }
             }
 
-            const USHORT nNewSize1 = nPolyPos << 1;
+            const sal_uInt16 nNewSize1 = nPolyPos << 1;
 
             aRetPoly = Polygon( nPolyPos, pPoints1 );
             aRetPoly.SetSize( nNewSize1 + 1 );
             aRetPoly[ nNewSize1 ] = aRetPoly[ 0 ];
 
-            for( USHORT j = nPolyPos; nPolyPos < nNewSize1; )
+            for( sal_uInt16 j = nPolyPos; nPolyPos < nNewSize1; )
                 aRetPoly[ nPolyPos++ ] = pPoints2[ --j ];
 
             if( ( fFactorX != 0. ) && ( fFactorY != 0. ) )
@@ -755,14 +755,14 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const ULONG nFlags,
 // - DitherBitmap -
 // ----------------
 
-BOOL DitherBitmap( Bitmap& rBitmap )
+sal_Bool DitherBitmap( Bitmap& rBitmap )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( ( rBitmap.GetBitCount() >= 8 ) && ( Application::GetDefaultDevice()->GetColorCount() < 257 ) )
         bRet = rBitmap.Dither( BMP_DITHER_FLOYD );
     else
-        bRet = FALSE;
+        bRet = sal_False;
 
     return bRet;
 }

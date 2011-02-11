@@ -30,7 +30,7 @@
 
 // include ---------------------------------------------------------------
 
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svl/itemset.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/module.hxx>
@@ -42,7 +42,7 @@ FieldUnit GetModuleFieldUnit( const SfxItemSet& rSet )
 {
     FieldUnit eUnit = FUNIT_INCH;
     const SfxPoolItem* pItem = NULL;
-    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, FALSE, &pItem ) )
+    if ( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC, sal_False, &pItem ) )
         eUnit = (FieldUnit)( (const SfxUInt16Item*)pItem )->GetValue();
     else
     {

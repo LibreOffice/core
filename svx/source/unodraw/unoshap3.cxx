@@ -45,7 +45,7 @@
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/lathe3d.hxx>
@@ -324,7 +324,7 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
 }
 
 //----------------------------------------------------------------------
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 
 struct ImpRememberTransAndRect
 {
@@ -394,7 +394,7 @@ bool Svx3DSceneObject::setPropertyValueImpl( const ::rtl::OUString& rName, const
             double fCamFocal =
                 (double)((const SfxUInt32Item&)rSceneSet.Get(SDRATTR_3DSCENE_FOCAL_LENGTH)).GetValue();
 
-            aCam.SetAutoAdjustProjection(FALSE);
+            aCam.SetAutoAdjustProjection(sal_False);
             aCam.SetViewWindow(- fW / 2, - fH / 2, fW, fH);
             basegfx::B3DPoint aLookAt;
             basegfx::B3DPoint aCamPos(0.0, 0.0, fCamPosZ);

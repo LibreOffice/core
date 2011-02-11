@@ -50,7 +50,7 @@
 #endif
 #include <svx/svdview.hxx>
 #include <editeng/colritem.hxx>
-#include "chrtitem.hxx"
+#include "svx/chrtitem.hxx"
 
 #include <svx/extrusionbar.hxx>
 #include "extrusiondepthdialog.hxx"
@@ -578,7 +578,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 nStrResId = RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING;
 
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-            ULONG nCount = rMarkList.GetMarkCount(), i;
+            sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
             for(i=0; i<nCount; i++)
             {
@@ -616,7 +616,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)rReq.GetArgs()->GetItem(SID_ATTR_METRIC))->GetValue();
 
                 ExtrusionDepthDialog aDlg( 0L, fDepth, eUnit );
-                USHORT nRet = aDlg.Execute();
+                sal_uInt16 nRet = aDlg.Execute();
                 if( nRet != 0 )
                 {
                     fDepth = aDlg.getDepth();
@@ -631,7 +631,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 
     if( nSID == SID_EXTRUSION_TOOGLE )
     {
-            static USHORT SidArray[] = {
+            static sal_uInt16 SidArray[] = {
                 SID_EXTRUSION_TILT_DOWN,
                 SID_EXTRUSION_TILT_UP,
                 SID_EXTRUSION_TILT_LEFT,
@@ -656,7 +656,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
 void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sViewPoint( RTL_CONSTASCII_USTRINGPARAM ( "ViewPoint" ) );
@@ -807,7 +807,7 @@ void getExtrusionDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
@@ -863,7 +863,7 @@ void getExtrusionProjectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
@@ -952,7 +952,7 @@ void getExtrusionSurfaceState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
@@ -1004,7 +1004,7 @@ void getExtrusionDepthState( SdrView* pSdrView, SfxItemSet& rSet )
     if( pSdrView->GetModel() )
     {
         FieldUnit eUnit = pSdrView->GetModel()->GetUIUnit();
-        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (USHORT)eUnit ) );
+        rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)eUnit ) );
     }
 
     if( bHasCustomShape )
@@ -1032,7 +1032,7 @@ static bool compare_direction( const Direction3D& d1, const Direction3D& d2 )
 void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sFirstLightDirection( RTL_CONSTASCII_USTRINGPARAM ( "FirstLightDirection" ) );
@@ -1113,7 +1113,7 @@ void getExtrusionLightingDirectionState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sBrightness( RTL_CONSTASCII_USTRINGPARAM ( "Brightness" ) );
@@ -1181,7 +1181,7 @@ void getExtrusionLightingIntensityState( SdrView* pSdrView, SfxItemSet& rSet )
 void getExtrusionColorState( SdrView* pSdrView, SfxItemSet& rSet )
 {
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
 
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
     static const rtl::OUString  sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
@@ -1256,7 +1256,7 @@ bool checkForSelectedCustomShapes( SdrView* pSdrView, bool bOnlyExtruded )
     static const rtl::OUString  sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
 
     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-    ULONG nCount = rMarkList.GetMarkCount(), i;
+    sal_uIntPtr nCount = rMarkList.GetMarkCount(), i;
     bool bFound = false;
 
     for(i=0;(i<nCount) && !bFound ; i++)

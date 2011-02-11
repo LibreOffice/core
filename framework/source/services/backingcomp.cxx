@@ -37,7 +37,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <classes/droptargetlistener.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 #include <targets.h>
 #include <properties.h>
 #include <services.h>
@@ -506,7 +506,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // disable full screen mode of the frame!
     if (pParent->IsFullScreenMode())
     {
-        pParent->ShowFullScreenMode(FALSE);
+        pParent->ShowFullScreenMode(sal_False);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
@@ -625,10 +625,10 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     UI user.
 
     @param  bSuspend
-                If its set to TRUE this controller should be suspended.
-                FALSE will resuspend it.
+                If its set to sal_True this controller should be suspended.
+                sal_False will resuspend it.
 
-    @return TRUE if the request could be finished successfully; FALSE otherwise.
+    @return sal_True if the request could be finished successfully; sal_False otherwise.
  */
 
 sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )

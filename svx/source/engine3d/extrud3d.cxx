@@ -28,10 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/svdpage.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/extrud3d.hxx>
 #include <svx/scene3d.hxx>
 
@@ -116,7 +116,7 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dExtrudeObj::GetObjIdentifier() const
+sal_uInt16 E3dExtrudeObj::GetObjIdentifier() const
 {
     return E3D_EXTRUDEOBJ_ID;
 }
@@ -190,9 +190,9 @@ void E3dExtrudeObj::TakeObjNamePlural(XubString& rName) const
 |*
 \************************************************************************/
 
-BOOL E3dExtrudeObj::IsBreakObjPossible()
+sal_Bool E3dExtrudeObj::IsBreakObjPossible()
 {
-    return TRUE;
+    return sal_True;
 }
 
 SdrAttrObj* E3dExtrudeObj::GetBreakObj()

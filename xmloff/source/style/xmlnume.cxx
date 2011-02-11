@@ -50,11 +50,11 @@
 #include <tools/debug.hxx>
 
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "fonthdl.hxx"
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlnume.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <tools/fontenum.hxx>
@@ -113,9 +113,9 @@ void SvxXMLNumRuleExport::exportLevelStyles( const uno::Reference< ::com::sun::s
     }
 }
 
-void SvxXMLNumRuleExport::exportLevelStyle( INT32 nLevel,
+void SvxXMLNumRuleExport::exportLevelStyle( sal_Int32 nLevel,
                                     const uno::Sequence<beans::PropertyValue>& rProps,
-                                    BOOL bOutline )
+                                    sal_Bool bOutline )
 {
     sal_Int16 eType = NumberingType::CHAR_SPECIAL;
 

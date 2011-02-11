@@ -225,7 +225,7 @@ IMPL_LINK( LicensePage, PageDownHdl, PushButton *, EMPTYARG )
 
 IMPL_LINK( LicensePage, EndReachedHdl, LicenseView *, EMPTYARG )
 {
-    m_bLicenseRead = TRUE;
+    m_bLicenseRead = sal_True;
     updateDialogTravelUI();
     return 0;
 }
@@ -259,20 +259,20 @@ void LicenseView::ScrollDown( ScrollType eScroll )
         pScroll->DoScrollAction( eScroll );
 }
 
-BOOL LicenseView::IsEndReached() const
+sal_Bool LicenseView::IsEndReached() const
 {
-    BOOL bEndReached;
+    sal_Bool bEndReached;
 
     ExtTextView*    pView = GetTextView();
     ExtTextEngine*  pEdit = GetTextEngine();
-    ULONG           nHeight = pEdit->GetTextHeight();
+    sal_uLong           nHeight = pEdit->GetTextHeight();
     Size            aOutSize = pView->GetWindow()->GetOutputSizePixel();
     Point           aBottom( 0, aOutSize.Height() );
 
-    if ( (ULONG) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
-        bEndReached = TRUE;
+    if ( (sal_uLong) pView->GetDocPos( aBottom ).Y() >= nHeight - 1 )
+        bEndReached = sal_True;
     else
-        bEndReached = FALSE;
+        bEndReached = sal_False;
 
     return bEndReached;
 }
@@ -281,8 +281,8 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        BOOL    bLastVal = EndReached();
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_Bool    bLastVal = EndReached();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
 
         if ( nId == TEXT_HINT_PARAINSERTED )
         {
@@ -339,14 +339,13 @@ void MigrationThread::onTerminated()
 
 MigrationPage::MigrationPage(
     svt::OWizardMachine* parent,
-    const ResId& resid,
-    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XThrobber > xThrobber)
+    const ResId& resid, Throbber& i_throbber )
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_MIGRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_MIGRATION_BODY))
     , m_cbMigration(this, WizardResId(CB_MIGRATION))
+    , m_rThrobber(i_throbber)
     , m_bMigrationDone(sal_False)
-    , m_xThrobber(xThrobber)
 {
     FreeResource();
     _setBold(m_ftHead);
@@ -366,9 +365,8 @@ sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason 
         if ( pWizard )
             pWizard->DisableButtonsWhileMigration();
 
-        uno::Reference< awt::XWindow > xWin( m_xThrobber, uno::UNO_QUERY );
-        xWin->setVisible( true );
-        m_xThrobber->start();
+        m_rThrobber.Show();
+        m_rThrobber.start();
         MigrationThread* pMigThread = new MigrationThread();
         pMigThread->create();
 
@@ -377,10 +375,10 @@ sal_Bool MigrationPage::commitPage( svt::WizardTypes::CommitPageReason _eReason 
             Application::Reschedule();
         }
 
-        m_xThrobber->stop();
+        m_rThrobber.stop();
         GetParent()->LeaveWait();
         // Next state will enable buttons - so no EnableButtons necessary!
-        xWin->setVisible( false );
+        m_rThrobber.Hide();
         pMigThread->join();
         delete pMigThread;
         m_bMigrationDone = sal_True;

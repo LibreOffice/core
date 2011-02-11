@@ -37,10 +37,10 @@
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -78,7 +78,7 @@ static SvXMLTokenMapEntry aChildren[] =
 
 
 XFormsModelContext::XFormsModelContext( SvXMLImport& rImport,
-                                        USHORT nPrefix,
+                                        sal_uInt16 nPrefix,
                                         const OUString& rLocalName ) :
     TokenContext( rImport, nPrefix, rLocalName, aAttributes, aChildren ),
     mxModel( lcl_createXFormsModel() )

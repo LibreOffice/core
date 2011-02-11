@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <svx/svdpage.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/extrud3d.hxx>
 #include <svx/lathe3d.hxx>
 #include <svx/polygn3d.hxx>
-#include "objfac3d.hxx"
+#include "svx/objfac3d.hxx"
 #include <svx/svdobj.hxx>
 
 /*************************************************************************
@@ -44,14 +44,14 @@
 |*
 \************************************************************************/
 
-static BOOL bInit = FALSE;
+static sal_Bool bInit = sal_False;
 
 E3dObjFactory::E3dObjFactory()
 {
     if ( !bInit )
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
-        bInit = TRUE;
+        bInit = sal_True;
     }
 }
 

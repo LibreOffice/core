@@ -37,7 +37,7 @@
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/xmlictxt.hxx>
@@ -49,7 +49,7 @@
 #include "StyleMap.hxx"
 #include <xmloff/ProgressBarHelper.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
@@ -228,7 +228,7 @@ typedef SvXMLImportContext *SvXMLImportContextPtr;
 SV_DECL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr, 20, 5 )
 SV_IMPL_PTRARR( SvXMLImportContexts_Impl, SvXMLImportContextPtr )
 
-SvXMLImportContext *SvXMLImport::CreateContext( USHORT nPrefix,
+SvXMLImportContext *SvXMLImport::CreateContext( sal_uInt16 nPrefix,
                                          const OUString& rLocalName,
                                          const uno::Reference< xml::sax::XAttributeList >& )
 {
@@ -655,8 +655,8 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // Process namespace attributes. This must happen before creating the
     // context, because namespace decaration apply to the element name itself.
-    INT16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    for( INT16 i=0; i < nAttrCount; i++ )
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
         if ( rAttrName.equalsAscii("office:version") )
@@ -711,13 +711,13 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     // Get element's namespace and local name.
     OUString aLocalName;
-    USHORT nPrefix =
+    sal_uInt16 nPrefix =
         mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
     // If there are contexts already, call a CreateChildContext at the topmost
     // context. Otherwise, create a default context.
     SvXMLImportContext *pContext;
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     if( nCount > 0 )
     {
         pContext = (*mpContexts)[nCount - 1]->CreateChildContext( nPrefix,
@@ -775,7 +775,7 @@ rName
 )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     DBG_ASSERT( nCount, "SvXMLImport::endElement: no context left" );
     if( nCount > 0 )
     {
@@ -786,7 +786,7 @@ rName
 #ifdef DBG_UTIL
         // Non product only: check if endElement call matches startELement call.
         OUString aLocalName;
-        USHORT nPrefix =
+        sal_uInt16 nPrefix =
             mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
         DBG_ASSERT( pContext->GetPrefix() == nPrefix,
                 "SvXMLImport::endElement: popped context has wrong prefix" );
@@ -816,7 +816,7 @@ rName
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
-    USHORT nCount = mpContexts->Count();
+    sal_uInt16 nCount = mpContexts->Count();
     if( nCount > 0 )
     {
         (*mpContexts)[nCount - 1]->Characters( rChars );

@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "XMLStringBufferImportContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;
@@ -57,7 +57,7 @@ XMLStringBufferImportContext::~XMLStringBufferImportContext()
 }
 
 SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> &)
 {

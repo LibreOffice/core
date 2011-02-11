@@ -29,7 +29,7 @@
 #define SVX_SQLPARSERCLIENT_HXX
 
 #include "svx/dbtoolsclient.hxx"
-#include "ParseContext.hxx"
+#include "svx/ParseContext.hxx"
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 //........................................................................

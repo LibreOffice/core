@@ -71,13 +71,14 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/mimeconfighelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <sfx2/sfxsids.hrc>
 #include <doc.hrc>
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/app.hxx>
@@ -507,7 +508,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sa
     aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
     aSearchRequest[0].Value <<= GetDocServiceName();
 
-    return SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+    return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
 
 //-------------------------------------------------------------------------
@@ -527,7 +528,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         aSearchRequest[1].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
         aSearchRequest[1].Value <<= GetDocServiceName();
 
-        aFilterProps = SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+        aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
     }
     else
     {
@@ -746,7 +747,7 @@ sal_Int8 ModelData_Impl::CheckFilter( const ::rtl::OUString& aFilterName )
         return STATUS_SAVEAS_STANDARDNAME;
     }
     else if ( ( !( nFiltFlags & SFX_FILTER_OWN ) || ( nFiltFlags & SFX_FILTER_ALIEN ) )
-           && !( nFiltFlags & SFX_FILTER_SILENTEXPORT ) && aDefFiltPropsHM.size()
+           && aDefFiltPropsHM.size()
            && ( nDefFiltFlags & SFX_FILTER_EXPORT ) && !( nDefFiltFlags & SFX_FILTER_INTERNAL ))
     {
         // the default filter is acceptable and the old filter is alian one
@@ -978,12 +979,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          NULL );
 
     const SfxPoolItem* pItem = NULL;
-    if ( bPreselectPassword && aDialogParams.GetItemState( SID_PASSWORD, sal_True, &pItem ) != SFX_ITEM_SET )
+    if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, sal_True, &pItem ) != SFX_ITEM_SET )
     {
-        // the file dialog preselects the password checkbox if the provided mediadescriptor has password entry
-        // after dialog execution the password entry will be either removed or replaced with the password
-        // entered by the user
-        aDialogParams.Put( SfxStringItem( SID_PASSWORD, String() ) );
+        // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
+        // after dialog execution the password interaction flag will be either removed or not
+        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, sal_True ) );
     }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
@@ -1590,6 +1590,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
+    OSL_ENSURE( aModelData.GetMediaDescr().find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )
@@ -1646,47 +1647,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     }
 
     return bDialogUsed;
-}
-
-//-------------------------------------------------------------------------
-// static
-uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
-                                                        const uno::Reference< container::XContainerQuery >& xFilterQuery,
-                                                        const uno::Sequence< beans::NamedValue >& aSearchRequest,
-                                                        sal_Int32 nMustFlags,
-                                                        sal_Int32 nDontFlags )
-{
-    uno::Sequence< beans::PropertyValue > aFilterProps;
-    uno::Reference< container::XEnumeration > xFilterEnum =
-                                            xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
-
-    // the first default filter will be taken,
-    // if there is no filter with flag default the first acceptable filter will be taken
-    if ( xFilterEnum.is() )
-    {
-        while ( xFilterEnum->hasMoreElements() )
-        {
-            uno::Sequence< beans::PropertyValue > aProps;
-            if ( xFilterEnum->nextElement() >>= aProps )
-            {
-                ::comphelper::SequenceAsHashMap aPropsHM( aProps );
-                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
-                                                                        (sal_Int32)0 );
-                if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
-                {
-                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
-                    {
-                        aFilterProps = aProps;
-                        break;
-                    }
-                    else if ( !aFilterProps.getLength() )
-                        aFilterProps = aProps;
-                }
-            }
-        }
-    }
-
-    return aFilterProps;
 }
 
 //-------------------------------------------------------------------------

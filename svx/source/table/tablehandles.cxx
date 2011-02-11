@@ -42,7 +42,7 @@
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svx/svdmrkv.hxx>
 #include <svx/svdpagv.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

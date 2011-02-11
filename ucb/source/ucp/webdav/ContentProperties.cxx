@@ -120,14 +120,14 @@ ContentProperties::ContentProperties( const DAVResource& rResource )
 
     std::vector< DAVPropertyValue >::const_iterator it
         = rResource.properties.begin();
-      std::vector< DAVPropertyValue >::const_iterator end
+    std::vector< DAVPropertyValue >::const_iterator end
         = rResource.properties.end();
 
-      while ( it != end )
-      {
+    while ( it != end )
+    {
         addProperty( (*it) );
         ++it;
-      }
+    }
 
     if ( rResource.uri.getStr()[ rResource.uri.getLength() - 1 ]
         == sal_Unicode( '/' ) )
@@ -155,6 +155,13 @@ ContentProperties::ContentProperties( const rtl::OUString & rTitle )
 {
     (*m_xProps)[ rtl::OUString::createFromAscii( "Title" ) ]
         = PropertyValue( uno::makeAny( rTitle ), true );
+}
+
+//=========================================================================
+ContentProperties::ContentProperties()
+: m_xProps( new PropertyValueMap ),
+  m_bTrailingSlash( sal_False )
+{
 }
 
 //=========================================================================
@@ -254,7 +261,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bCreationDate )
             {
-                   propertyNames.push_back( DAVProperties::CREATIONDATE );
+                    propertyNames.push_back( DAVProperties::CREATIONDATE );
                 bCreationDate = sal_True;
             }
         }
@@ -265,7 +272,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bLastModified )
             {
-                   propertyNames.push_back(
+                    propertyNames.push_back(
                     DAVProperties::GETLASTMODIFIED );
                 bLastModified = sal_True;
             }
@@ -277,7 +284,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bContentType )
             {
-                   propertyNames.push_back(
+                    propertyNames.push_back(
                         DAVProperties::GETCONTENTTYPE );
                 bContentType = sal_True;
             }
@@ -289,7 +296,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bContentLength )
             {
-                   propertyNames.push_back(
+                    propertyNames.push_back(
                     DAVProperties::GETCONTENTLENGTH );
                 bContentLength = sal_True;
             }
@@ -307,7 +314,7 @@ void ContentProperties::UCBNamesToDAVNames(
         {
             if ( !bResourceType )
             {
-                   propertyNames.push_back( DAVProperties::RESOURCETYPE );
+                    propertyNames.push_back( DAVProperties::RESOURCETYPE );
                 bResourceType = sal_True;
             }
         }
@@ -436,7 +443,7 @@ void ContentProperties::addProperties(
     const std::vector< DAVPropertyValue > & rProps )
 {
     std::vector< DAVPropertyValue >::const_iterator it  = rProps.begin();
-    std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
+    const std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
 
     while ( it != end )
     {
@@ -570,4 +577,97 @@ void ContentProperties::addProperty( const rtl::OUString & rName,
 
     // Save property.
     (*m_xProps)[ rName ] = PropertyValue( rValue, bIsCaseSensitive );
+}
+
+//=========================================================================
+//=========================================================================
+//
+// CachableContentProperties Implementation.
+//
+//=========================================================================
+//=========================================================================
+
+namespace
+{
+    bool isCachable( rtl::OUString const & rName,
+                     bool isCaseSensitive )
+    {
+        static rtl::OUString aNonCachableProps [] =
+        {
+            DAVProperties::LOCKDISCOVERY,
+
+            DAVProperties::GETETAG,
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ETag" ) ),
+
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DateModified" ) ),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Last-Modified" ) ),
+            DAVProperties::GETLASTMODIFIED,
+
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Size" ) ),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Content-Length" ) ),
+            DAVProperties::GETCONTENTLENGTH,
+
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Date" ) )
+        };
+
+        for ( sal_uInt32 n = 0;
+              n <  ( sizeof( aNonCachableProps )
+                     / sizeof( aNonCachableProps[ 0 ] ) );
+              ++n )
+        {
+            if ( isCaseSensitive )
+            {
+                if ( rName.equals( aNonCachableProps[ n ] ) )
+                    return false;
+            }
+            else
+                if ( rName.equalsIgnoreAsciiCase( aNonCachableProps[ n ] ) )
+                    return false;
+        }
+        return true;
+    }
+
+} // namespace
+
+//=========================================================================
+CachableContentProperties::CachableContentProperties(
+    const ContentProperties & rProps )
+{
+    addProperties( rProps );
+}
+
+//=========================================================================
+void CachableContentProperties::addProperties(
+    const ContentProperties & rProps )
+{
+    const std::auto_ptr< PropertyValueMap > & props = rProps.getProperties();
+
+    PropertyValueMap::const_iterator it = props->begin();
+    const PropertyValueMap::const_iterator end = props->end();
+
+    while ( it != end )
+    {
+        if ( isCachable( (*it).first, (*it).second.isCaseSensitive() ) )
+            m_aProps.addProperty( (*it).first,
+                                  (*it).second.value(),
+                                  (*it).second.isCaseSensitive() );
+
+        ++it;
+    }
+}
+
+//=========================================================================
+void CachableContentProperties::addProperties(
+    const std::vector< DAVPropertyValue > & rProps )
+{
+    std::vector< DAVPropertyValue >::const_iterator it  = rProps.begin();
+    const std::vector< DAVPropertyValue >::const_iterator end = rProps.end();
+
+    while ( it != end )
+    {
+        if ( isCachable( (*it).Name, (*it).IsCaseSensitive ) )
+            m_aProps.addProperty( (*it) );
+
+        ++it;
+     }
 }

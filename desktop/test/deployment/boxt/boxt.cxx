@@ -35,8 +35,6 @@
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/frame/XStatusListener.hpp"
 #include "com/sun/star/lang/XServiceInfo.hpp"
-#include "com/sun/star/lang/XSingleComponentFactory.hpp"
-#include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
@@ -45,7 +43,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "com/sun/star/util/URL.hpp"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implbase3.hxx"
 #include "cppuhelper/implementationentry.hxx"
 #include "cppuhelper/weak.hxx"
@@ -61,21 +58,6 @@ namespace {
 
 namespace css = com::sun::star;
 
-namespace service {
-
-rtl::OUString getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.test.deployment.boxt"));
-}
-
-css::uno::Sequence< rtl::OUString > getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.deployment.boxt"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
-}
-
-}
-
 class Service:
     public cppu::WeakImplHelper3<
         css::lang::XServiceInfo, css::frame::XDispatchProvider,
@@ -83,14 +65,24 @@ class Service:
     private boost::noncopyable
 {
 public:
-    Service() {}
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL static_create(
+        css::uno::Reference< css::uno::XComponentContext > const &)
+        SAL_THROW((css::uno::Exception))
+    { return static_cast< cppu::OWeakObject * >(new Service); }
+
+    static rtl::OUString SAL_CALL static_getImplementationName();
+
+    static css::uno::Sequence< rtl::OUString > SAL_CALL
+    static_getSupportedServiceNames();
 
 private:
+    Service() {}
+
     virtual ~Service() {}
 
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
-    { return service::getImplementationName(); }
+    { return static_getImplementationName(); }
 
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -98,7 +90,7 @@ private:
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
-    { return service::getSupportedServiceNames(); }
+    { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
         css::util::URL const &, rtl::OUString const &, sal_Int32)
@@ -128,6 +120,17 @@ private:
     {}
 };
 
+rtl::OUString Service::static_getImplementationName() {
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.test.deployment.boxt"));
+}
+
+css::uno::Sequence< rtl::OUString > Service::static_getSupportedServiceNames() {
+    rtl::OUString name(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.deployment.boxt"));
+    return css::uno::Sequence< rtl::OUString >(&name, 1);
+}
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
 Service::queryDispatches(
     css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
@@ -155,61 +158,10 @@ void Service::dispatch(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("test")));
 }
 
-class Factory:
-    public cppu::WeakImplHelper1< css::lang::XSingleComponentFactory >,
-    private boost::noncopyable
-{
-public:
-    Factory() {}
-
-private:
-    virtual ~Factory() {}
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithContext(
-        css::uno::Reference< css::uno::XComponentContext > const &)
-        throw (css::uno::Exception, css::uno::RuntimeException)
-    { return static_cast< cppu::OWeakObject * >(new Service); }
-
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL
-    createInstanceWithArgumentsAndContext(
-        css::uno::Sequence< css::uno::Any > const &,
-        css::uno::Reference< css::uno::XComponentContext > const & Context)
-        throw (css::uno::Exception, css::uno::RuntimeException)
-    { return createInstanceWithContext(Context); }
-};
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL dummy(
-    css::uno::Reference< css::uno::XComponentContext > const &)
-    SAL_THROW((css::uno::Exception))
-{
-    OSL_ASSERT(false);
-    return css::uno::Reference< css::uno::XInterface >();
-}
-
-rtl::OUString SAL_CALL getImplementationName() {
-    return rtl::OUString(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.test.deployment.boxt"));
-}
-
-css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() {
-    rtl::OUString name(
-        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.test.deployment.boxt"));
-    return css::uno::Sequence< rtl::OUString >(&name, 1);
-}
-
-css::uno::Reference< css::lang::XSingleComponentFactory > SAL_CALL
-createFactory(
-    cppu::ComponentFactoryFunc, rtl::OUString const &,
-    css::uno::Sequence< rtl::OUString > const &, rtl_ModuleCount *)
-    SAL_THROW(())
-{
-    return new Factory;
-}
-
 static cppu::ImplementationEntry const services[] = {
-    { &dummy, &service::getImplementationName,
-      &service::getSupportedServiceNames, &createFactory, 0, 0 },
+    { &Service::static_create, &Service::static_getImplementationName,
+      &Service::static_getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 }
 };
 

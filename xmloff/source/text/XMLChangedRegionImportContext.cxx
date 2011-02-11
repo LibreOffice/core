@@ -33,7 +33,7 @@
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>

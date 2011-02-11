@@ -58,7 +58,7 @@ SbxVariable* getVBAConstant( const String& rName );
 // 0x8000 - Argv ist belegt
 
 SbxVariable* SbiRuntime::FindElement
-    ( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal, BOOL bStatic )
+    ( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, sal_Bool bLocal, sal_Bool bStatic )
 {
     bool bIsVBAInterOp = SbiRuntime::isVBAEnabled();
     if( bIsVBAInterOp )
@@ -76,7 +76,7 @@ SbxVariable* SbiRuntime::FindElement
     }
     else
     {
-        BOOL bFatalError = FALSE;
+        sal_Bool bFatalError = sal_False;
         SbxDataType t = (SbxDataType) nOp2;
         String aName( pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) ) );
         // Hacky capture of Evaluate [] syntax
@@ -109,8 +109,8 @@ SbxVariable* SbiRuntime::FindElement
         if( !pElem )
         {
             // Die RTL brauchen wir nicht mehr zu durchsuchen!
-            BOOL bSave = rBasic.bNoRtl;
-            rBasic.bNoRtl = TRUE;
+            sal_Bool bSave = rBasic.bNoRtl;
+            rBasic.bNoRtl = sal_True;
             pElem = pObj->Find( aName, SbxCLASS_DONTCARE );
 
             // #110004, #112015: Make private really private
@@ -143,15 +143,19 @@ SbxVariable* SbiRuntime::FindElement
                     else
                         pElem = getVBAConstant( aName );
                 }
-                // #72382 VORSICHT! Liefert jetzt wegen unbekannten
-                // Modulen IMMER ein Ergebnis!
-                SbUnoClass* pUnoClass = findUnoClass( aName );
-                if( pUnoClass )
+
+                if( !pElem )
                 {
-                    pElem = new SbxVariable( t );
-                    SbxValues aRes( SbxOBJECT );
-                    aRes.pObj = pUnoClass;
-                    pElem->SbxVariable::Put( aRes );
+                    // #72382 VORSICHT! Liefert jetzt wegen unbekannten
+                    // Modulen IMMER ein Ergebnis!
+                    SbUnoClass* pUnoClass = findUnoClass( aName );
+                    if( pUnoClass )
+                    {
+                        pElem = new SbxVariable( t );
+                        SbxValues aRes( SbxOBJECT );
+                        aRes.pObj = pUnoClass;
+                        pElem->SbxVariable::Put( aRes );
+                    }
                 }
 
                 // #62939 Wenn eine Uno-Klasse gefunden wurde, muss
@@ -177,14 +181,14 @@ SbxVariable* SbiRuntime::FindElement
                 // Nicht da und nicht im Objekt?
                 // Hat das Ding Parameter, nicht einrichten!
                 if( nOp1 & 0x8000 )
-                    bFatalError = TRUE;
+                    bFatalError = sal_True;
                     // ALT: StarBASIC::FatalError( nNotFound );
 
                 // Sonst, falls keine Parameter sind, anderen Error Code verwenden
                 if( !bLocal || pImg->GetFlag( SBIMG_EXPLICIT ) )
                 {
                     // #39108 Bei explizit und als ELEM immer ein Fatal Error
-                    bFatalError = TRUE;
+                    bFatalError = sal_True;
 
                     // Falls keine Parameter sind, anderen Error Code verwenden
                     if( !( nOp1 & 0x8000 ) && nNotFound == SbERR_PROC_UNDEFINED )
@@ -229,19 +233,19 @@ SbxVariable* SbiRuntime::FindElement
         {
             // Soll der Typ konvertiert werden?
             SbxDataType t2 = pElem->GetType();
-            BOOL bSet = FALSE;
+            sal_Bool bSet = sal_False;
             if( !( pElem->GetFlags() & SBX_FIXED ) )
             {
                 if( t != SbxVARIANT && t != t2 &&
                     t >= SbxINTEGER && t <= SbxSTRING )
-                    pElem->SetType( t ), bSet = TRUE;
+                    pElem->SetType( t ), bSet = sal_True;
             }
             // pElem auf eine Ref zuweisen, um ggf. eine Temp-Var zu loeschen
             SbxVariableRef refTemp = pElem;
 
             // Moegliche Reste vom letzten Aufruf der SbxMethod beseitigen
             // Vorher Schreiben freigeben, damit kein Error gesetzt wird.
-            USHORT nSavFlags = pElem->GetFlags();
+            sal_uInt16 nSavFlags = pElem->GetFlags();
             pElem->SetFlag( SBX_READWRITE | SBX_NO_BROADCAST );
             pElem->SbxValue::Clear();
             pElem->SetFlags( nSavFlags );
@@ -310,8 +314,8 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
         SbxInfo* pInfo = pMeth->GetInfo();
         if( pInfo && refParams )
         {
-            USHORT nParamCount = refParams->Count();
-            USHORT j = 1;
+            sal_uInt16 nParamCount = refParams->Count();
+            sal_uInt16 j = 1;
             const SbxParamInfo* pParam = pInfo->GetParam( j );
             while( pParam )
             {
@@ -338,8 +342,8 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
     if( !pElem )
     {
         // RTL nicht durchsuchen!
-        BOOL bSave = rBasic.bNoRtl;
-        rBasic.bNoRtl = TRUE;
+        sal_Bool bSave = rBasic.bNoRtl;
+        rBasic.bNoRtl = sal_True;
         pElem = pMod->Find( rName, SbxCLASS_DONTCARE );
         rBasic.bNoRtl = bSave;
     }
@@ -351,20 +355,20 @@ SbxBase* SbiRuntime::FindElementExtern( const String& rName )
 // Dabei auch die Argumente umsetzen, falls benannte Parameter
 // verwendet wurden
 
-void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
+void SbiRuntime::SetupArgs( SbxVariable* p, sal_uInt32 nOp1 )
 {
     if( nOp1 & 0x8000 )
     {
         if( !refArgv )
             StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
-        BOOL bHasNamed = FALSE;
-        USHORT i;
-        USHORT nArgCount = refArgv->Count();
+        sal_Bool bHasNamed = sal_False;
+        sal_uInt16 i;
+        sal_uInt16 nArgCount = refArgv->Count();
         for( i = 1 ; i < nArgCount ; i++ )
         {
             if( refArgv->GetAlias( i ).Len() )
             {
-                bHasNamed = TRUE; break;
+                bHasNamed = sal_True; break;
             }
         }
         if( bHasNamed )
@@ -391,7 +395,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                         {
                             bError_ = false;
 
-                            USHORT nCurPar = 1;
+                            sal_uInt16 nCurPar = 1;
                             AutomationNamedArgsSbxArray* pArg =
                                 new AutomationNamedArgsSbxArray( nArgCount );
                             ::rtl::OUString* pNames = pArg->getNames().getArray();
@@ -407,12 +411,40 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                         }
                     }
                 }
+                else if( bVBAEnabled && p->GetType() == SbxOBJECT && (!p->ISA(SbxMethod) || !p->IsBroadcaster()) )
+                {
+                    // Check for default method with named parameters
+                    SbxBaseRef pObj = (SbxBase*)p->GetObject();
+                    if( pObj && pObj->ISA(SbUnoObject) )
+                    {
+                        SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                        Any aAny = pUnoObj->getUnoAny();
+
+                        if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+                        {
+                            Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                            Reference< XDefaultMethod > xDfltMethod( x, UNO_QUERY );
+
+                            rtl::OUString sDefaultMethod;
+                            if ( xDfltMethod.is() )
+                                sDefaultMethod = xDfltMethod->getDefaultMethodName();
+                            if ( sDefaultMethod.getLength() )
+                            {
+                                SbxVariable* meth = pUnoObj->Find( sDefaultMethod, SbxCLASS_METHOD );
+                                if( meth != NULL )
+                                    pInfo = meth->GetInfo();
+                                if( pInfo )
+                                    bError_ = false;
+                            }
+                        }
+                    }
+                }
                 if( bError_ )
                     Error( SbERR_NO_NAMED_ARGS );
             }
             else
             {
-                USHORT nCurPar = 1;
+                sal_uInt16 nCurPar = 1;
                 SbxArray* pArg = new SbxArray;
                 for( i = 1 ; i < nArgCount ; i++ )
                 {
@@ -421,7 +453,7 @@ void SbiRuntime::SetupArgs( SbxVariable* p, UINT32 nOp1 )
                     if( rName.Len() )
                     {
                         // nCurPar wird auf den gefundenen Parameter gesetzt
-                        USHORT j = 1;
+                        sal_uInt16 j = 1;
                         const SbxParamInfo* pParam = pInfo->GetParam( j );
                         while( pParam )
                         {
@@ -489,7 +521,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
             pPar->Put( NULL, 0 );
     }
     // Index-Access bei UnoObjekten beruecksichtigen
-    else if( pElem->GetType() == SbxOBJECT && !pElem->ISA(SbxMethod) )
+    else if( pElem->GetType() == SbxOBJECT && (!pElem->ISA(SbxMethod) || !pElem->IsBroadcaster()) )
     {
         pPar = pElem->GetParameters();
         if ( pPar )
@@ -512,7 +544,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                             // Haben wir Index-Access?
                             if( xIndexAccess.is() )
                             {
-                                UINT32 nParamCount = (UINT32)pPar->Count() - 1;
+                                sal_uInt32 nParamCount = (sal_uInt32)pPar->Count() - 1;
                                 if( nParamCount != 1 )
                                 {
                                     StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -520,7 +552,7 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                                 }
 
                                 // Index holen
-                                INT32 nIndex = pPar->Get( 1 )->GetLong();
+                                sal_Int32 nIndex = pPar->Get( 1 )->GetLong();
                                 Reference< XInterface > xRet;
                                 try
                                 {
@@ -589,6 +621,12 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
                     pCol->CollItem( pPar );
                 }
             }
+            else if( bVBAEnabled )  // !pObj
+            {
+                SbxArray* pParam = pElem->GetParameters();
+                if( pParam != NULL )
+                    Error( SbERR_NO_OBJECT );
+            }
         }
     }
 
@@ -597,13 +635,13 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
 
 // Laden eines Elements aus der Runtime-Library (+StringID+Typ)
 
-void SbiRuntime::StepRTL( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepRTL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, FALSE ) );
+    PushVar( FindElement( rBasic.pRtl, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_False ) );
 }
 
 void
-SbiRuntime::StepFIND_Impl( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nNotFound, BOOL bLocal, BOOL bStatic )
+SbiRuntime::StepFIND_Impl( SbxObject* pObj, sal_uInt32 nOp1, sal_uInt32 nOp2, SbError nNotFound, sal_Bool bLocal, sal_Bool bStatic )
 {
     if( !refLocals )
         refLocals = new SbxArray;
@@ -611,34 +649,34 @@ SbiRuntime::StepFIND_Impl( SbxObject* pObj, UINT32 nOp1, UINT32 nOp2, SbError nN
 }
 // Laden einer lokalen/globalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepFIND( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepFIND( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True );
 }
 
 // Search inside a class module (CM) to enable global search in time
-void SbiRuntime::StepFIND_CM( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepFIND_CM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
 
     SbClassModuleObject* pClassModuleObject = PTR_CAST(SbClassModuleObject,pMod);
     if( pClassModuleObject )
         pMod->SetFlag( SBX_GBLSEARCH );
 
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True );
 
     if( pClassModuleObject )
         pMod->ResetFlag( SBX_GBLSEARCH );
 }
 
-void SbiRuntime::StepFIND_STATIC( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepFIND_STATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, TRUE, TRUE );
+    StepFIND_Impl( pMod, nOp1, nOp2, SbERR_PROC_UNDEFINED, sal_True, sal_True );
 }
 
 // Laden eines Objekt-Elements (+StringID+Typ)
 // Das Objekt liegt auf TOS
 
-void SbiRuntime::StepELEM( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepELEM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     // Liegt auf dem TOS ein Objekt?
     SbxVariableRef pObjVar = PopVar();
@@ -657,7 +695,7 @@ void SbiRuntime::StepELEM( UINT32 nOp1, UINT32 nOp2 )
     if( pObj )
         SaveRef( (SbxVariable*)pObj );
 
-    PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, FALSE ) );
+    PushVar( FindElement( pObj, nOp1, nOp2, SbERR_NO_METHOD, sal_False ) );
 }
 
 // Laden eines Parameters (+Offset+Typ)
@@ -665,17 +703,17 @@ void SbiRuntime::StepELEM( UINT32 nOp1, UINT32 nOp2 )
 // Der Datentyp SbxEMPTY zeigt an, daa kein Parameter angegeben ist.
 // Get( 0 ) darf EMPTY sein
 
-void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepPARAM( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
-    USHORT i = static_cast<USHORT>( nOp1 & 0x7FFF );
+    sal_uInt16 i = static_cast<sal_uInt16>( nOp1 & 0x7FFF );
     SbxDataType t = (SbxDataType) nOp2;
     SbxVariable* p;
 
     // #57915 Missing sauberer loesen
-    USHORT nParamCount = refParams->Count();
+    sal_uInt16 nParamCount = refParams->Count();
     if( i >= nParamCount )
     {
-        INT16 iLoop = i;
+        sal_Int16 iLoop = i;
         while( iLoop >= nParamCount )
         {
             p = new SbxVariable();
@@ -701,7 +739,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
     //if( p->GetType() == SbxEMPTY && ( i ) )
     {
         // Wenn ein Parameter fehlt, kann er OPTIONAL sein
-        BOOL bOpt = FALSE;
+        sal_Bool bOpt = sal_False;
         if( pMeth )
         {
             SbxInfo* pInfo = pMeth->GetInfo();
@@ -711,7 +749,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
                 if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
                 {
                     // Default value?
-                    USHORT nDefaultId = sal::static_int_cast< USHORT >(
+                    sal_uInt16 nDefaultId = sal::static_int_cast< sal_uInt16 >(
                         pParam->nUserData & 0xffff );
                     if( nDefaultId > 0 )
                     {
@@ -720,11 +758,11 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
                         p->PutString( aDefaultStr );
                         refParams->Put( p, i );
                     }
-                    bOpt = TRUE;
+                    bOpt = sal_True;
                 }
             }
         }
-        if( bOpt == FALSE )
+        if( bOpt == sal_False )
             Error( SbERR_NOT_OPTIONAL );
     }
     else if( t != SbxVARIANT && (SbxDataType)(p->GetType() & 0x0FFF ) != t )
@@ -740,7 +778,7 @@ void SbiRuntime::StepPARAM( UINT32 nOp1, UINT32 nOp2 )
 
 // Case-Test (+True-Target+Test-Opcode)
 
-void SbiRuntime::StepCASEIS( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepCASEIS( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( !refCaseStk || !refCaseStk->Count() )
         StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
@@ -756,13 +794,13 @@ void SbiRuntime::StepCASEIS( UINT32 nOp1, UINT32 nOp2 )
 // Aufruf einer DLL-Prozedur (+StringID+Typ)
 // Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
 
-void SbiRuntime::StepCALL( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepCALL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aName = pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) );
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, FALSE );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, sal_False );
     aLibName = String();
     if( nOp1 & 0x8000 )
         PopArgv();
@@ -771,13 +809,13 @@ void SbiRuntime::StepCALL( UINT32 nOp1, UINT32 nOp2 )
 // Aufruf einer DLL-Prozedur nach CDecl (+StringID+Typ)
 // Auch hier zeigt das MSB des StringIDs an, dass Argv belegt ist
 
-void SbiRuntime::StepCALLC( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepCALLC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aName = pImg->GetString( static_cast<short>( nOp1 & 0x7FFF ) );
     SbxArray* pArgs = NULL;
     if( nOp1 & 0x8000 )
         pArgs = refArgv;
-    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, TRUE );
+    DllCall( aName, aLibName, pArgs, (SbxDataType) nOp2, sal_True );
     aLibName = String();
     if( nOp1 & 0x8000 )
         PopArgv();
@@ -786,14 +824,14 @@ void SbiRuntime::StepCALLC( UINT32 nOp1, UINT32 nOp2 )
 
 // Beginn eines Statements (+Line+Col)
 
-void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepSTMNT( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     // Wenn der Expr-Stack am Anfang einen Statements eine Variable enthaelt,
     // hat ein Trottel X als Funktion aufgerufen, obwohl es eine Variable ist!
-    BOOL bFatalExpr = FALSE;
+    sal_Bool bFatalExpr = sal_False;
     String sUnknownMethodName;
     if( nExprLvl > 1 )
-        bFatalExpr = TRUE;
+        bFatalExpr = sal_True;
     else if( nExprLvl )
     {
         SbxVariable* p = refExprStk->Get( 0 );
@@ -801,7 +839,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
          && refLocals.Is() && refLocals->Find( p->GetName(), p->GetClass() ) )
         {
             sUnknownMethodName = p->GetName();
-            bFatalExpr = TRUE;
+            bFatalExpr = sal_True;
         }
     }
     // Der Expr-Stack ist nun nicht mehr notwendig
@@ -821,7 +859,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
         return;
     }
     pStmnt = pCode - 9;
-    USHORT nOld = nLine;
+    sal_uInt16 nOld = nLine;
     nLine = static_cast<short>( nOp1 );
 
     // #29955 & 0xFF, um for-Schleifen-Ebene wegzufiltern
@@ -833,8 +871,8 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     // around the final column of this statement to set
 
     nCol2 = 0xffff;
-    USHORT n1, n2;
-    const BYTE* p = pMod->FindNextStmnt( pCode, n1, n2 );
+    sal_uInt16 n1, n2;
+    const sal_uInt8* p = pMod->FindNextStmnt( pCode, n1, n2 );
     if( p )
     {
         if( n1 == nOp1 )
@@ -848,7 +886,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     if( !bInError )
     {
         // (Bei Sprüngen aus Schleifen tritt hier eine Differenz auf)
-        USHORT nExspectedForLevel = static_cast<USHORT>( nOp2 / 0x100 );
+        sal_uInt16 nExspectedForLevel = static_cast<sal_uInt16>( nOp2 / 0x100 );
         if( pGosubStk )
             nExspectedForLevel = nExspectedForLevel + pGosubStk->nStartForLvl;
 
@@ -864,7 +902,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     //if( nFlags & SbDEBUG_STEPINTO )
     {
         StarBASIC* pStepBasic = GetCurrentBasic( &rBasic );
-        USHORT nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
+        sal_uInt16 nNewFlags = pStepBasic->StepPoint( nLine, nCol1, nCol2 );
 
         // Neuen BreakCallLevel ermitteln
         pInst->CalcBreakCallLevel( nNewFlags );
@@ -873,10 +911,10 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
     // Breakpoints nur bei STMNT-Befehlen in neuer Zeile!
     else if( ( nOp1 != nOld )
         && ( nFlags & SbDEBUG_BREAK )
-        && pMod->IsBP( static_cast<USHORT>( nOp1 ) ) )
+        && pMod->IsBP( static_cast<sal_uInt16>( nOp1 ) ) )
     {
         StarBASIC* pBreakBasic = GetCurrentBasic( &rBasic );
-        USHORT nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
+        sal_uInt16 nNewFlags = pBreakBasic->BreakPoint( nLine, nCol1, nCol2 );
 
         // Neuen BreakCallLevel ermitteln
         pInst->CalcBreakCallLevel( nNewFlags );
@@ -891,7 +929,7 @@ void SbiRuntime::StepSTMNT( UINT32 nOp1, UINT32 nOp2 )
 //        Kanalnummer
 //        Dateiname
 
-void SbiRuntime::StepOPEN( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepOPEN( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     SbxVariableRef pName = PopVar();
     SbxVariableRef pChan = PopVar();
@@ -906,7 +944,7 @@ void SbiRuntime::StepOPEN( UINT32 nOp1, UINT32 nOp2 )
 
 // Objekt kreieren (+StringID+StringID)
 
-void SbiRuntime::StepCREATE( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
     SbxObject *pObj = SbxBase::CreateObject( aClass );
@@ -924,12 +962,12 @@ void SbiRuntime::StepCREATE( UINT32 nOp1, UINT32 nOp2 )
     }
 }
 
-void SbiRuntime::StepDCREATE( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepDCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     StepDCREATE_IMPL( nOp1, nOp2 );
 }
 
-void SbiRuntime::StepDCREATE_REDIMP( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepDCREATE_REDIMP( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     StepDCREATE_IMPL( nOp1, nOp2 );
 }
@@ -956,7 +994,7 @@ void implCopyDimArray_DCREATE( SbxDimArray* pNewArray, SbxDimArray* pOldArray, s
 }
 
 // #56204 Objekt-Array kreieren (+StringID+StringID), DCREATE == Dim-Create
-void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepDCREATE_IMPL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     SbxVariableRef refVar = PopVar();
 
@@ -978,11 +1016,11 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
 
         // Dimensionen auswerten
         short nDims = pArray->GetDims();
-        INT32 nTotalSize = 0;
+        sal_Int32 nTotalSize = 0;
 
         // es muss ein eindimensionales Array sein
-        INT32 nLower, nUpper, nSize;
-        INT32 i;
+        sal_Int32 nLower, nUpper, nSize;
+        sal_Int32 i;
         for( i = 0 ; i < nDims ; i++ )
         {
             pArray->GetDim32( i+1, nLower, nUpper );
@@ -1020,7 +1058,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
         short nDimsNew = pArray->GetDims();
         short nDimsOld = pOldArray->GetDims();
         short nDims = nDimsNew;
-        BOOL bRangeError = FALSE;
+        sal_Bool bRangeError = sal_False;
 
         // Store dims to use them for copying later
         sal_Int32* pLowerBounds = new sal_Int32[nDims];
@@ -1028,7 +1066,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
         sal_Int32* pActualIndices = new sal_Int32[nDims];
         if( nDimsOld != nDimsNew )
         {
-            bRangeError = TRUE;
+            bRangeError = sal_True;
         }
         else
         {
@@ -1071,7 +1109,7 @@ void SbiRuntime::StepDCREATE_IMPL( UINT32 nOp1, UINT32 nOp2 )
 
 SbxObject* createUserTypeImpl( const String& rClassName );  // sb.cxx
 
-void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepTCREATE( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     String aClass( pImg->GetString( static_cast<short>( nOp2 ) ) );
@@ -1085,17 +1123,29 @@ void SbiRuntime::StepTCREATE( UINT32 nOp1, UINT32 nOp2 )
     PushVar( pNew );
 }
 
-void SbiRuntime::implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 )
+void SbiRuntime::implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, sal_uInt32 nOp2 )
 {
-    USHORT nCount = static_cast<USHORT>( nOp2 >> 17 );      // len = all bits above 0x10000
-    String aStr;
-    aStr.Fill( nCount, 0 );
-    pStrVar->PutString( aStr );
+    bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
+    if( bWithEvents )
+        pVar->SetFlag( SBX_WITH_EVENTS );
+
+    bool bDimAsNew = ((nOp2 & SBX_TYPE_DIM_AS_NEW_FLAG) != 0);
+    if( bDimAsNew )
+        pVar->SetFlag( SBX_DIM_AS_NEW );
+
+    bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
+    if( bFixedString )
+    {
+        sal_uInt16 nCount = static_cast<sal_uInt16>( nOp2 >> 17 );      // len = all bits above 0x10000
+        String aStr;
+        aStr.Fill( nCount, 0 );
+        pVar->PutString( aStr );
+    }
 }
 
 // Einrichten einer lokalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepLOCAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( !refLocals.Is() )
         refLocals = new SbxArray;
@@ -1105,23 +1155,18 @@ void SbiRuntime::StepLOCAL( UINT32 nOp1, UINT32 nOp2 )
         SbxDataType t = (SbxDataType)(nOp2 & 0xffff);
         SbxVariable* p = new SbxVariable( t );
         p->SetName( aName );
-        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
-        if( bWithEvents )
-            p->SetFlag( SBX_WITH_EVENTS );
-        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
-        if( bFixedString )
-            implCreateFixedString( p, nOp2 );
+        implHandleSbxFlags( p, t, nOp2 );
         refLocals->Put( p, refLocals->Count() );
     }
 }
 
 // Einrichten einer modulglobalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassModule )
+void SbiRuntime::StepPUBLIC_Impl( sal_uInt32 nOp1, sal_uInt32 nOp2, bool bUsedForClassModule )
 {
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType)(SbxDataType)(nOp2 & 0xffff);;
-    BOOL bFlag = pMod->IsSet( SBX_NO_MODIFY );
+    sal_Bool bFlag = pMod->IsSet( SBX_NO_MODIFY );
     pMod->SetFlag( SBX_NO_MODIFY );
     SbxVariableRef p = pMod->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
@@ -1137,21 +1182,16 @@ void SbiRuntime::StepPUBLIC_Impl( UINT32 nOp1, UINT32 nOp2, bool bUsedForClassMo
         // AB: 2.7.1996: HACK wegen 'Referenz kann nicht gesichert werden'
         pProp->SetFlag( SBX_NO_MODIFY);
 
-        bool bWithEvents = ((t & 0xff) == SbxOBJECT && (nOp2 & SBX_TYPE_WITH_EVENTS_FLAG) != 0);
-        if( bWithEvents )
-            pProp->SetFlag( SBX_WITH_EVENTS );
-        bool bFixedString = ((t & 0xff) == SbxSTRING && (nOp2 & SBX_FIXED_LEN_STRING_FLAG) != 0);
-        if( bFixedString )
-            implCreateFixedString( p, nOp2 );
+        implHandleSbxFlags( pProp, t, nOp2 );
     }
 }
 
-void SbiRuntime::StepPUBLIC( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepPUBLIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     StepPUBLIC_Impl( nOp1, nOp2, false );
 }
 
-void SbiRuntime::StepPUBLIC_P( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepPUBLIC_P( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     // Creates module variable that isn't reinitialised when
     // between invocations ( for VBASupport & document basic only )
@@ -1164,7 +1204,7 @@ void SbiRuntime::StepPUBLIC_P( UINT32 nOp1, UINT32 nOp2 )
 
 // Einrichten einer globalen Variablen (+StringID+Typ)
 
-void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepGLOBAL( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( pImg->GetFlag( SBIMG_CLASSMODULE ) )
         StepPUBLIC_Impl( nOp1, nOp2, true );
@@ -1182,7 +1222,7 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
         pMod->AddVarName( aName );
     }
 
-    BOOL bFlag = pStorage->IsSet( SBX_NO_MODIFY );
+    sal_Bool bFlag = pStorage->IsSet( SBX_NO_MODIFY );
     rBasic.SetFlag( SBX_NO_MODIFY );
     SbxVariableRef p = pStorage->Find( aName, SbxCLASS_PROPERTY );
     if( p.Is() )
@@ -1202,7 +1242,7 @@ void SbiRuntime::StepGLOBAL( UINT32 nOp1, UINT32 nOp2 )
 // Creates global variable that isn't reinitialised when
 // basic is restarted, P=PERSIST (+StringID+Typ)
 
-void SbiRuntime::StepGLOBAL_P( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepGLOBAL_P( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( pMod->pImage->bFirstInit )
     {
@@ -1214,7 +1254,7 @@ void SbiRuntime::StepGLOBAL_P( UINT32 nOp1, UINT32 nOp2 )
 // Searches for global variable, behavior depends on the fact
 // if the variable is initialised for the first time
 
-void SbiRuntime::StepFIND_G( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepFIND_G( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     if( pMod->pImage->bFirstInit )
     {
@@ -1252,7 +1292,7 @@ SbxVariable* SbiRuntime::StepSTATIC_Impl( String& aName, SbxDataType& t )
     return p;
 }
 // Einrichten einer statischen Variablen (+StringID+Typ)
-void SbiRuntime::StepSTATIC( UINT32 nOp1, UINT32 nOp2 )
+void SbiRuntime::StepSTATIC( sal_uInt32 nOp1, sal_uInt32 nOp2 )
 {
     String aName( pImg->GetString( static_cast<short>( nOp1 ) ) );
     SbxDataType t = (SbxDataType) nOp2;

@@ -256,17 +256,16 @@ namespace connectivity
 
             virtual double getValue(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _rxVariant,
-                const ::com::sun::star::util::Date& rNullDate,
-                sal_Int16 nKeyType) const = 0;
+                const ::com::sun::star::util::Date& rNullDate ) const = 0;
 
-            virtual ::rtl::OUString getValue(
+            virtual ::rtl::OUString getFormattedValue(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn >& _rxColumn,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxFormatter,
                 const ::com::sun::star::util::Date& _rNullDate,
                 sal_Int32 _nKey,
                 sal_Int16 _nKeyType) const = 0;
 
-            virtual ::rtl::OUString getValue(
+            virtual ::rtl::OUString getFormattedValue(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& _rxFormatter,
                 const ::com::sun::star::lang::Locale& _rLocale,

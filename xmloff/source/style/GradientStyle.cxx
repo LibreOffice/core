@@ -27,12 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
-#include "GradientStyle.hxx"
+#include "xmloff/GradientStyle.hxx"
 #include <com/sun/star/awt/Gradient.hpp>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>

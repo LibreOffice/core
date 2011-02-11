@@ -31,7 +31,7 @@
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #ifndef _XMLOFF_FAMILIES_HXX
@@ -104,6 +104,24 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     Reference< XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
+                                            // SJ: #i114750#
+    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct odf fo:wrap-option default
+    sal_Int32 nUPD( 0 );
+    sal_Int32 nBuild( 0 );
+    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+    if ( bBuildIdFound && (
+        ((nUPD >= 600) &&  (nUPD < 700))
+        ||
+        ((nUPD == 300) && (nBuild <= 9535))
+        ||
+        ((nUPD > 300) && (nUPD <= 330))
+    ) )
+        bWordWrapDefault = sal_False;
+
+    const OUString sTextWordWrap( RTL_CONSTASCII_USTRINGPARAM( "TextWordWrap" ) );
+    Reference< XPropertySetInfo > xInfo( xDefaults->getPropertySetInfo() );
+    if ( xInfo->hasPropertyByName( sTextWordWrap ) )
+        xDefaults->setPropertyValue( sTextWordWrap, Any( bWordWrapDefault ) );
 
     FillPropertySet( xDefaults );
 }

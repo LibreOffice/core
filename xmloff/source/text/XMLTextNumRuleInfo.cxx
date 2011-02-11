@@ -36,7 +36,7 @@
 #include <com/sun/star/container/XNamed.hpp>
 #include "XMLTextNumRuleInfo.hxx"
 // --> OD 2008-04-25 #refactorlists#
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 // <--
 
 using ::rtl::OUString;

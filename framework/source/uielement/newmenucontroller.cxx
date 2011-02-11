@@ -38,9 +38,9 @@
 #include <classes/resource.hrc>
 #endif
 #include <classes/fwkresid.hxx>
-#include <classes/bmkmenu.hxx>
-#include <helper/imageproducer.hxx>
-#include <xml/menuconfiguration.hxx>
+#include <framework/bmkmenu.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/menuconfiguration.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -97,13 +97,13 @@ DEFINE_INIT_SERVICE                     (   NewMenuController, {} )
 
 void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast )
 {
-    USHORT nItemCount = pPopupMenu->GetItemCount();
+    sal_uInt16 nItemCount = pPopupMenu->GetItemCount();
     Image               aImage;
     Reference< XFrame > xFrame( m_xFrame );
 
-    for ( USHORT i = 0; i < nItemCount; i++ )
+    for ( sal_uInt16 i = 0; i < nItemCount; i++ )
     {
-        USHORT nItemId = pPopupMenu->GetItemId( sal::static_int_cast<USHORT>( i ));
+        sal_uInt16 nItemId = pPopupMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ));
         if ( nItemId != 0 )
         {
             if ( bSetImages )
@@ -117,7 +117,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    aImage = GetImageFromURL( xFrame, aImageId, FALSE, bHiContrast );
+                    aImage = GetImageFromURL( xFrame, aImageId, sal_False, bHiContrast );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -129,7 +129,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
                 {
                     String aCmd( pPopupMenu->GetItemCommand( nItemId ) );
                     if ( aCmd.Len() )
-                        aImage = GetImageFromURL( xFrame, aCmd, FALSE, bHiContrast );
+                        aImage = GetImageFromURL( xFrame, aCmd, sal_False, bHiContrast );
 
                     if ( !!aImage )
                         pPopupMenu->SetItemImage( nItemId, aImage );
@@ -143,8 +143,8 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
 void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode )
 {
-    USHORT        nCount( pPopupMenu->GetItemCount() );
-    USHORT        nId( 0 );
+    sal_uInt16        nCount( pPopupMenu->GetItemCount() );
+    sal_uInt16        nId( 0 );
     sal_Bool      bFound( sal_False );
     rtl::OUString aCommand;
 
@@ -154,7 +154,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
 
         for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
         {
-            nId = pPopupMenu->GetItemId( USHORT( i ));
+            nId = pPopupMenu->GetItemId( sal_uInt16( i ));
             if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
             {
                 aCommand = pPopupMenu->GetItemCommand( nId );
@@ -176,7 +176,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
         {
             for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
             {
-                nId = pPopupMenu->GetItemId( USHORT( i ));
+                nId = pPopupMenu->GetItemId( sal_uInt16( i ));
                 if ( nId != 0 && pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR )
                 {
                     aCommand = pPopupMenu->GetItemCommand( nId );
@@ -255,7 +255,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         std::vector< sal_uInt32 >       aIds;
         for ( sal_uInt32 i = 0; i < nItemCount; i++ )
         {
-            USHORT nId( pPopupMenu->GetItemId( USHORT( i )));
+            sal_uInt16 nId( pPopupMenu->GetItemId( sal_uInt16( i )));
             if ( nId & ( pPopupMenu->GetItemType( nId ) != MENUITEM_SEPARATOR ))
             {
                 aIds.push_back( nId );
@@ -291,7 +291,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
         const sal_uInt32 nCount2 = aIds.size();
         for ( sal_uInt32 i = 0; i < nCount2; i++ )
-            pPopupMenu->SetAccelKey( USHORT( aIds[i] ), aMenuShortCuts[i] );
+            pPopupMenu->SetAccelKey( sal_uInt16( aIds[i] ), aMenuShortCuts[i] );
 
         // Special handling for "New" menu short-cut should be set at the
         // document which will be opened using it.
@@ -371,9 +371,9 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 
         // retrieve additional parameters from bookmark menu and
         // store it in a hash_map.
-        for ( USHORT i = 0; i < pSubMenu->GetItemCount(); i++ )
+        for ( sal_uInt16 i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
-            USHORT nItemId = pSubMenu->GetItemId( sal::static_int_cast<USHORT>( i ) );
+            sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );
             if (( nItemId != 0 ) &&
                 ( pSubMenu->GetItemType( nItemId ) != MENUITEM_SEPARATOR ))
             {

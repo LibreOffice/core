@@ -36,7 +36,7 @@
 #endif
 #include <xmloff/nmspmap.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;
@@ -470,7 +470,7 @@ sal_uInt16 SvXMLNamespaceMap::GetKeyByAttrName( const OUString& rAttrName,
                                             OUString *pPrefix,
                                             OUString *pLocalName,
                                             OUString *pNamespace,
-                                            USHORT /*nIdxGuess*/ ) const
+                                            sal_uInt16 /*nIdxGuess*/ ) const
 {
     return _GetKeyByAttrName ( rAttrName, pPrefix, pLocalName, pNamespace );
 }

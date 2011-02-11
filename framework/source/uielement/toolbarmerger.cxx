@@ -30,7 +30,7 @@
 
 #include <uielement/toolbarmerger.hxx>
 #include <uielement/generictoolbarcontroller.hxx>
-#include <helper/imageproducer.hxx>
+#include <framework/imageproducer.hxx>
 
 #include <svtools/miscopt.hxx>
 
@@ -86,7 +86,7 @@ static const char TOOLBARCONTROLLER_TOGGLEDDBTN[]         = "ToggleDropdownButto
 static const sal_uInt32 TOOLBARCONTROLLER_TOGGLEDDBTN_LEN = 20;
 
 static const char   TOOLBOXITEM_SEPARATOR_STR[]   = "private:separator";
-static const USHORT TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
+static const sal_uInt16 TOOLBOXITEM_SEPARATOR_STR_LEN = sizeof( TOOLBOXITEM_SEPARATOR_STR )-1;
 
 using namespace ::com::sun::star;
 

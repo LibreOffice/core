@@ -36,7 +36,7 @@
 #include "formcontrolling.hxx"
 #include "fmprop.hrc"
 #include "svx/dialmgr.hxx"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/fmtools.hxx"
 #include "fmurl.hxx"
@@ -81,7 +81,7 @@
 #include <comphelper/property.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/uno3.hxx>
-#include <comphelper/scopeguard.hxx>
+#include <comphelper/flagguard.hxx>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <toolkit/controls/unocontrol.hxx>

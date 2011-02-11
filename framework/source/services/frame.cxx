@@ -42,11 +42,11 @@
 #include <loadenv/loadenv.hxx>
 #include <helper/oframes.hxx>
 #include <helper/statusindicatorfactory.hxx>
-#include <helper/titlehelper.hxx>
+#include <framework/titlehelper.hxx>
 #include <classes/droptargetlistener.hxx>
 #include <classes/taskcreator.hxx>
 #include <loadenv/targethelper.hxx>
-#include <classes/framelistanalyzer.hxx>
+#include <framework/framelistanalyzer.hxx>
 #include <helper/dockingareadefaultacceptor.hxx>
 #include <dispatch/dispatchinformationprovider.hxx>
 #include <threadhelp/transactionguard.hxx>
@@ -280,7 +280,7 @@ Frame::Frame( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFac
         ,   PropertySetHelper           ( xFactory,
                                           &m_aLock,
                                           &m_aTransactionManager,
-                                          sal_False) // FALSE => dont release shared mutex on calling us!
+                                          sal_False) // sal_False => dont release shared mutex on calling us!
         ,   ::cppu::OWeakObject         (                                                   )
         //  init member
         ,   m_xFactory                  ( xFactory                                          )

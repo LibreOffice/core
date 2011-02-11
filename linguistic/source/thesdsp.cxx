@@ -38,7 +38,7 @@
 #include <osl/mutex.hxx>
 
 #include "thesdsp.hxx"
-#include "lngprops.hxx"
+#include "linguistic/lngprops.hxx"
 
 using namespace utl;
 using namespace osl;
@@ -52,15 +52,15 @@ using namespace linguistic;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static BOOL SvcListHasLanguage(
+static sal_Bool SvcListHasLanguage(
         const Sequence< Reference< XThesaurus > > &rRefs,
         const Locale &rLocale )
 {
-    BOOL bHasLanguage = FALSE;
+    sal_Bool bHasLanguage = sal_False;
 
     const Reference< XThesaurus > *pRef = rRefs.getConstArray();
-    INT32 nLen = rRefs.getLength();
-    for (INT32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
+    sal_Int32 nLen = rRefs.getLength();
+    for (sal_Int32 k = 0;  k < nLen  &&  !bHasLanguage;  ++k)
     {
         if (pRef[k].is())
             bHasLanguage = pRef[k]->hasLocale( rLocale );
@@ -128,7 +128,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
 
     Sequence< Reference< XMeaning > >   aMeanings;
 
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
     if (nLanguage == LANGUAGE_NONE  || !rTerm.getLength())
         return aMeanings;
 
@@ -150,13 +150,13 @@ Sequence< Reference< XMeaning > > SAL_CALL
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
 
-        INT32 nLen = pEntry->aSvcRefs.getLength();
+        sal_Int32 nLen = pEntry->aSvcRefs.getLength();
         DBG_ASSERT( nLen == pEntry->aSvcImplNames.getLength(),
                 "lng : sequence length mismatch");
         DBG_ASSERT( pEntry->nLastTriedSvcIndex < nLen,
                 "lng : index out of range");
 
-        INT32 i = 0;
+        sal_Int32 i = 0;
 
         // try already instantiated services first
         {
@@ -203,7 +203,7 @@ Sequence< Reference< XMeaning > > SAL_CALL
                     if (xThes.is()  &&  xThes->hasLocale( rLocale ))
                         aMeanings = xThes->queryMeanings( aChkWord, rLocale, rProperties );
 
-                    pEntry->nLastTriedSvcIndex = (INT16) i;
+                    pEntry->nLastTriedSvcIndex = (sal_Int16) i;
                     ++i;
                 }
 
@@ -227,9 +227,9 @@ void ThesaurusDispatcher::SetServiceList( const Locale &rLocale,
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
 
-    INT32 nLen = rSvcImplNames.getLength();
+    sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
         // remove entry
         aSvcMap.erase( nLanguage );
@@ -261,7 +261,7 @@ Sequence< OUString >
     Sequence< OUString > aRes;
 
     // search for entry with that language and use data from that
-    INT16 nLanguage = LocaleToLanguage( rLocale );
+    sal_Int16 nLanguage = LocaleToLanguage( rLocale );
     ThesaurusDispatcher             *pThis = (ThesaurusDispatcher *) this;
     const ThesSvcByLangMap_t::iterator  aIt( pThis->aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Thes       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

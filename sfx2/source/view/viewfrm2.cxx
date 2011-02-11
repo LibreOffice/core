@@ -30,7 +30,7 @@
 
 #include "impviewframe.hxx"
 #include "statcach.hxx"
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "workwin.hxx"
 
 #include "sfx2/app.hxx"
@@ -278,10 +278,10 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
     {
         case SID_SHOWPOPUPS :
         {
-            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, FALSE);
-            BOOL bShow = pShowItem ? pShowItem->GetValue() : TRUE;
-            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, FALSE);
-            USHORT nId = pIdItem ? pIdItem->GetValue() : 0;
+            SFX_REQUEST_ARG(rReq, pShowItem, SfxBoolItem, SID_SHOWPOPUPS, sal_False);
+            sal_Bool bShow = pShowItem ? pShowItem->GetValue() : sal_True;
+            SFX_REQUEST_ARG(rReq, pIdItem, SfxUInt16Item, SID_CONFIGITEMID, sal_False);
+            sal_uInt16 nId = pIdItem ? pIdItem->GetValue() : 0;
 
             // ausfuehren
             SfxWorkWindow *pWorkWin = GetFrame().GetWorkWindow_Impl();
@@ -289,7 +289,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
             {
                 // Zuerst die Floats auch anzeigbar machen
                 pWorkWin->MakeChildsVisible_Impl( bShow );
-                GetDispatcher()->Update_Impl( TRUE );
+                GetDispatcher()->Update_Impl( sal_True );
 
                 // Dann anzeigen
                 GetBindings().HidePopups( !bShow );
@@ -304,7 +304,7 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
                     pBind = pBind->GetSubBindings_Impl();
                 }
 
-                pWorkWin->HidePopups_Impl( !bShow, TRUE, nId );
+                pWorkWin->HidePopups_Impl( !bShow, sal_True, nId );
                 pWorkWin->MakeChildsVisible_Impl( bShow );
             }
 
@@ -315,14 +315,14 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
         case SID_ACTIVATE:
         {
-            MakeActive_Impl( TRUE );
+            MakeActive_Impl( sal_True );
             rReq.SetReturnValue( SfxObjectItem( 0, this ) );
             break;
         }
 
         case SID_NEWDOCDIRECT :
         {
-            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, FALSE);
+            SFX_REQUEST_ARG( rReq, pFactoryItem, SfxStringItem, SID_NEWDOCDIRECT, sal_False);
             String aFactName;
             if ( pFactoryItem )
                 aFactName = pFactoryItem->GetValue();
@@ -366,11 +366,11 @@ void SfxViewFrame::Exec_Impl(SfxRequest &rReq )
 
                 // Doc braucht nur gefragt zu werden, wenn keine weitere View
                 sal_Bool bClosed = sal_False;
-                sal_Bool bUI = TRUE;
+                sal_Bool bUI = sal_True;
                 if ( ( bOther || pDocSh->PrepareClose( bUI ) ) )
                 {
                     if ( !bOther )
-                        pDocSh->SetModified( FALSE );
+                        pDocSh->SetModified( sal_False );
                     rReq.Done(); // unbedingt vor Close() rufen!
                     bClosed = sal_False;
                     try
@@ -440,7 +440,7 @@ void SfxViewFrame::GetState_Impl( SfxItemSet &rSet )
                 {
                     uno::Any aAny;
                     aAny <<= GetViewShell()->GetVerbs();
-                    rSet.Put( SfxUnoAnyItem( USHORT( SID_OBJECT ), aAny ) );
+                    rSet.Put( SfxUnoAnyItem( sal_uInt16( SID_OBJECT ), aAny ) );
                 }
                 else
                     rSet.DisableItem( SID_OBJECT );

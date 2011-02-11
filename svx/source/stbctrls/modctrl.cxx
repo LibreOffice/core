@@ -40,25 +40,25 @@
 
 #include <svx/dialogs.hrc>
 
-#include "modctrl.hxx"
+#include "svx/modctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxModifyControl, SfxBoolItem);
 
 // class SvxModifyControl ------------------------------------------------
 
-SvxModifyControl::SvxModifyControl( USHORT _nSlotId,
-                                    USHORT _nId,
+SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId,
+                                    sal_uInt16 _nId,
                                     StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
-    bState( TRUE )
+    bState( sal_True )
 {
 }
 
 // -----------------------------------------------------------------------
 
-void SvxModifyControl::StateChanged( USHORT, SfxItemState eState,
+void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
 {
     if ( SFX_ITEM_AVAILABLE != eState )
@@ -90,7 +90,7 @@ void SvxModifyControl::DrawItemText_Impl()
     GetStatusBar().SetItemText( GetId(), sMode );
 }
 
-ULONG SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxModifyControl::GetDefItemWidth(const StatusBar& rStb)
 {
     return rStb.GetTextWidth(String::CreateFromAscii("XX"));
 }

@@ -40,7 +40,7 @@
 
 #include <cppuhelper/factory.hxx>
 #include <uno/lbnames.h>
-#include "xmlreg.hxx"
+#include "xmloff/xmlreg.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;

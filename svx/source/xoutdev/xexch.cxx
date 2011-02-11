@@ -43,7 +43,7 @@
 #endif
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
-#include "xexch.hxx"
+#include "svx/xexch.hxx"
 
 
 TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );
@@ -88,7 +88,7 @@ XFillExchangeData::~XFillExchangeData()
 |*
 |*
 *************************************************************************/
-ULONG XFillExchangeData::RegisterClipboardFormatName()
+sal_uIntPtr XFillExchangeData::RegisterClipboardFormatName()
 {
     return( SOT_FORMATSTR_ID_XFA );
 }
@@ -104,7 +104,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
     if( rData.pXFillAttrSetItem )
     {
         SfxWhichIter        aIter( rData.pXFillAttrSetItem->GetItemSet() );
-        USHORT              nWhich = aIter.FirstWhich();
+        sal_uInt16              nWhich = aIter.FirstWhich();
         const SfxPoolItem*  pItem;
         sal_uInt32          nItemCount = 0;
         sal_Size            nFirstPos = rOStm.Tell();
@@ -113,10 +113,10 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
 
         while( nWhich )
         {
-            if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, FALSE, &pItem ) )
+            if( SFX_ITEM_SET == rData.pXFillAttrSetItem->GetItemSet().GetItemState( nWhich, sal_False, &pItem ) )
             {
                 VersionCompat   aCompat( rOStm, STREAM_WRITE );
-                const USHORT    nItemVersion2 = pItem->GetVersion( (USHORT) rOStm.GetVersion() );
+                const sal_uInt16    nItemVersion2 = pItem->GetVersion( (sal_uInt16) rOStm.GetVersion() );
 
                 rOStm << nWhich << nItemVersion2;
                 pItem->Store( rOStm, nItemVersion2 );
@@ -127,7 +127,7 @@ SvStream& operator<<( SvStream& rOStm, const XFillExchangeData& rData )
             nWhich = aIter.NextWhich();
         }
 
-        const ULONG nLastPos = rOStm.Tell();
+        const sal_uIntPtr nLastPos = rOStm.Tell();
         rOStm.Seek( nFirstPos );
         rOStm << nItemCount;
         rOStm.Seek( nLastPos );
@@ -150,7 +150,7 @@ SvStream& operator>>( SvStream& rIStm, XFillExchangeData& rData )
     SfxItemSet*     pSet = new SfxItemSet ( *rData.pPool, XATTR_FILL_FIRST, XATTR_FILL_LAST );
     SfxPoolItem*    pNewItem;
     sal_uInt32      nItemCount = 0;
-    USHORT          nWhich, nItemVersion;
+    sal_uInt16          nWhich, nItemVersion;
 
     rIStm >> nItemCount;
 

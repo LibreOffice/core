@@ -42,13 +42,13 @@
 
 #include "recfloat.hxx"
 #include "dialog.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 
 using namespace ::com::sun::star;
 
@@ -148,21 +148,21 @@ static rtl::OUString GetLabelFromCommandURL( const rtl::OUString& rCommandURL, c
 SFX_IMPL_FLOATINGWINDOW( SfxRecordingFloatWrapper_Impl, SID_RECORDING_FLOATWINDOW );
 
 SfxRecordingFloatWrapper_Impl::SfxRecordingFloatWrapper_Impl( Window* pParentWnd ,
-                                                USHORT nId ,
+                                                sal_uInt16 nId ,
                                                 SfxBindings* pBind ,
                                                 SfxChildWinInfo* pInfo )
                     : SfxChildWindow( pParentWnd, nId )
                     , pBindings( pBind )
 {
     pWindow = new SfxRecordingFloat_Impl( pBindings, this, pParentWnd );
-    SetWantsFocus( FALSE );
+    SetWantsFocus( sal_False );
     eChildAlignment = SFX_ALIGN_NOALIGNMENT;
     ( ( SfxFloatingWindow* ) pWindow )->Initialize( pInfo );
 }
 
 SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 {
-    SfxBoolItem aItem( FN_PARAM_1, TRUE );
+    SfxBoolItem aItem( FN_PARAM_1, sal_True );
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() )
         pBindings->GetDispatcher()->Execute( SID_STOP_RECORDING, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
@@ -171,7 +171,7 @@ SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
 {
     // asking for recorded macro should be replaced if index access is available!
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && xRecorder->getRecordedMacro().getLength() )
     {
@@ -221,7 +221,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
     aTbx.SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
 
     // start recording
-    SfxBoolItem aItem( SID_RECORDMACRO, TRUE );
+    SfxBoolItem aItem( SID_RECORDMACRO, sal_True );
     GetBindings().GetDispatcher()->Execute( SID_RECORDMACRO, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
 }
 
@@ -240,9 +240,9 @@ SfxRecordingFloat_Impl::~SfxRecordingFloat_Impl()
     }
 }
 
-BOOL SfxRecordingFloat_Impl::Close()
+sal_Bool SfxRecordingFloat_Impl::Close()
 {
-    BOOL bRet = SfxFloatingWindow::Close();
+    sal_Bool bRet = SfxFloatingWindow::Close();
     return bRet;
 }
 

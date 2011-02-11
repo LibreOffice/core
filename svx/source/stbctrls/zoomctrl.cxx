@@ -39,7 +39,7 @@
 
 #include <svx/dialogs.hrc>
 
-#include "zoomctrl.hxx"
+#include "svx/zoomctrl.hxx"
 //CHINA001 #include "zoom.hxx"
 #include <svx/zoomitem.hxx>
 #include "stbctrls.h"
@@ -52,27 +52,27 @@ SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 class ZoomPopup_Impl : public PopupMenu
 {
 public:
-    ZoomPopup_Impl( USHORT nZ, USHORT nValueSet );
+    ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet );
 
-    USHORT          GetZoom() const { return nZoom; }
-    USHORT          GetCurId() const { return nCurId; }
+    sal_uInt16          GetZoom() const { return nZoom; }
+    sal_uInt16          GetCurId() const { return nCurId; }
 
 private:
-    USHORT          nZoom;
-    USHORT          nCurId;
+    sal_uInt16          nZoom;
+    sal_uInt16          nCurId;
 
     virtual void    Select();
 };
 
 // -----------------------------------------------------------------------
 
-ZoomPopup_Impl::ZoomPopup_Impl( USHORT nZ, USHORT nValueSet )
+ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
 
 :   PopupMenu( ResId( RID_SVXMNU_ZOOM, DIALOG_MGR() ) ),
 
     nZoom( nZ )
 {
-    static USHORT aTable[] =
+    static sal_uInt16 aTable[] =
     {
         SVX_ZOOM_ENABLE_50,         ZOOM_50,
         SVX_ZOOM_ENABLE_100,        ZOOM_100,
@@ -83,9 +83,9 @@ ZoomPopup_Impl::ZoomPopup_Impl( USHORT nZ, USHORT nValueSet )
         SVX_ZOOM_ENABLE_PAGEWIDTH,  ZOOM_PAGE_WIDTH
     };
 
-    for ( USHORT nPos = 0; nPos < sizeof(aTable) / sizeof(USHORT); nPos += 2 )
+    for ( sal_uInt16 nPos = 0; nPos < sizeof(aTable) / sizeof(sal_uInt16); nPos += 2 )
         if ( ( aTable[nPos] != ( aTable[nPos] & nValueSet ) ) )
-            EnableItem( aTable[nPos+1], FALSE );
+            EnableItem( aTable[nPos+1], sal_False );
 }
 
 // -----------------------------------------------------------------------
@@ -111,8 +111,8 @@ void ZoomPopup_Impl::Select()
 
 // class SvxZoomStatusBarControl ------------------------------------------
 
-SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT _nSlotId,
-                                                  USHORT _nId,
+SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
+                                                  sal_uInt16 _nId,
                                                   StatusBar& rStb ) :
 
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
@@ -123,7 +123,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( USHORT _nSlotId,
 
 // -----------------------------------------------------------------------
 
-void SvxZoomStatusBarControl::StateChanged( USHORT, SfxItemState eState,
+void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
 {
     if( SFX_ITEM_AVAILABLE != eState )
@@ -214,7 +214,7 @@ void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
         SfxStatusBarControl::Command( rCEvt );
 }
 
-ULONG SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
+sal_uIntPtr SvxZoomStatusBarControl::GetDefItemWidth(const StatusBar& rStb)
 {
     long nWidth1 =  rStb.GetTextWidth(String::CreateFromAscii("XXXXX%"));
     return nWidth1;

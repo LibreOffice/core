@@ -41,7 +41,7 @@
 #include <vector>
 #include <memory>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "lngopt.hxx"
 
 class DicEvtListenerHelper;
@@ -80,8 +80,8 @@ class DicList :
                 XTerminateListener >        xExitListener;
     MyAppExitListener                       *pExitListener;
 
-    BOOL    bDisposing;
-    BOOL    bInCreation;
+    sal_Bool    bDisposing;
+    sal_Bool    bInCreation;
 
     // disallow copy-constructor and assignment-operator for now
     DicList( const DicList & );
@@ -95,11 +95,11 @@ class DicList :
                             return aDicList;
                         }
 
-    void            LaunchEvent(INT16 nEvent, com::sun::star::uno::Sequence<
+    void            LaunchEvent(sal_Int16 nEvent, com::sun::star::uno::Sequence<
                             ::com::sun::star::linguistic2::XDictionary > xDic);
     void            SearchForDictionaries( DictionaryVec_t &rDicList,
-                                            const String &rDicDir, BOOL bIsWritePath );
-    INT32           GetDicPos(const com::sun::star::uno::Reference<
+                                            const String &rDicDir, sal_Bool bIsWritePath );
+    sal_Int32           GetDicPos(const com::sun::star::uno::Reference<
                             ::com::sun::star::linguistic2::XDictionary > &xDic);
 
 public:

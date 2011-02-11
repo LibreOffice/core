@@ -55,7 +55,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/tuple/b2dtuple.hxx>
 
@@ -182,7 +182,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
     // decide if transformation is neccessary
-    BOOL bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
+    sal_Bool bTransformationIsNeccessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
     if(bTransformationIsNeccessary)
     {
@@ -678,8 +678,8 @@ void XMLShapeExport::ImpExportTextBoxShape(
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
         // presentation attribute (if presentation)
-        sal_Bool bIsPresShape(FALSE);
-        sal_Bool bIsEmptyPresObj(FALSE);
+        sal_Bool bIsPresShape(sal_False);
+        sal_Bool bIsEmptyPresObj(sal_False);
         OUString aStr;
 
         switch(eShapeType)
@@ -687,49 +687,49 @@ void XMLShapeExport::ImpExportTextBoxShape(
             case XmlShapeTypePresSubtitleShape:
             {
                 aStr = GetXMLToken(XML_PRESENTATION_SUBTITLE);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresTitleTextShape:
             {
                 aStr = GetXMLToken(XML_PRESENTATION_TITLE);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresOutlinerShape:
             {
                 aStr = GetXMLToken(XML_PRESENTATION_OUTLINE);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresNotesShape:
             {
                 aStr = GetXMLToken(XML_PRESENTATION_NOTES);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresHeaderShape:
             {
                 aStr = GetXMLToken(XML_HEADER);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresFooterShape:
             {
                 aStr = GetXMLToken(XML_FOOTER);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresSlideNumberShape:
             {
                 aStr = GetXMLToken(XML_PAGE_NUMBER);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             case XmlShapeTypePresDateTimeShape:
             {
                 aStr = GetXMLToken(XML_DATE_TIME);
-                bIsPresShape = TRUE;
+                bIsPresShape = sal_True;
                 break;
             }
             default:
@@ -926,7 +926,7 @@ void XMLShapeExport::ImpExportEllipseShape(
         awt::Size aSize = xShape->getSize();
         sal_Int32 nRx((aSize.Width + 1) / 2);
         sal_Int32 nRy((aSize.Height + 1) / 2);
-        BOOL bCircle(nRx == nRy);
+        sal_Bool bCircle(nRx == nRy);
 
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
@@ -945,7 +945,7 @@ void XMLShapeExport::ImpExportEllipseShape(
             const double dEndAngle = nEndAngle / 100.0;
 
             // export circle kind
-            SvXMLUnitConverter::convertEnum( sStringBuffer, (USHORT)eKind, aXML_CircleKind_EnumMap );
+            SvXMLUnitConverter::convertEnum( sStringBuffer, (sal_uInt16)eKind, aXML_CircleKind_EnumMap );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
 
             // export start angle
@@ -991,9 +991,9 @@ void XMLShapeExport::ImpExportPolygonShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        BOOL bClosed(eShapeType == XmlShapeTypeDrawPolyPolygonShape
+        sal_Bool bClosed(eShapeType == XmlShapeTypeDrawPolyPolygonShape
             || eShapeType == XmlShapeTypeDrawClosedBezierShape);
-        BOOL bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
+        sal_Bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
 
         // get matrix

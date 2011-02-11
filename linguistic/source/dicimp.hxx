@@ -40,14 +40,14 @@
 #include <tools/stream.hxx>
 
 #include "defs.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 
 ///////////////////////////////////////////////////////////////////////////
 
 #define DIC_MAX_ENTRIES     30000
 
-INT16           ReadDicVersion( SvStreamPtr &rpStream, USHORT &nLng, BOOL &bNeg );
+sal_Int16           ReadDicVersion( SvStreamPtr &rpStream, sal_uInt16 &nLng, sal_Bool &bNeg );
 const String    GetDicExtension();
 
 ///////////////////////////////////////////////////////////////////////////
@@ -67,41 +67,41 @@ class DictionaryNeo :
     ::rtl::OUString                                             aDicName;
     ::rtl::OUString                                             aMainURL;
     ::com::sun::star::linguistic2::DictionaryType               eDicType;
-    INT16                                                       nCount;
-    INT16                                                       nLanguage;
-    INT16                                                       nDicVersion;
-    BOOL                                                        bNeedEntries;
-    BOOL                                                        bIsModified;
-    BOOL                                                        bIsActive;
-    BOOL                                                        bIsReadonly;
+    sal_Int16                                                       nCount;
+    sal_Int16                                                       nLanguage;
+    sal_Int16                                                       nDicVersion;
+    sal_Bool                                                        bNeedEntries;
+    sal_Bool                                                        bIsModified;
+    sal_Bool                                                        bIsActive;
+    sal_Bool                                                        bIsReadonly;
 
     // disallow copy-constructor and assignment-operator for now
     DictionaryNeo(const DictionaryNeo &);
     DictionaryNeo & operator = (const DictionaryNeo &);
 
-    void                    launchEvent(INT16 nEvent,
+    void                    launchEvent(sal_Int16 nEvent,
         ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XDictionaryEntry > xEntry);
 
-    ULONG                   loadEntries(const ::rtl::OUString &rMainURL);
-    ULONG                   saveEntries(const ::rtl::OUString &rMainURL);
+    sal_uLong                   loadEntries(const ::rtl::OUString &rMainURL);
+    sal_uLong                   saveEntries(const ::rtl::OUString &rMainURL);
     int                     cmpDicEntry(const ::rtl::OUString &rWord1,
                                         const ::rtl::OUString &rWord2,
-                                        BOOL bSimilarOnly = FALSE);
-    BOOL                    seekEntry(const ::rtl::OUString &rWord, INT32 *pPos,
-                                        BOOL bSimilarOnly = FALSE);
-    BOOL                    isSorted();
+                                        sal_Bool bSimilarOnly = sal_False);
+    sal_Bool                    seekEntry(const ::rtl::OUString &rWord, sal_Int32 *pPos,
+                                        sal_Bool bSimilarOnly = sal_False);
+    sal_Bool                    isSorted();
 
-    BOOL                    addEntry_Impl(const ::com::sun::star::uno::Reference<
+    sal_Bool                    addEntry_Impl(const ::com::sun::star::uno::Reference<
         ::com::sun::star::linguistic2::XDictionaryEntry > xDicEntry,
-                                          BOOL bIsLoadEntries = FALSE);
+                                          sal_Bool bIsLoadEntries = sal_False);
 
 public:
     DictionaryNeo();
-    DictionaryNeo(const ::rtl::OUString &rName, INT16 nLang,
+    DictionaryNeo(const ::rtl::OUString &rName, sal_Int16 nLang,
                     ::com::sun::star::linguistic2::DictionaryType eType,
                     const ::rtl::OUString &rMainURL,
-                    BOOL bWriteable );
+                    sal_Bool bWriteable );
     virtual ~DictionaryNeo();
 
     // XNamed
@@ -205,7 +205,7 @@ class DicEntry :
 {
     ::rtl::OUString aDicWord,       // including hyphen positions represented by "="
                     aReplacement;   // including hyphen positions represented by "="
-    BOOL            bIsNegativ;
+    sal_Bool            bIsNegativ;
 
     // disallow copy-constructor and assignment-operator for now
     DicEntry(const DicEntry &);
@@ -217,8 +217,8 @@ class DicEntry :
 
 public:
     DicEntry();
-    DicEntry(const ::rtl::OUString &rDicFileWord, BOOL bIsNegativ);
-    DicEntry(const ::rtl::OUString &rDicWord, BOOL bIsNegativ,
+    DicEntry(const ::rtl::OUString &rDicFileWord, sal_Bool bIsNegativ);
+    DicEntry(const ::rtl::OUString &rDicWord, sal_Bool bIsNegativ,
              const ::rtl::OUString &rRplcText);
     virtual ~DicEntry();
 

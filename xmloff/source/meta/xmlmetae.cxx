@@ -39,7 +39,7 @@
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <com/sun/star/beans/XPropertyAccess.hpp>
 #include <com/sun/star/beans/StringPair.hpp>

@@ -46,11 +46,11 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltkmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
@@ -160,7 +160,7 @@ public:
     void EndElement();
 
     SvXMLImportContext *CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const ::rtl::OUString& rLocalName,
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::xml::sax::XAttributeList> & xAttrList );
@@ -258,7 +258,7 @@ void XMLImageMapObjectContext::EndElement()
 }
 
 SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
@@ -682,7 +682,7 @@ XMLImageMapContext::~XMLImageMapContext()
 }
 
 SvXMLImportContext *XMLImageMapContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {

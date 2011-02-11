@@ -36,10 +36,10 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <osl/mutex.hxx>
 
-#include <misc.hxx>
-#include <lngprops.hxx>
+#include <linguistic/misc.hxx>
+#include <linguistic/lngprops.hxx>
 
-#include <lngprophelp.hxx>
+#include <linguistic/lngprophelp.hxx>
 
 
 //using namespace utl;
@@ -78,7 +78,7 @@ PropertyChgHelper::PropertyChgHelper(
     nEvtFlags           (nAllowedEvents)
 {
     OUString *pName = aPropNames.getArray();
-    for (INT32 i = 0;  i < nCHCount;  ++i)
+    for (sal_Int32 i = 0;  i < nCHCount;  ++i)
     {
         pName[i] = A2OU( aCH[i] );
     }
@@ -108,14 +108,14 @@ PropertyChgHelper::~PropertyChgHelper()
 }
 
 
-void PropertyChgHelper::AddPropNames( const char *pNewNames[], INT32 nCount )
+void PropertyChgHelper::AddPropNames( const char *pNewNames[], sal_Int32 nCount )
 {
     if (pNewNames && nCount)
     {
-        INT32 nLen = GetPropNames().getLength();
+        sal_Int32 nLen = GetPropNames().getLength();
         GetPropNames().realloc( nLen + nCount );
         OUString *pName = GetPropNames().getArray();
-        for (INT32 i = 0;  i < nCount;  ++i)
+        for (sal_Int32 i = 0;  i < nCount;  ++i)
         {
             pName[ nLen + i ] = A2OU( pNewNames[ i ] );
         }
@@ -125,20 +125,20 @@ void PropertyChgHelper::AddPropNames( const char *pNewNames[], INT32 nCount )
 
 void PropertyChgHelper::SetDefaultValues()
 {
-    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = TRUE;
-    bResIsUseDictionaryList         = bIsUseDictionaryList          = TRUE;
+    bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters    = sal_True;
+    bResIsUseDictionaryList         = bIsUseDictionaryList          = sal_True;
 }
 
 
 void PropertyChgHelper::GetCurrentValues()
 {
-    INT32 nLen = GetPropNames().getLength();
+    sal_Int32 nLen = GetPropNames().getLength();
     if (GetPropSet().is() && nLen)
     {
         const OUString *pPropName = GetPropNames().getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbVal     = NULL,
+            sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_IGNORE_CONTROL_CHARACTERS ) ))
@@ -169,13 +169,13 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
     //
-    INT32 nLen = rPropVals.getLength();
+    sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            BOOL  *pbResVal = NULL;
+            sal_Bool  *pbResVal = NULL;
             switch (pVal[i].Handle)
             {
                 case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -193,18 +193,18 @@ void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
 }
 
 
-BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
 
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        INT16 nLngSvcFlags = (nEvtFlags & AE_HYPHENATOR) ?
+        sal_Int16 nLngSvcFlags = (nEvtFlags & AE_HYPHENATOR) ?
                     LinguServiceEventFlags::HYPHENATE_AGAIN : 0;
-        BOOL bSCWA = FALSE, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = FALSE; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
 
-        BOOL  *pbVal = NULL;
+        sal_Bool  *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_IGNORE_CONTROL_CHARACTERS :
@@ -216,12 +216,12 @@ BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
             case UPH_IS_USE_DICTIONARY_LIST       :
             {
                 pbVal = &bIsUseDictionaryList;
-                bSCWA = bSWWA = TRUE;
+                bSCWA = bSWWA = sal_True;
                 break;
             }
             default:
             {
-                bRes = FALSE;
+                bRes = sal_False;
                 //DBG_ASSERT( 0, "unknown property" );
             }
         }
@@ -231,7 +231,7 @@ BOOL PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt )
         bRes = 0 != pbVal;  // sth changed?
         if (bRes)
         {
-            BOOL bSpellEvts = (nEvtFlags & AE_SPELLCHECKER) ? TRUE : FALSE;
+            sal_Bool bSpellEvts = (nEvtFlags & AE_SPELLCHECKER) ? sal_True : sal_False;
             if (bSCWA && bSpellEvts)
                 nLngSvcFlags |= LinguServiceEventFlags::SPELL_CORRECT_WORDS_AGAIN;
             if (bSWWA && bSpellEvts)
@@ -261,9 +261,9 @@ void PropertyChgHelper::AddAsPropListener()
 {
     if (xPropSet.is())
     {
-        INT32 nLen = aPropNames.getLength();
+        sal_Int32 nLen = aPropNames.getLength();
         const OUString *pPropName = aPropNames.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             if (pPropName[i].getLength())
                 xPropSet->addPropertyChangeListener( pPropName[i], this );
@@ -275,9 +275,9 @@ void PropertyChgHelper::RemoveAsPropListener()
 {
     if (xPropSet.is())
     {
-        INT32 nLen = aPropNames.getLength();
+        sal_Int32 nLen = aPropNames.getLength();
         const OUString *pPropName = aPropNames.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             if (pPropName[i].getLength())
                 xPropSet->removePropertyChangeListener( pPropName[i], this );
@@ -318,10 +318,10 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (rxListener.is())
     {
-        INT32   nCount = aLngSvcEvtListeners.getLength();
+        sal_Int32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.addInterface( rxListener ) != nCount;
     }
     return bRes;
@@ -335,10 +335,10 @@ sal_Bool SAL_CALL
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    BOOL bRes = FALSE;
+    sal_Bool bRes = sal_False;
     if (rxListener.is())
     {
-        INT32   nCount = aLngSvcEvtListeners.getLength();
+        sal_Int32   nCount = aLngSvcEvtListeners.getLength();
         bRes = aLngSvcEvtListeners.removeInterface( rxListener ) != nCount;
     }
     return bRes;
@@ -405,9 +405,9 @@ void PropertyHelper_Spell::SetDefaultValues()
 {
     PropertyChgHelper::SetDefaultValues();
 
-    bResIsSpellUpperCase        = bIsSpellUpperCase         = FALSE;
-    bResIsSpellWithDigits       = bIsSpellWithDigits        = FALSE;
-    bResIsSpellCapitalization   = bIsSpellCapitalization    = TRUE;
+    bResIsSpellUpperCase        = bIsSpellUpperCase         = sal_False;
+    bResIsSpellWithDigits       = bIsSpellWithDigits        = sal_False;
+    bResIsSpellCapitalization   = bIsSpellCapitalization    = sal_True;
 }
 
 
@@ -415,13 +415,13 @@ void PropertyHelper_Spell::GetCurrentValues()
 {
     PropertyChgHelper::GetCurrentValues();
 
-    INT32 nLen = GetPropNames().getLength();
+    sal_Int32 nLen = GetPropNames().getLength();
     if (GetPropSet().is() && nLen)
     {
         const OUString *pPropName = GetPropNames().getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            BOOL *pbVal     = NULL,
+            sal_Bool *pbVal     = NULL,
                  *pbResVal  = NULL;
 
             if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_IS_SPELL_UPPER_CASE ) ))
@@ -450,38 +450,38 @@ void PropertyHelper_Spell::GetCurrentValues()
 }
 
 
-BOOL PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    BOOL bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
+    sal_Bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        INT16 nLngSvcFlags = 0;
-        BOOL bSCWA = FALSE, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = FALSE; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Int16 nLngSvcFlags = 0;
+        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
+             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
 
-        BOOL *pbVal = NULL;
+        sal_Bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = FALSE == *pbVal;    // FALSE->TRUE change?
-                bSWWA = !bSCWA;             // TRUE->FALSE change?
+                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
+                bSWWA = !bSCWA;             // sal_True->sal_False change?
                 break;
             }
             default:
@@ -528,11 +528,11 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
     //
-    INT32 nLen = rPropVals.getLength();
+    sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             if (pVal[i].Name.equalsAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS ))
             {
@@ -540,7 +540,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
             }
             else
             {
-                BOOL *pbResVal = NULL;
+                sal_Bool *pbResVal = NULL;
                 switch (pVal[i].Handle)
                 {
                     case UPH_IS_SPELL_UPPER_CASE     : pbResVal = &bResIsSpellUpperCase; break;
@@ -556,7 +556,7 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
     }
 }
 
-INT16 PropertyHelper_Spell::GetDefaultNumberOfSuggestions() const
+sal_Int16 PropertyHelper_Spell::GetDefaultNumberOfSuggestions() const
 {
     return 16;
 }
@@ -601,13 +601,13 @@ void PropertyHelper_Hyphen::GetCurrentValues()
 {
     PropertyChgHelper::GetCurrentValues();
 
-    INT32 nLen = GetPropNames().getLength();
+    sal_Int32 nLen = GetPropNames().getLength();
     if (GetPropSet().is() && nLen)
     {
         const OUString *pPropName = GetPropNames().getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            INT16  *pnVal    = NULL,
+            sal_Int16  *pnVal    = NULL,
                    *pnResVal = NULL;
 
             if (pPropName[i].equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UPN_HYPH_MIN_LEADING ) ))
@@ -636,15 +636,15 @@ void PropertyHelper_Hyphen::GetCurrentValues()
 }
 
 
-BOOL PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt )
+sal_Bool PropertyHelper_Hyphen::propertyChange_Impl( const PropertyChangeEvent& rEvt )
 {
-    BOOL bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
+    sal_Bool bRes = PropertyChgHelper::propertyChange_Impl( rEvt );
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        INT16 nLngSvcFlags = LinguServiceEventFlags::HYPHENATE_AGAIN;
+        sal_Int16 nLngSvcFlags = LinguServiceEventFlags::HYPHENATE_AGAIN;
 
-        INT16   *pnVal = NULL;
+        sal_Int16   *pnVal = NULL;
         switch (rEvt.PropertyHandle)
         {
             case UPH_HYPH_MIN_LEADING     : pnVal = &nHyphMinLeading; break;
@@ -690,13 +690,13 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
     //
-    INT32 nLen = rPropVals.getLength();
+    sal_Int32 nLen = rPropVals.getLength();
     if (nLen)
     {
         const PropertyValue *pVal = rPropVals.getConstArray();
-        for (INT32 i = 0;  i < nLen;  ++i)
+        for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
-            INT16   *pnResVal = NULL;
+            sal_Int16   *pnResVal = NULL;
             switch (pVal[i].Handle)
             {
                 case UPH_HYPH_MIN_LEADING     : pnResVal = &nResHyphMinLeading; break;

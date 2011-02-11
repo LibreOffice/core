@@ -66,9 +66,9 @@ SbiScanner::SbiScanner( const ::rtl::OUString& rBuf, StarBASIC* p ) : aBuf( rBuf
     bUsedForHilite =
     bCompatible =
     bVBASupportOn =
-    bPrevLineExtentsComment = FALSE;
+    bPrevLineExtentsComment = sal_False;
     bHash    =
-    bErrors  = TRUE;
+    bErrors  = sal_True;
 }
 
 SbiScanner::~SbiScanner()
@@ -90,19 +90,19 @@ void SbiScanner::GenError( SbError code )
 {
     if( GetSbData()->bBlockCompilerError )
     {
-        bAbort = TRUE;
+        bAbort = sal_True;
         return;
     }
     if( !bError && bErrors )
     {
-        BOOL bRes = TRUE;
+        sal_Bool bRes = sal_True;
         // Nur einen Fehler pro Statement reporten
-        bError = TRUE;
+        bError = sal_True;
         if( pBasic )
         {
             // Falls EXPECTED oder UNEXPECTED kommen sollte, bezieht es sich
             // immer auf das letzte Token, also die Col1 uebernehmen
-            USHORT nc = nColLock ? nSavedCol1 : nCol1;
+            sal_uInt16 nc = nColLock ? nSavedCol1 : nCol1;
             switch( code )
             {
                 case SbERR_EXPECTED:
@@ -122,16 +122,16 @@ void SbiScanner::GenError( SbError code )
         nErrors++;
 }
 
-// Falls sofort ein Doppelpunkt folgt, wird TRUE zurueckgeliefert.
+// Falls sofort ein Doppelpunkt folgt, wird sal_True zurueckgeliefert.
 // Wird von SbiTokenizer::MayBeLabel() verwendet, um einen Label zu erkennen
 
-BOOL SbiScanner::DoesColonFollow()
+sal_Bool SbiScanner::DoesColonFollow()
 {
     if( pLine && *pLine == ':' )
     {
-        pLine++; nCol++; return TRUE;
+        pLine++; nCol++; return sal_True;
     }
-    else return FALSE;
+    else return sal_False;
 }
 
 // Testen auf ein legales Suffix
@@ -143,36 +143,36 @@ static SbxDataType GetSuffixType( sal_Unicode c )
     {
         sal_uInt32 n = aSuffixesStr.Search( c );
         if( STRING_NOTFOUND != n && c != ' ' )
-            return SbxDataType( (USHORT) n + SbxINTEGER );
+            return SbxDataType( (sal_uInt16) n + SbxINTEGER );
     }
     return SbxVARIANT;
 }
 
 // Einlesen des naechsten Symbols in die Variablen aSym, nVal und eType
-// Returnwert ist FALSE bei EOF oder Fehlern
+// Returnwert ist sal_False bei EOF oder Fehlern
 #define BUF_SIZE 80
 
-BOOL SbiScanner::NextSym()
+sal_Bool SbiScanner::NextSym()
 {
     // Fuer den EOLN-Fall merken
-    USHORT nOldLine = nLine;
-    USHORT nOldCol1 = nCol1;
-    USHORT nOldCol2 = nCol2;
+    sal_uInt16 nOldLine = nLine;
+    sal_uInt16 nOldCol1 = nCol1;
+    sal_uInt16 nOldCol2 = nCol2;
     sal_Unicode buf[ BUF_SIZE ], *p = buf;
-    bHash = FALSE;
+    bHash = sal_False;
 
     eScanType = SbxVARIANT;
     aSym.Erase();
     bSymbol =
-    bNumber = bSpaces = FALSE;
+    bNumber = bSpaces = sal_False;
 
     // Zeile einlesen?
     if( !pLine )
     {
-        INT32 n = nBufPos;
-        INT32 nLen = aBuf.getLength();
+        sal_Int32 n = nBufPos;
+        sal_Int32 nLen = aBuf.getLength();
         if( nBufPos >= nLen )
-            return FALSE;
+            return sal_False;
         const sal_Unicode* p2 = aBuf.getStr();
         p2 += n;
         while( ( n < nLen ) && ( *p2 != '\n' ) && ( *p2 != '\r' ) )
@@ -194,7 +194,7 @@ BOOL SbiScanner::NextSym()
 
     // Leerstellen weg:
     while( *pLine && (( *pLine == ' ' ) || ( *pLine == '\t' ) || ( *pLine == '\f' )) )
-        pLine++, nCol++, bSpaces = TRUE;
+        pLine++, nCol++, bSpaces = sal_True;
 
     nCol1 = nCol;
 
@@ -209,7 +209,7 @@ BOOL SbiScanner::NextSym()
     {
         pLine++;
         nCol++;
-        bHash = TRUE;
+        bHash = sal_True;
     }
 
     // Symbol? Dann Zeichen kopieren.
@@ -219,11 +219,35 @@ BOOL SbiScanner::NextSym()
         if( *pLine == '_' && !*(pLine+1) )
         {   pLine++;
             goto eoln;  }
-        bSymbol = TRUE;
+        bSymbol = sal_True;
         short n = nCol;
         for ( ; (BasicSimpleCharClass::isAlphaNumeric( *pLine, bCompatible ) || ( *pLine == '_' ) ); pLine++ )
             nCol++;
         aSym = aLine.copy( n, nCol - n );
+
+        // Special handling for "go to"
+        if( bCompatible && *pLine && aSym.EqualsIgnoreCaseAscii( "go" ) )
+        {
+            const sal_Unicode* pTestLine = pLine;
+            short nTestCol = nCol;
+            while( *pTestLine && (( *pTestLine == ' ' ) || ( *pTestLine == '\t' )) )
+            {
+                pTestLine++;
+                nTestCol++;
+            }
+
+            if( *pTestLine && *(pTestLine + 1) )
+            {
+                String aTestSym = aLine.copy( nTestCol, 2 );
+                if( aTestSym.EqualsIgnoreCaseAscii( "to" ) )
+                {
+                    aSym = String::CreateFromAscii( "goto" );
+                    pLine = pTestLine + 2;
+                    nCol = nTestCol + 2;
+                }
+            }
+        }
+
         // Abschliessendes '_' durch Space ersetzen, wenn Zeilenende folgt
         // (sonst falsche Zeilenfortsetzung)
         if( !bUsedForHilite && !*pLine && *(pLine-1) == '_' )
@@ -255,13 +279,13 @@ BOOL SbiScanner::NextSym()
         short ndig = 0;
         short ncdig = 0;
         eScanType = SbxDOUBLE;
-        BOOL bBufOverflow = FALSE;
+        sal_Bool bBufOverflow = sal_False;
         while( strchr( "0123456789.DEde", *pLine ) && *pLine )
         {
             // AB 4.1.1996: Buffer voll? -> leer weiter scannen
             if( (p-buf) == (BUF_SIZE-1) )
             {
-                bBufOverflow = TRUE;
+                bBufOverflow = sal_True;
                 pLine++, nCol++;
                 continue;
             }
@@ -298,7 +322,7 @@ BOOL SbiScanner::NextSym()
             if (!exp) ndig++;
         }
         *p = 0;
-        aSym = p; bNumber = TRUE;
+        aSym = p; bNumber = sal_True;
         // Komma, Exponent mehrfach vorhanden?
         if( comma > 1 || exp > 1 )
         {   aError = '.';
@@ -358,10 +382,10 @@ BOOL SbiScanner::NextSym()
                 // Wird als Operator angesehen
                 pLine--; nCol--; nCol1 = nCol-1; aSym = '&'; return SYMBOL;
         }
-        bNumber = TRUE;
+        bNumber = sal_True;
         long l = 0;
         int i;
-        BOOL bBufOverflow = FALSE;
+        sal_Bool bBufOverflow = sal_False;
         while( BasicSimpleCharClass::isAlphaNumeric( *pLine & 0xFF, bCompatible ) )
         {
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
@@ -369,7 +393,7 @@ BOOL SbiScanner::NextSym()
             pLine++; nCol++;
             // AB 4.1.1996: Buffer voll, leer weiter scannen
             if( (p-buf) == (BUF_SIZE-1) )
-                bBufOverflow = TRUE;
+                bBufOverflow = sal_True;
             else if( String( cmp ).Search( ch ) != STRING_NOTFOUND )
             //else if( strchr( cmp, ch ) )
                 *p++ = ch;
@@ -402,7 +426,7 @@ BOOL SbiScanner::NextSym()
     {
         sal_Unicode cSep = *pLine;
         if( cSep == '[' )
-            bSymbol = TRUE, cSep = ']';
+            bSymbol = sal_True, cSep = ']';
         short n = nCol+1;
         while( *pLine )
         {
@@ -422,7 +446,7 @@ BOOL SbiScanner::NextSym()
         // Doppelte Stringbegrenzer raus
         String s( cSep );
         s += cSep;
-        USHORT nIdx = 0;
+        sal_uInt16 nIdx = 0;
         do
         {
             nIdx = aSym.Search( s, nIdx );
@@ -461,15 +485,15 @@ PrevLineCommentLbl:
     if( bPrevLineExtentsComment || (eScanType != SbxSTRING &&
         ( aSym.GetBuffer()[0] == '\'' || aSym.EqualsIgnoreCaseAscii( "REM" ) ) ) )
     {
-        bPrevLineExtentsComment = FALSE;
+        bPrevLineExtentsComment = sal_False;
         aSym = String::CreateFromAscii( "REM" );
-        USHORT nLen = String( pLine ).Len();
+        sal_uInt16 nLen = String( pLine ).Len();
         if( bCompatible && pLine[ nLen - 1 ] == '_' && pLine[ nLen - 2 ] == ' ' )
-            bPrevLineExtentsComment = TRUE;
+            bPrevLineExtentsComment = sal_True;
         nCol2 = nCol2 + nLen;
         pLine = NULL;
     }
-    return TRUE;
+    return sal_True;
 
     // Sonst Zeilen-Ende: aber bitte auf '_' testen, ob die
     // Zeile nicht weitergeht!
@@ -484,7 +508,7 @@ eoln:
             //    .Method
             // ^^^  <- spaces is legal in MSO VBA
             OSL_TRACE("*** resetting bSpaces***");
-            bSpaces = FALSE;
+            bSpaces = sal_False;
         }
         return bRes;
     }
@@ -496,7 +520,7 @@ eoln:
         nCol2 = nOldCol2;
         aSym = '\n';
         nColLock = 0;
-        return TRUE;
+        return sal_True;
     }
 }
 

@@ -61,7 +61,7 @@
 #include <vcl/menu.hxx>
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 
 #ifndef _SVX_SVXIDS_HRC
@@ -784,7 +784,7 @@ void DbGridControl::NavigationBar::StateChanged( StateChangedType nType )
     {
         case STATE_CHANGE_MIRRORING:
         {
-            BOOL bIsRTLEnabled = IsRTLEnabled();
+            sal_Bool bIsRTLEnabled = IsRTLEnabled();
             for ( size_t i=0; i < sizeof( pWindows ) / sizeof( pWindows[0] ); ++i )
                 pWindows[i]->EnableRTL( bIsRTLEnabled );
         }
@@ -945,7 +945,7 @@ DbGridControl::DbGridControl(
             ,m_nDeleteEvent(0)
             ,m_nOptions(OPT_READONLY)
             ,m_nOptionMask(OPT_INSERT | OPT_UPDATE | OPT_DELETE)
-            ,m_nLastColId((USHORT)-1)
+            ,m_nLastColId((sal_uInt16)-1)
             ,m_nLastRowId(-1)
             ,m_bDesignMode(sal_False)
             ,m_bRecordCountFinal(sal_False)
@@ -2323,7 +2323,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
     if (nNewPos < 0)    // keine Position gefunden
         return;
 
-    m_bInAdjustDataSource = TRUE;
+    m_bInAdjustDataSource = sal_True;
     if (nNewPos != m_nCurrentPos)
     {
         if (m_bSynchDisplay)
@@ -2341,7 +2341,7 @@ void DbGridControl::AdjustDataSource(sal_Bool bFull)
         SetCurrent(nNewPos);
         RowModified(nNewPos);
     }
-    m_bInAdjustDataSource = FALSE;
+    m_bInAdjustDataSource = sal_False;
 
     // Wird der DatenCursor von aussen bewegt, wird die selektion aufgehoben
     SetNoSelection();
@@ -2734,7 +2734,7 @@ void DbGridControl::SetFilterMode(sal_Bool bMode)
     }
 }
 // -----------------------------------------------------------------------------
-String DbGridControl::GetCellText(long _nRow, USHORT _nColId) const
+String DbGridControl::GetCellText(long _nRow, sal_uInt16 _nColId) const
 {
     DbGridColumn* pColumn = m_aColumns.GetObject( GetModelColumnPos( _nColId ) );
     String sRet;
@@ -3630,7 +3630,7 @@ sal_uInt16 DbGridControl::GetModelColumnPos( sal_uInt16 nId ) const
 }
 
 //------------------------------------------------------------------------------
-void DbGridControl::implAdjustInSolarThread(BOOL _bRows)
+void DbGridControl::implAdjustInSolarThread(sal_Bool _bRows)
 {
     TRACE_RANGE("DbGridControl::implAdjustInSolarThread");
     ::osl::MutexGuard aGuard(m_aAdjustSafety);
@@ -3862,7 +3862,7 @@ Reference<XAccessible > DbGridControl::CreateAccessibleControl( sal_Int32 _nInde
 // -----------------------------------------------------------------------------
 Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, sal_uInt16 _nColumnPos )
 {
-    USHORT nColumnId = GetColumnId( _nColumnPos );
+    sal_uInt16 nColumnId = GetColumnId( _nColumnPos );
     DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColumnId));
     if ( pColumn )
     {
@@ -3883,7 +3883,7 @@ Reference< XAccessible > DbGridControl::CreateAccessibleCell( sal_Int32 _nRow, s
                     eValue = STATE_DONTKNOW;
                     break;
             }
-            return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue,TRUE );
+            return DbGridControl_Base::CreateAccessibleCheckBoxCell( _nRow, _nColumnPos,eValue,sal_True );
         }
     }
     return DbGridControl_Base::CreateAccessibleCell( _nRow, _nColumnPos );

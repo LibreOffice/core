@@ -38,7 +38,7 @@
 #include <svx/sdasaitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <vcl/virdev.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 #include <vcl/metric.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -46,7 +46,7 @@
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/charscaleitem.hxx>
-#include "EnhancedCustomShapeTypeNames.hxx"
+#include "svx/EnhancedCustomShapeTypeNames.hxx"
 #include <svx/svdorect.hxx>
 #include <svx/svdoashp.hxx>
 #include <editeng/outliner.hxx>
@@ -239,7 +239,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
         if ( rText.getLength() )
         {
             // generating vcl/font
-            USHORT nScriptType = i18n::ScriptType::LATIN;
+            sal_uInt16 nScriptType = i18n::ScriptType::LATIN;
             Reference< i18n::XBreakIterator > xBI( EnhancedCustomShapeFontWork::GetBreakIterator() );
             if ( xBI.is() )
             {
@@ -254,7 +254,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                         nScriptType = i18n::ScriptType::LATIN;
                 }
             }
-            UINT16 nFntItm = EE_CHAR_FONTINFO;
+            sal_uInt16 nFntItm = EE_CHAR_FONTINFO;
             if ( nScriptType == i18n::ScriptType::COMPLEX )
                 nFntItm = EE_CHAR_FONTINFO_CTL;
             else if ( nScriptType == i18n::ScriptType::ASIAN )
@@ -300,7 +300,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 {
                     FWCharacterData aCharacterData;
                     rtl::OUString aCharText( (sal_Unicode)rText[ i ] );
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, STRING_LEN, TRUE, nWidth, pDXArry ) )
+                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, aCharText, 0, 0, STRING_LEN, sal_True, nWidth, pDXArry ) )
                     {
                         sal_Int32 nTextWidth = aVirDev.GetTextWidth( aCharText, 0, STRING_LEN );
                         std::vector< PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
@@ -358,7 +358,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                     aVirDev.SetFont( aFont );
                 }
                 FWCharacterData aCharacterData;
-                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, STRING_LEN, TRUE, nWidth, pDXArry ) )
+                if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, 0, STRING_LEN, sal_True, nWidth, pDXArry ) )
                 {
                     aParagraphIter->vCharacters.push_back( aCharacterData );
                 }
@@ -368,7 +368,7 @@ void GetTextAreaOutline( const FWData& rFWData, const SdrObject* pCustomShape, F
                 for ( i = 0; i < rText.getLength(); i++ )
                 {
                     FWCharacterData aCharacterData;
-                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, i, 1, TRUE, nWidth, pDXArry ) )
+                    if ( aVirDev.GetTextOutlines( aCharacterData.vOutlines, rText, 0, i, 1, sal_True, nWidth, pDXArry ) )
                     {
                         std::vector< PolyPolygon >::iterator aOutlineIter = aCharacterData.vOutlines.begin();
                         std::vector< PolyPolygon >::iterator aOutlineIEnd  = aCharacterData.vOutlines.end();

@@ -4635,31 +4635,6 @@ SfxVoidItem PickList SID_PICKLIST
 ]
 
 //--------------------------------------------------------------------------
-SfxBoolItem PlayMacro SID_PLAYMACRO
-(SfxStringItem Statement SID_STATEMENT,SfxBoolItem Asynchron SID_ASYNCHRON)
-[
-    /* flags: */
-    AutoUpdate = TRUE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
-    Synchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_MACRO;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem PlugInsActive SID_PLUGINS_ACTIVE
 
 [
@@ -5238,31 +5213,6 @@ SfxVoidItem RunBasic SID_BASICRUN
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem RunStarWriter SID_STARTSW
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Asynchron;
-
-    /* config: */
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
 SfxBoolItem Save SID_SAVEDOC
 (SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem Author SID_DOCINFO_AUTHOR)
 [
@@ -5317,7 +5267,7 @@ SfxBoolItem SaveAll SID_SAVEDOCS
 
 //--------------------------------------------------------------------------
 SfxBoolItem SaveAs SID_SAVEASDOC
-(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
+(SfxStringItem URL SID_FILE_NAME,SfxStringItem FilterName SID_FILTER_NAME,SfxStringItem Password SID_PASSWORD,SfxBoolItem PasswordInteraction SID_PASSWORDINTERACTION,SfxStringItem FilterOptions SID_FILE_FILTEROPTIONS,SfxStringItem VersionComment SID_DOCINFO_COMMENTS,SfxStringItem VersionAuthor SID_DOCINFO_AUTHOR,SfxBoolItem Overwrite SID_OVERWRITE,SfxBoolItem Unpacked SID_UNPACK,SfxBoolItem SaveTo SID_SAVETO)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -6567,31 +6517,6 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
     StatusBarConfig = FALSE,
     ToolBoxConfig = FALSE,
     GroupId = GID_APPLICATION;
-]
-
-//--------------------------------------------------------------------------
-SfxVoidItem ToolsMacroEdit SID_EDITMACRO
-()
-[
-    /* flags: */
-    AutoUpdate = FALSE,
-    Cachable = Cachable,
-    FastCall = FALSE,
-    HasCoreId = FALSE,
-    HasDialog = TRUE,
-    ReadOnlyDoc = TRUE,
-    Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
-    Synchron;
-
-    /* config: */
-    AccelConfig = TRUE,
-    MenuConfig = TRUE,
-    StatusBarConfig = FALSE,
-    ToolBoxConfig = TRUE,
-    GroupId = GID_MACRO;
 ]
 
 //--------------------------------------------------------------------------

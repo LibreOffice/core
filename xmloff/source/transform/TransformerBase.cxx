@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "IgnoreTContext.hxx"
 #include "RenameElemTContext.hxx"
 #include "ProcAttrTContext.hxx"
@@ -89,7 +89,7 @@ bool lcl_ConvertAttr( OUString & rOutAttribute, sal_Int32 nParam )
 
 // -----------------------------------------------------------------------------
 
-XMLTransformerContext *XMLTransformerBase::CreateContext( USHORT nPrefix,
+XMLTransformerContext *XMLTransformerBase::CreateContext( sal_uInt16 nPrefix,
     const OUString& rLocalName, const OUString& rQName )
 {
     XMLTransformerActions::key_type aKey( nPrefix, rLocalName );

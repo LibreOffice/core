@@ -31,7 +31,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <rtl/ustring.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/xml/sax/XAttributeList.hpp>

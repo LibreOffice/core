@@ -48,20 +48,20 @@ enum SvxZoomType
 
 class SVX_DLLPUBLIC SvxZoomItem: public SfxUInt16Item
 {
-    USHORT                  nValueSet;  // erlaubte Werte (siehe #defines unten)
+    sal_uInt16                  nValueSet;  // erlaubte Werte (siehe #defines unten)
     SvxZoomType             eType;
 
 public:
     TYPEINFO();
 
     SvxZoomItem( SvxZoomType eZoomType = SVX_ZOOM_PERCENT,
-                 USHORT nVal = 0, USHORT nWhich = SID_ATTR_ZOOM );
+                 sal_uInt16 nVal = 0, sal_uInt16 nWhich = SID_ATTR_ZOOM );
     SvxZoomItem( const SvxZoomItem& );
     ~SvxZoomItem();
 
-    void                    SetValueSet( USHORT nValues ) { nValueSet = nValues; }
-    USHORT                  GetValueSet() const { return nValueSet; }
-    FASTBOOL                IsValueAllowed( USHORT nValue ) const
+    void                    SetValueSet( sal_uInt16 nValues ) { nValueSet = nValues; }
+    sal_uInt16                  GetValueSet() const { return nValueSet; }
+    FASTBOOL                IsValueAllowed( sal_uInt16 nValue ) const
                             { return nValue == ( nValue & nValueSet ); }
 
     SvxZoomType             GetType() const { return eType; }
@@ -69,11 +69,11 @@ public:
                             { eType = eNewType; }
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual SfxPoolItem*    Create( SvStream& rStrm, USHORT nVersion ) const;
-    virtual SvStream&       Store( SvStream& rStrm , USHORT nItemVersion ) const;
+    virtual SfxPoolItem*    Create( SvStream& rStrm, sal_uInt16 nVersion ) const;
+    virtual SvStream&       Store( SvStream& rStrm , sal_uInt16 nItemVersion ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 };
 
 //------------------------------------------------------------------------

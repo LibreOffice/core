@@ -33,7 +33,7 @@
 //_________________________________________________________________________________________________________________
 #include <uielement/menubarwrapper.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <helper/actiontriggerhelper.hxx>
+#include <framework/actiontriggerhelper.hxx>
 #include <services.h>
 
 //_________________________________________________________________________________________________________________
@@ -181,7 +181,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 if ( m_xConfigData.is() )
                 {
                     // Fill menubar with container contents
-                    USHORT nId = 1;
+                    sal_uInt16 nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
             }

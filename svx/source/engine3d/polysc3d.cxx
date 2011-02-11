@@ -30,14 +30,14 @@
 #include <svx/xfillit.hxx>
 #include <svx/svdopath.hxx>
 #include <svx/svdogrp.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdetc.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdpool.hxx>
 #include <svl/style.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/polysc3d.hxx>
 #include <svx/xlnclit.hxx>
 #include <svl/metitem.hxx>
@@ -66,7 +66,7 @@ E3dPolyScene::E3dPolyScene(E3dDefaultAttributes& rDefault)
 |*
 \************************************************************************/
 
-UINT16 E3dPolyScene::GetObjIdentifier() const
+sal_uInt16 E3dPolyScene::GetObjIdentifier() const
 {
     return E3D_POLYSCENE_ID;
 }

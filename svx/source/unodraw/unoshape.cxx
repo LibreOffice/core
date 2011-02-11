@@ -61,7 +61,7 @@
 #include "svx/svdogrp.hxx"
 #include "svx/scene3d.hxx"
 #include "svx/svdmodel.hxx"
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include "svx/fmglob.hxx"
 #include "svx/unopage.hxx"
 #include "svx/view3d.hxx"
@@ -72,7 +72,7 @@
 #include "svx/unoshprp.hxx"
 #include "svx/sxciaitm.hxx" // todo: remove
 #include "svx/svdograf.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include "svx/svdomeas.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdpool.hxx"
@@ -90,9 +90,9 @@
 #include "svx/xlnedit.hxx"
 #include "svx/xlnstit.hxx"
 #include "svx/xlndsit.hxx"
-#include "svdglob.hxx"
-#include "svdstr.hrc"
-#include "unomaster.hxx"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/unomaster.hxx"
 #include <editeng/outlobj.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
@@ -147,7 +147,7 @@ struct SvxShapeImpl
      *  SdrObject so a multiple call to SvxShape::Create() with same SdrObject
      *  is prohibited.
      */
-    SdrObject*      mpCreatedObj;
+    ::tools::WeakReference< SdrObject > mpCreatedObj;
 
     // for xComponent
     ::cppu::OInterfaceContainerHelper   maDisposeListeners;
@@ -160,7 +160,7 @@ struct SvxShapeImpl
         ,mpMaster( NULL )
         ,mbHasSdrObjectOwnership( false )
         ,mbDisposing( false )
-        ,mpCreatedObj( NULL )
+        ,mpCreatedObj()
         ,maDisposeListeners( _rMutex )
         ,maPropertyNotifier( _rAntiImpl, _rMutex )
     {
@@ -468,11 +468,12 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     if ( !pNewObj )
         return;
 
-    OSL_ENSURE( ( mpImpl->mpCreatedObj == NULL ) || ( mpImpl->mpCreatedObj == pNewObj ),
+    SdrObject* pCreatedObj = mpImpl->mpCreatedObj.get();
+    OSL_ENSURE( ( pCreatedObj == NULL ) || ( pCreatedObj == pNewObj ),
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
     // --> CL, OD 2005-07-19 #i52126# - correct condition
-    if ( mpImpl->mpCreatedObj != pNewObj )
+    if ( pCreatedObj != pNewObj )
     // <--
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
@@ -1537,7 +1538,7 @@ void SAL_CALL SvxShape::removeVetoableChangeListener( const OUString& , const Re
 
 sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rName )
 {
-    SfxItemSet aSet( mpModel->GetItemPool(),    (USHORT)nWID, (USHORT)nWID );
+    SfxItemSet aSet( mpModel->GetItemPool(),    (sal_uInt16)nWID, (sal_uInt16)nWID );
 
     if( SetFillAttribute( nWID, rName, aSet, mpModel ) )
     {
@@ -1722,12 +1723,12 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     const SfxItemPool* pPool = rSet.GetPool();
 
     const String aSearchName( aName );
-    const sal_uInt32 nCount = pPool->GetItemCount2((USHORT)nWID);
+    const sal_uInt32 nCount = pPool->GetItemCount2((sal_uInt16)nWID);
     const NameOrIndex* pItem;
 
     for( sal_uInt32 nSurrogate = 0; nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)pPool->GetItem2((USHORT)nWID, nSurrogate);
+        pItem = (NameOrIndex*)pPool->GetItem2((sal_uInt16)nWID, nSurrogate);
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             rSet.Put( *pItem );
@@ -1756,13 +1757,13 @@ sal_Bool SAL_CALL SvxShape::SetFillAttribute( sal_Int32 nWID, const OUString& rN
     const SfxItemPool& rPool = pModel->GetItemPool();
 
     const String aSearchName( rName );
-    const sal_uInt32 nCount = rPool.GetItemCount((USHORT)nWhich);
+    const sal_uInt32 nCount = rPool.GetItemCount((sal_uInt16)nWhich);
     const NameOrIndex* pItem = 0;
     bool bFound = false;
 
     for( sal_uInt32 nSurrogate = 0; ! bFound && nSurrogate < nCount; nSurrogate++ )
     {
-        pItem = (NameOrIndex*)rPool.GetItem((USHORT)nWhich, nSurrogate);
+        pItem = (NameOrIndex*)rPool.GetItem((sal_uInt16)nWhich, nSurrogate);
         if( pItem && ( pItem->GetName() == aSearchName ) )
         {
             bFound = true;
@@ -2395,7 +2396,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_FILLHATCH:
             case XATTR_LINEDASH:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                     if( ( pItem == NULL ) || ( pItem->GetName().Len() == 0) )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2410,7 +2411,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_LINESTART:
             case XATTR_FILLFLOATTRANSPARENCE:
                 {
-                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((USHORT)pMap->nWID);
+                    NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
                     if( ( pItem == NULL ) )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
@@ -2494,7 +2495,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
 #ifdef DBG_UTIL
                 SdrObject* pCheck =
 #endif
-                            pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (ULONG)nNewOrdNum );
+                            pObjList->SetObjectOrdNum( mpObj->GetOrdNum(), (sal_uIntPtr)nNewOrdNum );
                 DBG_ASSERT( pCheck == mpObj.get(), "GetOrdNum() failed!" );
             }
             return true;
@@ -2673,7 +2674,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
         OUString aLayerName;
         if( rValue >>= aLayerName )
         {
-            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, TRUE);
+            const SdrLayer* pLayer=mpModel->GetLayerAdmin().GetLayer(aLayerName, sal_True);
             if( pLayer != NULL )
             {
                 mpObj->SetLayer( pLayer->GetID() );
@@ -2711,7 +2712,7 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             {
                 Point aRef1(mpObj->GetSnapRect().Center());
                 double nTan=tan(nShear*nPi180);
-                mpObj->Shear(aRef1,nShear,nTan,FALSE);
+                mpObj->Shear(aRef1,nShear,nTan,sal_False);
                 return true;
             }
         }
@@ -3206,13 +3207,13 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
-                BOOL bIsWMF = FALSE;
+                sal_Bool bIsWMF = sal_False;
                 if ( pGraphic->IsLink() )
                 {
                     GfxLink aLnk = pGraphic->GetLink();
                     if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
                     {
-                        bIsWMF = TRUE;
+                        bIsWMF = sal_True;
                         uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
                         rValue <<= aSeq;
                     }
@@ -3423,7 +3424,7 @@ void SvxShape::setAllPropertiesToDefault() throw (uno::RuntimeException)
     }
 
     // #i68523# special handling for Svx3DCharacterModeItem, this is not saved
-    // but needs to be TRUE in svx, pool default (false) in sch. Since sch
+    // but needs to be sal_True in svx, pool default (false) in sch. Since sch
     // does not load lathe or extrude objects, it is possible to set the items
     // here.
     // For other solution possibilities, see task description.
@@ -3533,7 +3534,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
 
     if( mpObj.is() && mpObj->GetObjInventor() == SdrInventor)
     {
-        const UINT16 nIdent = mpObj->GetObjIdentifier();
+        const sal_uInt16 nIdent = mpObj->GetObjIdentifier();
 
         switch(nIdent)
         {
@@ -4125,7 +4126,7 @@ uno::Sequence< OUString > SAL_CALL SvxShape::_getSupportedServiceNames()
     else if( mpObj.is() && mpObj->GetObjInventor() == FmFormInventor)
     {
 #if OSL_DEBUG_LEVEL > 0
-        const UINT16 nIdent = mpObj->GetObjIdentifier();
+        const sal_uInt16 nIdent = mpObj->GetObjIdentifier();
         OSL_ENSURE( nIdent == OBJ_UNO, "SvxShape::_getSupportedServiceNames: FmFormInventor, but no UNO object?" );
 #endif
         static uno::Sequence< OUString > *pSeq = 0;

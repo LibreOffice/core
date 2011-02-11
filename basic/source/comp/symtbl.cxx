@@ -58,7 +58,7 @@ SbiStringPool::~SbiStringPool()
 
 // Suchen
 
-const String& SbiStringPool::Find( USHORT n ) const
+const String& SbiStringPool::Find( sal_uInt16 n ) const
 {
     if( !n || n > aData.Count() )
         return aEmpty;
@@ -69,10 +69,10 @@ const String& SbiStringPool::Find( USHORT n ) const
 // Hinzufuegen eines Strings. Der String wird Case-Insensitiv
 // verglichen.
 
-short SbiStringPool::Add( const String& rVal, BOOL bNoCase )
+short SbiStringPool::Add( const String& rVal, sal_Bool bNoCase )
 {
-    USHORT n = aData.Count();
-    for( USHORT i = 0; i < n; i++ )
+    sal_uInt16 n = aData.Count();
+    for( sal_uInt16 i = 0; i < n; i++ )
     {
         String* p = aData.GetObject( i );
         if( (  bNoCase && p->Equals( rVal ) )
@@ -125,7 +125,7 @@ void SbiSymPool::Clear()
 
 SbiSymDef* SbiSymPool::First()
 {
-    nCur = (USHORT) -1;
+    nCur = (sal_uInt16) -1;
     return Next();
 }
 
@@ -206,9 +206,10 @@ void SbiSymPool::Add( SbiSymDef* pDef )
 
 SbiSymDef* SbiSymPool::Find( const String& rName ) const
 {
-    for( USHORT i = 0; i < aData.Count(); i++ )
+    sal_uInt16 nCount = aData.Count();
+    for( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        SbiSymDef* p = aData.GetObject( i );
+        SbiSymDef* p = aData.GetObject( nCount - i - 1 );
         if( ( !p->nProcId || ( p->nProcId == nProcId ) )
          && ( p->aName.EqualsIgnoreCaseAscii( rName ) ) )
             return p;
@@ -221,9 +222,9 @@ SbiSymDef* SbiSymPool::Find( const String& rName ) const
 
 // Suchen ueber ID-Nummer
 
-SbiSymDef* SbiSymPool::FindId( USHORT n ) const
+SbiSymDef* SbiSymPool::FindId( sal_uInt16 n ) const
 {
-    for( USHORT i = 0; i < aData.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
     {
         SbiSymDef* p = aData.GetObject( i );
         if( p->nId == n && ( !p->nProcId || ( p->nProcId == nProcId ) ) )
@@ -237,7 +238,7 @@ SbiSymDef* SbiSymPool::FindId( USHORT n ) const
 
 // Suchen ueber Position (ab 0)
 
-SbiSymDef* SbiSymPool::Get( USHORT n ) const
+SbiSymDef* SbiSymPool::Get( sal_uInt16 n ) const
 {
     if( n >= aData.Count() )
         return NULL;
@@ -245,7 +246,7 @@ SbiSymDef* SbiSymPool::Get( USHORT n ) const
         return aData.GetObject( n );
 }
 
-UINT32 SbiSymPool::Define( const String& rName )
+sal_uInt32 SbiSymPool::Define( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( p )
@@ -257,7 +258,7 @@ UINT32 SbiSymPool::Define( const String& rName )
     return p->Define();
 }
 
-UINT32 SbiSymPool::Reference( const String& rName )
+sal_uInt32 SbiSymPool::Reference( const String& rName )
 {
     SbiSymDef* p = Find( rName );
     if( !p )
@@ -271,7 +272,7 @@ UINT32 SbiSymPool::Reference( const String& rName )
 
 void SbiSymPool::CheckRefs()
 {
-    for( USHORT i = 0; i < aData.Count(); i++ )
+    for( sal_uInt16 i = 0; i < aData.Count(); i++ )
     {
         SbiSymDef* p = aData.GetObject( i );
         if( !p->IsDefined() )
@@ -303,7 +304,7 @@ SbiSymDef::SbiSymDef( const String& rName ) : aName( rName )
     bWithEvents =
     bByVal   =
     bChained =
-    bGlobal  = FALSE;
+    bGlobal  = sal_False;
     pIn      =
     pPool    = NULL;
     nDefaultId = 0;
@@ -359,11 +360,11 @@ void SbiSymDef::SetType( SbxDataType t )
 // Es wird der Wert zurueckgeliefert, der als Operand gespeichert
 // werden soll.
 
-UINT32 SbiSymDef::Reference()
+sal_uInt32 SbiSymDef::Reference()
 {
     if( !bChained )
     {
-        UINT32 n = nChain;
+        sal_uInt32 n = nChain;
         nChain = pIn->pParser->aGen.GetOffset();
         return n;
     }
@@ -373,13 +374,13 @@ UINT32 SbiSymDef::Reference()
 // Definition eines Symbols.
 // Hier wird der Backchain aufgeloest, falls vorhanden
 
-UINT32 SbiSymDef::Define()
+sal_uInt32 SbiSymDef::Define()
 {
-    UINT32 n = pIn->pParser->aGen.GetPC();
+    sal_uInt32 n = pIn->pParser->aGen.GetPC();
     pIn->pParser->aGen.GenStmnt();
     if( nChain ) pIn->pParser->aGen.BackChain( nChain );
     nChain = n;
-    bChained = TRUE;
+    bChained = sal_True;
     return nChain;
 }
 
@@ -408,7 +409,7 @@ SbiSymScope SbiSymDef::GetScope() const
 // 3) aLabels: Labels
 
 SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
-                        BOOL bProcDecl )
+                        sal_Bool bProcDecl )
          : SbiSymDef( rName )
          , aParams( pParser->aGblStrings, SbPARAM )  // wird gedumpt
          , aLabels( pParser->aLclStrings, SbLOCAL )  // wird nicht gedumpt
@@ -420,9 +421,9 @@ SbiProcDef::SbiProcDef( SbiParser* pParser, const String& rName,
     nLine1  =
     nLine2  = 0;
     mePropMode = PROPERTY_MODE_NONE;
-    bPublic = TRUE;
-    bCdecl  = FALSE;
-    bStatic = FALSE;
+    bPublic = sal_True;
+    bCdecl  = sal_False;
+    bStatic = sal_False;
     // Fuer Returnwerte ist das erste Element der Parameterliste
     // immer mit dem Namen und dem Typ der Proc definiert
     aParams.AddSym( aName );
@@ -450,7 +451,7 @@ void SbiProcDef::Match( SbiProcDef* pOld )
 {
     SbiSymDef* po, *pn=NULL;
     // Parameter 0 ist der Funktionsname
-    USHORT i;
+    sal_uInt16 i;
     for( i = 1; i < aParams.GetSize(); i++ )
     {
         po = pOld->aParams.Get( i );

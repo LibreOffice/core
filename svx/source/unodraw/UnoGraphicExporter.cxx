@@ -46,6 +46,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 
+#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -65,9 +66,9 @@
 #include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include "svtools/filter.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>
@@ -178,7 +179,7 @@ namespace svx
         virtual sal_Bool SAL_CALL supportsMimeType( const ::rtl::OUString& MimeTypeName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException);
 
-        VirtualDevice* CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const;
+        VirtualDevice* CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
 
         DECL_LINK( CalcFieldValueHdl, EditFieldInfo* );
 
@@ -220,7 +221,7 @@ namespace svx
 
     /** creates a bitmap that is optionaly transparent from a metafile
     */
-    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, BOOL bTransparent, const Size* pSize )
+    BitmapEx GetBitmapFromMetaFile( const GDIMetaFile& rMtf, sal_Bool bTransparent, const Size* pSize )
     {
         Graphic     aGraphic( rMtf );
         BitmapEx    aBmpEx;
@@ -348,7 +349,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             if( pField && pField->ISA( SvxPageField ) )
             {
                 String aPageNumValue;
-                BOOL bUpper = FALSE;
+                sal_Bool bUpper = sal_False;
 
                 switch(mpDoc->GetPageNumType())
                 {
@@ -359,7 +360,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
                         aPageNumValue += (sal_Unicode)(char)((mnPageNumber - 1) % 26 + 'a');
                         break;
                     case SVX_ROMAN_UPPER:
-                        bUpper = TRUE;
+                        bUpper = sal_True;
                     case SVX_ROMAN_LOWER:
                         aPageNumValue += SvxNumberFormat::CreateRomanString(mnPageNumber, bUpper);
                         break;
@@ -390,7 +391,7 @@ IMPL_LINK(GraphicExporter, CalcFieldValueHdl, EditFieldInfo*, pInfo)
 
     @return the returned VirtualDevice is owned by the caller
 */
-VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixel, ULONG nHeightPixel ) const
+VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const
 {
     VirtualDevice*  pVDev = new VirtualDevice();
     MapMode         aMM( MAP_100TH_MM );
@@ -421,17 +422,17 @@ VirtualDevice* GraphicExporter::CreatePageVDev( SdrPage* pPage, ULONG nWidthPixe
 
     pVDev->SetMapMode( aMM );
 #ifdef DBG_UTIL
-    BOOL bAbort = !
+    sal_Bool bAbort = !
 #endif
         pVDev->SetOutputSize(aPageSize);
     DBG_ASSERT(!bAbort, "virt. Device nicht korrekt erzeugt");
 
     SdrView* pView = new SdrView(mpDoc, pVDev);
-    pView->SetPageVisible( FALSE );
-    pView->SetBordVisible( FALSE );
-    pView->SetGridVisible( FALSE );
-    pView->SetHlplVisible( FALSE );
-    pView->SetGlueVisible( FALSE );
+    pView->SetPageVisible( sal_False );
+    pView->SetBordVisible( sal_False );
+    pView->SetGridVisible( sal_False );
+    pView->SetHlplVisible( sal_False );
+    pView->SetGlueVisible( sal_False );
     pView->ShowSdrPage(pPage);
     Region aRegion (Rectangle( aPoint, aPageSize ) );
 
@@ -718,7 +719,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 aVDev.SetMapMode( aMap );
                 if( rSettings.mbUseHighContrast )
                     aVDev.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
-                aVDev.EnableOutput( FALSE );
+                aVDev.EnableOutput( sal_False );
                 aMtf.Record( &aVDev );
                 Size aNewSize;
 
@@ -734,14 +735,14 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     pView = new SdrView( mpDoc, &aVDev );
                 }
 
-                pView->SetBordVisible( FALSE );
-                pView->SetPageVisible( FALSE );
+                pView->SetBordVisible( sal_False );
+                pView->SetPageVisible( sal_False );
                 pView->ShowSdrPage( pPage );
 
                 if ( pView && pPage )
                 {
-                    pView->SetBordVisible( FALSE );
-                    pView->SetPageVisible( FALSE );
+                    pView->SetBordVisible( sal_False );
+                    pView->SetPageVisible( sal_False );
                     pView->ShowSdrPage( pPage );
 
                     const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
@@ -787,7 +788,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 if( rSettings.mbTranslucent )
                 {
                     Size aOutSize;
-                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), TRUE, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
+                    aGraphic = GetBitmapFromMetaFile( aGraphic.GetGDIMetaFile(), sal_True, CalcSize( rSettings.mnWidth, rSettings.mnHeight, aNewSize, aOutSize ) );
                 }
             }
         }
@@ -886,11 +887,11 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_SCROLLRECT", 0,
-                                         reinterpret_cast<BYTE const*>(&aScrollRectangle),
+                                         reinterpret_cast<sal_uInt8 const*>(&aScrollRectangle),
                                          sizeof( Rectangle ) ) );
                     pMtf->AddAction( new MetaCommentAction(
                                          "XTEXT_PAINTRECT", 0,
-                                         reinterpret_cast<BYTE const*>(&aPaintRectangle),
+                                         reinterpret_cast<sal_uInt8 const*>(&aPaintRectangle),
                                          sizeof( Rectangle ) ) );
 
                     aGraphic = Graphic( *pMtf );
@@ -923,7 +924,7 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                 }
             }
 
-            aOut.EnableOutput( FALSE );
+            aOut.EnableOutput( sal_False );
             aOut.SetMapMode( aMap );
             if( rSettings.mbUseHighContrast )
                 aOut.SetDrawMode( aVDev.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
@@ -1021,7 +1022,7 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     // create the output stuff
     Graphic aGraphic;
 
-    USHORT nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
+    sal_uInt16 nStatus = GetGraphic( aSettings, aGraphic, bVectorType ) ? GRFILTER_OK : GRFILTER_FILTERERROR;
 
     if( nStatus == GRFILTER_OK )
     {
@@ -1066,15 +1067,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     {
         Any aInteraction;
         Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
-        ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+        ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
         lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = nStatus;
         aInteraction <<= aErrorCode;
-        framework::InteractionRequest* pRequest = new framework::InteractionRequest( aInteraction, lContinuations );
-        Reference< XInteractionRequest >xRequest( static_cast< XInteractionRequest* >(pRequest), UNO_QUERY );
-        aSettings.mxInteractionHandler->handle( xRequest );
+        aSettings.mxInteractionHandler->handle( framework::InteractionRequest::CreateRequest( aInteraction, lContinuations ) );
     }
     return nStatus == GRFILTER_OK;
 }

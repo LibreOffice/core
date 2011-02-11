@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include "MetaImportComponent.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlmetai.hxx>

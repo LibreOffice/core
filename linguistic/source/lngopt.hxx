@@ -45,7 +45,7 @@
 #include <tools/solar.h>
 
 #include <svl/itemprop.hxx>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include <vos/refernce.hxx>
 
@@ -72,7 +72,7 @@ class LinguOptions
 
     //! uses default assignment-operator
 
-    BOOL SetLocale_Impl( INT16 &rLanguage,
+    sal_Bool SetLocale_Impl( sal_Int16 &rLanguage,
             ::com::sun::star::uno::Any &rOld,
             const ::com::sun::star::uno::Any &rVal, sal_Int16 nType );
 
@@ -81,11 +81,11 @@ public:
     LinguOptions(const LinguOptions &rOpt);
     ~LinguOptions();
 
-    BOOL            SetValue( ::com::sun::star::uno::Any &rOld,
-                            const ::com::sun::star::uno::Any &rVal, INT32 nWID );
-    void            GetValue( ::com::sun::star::uno::Any &rVal, INT32 nWID ) const;
+    sal_Bool            SetValue( ::com::sun::star::uno::Any &rOld,
+                            const ::com::sun::star::uno::Any &rVal, sal_Int32 nWID );
+    void            GetValue( ::com::sun::star::uno::Any &rVal, sal_Int32 nWID ) const;
 
-    static ::rtl::OUString    GetName( INT32 nWID );
+    static ::rtl::OUString    GetName( sal_Int32 nWID );
 
     const ::com::sun::star::uno::Sequence< rtl::OUString >
             GetActiveDics() const   { return pData->aActiveDics; }
@@ -103,14 +103,14 @@ public:
 // helper function call class
 struct PropHashType_Impl
 {
-    size_t operator()(const INT32 &s) const { return s; }
+    size_t operator()(const sal_Int32 &s) const { return s; }
 };
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar
     <
-        INT32,
+        sal_Int32,
         PropHashType_Impl,
-        std::equal_to< INT32 >
+        std::equal_to< sal_Int32 >
     > OPropertyListenerContainerHelper;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -132,7 +132,7 @@ class LinguProps :
     SfxItemPropertyMap                          aPropertyMap;
     SvtLinguConfig                              aConfig;
 
-    BOOL                                        bDisposing;
+    sal_Bool                                        bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     LinguProps(const LinguProps &);

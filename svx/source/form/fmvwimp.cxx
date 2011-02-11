@@ -32,15 +32,15 @@
 #include "fmobj.hxx"
 #include "fmpgeimp.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "fmshimp.hxx"
 #include "svx/fmtools.hxx"
 #include "fmundo.hxx"
 #include "fmvwimp.hxx"
 #include "formcontrolfactory.hxx"
-#include "sdrpaintwindow.hxx"
-#include "svditer.hxx"
+#include "svx/sdrpaintwindow.hxx"
+#include "svx/svditer.hxx"
 #include "svx/dataaccessdescriptor.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/fmglob.hxx"
@@ -51,7 +51,7 @@
 #include "svx/sdrpagewindow.hxx"
 #include "svx/svdogrp.hxx"
 #include "svx/svdpagv.hxx"
-#include "xmlexchg.hxx"
+#include "svx/xmlexchg.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
@@ -768,7 +768,7 @@ void FmXFormView::Activate(sal_Bool bSync)
 }
 
 //------------------------------------------------------------------------------
-void FmXFormView::Deactivate(BOOL bDeactivateController)
+void FmXFormView::Deactivate(sal_Bool bDeactivateController)
 {
     if (m_nActivationEvent)
     {
@@ -1518,7 +1518,7 @@ bool FmXFormView::createControlLabelPair( OutputDevice& _rOutDev, sal_Int32 _nXO
 bool FmXFormView::createControlLabelPair( const ::comphelper::ComponentContext& _rContext,
     OutputDevice& _rOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM, const Reference< XPropertySet >& _rxField,
     const Reference< XNumberFormats >& _rxNumberFormats, sal_uInt16 _nControlObjectID,
-    const ::rtl::OUString& _rFieldPostfix, UINT32 _nInventor, UINT16 _nLabelObjectID,
+    const ::rtl::OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl)
 {
     sal_Int32 nDataType = 0;
@@ -1690,8 +1690,8 @@ void FmXFormView::ObjectRemovedInAliveMode( const SdrObject* pObject )
     // muss ich es jetzt da rausnehmen, da ich sonst beim Zurueckschalten versuche, die Markierung wieder zu setzen
     // (interesanterweise geht das nur bei gruppierten Objekten schief (beim Zugriff auf deren ObjList GPF), nicht bei einzelnen)
 
-    ULONG nCount = m_aMark.GetMarkCount();
-    for (ULONG i = 0; i < nCount; ++i)
+    sal_uIntPtr nCount = m_aMark.GetMarkCount();
+    for (sal_uIntPtr i = 0; i < nCount; ++i)
     {
         SdrMark* pMark = m_aMark.GetMark(i);
         SdrObject* pCurrent = pMark->GetMarkedSdrObj();
@@ -1740,8 +1740,8 @@ void FmXFormView::saveMarkList( sal_Bool _bSmartUnmark )
         m_aMark = m_pView->GetMarkedObjectList();
         if ( _bSmartUnmark )
         {
-            ULONG nCount = m_aMark.GetMarkCount( );
-            for ( ULONG i = 0; i < nCount; ++i )
+            sal_uIntPtr nCount = m_aMark.GetMarkCount( );
+            for ( sal_uIntPtr i = 0; i < nCount; ++i )
             {
                 SdrMark*   pMark = m_aMark.GetMark(i);
                 SdrObject* pObj  = pMark->GetMarkedSdrObj();
@@ -1807,15 +1807,15 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             sal_Bool bMisMatch = sal_False;
 
             // loop through all current marks
-            ULONG nCurrentCount = rCurrentList.GetMarkCount();
-            for ( ULONG i=0; i<nCurrentCount&& !bMisMatch; ++i )
+            sal_uIntPtr nCurrentCount = rCurrentList.GetMarkCount();
+            for ( sal_uIntPtr i=0; i<nCurrentCount&& !bMisMatch; ++i )
             {
                 const SdrObject* pCurrentMarked = rCurrentList.GetMark( i )->GetMarkedSdrObj();
 
                 // loop through all saved marks, check for equality
                 sal_Bool bFound = sal_False;
-                ULONG nSavedCount = m_aMark.GetMarkCount();
-                for ( ULONG j=0; j<nSavedCount && !bFound; ++j )
+                sal_uIntPtr nSavedCount = m_aMark.GetMarkCount();
+                for ( sal_uIntPtr j=0; j<nSavedCount && !bFound; ++j )
                 {
                     if ( m_aMark.GetMark( j )->GetMarkedSdrObj() == pCurrentMarked )
                         bFound = sal_True;
@@ -1840,8 +1840,8 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
         sal_Bool bFound = sal_True;
 
         // gibt es noch alle Objecte
-        ULONG nCount = m_aMark.GetMarkCount();
-        for (ULONG i = 0; i < nCount && bFound; i++)
+        sal_uIntPtr nCount = m_aMark.GetMarkCount();
+        for (sal_uIntPtr i = 0; i < nCount && bFound; i++)
         {
             SdrMark*   pMark = m_aMark.GetMark(i);
             SdrObject* pObj  = pMark->GetMarkedSdrObj();
@@ -1862,7 +1862,7 @@ void FmXFormView::restoreMarkList( SdrMarkList& _rRestoredMarkList )
             // Das LastObject auswerten
             if (nCount) // Objecte jetzt Markieren
             {
-                for (ULONG i = 0; i < nCount; i++)
+                for (sal_uIntPtr i = 0; i < nCount; i++)
                 {
                     SdrMark* pMark = m_aMark.GetMark(i);
                     SdrObject* pObj = pMark->GetMarkedSdrObj();
@@ -1882,7 +1882,7 @@ void SAL_CALL FmXFormView::focusGained( const FocusEvent& /*e*/ ) throw (Runtime
 {
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside( TRUE, FmFormView::ImplAccess() );
+        m_pView->SetMoveOutside( sal_True, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1892,7 +1892,7 @@ void SAL_CALL FmXFormView::focusLost( const FocusEvent& /*e*/ ) throw (RuntimeEx
     // so we can not remove us as focus listener
     if ( m_xWindow.is() && m_pView )
     {
-        m_pView->SetMoveOutside( FALSE, FmFormView::ImplAccess() );
+        m_pView->SetMoveOutside( sal_False, FmFormView::ImplAccess() );
     }
 }
 // -----------------------------------------------------------------------------
@@ -1903,7 +1903,7 @@ void FmXFormView::removeGridWindowListening()
         m_xWindow->removeFocusListener(this);
         if ( m_pView )
         {
-            m_pView->SetMoveOutside( FALSE, FmFormView::ImplAccess() );
+            m_pView->SetMoveOutside( sal_False, FmFormView::ImplAccess() );
         }
         m_xWindow = NULL;
     }

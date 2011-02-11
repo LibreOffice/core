@@ -1,6 +1,3 @@
-vba     vbahelper       :       oovbaapi basic sfx2 svx filter cppuhelper vcl comphelper svtools tools sal NULL
+vba	vbahelper	:	oovbaapi offuh basic sfx2 svx filter cppuhelper vcl comphelper svtools tools sal LIBXSLT:libxslt NULL
 vba	vbahelper									usr1	-	all	  vba_mkout NULL
-#vba	vbahelper\inc								nmake	-	all	vba_inc NULL
-vba	vbahelper\source\vbahelper                        nmake	-	all	vba_vbahelper NULL
-vba	vbahelper\source\msforms                        nmake	-	all	vba_msforms NULL
-vba	vbahelper\util								nmake	-	all	vba_util vba_vbahelper vba_msforms NULL
+vba	vbahelper\prj	nmake	-	all	vba_prj NULL

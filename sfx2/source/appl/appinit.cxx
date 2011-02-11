@@ -65,9 +65,6 @@
 #include <rtl/logfile.hxx>
 #include <vcl/edit.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/unoctitm.hxx>
 #include "app.hrc"
 #include "sfxlocal.hrc"
@@ -77,18 +74,18 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
 #include "intro.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
-#include "sfxhelp.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxhelp.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/viewsh.hxx>
 #include "nochaos.hxx"
 #include <sfx2/fcontnr.hxx>
 #include "helper.hxx"   // SfxContentHelper::Kill()
 #include "sfxpicklist.hxx"
+#include <tools/svlibrary.hxx>
 
 #ifdef UNX
 #define stricmp(a,b) strcmp(a,b)
@@ -215,10 +212,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     {
         bDetermineFunction = true;
 
-        String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-        sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "cui" ) ) );
-
-        rtl::OUString aLibName( sLibName );
+        static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "cui" ) ) );
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
 
@@ -236,7 +230,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 //====================================================================
 
-FASTBOOL SfxApplication::Initialize_Impl()
+bool SfxApplication::Initialize_Impl()
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 

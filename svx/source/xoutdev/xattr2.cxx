@@ -35,7 +35,7 @@
 #include <com/sun/star/uno/Any.hxx>
 
 #include <svx/dialogs.hrc>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
 #include <editeng/itemtype.hxx>
@@ -52,7 +52,7 @@ TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XLineTransparenceItem::XLineTransparenceItem(USHORT)
+|*    XLineTransparenceItem::XLineTransparenceItem(sal_uInt16)
 |*
 |*    Beschreibung
 |*    Ersterstellung    07.11.95 KA
@@ -60,7 +60,7 @@ TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 |*
 *************************************************************************/
 
-XLineTransparenceItem::XLineTransparenceItem(USHORT nLineTransparence) :
+XLineTransparenceItem::XLineTransparenceItem(sal_uInt16 nLineTransparence) :
     SfxUInt16Item(XATTR_LINETRANSPARENCE, nLineTransparence)
 {
 }
@@ -97,7 +97,7 @@ SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*    SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    07.11.95 KA
@@ -105,7 +105,7 @@ SfxPoolItem* XLineTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XLineTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XLineTransparenceItem(rIn);
 }
@@ -130,7 +130,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue()) );
+            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue()) );
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -147,7 +147,7 @@ TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 // -----------------------------------------------------------------------------
 
 XLineJointItem::XLineJointItem( XLineJoint eLineJoint ) :
-    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< USHORT >(eLineJoint))
+    SfxEnumItem(XATTR_LINEJOINT, sal::static_int_cast< sal_uInt16 >(eLineJoint))
 {
 }
 
@@ -160,14 +160,14 @@ XLineJointItem::XLineJointItem( SvStream& rIn ) :
 
 // -----------------------------------------------------------------------------
 
-USHORT XLineJointItem::GetVersion( USHORT /*nFileFormatVersion*/) const
+sal_uInt16 XLineJointItem::GetVersion( sal_uInt16 /*nFileFormatVersion*/) const
 {
     return 1;
 }
 
 // -----------------------------------------------------------------------------
 
-SfxPoolItem* XLineJointItem::Create( SvStream& rIn, USHORT nVer ) const
+SfxPoolItem* XLineJointItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
 {
     XLineJointItem* pRet = new XLineJointItem( rIn );
 
@@ -198,7 +198,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
         case SFX_ITEM_PRESENTATION_COMPLETE:
         case SFX_ITEM_PRESENTATION_NAMELESS:
         {
-            USHORT nId = 0;
+            sal_uInt16 nId = 0;
 
             switch( GetValue() )
             {
@@ -238,7 +238,7 @@ SfxItemPresentation XLineJointItem::GetPresentation( SfxItemPresentation ePres, 
 
 // -----------------------------------------------------------------------------
 
-sal_Bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/) const
+sal_Bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     ::com::sun::star::drawing::LineJoint eJoint = ::com::sun::star::drawing::LineJoint_NONE;
 
@@ -268,7 +268,7 @@ sal_Bool XLineJointItem::QueryValue( ::com::sun::star::uno::Any& rVal, BYTE /*nM
 
 // -----------------------------------------------------------------------------
 
-BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nMemberId*/)
+sal_Bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /*nMemberId*/)
 {
     XLineJoint eJoint = XLINEJOINT_NONE;
     ::com::sun::star::drawing::LineJoint eUnoJoint;
@@ -300,14 +300,14 @@ BOOL XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE /*nM
         break;
     }
 
-    SetValue( sal::static_int_cast< USHORT >( eJoint ) );
+    SetValue( sal::static_int_cast< sal_uInt16 >( eJoint ) );
 
     return sal_True;
 }
 
 // -----------------------------------------------------------------------------
 
-USHORT XLineJointItem::GetValueCount() const
+sal_uInt16 XLineJointItem::GetValueCount() const
 {
     // don't forget to update the api interface also
     return 5;
@@ -320,7 +320,7 @@ TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFillTransparenceItem::XFillTransparenceItem(USHORT)
+|*    XFillTransparenceItem::XFillTransparenceItem(sal_uInt16)
 |*
 |*    Beschreibung
 |*    Ersterstellung    07.11.95 KA
@@ -328,7 +328,7 @@ TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 |*
 *************************************************************************/
 
-XFillTransparenceItem::XFillTransparenceItem(USHORT nFillTransparence) :
+XFillTransparenceItem::XFillTransparenceItem(sal_uInt16 nFillTransparence) :
     SfxUInt16Item(XATTR_FILLTRANSPARENCE, nFillTransparence)
 {
 }
@@ -365,7 +365,7 @@ SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT nVer) const
+|*    SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    07.11.95 KA
@@ -373,7 +373,7 @@ SfxPoolItem* XFillTransparenceItem::Clone(SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillTransparenceItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillTransparenceItem(rIn);
 }
@@ -398,7 +398,7 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
             rText = XubString( ResId( RID_SVXSTR_TRANSPARENCE, DIALOG_MGR() ) );
             rText.AppendAscii(": ");
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue() ));
+            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue() ));
             rText += sal_Unicode('%');
             return ePres;
         default:
@@ -413,7 +413,7 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT)
+|*    XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16)
 |*
 |*    Beschreibung
 |*    Ersterstellung    09.11.95 KA
@@ -421,7 +421,7 @@ TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 |*
 *************************************************************************/
 
-XFormTextShadowTranspItem::XFormTextShadowTranspItem(USHORT nShdwTransparence) :
+XFormTextShadowTranspItem::XFormTextShadowTranspItem(sal_uInt16 nShdwTransparence) :
     SfxUInt16Item(XATTR_FORMTXTSHDWTRANSP, nShdwTransparence)
 {
 }
@@ -458,7 +458,7 @@ SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT nVer) const
+|*    SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    09.11.95 KA
@@ -466,7 +466,7 @@ SfxPoolItem* XFormTextShadowTranspItem::Clone(SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFormTextShadowTranspItem(rIn);
 }
@@ -479,7 +479,7 @@ TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
 /*************************************************************************
 |*
-|*    XGradientStepCountItem::XGradientStepCountItem( USHORT )
+|*    XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 )
 |*
 |*    Beschreibung
 |*    Ersterstellung    23.01.96 KA
@@ -487,7 +487,7 @@ TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 |*
 *************************************************************************/
 
-XGradientStepCountItem::XGradientStepCountItem( USHORT nStepCount ) :
+XGradientStepCountItem::XGradientStepCountItem( sal_uInt16 nStepCount ) :
     SfxUInt16Item( XATTR_GRADIENTSTEPCOUNT, nStepCount )
 {
 }
@@ -524,7 +524,7 @@ SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT nVer) const
+|*    SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    23.01.96 KA
@@ -532,7 +532,7 @@ SfxPoolItem* XGradientStepCountItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XGradientStepCountItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XGradientStepCountItem( rIn );
 }
@@ -557,7 +557,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
 //          rText = XubString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) );
 //          rText += ": ";
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText += XubString( UniString::CreateFromInt32((USHORT) GetValue() ));
+            rText += XubString( UniString::CreateFromInt32((sal_uInt16) GetValue() ));
             return ePres;
         default:
             return SFX_ITEM_PRESENTATION_NONE;
@@ -580,7 +580,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 |*
 *************************************************************************/
 
-XFillBmpTileItem::XFillBmpTileItem( BOOL bTile ) :
+XFillBmpTileItem::XFillBmpTileItem( sal_Bool bTile ) :
             SfxBoolItem( XATTR_FILLBMP_TILE, bTile )
 {
 }
@@ -628,7 +628,7 @@ SfxPoolItem* XFillBmpTileItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpTileItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpTileItem( rIn );
 }
@@ -683,7 +683,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 *************************************************************************/
 
 XFillBmpPosItem::XFillBmpPosItem( RECT_POINT eRP ) :
-    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< USHORT >( eRP ) )
+    SfxEnumItem( XATTR_FILLBMP_POS, sal::static_int_cast< sal_uInt16 >( eRP ) )
 {
 }
 
@@ -730,7 +730,7 @@ SfxPoolItem* XFillBmpPosItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpPosItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpPosItem( rIn );
 }
@@ -774,7 +774,7 @@ SfxItemPresentation XFillBmpPosItem::GetPresentation
 |*
 \******************************************************************************/
 
-USHORT XFillBmpPosItem::GetValueCount() const
+sal_uInt16 XFillBmpPosItem::GetValueCount() const
 {
     return 9;
 }
@@ -843,7 +843,7 @@ SfxPoolItem* XFillBmpSizeXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpSizeXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpSizeXItem( rIn );
 }
@@ -959,7 +959,7 @@ SfxPoolItem* XFillBmpSizeYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpSizeYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpSizeYItem( rIn );
 }
@@ -1027,7 +1027,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 |*
 *************************************************************************/
 
-XFillBmpSizeLogItem::XFillBmpSizeLogItem( BOOL bLog ) :
+XFillBmpSizeLogItem::XFillBmpSizeLogItem( sal_Bool bLog ) :
             SfxBoolItem( XATTR_FILLBMP_SIZELOG, bLog )
 {
 }
@@ -1075,7 +1075,7 @@ SfxPoolItem* XFillBmpSizeLogItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpSizeLogItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpSizeLogItem( rIn );
 }
@@ -1129,7 +1129,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
 |*
 *************************************************************************/
 
-XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( USHORT nOffX ) :
+XFillBmpTileOffsetXItem::XFillBmpTileOffsetXItem( sal_uInt16 nOffX ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETX, nOffX )
 {
 }
@@ -1177,7 +1177,7 @@ SfxPoolItem* XFillBmpTileOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpTileOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpTileOffsetXItem( rIn );
 }
@@ -1231,7 +1231,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
 |*
 *************************************************************************/
 
-XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( USHORT nOffY ) :
+XFillBmpTileOffsetYItem::XFillBmpTileOffsetYItem( sal_uInt16 nOffY ) :
             SfxUInt16Item( XATTR_FILLBMP_TILEOFFSETY, nOffY )
 {
 }
@@ -1279,7 +1279,7 @@ SfxPoolItem* XFillBmpTileOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpTileOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpTileOffsetYItem( rIn );
 }
@@ -1333,7 +1333,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 |*
 *************************************************************************/
 
-XFillBmpStretchItem::XFillBmpStretchItem( BOOL bStretch ) :
+XFillBmpStretchItem::XFillBmpStretchItem( sal_Bool bStretch ) :
             SfxBoolItem( XATTR_FILLBMP_STRETCH, bStretch )
 {
 }
@@ -1381,7 +1381,7 @@ SfxPoolItem* XFillBmpStretchItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpStretchItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpStretchItem( rIn );
 }
@@ -1435,7 +1435,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
 |*
 *************************************************************************/
 
-XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( USHORT nOffPosX ) :
+XFillBmpPosOffsetXItem::XFillBmpPosOffsetXItem( sal_uInt16 nOffPosX ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETX, nOffPosX )
 {
 }
@@ -1483,7 +1483,7 @@ SfxPoolItem* XFillBmpPosOffsetXItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpPosOffsetXItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpPosOffsetXItem( rIn );
 }
@@ -1537,7 +1537,7 @@ TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
 |*
 *************************************************************************/
 
-XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( USHORT nOffPosY ) :
+XFillBmpPosOffsetYItem::XFillBmpPosOffsetYItem( sal_uInt16 nOffPosY ) :
             SfxUInt16Item( XATTR_FILLBMP_POSOFFSETY, nOffPosY )
 {
 }
@@ -1585,7 +1585,7 @@ SfxPoolItem* XFillBmpPosOffsetYItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBmpPosOffsetYItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBmpPosOffsetYItem( rIn );
 }
@@ -1630,7 +1630,7 @@ TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 
 /*************************************************************************
 |*
-|*    XFillBackgroundItem::XFillBackgroundItem( BOOL )
+|*    XFillBackgroundItem::XFillBackgroundItem( sal_Bool )
 |*
 |*    Beschreibung
 |*    Ersterstellung    19.11.96 KA
@@ -1638,7 +1638,7 @@ TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 |*
 *************************************************************************/
 
-XFillBackgroundItem::XFillBackgroundItem( BOOL bFill ) :
+XFillBackgroundItem::XFillBackgroundItem( sal_Bool bFill ) :
     SfxBoolItem( XATTR_FILLBACKGROUND, bFill )
 {
 }
@@ -1675,7 +1675,7 @@ SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 
 /*************************************************************************
 |*
-|*    SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT nVer) const
+|*    SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 nVer) const
 |*
 |*    Beschreibung
 |*    Ersterstellung    23.01.96 KA
@@ -1683,7 +1683,7 @@ SfxPoolItem* XFillBackgroundItem::Clone( SfxItemPool* /*pPool*/) const
 |*
 *************************************************************************/
 
-SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, USHORT /*nVer*/) const
+SfxPoolItem* XFillBackgroundItem::Create(SvStream& rIn, sal_uInt16 /*nVer*/) const
 {
     return new XFillBackgroundItem( rIn );
 }

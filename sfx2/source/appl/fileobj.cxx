@@ -48,7 +48,7 @@
 #include <comphelper/processfactory.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/opengrf.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "fileobj.hxx"
 #include "app.hrc"
 
@@ -81,9 +81,9 @@ struct Impl_DownLoadData
 SvFileObject::SvFileObject() :
     pDownLoadData( NULL ), pOldParent( NULL ), nType( FILETYPE_TEXT )
 {
-    bLoadAgain = TRUE;
+    bLoadAgain = sal_True;
     bSynchron = bLoadError = bWaitForData = bDataReady = bNativFormat =
-    bClearMedium = bStateChangeCalled = bInCallDownLoad = FALSE;
+    bClearMedium = bStateChangeCalled = bInCallDownLoad = sal_False;
 }
 
 
@@ -99,11 +99,11 @@ SvFileObject::~SvFileObject()
 }
 
 
-BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
+sal_Bool SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                                 const String & rMimeType,
-                                BOOL bGetSynchron )
+                                sal_Bool bGetSynchron )
 {
-    ULONG nFmt = SotExchange::GetFormatStringId( rMimeType );
+    sal_uIntPtr nFmt = SotExchange::GetFormatStringId( rMimeType );
     switch( nType )
     {
     case FILETYPE_TEXT:
@@ -131,7 +131,7 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 //      Ende das Flag zurueckgesetzt werden.
 // wird einzig und allein im sw/ndgrf.cxx benutzt, wenn der Link vom
 // GraphicNode entfernt wird.
-                BOOL bOldNativFormat = bNativFormat;
+                sal_Bool bOldNativFormat = bNativFormat;
 //!!??              bNativFormat = 0 != (ASPECT_ICON & pSvData->GetAspect());
 
                 // falls gedruckt werden soll, warten wir bis die
@@ -150,7 +150,7 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                             Application::Reschedule();
 
                         xMed = xTmpMed;
-                        bClearMedium = TRUE;
+                        bClearMedium = sal_True;
                     }
                 }
 
@@ -211,7 +211,7 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
                 if( xMed.Is() && !bSynchron && bClearMedium )
                 {
                     xMed.Clear();
-                    bClearMedium = FALSE;
+                    bClearMedium = sal_False;
                 }
             }
         }
@@ -227,10 +227,10 @@ BOOL SvFileObject::GetData( ::com::sun::star::uno::Any & rData,
 
 
 
-BOOL SvFileObject::Connect( sfx2::SvBaseLink* pLink )
+sal_Bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 {
     if( !pLink || !pLink->GetLinkManager() )
-        return FALSE;
+        return sal_False;
 
     // teste doch mal, ob nicht ein anderer Link mit der gleichen
     // Verbindung schon existiert
@@ -242,7 +242,7 @@ BOOL SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         if( pShell.Is() )
         {
             if( pShell->IsAbortingImport() )
-                return FALSE;
+                return sal_False;
 
             if( pShell->GetMedium() )
                 sReferer = pShell->GetMedium()->GetName();
@@ -266,25 +266,25 @@ BOOL SvFileObject::Connect( sfx2::SvBaseLink* pLink )
         break;
 
     default:
-        return FALSE;
+        return sal_False;
     }
 
     SetUpdateTimeout( 0 );
 
     // und jetzt bei diesem oder gefundenem Pseudo-Object anmelden
     AddDataAdvise( pLink, SotExchange::GetFormatMimeType( pLink->GetContentType()), 0 );
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvFileObject::LoadFile_Impl()
+sal_Bool SvFileObject::LoadFile_Impl()
 {
     // wir sind noch im Laden!!
     if( bWaitForData || !bLoadAgain || xMed.Is() || pDownLoadData )
-        return FALSE;
+        return sal_False;
 
     // z.Z. nur auf die aktuelle DocShell
-    xMed = new SfxMedium( sFileNm, STREAM_STD_READ, TRUE );
+    xMed = new SfxMedium( sFileNm, STREAM_STD_READ, sal_True );
     SvLinkSource::StreamToLoadFrom aStreamToLoadFrom =
         getStreamToLoadFrom();
     xMed->setStreamToLoadFrom(
@@ -296,14 +296,14 @@ BOOL SvFileObject::LoadFile_Impl()
 
     if( !bSynchron )
     {
-        bLoadAgain = bDataReady = bInNewData = FALSE;
-        bWaitForData = TRUE;
+        bLoadAgain = bDataReady = bInNewData = sal_False;
+        bWaitForData = sal_True;
 
         SfxMediumRef xTmpMed = xMed;
         xMed->SetDataAvailableLink( STATIC_LINK( this, SvFileObject, LoadGrfNewData_Impl ) );
-        bInCallDownLoad = TRUE;
+        bInCallDownLoad = sal_True;
         xMed->DownLoad( STATIC_LINK( this, SvFileObject, LoadGrfReady_Impl ) );
-        bInCallDownLoad = FALSE;
+        bInCallDownLoad = sal_False;
 
         bClearMedium = !xMed.Is();
         if( bClearMedium )
@@ -311,24 +311,24 @@ BOOL SvFileObject::LoadFile_Impl()
         return bDataReady;
     }
 
-    bWaitForData = TRUE;
-    bDataReady = bInNewData = FALSE;
+    bWaitForData = sal_True;
+    bDataReady = bInNewData = sal_False;
     xMed->DownLoad();
     bLoadAgain = !xMed->IsRemote();
-    bWaitForData = FALSE;
+    bWaitForData = sal_False;
 
     // Grafik ist fertig, also DataChanged von der Statusaederung schicken:
     SendStateChg_Impl( xMed->GetInStream() && xMed->GetInStream()->GetError()
                         ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
-    return TRUE;
+    return sal_True;
 }
 
 
-BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
+sal_Bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 {
     GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
 
-    const USHORT nFilter = sFilter.Len() && pGF->GetImportFormatCount()
+    const sal_uInt16 nFilter = sFilter.Len() && pGF->GetImportFormatCount()
                             ? pGF->GetImportFormatNumber( sFilter )
                             : GRFILTER_FORMAT_DONTKNOW;
 
@@ -366,10 +366,10 @@ BOOL SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
                 xMed->SetDataAvailableLink( Link() );
 //              xMed->SetDoneLink( Link() );
                 delete pDownLoadData, pDownLoadData = 0;
-                bDataReady = TRUE;
-                bWaitForData = FALSE;
+                bDataReady = sal_True;
+                bWaitForData = sal_False;
             }
-            else if( FALSE )
+            else if( sal_False )
             {
                 // Timer aufsetzen, um zurueck zukehren
                 pDownLoadData->aTimer.Start();
@@ -519,15 +519,15 @@ void SvFileObject::Edit( Window* pParent, sfx2::SvBaseLink* pLink, const Link& r
 IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 {
     // wenn wir von hier kommen, kann es kein Fehler mehr sein
-    pThis->bLoadError = FALSE;
-    pThis->bWaitForData = FALSE;
-    pThis->bInCallDownLoad = FALSE;
+    pThis->bLoadError = sal_False;
+    pThis->bWaitForData = sal_False;
+    pThis->bInCallDownLoad = sal_False;
 
     if( !pThis->bInNewData && !pThis->bDataReady )
     {
             // Grafik ist fertig, also DataChanged von der Status-
             // aederung schicken:
-        pThis->bDataReady = TRUE;
+        pThis->bDataReady = sal_True;
         pThis->SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_OK );
 
             // und dann nochmal die Daten senden
@@ -536,7 +536,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfReady_Impl, void*, EMPTYARG )
 
     if( pThis->bDataReady )
     {
-        pThis->bLoadAgain = TRUE;
+        pThis->bLoadAgain = sal_True;
         if( pThis->xMed.Is() )
         {
             pThis->xMed->SetDataAvailableLink( Link() );
@@ -567,8 +567,8 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
     if( pThis->bInNewData )
         return 0;
 
-    pThis->bInNewData = TRUE;
-    pThis->bLoadError = FALSE;
+    pThis->bInNewData = sal_True;
+    pThis->bLoadError = sal_False;
 
     if( !pThis->pDownLoadData )
     {
@@ -599,7 +599,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
         // im DataChanged ein DataReady?
         else if( pThis->bWaitForData && pThis->pDownLoadData )
         {
-            pThis->bLoadError = TRUE;
+            pThis->bLoadError = sal_True;
         }
     }
 
@@ -610,7 +610,7 @@ IMPL_STATIC_LINK( SvFileObject, LoadGrfNewData_Impl, void*, EMPTYARG )
         pThis->SendStateChg_Impl( pStrm->GetError() ? sfx2::LinkManager::STATE_LOAD_ERROR : sfx2::LinkManager::STATE_LOAD_OK );
     }
 
-    pThis->bInNewData = FALSE;
+    pThis->bInNewData = sal_False;
     return 0;
 }
 
@@ -649,28 +649,28 @@ IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg )
         ERRCODE_SO_PENDING      wenn sie noch nicht komplett gelesen wurde
         ERRCODE_SO_FALSE        sonst
 */
-BOOL SvFileObject::IsPending() const
+sal_Bool SvFileObject::IsPending() const
 {
     return FILETYPE_GRF == nType && !bLoadError &&
             ( pDownLoadData || bWaitForData );
 }
-BOOL SvFileObject::IsDataComplete() const
+sal_Bool SvFileObject::IsDataComplete() const
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( FILETYPE_GRF != nType )
-        bRet = TRUE;
+        bRet = sal_True;
     else if( !bLoadError && ( !bWaitForData && !pDownLoadData ))
     {
         SvFileObject* pThis = (SvFileObject*)this;
         if( bDataReady ||
             ( bSynchron && pThis->LoadFile_Impl() && xMed.Is() ) )
-            bRet = TRUE;
+            bRet = sal_True;
         else
         {
             INetURLObject aUrl( sFileNm );
             if( aUrl.HasError() ||
                 INET_PROT_NOT_VALID == aUrl.GetProtocol() )
-                bRet = TRUE;
+                bRet = sal_True;
         }
     }
     return bRet;
@@ -684,8 +684,8 @@ void SvFileObject::CancelTransfers()
     if( !bDataReady )
     {
         // nicht noch mal aufsetzen
-        bLoadAgain = FALSE;
-        bDataReady = bLoadError = bWaitForData = TRUE;
+        bLoadAgain = sal_False;
+        bDataReady = bLoadError = bWaitForData = sal_True;
         SendStateChg_Impl( sfx2::LinkManager::STATE_LOAD_ABORT );
     }
 }
@@ -699,7 +699,7 @@ void SvFileObject::SendStateChg_Impl( sfx2::LinkManager::LinkState nState )
         aAny <<= rtl::OUString::valueOf( (sal_Int32)nState );
         DataChanged( SotExchange::GetFormatName(
                         sfx2::LinkManager::RegisterStatusInfoId()), aAny );
-        bStateChangeCalled = TRUE;
+        bStateChangeCalled = sal_True;
     }
 }
 

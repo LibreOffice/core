@@ -50,9 +50,9 @@
 #include <vcl/svapp.hxx>
 
 
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -145,11 +145,11 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceNa
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 OUString SAL_CALL SvxUnoMarkerTable::getImplementationName() throw( uno::RuntimeException )
@@ -307,7 +307,7 @@ void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const 
         throw container::NoSuchElementException();
 }
 
-static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, USHORT nWhich, uno::Any& rAny )
+static sal_Bool getByNameFromPool( const String& rSearchName, SfxItemPool* pPool, sal_uInt16 nWhich, uno::Any& rAny )
 {
     NameOrIndex *pItem;
     const sal_uInt32 nSurrogateCount = pPool ? pPool->GetItemCount2( nWhich ) : 0;
@@ -355,7 +355,7 @@ uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
     return aAny;
 }
 
-static void createNamesForPool( SfxItemPool* pPool, USHORT nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
+static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set< OUString, comphelper::UStringLess >& rNameSet )
 {
     const sal_uInt32 nSuroCount = pPool->GetItemCount2( nWhich );
     sal_uInt32 nSurrogate;

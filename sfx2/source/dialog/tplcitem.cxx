@@ -33,12 +33,9 @@
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/templdlg.hxx>
 #include <sfx2/bindings.hxx>
-#include "tplpitem.hxx"
+#include "sfx2/tplpitem.hxx"
 #include "tplcitem.hxx"
 #include "templdgi.hxx"
 
@@ -50,7 +47,7 @@
 // Konstruktor
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
-        USHORT nSlotId,                 // ID
+        sal_uInt16 nSlotId,                 // ID
         SfxCommonTemplateDialog_Impl &rDlg, // Controller-Instanz, dem dieses Item zugeordnet ist.
         SfxBindings &rBindings):
     SfxControllerItem(nSlotId, rBindings),
@@ -71,7 +68,7 @@ SfxTemplateControllerItem::~SfxTemplateControllerItem()
 // Benachrichtigung "uber Status"anderung; wird an den
 // im Konstruktor "ubergebenen Controller propagiert
 
-void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
+void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pItem )
 {
     switch(nSID)
@@ -82,7 +79,7 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         case SID_STYLE_FAMILY4:
         case SID_STYLE_FAMILY5:
         {
-            FASTBOOL bAvailable = SFX_ITEM_AVAILABLE == eState;
+            bool bAvailable = SFX_ITEM_AVAILABLE == eState;
             if ( !bAvailable )
                 rTemplateDlg.SetFamilyState(GetId(), 0);
             else {
@@ -91,9 +88,9 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
                 DBG_ASSERT(pStateItem != 0, "SfxTemplateItem erwartet");
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
-            BOOL bDisable = eState == SFX_ITEM_DISABLED;
+            sal_Bool bDisable = eState == SFX_ITEM_DISABLED;
             // Familie Disablen
-            USHORT nFamily = 0;
+            sal_uInt16 nFamily = 0;
             switch( GetId())
             {
                 case SID_STYLE_FAMILY1:
@@ -178,7 +175,7 @@ IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
     {
         case 0 :
         case 1 :
-            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState ? TRUE : FALSE);
+            pState = new SfxBoolItem(SID_STYLE_WATERCAN, pThis->nWaterCanState ? sal_True : sal_False);
         break;
     }
     pThis->rTemplateDlg.SetWaterCanState(pState);

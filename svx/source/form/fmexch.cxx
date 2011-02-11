@@ -33,7 +33,7 @@
 #include <svl/itempool.hxx>
 
 #ifndef _SVX_DBEXCH_HRC
-#include <dbexch.hrc>
+#include <svx/dbexch.hrc>
 #endif
 #include <sot/formats.hxx>
 #include <svtools/svtreebx.hxx>

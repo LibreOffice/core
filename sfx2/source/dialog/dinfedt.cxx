@@ -31,8 +31,8 @@
 #ifndef GCC
 #endif
 
-#include "dinfedt.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/dinfedt.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include <sfx2/sfx.hrc>
 #include "dinfedt.hrc"

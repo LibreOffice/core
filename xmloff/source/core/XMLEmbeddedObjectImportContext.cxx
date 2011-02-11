@@ -42,11 +42,11 @@
 #include <sot/clsids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/attrlist.hxx>
-#include "XMLFilterServiceNames.h"
+#include "xmloff/XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
 using ::rtl::OUString;
@@ -92,14 +92,14 @@ class XMLEmbeddedObjectImportContext_Impl : public SvXMLImportContext
 public:
     TYPEINFO();
 
-    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, USHORT nPrfx,
+    XMLEmbeddedObjectImportContext_Impl( SvXMLImport& rImport, sal_uInt16 nPrfx,
                                     const ::rtl::OUString& rLName,
     const ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::sax::XDocumentHandler >& rHandler );
 
     virtual ~XMLEmbeddedObjectImportContext_Impl();
 
-    virtual SvXMLImportContext *CreateChildContext( USHORT nPrefix,
+    virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const ::rtl::OUString& rLocalName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
@@ -113,7 +113,7 @@ public:
 TYPEINIT1( XMLEmbeddedObjectImportContext_Impl, SvXMLImportContext );
 
 XMLEmbeddedObjectImportContext_Impl::XMLEmbeddedObjectImportContext_Impl(
-        SvXMLImport& rImport, USHORT nPrfx,
+        SvXMLImport& rImport, sal_uInt16 nPrfx,
         const OUString& rLName,
         const Reference< XDocumentHandler >& rHandler ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -126,7 +126,7 @@ XMLEmbeddedObjectImportContext_Impl::~XMLEmbeddedObjectImportContext_Impl()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext_Impl::CreateChildContext(
-        USHORT nPrefix,
+        sal_uInt16 nPrefix,
         const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
@@ -196,7 +196,7 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
 }
 
 XMLEmbeddedObjectImportContext::XMLEmbeddedObjectImportContext(
-        SvXMLImport& rImport, USHORT nPrfx, const OUString& rLName,
+        SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< XAttributeList >& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -286,7 +286,7 @@ XMLEmbeddedObjectImportContext::~XMLEmbeddedObjectImportContext()
 }
 
 SvXMLImportContext *XMLEmbeddedObjectImportContext::CreateChildContext(
-        USHORT nPrefix, const OUString& rLocalName,
+        sal_uInt16 nPrefix, const OUString& rLocalName,
         const Reference< XAttributeList >& )
 {
     if( xHandler.is() )

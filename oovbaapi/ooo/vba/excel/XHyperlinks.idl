@@ -47,11 +47,11 @@ interface XHyperlinks
     // ------------------------------------------------------------------------
 
     XHyperlink Add(
-        [in] any aAnchor,
-        [in] any aAddress,
-        [in] any aSubAddress,
-        [in] any aScreenTip,
-        [in] any aTextToDisplay );
+        [in] any Anchor,
+        [in] any Address,
+        [in] any SubAddress,
+        [in] any ScreenTip,
+        [in] any TextToDisplay );
 
     // ------------------------------------------------------------------------
 

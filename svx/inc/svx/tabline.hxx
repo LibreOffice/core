@@ -30,7 +30,7 @@
 // include ---------------------------------------------------------------
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _GROUP_HXX //autogen
 #include <vcl/group.hxx>
@@ -45,7 +45,7 @@
 class SvxBrushItem;
 // define ----------------------------------------------------------------
 
-typedef USHORT ChangeType; // auch in tab_area.hxx (mitpflegen !!!)
+typedef sal_uInt16 ChangeType; // auch in tab_area.hxx (mitpflegen !!!)
 
 #define CT_NONE                 ( (ChangeType) 0x0000 )
 #define CT_MODIFIED             ( (ChangeType) 0x0001 )

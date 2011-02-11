@@ -36,11 +36,11 @@
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include "arrdecl.hxx"
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/templdlg.hxx>
 #include "objmnctl.hxx"
 #include "inettbc.hxx"
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/navigat.hxx>
 #include <sfx2/taskpane.hxx>
 #include <sfx2/module.hxx>
@@ -65,9 +65,9 @@ void SfxApplication::Registrations_Impl()
 
     // ChildWindows
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
-    SfxNavigatorWrapper::RegisterChildWindow( FALSE, NULL, SFX_CHILDWIN_NEVERHIDE );
+    SfxNavigatorWrapper::RegisterChildWindow( sal_False, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
-    SfxTemplateDialogWrapper::RegisterChildWindow(TRUE);
+    SfxTemplateDialogWrapper::RegisterChildWindow(sal_True);
     SfxDockingWrapper::RegisterChildWindow();
 
     // Controller
@@ -88,7 +88,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pTbxCtrlFac->Count(); n++ )
     {
         SfxTbxCtrlFactory *pF = (*pAppData_Impl->pTbxCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -113,7 +113,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pStbCtrlFac->Count(); n++ )
     {
         SfxStbCtrlFactory *pF = (*pAppData_Impl->pStbCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&
@@ -138,7 +138,7 @@ void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFacto
     }
 
 #ifdef DBG_UTIL
-    for ( USHORT n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
+    for ( sal_uInt16 n=0; n<pAppData_Impl->pMenuCtrlFac->Count(); n++ )
     {
         SfxMenuCtrlFactory *pF = (*pAppData_Impl->pMenuCtrlFac)[n];
         if ( pF->nTypeId && pF->nTypeId == pFact->nTypeId &&

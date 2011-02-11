@@ -44,7 +44,7 @@
 #include <basic/sbxvar.hxx>
 #endif
 
-#include "hlnkitem.hxx"
+#include "svx/hlnkitem.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -360,7 +360,7 @@ void SvxHyperlinkItem::SetMacroTable( const SvxMacroTableDtor& rTbl )
     pMacroTable = new SvxMacroTableDtor ( rTbl );
 }
 
-BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -382,13 +382,13 @@ BOOL SvxHyperlinkItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberI
             rVal <<= (sal_Int32) eType;
         break;
         default:
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
-BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
@@ -422,9 +422,9 @@ BOOL SvxHyperlinkItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMem
             eType = (SvxLinkInsertMode) (sal_uInt16) nVal;
         break;
         default:
-            return FALSE;
+            return sal_False;
     }
 
-    return TRUE;
+    return sal_True;
 }
 

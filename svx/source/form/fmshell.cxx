@@ -64,7 +64,7 @@
 #include <sfx2/objsh.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/fmpage.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "fmobj.hxx"
 
 #ifndef _SVX_SVXIDS_HRC
@@ -72,7 +72,7 @@
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include "fmexch.hxx"
 #include <svx/fmglob.hxx>
@@ -288,7 +288,7 @@ void FmFormShell::NotifyMarkListChanged(FmFormView* pWhichView)
 }
 
 //------------------------------------------------------------------------
-sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
+sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool /*bForBrowsing*/)
 {
     if ( GetImpl()->didPrepareClose() )
         // we already did a PrepareClose for the current modifications of the current form
@@ -320,10 +320,6 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                     if ( bModified && bUI )
                     {
                         QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
-                        if (bForBrowsing)
-                            aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
-                                BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
-
                         switch (aQry.Execute())
                         {
                             case RET_NO:
@@ -872,7 +868,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             rReq.Done();
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
-            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, sal_True );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
                 &aIdentifierItem, NULL );
         }   break;

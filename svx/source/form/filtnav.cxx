@@ -34,7 +34,7 @@
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "gridcell.hxx"
 
 /** === begin UNO includes === **/
@@ -1268,7 +1268,7 @@ sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& r
     if (aText.Len() == 0)
     {
         // deleting the entry asynchron
-        ULONG nEvent;
+        sal_uLong nEvent;
         PostUserEvent(nEvent, LINK(this, FmFilterNavigator, OnRemove), pEntry);
     }
     else
@@ -1922,7 +1922,7 @@ void FmFilterNavigator::DeleteSelection()
     }
 
     // Remove the selection
-    SelectAll(FALSE);
+    SelectAll(sal_False);
 
     for (::std::vector<SvLBoxEntry*>::reverse_iterator i = aEntryList.rbegin();
         // link problems with operator ==

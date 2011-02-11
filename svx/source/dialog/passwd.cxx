@@ -36,7 +36,7 @@
 
 #define _SVX_PASSWD_CXX
 
-#include "passwd.hxx"
+#include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "passwd.hrc"
@@ -45,7 +45,7 @@
 
 IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
 {
-    BOOL bOK = TRUE;
+    sal_Bool bOK = sal_True;
     short nRet = RET_OK;
     String aEmpty;
 
@@ -55,7 +55,7 @@ IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
         aNewPasswdED.SetText( aEmpty );
         aRepeatPasswdED.SetText( aEmpty );
         aNewPasswdED.GrabFocus();
-        bOK = FALSE;
+        bOK = sal_False;
     }
 
     if ( bOK && aCheckPasswordHdl.IsSet() && !aCheckPasswordHdl.Call( this ) )
@@ -63,7 +63,7 @@ IMPL_LINK( SvxPasswordDialog, ButtonHdl, OKButton *, EMPTYARG )
         ErrorBox( this, WB_OK, aOldPasswdErrStr ).Execute();
         aOldPasswdED.SetText( aEmpty );
         aOldPasswdED.GrabFocus();
-        bOK = FALSE;
+        bOK = sal_False;
     }
 
     if ( bOK )
@@ -93,7 +93,7 @@ IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-SvxPasswordDialog::SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords, BOOL bDisableOldPassword ) :
+SvxPasswordDialog::SvxPasswordDialog( Window* pParent, sal_Bool bAllowEmptyPasswords, sal_Bool bDisableOldPassword ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
     aOldFL          ( this, SVX_RES( FL_OLD_PASSWD ) ),
     aOldPasswdFT    ( this, SVX_RES( FT_OLD_PASSWD ) ),

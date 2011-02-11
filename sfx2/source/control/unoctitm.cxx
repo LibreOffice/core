@@ -463,7 +463,7 @@ void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
 {
     if ( pControllerItem )
-        pControllerItem->isMasterSlaveCommand();
+        return pControllerItem->isMasterSlaveCommand();
     return sal_False;
 }
 
@@ -605,12 +605,12 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BOOL], 4 ))
             {
-                // BOOL support
+                // sal_Bool support
                 rArgs[nLen].Value <<= aValue.toBoolean();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BYTE], 4 ))
             {
-                // BYTE support
+                // sal_uInt8 support
                 rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_LONG], 4 ))
@@ -650,7 +650,7 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
 
 SfxMapUnit SfxDispatchController_Impl::GetCoreMetric( SfxItemPool& rPool, sal_uInt16 nSlotId )
 {
-    USHORT nWhich = rPool.GetWhich( nSlotId );
+    sal_uInt16 nWhich = rPool.GetWhich( nSlotId );
     return rPool.GetMetric( nWhich );
 }
 
@@ -770,7 +770,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             {
                 const SfxSlot *pSlot = 0;
                 if ( pDispatcher->GetShellAndSlot_Impl( GetId(), &pShell, &pSlot, sal_False,
-                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), FALSE ) )
+                        SFX_CALLMODE_MODAL==(nCall&SFX_CALLMODE_MODAL), sal_False ) )
                 {
                     if ( bMasterSlave )
                     {
@@ -851,10 +851,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             aEvent.Source = (::com::sun::star::frame::XDispatch*) pDispatch;
             if ( bSuccess && pItem && !pItem->ISA(SfxVoidItem) )
             {
-                USHORT nSubId( 0 );
+                sal_uInt16 nSubId( 0 );
                 if ( eMapUnit == SFX_MAPUNIT_TWIP )
                     nSubId |= CONVERT_TWIPS;
-                pItem->QueryValue( aEvent.Result, (BYTE)nSubId );
+                pItem->QueryValue( aEvent.Result, (sal_uInt8)nSubId );
             }
 
             rListener->dispatchFinished( aEvent );
@@ -957,7 +957,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
         {
             // Retrieve metric from pool to have correct sub ID when calling QueryValue
-            USHORT     nSubId( 0 );
+            sal_uInt16     nSubId( 0 );
             SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
 
             // retrieve the core metric
@@ -975,7 +975,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
             if ( eMapUnit == SFX_MAPUNIT_TWIP )
                 nSubId |= CONVERT_TWIPS;
 
-            pState->QueryValue( aState, (BYTE)nSubId );
+            pState->QueryValue( aState, (sal_uInt8)nSubId );
         }
         else if ( eState == SFX_ITEM_DONTCARE )
         {

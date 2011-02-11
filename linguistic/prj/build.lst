@@ -1,4 +1,4 @@
-lg  linguistic  :   svl xmloff ucbhelper vos comphelper ICU:icu NULL
+lg  linguistic  :   svl xmloff ucbhelper vos comphelper ICU:icu LIBXSLT:libxslt NULL
 lg	linguistic								usr1	-	all	lg_mkout NULL
 lg	linguistic\prj							get		-	all	lg_prj NULL
 lg	linguistic\inc							nmake	-	all	lg_inc NULL

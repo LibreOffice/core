@@ -37,7 +37,7 @@
 #endif
 #include <sfx2/dockwin.hxx>
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #include <svtools/valueset.hxx>
 #include <svtools/stdctrl.hxx>
@@ -201,7 +201,7 @@ private:
 // der Rest ...
     Image               aImgLightOn;
     Image               aImgLightOff;
-    BOOL                bUpdate;
+    sal_Bool                bUpdate;
     ViewType3D          eViewType;
     Size                aSize;
 
@@ -226,7 +226,7 @@ private:
     // ItemSet used to remember set 2d attributes
     SfxItemSet*         mpRemember2DAttributes;
 
-    BOOL                bOnly3DChanged;
+    sal_Bool                bOnly3DChanged;
 
     //------------------------------------
 
@@ -247,8 +247,8 @@ private:
     SVX_DLLPRIVATE void         Construct();
     SVX_DLLPRIVATE void         Reset();
 
-    SVX_DLLPRIVATE BOOL         LBSelectColor( ColorLB* pLb, const Color& rColor );
-    SVX_DLLPRIVATE USHORT           GetLightSource( const PushButton* pBtn = NULL );
+    SVX_DLLPRIVATE sal_Bool         LBSelectColor( ColorLB* pLb, const Color& rColor );
+    SVX_DLLPRIVATE sal_uInt16           GetLightSource( const PushButton* pBtn = NULL );
     SVX_DLLPRIVATE ColorLB*     GetLbByButton( const PushButton* pBtn = NULL );
 
     SVX_DLLPRIVATE bool         GetUILightState( ImageButton& aBtn ) const;
@@ -263,7 +263,7 @@ public:
             ~Svx3DWin();
 
     void    InitColorLB( const SdrModel* pDoc );
-    BOOL    IsUpdateMode() const { return bUpdate; }
+    sal_Bool    IsUpdateMode() const { return bUpdate; }
 
     void    Update( SfxItemSet& rSet );
     void    GetAttr( SfxItemSet& rSet );
@@ -283,11 +283,11 @@ class Svx3DCtrlItem : public SfxControllerItem
     Svx3DWin* p3DWin;
 
  protected:
-    virtual void StateChanged( USHORT nSId, SfxItemState eState,
+    virtual void StateChanged( sal_uInt16 nSId, SfxItemState eState,
                                 const SfxPoolItem* pState );
 
  public:
-    Svx3DCtrlItem( USHORT, Svx3DWin*, SfxBindings* );
+    Svx3DCtrlItem( sal_uInt16, Svx3DWin*, SfxBindings* );
 };
 
 /*************************************************************************
@@ -299,14 +299,14 @@ class Svx3DCtrlItem : public SfxControllerItem
 
 class SvxConvertTo3DItem : public SfxControllerItem
 {
-    BOOL                        bState;
+    sal_Bool                        bState;
 
 protected:
-    virtual void StateChanged(UINT16 nSId, SfxItemState eState, const SfxPoolItem* pState);
+    virtual void StateChanged(sal_uInt16 nSId, SfxItemState eState, const SfxPoolItem* pState);
 
 public:
-    SvxConvertTo3DItem(UINT16 nId, SfxBindings* pBindings);
-    BOOL GetState() const { return bState; }
+    SvxConvertTo3DItem(sal_uInt16 nId, SfxBindings* pBindings);
+    sal_Bool GetState() const { return bState; }
 };
 
 #endif      // _SVX_FLOAT3D_HXX

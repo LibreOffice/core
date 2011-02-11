@@ -91,7 +91,7 @@
 #include <sfx2/docfac.hxx>
 #include "openflag.hxx"
 #include <sfx2/passwd.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/sfxsids.hrc>
 #include "filedlghelper.hrc"
 #include "filtergrouping.hxx"
@@ -1433,8 +1433,8 @@ void lcl_saveLastURLs(SvStringsDtor*&                                    rpURLLi
                       ::comphelper::SequenceAsVector< ::rtl::OUString >& lLastURLs )
 {
     lLastURLs.clear();
-    USHORT c = rpURLList->Count();
-    USHORT i = 0;
+    sal_uInt16 c = rpURLList->Count();
+    sal_uInt16 i = 0;
     for (i=0; i<c; ++i)
         lLastURLs.push_back(*(rpURLList->GetObject(i)));
 }
@@ -1522,22 +1522,24 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
         // check password checkbox if the document had password before
         if( mbHasPassword )
         {
-            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxStringItem, SID_PASSWORD, FALSE );
-            mbPwdCheckBoxState = ( pPassItem != NULL );
+            SFX_ITEMSET_ARG( rpSet, pPassItem, SfxBoolItem, SID_PASSWORDINTERACTION, sal_False );
+            mbPwdCheckBoxState = ( pPassItem != NULL && pPassItem->GetValue() );
 
             // in case the document has password to modify, the dialog should be shown
-            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, FALSE );
+            SFX_ITEMSET_ARG( rpSet, pPassToModifyItem, SfxUnoAnyItem, SID_MODIFYPASSWORDINFO, sal_False );
             mbPwdCheckBoxState |= ( pPassToModifyItem && pPassToModifyItem->GetValue().hasValue() );
         }
 
-        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, FALSE );
+        SFX_ITEMSET_ARG( rpSet, pSelectItem, SfxBoolItem, SID_SELECTION, sal_False );
         if ( pSelectItem )
             mbSelection = pSelectItem->GetValue();
         else
             mbSelectionEnabled = sal_False;
 
         // the password will be set in case user decide so
+        rpSet->ClearItem( SID_PASSWORDINTERACTION );
         rpSet->ClearItem( SID_PASSWORD );
+        rpSet->ClearItem( SID_ENCRYPTIONDATA );
         rpSet->ClearItem( SID_RECOMMENDREADONLY );
         rpSet->ClearItem( SID_MODIFYPASSWORDINFO );
 
@@ -1652,7 +1654,30 @@ ErrCode FileDialogHelper_Impl::execute( SvStringsDtor*& rpURLList,
                         if ( pPasswordRequest->isPassword() )
                         {
                             if ( pPasswordRequest->getPassword().getLength() )
-                                rpSet->Put( SfxStringItem( SID_PASSWORD, pPasswordRequest->getPassword() ) );
+                            {
+                                // TODO/LATER: The filters should show the password dialog themself in future
+                                if ( bMSType )
+                                {
+                                    // all the current MS-filters use MSCodec_Std97 implementation
+                                    uno::Sequence< sal_Int8 > aUniqueID = ::comphelper::DocPasswordHelper::GenerateRandomByteSequence( 16 );
+                                    uno::Sequence< sal_Int8 > aEncryptionKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pPasswordRequest->getPassword(), aUniqueID );
+
+                                    if ( aEncryptionKey.getLength() )
+                                    {
+                                        ::comphelper::SequenceAsHashMap aHashData;
+                                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97EncryptionKey" ) ) ] <<= aEncryptionKey;
+                                        aHashData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "STD97UniqueID" ) ) ] <<= aUniqueID;
+
+                                        rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aHashData.getAsConstNamedValueList() ) ) );
+                                    }
+                                    else
+                                        return ERRCODE_IO_NOTSUPPORTED;
+                                }
+                                else
+                                {
+                                    rpSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( ::comphelper::OStorageHelper::CreatePackageEncryptionData( pPasswordRequest->getPassword() ) ) ) );
+                                }
+                            }
 
                             if ( pPasswordRequest->getRecommendReadOnly() )
                                 rpSet->Put( SfxBoolItem( SID_RECOMMENDREADONLY, sal_True ) );
@@ -1867,7 +1892,16 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
     sQuery.appendAscii(":eflags="                                       );
     sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
 
-    uno::Reference< XEnumeration > xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    uno::Reference< XEnumeration > xResult;
+    try
+    {
+        xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    }
+    catch( uno::Exception& )
+    {
+        DBG_ERRORFILE( "Could not get filters from the configuration!" );
+    }
+
     TSortedFilterList         aIter   (xResult);
 
     // no matcher any longer used ...
@@ -1923,7 +1957,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
 
     // create the list of filters
     mpGraphicFilter = new GraphicFilter;
-    USHORT i, j, nCount = mpGraphicFilter->GetImportFormatCount();
+    sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
 
     // compute the extension string for all known import filters
     String aExtensions;
@@ -1932,7 +1966,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
     {
         j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )
@@ -1972,7 +2006,7 @@ void FileDialogHelper_Impl::addGraphicFilter()
         String aExt;
         j = 0;
         String sWildcard;
-        while( TRUE )
+        while( sal_True )
         {
             sWildcard = mpGraphicFilter->GetImportWildcard( i, j++ );
             if ( !sWildcard.Len() )

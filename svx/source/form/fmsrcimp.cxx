@@ -29,10 +29,10 @@
 #include "precompiled_svx.hxx"
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include "svx/fmtools.hxx"
-#include "fmsrccfg.hxx"
+#include "svx/fmsrccfg.hxx"
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <tools/wldcrd.hxx>
@@ -63,7 +63,7 @@
 #include "fmprop.hrc"
 #endif
 #include "fmservs.hxx"
-#include "fmsrcimp.hxx"
+#include "svx/fmsrcimp.hxx"
 #include <svx/fmsearch.hxx>
 
 #include <comphelper/numbers.hxx>

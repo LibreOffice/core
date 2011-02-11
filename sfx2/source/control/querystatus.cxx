@@ -44,7 +44,7 @@
 #include <com/sun/star/frame/status/ItemState.hpp>
 #include <com/sun/star/frame/status/Visibility.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
@@ -59,7 +59,7 @@ class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
     public:
         SFX_DECL_XINTERFACE_XTYPEPROVIDER
 
-        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const rtl::OUString& aCommand );
+        SfxQueryStatus_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const rtl::OUString& aCommand );
         virtual ~SfxQueryStatus_Impl();
 
         // Query method
@@ -79,7 +79,7 @@ class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
         sal_Bool                                                                   m_bQueryInProgress;
         SfxItemState                                                               m_eState;
         SfxPoolItem*                                                               m_pItem;
-        USHORT                                                                     m_nSlotID;
+        sal_uInt16                                                                     m_nSlotID;
         osl::Condition                                                             m_aCondition;
         ::com::sun::star::util::URL                                                m_aCommand;
         com::sun::star::uno::Reference< com::sun::star::frame::XDispatch >         m_xDispatch;
@@ -88,7 +88,7 @@ class SfxQueryStatus_Impl : public ::com::sun::star::frame::XStatusListener ,
 SFX_IMPL_XINTERFACE_2( SfxQueryStatus_Impl, OWeakObject, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 SFX_IMPL_XTYPEPROVIDER_2( SfxQueryStatus_Impl, ::com::sun::star::frame::XStatusListener, ::com::sun::star::lang::XEventListener )
 
-SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand ) :
+SfxQueryStatus_Impl::SfxQueryStatus_Impl( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand ) :
     cppu::OWeakObject(),
     m_bQueryInProgress( sal_False ),
     m_eState( SFX_ITEM_DISABLED ),
@@ -222,7 +222,7 @@ SfxItemState SfxQueryStatus_Impl::QueryState( SfxPoolItem*& rpPoolItem )
 
 //*************************************************************************
 
-SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, USHORT nSlotId, const OUString& rCommand )
+SfxQueryStatus::SfxQueryStatus( const Reference< XDispatchProvider >& rDispatchProvider, sal_uInt16 nSlotId, const OUString& rCommand )
 {
     m_pSfxQueryStatusImpl = new SfxQueryStatus_Impl( rDispatchProvider, nSlotId, rCommand );
     m_xStatusListener     = Reference< XStatusListener >(

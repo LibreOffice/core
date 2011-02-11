@@ -1,18 +1,2 @@
-xo	xmloff	:	offapi svl vos NULL
-xo	xmloff									usr1	-	all	xo_mkout NULL
-xo	xmloff\prj								get		-	all	xo_prj NULL
-xo	xmloff\inc								nmake	-	all	xo_inc NULL
-xo	xmloff\source\core						nmake	-	all	xo_core xo_inc NULL
-xo	xmloff\source\meta						nmake	-	all	xo_meta xo_inc NULL
-xo	xmloff\source\style						nmake	-	all	xo_style xo_inc NULL
-xo	xmloff\source\text						nmake	-	all	xo_text xo_inc NULL
-xo	xmloff\source\draw						nmake	-	all	xo_draw xo_inc NULL
-xo	xmloff\source\chart						nmake	-	all	xo_chart xo_inc NULL
-xo	xmloff\source\forms						nmake	-	all	xo_forms xo_inc NULL
-xo	xmloff\source\forms\handler             nmake   -   all xo_forms_handler xo_inc NULL
-xo	xmloff\source\script					nmake	-	all	xo_script xo_inc NULL
-xo  xmloff\source\transform                 nmake   -   all xo_transform xo_util xo_inc NULL
-xo  xmloff\source\xforms                    nmake   -   all xo_xforms xo_inc NULL
-xo  xmloff\source\table						nmake   -   all xo_table xo_inc NULL
-xo  xmloff\util                             nmake   -   all xo_util xo_chart xo_core xo_draw xo_forms xo_forms_handler xo_meta xo_script xo_style xo_text xo_xforms xo_table NULL
-xo xmloff\qa\unoapi nmake - all xo_qa_unoapi NULL
+xo	xmloff	: LIBXSLT:libxslt offapi svl vos NULL
+xo	xmloff\prj								nmake	-	all	xo_prj NULL

@@ -60,11 +60,11 @@
 
 #include <svx/unoshprp.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include "svx/svdpagv.hxx"
 #include "svx/svdview.hxx"
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -285,13 +285,13 @@ bool SvxOle2Shape::getPropertyValueImpl( const ::rtl::OUString& rName, const Sfx
             Graphic* pGraphic = pObj->GetGraphic();
             if( pGraphic )
             {
-                BOOL bIsWMF = FALSE;
+                sal_Bool bIsWMF = sal_False;
                 if ( pGraphic->IsLink() )
                 {
                     GfxLink aLnk = pGraphic->GetLink();
                     if ( aLnk.GetType() == GFX_LINK_TYPE_NATIVE_WMF )
                     {
-                        bIsWMF = TRUE;
+                        bIsWMF = sal_True;
                         uno::Sequence<sal_Int8> aSeq((sal_Int8*)aLnk.GetData(), (sal_Int32) aLnk.GetDataSize());
                         rValue <<= aSeq;
                     }

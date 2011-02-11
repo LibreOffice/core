@@ -36,7 +36,7 @@
 #include <svl/svarray.hxx>
 #include <tools/debug.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "lngopt.hxx"
 
 
@@ -73,7 +73,7 @@ class ConvDicList :
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::
                 XTerminateListener >        xExitListener;
 
-    BOOL                                    bDisposing;
+    sal_Bool                                    bDisposing;
 
     // disallow copy-constructor and assignment-operator for now
     ConvDicList( const ConvDicList & );

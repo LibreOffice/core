@@ -46,7 +46,7 @@
 #include <svl/cntnrsrt.hxx>
 #include <svl/itemset.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 
 #ifndef _XMLOFF_FAMILIES_HXX
@@ -216,7 +216,7 @@ void SvXMLStyleContext::Finish( sal_Bool /*bOverwrite*/ )
 {
 }
 
-BOOL SvXMLStyleContext::IsTransient() const
+sal_Bool SvXMLStyleContext::IsTransient() const
 {
     return sal_False;
 }
@@ -366,7 +366,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
 #endif
         ((SvXMLStylesContext_Impl *)this)->pIndices =
             new SvXMLStyleIndices_Impl(
-                sal::static_int_cast< USHORT >(aStyles.Count()), 5 );
+                sal::static_int_cast< sal_uInt16 >(aStyles.Count()), 5 );
         for( sal_uInt32 i=0; i < aStyles.Count(); i++ )
         {
             SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles.GetObject(i));
@@ -384,7 +384,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
     if( pIndices )
     {
         SvXMLStyleIndex_Impl aIndex( nFamily, rName );
-        ULONG nPos = 0;
+        sal_uLong nPos = 0;
         if( pIndices->Seek_Entry( &aIndex, &nPos ) )
             pStyle = pIndices->GetObject( nPos )->GetStyle();
     }

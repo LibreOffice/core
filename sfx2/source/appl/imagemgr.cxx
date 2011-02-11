@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -41,7 +41,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -71,7 +71,7 @@ static WeakReference< XModuleUIConfigurationManagerSupplier > m_xModuleCfgMgrSup
 static WeakReference< XURLTransformer >                       m_xURLTransformer;
 static ModuleIdToImagegMgr                                    m_aModuleIdToImageMgrMap;
 
-Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
+Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, sal_Bool bBig, sal_Bool bHiContrast )
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
@@ -105,8 +105,8 @@ Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::sta
         URL aTargetURL;
         aTargetURL.Complete = aURL;
         xURLTransformer->parseStrict( aTargetURL );
-        USHORT nId = ( USHORT ) aTargetURL.Path.toInt32();*/
-        USHORT nId = ( USHORT ) String(aURL).Copy(5).ToInt32();
+        sal_uInt16 nId = ( sal_uInt16 ) aTargetURL.Path.toInt32();*/
+        sal_uInt16 nId = ( sal_uInt16 ) String(aURL).Copy(5).ToInt32();
         const SfxSlot* pSlot = 0;
         if ( xModel.is() )
         {

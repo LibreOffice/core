@@ -158,32 +158,32 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
 
 void SbxDecimal::setChar( sal_Unicode val )
 {
-    VarDecFromUI2( (USHORT)val, &maDec );
+    VarDecFromUI2( (sal_uInt16)val, &maDec );
 }
 
-void SbxDecimal::setByte( BYTE val )
+void SbxDecimal::setByte( sal_uInt8 val )
 {
-    VarDecFromUI1( (BYTE)val, &maDec );
+    VarDecFromUI1( (sal_uInt8)val, &maDec );
 }
 
-void SbxDecimal::setShort( INT16 val )
+void SbxDecimal::setShort( sal_Int16 val )
 {
     VarDecFromI2( (short)val, &maDec );
 }
 
-void SbxDecimal::setLong( INT32 val )
+void SbxDecimal::setLong( sal_Int32 val )
 {
     VarDecFromI4( (long)val, &maDec );
 }
 
-void SbxDecimal::setUShort( UINT16 val )
+void SbxDecimal::setUShort( sal_uInt16 val )
 {
-    VarDecFromUI2( (USHORT)val, &maDec );
+    VarDecFromUI2( (sal_uInt16)val, &maDec );
 }
 
-void SbxDecimal::setULong( UINT32 val )
+void SbxDecimal::setULong( sal_uInt32 val )
 {
-    VarDecFromUI4( (ULONG)val, &maDec );
+    VarDecFromUI4( (sal_uIntPtr)val, &maDec );
 }
 
 bool SbxDecimal::setSingle( float val )
@@ -200,12 +200,12 @@ bool SbxDecimal::setDouble( double val )
 
 void SbxDecimal::setInt( int val )
 {
-    setLong( (INT32)val );
+    setLong( (sal_Int32)val );
 }
 
 void SbxDecimal::setUInt( unsigned int val )
 {
-    setULong( (UINT32)val );
+    setULong( (sal_uInt32)val );
 }
 
 // sbxscan.cxx
@@ -261,31 +261,31 @@ bool SbxDecimal::getChar( sal_Unicode& rVal )
     return bRet;
 }
 
-bool SbxDecimal::getByte( BYTE& rVal )
+bool SbxDecimal::getByte( sal_uInt8& rVal )
 {
     bool bRet = ( VarUI1FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getShort( INT16& rVal )
+bool SbxDecimal::getShort( sal_Int16& rVal )
 {
     bool bRet = ( VarI2FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getLong( INT32& rVal )
+bool SbxDecimal::getLong( sal_Int32& rVal )
 {
     bool bRet = ( VarI4FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getUShort( UINT16& rVal )
+bool SbxDecimal::getUShort( sal_uInt16& rVal )
 {
     bool bRet = ( VarUI2FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
 }
 
-bool SbxDecimal::getULong( UINT32& rVal )
+bool SbxDecimal::getULong( sal_uInt32& rVal )
 {
     bool bRet = ( VarUI4FromDec( &maDec, &rVal ) == S_OK );
     return bRet;
@@ -305,7 +305,7 @@ bool SbxDecimal::getDouble( double& rVal )
 
 bool SbxDecimal::getInt( int& rVal )
 {
-    INT32 TmpVal;
+    sal_Int32 TmpVal;
     bool bRet = getLong( TmpVal );
     rVal = TmpVal;
     return bRet;
@@ -313,7 +313,7 @@ bool SbxDecimal::getInt( int& rVal )
 
 bool SbxDecimal::getUInt( unsigned int& rVal )
 {
-    UINT32 TmpVal;
+    sal_uInt32 TmpVal;
     bool bRet = getULong( TmpVal );
     rVal = TmpVal;
     return bRet;
@@ -364,11 +364,11 @@ SbxDecimal::CmpResult compare( const SbxDecimal &rLeft, const SbxDecimal &rRight
 }
 
 void SbxDecimal::setChar( sal_Unicode val )     { (void)val; }
-void SbxDecimal::setByte( BYTE val )            { (void)val; }
-void SbxDecimal::setShort( INT16 val )          { (void)val; }
-void SbxDecimal::setLong( INT32 val )           { (void)val; }
-void SbxDecimal::setUShort( UINT16 val )        { (void)val; }
-void SbxDecimal::setULong( UINT32 val )         { (void)val; }
+void SbxDecimal::setByte( sal_uInt8 val )           { (void)val; }
+void SbxDecimal::setShort( sal_Int16 val )          { (void)val; }
+void SbxDecimal::setLong( sal_Int32 val )           { (void)val; }
+void SbxDecimal::setUShort( sal_uInt16 val )        { (void)val; }
+void SbxDecimal::setULong( sal_uInt32 val )         { (void)val; }
 bool SbxDecimal::setSingle( float val )         { (void)val; return false; }
 bool SbxDecimal::setDouble( double val )        { (void)val; return false; }
 void SbxDecimal::setInt( int val )              { (void)val; }
@@ -376,11 +376,11 @@ void SbxDecimal::setUInt( unsigned int val )    { (void)val; }
 bool SbxDecimal::setString( ::rtl::OUString* pOUString )    { (void)pOUString;  return false; }
 
 bool SbxDecimal::getChar( sal_Unicode& rVal )   { (void)rVal; return false; }
-bool SbxDecimal::getByte( BYTE& rVal )          { (void)rVal; return false; }
-bool SbxDecimal::getShort( INT16& rVal )        { (void)rVal; return false; }
-bool SbxDecimal::getLong( INT32& rVal )         { (void)rVal; return false; }
-bool SbxDecimal::getUShort( UINT16& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getULong( UINT32& rVal )       { (void)rVal; return false; }
+bool SbxDecimal::getByte( sal_uInt8& rVal )         { (void)rVal; return false; }
+bool SbxDecimal::getShort( sal_Int16& rVal )        { (void)rVal; return false; }
+bool SbxDecimal::getLong( sal_Int32& rVal )         { (void)rVal; return false; }
+bool SbxDecimal::getUShort( sal_uInt16& rVal )      { (void)rVal; return false; }
+bool SbxDecimal::getULong( sal_uInt32& rVal )       { (void)rVal; return false; }
 bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
 bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
 bool SbxDecimal::getInt( int& rVal )            { (void)rVal; return false; }

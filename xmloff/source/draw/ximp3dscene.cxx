@@ -31,7 +31,7 @@
 #include <xmloff/xmluconv.hxx>
 #include "xexptran.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <com/sun/star/drawing/Direction3D.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include "eventimp.hxx"
@@ -54,8 +54,8 @@ SdXML3DLightContext::SdXML3DLightContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName),
     maDiffuseColor(0x00000000),
     maDirection(0.0, 0.0, 1.0),
-    mbEnabled(FALSE),
-    mbSpecular(FALSE)
+    mbEnabled(sal_False),
+    mbSpecular(sal_False)
 {
     // read attributes for the 3DScene
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -103,7 +103,7 @@ TYPEINIT1( SdXML3DSceneShapeContext, SdXMLShapeContext );
 
 SdXML3DSceneShapeContext::SdXML3DSceneShapeContext(
     SvXMLImport& rImport,
-    USHORT nPrfx,
+    sal_uInt16 nPrfx,
     const OUString& rLocalName,
     const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList,
     uno::Reference< drawing::XShapes >& rShapes,
@@ -180,7 +180,7 @@ void SdXML3DSceneShapeContext::EndElement()
 
 //////////////////////////////////////////////////////////////////////////////
 
-SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix,
+SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const uno::Reference< xml::sax::XAttributeList>& xAttrList )
 {
@@ -224,20 +224,20 @@ SvXMLImportContext* SdXML3DSceneShapeContext::CreateChildContext( USHORT nPrefix
 
 SdXML3DSceneAttributesHelper::SdXML3DSceneAttributesHelper( SvXMLImport& rImporter )
 :   mrImport( rImporter ),
-    mbSetTransform( FALSE ),
+    mbSetTransform( sal_False ),
     mxPrjMode(drawing::ProjectionMode_PERSPECTIVE),
     mnDistance(1000),
     mnFocalLength(1000),
     mnShadowSlant(0),
     mxShadeMode(drawing::ShadeMode_SMOOTH),
     maAmbientColor(0x00666666),
-    mbLightingMode(FALSE),
+    mbLightingMode(sal_False),
     maVRP(0.0, 0.0, 1.0),
     maVPN(0.0, 0.0, 1.0),
     maVUP(0.0, 1.0, 0.0),
-    mbVRPUsed(FALSE),
-    mbVPNUsed(FALSE),
-    mbVUPUsed(FALSE)
+    mbVRPUsed(sal_False),
+    mbVPNUsed(sal_False),
+    mbVUPUsed(sal_False)
 {
 }
 
@@ -283,7 +283,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVRP)
             {
                 maVRP = aNewVec;
-                mbVRPUsed = TRUE;
+                mbVRPUsed = sal_True;
             }
             return;
         }
@@ -295,7 +295,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVPN)
             {
                 maVPN = aNewVec;
-                mbVPNUsed = TRUE;
+                mbVPNUsed = sal_True;
             }
             return;
         }
@@ -307,7 +307,7 @@ void SdXML3DSceneAttributesHelper::processSceneAttribute( sal_uInt16 nPrefix, co
             if(aNewVec != maVUP)
             {
                 maVUP = aNewVec;
-                mbVUPUsed = TRUE;
+                mbVUPUsed = sal_True;
             }
             return;
         }

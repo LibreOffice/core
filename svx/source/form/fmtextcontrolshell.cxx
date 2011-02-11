@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmtextcontroldialogs.hxx"
 #include "fmtextcontrolfeature.hxx"
 #include "fmtextcontrolshell.hxx"
@@ -94,7 +94,7 @@ namespace svx
     using namespace ::com::sun::star::container;
 
     //====================================================================
-    typedef USHORT WhichId;
+    typedef sal_uInt16 WhichId;
 
     //====================================================================
     static SfxSlotId pTextControlSlots[] =

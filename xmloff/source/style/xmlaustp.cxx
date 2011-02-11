@@ -34,10 +34,10 @@
 #include "impastpl.hxx"
 #include <xmloff/xmlaustp.hxx>
 #include <xmloff/families.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 
 #ifndef _XMLOFF_PAGEMASTERSTYLEMAP_HXX
 #include <xmloff/PageMasterStyleMap.hxx>

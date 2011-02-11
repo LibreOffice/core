@@ -30,7 +30,7 @@
 #include "EventOOoTContext.hxx"
 #include "EventMap.hxx"
 #include "MutableAttrList.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #ifndef _XMLOFF_ACTIONMAPTYPESOOo_HXX
 #include "ActionMapTypesOOo.hxx"
 #endif

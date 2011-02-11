@@ -44,8 +44,8 @@
 #include "editeng/borderline.hxx"
 #include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::XLayoutConstrains;
@@ -927,8 +927,8 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
     if (!pOther || (pOther == &gEmptyBorder))
         return true;
 
-    USHORT nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
-    USHORT nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
+    sal_uInt16 nThisSize = pThis->GetOutWidth() + pThis->GetDistance() + pThis->GetInWidth();
+    sal_uInt16 nOtherSize = pOther->GetOutWidth() + pOther->GetDistance() + pOther->GetInWidth();
 
     if (nThisSize > nOtherSize)
         return true;

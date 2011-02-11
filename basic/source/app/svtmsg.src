@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "svtmsg.hrc"
+#include "basic/svtmsg.hrc"
 
 
 // Hier sind die Messages aus dem Verzeichnis /basic/source/app enhalten

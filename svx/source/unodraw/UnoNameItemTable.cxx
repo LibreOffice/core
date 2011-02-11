@@ -39,14 +39,14 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::vos;
 
-SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, USHORT nWhich, BYTE nMemberId ) throw()
+SvxUnoNameItemTable::SvxUnoNameItemTable( SdrModel* pModel, sal_uInt16 nWhich, sal_uInt8 nMemberId ) throw()
 : mpModel( pModel ),
   mpModelPool( pModel ? &pModel->GetItemPool() : NULL ),
   mnWhich( nWhich ), mnMemberId( nMemberId )
@@ -93,11 +93,11 @@ sal_Bool SAL_CALL SvxUnoNameItemTable::supportsService( const  OUString& Service
     uno::Sequence< OUString > aSNL( getSupportedServiceNames() );
     const OUString * pArray = aSNL.getConstArray();
 
-    for( INT32 i = 0; i < aSNL.getLength(); i++ )
+    for( sal_Int32 i = 0; i < aSNL.getLength(); i++ )
         if( pArray[i] == ServiceName )
-            return TRUE;
+            return sal_True;
 
-    return FALSE;
+    return sal_False;
 }
 
 void SAL_CALL SvxUnoNameItemTable::ImplInsertByName( const OUString& aName, const uno::Any& aElement )

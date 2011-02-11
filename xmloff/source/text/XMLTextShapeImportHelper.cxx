@@ -41,7 +41,7 @@
 #include "XMLAnchorTypePropHdl.hxx"
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
-#include "XMLTextShapeImportHelper.hxx"
+#include "xmloff/XMLTextShapeImportHelper.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

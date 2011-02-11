@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include <com/sun/star/style/GraphicLocation.hpp>
 
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <xmloff/xmlexp.hxx>

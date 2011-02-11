@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XInputStream.hpp>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "XMLBase64Export.hxx"
 
 using namespace ::com::sun::star::uno;

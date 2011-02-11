@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <com/sun/star/drawing/EnhancedCustomShapeGluePointType.hpp>
 /*
 static const SvxMSDffVertPair Vert[] =

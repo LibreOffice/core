@@ -31,7 +31,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <tools/debug.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmltoken.hxx>
 

@@ -57,7 +57,7 @@ const rtl::OUString UIELEMENT_PROPNAME_RESOURCEURL( RTL_CONSTASCII_USTRINGPARAM(
 const rtl::OUString UIELEMENT_PROPNAME_TYPE( RTL_CONSTASCII_USTRINGPARAM( "Type" ));
 const rtl::OUString UIELEMENT_PROPNAME_FRAME( RTL_CONSTASCII_USTRINGPARAM( "Frame" ));
 
-using namespace rtl;
+//using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
                                                                   sal_Int32  /*nHandle*/         ,
                                                                   const Any& /*aValue*/             ) throw( com::sun::star::lang::IllegalArgumentException )
 {
-    //  Initialize state with FALSE !!!
+    //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
     return sal_False ;
 }

@@ -40,12 +40,13 @@
 class SbMethod;
 class SbProperty;
 class SbiRuntime;
-typedef std::deque< USHORT > SbiBreakpoints;
+typedef std::deque< sal_uInt16 > SbiBreakpoints;
 class SbiImage;
 class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
@@ -62,6 +63,8 @@ class SbModule : public SbxObject
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
 
+    void            implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
+
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
@@ -69,36 +72,38 @@ protected:
     SbiImage*           pImage;        // the Image
     SbiBreakpoints*     pBreaks;       // Breakpoints
     SbClassData*        pClassData;
-    BOOL mbVBACompat;
-    INT32 mnType;
+    sal_Bool mbVBACompat;
+    sal_Int32 mnType;
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
-    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
+    static void     implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
     SbProperty*     GetProperty( const String&, SbxDataType );
     SbProcedureProperty* GetProcedureProperty( const String&, SbxDataType );
     SbIfaceMapperMethod* GetIfaceMapperMethod( const String&, SbMethod* );
-    void            EndDefinitions( BOOL=FALSE );
-    USHORT          Run( SbMethod* );
+    void            EndDefinitions( sal_Bool=sal_False );
+    sal_uInt16          Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
-    void            GlobalRunInit( BOOL bBasicStart );  // for all modules
+    void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
+    void            GlobalRunInit( sal_Bool bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
-    const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
-    const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT&,
-                        BOOL bFollowJumps, const SbiImage* pImg=NULL ) const;
-    virtual BOOL LoadData( SvStream&, USHORT );
-    virtual BOOL StoreData( SvStream& ) const;
-    virtual BOOL LoadCompleted();
+    const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16& ) const;
+    const sal_uInt8*    FindNextStmnt( const sal_uInt8*, sal_uInt16&, sal_uInt16&,
+                        sal_Bool bFollowJumps, const SbiImage* pImg=NULL ) const;
+    virtual sal_Bool LoadData( SvStream&, sal_uInt16 );
+    virtual sal_Bool StoreData( SvStream& ) const;
+    virtual sal_Bool LoadCompleted();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
+    void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);
     TYPEINFO();
-                    SbModule( const String&, BOOL bCompat = FALSE );
+                    SbModule( const String&, sal_Bool bCompat = sal_False );
     virtual void    SetParent( SbxObject* );
     virtual void    Clear();
 
@@ -111,33 +116,33 @@ public:
     void            SetSource32( const ::rtl::OUString& r );
     void            SetComment( const String& r );
 
-    virtual BOOL    Compile();
-    BOOL            Disassemble( String& rText );
-    virtual BOOL    IsCompiled() const;
+    virtual sal_Bool    Compile();
+    sal_Bool            Disassemble( String& rText );
+    virtual sal_Bool    IsCompiled() const;
     const SbxObject* FindType( String aTypeName ) const;
 
-    virtual BOOL    IsBreakable( USHORT nLine ) const;
+    virtual sal_Bool    IsBreakable( sal_uInt16 nLine ) const;
     virtual size_t  GetBPCount() const;
-    virtual USHORT  GetBP( size_t n ) const;
-    virtual BOOL    IsBP( USHORT nLine ) const;
-    virtual BOOL    SetBP( USHORT nLine );
-    virtual BOOL    ClearBP( USHORT nLine );
+    virtual sal_uInt16  GetBP( size_t n ) const;
+    virtual sal_Bool    IsBP( sal_uInt16 nLine ) const;
+    virtual sal_Bool    SetBP( sal_uInt16 nLine );
+    virtual sal_Bool    ClearBP( sal_uInt16 nLine );
     virtual void    ClearAllBP();
 
     // Lines of Subs
-    virtual SbMethod*   GetFunctionForLine( USHORT );
+    virtual SbMethod*   GetFunctionForLine( sal_uInt16 );
 
     // Store only image, no source (needed for new password protection)
-       BOOL StoreBinaryData( SvStream& );
-       BOOL StoreBinaryData( SvStream&, USHORT nVer );
-    BOOL LoadBinaryData( SvStream&, USHORT nVer );
-    BOOL LoadBinaryData( SvStream& );
-    BOOL ExceedsLegacyModuleSize();
+       sal_Bool StoreBinaryData( SvStream& );
+       sal_Bool StoreBinaryData( SvStream&, sal_uInt16 nVer );
+    sal_Bool LoadBinaryData( SvStream&, sal_uInt16 nVer );
+    sal_Bool LoadBinaryData( SvStream& );
+    sal_Bool ExceedsLegacyModuleSize();
     void fixUpMethodStart( bool bCvtToLegacy, SbiImage* pImg = NULL ) const;
-    BOOL IsVBACompat() const;
-    void SetVBACompat( BOOL bCompat );
-    INT32 GetModuleType() { return mnType; }
-    void SetModuleType( INT32 nType ) { mnType = nType; }
+    sal_Bool IsVBACompat() const;
+    void SetVBACompat( sal_Bool bCompat );
+    sal_Int32 GetModuleType() { return mnType; }
+    void SetModuleType( sal_Int32 nType ) { mnType = nType; }
     bool isProxyModule() { return bIsProxyModule; }
     void AddVarName( const String& aName );
     void RemoveVars();
