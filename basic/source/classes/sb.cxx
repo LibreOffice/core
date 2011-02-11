@@ -55,8 +55,12 @@
 #include "sb.hrc"
 #include <basrid.hxx>
 #include <vos/mutex.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/XCloseBroadcaster.hpp>
+#include <com/sun/star/util/XCloseListener.hpp>
 #include "errobject.hxx"
+#include <map>
 #include <hash_map>
 
 #include <com/sun/star/script/ModuleType.hpp>
@@ -79,6 +83,143 @@ using com::sun::star::lang::XMultiServiceFactory;
 
 const static String aThisComponent( RTL_CONSTASCII_USTRINGPARAM("ThisComponent") );
 const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
+
+// ============================================================================
+
+class DocBasicItem : public ::cppu::WeakImplHelper1< util::XCloseListener >
+{
+public:
+    explicit DocBasicItem( StarBASIC& rDocBasic );
+    virtual ~DocBasicItem();
+
+    inline const SbxObjectRef& getClassModules() const { return mxClassModules; }
+    inline bool isDocClosed() const { return mbDocClosed; }
+
+    void clearDependingVarsOnDelete( StarBASIC& rDeletedBasic );
+
+    void startListening();
+    void stopListening();
+
+    virtual void SAL_CALL queryClosing( const lang::EventObject& rSource, sal_Bool bGetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException);
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& rSource ) throw (uno::RuntimeException);
+    virtual void SAL_CALL disposing( const lang::EventObject& rSource ) throw (uno::RuntimeException);
+
+private:
+    StarBASIC&      mrDocBasic;
+    SbxObjectRef    mxClassModules;
+    bool            mbDocClosed;
+    bool            mbDisposed;
+};
+
+// ----------------------------------------------------------------------------
+
+DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
+    mrDocBasic( rDocBasic ),
+    mxClassModules( new SbxObject( String() ) ),
+    mbDocClosed( false ),
+    mbDisposed( false )
+{
+}
+
+DocBasicItem::~DocBasicItem()
+{
+    stopListening();
+}
+
+void DocBasicItem::clearDependingVarsOnDelete( StarBASIC& rDeletedBasic )
+{
+    mrDocBasic.implClearDependingVarsOnDelete( &rDeletedBasic );
+}
+
+void DocBasicItem::startListening()
+{
+    Any aThisComp;
+    mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
+    Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
+    if( xCloseBC.is() )
+        try { xCloseBC->addCloseListener( this ); } catch( uno::Exception& ) {}
+}
+
+void DocBasicItem::stopListening()
+{
+    if( mbDisposed ) return;
+    mbDisposed = true;
+    Any aThisComp;
+    mrDocBasic.GetUNOConstant( "ThisComponent", aThisComp );
+    Reference< util::XCloseBroadcaster > xCloseBC( aThisComp, UNO_QUERY );
+    if( xCloseBC.is() )
+        try { xCloseBC->removeCloseListener( this ); } catch( uno::Exception& ) {}
+}
+
+void SAL_CALL DocBasicItem::queryClosing( const lang::EventObject& /*rSource*/, sal_Bool /*bGetsOwnership*/ ) throw (util::CloseVetoException, uno::RuntimeException)
+{
+}
+
+void SAL_CALL DocBasicItem::notifyClosing( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException)
+{
+    stopListening();
+    mbDocClosed = true;
+}
+
+void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException)
+{
+    stopListening();
+}
+
+// ----------------------------------------------------------------------------
+
+namespace {
+
+typedef ::rtl::Reference< DocBasicItem > DocBasicItemRef;
+typedef std::map< const StarBASIC*, DocBasicItemRef > DocBasicItemMap;
+static DocBasicItemMap GaDocBasicItems;
+
+const DocBasicItem* lclFindDocBasicItem( const StarBASIC* pDocBasic )
+{
+    DocBasicItemMap::iterator it = GaDocBasicItems.find( pDocBasic );
+    return (it != GaDocBasicItems.end()) ? it->second.get() : 0;
+}
+
+void lclInsertDocBasicItem( StarBASIC& rDocBasic )
+{
+    DocBasicItemRef& rxDocBasicItem = GaDocBasicItems[ &rDocBasic ];
+    rxDocBasicItem.set( new DocBasicItem( rDocBasic ) );
+    rxDocBasicItem->startListening();
+}
+
+void lclRemoveDocBasicItem( StarBASIC& rDocBasic )
+{
+    DocBasicItemMap::iterator it = GaDocBasicItems.find( &rDocBasic );
+    if( it != GaDocBasicItems.end() )
+    {
+        it->second->stopListening();
+        GaDocBasicItems.erase( it );
+    }
+    DocBasicItemMap::iterator it_end = GaDocBasicItems.end();
+    for( it = GaDocBasicItems.begin(); it != it_end; ++it )
+        it->second->clearDependingVarsOnDelete( rDocBasic );
+}
+
+StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
+{
+    StarBASIC* pRetBasic = NULL;
+    SbxObject* pCurParent = pModule;
+    while( pCurParent->GetParent() != NULL )
+    {
+        pCurParent = pCurParent->GetParent();
+        StarBASIC* pDocBasic = PTR_CAST( StarBASIC, pCurParent );
+        if( pDocBasic != NULL && pDocBasic->IsDocBasic() )
+        {
+            pRetBasic = pDocBasic;
+            break;
+        }
+    }
+    return pRetBasic;
+}
+
+} // namespace
+
+// ============================================================================
 
 SbxObject* StarBASIC::getVBAGlobals( )
 {
@@ -461,6 +602,7 @@ SbxObject* createUserTypeImpl( const String& rClassName )
     return pRetObj;
 }
 
+
 TYPEINIT1(SbClassModuleObject,SbModule)
 
 SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
@@ -610,8 +752,12 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
 SbClassModuleObject::~SbClassModuleObject()
 {
+    // do not trigger termination event when document is already closed
     if( StarBASIC::IsRunning() )
-        triggerTerminateEvent();
+        if( StarBASIC* pDocBasic = lclGetDocBasicForModule( this ) )
+            if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
+                if( !pDocBasicItem->isDocClosed() )
+                    triggerTerminateEvent();
 
     // Must be deleted by base class dtor because this data
     // is not owned by the SbClassModuleObject object
@@ -699,8 +845,14 @@ SbClassFactory::~SbClassFactory()
 
 void SbClassFactory::AddClassModule( SbModule* pClassModule )
 {
+    SbxObjectRef xToUseClassModules = xClassModules;
+
+    if( StarBASIC* pDocBasic = lclGetDocBasicForModule( pClassModule ) )
+        if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
+            xToUseClassModules = pDocBasicItem->getClassModules();
+
     SbxObject* pParent = pClassModule->GetParent();
-    xClassModules->Insert( pClassModule );
+    xToUseClassModules->Insert( pClassModule );
     pClassModule->SetParent( pParent );
 }
 
@@ -717,12 +869,19 @@ SbxBase* SbClassFactory::Create( UINT16, UINT32 )
 
 SbxObject* SbClassFactory::CreateObject( const String& rClassName )
 {
-    SbxVariable* pVar = xClassModules->Find( rClassName, SbxCLASS_DONTCARE );
+    SbxObjectRef xToUseClassModules = xClassModules;
+
+    if( SbModule* pMod = pMOD )
+        if( StarBASIC* pDocBasic = lclGetDocBasicForModule( pMod ) )
+            if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
+                xToUseClassModules = pDocBasicItem->getClassModules();
+
+    SbxVariable* pVar = xToUseClassModules->Find( rClassName, SbxCLASS_OBJECT );
     SbxObject* pRet = NULL;
     if( pVar )
     {
-        SbModule* pMod = (SbModule*)pVar;
-        pRet = new SbClassModuleObject( pMod );
+        SbModule* pVarMod = (SbModule*)pVar;
+        pRet = new SbClassModuleObject( pVarMod );
     }
     return pRet;
 }
@@ -733,9 +892,6 @@ SbModule* SbClassFactory::FindClass( const String& rClassName )
     SbModule* pMod = pVar ? (SbModule*)pVar : NULL;
     return pMod;
 }
-
-typedef std::vector< StarBASIC* > DocBasicVector;
-static DocBasicVector GaDocBasics;
 
 StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     : SbxObject( String( RTL_CONSTASCII_USTRINGPARAM("StarBASIC") ) ), bDocBasic( bIsDocBasic )
@@ -768,7 +924,7 @@ StarBASIC::StarBASIC( StarBASIC* p, BOOL bIsDocBasic  )
     bQuit = FALSE;
 
     if( bDocBasic )
-        GaDocBasics.push_back( this );
+        lclInsertDocBasicItem( *this );
 }
 
 // #51727 Override SetModified so that the modified state
@@ -780,6 +936,9 @@ void StarBASIC::SetModified( BOOL b )
 
 StarBASIC::~StarBASIC()
 {
+    // Needs to be first action as it can trigger events
+    disposeComVariablesForBasic( this );
+
     if( !--GetSbData()->nInst )
     {
         RemoveFactory( pSBFAC );
@@ -812,20 +971,7 @@ StarBASIC::~StarBASIC()
     {
         SbxError eOld = SbxBase::GetError();
 
-        DocBasicVector::iterator it;
-        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
-        {
-            if( *it == this )
-            {
-                GaDocBasics.erase( it );
-                break;
-            }
-        }
-        for( it = GaDocBasics.begin() ; it != GaDocBasics.end() ; ++it )
-        {
-            StarBASIC* pBasic = *it;
-            pBasic->implClearDependingVarsOnDelete( this );
-        }
+        lclRemoveDocBasicItem( *this );
 
         SbxBase::ResetError();
         if( eOld != SbxERR_OK )
@@ -845,7 +991,6 @@ StarBASIC::~StarBASIC()
     }
 
     clearUnoMethodsForBasic( this );
-    disposeComVariablesForBasic( this );
 }
 
 // Override new() operator, so that everyone can create a new instance
