@@ -95,6 +95,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdobj.hxx>
 
+#include <anchoredobject.hxx>
 #include <docufld.hxx>
 #include <flddropdown.hxx>
 #include <format.hxx>
@@ -1887,15 +1888,12 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
     if( isAnchor )
     {
         m_pSerializer->startElementNS( XML_wp, XML_anchor,
-                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "1",
+                XML_distT, "0", XML_distB, "0", XML_distL, "0", XML_distR, "0", XML_simplePos, "0",
                 XML_relativeHeight, "0", // TODO
                 XML_behindDoc, rGrfNode.GetFlyFmt()->GetOpaque().GetValue() ? "0" : "1",
                 XML_locked, "0", XML_layoutInCell, "1", XML_allowOverlap, "1", // TODO
                 FSEND );
-        Point pos = rGrfNode.GetFlyFmt()->FindLayoutRect().Pos() - rGrfNode.FindPageFrmRect( false, NULL, false ).Pos();
-        OString x( OString::valueOf( pos.X()));
-        OString y( OString::valueOf( pos.Y()));
-        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, x.getStr(), XML_y, y.getStr(), FSEND );
+        m_pSerializer->singleElementNS( XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND ); // required, unused
         const char* relativeFromH;
         const char* relativeFromV;
         switch( rGrfNode.GetFlyFmt()->GetAnchor().GetAnchorId())
@@ -1913,15 +1911,20 @@ void DocxAttributeOutput::FlyFrameGraphic( const SwGrfNode& rGrfNode, const Size
                 relativeFromV = "line";
                 break;
         };
+        Point pos( 0, 0 );
+        if( SwFlyFrmFmt* flyfmt = dynamic_cast<SwFlyFrmFmt*>(rGrfNode.GetFlyFmt())) // TODO is always true?
+            pos = flyfmt->GetAnchoredObj()->GetCurrRelPos();
+        OString x( OString::valueOf( TwipsToEMU( pos.X())));
+        OString y( OString::valueOf( TwipsToEMU( pos.Y())));
         m_pSerializer->startElementNS( XML_wp, XML_positionH, XML_relativeFrom, relativeFromH, FSEND );
-        m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
-        m_pSerializer->write( "left" ); // TODO
-        m_pSerializer->endElementNS( XML_wp, XML_align );
+        m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+        m_pSerializer->write( x );
+        m_pSerializer->endElementNS( XML_wp, XML_posOffset );
         m_pSerializer->endElementNS( XML_wp, XML_positionH );
         m_pSerializer->startElementNS( XML_wp, XML_positionV, XML_relativeFrom, relativeFromV, FSEND );
-        m_pSerializer->startElementNS( XML_wp, XML_align, FSEND );
-        m_pSerializer->write( "top" ); // TODO
-        m_pSerializer->endElementNS( XML_wp, XML_align );
+        m_pSerializer->startElementNS( XML_wp, XML_posOffset, FSEND );
+        m_pSerializer->write( y );
+        m_pSerializer->endElementNS( XML_wp, XML_posOffset );
         m_pSerializer->endElementNS( XML_wp, XML_positionV );
     }
     else
