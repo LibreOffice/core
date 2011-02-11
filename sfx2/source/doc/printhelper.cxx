@@ -53,7 +53,6 @@
 #include <ucbhelper/content.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <vos/mutex.hxx>
-#include <svtools/printdlg.hxx>
 #include <cppuhelper/implbase1.hxx>
 
 #include <sfx2/viewfrm.hxx>
@@ -345,7 +344,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         // Name-Property?
         if ( rProp.Name.compareToAscii( "Name" ) == 0 )
         {
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if ( ( rProp.Value >>= sTemp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
 
@@ -423,8 +422,8 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             rtl::OUString aTmp;
             if ( ( rProp.Value >>= aTmp ) == sal_False )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            USHORT nCount = pPrinter->GetPaperBinCount();
-            for (USHORT nBin=0; nBin<nCount; nBin++)
+            sal_uInt16 nCount = pPrinter->GetPaperBinCount();
+            for (sal_uInt16 nBin=0; nBin<nCount; nBin++)
             {
                 ::rtl::OUString aName( pPrinter->GetPaperBinName(nBin) );
                 if ( aName == aTmp )
@@ -619,9 +618,9 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         if ( rProp.Name.compareToAscii( "FileName" ) == 0 )
         {
             // unpack th URL and check for a valid and well known protocol
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if (
-                ( rProp.Value.getValueType()!=::getCppuType((const OUSTRING*)0))  ||
+                ( rProp.Value.getValueType()!=::getCppuType((const ::rtl::OUString*)0))  ||
                 (!(rProp.Value>>=sTemp))
                )
             {
@@ -718,7 +717,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
         // Pages-Property
         else if ( rProp.Name.compareToAscii( "Pages" ) == 0 )
         {
-            OUSTRING sTemp;
+            ::rtl::OUString sTemp;
             if( rProp.Value >>= sTemp )
             {
                 aCheckedArgs[nProps].Name = rProp.Name;
@@ -799,81 +798,8 @@ void IMPL_PrintListener_DataContainer::Notify( SfxBroadcaster& rBC, const SfxHin
             {
                 if ( !m_xPrintJob.is() )
                     m_xPrintJob = new SfxPrintJob_Impl( this );
-/*
-                PrintDialog* pDlg = pPrintHint->GetPrintDialog();
-                Printer* pPrinter = pPrintHint->GetPrinter();
-                ::rtl::OUString aPrintFile ( ( pPrinter && pPrinter->IsPrintFileEnabled() ) ? pPrinter->GetPrintFile() : String() );
-                ::rtl::OUString aRangeText ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_RANGE) ) ? pDlg->GetRangeText() : String() );
-                sal_Bool bSelectionOnly = ( ( pDlg && pDlg->IsRangeChecked(PRINTDIALOG_SELECTION) ) ? sal_True : sal_False );
-
-                sal_Int32 nArgs = 2;
-                if ( aPrintFile.getLength() )
-                    nArgs++;
-                if ( aRangeText.getLength() )
-                    nArgs++;
-                else if ( bSelectionOnly )
-                    nArgs++;
-
-                m_aPrintOptions.realloc(nArgs);
-                m_aPrintOptions[0].Name = DEFINE_CONST_UNICODE("CopyCount");
-                m_aPrintOptions[0].Value <<= (sal_Int16) (pPrinter ? pPrinter->GetCopyCount() : 1 );
-                m_aPrintOptions[1].Name = DEFINE_CONST_UNICODE("Collate");
-                m_aPrintOptions[1].Value <<= (sal_Bool) (pDlg ? pDlg->IsCollateChecked() : sal_False );
-
-                if ( bSelectionOnly )
-                {
-                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Selection");
-                    m_aPrintOptions[2].Value <<= bSelectionOnly;
-                }
-                else if ( aRangeText.getLength() )
-                {
-                    m_aPrintOptions[2].Name = DEFINE_CONST_UNICODE("Pages");
-                    m_aPrintOptions[2].Value <<= aRangeText;
-                }
-
-                if ( aPrintFile.getLength() )
-                {
-                    m_aPrintOptions[nArgs-1].Name = DEFINE_CONST_UNICODE("FileName");
-                    m_aPrintOptions[nArgs-1].Value <<= aPrintFile;
-                }
-*/
                 m_aPrintOptions = pPrintHint->GetOptions();
             }
-/*
-            else if ( pPrintHint->GetWhich() == -3 )    // -3 : AdditionalPrintOptions
-            {
-                    uno::Sequence < beans::PropertyValue >& lOldOpts = m_aPrintOptions;
-                    const uno::Sequence < beans::PropertyValue >& lNewOpts = pPrintHint->GetAdditionalOptions();
-                    sal_Int32 nOld = lOldOpts.getLength();
-                    sal_Int32 nAdd = lNewOpts.getLength();
-                    lOldOpts.realloc( nOld + nAdd );
-
-                    // assume that all new elements are overwriting old ones and so don't need to be added
-                    sal_Int32 nTotal = nOld;
-                    for ( sal_Int32 n=0; n<nAdd; n++ )
-                    {
-                        sal_Int32 m;
-                        for ( m=0; m<nOld; m++ )
-                            if ( lNewOpts[n].Name == lOldOpts[m].Name )
-                                // new option overwrites old one
-                                break;
-
-                        if ( m == nOld )
-                        {
-                            // this is a new option, so add it to the resulting sequence - counter must be incremented
-                            lOldOpts[nTotal].Name = lNewOpts[n].Name;
-                            lOldOpts[nTotal++].Value = lNewOpts[n].Value;
-                        }
-                        else
-                            // overwrite old option with new value, counter stays unmodified
-                            lOldOpts[m].Value = lNewOpts[n].Value;
-                    }
-
-                    if ( nTotal != lOldOpts.getLength() )
-                        // at least one new options has overwritten an old one, so we allocated too much
-                        lOldOpts.realloc(  nTotal );
-            }
-*/
             else if ( pPrintHint->GetWhich() != -2 )    // -2 : CancelPrintJob
             {
                 view::PrintJobEvent aEvent;

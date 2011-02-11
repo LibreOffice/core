@@ -199,7 +199,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 |* MovePage
 |*
 \************************************************************************/
-void FmFormModel::MovePage( USHORT nPgNum, USHORT nNewPos )
+void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 {
 #ifndef SVX_LIGHT
     m_pImpl->bMovingPage = sal_True;

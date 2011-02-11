@@ -898,7 +898,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
             {
                 sal_Int16 nWheelBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
                 OSL_VERIFY( xModel->getPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) >>= nWheelBehavior );
-                USHORT nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
+                sal_uInt16 nVclSetting = MOUSE_WHEEL_FOCUS_ONLY;
                 switch ( nWheelBehavior )
                 {
                 case MouseWheelBehavior::SCROLL_DISABLED:   nVclSetting = MOUSE_WHEEL_DISABLE; break;
@@ -913,7 +913,7 @@ void DbCellControl::Init( Window& rParent, const Reference< XRowSet >& _rxCursor
                 MouseSettings aMouseSettings = aSettings.GetMouseSettings();
                 aMouseSettings.SetWheelBehavior( nVclSetting );
                 aSettings.SetMouseSettings( aMouseSettings );
-                m_pWindow->SetSettings( aSettings, TRUE );
+                m_pWindow->SetSettings( aSettings, sal_True );
             }
         }
         catch( const Exception& )
@@ -986,7 +986,7 @@ void DbCellControl::PaintCell( OutputDevice& _rDev, const Rectangle& _rRect )
         m_pPainter->SetTextFillColor( _rDev.GetTextColor() );
 
         Font aFont( _rDev.GetFont() );
-        aFont.SetTransparent( TRUE );
+        aFont.SetTransparent( sal_True );
         m_pPainter->SetFont( aFont );
 
         m_pPainter->SetPosSizePixel( _rRect.TopLeft(), _rRect.GetSize() );
@@ -1193,7 +1193,7 @@ String DbTextField::GetFormatText(const Reference< XColumn >& _rxField, const Re
     if ( _rxField.is() )
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType);
         }
         catch( const Exception& )
         {
@@ -1534,7 +1534,7 @@ String DbFormattedField::GetFormatText(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 return aText;
             ((FormattedField*)m_pPainter)->SetValue(dValue);
@@ -1578,7 +1578,7 @@ void DbFormattedField::UpdateFromField(const Reference< ::com::sun::star::sdb::X
             // ein double-Feld bindet und als Text formatiert, liefert m_rColumn.IsNumeric() sal_True. Das heisst
             // also einfach, dass ich den Inhalt der Variant mittels getDouble abfragen kann, und dann kann
             // ich den Rest (die Formatierung) dem FormattedField ueberlassen.
-            double dValue = getValue(_rxField, m_rColumn.GetParent().getNullDate(), m_nKeyType);
+            double dValue = getValue( _rxField, m_rColumn.GetParent().getNullDate() );
             if (_rxField->wasNull())
                 m_pWindow->SetText(String());
             else
@@ -1653,11 +1653,14 @@ DbCheckBox::DbCheckBox( DbGridColumn& _rColumn )
 
 namespace
 {
-    void setCheckBoxStyle( Window* _pWindow, USHORT nStyle )
+    void setCheckBoxStyle( Window* _pWindow, bool bMono )
     {
         AllSettings aSettings = _pWindow->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
-        aStyleSettings.SetCheckBoxStyle( nStyle );
+        if( bMono )
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() | STYLE_OPTION_MONO );
+        else
+            aStyleSettings.SetOptions( aStyleSettings.GetOptions() & (~STYLE_OPTION_MONO) );
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings );
     }
@@ -1683,8 +1686,8 @@ void DbCheckBox::Init( Window& rParent, const Reference< XRowSet >& xCursor )
         sal_Int16 nStyle = awt::VisualEffect::LOOK3D;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_VISUALEFFECT ) >>= nStyle );
 
-        setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
-        setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT ? STYLE_CHECKBOX_MONO : STYLE_CHECKBOX_WIN );
+        setCheckBoxStyle( m_pWindow, nStyle == awt::VisualEffect::FLAT );
+        setCheckBoxStyle( m_pPainter, nStyle == awt::VisualEffect::FLAT );
 
         sal_Bool bTristate = sal_True;
         OSL_VERIFY( xModel->getPropertyValue( FM_PROP_TRISTATE ) >>= bTristate );
@@ -2271,13 +2274,13 @@ void DbDateField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< DateField* >( m_pWindow )->SetMin( nMin );
         static_cast< DateField* >( m_pWindow )->SetMax( nMax );
         static_cast< DateField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
+        static_cast< DateField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< DateField* >( m_pPainter )->SetExtDateFormat( (ExtDateFieldFormat)nFormat );
         static_cast< DateField* >( m_pPainter )->SetMin( nMin );
         static_cast< DateField* >( m_pPainter )->SetMax( nMax );
         static_cast< DateField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
+        static_cast< DateField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
 }
 
@@ -2381,13 +2384,13 @@ void DbTimeField::implAdjustGenericFieldSetting( const Reference< XPropertySet >
         static_cast< TimeField* >( m_pWindow )->SetMin( nMin );
         static_cast< TimeField* >( m_pWindow )->SetMax( nMax );
         static_cast< TimeField* >( m_pWindow )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( TRUE );
+        static_cast< TimeField* >( m_pWindow )->EnableEmptyFieldValue( sal_True );
 
         static_cast< TimeField* >( m_pPainter )->SetExtFormat( (ExtTimeFieldFormat)nFormat );
         static_cast< TimeField* >( m_pPainter )->SetMin( nMin );
         static_cast< TimeField* >( m_pPainter )->SetMax( nMax );
         static_cast< TimeField* >( m_pPainter )->SetStrictFormat( bStrict );
-        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( TRUE );
+        static_cast< TimeField* >( m_pPainter )->EnableEmptyFieldValue( sal_True );
     }
 }
 
@@ -2553,7 +2556,7 @@ String DbComboBox::GetFormatText(const Reference< ::com::sun::star::sdb::XColumn
     if (_rxField.is())
         try
         {
-            aString = getValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
+            aString = getFormattedValue( _rxField, xFormatter, m_rColumn.GetParent().getNullDate(), m_rColumn.GetKey(), m_nKeyType );
         }
         catch( const Exception& )
         {
@@ -3164,7 +3167,7 @@ void DbFilterField::Update()
 
             while (!xListCursor->isAfterLast() && i++ < SHRT_MAX) // max anzahl eintraege
             {
-                aStr = getValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
+                aStr = getFormattedValue(xDataField, xFormatter, aNullDate, nFormatKey, nKeyType);
                 aStringList.push_back(aStr);
                 xListCursor->next();
             }
@@ -3496,7 +3499,7 @@ void FmXGridCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-void FmXGridCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXGridCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -3905,7 +3908,7 @@ void FmXEditCell::onFocusLost( const awt::FocusEvent& _rEvent )
 }
 
 //------------------------------------------------------------------------------
-void FmXEditCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXEditCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -4063,7 +4066,7 @@ Window* FmXCheckBoxCell::getEventWindow() const
 }
 
 //------------------------------------------------------------------
-void FmXCheckBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXCheckBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     switch ( _nEventId )
     {
@@ -4400,7 +4403,7 @@ void SAL_CALL FmXListBoxCell::makeVisible(sal_Int16 nEntry) throw( RuntimeExcept
 }
 
 //------------------------------------------------------------------
-void FmXListBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
     if  (   ( &_rWindow == m_pBox )
         &&  ( _nEventId == VCLEVENT_LISTBOX_SELECT )
@@ -4614,7 +4617,7 @@ void SAL_CALL FmXComboBoxCell::setDropDownLineCount(sal_Int16 nLines) throw( Run
 }
 
 //------------------------------------------------------------------------------
-void FmXComboBoxCell::onWindowEvent( const ULONG _nEventId, const Window& _rWindow, const void* _pEventData )
+void FmXComboBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _rWindow, const void* _pEventData )
 {
 
     switch ( _nEventId )

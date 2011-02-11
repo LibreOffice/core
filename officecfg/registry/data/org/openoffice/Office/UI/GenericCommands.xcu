@@ -3412,7 +3412,7 @@
             </node>
             <node oor:name=".uno:BmpMask" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">~Eyedropper</value>
+                    <value xml:lang="en-US">Color ~Replacer</value>
                 </prop>
             </node>
             <node oor:name=".uno:GoLeftBlock" oor:op="replace">

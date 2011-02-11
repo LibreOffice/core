@@ -451,7 +451,7 @@ namespace basic
             SotStorageRef xDummyStor = new SotStorage( ::rtl::OUString() );
             _out_rpBasicManager = new BasicManager( *xDummyStor, String() /* TODO/LATER: xStorage */,
                                                                 pAppBasic,
-                                                                &aAppBasicDir, TRUE );
+                                                                &aAppBasicDir, sal_True );
             if ( _out_rpBasicManager->HasErrors() )
             {
                 // handle errors
@@ -477,7 +477,7 @@ namespace basic
             // create new BASIC-manager
             StarBASIC* pBasic = new StarBASIC( pAppBasic );
             pBasic->SetFlag( SBX_EXTSEARCH );
-            _out_rpBasicManager = new BasicManager( pBasic, NULL, TRUE );
+            _out_rpBasicManager = new BasicManager( pBasic, NULL, sal_True );
         }
 
         // knit the containers with the BasicManager
@@ -507,6 +507,13 @@ namespace basic
 
         // register as listener for the BasicManager being destroyed
         StartListening( *_out_rpBasicManager );
+
+        // #i104876: Library container must not be modified just after
+        // creation. This happens as side effect when creating default
+        // "Standard" libraries and needs to be corrected here
+        xBasicLibs->setModified( sal_False );
+        xDialogLibs->setModified( sal_False );
+
     }
 
     //--------------------------------------------------------------------

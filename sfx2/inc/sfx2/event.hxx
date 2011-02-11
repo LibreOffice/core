@@ -46,17 +46,17 @@ class SFX2_DLLPUBLIC SfxEventHint : public SfxHint
 {
     SfxObjectShell*     pObjShell;
     ::rtl::OUString     aEventName;
-    USHORT              nEventId;
+    sal_uInt16              nEventId;
 
 public:
     TYPEINFO();
-    SfxEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
+    SfxEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj = 0 )
                         :   pObjShell(pObj),
                             aEventName(aName),
                             nEventId(nId)
                         {}
 
-    USHORT              GetEventId() const
+    sal_uInt16              GetEventId() const
                         { return nEventId; }
 
     ::rtl::OUString     GetEventName() const
@@ -75,12 +75,12 @@ class SFX2_DLLPUBLIC SfxViewEventHint : public SfxEventHint
 public:
     TYPEINFO();
 
-    SfxViewEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController, ::com::sun::star::uno::UNO_QUERY )
                         {}
 
-    SfxViewEventHint( USHORT nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
+    SfxViewEventHint( sal_uInt16 nId, const ::rtl::OUString& aName, SfxObjectShell *pObj, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController2 >& xController )
                         : SfxEventHint( nId, aName, pObj )
                         , xViewController( xController )
                         {}
@@ -119,7 +119,6 @@ public:
     SfxObjectShell*     GetObjShell() const { return _pObjShell; }
 };
 
-class PrintDialog;
 class Printer;
 class SfxPrintingHint : public SfxHint
 {

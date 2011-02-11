@@ -28,10 +28,10 @@
 #include <basic/sbstar.hxx>
 #include "sbtrace.hxx"
 
-#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
+#define RTLFUNC( name ) void SbRtl_##name( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 #define RTLNAME( name ) &SbRtl_##name
 
-typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, BOOL bWrite );
+typedef void( *RtlCall ) ( StarBASIC* p, SbxArray& rArgs, sal_Bool bWrite );
 
 // Properties
 

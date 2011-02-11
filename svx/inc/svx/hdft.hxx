@@ -54,21 +54,21 @@ class SVX_DLLPUBLIC SvxHFPage: public SfxTabPage
 
 public:
 
-    virtual BOOL    FillItemSet( SfxItemSet& rOutSet );
+    virtual sal_Bool    FillItemSet( SfxItemSet& rOutSet );
     virtual void    Reset( const SfxItemSet& rSet );
 
     virtual         ~SvxHFPage();
 
-    void            DisableDeleteQueryBox() { bDisableQueryBox = TRUE; }
-    void            EnableBackgroundSelector( BOOL bNew ) { bEnableBackgroundSelector = bNew; }
+    void            DisableDeleteQueryBox() { bDisableQueryBox = sal_True; }
+    void            EnableBackgroundSelector( sal_Bool bNew ) { bEnableBackgroundSelector = bNew; }
     void            EnableDynamicSpacing();
 
 protected:
     virtual void    ActivatePage( const SfxItemSet& rSet );
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 
-    SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rSet,
-               USHORT nSetId );
+    SvxHFPage( Window* pParent, sal_uInt16 nResId, const SfxItemSet& rSet,
+               sal_uInt16 nSetId );
 
     CheckBox        aTurnOnBox;
     CheckBox        aCntSharedBox;
@@ -86,10 +86,10 @@ protected:
     SvxPageWindow   aBspWin;
     PushButton      aBackgroundBtn;
 
-    USHORT          nId;
+    sal_uInt16          nId;
     SfxItemSet*     pBBSet;
-    BOOL            bDisableQueryBox;
-    BOOL            bEnableBackgroundSelector;
+    sal_Bool            bDisableQueryBox;
+    sal_Bool            bEnableBackgroundSelector;
     FASTBOOL        bInReset;
 
     void            InitHandler();
@@ -114,7 +114,7 @@ class SVX_DLLPUBLIC SvxHeaderPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     SvxHeaderPage( Window* pParent, const SfxItemSet& rSet );
@@ -126,7 +126,7 @@ class SVX_DLLPUBLIC SvxFooterPage : public SvxHFPage
 {
 public:
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
 private:
     SVX_DLLPRIVATE SvxFooterPage(   Window* pParent, const SfxItemSet& rSet );

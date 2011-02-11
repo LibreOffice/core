@@ -81,7 +81,7 @@ static ::rtl::OUString getWindowState(const css::uno::Reference< css::awt::XWind
     // check for system window is neccessary to guarantee correct pointer cast!
     if (pWindow!=NULL && pWindow->IsSystemWindow())
     {
-        ULONG nMask  = WINDOWSTATE_MASK_ALL;
+        sal_uLong nMask  = WINDOWSTATE_MASK_ALL;
               nMask &= ~(WINDOWSTATE_MASK_MINIMIZED);
         sWindowState = ((SystemWindow*)pWindow)->GetWindowState(nMask);
     }
