@@ -21469,7 +21469,7 @@
       <attribute name="val" tokenid="ooxml:CT_VerticalAlignRun_val" action="setValue"/>
       <action name="start" action="setDefaultStringValue"/>
     </resource>
-    <resource name="CT_FitText" resource="Properties" tag="paragraph">
+    <resource name="CT_FitText" resource="Properties" tag="paragraph" supported="no">
       <attribute name="val" tokenid="ooxml:CT_FitText_val"/>
       <attribute name="id" tokenid="ooxml:CT_FitText_id"/>
     </resource>
@@ -21590,7 +21590,7 @@
       <value name="exact" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_exact">exact</value>
       <value name="atLeast" tokenid="ooxml:Value_wordprocessingml_ST_LineSpacingRule_atLeast">atLeast</value>
     </resource>
-    <resource name="CT_Spacing" resource="Properties" tag="paragraüh">
+    <resource name="CT_Spacing" resource="Properties" tag="paragraph">
       <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
       <attribute name="beforeLines" tokenid="ooxml:CT_Spacing_beforeLines"/>
       <attribute name="beforeAutospacing" tokenid="ooxml:CT_Spacing_beforeAutospacing"/>

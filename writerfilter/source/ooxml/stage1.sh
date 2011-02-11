@@ -1,12 +1,11 @@
 #!/bin/bash
 
-SEARCHIN=$SRC_ROOT/writerfilter/source/dmapper
+SEARCHIN=$2
 
-(
 echo '<?xml version="1.0"?>'
 echo "<stage1>"
 
-xsltproc analyzemodel.xsl model.xml | tail -n +2
+cat $1 | tail -n +2
 
 find $SEARCHIN -name "*.cxx" -exec grep -nH -A 1 "case NS_" {} \; |
 grep -v "//.*case NS_" |
@@ -19,6 +18,3 @@ sed 's#^.*-[0-9][0-9]*-.*$#<nostatus/>#' |
 grep -v "^--"
 
 echo "</stage1>"
-) |
-xsltproc analyzestage2.xsl - |
-xsltproc analyzestage3.xsl -
