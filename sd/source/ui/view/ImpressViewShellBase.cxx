@@ -45,12 +45,6 @@ TYPEINIT1(ImpressViewShellBase, ViewShellBase);
 // We have to expand the SFX_IMPL_VIEWFACTORY macro to call LateInit() after a
 // new ImpressViewShellBase object has been constructed.
 
-/*
-SFX_IMPL_VIEWFACTORY(ImpressViewShellBase, SdResId(STR_DEFAULTVIEW))
-{
-    SFX_VIEW_REGISTRATION(DrawDocShell);
-}
-*/
 SfxViewFactory* ImpressViewShellBase::pFactory;
 SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
@@ -59,7 +53,7 @@ SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
     pBase->LateInit(::rtl::OUString());
     return pBase;
 }
-void ImpressViewShellBase::RegisterFactory( USHORT nPrio )
+void ImpressViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -98,7 +92,7 @@ ImpressViewShellBase::~ImpressViewShellBase (void)
 
 void ImpressViewShellBase::Execute (SfxRequest& rRequest)
 {
-    USHORT nSlotId = rRequest.GetSlot();
+    sal_uInt16 nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {

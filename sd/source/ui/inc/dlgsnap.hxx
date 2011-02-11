@@ -31,7 +31,7 @@
 
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _FIXED_HXX //autogen
 #include <vcl/fixed.hxx>
@@ -93,7 +93,7 @@ public:
 
     void HideRadioGroup();
     void HideDeleteBtn() { aBtnDelete.Hide(); }
-    void SetInputFields(BOOL bEnableX, BOOL bEnableY);
+    void SetInputFields(sal_Bool bEnableX, sal_Bool bEnableY);
 };
 
 

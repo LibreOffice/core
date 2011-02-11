@@ -99,10 +99,10 @@ static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
     if (nSize > STRING_MAXLEN)
         nSize = STRING_MAXLEN;
 
-    return xub_StrLen( nSize );
+    return static_cast< xub_StrLen >( nSize );
 }
 
-BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
+sal_Bool PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )
 {
     sal_uInt32  i, nItemSize, nType, nItemPos;
     sal_Bool    bRetValue = sal_False;
@@ -254,7 +254,7 @@ void Dictionary::AddProperty( sal_uInt32 nId, const String& rString )
 
 //  -----------------------------------------------------------------------
 
-UINT32 Dictionary::GetProperty( const String& rString )
+sal_uInt32 Dictionary::GetProperty( const String& rString )
 {
     for ( Dict* pDict = (Dict*)First(); pDict; pDict = (Dict*)Next() )
     {

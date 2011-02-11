@@ -34,8 +34,9 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
+#include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
-
+#include <svtools/svtdata.hxx>
 #include <utility>
 #include <vector>
 
@@ -106,7 +107,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 {
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STYLE_FAMILY ) )
     {
-        UINT16 nFamily = (UINT16)GetDocSh()->GetStyleFamily();
+        sal_uInt16 nFamily = (sal_uInt16)GetDocSh()->GetStyleFamily();
 
         SdrView* pDrView = GetDrawView();
 
@@ -150,14 +151,14 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_UNDO))
     {
-        SfxUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(FALSE);
+        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(sal_False);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetUndoActionCount() != 0)
             {
-                bActivate = TRUE;
+                bActivate = sal_True;
             }
         }
 
@@ -165,7 +166,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp( SvtResId( STR_UNDO ) );
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -178,14 +179,14 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
     // #96090#
     if(SFX_ITEM_AVAILABLE == rSet.GetItemState(SID_REDO))
     {
-        SfxUndoManager* pUndoManager = ImpGetUndoManager();
-        sal_Bool bActivate(FALSE);
+        ::svl::IUndoManager* pUndoManager = ImpGetUndoManager();
+        sal_Bool bActivate(sal_False);
 
         if(pUndoManager)
         {
             if(pUndoManager->GetRedoActionCount() != 0)
             {
-                bActivate = TRUE;
+                bActivate = sal_True;
             }
         }
 
@@ -193,7 +194,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
@@ -218,11 +219,11 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     SdPage* pPage,
     const sal_Int32 nInsertPosition)
 {
-    USHORT nSId = rRequest.GetSlot();
+    sal_uInt16 nSId = rRequest.GetSlot();
     SdDrawDocument* pDocument = GetDoc();
     SdrLayerAdmin& rLayerAdmin = pDocument->GetLayerAdmin();
-    BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
-    BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
+    sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), sal_False);
+    sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), sal_False);
     SetOfByte aVisibleLayers;
     // Determine the page from which to copy some values, such as layers,
     // size, master page, to the new page.  This is usually the given page.
@@ -240,8 +241,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     String aNotesPageName;
     AutoLayout eStandardLayout (AUTOLAYOUT_NONE);
     AutoLayout eNotesLayout (AUTOLAYOUT_NOTES);
-    BOOL bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
-    BOOL bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
+    sal_Bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
+    sal_Bool bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
     // 1. Process the arguments.
     const SfxItemSet* pArgs = rRequest.GetArgs();
@@ -278,7 +279,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     else if (pArgs->Count() == 1)
     {
         pDocument->StopWorkStartupDelay();
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
         if( pLayout )
         {
             if (ePageKind == PK_NOTES)
@@ -296,10 +297,10 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
 
-        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, FALSE);
-        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, FALSE);
-        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, FALSE);
-        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, FALSE);
+        SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, sal_False);
+        SFX_REQUEST_ARG (rRequest, pLayout, SfxUInt32Item, ID_VAL_WHATLAYOUT, sal_False);
+        SFX_REQUEST_ARG (rRequest, pIsPageBack, SfxBoolItem, ID_VAL_ISPAGEBACK, sal_False);
+        SFX_REQUEST_ARG (rRequest, pIsPageObj, SfxBoolItem, ID_VAL_ISPAGEOBJ, sal_False);
 
         if (CHECK_RANGE (AUTOLAYOUT__START, (AutoLayout) pLayout->GetValue (), AUTOLAYOUT__END))
         {
@@ -347,7 +348,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     if( bUndo )
         pDrView->BegUndo( String( SdResId(STR_INSERTPAGE) ) );
 
-    USHORT nNewPageIndex = 0xffff;
+    sal_uInt16 nNewPageIndex = 0xffff;
     switch (nSId)
     {
         case SID_INSERTPAGE:
@@ -381,8 +382,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         bIsPageObj,
                         nInsertPosition);
                     // Select exactly the new page.
-                    USHORT nPageCount (pDocument->GetSdPageCount(ePageKind));
-                    for (USHORT i=0; i<nPageCount; i++)
+                    sal_uInt16 nPageCount (pDocument->GetSdPageCount(ePageKind));
+                    for (sal_uInt16 i=0; i<nPageCount; i++)
                     {
                         pDocument->GetSdPage(i, PK_STANDARD)->SetSelected(
                             i == nNewPageIndex);
@@ -390,7 +391,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                             i == nNewPageIndex);
                     }
                     // Move the selected page to the head of the document
-                    pDocument->MovePages ((USHORT)-1);
+                    pDocument->MovePages ((sal_uInt16)-1);
                     nNewPageIndex = 0;
                 }
             else

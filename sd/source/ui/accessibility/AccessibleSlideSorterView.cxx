@@ -106,8 +106,8 @@ private:
     ::Window* mpWindow;
     sal_Int32 mnFocusedIndex;
     bool mbModelChangeLocked;
-    ULONG mnUpdateChildrenUserEventId;
-    ULONG mnSelectionChangeUserEventId;
+    sal_uLong mnUpdateChildrenUserEventId;
+    sal_uLong mnSelectionChangeUserEventId;
 
     void UpdateChildren (void);
 };
@@ -570,7 +570,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getForeground (void)
 {
     ThrowIfDisposed();
     svtools::ColorConfig aColorConfig;
-    UINT32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
+    sal_uInt32 nColor = aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor;
     return static_cast<sal_Int32>(nColor);
 }
 
@@ -581,7 +581,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getBackground (void)
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    UINT32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
+    sal_uInt32 nColor = Application::GetSettings().GetStyleSettings().GetWindowColor().GetColor();
     return static_cast<sal_Int32>(nColor);
 }
 

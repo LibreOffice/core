@@ -70,7 +70,7 @@ protected:
     /** Return an index of a page after which the pages of the transferable
         are to be inserted into the target document.
     */
-    virtual USHORT DetermineInsertPosition (
+    virtual sal_uInt16 DetermineInsertPosition (
         const SdTransferable& rTransferable);
 
     /** Insert the slides in the given transferable behind the last selected
@@ -83,9 +83,9 @@ protected:
         @return
             Returns the number of inserted slides.
     */
-    virtual USHORT InsertSlides (
+    virtual sal_uInt16 InsertSlides (
         const SdTransferable& rTransferable,
-        USHORT nInsertPosition);
+        sal_uInt16 nInsertPosition);
 };
 
 } // end of namespace ::sd

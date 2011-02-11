@@ -93,9 +93,9 @@ TYPEINIT1( FuDraw, FuPoor );
 FuDraw::FuDraw(ViewShell* pViewSh, ::sd::Window* pWin, ::sd::View* pView,
                SdDrawDocument* pDoc, SfxRequest& rReq) :
     FuPoor(pViewSh, pWin, pView, pDoc, rReq),
-    bMBDown(FALSE),
-    bDragHelpLine(FALSE),
-    bPermanent(FALSE)
+    bMBDown(sal_False),
+    bDragHelpLine(sal_False),
+    bPermanent(sal_False)
 {
 }
 
@@ -116,14 +116,14 @@ FuDraw::~FuDraw()
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
-    bDragHelpLine = FALSE;
+    bDragHelpLine = sal_False;
 
     aMDPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
@@ -131,11 +131,11 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-//        BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
+//        sal_Bool bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
 //        bOrtho = bOrtho != rMEvt.IsShift();
-        BOOL bOrtho = FALSE;
+        sal_Bool bOrtho = sal_False;
 
-        BOOL bRestricted = TRUE;
+        sal_Bool bRestricted = sal_True;
 
         if (mpView->IsDragObj())
         {
@@ -145,7 +145,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
             if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
             {
                 // Move
-                bRestricted = FALSE;
+                bRestricted = sal_False;
             }
         }
 
@@ -162,46 +162,46 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         if (!mpView->IsSnapEnabled())
-            mpView->SetSnapEnabled(TRUE);
-        BOOL bCntrl = rMEvt.IsMod1();
+            mpView->SetSnapEnabled(sal_True);
+        sal_Bool bSnapModPressed = rMEvt.IsMod1();
 
-        BOOL bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bCntrl != bGridSnap);
+        sal_Bool bGridSnap = pFrameView->IsGridSnap();
+        bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
-        BOOL bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bCntrl != bBordSnap);
+        sal_Bool bBordSnap = pFrameView->IsBordSnap();
+        bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
-        BOOL bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bCntrl != bHlplSnap);
+        sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
+        bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
-        BOOL bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bCntrl != bOFrmSnap);
+        sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
+        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
-        BOOL bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bCntrl != bOPntSnap);
+        sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
+        bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
-        BOOL bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bCntrl != bOConSnap);
+        sal_Bool bOConSnap = pFrameView->IsOConSnap();
+        bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);
 
-        BOOL bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
+        sal_Bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
 
         if (mpView->IsAngleSnapEnabled() != bAngleSnap)
             mpView->SetAngleSnapEnabled(bAngleSnap);
@@ -209,7 +209,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
 
-        BOOL bCenter = rMEvt.IsMod2();
+        sal_Bool bCenter = rMEvt.IsMod2();
 
         if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
              mpView->IsResizeAtCenter() != bCenter )
@@ -219,22 +219,22 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         }
 
         SdrPageView* pPV = 0;
-        USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+        sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
         // #76572# look only for HelpLines when they are visible (!)
-        BOOL bHelpLine(FALSE);
+        sal_Bool bHelpLine(sal_False);
         if(mpView->IsHlplVisible())
             bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
-        BOOL bHitHdl = (mpView->PickHandle(aMDPos) != NULL);
+        sal_Bool bHitHdl = (mpView->PickHandle(aMDPos) != NULL);
 
         if ( bHelpLine
             && !mpView->IsCreateObj()
-            && ((mpView->GetEditMode() == SDREDITMODE_EDIT && !bHitHdl) || (rMEvt.IsShift() && bCntrl)) )
+            && ((mpView->GetEditMode() == SDREDITMODE_EDIT && !bHitHdl) || (rMEvt.IsShift() && bSnapModPressed)) )
         {
             mpWindow->CaptureMouse();
             mpView->BegDragHelpLine(nHelpLine, pPV);
             bDragHelpLine = mpView->IsDragHelpLine();
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
     }
     ForcePointer(&rMEvt);
@@ -248,16 +248,16 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-//    BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
+//    sal_Bool bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
 //    bOrtho = bOrtho != rMEvt.IsShift();
-    BOOL bOrtho = FALSE;
+    sal_Bool bOrtho = sal_False;
 
-    BOOL bRestricted = TRUE;
+    sal_Bool bRestricted = sal_True;
 
     if (mpView->IsDragObj())
     {
@@ -267,7 +267,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
         if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
         {
             // Move
-            bRestricted = FALSE;
+            bRestricted = sal_False;
         }
     }
 
@@ -285,46 +285,46 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
             bOrtho = rMEvt.IsShift() != pFrameView->IsOrtho();
         }
 
-        BOOL bCntrl = rMEvt.IsMod1();
+        sal_Bool bSnapModPressed = rMEvt.IsMod2();
         mpView->SetDragWithCopy(rMEvt.IsMod1() && pFrameView->IsDragWithCopy());
 
-        BOOL bGridSnap = pFrameView->IsGridSnap();
-        bGridSnap = (bCntrl != bGridSnap);
+        sal_Bool bGridSnap = pFrameView->IsGridSnap();
+        bGridSnap = (bSnapModPressed != bGridSnap);
 
         if (mpView->IsGridSnap() != bGridSnap)
             mpView->SetGridSnap(bGridSnap);
 
-        BOOL bBordSnap = pFrameView->IsBordSnap();
-        bBordSnap = (bCntrl != bBordSnap);
+        sal_Bool bBordSnap = pFrameView->IsBordSnap();
+        bBordSnap = (bSnapModPressed != bBordSnap);
 
         if (mpView->IsBordSnap() != bBordSnap)
             mpView->SetBordSnap(bBordSnap);
 
-        BOOL bHlplSnap = pFrameView->IsHlplSnap();
-        bHlplSnap = (bCntrl != bHlplSnap);
+        sal_Bool bHlplSnap = pFrameView->IsHlplSnap();
+        bHlplSnap = (bSnapModPressed != bHlplSnap);
 
         if (mpView->IsHlplSnap() != bHlplSnap)
             mpView->SetHlplSnap(bHlplSnap);
 
-        BOOL bOFrmSnap = pFrameView->IsOFrmSnap();
-        bOFrmSnap = (bCntrl != bOFrmSnap);
+        sal_Bool bOFrmSnap = pFrameView->IsOFrmSnap();
+        bOFrmSnap = (bSnapModPressed != bOFrmSnap);
 
         if (mpView->IsOFrmSnap() != bOFrmSnap)
             mpView->SetOFrmSnap(bOFrmSnap);
 
-        BOOL bOPntSnap = pFrameView->IsOPntSnap();
-        bOPntSnap = (bCntrl != bOPntSnap);
+        sal_Bool bOPntSnap = pFrameView->IsOPntSnap();
+        bOPntSnap = (bSnapModPressed != bOPntSnap);
 
         if (mpView->IsOPntSnap() != bOPntSnap)
             mpView->SetOPntSnap(bOPntSnap);
 
-        BOOL bOConSnap = pFrameView->IsOConSnap();
-        bOConSnap = (bCntrl != bOConSnap);
+        sal_Bool bOConSnap = pFrameView->IsOConSnap();
+        bOConSnap = (bSnapModPressed != bOConSnap);
 
         if (mpView->IsOConSnap() != bOConSnap)
             mpView->SetOConSnap(bOConSnap);
 
-        BOOL bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
+        sal_Bool bAngleSnap = rMEvt.IsShift() == !pFrameView->IsAngleSnapEnabled();
 
         if (mpView->IsAngleSnapEnabled() != bAngleSnap)
             mpView->SetAngleSnapEnabled(bAngleSnap);
@@ -332,7 +332,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
 
-        BOOL bCenter = rMEvt.IsMod2();
+        sal_Bool bCenter = rMEvt.IsMod2();
 
         if ( mpView->IsCreate1stPointAsCenter() != bCenter ||
              mpView->IsResizeAtCenter() != bCenter )
@@ -345,7 +345,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
             mpView->MovDragHelpLine(aPos);
     }
 
-    BOOL bReturn = mpView->MouseMove(rMEvt, mpWindow);
+    sal_Bool bReturn = mpView->MouseMove(rMEvt, mpWindow);
 
     if (mpView->IsAction())
     {
@@ -365,7 +365,7 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
+sal_Bool FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
     if ( mpView->IsDragHelpLine() )
         mpView->EndDragHelpLine();
@@ -383,9 +383,9 @@ BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     mpView->SetOrtho( pFrameView->IsOrtho() );
     mpView->SetAngleSnapEnabled( pFrameView->IsAngleSnapEnabled() );
-    mpView->SetSnapEnabled(TRUE);
-    mpView->SetCreate1stPointAsCenter(FALSE);
-    mpView->SetResizeAtCenter(FALSE);
+    mpView->SetSnapEnabled(sal_True);
+    mpView->SetCreate1stPointAsCenter(sal_False);
+    mpView->SetResizeAtCenter(sal_False);
     mpView->SetDragWithCopy(pFrameView->IsDragWithCopy());
     mpView->SetGridSnap(pFrameView->IsGridSnap());
     mpView->SetBordSnap(pFrameView->IsBordSnap());
@@ -394,24 +394,24 @@ BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
     mpView->SetOPntSnap(pFrameView->IsOPntSnap());
     mpView->SetOConSnap(pFrameView->IsOConSnap());
 
-    bIsInDragMode = FALSE;
+    bIsInDragMode = sal_False;
     ForcePointer(&rMEvt);
     FuPoor::MouseButtonUp(rMEvt);
 
-    return FALSE;
+    return sal_False;
 }
 
 /*************************************************************************
 |*
 |* Process keyboard-events
 |*
-|* When processing a KeyEvent the returnvalue is TRUE, otherwise FALSE.
+|* When processing a KeyEvent the returnvalue is sal_True, otherwise sal_False.
 |*
 \************************************************************************/
 
-BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
+sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
@@ -426,7 +426,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpDocSh->IsReadOnly())
             {
-                if ( mpView && mpView->IsPresObjSelected(FALSE, TRUE, FALSE, TRUE) )
+                if ( mpView && mpView->IsPresObjSelected(sal_False, sal_True, sal_False, sal_True) )
                 {
                     InfoBox(mpWindow, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
                 }
@@ -452,7 +452,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                     mpView->DeleteMarked();
                 }
             }
-            bReturn = TRUE;
+            bReturn = sal_True;
         }
         break;
 
@@ -484,7 +484,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -497,13 +497,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // #97016# mark last object
                 mpView->UnmarkAllObj();
-                mpView->MarkNextObj(FALSE);
+                mpView->MarkNextObj(sal_False);
 
                 // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -516,13 +516,13 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // #97016# mark first object
                 mpView->UnmarkAllObj();
-                mpView->MarkNextObj(TRUE);
+                mpView->MarkNextObj(sal_True);
 
                 // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
-                bReturn = TRUE;
+                bReturn = sal_True;
             }
         }
         break;
@@ -596,9 +596,9 @@ void FuDraw::Deactivate()
 void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 {
     Point aPnt;
-    USHORT nModifier = 0;
-    BOOL bLeftDown = FALSE;
-    BOOL bDefPointer = TRUE;
+    sal_uInt16 nModifier = 0;
+    sal_Bool bLeftDown = sal_False;
+    sal_Bool bDefPointer = sal_True;
 
     if (pMEvt)
     {
@@ -618,7 +618,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             /******************************************************************
             * Giesskannenmodus
             ******************************************************************/
-            bDefPointer = FALSE;
+            bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
     }
@@ -631,7 +631,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             /******************************************************************
             * Giesskannenmodus
             ******************************************************************/
-            bDefPointer = FALSE;
+            bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
         else if (!pHdl &&
@@ -644,7 +644,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if (pMask && pMask->IsEyedropping())
             {
-                bDefPointer = FALSE;
+                bDefPointer = sal_False;
                 mpWindow->SetPointer(Pointer(POINTER_REFHAND));
             }
         }
@@ -672,7 +672,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                 if ((pObject->ISA(E3dObject)) && (rMarkList.GetMarkCount() == 1))
                 {
                     mpWindow->SetPointer(Pointer(POINTER_ROTATE));
-                    bDefPointer = FALSE;     // Otherwise it'll be calles Joes routine and the mousepointer will reconfigurate again
+                    bDefPointer = sal_False;     // Otherwise it'll be calles Joes routine and the mousepointer will reconfigurate again
                 }
             }
 
@@ -687,7 +687,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
             }
             else if (eHit == SDRHIT_TEXTEDITOBJ && this->ISA(FuSelection))
             {
-                UINT16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
+                sal_uInt16 nSdrObjKind = aVEvt.pObj->GetObjIdentifier();
 
                 if ( nSdrObjKind != OBJ_TEXT        &&
                      nSdrObjKind != OBJ_TITLETEXT   &&
@@ -695,7 +695,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
                      aVEvt.pObj->IsEmptyPresObj() )
                 {
                     pObj = NULL;
-                    bDefPointer = FALSE;
+                    bDefPointer = sal_False;
                     mpWindow->SetPointer(Pointer(POINTER_ARROW));
                 }
             }
@@ -728,22 +728,22 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
+sal_Bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 {
-    BOOL bSet = FALSE;
+    sal_Bool bSet = sal_False;
 
-    BOOL bAnimationInfo = (!mpDocSh->ISA(GraphicDocShell) &&
-                          mpDoc->GetAnimationInfo(pObj)) ? TRUE:FALSE;
+    sal_Bool bAnimationInfo = (!mpDocSh->ISA(GraphicDocShell) &&
+                          mpDoc->GetAnimationInfo(pObj)) ? sal_True:sal_False;
 
-    BOOL bImageMapInfo = FALSE;
+    sal_Bool bImageMapInfo = sal_False;
 
     if (!bAnimationInfo)
-        bImageMapInfo = mpDoc->GetIMapInfo(pObj) ? TRUE:FALSE;
+        bImageMapInfo = mpDoc->GetIMapInfo(pObj) ? sal_True:sal_False;
 
     if (bAnimationInfo || bImageMapInfo)
     {
         const SetOfByte* pVisiLayer = &mpView->GetSdrPageView()->GetVisibleLayers();
-        USHORT nHitLog(USHORT (mpWindow->PixelToLogic(Size(HITPIX,0)).Width()));
+        sal_uInt16 nHitLog(sal_uInt16 (mpWindow->PixelToLogic(Size(HITPIX,0)).Width()));
         long  n2HitLog(nHitLog * 2);
         Point aHitPosR(rPos);
         Point aHitPosL(rPos);
@@ -794,7 +794,7 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                             pInfo->meTextEffect != presentation::AnimationEffect_NONE )))))
                     {
                         // Animations-Objekt
-                        bSet = TRUE;
+                        bSet = sal_True;
                         mpWindow->SetPointer(Pointer(POINTER_REFHAND));
                     }
             }
@@ -804,7 +804,7 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                 /******************************************************
                 * ImageMap
                 ******************************************************/
-                bSet = TRUE;
+                bSet = sal_True;
                 mpWindow->SetPointer(Pointer(POINTER_REFHAND));
             }
         }
@@ -823,7 +823,7 @@ BOOL FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
 
 void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 {
-    USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
+    sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
     if ( mpView->AreObjectsMarked() )
     {
@@ -834,8 +834,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             SdrMark* pMark = rMarkList.GetMark(0);
             SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-            UINT32 nInv = pObj->GetObjInventor();
-            UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+            sal_uInt32 nInv = pObj->GetObjInventor();
+            sal_uInt16 nSdrObjKind = pObj->GetObjIdentifier();
 
             if (nInv == SdrInventor && nSdrObjKind == OBJ_OLE2)
             {
@@ -870,7 +870,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             {
                 // hit group -> select subobject
                 mpView->UnMarkAll();
-                mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), TRUE);
+                mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), sal_True);
             }
         }
     }
@@ -884,9 +884,9 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::RequestHelp(const HelpEvent& rHEvt)
+sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 {
-    BOOL bReturn = FALSE;
+    sal_Bool bReturn = sal_False;
 
     if (Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled())
     {
@@ -933,9 +933,9 @@ BOOL FuDraw::RequestHelp(const HelpEvent& rHEvt)
 |*
 \************************************************************************/
 
-BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
+sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
 {
-    BOOL bSet = FALSE;
+    sal_Bool bSet = sal_False;
     String aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
 
@@ -1074,7 +1074,7 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
 
     if (aHelpText.Len())
     {
-        bSet = TRUE;
+        bSet = sal_True;
         Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
         Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
                               mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));

@@ -46,14 +46,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [ en-US ] = "Document";
     };
-    StringArray _STR_IMPRESS_PRINT_UI_CONTENT_HELP
-    {
-        ItemList [ en-US ] =
-        {
-           < "Select which parts of the document should be printed"; >;
-           < "Select which parts of the document should be printed"; >;
-        };
-    };
     StringArray _STR_IMPRESS_PRINT_UI_CONTENT_CHOICES
     {
         ItemList [ en-US ] =
@@ -81,14 +73,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "9" ; > ;
         };
     };
-    StringArray _STR_IMPRESS_PRINT_UI_SLIDESPERPAGE_CHOICES_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Select how many slides to print per page." ; >;
-            < "Select how many slides to print per page." ; >;
-        };
-    };
     String _STR_IMPRESS_PRINT_UI_ORDER
     {
         Text [ en-US ] = "Order" ;
@@ -101,15 +85,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "Top to bottom, then right" ; > ;
         };
     };
-    StringArray _STR_IMPRESS_PRINT_UI_ORDER_CHOICES_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Specify how to arrange slides on the printed page." ; > ;
-            < "Arrange slides horizontally" ; > ;
-            < "Arrange slides vertically" ; > ;
-        };
-    };
     String _STR_IMPRESS_PRINT_UI_INCLUDE_CONTENT
     {
         Text [ en-US ] = "~Contents";
@@ -118,35 +93,18 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     {
         Text [ en-US ] = "~Slide name";
     };
-    String _STR_IMPRESS_PRINT_UI_IS_PRINT_NAME_HELP
-    {
-        Text [ en-US ] = "Specifies whether to print the page name of a document.";
-    };
     String _STR_DRAW_PRINT_UI_IS_PRINT_NAME
     {
         Text [ en-US ] = "P~age name";
-    };
-    String _STR_DRAW_PRINT_UI_IS_PRINT_NAME_HELP
-    {
-        Text [ en-US ] = "Specifies whether to print the page name of a document.";
     };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE
     {
         Text [ en-US ] = "~Date and time";
     };
-    String _STR_IMPRESS_PRINT_UI_IS_PRINT_DATE_HELP
-    {
-        Text [ en-US ] = "Specifies whether to print the current date and time.";
-    };
     String _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN
     {
         Text [ en-US ] = "Hidden pages";
     };
-    String _STR_IMPRESS_PRINT_UI_IS_PRINT_HIDDEN_HELP
-    {
-        Text [ en-US ] = "Specifies whether to print the pages that are currently hidden from the application.";
-    };
-
     String _STR_IMPRESS_PRINT_UI_OUTPUT_OPTIONS_GROUP
     {
         Text [ en-US ] = "Output options";
@@ -164,17 +122,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "Black & white" ; > ;
         };
     };
-    StringArray _STR_IMPRESS_PRINT_UI_QUALITY_CHOICES_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Specify how to treat colors in the printout."; >;
-            < "Specifies that you want to print in original colors." ; > ;
-            < "Specifies that you want to print colors as grayscale." ; > ;
-            < "Specifies that you want to print in black and white." ; > ;
-        };
-    };
-
     String _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS
     {
         Text [ en-US ] = "~Size";
@@ -199,23 +146,9 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "Tile sheet of paper with repeated pages" ; > ;
         };
     };
-    StringArray _STR_IMPRESS_PRINT_UI_PAGE_OPTIONS_CHOICES_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Specify how to scale slides in the printout."; >;
-            < "Specifies that you do not want to further scale pages when printing." ; > ;
-            < "Specifies whether to scale down objects that are beyond the margins of the current printer so they fit on the paper in the printer." ; > ;
-            < "Specifies that pages are to be printed in tiled format. If the pages or slides are smaller than the paper, several pages or slides will be printed on one page of paper." ; > ;
-        };
-    };
     String _STR_IMPRESS_PRINT_UI_BROCHURE
     {
         Text [en-US] = "Brochure";
-    };
-    String _STR_IMPRESS_PRINT_UI_BROCHURE_HELP
-    {
-        Text [en-US] = "Select the \"Brochure\" option to print the document in brochure format.";
     };
     String _STR_IMPRESS_PRINT_UI_PAGE_SIDES
     {
@@ -224,10 +157,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     String _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE
     {
         Text [ en-US ] = "Include";
-    };
-    String _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_HELP
-    {
-        Text [ en-US ] = "Select which pages of a brochure to print.";
     };
     StringArray _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST
     {
@@ -238,15 +167,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "Back sides / left pages" ; > ;
         };
     };
-    StringArray _STR_IMPRESS_PRINT_UI_BROCHURE_INCLUDE_LIST_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Print all pages of a brochure." ; > ;
-            < "Print only front pages of a brochure." ; > ;
-            < "Print only back pages of a brochure." ; > ;
-        };
-    };
 
     String _STR_IMPRESS_PRINT_UI_PAPER_TRAY_GROUP
     {
@@ -255,10 +175,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
     String _STR_IMPRESS_PRINT_UI_PAPER_TRAY
     {
         Text [ en-US ] = "~Use only paper tray from printer preferences";
-    };
-    String _STR_IMPRESS_PRINT_UI_PAPER_TRAY_HELP
-    {
-        Text [ en-US ] = "Determines that the paper tray to be used is the one defined in the printer setup.";
     };
     String _STR_IMPRESS_PRINT_UI_PAGE_RANGE
     {
@@ -271,16 +187,6 @@ Resource _STR_IMPRESS_PRINT_UI_OPTIONS
             < "~All slides"; >;
             < "~Slides"; >;
             < "Se~lection"; >;
-        };
-    };
-
-    StringArray _STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE_HELP
-    {
-        ItemList [ en-US ] =
-        {
-            < "Print the whole document."; >;
-            < "Print a specified range of the document."; >;
-            < "Print only the currently selected content."; >;
         };
     };
 

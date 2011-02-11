@@ -67,7 +67,7 @@ public:
     /** Remember the specified page to be selected when this command is
         executed.
     */
-    void AddSlide (USHORT nPageIndex);
+    void AddSlide (sal_uInt16 nPageIndex);
 
     /** Execute the command and select the pages added by previous calls to
         AddPages() and AddPage().

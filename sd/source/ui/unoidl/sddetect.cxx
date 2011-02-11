@@ -180,7 +180,7 @@ SdFilterDetect::~SdFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -208,8 +208,8 @@ SdFilterDetect::~SdFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
+        aMedium.UseInteractionHandler( sal_True );
         if ( aPreselectedFilterName.Len() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( aTypeName.Len() )
@@ -225,7 +225,7 @@ SdFilterDetect::~SdFilterDetect()
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
-            BOOL bIsStorage = aMedium.IsStorage();
+            sal_Bool bIsStorage = aMedium.IsStorage();
 
             if (aMedium.GetError() == SVSTREAM_OK)
             {
@@ -273,7 +273,7 @@ SdFilterDetect::~SdFilterDetect()
                             String sFilterName;
                             if ( pFilter )
                                 sFilterName = pFilter->GetName();
-                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : FALSE, &sFilterName );
+                            aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsOwnTemplateFormat() : sal_False, &sFilterName );
                         }
                         catch( lang::WrappedTargetException& aWrap )
                         {
@@ -291,20 +291,16 @@ SdFilterDetect::~SdFilterDetect()
                                     if ( !bRepairPackage )
                                     {
                                         // ask the user whether he wants to try to repair
-                                        RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
-                                        uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-
-                                        xInteraction->handle( xRequest );
-
-                                        bRepairAllowed = pRequest->isApproved();
+                                        RequestPackageReparation aRequest( aDocumentTitle );
+                                        xInteraction->handle( aRequest.GetRequest() );
+                                        bRepairAllowed = aRequest.isApproved();
                                     }
 
                                     if ( !bRepairAllowed )
                                     {
                                         // repair either not allowed or not successful
-                                        NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
-                                           uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                           xInteraction->handle( xRequest );
+                                        NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                        xInteraction->handle( aNotifyRequest.GetRequest() );
                                     }
                                 }
 
@@ -345,7 +341,7 @@ SdFilterDetect::~SdFilterDetect()
                     }
                     else
                     {
-                        SotStorageRef aStorage = new SotStorage ( pStm, FALSE );
+                        SotStorageRef aStorage = new SotStorage ( pStm, sal_False );
                         if ( !aStorage->GetError() )
                         {
                             String aStreamName = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "PowerPoint Document" ) );
@@ -368,7 +364,7 @@ SdFilterDetect::~SdFilterDetect()
                             const String        aFileName( aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE ) );
                             GraphicDescriptor   aDesc( *pStm, &aFileName );
                             GraphicFilter*      pGrfFilter = GraphicFilter::GetGraphicFilter();
-                            if( !aDesc.Detect( FALSE ) )
+                            if( !aDesc.Detect( sal_False ) )
                             {
                                 pFilter = 0;
                                 if( SvtModuleOptions().IsImpress() )
