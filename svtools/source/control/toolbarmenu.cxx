@@ -697,6 +697,7 @@ static long ImplGetNativeCheckAndRadioSize( Window* pWin, long& rCheckHeight, lo
     return (rCheckHeight > rRadioHeight) ? rCheckHeight : rRadioHeight;
 }
 
+#define gfxExtra 7
 
 Size ToolbarMenu::implCalcSize()
 {
@@ -780,7 +781,7 @@ Size ToolbarMenu::implCalcSize()
                     ImplGetNativeCheckAndRadioSize( this, nCheckHeight, nRadioHeight, nMaxCheckWidth );
 
                     long nCtrlHeight = (pEntry->mnBits & MIB_RADIOCHECK) ? nCheckHeight : nRadioHeight;
-                    nMaxTextWidth += nCtrlHeight + 1;
+                    nMaxTextWidth += nCtrlHeight + gfxExtra;
                 }
                 else if( pEntry->mbChecked )
                 {
@@ -1516,7 +1517,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
 
                             Rectangle aCheckRect( aTmpPos, Size( nCtrlHeight, nCtrlHeight ) );
                             DrawNativeControl( CTRL_MENU_POPUP, nPart, aCheckRect, nState, ImplControlValue(), OUString() );
-                            aPos.setX( aPos.getX() + nCtrlHeight + 1 );
+                            aPos.setX( aPos.getX() + nCtrlHeight + gfxExtra );
                         }
                         else if ( pEntry->mbChecked ) // by default do nothing for unchecked items
                         {
@@ -1538,7 +1539,7 @@ void ToolbarMenu::implPaint( ToolbarMenuEntry* pThisOnly, bool bHighlighted )
                             aTmpPos.Y() = aOuterCheckRect.Top() + (aOuterCheckRect.GetHeight() - aSymbolSize.Height())/2;
                             Rectangle aRect( aTmpPos, aSymbolSize );
                             aDecoView.DrawSymbol( aRect, eSymbol, GetTextColor(), nSymbolStyle );
-                            aPos.setX( aPos.getX() + aSymbolSize.getWidth( ) + 1 );
+                            aPos.setX( aPos.getX() + aSymbolSize.getWidth( ) + gfxExtra );
                         }
                     }
                 }
