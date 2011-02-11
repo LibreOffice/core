@@ -35,8 +35,8 @@ SByteExtStringList::~SByteExtStringList()
 {
     if (bDeleteStrings)
         while( Count()) {
-            delete GetObject((ULONG)0);
-            Remove((ULONG)0);
+            delete GetObject((sal_uIntPtr)0);
+            Remove((sal_uIntPtr)0);
         }
 }
 
@@ -55,8 +55,8 @@ void VersionDepInfo::Clear()
 /*****************************************************************************/
 {
     while( Count()) {
-        delete GetObject((ULONG)0);
-        Remove((ULONG)0);
+        delete GetObject((sal_uIntPtr)0);
+        Remove((sal_uIntPtr)0);
     }
 }
 

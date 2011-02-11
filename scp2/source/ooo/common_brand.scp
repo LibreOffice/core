@@ -124,8 +124,7 @@ Module gid_Module_Langpack_Brand_Template
             gid_Brand_Dir_Readme,
             gid_Brand_Dir_Share,
             gid_Brand_Dir_Share_Readme);
-    Files = (gid_Brand_File_Res_Iso,
-             gid_Brand_File_Res_Ooo,
+    Files = (gid_Brand_File_Res_About,
              gid_Brand_File_Res_Oirm,
              gid_Brand_File_Help_C05_Sdatabase_Zip,
              gid_Brand_File_Help_C05_Scalc_Zip,
@@ -1497,3 +1496,6 @@ File gid_Brand_File_Bin_Python
     Styles = (PACKED);
 End
 #endif
+
+BRAND_RES_FILE( gid_Brand_File_Res_About, about )
+
