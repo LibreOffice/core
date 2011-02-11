@@ -65,7 +65,7 @@
 
 // static ----------------------------------------------------------------
 
-static USHORT pCaptionRanges[] =
+static sal_uInt16 pCaptionRanges[] =
 {
     SDRATTR_CAPTIONTYPE,
     SDRATTR_CAPTIONFIXEDANGLE,
@@ -172,7 +172,7 @@ void SvxCaptionTabPage::Construct()
 
 // -----------------------------------------------------------------------
 
-BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
+sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
     SfxItemPool*    pPool = _rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -239,7 +239,7 @@ BOOL SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 
 //NYI-------------die Winkel muessen noch hier rein!!! XXX----------------------
 
-    return( TRUE );
+    return( sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -267,7 +267,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     SfxItemPool*    pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
 
-    USHORT          nWhich;
+    sal_uInt16          nWhich;
     SfxMapUnit      eUnit;
 
     //------- Winkel ----------
@@ -391,14 +391,14 @@ SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
 
 //------------------------------------------------------------------------
 
-USHORT* SvxCaptionTabPage::GetRanges()
+sal_uInt16* SvxCaptionTabPage::GetRanges()
 {
     return( pCaptionRanges );
 }
 
 //------------------------------------------------------------------------
 
-void SvxCaptionTabPage::SetupAnsatz_Impl( USHORT nType )
+void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
     xub_StrLen  nCnt=0, nIdx=0;
 
@@ -515,7 +515,7 @@ IMPL_LINK_INLINE_END( SvxCaptionTabPage, SelectCaptTypeHdl_Impl, void *, EMPTYAR
 
 //------------------------------------------------------------------------
 
-void SvxCaptionTabPage::SetupType_Impl( USHORT nType )
+void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 {
     switch( nType-1 )
     {
@@ -578,7 +578,7 @@ void SvxCaptionTabPage::FillValueSet()
 //========================================================================
 
 
-SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, USHORT nAnchorTypes)
+SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView, sal_uInt16 nAnchorTypes)
  :  SfxTabDialog( pParent, CUI_RES( RID_SVXDLG_CAPTION ) ),
     pView       ( pSdrView ),
     nAnchorCtrls(nAnchorTypes)
@@ -612,7 +612,7 @@ SvxCaptionTabDialog::~SvxCaptionTabDialog()
 
 // -----------------------------------------------------------------------
 
-void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxCaptionTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
     switch( nId )
     {

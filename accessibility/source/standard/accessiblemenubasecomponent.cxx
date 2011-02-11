@@ -353,13 +353,13 @@ Reference< XAccessible > OAccessibleMenuBaseComponent::GetChild( sal_Int32 i )
             // create a new child
             OAccessibleMenuBaseComponent* pChild;
 
-            if ( m_pMenu->GetItemType( (USHORT)i ) == MENUITEM_SEPARATOR )
+            if ( m_pMenu->GetItemType( (sal_uInt16)i ) == MENUITEM_SEPARATOR )
             {
                 pChild = new VCLXAccessibleMenuSeparator( m_pMenu, (sal_uInt16)i );
             }
             else
             {
-                PopupMenu* pPopupMenu = m_pMenu->GetPopupMenu( m_pMenu->GetItemId( (USHORT)i ) );
+                PopupMenu* pPopupMenu = m_pMenu->GetPopupMenu( m_pMenu->GetItemId( (sal_uInt16)i ) );
                 if ( pPopupMenu )
                 {
                     pChild = new VCLXAccessibleMenu( m_pMenu, (sal_uInt16)i, pPopupMenu );
@@ -524,7 +524,7 @@ void OAccessibleMenuBaseComponent::SelectChild( sal_Int32 i )
 
     // highlight the child
     if ( m_pMenu )
-        m_pMenu->HighlightItem( (USHORT)i );
+        m_pMenu->HighlightItem( (sal_uInt16)i );
 }
 
 // -----------------------------------------------------------------------------
@@ -541,7 +541,7 @@ sal_Bool OAccessibleMenuBaseComponent::IsChildSelected( sal_Int32 i )
 {
     sal_Bool bSelected = sal_False;
 
-    if ( m_pMenu && m_pMenu->IsHighlighted( (USHORT)i ) )
+    if ( m_pMenu && m_pMenu->IsHighlighted( (sal_uInt16)i ) )
         bSelected = sal_True;
 
     return bSelected;

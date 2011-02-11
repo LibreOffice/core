@@ -75,12 +75,12 @@ class MainWindow : public WorkWindow
 
 public:
     MainWindow(MyApp *pAppl);
-    virtual BOOL Close(); // derived
+    virtual sal_Bool Close(); // derived
 
     void FileExit();
     void FileOpen();
     void TestGross();
-    void Tree(GHEditWindow *aEditWin, Window *pBase, USHORT Indent);
+    void Tree(GHEditWindow *aEditWin, Window *pBase, sal_uInt16 Indent);
     void WinTree();
     void SysDlg();
     DECL_LINK(MenuSelectHdl,MenuBar*);
@@ -94,8 +94,8 @@ class MyDispatcher
 public:
     MyDispatcher(MainWindow  *MainWin) : pMainWin(MainWin) {};
     virtual ~MyDispatcher() {};
-    virtual USHORT ExecuteFunction( USHORT nSID, SfxPoolItem** ppArgs = 0, USHORT nMode = 0);
-    virtual void SetExecuteMode( USHORT nMode )
+    virtual sal_uInt16 ExecuteFunction( sal_uInt16 nSID, SfxPoolItem** ppArgs = 0, sal_uInt16 nMode = 0);
+    virtual void SetExecuteMode( sal_uInt16 nMode )
     {
         (void) nMode; /* avoid warning about unused parameter */
     };  // Ist hier sowieso egal

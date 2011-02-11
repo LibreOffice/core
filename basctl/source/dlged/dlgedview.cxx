@@ -149,7 +149,7 @@ void DlgEdView::MakeVisible( const Rectangle& rRect, Window& rWin )
 
 //----------------------------------------------------------------------------
 
-SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT nTol)
+SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, sal_uInt16 nTol)
 {
     DlgEdObj* pDlgEdObj = dynamic_cast< DlgEdObj* >(pRetval);
 
@@ -198,7 +198,7 @@ SdrObject* impLocalHitCorrection(SdrObject* pRetval, const Point& rPnt, USHORT n
     return pRetval;
 }
 
-SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, USHORT nTol, SdrObject* pObj, SdrPageView* pPV, ULONG nOptions, const SetOfByte* pMVisLay) const
+SdrObject* DlgEdView::CheckSingleSdrObjectHit(const Point& rPnt, sal_uInt16 nTol, SdrObject* pObj, SdrPageView* pPV, sal_uLong nOptions, const SetOfByte* pMVisLay) const
 {
     // call parent
     SdrObject* pRetval = SdrView::CheckSingleSdrObjectHit(rPnt, nTol, pObj, pPV, nOptions, pMVisLay);

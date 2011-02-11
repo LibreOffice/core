@@ -27,6 +27,7 @@
 package com.sun.star.wizards.report;
 
 import com.sun.star.wizards.common.JavaTools;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.*;
 import com.sun.star.wizards.db.*;
 
@@ -59,7 +60,7 @@ public class GroupFieldHandler extends FieldSelection
             CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblBlindTextNote_1",
                     new String[]
                     {
-                        "Enabled", "Height", "Label", "MultiLine", "PositionX", "PositionY", "Step", "Width"
+                        PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_MULTILINE, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                     },
                     new Object[]
                     {
@@ -112,7 +113,7 @@ public class GroupFieldHandler extends FieldSelection
     {
         emptyFieldsListBoxes();
         GroupFieldVector.removeAllElements();
-        CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(false));
+        CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, new Boolean(false));
     }
 
     public void getGroupFieldNames(CommandMetaData CurDBMetaData)
@@ -128,7 +129,7 @@ public class GroupFieldHandler extends FieldSelection
         int iSelCount = xSelectedFieldsListBox.getItemCount();
         if (iSelCount >= MAXSELFIELDS)
             {
-            CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, "Enabled", Boolean.FALSE);
+            CurUnoDialog.setControlProperty("cmdMoveSelected" + sIncSuffix, PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);
         }
     }
 
@@ -161,7 +162,7 @@ public class GroupFieldHandler extends FieldSelection
             int iSelCount = xSelectedFieldsListBox.getItemCount();
             String[] CurGroupNames = xFieldsListBox.getItems();
             CurReportDocument.liveupdate_addGroupNametoDocument(CurGroupNames, CurGroupTitle, GroupFieldVector, CurReportDocument.getReportPath(), iSelCount);
-            CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(true));
+            CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, new Boolean(true));
             if (iSelCount >= MAXSELFIELDS)
             {
                 toggleMoveButtons(false, false);
@@ -177,7 +178,7 @@ public class GroupFieldHandler extends FieldSelection
                 String[] NewSelList = xSelectedFieldsListBox.getItems();
                 CurReportDocument.liveupdate_removeGroupName(NewSelList, OldGroupTitle, GroupFieldVector);
                 String[] NewSelGroupNames = xSelectedFieldsListBox.getItems();
-                CurUnoDialog.setControlProperty("lblBlindTextNote_1", "Enabled", new Boolean(NewSelGroupNames.length == 0));
+                CurUnoDialog.setControlProperty("lblBlindTextNote_1", PropertyNames.PROPERTY_ENABLED, new Boolean(NewSelGroupNames.length == 0));
 
             // CurReportDocument.refreshGroupFields(xSelectedFieldsListBox.getItems());
             }

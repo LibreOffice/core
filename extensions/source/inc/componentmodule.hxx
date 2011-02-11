@@ -168,7 +168,7 @@ typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleService
     class ModuleRes : public ::ResId
     {
     public:
-        ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
+        ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
     };
 
     //==========================================================================

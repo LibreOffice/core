@@ -340,7 +340,7 @@ class PluginInputStream :
 private:
     ::ucbhelper::Content*       m_pContent;
     sal_Int32                   m_nMode;
-    UINT32                      m_nWritePos;
+    sal_uInt32                      m_nWritePos;
 
     Reference< com::sun::star::io::XActiveDataSource >  m_xSource;
     // hold a reference on input until closeOutput is called
@@ -354,7 +354,7 @@ private:
     SvFileStream                m_aFileStream;
 public:
     PluginInputStream( XPlugin_Impl* pPlugin,
-                   const char* url, UINT32 len, UINT32 lastmod );
+                   const char* url, sal_uInt32 len, sal_uInt32 lastmod );
 
     PluginInputStream() : PluginStream( NULL, NULL, 0, 0 ) {}
 
@@ -363,7 +363,7 @@ public:
     virtual PluginStreamType getStreamType();
 
     void setMode( sal_Int32 nMode );
-    UINT32 read( UINT32 offset, sal_Int8* buffer, UINT32 size );
+    sal_uInt32 read( sal_uInt32 offset, sal_Int8* buffer, sal_uInt32 size );
     void setSource( const Reference< com::sun::star::io::XActiveDataSource >& xSource ) { m_xSource = xSource; }
     // get contents ot url via ucbhelper::Content
     void load();

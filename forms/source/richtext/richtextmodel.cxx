@@ -157,7 +157,7 @@ namespace frm
         {
             m_pEngine->SetModifyHdl( LINK( this, ORichTextModel, OnEngineContentModified ) );
 
-            ULONG nEngineControlWord = m_pEngine->GetControlWord();
+            sal_uLong nEngineControlWord = m_pEngine->GetControlWord();
             nEngineControlWord = nEngineControlWord & ~EE_CNTRL_AUTOPAGESIZE;
             m_pEngine->SetControlWord( nEngineControlWord );
 

@@ -90,7 +90,7 @@ namespace accessibility
                         SvxIconChoiceCtrlEntry* pEntry = static_cast< SvxIconChoiceCtrlEntry* >( rVclWindowEvent.GetData() );
                         if ( pEntry )
                         {
-                            ULONG nPos = pCtrl->GetEntryListPos( pEntry );
+                            sal_uLong nPos = pCtrl->GetEntryListPos( pEntry );
                             Reference< XAccessible > xChild = new AccessibleIconChoiceCtrlEntry( *pCtrl, nPos, this );
                             uno::Any aOldValue, aNewValue;
                             aNewValue <<= xChild;
