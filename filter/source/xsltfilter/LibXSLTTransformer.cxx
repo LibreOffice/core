@@ -321,7 +321,7 @@ namespace XSLT
     {
         ListenerList::iterator it;
         ListenerList* l = &m_listeners;
-        for (it = l->begin(); it != l->end(); it++)
+        for (it = l->begin(); it != l->end(); ++it)
             {
                 Reference<XStreamListener> xl = *it;
                 xl.get()->started();
@@ -336,7 +336,7 @@ namespace XSLT
         ListenerList* l = &m_listeners;
         Any arg;
         arg <<= Exception(msg, *this);
-        for (ListenerList::iterator it = l->begin(); it != l->end(); it++)
+        for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
             {
                 Reference<XStreamListener> xl = *it;
                 if (xl.is())
@@ -350,7 +350,7 @@ namespace XSLT
     LibXSLTTransformer::done()
     {
         ListenerList* l = &m_listeners;
-        for (ListenerList::iterator it = l->begin(); it != l->end(); it++)
+        for (ListenerList::iterator it = l->begin(); it != l->end(); ++it)
             {
                 Reference<XStreamListener> xl = *it;
                 if (xl.is())
