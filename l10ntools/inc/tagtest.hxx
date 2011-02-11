@@ -58,12 +58,9 @@ struct lessByteString{
 
 struct hashByteString{
     size_t operator()( const ByteString& rName ) const{
-                boost::hash< const char* > myHash;
-                return myHash( rName.GetBuffer() );
+                return rtl_str_hashCode(rName.GetBuffer());
     }
 };
-
-
 
 typedef boost::unordered_map<ByteString , String , hashByteString,equalByteString>
                                 StringHashMap;
