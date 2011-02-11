@@ -299,6 +299,12 @@ dbgutil=
 # ---------------------------------------------------------------------------
 
 DMAKE_WORK_DIR*:=$(subst,/,/ $(PWD))
+.IF "$(GUI)"=="WNT"
+posix_PWD:=/cygdrive/$(PWD:s/://)
+.ELSE			#GUI)"=="WNT"
+posix_PWD:=$(PWD)
+.ENDIF			#GUI)"=="WNT"
+
 
 .IF "$(TMP)"!=""
 tmp*=$(TMP)
@@ -387,9 +393,11 @@ COMPILER_WARN_ERRORS=TRUE
 rsc_once*=$(RSC_ONCE)
 .ENDIF
 
-.IF "$(COMMON_BUILD)"!=""
-common_build*=$(COMMON_BUILD)
-.ENDIF
+#.IF "$(COMMON_BUILD)"!=""
+#common_build*=$(COMMON_BUILD)
+#.ENDIF
+common_build:=
+COMMON_BUILD:=
 
 .IF "$(USE_SHL_VERSIONS)"!=""
 use_shl_versions*=$(USE_SHL_VERSIONS)
@@ -574,24 +582,24 @@ PATH_IN_MODULE:=$(subst,$(shell @+cd $(PRJ) && pwd $(PWDFLAGS))/, $(PWD))
 PATH_IN_MODULE:=
 .ENDIF			# "$(PRJ)"!="."
 
-# common output tree
-.IF "$(common_build)"!=""
-COMMON_OUTDIR*=common
-.IF "$(no_common_build_reslib)"==""
-common_build_reslib=true
-.ENDIF			# "$(no_common_build_reslib)"==""
-.IF "$(no_common_build_zip)"==""
-common_build_zip=true
-.ENDIF			# "$(no_common_build_zip)"==""
-.IF "$(no_common_build_sign_jar)"==""
-common_build_sign_jar=true
-.ENDIF			# "$(no_common_build_sign_jar)"==""
-.IF "$(no_common_build_srs)"==""
-common_build_srs=true
-.ENDIF			# "$(no_common_build_srs)"==""
-.ELSE			# "$(common_build)"!=""
+## common output tree
+#.IF "$(common_build)"!=""
+#COMMON_OUTDIR*=common
+#.IF "$(no_common_build_reslib)"==""
+#common_build_reslib=true
+#.ENDIF			# "$(no_common_build_reslib)"==""
+#.IF "$(no_common_build_zip)"==""
+#common_build_zip=true
+#.ENDIF			# "$(no_common_build_zip)"==""
+#.IF "$(no_common_build_sign_jar)"==""
+#common_build_sign_jar=true
+#.ENDIF			# "$(no_common_build_sign_jar)"==""
+#.IF "$(no_common_build_srs)"==""
+#common_build_srs=true
+#.ENDIF			# "$(no_common_build_srs)"==""
+#.ELSE			# "$(common_build)"!=""
 COMMON_OUTDIR:=$(OUTPATH)
-.ENDIF			# "$(common_build)"!=""
+#.ENDIF			# "$(common_build)"!=""
 
 LOCAL_OUT:=$(OUT)
 LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
@@ -599,27 +607,25 @@ LOCAL_COMMON_OUT:=$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 
 # --- generate output tree -----------------------------------------
 
+# disable for makefiles wrapping a gnumake module
+.IF "$(TARGET)"!="prj"
 # As this is not part of the initial startup makefile we define an infered
 # target instead of using $(OUT)/inc/myworld.mk as target name.
 # (See iz62795)
-$(OUT)/inc/%world.mk :
+$(posix_PWD)/$(OUT)/inc/%world.mk :
     @$(MKOUT) $(ROUT)
     @echo $(EMQ)# > $@
 
-# don't need/want output trees in solenv!!!
-.IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
+.INCLUDE :  $(posix_PWD)/$(OUT)/inc/myworld.mk
 
 .IF "$(common_build)"!=""
-$(LOCAL_COMMON_OUT)/inc/%world.mk :
+$(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/%world.mk :
     @$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(ROUT))
     @echo $(EMQ)# > $@
 
-.IF "$(PRJNAME)"!="solenv"
-.INCLUDE : $(LOCAL_COMMON_OUT)/inc/myworld.mk
-.ENDIF			# "$(PRJNAME)"!="solenv"
+.INCLUDE : $(posix_PWD)/$(LOCAL_COMMON_OUT)/inc/myworld.mk
 .ENDIF			# "$(common_build)"!=""
+.ENDIF          # "$(TARGET)"!="prj"
 
 .INCLUDE .IGNORE : office.mk
 
@@ -1366,6 +1372,7 @@ COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
 COMPONENTPREFIX_INBUILD_NATIVE = \
     vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
 COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
+COMPONENTPREFIX_EXTENSION = ./
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized

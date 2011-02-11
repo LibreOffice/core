@@ -47,11 +47,13 @@ EXCEPTIONSFILES= \
                   $(SLO)$/prj.obj
 
 SLOFILES=\
+          $(SLO)$/command.obj \
           $(SLO)$/dep.obj \
           $(SLO)$/minormk.obj \
           $(SLO)$/prodmap.obj \
           $(SLO)$/appdef.obj \
            $(SLO)$/hashtbl.obj		\
+           $(SLO)$/sstring.obj		\
           $(SLO)$/prj.obj
 
 
@@ -62,7 +64,6 @@ SHL1DEF		=$(MISC)$/$(SHL1TARGET).def
 SHL1DEPN	=$(SHL1LIBS)
 SHL1STDLIBS=\
             $(TOOLSLIB) \
-            $(BTSTRPLIB)		\
             $(VOSLIB)			\
             $(SALLIB)   
 

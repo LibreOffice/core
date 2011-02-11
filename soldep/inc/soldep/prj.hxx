@@ -30,9 +30,7 @@
 
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
-#ifndef _LISTMACR_HXX
-#include <bootstrp/listmacr.hxx>
-#endif
+#include <soldep/listmacr.hxx>
 #include <vos/mutex.hxx>
 #include <tools/string.hxx>
 
@@ -85,10 +83,10 @@ class CommandData
     ByteString      sClientRestriction;
     SByteStringList *pDepList;
     SByteStringList *pCommandList;
-    USHORT      nOSType;
-    USHORT      nCommand;
+    sal_uInt16      nOSType;
+    sal_uInt16      nCommand;
 
-    ULONG       nDepth;             // Tiefe der Abhaenigkeit
+    sal_uIntPtr     nDepth;             // Tiefe der Abhaenigkeit
 
 public:
                 CommandData();
@@ -115,19 +113,19 @@ public:
     void        SetPath( ByteString aName ){aPath = aName;}
     ByteString      GetPrePath(){return aPrePath;}
     void        SetPrePath( ByteString aName ){aPrePath = aName;}
-    USHORT      GetOSType(){return nOSType;}
+    sal_uInt16      GetOSType(){return nOSType;}
     ByteString      GetOSTypeString();
-    void        SetOSType( USHORT nType ){nOSType = nType;}
-    USHORT      GetCommandType(){return nCommand;}
+    void        SetOSType( sal_uInt16 nType ){nOSType = nType;}
+    sal_uInt16      GetCommandType(){return nCommand;}
     ByteString      GetCommandTypeString();
-    void        SetCommandType( USHORT nCommandType ){nCommand = nCommandType;}
+    void        SetCommandType( sal_uInt16 nCommandType ){nCommand = nCommandType;}
     SByteStringList* GetDependencies(){return pDepList;}
     void        SetDependencies( SByteStringList *pList ){pDepList = pList;}
     ByteString      GetClientRestriction() { return sClientRestriction; }
     void        SetClientRestriction( ByteString sRestriction ) { sClientRestriction = sRestriction; }
 
     void        AddDepth(){nDepth++;}
-    ULONG       GetDepth(){return nDepth;}
+    sal_uIntPtr     GetDepth(){return nDepth;}
 
     void AddCommand(ByteString* pCommand);
     SByteStringList* GetCommandList() {return pCommandList;}
@@ -157,7 +155,7 @@ public:
                     SimpleConfig(DirEntry& rDirEntry);
                     ~SimpleConfig();
     ByteString          GetNext();
-    ByteString          GetCleanedNextLine( BOOL bReadComments = FALSE );
+    ByteString          GetCleanedNextLine( sal_Bool bReadComments = sal_False );
 };
 
 #define ENV_GUI     0x00000000
@@ -199,14 +197,14 @@ class DepInfo
     private:
         ByteString*         pProject;
         SByteStringList*    pModeList;
-        BOOL                bAllModes;
+        sal_Bool                bAllModes;
 
         void                RemoveProject ();
         void                RemoveModeList ();
     public:
-                            DepInfo() : pProject(0), pModeList(0), bAllModes(FALSE) {}
-                            DepInfo(ByteString* pString) : pProject(0), pModeList(0), bAllModes(FALSE) {pProject = pString;}
-                            DepInfo(ByteString* pString, SByteStringList* pList) : pProject(0), pModeList(0), bAllModes(FALSE) {pProject = pString; pModeList = pList;}
+                            DepInfo() : pProject(0), pModeList(0), bAllModes(sal_False) {}
+                            DepInfo(ByteString* pString) : pProject(0), pModeList(0), bAllModes(sal_False) {pProject = pString;}
+                            DepInfo(ByteString* pString, SByteStringList* pList) : pProject(0), pModeList(0), bAllModes(sal_False) {pProject = pString; pModeList = pList;}
                             ~DepInfo();
 
         void                SetProject (ByteString* pStr);
@@ -214,8 +212,8 @@ class DepInfo
         void                PutModeString (ByteString* pStr);
         SByteStringList*    GetModeList() {return pModeList;}
         void                SetModeList (SByteStringList* pList) {pModeList = pList;}
-        BOOL                IsAllModes() {return bAllModes;}
-        void                SetAllModes(BOOL bModes=TRUE) {bAllModes = bModes;}
+        sal_Bool                IsAllModes() {return bAllModes;}
+        void                SetAllModes(sal_Bool bModes=sal_True) {bAllModes = bModes;}
 
         DepInfo&            operator<<  ( SvStream& rStream );
         DepInfo&            operator>>  ( SvStream& rStream );
@@ -239,19 +237,19 @@ class SDepInfoList : public DepInfoList
                 ~SDepInfoList();
 
                 // neuen ByteString in Liste einfuegen
-    ULONG       PutString( ByteString*, ByteString*);
-    ULONG       PutString( ByteString*);
+    sal_uIntPtr     PutString( ByteString*, ByteString*);
+    sal_uIntPtr     PutString( ByteString*);
     void        PutModeString( DepInfo* pInfoList, ByteString* pStr );
 
     ByteString*     RemoveString( const ByteString& rName );
 
                 // Position des ByteString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( ByteString* );
+    sal_uIntPtr     IsString( ByteString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( ByteString* );
+    sal_uIntPtr     GetPrevString( ByteString* );
     SByteStringList*    GetAllDepModes();
 
     SDepInfoList& operator<< ( SvStream& rStream );
@@ -278,16 +276,16 @@ private:
     SByteStringList*    pPrjInitialDepList;
     SByteStringList*    pPrjDepList;
     SDepInfoList*       pPrjDepInfoList;
-    BOOL            bSorted;
-    BOOL            bHardDependencies;
-    BOOL            bFixedDependencies;
-    BOOL            bVisited;
-    BOOL            bIsAvailable;
+    sal_Bool            bSorted;
+    sal_Bool            bHardDependencies;
+    sal_Bool            bFixedDependencies;
+    sal_Bool            bVisited;
+    sal_Bool            bIsAvailable;
     SByteStringList* RemoveStringList(SByteStringList* pStringList );
     SDepInfoList*   RemoveDepInfoList(SDepInfoList* pInfoList );
     PrjList*        pTempCommandDataList;
-    BOOL            bTempCommandDataListPermanent;
-    BOOL            bError;
+    sal_Bool            bTempCommandDataListPermanent;
+    sal_Bool            bError;
 public:
                     Prj();
                     Prj( ByteString aName );
@@ -298,27 +296,27 @@ public:
                             {return aProjectName;}
     void            SetProjectName(ByteString aName)
                             {aProjectName = aName;}
-    BOOL            InsertDirectory( ByteString aDirName , USHORT aWhat,
-                                    USHORT aWhatOS, ByteString aLogFileName,
+    sal_Bool            InsertDirectory( ByteString aDirName , sal_uInt16 aWhat,
+                                    sal_uInt16 aWhatOS, ByteString aLogFileName,
                                     const ByteString &rClientRestriction );
     CommandData*    RemoveDirectory( ByteString aLogFileName );
-    CommandData*    GetDirectoryList ( USHORT nWhatOs, USHORT nCommand );
+    CommandData*    GetDirectoryList ( sal_uInt16 nWhatOs, sal_uInt16 nCommand );
     CommandData*    GetDirectoryData( ByteString aLogFileName );
     inline CommandData* GetData( ByteString aLogFileName )
                             { return GetDirectoryData( aLogFileName ); };
 
-    SByteStringList*    GetDependencies( BOOL bExpanded = TRUE );
+    SByteStringList*    GetDependencies( sal_Bool bExpanded = sal_True );
     SDepInfoList*   GetModeAndDependencies() {return pPrjDepInfoList;}
     void            AddDependencies( ByteString aStr );
     void            AddDependencies( ByteString aStr, ByteString aModeStr );
     void            SetMode(SByteStringList* pModeList);
-    void            HasHardDependencies( BOOL bHard ) { bHardDependencies = bHard; }
-    BOOL            HasHardDependencies() { return bHardDependencies; }
-    void            HasFixedDependencies( BOOL bFixed ) { bFixedDependencies = bFixed; }
-    BOOL            HasFixedDependencies() { return bFixedDependencies; }
+    void            HasHardDependencies( sal_Bool bHard ) { bHardDependencies = bHard; }
+    sal_Bool            HasHardDependencies() { return bHardDependencies; }
+    void            HasFixedDependencies( sal_Bool bFixed ) { bFixedDependencies = bFixed; }
+    sal_Bool            HasFixedDependencies() { return bFixedDependencies; }
 
-    BOOL            IsAvailable() { return bIsAvailable; }
-    void            IsAvailable( BOOL bAvailable ) { bIsAvailable=bAvailable; }
+    sal_Bool            IsAvailable() { return bIsAvailable; }
+    void            IsAvailable( sal_Bool bAvailable ) { bIsAvailable=bAvailable; }
 
     void            ExtractDependencies();
 
@@ -326,12 +324,12 @@ public:
     void            RemoveTempCommandDataList();
     void            GenerateTempCommandDataList();
     void            GenerateEmptyTempCommandDataList();
-    BOOL            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
-    void            SetTempCommandDataListPermanent (BOOL bVar = TRUE) {bTempCommandDataListPermanent = bVar;}
-    BOOL            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
+    sal_Bool            HasTempCommandDataList() {return pTempCommandDataList != NULL;}
+    void            SetTempCommandDataListPermanent (sal_Bool bVar = sal_True) {bTempCommandDataListPermanent = bVar;}
+    sal_Bool            IsTempCommandDataListPermanent() {return bTempCommandDataListPermanent;}
 
-    void            SetError (BOOL bVar = TRUE) {bError = bVar;}
-    BOOL            HasError () {return bError;}
+    void            SetError (sal_Bool bVar = sal_True) {bError = bVar;}
+    sal_Bool            HasError () {return bError;}
 
     Prj&            operator<<  ( SvStream& rStream );
     Prj&            operator>>  ( SvStream& rStream );
@@ -357,7 +355,7 @@ private:
     Date aDateCreated;
     Time aTimeCreated;
 
-    BOOL bExists;
+    sal_Bool bExists;
 
 public:
     StarFile( const String &rFile );
@@ -365,8 +363,8 @@ public:
     Date GetDate() { return aDate; }
     Time GetTime() { return aTime; }
 
-    BOOL NeedsUpdate();
-    BOOL Exists() { return bExists; }
+    sal_Bool NeedsUpdate();
+    sal_Bool Exists() { return bExists; }
 };
 
 DECLARE_LIST( StarFileList, StarFile * )
@@ -384,7 +382,7 @@ private:
 protected:
     vos:: OMutex  aMutex;
 
-    USHORT          nStarMode;
+    sal_uInt16          nStarMode;
     SolarFileList   aFileList;
     StarFileList    aLoadedFilesList;
     String          sSourceRoot;
@@ -399,15 +397,14 @@ protected:
 
     void            Expand_Impl();
     void            ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj );
-    ULONG           SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
+    sal_uIntPtr         SearchFileEntry( StarFileList *pStarFiles, StarFile* pFile );
     void            InsertTokenLine (const ByteString& rToken, Prj** ppPrj, const ByteString& rProjectName, const sal_Bool bExtendAlias = sal_True);
 
 public:
                     Star();
-                    Star( String aFileName, USHORT nMode = STAR_MODE_SINGLE_PARSE );
+                    Star( String aFileName, sal_uInt16 nMode = STAR_MODE_SINGLE_PARSE );
                     Star( SolarFileList *pSolarFiles );
-                    Star( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bLocal = FALSE,
-                        const char *pSourceRoot = NULL  );
+                    Star( GenericInformationList *pStandLst, ByteString &rVersion );
 
                     ~Star();
 
@@ -420,24 +417,22 @@ public:
 //  void            ReadXmlBuildList(const ByteString& sBuildLstPath);
 
 
-    BOOL            HasProject( ByteString aProjectName );
+    sal_Bool            HasProject( ByteString aProjectName );
     Prj*            GetPrj( ByteString aProjectName );
     ByteString          GetPrjName( DirEntry &rPath );
-    BOOL            RemovePrj ( Prj* pPrj );
+    sal_Bool            RemovePrj ( Prj* pPrj );
     void            RemoveAllPrj ();
 
-    StarFile*       ReadBuildlist (const String& rFilename, BOOL bReadComments = FALSE, BOOL bExtendAlias = TRUE);
-    BOOL            NeedsUpdate();
+    StarFile*       ReadBuildlist (const String& rFilename, sal_Bool bReadComments = sal_False, sal_Bool bExtendAlias = sal_True);
+    sal_Bool            NeedsUpdate();
     SolarFileList*  NeedsFilesForUpdate();
     void            ReplaceFileEntry( StarFileList *pStarFiles, StarFile* pFile );
-    void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
-                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
-    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, BOOL bRead = FALSE,
-                        BOOL bLocal = FALSE, const char *pSourceRoot = NULL  );
+    void            UpdateFileList( GenericInformationList *pStandLst, ByteString &rVersion, sal_Bool bRead = sal_False );
+    void            FullReload( GenericInformationList *pStandLst, ByteString &rVersion, sal_Bool bRead = sal_False );
     void            GenerateFileLoadList( SolarFileList *pSolarFiles );
-    BOOL            CheckFileLoadList(SolarFileList *pSolarFiles);
+    sal_Bool            CheckFileLoadList(SolarFileList *pSolarFiles);
 
-    USHORT          GetMode() { return nStarMode; }
+    sal_uInt16          GetMode() { return nStarMode; }
     String          GetFileName(){ return sFileName; };
     String          GetSourceRoot(){ return sSourceRoot; };
     SByteStringList* GetAvailableDeps ();
@@ -459,23 +454,23 @@ public:
 class StarWriter : public Star
 {
 private:
-    USHORT          WritePrj( Prj *pPrj, SvFileStream& rStream );
+    sal_uInt16          WritePrj( Prj *pPrj, SvFileStream& rStream );
 
 public:
-                    StarWriter( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE );
-                    StarWriter( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
+                    StarWriter( String aFileName, sal_Bool bReadComments = sal_False, sal_uInt16 nMode = STAR_MODE_SINGLE_PARSE );
+                    StarWriter( SolarFileList *pSolarFiles, sal_Bool bReadComments = sal_False );
                     StarWriter( GenericInformationList *pStandLst, ByteString &rVersion, ByteString &rMinor,
-                        BOOL bReadComments = FALSE, BOOL bLocal = FALSE, const char *pSourceRoot = NULL );
+                        sal_Bool bReadComments = sal_False );
 
     void            CleanUp();
 
-    BOOL            InsertProject ( Prj* pNewPrj );
+    sal_Bool            InsertProject ( Prj* pNewPrj );
     Prj*            RemoveProject ( ByteString aProjectName );
 
-    USHORT          Read( String aFileName, BOOL bReadComments = FALSE, USHORT nMode = STAR_MODE_SINGLE_PARSE  );
-       USHORT           Read( SolarFileList *pSolarFiles, BOOL bReadComments = FALSE );
-    USHORT          Write( String aFileName );
-    USHORT          WriteMultiple( String rSourceRoot );
+    sal_uInt16          Read( String aFileName, sal_Bool bReadComments = sal_False, sal_uInt16 nMode = STAR_MODE_SINGLE_PARSE  );
+       sal_uInt16           Read( SolarFileList *pSolarFiles, sal_Bool bReadComments = sal_False );
+    sal_uInt16          Write( String aFileName );
+    sal_uInt16          WriteMultiple( String rSourceRoot );
 
     void            InsertTokenLine ( const ByteString& rTokenLine );
 };

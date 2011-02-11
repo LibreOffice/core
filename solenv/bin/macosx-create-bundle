@@ -96,7 +96,7 @@ while [ $# != 0 ]; do
 			# Link jnilib
 			ln -sf "$inputfilename" "$outputdir/$inputjnilibname"
 
-			printf "macosx-create-bundle: $outputdir/$inputjnilibname successfully created\n"
+			#printf "macosx-create-bundle: $outputdir/$inputjnilibname successfully created\n"
 		fi
 	else
 		printf "macosx-create-bundle: error: file is not an executable or shared library.\n" >&2

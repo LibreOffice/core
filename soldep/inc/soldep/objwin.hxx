@@ -33,7 +33,7 @@
 #endif
 #include <vcl/menu.hxx>
 #include <vcl/timer.hxx>
-#include <bootstrp/listmacr.hxx>
+#include <soldep/listmacr.hxx>
 #include <tools/stream.hxx>
 
 #include <soldep/connctr.hxx>
@@ -59,73 +59,73 @@ class ObjectWin : public Window
     Point       maCalcPos;
     ByteString      msBodyText;
     ByteString      msTipText;
-    ULONG       mnObjectId;
+    sal_uIntPtr     mnObjectId;
     PopupMenu*  mpPopup;
-    USHORT      mnPopupStaticItems;
+    sal_uInt16      mnPopupStaticItems;
     Wallpaper   maObjWallpaper;
     ConnectorList   mConnections;
-    ULONG       mnMarkMode;
-    ULONG       mnViewMask;
-    BOOL        mbVisible;
-    BOOL        mbMenuExecute;
-    static BOOL msbHideMode;
-    static ULONG msnGlobalViewMask;   //will be set by SolDep
+    sal_uIntPtr     mnMarkMode;
+    sal_uIntPtr         mnViewMask;
+    sal_Bool        mbVisible;
+    sal_Bool        mbMenuExecute;
+    static sal_Bool msbHideMode;
+    static sal_uIntPtr msnGlobalViewMask;   //will be set by SolDep
 
 public:
-    BOOL        mbVisited;
+    sal_Bool        mbVisited;
 //  double x, y;
 
-    USHORT mnRootDist;
-    USHORT mnHeadDist;
-    BOOL mbFixed;
+    sal_uInt16 mnRootDist;
+    sal_uInt16 mnHeadDist;
+    sal_Bool mbFixed;
     //Depper*       mpDepperDontuseme;
     Timer   aTipTimer;
 
                     ObjectWin( Window* pParent, WinBits nWinStyle );
                     ~ObjectWin();
-        void            SetHideMode(BOOL bHide);
-        BOOL            ToggleHideMode();
-        BOOL            IsHideMode() { return msbHideMode; };
-        BOOL            IsNullObject() { return (msBodyText == "null"); };
-        void            SetGlobalViewMask(ULONG gvm) { msnGlobalViewMask = gvm; };
+        void            SetHideMode(sal_Bool bHide);
+        sal_Bool            ToggleHideMode();
+        sal_Bool            IsHideMode() { return msbHideMode; };
+        sal_Bool            IsNullObject() { return (msBodyText == "null"); };
+        void            SetGlobalViewMask(sal_uIntPtr gvm) { msnGlobalViewMask = gvm; };
         void            SetBodyText( const ByteString& rNewText );
         ByteString&         GetBodyText();
-        ULONG           GetIdByName( const ByteString& rText );
+        sal_uIntPtr           GetIdByName( const ByteString& rText );
         void            SetTipText( const ByteString& rNewText );
         ByteString&         GetTipText();
-        Point           GetFixPoint( const Point& rRefPoint, BOOL bUseRealPos = TRUE );
+        Point           GetFixPoint( const Point& rRefPoint, sal_Bool bUseRealPos = sal_True );
 
         void            SetCalcPosPixel( const Point& rNewPos ){ maCalcPos = rNewPos; };
         Point           GetCalcPosPixel() const { return maCalcPos; }
 
         void            AddConnector( Connector* pNewCon );
         void            RemoveConnector( Connector* pOldCon );
-        Connector*      GetConnector( ULONG nIndex );
-        Connector*      GetConnector( ULONG nStartId, ULONG nEndId );
-        virtual void    SetMarkMode( ULONG nMarkMode = 0 );
-        virtual void    UnsetMarkMode( ULONG nMarkMode );
-        ULONG           GetMarkMode(){ return mnMarkMode; };
+        Connector*      GetConnector( sal_uIntPtr nIndex );
+        Connector*      GetConnector( sal_uIntPtr nStartId, sal_uIntPtr nEndId );
+        virtual void    SetMarkMode( sal_uIntPtr nMarkMode = 0 );
+        virtual void    UnsetMarkMode( sal_uIntPtr nMarkMode );
+        sal_uIntPtr         GetMarkMode(){ return mnMarkMode; };
         Wallpaper       GetActualWallpaper() { return maObjWallpaper;};
         void            SetActualWallpaper(const Wallpaper& aWp) { maObjWallpaper = aWp;};
-        void            MarkNeeded( BOOL bReset = FALSE );
-        void            MarkDepending( BOOL bReset = FALSE );
+        void            MarkNeeded( sal_Bool bReset = sal_False );
+        void            MarkDepending( sal_Bool bReset = sal_False );
         void            Paint( const Rectangle& rRecct );
         void            MouseButtonDown( const MouseEvent& rMEvt );
         void            MouseButtonUp( const MouseEvent& rMEvt );
         void            MouseMove( const MouseEvent& rMEvt );
 //      void            DoubleClick();
-        USHORT          Save( SvFileStream& rOutFile );
-        USHORT          Load( SvFileStream& rInFile );
-        void            SetId( ULONG nId );
-        ULONG           GetId();
+        sal_uInt16          Save( SvFileStream& rOutFile );
+        sal_uInt16          Load( SvFileStream& rInFile );
+        void            SetId( sal_uIntPtr nId );
+        sal_uIntPtr         GetId();
         void            UpdateConnectors();
         void            SetAllConnectorsUnvisible();
         virtual void    Command( const CommandEvent& rEvent);
 
-        void SetViewMask( ULONG nMask );
-        ULONG GetViewMask() { return mnViewMask; }
+        void SetViewMask( sal_uIntPtr nMask );
+        sal_uIntPtr GetViewMask() { return mnViewMask; }
         using Window::IsVisible;
-        BOOL IsVisible() { return mbVisible; }
+        sal_Bool IsVisible() { return mbVisible; }
 
         DECL_LINK( PopupSelected, PopupMenu * );
         DECL_LINK( PopupDeactivated, PopupMenu * );
@@ -134,9 +134,9 @@ public:
         //virtual void GetFocus();
         virtual void LoseFocus();
 
-        BOOL            ConnectionExistsInAnyDirection( ObjectWin *pWin );
+        sal_Bool            ConnectionExistsInAnyDirection( ObjectWin *pWin );
         void    DrawOutput( OutputDevice* pDevice, const Point& rOffset  );
-        BOOL    IsTop();
+        sal_Bool    IsTop();
 };
 
 DECL_DEST_LIST( TmpObjWinList, ObjWinList, ObjectWin* )
@@ -147,7 +147,7 @@ class ObjectList : public ObjWinList
 private:
     ObjectWin* pSelectedObjectWin;
 protected:
-    BOOL       mbHideMode;
+    sal_Bool       mbHideMode;
 public:
                ObjectList();
                ~ObjectList() {};

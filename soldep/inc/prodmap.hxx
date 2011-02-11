@@ -28,9 +28,7 @@
 #ifndef PRODUCT_MAPPER_HXX
 #define PRODUCT_MAPPER_HXX
 
-#ifndef _SSTRING_HXX
-#include <bootstrp/sstring.hxx>
-#endif
+#include <soldep/sstring.hxx>
 
 class GenericInformation;
 class GenericInformationList;
@@ -54,13 +52,13 @@ private:
     SByteStringList aBaseList;
     SByteStringList aPrintedList;
 
-    USHORT PrintDependentTargets( const ByteString &rProduct, USHORT nLevel = 0 );
-    USHORT PrintAndDeleteBaseList();
+    sal_uInt16 PrintDependentTargets( const ByteString &rProduct, sal_uInt16 nLevel = 0 );
+    sal_uInt16 PrintAndDeleteBaseList();
 
     SByteStringList *GetMinorList( const ByteString &rVersion, const ByteString &rEnvironment );
-    BaseProductList *GetBases( GenericInformation *pProductInfo, USHORT nLevel = 0, BaseProductList *pBases = NULL );
+    BaseProductList *GetBases( GenericInformation *pProductInfo, sal_uInt16 nLevel = 0, BaseProductList *pBases = NULL );
 
-    USHORT PrintSingleMinorList( GenericInformation *pProductInfo, BaseProductList *pBases, const ByteString rEnvironment );
+    sal_uInt16 PrintSingleMinorList( GenericInformation *pProductInfo, BaseProductList *pBases, const ByteString rEnvironment );
 
 public:
     ProductMapper();
@@ -70,11 +68,11 @@ public:
 
     void CreateProductList( GenericInformationList *pVerList );
 
-    USHORT GetProductInformation( const ByteString &rProduct, GenericInformation *& pProductInfo );
-    USHORT PrintDependencies( const ByteString &rProduct );
-    USHORT PrintProductList();
+    sal_uInt16 GetProductInformation( const ByteString &rProduct, GenericInformation *& pProductInfo );
+    sal_uInt16 PrintDependencies( const ByteString &rProduct );
+    sal_uInt16 PrintProductList();
 
-    USHORT PrintMinorList( const ByteString rProduct, const ByteString rEnvironment );
+    sal_uInt16 PrintMinorList( const ByteString rProduct, const ByteString rEnvironment );
 
     static String GetVersionRoot( GenericInformationList *pList, const ByteString &rVersion );
 

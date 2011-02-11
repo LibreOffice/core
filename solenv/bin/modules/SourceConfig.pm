@@ -320,14 +320,14 @@ sub read_config_file {
                     next;
                 };
             };
-            croak("Line $line in " . $self->{SOURCE_CONFIG_FILE} . 'violates format. Please make your checks!!');
+            croak("Line $line in " . $self->{SOURCE_CONFIG_FILE} . ' violates format. Please make your checks!');
         };
         close SOURCE_CONFIG_FILE;
         if (!scalar keys %{$self->{REPOSITORIES}}) {
             get_fallback_repository($self);
         };
     } else {
-        croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . 'for reading');
+        croak('Cannot open ' . $self->{SOURCE_CONFIG_FILE} . ' for reading');
     };
 };
 

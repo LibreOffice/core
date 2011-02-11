@@ -230,6 +230,7 @@
     };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
     my $source_config = SourceConfig -> new($workspace_path);
+    check_partial_gnumake_build($initial_module);
 
     if ($html) {
         if (defined $html_path) {
@@ -786,6 +787,7 @@ sub dmake_dir {
         $error_code = run_job($dmake, $job_name);
         html_store_job_info(\%local_deps_hash, $job_name, $error_code) if (!$child);
     };
+
     if ($error_code && $ignore) {
         push(@ignored_errors, $job_name);
         $error_code = 0;
@@ -802,6 +804,7 @@ sub dmake_dir {
         };
         _exit(0);
     } elsif ($error_code && ($error_code != -1)) {
+        $broken_build{$job_name} = $error_code;
         return $error_code;
     };
 };
@@ -1681,23 +1684,23 @@ sub cancel_build {
 
     };
     if ($broken_modules_number && $build_all_parents) {
-        print "\n";
-        print $broken_modules_number;
-        print " module(s): ";
+        print STDERR "\n";
+        print STDERR $broken_modules_number;
+        print STDERR " module(s): ";
         foreach (@broken_module_names) {
-            print "\n\t$_";
+            print STDERR "\n\t$_";
         };
-        print "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
+        print STDERR "\nneed(s) to be rebuilt\n\nReason(s):\n\n";
         foreach (keys %broken_build) {
-            print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+            print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
-        print "\nAttention: if you fix the errors in above module(s) you may prolongue your the build issuing command:\n\n\t" . $message_part;
+        print STDERR "\nAttention: if you fix the errors in above module(s) you may prolongue your the build issuing command:\n\n\t" . $message_part;
     } else {
         while (children_number()) {
             handle_dead_children(1);
         }
         foreach (keys %broken_build) {
-            print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
+            print STDERR "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
         };
     };
     print "\n";
@@ -2031,7 +2034,7 @@ sub do_custom_job {
         };
         if ($error_code) {
             $modules_with_errors{$dependencies_hash}++;
-            $broken_build{$module} = $error_code;
+#            $broken_build{$module_job} = $error_code;
         } else {
             remove_from_dependencies($module_job, $dependencies_hash);
         };
@@ -3525,3 +3528,20 @@ sub fill_modules_queue {
         mp_success_exit();
     };
 };
+
+sub is_gnumake_module {
+    my $module = shift;
+    my $bridgemakefile = $source_config->get_module_path($module) . "/prj/makefile.mk";
+    return (-e $bridgemakefile);
+}
+
+sub check_partial_gnumake_build {
+    if(!$build_all_parents && is_gnumake_module(shift)) {
+        print "This module has been migrated to GNU make.\n";
+        print "You can only use build --all/--since here with build.pl.\n";
+        print "To do the equivalent of 'build && deliver' call:\n";
+        print "\tmake -sr\n";
+        print "in the module root (This will modify the solver).\n";
+        exit 1;
+    }
+}

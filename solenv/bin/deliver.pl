@@ -789,11 +789,6 @@ sub copy_if_newer
     if ( $opt_delete ) {
         print "REMOVE: $to\n" if $opt_verbose;
         $rc = unlink($to) unless $opt_check;
-        # handle special packaging of *.dylib files for Mac OS X
-        if ( $to =~ s/\.dylib$/.jnilib/ ) {
-            print "REMOVE: $to\n" if $opt_verbose;
-            $rc += unlink "$to" unless $opt_check;
-        }
         return 1 if $opt_check;
         return $rc;
     }
@@ -858,19 +853,6 @@ sub copy_if_newer
             # handle special packaging of *.dylib files for Mac OS X
             if ( $^O eq 'darwin' )
             {
-                if ( $to =~ /\.dylib/ ) {
-                    system("macosx-create-bundle", $to);
-                    my $bundlelib = $to;
-                    $bundlelib =~ s/\.dylib$//;
-                    $bundlelib .= ".jnilib";
-                    if ( $opt_delete ) {
-                        print "REMOVE: $bundlelib\n" if $opt_verbose;
-                        unlink "$bundlelib" unless $opt_check;
-                    } else {
-                        push_on_ziplist($bundlelib) if $opt_zip;
-                        push_on_loglist("LINK", basename($to), "$bundlelib") if $opt_log;
-                    }
-                }
                 system("macosx-create-bundle", "$to=$from.app") if ( -d "$from.app" );
                 system("ranlib", "$to" ) if ( $to =~ /\.a/ );
             }
