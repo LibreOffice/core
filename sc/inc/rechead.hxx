@@ -116,17 +116,17 @@
 #define SC_CURRENT_VERSION  0x0205
 
 
-//  alles ueber SC_31_EXPORT_VER muss auch beim Speichern abgefragt werden,
-//  weil 3.1-Export diese Versionsnummer schreibt.
+// all above SC_31_EXPORT_VER has to be queried during saving,
+// because 3.1-export writes this version number.
 
-// btw: 10 nach 09 ist kein Zaehlfehler sondern eine absichtliche Luecke,
-// weil nicht klar war, wie lange die RelRefs Entwicklung dauern wuerde.. :)
+// btw: 10 following 09 is not a counting error but an intentional gap,
+// because it was not clear, how long the RelRefs development would take. :)
 
 class SvStream;
 
 // -----------------------------------------------------------------------
 
-        //  Header mit Groessenangaben fuer mehrere Objekte
+        //  Header with size specification for multiple objects
 
 class ScMultipleReadHeader
 {

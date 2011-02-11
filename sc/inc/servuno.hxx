@@ -36,7 +36,7 @@ class String;
 class ScDocShell;
 
 
-//! AutoFormat wirklich hier oder besser global??????
+//! AutoFormat here or global??????
 
 #define SC_SERVICE_SHEET        0
 #define SC_SERVICE_URLFIELD     1
@@ -105,7 +105,7 @@ class ScDocShell;
 class ScServiceProvider
 {
 public:
-                            // pDocShell wird nicht fuer alle Services benoetigt
+                            // pDocShell is not needed for all Services
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
                             MakeInstance( sal_uInt16 nType, ScDocShell* pDocShell );
     static ::com::sun::star::uno::Sequence<rtl::OUString> GetAllServiceNames();
