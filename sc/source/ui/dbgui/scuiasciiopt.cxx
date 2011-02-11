@@ -316,34 +316,45 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     maFieldSeparators = GetSeparators();
 
     // Clipboard is always Unicode, else detect.
-    bool bPreselectUnicode = !mbFileImport;
+    rtl_TextEncoding ePreselectUnicode = (mbFileImport ?
+            RTL_TEXTENCODING_DONTKNOW : RTL_TEXTENCODING_UNICODE);
     // Sniff for Unicode / not
-    if( !bPreselectUnicode && mpDatStream )
+    if( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW && mpDatStream )
     {
         Seek( 0 );
-        mpDatStream->StartReadingUnicodeText();
+        mpDatStream->StartReadingUnicodeText( RTL_TEXTENCODING_DONTKNOW );
         ULONG nUniPos = mpDatStream->Tell();
-        if ( nUniPos > 0 )
-            bPreselectUnicode = TRUE;   // read 0xfeff/0xfffe
-        else
+        switch (nUniPos)
         {
-            UINT16 n;
-            *mpDatStream >> n;
-            // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
-            // control characters except CR,LF,TAB
-            if ( (n & 0xff00) < 0x2000 )
-            {
-                switch ( n & 0xff00 )
+            case 2:
+                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                break;
+            case 3:
+                ePreselectUnicode = RTL_TEXTENCODING_UTF8;      // UTF-8
+                break;
+            case 0:
                 {
-                    case 0x0900 :
-                    case 0x0a00 :
-                    case 0x0d00 :
-                    break;
-                    default:
-                        bPreselectUnicode = TRUE;
+                    UINT16 n;
+                    *mpDatStream >> n;
+                    // Assume that normal ASCII/ANSI/ISO/etc. text doesn't start with
+                    // control characters except CR,LF,TAB
+                    if ( (n & 0xff00) < 0x2000 )
+                    {
+                        switch ( n & 0xff00 )
+                        {
+                            case 0x0900 :
+                            case 0x0a00 :
+                            case 0x0d00 :
+                                break;
+                            default:
+                                ePreselectUnicode = RTL_TEXTENCODING_UNICODE;   // UTF-16
+                        }
+                    }
+                    mpDatStream->Seek(0);
                 }
-            }
-            mpDatStream->Seek(0);
+                break;
+            default:
+                ;   // nothing
         }
         mnStreamPos = mpDatStream->Tell();
     }
@@ -373,10 +384,10 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     // Insert one "SYSTEM" entry for compatibility in AsciiOptions and system
     // independent document linkage.
     aLbCharSet.InsertTextEncoding( RTL_TEXTENCODING_DONTKNOW, aCharSetUser );
-    aLbCharSet.SelectTextEncoding( bPreselectUnicode ?
-        RTL_TEXTENCODING_UNICODE : gsl_getSystemTextEncoding() );
+    aLbCharSet.SelectTextEncoding( ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW ?
+            gsl_getSystemTextEncoding() : ePreselectUnicode );
 
-    if( nCharSet >= 0 )
+    if( nCharSet >= 0 && ePreselectUnicode == RTL_TEXTENCODING_DONTKNOW )
         aLbCharSet.SelectEntryPos( static_cast<USHORT>(nCharSet) );
 
     SetSelectedCharSet();
@@ -437,8 +448,7 @@ bool ScImportAsciiDlg::GetLine( ULONG nLine, String &rText )
         memset( mpRowPosArray, 0, sizeof(mpRowPosArray[0]) * (ASCIIDLG_MAXROWS+2));
 
         Seek(0);
-        if ( mpDatStream->GetStreamCharSet() == RTL_TEXTENCODING_UNICODE )
-            mpDatStream->StartReadingUnicodeText();
+        mpDatStream->StartReadingUnicodeText( mpDatStream->GetStreamCharSet() );
 
         mnStreamPos = mpDatStream->Tell();
         mpRowPosArray[mnRowPosCount] = mnStreamPos;
