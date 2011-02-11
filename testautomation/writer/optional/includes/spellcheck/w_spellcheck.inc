@@ -69,7 +69,7 @@ testcase tToolsSpellcheckWithShortcut
         case 39 : Call wTypeKeys ("Don Cara Mio, capitoliooo?<Home>")
         case 49 : Call wTypeKeys ("Dies ist ein Rechtschreibtexxxxt<Home>")
         case 46 : Call wTypeKeys ("Det här är en rättstavningstexxxxt<Home>")
-        case 50 : Call wTypeKeys ("To je test črkvana<Home>")
+        case 50 : Call wTypeKeys ("To je test �?rkvana<Home>")
         case 07 : Printlog "- No Spellcheck in Russian!"
                      goto endsub
         case 48 : Printlog "- No Spellcheck in Polish!"
@@ -108,7 +108,7 @@ testcase tToolsSpellcheckWithShortcut
             printlog "OK, Spellchecker comes up"
             Spellcheck.Close            'closing spellchecker
         else
-            Warnlog "#i35000#Spellchecker does not come up with shortcut 'F7'"
+            Warnlog "Spellchecker does not come up with shortcut 'F7'"
         end if
     end if
     Call hCloseDocument
@@ -169,7 +169,7 @@ testcase tToolsSpellcheckCorrect
     select case iSprache
         case 01   : FFText = "This is a text without any error.<Return>"
         case 03   : FFText = "Escreva os seus dados de utilizador correctamente e tome nota deles (guardar / imprimir).<Return>"
-        case 07   : FFText = "принятый Государственной Думой в первом чтении 16 ноября 1999 года.<Return>"
+        case 07   : FFText = "прин�?тый Го�?удар�?твенной Думой в первом чтении 16 но�?бр�? 1999 года.<Return>"
         case 31   : FFText = "Dit werk is beschermd door de Auteurswet.<Return>"
         case 33   : FFText = "Il nous faut donc un de temps pour examiner avec soin tous les dossiers.<Return>"
         case 34   : FFText = "Este archivo contiene información importante sobre el programa.<Return>"
@@ -235,9 +235,9 @@ testcase tToolsSpellcheck1Mistake
         case 03   : sErrorSampleText = "Escrive os seus dados de utilizador correctamente e tome nota deles."
                     sWordToBeChecked = "Escrive"
                     sLanguageName = "Português"
-        case 07   : sErrorSampleText = "Военная технического сaтрудничества, проблему задолженности и вопросы региональных связей."
-                    sWordToBeChecked = "сaтрудничества"
-                    sLanguageName = "Русский"
+        case 07   : sErrorSampleText = "Военна�? техниче�?кого �?aтрудниче�?тва, проблему задолженно�?ти и вопро�?ы региональных �?в�?зей."
+                    sWordToBeChecked = "�?aтрудниче�?тва"
+                    sLanguageName = "Ру�?�?кий"
         case 31   : sErrorSampleText = "Wijek danken u voor uw interesse in het samenwerken met Sun Microsystems."
                     sWordToBeChecked = "Wijek"
                     sLanguageName = "Nederlands (NL)"
@@ -267,7 +267,7 @@ testcase tToolsSpellcheck1Mistake
                     sLanguageName = "Deutsch (Deutschland)"
         case 50   : sErrorSampleText = "Tuki je nekaj narobe."
                     sWordToBeChecked = "Tuki"
-                    sLanguageName = "Slovenščina"
+                    sLanguageName = "Slovenš�?ina"
         case 55	  : sErrorSampleText = "Esta poderia ser a respista para suas preces?"
         			sWordToBeChecked = "respista"
         			sLanguageName = "Português (Brasil)"
@@ -406,7 +406,7 @@ testcase tToolsSpellcheckForward
         case 46   : sDummy = "handbroken"   : sWordToBeAdded = "viktikt"
         case 48   : sDummy = "znajdujacej"  : sWordToBeAdded = "usuniete"
         case 49   : sDummy = "reichtt"      : sWordToBeAdded = "viierter"
-        case 50   : sDummy = "Paglejmo"     : sWordToBeAdded = "čtrto"
+        case 50   : sDummy = "Paglejmo"     : sWordToBeAdded = "�?trto"
         case 55   : sDummy = "horat"        : sWordToBeAdded = "dpa"
     end select
 
@@ -568,7 +568,7 @@ testcase tToolsSpellcheckOnlyOneWord
 
     select case iSprache
         case 01   : sWordToBeChecked = "excetionally"      ' this word is wrong
-        case 07   : sWordToBeChecked = "Кaнституции"
+        case 07   : sWordToBeChecked = "Кaн�?титуции"
         case 03   : sWordToBeChecked = "semstre"           ' this word is wrong
         case 31   : sWordToBeChecked = "lidstartesn"        ' this word is wrong
         case 33   : sWordToBeChecked = "heues"            ' this word is wrong
@@ -675,7 +675,7 @@ testcase tToolsSpellcheckOnlyOneWord
     try
         EditCopy
         if GetClipboardtext = sWordToBeChecked then
-            Warnlog "#i40498#Spellchecker does not commit changes correctly (" & GetClipboardtext & " found )"
+            Warnlog "Spellchecker does not commit changes correctly (" & GetClipboardtext & " found )"
             Call hCloseDocument
             goto endsub
         end if
@@ -697,7 +697,7 @@ testcase tToolsSpellcheckOnlyOneWord
                 if Active.Exists then
                     if Active.GetRT = 304 then
                         Active.Ok
-                        Warnlog "#i40480#Spellchecker finishes though wrong words in documents"
+                        Warnlog "Spellchecker finishes though wrong words in documents"
                     end if
                 end if
             catch

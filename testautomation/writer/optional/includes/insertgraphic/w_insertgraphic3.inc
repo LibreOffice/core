@@ -903,7 +903,7 @@ testcase tInsertGraphic_29
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
@@ -960,7 +960,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
    TabUmlauf.Cancel
 
    PrintLog "  3. Optimal Page Wrap:"
@@ -1013,7 +1013,7 @@ testcase tInsertGraphic_30
 
    fFormatGraphic("TabUmlauf")
     Sleep 1
-    if Parallel.IsChecked      <> TRUE then QaErrorLog "#i94558# - Graphic wrapping situation is wrong !"
+    if Parallel.IsChecked      <> TRUE then Warnlog "Graphic wrapping situation is wrong !"
     if ErsterAbsatz.IsChecked  <> TRUE then Warnlog "first paragraph configuration is wrong !"
    TabUmlauf.Cancel
 
