@@ -176,7 +176,7 @@ bool LibDump::Dump()
             }
         }
 
-        if ((aBuf[0] =='?') || !strncmp(aBuf, "__CT",4))
+        if (aBuf[0] =='?')
         {
             nLen = (int) strlen(aBuf);
             memset( aName, 0, sizeof( aName ) );
@@ -194,6 +194,7 @@ bool LibDump::Dump()
         }
         else if ( bAll == true &&
                   strncmp(aBuf, "__real@", 7) != 0 &&
+                  strncmp(aBuf, "__CT",4) != 0 &&
                   strncmp(aBuf, "__TI3?", 6) != 0 )
         {
             int nPreLen = (int) strlen( cAPrefix );
