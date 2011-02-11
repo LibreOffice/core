@@ -10,7 +10,7 @@
      le_uint32               lookupOrderCount;
 --- misc/icu/source/layout/LookupProcessor.cpp	2011-02-02 12:29:54.369077099 +0000
 +++ misc/build/icu/source/layout/LookupProcessor.cpp	2011-02-02 12:31:54.215503036 +0000
-@@ -62,6 +64,10 @@
+@@ -62,6 +62,10 @@
 
          if (selectMask != 0) {
              const LookupTable *lookupTable = lookupListTable->getLookupTable(lookup);
@@ -21,7 +21,7 @@
              le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);
 
              glyphIterator.reset(lookupFlags, selectMask);
-@@ -96,6 +102,9 @@
+@@ -96,6 +100,9 @@
      for (le_uint16 lookup = 0; lookup < lookupCount; lookup += 1) {
          le_uint16 lookupListIndex = SWAPW(featureTable->lookupListIndexArray[lookup]);
 
@@ -31,7 +31,7 @@
          lookupSelectArray[lookupListIndex] |= featureMask;
          lookupOrderArray[store++] = lookupListIndex;
      }
-@@ -106,7 +115,7 @@
+@@ -106,7 +113,7 @@
  LookupProcessor::LookupProcessor(const char *baseAddress,
          Offset scriptListOffset, Offset featureListOffset, Offset lookupListOffset,
          LETag scriptTag, LETag languageTag, const FeatureMap *featureMap, le_int32 featureMapCount, le_bool orderFeatures)
@@ -40,7 +40,7 @@
        lookupOrderArray(NULL), lookupOrderCount(0)
  {
      const ScriptListTable *scriptListTable = NULL;
-@@ -146,6 +155,8 @@
+@@ -146,6 +153,8 @@
          lookupSelectArray[i] = 0;
      }
 
@@ -49,3 +49,14 @@
      le_int32 count, order = 0;
      le_int32 featureReferences = 0;
      const FeatureTable *featureTable = NULL;
+@@ -162,6 +171,10 @@
+         le_uint16 featureIndex = SWAPW(langSysTable->featureIndexArray[feature]);
+
+         featureTable = featureListTable->getFeatureTable(featureIndex, &featureTag);
++
++        if (!featureTable)
++             continue;
++
+         featureReferences += SWAPW(featureTable->lookupCount);
+     }
+
