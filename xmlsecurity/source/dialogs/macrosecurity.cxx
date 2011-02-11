@@ -123,7 +123,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
     maHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
     maVeryHighRB.SetClickHdl( LINK( this, MacroSecurityLevelTP, RadioButtonHdl ) );
 
-    mnCurLevel = (USHORT) mpDlg->maSecOptions.GetMacroSecurityLevel();
+    mnCurLevel = (sal_uInt16) mpDlg->maSecOptions.GetMacroSecurityLevel();
     sal_Bool bReadonly = mpDlg->maSecOptions.IsReadOnly( SvtSecurityOptions::E_MACRO_SECLEVEL );
 
     RadioButton* pCheck = 0;
@@ -161,7 +161,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 
 IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMPTYARG )
 {
-    USHORT nNewLevel = 0;
+    sal_uInt16 nNewLevel = 0;
     if( maVeryHighRB.IsChecked() )
         nNewLevel = 3;
     else if( maHighRB.IsChecked() )
@@ -198,7 +198,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nSelected = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nSelected = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
 
         uno::Reference< dcss::security::XSerialNumberAdapter > xSerialNumberAdapter =
             ::com::sun::star::security::SerialNumberAdapter::create(mpDlg->mxCtx);
@@ -213,7 +213,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
 
         if ( xCert.is() )
         {
-            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, FALSE );
+            CertificateViewer aViewer( this, mpDlg->mxSecurityEnvironment, xCert, sal_False );
             aViewer.Execute();
         }
     }
@@ -224,7 +224,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
-        USHORT nAuthor = USHORT( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
+        sal_uInt16 nAuthor = sal_uInt16( sal_uIntPtr( maTrustCertLB.FirstSelected()->GetUserData() ) );
         ::comphelper::removeElementAt( maTrustedAuthors, nAuthor );
 
         FillCertLB();
@@ -277,13 +277,13 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
 
 IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
 {
-    USHORT  nSel = maTrustFileLocLB.GetSelectEntryPos();
+    sal_uInt16  nSel = maTrustFileLocLB.GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
         // --> PB 2004-09-21 #i33584#
         // after remove an entry, select another one if exists
-        USHORT nNewCount = maTrustFileLocLB.GetEntryCount();
+        sal_uInt16 nNewCount = maTrustFileLocLB.GetEntryCount();
         if ( nNewCount > 0 )
         {
             if ( nSel >= nNewCount )
@@ -398,11 +398,11 @@ void MacroSecurityTrustedSourcesTP::ActivatePage()
 
 void MacroSecurityTrustedSourcesTP::ClosePage( void )
 {
-    USHORT  nEntryCnt = maTrustFileLocLB.GetEntryCount();
+    sal_uInt16  nEntryCnt = maTrustFileLocLB.GetEntryCount();
     if( nEntryCnt )
     {
         cssu::Sequence< rtl::OUString > aSecureURLs( nEntryCnt );
-        for( USHORT i = 0 ; i < nEntryCnt ; ++i )
+        for( sal_uInt16 i = 0 ; i < nEntryCnt ; ++i )
         {
             ::rtl::OUString aURL( maTrustFileLocLB.GetEntry( i ) );
             osl::FileBase::getFileURLFromSystemPath( aURL, aURL );

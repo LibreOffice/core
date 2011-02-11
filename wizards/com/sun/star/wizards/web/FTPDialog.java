@@ -45,6 +45,7 @@ import com.sun.star.wizards.common.Desktop;
 import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.common.UCB;
 import com.sun.star.wizards.ui.UIConsts;
 import com.sun.star.wizards.ui.UnoDialog;
@@ -187,7 +188,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         publish = p;
 
 
-        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "wizard/bitmap/");
+        imagesDirectory = FileAccess.connectURLs(((CGSettings) (publish.root)).soTemplateDir, "../wizard/bitmap/");
 
         //Load Resources
         resources = new FTPDialogResources(xmsf);
@@ -197,7 +198,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    "Closeable", "Height", "HelpURL", "Moveable", "Name", "PositionX", "PositionY", "Title", "Width"
+                    "Closeable", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "Title", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -219,15 +220,15 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
     {
         final String[] PROPNAMES_LABEL = new String[]
         {
-            "Height", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
         };
         final String[] PROPNAMES_BUTTON = new String[]
         {
-            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
         };
         final String[] PROPNAMES_BUTTON2 = new String[]
         {
-            "Height", "HelpURL", "Label", "Name", "PositionX", "PositionY", "PushButtonType", "TabIndex", "Width"
+            PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "PushButtonType", PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
         };
 
         ln1 = insertFixedLine("ln1",
@@ -245,7 +246,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtHost = insertTextField("txtHost", "disconnect",
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -260,7 +261,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtUsername = insertTextField("txtUsername", "disconnect",
                 new String[]
                 {
-                    "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -275,7 +276,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtPassword = insertTextField("txtPassword", "disconnect",
                 new String[]
                 {
-                    "EchoChar", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Width"
+                    "EchoChar", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -297,7 +298,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         imgStatus = insertImage("imgStatus",
                 new String[]
                 {
-                    "Border", "Height", "PositionX", "PositionY", "ScaleImage", "Tabstop", "Width"
+                    "Border", PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, "ScaleImage", "Tabstop", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -321,7 +322,7 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
         txtDir = insertTextField("txtDir",
                 null, new String[]
                 {
-                    "Enabled", "Height", "HelpURL", "Name", "PositionX", "PositionY", "TabIndex", "Text", "Width"
+                    PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_TABINDEX, "Text", PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
@@ -701,8 +702,8 @@ public class FTPDialog extends UnoDialog2 implements UIConsts, WWHID
      */
     private void setLabel(String label, String image)
     {
-        Helper.setUnoPropertyValue(getModel(lblStatus), "Label", label);
-        Helper.setUnoPropertyValue(getModel(imgStatus), "ImageURL", imageUrl(image));
+        Helper.setUnoPropertyValue(getModel(lblStatus), PropertyNames.PROPERTY_LABEL, label);
+        Helper.setUnoPropertyValue(getModel(imgStatus), PropertyNames.PROPERTY_IMAGEURL, imageUrl(image));
     }
 
     private String imageUrl(String s)

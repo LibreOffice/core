@@ -158,7 +158,7 @@ void VCLXAccessibleEdit::FillAccessibleStateSet( utl::AccessibleStateSetHelper& 
             if ( !cEchoChar )
                 cEchoChar = '*';
             XubString sTmp;
-            aText = sTmp.Fill( (USHORT)aText.getLength(), cEchoChar );
+            aText = sTmp.Fill( (sal_uInt16)aText.getLength(), cEchoChar );
         }
     }
 

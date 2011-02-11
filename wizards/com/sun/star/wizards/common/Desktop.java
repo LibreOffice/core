@@ -378,7 +378,7 @@ public class Desktop
             {
                 TemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
                 UserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
-                BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/wizard/bitmap");
+                BitmapPath = FileAccess.combinePaths(xMSF, TemplatePath, "/../wizard/bitmap");
                 WorkPath = FileAccess.getOfficePath(xMSF, "Work", "", "");
             }
             catch (NoValidPathException nopathexception)
@@ -417,7 +417,7 @@ public class Desktop
     {
         try
         {
-            String sBitmapPath = FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/wizard/bitmap");
+            String sBitmapPath = FileAccess.combinePaths(_xMSF, getTemplatePath(_xMSF), "/../wizard/bitmap");
             return sBitmapPath;
         }
         catch (NoValidPathException nopathexception)

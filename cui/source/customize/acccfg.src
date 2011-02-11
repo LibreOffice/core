@@ -199,10 +199,6 @@ TabPage RID_SVXPAGE_KEYBOARD
     {
         Text [ en-US ] = "Save Keyboard Configuration" ;
     };
-    String STR_SFX_FILTERNAME_ALL
-    {
-        Text [ en-US ] = "All files (*.*)" ;
-    };
     String STR_FILTERNAME_CFG
     {
         Text [ en-US ] = "Configuration" ;
@@ -274,10 +270,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     {
         ImageBitmap = Bitmap { File = "imh30826.png"; };
         MASKCOLOR
-    };
-    String STR_BASICNAME
-    {
-        Text = "%PRODUCTNAME Basic" ;
     };
     Image BMP_COLLAPSED
     {

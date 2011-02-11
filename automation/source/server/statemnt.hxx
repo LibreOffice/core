@@ -40,7 +40,7 @@
 #ifndef _STATEMNT_HXX
 #define _STATEMNT_HXX
 
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
 #include <tools/time.hxx>
@@ -92,9 +92,9 @@ extern "C"
 #define GET_REAL_PARENT() GetWindow( WINDOW_REALPARENT )
 
 // switch behaviour of ImplMouse* and ImplKeyInput
-#define FORCE_DIRECT_CALL   TRUE
+#define FORCE_DIRECT_CALL   sal_True
 
-typedef USHORT SearchFlags;
+typedef sal_uInt16 SearchFlags;
 #define SEARCH_NOOVERLAP            ((SearchFlags) 0x0001)
 #define SEARCH_NO_TOPLEVEL_WIN      ((SearchFlags) 0x0002)
 #define SEARCH_FOCUS_FIRST          ((SearchFlags) 0x0004)
@@ -107,15 +107,15 @@ public:
     Search( SearchFlags nSearchFlags = 0): nmSearchFlags(nSearchFlags) {}
     virtual ~Search() {}
 
-    virtual BOOL IsWinOK( Window *pWin ) = 0;
+    virtual sal_Bool IsWinOK( Window *pWin ) = 0;
     SearchFlags GetSearchFlags() { return nmSearchFlags; }
     void AddSearchFlags( SearchFlags aNewFlags ) { nmSearchFlags |= aNewFlags; }
     void RemoveSearchFlags( SearchFlags aRemoveFlags ) { nmSearchFlags &= ( ~aRemoveFlags ); }
-    BOOL HasSearchFlag( SearchFlags aQueryFlag ) { return (nmSearchFlags & aQueryFlag) == aQueryFlag; }
+    sal_Bool HasSearchFlag( SearchFlags aQueryFlag ) { return (nmSearchFlags & aQueryFlag) == aQueryFlag; }
 };
 
-BOOL IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
-BOOL IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
+sal_Bool IsDialog(Window *pWin);        // Ist *pWin von SystemWindow abgeleitet (Kann es Active sein)
+sal_Bool IsAccessable(Window *pWin);    // Ist *pWin Zugreifbar (über IsEnabled und Parents geprüft)
 
 
 //class SafePointer : CriticalSection
@@ -126,7 +126,7 @@ public:
     SafePointer()   { pSelf = this; }
     virtual ~SafePointer()  { DBG_ASSERT(pSelf==this,"Destructor von Nicht existierendem Objekt aufgerufen");
                               pSelf = NULL; }
-//  static BOOL IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
+//  static sal_Bool IsValid( SafePointer *pThis ) { return pThis == pThis->pSelf; }
 // virtual      operator -> (); { DBG_ASSERT(pMyself == this,"-> von Nicht existierendem Objekt aufgerufen"); }
 };
 
@@ -146,7 +146,7 @@ struct TTSettings
 
     // Translate
     TranslateWin *pTranslateWin;
-    BOOL bToTop;
+    sal_Bool bToTop;
 };
 
 
@@ -162,37 +162,37 @@ private:
 
 protected:
     StatementList();
-    USHORT nRetryCount;
+    sal_uInt16 nRetryCount;
     void QueStatement(StatementList *pAfterThis);
-    BOOL bStatementInQue;
-    static USHORT nUseBindings;
+    sal_Bool bStatementInQue;
+    static sal_uInt16 nUseBindings;
 
     static TTProfiler *pProfiler;
     void InitProfile();
     void SendProfile( String aText );
     static StatementList *pCurrentProfileStatement;
 
-    static BOOL bIsInReschedule;
-        static USHORT nModalCount;
+    static sal_Bool bIsInReschedule;
+        static sal_uInt16 nModalCount;
     static Window *pLastFocusWindow;        // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static BOOL bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-    static BOOL bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
-       static BOOL bBasicWasRunning;
+    static sal_Bool bWasDragManager;            // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+    static sal_Bool bWasPopupMenu;              // Wenn dieses sich ändert wird Safe Reschedule abgebrochen
+       static sal_Bool bBasicWasRunning;
 
-    static USHORT nMinTypeKeysDelay;                /// Verzögerung der einzelnen Anschläge für TypeKeys
-    static USHORT nMaxTypeKeysDelay;
-    static BOOL bDoTypeKeysDelay;
+    static sal_uInt16 nMinTypeKeysDelay;                /// Verzögerung der einzelnen Anschläge für TypeKeys
+    static sal_uInt16 nMaxTypeKeysDelay;
+    static sal_Bool bDoTypeKeysDelay;
 
     static Window* pFirstDocFrame;
 
-    static BOOL bIsSlotInExecute;
+    static sal_Bool bIsSlotInExecute;
 
 public:
-    static BOOL IsInReschedule() { return bIsInReschedule; }
-    void SafeReschedule( BOOL bYield = FALSE )  // Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
+    static sal_Bool IsInReschedule() { return bIsInReschedule; }
+    void SafeReschedule( sal_Bool bYield = sal_False )  // Setzt Flag, so daß nicht schon der nächste Befehl ausgeführt wird
     {
         nModalCount = Application::GetModalModeCount();
-        bIsInReschedule = TRUE;
+        bIsInReschedule = sal_True;
         pLastFocusWindow = GetpApp()->GetFocusWindow();
         bWasDragManager = false /*!= DragManager::GetDragManager()*/;
         bWasPopupMenu = NULL != PopupMenu::GetActivePopupMenu();
@@ -203,17 +203,17 @@ public:
         else
             GetpApp()->Reschedule();
         bExecuting = bWasExecuting;
-        bBasicWasRunning = FALSE;
-        bWasPopupMenu = FALSE;
-        bWasDragManager = FALSE;
+        bBasicWasRunning = sal_False;
+        bWasPopupMenu = sal_False;
+        bWasDragManager = sal_False;
         pLastFocusWindow = NULL;
-        bIsInReschedule = FALSE;
+        bIsInReschedule = sal_False;
         nModalCount = 0;
     }
-    static BOOL MaybeResetSafeReschedule()
+    static sal_Bool MaybeResetSafeReschedule()
     {       // Implementierung muß hier zwar nicht sein, ist aber übersichtlicher so
         if ( !bIsInReschedule )
-            return FALSE;
+            return sal_False;
 
         if ( pLastFocusWindow != GetpApp()->GetFocusWindow()
             || ( Application::GetModalModeCount() > nModalCount )
@@ -221,12 +221,12 @@ public:
             || ( PopupMenu::GetActivePopupMenu() && !bWasPopupMenu )
             || ( StarBASIC::IsRunning() && !bBasicWasRunning ) )
         {
-            bIsInReschedule = FALSE;
+            bIsInReschedule = sal_False;
             pLastFocusWindow = NULL;
-            return TRUE;
+            return sal_True;
         }
         else
-            return FALSE;
+            return sal_False;
     }
     static void NormalReschedule()  // Setzt das flag nicht
     {
@@ -235,84 +235,84 @@ public:
 #define Reschedule RescheduleNichtBenutzen_StattdessenSafeRescheduleAnStatementList
 
     static Window* GetMouseWin();
-    static BOOL WinPtrValid(Window *pTest);
-    static Window* SearchAllWin( Window *pBase, Search &aSearch, BOOL MaybeBase = TRUE );
+    static sal_Bool WinPtrValid(Window *pTest);
+    static Window* SearchAllWin( Window *pBase, Search &aSearch, sal_Bool MaybeBase = sal_True );
 protected:
-    static Window* SearchClientWin( Window *pBase, Search &aSearch, BOOL MaybeBase = TRUE );
+    static Window* SearchClientWin( Window *pBase, Search &aSearch, sal_Bool MaybeBase = sal_True );
 
-    Window* SearchTree( rtl::OString aUId, BOOL bSearchButtonOnToolbox = FALSE );
-    Window* GetActive( WindowType nRT, BOOL MaybeBase = TRUE );
-    Window* GetFocus( WindowType nRT, BOOL MaybeBase = TRUE );
-    Window* GetAnyActive( BOOL MaybeBase = TRUE );
-    ScrollBar* GetScrollBar( Window *pBase, USHORT nDirection, BOOL MaybeBase = TRUE );
-    Window* GetPopupFloatingWin( BOOL MaybeBase = TRUE );
+    Window* SearchTree( rtl::OString aUId, sal_Bool bSearchButtonOnToolbox = sal_False );
+    Window* GetActive( WindowType nRT, sal_Bool MaybeBase = sal_True );
+    Window* GetFocus( WindowType nRT, sal_Bool MaybeBase = sal_True );
+    Window* GetAnyActive( sal_Bool MaybeBase = sal_True );
+    ScrollBar* GetScrollBar( Window *pBase, sal_uInt16 nDirection, sal_Bool MaybeBase = sal_True );
+    Window* GetPopupFloatingWin( sal_Bool MaybeBase = sal_True );
     Menu* GetMatchingMenu( Window* pWin, Menu* pBaseMenu = NULL );
-    Window* GetWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase = TRUE, USHORT nSkip = 0, BOOL bSearchAll = FALSE );
-    USHORT CountWinByRT( Window *pBase, WindowType nRT, BOOL MaybeBase = TRUE );
-    Window* GetDocWin( USHORT nNr );
-    USHORT GetDocWinCount();
-    Window* GetFadeSplitWin( Window *pBase, WindowAlign nAlign, BOOL MaybeBase = TRUE );
-    BOOL ValueOK(rtl::OString nId, String aBezeichnung, ULONG nValue, ULONG nMax);
+    Window* GetWinByRT( Window *pBase, WindowType nRT, sal_Bool MaybeBase = sal_True, sal_uInt16 nSkip = 0, sal_Bool bSearchAll = sal_False );
+    sal_uInt16 CountWinByRT( Window *pBase, WindowType nRT, sal_Bool MaybeBase = sal_True );
+    Window* GetDocWin( sal_uInt16 nNr );
+    sal_uInt16 GetDocWinCount();
+    Window* GetFadeSplitWin( Window *pBase, WindowAlign nAlign, sal_Bool MaybeBase = sal_True );
+    sal_Bool ValueOK(rtl::OString nId, String aBezeichnung, sal_uLong nValue, sal_uLong nMax);
 
-    USHORT GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
+    sal_uInt16 GetCurrentMenues( PopupMenu *&pPopup, MenuBar *&pMenuBar, Menu *&pMenu );
 
 public:
 //  void AddStatement( StatementList *pNewStatement );
 
     virtual ~StatementList();
     void Advance();
-    virtual BOOL Execute() = 0;
+    virtual sal_Bool Execute() = 0;
 /***************************************************************************
 ** Bestimmt erst den nächsten Befehl, setzt Current
 ** und führt dann aus.
 ** Returnwert gibt an, ob Befehl nochmal ausgeführt
 ** werden soll. Dann muß auch der UserEvent verlassen werden, um der Applikation
 ** normales Arbeiten zu ermöglichen (Dialog schliessen)
-** TRUE bedeutet, dass alles klar gegangen ist
-** FALSE bedeutet nochmal Bitte
+** sal_True bedeutet, dass alles klar gegangen ist
+** sal_False bedeutet nochmal Bitte
 ***************************************************************************/
 
     void ReportError(String aMessage);
     void ReportError(rtl::OString aUId, String aMessage);
-    void ReportError(String aMessage, ULONG nWhatever);
+    void ReportError(String aMessage, sal_uLong nWhatever);
 
-    static void DirectLog( ULONG nType, String aString );
+    static void DirectLog( sal_uLong nType, String aString );
 
     String Tree(Window *pBase, int Indent);
     String ClientTree(Window *pBase, int Indent);
 
     StatementList *pNext;
     static StatementList /**pCurrent,*/ *pFirst;
-    static BOOL bReadingCommands;
+    static sal_Bool bReadingCommands;
     static rtl::OString aWindowWaitUId;
     static Window *pWindowWaitPointer;
     static rtl::OString aWindowWaitOldHelpId;
     static rtl::OString aWindowWaitOldUniqueId;
     static RetStream *pRet;
-    static BOOL IsError;
-    static BOOL bDying;
-    static BOOL bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
-    BOOL bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
-    static USHORT aSubMenuId1;          // Untermenüs bei PopupMenus
-    static USHORT aSubMenuId2;          // erstmal 2-Stufig
-    static USHORT aSubMenuId3;          // and now even 3 levels #i31512#
+    static sal_Bool IsError;
+    static sal_Bool bDying;
+    static sal_Bool bExecuting;             // Gesetzt, wenn ein Befehl rescheduled ohne einen neuen Befehl zu erlauben
+    sal_Bool bWasExecuting;                 // Wurde bei einem MaybeResetSafeReschedule resettet, so wird der Zustand danach wiederhergestellt
+    static sal_uInt16 aSubMenuId1;          // Untermenüs bei PopupMenus
+    static sal_uInt16 aSubMenuId2;          // erstmal 2-Stufig
+    static sal_uInt16 aSubMenuId3;          // and now even 3 levels #i31512#
     static SystemWindow *pMenuWindow;   // when using MenuBar as base for MenuCommands
     static TTProperties *pTTProperties; // Hier stehen die SlotIDs aus dem SFX drin
 
-    BOOL CheckWindowWait();         //True heisst, dass Window noch existiert
+    sal_Bool CheckWindowWait();         //True heisst, dass Window noch existiert
                                     //False -> Window weg;
     static void SetFirstDocFrame( Window* pWin );
     static Window* GetFirstDocFrame();
-    static BOOL IsFirstDocFrame( Window* pWin );
-    static BOOL IsDocWin( Window* pWin );
-    static BOOL IsIMEWin( Window* pWin );    // Input Window for CJK under Solaris
-    static BOOL IsDocFrame( Window* pWin );
+    static sal_Bool IsFirstDocFrame( Window* pWin );
+    static sal_Bool IsDocWin( Window* pWin );
+    static sal_Bool IsIMEWin( Window* pWin );    // Input Window for CJK under Solaris
+    static sal_Bool IsDocFrame( Window* pWin );
     static MenuBar* GetDocFrameMenuBar( Window* pWin );
-    static USHORT GetDocFrameCount();
+    static sal_uInt16 GetDocFrameCount();
 
-    static BOOL bCatchGPF;
+    static sal_Bool bCatchGPF;
 
-    static BOOL bUsePostEvents;         // use Application::Post*Event or own impl to handle key and mouseevents
+    static sal_Bool bUsePostEvents;         // use Application::Post*Event or own impl to handle key and mouseevents
 
 #if OSL_DEBUG_LEVEL > 1
     static EditWindow *m_pDbgWin;
@@ -322,20 +322,20 @@ public:
 class StatementSlot : public StatementList  //Slots aufrufen
 {
 protected:
-    USHORT nAnzahl;
+    sal_uInt16 nAnzahl;
     SfxPoolItem **pItemArr;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue> aArgs;
-    USHORT nFunctionId;     // can get removed when the old (numeric) slothandling is removed
+    sal_uInt16 nFunctionId;     // can get removed when the old (numeric) slothandling is removed
     String aUnoUrl;
-    BOOL bMenuClosed;
+    sal_Bool bMenuClosed;
 
     StatementSlot();
     void AddReferer();
 public:
     StatementSlot( SCmdStream *pIn );
-    StatementSlot( ULONG nSlot, SfxPoolItem* pItem = NULL );
+    StatementSlot( sal_uLong nSlot, SfxPoolItem* pItem = NULL );
     virtual ~StatementSlot();
-    virtual BOOL Execute();
+    virtual sal_Bool Execute();
 };
 
 class StatementUnoSlot : public StatementSlot   //Uno Slots aufrufen
@@ -348,32 +348,32 @@ class StatementCommand : public StatementList   // Befehl ausführen (wintree, re
 {
     friend class ImplRemoteControl;
 protected:
-    USHORT nMethodId;
-    USHORT nParams;
+    sal_uInt16 nMethodId;
+    sal_uInt16 nParams;
     comm_USHORT nNr1,nNr2,nNr3,nNr4;
     comm_ULONG nLNr1;
     String aString1,aString2;
-    BOOL bBool1,bBool2;
+    sal_Bool bBool1,bBool2;
 
     Window* GetNextOverlap( Window* pBase );
     Window* GetNextRecoverWin();
 
-    static USHORT nDirPos;
+    static sal_uInt16 nDirPos;
     static Dir *pDir;
     static pfunc_osl_printDebugMessage pOriginal_osl_DebugMessageFunc;
 
 
-    BOOL UnpackStorage( SotStorageRef xStorage, DirEntry &aBaseDir );
+    sal_Bool UnpackStorage( SotStorageRef xStorage, DirEntry &aBaseDir );
 
     void HandleSAXParser();
 
 public:
     StatementCommand( SCmdStream *pIn );
-    StatementCommand( StatementList *pAfterThis, USHORT MethodId, USHORT Params, USHORT Nr1 );
-    virtual BOOL Execute();
-    BOOL DisplayHID();
+    StatementCommand( StatementList *pAfterThis, sal_uInt16 MethodId, sal_uInt16 Params, sal_uInt16 Nr1 );
+    virtual sal_Bool Execute();
+    sal_Bool DisplayHID();
     void Translate();
-    void WriteControlData( Window *pBase, ULONG nConf, BOOL bFirst = TRUE );
+    void WriteControlData( Window *pBase, sal_uLong nConf, sal_Bool bFirst = sal_True );
 
 };
 
@@ -384,46 +384,46 @@ class StatementControl : public StatementList
 {
 protected:
     rtl::OString aUId;
-    USHORT nMethodId;
-    USHORT nParams;
+    sal_uInt16 nMethodId;
+    sal_uInt16 nParams;
     comm_USHORT nNr1,nNr2,nNr3,nNr4;
     comm_ULONG nLNr1;
     String aString1,aString2;
-    BOOL bBool1,bBool2;
-    BOOL ControlOK( Window *pControl, const sal_Char* aBezeichnung );
+    sal_Bool bBool1,bBool2;
+    sal_Bool ControlOK( Window *pControl, const sal_Char* aBezeichnung );
     void AnimateMouse( Window *pControl, TTHotSpots aWohin );
     void AnimateMouse( Window *pControl, Point aWohin );
 
-    BOOL MaybeDoTypeKeysDelay( Window *pTestWindow );
+    sal_Bool MaybeDoTypeKeysDelay( Window *pTestWindow );
 
-    BOOL HandleVisibleControls( Window *pControl );
-    BOOL HandleCommonMethods( Window *pControl );
+    sal_Bool HandleVisibleControls( Window *pControl );
+    sal_Bool HandleCommonMethods( Window *pControl );
 
 public:
-    StatementControl( SCmdStream *pIn, USHORT nControlType );
-    virtual BOOL Execute();
+    StatementControl( SCmdStream *pIn, sal_uInt16 nControlType );
+    virtual sal_Bool Execute();
 
 };
 
 class StatementFlow : public StatementList      // Kommunikation mit Sequence
 {
-    USHORT nArt;
+    sal_uInt16 nArt;
 
-    USHORT nParams;
+    sal_uInt16 nParams;
     comm_USHORT nSNr1;
     comm_ULONG nLNr1;
     String aString1;
-    BOOL bBool1;
+    sal_Bool bBool1;
 
 
 public:
-    StatementFlow (ULONG nServiceId, SCmdStream *pIn, ImplRemoteControl *pRC );
-    StatementFlow( StatementList *pAfterThis, USHORT nArtP );
-    virtual BOOL Execute();
+    StatementFlow (sal_uLong nServiceId, SCmdStream *pIn, ImplRemoteControl *pRC );
+    StatementFlow( StatementList *pAfterThis, sal_uInt16 nArtP );
+    virtual sal_Bool Execute();
     static CommunicationLink *pCommLink;
-    static BOOL bSending;
+    static sal_Bool bSending;
 
-    static BOOL bUseIPC;    // Soll zur rückmeldung IPC verwendet werden?
+    static sal_Bool bUseIPC;    // Soll zur rückmeldung IPC verwendet werden?
     static ImplRemoteControl *pRemoteControl;   // Static für 2. Constructor
 
 private:
@@ -435,10 +435,10 @@ class SearchUID : public Search
     Window *pMaybeResult;
     Window *pAlternateResult;
     rtl::OString aUId;
-    BOOL bSearchButtonOnToolbox;
+    sal_Bool bSearchButtonOnToolbox;
 public:
-    SearchUID( rtl::OString aUIdP, BOOL bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), pAlternateResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    SearchUID( rtl::OString aUIdP, sal_Bool bSearchButtonOnToolboxP ): Search( SEARCH_FOCUS_FIRST ), pMaybeResult(NULL), pAlternateResult(NULL), aUId(aUIdP), bSearchButtonOnToolbox(bSearchButtonOnToolboxP) {}
+    virtual sal_Bool IsWinOK( Window *pWin );
     Window* GetMaybeWin() { return pMaybeResult; }
     Window* GetAlternateResultWin() { return pAlternateResult; }
 };
@@ -447,52 +447,52 @@ class SearchActive : public Search
     WindowType nRT;
 public:
     SearchActive( WindowType nRTP ): nRT(nRTP) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    virtual sal_Bool IsWinOK( Window *pWin );
 };
 class SearchPopupFloatingWin : public Search
 {
 public:
     SearchPopupFloatingWin(): Search( SEARCH_FOCUS_FIRST ) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    virtual sal_Bool IsWinOK( Window *pWin );
 };
 class SearchRT : public Search
 {
     WindowType mnRT;
-    USHORT mnSkip;
-    USHORT mnCount;
+    sal_uInt16 mnSkip;
+    sal_uInt16 mnCount;
 public:
-    SearchRT( WindowType nRTP, SearchFlags nSearchFlags, USHORT nSkip = 0 ): Search(nSearchFlags), mnRT(nRTP), mnSkip( nSkip ), mnCount( 0 ) {}
-    virtual BOOL IsWinOK( Window *pWin );
-    USHORT GetCount(){ return mnCount; }
+    SearchRT( WindowType nRTP, SearchFlags nSearchFlags, sal_uInt16 nSkip = 0 ): Search(nSearchFlags), mnRT(nRTP), mnSkip( nSkip ), mnCount( 0 ) {}
+    virtual sal_Bool IsWinOK( Window *pWin );
+    sal_uInt16 GetCount(){ return mnCount; }
 };
 class SearchScroll : public SearchRT
 {
-    USHORT nDirection;
+    sal_uInt16 nDirection;
 public:
-    SearchScroll( USHORT nDir, SearchFlags nSearchFlags ): SearchRT(WINDOW_SCROLLBAR, nSearchFlags), nDirection(nDir) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    SearchScroll( sal_uInt16 nDir, SearchFlags nSearchFlags ): SearchRT(WINDOW_SCROLLBAR, nSearchFlags), nDirection(nDir) {}
+    virtual sal_Bool IsWinOK( Window *pWin );
 };
 class SearchWinPtr : public Search
 {
     Window *pTest;
 public:
     SearchWinPtr( Window *pTestP ): pTest(pTestP) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    virtual sal_Bool IsWinOK( Window *pWin );
 };
 class SearchFadeSplitWin : public Search
 {
     WindowAlign nAlign;
 public:
     SearchFadeSplitWin( WindowAlign nAlignP ): nAlign(nAlignP) {}
-    virtual BOOL IsWinOK( Window *pWin );
+    virtual sal_Bool IsWinOK( Window *pWin );
 };
 
 
-void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt, BOOL bForceDirect=FALSE );
-void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
-void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
-void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, BOOL bForceDirect=FALSE );
+void ImplKeyInput( Window* pWin, KeyEvent &aKEvnt, sal_Bool bForceDirect=sal_False );
+void ImplMouseMove( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect=sal_False );
+void ImplMouseButtonDown( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect=sal_False );
+void ImplMouseButtonUp( Window* pWin, MouseEvent &aMEvnt, sal_Bool bForceDirect=sal_False );
 void ImplCommand( Window* pWin, CommandEvent &aCmdEvnt );
-void ImplEventWait( ULONG nID );
+void ImplEventWait( sal_uLong nID );
 
 #endif

@@ -36,10 +36,10 @@
 #include <dialmgr.hxx>
 
 #include <sfx2/msg.hxx>
-#include <sfx2/macrconf.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/minfitem.hxx>
+#include <sfx2/sfxresid.hxx>
 #include <svl/stritem.hxx>
 
 #include "cuires.hrc"
@@ -112,7 +112,7 @@ static ::rtl::OUString MEDIATYPE_PROPNAME               = ::rtl::OUString::creat
 static ::rtl::OUString MEDIATYPE_UICONFIG               = ::rtl::OUString::createFromAscii("application/vnd.sun.xml.ui.configuration"                   );
 
 //-----------------------------------------------
-static USHORT __FAR_DATA KEYCODE_ARRAY[] =
+static sal_uInt16 __FAR_DATA KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
     KEY_F2       ,
@@ -572,7 +572,7 @@ static USHORT __FAR_DATA KEYCODE_ARRAY[] =
     KEY_DELETE    | KEY_SHIFT | KEY_MOD1 | KEY_MOD2
 };
 
-static USHORT KEYCODE_ARRAY_SIZE = (sizeof(KEYCODE_ARRAY) / sizeof(KEYCODE_ARRAY[0]));
+static sal_uInt16 KEYCODE_ARRAY_SIZE = (sizeof(KEYCODE_ARRAY) / sizeof(KEYCODE_ARRAY[0]));
 
 //-----------------------------------------------
 // seems to be needed to layout the list box, which shows all
@@ -589,20 +589,20 @@ class SfxAccCfgLBoxString_Impl : public SvLBoxString
 {
     public:
     SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
-                                   USHORT       nFlags,
+                                   sal_uInt16       nFlags,
                              const String&      sText );
 
     virtual ~SfxAccCfgLBoxString_Impl();
 
     virtual void Paint(const Point&       aPos   ,
                              SvLBox&      rDevice,
-                             USHORT       nFlags ,
+                             sal_uInt16       nFlags ,
                              SvLBoxEntry* pEntry );
 };
 
 //-----------------------------------------------
 SfxAccCfgLBoxString_Impl::SfxAccCfgLBoxString_Impl(      SvLBoxEntry* pEntry,
-                                                         USHORT       nFlags,
+                                                         sal_uInt16       nFlags,
                                                    const String&      sText )
         : SvLBoxString(pEntry, nFlags, sText)
 {
@@ -616,7 +616,7 @@ SfxAccCfgLBoxString_Impl::~SfxAccCfgLBoxString_Impl()
 //-----------------------------------------------
 void SfxAccCfgLBoxString_Impl::Paint(const Point&       aPos   ,
                                            SvLBox&      rDevice,
-                                           USHORT       /*nFlags*/,
+                                           sal_uInt16       /*nFlags*/,
                                            SvLBoxEntry* pEntry )
 {
     /*/ ??? realy needed !!!
@@ -657,8 +657,8 @@ void SfxAccCfgTabListBox_Impl::InitEntry(      SvLBoxEntry* pEntry ,
 void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
 {
     KeyCode aCode1 = aKey.GetKeyCode();
-    USHORT  nCode1 = aCode1.GetCode();
-    USHORT  nMod1  = aCode1.GetModifier();
+    sal_uInt16  nCode1 = aCode1.GetCode();
+    sal_uInt16  nMod1  = aCode1.GetModifier();
 
     // is it related to our list box ?
     if (
@@ -676,8 +676,8 @@ void SfxAccCfgTabListBox_Impl::KeyInput(const KeyEvent& aKey)
             TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
             if (pUserData)
             {
-                USHORT nCode2 = pUserData->m_aKey.GetCode();
-                USHORT nMod2  = pUserData->m_aKey.GetModifier();
+                sal_uInt16 nCode2 = pUserData->m_aKey.GetCode();
+                sal_uInt16 nMod2  = pUserData->m_aKey.GetModifier();
                 if (
                     (nCode1 == nCode2) &&
                     (nMod1  == nMod2 )
@@ -721,7 +721,6 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , aResetButton            (this   , CUI_RES(BTN_RESET               ))
     , aLoadAccelConfigStr             ( CUI_RES( STR_LOADACCELCONFIG ) )
     , aSaveAccelConfigStr             ( CUI_RES( STR_SAVEACCELCONFIG ) )
-    , aFilterAllStr                   ( CUI_RES( STR_SFX_FILTERNAME_ALL ) )
     , aFilterCfgStr                   ( CUI_RES( STR_FILTERNAME_CFG ) )
     , m_bStylesInfoInitialized(sal_False)
     , m_xGlobal               ()
@@ -729,6 +728,8 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
     , m_xAct                  ()
 {
     FreeResource();
+
+    aFilterAllStr = String( SfxResId( STR_SFX_FILTERNAME_ALL ) );
 
 // install handler functions
     aChangeButton.SetClickHdl( LINK( this, SfxAcceleratorConfigPage, ChangeHdl ));
@@ -753,7 +754,7 @@ SfxAcceleratorConfigPage::SfxAcceleratorConfigPage( Window* pParent, const SfxIt
 
     // detect max keyname width
     long nMaxWidth  = 0;
-    for ( USHORT i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
+    for ( sal_uInt16 i = 0; i < KEYCODE_ARRAY_SIZE; ++i )
     {
         long nTmp = GetTextWidth( KeyCode( KEYCODE_ARRAY[i] ).GetName() );
         if ( nTmp > nMaxWidth )
@@ -886,9 +887,9 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     // Insert all editable accelerators into list box. It is possible
     // that some accelerators are not mapped on the current system/keyboard
     // but we don't want to lose these mappings.
-    USHORT c1       = KEYCODE_ARRAY_SIZE;
-    USHORT i1       = 0;
-    USHORT nListPos = 0;
+    sal_uInt16 c1       = KEYCODE_ARRAY_SIZE;
+    sal_uInt16 i1       = 0;
+    sal_uInt16 nListPos = 0;
     for (i1=0; i1<c1; ++i1)
     {
         KeyCode aKey = KEYCODE_ARRAY[i1];
@@ -904,7 +905,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     css::uno::Sequence< css::awt::KeyEvent > lKeys = xAccMgr->getAllKeyEvents();
     sal_Int32                                c2    = lKeys.getLength();
     sal_Int32                                i2    = 0;
-    USHORT                                   nCol  = aEntriesBox.TabCount()-1;
+    sal_uInt16                                   nCol  = aEntriesBox.TabCount()-1;
 
     for (i2=0; i2<c2; ++i2)
     {
@@ -912,7 +913,7 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
               ::rtl::OUString     sCommand = xAccMgr->getCommandByKeyEvent(aAWTKey);
               String              sLabel   = GetLabel4Command(sCommand);
               KeyCode             aKeyCode = ::svt::AcceleratorExecute::st_AWTKey2VCLKey(aAWTKey);
-              USHORT              nPos     = MapKeyCodeToPos(aKeyCode);
+              sal_uInt16              nPos     = MapKeyCodeToPos(aKeyCode);
 
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
             continue;
@@ -928,12 +929,12 @@ void SfxAcceleratorConfigPage::Init(const css::uno::Reference< css::ui::XAcceler
     }
 
     // Map the VCL hardcoded key codes and mark them as not changeable
-    ULONG c3 = Application::GetReservedKeyCodeCount();
-    ULONG i3 = 0;
+    sal_uLong c3 = Application::GetReservedKeyCodeCount();
+    sal_uLong i3 = 0;
     for (i3=0; i3<c3; ++i3)
     {
         const KeyCode* pKeyCode = Application::GetReservedKeyCode(i3);
-              USHORT   nPos     = MapKeyCodeToPos(*pKeyCode);
+              sal_uInt16   nPos     = MapKeyCodeToPos(*pKeyCode);
 
         if (nPos == LISTBOX_ENTRY_NOTFOUND)
             continue;
@@ -1013,10 +1014,10 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
     if (xReset.is())
         xReset->reset();
 
-    aEntriesBox.SetUpdateMode(FALSE);
+    aEntriesBox.SetUpdateMode(sal_False);
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode(TRUE);
+    aEntriesBox.SetUpdateMode(sal_True);
     aEntriesBox.Invalidate();
     aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
 
@@ -1026,7 +1027,7 @@ IMPL_LINK(SfxAcceleratorConfigPage, Default, PushButton*, EMPTYARG)
 //-----------------------------------------------
 IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
 {
-    USHORT    nPos        = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    sal_uInt16    nPos        = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry      = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
     String    sNewCommand = pFunctionBox->GetCurCommand();
     String    sLabel      = pFunctionBox->GetCurLabel();
@@ -1034,7 +1035,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
         sLabel = GetLabel4Command(sNewCommand);
 
     pEntry->m_sCommand = sNewCommand;
-    USHORT nCol = aEntriesBox.TabCount() - 1;
+    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText(sLabel, nPos, nCol);
 
     ((Link &) pFunctionBox->GetSelectHdl()).Call( pFunctionBox );
@@ -1045,11 +1046,11 @@ IMPL_LINK( SfxAcceleratorConfigPage, ChangeHdl, Button*, EMPTYARG )
 IMPL_LINK( SfxAcceleratorConfigPage, RemoveHdl, Button *, EMPTYARG )
 {
     // get selected entry
-    USHORT    nPos   = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+    sal_uInt16    nPos   = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
     TAccInfo* pEntry = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
 
     // remove function name from selected entry
-    USHORT nCol = aEntriesBox.TabCount() - 1;
+    sal_uInt16 nCol = aEntriesBox.TabCount() - 1;
     aEntriesBox.SetEntryText( String(), nPos, nCol );
     pEntry->m_sCommand = ::rtl::OUString();
 
@@ -1064,17 +1065,17 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     Help::ShowBalloon( this, Point(), String() );
     if ( pListBox == &aEntriesBox )
     {
-        USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
+        sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( aEntriesBox.FirstSelected() );
         TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
         ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
-        aRemoveButton.Enable( FALSE );
-        aChangeButton.Enable( FALSE );
+        aRemoveButton.Enable( sal_False );
+        aChangeButton.Enable( sal_False );
 
         if (pEntry->m_bIsConfigurable)
         {
             if (pEntry->isConfigured())
-                aRemoveButton.Enable( TRUE );
+                aRemoveButton.Enable( sal_True );
             aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
         }
     }
@@ -1082,25 +1083,25 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
     {
         pGroupLBox->GroupSelected();
         if ( !pFunctionBox->FirstSelected() )
-            aChangeButton.Enable( FALSE );
+            aChangeButton.Enable( sal_False );
     }
     else if ( pListBox == pFunctionBox )
     {
-        aRemoveButton.Enable( FALSE );
-        aChangeButton.Enable( FALSE );
+        aRemoveButton.Enable( sal_False );
+        aChangeButton.Enable( sal_False );
 
         // #i36994 First selected can return zero!
         SvLBoxEntry*    pLBEntry = aEntriesBox.FirstSelected();
         if ( pLBEntry != 0 )
         {
-            USHORT          nPos                = (USHORT) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
+            sal_uInt16          nPos                = (sal_uInt16) aEntriesBox.GetModel()->GetRelPos( pLBEntry );
             TAccInfo*       pEntry              = (TAccInfo*)aEntriesBox.GetEntry(0, nPos)->GetUserData();
             ::rtl::OUString sPossibleNewCommand = pFunctionBox->GetCurCommand();
 
             if (pEntry->m_bIsConfigurable)
             {
                 if (pEntry->isConfigured())
-                    aRemoveButton.Enable( TRUE );
+                    aRemoveButton.Enable( sal_True );
                 aChangeButton.Enable( pEntry->m_sCommand != sPossibleNewCommand );
             }
 
@@ -1113,9 +1114,9 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
                 if ( pUserData && pUserData->m_sCommand == sPossibleNewCommand )
                 {
                     TAccInfo*    pU1 = new TAccInfo(-1, -1, pUserData->m_aKey);
-                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, TRUE, LIST_APPEND );
+                    SvLBoxEntry* pE1 = aKeyBox.InsertEntry( pUserData->m_aKey.GetName(), 0L, sal_True, LIST_APPEND );
                     pE1->SetUserData(pU1);
-                    pE1->EnableChildsOnDemand( FALSE );
+                    pE1->EnableChildsOnDemand( sal_False );
                 }
                 pIt = aEntriesBox.Next(pIt);
             }
@@ -1126,7 +1127,7 @@ IMPL_LINK( SfxAcceleratorConfigPage, SelectHdl, Control*, pListBox )
         // goto selected "key" entry of the key box
         SvLBoxEntry* pE2 = 0;
         TAccInfo*    pU2 = 0;
-        USHORT       nP2 = LISTBOX_ENTRY_NOTFOUND;
+        sal_uInt16       nP2 = LISTBOX_ENTRY_NOTFOUND;
         SvLBoxEntry* pE3 = 0;
 
         pE2 = aKeyBox.FirstSelected();
@@ -1160,10 +1161,10 @@ IMPL_LINK( SfxAcceleratorConfigPage, RadioHdl, RadioButton *, EMPTYARG )
     if ( m_xAct.is() && ( xOld == m_xAct ) )
         return 0;
 
-    aEntriesBox.SetUpdateMode( FALSE );
+    aEntriesBox.SetUpdateMode( sal_False );
     ResetConfig();
     Init(m_xAct);
-    aEntriesBox.SetUpdateMode( TRUE );
+    aEntriesBox.SetUpdateMode( sal_True );
     aEntriesBox.Invalidate();
 
      pGroupLBox->Init(m_xSMGR, m_xFrame, m_sModuleLongName);
@@ -1232,10 +1233,10 @@ IMPL_LINK( SfxAcceleratorConfigPage, LoadHdl, sfx2::FileDialogHelper*, EMPTYARG 
             // open the configuration and update our UI
             css::uno::Reference< css::ui::XAcceleratorConfiguration > xTempAccMgr(xCfgMgr->getShortCutManager(), css::uno::UNO_QUERY_THROW);
 
-            aEntriesBox.SetUpdateMode(FALSE);
+            aEntriesBox.SetUpdateMode(sal_False);
             ResetConfig();
             Init(xTempAccMgr);
-            aEntriesBox.SetUpdateMode(TRUE);
+            aEntriesBox.SetUpdateMode(sal_True);
             aEntriesBox.Invalidate();
             aEntriesBox.Select(aEntriesBox.GetEntry(0, 0));
 
@@ -1386,7 +1387,7 @@ void SfxAcceleratorConfigPage::StartFileDialog( WinBits nBits, const String& rTi
 }
 
 //-----------------------------------------------
-BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
+sal_Bool SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
 {
     Apply(m_xAct);
     try
@@ -1396,9 +1397,9 @@ BOOL SfxAcceleratorConfigPage::FillItemSet( SfxItemSet& )
     catch(const css::uno::RuntimeException& exRun)
         { throw exRun; }
     catch(const css::uno::Exception&)
-        { return FALSE; }
+        { return sal_False; }
 
-    return TRUE;
+    return sal_True;
 }
 
 //-----------------------------------------------
@@ -1426,7 +1427,7 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     RadioHdl(0);
 
     const SfxPoolItem* pMacroItem=0;
-    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, TRUE, &pMacroItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_MACROINFO, sal_True, &pMacroItem ) )
     {
         m_pMacroInfoItem = PTR_CAST( SfxMacroInfoItem, pMacroItem );
         pGroupLBox->SelectMacro( m_pMacroInfoItem );
@@ -1434,31 +1435,28 @@ void SfxAcceleratorConfigPage::Reset( const SfxItemSet& rSet )
     else
     {
         const SfxPoolItem* pStringItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, TRUE, &pStringItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_CHARMAP, sal_True, &pStringItem ) )
             m_pStringItem = PTR_CAST( SfxStringItem, pStringItem );
 
         const SfxPoolItem* pFontItem=0;
-        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, TRUE, &pFontItem ) )
+        if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_SPECIALCHAR, sal_True, &pFontItem ) )
             m_pFontItem = PTR_CAST( SfxStringItem, pFontItem );
-
-        if ( m_pStringItem )
-            pGroupLBox->AddAndSelect( m_pStringItem, m_pFontItem );
     }
 }
 
 //-----------------------------------------------
-USHORT SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
+sal_uInt16 SfxAcceleratorConfigPage::MapKeyCodeToPos(const KeyCode& aKey) const
 {
-    USHORT       nCode1 = aKey.GetCode()+aKey.GetModifier();
+    sal_uInt16       nCode1 = aKey.GetCode()+aKey.GetModifier();
     SvLBoxEntry* pEntry = aEntriesBox.First();
-    USHORT       i      = 0;
+    sal_uInt16       i      = 0;
 
     while (pEntry)
     {
         TAccInfo* pUserData = (TAccInfo*)pEntry->GetUserData();
         if (pUserData)
         {
-            USHORT nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();
+            sal_uInt16 nCode2 = pUserData->m_aKey.GetCode()+pUserData->m_aKey.GetModifier();
             if (nCode1 == nCode2)
                 return i;
         }

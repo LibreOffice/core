@@ -31,7 +31,7 @@
 
 #include <svx/orienthelper.hxx>
 #include <vcl/field.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <sfx2/tabdlg.hxx>
@@ -52,7 +52,7 @@ public:
     virtual             ~AlignmentTabPage();
 
     static SfxTabPage*  Create( Window* pParent, const SfxItemSet& rAttrSet );
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
 
     virtual void        Reset( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet );

@@ -550,7 +550,7 @@ Dim Isthere as Boolean
 	InitializeLocales(oLocale)
 	InitializeCurrencies()
 	InitializeControls()
-	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+	BitmapDir = GetOfficeSubPath(&quot;Template&quot;, &quot;../wizard/bitmap&quot;)
 	If BitmapDir = &quot;&quot; Then
 		Stop
 	End If

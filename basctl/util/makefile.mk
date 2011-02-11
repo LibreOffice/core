@@ -54,6 +54,7 @@ SHL1STDLIBS= \
             $(SVXCORELIB) \
             $(SVXLIB) \
             $(SFX2LIB) \
+            $(FWELIB) \
             $(BASICLIB) \
             $(SVTOOLLIB) \
             $(TKLIB) \
@@ -90,8 +91,6 @@ LIB1FILES       = \
 SRSFILELIST=\
                 $(SRS)$/basicide.srs \
                 $(SRS)$/dlged.srs
-
-SRSFILELIST+=   $(SOLARCOMMONRESDIR)$/sfx.srs
 
 RESLIB1NAME=basctl
 RESLIB1IMAGES =$(PRJ)$/res

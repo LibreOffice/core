@@ -88,19 +88,21 @@ struct SpellDialog_Impl
 // -----------------------------------------------------------------------
 //#define VENDOR_IMAGE_HEIGHT 44 //as specified
 
-#define SPELLUNDO_CHANGE_LANGUAGE           (TEXTUNDO_USER + 1)
-#define SPELLUNDO_CHANGE_TEXTENGINE         (TEXTUNDO_USER + 2)
-#define SPELLUNDO_CHANGE_NEXTERROR          (TEXTUNDO_USER + 3)
-#define SPELLUNDO_CHANGE_ADD_TO_DICTIONARY  (TEXTUNDO_USER + 4)
-#define SPELLUNDO_CHANGE_GROUP              (TEXTUNDO_USER + 5) //undo list
-#define SPELLUNDO_MOVE_ERROREND             (TEXTUNDO_USER + 6)
-#define SPELLUNDO_UNDO_EDIT_MODE            (TEXTUNDO_USER + 7)
-#define SPELLUNDO_ADD_IGNORE_RULE           (TEXTUNDO_USER + 8)
+#define SPELLUNDO_START                     200
+
+#define SPELLUNDO_CHANGE_LANGUAGE           (SPELLUNDO_START + 1)
+#define SPELLUNDO_CHANGE_TEXTENGINE         (SPELLUNDO_START + 2)
+#define SPELLUNDO_CHANGE_NEXTERROR          (SPELLUNDO_START + 3)
+#define SPELLUNDO_CHANGE_ADD_TO_DICTIONARY  (SPELLUNDO_START + 4)
+#define SPELLUNDO_CHANGE_GROUP              (SPELLUNDO_START + 5) //undo list
+#define SPELLUNDO_MOVE_ERROREND             (SPELLUNDO_START + 6)
+#define SPELLUNDO_UNDO_EDIT_MODE            (SPELLUNDO_START + 7)
+#define SPELLUNDO_ADD_IGNORE_RULE           (SPELLUNDO_START + 8)
 
 namespace svx{
 class SpellUndoAction_Impl : public SfxUndoAction
 {
-    USHORT          m_nId;
+    sal_uInt16          m_nId;
     const Link&     m_rActionLink;
     //undo of button enabling
     bool            m_bEnableChangePB;
@@ -119,7 +121,7 @@ class SpellUndoAction_Impl : public SfxUndoAction
     long            m_nOffset;
 
 public:
-    SpellUndoAction_Impl(USHORT nId, const Link& rActionLink) :
+    SpellUndoAction_Impl(sal_uInt16 nId, const Link& rActionLink) :
         m_nId(nId),
         m_rActionLink( rActionLink),
         m_bEnableChangePB(false),
@@ -135,7 +137,7 @@ public:
     ~SpellUndoAction_Impl();
 
     virtual void            Undo();
-    virtual USHORT          GetId() const;
+    virtual sal_uInt16          GetId() const;
 
     void                    SetEnableChangePB(){m_bEnableChangePB = true;}
     bool                    IsEnableChangePB(){return m_bEnableChangePB;}
@@ -189,7 +191,7 @@ void SpellUndoAction_Impl::Undo()
 /*-- 06.11.2003 12:16:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-USHORT SpellUndoAction_Impl::GetId()const
+sal_uInt16 SpellUndoAction_Impl::GetId()const
 {
     return m_nId;
 }
@@ -307,7 +309,7 @@ void SpellDialog::Init_Impl()
     aLanguageLB.SetSelectHdl(LINK( this, SpellDialog, LanguageSelectHdl ) );
 
     // initialize language ListBox
-    aLanguageLB.SetLanguageList( LANG_LIST_SPELL_USED, FALSE, FALSE, TRUE );
+    aLanguageLB.SetLanguageList( LANG_LIST_SPELL_USED, sal_False, sal_False, sal_True );
 
     // get current language
     UpdateBoxes_Impl();
@@ -424,7 +426,7 @@ void SpellDialog::SpellContinue_Impl(bool bUseSavedSentence, bool bIgnoreCurrent
         {
             //remove undo if a new sentence is active
             aSentenceED.ResetUndo();
-            aUndoPB.Enable(FALSE);
+            aUndoPB.Enable(sal_False);
         }
     }
 }
@@ -439,7 +441,7 @@ IMPL_STATIC_LINK( SpellDialog, InitHdl, SpellDialog *, EMPTYARG )
     pThis->aAutoCorrPB.Show(pThis->rParent.HasAutoCorrection());
     pThis->SpellContinue_Impl();
     pThis->aSentenceED.ResetUndo();
-    pThis->aUndoPB.Enable(FALSE);
+    pThis->aUndoPB.Enable(sal_False);
 
     pThis->LockFocusChanges(true);
     if( pThis->aChangePB.IsEnabled() )
@@ -628,7 +630,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
         aSentenceED.ChangeMarkedWord(aString, GetSelectedLang_Impl());
         SpellContinue_Impl();
         bModified = false;
-        aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+        aSentenceED.UndoActionEnd();
     }
     if(!aChangePB.IsEnabled())
         aIgnorePB.GrabFocus();
@@ -670,7 +672,7 @@ IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
     aSentenceED.ChangeMarkedWord(aString, eLang);
     SpellContinue_Impl();
     bModified = false;
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 1;
 }
 // -----------------------------------------------------------------------
@@ -715,7 +717,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
 
     SpellContinue_Impl();
     bModified = false;
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 1;
 }
 /*-- 06.11.2003 11:24:08---------------------------------------------------
@@ -725,7 +727,7 @@ IMPL_LINK( SpellDialog, UndoHdl, Button*, EMPTYARG )
 {
     aSentenceED.Undo();
     if(!aSentenceED.GetUndoActionCount())
-        aUndoPB.Enable(FALSE);
+        aUndoPB.Enable(sal_False);
     return 0;
 }
 /*-- 06.11.2003 12:19:15---------------------------------------------------
@@ -738,14 +740,14 @@ IMPL_LINK( SpellDialog, DialogUndoHdl, SpellUndoAction_Impl*, pAction )
         case SPELLUNDO_CHANGE_TEXTENGINE:
         {
             if(pAction->IsEnableChangePB())
-                aChangePB.Enable(FALSE);
+                aChangePB.Enable(sal_False);
             if(pAction->IsEnableChangeAllPB())
-                aChangeAllPB.Enable(FALSE);
+                aChangeAllPB.Enable(sal_False);
         }
         break;
         case SPELLUNDO_CHANGE_NEXTERROR:
         {
-            aSentenceED.MoveErrorMarkTo((USHORT)pAction->GetOldErrorStart(), (USHORT)pAction->GetOldErrorEnd(), false);
+            aSentenceED.MoveErrorMarkTo((sal_uInt16)pAction->GetOldErrorStart(), (sal_uInt16)pAction->GetOldErrorEnd(), false);
             if(pAction->IsErrorLanguageSelected())
             {
                 UpdateBoxes_Impl();
@@ -828,7 +830,7 @@ void SpellDialog::SetSelectedLang_Impl( LanguageType nLang )
 
 LanguageType SpellDialog::GetSelectedLang_Impl() const
 {
-    INT16 nLang = aLanguageLB.GetSelectLanguage();
+    sal_Int16 nLang = aLanguageLB.GetSelectLanguage();
     return nLang;
 }
 /* -----------------28.10.2003 14:27-----------------
@@ -960,7 +962,7 @@ void SpellDialog::InitUserDicts()
     delete aAddToDictMB.GetPopupMenu();
     PopupMenu* pMenu = new PopupMenu;
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
-    USHORT nItemId = 1;     // menu items should be enumerated from 1 and not 0
+    sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
     for (sal_Int32 i = 0; i < nSize; ++i)
     {
         uno::Reference< linguistic2::XDictionary >  xDicTmp( pDic[i], uno::UNO_QUERY );
@@ -1006,7 +1008,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
     //manually changed
     const String aNewWord= aSentenceED.GetErrorText();
 
-    USHORT nItemId = pButton->GetCurItemId();
+    sal_uInt16 nItemId = pButton->GetCurItemId();
     PopupMenu *pMenu = pButton->GetPopupMenu();
     String aDicName ( pMenu->GetItemText( nItemId ) );
 
@@ -1018,7 +1020,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
     sal_Int16 nAddRes = DIC_ERR_UNKNOWN;
     if (xDic.is())
     {
-        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, FALSE, OUString(), LANGUAGE_NONE );
+        nAddRes = linguistic::AddEntryToDic( xDic, aNewWord, sal_False, OUString(), LANGUAGE_NONE );
         // save modified user-dictionary if it is persistent
         uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
         if (xSavDic.is())
@@ -1044,7 +1046,7 @@ IMPL_LINK(SpellDialog, AddToDictionaryHdl, MenuButton*, pButton )
 
     // go on
     SpellContinue_Impl();
-    aSentenceED.UndoActionEnd( SPELLUNDO_CHANGE_GROUP );
+    aSentenceED.UndoActionEnd();
     return 0;
 }
 /*-------------------------------------------------------------------------
@@ -1151,7 +1153,7 @@ void SpellDialog::InvalidateDialog()
     sal_Int16 i = 0;
     while(aDisableArr[i])
     {
-        aDisableArr[i]->Enable(FALSE);
+        aDisableArr[i]->Enable(sal_False);
         i++;
     }
     SfxModelessDialog::Deactivate();
@@ -1218,7 +1220,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         sServiceName = xNamed->getName();
                     SpellErrorDescription aDesc( false, aStart->xAlternatives->getWord(),
                                     aStart->xAlternatives->getLocale(), aStart->xAlternatives->getAlternatives(), 0, sServiceName);
-                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
                 }
                 else if(aStart->bIsGrammarError )
                 {
@@ -1232,11 +1234,11 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
                         &aStart->sDialogTitle,
                         &aStart->aGrammarError.aFullComment,
                         &aStart->aGrammarError.aRuleIdentifier );
-                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                    aSentenceED.SetAttrib( SpellErrorAttrib(aDesc), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
                 }
                 if(aStart->bIsField)
-                    aSentenceED.SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
-                aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (USHORT) nStartPosition, (USHORT) nEndPosition );
+                    aSentenceED.SetAttrib( SpellBackgroundAttrib(COL_LIGHTGRAY), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
+                aSentenceED.SetAttrib( SpellLanguageAttrib(aStart->eLanguage), 0, (sal_uInt16) nStartPosition, (sal_uInt16) nEndPosition );
                 nStartPosition = nEndPosition;
             }
             aStart++;
@@ -1245,7 +1247,7 @@ bool SpellDialog::GetNextSentence_Impl(bool bUseSavedSentence, bool bRecheck)
         if(!bHasReplaced)
             aSentenceED.ClearModifyFlag();
         aSentenceED.ResetUndo();
-        aUndoPB.Enable(FALSE);
+        aUndoPB.Enable(sal_False);
         bRet = nStartPosition > 0;
     }
     return bRet;
@@ -1543,7 +1545,7 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 break;
             }
             //save the current paragraph
-            USHORT nCurrentLen = GetText().Len();
+            sal_uInt16 nCurrentLen = GetText().Len();
             if(nAction != ACTION_SELECTFIELD)
                 pTextView->GetWindow()->KeyInput(rKeyEvt);
             else
@@ -1564,8 +1566,8 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 if(pErrorAttrLeft)
                 {
                     TextAttrib* pNewError =  pErrorAttrLeft->GetAttr().Clone();
-                    USHORT nStart = pErrorAttrLeft->GetStart();
-                    USHORT nEnd = pErrorAttrLeft->GetEnd();
+                    sal_uInt16 nStart = pErrorAttrLeft->GetStart();
+                    sal_uInt16 nEnd = pErrorAttrLeft->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttrLeft );
                     SetAttrib( *pNewError, 0, nStart, ++nEnd );
                     //only active errors move the mark
@@ -1581,13 +1583,13 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                 else if(pErrorAttr)
                 {
                     //determine the change
-                    USHORT nAddedChars = GetText().Len() - nCurrentLen;
+                    sal_uInt16 nAddedChars = GetText().Len() - nCurrentLen;
 
                     TextAttrib* pNewError =  pErrorAttr->GetAttr().Clone();
-                    USHORT nStart = pErrorAttr->GetStart();
-                    USHORT nEnd = pErrorAttr->GetEnd();
+                    sal_uInt16 nStart = pErrorAttr->GetStart();
+                    sal_uInt16 nEnd = pErrorAttr->GetEnd();
                     pTextEngine->RemoveAttrib( 0, *pErrorAttr );
-                    nStart = nStart - (USHORT)nAddedChars;
+                    nStart = nStart - (sal_uInt16)nAddedChars;
                     SetAttrib( *pNewError, 0, nStart - nAddedChars, nEnd );
                     //only if the error is active the mark is moved here
                     if(bIsErrorActive)
@@ -1600,8 +1602,8 @@ long SentenceEditWindow_Impl::PreNotify( NotifyEvent& rNEvt )
                     if(pBackAttrLeft)
                     {
                         TextAttrib* pNewBack =  pBackAttrLeft->GetAttr().Clone();
-                        USHORT _nStart = pBackAttrLeft->GetStart();
-                        USHORT _nEnd = pBackAttrLeft->GetEnd();
+                        sal_uInt16 _nStart = pBackAttrLeft->GetStart();
+                        sal_uInt16 _nEnd = pBackAttrLeft->GetEnd();
                         pTextEngine->RemoveAttrib( 0, *pBackAttrLeft );
                         SetAttrib( *pNewBack, 0, _nStart, _nEnd - nAddedChars);
                         delete pNewBack;
@@ -1651,14 +1653,14 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
     if (bIgnoreCurrentError)
         m_aIgnoreErrorsAt.insert( m_nErrorStart );
     ExtTextEngine* pTextEngine = GetTextEngine();
-    USHORT nTextLen = pTextEngine->GetTextLen(0);
+    sal_uInt16 nTextLen = pTextEngine->GetTextLen(0);
     if(m_nErrorEnd >= nTextLen - 1)
         return false;
     //if it's not already modified the modified flag has to be reset at the and of the marking
     bool bModified = IsModified();
     bool bRet = false;
-    const USHORT nOldErrorStart = m_nErrorStart;
-    const USHORT nOldErrorEnd   = m_nErrorEnd;
+    const sal_uInt16 nOldErrorStart = m_nErrorStart;
+    const sal_uInt16 nOldErrorEnd   = m_nErrorEnd;
 
     //create a cursor behind the end of the last error
     //- or at 0 at the start of the sentence
@@ -1695,7 +1697,7 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
             m_nErrorEnd = pNextError->GetEnd();
             ChangeMarkedWord(xEntry->getReplacementText(),
                     SvxLocaleToLanguage( pSpellErrorDescription->aLocale ));
-            aCursor.GetIndex() = aCursor.GetIndex() + (USHORT)(xEntry->getReplacementText().getLength());
+            aCursor.GetIndex() = aCursor.GetIndex() + (sal_uInt16)(xEntry->getReplacementText().getLength());
         }
         else
             break;
@@ -1734,11 +1736,11 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError )
 /*-- 06.11.2003 13:30:26---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::MoveErrorMarkTo(USHORT nStart, USHORT nEnd, bool bGrammarError)
+void SentenceEditWindow_Impl::MoveErrorMarkTo(sal_uInt16 nStart, sal_uInt16 nEnd, bool bGrammarError)
 {
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR, TRUE );
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT, TRUE );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, sal_True );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, sal_True );
     pTextEngine->SetAttrib( TextAttribFontWeight(WEIGHT_BOLD), 0, nStart, nEnd );
     pTextEngine->SetAttrib( TextAttribFontColor(bGrammarError ? COL_LIGHTBLUE : COL_LIGHTRED), 0, nStart, nEnd );
     m_nErrorStart = nStart;
@@ -1755,7 +1757,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     TextSelection aSel(TextPaM(0, m_nErrorStart), TextPaM(0, m_nErrorEnd));
     //Remove spell errror attribute
     ExtTextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->UndoActionStart( TEXTUNDO_INSERT );
+    pTextEngine->UndoActionStart();
     const TextCharAttrib*  pErrorAttrib = pTextEngine->FindCharAttrib( TextPaM(0, m_nErrorStart), TEXTATTR_SPELL_ERROR );
     DBG_ASSERT(pErrorAttrib, "no error attribute found");
 //  Reference <XSpellAlternatives> xAlternatives;
@@ -1776,30 +1778,30 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
         const TextCharAttrib*  pLangAttrib =
                 pTextEngine->FindCharAttrib(
                     TextPaM(0, m_nErrorEnd), TEXTATTR_SPELL_LANGUAGE );
-        USHORT nTextLen = pTextEngine->GetTextLen( 0 );
+        sal_uInt16 nTextLen = pTextEngine->GetTextLen( 0 );
         if(pLangAttrib && !pLangAttrib->GetStart() && pLangAttrib->GetEnd() ==
             nTextLen)
         {
             SpellLanguageAttrib aNewLangAttrib( static_cast<const SpellLanguageAttrib&>(pLangAttrib->GetAttr()).GetLanguage());
             pTextEngine->RemoveAttrib(0, *pLangAttrib);
-            pTextEngine->SetAttrib( aNewLangAttrib, 0, (USHORT)(m_nErrorEnd + nDiffLen) , nTextLen );
+            pTextEngine->SetAttrib( aNewLangAttrib, 0, (sal_uInt16)(m_nErrorEnd + nDiffLen) , nTextLen );
         }
     }
     // undo expanded attributes!
     if( pBackAttrib && pBackAttrib->GetStart() < m_nErrorStart && pBackAttrib->GetEnd() == m_nErrorEnd + nDiffLen)
     {
         TextAttrib* pNewBackground = pBackAttrib->GetAttr().Clone();
-        USHORT nStart = pBackAttrib->GetStart();
+        sal_uInt16 nStart = pBackAttrib->GetStart();
         pTextEngine->RemoveAttrib(0, *pBackAttrib);
         pTextEngine->SetAttrib(*pNewBackground, 0, nStart, m_nErrorStart);
         delete pNewBackground;
     }
-    pTextEngine->SetModified(TRUE);
+    pTextEngine->SetModified(sal_True);
 
     //adjust end position
     long nEndTemp = m_nErrorEnd;
     nEndTemp += nDiffLen;
-    m_nErrorEnd = (USHORT)nEndTemp;
+    m_nErrorEnd = (sal_uInt16)nEndTemp;
 
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(
                     SPELLUNDO_MOVE_ERROREND, GetSpellDialog()->aDialogUndoLink);
@@ -1808,7 +1810,7 @@ void SentenceEditWindow_Impl::ChangeMarkedWord(const String& rNewWord, LanguageT
     if(pSpellErrorDescription)
         SetAttrib( SpellErrorAttrib(*pSpellErrorDescription), 0, m_nErrorStart, m_nErrorEnd );
     SetAttrib( SpellLanguageAttrib(eLanguage), 0, m_nErrorStart, m_nErrorEnd );
-    pTextEngine->UndoActionEnd( TEXTUNDO_INSERT );
+    pTextEngine->UndoActionEnd();
 }
 /* -----------------08.10.2003 13:18-----------------
 
@@ -1871,7 +1873,7 @@ void SentenceEditWindow_Impl::SetAlternatives( Reference< XSpellAlternatives> xA
 /*-- 10.09.2003 14:43:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, ULONG nPara, USHORT nStart, USHORT nEnd )
+void SentenceEditWindow_Impl::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd )
 {
     GetTextEngine()->SetAttrib(rAttr, nPara, nStart, nEnd);
 }
@@ -1889,10 +1891,10 @@ void SentenceEditWindow_Impl::SetText( const String& rStr )
   -----------------------------------------------------------------------*/
 struct LanguagePosition_Impl
 {
-    USHORT          nPosition;
+    sal_uInt16          nPosition;
     LanguageType    eLanguage;
 
-    LanguagePosition_Impl(USHORT nPos, LanguageType eLang) :
+    LanguagePosition_Impl(sal_uInt16 nPos, LanguageType eLang) :
         nPosition(nPos),
         eLanguage(eLang)
         {}
@@ -1900,7 +1902,7 @@ struct LanguagePosition_Impl
 typedef std::vector<LanguagePosition_Impl> LanguagePositions_Impl;
 
 void lcl_InsertBreakPosition_Impl(
-        LanguagePositions_Impl& rBreakPositions, USHORT nInsert, LanguageType eLanguage)
+        LanguagePositions_Impl& rBreakPositions, sal_uInt16 nInsert, LanguageType eLanguage)
 {
     LanguagePositions_Impl::iterator aStart = rBreakPositions.begin();
     while(aStart != rBreakPositions.end())
@@ -1931,7 +1933,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
 {
     svx::SpellPortions aRet;
     ExtTextEngine* pTextEngine = GetTextEngine();
-    const USHORT nTextLen = pTextEngine->GetTextLen(0);
+    const sal_uInt16 nTextLen = pTextEngine->GetTextLen(0);
     if(nTextLen)
     {
         TextPaM aCursor(0, 0);
@@ -1977,7 +1979,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
             LanguagePositions_Impl::iterator aStart = aBreakPositions.begin();
             //start should always be Null
             eLang = aStart->eLanguage;
-            USHORT nStart = aStart->nPosition;
+            sal_uInt16 nStart = aStart->nPosition;
             DBG_ASSERT(!nStart, "invalid start position - language attribute missing?");
             ++aStart;
 
@@ -2002,11 +2004,11 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
         // quick partly fix of #i71318. Correct fix needs to patch the TextEngine itself...
         // this one will only prevent text from disappearing. It may to not have the
         // correct language and will probably not spell checked...
-        ULONG nPara = pTextEngine->GetParagraphCount();
+        sal_uLong nPara = pTextEngine->GetParagraphCount();
         if (nPara > 1)
         {
             String aLeftOverText;
-            for (ULONG i = 1;  i < nPara;  ++i)
+            for (sal_uLong i = 1;  i < nPara;  ++i)
             {
                 aLeftOverText.AppendAscii( "\x0a" );    // the manual line break...
                 aLeftOverText += pTextEngine->GetText(i);
@@ -2032,12 +2034,12 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions( bool bSetIgnore
   -----------------------------------------------------------------------*/
 void SentenceEditWindow_Impl::Undo()
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     DBG_ASSERT(GetUndoActionCount(), "no undo actions available" );
     if(!GetUndoActionCount())
         return;
     bool bSaveUndoEdit = IsUndoEditMode();
-    USHORT nId;
+    sal_uInt16 nId;
     //if the undo edit mode is active then undo all changes until the UNDO_EDIT_MODE action has been found
     do
     {
@@ -2058,16 +2060,16 @@ void SentenceEditWindow_Impl::ResetUndo()
 /*-- 06.11.2003 12:30:41---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerg )
+void SentenceEditWindow_Impl::AddUndoAction( SfxUndoAction *pAction, sal_Bool bTryMerg )
 {
-    SfxUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
+    ::svl::IUndoManager& rUndoMgr = GetTextEngine()->GetUndoManager();
     rUndoMgr.AddUndoAction(pAction, bTryMerg);
     GetSpellDialog()->aUndoPB.Enable();
 }
 /*-- 06.11.2003 12:38:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-USHORT SentenceEditWindow_Impl::GetUndoActionCount()
+sal_uInt16 SentenceEditWindow_Impl::GetUndoActionCount()
 {
     return GetTextEngine()->GetUndoManager().GetUndoActionCount();
 }
@@ -2075,16 +2077,16 @@ USHORT SentenceEditWindow_Impl::GetUndoActionCount()
 /*-- 12.11.2003 12:12:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::UndoActionStart( USHORT nId )
+void SentenceEditWindow_Impl::UndoActionStart( sal_uInt16 nId )
 {
     GetTextEngine()->UndoActionStart(nId);
 }
 /*-- 12.11.2003 12:12:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SentenceEditWindow_Impl::UndoActionEnd( USHORT nId )
+void SentenceEditWindow_Impl::UndoActionEnd()
 {
-    GetTextEngine()->UndoActionEnd(nId);
+    GetTextEngine()->UndoActionEnd();
 }
 /*-- 12.11.2003 12:12:38---------------------------------------------------
 
@@ -2092,9 +2094,9 @@ void SentenceEditWindow_Impl::UndoActionEnd( USHORT nId )
 void SentenceEditWindow_Impl::MoveErrorEnd(long nOffset)
 {
     if(nOffset > 0)
-        m_nErrorEnd = m_nErrorEnd - (USHORT)nOffset;
+        m_nErrorEnd = m_nErrorEnd - (sal_uInt16)nOffset;
     else
-        m_nErrorEnd = m_nErrorEnd -(USHORT)- nOffset;
+        m_nErrorEnd = m_nErrorEnd -(sal_uInt16)- nOffset;
 }
 /*-- 13.11.2003 15:15:19---------------------------------------------------
 
@@ -2129,8 +2131,8 @@ void  SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //remove error marks
     TextEngine* pTextEngine = GetTextEngine();
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTCOLOR, TRUE );
-    pTextEngine->RemoveAttribs( 0, (USHORT)TEXTATTR_FONTWEIGHT, TRUE );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTCOLOR, sal_True );
+    pTextEngine->RemoveAttribs( 0, (sal_uInt16)TEXTATTR_FONTWEIGHT, sal_True );
 
     //put the appropriate action on the Undo-stack
     SpellUndoAction_Impl* pAction = new SpellUndoAction_Impl(

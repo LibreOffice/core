@@ -441,7 +441,7 @@ public class ReportTextImplementation extends ReportImplementationHelper impleme
 //                if (iCounter % 10 == 0)
 //                {
 //                    sProgressCurRecord = JavaTools.replaceSubString(sProgressBaseCurRecord, String.valueOf(iCounter), "<COUNT>");
-//                    setControlProperty("lblCurProgress", "Label", sProgressCurRecord);
+//                    setControlProperty("lblCurProgress", PropertyNames.PROPERTY_LABEL, sProgressCurRecord);
 //                    super.xReschedule.reschedule();
 //                }
 //            }

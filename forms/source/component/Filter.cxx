@@ -72,7 +72,7 @@
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/stdtext.hxx>
 #include <vcl/svapp.hxx>
-#include <vcl/wintypes.hxx>
+#include <tools/wintypes.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_OFilterControl()

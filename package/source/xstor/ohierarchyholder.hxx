@@ -33,6 +33,8 @@
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
 #include <cppuhelper/implbase1.hxx>
 
+#include <comphelper/sequenceashashmap.hxx>
+
 #include <rtl/ref.hxx>
 
 #include <hash_map>
@@ -90,10 +92,10 @@ public:
     void RemoveElement( const ::rtl::Reference< OHierarchyElement_Impl >& aRef );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
-                                        GetStreamHierarchically( sal_Int32 nStorageMode,
-                                                                OStringList_Impl& aPath,
-                                                                sal_Int32 nStreamMode,
-                                                                const ::rtl::OUString& aPassword = ::rtl::OUString() );
+        GetStreamHierarchically( sal_Int32 nStorageMode,
+                                OStringList_Impl& aPath,
+                                sal_Int32 nStreamMode,
+                                const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
 
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 
@@ -127,10 +129,10 @@ public:
     static OStringList_Impl GetListPathFromString( const ::rtl::OUString& aPath );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream >
-                                        GetStreamHierarchically( sal_Int32 nStorageMode,
-                                                                OStringList_Impl& aListPath,
-                                                                sal_Int32 nStreamMode,
-                                                                const ::rtl::OUString& aPassword = ::rtl::OUString() );
+        GetStreamHierarchically( sal_Int32 nStorageMode,
+                                OStringList_Impl& aListPath,
+                                sal_Int32 nStreamMode,
+                                const ::comphelper::SequenceAsHashMap& aEncryptionData = ::comphelper::SequenceAsHashMap() );
 
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 };

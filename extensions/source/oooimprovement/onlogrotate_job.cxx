@@ -128,17 +128,21 @@ namespace
         }
         {
             ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
-            if(m_ServiceFactory.is())
+            try
             {
-                if(Config(m_ServiceFactory).getInvitationAccepted())
+                if(m_ServiceFactory.is())
                 {
-                    packLogs(m_ServiceFactory);
-                    uploadLogs(m_ServiceFactory);
+                    if(Config(m_ServiceFactory).getInvitationAccepted())
+                    {
+                        packLogs(m_ServiceFactory);
+                        uploadLogs(m_ServiceFactory);
+                    }
+                    else
+                        LogStorage(m_ServiceFactory).clear();
                 }
-                else
-                    LogStorage(m_ServiceFactory).clear();
+                m_ServiceFactory.clear();
             }
-            m_ServiceFactory.clear();
+            catch(...) {}
         }
     }
 
@@ -158,16 +162,25 @@ namespace
                 m_Thread->create();
             }
             virtual ~OnLogRotateThreadWatcher()
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
 
             // XTerminateListener
             virtual void SAL_CALL queryTermination(const EventObject&) throw(RuntimeException)
                 { };
             virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException)
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
             // XEventListener
             virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException)
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
         private:
             ::std::auto_ptr<OnLogRotateThread> m_Thread;
     };

@@ -42,6 +42,7 @@ import com.sun.star.wizards.common.FileAccess;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.SystemDialog;
+import com.sun.star.wizards.common.PropertyNames;
 import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.wizards.ui.event.DataAware;
 import com.sun.star.wizards.ui.event.ListModelBinder;
@@ -251,7 +252,7 @@ public abstract class WWD_Events extends WWD_Startup
                 }
                 if (nextSelected[0] == 0)
                 {
-                    Helper.setUnoPropertyValue(getModel(btnDelSession), "Enabled", Boolean.FALSE);                // select...
+                    Helper.setUnoPropertyValue(getModel(btnDelSession), PropertyNames.PROPERTY_ENABLED, Boolean.FALSE);                // select...
                 }
                 Helper.setUnoPropertyValue(getModel(lstLoadSettings), "SelectedItems", nextSelected);
 
@@ -1001,7 +1002,7 @@ public abstract class WWD_Events extends WWD_Startup
         //replace all '/' with '%2F'
         url1 = JavaTools.replaceSubString(url1, "%2F", "/");
 
-        p.url = "vnd.sun.star.pkg://" + url1 + "/";
+        p.url = "vnd.sun.star.zip://" + url1 + "/";
 
         /*
          * and now ftp...
@@ -1116,7 +1117,7 @@ public abstract class WWD_Events extends WWD_Startup
             }
             else if (ke.KeyChar == '%' && ((System.currentTimeMillis() - time) < 300))
             {
-                Boolean b = (Boolean) getControlProperty("btnWizardFinish", "Enabled");
+                Boolean b = (Boolean) getControlProperty("btnWizardFinish", PropertyNames.PROPERTY_ENABLED);
                 if (b.booleanValue())
                 {
                     finishWizard(false);

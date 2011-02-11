@@ -297,7 +297,9 @@ public class FormDocument extends TextDocument
 
     public ControlForm[] getControlForms()
     {
-        return (ControlForm[]) oControlForms.toArray();
+        ControlForm[] aResult = new ControlForm[oControlForms.size()];
+        oControlForms.toArray( aResult );
+        return aResult;
     }
 
     public boolean finalizeForms(DataEntrySetter _curDataEntrySetter, FieldLinker _curFieldLinker, FormConfiguration _curFormConfiguration)

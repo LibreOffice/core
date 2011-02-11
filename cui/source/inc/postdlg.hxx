@@ -33,7 +33,7 @@
 #include <vcl/group.hxx>
 #endif
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #ifndef _EDIT_HXX //autogen
 #include <vcl/edit.hxx>
@@ -61,10 +61,10 @@ class SvxPostItDialog : public SfxModalDialog
 {
 public:
     SvxPostItDialog( Window* pParent, const SfxItemSet& rCoreSet,
-                     BOOL bPrevNext = FALSE, BOOL bRedline = FALSE );
+                     sal_Bool bPrevNext = sal_False, sal_Bool bRedline = sal_False );
     ~SvxPostItDialog();
 
-    static USHORT*      GetRanges();
+    static sal_uInt16*      GetRanges();
     const SfxItemSet*   GetOutputItemSet() const { return pOutSet; }
 
     Link                GetPrevHdl() const { return aPrevHdlLink; }
@@ -74,20 +74,20 @@ public:
     void                SetNextHdl( const Link& rLink )
                             { aNextHdlLink = rLink; }
 
-    void                EnableTravel(BOOL bNext, BOOL bPrev);
+    void                EnableTravel(sal_Bool bNext, sal_Bool bPrev);
     inline String       GetNote() { return aEditED.GetText(); }
     inline void         SetNote(const String& rTxt) { aEditED.SetText(rTxt); }
 
     void                ShowLastAuthor(const String& rAuthor, const String& rDate);
-    inline void         DontChangeAuthor()  { aAuthorBtn.Enable(FALSE); }
+    inline void         DontChangeAuthor()  { aAuthorBtn.Enable(sal_False); }
     inline void         HideAuthor()        { aAuthorBtn.Hide(); }
-    inline void         SetReadonlyPostIt(BOOL bDisable)
+    inline void         SetReadonlyPostIt(sal_Bool bDisable)
                             {
                                 aOKBtn.Enable( !bDisable );
                                 aEditED.SetReadOnly( bDisable );
                                 aAuthorBtn.Enable( !bDisable );
                             }
-    inline BOOL         IsOkEnabled() const { return aOKBtn.IsEnabled(); }
+    inline sal_Bool         IsOkEnabled() const { return aOKBtn.IsEnabled(); }
 
 private:
     FixedLine           aPostItFL;

@@ -64,6 +64,7 @@ JAVAFILES=							\
     common$/JavaTools.java                  		\
     common$/NoValidPathException.java       		\
     common$/Properties.java                 		\
+    common$/PropertyNames.java                 		\
     common$/Resource.java                   		\
     common$/SystemDialog.java				\
     common$/Configuration.java				\
