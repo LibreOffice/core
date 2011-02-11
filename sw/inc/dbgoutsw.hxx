@@ -32,6 +32,7 @@
 
 #include <boost/unordered_map.hpp>
 #include <tox.hxx>
+#include <cstdio>
 class String;
 
 namespace rtl
