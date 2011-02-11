@@ -28,7 +28,6 @@
 #ifndef OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 #define OOX_DRAWINGML_CHART_OBJECTFORMATTER_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/chart/modelbase.hxx"
@@ -170,4 +169,3 @@ private:
 } // namespace oox
 
 #endif
-

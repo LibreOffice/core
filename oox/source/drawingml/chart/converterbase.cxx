@@ -26,45 +26,38 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/converterbase.hxx"
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/drawing/FillStyle.hpp>
-#include <com/sun/star/drawing/LineStyle.hpp>
+
 #include <com/sun/star/chart/XAxisXSupplier.hpp>
 #include <com/sun/star/chart/XAxisYSupplier.hpp>
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
 #include <com/sun/star/chart2/RelativePosition.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/LineStyle.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/solar.h>    // for F_PI180
-#include "properties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/theme.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::frame::XModel;
-using ::com::sun::star::awt::Point;
-using ::com::sun::star::awt::Rectangle;
-using ::com::sun::star::awt::Size;
-using ::com::sun::star::chart2::RelativePosition;
-using ::com::sun::star::chart2::XChartDocument;
-using ::com::sun::star::chart2::XTitle;
-using ::com::sun::star::drawing::XShape;
-using ::oox::core::XmlFilterBase;
-
-namespace cssc = ::com::sun::star::chart;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+namespace cssc = ::com::sun::star::chart;
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+
+using ::oox::core::XmlFilterBase;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -247,7 +240,7 @@ Reference< XInterface > ConverterRoot::createInstance( const OUString& rServiceN
     Reference< XInterface > xInt;
     try
     {
-        xInt = mxData->mrFilter.getGlobalFactory()->createInstance( rServiceName );
+        xInt = mxData->mrFilter.getServiceFactory()->createInstance( rServiceName );
     }
     catch( Exception& )
     {
@@ -419,4 +412,3 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

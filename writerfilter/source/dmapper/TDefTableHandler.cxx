@@ -33,6 +33,8 @@
 #include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
 
+#include "dmapperLoggers.hxx"
+
 namespace writerfilter {
 namespace dmapper {
 
@@ -42,11 +44,12 @@ using namespace ::com::sun::star;
 
   -----------------------------------------------------------------------*/
 TDefTableHandler::TDefTableHandler(bool bOOXML) :
-    m_nLineWidth(0),
-    m_nLineType(0),
-    m_nLineColor(0),
-    m_nLineDistance(0),
-    m_bOOXML( bOOXML )
+LoggedProperties(dmapper_logger, "TDefTableHandler"),
+m_nLineWidth(0),
+m_nLineType(0),
+m_nLineColor(0),
+m_nLineDistance(0),
+m_bOOXML( bOOXML )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -58,7 +61,7 @@ TDefTableHandler::~TDefTableHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TDefTableHandler::attribute(Id rName, Value & rVal)
+void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
@@ -214,7 +217,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TDefTableHandler::sprm(Sprm & rSprm)
+void TDefTableHandler::lcl_sprm(Sprm & rSprm)
 {
     /* WRITERFILTERSTATUS: table: TDefTable_sprm */
     switch( rSprm.getId() )

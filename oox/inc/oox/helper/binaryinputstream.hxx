@@ -288,4 +288,3 @@ typedef ::boost::shared_ptr< RelativeInputStream > RelativeInputStreamRef;
 } // namespace oox
 
 #endif
-

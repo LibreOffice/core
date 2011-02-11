@@ -26,49 +26,33 @@
  ************************************************************************/
 
 #include "oox/core/filterdetect.hxx"
+
 #include <com/sun/star/io/XStream.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
-#include <rtl/digest.h>
-#include <openssl/evp.h>
 #include <comphelper/docpasswordhelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <openssl/evp.h>
+#include <rtl/digest.h>
+#include "oox/core/fastparser.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/zipstorage.hxx"
-#include "oox/core/fasttokenhandler.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/ole/olestorage.hxx"
-
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::RuntimeException;
-using ::com::sun::star::uno::Sequence;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::uno::XInterface;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::beans::NamedValue;
-using ::com::sun::star::beans::PropertyValue;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XOutputStream;
-using ::com::sun::star::io::XStream;
-using ::com::sun::star::xml::sax::InputSource;
-using ::com::sun::star::xml::sax::SAXException;
-using ::com::sun::star::xml::sax::XFastAttributeList;
-using ::com::sun::star::xml::sax::XFastContextHandler;
-using ::com::sun::star::xml::sax::XFastParser;
-using ::com::sun::star::xml::sax::XLocator;
-using ::comphelper::MediaDescriptor;
-using ::comphelper::SequenceAsHashMap;
-
-using namespace ::com::sun::star;
 
 namespace oox {
 namespace core {
+
+// ============================================================================
+
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
+
+using ::comphelper::MediaDescriptor;
+using ::comphelper::SequenceAsHashMap;
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -105,22 +89,22 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
     switch ( nElement )
     {
         // cases for _rels/.rels
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships:
+        case PR_TOKEN( Relationships ):
         break;
-        case NMSP_PACKAGE_RELATIONSHIPS|XML_Relationship:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_PACKAGE_RELATIONSHIPS|XML_Relationships)) )
+        case PR_TOKEN( Relationship ):
+            if( !maContextStack.empty() && (maContextStack.back() == PR_TOKEN( Relationships )) )
                 parseRelationship( aAttribs );
         break;
 
         // cases for [Content_Types].xml
-        case NMSP_CONTENT_TYPES|XML_Types:
+        case PC_TOKEN( Types ):
         break;
-        case NMSP_CONTENT_TYPES|XML_Default:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_CONTENT_TYPES|XML_Types)) )
+        case PC_TOKEN( Default ):
+            if( !maContextStack.empty() && (maContextStack.back() == PC_TOKEN( Types )) )
                 parseContentTypesDefault( aAttribs );
         break;
-        case NMSP_CONTENT_TYPES|XML_Override:
-            if( !maContextStack.empty() && (maContextStack.back() == (NMSP_CONTENT_TYPES|XML_Types)) )
+        case PC_TOKEN( Override ):
+            if( !maContextStack.empty() && (maContextStack.back() == PC_TOKEN( Types )) )
                 parseContentTypesOverride( aAttribs );
         break;
     }
@@ -249,17 +233,16 @@ OUString FilterDetect_getImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
+Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return Reference< XInterface >( *new FilterDetect( xServiceManager ) );
+    return static_cast< ::cppu::OWeakObject* >( new FilterDetect( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------
 
-FilterDetect::FilterDetect( const Reference< XMultiServiceFactory >& rxFactory ) :
-    mxFactory( rxFactory )
+FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    mxContext( rxContext, UNO_SET_THROW )
 {
-    OSL_ENSURE( mxFactory.is(), "FilterDetect::FilterDetect - no service factory" );
 }
 
 FilterDetect::~FilterDetect()
@@ -410,7 +393,7 @@ bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const 
 
 // ----------------------------------------------------------------------------
 
-uno::Sequence< beans::NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUString& rPassword, sal_uInt8* pnKey, sal_uInt32 nRequiredKeyLen )
+Sequence< NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUString& rPassword, sal_uInt8* pnKey, sal_uInt32 nRequiredKeyLen )
 {
     size_t nBufferSize = rEncrInfo.mnSaltSize + 2 * rPassword.getLength();
     sal_uInt8* pnBuffer = new sal_uInt8[ nBufferSize ];
@@ -449,15 +432,14 @@ uno::Sequence< beans::NamedValue > lclGenerateEncryptionKey( const PackageEncryp
     lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, pnKey, nRequiredKeyLen );
     delete[] pnHash;
 
-    uno::Sequence< beans::NamedValue > aResult;
-    if ( lclCheckEncryptionData( pnKey, nRequiredKeyLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ), rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) ) )
+    Sequence< NamedValue > aResult;
+    if( lclCheckEncryptionData( pnKey, nRequiredKeyLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ), rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) ) )
     {
-        ::comphelper::SequenceAsHashMap aEncryptionData;
-        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionKey" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
-        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionSalt" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
-        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifier" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
-        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifierHash" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
-
+        SequenceAsHashMap aEncryptionData;
+        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionKey" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
+        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionSalt" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
+        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionVerifier" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
+        aEncryptionData[ CREATE_OUSTRING( "AES128EncryptionVerifierHash" ) ] <<= Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
         aResult = aEncryptionData.getAsConstNamedValueList();
     }
 
@@ -471,8 +453,10 @@ class PasswordVerifier : public ::comphelper::IDocPasswordVerifier
 public:
     explicit            PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo );
 
-    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
-    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyPassword( const OUString& rPassword, Sequence< NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyEncryptionData( const Sequence< NamedValue >& rEncryptionData );
 
     inline const sal_uInt8* getKey() const { return &maKey.front(); }
 
@@ -487,29 +471,26 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 {
 }
 
-::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData )
+::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword, Sequence< NamedValue >& o_rEncryptionData )
 {
     // verifies the password and writes the related decryption key into maKey
     o_rEncryptionData = lclGenerateEncryptionKey( mrEncryptInfo, rPassword, &maKey.front(), maKey.size() );
-    return ( o_rEncryptionData.getLength() > 0 ) ?
-        ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    return o_rEncryptionData.hasElements() ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
-::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData )
+::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const Sequence< NamedValue >& rEncryptionData )
 {
-    ::comphelper::SequenceAsHashMap aHashData( rEncryptionData );
-    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
-    uno::Sequence< sal_Int8 > aVerifier = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifier" ) ), uno::Sequence< sal_Int8 >() );
-    uno::Sequence< sal_Int8 > aVerifierHash = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifierHash" ) ), uno::Sequence< sal_Int8 >() );
+    SequenceAsHashMap aHashData( rEncryptionData );
+    Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionKey" ), Sequence< sal_Int8 >() );
+    Sequence< sal_Int8 > aVerifier = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionVerifier" ), Sequence< sal_Int8 >() );
+    Sequence< sal_Int8 > aVerifierHash = aHashData.getUnpackedValueOrDefault( CREATE_OUSTRING( "AES128EncryptionVerifierHash" ), Sequence< sal_Int8 >() );
 
-    return lclCheckEncryptionData(
-                reinterpret_cast< const sal_uInt8* >( aKey.getConstArray() ),
-                aKey.getLength(),
-                reinterpret_cast< const sal_uInt8* >( aVerifier.getConstArray() ),
-                aVerifier.getLength(),
-                reinterpret_cast< const sal_uInt8* >( aVerifierHash.getConstArray() ),
-                aVerifierHash.getLength() )
-            ?  ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+    bool bResult = lclCheckEncryptionData(
+        reinterpret_cast< const sal_uInt8* >( aKey.getConstArray() ), aKey.getLength(),
+        reinterpret_cast< const sal_uInt8* >( aVerifier.getConstArray() ), aVerifier.getLength(),
+        reinterpret_cast< const sal_uInt8* >( aVerifierHash.getConstArray() ), aVerifierHash.getLength() );
+
+    return bResult ? ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
 } // namespace
@@ -518,11 +499,12 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDesc ) const
 {
-    if( mxFactory.is() )
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY );
+    if( xFactory.is() )
     {
         // try the plain input stream
         Reference< XInputStream > xInStrm( rMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
-        if( !xInStrm.is() || lclIsZipPackage( mxFactory, xInStrm ) )
+        if( !xInStrm.is() || lclIsZipPackage( xFactory, xInStrm ) )
             return xInStrm;
 
         // check if a temporary file is passed in the 'ComponentData' property
@@ -530,12 +512,12 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
         if( xDecrypted.is() )
         {
             Reference< XInputStream > xDecrInStrm = xDecrypted->getInputStream();
-            if( lclIsZipPackage( mxFactory, xDecrInStrm ) )
+            if( lclIsZipPackage( xFactory, xDecrInStrm ) )
                 return xDecrInStrm;
         }
 
         // try to decrypt an encrypted OLE package
-        ::oox::ole::OleStorage aOleStorage( mxFactory, xInStrm, false );
+        ::oox::ole::OleStorage aOleStorage( xFactory, xInStrm, false );
         if( aOleStorage.isStorage() ) try
         {
             // open the required input streams in the encrypted package
@@ -571,7 +553,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     (according to the verifier), or with an empty string if
                     user has cancelled the password input dialog. */
                 PasswordVerifier aVerifier( aEncryptInfo );
-                uno::Sequence< beans::NamedValue > aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                Sequence< NamedValue > aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
                     aVerifier, rMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
 
                 if( aEncryptionData.getLength() == 0 )
@@ -581,7 +563,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 else
                 {
                     // create temporary file for unencrypted package
-                    Reference< XStream > xTempFile( mxFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
+                    Reference< XStream > xTempFile( xFactory->createInstance( CREATE_OUSTRING( "com.sun.star.io.TempFile" ) ), UNO_QUERY_THROW );
                     Reference< XOutputStream > xDecryptedPackage( xTempFile->getOutputStream(), UNO_SET_THROW );
                     BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
                     BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
@@ -612,7 +594,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     rMediaDesc.setComponentDataEntry( CREATE_OUSTRING( "DecryptedPackage" ), Any( xTempFile ) );
 
                     Reference< XInputStream > xDecrInStrm = xTempFile->getInputStream();
-                    if( lclIsZipPackage( mxFactory, xDecrInStrm ) )
+                    if( lclIsZipPackage( xFactory, xDecrInStrm ) )
                         return xDecrInStrm;
                 }
             }
@@ -651,12 +633,13 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 {
     OUString aFilterName;
     MediaDescriptor aMediaDesc( rMediaDescSeq );
+    Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
 
     /*  Check that the user has not choosen to abort detection, e.g. by hitting
         'Cancel' in the password input dialog. This may happen because this
         filter detection is used by different filters. */
     bool bAborted = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_ABORTED(), false );
-    if( !bAborted && mxFactory.is() ) try
+    if( !bAborted ) try
     {
         aMediaDesc.addInputStream();
 
@@ -666,30 +649,21 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             descriptor. */
         Reference< XInputStream > xInStrm( extractUnencryptedPackage( aMediaDesc ), UNO_SET_THROW );
 
-        // try to detect the file type, must be a ZIP package
-        ZipStorage aZipStorage( mxFactory, xInStrm );
+        // stream must be a ZIP package
+        ZipStorage aZipStorage( xFactory, xInStrm );
         if( aZipStorage.isStorage() )
         {
-            Reference< XFastParser > xParser( mxFactory->createInstance(
-                CREATE_OUSTRING( "com.sun.star.xml.sax.FastParser" ) ), UNO_QUERY_THROW );
+            // create the fast parser, register the XML namespaces, set document handler
+            FastParser aParser( mxContext );
+            aParser.registerNamespace( NMSP_packageRel );
+            aParser.registerNamespace( NMSP_officeRel );
+            aParser.registerNamespace( NMSP_packageContentTypes );
+            aParser.setDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
 
-            xParser->setFastDocumentHandler( new FilterDetectDocHandler( aFilterName ) );
-            xParser->setTokenHandler( new FastTokenHandler );
-
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/relationships" ), NMSP_PACKAGE_RELATIONSHIPS );
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/officeDocument/2006/relationships" ), NMSP_RELATIONSHIPS );
-            xParser->registerNamespace( CREATE_OUSTRING( "http://schemas.openxmlformats.org/package/2006/content-types" ), NMSP_CONTENT_TYPES );
-
-            // Parse _rels/.rels to get the target path.
-            InputSource aParserInput;
-            aParserInput.sSystemId = CREATE_OUSTRING( "_rels/.rels" );
-            aParserInput.aInputStream = aZipStorage.openInputStream( aParserInput.sSystemId );
-            xParser->parseStream( aParserInput );
-
-            // Parse [Content_Types].xml to determine the content type of the part at the target path.
-            aParserInput.sSystemId = CREATE_OUSTRING( "[Content_Types].xml" );
-            aParserInput.aInputStream = aZipStorage.openInputStream( aParserInput.sSystemId );
-            xParser->parseStream( aParserInput );
+            /*  Parse '_rels/.rels' to get the target path and '[Content_Types].xml'
+                to determine the content type of the part at the target path. */
+            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "_rels/.rels" ) );
+            aParser.parseStream( aZipStorage, CREATE_OUSTRING( "[Content_Types].xml" ) );
         }
     }
     catch( Exception& )
@@ -705,4 +679,3 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
 
 } // namespace core
 } // namespace oox
-

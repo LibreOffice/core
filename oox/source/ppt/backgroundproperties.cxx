@@ -28,8 +28,6 @@
 #include "oox/ppt/backgroundproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -51,7 +49,7 @@ Reference< XFastContextHandler > BackgroundPropertiesContext::createFastChildCon
 
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_fill: // a:CT_FillEffect
+    case PPT_TOKEN( fill ): // a:CT_FillEffect
         break;
     }
 

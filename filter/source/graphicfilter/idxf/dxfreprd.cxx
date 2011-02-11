@@ -37,14 +37,14 @@
 
 void DXFBoundingBox::Union(const DXFVector & rVector)
 {
-    if (bEmpty==TRUE) {
+    if (bEmpty==sal_True) {
         fMinX=rVector.fx;
         fMinY=rVector.fy;
         fMinZ=rVector.fz;
         fMaxX=rVector.fx;
         fMaxY=rVector.fy;
         fMaxZ=rVector.fz;
-        bEmpty=FALSE;
+        bEmpty=sal_False;
     }
     else {
         if (fMinX>rVector.fx) fMinX=rVector.fx;
@@ -63,11 +63,11 @@ void DXFBoundingBox::Union(const DXFVector & rVector)
 DXFPalette::DXFPalette()
 {
     short i,j,nHue,nNSat,nVal,nC[3],nmax,nmed,nmin;
-    BYTE nV;
+    sal_uInt8 nV;
 
-    pRed  =new BYTE[256];
-    pGreen=new BYTE[256];
-    pBlue =new BYTE[256];
+    pRed  =new sal_uInt8[256];
+    pGreen=new sal_uInt8[256];
+    pBlue =new sal_uInt8[256];
 
     // Farben 0 - 9 (normale Farben)
     SetColor(0, 0x00, 0x00, 0x00); // eigentlich nie benutzt
@@ -105,15 +105,15 @@ DXFPalette::DXFPalette()
                     for (j=0; j<3; j++) nC[j]=(nC[j]>>1)+128;
                 }
                 for (j=0; j<3; j++) nC[j]=nC[j]*nVal/5;
-                SetColor((BYTE)(i++),(BYTE)nC[0],(BYTE)nC[1],(BYTE)nC[2]);
+                SetColor((sal_uInt8)(i++),(sal_uInt8)nC[0],(sal_uInt8)nC[1],(sal_uInt8)nC[2]);
             }
         }
     }
 
     // Farben 250 - 255 (Grautoenne)
     for (i=0; i<6; i++) {
-        nV=(BYTE)(i*38+65);
-        SetColor((BYTE)(250+i),nV,nV,nV);
+        nV=(sal_uInt8)(i*38+65);
+        SetColor((sal_uInt8)(250+i),nV,nV,nV);
     }
 }
 
@@ -126,7 +126,7 @@ DXFPalette::~DXFPalette()
 }
 
 
-void DXFPalette::SetColor(BYTE nIndex, BYTE nRed, BYTE nGreen, BYTE nBlue)
+void DXFPalette::SetColor(sal_uInt8 nIndex, sal_uInt8 nRed, sal_uInt8 nGreen, sal_uInt8 nBlue)
 {
     pRed[nIndex]=nRed;
     pGreen[nIndex]=nGreen;
@@ -149,10 +149,10 @@ DXFRepresentation::~DXFRepresentation()
 }
 
 
-BOOL DXFRepresentation::Read( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent)
+sal_Bool DXFRepresentation::Read( SvStream & rIStream, sal_uInt16 nMinPercent, sal_uInt16 nMaxPercent)
 {
     DXFGroupReader * pDGR;
-    BOOL bRes;
+    sal_Bool bRes;
 
     aTables.Clear();
     aBlocks.Clear();
@@ -180,7 +180,7 @@ BOOL DXFRepresentation::Read( SvStream & rIStream, USHORT nMinPercent, USHORT nM
 
     delete pDGR;
 
-    if (bRes==TRUE && aBoundingBox.bEmpty==TRUE)
+    if (bRes==sal_True && aBoundingBox.bEmpty==sal_True)
         CalcBoundingBox(aEntities,aBoundingBox);
 
     return bRes;
@@ -312,7 +312,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 pB=aBlocks.Search(pE->sName);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
-                if (aBox.bEmpty==TRUE) break;
+                if (aBox.bEmpty==sal_True) break;
                 aP.fx=(aBox.fMinX-pB->aBasePoint.fx)*pE->fXScale+pE->aP0.fx;
                 aP.fy=(aBox.fMinY-pB->aBasePoint.fy)*pE->fYScale+pE->aP0.fy;
                 aP.fz=(aBox.fMinZ-pB->aBasePoint.fz)*pE->fZScale+pE->aP0.fz;
@@ -354,7 +354,7 @@ void DXFRepresentation::CalcBoundingBox(const DXFEntities & rEntities,
                 pB=aBlocks.Search(pE->sPseudoBlock);
                 if (pB==NULL) break;
                 CalcBoundingBox(*pB,aBox);
-                if (aBox.bEmpty==TRUE) break;
+                if (aBox.bEmpty==sal_True) break;
                 aP.fx=aBox.fMinX-pB->aBasePoint.fx;
                 aP.fy=aBox.fMinY-pB->aBasePoint.fy;
                 aP.fz=aBox.fMinZ-pB->aBasePoint.fz;

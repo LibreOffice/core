@@ -124,4 +124,3 @@ public:
 } // namespace oox
 
 #endif
-

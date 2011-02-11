@@ -8,6 +8,8 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
+#include "dmapperLoggers.hxx"
+
 #include <iostream>
 using namespace std;
 
@@ -17,7 +19,7 @@ namespace dmapper {
 using namespace com::sun::star;
 
 PositionHandler::PositionHandler( ) :
-    Properties( )
+LoggedProperties(dmapper_logger, "PositionHandler")
 {
     m_nOrient = text::VertOrientation::NONE;
     m_nRelation = text::RelOrientation::FRAME;
@@ -28,7 +30,7 @@ PositionHandler::~PositionHandler( )
 {
 }
 
-void PositionHandler::attribute( Id aName, Value& rVal )
+void PositionHandler::lcl_attribute( Id aName, Value& rVal )
 {
     sal_Int32 nIntValue = rVal.getInt( );
     switch ( aName )
@@ -85,11 +87,15 @@ void PositionHandler::attribute( Id aName, Value& rVal )
                 }
             }
             break;
-        default:;
+        default:
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
+#endif
+            break;
     }
 }
 
-void PositionHandler::sprm( Sprm& rSprm )
+void PositionHandler::lcl_sprm( Sprm& rSprm )
 {
     Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
@@ -153,12 +159,16 @@ void PositionHandler::sprm( Sprm& rSprm )
         case NS_ooxml::LN_CT_PosH_posOffset:
         case NS_ooxml::LN_CT_PosV_posOffset:
             m_nPosition = ConversionHelper::convertEMUToMM100( nIntValue );
-        default:;
+        default:
+#ifdef DEBUG_DOMAINMAPPER
+            dmapper_logger->element("unhandled");
+#endif
+            break;
     }
 }
 
 WrapHandler::WrapHandler( ) :
-    Properties( ),
+LoggedProperties(dmapper_logger, "WrapHandler"),
     m_nType( 0 ),
     m_nSide( 0 )
 {
@@ -168,7 +178,7 @@ WrapHandler::~WrapHandler( )
 {
 }
 
-void WrapHandler::attribute( Id aName, Value& rVal )
+void WrapHandler::lcl_attribute( Id aName, Value& rVal )
 {
     switch ( aName )
     {
@@ -182,7 +192,7 @@ void WrapHandler::attribute( Id aName, Value& rVal )
     }
 }
 
-void WrapHandler::sprm( Sprm& )
+void WrapHandler::lcl_sprm( Sprm& )
 {
 }
 

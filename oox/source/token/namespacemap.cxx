@@ -25,32 +25,25 @@
  *
  ************************************************************************/
 
-#include "oox/token/propertylist.hxx"
-#include "properties.hxx"
+#include "oox/token/namespacemap.hxx"
 
 namespace oox {
 
-namespace {
-
-// include auto-generated property name lists
-#include "propertywords.inc"
-
-} // namespace
-
 // ============================================================================
 
-PropertyList::PropertyList()
+NamespaceMap::NamespaceMap()
 {
-    reserve( static_cast< size_t >( PROP_COUNT ) );
-    for( sal_Int32 nIdx = 0; nIdx < PROP_COUNT; ++nIdx )
-        push_back( ::rtl::OUString::createFromAscii( propertywordlist[ nIdx ] ) );
-}
+    static const struct NamespaceUrl { sal_Int32 mnId; const sal_Char* mpcUrl; } spNamespaceUrls[] =
+    {
+// include auto-generated C array with namespace URLs as C strings
+#include "namespacenames.inc"
+        { -1, "" }
+    };
 
-PropertyList::~PropertyList()
-{
+    for( const NamespaceUrl* pNamespaceUrl = spNamespaceUrls; pNamespaceUrl->mnId != -1; ++pNamespaceUrl )
+        operator[]( pNamespaceUrl->mnId ) = ::rtl::OUString::createFromAscii( pNamespaceUrl->mpcUrl );
 }
 
 // ============================================================================
 
 } // namespace oox
-

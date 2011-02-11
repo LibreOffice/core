@@ -158,4 +158,3 @@ typedef ::boost::shared_ptr< SequenceOutputStream > SequenceOutputStreamRef;
 } // namespace oox
 
 #endif
-

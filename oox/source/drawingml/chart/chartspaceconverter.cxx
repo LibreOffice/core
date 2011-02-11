@@ -26,6 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
+
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -38,7 +39,6 @@
 #include "oox/drawingml/chart/chartspacemodel.hxx"
 #include "oox/drawingml/chart/plotareaconverter.hxx"
 #include "oox/drawingml/chart/titleconverter.hxx"
-#include "properties.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::Point;
@@ -46,16 +46,29 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
+using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::util::XNumberFormatsSupplier;
 using ::com::sun::star::drawing::XDrawPageSupplier;
 using ::com::sun::star::drawing::XShapes;
 using ::com::sun::star::chart2::XDiagram;
 using ::com::sun::star::chart2::XTitled;
 using ::com::sun::star::chart2::data::XDataReceiver;
+using ::com::sun::star::beans::XPropertySet;
 
 namespace oox {
 namespace drawingml {
 namespace chart {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::chart2;
+using namespace ::com::sun::star::chart2::data;
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::util;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -199,6 +212,14 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     catch( Exception& )
     {
     }
+
+    // pivot chart
+    if ( mrModel.mbPivotChart )
+    {
+        PropertySet aProps( getChartDocument() );
+        aProps.setProperty( PROP_DisableDataTableDialog , true );
+        aProps.setProperty( PROP_DisableComplexChartTypes , true );
+    }
 }
 
 // ============================================================================
@@ -206,4 +227,3 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
 } // namespace chart
 } // namespace drawingml
 } // namespace oox
-

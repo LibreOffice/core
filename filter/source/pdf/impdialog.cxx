@@ -70,7 +70,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   const Reference< XComponent >& rxDoc,
                                   const Reference< lang::XMultiServiceFactory >& xFact
                                   ) :
-    SfxTabDialog( pParent, PDFFilterResId( RID_PDF_EXPORT_DLG ), 0, FALSE, 0 ),
+    SfxTabDialog( pParent, PDFFilterResId( RID_PDF_EXPORT_DLG ), 0, sal_False, 0 ),
     mxMSF( xFact ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
@@ -180,7 +180,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     {
     }
 
-//get the CTL (Complex Text Layout) from general options, returns TRUE if we have a CTL font on our hands.
+//get the CTL (Complex Text Layout) from general options, returns sal_True if we have a CTL font on our hands.
     mbUseCTLFont = maConfigI18N.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "CTLFont" ) ), sal_False );
 
     mbUseLosslessCompression = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ) ), sal_False );
@@ -274,7 +274,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
 }
 
 // -----------------------------------------------------------------------------
-void ImpPDFTabDialog::PageCreated( USHORT _nId,
+void ImpPDFTabDialog::PageCreated( sal_uInt16 _nId,
                                    SfxTabPage& _rPage )
 {
     switch( _nId )
@@ -524,7 +524,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     switch( paParent->mnPDFTypeSelection )
     {
     default:
-    case 0: maCbPDFA1b.Check( FALSE ); // PDF 1.4
+    case 0: maCbPDFA1b.Check( sal_False ); // PDF 1.4
         break;
     case 1: maCbPDFA1b.Check(); // PDF/A-1a
         break;
@@ -556,7 +556,7 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     if ( mbIsPresentation )
     {
-        maCbExportNotesPages.Show( TRUE );
+        maCbExportNotesPages.Show( sal_True );
         maCbExportNotesPages.Check( paParent->mbExportNotesPages );
     }
     else
@@ -570,8 +570,8 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
         maCbAddStream.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
         aPos = maCbEmbedStandardFonts.GetPosPixel();
         maCbEmbedStandardFonts.SetPosPixel( Point( aPos.X(), aPos.Y() - nCheckBoxHeight ) );
-        maCbExportNotesPages.Show( FALSE );
-        maCbExportNotesPages.Check( FALSE );
+        maCbExportNotesPages.Show( sal_False );
+        maCbExportNotesPages.Check( sal_False );
     }
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
@@ -584,13 +584,13 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     }
     if( xIfc.is() )
     {
-        maCbAddStream.Show( TRUE );
+        maCbAddStream.Show( sal_True );
         maCbAddStream.Check( paParent->mbAddStream );
     }
     else
     {
-        maCbAddStream.Show( FALSE );
-        maCbAddStream.Check( FALSE );
+        maCbAddStream.Show( sal_False );
+        maCbAddStream.Check( sal_False );
     }
     maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
@@ -692,17 +692,17 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
         if( maCbAddStream.IsChecked() )
         {
             maRbAll.Check();
-            maRbRange.Enable( FALSE );
-            maRbSelection.Enable( FALSE );
-            maEdPages.Enable( FALSE );
-            maEdPages.SetReadOnly( TRUE );
-            maRbAll.Enable( FALSE );
+            maRbRange.Enable( sal_False );
+            maRbSelection.Enable( sal_False );
+            maEdPages.Enable( sal_False );
+            maEdPages.SetReadOnly( sal_True );
+            maRbAll.Enable( sal_False );
         }
         else
         {
-            maRbAll.Enable( TRUE );
-            maRbRange.Enable( TRUE );
-            maRbSelection.Enable( TRUE );
+            maRbAll.Enable( sal_True );
+            maRbRange.Enable( sal_True );
+            maRbSelection.Enable( sal_True );
         }
     }
     return 0;
@@ -877,23 +877,23 @@ void ImpPDFTabOpnFtrPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     default:
     case 0:
         maRbMagnDefault.Check();
-        maNumZoom.Enable( FALSE );
+        maNumZoom.Enable( sal_False );
         break;
     case 1:
         maRbMagnFitWin.Check();
-        maNumZoom.Enable( FALSE );
+        maNumZoom.Enable( sal_False );
         break;
     case 2:
         maRbMagnFitWidth.Check();
-        maNumZoom.Enable( FALSE );
+        maNumZoom.Enable( sal_False );
         break;
     case 3:
         maRbMagnFitVisible.Check();
-        maNumZoom.Enable( FALSE );
+        maNumZoom.Enable( sal_False );
         break;
     case 4:
         maRbMagnZoom.Check();
-        maNumZoom.Enable( TRUE );
+        maNumZoom.Enable( sal_True );
         break;
     };
 
@@ -1002,13 +1002,13 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
     maCbTransitionEffects.Enable( mbIsPresentation );
     if( paParent->mnOpenBookmarkLevels < 0 )
     {
-        maRbAllBookmarkLevels.Check( TRUE );
-        maNumBookmarkLevels.Enable( FALSE );
+        maRbAllBookmarkLevels.Check( sal_True );
+        maNumBookmarkLevels.Enable( sal_False );
     }
     else
     {
-        maRbVisibleBookmarkLevels.Check( TRUE );
-        maNumBookmarkLevels.Enable( TRUE );
+        maRbVisibleBookmarkLevels.Check( sal_True );
+        maNumBookmarkLevels.Enable( sal_True );
         maNumBookmarkLevels.SetValue( paParent->mnOpenBookmarkLevels );
     }
 }
@@ -1474,28 +1474,28 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
         {
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDFA:
         {
-            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_PDFA_SHORT ) ),
                                                 aWarnImg );
             maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Omitted_PDF13:
         {
-            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_VERSION_SHORT ) ),
                                                 aWarnImg );
             maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_VERSION ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_FormAction_Omitted_PDFA:
         {
-            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_FORMACTION_PDFA_SHORT ) ),
                                                 aWarnImg );
             maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_FORMACTION_PDFA ) ) );
         }
         break;
         case vcl::PDFWriter::Warning_Transparency_Converted:
         {
-            USHORT nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
+            sal_uInt16 nPos = maErrors.InsertEntry( String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED_SHORT ) ),
                                                 aWarnImg );
             maErrors.SetEntryData( nPos, new String( PDFFilterResId( STR_WARN_TRANSP_CONVERTED ) ) );
         }
@@ -1546,7 +1546,7 @@ ImplErrorDialog::ImplErrorDialog( const std::set< vcl::PDFWriter::ErrorCode >& r
 ImplErrorDialog::~ImplErrorDialog()
 {
     // free strings again
-    for( USHORT n = 0; n < maErrors.GetEntryCount(); n++ )
+    for( sal_uInt16 n = 0; n < maErrors.GetEntryCount(); n++ )
         delete (String*)maErrors.GetEntryData( n );
 }
 

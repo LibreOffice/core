@@ -1,5 +1,5 @@
     <node oor:name="calc_MS_Excel_40" oor:op="replace" >
-        <prop oor:name="DetectService"><value>com.sun.star.comp.calc.FormatDetector</value></prop>
+        <prop oor:name="DetectService"><value>com.sun.star.comp.oox.xls.BiffDetector</value></prop>
         <prop oor:name="URLPattern"/>
         <prop oor:name="Extensions"><value>xls xlw xlc xlm</value></prop>
         <prop oor:name="MediaType"><value>application/vnd.ms-excel</value></prop>

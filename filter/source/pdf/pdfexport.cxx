@@ -211,7 +211,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
                     pOut->Push();
-                    pOut->EnableOutput( FALSE );
+                    pOut->EnableOutput( sal_False );
                     pOut->SetMapMode( aMapMode );
 
                     aMtf.SetPrefSize( aMtfSize );
@@ -819,7 +819,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 5 );
+                Sequence< PropertyValue > aRenderOptions( 6 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
@@ -831,12 +831,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 3 ].Value <<= sal_False;
                 aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
-                #if 0
-                // #i113919# writer has to begun "PageRange" for itself changing its renderer count
-                // we should unify this behavior but not for OOo 3.3
                 aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
                 aRenderOptions[ 5 ].Value <<= aPageRange;
-                #endif
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
                 {
@@ -905,7 +901,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if( nPageCount > 0 )
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
                 else
-                    bRet = FALSE;
+                    bRet = sal_False;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {

@@ -32,9 +32,7 @@
 #include "oox/drawingml/fillproperties.hxx"
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/helper/attributelist.hxx"
-#include "tokens.hxx"
 
 using ::rtl::OUString;
 using namespace ::oox::core;
@@ -67,12 +65,12 @@ Reference< XFastContextHandler > FillStyleListContext::createFastChildContext( s
 {
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_noFill:
-        case NMSP_DRAWINGML|XML_solidFill:
-        case NMSP_DRAWINGML|XML_gradFill:
-        case NMSP_DRAWINGML|XML_blipFill:
-        case NMSP_DRAWINGML|XML_pattFill:
-        case NMSP_DRAWINGML|XML_grpFill:
+        case A_TOKEN( noFill ):
+        case A_TOKEN( solidFill ):
+        case A_TOKEN( gradFill ):
+        case A_TOKEN( blipFill ):
+        case A_TOKEN( pattFill ):
+        case A_TOKEN( grpFill ):
             mrFillStyleList.push_back( FillPropertiesPtr( new FillProperties ) );
             return FillPropertiesContext::createFillContext( *this, nElement, xAttribs, *mrFillStyleList.back() );
     }
@@ -102,7 +100,7 @@ Reference< XFastContextHandler > LineStyleListContext::createFastChildContext( s
 {
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_ln:
+        case A_TOKEN( ln ):
             mrLineStyleList.push_back( LinePropertiesPtr( new LineProperties ) );
             return new LinePropertiesContext( *this, xAttribs, *mrLineStyleList.back() );
     }
@@ -131,7 +129,7 @@ Reference< XFastContextHandler > EffectStyleListContext::createFastChildContext(
 {
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_effectStyle:
+        case A_TOKEN( effectStyle ):
             mrEffectStyleList.push_back( EffectStyleList::value_type( new PropertyMap ) );
             // TODO: import effect styles
             return 0;
@@ -165,24 +163,24 @@ Reference< XFastContextHandler > FontSchemeContext::createFastChildContext( sal_
     AttributeList aAttribs( rxAttribs );
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_majorFont:
+        case A_TOKEN( majorFont ):
             mxCharProps.reset( new TextCharacterProperties );
             mrFontScheme[ XML_major ] = mxCharProps;
             return this;
-        case NMSP_DRAWINGML|XML_minorFont:
+        case A_TOKEN( minorFont ):
             mxCharProps.reset( new TextCharacterProperties );
             mrFontScheme[ XML_minor ] = mxCharProps;
             return this;
 
-        case NMSP_DRAWINGML|XML_latin:
+        case A_TOKEN( latin ):
             if( mxCharProps.get() )
                 mxCharProps->maLatinFont.setAttributes( aAttribs );
         break;
-        case NMSP_DRAWINGML|XML_ea:
+        case A_TOKEN( ea ):
             if( mxCharProps.get() )
                 mxCharProps->maAsianFont.setAttributes( aAttribs );
         break;
-        case NMSP_DRAWINGML|XML_cs:
+        case A_TOKEN( cs ):
             if( mxCharProps.get() )
                 mxCharProps->maComplexFont.setAttributes( aAttribs );
         break;
@@ -194,8 +192,8 @@ void FontSchemeContext::endFastElement( sal_Int32 nElement ) throw (SAXException
 {
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_majorFont:
-        case NMSP_DRAWINGML|XML_minorFont:
+        case A_TOKEN( majorFont ):
+        case A_TOKEN( minorFont ):
             mxCharProps.reset();
         break;
     }
@@ -215,22 +213,22 @@ Reference< XFastContextHandler > ThemeElementsContext::createFastChildContext( s
     Reference< XFastContextHandler > xRet;
     switch( nElement )
     {
-        case NMSP_DRAWINGML|XML_clrScheme:  // CT_ColorScheme
+        case A_TOKEN( clrScheme ):  // CT_ColorScheme
             return new clrSchemeContext( *this, mrTheme.getClrScheme() );
-        case NMSP_DRAWINGML|XML_fontScheme: // CT_FontScheme
+        case A_TOKEN( fontScheme ): // CT_FontScheme
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
-        case NMSP_DRAWINGML|XML_fmtScheme:  // CT_StyleMatrix
+        case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
             mrTheme.setStyleName( xAttribs->getOptionalValue( XML_name ) );
             return this;
 
-        case NMSP_DRAWINGML|XML_fillStyleLst:   // CT_FillStyleList
+        case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
             return new FillStyleListContext( *this, mrTheme.getFillStyleList() );
-        case NMSP_DRAWINGML|XML_lnStyleLst:    // CT_LineStyleList
+        case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
             return new LineStyleListContext( *this, mrTheme.getLineStyleList() );
-        case NMSP_DRAWINGML|XML_effectStyleLst: // CT_EffectStyleList
+        case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
             return new EffectStyleListContext( *this, mrTheme.getEffectStyleList() );
-        case NMSP_DRAWINGML|XML_bgFillStyleLst: // CT_BackgroundFillStyleList
+        case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
             return new FillStyleListContext( *this, mrTheme.getBgFillStyleList() );
     }
     return 0;
