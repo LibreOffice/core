@@ -621,6 +621,30 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
         m_pColorLB  = new ColorListBox( this, CUI_RES( LB_COLOR2 ) );
     }
 
+    //In MacOSX the standard dialogs name font-name, font-style as
+    //Family, Typeface
+    //In GNOME the standard dialogs name font-name, font-style as
+    //Family, Style
+    //In Windows the standard dialogs name font-name, font-style as
+    //Font, Style
+#ifdef WNT
+    String sFontFamilyString(CUI_RES(STR_CHARNAME_FONT));
+#else
+    String sFontFamilyString(CUI_RES(STR_CHARNAME_FAMILY));
+#endif
+    m_pWestFontNameFT->SetText(sFontFamilyString);
+    m_pEastFontNameFT->SetText(sFontFamilyString);
+    m_pCTLFontNameFT->SetText(sFontFamilyString);
+
+#ifdef MACOSX
+    String sFontStyleString(CUI_RES(STR_CHARNAME_TYPEFACE));
+#else
+    String sFontStyleString(CUI_RES(STR_CHARNAME_STYLE));
+#endif
+    m_pWestFontStyleFT->SetText(sFontStyleString);
+    m_pEastFontStyleFT->SetText(sFontStyleString);
+    m_pCTLFontStyleFT->SetText(sFontStyleString);
+
     m_pWestLine             ->Show( bCJK );
     m_pColorFL              ->Show( bCJK );
 
