@@ -1204,36 +1204,60 @@ static sal_Bool lcl_PutDataArray( ScDocShell& rDocShell, const ScRange& rRange,
             for (long nCol=0; nCol<nCols; nCol++)
             {
                 const uno::Any& rElement = pColArr[nCol];
-                uno::TypeClass eElemClass = rElement.getValueTypeClass();
-                if ( eElemClass == uno::TypeClass_VOID )
+                switch( rElement.getValueTypeClass() )
                 {
-                    // void = "no value"
-                    pDoc->SetError( nDocCol, nDocRow, nTab, NOTAVAILABLE );
-                }
-                else if ( eElemClass == uno::TypeClass_BYTE ||
-                            eElemClass == uno::TypeClass_SHORT ||
-                            eElemClass == uno::TypeClass_UNSIGNED_SHORT ||
-                            eElemClass == uno::TypeClass_LONG ||
-                            eElemClass == uno::TypeClass_UNSIGNED_LONG ||
-                            eElemClass == uno::TypeClass_FLOAT ||
-                            eElemClass == uno::TypeClass_DOUBLE )
-                {
-                    //  accept integer types because Basic passes a floating point
-                    //  variable as byte, short or long if it's an integer number.
-                    double fVal(0.0);
-                    rElement >>= fVal;
-                    pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
-                }
-                else if ( eElemClass == uno::TypeClass_STRING )
-                {
-                    rtl::OUString aUStr;
-                    rElement >>= aUStr;
-                    if ( !aUStr.isEmpty() )
-                        pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
-                }
-                else
-                    bError = sal_True;      // invalid type
+                    case uno::TypeClass_VOID:
+                    {
+                        // void = "no value"
+                        pDoc->SetError( nDocCol, nDocRow, nTab, NOTAVAILABLE );
+                    }
+                    break;
 
+                    //  #87871# accept integer types because Basic passes a floating point
+                    //  variable as byte, short or long if it's an integer number.
+                    case uno::TypeClass_BYTE:
+                    case uno::TypeClass_SHORT:
+                    case uno::TypeClass_UNSIGNED_SHORT:
+                    case uno::TypeClass_LONG:
+                    case uno::TypeClass_UNSIGNED_LONG:
+                    case uno::TypeClass_FLOAT:
+                    case uno::TypeClass_DOUBLE:
+                    {
+                        double fVal(0.0);
+                        rElement >>= fVal;
+                        pDoc->SetValue( nDocCol, nDocRow, nTab, fVal );
+                    }
+                    break;
+
+                    case uno::TypeClass_STRING:
+                    {
+                        rtl::OUString aUStr;
+                        rElement >>= aUStr;
+                        if ( !aUStr.isEmpty() )
+                            pDoc->PutCell( nDocCol, nDocRow, nTab, new ScStringCell( aUStr ) );
+                    }
+                    break;
+
+                    // accept Sequence<FormulaToken> for formula cells
+                    case uno::TypeClass_SEQUENCE:
+                    {
+                        uno::Sequence< sheet::FormulaToken > aTokens;
+                        if ( rElement >>= aTokens )
+                        {
+                            ScTokenArray aTokenArray;
+                            ScTokenConversion::ConvertToTokenArray( *pDoc, aTokenArray, aTokens );
+                            ScAddress aPos( nDocCol, nDocRow, nTab );
+                            ScBaseCell* pNewCell = new ScFormulaCell( pDoc, aPos, &aTokenArray );
+                            pDoc->PutCell( aPos, pNewCell );
+                        }
+                        else
+                            bError = true;
+                    }
+                    break;
+
+                    default:
+                        bError = true;      // invalid type
+                }
                 ++nDocCol;
             }
         }
