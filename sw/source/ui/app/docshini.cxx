@@ -170,30 +170,30 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         SfxPrinter* pPrt = pDoc->getPrinter( false );
 
         String sEntry;
-        USHORT aFontWhich[] =
+        sal_uInt16 aFontWhich[] =
         {   RES_CHRATR_FONT,
             RES_CHRATR_CJK_FONT,
             RES_CHRATR_CTL_FONT
         };
-        USHORT aFontHeightWhich[] =
+        sal_uInt16 aFontHeightWhich[] =
         {
             RES_CHRATR_FONTSIZE,
             RES_CHRATR_CJK_FONTSIZE,
             RES_CHRATR_CTL_FONTSIZE
         };
-        USHORT aFontIds[] =
+        sal_uInt16 aFontIds[] =
         {
             FONT_STANDARD,
             FONT_STANDARD_CJK,
             FONT_STANDARD_CTL
         };
-        USHORT nFontTypes[] =
+        sal_uInt16 nFontTypes[] =
         {
             DEFAULTFONT_LATIN_TEXT,
             DEFAULTFONT_CJK_TEXT,
             DEFAULTFONT_CTL_TEXT
         };
-        USHORT aLangTypes[] =
+        sal_uInt16 aLangTypes[] =
         {
             RES_CHRATR_LANGUAGE,
             RES_CHRATR_CJK_LANGUAGE,
@@ -202,29 +202,23 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 
         for(sal_uInt8 i = 0; i < 3; i++)
         {
-            USHORT nFontWhich = aFontWhich[i];
-            USHORT nFontId = aFontIds[i];
+            sal_uInt16 nFontWhich = aFontWhich[i];
+            sal_uInt16 nFontId = aFontIds[i];
             SvxFontItem* pFontItem = 0;
             const SvxLanguageItem& rLang = (const SvxLanguageItem&)pDoc->GetDefault( aLangTypes[i] );
             LanguageType eLanguage = rLang.GetLanguage();
             if(!pStdFont->IsFontDefault(nFontId))
             {
                 sEntry = pStdFont->GetFontFor(nFontId);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
                 {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
+                    aFont = pPrt->GetFontMetric( aFont );
                 }
-                pFontItem = new SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                    aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich);
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
-                    bDelete = sal_False;
-                }
+
+                pFontItem = new SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                            aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich);
             }
             else
             {
@@ -266,7 +260,7 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             }
 
         }
-        USHORT aFontIdPoolId[] =
+        sal_uInt16 aFontIdPoolId[] =
         {
             FONT_OUTLINE,       RES_POOLCOLL_HEADLINE_BASE,
             FONT_LIST,          RES_POOLCOLL_NUMBUL_BASE,
@@ -282,8 +276,8 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             FONT_INDEX_CTL,     RES_POOLCOLL_REGISTER_BASE
         };
 
-        USHORT nFontWhich = RES_CHRATR_FONT;
-        USHORT nFontHeightWhich = RES_CHRATR_FONTSIZE;
+        sal_uInt16 nFontWhich = RES_CHRATR_FONT;
+        sal_uInt16 nFontHeightWhich = RES_CHRATR_FONTSIZE;
         LanguageType eLanguage = static_cast<const SvxLanguageItem&>(pDoc->GetDefault( RES_CHRATR_LANGUAGE )).GetLanguage();
         for(sal_uInt8 nIdx = 0; nIdx < 24; nIdx += 2)
         {
@@ -303,25 +297,18 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
             if(!pStdFont->IsFontDefault(aFontIdPoolId[nIdx]))
             {
                 sEntry = pStdFont->GetFontFor(aFontIdPoolId[nIdx]);
-                sal_Bool bDelete = sal_False;
-                const SfxFont* pFnt = pPrt ? pPrt->GetFontByName(sEntry): 0;
-                if(!pFnt)
-                {
-                    pFnt = new SfxFont( FAMILY_DONTKNOW, sEntry, PITCH_DONTKNOW,
-                                        ::gsl_getSystemTextEncoding() );
-                    bDelete = sal_True;
-                }
+
+                Font aFont( sEntry, Size( 0, 10 ) );
+                if( pPrt )
+                    aFont = pPrt->GetFontMetric( aFont );
+
                 pColl = pDoc->GetTxtCollFromPool(aFontIdPoolId[nIdx + 1]);
                 if( !bHTMLTemplSet ||
                     SFX_ITEM_SET != pColl->GetAttrSet().GetItemState(
                                                     nFontWhich, sal_False ) )
                 {
-                    pColl->SetFmtAttr(SvxFontItem(pFnt->GetFamily(), pFnt->GetName(),
-                                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), nFontWhich));
-                }
-                if(bDelete)
-                {
-                    delete (SfxFont*) pFnt;
+                    pColl->SetFmtAttr(SvxFontItem(aFont.GetFamily(), aFont.GetName(),
+                                                  aEmptyStr, aFont.GetPitch(), aFont.GetCharSet(), nFontWhich));
                 }
             }
             sal_Int32 nFontHeight = pStdFont->GetFontHeight( static_cast< sal_Int8 >(aFontIdPoolId[nIdx]), 0, eLanguage );
@@ -351,14 +338,14 @@ sal_Bool SwDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
         pDoc->SetDefault( SvxAdjustItem(SVX_ADJUST_RIGHT, RES_PARATR_ADJUST ) );
 
     // OD 09.10.2003 #i18732# - set dynamic pool default for
-    // item RES_FOLLOW_TEXT_FLOW to FALSE for *new document*.
+    // item RES_FOLLOW_TEXT_FLOW to sal_False for *new document*.
     // Thus, redo this change in method <SwDoc::RemoveAllFmtLanguageDependencies()>,
     // which is called from <SwDocShell::ConvertFrom(..)> in order to restore
     // the static pool default.
-    pDoc->SetDefault( SwFmtFollowTextFlow( FALSE ) );
+    pDoc->SetDefault( SwFmtFollowTextFlow( sal_False ) );
 
 // --> collapsing borders FME 2005-05-27 #i29550#
-    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, TRUE ) );
+    pDoc->SetDefault( SfxBoolItem( RES_COLLAPSING_BORDERS, sal_True ) );
 // <-- collapsing
 
     //#i16874# AutoKerning as default for new documents
@@ -605,10 +592,10 @@ sal_Bool  SwDocShell::Load( SfxMedium& rMedium )
             {
                 if( ReadXML )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
+                    ReadXML->SetOrganizerMode( sal_True );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    ReadXML->SetOrganizerMode( sal_False );
                 }
             }
             break;
@@ -716,10 +703,10 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
                 mxBasePool = new SwDocStyleSheetPool( *pDoc, SFX_CREATE_MODE_ORGANIZER == GetCreateMode() );
                 if( ReadXML )
                 {
-                    ReadXML->SetOrganizerMode( TRUE );
+                    ReadXML->SetOrganizerMode( sal_True );
                     SwReader aRdr( rMedium, aEmptyStr, pDoc );
                     nErr = aRdr.Read( *ReadXML );
-                    ReadXML->SetOrganizerMode( FALSE );
+                    ReadXML->SetOrganizerMode( sal_False );
                 }
             }
         }
@@ -736,7 +723,7 @@ sal_Bool  SwDocShell::LoadFrom( SfxMedium& rMedium )
             if( !pFltr || !pFltr->GetUserData().EqualsAscii( FILTER_SWG ))
                 break;
 
-            SfxMedium aMed( rNm, STREAM_STD_READ, FALSE );
+            SfxMedium aMed( rNm, STREAM_STD_READ, sal_False );
             if( 0 == ( nErr = aMed.GetInStream()->GetError() ) )
             {
                 SwWait aWait( *this, sal_True );
@@ -799,12 +786,12 @@ void SwDocShell::SubInitNew()
     {
         SvxHyphenZoneItem aHyp( (SvxHyphenZoneItem&) pDoc->GetDefault(
                                                         RES_PARATR_HYPHENZONE) );
-        aHyp.GetMinLead()   = static_cast< BYTE >(aLinguOpt.nHyphMinLeading);
-        aHyp.GetMinTrail()  = static_cast< BYTE >(aLinguOpt.nHyphMinTrailing);
+        aHyp.GetMinLead()   = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinLeading);
+        aHyp.GetMinTrail()  = static_cast< sal_uInt8 >(aLinguOpt.nHyphMinTrailing);
 
         aDfltSet.Put( aHyp );
 
-        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(FALSE)->GetDefTab());
+        sal_uInt16 nNewPos = static_cast< sal_uInt16 >(SW_MOD()->GetUsrPref(sal_False)->GetDefTab());
         if( nNewPos )
             aDfltSet.Put( SvxTabStopItem( 1, nNewPos,
                                           SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP ) );
@@ -816,7 +803,7 @@ void SwDocShell::SubInitNew()
     //default page mode for text grid
     if(!bWeb)
     {
-        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(FALSE)->IsSquaredPageMode();
+        sal_Bool bSquaredPageMode = SW_MOD()->GetUsrPref(sal_False)->IsSquaredPageMode();
         pDoc->SetDefaultPageMode( bSquaredPageMode );
     }
 

@@ -143,7 +143,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
-    bCopyAttributes( FALSE ),
+    bCopyAttributes( sal_False ),
     bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
     //#i61007# order of captions
@@ -188,7 +188,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     {
         nPoolId = RES_POOLCOLL_LABEL_ABB;
         pString = ::GetOldGrfCat();
-        bCopyAttributes = TRUE;
+        bCopyAttributes = sal_True;
         sObjectName = rSh.GetFlyName();
         //if not OLE
         if(!xNameAccess.is())
@@ -382,6 +382,7 @@ IMPL_LINK(SwCaptionDialog, CaptionHdl, PushButton*, EMPTYARG)
 void SwCaptionDialog::DrawSample()
 {
     String aStr;
+    String sCaption = aTextEdit.GetText();
 
     // Nummer
     String sFldTypeName = aCategoryBox.GetText();
@@ -436,9 +437,12 @@ void SwCaptionDialog::DrawSample()
             }
 
         }
-        aStr += aSepEdit.GetText();
+        if( sCaption.Len() > 0 )
+    {
+            aStr += aSepEdit.GetText();
+        }
     }
-    aStr += aTextEdit.GetText();
+    aStr += sCaption;
     // do preview!
     aPrevWin.SetPreviewText( aStr );
 }
@@ -524,7 +528,7 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aLbLevel.SelectEntryPos( nLvl < MAXLEVEL ? nLvl + 1 : 0 );
     aEdDelim.SetText( sDelim );
 
-    ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), TRUE, TRUE );
+    ::FillCharStyleListBox( aLbCharStyle, rView.GetDocShell(), sal_True, sal_True );
     aLbCharStyle.SelectEntryPos( 0 );
 }
 
@@ -590,7 +594,7 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvent = rNEvt.GetKeyEvent();
         const KeyCode&  rKeyCode = pEvent->GetKeyCode();
-        USHORT nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
+        sal_uInt16 nTmpCode = rKeyCode.GetFullCode() & ~KEY_ALLMODTYPE;
 
         if(nTmpCode != KEY_BACKSPACE && nTmpCode != KEY_RETURN
                 && nTmpCode != KEY_TAB && nTmpCode != KEY_ESCAPE)

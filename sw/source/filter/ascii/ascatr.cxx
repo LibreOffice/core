@@ -67,7 +67,7 @@ public:
     void NextPos()      { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     xub_StrLen WhereNext() const        { return nAktSwPos; }
-    BOOL OutAttr( xub_StrLen nSwPos );
+    sal_Bool OutAttr( xub_StrLen nSwPos );
 };
 
 
@@ -88,7 +88,7 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 // kann noch optimiert werden, wenn ausgenutzt wird, dass die TxtAttrs
 // nach der Anfangsposition geordnet sind. Dann muessten
 // allerdings noch 2 Indices gemerkt werden
-        for ( USHORT i = 0; i < pTxtAttrs->Count(); i++ )
+        for ( sal_uInt16 i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if (pHt->HasDummyChar())
@@ -107,19 +107,19 @@ xub_StrLen SwASC_AttrIter::SearchNext( xub_StrLen nStartPos )
 }
 
 
-BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
+sal_Bool SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     const SwpHints* pTxtAttrs = rNd.GetpSwpHints();
     if( pTxtAttrs )
     {
-        USHORT i;
+        sal_uInt16 i;
         for( i = 0; i < pTxtAttrs->Count(); i++ )
         {
             const SwTxtAttr* pHt = (*pTxtAttrs)[i];
             if ( pHt->HasDummyChar() && nSwPos == *pHt->GetStart() )
             {
-                bRet = TRUE;
+                bRet = sal_True;
                 String sOut;
                 switch( pHt->Which() )
                 {
@@ -163,7 +163,7 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
 
     xub_StrLen nStrPos = rWrt.pCurPam->GetPoint()->nContent.GetIndex();
     xub_StrLen nNodeEnde = rNd.Len(), nEnde = nNodeEnde;
-    BOOL bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
+    sal_Bool bLastNd =  rWrt.pCurPam->GetPoint()->nNode == rWrt.pCurPam->GetMark()->nNode;
     if( bLastNd )
         nEnde = rWrt.pCurPam->GetMark()->nContent.GetIndex();
 
@@ -205,8 +205,8 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     } while( nStrPos < nEnde );
 
     if( !bLastNd ||
-        ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
-            && !nStrPos && nEnde == nNodeEnde )
+        ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
+            && !nStrPos && nEnde == nNodeEnde ) )
         rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;

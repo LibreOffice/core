@@ -52,15 +52,15 @@ class SwNodeIndex;
 
 struct SwPamRange
 {
-    ULONG nStart, nEnd;
+    sal_uLong nStart, nEnd;
 
     SwPamRange() : nStart( 0 ), nEnd( 0 )   {}
-    SwPamRange( ULONG nS, ULONG nE ) : nStart( nS ), nEnd( nE ) {}
+    SwPamRange( sal_uLong nS, sal_uLong nE ) : nStart( nS ), nEnd( nE ) {}
 
-    BOOL operator==( const SwPamRange& rRg )
-        { return nStart == rRg.nStart ? TRUE : FALSE; }
-    BOOL operator<( const SwPamRange& rRg )
-        { return nStart < rRg.nStart ? TRUE : FALSE; }
+    sal_Bool operator==( const SwPamRange& rRg )
+        { return nStart == rRg.nStart ? sal_True : sal_False; }
+    sal_Bool operator<( const SwPamRange& rRg )
+        { return nStart < rRg.nStart ? sal_True : sal_False; }
 };
 
 SV_DECL_VARARR_SORT( _SwPamRanges, SwPamRange, 0, 1 )
@@ -71,11 +71,11 @@ public:
     SwPamRanges( const SwPaM& rRing );
 
     void Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 );
-    SwPaM& SetPam( USHORT nArrPos, SwPaM& rPam );
+    SwPaM& SetPam( sal_uInt16 nArrPos, SwPaM& rPam );
 
-    USHORT Count() const
+    sal_uInt16 Count() const
                 {   return _SwPamRanges::Count(); }
-    SwPamRange operator[]( USHORT nPos ) const
+    SwPamRange operator[]( sal_uInt16 nPos ) const
                 { return _SwPamRanges::operator[](nPos); }
 };
 

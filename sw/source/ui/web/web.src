@@ -25,15 +25,10 @@
  *
  ************************************************************************/
 
-#ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
-#endif
 #include "globals.hrc"
 #include "cmdid.h"
 #include "web.hrc"
-#include "swmn.hrc"
-#define ACC_SW_WEB
-#include "toolbox.hrc"
 #include "helpid.h"
 #include "cfgid.h"
 
@@ -84,10 +79,5 @@ String RID_WEBOLE_TOOLBOX
 {
     Text [ en-US ] = "Object/Web" ;
 };
-/*************************************************************************
 
-*************************************************************************/
-Menu MN_WEB_TEXT_POPUPMENU
-    BASE_TEXT_POPUPMENU_BEGIN
-    BASE_TEXT_POPUPMENU_END
 

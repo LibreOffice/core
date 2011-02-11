@@ -160,7 +160,7 @@ SwView* SwModule::GetNextView(SwView* pView)
 {
     DBG_ASSERT(PTR_CAST(SwView, pView),"keine SwView uebergeben");
     const TypeId aTypeId = TYPE(SwView);
-    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
+    SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, sal_True);
     return pNView;
 }
 
@@ -241,7 +241,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 /* -----------------------------28.09.00 12:36--------------------------------
 
  ---------------------------------------------------------------------------*/
-void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
+void SwModule::ApplyUserMetric( FieldUnit eMetric, sal_Bool bWeb )
 {
         SwMasterUsrPref* pPref;
         if(bWeb)
@@ -279,7 +279,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, BOOL bWeb )
 /*-- 12.11.2008 14:47:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwModule::ApplyRulerMetric( FieldUnit eMetric, BOOL bHorizontal, BOOL bWeb )
+void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, sal_Bool bWeb )
 {
     SwMasterUsrPref* pPref;
     if(bWeb)
@@ -334,11 +334,11 @@ SwPrintOptions*     SwModule::GetPrtOptions(sal_Bool bWeb)
 {
     if(bWeb && !pWebPrtOpt)
     {
-        pWebPrtOpt = new SwPrintOptions(TRUE);
+        pWebPrtOpt = new SwPrintOptions(sal_True);
     }
     else if(!bWeb && !pPrtOpt)
     {
-        pPrtOpt = new SwPrintOptions(FALSE);
+        pPrtOpt = new SwPrintOptions(sal_False);
     }
 
     return bWeb ? pWebPrtOpt : pPrtOpt;
@@ -358,7 +358,7 @@ SwChapterNumRules*  SwModule::GetChapterNumRules()
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, BOOL /*bOnlyIfAvailable*/)
+void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyIfAvailable*/)
 {
     Reference<XFrame> xFrame = rView.GetViewFrame()->GetFrame().GetFrameInterface();
     Reference<XDispatchProvider> xDP(xFrame, uno::UNO_QUERY);

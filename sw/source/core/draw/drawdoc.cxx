@@ -68,11 +68,11 @@ const String GetPalettePath()
 
 SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     FmFormModel( ::GetPalettePath(), &pD->GetAttrPool(),
-                 pD->GetDocShell(), TRUE ),
+                 pD->GetDocShell(), sal_True ),
     pDoc( pD )
 {
     SetScaleUnit( MAP_TWIP );
-    SetSwapGraphics( TRUE );
+    SetSwapGraphics( sal_True );
 
     SwDocShell* pDocSh = pDoc->GetDocShell();
     if ( pDocSh )
@@ -102,7 +102,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     SfxItemPool* pSdrPool = pD->GetAttrPool().GetSecondaryPool();
     if( pSdrPool )
     {
-        const USHORT aWhichRanges[] =
+        const sal_uInt16 aWhichRanges[] =
             {
                 RES_CHRATR_BEGIN, RES_CHRATR_END,
                 RES_PARATR_BEGIN, RES_PARATR_END,
@@ -110,11 +110,11 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
             };
 
         SfxItemPool& rDocPool = pD->GetAttrPool();
-        USHORT nEdtWhich, nSlotId;
+        sal_uInt16 nEdtWhich, nSlotId;
         const SfxPoolItem* pItem;
-        for( const USHORT* pRangeArr = aWhichRanges;
+        for( const sal_uInt16* pRangeArr = aWhichRanges;
             *pRangeArr; pRangeArr += 2 )
-            for( USHORT nW = *pRangeArr, nEnd = *(pRangeArr+1);
+            for( sal_uInt16 nW = *pRangeArr, nEnd = *(pRangeArr+1);
                     nW < nEnd; ++nW )
                 if( 0 != (pItem = rDocPool.GetPoolDefaultItem( nW )) &&
                     0 != (nSlotId = rDocPool.GetSlotId( nW ) ) &&
@@ -131,7 +131,7 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
 
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
     // #87795# Implementation for asian compression
-    SetCharCompressType( static_cast<UINT16>(pD->getCharacterCompressionType() ));
+    SetCharCompressType( static_cast<sal_uInt16>(pD->getCharacterCompressionType() ));
 }
 
 /*************************************************************************
@@ -196,7 +196,7 @@ SvStream* SwDrawDocument::GetDocumentStream( SdrDocumentStreamInfo& rInfo ) cons
                     pRet = utl::UcbStreamHelper::CreateStream( xStream );
                     if( pRet )
                     {
-                        rInfo.mbDeleteAfterUse = TRUE;
+                        rInfo.mbDeleteAfterUse = sal_True;
                         rInfo.mxStorageRef = xPictureStorage;
                     }
                 }

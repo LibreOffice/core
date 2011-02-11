@@ -54,6 +54,8 @@
 #include <mdiexp.hxx>           // ...Percent()
 #include <poolfmt.hxx>
 
+#include "vcl/metric.hxx"
+
 #define ASC_BUFFLEN 4096
 
 class SwASCIIParser
@@ -65,10 +67,10 @@ class SwASCIIParser
     const SwAsciiOptions& rOpt;
     SfxItemSet* pItemSet;
     long nFileSize;
-    USHORT nScript;
+    sal_uInt16 nScript;
     bool bNewDoc;
 
-    ULONG ReadChars();
+    sal_uLong ReadChars();
     void InsertText( const String& rStr );
 
 public:
@@ -76,12 +78,12 @@ public:
                             int bReadNewDoc, const SwAsciiOptions& rOpts );
     ~SwASCIIParser();
 
-    ULONG CallParser();
+    sal_uLong CallParser();
 };
 
 
 // Aufruf fuer die allg. Reader-Schnittstelle
-ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String & )
+sal_uLong AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String & )
 {
     if( !pStrm )
     {
@@ -97,7 +99,7 @@ ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String &
 
     SwASCIIParser* pParser = new SwASCIIParser( &rDoc, rPam, *pStrm,
                                         !bInsertMode, aOpt.GetASCIIOpts() );
-    ULONG nRet = pParser->CallParser();
+    sal_uLong nRet = pParser->CallParser();
 
     delete pParser;
     // after Read reset the options
@@ -129,24 +131,14 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     }
     if( rOpt.GetFontName().Len() )
     {
-        bool bDelete = false;
-        const SfxFont* pFnt = 0;
+        Font aTextFont( rOpt.GetFontName(), Size( 0, 10 ) );
         if( pDoc->getPrinter( false ) )
-            pFnt = pDoc->getPrinter( false )->GetFontByName( rOpt.GetFontName() );
-
-        if( !pFnt )
-        {
-            pFnt = new SfxFont( FAMILY_DONTKNOW, rOpt.GetFontName() );
-            bDelete = true;
-        }
-        SvxFontItem aFont( pFnt->GetFamily(), pFnt->GetName(),
-                        aEmptyStr, pFnt->GetPitch(), pFnt->GetCharSet(), RES_CHRATR_FONT );
+            aTextFont = pDoc->getPrinter( false )->GetFontMetric( aTextFont );
+        SvxFontItem aFont( aTextFont.GetFamily(), aTextFont.GetName(),
+                           aEmptyStr, aTextFont.GetPitch(), aTextFont.GetCharSet(), RES_CHRATR_FONT );
         pItemSet->Put( aFont );
         pItemSet->Put( aFont, RES_CHRATR_CJK_FONT );
         pItemSet->Put( aFont, RES_CHRATR_CTL_FONT );
-
-        if( bDelete )
-            delete (SfxFont*)pFnt;
     }
 }
 
@@ -159,7 +151,7 @@ SwASCIIParser::~SwASCIIParser()
 
 
 // Aufruf des Parsers
-ULONG SwASCIIParser::CallParser()
+sal_uLong SwASCIIParser::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_END);
     rInput.ResetError();
@@ -190,7 +182,7 @@ ULONG SwASCIIParser::CallParser()
             pDoc->SetTxtFmtColl(*pPam, pColl);
     }
 
-    ULONG nError = ReadChars();
+    sal_uLong nError = ReadChars();
 
     if( pItemSet )
     {
@@ -271,7 +263,7 @@ ULONG SwASCIIParser::CallParser()
     return nError;
 }
 
-ULONG SwASCIIParser::ReadChars()
+sal_uLong SwASCIIParser::ReadChars()
 {
     sal_Unicode *pStt = 0, *pEnd = 0, *pLastStt = 0;
     long nReadCnt = 0, nLineLen = 0;
@@ -286,7 +278,7 @@ ULONG SwASCIIParser::ReadChars()
         aEmpty.GetLanguage() == rOpt.GetLanguage() &&
         aEmpty.GetParaFlags() == rOpt.GetParaFlags())
     {
-        ULONG nLen, nOrig;
+        sal_uLong nLen, nOrig;
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
         CharSet eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
@@ -323,7 +315,7 @@ ULONG SwASCIIParser::ReadChars()
     }
 
     String sWork;
-    ULONG nArrOffset = 0;
+    sal_uLong nArrOffset = 0;
 
     do {
         if( pStt >= pEnd )
@@ -332,7 +324,7 @@ ULONG SwASCIIParser::ReadChars()
                 InsertText( String( pLastStt ));
 
             // lese einen neuen Block ein
-            ULONG lGCount;
+            sal_uLong lGCount;
             if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
                         rInput.Read( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
@@ -378,7 +370,7 @@ ULONG SwASCIIParser::ReadChars()
                 if( bSwapUnicode )
                 {
                     sal_Char* pF = pArr, *pN = pArr + 1;
-                    for( ULONG n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
+                    for( sal_uLong n = 0; n < lGCount; n += 2, pF += 2, pN += 2 )
                     {
                         sal_Char c = *pF;
                         *pF = *pN;

@@ -30,7 +30,7 @@
 
 #include "smdetect.hxx"
 
-#include <framework/interaction.hxx>
+//#include <framework/interaction.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
@@ -181,7 +181,7 @@ SmFilterDetect::~SmFilterDetect()
     SfxApplication* pApp = SFX_APP();
     SfxAllItemSet *pSet = new SfxAllItemSet( pApp->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
-    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, FALSE );
+    SFX_ITEMSET_ARG( pSet, pItem, SfxBoolItem, SID_DOC_READONLY, sal_False );
 
     bWasReadOnly = pItem && pItem->GetValue();
 
@@ -202,10 +202,10 @@ SmFilterDetect::~SmFilterDetect()
     else
     {
         // ctor of SfxMedium uses owner transition of ItemSet
-        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( TRUE );
+        SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, sal_False, NULL, pSet );
+        aMedium.UseInteractionHandler( sal_True );
 
-        BOOL bIsStorage = aMedium.IsStorage();
+        sal_Bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -254,7 +254,7 @@ SmFilterDetect::~SmFilterDetect()
                         String aTmpFilterName;
                         if ( pFilter )
                             aTmpFilterName = pFilter->GetName();
-                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : FALSE, &aTmpFilterName );
+                        aTypeName = SfxFilter::GetTypeFromStorage( xStorage, pFilter ? pFilter->IsAllowedAsTemplate() : sal_False, &aTmpFilterName );
                     }
                     catch( lang::WrappedTargetException& aWrap )
                     {
@@ -274,20 +274,16 @@ SmFilterDetect::~SmFilterDetect()
                                 if ( !bRepairPackage )
                                 {
                                     // ask the user whether he wants to try to repair
-                                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-
-                                    xInteraction->handle( xRequest );
-
-                                    bRepairAllowed = pRequest->isApproved();
+                                    RequestPackageReparation aRequest( aDocumentTitle );
+                                    xInteraction->handle( aRequest.GetRequest() );
+                                    bRepairAllowed = aRequest.isApproved();
                                 }
 
                                 if ( !bRepairAllowed )
                                 {
                                     // repair either not allowed or not successful
-                                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
-                                    uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                       xInteraction->handle( xRequest );
+                                    NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                    xInteraction->handle( aNotifyRequest.GetRequest() );
                                 }
                             }
 
@@ -322,7 +318,7 @@ SmFilterDetect::~SmFilterDetect()
                 aTypeName.Erase();
                 if (pStrm && !pStrm->GetError())
                 {
-                    SotStorageRef aStorage = new SotStorage ( pStrm, FALSE );
+                    SotStorageRef aStorage = new SotStorage ( pStrm, sal_False );
                     if ( !aStorage->GetError() )
                     {
                         if ( aStorage->IsStream( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "Equation Native" ) ) ) )
@@ -334,11 +330,11 @@ SmFilterDetect::~SmFilterDetect()
                     }
                     else
                     {
-                        const USHORT nSize = 5;
+                        const sal_uInt16 nSize = 5;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        ULONG nBytesRead = pStrm->Read( aBuffer, nSize );
+                        sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
                         if (nBytesRead == nSize)
                         {
                             if (0 == strncmp( "<?xml",aBuffer,nSize))

@@ -233,7 +233,7 @@ public:
 
     sal_Bool                        IsModified()const;
 
-    virtual String GetCellText( long nRow, USHORT nColumn ) const;
+    virtual String GetCellText( long nRow, sal_uInt16 nColumn ) const;
 };
 
 class SwAutoMarkDlg_Impl : public ModalDialog
@@ -536,7 +536,7 @@ SwTOXDescription* SwMultiTOXTabDialog::CreateTOXDescFromTOXBase(
         pDesc->SetIndexOptions(pCurTOX->GetOptions());
     pDesc->SetMainEntryCharStyle(pCurTOX->GetMainEntryCharStyle());
     if(pDesc->GetTOXType() != TOX_INDEX)
-        pDesc->SetLevel((BYTE)pCurTOX->GetLevel());
+        pDesc->SetLevel((sal_uInt8)pCurTOX->GetLevel());
     pDesc->SetCreateFromObjectNames(pCurTOX->IsFromObjectNames());
     pDesc->SetSequenceName(pCurTOX->GetSequenceName());
     pDesc->SetCaptionDisplay(pCurTOX->GetCaptionDisplay());
@@ -571,7 +571,7 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 
             SvtPathOptions aOpt;
             // 6.0 (extension .sxw)
-            BOOL bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
+            sal_Bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
 #ifndef MAC_WITHOUT_EXT
             if( !bExist )
@@ -674,7 +674,7 @@ long  SwIndexTreeLB::GetTabPos( SvLBoxEntry* pEntry, SvLBoxTab* pTab)
     long nData = (long)pEntry->GetUserData();
     if(nData != USHRT_MAX)
     {
-        long  nPos = pHeaderBar->GetItemRect( static_cast< USHORT >(101 + nData) ).TopLeft().X();
+        long  nPos = pHeaderBar->GetItemRect( static_cast< sal_uInt16 >(101 + nData) ).TopLeft().X();
         nData = nPos;
     }
     else
@@ -1022,7 +1022,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     pIndexEntryWrapper = new IndexEntrySupplierWrapper();
 
     aLanguageLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN,
-                                 FALSE, FALSE, FALSE );
+                                 sal_False, sal_False, sal_False );
 
     sAddStyleContent = aAddStylesCB.GetText();
 
@@ -1246,7 +1246,7 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
         aFromObjectNamesRB.Check(rDesc.IsCreateFromObjectNames());
         aFromCaptionsRB.Check(!rDesc.IsCreateFromObjectNames());
         aCaptionSequenceLB.SelectEntry(rDesc.GetSequenceName());
-        aDisplayTypeLB.SelectEntryPos( static_cast< USHORT >(rDesc.GetCaptionDisplay()) );
+        aDisplayTypeLB.SelectEntryPos( static_cast< sal_uInt16 >(rDesc.GetCaptionDisplay()) );
         RadioButtonHdl(&aFromCaptionsRB);
 
     }
@@ -1277,11 +1277,11 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     LanguageHdl(0);
     for( long nCnt = 0; nCnt < aSortAlgorithmLB.GetEntryCount(); ++nCnt )
     {
-        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (USHORT)nCnt );
+        const String* pEntryData = (const String*)aSortAlgorithmLB.GetEntryData( (sal_uInt16)nCnt );
         DBG_ASSERT(pEntryData, "no entry data available");
         if( pEntryData && *pEntryData == rDesc.GetSortAlgorithm())
         {
-            aSortAlgorithmLB.SelectEntryPos( (USHORT)nCnt );
+            aSortAlgorithmLB.SelectEntryPos( (sal_uInt16)nCnt );
             break;
         }
     }
@@ -1360,7 +1360,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
                     nOLEData |= nData;
                 }
             }
-            rDesc.SetOLEOptions((USHORT)nOLEData);
+            rDesc.SetOLEOptions((sal_uInt16)nOLEData);
         }
         break;
         case TOX_AUTHORITIES:
@@ -1385,7 +1385,7 @@ void SwTOXSelectTabPage::FillTOXDescription()
 
     rDesc.SetContentOptions(nContentOptions);
     rDesc.SetIndexOptions(nIndexOptions);
-    rDesc.SetLevel( static_cast< BYTE >(aLevelNF.GetValue()) );
+    rDesc.SetLevel( static_cast< sal_uInt8 >(aLevelNF.GetValue()) );
 
     rDesc.SetReadonly(aReadOnlyCB.IsChecked());
 
@@ -1655,16 +1655,16 @@ IMPL_LINK(SwTOXSelectTabPage, LanguageHdl, ListBox*, pBox)
     if( 0 != (pUserData = aSortAlgorithmLB.GetEntryData( aSortAlgorithmLB.GetSelectEntryPos())) )
         sOldString = *(String*)pUserData;
     void* pDel;
-    USHORT nEnd = aSortAlgorithmLB.GetEntryCount();
-    for( USHORT n = 0; n < nEnd; ++n )
+    sal_uInt16 nEnd = aSortAlgorithmLB.GetEntryCount();
+    for( sal_uInt16 n = 0; n < nEnd; ++n )
         if( 0 != ( pDel = aSortAlgorithmLB.GetEntryData( n )) )
             delete (String*)pDel;
     aSortAlgorithmLB.Clear();
 
-    USHORT nInsPos;
+    sal_uInt16 nInsPos;
     String sAlg, sUINm;
-    nEnd = static_cast< USHORT >(aSeq.getLength());
-    for( USHORT nCnt = 0; nCnt < nEnd; ++nCnt )
+    nEnd = static_cast< sal_uInt16 >(aSeq.getLength());
+    for( sal_uInt16 nCnt = 0; nCnt < nEnd; ++nCnt )
     {
         sUINm = pIndexRes->GetTranslation( sAlg = aSeq[ nCnt ] );
         nInsPos = aSortAlgorithmLB.InsertEntry( sUINm );
@@ -1838,8 +1838,8 @@ void    SwTOXEdit::KeyInput( const KeyEvent& rKEvt )
 {
     const Selection& rSel = GetSelection();
     sal_uInt16 nTextLen = GetText().Len();
-    if(rSel.A() == rSel.B() &&
-        !rSel.A() || rSel.A() == nTextLen )
+    if( (rSel.A() == rSel.B() &&
+         !rSel.A() ) || rSel.A() == nTextLen )
     {
         sal_Bool bCall = sal_False;
         KeyCode aCode = rKEvt.GetKeyCode();
@@ -2019,7 +2019,7 @@ void    SwIdxTreeListBox::RequestHelp( const HelpEvent& rHEvt )
         SvLBoxEntry* pEntry = GetEntry( aPos );
         if( pEntry )
         {
-            USHORT nLevel = static_cast< USHORT >(GetModel()->GetAbsPos(pEntry));
+            sal_uInt16 nLevel = static_cast< sal_uInt16 >(GetModel()->GetAbsPos(pEntry));
             String sEntry = pParent->GetLevelHelp(++nLevel);
             if('*' == sEntry)
                 sEntry = GetEntryText(pEntry);
@@ -2178,7 +2178,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aCommaSeparatedCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
     aRelToStyleCB.SetClickHdl(LINK(this, SwTOXEntryTabPage, ModifyHdl));
 
-    FieldUnit aMetric = ::GetDfltMetric(FALSE);
+    FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(aTabPosMF, aMetric);
 
     aSortDocPosRB.Check();
@@ -2208,7 +2208,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
                                aEntryOutlineLevelFT.GetPosPixel().X();
 
     //fill the types in
-    USHORT i;
+    sal_uInt16 i;
     for( i = 0; i < AUTH_FIELD_END; i++)
     {
         String sTmp(SW_RES(STR_AUTH_FIELD_START + i));
@@ -2326,9 +2326,9 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     m_pCurrentForm = pTOXDlg->GetForm(aCurType);
     if( !( aLastTOXType == aCurType ))
     {
-        BOOL bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
-        BOOL bToxIsIndex =       TOX_INDEX == aCurType.eType;
-        BOOL bToxIsContent =     TOX_CONTENT == aCurType.eType;
+        sal_Bool bToxIsAuthorities = TOX_AUTHORITIES == aCurType.eType;
+        sal_Bool bToxIsIndex =       TOX_INDEX == aCurType.eType;
+        sal_Bool bToxIsContent =     TOX_CONTENT == aCurType.eType;
 
         aLevelLB.Clear();
         for(sal_uInt16 i = 1; i < m_pCurrentForm->GetFormMax(); i++)
@@ -2636,7 +2636,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     String sText;
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     String sCharStyle;
-    USHORT  nChapterFormat = CF_NUMBER; // i89791
+    sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
     if(pBtn == &aEntryNoPB)
     {
         sText.AssignAscii(SwForm::aFormEntryNum);
@@ -2962,7 +2962,7 @@ IMPL_LINK(SwTOXEntryTabPage, ChapterInfoHdl, ListBox*, pBox)
 
 IMPL_LINK(SwTOXEntryTabPage, ChapterInfoOutlineHdl, NumericField*, pField)
 {
-    const sal_uInt16 nLevel = static_cast<BYTE>(pField->GetValue());
+    const sal_uInt16 nLevel = static_cast<sal_uInt8>(pField->GetValue());
 
     Control* pCtrl = aTokenWIN.GetActiveControl();
     DBG_ASSERT(pCtrl, "no active control?");
@@ -3056,7 +3056,7 @@ IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 void SwTOXEntryTabPage::SetWrtShell(SwWrtShell& rSh)
 {
     SwDocShell* pDocSh = rSh.GetView().GetDocShell();
-    ::FillCharStyleListBox(aCharStyleLB, pDocSh, TRUE, TRUE);
+    ::FillCharStyleListBox(aCharStyleLB, pDocSh, sal_True, sal_True);
     const String sDefault(SW_RES(STR_POOLCOLL_STANDARD));
     for(sal_uInt16 i = 0; i < aCharStyleLB.GetEntryCount(); i++)
     {
@@ -3141,7 +3141,7 @@ SwTokenWindow::~SwTokenWindow()
         pControl->SetLoseFocusHdl( Link() );
     }
 
-    for( ULONG i = aControlList.Count(); i; )
+    for( sal_uLong i = aControlList.Count(); i; )
     {
         Control* pControl = aControlList.Remove( --i );
         delete pControl;
@@ -3157,7 +3157,7 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     if(pForm)
     {
         //apply current level settings to the form
-        for( ULONG i = aControlList.Count(); i; )
+        for( sal_uLong i = aControlList.Count(); i; )
         {
             Control* pControl = aControlList.Remove( --i );
             delete pControl;
@@ -3437,9 +3437,9 @@ void    SwTokenWindow::InsertAtSelection(
          Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
         aSel.Justify();
         String sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
-        String sLeft = sEditText.Copy( 0, static_cast< USHORT >(aSel.A()) );
-        String sRight = sEditText.Copy( static_cast< USHORT >(aSel.B()),
-                                        static_cast< USHORT >(sEditText.Len() - aSel.B()));
+        String sLeft = sEditText.Copy( 0, static_cast< sal_uInt16 >(aSel.A()) );
+        String sRight = sEditText.Copy( static_cast< sal_uInt16 >(aSel.B()),
+                                        static_cast< sal_uInt16 >(sEditText.Len() - aSel.B()));
 
         ((SwTOXEdit*)pActiveCtrl)->SetText(sLeft);
         ((SwTOXEdit*)pActiveCtrl)->AdjustSize();
@@ -3646,7 +3646,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         else
         {
             //find the first completely visible control (left edge visible)
-            for(ULONG i = aControlList.Count(); i; i-- )
+            for(sal_uLong i = aControlList.Count(); i; i-- )
             {
                 Control* pCtrl = aControlList.GetObject(i - 1);
                 long nCtrlWidth = pCtrl->GetSizePixel().Width();
@@ -3732,11 +3732,11 @@ sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
     return bRet;
 }
 //---------------------------------------------------
-BOOL SwTokenWindow::CreateQuickHelp(Control* pCtrl,
+sal_Bool SwTokenWindow::CreateQuickHelp(Control* pCtrl,
             const SwFormToken& rToken,
             const HelpEvent& rHEvt)
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
     if( rHEvt.GetMode() & HELPMODE_QUICK )
     {
         sal_Bool bBalloon = Help::IsBalloonHelpEnabled();
@@ -3775,7 +3775,7 @@ BOOL SwTokenWindow::CreateQuickHelp(Control* pCtrl,
         else
             Help::ShowQuickHelp( this, aItemRect, sEntry,
                 QUICKHELP_LEFT|QUICKHELP_VCENTER );
-        bRet = TRUE;
+        bRet = sal_True;
     }
     return bRet;
 }
@@ -3816,8 +3816,8 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pEdit);
-    if(nPos && !pEdit->IsNextControl() ||
-        nPos < aControlList.Count() - 1 && pEdit->IsNextControl())
+    if( (nPos && !pEdit->IsNextControl()) ||
+        (nPos < aControlList.Count() - 1 && pEdit->IsNextControl()))
     {
         aControlList.Seek(nPos);
         Control* pNextPrev = pEdit->IsNextControl() ? aControlList.Next() : aControlList.Prev();
@@ -3852,8 +3852,8 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
     sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pBtn);
-    if(nPos && !pBtn->IsNextControl() ||
-        nPos < aControlList.Count() - 1 && pBtn->IsNextControl())
+    if( (nPos && !pBtn->IsNextControl()) ||
+        (nPos < aControlList.Count() - 1 && pBtn->IsNextControl()))
     {
         aControlList.Seek(nPos);
         sal_Bool bNext = pBtn->IsNextControl();
@@ -4229,17 +4229,17 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, const ResId& rId,
 sal_Bool    SwEntryBrowseBox::SeekRow( long nRow )
 {
     nCurrentRow = nRow;
-    return TRUE;
+    return sal_True;
 }
 /* -----------------------------19.01.00 15:32--------------------------------
 
  ---------------------------------------------------------------------------*/
-String SwEntryBrowseBox::GetCellText(long nRow, USHORT nColumn) const
+String SwEntryBrowseBox::GetCellText(long nRow, sal_uInt16 nColumn) const
 {
     const String* pRet = &aEmptyStr;
     if(aEntryArr.Count() > nRow)
     {
-        AutoMarkEntry* pEntry = aEntryArr[ static_cast< USHORT >(nRow) ];
+        AutoMarkEntry* pEntry = aEntryArr[ static_cast< sal_uInt16 >(nRow) ];
         switch(nColumn)
         {
             case  ITEM_SEARCH       :pRet = &pEntry->sSearch; break;
@@ -4277,7 +4277,7 @@ void    SwEntryBrowseBox::PaintCell(OutputDevice& rDev,
 sal_Bool SwEntryBrowseBox::SaveModified()
 {
     SetModified();
-    USHORT nRow = static_cast< USHORT >(GetCurRow());
+    sal_uInt16 nRow = static_cast< sal_uInt16 >(GetCurRow());
     sal_uInt16 nCol = GetCurColumnId();
 
     String sNew;
@@ -4364,7 +4364,7 @@ void    SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
                 if( !pToInsert )
                     pToInsert = new AutoMarkEntry;
 
-                USHORT nSttPos = 0;
+                sal_uInt16 nSttPos = 0;
                 pToInsert->sSearch      = sLine.GetToken(0, ';', nSttPos );
                 pToInsert->sAlternative = sLine.GetToken(0, ';', nSttPos );
                 pToInsert->sPrimKey     = sLine.GetToken(0, ';', nSttPos );
@@ -4480,7 +4480,7 @@ SwAutoMarkDlg_Impl::SwAutoMarkDlg_Impl(Window* pParent, const String& rAutoMarkU
         aEntriesBB.RowInserted(0, 1, sal_True);
     else
     {
-        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ, FALSE );
+        SfxMedium aMed( sAutoMarkURL, STREAM_STD_READ, sal_False );
         if( aMed.GetInStream() && !aMed.GetInStream()->GetError() )
             aEntriesBB.ReadEntries( *aMed.GetInStream() );
         else
@@ -4507,7 +4507,7 @@ IMPL_LINK(SwAutoMarkDlg_Impl, OkHdl, OKButton*, EMPTYARG)
         SfxMedium aMed( sAutoMarkURL,
                         bCreateMode ? STREAM_WRITE
                                     : STREAM_WRITE| STREAM_TRUNC,
-                        FALSE );
+                        sal_False );
         SvStream* pStrm = aMed.GetOutStream();
         pStrm->SetStreamCharSet( RTL_TEXTENCODING_MS_1253 );
         if( !pStrm->GetError() )

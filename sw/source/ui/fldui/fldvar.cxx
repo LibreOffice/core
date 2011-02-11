@@ -86,7 +86,7 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aSeparatorFT    (this, SW_RES(FT_VARSEPARATOR)),
     aSeparatorED    (this, SW_RES(ED_VARSEPARATOR)),
     aNewDelTBX      (this, SW_RES(TBX_VARNEWDEL)),
-    bInit           (TRUE)
+    bInit           (sal_True)
 {
     FreeResource();
 
@@ -101,12 +101,12 @@ SwFldVarPage::SwFldVarPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     sOldValueFT = aValueFT.GetText();
     sOldNameFT = aNameFT.GetText();
 
-    for (USHORT i = 1; i <= MAXLEVEL; i++)
+    for (sal_uInt16 i = 1; i <= MAXLEVEL; i++)
         aChapterLevelLB.InsertEntry(String::CreateFromInt32(i));
 
     aChapterLevelLB.SelectEntryPos(0);
     //enable 'active' language selection
-    aNumFormatLB.SetShowLanguageControl(TRUE);
+    aNumFormatLB.SetShowLanguageControl(sal_True);
 }
 
 /*--------------------------------------------------------------------
@@ -127,10 +127,10 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 
     Init(); // Allgemeine initialisierung
 
-    aTypeLB.SetUpdateMode(FALSE);
+    aTypeLB.SetUpdateMode(sal_False);
     aTypeLB.Clear();
 
-    USHORT nPos, nTypeId;
+    sal_uInt16 nPos, nTypeId;
 
     if (!IsFldEdit())
     {
@@ -185,11 +185,11 @@ void SwFldVarPage::Reset(const SfxItemSet& )
         if(!IsRefresh() && sUserData.GetToken(0, ';').EqualsIgnoreCaseAscii(USER_DATA_VERSION_1))
         {
             String sVal = sUserData.GetToken(1, ';');
-            USHORT nVal = (USHORT)sVal.ToInt32();
+            sal_uInt16 nVal = (sal_uInt16)sVal.ToInt32();
             if( USHRT_MAX != nVal )
             {
-                for(USHORT i = 0; i < aTypeLB.GetEntryCount(); i++)
-                    if(nVal == (USHORT)(ULONG)aTypeLB.GetEntryData(i))
+                for(sal_uInt16 i = 0; i < aTypeLB.GetEntryCount(); i++)
+                    if(nVal == (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(i))
                     {
                         aTypeLB.SelectEntryPos(i);
                         break;
@@ -199,7 +199,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     }
     TypeHdl(0);
 
-    aTypeLB.SetUpdateMode(TRUE);
+    aTypeLB.SetUpdateMode(sal_True);
 
     if (IsFldEdit())
     {
@@ -221,7 +221,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
 IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
-    const USHORT nOld = GetTypeSel();
+    const sal_uInt16 nOld = GetTypeSel();
 
     // Aktuelle ListBoxPos
     SetTypeSel(aTypeLB.GetSelectEntryPos());
@@ -234,18 +234,18 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
 
     if (nOld != GetTypeSel() || nOld == LISTBOX_ENTRY_NOTFOUND)
     {
-        bInit = TRUE;
+        bInit = sal_True;
         if (nOld != LISTBOX_ENTRY_NOTFOUND)
         {
             aNameED.SetText(aEmptyStr);
             aValueED.SetText(aEmptyStr);
         }
 
-        aValueED.SetDropEnable(FALSE);
+        aValueED.SetDropEnable(sal_False);
         UpdateSubType();    // Auswahl-Listboxen initialisieren
     }
 
-    bInit = FALSE;
+    bInit = sal_False;
 
     return 0;
 }
@@ -256,11 +256,11 @@ IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
-    USHORT nSelPos = aSelectionLB.GetSelectEntryPos();
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nSelPos = aSelectionLB.GetSelectEntryPos();
 
     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
-        nSelPos = (USHORT)(ULONG)aSelectionLB.GetEntryData(nSelPos);
+        nSelPos = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nSelPos);
 
     if (IsFldEdit() && (!pBox || bInit))
     {
@@ -275,15 +275,15 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     if (aValueFT.GetText() != sOldValueFT)
         aValueFT.SetText(sOldValueFT);
 
-    aNumFormatLB.SetUpdateMode(FALSE);
-    aFormatLB.SetUpdateMode(FALSE);
+    aNumFormatLB.SetUpdateMode(sal_False);
+    aFormatLB.SetUpdateMode(sal_False);
     FillFormatLB(nTypeId);
 
-    USHORT nSize = aFormatLB.GetEntryCount();
+    sal_uInt16 nSize = aFormatLB.GetEntryCount();
 
-    BOOL bValue = FALSE, bName = FALSE, bNumFmt = FALSE,
-            bInvisible = FALSE, bSeparator = FALSE, bChapterLevel = FALSE;
-    BOOL bFormat = nSize != 0;
+    sal_Bool bValue = sal_False, bName = sal_False, bNumFmt = sal_False,
+            bInvisible = sal_False, bSeparator = sal_False, bChapterLevel = sal_False;
+    sal_Bool bFormat = nSize != 0;
 
     switch (nTypeId)
     {
@@ -322,23 +322,23 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     aValueED.SetText(aEmptyStr);
                 }
             }
-            bValue = bName = bNumFmt = bInvisible = TRUE;
+            bValue = bName = bNumFmt = bInvisible = sal_True;
 
-            aValueED.SetDropEnable(TRUE);
+            aValueED.SetDropEnable(sal_True);
             break;
         }
 
         case TYP_SETFLD:
-            bValue = TRUE;
+            bValue = sal_True;
 
-            bNumFmt = bInvisible = TRUE;
+            bNumFmt = bInvisible = sal_True;
 
             if (!IsFldDlgHtmlMode())
-                bName = TRUE;
+                bName = sal_True;
             else
             {
                 aNumFormatLB.Clear();
-                USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
+                sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
                 aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
                 aNumFormatLB.SelectEntryPos(0);
             }
@@ -375,15 +375,15 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 // (statt test2 = test + 1)
                 aValueED.SetText(((SwSetExpField*)GetCurField())->GetFormula());
             }
-            aValueED.SetDropEnable(TRUE);
+            aValueED.SetDropEnable(sal_True);
             break;
 
         case TYP_FORMELFLD:
             {
-                bValue = TRUE;
-                bNumFmt = TRUE;
+                bValue = sal_True;
+                bNumFmt = sal_True;
                 aValueFT.SetText(SW_RESSTR(STR_FORMULA));
-                aValueED.SetDropEnable(TRUE);
+                aValueED.SetDropEnable(sal_True);
             }
             break;
 
@@ -413,14 +413,14 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         if(pSetTyp)
                         {
                             if (pSetTyp->GetType() & nsSwGetSetExpType::GSE_STRING)    // Textuell?
-                                bFormat = TRUE;
+                                bFormat = sal_True;
                             else                    // Numerisch
-                                bNumFmt = TRUE;
+                                bNumFmt = sal_True;
                         }
                     }
                 }
                 else
-                    bFormat = FALSE;
+                    bFormat = sal_False;
 
                 EnableInsert(bFormat|bNumFmt);
             }
@@ -431,7 +431,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
             if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
             {
-                bValue = bNumFmt = TRUE;
+                bValue = bNumFmt = sal_True;
 
                 String sName;
 
@@ -439,8 +439,8 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                 aNameED.SetText( sName );
 
                 // User- oder SetField ?
-                USHORT nInpType = 0;
-                nInpType = static_cast< USHORT >(GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
+                sal_uInt16 nInpType = 0;
+                nInpType = static_cast< sal_uInt16 >(GetFldMgr().GetFldType(RES_USERFLD, sName) ? 0 : TYP_SETINPFLD);
 
                 if (nInpType)   // SETEXPFLD
                 {
@@ -454,7 +454,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         {
                             aNumFormatLB.Clear();
 
-                            USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_USERVAR_TEXT), 0);
+                            sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_USERVAR_TEXT), 0);
                             aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
                             aNumFormatLB.SelectEntryPos(0);
                         }
@@ -463,7 +463,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         aValueED.SetText(((SwSetExpField*)GetCurField())->GetPromptText());
                 }
                 else    // USERFLD
-                    bFormat = bNumFmt = FALSE;
+                    bFormat = bNumFmt = sal_False;
             }
             break;
 
@@ -484,7 +484,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet
                         String sCmd( pType->GetCmd() );
-                        USHORT nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
+                        sal_uInt16 nTmpPos = sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ' );
                         sCmd.SearchAndReplace( sfx2::cTokenSeperator, ' ', nTmpPos );
 
                         aValueED.SetText( sCmd );
@@ -492,13 +492,13 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     }
                 }
             }
-            bName = bValue = TRUE;
+            bName = bValue = sal_True;
             break;
 
         case TYP_SEQFLD:
             {
-                // aNumRB.Check(TRUE);
-                bName = bValue = bSeparator = bChapterLevel = TRUE;
+                // aNumRB.Check(sal_True);
+                bName = bValue = bSeparator = bChapterLevel = sal_True;
 
                 SwFieldType* pFldTyp;
                 if( IsFldEdit() )
@@ -522,7 +522,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                 if( pFldTyp )
                 {
-                    BYTE nLevel = ((SwSetExpFieldType*)pFldTyp)->GetOutlineLvl();
+                    sal_uInt8 nLevel = ((SwSetExpFieldType*)pFldTyp)->GetOutlineLvl();
                     if( 0x7f == nLevel )
                         aChapterLevelLB.SelectEntryPos( 0 );
                     else
@@ -536,7 +536,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
         case TYP_SETREFPAGEFLD:
             {
-                bValue = FALSE;
+                bValue = sal_False;
                 aValueFT.SetText( SW_RESSTR( STR_OFFSET ));
 
                 if (IsFldEdit() || pBox)    // Nur bei Interaktion mit Maus
@@ -544,7 +544,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
                 if (nSelPos != 0 && nSelPos != LISTBOX_ENTRY_NOTFOUND)
                 {
-                    bValue = TRUE;      // SubType OFF - kennt keinen Offset
+                    bValue = sal_True;      // SubType OFF - kennt keinen Offset
                     if (IsFldEdit())
                         aValueED.SetText(String::CreateFromInt32(((SwRefPageSetField*)GetCurField())->GetOffset()));
                 }
@@ -561,7 +561,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
     aFormatLB.Show(!bNumFmt);
 
     if (IsFldEdit())
-        bName = FALSE;
+        bName = sal_False;
 
     aFormatLB.Enable(bFormat);
     aFormatFT.Enable(bFormat|bNumFmt);
@@ -589,12 +589,12 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
     ModifyHdl();    // Anwenden/Einfuegen/Loeschen Status update
 
-    aNumFormatLB.SetUpdateMode(TRUE);
-    aFormatLB.SetUpdateMode(TRUE);
+    aNumFormatLB.SetUpdateMode(sal_True);
+    aFormatLB.SetUpdateMode(sal_True);
 
     if(aSelectionLB.IsCallAddSelection())
     {
-        nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+        nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
         switch (nTypeId)
         {
@@ -603,7 +603,7 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                     nSelPos = aSelectionLB.GetSelectEntryPos();
 
                     if (nSelPos != LISTBOX_ENTRY_NOTFOUND)
-                        nSelPos = (USHORT)(ULONG)aSelectionLB.GetEntryData(nSelPos);
+                        nSelPos = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nSelPos);
 
                     if (nSelPos != LISTBOX_ENTRY_NOTFOUND && pBox && !bInit)
                     {
@@ -625,22 +625,22 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 void SwFldVarPage::UpdateSubType()
 {
     String sOldSel;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     SetSelectionSel(aSelectionLB.GetSelectEntryPos());
     if(GetSelectionSel() != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = aSelectionLB.GetEntry(GetSelectionSel());
 
     // Auswahl-Listbox fuellen
-    aSelectionLB.SetUpdateMode(FALSE);
+    aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
     SvStringsDtor aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
-    USHORT nCount = aList.Count();
-    USHORT nPos;
+    sal_uInt16 nCount = aList.Count();
+    sal_uInt16 nPos;
 
-    for (USHORT i = 0; i < nCount; ++i)
+    for (sal_uInt16 i = 0; i < nCount; ++i)
     {
         if (nTypeId != TYP_INPUTFLD || i)
         {
@@ -651,29 +651,29 @@ void SwFldVarPage::UpdateSubType()
             }
             else
             {
-                BOOL bInsert = FALSE;
+                sal_Bool bInsert = sal_False;
 
                 switch (nTypeId)
                 {
                     case TYP_INPUTFLD:
                         if (*aList[i] == GetCurField()->GetPar1())
-                            bInsert = TRUE;
+                            bInsert = sal_True;
                         break;
 
                     case TYP_FORMELFLD:
-                        bInsert = TRUE;
+                        bInsert = sal_True;
                         break;
 
                     case TYP_GETFLD:
                         if (*aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
-                            bInsert = TRUE;
+                            bInsert = sal_True;
                         break;
 
                     case TYP_SETFLD:
                     case TYP_USERFLD:
                         if (*aList[i] == GetCurField()->GetTyp()->GetName())
                         {
-                            bInsert = TRUE;
+                            bInsert = sal_True;
                             if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_INVISIBLE)
                                 aInvisibleCB.Check();
                         }
@@ -691,7 +691,7 @@ void SwFldVarPage::UpdateSubType()
 
                     default:
                         if (*aList[i] == GetCurField()->GetPar1())
-                            bInsert = TRUE;
+                            bInsert = sal_True;
                         break;
                 }
                 if (bInsert)
@@ -705,7 +705,7 @@ void SwFldVarPage::UpdateSubType()
         }
     }
 
-    BOOL bEnable = aSelectionLB.GetEntryCount() != 0;
+    sal_Bool bEnable = aSelectionLB.GetEntryCount() != 0;
     ListBox *pLB = 0;
 
     if (bEnable)
@@ -722,23 +722,23 @@ void SwFldVarPage::UpdateSubType()
     aSelectionFT.Enable( bEnable );
 
     SubTypeHdl(pLB);
-    aSelectionLB.SetUpdateMode(TRUE);
+    aSelectionLB.SetUpdateMode(sal_True);
 }
 
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
+sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 {
     String sOldSel, sOldNumSel;
-    ULONG nOldNumFormat = 0;
+    sal_uLong nOldNumFormat = 0;
 
-    USHORT nFormatSel = aFormatLB.GetSelectEntryPos();
+    sal_uInt16 nFormatSel = aFormatLB.GetSelectEntryPos();
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = aFormatLB.GetEntry(nFormatSel);
 
-    USHORT nNumFormatSel = aNumFormatLB.GetSelectEntryPos();
+    sal_uInt16 nNumFormatSel = aNumFormatLB.GetSelectEntryPos();
     if (nNumFormatSel != LISTBOX_ENTRY_NOTFOUND)
     {
         sOldNumSel = aNumFormatLB.GetEntry(nNumFormatSel);
@@ -748,7 +748,7 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
     // Format-Listbox fuellen
     aFormatLB.Clear();
     aNumFormatLB.Clear();
-    BOOL bSpecialFmt = FALSE;
+    sal_Bool bSpecialFmt = sal_False;
 
     if( TYP_GETREFPAGEFLD != nTypeId )
     {
@@ -780,7 +780,7 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
         {
             if (!IsFldEdit() || bSpecialFmt)
             {
-                USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_MARK_TEXT), 0);
+                sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_MARK_TEXT), 0);
                 aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
                 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_USERVAR_CMD), 1);
                 aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
@@ -792,7 +792,7 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
         {
             if (!IsFldEdit() || bSpecialFmt)
             {
-                USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
+                sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_SETVAR_TEXT), 0);
                 aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
             }
         }
@@ -800,14 +800,14 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
 
         case TYP_FORMELFLD:
         {
-            USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
+            sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
             aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
         }
         break;
 
         case TYP_GETFLD:
         {
-            USHORT nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
+            sal_uInt16 nPos = aNumFormatLB.InsertEntry(SW_RESSTR(FMT_GETVAR_NAME), 0);
             aNumFormatLB.SetEntryData(nPos, (void *)ULONG_MAX);
         }
         break;
@@ -828,12 +828,12 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
             aNumFormatLB.SelectEntry(sOldSel);
     }
 
-    USHORT nSize = GetFldMgr().GetFormatCount(nTypeId, FALSE, IsFldDlgHtmlMode());
+    sal_uInt16 nSize = GetFldMgr().GetFormatCount(nTypeId, sal_False, IsFldDlgHtmlMode());
 
-    for (USHORT i = 0; i < nSize; i++)
+    for (sal_uInt16 i = 0; i < nSize; i++)
     {
-        USHORT nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
-        USHORT nFldId = GetFldMgr().GetFormatId( nTypeId, i );
+        sal_uInt16 nPos = aFormatLB.InsertEntry(GetFldMgr().GetFormatStr(nTypeId, i));
+        sal_uInt16 nFldId = GetFldMgr().GetFormatId( nTypeId, i );
         aFormatLB.SetEntryData( nPos, reinterpret_cast<void*>(nFldId) );
         if (IsFldEdit() && nFldId == GetCurField()->GetFormat())
             aFormatLB.SelectEntryPos( nPos );
@@ -865,9 +865,9 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
 IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
 {
     String sValue(aValueED.GetText());
-    BOOL bHasValue = sValue.Len() != 0;
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
-    BOOL bInsert = FALSE, bApply = FALSE, bDelete = FALSE;
+    sal_Bool bHasValue = sValue.Len() != 0;
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
+    sal_Bool bInsert = sal_False, bApply = sal_False, bDelete = sal_False;
 
     String sName( aNameED.GetText() );
     xub_StrLen nLen = sName.Len();
@@ -897,7 +897,7 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
         if( nLen )
         {
             // Gibts schon einen entsprechenden Type
-            bInsert = bApply = TRUE;
+            bInsert = bApply = sal_True;
 
             SwFieldType* pType = GetFldMgr().GetFldType(RES_DDEFLD, sName);
 
@@ -926,13 +926,13 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
             {
                 // Benutzerfelder duerfen auch ohne Inhalt eingefuegt werden!
                 // Bug #56845
-                bInsert = bApply = TRUE;
+                bInsert = bApply = sal_True;
             }
         }
         break;
 
     default:
-        bInsert = TRUE;
+        bInsert = sal_True;
 
         if (nTypeId == TYP_SETFLD || nTypeId == TYP_SEQFLD)
         {
@@ -948,7 +948,7 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
                 if(pSh)
                 {
                     const SwFldTypes* p = pSh->GetDoc()->GetFldTypes();
-                    USHORT i;
+                    sal_uInt16 i;
 
                     for (i = 0; i < INIT_FLDTYPES; i++)
                     {
@@ -958,26 +958,26 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
                     }
 
                     if (i >= INIT_FLDTYPES && !pSh->IsUsed(*pFldType))
-                        bDelete = TRUE;
+                        bDelete = sal_True;
 
                     if (nTypeId == TYP_SEQFLD && !(pFldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
-                        bInsert = FALSE;
+                        bInsert = sal_False;
 
                     if (nTypeId == TYP_SETFLD && (pFldType->GetType() & nsSwGetSetExpType::GSE_SEQ))
-                        bInsert = FALSE;
+                        bInsert = sal_False;
                 }
             }
             if (GetFldMgr().GetFldType(RES_USERFLD, sName))
-                bInsert = FALSE;
+                bInsert = sal_False;
         }
 
         if( !nLen && ( nTypeId == TYP_SETFLD ||
                         (!IsFldEdit() && nTypeId == TYP_GETFLD ) ) )
-            bInsert = FALSE;
+            bInsert = sal_False;
 
         if( (nTypeId == TYP_SETFLD || nTypeId == TYP_FORMELFLD) &&
             !bHasValue )
-            bInsert = FALSE;
+            bInsert = sal_False;
         break;
     }
 
@@ -994,7 +994,7 @@ IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
 
 IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     switch (pBox->GetCurItemId())
     {
@@ -1004,7 +1004,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                 GetFldMgr().RemoveFldType(RES_USERFLD, aSelectionLB.GetSelectEntry());
             else
             {
-                USHORT nWhich;
+                sal_uInt16 nWhich;
 
                 switch(nTypeId)
                 {
@@ -1035,8 +1035,8 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
         {
             String sName(aNameED.GetText()), sValue(aValueED.GetText());
             SwFieldType* pType = 0;
-            USHORT nId = 0;
-            USHORT nNumFormatPos = aNumFormatLB.GetSelectEntryPos();
+            sal_uInt16 nId = 0;
+            sal_uInt16 nNumFormatPos = aNumFormatLB.GetSelectEntryPos();
 
             switch (nTypeId)
             {
@@ -1046,9 +1046,9 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
             }
             pType = GetFldMgr().GetFldType(nId, sName);
 
-            ULONG nFormat = aFormatLB.GetSelectEntryPos();
+            sal_uLong nFormat = aFormatLB.GetSelectEntryPos();
             if (nFormat != LISTBOX_ENTRY_NOTFOUND)
-                nFormat = (ULONG)aFormatLB.GetEntryData((USHORT)nFormat);
+                nFormat = (sal_uLong)aFormatLB.GetEntryData((sal_uInt16)nFormat);
 
             if (pType)  // Aendern
             {
@@ -1063,7 +1063,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         if (nNumFormatPos != LISTBOX_ENTRY_NOTFOUND)
                         {
-                            ULONG nFmt = nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat();
+                            sal_uLong nFmt = nNumFormatPos == 0 ? 0 : aNumFormatLB.GetFormat();
                             if (nFmt)
                             {   // Sprache auf Office-Sprache umstellen, da String im Office
                                 // Format vom Kalkulator erwartet wird und so in den Dlg
@@ -1081,10 +1081,10 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                         {
                             //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                             //              Namen haben! Wird hier noch nicht beachtet.
-                            USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+                            sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
                             sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
                             ((SwDDEFieldType*)pType)->SetCmd(sValue);
-                            ((SwDDEFieldType*)pType)->SetType((USHORT)nFormat);
+                            ((SwDDEFieldType*)pType)->SetType((sal_uInt16)nFormat);
                         }
                     }
                     pType->UpdateFlds();
@@ -1119,10 +1119,10 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
                     {
                         //JP 28.08.95: DDE-Topics/-Items koennen Blanks in ihren
                         //              Namen haben! Wird hier noch nicht beachtet.
-                        USHORT nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
+                        sal_uInt16 nTmpPos = sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator );
                         sValue.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
-                        SwDDEFieldType aType(sName, sValue, (USHORT)nFormat);
+                        SwDDEFieldType aType(sName, sValue, (sal_uInt16)nFormat);
                         aSelectionLB.InsertEntry(sName);
                         aSelectionLB.SelectEntry(sName);
                         GetFldMgr().InsertFldType(aType);   // DDE-Feld Neu
@@ -1137,7 +1137,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
         break;
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 /*--------------------------------------------------------------------
@@ -1146,7 +1146,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
 
 IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
 {
-    BOOL bEnable = aChapterLevelLB.GetSelectEntryPos() != 0;
+    sal_Bool bEnable = aChapterLevelLB.GetSelectEntryPos() != 0;
 
     aSeparatorED.Enable(bEnable);
     aSeparatorFT.Enable(bEnable);
@@ -1161,7 +1161,7 @@ IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
 
 IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
 {
-    BOOL bEnable = aSeparatorED.GetText().Len() != 0 ||
+    sal_Bool bEnable = aSeparatorED.GetText().Len() != 0 ||
                     aChapterLevelLB.GetSelectEntryPos() == 0;
     EnableInsert(bEnable);
 
@@ -1172,20 +1172,20 @@ IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
+sal_Bool SwFldVarPage::FillItemSet(SfxItemSet& )
 {
-    USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
+    sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
     String aVal(aValueED.GetText());
     String aName(aNameED.GetText());
 
-    USHORT nSubType = aSelectionLB.GetSelectEntryPos();
+    sal_uInt16 nSubType = aSelectionLB.GetSelectEntryPos();
     if(nSubType == LISTBOX_ENTRY_NOTFOUND)
         nSubType = 0;
     else
-        nSubType = (USHORT)(ULONG)aSelectionLB.GetEntryData(nSubType);
+        nSubType = (sal_uInt16)(sal_uLong)aSelectionLB.GetEntryData(nSubType);
 
-    ULONG nFormat;
+    sal_uLong nFormat;
 
     if (!aNumFormatLB.IsVisible())
     {
@@ -1194,7 +1194,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
         if(nFormat == LISTBOX_ENTRY_NOTFOUND)
             nFormat = 0;
         else
-            nFormat = (ULONG)aFormatLB.GetEntryData((USHORT)nFormat);
+            nFormat = (sal_uLong)aFormatLB.GetEntryData((sal_uInt16)nFormat);
     }
     else
     {
@@ -1245,7 +1245,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
         case TYP_INPUTFLD:
         {
             SwFieldType* pType = GetFldMgr().GetFldType(RES_USERFLD, aName);
-            nSubType = static_cast< USHORT >((nSubType & 0xff00) | ((pType) ? INP_USR : INP_VAR));
+            nSubType = static_cast< sal_uInt16 >((nSubType & 0xff00) | ((pType) ? INP_USR : INP_VAR));
             break;
         }
 
@@ -1274,7 +1274,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
                 nSubType--;
                 String sSeparator(aSeparatorED.GetText().GetChar(0));
                 cSeparator = sSeparator.Len() ? sSeparator.GetChar(0) : ' ';
-                //nSubType |= (USHORT)(((BYTE)) << 8);
+                //nSubType |= (sal_uInt16)(((sal_uInt8)) << 8);
             }
             break;
         }
@@ -1300,7 +1300,7 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
 
     UpdateSubType();
 
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -1318,7 +1318,7 @@ SfxTabPage* SwFldVarPage::Create(   Window* pParent,
     Beschreibung:
  --------------------------------------------------------------------*/
 
-USHORT SwFldVarPage::GetGroup()
+sal_uInt16 SwFldVarPage::GetGroup()
 {
     return GRP_VAR;
 }
@@ -1330,7 +1330,7 @@ USHORT SwFldVarPage::GetGroup()
 SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId ) :
     ListBox (pDialog, rResId),
     pDlg    (pDialog),
-    bCallAddSelection(FALSE)
+    bCallAddSelection(sal_False)
 {
 }
 
@@ -1341,23 +1341,23 @@ SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId )
 long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = ListBox::PreNotify( rNEvt );
-    //BOOL bAddSel = FALSE;
+    //sal_Bool bAddSel = sal_False;
     if ( rNEvt.GetType() == EVENT_KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
-        const USHORT nModifier = aKeyCode.GetModifier();
+        const sal_uInt16 nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
-//          bAddSel = TRUE;
-            bCallAddSelection = TRUE;
+//          bAddSel = sal_True;
+            bCallAddSelection = sal_True;
     }
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
     {
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 
         if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  // Alt oder Ctrl
-            //bAddSel = TRUE;
-            bCallAddSelection = TRUE;
+            //bAddSel = sal_True;
+            bCallAddSelection = sal_True;
     }
 
 //  if (bAddSel)
@@ -1372,11 +1372,11 @@ void SwFldVarPage::FillUserData()
 {
     String sData(String::CreateFromAscii(USER_DATA_VERSION));
     sData += ';';
-    USHORT nTypeSel = aTypeLB.GetSelectEntryPos();
+    sal_uInt16 nTypeSel = aTypeLB.GetSelectEntryPos();
     if( LISTBOX_ENTRY_NOTFOUND == nTypeSel )
         nTypeSel = USHRT_MAX;
     else
-        nTypeSel = (USHORT)(ULONG)aTypeLB.GetEntryData( nTypeSel );
+        nTypeSel = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData( nTypeSel );
     sData += String::CreateFromInt32( nTypeSel );
     SetUserData(sData);
 }

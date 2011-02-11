@@ -30,7 +30,6 @@
 
 class ImageButton;
 class Point;
-class PrintDialog;
 class SfxItemSet;
 class SfxPrinter;
 class SfxTabPage;
@@ -42,17 +41,16 @@ class Window;
 class SwWrtShell;
 
 // folgende Funktionen stehen im viewprt.cxx
-PrintDialog* CreatePrintDialog( Window* , USHORT, SwWrtShell* );
-void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, BOOL bWeb );
+void SetPrinter( IDocumentDeviceAccess*, SfxPrinter*, sal_Bool bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );
-void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb );
+void SetAppPrintOptions( ViewShell* pSh, sal_Bool bWeb );
 
 // folgende Funktionen stehen im viewport.cxx
 void ViewResizePixel( const Window &rRef,
                     const Point &rOfst,
                     const Size &rSize,
                     const Size &rEditSz,
-                    const BOOL bInner,
+                    const sal_Bool bInner,
                     SwScrollbar& rVScrollbar,
                     SwScrollbar& rHScrollbar,
                     ImageButton* pPageUpBtn,
@@ -61,8 +59,8 @@ void ViewResizePixel( const Window &rRef,
                     Window& rScrollBarBox,
                     SvxRuler* pVLineal = 0,
                     SvxRuler* pHLineal = 0,
-                    BOOL bWebView = FALSE,
-                    BOOL bVRulerRight = FALSE );
+                    sal_Bool bWebView = sal_False,
+                    sal_Bool bVRulerRight = sal_False );
 
 
 #endif

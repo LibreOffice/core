@@ -60,7 +60,7 @@ public:
         // ctor oeffnet File im BinearMode, dtor schliesst es
     BinaryFile(const String &, int eOpenMode);
     ~BinaryFile();
-    BOOL Ok() const {
+    sal_Bool Ok() const {
         return -1 != fd;
     }
     operator int() const { return fd; }
@@ -167,7 +167,7 @@ public:
         return aStr;
     }
 
-    BOOL Ok();
+    sal_Bool Ok();
 };
 
 

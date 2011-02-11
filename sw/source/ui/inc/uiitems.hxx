@@ -44,7 +44,7 @@ class SW_DLLPUBLIC SwPageFtnInfoItem : public SfxPoolItem
 
 public:
 
-    SwPageFtnInfoItem(const USHORT nId, SwPageFtnInfo& rInfo);
+    SwPageFtnInfoItem(const sal_uInt16 nId, SwPageFtnInfo& rInfo);
     SwPageFtnInfoItem(const SwPageFtnInfoItem& rItem );
     ~SwPageFtnInfoItem();
 
@@ -56,8 +56,8 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     SwPageFtnInfo& GetPageFtnInfo()             { return aFtnInfo; }
     const SwPageFtnInfo& GetPageFtnInfo() const { return aFtnInfo; }
@@ -71,7 +71,7 @@ class SW_DLLPUBLIC SwPtrItem : public SfxPoolItem
     void* pMisc;
 
 public:
-    SwPtrItem( const USHORT nId = FN_PARAM_GRF_DIALOG, void* pPtr = 0);
+    SwPtrItem( const sal_uInt16 nId = FN_PARAM_GRF_DIALOG, void* pPtr = 0);
     SwPtrItem( const SwPtrItem& rItem );
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
@@ -88,15 +88,15 @@ class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
     SwNumRule* pRule;
 
 public:
-    SwUINumRuleItem( const SwNumRule& rRule, const USHORT = FN_PARAM_ACT_NUMBER);
+    SwUINumRuleItem( const SwNumRule& rRule, const sal_uInt16 = FN_PARAM_ACT_NUMBER);
     SwUINumRuleItem( const SwUINumRuleItem& rItem );
     virtual ~SwUINumRuleItem();
 
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
 
-    virtual BOOL             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual BOOL             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
 
     const SwNumRule* GetNumRule() const         { return pRule; }
           SwNumRule* GetNumRule()               { return pRule; }
@@ -108,7 +108,7 @@ public:
 class SwBackgroundDestinationItem : public SfxUInt16Item
 {
 public:
-    SwBackgroundDestinationItem(USHORT  nWhich, USHORT nValue);
+    SwBackgroundDestinationItem(sal_uInt16  nWhich, sal_uInt16 nValue);
 
     virtual SfxPoolItem*     Clone( SfxItemPool *pPool = 0 ) const;
 };

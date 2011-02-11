@@ -52,31 +52,31 @@ SRC2FILES = smres.src   \
 
 SLO1FILES =  \
         $(SLO)$/accessibility.obj \
-        $(SLO)$/edit.obj \
-        $(SLO)$/eqnolefilehdr.obj \
-        $(SLO)$/mathmlexport.obj \
-        $(SLO)$/mathmlimport.obj \
-        $(SLO)$/symbol.obj \
-        $(SLO)$/types.obj \
-        $(SLO)$/unodoc.obj \
         $(SLO)$/action.obj \
         $(SLO)$/cfgitem.obj \
         $(SLO)$/config.obj \
         $(SLO)$/dialog.obj \
         $(SLO)$/document.obj \
+        $(SLO)$/edit.obj \
+        $(SLO)$/eqnolefilehdr.obj \
         $(SLO)$/format.obj \
+        $(SLO)$/mathmlexport.obj \
+        $(SLO)$/mathmlimport.obj \
         $(SLO)$/mathtype.obj \
         $(SLO)$/node.obj \
         $(SLO)$/parse.obj \
+        $(SLO)$/rect.obj \
         $(SLO)$/register.obj \
         $(SLO)$/smdll.obj \
+        $(SLO)$/smmod.obj \
+        $(SLO)$/symbol.obj \
         $(SLO)$/toolbox.obj \
         $(SLO)$/typemap.obj \
-        $(SLO)$/smmod.obj \
+        $(SLO)$/types.obj \
+        $(SLO)$/unodoc.obj \
         $(SLO)$/utility.obj \
-        $(SLO)$/rect.obj \
-        $(SLO)$/unomodel.obj \
-        $(SLO)$/view.obj
+        $(SLO)$/view.obj \
+        $(SLO)$/unomodel.obj
 
 SLO2FILES =  \
         $(SLO)$/register.obj  \
@@ -94,9 +94,6 @@ LIB1OBJFILES = \
     $(SLO1FILES)
 
 # --- Targets -------------------------------------------------------
-
-LOCALIZE_ME =  menu_tmpl.src
-
 
 .INCLUDE :  target.mk
 

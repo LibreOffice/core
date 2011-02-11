@@ -31,7 +31,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -55,7 +55,7 @@ class SwWrapDlg : public SfxSingleTabDialog
     SwWrtShell*         pWrtShell;
 
 public:
-     SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode);
+     SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, sal_Bool bDrawMode);
     ~SwWrapDlg();
 
     inline SwWrtShell*  GetWrtShell()   { return pWrtShell; }
@@ -99,22 +99,22 @@ class SwWrapTabPage: public SfxTabPage
     ImageList           aWrapIL;
     ImageList           aWrapILH;
 
-    USHORT              nOldLeftMargin;
-    USHORT              nOldRightMargin;
-    USHORT              nOldUpperMargin;
-    USHORT              nOldLowerMargin;
+    sal_uInt16              nOldLeftMargin;
+    sal_uInt16              nOldRightMargin;
+    sal_uInt16              nOldUpperMargin;
+    sal_uInt16              nOldLowerMargin;
 
     RndStdIds           nAnchorId;
-    USHORT              nHtmlMode;
+    sal_uInt16              nHtmlMode;
 
     Size aFrmSize;
     SwWrtShell*         pWrtSh;
 
-    BOOL bFormat;
-    BOOL bNew;
-    BOOL bHtmlMode;
-    BOOL bDrawMode;
-    BOOL bContourImage;
+    sal_Bool bFormat;
+    sal_Bool bNew;
+    sal_Bool bHtmlMode;
+    sal_Bool bDrawMode;
+    sal_Bool bContourImage;
 
     SwWrapTabPage(Window *pParent, const SfxItemSet &rSet);
     ~SwWrapTabPage();
@@ -136,12 +136,12 @@ public:
 
     static SfxTabPage *Create(Window *pParent, const SfxItemSet &rSet);
 
-    virtual BOOL    FillItemSet(SfxItemSet &rSet);
+    virtual sal_Bool    FillItemSet(SfxItemSet &rSet);
     virtual void    Reset(const SfxItemSet &rSet);
 
-    static USHORT*  GetRanges();
-    inline void     SetNewFrame(BOOL bNewFrame) { bNew = bNewFrame; }
-    inline void     SetFormatUsed(BOOL bFmt, BOOL bDrw) { bFormat = bFmt;
+    static sal_uInt16*  GetRanges();
+    inline void     SetNewFrame(sal_Bool bNewFrame) { bNew = bNewFrame; }
+    inline void     SetFormatUsed(sal_Bool bFmt, sal_Bool bDrw) { bFormat = bFmt;
                                                             bDrawMode = bDrw; }
     inline void     SetShell(SwWrtShell* pSh) { pWrtSh = pSh; }
 };

@@ -44,7 +44,7 @@
 #endif
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 
 class SwWrtShell;
@@ -76,8 +76,8 @@ private:
     String              aText;
     String              aType;
 
-    BOOL                bNew;
-    BOOL                bIsUrl;
+    sal_Bool                bNew;
+    sal_Bool                bIsUrl;
 
     SwScriptField*          pFld;
     SwFldMgr*               pMgr;
@@ -108,9 +108,9 @@ public:
 
     String              GetType() { return aType; }
 
-    BOOL                IsUrl() { return bIsUrl; }
-    BOOL                IsNew() { return bNew; }
-    BOOL                IsUpdate();
+    sal_Bool                IsUrl() { return bIsUrl; }
+    sal_Bool                IsNew() { return bNew; }
+    sal_Bool                IsUpdate();
 };
 
 

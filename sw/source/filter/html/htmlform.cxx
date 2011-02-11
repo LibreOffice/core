@@ -544,7 +544,7 @@ void SwHTMLImageWatcher::init( sal_Int32 Width, sal_Int32 Height )
             SwNode *pANd;
             SwTableNode *pTblNd;
             if( pAPos &&
-                0 != (pANd = pDoc->GetNodes()[pAPos->nNode]) &&
+                0 != (pANd = & pAPos->nNode.GetNode()) &&
                 0 != (pTblNd = pANd->FindTableNode()) )
             {
                 const sal_Bool bLastGrf = !pTblNd->GetTable().DecGrfsThatResize();
@@ -1171,7 +1171,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
             SVX_CSS1_LTYPE_TWIP == rCSS1PropInfo.eTopType )
         {
             const SwStartNode *pFlySttNd =
-                pDoc->GetNodes()[pPam->GetPoint()->nNode]->FindFlyStartNode();
+                pPam->GetPoint()->nNode.GetNode().FindFlyStartNode();
 
             if( pFlySttNd )
             {
@@ -1351,7 +1351,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1525,7 +1525,7 @@ void SwHTMLParser::InsertInput()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -1739,7 +1739,7 @@ void SwHTMLParser::InsertInput()
 
         if( bDisabled )
         {
-            BOOL bFalse = sal_False;
+            sal_Bool bFalse = sal_False;
             aTmp.setValue(&bFalse, ::getBooleanCppuType()  );
             xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ), aTmp );
         }
@@ -2017,7 +2017,7 @@ void SwHTMLParser::NewTextArea()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2132,7 +2132,7 @@ void SwHTMLParser::NewTextArea()
     aTmp <<= OUString(sName);
     xPropSet->setPropertyValue( OUString::createFromAscii( "Name" ), aTmp );
 
-    BOOL bTrue = sal_True;
+    sal_Bool bTrue = sal_True;
     aTmp.setValue( &bTrue, ::getBooleanCppuType() );
     xPropSet->setPropertyValue( OUString::createFromAscii( "MultiLine" ),
                                 aTmp );
@@ -2155,7 +2155,7 @@ void SwHTMLParser::NewTextArea()
 
     if( bDisabled )
     {
-        BOOL bFalse = sal_False;
+        sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ),
                                     aTmp );
@@ -2308,7 +2308,7 @@ void SwHTMLParser::NewSelect()
     {
         const HTMLOption *pOption = (*pHTMLOptions)[--i];
         ScriptType eScriptType2 = eDfltScriptType;
-        sal_uInt16 nEvent;
+        sal_uInt16 nEvent = 0;
         sal_Bool bSetEvent = sal_False;
 
         switch( pOption->GetToken() )
@@ -2421,7 +2421,7 @@ void SwHTMLParser::NewSelect()
 
     if( bDisabled )
     {
-        BOOL bFalse = sal_False;
+        sal_Bool bFalse = sal_False;
         aTmp.setValue( &bFalse, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Enabled" ),
                                     aTmp );
@@ -2431,7 +2431,7 @@ void SwHTMLParser::NewSelect()
     sal_Bool bMinWidth = sal_True, bMinHeight = sal_True;
     if( !bMultiple && 1==nSelectEntryCnt )
     {
-        BOOL bTrue = sal_True;
+        sal_Bool bTrue = sal_True;
         aTmp.setValue( &bTrue, ::getBooleanCppuType() );
         xPropSet->setPropertyValue( OUString::createFromAscii( "Dropdown" ),
                                     aTmp );
@@ -2443,7 +2443,7 @@ void SwHTMLParser::NewSelect()
 
         if( bMultiple )
         {
-            BOOL bTrue = sal_True;
+            sal_Bool bTrue = sal_True;
             aTmp.setValue( &bTrue, ::getBooleanCppuType() );
             xPropSet->setPropertyValue(
                     OUString::createFromAscii( "MultiSelection" ), aTmp );

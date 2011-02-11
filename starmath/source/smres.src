@@ -1099,6 +1099,13 @@ TabPage RID_PRINTOPTIONPAGE
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Text [ en-US ] = "Ig~nore ~~ and ` at the end of the line";
     };
+    CheckBox CB_SAVE_ONLY_USED_SYMBOLS
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 154 ) ;
+        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Text [ en-US ] = "Embed only used symbols (smaller file size)";
+    };
 };
 
 ModalDialog RID_SYMBOLDIALOG
@@ -1755,21 +1762,12 @@ StringArray RID_PRINTUIOPTIONS
         < "%PRODUCTNAME %s"; >;
         < "Contents"; >;
         < "~Title"; >;
-        < "Specifies whether you want the name of the document to be included in the printout"; >;
         < "~Formula text"; >;
-        < "Specifies whether to include the contents of the 'Commands' window at the bottom of the printout."; >;
         < "B~orders"; >;
-        < "Applies a thin border to the formula area in the printout."; >;
         < "Size"; >;
         < "O~riginal size"; >;
-        < "Prints the formula without adjusting the current font size."; >;
         < "Fit to ~page"; >;
-        < "Adjusts the formula to the page format used in the printout."; >;
         < "~Scaling"; >;
-        < "Reduces or enlarges the size of the printed formula by a specified enlargement factor."; >;
-//        < "Miscellaneous options"; >;
-//        < "Ig~nore ~~ and ` at the end of the line"; >;
-//        < "Specfies that these space wildcards will be removed if they are at the end of a line."; >;
     };
 };
 

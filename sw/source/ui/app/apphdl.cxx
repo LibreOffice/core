@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <hintids.hxx>
 #include <tools/urlobj.hxx>
 
@@ -71,9 +72,7 @@
 #include <srcview.hxx>
 #include <wrtsh.hxx>
 #include <docsh.hxx>
-#ifndef _CMDID_H
 #include <cmdid.h>          // Funktion-Ids
-#endif
 #include <initui.hxx>
 #include <uitool.hxx>
 #include <swmodule.hxx>
@@ -83,13 +82,12 @@
 #include <gloslst.hxx>      // SwGlossaryList
 #include <glosdoc.hxx>      // SwGlossaryList
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
 #include <modcfg.hxx>
 #include <globals.h>        // globale Konstanten z.B.
-#ifndef _APP_HRC
 #include <app.hrc>
-#endif
 #include <fontcfg.hxx>
 #include <barcfg.hxx>
 #include <uinums.hxx>
@@ -135,7 +133,6 @@ using namespace ::com::sun::star;
 #define _ExecAddress ExecOther
 #define _StateAddress StateOther
 #include <sfx2/msg.hxx>
-#include <svx/svxslots.hxx>
 #include "swslots.hxx"
 #include <cfgid.h>
 
@@ -202,7 +199,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
                 }
             break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< UINT16 >(::GetDfltMetric(bWebView))));
+                rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, static_cast< sal_uInt16 >(::GetDfltMetric(bWebView))));
             break;
             case FN_SET_MODOPT_TBLNUMFMT:
                 rSet.Put( SfxBoolItem( nWhich, pModuleConfig->
@@ -225,7 +222,7 @@ SwView* lcl_LoadDoc(SwView* pView, const String& rURL)
     {
         SfxStringItem aURL(SID_FILE_NAME, rURL);
         SfxStringItem aTargetFrameName( SID_TARGETNAME, String::CreateFromAscii("_blank") );
-        SfxBoolItem aHidden( SID_HIDDEN, TRUE );
+        SfxBoolItem aHidden( SID_HIDDEN, sal_True );
         SfxStringItem aReferer(SID_REFERER, pView->GetDocShell()->GetTitle());
         SfxObjectItem* pItem = (SfxObjectItem*)pView->GetViewFrame()->GetDispatcher()->
                 Execute(SID_OPENDOC, SFX_CALLMODE_SYNCHRON,
@@ -337,7 +334,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                 m_pMMConfig->SetSourceView( m_pView );
             m_pView->SetMailMergeConfigItem(0, 0, sal_True);
             SfxViewFrame* pViewFrame = m_pView->GetViewFrame();
-            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, FALSE);
+            pViewFrame->ShowChildWindow(FN_MAILMERGE_CHILDWINDOW, sal_False);
             DBG_ASSERT(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }
@@ -755,7 +752,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     }
     else if(rHint.ISA(SfxSimpleHint))
     {
-        USHORT nHintId = ((SfxSimpleHint&)rHint).GetId();
+        sal_uInt16 nHintId = ((SfxSimpleHint&)rHint).GetId();
         if(SFX_HINT_DEINITIALIZING == nHintId)
         {
             DELETEZ(pWebUsrPref);
@@ -803,26 +800,22 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
 {
     if( pBrdCst == pUserOptions )
     {
-        bAuthorInitialised = FALSE;
+        bAuthorInitialised = sal_False;
     }
     else if( pBrdCst == pUndoOptions )
     {
-        const int nNew = GetUndoOptions().GetUndoCount();
-        const int nOld = SwEditShell::GetUndoActionCount();
-        if(!nNew || !nOld)
+        sal_Int32 const nNew = GetUndoOptions().GetUndoCount();
+        bool const bUndo = (nNew != 0);
+        // switch Undo for all DocShells
+        TypeId aType(TYPE(SwDocShell));
+        SwDocShell * pDocShell =
+            static_cast<SwDocShell *>(SfxObjectShell::GetFirst(&aType));
+        while (pDocShell)
         {
-            sal_Bool bUndo = nNew != 0;
-            //ueber DocShells iterieren und Undo umschalten
-
-            TypeId aType(TYPE(SwDocShell));
-            SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
-            while( pDocShell )
-            {
-                pDocShell->GetDoc()->DoUndo( bUndo );
-                pDocShell = (SwDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
-            }
+            pDocShell->GetDoc()->GetIDocumentUndoRedo().DoUndo(bUndo);
+            pDocShell = static_cast<SwDocShell *>(
+                    SfxObjectShell::GetNext(*pDocShell, &aType));
         }
-        SwEditShell::SetUndoActionCount( static_cast< USHORT >(nNew));
     }
     else if ( pBrdCst == pColorConfig || pBrdCst == pAccessibilityOptions )
     {
@@ -957,11 +950,11 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
     {
         // im Load der SwMasterUsrPref wird der SpellChecker gebraucht, dort darf
         // er aber nicht angelegt werden #58256#
-        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(TRUE);
+        pNonConstModule->pWebUsrPref = new SwMasterUsrPref(sal_True);
     }
     else if(!bWeb && !pUsrPref)
     {
-        pNonConstModule->pUsrPref = new SwMasterUsrPref(FALSE);
+        pNonConstModule->pUsrPref = new SwMasterUsrPref(sal_False);
     }
     return  bWeb ? pWebUsrPref : pUsrPref;
 }
@@ -973,7 +966,7 @@ void NewXForms( SfxRequest& rReq )
     // copied & excerpted from SwModule::InsertLab(..)
 
     // create new document
-    SfxObjectShellRef xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
+    SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
     xDocSh->DoInitNew( 0 );
 
     // initialize XForms

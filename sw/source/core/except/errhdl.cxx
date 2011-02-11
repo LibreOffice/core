@@ -27,6 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
+#ifdef DBG_UTIL
+
 #define _ERRHDL_CXX
 
 
@@ -41,8 +44,8 @@
 #define CVBREAK
 #endif
 
-BOOL bAssertFail = FALSE;           // ist gerade eine Assertbox oben ?
-BOOL bAssert = FALSE;               // TRUE, wenn mal ein ASSERT kam.
+sal_Bool bAssertFail = sal_False;           // ist gerade eine Assertbox oben ?
+sal_Bool bAssert = sal_False;               // sal_True, wenn mal ein ASSERT kam.
 
 /*------------------------------------------------------------------------
     Ausgabe einer Fehlermeldung inkl. Bedingung, Dateiname und Zeilennummer
@@ -51,18 +54,18 @@ BOOL bAssert = FALSE;               // TRUE, wenn mal ein ASSERT kam.
     Parameter:
                 char    *pError     Fehlermeldung
                 char    *pFileName  Filename in dem der Fehler auftrat
-                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
+                sal_uInt16  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
-void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine )
+void AssertFail( const sal_Char* pError, const sal_Char* pFileName, sal_uInt16 nLine )
 {
     CVBREAK;
     // NOTE4("ASSERT: %s at %d: %s\n", pFileName, nLine, pError);
-    bAssert = TRUE;
+    bAssert = sal_True;
 
     if( !bAssertFail && GetpApp() && GetpApp()->IsInMain() )
     {
-        bAssertFail = TRUE;
+        bAssertFail = sal_True;
         ByteString  aErr;
         aErr = "Assertion failed\n==================\nFILE      :  ";
         aErr += pFileName;
@@ -72,7 +75,7 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
         aErr += pError;
 
         ByteString aTmp( getenv( "SW_NOBEEP" ) );
-        if ( aTmp != "TRUE" )
+        if ( aTmp != "sal_True" )
             Sound::Beep(SOUND_ERROR);
 
 #if defined( UNX ) && !defined( DBG_UTIL )
@@ -80,7 +83,7 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
 #else
         DbgError( aErr.GetBuffer() );
 #endif
-        bAssertFail = FALSE;
+        bAssertFail = sal_False;
     }
     else
     {
@@ -97,12 +100,12 @@ void AssertFail( const sal_Char* pError, const sal_Char* pFileName, USHORT nLine
     wo der Fehler auftrat.
     Die Funktion wird durch das ASSERT Makro gerufen!
     Parameter:
-                USHORT  nErrorId    Id fuer Fehlermeldung
+                sal_uInt16  nErrorId    Id fuer Fehlermeldung
                 char    *pFileName  Filename in dem der Fehler auftrat
-                USHORT  nLine       Zeilennummer in dem der Fehler auftrat
+                sal_uInt16  nLine       Zeilennummer in dem der Fehler auftrat
 ------------------------------------------------------------------------*/
 
-void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
+void AssertFail( sal_uInt16 nErrorId, const sal_Char* pFileName, sal_uInt16 nLine )
 {
     // Umsetzung der ErrorId in eine Fehlermeldung
     static const sal_Char
@@ -129,4 +132,5 @@ void AssertFail( USHORT nErrorId, const sal_Char* pFileName, USHORT nLine )
     AssertFail( pMsg, pFileName, nLine );
 }
 
+#endif // DBG_UTIL
 

@@ -81,7 +81,7 @@ namespace sw {
         CreateParentXText(SwDoc & rDoc, const SwPosition& rPos);
 
     bool GetDefaultTextContentValue(::com::sun::star::uno::Any& rAny,
-        const ::rtl::OUString& rPropertyName, USHORT nWID = 0);
+        const ::rtl::OUString& rPropertyName, sal_uInt16 nWID = 0);
 
 } // namespace sw
 
