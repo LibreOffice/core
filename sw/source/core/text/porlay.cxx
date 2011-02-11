@@ -1367,7 +1367,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // position and that we don't have "empty" changes.
                 BYTE nLastTyp = i18n::ScriptType::WEAK;
                 xub_StrLen nLastPos = 0;
-                for (aScriptChanges::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
+                for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 < aScriptChanges.end(); ++i2)
                 {
                     OSL_ENSURE( nLastTyp != i2->type &&
                             nLastPos < i2->position,
