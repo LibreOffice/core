@@ -188,7 +188,7 @@ void WorkWindow::ShowFullScreenMode( sal_Bool bFullScreenMode, sal_Int32 nDispla
     if ( !mbFullScreenMode == !bFullScreenMode )
         return;
 
-    if( (nDisplayScreen < 0)
+    if( (nDisplayScreen < -1)
     || (nDisplayScreen >= static_cast<sal_Int32>(Application::GetScreenCount()) ) )
     {
         nDisplayScreen = GetScreenNumber();

@@ -793,8 +793,9 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
     try
     {
         uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        uno::Reference< XIndexAccess > xMultiMon( xFactory->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.DisplayAccess" ) ) ), UNO_QUERY_THROW );
-        if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < xMultiMon->getCount()) )
+        uno::Reference< XIndexAccess > xMultiMon( xFactory->createInstance( "com.sun.star.awt.DisplayAccess" ), UNO_QUERY_THROW );
+        sal_Int32 nMonitors = xMultiMon->getCount();
+        if( (pFrame->mnDisplay >= 0) && (pFrame->mnDisplay < nMonitors) )
         {
             uno::Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( pFrame->mnDisplay ), UNO_QUERY_THROW );
             com::sun::star::awt::Rectangle aRect;
@@ -808,10 +809,28 @@ static void ImplSalCalcFullScreenSize( const WinSalFrame* pFrame,
         }
         else
         {
-            nScreenX = GetSystemMetrics( SM_XVIRTUALSCREEN );
-            nScreenY = GetSystemMetrics( SM_YVIRTUALSCREEN );
-            nScreenDX = GetSystemMetrics( SM_CXVIRTUALSCREEN );
-            nScreenDY = GetSystemMetrics( SM_CYVIRTUALSCREEN );
+            Rectangle aCombined;
+            Reference< XPropertySet > xMonitor( xMultiMon->getByIndex( 0 ), UNO_QUERY_THROW );
+            com::sun::star::awt::Rectangle aRect;
+            if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
+            {
+                aCombined.Left()   = aRect.X;
+                aCombined.Top()    = aRect.Y;
+                aCombined.Right()  = aRect.X + aRect.Width;
+                aCombined.Bottom() = aRect.Y + aRect.Height;
+                for( sal_Int32 i = 1 ; i < nMonitors ; i++ )
+                {
+                    xMonitor = Reference< XPropertySet >( xMultiMon->getByIndex(i), UNO_QUERY_THROW );
+                    if( xMonitor->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ScreenArea" ) ) ) >>= aRect )
+                    {
+                        aCombined.Union( Rectangle( aRect.X, aRect.Y, aRect.X+aRect.Width, aRect.Y+aRect.Height ) );
+                    }
+                }
+            }
+            nScreenX  = aCombined.Left();
+            nScreenY  = aCombined.Top();
+            nScreenDX = aCombined.GetWidth();
+            nScreenDY = aCombined.GetHeight();
         }
     }
     catch( Exception& )
@@ -920,6 +939,8 @@ WinSalFrame::WinSalFrame()
 // -----------------------------------------------------------------------
 void WinSalFrame::updateScreenNumber()
 {
+    if( mnDisplay == -1 ) // spans all monitors
+        return;
     WinSalSystem* pSys = static_cast<WinSalSystem*>(ImplGetSalSystem());
     if( pSys )
     {
