@@ -1,0 +1,12 @@
+--- misc/mdds_0.5.1/include/mdds/mixed_type_matrix_flag_storage.hpp	2011-02-11 15:10:29.374529418 +0000
++++ misc/build/mdds_0.5.1/include/mdds/mixed_type_matrix_flag_storage.hpp	2011-02-11 15:10:47.517729200 +0000
+@@ -53,8 +53,7 @@
+         if (itr == m_flags.end())
+         {
+             // flag not stored for this position.
+-            ::std::pair<typename flag_store_type::iterator, bool> r = 
+-                m_flags.insert(typename flag_store_type::value_type(pos, flag));
++            m_flags.insert(typename flag_store_type::value_type(pos, flag));
+             return;
+         }
+         itr->second = flag;
