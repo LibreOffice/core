@@ -29,12 +29,6 @@ do while( lines())
 	if l = '_GetVersionInfo' then l = ''
 
 	/* remove GLOBAL symbols */
-/*
-	if POS('_GLOBAL_', l) > 0 then l = ';'l
-	if POS('_ZN4_STL', l) > 0 then l = ';'l
-	if POS('_ZNK4_STL', l) > 0 then l = ';'l
-*/
-	/* if LENGTH(l) > 254 then l = ';(>254)'left(l,100)*/
 
 	IF LENGTH(l)>0 THEN DO
 	  say l

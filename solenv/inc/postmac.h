@@ -44,7 +44,6 @@
 #undef LSize
 #undef ModalDialog
 #undef SetCursor
-//#undef ShowWindow
 #undef StringPtr
 #undef DirInfo
 #undef ULONG
