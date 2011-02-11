@@ -889,6 +889,17 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     // die Position nicht "verschoben"
     aCpyPam.SetMark();
     BOOL bCanMoveBack = aCpyPam.Move( fnMoveBackward, fnGoCntnt );
+    // If the position was shifted from more than one node, an end node has been skipped
+    bool bAfterTable = false;
+    if ( ( rPos.nNode.GetIndex() - aCpyPam.GetPoint()->nNode.GetIndex() ) > 1 )
+    {
+        // First go back to the original place
+        aCpyPam.GetPoint()->nNode = rPos.nNode;
+        aCpyPam.GetPoint()->nContent = rPos.nContent;
+
+        bCanMoveBack = false;
+        bAfterTable = true;
+    }
     if( !bCanMoveBack )
         aCpyPam.GetPoint()->nNode--;
 
@@ -1253,7 +1264,20 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     else
         *aCpyPam.GetMark() = rPos;
 
-    aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
+    if ( !bAfterTable )
+        aCpyPam.Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
+    else
+    {
+        // Reset the offset to 0 as it was before the insertion
+        aCpyPam.GetPoint( )->nContent -= aCpyPam.GetPoint( )->nContent;
+
+        aCpyPam.GetPoint( )->nNode++;
+        // If the next node is a start node, then step back: the start node
+        // has been copied and needs to be in the selection for the undo
+        if ( aCpyPam.GetPoint()->nNode.GetNode().IsStartNode() )
+            aCpyPam.GetPoint( )->nNode--;
+
+    }
     aCpyPam.Exchange();
 
     // dann kopiere noch alle Bookmarks
