@@ -2316,7 +2316,7 @@ void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) cons
             break;
 
         const SwLineEntrySet& rEntrySet = (*aIter).second;
-        SwLineEntrySetIter aSetIter = rEntrySet.begin();
+        SwLineEntrySetConstIter aSetIter = rEntrySet.begin();
         while ( aSetIter != rEntrySet.end() )
         {
             const SwLineEntry& rEntry = *aSetIter;
