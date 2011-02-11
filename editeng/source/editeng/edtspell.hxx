@@ -52,13 +52,13 @@ private:
 
 protected:
     virtual void            SpellStart( SvxSpellArea eArea );
-    virtual BOOL            SpellContinue();    // Bereich pruefen
-    virtual void            ReplaceAll( const String &rNewText, INT16 nLanguage );
+    virtual sal_Bool            SpellContinue();    // Bereich pruefen
+    virtual void            ReplaceAll( const String &rNewText, sal_Int16 nLanguage );
     virtual void            SpellEnd();
-    virtual BOOL            SpellMore();
-    virtual BOOL            HasOtherCnt();
+    virtual sal_Bool            SpellMore();
+    virtual sal_Bool            HasOtherCnt();
     virtual void            ScrollArea();
-    virtual void            ChangeWord( const String& rNewWord, const USHORT nLang );
+    virtual void            ChangeWord( const String& rNewWord, const sal_uInt16 nLang );
     virtual void            ChangeThesWord( const String& rNewWord );
     virtual void            AutoCorrect( const String& rOldWord, const String& rNewWord );
 
@@ -66,18 +66,18 @@ public:
     EditSpellWrapper( Window* pWin,
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XSpellChecker1 > &xChecker,
-            BOOL bIsStart,
-            BOOL bIsAllRight, EditView* pView );
+            sal_Bool bIsStart,
+            sal_Bool bIsAllRight, EditView* pView );
 
 };
 
 
 struct WrongRange
 {
-    USHORT nStart;
-    USHORT nEnd;
+    sal_uInt16 nStart;
+    sal_uInt16 nEnd;
 
-    WrongRange( USHORT nS, USHORT nE ) { nStart = nS; nEnd = nE; }
+    WrongRange( sal_uInt16 nS, sal_uInt16 nE ) { nStart = nS; nEnd = nE; }
 };
 
 SV_DECL_VARARR( WrongRanges, WrongRange, 4, 4 )
@@ -86,41 +86,41 @@ SV_DECL_VARARR( WrongRanges, WrongRange, 4, 4 )
 class WrongList : private WrongRanges
 {
 private:
-    USHORT  nInvalidStart;
-    USHORT  nInvalidEnd;
+    sal_uInt16  nInvalidStart;
+    sal_uInt16  nInvalidEnd;
 
-    BOOL    DbgIsBuggy() const;
+    sal_Bool    DbgIsBuggy() const;
 
 public:
             WrongList();
             ~WrongList();
 
-    BOOL    IsInvalid() const       { return nInvalidStart != NOT_INVALID; }
+    sal_Bool    IsInvalid() const       { return nInvalidStart != NOT_INVALID; }
     void    SetValid()              { nInvalidStart = NOT_INVALID; nInvalidEnd = 0; }
-    void    MarkInvalid( USHORT nS, USHORT nE );
+    void    MarkInvalid( sal_uInt16 nS, sal_uInt16 nE );
 
-    USHORT          Count() const               { return WrongRanges::Count(); }
+    sal_uInt16          Count() const               { return WrongRanges::Count(); }
 
     // Wenn man weiss was man tut:
-    WrongRange&     GetObject( USHORT n ) const { return WrongRanges::GetObject( n ); }
-    void            InsertWrong( const WrongRange& rWrong, USHORT nPos );
+    WrongRange&     GetObject( sal_uInt16 n ) const { return WrongRanges::GetObject( n ); }
+    void            InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos );
 
-    USHORT  GetInvalidStart() const { return nInvalidStart; }
-    USHORT& GetInvalidStart()       { return nInvalidStart; }
+    sal_uInt16  GetInvalidStart() const { return nInvalidStart; }
+    sal_uInt16& GetInvalidStart()       { return nInvalidStart; }
 
-    USHORT  GetInvalidEnd() const   { return nInvalidEnd; }
-    USHORT& GetInvalidEnd()         { return nInvalidEnd; }
+    sal_uInt16  GetInvalidEnd() const   { return nInvalidEnd; }
+    sal_uInt16& GetInvalidEnd()         { return nInvalidEnd; }
 
-    void    TextInserted( USHORT nPos, USHORT nChars, BOOL bPosIsSep );
-    void    TextDeleted( USHORT nPos, USHORT nChars );
+    void    TextInserted( sal_uInt16 nPos, sal_uInt16 nChars, sal_Bool bPosIsSep );
+    void    TextDeleted( sal_uInt16 nPos, sal_uInt16 nChars );
 
     void    ResetRanges()           { Remove( 0, Count() ); }
-    BOOL    HasWrongs() const       { return Count() != 0; }
-    void    InsertWrong( USHORT nStart, USHORT nEnd, BOOL bClearRange );
-    BOOL    NextWrong( USHORT& rnStart, USHORT& rnEnd ) const;
-    BOOL    HasWrong( USHORT nStart, USHORT nEnd ) const;
-    BOOL    HasAnyWrong( USHORT nStart, USHORT nEnd ) const;
-    void    ClearWrongs( USHORT nStart, USHORT nEnd, const ContentNode* pNode );
+    sal_Bool    HasWrongs() const       { return Count() != 0; }
+    void    InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd, sal_Bool bClearRange );
+    sal_Bool    NextWrong( sal_uInt16& rnStart, sal_uInt16& rnEnd ) const;
+    sal_Bool    HasWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
+    sal_Bool    HasAnyWrong( sal_uInt16 nStart, sal_uInt16 nEnd ) const;
+    void    ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd, const ContentNode* pNode );
     void    MarkWrongsInvalid();
 
     WrongList*  Clone() const;
@@ -129,7 +129,7 @@ public:
     bool operator==(const WrongList& rCompare) const;
 };
 
-inline void WrongList::InsertWrong( const WrongRange& rWrong, USHORT nPos )
+inline void WrongList::InsertWrong( const WrongRange& rWrong, sal_uInt16 nPos )
 {
     WrongRanges::Insert( rWrong, nPos );
 #ifdef DBG_UTIL
@@ -143,35 +143,35 @@ class EdtAutoCorrDoc : public SvxAutoCorrDoc
 {
     ImpEditEngine*  pImpEE;
     ContentNode*    pCurNode;
-    USHORT          nCursor;
+    sal_uInt16          nCursor;
 
-    BOOL            bAllowUndoAction;
-    BOOL            bUndoAction;
+    sal_Bool            bAllowUndoAction;
+    sal_Bool            bUndoAction;
 
 protected:
     void            ImplStartUndoAction();
 
 public:
-                    EdtAutoCorrDoc( ImpEditEngine* pImpEE, ContentNode* pCurNode, USHORT nCrsr, xub_Unicode cIns );
+                    EdtAutoCorrDoc( ImpEditEngine* pImpEE, ContentNode* pCurNode, sal_uInt16 nCrsr, xub_Unicode cIns );
                     ~EdtAutoCorrDoc();
 
-    virtual BOOL    Delete( USHORT nStt, USHORT nEnd );
-    virtual BOOL    Insert( USHORT nPos, const String& rTxt );
-    virtual BOOL    Replace( USHORT nPos, const String& rTxt );
+    virtual sal_Bool    Delete( sal_uInt16 nStt, sal_uInt16 nEnd );
+    virtual sal_Bool    Insert( sal_uInt16 nPos, const String& rTxt );
+    virtual sal_Bool    Replace( sal_uInt16 nPos, const String& rTxt );
 
-    virtual BOOL    SetAttr( USHORT nStt, USHORT nEnd, USHORT nSlotId, SfxPoolItem& );
-    virtual BOOL    SetINetAttr( USHORT nStt, USHORT nEnd, const String& rURL );
+    virtual sal_Bool    SetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, sal_uInt16 nSlotId, SfxPoolItem& );
+    virtual sal_Bool    SetINetAttr( sal_uInt16 nStt, sal_uInt16 nEnd, const String& rURL );
 
-    virtual BOOL    HasSymbolChars( USHORT nStt, USHORT nEnd );
+    virtual sal_Bool    HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd );
 
-    virtual const String* GetPrevPara( BOOL bAtNormalPos );
+    virtual const String* GetPrevPara( sal_Bool bAtNormalPos );
 
-    virtual BOOL    ChgAutoCorrWord( USHORT& rSttPos, USHORT nEndPos,
+    virtual sal_Bool    ChgAutoCorrWord( sal_uInt16& rSttPos, sal_uInt16 nEndPos,
                                   SvxAutoCorrect& rACorrect, const String** ppPara );
 
-    virtual LanguageType GetLanguage( USHORT nPos, BOOL bPrevPara = FALSE ) const;
+    virtual LanguageType GetLanguage( sal_uInt16 nPos, sal_Bool bPrevPara = sal_False ) const;
 
-    USHORT          GetCursor() const { return nCursor; }
+    sal_uInt16          GetCursor() const { return nCursor; }
 
 };
 

@@ -74,7 +74,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/evntconf.hxx>
 #include "intro.hxx"
-#include <sfx2/macrconf.hxx>
 #include <sfx2/mnumgr.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/progress.hxx>
@@ -231,7 +230,7 @@ String GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
 
 //====================================================================
 
-FASTBOOL SfxApplication::Initialize_Impl()
+bool SfxApplication::Initialize_Impl()
 {
     RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 

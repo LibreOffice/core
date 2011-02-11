@@ -31,6 +31,7 @@
 #include "doctemplates.hxx"
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
 #include <tools/urlobj.hxx>
 #include <rtl/ustring.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -42,6 +43,7 @@
 #include <comphelper/sequenceashashmap.hxx>
 #include <unotools/pathoptions.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
@@ -59,7 +61,6 @@
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
 
 #include <svtools/templatefoldercache.hxx>
 #include <unotools/configmgr.hxx>
@@ -128,7 +129,7 @@ using namespace ::comphelper;
 class WaitWindow_Impl : public WorkWindow
 {
     Rectangle   _aRect;
-    USHORT      _nTextStyle;
+    sal_uInt16      _nTextStyle;
     String      _aText;
 
     public:
@@ -386,8 +387,8 @@ public:
                                   const OUString& rTargetURL,
                                   const OUString& rType,
                                   const OUString& rHierURL );
-    ULONG               count() { return maEntries.Count(); }
-    DocTemplates_EntryData_Impl*     getEntry( ULONG nPos ) { return maEntries.GetObject( nPos ); }
+    sal_uIntPtr               count() { return maEntries.Count(); }
+    DocTemplates_EntryData_Impl*     getEntry( sal_uIntPtr nPos ) { return maEntries.GetObject( nPos ); }
 };
 
 DECLARE_LIST( GroupList_Impl, GroupData_Impl* )
@@ -549,9 +550,9 @@ void SfxDocTplService_Impl::readFolderList()
 
     NamePair_Impl*  pPair;
 
-    USHORT nCount = (USHORT)( Min( aShortNames.Count(), aLongNames.Count() ) );
+    sal_uInt16 nCount = (sal_uInt16)( Min( aShortNames.Count(), aLongNames.Count() ) );
 
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         pPair = new NamePair_Impl;
         pPair->maShortName  = aShortNames.GetString( i );
@@ -594,11 +595,11 @@ void SfxDocTplService_Impl::getDirList()
     // TODO/LATER: let use service, register listener
     INetURLObject   aURL;
     String          aDirs = SvtPathOptions().GetTemplatePath();
-    USHORT          nCount = aDirs.GetTokenCount( C_DELIM );
+    sal_uInt16          nCount = aDirs.GetTokenCount( C_DELIM );
 
     maTemplateDirs = Sequence< OUString >( nCount );
 
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( sal_uInt16 i=0; i<nCount; i++ )
     {
         aURL.SetSmartProtocol( INET_PROT_FILE );
         aURL.SetURL( aDirs.GetToken( i, C_DELIM ) );
@@ -1248,8 +1249,8 @@ void SfxDocTplService_Impl::doUpdate()
                                  OUString( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) ),
                                  makeAny( pGroup->getTargetURL() ) );
 
-                ULONG nCount = pGroup->count();
-                for ( ULONG i=0; i<nCount; i++ )
+                sal_uIntPtr nCount = pGroup->count();
+                for ( sal_uIntPtr i=0; i<nCount; i++ )
                 {
                     DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
                     if ( ! pData->getInUse() )
@@ -2462,7 +2463,7 @@ void SfxDocTplService_Impl::addHierGroup( GroupList_Impl& rList,
         {
             while ( xResultSet->next() )
             {
-                BOOL             bUpdateType = sal_False;
+                sal_Bool             bUpdateType = sal_False;
                 DocTemplates_EntryData_Impl  *pData;
 
                 OUString aTitle( xRow->getString( 1 ) );
@@ -2727,8 +2728,8 @@ void SfxDocTplService_Impl::addGroupToHierarchy( GroupData_Impl *pGroup )
         setProperty( aGroup, aAdditionalProp, makeAny( pGroup->getTargetURL() ) );
         pGroup->setHierarchyURL( aNewGroupURL );
 
-        ULONG nCount = pGroup->count();
-        for ( ULONG i=0; i<nCount; i++ )
+        sal_uIntPtr nCount = pGroup->count();
+        for ( sal_uIntPtr i=0; i<nCount; i++ )
         {
             DocTemplates_EntryData_Impl *pData = pGroup->getEntry( i );
             addToHierarchy( pGroup, pData ); // add entry to hierarchy
@@ -2876,11 +2877,35 @@ void SfxURLRelocator_Impl::initOfficeInstDirs()
 }
 
 // -----------------------------------------------------------------------
+void SfxURLRelocator_Impl::implExpandURL( ::rtl::OUString& io_url )
+{
+    const INetURLObject aParser( io_url );
+    if ( aParser.GetProtocol() != INET_PROT_VND_SUN_STAR_EXPAND )
+        return;
+
+    io_url = aParser.GetURLPath( INetURLObject::DECODE_WITH_CHARSET );
+    try
+    {
+        if ( !mxMacroExpander.is() )
+        {
+            ::comphelper::ComponentContext aContext( mxFactory );
+            mxMacroExpander.set( aContext.getSingleton( "com.sun.star.util.theMacroExpander" ), UNO_QUERY_THROW );
+        }
+        io_url = mxMacroExpander->expandMacros( io_url );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+// -----------------------------------------------------------------------
 void SfxURLRelocator_Impl::makeRelocatableURL( rtl::OUString & rURL )
 {
     if ( rURL.getLength() > 0 )
     {
         initOfficeInstDirs();
+        implExpandURL( rURL );
         rURL = mxOfficeInstDirs->makeRelocatableURL( rURL );
     }
 }
@@ -2891,6 +2916,7 @@ void SfxURLRelocator_Impl::makeAbsoluteURL( rtl::OUString & rURL )
     if ( rURL.getLength() > 0 )
     {
         initOfficeInstDirs();
+        implExpandURL( rURL );
         rURL = mxOfficeInstDirs->makeAbsoluteURL( rURL );
     }
 }

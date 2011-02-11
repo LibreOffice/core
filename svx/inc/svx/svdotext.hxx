@@ -178,8 +178,8 @@ private:
 
 protected:
     // Das aRect ist gleichzeig auch das Rect vom RectObj und CircObj.
-    // Bei bTextFrame=TRUE wird der Text in dieses Rect hineinformatiert.
-    // Bei bTextFrame=FALSE wird der Text am Mittelpunkt des Rect zentriert.
+    // Bei bTextFrame=sal_True wird der Text in dieses Rect hineinformatiert.
+    // Bei bTextFrame=sal_False wird der Text am Mittelpunkt des Rect zentriert.
     Rectangle                   aRect;
 
     // Der GeoStat enthaelt den Drehwinkel und einen Shearwinkel
@@ -206,7 +206,7 @@ protected:
     //     OBJ_TEXTEXT      Textfortsetzungsrahmen
     //     OBJ_TITLETEXT    TitleText fuer StarDraw-Praesentation
     //     OBJ_OUTLINETEXT  OutlineText fuer StarDraw-Praesentation
-    // eTextKind hat nur Bedeutung, wenn bTextFrame=TRUE, da es sich sonst
+    // eTextKind hat nur Bedeutung, wenn bTextFrame=sal_True, da es sich sonst
     // um ein beschriftetes Grafikobjekt handelt.
     SdrObjKind                  eTextKind;
 
@@ -223,36 +223,36 @@ public:
 protected:
     // Fuer beschriftete Zeichenobjekte ist bTextFrame=FALSE. Der Textblock
     // wird dann hoizontal und vertikal an aRect zentriert. Bei bTextFrame=
-    // TRUE wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
-    // ist durch ein SdrRectObj mit bTextFrame=TRUE realisiert.
-    BOOL                        bTextFrame : 1;
-    BOOL                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
-    BOOL                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
-    BOOL                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
-    BOOL                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
-    BOOL                        bTextSizeDirty : 1;
+    // sal_True wird der Text in aRect hineinformatiert. Der eigentliche Textrahmen
+    // ist durch ein SdrRectObj mit bTextFrame=sal_True realisiert.
+    sal_Bool                        bTextFrame : 1;
+    sal_Bool                        bPortionInfoChecked : 1; // Fuer Optimierung von Textobjekten
+    sal_Bool                        bNoShear : 1;            // Obj darf nicht gesheart werden   (->Graf+Ole+TextFrame)
+    sal_Bool                        bNoRotate : 1;           // Obj darf nicht gedreht werden    (->Ole)
+    sal_Bool                        bNoMirror : 1;           // Obj darf nicht gespiegelt werden (->Ole,TextFrame)
+    sal_Bool                        bTextSizeDirty : 1;
 
     // #101684#
-    BOOL                        mbInEditMode : 1;   // Is this text obejct in edit mode?
+    sal_Bool                        mbInEditMode : 1;   // Is this text obejct in edit mode?
 
     // Fuer Objekt mit freier Groesse im Draw (Mengentext). Das Flag wird vom
     // der App beim Create gesetzt.
     // Wenn das Objekt dann spaeter in der Breite resized wird, wird
-    // AutoGrowWidth abgeschaltet (Hart auf FALSE attributiert). Das Flag wird
-    // dann ebenfalls auf FALSE gesetzt, sodass sich das Objekt anschliessend
+    // AutoGrowWidth abgeschaltet (Hart auf sal_False attributiert). Das Flag wird
+    // dann ebenfalls auf sal_False gesetzt, sodass sich das Objekt anschliessend
     // wie ein normales Textobjekt verhaelt.
     // Resize in der Breite kann sein:
     // - Interaktives Resize in Einfach- oder Mehrfachselektion
     // - Positions+Groesse Dialog
-    BOOL                        bDisableAutoWidthOnDragging : 1;
+    sal_Bool                        bDisableAutoWidthOnDragging : 1;
 
     // #111096#
     // Allow text suppression
-    BOOL                        mbTextHidden : 1;
+    sal_Bool                        mbTextHidden : 1;
 
     // #111096#
     // Flag for allowing text animation. Default is sal_true.
-    BOOL                        mbTextAnimationAllowed : 1;
+    sal_Bool                        mbTextAnimationAllowed : 1;
 
     SdrOutliner& ImpGetDrawOutliner() const;
 
@@ -283,10 +283,10 @@ protected:
     void ImpCheckShear();
     Rectangle ImpDragCalcRect(const SdrDragStat& rDrag) const;
     void ImpSetTextEditParams() const;
-    void SetTextSizeDirty() { bTextSizeDirty=TRUE; }
+    void SetTextSizeDirty() { bTextSizeDirty=sal_True; }
 
     // rAnchorRect ist InOut-Parameter!
-    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, BOOL bLineWidth ) const;
+    void ImpSetContourPolygon( SdrOutliner& rOutliner, Rectangle& rAnchorRect, sal_Bool bLineWidth ) const;
 
     virtual SdrObjGeoData* NewGeoData() const;
     virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
@@ -308,15 +308,15 @@ protected:
     SdrTextObj(SdrObjKind eNewTextKind);
     SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect);
 
-    // der USHORT eFormat nimmt Werte des enum EETextFormat entgegen
-    SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, USHORT eFormat);
+    // der sal_uInt16 eFormat nimmt Werte des enum EETextFormat entgegen
+    SdrTextObj(SdrObjKind eNewTextKind, const Rectangle& rNewRect, SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
     virtual ~SdrTextObj();
 
 public:
     TYPEINFO();
 
     // #101684#
-    BOOL IsInEditMode() const { return mbInEditMode; }
+    sal_Bool IsInEditMode() const { return mbInEditMode; }
 
     // via eCharSet kann der CharSet der vorliegenden Datei uebergeben werden.
     // Bei RTL_TEXTENCODING_DONTKNOW wird der CharSet der aktuellen Plattform verwendet.
@@ -331,12 +331,12 @@ public:
     void SetTextLink(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
     void ReleaseTextLink();
     FASTBOOL IsLinkedText() const { return pPlusData!=NULL && GetLinkUserData()!=NULL; }
-    FASTBOOL ReloadLinkedText(FASTBOOL bForceLoad=FALSE);
+    FASTBOOL ReloadLinkedText(FASTBOOL bForceLoad=sal_False);
     FASTBOOL LoadText(const String& rFileName, const String& rFilterName, rtl_TextEncoding eCharSet);
 
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE) const;
-    virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
-    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=TRUE, FASTBOOL bWdt=TRUE);
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(Rectangle& rR, FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True) const;
+    virtual FASTBOOL NbcAdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
+    virtual FASTBOOL AdjustTextFrameWidthAndHeight(FASTBOOL bHgt=sal_True, FASTBOOL bWdt=sal_True);
     void NbcResizeTextAttributes(const Fraction& xFact, const Fraction& yFact);
     FASTBOOL IsTextFrame() const { return bTextFrame; }
     FASTBOOL IsOutlText() const { return bTextFrame && (eTextKind==OBJ_OUTLINETEXT || eTextKind==OBJ_TITLETEXT); }
@@ -368,8 +368,8 @@ public:
     FASTBOOL IsDisableAutoWidthOnDragging() { return bDisableAutoWidthOnDragging; }
     void NbcSetText(const String& rStr);
     void SetText(const String& rStr);
-    void NbcSetText(SvStream& rInput, const String& rBaseURL, USHORT eFormat);
-    void SetText(SvStream& rInput, const String& rBaseURL, USHORT eFormat);
+    void NbcSetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
+    void SetText(SvStream& rInput, const String& rBaseURL, sal_uInt16 eFormat);
 
     // FitToSize und Fontwork wird bei GetTextSize() nicht berueksichtigt!
     virtual const Size& GetTextSize() const;
@@ -377,8 +377,8 @@ public:
 
     // Gleichzeitig wird der Text in den Outliner gesetzt (ggf.
     // der des EditOutliners) und die PaperSize gesetzt.
-    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
-        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=sal_False,
+        Rectangle* pAnchorRect=NULL, sal_Bool bLineWidth=sal_True ) const;
     virtual void TakeTextAnchorRect(::Rectangle& rAnchorRect) const;
     const GeoStat& GetGeoStat() const { return aGeo; }
 
@@ -421,7 +421,7 @@ public:
     virtual void SetPage(SdrPage* pNewPage);
     virtual void SetModel(SdrModel* pNewModel);
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
-    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_uInt16 GetObjIdentifier() const;
 
     // Wird zur Bestimmung des Textankerbereichs benoetigt
     virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
@@ -435,7 +435,7 @@ public:
     virtual void NbcSetLogicRect(const Rectangle& rRect);
     virtual const Rectangle& GetLogicRect() const;
     virtual long GetRotateAngle() const;
-    virtual long GetShearAngle(FASTBOOL bVertical=FALSE) const;
+    virtual long GetShearAngle(FASTBOOL bVertical=sal_False) const;
 
     virtual sal_uInt32 GetSnapPointCount() const;
     virtual Point GetSnapPoint(sal_uInt32 i) const;
@@ -466,7 +466,7 @@ public:
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual void EndTextEdit(SdrOutliner& rOutl);
-    virtual USHORT GetOutlinerViewAnchorMode() const;
+    virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
     void StartTextAnimation(OutputDevice* pOutDev, const Point& rOffset, long nExtraData=0L);
     void StopTextAnimation(OutputDevice* pOutDev=NULL, long nExtraData=0L);
@@ -480,10 +480,10 @@ public:
     virtual void NbcReformatText();
     virtual void ReformatText();
 
-    virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+    virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, sal_uInt16 nPara, sal_uInt16 nPos,
         FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
 
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     void SetTextEditOutliner(SdrOutliner* pOutl) { pEdtOutl=pOutl; }
 

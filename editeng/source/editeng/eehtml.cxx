@@ -56,15 +56,15 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
 {
     pImpEditEngine = 0;
     pCurAnchor = 0;
-    bInPara = FALSE;
-    bWasInPara = FALSE;
+    bInPara = sal_False;
+    bWasInPara = sal_False;
     nInTable = 0;
     nInCell = 0;
-    bInTitle = FALSE;
+    bInTitle = sal_False;
     nDefListLevel = 0;
     nBulletLevel = 0;
     nNumberingLevel = 0;
-    bFieldsInserted = FALSE;
+    bFieldsInserted = sal_False;
 
     DBG_ASSERT( RTL_TEXTENCODING_DONTKNOW == GetSrcEncoding( ), "EditHTMLParser::EditHTMLParser: Where does the encoding come from?" );
     DBG_ASSERT( !IsSwitchToUCS2(), "EditHTMLParser::::EditHTMLParser: Switch to UCS2?" );
@@ -74,7 +74,7 @@ EditHTMLParser::EditHTMLParser( SvStream& rIn, const String& rBaseURL, SvKeyValu
     SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
-    SetSwitchToUCS2( TRUE );
+    SetSwitchToUCS2( sal_True );
 
     if ( pHTTPHeaderAttrs )
         SetEncodingByHTTPHeader( pHTTPHeaderAttrs );
@@ -128,16 +128,16 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_META:
     {
         const HTMLOptions *_pOptions = GetOptions();
-        USHORT nArrLen = _pOptions->Count();
-        BOOL bEquiv = FALSE;
-        for ( USHORT i = 0; i < nArrLen; i++ )
+        sal_uInt16 nArrLen = _pOptions->Count();
+        sal_Bool bEquiv = sal_False;
+        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             const HTMLOption *pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
             {
                 case HTML_O_HTTPEQUIV:
                 {
-                    bEquiv = TRUE;
+                    bEquiv = sal_True;
                 }
                 break;
                 case HTML_O_CONTENT:
@@ -157,11 +157,11 @@ void EditHTMLParser::NextToken( int nToken )
     break;
     case HTML_PLAINTEXT_ON:
     case HTML_PLAINTEXT2_ON:
-        bInPara = TRUE;
+        bInPara = sal_True;
     break;
     case HTML_PLAINTEXT_OFF:
     case HTML_PLAINTEXT2_OFF:
-        bInPara = FALSE;
+        bInPara = sal_False;
     break;
 
     case HTML_LINEBREAK:
@@ -194,7 +194,7 @@ void EditHTMLParser::NextToken( int nToken )
         if (!bInTitle)
         {
             if ( !bInPara )
-                StartPara( FALSE );
+                StartPara( sal_False );
 
             // if ( bInPara || pCurAnchor )
 
@@ -212,7 +212,7 @@ void EditHTMLParser::NextToken( int nToken )
                 // Nur bis HTML mit 319 geschrieben ?!
                 if ( IsReadPRE() )
                 {
-                    USHORT nTabPos = aText.Search( '\t', 0 );
+                    sal_uInt16 nTabPos = aText.Search( '\t', 0 );
                     while ( nTabPos != STRING_NOTFOUND )
                     {
                         aText.Erase( nTabPos, 1 );
@@ -229,7 +229,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_CENTER_ON:
     case HTML_CENTER_OFF:   // if ( bInPara )
                             {
-                                USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+                                sal_uInt16 nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
                                 aItems.ClearItem( EE_PARA_JUST );
                                 if ( nToken == HTML_CENTER_ON )
@@ -245,13 +245,13 @@ void EditHTMLParser::NextToken( int nToken )
 
     case HTML_PARABREAK_ON:
         if( bInPara && HasTextInCurrentPara() )
-            EndPara( TRUE );
-        StartPara( TRUE );
+            EndPara( sal_True );
+        StartPara( sal_True );
         break;
 
     case HTML_PARABREAK_OFF:
         if( bInPara )
-            EndPara( TRUE );
+            EndPara( sal_True );
         break;
 
     case HTML_HEAD1_ON:
@@ -280,7 +280,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_XMP_ON:
     case HTML_LISTING_ON:
     {
-        StartPara( TRUE );
+        StartPara( sal_True );
         ImpSetStyleSheet( STYLE_PRE );
     }
     break;
@@ -319,10 +319,10 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_ORDERLIST_ON:
     case HTML_UNORDERLIST_ON:
     {
-        BOOL bHasText = HasTextInCurrentPara();
+        sal_Bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
-        StartPara( FALSE );
+        StartPara( sal_False );
     }
     break;
 
@@ -338,7 +338,7 @@ void EditHTMLParser::NextToken( int nToken )
     case HTML_DD_OFF:
     case HTML_DT_OFF:
     case HTML_ORDERLIST_OFF:
-    case HTML_UNORDERLIST_OFF:  EndPara( FALSE );
+    case HTML_UNORDERLIST_OFF:  EndPara( sal_False );
                                 break;
 
     case HTML_TABLEROW_ON:
@@ -357,10 +357,10 @@ void EditHTMLParser::NextToken( int nToken )
     // #58335# kein SkipGroup on/off auf inline markup etc.
 
     case HTML_TITLE_ON:
-        bInTitle = TRUE;
+        bInTitle = sal_True;
         break;
     case HTML_TITLE_OFF:
-        bInTitle = FALSE;
+        bInTitle = sal_False;
         break;
 
     // globals
@@ -555,7 +555,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     }
 
     ContentNode* pSN = aStartPaM.GetNode();
-    USHORT nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
+    sal_uInt16 nStartNode = pImpEditEngine->GetEditDoc().GetPos( pSN );
 
     // Wenn ein Attribut von 0 bis aktuelle Absatzlaenge geht,
     // soll es ein Absatz-Attribut sein!
@@ -566,12 +566,12 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     // HTML eigentlich nicht:
 #ifdef DBG_UTIL
     ContentNode* pEN = aEndPaM.GetNode();
-    USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
+    sal_uInt16 nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
     DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Mehrere Absaetze?" );
 #endif
 
 /*
-    for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
+    for ( sal_uInt16 z = nStartNode+1; z < nEndNode; z++ )
     {
         DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node existiert noch nicht(RTF)" );
         pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
@@ -606,7 +606,7 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     }
 }
 
-void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
+void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
 {
     /*
         nHLevel:    0:          Ausschalten
@@ -628,7 +628,7 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
             // dass diese auch in der App liegen sollten, damit sie beim
             // fuettern in eine andere Engine auch noch da sind...
 
-            USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+            sal_uInt16 nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
 //          SfxItemSet aItems( pImpEditEngine->GetEmptyItemSet() );
             SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
 
@@ -667,8 +667,8 @@ void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
                 if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
                 {
                     SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-                    aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
-                    aULSpaceItem.SetLower( (USHORT)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
+                    aULSpaceItem.SetUpper( (sal_uInt16)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
+                    aULSpaceItem.SetLower( (sal_uInt16)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
                     aItems.Put( aULSpaceItem );
                 }
             }
@@ -704,7 +704,7 @@ void EditHTMLParser::SkipGroup( int nEndToken )
     // #69109# groups in cells are closed upon leaving the cell, because those
     // ******* web authors don't know their job
     // for example: <td><form></td>   lacks a closing </form>
-    BYTE nCellLevel = nInCell;
+    sal_uInt8 nCellLevel = nInCell;
     int nToken;
     while( nCellLevel <= nInCell && ( (nToken = GetNextToken() ) != nEndToken ) && nToken )
     {
@@ -723,14 +723,14 @@ void EditHTMLParser::SkipGroup( int nEndToken )
     }
 }
 
-void EditHTMLParser::StartPara( BOOL bReal )
+void EditHTMLParser::StartPara( sal_Bool bReal )
 {
     if ( bReal )
     {
         const HTMLOptions *_pOptions = GetOptions();
-        USHORT nArrLen = _pOptions->Count();
+        sal_uInt16 nArrLen = _pOptions->Count();
         SvxAdjust eAdjust = SVX_ADJUST_LEFT;
-        for ( USHORT i = 0; i < nArrLen; i++ )
+        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             const HTMLOption *pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
@@ -753,37 +753,37 @@ void EditHTMLParser::StartPara( BOOL bReal )
         aItemSet.Put( SvxAdjustItem( eAdjust, EE_PARA_JUST ) );
         ImpSetAttribs( aItemSet );
     }
-    bInPara = TRUE;
+    bInPara = sal_True;
 }
 
-void EditHTMLParser::EndPara( BOOL )
+void EditHTMLParser::EndPara( sal_Bool )
 {
     if ( bInPara )
     {
-        BOOL bHasText = HasTextInCurrentPara();
+        sal_Bool bHasText = HasTextInCurrentPara();
         if ( bHasText )
             ImpInsertParaBreak();
         // Nur, wenn ohne Absatzabstaende gearbeitet wird...
 //      if ( !nInTable && bReal && (nNumberingLevel<=1) && (nBulletLevel<=1) )
 //          ImpInsertParaBreak();
     }
-    bInPara = FALSE;
+    bInPara = sal_False;
 }
 
-BOOL EditHTMLParser::ThrowAwayBlank()
+sal_Bool EditHTMLParser::ThrowAwayBlank()
 {
     // Ein Blank muss weggeschmissen werden, wenn der neue Text mit einem
     // Blank beginnt und der aktuelle Absatz leer ist oder mit einem
     // Blank endet...
     ContentNode* pNode = aCurSel.Max().GetNode();
     if ( pNode->Len() && ( pNode->GetChar( pNode->Len()-1 ) != ' ' ) )
-        return FALSE;
-    return TRUE;
+        return sal_False;
+    return sal_True;
 }
 
-BOOL EditHTMLParser::HasTextInCurrentPara()
+sal_Bool EditHTMLParser::HasTextInCurrentPara()
 {
-    return aCurSel.Max().GetNode()->Len() ? TRUE : FALSE;
+    return aCurSel.Max().GetNode()->Len() ? sal_True : sal_False;
 }
 
 void EditHTMLParser::AnchorStart()
@@ -792,11 +792,11 @@ void EditHTMLParser::AnchorStart()
     if ( !pCurAnchor )
     {
         const HTMLOptions* _pOptions = GetOptions();
-        USHORT nArrLen = _pOptions->Count();
+        sal_uInt16 nArrLen = _pOptions->Count();
 
         String aRef;
 
-        for ( USHORT i = 0; i < nArrLen; i++ )
+        for ( sal_uInt16 i = 0; i < nArrLen; i++ )
         {
             const HTMLOption* pOption = (*_pOptions)[i];
             switch( pOption->GetToken() )
@@ -830,7 +830,7 @@ void EditHTMLParser::AnchorEnd()
         // Als URL-Feld einfuegen...
         SvxFieldItem aFld( SvxURLField( pCurAnchor->aHRef, pCurAnchor->aText, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD  );
         aCurSel = pImpEditEngine->InsertField( aCurSel, aFld );
-        bFieldsInserted = TRUE;
+        bFieldsInserted = sal_True;
         delete pCurAnchor;
         pCurAnchor = 0;
 
@@ -845,12 +845,12 @@ void EditHTMLParser::AnchorEnd()
 void EditHTMLParser::HeadingStart( int nToken )
 {
     bWasInPara = bInPara;
-    StartPara( FALSE );
+    StartPara( sal_False );
 
     if ( bWasInPara && HasTextInCurrentPara() )
         ImpInsertParaBreak();
 
-    USHORT nId = sal::static_int_cast< USHORT >(
+    sal_uInt16 nId = sal::static_int_cast< sal_uInt16 >(
         1 + ( ( nToken - HTML_HEAD1_ON ) / 2 ) );
     DBG_ASSERT( (nId >= 1) && (nId <= 9), "HeadingStart: ID kann nicht stimmen!" );
     ImpSetStyleSheet( nId );
@@ -858,12 +858,12 @@ void EditHTMLParser::HeadingStart( int nToken )
 
 void EditHTMLParser::HeadingEnd( int )
 {
-    EndPara( FALSE );
+    EndPara( sal_False );
     ImpSetStyleSheet( 0 );
 
     if ( bWasInPara )
     {
-        bInPara = TRUE;
-        bWasInPara = FALSE;
+        bInPara = sal_True;
+        bWasInPara = sal_False;
     }
 }

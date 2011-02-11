@@ -41,8 +41,8 @@ class TextConvWrapper : public editeng::HangulHanjaConversion
 {
     rtl::OUString   aConvText;      // convertible text part found last time
     LanguageType    nConvTextLang;  // language of aConvText
-    USHORT          nLastPos;       // starting position of the last found text portion (word)
-    USHORT          nUnitOffset;    // offset of current unit in the current text portion (word)
+    sal_uInt16          nLastPos;       // starting position of the last found text portion (word)
+    sal_uInt16          nUnitOffset;    // offset of current unit in the current text portion (word)
 
     ESelection      aConvSel;       // selection to be converted if
                                     // 'HasRange' is true, other conversion
@@ -99,8 +99,8 @@ protected:
     virtual sal_Bool    HasRubySupport() const;
 
     void SetLanguageAndFont( const ESelection &rESel,
-                            LanguageType nLang, USHORT nLangWhichId,
-                            const Font *pFont,  USHORT nFontWhichId );
+                            LanguageType nLang, sal_uInt16 nLangWhichId,
+                            const Font *pFont,  sal_uInt16 nFontWhichId );
 
 
 public:
@@ -109,9 +109,9 @@ public:
             const ::com::sun::star::lang::Locale& rSourceLocale,
             const ::com::sun::star::lang::Locale& rTargetLocale,
             const Font* pTargetFont,
-            INT32 nOptions,
+            sal_Int32 nOptions,
             sal_Bool bIsInteractive,
-            BOOL bIsStart, EditView* pView );
+            sal_Bool bIsStart, EditView* pView );
 
     virtual ~TextConvWrapper();
 

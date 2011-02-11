@@ -88,17 +88,17 @@ int SfxScriptOrganizerItem::operator==( const SfxPoolItem& rItem) const
 }
 
 
-sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId ) const
+sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     String aValue;
-    BOOL bIsString = FALSE;
+    sal_Bool bIsString = sal_False;
     sal_Bool bValue = sal_False;
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
         case 0:
         case MID_SCRIPT_ORGANIZER_LANGUAGE:
-            bIsString = TRUE;
+            bIsString = sal_True;
             aValue = aLanguage;
             break;
         default:
@@ -113,7 +113,7 @@ sal_Bool SfxScriptOrganizerItem::QueryValue( com::sun::star::uno::Any& rVal, BYT
     return sal_True;
 }
 
-sal_Bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId )
+sal_Bool SfxScriptOrganizerItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId )
 {
     ::rtl::OUString aValue;
     sal_Bool bRet = sal_False;

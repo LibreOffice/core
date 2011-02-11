@@ -44,14 +44,14 @@
 |*
 \************************************************************************/
 
-static BOOL bInit = FALSE;
+static sal_Bool bInit = sal_False;
 
 E3dObjFactory::E3dObjFactory()
 {
     if ( !bInit )
     {
         SdrObjFactory::InsertMakeObjectHdl(LINK(this, E3dObjFactory, MakeObject));
-        bInit = TRUE;
+        bInit = sal_True;
     }
 }
 

@@ -46,7 +46,6 @@
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <basic/sbuno.hxx>
-#include <sfx2/macrconf.hxx>
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
@@ -187,7 +186,7 @@ void FmFormView::MarkListHasChanged()
                 pImpl->m_xWindow->removeFocusListener(pImpl);
                 pImpl->m_xWindow = NULL;
             }
-            SetMoveOutside(FALSE);
+            SetMoveOutside(sal_False);
             //OLMRefreshAllIAOManagers();
         }
 
@@ -504,9 +503,9 @@ void FmFormView::EndCompleteRedraw( SdrPaintWindow& rPaintWindow, bool bPaintFor
 }
 
 // -----------------------------------------------------------------------------
-BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
+sal_Bool FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     if  (   IsDesignMode()
         &&  rKeyCode.GetCode() == KEY_RETURN
@@ -529,10 +528,10 @@ BOOL FmFormView::KeyInput(const KeyEvent& rKEvt, Window* pWin)
                     pImpl->m_xWindow = xWindow;
                     // add as listener to get notified when ESC will be pressed inside the grid
                     pImpl->m_xWindow->addFocusListener(pImpl);
-                    SetMoveOutside(TRUE);
+                    SetMoveOutside(sal_True);
                     //OLMRefreshAllIAOManagers();
                     xWindow->setFocus();
-                    bDone = TRUE;
+                    bDone = sal_True;
                 }
             }
         }
@@ -565,9 +564,9 @@ sal_Bool FmFormView::checkUnMarkAll(const Reference< XInterface >& _xSource)
 }
 
 // -----------------------------------------------------------------------------
-BOOL FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
+sal_Bool FmFormView::MouseButtonDown( const MouseEvent& _rMEvt, Window* _pWin )
 {
-    BOOL bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
+    sal_Bool bReturn = E3dView::MouseButtonDown( _rMEvt, _pWin );
 
     if ( pFormShell && pFormShell->GetImpl() )
     {
@@ -604,7 +603,7 @@ FmFormObj* FmFormView::getMarkedGrid() const
 // -----------------------------------------------------------------------------
 void FmFormView::createControlLabelPair( OutputDevice* _pOutDev, sal_Int32 _nXOffsetMM, sal_Int32 _nYOffsetMM,
     const Reference< XPropertySet >& _rxField, const Reference< XNumberFormats >& _rxNumberFormats,
-    sal_uInt16 _nControlObjectID, const ::rtl::OUString& _rFieldPostfix, UINT32 _nInventor, UINT16 _nLabelObjectID,
+    sal_uInt16 _nControlObjectID, const ::rtl::OUString& _rFieldPostfix, sal_uInt32 _nInventor, sal_uInt16 _nLabelObjectID,
     SdrPage* _pLabelPage, SdrPage* _pControlPage, SdrModel* _pModel, SdrUnoObj*& _rpLabel, SdrUnoObj*& _rpControl )
 {
     FmXFormView::createControlLabelPair(

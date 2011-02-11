@@ -235,7 +235,10 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
             if ( nNextState == embed::EmbedStates::INPLACE_ACTIVE )
             {
                 if ( !m_xClientSite.is() )
-                    throw embed::WrongStateException(); //TODO: client site is not set!
+                    throw embed::WrongStateException(
+                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "client site not set, yet" ) ),
+                        *this
+                );
 
                 uno::Reference< embed::XInplaceClient > xInplaceClient( m_xClientSite, uno::UNO_QUERY );
                 if ( xInplaceClient.is() && xInplaceClient->canInplaceActivate() )

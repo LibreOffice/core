@@ -49,7 +49,6 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::script;
-using namespace ::scripting_util;
 using namespace ::sf_misc;
 
 namespace func_provider

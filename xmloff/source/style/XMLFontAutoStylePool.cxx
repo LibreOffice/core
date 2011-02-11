@@ -172,7 +172,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sPoolName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    ULONG nPos;
+    sal_uLong nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sPoolName = pPool->GetObject( nPos )->GetName();
@@ -226,7 +226,7 @@ OUString XMLFontAutoStylePool::Add(
     OUString sName;
     XMLFontAutoStylePoolEntry_Impl aTmp( rFamilyName, rStyleName, nFamily,
                                           nPitch, eEnc );
-    ULONG nPos;
+    sal_uLong nPos;
     if( pPool->Seek_Entry( &aTmp, &nPos ) )
     {
         sName = pPool->GetObject( nPos )->GetName();
