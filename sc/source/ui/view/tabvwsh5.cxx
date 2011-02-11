@@ -175,9 +175,6 @@ void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 PaintLeftArea( pHint->GetStartRow(), pHint->GetEndRow() );
             if (nParts & PAINT_TOP)
                 PaintTopArea( pHint->GetStartCol(), pHint->GetEndCol() );
-            if (nParts & PAINT_INVERT)
-                InvertBlockMark( pHint->GetStartCol(), pHint->GetStartRow(),
-                                 pHint->GetEndCol(), pHint->GetEndRow() );
 
             // #i84689# call UpdateAllOverlays here instead of in ScTabView::PaintArea
             if (nParts & ( PAINT_LEFT | PAINT_TOP ))    // only if widths or heights changed

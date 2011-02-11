@@ -402,9 +402,6 @@ public:
 
                                     // Zeichnen
 
-    void            InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
-                                SCCOL nBlockEndX, SCROW nBlockEndY);
-
     void            PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                         ScUpdateMode eMode = SC_UPDATE_ALL );
 

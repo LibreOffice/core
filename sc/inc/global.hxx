@@ -165,10 +165,9 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define PAINT_TOP           2
 #define PAINT_LEFT          4
 #define PAINT_EXTRAS        8
-#define PAINT_INVERT        16
-#define PAINT_MARKS         32
-#define PAINT_OBJECTS       64
-#define PAINT_SIZE          128
+#define PAINT_MARKS         16
+#define PAINT_OBJECTS       32
+#define PAINT_SIZE          64
 #define PAINT_ALL           ( PAINT_GRID | PAINT_TOP | PAINT_LEFT | PAINT_EXTRAS | PAINT_OBJECTS | PAINT_SIZE )
 
 
