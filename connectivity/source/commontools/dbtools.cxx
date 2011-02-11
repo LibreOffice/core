@@ -956,7 +956,7 @@ void qualifiedNameComponents(const Reference< XDatabaseMetaData >& _rxConnMetaDa
         }
         else
         {
-            // Katalogname am Ende
+            // Catalogue name at the end
             sal_Int32 nIndex = sName.lastIndexOf(sSeparator);
             if (-1 != nIndex)
             {
@@ -1014,7 +1014,7 @@ try
     if ( !xOldProps.is() || !xNewProps.is() )
         return;
 
-    // kopieren wir erst mal alle Props, die in Quelle und Ziel vorhanden sind und identische Beschreibungen haben
+    // First we copy all the Props, that are available in source and target and have the same description
     Reference< XPropertySetInfo> xOldInfo( xOldProps->getPropertySetInfo());
     Reference< XPropertySetInfo> xNewInfo( xNewProps->getPropertySetInfo());
 
@@ -1048,13 +1048,13 @@ try
             &&  (!pOldProps[i].Name.equals(sPropLabelControl))
             )
         {
-            // binaere Suche
+            // binary search
             Property* pResult = ::std::lower_bound(pNewProps, pNewProps + nNewLen,pOldProps[i].Name, ::comphelper::PropertyStringLessFunctor());
             if (    pResult
                 && ( pResult != pNewProps + nNewLen && pResult->Name == pOldProps[i].Name )
                 && ( (pResult->Attributes & PropertyAttribute::READONLY) == 0 )
                 && ( pResult->Type.equals(pOldProps[i].Type)) )
-            {   // Attribute stimmen ueberein und Property ist nicht read-only
+            {   // Attributes match and the property is not read-only
                 try
                 {
                     xNewProps->setPropertyValue(pResult->Name, xOldProps->getPropertyValue(pResult->Name));
@@ -1073,8 +1073,7 @@ try
         }
     }
 
-
-    // fuer formatierte Felder (entweder alt oder neu) haben wir ein paar Sonderbehandlungen
+    // for formatted fields (either old or new) we have some special treatments
     Reference< XServiceInfo > xSI( xOldProps, UNO_QUERY );
     sal_Bool bOldIsFormatted = xSI.is() && xSI->supportsService( sFormattedServiceName );
     xSI = Reference< XServiceInfo >( xNewProps, UNO_QUERY );
@@ -1084,13 +1083,12 @@ try
         return; // nothing to do
 
     if (bOldIsFormatted && bNewIsFormatted)
-        // nein, wenn beide formatierte Felder sind, dann machen wir keinerlei Konvertierungen
-        // Das geht zu weit ;)
+        // if both fields are formatted we do no conversions
         return;
 
     if (bOldIsFormatted)
     {
-        // aus dem eingestellten Format ein paar Properties rausziehen und zum neuen Set durchschleifen
+        // get some properties from the selected format and put them in the new Set
         Any aFormatKey( xOldProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY)) );
         if (aFormatKey.hasValue())
         {
@@ -1104,8 +1102,7 @@ try
                 {
                     Any aVal( xFormat->getPropertyValue(sPropCurrencySymbol) );
                     if (aVal.hasValue() && hasProperty(sPropCurrencySymbol, xNewProps))
-                        // (wenn die Quelle das nicht gesetzt hat, dann auch nicht kopieren, um den
-                        // Default-Wert nicht zu ueberschreiben
+                        // If the source value hasn't been set then don't copy it, so we don´t overwrite the default value
                         xNewProps->setPropertyValue(sPropCurrencySymbol, aVal);
                 }
                 if (hasProperty(sPropDecimals, xFormat) && hasProperty(sPropDecimals, xNewProps))
@@ -1113,10 +1110,10 @@ try
             }
         }
 
-        // eine eventuelle-Min-Max-Konvertierung
+        // a potential Min-Max-Conversion
         Any aEffectiveMin( xOldProps->getPropertyValue(sPropEffectiveMin) );
         if (aEffectiveMin.hasValue())
-        {   // im Gegensatz zu ValueMin kann EffectiveMin void sein
+        {   // Unlike the ValueMin the EffectiveMin can be void
             if (hasProperty(sPropValueMin, xNewProps))
             {
                 OSL_ENSURE(aEffectiveMin.getValueType().getTypeClass() == TypeClass_DOUBLE,
@@ -1135,59 +1132,59 @@ try
             }
         }
 
-        // dann koennen wir noch Default-Werte konvertieren und uebernehmen
+        // then we can still convert and copy the default values
         Any aEffectiveDefault( xOldProps->getPropertyValue(sPropEffectiveDefault) );
         if (aEffectiveDefault.hasValue())
         {
             sal_Bool bIsString = aEffectiveDefault.getValueType().getTypeClass() == TypeClass_STRING;
             OSL_ENSURE(bIsString || aEffectiveDefault.getValueType().getTypeClass() == TypeClass_DOUBLE,
                 "TransferFormComponentProperties : invalid property type !");
-                // die Effective-Properties sollten immer void oder string oder double sein ....
+                // The Effective-Properties should always be void or string or double ....
 
             if (hasProperty(sPropDefaultDate, xNewProps) && !bIsString)
-            {   // (einen ::rtl::OUString in ein Datum zu konvertieren muss nicht immer klappen, denn das ganze kann ja an
-                // eine Textspalte gebunden gewesen sein, aber mit einem double koennen wir was anfangen)
+            {   // (to convert a ::rtl::OUString into a date will not always succeed, because it might be bound to a text-column,
+                // but we can work with a double)
                 Date aDate = DBTypeConversion::toDate(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultDate, makeAny(aDate));
             }
 
             if (hasProperty(sPropDefaultTime, xNewProps) && !bIsString)
-            {   // voellig analog mit Zeit
+            {   // Completely analogous to time
                 Time aTime = DBTypeConversion::toTime(getDouble(aEffectiveDefault));
                 xNewProps->setPropertyValue(sPropDefaultTime, makeAny(aTime));
             }
 
             if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xNewProps) && !bIsString)
-            {   // hier koennen wir einfach das double durchreichen
+            {   // Here we can simply pass the double
                 xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), aEffectiveDefault);
             }
 
             if (hasProperty(sPropDefaultText, xNewProps) && bIsString)
-            {   // und hier den ::rtl::OUString
+            {   // and here the ::rtl::OUString
                 xNewProps->setPropertyValue(sPropDefaultText, aEffectiveDefault);
             }
 
-            // nyi: die Uebersetzung zwischen doubles und ::rtl::OUString wuerde noch mehr Moeglichkeien eroeffnen
+            // nyi: The translation between doubles and ::rtl::OUString would offer more alternatives
         }
     }
 
-    // die andere Richtung : das neu Control soll formatiert sein
+    // The other direction: the new Control shall be formatted
     if (bNewIsFormatted)
     {
-        // zuerst die Formatierung
-        // einen Supplier koennen wir nicht setzen, also muss das neue Set schon einen mitbringen
+        // first the formatting
+        // we can't set a Supplier, so the new Set must bring one in
         Reference< XNumberFormatsSupplier> xSupplier;
         xNewProps->getPropertyValue(sPropFormatsSupplier) >>= xSupplier;
         if (xSupplier.is())
         {
             Reference< XNumberFormats> xFormats(xSupplier->getNumberFormats());
 
-            // Dezimal-Stellen
+            // Set number of decimals
             sal_Int16 nDecimals = 2;
             if (hasProperty(sPropDecimalAccuracy, xOldProps))
                 xOldProps->getPropertyValue(sPropDecimalAccuracy) >>= nDecimals;
 
-            // Grund-Format (je nach ClassId des alten Sets)
+            // base format (depending on the ClassId of the old Set)
             sal_Int32 nBaseKey = 0;
             if (hasProperty(sPropClassId, xOldProps))
             {
@@ -1213,21 +1210,21 @@ try
                 }
             }
 
-            // damit koennen wir ein neues Format basteln ...
+            // With this we can generate a new format ...
             ::rtl::OUString sNewFormat = xFormats->generateFormat(nBaseKey, _rLocale, sal_False, sal_False, nDecimals, 0);
-                // kein Tausender-Trennzeichen, negative Zahlen nicht in Rot, keine fuehrenden Nullen
+            // No thousands separator, negative numbers are not in red, no leading zeros
 
-            // ... und zum FormatsSupplier hinzufuegen (wenn noetig)
+            // ... and add at FormatsSupplier (if needed)
             sal_Int32 nKey = xFormats->queryKey(sNewFormat, _rLocale, sal_False);
             if (nKey == (sal_Int32)-1)
-            {   // noch nicht vorhanden in meinem Formatter ...
+            {   // not added yet in my formatter ...
                 nKey = xFormats->addNew(sNewFormat, _rLocale);
             }
 
             xNewProps->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FORMATKEY), makeAny((sal_Int32)nKey));
         }
 
-        // min-/max-Werte
+        // min-/max-Value
         Any aNewMin, aNewMax;
         if (hasProperty(sPropValueMin, xOldProps))
             aNewMin = xOldProps->getPropertyValue(sPropValueMin);
@@ -1236,7 +1233,7 @@ try
         xNewProps->setPropertyValue(sPropEffectiveMin, aNewMin);
         xNewProps->setPropertyValue(sPropEffectiveMax, aNewMax);
 
-        // Default-Wert
+        // Default-Value
         Any aNewDefault;
         if (hasProperty(sPropDefaultDate, xOldProps))
         {
@@ -1252,7 +1249,7 @@ try
                 aNewDefault <<= DBTypeConversion::toDouble(*(Time*)aTime.getValue());
         }
 
-        // double oder ::rtl::OUString werden direkt uebernommen
+        // double or ::rtl::OUString will be copied directly
         if (hasProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE), xOldProps))
             aNewDefault = xOldProps->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE));
         if (hasProperty(sPropDefaultText, xOldProps))
