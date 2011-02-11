@@ -985,7 +985,7 @@ ShapeExport& ShapeExport::WriteUnknownShape( Reference< XShape > )
 
 size_t ShapeExport::ShapeHash::operator()( const ::com::sun::star::uno::Reference < ::com::sun::star::drawing::XShape > rXShape ) const
 {
-    return maHashFunction( USS( rXShape->getShapeType() ) );
+    return rXShape->getShapeType().hashCode();
 }
 
 sal_Int32 ShapeExport::GetNewShapeID( const Reference< XShape > rXShape )
