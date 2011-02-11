@@ -46,7 +46,6 @@
 #include <vector>
 
 struct UnoControlModelEntry;
-
 typedef ::std::vector< UnoControlModelEntry* > UnoControlModelEntryListBase;
 
 class UnoControlModelEntryList
@@ -80,14 +79,13 @@ struct UnoControlModelEntry
     };
 };
 
-// Keine Referenz halten, nur temporaer fuer AutoTabOrder
 struct ComponentEntry
 {
     ::com::sun::star::awt::XWindow*     pComponent;
     Point                               aPos;
 };
 
-DECLARE_LIST( ComponentEntryList, ComponentEntry* )
+typedef ::std::vector< ComponentEntry* > ComponentEntryList;
 
 #define CONTROLPOS_NOTFOUND 0xFFFFFFFF
 
