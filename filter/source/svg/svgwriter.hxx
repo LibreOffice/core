@@ -140,6 +140,7 @@ public:
     virtual                 ~SVGAttributeWriter();
 
     ::rtl::OUString         GetFontStyle( const Font& rFont );
+    ::rtl::OUString         GetColorStyle( const Color& rColor );
     ::rtl::OUString         GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo );
 
     void                    SetFontAttr( const Font& rFont );
@@ -164,6 +165,7 @@ private:
     sal_Bool                mbClipAttrChanged;
     sal_Int32               mnCurClipId;
     sal_Int32               mnCurPatternId;
+    sal_Int32               mnCurGradientId;
     Stack                   maContextStack;
     VirtualDevice*          mpVDev;
     MapMode                 maTargetMapMode;
@@ -186,6 +188,10 @@ private:
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
+    void                    ImplWriteGradientLinear( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
+    void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
+    Color                   ImplGetColorWithIntensity( const Color& rColor, USHORT nIntensity );
+    Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );
     void                ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const ::rtl::OUString* pStyle = NULL );
@@ -196,6 +202,7 @@ private:
     void                    ImplWriteActions( const GDIMetaFile& rMtf, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     sal_Int32               ImplGetNextClipId() { return mnCurClipId++; }
     sal_Int32               ImplGetNextPatternId() { return mnCurPatternId++; }
+    sal_Int32               ImplGetNextGradientId() { return mnCurGradientId++; }
 
 public:
 

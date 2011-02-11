@@ -40,6 +40,8 @@ static const char   aXMLElemG[] = "g";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemClipPath[] = "clipPath";
 static const char   aXMLElemPattern[] = "pattern";
+static const char   aXMLElemLinearGradient[] = "linearGradient";
+static const char   aXMLElemStop[] = "stop";
 static const char   aXMLElemLine[] = "line";
 static const char   aXMLElemRect[] = "rect";
 static const char   aXMLElemEllipse[] = "ellipse";
@@ -68,6 +70,8 @@ static const char   aXMLAttrWidth[] = "width";
 static const char   aXMLAttrHeight[] = "height";
 static const char   aXMLAttrPoints[] = "points";
 static const char   aXMLAttrPatternUnits[] = "patternUnits";
+static const char   aXMLAttrGradientUnits[] = "gradientUnits";
+static const char   aXMLAttrOffset[] = "offset";
 static const char   aXMLAttrXLinkHRef[] = "xlink:href";
 
 // --------------
@@ -227,6 +231,21 @@ NMSP_RTL::OUString SVGAttributeWriter::GetFontStyle( const Font& rFont )
 
 // -----------------------------------------------------------------------------
 
+NMSP_RTL::OUString SVGAttributeWriter::GetColorStyle( const Color& rColor )
+{
+    FastString aStyle;
+    aStyle += B2UCONST( "rgb(" );
+    aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetRed() );
+    aStyle += B2UCONST( "," );
+    aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetGreen() );
+    aStyle += B2UCONST( "," );
+    aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rColor.GetBlue() );
+    aStyle += B2UCONST( ")" );
+    return aStyle.GetString();
+}
+
+// -----------------------------------------------------------------------------
+
 NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, const Color& rFillColor, const LineInfo* pLineInfo )
 {
     FastString aStyle;
@@ -239,13 +258,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, c
     else
     {
         // line color value in rgb
-        aStyle += B2UCONST( "rgb(" );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rLineColor.GetRed() );
-        aStyle += B2UCONST( "," );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rLineColor.GetGreen() );
-        aStyle += B2UCONST( "," );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rLineColor.GetBlue() );
-        aStyle += B2UCONST( ")" );
+        aStyle += GetColorStyle( rLineColor );
 
         // line color opacity in percent if neccessary
         if( rLineColor.GetTransparency() )
@@ -327,13 +340,7 @@ NMSP_RTL::OUString SVGAttributeWriter::GetPaintStyle( const Color& rLineColor, c
     else
     {
         // fill color value in rgb
-        aStyle += B2UCONST( "rgb(" );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rFillColor.GetRed() );
-        aStyle += B2UCONST( "," );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rFillColor.GetGreen() );
-        aStyle += B2UCONST( "," );
-        aStyle += NMSP_RTL::OUString::valueOf( (sal_Int32) rFillColor.GetBlue() );
-        aStyle += B2UCONST( ")" );
+        aStyle += GetColorStyle( rFillColor );
 
         // fill color opacity in percent if neccessary
         if( rFillColor.GetTransparency() )
@@ -382,7 +389,8 @@ SVGActionWriter::SVGActionWriter( SvXMLExport& rExport, SVGFontExport& rFontExpo
     mpContext( NULL ),
     mbClipAttrChanged( sal_False ),
     mnCurClipId( 1 ),
-    mnCurPatternId( 1 )
+    mnCurPatternId( 1 ),
+    mnCurGradientId( 1 )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
@@ -732,7 +740,170 @@ void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
 void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
                                            const NMSP_RTL::OUString* pStyle, sal_uInt32 nWriteFlags )
 {
-    ImplWritePattern( rPolyPoly, NULL, &rGradient, pStyle, nWriteFlags );
+    if ( rGradient.GetStyle() == GRADIENT_LINEAR ||
+         rGradient.GetStyle() == GRADIENT_AXIAL )
+    {
+        ImplWriteGradientLinear( rPolyPoly, rGradient );
+    }
+    else
+    {
+        ImplWritePattern( rPolyPoly, NULL, &rGradient, pStyle, nWriteFlags );
+    }
+}
+
+void SVGActionWriter::ImplWriteGradientLinear( const PolyPolygon& rPolyPoly,
+                                               const Gradient& rGradient )
+{
+    if( rPolyPoly.Count() )
+    {
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+
+        FastString aGradientId;
+        aGradientId += B2UCONST( "gradient" );
+        aGradientId += GetValueString( ImplGetNextGradientId() );
+
+        {
+            SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aGradientId.GetString() );
+            {
+                Rectangle aTmpRect;
+                Point aTmpCenter;
+                rGradient.GetBoundRect( rPolyPoly.GetBoundRect(), aTmpRect, aTmpCenter );
+                const Rectangle aRect( ImplMap( aTmpRect) );
+                const Point aCenter( ImplMap( aTmpCenter) );
+                const sal_uInt16 nAngle = rGradient.GetAngle() % 3600;
+
+                Polygon aPoly( 2 );
+                // Setting x value of a gradient vector to rotation center to
+                // place a gradient vector in a target polygon.
+                // This would help editing it in SVG editors like inkscape.
+                aPoly[ 0 ].X() = aPoly[ 1 ].X() = aCenter.X();
+                aPoly[ 0 ].Y() = aRect.Top();
+                aPoly[ 1 ].Y() = aRect.Bottom();
+                aPoly.Rotate( aCenter, nAngle );
+
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX1, GetValueString( aPoly[ 0 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY1, GetValueString( aPoly[ 0 ].Y() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX2, GetValueString( aPoly[ 1 ].X() ) );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY2, GetValueString( aPoly[ 1 ].Y() ) );
+
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrGradientUnits,
+                                       NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse" ) ) );
+            }
+
+            {
+                SvXMLElementExport aElemLinearGradient( mrExport, XML_NAMESPACE_NONE, aXMLElemLinearGradient, TRUE, TRUE );
+
+                const Color aStartColor = ImplGetColorWithIntensity( rGradient.GetStartColor(), rGradient.GetStartIntensity() );
+                const Color aEndColor = ImplGetColorWithIntensity( rGradient.GetEndColor(), rGradient.GetEndIntensity() );
+                double fBorderOffset = rGradient.GetBorder() / 100.0;
+                const sal_uInt16 nSteps = rGradient.GetSteps();
+                if( rGradient.GetStyle() == GRADIENT_LINEAR )
+                {
+                    // Emulate non-smooth gradient
+                    if( 0 < nSteps && nSteps < 100 )
+                    {
+                        double fOffsetStep = ( 1.0 - fBorderOffset ) / (double)nSteps;
+                        for( sal_uInt16 i = 0; i < nSteps; i++ ) {
+                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / (double) nSteps );
+                            ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
+                            aColor = ImplGetGradientColor( aStartColor, aEndColor, ( i + 1 ) / (double) nSteps );
+                            ImplWriteGradientStop( aColor, fBorderOffset + ( i + 1 ) * fOffsetStep );
+                        }
+                    }
+                    else
+                    {
+                        ImplWriteGradientStop( aStartColor, fBorderOffset );
+                        ImplWriteGradientStop( aEndColor, 1.0 );
+                    }
+                }
+                else
+                {
+                    fBorderOffset /= 2;
+                    // Emulate non-smooth gradient
+                    if( 0 < nSteps && nSteps < 100 )
+                    {
+                        double fOffsetStep = ( 0.5 - fBorderOffset ) / (double)nSteps;
+                        // Upper half
+                        for( sal_uInt16 i = 0; i < nSteps; i++ )
+                        {
+                            Color aColor = ImplGetGradientColor( aEndColor, aStartColor, i / (double) nSteps );
+                            ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
+                            aColor = ImplGetGradientColor( aEndColor, aStartColor, (i + 1 ) / (double) nSteps );
+                            ImplWriteGradientStop( aColor, fBorderOffset + i * fOffsetStep );
+                        }
+                        // Lower half
+                        for( sal_uInt16 i = 0; i < nSteps; i++ )
+                        {
+                            Color aColor = ImplGetGradientColor( aStartColor, aEndColor, i / (double) nSteps );
+                            ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
+                            aColor = ImplGetGradientColor( aStartColor, aEndColor, (i + 1 ) / (double) nSteps );
+                            ImplWriteGradientStop( aColor, 0.5 + (i + 1) * fOffsetStep );
+                        }
+                    }
+                    else
+                    {
+                        ImplWriteGradientStop( aEndColor, fBorderOffset );
+                        ImplWriteGradientStop( aStartColor, 0.5 );
+                        ImplWriteGradientStop( aEndColor, 1.0 - fBorderOffset );
+                    }
+                }
+            }
+        }
+
+        FastString aGradientStyle;
+        aGradientStyle += B2UCONST( "fill:" );
+        aGradientStyle += B2UCONST( "url(#" );
+        aGradientStyle += aGradientId.GetString();
+        aGradientStyle += B2UCONST( ")" );
+
+        {
+            ImplWritePolyPolygon( rPolyPoly, sal_False, &aGradientStyle.GetString() );
+        }
+    }
+}
+
+void SVGActionWriter::ImplWriteGradientStop( const Color& rColor, double fOffset )
+{
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrOffset, NMSP_RTL::OUString::valueOf( fOffset ) );
+
+    FastString aStyle;
+    aStyle += B2UCONST( "stop-color:" );
+    aStyle += mpContext->GetColorStyle ( rColor );
+
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aStyle.GetString() );
+    {
+        SvXMLElementExport aElemStartStop( mrExport, XML_NAMESPACE_NONE, aXMLElemStop, TRUE, TRUE );
+    }
+}
+
+Color SVGActionWriter::ImplGetColorWithIntensity( const Color& rColor,
+                                                  sal_uInt16 nIntensity )
+{
+     sal_uInt8 nNewRed = (sal_uInt8)( (long)rColor.GetRed() * nIntensity / 100L );
+     sal_uInt8 nNewGreen = (sal_uInt8)( (long)rColor.GetGreen() * nIntensity / 100L );
+     sal_uInt8 nNewBlue = (sal_uInt8)( (long)rColor.GetBlue() * nIntensity / 100L );
+     return Color( nNewRed, nNewGreen, nNewBlue);
+}
+
+Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
+                                             const Color& rEndColor,
+                                             double fOffset )
+{
+    long nRedStep = rEndColor.GetRed() - rStartColor.GetRed();
+    long nNewRed = rStartColor.GetRed() + (long)( nRedStep * fOffset );
+    nNewRed = ( nNewRed < 0 ) ? 0 : ( nNewRed > 0xFF) ? 0xFF : nNewRed;
+
+    long nGreenStep = rEndColor.GetGreen() - rStartColor.GetGreen();
+    long nNewGreen = rStartColor.GetGreen() + (long)( nGreenStep * fOffset );
+    nNewGreen = ( nNewGreen < 0 ) ? 0 : ( nNewGreen > 0xFF) ? 0xFF : nNewGreen;
+
+    long nBlueStep = rEndColor.GetBlue() - rStartColor.GetBlue();
+    long nNewBlue = rStartColor.GetBlue() + (long)( nBlueStep * fOffset );
+    nNewBlue = ( nNewBlue < 0 ) ? 0 : ( nNewBlue > 0xFF) ? 0xFF : nNewBlue;
+
+    return Color( (sal_uInt8)nNewRed, (sal_uInt8)nNewGreen, (sal_uInt8)nNewBlue );
 }
 
 // -----------------------------------------------------------------------------
