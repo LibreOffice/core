@@ -49,7 +49,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objface.hxx>
 
-#include <svx/hyprlink.hxx>
 #include "IAnyRefDialog.hxx"
 
 #include <svtools/ehdl.hxx>

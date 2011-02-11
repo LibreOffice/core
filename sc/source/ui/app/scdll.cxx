@@ -116,7 +116,6 @@
 #include "spelldialog.hxx"
 #include <svx/fontwork.hxx>
 #include <svx/srchdlg.hxx>
-#include <svx/hyprlink.hxx>
 #include <svx/hyperdlg.hxx>
 #include <svx/imapdlg.hxx>
 
