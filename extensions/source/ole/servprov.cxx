@@ -29,6 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#include <vector>
+
 #ifdef __MINGW32__
 #define INITGUID
 #include <initguid.h>
@@ -53,7 +55,6 @@ extern CComModule _Module;
 #include <tools/postsys.h>
 
 
-using namespace std;
 using namespace cppu;
 using namespace rtl;
 using namespace osl;
