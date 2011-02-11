@@ -1476,8 +1476,10 @@ long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
 
 void SwDocShell::ReconnectDdeLink(SfxObjectShell& rServer)
 {
-    ::sfx2::LinkManager& rLinkManager = pDoc->GetLinkManager();
-    rLinkManager.ReconnectDdeLink(rServer);
+    if ( pDoc ) {
+        ::sfx2::LinkManager& rLinkManager = pDoc->GetLinkManager();
+        rLinkManager.ReconnectDdeLink(rServer);
+    }
 }
 
 void SwDocShell::FillClass( SvGlobalName * pClassName,
