@@ -215,7 +215,6 @@ bool FormControlHelper::createDropdown(uno::Reference<text::XTextRange> xTextRan
         }
     }
 
-    // #FIXME improve the auto height width calculation
     // some fallback values ( to display something )
 
     m_pImpl->aSize.Width = 2381;
@@ -225,11 +224,13 @@ bool FormControlHelper::createDropdown(uno::Reference<text::XTextRange> xTextRan
     {
         uno::Reference<beans::XPropertySet> xTextRangeProps(xTextRange, uno::UNO_QUERY_THROW);
         static ::rtl::OUString sCharHeight(RTL_CONSTASCII_USTRINGPARAM("CharHeight"));
+        // #FIXME improve the auto height width calculation ( but this
+        // should be removed when we use form fields instead of controls
         float fComboBoxHeight = 0.0;
         xTextRangeProps->getPropertyValue(sCharHeight) >>= fComboBoxHeight;
         m_pImpl->aSize.Height = floor(fComboBoxHeight * 35.3);
         if ( nMaxChars )
-            m_pImpl->aSize.Width = floor(  m_pImpl->aSize.Height * nMaxChars );
+            m_pImpl->aSize.Width =  m_pImpl->aSize.Height * nMaxChars;
     }
     catch( uno::Exception& e )
     {
