@@ -166,6 +166,7 @@ private:
     sal_Int32               mnCurClipId;
     sal_Int32               mnCurPatternId;
     sal_Int32               mnCurGradientId;
+    sal_Int32               mnCurMaskId;
     Stack                   maContextStack;
     VirtualDevice*          mpVDev;
     MapMode                 maTargetMapMode;
@@ -192,6 +193,7 @@ private:
     void                    ImplWriteGradientStop( const Color& rColor, double fOffset );
     Color                   ImplGetColorWithIntensity( const Color& rColor, USHORT nIntensity );
     Color                   ImplGetGradientColor( const Color& rStartColor, const Color& rEndColor, double fOffset );
+    void                    ImplWriteMask( GDIMetaFile& rMtf, const Point& rDestPt, const Size& rDestSize, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );
     void                ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle, Color aTextColor );
     void                    ImplWriteBmp( const BitmapEx& rBmpEx, const Point& rPt, const Size& rSz, const Point& rSrcPt, const Size& rSrcSz, const ::rtl::OUString* pStyle = NULL );
@@ -203,6 +205,7 @@ private:
     sal_Int32               ImplGetNextClipId() { return mnCurClipId++; }
     sal_Int32               ImplGetNextPatternId() { return mnCurPatternId++; }
     sal_Int32               ImplGetNextGradientId() { return mnCurGradientId++; }
+    sal_Int32               ImplGetNextMaskId() { return mnCurMaskId++; }
 
 public:
 

@@ -39,6 +39,7 @@
 static const char   aXMLElemG[] = "g";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemClipPath[] = "clipPath";
+static const char   aXMLElemMask[] = "mask";
 static const char   aXMLElemPattern[] = "pattern";
 static const char   aXMLElemLinearGradient[] = "linearGradient";
 static const char   aXMLElemStop[] = "stop";
@@ -390,7 +391,8 @@ SVGActionWriter::SVGActionWriter( SvXMLExport& rExport, SVGFontExport& rFontExpo
     mbClipAttrChanged( sal_False ),
     mnCurClipId( 1 ),
     mnCurPatternId( 1 ),
-    mnCurGradientId( 1 )
+    mnCurGradientId( 1 ),
+    mnCurMaskId( 1 )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
@@ -904,6 +906,73 @@ Color SVGActionWriter::ImplGetGradientColor( const Color& rStartColor,
     nNewBlue = ( nNewBlue < 0 ) ? 0 : ( nNewBlue > 0xFF) ? 0xFF : nNewBlue;
 
     return Color( (sal_uInt8)nNewRed, (sal_uInt8)nNewGreen, (sal_uInt8)nNewBlue );
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGActionWriter::ImplWriteMask( GDIMetaFile& rMtf,
+                                     const Point& rDestPt,
+                                     const Size& rDestSize,
+                                     const Gradient& rGradient,
+                                     const NMSP_RTL::OUString* pStyle,
+                                     sal_uInt32 nWriteFlags )
+{
+    Point          aSrcPt( rMtf.GetPrefMapMode().GetOrigin() );
+    const Size     aSrcSize( rMtf.GetPrefSize() );
+    const double   fScaleX = aSrcSize.Width() ? (double) rDestSize.Width() / aSrcSize.Width() : 1.0;
+    const double   fScaleY = aSrcSize.Height() ? (double) rDestSize.Height() / aSrcSize.Height() : 1.0;
+    long           nMoveX, nMoveY;
+
+    if( fScaleX != 1.0 || fScaleY != 1.0 )
+    {
+        rMtf.Scale( fScaleX, fScaleY );
+        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
+    }
+
+    nMoveX = rDestPt.X() - aSrcPt.X(), nMoveY = rDestPt.Y() - aSrcPt.Y();
+
+    if( nMoveX || nMoveY )
+        rMtf.Move( nMoveX, nMoveY );
+
+    FastString aMaskId;
+    aMaskId += B2UCONST( "mask" );
+    aMaskId += GetValueString( ImplGetNextMaskId() );
+
+    {
+        SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
+
+        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aMaskId.GetString() );
+        {
+            SvXMLElementExport aElemMask( mrExport, XML_NAMESPACE_NONE, aXMLElemMask, TRUE, TRUE );
+
+            const PolyPolygon aPolyPolygon( PolyPolygon( Rectangle( rDestPt, rDestSize ) ) );
+            Gradient aGradient( rGradient );
+
+            // swap gradient stops to adopt SVG mask
+            Color aTmpColor( aGradient.GetStartColor() );
+            sal_uInt16 nTmpIntensity( aGradient.GetStartIntensity() );
+            aGradient.SetStartColor( aGradient.GetEndColor() );
+            aGradient.SetStartIntensity( aGradient.GetEndIntensity() ) ;
+            aGradient.SetEndColor( aTmpColor );
+            aGradient.SetEndIntensity( nTmpIntensity );
+
+            ImplWriteGradientEx( aPolyPolygon, aGradient, pStyle, nWriteFlags );
+        }
+    }
+
+    FastString aMaskStyle;
+    aMaskStyle += B2UCONST( "mask:url(#" );
+    aMaskStyle += aMaskId.GetString();
+    aMaskStyle += B2UCONST( ")" );
+    mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aMaskStyle.GetString() );
+
+    {
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+
+        mpVDev->Push();
+        ImplWriteActions( rMtf, pStyle, nWriteFlags );
+        mpVDev->Pop();
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -1508,28 +1577,8 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 {
                     const MetaFloatTransparentAction*   pA = (const MetaFloatTransparentAction*) pAction;
                     GDIMetaFile                         aTmpMtf( pA->GetGDIMetaFile() );
-                    Point                               aSrcPt( aTmpMtf.GetPrefMapMode().GetOrigin() );
-                    const Size                          aSrcSize( aTmpMtf.GetPrefSize() );
-                    const Point                         aDestPt( pA->GetPoint() );
-                    const Size                          aDestSize( pA->GetSize() );
-                    const double                        fScaleX = aSrcSize.Width() ? (double) aDestSize.Width() / aSrcSize.Width() : 1.0;
-                    const double                        fScaleY = aSrcSize.Height() ? (double) aDestSize.Height() / aSrcSize.Height() : 1.0;
-                    long                                nMoveX, nMoveY;
-
-                    if( fScaleX != 1.0 || fScaleY != 1.0 )
-                    {
-                        aTmpMtf.Scale( fScaleX, fScaleY );
-                        aSrcPt.X() = FRound( aSrcPt.X() * fScaleX ), aSrcPt.Y() = FRound( aSrcPt.Y() * fScaleY );
-                    }
-
-                    nMoveX = aDestPt.X() - aSrcPt.X(), nMoveY = aDestPt.Y() - aSrcPt.Y();
-
-                    if( nMoveX || nMoveY )
-                        aTmpMtf.Move( nMoveX, nMoveY );
-
-                    mpVDev->Push();
-                    ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
-                    mpVDev->Pop();
+                    ImplWriteMask( aTmpMtf, pA->GetPoint(), pA->GetSize(),
+                                   pA->GetGradient(), pStyle, nWriteFlags  );
                 }
             }
             break;
