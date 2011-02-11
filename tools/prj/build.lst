@@ -27,5 +27,4 @@ tl	tools\os2\source\dll				nmake	-	p	tl_dllp tl_inc NULL
 tl	tools\unx\source\dll				nmake	-	u	tl_dllu tl_inc NULL
 tl	tools\util							nmake	-	all	tl_utl tl_com tl_dat tl_deb tl_dllu.u tl_dllp.p tl_dllw.w tl_fsys tl_gen tl_inet tl_mem tl_rc tl_ref tl_str tl_string tl_misc tl_zco tl_ttloader NULL
 tl	tools\bootstrp						nmake	-	all	tl_bstrp tl_utl tl_inc NULL
-tl	tools\bootstrp\addexes2				nmake	-	all	tl_bsexes2 tl_bstrp tl_inc NULL
 tl	tools\qa					nmake	-	all	tl_qa tl_utl NULL
