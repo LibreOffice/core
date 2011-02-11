@@ -35,6 +35,13 @@
 #include <boost/unordered_map.hpp>
 #include <string.h>
 
+struct THash
+{
+    size_t operator()( const char* s ) const
+    {
+        return rtl_str_hashCode(s);
+    }
+};
 struct TCheck
 {
     bool operator()( const char* s1, const char* s2 ) const
@@ -42,7 +49,7 @@ struct TCheck
         return strcmp( s1, s2 ) == 0;
     }
 };
-typedef boost::unordered_map< const char*, PPPOptimizerTokenEnum, boost::hash<const char*>, TCheck> TypeNameHashMap;
+typedef boost::unordered_map< const char*, PPPOptimizerTokenEnum, THash, TCheck> TypeNameHashMap;
 static TypeNameHashMap* pHashMap = NULL;
 static ::osl::Mutex& getHashMapMutex()
 {
