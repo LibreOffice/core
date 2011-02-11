@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include "svtools/genericunodialog.hxx"
-#ifndef _SVT_DOC_ADDRESSTEMPLATE_HXX_
-#include "addresstemplate.hxx"
-#endif
-#ifndef _CPPUHELPER_EXTRACT_HXX_
-#include <cppuhelper/extract.hxx>
-#endif
+#include <svtools/addresstemplate.hxx>
+#include <comphelper/extract.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/property.hxx>
 #include <com/sun/star/sdbc/XDataSource.hpp>

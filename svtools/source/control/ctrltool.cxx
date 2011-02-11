@@ -32,19 +32,14 @@
 
 #include <string.h>
 
-#ifndef TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
 #include <i18npool/mslangid.hxx>
-#ifndef _VCL_WINDOW_HXX
 #include <vcl/window.hxx>
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
-
 #include <svtools/svtools.hrc>
 #include <svtools/svtdata.hxx>
-#include <ctrltool.hxx>
+#include <svtools/ctrltool.hxx>
 
 // =======================================================================
 
@@ -120,7 +115,7 @@ class ImplFontListNameInfo
 private:
     XubString               maSearchName;
     ImplFontListFontInfo*   mpFirst;
-    USHORT                  mnType;
+    sal_uInt16                  mnType;
 
                             ImplFontListNameInfo( const XubString& rSearchName ) :
                                 maSearchName( rSearchName )
@@ -168,7 +163,7 @@ static void ImplMakeSearchStringFromName( XubString& rStr )
 
 // -----------------------------------------------------------------------
 
-ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* pIndex ) const
+ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, sal_uLong* pIndex ) const
 {
     // Wenn kein Eintrag in der Liste oder der Eintrag groesser ist als
     // der Letzte, dann hinten dranhaengen. Wir vergleichen erst mit dem
@@ -176,7 +171,7 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* p
     // und somit die Wahrscheinlichkeit das hinten angehaengt werden muss
     // sehr gross ist.
     StringCompare eComp;
-    ULONG nCnt = Count();
+    sal_uLong nCnt = Count();
     if ( !nCnt )
     {
         if ( pIndex )
@@ -200,9 +195,9 @@ ImplFontListNameInfo* FontList::ImplFind( const XubString& rSearchName, ULONG* p
     // Fonts in der Liste suchen
     ImplFontListNameInfo*   pCompareData;
     ImplFontListNameInfo*   pFoundData = NULL;
-    ULONG                   nLow = 0;
-    ULONG                   nHigh = nCnt-1;
-    ULONG                   nMid;
+    sal_uLong                   nLow = 0;
+    sal_uLong                   nHigh = nCnt-1;
+    sal_uLong                   nMid;
 
     do
     {
@@ -251,12 +246,12 @@ ImplFontListNameInfo* FontList::ImplFindByName( const XubString& rStr ) const
 
 // -----------------------------------------------------------------------
 
-void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
-                                BOOL bInsertData )
+void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
+                                sal_Bool bInsertData )
 {
     rtl_TextEncoding eSystemEncoding = gsl_getSystemTextEncoding();
 
-    USHORT nType;
+    sal_uInt16 nType;
     if ( pDevice->GetOutDevType() != OUTDEV_PRINTER )
         nType = FONTLIST_FONTNAMETYPE_SCREEN;
     else
@@ -264,7 +259,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
 
     // Alle Fonts vom Device abfragen
     int n = pDevice->GetDevFontCount();
-    USHORT  i;
+    sal_uInt16  i;
     for( i = 0; i < n; i++ )
     {
         FontInfo aFontInfo = pDevice->GetDevFont( i );
@@ -276,7 +271,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
 
         XubString               aSearchName = aFontInfo.GetName();
         ImplFontListNameInfo*   pData;
-        ULONG                   nIndex;
+        sal_uLong                   nIndex;
         ImplMakeSearchString( aSearchName );
         pData = ImplFind( aSearchName, &nIndex );
 
@@ -296,7 +291,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
         {
             if ( bInsertData )
             {
-                BOOL                    bInsert = TRUE;
+                sal_Bool                    bInsert = sal_True;
                 ImplFontListFontInfo*   pPrev = NULL;
                 ImplFontListFontInfo*   pTemp = pData->mpFirst;
                 ImplFontListFontInfo*   pNewInfo = new ImplFontListFontInfo( aFontInfo, pDevice );
@@ -317,7 +312,7 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
                                 pTemp->mpNext = pTemp2;
                             }
                             delete pNewInfo;
-                            bInsert = FALSE;
+                            bInsert = sal_False;
                         }
 
                         break;
@@ -349,8 +344,8 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, BOOL bAll,
 
 // =======================================================================
 
-FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, BOOL bAll ) :
-    List( 4096, sal::static_int_cast< USHORT >(pDevice->GetDevFontCount()), 32 )
+FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll ) :
+    List( 4096, sal::static_int_cast< sal_uInt16 >(pDevice->GetDevFontCount()), 32 )
 {
     // Variablen initialisieren
     mpDev = pDevice;
@@ -367,14 +362,14 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, BOOL bAll ) :
     maBlack         = XubString( SvtResId( STR_SVT_STYLE_BLACK ) );
     maBlackItalic   = XubString( SvtResId( STR_SVT_STYLE_BLACK_ITALIC ) );
 
-    ImplInsertFonts( pDevice, bAll, TRUE );
+    ImplInsertFonts( pDevice, bAll, sal_True );
 
     // Gegebenenfalls muessen wir mit den Bildschirmfonts vergleichen,
     // damit dort die eigentlich doppelten auf Equal mappen koennen
-    BOOL bCompareWindow = FALSE;
+    sal_Bool bCompareWindow = sal_False;
     if ( !pDevice2 && (pDevice->GetOutDevType() == OUTDEV_PRINTER) )
     {
-        bCompareWindow = TRUE;
+        bCompareWindow = sal_True;
         pDevice2 = Application::GetDefaultDevice();
     }
 
@@ -532,12 +527,12 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
     }
 
     // search for synthetic style
-    USHORT              nType       = pData->mnType;
+    sal_uInt16              nType       = pData->mnType;
     const XubString&    rStyleName  = rInfo.GetStyleName();
     if ( rStyleName.Len() )
     {
-        BOOL                    bNotSynthetic = FALSE;
-        BOOL                    bNoneAvailable = FALSE;
+        sal_Bool                    bNotSynthetic = sal_False;
+        sal_Bool                    bNoneAvailable = sal_False;
         FontWeight              eWeight = rInfo.GetWeight();
         FontItalic              eItalic = rInfo.GetItalic();
         ImplFontListFontInfo*   pFontInfo = pData->mpFirst;
@@ -546,7 +541,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
             if ( (eWeight == pFontInfo->GetWeight()) &&
                  (eItalic == pFontInfo->GetItalic()) )
             {
-                bNotSynthetic = TRUE;
+                bNotSynthetic = sal_True;
                 break;
             }
 
@@ -603,7 +598,7 @@ XubString FontList::GetFontMapText( const FontInfo& rInfo ) const
 
 // -----------------------------------------------------------------------
 
-USHORT FontList::GetFontNameType( const XubString& rFontName ) const
+sal_uInt16 FontList::GetFontNameType( const XubString& rFontName ) const
 {
     ImplFontListNameInfo* pData = ImplFindByName( rFontName );
     if ( pData )
@@ -751,14 +746,14 @@ FontInfo FontList::Get( const XubString& rName,
 
 // -----------------------------------------------------------------------
 
-BOOL FontList::IsAvailable( const XubString& rName ) const
+sal_Bool FontList::IsAvailable( const XubString& rName ) const
 {
     return (ImplFindByName( rName ) != 0);
 }
 
 // -----------------------------------------------------------------------
 
-const FontInfo& FontList::GetFontName( USHORT nFont ) const
+const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontName(): nFont >= Count" );
 
@@ -768,7 +763,7 @@ const FontInfo& FontList::GetFontName( USHORT nFont ) const
 
 // -----------------------------------------------------------------------
 
-USHORT FontList::GetFontNameType( USHORT nFont ) const
+sal_uInt16 FontList::GetFontNameType( sal_uInt16 nFont ) const
 {
     DBG_ASSERT( nFont < GetFontNameCount(), "FontList::GetFontNameType(): nFont >= Count" );
 
@@ -834,8 +829,8 @@ const long* FontList::GetSizeAry( const FontInfo& rInfo ) const
     MapMode aMap( MAP_10TH_INCH, Point(), Fraction( 1, 72 ), Fraction( 1, 72 ) );
     pDevice->SetMapMode( aMap );
 
-    USHORT  i;
-    USHORT  nRealCount = 0;
+    sal_uInt16  i;
+    sal_uInt16  nRealCount = 0;
     long    nOldHeight = 0;
     ((FontList*)this)->mpSizeAry = new long[nDevSizeCount+1];
     for ( i = 0; i < nDevSizeCount; i++ )
@@ -996,7 +991,7 @@ String FontSizeNames::Size2Name( long nValue ) const
 
 //------------------------------------------------------------------------
 
-String FontSizeNames::GetIndexName( ULONG nIndex ) const
+String FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
     String aStr;
 
@@ -1008,7 +1003,7 @@ String FontSizeNames::GetIndexName( ULONG nIndex ) const
 
 //------------------------------------------------------------------------
 
-long FontSizeNames::GetIndexSize( ULONG nIndex ) const
+long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {
     if ( nIndex >= mnElem )
         return 0;

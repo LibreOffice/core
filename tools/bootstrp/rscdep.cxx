@@ -80,7 +80,7 @@ void RscHrcDep::Execute()
 
 //static String aDelim;
 
-SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
+int main( int argc, char** argv )
 {
     int c;
     char aBuf[255];
@@ -88,7 +88,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     char pOutputFileName[255];
     char pSrsFileName[255];
     String aSrsBaseName;
-    BOOL bSource = FALSE;
+    sal_Bool bSource = sal_False;
     ByteString aRespArg;
 //  who needs anything but '/' ?
 //  String aDelim = String(DirEntry::GetAccessDelimiter());
@@ -172,7 +172,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
                     pDep->AddSource( &aBuf2[0] );
                     aRespArg += " ";
                     aRespArg += &aBuf2[0];
-                    bSource = TRUE;
+                    bSource = sal_True;
                 }
             }
         }
@@ -205,7 +205,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
             case 'h' :
             case 'H' :
             case '?' :
-                printf("RscDep 1.0 (c)2000 StarOffice\n");
+                printf("RscDep 1.0\n");
                 break;
 
             default:
@@ -221,7 +221,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     aEntry.ToAbs();
 //  String aCwd = aEntry.GetName();
     String aCwd(pFileNamePrefix, gsl_getSystemTextEncoding());
-/*  USHORT nPos;
+/*  sal_uInt16 nPos;
 #ifndef UNX
     while ( (nPos = aCwd.Search('\\') != STRING_NOTFOUND  ))
 #else
@@ -272,7 +272,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
     aString += aRespArg;
     pDep->Execute();
     ByteStringList *pLst = pDep->GetDepList();
-    ULONG nCount = pLst->Count();
+    sal_uIntPtr nCount = pLst->Count();
     if ( nCount == 0 )
     {
         aOutStream.WriteLine( aString );
@@ -283,7 +283,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         aOutStream.WriteLine( aString );
     }
 
-    for ( ULONG j=0; j<nCount; j++ )
+    for ( sal_uIntPtr j=0; j<nCount; j++ )
     {
         ByteString *pStr = pLst->GetObject(j);
         pStr->SearchAndReplaceAll('\\', ByteString( aDelim,  RTL_TEXTENCODING_ASCII_US ));

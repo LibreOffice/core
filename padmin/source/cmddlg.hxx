@@ -79,9 +79,9 @@ private:
 
     FixedText                       m_aConfigureText;
     ListBox                         m_aConfigureBox;
-    USHORT                          m_nPrinterEntry;
-    USHORT                          m_nFaxEntry;
-    USHORT                          m_nPdfEntry;
+    sal_uInt16                          m_nPrinterEntry;
+    sal_uInt16                          m_nFaxEntry;
+    sal_uInt16                          m_nPdfEntry;
     FixedText                       m_aPdfDirectoryText;
     PushButton                      m_aPdfDirectoryButton;
     Edit                            m_aPdfDirectoryEdit;

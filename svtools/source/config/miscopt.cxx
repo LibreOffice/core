@@ -45,7 +45,7 @@
 #include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________
@@ -81,7 +81,7 @@ using namespace ::com::sun::star;
 
 #define PROPERTYCOUNT                       6
 
-#define VCL_TOOLBOX_STYLE_FLAT              ((USHORT)0x0004) // from <vcl/toolbox.hxx>
+#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
 
 DECLARE_LIST( LinkList, Link * )
 
@@ -374,7 +374,7 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
         Commit();
     }
 
-    for ( USHORT n=0; n<aList.Count(); )
+    for ( sal_uInt16 n=0; n<aList.Count(); )
         delete aList.Remove(n);
 }
 
@@ -467,7 +467,7 @@ void SvtMiscOptions_Impl::AddListenerLink( const Link& rLink )
 
 void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 {
-    for ( USHORT n=0; n<aList.Count(); n++ )
+    for ( sal_uInt16 n=0; n<aList.Count(); n++ )
     {
         if ( (*aList.GetObject(n) ) == rLink )
         {
@@ -479,7 +479,7 @@ void SvtMiscOptions_Impl::RemoveListenerLink( const Link& rLink )
 
 void SvtMiscOptions_Impl::CallListeners()
 {
-    for ( USHORT n = 0; n < aList.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < aList.Count(); ++n )
         aList.GetObject(n)->Call( this );
 }
 
@@ -725,7 +725,7 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
     {
         // Use system settings, we have to retrieve the toolbar icon size from the
         // Application class
-        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+        sal_uLong nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
         if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
             eOptSymbolsSize = SFX_SYMBOLS_SIZE_LARGE;
         else

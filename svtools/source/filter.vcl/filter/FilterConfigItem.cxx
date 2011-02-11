@@ -38,7 +38,7 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::utl                       ;   // getProcessServiceFactory
 using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
 using namespace ::com::sun::star::beans     ;   // PropertyValue
@@ -428,7 +428,7 @@ void FilterConfigItem::WriteBool( const OUString& rKey, sal_Bool bNewValue )
         Any aAny;
         if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
-            sal_Bool bOldValue;
+            sal_Bool bOldValue(sal_True);
             if ( aAny >>= bOldValue )
             {
                 if ( bOldValue != bNewValue )
@@ -462,7 +462,7 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
 
         if ( ImplGetPropertyValue( aAny, xPropSet, rKey, sal_True ) )
         {
-            sal_Int32 nOldValue;
+            sal_Int32 nOldValue = 0;
             if ( aAny >>= nOldValue )
             {
                 if ( nOldValue != nNewValue )

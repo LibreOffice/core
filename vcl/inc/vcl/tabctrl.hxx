@@ -44,8 +44,8 @@ class ListBox;
 // --------------------
 
 #ifndef TAB_APPEND
-#define TAB_APPEND          ((USHORT)0xFFFF)
-#define TAB_PAGE_NOTFOUND   ((USHORT)0xFFFF)
+#define TAB_APPEND          ((sal_uInt16)0xFFFF)
+#define TAB_PAGE_NOTFOUND   ((sal_uInt16)0xFFFF)
 #endif /* !TAB_APPEND */
 
 // --------------
@@ -61,39 +61,30 @@ private:
     long                mnLastHeight;
     long                mnBtnSize;
     long                mnMaxPageWidth;
-    USHORT              mnActPageId;
-    USHORT              mnCurPageId;
-    USHORT              mnFirstPagePos;
-    USHORT              mnLastFirstPagePos;
-    BOOL                mbFormat;
-    BOOL                mbRestoreHelpId;
-    BOOL                mbRestoreUnqId;
-    BOOL                mbSingleLine;
-    BOOL                mbScroll;
-    BOOL                mbSmallInvalidate;
-    BOOL                mbExtraSpace;
+    sal_uInt16              mnActPageId;
+    sal_uInt16              mnCurPageId;
+    sal_Bool                mbFormat;
+    sal_Bool                mbRestoreHelpId;
+    sal_Bool                mbRestoreUnqId;
+    sal_Bool                mbSmallInvalidate;
+    sal_Bool                mbExtraSpace;
     Link                maActivateHdl;
     Link                maDeactivateHdl;
 
     using Control::ImplInitSettings;
-    SAL_DLLPRIVATE void         ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
-    SAL_DLLPRIVATE ImplTabItem* ImplGetItem( USHORT nId ) const;
-    SAL_DLLPRIVATE void         ImplScrollBtnsColor();
-    SAL_DLLPRIVATE void         ImplSetScrollBtnsState();
-    SAL_DLLPRIVATE void         ImplPosScrollBtns();
+    SAL_DLLPRIVATE void         ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
+    SAL_DLLPRIVATE ImplTabItem* ImplGetItem( sal_uInt16 nId ) const;
     SAL_DLLPRIVATE Size         ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth );
-    SAL_DLLPRIVATE Rectangle    ImplGetTabRect( USHORT nPos, long nWidth = -1, long nHeight = -1 );
-    SAL_DLLPRIVATE void         ImplChangeTabPage( USHORT nId, USHORT nOldId );
-    SAL_DLLPRIVATE BOOL         ImplPosCurTabPage();
-    SAL_DLLPRIVATE void         ImplActivateTabPage( BOOL bNext );
-    SAL_DLLPRIVATE void         ImplSetFirstPagePos( USHORT nPagePos );
+    SAL_DLLPRIVATE Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
+    SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
+    SAL_DLLPRIVATE sal_Bool         ImplPosCurTabPage();
+    SAL_DLLPRIVATE void         ImplActivateTabPage( sal_Bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout = false, bool bFirstInGroup = false, bool bLastInGroup = false, bool bIsCurrentItem = false );
     SAL_DLLPRIVATE void         ImplPaint( const Rectangle& rRect, bool bLayout = false );
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
-    DECL_DLLPRIVATE_LINK(       ImplScrollBtnHdl, PushButton* pBtn );
     DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
 
@@ -141,46 +132,43 @@ public:
     Point               GetItemsOffset() const;
 
     void                InsertPage( const ResId& rResId,
-                                    USHORT nPos = TAB_APPEND );
-    void                InsertPage( USHORT nPageId, const XubString& rText,
-                                    USHORT nPos = TAB_APPEND );
-    void                RemovePage( USHORT nPageId );
+                                    sal_uInt16 nPos = TAB_APPEND );
+    void                InsertPage( sal_uInt16 nPageId, const XubString& rText,
+                                    sal_uInt16 nPos = TAB_APPEND );
+    void                RemovePage( sal_uInt16 nPageId );
     void                Clear();
-    void                EnablePage( USHORT nPageId, bool bEnable = true );
+    void                EnablePage( sal_uInt16 nPageId, bool bEnable = true );
 
-    USHORT              GetPageCount() const;
-    USHORT              GetPageId( USHORT nPos ) const;
-    USHORT              GetPagePos( USHORT nPageId ) const;
-    USHORT              GetPageId( const Point& rPos ) const;
+    sal_uInt16              GetPageCount() const;
+    sal_uInt16              GetPageId( sal_uInt16 nPos ) const;
+    sal_uInt16              GetPagePos( sal_uInt16 nPageId ) const;
+    sal_uInt16              GetPageId( const Point& rPos ) const;
 
-    void                SetCurPageId( USHORT nPageId );
-    USHORT              GetCurPageId() const;
+    void                SetCurPageId( sal_uInt16 nPageId );
+    sal_uInt16              GetCurPageId() const;
 
-    void                SetFirstPageId( USHORT nPageId );
-    USHORT              GetFirstPageId() const { return GetPageId( mnFirstPagePos ); }
-
-    void                SelectTabPage( USHORT nPageId );
+    void                SelectTabPage( sal_uInt16 nPageId );
 
     void                SetMaxPageWidth( long nMaxWidth ) { mnMaxPageWidth = nMaxWidth; }
     long                GetMaxPageWidth() const { return mnMaxPageWidth; }
     void                ResetMaxPageWidth() { SetMaxPageWidth( 0 ); }
-    BOOL                IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
+    sal_Bool                IsMaxPageWidth() const { return mnMaxPageWidth != 0; }
 
-    void                SetTabPage( USHORT nPageId, TabPage* pPage );
-    TabPage*            GetTabPage( USHORT nPageId ) const;
-    USHORT              GetTabPageResId( USHORT nPageId ) const;
+    void                SetTabPage( sal_uInt16 nPageId, TabPage* pPage );
+    TabPage*            GetTabPage( sal_uInt16 nPageId ) const;
+    sal_uInt16              GetTabPageResId( sal_uInt16 nPageId ) const;
 
-    void                SetPageText( USHORT nPageId, const XubString& rText );
-    XubString           GetPageText( USHORT nPageId ) const;
+    void                SetPageText( sal_uInt16 nPageId, const XubString& rText );
+    XubString           GetPageText( sal_uInt16 nPageId ) const;
 
-    void                SetHelpText( USHORT nPageId, const XubString& rText );
-    const XubString&    GetHelpText( USHORT nPageId ) const;
+    void                SetHelpText( sal_uInt16 nPageId, const XubString& rText );
+    const XubString&    GetHelpText( sal_uInt16 nPageId ) const;
 
-    void                SetHelpId( USHORT nPageId, const rtl::OString& rHelpId );
-    rtl::OString        GetHelpId( USHORT nPageId ) const;
+    void                SetHelpId( sal_uInt16 nPageId, const rtl::OString& rHelpId );
+    rtl::OString        GetHelpId( sal_uInt16 nPageId ) const;
 
-    void                SetPageImage( USHORT nPageId, const Image& rImage );
-    const Image*        GetPageImage( USHORT nPageId ) const;
+    void                SetPageImage( sal_uInt16 nPageId, const Image& rImage );
+    const Image*        GetPageImage( sal_uInt16 nPageId ) const;
 
     void                SetHelpText( const XubString& rText )
                             { Control::SetHelpText( rText ); }
@@ -200,19 +188,19 @@ public:
     // returns (control relative) bounding rectangle for the
     // character at index nIndex relative to the text of page nPageId
     using Control::GetCharacterBounds;
-    Rectangle GetCharacterBounds( USHORT nPageId, long nIndex ) const;
+    Rectangle GetCharacterBounds( sal_uInt16 nPageId, long nIndex ) const;
 
     // returns the index relative to the text of page nPageId (also returned)
     // at position rPoint (control relative)
     using Control::GetIndexForPoint;
-    long GetIndexForPoint( const Point& rPoint, USHORT& rPageId ) const;
+    long GetIndexForPoint( const Point& rPoint, sal_uInt16& rPageId ) const;
 
     // returns the bounding rectangle of the union of tab page area and the
     // corresponding tab
-    Rectangle GetTabPageBounds( USHORT nPageId ) const;
+    Rectangle GetTabPageBounds( sal_uInt16 nPageId ) const;
 
     // returns the rectangle of the tab for page nPageId
-    Rectangle GetTabBounds( USHORT nPageId ) const;
+    Rectangle GetTabBounds( sal_uInt16 nPageId ) const;
 };
 
 #endif  // _SV_TABCTRL_HXX

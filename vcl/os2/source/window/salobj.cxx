@@ -566,3 +566,9 @@ void Os2SalObject::SetCallback( void* pInst, SALOBJECTPROC pProc )
 }
 #endif
 
+// -----------------------------------------------------------------------
+
+void Os2SalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

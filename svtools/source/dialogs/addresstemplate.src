@@ -25,15 +25,9 @@
  *
  ************************************************************************/
 
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVT_ADDRESSTEMPLATE_HRC_
 #include "addresstemplate.hrc"
-#endif
-#ifndef _SVT_CONTROLDIMS_HRC_
-#include "controldims.hrc"
-#endif
+#include <svtools/controldims.hrc>
 
 #define FIELD_ROW_HEIGHT    17
 

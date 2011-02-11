@@ -52,12 +52,12 @@ ExtTextEngine::~ExtTextEngine()
 TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
 {
     TextSelection aSel( rCursor );
-    USHORT nPos = rCursor.GetIndex();
-    ULONG nPara = rCursor.GetPara();
-    ULONG nParas = GetParagraphCount();
+    sal_uInt16 nPos = rCursor.GetIndex();
+    sal_uLong nPara = rCursor.GetPara();
+    sal_uLong nParas = GetParagraphCount();
     if ( ( nPara < nParas ) && ( nPos < GetTextLen( nPara ) ) )
     {
-        USHORT nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() ).GetChar( nPos ) );
+        sal_uInt16 nMatchChar = maGroupChars.Search( GetText( rCursor.GetPara() ).GetChar( nPos ) );
         if ( nMatchChar != STRING_NOTFOUND )
         {
             if ( ( nMatchChar % 2 ) == 0 )
@@ -66,8 +66,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 sal_Unicode nSC = maGroupChars.GetChar( nMatchChar );
                 sal_Unicode nEC = maGroupChars.GetChar( nMatchChar+1 );
 
-                USHORT nCur = nPos+1;
-                USHORT nLevel = 1;
+                sal_uInt16 nCur = nPos+1;
+                sal_uInt16 nLevel = 1;
                 while ( nLevel && ( nPara < nParas ) )
                 {
                     XubString aStr = GetText( nPara );
@@ -102,8 +102,8 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
                 xub_Unicode nEC = maGroupChars.GetChar( nMatchChar );
                 xub_Unicode nSC = maGroupChars.GetChar( nMatchChar-1 );
 
-                USHORT nCur = rCursor.GetIndex()-1;
-                USHORT nLevel = 1;
+                sal_uInt16 nCur = rCursor.GetIndex()-1;
+                sal_uInt16 nLevel = 1;
                 while ( nLevel )
                 {
                     if ( GetTextLen( nPara ) )
@@ -148,12 +148,12 @@ TextSelection ExtTextEngine::MatchGroup( const TextPaM& rCursor ) const
     return aSel;
 }
 
-BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, BOOL bForward )
+sal_Bool ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSearchOptions, sal_Bool bForward )
 {
     TextSelection aSel( rSel );
     aSel.Justify();
 
-    BOOL bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
+    sal_Bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
 
     TextPaM aStartPaM( aSel.GetEnd() );
     if ( aSel.HasRange() && ( ( bSearchInSelection && bForward ) || ( !bSearchInSelection && !bForward ) ) )
@@ -162,7 +162,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
     }
 
     bool bFound = false;
-    ULONG nStartNode, nEndNode;
+    sal_uLong nStartNode, nEndNode;
 
     if ( bSearchInSelection )
         nEndNode = bForward ? aSel.GetEnd().GetPara() : aSel.GetStart().GetPara();
@@ -176,13 +176,13 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
     utl::TextSearch aSearcher( rSearchOptions );
 
     // ueber die Absaetze iterieren...
-    for ( ULONG nNode = nStartNode;
+    for ( sal_uLong nNode = nStartNode;
             bForward ?  ( nNode <= nEndNode) : ( nNode >= nEndNode );
             bForward ? nNode++ : nNode-- )
     {
         String aText = GetText( nNode );
-        USHORT nStartPos = 0;
-        USHORT nEndPos = aText.Len();
+        sal_uInt16 nStartPos = 0;
+        sal_uInt16 nEndPos = aText.Len();
         if ( nNode == nStartNode )
         {
             if ( bForward )
@@ -212,7 +212,7 @@ BOOL ExtTextEngine::Search( TextSelection& rSel, const util::SearchOptions& rSea
             // Ueber den Absatz selektieren?
             // Select over the paragraph?
             // FIXME  This should be max long...
-            if( nEndPos == sal::static_int_cast<USHORT>(-1) ) // USHORT for 0 and -1 !
+            if( nEndPos == sal::static_int_cast<sal_uInt16>(-1) ) // sal_uInt16 for 0 and -1 !
             {
                 if ( (rSel.GetEnd().GetPara()+1) < GetParagraphCount() )
                 {
@@ -249,34 +249,34 @@ ExtTextView::~ExtTextView()
 {
 }
 
-BOOL ExtTextView::MatchGroup()
+sal_Bool ExtTextView::MatchGroup()
 {
     TextSelection aTmpSel( GetSelection() );
     aTmpSel.Justify();
     if ( ( aTmpSel.GetStart().GetPara() != aTmpSel.GetEnd().GetPara() ) ||
          ( ( aTmpSel.GetEnd().GetIndex() - aTmpSel.GetStart().GetIndex() ) > 1 ) )
     {
-        return FALSE;
+        return sal_False;
     }
 
     TextSelection aMatchSel = ((ExtTextEngine*)GetTextEngine())->MatchGroup( aTmpSel.GetStart() );
     if ( aMatchSel.HasRange() )
         SetSelection( aMatchSel );
 
-    return aMatchSel.HasRange() ? TRUE : FALSE;
+    return aMatchSel.HasRange() ? sal_True : sal_False;
 }
 
-BOOL ExtTextView::Search( const util::SearchOptions& rSearchOptions, BOOL bForward )
+sal_Bool ExtTextView::Search( const util::SearchOptions& rSearchOptions, sal_Bool bForward )
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
     TextSelection aSel( GetSelection() );
     if ( ((ExtTextEngine*)GetTextEngine())->Search( aSel, rSearchOptions, bForward ) )
     {
-        bFound = TRUE;
+        bFound = sal_True;
         // Erstmal den Anfang des Wortes als Selektion einstellen,
         // damit das ganze Wort in den sichtbaren Bereich kommt.
         SetSelection( aSel.GetStart() );
-        ShowCursor( TRUE, FALSE );
+        ShowCursor( sal_True, sal_False );
     }
     else
     {
@@ -289,9 +289,9 @@ BOOL ExtTextView::Search( const util::SearchOptions& rSearchOptions, BOOL bForwa
     return bFound;
 }
 
-USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAll, BOOL bForward )
+sal_uInt16 ExtTextView::Replace( const util::SearchOptions& rSearchOptions, sal_Bool bAll, sal_Bool bForward )
 {
-    USHORT nFound = 0;
+    sal_uInt16 nFound = 0;
 
     if ( !bAll )
     {
@@ -316,7 +316,7 @@ USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAl
         // HideSelection();
         TextSelection aSel;
 
-        BOOL bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
+        sal_Bool bSearchInSelection = (0 != (rSearchOptions.searchFlag & util::SearchFlags::REG_NOT_BEGINOFLINE) );
         if ( bSearchInSelection )
         {
             aSel = GetSelection();
@@ -325,9 +325,9 @@ USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAl
 
         TextSelection aSearchSel( aSel );
 
-        BOOL bFound = pTextEngine->Search( aSel, rSearchOptions, TRUE );
+        sal_Bool bFound = pTextEngine->Search( aSel, rSearchOptions, sal_True );
         if ( bFound )
-            pTextEngine->UndoActionStart( XTEXTUNDO_REPLACEALL );
+            pTextEngine->UndoActionStart();
         while ( bFound )
         {
             nFound++;
@@ -335,42 +335,42 @@ USHORT ExtTextView::Replace( const util::SearchOptions& rSearchOptions, BOOL bAl
             TextPaM aNewStart = pTextEngine->ImpInsertText( aSel, rSearchOptions.replaceString );
             aSel = aSearchSel;
             aSel.GetStart() = aNewStart;
-            bFound = pTextEngine->Search( aSel, rSearchOptions, TRUE );
+            bFound = pTextEngine->Search( aSel, rSearchOptions, sal_True );
         }
         if ( nFound )
         {
             SetSelection( aSel.GetStart() );
             pTextEngine->FormatAndUpdate( this );
-            pTextEngine->UndoActionEnd( XTEXTUNDO_REPLACEALL );
+            pTextEngine->UndoActionEnd();
         }
     }
     return nFound;
 }
 
-BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
+sal_Bool ExtTextView::ImpIndentBlock( sal_Bool bRight )
 {
-    BOOL bDone = FALSE;
+    sal_Bool bDone = sal_False;
 
     TextSelection aSel = GetSelection();
     aSel.Justify();
 
     HideSelection();
-    GetTextEngine()->UndoActionStart( bRight ? XTEXTUNDO_INDENTBLOCK : XTEXTUNDO_UNINDENTBLOCK );
+    GetTextEngine()->UndoActionStart();
 
-    ULONG nStartPara = aSel.GetStart().GetPara();
-    ULONG nEndPara = aSel.GetEnd().GetPara();
+    sal_uLong nStartPara = aSel.GetStart().GetPara();
+    sal_uLong nEndPara = aSel.GetEnd().GetPara();
     if ( aSel.HasRange() && !aSel.GetEnd().GetIndex() )
     {
         nEndPara--; // den dann nicht einruecken...
     }
 
-    for ( ULONG nPara = nStartPara; nPara <= nEndPara; nPara++ )
+    for ( sal_uLong nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
         if ( bRight )
         {
             // Tabs hinzufuegen
             GetTextEngine()->ImpInsertText( TextPaM( nPara, 0 ), '\t' );
-            bDone = TRUE;
+            bDone = sal_True;
         }
         else
         {
@@ -381,14 +381,14 @@ BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
                     ( aText.GetChar( 0 ) == ' ' ) ) )
             {
                 GetTextEngine()->ImpDeleteText( TextSelection( TextPaM( nPara, 0 ), TextPaM( nPara, 1 ) ) );
-                bDone = TRUE;
+                bDone = sal_True;
             }
         }
     }
 
-    GetTextEngine()->UndoActionEnd( bRight ? XTEXTUNDO_INDENTBLOCK : XTEXTUNDO_UNINDENTBLOCK );
+    GetTextEngine()->UndoActionEnd();
 
-    BOOL bRange = aSel.HasRange();
+    sal_Bool bRange = aSel.HasRange();
     if ( bRight )
     {
         aSel.GetStart().GetIndex()++;
@@ -409,13 +409,13 @@ BOOL ExtTextView::ImpIndentBlock( BOOL bRight )
     return bDone;
 }
 
-BOOL ExtTextView::IndentBlock()
+sal_Bool ExtTextView::IndentBlock()
 {
-    return ImpIndentBlock( TRUE );
+    return ImpIndentBlock( sal_True );
 }
 
-BOOL ExtTextView::UnindentBlock()
+sal_Bool ExtTextView::UnindentBlock()
 {
-    return ImpIndentBlock( FALSE );
+    return ImpIndentBlock( sal_False );
 }
 

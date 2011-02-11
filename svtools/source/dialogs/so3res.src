@@ -25,10 +25,11 @@
  *
  ************************************************************************/
 
-#include "sores.hxx"
+#include "svtools/sores.hxx"
 #define __RSC
-#include "soerr.hxx"
+#include <svtools/soerr.hxx>
 #define S_MAX   0x7fff
+
 Resource RID_SO_ERROR_HANDLER
 {
     String ERRCODE_SO_GENERALERROR&S_MAX

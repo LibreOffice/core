@@ -30,8 +30,8 @@
 
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#include "rtfkeywd.hxx"
-#include "rtftoken.h"
+#include <svtools/rtfkeywd.hxx>
+#include <svtools/rtftoken.h>
 #include "tools/string.hxx"
 
 #include <string.h>
@@ -49,7 +49,7 @@ struct RTF_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = FALSE;
+static int __FAR_DATA bSortKeyWords = sal_False;
 
 static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
@@ -1228,7 +1228,7 @@ int GetRTFToken( const String& rSearch )
                 sizeof( aRTFTokenTab ) / sizeof( RTF_TokenEntry ),
                 sizeof( RTF_TokenEntry ),
                 RTFKeyCompare );
-        bSortKeyWords = TRUE;
+        bSortKeyWords = sal_True;
     }
 
     int nRet = 0;

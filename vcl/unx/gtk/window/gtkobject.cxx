@@ -33,7 +33,7 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 
-GtkSalObject::GtkSalObject( GtkSalFrame* pParent, BOOL bShow )
+GtkSalObject::GtkSalObject( GtkSalFrame* pParent, sal_Bool bShow )
         : m_pSocket( NULL ),
           m_pRegion( NULL )
 {
@@ -104,12 +104,12 @@ void GtkSalObject::ResetClipRegion()
         gdk_window_shape_combine_region( m_pSocket->window, NULL, 0, 0 );
 }
 
-USHORT GtkSalObject::GetClipRegionType()
+sal_uInt16 GtkSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-void GtkSalObject::BeginSetClipRegion( ULONG )
+void GtkSalObject::BeginSetClipRegion( sal_uLong )
 {
     if( m_pRegion )
         gdk_region_destroy( m_pRegion );
@@ -144,7 +144,7 @@ void GtkSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
     }
 }
 
-void GtkSalObject::Show( BOOL bVisible )
+void GtkSalObject::Show( sal_Bool bVisible )
 {
     if( m_pSocket )
     {
@@ -155,7 +155,7 @@ void GtkSalObject::Show( BOOL bVisible )
     }
 }
 
-void GtkSalObject::Enable( BOOL )
+void GtkSalObject::Enable( sal_Bool )
 {
 }
 
@@ -209,3 +209,8 @@ void GtkSalObject::signalDestroy( GtkObject* pObj, gpointer object )
         pThis->m_pSocket = NULL;
     }
 }
+
+void GtkSalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

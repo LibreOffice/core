@@ -42,12 +42,12 @@ public:
     SvBorder( const Rectangle & rOuter, const Rectangle & rInner );
     SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
     { nLeft = nLeftP; nTop = nTopP; nRight = nRightP; nBottom = nBottomP; }
-    BOOL    operator == ( const SvBorder & rObj ) const
+    sal_Bool    operator == ( const SvBorder & rObj ) const
             {
                 return nTop == rObj.nTop && nRight == rObj.nRight &&
                        nBottom == rObj.nBottom && nLeft == rObj.nLeft;
             }
-    BOOL    operator != ( const SvBorder & rObj ) const
+    sal_Bool    operator != ( const SvBorder & rObj ) const
             { return !(*this == rObj); }
     SvBorder & operator = ( const SvBorder & rBorder )
             {
@@ -73,7 +73,7 @@ public:
                 Bottom() -= rBorder.Bottom();
                 return *this;
             }
-    BOOL    IsInside( const SvBorder & rInside )
+    sal_Bool    IsInside( const SvBorder & rInside )
             {
                 return nTop >= rInside.nTop && nRight >= rInside.nRight &&
                        nBottom >= rInside.nBottom && nLeft >= rInside.nLeft;

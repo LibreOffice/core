@@ -31,7 +31,7 @@
 #include <svtools/svmedit.hxx>
 #include <svtools/xtextedt.hxx>
 #include <svtools/editsyntaxhighlighter.hxx>
-#include "../../inc/txtattr.hxx"
+#include <svtools/txtattr.hxx>
 
 
 MultiLineEditSyntaxHighlight::MultiLineEditSyntaxHighlight( Window* pParent, WinBits nWinStyle,
@@ -68,12 +68,12 @@ void MultiLineEditSyntaxHighlight::SetText(const String& rNewText)
     UpdateData();
 }
 
-void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
+void MultiLineEditSyntaxHighlight::DoBracketHilight(sal_uInt16 aKey)
 {
     TextSelection aCurrentPos = GetTextView()->GetSelection();
     xub_StrLen aStartPos  = aCurrentPos.GetStart().GetIndex();
-    ULONG nStartPara = aCurrentPos.GetStart().GetPara();
-    USHORT aCount = 0;
+    sal_uLong nStartPara = aCurrentPos.GetStart().GetPara();
+    sal_uInt16 aCount = 0;
     int aChar = -1;
 
     switch (aKey)
@@ -109,16 +109,16 @@ void MultiLineEditSyntaxHighlight::DoBracketHilight(USHORT aKey)
                 continue;
 
             String aLine( GetTextEngine()->GetText( aPara ) );
-            for (USHORT i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (USHORT)(aLine.Len()-1); i>0; --i)
+            for (sal_uInt16 i = ((unsigned long)aPara==nStartPara) ? aStartPos-1 : (sal_uInt16)(aLine.Len()-1); i>0; --i)
             {
                 if (aLine.GetChar(i)==aChar)
                 {
                     if (!aCount)
                     {
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), aPara, i, i+1, TRUE );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), aPara, i, i+1, TRUE );
-                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, aStartPos, aStartPos, TRUE );
-                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, aStartPos, aStartPos, TRUE );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), aPara, i, i+1, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), aPara, i, i+1, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontWeight( WEIGHT_ULTRABOLD ), nStartPara, aStartPos, aStartPos, sal_True );
+                        GetTextEngine()->SetAttrib( TextAttribFontColor( Color(0,0,0) ), nStartPara, aStartPos, aStartPos, sal_True );
                         return;
                     }
                     else
@@ -184,19 +184,19 @@ void MultiLineEditSyntaxHighlight::UpdateData()
 {
     // syntax highlighting
     // this must be possible improved by using notifychange correctly
-    BOOL bTempModified = GetTextEngine()->IsModified();
+    sal_Bool bTempModified = GetTextEngine()->IsModified();
     for (unsigned int nLine=0; nLine < GetTextEngine()->GetParagraphCount(); nLine++)
     {
         String aLine( GetTextEngine()->GetText( nLine ) );
         Range aChanges = aHighlighter.notifyChange( nLine, 0, &aLine, 1 );
 
-        GetTextEngine()->RemoveAttribs( nLine, TRUE );
+        GetTextEngine()->RemoveAttribs( nLine, sal_True );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
         for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
-            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, TRUE );
+            GetTextEngine()->SetAttrib( TextAttribFontColor( GetColorValue(r.tokenType) ), nLine, r.nBegin, r.nEnd, sal_True );
         }
     }
     GetTextView()->ShowCursor( false, true );

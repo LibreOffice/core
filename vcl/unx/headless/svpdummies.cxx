@@ -50,17 +50,18 @@ SvpSalObject::~SvpSalObject()
 }
 
 void SvpSalObject::ResetClipRegion() {}
-USHORT SvpSalObject::GetClipRegionType() { return 0; }
-void SvpSalObject::BeginSetClipRegion( ULONG ) {}
+sal_uInt16 SvpSalObject::GetClipRegionType() { return 0; }
+void SvpSalObject::BeginSetClipRegion( sal_uLong ) {}
 void SvpSalObject::UnionClipRegion( long, long, long, long ) {}
 void SvpSalObject::EndSetClipRegion() {}
 void SvpSalObject::SetPosSize( long, long, long, long ) {}
-void SvpSalObject::Show( BOOL ) {}
-void SvpSalObject::Enable( BOOL ) {}
+void SvpSalObject::Show( sal_Bool ) {}
+void SvpSalObject::Enable( sal_Bool ) {}
 void SvpSalObject::GrabFocus() {}
 void SvpSalObject::SetBackground() {}
 void SvpSalObject::SetBackground( SalColor ) {}
 const SystemEnvData* SvpSalObject::GetSystemData() const { return &m_aSystemChildData; }
+void SvpSalObject::InterceptChildWindowKeyDown( sal_Bool ) {}
 
 // SalI18NImeStatus
 SvpImeStatus::~SvpImeStatus() {}

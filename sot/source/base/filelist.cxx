@@ -33,7 +33,7 @@
 #include<tools/string.hxx>
 #include<tools/rtti.hxx>
 #include<sot/exchange.hxx>
-#include<filelist.hxx>
+#include<sot/filelist.hxx>
 #include <osl/thread.h>
 
 TYPEINIT1_AUTOFACTORY( FileList, SvDataCopyStream );
@@ -61,8 +61,8 @@ FileList::~FileList()
 void FileList::ClearAll( void )
 {
     // Strings in der Liste loeschen
-    ULONG nCount = pStrList->Count();
-    for( ULONG i = 0 ; i < nCount ; i++ )
+    sal_uLong nCount = pStrList->Count();
+    for( sal_uLong i = 0 ; i < nCount ; i++ )
         delete pStrList->GetObject( i );
 
     // Liste loeschen
@@ -81,8 +81,8 @@ FileList& FileList::operator=( const FileList& rFileList )
     *pStrList = *rFileList.pStrList;
 
     // Strings in der Liste kopieren
-    ULONG nCount = pStrList->Count();
-    for( ULONG i = 0 ; i < nCount ; i++ )
+    sal_uLong nCount = pStrList->Count();
+    for( sal_uLong i = 0 ; i < nCount ; i++ )
         pStrList->Replace( new String( *rFileList.pStrList->GetObject( i ) ), i );
 
     return *this;
@@ -94,7 +94,7 @@ FileList& FileList::operator=( const FileList& rFileList )
 |*
 \*************************************************************************/
 
-ULONG FileList::GetFormat()
+sal_uLong FileList::GetFormat()
 {
     return FORMAT_FILE_LIST;
 }
@@ -184,7 +184,7 @@ void FileList::AppendFile( const String& rStr )
     pStrList->Insert( new String( rStr ) , pStrList->Count() );
 }
 
-String FileList::GetFile( ULONG i ) const
+String FileList::GetFile( sal_uLong i ) const
 {
     String aStr;
     if( i < pStrList->Count() )
@@ -192,7 +192,7 @@ String FileList::GetFile( ULONG i ) const
     return aStr;
 }
 
-ULONG FileList::Count( void ) const
+sal_uLong FileList::Count( void ) const
 {
     return pStrList->Count();
 }

@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <vos/mutex.hxx>
-#ifndef DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
@@ -43,12 +39,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGCONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
-#endif
-
 #include "svl/urlbmk.hxx"
-#include "inetimg.hxx"
+#include <svtools/inetimg.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 
@@ -441,7 +434,7 @@ sal_Bool TransferDataContainer::GetData( const
     TDataCntnrEntryList::iterator   aIter( pImpl->aFmtList.begin() ),
                                     aEnd( pImpl->aFmtList.end() );
     sal_Bool bFnd = sal_False;
-    ULONG nFmtId = SotExchange::GetFormat( rFlavor );
+    sal_uLong nFmtId = SotExchange::GetFormat( rFlavor );
 
     // test first the list
     for( ; aIter != aEnd; ++aIter )
@@ -507,8 +500,8 @@ void TransferDataContainer::CopyINetBookmark( const INetBookmark& rBkmk )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyAnyData( ULONG nFormatId,
-                                        const sal_Char* pData, ULONG nLen )
+void TransferDataContainer::CopyAnyData( sal_uLong nFormatId,
+                                        const sal_Char* pData, sal_uLong nLen )
 {
     if( nLen )
     {
@@ -525,7 +518,7 @@ void TransferDataContainer::CopyAnyData( ULONG nFormatId,
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyByteString( ULONG nFormatId,
+void TransferDataContainer::CopyByteString( sal_uLong nFormatId,
                                             const ByteString& rStr )
 {
     CopyAnyData( nFormatId, rStr.GetBuffer(), rStr.Len() );
@@ -575,7 +568,7 @@ void TransferDataContainer::CopyGraphic( const Graphic& rGrf )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyString( USHORT nFmt, const String& rStr )
+void TransferDataContainer::CopyString( sal_uInt16 nFmt, const String& rStr )
 {
     if( rStr.Len() )
     {
@@ -597,7 +590,7 @@ void TransferDataContainer::CopyString( const String& rStr )
 
 // -----------------------------------------------------------------------------
 
-void TransferDataContainer::CopyAny( USHORT nFmt,
+void TransferDataContainer::CopyAny( sal_uInt16 nFmt,
                                     const ::com::sun::star::uno::Any& rAny )
 {
     TDataCntnrEntry_Impl aEntry;

@@ -38,18 +38,18 @@ DBG_NAME(SfxVoidItem)
 // @@@ DBG_NAME(SfxInvalidItem);
 DBG_NAME(SfxItemHandle)
 
-BYTE nSfxFlag8Val[8] =
+sal_uInt8 nSfxFlag8Val[8] =
 {
     1, 2, 4, 8, 16, 32, 64, 128
 };
 
-USHORT nSfxFlag16Val[16] =
+sal_uInt16 nSfxFlag16Val[16] =
 {
     1, 2, 4, 8, 16, 32, 64, 128, 256, 512,
     1024, 2048, 4096, 8192, 16384, 32768
 };
 
-ULONG nSfxFlag32Val[32] =
+sal_uLong nSfxFlag32Val[32] =
 {
     0x1L, 0x2L, 0x4L, 0x8L,
     0x10L, 0x20L, 0x40L, 0x80L,
@@ -71,7 +71,7 @@ TYPEINIT1(SfxSetItem, SfxPoolItem);
 
 // ------------------------------------------------------------------------
 #if OSL_DEBUG_LEVEL > 1
-static ULONG nItemCount = 0;
+static sal_uLong nItemCount = 0;
 
 const char* pw1 = "Wow! 10.000 items!";
 const char* pw2 = "Wow! 100.000 items!";
@@ -83,7 +83,7 @@ const char* pw5 = "Wow! 10.000.000 items!";
 IMPL_PTRHINT(SfxPoolItemHint,SfxPoolItem)
 
 // SfxPoolItem -----------------------------------------------------------
-SfxPoolItem::SfxPoolItem( USHORT nW )
+SfxPoolItem::SfxPoolItem( sal_uInt16 nW )
     : nRefCount( 0 ),
       nWhich( nW )
       , nKind( 0 )
@@ -192,26 +192,26 @@ int SfxPoolItem::operator==( const SfxPoolItem& rCmp ) const
 int SfxPoolItem::IsPoolable() const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
-    return TRUE;
+    return sal_True;
 }
 #endif
 
 // -----------------------------------------------------------------------
-SfxPoolItem* SfxPoolItem::Create(SvStream &, USHORT) const
+SfxPoolItem* SfxPoolItem::Create(SvStream &, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return Clone(0);
 }
 
 // -----------------------------------------------------------------------
-USHORT SfxPoolItem::GetVersion( USHORT ) const
+sal_uInt16 SfxPoolItem::GetVersion( sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return 0;
 }
 
 // -----------------------------------------------------------------------
-SvStream& SfxPoolItem::Store(SvStream &rStream, USHORT ) const
+SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
     DBG_CHKTHIS(SfxPoolItem, 0);
     return rStream;
@@ -269,7 +269,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
     von allen UI-relevanten SfxPoolItem-Subklassen "uberladen werden.
 
     Da die Ma\seinheit des Wertes im SfxItemPool nur "uber
-    <SfxItemPool::GetMetric(USHORT)const> erfragbar ist, und nicht etwa
+    <SfxItemPool::GetMetric(sal_uInt16)const> erfragbar ist, und nicht etwa
     in der SfxPoolItem-Instanz oder -Subklasse  verf"ugbar ist, wird die
     eigene Ma\seinheit als 'eCoreMetric' "ubergeben.
 
@@ -312,7 +312,7 @@ SfxItemPresentation SfxPoolItem::GetPresentation
 }
 
 // SfxVoidItem ------------------------------------------------------------
-SfxVoidItem::SfxVoidItem( USHORT which ):
+SfxVoidItem::SfxVoidItem( sal_uInt16 which ):
     SfxPoolItem(which)
 {
     DBG_CTOR(SfxVoidItem, 0);
@@ -334,7 +334,7 @@ rCmp
 {
     DBG_CHKTHIS(SfxVoidItem, 0);
     DBG_ASSERT( SfxPoolItem::operator==( rCmp ), "unequal type" );
-    return TRUE;
+    return sal_True;
 }
 
 // ------------------------------------------------------------------------
@@ -361,7 +361,7 @@ SfxPoolItem* SfxVoidItem::Clone(SfxItemPool *) const
 
 // SfxInvalidItem ---------------------------------------------------------
 #if 0  /* @@@ NOT USED @@@ */
-SfxInvalidItem::SfxInvalidItem( USHORT nWhich, const SfxPoolItem &rDefault ):
+SfxInvalidItem::SfxInvalidItem( sal_uInt16 nWhich, const SfxPoolItem &rDefault ):
     SfxPoolItem(nWhich),
     pDefaultItem(&rDefault)
 {
@@ -414,7 +414,7 @@ SfxPoolItem* SfxInvalidItem::Clone(SfxItemPool *) const
 }
 
 // ------------------------------------------------------------------------
-SfxPoolItem* SfxInvalidItem::Create(SvStream &, USHORT nVersion) const
+SfxPoolItem* SfxInvalidItem::Create(SvStream &, sal_uInt16 nVersion) const
 {
     DBG_CHKTHIS(SfxInvalidItem, 0);
     DBG_ERROR("SfxInvalidItem::Create() ist sinnlos");
@@ -422,7 +422,7 @@ SfxPoolItem* SfxInvalidItem::Create(SvStream &, USHORT nVersion) const
 }
 
 // ------------------------------------------------------------------------
-SvStream& SfxInvalidItem::Store(SvStream &rStream, USHORT nItemVersion ) const
+SvStream& SfxInvalidItem::Store(SvStream &rStream, sal_uInt16 nItemVersion ) const
 {
     DBG_CHKTHIS(SfxInvalidItem, 0);
     DBG_ERROR("SfxInvalidItem::Store() ist sinnlos");
@@ -432,7 +432,7 @@ SvStream& SfxInvalidItem::Store(SvStream &rStream, USHORT nItemVersion ) const
 
 // SfxItemHandle ----------------------------------------------------------
 SfxItemHandle::SfxItemHandle(SfxPoolItem &rItem):
-    pRef(new USHORT(1)),
+    pRef(new sal_uInt16(1)),
     pItem(rItem.Clone(0))
 {
     DBG_CTOR(SfxItemHandle, 0);
@@ -504,18 +504,18 @@ void SfxPoolItem::Store(SvStream &rStream) const
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::QueryValue( com::sun::star::uno::Any&, BYTE ) const
+sal_Bool SfxPoolItem::QueryValue( com::sun::star::uno::Any&, sal_uInt8 ) const
 {
     DBG_ERROR("There is no implementation for QueryValue for this item!");
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL SfxPoolItem::PutValue( const com::sun::star::uno::Any&, BYTE )
+sal_Bool SfxPoolItem::PutValue( const com::sun::star::uno::Any&, sal_uInt8 )
 {
     DBG_ERROR("There is no implementation for PutValue for this item!");
-    return FALSE;
+    return sal_False;
 }
 
 SfxVoidItem::~SfxVoidItem()

@@ -34,7 +34,7 @@
 #include <vcl/window.hxx>
 #include <vos/mutex.hxx>
 
-#include "cliplistener.hxx"
+#include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 
 using namespace ::com::sun::star;
@@ -68,7 +68,7 @@ void SAL_CALL TransferableClipboardListener::changedContents(
     }
 }
 
-void TransferableClipboardListener::AddRemoveListener( Window* pWin, BOOL bAdd )
+void TransferableClipboardListener::AddRemoveListener( Window* pWin, sal_Bool bAdd )
 {
     try
     {

@@ -35,6 +35,9 @@
 #define RID_SVTOOLS_BITMAP_START        (RID_SVTOOLS_START + 0)
 #define RID_SVTOOLS_IMAGELIST_START     (RID_SVTOOLS_START + 0)
 
+#define ABOUT_STR_COPYRIGHT             (RID_SVTOOLS_START + 1)
+#define ABOUT_STR_DEVELOPER_ARY         (RID_SVTOOLS_START + 2)
+
 //.............................................................................
 // various unsorted stuff
 
@@ -89,6 +92,10 @@
 #define STR_BASICKEY_FORMAT_TRUE        (RID_SVTOOLS_START+107)
 #define STR_BASICKEY_FORMAT_FALSE       (RID_SVTOOLS_START+108)
 #define CONFIG_BASIC_FORMAT_END         (RID_SVTOOLS_START+109)
+#define STR_UNDO                        (RID_SVTOOLS_START+110)
+#define STR_REDO                        (RID_SVTOOLS_START+111)
+#define STR_REPEAT                      (RID_SVTOOLS_START+112)
+
 
 #define STR_INVALIDTRYBUY               (RID_SVTOOLS_START+120)
 #define STR_OLDTRYBUY                   (RID_SVTOOLS_START+121)

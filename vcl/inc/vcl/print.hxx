@@ -76,18 +76,18 @@ class VCL_DLLPUBLIC PrinterPage
 {
     GDIMetaFile*    mpMtf;
     JobSetup        maJobSetup;
-    UINT16          mbNewJobSetup;
+    sal_uInt16          mbNewJobSetup;
 
 public:
 
     PrinterPage() : mpMtf( new GDIMetaFile() ) {}
-    PrinterPage( GDIMetaFile* pMtf, BOOL bNewJobSetup, const JobSetup& rSetup ) :
+    PrinterPage( GDIMetaFile* pMtf, sal_Bool bNewJobSetup, const JobSetup& rSetup ) :
            mpMtf( pMtf ), maJobSetup( rSetup ), mbNewJobSetup( bNewJobSetup ) {}
     ~PrinterPage() { delete mpMtf; }
 
     GDIMetaFile*    GetGDIMetaFile() const { return mpMtf; }
     const JobSetup& GetJobSetup() const { return maJobSetup; }
-    BOOL            IsNewJobSetup() const { return (mbNewJobSetup != 0); }
+    sal_Bool            IsNewJobSetup() const { return (mbNewJobSetup != 0); }
 
     friend VCL_DLLPUBLIC SvStream& operator<<( SvStream& rOStm, const PrinterPage& rPage )
     { rOStm << rPage.mbNewJobSetup; rOStm << rPage.maJobSetup; rPage.mpMtf->Write( rOStm ); return rOStm; }
@@ -163,51 +163,56 @@ class VCL_DLLPUBLIC PrinterOptions
 {
 private:
 
-    BOOL                        mbReduceTransparency;
+    sal_Bool                        mbReduceTransparency;
     PrinterTransparencyMode     meReducedTransparencyMode;
-    BOOL                        mbReduceGradients;
+    sal_Bool                        mbReduceGradients;
     PrinterGradientMode         meReducedGradientsMode;
-    USHORT                      mnReducedGradientStepCount;
-    BOOL                        mbReduceBitmaps;
+    sal_uInt16                      mnReducedGradientStepCount;
+    sal_Bool                        mbReduceBitmaps;
     PrinterBitmapMode           meReducedBitmapMode;
-    USHORT                      mnReducedBitmapResolution;
-    BOOL                        mbReducedBitmapsIncludeTransparency;
-    BOOL                        mbConvertToGreyscales;
+    sal_uInt16                      mnReducedBitmapResolution;
+    sal_Bool                        mbReducedBitmapsIncludeTransparency;
+    sal_Bool                        mbConvertToGreyscales;
 
 public:
 
                                 PrinterOptions();
                                 ~PrinterOptions();
 
-    BOOL                        IsReduceTransparency() const { return mbReduceTransparency; }
-    void                        SetReduceTransparency( BOOL bSet ) { mbReduceTransparency = bSet; }
+    sal_Bool                        IsReduceTransparency() const { return mbReduceTransparency; }
+    void                        SetReduceTransparency( sal_Bool bSet ) { mbReduceTransparency = bSet; }
 
     PrinterTransparencyMode     GetReducedTransparencyMode() const { return meReducedTransparencyMode; }
     void                        SetReducedTransparencyMode( PrinterTransparencyMode eMode ) { meReducedTransparencyMode = eMode; }
 
-    BOOL                        IsReduceGradients() const { return mbReduceGradients; }
-    void                        SetReduceGradients( BOOL bSet ) { mbReduceGradients = bSet; }
+    sal_Bool                        IsReduceGradients() const { return mbReduceGradients; }
+    void                        SetReduceGradients( sal_Bool bSet ) { mbReduceGradients = bSet; }
 
     PrinterGradientMode         GetReducedGradientMode() const { return meReducedGradientsMode; }
     void                        SetReducedGradientMode( PrinterGradientMode eMode ) { meReducedGradientsMode = eMode; }
 
-    USHORT                      GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
-    void                        SetReducedGradientStepCount( USHORT nStepCount ) { mnReducedGradientStepCount = nStepCount; }
+    sal_uInt16                      GetReducedGradientStepCount() const { return mnReducedGradientStepCount; }
+    void                        SetReducedGradientStepCount( sal_uInt16 nStepCount ) { mnReducedGradientStepCount = nStepCount; }
 
-    BOOL                        IsReduceBitmaps() const { return mbReduceBitmaps; }
-    void                        SetReduceBitmaps( BOOL bSet ) { mbReduceBitmaps = bSet; }
+    sal_Bool                        IsReduceBitmaps() const { return mbReduceBitmaps; }
+    void                        SetReduceBitmaps( sal_Bool bSet ) { mbReduceBitmaps = bSet; }
 
     PrinterBitmapMode           GetReducedBitmapMode() const { return meReducedBitmapMode; }
     void                        SetReducedBitmapMode( PrinterBitmapMode eMode ) { meReducedBitmapMode = eMode; }
 
-    USHORT                      GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
-    void                        SetReducedBitmapResolution( USHORT nResolution ) { mnReducedBitmapResolution = nResolution; }
+    sal_uInt16                      GetReducedBitmapResolution() const { return mnReducedBitmapResolution; }
+    void                        SetReducedBitmapResolution( sal_uInt16 nResolution ) { mnReducedBitmapResolution = nResolution; }
 
-    BOOL                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
-    void                        SetReducedBitmapIncludesTransparency( BOOL bSet ) { mbReducedBitmapsIncludeTransparency = bSet; }
+    sal_Bool                        IsReducedBitmapIncludesTransparency() const { return mbReducedBitmapsIncludeTransparency; }
+    void                        SetReducedBitmapIncludesTransparency( sal_Bool bSet ) { mbReducedBitmapsIncludeTransparency = bSet; }
 
-    BOOL                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
-    void                        SetConvertToGreyscales( BOOL bSet ) { mbConvertToGreyscales = bSet; }
+    sal_Bool                        IsConvertToGreyscales() const { return mbConvertToGreyscales; }
+    void                        SetConvertToGreyscales( sal_Bool bSet ) { mbConvertToGreyscales = bSet; }
+
+    // read printer options from configuration, parameter decides whether the set for
+    // print "to printer" or "to file" should be read.
+    // returns true if config was read, false if an error occured
+    bool                        ReadFromConfig( bool bFile );
 };
 
 // -----------
@@ -234,21 +239,21 @@ private:
     JobSetup                    maJobSetup;
     Point                       maPageOffset;
     Size                        maPaperSize;
-    ULONG                       mnError;
-    USHORT                      mnCurPage;
-    USHORT                      mnCurPrintPage;
-    USHORT                      mnPageQueueSize;
-    USHORT                      mnCopyCount;
-    BOOL                        mbDefPrinter;
-    BOOL                        mbPrinting;
-    BOOL                        mbJobActive;
-    BOOL                        mbCollateCopy;
-    BOOL                        mbPrintFile;
-    BOOL                        mbInPrintPage;
-    BOOL                        mbNewJobSetup;
-    BOOL                        mbIsQueuePrinter;
-    BOOL                        mbUserSetupCompleted;
-    BOOL                        mbUserSetupResult;
+    sal_uLong                       mnError;
+    sal_uInt16                      mnCurPage;
+    sal_uInt16                      mnCurPrintPage;
+    sal_uInt16                      mnPageQueueSize;
+    sal_uInt16                      mnCopyCount;
+    sal_Bool                        mbDefPrinter;
+    sal_Bool                        mbPrinting;
+    sal_Bool                        mbJobActive;
+    sal_Bool                        mbCollateCopy;
+    sal_Bool                        mbPrintFile;
+    sal_Bool                        mbInPrintPage;
+    sal_Bool                        mbNewJobSetup;
+    sal_Bool                        mbIsQueuePrinter;
+    sal_Bool                        mbUserSetupCompleted;
+    sal_Bool                        mbUserSetupResult;
     Link                        maErrorHdl;
 
     SAL_DLLPRIVATE void         ImplInitData();
@@ -263,11 +268,11 @@ private:
 
     SAL_DLLPRIVATE bool StartJob( const rtl::OUString& rJobName, boost::shared_ptr<vcl::PrinterController>& );
 
-    static SAL_DLLPRIVATE ULONG ImplSalPrinterErrorCodeToVCL( ULONG nError );
+    static SAL_DLLPRIVATE sal_uLong ImplSalPrinterErrorCodeToVCL( sal_uLong nError );
 
 private:
     SAL_DLLPRIVATE void         ImplEndPrint();
-    SAL_DLLPRIVATE BOOL         EndJob();
+    SAL_DLLPRIVATE sal_Bool         EndJob();
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
 public:
@@ -279,8 +284,8 @@ public:
 
 protected:
 
-    void                        SetSelfAsQueuePrinter( BOOL bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
-    BOOL                        IsQueuePrinter() const { return mbIsQueuePrinter; }
+    void                        SetSelfAsQueuePrinter( sal_Bool bQueuePrinter ) { mbIsQueuePrinter = bQueuePrinter; }
+    sal_Bool                        IsQueuePrinter() const { return mbIsQueuePrinter; }
 
 public:
                                 Printer();
@@ -298,68 +303,69 @@ public:
 
     const XubString&            GetName() const             { return maPrinterName; }
     const XubString&            GetDriverName() const       { return maDriver; }
-    BOOL                        IsDefPrinter() const        { return mbDefPrinter; }
-    BOOL                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
-    BOOL                        IsValid() const             { return !IsDisplayPrinter(); }
+    sal_Bool                        IsDefPrinter() const        { return mbDefPrinter; }
+    sal_Bool                        IsDisplayPrinter() const    { return mpDisplayDev != NULL; }
+    sal_Bool                        IsValid() const             { return !IsDisplayPrinter(); }
 
-    ULONG                       GetCapabilities( USHORT nType ) const;
-    BOOL                        HasSupport( PrinterSupport eFeature ) const;
+    sal_uLong                       GetCapabilities( sal_uInt16 nType ) const;
+    sal_Bool                        HasSupport( PrinterSupport eFeature ) const;
 
-    BOOL                        SetJobSetup( const JobSetup& rSetup );
+    sal_Bool                        SetJobSetup( const JobSetup& rSetup );
     const JobSetup&             GetJobSetup() const { return maJobSetup; }
     String                      GetJobValue( const String& rKey ) const { return maJobSetup.GetValue( rKey ); }
     void                        SetJobValue( const String& rKey, const String& rValue ) { maJobSetup.SetValue( rKey, rValue ); }
 
-    BOOL                        Setup( Window* pWindow = NULL );
-    BOOL                        SetPrinterProps( const Printer* pPrinter );
+    sal_Bool                        Setup( Window* pWindow = NULL );
+    sal_Bool                        SetPrinterProps( const Printer* pPrinter );
 
-    void                        SetPrinterOptions( const PrinterOptions& rOptions ) { *mpPrinterOptions = rOptions; }
+    // SetPrinterOptions is used internally only now
+    // in earlier times it was used only to set the options loaded directly from the configuration
+    // in SfxPrinter::InitJob, this is now handled internally
+    // should the need arise to set the printer options outside vcl, also a method would have to be devised
+    // to not override these again internally
+    SAL_DLLPRIVATE void         SetPrinterOptions( const PrinterOptions& rOptions );
     const PrinterOptions&       GetPrinterOptions() const { return( *mpPrinterOptions ); }
 
-    BOOL                        SetOrientation( Orientation eOrient );
+    sal_Bool                        SetOrientation( Orientation eOrient );
     Orientation                 GetOrientation() const;
     DuplexMode                  GetDuplexMode() const;
-    BOOL                        SetDuplexMode( DuplexMode );
+    sal_Bool                        SetDuplexMode( DuplexMode );
     // returns the angle that a landscape page will be turned counterclockwise
     // wrt to portrait. The return value may be only valid for
     // the current paper
     int                         GetLandscapeAngle() const;
-    BOOL                        SetPaperBin( USHORT nPaperBin );
-    USHORT                      GetPaperBin() const;
-    BOOL                        SetPaper( Paper ePaper );
-    BOOL                        SetPaperSizeUser( const Size& rSize );
-    BOOL                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
+    sal_Bool                        SetPaperBin( sal_uInt16 nPaperBin );
+    sal_uInt16                      GetPaperBin() const;
+    sal_Bool                        SetPaper( Paper ePaper );
+    sal_Bool                        SetPaperSizeUser( const Size& rSize );
+    sal_Bool                        SetPaperSizeUser( const Size& rSize, bool bMatchNearest );
     Paper                   GetPaper() const;
 
     // returns number of available paper formats
     int                         GetPaperInfoCount() const;
     // returns info about paper format nPaper
     const PaperInfo&            GetPaperInfo( int nPaper ) const;
-    USHORT                      GetPaperBinCount() const;
-    XubString                   GetPaperBinName( USHORT nPaperBin ) const;
+    sal_uInt16                      GetPaperBinCount() const;
+    XubString                   GetPaperBinName( sal_uInt16 nPaperBin ) const;
 
     const Size&                 GetPaperSizePixel() const { return maPaperSize; }
     Size                        GetPaperSize() const { return PixelToLogic( maPaperSize ); }
     const Point&                GetPageOffsetPixel() const { return maPageOffset; }
     Point                       GetPageOffset() const { return PixelToLogic( maPageOffset ); }
 
-    BOOL                        SetCopyCount( USHORT nCopy, BOOL bCollate = FALSE );
-    USHORT                      GetCopyCount() const { return mnCopyCount; }
-    BOOL                        IsCollateCopy() const { return mbCollateCopy; }
+    sal_Bool                        SetCopyCount( sal_uInt16 nCopy, sal_Bool bCollate = sal_False );
+    sal_uInt16                      GetCopyCount() const { return mnCopyCount; }
+    sal_Bool                        IsCollateCopy() const { return mbCollateCopy; }
 
-    BOOL                        IsPrinting() const { return mbPrinting; }
+    sal_Bool                        IsPrinting() const { return mbPrinting; }
 
-    void                        SetPrintFile( const XubString& rFileName ) { maPrintFile = rFileName; }
-    const XubString&            GetPrintFile() const { return maPrintFile; }
-    void                        EnablePrintFile( BOOL bEnable ) { mbPrintFile = bEnable; }
-    BOOL                        IsPrintFileEnabled() const { return mbPrintFile; }
-    BOOL                        AbortJob();
+    sal_Bool                        AbortJob();
     const XubString&            GetCurJobName() const { return maJobName; }
-    USHORT                      GetCurPage() const { return mnCurPage; }
-    BOOL                        IsJobActive() const { return mbJobActive; }
+    sal_uInt16                      GetCurPage() const { return mnCurPage; }
+    sal_Bool                        IsJobActive() const { return mbJobActive; }
 
-    ULONG                       GetError() const { return ERRCODE_TOERROR(mnError); }
-    ULONG                       GetErrorCode() const { return mnError; }
+    sal_uLong                       GetError() const { return ERRCODE_TOERROR(mnError); }
+    sal_uLong                       GetErrorCode() const { return mnError; }
 
     void                        SetErrorHdl( const Link& rLink ) { maErrorHdl = rLink; }
     const Link&                 GetErrorHdl() const { return maErrorHdl; }
@@ -537,7 +543,8 @@ public:
     SAL_DLLPRIVATE int getPageCountProtected() const;
     SAL_DLLPRIVATE com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getPageParametersProtected( int i_nPage ) const;
 
-    SAL_DLLPRIVATE ULONG removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE sal_uLong removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFile& o_rOut );
+    SAL_DLLPRIVATE void resetPrinterOptions( bool i_bFileOutput );
 };
 
 class VCL_DLLPUBLIC PrinterOptionsHelper
@@ -620,28 +627,34 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
         , mbEnabled( i_bEnabled ) {}
     };
 
+    // note: in the following helper functions HelpIds are expected as an rtl::OUString
+    // the normal HelpId form is rtl::OString (byte string instead of UTF16 string)
+    // this is because the whole interface is base on UNO properties; in fact the structures
+    // are passed over UNO interfaces. UNO does not know a byte string, hence the string is
+    // transported via UTF16 strings.
+
     // general control
     static com::sun::star::uno::Any getUIControlOpt( const rtl::OUString& i_rTitle,
-                                                     const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
+                                                     const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
                                                      const rtl::OUString& i_rType,
                                                      const com::sun::star::beans::PropertyValue* i_pValue = NULL,
                                                      const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                      );
     // create a group (e.g. a TabPage); following controls will be grouped in it until the next
     // group begins
-    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpText );
+    static com::sun::star::uno::Any getGroupControlOpt( const rtl::OUString& i_rTitle, const rtl::OUString& i_rHelpId );
 
     // create a subgroup (e.g. a FixedLine); following controls will be grouped in it until the next
     // subgroup or group begins
     // setting bJobPage = true will make the subgroup appear on the first page of the print dialog
     static com::sun::star::uno::Any getSubgroupControlOpt( const rtl::OUString& i_rTitle,
-                                                           const rtl::OUString& i_rHelpText,
+                                                           const rtl::OUString& i_rHelpId,
                                                            const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                            );
 
     // create a bool option (usually a checkbox)
     static com::sun::star::uno::Any getBoolControlOpt( const rtl::OUString& i_rTitle,
-                                                       const rtl::OUString& i_rHelpText,
+                                                       const rtl::OUString& i_rHelpId,
                                                        const rtl::OUString& i_rProperty,
                                                        sal_Bool i_bValue,
                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()
@@ -649,7 +662,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
 
     // create a set of choices (either a radio button group or a list box)
     static com::sun::star::uno::Any getChoiceControlOpt( const rtl::OUString& i_rTitle,
-                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpText,
+                                                         const com::sun::star::uno::Sequence< rtl::OUString >& i_rHelpId,
                                                          const rtl::OUString& i_rProperty,
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
@@ -661,7 +674,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create an integer range (e.g. a spin field)
     // note: max value < min value means do not apply min/max values
     static com::sun::star::uno::Any getRangeControlOpt( const rtl::OUString& i_rTitle,
-                                                        const rtl::OUString& i_rHelpText,
+                                                        const rtl::OUString& i_rHelpId,
                                                         const rtl::OUString& i_rProperty,
                                                         sal_Int32 i_nValue,
                                                         sal_Int32 i_nMinValue = -1,
@@ -672,7 +685,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     // create a string field
     // note: max value < min value means do not apply min/max values
     static com::sun::star::uno::Any getEditControlOpt( const rtl::OUString& i_rTitle,
-                                                       const rtl::OUString& i_rHelpText,
+                                                       const rtl::OUString& i_rHelpId,
                                                        const rtl::OUString& i_rProperty,
                                                        const rtl::OUString& i_rValue,
                                                        const UIControlOptions& i_rControlOptions = UIControlOptions()

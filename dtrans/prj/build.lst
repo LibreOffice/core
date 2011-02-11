@@ -1,4 +1,4 @@
-dr	dtrans	:	unotools offapi offuh rdbmaker vos stoc NULL
+dr	dtrans	:	unotools offapi offuh rdbmaker vos stoc LIBXSLT:libxslt NULL
 dr	dtrans									usr1	-	all	dr_mkout NULL
 dr	dtrans\inc								nmake	-	all	dr_inc NULL
 dr	dtrans\source\cnttype					nmake	-	all	dr_cnttype dr_generic dr_inc NULL

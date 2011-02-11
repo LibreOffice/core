@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <asynclink.hxx>
+#include <svtools/asynclink.hxx>
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>
@@ -42,11 +42,11 @@ void AsynchronLink::CreateMutex()
     if( !_pMutex ) _pMutex = new vos::OMutex;
 }
 
-void AsynchronLink::Call( void* pObj, BOOL
+void AsynchronLink::Call( void* pObj, sal_Bool
 #ifdef DBG_UTIL
 bAllowDoubles
 #endif
-, BOOL bUseTimer )
+, sal_Bool bUseTimer )
 {
 #ifdef DBG_UTIL
     if ( bUseTimer || !_bInCall )
@@ -92,7 +92,7 @@ AsynchronLink::~AsynchronLink()
         Application::RemoveUserEvent( _nEventId );
     }
     delete _pTimer;
-    if( _pDeleted ) *_pDeleted = TRUE;
+    if( _pDeleted ) *_pDeleted = sal_True;
     delete _pMutex;
 }
 
@@ -125,13 +125,13 @@ void AsynchronLink::ClearPendingCall()
 
 void AsynchronLink::Call_Impl( void* pArg )
 {
-    _bInCall = TRUE;
-    BOOL bDeleted = FALSE;
+    _bInCall = sal_True;
+    sal_Bool bDeleted = sal_False;
     _pDeleted = &bDeleted;
     _aLink.Call( pArg );
     if( !bDeleted )
     {
-        _bInCall = FALSE;
+        _bInCall = sal_False;
         _pDeleted = 0;
     }
 }

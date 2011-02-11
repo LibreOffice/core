@@ -34,9 +34,7 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <vcl/graph.hxx>
-#ifndef _SV_MAPUNIT_HXX
-#include <vcl/mapunit.hxx>
-#endif
+#include <tools/mapunit.hxx>
 #include <rtl/ustring.hxx>
 
 #define NS_UNO ::com::sun::star::uno
@@ -59,8 +57,8 @@ namespace svt
         EmbeddedObjectRef_Impl*  mpImp;
         NS_UNO::Reference < NS_EMBED::XEmbeddedObject > mxObj;
 
-        SVT_DLLPRIVATE SvStream*   GetGraphicStream( BOOL bUpdate ) const;
-        /* SVT_DLLPRIVATE */ void        GetReplacement( BOOL bUpdate );
+        SVT_DLLPRIVATE SvStream*   GetGraphicStream( sal_Bool bUpdate ) const;
+        /* SVT_DLLPRIVATE */ void        GetReplacement( sal_Bool bUpdate );
         SVT_DLLPRIVATE void        Construct_Impl();
 
         EmbeddedObjectRef& operator = ( const EmbeddedObjectRef& );
@@ -71,7 +69,7 @@ namespace svt
 
         static void DrawPaintReplacement( const Rectangle &rRect, const String &rText, OutputDevice *pOut );
         static void DrawShading( const Rectangle &rRect, OutputDevice *pOut );
-        static BOOL TryRunningState( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& );
+        static sal_Bool TryRunningState( const NS_UNO::Reference < NS_EMBED::XEmbeddedObject >& );
         static void SetGraphicToContainer( const Graphic& rGraphic,
                                             comphelper::EmbeddedObjectContainer& aContainer,
                                             const ::rtl::OUString& aName,
@@ -96,7 +94,7 @@ namespace svt
 
         ~EmbeddedObjectRef();
         EmbeddedObjectRef( const EmbeddedObjectRef& );
-        BOOL TryRunningState();
+        sal_Bool TryRunningState();
 
         // assigning to a container enables the object to exchange graphical representations with a storage
         void            AssignToContainer( comphelper::EmbeddedObjectContainer* pContainer, const ::rtl::OUString& rPersistName );
@@ -119,15 +117,15 @@ namespace svt
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xInGrStream,
                             const ::rtl::OUString& rMediaType );
 
-        void            UpdateReplacement() { GetReplacement( TRUE ); }
+        void            UpdateReplacement() { GetReplacement( sal_True ); }
         void            UpdateReplacementOnDemand();
         MapUnit         GetMapUnit() const;
-        void            Lock( BOOL bLock = TRUE );
-        BOOL            IsLocked() const;
+        void            Lock( sal_Bool bLock = sal_True );
+        sal_Bool            IsLocked() const;
         void            Clear();
-        BOOL            is() const { return mxObj.is(); }
+        sal_Bool            is() const { return mxObj.is(); }
 
-        BOOL            IsChart() const;
+        sal_Bool            IsChart() const;
 
         // #i104867#
         // Provides a graphic version number for the fetchable Graphic during this object's lifetime. Internally,

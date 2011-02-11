@@ -35,12 +35,9 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <svtools/miscopt.hxx>
-
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/unohlp.hxx>
-#endif
 #include <vcl/toolbox.hxx>
 //shizhobo
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -849,7 +846,7 @@ void ToolboxController::enable( bool bEnable )
     sal_uInt16 nItemId = 0;
     if( getToolboxId( nItemId, &pToolBox ) )
     {
-        pToolBox->EnableItem( nItemId, bEnable ? TRUE : FALSE );
+        pToolBox->EnableItem( nItemId, bEnable ? sal_True : sal_False );
     }
 }
 

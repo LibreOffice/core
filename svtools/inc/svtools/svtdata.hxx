@@ -28,6 +28,7 @@
 #ifndef _SVTOOLS_SVTDATA_HXX
 #define _SVTOOLS_SVTDATA_HXX
 
+#include "svtools/svtdllapi.h"
 #include <tools/resid.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -56,13 +57,11 @@ public:
 };
 
 //============================================================================
-class SvtResId: public ResId
+class SVT_DLLPUBLIC SvtResId: public ResId
 {
 public:
-    SvtResId(USHORT nId, const ::com::sun::star::lang::Locale aLocale):
-        ResId(nId, *ImpSvtData::GetSvtData().GetResMgr(aLocale)) {}
-
-    SvtResId(USHORT nId): ResId(nId, *ImpSvtData::GetSvtData().GetResMgr()) {}
+    SvtResId(sal_uInt16 nId, const ::com::sun::star::lang::Locale aLocale);
+    SvtResId(sal_uInt16 nId);
      // VCL dependant, only available in SVT, not in SVL!
 };
 

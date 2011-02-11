@@ -29,7 +29,9 @@
 #define _MK_CREATE_HXX
 
 #include <tools/string.hxx>
-#include "bootstrp/sstring.hxx"
+//#include "bootstrp/sstring.hxx"
+
+DECLARE_LIST( UniStringList, UniString* )
 
 #include <tools/list.hxx>
 #include "bootstrp/prj.hxx"
@@ -44,14 +46,14 @@ class SourceDirectoryList;
 class CodedDependency : public ByteString
 {
 private:
-    USHORT nOSType;                         // operating systems where dependeny exists
+    sal_uInt16 nOSType;                         // operating systems where dependeny exists
 
 public:
     /* create a dependency instance with given coded directory name
      */
     CodedDependency(
         const ByteString &rCodedIdentifier, // the coded name of the directory
-        USHORT nOperatingSystems            // the operating systems where this dependency exists
+        sal_uInt16 nOperatingSystems            // the operating systems where this dependency exists
     ) :
     ByteString( rCodedIdentifier ),
     nOSType( nOperatingSystems )
@@ -60,29 +62,29 @@ public:
 
     /* returns the operating system
      */
-    USHORT GetOperatingSystem()
+    sal_uInt16 GetOperatingSystem()
     {
         return nOSType;
     }
 
     /* set operating system
      */
-    void SetOperatingSystem( USHORT nOperatingSystems )
+    void SetOperatingSystem( sal_uInt16 nOperatingSystems )
     {
         nOSType = nOperatingSystems;
     }
 
     /* add operating systems if same dependency
      */
-    BOOL TryToMerge(
+    sal_Bool TryToMerge(
         const ByteString &rCodedIdentifier, // the coded name of the directory
-        USHORT nOperatingSystems            // the operating systems where this dependency exists
+        sal_uInt16 nOperatingSystems            // the operating systems where this dependency exists
     )
     {
         if ( rCodedIdentifier != *this )
-            return FALSE;
+            return sal_False;
         nOSType |= nOperatingSystems;
-        return TRUE;
+        return sal_True;
     }
 };
 
@@ -93,14 +95,14 @@ public:
 class Dependency : public ByteString
 {
 private:
-    USHORT nOSType;                         // operating systems where dependecy exists
+    sal_uInt16 nOSType;                         // operating systems where dependecy exists
 
 public:
     /* create a dependency instance with given directory name
      */
     Dependency(
         const ByteString &rDirectoryName,   // the coded name of the directory
-        USHORT nOperatingSystems            // the operating systems where this dependency exists
+        sal_uInt16 nOperatingSystems            // the operating systems where this dependency exists
     ) :
     ByteString( rDirectoryName ),
     nOSType( nOperatingSystems )
@@ -109,7 +111,7 @@ public:
 
     /* returns the operating system
      */
-    USHORT GetOperatingSystem()
+    sal_uInt16 GetOperatingSystem()
     {
         return nOSType;
     }
@@ -124,8 +126,8 @@ class SourceDirectory : public ByteString
 private:
     SourceDirectory *pParent;               // the parent directory
     SourceDirectoryList *pSubDirectories;   // list of sub directories
-    USHORT nOSType;                         // operating systems where this directory is used
-    USHORT nDepth;                          // depth of directory structure (root is 0)
+    sal_uInt16 nOSType;                         // operating systems where this directory is used
+    sal_uInt16 nDepth;                          // depth of directory structure (root is 0)
 
     SByteStringList *pDependencies;         // dependencies on other directories in this depth
 
@@ -140,13 +142,13 @@ private:
 
     /* returns the operating systems of a coded dependency
      */
-    static USHORT GetOSType(
+    static sal_uInt16 GetOSType(
         const ByteString &sDependExt        // the corresponding dependency extension (see also prj.hxx)
     );
 
     /* removes this and all sub directories with all dependencies
      */
-    BOOL RemoveDirectoryTreeAndAllDependencies();
+    sal_Bool RemoveDirectoryTreeAndAllDependencies();
 
 public:
 
@@ -155,7 +157,7 @@ public:
      */
     SourceDirectory(
         const ByteString &rDirectoryName,           // name without parent
-        USHORT nOperatingSystem,                    // the operating systems where this directory is used
+        sal_uInt16 nOperatingSystem,                    // the operating systems where this directory is used
         SourceDirectory *pParentDirectory = NULL    // parent (if not root)
     );
     ~SourceDirectory();
@@ -170,20 +172,20 @@ public:
 
     /* returns the Operating systems where this directory is used
      */
-    USHORT GetOperatingSystems() { return nOSType; }
+    sal_uInt16 GetOperatingSystems() { return nOSType; }
 
     /* returns the given directory
      */
     SourceDirectory *GetDirectory(
         const ByteString &rDirectoryName,   // full path
-        USHORT nOperatingSystem             // the operating systems where this directory is used
+        sal_uInt16 nOperatingSystem             // the operating systems where this directory is used
     );
 
     /* create the directory and all mandatory parents
      */
     SourceDirectory *InsertFull(
         const ByteString &rDirectoryName,   // full path
-        USHORT nOperatingSystem             // the operating systems where this directory is used
+        sal_uInt16 nOperatingSystem             // the operating systems where this directory is used
     )
     {
         return GetDirectory( rDirectoryName, nOperatingSystem );
@@ -193,7 +195,7 @@ public:
      */
     SourceDirectory *Insert(
         const ByteString &rDirectoryName,   // name without parent
-        USHORT nOperatingSystem             // the operating systems where this directory is used
+        sal_uInt16 nOperatingSystem             // the operating systems where this directory is used
     );
 
     /* get the root directory
@@ -204,14 +206,14 @@ public:
      */
     SourceDirectory *GetSubDirectory(
         const ByteString &rDirectoryPath,   // full sub path
-        USHORT nOperatingSystem             // the operating systems where this directory is used
+        sal_uInt16 nOperatingSystem             // the operating systems where this directory is used
     );
 
     /* add a dependency for several platforms
      */
     CodedDependency *AddCodedDependency(
         const ByteString &rCodedIdentifier, // the coded name of the directory
-        USHORT nOperatingSystems            // the operating systems where this dependency exists
+        sal_uInt16 nOperatingSystems            // the operating systems where this dependency exists
     );
 
     /* returns the dependency list
@@ -225,7 +227,7 @@ public:
      */
     CodedDependency *AddCodedIdentifier(
         const ByteString &rCodedIdentifier, // the coded name of the directory
-        USHORT nOperatingSystems            // the operating systems where this dependency exists
+        sal_uInt16 nOperatingSystems            // the operating systems where this dependency exists
     );
 
     /* returns the identifier list
@@ -252,13 +254,13 @@ public:
     static SourceDirectory *CreateRootDirectory(
         const ByteString &rRoot,    // the root directory in file system
         const ByteString &rVersion, // the solar verion (r.g. SRC590, SRC591 etc.)
-        BOOL bAll = FALSE           // add all directories or only buildable ones
+        sal_Bool bAll = sal_False           // add all directories or only buildable ones
     );
 
     /* create the makefile.rc in file system
      */
-    BOOL CreateRecursiveMakefile(
-        BOOL bAllChilds = FALSE     // create rcursive for all sub directories
+    sal_Bool CreateRecursiveMakefile(
+        sal_Bool bAllChilds = sal_False     // create rcursive for all sub directories
     );
 };
 
@@ -284,7 +286,7 @@ public:
 
     /* insert a new directory
      */
-    ULONG InsertSorted(
+    sal_uIntPtr InsertSorted(
         SourceDirectory *pDirectory     // directory
     )
     {

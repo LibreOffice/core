@@ -37,7 +37,7 @@
 #include <vcl/lstbox.hxx>
 
 #ifndef _IMAGEBTN_HXX
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #include <svtools/brwbox.hxx>
 #include <vcl/timer.hxx>
@@ -99,7 +99,7 @@ namespace svt
 
     protected:
         Control*    pWindow;
-        sal_Bool    bSuspended;     // <TRUE> if the window is hidden and disabled
+        sal_Bool    bSuspended;     // <sal_True> if the window is hidden and disabled
 
     public:
         TYPEINFO();
@@ -142,8 +142,8 @@ namespace svt
         virtual String              GetText( LineEnd aSeparator ) const = 0;
         virtual void                SetText( const String& _rStr ) = 0;
 
-        virtual BOOL                IsReadOnly() const = 0;
-        virtual void                SetReadOnly( BOOL bReadOnly ) = 0;
+        virtual sal_Bool                IsReadOnly() const = 0;
+        virtual void                SetReadOnly( sal_Bool bReadOnly ) = 0;
 
         virtual xub_StrLen          GetMaxTextLen() const = 0;
         virtual void                SetMaxTextLen( xub_StrLen _nMaxLen ) = 0;
@@ -178,8 +178,8 @@ namespace svt
         virtual String              GetText( LineEnd aSeparator ) const;
         virtual void                SetText( const String& _rStr );
 
-        virtual BOOL                IsReadOnly() const;
-        virtual void                SetReadOnly( BOOL bReadOnly );
+        virtual sal_Bool                IsReadOnly() const;
+        virtual void                SetReadOnly( sal_Bool bReadOnly );
 
         virtual xub_StrLen          GetMaxTextLen() const;
         virtual void                SetMaxTextLen( xub_StrLen _nMaxLen );
@@ -220,7 +220,7 @@ namespace svt
         virtual void Modify();
 
     private:
-        BOOL    dispatchKeyEvent( const KeyEvent& _rEvent );
+        sal_Bool    dispatchKeyEvent( const KeyEvent& _rEvent );
     };
 
     //==================================================================
@@ -246,7 +246,7 @@ namespace svt
     class SVT_DLLPUBLIC EditCellController : public CellController
     {
         IEditImplementation*    m_pEditImplementation;
-        BOOL                    m_bOwnImplementation;   // did we create m_pEditImplementation?
+        sal_Bool                    m_bOwnImplementation;   // did we create m_pEditImplementation?
 
     public:
         TYPEINFO();
@@ -302,7 +302,7 @@ namespace svt
         virtual void GetFocus();
         virtual long PreNotify(NotifyEvent& rEvt);
         virtual void Paint(const Rectangle& rClientRect);
-        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+        virtual void Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags );
         virtual void StateChanged( StateChangedType nStateChange );
         virtual void DataChanged( const DataChangedEvent& _rEvent );
         virtual void Resize();
@@ -487,7 +487,7 @@ namespace svt
         CellControllerRef        aController,
                                  aOldController;
 
-        ULONG   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
+        sal_uLong   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
         Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
@@ -664,7 +664,7 @@ namespace svt
         virtual sal_Int32 GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint);
 
         ::com::sun::star::uno::Reference<
-            ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, USHORT _nColumnPos,const TriState& eState,sal_Bool _bEnabled=sal_True);
+            ::com::sun::star::accessibility::XAccessible > CreateAccessibleCheckBoxCell(long _nRow, sal_uInt16 _nColumnPos,const TriState& eState,sal_Bool _bEnabled=sal_True);
     protected:
         // creates the accessible which wraps the active cell
         void    implCreateActiveAccessible( );

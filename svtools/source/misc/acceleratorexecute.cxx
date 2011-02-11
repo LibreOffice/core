@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "acceleratorexecute.hxx"
+#include <svtools/acceleratorexecute.hxx>
 
 //===============================================
 // includes
@@ -286,7 +286,7 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
     sal_Bool bMod1  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD1 ) == css::awt::KeyModifier::MOD1  );
     sal_Bool bMod2  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD2 ) == css::awt::KeyModifier::MOD2  );
     sal_Bool bMod3  = ((aAWTKey.Modifiers & css::awt::KeyModifier::MOD3 ) == css::awt::KeyModifier::MOD3  );
-    USHORT   nKey   = (USHORT)aAWTKey.KeyCode;
+    sal_uInt16   nKey   = (sal_uInt16)aAWTKey.KeyCode;
 
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }

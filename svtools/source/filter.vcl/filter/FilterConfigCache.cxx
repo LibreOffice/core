@@ -46,7 +46,7 @@ using namespace ::com::sun::star::container     ;   // XNameAccess
 using namespace ::com::sun::star::uno           ;   // Reference
 using namespace ::com::sun::star::beans         ;   // PropertyValue
 using namespace ::utl                           ;   // getProcessServiceFactory();
-using namespace ::rtl                           ;
+using ::rtl::OUString;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
 {

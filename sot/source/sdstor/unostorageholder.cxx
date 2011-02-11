@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "unostorageholder.hxx"
-#include <storinfo.hxx>
+#include <sot/storinfo.hxx>
 
 
 using namespace ::com::sun::star;
@@ -133,7 +133,7 @@ void SAL_CALL UNOStorageHolder::commited( const lang::EventObject& /*aEvent*/ )
 
     xComp->dispose();
 
-    SotStorageRef rTempStorage = new SotStorage( TRUE, aTmpStorFile.GetURL(), STREAM_WRITE, STORAGE_TRANSACTED );
+    SotStorageRef rTempStorage = new SotStorage( sal_True, aTmpStorFile.GetURL(), STREAM_WRITE, STORAGE_TRANSACTED );
     if ( !rTempStorage.Is() || rTempStorage->GetError() != ERRCODE_NONE )
         throw uno::RuntimeException();
 

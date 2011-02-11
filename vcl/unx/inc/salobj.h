@@ -41,16 +41,16 @@ public:
                 SalClipRegion();
                ~SalClipRegion();
 
-    void        BeginSetClipRegion( ULONG nRects );
+    void        BeginSetClipRegion( sal_uIntPtr nRects );
     void        UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
 
     XRectangle *EndSetClipRegion()  {
         return ClipRectangleList;   }
     void        ResetClipRegion()   {
         numClipRectangles = 0;      }
-    USHORT      GetClipRegionType() {
+    sal_uInt16      GetClipRegionType() {
         return nClipRegionType;     }
-    void        SetClipRegionType( USHORT nType ) {
+    void        SetClipRegionType( sal_uInt16 nType ) {
         nClipRegionType = nType;    }
     int         GetRectangleCount() {
         return numClipRectangles;   }
@@ -60,7 +60,7 @@ private:
     XRectangle* ClipRectangleList;
     int         numClipRectangles;
     int         maxClipRectangles;
-    USHORT      nClipRegionType;
+    sal_uInt16      nClipRegionType;
 };
 
 
@@ -73,24 +73,24 @@ public:
     XLIB_Window     maSecondary;
     Colormap        maColormap;
     SalClipRegion   maClipRegion;
-    BOOL            mbVisible;
+    sal_Bool            mbVisible;
 
     static VCL_DLLPUBLIC long Dispatch( XEvent* pEvent );
-    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    static VCL_DLLPUBLIC X11SalObject* CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
 
     X11SalObject();
     virtual ~X11SalObject();
 
     // overload all pure virtual methods
      virtual void                   ResetClipRegion();
-    virtual USHORT                  GetClipRegionType();
-    virtual void                    BeginSetClipRegion( ULONG nRects );
+    virtual sal_uInt16                  GetClipRegionType();
+    virtual void                    BeginSetClipRegion( sal_uIntPtr nRects );
     virtual void                    UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     virtual void                    EndSetClipRegion();
 
     virtual void                    SetPosSize( long nX, long nY, long nWidth, long nHeight );
-    virtual void                    Show( BOOL bVisible );
-    virtual void                    Enable( BOOL nEnable );
+    virtual void                    Show( sal_Bool bVisible );
+    virtual void                    Enable( sal_Bool nEnable );
     virtual void                    GrabFocus();
 
     virtual void                    SetBackground();
@@ -98,6 +98,7 @@ public:
 
     virtual const SystemEnvData*    GetSystemData() const;
 
+    virtual void InterceptChildWindowKeyDown( sal_Bool bIntercept );
 };
 
 #endif // _SV_SALOBJ_H

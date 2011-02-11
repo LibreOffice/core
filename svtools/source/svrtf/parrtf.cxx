@@ -34,8 +34,8 @@
 #include <rtl/tencinfo.h>
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
-#include "rtftoken.h"
-#include "rtfkeywd.hxx"
+#include <svtools/rtftoken.h>
+#include <svtools/rtfkeywd.hxx>
 #include <svtools/parrtf.hxx>
 
 const int MAX_STRING_LEN = 1024;
@@ -44,7 +44,7 @@ const int MAX_TOKEN_LEN = 128;
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
 #define RTF_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
 
-SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
+SvRTFParser::SvRTFParser( SvStream& rIn, sal_uInt8 nStackSize )
     : SvParser( rIn, nStackSize ),
     eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
     nUCharOverread( 1 )
@@ -170,7 +170,7 @@ int SvRTFParser::_GetNextToken()
                         case RTF_UC:
                             if( 0 <= nTokenValue )
                             {
-                                nUCharOverread = (BYTE)nTokenValue;
+                                nUCharOverread = (sal_uInt8)nTokenValue;
 #if 1
                                 //cmc: other ifdef breaks #i3584
                                 aParserStates.top().
@@ -208,7 +208,7 @@ int SvRTFParser::_GetNextToken()
 
                                 // overread the next n "RTF" characters. This
                                 // can be also \{, \}, \'88
-                                for( BYTE m = 0; m < nUCharOverread; ++m )
+                                for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                                 {
                                     sal_Unicode cAnsi = nNextCh;
                                     while( 0xD == cAnsi )
@@ -437,7 +437,7 @@ void SvRTFParser::ScanText( const sal_Unicode cBreak )
 
                             // overread the next n "RTF" characters. This
                             // can be also \{, \}, \'88
-                            for( BYTE m = 0; m < nUCharOverread; ++m )
+                            for( sal_uInt8 m = 0; m < nUCharOverread; ++m )
                             {
                                 sal_Unicode cAnsi = nNextCh;
                                 while( 0xD == cAnsi )

@@ -30,18 +30,15 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/calendarwrapper.hxx>
-
 #include <unotools/syslocale.hxx>
-#include <taskbar.hxx>
+#include <svtools/taskbar.hxx>
 
 // =======================================================================
 
@@ -53,7 +50,7 @@
 struct ImplTaskSBFldItem
 {
     TaskStatusFieldItem     maItem;
-    USHORT                  mnId;
+    sal_uInt16                  mnId;
     long                    mnOffX;
 };
 
@@ -61,37 +58,37 @@ DECLARE_LIST( ImplTaskSBItemList, ImplTaskSBFldItem* )
 
 // =======================================================================
 
-BOOL ITaskStatusNotify::MouseButtonDown( USHORT, const MouseEvent& )
+sal_Bool ITaskStatusNotify::MouseButtonDown( sal_uInt16, const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::MouseButtonUp( USHORT, const MouseEvent& )
+sal_Bool ITaskStatusNotify::MouseButtonUp( sal_uInt16, const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::MouseMove( USHORT, const MouseEvent& )
+sal_Bool ITaskStatusNotify::MouseMove( sal_uInt16, const MouseEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::Command( USHORT, const CommandEvent& )
+sal_Bool ITaskStatusNotify::Command( sal_uInt16, const CommandEvent& )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL ITaskStatusNotify::UpdateHelp( USHORT )
+sal_Bool ITaskStatusNotify::UpdateHelp( sal_uInt16 )
 {
-    return FALSE;
+    return sal_False;
 }
 
 // =======================================================================
@@ -119,7 +116,7 @@ TaskStatusFieldItem::TaskStatusFieldItem( ITaskStatusNotify* pNotify,
                                           const Image& rImage,
                                           const XubString& rQuickHelpText,
                                           const XubString& rHelpText,
-                                          USHORT nFlags ) :
+                                          sal_uInt16 nFlags ) :
     mpNotify( pNotify ),
     maImage( rImage ),
     maQuickHelpText( rQuickHelpText ),
@@ -159,8 +156,8 @@ TaskStatusBar::TaskStatusBar( Window* pParent, WinBits nWinStyle ) :
     mnItemWidth     = 0;
     mnFieldWidth    = 0;
     mnFieldFlags    = 0;
-    mbFlashItems    = FALSE;
-    mbOutInterval   = FALSE;
+    mbFlashItems    = sal_False;
+    mbOutInterval   = sal_False;
 
     maTimer.SetTimeoutHdl( LINK( this, TaskStatusBar, ImplTimerHdl ) );
 }
@@ -186,9 +183,9 @@ TaskStatusBar::~TaskStatusBar()
 
 IMPL_LINK( TaskStatusBar, ImplTimerHdl, Timer*, EMPTYARG )
 {
-    BOOL bUpdate = ImplUpdateClock();
+    sal_Bool bUpdate = ImplUpdateClock();
     if ( ImplUpdateFlashItems() )
-        bUpdate = TRUE;
+        bUpdate = sal_True;
     if ( bUpdate )
         SetItemData( TASKSTATUSBAR_STATUSFIELDID, NULL );
 
@@ -197,7 +194,7 @@ IMPL_LINK( TaskStatusBar, ImplTimerHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( USHORT nItemId ) const
+ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( sal_uInt16 nItemId ) const
 {
     if ( !mpFieldItemList )
         return NULL;
@@ -216,11 +213,11 @@ ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( USHORT nItemId ) const
 
 // -----------------------------------------------------------------------
 
-ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( const Point& rPos, BOOL& rFieldRect ) const
+ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( const Point& rPos, sal_Bool& rFieldRect ) const
 {
     if ( GetItemId( rPos ) == TASKSTATUSBAR_STATUSFIELDID )
     {
-        rFieldRect = TRUE;
+        rFieldRect = sal_True;
 
         if ( mpFieldItemList )
         {
@@ -236,14 +233,14 @@ ImplTaskSBFldItem* TaskStatusBar::ImplGetFieldItem( const Point& rPos, BOOL& rFi
         }
     }
     else
-        rFieldRect = FALSE;
+        rFieldRect = sal_False;
 
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL TaskStatusBar::ImplUpdateClock()
+sal_Bool TaskStatusBar::ImplUpdateClock()
 {
     if ( mnFieldFlags & TASKSTATUSFIELD_CLOCK )
     {
@@ -253,40 +250,40 @@ BOOL TaskStatusBar::ImplUpdateClock()
              (aTime.GetHour() != maTime.GetHour()) )
         {
             maTime = aTime;
-            maTimeText = SvtSysLocale().GetLocaleData().getTime( aTime, FALSE, FALSE );
-            return TRUE;
+            maTimeText = SvtSysLocale().GetLocaleData().getTime( aTime, sal_False, sal_False );
+            return sal_True;
         }
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL TaskStatusBar::ImplUpdateFlashItems()
+sal_Bool TaskStatusBar::ImplUpdateFlashItems()
 {
     if ( mbFlashItems )
     {
         if ( mbOutInterval )
         {
             maTimer.SetTimeout( 900 );
-            mbOutInterval = FALSE;
+            mbOutInterval = sal_False;
         }
         else
         {
             maTimer.SetTimeout( 700 );
-            mbOutInterval = TRUE;
+            mbOutInterval = sal_True;
         }
 
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::ImplUpdateField( BOOL bItems )
+void TaskStatusBar::ImplUpdateField( sal_Bool bItems )
 {
     maTimer.Stop();
 
@@ -294,15 +291,15 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
     {
         ImplTaskSBFldItem* pItem = mpFieldItemList->First();
         mnItemWidth = 0;
-        mbFlashItems = FALSE;
-        mbOutInterval = FALSE;
+        mbFlashItems = sal_False;
+        mbOutInterval = sal_False;
         while ( pItem )
         {
             mnItemWidth += TASKSTATUSBAR_IMAGEOFFX;
             pItem->mnOffX = mnItemWidth;
             mnItemWidth += pItem->maItem.GetImage().GetSizePixel().Width();
             if ( pItem->maItem.GetFlags() & TASKSTATUSFIELDITEM_FLASH )
-                mbFlashItems = TRUE;
+                mbFlashItems = sal_True;
 
             pItem = mpFieldItemList->Next();
         }
@@ -311,7 +308,7 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
     {
         if ( mnFieldFlags & TASKSTATUSFIELD_CLOCK )
         {
-            XubString aStr = SvtSysLocale().GetLocaleData().getTime( Time( 23, 59, 59 ), FALSE, FALSE );
+            XubString aStr = SvtSysLocale().GetLocaleData().getTime( Time( 23, 59, 59 ), sal_False, sal_False );
             mnClockWidth = GetTextWidth( aStr )+(TASKSTATUSBAR_CLOCXOFFX*2);
         }
         else
@@ -329,7 +326,7 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
         {
             mnFieldWidth = nNewWidth;
             long    nOffset = GetItemOffset( TASKSTATUSBAR_STATUSFIELDID );
-            USHORT  nItemPos = GetItemPos( TASKSTATUSBAR_STATUSFIELDID );
+            sal_uInt16  nItemPos = GetItemPos( TASKSTATUSBAR_STATUSFIELDID );
             InsertItem( TASKSTATUSBAR_STATUSFIELDID, nNewWidth, SIB_RIGHT | SIB_IN | SIB_USERDRAW, nOffset, nItemPos );
         }
         else
@@ -344,7 +341,7 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
     if ( mbFlashItems || (mnFieldFlags & TASKSTATUSFIELD_CLOCK) )
     {
         ImplUpdateClock();
-        mbOutInterval = TRUE;
+        mbOutInterval = sal_True;
         ImplUpdateFlashItems();
         maTimer.Start();
     }
@@ -354,12 +351,12 @@ void TaskStatusBar::ImplUpdateField( BOOL bItems )
 
 void TaskStatusBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
+    sal_Bool bFieldRect;
+    sal_Bool bBaseClass = sal_False;
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( rMEvt.GetPosPixel(), bFieldRect );
 
     ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
+    sal_uInt16              nItemId = 0;
 
     if ( bFieldRect )
         nItemId = TASKSTATUSBAR_CLOCKID;
@@ -381,12 +378,12 @@ void TaskStatusBar::MouseButtonDown( const MouseEvent& rMEvt )
 
 void TaskStatusBar::MouseButtonUp( const MouseEvent& rMEvt )
 {
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
+    sal_Bool bFieldRect;
+    sal_Bool bBaseClass = sal_False;
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( rMEvt.GetPosPixel(), bFieldRect );
 
     ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
+    sal_uInt16              nItemId = 0;
 
     if ( bFieldRect )
         nItemId = TASKSTATUSBAR_CLOCKID;
@@ -408,12 +405,12 @@ void TaskStatusBar::MouseButtonUp( const MouseEvent& rMEvt )
 
 void TaskStatusBar::MouseMove( const MouseEvent& rMEvt )
 {
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
+    sal_Bool bFieldRect;
+    sal_Bool bBaseClass = sal_False;
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( rMEvt.GetPosPixel(), bFieldRect );
 
     ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
+    sal_uInt16              nItemId = 0;
 
     if ( bFieldRect )
         nItemId = TASKSTATUSBAR_CLOCKID;
@@ -435,12 +432,12 @@ void TaskStatusBar::MouseMove( const MouseEvent& rMEvt )
 
 void TaskStatusBar::Command( const CommandEvent& rCEvt )
 {
-    BOOL bFieldRect;
-    BOOL bBaseClass = FALSE;
+    sal_Bool bFieldRect;
+    sal_Bool bBaseClass = sal_False;
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( rCEvt.GetMousePosPixel(), bFieldRect );
 
     ITaskStatusNotify*  pNotify = mpNotify;
-    USHORT              nItemId = 0;
+    sal_uInt16              nItemId = 0;
 
     if ( bFieldRect )
         nItemId = TASKSTATUSBAR_CLOCKID;
@@ -462,12 +459,12 @@ void TaskStatusBar::Command( const CommandEvent& rCEvt )
 
 void TaskStatusBar::RequestHelp( const HelpEvent& rHEvt )
 {
-    BOOL bFieldRect;
+    sal_Bool bFieldRect;
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ), bFieldRect );
     if ( bFieldRect )
     {
         ITaskStatusNotify*  pNotify = mpNotify;
-        USHORT              nItemId = 0;
+        sal_uInt16              nItemId = 0;
 
         if ( pItem )
         {
@@ -574,28 +571,28 @@ void TaskStatusBar::UserDraw( const UserDrawEvent& rUDEvt )
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::InsertStatusField( long, USHORT,
-                                       USHORT nFlags )
+void TaskStatusBar::InsertStatusField( long, sal_uInt16,
+                                       sal_uInt16 nFlags )
 {
     mnFieldFlags = nFlags;
-    ImplUpdateField( FALSE );
+    ImplUpdateField( sal_False );
 }
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::SetFieldFlags( USHORT nFlags )
+void TaskStatusBar::SetFieldFlags( sal_uInt16 nFlags )
 {
     if ( mnFieldFlags != nFlags )
     {
         mnFieldFlags = nFlags;
-        ImplUpdateField( FALSE );
+        ImplUpdateField( sal_False );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::AddStatusFieldItem( USHORT nItemId, const TaskStatusFieldItem& rItem,
-                                        USHORT nPos )
+void TaskStatusBar::AddStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem,
+                                        sal_uInt16 nPos )
 {
     DBG_ASSERT( nItemId, "TaskStatusBar::AddStatusFieldItem() - Item is 0" );
     DBG_ASSERT( !ImplGetFieldItem( nItemId ), "TaskStatusBar::AddStatusFieldItem() - Item-Id already exist" );
@@ -607,50 +604,50 @@ void TaskStatusBar::AddStatusFieldItem( USHORT nItemId, const TaskStatusFieldIte
     pItem->maItem   = rItem;
     pItem->mnId     = nItemId;
     pItem->mnOffX   = 0;
-    mpFieldItemList->Insert( pItem, (ULONG)nPos );
+    mpFieldItemList->Insert( pItem, (sal_uLong)nPos );
 
-    ImplUpdateField( TRUE );
+    ImplUpdateField( sal_True );
 }
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::ModifyStatusFieldItem( USHORT nItemId, const TaskStatusFieldItem& rItem )
+void TaskStatusBar::ModifyStatusFieldItem( sal_uInt16 nItemId, const TaskStatusFieldItem& rItem )
 {
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( nItemId );
     if ( pItem )
     {
-        BOOL bUpdate = (pItem->maItem.GetImage() != rItem.GetImage()) ||
+        sal_Bool bUpdate = (pItem->maItem.GetImage() != rItem.GetImage()) ||
                        (pItem->maItem.GetFlags() != rItem.GetFlags());
         pItem->maItem = rItem;
         if ( bUpdate )
-            ImplUpdateField( TRUE );
+            ImplUpdateField( sal_True );
     }
 }
 
 // -----------------------------------------------------------------------
 
-void TaskStatusBar::RemoveStatusFieldItem( USHORT nItemId )
+void TaskStatusBar::RemoveStatusFieldItem( sal_uInt16 nItemId )
 {
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( nItemId );
     if ( pItem )
     {
         mpFieldItemList->Remove( pItem );
         delete pItem;
-        ImplUpdateField( TRUE );
+        ImplUpdateField( sal_True );
     }
 }
 
 // -----------------------------------------------------------------------
 
-BOOL TaskStatusBar::GetStatusFieldItem( USHORT nItemId, TaskStatusFieldItem& rItem ) const
+sal_Bool TaskStatusBar::GetStatusFieldItem( sal_uInt16 nItemId, TaskStatusFieldItem& rItem ) const
 {
     ImplTaskSBFldItem* pItem = ImplGetFieldItem( nItemId );
     if ( pItem )
     {
         rItem = pItem->maItem;
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 

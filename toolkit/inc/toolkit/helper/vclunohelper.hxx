@@ -64,8 +64,8 @@ namespace com { namespace sun { namespace star { namespace awt {
 #include <vcl/bitmapex.hxx>
 #include <vcl/region.hxx>
 #include <vcl/metric.hxx>
-#include <vcl/mapunit.hxx>
-#include <vcl/fldunit.hxx>
+#include <tools/mapunit.hxx>
+#include <tools/fldunit.hxx>
 #include <tools/poly.hxx>
 
 class Window;

@@ -43,7 +43,7 @@
 
 #include <osl/mutex.hxx>
 
-#include <stg.hxx>
+#include <sot/stg.hxx>
 
 
 class OLESimpleStorage  : public ::cppu::WeakImplHelper3

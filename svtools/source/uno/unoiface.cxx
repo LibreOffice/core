@@ -31,12 +31,11 @@
 #define _SVT_UNOIFACE_CXX
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
-
 #include <svtools/svmedit.hxx>
 #include <unoiface.hxx>
-#include "filedlg.hxx"
-#include "filectrl.hxx"
-#include "roadmap.hxx"
+#include <svtools/filedlg.hxx>
+#include <svtools/filectrl.hxx>
+#include <svtools/roadmap.hxx>
 #include <svtools/fixedhyper.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -46,9 +45,8 @@
 #include <toolkit/helper/property.hxx>
 #include <svtools/fmtfield.hxx>
 #include <svl/numuno.hxx>
-#include <calendar.hxx>
-#include <prgsbar.hxx>
-
+#include <svtools/calendar.hxx>
+#include <svtools/prgsbar.hxx>
 #include <svtools/svtreebx.hxx>
 #include "treecontrolpeer.hxx"
 #include "svtxgridcontrol.hxx"
@@ -123,7 +121,7 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         pWindow = new CalendarField( pParent, nWinBits);
         static_cast<CalendarField*>(pWindow)->EnableToday();
         static_cast<CalendarField*>(pWindow)->EnableNone();
-        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( TRUE );
+        static_cast<CalendarField*>(pWindow)->EnableEmptyFieldValue( sal_True );
         *ppNewComp = new SVTXDateField;
         ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(DateField*)pWindow );
     }
@@ -840,7 +838,7 @@ void SVTXFormattedField::SetWindow( Window* _pWindow )
 {
     VCLXSpinField::SetWindow(_pWindow);
     if (GetFormattedField())
-        GetFormattedField()->SetAutoColor(TRUE);
+        GetFormattedField()->SetAutoColor(sal_True);
 }
 
 // --------------------------------------------------------------------------------------
@@ -1652,7 +1650,7 @@ void SVTXRoadmap::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "SVTXRoadmap::ImplSetNewImage: window is required to be not-NULL!" );
     ::svt::ORoadmap* pButton = static_cast< ::svt::ORoadmap* >( GetWindow() );
-    pButton->SetRoadmapBitmap( GetBitmap() );
+    pButton->SetRoadmapBitmap( GetImage().GetBitmapEx() );
 }
 
 void SVTXRoadmap::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -2136,7 +2134,7 @@ void VCLXProgressBar::ImplUpdateValue()
         }
 
         // set progressbar value
-        pProgressBar->SetValue( (USHORT) nPercent );
+        pProgressBar->SetValue( (sal_uInt16) nPercent );
     }
 }
 

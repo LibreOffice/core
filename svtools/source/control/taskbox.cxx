@@ -30,14 +30,11 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
-
-#include <taskbar.hxx>
+#include <svtools/taskbar.hxx>
 
 // =======================================================================
 
@@ -63,7 +60,7 @@ TaskToolBox::TaskToolBox( Window* pParent, WinBits nWinStyle ) :
     mnActiveItemId  = 0;
     mnTaskItem      = 0;
     mnSmallItem     = TOOLBOX_ITEM_NOTFOUND;
-    mbMinActivate   = FALSE;
+    mbMinActivate   = sal_False;
 
     SetAlign( WINDOWALIGN_BOTTOM );
     SetButtonType( BUTTON_SYMBOLTEXT );
@@ -85,14 +82,14 @@ TaskToolBox::~TaskToolBox()
 
 // -----------------------------------------------------------------------
 
-void TaskToolBox::ActivateTaskItem( USHORT nItemId, BOOL bMinActivate )
+void TaskToolBox::ActivateTaskItem( sal_uInt16 nItemId, sal_Bool bMinActivate )
 {
     if ( nItemId )
     {
         if ( nItemId != mnActiveItemId )
         {
             if ( mnActiveItemId )
-                CheckItem( mnActiveItemId, FALSE );
+                CheckItem( mnActiveItemId, sal_False );
             CheckItem( nItemId );
             mnActiveItemId = nItemId;
         }
@@ -101,13 +98,13 @@ void TaskToolBox::ActivateTaskItem( USHORT nItemId, BOOL bMinActivate )
             if ( !bMinActivate )
                 return;
 
-            mbMinActivate = TRUE;
+            mbMinActivate = sal_True;
         }
 
         mnTaskItem = nItemId-1;
         ActivateTask();
         mnTaskItem = 0;
-        mbMinActivate = FALSE;
+        mbMinActivate = sal_False;
     }
 }
 
@@ -138,7 +135,7 @@ void TaskToolBox::MouseButtonDown( const MouseEvent& rMEvt )
 void TaskToolBox::Resize()
 {
     mnOldItemCount  = mpItemList->Count();
-    mnUpdatePos     = (USHORT)mnOldItemCount;
+    mnUpdatePos     = (sal_uInt16)mnOldItemCount;
     mnUpdateNewPos  = TOOLBOX_ITEM_NOTFOUND;
     ImplFormatTaskToolBox();
     ToolBox::Resize();
@@ -150,7 +147,7 @@ void TaskToolBox::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
-        USHORT nItemId = GetItemId( rCEvt.GetMousePosPixel() );
+        sal_uInt16 nItemId = GetItemId( rCEvt.GetMousePosPixel() );
 // Dies machen wir nicht mehr, da es von zu vielen als stoerend empfunden wurde
 //        ActivateTaskItem( nItemId );
         mnTaskItem = nItemId-1;
@@ -170,7 +167,7 @@ void TaskToolBox::RequestHelp( const HelpEvent& rHEvt )
 {
     if ( rHEvt.GetMode() & (HELPMODE_BALLOON | HELPMODE_QUICK) )
     {
-        USHORT nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
+        sal_uInt16 nItemId = GetItemId( ScreenToOutputPixel( rHEvt.GetMousePosPixel() ) );
 
         if ( nItemId )
         {
@@ -199,8 +196,8 @@ void TaskToolBox::RequestHelp( const HelpEvent& rHEvt )
 
 void TaskToolBox::Select()
 {
-    USHORT nItemId = GetCurItemId();
-    ActivateTaskItem( nItemId, TRUE );
+    sal_uInt16 nItemId = GetCurItemId();
+    ActivateTaskItem( nItemId, sal_True );
 }
 
 // -----------------------------------------------------------------------
@@ -211,7 +208,7 @@ void TaskToolBox::ImplFormatTaskToolBox()
     {
         // Eintraege aus der Liste entfernen
         while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (ULONG)mnUpdatePos );
+            delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
         mnUpdateNewPos = mnUpdatePos;
     }
 
@@ -239,14 +236,14 @@ void TaskToolBox::ImplFormatTaskToolBox()
     }
 
     // Eintraege aus der ToolBox entfernen, die ersetzt werden
-    USHORT nBtnPos = (mnUpdateNewPos*2);
+    sal_uInt16 nBtnPos = (mnUpdateNewPos*2);
     while ( nBtnPos < GetItemCount() )
         RemoveItem( nBtnPos );
     if ( mnUpdateNewPos <= (mnActiveItemId-1) )
         mnActiveItemId = 0;
 
     // Neue Eintrage einfuegen
-    USHORT i = mnUpdateNewPos;
+    sal_uInt16 i = mnUpdateNewPos;
     while ( i < mpItemList->Count() )
     {
         ImplTaskItem* pItem = mpItemList->GetObject( i );
@@ -270,7 +267,7 @@ void TaskToolBox::ImplFormatTaskToolBox()
             while ( (nTxtWidth > mnMaxTextWidth) && (aText.Len() > 3) );
         }
 
-        USHORT nItemId = i+1;
+        sal_uInt16 nItemId = i+1;
         if ( aText.EqualsAscii( "..." ) )
             InsertItem( nItemId, pItem->maImage, TIB_LEFT );
         else
@@ -285,7 +282,7 @@ void TaskToolBox::ImplFormatTaskToolBox()
     if ( mnNewActivePos+1 != mnActiveItemId )
     {
         if ( mnActiveItemId )
-            CheckItem( mnActiveItemId, FALSE );
+            CheckItem( mnActiveItemId, sal_False );
         mnActiveItemId = mnNewActivePos+1;
         CheckItem( mnActiveItemId );
     }
@@ -304,7 +301,7 @@ void TaskToolBox::StartUpdateTask()
 // -----------------------------------------------------------------------
 
 void TaskToolBox::UpdateTask( const Image& rImage, const String& rText,
-                              BOOL bActive )
+                              sal_Bool bActive )
 {
     ImplTaskItem* pItem = mpItemList->GetObject( mnUpdatePos );
     if ( pItem )
@@ -313,7 +310,7 @@ void TaskToolBox::UpdateTask( const Image& rImage, const String& rText,
         {
             // Eintraege aus der Liste entfernen
             while ( mpItemList->Count() > mnUpdatePos )
-                delete mpItemList->Remove( (ULONG)mnUpdatePos );
+                delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
             pItem = NULL;
         }
     }
@@ -343,7 +340,7 @@ void TaskToolBox::EndUpdateTask()
     {
         // Eintraege aus der Liste entfernen
         while ( mpItemList->Count() > mnUpdatePos )
-            delete mpItemList->Remove( (ULONG)mnUpdatePos );
+            delete mpItemList->Remove( (sal_uLong)mnUpdatePos );
         mnUpdateNewPos = mnUpdatePos;
     }
 

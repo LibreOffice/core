@@ -149,7 +149,7 @@ extern "C" void SAL_CALL ICEConnectionWorker( void* );
 class ICEConnectionObserver
 {
     friend void SAL_CALL ICEConnectionWorker(void*);
-    static BOOL bIsWatching;
+    static sal_Bool bIsWatching;
     static void ICEWatchProc( IceConn connection, IcePointer client_data,
                               Bool opening, IcePointer* watch_data );
 
@@ -175,7 +175,7 @@ public:
 
 SmcConn             SessionManagerClient::aSmcConnection            = NULL;
 ByteString          SessionManagerClient::aClientID;
-BOOL                ICEConnectionObserver::bIsWatching              = FALSE;
+sal_Bool                ICEConnectionObserver::bIsWatching              = sal_False;
 struct pollfd*  ICEConnectionObserver::pFilehandles             = NULL;
 IceConn*            ICEConnectionObserver::pConnections             = NULL;
 int                 ICEConnectionObserver::nConnections             = 0;
@@ -606,7 +606,7 @@ void ICEConnectionObserver::activate()
     {
         nWakeupFiles[0] = nWakeupFiles[1] = 0;
         ICEMutex = osl_createMutex();
-        bIsWatching = TRUE;
+        bIsWatching = sal_True;
 #ifdef USE_SM_EXTENSION
         /*
          * Default handlers call exit, we don't care that strongly if something
@@ -624,7 +624,7 @@ void ICEConnectionObserver::deactivate()
     if( bIsWatching )
     {
         lock();
-        bIsWatching = FALSE;
+        bIsWatching = sal_False;
 #ifdef USE_SM_EXTENSION
         IceRemoveConnectionWatch( ICEWatchProc, NULL );
         IceSetErrorHandler( origErrorHandler );

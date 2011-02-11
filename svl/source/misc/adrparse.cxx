@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
 #include <tools/inetmime.hxx>
-#include <adrparse.hxx>
+#include <svl/adrparse.hxx>
 
 namespace unnamed_svl_adrparse {}
 using namespace unnamed_svl_adrparse;
@@ -774,7 +774,7 @@ SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
 //============================================================================
 SvAddressParser::~SvAddressParser()
 {
-    for (ULONG i = m_aRest.Count(); i != 0;)
+    for (sal_uLong i = m_aRest.Count(); i != 0;)
         delete m_aRest.Remove(--i);
 }
 

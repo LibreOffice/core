@@ -27,20 +27,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "helpagentwindow.hxx"
+#include <svtools/helpagentwindow.hxx>
 #include <osl/diagnose.h>
-#ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
-#endif
 #include <vcl/bitmap.hxx>
 #include <svtools/svtdata.hxx>
-
-#ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
-#endif
-#ifndef _SVT_HELPID_HRC
 #include <svtools/helpid.hrc>
-#endif
 
 #define WB_AGENT_STYLE  0
 
@@ -106,7 +99,7 @@ namespace svt
         m_aPreferredSize.Height() += aSize.Height() - aOutputSize.Height();
 
         SetPointer(Pointer(POINTER_REFHAND));
-        AlwaysEnableInput( TRUE, TRUE );
+        AlwaysEnableInput( sal_True, sal_True );
 
         // unique id for the testtool
         SetUniqueId( HID_HELPAGENT_WINDOW );
