@@ -1833,9 +1833,7 @@ bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, strin
 
         boost::unordered_map< string, string >::const_iterator iter;
 
-        for ( iter = rLibraries.begin();
-            iter != rLibraries.end();
-            iter++ )
+        for ( iter = rLibraries.begin(); iter != rLibraries.end(); ++iter )
         {
             sal_uInt8 checksum[RTL_DIGEST_LENGTH_MD5];
             sal_uInt32 nBytesProcessed = calc_md5_checksum(
