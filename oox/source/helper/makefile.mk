@@ -51,7 +51,6 @@ SLOFILES =	\
         $(SLO)$/progressbar.obj				\
         $(SLO)$/propertymap.obj				\
         $(SLO)$/propertyset.obj				\
-        $(SLO)$/recordinputstream.obj		\
         $(SLO)$/storagebase.obj				\
         $(SLO)$/textinputstream.obj		    \
         $(SLO)$/zipstorage.obj

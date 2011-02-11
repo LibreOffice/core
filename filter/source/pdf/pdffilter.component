@@ -34,4 +34,7 @@
   <implementation name="com.sun.star.comp.PDF.PDFFilter">
     <service name="com.sun.star.document.PDFFilter"/>
   </implementation>
+  <implementation name="com.sun.star.comp.PDF.PDFExportInteractionHandler">
+    <service name="com.sun.star.filter.pdfexport.PDFExportInteractionHandler"/>
+  </implementation>
 </component>

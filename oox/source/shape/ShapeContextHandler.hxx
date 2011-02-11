@@ -28,10 +28,9 @@
 #define OOX_SHAPE_SHAPE_CONTEXT_HANDLER_HXX
 
 #include <boost/shared_ptr.hpp>
-#include "sal/config.h"
-#include "com/sun/star/uno/XComponentContext.hpp"
-#include "cppuhelper/implbase1.hxx"
-#include "com/sun/star/xml/sax/XFastShapeContextHandler.hpp"
+#include <com/sun/star/uno/XComponentContext.hpp>
+#include <cppuhelper/implbase1.hxx>
+#include <com/sun/star/xml/sax/XFastShapeContextHandler.hpp>
 #include "oox/drawingml/graphicshapecontext.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/theme.hxx"
@@ -42,21 +41,6 @@
 namespace css = ::com::sun::star;
 
 namespace oox { namespace shape {
-
-// component and service helper functions:
-::rtl::OUString SAL_CALL ShapeContextHandler_getImplementationName();
-
-css::uno::Sequence< ::rtl::OUString > SAL_CALL
-ShapeContextHandler_getSupportedServiceNames();
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-ShapeContextHandler_create
-( css::uno::Reference< css::uno::XComponentContext > const & context );
-
-css::uno::Reference< css::uno::XInterface > SAL_CALL
-ShapeContextHandler_createInstance
-( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-throw( css::uno::Exception );
 
 class ShapeFragmentHandler : public core::FragmentHandler
 {

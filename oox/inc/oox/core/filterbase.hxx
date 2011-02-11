@@ -29,14 +29,15 @@
 #define OOX_CORE_FILTERBASE_HXX
 
 #include <memory>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/document/XImporter.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <com/sun/star/io/XStream.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include "oox/helper/binarystreambase.hxx"
@@ -44,16 +45,18 @@
 #include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace awt { struct DeviceInfo; }
-    namespace frame { class XModel; }
-    namespace task { class XStatusIndicator; }
-    namespace task { class XInteractionHandler; }
     namespace frame { class XFrame; }
+    namespace frame { class XModel; }
+    namespace graphic { class XGraphic; }
     namespace io { class XInputStream; }
     namespace io { class XOutputStream; }
     namespace io { class XStream; }
-    namespace graphic { class XGraphic; }
+    namespace lang { class XMultiComponentFactory; }
+    namespace lang { class XMultiServiceFactory; }
+    namespace task { class XInteractionHandler; }
+    namespace task { class XStatusIndicator; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace comphelper {
@@ -68,6 +71,7 @@ namespace oox {
 
 namespace oox { namespace ole {
     class OleObjectHelper;
+    class VbaProject;
 } }
 
 namespace oox {
@@ -89,7 +93,8 @@ class OOX_DLLPUBLIC FilterBase : public FilterBaseBase, public ::cppu::BaseMutex
 {
 public:
     explicit            FilterBase(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual             ~FilterBase();
 
@@ -109,9 +114,17 @@ public:
     /** Returns the specified argument passed through the XInitialization interface. */
     ::com::sun::star::uno::Any getArgument( const ::rtl::OUString& rArgName ) const;
 
-    /** Returns the global service factory passed in the filter constructor (always existing). */
+    /** Returns the component context passed in the filter constructor (always existing). */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
+                        getComponentContext() const;
+
+    /** Returns the component service factory (always existing). */
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >&
+                        getComponentFactory() const;
+
+    /** Returns the multi service factory of the component (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
-                        getGlobalFactory() const;
+                        getServiceFactory() const;
 
     /** Returns the document model (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >&
@@ -121,7 +134,7 @@ public:
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&
                         getModelFactory() const;
 
-    /** Returns the frame that will contain the document model. */
+    /** Returns the frame that will contain the document model (may be null). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >&
                         getTargetFrame() const;
 
@@ -194,9 +207,13 @@ public:
     /** Returns a helper for the handling of OLE obejcts. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
-    /** Requests a password from the media descriptor or from the user. On
-        success, the password will be inserted into the media descriptor. */
-    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
+    /** Returns the VBA project manager. */
+    ::oox::ole::VbaProject& getVbaProject() const;
+
+    /** Requests the encryption data from the media descriptor or from the user. On
+        success, the encryption data will be inserted into the media descriptor. */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >
+                        requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */
@@ -271,6 +288,9 @@ private:
         resolving palette colors. */
     virtual GraphicHelper* implCreateGraphicHelper() const;
 
+    /** Derived classes create a VBA project manager object. */
+    virtual ::oox::ole::VbaProject* implCreateVbaProject() const = 0;
+
     virtual ::rtl::OUString implGetImplementationName() const = 0;
 
     virtual StorageRef  implCreateStorage(
@@ -288,4 +308,3 @@ private:
 } // namespace oox
 
 #endif
-

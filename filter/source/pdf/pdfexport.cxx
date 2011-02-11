@@ -32,49 +32,58 @@
 #include "impdialog.hxx"
 
 #include "pdf.hrc"
-#include <tools/urlobj.hxx>
-#include <tools/fract.hxx>
-#include <tools/poly.hxx>
-#include <vcl/mapmod.hxx>
-#include <vcl/virdev.hxx>
-#include <vcl/metaact.hxx>
-#include <vcl/gdimtf.hxx>
-#include <vcl/jobset.hxx>
-#include <vcl/salbtype.hxx>
-#include <vcl/bmpacc.hxx>
+#include "tools/urlobj.hxx"
+#include "tools/fract.hxx"
+#include "tools/poly.hxx"
+#include "vcl/mapmod.hxx"
+#include "vcl/virdev.hxx"
+#include "vcl/metaact.hxx"
+#include "vcl/gdimtf.hxx"
+#include "vcl/jobset.hxx"
+#include "vcl/salbtype.hxx"
+#include "vcl/bmpacc.hxx"
 #include "vcl/svapp.hxx"
-#include <toolkit/awt/vclxdevice.hxx>
-#include <unotools/localfilehelper.hxx>
-#include <unotools/processfactory.hxx>
-#include <svtools/FilterConfigItem.hxx>
-#include <svtools/filter.hxx>
-#include <svl/solar.hrc>
-#include <comphelper/string.hxx>
-#include <unotools/streamwrap.hxx>
-#include <com/sun/star/io/XSeekable.hpp>
+#include "toolkit/awt/vclxdevice.hxx"
+#include "unotools/localfilehelper.hxx"
+#include "unotools/processfactory.hxx"
+#include "svtools/FilterConfigItem.hxx"
+#include "svtools/filter.hxx"
+#include "svl/solar.hrc"
+#include "comphelper/string.hxx"
+#include "comphelper/storagehelper.hxx"
+#include "unotools/streamwrap.hxx"
+#include "com/sun/star/io/XSeekable.hpp"
+
 #include "basegfx/polygon/b2dpolygon.hxx"
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 #include "basegfx/polygon/b2dpolygontools.hxx"
 
-#include <unotools/saveopt.hxx> // only for testing of relative saving options in PDF
+#include "unotools/saveopt.hxx" // only for testing of relative saving options in PDF
 
-#include <vcl/graphictools.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/awt/Rectangle.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
-#include <com/sun/star/util/MeasureUnit.hpp>
-#include <com/sun/star/frame/XModel.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
-#include <com/sun/star/frame/XStorable.hpp>
-#include <com/sun/star/frame/XController.hpp>
-#include <com/sun/star/document/XDocumentProperties.hpp>
-#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
-#include <com/sun/star/view/XViewSettingsSupplier.hpp>
-#include <unotools/configmgr.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/drawing/XShapes.hpp>
-#include <com/sun/star/graphic/XGraphicProvider.hpp>
+#include "vcl/graphictools.hxx"
+#include "com/sun/star/beans/XPropertySet.hpp"
+#include "com/sun/star/awt/Rectangle.hpp"
+#include "com/sun/star/awt/XDevice.hpp"
+#include "com/sun/star/util/MeasureUnit.hpp"
+#include "com/sun/star/frame/XModel.hpp"
+#include "com/sun/star/frame/XModuleManager.hpp"
+#include "com/sun/star/frame/XStorable.hpp"
+#include "com/sun/star/frame/XController.hpp"
+#include "com/sun/star/document/XDocumentProperties.hpp"
+#include "com/sun/star/document/XDocumentPropertiesSupplier.hpp"
+#include "com/sun/star/container/XNameAccess.hpp"
+#include "com/sun/star/view/XViewSettingsSupplier.hpp"
+#include "com/sun/star/task/XInteractionRequest.hpp"
+#include "com/sun/star/task/PDFExportException.hpp"
+
+#include "unotools/configmgr.hxx"
+#include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/compbase1.hxx"
+#include "cppuhelper/basemutex.hxx"
+
+#include "com/sun/star/lang/XServiceInfo.hpp"
+#include "com/sun/star/drawing/XShapes.hpp"
+#include "com/sun/star/graphic/XGraphicProvider.hpp"
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -89,10 +98,14 @@ using namespace ::com::sun::star::graphic;
 // - PDFExport -
 // -------------
 
-PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFactory ) :
+PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
+                      const Reference< task::XStatusIndicator >& rxStatusIndicator,
+                      const Reference< task::XInteractionHandler >& rxIH,
+                      const Reference< lang::XMultiServiceFactory >& xFactory ) :
     mxSrcDoc                    ( rxSrcDoc ),
     mxMSF                       ( xFactory ),
     mxStatusIndicator           ( rxStatusIndicator ),
+    mxIH                        ( rxIH ),
     mbUseTaggedPDF              ( sal_False ),
     mnPDFTypeSelection          ( 0 ),
     mbExportNotes               ( sal_True ),
@@ -130,9 +143,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbFirstPageLeft             ( sal_False ),
 
     mbEncrypt                   ( sal_False ),
-    msOpenPassword              (),
     mbRestrictPermissions       ( sal_False ),
-    msPermissionPassword        (),
     mnPrintAllowed              ( 2 ),
     mnChangesAllowed            ( 4 ),
     mbCanCopyOrExtract          ( sal_True ),
@@ -200,7 +211,7 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
                     const Size                  aMtfSize( aPageSize.Width, aPageSize.Height );
 
                     pOut->Push();
-                    pOut->EnableOutput( FALSE );
+                    pOut->EnableOutput( sal_False );
                     pOut->SetMapMode( aMapMode );
 
                     aMtf.SetPrefSize( aMtfSize );
@@ -250,12 +261,12 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
 
 class PDFExportStreamDoc : public vcl::PDFOutputStream
 {
-    Reference< XComponent > m_xSrcDoc;
-    rtl::OUString           m_aPassWd;
+    Reference< XComponent >             m_xSrcDoc;
+    Sequence< beans::NamedValue >       m_aPreparedPassword;
     public:
-    PDFExportStreamDoc( const Reference< XComponent >& xDoc, const rtl::OUString& rPwd )
+        PDFExportStreamDoc( const Reference< XComponent >& xDoc, const Sequence<beans::NamedValue>& rPwd )
     : m_xSrcDoc( xDoc ),
-      m_aPassWd( rPwd )
+      m_aPreparedPassword( rPwd )
     {}
     virtual ~PDFExportStreamDoc();
 
@@ -271,15 +282,16 @@ void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
     Reference< com::sun::star::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
     if( xStore.is() )
     {
-        Sequence< beans::PropertyValue > aArgs( m_aPassWd.getLength() ? 3 : 2 );
+        Sequence< beans::PropertyValue > aArgs( 2 + ((m_aPreparedPassword.getLength() > 0) ? 1 : 0) );
         aArgs.getArray()[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
         aArgs.getArray()[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
         aArgs.getArray()[1].Value <<= xStream;
-        if( m_aPassWd.getLength() )
+        if( m_aPreparedPassword.getLength() )
         {
-            aArgs.getArray()[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
-            aArgs.getArray()[2].Value <<= m_aPassWd;
+            aArgs.getArray()[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) );
+            aArgs.getArray()[2].Value <<= m_aPreparedPassword;
         }
+
         try
         {
             xStore->storeToURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ),
@@ -390,6 +402,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             VCLXDevice*                 pXDevice = new VCLXDevice;
             OUString                    aPageRange;
             Any                         aSelection;
+            PDFWriter::PDFWriterContext aContext;
+            rtl::OUString aOpenPassword, aPermissionPassword;
+            Reference< beans::XMaterialHolder > xEnc;
+            Sequence< beans::NamedValue > aPreparedPermissionPassword;
+
 
             // getting the string for the creator
             String aCreator;
@@ -408,7 +425,34 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aCreator.AppendAscii( "Math" );
             }
 
-            PDFWriter::PDFWriterContext aContext;
+            Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
+            if ( xDocumentPropsSupplier.is() )
+            {
+                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
+                if ( xDocumentProps.is() )
+                {
+                    aContext.DocumentInfo.Title = xDocumentProps->getTitle();
+                    aContext.DocumentInfo.Author = xDocumentProps->getAuthor();
+                    aContext.DocumentInfo.Subject = xDocumentProps->getSubject();
+                    aContext.DocumentInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
+                }
+            }
+            // getting the string for the producer
+            String aProducer;
+            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
+            if ( pMgr )
+            {
+                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
+                ::rtl::OUString sProductName;
+                aProductName >>= sProductName;
+                aProducer = sProductName;
+                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
+                aProductName >>= sProductName;
+                aProducer.AppendAscii(" ");
+                aProducer += String( sProductName );
+            }
+            aContext.DocumentInfo.Producer = aProducer;
+            aContext.DocumentInfo.Creator = aCreator;
 
             for( sal_Int32 nData = 0, nDataCount = rFilterData.getLength(); nData < nDataCount; ++nData )
             {
@@ -482,11 +526,15 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptFile" ) ) )
                     rFilterData[ nData ].Value >>= mbEncrypt;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) ) )
-                    rFilterData[ nData ].Value >>= msOpenPassword;
+                    rFilterData[ nData ].Value >>= aOpenPassword;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RestrictPermissions" ) ) )
                     rFilterData[ nData ].Value >>= mbRestrictPermissions;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) ) )
-                    rFilterData[ nData ].Value >>= msPermissionPassword;
+                    rFilterData[ nData ].Value >>= aPermissionPassword;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) ) )
+                    rFilterData[ nData ].Value >>= xEnc;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) ) )
+                    rFilterData[ nData ].Value >>= aPreparedPermissionPassword;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Printing" ) ) )
                     rFilterData[ nData ].Value >>= mnPrintAllowed;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Changes" ) ) )
@@ -521,14 +569,17 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 break;
             case 1:
                 aContext.Version    = PDFWriter::PDF_A_1;
-//force the tagged PDF as well
+                //force the tagged PDF as well
                 mbUseTaggedPDF = sal_True;
-//force embedding of standard fonts
+                //force embedding of standard fonts
                 mbEmbedStandardFonts = sal_True;
-//force disabling of form conversion
+                //force disabling of form conversion
                 mbExportFormFields = sal_False;
-// PDF/A does not allow transparencies
+                // PDF/A does not allow transparencies
                 mbRemoveTransparencies = sal_True;
+                // no encryption
+                mbEncrypt = sal_False;
+                xEnc.clear();
                 break;
             }
 
@@ -604,23 +655,17 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             if( aContext.Version != PDFWriter::PDF_A_1 )
             {
 //set values needed in encryption
-                aContext.Encrypt =  mbEncrypt;
 //set encryption level, fixed, but here it can set by the UI if needed.
 // true is 128 bit, false 40
 //note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
 //128bit security mode
-                aContext.Security128bit = sal_True;
-
-//set the open password
-                if( aContext.Encrypt &&  msOpenPassword.getLength() > 0 )
-                    aContext.UserPassword = msOpenPassword;
+                aContext.Encryption.Security128bit = sal_True;
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-                if( mbRestrictPermissions && msPermissionPassword.getLength() > 0 )
+                if( mbRestrictPermissions && (xEnc.is() || aPermissionPassword.getLength() > 0) )
                 {
-                    aContext.OwnerPassword = msPermissionPassword;
-                    aContext.Encrypt = sal_True;
+                    mbEncrypt = sal_True;
 //permission set as desired, done after
                 }
                 else
@@ -638,9 +683,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
                 default:
                 case 2:
-                    aContext.AccessPermissions.CanPrintFull         = sal_True;
+                    aContext.Encryption.CanPrintFull            = sal_True;
                 case 1:
-                    aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
+                    aContext.Encryption.CanPrintTheDocument     = sal_True;
                     break;
                 }
 
@@ -649,26 +694,36 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 case 0: //already in struct PDFSecPermissions CTOR
                     break;
                 case 1:
-                    aContext.AccessPermissions.CanAssemble              = sal_True;
+                    aContext.Encryption.CanAssemble             = sal_True;
                     break;
                 case 2:
-                    aContext.AccessPermissions.CanFillInteractive       = sal_True;
+                    aContext.Encryption.CanFillInteractive      = sal_True;
                     break;
                 case 3:
-                    aContext.AccessPermissions.CanAddOrModify           = sal_True;
+                    aContext.Encryption.CanAddOrModify          = sal_True;
                     break;
                 default:
                 case 4:
-                    aContext.AccessPermissions.CanModifyTheContent      =
-                        aContext.AccessPermissions.CanCopyOrExtract     =
-                        aContext.AccessPermissions.CanAddOrModify       =
-                        aContext.AccessPermissions.CanFillInteractive   = sal_True;
+                    aContext.Encryption.CanModifyTheContent     =
+                        aContext.Encryption.CanCopyOrExtract    =
+                        aContext.Encryption.CanAddOrModify      =
+                        aContext.Encryption.CanFillInteractive  = sal_True;
                     break;
                 }
 
-                aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
-                aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
+                aContext.Encryption.CanCopyOrExtract                = mbCanCopyOrExtract;
+                aContext.Encryption.CanExtractForAccessibility  = mbCanExtractForAccessibility;
+                if( mbEncrypt && ! xEnc.is() )
+                    xEnc = PDFWriter::InitEncryption( aPermissionPassword, aOpenPassword, aContext.Encryption.Security128bit );
+                if( mbEncrypt && aPermissionPassword.getLength() && ! aPreparedPermissionPassword.getLength() )
+                    aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
+            // after this point we don't need the legacy clear passwords anymore
+            // however they are still inside the passed filter data sequence
+            // which is sadly out out our control
+            aPermissionPassword = rtl::OUString();
+            aOpenPassword = rtl::OUString();
+
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
             * ever be an additional form submit format this could get invalid.
@@ -731,7 +786,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 //<---
             }
 // all context data set, time to create the printing device
-            PDFWriter*          pPDFWriter = new PDFWriter( aContext );
+            PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
 
@@ -744,41 +799,10 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 // get mimetype
                 OUString aSrcMimetype = getMimetypeForDocument( mxMSF, mxSrcDoc );
                 pPDFWriter->AddStream( aSrcMimetype,
-                                       new PDFExportStreamDoc( mxSrcDoc, msPermissionPassword ),
+                                       new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword ),
                                        false
                                        );
             }
-            PDFDocInfo aDocInfo;
-            Reference< document::XDocumentPropertiesSupplier > xDocumentPropsSupplier( mxSrcDoc, UNO_QUERY );
-            if ( xDocumentPropsSupplier.is() )
-            {
-                Reference< document::XDocumentProperties > xDocumentProps( xDocumentPropsSupplier->getDocumentProperties() );
-                if ( xDocumentProps.is() )
-                {
-                    aDocInfo.Title = xDocumentProps->getTitle();
-                    aDocInfo.Author = xDocumentProps->getAuthor();
-                    aDocInfo.Subject = xDocumentProps->getSubject();
-                    aDocInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
-                }
-            }
-            // getting the string for the producer
-            String aProducer;
-            ::utl::ConfigManager* pMgr = ::utl::ConfigManager::GetConfigManager();
-            if ( pMgr )
-            {
-                Any aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-                ::rtl::OUString sProductName;
-                aProductName >>= sProductName;
-                aProducer = sProductName;
-                aProductName = pMgr->GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTVERSION );
-                aProductName >>= sProductName;
-                aProducer.AppendAscii(" ");
-                aProducer += String( sProductName );
-            }
-            aDocInfo.Producer = aProducer;
-            aDocInfo.Creator = aCreator;
-
-            pPDFWriter->SetDocInfo( aDocInfo );
 
             if ( pOut )
             {
@@ -795,7 +819,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
                 pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
-                Sequence< PropertyValue > aRenderOptions( 5 );
+                Sequence< PropertyValue > aRenderOptions( 6 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
                 aRenderOptions[ 0 ].Value <<= Reference< awt::XDevice >( pXDevice );
                 aRenderOptions[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) );
@@ -807,12 +831,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 aRenderOptions[ 3 ].Value <<= sal_False;
                 aRenderOptions[ 4 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) );
                 aRenderOptions[ 4 ].Value <<= mbSkipEmptyPages;
-                #if 0
-                // #i113919# writer has to begun "PageRange" for itself changing its renderer count
-                // we should unify this behavior but not for OOo 3.3
                 aRenderOptions[ 5 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) );
                 aRenderOptions[ 5 ].Value <<= aPageRange;
-                #endif
 
                 if( aPageRange.getLength() || !aSelection.hasValue() )
                 {
@@ -881,7 +901,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if( nPageCount > 0 )
                     bRet = ExportSelection( *pPDFWriter, xRenderable, aSelection, aMultiSelection, aRenderOptions, nPageCount );
                 else
-                    bRet = FALSE;
+                    bRet = sal_False;
 
                 if ( bRet && bSecondPassForImpressNotes )
                 {
@@ -926,12 +946,59 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
     return bRet;
 }
 
+namespace
+{
+
+typedef cppu::WeakComponentImplHelper1< task::XInteractionRequest > PDFErrorRequestBase;
+
+class PDFErrorRequest : private cppu::BaseMutex,
+                        public PDFErrorRequestBase
+{
+    task::PDFExportException maExc;
+public:
+    PDFErrorRequest( const task::PDFExportException& i_rExc );
+
+    // XInteractionRequest
+    virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException);
+    virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException);
+};
+
+PDFErrorRequest::PDFErrorRequest( const task::PDFExportException& i_rExc ) :
+    PDFErrorRequestBase( m_aMutex ),
+    maExc( i_rExc )
+{
+}
+
+uno::Any SAL_CALL PDFErrorRequest::getRequest() throw (uno::RuntimeException)
+{
+    osl::MutexGuard const guard( m_aMutex );
+
+    uno::Any aRet;
+    aRet <<= maExc;
+    return aRet;
+}
+
+uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFErrorRequest::getContinuations() throw (uno::RuntimeException)
+{
+    return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
+}
+
+} // namespace
+
 void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
-    if( ! rErrors.empty() )
+    if( ! rErrors.empty() && mxIH.is() )
     {
-        ImplErrorDialog aDlg( rErrors );
-        aDlg.Execute();
+        task::PDFExportException aExc;
+        aExc.ErrorCodes.realloc( sal_Int32(rErrors.size()) );
+        sal_Int32 i = 0;
+        for( std::set< PDFWriter::ErrorCode >::const_iterator it = rErrors.begin();
+             it != rErrors.end(); ++it, i++ )
+        {
+            aExc.ErrorCodes.getArray()[i] = (sal_Int32)*it;
+        }
+        Reference< task::XInteractionRequest > xReq( new PDFErrorRequest( aExc ) );
+        mxIH->handle( xReq );
     }
 }
 
@@ -939,8 +1006,15 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 
 sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
-    vcl::PDFWriter::PlayMetafileContext aCtx;
+    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
+    Point           aOrigin;
+    Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
+    sal_Bool        bRet = sal_True;
 
+    rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
+    rWriter.SetMapMode( rMtf.GetPrefMapMode() );
+
+    vcl::PDFWriter::PlayMetafileContext aCtx;
     GDIMetaFile aMtf;
     if( mbRemoveTransparencies )
     {
@@ -956,14 +1030,6 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     aCtx.m_bOnlyLosslessCompression = mbUseLosslessCompression;
     aCtx.m_nJPEGQuality             = mnQuality;
 
-
-    const Size      aSizePDF( OutputDevice::LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_POINT ) );
-    Point           aOrigin;
-    Rectangle       aPageRect( aOrigin, rMtf.GetPrefSize() );
-    sal_Bool        bRet = sal_True;
-
-    rWriter.NewPage( aSizePDF.Width(), aSizePDF.Height() );
-    rWriter.SetMapMode( rMtf.GetPrefMapMode() );
 
     basegfx::B2DRectangle aB2DRect( aPageRect.Left(), aPageRect.Top(), aPageRect.Right(), aPageRect.Bottom() );
     rWriter.SetClipRegion( basegfx::B2DPolyPolygon( basegfx::tools::createPolygonFromRect( aB2DRect ) ) );

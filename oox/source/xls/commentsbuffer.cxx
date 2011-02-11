@@ -26,31 +26,27 @@
  ************************************************************************/
 
 #include "oox/xls/commentsbuffer.hxx"
+
 #include <com/sun/star/sheet/XSheetAnnotationAnchor.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
 #include "oox/helper/attributelist.hxx"
-#include "oox/helper/recordinputstream.hxx"
 #include "oox/vml/vmlshape.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/drawingfragment.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::drawing::XShape;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::sheet::XSheetAnnotation;
-using ::com::sun::star::sheet::XSheetAnnotationAnchor;
-using ::com::sun::star::sheet::XSheetAnnotationShapeSupplier;
-using ::com::sun::star::sheet::XSheetAnnotations;
-using ::com::sun::star::sheet::XSheetAnnotationsSupplier;
-
 namespace oox {
 namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::drawing;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -73,7 +69,7 @@ void Comment::importComment( const AttributeList& rAttribs )
     getAddressConverter().convertToCellRangeUnchecked( maModel.maRange, rAttribs.getString( XML_ref, OUString() ), getSheetIndex() );
 }
 
-void Comment::importComment( RecordInputStream& rStrm )
+void Comment::importComment( SequenceInputStream& rStrm )
 {
     BinRange aBinRange;
     rStrm >> maModel.mnAuthorId >> aBinRange;
@@ -89,7 +85,7 @@ RichStringRef Comment::createText()
 
 void Comment::finalizeImport()
 {
-    // OOBIN format stores cell range instead of cell address, use first cell of this range
+    // BIFF12 stores cell range instead of cell address, use first cell of this range
     OSL_ENSURE( (maModel.maRange.StartColumn == maModel.maRange.EndColumn) &&
         (maModel.maRange.StartRow == maModel.maRange.EndRow),
         "Comment::finalizeImport - comment anchor should be a single cell" );
@@ -115,9 +111,8 @@ void Comment::finalizeImport()
                 // position and formatting
                 pNoteShape->convertFormatting( xAnnoShape );
                 // visibility
-                const ::oox::vml::ShapeModel::ShapeClientDataPtr& rxClientData = pNoteShape->getShapeModel().mxClientData;
-                bool bVisible = rxClientData.get() && rxClientData->mbVisible;
-                xAnno->setIsVisible( bVisible );
+                const ::oox::vml::ClientData* pClientData = pNoteShape->getClientData();
+                xAnno->setIsVisible( pClientData && pClientData->mbVisible );
             }
         }
     }
@@ -154,4 +149,3 @@ void CommentsBuffer::finalizeImport()
 
 } // namespace xls
 } // namespace oox
-

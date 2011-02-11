@@ -28,7 +28,6 @@
 #include "oox/drawingml/fillpropertiesgroupcontext.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "oox/drawingml/fillproperties.hxx"
@@ -190,7 +189,7 @@ Reference< XFastContextHandler > BlipContext::createFastChildContext(
     {
         case A_TOKEN( biLevel ):
         case A_TOKEN( grayscl ):
-            mrBlipProps.moColorEffect = getToken( nElement );
+            mrBlipProps.moColorEffect = getBaseToken( nElement );
         break;
 
         case A_TOKEN( clrChange ):
@@ -237,7 +236,7 @@ Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
         break;
 
         case A_TOKEN( tile ):
-            mrBlipProps.moBitmapMode = getToken( nElement );
+            mrBlipProps.moBitmapMode = getBaseToken( nElement );
             mrBlipProps.moTileOffsetX = aAttribs.getInteger( XML_tx );
             mrBlipProps.moTileOffsetY = aAttribs.getInteger( XML_ty );
             mrBlipProps.moTileScaleX = aAttribs.getInteger( XML_sx );
@@ -247,7 +246,7 @@ Reference< XFastContextHandler > BlipFillContext::createFastChildContext(
         break;
 
         case A_TOKEN( stretch ):
-            mrBlipProps.moBitmapMode = getToken( nElement );
+            mrBlipProps.moBitmapMode = getBaseToken( nElement );
             return this;    // for fillRect element
 
         case A_TOKEN( fillRect ):
@@ -279,12 +278,12 @@ Reference< XFastContextHandler > FillPropertiesContext::createFastChildContext(
 {
     switch( nElement )
     {
-        case A_TOKEN( noFill ):     { rFillProps.moFillType = getToken( nElement ); return 0; };
-        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
-        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
-        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
-        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
-        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getToken( nElement ); return 0; };    // TODO
+        case A_TOKEN( noFill ):     { rFillProps.moFillType = getBaseToken( nElement ); return 0; };
+        case A_TOKEN( solidFill ):  { rFillProps.moFillType = getBaseToken( nElement ); return new SolidFillContext( rParent, rxAttribs, rFillProps ); };
+        case A_TOKEN( gradFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new GradientFillContext( rParent, rxAttribs, rFillProps.maGradientProps ); };
+        case A_TOKEN( pattFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new PatternFillContext( rParent, rxAttribs, rFillProps.maPatternProps ); };
+        case A_TOKEN( blipFill ):   { rFillProps.moFillType = getBaseToken( nElement ); return new BlipFillContext( rParent, rxAttribs, rFillProps.maBlipProps ); };
+        case A_TOKEN( grpFill ):    { rFillProps.moFillType = getBaseToken( nElement ); return 0; };    // TODO
     }
     return 0;
 }

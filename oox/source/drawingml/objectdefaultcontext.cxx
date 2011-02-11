@@ -28,8 +28,6 @@
 #include "oox/drawingml/objectdefaultcontext.hxx"
 #include "oox/drawingml/spdefcontext.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::oox::core;
@@ -48,11 +46,11 @@ Reference< XFastContextHandler > objectDefaultContext::createFastChildContext( s
 {
     switch( aElementToken )
     {
-        case NMSP_DRAWINGML|XML_spDef:
+        case A_TOKEN( spDef ):
             return new spDefContext( *this, mrTheme.getSpDef() );
-        case NMSP_DRAWINGML|XML_lnDef:
+        case A_TOKEN( lnDef ):
             return new spDefContext( *this, mrTheme.getLnDef() );
-        case NMSP_DRAWINGML|XML_txDef:
+        case A_TOKEN( txDef ):
             return new spDefContext( *this, mrTheme.getTxDef() );
     }
     return 0;

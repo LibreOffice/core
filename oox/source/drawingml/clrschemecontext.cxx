@@ -26,9 +26,7 @@
  ************************************************************************/
 
 #include "oox/drawingml/clrschemecontext.hxx"
-#include "oox/core/namespaces.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "tokens.hxx"
 
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -99,7 +97,7 @@ Reference< XFastContextHandler > clrSchemeContext::createFastChildContext(
         case A_TOKEN( accent6 ):
         case A_TOKEN( hlink ):
         case A_TOKEN( folHlink ):
-            return new clrSchemeColorContext( *this, mrClrScheme, getToken( nElement ) );
+            return new clrSchemeColorContext( *this, mrClrScheme, getBaseToken( nElement ) );
     }
     return 0;
 }

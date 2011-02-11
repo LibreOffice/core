@@ -627,10 +627,9 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
 
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->attribute("isTextAppend", xTextAppend.is());
-    dmapper_logger->attribute("isIgnor", getTableManager().isIgnore());
 #endif
 
-    if(xTextAppend.is() && ! getTableManager( ).isIgnore())
+    if(xTextAppend.is() && ! getTableManager( ).isIgnore() && pParaContext != NULL)
     {
         try
         {
@@ -649,7 +648,10 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
               old _and_ new DropCap must not occur
              */
 
-            bool bIsDropCap = pParaContext->IsFrameMode() && sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+            bool bIsDropCap =
+                pParaContext->IsFrameMode() &&
+                sal::static_int_cast<Id>(pParaContext->GetDropCap()) != NS_ooxml::LN_Value_wordprocessingml_ST_DropCap_none;
+
             style::DropCapFormat aDrop;
             ParagraphPropertiesPtr pToBeSavedProperties;
             bool bKeepLastParagraphProperties = false;

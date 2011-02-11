@@ -26,21 +26,24 @@
  ************************************************************************/
 
 #include "oox/core/binaryfilterbase.hxx"
-#include "oox/ole/olestorage.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::io::XInputStream;
-using ::com::sun::star::io::XStream;
+#include "oox/ole/olestorage.hxx"
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-BinaryFilterBase::BinaryFilterBase( const Reference< XMultiServiceFactory >& rxGlobalFactory ) :
-    FilterBase( rxGlobalFactory )
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::uno;
+
+using ::rtl::OUString;
+
+// ============================================================================
+
+BinaryFilterBase::BinaryFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+    FilterBase( rxContext )
 {
 }
 
@@ -52,16 +55,15 @@ BinaryFilterBase::~BinaryFilterBase()
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XInputStream >& rxInStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxInStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxInStream, true ) );
 }
 
 StorageRef BinaryFilterBase::implCreateStorage( const Reference< XStream >& rxOutStream ) const
 {
-    return StorageRef( new ::oox::ole::OleStorage( getGlobalFactory(), rxOutStream, true ) );
+    return StorageRef( new ::oox::ole::OleStorage( getServiceFactory(), rxOutStream, true ) );
 }
 
 // ============================================================================
 
 } // namespace core
 } // namespace oox
-

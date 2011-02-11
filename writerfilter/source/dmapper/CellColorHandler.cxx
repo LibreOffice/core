@@ -29,6 +29,7 @@
 #include <doctok/resourceids.hxx>
 #include <ConversionHelper.hxx>
 #include <ooxml/resourceids.hxx>
+#include "dmapperLoggers.hxx"
 
 #define OOXML_COLOR_AUTO 0x0a //todo: AutoColor needs symbol
 
@@ -43,10 +44,11 @@ using namespace ::writerfilter;
 
   -----------------------------------------------------------------------*/
 CellColorHandler::CellColorHandler() :
-    m_nShadowType( 0 ),
-    m_nColor( 0xffffffff ),
-    m_nFillColor( 0xffffffff ),
-    m_bParagraph( false )
+LoggedProperties(dmapper_logger, "CellColorHandler"),
+m_nShadowType( 0 ),
+m_nColor( 0xffffffff ),
+m_nFillColor( 0xffffffff ),
+m_bParagraph( false )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -58,7 +60,7 @@ CellColorHandler::~CellColorHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void CellColorHandler::attribute(Id rName, Value & rVal)
+void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
@@ -119,7 +121,7 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void CellColorHandler::sprm(Sprm & rSprm)
+void CellColorHandler::lcl_sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }

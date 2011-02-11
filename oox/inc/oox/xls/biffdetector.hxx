@@ -28,15 +28,15 @@
 #ifndef OOX_XLS_BIFFDETECTOR_HXX
 #define OOX_XLS_BIFFDETECTOR_HXX
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase2.hxx>
 #include "oox/helper/storagebase.hxx"
 #include "oox/xls/biffhelper.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace lang { class XMultiServiceFactory; }
     namespace beans { struct PropertyValue; }
+    namespace uno { class XComponentContext; }
 } } }
 
 namespace oox { class BinaryInputStream; }
@@ -53,7 +53,8 @@ class BiffDetector : public ::cppu::WeakImplHelper2<
 {
 public:
     explicit            BiffDetector(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxFactory );
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
+                            throw( ::com::sun::star::uno::RuntimeException );
 
     virtual             ~BiffDetector();
 
@@ -63,7 +64,7 @@ public:
     /** Detects the BIFF version and workbook stream name of the passed storage. */
     static BiffType     detectStorageBiffVersion(
                             ::rtl::OUString& orWorkbookStreamName,
-                            StorageRef xStorage );
+                            const StorageRef& rxStorage );
 
     // com.sun.star.lang.XServiceInfo interface -------------------------------
 
@@ -84,8 +85,8 @@ public:
                             throw( ::com::sun::star::uno::RuntimeException );
 
 private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
-                        mxFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+                        mxContext;
 };
 
 // ============================================================================
@@ -94,4 +95,3 @@ private:
 } // namespace oox
 
 #endif
-

@@ -26,16 +26,19 @@
  ************************************************************************/
 
 #include "oox/helper/textinputstream.hxx"
+
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/helper/binaryinputstream.hxx"
+
+namespace oox {
+
+// ============================================================================
 
 using ::rtl::OStringBuffer;
 using ::rtl::OStringToOUString;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
-
-namespace oox {
 
 // ============================================================================
 
@@ -125,4 +128,3 @@ OUString TextInputStream::readLine()
 // ============================================================================
 
 } // namespace oox
-

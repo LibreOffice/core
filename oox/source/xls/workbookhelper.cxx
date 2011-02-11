@@ -26,28 +26,28 @@
  ************************************************************************/
 
 #include "oox/xls/workbookhelper.hxx"
-#include <osl/thread.h>
+
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/document/XActionLockable.hpp>
-#include <com/sun/star/table/CellAddress.hpp>
-#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XDatabaseRange.hpp>
+#include <com/sun/star/sheet/XDatabaseRanges.hpp>
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#include <com/sun/star/sheet/XDatabaseRanges.hpp>
-#include <com/sun/star/sheet/XExternalDocLinks.hpp>
+#include <com/sun/star/sheet/XSpreadsheet.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#include "properties.hxx"
+#include <com/sun/star/table/CellAddress.hpp>
+#include <osl/thread.h>
+#include "oox/drawingml/theme.hxx"
 #include "oox/helper/progressbar.hxx"
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/vbaproject.hxx"
-#include "oox/drawingml/theme.hxx"
 #include "oox/xls/addressconverter.hxx"
 #include "oox/xls/biffinputstream.hxx"
 #include "oox/xls/biffcodec.hxx"
+#include "oox/xls/connectionsbuffer.hxx"
 #include "oox/xls/defnamesbuffer.hxx"
 #include "oox/xls/excelchartconverter.hxx"
 #include "oox/xls/excelfilter.hxx"
@@ -63,43 +63,29 @@
 #include "oox/xls/themebuffer.hxx"
 #include "oox/xls/unitconverter.hxx"
 #include "oox/xls/viewsettings.hxx"
-#include "oox/xls/webquerybuffer.hxx"
 #include "oox/xls/workbooksettings.hxx"
 #include "oox/xls/worksheetbuffer.hxx"
 
-using ::rtl::OUString;
-using ::com::sun::star::uno::Any;
-using ::com::sun::star::uno::Reference;
-using ::com::sun::star::uno::Exception;
-using ::com::sun::star::uno::UNO_QUERY;
-using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::com::sun::star::uno::UNO_SET_THROW;
-using ::com::sun::star::container::XIndexAccess;
-using ::com::sun::star::container::XNameAccess;
-using ::com::sun::star::container::XNameContainer;
-using ::com::sun::star::lang::XMultiServiceFactory;
-using ::com::sun::star::awt::XDevice;
-using ::com::sun::star::document::XActionLockable;
-using ::com::sun::star::table::CellAddress;
-using ::com::sun::star::table::CellRangeAddress;
-using ::com::sun::star::table::XCell;
-using ::com::sun::star::table::XCellRange;
-using ::com::sun::star::sheet::XSpreadsheetDocument;
-using ::com::sun::star::sheet::XSpreadsheet;
-using ::com::sun::star::sheet::XNamedRange;
-using ::com::sun::star::sheet::XNamedRanges;
-using ::com::sun::star::sheet::XDatabaseRanges;
-using ::com::sun::star::sheet::XExternalDocLinks;
-using ::com::sun::star::style::XStyle;
-using ::com::sun::star::style::XStyleFamiliesSupplier;
+namespace oox {
+namespace xls {
+
+// ============================================================================
+
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::document;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::sheet;
+using namespace ::com::sun::star::style;
+using namespace ::com::sun::star::table;
+using namespace ::com::sun::star::uno;
+
 using ::oox::core::BinaryFilterBase;
 using ::oox::core::FilterBase;
 using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
-
-namespace oox {
-namespace xls {
+using ::rtl::OUString;
 
 // ============================================================================
 
@@ -145,22 +131,14 @@ public:
 
     /** Returns a reference to the source/target spreadsheet document model. */
     inline Reference< XSpreadsheetDocument > getDocument() const { return mxDoc; }
-    /** Returns the reference device of the document. */
-    Reference< XDevice > getReferenceDevice() const;
-    /** Returns the container for defined names from the Calc document. */
-    Reference< XNamedRanges > getNamedRanges() const;
-    /** Returns the container for database ranges from the Calc document. */
-    Reference< XDatabaseRanges > getDatabaseRanges() const;
-    /** Returns the container for external documents from the Calc document. */
-    Reference< XExternalDocLinks > getExternalDocLinks() const;
-    /** Returns the container for DDE links from the Calc document. */
-    Reference< XNameAccess > getDdeLinks() const;
     /** Returns the cell or page styles container from the Calc document. */
     Reference< XNameContainer > getStyleFamily( bool bPageStyles ) const;
     /** Returns the specified cell or page style from the Calc document. */
     Reference< XStyle > getStyleObject( const OUString& rStyleName, bool bPageStyle ) const;
     /** Creates and returns a defined name on-the-fly in the Calc document. */
     Reference< XNamedRange > createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const;
+    /** Creates and returns a database range on-the-fly in the Calc document. */
+    Reference< XDatabaseRange > createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const;
     /** Creates and returns a com.sun.star.style.Style object for cells or pages. */
     Reference< XStyle > createStyleObject( OUString& orStyleName, bool bPageStyle ) const;
 
@@ -186,8 +164,8 @@ public:
     inline TableBuffer& getTables() const { return *mxTables; }
     /** Returns the scenarios collection. */
     inline ScenarioBuffer& getScenarios() const { return *mxScenarios; }
-    /** Returns the web queries. */
-    inline WebQueryBuffer& getWebQueries() const { return *mxWebQueries; }
+    /** Returns the collection of external data connections. */
+    inline ConnectionsBuffer&  getConnections() const { return *mxConnections; }
     /** Returns the collection of pivot caches. */
     inline PivotCacheBuffer& getPivotCaches() const { return *mxPivotCaches; }
     /** Returns the collection of pivot tables. */
@@ -206,12 +184,12 @@ public:
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
-    // OOX specific -----------------------------------------------------------
+    // OOXML/BIFF12 specific --------------------------------------------------
 
-    /** Returns the base OOX filter object. */
+    /** Returns the base OOXML/BIFF12 filter object. */
     inline XmlFilterBase& getOoxFilter() const { return *mpOoxFilter; }
 
-    // BIFF specific ----------------------------------------------------------
+    // BIFF2-BIFF8 specific ---------------------------------------------------
 
     /** Returns the base BIFF filter object. */
     inline BinaryFilterBase& getBiffFilter() const { return *mpBiffFilter; }
@@ -250,7 +228,7 @@ private:
     typedef ::std::auto_ptr< DefinedNamesBuffer >       DefNamesBfrPtr;
     typedef ::std::auto_ptr< TableBuffer >              TableBfrPtr;
     typedef ::std::auto_ptr< ScenarioBuffer >           ScenarioBfrPtr;
-    typedef ::std::auto_ptr< WebQueryBuffer >           WebQueryBfrPtr;
+    typedef ::std::auto_ptr< ConnectionsBuffer >        ConnectionsBfrPtr;
     typedef ::std::auto_ptr< PivotCacheBuffer >         PivotCacheBfrPtr;
     typedef ::std::auto_ptr< PivotTableBuffer >         PivotTableBfrPtr;
     typedef ::std::auto_ptr< FormulaParser >            FormulaParserPtr;
@@ -284,7 +262,7 @@ private:
     DefNamesBfrPtr      mxDefNames;             /// All defined names.
     TableBfrPtr         mxTables;               /// All tables (database ranges).
     ScenarioBfrPtr      mxScenarios;            /// All scenarios.
-    WebQueryBfrPtr      mxWebQueries;           /// Web queries buffer.
+    ConnectionsBfrPtr   mxConnections;          /// All external data connections.
     PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
     PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
 
@@ -295,11 +273,11 @@ private:
     ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
     PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
 
-    // OOX specific
-    XmlFilterBase*      mpOoxFilter;            /// Base OOX filter object.
+    // OOXML/BIFF12 specific
+    XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
 
-    // BIFF specific
-    BinaryFilterBase*   mpBiffFilter;           /// Base BIFF filter object.
+    // BIFF2-BIFF8 specific
+    BinaryFilterBase*   mpBiffFilter;           /// Base BIFF2-BIFF8 filter object.
     BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
     BiffType            meBiff;                 /// BIFF version for BIFF import/export.
     rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
@@ -311,7 +289,7 @@ private:
 WorkbookData::WorkbookData( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
     mrExcelBase( rFilter ),
-    meFilterType( FILTER_OOX ),
+    meFilterType( FILTER_OOXML ),
     mpOoxFilter( &rFilter ),
     mpBiffFilter( 0 ),
     meBiff( BIFF_UNKNOWN )
@@ -341,46 +319,6 @@ WorkbookData::~WorkbookData()
 }
 
 // document model -------------------------------------------------------------
-
-Reference< XDevice > WorkbookData::getReferenceDevice() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XDevice > xDevice;
-    aPropSet.getProperty( xDevice, PROP_ReferenceDevice );
-    return xDevice;
-}
-
-Reference< XNamedRanges > WorkbookData::getNamedRanges() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XNamedRanges > xNamedRanges;
-    aPropSet.getProperty( xNamedRanges, PROP_NamedRanges );
-    return xNamedRanges;
-}
-
-Reference< XDatabaseRanges > WorkbookData::getDatabaseRanges() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XDatabaseRanges > xDatabaseRanges;
-    aPropSet.getProperty( xDatabaseRanges, PROP_DatabaseRanges );
-    return xDatabaseRanges;
-}
-
-Reference< XExternalDocLinks > WorkbookData::getExternalDocLinks() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XExternalDocLinks > xDocLinks;
-    aPropSet.getProperty( xDocLinks, PROP_ExternalDocLinks );
-    return xDocLinks;
-}
-
-Reference< XNameAccess > WorkbookData::getDdeLinks() const
-{
-    PropertySet aPropSet( mxDoc );
-    Reference< XNameAccess > xDdeLinks;
-    aPropSet.getProperty( xDdeLinks, PROP_DDELinks );
-    return xDdeLinks;
-}
 
 Reference< XNameContainer > WorkbookData::getStyleFamily( bool bPageStyles ) const
 {
@@ -415,16 +353,16 @@ Reference< XStyle > WorkbookData::getStyleObject( const OUString& rStyleName, bo
 
 Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName, sal_Int32 nNameFlags ) const
 {
-    // find an unused name
-    Reference< XNamedRanges > xNamedRanges = getNamedRanges();
-    Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY );
-    if( xNameAccess.is() )
-        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
-
     // create the name and insert it into the Calc document
     Reference< XNamedRange > xNamedRange;
-    if( xNamedRanges.is() && (orName.getLength() > 0) ) try
+    if( orName.getLength() > 0 ) try
     {
+        // find an unused name
+        PropertySet aDocProps( mxDoc );
+        Reference< XNamedRanges > xNamedRanges( aDocProps.getAnyProperty( PROP_NamedRanges ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccess( xNamedRanges, UNO_QUERY_THROW );
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        // create the named range
         xNamedRanges->addNewByName( orName, OUString(), CellAddress( 0, 0, 0 ), nNameFlags );
         xNamedRange.set( xNamedRanges->getByName( orName ), UNO_QUERY );
     }
@@ -433,6 +371,32 @@ Reference< XNamedRange > WorkbookData::createNamedRangeObject( OUString& orName,
     }
     OSL_ENSURE( xNamedRange.is(), "WorkbookData::createNamedRangeObject - cannot create defined name" );
     return xNamedRange;
+}
+
+Reference< XDatabaseRange > WorkbookData::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+{
+    // validate cell range
+    CellRangeAddress aDestRange = rRangeAddr;
+    bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
+
+    // create database range and insert it into the Calc document
+    Reference< XDatabaseRange > xDatabaseRange;
+    if( bValidRange && (orName.getLength() > 0) ) try
+    {
+        // find an unused name
+        PropertySet aDocProps( mxDoc );
+        Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
+        Reference< XNameAccess > xNameAccess( xDatabaseRanges, UNO_QUERY_THROW );
+        orName = ContainerHelper::getUnusedName( xNameAccess, orName, '_' );
+        // create the database range
+        xDatabaseRanges->addNewByName( orName, aDestRange );
+        xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
+    }
+    catch( Exception& )
+    {
+    }
+    OSL_ENSURE( xDatabaseRange.is(), "WorkbookData::createDatabaseRangeObject - cannot create database range" );
+    return xDatabaseRange;
 }
 
 Reference< XStyle > WorkbookData::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
@@ -542,7 +506,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
     mxDefNames.reset( new DefinedNamesBuffer( *this ) );
     mxTables.reset( new TableBuffer( *this ) );
     mxScenarios.reset( new ScenarioBuffer( *this ) );
-    mxWebQueries.reset( new WebQueryBuffer( *this ) );
+    mxConnections.reset( new ConnectionsBuffer( *this ) );
     mxPivotCaches.reset( new PivotCacheBuffer( *this ) );
     mxPivotTables.reset( new PivotTableBuffer( *this ) );
 
@@ -564,7 +528,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
         // disable automatic update of linked sheets and DDE links
         aPropSet.setProperty( PROP_IsExecuteLinkEnabled, false );
         // #i79890# disable automatic update of defined names
-        Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
+        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
         if( xLockable.is() )
             xLockable->addActionLock();
 
@@ -585,7 +549,7 @@ void WorkbookData::initialize( bool bWorkbookFile )
             mxCodecHelper.reset( new BiffCodecHelper( *this ) );
         break;
 
-        case FILTER_OOX:
+        case FILTER_OOXML:
         break;
 
         case FILTER_UNKNOWN:
@@ -602,7 +566,7 @@ void WorkbookData::finalize()
         // #i74668# do not insert default sheets
         aPropSet.setProperty( PROP_IsLoaded, true );
         // #i79890# enable automatic update of defined names (before IsAdjustHeightEnabled!)
-        Reference< XActionLockable > xLockable( getNamedRanges(), UNO_QUERY );
+        Reference< XActionLockable > xLockable( aPropSet.getAnyProperty( PROP_NamedRanges ), UNO_QUERY );
         if( xLockable.is() )
             xLockable->removeActionLock();
         // enable automatic update of linked sheets and DDE links
@@ -613,6 +577,8 @@ void WorkbookData::finalize()
         aPropSet.setProperty( PROP_IsUndoEnabled, true );
         // disable editing read-only documents (e.g. from read-only files)
         aPropSet.setProperty( PROP_IsChangeReadOnlyEnabled, false );
+        // #111099# open forms in alive mode (has no effect, if no controls in document)
+        aPropSet.setProperty( PROP_ApplyFormDesignMode, false );
     }
 }
 
@@ -631,7 +597,7 @@ FilterBase& WorkbookHelper::getBaseFilter() const
 
 Reference< XMultiServiceFactory > WorkbookHelper::getGlobalFactory() const
 {
-    return mrBookData.getBaseFilter().getGlobalFactory();
+    return mrBookData.getBaseFilter().getServiceFactory();
 }
 
 FilterType WorkbookHelper::getFilterType() const
@@ -690,10 +656,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         contains the workbook code name). */
     StorageRef xVbaPrjStrg = mrBookData.getVbaProjectStorage();
     if( xVbaPrjStrg.get() && xVbaPrjStrg->isStorage() )
-    {
-        ::oox::ole::VbaProject aVbaProject( getGlobalFactory(), getBaseFilter().getModel(), CREATE_OUSTRING( "Calc" ) );
-        aVbaProject.importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
-    }
+        getBaseFilter().getVbaProject().importVbaProject( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
 
 // document model -------------------------------------------------------------
@@ -706,31 +669,6 @@ Reference< XSpreadsheetDocument > WorkbookHelper::getDocument() const
 Reference< XMultiServiceFactory > WorkbookHelper::getDocumentFactory() const
 {
     return mrBookData.getBaseFilter().getModelFactory();
-}
-
-Reference< XDevice > WorkbookHelper::getReferenceDevice() const
-{
-    return mrBookData.getReferenceDevice();
-}
-
-Reference< XNamedRanges > WorkbookHelper::getNamedRanges() const
-{
-    return mrBookData.getNamedRanges();
-}
-
-Reference< XDatabaseRanges > WorkbookHelper::getDatabaseRanges() const
-{
-    return mrBookData.getDatabaseRanges();
-}
-
-Reference< XExternalDocLinks > WorkbookHelper::getExternalDocLinks() const
-{
-    return mrBookData.getExternalDocLinks();
-}
-
-Reference< XNameAccess > WorkbookHelper::getDdeLinks() const
-{
-    return mrBookData.getDdeLinks();
 }
 
 Reference< XSpreadsheet > WorkbookHelper::getSheetFromDoc( sal_Int16 nSheet ) const
@@ -804,6 +742,11 @@ Reference< XNamedRange > WorkbookHelper::createNamedRangeObject( OUString& orNam
     return mrBookData.createNamedRangeObject( orName, nNameFlags );
 }
 
+Reference< XDatabaseRange > WorkbookHelper::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr ) const
+{
+    return mrBookData.createDatabaseRangeObject( orName, rRangeAddr );
+}
+
 Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bool bPageStyle ) const
 {
     return mrBookData.createStyleObject( orStyleName, bPageStyle );
@@ -861,9 +804,9 @@ ScenarioBuffer& WorkbookHelper::getScenarios() const
     return mrBookData.getScenarios();
 }
 
-WebQueryBuffer& WorkbookHelper::getWebQueries() const
+ConnectionsBuffer& WorkbookHelper::getConnections() const
 {
-    return mrBookData.getWebQueries();
+    return mrBookData.getConnections();
 }
 
 PivotCacheBuffer& WorkbookHelper::getPivotCaches() const
@@ -903,11 +846,11 @@ PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
     return mrBookData.getPageSettingsConverter();
 }
 
-// OOX specific ---------------------------------------------------------------
+// OOXML/BIFF12 specific ------------------------------------------------------
 
 XmlFilterBase& WorkbookHelper::getOoxFilter() const
 {
-    OSL_ENSURE( mrBookData.getFilterType() == FILTER_OOX, "WorkbookHelper::getOoxFilter - invalid call" );
+    OSL_ENSURE( mrBookData.getFilterType() == FILTER_OOXML, "WorkbookHelper::getOoxFilter - invalid call" );
     return mrBookData.getOoxFilter();
 }
 
@@ -1002,4 +945,3 @@ bool WorkbookHelperRoot::isValid() const
 
 } // namespace xls
 } // namespace oox
-

@@ -28,8 +28,8 @@
 #ifndef OOX_OLE_VBAMODULE_HXX
 #define OOX_OLE_VBAMODULE_HXX
 
-#include <rtl/ustring.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ustring.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
@@ -68,9 +68,24 @@ public:
 
     /** Imports all records for this module until the MODULEEND record. */
     void                importDirRecords( BinaryInputStream& rDirStrm );
-    /** Imports the Basic source code into the passed Basic library. */
-    void                importSourceCode(
+
+    /** Imports the VBA source code into the passed Basic library. */
+    void                createAndImportModule(
                             StorageBase& rVbaStrg,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+    /** Creates an empty Basic module in the passed Basic library. */
+    void                createEmptyModule(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+
+private:
+    /** Reads and returns the VBA source code from the passed storage. */
+    ::rtl::OUString     readSourceCode( StorageBase& rVbaStrg ) const;
+
+    /** Creates a new Basic module and inserts it into the passed Basic library. */
+    void                createModule(
+                            const ::rtl::OUString& rVBASourceCode,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
 

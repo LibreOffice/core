@@ -910,7 +910,7 @@ public:
     void                eraseNameList( const ::rtl::OUString& rListName );
     NameListRef         getNameList( const ::rtl::OUString& rListName ) const;
 
-    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     inline bool         isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:
@@ -1011,7 +1011,7 @@ public:
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
 
-    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier );
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     bool                isPasswordCancelled() const;
 
 protected:

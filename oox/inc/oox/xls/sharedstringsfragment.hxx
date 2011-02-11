@@ -35,21 +35,16 @@ namespace xls {
 
 // ============================================================================
 
-class OoxSharedStringsFragment : public OoxWorkbookFragmentBase
+class SharedStringsFragment : public WorkbookFragmentBase
 {
 public:
-    explicit            OoxSharedStringsFragment(
+    explicit            SharedStringsFragment(
                             const WorkbookHelper& rHelper,
                             const ::rtl::OUString& rFragmentPath );
 
 protected:
-    // oox.core.ContextHandler2Helper interface -------------------------------
-
     virtual ::oox::core::ContextHandlerRef onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs );
-
-    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, RecordInputStream& rStrm );
-
-    // oox.core.FragmentHandler2 interface ------------------------------------
+    virtual ::oox::core::ContextHandlerRef onCreateRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm );
 
     virtual const ::oox::core::RecordInfo* getRecordInfos() const;
     virtual void        finalizeImport();
@@ -61,4 +56,3 @@ protected:
 } // namespace oox
 
 #endif
-

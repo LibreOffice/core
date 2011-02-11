@@ -44,6 +44,8 @@
 
 #include "sfx2/tabdlg.hxx"
 
+#include "com/sun/star/beans/NamedValue.hpp"
+
 // ----------------
 // - ImpPDFDialog -
 // ----------------
@@ -126,14 +128,14 @@ protected:
     sal_Bool                    mbFirstPageLeft;
 
     sal_Bool                    mbEncrypt;
-    String                      msUserPassword;
 
     sal_Bool                    mbRestrictPermissions;
-    String                      msOwnerPassword;
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
     sal_Int32                   mnPrint;
     sal_Int32                   mnChangesAllowed;
     sal_Bool                    mbCanCopyOrExtract;
     sal_Bool                    mbCanExtractForAccessibility;
+    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     sal_Bool                    mbIsRangeChecked;
     String                      msPageRange;
@@ -163,7 +165,7 @@ public:
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getServiceFactory() const { return mxMSF; }
 
 protected:
-    virtual void                PageCreated( USHORT _nId,
+    virtual void                PageCreated( sal_uInt16 _nId,
                                              SfxTabPage& _rPage );
     virtual short               Ok();
 };
@@ -314,12 +316,13 @@ public:
 //class security tab page
 class ImpPDFTabSecurityPage : public SfxTabPage
 {
-    PushButton                  maPbUserPwd;
+    FixedLine                   maFlGroup;
+    PushButton                  maPbSetPwd;
     FixedText                   maFtUserPwd;
     String                      maUserPwdSet;
     String                      maUserPwdUnset;
+    String                      maStrSetPwd;
 
-    PushButton                  maPbOwnerPwd;
     FixedText                   maFtOwnerPwd;
     String                      maOwnerPwdSet;
     String                      maOwnerPwdUnset;
@@ -339,16 +342,18 @@ class ImpPDFTabSecurityPage : public SfxTabPage
     CheckBox                    maCbEnableCopy;
     CheckBox                    maCbEnableAccessibility;
 
-    String                      msUserPassword;
     String                      msUserPwdTitle;
 
-    String                      msOwnerPassword;
+    bool                        mbHaveOwnerPassword;
+    bool                        mbHaveUserPassword;
+    com::sun::star::uno::Sequence< com::sun::star::beans::NamedValue > maPreparedOwnerPassword;
     String                      msOwnerPwdTitle;
+
+    com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder > mxPreparedPasswords;
 
     long nWidth;
 
-    DECL_LINK( ClickmaPbUserPwdHdl, void* );
-    DECL_LINK( ClickmaPbOwnerPwdHdl, void* );
+    DECL_LINK( ClickmaPbSetPwdHdl, void* );
 
     void enablePermissionControls();
 

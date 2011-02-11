@@ -28,8 +28,8 @@
 #ifndef OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 #define OOX_DRAWINGML_TEXTLISTSTYLE_HXX
 
-#include "oox/helper/containerhelper.hxx"
 #include "oox/drawingml/textparagraphproperties.hxx"
+#include "oox/helper/refvector.hxx"
 
 namespace oox { namespace drawingml {
 
@@ -49,10 +49,6 @@ public:
 
     inline const TextParagraphPropertiesVector& getAggregationListStyle() const { return maAggregationListStyle; };
     inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
-
-#if OSL_DEBUG_LEVEL > 0
-    void dump( int nLevels=9 );
-#endif
 
 protected:
 

@@ -36,6 +36,7 @@
 
 #include <pdffilter.hxx>
 #include <pdfdialog.hxx>
+#include <pdfinteract.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -74,6 +75,13 @@ extern "C"
                 xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
                                                 OUString::createFromAscii( pImplName ),
                                                 PDFDialog_createInstance, PDFDialog_getSupportedServiceNames() );
+
+            }
+            else if( aImplName.equals( PDFInteractionHandler_getImplementationName() ) )
+            {
+                xFactory = createSingleFactory( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),
+                                                OUString::createFromAscii( pImplName ),
+                                                PDFInteractionHandler_createInstance, PDFInteractionHandler_getSupportedServiceNames() );
 
             }
 

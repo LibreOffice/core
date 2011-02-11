@@ -83,8 +83,8 @@ struct PageSettingsModel
 
     explicit            PageSettingsModel();
 
-    /** Sets the OOBIN or BIFF print errors mode. */
-    void                setBinPrintErrors( sal_uInt8 nPrintErrors );
+    /** Sets the BIFF print errors mode. */
+    void                setBiffPrintErrors( sal_uInt8 nPrintErrors );
 };
 
 // ============================================================================
@@ -110,17 +110,17 @@ public:
     void                importPicture( const ::oox::core::Relations& rRelations, const AttributeList& rAttribs );
 
     /** Imports the PRINTOPTIONS record from the passed stream. */
-    void                importPrintOptions( RecordInputStream& rStrm );
+    void                importPrintOptions( SequenceInputStream& rStrm );
     /** Imports the PAGEMARGINS record from the passed stream. */
-    void                importPageMargins( RecordInputStream& rStrm );
+    void                importPageMargins( SequenceInputStream& rStrm );
     /** Imports the PAGESETUP record from the passed stream. */
-    void                importPageSetup( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
+    void                importPageSetup( const ::oox::core::Relations& rRelations, SequenceInputStream& rStrm );
     /** Imports the CHARTPAGESETUP record from the passed stream. */
-    void                importChartPageSetup( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
+    void                importChartPageSetup( const ::oox::core::Relations& rRelations, SequenceInputStream& rStrm );
     /** Imports the HEADERFOOTER record from the passed stream. */
-    void                importHeaderFooter( RecordInputStream& rStrm );
+    void                importHeaderFooter( SequenceInputStream& rStrm );
     /** Imports the PICTURE record from the passed stream. */
-    void                importPicture( const ::oox::core::Relations& rRelations, RecordInputStream& rStrm );
+    void                importPicture( const ::oox::core::Relations& rRelations, SequenceInputStream& rStrm );
 
     /** Imports the LEFTMARGIN record from the passed BIFF stream. */
     void                importLeftMargin( BiffInputStream& rStrm );
@@ -217,4 +217,3 @@ private:
 } // namespace oox
 
 #endif
-

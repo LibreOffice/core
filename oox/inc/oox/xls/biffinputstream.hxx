@@ -444,4 +444,3 @@ public:
 } // namespace oox
 
 #endif
-

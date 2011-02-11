@@ -24,27 +24,42 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef INCLUDED_XPATH_LOGGER_HXX
+#define INCLUDED_XPATH_LOGGER_HXX
 
-#ifndef OOX_TOKEN_PROPERTYLIST_HXX
-#define OOX_TOKEN_PROPERTYLIST_HXX
-
+#include <hash_map>
+#include <stack>
+#include <string>
 #include <vector>
-#include <rtl/ustring.hxx>
+#include <boost/shared_ptr.hpp>
+#include <WriterFilterDllApi.hxx>
 
-namespace oox {
-
-// ============================================================================
-
-/** A vector that contains all predefined property names used in the filters. */
-struct PropertyList : public ::std::vector< ::rtl::OUString >
+namespace writerfilter
 {
-    explicit            PropertyList();
-                        ~PropertyList();
+using ::std::hash_map;
+using ::std::stack;
+using ::std::string;
+using ::std::vector;
+
+class WRITERFILTER_DLLPUBLIC XPathLogger
+{
+    typedef hash_map<string, unsigned int> TokenMap_t;
+    typedef boost::shared_ptr<TokenMap_t> TokenMapPointer_t;
+
+    TokenMapPointer_t mp_tokenMap;
+    stack<TokenMapPointer_t> m_tokenMapStack;
+    vector<string> m_path;
+    string m_currentPath;
+
+    void updateCurrentPath();
+
+public:
+    explicit XPathLogger();
+    virtual ~XPathLogger();
+
+    string getXPath() const;
+    void startElement(string _token);
+    void endElement();
 };
-
-// ============================================================================
-
-} // namespace oox
-
-#endif
-
+}
+#endif // INCLUDED_XPATH_LOGGER_HXX

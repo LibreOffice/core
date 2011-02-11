@@ -91,4 +91,3 @@ struct PlotAreaModel
 } // namespace oox
 
 #endif
-

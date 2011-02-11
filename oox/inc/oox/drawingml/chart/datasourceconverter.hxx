@@ -75,4 +75,3 @@ public:
 } // namespace oox
 
 #endif
-

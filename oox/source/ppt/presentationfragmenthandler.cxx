@@ -46,8 +46,6 @@
 #include "oox/ppt/slidefragmenthandler.hxx"
 #include "oox/ppt/layoutfragmenthandler.hxx"
 #include "oox/ppt/pptimport.hxx"
-#include "oox/core/namespaces.hxx"
-#include "tokens.hxx"
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -182,12 +180,12 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 FragmentHandlerRef xSlideFragmentHandler( new SlideFragmentHandler( rFilter, aSlideFragmentPath, pSlidePersistPtr, Slide ) );
 
                 // importing the corresponding masterpage/layout
-                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideLayout" ) );
+                OUString aLayoutFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideLayout" ) );
                 if ( aLayoutFragmentPath.getLength() > 0 )
                 {
                     // importing layout
                     RelationsRef xLayoutRelations = rFilter.importRelations( aLayoutFragmentPath );
-                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "slideMaster" ) );
+                    OUString aMasterFragmentPath = xLayoutRelations->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "slideMaster" ) );
                     if( aMasterFragmentPath.getLength() )
                     {
                         // check if the corresponding masterpage+layout has already been imported
@@ -221,7 +219,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                             FragmentHandlerRef xMasterFragmentHandler( new SlideFragmentHandler( rFilter, aMasterFragmentPath, pMasterPersistPtr, Master ) );
 
                             // set the correct theme
-                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "theme" ) );
+                            OUString aThemeFragmentPath = xMasterFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
                             if( aThemeFragmentPath.getLength() > 0 )
                             {
                                 std::map< OUString, oox::drawingml::ThemePtr >& rThemes( rFilter.getThemes() );
@@ -259,7 +257,7 @@ void PresentationFragmentHandler::endDocument() throw (SAXException, RuntimeExce
                 pSlidePersistPtr->createXShapes( rFilter );
 
                 // now importing the notes page
-                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATIONSTYPE( "notesSlide" ) );
+                OUString aNotesFragmentPath = xSlideFragmentHandler->getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesSlide" ) );
                 if( aNotesFragmentPath.getLength() > 0 )
                 {
                     Reference< XPresentationPage > xPresentationPage( xSlide, UNO_QUERY );
@@ -305,30 +303,30 @@ Reference< XFastContextHandler > PresentationFragmentHandler::createFastChildCon
     Reference< XFastContextHandler > xRet;
     switch( aElementToken )
     {
-    case NMSP_PPT|XML_presentation:
-    case NMSP_PPT|XML_sldMasterIdLst:
-    case NMSP_PPT|XML_notesMasterIdLst:
-    case NMSP_PPT|XML_sldIdLst:
+    case PPT_TOKEN( presentation ):
+    case PPT_TOKEN( sldMasterIdLst ):
+    case PPT_TOKEN( notesMasterIdLst ):
+    case PPT_TOKEN( sldIdLst ):
         break;
-    case NMSP_PPT|XML_sldMasterId:
-        maSlideMasterVector.push_back( xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_id ) );
+    case PPT_TOKEN( sldMasterId ):
+        maSlideMasterVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
         break;
-    case NMSP_PPT|XML_sldId:
-        maSlidesVector.push_back( xAttribs->getOptionalValue( NMSP_RELATIONSHIPS|XML_id ) );
+    case PPT_TOKEN( sldId ):
+        maSlidesVector.push_back( xAttribs->getOptionalValue( R_TOKEN( id ) ) );
         break;
-    case NMSP_PPT|XML_notesMasterId:
-        maNotesMasterVector.push_back( xAttribs->getOptionalValue(NMSP_RELATIONSHIPS|XML_id ) );
+    case PPT_TOKEN( notesMasterId ):
+        maNotesMasterVector.push_back( xAttribs->getOptionalValue(R_TOKEN( id ) ) );
         break;
-    case NMSP_PPT|XML_sldSz:
+    case PPT_TOKEN( sldSz ):
         maSlideSize = GetSize2D( xAttribs );
         break;
-    case NMSP_PPT|XML_notesSz:
+    case PPT_TOKEN( notesSz ):
         maNotesSize = GetSize2D( xAttribs );
         break;
-    case NMSP_PPT|XML_custShowLst:
+    case PPT_TOKEN( custShowLst ):
         xRet.set( new CustomShowListContext( *this, maCustomShowList ) );
         break;
-    case NMSP_PPT|XML_defaultTextStyle:
+    case PPT_TOKEN( defaultTextStyle ):
         xRet.set( new TextListStyleContext( *this, *mpTextListStyle ) );
         break;
     }
