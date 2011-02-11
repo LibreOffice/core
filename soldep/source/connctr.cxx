@@ -32,14 +32,14 @@
 #include <soldep/depwin.hxx>
 #include "math.h"
 
-BOOL Connector::msbHideMode = FALSE;
+sal_Bool Connector::msbHideMode = sal_False;
 
 Connector::Connector( DepWin* pParent, WinBits nWinStyle ) :
 mpStartWin( 0L ),
 mpEndWin( 0L ),
 mnStartId( 0 ),
 mnEndId( 0 ),
-bVisible( FALSE ),
+bVisible( sal_False ),
 len( 70 )
 {
     mpParent = pParent;
@@ -59,7 +59,7 @@ Connector::~Connector()
     mpParent->Invalidate( Rectangle( mEnd - Point( 3, 3), mEnd + Point( 3, 3)));
 }
 
-void Connector::Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin, BOOL bVis )
+void Connector::Initialize( ObjectWin* pStartWin, ObjectWin* pEndWin, sal_Bool bVis )
 {
     mpStartWin = pStartWin;
     mpEndWin = pEndWin;
@@ -141,7 +141,7 @@ void Connector::Paint( const Rectangle& rRect )
     UpdateVisibility();
     } else //IsHideMode
     {
-        //bVisible = TRUE;
+        //bVisible = sal_True;
         if (!(mpStartWin->IsNullObject())) //null_project
         {
              mpStartWin->SetViewMask(1);
@@ -172,12 +172,12 @@ void Connector::DrawOutput( OutputDevice* pDevice, const Point& rOffset )
     }
 }
 
-void Connector::UpdatePosition( ObjectWin* pWin, BOOL bPaint )
+void Connector::UpdatePosition( ObjectWin* pWin, sal_Bool bPaint )
 {
 //  more than one call ?
 //
     Point OldStart, OldEnd;
-    static ULONG nCallCount = 0;
+    static sal_uIntPtr nCallCount = 0;
 
     //MyApp *pApp = (MyApp*)GetpApp();
     //SolDep *pSoldep = pApp->GetSolDep();
@@ -216,7 +216,7 @@ void Connector::UpdatePosition( ObjectWin* pWin, BOOL bPaint )
     }
 }
 
-USHORT Connector::Save( SvFileStream& rOutFile )
+sal_uInt16 Connector::Save( SvFileStream& rOutFile )
 {
     rOutFile << mpStartWin->GetId();
     rOutFile << mpEndWin->GetId();
@@ -224,7 +224,7 @@ USHORT Connector::Save( SvFileStream& rOutFile )
     return 0;
 }
 
-USHORT Connector::Load( SvFileStream& rInFile )
+sal_uInt16 Connector::Load( SvFileStream& rInFile )
 {
     rInFile >> mnStartId;
     rInFile >> mnEndId;
@@ -244,7 +244,7 @@ ObjectWin* Connector::GetOtherWin( ObjectWin* pWin )
     return NULL;
 }
 
-ULONG Connector::GetOtherId( ULONG nId )
+sal_uIntPtr Connector::GetOtherId( sal_uIntPtr nId )
 {
 // get correspondent object id
     if ( mnStartId == nId )
@@ -256,17 +256,17 @@ ULONG Connector::GetOtherId( ULONG nId )
     return NULL;
 }
 
-ULONG Connector::GetLen()
+sal_uIntPtr Connector::GetLen()
 {
     double dx, dy;
 
     dx = mStart.X() - mEnd.X();
     dy = mStart.Y() - mEnd.Y();
 
-    return (ULONG) sqrt( dx * dx + dy * dy );
+    return (sal_uIntPtr) sqrt( dx * dx + dy * dy );
 }
 
-BOOL Connector::IsStart( ObjectWin* pWin )
+sal_Bool Connector::IsStart( ObjectWin* pWin )
 {
     return pWin == mpStartWin;
 }

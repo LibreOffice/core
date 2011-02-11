@@ -108,16 +108,16 @@ MinorMk::MinorMk( GenericInformationList *pList, const ByteString rVersion )
 /*****************************************************************************/
 MinorMk::MinorMk( const ByteString &rMinor, const ByteString &rEnvironment )
 /*****************************************************************************/
-                : bExists( FALSE )
+                : bExists( sal_False )
 {
     ByteString sDelimiter( DirEntry::GetAccessDelimiter(), RTL_TEXTENCODING_ASCII_US );
 
 
     ByteString sSolver( GetEnv( "SOLARVERSION" ));
-    BOOL bNewEnv = TRUE;
+    sal_Bool bNewEnv = sal_True;
     if ( !sSolver.Len()) {
         sSolver = GetEnv( "SOLARVER" );
-        bNewEnv = FALSE;
+        bNewEnv = sal_False;
     }
     ByteString sUPD( GetEnv( "UPD" ));
 
@@ -152,7 +152,7 @@ void MinorMk::ReadMinorMk( const String &rFileName )
 /*****************************************************************************/
 {
     if ( DirEntry( rFileName ).Exists()) {
-        bExists = TRUE;
+        bExists = sal_True;
         SvFileStream aStream( rFileName, STREAM_STD_READ );
         while ( !aStream.IsOpen())
             aStream.Open( rFileName, STREAM_STD_READ );

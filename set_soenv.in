@@ -1612,8 +1612,6 @@ ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "ENABLE_NSS_MODULE",  "@ENABLE_NSS_MODULE@", "e" );
 ToFile( "MOZILLABUILD",  "@MOZILLABUILD@", "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
-ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
-ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
 if ($platform =~ m/linux/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
@@ -1698,6 +1696,16 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
+if ( $platform =~ m/darwin/ )
+{
+# MAXOSX_DEPLOYMENT_TARGET : The minimum version required to run the build,
+# build can assume functions/libraries of that version to be available
+# unless you want to do runtime checks for 10.5 api, you also want to use the 10.4 sdk
+# (safer/easier than dealing with the MAC_OS_X_VERSION_MAX_ALLOWED macro)
+# http://developer.apple.com/technotes/tn2002/tn2064.html
+    ToFile( "MACOSX_DEPLOYMENT_TARGET",       "10.4",       "e" );
+}
+
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
@@ -1966,6 +1974,7 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "MINGW_SHARED_GCCLIB",         "@MINGW_SHARED_GCCLIB@",              "e" );
       ToFile( "MINGW_GCCLIB_EH",      "@MINGW_GCCLIB_EH@",              "e" );
       ToFile( "MINGW_SHARED_GXXLIB",         "@MINGW_SHARED_GXXLIB@",              "e" );
+      ToFile( "MINGW_SHARED_LIBSTDCPP",         "@MINGW_SHARED_LIBSTDCPP@",              "e" );
       ToFile( "MINGW_GCCDLL",         "@MINGW_GCCDLL@",              "e" );
       ToFile( "MINGW_GXXDLL",         "@MINGW_GXXDLL@",              "e" );
    }
@@ -2034,8 +2043,8 @@ if ( $platform =~ m/cygwin/ ) {
 if ($platform =~ m/solaris|darwin|freebsd/)
 {
   ToFile( "GNUPATCH",   "@GNUPATCH@",	"e");
-  ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 }
+ToFile( "GNUCOPY",	"@GNUCP@",	"e");
 # OS/2 define .pl as executable for 4os2
 # use - as switch char for dmake (os2/switchar.c)
 if ($platform =~ m/os2/)
