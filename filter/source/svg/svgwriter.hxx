@@ -163,6 +163,7 @@ private:
     SVGAttributeWriter*     mpContext;
     sal_Bool                mbClipAttrChanged;
     sal_Int32               mnCurClipId;
+    sal_Int32               mnCurPatternId;
     Stack                   maContextStack;
     VirtualDevice*          mpVDev;
     MapMode                 maTargetMapMode;
@@ -183,6 +184,7 @@ private:
     void                    ImplWriteRect( const Rectangle& rRect, long nRadX = 0, long nRadY = 0, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWriteEllipse( const Point& rCenter, long nRadX, long nRadY, const ::rtl::OUString* pStyle = NULL );
     void                    ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bool bLineOnly, const ::rtl::OUString* pStyle = NULL );
+    void                    ImplWritePattern( const PolyPolygon& rPolyPoly, const Hatch* pHatch, const Gradient* pGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     void                    ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle = NULL );
     void                ImplWriteText( const Point& rPos, const String& rText, const sal_Int32* pDXArray, long nWidth, const ::rtl::OUString* pStyle, Color aTextColor );
@@ -193,6 +195,7 @@ private:
 
     void                    ImplWriteActions( const GDIMetaFile& rMtf, const ::rtl::OUString* pStyle, sal_uInt32 nWriteFlags );
     sal_Int32               ImplGetNextClipId() { return mnCurClipId++; }
+    sal_Int32               ImplGetNextPatternId() { return mnCurPatternId++; }
 
 public:
 

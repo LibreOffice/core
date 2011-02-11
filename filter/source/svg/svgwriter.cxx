@@ -39,6 +39,7 @@
 static const char   aXMLElemG[] = "g";
 static const char   aXMLElemDefs[] = "defs";
 static const char   aXMLElemClipPath[] = "clipPath";
+static const char   aXMLElemPattern[] = "pattern";
 static const char   aXMLElemLine[] = "line";
 static const char   aXMLElemRect[] = "rect";
 static const char   aXMLElemEllipse[] = "ellipse";
@@ -66,6 +67,7 @@ static const char   aXMLAttrRY[] = "ry";
 static const char   aXMLAttrWidth[] = "width";
 static const char   aXMLAttrHeight[] = "height";
 static const char   aXMLAttrPoints[] = "points";
+static const char   aXMLAttrPatternUnits[] = "patternUnits";
 static const char   aXMLAttrXLinkHRef[] = "xlink:href";
 
 // --------------
@@ -379,7 +381,8 @@ SVGActionWriter::SVGActionWriter( SvXMLExport& rExport, SVGFontExport& rFontExpo
     mrFontExport( rFontExport ),
     mpContext( NULL ),
     mbClipAttrChanged( sal_False ),
-    mnCurClipId( 1 )
+    mnCurClipId( 1 ),
+    mnCurPatternId( 1 )
 {
     mpVDev = new VirtualDevice;
     mpVDev->EnableOutput( sal_False );
@@ -659,44 +662,77 @@ void SVGActionWriter::ImplWritePolyPolygon( const PolyPolygon& rPolyPoly, sal_Bo
 
 // -----------------------------------------------------------------------------
 
-void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
-                                           const NMSP_RTL::OUString* pStyle, sal_uInt32 nWriteFlags )
+void SVGActionWriter::ImplWritePattern( const PolyPolygon& rPolyPoly,
+                                        const Hatch* pHatch,
+                                        const Gradient* pGradient,
+                                        const NMSP_RTL::OUString* pStyle,
+                                        sal_uInt32 nWriteFlags )
 {
     if( rPolyPoly.Count() )
     {
-        SvXMLElementExport  aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
-        FastString          aClipId;
-        FastString          aClipStyle;
+        SvXMLElementExport aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
 
-        aClipId += B2UCONST( "clip" );
-        aClipId += NMSP_RTL::OUString::valueOf( ImplGetNextClipId() );
+        FastString aPatternId;
+        aPatternId += B2UCONST( "pattern" );
+        aPatternId += GetValueString( ImplGetNextPatternId() );
 
         {
             SvXMLElementExport aElemDefs( mrExport, XML_NAMESPACE_NONE, aXMLElemDefs, TRUE, TRUE );
 
-            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aClipId.GetString() );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrId, aPatternId.GetString() );
+
+            Rectangle aRect( ImplMap( rPolyPoly.GetBoundRect() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aRect.Left() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aRect.Top() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrWidth, GetValueString( aRect.GetWidth() ) );
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrHeight, GetValueString( aRect.GetHeight() ) );
+
+            mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrPatternUnits, NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "userSpaceOnUse") ) );
 
             {
-                SvXMLElementExport aElemClipPath( mrExport, XML_NAMESPACE_NONE, aXMLElemClipPath, TRUE, TRUE );
-                ImplWritePolyPolygon( rPolyPoly, sal_False );
+                SvXMLElementExport aElemPattern( mrExport, XML_NAMESPACE_NONE, aXMLElemPattern, TRUE, TRUE );
+
+                // The origin of a pattern is positioned at (aRect.Left(), aRect.Top()).
+                // So we need to adjust the pattern coordinate.
+                FastString aTransform;
+                aTransform += B2UCONST( "translate" );
+                aTransform += B2UCONST( "(" );
+                aTransform += GetValueString( -aRect.Left() );
+                aTransform += B2UCONST( "," );
+                aTransform += GetValueString( -aRect.Top() );
+                aTransform += B2UCONST( ")" );
+                mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrTransform, aTransform.GetString() );
+
+                {
+                    SvXMLElementExport aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+
+                    GDIMetaFile aTmpMtf;
+                    if( pHatch )
+                        mpVDev->AddHatchActions( rPolyPoly, *pHatch, aTmpMtf );
+                    else if ( pGradient )
+                        mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), *pGradient, aTmpMtf );
+                    ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
+                }
             }
         }
 
-        // create new context with clippath set
-        aClipStyle += B2UCONST( "clip-path:URL(#" );
-        aClipStyle += aClipId.GetString();
-        aClipStyle += B2UCONST( ")" );
-
-        mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, aClipStyle.GetString() );
+        FastString aPatternStyle;
+        aPatternStyle += B2UCONST( "fill:url(#" );
+        aPatternStyle += aPatternId.GetString();
+        aPatternStyle += B2UCONST( ")" );
 
         {
-            GDIMetaFile         aTmpMtf;
-            SvXMLElementExport  aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
-
-            mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
-            ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
+            ImplWritePolyPolygon( rPolyPoly, sal_False, &aPatternStyle.GetString() );
         }
     }
+}
+
+// -----------------------------------------------------------------------------
+
+void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
+                                           const NMSP_RTL::OUString* pStyle, sal_uInt32 nWriteFlags )
+{
+    ImplWritePattern( rPolyPoly, NULL, &rGradient, pStyle, nWriteFlags );
 }
 
 // -----------------------------------------------------------------------------
@@ -1267,10 +1303,7 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf,
                 if( nWriteFlags & SVGWRITER_WRITE_FILL )
                 {
                     const MetaHatchAction*  pA = (const MetaHatchAction*) pAction;
-                    GDIMetaFile             aTmpMtf;
-
-                    mpVDev->AddHatchActions( pA->GetPolyPolygon(), pA->GetHatch(), aTmpMtf );
-                    ImplWriteActions( aTmpMtf, pStyle, nWriteFlags );
+                    ImplWritePattern( pA->GetPolyPolygon(), &pA->GetHatch(), NULL, pStyle, nWriteFlags );
                 }
             }
             break;
