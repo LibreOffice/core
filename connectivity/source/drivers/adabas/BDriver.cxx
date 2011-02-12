@@ -525,23 +525,23 @@ void SAL_CALL ODriver::dropCatalog( const ::rtl::OUString& /*catalogName*/, cons
     ::dbtools::throwFeatureNotImplementedException( "!XDropCatalog::dropCatalog", *this );
 }
 //-----------------------------------------------------------------------------
-// ODBC Environment (gemeinsam fuer alle Connections):
+// ODBC Environment (common for all Connections):
 SQLHANDLE ODriver::EnvironmentHandle(::rtl::OUString &_rPath)
 {
-    // Ist (fuer diese Instanz) bereits ein Environment erzeugt worden?
+    // Has an Environment already been created (for this Instance)?
     if (!m_pDriverHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;
-        // Environment allozieren
+        // allocate Environment
 
-        // ODBC-DLL jetzt laden:
+        // load ODBC-DLL now:
         if (! LoadLibrary_ADABAS(_rPath))
             return SQL_NULL_HANDLE;
 
         if (N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
             return SQL_NULL_HANDLE;
 
-        // In globaler Struktur merken ...
+        // Save in global Structure...
         m_pDriverHandle = h;
         SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_INTEGER);
         OSL_UNUSED( nError );
