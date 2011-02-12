@@ -427,7 +427,6 @@
 #include <vcl/gdimtf.hxx>
 #include <sot/exchange.hxx>
 #include <vcl/wrkwin.hxx>
-#include <tools/sstring.hxx>
 #include <action.hxx>
 #include <sfx2/filedlg.hxx>
 #include <sfx2/iodlg.hxx>
