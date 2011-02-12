@@ -35,7 +35,6 @@
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND
 
-#define  SStringList SUniStringList
 #define  StringList UniStringList
 
 typedef ::std::vector< ByteString* > ByteStringList;
@@ -75,40 +74,6 @@ public:
     SByteStringList&    operator>>  ( SvStream& rStream );
     ByteString*         operator[]( size_t i ) const;
     ByteString*         at( size_t i ) const;
-};
-
-// ---------------------
-// - class SUniStringList -
-// ---------------------
-
-class SUniStringList : public UniStringList
-{
-public:
-                SUniStringList();
-                ~SUniStringList();
-
-                // neuen UniString in Liste einfuegen
-    ULONG       PutString( UniString* );
-    UniString*  RemoveString( const UniString& rName );
-
-                // Position des UniString in Liste, wenn nicht enthalten, dann
-                // return = NOT_THERE
-    ULONG       IsString( UniString* );
-
-                // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
-                // Liste enthalten
-    ULONG       GetPrevString( UniString* );
-};
-
-class Text
-{
-protected:
-    String      aString;
-
-public:
-                Text( char* pChar );
-                Text( String &rStr ) { aString = rStr; }
-    void        Stderr();
 };
 
 #endif
