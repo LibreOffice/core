@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #define ITEMID_MACRO 0
 #include <svl/macitem.hxx>
 #undef ITEMID_MACRO

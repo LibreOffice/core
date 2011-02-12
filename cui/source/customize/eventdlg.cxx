@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ***************************************************************
 #include <svtools/svmedit.hxx>
 #include <tools/diagnose_ex.h>

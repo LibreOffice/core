@@ -26,8 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
 #include <svl/zforlist.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svl/flagitem.hxx>

@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hldocntp.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfac.hxx>

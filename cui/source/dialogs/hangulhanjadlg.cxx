@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include "hangulhanjadlg.hxx"
 #include "hangulhanjadlg.hrc"
 #include "commonlingui.hxx"
@@ -58,15 +55,6 @@
 namespace svx
 {
 //.............................................................................
-/*
-    using HangulHanjaConversion::eSimpleConversion;
-    using HangulHanjaConversion::eHangulBracketed;
-    using HangulHanjaConversion::eHanjaBracketed;
-    using HangulHanjaConversion::eRubyHanjaAbove;
-    using HangulHanjaConversion::eRubyHanjaBelow;
-    using HangulHanjaConversion::eRubyHangulAbove;
-    using HangulHanjaConversion::eRubyHangulBelow;
-*/
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::linguistic2;

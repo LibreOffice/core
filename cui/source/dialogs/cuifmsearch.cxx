@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <tools/debug.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/svapp.hxx>

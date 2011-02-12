@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <sfx2/basedlgs.hxx>
 #include <cuires.hrc>
 #include "dstribut.hxx"

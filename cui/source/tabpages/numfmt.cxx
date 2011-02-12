@@ -26,13 +26,6 @@
  *
  ************************************************************************/
 
-#if !ENABLE_LAYOUT_EXPERIMENTAL
-//#undef ENABLE_LAYOUT
-#endif
-
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 // include ---------------------------------------------------------------
 #include <svl/eitem.hxx>
 #include <svl/intitem.hxx>

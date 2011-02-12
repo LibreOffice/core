@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <SpellAttrib.hxx>
 #include <vcl/font.hxx>
 #include <com/sun/star/uno/Reference.hxx>

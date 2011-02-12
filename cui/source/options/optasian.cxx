@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <optasian.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/unolingu.hxx>

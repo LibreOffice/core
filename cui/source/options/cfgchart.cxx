@@ -26,14 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #include <com/sun/star/uno/Sequence.hxx>
-// header for SvStream
-#include <tools/stream.hxx>
-// header for SAL_STATIC_CAST
-#include <sal/types.h>
+#include <tools/stream.hxx>            // header for SvStream
+#include <sal/types.h>                 // header for SAL_STATIC_CAST
 #include "cfgchart.hxx"
 #include <dialmgr.hxx>
 #include <cuires.hrc>

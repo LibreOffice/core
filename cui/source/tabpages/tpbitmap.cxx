@@ -26,9 +26,6 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 //svdraw.hxx
 #define _SVDRAW_HXX
 #define _SDR_NOITEMS

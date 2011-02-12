@@ -26,11 +26,9 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_cui.hxx"
-
 #define _SVSTDARR_STRINGSISORTDTOR
 #define _SVSTDARR_STRINGSDTOR
+
 #include <svl/svstdarr.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/field.hxx>
