@@ -441,8 +441,9 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
 {
     SCCOL nNewX = -1;
     SCROW nNewY = -1;
-    SCCOL nCurX = -1;
-    SCROW nCurY = -1;
+    // current cursor position.
+    SCCOL nCurX = aViewData.GetCurX();
+    SCROW nCurY = aViewData.GetCurY();
 
     if (aViewData.IsRefMode())
     {
@@ -456,8 +457,8 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     }
     else
     {
-        nNewX = nCurX = aViewData.GetCurX();
-        nNewY = nCurY = aViewData.GetCurY();
+        nNewX = nCurX;
+        nNewY = nCurY;
     }
 
     ScDocument* pDoc = aViewData.GetDocument();
@@ -627,7 +628,7 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
 
 namespace {
 
-bool lcl_isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
+bool isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
 {
     bool bCellProtected = pDoc->HasAttrib(
         nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_PROTECTED);
@@ -641,33 +642,7 @@ bool lcl_isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, b
     return true;
 }
 
-void skipHiddenRows(ScDocument* pDoc, SCTAB nTab, SCROW& rRow, bool bForward)
-{
-    SCROW nFirst, nLast;
-    if (!pDoc->RowHidden(rRow, nTab, &nFirst, &nLast))
-        // This row is visible.  Nothing to do.
-        return;
-
-    if (bForward)
-        rRow = nLast < MAXROW ? nLast + 1 : MAXROW;
-    else
-        rRow = nFirst > 0 ? nFirst - 1 : 0;
-}
-
-void skipHiddenCols(ScDocument* pDoc, SCTAB nTab, SCCOL& rCol, bool bForward)
-{
-    SCCOL nFirst, nLast;
-    if (!pDoc->ColHidden(rCol, nTab, &nFirst, &nLast))
-        // This row is visible.  Nothing to do.
-        return;
-
-    if (bForward)
-        rCol = nLast < MAXCOL ? nLast + 1 : MAXCOL;
-    else
-        rCol = nFirst > 0 ? nFirst - 1 : 0;
-}
-
-void lcl_moveCursorByProtRule(
+void moveCursorByProtRule(
     SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY, SCTAB nTab, ScDocument* pDoc)
 {
     bool bSelectLocked = true;
@@ -685,10 +660,9 @@ void lcl_moveCursorByProtRule(
         {
             for (SCCOL i = 0; i < nMovX; ++i)
             {
-                if (!lcl_isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                if (!isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rCol;
-                skipHiddenCols(pDoc, nTab, rCol, true);
             }
         }
     }
@@ -699,10 +673,9 @@ void lcl_moveCursorByProtRule(
             nMovX = -nMovX;
             for (SCCOL i = 0; i < nMovX; ++i)
             {
-                if (!lcl_isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
+                if (!isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rCol;
-                skipHiddenCols(pDoc, nTab, rCol, false);
             }
         }
     }
@@ -713,10 +686,9 @@ void lcl_moveCursorByProtRule(
         {
             for (SCROW i = 0; i < nMovY; ++i)
             {
-                if (!lcl_isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
+                if (!isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rRow;
-                skipHiddenRows(pDoc, nTab, rRow, true);
             }
         }
     }
@@ -727,10 +699,9 @@ void lcl_moveCursorByProtRule(
             nMovY = -nMovY;
             for (SCROW i = 0; i < nMovY; ++i)
             {
-                if (!lcl_isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
+                if (!isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rRow;
-                skipHiddenRows(pDoc, nTab, rRow, false);
             }
         }
     }
@@ -769,7 +740,7 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
             bSelectUnlocked = pTabProtection->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
         }
 
-        lcl_moveCursorByProtRule(nNewX, nNewY, nMovX, nMovY, nRefTab, pDoc);
+        moveCursorByProtRule(nNewX, nNewY, nMovX, nMovY, nRefTab, pDoc);
 
         if (nMovX)
         {
@@ -781,7 +752,7 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
                 else
                     --nTempX;
             }
-            if (lcl_isCellQualified(pDoc, nTempX, nNewY, nRefTab, bSelectLocked, bSelectUnlocked))
+            if (isCellQualified(pDoc, nTempX, nNewY, nRefTab, bSelectLocked, bSelectUnlocked))
                 nNewX = nTempX;
         }
 
@@ -795,7 +766,7 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
                 else
                     --nTempY;
             }
-            if (lcl_isCellQualified(pDoc, nNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
+            if (isCellQualified(pDoc, nNewX, nTempY, nRefTab, bSelectLocked, bSelectUnlocked))
                 nNewY = nTempY;
         }
 
@@ -812,7 +783,7 @@ void ScTabView::ExpandBlock(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode)
         if (!IsBlockMode())
             InitBlockMode(aViewData.GetCurX(), aViewData.GetCurY(), nTab, true);
 
-        lcl_moveCursorByProtRule(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc);
+        moveCursorByProtRule(nBlockEndX, nBlockEndY, nMovX, nMovY, nTab, pDoc);
 
         if (nBlockEndX < 0)
             nBlockEndX = 0;
