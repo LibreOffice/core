@@ -22,3 +22,4 @@ sa sal\qa\osl\file nmake - u sa_qa_osl_file sa_cppunittester sa_util NULL
 sa sal\qa\osl\module nmake - u sa_qa_osl_module sa_cppunittester sa_util NULL
 sa sal\qa\osl\condition nmake - all sa_qa_osl_condition sa_cppunittester sa_util NULL
 sa sal\qa\rtl\strings nmake - all sa_qa_rt_strings sa_cppunittester sa_util NULL
+sa sal\qa\rtl\oustringbuffer nmake - all sa_qa_rt_oustringbuffer sa_cppunittester sa_util NULL

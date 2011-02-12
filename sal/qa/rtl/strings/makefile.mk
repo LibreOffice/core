@@ -42,7 +42,6 @@ CFLAGSCXX += $(CPPUNIT_CFLAGS)
 
 SHL1TARGET := $(TARGET)
 SHL1OBJS := \
-    $(SLO)$/test_oustringbuffer_utf32.obj \
     $(SLO)$/test_oustring_compare.obj \
     $(SLO)$/test_oustring_convert.obj \
     $(SLO)$/test_oustring_endswith.obj \
