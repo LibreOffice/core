@@ -40,7 +40,7 @@ class SwSpzFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
 
-// OD 2004-03-22 #i26791#
+// #i26791#
 #include <anchoredobject.hxx>
 
 //Sucht ausgehend von pOldAnch einen Anker fuer Absatzgebundene Rahmen.
@@ -54,7 +54,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove = TRUE );
 
 //allg. Basisklasse fuer alle Freifliegenden Rahmen
-// OD 2004-03-22 #i26791# - inherit also from <SwAnchoredFlyFrm>
+// #i26791# - inherit also from <SwAnchoredFlyFrm>
 class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
 {
     //darf Locken. Definiert in frmtool.cxx
@@ -76,7 +76,7 @@ protected:
     SwFlyFrm *pPrevLink,        // Vorgaenger/Nachfolger fuer Verkettung mit
              *pNextLink;        // Textfluss
 
-    // OD 2004-05-27 #i26791# - moved to <SwAnchoredObject>
+    // #i26791# - moved to <SwAnchoredObject>
 //    Point aRelPos;   //Die Relative Position zum Master
 
 private:
@@ -117,8 +117,6 @@ protected:
                                         // invisible layer.
 
     friend class SwNoTxtFrm; // Darf NotifyBackground rufen
-//    virtual void NotifyBackground( SwPageFrm *pPage,
-//                                   const SwRect& rRect, PrepareHint eHint) = 0;
 
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     void MakePrtArea( const SwBorderAttrs &rAttrs );
@@ -137,22 +135,19 @@ protected:
     /** method to assure that anchored object is registered at the correct
         page frame
 
-        OD 2004-07-02 #i28701#
-
-        @author OD
+        #i28701#
     */
     virtual void RegisterAtCorrectPage();
 
-    // --> OD 2006-08-10 #i68520#
+    // #i68520#
     virtual bool _SetObjTop( const SwTwips _nTop );
     virtual bool _SetObjLeft( const SwTwips _nLeft );
-    // <--
 
-    // --> OD 2006-10-05 #i70122#
+    // #i70122#
     virtual const SwRect GetObjBoundRect() const;
-    // <--
+
 public:
-    // OD 2004-03-23 #i26791#
+    // #i26791#
     TYPEINFO();
 
     virtual ~SwFlyFrm();
@@ -184,7 +179,7 @@ public:
 
     SwFlyFrm *FindChainNeighbour( SwFrmFmt &rFmt, SwFrm *pAnch = 0 );
 
-    // OD 2004-03-24 #i26791#
+    // #i26791#
     const SwVirtFlyDrawObj* GetVirtDrawObj() const;
     SwVirtFlyDrawObj *GetVirtDrawObj();
     void NotifyDrawObj();
@@ -223,7 +218,7 @@ public:
 
     SwFrm *FindLastLower();
 
-    // OD 16.04.2003 #i13147# - add parameter <_bForPaint> to avoid load of
+    // #i13147# - add parameter <_bForPaint> to avoid load of
     // the graphic during paint. Default value: sal_False
     BOOL GetContour( PolyPolygon&   rContour,
                      const sal_Bool _bForPaint = sal_False ) const;
@@ -232,40 +227,32 @@ public:
     //Auf dieser Shell painten (PreView, Print-Flag usw. rekursiv beachten)?.
     static BOOL IsPaint( SdrObject *pObj, const ViewShell *pSh );
 
-    /** SwFlyFrm::IsBackgroundTransparent - for feature #99657#
+    /** SwFlyFrm::IsBackgroundTransparent
 
-        OD 12.08.2002
         determines, if background of fly frame has to be drawn transparent
         definition found in /core/layout/paintfrm.cxx
-
-        @author OD
 
         @return true, if background color is transparent or a existing background
         graphic is transparent.
     */
     sal_Bool IsBackgroundTransparent() const;
 
-    /** SwFlyFrm::IsShadowTransparent - for feature #99657#
+    /** SwFlyFrm::IsShadowTransparent
 
-        OD 05.08.2002
         determine, if shadow color of fly frame has to be drawn transparent
         definition found in /core/layout/paintfrm.cxx
-
-        @author OD
 
         @return true, if shadow color is transparent.
     */
     sal_Bool IsShadowTransparent() const;
 
-    // OD 2004-01-19 #110582#
     void Chain( SwFrm* _pAnchor );
     void Unchain();
     void InsertCnt();
     void DeleteCnt();
-    // OD 2004-02-12 #110582#-2
     void InsertColumns();
 
-    // OD 2004-03-23 #i26791# - pure virtual methods of base class <SwAnchoredObject>
+    // #i26791# - pure virtual methods of base class <SwAnchoredObject>
     virtual void MakeObjPos();
     virtual void InvalidateObjPos();
 
@@ -276,12 +263,10 @@ public:
 
     /** method to determine, if a format on the Writer fly frame is possible
 
-        OD 2004-05-11 #i28701#
+        #i28701#
         refine 'IsFormatPossible'-conditions of method
         <SwAnchoredObject::IsFormatPossible()> by:
         format isn't possible, if Writer fly frame is locked resp. col-locked.
-
-        @author OD
     */
     virtual bool IsFormatPossible() const;
 };

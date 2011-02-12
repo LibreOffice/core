@@ -29,7 +29,7 @@
 #define _ANCHOREDOBJECTPOSITION_HXX
 
 #include <swtypes.hxx>
-// OD 2004-03-16 #i11860#
+// #i11860#
 #include <frame.hxx>
 
 class SdrObject;
@@ -41,7 +41,7 @@ class SwRect;
 class SvxLRSpaceItem;
 class SvxULSpaceItem;
 class SwFmtHoriOrient;
-// OD 2004-03-23 #i26701#
+// #i26701#
 class SwAnchoredObject;
 
 namespace objectpositioning
@@ -57,7 +57,7 @@ namespace objectpositioning
          // information about object
             // does the object represents a Writer fly frame
             bool mbIsObjFly;
-            // OD 2004-03-23 #i26791# - anchored object the object belongs to;
+            // #i26791# - anchored object the object belongs to;
             SwAnchoredObject* mpAnchoredObj;
             // frame the object is anchored at
             SwFrm* mpAnchorFrm;
@@ -65,25 +65,20 @@ namespace objectpositioning
             SwContact* mpContact;
             // frame format
             const SwFrmFmt* mpFrmFmt;
-            // --> OD 2006-03-15 #i62875#
+            // #i62875#
             bool mbFollowTextFlow;
-            // <--
-            // --> OD 2006-03-15 #i62875#
+            // #i62875#
             // for compatibility option <DoNotCaptureDrawObjsOnPage>
             bool mbDoNotCaptureAnchoredObj;
-            // <--
 
             /** determine information about object
 
-                OD 30.07.2003 #110978#
                 member <mbIsObjFly>, <mpAnchoredObj>, <mpAnchorFrm>, <mpContact>
                 and <mpFrmFmt> are set
-
-                @author OD
             */
             void _GetInfoAboutObj();
 
-            // --> OD 2006-03-15 #i62875#
+            // #i62875#
             SwTwips _ImplAdjustVertRelPos( const SwTwips _nTopOfAnch,
                                            const bool _bVert,
                                            const SwFrm&  _rPageAlignLayFrm,
@@ -92,7 +87,6 @@ namespace objectpositioning
                                            const bool _bCheckBottom = true ) const;
             SwTwips _ImplAdjustHoriRelPos( const SwFrm&  _rPageAlignLayFrm,
                                            const SwTwips _nProposedRelPosX ) const;
-            // <--
 
         protected:
             SwAnchoredObjectPosition( SdrObject& _rDrawObj );
@@ -123,27 +117,24 @@ namespace objectpositioning
             {
                 return *mpFrmFmt;
             }
-            // --> OD 2006-03-15 #i62875#
+            // #i62875#
             inline bool DoesObjFollowsTextFlow() const
             {
                 return mbFollowTextFlow;
             }
-            // <--
 
          // virtual methods providing data for to character anchored objects.
             virtual bool IsAnchoredToChar() const;
             virtual const SwFrm* ToCharOrientFrm() const;
             virtual const SwRect* ToCharRect() const;
-            // OD 12.11.2003 #i22341#
+            // #i22341#
             virtual SwTwips ToCharTopOfLine() const;
 
         // *********************************************************************
             /** helper method to determine top of a frame for the vertical
                 object positioning
 
-                OD 2004-03-11 #i11860#
-
-                @author OD
+                #i11860#
             */
             SwTwips _GetTopForObjPos( const SwFrm& _rFrm,
                                       const SwRectFn& _fnRect,
@@ -157,7 +148,7 @@ namespace objectpositioning
                                           SwTwips&      _orAlignAreaOffset ) const;
 
         // *********************************************************************
-        // --> OD 2004-06-17 #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
+        // #i26791# - add output parameter <_roVertOffsetToFrmAnchorPos>
             SwTwips _GetVertRelPos( const SwFrm& _rVertOrientFrm,
                                     const SwFrm& _rPageAlignLayFrm,
                                     const sal_Int16 _eVertOrient,
@@ -171,9 +162,9 @@ namespace objectpositioning
             /** adjust calculated vertical in order to keep object inside
                 'page' alignment layout frame.
 
-                OD 2004-07-22 #i31805# - add parameter <_bCheckBottom>
-                OD 2004-10-08 #i26945# - add parameter <_bFollowTextFlow>
-                OD 2006-03-15 #i62875# - made inline, intrinsic actions moved
+                #i31805# - add parameter <_bCheckBottom>
+                #i26945# - add parameter <_bFollowTextFlow>
+                #i62875# - made inline, intrinsic actions moved
                 to private method <_ImplAdjustVertRelPos>, which is only
                 called, if <mbDoNotCaptureAnchoredObj> not set.
 
@@ -201,8 +192,6 @@ namespace objectpositioning
                 input parameter - boolean indicating, if bottom of anchored
                 object has to be checked and thus, (if needed) the proposed
                 relative position has to be adjusted. default value <true>
-
-                @author OD
             */
             inline SwTwips _AdjustVertRelPos( const SwTwips _nTopOfAnch,
                                               const bool _bVert,
@@ -223,10 +212,8 @@ namespace objectpositioning
         // *********************************************************************
             /** calculate relative horizontal position
 
-                --> OD 2004-06-17 #i26791# - add output parameter
+                #i26791# - add output parameter
                 <_roHoriOffsetToFrmAnchorPos>
-
-                @author OD
 
                 @param _rHoriOrientFrm
                 input parameter - frame the horizontal position of the object
@@ -273,11 +260,9 @@ namespace objectpositioning
             /** adjust calculated horizontal in order to keep object inside
                 'page' alignment layout frame for object type position TO_CNTNT
 
-                OD 2006-03-15 #i62875# - made inline, intrinsic actions moved
+                #i62875# - made inline, intrinsic actions moved
                 to private method <_ImplAdjustHoriRelPos>, which is only
                 called, if <mbDoNotCaptureAnchoredObj> not set.
-
-                @author OD
 
                 @param _rPageAlignLayFrm
                 input paramter - layout frame, which determines the 'page area'
@@ -300,8 +285,6 @@ namespace objectpositioning
         // *********************************************************************
             /** toggle given horizontal orientation and relative alignment
 
-                @author OD
-
                 @param _bToggleLeftRight
                 input parameter - boolean indicating, if horizontal orientation
                 and relative alignment has to be toggled.
@@ -321,8 +304,6 @@ namespace objectpositioning
 
         // *********************************************************************
             /** determine alignment values for horizontal position of object
-
-                @author OD
 
                 @param _rHoriOrientFrm
                 input parameter - frame the horizontal position of the object
@@ -371,8 +352,6 @@ namespace objectpositioning
             /** adjust calculated horizontal position in order to draw object
                 aside other objects with same positioning
 
-                @author OD
-
                 @param _rHoriOrientFrm
                 input parameter - frame the horizontal position of the object
                 is oriented at.
@@ -416,8 +395,6 @@ namespace objectpositioning
 
                 method used by <_AdjustHoriRelPosForDrawAside(..)>
 
-                @author OD
-
                 @param _pFly
                 input parameter - fly frame the draw aside check is done for.
 
@@ -460,8 +437,6 @@ namespace objectpositioning
                 depending on parameter _bLeft check is done for left or right
                 positioning.
                 method used by <_DrawAsideFly(..)>
-
-                @author OD
 
                 @param _eRelOrient1
                 input parameter - alignment 1

@@ -41,7 +41,7 @@ namespace objectpositioning
         private:
             // calculated data for object position
             const SwLayoutFrm* mpVertPosOrientFrm;
-            // --> OD 2004-06-17 #i26791#
+            // #i26791#
             // determine offset to frame anchor position according to the
             // positioning alignments
             Point maOffsetToFrmAnchorPos;
@@ -55,7 +55,7 @@ namespace objectpositioning
             virtual bool IsAnchoredToChar() const;
             virtual const SwFrm* ToCharOrientFrm() const;
             virtual const SwRect* ToCharRect() const;
-            // OD 12.11.2003 #i22341#
+            // #i22341#
             virtual SwTwips ToCharTopOfLine() const;
 
             // method to cast <SwAnchoredObjectPosition::GetAnchorFrm()> to
@@ -65,15 +65,12 @@ namespace objectpositioning
         // *********************************************************************
             /** determine frame for horizontal position
 
-                OD 04.08.2003
                 if the given proposed frame is a content frame, the proposed
                 frame is returned.
                 otherwise (given proposed frame is a layout frame),
                 the lower content frames of the proposed frame are checked
                 for the first, that the anchor or a follow of the anchor.
                 If none is found, the proposed frame is returned.
-
-                @author OD
 
                 @param _pProposedFrm
                 input parameter - proposed frame for horizontal position
@@ -88,14 +85,10 @@ namespace objectpositioning
             virtual ~SwToCntntAnchoredObjectPosition();
 
             /** calculate position of object
-
-                @author OD
             */
             virtual void CalcPosition();
 
             /** frame, at which the vertical position is oriented at
-
-                @author OD
             */
             const SwLayoutFrm& GetVertPosOrientFrm() const;
     };
