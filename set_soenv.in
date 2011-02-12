@@ -1786,7 +1786,6 @@ if ( '@JDK@' ne '' )
    ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
    ToFile( "JAVAIFLAGS",      "@JAVAIFLAGS@",    "e" );
    ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
-   ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
    ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
 }
 ToFile( "SCPDEFS",           '@SCPDEFS@',        "e" );

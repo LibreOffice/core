@@ -397,13 +397,6 @@ AC_ARG_ENABLE(Xaw,
         [Disables the use of Xaw for the Netscape/Mozilla plugin.]),
 ,)
 
-AC_ARG_ENABLE(gcjaot,
-    AS_HELP_STRING([--enable-gcjaot],
-        [Build with[[out]] using Ahead of Time java compilation support to speed
-         up buildsi by compiling the jars also to native code.. --enable-gcjaot
-         is only known to work with bytecode created with gcj or ecj.]),
-,)
-
 AC_ARG_ENABLE(check-only,
     AS_HELP_STRING([--enable-check-only],
         [Use this option option if you just want to check your environment.
@@ -3548,37 +3541,6 @@ if test "$SOLAR_JAVA" != ""; then
    AC_SUBST(AWTLIB)
 fi
 
-dnl ===================================================================
-dnl Check for optional gcj for AOT
-dnl ===================================================================
-if test "$SOLAR_JAVA" != ""; then
-  AC_MSG_CHECKING([whether to enable gcj aot compilation])
-  if test -n "$enable_gcjaot" && test "$enable_gcjaot" != "no"; then
-     AC_MSG_RESULT([yes])
-     if test `echo $WITH_JAVA | grep -c "gij"` -eq 0; then
-        gcjaot="gcj"
-     else
-        gcjaot=`echo $WITH_JAVA | $SED -e "s/gij/gcj/g"`
-     fi
-     AC_MSG_RESULT([$gcjaot])
-     if test -n "$with_jdk_home"; then
-        _javac_path="$with_jdk_home/bin/$gcjaot"
-        dnl Check if there is a gcj at all.
-        if test -x "$_javac_path"; then
-           JAVAAOTCOMPILER=$_javac_path
-        fi
-     fi
-     if test -z "$JAVAAOTCOMPILER"; then
-        AC_PATH_PROG(JAVAAOTCOMPILER, $gcjaot)
-     fi
-     if test -z "$JAVAAOTCOMPILER"; then
-        AC_MSG_WARN([$gcjaot not found, set with_jdk_home])
-     fi
-  else
-     AC_MSG_RESULT([no])
-  fi
-fi
-
 AC_SUBST(JAVA_HOME)
 AC_SUBST(JDK)
 AC_SUBST(JAVAFLAGS)
@@ -3587,7 +3549,6 @@ AC_SUBST(JAVA_TARGET_VER)
 AC_SUBST(JAVAINTERPRETER)
 AC_SUBST(JAVAIFLAGS)
 AC_SUBST(JAVACOMPILER)
-AC_SUBST(JAVAAOTCOMPILER)
 AC_SUBST(JAVADOC)
 
 dnl ===================================================================
