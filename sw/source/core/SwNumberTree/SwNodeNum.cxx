@@ -211,7 +211,7 @@ bool SwNodeNum::HasCountedChildren() const
 {
     bool bResult = false;
 
-    tSwNumberTreeChildren::iterator aIt;
+    tSwNumberTreeChildren::const_iterator aIt;
 
     for (aIt = mChildren.begin(); aIt != mChildren.end(); ++aIt)
     {
