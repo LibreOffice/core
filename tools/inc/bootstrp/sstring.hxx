@@ -31,13 +31,14 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
+#include <vector>
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND
 
 #define  SStringList SUniStringList
 #define  StringList UniStringList
 
-DECLARE_LIST( ByteStringList, ByteString* )
+typedef ::std::vector< ByteString* > ByteStringList;
 DECLARE_LIST( UniStringList, UniString* )
 
 class SvStream;
@@ -46,27 +47,34 @@ class SvStream;
 // - class SStringList -
 // ---------------------
 
-class SByteStringList : public ByteStringList
+class SByteStringList
 {
+private:
+    ByteStringList  maList;
+
 public:
                 SByteStringList();
                 ~SByteStringList();
 
                 // neuen ByteString in Liste einfuegen
-    ULONG       PutString( ByteString* );
-    ByteString*     RemoveString( const ByteString& rName );
+    size_t      PutString( ByteString* );
+    ByteString* RemoveString( const ByteString& rName );
 
                 // Position des ByteString in Liste, wenn nicht enthalten, dann
                 // return = NOT_THERE
-    ULONG       IsString( ByteString* );
+    size_t      IsString( ByteString* );
 
                 // Vorgaenger ermitteln ( auch wenn selbst noch nicht in
                 // Liste enthalten
-    ULONG       GetPrevString( ByteString* );
+    size_t      GetPrevString( ByteString* );
     void        CleanUp();
+    size_t      size() const;
+    ByteString* erase( size_t i );
 
-    SByteStringList& operator<<  ( SvStream& rStream );
-    SByteStringList& operator>>  ( SvStream& rStream );
+    SByteStringList&    operator<<  ( SvStream& rStream );
+    SByteStringList&    operator>>  ( SvStream& rStream );
+    ByteString*         operator[]( size_t i ) const;
+    ByteString*         at( size_t i ) const;
 };
 
 // ---------------------

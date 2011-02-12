@@ -285,7 +285,7 @@ public:
 
     /* insert a new directory
      */
-    ULONG InsertSorted(
+    size_t InsertSorted(
         SourceDirectory *pDirectory     // directory
     )
     {

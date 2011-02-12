@@ -29,10 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#ifndef _TOOLS_STRINGLIST
-#  define _TOOLS_STRINGLIST
-#endif
-
 #define ENABLE_BYTESTRING_STREAM_OPERATORS
 #include <tools/stream.hxx>
 #include "bootstrp/sstring.hxx"
@@ -43,14 +39,39 @@ SByteStringList::SByteStringList()
 
 SByteStringList::~SByteStringList()
 {
+    CleanUp();
 }
 
-ULONG SByteStringList::IsString( ByteString* pStr )
+size_t SByteStringList::size() const {
+    return maList.size();
+}
+
+ByteString* SByteStringList::erase( size_t i ) {
+    ByteString* result = NULL;
+    if ( i < maList.size() ) {
+        ByteStringList::iterator it = maList.begin();
+        ::std::advance( it, i );
+        result = *it;
+        maList.erase( it );
+    }
+    return result;
+}
+
+
+ByteString* SByteStringList::operator[]( size_t i ) const {
+    return ( i < maList.size() ) ? maList[ i ] : NULL;
+}
+
+ByteString* SByteStringList::at( size_t i ) const {
+    return ( i < maList.size() ) ? maList[ i ] : NULL;
+}
+
+size_t SByteStringList::IsString( ByteString* pStr )
 {
-    ULONG nRet = NOT_THERE;
+    size_t nRet = NOT_THERE;
     if ( (nRet = GetPrevString( pStr )) != 0 )
     {
-        ByteString* pString = GetObject( nRet );
+        ByteString* pString = maList[ nRet ];
         if ( *pString == *pStr )
             return nRet;
         else
@@ -58,7 +79,7 @@ ULONG SByteStringList::IsString( ByteString* pStr )
     }
     else
     {
-        ByteString* pString = GetObject( 0 );
+        ByteString* pString = maList.empty() ? NULL : maList[ 0 ];
         if ( pString && (*pString == *pStr) )
             return 0;
         else
@@ -66,22 +87,22 @@ ULONG SByteStringList::IsString( ByteString* pStr )
     }
 }
 
-ULONG SByteStringList::GetPrevString( ByteString* pStr )
+size_t SByteStringList::GetPrevString( ByteString* pStr )
 {
-    ULONG nRet = 0;
+    size_t nRet = 0;
     BOOL bFound = FALSE;
-    ULONG nCountMember = Count();
-    ULONG nUpper = nCountMember;
-    ULONG nLower = 0;
-    ULONG nCurrent = nUpper / 2;
-    ULONG nRem = 0;
+    size_t nCountMember = maList.size();
+    size_t nUpper = nCountMember;
+    size_t nLower = 0;
+    size_t nCurrent = nUpper / 2;
+    size_t nRem = 0;
     ByteString* pString;
 
     do
     {
         if ( (nCurrent == nLower) || (nCurrent == nUpper) )
             return nLower;
-        pString = GetObject( nCurrent );
+        pString = maList[ nCurrent ];
         StringCompare nResult =  pStr->CompareTo( *pString );
         if ( nResult == COMPARE_LESS )
         {
@@ -110,30 +131,36 @@ ULONG SByteStringList::GetPrevString( ByteString* pStr )
 *
 **************************************************************************/
 
-ULONG SByteStringList::PutString( ByteString* pStr )
+size_t SByteStringList::PutString( ByteString* pStr )
 {
-    ULONG nPos = GetPrevString ( pStr );
-    if ( Count() )
+    size_t nPos = GetPrevString ( pStr );
+    if ( maList.size() )
     {
+        ByteString* pString = NULL;
+        pString = maList[ 0 ];
+        if ( pString->CompareTo( *pStr ) == COMPARE_GREATER )
         {
-            ByteString* pString = GetObject( 0 );
-            if ( pString->CompareTo( *pStr ) == COMPARE_GREATER )
-            {
-                Insert( pStr, (ULONG)0 );
-                return (ULONG)0;
-            }
+            maList.insert( maList.begin(), pStr );
+            return 0;
         }
-        ByteString* pString = GetObject( nPos );
+        pString = maList[ nPos ];
         if ( *pStr != *pString )
         {
-            Insert( pStr, nPos+1 );
-            return ( nPos +1 );
+            if ( ++nPos < maList.size() ) {
+                ByteStringList::iterator it = maList.begin();
+                ::std::advance( it, nPos );
+                maList.insert( it, pStr );
+                return nPos;
+            } else {
+                maList.push_back( pStr );
+                return maList.size() - 1;
+            }
         }
     }
     else
     {
-        Insert( pStr );
-        return (ULONG)0;
+        maList.push_back( pStr );
+        return 0;
     }
 
     return NOT_THERE;
@@ -141,61 +168,52 @@ ULONG SByteStringList::PutString( ByteString* pStr )
 
 ByteString* SByteStringList::RemoveString( const ByteString& rName )
 {
-    ULONG i;
-    ByteString* pReturn;
+    ByteString* pReturn = NULL;
 
-    for( i = 0 ; i < Count(); i++ )
+    for ( ByteStringList::iterator it = maList.begin(); it < maList.end(); ++it )
     {
-        if ( rName == *GetObject( i ) )
+        if ( rName == *(*it) )
         {
-            pReturn = GetObject(i);
-            Remove(i);
+            pReturn = *it;
+            maList.erase( it );
             return pReturn;
         }
     }
 
-    return NULL;
+    return pReturn;
 }
 
 void SByteStringList::CleanUp()
 {
-    ByteString* pByteString = First();
-    while (pByteString) {
-        delete pByteString;
-        pByteString = Next();
+    for ( size_t i = 0, n = maList.size(); i < n; ++i ) {
+        delete maList[ i ];
     }
-    Clear();
+    maList.clear();
 }
 
 SByteStringList& SByteStringList::operator<<  ( SvStream& rStream )
 {
     sal_uInt32 nListCount;
     rStream >> nListCount;
-    for ( USHORT i = 0; i < nListCount; i++ ) {
+    for ( sal_uInt32 i = 0; i < nListCount; i++ ) {
         ByteString* pByteString = new ByteString();
         rStream >> *pByteString;
-        Insert (pByteString, LIST_APPEND);
+        maList.push_back( pByteString );
     }
     return *this;
 }
 
 SByteStringList& SByteStringList::operator>>  ( SvStream& rStream )
 {
-    sal_uInt32 nListCount = Count();
+    sal_uInt32 nListCount = maList.size();
     rStream << nListCount;
-    ByteString* pByteString = First();
-    while (pByteString) {
-        rStream << *pByteString;
-        pByteString = Next();
+    for ( size_t i = 0; i < nListCount; ++i ) {
+        rStream << *( maList[ i ] );
     }
     return *this;
 }
 
-
-
-
-
-
+//=============================================================================
 
 SUniStringList::SUniStringList()
 {

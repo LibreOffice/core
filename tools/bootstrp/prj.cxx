@@ -187,11 +187,8 @@ CommandData::~CommandData()
 {
     if ( pDepList )
     {
-        ByteString *pString = pDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pDepList->Next();
+        for ( size_t i = 0, n = pDepList->size(); i < n; ++i ) {
+            delete (*pDepList)[ i ];
         }
         delete pDepList;
 
@@ -314,27 +311,17 @@ Prj::~Prj()
             delete maList[ i ];
         maList.clear();
 
-        ByteString *pString = pPrjDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pPrjDepList->Next();
-        }
+        for ( size_t i = 0, n = pPrjDepList->size(); i < n; ++i )
+            delete (*pPrjDepList)[ i ];
         delete pPrjDepList;
-
         pPrjDepList = NULL;
     }
 
     if ( pPrjInitialDepList )
     {
-        ByteString *pString = pPrjInitialDepList->First();
-        while ( pString )
-        {
-            delete pString;
-            pString = pPrjInitialDepList->Next();
-        }
+        for ( size_t i = 0, n = pPrjInitialDepList->size(); i < n; ++i )
+            delete (*pPrjInitialDepList)[ i ];
         delete pPrjInitialDepList;
-
         pPrjInitialDepList = NULL;
     }
 }
@@ -410,12 +397,12 @@ CommandData* Prj::RemoveDirectory ( ByteString aLogFileName )
             if ( pDataDeps )
             {
                 ByteString* pString;
-                ULONG nDataDepsCount = pDataDeps->Count();
-                for ( ULONG j = nDataDepsCount; j > 0; j-- )
+                size_t nDataDepsCount = pDataDeps->size();
+                for ( size_t j = nDataDepsCount; j > 0; )
                 {
-                    pString = pDataDeps->GetObject( j - 1 );
+                    pString = (*pDataDeps)[ --j ];
                     if ( pString->GetToken( 0, '.') == aLogFileName )
-                        pDataDeps->Remove( pString );
+                        pDataDeps->erase( j );
                 }
             }
         }
@@ -676,13 +663,13 @@ void Star::ExpandPrj_Impl( Prj *pPrj, Prj *pDepPrj )
     ByteString* pDepend;
     ByteString* pPutStr;
     Prj *pNextPrj = NULL;
-    ULONG i, nRetPos;
+    size_t i, nRetPos;
 
     if ( pPrjLst ) {
         pDepLst = pDepPrj->GetDependencies();
         if ( pDepLst ) {
-            for ( i = 0; i < pDepLst->Count(); i++ ) {
-                pDepend = pDepLst->GetObject( i );
+            for ( i = 0; i < pDepLst->size(); i++ ) {
+                pDepend = (*pDepLst)[ i ];
                 pPutStr = new ByteString( *pDepend );
                 nRetPos = pPrjLst->PutString( pPutStr );
                 if( nRetPos == NOT_THERE )
@@ -1175,8 +1162,8 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
             else
                 aDataString+= ByteString(":");
             aDataString += aTab;
-            for ( USHORT i = 0; i< pPrjDepList->Count(); i++ ) {
-                aDataString += *pPrjDepList->GetObject( i );
+            for ( size_t i = 0; i< pPrjDepList->size(); i++ ) {
+                aDataString += *(*pPrjDepList)[ i ];
                 aDataString += aSpace;
             }
             aDataString+= "NULL";
@@ -1222,8 +1209,8 @@ USHORT StarWriter::WritePrj( Prj *pPrj, SvFileStream& rStream )
 
                     pCmdDepList = pCmdData->GetDependencies();
                     if ( pCmdDepList )
-                        for ( USHORT i = 0; i< pCmdDepList->Count(); i++ ) {
-                            aDataString += *pCmdDepList->GetObject( i );
+                        for ( size_t i = 0; i< pCmdDepList->size(); i++ ) {
+                            aDataString += *(*pCmdDepList)[ i ];
                             aDataString += aSpace;
                     }
                     aDataString += "NULL";
@@ -1531,12 +1518,12 @@ Prj* StarWriter::RemoveProject ( ByteString aProjectName )
             if ( pPrjDeps )
             {
                 ByteString* pString;
-                ULONG nPrjDepsCount = pPrjDeps->Count();
-                for ( ULONG j = nPrjDepsCount; j > 0; j-- )
+                size_t nPrjDepsCount = pPrjDeps->size();
+                for ( ULONG j = nPrjDepsCount; j > 0; )
                 {
-                    pString = pPrjDeps->GetObject( j - 1 );
+                    pString = (*pPrjDeps)[ --j ];
                     if ( pString->GetToken( 0, '.') == aProjectName )
-                        pPrjDeps->Remove( pString );
+                        pPrjDeps->erase( j );
                 }
             }
         }
