@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 #include <../../inc/tools/string.hxx>
-#include <../../inc/tools/list.hxx>
+#include <vector>
 
 class TextFilter
 {
@@ -82,7 +82,8 @@ void TextFilter::Filter()
 
 #define LINE_LEN 2048
 
-class ByteStringList;
+class MkLine;
+typedef ::std::vector< MkLine* > ByteStringList;
 
 class MkLine
 {
@@ -102,7 +103,6 @@ MkLine::MkLine()
     pPrivateTnrLst = NULL;
 }
 
-DECLARE_LIST( ByteStringList, MkLine * )
 
 class MkFilter : public TextFilter
 {
@@ -125,7 +125,13 @@ MkFilter::MkFilter( ByteString aInFile, ByteString aOutFile ) :
 
 MkFilter::~MkFilter()
 {
+    for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
+        delete (*pTnrLst)[ i ];
+    }
     delete pTnrLst;
+    for ( size_t i = 0, n = pLst->size(); i < n; ++i ) {
+        delete (*pLst)[ i ];
+    }
     delete pLst;
 }
 
@@ -162,7 +168,7 @@ void MkFilter::Filter()
             pMkLine->aLine = *pStr;
             pMkLine->bOut = FALSE;
 
-            pLst->Insert( pMkLine, LIST_APPEND );
+            pLst->push_back( pMkLine );
         }
         else if ( nState == 1 )
         {
@@ -179,7 +185,7 @@ void MkFilter::Filter()
                 p_MkLine->bOut = FALSE;
                 p_MkLine->pPrivateTnrLst = pTnrLst;
                 pTnrLst = new ByteStringList();
-                pLst->Insert( p_MkLine, LIST_APPEND );
+                pLst->push_back( p_MkLine );
                 nState = 0;
                 bInTnrList = FALSE;
             }
@@ -188,7 +194,7 @@ void MkFilter::Filter()
             pMkLine->bOut = FALSE;
 
             if ( bInTnrList )
-                pTnrLst->Insert( pMkLine, LIST_APPEND );
+                pTnrLst->push_back( pMkLine );
         }
         else {
             /* Zeilen ignorieren */;
@@ -197,27 +203,31 @@ void MkFilter::Filter()
     fprintf( stderr, "\n" );
 
     // das File wieder ausgegeben
-    ULONG nLines = pLst->Count();
-    for ( ULONG j=0; j<nLines; j++ )
+    size_t nLines = pLst->size();
+    for ( size_t j=0; j<nLines; j++ )
     {
-        MkLine *pLine = pLst->GetObject( j );
+        MkLine *pLine = (*pLst)[ j ];
         if ( pLine->bHier )
         {
             // die List n - Mal abarbeiten
             for ( USHORT n=1; n<11; n++)
             {
-                ULONG nCount = pLine->pPrivateTnrLst->Count();
-                for ( ULONG i=0; i<nCount; i++ )
+                size_t nCount = pLine->pPrivateTnrLst->size();
+                for ( size_t i=0; i<nCount; i++ )
                 {
-                    MkLine *pMkLine = pLine->pPrivateTnrLst->GetObject(i);
+                    MkLine *pMkLine = (*pLine->pPrivateTnrLst)[ i ];
                     ByteString aLine = pMkLine->aLine;
                     while( aLine.SearchAndReplace( aTnr, ByteString::CreateFromInt32( n )) != (USHORT)-1 ) ;
                     fputs( aLine.GetBuffer(), pOut );
                     fprintf( stderr, "o" );
                 }
             }
-            if ( pLine->pPrivateTnrLst != NULL )
+            if ( pLine->pPrivateTnrLst != NULL ) {
+                for ( size_t i = 0, n = pLine->pPrivateTnrLst->size(); i < n; ++i ) {
+                    delete (*pLine->pPrivateTnrLst)[ i ];
+                }
                 delete pLine->pPrivateTnrLst;
+            }
             pLine->pPrivateTnrLst = NULL;
         }
         if ( pLine->bOut )
