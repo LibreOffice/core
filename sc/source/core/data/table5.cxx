@@ -580,6 +580,12 @@ bool ScTable::SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden)
     else
         bChanged = mpHiddenRows->setFalse(nStartRow, nEndRow);
 
+    if (bChanged)
+    {
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
+
     return bChanged;
 }
 
@@ -590,6 +596,12 @@ bool ScTable::SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden)
         bChanged = mpHiddenCols->setTrue(nStartCol, nEndCol);
     else
         bChanged = mpHiddenCols->setFalse(nStartCol, nEndCol);
+
+    if (bChanged)
+    {
+        if (IsStreamValid())
+            SetStreamValid(false);
+    }
 
     return bChanged;
 }
