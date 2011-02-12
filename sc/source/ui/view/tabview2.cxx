@@ -371,7 +371,23 @@ void ScTabView::GetPageMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, SCsCOL& rPage
 {
     SCCOL nCurX;
     SCROW nCurY;
-    aViewData.GetMoveCursor( nCurX,nCurY );
+    if (aViewData.IsRefMode())
+    {
+        nCurX = aViewData.GetRefEndX();
+        nCurY = aViewData.GetRefEndY();
+    }
+    else if (IsBlockMode())
+    {
+        // block end position.
+        nCurX = nBlockEndX;
+        nCurY = nBlockEndY;
+    }
+    else
+    {
+        // cursor position
+        nCurX = aViewData.GetCurX();
+        nCurY = aViewData.GetCurY();
+    }
 
     ScSplitPos eWhich = aViewData.GetActivePart();
     ScHSplitPos eWhichX = WhichH( eWhich );
