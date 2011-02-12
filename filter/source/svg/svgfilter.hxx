@@ -222,7 +222,7 @@ private:
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
 
-    ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString                     implGetClassFromShape( const Reference< XShape >& rxShape );
     ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
 
                                         DECL_LINK( CalcFieldHdl, EditFieldInfo* );

@@ -510,25 +510,24 @@ sal_Bool SVGFilter::implExportPages( const Reference< XDrawPages >& rxPages,
                 mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "id", implGetValidIDFromInterface( xShapes ) );
 
                 {
-                    SvXMLElementExport  aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-                    const Point         aNullPt;
-
                     {
                         Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
                         if( xExtDocHandler.is() )
                         {
-                            SvXMLElementExport  aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                            OUString            aDesc;
+                            OUString aDesc;
 
                             if( bMaster )
-                                aDesc = B2UCONST( "Master slide" );
+                                aDesc = B2UCONST( "Master_Slide" );
                             else
                                 aDesc = B2UCONST( "Slide" );
 
-                            xExtDocHandler->unknown( aDesc );
+                            mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", aDesc );
                         }
                     }
+
+                    SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
+                    const Point        aNullPt;
 
                     if( bMaster )
                     {
@@ -639,14 +638,8 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
 
                 if( xShapes.is() )
                 {
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", B2UCONST( "Group" ) );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
-
-                    {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                        Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
-
-                        xExtDocHandler->unknown( B2UCONST( "Group" ) );
-                    }
 
                     bRet = implExportShapes( xShapes );
                 }
@@ -663,13 +656,25 @@ sal_Bool SVGFilter::implExportShape( const Reference< XShape >& rxShape )
                 const Size  aSize( aBoundRect.Width, aBoundRect.Height );
 
                 {
+                    mpSVGExport->AddAttribute( XML_NAMESPACE_NONE, "class", implGetClassFromShape( rxShape ) );
                     SvXMLElementExport aExp( *mpSVGExport, XML_NAMESPACE_NONE, "g", TRUE, TRUE );
 
-                    {
-                        SvXMLElementExport                      aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
-                        Reference< XExtendedDocumentHandler >   xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
+                    Reference< XExtendedDocumentHandler > xExtDocHandler( mpSVGExport->GetDocHandler(), UNO_QUERY );
 
-                        xExtDocHandler->unknown( implGetDescriptionFromShape( rxShape ) );
+                    OUString aTitle;
+                    xShapePropSet->getPropertyValue( B2UCONST( "Title" ) ) >>= aTitle;
+                    if( aTitle.getLength() )
+                    {
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "title", TRUE, TRUE );
+                        xExtDocHandler->characters( aTitle );
+                    }
+
+                    OUString aDescription;
+                    xShapePropSet->getPropertyValue( B2UCONST( "Description" ) ) >>= aDescription;
+                    if( aDescription.getLength() )
+                    {
+                        SvXMLElementExport aExp2( *mpSVGExport, XML_NAMESPACE_NONE, "desc", TRUE, TRUE );
+                        xExtDocHandler->characters( aDescription );
                     }
 
                     if( rMtf.GetActionCount() )
@@ -868,7 +873,7 @@ sal_Bool SVGFilter::implCreateObjectsFromBackground( const Reference< XDrawPage 
 
 // -----------------------------------------------------------------------------
 
-OUString SVGFilter::implGetDescriptionFromShape( const Reference< XShape >& rxShape )
+OUString SVGFilter::implGetClassFromShape( const Reference< XShape >& rxShape )
 {
     OUString            aRet;
     const OUString      aShapeType( rxShape->getShapeType() );
@@ -886,7 +891,7 @@ OUString SVGFilter::implGetDescriptionFromShape( const Reference< XShape >& rxSh
     else if( aShapeType.lastIndexOf( B2UCONST( "presentation.DateTimeShape" ) ) != -1 )
         aRet = B2UCONST( "Date/Time" );
     else if( aShapeType.lastIndexOf( B2UCONST( "presentation.SlideNumberShape" ) ) != -1 )
-        aRet = B2UCONST( "Slide Number" );
+        aRet = B2UCONST( "Slide_Number" );
     else
         aRet = B2UCONST( "Drawing" );
 
