@@ -274,6 +274,12 @@ public:
      */
     const sal_Unicode*  getStr() const { return pData->buffer; }
 
+    /**
+        Return a OUString instance reflecting the current content
+        of this OUStringBuffer.
+     */
+    const OUString toString() const { return OUString(pData->buffer); }
+
 
     /**
         The character at the specified index of this string buffer is set
