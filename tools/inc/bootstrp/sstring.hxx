@@ -35,10 +35,7 @@
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND
 
-#define  StringList UniStringList
-
 typedef ::std::vector< ByteString* > ByteStringList;
-DECLARE_LIST( UniStringList, UniString* )
 
 class SvStream;
 
