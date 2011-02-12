@@ -3393,7 +3393,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         SCCOL nCol = 0, nLastCol;
         while (nCol <= MAXCOL)
         {
-            if (pDoc->ColHidden(nCol, nTab, nLastCol))
+            if (pDoc->ColHidden(nCol, nTab, NULL, &nLastCol))
                 // hidden columns.  Unselect them.
                 aMarkData.SetMultiMarkArea(ScRange(nCol, 0, nTab, nLastCol, MAXROW, nTab), false);
 
@@ -3403,7 +3403,7 @@ uno::Reference<sheet::XSheetCellRanges> SAL_CALL ScCellRangesBase::queryVisibleC
         SCROW nRow = 0, nLastRow;
         while (nRow <= MAXROW)
         {
-            if (pDoc->RowHidden(nRow, nTab, nLastRow))
+            if (pDoc->RowHidden(nRow, nTab, NULL, &nLastRow))
                 // These rows are hidden.  Unselect them.
                 aMarkData.SetMultiMarkArea(ScRange(0, nRow, nTab, MAXCOL, nLastRow, nTab), false);
 
@@ -8851,8 +8851,7 @@ void ScTableColumnObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
-            SCCOL nDummy;
-            bool bHidden = pDoc->ColHidden(nCol, nTab, nDummy);
+            bool bHidden = pDoc->ColHidden(nCol, nTab);
             ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
         }
         else if ( pEntry->nWID == SC_WID_UNO_OWIDTH )
@@ -9005,8 +9004,7 @@ void ScTableRowObj::GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntr
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLVIS )
         {
-            SCROW nDummy;
-            bool bHidden = pDoc->RowHidden(nRow, nTab, nDummy);
+            bool bHidden = pDoc->RowHidden(nRow, nTab);
             ScUnoHelpFunctions::SetBoolInAny( rAny, !bHidden );
         }
         else if ( pEntry->nWID == SC_WID_UNO_CELLFILT )

@@ -3189,7 +3189,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
                     {
                         BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
                         SCROW nLastRow = -1;
-                        bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                        bool bHidden = pDoc->RowHidden(nRow, nTab, NULL, &nLastRow);
                         if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                             pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
                     }
@@ -3225,8 +3225,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
         {
             for (SCCOL nCol=static_cast<SCCOL>(nStartNo); nCol<=static_cast<SCCOL>(nEndNo); nCol++)
             {
-                SCCOL nLastCol = -1;
-                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab, nLastCol) )
+                if ( eMode != SC_SIZE_VISOPT || !pDoc->ColHidden(nCol, nTab) )
                 {
                     USHORT nThisSize = nSizeTwips;
 

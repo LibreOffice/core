@@ -607,11 +607,11 @@ void ScTransferObj::InitDocShell()
         //  widths / heights
         //  (must be copied before CopyFromClip, for drawing objects)
 
-        SCCOL nCol, nLastCol;
+        SCCOL nCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
         pDestDoc->SetLayoutRTL(0, pDoc->IsLayoutRTL(nSrcTab));
         for (nCol=nStartX; nCol<=nEndX; nCol++)
-            if ( pDoc->ColHidden(nCol, nSrcTab, nLastCol) )
+            if ( pDoc->ColHidden(nCol, nSrcTab) )
                 pDestDoc->ShowCol( nCol, 0, FALSE );
             else
                 pDestDoc->SetColWidth( nCol, 0, pDoc->GetColWidth( nCol, nSrcTab ) );
@@ -622,8 +622,7 @@ void ScTransferObj::InitDocShell()
         for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
         {
             BYTE nSourceFlags = pDoc->GetRowFlags(nRow, nSrcTab);
-            SCROW nLastRow = -1;
-            if ( pDoc->RowHidden(nRow, nSrcTab, nLastRow) )
+            if ( pDoc->RowHidden(nRow, nSrcTab) )
                 pDestDoc->ShowRow( nRow, 0, FALSE );
             else
             {

@@ -487,7 +487,7 @@ void ScOutputData::DrawGrid( BOOL bGrid, BOOL bPage )
                 for (SCROW i = nYplus1; i <= MAXROW; ++i)
                 {
                     if (i > nHiddenEndRow)
-                        bHiddenRow = pDoc->RowHidden(i, nTab, nHiddenEndRow);
+                        bHiddenRow = pDoc->RowHidden(i, nTab, NULL, &nHiddenEndRow);
                     /* TODO: optimize the row break thing for large hidden
                      * segments where HasRowBreak() has to be called
                      * nevertheless for each row, as a row break is drawn also

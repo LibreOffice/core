@@ -3003,8 +3003,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getPropertyValue( const rtl::OUString& aPro
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
     {
-        SCCOL nLastCol;
-        bool bVis = !pDoc->ColHidden(nStartCol, nTab, nLastCol);
+        bool bVis = !pDoc->ColHidden(nStartCol, nTab);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_OWIDTH ) )
@@ -3266,7 +3265,7 @@ uno::Any SAL_CALL ScTableRowsObj::getPropertyValue( const rtl::OUString& aProper
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLVIS ) )
     {
         SCROW nLastRow;
-        bool bVis = !pDoc->RowHidden(nStartRow, nTab, nLastRow);
+        bool bVis = !pDoc->RowHidden(nStartRow, nTab, NULL, &nLastRow);
         ScUnoHelpFunctions::SetBoolInAny( aAny, bVis );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_CELLFILT ) )

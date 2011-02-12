@@ -1973,13 +1973,12 @@ void ScTabView::PaintRangeFinder( long nNumber )
                             BOOL bHiddenEdge = FALSE;
                             SCROW nTmp;
                             ScDocument* pDoc = aViewData.GetDocument();
-                            SCCOL nLastCol = -1;
-                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab, nLastCol) )
+                            while ( nCol1 > 0 && pDoc->ColHidden(nCol1, nTab) )
                             {
                                 --nCol1;
                                 bHiddenEdge = TRUE;
                             }
-                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab, nLastCol) )
+                            while ( nCol2 < MAXCOL && pDoc->ColHidden(nCol2, nTab) )
                             {
                                 ++nCol2;
                                 bHiddenEdge = TRUE;

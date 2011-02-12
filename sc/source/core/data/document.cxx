@@ -3610,35 +3610,12 @@ bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW* pFirstRow, SCROW* pLas
     return pTab[nTab]->RowHidden(nRow, pFirstRow, pLastRow);
 }
 
-bool ScDocument::RowHidden(SCROW nRow, SCTAB nTab, SCROW& rLastRow)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-    {
-        rLastRow = nRow;
-        return false;
-    }
-
-    return pTab[nTab]->RowHidden(nRow, rLastRow);
-}
-
-
 bool ScDocument::HasHiddenRows(SCROW nStartRow, SCROW nEndRow, SCTAB nTab)
 {
     if (!ValidTab(nTab) || !pTab[nTab])
         return false;
 
     return pTab[nTab]->HasHiddenRows(nStartRow, nEndRow);
-}
-
-bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL& rLastCol)
-{
-    if (!ValidTab(nTab) || !pTab[nTab])
-    {
-        rLastCol = nCol;
-        return false;
-    }
-
-    return pTab[nTab]->ColHidden(nCol, rLastCol);
 }
 
 bool ScDocument::ColHidden(SCCOL nCol, SCTAB nTab, SCCOL* pFirstCol, SCCOL* pLastCol)

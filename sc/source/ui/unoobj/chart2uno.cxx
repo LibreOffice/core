@@ -2456,8 +2456,8 @@ void ScChart2DataSequence::BuildDataCache()
                 {
                     for (SCROW nRow = aRange.aStart.Row(); nRow <= aRange.aEnd.Row(); ++nRow)
                     {
-                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, nLastCol);
-                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, nLastRow);
+                        bool bColHidden = m_pDocument->ColHidden(nCol, nTab, NULL, &nLastCol);
+                        bool bRowHidden = m_pDocument->RowHidden(nRow, nTab, NULL, &nLastRow);
 
                         if (bColHidden || bRowHidden)
                         {

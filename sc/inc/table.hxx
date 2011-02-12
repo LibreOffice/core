@@ -727,9 +727,7 @@ public:
         ::com::sun::star::sheet::TablePageBreakData> GetRowBreakData() const;
 
     bool        RowHidden(SCROW nRow, SCROW* pFirstRow = NULL, SCROW* pLastRow = NULL) const;
-    bool        RowHidden(SCROW nRow, SCROW& rLastRow) const;
     bool        HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const;
-    bool        ColHidden(SCCOL nCol, SCCOL& rLastCol) const;
     bool        ColHidden(SCCOL nCol, SCCOL* pFirstCol = NULL, SCCOL* pLastCol = NULL) const;
     bool        SetRowHidden(SCROW nStartRow, SCROW nEndRow, bool bHidden);
     bool        SetColHidden(SCCOL nStartCol, SCCOL nEndCol, bool bHidden);

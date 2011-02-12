@@ -103,7 +103,7 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
     while (bHOver)              // nY konstant
     {
         --rStartX;
-        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, nLastCol))
+        if (rStartX >= (SCsCOL) nX1 && !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol))
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
             bVOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bVOverlapped;
@@ -125,8 +125,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
             --nArrY;                        // lokale Kopie !
 
         if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-            !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
-            !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
+            !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
+            !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
             (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
         {
             bHOver = pRowInfo[nArrY].pCellInfo[rStartX+1].bHOverlapped;
@@ -143,8 +143,8 @@ void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
 
     const ScMergeAttr* pMerge;
     if (rStartX >= (SCsCOL) nX1 && rStartY >= (SCsROW) nY1 &&
-        !pDoc->ColHidden(rStartX, nTab, nLastCol) &&
-        !pDoc->RowHidden(rStartY, nTab, nLastRow) &&
+        !pDoc->ColHidden(rStartX, nTab, NULL, &nLastCol) &&
+        !pDoc->RowHidden(rStartY, nTab, NULL, &nLastRow) &&
         (SCsROW) pRowInfo[nArrY].nRowNo == rStartY)
     {
         pMerge = (const ScMergeAttr*) &pRowInfo[nArrY].pCellInfo[rStartX+1].pPatternAttr->
@@ -396,7 +396,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         (nThisRow=pThisCol->pItems[nUIndex].nRow) <= nY2 )
                 {
                     if (nThisRow > nHiddenEndRow)
-                        bHiddenRow = RowHidden( nThisRow, nTab, nHiddenEndRow);
+                        bHiddenRow = RowHidden( nThisRow, nTab, NULL, &nHiddenEndRow);
                     if ( !bHiddenRow )
                     {
                         while ( pRowInfo[nArrY].nRowNo < nThisRow )
@@ -487,7 +487,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                         do
                         {
                             SCROW nLastHiddenRow = -1;
-                            bool bRowHidden = RowHidden(nCurRow, nTab, nLastHiddenRow);
+                            bool bRowHidden = RowHidden(nCurRow, nTab, NULL, &nLastHiddenRow);
                             if ( nArrY==0 || !bRowHidden )
                             {
                                 RowInfo* pThisRowInfo = &pRowInfo[nArrY];

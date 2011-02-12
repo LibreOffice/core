@@ -1081,20 +1081,18 @@ void ScUndoAutoFormat::Redo()
             aDestMark.MarkToMulti();
 
             // wie SC_SIZE_VISOPT
-            SCROW nLastRow = -1;
             for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
             {
                 BYTE nOld = pDoc->GetRowFlags(nRow,nTab);
-                bool bHidden = pDoc->RowHidden(nRow, nTab, nLastRow);
+                bool bHidden = pDoc->RowHidden(nRow, nTab);
                 if ( !bHidden && ( nOld & CR_MANUALSIZE ) )
                     pDoc->SetRowFlags( nRow, nTab, nOld & ~CR_MANUALSIZE );
             }
             pDoc->SetOptimalHeight( nStartY, nEndY, nTab, 0, &aVirtDev,
                                         nPPTX, nPPTY, aZoomX, aZoomY, FALSE );
 
-            SCCOL nLastCol = -1;
             for (SCCOL nCol=nStartX; nCol<=nEndX; nCol++)
-                if (!pDoc->ColHidden(nCol, nTab, nLastCol))
+                if (!pDoc->ColHidden(nCol, nTab))
                 {
                     USHORT nThisSize = STD_EXTRA_WIDTH + pDoc->GetOptimalColWidth( nCol, nTab,
                                                 &aVirtDev, nPPTX, nPPTY, aZoomX, aZoomY, bFormula,

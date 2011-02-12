@@ -3045,10 +3045,9 @@ void ScPrintFunc::CalcPages()               // berechnet aPageRect und Seiten au
     nTotalY = 0;
 
     bool bVisCol = false;
-    SCCOL nLastCol = -1;
     for (SCCOL i=nStartCol; i<=nEndCol; i++)
     {
-        bool bHidden = pDoc->ColHidden(i, nPrintTab, nLastCol);
+        bool bHidden = pDoc->ColHidden(i, nPrintTab);
         bool bPageBreak = (pDoc->HasColBreak(i, nPrintTab) & BREAK_PAGE);
         if ( i>nStartCol && bVisCol && bPageBreak )
         {

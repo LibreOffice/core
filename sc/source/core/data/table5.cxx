@@ -540,49 +540,19 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
     return aData.mbValue;
 }
 
-
-bool ScTable::RowHidden(SCROW nRow, SCROW& rLastRow) const
-{
-    rLastRow = nRow;
-    if (!ValidRow(nRow))
-        return true;
-
-    ScFlatBoolRowSegments::RangeData aData;
-    if (!mpHiddenRows->getRangeData(nRow, aData))
-        // search failed.
-        return true;
-
-    rLastRow = aData.mnRow2;
-    return aData.mbValue;
-}
-
 bool ScTable::HasHiddenRows(SCROW nStartRow, SCROW nEndRow) const
 {
     SCROW nRow = nStartRow;
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = RowHidden(nRow, nLastRow);
+        bool bHidden = RowHidden(nRow, NULL, &nLastRow);
         if (bHidden)
             return true;
 
         nRow = nLastRow + 1;
     }
     return false;
-}
-
-bool ScTable::ColHidden(SCCOL nCol, SCCOL& rLastCol) const
-{
-    rLastCol = nCol;
-    if (!ValidCol(nCol))
-        return true;
-
-    ScFlatBoolColSegments::RangeData aData;
-    if (!mpHiddenCols->getRangeData(nCol, aData))
-        return true;
-
-    rLastCol = aData.mnCol2;
-    return aData.mbValue;
 }
 
 bool ScTable::ColHidden(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
@@ -645,7 +615,7 @@ void ScTable::CopyRowHidden(ScTable& rTable, SCROW nStartRow, SCROW nEndRow)
     while (nRow <= nEndRow)
     {
         SCROW nLastRow = -1;
-        bool bHidden = rTable.RowHidden(nRow, nLastRow);
+        bool bHidden = rTable.RowHidden(nRow, NULL, &nLastRow);
         if (nLastRow > nEndRow)
             nLastRow = nEndRow;
         SetRowHidden(nRow, nLastRow, bHidden);

@@ -2391,7 +2391,7 @@ ULONG ScTable::GetRowHeight( SCROW nStartRow, SCROW nEndRow ) const
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!RowHidden(nRow, nLastRow))
+            if (!RowHidden(nRow, NULL, &nLastRow))
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
@@ -2417,7 +2417,7 @@ ULONG ScTable::GetScaledRowHeight( SCROW nStartRow, SCROW nEndRow, double fScale
         while (nRow <= nEndRow)
         {
             SCROW nLastRow = -1;
-            if (!RowHidden(nRow, nLastRow))
+            if (!RowHidden(nRow, NULL, &nLastRow))
             {
                 if (nLastRow > nEndRow)
                     nLastRow = nEndRow;
@@ -2453,7 +2453,7 @@ SCROW ScTable::GetHiddenRowCount( SCROW nRow )
         return 0;
 
     SCROW nLastRow = -1;
-    if (!RowHidden(nRow, nLastRow) || !ValidRow(nLastRow))
+    if (!RowHidden(nRow, NULL, &nLastRow) || !ValidRow(nLastRow))
         return 0;
 
     return nLastRow - nRow + 1;
@@ -2549,7 +2549,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
-        bool bWasVis = !RowHidden(nStartRow, nEndRow);
+        bool bWasVis = !RowHidden(nStartRow, NULL, &nEndRow);
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
@@ -2589,7 +2589,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, bool bShow)
     while (nStartRow <= nRow2)
     {
         SCROW nEndRow = -1;
-        bool bWasVis = !RowHidden(nStartRow, nEndRow);
+        bool bWasVis = !RowHidden(nStartRow, NULL, &nEndRow);
         if (nEndRow > nRow2)
             nEndRow = nRow2;
 
@@ -2783,7 +2783,7 @@ void ScTable::ExtendHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY2 < MAXROW)
     {
         SCROW nEndRow = -1;
-        if (RowHidden(rY2+1, nEndRow) && ValidRow(nEndRow))
+        if (RowHidden(rY2+1, NULL, &nEndRow) && ValidRow(nEndRow))
             rY2 = nEndRow;
     }
 }
@@ -2810,7 +2810,7 @@ void ScTable::StripHidden( SCCOL& rX1, SCROW& rY1, SCCOL& rX2, SCROW& rY2 )
     if (rY1 < rY2)
     {
         SCROW nEndRow = -1;
-        if (RowHidden(rY1, nEndRow) && ValidRow(nEndRow) && nEndRow <= rY2)
+        if (RowHidden(rY1, NULL, &nEndRow) && ValidRow(nEndRow) && nEndRow <= rY2)
             rY1 = nEndRow;
     }
 }

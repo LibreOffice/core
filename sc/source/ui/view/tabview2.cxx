@@ -484,8 +484,7 @@ void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX,
     bool bHFlip = false;
     do
     {
-        SCCOL nLastCol = -1;
-        bSkipCell = pDoc->ColHidden(rCurX, nTab, nLastCol) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
+        bSkipCell = pDoc->ColHidden(rCurX, nTab) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
         if (bSkipProtected && !bSkipCell)
             bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
         if (bSkipUnprotected && !bSkipCell)
@@ -545,7 +544,7 @@ void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, S
     do
     {
         SCROW nLastRow = -1;
-        bSkipCell = pDoc->RowHidden(rCurY, nTab, nLastRow) || pDoc->IsVerOverlapped( rCurX, rCurY, nTab );
+        bSkipCell = pDoc->RowHidden(rCurY, nTab, NULL, &nLastRow) || pDoc->IsVerOverlapped( rCurX, rCurY, nTab );
         if (bSkipProtected && !bSkipCell)
             bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
         if (bSkipUnprotected && !bSkipCell)

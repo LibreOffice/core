@@ -650,9 +650,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid1 )
         {
             Point aPos( pDoc->GetColOffset( nCol1, nTab1 ), pDoc->GetRowOffset( nRow1, nTab1 ) );
-            if (!pDoc->ColHidden(nCol1, nTab1, nLastCol))
+            if (!pDoc->ColHidden(nCol1, nTab1, NULL, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol1, nTab1 ) / 4;
-            if (!pDoc->RowHidden(nRow1, nTab1, nLastRow))
+            if (!pDoc->RowHidden(nRow1, nTab1, NULL, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow1, nTab1 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
@@ -688,9 +688,9 @@ void ScDrawLayer::RecalcPos( SdrObject* pObj, ScDrawObjData& rData, bool bNegati
         if( bValid2 )
         {
             Point aPos( pDoc->GetColOffset( nCol2, nTab2 ), pDoc->GetRowOffset( nRow2, nTab2 ) );
-            if (!pDoc->ColHidden(nCol2, nTab2, nLastCol))
+            if (!pDoc->ColHidden(nCol2, nTab2, NULL, &nLastCol))
                 aPos.X() += pDoc->GetColWidth( nCol2, nTab2 ) / 4;
-            if (!pDoc->RowHidden(nRow2, nTab2, nLastRow))
+            if (!pDoc->RowHidden(nRow2, nTab2, NULL, &nLastRow))
                 aPos.Y() += pDoc->GetRowHeight( nRow2, nTab2 ) / 2;
             TwipsToMM( aPos.X() );
             TwipsToMM( aPos.Y() );
