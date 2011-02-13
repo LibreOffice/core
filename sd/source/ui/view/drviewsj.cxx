@@ -311,7 +311,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
 
         rSet.DisableItem( SID_LINEEND_POLYGON );
         rSet.DisableItem( SID_ENTER_GROUP );
-        // Jetzt (28.10.96) muessen Namen fuer Objekte eindeutig sein
+        // Jetzt muessen Namen fuer Objekte eindeutig sein
         rSet.DisableItem( SID_NAME_GROUP );
         // #i68101#
         rSet.DisableItem( SID_OBJECT_TITLE_DESCRIPTION );
