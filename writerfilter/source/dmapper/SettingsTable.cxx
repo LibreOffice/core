@@ -229,9 +229,8 @@ void SettingsTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Poin
 }
 //returns default TabStop in 1/100th mm
 
-/*-- 22.09.2009 10:29:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 int SettingsTable::GetDefaultTabStop() const
 {
     return ConversionHelper::convertTwipToMM100( m_pImpl->m_nDefaultTabStop );

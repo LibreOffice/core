@@ -37,16 +37,14 @@ using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
 
-/*-- 22.02.2007 12:19:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 WriterFilter::WriterFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
     m_xContext( rxContext )
 {
 }
-/*-- 22.02.2007 12:19:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 WriterFilter::~WriterFilter()
 {
 }

@@ -119,9 +119,8 @@ void DomainMapperTableHandler::startTable(unsigned int nRows,
 #endif
 }
 
-/*-- 22.02.2008 10:18:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr lcl_SearchParentStyleSheetAndMergeProperties(const StyleSheetEntryPtr pStyleSheet, StyleSheetTablePtr pStyleSheetTable)
 {
 #ifdef DEBUG_DOMAINMAPPER

@@ -61,9 +61,8 @@ namespace dmapper
 
 typedef ::std::map< ::rtl::OUString, ::rtl::OUString> StringPairMap_t;
 
-/*-- 21.06.2006 07:34:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetEntry::StyleSheetEntry() :
         sStyleIdentifierI()
         ,sStyleIdentifierD()
@@ -318,9 +317,8 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
     return pProps;
 }
 
-/*-- 06.02.2008 11:30:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct ListCharStylePropertyMap_t
 {
     ::rtl::OUString         sCharStyleName;
@@ -332,9 +330,8 @@ struct ListCharStylePropertyMap_t
         {}
 };
 typedef std::vector< ListCharStylePropertyMap_t > ListCharStylePropertyVector_t;
-/*-- 19.06.2006 12:04:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct StyleSheetTable_Impl
 {
     DomainMapper&                           m_rDMapper;
@@ -351,9 +348,8 @@ struct StyleSheetTable_Impl
 
     ::rtl::OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 };
-/*-- 15.11.2007 08:30:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument ) :
             m_rDMapper( rDMapper ),
             m_xTextDocument( xTextDocument ),
@@ -367,9 +363,8 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, true, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_COMPLEX, true, aVal );
 }
-/*-- 06.02.2008 11:45:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rPropValues )
 {
     ::rtl::OUString sRet;
@@ -413,23 +408,20 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
     }
     return sRet;
 }
-/*-- 19.06.2006 12:04:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable::StyleSheetTable(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument) :
     m_pImpl( new StyleSheetTable_Impl(rDMapper, xTextDocument) )
 {
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 StyleSheetTable::~StyleSheetTable()
 {
     delete m_pImpl;
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::attribute(Id Name, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -535,9 +527,8 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -688,9 +679,8 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 19.06.2006 12:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -780,9 +770,8 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
     }
     return aRet;
 }
-/*-- 21.06.2006 13:35:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1037,9 +1026,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     dmapper_logger->endElement();
 #endif
 }
-/*-- 22.06.2006 15:56:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1053,9 +1041,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByISTD(const ::rtl::OUSt
     }
     return pRet;
 }
-/*-- 28.12.2007 14:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1069,9 +1056,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByStyleName(const ::rtl:
     }
     return pRet;
 }
-/*-- 28.12.2007 14:45:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(const ::rtl::OUString& sIndex)
 {
     StyleSheetEntryPtr pRet;
@@ -1086,9 +1072,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindStyleSheetByConvertedStyleName(con
     return pRet;
 }
 
-/*-- 17.07.2006 11:47:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString sBaseStyle)
 {
     if( !sBaseStyle.getLength() )
@@ -1101,9 +1086,8 @@ const StyleSheetEntryPtr StyleSheetTable::FindParentStyleSheet(::rtl::OUString s
 
     return FindStyleSheetByISTD( sBaseStyle );
 }
-/*-- 21.12.2006 15:58:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 static const sal_Char *aStyleNamePairs[] =
 {
     "Normal",                     "Standard",
@@ -1304,9 +1288,8 @@ void StyleSheetTable::resolveAttributeProperties(Value & val)
     if( pProperties.get())
         pProperties->resolve(*this);
 }
-/*-- 18.07.2007 15:59:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void StyleSheetTable::applyDefaults(bool bParaProperties)
 {
     try{
@@ -1352,9 +1335,8 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     {
     }
 }
-/*-- 05.02.2008 10:27:36---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
     //find out if any of the styles already has the required properties then return it's name

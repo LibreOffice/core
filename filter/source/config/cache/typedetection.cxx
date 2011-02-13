@@ -62,9 +62,8 @@ namespace css = ::com::sun::star;
 // enable/disable special handling for CSV/TXT problem
 #define WORKAROUND_CSV_TXT_BUG_i60158
 
-/*-----------------------------------------------
-    03.07.2003 11:25
------------------------------------------------*/
+
+
 TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,
@@ -73,16 +72,14 @@ TypeDetection::TypeDetection(const css::uno::Reference< css::lang::XMultiService
                         FilterCache::E_TYPE                           );
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 TypeDetection::~TypeDetection()
 {
 }
 
-/*-----------------------------------------------
-    03.11.2003 08:43
------------------------------------------------*/
+
+
 ::rtl::OUString SAL_CALL TypeDetection::queryTypeByURL(const ::rtl::OUString& sURL)
     throw (css::uno::RuntimeException)
 {
@@ -122,9 +119,8 @@ TypeDetection::~TypeDetection()
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    31.10.2003 09:36
------------------------------------------------*/
+
+
 ::rtl::OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               sal_Bool                                         bAllowDeep )
     throw (css::uno::RuntimeException)
@@ -225,9 +221,8 @@ TypeDetection::~TypeDetection()
     return sType;
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescriptor& rDescriptor,
                                                       ::rtl::OUString&               sType      )
 {
@@ -411,9 +406,8 @@ void TypeDetection::impl_checkResultsAndAddBestFilter(::comphelper::MediaDescrip
         {}
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:06
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreSelType,
                                                     const css::util::URL&  aParsedURL ,
                                                           FlatDetection&   rFlatTypes )
@@ -532,9 +526,8 @@ sal_Bool TypeDetection::impl_getPreselectionForType(const ::rtl::OUString& sPreS
     return sal_False;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:09
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPreSelFilter,
                                                       const css::util::URL&  aParsedURL   ,
                                                             FlatDetection&   rFlatTypes   )
@@ -592,9 +585,8 @@ sal_Bool TypeDetection::impl_getPreselectionForFilter(const ::rtl::OUString& sPr
         return sal_False;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:11
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUString& sPreSelDocumentService,
                                                                const css::util::URL&  aParsedURL            ,
                                                                      FlatDetection&   rFlatTypes            )
@@ -670,9 +662,8 @@ sal_Bool TypeDetection::impl_getPreselectionForDocumentService(const ::rtl::OUSt
     return sal_True;
 }
 
-/*-----------------------------------------------
-    14.11.2003 12:21
------------------------------------------------*/
+
+
 void TypeDetection::impl_getPreselection(const css::util::URL&                aParsedURL ,
                                                ::comphelper::MediaDescriptor& rDescriptor,
                                                FlatDetection&                 rFlatTypes )
@@ -709,9 +700,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
         impl_getPreselectionForDocumentService(sSelectedDoc, aParsedURL, rFlatTypes);
 }
 
-/*-----------------------------------------------
-    03.11.2003 09:17
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_detectTypeFlatAndDeep(      ::comphelper::MediaDescriptor& rDescriptor   ,
                                                           const FlatDetection&                 lFlatTypes    ,
                                                                 sal_Bool                       bAllowDeep    ,
@@ -814,9 +804,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.11.2003 09:19
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_detectTypeDeepOnly(      ::comphelper::MediaDescriptor& rDescriptor          ,
                                                        const OUStringList&                  lOutsideUsedDetectors)
 {
@@ -944,9 +933,8 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    07.03.2005 11:13
------------------------------------------------*/
+
+
 void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescriptor)
 {
     // try to seek to 0 ...
@@ -968,9 +956,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     }
 }
 
-/*-----------------------------------------------
-    30.10.2003 15:12
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_askDetectService(const ::rtl::OUString&               sDetectService,
                                                            ::comphelper::MediaDescriptor& rDescriptor   )
 {
@@ -1056,9 +1043,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    17.12.2004 13:47
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(::comphelper::MediaDescriptor& rDescriptor)
 {
     // SAFE ->
@@ -1125,9 +1111,8 @@ void TypeDetection::impl_seekStreamToZero(comphelper::MediaDescriptor& rDescript
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------
-    10.03.2004 10:30
------------------------------------------------*/
+
+
 void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     throw (css::uno::Exception)
 {
@@ -1155,9 +1140,8 @@ void TypeDetection::impl_openStream(::comphelper::MediaDescriptor& rDescriptor)
     }
 }
 
-/*-----------------------------------------------
-    04.07.2003 13:47
------------------------------------------------*/
+
+
 void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescriptor& rDescriptor)
 {
     ::comphelper::MediaDescriptor::iterator pItType   = rDescriptor.find(::comphelper::MediaDescriptor::PROP_TYPENAME()  );
@@ -1168,9 +1152,8 @@ void TypeDetection::impl_removeTypeFilterFromDescriptor(::comphelper::MediaDescr
         rDescriptor.erase(pItFilter);
 }
 
-/*-----------------------------------------------
-    14.10.2003 11:15
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
                                                             const ::rtl::OUString&               sType      )
 {
@@ -1189,9 +1172,8 @@ sal_Bool TypeDetection::impl_validateAndSetTypeOnDescriptor(      ::comphelper::
     return sal_False;
 }
 
-/*-----------------------------------------------
-    04.07.2003 14:01
------------------------------------------------*/
+
+
 sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper::MediaDescriptor& rDescriptor,
                                                               const ::rtl::OUString&               sFilter    )
 {
@@ -1220,17 +1202,15 @@ sal_Bool TypeDetection::impl_validateAndSetFilterOnDescriptor(      ::comphelper
     return sal_False;
 }
 
-/*-----------------------------------------------
-    03.07.2003 10:36
------------------------------------------------*/
+
+
 ::rtl::OUString TypeDetection::impl_getImplementationName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.TypeDetection" ));
 }
 
-/*-----------------------------------------------
-    03.07.2003 11:27
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > TypeDetection::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
@@ -1238,9 +1218,8 @@ css::uno::Sequence< ::rtl::OUString > TypeDetection::impl_getSupportedServiceNam
     return lServiceNames;
 }
 
-/*-----------------------------------------------
-    09.07.2003 08:02
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL TypeDetection::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     TypeDetection* pNew = new TypeDetection(xSMGR);

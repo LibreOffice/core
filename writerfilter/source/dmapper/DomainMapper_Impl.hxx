@@ -190,9 +190,8 @@ typedef std::stack< TextAppendContext >         TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
 typedef std::stack< com::sun::star::uno::Reference< com::sun::star::text::XTextContent > >  TextContentStack;
 
-/*-- 18.07.2006 08:49:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class FIB
 {
     sal_Int32   aFIBData[ NS_rtf::LN_LCBSTTBFUSSR - NS_rtf::LN_WIDENT + 1];
@@ -246,9 +245,8 @@ struct RedlineParams
 };
 typedef boost::shared_ptr< RedlineParams > RedlineParamsPtr;
 
-/*-- 03.03.2008 11:01:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct LineNumberSettings
 {
     bool        bIsOn;
@@ -265,9 +263,8 @@ struct LineNumberSettings
     {}
 
 };
-/*-- 09.06.2006 10:15:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class DomainMapper;
 class WRITERFILTER_DLLPRIVATE DomainMapper_Impl
 {

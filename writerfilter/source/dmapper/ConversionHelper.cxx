@@ -470,16 +470,14 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
     return aNewFormat.makeStringAndClear();
 
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
     return TWIP_TO_MM100( _t );
 }
-/*-- 09.08.2007 09:34:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 convertEMUToMM100(sal_Int32 _t)
 {
     return _t / 360;
@@ -498,9 +496,8 @@ sal_Int32 ConvertColor(sal_Int32 nWordColor)
     sal_Int32 nRet = (t<<24) + (r<<16) + (g<<8) + b;
     return nRet;
 }
-/*-- 27.06.2007 13:42:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 convertTableJustification( sal_Int32 nIntValue )
 {
     sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
@@ -557,9 +554,8 @@ com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTime
     }
     return aRet;
 }
-/*-- 05.03.2008 09:10:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 ConvertNumberingType(sal_Int32 nNFC)
 {
     sal_Int16 nRet;

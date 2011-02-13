@@ -94,9 +94,8 @@ public:
     virtual ::sal_Int32 SAL_CALL available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
     virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException);
 };
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bBmp) :
         m_pBuffer( buf ),
         m_nLength( len ),
@@ -109,23 +108,20 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len, bool bB
     m_nHeaderLength = m_bBmp ? sizeof( aHeader ) / sizeof(sal_uInt8) : 0;
 
 }
-/*-- 01.11.2006 13:56:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 XInputStreamHelper::~XInputStreamHelper()
 {
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     return readSomeBytes( aData, nBytesToRead );
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
         throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -155,31 +151,27 @@ XInputStreamHelper::~XInputStreamHelper()
     }
     return nRet;
 }
-/*-- 01.11.2006 13:56:21---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
     if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
     m_nPosition += nBytesToSkip;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
     return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
-/*-- 01.11.2006 13:56:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException)
 {
 }
-/*-- 02.11.2006 09:34:29---------------------------------------------------
 
- -----------------------------------------------------------------------*/
+
 struct GraphicBorderLine
 {
     sal_Int32   nLineWidth;
@@ -348,9 +340,8 @@ public:
         return bYSizeValid;
     }
 };
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
                              DomainMapper& rDMapper,
@@ -360,16 +351,14 @@ GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xCompo
   ,m_xTextFactory( xTextFactory)
 {
 }
-/*-- 01.11.2006 09:42:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImport::~GraphicImport()
 {
     delete m_pImpl;
 }
-/*-- 01.11.2006 09:45:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::attribute(Id nName, Value & val)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1050,9 +1039,8 @@ uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
     return xResult;
 }
 
-/*-- 22.11.2006 09:46:48---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::ProcessShapeOptions(Value& val)
 {
     sal_Int32 nIntValue = val.getInt();
@@ -1216,9 +1204,8 @@ void GraphicImport::ProcessShapeOptions(Value& val)
             OSL_ENSURE( false, "shape option unsupported?");
     }
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -1348,9 +1335,8 @@ void GraphicImport::sprm(Sprm & rSprm)
     dmapper_logger->endElement();
 #endif
 }
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
@@ -1589,9 +1575,8 @@ uno::Reference< text::XTextContent > GraphicImport::createGraphicObject( const b
     return xGraphicObject;
 }
 
-/*-- 01.11.2006 09:45:02---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
@@ -1604,75 +1589,63 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Referen
 
         m_xGraphicObject = createGraphicObject( aMediaProperties );
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startSectionGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endSectionGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startParagraphGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endParagraphGroup()
 {
 }
-/*-- 01.11.2006 09:45:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::startCharacterGroup()
 {
 }
-/*-- 01.11.2006 09:45:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::endCharacterGroup()
 {
 }
-/*-- 01.11.2006 09:45:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::text(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
-/*-- 01.11.2006 09:45:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 {
 }
-/*-- 01.11.2006 09:45:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
 {
 }
-/*-- 01.11.2006 09:45:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void GraphicImport::info(const string & /*info*/)
 {
 }
@@ -1685,9 +1658,8 @@ void GraphicImport::endShape( )
 {
 }
 
-/*-- 09.08.2007 10:17:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool    GraphicImport::IsGraphic() const
 {
     return m_pImpl->bIsGraphic;

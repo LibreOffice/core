@@ -96,9 +96,8 @@ namespace css = ::com::sun::star;
 #define QUERYPARAMVALUE_SORT_PROP_NAME                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "name" ))
 #define QUERYPARAMVALUE_SORT_PROP_UINAME                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "uiname" ))
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     BaseContainer::init(xSMGR                                         ,
@@ -107,16 +106,14 @@ FilterFactory::FilterFactory(const css::uno::Reference< css::lang::XMultiService
                         FilterCache::E_FILTER                         );
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 FilterFactory::~FilterFactory()
 {
 }
 
-/*-----------------------------------------------
-    16.07.2003 13:43
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstance(const ::rtl::OUString& sFilter)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
@@ -124,9 +121,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     return createInstanceWithArguments(sFilter, css::uno::Sequence< css::uno::Any >());
 }
 
-/*-----------------------------------------------
-    17.07.2003 08:56
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstanceWithArguments(const ::rtl::OUString&                     sFilter   ,
                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
@@ -206,9 +202,8 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::createInstan
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    18.02.2004 14:21
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
@@ -235,9 +230,8 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FilterFactory::getAvailableServic
     return lUNOFilters.getAsConstList();
 }
 
-/*-----------------------------------------------
-    11.03.2004 08:37
------------------------------------------------*/
+
+
 css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
     throw (css::uno::RuntimeException)
 {
@@ -294,9 +288,8 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL FilterFactory::crea
     return css::uno::Reference< css::container::XEnumeration >(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY);
 }
 
-/*-----------------------------------------------
-    11.03.2004 08:33
------------------------------------------------*/
+
+
 OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenizer& lTokens) const
 {
     // analyze query
@@ -435,9 +428,8 @@ OUStringList FilterFactory::impl_queryMatchByDocumentService(const QueryTokenize
     return lResult;
 }
 
-/*-----------------------------------------------
-    21.01.2005 13:39
------------------------------------------------*/
+
+
 class stlcomp_removeIfMatchFlags
 {
     private:
@@ -478,9 +470,8 @@ class stlcomp_removeIfMatchFlags
         }
 };
 
-/*-----------------------------------------------
-    21.01.2005 13:39
------------------------------------------------*/
+
+
 OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lTokens) const
 {
     // analyze the given query parameter
@@ -530,9 +521,8 @@ OUStringList FilterFactory::impl_getSortedFilterList(const QueryTokenizer& lToke
     return lFilterList;
 }
 
-/*-----------------------------------------------
-    21.01.2005 10:19
------------------------------------------------*/
+
+
 OUStringList FilterFactory::impl_getListOfInstalledModules() const
 {
     // SAFE -> ----------------------
@@ -559,9 +549,8 @@ OUStringList FilterFactory::impl_getListOfInstalledModules() const
     return OUStringList();
 }
 
-/*-----------------------------------------------
-    21.01.2005 10:19
------------------------------------------------*/
+
+
 OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUString& sModule,
                                                                     sal_Int32        nIFlags,
                                                                     sal_Int32        nEFlags) const
@@ -615,9 +604,8 @@ OUStringList FilterFactory::impl_getSortedFilterListForModule(const ::rtl::OUStr
     return lMergedFilters;
 }
 
-/*-----------------------------------------------
-    21.01.2005 10:19
------------------------------------------------*/
+
+
 OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUString& sModule) const
 {
     // SAFE -> ----------------------
@@ -655,17 +643,15 @@ OUStringList FilterFactory::impl_readSortedFilterListFromConfig(const ::rtl::OUS
     return OUStringList();
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 ::rtl::OUString FilterFactory::impl_getImplementationName()
 {
     return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.FilterFactory" ));
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
@@ -673,9 +659,8 @@ css::uno::Sequence< ::rtl::OUString > FilterFactory::impl_getSupportedServiceNam
     return lServiceNames;
 }
 
-/*-----------------------------------------------
-    09.07.2003 07:43
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > SAL_CALL FilterFactory::impl_createInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR)
 {
     FilterFactory* pNew = new FilterFactory(xSMGR);

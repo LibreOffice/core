@@ -39,23 +39,20 @@ struct PropertyNameSupplier_Impl
     PropertyNameMap_t aNameMap;
 };
 
-/*-- 14.06.2006 11:01:31---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyNameSupplier::PropertyNameSupplier() :
     m_pImpl(new PropertyNameSupplier_Impl)
 {
 }
-/*-- 14.06.2006 11:01:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyNameSupplier::~PropertyNameSupplier()
 {
     delete m_pImpl;
 }
-/*-- 14.06.2006 11:01:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
 {
     PropertyNameMap_t::iterator aIt = m_pImpl->aNameMap.find(eId);

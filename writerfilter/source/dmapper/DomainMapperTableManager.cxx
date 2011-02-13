@@ -46,9 +46,8 @@ namespace dmapper {
 
 using namespace ::com::sun::star;
 using namespace ::std;
-/*-- 23.04.2007 14:57:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
     m_nRow(0),
     m_nCell(0),
@@ -67,17 +66,15 @@ DomainMapperTableManager::DomainMapperTableManager(bool bOOXML) :
 #endif
 #endif
 }
-/*-- 23.04.2007 14:57:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 DomainMapperTableManager::~DomainMapperTableManager()
 {
     if ( m_pTablePropsHandler )
         delete m_pTablePropsHandler, m_pTablePropsHandler = NULL;
 }
-/*-- 23.04.2007 15:25:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool DomainMapperTableManager::sprm(Sprm & rSprm)
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -358,9 +355,8 @@ void DomainMapperTableManager::endLevel( )
 #endif
 }
 
-/*-- 02.05.2007 14:36:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapperTableManager::endOfCellAction()
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -371,9 +367,8 @@ void DomainMapperTableManager::endOfCellAction()
     m_nGridSpan = 1;
     ++m_nCell;
 }
-/*-- 02.05.2007 14:36:26---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapperTableManager::endOfRowAction()
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -493,18 +488,16 @@ void DomainMapperTableManager::endOfRowAction()
     dmapper_logger->endElement();
 #endif
 }
-/*-- 18.06.2007 10:34:37---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapperTableManager::clearData()
 {
     m_nRow = m_nCell = m_nCellBorderIndex = m_nHeaderRepeat = m_nTableWidth = 0;
     m_sTableStyleName = ::rtl::OUString();
     m_pTableStyleTextProperies.reset();
 }
-/*-- 27.06.2007 14:19:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void lcl_CopyTextProperties(PropertyMapPtr pToFill,
             const StyleSheetEntry* pStyleSheetEntry, StyleSheetTablePtr pStyleSheetTable)
 {

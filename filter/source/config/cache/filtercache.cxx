@@ -79,9 +79,8 @@ namespace css = ::com::sun::star;
 // Its no longer supported by using native installers ...
 static ::rtl::OUString MESSAGE_CORRUPTED_FILTERCONFIG( RTL_CONSTASCII_USTRINGPARAM( "The filter configuration appears to be defective. Please install the office suite again." ));
 
-/*-----------------------------------------------
-    15.03.2004 08:59
------------------------------------------------*/
+
+
 FilterCache::FilterCache()
     : BaseLock    (                                        )
     , m_xSMGR     (::comphelper::getProcessServiceFactory())
@@ -90,17 +89,15 @@ FilterCache::FilterCache()
     RTL_LOGFILE_TRACE("{ (as96863) FilterCache lifetime");
 }
 
-/*-----------------------------------------------
-    15.03.2004 08:59
------------------------------------------------*/
+
+
 FilterCache::~FilterCache()
 {
     RTL_LOGFILE_TRACE("} (as96863) FilterCache lifetime");
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:27
------------------------------------------------*/
+
+
 FilterCache* FilterCache::clone() const
 {
     // SAFE -> ----------------------------------
@@ -138,9 +135,8 @@ FilterCache* FilterCache::clone() const
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.03.2004 14:39
------------------------------------------------*/
+
+
 void FilterCache::takeOver(const FilterCache& rClone)
 {
     // SAFE -> ----------------------------------
@@ -194,9 +190,8 @@ void FilterCache::takeOver(const FilterCache& rClone)
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    28.10.2003 09:01
------------------------------------------------*/
+
+
 void FilterCache::load(EFillState eRequired,
 #if OSL_DEBUG_LEVEL > 1
     sal_Bool bByThread
@@ -281,9 +276,8 @@ void FilterCache::load(EFillState eRequired,
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    28.10.2003 09:50
------------------------------------------------*/
+
+
 sal_Bool FilterCache::isFillState(FilterCache::EFillState eState) const
     throw(css::uno::Exception)
 {
@@ -293,9 +287,8 @@ sal_Bool FilterCache::isFillState(FilterCache::EFillState eState) const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    14.07.2003 10:45
------------------------------------------------*/
+
+
 OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
                                                   const CacheItem& lIProps,
                                                   const CacheItem& lEProps) const
@@ -332,9 +325,8 @@ OUStringList FilterCache::getMatchingItemsByProps(      EItemType  eType  ,
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    02.07.2003 09:32
------------------------------------------------*/
+
+
 sal_Bool FilterCache::hasItems(EItemType eType) const
     throw(css::uno::Exception)
 {
@@ -350,9 +342,8 @@ sal_Bool FilterCache::hasItems(EItemType eType) const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    02.07.2003 11:48
------------------------------------------------*/
+
+
 OUStringList FilterCache::getItemNames(EItemType eType) const
     throw(css::uno::Exception)
 {
@@ -375,9 +366,8 @@ OUStringList FilterCache::getItemNames(EItemType eType) const
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    27.10.2003 08:37
------------------------------------------------*/
+
+
 sal_Bool FilterCache::hasItem(      EItemType        eType,
                               const ::rtl::OUString& sItem)
     throw(css::uno::Exception)
@@ -410,9 +400,8 @@ sal_Bool FilterCache::hasItem(      EItemType        eType,
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    17.07.2006 09:15
------------------------------------------------*/
+
+
 CacheItem FilterCache::getItem(      EItemType        eType,
                                const ::rtl::OUString& sItem)
     throw(css::uno::Exception)
@@ -467,9 +456,8 @@ CacheItem FilterCache::getItem(      EItemType        eType,
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    03.03.2004 11:28
------------------------------------------------*/
+
+
 void FilterCache::removeItem(      EItemType        eType,
                              const ::rtl::OUString& sItem)
     throw(css::uno::Exception)
@@ -490,9 +478,8 @@ void FilterCache::removeItem(      EItemType        eType,
     impl_addItem2FlushList(eType, sItem);
 }
 
-/*-----------------------------------------------
-    26.11.2003 13:28
------------------------------------------------*/
+
+
 void FilterCache::setItem(      EItemType        eType ,
                           const ::rtl::OUString& sItem ,
                           const CacheItem&       aValue)
@@ -531,9 +518,8 @@ void FilterCache::refreshItem(      EItemType        eType,
     impl_loadItemOnDemand(eType, sItem);
 }
 
-/*-----------------------------------------------
-    27.10.2003 08:14
------------------------------------------------*/
+
+
 void FilterCache::addStatePropsToItem(      EItemType        eType,
                                       const ::rtl::OUString& sItem,
                                             CacheItem&       rItem)
@@ -629,9 +615,8 @@ void FilterCache::addStatePropsToItem(      EItemType        eType,
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    05.03.2004 10:36
------------------------------------------------*/
+
+
 void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
     throw(css::uno::Exception)
 {
@@ -644,9 +629,8 @@ void FilterCache::removeStatePropsFromItem(CacheItem& rItem)
         rItem.erase(pIt);
 }
 
-/*-----------------------------------------------
-    02.07.2003 09:17
------------------------------------------------*/
+
+
 void FilterCache::flush()
     throw(css::uno::Exception)
 {
@@ -683,9 +667,8 @@ void FilterCache::flush()
     /*TODO FrameLoader/ContentHandler must be flushed here too ... */
 }
 
-/*-----------------------------------------------
-    20.10.2003 09:22
------------------------------------------------*/
+
+
 void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XNameAccess >& xSet  ,
                                          EItemType                                           eType ,
                                    const CacheItemList&                                      rCache,
@@ -746,9 +729,8 @@ void FilterCache::impl_flushByList(const css::uno::Reference< css::container::XN
     }
 }
 
-/*-----------------------------------------------
-    03.11.2003 08:38
------------------------------------------------*/
+
+
 void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
                                          FlatDetection&  rFlatTypes) const
     throw(css::uno::Exception)
@@ -814,9 +796,8 @@ void FilterCache::detectFlatForURL(const css::util::URL& aURL      ,
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    03.11.2003 08:38
------------------------------------------------*/
+
+
 CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
     throw(css::uno::Exception)
 {
@@ -838,9 +819,8 @@ CacheItemList& FilterCache::impl_getItemList(EItemType eType) const
     // <- SAFE ----------------------------------
 }
 
-/*-----------------------------------------------
-    21.10.2003 13:20
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfigProvider eProvider)
     throw(css::uno::Exception)
 {
@@ -924,9 +904,8 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_openConfig(EConfig
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    17.07.2003 10:10
------------------------------------------------*/
+
+
 css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey)
 {
     ::rtl::OUString sRoot;
@@ -971,9 +950,8 @@ css::uno::Any FilterCache::impl_getDirectCFGValue(const ::rtl::OUString& sDirect
     return aValue;
 }
 
-/*-----------------------------------------------
-    17.07.2003 09:49
------------------------------------------------*/
+
+
 css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess(const ::rtl::OUString& sRoot       ,
                                                                                        sal_Bool         bReadOnly   ,
                                                                                        sal_Bool         bLocalesMode)
@@ -1033,9 +1011,8 @@ css::uno::Reference< css::uno::XInterface > FilterCache::impl_createConfigAccess
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    24.10.2003 10:03
------------------------------------------------*/
+
+
 void FilterCache::impl_validateAndOptimize()
     throw(css::uno::Exception)
 {
@@ -1342,9 +1319,8 @@ void FilterCache::impl_validateAndOptimize()
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    20.10.2003 08:15
------------------------------------------------*/
+
+
 void FilterCache::impl_addItem2FlushList(      EItemType        eType,
                                          const ::rtl::OUString& sItem)
     throw(css::uno::Exception)
@@ -1380,9 +1356,8 @@ void FilterCache::impl_addItem2FlushList(      EItemType        eType,
         pList->push_back(sItem);
 }
 
-/*-----------------------------------------------
-    20.10.2003 08:49
------------------------------------------------*/
+
+
 FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                                                      const CacheItemList&                                      rList,
                                                                      const ::rtl::OUString&                                    sItem)
@@ -1409,9 +1384,8 @@ FilterCache::EItemFlushState FilterCache::impl_specifyFlushOperation(const css::
     return eState;
 }
 
-/*-----------------------------------------------
-    14.10.2003 09:26
------------------------------------------------*/
+
+
 void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList,
                                                     const ::rtl::OUString& sItem,
                                                     const ::rtl::OUString& sType)
@@ -1431,9 +1405,8 @@ void FilterCache::impl_resolveItem4TypeRegistration(      CacheItemList*   pList
     }
 }
 
-/*-----------------------------------------------
-    28.10.2003 09:18
------------------------------------------------*/
+
+
 void FilterCache::impl_load(EFillState eRequiredState)
     throw(css::uno::Exception)
 {
@@ -1538,9 +1511,8 @@ void FilterCache::impl_load(EFillState eRequiredState)
     // <- SAFE
 }
 
-/*-----------------------------------------------
-    22.09.2003 14:27
------------------------------------------------*/
+
+
 void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                      EItemType                                           eType  ,
                                      EReadOption                                         eOption,
@@ -1659,9 +1631,8 @@ void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameA
     }
 }
 
-/*-----------------------------------------------
-    26.11.2003 12:49
------------------------------------------------*/
+
+
 void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::container::XNameAccess >& xNode,
                                               CacheItem&                                          rItem)
     throw(css::uno::Exception)
@@ -1743,9 +1714,8 @@ void FilterCache::impl_readPatchUINames(const css::uno::Reference< css::containe
         rItem[PROPNAME_UINAME] = pUIName->second;
 }
 
-/*-----------------------------------------------
-    26.11.2003 12:56
------------------------------------------------*/
+
+
 void FilterCache::impl_savePatchUINames(const css::uno::Reference< css::container::XNameReplace >& xNode,
                                         const CacheItem&                                           rItem)
     throw(css::uno::Exception)
@@ -1897,9 +1867,8 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     return aItem;
 }
 
-/*-----------------------------------------------
-    27.10.2003 08:47
------------------------------------------------*/
+
+
 CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType        eType,
                                                            const ::rtl::OUString& sItem)
     throw(css::uno::Exception)
@@ -1979,9 +1948,8 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
     return pList->find(sItem);
 }
 
-/*-----------------------------------------------
-    20.10.2003 09:38
------------------------------------------------*/
+
+
 void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xItem,
                                       EItemType                                            eType,
                                 const CacheItem&                                           aItem)
@@ -2262,9 +2230,8 @@ sal_Int32 FilterCache::impl_convertFlagNames2FlagField(const css::uno::Sequence<
     return nField;
 }
 
-/*-----------------------------------------------
-    12.02.2004 08:40
------------------------------------------------*/
+
+
 void FilterCache::impl_interpretDataVal4Type(const ::rtl::OUString& sValue,
                                                    sal_Int32        nProp ,
                                                    CacheItem&       rItem )
@@ -2294,9 +2261,8 @@ void FilterCache::impl_interpretDataVal4Type(const ::rtl::OUString& sValue,
     }
 }
 
-/*-----------------------------------------------
-    12.02.2004 08:50
------------------------------------------------*/
+
+
 void FilterCache::impl_interpretDataVal4Filter(const ::rtl::OUString& sValue,
                                                      sal_Int32        nProp ,
                                                      CacheItem&       rItem )
@@ -2391,9 +2357,8 @@ void FilterCache::impl_readOldFormat()
     }
 }
 
-/*-----------------------------------------------
-    12.02.2004 08:30
------------------------------------------------*/
+
+
 CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::container::XNameAccess >& xSet ,
                                               EItemType                                           eType,
                                         const ::rtl::OUString&                                    sItem)
@@ -2453,9 +2418,8 @@ CacheItem FilterCache::impl_readOldItem(const css::uno::Reference< css::containe
     return aItem;
 }
 
-/*-----------------------------------------------
-    12.02.2004 08:15
------------------------------------------------*/
+
+
 OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
                                                     sal_Unicode      cSeperator)
 {
@@ -2471,7 +2435,8 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
 }
 
 #if OSL_DEBUG_LEVEL > 0
-/*-----------------------------------------------*/
+
+
 ::rtl::OUString FilterCache::impl_searchFrameLoaderForType(const ::rtl::OUString& sType) const
 {
     CacheItemList::const_iterator pIt;
@@ -2490,7 +2455,8 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
     return ::rtl::OUString();
 }
 
-/*-----------------------------------------------*/
+
+
 ::rtl::OUString FilterCache::impl_searchContentHandlerForType(const ::rtl::OUString& sType) const
 {
     CacheItemList::const_iterator pIt;
@@ -2510,7 +2476,8 @@ OUStringList FilterCache::impl_tokenizeString(const ::rtl::OUString& sData     ,
 }
 #endif
 
-/*-----------------------------------------------*/
+
+
 sal_Bool FilterCache::impl_isModuleInstalled(const ::rtl::OUString& sModule)
 {
     css::uno::Reference< css::container::XNameAccess > xCfg;

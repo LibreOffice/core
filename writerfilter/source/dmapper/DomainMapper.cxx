@@ -3129,9 +3129,8 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     dmapper_logger->endElement();
 #endif
 }
-/*-- 09.06.2006 09:52:13---------------------------------------------------
 
------------------------------------------------------------------------*/
+
 void DomainMapper::entry(int /*pos*/,
                          writerfilter::Reference<Properties>::Pointer_t ref)
 {

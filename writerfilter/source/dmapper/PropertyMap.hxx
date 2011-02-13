@@ -74,9 +74,8 @@ enum BorderPosition
     BORDER_TOP,
     BORDER_BOTTOM
 };
-/*-- 15.06.2006 08:22:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 struct PropertyDefinition
 {
     PropertyIds eId;
@@ -142,9 +141,8 @@ public:
 };
 typedef boost::shared_ptr<PropertyMap>  PropertyMapPtr;
 
-/*-- 24.07.2006 08:26:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class SectionPropertyMap : public PropertyMap
 {
     //--> debug
@@ -285,9 +283,8 @@ public:
 };
 typedef boost::shared_ptr<SectionPropertyMap> SectionPropertyMapPtr;
 
-/*-- 28.12.2007 08:17:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphProperties
 {
     bool                    m_bFrameMode;
@@ -505,9 +502,8 @@ public:
             mnOutlineLevel = nLevel;
     }
 };
-/*-- 27.12.2007 12:38:06---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class ParagraphPropertyMap : public PropertyMap, public ParagraphProperties
 {
 public:
@@ -515,9 +511,8 @@ public:
     ~ParagraphPropertyMap();
 
 };
-/*-- 15.02.2008 16:06:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 class TablePropertyMap : public PropertyMap
 {
 public:

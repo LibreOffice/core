@@ -36,21 +36,18 @@ namespace dmapper {
 using namespace ::com::sun::star;
 
 
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ModelEventListener::ModelEventListener()
 {
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ModelEventListener::~ModelEventListener()
 {
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException)
 {
     if( rEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("OnFocus")))
@@ -78,9 +75,8 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
         }
     }
 }
-/*-- 22.11.2007 08:40:22---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException)
 {
     try

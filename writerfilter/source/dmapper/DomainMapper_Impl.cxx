@@ -103,9 +103,8 @@ struct FieldConversion
 typedef ::std::map< ::rtl::OUString, FieldConversion>
             FieldConversionMap_t;
 
-/*-- 18.07.2006 08:56:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int32 FIB::GetData( Id nName )
 {
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
@@ -113,18 +112,16 @@ sal_Int32 FIB::GetData( Id nName )
     OSL_ENSURE( false, "invalid index in FIB");
     return -1;
 }
-/*-- 18.07.2006 08:56:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void FIB::SetData( Id nName, sal_Int32 nValue )
 {
     OSL_ENSURE( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR, "invalid index in FIB");
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
         aFIBData[nName - NS_rtf::LN_WIDENT] = nValue;
 }
-/*-- 01.09.2006 10:22:03---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
@@ -167,18 +164,16 @@ DomainMapper_Impl::DomainMapper_Impl(
 
     getTableManager( ).startLevel();
 }
-/*-- 01.09.2006 10:22:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 DomainMapper_Impl::~DomainMapper_Impl()
 {
     RemoveLastParagraph( );
     getTableManager( ).endLevel();
     popTableManager( );
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles()
 {
     if(!m_xPageStyles.is())
@@ -188,9 +183,8 @@ uno::Reference< container::XNameContainer >    DomainMapper_Impl::GetPageStyles(
     }
     return m_xPageStyles;
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
 {
     if(!m_xBodyText.is() && m_xTextDocument.is())
@@ -199,9 +193,8 @@ uno::Reference< text::XText > DomainMapper_Impl::GetBodyText()
     }
     return m_xBodyText;
 }
-/*-- 21.12.2006 12:09:30---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
 {
     if( !m_xDocumentSettings.is() )
@@ -211,9 +204,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::GetDocumentSettings()
     }
     return m_xDocumentSettings;
 }
-/*-- 21.12.2006 12:16:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue )
 {
     uno::Reference< beans::XPropertySet > xSettings = GetDocumentSettings();
@@ -250,9 +242,8 @@ void DomainMapper_Impl::SetIsLastParagraphInSection( bool bIsLast )
     m_bIsLastParaInSection = bIsLast;
 }
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void    DomainMapper_Impl::PushProperties(ContextType eId)
 {
     SectionPropertyMap* pSectionContext = 0;
@@ -275,9 +266,8 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
 
     m_pTopContext = m_aPropertyStacks[eId].top();
 }
-/*-- 13.06.2007 16:18:18---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
 {
     m_aPropertyStacks[CONTEXT_STYLESHEET].push( pStyleProperties );
@@ -285,18 +275,16 @@ void DomainMapper_Impl::PushStyleProperties( PropertyMapPtr pStyleProperties )
 
     m_pTopContext = m_aPropertyStacks[CONTEXT_STYLESHEET].top();
 }
-/*-- 28.01.2008 14:47:46---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushListProperties(PropertyMapPtr pListProperties)
 {
     m_aPropertyStacks[CONTEXT_LIST].push( pListProperties );
     m_aContextStack.push(CONTEXT_LIST);
     m_pTopContext = m_aPropertyStacks[CONTEXT_LIST].top();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void    DomainMapper_Impl::PopProperties(ContextType eId)
 {
     OSL_ENSURE(!m_aPropertyStacks[eId].empty(), "section stack already empty");
@@ -317,9 +305,8 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
         m_pTopContext.reset();
     }
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
 {
     PropertyMapPtr pRet;
@@ -330,18 +317,16 @@ PropertyMapPtr DomainMapper_Impl::GetTopContextOfType(ContextType eId)
     return pRet;
 }
 
-/*-- 24.05.2007 15:54:51---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< text::XTextAppend >  DomainMapper_Impl::GetTopTextAppend()
 {
     OSL_ENSURE(!m_aTextAppendStack.empty(), "text append stack is empty" );
     return m_aTextAppendStack.top().xTextAppend;
 }
 
-/*-- 17.07.2006 08:47:04---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabStop >& rInitTabStops )
 {
     OSL_ENSURE(!m_aCurrentTabStops.size(), "tab stops already initialized");
@@ -351,9 +336,8 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
     }
 }
 
-/*-- 29.06.2006 13:35:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
 {
     OSL_ENSURE(nId == NS_rtf::LN_dxaAdd || m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
@@ -435,9 +419,8 @@ void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
     if( !bFound )
         m_aCurrentTabStops.push_back( rTabStop );
 }
-/*-- 29.06.2006 13:35:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Sequence< style::TabStop > DomainMapper_Impl::GetCurrentTabStopAndClear()
 {
     uno::Sequence< style::TabStop > aRet( sal_Int32( m_aCurrentTabStops.size() ) );
@@ -490,9 +473,8 @@ uno::Any DomainMapper_Impl::GetPropertyFromStyleSheet(PropertyIds eId)
     }
     return uno::Any();
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ListsManager::Pointer DomainMapper_Impl::GetListTable()
 {
     if(!m_pListTable)
@@ -566,9 +548,8 @@ bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const 
     return bRet;
 }
 
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrameProperties,
     uno::Reference<text::XTextRange> xStartTextRange,
     uno::Reference<text::XTextRange> xEndTextRange )
@@ -616,9 +597,8 @@ void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrame
         (void)rEx;
    }
 }
-/*-- 04.01.2008 10:59:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void lcl_AddRangeAndStyle(
     ParagraphPropertiesPtr& pToBeSavedProperties,
     uno::Reference< text::XTextAppend > xTextAppend,
@@ -641,9 +621,8 @@ void lcl_AddRangeAndStyle(
         }
     }
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 //define some default frame width - 0cm ATM: this allow the frame to be wrapped around the text
 #define DEFAULT_FRAME_MIN_WIDTH 0
 
@@ -922,9 +901,8 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     dmapper_logger->endElement();
 #endif
 }
-/*-------------------------------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 util::DateTime lcl_DateStringToDateTime( const ::rtl::OUString& rDateTime )
 {
     util::DateTime aDateTime;
@@ -972,9 +950,8 @@ void DomainMapper_Impl::appendTextPortion( const ::rtl::OUString& rString, Prope
         }
     }
 }
-/*-- 02.11.2006 12:08:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::appendTextContent(
     const uno::Reference< text::XTextContent > xContent,
     const uno::Sequence< beans::PropertyValue > xPropertyValues
@@ -997,9 +974,8 @@ void DomainMapper_Impl::appendTextContent(
     }
 }
 
-/*-- 24.04.2008 08:38:07---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandlerPtr pOLEHandler )
 {
     static const rtl::OUString sEmbeddedService(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextEmbeddedObject"));
@@ -1044,9 +1020,8 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
     }
 
 }
-/*-- 14.12.2006 12:26:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
                                     uno::Reference< text::XTextRange >& xBefore )
 {
@@ -1076,9 +1051,8 @@ uno::Reference< beans::XPropertySet > DomainMapper_Impl::appendTextSectionAfter(
 
     return xRet;
 }
-/*-- 02.11.2006 12:08:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
 {
     //get the section context
@@ -1114,9 +1088,8 @@ void DomainMapper_Impl::PushPageHeader(SectionPropertyMap::PageType eType)
         }
     }
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
 {
     //get the section context
@@ -1151,9 +1124,8 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
         }
     }
 }
-/*-- 24.07.2006 09:41:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopPageHeaderFooter()
 {
     //header and footer always have an empty paragraph at the end
@@ -1161,9 +1133,8 @@ void DomainMapper_Impl::PopPageHeaderFooter()
     RemoveLastParagraph( );
     m_aTextAppendStack.pop();
 }
-/*-- 24.05.2007 14:22:28---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushFootOrEndnote( bool bIsFootnote )
 {
     try
@@ -1283,9 +1254,8 @@ void DomainMapper_Impl::EndParaChange( )
     m_bIsParaChange = false;
 }
 
-/*-- 22.12.2008 13:45:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PushAnnotation()
 {
     try
@@ -1303,16 +1273,14 @@ void DomainMapper_Impl::PushAnnotation()
         OSL_ENSURE( false, "exception in PushFootOrEndnote" );
     }
 }
-/*-- 24.05.2007 14:22:29---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopFootOrEndnote()
 {
     m_aTextAppendStack.pop();
 }
-/*-- 22.12.2008 13:45:15---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopAnnotation()
 {
     m_aTextAppendStack.pop();
@@ -1356,9 +1324,8 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     }
 }
 
-/*-- 20.03.2008 09:01:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::PopShapeContext()
 {
     if ( m_bShapeContextAdded )
@@ -1368,9 +1335,8 @@ void DomainMapper_Impl::PopShapeContext()
     }
     m_bIsInShape = false;
 }
-/*-- 12.09.2006 08:07:55---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString lcl_FindQuotedText( const ::rtl::OUString& rCommand,
                 const sal_Char* cStartQuote, const sal_Unicode uEndQuote )
 {
@@ -1389,9 +1355,8 @@ void DomainMapper_Impl::PopShapeContext()
     return sRet;
 
 }
-/*-- 08.09.2006 14:05:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 sal_Int16 lcl_ParseNumberingType( const ::rtl::OUString& rCommand )
 {
     sal_Int16 nRet = style::NumberingType::PAGE_DESCRIPTOR;
@@ -1487,9 +1452,8 @@ style::NumberingType::
     }
     return nRet;
 }
-/*-- 08.09.2006 13:52:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 OUString lcl_ParseFormat( const ::rtl::OUString& rCommand )
 {
     //  The command looks like: " DATE \@ "dd MMMM yyyy"
@@ -1529,9 +1493,8 @@ extract a parameter (with or without quotes) between the command and the followi
     return sRet;
 }
 
-/*-- 15.09.2006 10:57:57---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 ::rtl::OUString lcl_ExctractAskVariableAndHint( const ::rtl::OUString& rCommand, ::rtl::OUString& rHint )
 {
     // the first word after "ASK " is the variable
@@ -1553,9 +1516,8 @@ extract a parameter (with or without quotes) between the command and the followi
         rHint = sRet;
     return sRet;
 }
-/*-- 24.01.2007 16:04:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool lcl_FindInCommand(
     const ::rtl::OUString& rCommand,
     sal_Unicode cSwitch,
@@ -1578,9 +1540,8 @@ bool lcl_FindInCommand(
     return bRet;
 }
 
-/*-- 14.09.2006 12:46:52---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::GetCurrentLocale(lang::Locale& rLocale)
 {
     PropertyMapPtr pTopContext = GetTopContext();
@@ -1632,9 +1593,8 @@ void DomainMapper_Impl::SetNumberFormat( const ::rtl::OUString& rCommand,
     }
 }
 
-/*-- 15.09.2006 15:10:20---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 uno::Reference< beans::XPropertySet > DomainMapper_Impl::FindOrCreateFieldMaster(
         const sal_Char* pFieldMasterService, const ::rtl::OUString& rFieldMasterName )
             throw(::com::sun::star::uno::Exception)
@@ -1706,23 +1666,20 @@ bool DomainMapper_Impl::IsOpenField() const
 {
     return !m_aFieldStack.empty();
 }
-/*-- 29.01.2007 11:49:13---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 FieldContext::FieldContext(uno::Reference< text::XTextRange > xStart) :
     m_bFieldCommandCompleted( false )
     ,m_xStartRange( xStart )
 {
 }
-/*-- 29.01.2007 11:48:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 FieldContext::~FieldContext()
 {
 }
-/*-- 29.01.2007 11:48:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void FieldContext::AppendCommand(const ::rtl::OUString& rPart)
 {
     m_sCommand += rPart;
@@ -1802,9 +1759,8 @@ void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
         pContext->AppendCommand( rPartOfCommand );
     }
 }
-/*-- 13.12.2007 11:45:43---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 typedef std::multimap < sal_Int32, ::rtl::OUString > TOCStyleMap;
 
 const FieldConversionMap_t & lcl_GetFieldConversion()
@@ -2704,9 +2660,8 @@ bool DomainMapper_Impl::IsFieldResultAsString()
     }
     return bRet;
 }
-/*-- 01.09.2006 11:48:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetFieldResult( ::rtl::OUString& rResult )
 {
 #ifdef DEBUG_DOMAINMAPPER
@@ -2854,9 +2809,8 @@ void DomainMapper_Impl::PopFieldContext()
     //remove the field context
     m_aFieldStack.pop();
 }
-/*-- 11.06.2007 16:19:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const ::rtl::OUString& rId )
 {
     uno::Reference< text::XTextAppend >  xTextAppend = m_aTextAppendStack.top().xTextAppend;
@@ -2899,9 +2853,8 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName, const
         //TODO: What happens to bookmarks where start and end are at different XText objects?
     }
 }
-/*-- 01.11.2006 14:57:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
@@ -2915,9 +2868,8 @@ void DomainMapper_Impl::ResetGraphicImport()
 {
     m_pGraphicImport.reset();
 }
-/*-- 01.11.2006 09:25:40---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Pointer_t ref, GraphicImportType eGraphicImportType)
 {
     GetGraphicImport(eGraphicImportType);
@@ -2940,9 +2892,8 @@ void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Po
     m_pGraphicImport.reset();
 }
 
-/*-- 28.12.2006 14:00:47---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn )
 {
     if( !m_bLineNumberingSet )
@@ -2984,9 +2935,8 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal
     }
     m_bLineNumberingSet = true;
 }
-/*-- 31.08.2007 13:50:49---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue )
 {
     nValue = ConversionHelper::convertTwipToMM100(nValue);
@@ -3002,9 +2952,8 @@ void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nV
     }
 }
 
-/*-- 31.08.2007 13:47:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 _PageMar::_PageMar()
 {
     header = footer = top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
@@ -3012,9 +2961,8 @@ _PageMar::_PageMar()
     gutter = 0;
 }
 
-/*-- 07.03.2008 12:07:27---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::RegisterFrameConversion(
         uno::Reference< text::XTextRange >      xFrameStartRange,
         uno::Reference< text::XTextRange >      xFrameEndRange,
@@ -3028,9 +2976,8 @@ void DomainMapper_Impl::RegisterFrameConversion(
     m_xFrameStartRange = xFrameStartRange;
     m_xFrameEndRange   = xFrameEndRange;
 }
-/*-- 07.03.2008 12:07:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 bool DomainMapper_Impl::ExecuteFrameConversion()
 {
     bool bRet = false;
@@ -3118,9 +3065,8 @@ void DomainMapper_Impl::SetCurrentRedlineToken( sal_Int32 nToken )
         pCurrent->m_nToken = nToken;
 }
 
-/*-- 19.03.2008 11:35:38---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
+
 void DomainMapper_Impl::RemoveCurrentRedline( )
 {
     if ( m_aRedlines.size( ) > 0 )
@@ -3138,9 +3084,8 @@ void DomainMapper_Impl::ResetParaRedline( )
     }
 }
 
-/*-- 22.09.2009 10:26:19---------------------------------------------------
 
------------------------------------------------------------------------*/
+
 void DomainMapper_Impl::ApplySettingsTable()
 {
     if( m_pSettingsTable )
