@@ -103,7 +103,8 @@ ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String &
 
 SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     int bReadNewDoc, const SwAsciiOptions& rOpts)
-    : pDoc(pD), rInput(rIn), rOpt(rOpts), nScript(0), bNewDoc(bReadNewDoc)
+    : pDoc(pD), rInput(rIn), rOpt(rOpts), nFileSize(0), nScript(0)
+    , bNewDoc(bReadNewDoc)
 {
     pPam = new SwPaM( *rCrsr.GetPoint() );
     pArr = new sal_Char [ ASC_BUFFLEN + 2 ];
