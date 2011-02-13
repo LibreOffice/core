@@ -1106,11 +1106,6 @@ int SwFEShell::IsInsideSelectedObj( const Point &rPt )
 bool SwFEShell::IsObjSelectable( const Point& rPt )
 {
     SET_CURR_SHELL(this);
-#ifdef OLD
-    if( Imp()->HasDrawView() )
-        return Imp()->GetDrawView()->PickSomething( rPt, MINMOVE );
-    return 0;
-#else
     SwDrawView *pDView = Imp()->GetDrawView();
     bool bRet = false;
     if( pDView )
@@ -1124,7 +1119,6 @@ bool SwFEShell::IsObjSelectable( const Point& rPt )
         pDView->SetHitTolerancePixel( nOld );
     }
     return bRet;
-#endif
 }
 
 // Test if there is a object at that position and if it should be selected.

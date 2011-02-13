@@ -1186,10 +1186,6 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
     {
         // --- Ist die Selection noch da ??????
 
-        // und noch die Attribute setzen
-#ifdef OLD
-        pCrsr->GetDoc()->Insert( *pCrsr, *pReplSet, 0 );
-#else
         //JP 13.07.95: alle gesuchten Attribute werden, wenn nicht im
         //              ReplaceSet angegeben, auf Default zurueck gesetzt
 
@@ -1218,7 +1214,7 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             aSet.Put( *pReplSet );
             pCrsr->GetDoc()->InsertItemSet( *pCrsr, aSet, 0 );
         }
-#endif
+
         return FIND_NO_RING;
     }
 
