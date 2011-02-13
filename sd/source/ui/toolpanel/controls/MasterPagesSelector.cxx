@@ -467,7 +467,7 @@ MasterPagesSelector::UserData* MasterPagesSelector::GetUserData (int nIndex) con
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
+    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=mpPageSet->GetItemCount())
         return reinterpret_cast<UserData*>(mpPageSet->GetItemData((USHORT)nIndex));
     else
         return NULL;
@@ -480,7 +480,7 @@ void MasterPagesSelector::SetUserData (int nIndex, UserData* pData)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    if (nIndex>0 && nIndex<=mpPageSet->GetItemCount())
+    if (nIndex>0 && static_cast<unsigned int>(nIndex)<=mpPageSet->GetItemCount())
     {
         UserData* pOldData = GetUserData(nIndex);
         if (pOldData!=NULL && pOldData!=pData)
