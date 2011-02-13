@@ -1015,12 +1015,8 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     {
         if( !pNext ||
             (CSS1_SELTYPE_PSEUDO==eNextType &&
-#ifdef FULL_FIRST_LETTER
-             pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter)) )
-#else
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first_letter) &&
              SVX_ADJUST_LEFT == rPropInfo.eFloat) )
-#endif
         {
             // Entweder kein zusammengesetzter Selektor oder
             // ein X:first-line { float: left; ... }
@@ -1546,11 +1542,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
 
     // Bei harter Attributierung (pName==0) koennen wir aufhoehren, wenn
     // das Initial nur ueber eine Zeile geht.
-#ifdef FULL_FIRST_LETTER
-    if( nLines<=1 && !pName )
-#else
     if( nLines<=1 )
-#endif
         return;
 
     rDrop.GetLines() = nLines;
