@@ -104,34 +104,12 @@
 
 using namespace ::com::sun::star;
 
-// #i17764# delete table redlines when modifying the table structure?
-// #define DEL_TABLE_REDLINES 1
-
 const sal_Unicode T2T_PARA = 0x0a;
 
 extern void ClearFEShellTabCols();
 
 // steht im gctable.cxx
 extern BOOL lcl_GC_Line_Border( const SwTableLine*& , void* pPara );
-
-#ifdef DEL_TABLE_REDLINES
-class lcl_DelRedlines
-{
-    SwDoc* pDoc;
-public:
-    lcl_DelRedlines( const SwTableNode& rNd, BOOL bCheckForOwnRedline );
-    lcl_DelRedlines( SwPaM& rPam );
-
-    ~lcl_DelRedlines() { pDoc->EndUndo(UNDO_EMPTY, NULL); }
-};
-
-lcl_DelRedlines::lcl_DelRedlines( SwPaM & rPam) : pDoc( rPam.GetDoc() )
-{
-    pDoc->StartUndo(UNDO_EMPTY, NULL);
-    if( !pDoc->IsIgnoreRedline() && pDoc->GetRedlineTbl().Count() )
-        pDoc->AcceptRedline( rPam, true );
-}
-#endif
 
 void lcl_SetDfltBoxAttr( SwFrmFmt& rFmt, BYTE nId )
 {
@@ -672,10 +650,6 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
     pStt = aOriginal.GetMark();
     pEnd = aOriginal.GetPoint();
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( aOriginal );
-#endif
-
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
     {
@@ -1119,10 +1093,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     const SwPosition *pStt = aOriginal.GetMark();
     const SwPosition *pEnd = aOriginal.GetPoint();
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( aOriginal );
-#endif
-
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
     {
@@ -1439,10 +1409,6 @@ BOOL SwDoc::TableToText( const SwTableNode* pTblNd, sal_Unicode cCh )
         pESh->ClearMark();
     // <--
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( *pTblNd, FALSE );
-#endif
-
     SwNodeRange aRg( *pTblNd, 0, *pTblNd->EndOfSectionNode() );
     SwUndoTblToTxt* pUndo = 0;
     SwNodeRange* pUndoRg = 0;
@@ -1712,10 +1678,6 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
-#endif
-
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
     if( DoesUndo() )
@@ -1776,10 +1738,6 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     SwTable& rTbl = pTblNd->GetTable();
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
-
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
-#endif
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -1981,10 +1939,6 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
             rTable.FindSuperfluousRows( aSelBoxes );
     }
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
-#endif
-
     // soll die gesamte Tabelle geloescht werden ??
     const ULONG nTmpIdx1 = pTblNd->GetIndex();
     const ULONG nTmpIdx2 = aSelBoxes[ aSelBoxes.Count()-1 ]->GetSttNd()->
@@ -2178,10 +2132,6 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     if( rTbl.ISA( SwDDETable ))
         return FALSE;
 
-#ifdef DEL_TABLE_REDLINES
-    lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
-#endif
-
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
@@ -2262,10 +2212,6 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
     StartUndo( UNDO_TABLE_MERGE, NULL );
     // <--
 
-#ifdef DEL_TABLE_REDLINES
-    if( !IsIgnoreRedline() && GetRedlineTbl().Count() )
-        DeleteRedline( *pTblNd, true, USHRT_MAX );
-#endif
     RedlineMode_t eOld = GetRedlineMode();
     SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
@@ -4588,51 +4534,5 @@ BOOL SwDoc::HasTblAnyProtection( const SwPosition* pPos,
     }
     return bHasProtection;
 }
-
-#ifdef DEL_TABLE_REDLINES
-lcl_DelRedlines::lcl_DelRedlines( const SwTableNode& rNd,
-                                    BOOL bCheckForOwnRedline )
-    : pDoc( (SwDoc*)rNd.GetNodes().GetDoc() )
-{
-    pDoc->StartUndo(UNDO_EMPTY, NULL);
-    const SwRedlineTbl& rTbl = pDoc->GetRedlineTbl();
-    if( !pDoc->IsIgnoreRedline() && rTbl.Count() )
-    {
-        BOOL bDelete = TRUE;
-        if( bCheckForOwnRedline )
-        {
-            sal_uInt16 nRedlPos = pDoc->GetRedlinePos( rNd, USHRT_MAX );
-            sal_uInt32 nSttNd = rNd.GetIndex(),
-                       nEndNd = rNd.EndOfSectionIndex();
-
-            for ( ; nRedlPos < rTbl.Count(); ++nRedlPos )
-            {
-                const SwRedline* pRedline = rTbl[ nRedlPos ];
-                const SwPosition* pStt = pRedline->Start(),
-                                  * pEnd = pStt == pRedline->GetPoint()
-                                                      ? pRedline->GetMark()
-                                                    : pRedline->GetPoint();
-                if( pStt->nNode <= nSttNd )
-                {
-                    if( pEnd->nNode >= nEndNd &&
-                        pRedline->GetAuthor() == pDoc->GetRedlineAuthor() )
-                    {
-                        bDelete = FALSE;
-                        break;
-                    }
-                }
-                else
-                    break;
-            }
-        }
-        if( bDelete )
-        {
-            SwPaM aPam(*rNd.EndOfSectionNode(), rNd);
-            pDoc->AcceptRedline( aPam, true );
-        }
-    }
-}
-#endif
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
