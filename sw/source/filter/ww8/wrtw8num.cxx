@@ -49,11 +49,6 @@
 #include "wrtww8.hxx"
 #include "ww8par.hxx"
 
-//#define DUMPSYMBOLS
-#ifdef DUMPSYMBOLS
-#include <fstream>
-#endif
-
 using namespace ::com::sun::star;
 using namespace sw::types;
 using namespace sw::util;
@@ -711,15 +706,6 @@ void MSWordExportBase::SubstituteBullet( String& rNumStr,
     if (!pConvert)
     {
         pConvert = CreateStarSymbolToMSMultiFont();
-#ifdef DUMPSYMBOLS
-        ::std::ofstream output("fontdebug");
-        for (sal_Unicode i=0xE000;i<0xF8FF;i++)
-        {
-            String sFont = pConvert->ConvertChar(i);
-            if (sFont.Len())
-                 output << ::std::hex << i << std::endl;
-        }
-#endif
     }
     sal_Unicode cChar = rNumStr.GetChar(0);
     String sFont = pConvert->ConvertChar(cChar);
