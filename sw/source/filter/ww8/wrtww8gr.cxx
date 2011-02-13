@@ -108,9 +108,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     SvStorageRef xOleStg, SvStorageRef xObjStg, String &rStorageName,
     SwOLENode *pOLENd)
 {
-#ifdef NO_OLE_SIZE_OPTIMIZE
-    return true;
-#else
     bool bGraphicNeeded = false;
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -210,7 +207,6 @@ bool WW8Export::TestOleNeedsGraphic(const SwAttrSet& rSet,
     else
         bGraphicNeeded = true;
     return bGraphicNeeded;
-#endif
 }
 
 void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
