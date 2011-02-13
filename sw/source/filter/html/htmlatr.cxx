@@ -3106,14 +3106,10 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
 
     rWrt.Strm() << sOut.GetBuffer();
 
-#define REL_HACK
-#ifdef REL_HACK
     String sRel;
-#endif
 
     if( aURL.Len() || bEvents )
     {
-#ifdef REL_HACK
         String sTmp( aURL );
         sTmp.ToUpperAscii();
         xub_StrLen nPos = sTmp.SearchAscii( "\" REL=" );
@@ -3122,7 +3118,6 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
             sRel = aURL.Copy( nPos+1 );
             aURL.Erase( nPos );
         }
-#endif
         aURL.EraseLeadingChars().EraseTrailingChars();
 
         ((sOut = ' ') += OOO_STRING_SVTOOLS_HTML_O_href) += "=\"";
@@ -3151,10 +3146,9 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, BOOL bOn )
         sOut = '\"';
     }
 
-#ifdef REL_HACK
     if( sRel.Len() )
         sOut += ByteString( sRel, RTL_TEXTENCODING_ASCII_US );
-#endif
+
     if( sOut.Len() )
         rWrt.Strm() << sOut.GetBuffer();
 
