@@ -734,47 +734,6 @@ inline void SwTxtFrm::ResetBlinkPor() const
     ((SwTxtFrm*)this)->bBlinkPor = sal_False;
 }
 
-#ifdef LINGU_STATISTIK
-
-class SwLinguStatistik
-{
-public:
-    long nWords;    // gepruefte Worte
-    long nFlushCnt; // zaehlt die Messungen
-
-    long nWrong;  // als falsch erkannt
-    long nAlter;  // Alternativvorschlaege
-    long nSpellTime; // Zeitmessung
-    long nSynonym; // Thesaurus
-    long nNoSynonym; // Thesaurus ratlos
-    long nMeaning; // Thesaurus-Bedeutung
-    long nNoMeaning; // Thesaurus meinungslos
-    long nTheTime; // Zeitmessung
-    long nHyphens; // Trennstellen
-    long nNoHyph; // Worte ohne Trennstellen
-    long nHyphErr; // Fehler beim Trennen
-    long nHyphTime; // Zeitmessung
-    SpellCheck *pSpell;
-    LanguageType eLang;
-
-    void Flush();
-
-    inline SwLinguStatistik()
-        { nWords = nWrong = nAlter = nSynonym = nNoSynonym =
-          nHyphens = nNoHyph = nHyphErr = nSpellTime = nTheTime =
-          nHyphTime = nFlushCnt = 0;
-          pSpell = NULL;
-          eLang = LANGUAGE_DONTKNOW; }
-    inline ~SwLinguStatistik(){ Flush(); }
-};
-
-// globale Variable, implementiert in txtfrm.cxx
-extern SwLinguStatistik aSwLinguStat;
-
-#define SW_LING(nWhich,nInc) (aSwLinguStat.nWhich) += nInc;
-
-#endif
-
 #define SWAP_IF_SWAPPED( pFrm )\
     sal_Bool bUndoSwap = sal_False;   \
     if ( pFrm->IsVertical() && pFrm->IsSwapped() )\
