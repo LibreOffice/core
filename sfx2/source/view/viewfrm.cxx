@@ -170,8 +170,6 @@ SFX_IMPL_INTERFACE(SfxViewFrame,SfxShell,SfxResId(0))
 TYPEINIT2(SfxViewFrame,SfxShell,SfxListener);
 TYPEINIT1(SfxViewFrameItem, SfxPoolItem);
 
-//=========================================================================
-
 //-------------------------------------------------------------------------
 namespace
 {
@@ -1187,22 +1185,6 @@ void SfxViewFrame::DoActivate( sal_Bool bUI, SfxViewFrame* pOldFrame )
     // ViewFrames, erh"alt er ein ParentActivate
     if ( bUI )
     {
-/*
-        SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
-        if( pMed )
-        {
-            SFX_ITEMSET_ARG(
-                pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem,
-                SID_INTERCEPTOR, sal_False );
-            if( pInterceptorItem )
-            {
-                SfxSlotInterceptor* pInter = pInterceptorItem->GetValue();
-                if( !pInter->GetBindings() )
-                    pInter->SetBindings( &GetBindings() );
-                pInter->Activate( sal_True );
-            }
-        }
- */
         SfxViewFrame *pFrame = GetParentViewFrame();
         while ( pFrame )
         {
@@ -1224,19 +1206,6 @@ void SfxViewFrame::DoDeactivate(sal_Bool bUI, SfxViewFrame* pNewFrame )
     // ViewFrames, erh"alt er ein ParentDeactivate
     if ( bUI )
     {
-//        if ( GetFrame().GetWorkWindow_Impl() )
-//            GetFrame().GetWorkWindow_Impl()->SaveStatus_Impl();
-/*
-        SfxMedium* pMed = GetObjectShell() ? GetObjectShell()->GetMedium() : NULL;
-        if( pMed )
-        {
-            SFX_ITEMSET_ARG(
-                pMed->GetItemSet(), pInterceptorItem, SfxSlotInterceptorItem,
-                SID_INTERCEPTOR, sal_False );
-            if( pInterceptorItem )
-                pInterceptorItem->GetValue()->Activate( sal_False );
-        }
-*/
         SfxViewFrame *pFrame = GetParentViewFrame();
         while ( pFrame )
         {
@@ -1259,13 +1228,6 @@ void SfxViewFrame::InvalidateBorderImpl( const SfxViewShell* pSh )
         {
             if ( GetFrame().IsInPlace() )
             {
-                /*
-                Size aSize( GetViewShell()->GetWindow()->GetSizePixel() );
-
-                //Size aBorderSz( pEnv->GetBorderWin()->GetHatchBorderPixel() );
-                Point aOfs; //( aBorderSz.Width(), aBorderSz.Height() );
-
-                DoAdjustPosSizePixel( GetViewShell(), aOfs, aSize );*/
                 return;
             }
 
@@ -1699,43 +1661,18 @@ SfxProgress* SfxViewFrame::GetProgress() const
 //--------------------------------------------------------------------
 void SfxViewFrame::ShowStatusText( const String& /*rText*/)
 {
-/* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
-             framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
-             extended to support a new interface to support ShowStatusText/HideStatusText
-    SfxWorkWindow* pWorkWin = GetFrame().GetWorkWindow_Impl();
-    SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
-    if ( pMgr )
-    {
-        pMgr->GetStatusBar()->HideItems();
-        pMgr->GetStatusBar()->SetText( rText );
-    }
-*/
 }
 
 //--------------------------------------------------------------------
 void SfxViewFrame::HideStatusText()
 {
-/* OBSOLETE: If this is used, framework/uielement/progressbarwrapper.[h|c]xx &
-             framework/uielement/statusindicatorinterfacewrapper.[h|c]xx must be
-             extended to support a new interface to support ShowStatusText/HideStatusText
-    SfxWorkWindow* pWorkWin = GetFrame().GetWorkWindow_Impl();
-    SfxStatusBarManager *pMgr = pWorkWin->GetStatusBarManager_Impl();
-    if ( pMgr )
-        pMgr->GetStatusBar()->ShowItems();
-*/
 }
-
 
 //--------------------------------------------------------------------
 #ifdef ENABLE_INIMANAGER//MUSTINI
 SfxIniManager* SfxViewFrame::GetIniManager() const
 {
-/*  SfxIniManager *pIniMgr = GetObjectShell()
-            ? GetObjectShell()->GetFactory().GetIniManager()
-            : 0;
-    if ( !pIniMgr )*/ //!
         return SFX_APP()->GetAppIniManager();
-//  return pIniMgr;
 }
 #endif
 
@@ -1885,13 +1822,6 @@ void SfxViewFrame::Enable( sal_Bool bEnable )
             if ( pViewSh )
                 pViewSh->ShowCursor(sal_False);
         }
-/*
-        if ( !bEnable )
-            GetBindings().ENTERREGISTRATIONS();
-        GetDispatcher()->Lock( !bEnable );
-        if ( bEnable )
-            GetBindings().LEAVEREGISTRATIONS();
-*/
     }
 }
 
@@ -1929,12 +1859,6 @@ void SfxViewFrame::Show()
         GetWindow().Show();
     GetFrame().GetWindow().Show();
 
-/*    SfxViewFrame* pCurrent = SfxViewFrame::Current();
-    if ( GetFrame().GetFrameInterface()->isActive() &&
-            pCurrent != this &&
-            ( !pCurrent || pCurrent->GetParentViewFrame_Impl() != this ) &&
-            !GetActiveChildFrame_Impl() )
-        MakeActive_Impl( FALSE );*/
     if ( xObjSh.Is() && xObjSh->Get_Impl()->bHiddenLockedByAPI )
     {
         xObjSh->Get_Impl()->bHiddenLockedByAPI = FALSE;
@@ -2059,21 +1983,6 @@ void SfxViewFrame::SetActiveChildFrame_Impl( SfxViewFrame *pViewFrame )
 SfxViewFrame* SfxViewFrame::GetActiveChildFrame_Impl() const
 {
     SfxViewFrame *pViewFrame = pImp->pActiveChild;
-/*
-    if ( !pViewFrame )
-    {
-        // Wenn es keinen aktiven ChildFrame gibt, irgendeinen nehmen
-        for ( sal_uInt16 n=0; n<GetChildFrameCount(); n++ )
-        {
-            pViewFrame =
-                PTR_CAST( SfxViewFrame, GetChildFrame(n)->GetChildFrame(0) );
-            if ( pViewFrame )
-                break;
-        }
-    }
-
-    pImp->pActiveChild = pViewFrame;
-*/
     return pViewFrame;
 }
 
@@ -2832,14 +2741,6 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
  */
 void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 {
-    /*
-    // get lib and modul name from dialog
-    SfxModule *pMod = GetObjectShell()->GetModule();
-    SfxRequest aReq( SID_BASICCHOOSER, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
-    const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
-    if ( pRet )
-        ::rtl::OUString = ((SfxStringItem*)pRet)->GetValue();
-    */
     if ( !sMacro.getLength() )
         return;
 
@@ -3023,12 +2924,6 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
     {
         // add code for "session only" macro
     }
-
-    /*
-    FILE* pFile = fopen( "macro.bas", "a" );
-    fprintf( pFile, "%s", ::rtl::OUStringToOString(sBuffer.makeStringAndClear(),RTL_TEXTENCODING_UTF8).getStr() );
-    fclose ( pFile );
-    */
 }
 
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
@@ -3500,12 +3395,6 @@ SfxWorkWindow* SfxViewFrame::GetWorkWindow_Impl( USHORT /*nId*/ )
     pWork = GetFrame().GetWorkWindow_Impl();
     return pWork;
 }
-
-/*
-void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn)
-{
-    SetChildWindow( nId, bOn, TRUE );
-}*/
 
 void SfxViewFrame::SetChildWindow(USHORT nId, BOOL bOn, BOOL bSetFocus )
 {

@@ -70,9 +70,6 @@ struct _FileListEntry
     const CollatorWrapper* pCollator;
     SfxObjectShellLock aDocShell; // ObjectShell als Ref-Klasse
 
-//REMOVE        SvStorageRef aStor;         // Referenz auf Storage, wenn wir diesen geoeffnet haben
-    //uno::Reference< embed::XStorage > xStorage;
-
     BOOL bFile;                 // als Datei auf Platte
                                 // (!= unbenannt1, nicht als Dok. geladen;
                                 // diese werden nicht gespeichert!)

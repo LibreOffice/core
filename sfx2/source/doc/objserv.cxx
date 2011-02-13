@@ -938,7 +938,6 @@ void SfxObjectShell::GetState_Impl(SfxItemSet &rSet)
 
                     if ( !pFrame || !pDoc->HasName() ||
                         !IsOwnStorageFormat_Impl( *pDoc->GetMedium() ) )
-//REMOVE                            || pDoc->GetMedium()->GetStorage()->GetVersion() < SOFFICE_FILEFORMAT_50 )
                         rSet.DisableItem( nWhich );
                     break;
                 }

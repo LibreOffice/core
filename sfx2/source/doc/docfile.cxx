@@ -2179,7 +2179,6 @@ void SfxMedium::ClearBackup_Impl()
         if ( pImp->m_aBackupURL.getLength() )
         {
             if ( ::utl::UCBContentHelper::Kill( pImp->m_aBackupURL ) )
-              // || !::utl::UCBContentHelper::IsDocument( pImp->m_aBackupURL ) );
             {
                 pImp->m_bRemoveBackup = sal_False;
                 pImp->m_aBackupURL = ::rtl::OUString();

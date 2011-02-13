@@ -97,7 +97,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SvGlobalName        aFilterClass;
     SvStream*           pInStream;
     SvStream*           pOutStream;
-//REMOVE        SvStorageRef        aStorage;
     const SfxFilter*    pFilter;
     SfxItemSet*         pSet;
     SfxMedium_Impl*     pImp;
@@ -283,7 +282,6 @@ public:
     SAL_DLLPRIVATE void SetUpdatePickList(sal_Bool);
     SAL_DLLPRIVATE sal_Bool IsUpdatePickList() const;
 
-//REMOVE        void                SetStorage_Impl( SvStorage* pStor );
     SAL_DLLPRIVATE void SetLongName(const String &rName)
                         { aLongName = rName; }
     SAL_DLLPRIVATE const String & GetLongName() const { return aLongName; }

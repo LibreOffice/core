@@ -518,7 +518,6 @@ SvxGraphicHelperStream_Impl SvXMLGraphicHelper::ImplGetGraphicStream( const ::rt
         aRet.xStream = aRet.xStorage->openStreamElement( rPictureStreamName, nMode );
         if( aRet.xStream.is() && ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) )
         {
-//REMOVE                ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("Encrypted") );
             ::rtl::OUString aPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
             uno::Reference < beans::XPropertySet > xProps( aRet.xStream, uno::UNO_QUERY );
             xProps->setPropertyValue( aPropName, uno::makeAny( sal_True) );

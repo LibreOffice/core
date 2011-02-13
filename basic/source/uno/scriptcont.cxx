@@ -1151,11 +1151,6 @@ sal_Bool SfxScriptLibraryContainer::implLoadPasswordLibrary
         }
     }
 
-//REMOVE        // If the password is verified the library must remain modified, because
-//REMOVE        // otherwise for saving the storage would be copied and that doesn't work
-//REMOVE        // with mtg's storages when the password is verified
-//REMOVE        if( !pLib->mbPasswordVerified )
-//REMOVE            pLib->mbModified = sal_False;
     return bRet;
 }
 

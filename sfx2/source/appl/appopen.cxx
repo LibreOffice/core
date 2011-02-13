@@ -464,8 +464,6 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
                xDoc->GetStorage()->copyToStorage( xTempStorage );
 
-//REMOVE                // the following operations should be done in one step
-//REMOVE                xDoc->DoHandsOff();
             if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
         }

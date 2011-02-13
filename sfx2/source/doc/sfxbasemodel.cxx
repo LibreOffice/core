@@ -2536,14 +2536,6 @@ void SfxBaseModel::Notify(          SfxBroadcaster& rBC     ,
             {
                 postEvent_Impl( GlobalEventConfig::GetEventName( STR_EVENT_MODECHANGED ) );
             }
-/*
-            else if ( pSimpleHint->GetId() == SFX_HINT_DYING
-                || pSimpleHint->GetId() == SFX_HINT_DEINITIALIZING )
-            {
-                SfxObjectShellLock pShellLock = m_pData->m_pObjectShellLock;
-                m_pData->m_pObjectShellLock = SfxObjectShellLock();
-            }
-*/
         }
     }
 }
@@ -2648,8 +2640,6 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
 {
     if( !sURL.getLength() )
         throw frame::IllegalArgumentIOException();
-
-    //sal_Bool aSaveAsTemplate = sal_False;
 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
@@ -3005,8 +2995,6 @@ void SAL_CALL SfxBaseModel::addPrintJobListener( const uno::Reference< view::XPr
         if ( xPJB.is() )
             xPJB->addPrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::XPrintJobListener >& xListener ) throw (uno::RuntimeException)
@@ -3019,8 +3007,6 @@ void SAL_CALL SfxBaseModel::removePrintJobListener( const uno::Reference< view::
         if ( xPJB.is() )
             xPJB->removePrintJobListener( xListener );
     }
-//  else
-//      m_pData->m_aInterfaceContainer.addInterface( ::getCppuType((const uno::Reference< view::XPrintJobListener >*)0), xListener );
 }
 
 // simple declaration of class SvObject is enough

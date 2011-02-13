@@ -659,18 +659,6 @@ void FileDialogHelper_Impl::updateVersions()
 
                 for ( sal_Int32 i=0; i<xVersions.getLength(); i++ )
                     aEntries[ i + 1 ] = xVersions[i].Identifier;
-
-                // TODO/LATER: not sure that this information must be shown in future ( binfilter? )
-//REMOVE                    else
-//REMOVE                    {
-//REMOVE                        SfxFilterFlags nMust = SFX_FILTER_IMPORT | SFX_FILTER_OWN;
-//REMOVE                        SfxFilterFlags nDont = SFX_FILTER_NOTINSTALLED | SFX_FILTER_STARONEFILTER;
-//REMOVE                        if ( SFX_APP()->GetFilterMatcher().GetFilter4ClipBoardId( pStor->GetFormat(), nMust, nDont ) )
-//REMOVE                        {
-//REMOVE                            aEntries.realloc( 1 );
-//REMOVE                            aEntries[0] = OUString( String ( SfxResId( STR_SFX_FILEDLG_ACTUALVERSION ) ) );
-//REMOVE                        }
-//REMOVE                    }
             }
             catch( uno::Exception& )
             {

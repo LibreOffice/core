@@ -1399,7 +1399,6 @@ void SfxLibraryContainer::implStoreLibrary( SfxLibrary* pLib,
                     xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                     // #87671 Allow encryption
-//REMOVE                            aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                     aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                     xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
@@ -1547,7 +1546,6 @@ void SfxLibraryContainer::implStoreLibraryIndexFile( SfxLibrary* pLib,
                 xProps->setPropertyValue( aPropName, uno::makeAny( aMime ) );
 
                 // #87671 Allow encryption
-//REMOVE                    aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Encrypted") );
                 aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "UseCommonStoragePasswordEncryption" ) );
                 xProps->setPropertyValue( aPropName, uno::makeAny( sal_True ) );
 
