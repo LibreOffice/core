@@ -207,15 +207,6 @@ void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 
 
 #endif
 
-#ifdef JP_REDLINE
-    if( GetDoc()->GetRedlineTbl().Count() )
-    {
-        SwRedlineTbl& rRedlineTbl = (SwRedlineTbl&)GetDoc()->GetRedlineTbl();
-        for( USHORT i = 0; i < rRedlineTbl.Count(); ++i )
-            rRedlineTbl[ i ]->HideRects( *GetShell() );
-    }
-#endif
-
 // -----  Starting from here: classes / methods for the non-text-cursor -----
 
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
