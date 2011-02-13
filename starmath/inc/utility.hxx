@@ -133,29 +133,6 @@ public:
 SmFace & operator *= (SmFace &rFace, const Fraction &rFrac);
 
 
-#ifdef NEVER
-////////////////////////////////////////////////////////////
-//
-// SmInfoText
-//
-
-class SmInfoText : public FixedText
-{
-protected:
-    USHORT  nMaxLen;
-    String  aText;
-
-public:
-    SmInfoText(Window* pParent, WinBits nWinStyle = 0, USHORT nMax = 128);
-    SmInfoText(Window* pParent, const ResId& rResId, USHORT nMax = 128);
-
-    void    SetText(const String& rStr);
-
-    XubString GetText() const { return (aText); }
-};
-#endif
-
-
 ////////////////////////////////////////////////////////////
 //
 // SmPickList
@@ -201,63 +178,6 @@ public:
     void        Clear();
 };
 
-
-////////////////////////////////////////////////////////////
-//
-// SmStringPickList
-//
-#ifdef NEVER
-class SmStringPickList : public SmPickList
-{
-protected:
-    virtual void   *CreateItem(const String& rString);
-    virtual void   *CreateItem(const void *pItem);
-    virtual void    DestroyItem(void *pItem);
-
-    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
-
-    virtual String  GetStringItem(void *pItem);
-
-public:
-    SmStringPickList()
-        : SmPickList(0, 5) {}
-    SmStringPickList(USHORT nInitSize, USHORT nMaxSize)
-        : SmPickList(nInitSize, nMaxSize) {}
-    SmStringPickList(const SmPickList& rOrig )
-        : SmPickList(rOrig) {}
-    virtual ~SmStringPickList() { Clear(); }
-
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
-
-    inline bool     Contains(const String &rString) const;
-    inline String   Get(USHORT nPos = 0) const;
-
-    inline SmStringPickList& operator = (const SmStringPickList& rList);
-    inline String            operator [] (USHORT nPos) const;
-};
-
-inline SmStringPickList& SmStringPickList::operator = (const SmStringPickList& rList)
-{
-    *(SmPickList *)this = *(SmPickList *)&rList; return *this;
-}
-
-inline String SmStringPickList::operator [] (USHORT nPos) const
-{
-    return *((String *)SmPickList::operator[](nPos));
-}
-
-inline String SmStringPickList::Get(USHORT nPos) const
-{
-    return nPos < Count() ? *((String *)SmPickList::Get(nPos)) : String();
-}
-
-inline bool SmStringPickList::Contains(const String &rString) const
-{
-    return SmPickList::Contains((void *)&rString);
-}
-#endif
 
 ////////////////////////////////////////////////////////////
 //
@@ -325,32 +245,6 @@ inline bool SmFontPickList::Contains(const Font &rFont) const
     return SmPickList::Contains((void *)&rFont);
 }
 
-
-////////////////////////////////////////////////////////////
-//
-// SmStringPickComboBox
-//
-#ifdef NEVER
-class SmStringPickComboBox : public SmStringPickList, public ComboBox
-{
-protected:
-    virtual void LoseFocus();
-
-    DECL_LINK(SelectHdl, ComboBox *);
-
-public:
-    SmStringPickComboBox(Window* pParent, WinBits nWinStyle = 0, USHORT nMax = 4);
-    SmStringPickComboBox(Window* pParent, const ResId& rResId, USHORT nMax = 4);
-
-    SmStringPickComboBox& operator = (const SmStringPickList& rList);
-
-    void            SetText(const String& rStr);
-
-    virtual void    Insert(const String &rString);
-    virtual void    Update(const String &rString, const String &rNewString);
-    virtual void    Remove(const String &rString);
-};
-#endif
 
 ////////////////////////////////////////////////////////////
 //
