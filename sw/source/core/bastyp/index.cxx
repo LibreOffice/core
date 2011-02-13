@@ -75,7 +75,6 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -86,7 +85,6 @@ SwIndex::SwIndex( const SwIndex& rIdx )
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -181,8 +179,6 @@ SwIndex& SwIndex::ChgValue( const SwIndex& rIdx, xub_StrLen nNewValue )
 
     nIndex = nNewValue;
 
-IDX_CHK_ARRAY
-
     return *this; }
 
 
@@ -197,8 +193,6 @@ void SwIndex::Remove()
         pArray->pLast = pPrev;
     else
         pNext->pPrev = pPrev;
-
-IDX_CHK_ARRAY
 }
 
 /*************************************************************************
@@ -254,7 +248,6 @@ SwIndex& SwIndex::Assign( SwIndexReg* pArr, xub_StrLen nIdx )
     }
     else if( nIndex != nIdx )
         ChgValue( *this, nIdx );
-IDX_CHK_ARRAY
     return *this;
 }
 
