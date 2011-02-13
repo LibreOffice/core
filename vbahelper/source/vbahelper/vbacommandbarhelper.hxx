@@ -73,17 +73,17 @@ private:
 public:
     VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
 
-    css::uno::Reference< css::frame::XModel > getModel() { return mxModel; }
+    css::uno::Reference< css::frame::XModel > getModel() const { return mxModel; }
 
-    css::uno::Reference< css::ui::XUIConfigurationManager > getDocCfgManager() throw (css::uno::RuntimeException)
+    css::uno::Reference< css::ui::XUIConfigurationManager > getDocCfgManager() const throw (css::uno::RuntimeException)
     {
         return m_xDocCfgMgr;
     }
-    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() throw (css::uno::RuntimeException)
+    css::uno::Reference< css::ui::XUIConfigurationManager > getAppCfgManager() const throw (css::uno::RuntimeException)
     {
         return m_xAppCfgMgr;
     }
-    css::uno::Reference< css::container::XNameAccess > getPersistentWindowState() throw (css::uno::RuntimeException)
+    css::uno::Reference< css::container::XNameAccess > getPersistentWindowState() const throw (css::uno::RuntimeException)
     {
         return m_xWindowState;
     }
@@ -94,7 +94,7 @@ public:
 
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() throw (css::uno::RuntimeException);
 
-    const rtl::OUString getModuleId(){ return maModuleId; }
+    const rtl::OUString getModuleId() const { return maModuleId; }
     rtl::OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const rtl::OUString& sName ) throw (css::uno::RuntimeException);
     static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const rtl::OUString& sName, bool bMenu = false ) throw (css::uno::RuntimeException);
     static rtl::OUString generateCustomURL();
