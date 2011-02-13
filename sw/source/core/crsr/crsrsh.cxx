@@ -231,21 +231,6 @@ void SwCrsrShell::EndAction( const BOOL bIdleEnd )
     if( bIdleEnd && Imp()->GetRegion() )
     {
         pCurCrsr->Hide();
-
-#ifdef SHOW_IDLE_REGION
-if( GetWin() )
-{
-    GetWin()->Push();
-    GetWin()->ChangePen( Pen( Color( COL_YELLOW )));
-    for( USHORT n = 0; n < aPntReg.Count(); ++n )
-    {
-        SwRect aIRect( aPntReg[n] );
-        GetWin()->DrawRect( aIRect.SVRect() );
-    }
-    GetWin()->Pop();
-}
-#endif
-
     }
 
     // vor der letzten Action alle invaliden Numerierungen updaten
