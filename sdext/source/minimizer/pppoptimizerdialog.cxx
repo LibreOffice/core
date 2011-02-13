@@ -139,7 +139,8 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
         {
             try
             {
-                sal_Int64 nFileSizeSource,nFileSizeDest = 0;
+                sal_Int64 nFileSizeSource = 0;
+                sal_Int64 nFileSizeDest = 0;
                 mpOptimizerDialog = new OptimizerDialog( mxMSF, mxFrame, this );
                 mpOptimizerDialog->execute();
 
