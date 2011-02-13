@@ -28,8 +28,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-//#define TEST_RESIZE
-
 
 #include "hintids.hxx"
 #include <vcl/svapp.hxx>
@@ -63,9 +61,6 @@
 #include "poolfmt.hxx"
 #include "swtable.hxx"
 #include "cellatr.hxx"
-#ifdef TEST_RESIZE
-#include "viewsh.hxx"
-#endif
 #include "htmltbl.hxx"
 #include "swtblfmt.hxx"
 #include "htmlnum.hxx"
@@ -5478,26 +5473,6 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
             // SwTable aufbereiten
             sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
             pSaveStruct->MakeTable( nBrowseWidth, *pPam->GetPoint(), pDoc );
-
-#ifdef TEST_RESIZE
-            const SwTable *pSwTable = pTable->GetSwTable();
-            SwHTMLTableLayout *pLayoutInfo =
-                pSwTable ? ((SwTable *)pSwTable)->GetHTMLTableLayout() : 0;
-            if( pLayoutInfo )
-            {
-                ViewShell *pVSh = CheckActionViewShell();
-                if( pVSh )
-                {
-                    CallEndAction( sal_False, sal_False );
-                    CallStartAction( pVSh, sal_False );
-
-                    sal_uInt16 nNewBrwoseWidth =
-                        (sal_uInt16)GetCurrentBrowseWidth();
-                    if( nBrowseWidth != nNewBrowseWidth )
-                        pLayoutInfo->Resize( nNewBrowseWidth );
-                }
-            }
-#endif
         }
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
