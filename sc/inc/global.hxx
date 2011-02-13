@@ -97,17 +97,10 @@ const sal_Unicode CHAR_ZWNBSP   = 0x2060;
 #define MINZOOM     20
 #define MAXZOOM     400
 
-#ifdef SC_ROWLIMIT_TYPECONVERSION_NOCONVPASS
-const size_t MAXSUBTOTAL        = 3;
-const size_t MAXQUERY           = 8;
-const size_t PIVOT_MAXFIELD     = 8;
-const size_t PIVOT_MAXPAGEFIELD = 10;
-#else
 const SCSIZE MAXSUBTOTAL        = 3;
 const SCSIZE MAXQUERY           = 8;
 const SCSIZE PIVOT_MAXFIELD     = 8;
 const SCSIZE PIVOT_MAXPAGEFIELD = 10;
-#endif
 
 #define SC_START_INDEX_DB_COLL 50000
                                         // Above this threshold are indices
