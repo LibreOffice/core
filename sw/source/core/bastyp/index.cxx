@@ -45,46 +45,6 @@ int SwIndex::nSerial = 0;
 TYPEINIT0(SwIndexReg);  // rtti
 
 
-#ifdef CHK
-
-#define IDX_CHK_ARRAY       pArray->ChkArr();
-#define ARR_CHK_ARRAY       ChkArr();
-
-
-void SwIndexReg::ChkArr()
-{
-    OSL_ENSURE( (pFirst && pLast) || (!pFirst && !pLast),
-            "Array falsch Indiziert" );
-
-    if( !pFirst )
-        return;
-
-    xub_StrLen nVal = 0;
-    const SwIndex* pIdx = pFirst, *pPrev = 0;
-    OSL_ENSURE( !pIdx->pPrev, "Array-pFirst nicht am Anfang" );
-
-    while( pIdx != pLast )
-    {
-        OSL_ENSURE( pIdx->pPrev != pIdx && pIdx->pNext != pIdx,
-                "Index zeigt auf sich selbst" );
-
-        OSL_ENSURE( pIdx->nIndex >= nVal, "Reihenfolge stimmt nicht" );
-        OSL_ENSURE( pPrev == pIdx->pPrev, "Verkettung stimmt nicht" );
-        pPrev = pIdx;
-        pIdx = pIdx->pNext;
-        nVal = pPrev->nIndex;
-    }
-}
-
-#else                                   // CHK
-
-#define IDX_CHK_ARRAY
-#define ARR_CHK_ARRAY
-
-#endif                                  // CHK
-
-
-
 SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
     : nIndex( nIdx ), pArray( pArr ), pNext( 0 ), pPrev( 0 )
 {
@@ -104,7 +64,6 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
 #if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
-IDX_CHK_ARRAY
 }
 
 
@@ -354,7 +313,6 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
             pStt = pStt->pNext;
         }
     }
-ARR_CHK_ARRAY
 }
 
 #if OSL_DEBUG_LEVEL > 1
