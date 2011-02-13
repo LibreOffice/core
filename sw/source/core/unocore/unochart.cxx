@@ -1372,19 +1372,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwChartDataProvider::detectArgume
     if (!bNeedSequenceMapping)
         aSequenceMapping.realloc(0);
 
-
-#ifdef TL_NOT_USED  // in the end chart2 did not want to have the sequence minimized
-    // try to shorten the 'SequenceMapping' as much as possible
-    sal_Int32 k;
-    for (k = nNumDS_LDS - 1;  k >= 0;  --k)
-    {
-        if (pSequenceMapping[k] != k)
-            break;
-    }
-    aSequenceMapping.realloc( k + 1 );
-#endif
-
-
     //
     // build resulting properties
     //
