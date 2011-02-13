@@ -31,7 +31,6 @@
 
 #include <tools/string.hxx>
 
-/******************* T y p e s *******************************************/
 class SvChar
 {
 public:

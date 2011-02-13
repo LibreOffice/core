@@ -33,14 +33,12 @@
 #include <tools/gen.hxx>
 #include <tools/stream.hxx>
 
-/******************** enum ***********************************************/
 enum SVTOKEN_ENUM { SVTOKEN_EMPTY,      SVTOKEN_COMMENT,
                     SVTOKEN_INTEGER,    SVTOKEN_STRING,
                     SVTOKEN_BOOL,       SVTOKEN_IDENTIFIER,
                     SVTOKEN_CHAR,       SVTOKEN_RTTIBASE,
                     SVTOKEN_EOF,        SVTOKEN_HASHID };
 
-/******************** class SvToken **************************************/
 class BigInt;
 class SvToken
 {
@@ -53,7 +51,6 @@ friend class SvTokenStream;
         ULONG               nLong;
         BOOL                bBool;
         char                cChar;
-//      SvRttiBase *        pComplexObj;
         SvStringHashEntry * pHash;
     };
 public:
@@ -63,7 +60,6 @@ public:
             SvToken( SVTOKEN_ENUM nTypeP, BOOL b );
             SvToken( char c );
             SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr );
-//            SvToken( SvRttiBase * pComplexObj );
             SvToken( SVTOKEN_ENUM nTypeP );
 
     SvToken & operator = ( const SvToken & rObj );
@@ -102,7 +98,6 @@ public:
     ULONG       GetNumber() const       { return nLong;         }
     BOOL        GetBool() const         { return bBool;         }
     char        GetChar() const         { return cChar;         }
-//    SvRttiBase *GetObject() const       { return pComplexObj;   }
 
     void        SetHash( SvStringHashEntry * pHashP )
                 { pHash = pHashP; nType = SVTOKEN_HASHID; }
@@ -128,26 +123,19 @@ inline SvToken::SvToken( char c )
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP, const ByteString & rStr )
     : nType( nTypeP ), aString( rStr ) {}
 
-/*
-inline SvToken::SvToken( SvRttiBase * pObj )
-    : nType( SVTOKEN_RTTIBASE ), pComplexObj( pObj )
-        { pObj->AddRef(); }
-*/
-
 inline SvToken::SvToken( SVTOKEN_ENUM nTypeP )
 : nType( nTypeP ) {}
 
 DECLARE_LIST( SvTokenList, SvToken * )
 
-/******************** class SvTokenStream ********************************/
 class SvTokenStream
 {
     ULONG       nLine, nColumn;
     int         nBufPos;
-    int         c;          // naechstes Zeichen
+    int         c;          // next character
     CharSet     nCharSet;
-    char *      pCharTab;   // Zeiger auf die Konverierungstabelle
-    USHORT      nTabSize;   // Tabulator Laenge
+    char *      pCharTab;   // pointer to conversion table
+    USHORT      nTabSize;   // length of tabulator
     ByteString      aStrTrue;
     ByteString      aStrFalse;
     ULONG       nMaxPos;
@@ -179,7 +167,7 @@ class SvTokenStream
                     }
     void            CalcColumn()
                     {
-                        // wenn Zeilenende berechnung sparen
+                        // if end of line spare calculation
                         if( 0 != c )
                         {
                             USHORT n = 0;
@@ -207,7 +195,7 @@ public:
                     {
                         SvToken * pRetToken = pCurToken;
                         if( NULL == (pCurToken = aTokList.Prev()) )
-                            // Current Zeiger nie Null
+                            // current pointer never null
                             pCurToken = pRetToken;
 
                         return pRetToken;
@@ -216,14 +204,14 @@ public:
                     {
                         SvToken * pRetToken = pCurToken;
                         if( NULL == (pCurToken = aTokList.Next()) )
-                            // Current Zeiger nie Null
+                            // current pointer never null
                             pCurToken = pRetToken;
                         SetMax();
                         return pRetToken;
                     }
     SvToken *       GetToken_Next()
                     {
-                        // Kommentare werden initial entfernt
+                        // comments get removed initially
                         return GetToken_NextAll();
                     }
     SvToken *       GetToken() const { return pCurToken; }

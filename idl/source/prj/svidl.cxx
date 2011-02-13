@@ -74,13 +74,13 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
     }
     DirEntry aF2( rFile2 );
     if( nC1 != nC2 )
-    {// es hat sich etwas geaendert
+    {// something has changed
         DirEntry aF1( rFile1 );
         aF1.Kill();
-        // Datei verschieben
+        // move file
         if( aF2.MoveTo( aF1 ) )
         {
-            // Beide Dateien loeschen
+            // delete both files
             aF1.Kill();
             aF2.Kill();
             return FALSE;
@@ -90,11 +90,6 @@ BOOL FileMove_Impl( const String & rFile1, const String & rFile2, BOOL bImmerVer
     return 0 == aF2.Kill();
 }
 
-/*************************************************************************
-|*    main()
-|*
-|*    Beschreibung
-*************************************************************************/
 #if defined( UNX ) || (defined( PM2 ) && defined( CSET )) || defined (WTC) || defined (MTW) || defined (__MINGW32__) || defined( OS2 )
 int main ( int argc, char ** argv)
 {
@@ -338,7 +333,7 @@ int cdecl main ( int argc, char ** argv)
                 DirEntry aT(aCommand.aTargetFile);
                 aT.Kill();
 #endif
-                // Datei stempeln, da idl korrekt durchlaufen wurde
+                // stamp file, because idl passed through correctly
                 SvFileStream aOutStm( aCommand.aTargetFile,
                                 STREAM_READWRITE | STREAM_TRUNC );
             }

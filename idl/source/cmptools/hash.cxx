@@ -29,33 +29,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
-// C and C++ Includes.
+// C and C++ includes
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
 
-// Programmabh„ngige Includes.
+// program-sensitive includes
 #include <hash.hxx>
 #include <tools/debug.hxx>
 
-/****************** C O D E **********************************************/
-/*************************************************************************
-|*
-|*    SvStringHashEntry::~SvStringHashEntry()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvStringHashEntry::~SvStringHashEntry() { };
 
-/*************************************************************************
-|*
-|*    SvHashTable::SvHashTable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvHashTable::SvHashTable( UINT32 nMaxEntries )
 {
     nMax = nMaxEntries;     // set max entries
@@ -64,13 +48,6 @@ SvHashTable::SvHashTable( UINT32 nMaxEntries )
     lAsk = 0;
 }
 
-/*************************************************************************
-|*
-|*    SvHashTable::~SvHashTable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvHashTable::~SvHashTable()
 {
 #ifdef DOS_NIE
@@ -81,13 +58,6 @@ SvHashTable::~SvHashTable()
 #endif
 }
 
-/*************************************************************************
-|*
-|*    SvHashTable::Test_Insert()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
                                UINT32 * pInsertPos )
 {
@@ -128,14 +98,6 @@ BOOL SvHashTable::Test_Insert( const void * pElement, BOOL bInsert,
     return( FALSE );
 }
 
-/************************************************************************/
-/*************************************************************************
-|*
-|*    SvStringHashTable::SvStringHashTable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
         : SvHashTable( nMaxEntries )
 {
@@ -145,7 +107,7 @@ SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
 #endif
     pEntries = new SvStringHashEntry[ nMaxEntries ];
 
-    // RefCount auf eins setzen
+    // set RefCount to one
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + nMaxEntries;
@@ -156,17 +118,10 @@ SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
     }
 }
 
-/*************************************************************************
-|*
-|*    ~SvStringHashTable::SvStringHashTable()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvStringHashTable::~SvStringHashTable()
 {
 #ifdef DBG_UTIL
-    // RefCount auf eins setzen
+    // set RefCount to one
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + GetMax();
@@ -180,13 +135,6 @@ SvStringHashTable::~SvStringHashTable()
     delete [] pEntries;
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::HashFunc()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 UINT32 SvStringHashTable::HashFunc( const void * pElement ) const
 {
     UINT32          nHash = 0;  // hash value
@@ -208,13 +156,6 @@ UINT32 SvStringHashTable::HashFunc( const void * pElement ) const
     return( nHash );
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::GetNearString()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 ByteString SvStringHashTable::GetNearString( const ByteString & rName ) const
 {
     for( UINT32 i = 0; i < GetMax(); i++ )
@@ -229,13 +170,6 @@ ByteString SvStringHashTable::GetNearString( const ByteString & rName ) const
     return ByteString();
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::IsEntry()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 BOOL SvStringHashTable::IsEntry( UINT32 nIndex ) const
 {
     if( nIndex >= GetMax() )
@@ -243,13 +177,6 @@ BOOL SvStringHashTable::IsEntry( UINT32 nIndex ) const
     return pEntries[ nIndex ].HasId();
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::Insert()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 BOOL SvStringHashTable::Insert( const ByteString & rName, UINT32 * pIndex )
 {
     UINT32 nIndex;
@@ -264,26 +191,12 @@ BOOL SvStringHashTable::Insert( const ByteString & rName, UINT32 * pIndex )
     return TRUE;
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::Test()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 BOOL SvStringHashTable::Test( const ByteString & rName, UINT32 * pPos ) const
 {
     return ((SvStringHashTable *)this)->SvHashTable::
                 Test_Insert( &rName, FALSE, pPos );
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::Get()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 SvStringHashEntry * SvStringHashTable::Get( UINT32 nIndex ) const
 {
     if( IsEntry( nIndex ) )
@@ -291,26 +204,12 @@ SvStringHashEntry * SvStringHashTable::Get( UINT32 nIndex ) const
     return( NULL );
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::Get()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 StringCompare SvStringHashTable::Compare( const void * pElement,
                                           UINT32 nIndex ) const
 {
     return ((const ByteString *)pElement)->CompareTo( pEntries[ nIndex ].GetName() );
 }
 
-/*************************************************************************
-|*
-|*    SvStringHashTable::FillHashList()
-|*
-|*    Beschreibung
-|*
-*************************************************************************/
 void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
 {
     for( UINT32 n = 0; n < GetMax(); n++ )
@@ -318,7 +217,7 @@ void SvStringHashTable::FillHashList( SvStringHashList * pList ) const
         if( IsEntry( n ) )
             pList->push_back( Get( n ) );
     }
-    // Hash Reihenfolge, jetzt sortieren
+    // hash order, sort now
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

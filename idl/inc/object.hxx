@@ -56,7 +56,6 @@ public:
     ULONG   GetObject( ULONG nPos ){ return (ULONG) List::GetObject( nPos ); }
 };
 
-/******************** class SvClassElement *******************************/
 SV_DECL_REF(SvMetaClass)
 class SvClassElement : public SvPersistBase
 {
@@ -86,7 +85,6 @@ public:
 SV_DECL_IMPL_REF(SvClassElement)
 SV_DECL_IMPL_PERSIST_LIST(SvClassElement,SvClassElement *)
 
-/******************** class SvMetaClass *********************************/
 class SvMetaModule;
 SV_DECL_PERSIST_LIST(SvMetaClass,SvMetaClass *)
 class SvMetaClass : public SvMetaType

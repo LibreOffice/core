@@ -32,8 +32,6 @@
 #include <types.hxx>
 #include <command.hxx>
 
-/******************** class SvMetaSlot **********************************/
-//class SbxObject;
 class SvMetaSlotMemberList;
 class SvMetaSlot : public SvMetaAttribute
 {
@@ -49,15 +47,15 @@ class SvMetaSlot : public SvMetaAttribute
     SvBOOL          aGet;
     SvBOOL          aSet;
 
-    SvBOOL          aCachable;  // exclusiv
+    SvBOOL          aCachable;  // exclusive
     SvBOOL          aVolatile;
     SvBOOL          aToggle;
     SvBOOL          aAutoUpdate;
 
-    SvBOOL          aSynchron;  // exclusiv
+    SvBOOL          aSynchron;  // exclusive
     SvBOOL          aAsynchron;
 
-    SvBOOL          aRecordPerItem;// exclusiv
+    SvBOOL          aRecordPerItem;// exclusive
     SvBOOL          aRecordPerSet;
     SvBOOL          aRecordManual;
     SvBOOL          aNoRecord;
@@ -202,10 +200,6 @@ public:
     const ByteString &      GetDefault() const;
     const ByteString &      GetDisableFlags() const;
     BOOL                GetPseudoSlots() const;
-    /*
-    BOOL                GetGet() const;
-    BOOL                GetSet() const;
-    */
     BOOL                GetCachable() const;
     BOOL                GetVolatile() const;
     BOOL                GetToggle() const;
@@ -242,7 +236,6 @@ public:
     void                ResetSlotPointer()
                         { pNextSlot = pLinkedSlot = 0; }
 
-//    void                FillSbxObject( SvIdlDataBase & rBase, SbxObject *, BOOL bProp );
 #ifdef IDL_COMPILER
     SvMetaEnumValue*    GetEnumValue() const
                         { return pEnumValue; }

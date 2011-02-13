@@ -35,7 +35,6 @@
 class SvSlotElementList;
 struct SvSlotElement;
 
-/******************** class SvMetaAttribute *****************************/
 SV_DECL_REF(SvMetaType)
 SV_DECL_REF(SvMetaAttribute)
 SV_DECL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
@@ -105,8 +104,6 @@ public:
     virtual BOOL        IsVariable() const;
     virtual ByteString      GetMangleName( BOOL bVariable ) const;
 
-//    void                FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags = 0 );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj, BOOL bVariable );
 
 #ifdef IDL_COMPILER
     virtual BOOL        Test( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -135,14 +132,13 @@ SV_IMPL_REF(SvMetaAttribute)
 SV_IMPL_PERSIST_LIST(SvMetaAttribute,SvMetaAttribute *)
 
 
-/******************** class SvType *********************************/
 enum { CALL_VALUE, CALL_POINTER, CALL_REFERENCE };
 enum { TYPE_METHOD, TYPE_STRUCT, TYPE_BASE, TYPE_ENUM, TYPE_UNION,
       TYPE_CLASS, TYPE_POINTER };
 class SvMetaType : public SvMetaExtern
 {
-    SvBOOL                      aIn;    // Eingangsparameter
-    SvBOOL                      aOut;   // Returnparameter
+    SvBOOL                      aIn;    // input parameter
+    SvBOOL                      aOut;   // return parameter
     Svint                       aCall0, aCall1;
     Svint                       aSbxDataType;
     SvIdentifier                aSvName;
@@ -186,7 +182,7 @@ public:
             SvMetaType( const ByteString & rTypeName, const ByteString & rSbxName,
                         const ByteString & rOdlName, char cParserChar,
                         const ByteString & rCName, const ByteString & rBasicName,
-                        const ByteString & rBasicPostfix/*, SbxDataType nT = SbxEMPTY */);
+                        const ByteString & rBasicPostfix );
 
     SvMetaAttributeMemberList & GetAttrList() const;
     ULONG               GetAttrCount() const
@@ -204,10 +200,6 @@ public:
     SvMetaType *        GetReturnType() const;
     BOOL                IsItem() const { return bIsItem; }
     BOOL                IsShell() const { return bIsShell; }
-
-//    void                SetSbxDataType( SbxDataType nT )
-//                        { aSbxDataType = (int)nT; }
-//    SbxDataType         GetSbxDataType() const;
 
     void                SetIn( BOOL b ) { aIn = b; }
     BOOL                GetIn() const;
@@ -234,7 +226,6 @@ public:
 
     virtual BOOL        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
 
-//    void                FillSbxObject( SbxVariable * pObj, BOOL bVariable );
 
 #ifdef IDL_COMPILER
     virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
@@ -249,7 +240,6 @@ public:
 
     ULONG               MakeSfx( ByteString * pAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
-    //BOOL              ReadTypePrefix( SvIdlDataBase &, SvTokenStream & rInStm );
     BOOL                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
     void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab, WriteType );
@@ -265,7 +255,6 @@ DECLARE_LIST(SvMetaTypeList,SvMetaType *)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaType,SvMetaType *)
 
 
-/******************** class SvTypeString *********************************/
 class SvMetaTypeString : public SvMetaType
 {
 public:
@@ -276,7 +265,6 @@ SV_DECL_IMPL_REF(SvMetaTypeString)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeString,SvMetaTypeString *)
 
 
-/******************** class SvMetaEnumValue **********************************/
 class SvMetaEnumValue : public SvMetaName
 {
     ByteString      aEnumValue;
@@ -295,7 +283,6 @@ SV_DECL_IMPL_REF(SvMetaEnumValue)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaEnumValue,SvMetaEnumValue *)
 
 
-/******************** class SvTypeEnum *********************************/
 class SvMetaTypeEnum : public SvMetaType
 {
     SvMetaEnumValueMemberList   aEnumValueList;
@@ -331,7 +318,6 @@ SV_DECL_IMPL_REF(SvMetaTypeEnum)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaTypeEnum,SvMetaTypeEnum *)
 
 
-/******************** class SvTypeVoid ***********************************/
 class SvMetaTypevoid : public SvMetaType
 {
 public:

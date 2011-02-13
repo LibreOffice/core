@@ -41,7 +41,6 @@ typedef ::std::vector< String* > StringList;
 
 typedef ::std::vector< ByteString* > ByteStringList;
 
-/******************** class SvCommand ************************************/
 class SvCommand
 {
 public:

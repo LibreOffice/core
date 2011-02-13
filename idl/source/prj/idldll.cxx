@@ -34,15 +34,15 @@
 
 #include <sysdep.hxx>
 
-// Statische DLL-Verwaltungs-Variablen
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
+// static  DLL handle
+static HINSTANCE hDLLInst = 0;      // HANDLE of the DLL
 
 
 /***************************************************************************
 |*
 |*    LibMain()
 |*
-|*    Beschreibung       Initialisierungsfunktion der DLL
+|*    description       initializing function of the DLL
 |*
 ***************************************************************************/
 
@@ -62,7 +62,7 @@ extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
 |*
 |*    WEP()
 |*
-|*    Beschreibung      DLL-Deinitialisierung
+|*    description      DLL de-initializing
 |*
 ***************************************************************************/
 

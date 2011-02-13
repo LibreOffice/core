@@ -59,7 +59,6 @@ enum
 };
 typedef int WriteAttribute;
 
-/******************** Meta Factory **************************************/
 #define SV_DECL_META_FACTORY( Class, CLASS_ID )                         \
     SV_DECL_PERSIST( Class, CLASS_ID )
 
@@ -74,7 +73,6 @@ typedef int WriteAttribute;
 #define SV_IMPL_META_FACTORY1( Class, Super1 )                          \
     SV_IMPL_PERSIST1( Class, Super1 )
 
-/******************** class SvMetaObject ********************************/
 class SvMetaObject : public SvPersistBase
 {
 public:
@@ -128,7 +126,6 @@ public:
                     }
 };
 
-/******************** class SvMetaName **********************************/
 class SvMetaName : public SvMetaObject
 {
     SvString      aName;
@@ -180,7 +177,6 @@ SV_DECL_IMPL_REF(SvMetaName)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaName,SvMetaName *)
 
 
-/******************** class SvMetaReference *****************************/
 SV_DECL_REF(SvMetaReference)
 class SvMetaReference : public SvMetaName
 {
@@ -229,11 +225,10 @@ SV_IMPL_REF(SvMetaReference)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaReference,SvMetaReference *)
 
 
-/******************** class SvMetaExtern *********************************/
 class SvMetaModule;
 class SvMetaExtern : public SvMetaReference
 {
-    SvMetaModule *          pModule;    // in welchem Modul enthalten
+    SvMetaModule *          pModule;    // included in which module
 
     SvUUId                  aUUId;
     SvVersion               aVersion;

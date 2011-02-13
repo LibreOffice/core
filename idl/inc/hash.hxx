@@ -33,13 +33,12 @@
 #include <tools/string.hxx>
 #include <vector>
 
-/****************** H a s h - T a b l e **********************************/
 class SvHashTable
 {
     UINT32       nMax;                 // size of hash-tabel
     UINT32       nFill;                // elements in hash-tabel
-    UINT32       lAsk;                 // Anzahl der Anfragen
-    UINT32       lTry;                 // Anzahl der Versuche
+    UINT32       lAsk;                 // number of requests
+    UINT32       lTry;                 // number of tries
 protected:
     BOOL        Test_Insert( const void *, BOOL bInsert, UINT32 * pInsertPos );
 
@@ -56,7 +55,6 @@ public:
     virtual BOOL            IsEntry( UINT32 ) const = 0;
 };
 
-/************** S t r i n g H a s h T a b l e E n t r y ******************/
 class SvStringHashTable;
 class SvStringHashEntry : public SvRefBase
 {
@@ -97,7 +95,6 @@ public:
 
 SV_DECL_IMPL_REF(SvStringHashEntry)
 
-/****************** S t r i n g H a s h T a b l e ************************/
 typedef ::std::vector< SvStringHashEntry* > SvStringHashList;
 
 class SvStringHashTable : public SvHashTable

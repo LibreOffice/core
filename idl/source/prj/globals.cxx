@@ -29,13 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_idl.hxx"
 
-/****************** I N C L U D E S **************************************/
 #include <tools/shl.hxx>
 
 #include <globals.hxx>
 #include <database.hxx>
 
-/****************** G L O B A L S ****************************************/
 #ifdef DOS
 static IdlDll * pApp = NULL;
 IdlDll * GetIdlApp()
@@ -50,9 +48,6 @@ IdlDll * GetIdlApp()
     if( !(*(IdlDll**)GetAppData(SHL_IDL)) )
     {
         (*(IdlDll**)GetAppData(SHL_IDL)) = new IdlDll();
-        // Temporaer, sonst nur wenn Compiler
-        //GetIdlApp()->pHashTable      = new SvStringHashTable( 2801 );
-        //GetIdlApp()->pGlobalNames    = new SvGlobalHashNames();
     }
     return (*(IdlDll**)GetAppData(SHL_IDL));
 }
@@ -93,11 +88,6 @@ IdlDll::~IdlDll()
     delete pHashTable;
 }
 
-/*************************************************************************
-|*
-|*    SvGlobalHashNames::SvGlobalHashNames()
-|*
-*************************************************************************/
 inline SvStringHashEntry * INS( const ByteString & rName )
 {
     UINT32  nIdx;
@@ -126,7 +116,6 @@ SvGlobalHashNames::SvGlobalHashNames()
     , MM_SlotId( INS( "SlotId" ) )
     , MM_HasCoreId( INS( "HasCoreId" ) )
     , MM_Cachable( INS( "Cachable" ) )
-//    , MM_Volatile( INS( "Volatile" ) )
     , MM_Toggle( INS( "Toggle" ) )
     , MM_AutoUpdate( INS( "AutoUpdate" ) )
     , MM_Synchron( INS( "Synchron" ) )

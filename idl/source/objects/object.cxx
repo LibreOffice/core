@@ -38,23 +38,12 @@
 #include <globals.hxx>
 #include <database.hxx>
 
-/******************** class SvClassElement *******************************/
 SV_IMPL_PERSIST1( SvClassElement, SvPersistBase );
 
-/*************************************************************************
-|*    SvClassElement::SvClassElement()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvClassElement::SvClassElement()
 {
 };
 
-/*************************************************************************
-|*    SvClassElement::Load()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvClassElement::Load( SvPersistStream & rStm )
 {
     BYTE nMask;
@@ -75,43 +64,27 @@ void SvClassElement::Load( SvPersistStream & rStm )
     }
 }
 
-/*************************************************************************
-|*    SvClassElement::Save()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvClassElement::Save( SvPersistStream & rStm )
 {
-    // Maske erstellen
+    // create mask
     BYTE nMask = 0;
     if( aAutomation.IsSet() )       nMask |= 0x1;
     if( aPrefix.Len() )             nMask |= 0x2;
     if( xClass.Is() )               nMask |= 0x4;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aAutomation;
     if( nMask & 0x02 ) rStm.WriteByteString( aPrefix );
     if( nMask & 0x04 ) rStm << xClass;
 }
 
-/****************** SvMetaClass ******************************************/
 SV_IMPL_META_FACTORY1( SvMetaClass, SvMetaType );
-/*************************************************************************
-|*    SvMetaClass::SvMetaClass()
-|*
-|*    Beschreibung
-*************************************************************************/
 SvMetaClass::SvMetaClass()
     : aAutomation( TRUE, FALSE )
 {
 }
 
-/*************************************************************************
-|*    SvMetaClass::Load()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::Load( SvPersistStream & rStm )
 {
     SvMetaType::Load( rStm );
@@ -141,16 +114,11 @@ void SvMetaClass::Load( SvPersistStream & rStm )
     if( nMask & 0x10 ) rStm >> aAutomation;
 }
 
-/*************************************************************************
-|*    SvMetaClass::Save()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::Save( SvPersistStream & rStm )
 {
     SvMetaType::Save( rStm );
 
-    // Maske erstellen
+    // create mask
     BYTE nMask = 0;
     if( aAttrList.Count() )         nMask |= 0x1;
     if( aSuperClass.Is() )          nMask |= 0x2;
@@ -158,7 +126,7 @@ void SvMetaClass::Save( SvPersistStream & rStm )
     if( xAutomationInterface.Is() ) nMask |= 0x8;
     if( aAutomation.IsSet() )       nMask |= 0x10;
 
-    // Daten schreiben
+    // write data
     rStm << nMask;
     if( nMask & 0x01 ) rStm << aAttrList;
     if( nMask & 0x02 ) rStm << aSuperClass;
@@ -168,11 +136,6 @@ void SvMetaClass::Save( SvPersistStream & rStm )
 }
 
 #ifdef IDL_COMPILER
-/*************************************************************************
-|*    SvMetaClass::ReadAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                         SvTokenStream & rInStm )
 {
@@ -180,11 +143,6 @@ void SvMetaClass::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aAutomation.ReadSvIdl( SvHash_Automation(), rInStm );
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteAttributesSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
                                  SvStream & rOutStm, USHORT nTab )
 {
@@ -203,11 +161,6 @@ void SvMetaClass::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::ReadContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                                     SvTokenStream & rInStm )
 {
@@ -232,7 +185,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                     {
                         if( xAutomationInterface.Is() )
                         {
-                            // Fehler setzen
+                            // set error
                             rBase.SetError( "Automation allready set",
                                             rInStm.GetToken() );
                             rBase.WriteError( rInStm );
@@ -242,14 +195,14 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
                     }
                     else
                     {
-                        // Fehler setzen
+                        // set error
                         rBase.SetError( "missing ]", rInStm.GetToken() );
                         rBase.WriteError( rInStm );
                     }
                 }
                 else
                 {
-                    // Fehler setzen
+                    // set error
                     rBase.SetError( "only attribute Automation allowed",
                                     rInStm.GetToken() );
                     rBase.WriteError( rInStm );
@@ -265,7 +218,7 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            // Fehler setzen
+            // set error
             rBase.SetError( "unknown imported interface", rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -307,11 +260,6 @@ void SvMetaClass::ReadContextSvIdl( SvIdlDataBase & rBase,
     rInStm.Seek( nTokPos );
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteContextSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteContextSvIdl
 (
     SvIdlDataBase & rBase,
@@ -319,7 +267,6 @@ void SvMetaClass::WriteContextSvIdl
     USHORT nTab
 )
 {
-    //SvMetaType::WriteContextSvIdl( rBase, rOutStm, nTab );
     ULONG n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
@@ -342,11 +289,6 @@ void SvMetaClass::WriteContextSvIdl
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::ReadSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 BOOL SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     ULONG nTokPos = rInStm.Tell();
@@ -359,7 +301,7 @@ BOOL SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
             bOk = aSuperClass.Is();
             if( !bOk )
             {
-                // Fehler setzen
+                // set error
                 rBase.SetError( "unknown super class",
                                 rInStm.GetToken() );
                 rBase.WriteError( rInStm );
@@ -377,11 +319,6 @@ BOOL SvMetaClass::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     return FALSE;
 }
 
-/*************************************************************************
-|*    SvMetaClass::TestAttribute()
-|*
-|*    Beschreibung
-*************************************************************************/
 BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
                                  SvMetaAttribute & rAttr ) const
 {
@@ -396,7 +333,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
         SvMetaAttribute * pS = aAttrList.GetObject( n );
         if( pS->GetName() == rAttr.GetName() )
         {
-            // Werte muessen uebereinstimmen
+            // values have to match
             if( pS->GetSlotId().GetValue() != rAttr.GetSlotId().GetValue() )
             {
                 DBG_ERROR( "Gleicher Name in MetaClass : " );
@@ -416,7 +353,7 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
         {
             UINT32 nId1 = pS->GetSlotId().GetValue();
             UINT32 nId2 = rAttr.GetSlotId().GetValue();
-            if( nId1 == nId2 && nId1 != 0 /*&& nId2 != 0 ist ueberfluessig*/ )
+            if( nId1 == nId2 && nId1 != 0 )
             {
                 DBG_ERROR( "Gleiche Id in MetaClass : " );
                 DBG_ERROR( ByteString::CreateFromInt32( pS->GetSlotId().GetValue() ).GetBuffer() );
@@ -440,11 +377,6 @@ BOOL SvMetaClass::TestAttribute( SvIdlDataBase & rBase, SvTokenStream & rInStm,
     return TRUE;
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteSvIdl()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
                               USHORT nTab )
 {
@@ -456,11 +388,6 @@ void SvMetaClass::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     rOutStm << endl;
 }
 
-/*************************************************************************
-|*    SvMetaClass::Write()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
                         USHORT nTab,
                          WriteType nT, WriteAttribute )
@@ -489,7 +416,7 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             WriteDescription( rOutStm );
             rOutStm << "</INTERFACE>" << endl << endl;
 
-            // alle Attribute schreiben
+            // write all attributes
             ULONG n;
             for( n = 0; n < aAttrList.Count(); n++ )
             {
@@ -511,11 +438,6 @@ void SvMetaClass::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteSlotParamArray()
-|*
-|*    Beschreibung
-*************************************************************************/
 USHORT SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
                                         SvSlotElementList & rSlotList,
                                         SvStream & rOutStm )
@@ -531,11 +453,6 @@ USHORT SvMetaClass::WriteSlotParamArray( SvIdlDataBase & rBase,
     return nCount;
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteSlots()
-|*
-|*    Beschreibung
-*************************************************************************/
 USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
                                 USHORT nCount, SvSlotElementList & rSlotList,
                                 SvIdlDataBase & rBase,
@@ -555,23 +472,18 @@ USHORT SvMetaClass::WriteSlots( const ByteString & rShellName,
     return nSCount;
 }
 
-/*************************************************************************
-|*    SvMetaClass::InsertSlots()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
                             SvMetaClassList &rClassList,
                             const ByteString & rPrefix, SvIdlDataBase& rBase)
 {
-    // Wurde diese Klasse schon geschrieben ?
+    // was this class already written?
     for ( size_t i = 0, n = rClassList.size(); i < n ; ++i )
         if ( rClassList[ i ] == this )
             return;
 
     rClassList.push_back( this );
 
-    // alle direkten Attribute schreiben
+    // write all direct attributes
     ULONG n;
     for( n = 0; n < aAttrList.Count(); n++ )
     {
@@ -587,22 +499,22 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
 
         if( nPos == rSuperList.Count() )
         {
-            // nur schreiben, wenn nicht schon bei SubClass oder
-            // importiertem Interface geschrieben
+            // Write only if not already written by subclass or
+            // imported interface.
             rSuperList.Insert( nId, nPos );
             pAttr->Insert(rList, rPrefix, rBase);
         }
     }
 
-    // Alle schon von SuperShells importierten Interfaces sollen nicht
-    // mehr geschrieben werden
-    // Es ist also verboten, da\s Shell und SuperShell die gleiche Klasse
-    // direkt importieren !
+    // All Interfaces already imported by SuperShells should not be
+    // written any more.
+    // It is prohibited that Shell and SuperShell directly import the same
+    //class.
     if( IsShell() && aSuperClass.Is() )
         aSuperClass->FillClasses( rClassList );
 
-    // alle Attribute der importierten Klassen schreiben, sofern diese nicht
-    // schon von der Superklasse importiert wurden
+    // Write all attributes of the imported classes, as long as they have
+    // not already been imported by the superclass.
     for( n = 0; n < aClassList.Count(); n++ )
     {
         SvClassElement * pEle = aClassList.GetObject( n );
@@ -612,32 +524,27 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, SvULongs& rSuperList,
             rPre += '.';
         rPre += pEle->GetPrefix();
 
-        // Zun"achst die direkt importierten Interfaces schreiben
+        // first of all write direct imported interfaces
         pCl->InsertSlots( rList, rSuperList, rClassList, rPre, rBase );
     }
 
-    // Superklassen nur schreiben, wenn keine Shell und nicht in der Liste
+    // only write superclass if no shell and not in the list
     if( !IsShell() && aSuperClass.Is() )
     {
         aSuperClass->InsertSlots( rList, rSuperList, rClassList, rPrefix, rBase );
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::FillClasses()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::FillClasses( SvMetaClassList & rList )
 {
-    // Bin ich noch nicht drin ?
+    // Am I not yet in?
     for ( size_t i = 0, n = rList.size(); i < n; ++i )
         if ( rList[ i ] == this )
             return;
 
     rList.push_back( this );
 
-    // Meine Imports
+    // my imports
     for( ULONG n = 0; n < aClassList.Count(); n++ )
     {
         SvClassElement * pEle = aClassList.GetObject( n );
@@ -645,23 +552,18 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
         pCl->FillClasses( rList );
     }
 
-    // Meine Superklasse
+    // my superclass
     if( aSuperClass.Is() )
         aSuperClass->FillClasses( rList );
 }
 
 
-/*************************************************************************
-|*    SvMetaClass::WriteSlotStubs()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteSlotStubs( const ByteString & rShellName,
                                 SvSlotElementList & rSlotList,
                                 ByteStringList & rList,
                                 SvStream & rOutStm )
 {
-    // alle Attribute schreiben
+    // write all attributes
     for( ULONG n = 0; n < rSlotList.Count(); n++ )
     {
         SvSlotElement *pEle = rSlotList.GetObject( n );
@@ -670,27 +572,22 @@ void SvMetaClass::WriteSlotStubs( const ByteString & rShellName,
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteSfx()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 {
     WriteStars( rOutStm );
-    // Klasse definieren
+    // define class
     rOutStm << "#ifdef " << GetName().GetBuffer() << endl;
     rOutStm << "#undef ShellClass" << endl;
     rOutStm << "#undef " << GetName().GetBuffer() << endl;
     rOutStm << "#define ShellClass " << GetName().GetBuffer() << endl;
 
-    // Fuer Interfaces werden kein Slotmaps geschrieben
+    // no slotmaps get written for interfaces
     if( !IsShell() )
     {
         rOutStm << "#endif" << endl << endl;
         return;
     }
-    // Parameter Array schreiben
+    // write parameter array
     rOutStm << "SFX_ARGUMENTMAP(" << GetName().GetBuffer() << ')' << endl
         << '{' << endl;
 
@@ -707,13 +604,13 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     ULONG nSlotCount = aSlotList.Count();
 
-    // alle Attribute schreiben
+    // write all attributes
     USHORT nArgCount = WriteSlotParamArray( rBase, aSlotList, rOutStm );
     if( nArgCount )
         Back2Delemitter( rOutStm );
     else
     {
-        // mindestens einen dummy
+        // at leaast one dummy
         WriteTab( rOutStm, 1 );
         rOutStm << "SFX_ARGUMENT( 0, 0, SfxVoidItem )" << endl;
     }
@@ -727,17 +624,17 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 
     rOutStm << endl;
 
-    // Slotmap schreiben
+    // write slotmap
     rOutStm << "SFX_SLOTMAP_ARG(" << GetName().GetBuffer() << ')' << endl
         << '{' << endl;
 
-    // alle Attribute schreiben
+    // write all attributes
     WriteSlots( GetName(), 0, aSlotList, rBase, rOutStm );
     if( nSlotCount )
         Back2Delemitter( rOutStm );
     else
     {
-        // mindestens einen dummy
+        // at least one dummy
         WriteTab( rOutStm, 1 );
         rOutStm << "SFX_SLOT_ARG(" << GetName().GetBuffer()
                 << ", 0, 0, "
@@ -769,9 +666,6 @@ void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaShell::WriteSrc()
-*************************************************************************/
 void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
                              Table * pTable )
 {
@@ -782,11 +676,6 @@ void SvMetaClass::WriteSrc( SvIdlDataBase & rBase, SvStream & rOutStm,
     }
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteHxx()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 {
     ByteString aSuperName( "SvDispatch" );
@@ -812,11 +701,6 @@ void SvMetaClass::WriteHxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
     << "};" << endl;
 }
 
-/*************************************************************************
-|*    SvMetaClass::WriteCxx()
-|*
-|*    Beschreibung
-*************************************************************************/
 void SvMetaClass::WriteCxx( SvIdlDataBase &, SvStream & rOutStm, USHORT )
 {
     ByteString aSuperName( "SvDispatch" );
