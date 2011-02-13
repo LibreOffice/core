@@ -70,143 +70,6 @@ long SwSelPaintRects::nPixPtX = 0;
 long SwSelPaintRects::nPixPtY = 0;
 MapMode* SwSelPaintRects::pMapMode = 0;
 
-
-#ifndef SHOW_BOOKMARKS
-#define SHOWBOOKMARKS1( nAct )
-#define SHOWBOOKMARKS2( nAct, pRect )
-#endif
-
-#ifdef SHOW_REDLINES
-#include <redline.hxx>
-
-class SwRedlineRects : public SwSelPaintRects
-{
-    USHORT nMode;
-    USHORT nNm;
-
-    virtual void Paint( const Rectangle& rRect );
-    virtual void FillRects();
-
-public:
-    SwRedlineRects( const SwCrsrShell& rSh, USHORT nName, USHORT n )
-        : SwSelPaintRects( rSh ), nMode( n ), nNm( nName )
-    {}
-};
-
-void SwRedlineRects::Paint( const Rectangle& rRect )
-{
-    Window* pWin = GetShell()->GetWin();
-
-    RasterOp eOld( pWin->GetRasterOp() );
-    BOOL bLCol = pWin->IsLineColor();
-    Color aLCol( pWin->GetLineColor() );
-    BOOL bFCol = pWin->IsFillColor();
-    Color aFCol( pWin->GetFillColor() );
-
-    pWin->SetRasterOp( ROP_XOR );
-    Color aCol;
-
-    UINT8 nVal = 0xc8 - ( (nMode / 4) * 16 );
-    switch( nMode % 4 )
-    {
-    case 0: aCol = RGB_COLORDATA( nVal, nVal, 0xFF );   break;
-    case 1: aCol = RGB_COLORDATA( 0xFF, 0xc8, nVal );   break;
-    case 2: aCol = RGB_COLORDATA( nVal, 0xFF, nVal );   break;
-    case 3: aCol = RGB_COLORDATA( 0xFF, nVal, nVal );   break;
-    }
-    aCol = aCol.GetColor() ^ COL_WHITE;
-
-    pWin->SetFillColor( aCol );
-    pWin->SetLineColor( aCol );
-
-    pWin->DrawRect( rRect );
-
-    if( bLCol ) pWin->SetLineColor( aLCol ); else pWin->SetLineColor();
-    if( bFCol ) pWin->SetFillColor( aFCol ); else pWin->SetFillColor();
-    pWin->SetRasterOp( eOld );
-}
-
-void SwRedlineRects::FillRects()
-{
-    SwRegionRects aReg( GetShell()->VisArea() );
-
-    const SwRedlineTbl& rTbl = GetShell()->GetDoc()->GetRedlineTbl();
-    SwShellCrsr* pCrsr = 0;
-    for( USHORT n = 0; n < rTbl.Count(); ++n )
-    {
-        const SwRedline& rRed = *rTbl[ n ];
-        if( rRed.HasMark() && (nMode % 4 ) == rRed.GetType() &&
-            nNm == rRed.GetAuthor() )
-        {
-            if( !pCrsr )
-            {
-                pCrsr = new SwShellCrsr( *GetShell(), *rRed.GetPoint() );
-                pCrsr->SetMark();
-            }
-            else
-                *pCrsr->GetPoint() = *rRed.GetPoint();
-            *pCrsr->GetMark() = *rRed.GetMark();
-            pCrsr->FillRects();
-            for( USHORT i = 0; i < pCrsr->Count(); ++i )
-                aReg -= (*pCrsr)[ i ];
-
-            pCrsr->Remove( 0, i );
-        }
-    }
-    if( pCrsr ) delete pCrsr;
-
-    aReg.Invert();
-    SwRects::Insert( &aReg, 0 );
-}
-
-SwRedlineRects* aRedlines[ 10 * 4 ];
-static int bFirstCall = TRUE;
-
-void ShowRedlines( const SwCrsrShell* pSh, int nAction, const SwRect* pRect = 0 )
-{
-    if( bFirstCall )
-    {
-        memset( aRedlines, 0, sizeof(aRedlines));
-        bFirstCall = FALSE;
-    }
-
-    const SwRedlineTbl& rTbl = pSh->GetDoc()->GetRedlineTbl();
-    const SwRedlineAuthorTbl& rAuthorTbl = pSh->GetDoc()->GetRedlineAuthorTbl();
-
-    for( USHORT n = 0; n < rAuthorTbl.Count(); ++n )
-    {
-        for( int i = 0; i < 4; ++i  )
-        {
-            SwRedlineRects** ppRedRect = &aRedlines[ n * 4 + i ];
-            if( rTbl.Count() && !*ppRedRect )
-                *ppRedRect = new SwRedlineRects( *pSh, n, n * 4 + i );
-
-            if( *ppRedRect )
-            {
-                switch( nAction )
-                {
-                case 1: (*ppRedRect)->Show(); break;
-                case 2: (*ppRedRect)->Hide(); break;
-                case 3: (*ppRedRect)->Invalidate( *pRect ); break;
-                }
-
-                if( !(*ppRedRect)->Count() )
-                    delete *ppRedRect, *ppRedRect = 0;
-            }
-        }
-    }
-}
-
-#define SHOWREDLINES1( nAct )           ShowRedlines( GetShell(),nAct );
-#define SHOWREDLINES2( nAct, pRect )    ShowRedlines( GetShell(),nAct, pRect );
-
-#else
-
-#define SHOWREDLINES1( nAct )
-#define SHOWREDLINES2( nAct, pRect )
-
-#endif
-
 // -----  Starting from here: classes / methods for the non-text-cursor -----
 
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
@@ -648,9 +511,6 @@ void SwShellCrsr::Show()
     do {
         pTmp->SwSelPaintRects::Show();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
-
-    SHOWBOOKMARKS1( 1 )
-    SHOWREDLINES1( 1 )
 }
 
 
@@ -676,9 +536,6 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
         while ( !pTmp );
     }
     while( this != pTmp );
-
-    SHOWBOOKMARKS2( 3, &rRect )
-    SHOWREDLINES2( 3, &rRect )
 }
 
 
@@ -688,9 +545,6 @@ void SwShellCrsr::Hide()
     do {
         pTmp->SwSelPaintRects::Hide();
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
-
-    SHOWBOOKMARKS1( 2 )
-    SHOWREDLINES1( 2 )
 }
 
 SwCursor* SwShellCrsr::Create( SwPaM* pRing ) const
