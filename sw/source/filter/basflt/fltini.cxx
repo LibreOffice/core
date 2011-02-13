@@ -142,12 +142,6 @@ void _InitFilter()
     _SetFltPtr( READER_WRITER_HTML, (ReadHTML = new HTMLReader) );
     _SetFltPtr( READER_WRITER_WW1, new WW1Reader );
     _SetFltPtr( READER_WRITER_XML, (ReadXML = new XMLReader)  );
-
-#ifdef NEW_WW97_EXPORT
-    aReaderWriter[ READER_WRITER_WW1 ].fnGetWriter =  &::GetWW8Writer;
-    aReaderWriter[ READER_WRITER_WW5 ].fnGetWriter = &::GetWW8Writer;
-#endif
-
     _SetFltPtr( READER_WRITER_TEXT_DLG, ReadAscii );
     _SetFltPtr( READER_WRITER_TEXT, ReadAscii );
 }
