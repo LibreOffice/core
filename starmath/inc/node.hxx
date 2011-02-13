@@ -166,10 +166,6 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
-
     virtual void    GetAccessibleText( String &rText ) const;
     sal_Int32       GetAccessibleIndex() const { return nAccIndex; }
     const SmNode *  FindNodeWithAccessibleIndex(xub_StrLen nAccIndex) const;
@@ -413,10 +409,6 @@ public:
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
 
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
-
     void CreateTextFromNode(String &rText);
     void Accept(SmVisitor* pVisitor);
 };
@@ -445,10 +437,6 @@ public:
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -509,11 +497,6 @@ public:
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     virtual void CreateTextFromNode(String &rText);
 
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
-
-
     virtual void  GetAccessibleText( String &rText ) const;
     void Accept(SmVisitor* pVisitor);
 };
@@ -540,10 +523,6 @@ public:
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };
@@ -622,10 +601,6 @@ public:
     ULONG GetBodyWidth() const {return nBodyWidth;};
     virtual void AdaptToX(const OutputDevice &rDev, ULONG nWidth);
     virtual void AdaptToY(const OutputDevice &rDev, ULONG nHeight);
-
-#ifdef SM_RECT_DEBUG
-    using   SmRect::Draw;
-#endif
 
     void Accept(SmVisitor* pVisitor);
 };

@@ -211,10 +211,6 @@ public:
 
     inline  Rectangle   AsRectangle() const;
             SmRect      AsGlyphRect() const;
-
-#ifdef SM_RECT_DEBUG
-            void        Draw(OutputDevice &rDev, const Point &rPosition, int nFlags) const;
-#endif
 };
 
 

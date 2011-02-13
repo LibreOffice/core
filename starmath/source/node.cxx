@@ -50,9 +50,6 @@
 #include <math.h>
 #include <float.h>
 
-// define this to draw rectangles for debugging
-//#define SM_RECT_DEBUG
-
 #define APPEND(str,ascii) str.AppendAscii(RTL_CONSTASCII_STRINGPARAM(ascii))
 
 ////////////////////////////////////////

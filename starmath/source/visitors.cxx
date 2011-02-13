@@ -685,14 +685,6 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     aBar.SetPos( aDrawPos );
 
     rDev.DrawRect( aBar );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
@@ -714,14 +706,6 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
 
     rDev.DrawPolyLine( pNode->GetPolygon( ), aInfo );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
@@ -754,14 +738,6 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     aTmp.SetPos( aPos );
 
     rDev.DrawRect( aTmp );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
@@ -778,14 +754,6 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
     aPos = rDev.PixelToLogic( rDev.LogicToPixel( aPos ) );
 
     rDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, Position, nRFlags );
-#endif
 }
 
 void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
@@ -811,14 +779,6 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
         Position = rPosition + aOffset;
         it->Accept( this );
     }
-
-#ifdef SM_RECT_DEBUG
-    if ( !pNode->IsDebug( ) )
-        return;
-
-    int  nRFlags = SM_RECT_CORE | SM_RECT_ITALIC | SM_RECT_LINES | SM_RECT_MID;
-    pNode->SmRect::Draw( rDev, rPosition, nRFlags );
-#endif
 }
 
 /////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
