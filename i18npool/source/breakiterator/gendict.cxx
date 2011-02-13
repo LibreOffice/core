@@ -135,7 +135,7 @@ static inline void printLenArray(FILE* source_fp, const vector<sal_uInt32>& lenA
         if( !(k & 0xf) )
             fputs("\n\t", source_fp);
 
-        fprintf(source_fp, "0x%x, ", lenArray[k]);
+        fprintf(source_fp, "0x%lx, ", static_cast<long unsigned int>(lenArray[k]));
     }
     fputs("\n};\n", source_fp );
 }
@@ -172,7 +172,7 @@ static inline void printIndex2(FILE *source_fp, sal_Int16 *set)
                         k++;
 
                 prev = charArray[(i<<8) + j];
-                fprintf(source_fp, "0x%x, ",(k < 0x10000 ? charArray[k] + 1 : 0));
+                fprintf(source_fp, "0x%lx, ", static_cast<long unsigned int>(k < 0x10000 ? charArray[k] + 1 : 0));
                 if ((j & 0x0f) == 0x0f)
                     fputs ("\n\t", source_fp);
             }
