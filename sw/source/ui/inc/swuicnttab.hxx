@@ -41,7 +41,6 @@
 #include <sfx2/tabdlg.hxx>
 
 #include "tox.hxx"
-#include <tools/list.hxx>
 #include <toxmgr.hxx>
 #include <svx/checklbx.hxx>
 #include <tools/resary.hxx>
@@ -254,19 +253,21 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-
-DECLARE_LIST( TOXControlList, Control* )
-
 class SwTOXEdit;
 class SwTOXButton;
 class SwTOXEntryTabPage;
 
 class SwTokenWindow : public Window
 {
+    typedef std::vector<Control*>::iterator ctrl_iterator;
+    typedef std::vector<Control*>::const_iterator ctrl_const_iterator;
+    typedef std::vector<Control*>::reverse_iterator ctrl_reverse_iterator;
+    typedef std::vector<Control*>::const_reverse_iterator ctrl_const_reverse_iterator;
+
     ImageButton     aLeftScrollWin;
     Window          aCtrlParentWin;
     ImageButton     aRightScrollWin;
-    TOXControlList  aControlList;
+    std::vector<Control*>   aControlList;
     SwForm*         pForm;
     USHORT          nLevel;
     BOOL            bValid;
