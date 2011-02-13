@@ -34,8 +34,8 @@ const sSChartLogFileName = &quot;schlog.dat&quot;
 const sSHptLogFileName = &quot;shptlog.dat&quot;
 const sSDrawLogFileName = &quot;sdrwlog.dat&quot;, sJavaLogFileName = &quot;javalog.dat&quot;
 const sSDBLogFileName = &quot;dblog.dat&quot;, sExtLogFileName = &quot;extlog.dat&quot;
-const sTestGlueLogFileName = &quot;testgluelog.dat&quot;
-const sLogFileName = &quot;log.dat&quot;
+const sTestGlueLogFileName = &quot;testclosure.log&quot;
+const sLogFileName = &quot;smoketest.log&quot;
 const cTempFileName = &quot;ttt&quot;
 
 const cMessageSaveOpen8Doc = &quot;Save/Open open Documents (8.0)&quot;
@@ -272,17 +272,19 @@ Sub WriteTestSequence
         WriteDBTests (&quot;Database    : &quot;, MainFileChannel)
     end if
     if bMakeExtensionTest then
-        WriteExtensionTests (&quot;Extension    : &quot;, MainFileChannel)
-    end if
+        WriteExtensionTests (&quot;Extension   : &quot;, MainFileChannel)
+  end if
 
-    Print #MainFileChannel
-end Sub
+  Print #MainFileChannel, &quot;testclosure : setup, write_status&quot;
 
-Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
-    Dim sWriteStr as string
+  Print #MainFileChannel
+  end Sub
 
-    sWriteStr = sText
-    sWriteStr = sWriteStr + &quot;new&quot;
+  Sub WriteTests (sText as string, bTestAll as boolean)
+  Dim sWriteStr as string
+
+  sWriteStr = sText
+  sWriteStr = sWriteStr + &quot;new&quot;
     if bTestAll then
     if bMakeSaveOpen8Test then
         sWriteStr = sWriteStr + &quot;, save 8.0&quot;
@@ -300,7 +302,7 @@ Sub WriteTests (sText as string, bTestAll as boolean, nFileChannel as integer)
 
     sWriteStr = sWriteStr + &quot;, close&quot;
 
-    Print #nFileChannel, sWriteStr
+    Print #MainFileChannel, sWriteStr
 end Sub
 
 Sub WriteDBTests (sText as string, nFileChannel as integer)
