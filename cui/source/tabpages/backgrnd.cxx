@@ -591,8 +591,8 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             }
 
             nWhich = GetWhich( SID_ATTR_BRUSH_CHAR );
-            SfxItemState eState = rSet.GetItemState( nWhich, TRUE );
-            eState = rSet.GetItemState( nWhich, FALSE );
+            rSet.GetItemState( nWhich, TRUE );
+            rSet.GetItemState( nWhich, FALSE );
             if ( rSet.GetItemState( nWhich, TRUE ) > SFX_ITEM_AVAILABLE )
             {
                 pBgdAttr = (const SvxBrushItem*)&( rSet.Get( nWhich ) );
