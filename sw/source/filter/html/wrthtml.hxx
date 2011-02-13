@@ -371,9 +371,6 @@ public:
     void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const String& rNum,
                              sal_uInt16 nScript );
 
-#ifdef JAVA_BASIC_IDE
-    void OutBasicModule( const String& rName, const String& rLanguage );
-#endif
     void OutBasic();
 
     void OutAndSetDefList( sal_uInt16 nNewLvl );
