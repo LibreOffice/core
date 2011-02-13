@@ -1181,7 +1181,9 @@ USHORT SbModule::Run( SbMethod* pMeth )
 
                 GlobalRunDeInit();
 
+#ifdef DBG_UTIL
                 ResetCapturedAssertions();
+#endif
 
                 // VBA always ensures screenupdating is enabled after completing
                 if ( mbVBACompat )
