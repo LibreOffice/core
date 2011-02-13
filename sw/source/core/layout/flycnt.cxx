@@ -57,20 +57,12 @@
 #include "crstate.hxx"
 #include "sectfrm.hxx"
 
-// OD 29.10.2003 #113049#
 #include <tocntntanchoredobjectposition.hxx>
-// OD 2004-05-24 #i28701#
 #include <dcontact.hxx>
 #include <sortedobjs.hxx>
-// --> OD 2005-09-29 #125370#,#125957#
 #include <layouter.hxx>
-// <--
-// --> OD 2005-11-17 #i56300#
 #include <objectformattertxtfrm.hxx>
-// <--
-// --> OD 2006-03-06 #125892#
 #include <HandleAnchorNodeChg.hxx>
-// <--
 
 using namespace ::com::sun::star;
 
@@ -88,9 +80,8 @@ SwFlyAtCntFrm::SwFlyAtCntFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     bAutoPosition = (FLY_AT_CHAR == pFmt->GetAnchor().GetAnchorId());
 }
 
-// --> OD 2004-06-29 #i28701#
+// #i28701#
 TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
-// <--
 /*************************************************************************
 |*
 |*  SwFlyAtCntFrm::Modify()
@@ -143,13 +134,11 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         //immer noch vom Node einen Frame besorgen. Die Change, dass dies dann
         //der richtige ist, ist gut.
         const bool bNext = aOldIdx < aNewIdx;
-        // --> OD 2006-02-28 #125892#
         // consider the case that at found anchor frame candidate already a
         // fly frame of the given fly format is registered.
-        // --> OD 2006-03-15 #133407# - consider, that <pCntnt> is the already
+        // consider, that <pCntnt> is the already
         // the new anchor frame.
         bool bFound( aOldIdx == aNewIdx );
-        // <--
         while ( pCntnt && !bFound )
         {
             do
@@ -164,7 +153,6 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
             if ( pCntnt )
                 aOldIdx = *pCntnt->GetNode();
 
-            // --> OD 2006-02-28 #125892#
             // check, if at found anchor frame candidate already a fly frame
             // of the given fly frame format is registered.
             bFound = aOldIdx == aNewIdx;
@@ -183,9 +171,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
                     }
                 }
             }
-            // <--
         }
-        // <--
         if ( !pCntnt )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
@@ -208,7 +194,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         _InvalidatePos();
         InvalidatePage();
         SetNotifyBack();
-        // --> OD 2004-06-24 #i28701# - reset member <maLastCharRect> and
+        // #i28701# - reset member <maLastCharRect> and
         // <mnLastTopOfLine> for to-character anchored objects.
         ClearCharRectAndTopOfLine();
     }
@@ -242,7 +228,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 |*************************************************************************/
 //Wir brauchen ein Paar Hilfsklassen zur Kontrolle der Ozillation und ein paar
 //Funktionen um die Uebersicht zu gewaehrleisten.
-// OD 2004-08-25 #i3317# - re-factoring of the position stack
+// #i3317# - re-factoring of the position stack
 class SwOszControl
 {
     static const SwFlyFrm *pStk1;
@@ -252,10 +238,9 @@ class SwOszControl
     static const SwFlyFrm *pStk5;
 
     const SwFlyFrm *pFly;
-    // --> OD 2004-08-25 #i3317#
+    // #i3317#
     sal_uInt8 mnPosStackSize;
     std::vector<Point*> maObjPositions;
-    // <--
 
 public:
     SwOszControl( const SwFlyFrm *pFrm );
@@ -271,9 +256,8 @@ const SwFlyFrm *SwOszControl::pStk5 = 0;
 
 SwOszControl::SwOszControl( const SwFlyFrm *pFrm )
     : pFly( pFrm ),
-      // --> OD 2004-08-25 #i3317#
+      // #i3317#
       mnPosStackSize( 20 )
-      // <--
 {
     if ( !SwOszControl::pStk1 )
         SwOszControl::pStk1 = pFly;
@@ -299,7 +283,7 @@ SwOszControl::~SwOszControl()
         SwOszControl::pStk4 = 0;
     else if ( SwOszControl::pStk5 == pFly )
         SwOszControl::pStk5 = 0;
-    // --> OD 2004-08-25 #i3317#
+    // #i3317#
     while ( !maObjPositions.empty() )
     {
         Point* pPos = maObjPositions.back();
@@ -307,7 +291,6 @@ SwOszControl::~SwOszControl()
 
         maObjPositions.pop_back();
     }
-    // <--
 }
 
 BOOL SwOszControl::IsInProgress( const SwFlyFrm *pFly )
@@ -360,7 +343,6 @@ bool SwOszControl::ChkOsz()
 
 void SwFlyAtCntFrm::MakeAll()
 {
-    // OD 2004-01-19 #110582#
     if ( !GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) )
     {
         return;
@@ -368,7 +350,7 @@ void SwFlyAtCntFrm::MakeAll()
 
     if ( !SwOszControl::IsInProgress( this ) && !IsLocked() && !IsColLocked() )
     {
-        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        // #i28701# - use new method <GetPageFrm()>
         if( !GetPageFrm() && GetAnchorFrm() && GetAnchorFrm()->IsInFly() )
         {
             SwFlyFrm* pFly = AnchorFrm()->FindFlyFrm();
@@ -376,7 +358,7 @@ void SwFlyAtCntFrm::MakeAll()
             if( pTmpPage )
                 pTmpPage->AppendFlyToPage( this );
         }
-        // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+        // #i28701# - use new method <GetPageFrm()>
         if( GetPageFrm() )
         {
             bSetCompletePaintOnInvalidate = TRUE;
@@ -399,50 +381,46 @@ void SwFlyAtCntFrm::MakeAll()
 
             SwOszControl aOszCntrl( this );
 
-            // --> OD 2005-02-22 #i43255#
-            // --> OD 2005-06-07 #i50356# - format the anchor frame, which
+            // #i43255#
+            // #i50356# - format the anchor frame, which
             // contains the anchor position. E.g., for at-character anchored
             // object this can be the follow frame of the anchor frame.
             const bool bFormatAnchor =
                     !static_cast<const SwTxtFrm*>( GetAnchorFrmContainingAnchPos() )->IsAnyJoinLocked() &&
                     !ConsiderObjWrapInfluenceOnObjPos() &&
                     !ConsiderObjWrapInfluenceOfOtherObjs();
-            // <--
 
             const SwFrm* pFooter = GetAnchorFrm()->FindFooterOrHeader();
             if( pFooter && !pFooter->IsFooterFrm() )
                 pFooter = NULL;
             bool bOsz = false;
             BOOL bExtra = Lower() && Lower()->IsColumnFrm();
-            // --> OD 2004-08-25 #i3317# - boolean, to apply temporarly the
+            // #i3317# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to its
             // overlapping with a previous column.
             bool bConsiderWrapInfluenceDueToOverlapPrevCol( false );
-            // <--
-            // --> OD 2004-10-22 #i35911# - boolean, to apply temporarly the
+            //  #i35911# - boolean, to apply temporarly the
             // 'straightforward positioning process' for the frame due to fact
             // that it causes the complete content of its layout environment
             // to move forward.
-            // --> OD 2005-01-14 #i40444# - extend usage of this boolean:
+            // #i40444# - extend usage of this boolean:
             // apply temporarly the 'straightforward positioning process' for
             // the frame due to the fact that the frame clears the area for
             // the anchor frame, thus it has to move forward.
             bool bConsiderWrapInfluenceDueToMovedFwdAnchor( false );
-            // <--
             do {
                 SWRECTFN( this )
                 Point aOldPos( (Frm().*fnRect->fnGetPos)() );
                 SwFlyFreeFrm::MakeAll();
                 const bool bPosChgDueToOwnFormat =
                                         aOldPos != (Frm().*fnRect->fnGetPos)();
-                // --> OD 2004-08-25 #i3317#
+                // #i3317#
                 if ( !ConsiderObjWrapInfluenceOnObjPos() &&
                      OverlapsPrevColumn() )
                 {
                     bConsiderWrapInfluenceDueToOverlapPrevCol = true;
                 }
-                // <--
-                // OD 2004-05-12 #i28701# - no format of anchor frame, if
+                // #i28701# - no format of anchor frame, if
                 // wrapping style influence is considered on object positioning
                 if ( bFormatAnchor )
                 {
@@ -450,23 +428,21 @@ void SwFlyAtCntFrm::MakeAll()
                             dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
                     OSL_ENSURE( pAnchPosAnchorFrm,
                             "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
-                    // --> OD 2006-01-27 #i58182# - For the usage of new method
+                    // #i58182# - For the usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
                     // to check move forward of anchor frame due to the object
                     // positioning it's needed to know, if the object is anchored
                     // at the master frame before the anchor frame is formatted.
                     const bool bAnchoredAtMaster( !pAnchPosAnchorFrm->IsFollow() );
-                    // <--
 
-                    // --> OD 2005-11-17 #i56300#
+                    // #i56300#
                     // perform complete format of anchor text frame and its
                     // previous frames, which have become invalid due to the
                     // fly frame format.
                     SwObjectFormatterTxtFrm::FormatAnchorFrmAndItsPrevs( *pAnchPosAnchorFrm );
-                    // <--
-                    // --> OD 2004-10-22 #i35911#
-                    // --> OD 2005-01-14 #i40444#
-                    // --> OD 2006-01-27 #i58182# - usage of new method
+                    // #i35911#
+                    // #i40444#
+                    // #i58182# - usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
                     sal_uInt32 nToPageNum( 0L );
                     bool bDummy( false );
@@ -475,7 +451,7 @@ void SwFlyAtCntFrm::MakeAll()
                                         bAnchoredAtMaster, nToPageNum, bDummy ) )
                     {
                         bConsiderWrapInfluenceDueToMovedFwdAnchor = true;
-                        // --> OD 2005-09-29 #125370#,#125957# - mark anchor text frame
+                        // mark anchor text frame
                         // directly, that it is moved forward by object positioning.
                         SwTxtFrm* pAnchorTxtFrm( static_cast<SwTxtFrm*>(AnchorFrm()) );
                         bool bInsert( true );
@@ -494,9 +470,7 @@ void SwFlyAtCntFrm::MakeAll()
                             SwLayouter::InsertMovedFwdFrm( rDoc, *pAnchorTxtFrm,
                                                            nToPageNum );
                         }
-                        // <--
                     }
-                    // <--
                 }
 
                 if ( aOldPos != (Frm().*fnRect->fnGetPos)() ||
@@ -505,7 +479,7 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     bOsz = aOszCntrl.ChkOsz();
 
-                    // --> OD 2006-04-13 #b6403541#
+                    // #b6403541#
                     // special loop prevention for dedicated document:
                     if ( bOsz &&
                          HasFixSize() && IsClipped() &&
@@ -531,7 +505,6 @@ void SwFlyAtCntFrm::MakeAll()
                             }
                         }
                     }
-                    // <--
                 }
 
                 if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
@@ -543,17 +516,15 @@ void SwFlyAtCntFrm::MakeAll()
                     bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
             } while ( !IsValid() && !bOsz &&
-                      // --> OD 2004-08-25 #i3317#
+                      // #i3317#
                       !bConsiderWrapInfluenceDueToOverlapPrevCol &&
-                      // <--
-                      // --> OD 2005-01-14 #i40444#
+                      // #i40444#
                       !bConsiderWrapInfluenceDueToMovedFwdAnchor &&
-                      // <--
                       GetFmt()->GetDoc()->IsVisibleLayerId( GetVirtDrawObj()->GetLayer() ) );
 
-            // --> OD 2004-08-25 #i3317# - instead of attribute change apply
+            // #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
-            // --> OD 2007-11-29 #i80924#
+            // #i80924#
             // handle special case during splitting of table rows
             if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&
                  GetAnchorFrm()->IsInTab() &&
@@ -574,19 +545,15 @@ void SwFlyAtCntFrm::MakeAll()
                     }
                 }
             }
-            // <--
             if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
-                 // --> OD 2005-01-14 #i40444#
+                 // #i40444#
                  bConsiderWrapInfluenceDueToMovedFwdAnchor )
-                 // <--
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
-                // --> OD 2006-07-24 #b6449874#
+                // #b6449874#
                 SetTmpConsiderWrapInfluenceOfOtherObjs( true );
-                // <--
             }
-            // <--
             bSetCompletePaintOnInvalidate = FALSE;
         }
     }
@@ -594,9 +561,7 @@ void SwFlyAtCntFrm::MakeAll()
 
 /** method to determine, if a <MakeAll()> on the Writer fly frame is possible
 
-    OD 2004-05-11 #i28701#
-
-    @author OD
+    #i28701#
 */
 bool SwFlyAtCntFrm::IsFormatPossible() const
 {
@@ -650,7 +615,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
             pUp = pUp->GetUpper();
         const bool bVert = pUp->IsVertical();
         //Dem Textflus folgen.
-        // --> OD 2009-01-12 #i70582#
+        // #i70582#
         const SwTwips nTopForObjPos =
             bVert
             ? ( pCnt->Frm().Left() +
@@ -658,41 +623,38 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                 pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() )
             : ( pCnt->Frm().Top() +
                 pCnt->GetUpperSpaceAmountConsideredForPrevFrmAndPageGrid() );
-        // <--
         if ( pUp->Frm().IsInside( rPt ) )
         {
-            // OD 26.09.2003 - <rPt> point is inside environment of given content frame
-            // --> OD 2009-01-12 #i70582#
+            // <rPt> point is inside environment of given content frame
+            // #i70582#
             if( bVert )
                 rRet.nMain =  nTopForObjPos - rPt.X();
             else
                 rRet.nMain =  rPt.Y() - nTopForObjPos;
-            // <--
             return pCnt;
         }
         else if ( rPt.Y() <= pUp->Frm().Top() )
         {
-            // OD 26.09.2003 - <rPt> point is above environment of given content frame
-            // OD: correct for vertical layout?
+            // <rPt> point is above environment of given content frame
+            // correct for vertical layout?
             rRet.nMain = LONG_MAX;
         }
         else if( rPt.X() < pUp->Frm().Left() &&
                  rPt.Y() <= ( bVert ? pUp->Frm().Top() : pUp->Frm().Bottom() ) )
         {
-            // OD 26.09.2003 - <rPt> point is left of environment of given content frame
-            // OD: seems not to be correct for vertical layout!?
+            // <rPt> point is left of environment of given content frame
+            // seems not to be correct for vertical layout!?
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, FALSE, pCnt );
             if( !pLay ||
                 (bVert && (pLay->Frm().Top() + pLay->Prt().Bottom()) <rPt.Y())||
                 (!bVert && (pLay->Frm().Left() + pLay->Prt().Right())<rPt.X()) )
             {
-                // OD 26.09.2003 - <rPt> point is in left border of environment
-                // --> OD 2009-01-12 #i70582#
+                // <rPt> point is in left border of environment
+                // #i70582#
                 if( bVert )
                     rRet.nMain =  nTopForObjPos - rPt.X();
                 else
                     rRet.nMain = rPt.Y() - nTopForObjPos;
-                // <--
                 return pCnt;
             }
             else
@@ -700,11 +662,10 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
         }
         else
         {
-            // --> OD 2009-01-12 #i70582#
+            // #i70582#
             rRet.nMain = bVert
                 ? nTopForObjPos - (pUp->Frm().Left() + pUp->Prt().Left())
                 : (pUp->Frm().Top() + pUp->Prt().Bottom()) - nTopForObjPos;
-            // <--
 
             const SwFrm *pPre = pCnt;
             const SwFrm *pLay = pUp->GetLeaf( MAKEPAGE_NONE, TRUE, pCnt );
@@ -1181,7 +1142,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     //fluss sondern in irgendwelchen Raendern steht.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
     {
-        // #102861# If an OLE objects, which is contained in a fly frame
+        // If an OLE objects, which is contained in a fly frame
         // is resized in inplace mode and the new Position is outside the
         // fly frame, we do not want to leave our fly frame.
         if ( pCnt->IsInFly() )
@@ -1243,7 +1204,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
     SwTwips nY;
     if ( pCnt->Frm().IsInside( aNew ) )
     {
-        // --> OD 2009-01-12 #i70582#
+        // #i70582#
         const SwTwips nTopForObjPos =
                 bVert
                 ? ( pCnt->Frm().Left() +
@@ -1259,7 +1220,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         {
             nY = rNew.Y() - nTopForObjPos;
         }
-        // <--
     }
     else
     {
@@ -1302,7 +1262,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( nY == LONG_MAX )
     {
-        // --> OD 2009-01-12 #i70582#
+        // #i70582#
         const SwTwips nTopForObjPos =
                 bVert
                 ? ( pCnt->Frm().Left() +
@@ -1318,7 +1278,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         {
             nY = rNew.Y() - nTopForObjPos;
         }
-        // <--
     }
 
     SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
@@ -1390,7 +1349,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             pPos->nContent.Assign( pCnt->GetNode(), 0 );
         }
 
-        // --> OD 2006-02-27 #125892#
         // handle change of anchor node:
         // if count of the anchor frame also change, the fly frames have to be
         // re-created. Thus, delete all fly frames except the <this> before the
@@ -1399,9 +1357,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
             SwHandleAnchorNodeChg aHandleAnchorNodeChg( *pFmt, aAnch, this );
             pFmt->GetDoc()->SetAttr( aAnch, *pFmt );
         }
-        // <--
     }
-    // --> OD 2004-06-30 #i28701# - use new method <GetPageFrm()>
+    // #i28701# - use new method <GetPageFrm()>
     else if ( pTmpPage && pTmpPage != GetPageFrm() )
         GetPageFrm()->MoveFly( this, pTmpPage );
 
@@ -1418,10 +1375,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 /** method to assure that anchored object is registered at the correct
     page frame
 
-    OD 2004-07-02 #i28701#
+    #i28701#
     takes over functionality of deleted method <SwFlyAtCntFrm::AssertPage()>
-
-    @author OD
 */
 void SwFlyAtCntFrm::RegisterAtCorrectPage()
 {
@@ -1439,33 +1394,31 @@ void SwFlyAtCntFrm::RegisterAtCorrectPage()
     }
 }
 
-// OD 2004-03-23 #i26791#
+// #i26791#
 //void SwFlyAtCntFrm::MakeFlyPos()
 void SwFlyAtCntFrm::MakeObjPos()
 {
-    // OD 02.10.2002 #102646#
     // if fly frame position is valid, nothing is to do. Thus, return
     if ( bValidPos )
     {
         return;
     }
 
-    // OD 2004-03-24 #i26791# - validate position flag here.
+    // #i26791# - validate position flag here.
     bValidPos = TRUE;
 
-    // --> OD 2004-10-22 #i35911# - no calculation of new position, if
+    // #i35911# - no calculation of new position, if
     // anchored object is marked that it clears its environment and its
     // environment is already cleared.
-    // --> OD 2006-01-02 #125977# - before checking for cleared environment
+    // before checking for cleared environment
     // check, if member <mpVertPosOrientFrm> is set.
     if ( GetVertPosOrientFrm() &&
          ClearedEnvironment() && HasClearedEnvironment() )
     {
         return;
     }
-    // <--
 
-    // OD 29.10.2003 #113049# - use new class to position object
+    // use new class to position object
     objectpositioning::SwToCntntAnchoredObjectPosition
             aObjPositioning( *GetVirtDrawObj() );
     aObjPositioning.CalcPosition();
@@ -1473,7 +1426,7 @@ void SwFlyAtCntFrm::MakeObjPos()
     SetVertPosOrientFrm ( aObjPositioning.GetVertPosOrientFrm() );
 }
 
-// OD 2004-05-12 #i28701#
+// #i28701#
 bool SwFlyAtCntFrm::_InvalidationAllowed( const InvalidationType _nInvalid ) const
 {
     bool bAllowed( SwFlyFreeFrm::_InvalidationAllowed( _nInvalid ) );

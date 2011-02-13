@@ -34,7 +34,7 @@
 class SwTxtFrm;
 
 // -----------------------------------------------------------------------------
-// OD 2004-07-01 #i28701#
+// #i28701#
 // Format floating screen objects, which are anchored at a given anchor text frame
 // and registered at the given page frame.
 // -----------------------------------------------------------------------------
@@ -52,18 +52,16 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
                                  SwTxtFrm* _pMasterAnchorTxtFrm,
                                  SwLayAction* _pLayAction );
 
-        /* method to invalidate objects, anchored previous to given object at
+        /** method to invalidate objects, anchored previous to given object at
            the anchor text frame
 
             @param _rAnchoredObj
             reference to anchored object - objects, anchored previous to
             this one will be invalidated.
-
-            @author OD
         */
         void _InvalidatePrevObjs( SwAnchoredObject& _rAnchoredObj );
 
-        /* method to invalidate objects, anchored after the given object at
+        /** method to invalidate objects, anchored after the given object at
            the page frame
 
             @param _rAnchoredObj
@@ -73,8 +71,6 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
             @param _bInclObj
             boolean indicates, if given anchored object <_rAnchoredObj> also have
             to be invalidated.
-
-            @author OD
         */
         void _InvalidateFollowObjs( SwAnchoredObject& _rAnchoredObj,
                                     const bool _bInclObj );
@@ -85,12 +81,12 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
             'anchor (of an object) is moved forward', if the anchor frame
             respectively the anchor character of the object isn't on the
             proposed page frame. Instead its on a following page
-            OD 2004-10-04 #i26945# - For at-character anchored objects,
+
+            #i26945# - For at-character anchored objects,
             it has also to be checked, if the anchor character is in a follow
             text frame, which would move to the next page.
-            OD 2005-03-30 #i43913# - add output parameter <_boInFollow>
 
-            @author OD
+            #i43913# - add output parameter <_boInFollow>
 
             @param _nWrapInfluenceOnPosition
             input parameter - only object with this given wrapping style
@@ -120,18 +116,14 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
 
         /** method to format the anchor frame for checking of the move forward condition
 
-            OD 2005-01-11 #i40141#
-
-            @author OD
+            #i40141#
         */
         void _FormatAnchorFrmForCheckMoveFwd();
 
         /** method to determine if at least one anchored object has state
             <temporarly consider wrapping style influence> set.
 
-            OD 2006-07-24 #b6449874#
-
-            @author OD
+            #b6449874#
         */
         bool _AtLeastOneObjIsTmpConsiderWrapInfluence();
 
@@ -142,16 +134,13 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
     public:
         virtual ~SwObjectFormatterTxtFrm();
 
-        // --> OD 2005-01-10 #i40147# - add parameter <_bCheckForMovedFwd>.
+        // #i40147# - add parameter <_bCheckForMovedFwd>.
         virtual bool DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                                   const bool _bCheckForMovedFwd = false );
-        // <--
         virtual bool DoFormatObjs();
 
         /** method to create an instance of <SwObjectFormatterTxtFrm> is
             necessary.
-
-            @author OD
         */
         static SwObjectFormatterTxtFrm* CreateObjFormatter(
                                                 SwTxtFrm& _rAnchorTxtFrm,
@@ -160,13 +149,11 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
 
         /** method to format given anchor text frame and its previous frames
 
-            OD 2005-11-17 #i56300#
+            #i56300#
             Usage: Needed to check, if the anchor text frame is moved forward
             due to the positioning and wrapping of its anchored objects, and
             to format the frames, which have become invalid due to the anchored
             object formatting in the iterative object positioning algorithm
-
-            @author OD
 
             @param _rAnchorTxtFrm
             input parameter - reference to anchor text frame, which has to be
@@ -176,12 +163,10 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
 
         /** method to check the conditions, if 'anchor is moved forward'
 
-            OD 2004-10-11 #i26945#
-            OD 2005-03-30 #i43913# - add output parameter <_boInFollow>
-            OD 2006-01-27 #i58182# - replace method by a corresponding static
+            #i26945#
+            #i43913# - add output parameter <_boInFollow>
+            #i58182# - replace method by a corresponding static
             method, because it's needed for the iterative positioning algorithm.
-
-            @author OD
 
             @param _rAnchoredObj
             input parameter - anchored object, for which the condition has to checked.
