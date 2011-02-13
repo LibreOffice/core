@@ -36,8 +36,6 @@
 #include "tools/iparser.hxx"
 #include "tools/geninfo.hxx"
 
-
-
 //
 // class InformationParser
 //
@@ -232,9 +230,9 @@ BOOL InformationParser::Save( SvStream &rOutStream,
      static ByteString aKeyLevel;
     aKeyLevel.Expand( level, cKeyLevelChar );
 
-    for ( nInfoListCount = 0; nInfoListCount < pSaveList->Count(); nInfoListCount++) {
+    for ( nInfoListCount = 0; nInfoListCount < pSaveList->size(); nInfoListCount++) {
         // Key-Value Paare schreiben
-        pGenericInfo = pSaveList->GetObject( nInfoListCount );
+        pGenericInfo = (*pSaveList)[ nInfoListCount ];
         sTmpStr = "";
         if ( !bStripped && level )
             sTmpStr.Append( aKeyLevel.GetBuffer(), level );

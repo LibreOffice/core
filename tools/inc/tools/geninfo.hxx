@@ -32,6 +32,7 @@
 
 #include <tools/string.hxx>
 #include <tools/list.hxx>
+#include <vector>
 
 // forwards
 class GenericInformationList;
@@ -189,19 +190,20 @@ private:
 Purpose: holds set of generic informations in a sorted list
 ******************************************************************************/
 
-DECLARE_LIST( GenericInformationList_Impl, GenericInformation * )
+typedef ::std::vector< GenericInformation* > GenericInformationList_Impl;
 
-class TOOLS_DLLPUBLIC GenericInformationList : public GenericInformationList_Impl
+class TOOLS_DLLPUBLIC GenericInformationList
 {
 private:
+    GenericInformationList_Impl maList;
     GenericInformation *pOwner;         // holds parent of this list
 
 protected:
     // methods
-    ULONG InsertSorted( GenericInformation *pInfo, BOOL bOverwrite,
-                            ULONG nStart, ULONG nEnd );
-    GenericInformation *Search( ULONG &rPos, ByteString sKey,
-                            ULONG nStart, ULONG nEnd );
+    size_t InsertSorted( GenericInformation *pInfo, BOOL bOverwrite,
+                            size_t nStart, size_t nEnd );
+    GenericInformation *Search( size_t &rPos, ByteString sKey,
+                            size_t nStart, size_t nEnd );
 
 public:
     GenericInformationList( GenericInformation *pParent = NULL );
@@ -219,12 +221,15 @@ public:
    * wenn bNewPath gesetzt, wird der nichtexistente Teil des Pfades neu kreiert
    * wenn bNewPath nicht gesetzt ist und ein Teil des Pfades nicht vorhanden ist,
    * gibt die Methode FALSE zurueck.*/
-  BOOL InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
+    BOOL InsertInfo( const ByteString &rPathKey, const ByteString &rValue,
            BOOL bSearchByPath = FALSE, BOOL bNewPath = FALSE);
+
     void RemoveInfo( GenericInformation *pInfo, BOOL bDelete = FALSE );
 
     GenericInformation* SetOwner( GenericInformation *pNewOwner );
 
+    size_t size() const;
+    GenericInformation* operator[]( size_t i ) const;
 };
 
 #endif

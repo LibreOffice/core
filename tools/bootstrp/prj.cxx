@@ -477,8 +477,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
         GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
-                GenericInformation *pDrive = pDrives->GetObject( i );
+            for ( size_t i = 0; i < pDrives->size(); i++ ) {
+                GenericInformation *pDrive = (*pDrives)[ i ];
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
@@ -526,8 +526,8 @@ Star::Star( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
-                                    ByteString sProject( *pProjects->GetObject( j ));
+                                for ( size_t j = 0; j < pProjects->size(); j++ ) {
+                                    ByteString sProject( *(*pProjects)[ j ] );
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
@@ -995,8 +995,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
         GenericInformation *pInfo2 = pStandLst->GetInfo( sPath, TRUE );
         if ( pInfo2 && pInfo2->GetSubList())  {
             GenericInformationList *pDrives = pInfo2->GetSubList();
-            for ( ULONG i = 0; i < pDrives->Count(); i++ ) {
-                GenericInformation *pDrive = pDrives->GetObject( i );
+            for ( size_t i = 0; i < pDrives->size(); i++ ) {
+                GenericInformation *pDrive = (*pDrives)[ i ];
                 if ( pDrive ) {
                     DirEntry aEntry;
                     BOOL bOk = FALSE;
@@ -1044,8 +1044,8 @@ StarWriter::StarWriter( GenericInformationList *pStandLst, ByteString &rVersion,
                                 String sPrjDir( String::CreateFromAscii( "prj" ));
                                 String sSolarFile( String::CreateFromAscii( "build.lst" ));
 
-                                for ( ULONG j = 0; j < pProjects->Count(); j++ ) {
-                                    ByteString sProject( *pProjects->GetObject( j ));
+                                for ( size_t j = 0; j < pProjects->size(); j++ ) {
+                                    ByteString sProject( *(*pProjects)[ j ] );
                                     String ssProject( sProject, RTL_TEXTENCODING_ASCII_US );
 
                                     DirEntry aPrjEntry( aEntry );
