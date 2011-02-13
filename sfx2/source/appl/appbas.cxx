@@ -229,7 +229,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 
         case SID_DELETE_BASICOBJECT:
         {
-            SFX_REQUEST_ARG(rReq, pItem, SfxObjectItem, nSID, sal_False);
             break;
         }
 
