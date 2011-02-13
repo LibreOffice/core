@@ -32,34 +32,34 @@
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <doc.hxx>
-#   include "writerhelper.hxx"
-#   include <msfilter.hxx>
+#include "writerhelper.hxx"
+#include <msfilter.hxx>
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 
 #include <algorithm>                //std::swap
 #include <functional>               //std::binary_function
-#   include <svl/itemiter.hxx>  //SfxItemIter
-#   include <svx/svdobj.hxx>        //SdrObject
-#   include <svx/svdoole2.hxx>      //SdrOle2Obj
-#   include <svx/fmglob.hxx>        //FmFormInventor
-#   include <editeng/brkitem.hxx>       //SvxFmtBreakItem
-#   include <editeng/tstpitem.hxx>      //SvxTabStopItem
-#   include <ndtxt.hxx>             //SwTxtNode
-#    include <ndnotxt.hxx>          //SwNoTxtNode
-#    include <fmtcntnt.hxx>         //SwFmtCntnt
-#    include <swtable.hxx>          //SwTable
-#    include <frmfmt.hxx>           //SwFrmFmt
-#    include <flypos.hxx>           //SwPosFlyFrms
-#    include <fmtanchr.hxx>         //SwFmtAnchor
-#    include <ndgrf.hxx>            //SwGrfNode
-#    include <fmtfsize.hxx>         //SwFmtFrmSize
-#   include <SwStyleNameMapper.hxx> //SwStyleNameMapper
-#   include <docary.hxx>            //SwCharFmts
-#   include <charfmt.hxx>           //SwCharFmt
-#   include <fchrfmt.hxx>           //SwFmtCharFmt
+#include <svl/itemiter.hxx>  //SfxItemIter
+#include <svx/svdobj.hxx>        //SdrObject
+#include <svx/svdoole2.hxx>      //SdrOle2Obj
+#include <svx/fmglob.hxx>        //FmFormInventor
+#include <editeng/brkitem.hxx>       //SvxFmtBreakItem
+#include <editeng/tstpitem.hxx>      //SvxTabStopItem
+#include <ndtxt.hxx>             //SwTxtNode
+#include <ndnotxt.hxx>          //SwNoTxtNode
+#include <fmtcntnt.hxx>         //SwFmtCntnt
+#include <swtable.hxx>          //SwTable
+#include <frmfmt.hxx>           //SwFrmFmt
+#include <flypos.hxx>           //SwPosFlyFrms
+#include <fmtanchr.hxx>         //SwFmtAnchor
+#include <ndgrf.hxx>            //SwGrfNode
+#include <fmtfsize.hxx>         //SwFmtFrmSize
+#include <SwStyleNameMapper.hxx> //SwStyleNameMapper
+#include <docary.hxx>            //SwCharFmts
+#include <charfmt.hxx>           //SwCharFmt
+#include <fchrfmt.hxx>           //SwFmtCharFmt
 #ifndef _UNOTOOLS_STREAMWRAP_HXX
-#   include <unotools/streamwrap.hxx>
+#include <unotools/streamwrap.hxx>
 #endif
 #include <numrule.hxx>
 

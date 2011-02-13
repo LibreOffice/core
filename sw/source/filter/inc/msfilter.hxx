@@ -32,11 +32,11 @@
 #include <set>
 #include <map>
 #include <vector>
-#   include <swtypes.hxx>       //SwTwips
-#   include <tools/string.hxx>  //String
-#   include "wwstyles.hxx"      //ww::sti
-#   include <rtl/textenc.h>     //rtl_TextEncoding
-#   include <tools/gen.hxx>     //Size
+#include <swtypes.hxx>       //SwTwips
+#include <tools/string.hxx>  //String
+#include "wwstyles.hxx"      //ww::sti
+#include <rtl/textenc.h>     //rtl_TextEncoding
+#include <tools/gen.hxx>     //Size
 #include <tools/datetime.hxx>
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <redline.hxx>

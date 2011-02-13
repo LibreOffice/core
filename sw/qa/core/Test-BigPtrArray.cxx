@@ -30,8 +30,8 @@
 #include "precompiled_sw.hxx"
 
 #ifdef WNT
-# include <prewin.h>
-# include <postwin.h>
+#include <prewin.h>
+#include <postwin.h>
 #endif
 
 #define TIMELOG

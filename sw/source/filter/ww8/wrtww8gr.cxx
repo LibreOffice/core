@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-#   include <cstdio>
+#include <cstdio>
 #endif
 
 #include <com/sun/star/embed/XEmbedPersist.hpp>

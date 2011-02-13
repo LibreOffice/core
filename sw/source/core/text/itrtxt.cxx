@@ -49,7 +49,7 @@
 #include "porfly.hxx"
 
 #if OSL_DEBUG_LEVEL > 1
-# include "txtfrm.hxx"      // GetFrmID,
+#include "txtfrm.hxx"      // GetFrmID,
 #endif
 
 /*************************************************************************

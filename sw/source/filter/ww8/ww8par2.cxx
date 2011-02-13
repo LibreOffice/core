@@ -67,8 +67,8 @@
 #include <fmtrowsplt.hxx>
 #include <fmtfollowtextflow.hxx> // #i33818#
 #include <numrule.hxx>
-#   include "../inc/wwstyles.hxx"
-#   include "writerhelper.hxx"
+#include "../inc/wwstyles.hxx"
+#include "writerhelper.hxx"
 #include "ww8struc.hxx"         // struct TC
 #include "ww8par.hxx"
 #include "ww8par2.hxx"

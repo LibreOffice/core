@@ -163,10 +163,10 @@ const char *GetLangName( const MSHORT  )
 }
 
 #else
-# include <limits.h>
-# include <stdlib.h>
-# include "swtypes.hxx"      // ZTCCONST
-# include "swfont.hxx"     // SwDropPortion
+#include <limits.h>
+#include <stdlib.h>
+#include "swtypes.hxx"      // ZTCCONST
+#include "swfont.hxx"     // SwDropPortion
 
 CONSTCHAR( pClose, "} " );
 

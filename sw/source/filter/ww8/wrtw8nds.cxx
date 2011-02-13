@@ -35,8 +35,9 @@
 #include <algorithm>
 #include <functional>
 #include <iostream>
+
 #if OSL_DEBUG_LEVEL > 1
-#   include <cstdio>
+#include <cstdio>
 #endif
 
 #include <hintids.hxx>
