@@ -33,9 +33,6 @@
 
 class EditView;
 
-//  ----------------------------------------------------------------------
-//  class EditSelFunctionSet
-//  ----------------------------------------------------------------------
 class EditSelFunctionSet: public FunctionSet
 {
 private:
@@ -59,9 +56,6 @@ public:
     EditView*       GetCurView()                        { return pCurView; }
 };
 
-// ----------------------------------------------------------------------
-//  class EditSelectionEngine
-//  ----------------------------------------------------------------------
 class EditSelectionEngine : public SelectionEngine
 {
 private:

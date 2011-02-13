@@ -80,18 +80,6 @@ using namespace ::com::sun::star;
 USHORT lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
 {
     USHORT nExtra = 0;
-    /* if ( ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_PROP )
-            && ( rLSItem.GetPropLineSpace() != 100 ) )
-    {
-        // ULONG nH = pPortion->GetNode()->GetCharAttribs().GetDefFont().GetSize().Height();
-        ULONG nH = pPortion->GetLines().GetObject( 0 )->GetHeight();
-        long n = nH * rLSItem.GetPropLineSpace();
-        n /= 100;
-        n -= nH;    // nur den Abstand
-        if ( n > 0 )
-            nExtra = (USHORT)n;
-    }
-    else */
     if ( rLSItem.GetInterLineSpaceRule() == SVX_INTER_LINE_SPACE_FIX )
     {
         nExtra = rLSItem.GetInterLineSpace();
@@ -99,10 +87,6 @@ USHORT lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
 
     return nExtra;
 }
-
-// ----------------------------------------------------------------------
-//  class ImpEditEngine
-//  ----------------------------------------------------------------------
 
 ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     aPaperSize( 0x7FFFFFFF, 0x7FFFFFFF ),
@@ -1043,7 +1027,6 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
     if ( !bEmptyLine )
     {
         String aLine( *aPaM.GetNode(), pLine->GetStart(), pLine->GetEnd() - pLine->GetStart() );
-//        USHORT nPosInLine = aPaM.GetIndex() - pLine->GetStart();
 
         const sal_Unicode* pLineString = aLine.GetBuffer();
 
@@ -1064,7 +1047,7 @@ EditPaM ImpEditEngine::CursorVisualStartEnd( EditView* pEditView, const EditPaM&
         USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nTmp, TRUE );
         TextPortion* pTextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion );
         USHORT nRTLLevel = pTextPortion->GetRightToLeft();
-//        BOOL bParaRTL = IsRightToLeft( nPara );
+
         BOOL bPortionRTL = nRTLLevel%2 ? TRUE : FALSE;
 
         if ( bStart )
@@ -1096,7 +1079,6 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
     EditLine* pLine = pParaPortion->GetLines().GetObject( nLine );
     BOOL bEmptyLine = pLine->GetStart() == pLine->GetEnd();
 
-//    USHORT nCurrentCursorFlags = pEditView->pImpEditView->nExtraCursorFlags;
     pEditView->pImpEditView->nExtraCursorFlags = 0;
 
     BOOL bParaRTL = IsRightToLeft( nPara );
@@ -1222,8 +1204,6 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             {
                 if ( bWasBehind || bRTLPortion || bBeforePortion )
                     nVisPos++;
-//                if ( bWasBehind && bRTLPortion )
-//                    nVisPos++;
             }
 
             bGotoEndOfPrevLine = nVisPos < 0;
@@ -1233,31 +1213,19 @@ EditPaM ImpEditEngine::CursorVisualLeftRight( EditView* pEditView, const EditPaM
             {
                 USHORT nLogPos = (USHORT)ubidi_getLogicalIndex( pBidi, nVisPos, &nError );
 
-/*
-                if ( nLogPos == aPaM.GetIndex() )
-                {
-                    if ( bVisualToLeft )
-                        bGotoEndOfPrevLine = TRUE;
-                    else
-                        bGotoStartOfNextLine = TRUE;
-                }
-                else
-*/
-                {
-                    aPaM.GetIndex() = pLine->GetStart() + nLogPos;
+                aPaM.GetIndex() = pLine->GetStart() + nLogPos;
 
-                    // RTL portion, stay visually on the left side.
-                    USHORT _nPortionStart;
-                    // USHORT nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), nPortionStart, !bRTLPortion );
-                    USHORT _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, TRUE );
-                    TextPortion* _pTextPortion = pParaPortion->GetTextPortions().GetObject( _nTextPortion );
-                    if ( bVisualToLeft && !bRTLPortion && ( _pTextPortion->GetRightToLeft() % 2 ) )
-                        aPaM.GetIndex()++;
-                    else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_pTextPortion->GetRightToLeft() % 2 )) )
-                        aPaM.GetIndex()++;
+                // RTL portion, stay visually on the left side.
+                USHORT _nPortionStart;
 
-                    pEditView->pImpEditView->SetCursorBidiLevel( _nPortionStart );
-                }
+                USHORT _nTextPortion = pParaPortion->GetTextPortions().FindPortion( aPaM.GetIndex(), _nPortionStart, TRUE );
+                TextPortion* _pTextPortion = pParaPortion->GetTextPortions().GetObject( _nTextPortion );
+                if ( bVisualToLeft && !bRTLPortion && ( _pTextPortion->GetRightToLeft() % 2 ) )
+                    aPaM.GetIndex()++;
+                else if ( !bVisualToLeft && bRTLPortion && ( bWasBehind || !(_pTextPortion->GetRightToLeft() % 2 )) )
+                    aPaM.GetIndex()++;
+
+                pEditView->pImpEditView->SetCursorBidiLevel( _nPortionStart );
             }
         }
 
@@ -1699,9 +1667,6 @@ sal_Bool ImpEditEngine::IsInputSequenceCheckingRequired( sal_Unicode nChar, cons
     return bIsSequenceChecking;
 }
 
-/*************************************************************************
- *                 lcl_HasStrongLTR
- *************************************************************************/
  bool lcl_HasStrongLTR ( const String& rTxt, xub_StrLen nStart, xub_StrLen nEnd )
  {
      for ( xub_StrLen nCharIdx = nStart; nCharIdx < nEnd; ++nCharIdx )
@@ -1722,8 +1687,6 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     ParaPortion* pParaPortion = GetParaPortions().SaveGetObject( nPara );
     ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     rTypes.Remove( 0, rTypes.Count() );
-
-//  pParaPortion->aExtraCharInfos.Remove( 0, pParaPortion->aExtraCharInfos.Count() );
 
     ContentNode* pNode = pParaPortion->GetNode();
     if ( pNode->Len() )
@@ -2091,7 +2054,6 @@ BOOL ImpEditEngine::HasDifferentRTLLevels( const ContentNode* pNode )
 
 BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, USHORT* pEnd )
 {
-//    BYTE nRightToLeft = IsRightToLeft( nPara ) ? 1 : 0;
     BYTE nRightToLeft = 0;
 
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
@@ -2101,7 +2063,6 @@ BYTE ImpEditEngine::GetRightToLeft( USHORT nPara, USHORT nPos, USHORT* pStart, U
         if ( !pParaPortion->aWritingDirectionInfos.Count() )
             InitWritingDirections( nPara );
 
-//        BYTE nType = 0;
         WritingDirectionInfos& rDirInfos = pParaPortion->aWritingDirectionInfos;
         for ( USHORT n = 0; n < rDirInfos.Count(); n++ )
         {
@@ -2152,7 +2113,6 @@ SvxCellVerJustify ImpEditEngine::GetVerJustification( USHORT nPara ) const
     return static_cast<SvxCellVerJustify>(rItem.GetEnumValue());
 }
 
-
 //  ----------------------------------------------------------------------
 //  Textaenderung
 //  ----------------------------------------------------------------------
@@ -2167,7 +2127,7 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, USHORT nChars, EditUndo
         USHORT nStart = rPaM.GetIndex();
         USHORT nEnd = nStart + nChars;
         CharAttribArray& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
-//      USHORT nAttrs = rAttribs.Count();
+
         for ( USHORT nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
         {
             EditCharAttrib* pAttr = rAttribs[nAttr];
@@ -3058,7 +3018,6 @@ BOOL ImpEditEngine::UpdateFields()
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
         DBG_ASSERT( pNode, "NULL-Pointer im Doc" );
         CharAttribArray& rAttribs = pNode->GetCharAttribs().GetAttribs();
-//      USHORT nAttrs = rAttribs.Count();
         for ( USHORT nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
         {
             EditCharAttrib* pAttr = rAttribs[nAttr];
@@ -3194,8 +3153,6 @@ sal_uInt32 ImpEditEngine::CalcTextWidth( BOOL bIgnoreExtraSpace )
     // Ueber alle Absaetze...
     // --------------------------------------------------
     USHORT nParas = GetParaPortions().Count();
-//  USHORT nBiggestPara = 0;
-//  USHORT nBiggestLine = 0;
     for ( USHORT nPara = 0; nPara < nParas; nPara++ )
     {
         ParaPortion* pPortion = GetParaPortions().GetObject( nPara );
@@ -3743,24 +3700,6 @@ EditSelection ImpEditEngine::InsertText( uno::Reference< datatransfer::XTransfer
 
             if ( !bDone )
             {
-                // Bookmark
-                /*
-                String aURL = ...;
-                String aTxt = ...;
-                // Feld nur einfuegen, wenn Factory vorhanden.
-                if ( ITEMDATA() && ITEMDATA()->GetClassManager().Get( SVX_URLFIELD ) )
-                {
-                    SvxFieldItem aField( SvxURLField( aURL, aTxt, SVXURLFORMAT_URL ), EE_FEATURE_FIELD  );
-                    aNewSelection = InsertField( aPaM, aField );
-                    UpdateFields();
-                }
-                else
-                    aNewSelection = ImpInsertText( aPaM, aURL );
-                }
-                */
-            }
-            if ( !bDone )
-            {
                 // RTF
                 SotExchange::GetFormatDataFlavor( SOT_FORMAT_RTF, aFlavor );
                 if ( rxDataObj->isDataFlavorSupported( aFlavor ) )
@@ -4077,7 +4016,6 @@ long ImpEditEngine::GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLin
             case PORTIONKIND_TEXT:
             case PORTIONKIND_HYPHENATOR:
             case PORTIONKIND_TAB:
-//          case PORTIONKIND_EXTRASPACE:
             {
                 nX += pPortion->GetSize().Width();
             }
@@ -4589,17 +4527,6 @@ BOOL ImpEditEngine::DoVisualCursorTraveling( const ContentNode* )
 {
     // Don't check if it's necessary, because we also need it when leaving the paragraph
     return IsVisualCursorTravelingEnabled();
-/*
-    BOOL bDoVisualCursorTraveling = FALSE;
-
-    if ( IsVisualCursorTravelingEnabled() && pNode->Len() )
-    {
-        // Only necessary when RTL text in LTR para or LTR text in RTL para
-        bDoVisualCursorTraveling = HasDifferentRTLLevels( pNode );
-    }
-
-    return bDoVisualCursorTraveling;
-*/
 }
 
 

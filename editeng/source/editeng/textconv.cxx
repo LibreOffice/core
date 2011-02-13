@@ -112,7 +112,6 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 
     }
 
-    //ResMgr* pMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bStartDone && bEndDone )
@@ -161,8 +160,6 @@ sal_Bool TextConvWrapper::ConvNext_impl()
 sal_Bool TextConvWrapper::FindConvText_impl()
 {
     // modified version of SvxSpellWrapper::FindSpellError
-
-    //ShowLanguageErrors();
 
     sal_Bool bFound = sal_False;
 

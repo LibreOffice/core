@@ -2781,90 +2781,7 @@ sal_Bool EditEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 void EditEngine::ImportBulletItem( SvxNumBulletItem& /*rNumBullet*/, sal_uInt16 /*nLevel*/,
                                     const SvxBulletItem* /*pOldBullet*/, const SvxLRSpaceItem* /*pOldLRSpace*/ )
 {
-/* TL_NFLR
-    if ( pOldBullet || pOldLRSpace )
-    {
-        // Numberformat dynamisch, weil Zuweisungsoperator nicht implementiert.
 
-        // Altes NumBulletItem nur uebernehmen, wenn kein altes BulletItem
-        const SvxNumberFormat* pFmt = ( !pOldBullet && ( rNumBullet.GetNumRule()->GetLevelCount() > nLevel ) ) ?
-                                        rNumBullet.GetNumRule()->Get( nLevel ) : NULL;
-        SvxNumberFormat* pNumberFormat = pFmt
-                                            ? new SvxNumberFormat( *pFmt )
-                                            : new SvxNumberFormat( SVX_NUM_NUMBER_NONE );
-        if ( pOldBullet )
-        {
-            // Style
-            SvxExtNumType eNumType;
-            switch( pOldBullet->GetStyle() )
-            {
-                case BS_BMP:            eNumType = SVX_NUM_BITMAP;              break;
-                case BS_BULLET:         eNumType = SVX_NUM_CHAR_SPECIAL;        break;
-                case BS_ROMAN_BIG:      eNumType = SVX_NUM_ROMAN_UPPER;         break;
-                case BS_ROMAN_SMALL:    eNumType = SVX_NUM_ROMAN_LOWER;         break;
-                case BS_ABC_BIG:        eNumType = SVX_NUM_CHARS_UPPER_LETTER;  break;
-                case BS_ABC_SMALL:      eNumType = SVX_NUM_CHARS_LOWER_LETTER;  break;
-                case BS_123:            eNumType = SVX_NUM_ARABIC;              break;
-                default:                eNumType = SVX_NUM_NUMBER_NONE;         break;
-            }
-            pNumberFormat->SetNumberingType(
-                sal::static_int_cast< sal_Int16 >( eNumType ) );
-
-            // Justification
-            SvxAdjust eAdjust;
-            switch( pOldBullet->GetJustification() & (BJ_HRIGHT|BJ_HCENTER|BJ_HLEFT) )
-            {
-                case BJ_HRIGHT:     eAdjust = SVX_ADJUST_RIGHT;     break;
-                case BJ_HCENTER:    eAdjust = SVX_ADJUST_CENTER;    break;
-                default:            eAdjust = SVX_ADJUST_LEFT;      break;
-            }
-            pNumberFormat->SetNumAdjust(eAdjust);
-
-            // Prefix/Suffix
-            pNumberFormat->SetPrefix( pOldBullet->GetPrevText() );
-            pNumberFormat->SetSuffix( pOldBullet->GetFollowText() );
-
-            //Font
-            if ( eNumType != SVX_NUM_BITMAP )
-            {
-                Font aTmpFont = pOldBullet->GetFont();
-                pNumberFormat->SetBulletFont( &aTmpFont );
-            }
-
-            // Color
-            pNumberFormat->SetBulletColor( pOldBullet->GetFont().GetColor() );
-
-            // Start
-            pNumberFormat->SetStart( pOldBullet->GetStart() );
-
-            // Scale
-            pNumberFormat->SetBulletRelSize( pOldBullet->GetScale() );
-
-            // Bullet/Bitmap
-            if( eNumType == SVX_NUM_CHAR_SPECIAL )
-            {
-                pNumberFormat->SetBulletChar( pOldBullet->GetSymbol() );
-            }
-            else if( eNumType == SVX_NUM_BITMAP )
-            {
-                SvxBrushItem aBItem( Graphic( pOldBullet->GetBitmap() ), GPOS_NONE, SID_ATTR_BRUSH );
-                pNumberFormat->SetGraphicBrush( &aBItem );
-            }
-        }
-
-        // Einzug und Erstzeileneinzug
-//TL_NFLR       if ( pOldLRSpace )
-//TL_NFLR       {
-//TL_NFLR           short nLSpace = (short)pOldLRSpace->GetTxtLeft();
-//TL_NFLR           pNumberFormat->SetLSpace( nLSpace );
-//TL_NFLR           pNumberFormat->SetAbsLSpace( nLSpace );
-//TL_NFLR           pNumberFormat->SetFirstLineOffset( pOldLRSpace->GetTxtFirstLineOfst() );
-//TL_NFLR       }
-
-        rNumBullet.GetNumRule()->SetLevel( nLevel, *pNumberFormat );
-        delete pNumberFormat;
-    }
-*/
 }
 
 BOOL EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rTransferable )
@@ -2913,9 +2830,6 @@ BOOL EditEngine::IsFirstWordCapitalization() const
 {
     return pImpEditEngine->IsFirstWordCapitalization();
 }
-
-
-// ---------------------------------------------------
 
 
 EFieldInfo::EFieldInfo()

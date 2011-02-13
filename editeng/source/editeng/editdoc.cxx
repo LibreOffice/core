@@ -408,10 +408,6 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, US
     return pNew;
 }
 
-// -------------------------------------------------------------------------
-// class EditLine
-// -------------------------------------------------------------------------
-
 EditLine::EditLine()
 {
     DBG_CTOR( EE_EditLine, 0 );
@@ -545,9 +541,6 @@ Size EditLine::CalcTextSize( ParaPortion& rParaPortion )
     return aSz;
 }
 
-// -------------------------------------------------------------------------
-// class EditLineList
-// -------------------------------------------------------------------------
 EditLineList::EditLineList()
 {
 }
@@ -588,9 +581,6 @@ USHORT EditLineList::FindLine( USHORT nChar, BOOL bInclEnd )
     return ( Count() - 1 );
 }
 
-// -------------------------------------------------------------------------
-// class EditSelection
-// -------------------------------------------------------------------------
 BOOL EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
     if ( !pNode )
@@ -682,10 +672,6 @@ BOOL EditSelection::Adjust( const ContentList& rNodes )
     return bSwap;
 }
 
-
-// -------------------------------------------------------------------------
-// class EditPaM
-// -------------------------------------------------------------------------
 BOOL operator == ( const EditPaM& r1,  const EditPaM& r2  )
 {
     if ( r1.GetNode() != r2.GetNode() )
@@ -709,10 +695,6 @@ BOOL operator != ( const EditPaM& r1,  const EditPaM& r2  )
     return !( r1 == r2 );
 }
 
-
-// -------------------------------------------------------------------------
-// class ContentNode
-// -------------------------------------------------------------------------
 ContentNode::ContentNode( SfxItemPool& rPool ) : aContentAttribs( rPool )
 {
     DBG_CTOR( EE_ContentNode, 0 );
@@ -935,7 +917,7 @@ void ContentNode::CollapsAttribs( USHORT nIndex, USHORT nDeleted, SfxItemPool& r
 
         DBG_ASSERT( pAttrib->GetStart() <= pAttrib->GetEnd(), "Collaps: Attribut verdreht!" );
         DBG_ASSERT( ( pAttrib->GetEnd() <= Len()) || bDelAttr, "Collaps: Attrib groesser als Absatz!" );
-        if ( bDelAttr /* || pAttrib->IsEmpty() */ )
+        if ( bDelAttr )
         {
             bResort = TRUE;
             aCharAttribList.GetAttribs().Remove( nAttr );
@@ -1125,9 +1107,6 @@ void ContentNode::SetWrongList( WrongList* p )
     pWrongList = p;
 }
 
-// -------------------------------------------------------------------------
-// class ContentAttribs
-// -------------------------------------------------------------------------
 ContentAttribs::ContentAttribs( SfxItemPool& rPool ) :
                     aAttribSet( rPool, EE_PARA_START, EE_CHAR_END )
 {
@@ -1202,10 +1181,6 @@ BOOL ContentAttribs::HasItem( USHORT nWhich )
 }
 
 
-
-// ----------------------------------------------------------------------
-//  class ItemList
-//  ----------------------------------------------------------------------
 ItemList::ItemList() : CurrentItem( 0 )
 {
 }
@@ -1240,9 +1215,7 @@ void ItemList::Insert( const SfxPoolItem* pItem )
     CurrentItem = aItemPool.size() - 1;
 }
 
-// -------------------------------------------------------------------------
-// class EditDoc
-// -------------------------------------------------------------------------
+
 EditDoc::EditDoc( SfxItemPool* pPool )
 {
     if ( pPool )
@@ -1861,9 +1834,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, USHORT nStart, USHORT nEnd, cons
         {
             if ( pAttr->IsInside( nStart ) )    // splitten
             {
-                // ???????????????????????????????
                 // eigentlich noch pruefen, ob wirklich splittet, oder return !
-                // ???????????????????????????????
                 USHORT nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
                 pAttr = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
@@ -1996,10 +1967,6 @@ void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos,
     }
 }
 
-
-// -------------------------------------------------------------------------
-// class EditCharAttribList
-// -------------------------------------------------------------------------
 
 CharAttribList::CharAttribList()
 {
@@ -2273,7 +2240,6 @@ ULONG SvxFontTable::GetId( const SvxFontItem& rFontItem )
     return 0;
 }
 
-//=============================================================================
 SvxColorList::SvxColorList()
 {
 }
@@ -2313,7 +2279,6 @@ SvxColorItem* SvxColorList::GetObject( size_t nIndex )
     return ( nIndex >= aColorList.size() ) ? NULL : aColorList[ nIndex ];
 }
 
-//=============================================================================
 EditEngineItemPool::EditEngineItemPool( BOOL bPersistenRefCounts )
     : SfxItemPool( String( "EditEngineItemPool", RTL_TEXTENCODING_ASCII_US ), EE_ITEMS_START, EE_ITEMS_END,
                     aItemInfos, 0, bPersistenRefCounts )

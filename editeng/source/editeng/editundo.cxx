@@ -67,9 +67,6 @@ void lcl_DoSetSelection( EditView* pView, USHORT nPara )
     pView->GetImpEditView()->SetEditSelection( aSel );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoManager
-// ------------------------------------------------------------------------
 EditUndoManager::EditUndoManager( ImpEditEngine* p )
 {
     pImpEE = p;
@@ -145,9 +142,6 @@ BOOL EditUndoManager::Redo( USHORT nCount )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
-// EditUndo
-// ------------------------------------------------------------------------
 EditUndo::EditUndo( USHORT nI, ImpEditEngine* p )
 {
     DBG_CTOR( EditUndo, 0 );
@@ -182,9 +176,6 @@ XubString EditUndo::GetComment() const
     return aComment;
 }
 
-// -----------------------------------------------------------------------
-// EditUndoDelContent
-// ------------------------------------------------------------------------
 EditUndoDelContent::EditUndoDelContent( ImpEditEngine* _pImpEE, ContentNode* pNode, USHORT n )
                     : EditUndo( EDITUNDO_DELCONTENT, _pImpEE )
 {
@@ -242,9 +233,6 @@ void EditUndoDelContent::Redo()
     _pImpEE->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoConnectParas
-// ------------------------------------------------------------------------
 EditUndoConnectParas::EditUndoConnectParas( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP,
                                             const SfxItemSet& rLeftParaAttribs, const SfxItemSet& rRightParaAttribs,
                                             const SfxStyleSheet* pLeftStyle, const SfxStyleSheet* pRightStyle, BOOL bBkwrd )
@@ -311,9 +299,6 @@ void EditUndoConnectParas::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoSplitPara
-// ------------------------------------------------------------------------
 EditUndoSplitPara::EditUndoSplitPara( ImpEditEngine* _pImpEE, USHORT nN, USHORT nSP )
                     : EditUndo( EDITUNDO_SPLITPARA, _pImpEE )
 {
@@ -339,9 +324,6 @@ void EditUndoSplitPara::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( EditSelection( aPaM, aPaM ) );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoInsertChars
-// ------------------------------------------------------------------------
 EditUndoInsertChars::EditUndoInsertChars( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const XubString& rStr )
                     : EditUndo( EDITUNDO_INSERTCHARS, _pImpEE ),
                         aEPaM( rEPaM ), aText( rStr )
@@ -386,9 +368,6 @@ BOOL EditUndoInsertChars::Merge( SfxUndoAction* pNextAction )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
-// EditUndoRemoveChars
-// ------------------------------------------------------------------------
 EditUndoRemoveChars::EditUndoRemoveChars( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const XubString& rStr )
                     : EditUndo( EDITUNDO_REMOVECHARS, _pImpEE ),
                         aEPaM( rEPaM ), aText( rStr )
@@ -415,9 +394,6 @@ void EditUndoRemoveChars::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewPaM );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoInsertFeature
-// ------------------------------------------------------------------------
 EditUndoInsertFeature::EditUndoInsertFeature( ImpEditEngine* _pImpEE, const EPaM& rEPaM, const SfxPoolItem& rFeature)
                     : EditUndo( EDITUNDO_INSERTFEATURE, _pImpEE ), aEPaM( rEPaM )
 {
@@ -454,9 +430,6 @@ void EditUndoInsertFeature::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoMoveParagraphs
-// ------------------------------------------------------------------------
 EditUndoMoveParagraphs::EditUndoMoveParagraphs
                             ( ImpEditEngine* _pImpEE, const Range& rParas, USHORT n )
                             :   EditUndo( EDITUNDO_MOVEPARAGRAPHS, _pImpEE ),
@@ -499,9 +472,6 @@ void EditUndoMoveParagraphs::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoSetStyleSheet
-// ------------------------------------------------------------------------
 EditUndoSetStyleSheet::EditUndoSetStyleSheet( ImpEditEngine* _pImpEE, USHORT nP,
                         const XubString& rPrevName, SfxStyleFamily ePrevFam,
                         const XubString& rNewName, SfxStyleFamily eNewFam,
@@ -533,9 +503,6 @@ void EditUndoSetStyleSheet::Redo()
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoSetParaAttribs
-// ------------------------------------------------------------------------
 EditUndoSetParaAttribs::EditUndoSetParaAttribs( ImpEditEngine* _pImpEE, USHORT nP, const SfxItemSet& rPrevItems, const SfxItemSet& rNewItems )
     : EditUndo( EDITUNDO_PARAATTRIBS, _pImpEE ),
       aPrevItems( rPrevItems ),
@@ -562,9 +529,6 @@ void EditUndoSetParaAttribs::Redo()
     lcl_DoSetSelection( GetImpEditEngine()->GetActiveView(), nPara );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoSetAttribs
-// ------------------------------------------------------------------------
 EditUndoSetAttribs::EditUndoSetAttribs( ImpEditEngine* _pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems )
     : EditUndo( EDITUNDO_ATTRIBS, _pImpEE ),
       aESel( rESel ),
@@ -655,9 +619,6 @@ void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aSel );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoTransliteration
-// ------------------------------------------------------------------------
 EditUndoTransliteration::EditUndoTransliteration( ImpEditEngine* _pImpEE, const ESelection& rESel, sal_Int32 nM )
     : EditUndo( EDITUNDO_TRANSLITERATE, _pImpEE ), aOldESel( rESel )
 {
@@ -720,9 +681,6 @@ void EditUndoTransliteration::Redo()
     GetImpEditEngine()->GetActiveView()->GetImpEditView()->SetEditSelection( aNewSel );
 }
 
-// -----------------------------------------------------------------------
-// EditUndoMarkSelection
-// ------------------------------------------------------------------------
 EditUndoMarkSelection::EditUndoMarkSelection( ImpEditEngine* _pImpEE, const ESelection& rSel )
     : EditUndo( EDITUNDO_MARKSELECTION, _pImpEE ), aSelection( rSel )
 {

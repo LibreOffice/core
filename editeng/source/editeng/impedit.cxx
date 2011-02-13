@@ -1833,9 +1833,8 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
 
     if ( GetOutputArea().IsInside( aMousePos ) && !bReadOnly )
     {
-//        sal_Int8 nSupportedActions = bReadOnly ? datatransfer::dnd::DNDConstants::ACTION_COPY : datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE;
 
-        if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData /* && ( nSupportedActions & rDTDE.DropAction ) MT: Default = 0x80 ?! */ )
+        if ( pDragAndDropInfo && pDragAndDropInfo->bHasValidData )
         {
             bAccept = sal_True;
 

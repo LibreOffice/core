@@ -228,7 +228,7 @@ void EditHTMLParser::NextToken( int nToken )
     break;
 
     case HTML_CENTER_ON:
-    case HTML_CENTER_OFF:   // if ( bInPara )
+    case HTML_CENTER_OFF:
                             {
                                 USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
                                 SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
@@ -570,148 +570,111 @@ void EditHTMLParser::ImpSetAttribs( const SfxItemSet& rItems, EditSelection* pSe
     USHORT nEndNode = pImpEditEngine->GetEditDoc().GetPos( pEN );
     DBG_ASSERT( nStartNode == nEndNode, "ImpSetAttribs: Mehrere Absaetze?" );
 #endif
-
-/*
-    for ( USHORT z = nStartNode+1; z < nEndNode; z++ )
+    if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
     {
-        DBG_ASSERT( pImpEditEngine->GetEditDoc().SaveGetObject( z ), "Node existiert noch nicht(RTF)" );
-        pImpEditEngine->SetParaAttribs( z, rSet.GetAttrSet() );
-    }
-
-    if ( aStartPaM.GetNode() != aEndPaM.GetNode() )
-    {
-        // Den Rest des StartNodes...
-        if ( aStartPaM.GetIndex() == 0 )
-            pImpEditEngine->SetParaAttribs( nStartNode, rSet.GetAttrSet() );
-        else
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, EditPaM( aStartPaM.GetNode(), aStartPaM.GetNode()->Len() ) ), rSet.GetAttrSet() );
-
-        // Den Anfang des EndNodes....
-        if ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() )
-            pImpEditEngine->SetParaAttribs( nEndNode, rSet.GetAttrSet() );
-        else
-            pImpEditEngine->SetAttribs( EditSelection( EditPaM( aEndPaM.GetNode(), 0 ), aEndPaM ), rSet.GetAttrSet() );
+        // Muesse gemergt werden:
+        SfxItemSet aItems( pImpEditEngine->GetParaAttribs( nStartNode ) );
+        aItems.Put( rItems );
+        pImpEditEngine->SetParaAttribs( nStartNode, aItems );
     }
     else
-*/
-    {
-        if ( ( aStartPaM.GetIndex() == 0 ) && ( aEndPaM.GetIndex() == aEndPaM.GetNode()->Len() ) )
-        {
-            // Muesse gemergt werden:
-            SfxItemSet aItems( pImpEditEngine->GetParaAttribs( nStartNode ) );
-            aItems.Put( rItems );
-            pImpEditEngine->SetParaAttribs( nStartNode, aItems );
-        }
-        else
-            pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rItems );
-    }
+        pImpEditEngine->SetAttribs( EditSelection( aStartPaM, aEndPaM ), rItems );
 }
 
 void EditHTMLParser::ImpSetStyleSheet( USHORT nHLevel )
 {
     /*
-        nHLevel:    0:          Ausschalten
-                    1-6:        Heading
-                    STYLE_PRE:  Preformatted
+    nHLevel:    0:          Ausschalten
+              1-6:      Heading
+        STYLE_PRE:  Preformatted
     */
+    // Harte Attribute erzeugen...
+    // Reicht fuer Calc, bei StyleSheets muesste noch geklaert werden,
+    // dass diese auch in der App liegen sollten, damit sie beim
+    // fuettern in eine andere Engine auch noch da sind...
 
-//      if ( pImpEditEngine->GetStatus().DoImportRTFStyleSheets() )
-//      {
-//          SvxRTFStyleType* pS = GetStyleTbl().Get( rSet.StyleNo() );
-//          DBG_ASSERT( pS, "Vorlage in RTF nicht definiert!" );
-//          if ( pS )
-//              pImpEditEngine->SetStyleSheet( EditSelection( aStartPaM, aEndPaM ), pS->sName, SFX_STYLE_FAMILY_ALL );
-//      }
-//      else
+    USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
+
+    SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
+
+    aItems.ClearItem( EE_PARA_ULSPACE );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT );
+    aItems.ClearItem( EE_CHAR_FONTINFO );
+    aItems.ClearItem( EE_CHAR_WEIGHT );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT_CJK );
+    aItems.ClearItem( EE_CHAR_FONTINFO_CJK );
+    aItems.ClearItem( EE_CHAR_WEIGHT_CJK );
+
+    aItems.ClearItem( EE_CHAR_FONTHEIGHT_CTL );
+    aItems.ClearItem( EE_CHAR_FONTINFO_CTL );
+    aItems.ClearItem( EE_CHAR_WEIGHT_CTL );
+
+    // Fett in den ersten 3 Headings
+    if ( ( nHLevel >= 1 ) && ( nHLevel <= 3 ) )
+    {
+        SvxWeightItem aWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
+        aItems.Put( aWeightItem );
+
+        SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
+        aItems.Put( aWeightItem );
+
+        SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
+        aItems.Put( aWeightItem );
+    }
+
+    // Fonthoehe und Abstaende, wenn LogicToLogic moeglich:
+    MapUnit eUnit = pImpEditEngine->GetRefMapMode().GetMapUnit();
+    if ( ( eUnit != MAP_PIXEL ) && ( eUnit != MAP_SYSFONT ) &&
+         ( eUnit != MAP_APPFONT ) && ( eUnit != MAP_RELATIVE ) )
+    {
+        long nPoints = 10;
+        if ( nHLevel == 1 )
+            nPoints = 22;
+        else if ( nHLevel == 2 )
+            nPoints = 16;
+        else if ( nHLevel == 3 )
+            nPoints = 12;
+        else if ( nHLevel == 4 )
+            nPoints = 11;
+
+        nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
+
+        SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
+        aItems.Put( aHeightItem );
+
+        SvxFontHeightItem aHeightItemCJK( nPoints, 100, EE_CHAR_FONTHEIGHT_CJK );
+        aItems.Put( aHeightItemCJK );
+
+        SvxFontHeightItem aHeightItemCTL( nPoints, 100, EE_CHAR_FONTHEIGHT_CTL );
+        aItems.Put( aHeightItemCTL );
+
+        // Absatzabstaende, wenn Heading:
+        if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
         {
-            // Harte Attribute erzeugen...
-            // Reicht fuer Calc, bei StyleSheets muesste noch geklaert werden,
-            // dass diese auch in der App liegen sollten, damit sie beim
-            // fuettern in eine andere Engine auch noch da sind...
-
-            USHORT nNode = pImpEditEngine->GetEditDoc().GetPos( aCurSel.Max().GetNode() );
-//          SfxItemSet aItems( pImpEditEngine->GetEmptyItemSet() );
-            SfxItemSet aItems( aCurSel.Max().GetNode()->GetContentAttribs().GetItems() );
-
-            aItems.ClearItem( EE_PARA_ULSPACE );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT );
-            aItems.ClearItem( EE_CHAR_FONTINFO );
-            aItems.ClearItem( EE_CHAR_WEIGHT );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CJK );
-            aItems.ClearItem( EE_CHAR_FONTINFO_CJK );
-            aItems.ClearItem( EE_CHAR_WEIGHT_CJK );
-
-            aItems.ClearItem( EE_CHAR_FONTHEIGHT_CTL );
-            aItems.ClearItem( EE_CHAR_FONTINFO_CTL );
-            aItems.ClearItem( EE_CHAR_WEIGHT_CTL );
-
-            // Fett in den ersten 3 Headings
-            if ( ( nHLevel >= 1 ) && ( nHLevel <= 3 ) )
-            {
-                SvxWeightItem aWeightItem( WEIGHT_BOLD, EE_CHAR_WEIGHT );
-                aItems.Put( aWeightItem );
-
-                SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
-                aItems.Put( aWeightItem );
-
-                SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
-                aItems.Put( aWeightItem );
-            }
-
-            // Fonthoehe und Abstaende, wenn LogicToLogic moeglich:
-            MapUnit eUnit = pImpEditEngine->GetRefMapMode().GetMapUnit();
-            if ( ( eUnit != MAP_PIXEL ) && ( eUnit != MAP_SYSFONT ) &&
-                 ( eUnit != MAP_APPFONT ) && ( eUnit != MAP_RELATIVE ) )
-            {
-                long nPoints = 10;
-                if ( nHLevel == 1 )
-                    nPoints = 22;
-                else if ( nHLevel == 2 )
-                    nPoints = 16;
-                else if ( nHLevel == 3 )
-                    nPoints = 12;
-                else if ( nHLevel == 4 )
-                    nPoints = 11;
-
-                nPoints = OutputDevice::LogicToLogic( nPoints, MAP_POINT, eUnit );
-
-                SvxFontHeightItem aHeightItem( nPoints, 100, EE_CHAR_FONTHEIGHT );
-                aItems.Put( aHeightItem );
-
-                SvxFontHeightItem aHeightItemCJK( nPoints, 100, EE_CHAR_FONTHEIGHT_CJK );
-                aItems.Put( aHeightItemCJK );
-
-                SvxFontHeightItem aHeightItemCTL( nPoints, 100, EE_CHAR_FONTHEIGHT_CTL );
-                aItems.Put( aHeightItemCTL );
-
-                // Absatzabstaende, wenn Heading:
-                if ( !nHLevel || ((nHLevel >= 1) && (nHLevel <= 6)) )
-                {
-                    SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
-                    aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
-                    aULSpaceItem.SetLower( (USHORT)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
-                    aItems.Put( aULSpaceItem );
-                }
-            }
-
-            // Bei Pre einen proportionalen Font waehlen
-            if ( nHLevel == STYLE_PRE )
-            {
-                Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
-                SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
-                aItems.Put( aFontItem );
-
-                SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
-                aItems.Put( aFontItemCJK );
-
-                SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
-                aItems.Put( aFontItemCTL );
-            }
-
-            pImpEditEngine->SetParaAttribs( nNode, aItems );
+            SvxULSpaceItem aULSpaceItem( EE_PARA_ULSPACE );
+            aULSpaceItem.SetUpper( (USHORT)OutputDevice::LogicToLogic( 42, MAP_10TH_MM, eUnit ) );
+            aULSpaceItem.SetLower( (USHORT)OutputDevice::LogicToLogic( 35, MAP_10TH_MM, eUnit ) );
+            aItems.Put( aULSpaceItem );
         }
+    }
+
+    // Bei Pre einen proportionalen Font waehlen
+    if ( nHLevel == STYLE_PRE )
+    {
+        Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, LANGUAGE_SYSTEM, 0 );
+        SvxFontItem aFontItem( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO );
+        aItems.Put( aFontItem );
+
+        SvxFontItem aFontItemCJK( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CJK );
+        aItems.Put( aFontItemCJK );
+
+        SvxFontItem aFontItemCTL( aFont.GetFamily(), aFont.GetName(), XubString(), aFont.GetPitch(), aFont.GetCharSet(), EE_CHAR_FONTINFO_CTL );
+        aItems.Put( aFontItemCTL );
+    }
+
+    pImpEditEngine->SetParaAttribs( nNode, aItems );
 }
 
 void EditHTMLParser::ImpInsertText( const String& rText )

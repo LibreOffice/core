@@ -69,27 +69,7 @@ DBG_NAME( EE_ParaPortion )
 
 SV_IMPL_VARARR( CharPosArray, sal_Int32 );
 
-/*
 
-BOOL EditStyleSheet::HasStyleAsAnyParent( SfxStyleSheet& rStyle )
-{
-    if ( GetParent() == rStyle.GetName() )
-        return TRUE;
-
-    if ( GetParent().Len() && ( GetParent() != GetName() ) )
-    {
-        EditStyleSheet* pS = (EditStyleSheet*)GetPool().Find( GetParent(), rStyle.GetFamily() );
-        if ( pS )
-            return pS->HasStyleAsAnyParent( rStyle );
-    }
-    return FALSE;
-}
-
-*/
-
-// -------------------------------------------------------------------------
-// class TextPortionList
-// -------------------------------------------------------------------------
 TextPortionList::TextPortionList()
 {
 }
@@ -148,10 +128,6 @@ USHORT TextPortionList::GetStartPos( USHORT nPortion )
 }
 
 
-// -------------------------------------------------------------------------
-// class ExtraPortionInfo
-// -------------------------------------------------------------------------
-
 ExtraPortionInfo::ExtraPortionInfo()
 {
     nOrgWidth = 0;
@@ -183,9 +159,6 @@ void ExtraPortionInfo::DestroyOrgDXArray()
 }
 
 
-// -------------------------------------------------------------------------
-// class ParaPortion
-// -------------------------------------------------------------------------
 ParaPortion::ParaPortion( ContentNode* pN )
 {
     DBG_CTOR( EE_ParaPortion, 0 );
@@ -358,9 +331,6 @@ static USHORT FastGetPos( const VoidPtr *pPtrArray, USHORT nPtrArrayLen,
   return USHRT_MAX;
 }
 
-// -------------------------------------------------------------------------
-// class ParaPortionList
-// -------------------------------------------------------------------------
 ParaPortionList::ParaPortionList() : nLastCache( 0 )
 {
 }
