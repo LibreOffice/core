@@ -39,7 +39,6 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::text;
 
-// class SvxWritingModeItem -------------------------------------------------
 
 TYPEINIT1_FACTORY(SvxWritingModeItem, SfxUInt16Item, new SvxWritingModeItem(com::sun::star::text::WritingMode_LR_TB, 0));
 

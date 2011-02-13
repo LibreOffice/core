@@ -39,7 +39,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::xml;
 
-// ------------------------------------------------------------------------
 
 TYPEINIT1(SvXMLAttrContainerItem, SfxPoolItem);
 

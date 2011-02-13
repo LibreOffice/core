@@ -141,8 +141,6 @@ SvXMLWordContext::SvXMLWordContext(
     if (!sWrong.Len() || !sRight.Len() )
         return;
 
-//  const International& rInter = Application::GetAppInternational();
-//  BOOL bOnlyTxt = COMPARE_EQUAL != rInter.Compare( sRight, sWrong, INTN_COMPARE_IGNORECASE );
     BOOL bOnlyTxt = sRight != sWrong;
     if( !bOnlyTxt )
     {

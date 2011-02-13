@@ -36,12 +36,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
-/*************************************************************************
-|*
-|*    TextRanger::TextRanger()
-|*
-*************************************************************************/
-
 #ifdef WIN
 #pragma optimize ( "", off )
 #endif
@@ -98,11 +92,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
 #pragma optimize ( "", on )
 #endif
 
-/*************************************************************************
-|*
-|*    TextRanger::~TextRanger()
-|*
-*************************************************************************/
 
 TextRanger::~TextRanger()
 {
@@ -129,12 +118,6 @@ void TextRanger::SetVertical( BOOL bNew )
         memset( pCache, 0, nCacheSize * sizeof( SvLongsPtr ) );
     }
 }
-
-/*************************************************************************
-|*
-|*    SvxBoundArgs
-|*
-*************************************************************************/
 
 class SvxBoundArgs
 {

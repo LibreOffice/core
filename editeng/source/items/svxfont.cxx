@@ -51,9 +51,6 @@
     static sal_Char const sDoubleSpace[] = "  ";
 #endif
 
-/*************************************************************************
- *                      class SvxFont
- *************************************************************************/
 
 SvxFont::SvxFont()
 {
@@ -72,9 +69,6 @@ SvxFont::SvxFont( const Font &rFont )
     eLang = LANGUAGE_SYSTEM;
 }
 
-/*************************************************************************
- *                      class SvxFont: Copy-Ctor
- *************************************************************************/
 
 SvxFont::SvxFont( const SvxFont &rFont )
     : Font( rFont )
@@ -86,9 +80,6 @@ SvxFont::SvxFont( const SvxFont &rFont )
     eLang = rFont.GetLanguage();
 }
 
-/*************************************************************************
- *               static SvxFont::DrawArrow
- *************************************************************************/
 
 void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
     const Size& rSize, const Color& rCol, BOOL bLeft )
@@ -126,9 +117,6 @@ void SvxFont::DrawArrow( OutputDevice &rOut, const Rectangle& rRect,
     rOut.SetFillColor( aOldFillColor );
 }
 
-/*************************************************************************
- *                      SvxFont::CalcCaseMap
- *************************************************************************/
 
 XubString SvxFont::CalcCaseMap( const XubString &rTxt ) const
 {
@@ -357,9 +345,6 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo, const xub_StrLen nPartLen) const
     rDo.DoSpace( TRUE );
 }
 
-/**************************************************************************
- *                    SvxFont::SetPhysFont()
- *************************************************************************/
 
 void SvxFont::SetPhysFont( OutputDevice *pOut ) const
 {
@@ -380,9 +365,6 @@ void SvxFont::SetPhysFont( OutputDevice *pOut ) const
     }
 }
 
-/*************************************************************************
- *                    SvxFont::ChgPhysFont()
- *************************************************************************/
 
 Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
 {
@@ -391,9 +373,6 @@ Font SvxFont::ChgPhysFont( OutputDevice *pOut ) const
     return aOldFont;
 }
 
-/*************************************************************************
- *                    SvxFont::GetPhysTxtSize()
- *************************************************************************/
 
 Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const XubString &rTxt,
                          const xub_StrLen nIdx, const xub_StrLen nLen ) const
@@ -483,9 +462,6 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const XubString &rTxt,
     return aTxtSize;
 }
 
-/*************************************************************************
- *                    SvxFont::GetTxtSize()
- *************************************************************************/
 
 Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
                          const xub_StrLen nIdx, const xub_StrLen nLen )
@@ -504,9 +480,6 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const XubString &rTxt,
     return aTxtSize;
 }
 
-/*************************************************************************
- *                    SvxFont::DrawText()
- *************************************************************************/
 
 void SvxFont::DrawText( OutputDevice *pOut,
                const Point &rPos, const XubString &rTxt,
@@ -590,7 +563,6 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     }
 }
 
-// -----------------------------------------------------------------------
 
 void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
                         const Point &rPos, const XubString &rTxt,
@@ -652,7 +624,6 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
     pPrinter->SetFont( aOldPrnFont );
 }
 
-// -----------------------------------------------------------------------
 
 SvxFont& SvxFont::operator=( const Font& rFont )
 {
@@ -672,11 +643,6 @@ SvxFont& SvxFont::operator=( const SvxFont& rFont )
 }
 
 
-/*************************************************************************
- *                    class SvxDoGetCapitalSize
- * wird von SvxFont::GetCapitalSize() zur Berechnung der TxtSize bei
- * eingestellten Kapitaelchen benutzt.
- *************************************************************************/
 
 class SvxDoGetCapitalSize : public SvxDoCapitals
 {
@@ -723,10 +689,6 @@ void SvxDoGetCapitalSize::Do( const XubString &_rTxt, const xub_StrLen _nIdx,
     aTxtSize.Width() += ( _nLen * long( nKern ) );
 }
 
-/*************************************************************************
- *                    SvxFont::GetCapitalSize()
- * berechnet TxtSize, wenn Kapitaelchen eingestellt sind.
- *************************************************************************/
 
 Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
                              const xub_StrLen nIdx, const xub_StrLen nLen) const
@@ -745,10 +707,6 @@ Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const XubString &rTxt,
     return aTxtSize;
 }
 
-/*************************************************************************
- *                     class SvxDoDrawCapital
- * wird von SvxFont::DrawCapital zur Ausgabe von Kapitaelchen benutzt.
- *************************************************************************/
 
 class SvxDoDrawCapital : public SvxDoCapitals
 {

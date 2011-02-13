@@ -46,7 +46,7 @@
 #include <map>
 
 #include <editeng/svxenum.hxx>
-#include <editeng/splwrap.hxx>      // Der Wrapper
+#include <editeng/splwrap.hxx>
 #include <editeng/edtdlg.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
@@ -87,8 +87,6 @@ void SvxPrepareAutoCorrect( String &rOldText, String &rNewText )
             rOldText.Erase( nOldLen - 1 );
     }
 }
-
-// -----------------------------------------------------------------------
 
 #define SVX_LANG_NEED_CHECK         0
 #define SVX_LANG_OK                 1

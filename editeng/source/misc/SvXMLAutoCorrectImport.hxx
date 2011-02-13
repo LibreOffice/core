@@ -49,7 +49,6 @@ public:
     SvxAutocorrWordList     *pAutocorr_List;
     SvxAutoCorrect          &rAutoCorrect;
     com::sun::star::uno::Reference < com::sun::star::embed::XStorage > xStorage;
-    //SvStorageRef            &rStorage;
 
     // #110680#
     SvXMLAutoCorrectImport(

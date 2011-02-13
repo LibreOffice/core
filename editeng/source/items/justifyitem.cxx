@@ -44,14 +44,12 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 
-// STATIC DATA -----------------------------------------------------------
 
 TYPEINIT1_FACTORY( SvxHorJustifyItem, SfxEnumItem, new SvxHorJustifyItem(SVX_HOR_JUSTIFY_STANDARD, 0) );
 TYPEINIT1_FACTORY( SvxVerJustifyItem, SfxEnumItem, new SvxVerJustifyItem(SVX_VER_JUSTIFY_STANDARD, 0) );
 
 using namespace ::com::sun::star;
 
-// class SvxHorJustifyItem -----------------------------------------------
 
 
 SvxHorJustifyItem::SvxHorJustifyItem( const USHORT nId ) :
@@ -65,7 +63,6 @@ SvxHorJustifyItem::SvxHorJustifyItem( const SvxCellHorJustify eJustify,
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxHorJustifyItem::GetPresentation
 (
@@ -88,7 +85,6 @@ SfxItemPresentation SvxHorJustifyItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
 bool SvxHorJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -185,7 +181,6 @@ bool SvxHorJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
 
 XubString SvxHorJustifyItem::GetValueText( USHORT nVal ) const
 {
@@ -193,14 +188,12 @@ XubString SvxHorJustifyItem::GetValueText( USHORT nVal ) const
     return EE_RESSTR(RID_SVXITEMS_HORJUST_STANDARD + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxHorJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxHorJustifyItem( *this );
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, USHORT ) const
 {
@@ -208,14 +201,13 @@ SfxPoolItem* SvxHorJustifyItem::Create( SvStream& rStream, USHORT ) const
     rStream >> nVal;
     return new SvxHorJustifyItem( (SvxCellHorJustify)nVal, Which() );
 }
-//------------------------------------------------------------------------
+
 
 USHORT SvxHorJustifyItem::GetValueCount() const
 {
     return SVX_HOR_JUSTIFY_REPEAT + 1;  // letzter Enum-Wert + 1
 }
 
-// class SvxVerJustifyItem -----------------------------------------------
 
 SvxVerJustifyItem::SvxVerJustifyItem( const USHORT nId ) :
     SfxEnumItem( nId, (USHORT)SVX_VER_JUSTIFY_STANDARD )
@@ -228,7 +220,6 @@ SvxVerJustifyItem::SvxVerJustifyItem( const SvxCellVerJustify eJustify,
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxVerJustifyItem::GetPresentation
 (
@@ -252,7 +243,6 @@ SfxItemPresentation SvxVerJustifyItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
 bool SvxVerJustifyItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -337,7 +327,6 @@ bool SvxVerJustifyItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
     return true;
 }
 
-//------------------------------------------------------------------------
 
 XubString SvxVerJustifyItem::GetValueText( USHORT nVal ) const
 {
@@ -345,14 +334,12 @@ XubString SvxVerJustifyItem::GetValueText( USHORT nVal ) const
     return EE_RESSTR(RID_SVXITEMS_VERJUST_STANDARD + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxVerJustifyItem::Clone( SfxItemPool* ) const
 {
     return new SvxVerJustifyItem( *this );
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, USHORT ) const
 {
@@ -361,7 +348,6 @@ SfxPoolItem* SvxVerJustifyItem::Create( SvStream& rStream, USHORT ) const
     return new SvxVerJustifyItem( (SvxCellVerJustify)nVal, Which() );
 }
 
-//------------------------------------------------------------------------
 
 USHORT SvxVerJustifyItem::GetValueCount() const
 {
@@ -369,7 +355,6 @@ USHORT SvxVerJustifyItem::GetValueCount() const
 }
 
 
-// class SvxJustifyMethodItem -----------------------------------------------
 
 SvxJustifyMethodItem::SvxJustifyMethodItem( const USHORT nId ) :
     SfxEnumItem( nId, (USHORT)SVX_JUSTIFY_METHOD_AUTO )
@@ -382,7 +367,6 @@ SvxJustifyMethodItem::SvxJustifyMethodItem( const SvxCellJustifyMethod eJustify,
 {
 }
 
-//------------------------------------------------------------------------
 
 SfxItemPresentation SvxJustifyMethodItem::GetPresentation
 (
@@ -406,7 +390,6 @@ SfxItemPresentation SvxJustifyMethodItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
 
 bool SvxJustifyMethodItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
 {
@@ -442,7 +425,6 @@ bool SvxJustifyMethodItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
     return true;
 }
 
-//------------------------------------------------------------------------
 
 XubString SvxJustifyMethodItem::GetValueText( USHORT nVal ) const
 {
@@ -450,14 +432,12 @@ XubString SvxJustifyMethodItem::GetValueText( USHORT nVal ) const
     return EE_RESSTR(RID_SVXITEMS_JUSTMETHOD_AUTO + nVal);
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxJustifyMethodItem::Clone( SfxItemPool* ) const
 {
     return new SvxJustifyMethodItem( *this );
 }
 
-//------------------------------------------------------------------------
 
 SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, USHORT ) const
 {
@@ -466,7 +446,6 @@ SfxPoolItem* SvxJustifyMethodItem::Create( SvStream& rStream, USHORT ) const
     return new SvxJustifyMethodItem( (SvxCellJustifyMethod)nVal, Which() );
 }
 
-//------------------------------------------------------------------------
 
 USHORT SvxJustifyMethodItem::GetValueCount() const
 {

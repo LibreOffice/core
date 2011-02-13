@@ -47,10 +47,6 @@ using namespace com::sun::star::uno;
 
 static SvxAutoCorrCfg* pAutoCorrCfg = 0;
 
-/*--------------------------------------------------------------------
-    Beschreibung:   Ctor Dtor
- --------------------------------------------------------------------*/
-
 SvxAutoCorrCfg::SvxAutoCorrCfg() :
     aBaseConfig(*this),
     aSwConfig(*this),
