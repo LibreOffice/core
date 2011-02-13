@@ -393,7 +393,6 @@ namespace pcr
             // doing the commit here, while we, as well as our owner, as well as some other components,
             // are already "half dead" (means within their dtor) is potentially dangerous.
             // By definition, CommitModified has to be called (if necessary) before destruction
-            // #105868# - 2002-12-13 - fs@openoffice.org
 
         m_pControlContextImpl->dispose();
         m_pControlContextImpl.clear();
@@ -421,7 +420,7 @@ namespace pcr
         if ( IsModified() && m_xActiveControl.is() )
         {
             // for the time of this commit, notify all events synchronously
-            // #i63814# / 2006-03-31 / frank.schoenheit@sun.com
+            // #i63814#
             m_pControlContextImpl->setNotificationMode( PropertyControlContext_Impl::eSynchronously );
             try
             {

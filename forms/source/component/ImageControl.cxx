@@ -180,7 +180,6 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
     osl_incrementInterlockedCount( &m_refCount );
     {
         // simulate a propertyChanged event for the ImageURL
-        // 2003-05-15 - #109591# - fs@openoffice.org
         ::osl::MutexGuard aGuard( m_aMutex );
         impl_handleNewImageURL_lck( eOther );
     }
@@ -644,7 +643,6 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
             // release our mutex once (it's acquired in the calling method!), as starting the image production may
             // result in the locking of the solar mutex (unfortunally the default implementation of our aggregate,
             // VCLXImageControl, does this locking)
-            // FS - 74438 - 30.03.00
             MutexRelease aRelease(m_aMutex);
             xProducer->startProduction();
         }
@@ -861,7 +859,7 @@ bool OImageControlControl::implInsertGraphics()
             // Force bIsLink to be TRUE if we're bound to a field. Though we initialized the file picker with IsLink=TRUE
             // in this case, and disabled the respective control, there might be picker implementations which do not
             // respect this, and return IsLink=FALSE here. In this case, "normalize" the flag.
-            // #i112659# / 2010-08-26 / frank.schoenheit@oracle.com
+            // #i112659#
             bIsLink |= bHasField;
             if ( !bIsLink )
             {
@@ -973,7 +971,6 @@ void OImageControlControl::mousePressed(const ::com::sun::star::awt::MouseEvent&
 
             // wenn Control nicht gebunden ist, kein Dialog (da die zu schickende URL hinterher sowieso
             // versanden wuerde)
-            // FS - #64946# - 19.04.99
             Reference<XPropertySet> xBoundField;
             if (hasProperty(PROPERTY_BOUNDFIELD, xSet))
                 ::cppu::extractInterface(xBoundField, xSet->getPropertyValue(PROPERTY_BOUNDFIELD));

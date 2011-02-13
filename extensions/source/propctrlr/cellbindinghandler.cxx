@@ -175,7 +175,7 @@ namespace pcr
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
 
             // also reset the list entries if the cell range is reset
-            // #i28319# - 2004-04-27 - fs@openoffice.org
+            // #i28319#
             if ( !_bFirstTimeInit )
             {
                 try

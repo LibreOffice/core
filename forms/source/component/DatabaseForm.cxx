@@ -2106,8 +2106,7 @@ void ODatabaseForm::reset_impl(bool _bAproveByListeners)
     aResetGuard.reset();
     // ensure that the row isn't modified
     // (do this _before_ the listeners are notified ! their reaction (maybe asynchronous) may depend
-    // on the modified state of the row
-    // 21.02.00 - 73265 - FS)
+    // on the modified state of the row)
     if (bInsertRow)
         m_xAggregateSet->setPropertyValue(PROPERTY_ISMODIFIED, ::cppu::bool2any(sal_Bool(sal_False)));
 

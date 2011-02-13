@@ -500,7 +500,6 @@ namespace frm
         osl_incrementInterlockedCount( &m_refCount );
         {
             // simulate a propertyChanged event for the ImageURL
-            // 2003-05-15 - #109591# - fs@openoffice.org
             Any aImageURL;
             getFastPropertyValue( aImageURL, PROPERTY_ID_IMAGE_URL );
             _propertyChanged( PropertyChangeEvent( *this, PROPERTY_IMAGE_URL, sal_False, PROPERTY_ID_IMAGE_URL, Any( ), aImageURL ) );

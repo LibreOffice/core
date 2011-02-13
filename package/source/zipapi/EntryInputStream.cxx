@@ -42,7 +42,7 @@ using namespace com::sun::star::packages::zip::ZipConstants;
 
 /** Provides access to the compressed data in a zipfile.
  *
- * 04/12/00 - uncompresses the stream into memory and seeks on it 'in memory'
+ * uncompresses the stream into memory and seeks on it 'in memory'
  * This and the ZipPackageBuffer used in the ZipOutputStream are memory hogs
  * and will hopefully be replaced eventually
  *

@@ -599,7 +599,7 @@ OControlModel::OControlModel(
     ,m_bNativeLook( sal_False )
         // form controls are usually embedded into documents, not dialogs, and in documents
         // the native look is ugly ....
-        // #i37342# / 2004-11-19 / frank.schoenheit@sun.com
+        // #i37342#
 {
     DBG_CTOR(OControlModel, NULL);
     if (_rUnoControlModelTypeName.getLength())  // the is a model we have to aggregate
@@ -2162,7 +2162,7 @@ void OBoundControlModel::initFromField( const Reference< XRowSet >& _rxRowSet )
             transferDbValueToControl();
         else
             // reset the field if the row set is empty
-            // #i30661# / 2004-12-16 / frank.schoenheit@sun.com
+            // #i30661#
             resetNoBroadcast();
     }
 }
@@ -2335,7 +2335,6 @@ void OBoundControlModel::doSetControlValue( const Any& _rValue )
         // release our mutex once (it's acquired in one of the the calling methods), as setting aggregate properties
         // may cause any uno controls belonging to us to lock the solar mutex, which is potentially dangerous with
         // our own mutex locked
-        // #72451# / 2000-01-31 / frank.schoenheit@sun.com
         MutexRelease aRelease( m_aMutex );
         if ( ( m_nValuePropertyAggregateHandle != -1 ) && m_xAggregateFastSet.is() )
         {
@@ -2476,10 +2475,7 @@ void OBoundControlModel::reset() throw (RuntimeException)
     {
         OSL_ENSURE( sal_False, "OBoundControlModel::reset: caught an SQL exception!" );
     }
-    // don't count the insert row as "invalid"
-    // @since  #i24495#
-    // @date   2004-05-14
-    // @author fs@openoffice.org
+    // #i24495# - don't count the insert row as "invalid"
 
     sal_Bool bSimpleReset =
                         (   !m_xColumn.is()                     // no connection to a database column

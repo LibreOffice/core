@@ -411,7 +411,7 @@ namespace frm
     void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< ::rtl::OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         // if both SelectedItems and StringItemList are set, care for this
-        // #i27024# / 2004-04-05 / fs@openoffice.org
+        // #i27024#
         const Any* pSelectSequenceValue = NULL;
 
         const ::rtl::OUString* pStartPos = _rPropertyNames.getConstArray();

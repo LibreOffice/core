@@ -2846,7 +2846,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sURL );
 
         _rClearBeforeDialog.clear();
@@ -2900,7 +2899,6 @@ namespace pcr
         if ( INET_PROT_FILE == aParser.GetProtocol() )
             // set the initial directory only for file-URLs. Everything else
             // is considered to be potentially expensive
-            // 106126 - 2002/12/10 - fs@openoffice.org
             aFileDlg.SetDisplayDirectory( sDataSource );
 
         const String s_sDatabaseType = String::CreateFromAscii("StarOffice XML (Base)");

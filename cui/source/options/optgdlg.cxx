@@ -1861,10 +1861,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
-    /*---------------------07-05-07--------------------------
-    check the box "For the current document only"
-    set the focus to the Western Language box
-    --------------------------------------------------------*/
+    // check the box "For the current document only"
+    // set the focus to the Western Language box
     const SfxPoolItem* pLang = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, FALSE, &pLang ) &&( (const SfxBoolItem*)pLang)->GetValue() == TRUE )
     {

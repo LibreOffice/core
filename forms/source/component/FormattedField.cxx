@@ -127,7 +127,7 @@ StandardFormatsSupplier::StandardFormatsSupplier(const Reference< XMultiServiceF
 {
     SetNumberFormatter(m_pMyPrivateFormatter);
 
-    // #i29147# - 2004-06-18 - fs@openoffice.org
+    // #i29147#
     ::utl::DesktopTerminationObserver::registerTerminationListener( this );
 }
 
@@ -184,7 +184,7 @@ void StandardFormatsSupplier::notifyTermination()
     Reference< XNumberFormatsSupplier > xKeepAlive = this;
     // when the application is terminating, release our static reference so that we are cleared/destructed
     // earlier than upon unloading the library
-    // #i29147# - 2004-06-18 - fs@openoffice.org
+    // #i29147#
     s_xDefaultFormatsSupplier = WeakReference< XNumberFormatsSupplier >( );
 
     SetNumberFormatter( NULL );
@@ -689,7 +689,6 @@ void OFormattedModel::loaded(const EventObject& rEvent) throw ( ::com::sun::star
     // property requests and one for our own code. This would need a lot of code rewriting
     // alternative b): The NumberFormatter has to be really threadsafe (with an own mutex), which is
     // the only "clean" solution for me.
-    // FS - 69603 - 02.11.99
 
     SolarMutexGuard aGuard;
     OEditBaseModel::loaded(rEvent);

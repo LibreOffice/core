@@ -112,7 +112,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, BOOL bHtml 
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion
 
-    //JP 24.02.99: UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
+    // UpdateTimer fuer DDE-/Grf-Links, auf die gewarted wird
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
 

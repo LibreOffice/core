@@ -548,7 +548,7 @@ namespace frm
                     m_xLoadableForm->reload();
 
                     // refresh all controls in the form (and sub forms) which can be refreshed
-                    // #i90914# / 2008-07-02 / frank.schoenheit@sun.com
+                    // #i90914#
                     ::comphelper::IndexAccessIterator aIter( m_xLoadableForm );
                     Reference< XInterface > xElement( aIter.Next() );
                     while ( xElement.is() )

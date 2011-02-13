@@ -364,13 +364,13 @@ public class SolarisHelper {
     }
 
     public boolean comparePackageVersions(String firstPackageVersion, String secondPackageVersion) {
-       // Analyzing strings: version, 2.0.0,REV=106.2005.05.26
+       // Analyzing strings
 
         boolean firstPackageIsOlder = false;
         String comparison = null;
 
-        String firstPackageMainVersion = getMainVersion(firstPackageVersion); // 2.0.0
-        String secondPackageMainVersion = getMainVersion(secondPackageVersion); // 2.0.0
+        String firstPackageMainVersion = getMainVersion(firstPackageVersion);
+        String secondPackageMainVersion = getMainVersion(secondPackageVersion);
 
         if (( firstPackageMainVersion != null ) && ( secondPackageMainVersion != null )) {
             comparison = compareVersion(firstPackageMainVersion, secondPackageMainVersion);
@@ -381,8 +381,8 @@ public class SolarisHelper {
         } else if ( comparison.equals("secondPackageIsOlder") ) {
             firstPackageIsOlder = false;
         } else if ( comparison.equals("bothPackagesAreEqual") ) {
-            String firstPackageRevision = getPackageRevision(firstPackageVersion); // 106.2005.05.26
-            String secondPackageRevision = getPackageRevision(secondPackageVersion); // 106.2005.05.26
+            String firstPackageRevision = getPackageRevision(firstPackageVersion);
+            String secondPackageRevision = getPackageRevision(secondPackageVersion);
 
             if (( firstPackageRevision != null ) && ( secondPackageRevision != null )) {
                 comparison = compareVersion(firstPackageRevision, secondPackageRevision);

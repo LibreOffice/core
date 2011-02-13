@@ -1245,7 +1245,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese nicht skaliert werden; dieses wird
-                    // im Item beruecksichtigt ( KA05.11.96 )
+                    // im Item beruecksichtigt
                     pItem = new XFillBmpSizeXItem( -labs( static_cast<long>(aMtrFldXSize.GetValue()) ) );
                 }
             }
@@ -1282,7 +1282,7 @@ BOOL SvxAreaTabPage::FillItemSet( SfxItemSet& rAttrs )
                 {
                     // Prozentwerte werden negativ gesetzt, damit
                     // diese vom MetricItem nicht skaliert werden;
-                    // dieses wird im Item beruecksichtigt ( KA05.11.96 )
+                    // dieses wird im Item beruecksichtigt
                     pItem = new XFillBmpSizeYItem( -labs( static_cast<long>(aMtrFldYSize.GetValue()) ) );
                 }
             }

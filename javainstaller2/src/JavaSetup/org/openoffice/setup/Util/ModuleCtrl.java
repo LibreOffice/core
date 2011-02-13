@@ -303,7 +303,7 @@ public class ModuleCtrl {
         if (isUninstall) {
             if (isInstalled) {
                 packageData.setSelectionState(PackageDescription.REMOVE);
-                // The following is no longer required !? (IS, 06/05/08)
+                // The following is no longer required !?
                 // PackageDescription parent = packageData.getParent();
                 // if ( parent != null ) {
                 //     if ( parent.getSelectionState() != PackageDescription.REMOVE ) {

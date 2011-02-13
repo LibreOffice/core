@@ -1868,7 +1868,7 @@ awt::DeviceInfo DlgEdForm::getDeviceInfo() const
     {
         // don't create a temporary control all the time, this method here is called
         // way too often. Instead, use a cached DeviceInfo.
-        // 2007-02-05 / i74065 / frank.schoenheit@sun.com
+        // #i74065#
         if ( !!mpDeviceInfo )
             return *mpDeviceInfo;
 
