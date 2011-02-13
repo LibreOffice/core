@@ -1927,10 +1927,7 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
     if (bItemInConfig)
     {
-        CacheItem aItem;
-        CacheItem::iterator pDbgTest = aItem.find(PROPNAME_NAME);
-        aItem = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
-        (*pList)[sItem] = aItem;
+        (*pList)[sItem] = impl_loadItem(xSet, eType, sItem, E_READ_ALL);
         _FILTER_CONFIG_LOG_2_("impl_loadItemOnDemand(%d, \"%s\") ... OK", (int)eType, _FILTER_CONFIG_TO_ASCII_(sItem).getStr())
     }
     else
