@@ -764,41 +764,6 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
                         }
                     }
                 }
-
-#ifdef CHECK_CELL_READONLY
-//JP 22.01.99: bisher wurden Tabelle, die in der Text-Selektion standen
-//              nicht beachtet. Wollte man das haben, dann muss dieser
-//              Code freigeschaltet werden
-
-                if( !bRet )
-                {
-                    // dann noch ueber alle Tabellen
-                    const SwFrmFmts& rFmts = *GetDoc()->GetTblFrmFmts();
-                    for( n = rFmts.Count(); n ;  )
-                    {
-                        SwFrmFmt* pFmt = (SwFrmFmt*)rFmts[ --n ];
-                        const SwTable* pTbl = SwTable::FindTable( pFmt );
-                        ULONG nIdx = pTbl ? pTbl->GetTabSortBoxes()[0]->GetSttIdx()
-                                          : 0;
-                        if( nSttIdx <= nIdx && nEndIdx >= nIdx )
-                        {
-                            // dann teste mal alle Boxen
-                            const SwTableSortBoxes& rBoxes = pTbl->GetTabSortBoxes();
-
-                            for( USHORT i =  rBoxes.Count(); i; )
-                                if( rBoxes[ --i ]->GetFrmFmt()->GetProtect().
-                                    IsCntntProtected() )
-                                {
-                                    bRet = TRUE;
-                                    break;
-                                }
-
-                            if( bRet )
-                                break;
-                        }
-                    }
-                }
-#endif
             }
         }
     }
