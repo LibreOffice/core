@@ -307,7 +307,7 @@ DebugTraceScope::DebugTraceScope (const sal_Char* sFormat, ...)
     va_start(args, sFormat);
 
     msMessage[mnBufferSize-1] = 0;
-    _vsnprintf(msMessage, mnBufferSize-1, sFormat, args);
+    vsnprintf(msMessage, mnBufferSize-1, sFormat, args);
     TRACE_BEGIN("[ %s", msMessage);
     va_end(args);
 }
