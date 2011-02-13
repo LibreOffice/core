@@ -63,17 +63,6 @@
 #endif
 #include <numrule.hxx>
 
-#ifdef DEBUGDUMP
-#       include <vcl/svapp.hxx>
-#   ifndef _TOOLS_URLOBJ_HXX
-#       include <tools/urlobj.hxx>
-#   endif
-#   ifndef _UNOTOOLS_UCBSTREAMHELPER_HXX
-#       include <unotools/ucbstreamhelper.hxx>
-#   endif
-#       include <unotools/localfilehelper.hxx>
-#endif
-
 using namespace com::sun::star;
 using namespace nsSwGetPoolIdFromName;
 
@@ -337,51 +326,6 @@ namespace sw
                 mxIPRef = 0;
             }
         }
-
-#ifdef DEBUGDUMP
-        SvStream *CreateDebuggingStream(const String &rSuffix)
-        {
-            SvStream* pDbgOut = 0;
-            static sal_Int32 nCount;
-            String aFileName(String(RTL_CONSTASCII_STRINGPARAM("wwdbg")));
-            aFileName.Append(String::CreateFromInt32(++nCount));
-            aFileName.Append(rSuffix);
-            String aURLStr;
-            if (::utl::LocalFileHelper::ConvertPhysicalNameToURL(
-                Application::GetAppFileName(), aURLStr))
-            {
-                INetURLObject aURL(aURLStr);
-                aURL.removeSegment();
-                aURL.removeFinalSlash();
-                aURL.Append(aFileName);
-
-                pDbgOut = ::utl::UcbStreamHelper::CreateStream(
-                    aURL.GetMainURL(INetURLObject::NO_DECODE),
-                    STREAM_TRUNC | STREAM_WRITE);
-            }
-            return pDbgOut;
-        }
-
-        void DumpStream(const SvStream &rSrc, SvStream &rDest, sal_uInt32 nLen)
-        {
-            SvStream &rSource = const_cast<SvStream&>(rSrc);
-            ULONG nOrigPos = rSource.Tell();
-            if (nLen == STREAM_SEEK_TO_END)
-            {
-                rSource.Seek(STREAM_SEEK_TO_END);
-                nLen = rSource.Tell();
-            }
-            if (nLen - nOrigPos)
-            {
-                rSource.Seek(nOrigPos);
-                sal_Char* pDat = new sal_Char[nLen];
-                rSource.Read(pDat, nLen);
-                rDest.Write(pDat, nLen);
-                delete[] pDat;
-                rSource.Seek(nOrigPos);
-            }
-        }
-#endif
     }
 
     namespace util

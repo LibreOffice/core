@@ -44,11 +44,6 @@
 #include <tools/poly.hxx>           //Polygon, PolyPolygon
 #include <doc.hxx>                  //SwDoc
 
-//Uncomment to dump debugging streams of graphics
-#if OSL_DEBUG_LEVEL > 1
-//#   define DEBUGDUMP
-#endif
-
 class SwTxtFmtColl;
 class SwCharFmt;
 class SdrObject;
@@ -919,41 +914,6 @@ namespace sw
             /// No copying allowed
             DrawingOLEAdaptor(const DrawingOLEAdaptor &rDoc);
         };
-
-#ifdef DEBUGDUMP
-        /** Create a SvStream to dump data to during debugging
-
-            This creates a file in the program dir of OOo, delete the SvStream
-            after you are done with it
-
-            @param rSuffix
-            The suffix that will be appened to this debugging file
-
-            @return a SvStream to dump data to
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        SvStream *CreateDebuggingStream(const String &rSuffix);
-
-        /** Dump one SvStream to another
-
-            @param rSrc
-            The source stream
-
-            @param rDest
-            The destination stream
-
-            @param nLen
-            Optional Length of data to copy from rSrc to rDest, if unused copy
-            all available data from rSrc
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-        */
-        void DumpStream(const SvStream &rSrc, SvStream &rDest,
-            sal_uInt32 nLen = STREAM_SEEK_TO_END);
-#endif
     }
 }
 

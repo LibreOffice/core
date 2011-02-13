@@ -203,13 +203,6 @@ static bool SwWw6ReadMacPICTStream(Graphic& rGraph, SvStorageRef& rSrc1)
 
     pStp->Seek( STREAM_SEEK_TO_BEGIN );
 
-#ifdef DEBUGDUMP
-    SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".pct"));
-    pDbg->Seek(0x200); //Prepend extra 0x200 of zeros to make this a valid PICT
-    sw::hack::DumpStream(*pStp, *pDbg);
-    delete pDbg;
-#endif
-
     // Mac-Pict steht im 03PICT-StorageStream allerdings ohne die ersten 512
     // Bytes, die bei einem MAC-PICT egal sind ( werden nicht ausgewertet )
     return SwWW8ImplReader::GetPictGrafFromStream(rGraph, *pStp);

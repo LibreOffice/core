@@ -4118,48 +4118,6 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
 
     ::StartProgress(STR_STATSTR_W4WREAD, 0, 100, mpDocShell);
 
-#ifdef DEBUGDUMP
-    //experimental embedded ttf dumper
-    if (pWwFib->lcbSttbttmbd && (7 < pWwFib->nVersion))
-    {
-        pTableStream->Seek(pWwFib->fcSttbttmbd);
-        sal_uInt16 nZeros;
-        *pTableStream >> nZeros;
-        sal_uInt16 nNoEntries;
-        *pTableStream >> nNoEntries;
-        sal_uInt32 nUnknown1;
-        *pTableStream >> nUnknown1;
-        sal_uInt16 nUnknown2;
-        *pTableStream >> nUnknown2;
-        std::vector<sal_uInt32> aOffsets;
-        for (sal_uInt16 nI = 0; nI < nNoEntries; ++nI)
-        {
-            sal_uInt32 nOffset;
-            *pTableStream >> nOffset;
-            aOffsets.push_back(nOffset);
-            sal_uInt32 nUnknown3;
-            *pTableStream >> nUnknown3;
-            sal_uInt32 nUnknown4;
-            *pTableStream >> nUnknown4;
-        }
-        typedef std::vector<sal_uInt32>::iterator myIter;
-        myIter aEnd = aOffsets.end();
-        myIter aIter = aOffsets.begin();
-        while (aIter != aEnd)
-        {
-            sal_uInt32 nOffset = *aIter;
-            sal_uInt32 nLen = STREAM_SEEK_TO_END;
-            ++aIter;
-            pStrm->Seek(nOffset);
-            if (aIter != aEnd)
-                nLen = *aIter - nOffset;
-            SvStream *pDbg = sw::hack::CreateDebuggingStream(CREATE_CONST_ASC(".ttf.dump"));
-            sw::hack::DumpStream(*pStrm, *pDbg, nLen);
-            delete pDbg;
-        }
-    }
-#endif
-
     // read Font Table
     pFonts = new WW8Fonts( *pTableStream, *pWwFib );
 
