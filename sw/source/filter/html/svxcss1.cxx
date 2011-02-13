@@ -1101,24 +1101,12 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
     case CSS1_IDENT:
         {
             USHORT nSize;
-#ifdef PERCENTAGE_POSSIBLE
-            const String& rValue = pExpr->GetString();
-#endif
+
             if( SvxCSS1Parser::GetEnum( aFontSizeTable, pExpr->GetString(),
                                         nSize ) )
             {
                 nHeight = rParser.GetFontHeight( nSize );
             }
-#ifdef PERCENTAGE_POSSIBLE
-            else if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_larger ) )
-            {
-                nPropHeight = 150;
-            }
-            else if( rValue.EqualsIgnoreCaseAscii( sCSS1_PV_smaller ) )
-            {
-                nPropHeight = 67;
-            }
-#endif
         }
         break;
 
