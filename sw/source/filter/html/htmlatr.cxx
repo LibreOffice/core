@@ -110,14 +110,6 @@ using namespace ::com::sun::star;
 #error Attribut-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
 #endif
 
-#ifdef FORMAT_TABELLE
-// da sie nicht benutzt wird!
-#define FORMATTAB_SIZE 7
-#if FORMATTAB_SIZE != RES_FMT_END - RES_FMT_BEGIN
-#error Format-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
-#endif
-#endif
-
 #define NODETAB_SIZE 3
 #if NODETAB_SIZE != RES_NODE_END - RES_NODE_BEGIN
 #error Node-Tabelle ist ungueltigt. Wurden neue Hint-IDs zugefuegt ??
