@@ -249,7 +249,7 @@ SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
     pBase->LateInit(OUString());
     return pBase;
 }
-void ViewShellBase::RegisterFactory( USHORT nPrio )
+void ViewShellBase::RegisterFactory( sal_uInt16 nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,"Default");
@@ -339,8 +339,8 @@ ViewShellBase::~ViewShellBase (void)
 
 void ViewShellBase::LateInit (const ::rtl::OUString& rsDefaultView)
 {
-    StartListening(*GetViewFrame(),TRUE);
-    StartListening(*GetDocShell(),TRUE);
+    StartListening(*GetViewFrame(),sal_True);
+    StartListening(*GetDocShell(),sal_True);
     mpImpl->LateInit();
     InitializeFramework();
 
@@ -555,7 +555,7 @@ void ViewShellBase::Rearrange (void)
         OSL_TRACE("Rearrange: window missing");
     }
 
-    GetViewFrame()->Resize(TRUE);
+    GetViewFrame()->Resize(sal_True);
 }
 
 
@@ -585,7 +585,7 @@ Reference<view::XRenderable> ViewShellBase::GetRenderable (void)
 
 
 
-SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
+SfxPrinter* ViewShellBase::GetPrinter (sal_Bool bCreate)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
 
@@ -595,9 +595,9 @@ SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 
 
 
-USHORT ViewShellBase::SetPrinter (
+sal_uInt16 ViewShellBase::SetPrinter (
     SfxPrinter* pNewPrinter,
-    USHORT nDiffFlags,
+    sal_uInt16 nDiffFlags,
     bool bIsAPI)
 {
     OSL_ASSERT(mpImpl.get()!=NULL);
@@ -613,7 +613,7 @@ USHORT ViewShellBase::SetPrinter (
         pNewPrinter->SetMapMode(aMap);
         Size aNewSize = pNewPrinter->GetOutputSize();
 
-        BOOL bScaleAll = FALSE;
+        sal_Bool bScaleAll = sal_False;
         if ( bIsAPI )
         {
             WarningBox aWarnBox (
@@ -702,7 +702,7 @@ SvBorder ViewShellBase::GetBorder (bool )
 
 void ViewShellBase::Execute (SfxRequest& rRequest)
 {
-    USHORT nSlotId = rRequest.GetSlot();
+    sal_uInt16 nSlotId = rRequest.GetSlot();
 
     switch (nSlotId)
     {
@@ -852,7 +852,7 @@ void ViewShellBase::ReadUserDataSequence (
 
 
 
-void ViewShellBase::Activate (BOOL bIsMDIActivate)
+void ViewShellBase::Activate (sal_Bool bIsMDIActivate)
 {
     SfxViewShell::Activate(bIsMDIActivate);
 
@@ -870,7 +870,7 @@ void ViewShellBase::Activate (BOOL bIsMDIActivate)
 
 
 
-void ViewShellBase::Deactivate (BOOL bIsMDIActivate)
+void ViewShellBase::Deactivate (sal_Bool bIsMDIActivate)
 {
     SfxViewShell::Deactivate(bIsMDIActivate);
 }
@@ -892,11 +892,11 @@ void ViewShellBase::SetZoomFactor (
 
 
 
-USHORT ViewShellBase::PrepareClose (BOOL bUI, BOOL bForBrowsing)
+sal_uInt16 ViewShellBase::PrepareClose (sal_Bool bUI, sal_Bool bForBrowsing)
 {
-    USHORT nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
+    sal_uInt16 nResult = SfxViewShell::PrepareClose (bUI, bForBrowsing);
 
-    if (nResult == TRUE)
+    if (nResult == sal_True)
     {
         mpImpl->mbIsClosing = true;
 
@@ -912,7 +912,7 @@ USHORT ViewShellBase::PrepareClose (BOOL bUI, BOOL bForBrowsing)
 
 
 
-void ViewShellBase::WriteUserData (String& rString, BOOL bBrowse)
+void ViewShellBase::WriteUserData (String& rString, sal_Bool bBrowse)
 {
     SfxViewShell::WriteUserData (rString, bBrowse);
 
@@ -925,7 +925,7 @@ void ViewShellBase::WriteUserData (String& rString, BOOL bBrowse)
 
 
 
-void ViewShellBase::ReadUserData (const String& rString, BOOL bBrowse)
+void ViewShellBase::ReadUserData (const String& rString, sal_Bool bBrowse)
 {
     SfxViewShell::ReadUserData (rString, bBrowse);
 
@@ -1290,9 +1290,9 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
 void ViewShellBase::Implementation::ShowViewTabBar (bool bShow)
 {
     if (mpViewTabBar.is()
-        && (mpViewTabBar->GetTabControl()->IsVisible()==TRUE) != bShow)
+        && (mpViewTabBar->GetTabControl()->IsVisible()==sal_True) != bShow)
     {
-        mpViewTabBar->GetTabControl()->Show(bShow ? TRUE : FALSE);
+        mpViewTabBar->GetTabControl()->Show(bShow ? sal_True : sal_False);
         mrBase.Rearrange();
     }
 }
@@ -1368,8 +1368,8 @@ void ViewShellBase::Implementation::SetPaneVisibility (
 
         // Determine the new visibility state.
         const SfxItemSet* pArguments = rRequest.GetArgs();
-        BOOL bShowChildWindow;
-        USHORT nSlotId = rRequest.GetSlot();
+        sal_Bool bShowChildWindow;
+        sal_uInt16 nSlotId = rRequest.GetSlot();
         if (pArguments != NULL)
             bShowChildWindow = static_cast<const SfxBoolItem&>(
                 pArguments->Get(nSlotId)).GetValue();
@@ -1556,7 +1556,7 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
 {
     // Set the visibility state of the toolpanel and one of its top
     // level panels.
-    BOOL bShowToolPanel = TRUE;
+    sal_Bool bShowToolPanel = sal_True;
     toolpanel::PanelId nPanelId (
         toolpanel::PID_UNKNOWN);
     bool bPanelIdGiven = false;
@@ -1568,14 +1568,14 @@ void ViewShellBase::Implementation::ProcessTaskPaneSlot (SfxRequest& rRequest)
         if ((pArgs->Count() == 1) || (pArgs->Count() == 2))
         {
             SFX_REQUEST_ARG (rRequest, pIsPanelVisible,
-                SfxBoolItem, ID_VAL_ISVISIBLE, FALSE);
+                SfxBoolItem, ID_VAL_ISVISIBLE, sal_False);
             if (pIsPanelVisible != NULL)
                 bShowToolPanel = pIsPanelVisible->GetValue();
         }
         if (pArgs->Count() == 2)
         {
             SFX_REQUEST_ARG (rRequest, pPanelId, SfxUInt32Item,
-                ID_VAL_PANEL_INDEX, FALSE);
+                ID_VAL_PANEL_INDEX, sal_False);
             if (pPanelId != NULL)
             {
                 nPanelId = static_cast<

@@ -110,7 +110,7 @@ namespace sd {
 |*
 \************************************************************************/
 
-SfxPrinter* DrawDocShell::GetPrinter(BOOL bCreate)
+SfxPrinter* DrawDocShell::GetPrinter(sal_Bool bCreate)
 {
     if (bCreate && !mpPrinter)
     {
@@ -124,7 +124,7 @@ SfxPrinter* DrawDocShell::GetPrinter(BOOL bCreate)
         SdOptionsPrintItem aPrintItem( ATTR_OPTIONS_PRINT,
                             SD_MOD()->GetSdOptions(mpDoc->GetDocumentType()));
         SfxFlagItem aFlagItem( SID_PRINTER_CHANGESTODOC );
-        USHORT      nFlags = 0;
+        sal_uInt16      nFlags = 0;
 
         nFlags =  (aPrintItem.GetOptionsPrint().IsWarningSize() ? SFX_PRINTER_CHG_SIZE : 0) |
                 (aPrintItem.GetOptionsPrint().IsWarningOrientation() ? SFX_PRINTER_CHG_ORIENTATION : 0);
@@ -135,12 +135,12 @@ SfxPrinter* DrawDocShell::GetPrinter(BOOL bCreate)
         pSet->Put( aFlagItem );
 
         mpPrinter = new SfxPrinter(pSet);
-        mbOwnPrinter = TRUE;
+        mbOwnPrinter = sal_True;
 
         // Ausgabequalitaet setzen
-        UINT16 nQuality = aPrintItem.GetOptionsPrint().GetOutputQuality();
+        sal_uInt16 nQuality = aPrintItem.GetOptionsPrint().GetOutputQuality();
 
-        ULONG nMode = DRAWMODE_DEFAULT;
+        sal_uLong nMode = DRAWMODE_DEFAULT;
 
         if( nQuality == 1 )
             nMode = DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL | DRAWMODE_BLACKTEXT | DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT;
@@ -178,7 +178,7 @@ void DrawDocShell::SetPrinter(SfxPrinter *pNewPrinter)
     }
 
     mpPrinter = pNewPrinter;
-    mbOwnPrinter = TRUE;
+    mbOwnPrinter = sal_True;
     if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
         UpdateFontList();
     UpdateRefDevice();
@@ -189,10 +189,10 @@ void DrawDocShell::UpdateFontList()
     delete mpFontList;
     OutputDevice* pRefDevice = NULL;
     if ( mpDoc->GetPrinterIndependentLayout() == ::com::sun::star::document::PrinterIndependentLayout::DISABLED )
-        pRefDevice = GetPrinter(TRUE);
+        pRefDevice = GetPrinter(sal_True);
     else
         pRefDevice = SD_MOD()->GetVirtualRefDevice();
-    mpFontList = new FontList( pRefDevice, NULL, FALSE );
+    mpFontList = new FontList( pRefDevice, NULL, sal_False );
     SvxFontListItem aFontListItem( mpFontList, SID_ATTR_CHAR_FONTLIST );
     PutItem( aFontListItem );
 }
@@ -204,7 +204,7 @@ void DrawDocShell::UpdateFontList()
 \************************************************************************/
 Printer* DrawDocShell::GetDocumentPrinter()
 {
-    return GetPrinter(FALSE);
+    return GetPrinter(sal_False);
 }
 
 /*************************************************************************
@@ -233,7 +233,7 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
         SetPrinter((SfxPrinter*) pNewPrinter);
 
         // Printer gehoert dem Container
-        mbOwnPrinter = FALSE;
+        mbOwnPrinter = sal_False;
     }
 }
 
@@ -269,12 +269,12 @@ void DrawDocShell::UpdateRefDevice()
         }
         mpDoc->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pOutl = mpDoc->GetOutliner( FALSE );
+        ::sd::Outliner* pOutl = mpDoc->GetOutliner( sal_False );
 
         if( pOutl )
             pOutl->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( FALSE );
+        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( sal_False );
 
         if( pInternalOutl )
             pInternalOutl->SetRefDevice( pRefDevice );
@@ -287,9 +287,9 @@ void DrawDocShell::UpdateRefDevice()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+sal_Bool DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     bRet = SfxObjectShell::InitNew( xStorage );
 
@@ -312,11 +312,11 @@ BOOL DrawDocShell::InitNew( const ::com::sun::star::uno::Reference< ::com::sun::
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::Load( SfxMedium& rMedium )
+sal_Bool DrawDocShell::Load( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
-    BOOL    bRet = FALSE;
+    sal_Bool    bRet = sal_False;
     bool    bStartPresentation = false;
     ErrCode nError = ERRCODE_NONE;
 
@@ -327,7 +327,7 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
     {
         if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            mpDoc->SetStarDrawPreviewMode( TRUE );
+            mpDoc->SetStarDrawPreviewMode( sal_True );
         }
 
         if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
@@ -394,7 +394,7 @@ BOOL DrawDocShell::Load( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
+sal_Bool DrawDocShell::LoadFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
@@ -402,7 +402,7 @@ BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
     if( mpViewShell )
         pWait = new WaitObject( (Window*) mpViewShell->GetActiveWindow() );
 
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
         /*
         // #90691# return to old behaviour (before #80365#): construct own medium
@@ -458,22 +458,22 @@ BOOL DrawDocShell::LoadFrom( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
+sal_Bool DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     mbNewDocument = sal_False;
 
     const String    aFilterName( rMedium.GetFilter()->GetFilterName() );
-    BOOL            bRet = FALSE;
+    sal_Bool            bRet = sal_False;
     bool    bStartPresentation = false;
 
-    SetWaitCursor( TRUE );
+    SetWaitCursor( sal_True );
 
     SfxItemSet* pSet = rMedium.GetItemSet();
     if( pSet )
     {
         if( (  SFX_ITEM_SET == pSet->GetItemState(SID_PREVIEW ) ) && ( (SfxBoolItem&) ( pSet->Get( SID_PREVIEW ) ) ).GetValue() )
         {
-            mpDoc->SetStarDrawPreviewMode( TRUE );
+            mpDoc->SetStarDrawPreviewMode( sal_True );
         }
 
         if( SFX_ITEM_SET == pSet->GetItemState(SID_DOC_STARTPRESENTATION)&&
@@ -530,7 +530,7 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
         if( pMediumSet )
             pMediumSet->Put( SfxUInt16Item( SID_VIEW_ID, 5 ) );
     }
-    SetWaitCursor( FALSE );
+    SetWaitCursor( sal_False );
 
     // tell SFX to change viewshell when in preview mode
     if( IsPreview() || bStartPresentation )
@@ -549,7 +549,7 @@ BOOL DrawDocShell::ConvertFrom( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::Save()
+sal_Bool DrawDocShell::Save()
 {
     mpDoc->StopWorkStartupDelay();
 
@@ -557,7 +557,7 @@ BOOL DrawDocShell::Save()
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
-    BOOL bRet = SfxObjectShell::Save();
+    sal_Bool bRet = SfxObjectShell::Save();
 
     if( bRet )
     {
@@ -576,7 +576,7 @@ BOOL DrawDocShell::Save()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
+sal_Bool DrawDocShell::SaveAs( SfxMedium& rMedium )
 {
     mpDoc->StopWorkStartupDelay();
 
@@ -584,8 +584,8 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
     if( GetCreateMode() == SFX_CREATE_MODE_STANDARD )
         SfxObjectShell::SetVisArea( Rectangle() );
 
-    UINT32  nVBWarning = ERRCODE_NONE;
-    BOOL    bRet = SfxObjectShell::SaveAs( rMedium );
+    sal_uInt32  nVBWarning = ERRCODE_NONE;
+    sal_Bool    bRet = SfxObjectShell::SaveAs( rMedium );
 
     if( bRet )
     {
@@ -606,9 +606,9 @@ BOOL DrawDocShell::SaveAs( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
+sal_Bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( mpDoc->GetPageCount() )
     {
@@ -648,7 +648,7 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 
         if( pFilter )
         {
-            const ULONG nOldSwapMode = mpDoc->GetSwapGraphicsMode();
+            const sal_uLong nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
             mpDoc->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_TEMP );
 
@@ -670,13 +670,13 @@ BOOL DrawDocShell::ConvertTo( SfxMedium& rMedium )
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
+sal_Bool DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
 {
-    BOOL bRet = FALSE;
+    sal_Bool bRet = sal_False;
 
     if( SfxObjectShell::SaveCompleted(xStorage) )
     {
-        mpDoc->NbcSetChanged( FALSE );
+        mpDoc->NbcSetChanged( sal_False );
 
         if( mpViewShell )
         {
@@ -695,14 +695,14 @@ BOOL DrawDocShell::SaveCompleted( const ::com::sun::star::uno::Reference< ::com:
             }
         }
 
-        bRet = TRUE;
+        bRet = sal_True;
 
         SfxViewFrame* pFrame = ( mpViewShell && mpViewShell->GetViewFrame() ) ?
                                mpViewShell->GetViewFrame() :
                                SfxViewFrame::Current();
 
         if( pFrame )
-            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
+            pFrame->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
     }
     return bRet;
 }
@@ -735,17 +735,17 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 |*
 \************************************************************************/
 
-BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
+sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
 {
-    BOOL bFound = FALSE;
+    sal_Bool bFound = sal_False;
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
         DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
-        BOOL bIsMasterPage = sal_False;
-        USHORT nPageNumber = SDRPAGE_NOTFOUND;
+        sal_Bool bIsMasterPage = sal_False;
+        sal_uInt16 nPageNumber = SDRPAGE_NOTFOUND;
         SdrObject* pObj = NULL;
 
         rtl::OUString sBookmark( rBookmark );
@@ -801,7 +801,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
         {
             // Jump to the bookmarked page.  This is done in three steps.
 
-            bFound = TRUE;
+            bFound = sal_True;
             SdPage* pPage;
             if (bIsMasterPage)
                 pPage = (SdPage*) mpDoc->GetMasterPage(nPageNumber);
@@ -813,7 +813,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             PageKind eNewPageKind = pPage->GetPageKind();
 
             if( (eNewPageKind != PK_STANDARD) && (mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
-                return FALSE;
+                return sal_False;
 
             if (eNewPageKind != pDrawViewShell->GetPageKind())
             {
@@ -866,14 +866,14 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
                 if (eNewEditMode != pDrawViewShell->GetEditMode())
                 {
                     // EditMode setzen
-                    pDrawViewShell->ChangeEditMode(eNewEditMode, FALSE);
+                    pDrawViewShell->ChangeEditMode(eNewEditMode, sal_False);
                 }
 
                 // Make the bookmarked page the current page.  This is done
                 // by using the API because this takes care of all the
                 // little things to be done.  Especially writing the view
                 // data to the frame view (see bug #107803#).
-                USHORT nSdPgNum = (nPageNumber - 1) / 2;
+                sal_uInt16 nSdPgNum = (nPageNumber - 1) / 2;
                 Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
                 if (xController.is())
                 {
@@ -896,7 +896,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
                     pDrawViewShell->GetView()->UnmarkAll();
                     pDrawViewShell->GetView()->MarkObj(
                         pObj,
-                        pDrawViewShell->GetView()->GetSdrPageView(), FALSE);
+                        pDrawViewShell->GetView()->GetSdrPageView(), sal_False);
                 }
             }
         }
@@ -905,7 +905,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             ? pDrawViewShell->GetViewFrame()
             : SfxViewFrame::Current() )->GetBindings();
 
-        rBindings.Invalidate(SID_NAVIGATOR_STATE, TRUE, FALSE);
+        rBindings.Invalidate(SID_NAVIGATOR_STATE, sal_True, sal_False);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
     }
 
@@ -919,7 +919,7 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
 \************************************************************************/
 #include <tools/urlobj.hxx>
 
-BOOL DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
+sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {
 
     const SfxFilter* pFilter = rMedium.GetFilter();
@@ -936,7 +936,7 @@ BOOL DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
         String aLayoutName;
 
         SfxStringItem* pLayoutItem;
-        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, FALSE, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
+        if( rMedium.GetItemSet()->GetItemState(SID_TEMPLATE_NAME, sal_False, (const SfxPoolItem**) & pLayoutItem ) == SFX_ITEM_SET )
         {
             aLayoutName = pLayoutItem->GetValue();
         }

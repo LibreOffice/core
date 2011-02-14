@@ -76,7 +76,7 @@ public:
     ChildWindowPane (
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::drawing::framework::XResourceId>& rxPaneId,
-        USHORT nChildWindowId,
+        sal_uInt16 nChildWindowId,
         ViewShellBase& rViewShellBase,
         ::std::auto_ptr<SfxShell> pShell);
     virtual ~ChildWindowPane (void) throw();
@@ -115,7 +115,7 @@ public:
 
 private:
     ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XResourceId> mxPaneId;
-    USHORT mnChildWindowId;
+    sal_uInt16 mnChildWindowId;
     ViewShellBase& mrViewShellBase;
     ::std::auto_ptr<SfxShell> mpShell;
 

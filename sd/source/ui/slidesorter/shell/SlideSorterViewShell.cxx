@@ -544,7 +544,7 @@ void SlideSorterViewShell::ArrangeGUIElements (void)
 
 
 
-void SlideSorterViewShell::Activate (BOOL bIsMDIActivate)
+void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
 {
     ViewShell::Activate(bIsMDIActivate);
     if (mbIsArrangeGUIElementsPending)
@@ -582,7 +582,7 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     {
         view::SlideSorterView& rView (mpSlideSorter->GetView());
 
-        USHORT nSlidesPerRow (pFrameView->GetSlidesPerRow());
+        sal_uInt16 nSlidesPerRow (pFrameView->GetSlidesPerRow());
         if (nSlidesPerRow > 0
             && rView.GetOrientation() == view::Layouter::GRID
             && IsMainViewShell())
@@ -620,7 +620,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
     if (mpFrameView != NULL)
     {
         view::SlideSorterView& rView (mpSlideSorter->GetView());
-        mpFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
+        mpFrameView->SetSlidesPerRow((sal_uInt16)rView.GetLayouter().GetColumnCount());
 
         // DrawMode for 'main' window
         if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
@@ -640,7 +640,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
             // We have no current page to set but at least we can make sure
             // that the index of the frame view has a legal value.
             if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
-                mpFrameView->SetSelectedPage((USHORT)mpSlideSorter->GetModel().GetPageCount()-1);
+                mpFrameView->SetSelectedPage((sal_uInt16)mpSlideSorter->GetModel().GetPageCount()-1);
         }
     }
 }
@@ -738,8 +738,8 @@ sal_Int8 SlideSorterViewShell::AcceptDrop (
     const AcceptDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    USHORT nPage,
-    USHORT nLayer)
+    sal_uInt16 nPage,
+    sal_uInt16 nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().AcceptDrop (
@@ -757,8 +757,8 @@ sal_Int8 SlideSorterViewShell::ExecuteDrop (
     const ExecuteDropEvent& rEvt,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    USHORT nPage,
-    USHORT nLayer)
+    sal_uInt16 nPage,
+    sal_uInt16 nLayer)
 {
     OSL_ASSERT(mpSlideSorter.get()!=NULL);
     return mpSlideSorter->GetController().GetClipboard().ExecuteDrop (

@@ -59,8 +59,8 @@ namespace sd { namespace slidesorter { namespace model {
 
 class DocumentPageContainer;
 
-inline sal_Int32 FromCoreIndex (const USHORT nCoreIndex) { return (nCoreIndex-1)/2; }
-inline USHORT ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
+inline sal_Int32 FromCoreIndex (const sal_uInt16 nCoreIndex) { return (nCoreIndex-1)/2; }
+inline sal_uInt16 ToCoreIndex (const sal_Int32 nIndex) { return nIndex*2+1; }
 
 /** The model of the slide sorter gives access to the slides that are to be
     displayed in the slide sorter view.  Via the SetDocumentSlides() method
@@ -155,7 +155,7 @@ public:
         the n*2+1 magic.  Only when a special model is set, like a custom
         slide show, then the returned value is different.
     */
-    USHORT GetCoreIndex (const sal_Int32 nIndex) const;
+    sal_uInt16 GetCoreIndex (const sal_Int32 nIndex) const;
 
     /** Call this method after the document has changed its structure.  This
         will get the model in sync with the SdDrawDocument.  This method

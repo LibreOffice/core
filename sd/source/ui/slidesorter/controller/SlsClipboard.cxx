@@ -233,7 +233,7 @@ void Clipboard::DoDelete (::Window* )
 
 void Clipboard::DoCopy (::Window* pWindow )
 {
-    CreateSlideTransferable( pWindow, FALSE );
+    CreateSlideTransferable( pWindow, sal_False );
 }
 
 
@@ -310,25 +310,25 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
     SdTransferable* pClipTransferable = SD_MOD()->pTransferClip;
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
     bool bMergeMasterPages = !pClipTransferable->HasSourceDoc (rModel.GetDocument());
-    USHORT nInsertIndex (rModel.GetCoreIndex(nInsertPosition));
+    sal_uInt16 nInsertIndex (rModel.GetCoreIndex(nInsertPosition));
     sal_Int32 nInsertPageCount (0);
     if (pClipTransferable->HasPageBookmarks())
     {
         const List& rBookmarkList = pClipTransferable->GetPageBookmarks();
         const ::vos::OGuard aGuard (Application::GetSolarMutex());
 
-        nInsertPageCount = (USHORT) rBookmarkList.Count();
+        nInsertPageCount = (sal_uInt16) rBookmarkList.Count();
         rModel.GetDocument()->InsertBookmarkAsPage(
             const_cast<List*>(&rBookmarkList),
             NULL,
-            FALSE,
-            FALSE,
+            sal_False,
+            sal_False,
             nInsertIndex,
-            FALSE,
+            sal_False,
             pClipTransferable->GetPageDocShell(),
-            TRUE,
+            sal_True,
             bMergeMasterPages,
-            FALSE);
+            sal_False);
     }
     else
     {
@@ -346,14 +346,14 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
             rModel.GetDocument()->InsertBookmarkAsPage(
                 NULL,
                 NULL,
-                FALSE,
-                FALSE,
+                sal_False,
+                sal_False,
                 nInsertIndex,
-                FALSE,
+                sal_False,
                 pDataDocSh,
-                TRUE,
+                sal_True,
                 bMergeMasterPages,
-                FALSE);
+                sal_False);
         }
     }
     mrController.HandleModelChange();
@@ -369,7 +369,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
     // after the nInsertIndex position.
     PageSelector& rSelector (mrController.GetPageSelector());
     rSelector.DeselectAllPages();
-    for (USHORT i=0; i<nPageCount; i++)
+    for (sal_uInt16 i=0; i<nPageCount; i++)
     {
         model::SharedPageDescriptor pDescriptor (
             mrSlideSorter.GetModel().GetPageDescriptor(nFirstIndex + i));
@@ -436,7 +436,7 @@ void Clipboard::CreateSlideTransferable (
         SdTransferable* pTransferable = new Transferable (
             pDocument,
             NULL,
-            FALSE,
+            sal_False,
             dynamic_cast<SlideSorterViewShell*>(mrSlideSorter.GetViewShell()),
             aRepresentatives);
 
@@ -498,7 +498,7 @@ void Clipboard::StartDrag (
     maPagesToRemove.clear();
     maPagesToSelect.clear();
     mbUpdateSelectionPending = false;
-    CreateSlideTransferable(pWindow, TRUE);
+    CreateSlideTransferable(pWindow, sal_True);
 
     mrController.GetInsertionIndicatorHandler()->UpdatePosition(
         rPosition,
@@ -585,8 +585,8 @@ sal_Int8 Clipboard::AcceptDrop (
     const AcceptDropEvent& rEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    USHORT nPage,
-    USHORT nLayer)
+    sal_uInt16 nPage,
+    sal_uInt16 nLayer)
 {
     sal_Int8 nAction (DND_ACTION_NONE);
 
@@ -655,8 +655,8 @@ sal_Int8 Clipboard::ExecuteDrop (
     const ExecuteDropEvent& rEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    USHORT nPage,
-    USHORT nLayer)
+    sal_uInt16 nPage,
+    sal_uInt16 nLayer)
 {
     sal_Int8 nResult = DND_ACTION_NONE;
     mpUndoContext.reset();
@@ -680,7 +680,7 @@ sal_Int8 Clipboard::ExecuteDrop (
                         mrController.GetInsertionIndicatorHandler());
             // Get insertion position and then turn off the insertion indicator.
             pInsertionIndicatorHandler->UpdatePosition(aEventModelPosition, rEvent.mnAction);
-            //            USHORT nIndex = DetermineInsertPosition(*pDragTransferable);
+            //            sal_uInt16 nIndex = DetermineInsertPosition(*pDragTransferable);
 
             // Do not process the insertion when it is trivial,
             // i.e. would insert pages at their original place.
@@ -754,7 +754,7 @@ void Clipboard::Abort (void)
 
 
 
-USHORT Clipboard::DetermineInsertPosition (const SdTransferable& )
+sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
     // Tell the model to move the dragged pages behind the one with the
     // index nInsertionIndex which first has to be transformed into an index
@@ -772,11 +772,11 @@ USHORT Clipboard::DetermineInsertPosition (const SdTransferable& )
 
 
 
-USHORT Clipboard::InsertSlides (
+sal_uInt16 Clipboard::InsertSlides (
     const SdTransferable& rTransferable,
-    USHORT nInsertPosition)
+    sal_uInt16 nInsertPosition)
 {
-    USHORT nInsertedPageCount = ViewClipboard::InsertSlides (
+    sal_uInt16 nInsertedPageCount = ViewClipboard::InsertSlides (
         rTransferable,
         nInsertPosition);
 
@@ -827,8 +827,8 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     const void* pDropEvent,
     DropTargetHelper& rTargetHelper,
     ::sd::Window* pTargetWindow,
-    USHORT nPage,
-    USHORT nLayer)
+    sal_uInt16 nPage,
+    sal_uInt16 nLayer)
 {
     sal_Int8 nResult = 0;
 

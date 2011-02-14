@@ -398,7 +398,7 @@ FunctionReference SelectionFunction::Create(
 
 
 
-BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
+sal_Bool SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode (rEvent.GetButtons());
@@ -409,22 +409,22 @@ BOOL SelectionFunction::MouseButtonDown (const MouseEvent& rEvent)
 
     ProcessMouseEvent(BUTTON_DOWN, rEvent);
 
-    return TRUE;
+    return sal_True;
 }
 
 
 
 
-BOOL SelectionFunction::MouseMove (const MouseEvent& rEvent)
+sal_Bool SelectionFunction::MouseMove (const MouseEvent& rEvent)
 {
     ProcessMouseEvent(MOUSE_MOTION, rEvent);
-    return TRUE;
+    return sal_True;
 }
 
 
 
 
-BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
+sal_Bool SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
 {
     mrController.GetScrollBarManager().StopAutoScroll ();
 
@@ -433,7 +433,7 @@ BOOL SelectionFunction::MouseButtonUp (const MouseEvent& rEvent)
     mbProcessingMouseButtonDown = false;
 //    mpWindow->ReleaseMouse();
 
-    return TRUE;
+    return sal_True;
 }
 
 
@@ -447,12 +447,12 @@ void SelectionFunction::NotifyDragFinished (void)
 
 
 
-BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
+sal_Bool SelectionFunction::KeyInput (const KeyEvent& rEvent)
 {
     view::SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
     PageSelector::UpdateLock aLock (mrSlideSorter);
     FocusManager& rFocusManager (mrController.GetFocusManager());
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     const KeyCode& rCode (rEvent.GetKeyCode());
     switch (rCode.GetCode())
@@ -477,7 +477,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
                         SID_INSERTPAGE,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 }
-                bResult = TRUE;
+                bResult = sal_True;
             }
             break;
         }
@@ -486,7 +486,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             if ( ! rFocusManager.IsFocusShowing())
             {
                 rFocusManager.ShowFocus();
-                bResult = TRUE;
+                bResult = sal_True;
             }
             break;
 
@@ -495,7 +495,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             // operation then stop that.
             mpModeHandler->Abort();
             SwitchToNormalMode();
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         case KEY_SPACE:
@@ -509,7 +509,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
                 else
                     mrController.GetPageSelector().SelectPage(pDescriptor);
             }
-            bResult = TRUE;
+            bResult = sal_True;
         }
         break;
 
@@ -517,47 +517,47 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
         // Move the focus indicator left.
         case KEY_LEFT:
             MoveFocus(FocusManager::FMD_LEFT, rCode.IsShift(), rCode.IsMod1());
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         // Move the focus indicator right.
         case KEY_RIGHT:
             MoveFocus(FocusManager::FMD_RIGHT, rCode.IsShift(), rCode.IsMod1());
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         // Move the focus indicator up.
         case KEY_UP:
             MoveFocus(FocusManager::FMD_UP, rCode.IsShift(), rCode.IsMod1());
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         // Move the focus indicator down.
         case KEY_DOWN:
             MoveFocus(FocusManager::FMD_DOWN, rCode.IsShift(), rCode.IsMod1());
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         // Go to previous page.  No wrap around.
         case KEY_PAGEUP:
             GotoNextPage(-1);
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         // Go to next page.  No wrap around..
         case KEY_PAGEDOWN:
             GotoNextPage(+1);
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         case KEY_HOME:
             GotoPage(0);
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         case KEY_END:
             GotoPage(mrSlideSorter.GetModel().GetPageCount()-1);
-            bResult = TRUE;
+            bResult = sal_True;
             break;
 
         case KEY_DELETE:
@@ -569,7 +569,7 @@ BOOL SelectionFunction::KeyInput (const KeyEvent& rEvent)
             mrController.GetSelectionManager()->DeleteSelectedPages(rCode.GetCode()==KEY_DELETE);
 
             mnShiftKeySelectionAnchor = -1;
-            bResult = TRUE;
+            bResult = sal_True;
         }
         break;
 
@@ -748,7 +748,7 @@ void SelectionFunction::GotoNextPage (int nOffset)
 
 void SelectionFunction::GotoPage (int nIndex)
 {
-    USHORT nPageCount = (USHORT)mrSlideSorter.GetModel().GetPageCount();
+    sal_uInt16 nPageCount = (sal_uInt16)mrSlideSorter.GetModel().GetPageCount();
 
     if (nIndex >= nPageCount)
         nIndex = nPageCount - 1;
@@ -1260,7 +1260,7 @@ void SelectionFunction::ModeHandler::SwitchView (const model::SharedPageDescript
     {
         if (rpDescriptor.get()!=NULL && rpDescriptor->GetPage()!=NULL)
         {
-            mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), TRUE);
+            mrSlideSorter.GetModel().GetDocument()->SetSelected(rpDescriptor->GetPage(), sal_True);
             pViewShell->GetFrameView()->SetSelectedPage(
                 (rpDescriptor->GetPage()->GetPageNum()-1)/2);
         }
@@ -1542,15 +1542,15 @@ void NormalModeHandler::RangeSelect (const model::SharedPageDescriptor& rpDescri
     {
         // Select all pages between the anchor and the given one, including
         // the two.
-        const USHORT nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
-        const USHORT nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
+        const sal_uInt16 nAnchorIndex ((pAnchor->GetPage()->GetPageNum()-1) / 2);
+        const sal_uInt16 nOtherIndex ((rpDescriptor->GetPage()->GetPageNum()-1) / 2);
 
         // Iterate over all pages in the range.  Start with the anchor
         // page.  This way the PageSelector will recognize it again as
         // anchor (the first selected page after a DeselectAllPages()
         // becomes the anchor.)
-        const USHORT nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
-        USHORT nIndex (nAnchorIndex);
+        const sal_uInt16 nStep ((nAnchorIndex < nOtherIndex) ? +1 : -1);
+        sal_uInt16 nIndex (nAnchorIndex);
         while (true)
         {
             rSelector.SelectPage(nIndex);
