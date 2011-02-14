@@ -186,7 +186,7 @@ void SalData::deInitNWF( void )
     while( iter != aThemeMap.end() )
     {
         vsAPI.CloseThemeData(iter->second);
-        iter++;
+        ++iter;
     }
     aThemeMap.clear();
 }
