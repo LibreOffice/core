@@ -57,7 +57,7 @@ namespace svt
         :Window( &i_rParent )
         ,m_rDrawer( i_rParent )
     {
-        SetMouseTransparent( TRUE );
+        SetMouseTransparent( sal_True );
         Show();
         SetAccessibleRole( AccessibleRole::LABEL );
     }
@@ -85,7 +85,7 @@ namespace svt
         ,m_bFocused( false )
         ,m_bExpanded( false )
     {
-        EnableMapMode( FALSE );
+        EnableMapMode( sal_False );
         SetBackground( Wallpaper() );
         SetPointer( POINTER_REFHAND );
 
@@ -162,7 +162,7 @@ namespace svt
     Image ToolPanelDrawer::impl_getExpansionIndicator() const
     {
         const bool bHighContrastMode( GetSettings().GetStyleSettings().GetHighContrastMode() != 0 );
-        USHORT nResourceId = 0;
+        sal_uInt16 nResourceId = 0;
         if ( m_bExpanded )
             if ( bHighContrastMode )
                 nResourceId = IMG_TRIANGLE_DOWN_HC;
@@ -177,9 +177,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    USHORT ToolPanelDrawer::impl_getTextStyle() const
+    sal_uInt16 ToolPanelDrawer::impl_getTextStyle() const
     {
-        const USHORT nBasicStyle =  TEXT_DRAW_LEFT
+        const sal_uInt16 nBasicStyle =  TEXT_DRAW_LEFT
                                 |   TEXT_DRAW_TOP
                                 |   TEXT_DRAW_WORDBREAK;
 
@@ -212,7 +212,7 @@ namespace svt
         {
             const Rectangle aTextPixelBox( m_pPaintDevice->LogicToPixel( i_rTextBox ) );
 
-            m_pPaintDevice->EnableMapMode( FALSE );
+            m_pPaintDevice->EnableMapMode( sal_False );
             m_pPaintDevice->SetFillColor();
 
             Rectangle aBox( i_rTextBox );
@@ -229,7 +229,7 @@ namespace svt
 
             m_pPaintDevice->SetLineColor( COL_BLACK );
             m_pPaintDevice->DrawPolyLine( Polygon( aTextPixelBox ), aDottedStyle );
-            m_pPaintDevice->EnableMapMode( FALSE );
+            m_pPaintDevice->EnableMapMode( sal_False );
         }
         else
             HideFocus();
@@ -306,9 +306,9 @@ namespace svt
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( BOOL i_bCreate )
+    Reference< XWindowPeer > ToolPanelDrawer::GetComponentInterface( sal_Bool i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( FALSE ) );
+        Reference< XWindowPeer > xWindowPeer( Window::GetComponentInterface( sal_False ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new ToolPanelDrawerPeer() );

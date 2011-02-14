@@ -79,8 +79,8 @@ using namespace ::rtl;
     return italicStyle;
 }
 
-+(MacOSBOOL)isStrikethrough:(PropertyValue)property {
-    MacOSBOOL strikethrough = NO;
++(BOOL)isStrikethrough:(PropertyValue)property {
+    BOOL strikethrough = NO;
     sal_Int16 value = 0;
     property.Value >>= value;
     if ( value != FontStrikeout::NONE
@@ -90,8 +90,8 @@ using namespace ::rtl;
     return strikethrough;
 }
 
-+(MacOSBOOL)convertBoolean:(PropertyValue)property {
-    MacOSBOOL myBoolean = NO;
++(BOOL)convertBoolean:(PropertyValue)property {
+    BOOL myBoolean = NO;
     bool value = sal_False;
     property.Value >>= value;
     if ( value ) {
@@ -151,7 +151,7 @@ using namespace ::rtl;
     int fonttraits = 0;
     float fontsize = 0.0;
     sal_Int32 underlineColor = 0;
-    MacOSBOOL underlineHasColor = NO;
+    BOOL underlineHasColor = NO;
     // add attributes to string
     for ( int attrIndex = 0; attrIndex < attributes.getLength(); attrIndex++ ) {
         PropertyValue property = attributes [ attrIndex ];

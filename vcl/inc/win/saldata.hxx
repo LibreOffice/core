@@ -48,7 +48,7 @@ class Font;
 struct HDCCache;
 struct TempFontItem;
 
-typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(WIN_BOOL*);
+typedef HRESULT (WINAPI  *DwmIsCompositionEnabled_ptr)(BOOL*);
 
 // --------------------
 // - Standard-Defines -
@@ -88,7 +88,7 @@ public:
     void initKeyCodeMap();
 
     // checks if the menuhandle was created by VCL
-    BOOL    IsKnownMenuHandle( HMENU hMenu );
+    sal_Bool    IsKnownMenuHandle( HMENU hMenu );
 
 public:
     HINSTANCE               mhInst;                 // default instance handle
@@ -101,12 +101,12 @@ public:
     long*                   mpDitherDiff;           // Dither mapping table
     BYTE*                   mpDitherLow;            // Dither mapping table
     BYTE*                   mpDitherHigh;           // Dither mapping table
-    ULONG                   mnTimerMS;              // Current Time (in MS) of the Timer
-    ULONG                   mnTimerOrgMS;           // Current Original Time (in MS)
+    sal_uLong                   mnTimerMS;              // Current Time (in MS) of the Timer
+    sal_uLong                   mnTimerOrgMS;           // Current Original Time (in MS)
     DWORD                   mnNextTimerTime;
     DWORD                   mnLastEventTime;
     UINT                    mnTimerId;              // windows timer id
-    BOOL                    mbInTimerProc;          // timer event is currently being dispatched
+    sal_Bool                    mbInTimerProc;          // timer event is currently being dispatched
     HHOOK                   mhSalObjMsgHook;        // hook to get interesting msg for SalObject
     HWND                    mhWantLeaveMsg;         // window handle, that want a MOUSELEAVE message
     AutoTimer*              mpMouseLeaveTimer;      // Timer for MouseLeave Test
@@ -122,20 +122,20 @@ public:
     COLORREF                maStockBrushColorAry[MAX_STOCKBRUSH];
     HPEN                    mhStockPenAry[MAX_STOCKPEN];
     HBRUSH                  mhStockBrushAry[MAX_STOCKBRUSH];
-    USHORT                  mnStockPenCount;        // count of static pens
-    USHORT                  mnStockBrushCount;      // count of static brushes
+    sal_uInt16                  mnStockPenCount;        // count of static pens
+    sal_uInt16                  mnStockBrushCount;      // count of static brushes
     WPARAM                  mnSalObjWantKeyEvt;     // KeyEvent, welcher vom SalObj-Hook verarbeitet werden soll
     BYTE                    mnCacheDCInUse;         // count of CacheDC in use
-    BOOL                    mbObjClassInit;         // is SALOBJECTCLASS initialised
-    BOOL                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
+    sal_Bool                    mbObjClassInit;         // is SALOBJECTCLASS initialised
+    sal_Bool                    mbInPalChange;          // is in WM_QUERYNEWPALETTE
     DWORD                   mnAppThreadId;          // Id from Applikation-Thread
-    WIN_BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
+    BOOL                mbScrSvrEnabled;        // ScreenSaver enabled
     int                     mnSageStatus;           // status of Sage-DLL (DISABLE_AGENT == nicht vorhanden)
     SysAgt_Enable_PROC      mpSageEnableProc;       // funktion to deactivate the system agent
     SalIcon*                mpFirstIcon;            // icon cache, points to first icon, NULL if none
     TempFontItem*           mpTempFontItem;
-    BOOL                    mbThemeChanged;         // true if visual theme was changed: throw away theme handles
-    BOOL                    mbThemeMenuSupport;
+    sal_Bool                mbThemeChanged;         // true if visual theme was changed: throw away theme handles
+    sal_Bool                mbThemeMenuSupport;
 
     // for GdiPlus GdiplusStartup/GdiplusShutdown
     ULONG_PTR               gdiplusToken;
@@ -161,9 +161,9 @@ struct SalShlData
     UINT                    mnWheelScrollChars;     // WheelScrollChars
     UINT                    mnWheelMsgId;           // Wheel-Message-Id fuer W95
     WORD                    mnVersion;              // System-Version (311 == 3.11)
-    WIN_BOOL                mbW40;                  // Is System-Version >= 4.0
-    WIN_BOOL                mbWXP;                  // Windows XP
-    WIN_BOOL                mbWPrinter;             // true: use unicode printer functions
+    BOOL                    mbW40;                  // Is System-Version >= 4.0
+    BOOL                    mbWXP;                  // Windows XP
+    BOOL                    mbWPrinter;             // true: use unicode printer functions
                                                     // false: use anis compat printer functions
     OSVERSIONINFO           maVersionInfo;
 };
@@ -190,8 +190,8 @@ struct HDCCache
 };
 
 void ImplClearHDCCache( SalData* pData );
-HDC ImplGetCachedDC( ULONG nID, HBITMAP hBmp = 0 );
-void ImplReleaseCachedDC( ULONG nID );
+HDC ImplGetCachedDC( sal_uLong nID, HBITMAP hBmp = 0 );
+void ImplReleaseCachedDC( sal_uLong nID );
 
 bool ImplAddTempFont( SalData&, const String& rFontFileURL );
 void ImplReleaseTempFonts( SalData& );
@@ -202,7 +202,7 @@ void ImplReleaseTempFonts( SalData& );
 
 HCURSOR ImplLoadSalCursor( int nId );
 HBITMAP ImplLoadSalBitmap( int nId );
-BOOL ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
+sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon );
 
 // SALGDI.CXX
 void ImplInitSalGDI();
@@ -214,11 +214,11 @@ void ImplFreeSalGDI();
 
 // \\WIN\SOURCE\APP\SALINST.CXX
 void ImplSalYieldMutexAcquireWithWait();
-BOOL ImplSalYieldMutexTryToAcquire();
+sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
-ULONG ImplSalReleaseYieldMutex();
-void ImplSalAcquireYieldMutex( ULONG nCount );
+sal_uLong ImplSalReleaseYieldMutex();
+void ImplSalAcquireYieldMutex( sal_uLong nCount );
 sal_Bool ImplInterceptChildWindowKeyDown( MSG& rMsg );
 
 // \\WIN\SOURCE\WINDOW\SALFRAME.CXX
@@ -230,16 +230,16 @@ void    CALLBACK SalTimerProc( HWND hWnd, UINT nMsg, UINT_PTR nId, DWORD nTime )
 
 // \WIN\SOURCE\WINDOW\SALFRAME.CXX
 void SalTestMouseLeave();
-BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall );
+sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall );
 
 // \WIN\SOURCE\WINDOW\SALFRAME.CXX
 long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam );
 long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam );
-BOOL ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
+sal_Bool ImplHandleGlobalMsg( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT& rlResult );
 
 // \WIN\SOURCE\WINDOW\SALOBJ.CXX
 WinSalObject* ImplFindSalObject( HWND hWndChild );
-BOOL ImplSalPreDispatchMsg( MSG* pMsg );
+sal_Bool ImplSalPreDispatchMsg( MSG* pMsg );
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT nDispatchResult );
 
 // \WIN\SOURCE\GDI\SALGDI3.CXX
@@ -249,7 +249,7 @@ bool ImplIsFontAvailable( HDC hDC, const UniString& rName );
 
 // \WIN\SOURCE\APP\SALDATA.CXX
 rtl_TextEncoding ImplSalGetSystemEncoding();
-ByteString ImplSalGetWinAnsiString( const UniString& rStr, BOOL bFileName = FALSE );
+ByteString ImplSalGetWinAnsiString( const UniString& rStr, sal_Bool bFileName = FALSE );
 UniString ImplSalGetUniString( const sal_Char* pStr, xub_StrLen nLen = STRING_LEN );
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
@@ -350,10 +350,10 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 // A/W-Wrapper
 LONG        ImplSetWindowLong( HWND hWnd, int nIndex, DWORD dwNewLong );
 LONG        ImplGetWindowLong( HWND hWnd, int nIndex );
-WIN_BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-WIN_BOOL    ImplSendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
-WIN_BOOL    ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax );
-WIN_BOOL    ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
+BOOL    ImplPostMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+BOOL    ImplSendMessage( HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam );
+BOOL    ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax );
+BOOL    ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg );
 LONG        ImplDispatchMessage( CONST MSG *lpMsg );
 
 inline void SetWindowPtr( HWND hWnd, WinSalFrame* pThis )

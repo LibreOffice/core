@@ -65,6 +65,7 @@
 #include <vcl/tabpage.hxx>
 #include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
+#include <comphelper/flagguard.hxx>
 #include <toolkit/helper/solarrelease.hxx>
 #include "stylesettings.hxx"
 #include <tools/urlobj.hxx>
@@ -93,32 +94,6 @@ namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
 using ::toolkit::ReleaseSolarMutex;
-
-//====================================================================
-//= misc helpers
-//====================================================================
-namespace
-{
-    //................................................................
-    //. FlagGuard
-    //................................................................
-    class FlagGuard
-    {
-    private:
-        bool&   m_rFlag;
-
-    public:
-        FlagGuard( bool& _rFlag )
-            :m_rFlag( _rFlag )
-        {
-            m_rFlag = true;
-        }
-        ~FlagGuard()
-        {
-            m_rFlag = false;
-        }
-    };
-}
 
 //====================================================================
 //= VCLXWindowImpl
@@ -151,7 +126,7 @@ private:
     TopWindowListenerMultiplexer        maTopWindowListeners;
 
     CallbackArray                       maCallbackEvents;
-    ULONG                               mnCallbackEventId;
+    sal_uLong                               mnCallbackEventId;
 
 public:
     bool                                mbDisposing             : 1;
@@ -159,7 +134,7 @@ public:
     bool                                mbSynthesizingVCLEvent  : 1;
     bool                                mbWithDefaultProps      : 1;
 
-    ULONG                               mnListenerLockLevel;
+    sal_uLong                               mnListenerLockLevel;
     sal_Int16                           mnWritingMode;
     sal_Int16                           mnContextWritingMode;
 
@@ -895,7 +870,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
         {
             if ( mpImpl->getDockableWindowListeners().getLength() )
             {
-                BOOL *p_bFloating = (BOOL*)rVclWindowEvent.GetData();
+                sal_Bool *p_bFloating = (sal_Bool*)rVclWindowEvent.GetData();
 
                 ::com::sun::star::lang::EventObject aEvent;
                 aEvent.Source = (::cppu::OWeakObject*)this;
@@ -954,7 +929,7 @@ void VCLXWindow::SetSynthesizingVCLEvent( sal_Bool _b )
     mpImpl->mbSynthesizingVCLEvent = _b;
 }
 
-BOOL VCLXWindow::IsSynthesizingVCLEvent() const
+sal_Bool VCLXWindow::IsSynthesizingVCLEvent() const
 {
     return mpImpl->mbSynthesizingVCLEvent;
 }
@@ -1095,7 +1070,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->Enable( bEnable, FALSE ); // #95824# without children!
+        pWindow->Enable( bEnable, sal_False ); // #95824# without children!
         pWindow->EnableInput( bEnable );
     }
 }
@@ -1120,7 +1095,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
 
     // #100119# Get all resize events, even if height or width 0, or invisible
     if ( GetWindow() )
-        GetWindow()->EnableAllResize( TRUE );
+        GetWindow()->EnableAllResize( sal_True );
 }
 
 void VCLXWindow::removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
@@ -1353,7 +1328,7 @@ namespace toolkit
         (aStyleSettings.*pSetter)( Color( nColor ) );
 
         aSettings.SetStyleSettings( aStyleSettings );
-        _pWindow->SetSettings( aSettings, TRUE );
+        _pWindow->SetSettings( aSettings, sal_True );
     }
 }
 
@@ -1429,11 +1404,11 @@ namespace
 {
     void    lcl_updateWritingMode( Window& _rWindow, const sal_Int16 _nWritingMode, const sal_Int16 _nContextWritingMode )
     {
-        BOOL bEnableRTL = FALSE;
+        sal_Bool bEnableRTL = sal_False;
         switch ( _nWritingMode )
         {
-        case WritingMode2::LR_TB:   bEnableRTL = FALSE; break;
-        case WritingMode2::RL_TB:   bEnableRTL = TRUE; break;
+        case WritingMode2::LR_TB:   bEnableRTL = sal_False; break;
+        case WritingMode2::RL_TB:   bEnableRTL = sal_True; break;
         case WritingMode2::CONTEXT:
         {
             // consult our ContextWritingMode. If it has an explicit RTL/LTR value, then use
@@ -1441,8 +1416,8 @@ namespace
             // own window for its RTL mode
             switch ( _nContextWritingMode )
             {
-                case WritingMode2::LR_TB:   bEnableRTL = FALSE; break;
-                case WritingMode2::RL_TB:   bEnableRTL = TRUE; break;
+                case WritingMode2::LR_TB:   bEnableRTL = sal_False; break;
+                case WritingMode2::RL_TB:   bEnableRTL = sal_True; break;
                 case WritingMode2::CONTEXT:
                 {
                     const Window* pParent = _rWindow.GetParent();
@@ -1513,7 +1488,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             AllSettings aSettings = pWindow->GetSettings();
             MouseSettings aMouseSettings = aSettings.GetMouseSettings();
 
-            USHORT nVclBehavior( MOUSE_WHEEL_FOCUS_ONLY );
+            sal_uInt16 nVclBehavior( MOUSE_WHEEL_FOCUS_ONLY );
             switch ( nWheelBehavior )
             {
             case MouseWheelBehavior::SCROLL_DISABLED:   nVclBehavior = MOUSE_WHEEL_DISABLE;     break;
@@ -1525,7 +1500,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             aMouseSettings.SetWheelBehavior( nWheelBehavior );
             aSettings.SetMouseSettings( aMouseSettings );
-            pWindow->SetSettings( aSettings, TRUE );
+            pWindow->SetSettings( aSettings, sal_True );
         }
         break;
 
@@ -1680,7 +1655,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         // support transparency only for special controls
                         pWindow->SetBackground();
                         pWindow->SetControlBackground();
-                        pWindow->SetPaintTransparent( TRUE );
+                        pWindow->SetPaintTransparent( sal_True );
                         break;
                     }
 
@@ -1713,7 +1688,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         case WINDOW_RADIOBUTTON:
                         case WINDOW_GROUPBOX:
                         case WINDOW_FIXEDLINE:
-                            pWindow->SetPaintTransparent( FALSE );
+                            pWindow->SetPaintTransparent( sal_False );
                         default: ;
                     }
                     pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
@@ -1945,7 +1920,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
         case BASEPROPERTY_REPEAT:
         {
-            sal_Bool bRepeat( FALSE );
+            sal_Bool bRepeat( sal_False );
             Value >>= bRepeat;
 
             WinBits nStyle = pWindow->GetStyle();
@@ -1968,7 +1943,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aMouseSettings.SetButtonRepeat( nRepeatDelay );
                 aSettings.SetMouseSettings( aMouseSettings );
 
-                pWindow->SetSettings( aSettings, TRUE );
+                pWindow->SetSettings( aSettings, sal_True );
             }
         }
         break;
@@ -2023,7 +1998,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
             case BASEPROPERTY_MOUSE_WHEEL_BEHAVIOUR:
             {
-                USHORT nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
+                sal_uInt16 nVclBehavior = GetWindow()->GetSettings().GetMouseSettings().GetWheelBehavior();
                 sal_Int16 nBehavior = MouseWheelBehavior::SCROLL_FOCUS_ONLY;
                 switch ( nVclBehavior )
                 {
@@ -2347,9 +2322,9 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
             if ( !mpImpl->getDrawingOntoParent_ref() )
             {
-                FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
+                ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
 
-                BOOL bWasVisible = pWindow->IsVisible();
+                sal_Bool bWasVisible = pWindow->IsVisible();
                 Point aOldPos( pWindow->GetPosPixel() );
 
                 if ( bWasVisible && aOldPos == aPos )
@@ -2374,7 +2349,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->SetPosPixel( aOldPos );
                 if ( bWasVisible )
-                    pWindow->Show( TRUE );
+                    pWindow->Show( sal_True );
             }
         }
         else if ( pDev )
@@ -2393,12 +2368,12 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
             }
             else
             {
-                BOOL bOldNW =pWindow->IsNativeWidgetEnabled();
+                sal_Bool bOldNW =pWindow->IsNativeWidgetEnabled();
                 if( bOldNW )
-                    pWindow->EnableNativeWidget(FALSE);
+                    pWindow->EnableNativeWidget(sal_False);
                 pWindow->PaintToDevice( pDev, aP, aSz );
                 if( bOldNW )
-                    pWindow->EnableNativeWidget(TRUE);
+                    pWindow->EnableNativeWidget(sal_True);
             }
         }
     }
@@ -2494,7 +2469,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (::com::sun::star::uno::Runti
     if( pWindow )
         return Window::GetDockingManager()->IsFloating( pWindow );
     else
-        return FALSE;
+        return sal_False;
 }
 
 void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (::com::sun::star::uno::RuntimeException)
@@ -2514,7 +2489,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (::com::sun::star::uno::Runtime
     if( pWindow )
         return Window::GetDockingManager()->IsLocked( pWindow );
     else
-        return FALSE;
+        return sal_False;
 }
 
 void SAL_CALL VCLXWindow::lock(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -2545,7 +2520,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::Ru
 {
     // TODO: remove interface in the next incompatible build
     ::vos::OGuard aGuard( GetMutex() );
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -2587,7 +2562,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (::com::sun::star::uno::Runtim
     if( GetWindow() )
         return GetWindow()->IsVisible();
     else
-        return FALSE;
+        return sal_False;
 }
 
 sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -2596,7 +2571,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (::com::sun::star::uno::Runtime
     if( GetWindow() )
         return GetWindow()->IsActive();
     else
-        return FALSE;
+        return sal_False;
 
 }
 
@@ -2606,7 +2581,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (::com::sun::star::uno::Runtim
     if( GetWindow() )
         return GetWindow()->IsEnabled();
     else
-        return FALSE;
+        return sal_False;
 }
 
 sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::RuntimeException)
@@ -2615,7 +2590,7 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::Runtime
     if( GetWindow() )
         return GetWindow()->HasFocus();
     else
-        return FALSE;
+        return sal_False;
 }
 
 // ::com::sun::star::beans::XPropertySetInfo

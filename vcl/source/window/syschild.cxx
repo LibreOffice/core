@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 // =======================================================================
 
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
-                       USHORT nEvent, const void* /* pEvent */ )
+                       sal_uInt16 nEvent, const void* /* pEvent */ )
 {
     SystemChildWindow* pWindow = (SystemChildWindow*)pInst;
     long nRet = 0;
@@ -75,33 +75,33 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             // Focus holen und zwar so, das alle Handler gerufen
             // werden, als ob dieses Fenster den Focus bekommt,
             // ohne das der Frame den Focus wieder klaut
-            pWindow->ImplGetFrameData()->mbSysObjFocus = TRUE;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = TRUE;
+            pWindow->ImplGetFrameData()->mbSysObjFocus = sal_True;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_True;
             pWindow->ToTop( TOTOP_NOGRABFOCUS );
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = FALSE;
-            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = TRUE;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_False;
+            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = sal_True;
             pWindow->GrabFocus();
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = FALSE;
+            pWindow->ImplGetFrameData()->mbInSysObjFocusHdl = sal_False;
             break;
 
         case SALOBJ_EVENT_LOSEFOCUS:
             // Hintenrum einen LoseFocus ausloesen, das der Status
             // der Fenster dem entsprechenden Activate-Status
             // entspricht
-            pWindow->ImplGetFrameData()->mbSysObjFocus = FALSE;
+            pWindow->ImplGetFrameData()->mbSysObjFocus = sal_False;
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
-                pWindow->ImplGetFrameData()->mbStartFocusState = TRUE;
+                pWindow->ImplGetFrameData()->mbStartFocusState = sal_True;
                 Application::PostUserEvent( pWindow->ImplGetFrameData()->mnFocusId, LINK( pWindow->ImplGetFrameWindow(), Window, ImplAsyncFocusHdl ) );
             }
             break;
 
         case SALOBJ_EVENT_TOTOP:
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = TRUE;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_True;
             if ( !Application::GetFocusWindow() || pWindow->HasChildPathFocus() )
                 pWindow->ToTop( TOTOP_NOGRABFOCUS );
             else
@@ -111,7 +111,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             pWindow->GrabFocus();
             if( aDogTag.IsDead() )
                 break;
-            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = FALSE;
+            pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = sal_False;
             break;
     }
 
@@ -120,7 +120,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 // =======================================================================
 
-void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow )
+void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow )
 {
     mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
 
@@ -145,7 +145,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow ) :
+SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, sal_Bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
     ImplInitSysChild( pParent, nStyle, pData, bShow );
@@ -189,7 +189,7 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
 
 // -----------------------------------------------------------------------
 
-void SystemChildWindow::EnableEraseBackground( BOOL bEnable )
+void SystemChildWindow::EnableEraseBackground( sal_Bool bEnable )
 {
     if ( mpWindowImpl->mpSysObj )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
@@ -197,12 +197,12 @@ void SystemChildWindow::EnableEraseBackground( BOOL bEnable )
 
 // -----------------------------------------------------------------------
 
-BOOL SystemChildWindow::IsEraseBackgroundEnabled()
+sal_Bool SystemChildWindow::IsEraseBackgroundEnabled()
 {
     if ( mpWindowImpl->mpSysObj )
         return mpWindowImpl->mpSysObj->IsEraseBackgroundEnabled();
     else
-        return FALSE;
+        return sal_False;
 }
 
 // -----------------------------------------------------------------------

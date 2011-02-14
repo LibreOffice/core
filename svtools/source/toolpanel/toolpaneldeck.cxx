@@ -544,9 +544,9 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    Reference< XWindowPeer > ToolPanelDeck::GetComponentInterface( BOOL i_bCreate )
+    Reference< XWindowPeer > ToolPanelDeck::GetComponentInterface( sal_Bool i_bCreate )
     {
-        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( FALSE ) );
+        Reference< XWindowPeer > xWindowPeer( Control::GetComponentInterface( sal_False ) );
         if ( !xWindowPeer.is() && i_bCreate )
         {
             xWindowPeer.set( new ToolPanelDeckPeer( *this ) );

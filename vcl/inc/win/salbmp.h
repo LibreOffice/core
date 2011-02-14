@@ -48,16 +48,16 @@ private:
     Size                maSize;
     HGLOBAL             mhDIB;
     HBITMAP             mhDDB;
-    USHORT              mnBitCount;
+    sal_uInt16              mnBitCount;
 
 public:
 
     HGLOBAL             ImplGethDIB() const { return mhDIB; }
     HBITMAP             ImplGethDDB() const { return mhDDB; }
 
-    static HGLOBAL      ImplCreateDIB( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
+    static HGLOBAL      ImplCreateDIB( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
     static HANDLE       ImplCopyDIBOrDDB( HANDLE hHdl, bool bDIB );
-    static USHORT       ImplGetDIBColorCount( HGLOBAL hDIB );
+    static sal_uInt16       ImplGetDIBColorCount( HGLOBAL hDIB );
     static void         ImplDecodeRLEBuffer( const BYTE* pSrcBuf, BYTE* pDstBuf,
                                              const Size& rSizePixel, bool bRLE4 );
 
@@ -69,15 +69,15 @@ public:
 public:
 
     bool                        Create( HANDLE hBitmap, bool bDIB, bool bCopyHandle );
-    virtual bool                Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
+    virtual bool                Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
     virtual bool                Create( const SalBitmap& rSalBmpImpl );
     virtual bool                Create( const SalBitmap& rSalBmpImpl, SalGraphics* pGraphics );
-    virtual bool                Create( const SalBitmap& rSalBmpImpl, USHORT nNewBitCount );
+    virtual bool                Create( const SalBitmap& rSalBmpImpl, sal_uInt16 nNewBitCount );
 
     virtual void                Destroy();
 
     virtual Size                GetSize() const { return maSize; }
-    virtual USHORT              GetBitCount() const { return mnBitCount; }
+    virtual sal_uInt16              GetBitCount() const { return mnBitCount; }
 
     virtual BitmapBuffer*       AcquireBuffer( bool bReadOnly );
     virtual void                ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );

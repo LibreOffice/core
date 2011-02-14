@@ -78,10 +78,10 @@ public:
     bool                            mbSized:1;
     bool                            mbPresentation:1;
 
-    ULONG                           mnStyle;
+    sal_uLong                           mnStyle;
     unsigned int                    mnStyleMask;            // our style mask from NSWindow creation
 
-    ULONG                           mnLastEventTime;
+    sal_uLong                           mnLastEventTime;
     unsigned int                    mnLastModifierFlags;
     AquaSalMenu*                    mpMenu;
 
@@ -98,7 +98,7 @@ public:
 
     Rectangle                       maInvalidRect;
 
-    ULONG                           mnICOptions;
+    sal_uLong                           mnICOptions;
 
     boost::shared_ptr< Timer >      mpActivityTimer; // Timer to prevent system sleep during presentation
 public:
@@ -108,43 +108,43 @@ public:
 
         @throws std::runtime_error in case window creation fails
     */
-    AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle );
+    AquaSalFrame( SalFrame* pParent, sal_uLong salFrameStyle );
 
     virtual ~AquaSalFrame();
 
     virtual SalGraphics*        GetGraphics();
     virtual void                ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                PostEvent( void* pData );
+    virtual sal_Bool                PostEvent( void* pData );
     virtual void                SetTitle( const XubString& rTitle );
-    virtual void                SetIcon( USHORT nIcon );
+    virtual void                SetIcon( sal_uInt16 nIcon );
     virtual void                SetRepresentedURL( const rtl::OUString& );
     virtual void                SetMenu( SalMenu* pSalMenu );
     virtual void                DrawMenuBar();
-    virtual void                Show( BOOL bVisible, BOOL bNoActivate = FALSE );
-    virtual void                Enable( BOOL bEnable );
+    virtual void                Show( sal_Bool bVisible, sal_Bool bNoActivate = sal_False );
+    virtual void                Enable( sal_Bool bEnable );
     virtual void                SetMinClientSize( long nWidth, long nHeight );
     virtual void                SetMaxClientSize( long nWidth, long nHeight );
-    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, USHORT nFlags );
+    virtual void                SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags );
     virtual void                GetClientSize( long& rWidth, long& rHeight );
     virtual void                GetWorkArea( Rectangle& rRect );
     virtual SalFrame*           GetParent() const;
     virtual void                SetWindowState( const SalFrameState* pState );
-    virtual BOOL                GetWindowState( SalFrameState* pState );
-    virtual void                ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay );
-    virtual void                StartPresentation( BOOL bStart );
-    virtual void                SetAlwaysOnTop( BOOL bOnTop );
-    virtual void                ToTop( USHORT nFlags );
+    virtual sal_Bool                GetWindowState( SalFrameState* pState );
+    virtual void                ShowFullScreen( sal_Bool bFullScreen, sal_Int32 nDisplay );
+    virtual void                StartPresentation( sal_Bool bStart );
+    virtual void                SetAlwaysOnTop( sal_Bool bOnTop );
+    virtual void                ToTop( sal_uInt16 nFlags );
     virtual void                SetPointer( PointerStyle ePointerStyle );
-    virtual void                CaptureMouse( BOOL bMouse );
+    virtual void                CaptureMouse( sal_Bool bMouse );
     virtual void                SetPointerPos( long nX, long nY );
     virtual void                Flush( void );
     virtual void                Flush( const Rectangle& );
     virtual void                Sync();
     virtual void                SetInputContext( SalInputContext* pContext );
-    virtual void                EndExtTextInput( USHORT nFlags );
-    virtual String              GetKeyName( USHORT nKeyCode );
-    virtual String              GetSymbolKeyName( const XubString& rFontName, USHORT nKeyCode );
-    virtual BOOL                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
+    virtual void                EndExtTextInput( sal_uInt16 nFlags );
+    virtual String              GetKeyName( sal_uInt16 nKeyCode );
+    virtual String              GetSymbolKeyName( const XubString& rFontName, sal_uInt16 nKeyCode );
+    virtual sal_Bool                MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode );
     virtual LanguageType        GetInputLanguage();
     virtual SalBitmap*          SnapShot();
     virtual void                UpdateSettings( AllSettings& rSettings );
@@ -161,7 +161,7 @@ public:
     // set clip region to none (-> rectangular windows, normal state)
     virtual void ResetClipRegion();
     // start setting the clipregion consisting of nRects rectangles
-    virtual void BeginSetClipRegion( ULONG nRects );
+    virtual void BeginSetClipRegion( sal_uLong nRects );
     // add a rectangle to the clip region
     virtual void UnionClipRegion( long nX, long nY, long nWidth, long nHeight );
     // done setting up the clipregion

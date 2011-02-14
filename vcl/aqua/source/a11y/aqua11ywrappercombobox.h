@@ -42,7 +42,7 @@
 -(id)selectedTextRangeAttribute;
 -(id)visibleCharacterRangeAttribute;
 // Accessibility Protocol
--(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute;
 -(void)accessibilitySetValue:(id)value forAttribute:(NSString *)attribute;
 -(NSArray *)accessibilityAttributeNames;
 @end

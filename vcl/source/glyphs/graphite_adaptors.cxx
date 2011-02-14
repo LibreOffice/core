@@ -252,7 +252,7 @@ void GraphiteFontAdaptor::getFontMetrics(float * ascent_out, float * descent_out
 const void * GraphiteFontAdaptor::getTable(gr::fontTableId32 table_id, size_t * buffer_sz)
 {
     char tag_name[5] = {char(table_id >> 24), char(table_id >> 16), char(table_id >> 8), char(table_id), 0};
-    ULONG temp = *buffer_sz;
+    sal_uLong temp = *buffer_sz;
 
     const void * const tbl_buf = static_cast<FreetypeServerFont &>(mrFont).GetTable(tag_name, &temp);
     *buffer_sz = temp;

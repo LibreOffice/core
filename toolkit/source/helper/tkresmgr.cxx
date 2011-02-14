@@ -29,14 +29,21 @@
 #include "precompiled_toolkit.hxx"
 #include <toolkit/helper/tkresmgr.hxx>
 #include <tools/simplerm.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #ifndef  _TOOLS_RESMGR_HXX_
 #include <tools/resmgr.hxx>
 #endif
-
+#include <tools/diagnose_ex.h>
 
 #include <vcl/svapp.hxx>
 
-
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::XGraphicProvider;
+using namespace ::com::sun::star;
 // -----------------------------------------------------------------------------
 // TkResMgr
 // -----------------------------------------------------------------------------
@@ -98,3 +105,27 @@ Image TkResMgr::loadImage( sal_uInt16 nResId )
 }
 
 // -----------------------------------------------------------------------------
+Image TkResMgr::getImageFromURL( const ::rtl::OUString& i_rImageURL )
+{
+    if ( !i_rImageURL.getLength() )
+        return Image();
+
+    try
+    {
+        ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+        Reference< XGraphicProvider > xProvider;
+        if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+        {
+            ::comphelper::NamedValueCollection aMediaProperties;
+            aMediaProperties.put( "URL", i_rImageURL );
+            Reference< XGraphic > xGraphic = xProvider->queryGraphic( aMediaProperties.getPropertyValues() );
+            return Image( xGraphic );
+        }
+    }
+    catch( const uno::Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return Image();
+}
+

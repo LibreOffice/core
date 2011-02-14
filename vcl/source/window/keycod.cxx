@@ -39,7 +39,7 @@
 
 
 // =======================================================================
-static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
+static sal_uInt16 aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
 {
     0, 0, 0, 0,                                                    // KEYFUNC_DONTKNOW
     KEY_N | KEY_MOD1, 0, 0, 0,                                     // KEYFUNC_NEW
@@ -64,9 +64,9 @@ static USHORT aImplKeyFuncTab[(KEYFUNC_FRONT+1)*4] =
 
 // -----------------------------------------------------------------------
 
-void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& rCode3, USHORT& rCode4 )
+void ImplGetKeyCode( KeyFuncType eFunc, sal_uInt16& rCode1, sal_uInt16& rCode2, sal_uInt16& rCode3, sal_uInt16& rCode4 )
 {
-    USHORT nIndex = (USHORT)eFunc;
+    sal_uInt16 nIndex = (sal_uInt16)eFunc;
     nIndex *= 4;
     rCode1 = aImplKeyFuncTab[nIndex];
     rCode2 = aImplKeyFuncTab[nIndex+1];
@@ -78,7 +78,7 @@ void ImplGetKeyCode( KeyFuncType eFunc, USHORT& rCode1, USHORT& rCode2, USHORT& 
 
 KeyCode::KeyCode( KeyFuncType eFunction )
 {
-    USHORT nDummy;
+    sal_uInt16 nDummy;
     ImplGetKeyCode( eFunction, nCode, nDummy, nDummy, nDummy );
     eFunc = eFunction;
 }
@@ -94,18 +94,18 @@ KeyCode::KeyCode( const ResId& rResId )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        ULONG nKeyCode  = pResMgr->ReadLong();
-        ULONG nModifier = pResMgr->ReadLong();
-        ULONG nKeyFunc  = pResMgr->ReadLong();
+        sal_uLong nKeyCode  = pResMgr->ReadLong();
+        sal_uLong nModifier = pResMgr->ReadLong();
+        sal_uLong nKeyFunc  = pResMgr->ReadLong();
 
         eFunc = (KeyFuncType)nKeyFunc;
         if ( eFunc != KEYFUNC_DONTKNOW )
         {
-            USHORT nDummy;
+            sal_uInt16 nDummy;
             ImplGetKeyCode( eFunc, nCode, nDummy, nDummy, nDummy );
         }
         else
-            nCode = sal::static_int_cast<USHORT>(nKeyCode | nModifier);
+            nCode = sal::static_int_cast<sal_uInt16>(nKeyCode | nModifier);
     }
 }
 
@@ -134,15 +134,15 @@ KeyFuncType KeyCode::GetFunction() const
     if ( eFunc != KEYFUNC_DONTKNOW )
         return eFunc;
 
-    USHORT nCompCode = GetModifier() | GetCode();
+    sal_uInt16 nCompCode = GetModifier() | GetCode();
     if ( nCompCode )
     {
-        for ( USHORT i = (USHORT)KEYFUNC_NEW; i < (USHORT)KEYFUNC_FRONT; i++ )
+        for ( sal_uInt16 i = (sal_uInt16)KEYFUNC_NEW; i < (sal_uInt16)KEYFUNC_FRONT; i++ )
         {
-            USHORT nKeyCode1;
-            USHORT nKeyCode2;
-            USHORT nKeyCode3;
-                        USHORT nKeyCode4;
+            sal_uInt16 nKeyCode1;
+            sal_uInt16 nKeyCode2;
+            sal_uInt16 nKeyCode3;
+                        sal_uInt16 nKeyCode4;
             ImplGetKeyCode( (KeyFuncType)i, nKeyCode1, nKeyCode2, nKeyCode3, nKeyCode4 );
             if ( (nCompCode == nKeyCode1) || (nCompCode == nKeyCode2) || (nCompCode == nKeyCode3) || (nCompCode == nKeyCode4) )
                 return (KeyFuncType)i;

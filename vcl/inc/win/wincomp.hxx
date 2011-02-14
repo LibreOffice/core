@@ -128,17 +128,17 @@ inline DWORD GetWindowExStyle( HWND hWnd )
     return GetWindowLong( hWnd, GWL_EXSTYLE );
 }
 
-inline WIN_BOOL IsMinimized( HWND hWnd )
+inline BOOL IsMinimized( HWND hWnd )
 {
     return IsIconic( hWnd );
 }
 
-inline WIN_BOOL IsMaximized( HWND hWnd )
+inline BOOL IsMaximized( HWND hWnd )
 {
     return IsZoomed( hWnd );
 }
 
-inline void SetWindowFont( HWND hWnd, HFONT hFont, WIN_BOOL bRedraw )
+inline void SetWindowFont( HWND hWnd, HFONT hFont, BOOL bRedraw )
 {
     SendMessage( hWnd, WM_SETFONT, (WPARAM)hFont, MAKELPARAM((UINT)bRedraw,0) );
 }

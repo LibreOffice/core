@@ -85,7 +85,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
         // #i19065# Negative sizes have mirror semantics on
         // OutputDevice. BitmapEx and co. have no idea about that, so
         // perform that _before_ doing anything with aBitmapEx.
-        ULONG nMirrorFlags(BMP_MIRROR_NONE);
+        sal_uLong nMirrorFlags(BMP_MIRROR_NONE);
         if( aSize.Width() < 0 )
         {
             aSize.Width() *= -1;
@@ -260,7 +260,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
         if ( !i_pOutDevData || !i_pOutDevData->PlaySyncPageAct( m_rOuterFace, i ) )
         {
             const MetaAction*   pAction = aMtf.GetAction( i );
-            const USHORT        nType = pAction->GetType();
+            const sal_uInt16        nType = pAction->GetType();
 
             switch( nType )
             {
@@ -397,7 +397,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     if( rTransparenceGradient.GetStartColor() == rTransparenceGradient.GetEndColor() )
                     {
                         const Color aTransCol( rTransparenceGradient.GetStartColor() );
-                        const USHORT nTransPercent = aTransCol.GetLuminance() * 100 / 255;
+                        const sal_uInt16 nTransPercent = aTransCol.GetLuminance() * 100 / 255;
                         m_rOuterFace.BeginTransparencyGroup();
                         playMetafile( aTmpMtf, NULL, i_rContext, pDummyVDev );
                         m_rOuterFace.EndTransparencyGroup( Rectangle( rPos, rSize ), nTransPercent );
@@ -442,9 +442,9 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
 
-                                pVDev->EnableMapMode( FALSE );
+                                pVDev->EnableMapMode( sal_False );
                                 aPaint = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( TRUE );
+                                pVDev->EnableMapMode( sal_True );
 
                                 // create mask bitmap
                                 pVDev->SetLineColor( COL_BLACK );
@@ -455,15 +455,15 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                                 aTmpMtf.WindStart();
                                 aTmpMtf.Play( pVDev, aPoint, aDstSize );
                                 aTmpMtf.WindStart();
-                                pVDev->EnableMapMode( FALSE );
+                                pVDev->EnableMapMode( sal_False );
                                 aMask = pVDev->GetBitmap( aPoint, aDstSizePixel );
-                                pVDev->EnableMapMode( TRUE );
+                                pVDev->EnableMapMode( sal_True );
 
                                 // create alpha mask from gradient
                                 pVDev->SetDrawMode( DRAWMODE_GRAYGRADIENT );
                                 pVDev->DrawGradient( Rectangle( aPoint, aDstSize ), rTransparenceGradient );
                                 pVDev->SetDrawMode( DRAWMODE_DEFAULT );
-                                pVDev->EnableMapMode( FALSE );
+                                pVDev->EnableMapMode( sal_False );
                                 pVDev->DrawMask( aPoint, aDstSizePixel, aMask, Color( COL_WHITE ) );
                                 aAlpha = pVDev->GetBitmap( aPoint, aDstSizePixel );
                                 implWriteBitmapEx( rPos, rSize, BitmapEx( aPaint, aAlpha ), pDummyVDev, i_rContext );
@@ -525,7 +525,7 @@ void PDFWriterImpl::playMetafile( const GDIMetaFile& i_rMtf, vcl::PDFExtOutDevDa
                     }
                     else
                     {
-                        const BYTE* pData = pA->GetData();
+                        const sal_uInt8* pData = pA->GetData();
                         if ( pData )
                         {
                             SvMemoryStream  aMemStm( (void*)pData, pA->GetDataSize(), STREAM_READ );

@@ -1,3 +1,2 @@
 ti	toolkit	: LIBXSLT:libxslt vcl NULL
 ti toolkit\prj nmake - all ti_prj NULL
-ti toolkit\qa\unoapi nmake - all ti_qa_unoapi NULL

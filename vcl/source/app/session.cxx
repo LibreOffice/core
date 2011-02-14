@@ -151,7 +151,7 @@ void VCLSession::callSaveRequested( bool bShutdown, bool bCancelable )
         }
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->doSave( bShutdown, bCancelable );
     Application::AcquireSolarMutex( nAcquireCount );
@@ -179,7 +179,7 @@ void VCLSession::callInteractionGranted( bool bInteractionGranted )
         }
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->approveInteraction( bInteractionGranted );
 
@@ -197,7 +197,7 @@ void VCLSession::callShutdownCancelled()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
         it->m_xListener->shutdownCanceled();
     Application::AcquireSolarMutex( nAcquireCount );
@@ -214,7 +214,7 @@ void VCLSession::callQuit()
         m_bInteractionRequested = m_bInteractionDone = m_bInteractionGranted = false;
     }
 
-    ULONG nAcquireCount = Application::ReleaseSolarMutex();
+    sal_uLong nAcquireCount = Application::ReleaseSolarMutex();
     for( std::list< Listener >::const_iterator it = aListeners.begin(); it != aListeners.end(); ++it )
     {
         Reference< XSessionManagerListener2 > xListener2( it->m_xListener, UNO_QUERY );

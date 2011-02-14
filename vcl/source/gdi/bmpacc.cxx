@@ -40,7 +40,7 @@
 // - BitmapReadAccess -
 // --------------------
 
-BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, BOOL bModify ) :
+BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap, sal_Bool bModify ) :
             mpBuffer        ( NULL ),
             mpScanBuf       ( NULL ),
             mFncGetPixel    ( NULL ),
@@ -57,7 +57,7 @@ BitmapReadAccess::BitmapReadAccess( Bitmap& rBitmap ) :
             mpScanBuf       ( NULL ),
             mFncGetPixel    ( NULL ),
             mFncSetPixel    ( NULL ),
-            mbModify        ( FALSE )
+            mbModify        ( sal_False )
 {
     ImplCreate( rBitmap );
 }
@@ -157,9 +157,9 @@ void BitmapReadAccess::ImplDestroy()
 
 // ------------------------------------------------------------------
 
-BOOL BitmapReadAccess::ImplSetAccessPointers( ULONG nFormat )
+sal_Bool BitmapReadAccess::ImplSetAccessPointers( sal_uLong nFormat )
 {
-    BOOL bRet = TRUE;
+    sal_Bool bRet = sal_True;
 
     switch( nFormat )
     {
@@ -181,7 +181,7 @@ BOOL BitmapReadAccess::ImplSetAccessPointers( ULONG nFormat )
         CASE_FORMAT( _32BIT_TC_MASK )
 
         default:
-            bRet = FALSE;
+            bRet = sal_False;
         break;
     }
 
@@ -199,7 +199,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
         sal_uInt32 nBits;
         bool       bMsb;
 
-        const ULONG nScanlineFormat = GetScanlineFormat();
+        const sal_uLong nScanlineFormat = GetScanlineFormat();
         switch( nScanlineFormat )
         {
             case( BMP_FORMAT_1BIT_MSB_PAL ):
@@ -275,7 +275,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
                 else
                     nMask = static_cast<sal_uInt8>(0xffU >> (nLeftOverBits & 3UL));
 
-                BYTE* pLastBytes = (BYTE*)GetBuffer() + ( nScanSize - nBytes );
+                sal_uInt8* pLastBytes = (sal_uInt8*)GetBuffer() + ( nScanSize - nBytes );
                 for( sal_uInt32 i = 0; i < nHeight; i++, pLastBytes += nScanSize )
                 {
                     *pLastBytes &= nMask;
@@ -287,7 +287,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
         else if( nBits & 0x1f )
         {
             sal_uInt32  nMask = 0xffffffff << ( ( nScanSize << 3 ) - nBits );
-            BYTE*       pLast4Bytes = (BYTE*) GetBuffer() + ( nScanSize - 4 );
+            sal_uInt8*      pLast4Bytes = (sal_uInt8*) GetBuffer() + ( nScanSize - 4 );
 
 #ifdef OSL_LITENDIAN
             nMask = SWAPLONG( nMask );
@@ -307,7 +307,7 @@ void BitmapReadAccess::Flush()
 
 // ------------------------------------------------------------------
 
-void BitmapReadAccess::ReAccess( BOOL bModify )
+void BitmapReadAccess::ReAccess( sal_Bool bModify )
 {
     const ImpBitmap* pImpBmp = maBitmap.ImplGetImpBitmap();
 
@@ -323,7 +323,7 @@ void BitmapReadAccess::ReAccess( BOOL bModify )
 
 // ------------------------------------------------------------------
 
-USHORT BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
+sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) const
 {
     return( HasPalette() ? mpBuffer->maPalette.GetBestIndex( rBitmapColor ) : 0 );
 }
@@ -333,7 +333,7 @@ USHORT BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColor ) 
 // ---------------------
 
 BitmapWriteAccess::BitmapWriteAccess( Bitmap& rBitmap ) :
-            BitmapReadAccess( rBitmap, TRUE ),
+            BitmapReadAccess( rBitmap, sal_True ),
             mpLineColor     ( NULL ),
             mpFillColor     ( NULL )
 {
@@ -369,16 +369,16 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
 // ------------------------------------------------------------------
 
 void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
-                                      ULONG nSrcScanlineFormat, ULONG nSrcScanlineSize )
+                                      sal_uLong nSrcScanlineFormat, sal_uLong nSrcScanlineSize )
 {
-    const ULONG nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
+    const sal_uLong nFormat = BMP_SCANLINE_FORMAT( nSrcScanlineFormat );
 
     DBG_ASSERT( ( nY >= 0 ) && ( nY < mpBuffer->mnHeight ), "y-coordinate in destination out of range!" );
     DBG_ASSERT( ( HasPalette() && nFormat <= BMP_FORMAT_8BIT_PAL ) ||
                 ( !HasPalette() && nFormat > BMP_FORMAT_8BIT_PAL ),
                 "No copying possible between palette and non palette scanlines!" );
 
-    const ULONG nCount = Min( GetScanlineSize(), nSrcScanlineSize );
+    const sal_uLong nCount = Min( GetScanlineSize(), nSrcScanlineSize );
 
     if( nCount )
     {
@@ -440,7 +440,7 @@ void BitmapWriteAccess::CopyBuffer( const BitmapReadAccess& rReadAcc )
         ( GetScanlineSize() == rReadAcc.GetScanlineSize() ) )
     {
         const long  nHeight = Min( mpBuffer->mnHeight, rReadAcc.Height() );
-        const ULONG nCount = nHeight * mpBuffer->mnScanlineSize;
+        const sal_uLong nCount = nHeight * mpBuffer->mnScanlineSize;
 
         memcpy( mpBuffer->mpBits, rReadAcc.GetBuffer(), nCount );
     }

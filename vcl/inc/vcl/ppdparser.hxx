@@ -159,7 +159,7 @@ private:
     // some basic attributes
     bool                                        m_bColorDevice;
     bool                                        m_bType42Capable;
-    ULONG                                       m_nLanguageLevel;
+    sal_uLong                                       m_nLanguageLevel;
     rtl_TextEncoding                            m_aFileEncoding;
 
 
@@ -221,7 +221,7 @@ public:
 
     bool            isColorDevice() const { return m_bColorDevice; }
     bool            isType42Capable() const { return m_bType42Capable; }
-    ULONG           getLanguageLevel() const { return m_nLanguageLevel; }
+    sal_uLong           getLanguageLevel() const { return m_nLanguageLevel; }
 
     String          getDefaultPaperDimension() const;
     void            getDefaultPaperDimension( int& rWidth, int& rHeight ) const
@@ -329,8 +329,8 @@ public:
     void getUnconstrainedValues( const PPDKey*, ::std::list< const PPDValue* >& rValues );
 
     // for printer setup
-    void*   getStreamableBuffer( ULONG& rBytes ) const;
-    void    rebuildFromStreamBuffer( void* pBuffer, ULONG nBytes );
+    void*   getStreamableBuffer( sal_uLong& rBytes ) const;
+    void    rebuildFromStreamBuffer( void* pBuffer, sal_uLong nBytes );
 
     // convenience
     int getRenderResolution() const;

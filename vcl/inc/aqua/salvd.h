@@ -79,12 +79,12 @@ private:
     void Destroy();
 
 public:
-    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, USHORT nBitCount, const SystemGraphicsData *pData );
+    AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual ~AquaSalVirtualDevice();
 
     virtual SalGraphics*            GetGraphics();
     virtual void                    ReleaseGraphics( SalGraphics* pGraphics );
-    virtual BOOL                    SetSize( long nNewDX, long nNewDY );
+    virtual sal_Bool                    SetSize( long nNewDX, long nNewDY );
     virtual void                       GetSize( long& rWidth, long& rHeight );
 };
 

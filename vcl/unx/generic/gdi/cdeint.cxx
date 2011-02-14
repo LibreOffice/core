@@ -234,9 +234,9 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         {
             // calculate Checked color
             Color   aColor2 = aStyleSettings.GetLightColor();
-            BYTE    nRed    = (BYTE)(((USHORT)aColors[1].GetRed()   + (USHORT)aColor2.GetRed())/2);
-            BYTE    nGreen  = (BYTE)(((USHORT)aColors[1].GetGreen() + (USHORT)aColor2.GetGreen())/2);
-            BYTE    nBlue   = (BYTE)(((USHORT)aColors[1].GetBlue()  + (USHORT)aColor2.GetBlue())/2);
+            sal_uInt8    nRed    = (sal_uInt8)(((sal_uInt16)aColors[1].GetRed()   + (sal_uInt16)aColor2.GetRed())/2);
+            sal_uInt8    nGreen  = (sal_uInt8)(((sal_uInt16)aColors[1].GetGreen() + (sal_uInt16)aColor2.GetGreen())/2);
+            sal_uInt8    nBlue   = (sal_uInt8)(((sal_uInt16)aColors[1].GetBlue()  + (sal_uInt16)aColor2.GetBlue())/2);
             aStyleSettings.SetCheckedColor( Color( nRed, nGreen, nBlue ) );
         }
     }

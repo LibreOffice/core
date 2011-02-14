@@ -131,7 +131,7 @@ inline SalData *GetAppSalData() { return (SalData*)ImplGetAppSVData()->mpSalData
 
 // --- Prototypes ---
 
-BOOL ImplSalYieldMutexTryToAcquire();
+sal_Bool ImplSalYieldMutexTryToAcquire();
 void ImplSalYieldMutexAcquire();
 void ImplSalYieldMutexRelease();
 

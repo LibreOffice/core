@@ -56,7 +56,7 @@ void BitmapWriteAccess::SetLineColor( const Color& rColor )
     if( rColor.GetTransparency() == 255 )
         mpLineColor = NULL;
     else
-        mpLineColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
+        mpLineColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------
@@ -90,7 +90,7 @@ void BitmapWriteAccess::SetFillColor( const Color& rColor )
     if( rColor.GetTransparency() == 255 )
         mpFillColor = NULL;
     else
-        mpFillColor = ( HasPalette() ? new BitmapColor(  (BYTE) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
+        mpFillColor = ( HasPalette() ? new BitmapColor(  (sal_uInt8) GetBestPaletteIndex( rColor ) ) : new BitmapColor( rColor ) );
 }
 
 // ------------------------------------------------------------------
@@ -115,7 +115,7 @@ void BitmapWriteAccess::Erase( const Color& rColor )
     // TODO: provide and use Erase( BitmapColor& method)
     BitmapColor aColor = rColor;
     if( HasPalette() )
-        aColor = BitmapColor( (BYTE)GetBestPaletteIndex( rColor) );
+        aColor = BitmapColor( (sal_uInt8)GetBestPaletteIndex( rColor) );
     // try fast bitmap method first
     if( ImplFastEraseBitmap( *mpBuffer, aColor ) )
         return;
@@ -207,7 +207,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 const long  nDYX = ( nDY - nDX ) << 1;
                 const long  nDY2 = nDY << 1;
                 long        nD = nDY2 - nDX;
-                BOOL        bPos = nY1 < nY2;
+                sal_Bool        bPos = nY1 < nY2;
 
                 for ( nX = nX1, nY = nY1; nX <= nX2; nX++ )
                 {
@@ -246,7 +246,7 @@ void BitmapWriteAccess::DrawLine( const Point& rStart, const Point& rEnd )
                 const long  nDYX = ( nDX - nDY ) << 1;
                 const long  nDY2 = nDX << 1;
                 long        nD = nDY2 - nDY;
-                BOOL        bPos = nX1 < nX2;
+                sal_Bool        bPos = nX1 < nX2;
 
                 for ( nX = nX1, nY = nY1; nY <= nY2; nY++ )
                 {
@@ -315,7 +315,7 @@ void BitmapWriteAccess::DrawRect( const Rectangle& rRect )
 
 void BitmapWriteAccess::FillPolygon( const Polygon& rPoly )
 {
-    const USHORT nSize = rPoly.GetSize();
+    const sal_uInt16 nSize = rPoly.GetSize();
 
     if( nSize && mpFillColor )
     {
@@ -348,9 +348,9 @@ void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
 
     if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
     {
-        const USHORT nSize = rPoly.GetSize();
+        const sal_uInt16 nSize = rPoly.GetSize();
 
-        for( USHORT i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+        for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
             DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
 
         if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )
@@ -362,7 +362,7 @@ void BitmapWriteAccess::DrawPolygon( const Polygon& rPoly )
 
 void BitmapWriteAccess::FillPolyPolygon( const PolyPolygon& rPolyPoly )
 {
-    const USHORT nCount = rPolyPoly.Count();
+    const sal_uInt16 nCount = rPolyPoly.Count();
 
     if( nCount && mpFillColor )
     {
@@ -395,14 +395,14 @@ void BitmapWriteAccess::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
     if( mpLineColor && ( !mpFillColor || ( *mpFillColor != *mpLineColor ) ) )
     {
-        for( USHORT n = 0, nCount = rPolyPoly.Count(); n < nCount; )
+        for( sal_uInt16 n = 0, nCount = rPolyPoly.Count(); n < nCount; )
         {
             const Polygon&  rPoly = rPolyPoly[ n++ ];
-            const USHORT    nSize = rPoly.GetSize();
+            const sal_uInt16    nSize = rPoly.GetSize();
 
             if( nSize )
             {
-                for( USHORT i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
+                for( sal_uInt16 i = 0, nSize1 = nSize - 1; i < nSize1; i++ )
                     DrawLine( rPoly[ i ], rPoly[ i + 1 ] );
 
                 if( rPoly[ nSize - 1 ] != rPoly[ 0 ] )

@@ -87,8 +87,8 @@ public:
     inline Vector2D&    operator/=(double t) { mfX /= t; mfY /= t; return *this; }
     inline Vector2D     operator/(double t) const { Vector2D aNew(*this); aNew /= t; return aNew; }
 
-    inline BOOL         operator==( const Vector2D& rVec ) const { return( mfX == rVec.mfX && mfY == rVec.mfY ); }
-    inline BOOL         operator!=( const Vector2D& rVec ) const { return !( *this == rVec ); }
+    inline sal_Bool         operator==( const Vector2D& rVec ) const { return( mfX == rVec.mfX && mfY == rVec.mfY ); }
+    inline sal_Bool         operator!=( const Vector2D& rVec ) const { return !( *this == rVec ); }
 
     inline Vector2D&    operator=( const Vector2D& rVec ) { mfX = rVec.mfX, mfY = rVec.mfY; return *this; }
     inline Vector2D&    operator=( const Pair& rPair ) { mfX = rPair.nA, mfY = rPair.nB; return *this; }
@@ -97,11 +97,11 @@ public:
     inline Vector2D&    operator*=( const Pair& rPair ) { mfX *= rPair.nA, mfY *= rPair.nB; return *this; }
     inline Vector2D&    operator/=( const Pair& rPair ) { mfX /= rPair.nA, mfY /= rPair.nB; return *this; }
 
-    inline BOOL         operator==( const Pair& rPair ) const { return( mfX == rPair.nA && mfY == rPair.nB ); }
-    inline BOOL         operator!=( const Pair& rPair ) const { return !( *this == rPair ); }
+    inline sal_Bool         operator==( const Pair& rPair ) const { return( mfX == rPair.nA && mfY == rPair.nB ); }
+    inline sal_Bool         operator!=( const Pair& rPair ) const { return !( *this == rPair ); }
 
-    inline BOOL         IsPositive( Vector2D& rVec ) const { return( ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0 ); }
-    inline BOOL         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
+    inline sal_Bool         IsPositive( Vector2D& rVec ) const { return( ( mfX * rVec.mfY - mfY * rVec.mfX ) >= 0.0 ); }
+    inline sal_Bool         IsNegative( Vector2D& rVec ) const { return !IsPositive( rVec ); }
 };
 
 // -----------------------------------------------------------------------------

@@ -45,7 +45,7 @@
     return [ NSNumber numberWithInt: 0 ];
 }
 
--(MacOSBOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
+-(BOOL)accessibilityIsAttributeSettable:(NSString *)attribute {
     if ( [ attribute isEqualToString: NSAccessibilityValueAttribute ] ) {
         return NO;
     }

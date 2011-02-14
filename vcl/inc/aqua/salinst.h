@@ -48,7 +48,7 @@ class Image;
 
 class SalYieldMutex : public vos::OMutex
 {
-    ULONG                                       mnCount;
+    sal_uLong                                       mnCount;
     vos::OThread::TThreadIdentifier             mnThreadId;
 
 public:
@@ -56,7 +56,7 @@ public:
     virtual void                                acquire();
     virtual void                                release();
     virtual sal_Bool                            tryToAcquire();
-    ULONG                                       GetAcquireCount() const { return mnCount; }
+    sal_uLong                                       GetAcquireCount() const { return mnCount; }
     vos::OThread::TThreadIdentifier             GetThreadId() const { return mnThreadId; }
 };
 
@@ -82,9 +82,9 @@ class AquaSalInstance : public SalInstance
     {
         AquaSalFrame*   mpFrame;
         void*           mpData;
-        USHORT          mnType;
+        sal_uInt16          mnType;
 
-        SalUserEvent( AquaSalFrame* pFrame, void* pData, USHORT nType ) :
+        SalUserEvent( AquaSalFrame* pFrame, void* pData, sal_uInt16 nType ) :
             mpFrame( pFrame ), mpData( pData ), mnType( nType )
         {}
     };
@@ -108,14 +108,14 @@ public:
 
     virtual SalSystem*      CreateSystem();
     virtual void            DestroySystem(SalSystem*);
-    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
-    virtual SalFrame*       CreateFrame( SalFrame* pParent, ULONG nStyle );
+    virtual SalFrame*       CreateChildFrame( SystemParentData* pParent, sal_uLong nStyle );
+    virtual SalFrame*       CreateFrame( SalFrame* pParent, sal_uLong nStyle );
     virtual void            DestroyFrame( SalFrame* pFrame );
-    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
+    virtual SalObject*      CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow = sal_True );
     virtual void            DestroyObject( SalObject* pObject );
     virtual SalVirtualDevice*   CreateVirtualDevice( SalGraphics* pGraphics,
                                                      long nDX, long nDY,
-                                                     USHORT nBitCount, const SystemGraphicsData *pData );
+                                                     sal_uInt16 nBitCount, const SystemGraphicsData *pData );
     virtual void            DestroyVirtualDevice( SalVirtualDevice* pDevice );
 
     virtual SalInfoPrinter* CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
@@ -132,12 +132,12 @@ public:
     virtual SalSystem*          CreateSalSystem();
     virtual SalBitmap*          CreateSalBitmap();
     virtual vos::IMutex*        GetYieldMutex();
-    virtual ULONG               ReleaseYieldMutex();
-    virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual sal_uLong               ReleaseYieldMutex();
+    virtual void                AcquireYieldMutex( sal_uLong nCount );
     virtual bool                CheckYieldMutex();
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
-    virtual bool                AnyInput( USHORT nType );
-    virtual SalMenu*            CreateMenu( BOOL bMenuBar, Menu* pVCLMenu );
+    virtual bool                AnyInput( sal_uInt16 nType );
+    virtual SalMenu*            CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu );
     virtual void                DestroyMenu( SalMenu* );
     virtual SalMenuItem*        CreateMenuItem( const SalItemParams* pItemData );
     virtual void                DestroyMenuItem( SalMenuItem* );
@@ -164,7 +164,7 @@ public:
  public:
     friend class AquaSalFrame;
 
-    void PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData );
+    void PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData );
     void delayedSettingsChanged( bool bInvalidate );
 
     bool isNSAppThread() const;
@@ -185,7 +185,7 @@ public:
 // helper class: inverted solar guard
 class YieldMutexReleaser
 {
-    ULONG mnCount;
+    sal_uLong mnCount;
     public:
     YieldMutexReleaser();
     ~YieldMutexReleaser();

@@ -128,7 +128,7 @@ private:
     FontAttrMap     aFontAttributes;
     rtl::OUString   aCacheFileName;
     String          aBaseURL;
-    BOOL            bModified;
+    sal_Bool            bModified;
 
 protected:
     String  OptimizeURL( const String& rURL ) const;
@@ -646,7 +646,7 @@ static CharSet ImplCharSetToSal( BYTE nCharSet )
 
     if ( nCharSet == OEM_CHARSET )
     {
-        UINT nCP = (USHORT)GetOEMCP();
+        UINT nCP = (sal_uInt16)GetOEMCP();
         switch ( nCP )
         {
             // It is unclear why these two (undefined?) code page numbers are
@@ -1095,7 +1095,7 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 // =======================================================================
 
 ImplWinFontData::ImplWinFontData( const ImplDevFontAttributes& rDFS,
-    int nHeight, WIN_BYTE eWinCharSet, WIN_BYTE nPitchAndFamily )
+    int nHeight, BYTE eWinCharSet, BYTE nPitchAndFamily )
 :   ImplFontData( rDFS, 0 ),
     meWinCharSet( eWinCharSet ),
     mnPitchAndFamily( nPitchAndFamily ),
@@ -1609,7 +1609,7 @@ HFONT WinSalGraphics::ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFont
     return hNewFont;
 }
 
-USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
+sal_uInt16 WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     // return early if there is no new font
     if( !pFont )
@@ -1796,12 +1796,12 @@ static void ImplGetAllFontCharSets( WinSalGraphics* pData )
 
 static void ImplAddKerningPairs( WinSalGraphics* pData )
 {
-    ULONG nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
+    sal_uLong nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
     if ( !nPairs )
         return;
 
     CHARSETINFO aInfo;
-    if ( !TranslateCharsetInfo( (DWORD*)(ULONG)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
+    if ( !TranslateCharsetInfo( (DWORD*)(sal_uLong)GetTextCharset( pData->mhDC ), &aInfo, TCI_SRCCHARSET ) )
         return;
 
     if ( !pData->mpFontKernPairs )
@@ -1816,15 +1816,15 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
     }
 
     UINT            nCP = aInfo.ciACP;
-    ULONG           nOldPairs = pData->mnFontKernPairCount;
+    sal_uLong           nOldPairs = pData->mnFontKernPairCount;
     KERNINGPAIR*    pTempPair = pData->mpFontKernPairs+pData->mnFontKernPairCount;
     nPairs = ::GetKerningPairsA( pData->mhDC, nPairs, pTempPair );
-    for ( ULONG i = 0; i < nPairs; i++ )
+    for ( sal_uLong i = 0; i < nPairs; i++ )
     {
         unsigned char   aBuf[2];
         wchar_t         nChar;
         int             nLen;
-        BOOL            bAdd = TRUE;
+        sal_Bool            bAdd = TRUE;
 
         // None-ASCII?, then we must convert the char
         if ( (pTempPair->wFirst > 125) || (pTempPair->wFirst == 92) )
@@ -1868,7 +1868,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
         // TODO: get rid of linear search!
         KERNINGPAIR* pTempPair2 = pData->mpFontKernPairs;
-        for ( ULONG j = 0; j < nOldPairs; j++ )
+        for ( sal_uLong j = 0; j < nOldPairs; j++ )
         {
             if ( (pTempPair2->wFirst == pTempPair->wFirst) &&
                  (pTempPair2->wSecond == pTempPair->wSecond) )
@@ -1893,7 +1893,7 @@ static void ImplAddKerningPairs( WinSalGraphics* pData )
 
 // -----------------------------------------------------------------------
 
-ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
+sal_uLong WinSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData* pKernPairs )
 {
     DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
                 "WinSalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
@@ -2314,8 +2314,8 @@ bool WinSalGraphics::AddTempDevFont( ImplDevFontList* pFontList,
     */
 
     ImplWinFontData* pFontData = new ImplWinFontData( aDFA, 0,
-        sal::static_int_cast<WIN_BYTE>(nPreferedCharSet),
-        sal::static_int_cast<WIN_BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
+        sal::static_int_cast<BYTE>(nPreferedCharSet),
+        sal::static_int_cast<BYTE>(TMPF_VECTOR|TMPF_TRUETYPE) );
     pFontData->SetFontId( reinterpret_cast<sal_IntPtr>(pFontData) );
     pFontList->Add( pFontData );
     return true;
@@ -2426,7 +2426,7 @@ void WinSalGraphics::GetDevFontSubstList( OutputDevice* )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
+sal_Bool WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 {
     HDC hDC = mhDC;
 
@@ -2458,7 +2458,7 @@ BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 
 // -----------------------------------------------------------------------
 
-BOOL WinSalGraphics::GetGlyphOutline( long nIndex,
+sal_Bool WinSalGraphics::GetGlyphOutline( long nIndex,
     ::basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
     rB2DPolyPoly.clear();
@@ -2700,7 +2700,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
     return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
-BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
@@ -2797,7 +2797,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // subset TTF-glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphCount;
-    USHORT    aShortIDs[ 256 ];
+    sal_uInt16    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
     int nNotDef=-1, i;
@@ -2817,7 +2817,7 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                 nGlyphIdx = ::MapChar( aSftTTF.get(), cChar, bVertical );
             }
         }
-        aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
+        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
         if( !nGlyphIdx )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
@@ -2888,7 +2888,7 @@ const void* WinSalGraphics::GetEmbedFontData( const ImplFontData* pFont,
         nFNLen--;
     if( nFNLen == 0 )
         *pDataLen = 0;
-    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<USHORT>(nFNLen) );
+    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<sal_uInt16>(nFNLen) );
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),

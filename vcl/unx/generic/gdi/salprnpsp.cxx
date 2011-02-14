@@ -213,7 +213,7 @@ static void copyJobDataToJobSetup( ImplJobSetup* pJobSetup, JobData& rData )
     if( rData.getStreamBuffer( pBuffer, nBytes ) )
     {
         pJobSetup->mnDriverDataLen = nBytes;
-        pJobSetup->mpDriverData = (BYTE*)pBuffer;
+        pJobSetup->mpDriverData = (sal_uInt8*)pBuffer;
     }
     else
     {
@@ -588,15 +588,15 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
+sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 {
     if( ! pFrame || ! pJobSetup )
-        return FALSE;
+        return sal_False;
 
     getPaLib();
 
     if( ! pSetupFunction )
-        return FALSE;
+        return sal_False;
 
     PrinterInfoManager& rManager = PrinterInfoManager::get();
 
@@ -616,14 +616,14 @@ BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
         void* pBuffer = NULL;
         aInfo.getStreamBuffer( pBuffer, nBytes );
         pJobSetup->mnDriverDataLen  = nBytes;
-        pJobSetup->mpDriverData     = (BYTE*)pBuffer;
+        pJobSetup->mpDriverData     = (sal_uInt8*)pBuffer;
 
         // copy everything to job setup
         copyJobDataToJobSetup( pJobSetup, aInfo );
         JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
-        return TRUE;
+        return sal_True;
     }
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -633,7 +633,7 @@ BOOL PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 // data should be merged into the driver data
 // If pJobSetup->mpDriverData IS NULL, then the driver defaults
 // should be merged into the independent data
-BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
+sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
@@ -652,7 +652,7 @@ BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 
     copyJobDataToJobSetup( pJobSetup, m_aJobData );
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -661,8 +661,8 @@ BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // and sets the new independ data in pJobSetup
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
-BOOL PspSalInfoPrinter::SetData(
-    ULONG nSetDataFlags,
+sal_Bool PspSalInfoPrinter::SetData(
+    sal_uLong nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
     JobData aData;
@@ -711,7 +711,7 @@ BOOL PspSalInfoPrinter::SetData(
             }
 
             if( ! ( pKey && pValue && aData.m_aContext.setValue( pKey, pValue, false ) == pValue ) )
-                return FALSE;
+                return sal_False;
         }
 
         // merge paperbin if necessary
@@ -771,10 +771,10 @@ BOOL PspSalInfoPrinter::SetData(
 
         m_aJobData = aData;
         copyJobDataToJobSetup( pJobSetup, aData );
-        return TRUE;
+        return sal_True;
     }
 
-    return FALSE;
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -823,7 +823,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
+sal_uLong PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
         return 0;
@@ -837,7 +837,7 @@ ULONG PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 
 // -----------------------------------------------------------------------
 
-String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG nPaperBin )
+String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, sal_uLong nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -846,7 +846,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG 
     if( aData.m_pParser )
     {
         const PPDKey* pKey = aData.m_pParser ? aData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "InputSlot" ) ) ): NULL;
-        if( ! pKey || nPaperBin >= (ULONG)pKey->countValues() )
+        if( ! pKey || nPaperBin >= (sal_uLong)pKey->countValues() )
             aRet = aData.m_pParser->getDefaultInputSlot();
         else
         {
@@ -861,7 +861,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG 
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT nType )
+sal_uLong PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, sal_uInt16 nType )
 {
     switch( nType )
     {
@@ -955,11 +955,11 @@ static String getTmpName()
     return aSys;
 }
 
-BOOL PspSalPrinter::StartJob(
+sal_Bool PspSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
-    ULONG nCopies,
+    sal_uLong nCopies,
     bool bCollate,
     bool bDirect,
     ImplJobSetup* pJobSetup )
@@ -1035,16 +1035,16 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
-    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? TRUE : FALSE;
+    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::EndJob()
+sal_Bool PspSalPrinter::EndJob()
 {
-    BOOL bSuccess = FALSE;
+    sal_Bool bSuccess = sal_False;
     if( m_bIsPDFWriterJob )
-        bSuccess = TRUE;
+        bSuccess = sal_True;
     else
     {
         bSuccess = m_aPrintJob.EndJob();
@@ -1072,16 +1072,16 @@ BOOL PspSalPrinter::EndJob()
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::AbortJob()
+sal_Bool PspSalPrinter::AbortJob()
 {
-    BOOL bAbort = m_aPrintJob.AbortJob() ? TRUE : FALSE;
+    sal_Bool bAbort = m_aPrintJob.AbortJob() ? sal_True : sal_False;
     vcl_sal::PrinterUpdate::jobEnded();
     return bAbort;
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
+SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, sal_Bool )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
@@ -1102,16 +1102,16 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::EndPage()
+sal_Bool PspSalPrinter::EndPage()
 {
     sal_Bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
-    return bResult ? TRUE : FALSE;
+    return bResult ? sal_True : sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalPrinter::GetErrorCode()
+sal_uLong PspSalPrinter::GetErrorCode()
 {
     return 0;
 }
@@ -1121,10 +1121,10 @@ ULONG PspSalPrinter::GetErrorCode()
 struct PDFNewJobParameters
 {
     Size        maPageSize;
-    USHORT      mnPaperBin;
+    sal_uInt16      mnPaperBin;
 
     PDFNewJobParameters( const Size& i_rSize = Size(),
-                         USHORT i_nPaperBin = 0xffff )
+                         sal_uInt16 i_nPaperBin = 0xffff )
     : maPageSize( i_rSize ), mnPaperBin( i_nPaperBin ) {}
 
     bool operator!=(const PDFNewJobParameters& rComp ) const
@@ -1152,7 +1152,7 @@ struct PDFPrintFile
     , maParameters( i_rNewParameters ) {}
 };
 
-BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobName, const String& i_rAppName,
+sal_Bool PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobName, const String& i_rAppName,
                               ImplJobSetup* i_pSetupData, vcl::PrinterController& i_rController )
 {
     OSL_TRACE( "StartJob with controller: pFilename = %s", i_pFileName ? rtl::OUStringToOString( *i_pFileName, RTL_TEXTENCODING_UTF8 ).getStr() : "<nil>" );
@@ -1376,7 +1376,7 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
         }
     }
 
-    return TRUE;
+    return sal_True;
 }
 
 

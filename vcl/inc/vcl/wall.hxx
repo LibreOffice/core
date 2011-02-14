@@ -89,7 +89,7 @@ class VCL_DLLPUBLIC Wallpaper
 private:
     ImplWallpaper*  mpImplWallpaper;
 
-    SAL_DLLPRIVATE void           ImplMakeUnique( BOOL bReleaseCache = TRUE );
+    SAL_DLLPRIVATE void           ImplMakeUnique( sal_Bool bReleaseCache = sal_True );
     SAL_DLLPRIVATE Gradient       ImplGetApplicationGradient() const;
 
 //#if 0 // _SOLAR__PRIVATE
@@ -114,26 +114,26 @@ public:
     void            SetBitmap( const BitmapEx& rBitmap );
     void            SetBitmap();
     BitmapEx        GetBitmap() const;
-    BOOL            IsBitmap() const;
+    sal_Bool            IsBitmap() const;
 
     void            SetGradient( const Gradient& rGradient );
     void            SetGradient();
     Gradient        GetGradient() const;
-    BOOL            IsGradient() const;
+    sal_Bool            IsGradient() const;
 
     void            SetRect( const Rectangle& rRect );
     void            SetRect();
     Rectangle       GetRect() const;
-    BOOL            IsRect() const;
+    sal_Bool            IsRect() const;
 
-    BOOL            IsFixed() const;
-    BOOL            IsScrollable() const;
+    sal_Bool            IsFixed() const;
+    sal_Bool            IsScrollable() const;
 
     Wallpaper&      operator=( const Wallpaper& rWallpaper );
-    BOOL            operator==( const Wallpaper& rWallpaper ) const;
-    BOOL            operator!=( const Wallpaper& rWallpaper ) const
+    sal_Bool            operator==( const Wallpaper& rWallpaper ) const;
+    sal_Bool            operator!=( const Wallpaper& rWallpaper ) const
                         { return !(Wallpaper::operator==( rWallpaper )); }
-    BOOL            IsSameInstance( const Wallpaper& rWallpaper ) const
+    sal_Bool            IsSameInstance( const Wallpaper& rWallpaper ) const
                         { return (mpImplWallpaper == rWallpaper.mpImplWallpaper); }
 
     friend VCL_DLLPUBLIC SvStream& operator>>( SvStream& rIStm, Wallpaper& rWallpaper );

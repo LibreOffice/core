@@ -140,7 +140,7 @@ void KDEXLib::Init()
             "http://artax.karlin.mff.cuni.cz/~kendy" );
 
     m_nFakeCmdLineArgs = 1;
-    USHORT nIdx;
+    sal_uInt16 nIdx;
     vos::OExtCommandLine aCommandLine;
     int nParams = aCommandLine.getCommandArgCount();
     rtl::OString aDisplay;

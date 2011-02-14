@@ -60,7 +60,7 @@
 
 using namespace vcl;
 
-typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
+//typedef unsigned char Boolean; // copied from MacTypes.h, should be properly included
 typedef std::vector<unsigned char> ByteVector;
 
 
@@ -455,9 +455,9 @@ void AquaSalGraphics::copyResolution( AquaSalGraphics& rGraphics )
 
 // -----------------------------------------------------------------------
 
-USHORT AquaSalGraphics::GetBitCount()
+sal_uInt16 AquaSalGraphics::GetBitCount()
 {
-    USHORT nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
+    sal_uInt16 nBits = mnBitmapDepth ? mnBitmapDepth : 32;//24;
     return nBits;
 }
 
@@ -564,7 +564,7 @@ void AquaSalGraphics::ResetClipRegion()
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::BeginSetClipRegion( ULONG nRectCount )
+void AquaSalGraphics::BeginSetClipRegion( sal_uLong nRectCount )
 {
     // release old clip path
     if( mxClipPath )
@@ -576,16 +576,16 @@ void AquaSalGraphics::BeginSetClipRegion( ULONG nRectCount )
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
+sal_Bool AquaSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
     if( (nWidth <= 0) || (nHeight <= 0) )
-        return TRUE;
+        return sal_True;
 
     if( !mxClipPath )
         mxClipPath = CGPathCreateMutable();
     const CGRect aClipRect = {{nX,nY},{nWidth,nHeight}};
     CGPathAddRect( mxClipPath, NULL, aClipRect );
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -749,13 +749,13 @@ void AquaSalGraphics::drawRect( long nX, long nY, long nWidth, long nHeight )
 
 // -----------------------------------------------------------------------
 
-static void getBoundRect( ULONG nPoints, const SalPoint *pPtAry, long &rX, long& rY, long& rWidth, long& rHeight )
+static void getBoundRect( sal_uLong nPoints, const SalPoint *pPtAry, long &rX, long& rY, long& rWidth, long& rHeight )
 {
     long nX1 = pPtAry->mnX;
     long nX2 = nX1;
     long nY1 = pPtAry->mnY;
     long nY2 = nY1;
-    for( ULONG n = 1; n < nPoints; n++ )
+    for( sal_uLong n = 1; n < nPoints; n++ )
     {
         if( pPtAry[n].mnX < nX1 )
             nX1 = pPtAry[n].mnX;
@@ -779,7 +779,7 @@ static inline void alignLinePoint( const SalPoint* i_pIn, float& o_fX, float& o_
     o_fY = static_cast<float>(i_pIn->mnY ) + 0.5;
 }
 
-void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+void AquaSalGraphics::drawPolyLine( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     if( nPoints < 1 )
         return;
@@ -795,7 +795,7 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
     alignLinePoint( pPtAry, fX, fY );
     CGContextMoveToPoint( mrContext, fX, fY );
     pPtAry++;
-    for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+    for( sal_uLong nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
     {
         alignLinePoint( pPtAry, fX, fY );
         CGContextAddLineToPoint( mrContext, fX, fY );
@@ -807,7 +807,7 @@ void AquaSalGraphics::drawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
+void AquaSalGraphics::drawPolygon( sal_uLong nPoints, const SalPoint *pPtAry )
 {
     if( nPoints <= 1 )
         return;
@@ -835,7 +835,7 @@ void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
         alignLinePoint( pPtAry, fX, fY );
         CGContextMoveToPoint( mrContext, fX, fY );
         pPtAry++;
-        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+        for( sal_uLong nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
         {
             alignLinePoint( pPtAry, fX, fY );
             CGContextAddLineToPoint( mrContext, fX, fY );
@@ -845,7 +845,7 @@ void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
     {
         CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
         pPtAry++;
-        for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+        for( sal_uLong nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
             CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
     }
 
@@ -855,7 +855,7 @@ void AquaSalGraphics::drawPolygon( ULONG nPoints, const SalPoint *pPtAry )
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, PCONSTSALPOINT  *ppPtAry )
+void AquaSalGraphics::drawPolyPolygon( sal_uLong nPolyCount, const sal_uLong *pPoints, PCONSTSALPOINT  *ppPtAry )
 {
     if( nPolyCount <= 0 )
         return;
@@ -865,7 +865,7 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
     // find bound rect
     long leftX = 0, topY = 0, maxWidth = 0, maxHeight = 0;
     getBoundRect( pPoints[0], ppPtAry[0], leftX, topY, maxWidth, maxHeight );
-    for( ULONG n = 1; n < nPolyCount; n++ )
+    for( sal_uLong n = 1; n < nPolyCount; n++ )
     {
         long nX = leftX, nY = topY, nW = maxWidth, nH = maxHeight;
         getBoundRect( pPoints[n], ppPtAry[n], nX, nY, nW, nH );
@@ -900,9 +900,9 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
     CGContextBeginPath( mrContext );
     if( IsPenVisible() )
     {
-        for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+        for( sal_uLong nPoly = 0; nPoly < nPolyCount; nPoly++ )
         {
-            const ULONG nPoints = pPoints[nPoly];
+            const sal_uLong nPoints = pPoints[nPoly];
             if( nPoints > 1 )
             {
                 const SalPoint *pPtAry = ppPtAry[nPoly];
@@ -910,7 +910,7 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
                 alignLinePoint( pPtAry, fX, fY );
                 CGContextMoveToPoint( mrContext, fX, fY );
                 pPtAry++;
-                for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                for( sal_uLong nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
                 {
                     alignLinePoint( pPtAry, fX, fY );
                     CGContextAddLineToPoint( mrContext, fX, fY );
@@ -921,15 +921,15 @@ void AquaSalGraphics::drawPolyPolygon( ULONG nPolyCount, const ULONG *pPoints, P
     }
     else
     {
-        for( ULONG nPoly = 0; nPoly < nPolyCount; nPoly++ )
+        for( sal_uLong nPoly = 0; nPoly < nPolyCount; nPoly++ )
         {
-            const ULONG nPoints = pPoints[nPoly];
+            const sal_uLong nPoints = pPoints[nPoly];
             if( nPoints > 1 )
             {
                 const SalPoint *pPtAry = ppPtAry[nPoly];
                 CGContextMoveToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
                 pPtAry++;
-                for( ULONG nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
+                for( sal_uLong nPoint = 1; nPoint < nPoints; nPoint++, pPtAry++ )
                     CGContextAddLineToPoint( mrContext, pPtAry->mnX, pPtAry->mnY );
                 CGContextClosePath(mrContext);
             }
@@ -1054,22 +1054,22 @@ bool AquaSalGraphics::drawPolyLine( const ::basegfx::B2DPolygon& rPolyLine,
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolyLineBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolygonBezier( sal_uLong nPoints, const SalPoint* pPtAry, const sal_uInt8* pFlgAry )
 {
     return sal_False;
 }
 
 // -----------------------------------------------------------------------
 
-sal_Bool AquaSalGraphics::drawPolyPolygonBezier( ULONG nPoly, const ULONG* pPoints,
-                                             const SalPoint* const* pPtAry, const BYTE* const* pFlgAry )
+sal_Bool AquaSalGraphics::drawPolyPolygonBezier( sal_uLong nPoly, const sal_uLong* pPoints,
+                                             const SalPoint* const* pPtAry, const sal_uInt8* const* pFlgAry )
 {
     return sal_False;
 }
@@ -1155,7 +1155,7 @@ void AquaSalGraphics::copyBits( const SalTwoRect *pPosAry, SalGraphics *pSrcGrap
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, USHORT nFlags )
+void AquaSalGraphics::copyArea( long nDstX, long nDstY,long nSrcX, long nSrcY, long nSrcWidth, long nSrcHeight, sal_uInt16 nFlags )
 {
     ApplyXorContext();
 
@@ -1399,7 +1399,7 @@ void AquaSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalIn
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
+void AquaSalGraphics::invert( sal_uLong nPoints, const SalPoint*  pPtAry, SalInvert nSalFlags )
 {
     CGPoint* CGpoints ;
     if ( CheckContext() )
@@ -1436,8 +1436,8 @@ void AquaSalGraphics::invert( ULONG nPoints, const SalPoint*  pPtAry, SalInvert 
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
-    void* pEpsData, ULONG nByteCount )
+sal_Bool AquaSalGraphics::drawEPS( long nX, long nY, long nWidth, long nHeight,
+    void* pEpsData, sal_uLong nByteCount )
 {
     // convert the raw data to an NSImageRef
     NSData* xNSData = [NSData dataWithBytes:(void*)pEpsData length:(int)nByteCount];
@@ -1606,7 +1606,7 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackL
 
 // -----------------------------------------------------------------------
 
-ULONG AquaSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData*  pKernPairs )
+sal_uLong AquaSalGraphics::GetKernPairs( sal_uLong nPairs, ImplKernPairData*  pKernPairs )
 {
     return 0;
 }
@@ -1787,7 +1787,7 @@ static OSStatus GgoMoveToProc( const Float32Point* pPoint, void* pData )
     return eStatus;
 }
 
-BOOL AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
+sal_Bool AquaSalGraphics::GetGlyphOutline( long nGlyphId, basegfx::B2DPolyPolygon& rPolyPoly )
 {
     GgoData aGgoData;
     aGgoData.mpPolyPoly = &rPolyPoly;
@@ -1829,7 +1829,7 @@ long AquaSalGraphics::GetGraphicsWidth() const
 
 // -----------------------------------------------------------------------
 
-BOOL AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
+sal_Bool AquaSalGraphics::GetGlyphBoundRect( long nGlyphId, Rectangle& rRect )
 {
     ATSUStyle rATSUStyle = maATSUStyle; // TODO: handle glyph fallback
     GlyphID aGlyphId = nGlyphId;
@@ -1862,7 +1862,7 @@ void AquaSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
 
 // -----------------------------------------------------------------------
 
-USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLevel )
+sal_uInt16 AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLevel )
 {
     if( !pReqFont )
     {
@@ -2179,10 +2179,10 @@ static bool GetRawFontData( const ImplFontData* pFontData,
 
     DBG_ASSERT( (nOfs==nTotalLen), "AquaSalGraphics::CreateFontSubset (nOfs!=nTotalLen)");
 
-    return true;
+    return sal_True;
 }
 
-BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+sal_Bool AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const ImplFontData* pFontData, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pGlyphWidths, int nGlyphCount, FontSubsetInfo& rInfo )
 {
@@ -2191,7 +2191,7 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // prepare the requested file name for writing the font-subset file
     rtl::OUString aSysPath;
     if( osl_File_E_None != osl_getSystemPathFromFileURL( rToFile.pData, &aSysPath.pData ) )
-        return FALSE;
+        return sal_False;
     const rtl_TextEncoding aThreadEncoding = osl_getThreadTextEncoding();
     const ByteString aToFile( rtl::OUStringToOString( aSysPath, aThreadEncoding ) );
 
@@ -2252,7 +2252,7 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     // subset glyphs and get their properties
     // take care that subset fonts require the NotDef glyph in pos 0
     int nOrigCount = nGlyphCount;
-    USHORT    aShortIDs[ 256 ];
+    sal_uInt16    aShortIDs[ 256 ];
     sal_uInt8 aTempEncs[ 256 ];
 
     int nNotDef = -1;
@@ -2272,7 +2272,7 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
                 nGlyphIdx = ::MapChar( pSftFont, static_cast<sal_uInt16>(nGlyphIdx), bVertical );
             }
         }
-        aShortIDs[i] = static_cast<USHORT>( nGlyphIdx );
+        aShortIDs[i] = static_cast<sal_uInt16>( nGlyphIdx );
         if( !nGlyphIdx )
             if( nNotDef < 0 )
                 nNotDef = i; // first NotDef glyph found
@@ -2300,7 +2300,7 @@ BOOL AquaSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     TTSimpleGlyphMetrics* pGlyphMetrics =
         ::GetTTSimpleGlyphMetrics( pSftFont, aShortIDs, nGlyphCount, bVertical );
     if( !pGlyphMetrics )
-        return FALSE;
+        return sal_False;
     sal_uInt16 nNotDefAdv       = pGlyphMetrics[0].adv;
     pGlyphMetrics[0].adv        = pGlyphMetrics[nNotDef].adv;
     pGlyphMetrics[nNotDef].adv  = nNotDefAdv;
@@ -2604,24 +2604,24 @@ void XorEmulation::SetTarget( int nWidth, int nHeight, int nTargetDepth,
         nBytesPerRow = 1;
     }
     nBytesPerRow *= nWidth;
-    mnBufferLongs = (nHeight * nBytesPerRow + sizeof(ULONG)-1) / sizeof(ULONG);
+    mnBufferLongs = (nHeight * nBytesPerRow + sizeof(sal_uLong)-1) / sizeof(sal_uLong);
 
     // create a XorMask context
-    mpMaskBuffer = new ULONG[ mnBufferLongs ];
+    mpMaskBuffer = new sal_uLong[ mnBufferLongs ];
     mxMaskContext = ::CGBitmapContextCreate( mpMaskBuffer,
         nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
         aCGColorSpace, aCGBmpInfo );
     // reset the XOR mask to black
-    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(ULONG) );
+    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(sal_uLong) );
 
     // a bitmap context will be needed for manual XORing
     // create one unless the target context is a bitmap context
     if( nTargetDepth )
-        mpTempBuffer = (ULONG*)CGBitmapContextGetData( mxTargetContext );
+        mpTempBuffer = (sal_uLong*)CGBitmapContextGetData( mxTargetContext );
     if( !mpTempBuffer )
     {
         // create a bitmap context matching to the target context
-        mpTempBuffer = new ULONG[ mnBufferLongs ];
+        mpTempBuffer = new sal_uLong[ mnBufferLongs ];
         mxTempContext = ::CGBitmapContextCreate( mpTempBuffer,
             nWidth, nHeight, nBitsPerComponent, nBytesPerRow,
             aCGColorSpace, aCGBmpInfo );
@@ -2661,8 +2661,8 @@ bool XorEmulation::UpdateTarget()
     // do a manual XOR with the XorMask
     // this approach suffices for simple color manipulations
     // and also the complex-clipping-XOR-trick used in metafiles
-    const ULONG* pSrc = mpMaskBuffer;
-    ULONG* pDst = mpTempBuffer;
+    const sal_uLong* pSrc = mpMaskBuffer;
+    sal_uLong* pDst = mpTempBuffer;
     for( int i = mnBufferLongs; --i >= 0;)
         *(pDst++) ^= *(pSrc++);
 
@@ -2680,7 +2680,7 @@ bool XorEmulation::UpdateTarget()
 
     // reset the XorMask to black again
     // TODO: not needed for last update
-    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(ULONG) );
+    memset( mpMaskBuffer, 0, mnBufferLongs * sizeof(sal_uLong) );
 
     // TODO: return FALSE if target was not changed
     return true;

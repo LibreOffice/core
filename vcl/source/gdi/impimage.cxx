@@ -67,7 +67,7 @@ ImageAryData::ImageAryData( const ImageAryData& rData ) :
 }
 
 ImageAryData::ImageAryData( const rtl::OUString &aName,
-                            USHORT nId, const BitmapEx &aBitmap )
+                            sal_uInt16 nId, const BitmapEx &aBitmap )
         : maName( aName ), mnId( nId ), maBitmapEx( aBitmap )
 {
 }
@@ -119,7 +119,7 @@ ImplImageList::~ImplImageList()
 }
 
 void ImplImageList::AddImage( const ::rtl::OUString &aName,
-                              USHORT nId, const BitmapEx &aBitmapEx )
+                              sal_uInt16 nId, const BitmapEx &aBitmapEx )
 {
     ImageAryData *pImg = new ImageAryData( aName, nId, aBitmapEx );
     maImages.push_back( pImg );
@@ -127,7 +127,7 @@ void ImplImageList::AddImage( const ::rtl::OUString &aName,
         maNameHash [ aName ] = pImg;
 }
 
-void ImplImageList::RemoveImage( USHORT nPos )
+void ImplImageList::RemoveImage( sal_uInt16 nPos )
 {
     ImageAryData *pImg = maImages[ nPos ];
     if( pImg->maName.getLength() )
@@ -135,9 +135,9 @@ void ImplImageList::RemoveImage( USHORT nPos )
     maImages.erase( maImages.begin() + nPos );
 }
 
-USHORT ImplImageList::GetImageCount() const
+sal_uInt16 ImplImageList::GetImageCount() const
 {
-    return sal::static_int_cast< USHORT >( maImages.size() );
+    return sal::static_int_cast< sal_uInt16 >( maImages.size() );
 }
 
 // -----------------
@@ -161,7 +161,7 @@ ImplImageData::~ImplImageData()
 // - ImplImageData -
 // -----------------
 
-BOOL ImplImageData::IsEqual( const ImplImageData& rData )
+sal_Bool ImplImageData::IsEqual( const ImplImageData& rData )
 {
     return( maBmpEx == rData.maBmpEx );
 }
@@ -213,7 +213,7 @@ ImplImageBmp::~ImplImageBmp()
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Create( long nItemWidth, long nItemHeight, USHORT nInitSize )
+void ImplImageBmp::Create( long nItemWidth, long nItemHeight, sal_uInt16 nInitSize )
 {
     const Size aTotalSize( nInitSize * nItemWidth, nItemHeight );
 
@@ -227,13 +227,13 @@ void ImplImageBmp::Create( long nItemWidth, long nItemHeight, USHORT nInitSize )
     mnSize = nInitSize;
 
     delete[] mpInfoAry;
-    mpInfoAry = new BYTE[ mnSize ];
+    mpInfoAry = new sal_uInt8[ mnSize ];
     memset( mpInfoAry, 0, mnSize );
 }
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight, USHORT nInitSize )
+void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHeight, sal_uInt16 nInitSize )
 {
     maBmpEx = rBmpEx;
     maDisabledBmpEx.SetEmpty();
@@ -245,7 +245,7 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
     mnSize = nInitSize;
 
     delete[] mpInfoAry;
-    mpInfoAry = new BYTE[ mnSize ];
+    mpInfoAry = new sal_uInt8[ mnSize ];
     memset( mpInfoAry,
             rBmpEx.IsAlpha() ? IMPSYSIMAGEITEM_ALPHA : ( rBmpEx.IsTransparent() ? IMPSYSIMAGEITEM_MASK : 0 ),
             mnSize );
@@ -253,11 +253,11 @@ void ImplImageBmp::Create( const BitmapEx& rBmpEx, long nItemWidth, long nItemHe
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Expand( USHORT nGrowSize )
+void ImplImageBmp::Expand( sal_uInt16 nGrowSize )
 {
-    const ULONG     nDX = nGrowSize * maSize.Width();
-    const USHORT    nOldSize = mnSize;
-    BYTE*           pNewAry = new BYTE[ mnSize = sal::static_int_cast<USHORT>(mnSize+nGrowSize) ];
+    const sal_uLong     nDX = nGrowSize * maSize.Width();
+    const sal_uInt16    nOldSize = mnSize;
+    sal_uInt8*          pNewAry = new sal_uInt8[ mnSize = sal::static_int_cast<sal_uInt16>(mnSize+nGrowSize) ];
 
     maBmpEx.Expand( nDX, 0UL );
 
@@ -285,7 +285,7 @@ void ImplImageBmp::Invert()
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
+void ImplImageBmp::Replace( sal_uInt16 nPos, sal_uInt16 nSrcPos )
 {
     const Point     aSrcPos( nSrcPos * maSize.Width(), 0L ), aPos( nPos * maSize.Width(), 0L );
     const Rectangle aSrcRect( aSrcPos, maSize );
@@ -304,7 +304,7 @@ void ImplImageBmp::Replace( USHORT nPos, USHORT nSrcPos )
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT nSrcPos )
+void ImplImageBmp::Replace( sal_uInt16 nPos, const ImplImageBmp& rImageBmp, sal_uInt16 nSrcPos )
 {
     const Point     aSrcPos( nSrcPos * maSize.Width(), 0L ), aPos( nPos * maSize.Width(), 0L );
     const Rectangle aSrcRect( aSrcPos, maSize );
@@ -321,7 +321,7 @@ void ImplImageBmp::Replace( USHORT nPos, const ImplImageBmp& rImageBmp, USHORT n
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Replace( USHORT nPos, const BitmapEx& rBmpEx )
+void ImplImageBmp::Replace( sal_uInt16 nPos, const BitmapEx& rBmpEx )
 {
     const Point     aNullPos, aPos( nPos * maSize.Width(), 0L );
     const Rectangle aSrcRect( aNullPos, maSize );
@@ -339,7 +339,7 @@ void ImplImageBmp::Replace( USHORT nPos, const BitmapEx& rBmpEx )
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, ULONG nColorCount )
+void ImplImageBmp::ReplaceColors( const Color* pSrcColors, const Color* pDstColors, sal_uLong nColorCount )
 {
     maBmpEx.Replace( pSrcColors, pDstColors, nColorCount );
     delete mpDisplayBmp;
@@ -357,7 +357,7 @@ void ImplImageBmp::ColorTransform( BmpColorMode eColorMode )
 
 // -----------------------------------------------------------------------
 
-BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
+BitmapEx ImplImageBmp::GetBitmapEx( sal_uInt16 nPosCount, sal_uInt16* pPosAry ) const
 {
     const Bitmap    aNewBmp( Size( nPosCount * maSize.Width(), maSize.Height() ),  maBmpEx.GetBitmap().GetBitCount() );
     BitmapEx        aRet;
@@ -372,7 +372,7 @@ BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
     else
         aRet  = BitmapEx( aNewBmp );
 
-    for( USHORT i = 0; i < nPosCount; i++ )
+    for( sal_uInt16 i = 0; i < nPosCount; i++ )
     {
         const Point     aSrcPos( pPosAry[ i ] * maSize.Width(), 0L );
         const Point     aPos( i * maSize.Width(), 0L );
@@ -387,8 +387,8 @@ BitmapEx ImplImageBmp::GetBitmapEx( USHORT nPosCount, USHORT* pPosAry ) const
 
 // -----------------------------------------------------------------------
 
-void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
-                         const Point& rPos, USHORT nStyle,
+void ImplImageBmp::Draw( sal_uInt16 nPos, OutputDevice* pOutDev,
+                         const Point& rPos, sal_uInt16 nStyle,
                          const Size* pSize )
 {
     if( pOutDev->IsDeviceOutputNecessary() )
@@ -440,9 +440,9 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                         BitmapColor             aCol;
                         const long              nW = pAcc->Width();
                         const long              nH = pAcc->Height();
-                        BYTE*                   pMapR = new BYTE[ 256 ];
-                        BYTE*                   pMapG = new BYTE[ 256 ];
-                        BYTE*                   pMapB = new BYTE[ 256 ];
+                        sal_uInt8*                  pMapR = new sal_uInt8[ 256 ];
+                        sal_uInt8*                  pMapG = new sal_uInt8[ 256 ];
+                        sal_uInt8*                  pMapB = new sal_uInt8[ 256 ];
                         long                    nX, nY;
 
                         if( nStyle & IMAGE_DRAW_HIGHLIGHT )
@@ -450,20 +450,20 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                         else
                             aColor = rSettings.GetDeactiveColor();
 
-                        const BYTE cR = aColor.GetRed();
-                        const BYTE cG = aColor.GetGreen();
-                        const BYTE cB = aColor.GetBlue();
+                        const sal_uInt8 cR = aColor.GetRed();
+                        const sal_uInt8 cG = aColor.GetGreen();
+                        const sal_uInt8 cB = aColor.GetBlue();
 
                         for( nX = 0L; nX < 256L; nX++ )
                         {
-                            pMapR[ nX ] = (BYTE) ( ( ( nY = ( nX + cR ) >> 1 ) > 255 ) ? 255 : nY );
-                            pMapG[ nX ] = (BYTE) ( ( ( nY = ( nX + cG ) >> 1 ) > 255 ) ? 255 : nY );
-                            pMapB[ nX ] = (BYTE) ( ( ( nY = ( nX + cB ) >> 1 ) > 255 ) ? 255 : nY );
+                            pMapR[ nX ] = (sal_uInt8) ( ( ( nY = ( nX + cR ) >> 1 ) > 255 ) ? 255 : nY );
+                            pMapG[ nX ] = (sal_uInt8) ( ( ( nY = ( nX + cG ) >> 1 ) > 255 ) ? 255 : nY );
+                            pMapB[ nX ] = (sal_uInt8) ( ( ( nY = ( nX + cB ) >> 1 ) > 255 ) ? 255 : nY );
                         }
 
                         if( pAcc->HasPalette() )
                         {
-                            for( USHORT i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
+                            for( sal_uInt16 i = 0, nCount = pAcc->GetPaletteEntryCount(); i < nCount; i++ )
                             {
                                 const BitmapColor& rCol = pAcc->GetPaletteColor( i );
                                 aCol.SetRed( pMapR[ rCol.GetRed() ] );
@@ -519,7 +519,7 @@ void ImplImageBmp::Draw( USHORT nPos, OutputDevice* pOutDev,
                     }
                     else
                     {
-                        BYTE cErase = 128;
+                        sal_uInt8 cErase = 128;
                         aTmpBmpEx = BitmapEx( aTmpBmp, AlphaMask( aTmpBmp.GetSizePixel(),  &cErase ) );
                     }
                 }

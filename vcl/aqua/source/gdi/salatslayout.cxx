@@ -268,7 +268,7 @@ bool ATSLayout::LayoutText( ImplLayoutArgs& rArgs )
     if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) != 0 )
     {
         // control BiDi defaults
-        MacOSBOOL nLineDirTag = kATSULeftToRightBaseDirection;
+        BOOL nLineDirTag = kATSULeftToRightBaseDirection;
         if( (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL) != 0 )
             nLineDirTag = kATSURightToLeftBaseDirection;
         aTagAttrs[0] = kATSULineDirectionTag;

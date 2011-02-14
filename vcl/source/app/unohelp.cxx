@@ -184,7 +184,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     return xB;
 }
 
-::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, BOOL bSUPD )
+::rtl::OUString vcl::unohelper::CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD )
 {
     // create variable library name suffixes
     OUString aDLLSuffix = OUString::createFromAscii( STRING(DLLPOSTFIX) );

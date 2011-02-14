@@ -75,15 +75,15 @@ public:
 public:
 
     // SalBitmap methods
-    bool            Create( const Size& rSize, USHORT nBitCount, const BitmapPalette& rPal );
+    bool            Create( const Size& rSize, sal_uInt16 nBitCount, const BitmapPalette& rPal );
     bool            Create( const SalBitmap& rSalBmp );
     bool            Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics );
-    bool            Create( const SalBitmap& rSalBmp, USHORT nNewBitCount );
+    bool            Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount );
 
     void            Destroy();
 
     Size            GetSize() const;
-    USHORT          GetBitCount() const;
+    sal_uInt16          GetBitCount() const;
 
     BitmapBuffer   *AcquireBuffer( bool bReadOnly );
     void            ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly );

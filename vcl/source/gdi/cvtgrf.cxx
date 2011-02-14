@@ -55,10 +55,10 @@ GraphicConverter::~GraphicConverter()
 
 // ------------------------------------------------------------------------
 
-ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nInBufSize,
-                                     void** ppOutBuffer, ULONG nOutFormat )
+sal_uLong GraphicConverter::ImplConvert( sal_uLong nInFormat, void* pInBuffer, sal_uLong nInBufSize,
+                                     void** ppOutBuffer, sal_uLong nOutFormat )
 {
-    ULONG nRetBufSize = 0UL;
+    sal_uLong nRetBufSize = 0UL;
 
     if( ( nInFormat != nOutFormat ) && pInBuffer )
     {
@@ -67,7 +67,7 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
             SvMemoryStream  aIStm;
             Graphic         aGraphic;
 
-            aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, FALSE, nInBufSize );
+            aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, sal_False, nInBufSize );
             aIStm >> aGraphic;
 
             if( !aIStm.GetError() )
@@ -80,7 +80,7 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
                 {
                     nRetBufSize = aOStm.Seek( STREAM_SEEK_TO_END );
                     *ppOutBuffer = (void*) aOStm.GetData();
-                    aOStm.ObjectOwnsMemory( FALSE );
+                    aOStm.ObjectOwnsMemory( sal_False );
                 }
 
                 delete mpConvertData;
@@ -91,7 +91,7 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
         {
             SvMemoryStream  aIStm;
 
-            aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, FALSE, nInBufSize );
+            aIStm.SetBuffer( (char*) pInBuffer, nInBufSize, sal_False, nInBufSize );
             mpConvertData = new ConvertData( Graphic(), aIStm, nInFormat );
 
             if( maFilterHdl.IsSet() && maFilterHdl.Call( mpConvertData ) )
@@ -117,7 +117,7 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
                 {
                     nRetBufSize = aOStm.Seek( STREAM_SEEK_TO_END );
                     *ppOutBuffer = (void*) aOStm.GetData();
-                    aOStm.ObjectOwnsMemory( FALSE );
+                    aOStm.ObjectOwnsMemory( sal_False );
                 }
             }
 
@@ -131,10 +131,10 @@ ULONG GraphicConverter::ImplConvert( ULONG nInFormat, void* pInBuffer, ULONG nIn
 
 // ------------------------------------------------------------------------
 
-ULONG GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ULONG nFormat )
+sal_uLong GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, sal_uLong nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    ULONG               nRet = ERRCODE_IO_GENERAL;
+    sal_uLong               nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {
@@ -154,10 +154,10 @@ ULONG GraphicConverter::Import( SvStream& rIStm, Graphic& rGraphic, ULONG nForma
 
 // ------------------------------------------------------------------------
 
-ULONG GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, ULONG nFormat )
+sal_uLong GraphicConverter::Export( SvStream& rOStm, const Graphic& rGraphic, sal_uLong nFormat )
 {
     GraphicConverter*   pCvt = ImplGetSVData()->maGDIData.mpGrfConverter;
-    ULONG               nRet = ERRCODE_IO_GENERAL;
+    sal_uLong               nRet = ERRCODE_IO_GENERAL;
 
     if( pCvt && pCvt->GetFilterHdl().IsSet() )
     {

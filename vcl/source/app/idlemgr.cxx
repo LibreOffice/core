@@ -39,8 +39,8 @@
 struct ImplIdleData
 {
     Link        maIdleHdl;
-    USHORT      mnPriority;
-    BOOL        mbTimeout;
+    sal_uInt16      mnPriority;
+    sal_Bool        mbTimeout;
 };
 
 DECLARE_LIST( ImplIdleList, ImplIdleData* )
@@ -74,15 +74,15 @@ ImplIdleMgr::~ImplIdleMgr()
 
 // -----------------------------------------------------------------------
 
-BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
+sal_Bool ImplIdleMgr::InsertIdleHdl( const Link& rLink, sal_uInt16 nPriority )
 {
-    ULONG           nPos = LIST_APPEND;
+    sal_uLong           nPos = LIST_APPEND;
     ImplIdleData*   pIdleData = mpIdleList->First();
     while ( pIdleData )
     {
-        // Wenn Link schon existiert, dann gebe FALSE zurueck
+        // Wenn Link schon existiert, dann gebe sal_False zurueck
         if ( pIdleData->maIdleHdl == rLink )
-            return FALSE;
+            return sal_False;
 
         // Nach Prioritaet sortieren
         if ( nPriority <= pIdleData->mnPriority )
@@ -98,14 +98,14 @@ BOOL ImplIdleMgr::InsertIdleHdl( const Link& rLink, USHORT nPriority )
     pIdleData               = new ImplIdleData;
     pIdleData->maIdleHdl    = rLink;
     pIdleData->mnPriority   = nPriority;
-    pIdleData->mbTimeout    = FALSE;
+    pIdleData->mbTimeout    = sal_False;
     mpIdleList->Insert( pIdleData, nPos );
 
     // Wenn Timer noch nicht gestartet ist, dann starten
     if ( !maTimer.IsActive() )
         maTimer.Start();
 
-    return TRUE;
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -139,11 +139,11 @@ IMPL_LINK( ImplIdleMgr, TimeoutHdl, Timer*, EMPTYARG )
     {
         if ( !pIdleData->mbTimeout )
         {
-            pIdleData->mbTimeout = TRUE;
+            pIdleData->mbTimeout = sal_True;
             pIdleData->maIdleHdl.Call( GetpApp() );
             // Kann im Handler entfernt worden sein
             if ( mpIdleList->GetPos( pIdleData ) != LIST_ENTRY_NOTFOUND )
-                pIdleData->mbTimeout = FALSE;
+                pIdleData->mbTimeout = sal_False;
         }
 
         pIdleData = mpIdleList->Next();

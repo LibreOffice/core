@@ -45,24 +45,24 @@ CommandExtTextInputData::CommandExtTextInputData()
     mnDeltaStart    = 0;
     mnOldTextLen    = 0;
     mnCursorFlags   = 0;
-    mbOnlyCursor    = FALSE;
+    mbOnlyCursor    = sal_False;
 }
 
 // -----------------------------------------------------------------------
 
 CommandExtTextInputData::CommandExtTextInputData( const XubString& rText,
-                                                  const USHORT* pTextAttr,
+                                                  const sal_uInt16* pTextAttr,
                                                   xub_StrLen nCursorPos,
-                                                  USHORT nCursorFlags,
+                                                  sal_uInt16 nCursorFlags,
                                                   xub_StrLen nDeltaStart,
                                                   xub_StrLen nOldTextLen,
-                                                  BOOL bOnlyCursor ) :
+                                                  sal_Bool bOnlyCursor ) :
     maText( rText )
 {
     if ( pTextAttr && maText.Len() )
     {
-        mpTextAttr = new USHORT[maText.Len()];
-        memcpy( mpTextAttr, pTextAttr, maText.Len()*sizeof(USHORT) );
+        mpTextAttr = new sal_uInt16[maText.Len()];
+        memcpy( mpTextAttr, pTextAttr, maText.Len()*sizeof(sal_uInt16) );
     }
     else
         mpTextAttr = NULL;
@@ -80,8 +80,8 @@ CommandExtTextInputData::CommandExtTextInputData( const CommandExtTextInputData&
 {
     if ( rData.mpTextAttr && maText.Len() )
     {
-        mpTextAttr = new USHORT[maText.Len()];
-        memcpy( mpTextAttr, rData.mpTextAttr, maText.Len()*sizeof(USHORT) );
+        mpTextAttr = new sal_uInt16[maText.Len()];
+        memcpy( mpTextAttr, rData.mpTextAttr, maText.Len()*sizeof(sal_uInt16) );
     }
     else
         mpTextAttr = NULL;
