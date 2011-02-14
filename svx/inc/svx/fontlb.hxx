@@ -96,7 +96,7 @@ public:
     void                        SetNoSelection();
 
     /** Returns the position of the entry currently selected or LIST_APPEND. */
-    ULONG                       GetSelectEntryPos() const;
+    sal_uLong                       GetSelectEntryPos() const;
     /** Returns the text of the selected entry or an empty string. */
     XubString                   GetSelectEntry() const;
 

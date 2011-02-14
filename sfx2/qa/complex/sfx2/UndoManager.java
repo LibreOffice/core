@@ -159,7 +159,7 @@ public class UndoManager
     }
 
     // -----------------------------------------------------------------------------------------------------------------
-    @Test
+//#i116813# disabled   @Test
     public void checkBrokenScripts() throws com.sun.star.uno.Exception, InterruptedException
     {
         System.out.println( "testing: broken scripts" );

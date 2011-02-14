@@ -167,7 +167,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
 
 
     sal_Int32 nLongVal = 0;
-    BOOL bOutLongVal = TRUE;
+    sal_Bool bOutLongVal = sal_True;
     if( nValue > SAL_MAX_INT32 / nMul )
     {
         // A big int is required for calculation
@@ -197,7 +197,7 @@ void SvXMLExportHelper::AddLength( sal_Int32 nValue, MapUnit eValueUnit,
                     rOut.append( (sal_Int32)((nBigVal / nBigFac) % nBig10 ) );
                 }
             }
-            bOutLongVal = FALSE;
+            bOutLongVal = sal_False;
         }
     }
     else

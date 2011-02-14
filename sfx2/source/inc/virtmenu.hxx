@@ -54,21 +54,21 @@ private:
     PopupMenu*      pPickMenu;
     PopupMenu*      pAddonsMenu;
     Timer*          pAutoDeactivate; // Hack fuer QAP-Bug
-    USHORT          nVisibleItems;
-    USHORT          nId;
-    USHORT          nCount;
-    USHORT          nLocks;
-    BOOL            bResCtor : 1; // SV Menu created from resource
-    BOOL            bOLE : 1;     // InPlaceMenu
-    BOOL            bHelpInitialized : 1;
-    BOOL            bIsActive : 1;
-    BOOL            bControllersUnBound : 1;
-    BOOL            bWasHighContrast : 1;
-    BOOL            bIsAddonPopupMenu : 1;
+    sal_uInt16          nVisibleItems;
+    sal_uInt16          nId;
+    sal_uInt16          nCount;
+    sal_uInt16          nLocks;
+    sal_Bool            bResCtor : 1; // SV Menu created from resource
+    sal_Bool            bOLE : 1;     // InPlaceMenu
+    sal_Bool            bHelpInitialized : 1;
+    sal_Bool            bIsActive : 1;
+    sal_Bool            bControllersUnBound : 1;
+    sal_Bool            bWasHighContrast : 1;
+    sal_Bool            bIsAddonPopupMenu : 1;
 
 private:
     void            Construct_Impl();
-    FASTBOOL        Bind_Impl( Menu *pMenu );
+    bool        Bind_Impl( Menu *pMenu );
     inline SfxMenuCtrlArr_Impl& GetAppCtrl_Impl()
     {
         return pAppCtrl? *pAppCtrl: *(pAppCtrl = new SfxMenuCtrlArr_Impl) ;
@@ -77,8 +77,8 @@ private:
     void            BindControllers();
 
 protected:
-    SfxVirtualMenu( USHORT nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, BOOL bWithHelp,
-                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE, BOOL bIsAddonMenu=FALSE );
+    SfxVirtualMenu( sal_uInt16 nOwnId, SfxVirtualMenu* pParent, Menu& rMenu, sal_Bool bWithHelp,
+                        SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
 
     void            CreateFromSVMenu();
     DECL_LINK( Highlight, Menu * );
@@ -93,22 +93,22 @@ protected:
 
 public:
                     ~SfxVirtualMenu();
-                    SfxVirtualMenu( Menu *pStarViewMenu, BOOL bWithHelp,
-                        SfxBindings &rBind, BOOL bOLEServer=FALSE, BOOL bRes=FALSE, BOOL bIsAddonMenu=FALSE );
-    void            CheckItem( USHORT nItemId, BOOL bCheck );
-    void            EnableItem( USHORT nItemId, BOOL bEnable );
-    void            SetItemText( USHORT nItemId, const String& rText );
+                    SfxVirtualMenu( Menu *pStarViewMenu, sal_Bool bWithHelp,
+                        SfxBindings &rBind, sal_Bool bOLEServer=sal_False, sal_Bool bRes=sal_False, sal_Bool bIsAddonMenu=sal_False );
+    void            CheckItem( sal_uInt16 nItemId, sal_Bool bCheck );
+    void            EnableItem( sal_uInt16 nItemId, sal_Bool bEnable );
+    void            SetItemText( sal_uInt16 nItemId, const String& rText );
 
-    USHORT          GetItemPos( USHORT nItemId ) const;
+    sal_uInt16          GetItemPos( sal_uInt16 nItemId ) const;
 
-    USHORT          GetItemCount() const;
+    sal_uInt16          GetItemCount() const;
     Menu*           GetSVMenu() const;
-    SfxMenuControl& operator[]( USHORT nPos ) const;
+    SfxMenuControl& operator[]( sal_uInt16 nPos ) const;
 
-    USHORT          GetItemId( USHORT nPos ) const;
-    SfxVirtualMenu* GetPopupMenu( USHORT nId ) const;
-    String          GetItemText( USHORT nId ) const;
-    String          GetItemHelpText( USHORT nId ) const;
+    sal_uInt16          GetItemId( sal_uInt16 nPos ) const;
+    SfxVirtualMenu* GetPopupMenu( sal_uInt16 nId ) const;
+    String          GetItemText( sal_uInt16 nId ) const;
+    String          GetItemHelpText( sal_uInt16 nId ) const;
 
     //void            InvalidateKeyCodes();
 
@@ -116,15 +116,15 @@ public:
     void            SetParentMenu( SfxVirtualMenu* pNewParent )
                     { pParent = pNewParent; }
 
-    void            SetPopupMenu( USHORT nId, PopupMenu *pMenu );
-    BOOL            IsFromResource() const
+    void            SetPopupMenu( sal_uInt16 nId, PopupMenu *pMenu );
+    sal_Bool            IsFromResource() const
                     { return bResCtor; }
-    void            InitPopup(USHORT nPos, BOOL bOLE = TRUE);
+    void            InitPopup(sal_uInt16 nPos, sal_Bool bOLE = sal_True);
     void            InitializeHelp();
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
-    BOOL            IsHiContrastMode() const;
+    sal_Bool            IsHiContrastMode() const;
     void            UpdateImages();
 
     DECL_LINK( Select, Menu * );
@@ -134,7 +134,7 @@ public:
 
 // return the number of virtual items in this menu
 
-inline USHORT SfxVirtualMenu::GetItemCount() const
+inline sal_uInt16 SfxVirtualMenu::GetItemCount() const
 {
     return nCount;
 }
@@ -142,7 +142,7 @@ inline USHORT SfxVirtualMenu::GetItemCount() const
 
 //
 
-inline SfxMenuControl& SfxVirtualMenu::operator[]( USHORT nPos ) const
+inline SfxMenuControl& SfxVirtualMenu::operator[]( sal_uInt16 nPos ) const
 {
     return *(pItems+nPos);
 }
@@ -150,7 +150,7 @@ inline SfxMenuControl& SfxVirtualMenu::operator[]( USHORT nPos ) const
 
 // returns the item id at position nPos in the menu (or 0 if sep.)
 
-inline USHORT SfxVirtualMenu::GetItemId( USHORT nPos ) const
+inline sal_uInt16 SfxVirtualMenu::GetItemId( sal_uInt16 nPos ) const
 {
     return pItems ? pItems[nPos].GetId() : 0;
 }

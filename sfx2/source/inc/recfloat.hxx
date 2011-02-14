@@ -38,7 +38,7 @@ class SfxRecordingFloatWrapper_Impl : public SfxChildWindow
     SfxBindings*        pBindings;
 public:
                         SfxRecordingFloatWrapper_Impl( Window* pParent ,
-                                                USHORT nId ,
+                                                sal_uInt16 nId ,
                                                 SfxBindings* pBindings ,
                                                 SfxChildWinInfo* pInfo );
                         ~SfxRecordingFloatWrapper_Impl();
@@ -57,7 +57,7 @@ public:
                             SfxChildWindow* pChildWin ,
                             Window* pParent );
     virtual             ~SfxRecordingFloat_Impl();
-    virtual BOOL        Close();
+    virtual sal_Bool        Close();
     virtual void        FillInfo( SfxChildWinInfo& rInfo ) const;
     virtual void        StateChanged( StateChangedType nStateChange );
 

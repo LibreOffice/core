@@ -40,7 +40,7 @@ class SVX_DLLPUBLIC SvxGraphicItem: public SfxPoolItem
 public:
                             TYPEINFO();
                             SvxGraphicItem();
-                            SvxGraphicItem( USHORT nWhich ,const Graphic& rGraphic);
+                            SvxGraphicItem( sal_uInt16 nWhich ,const Graphic& rGraphic);
                             SvxGraphicItem( const SvxGraphicItem& );
 
 

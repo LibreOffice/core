@@ -396,7 +396,7 @@ namespace basprov
                 StarBASIC* pBasic = pBasicMgr->GetLib( aLibrary );
                 if ( !pBasic )
                 {
-                    USHORT nId = pBasicMgr->GetLibId( aLibrary );
+                    sal_uInt16 nId = pBasicMgr->GetLibId( aLibrary );
                     if ( nId != LIB_NOTFOUND )
                     {
                         pBasicMgr->LoadLib( nId );

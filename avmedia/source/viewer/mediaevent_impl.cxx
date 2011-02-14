@@ -117,7 +117,7 @@ void SAL_CALL MediaEventListenersImpl::mousePressed( const ::com::sun::star::awt
     if( mpNotifyWindow )
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
-                                 sal::static_int_cast< USHORT >(e.ClickCount),
+                                 sal::static_int_cast< sal_uInt16 >(e.ClickCount),
                                  0,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |
@@ -138,7 +138,7 @@ void SAL_CALL MediaEventListenersImpl::mouseReleased( const ::com::sun::star::aw
     if( mpNotifyWindow )
     {
         MouseEvent aVCLMouseEvt( Point( e.X, e.Y ),
-                                 sal::static_int_cast< USHORT >(e.ClickCount),
+                                 sal::static_int_cast< sal_uInt16 >(e.ClickCount),
                                  0,
                                 ( ( e.Buttons & 1 ) ? MOUSE_LEFT : 0 ) |
                                 ( ( e.Buttons & 2 ) ? MOUSE_RIGHT : 0 ) |

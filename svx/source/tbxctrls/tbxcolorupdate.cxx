@@ -47,10 +47,10 @@ namespace svx
     //====================================================================
 
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
-        USHORT nId,
-        USHORT nTbxBtnId,
+        sal_uInt16 nId,
+        sal_uInt16 nTbxBtnId,
         ToolBox* ptrTbx,
-        USHORT nMode ) :
+        sal_uInt16 nMode ) :
         mnDrawMode        ( nMode ),
         mnBtnId           ( nTbxBtnId ),
         mnSlotId           ( nId ),
@@ -60,7 +60,7 @@ namespace svx
         if (mnSlotId == SID_BACKGROUND_COLOR)
             mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
-        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : FALSE;
+        mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
         Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
     }
 

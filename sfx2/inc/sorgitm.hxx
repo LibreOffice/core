@@ -45,8 +45,8 @@ public:
 
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = NULL ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
-    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
-    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
+    virtual sal_Bool             QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool             PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId = 0 );
     String  getLanguage() { return aLanguage; };
 };
 

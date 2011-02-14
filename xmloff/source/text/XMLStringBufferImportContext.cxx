@@ -57,7 +57,7 @@ XMLStringBufferImportContext::~XMLStringBufferImportContext()
 }
 
 SvXMLImportContext *XMLStringBufferImportContext::CreateChildContext(
-    USHORT nPrefix,
+    sal_uInt16 nPrefix,
     const OUString& rLocalName,
     const Reference<XAttributeList> &)
 {

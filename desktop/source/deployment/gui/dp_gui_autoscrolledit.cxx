@@ -59,7 +59,7 @@ void AutoScrollEdit::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.IsA( TYPE(TextHint) ) )
     {
-        ULONG   nId = ((const TextHint&)rHint).GetId();
+        sal_uLong   nId = ((const TextHint&)rHint).GetId();
         if ( nId == TEXT_HINT_VIEWSCROLLED )
         {
             ScrollBar*  pScroll = GetVScrollBar();

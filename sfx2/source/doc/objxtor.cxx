@@ -815,7 +815,7 @@ void SfxObjectShell::InitBasicManager_Impl()
         changed to return the Basic manager currently under construction, when
         called repeatedly.
 
-        The variable pImp->bBasicInitialized will be set to TRUE after
+        The variable pImp->bBasicInitialized will be set to sal_True after
         construction now, to ensure that the recursive call of the function
         lcl_getBasicManagerForDocument() will be routed into this function too.
 
@@ -826,7 +826,7 @@ void SfxObjectShell::InitBasicManager_Impl()
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
-    pImp->bBasicInitialized = TRUE;
+    pImp->bBasicInitialized = sal_True;
 }
 
 //--------------------------------------------------------------------
@@ -936,7 +936,7 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if ( aPrefix.Len() == aFact.Match( aPrefix ) )
         aFact.Erase( 0, aPrefix.Len() );
-    USHORT nPos = aFact.Search( '?' );
+    sal_uInt16 nPos = aFact.Search( '?' );
     String aParam;
     if ( nPos != STRING_NOTFOUND )
     {
@@ -1029,8 +1029,8 @@ SfxObjectShell* SfxObjectShell::CreateAndLoadObject( const SfxItemSet& rSet, Sfx
 {
     uno::Sequence < beans::PropertyValue > aProps;
     TransformItems( SID_OPENDOC, rSet, aProps );
-    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, FALSE);
-    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, FALSE);
+    SFX_ITEMSET_ARG(&rSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, sal_False);
+    SFX_ITEMSET_ARG(&rSet, pTargetItem, SfxStringItem, SID_TARGETNAME, sal_False);
     ::rtl::OUString aURL;
     ::rtl::OUString aTarget = rtl::OUString::createFromAscii("_blank");
     if ( pFileNameItem )
