@@ -410,13 +410,13 @@ struct AnnotatingVisitor
         const sal_uInt8 nGreen( toByteColor(rColor.g) );
         const sal_uInt8 nBlue ( toByteColor(rColor.b)  );
         aBuf.append( sal_Unicode('#') );
-        if( nRed < 10 )
+        if( nRed < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nRed), 16 );
-        if( nGreen < 10 )
+        if( nGreen < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nGreen), 16 );
-        if( nBlue < 10 )
+        if( nBlue < 0x10 )
             aBuf.append( sal_Unicode('0') );
         aBuf.append( sal_Int32(nBlue), 16 );
 
