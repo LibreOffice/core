@@ -34,20 +34,6 @@
 
 //=========================================================================
 
-#define PRV_SV_DECL_REF_SIGNATURE( ClassName, Ref )                     \
-    inline               ClassName##Ref() { pObj = 0; }                 \
-    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
-    inline               ClassName##Ref( ClassName * pObjP );           \
-    inline void          Clear();                                       \
-    inline               ~ClassName##Ref();                             \
-    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
-    inline ClassName##Ref & operator = ( ClassName * pObj );            \
-    inline BOOL            Is() const { return pObj != NULL; }          \
-    inline ClassName *     operator &  () const { return pObj; }        \
-    inline ClassName *     operator -> () const { return pObj; }        \
-    inline ClassName &     operator *  () const { return *pObj; }       \
-    inline operator ClassName * () const { return pObj; }
-
 #define PRV_SV_IMPL_REF_COUNTERS( ClassName, Ref, AddRef, AddNextRef, ReleaseRef, Init, pRefbase ) \
 inline ClassName##Ref::ClassName##Ref( const ClassName##Ref & rObj )        \
     { pObj = rObj.pObj; if( pObj ) { Init pRefbase->AddNextRef; } }         \
@@ -80,7 +66,18 @@ inline ClassName##Ref & ClassName##Ref::operator = ( ClassName * pObjP )    \
 protected:                                      \
     ClassName * pObj;                           \
 public:                                         \
-PRV_SV_DECL_REF_SIGNATURE(ClassName, Ref)
+    inline               ClassName##Ref() { pObj = 0; }                 \
+    inline               ClassName##Ref( const ClassName##Ref & rObj ); \
+    inline               ClassName##Ref( ClassName * pObjP );           \
+    inline void          Clear();                                       \
+    inline               ~ClassName##Ref();                             \
+    inline ClassName##Ref & operator = ( const ClassName##Ref & rObj ); \
+    inline ClassName##Ref & operator = ( ClassName * pObj );            \
+    inline BOOL            Is() const { return pObj != NULL; }          \
+    inline ClassName *     operator &  () const { return pObj; }        \
+    inline ClassName *     operator -> () const { return pObj; }        \
+    inline ClassName &     operator *  () const { return *pObj; }       \
+    inline operator ClassName * () const { return pObj; }
 
 #define PRV_SV_DECL_REF( ClassName )            \
 PRV_SV_DECL_REF_LOCK( ClassName, Ref )
