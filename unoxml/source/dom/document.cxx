@@ -489,8 +489,11 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        xmlChar *xData = (xmlChar*)OUStringToOString(data, RTL_TEXTENCODING_UTF8).getStr();
-        xmlNodePtr pText = xmlNewCDataBlock(m_aDocPtr, xData, strlen((char*)xData));
+        OString const oData(OUStringToOString(data, RTL_TEXTENCODING_UTF8));
+        xmlChar const*const pData =
+            reinterpret_cast<xmlChar const*>(oData.getStr());
+        xmlNodePtr const pText =
+            xmlNewCDataBlock(m_aDocPtr, pData, strlen(oData.getStr()));
         Reference< XCDATASection > const xRet(
             static_cast< XNode* >(GetCNode(pText).get()),
             UNO_QUERY_THROW);
