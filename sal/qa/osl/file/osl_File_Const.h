@@ -89,7 +89,7 @@ const sal_Char pBuffer_Blank[]  = "";
 #   include <errno.h>
 #   include <fcntl.h>
 #   include <sys/stat.h>
-#   if !defined MACOSX
+#   if !defined(MACOSX) && !defined(__OpenBSD__) && !defined(__FreeBSD__) && !defined(__NetBSD__)
 #       include <sys/statfs.h>
 #   else
 #       include <sys/param.h>
