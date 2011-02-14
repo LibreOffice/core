@@ -670,6 +670,11 @@ void StyleTree_Impl::Put(StyleTree_Impl* pIns, ULONG lPos)
 StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
 {
     const USHORT nCount = rArr.Count();
+
+    comphelper::string::NaturalStringSorter aSorter(
+        ::comphelper::getProcessComponentContext(),
+        Application::GetSettings().GetLocale());
+
     // Alle unter ihren Parents einordnen
     USHORT i;
     for(i = 0; i < nCount; ++i)
@@ -685,7 +690,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                     // initial sortiert einfuegen
                     USHORT nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                        comphelper::string::compareNatural((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++);
+                        aSorter.compare((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++);
                     pCmp->Put(pEntry,nPos);
                     break;
                 }
@@ -1313,12 +1318,16 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)
             SvLBoxEntry* pEntry = aFmtLb.First();
             SvStringsDtor aStrings;
 
+            comphelper::string::NaturalStringSorter aSorter(
+                ::comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetLocale());
+
             while( pStyle )
             {
                 //Bubblesort
                 USHORT nPos;
                 for( nPos = aStrings.Count() ; nPos &&
-                    comphelper::string::compareNatural(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--);
+                    aSorter.compare(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--);
                 aStrings.Insert( new String( pStyle->GetName() ), nPos );
                 pStyle = pStyleSheetPool->Next();
             }
