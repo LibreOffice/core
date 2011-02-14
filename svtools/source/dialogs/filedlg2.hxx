@@ -96,10 +96,6 @@ private:
     DirEntry            aPath;          // aktuell angewaehlter Pfad
     USHORT              nDirCount;      // Anzahl der Verzeichnis-
                                         // Verschachtelungen
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XCollator >
-                        xCollator;
-
 protected:
 
     virtual void        UpdateEntries( const BOOL bWithDirs );

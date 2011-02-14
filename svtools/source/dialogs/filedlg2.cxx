@@ -40,7 +40,7 @@
 #include <filedlg2.hrc>
 #include <vcl/msgbox.hxx>
 #include <osl/security.hxx>
-#include <com/sun/star/i18n/XCollator.hpp>
+#include <comphelper/string.hxx>
 
 #include <svtools/stdctrl.hxx>
 
@@ -131,12 +131,6 @@ ImpPathDialog::ImpPathDialog( PathDialog* pDlg, RESOURCE_TYPE nType, BOOL bCreat
     }
 
     pDlg->SetHelpId( HID_FILEDLG_PATHDLG );
-
-    lang::Locale aLocale = Application::GetSettings().GetLocale();
-    xCollator = ::vcl::unohelper::CreateCollator();
-    if( xCollator.is() )
-        xCollator->loadDefaultCollator( aLocale, 1 );
-    DBG_ASSERT( xCollator.is(), "not collator service for path dialog" );
 }
 
 ImpPathDialog::~ImpPathDialog()
@@ -454,6 +448,8 @@ void ImpPathDialog::UpdateEntries( const BOOL )
     if( nEntries )
     {
         UniStringList aSortDirList;
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
         for ( USHORT n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -463,12 +459,9 @@ void ImpPathDialog::UpdateEntries( const BOOL )
                 if( FileStat( rEntry ).GetKind() & FSYS_KIND_DIR )
                 {
                     size_t l = 0;
-                    if( xCollator.is() )
-                    {
-                        for( l = 0; l < aSortDirList.size(); l++ )
-                            if( xCollator->compareString( *aSortDirList[ l ], aName ) > 0 )
-                                break;
-                    }
+                    for( l = 0; l < aSortDirList.size(); l++ )
+                        if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                            break;
                     if ( l < aSortDirList.size() ) {
                         UniStringList::iterator it = aSortDirList.begin();
                         ::std::advance( it, l );
@@ -1018,6 +1011,8 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
     if ( nEntries )
     {
         UniStringList aSortDirList;
+        const comphelper::string::NaturalStringSorter& rSorter =
+            ::vcl::unohelper::getNaturalStringSorterForAppLocale();
         for ( USHORT n = 0; n < nEntries; n++ )
         {
             DirEntry& rEntry = aDir[n];
@@ -1048,12 +1043,9 @@ void ImpFileDialog::UpdateEntries( const BOOL bWithDirs )
                     else
                     {
                         size_t l = 0;
-                        if( xCollator.is() )
-                        {
-                            for( l = 0; l < aSortDirList.size(); l++ )
-                                if( xCollator->compareString( *aSortDirList[ l ], aName ) > 0 )
-                                    break;
-                        }
+                        for( l = 0; l < aSortDirList.size(); l++ )
+                            if( rSorter.compare( *aSortDirList[ l ], aName ) > 0 )
+                                break;
                         if ( l < aSortDirList.size() ) {
                             UniStringList::iterator it = aSortDirList.begin();
                             ::std::advance( it, l );
