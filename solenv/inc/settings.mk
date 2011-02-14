@@ -803,7 +803,12 @@ SOLARCOMMONSDFDIR=$(SOLARSDFDIR)
 
 .EXPORT : SOLARBINDIR
 
+.IF "$(GUI)"=="WNT"
+# we assume that we build using cygwin
+L10N_MODULE*=$(cygpath -m $(realpath $(SOLARSRC)$/l10n))
+.ELSE
 L10N_MODULE*=$(SOLARSRC)$/l10n
+.ENDIF
 ALT_L10N_MODULE*=$(SOLARSRC)$/l10n_so
 
 .IF "$(WITH_LANG)"!=""
