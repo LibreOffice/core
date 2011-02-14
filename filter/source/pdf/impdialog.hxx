@@ -165,7 +165,7 @@ public:
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getServiceFactory() const { return mxMSF; }
 
 protected:
-    virtual void                PageCreated( USHORT _nId,
+    virtual void                PageCreated( sal_uInt16 _nId,
                                              SfxTabPage& _rPage );
     virtual short               Ok();
 };

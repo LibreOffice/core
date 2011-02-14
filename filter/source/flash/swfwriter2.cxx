@@ -481,7 +481,7 @@ sal_uInt16 FlashFont::getGlyph( sal_uInt16 nChar, VirtualDevice* pVDev )
     {
         Polygon& rPoly = aPolyPoly[ i ];
 
-        const USHORT nSize = rPoly.GetSize();
+        const sal_uInt16 nSize = rPoly.GetSize();
         if( nSize )
         {
             // convert polygon to flash EM_SQUARE (1024x1024)

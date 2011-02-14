@@ -50,7 +50,7 @@ namespace PictReaderInternal {
     }
 
     //! reads black/white pattern from SvStream
-    ULONG read(SvStream &stream);
+    sal_uLong read(SvStream &stream);
     //! sets the color
     void setColor(Color &col) { isColor = true; color = col; }
     /** returns a color which can be "used" to replace the pattern,
@@ -62,9 +62,9 @@ namespace PictReaderInternal {
       if (isColor) return color;
       // we create a gray pattern from nBitCount
       double alpha = nBitCount / 64.0;
-      return Color(BYTE(alpha*fgColor.GetRed()+(1.0-alpha)*bkColor.GetRed()),
-           BYTE(alpha*fgColor.GetGreen()+(1.0-alpha)*bkColor.GetGreen()),
-           BYTE(alpha*fgColor.GetBlue()+(1.0-alpha)*bkColor.GetBlue()));
+      return Color(sal_uInt8(alpha*fgColor.GetRed()+(1.0-alpha)*bkColor.GetRed()),
+           sal_uInt8(alpha*fgColor.GetGreen()+(1.0-alpha)*bkColor.GetGreen()),
+           sal_uInt8(alpha*fgColor.GetBlue()+(1.0-alpha)*bkColor.GetBlue()));
     }
 
     //! returns true if this is the default pattern
@@ -89,10 +89,10 @@ namespace PictReaderInternal {
     bool isRead;
   };
 
-  ULONG Pattern::read(SvStream &stream) {
+  sal_uLong Pattern::read(SvStream &stream) {
     short nx,ny;
     unsigned char nbyte[8];
-    ULONG nHiBytes, nLoBytes;
+    sal_uLong nHiBytes, nLoBytes;
     isColor = false;
 
     // Anzahl der Bits im Pattern zaehlen, die auf 1 gesetzt sind:
@@ -105,14 +105,14 @@ namespace PictReaderInternal {
     }
 
     // Pattern in 2 Langworten unterbringen:
-    nHiBytes=(((((((ULONG)nbyte[0])<<8)|
-         (ULONG)nbyte[1])<<8)|
-           (ULONG)nbyte[2])<<8)|
-      (ULONG)nbyte[3];
-    nLoBytes=(((((((ULONG)nbyte[4])<<8)|
-         (ULONG)nbyte[5])<<8)|
-           (ULONG)nbyte[6])<<8)|
-      (ULONG)nbyte[7];
+    nHiBytes=(((((((sal_uLong)nbyte[0])<<8)|
+         (sal_uLong)nbyte[1])<<8)|
+           (sal_uLong)nbyte[2])<<8)|
+      (sal_uLong)nbyte[3];
+    nLoBytes=(((((((sal_uLong)nbyte[4])<<8)|
+         (sal_uLong)nbyte[5])<<8)|
+           (sal_uLong)nbyte[6])<<8)|
+      (sal_uLong)nbyte[7];
 
     // Einen PenStyle machen:
     if      (nBitCount<=0)  penStyle=PEN_NULL;
@@ -155,9 +155,9 @@ private:
     VirtualDevice * pVirDev;         // Hier werden die Drawing-Methoden aufgerufen.
                                      // Dabei findet ein Recording in das GDIMetaFile
                                      // statt.
-    ULONG         nOrigPos;          // Anfaengliche Position in pPict
-    UINT16        nOrigNumberFormat; // Anfaengliches Nummern-Format von pPict
-    BOOL          IsVersion2;        // Ob es ein Version 2 Pictfile ist.
+    sal_uLong         nOrigPos;          // Anfaengliche Position in pPict
+    sal_uInt16        nOrigNumberFormat; // Anfaengliches Nummern-Format von pPict
+    sal_Bool          IsVersion2;        // Ob es ein Version 2 Pictfile ist.
     Rectangle     aBoundingRect;     // Min/Max-Rechteck fuer die ganze Zeichnung
 
     Point         aPenPosition;
@@ -177,7 +177,7 @@ private:
     Fraction        aHRes;
     Fraction        aVRes;
 
-    BOOL Callback(USHORT nPercent);
+    sal_Bool Callback(sal_uInt16 nPercent);
 
     Point ReadPoint();
 
@@ -195,32 +195,32 @@ private:
 
     void ReadRectangle(Rectangle & rRect);
 
-    ULONG ReadPolygon(Polygon & rPoly);
+    sal_uLong ReadPolygon(Polygon & rPoly);
 
-    ULONG ReadPixPattern(Pattern &pattern);
+    sal_uLong ReadPixPattern(Pattern &pattern);
 
     Rectangle aLastRect;
-    ULONG ReadAndDrawRect(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSameRect(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawRect(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSameRect(PictDrawingMethod eMethod);
 
     Rectangle aLastRoundRect;
-    ULONG ReadAndDrawRoundRect(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSameRoundRect(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawRoundRect(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSameRoundRect(PictDrawingMethod eMethod);
 
     Rectangle aLastOval;
-    ULONG ReadAndDrawOval(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSameOval(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawOval(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSameOval(PictDrawingMethod eMethod);
 
     Polygon aLastPolygon;
-    ULONG ReadAndDrawPolygon(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSamePolygon(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawPolygon(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSamePolygon(PictDrawingMethod eMethod);
 
     Rectangle aLastArcRect;
-    ULONG ReadAndDrawArc(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSameArc(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawArc(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSameArc(PictDrawingMethod eMethod);
 
-    ULONG ReadAndDrawRgn(PictDrawingMethod eMethod);
-    ULONG ReadAndDrawSameRgn(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawRgn(PictDrawingMethod eMethod);
+    sal_uLong ReadAndDrawSameRgn(PictDrawingMethod eMethod);
 
         // returns true, if we do not need to print the shape/text/frame
         bool IsInvisible(PictDrawingMethod eMethod) const {
@@ -230,16 +230,16 @@ private:
     }
     void DrawingMethod(PictDrawingMethod eMethod);
 
-    ULONG ReadAndDrawText();
+    sal_uLong ReadAndDrawText();
 
-    ULONG ReadPixMapEtc(Bitmap & rBitmap, BOOL bBaseAddr, BOOL bColorTable,
+    sal_uLong ReadPixMapEtc(Bitmap & rBitmap, sal_Bool bBaseAddr, sal_Bool bColorTable,
                         Rectangle * pSrcRect, Rectangle * pDestRect,
-                        BOOL bMode, BOOL bMaskRgn);
+                        sal_Bool bMode, sal_Bool bMaskRgn);
 
     void ReadHeader();
         // Liesst den Kopf der Pict-Datei, setzt IsVersion2 und aBoundingRect
 
-    ULONG ReadData(USHORT nOpcode);
+    sal_uLong ReadData(sal_uInt16 nOpcode);
         // Liesst die Daten eines Opcodes ein und fuehrt die Operation aus.
         // Auf jeden Fall wird die Anzahl der Datenbytes zu dem Opcode
         // zurueckgeliefert.
@@ -248,7 +248,7 @@ private:
     void SetFillColor( const Color& rColor );
 
   // OSNOLA: returns the text encoding which must be used for system id
-  static rtl_TextEncoding GetTextEncoding (USHORT fId = 0xFFFF);
+  static rtl_TextEncoding GetTextEncoding (sal_uInt16 fId = 0xFFFF);
 public:
 
   PictReader() { aActFont.SetCharSet(GetTextEncoding()); }
@@ -311,7 +311,7 @@ public:
 }
 
 //=================== Methoden von PictReader ==============================
-rtl_TextEncoding PictReader::GetTextEncoding (USHORT fId) {
+rtl_TextEncoding PictReader::GetTextEncoding (sal_uInt16 fId) {
   static bool first = true;
   static rtl_TextEncoding enc = RTL_TEXTENCODING_APPLE_ROMAN;
   if (first) {
@@ -358,17 +358,17 @@ void PictReader::SetFillColor( const Color& rColor )
     pVirDev->SetFillColor( rColor );
 }
 
-BOOL PictReader::Callback(USHORT /*nPercent*/)
+sal_Bool PictReader::Callback(sal_uInt16 /*nPercent*/)
 {
 /*
     if (pCallback!=NULL) {
-        if (((*pCallback)(pCallerData,nPercent))==TRUE) {
+        if (((*pCallback)(pCallerData,nPercent))==sal_True) {
             pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
-            return TRUE;
+            return sal_True;
         }
     }
 */
-    return FALSE;
+    return sal_False;
 }
 
 Point PictReader::ReadPoint()
@@ -450,10 +450,10 @@ Color PictReader::ReadColor()
 
 Color PictReader::ReadRGBColor()
 {
-    USHORT nR, nG, nB;
+    sal_uInt16 nR, nG, nB;
 
     *pPict >> nR >> nG >> nB;
-    return Color( (BYTE) ( nR >> 8 ), (BYTE) ( nG >> 8 ), (BYTE) ( nB >> 8 ) );
+    return Color( (sal_uInt8) ( nR >> 8 ), (sal_uInt8) ( nG >> 8 ), (sal_uInt8) ( nB >> 8 ) );
 }
 
 
@@ -467,44 +467,44 @@ void PictReader::ReadRectangle(Rectangle & rRect)
 }
 
 
-ULONG PictReader::ReadPolygon(Polygon & rPoly)
+sal_uLong PictReader::ReadPolygon(Polygon & rPoly)
 {
-    USHORT nSize,i;
-    ULONG nDataSize;
+    sal_uInt16 nSize,i;
+    sal_uLong nDataSize;
 
     *pPict >> nSize;
     pPict->SeekRel(8);
-    nDataSize=(ULONG)nSize;
+    nDataSize=(sal_uLong)nSize;
     nSize=(nSize-10)/4;
     rPoly.SetSize(nSize);
     for (i=0; i<nSize; i++) rPoly.SetPoint(ReadPoint(),i);
     return nDataSize;
 }
 
-ULONG PictReader::ReadPixPattern(PictReader::Pattern &pattern)
+sal_uLong PictReader::ReadPixPattern(PictReader::Pattern &pattern)
 {
     // Keine Ahnung, ob dies richtig ist, weil kein Bild gefunden, das
     // PixPatterns enthaelt. Auch hier nur der Versuch, die Groesse der Daten zu
     // ermitteln, und einfache StarView-Styles daraus zu machen. Gluecklicherweise
     // enthaelt ein PixPattern immer auch ein normales Pattern.
 
-    ULONG nDataSize;
-    USHORT nPatType;
+    sal_uLong nDataSize;
+    sal_uInt16 nPatType;
     Bitmap aBMP;
 
     *pPict >> nPatType;
     if (nPatType==1) {
             pattern.read(*pPict);
-        nDataSize=ReadPixMapEtc(aBMP,FALSE,TRUE,NULL,NULL,FALSE,FALSE);
+        nDataSize=ReadPixMapEtc(aBMP,sal_False,sal_True,NULL,NULL,sal_False,sal_False);
         // CHANGEME: use average pixmap colors to update the pattern, ...
         if (nDataSize!=0xffffffff) nDataSize+=10;
     }
     else if (nPatType==2) {
             pattern.read(*pPict);
         // RGBColor
-        USHORT nR, nG, nB;
+        sal_uInt16 nR, nG, nB;
         *pPict >> nR >> nG >> nB;
-        Color col((BYTE) ( nR >> 8 ), (BYTE) ( nG >> 8 ), (BYTE) ( nB >> 8 ) );
+        Color col((sal_uInt8) ( nR >> 8 ), (sal_uInt8) ( nG >> 8 ), (sal_uInt8) ( nB >> 8 ) );
         pattern.setColor(col);
         nDataSize=16;
     }
@@ -513,14 +513,14 @@ ULONG PictReader::ReadPixPattern(PictReader::Pattern &pattern)
     return nDataSize;
 }
 
-ULONG PictReader::ReadAndDrawRect(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRect);
     ReadAndDrawSameRect(eMethod);
     return 8;
 }
 
-ULONG PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
@@ -528,14 +528,14 @@ ULONG PictReader::ReadAndDrawSameRect(PictDrawingMethod eMethod)
     return 0;
 }
 
-ULONG PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawRoundRect(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastRoundRect);
     ReadAndDrawSameRoundRect(eMethod);
     return 8;
 }
 
-ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
@@ -543,14 +543,14 @@ ULONG PictReader::ReadAndDrawSameRoundRect(PictDrawingMethod eMethod)
     return 0;
 }
 
-ULONG PictReader::ReadAndDrawOval(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawOval(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastOval);
     ReadAndDrawSameOval(eMethod);
     return 8;
 }
 
-ULONG PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
@@ -558,15 +558,15 @@ ULONG PictReader::ReadAndDrawSameOval(PictDrawingMethod eMethod)
     return 0;
 }
 
-ULONG PictReader::ReadAndDrawPolygon(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawPolygon(PictDrawingMethod eMethod)
 {
-    ULONG nDataSize;
+    sal_uLong nDataSize;
     nDataSize=ReadPolygon(aLastPolygon);
     ReadAndDrawSamePolygon(eMethod);
     return nDataSize;
 }
 
-ULONG PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
@@ -575,14 +575,14 @@ ULONG PictReader::ReadAndDrawSamePolygon(PictDrawingMethod eMethod)
 }
 
 
-ULONG PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawArc(PictDrawingMethod eMethod)
 {
     ReadRectangle(aLastArcRect);
     ReadAndDrawSameArc(eMethod);
     return 12;
 }
 
-ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
 {
     short nstartAngle, narcAngle;
     double fAng1, fAng2;
@@ -601,9 +601,9 @@ ULONG PictReader::ReadAndDrawSameArc(PictDrawingMethod eMethod)
     return 4;
 }
 
-ULONG PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
 {
-    USHORT nSize;
+    sal_uInt16 nSize;
 
     *pPict >> nSize;
     // read the DATA
@@ -621,10 +621,10 @@ ULONG PictReader::ReadAndDrawRgn(PictDrawingMethod eMethod)
     //   - takes M and inverts all values in [a_0,b_0-1], in [a_1,b_1-1] ...
     //   - sets M = new y_i line mask
     ReadAndDrawSameRgn(eMethod);
-    return (ULONG)nSize;
+    return (sal_uLong)nSize;
 }
 
-ULONG PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
+sal_uLong PictReader::ReadAndDrawSameRgn(PictDrawingMethod eMethod)
 {
     if (IsInvisible(eMethod)) return 0;
     DrawingMethod(eMethod);
@@ -676,7 +676,7 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
         case PDM_TEXT:
             aActFont.SetColor(aActForeColor);
             aActFont.SetFillColor(aActBackColor);
-            aActFont.SetTransparent(TRUE);
+            aActFont.SetTransparent(sal_True);
             pVirDev->SetFont(aActFont);
             pVirDev->SetRasterOp(ROP_OVERPAINT);
             break;
@@ -686,13 +686,13 @@ void PictReader::DrawingMethod(PictDrawingMethod eMethod)
     eActMethod=eMethod;
 }
 
-ULONG PictReader::ReadAndDrawText()
+sal_uLong PictReader::ReadAndDrawText()
 {
     char        nByteLen;
     sal_uInt32  nLen, nDataLen;
     sal_Char    sText[256];
 
-    *pPict >> nByteLen; nLen=((ULONG)nByteLen)&0x000000ff;
+    *pPict >> nByteLen; nLen=((sal_uLong)nByteLen)&0x000000ff;
     nDataLen = nLen + 1;
     pPict->Read( &sText, nLen );
 
@@ -708,18 +708,18 @@ ULONG PictReader::ReadAndDrawText()
     return nDataLen;
 }
 
-ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTable, Rectangle* pSrcRect,
-                                    Rectangle* pDestRect, BOOL bMode, BOOL bMaskRgn )
+sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, sal_Bool bBaseAddr, sal_Bool bColorTable, Rectangle* pSrcRect,
+                                    Rectangle* pDestRect, sal_Bool bMode, sal_Bool bMaskRgn )
 {
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc = NULL;
     BitmapReadAccess*   pReadAcc = NULL;
-    USHORT              ny, nx, nColTabSize;
-    USHORT              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
+    sal_uInt16              ny, nx, nColTabSize;
+    sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nVersion, nPackType, nPixelType,
                         nPixelSize, nCmpCount, nCmpSize;
     sal_uInt32          nPackSize, nPlaneBytes, nHRes, nVRes;
-    BYTE                nDat, nRed, nGreen, nBlue, nDummy;
-    ULONG               i, nDataSize = 0;
+    sal_uInt8               nDat, nRed, nGreen, nBlue, nDummy;
+    sal_uLong               i, nDataSize = 0;
 
     // In nDataSize wird mitgerechnet, wie gross die gesammten Daten sind.
     nDataSize = 0;
@@ -769,7 +769,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
             {
                 pPict->SeekRel(2);
                 *pPict >> nRed >> nDummy >> nGreen >> nDummy >> nBlue >> nDummy;
-                pAcc->SetPaletteColor( (USHORT) i, BitmapColor( nRed, nGreen, nBlue ) );
+                pAcc->SetPaletteColor( (sal_uInt16) i, BitmapColor( nRed, nGreen, nBlue ) );
             }
             nDataSize += 8 + nColTabSize * 8;
         }
@@ -794,9 +794,9 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     // ggf. Quell-Rechteck einlesen:
     if ( pSrcRect != 0)
     {
-        USHORT  nTop, nLeft, nBottom, nRight;
+        sal_uInt16  nTop, nLeft, nBottom, nRight;
         *pPict >> nTop >> nLeft >> nBottom >> nRight;
-        *pSrcRect = Rectangle( (ULONG)nLeft, (ULONG)nTop, (ULONG)nRight, (ULONG)nBottom );
+        *pSrcRect = Rectangle( (sal_uLong)nLeft, (sal_uLong)nTop, (sal_uLong)nRight, (sal_uLong)nBottom );
         nDataSize += 8;
     }
 
@@ -820,19 +820,19 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     // ggf. Region einlesen (bzw. ueberspringen):
     if ( bMaskRgn )
     {
-        USHORT nSize;
+        sal_uInt16 nSize;
         *pPict >> nSize;
         pPict->SeekRel( nSize - 2 );
-        nDataSize += (ULONG)nSize;
+        nDataSize += (sal_uLong)nSize;
     }
 
-//  aSMem << (nHRes/1665L) << (nVRes/1665L) << ((ULONG)0) << ((ULONG)0);
+//  aSMem << (nHRes/1665L) << (nVRes/1665L) << ((sal_uLong)0) << ((sal_uLong)0);
 
     // Lese und Schreibe Bitmap-Bits:
     if ( nPixelSize == 1 || nPixelSize == 2 || nPixelSize == 4 || nPixelSize == 8 )
     {
-        BYTE    nByteCountAsByte, nFlagCounterByte;
-        USHORT  nByteCount, nCount, nSrcBPL, nDestBPL;
+        sal_uInt8   nByteCountAsByte, nFlagCounterByte;
+        sal_uInt16  nByteCount, nCount, nSrcBPL, nDestBPL;
 
         if      ( nPixelSize == 1 ) nSrcBPL = ( nWidth + 7 ) >> 3;
         else if ( nPixelSize == 2 ) nSrcBPL = ( nWidth + 3 ) >> 2;
@@ -860,13 +860,13 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                 if ( nRowBytes > 250 )
                 {
                     *pPict >> nByteCount;
-                    nDataSize += 2 + (ULONG)nByteCount;
+                    nDataSize += 2 + (sal_uLong)nByteCount;
                 }
                 else
                 {
                     *pPict >> nByteCountAsByte;
-                    nByteCount = ( (USHORT)nByteCountAsByte ) & 0x00ff;
-                    nDataSize += 1 + (ULONG)nByteCount;
+                    nByteCount = ( (sal_uInt16)nByteCountAsByte ) & 0x00ff;
+                    nDataSize += 1 + (sal_uLong)nByteCount;
                 }
 
                 while ( nByteCount )
@@ -874,7 +874,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     *pPict >> nFlagCounterByte;
                     if ( ( nFlagCounterByte & 0x80 ) == 0 )
                     {
-                        nCount = ( (USHORT)nFlagCounterByte ) + 1;
+                        nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
                         for ( i = 0; i < nCount; i++ )
                         {
                             *pPict >> nDat;
@@ -885,7 +885,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     }
                     else
                     {
-                        nCount = ( 1 - ( ( (USHORT)nFlagCounterByte ) | 0xff00 ) );
+                        nCount = ( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                         *pPict >> nDat;
                         for ( i = 0; i < nCount; i++ )
                         {
@@ -900,9 +900,9 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
     }
     else if ( nPixelSize == 16 )
     {
-        BYTE    nByteCountAsByte, nFlagCounterByte;
-        USHORT  nByteCount, nCount, nDestBPL,nD;
-        ULONG   nSrcBitsPos;
+        sal_uInt8   nByteCountAsByte, nFlagCounterByte;
+        sal_uInt16  nByteCount, nCount, nDestBPL,nD;
+        sal_uLong   nSrcBitsPos;
 
         if ( nRowBytes < 2 * nWidth )
             BITMAPERROR;
@@ -917,12 +917,12 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                 for ( i = 0; i < nWidth; i++ )
                 {
                     *pPict >> nD;
-                    nRed = (BYTE)( nD >> 7 );
-                    nGreen = (BYTE)( nD >> 2 );
-                    nBlue = (BYTE)( nD << 3 );
+                    nRed = (sal_uInt8)( nD >> 7 );
+                    nGreen = (sal_uInt8)( nD >> 2 );
+                    nBlue = (sal_uInt8)( nD << 3 );
                     pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue ) );
                 }
-                nDataSize += ( (ULONG)nWidth ) * 2;
+                nDataSize += ( (sal_uLong)nWidth ) * 2;
             }
             else
             {
@@ -935,7 +935,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                 else
                 {
                     *pPict >> nByteCountAsByte;
-                    nByteCount = ( (USHORT)nByteCountAsByte ) & 0x00ff;
+                    nByteCount = ( (sal_uInt16)nByteCountAsByte ) & 0x00ff;
                     nByteCount++;
                 }
                 while ( nx != nWidth )
@@ -943,43 +943,43 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     *pPict >> nFlagCounterByte;
                     if ( (nFlagCounterByte & 0x80) == 0)
                     {
-                        nCount=((USHORT)nFlagCounterByte)+1;
+                        nCount=((sal_uInt16)nFlagCounterByte)+1;
                         if ( nCount + nx > nWidth)              // SJ: the RLE decoding seems not to be correct here,
                             nCount = nWidth - nx;               // I don't want to change this until I have a bugdoc for
                         for (i=0; i<nCount; i++)                // this case. Have a look at 32bit, there I changed the
                         {                                       // encoding, so that it is used a straight forward array
                             *pPict >> nD;
-                            nRed = (BYTE)( nD >> 7 );
-                            nGreen = (BYTE)( nD >> 2 );
-                            nBlue = (BYTE)( nD << 3 );
+                            nRed = (sal_uInt8)( nD >> 7 );
+                            nGreen = (sal_uInt8)( nD >> 2 );
+                            nBlue = (sal_uInt8)( nD << 3 );
                             pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                     }
                     else
                     {
-                        nCount=(1-(((USHORT)nFlagCounterByte)|0xff00));
+                        nCount=(1-(((sal_uInt16)nFlagCounterByte)|0xff00));
                         if ( nCount + nx > nWidth )
                             nCount = nWidth - nx;
                         *pPict >> nD;
-                        nRed = (BYTE)( nD >> 7 );
-                        nGreen = (BYTE)( nD >> 2 );
-                        nBlue = (BYTE)( nD << 3 );
+                        nRed = (sal_uInt8)( nD >> 7 );
+                        nGreen = (sal_uInt8)( nD >> 2 );
+                        nBlue = (sal_uInt8)( nD << 3 );
                         for (i=0; i<nCount; i++)
                         {
                             pAcc->SetPixel( ny, nx++, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                     }
                 }
-                nDataSize+=(ULONG)nByteCount;
-                pPict->Seek(nSrcBitsPos+(ULONG)nByteCount);
+                nDataSize+=(sal_uLong)nByteCount;
+                pPict->Seek(nSrcBitsPos+(sal_uLong)nByteCount);
             }
         }
     }
     else if (nPixelSize==32)
     {
-        BYTE                nByteCountAsByte, nFlagCounterByte;
-        USHORT              nByteCount, nCount;
-        ULONG               nSrcBitsPos;
+        sal_uInt8               nByteCountAsByte, nFlagCounterByte;
+        sal_uInt16              nByteCount, nCount;
+        sal_uLong               nSrcBitsPos;
         BitmapColor         aBitmapColor;
         if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == NULL )
             BITMAPERROR;
@@ -997,7 +997,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                         *pPict >> nDummy >> nRed >> nGreen >> nBlue;
                         pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue) );
                     }
-                    nDataSize += ( (ULONG)nWidth ) * 4;
+                    nDataSize += ( (sal_uLong)nWidth ) * 4;
                 }
             }
         }
@@ -1010,7 +1010,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     *pPict >> nRed >> nGreen >> nBlue;
                     pAcc->SetPixel( ny, nx, BitmapColor( nRed, nGreen, nBlue ) );
                 }
-                nDataSize += ( (ULONG)nWidth ) * 3;
+                nDataSize += ( (sal_uLong)nWidth ) * 3;
             }
         }
         else
@@ -1029,7 +1029,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                     else
                     {
                         *pPict >> nByteCountAsByte;
-                        nByteCount = (BYTE)nByteCountAsByte;
+                        nByteCount = (sal_uInt8)nByteCountAsByte;
                         nByteCount++;
                     }
                     i = 0;
@@ -1038,7 +1038,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                         *pPict >> nFlagCounterByte;
                         if ( ( nFlagCounterByte & 0x80 ) == 0)
                         {
-                            nCount = ( (USHORT)nFlagCounterByte ) + 1;
+                            nCount = ( (sal_uInt16)nFlagCounterByte ) + 1;
                             if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
                                 nCount = (sal_uInt16)( nWidth * nCmpCount - i );
                             while( nCount-- )
@@ -1049,7 +1049,7 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                         }
                         else
                         {
-                            nCount = ( 1 - ( ( (USHORT)nFlagCounterByte ) | 0xff00 ) );
+                            nCount = ( 1 - ( ( (sal_uInt16)nFlagCounterByte ) | 0xff00 ) );
                             if ( ( i + nCount ) > (sal_uInt32)( nWidth * nCmpCount ) )
                                 nCount = (sal_uInt16)( nWidth * nCmpCount - i );
                             *pPict >> nDat;
@@ -1062,8 +1062,8 @@ ULONG PictReader::ReadPixMapEtc( Bitmap &rBitmap, BOOL bBaseAddr, BOOL bColorTab
                         pTmp += nWidth;
                     for ( nx = 0; nx < nWidth; pTmp++ )
                         pAcc->SetPixel( ny, nx++, BitmapColor( *pTmp, pTmp[ nWidth ], pTmp[ 2 * nWidth ] ) );
-                    nDataSize += (ULONG)nByteCount;
-                    pPict->Seek( nSrcBitsPos + (ULONG)nByteCount );
+                    nDataSize += (sal_uLong)nByteCount;
+                    pPict->Seek( nSrcBitsPos + (sal_uLong)nByteCount );
                 }
                 delete[] pScanline;
             }
@@ -1085,7 +1085,7 @@ void PictReader::ReadHeader()
     sal_Char    sBuf[ 2 ];
     // previous code considers pPict->Tell() as the normal starting position,
     // can we have nStartPos != 0 ?
-    ULONG   nStartPos = pPict->Tell();
+    sal_uLong   nStartPos = pPict->Tell();
     // Standard:
     // a picture file begins by 512 bytes (reserved to the application) followed by the picture data
     // while clipboard, pictures stored in a document often contain only the picture data.
@@ -1151,7 +1151,7 @@ void PictReader::ReadHeader()
         if ( sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = FALSE; return;
+          IsVersion2 = sal_False; return;
         }
         if (sBuf[0] != 0x00) continue; // unrecovable error
         int numZero = 0;
@@ -1169,11 +1169,11 @@ void PictReader::ReadHeader()
         if (sBuf[1] == 0x01 ) {
           // pict v1 must be rare and we do only few tests
           if (st < 2) { confidence[st] = --actualConfid; continue; }
-          IsVersion2 = FALSE; return;
+          IsVersion2 = sal_False; return;
         }
         if (sBuf[1] != 0x02 ) continue; // not a version 2 file
 
-        IsVersion2=TRUE;
+        IsVersion2=sal_True;
         short   nExtVer, nReserved;
         // 3 Bytes ignored : end of version arg 0x02FF (ie: 0xFF), HeaderOp : 0x0C00
         pPict->SeekRel( 3 );
@@ -1208,11 +1208,11 @@ void PictReader::ReadHeader()
     pPict->SetError(SVSTREAM_FILEFORMAT_ERROR);
 }
 
-ULONG PictReader::ReadData(USHORT nOpcode)
+sal_uLong PictReader::ReadData(sal_uInt16 nOpcode)
 {
-    USHORT nUSHORT;
+    sal_uInt16 nUSHORT;
     Point aPoint;
-    ULONG nDataSize=0;
+    sal_uLong nDataSize=0;
     PictDrawingMethod shapeDMethod = PDM_UNDEFINED;
     switch (nOpcode & 7) {
     case 0: shapeDMethod = PDM_FRAME; break;
@@ -1272,10 +1272,10 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else                     aActFont.SetItalic(ITALIC_NONE);
         if ( (nFace & 0x04)!=0 ) aActFont.SetUnderline(UNDERLINE_SINGLE);
         else                     aActFont.SetUnderline(UNDERLINE_NONE);
-        if ( (nFace & 0x08)!=0 ) aActFont.SetOutline(TRUE);
-        else                     aActFont.SetOutline(FALSE);
-        if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(TRUE);
-        else                     aActFont.SetShadow(FALSE);
+        if ( (nFace & 0x08)!=0 ) aActFont.SetOutline(sal_True);
+        else                     aActFont.SetOutline(sal_False);
+        if ( (nFace & 0x10)!=0 ) aActFont.SetShadow(sal_True);
+        else                     aActFont.SetShadow(sal_False);
         eActMethod=PDM_UNDEFINED;
         nDataSize=1;
         break;
@@ -1500,7 +1500,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
         else if (nUSHORT <= 1023) aActFont.SetFamily(FAMILY_SWISS);
         else                      aActFont.SetFamily(FAMILY_ROMAN);
         aActFont.SetCharSet(GetTextEncoding(nUSHORT));
-        *pPict >> nByteLen; nLen=((USHORT)nByteLen)&0x00ff;
+        *pPict >> nByteLen; nLen=((sal_uInt16)nByteLen)&0x00ff;
         pPict->Read( &sFName, nLen );
         sFName[ nLen ] = 0;
         String aString( (const sal_Char*)&sFName, gsl_getSystemTextEncoding() );
@@ -1693,7 +1693,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x0090: { // BitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, FALSE, TRUE, &aSrcRect, &aDestRect, TRUE, FALSE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_False);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1701,7 +1701,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x0091: { // BitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, FALSE, TRUE, &aSrcRect, &aDestRect, TRUE, TRUE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_True);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1718,7 +1718,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x0098: { // PackBitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, FALSE, TRUE, &aSrcRect, &aDestRect, TRUE, FALSE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_False);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1726,7 +1726,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x0099: { // PackBitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, FALSE, TRUE, &aSrcRect, &aDestRect, TRUE, TRUE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_False, sal_True, &aSrcRect, &aDestRect, sal_True, sal_True);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1734,7 +1734,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x009a: { // DirectBitsRect
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, TRUE, FALSE, &aSrcRect, &aDestRect, TRUE, FALSE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_True, sal_False, &aSrcRect, &aDestRect, sal_True, sal_False);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1742,7 +1742,7 @@ ULONG PictReader::ReadData(USHORT nOpcode)
     case 0x009b: { // DirectBitsRgn
         Bitmap aBmp;
         Rectangle aSrcRect, aDestRect;
-        nDataSize=ReadPixMapEtc(aBmp, TRUE, FALSE, &aSrcRect, &aDestRect, TRUE, TRUE);
+        nDataSize=ReadPixMapEtc(aBmp, sal_True, sal_False, &aSrcRect, &aDestRect, sal_True, sal_True);
         DrawingMethod(PDM_PAINT);
         pVirDev->DrawBitmap(aDestRect.TopLeft(),aDestRect.GetSize(),aBmp);
         break;
@@ -1788,9 +1788,9 @@ ULONG PictReader::ReadData(USHORT nOpcode)
 
 void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 {
-    USHORT          nOpcode;
-    BYTE            nOneByteOpcode;
-    ULONG           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
+    sal_uInt16          nOpcode;
+    sal_uInt8           nOneByteOpcode;
+    sal_uLong           nSize, nPos, nStartPos, nEndPos, nPercent, nLastPercent;
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
@@ -1811,7 +1811,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     aHRes = aVRes = Fraction( 1, 1 );
 
     pVirDev = new VirtualDevice();
-    pVirDev->EnableOutput(FALSE);
+    pVirDev->EnableOutput(sal_False);
     rGDIMetaFile.Record(pVirDev);
 
     pPict->SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
@@ -1831,7 +1831,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
         nPercent=(nPos-nStartPos)*100/(nEndPos-nStartPos);
         if (nLastPercent+4<=nPercent) {
-            if (Callback((USHORT)nPercent)==TRUE) break;
+            if (Callback((sal_uInt16)nPercent)==sal_True) break;
             nLastPercent=nPercent;
         }
 
@@ -1840,7 +1840,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
         else
         {
             *pPict >> nOneByteOpcode;
-            nOpcode=(USHORT)nOneByteOpcode;
+            nOpcode=(sal_uInt16)nOneByteOpcode;
         }
 
         if (pPict->GetError())
@@ -1883,18 +1883,18 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
 //================== GraphicImport - die exportierte Funktion ================
 
-extern "C" BOOL __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, BOOL )
+extern "C" sal_Bool __LOADONCALLAPI GraphicImport( SvStream& rIStm, Graphic & rGraphic, FilterConfigItem*, sal_Bool )
 {
     GDIMetaFile aMTF;
     PictReader  aPictReader;
-    BOOL        bRet = FALSE;
+    sal_Bool        bRet = sal_False;
 
     aPictReader.ReadPict( rIStm, aMTF );
 
     if ( !rIStm.GetError() )
     {
         rGraphic = Graphic( aMTF );
-        bRet = TRUE;
+        bRet = sal_True;
     }
 
     return bRet;
