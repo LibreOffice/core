@@ -1397,7 +1397,7 @@ sal_Bool Region::Union( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationOr( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1484,7 +1484,7 @@ sal_Bool Region::Intersect( const Rectangle& rRect )
                                                 basegfx::B2DRange( rRect.Left(), rRect.Top(),
                                                                    rRect.Right(), rRect.Bottom() ),
                                                 true, false );
-        return TRUE;
+        return sal_True;
     }
     else
         ImplPolyPolyRegionToBandRegion();
@@ -1576,7 +1576,7 @@ sal_Bool Region::Exclude( const Rectangle& rRect )
         aThisPolyPoly = basegfx::tools::prepareForPolygonOperation( aThisPolyPoly );
 
         if( aThisPolyPoly.count() == 0 )
-            return TRUE;
+            return sal_True;
 
         // get the other B2DPolyPolygon
         basegfx::B2DPolygon aRectPoly( basegfx::tools::createPolygonFromRect( basegfx::B2DRectangle( rRect.Left(), rRect.Top(), rRect.Right(), rRect.Bottom() ) ) );
@@ -1585,7 +1585,7 @@ sal_Bool Region::Exclude( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationDiff( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1639,7 +1639,7 @@ sal_Bool Region::XOr( const Rectangle& rRect )
         if( aThisPolyPoly.count() == 0 )
         {
             *this = rRect;
-            return TRUE;
+            return sal_True;
         }
 
         // get the other B2DPolyPolygon
@@ -1649,7 +1649,7 @@ sal_Bool Region::XOr( const Rectangle& rRect )
         basegfx::B2DPolyPolygon aClip = basegfx::tools::solvePolygonOperationXor( aThisPolyPoly, aOtherPolyPoly );
         *this = Region( aClip );
 
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1714,7 +1714,7 @@ sal_Bool Region::Union( const Region& rRegion )
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplUnionPolyPolygon( rRegion );
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -1946,7 +1946,7 @@ sal_Bool Region::Exclude( const Region& rRegion )
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplExcludePolyPolygon( rRegion );
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
@@ -2023,7 +2023,7 @@ sal_Bool Region::XOr( const Region& rRegion )
     if( rRegion.HasPolyPolygon() || HasPolyPolygon() )
     {
         ImplXOrPolyPolygon( rRegion );
-        return TRUE;
+        return sal_True;
     }
 
     ImplPolyPolyRegionToBandRegion();
