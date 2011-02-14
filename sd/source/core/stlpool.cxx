@@ -1061,8 +1061,8 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
                     SvxNumberFormat aFrmt( pDefaultRule->GetLevel(i) );
                     aFrmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                     // #i93908# clear suffix for bullet lists
-                    aFmt.SetPrefix(::rtl::OUString());
-                    aFmt.SetSuffix(::rtl::OUString());
+                    aFrmt.SetPrefix(::rtl::OUString());
+                    aFrmt.SetSuffix(::rtl::OUString());
                     aFrmt.SetStart(1);
                     aFrmt.SetBulletRelSize(45);
                     aFrmt.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
