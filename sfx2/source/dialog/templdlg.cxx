@@ -76,6 +76,7 @@
 #include <sfx2/viewfrm.hxx>
 
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/string.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -684,7 +685,7 @@ StyleTreeArr_Impl &MakeTree_Impl(StyleTreeArr_Impl &rArr)
                     // initial sortiert einfuegen
                     USHORT nPos;
                     for( nPos = 0 ; nPos < pCmp->Count() &&
-                        (*pCmp->pChilds)[nPos]->aName.CompareToNumeric(pEntry->aName) < 0 ; nPos++);
+                        comphelper::string::compareNatural((*pCmp->pChilds)[nPos]->aName, pEntry->aName) < 0 ; nPos++);
                     pCmp->Put(pEntry,nPos);
                     break;
                 }
@@ -1317,7 +1318,7 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)
                 //Bubblesort
                 USHORT nPos;
                 for( nPos = aStrings.Count() ; nPos &&
-                    aStrings[nPos-1]->CompareToNumeric(pStyle->GetName()) > 0 ; nPos--);
+                    comphelper::string::compareNatural(*(aStrings[nPos-1]), pStyle->GetName()) > 0 ; nPos--);
                 aStrings.Insert( new String( pStyle->GetName() ), nPos );
                 pStyle = pStyleSheetPool->Next();
             }
