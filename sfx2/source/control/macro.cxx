@@ -62,9 +62,9 @@ SfxMacroStatement::SfxMacroStatement
 (
     const SfxShell& /*rShell*/,     // <SfxShell>, die den Request ausf"uhrte
     const String&   /*rTarget*/,    // Name des Zielobjektes vor der Ausf"urhung
-    BOOL            /*bAbsolute*/,  // obsolet
+    sal_Bool            /*bAbsolute*/,  // obsolet
     const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
-    BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
+    sal_Bool            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
@@ -91,7 +91,7 @@ SfxMacroStatement::SfxMacroStatement
     die Selektion auch deskriptiv z.B. als 'CellSelection("A5-D8")')
     angesprochen werden, dazu mu\ jedoch vom Anwendungsprogrammierer der
     Konstruktor <SfxMacroStatement::SfxMacroStatement(const String&,
-    const SfxSlot&,BOOL,SfxArguments*)> verwendet werden.
+    const SfxSlot&,sal_Bool,SfxArguments*)> verwendet werden.
 
     F"ur das so bezeichnete Objekt wird dann je nach Typ des Slots
     eine Zuweisung an eines seiner Properties oder der Aufruf einer seiner
@@ -112,7 +112,7 @@ SfxMacroStatement::SfxMacroStatement
 
     [Querverweise]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
     <SfxMacroStatement::SfxMacroStatement(const String&)>
 */
 
@@ -126,11 +126,11 @@ SfxMacroStatement::SfxMacroStatement
         return;
 /*
     // Objekt-Typ bestimmen
-    FASTBOOL bIsApp = rShell.ISA(SfxApplication);
-    FASTBOOL bIsDoc = rShell.ISA(SfxObjectShell);
-    FASTBOOL bIsWin = !bIsApp && !bIsDoc &&
+    bool bIsApp = rShell.ISA(SfxApplication);
+    bool bIsDoc = rShell.ISA(SfxObjectShell);
+    bool bIsWin = !bIsApp && !bIsDoc &&
                       ( rShell.ISA(SfxViewShell) || rShell.ISA(SfxViewFrame) );
-    FASTBOOL bIsSel = !bIsApp && !bIsDoc && !bIsWin;
+    bool bIsSel = !bIsApp && !bIsDoc && !bIsWin;
 
     // Objekt nicht schon im Slot-Namen enthalten?
     if ( bIsSel || rSlot.pName[0] == '.' )
@@ -229,7 +229,7 @@ SfxMacroStatement::SfxMacroStatement
 (
     const String&   rTarget,        // Objekt, was beim Playing angesprochen wird
     const SfxSlot&  rSlot,          // der <SfxSlot>, der das Statement abspielen kann
-    BOOL            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
+    sal_Bool            bRequestDone,   // wurde der Request tats"achlich ausgef"uhrt
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& rArgs
 )
 
@@ -239,7 +239,7 @@ SfxMacroStatement::SfxMacroStatement
     [Querverweise]
 
     <SfxMacroStatement::SfxMacroStatement(const String&)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
 */
 
 :   nSlotId( rSlot.GetSlotId() ),
@@ -270,13 +270,13 @@ SfxMacroStatement::SfxMacroStatement
 
     [Querverweise]
 
-    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,BOOL,SfxArguments*)>
-    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,BOOL,const SfxSlot&,BOOL,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const String&,const SfxSlot&,sal_Bool,SfxArguments*)>
+    <SfxMacroStatement::SfxMacroStatement(const SfxShell&,sal_Bool,const SfxSlot&,sal_Bool,SfxArguments*)>
 */
 
 :   nSlotId( 0 ),
        aStatement( rStatement ),
-    bDone( TRUE ),
+    bDone( sal_True ),
     pDummy( 0 )
 {
 }
@@ -320,7 +320,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 (
     SfxMacro*       /*pMacro*/,         // darin wird aufgezeichnet
     const SfxSlot&  rSlot,          // der Slot, der das Statement abspielen kann
-    BOOL            bRequestDone,   // TRUE=wurde ausgef"uhrt, FALSE=abgebrochen
+    sal_Bool            bRequestDone,   // sal_True=wurde ausgef"uhrt, sal_False=abgebrochen
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >& /*rArgs*/
 )
 
@@ -346,7 +346,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
     // alle zusammengesuchten Parameter rausschreiben
     if ( aArgs.getLength() )
-        for ( USHORT nArg = 0; nArg < aArgs.getLength(); ++nArg )
+        for ( sal_uInt16 nArg = 0; nArg < aArgs.getLength(); ++nArg )
         {
             // den Parameter textuell darstellen
             String aArg;
@@ -377,8 +377,8 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
 
                 // Anf"uhrungszeichen werden verdoppelt
                 XubString aRecordable( sTemp );
-                USHORT nPos = 0;
-                while ( TRUE )
+                sal_uInt16 nPos = 0;
+                while ( sal_True )
                 {
                     nPos = aRecordable.SearchAndReplace( DEFINE_CONST_UNICODE('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
                     if ( STRING_NOTFOUND == nPos )
@@ -387,8 +387,8 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 }
 
                 // nicht druckbare Zeichen werden als chr$(...) geschrieben
-                FASTBOOL bPrevReplaced = FALSE;
-                for ( USHORT n = 0; n < aRecordable.Len(); ++n )
+                bool bPrevReplaced = sal_False;
+                for ( sal_uInt16 n = 0; n < aRecordable.Len(); ++n )
                 {
                     sal_Unicode cChar = aRecordable.GetChar(n);
                     if ( !( cChar>=32 && cChar!=127 ) ) // ALS ERSATZ FUER String::IsPrintable()!
@@ -411,10 +411,10 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                             aRecordable.Insert( aReplacement, n + 1 );
                             n = n + aReplacement.Len();
                         }
-                        bPrevReplaced = TRUE;
+                        bPrevReplaced = sal_True;
                     }
                     else
-                        bPrevReplaced = FALSE;
+                        bPrevReplaced = sal_False;
 
                     // Argument in Anf"uhrungszeichen
                     aArg = '"';
@@ -425,7 +425,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 case SbxBYTE:
                 {
                     // als Zahl darstellen
-                    aArg = (USHORT) rVar.GetByte();
+                    aArg = (sal_uInt16) rVar.GetByte();
                     break;
                 }
 */
@@ -696,7 +696,7 @@ String SfxMacro::GenerateSource() const
 {
     DBG_ASSERT( pImp->eMode != SFX_MACRO_EXISTING, "invalid call to non-recording SfxMacro" );
     String aSource;
-    for ( USHORT n = 0; n < pImp->aList.Count(); ++n )
+    for ( sal_uInt16 n = 0; n < pImp->aList.Count(); ++n )
     {
         aSource += pImp->aList.GetObject(n)->GetStatement();
         if ( (n+1) < pImp->aList.Count() )

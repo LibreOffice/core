@@ -48,77 +48,77 @@ class SvMetaAttribute : public SvMetaReference
     SvBOOL              aIsCollection;
     SvBOOL              aReadOnlyDoc;
     SvBOOL              aHidden;
-    BOOL                bNewAttr;
+    sal_Bool                bNewAttr;
 
 protected:
 #ifdef IDL_COMPILER
     virtual void WriteCSource( SvIdlDataBase & rBase,
-                                 SvStream & rOutStm, BOOL bSet );
-    ULONG        MakeSlotValue( SvIdlDataBase & rBase, BOOL bVariable ) const;
+                                 SvStream & rOutStm, sal_Bool bSet );
+    sal_uLong        MakeSlotValue( SvIdlDataBase & rBase, sal_Bool bVariable ) const;
     virtual void WriteAttributes( SvIdlDataBase & rBase,
-                                      SvStream & rOutStm, USHORT nTab,
+                                      SvStream & rOutStm, sal_uInt16 nTab,
                                         WriteType, WriteAttribute = 0 );
     virtual void ReadAttributesSvIdl( SvIdlDataBase & rBase,
                                       SvTokenStream & rInStm );
     virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, USHORT nTab );
+                                    SvStream & rOutStm, sal_uInt16 nTab );
 #endif
 public:
             SV_DECL_META_FACTORY1( SvMetaAttribute, SvMetaReference, 2 )
                         SvMetaAttribute();
                         SvMetaAttribute( SvMetaType * );
 
-    void                SetNewAttribute( BOOL bNew )
+    void                SetNewAttribute( sal_Bool bNew )
                         { bNewAttr = bNew; }
-    BOOL                IsNewAttribute() const
+    sal_Bool                IsNewAttribute() const
                         { return bNewAttr; }
-    BOOL                GetReadonly() const;
+    sal_Bool                GetReadonly() const;
 
     void                SetSlotId( const SvNumberIdentifier & rId )
                         { aSlotId = rId; }
     const SvNumberIdentifier & GetSlotId() const;
 
-    void                SetExport( BOOL bSet )
+    void                SetExport( sal_Bool bSet )
                         { aExport = bSet; }
-    BOOL                GetExport() const;
+    sal_Bool                GetExport() const;
 
-    void                SetHidden( BOOL bSet )
+    void                SetHidden( sal_Bool bSet )
                         { aHidden = bSet; }
-    BOOL                GetHidden() const;
+    sal_Bool                GetHidden() const;
 
-    void                SetAutomation( BOOL bSet )
+    void                SetAutomation( sal_Bool bSet )
                         { aAutomation = bSet; }
-    BOOL                GetAutomation() const;
+    sal_Bool                GetAutomation() const;
 
-    void                SetIsCollection( BOOL bSet )
+    void                SetIsCollection( sal_Bool bSet )
                         { aIsCollection = bSet; }
-    BOOL                GetIsCollection() const;
-    void                SetReadOnlyDoc( BOOL bSet )
+    sal_Bool                GetIsCollection() const;
+    void                SetReadOnlyDoc( sal_Bool bSet )
                         { aReadOnlyDoc = bSet; }
-    BOOL                GetReadOnlyDoc() const;
+    sal_Bool                GetReadOnlyDoc() const;
 
     void                SetType( SvMetaType * pT ) { aType = pT; }
     SvMetaType *        GetType() const;
 
-    virtual BOOL        IsMethod() const;
-    virtual BOOL        IsVariable() const;
-    virtual ByteString      GetMangleName( BOOL bVariable ) const;
+    virtual sal_Bool        IsMethod() const;
+    virtual sal_Bool        IsVariable() const;
+    virtual ByteString      GetMangleName( sal_Bool bVariable ) const;
 
-//    void                FillSbxObject( SbxInfo * pInfo, USHORT nSbxFlags = 0 );
-//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj, BOOL bVariable );
+//    void                FillSbxObject( SbxInfo * pInfo, sal_uInt16 nSbxFlags = 0 );
+//    virtual void        FillSbxObject( SvIdlDataBase & rBase, SbxObject * pObj, sal_Bool bVariable );
 
 #ifdef IDL_COMPILER
-    virtual BOOL        Test( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
-    virtual void        WriteParam( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+    virtual sal_Bool        Test( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        WriteParam( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                     WriteType );
     void                WriteRecursiv_Impl( SvIdlDataBase & rBase,
-                                        SvStream & rOutStm, USHORT nTab,
+                                        SvStream & rOutStm, sal_uInt16 nTab,
                                           WriteType, WriteAttribute );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    ULONG               MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString * pAtrrArray );
     virtual void        Insert( SvSlotElementList&, const ByteString & rPrefix,
                                 SvIdlDataBase& );
     virtual void        WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
@@ -152,30 +152,30 @@ class SvMetaType : public SvMetaExtern
     SvIdentifier                aBasicName;
     SvMetaAttributeMemberList * pAttrList;
     int                         nType;
-    BOOL                        bIsItem;
-    BOOL                        bIsShell;
+    sal_Bool                        bIsItem;
+    sal_Bool                        bIsShell;
     char                        cParserChar;
 
 #ifdef IDL_COMPILER
     void    WriteSfxItem( const ByteString & rItemName, SvIdlDataBase & rBase,
                         SvStream & rOutStm );
 protected:
-    BOOL        ReadNamesSvIdl( SvIdlDataBase & rBase,
+    sal_Bool        ReadNamesSvIdl( SvIdlDataBase & rBase,
                                          SvTokenStream & rInStm );
     virtual void ReadAttributesSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual void WriteAttributesSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                                   USHORT nTab );
+                                   sal_uInt16 nTab );
 
     virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                      USHORT nTab,
+                                      sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+    virtual void WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
-    BOOL    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    sal_Bool    ReadHeaderSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     void    WriteHeaderSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                              USHORT nTab );
+                              sal_uInt16 nTab );
 #endif
 public:
             SV_DECL_META_FACTORY1( SvMetaType, SvMetaExtern, 18 )
@@ -188,7 +188,7 @@ public:
                         const ByteString & rBasicPostfix/*, SbxDataType nT = SbxEMPTY */);
 
     SvMetaAttributeMemberList & GetAttrList() const;
-    ULONG               GetAttrCount() const
+    sal_uLong               GetAttrCount() const
                         {
                             return pAttrList ? pAttrList->Count() : 0L;
                         }
@@ -201,18 +201,18 @@ public:
     int                 GetType() const { return nType; }
     SvMetaType *        GetBaseType() const;
     SvMetaType *        GetReturnType() const;
-    BOOL                IsItem() const { return bIsItem; }
-    BOOL                IsShell() const { return bIsShell; }
+    sal_Bool                IsItem() const { return bIsItem; }
+    sal_Bool                IsShell() const { return bIsShell; }
 
 //    void                SetSbxDataType( SbxDataType nT )
 //                        { aSbxDataType = (int)nT; }
 //    SbxDataType         GetSbxDataType() const;
 
-    void                SetIn( BOOL b ) { aIn = b; }
-    BOOL                GetIn() const;
+    void                SetIn( sal_Bool b ) { aIn = b; }
+    sal_Bool                GetIn() const;
 
-    void                SetOut( BOOL b ) { aOut = b; }
-    BOOL                GetOut() const;
+    void                SetOut( sal_Bool b ) { aOut = b; }
+    sal_Bool                GetOut() const;
 
     void                SetCall0( int e );
     int                 GetCall0() const;
@@ -231,29 +231,29 @@ public:
     const ByteString &      GetCName() const;
     char                GetParserChar() const { return cParserChar; }
 
-    virtual BOOL        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
+    virtual sal_Bool        SetName( const ByteString & rName, SvIdlDataBase * = NULL );
 
-//    void                FillSbxObject( SbxVariable * pObj, BOOL bVariable );
+//    void                FillSbxObject( SbxVariable * pObj, sal_Bool bVariable );
 
 #ifdef IDL_COMPILER
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void        WriteSvIdl( SvIdlDataBase & rBase,
-                                    SvStream & rOutStm, USHORT nTab );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+                                    SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
     ByteString              GetCString() const;
-    void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
-    void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    void                WriteSvIdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    void                WriteOdlType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
     void                AppendParserString (ByteString &rString);
 
-    ULONG               MakeSfx( ByteString * pAtrrArray );
+    sal_uLong               MakeSfx( ByteString * pAtrrArray );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
-    //BOOL              ReadTypePrefix( SvIdlDataBase &, SvTokenStream & rInStm );
-    BOOL                ReadMethodArgs( SvIdlDataBase & rBase,
+    //sal_Bool              ReadTypePrefix( SvIdlDataBase &, SvTokenStream & rInStm );
+    sal_Bool                ReadMethodArgs( SvIdlDataBase & rBase,
                                              SvTokenStream & rInStm );
-    void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab, WriteType );
-    void                WriteMethodArgs( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab, WriteType );
-    void                WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab, WriteType );
+    void                WriteTypePrefix( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
+    void                WriteMethodArgs( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
+    void                WriteTheType( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab, WriteType );
     ByteString              GetParserString() const;
     void                WriteParamNames( SvIdlDataBase & rBase, SvStream & rOutStm,
                                         const ByteString & rChief );
@@ -284,9 +284,9 @@ public:
             SvMetaEnumValue();
 
 #ifdef IDL_COMPILER
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
-    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
+    virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
 #endif
 };
@@ -303,26 +303,26 @@ protected:
 #ifdef IDL_COMPILER
     virtual void ReadContextSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
     virtual void WriteContextSvIdl( SvIdlDataBase &, SvStream & rOutStm,
-                                   USHORT nTab );
-    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab,
+                                   sal_uInt16 nTab );
+    virtual void WriteContext( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
 #endif
 public:
             SV_DECL_META_FACTORY1( SvMetaTypeEnum, SvMetaType, 21 )
             SvMetaTypeEnum();
 
-    USHORT              GetMaxValue() const;
-    ULONG               Count() const { return aEnumValueList.Count(); }
+    sal_uInt16              GetMaxValue() const;
+    sal_uLong               Count() const { return aEnumValueList.Count(); }
     const ByteString &      GetPrefix() const { return aPrefix; }
-    SvMetaEnumValue *   GetObject( ULONG n ) const
+    SvMetaEnumValue *   GetObject( sal_uLong n ) const
                         { return aEnumValueList.GetObject( n ); }
 
 #ifdef IDL_COMPILER
-    virtual BOOL        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
-    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, USHORT nTab );
+    virtual sal_Bool        ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm );
+    virtual void        WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm, sal_uInt16 nTab );
 
     virtual void        Write( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                USHORT nTab,
+                                sal_uInt16 nTab,
                                   WriteType, WriteAttribute = 0 );
 #endif
 };

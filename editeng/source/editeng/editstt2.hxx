@@ -36,93 +36,93 @@ class InternalEditStatus : public EditStatus
 public:
             InternalEditStatus() { ; }
 
-    void    TurnOnFlags( ULONG nFlags )
+    void    TurnOnFlags( sal_uLong nFlags )
                 { nControlBits |= nFlags; }
 
-    void    TurnOffFlags( ULONG nFlags )
+    void    TurnOffFlags( sal_uLong nFlags )
                 { nControlBits &= ~nFlags; }
 
-    void    TurnOnStatusBits( ULONG nBits )
+    void    TurnOnStatusBits( sal_uLong nBits )
                 { nStatusBits |= nBits; }
 
-    void    TurnOffStatusBits( ULONG nBits )
+    void    TurnOffStatusBits( sal_uLong nBits )
                 { nStatusBits &= ~nBits; }
 
 
-    BOOL    UseCharAttribs() const
+    sal_Bool    UseCharAttribs() const
                 { return ( ( nControlBits & EE_CNTRL_USECHARATTRIBS ) != 0 ); }
 
-    BOOL    NotifyCursorMovements() const
+    sal_Bool    NotifyCursorMovements() const
                 { return ( ( nControlBits & EE_CNTRL_CRSRLEFTPARA ) != 0 ); }
 
-    BOOL    UseIdleFormatter() const
+    sal_Bool    UseIdleFormatter() const
                 { return ( ( nControlBits & EE_CNTRL_DOIDLEFORMAT) != 0 ); }
 
-    BOOL    AllowPasteSpecial() const
+    sal_Bool    AllowPasteSpecial() const
                 { return ( ( nControlBits & EE_CNTRL_PASTESPECIAL ) != 0 ); }
 
-    BOOL    DoAutoIndenting() const
+    sal_Bool    DoAutoIndenting() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOINDENTING ) != 0 ); }
 
-    BOOL    DoUndoAttribs() const
+    sal_Bool    DoUndoAttribs() const
                 { return ( ( nControlBits & EE_CNTRL_UNDOATTRIBS ) != 0 ); }
 
-    BOOL    OneCharPerLine() const
+    sal_Bool    OneCharPerLine() const
                 { return ( ( nControlBits & EE_CNTRL_ONECHARPERLINE ) != 0 ); }
 
-    BOOL    IsOutliner() const
+    sal_Bool    IsOutliner() const
                 { return ( ( nControlBits & EE_CNTRL_OUTLINER ) != 0 ); }
 
-    BOOL    IsOutliner2() const
+    sal_Bool    IsOutliner2() const
                 { return ( ( nControlBits & EE_CNTRL_OUTLINER2 ) != 0 ); }
 
-    BOOL    IsAnyOutliner() const
+    sal_Bool    IsAnyOutliner() const
                 { return IsOutliner() || IsOutliner2(); }
 
-    BOOL    DoNotUseColors() const
+    sal_Bool    DoNotUseColors() const
                 { return ( ( nControlBits & EE_CNTRL_NOCOLORS ) != 0 ); }
 
-    BOOL    AllowBigObjects() const
+    sal_Bool    AllowBigObjects() const
                 { return ( ( nControlBits & EE_CNTRL_ALLOWBIGOBJS ) != 0 ); }
 
-    BOOL    DoOnlineSpelling() const
+    sal_Bool    DoOnlineSpelling() const
                 { return ( ( nControlBits & EE_CNTRL_ONLINESPELLING ) != 0 ); }
 
-    BOOL    DoStretch() const
+    sal_Bool    DoStretch() const
                 { return ( ( nControlBits & EE_CNTRL_STRETCHING ) != 0 ); }
 
-    BOOL    AutoPageSize() const
+    sal_Bool    AutoPageSize() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZE ) != 0 ); }
-    BOOL    AutoPageWidth() const
+    sal_Bool    AutoPageWidth() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEX ) != 0 ); }
-    BOOL    AutoPageHeight() const
+    sal_Bool    AutoPageHeight() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOPAGESIZEY ) != 0 ); }
 
-    BOOL    MarkFields() const
+    sal_Bool    MarkFields() const
                 { return ( ( nControlBits & EE_CNTRL_MARKFIELDS ) != 0 ); }
 
-    BOOL    DoRestoreFont() const
+    sal_Bool    DoRestoreFont() const
                 { return ( ( nControlBits & EE_CNTRL_RESTOREFONT ) != 0 ); }
 
-    BOOL    DoImportRTFStyleSheets() const
+    sal_Bool    DoImportRTFStyleSheets() const
                 { return ( ( nControlBits & EE_CNTRL_RTFSTYLESHEETS ) != 0 ); }
 
-    BOOL    DoAutoCorrect() const
+    sal_Bool    DoAutoCorrect() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOCORRECT ) != 0 ); }
 
-    BOOL    DoAutoComplete() const
+    sal_Bool    DoAutoComplete() const
                 { return ( ( nControlBits & EE_CNTRL_AUTOCOMPLETE ) != 0 ); }
 
-    BOOL    DoTabIndenting() const
+    sal_Bool    DoTabIndenting() const
                 { return ( ( nControlBits & EE_CNTRL_TABINDENTING ) != 0 ); }
 
-    BOOL    DoFormat100() const
+    sal_Bool    DoFormat100() const
                 { return ( ( nControlBits & EE_CNTRL_FORMAT100 ) != 0 ); }
 
-    BOOL    ULSpaceSummation() const
+    sal_Bool    ULSpaceSummation() const
                 { return ( ( nControlBits & EE_CNTRL_ULSPACESUMMATION ) != 0 ); }
 
-    BOOL    ULSpaceFirstParagraph() const
+    sal_Bool    ULSpaceFirstParagraph() const
                 { return ( ( nControlBits & EE_CNTRL_ULSPACEFIRSTPARA ) != 0 ); }
 };
 

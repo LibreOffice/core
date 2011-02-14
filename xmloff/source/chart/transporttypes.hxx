@@ -135,7 +135,7 @@ struct SchNumericCellRangeAddress
 
 // ----------------------------------------
 
-enum SchXMLAxisClass
+enum SchXMLAxisDimension
 {
     SCH_XML_AXIS_X = 0,
     SCH_XML_AXIS_Y,
@@ -145,13 +145,13 @@ enum SchXMLAxisClass
 
 struct SchXMLAxis
 {
-    enum SchXMLAxisClass eClass;
-    sal_Int8 nIndexInCategory;
+    enum SchXMLAxisDimension eDimension;
+    sal_Int8 nAxisIndex;//0->primary axis; 1->secondary axis
     rtl::OUString aName;
     rtl::OUString aTitle;
     bool bHasCategories;
 
-    SchXMLAxis() : eClass( SCH_XML_AXIS_UNDEF ), nIndexInCategory( 0 ), bHasCategories( false ) {}
+    SchXMLAxis() : eDimension( SCH_XML_AXIS_UNDEF ), nAxisIndex( 0 ), bHasCategories( false ) {}
 };
 
 // ----------------------------------------

@@ -169,9 +169,9 @@ void DeInit()
 |*    Beschreibung
 |*
 *************************************************************************/
-BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
+sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 {
-    for( USHORT n = 0; n < rCommand.aInFileList.Count(); n++ )
+    for( sal_uInt16 n = 0; n < rCommand.aInFileList.Count(); n++ )
     {
         String aFileName ( *rCommand.aInFileList.GetObject( n ) );
         SvFileStream aStm( aFileName, STREAM_STD_READ | STREAM_NOCREATE );
@@ -191,24 +191,24 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
                         aStr = "error during load, file ";
                     aStr += ByteString( aFileName, RTL_TEXTENCODING_UTF8 );
                     fprintf( stderr, "%s\n", aStr.GetBuffer() );
-                    return FALSE;
+                    return sal_False;
                 }
             }
             else
             {
                 SvTokenStream aTokStm( aStm, aFileName );
-                if( !pDataBase->ReadSvIdl( aTokStm, FALSE, rCommand.aPath ) )
-                    return FALSE;
+                if( !pDataBase->ReadSvIdl( aTokStm, sal_False, rCommand.aPath ) )
+                    return sal_False;
             }
         }
         else
         {
             const ByteString aStr( aFileName, RTL_TEXTENCODING_UTF8 );
             fprintf( stderr, "unable to read input file: %s\n", aStr.GetBuffer() );
-            return FALSE;
+            return sal_False;
         }
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -218,7 +218,7 @@ BOOL ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 |*    Beschreibung
 |*
 *************************************************************************/
-static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
+static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
     // Programmname
     pList->Insert( new String( String::CreateFromAscii(*argv) ), LIST_APPEND );
@@ -228,13 +228,13 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
         { // wenn @, dann Response-Datei
             SvFileStream aStm( String::CreateFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
-                return FALSE;
+                return sal_False;
 
             ByteString aStr;
             while( aStm.ReadLine( aStr ) )
             {
-                USHORT n = 0;
-                USHORT nPos = 1;
+                sal_uInt16 n = 0;
+                sal_uInt16 nPos = 1;
                 while( n != nPos )
                 {
                     while( aStr.GetChar(n) && isspace( aStr.GetChar(n) ) )
@@ -250,7 +250,7 @@ static BOOL ResponseFile( StringList * pList, int argc, char ** argv )
         else if( argv[ i ] )
             pList->Insert( new String( String::CreateFromAscii( argv[ i ] ) ), LIST_APPEND );
     }
-    return TRUE;
+    return sal_True;
 }
 
 /*************************************************************************
@@ -264,7 +264,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     StringList aList;
 
     if( ResponseFile( &aList, argc, argv ) )
-    for( ULONG i = 1; i < aList.Count(); i++ )
+    for( sal_uLong i = 1; i < aList.Count(); i++ )
     {
         String aParam( *aList.GetObject( i ) );
         sal_Unicode aFirstChar( aParam.GetChar(0) );

@@ -69,7 +69,7 @@ public:
     virtual SdrPage* AllocPage(FASTBOOL bMasterPage);
     virtual void     InsertPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemovePage(sal_uInt16 nPgNum);
-    virtual void     MovePage(USHORT nPgNum, USHORT nNewPos);
+    virtual void     MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos);
     virtual void     InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos=0xFFFF);
     virtual SdrPage* RemoveMasterPage(sal_uInt16 nPgNum);
 

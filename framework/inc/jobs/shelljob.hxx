@@ -157,7 +157,7 @@ class ShellJob : private ThreadHelpBase
                     If it's set to false we return false only in case executable couldnt be found
                     or couldnt be started.
 
-            @return TRUE if command was executed successfully; FALSE otherwise.
+            @return sal_True if command was executed successfully; sal_False otherwise.
          */
         ::sal_Bool impl_execute(const ::rtl::OUString&                       sCommand      ,
                                 const css::uno::Sequence< ::rtl::OUString >& lArguments    ,

@@ -30,6 +30,7 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XOfficeInstallationDirectories.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
 
 #include <rtl/ustring.hxx>
 #include <osl/mutex.hxx>
@@ -39,6 +40,7 @@ class SfxURLRelocator_Impl
     ::osl::Mutex maMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >           mxFactory;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XOfficeInstallationDirectories > mxOfficeInstDirs;
+    ::com::sun::star::uno::Reference< ::com::sun::star::util::XMacroExpander >                 mxMacroExpander;
 
 public:
     static bool                 propertyCanContainOfficeDir( const rtl::OUString & rPropName );
@@ -48,6 +50,9 @@ public:
 
     SfxURLRelocator_Impl( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory );
     ~SfxURLRelocator_Impl();
+
+private:
+    void implExpandURL( ::rtl::OUString& io_url );
 };
 
 #endif

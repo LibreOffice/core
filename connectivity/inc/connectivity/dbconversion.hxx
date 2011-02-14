@@ -98,17 +98,18 @@ namespace dbtools
                              const double& rValue,
                              sal_Int16 nKeyType) throw(::com::sun::star::lang::IllegalArgumentException);
 
-        static double getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate,
-                                    sal_Int16 nKeyType);
+        static double getValue( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& xVariant, const ::com::sun::star::util::Date& rNullDate );
 
         // get the columnvalue as string with a default format given by the column or a default format
         // for the type
-        static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
+        static ::rtl::OUString getFormattedValue(
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::lang::Locale& _rLocale,
                                         const ::com::sun::star::util::Date& rNullDate);
 
-        static ::rtl::OUString getValue(const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
+        static ::rtl::OUString getFormattedValue(
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XColumn>& _xColumn,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>& xFormatter,
                                         const ::com::sun::star::util::Date& rNullDate,
                                         sal_Int32 nKey,

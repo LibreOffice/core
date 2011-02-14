@@ -54,29 +54,29 @@ namespace formula
 
         inline const CharClass* GetCharClass() const { return m_pCharClass; }
 
-        BOOL                GetNextFunc( const String&  rFormula,
-                                                 BOOL           bBack,
+        sal_Bool                GetNextFunc( const String&  rFormula,
+                                                 sal_Bool           bBack,
                                                  xub_StrLen&    rFStart, // Ein- und Ausgabe
                                                  xub_StrLen*    pFEnd = NULL,
                                                  const IFunctionDescription** ppFDesc = NULL,
                                                  ::std::vector< ::rtl::OUString>*      pArgs = NULL ) const;
 
         xub_StrLen          GetFunctionStart( const String& rFormula, xub_StrLen nStart,
-                                                        BOOL bBack, String* pFuncName = NULL ) const;
+                                                        sal_Bool bBack, String* pFuncName = NULL ) const;
 
         xub_StrLen          GetFunctionEnd  ( const String& rFormula, xub_StrLen nStart ) const;
 
         xub_StrLen          GetArgStart     ( const String& rFormula, xub_StrLen nStart,
-                                                      USHORT nArg ) const;
+                                                      sal_uInt16 nArg ) const;
 
         void                GetArgStrings   ( ::std::vector< ::rtl::OUString >& _rArgs,
                                                       const String& rFormula,
                                                       xub_StrLen    nFuncPos,
-                                                      USHORT        nArgs ) const;
+                                                      sal_uInt16        nArgs ) const;
 
         void                FillArgStrings  ( const String& rFormula,
                                                       xub_StrLen    nFuncPos,
-                                                      USHORT        nArgs,
+                                                      sal_uInt16        nArgs,
                                                       ::std::vector< ::rtl::OUString >&      _rArgs ) const;
     };
 // =============================================================================

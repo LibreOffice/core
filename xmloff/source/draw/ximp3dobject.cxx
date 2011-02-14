@@ -60,7 +60,7 @@ SdXML3DObjectContext::SdXML3DObjectContext(
     uno::Reference< drawing::XShapes >& rShapes,
     sal_Bool bTemporaryShape)
 :   SdXMLShapeContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
-    mbSetTransform( FALSE )
+    mbSetTransform( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -145,14 +145,14 @@ void SdXML3DObjectContext::SetStyle()
     if(maDrawStyleName.getLength() && mxShape.is())
     {
         const SvXMLStyleContext* pStyle = 0L;
-        sal_Bool bAutoStyle(FALSE);
+        sal_Bool bAutoStyle(sal_False);
 
         if(GetImport().GetShapeImport()->GetAutoStylesContext())
             pStyle = GetImport().GetShapeImport()->GetAutoStylesContext()->FindStyleChildContext(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID, maDrawStyleName);
 
         if(pStyle)
-            bAutoStyle = TRUE;
+            bAutoStyle = sal_True;
 
         if(!pStyle && GetImport().GetShapeImport()->GetStylesContext())
             pStyle = GetImport().GetShapeImport()->GetStylesContext()->
@@ -198,8 +198,8 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maMinEdge(-2500.0, -2500.0, -2500.0),
     maMaxEdge(2500.0, 2500.0, 2500.0),
-    mbMinEdgeUsed(FALSE),
-    mbMaxEdgeUsed(FALSE)
+    mbMinEdgeUsed(sal_False),
+    mbMaxEdgeUsed(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -220,7 +220,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMinEdge)
                 {
                     maMinEdge = aNewVec;
-                    mbMinEdgeUsed = TRUE;
+                    mbMinEdgeUsed = sal_True;
                 }
                 break;
             }
@@ -232,7 +232,7 @@ SdXML3DCubeObjectShapeContext::SdXML3DCubeObjectShapeContext(
                 if(aNewVec != maMaxEdge)
                 {
                     maMaxEdge = aNewVec;
-                    mbMaxEdgeUsed = TRUE;
+                    mbMaxEdgeUsed = sal_True;
                 }
                 break;
             }
@@ -309,8 +309,8 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
 :   SdXML3DObjectContext( rImport, nPrfx, rLocalName, xAttrList, rShapes, bTemporaryShape ),
     maCenter(0.0, 0.0, 0.0),
     maSize(5000.0, 5000.0, 5000.0),
-    mbCenterUsed(FALSE),
-    mbSizeUsed(FALSE)
+    mbCenterUsed(sal_False),
+    mbSizeUsed(sal_False)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
@@ -331,7 +331,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maCenter)
                 {
                     maCenter = aNewVec;
-                    mbCenterUsed = TRUE;
+                    mbCenterUsed = sal_True;
                 }
                 break;
             }
@@ -343,7 +343,7 @@ SdXML3DSphereObjectShapeContext::SdXML3DSphereObjectShapeContext(
                 if(aNewVec != maSize)
                 {
                     maSize = aNewVec;
-                    mbSizeUsed = TRUE;
+                    mbSizeUsed = sal_True;
                 }
                 break;
             }

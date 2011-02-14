@@ -38,7 +38,7 @@ private:
     basegfx::B3DPolyPolygon aPolyPoly3D;
     basegfx::B3DPolyPolygon aPolyNormals3D;
     basegfx::B2DPolyPolygon aPolyTexture2D;
-    BOOL            bLineOnly;
+    sal_Bool            bLineOnly;
 
     SVX_DLLPRIVATE void CreateDefaultNormals();
     SVX_DLLPRIVATE void CreateDefaultTexture();
@@ -56,18 +56,18 @@ public:
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
-        BOOL bLinOnly=FALSE);
+        sal_Bool bLinOnly=sal_False);
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
         const basegfx::B3DPolyPolygon& rPolyNormals3D,
-        BOOL bLinOnly=FALSE);
+        sal_Bool bLinOnly=sal_False);
     E3dPolygonObj(
         E3dDefaultAttributes& rDefault,
         const basegfx::B3DPolyPolygon& rPolyPoly3D,
         const basegfx::B3DPolyPolygon& rPolyNormals3D,
         const basegfx::B2DPolyPolygon& rPolyTexture2D,
-        BOOL bLinOnly=FALSE);
+        sal_Bool bLinOnly=sal_False);
 
     E3dPolygonObj();
     virtual ~E3dPolygonObj();
@@ -76,14 +76,14 @@ public:
     const basegfx::B3DPolyPolygon& GetPolyNormals3D() const { return aPolyNormals3D; }
     const basegfx::B2DPolyPolygon& GetPolyTexture2D() const { return aPolyTexture2D; }
 
-    virtual UINT16 GetObjIdentifier() const;
-    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual sal_uInt16 GetObjIdentifier() const;
+    virtual SdrObject* DoConvertToPolyObj(sal_Bool bBezier) const;
 
     virtual void operator=(const SdrObject&);
 
     // LineOnly?
-    BOOL GetLineOnly() { return bLineOnly; }
-    void SetLineOnly(BOOL bNew);
+    sal_Bool GetLineOnly() { return bLineOnly; }
+    void SetLineOnly(sal_Bool bNew);
 };
 
 #endif          // _E3D_POLYGON3D_HXX

@@ -78,10 +78,10 @@
 class SbxRes : public ::rtl::OUString
 {
 public:
-    SbxRes( USHORT );
+    SbxRes( sal_uInt16 );
 };
 
-const char* GetSbxRes( USHORT );
+const char* GetSbxRes( sal_uInt16 );
 
 
 #endif

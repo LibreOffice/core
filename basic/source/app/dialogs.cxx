@@ -108,9 +108,9 @@ IMPL_LINK_INLINE_START( FindDialog, ButtonClick, Button *, pB )
 {
     if( pB == &aOk ) {
         *pFind = aFind.GetText();
-        EndDialog( TRUE );
-    } else EndDialog( FALSE );
-    return TRUE;
+        EndDialog( sal_True );
+    } else EndDialog( sal_False );
+    return sal_True;
 }
 IMPL_LINK_INLINE_END( FindDialog, ButtonClick, Button *, pB )
 
@@ -138,9 +138,9 @@ IMPL_LINK( ReplaceDialog, ButtonClick, Button *, pB )
     if( pB == &aOk ) {
         *pFind = aFind.GetText();
         *pReplace = aReplace.GetText();
-        EndDialog( TRUE );
-    } else EndDialog( FALSE );
-    return TRUE;
+        EndDialog( sal_True );
+    } else EndDialog( sal_False );
+    return sal_True;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ void ConfEdit::Init( Config &aConf )
     aEdit.SetText( aTemp );
 }
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+ConfEdit::ConfEdit( Window* pParent, sal_uInt16 nResText, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf )
 : PushButton( pParent, SttResId(nResButton) )
 , aText( pParent, SttResId(nResText) )
 , aEdit( pParent, SttResId(nResEdit) )
@@ -172,7 +172,7 @@ ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nR
     Init( aConf );
 }
 
-ConfEdit::ConfEdit( Window* pParent, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
+ConfEdit::ConfEdit( Window* pParent, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, Config &aConf )
 : PushButton( pParent, SttResId(nResButton) )
 , aText( pParent )
 , aEdit( pParent, SttResId(nResEdit) )
@@ -210,7 +210,7 @@ void ConfEdit::Click()
     }
 }
 
-OptConfEdit::OptConfEdit( Window* pParent, USHORT nResCheck, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf )
+OptConfEdit::OptConfEdit( Window* pParent, sal_uInt16 nResCheck, sal_uInt16 nResEdit, sal_uInt16 nResButton, const ByteString& aKN, ConfEdit& rBaseEdit, Config& aConf )
 : ConfEdit( pParent, nResEdit, nResButton, aKN, aConf )
 , aCheck( pParent, SttResId( nResCheck ) )
 , rBase( rBaseEdit )
@@ -260,7 +260,7 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 , aCancel( this )
 , aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
 {
-    aConfig.EnablePersistence( FALSE );
+    aConfig.EnablePersistence( sal_False );
     FreeResource();
     aTabCtrl.SetActivatePageHdl( LINK( this, OptionsDialog, ActivatePageHdl ) );
     aTabCtrl.SetCurPageId( RID_TP_PRO );
@@ -274,25 +274,25 @@ OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 
 OptionsDialog::~OptionsDialog()
 {
-    for ( USHORT i = 0; i < aTabCtrl.GetPageCount(); i++ )
+    for ( sal_uInt16 i = 0; i < aTabCtrl.GetPageCount(); i++ )
         delete aTabCtrl.GetTabPage( aTabCtrl.GetPageId( i ) );
 };
 
-BOOL OptionsDialog::Close()
+sal_Bool OptionsDialog::Close()
 {
   if ( TabDialog::Close() )
   {
     delete this;
-    return TRUE;
+    return sal_True;
   }
   else
-    return FALSE;
+    return sal_False;
 }
 
 
 IMPL_LINK( OptionsDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
-    USHORT nId = pTabCtrl->GetCurPageId();
+    sal_uInt16 nId = pTabCtrl->GetCurPageId();
     // If TabPage was not yet created, do it
     if ( !pTabCtrl->GetTabPage( nId ) )
     {
@@ -362,7 +362,7 @@ IMPL_LINK( OptionsDialog, OKClick, Button *, pButton )
 }
 
 const ByteString ProfilePrefix("_profile_");
-const USHORT ProfilePrefixLen = ProfilePrefix.Len();
+const sal_uInt16 ProfilePrefixLen = ProfilePrefix.Len();
 
 ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 : TabPage( pParent, SttResId( RID_TP_PROFILE ) )
@@ -384,7 +384,7 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 {
     FreeResource();
 
-    aCbProfile.EnableAutocomplete( TRUE );
+    aCbProfile.EnableAutocomplete( sal_True );
 
     aCbProfile.SetSelectHdl( LINK( this, ProfileOptions, Select ) );
 
@@ -399,7 +399,7 @@ ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
 void ProfileOptions::LoadData()
 {
     // collect all profiles (all groups starting with the ProfilePrefix)
-    for ( USHORT i = 0 ; i < rConf.GetGroupCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < rConf.GetGroupCount() ; i++ )
     {
         ByteString aProfile = rConf.GetGroupName( i );
         if ( aProfile.Match( ProfilePrefix ) )
@@ -520,7 +520,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
 {
     FreeResource();
 
-    aNFCRPort.SetUseThousandSep( FALSE );
+    aNFCRPort.SetUseThousandSep( sal_False );
 
     ByteString aTemp;
 
@@ -530,7 +530,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
         aCBUseProxy.Check();
     else
-        aCBUseProxy.Check( FALSE );
+        aCBUseProxy.Check( sal_False );
 
     aCBUseProxy.SetToggleHdl( LINK( this, CrashreportOptions, CheckProxy ) );
     LINK( this, CrashreportOptions, CheckProxy ).Call( NULL );  // call once to initialize
@@ -545,7 +545,7 @@ CrashreportOptions::CrashreportOptions( Window* pParent, Config &aConfig )
     if ( aTemp.EqualsIgnoreCaseAscii( "true" ) || aTemp.Equals( "1" ) )
         aCBAllowContact.Check();
     else
-        aCBAllowContact.Check( FALSE );
+        aCBAllowContact.Check( sal_False );
 
     aCBAllowContact.SetToggleHdl( LINK( this, CrashreportOptions, CheckResponse ) );
     LINK( this, CrashreportOptions, CheckResponse ).Call( NULL );  // call once to initialize
@@ -611,9 +611,9 @@ MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
 {
     FreeResource();
 
-    aNFTTPort.SetUseThousandSep( FALSE );
-    aNFUNOPort.SetUseThousandSep( FALSE );
-    aTFMaxLRU.SetUseThousandSep( FALSE );
+    aNFTTPort.SetUseThousandSep( sal_False );
+    aNFUNOPort.SetUseThousandSep( sal_False );
+    aTFMaxLRU.SetUseThousandSep( sal_False );
 
     ByteString aTemp;
 
@@ -661,8 +661,8 @@ void MiscOptions::Save( Config &aConfig )
 
     aConfig.SetGroup("LRU");
     ByteString aTemp = aConfig.ReadKey( "MaxLRU", "4" );
-    USHORT nOldMaxLRU = (USHORT)aTemp.ToInt32();
-    USHORT n;
+    sal_uInt16 nOldMaxLRU = (sal_uInt16)aTemp.ToInt32();
+    sal_uInt16 n;
     for ( n = nOldMaxLRU ; n > aTFMaxLRU.GetValue() ; n-- )
         aConfig.DeleteKey( ByteString("LRU").Append( ByteString::CreateFromInt32( n ) ) );
     aConfig.WriteKey( "MaxLRU", ByteString::CreateFromInt64( aTFMaxLRU.GetValue() ) );
@@ -735,8 +735,8 @@ IMPL_LINK( FontOptions, FontSizeChanged, void*, EMPTYARG )
 void FontOptions::UpdatePreview()
 {
     Font aFont = aFontList.Get( aFontName.GetText(), aFontStyle.GetText() );
-//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
-    ULONG nFontSize = static_cast<ULONG>((aFontSize.GetValue() + 5) / 10);
+//    sal_uIntPtr nFontSize = aFontSize.GetValue( FUNIT_POINT );
+    sal_uIntPtr nFontSize = static_cast<sal_uIntPtr>((aFontSize.GetValue() + 5) / 10);
     aFont.SetHeight( nFontSize );
     aFTPreview.SetFont( aFont );
     aFTPreview.SetText( aFontName.GetText() );
@@ -770,13 +770,13 @@ GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
 , aPbDelValue( this, SttResId( RID_PB_DEL_VALUE ) )
 
 , nMoveButtons( 0 )
-, bShowSelectPath( FALSE )
+, bShowSelectPath( sal_False )
 {
     FreeResource();
     LoadData();
 
-    aCbArea.EnableAutocomplete( TRUE );
-    aCbValue.EnableAutocomplete( TRUE );
+    aCbArea.EnableAutocomplete( sal_True );
+    aCbValue.EnableAutocomplete( sal_True );
 
     aCbArea.SetSelectHdl( LINK( this, GenericOptions, LoadGroup ) );
 
@@ -802,7 +802,7 @@ GenericOptions::~GenericOptions()
 StringList* GenericOptions::GetAllGroups()
 {
     StringList* pGroups = new StringList();
-    for ( USHORT i = 0 ; i < aConf.GetGroupCount() ; i++ )
+    for ( sal_uInt16 i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
         String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
         pGroups->Insert( pGroup );
@@ -841,16 +841,16 @@ void GenericOptions::ShowSelectPath( const String aType )
     {   // Show Path button
         nMoveButtons += nDelta;
         aMoveTimer.Start();
-        bShowSelectPath = TRUE;
-        aPbSelectPath.Show( TRUE );
-        aPbSelectPath.Enable( TRUE );
+        bShowSelectPath = sal_True;
+        aPbSelectPath.Show( sal_True );
+        aPbSelectPath.Enable( sal_True );
     }
     else if ( !aType.EqualsIgnoreCaseAscii( "PATH" ) && bShowSelectPath )
     {   // Hide Path button
         nMoveButtons -= nDelta;
         aMoveTimer.Start();
-        bShowSelectPath = FALSE;
-        aPbSelectPath.Enable( FALSE );
+        bShowSelectPath = sal_False;
+        aPbSelectPath.Enable( sal_False );
     }
 }
 
@@ -903,7 +903,7 @@ IMPL_LINK( GenericOptions, LoadGroup, ComboBox*, EMPTYARG )
 
         aConf.SetGroup( aLastGroupName );
         aConf.WriteKey( C_KEY_AKTUELL, ByteString( aCurrentValue, RTL_TEXTENCODING_UTF8 ) );
-        USHORT i;
+        sal_uInt16 i;
         for ( i=0 ; i < aCbValue.GetEntryCount() ; i++ )
         {
             if ( i > 0 )
@@ -1021,16 +1021,16 @@ class TextAndWin : public DockingWindow
     Window* pFtOriginalParent;
     Window* pWinOriginalParent;
     long nSpace;    // default space
-    BOOL bAlignTop;
+    sal_Bool bAlignTop;
 
 public:
-    TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, BOOL bAlignTopP );
+    TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, sal_Bool bAlignTopP );
     ~TextAndWin();
 
     virtual void Resize();
 };
 
-TextAndWin::TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, BOOL bAlignTopP )
+TextAndWin::TextAndWin( Window *pParent, FixedText *pFtP, Window *pWinP, long nSpaceP, sal_Bool bAlignTopP )
 : DockingWindow( pParent )
 , pFt( pFtP )
 , pWin( pWinP )
@@ -1112,8 +1112,8 @@ DisplayHidDlg::DisplayHidDlg( Window * pParent )
 #endif
 
     pSplit = new SplitWindow( this );
-    pControls = new TextAndWin( pSplit, &aFtControls, &aMlbControls, aMlbControls.GetPosPixel().X(), TRUE );
-    pSlots = new TextAndWin( pSplit, &aFtSlots, &aMlbSlots, aMlbControls.GetPosPixel().X(), FALSE );
+    pControls = new TextAndWin( pSplit, &aFtControls, &aMlbControls, aMlbControls.GetPosPixel().X(), sal_True );
+    pSlots = new TextAndWin( pSplit, &aFtSlots, &aMlbSlots, aMlbControls.GetPosPixel().X(), sal_False );
 
     pSplit->SetPosPixel( aFtControls.GetPosPixel() );
     pSplit->InsertItem( 1, pControls, 70, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
@@ -1139,7 +1139,7 @@ DisplayHidDlg::~DisplayHidDlg()
 IMPL_LINK( DisplayHidDlg, CopyToClipboard, void*, EMPTYARG )
 {
     String aSammel;
-    USHORT i;
+    sal_uInt16 i;
 
     for ( i=0 ; i < aMlbControls.GetSelectEntryCount() ; i++ )
     {
@@ -1161,7 +1161,7 @@ IMPL_LINK( DisplayHidDlg, SelectAll, PushButton*, pButton )
 {
     if ( pButton->GetState() != STATE_CHECK )
     {
-        USHORT i;
+        sal_uInt16 i;
         for ( i=0 ; i < aMlbControls.GetEntryCount() ; i++ )
             aMlbControls.SelectEntryPos( i );
         for ( i=0 ; i < aMlbSlots.GetEntryCount() ; i++ )
@@ -1266,7 +1266,7 @@ void DisplayHidDlg::Resize()
     }
     else
     {
-//      SetUpdateMode( FALSE );
+//      SetUpdateMode( sal_False );
 
         // Minimum size
         Size aSize( GetOutputSizePixel() );
@@ -1322,7 +1322,7 @@ void DisplayHidDlg::Resize()
         aPos.Move( pSplit->GetSizePixel().Width(), pSplit->GetSizePixel().Height() );
         aOKClose.SetPosPixel( aPos );
 
-//      SetUpdateMode( TRUE );
+//      SetUpdateMode( sal_True );
 //      Invalidate();
     }
     FloatingWindow::Resize();
@@ -1402,7 +1402,7 @@ VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
 IMPL_LINK( VarEditDialog, OKClick, Button *, pButton )
 {
     (void) pButton; /* avoid warning about unused parameter */
-    BOOL bWasError = SbxBase::IsError();    // Probably an error is thrown
+    sal_Bool bWasError = SbxBase::IsError();    // Probably an error is thrown
 
 
     SbxDataType eType = pVar->GetType();
@@ -1445,7 +1445,7 @@ SvNumberformat::
 
 
     String aContent( aEditRID_ED_NEW_STRING.GetText() );
-    BOOL bError = FALSE;
+    sal_Bool bError = sal_False;
     switch ( eType )
     {
         case SbxBOOL:
@@ -1458,10 +1458,10 @@ SvNumberformat::
 //          pVar->PutDate( aContent );
 //          break;
         case SbxINTEGER:
-            pVar->PutInteger( (INT16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
+            pVar->PutInteger( (sal_Int16)aNumericFieldRID_NF_NEW_INTEGER.GetValue() );
             break;
         case SbxLONG:
-            pVar->PutLong( static_cast<INT32>(aNumericFieldRID_NF_NEW_LONG.GetValue()) );
+            pVar->PutLong( static_cast<sal_Int32>(aNumericFieldRID_NF_NEW_LONG.GetValue()) );
             break;
         case SbxDOUBLE:
         case SbxSINGLE:
@@ -1482,7 +1482,7 @@ SvNumberformat::
 //  pVar->PutStringExt( aEditRID_ED_NEW_STRING.GetText() );
     if ( !bWasError && SbxBase::IsError() )
     {
-        bError = TRUE;
+        bError = sal_True;
         SbxBase::ResetError();
     }
 

@@ -76,7 +76,7 @@ namespace svx
     }
 
     //--------------------------------------------------------------------
-    void TextControlCharAttribDialog::PageCreated( USHORT _nId, SfxTabPage& _rPage )
+    void TextControlCharAttribDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
