@@ -46,6 +46,10 @@
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
 
+#include <rtl/instance.hxx>
+#include <comphelper/string.hxx>
+#include <comphelper/processfactory.hxx>
+
 #define MULTILINE_ENTRY_DRAW_FLAGS ( TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE | TEXT_DRAW_VCENTER )
 
 using namespace ::com::sun::star;
@@ -144,17 +148,29 @@ void ImplEntryList::SelectEntry( USHORT nPos, BOOL bSelect )
     }
 }
 
-// -----------------------------------------------------------------------
-
-uno::Reference< i18n::XCollator > ImplGetCollator (lang::Locale &rLocale)
+namespace
 {
-    static uno::Reference< i18n::XCollator > xCollator;
-    if ( !xCollator.is() )
-        xCollator = vcl::unohelper::CreateCollator();
-    if( xCollator.is() )
-        xCollator->loadDefaultCollator (rLocale, 0);
+    struct theSorter
+        : public rtl::StaticWithInit< comphelper::string::NaturalStringSorter, theSorter >
+    {
+        comphelper::string::NaturalStringSorter operator () ()
+        {
+            return comphelper::string::NaturalStringSorter(
+                ::comphelper::getProcessComponentContext(),
+                Application::GetSettings().GetLocale());
+        }
+    };
+}
 
-    return xCollator;
+namespace vcl
+{
+    namespace unohelper
+    {
+        const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale()
+        {
+            return theSorter::get();
+        }
+    }
 }
 
 USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL bSort )
@@ -168,8 +184,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
     }
     else
     {
-        lang::Locale aLocale = Application::GetSettings().GetLocale();
-        uno::Reference< i18n::XCollator > xCollator = ImplGetCollator(aLocale);
+        const comphelper::string::NaturalStringSorter &rSorter = theSorter::get();
 
         const XubString& rStr = pNewEntry->maStr;
         ULONG nLow, nHigh, nMid;
@@ -182,9 +197,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
         {
             // XXX even though XCollator::compareString returns a sal_Int32 the only
             // defined values are {-1, 0, 1} which is compatible with StringCompare
-            StringCompare eComp = xCollator.is() ?
-                (StringCompare)xCollator->compareString (rStr, pTemp->maStr)
-                : COMPARE_EQUAL;
+            StringCompare eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
 
             // Schnelles Einfuegen bei sortierten Daten
             if ( eComp != COMPARE_LESS )
@@ -196,7 +209,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
                 nLow  = mnMRUCount;
                 pTemp = (ImplEntryType*)GetEntry( (USHORT)nLow );
 
-                eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
+                eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
                 if ( eComp != COMPARE_GREATER )
                 {
                     Insert( pNewEntry, (ULONG)0 );
@@ -210,7 +223,7 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
                         nMid = (nLow + nHigh) / 2;
                         pTemp = (ImplEntryType*)GetObject( nMid );
 
-                        eComp = (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
+                        eComp = (StringCompare)rSorter.compare(rStr, pTemp->maStr);
 
                         if ( eComp == COMPARE_LESS )
                             nHigh = nMid-1;

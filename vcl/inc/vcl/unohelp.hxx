@@ -54,6 +54,11 @@ namespace accessibility {
 }
 }}}
 
+namespace comphelper {
+    namespace string {
+        class NaturalStringSorter;
+}}
+
 namespace vcl
 {
 namespace unohelper
@@ -61,7 +66,8 @@ namespace unohelper
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > GetMultiServiceFactory();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > CreateBreakIterator();
 VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCharacterClassification> CreateCharacterClassification();
-VCL_DLLPUBLIC ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XCollator > CreateCollator();
+//Get access to singleton Natural String Sorter collating for Application::GetLocale
+VCL_DLLPUBLIC const comphelper::string::NaturalStringSorter& getNaturalStringSorterForAppLocale();
 VCL_DLLPUBLIC ::rtl::OUString CreateLibraryName( const sal_Char* pModName, sal_Bool bSUPD );
 VCL_DLLPUBLIC void NotifyAccessibleStateEventGlobally( const ::com::sun::star::accessibility::AccessibleEventObject& rEventObject );
 }}  // namespace vcl::unohelper
