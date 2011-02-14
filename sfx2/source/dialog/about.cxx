@@ -262,11 +262,6 @@ IMPL_LINK( AboutDialog, TimerHdl, Timer *, pTimer )
 
 IMPL_LINK( AboutDialog, AccelSelectHdl, Accelerator *, pAccelerator )
 {
-#ifdef YURI_DARIO
-    aCopyrightText.SetHelpText( DEFINE_CONST_UNICODE("Conoscere qualcuno ovunque egli sia, con cui comprendersi nonostante le distanze\n"
-                      "e le differenze, puo' trasformare la terra in un giardino. baci Valeria") );
-#endif
-
     (void)pAccelerator; //unused
     // init Timer
     aTimer.SetTimeoutHdl( LINK( this, AboutDialog, TimerHdl ) );
