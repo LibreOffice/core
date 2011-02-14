@@ -44,7 +44,10 @@ static bool bReportingAssertion = false;
 
 void ResetCapturedAssertions()
 {
-    DBG_INSTOUTERROR( nRestoreChannelId != 0 ? nRestoreChannelId : DBG_OUT_NULL );
+    if ( nRestoreChannelId != 0 )
+    {
+        DBG_INSTOUTERROR( nRestoreChannelId );
+    }
     nRestoreChannelId = 0;
     xAssertionChannelBasic = NULL;
     sCaptureFunctionName = String();
