@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
-static const USHORT __FAR_DATA nFtnLines[] = {
+static const sal_uInt16 __FAR_DATA nFtnLines[] = {
     0,
     10,
     50,
@@ -59,7 +59,7 @@ static const USHORT __FAR_DATA nFtnLines[] = {
 #define FTN_LINE_STYLE_COUNT 5
 
 
-SwPageFtnInfoItem::SwPageFtnInfoItem( const USHORT nId, SwPageFtnInfo& rInfo) :
+SwPageFtnInfoItem::SwPageFtnInfoItem( const sal_uInt16 nId, SwPageFtnInfo& rInfo) :
     SfxPoolItem( nId ),
     aFtnInfo(rInfo)
 {
@@ -108,7 +108,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            USHORT nHght = (USHORT) GetPageFtnInfo().GetHeight();
+            sal_uInt16 nHght = (sal_uInt16) GetPageFtnInfo().GetHeight();
             if ( nHght )
             {
                 rText = SW_RESSTR( STR_MAX_FTN_HEIGHT );
@@ -125,7 +125,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
 /* -----------------------------26.04.01 12:25--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
+sal_Bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
 {
     sal_Bool bRet = sal_True;
     switch(nMemberId & ~CONVERT_TWIPS)
@@ -151,7 +151,7 @@ BOOL SwPageFtnInfoItem::QueryValue( Any& rVal, BYTE nMemberId ) const
 /* -----------------------------26.04.01 12:26--------------------------------
 
  ---------------------------------------------------------------------------*/
-BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
+sal_Bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
 {
     sal_Int32 nSet32 = 0;
     sal_Bool bRet = sal_True;
@@ -214,7 +214,7 @@ BOOL SwPageFtnInfoItem::PutValue(const Any& rVal, BYTE nMemberId)
     return bRet;
 }
 
-SwPtrItem::SwPtrItem( const USHORT nId, void* pPtr ) :
+SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
     SfxPoolItem( nId ),
     pMisc(pPtr)
 {
@@ -256,7 +256,7 @@ int SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
 /*-----------------12.11.97 12:55-------------------------------
  SwUINumRuleItem fuer die NumTabPages der FormatNumRule/Stylisten
 ---------------------------------------------------------------*/
-SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const USHORT nId )
+SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
     : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )
 {
 }
@@ -284,13 +284,13 @@ int  SwUINumRuleItem::operator==( const SfxPoolItem& rAttr ) const
     return *pRule == *((SwUINumRuleItem&)rAttr).pRule;
 }
 
-BOOL SwUINumRuleItem::QueryValue( uno::Any& rVal, BYTE /*nMemberId*/ ) const
+sal_Bool SwUINumRuleItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/ ) const
 {
     uno::Reference< container::XIndexReplace >xRules = new SwXNumberingRules(*pRule);
     rVal.setValue(&xRules, ::getCppuType((uno::Reference< container::XIndexReplace>*)0));
-    return TRUE;
+    return sal_True;
 }
-BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
+sal_Bool SwUINumRuleItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ )
 {
     uno::Reference< container::XIndexReplace> xRulesRef;
     if(rVal >>= xRulesRef)
@@ -303,12 +303,12 @@ BOOL SwUINumRuleItem::PutValue( const uno::Any& rVal, BYTE /*nMemberId*/ )
             *pRule = *pSwXRules->GetNumRule();
         }
     }
-    return TRUE;
+    return sal_True;
 }
 /* -----------------17.06.98 17:43-------------------
  *
  * --------------------------------------------------*/
-SwBackgroundDestinationItem::SwBackgroundDestinationItem(USHORT  _nWhich, USHORT nValue) :
+SwBackgroundDestinationItem::SwBackgroundDestinationItem(sal_uInt16  _nWhich, sal_uInt16 nValue) :
     SfxUInt16Item(_nWhich, nValue)
 {
 }

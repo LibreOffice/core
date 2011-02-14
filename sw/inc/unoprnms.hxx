@@ -814,7 +814,7 @@ enum SwPropNameIds
 struct SwPropNameLen
 {
     const char* pName;
-    USHORT      nNameLen;
+    sal_uInt16      nNameLen;
     operator const char*() const { return pName; }
 };
 
@@ -826,8 +826,8 @@ extern const SwPropNameTab aPropNameTab;
 // !!! function must not(!) be inline because it is called via the below  !!!
 // !!! listed macros from the swui DLL and that can not access the        !!!
 // !!! array aPropNameTab which is located in a different DLL.            !!!
-SW_DLLPUBLIC const SwPropNameLen& GetPropName( USHORT nId );
-SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( USHORT nId );
+SW_DLLPUBLIC const SwPropNameLen& GetPropName( sal_uInt16 nId );
+SW_DLLPUBLIC const SwPropNameLen& SwGetPropName( sal_uInt16 nId );
 
 #define SW_PROP_NAME(nId) \
     GetPropName( nId ).pName, GetPropName( nId ).nNameLen

@@ -379,48 +379,48 @@ RES_FLTRATTR_END
 #define RES_WHICHHINT_END HINT_END
 
 
-inline bool isATR(const USHORT nWhich)
+inline bool isATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
-inline bool isCHRATR(const USHORT nWhich)
+inline bool isCHRATR(const sal_uInt16 nWhich)
 {
     return (RES_CHRATR_BEGIN <= nWhich) && (RES_CHRATR_END > nWhich);
 }
-inline bool isTXTATR_WITHEND(const USHORT nWhich)
+inline bool isTXTATR_WITHEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_WITHEND_BEGIN <= nWhich)
         && (RES_TXTATR_WITHEND_END > nWhich);
 }
-inline bool isTXTATR_NOEND(const USHORT nWhich)
+inline bool isTXTATR_NOEND(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_NOEND_BEGIN <= nWhich)
         && (RES_TXTATR_NOEND_END > nWhich);
 }
-inline bool isTXTATR(const USHORT nWhich)
+inline bool isTXTATR(const sal_uInt16 nWhich)
 {
     return (RES_TXTATR_BEGIN <= nWhich) && (RES_TXTATR_END > nWhich);
 }
-inline bool isPARATR(const USHORT nWhich)
+inline bool isPARATR(const sal_uInt16 nWhich)
 {
     return (RES_PARATR_BEGIN <= nWhich) && (RES_PARATR_END > nWhich);
 }
-inline bool isPARATR_LIST(const USHORT nWhich)
+inline bool isPARATR_LIST(const sal_uInt16 nWhich)
 {
     return (RES_PARATR_LIST_BEGIN <= nWhich) && (RES_PARATR_LIST_END > nWhich); }
-inline bool isFRMATR(const USHORT nWhich)
+inline bool isFRMATR(const sal_uInt16 nWhich)
 {
     return (RES_FRMATR_BEGIN <= nWhich) && (RES_FRMATR_END > nWhich);
 }
-inline bool isGRFATR(const USHORT nWhich)
+inline bool isGRFATR(const sal_uInt16 nWhich)
 {
     return (RES_GRFATR_BEGIN <= nWhich) && (RES_GRFATR_END > nWhich);
 }
-inline bool isBOXATR(const USHORT nWhich)
+inline bool isBOXATR(const sal_uInt16 nWhich)
 {
     return (RES_BOXATR_BEGIN <= nWhich) && (RES_BOXATR_END > nWhich);
 }
-inline bool isUNKNOWNATR(const USHORT nWhich)
+inline bool isUNKNOWNATR(const sal_uInt16 nWhich)
 {
     return (RES_UNKNOWNATR_BEGIN <= nWhich) && (RES_UNKNOWNATR_END > nWhich);
 }
@@ -442,9 +442,9 @@ typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 extern SwDfltAttrTab __FAR_DATA aAttrTab;
 extern SfxItemInfo   __FAR_DATA aSlotTab[];
 
-SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
+SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( sal_uInt16 nWhich );
 
-SW_DLLPUBLIC USHORT GetWhichOfScript( USHORT nWhich, USHORT nScript );
+SW_DLLPUBLIC sal_uInt16 GetWhichOfScript( sal_uInt16 nWhich, sal_uInt16 nScript );
 
 // return for the given TextAttribut without an end the correct character.
 // This function returns
@@ -456,31 +456,31 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 // alle Sets stehen im init.cxx
 
 // AttrSet-Range fuer die 3 Break-Attribute
-extern USHORT __FAR_DATA aBreakSetRange[];
+extern sal_uInt16 __FAR_DATA aBreakSetRange[];
 // AttrSet-Range fuer die TxtFmtColl
-extern USHORT __FAR_DATA aTxtFmtCollSetRange[];
+extern sal_uInt16 __FAR_DATA aTxtFmtCollSetRange[];
 // AttrSet-Range fuer die GrfFmtColl
-extern USHORT __FAR_DATA aGrfFmtCollSetRange[];
+extern sal_uInt16 __FAR_DATA aGrfFmtCollSetRange[];
 // AttrSet-Range fuer die TextNode
-SW_DLLPUBLIC extern USHORT __FAR_DATA aTxtNodeSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 __FAR_DATA aTxtNodeSetRange[];
 // AttrSet-Range fuer die NoTxtNode
-extern USHORT __FAR_DATA aNoTxtNodeSetRange[];
+extern sal_uInt16 __FAR_DATA aNoTxtNodeSetRange[];
 // AttrSet-Range fuer die SwTable
-extern USHORT __FAR_DATA aTableSetRange[];
+extern sal_uInt16 __FAR_DATA aTableSetRange[];
 // AttrSet-Range fuer die SwTableLine
-extern USHORT __FAR_DATA aTableLineSetRange[];
+extern sal_uInt16 __FAR_DATA aTableLineSetRange[];
 // AttrSet-Range fuer die SwTableBox
-extern USHORT __FAR_DATA aTableBoxSetRange[];
+extern sal_uInt16 __FAR_DATA aTableBoxSetRange[];
 // AttrSet-Range fuer die SwFrmFmt
-SW_DLLPUBLIC extern USHORT __FAR_DATA aFrmFmtSetRange[];
+SW_DLLPUBLIC extern sal_uInt16 __FAR_DATA aFrmFmtSetRange[];
 // AttrSet-Range fuer die SwCharFmt
-extern USHORT __FAR_DATA aCharFmtSetRange[];
+extern sal_uInt16 __FAR_DATA aCharFmtSetRange[];
 // AttrSet-Range fuer die character autostyles
-extern USHORT __FAR_DATA aCharAutoFmtSetRange[];
+extern sal_uInt16 __FAR_DATA aCharAutoFmtSetRange[];
 // AttrSet-Range fuer die SwPageDescFmt
-extern USHORT __FAR_DATA aPgFrmFmtSetRange[];
+extern sal_uInt16 __FAR_DATA aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
-BOOL IsInRange( const USHORT* pRange, const USHORT nId );
+sal_Bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId );
 
 #endif

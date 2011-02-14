@@ -68,10 +68,10 @@ friend class InputEdit;
     String          aAktTableName, sOldFml;
     sal_Int32       m_nActionCount;
 
-    BOOL            bFirst : 1;  //Initialisierungen beim ersten Aufruf
-    BOOL            bActive : 1; //fuer Hide/Show beim Dokumentwechsel
-    BOOL            bIsTable : 1;
-    BOOL            bDelSel : 1;
+    sal_Bool        bFirst : 1;  //Initialisierungen beim ersten Aufruf
+    sal_Bool        bActive : 1; //fuer Hide/Show beim Dokumentwechsel
+    sal_Bool        bIsTable : 1;
+    sal_Bool        bDelSel : 1;
     bool            m_bDoesUndo : 1;
     bool            m_bResetUndo : 1;
     bool            m_bCallUndo : 1;
@@ -101,26 +101,26 @@ public:
 
     void            ShowWin();
 
-    BOOL            IsActive(){ return bActive; };
+    sal_Bool            IsActive(){ return bActive; };
 
     DECL_LINK( SelTblCellsNotify, SwWrtShell * );
 
-    void            SetFormula( const String& rFormula, BOOL bDelSel = TRUE );
+    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True );
     const SwView*   GetView() const{return pView;}
 };
 
 class SwInputChild : public SfxChildWindow
 {
-    BOOL            bObjVis;
+    sal_Bool            bObjVis;
     SfxDispatcher*  pDispatch;
 public:
     SwInputChild( Window* ,
-                        USHORT nId,
+                        sal_uInt16 nId,
                         SfxBindings*,
                         SfxChildWinInfo*  );
     ~SwInputChild();
     SFX_DECL_CHILDWINDOW( SwInputChild );
-    void            SetFormula( const String& rFormula, BOOL bDelSel = TRUE )
+    void            SetFormula( const String& rFormula, sal_Bool bDelSel = sal_True )
                         { ((SwInputWindow*)pWindow)->SetFormula(
                                     rFormula, bDelSel ); }
     const SwView*   GetView() const{return ((SwInputWindow*)pWindow)->GetView();}

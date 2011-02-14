@@ -215,7 +215,7 @@ class SwHTMLWriter : public Writer
     void CollectLinkTargets();
 
 protected:
-    ULONG WriteStream();
+    sal_uLong WriteStream();
 
 public:
 #if defined(UNX)
@@ -347,7 +347,7 @@ public:
     void OutHyperlinkHRefValue( const String& rURL );
 
     // gebe die evt. an der akt. Position stehenden FlyFrame aus.
-    sal_Bool OutFlyFrm( ULONG nNdIdx, xub_StrLen nCntntIdx,
+    sal_Bool OutFlyFrm( sal_uLong nNdIdx, xub_StrLen nCntntIdx,
                         sal_uInt8 nPos, HTMLOutContext *pContext = 0 );
     void OutFrmFmt( sal_uInt8 nType, const SwFrmFmt& rFmt,
                     const SdrObject *pSdrObj );
@@ -543,7 +543,7 @@ struct HTMLSaveData
     sal_Bool bOldOutFlyFrame : 1;
     const SwFlyFrmFmt* pOldFlyFmt;
 
-    HTMLSaveData( SwHTMLWriter&, ULONG nStt, ULONG nEnd,
+    HTMLSaveData( SwHTMLWriter&, sal_uLong nStt, sal_uLong nEnd,
                   sal_Bool bSaveNum=sal_True,
                      const SwFrmFmt *pFrmFmt=0  );
     ~HTMLSaveData();

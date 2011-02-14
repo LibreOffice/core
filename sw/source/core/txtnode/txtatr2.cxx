@@ -60,7 +60,7 @@ SwTxtCharFmt::SwTxtCharFmt( SwFmtCharFmt& rAttr,
     , m_nSortNumber( 0 )
 {
     rAttr.pTxtAttr = this;
-    SetCharFmtAttr( TRUE );
+    SetCharFmtAttr( sal_True );
 }
 
 SwTxtCharFmt::~SwTxtCharFmt( )
@@ -69,7 +69,7 @@ SwTxtCharFmt::~SwTxtCharFmt( )
 
 void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtCharFmt::Modify(): unknown Modify");
@@ -82,16 +82,16 @@ void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 }
 
     // erfrage vom Modify Informationen
-BOOL SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTxtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return sal_True;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return sal_False;
 }
 
 
@@ -149,17 +149,17 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
             SetVisited( pDoc->IsVisitedURL( rFmt.GetValue() ) );
             SetVisitedValid( true );
         }
-        USHORT nId;
+        sal_uInt16 nId;
         const String& rStr = IsVisited() ? rFmt.GetVisitedFmt()
                                            : rFmt.GetINetFmt();
         if( rStr.Len() )
             nId = IsVisited() ? rFmt.GetVisitedFmtId() : rFmt.GetINetFmtId();
         else
-            nId = static_cast<USHORT>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
+            nId = static_cast<sal_uInt16>(IsVisited() ? RES_POOLCHR_INET_VISIT : RES_POOLCHR_INET_NORMAL);
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //      correct charstyle.
-        BOOL bResetMod = !pDoc->IsModified();
+        sal_Bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {
@@ -188,7 +188,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 
 void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtINetFmt::Modify(): unknown Modify");
@@ -201,19 +201,19 @@ void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 }
 
     // erfrage vom Modify Informationen
-BOOL SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTxtINetFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     if ( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return sal_True;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return sal_False;
 }
 
-BOOL SwTxtINetFmt::IsProtect( ) const
+sal_Bool SwTxtINetFmt::IsProtect( ) const
 {
     return m_pTxtNode && m_pTxtNode->IsProtect();
 }
@@ -237,7 +237,7 @@ SwTxtRuby::~SwTxtRuby()
 
 void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
-    USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
+    sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
     ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtRuby::Modify(): unknown Modify");
@@ -249,16 +249,16 @@ void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
     }
 }
 
-BOOL SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
+sal_Bool SwTxtRuby::GetInfo( SfxPoolItem& rInfo ) const
 {
     if( RES_AUTOFMT_DOCNODE != rInfo.Which() || !m_pTxtNode ||
         &m_pTxtNode->GetNodes() != static_cast<SwAutoFmtGetDocNode&>(rInfo).pNodes )
     {
-        return TRUE;
+        return sal_True;
     }
 
     static_cast<SwAutoFmtGetDocNode&>(rInfo).pCntntNode = m_pTxtNode;
-    return FALSE;
+    return sal_False;
 }
 
 SwCharFmt* SwTxtRuby::GetCharFmt()
@@ -270,13 +270,13 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
     {
         const SwDoc* pDoc = GetTxtNode().GetDoc();
         const String& rStr = rFmt.GetCharFmtName();
-        USHORT nId = RES_POOLCHR_RUBYTEXT;
+        sal_uInt16 nId = RES_POOLCHR_RUBYTEXT;
         if ( rStr.Len() )
             nId = rFmt.GetCharFmtId();
 
         // JP 10.02.2000, Bug 72806: dont modify the doc for getting the
         //              correct charstyle.
-        BOOL bResetMod = !pDoc->IsModified();
+        sal_Bool bResetMod = !pDoc->IsModified();
         Link aOle2Lnk;
         if( bResetMod )
         {

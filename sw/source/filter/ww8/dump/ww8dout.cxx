@@ -31,7 +31,7 @@
 #include <stdio.h>          // getchar
 
 //#include "defs.hxx"
-#include <tools/solar.h>            // BYTE
+#include <tools/solar.h>            // sal_uInt8
 //#include "wwscan.hxx" // aWwStor
 #include "ww8dout.hxx"
 #include <tools/stream.hxx>
@@ -41,7 +41,7 @@
 extern SvStorageStreamRef xStrm;
 extern SvStorageStreamRef xTableStream;
 extern SvStorageStreamRef xDataStream;  // ist bei Ver6-7 mit xStrm identisch,
-void DumpSprms( BYTE nVersion, SvStream& rSt, short nLen );
+void DumpSprms( sal_uInt8 nVersion, SvStream& rSt, short nLen );
 
 ostream* pOut = 0;
 
@@ -158,19 +158,19 @@ ostream&  __cdecl end2( ostream& s ) { level--; return s << indent2 << "END "; }
 
 void OutBool( SvStream& rSt, short )
 {
-    BYTE nPara;
+    sal_uInt8 nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     switch( nPara ){
     case 0:  *pOut << "F"; break;
     case 1:  *pOut << "T"; break;
-    default: *pOut << "ERROR:" << (USHORT)nPara; break;
+    default: *pOut << "ERROR:" << (sal_uInt16)nPara; break;
     }
 }
 
 void OutBool4( SvStream& rSt, short )
 {
-    BYTE nPara;
+    sal_uInt8 nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     switch( nPara ){
@@ -178,16 +178,16 @@ void OutBool4( SvStream& rSt, short )
     case 1:   *pOut << "T"; break;
     case 128: *pOut << "==Style"; break;
     case 129: *pOut << "!=Style"; break;
-    default:  *pOut << "ERROR:" << (USHORT)nPara; break;
+    default:  *pOut << "ERROR:" << (sal_uInt16)nPara; break;
     }
 }
 
 void OutByte( SvStream& rSt, short )
 {
-    BYTE nPara;
+    sal_uInt8 nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
-    *pOut << (USHORT)nPara;
+    *pOut << (sal_uInt16)nPara;
 }
 
 void OutShort( SvStream& rSt, short )
@@ -200,7 +200,7 @@ void OutShort( SvStream& rSt, short )
 
 void OutShorts( SvStream& rSt, short nLen )
 {
-    INT16 nPara;
+    sal_Int16 nPara;
 
     for( short i = 0; i < nLen / 2; i++ ){
         rSt.Read( &nPara, sizeof( nPara ) );
@@ -210,7 +210,7 @@ void OutShorts( SvStream& rSt, short nLen )
 
 void OutWord( SvStream& rSt, short )
 {
-    USHORT nPara;
+    sal_uInt16 nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     *pOut << nPara;
@@ -218,7 +218,7 @@ void OutWord( SvStream& rSt, short )
 
 void OutWords( SvStream& rSt, short nLen )
 {
-    USHORT nPara;
+    sal_uInt16 nPara;
 
     for( short i = 0; i < nLen / 2; i++ ){
         rSt.Read( &nPara, sizeof( nPara ) );
@@ -228,7 +228,7 @@ void OutWords( SvStream& rSt, short nLen )
 
 void OutWordHex( SvStream& rSt, short )
 {
-    USHORT nPara;
+    sal_uInt16 nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     *pOut << "0x" << hex4 << nPara << dec;
@@ -236,7 +236,7 @@ void OutWordHex( SvStream& rSt, short )
 
 void OutWordsHex( SvStream& rSt, short nLen )
 {
-    USHORT nPara;
+    sal_uInt16 nPara;
     nLen /= sizeof( nPara );
     for( short i = 0; i < nLen; i++ ){
         rSt.Read( &nPara, sizeof( nPara ) );
@@ -261,7 +261,7 @@ void OutLongsHex( SvStream& rSt, short nLen )
 
 void OutLongHex( SvStream& rSt, short )
 {
-    ULONG nPara;
+    sal_uLong nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     *pOut << "0x" << hex8 << nPara << dec;
@@ -269,7 +269,7 @@ void OutLongHex( SvStream& rSt, short )
 
 void OutTab68( SvStream& rSt, short )
 {
-    ULONG nPara;
+    sal_uLong nPara;
 
     rSt.Read( &nPara, sizeof( nPara ) );
     if(  nPara == 0 )
@@ -281,11 +281,11 @@ void OutTab68( SvStream& rSt, short )
 
 void OutTab( SvStream& rSt, short )
 {
-    BYTE nDel, nIns, nType;
+    sal_uInt8 nDel, nIns, nType;
     short nPos, i;
 
     rSt.Read( &nDel, sizeof( nDel ) );
-    *pOut << "Del " << (USHORT)nDel;
+    *pOut << "Del " << (sal_uInt16)nDel;
     if ( nDel ) *pOut << ": ";
     else        *pOut << ", ";
 
@@ -296,7 +296,7 @@ void OutTab( SvStream& rSt, short )
         else *pOut << ' ';
     }
     rSt.Read( &nIns, sizeof( nIns ) );
-    *pOut << "Ins " << (USHORT)nIns;
+    *pOut << "Ins " << (sal_uInt16)nIns;
     if ( nIns ) *pOut << ": ";
 
     for( i=1; i<=nIns; i++){
@@ -309,7 +309,7 @@ void OutTab( SvStream& rSt, short )
 
     for( i=1; i<=nIns; i++){
         rSt.Read( &nType, sizeof( nType ) );
-        *pOut << (USHORT)nType;
+        *pOut << (sal_uInt16)nType;
         if( i<nIns ) *pOut << ',';
         else *pOut << ' ';
     }
@@ -321,9 +321,9 @@ void OutTab( SvStream& rSt, short )
 
 void OutTab190( SvStream& rSt, short nLen )
 {
-    BYTE nCols;
+    sal_uInt8 nCols;
     rSt.Read( &nCols, sizeof( nCols ) );
-    *pOut << (USHORT)nCols << " Cols: ";
+    *pOut << (sal_uInt16)nCols << " Cols: ";
 
     short nPos, i;
     for( i = 0; i <= nCols; i++ ){
@@ -343,9 +343,9 @@ void OutTab190( SvStream& rSt, short nLen )
 
 void OutTab191( SvStream& rSt, short nLen )
 {
-    BYTE nCols;
+    sal_uInt8 nCols;
     rSt.Read( &nCols, sizeof( nCols ) );
-    *pOut << (USHORT)nCols << " Cols, SHDs: ";
+    *pOut << (sal_uInt16)nCols << " Cols, SHDs: ";
     OutWordsHex( rSt, ( nCols + 1 ) * 2 );
 }
 
@@ -374,7 +374,7 @@ void OutHugeHex( SvStream& rSt, short nLen )
 
 void OutTabD608( SvStream& rSt, short nLen )
 {
-    BYTE nHi, nCols;
+    sal_uInt8 nHi, nCols;
     rSt.Read( &nHi, sizeof( nHi ) );
 //  nLen += ((short)nHi) << 8;
 
@@ -406,7 +406,7 @@ void OutTabD609( SvStream& rSt, short nLen )
     *pOut << " Brush(FBS): ";
     for( short i = 0; i < nLen / 2; ++i )
     {
-        UINT16 nVal;
+        sal_uInt16 nVal;
         rSt.Read( &nVal, sizeof( nVal ) );
         *pOut << (nVal & 0x1f);
         *pOut << "|" << ((nVal >> 5) & 0x1f);

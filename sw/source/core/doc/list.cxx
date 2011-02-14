@@ -60,7 +60,7 @@ class SwListImpl
         void ValidateListTree();
 
         void MarkListLevel( const int nListLevel,
-                            const BOOL bValue );
+                            const sal_Bool bValue );
 
         bool IsListLevelMarked( const int nListLevel ) const;
 
@@ -102,7 +102,7 @@ SwListImpl::SwListImpl( const String sListId,
         pNode = pNode->EndOfSectionNode();
         if (pNode != &rNodes.GetEndOfContent())
         {
-            ULONG nIndex = pNode->GetIndex();
+            sal_uLong nIndex = pNode->GetIndex();
             nIndex++;
             pNode = rNodes[nIndex];
         }
@@ -186,7 +186,7 @@ void SwListImpl::ValidateListTree()
 }
 
 void SwListImpl::MarkListLevel( const int nListLevel,
-                                const BOOL bValue )
+                                const sal_Bool bValue )
 {
     if ( bValue )
     {
@@ -279,7 +279,7 @@ void SwList::ValidateListTree()
 }
 
 void SwList::MarkListLevel( const int nListLevel,
-                                  const BOOL bValue )
+                                  const sal_Bool bValue )
 {
     mpListImpl->MarkListLevel( nListLevel, bValue );
 }

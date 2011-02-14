@@ -83,9 +83,9 @@
 /*--------------------------------------------------------------------
     Beschreibung:   KeyEvents
  --------------------------------------------------------------------*/
-static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
+static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, sal_Bool bBalloon )
 {
-    USHORT nResId = 0;
+    sal_uInt16 nResId = 0;
     switch( rRedl.GetType() )
     {
     case nsRedlineType_t::REDLINE_INSERT:   nResId = STR_REDLINE_INSERT; break;
@@ -111,14 +111,14 @@ static void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBall
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
-    BOOL bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
+    sal_Bool bQuickBalloon = 0 != (rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ));
     if(bQuickBalloon && rSh.GetViewOptions()->IsPreventTips())
         return;
-    BOOL bWeiter = TRUE;
+    sal_Bool bWeiter = sal_True;
     SET_CURR_SHELL(&rSh);
     String sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));
-    BOOL bBalloon = static_cast< BOOL >(rEvt.GetMode() & HELPMODE_BALLOON);
+    sal_Bool bBalloon = static_cast< sal_Bool >(rEvt.GetMode() & HELPMODE_BALLOON);
 
     SdrView *pSdrView = rSh.GetDrawView();
 
@@ -135,7 +135,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
     if( bWeiter && bQuickBalloon)
     {
         SwRect aFldRect;
-        USHORT nStyle = 0; // style of quick help
+        sal_uInt16 nStyle = 0; // style of quick help
         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_FIELD |
                                     SwContentAtPos::SW_INETATTR |
                                     SwContentAtPos::SW_FTN |
@@ -149,7 +149,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #endif
                                     SwContentAtPos::SW_TABLEBOXFML );
 
-        if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
+        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
         {
              switch( aCntntAtPos.eCntntAtPos )
             {
@@ -224,7 +224,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
                 // <--
                 // --> OD 2007-07-26 #i80029#
-                BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                sal_Bool bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
                     SvtSecurityOptions aSecOpts;
@@ -302,7 +302,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         case RES_TABLEFLD:
                         case RES_GETEXPFLD:
                         {
-                            USHORT nOldSubType = pFld->GetSubType();
+                            sal_uInt16 nOldSubType = pFld->GetSubType();
                             ((SwField*)pFld)->SetSubType(nsSwExtendedSubType::SUB_CMD);
                             sTxt = pFld->ExpandField(true);
                             ((SwField*)pFld)->SetSubType(nOldSubType);
@@ -332,7 +332,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                 break;
                             }
                         case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
-                            bBalloon = TRUE;
+                            bBalloon = sal_True;
                             /* no break */
                         case RES_JUMPEDITFLD:
                             sTxt = pFld->GetPar2();
@@ -388,7 +388,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                     if( !sTxt.Len() )
                     {
                         aCntntAtPos.eCntntAtPos = SwContentAtPos::SW_REDLINE;
-                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, FALSE, &aFldRect ) )
+                        if( rSh.GetContentAtPos( aPos, aCntntAtPos, sal_False, &aFldRect ) )
                             lcl_GetRedlineHelp( *aCntntAtPos.aFnd.pRedl,
                                                     sTxt, bBalloon );
                     }
@@ -412,12 +412,12 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 }
             }
 
-            bWeiter = FALSE;
+            bWeiter = sal_False;
         }
         if( bWeiter )
         {
-            BYTE nTabCols = rSh.WhichMouseTabCol(aPos);
-            USHORT nTabRes = 0;
+            sal_uInt8 nTabCols = rSh.WhichMouseTabCol(aPos);
+            sal_uInt16 nTabRes = 0;
             switch(nTabCols)
             {
                 case SW_TABCOL_HORI:
@@ -452,7 +452,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 Rectangle aRect(rEvt.GetMousePosPixel(), aTxtSize);
                 Help::ShowQuickHelp(this, aRect, sTxt);
             }
-            bWeiter = FALSE;
+            bWeiter = sal_False;
         }
     }
 
@@ -479,7 +479,7 @@ aktuelle Zeichenvorlage anzeigen?
                 pObj = aVEvt.pObj;
                 sTxt = pField->GetURL();
 
-                bWeiter = FALSE;
+                bWeiter = sal_False;
             }
         }
         if (bWeiter && eHit == SDRHIT_TEXTEDIT)
@@ -504,7 +504,7 @@ aktuelle Zeichenvorlage anzeigen?
                 if (pField )
                 {
                     sTxt = ((const SvxURLField*) pField)->GetURL();
-                    bWeiter = FALSE;
+                    bWeiter = sal_False;
                 }
             }
         }
@@ -553,7 +553,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
     SwWrtShell* pWrtShell = GetView().GetWrtShellPtr();
     if(!pWrtShell)
         return;
-    BOOL bPaintShadowCrsr = FALSE;
+    sal_Bool bPaintShadowCrsr = sal_False;
     if( pShadCrsr )
     {
         Rectangle aRect( pShadCrsr->GetRect());
@@ -566,7 +566,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
             // liegt irgendwie drueber, dann ist alles ausserhalb geclippt
             // und wir muessen den "inneren Teil" am Ende vom Paint
             // wieder sichtbar machen. Sonst kommt es zu Paintfehlern!
-            bPaintShadowCrsr = TRUE;
+            bPaintShadowCrsr = sal_True;
         }
     }
 /*

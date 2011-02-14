@@ -1170,7 +1170,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_PARAM_SHADOWCURSOR           (FN_PARAM2+8) /* Fuer ShadowCursor Optionen */
 
-#define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* BYTE-Item mit aktuellen NumLevel */
+#define FN_PARAM_ACT_NUMLEVEL           (FN_PARAM2+9) /* sal_uInt8-Item mit aktuellen NumLevel */
 
 #define FN_PARAM_9                      (FN_PARAM2+10)
 #define FN_PARAM_10                     (FN_PARAM2+11)

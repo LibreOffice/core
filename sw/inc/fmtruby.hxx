@@ -40,9 +40,9 @@ class SW_DLLPUBLIC SwFmtRuby : public SfxPoolItem
     String sRubyTxt;                    // the ruby txt
     String sCharFmtName;                // name of the charformat
     SwTxtRuby* pTxtAttr;                // the TextAttribut
-    USHORT nCharFmtId;                  // PoolId of the charformat
-    USHORT nPosition;                   // Position of the Ruby-Character
-    USHORT nAdjustment;                 // specific adjustment of the Ruby-Ch.
+    sal_uInt16 nCharFmtId;                  // PoolId of the charformat
+    sal_uInt16 nPosition;                   // Position of the Ruby-Character
+    sal_uInt16 nAdjustment;                 // specific adjustment of the Ruby-Ch.
 
 public:
     SwFmtRuby( const String& rRubyTxt );
@@ -61,10 +61,10 @@ public:
                                     String &rText,
                                     const IntlWrapper* pIntl = 0 ) const;
 
-    virtual BOOL            QueryValue( com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 ) const;
-    virtual BOOL            PutValue( const com::sun::star::uno::Any& rVal,
-                                        BYTE nMemberId = 0 );
+    virtual sal_Bool            QueryValue( com::sun::star::uno::Any& rVal,
+                                        sal_uInt8 nMemberId = 0 ) const;
+    virtual sal_Bool            PutValue( const com::sun::star::uno::Any& rVal,
+                                        sal_uInt8 nMemberId = 0 );
 
 
     const SwTxtRuby* GetTxtRuby() const         { return pTxtAttr; }
@@ -76,14 +76,14 @@ public:
     const String& GetCharFmtName() const        { return sCharFmtName; }
     void SetCharFmtName( const String& rNm )    { sCharFmtName = rNm; }
 
-    USHORT GetCharFmtId() const                 { return nCharFmtId; }
-    void SetCharFmtId( USHORT nNew )            { nCharFmtId = nNew; }
+    sal_uInt16 GetCharFmtId() const                 { return nCharFmtId; }
+    void SetCharFmtId( sal_uInt16 nNew )            { nCharFmtId = nNew; }
 
-    USHORT GetPosition() const                  { return nPosition; }
-    void SetPosition( USHORT nNew )             { nPosition = nNew; }
+    sal_uInt16 GetPosition() const                  { return nPosition; }
+    void SetPosition( sal_uInt16 nNew )             { nPosition = nNew; }
 
-    USHORT GetAdjustment() const                { return nAdjustment; }
-    void SetAdjustment( USHORT nNew )           { nAdjustment = nNew; }
+    sal_uInt16 GetAdjustment() const                { return nAdjustment; }
+    void SetAdjustment( sal_uInt16 nNew )           { nAdjustment = nNew; }
 };
 
 

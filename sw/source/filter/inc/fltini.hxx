@@ -42,7 +42,7 @@ class HTMLReader: public Reader
 {
     // wir wollen die Streams / Storages nicht geoeffnet haben
     virtual int SetStrmStgPtr();
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
     virtual String GetTemplateName() const;
 public:
     HTMLReader();
@@ -50,12 +50,12 @@ public:
 
 class WW1Reader : public Reader
 {
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 };
 
 class XMLReader : public Reader
 {
-    virtual ULONG Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
+    virtual sal_uLong Read(SwDoc &, const String& rBaseURL, SwPaM &,const String &);
 public:
     virtual int GetReaderType();
 
@@ -63,7 +63,7 @@ public:
 
     // read the sections of the document, which is equal to the medium.
     // returns the count of it
-    virtual USHORT GetSectionList( SfxMedium& rMedium,
+    virtual sal_uInt16 GetSectionList( SfxMedium& rMedium,
                                 SvStrings& rStrings ) const;
 };
 
@@ -81,12 +81,12 @@ void GetWW8Writer( const String&, const String&, WriterRef& );
 class SW_DLLPUBLIC SwRelNumRuleSpaces
 {
     SwNumRuleTbl* pNumRuleTbl;  // Liste aller benannten NumRules
-    BOOL bNewDoc;
+    sal_Bool bNewDoc;
 
     void SetNumLSpace( SwTxtNode& rNd, const SwNumRule& rRule );
 
 public:
-    SwRelNumRuleSpaces( SwDoc& rDoc, BOOL bNewDoc );
+    SwRelNumRuleSpaces( SwDoc& rDoc, sal_Bool bNewDoc );
     ~SwRelNumRuleSpaces();
 
     void SetNumRelSpaces( SwDoc& rDoc );
