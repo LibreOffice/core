@@ -105,9 +105,7 @@ namespace testdoctok
                 rtl_uString *dir=NULL;
                 osl_getProcessWorkingDir(&dir);
                 rtl_uString *fname=NULL;
-                //rtl_uString_newFromAscii(&fname, "/OpenDocument-v1.doc");
                 rtl_uString_newFromAscii(&fname, "/test.doc");
-                //rtl_uString_newFromAscii(&fname, "/numbers.doc");
                 rtl_uString *absfile=NULL;
                 rtl_uString_newConcat(&absfile, dir, fname);
 
@@ -210,7 +208,6 @@ namespace testdoctok
         CPPUNIT_TEST_SUITE(test);
         CPPUNIT_TEST(testInitUno);
         CPPUNIT_TEST(testOpenFile);
-        //CPPUNIT_TEST(testTraversal);
         CPPUNIT_TEST(testEvents);
         CPPUNIT_TEST(testEnd);
         CPPUNIT_TEST_SUITE_END();

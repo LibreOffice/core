@@ -62,7 +62,6 @@ public:
             id%=QName::tokenizer().getQNames();
             const sal_Char *ln=QName::serializer().getLocalName((QName_t)id);
             const sal_Char *ns=QName::serializer().getNamespaceUri((QName_t)id);
-//          printf("%i \"%s\" \"%s\"\n", i, ns, ln);
             testAdd(ns, ln);
         }
         rtl_random_destroyPool(rndPool);

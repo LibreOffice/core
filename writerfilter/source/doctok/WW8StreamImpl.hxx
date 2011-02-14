@@ -54,8 +54,6 @@ public:
     virtual Sequence get(sal_uInt32 nOffset, sal_uInt32 nCount)
         const;
 
-    //virtual bool put(sal_uInt32 nOffset, const Sequence & rSeq);
-
     virtual string getSubStreamNames() const;
     virtual uno::Sequence<rtl::OUString> getSubStreamUNames() const;
 
