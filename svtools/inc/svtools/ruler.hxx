@@ -138,7 +138,7 @@ SetMargin2() mit Parametern aufgerufen werden, kann bei diesen
 folgendes angegeben werden:
 
     long    nPos            - Offset zum NullPunkt in Pixel
-    USHORT  nStyle          - Bit-Style:
+    sal_uInt16  nStyle          - Bit-Style:
                                 RULER_MARGIN_SIZEABLE
                                 Rand kann in der Groesse veraendert werden.
 
@@ -154,7 +154,7 @@ initialisiert werden muessen:
     long    nPos            - Offset zum NullPunkt in Pixel
     long    nWidth          - Breite des Spaltenabstands in Pixel (kann zum
                               Beispiel fuer Tabellenspalten auch 0 sein)
-    USHORT  nStyle          - Bit-Style:
+    sal_uInt16  nStyle          - Bit-Style:
                                 RULER_BORDER_SIZEABLE
                                 Spaltenabstand kann in der Groesse veraendert
                                 werden. Dieses Flag sollte nur gesetzt werden,
@@ -190,7 +190,7 @@ Parameter muss ein Array vom Typ RulerIndent uebergeben werden, wobei folgende
 Werte initialisiert werden muessen:
 
     long    nPos            - Offset zum NullPunkt in Pixel
-    USHORT  nStyle          - Bit-Style:
+    sal_uInt16  nStyle          - Bit-Style:
                                 RULER_INDENT_TOP    (Erstzeileneinzug)
                                 RULER_INDENT_BOTTOM (Linker/Rechter Einzug)
                                 RULER_INDENT_BORDER (Verical line that shows the border distance)
@@ -206,7 +206,7 @@ Parameter muss ein Array vom Typ RulerTab uebergeben werden, wobei folgende
 Werte initialisiert werden muessen:
 
     long    nPos            - Offset zum NullPunkt in Pixel
-    USHORT  nStyle          - Bit-Style:
+    sal_uInt16  nStyle          - Bit-Style:
                                 RULER_TAB_DEFAULT (kann nicht selektiert werden)
                                 RULER_TAB_LEFT
                                 RULER_TAB_CENTER
@@ -223,7 +223,7 @@ muss ein Array vom Typ RulerLine uebergeben werden, wobei folgende Werte
 initialisiert werden muessen:
 
     long    nPos            - Offset zum NullPunkt in Pixel
-    USHORT  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
+    sal_uInt16  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
 
 Mit SetArrows() koennen Bemassungspfeile im Lineal angezeigt werden. Wenn
 Bemassungspfeile gesetzt werden, werden im Lineal auch keine Unterteilungen
@@ -234,7 +234,7 @@ uebergeben werden, wobei folgende Werte initialisiert werden muessen:
     long    nPos            - Offset zum NullPunkt in Pixel
     long    nWidth          - Breite des Pfeils
     long    nLogWidth       - Breite des Pfeils in logischer Einheit
-    USHORT  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
+    sal_uInt16  nStyle          - Bit-Style (muss zur Zeit immer 0 sein)
 
 Mit SetSourceUnit() wird die Einheit eingestellt, in welcher die logischen
 Werte vorliegen, die bei SetArrows() uebergeben werden. Dabei werden nur die
@@ -246,7 +246,7 @@ Wenn auch vom Benutzer die Raender, Tabs, Border, ... ueber das Lineal
 geaendert werden koennen, muss etwas mehr Aufwand getrieben werden. Dazu
 muessen die Methoden StartDrag(), Drag() und EndDrag() ueberlagert werden.
 Bei der Methode StartDrag() besteht die Moeglichkeit durch das zurueckgeben
-von FALSE das Draggen zu verhindern. Im Drag-Handler muss die Drag-Position
+von sal_False das Draggen zu verhindern. Im Drag-Handler muss die Drag-Position
 abgefragt werden und die Werte muessen an die neue Position verschoben werden.
 Dazu ruft man einfach die einzelnen Set-Methoden auf. Solange man sich
 im Drag-Handler befindet, werden sich die Werte nur gemerkt und erst
@@ -254,10 +254,10 @@ danach das Lineal neu ausgegeben. Alle Handler koennen auch als Links ueber
 entsprechende Set..Hdl()-Methoden gesetzt werden.
 
     - StartDrag()
-        Wird gerufen, wenn das Draggen gestartet wird. Wenn FALSE
-        zurueckgegeben wird, wird das Draggen nicht ausgefuehrt. Bei TRUE
+        Wird gerufen, wenn das Draggen gestartet wird. Wenn sal_False
+        zurueckgegeben wird, wird das Draggen nicht ausgefuehrt. Bei sal_True
         wird das Draggen zugelassen. Wenn der Handler nicht ueberlagert
-        wird, wird FALSE zurueckgegeben.
+        wird, wird sal_False zurueckgegeben.
 
     - EndDrag()
         Wird gerufen, wenn das Draggen beendet wird.
@@ -325,7 +325,7 @@ es folgende Abfrage-Methoden.
         gezogen, werden automatisch die alten Werte dargestellt, ohne das
         der Drag-Handler gerufen wird.
         Falls der Benutzer jedoch den Wert auf die alte Position
-        zurueckgeschoben hat, liefert die Methode trotzdem FALSE. Falls
+        zurueckgeschoben hat, liefert die Methode trotzdem sal_False. Falls
         dies vermieden werden soll, muss sich die Applikation im StartDrag-
         Handler den alten Wert merken und im EndDrag-Handler den Wert
         vergleichen.
@@ -372,7 +372,7 @@ es folgende Abfrage-Methoden.
         gegebenenfalls ueber das Abfangen des MouseButtonDown-Handlers
         auch ueber die rechte Maustaste etwas auf ein Item anzuwenden. Als
         Paramter ueber gibt man die Fensterposition und gegebenenfalls
-        einen Pointer auf einen USHORT, um die Array-Position eines
+        einen Pointer auf einen sal_uInt16, um die Array-Position eines
         Tabs, Indent oder Borders mitzubekommen. Als Type werden folgende
         Werte zurueckgegeben:
             RULER_TYPE_DONTKNOW             (kein Element im Linealbereich)
@@ -388,7 +388,7 @@ mit CancelDrag() abgebrochen werden. Folgende Methoden gibt es fuer die
 Drag-Steuerung:
 
     - IsDrag()
-        Liefert TRUE zurueck, wenn sich das Lineal im Drag-Vorgang befindet.
+        Liefert sal_True zurueck, wenn sich das Lineal im Drag-Vorgang befindet.
 
     - CancelDrag()
         Bricht den Drag-Vorgang ab, falls einer durchgefuehrt wird. Dabei
@@ -443,7 +443,7 @@ womit man bestimmte Aktionen abfangen kann.
                                 RULER_EXTRA_DONTKNOW        (Nichts)
                                 RULER_EXTRA_NULLOFFSET      (Koordinaaten-Kreuz)
                                 RULER_EXTRA_TAB             (Tab)
-            - USHORT nStyle     Bitfeld als Style:
+            - sal_uInt16 nStyle     Bitfeld als Style:
                                     RULER_STYLE_HIGHLIGHT   (selektiert)
                                     RULER_TAB_...           (ein Tab-Style)
 
@@ -553,9 +553,9 @@ enum RulerType { RULER_TYPE_DONTKNOW, RULER_TYPE_OUTSIDE,
 enum RulerExtra { RULER_EXTRA_DONTKNOW,
                   RULER_EXTRA_NULLOFFSET, RULER_EXTRA_TAB };
 
-#define RULER_STYLE_HIGHLIGHT   ((USHORT)0x8000)
-#define RULER_STYLE_DONTKNOW    ((USHORT)0x4000)
-#define RULER_STYLE_INVISIBLE   ((USHORT)0x2000)
+#define RULER_STYLE_HIGHLIGHT   ((sal_uInt16)0x8000)
+#define RULER_STYLE_DONTKNOW    ((sal_uInt16)0x4000)
+#define RULER_STYLE_INVISIBLE   ((sal_uInt16)0x2000)
 
 #define RULER_DRAGSIZE_MOVE     0
 #define RULER_DRAGSIZE_1        1
@@ -574,24 +574,24 @@ enum RulerExtra { RULER_EXTRA_DONTKNOW,
 // - RulerMargin -
 // ---------------
 
-#define RULER_MARGIN_SIZEABLE   ((USHORT)0x0001)
+#define RULER_MARGIN_SIZEABLE   ((sal_uInt16)0x0001)
 
 // ---------------
 // - RulerBorder -
 // ---------------
 
-#define RULER_BORDER_SIZEABLE   ((USHORT)0x0001)
-#define RULER_BORDER_MOVEABLE   ((USHORT)0x0002)
-#define RULER_BORDER_VARIABLE   ((USHORT)0x0004)
-#define RULER_BORDER_TABLE      ((USHORT)0x0008)
-#define RULER_BORDER_SNAP       ((USHORT)0x0010)
-#define RULER_BORDER_MARGIN     ((USHORT)0x0020)
+#define RULER_BORDER_SIZEABLE   ((sal_uInt16)0x0001)
+#define RULER_BORDER_MOVEABLE   ((sal_uInt16)0x0002)
+#define RULER_BORDER_VARIABLE   ((sal_uInt16)0x0004)
+#define RULER_BORDER_TABLE      ((sal_uInt16)0x0008)
+#define RULER_BORDER_SNAP       ((sal_uInt16)0x0010)
+#define RULER_BORDER_MARGIN     ((sal_uInt16)0x0020)
 
 struct RulerBorder
 {
     long    nPos;
     long    nWidth;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
     //minimum/maximum position, supported for table borders/rows
     long    nMinPos;
     long    nMaxPos;
@@ -601,33 +601,33 @@ struct RulerBorder
 // - RulerIndent -
 // ---------------
 
-#define RULER_INDENT_TOP        ((USHORT)0x0000)
-#define RULER_INDENT_BOTTOM     ((USHORT)0x0001)
-#define RULER_INDENT_BORDER     ((USHORT)0x0002)
-#define RULER_INDENT_STYLE      ((USHORT)0x000F)
+#define RULER_INDENT_TOP        ((sal_uInt16)0x0000)
+#define RULER_INDENT_BOTTOM     ((sal_uInt16)0x0001)
+#define RULER_INDENT_BORDER     ((sal_uInt16)0x0002)
+#define RULER_INDENT_STYLE      ((sal_uInt16)0x000F)
 
 struct RulerIndent
 {
     long    nPos;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
 };
 
 // ------------
 // - RulerTab -
 // ------------
 
-#define RULER_TAB_LEFT          ((USHORT)0x0000)
-#define RULER_TAB_RIGHT         ((USHORT)0x0001)
-#define RULER_TAB_DECIMAL       ((USHORT)0x0002)
-#define RULER_TAB_CENTER        ((USHORT)0x0003)
-#define RULER_TAB_DEFAULT       ((USHORT)0x0004)
-#define RULER_TAB_STYLE         ((USHORT)0x000F)
-#define RULER_TAB_RTL           ((USHORT)0x0010)
+#define RULER_TAB_LEFT          ((sal_uInt16)0x0000)
+#define RULER_TAB_RIGHT         ((sal_uInt16)0x0001)
+#define RULER_TAB_DECIMAL       ((sal_uInt16)0x0002)
+#define RULER_TAB_CENTER        ((sal_uInt16)0x0003)
+#define RULER_TAB_DEFAULT       ((sal_uInt16)0x0004)
+#define RULER_TAB_STYLE         ((sal_uInt16)0x000F)
+#define RULER_TAB_RTL           ((sal_uInt16)0x0010)
 
 struct RulerTab
 {
     long    nPos;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
 };
 
 #define RULER_TAB_WIDTH         7
@@ -640,7 +640,7 @@ struct RulerTab
 struct RulerLine
 {
     long    nPos;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
 };
 
 // --------------
@@ -652,7 +652,7 @@ struct RulerArrow
     long    nPos;
     long    nWidth;
     long    nLogWidth;
-    USHORT  nStyle;
+    sal_uInt16  nStyle;
 };
 
 class ImplRulerData;
@@ -676,33 +676,33 @@ private:
     long                mnBorderWidth;
     long                mnStartDragPos;
     long                mnDragPos;
-    ULONG               mnUpdateEvtId;
+    sal_uLong               mnUpdateEvtId;
     ImplRulerData*      mpSaveData;
     ImplRulerData*      mpData;
     ImplRulerData*      mpDragData;
     Rectangle           maExtraRect;
     WinBits             mnWinStyle;
-    USHORT              mnUnitIndex;
-    USHORT              mnDragAryPos;
-    USHORT              mnDragSize;
-    USHORT              mnDragScroll;
-    USHORT              mnDragModifier;
-    USHORT              mnExtraStyle;
-    USHORT              mnExtraClicks;
-    USHORT              mnExtraModifier;
+    sal_uInt16              mnUnitIndex;
+    sal_uInt16              mnDragAryPos;
+    sal_uInt16              mnDragSize;
+    sal_uInt16              mnDragScroll;
+    sal_uInt16              mnDragModifier;
+    sal_uInt16              mnExtraStyle;
+    sal_uInt16              mnExtraClicks;
+    sal_uInt16              mnExtraModifier;
     RulerExtra          meExtraType;
     RulerType           meDragType;
     MapUnit             meSourceUnit;
     FieldUnit           meUnit;
     Fraction            maZoom;
-    BOOL                mbCalc;
-    BOOL                mbFormat;
-    BOOL                mbDrag;
-    BOOL                mbDragDelete;
-    BOOL                mbDragCanceled;
-    BOOL                mbAutoWinWidth;
-    BOOL                mbActive;
-    BYTE                mnUpdateFlags;
+    sal_Bool                mbCalc;
+    sal_Bool                mbFormat;
+    sal_Bool                mbDrag;
+    sal_Bool                mbDragDelete;
+    sal_Bool                mbDragCanceled;
+    sal_Bool                mbAutoWinWidth;
+    sal_Bool                mbActive;
+    sal_uInt8                mnUpdateFlags;
     Link                maStartDragHdl;
     Link                maDragHdl;
     Link                maEndDragHdl;
@@ -718,27 +718,27 @@ private:
     SVT_DLLPRIVATE void                ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter );
     SVT_DLLPRIVATE void                ImplDrawArrows( long nCenter );
     SVT_DLLPRIVATE void                ImplDrawBorders( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void                ImplDrawIndent( const Polygon& rPoly, USHORT nStyle );
+    SVT_DLLPRIVATE void                ImplDrawIndent( const Polygon& rPoly, sal_uInt16 nStyle );
     SVT_DLLPRIVATE void                ImplDrawIndents( long nMin, long nMax, long nVirTop, long nVirBottom );
-    SVT_DLLPRIVATE void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, USHORT nStyle );
+    SVT_DLLPRIVATE void                ImplDrawTab( OutputDevice* pDevice, const Point& rPos, sal_uInt16 nStyle );
     SVT_DLLPRIVATE void                ImplDrawTabs( long nMin, long nMax, long nVirTop, long nVirBottom );
     using Window::ImplInit;
     SVT_DLLPRIVATE void                ImplInit( WinBits nWinBits );
-    SVT_DLLPRIVATE void                ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SVT_DLLPRIVATE void                ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal_Bool bBackground );
     SVT_DLLPRIVATE void                ImplCalc();
     SVT_DLLPRIVATE void                ImplFormat();
-    SVT_DLLPRIVATE void                ImplInitExtraField( BOOL bUpdate );
-    SVT_DLLPRIVATE void                ImplInvertLines( BOOL bErase = FALSE );
+    SVT_DLLPRIVATE void                ImplInitExtraField( sal_Bool bUpdate );
+    SVT_DLLPRIVATE void                ImplInvertLines( sal_Bool bErase = sal_False );
     SVT_DLLPRIVATE void                ImplDraw();
-    SVT_DLLPRIVATE void                ImplDrawExtra( BOOL bPaint = FALSE );
-    SVT_DLLPRIVATE void                ImplUpdate( BOOL bMustCalc = FALSE );
+    SVT_DLLPRIVATE void                ImplDrawExtra( sal_Bool bPaint = sal_False );
+    SVT_DLLPRIVATE void                ImplUpdate( sal_Bool bMustCalc = sal_False );
     using Window::ImplHitTest;
-    SVT_DLLPRIVATE BOOL                ImplHitTest( const Point& rPos,
+    SVT_DLLPRIVATE sal_Bool                ImplHitTest( const Point& rPos,
                                      ImplRulerHitTest* pHitTest,
-                                     BOOL bRequiredStyle = FALSE,
-                                     USHORT nRequiredStyle = 0 ) const;
-    SVT_DLLPRIVATE BOOL                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
-    SVT_DLLPRIVATE BOOL                ImplStartDrag( ImplRulerHitTest* pHitTest, USHORT nModifier );
+                                     sal_Bool bRequiredStyle = sal_False,
+                                     sal_uInt16 nRequiredStyle = 0 ) const;
+    SVT_DLLPRIVATE sal_Bool                ImplDocHitTest( const Point& rPos, RulerType eDragType, ImplRulerHitTest* pHitTest ) const;
+    SVT_DLLPRIVATE sal_Bool                ImplStartDrag( ImplRulerHitTest* pHitTest, sal_uInt16 nModifier );
     SVT_DLLPRIVATE void                ImplDrag( const Point& rPos );
     SVT_DLLPRIVATE void                ImplEndDrag();
                         DECL_DLLPRIVATE_LINK( ImplUpdateHdl, void* );
@@ -769,7 +769,7 @@ public:
 
     void                Activate();
     void                Deactivate();
-    BOOL                IsActive() const { return mbActive; }
+    sal_Bool                IsActive() const { return mbActive; }
 
     void                SetWinPos( long nOff = 0, long nWidth = 0 );
     long                GetWinOffset() const { return mnWinOff; }
@@ -789,67 +789,67 @@ public:
     void                SetSourceUnit( MapUnit eNewUnit ) { meSourceUnit = eNewUnit; }
     MapUnit             GetSourceUnit() const { return meSourceUnit; }
 
-    void                SetExtraType( RulerExtra eNewExtraType, USHORT nStyle = 0 );
+    void                SetExtraType( RulerExtra eNewExtraType, sal_uInt16 nStyle = 0 );
     RulerExtra          GetExtraType() const { return meExtraType; }
-    USHORT              GetExtraStyle()  const { return mnExtraStyle; }
-    USHORT              GetExtraClicks() const { return mnExtraClicks; }
-    USHORT              GetExtraModifier() const { return mnExtraModifier; }
+    sal_uInt16              GetExtraStyle()  const { return mnExtraStyle; }
+    sal_uInt16              GetExtraClicks() const { return mnExtraClicks; }
+    sal_uInt16              GetExtraModifier() const { return mnExtraModifier; }
 
-    BOOL                StartDocDrag( const MouseEvent& rMEvt,
+    sal_Bool                StartDocDrag( const MouseEvent& rMEvt,
                                       RulerType eDragType = RULER_TYPE_DONTKNOW );
     RulerType           GetDocType( const Point& rPos,
                                     RulerType eDragType = RULER_TYPE_DONTKNOW,
-                                    USHORT* pAryPos = NULL ) const;
+                                    sal_uInt16* pAryPos = NULL ) const;
     RulerType           GetDragType() const { return meDragType; }
     long                GetDragPos() const { return mnDragPos; }
-    USHORT              GetDragAryPos() const { return mnDragAryPos; }
-    USHORT              GetDragSize() const { return mnDragSize; }
-    BOOL                IsDragDelete() const { return mbDragDelete; }
-    BOOL                IsDragCanceled() const { return mbDragCanceled; }
-    USHORT              GetDragScroll() const { return mnDragScroll; }
-    USHORT              GetDragModifier() const { return mnDragModifier; }
-    BOOL                IsDrag() const { return mbDrag; }
+    sal_uInt16              GetDragAryPos() const { return mnDragAryPos; }
+    sal_uInt16              GetDragSize() const { return mnDragSize; }
+    sal_Bool                IsDragDelete() const { return mbDragDelete; }
+    sal_Bool                IsDragCanceled() const { return mbDragCanceled; }
+    sal_uInt16              GetDragScroll() const { return mnDragScroll; }
+    sal_uInt16              GetDragModifier() const { return mnDragModifier; }
+    sal_Bool                IsDrag() const { return mbDrag; }
     void                CancelDrag();
     long                GetClickPos() const { return mnDragPos; }
     RulerType           GetClickType() const { return meDragType; }
-    USHORT              GetClickAryPos() const { return mnDragAryPos; }
+    sal_uInt16              GetClickAryPos() const { return mnDragAryPos; }
     using Window::GetType;
     RulerType           GetType( const Point& rPos,
-                                 USHORT* pAryPos = NULL ) const;
+                                 sal_uInt16* pAryPos = NULL ) const;
 
     void                SetNullOffset( long nPos );
     long                GetNullOffset() const;
     void                SetMargin1() { SetMargin1( 0, RULER_STYLE_INVISIBLE ); }
-    void                SetMargin1( long nPos, USHORT nMarginStyle = RULER_MARGIN_SIZEABLE );
+    void                SetMargin1( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
     long                GetMargin1() const;
-    USHORT              GetMargin1Style() const;
+    sal_uInt16              GetMargin1Style() const;
     void                SetMargin2() { SetMargin2( 0, RULER_STYLE_INVISIBLE ); }
-    void                SetMargin2( long nPos, USHORT nMarginStyle = RULER_MARGIN_SIZEABLE );
+    void                SetMargin2( long nPos, sal_uInt16 nMarginStyle = RULER_MARGIN_SIZEABLE );
     long                GetMargin2() const;
-    USHORT              GetMargin2Style() const;
+    sal_uInt16              GetMargin2Style() const;
 
-    void                SetLines( USHORT n = 0, const RulerLine* pLineAry = NULL );
-    USHORT              GetLineCount() const;
+    void                SetLines( sal_uInt16 n = 0, const RulerLine* pLineAry = NULL );
+    sal_uInt16              GetLineCount() const;
     const RulerLine*    GetLines() const;
 
-    void                SetArrows( USHORT n = 0, const RulerArrow* pArrowAry = NULL );
-    USHORT              GetArrowCount() const;
+    void                SetArrows( sal_uInt16 n = 0, const RulerArrow* pArrowAry = NULL );
+    sal_uInt16              GetArrowCount() const;
     const RulerArrow*   GetArrows() const;
 
-    void                SetBorders( USHORT n = 0, const RulerBorder* pBrdAry = NULL );
-    USHORT              GetBorderCount() const;
+    void                SetBorders( sal_uInt16 n = 0, const RulerBorder* pBrdAry = NULL );
+    sal_uInt16              GetBorderCount() const;
     const RulerBorder*  GetBorders() const;
 
-    void                SetIndents( USHORT n = 0, const RulerIndent* pIndentAry = NULL );
-    USHORT              GetIndentCount() const;
+    void                SetIndents( sal_uInt16 n = 0, const RulerIndent* pIndentAry = NULL );
+    sal_uInt16              GetIndentCount() const;
     const RulerIndent*  GetIndents() const;
 
-    void                SetTabs( USHORT n = 0, const RulerTab* pTabAry = NULL );
-    USHORT              GetTabCount() const;
+    void                SetTabs( sal_uInt16 n = 0, const RulerTab* pTabAry = NULL );
+    sal_uInt16              GetTabCount() const;
     const RulerTab*     GetTabs() const;
 
     static void         DrawTab( OutputDevice* pDevice,
-                                 const Point& rPos, USHORT nStyle );
+                                 const Point& rPos, sal_uInt16 nStyle );
 
     void                SetStyle( WinBits nStyle );
     WinBits             GetStyle() const { return mnWinStyle; }
@@ -868,7 +868,7 @@ public:
     const Link&         GetExtraDownHdl() const { return maExtraDownHdl; }
 
     //set text direction right-to-left
-    void                SetTextRTL(BOOL bRTL);
+    void                SetTextRTL(sal_Bool bRTL);
 };
 
 #endif  // _RULER_HXX

@@ -223,10 +223,10 @@ DECLARE_LIST( StringList_Impl, ::rtl::OUString* )
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        sal_uLong nCount = pFiles->Count();
         Sequence < ::rtl::OUString > aRet( nCount );
         ::rtl::OUString* pRet = aRet.getArray();
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( sal_uInt16 i = 0; i < nCount; ++i )
         {
             ::rtl::OUString* pFile = pFiles->GetObject(i);
             pRet[i] = *( pFile );

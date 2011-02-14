@@ -59,9 +59,9 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     ,nAAMinPixelHeight  ( DEFAULT_AAMINHEIGHT )
 #endif
-    ,bMenuMouseFollow(FALSE)
+    ,bMenuMouseFollow(sal_False)
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
-    ,bFontAntialiasing  ( TRUE )
+    ,bFontAntialiasing  ( sal_True )
 #endif
 {
     RTL_LOGFILE_CONTEXT(aLog, "svtools SvtTabAppearanceCfg::SvtTabAppearanceCfg()");
@@ -165,7 +165,7 @@ void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUSt
      Beschreibung:
  --------------------------------------------------------------------*/
 
-void SvtTabAppearanceCfg::SetDragMode  ( USHORT nSet )
+void SvtTabAppearanceCfg::SetDragMode  ( sal_uInt16 nSet )
 {
     nDragMode = nSet;
     SetModified();
@@ -175,7 +175,7 @@ void SvtTabAppearanceCfg::SetDragMode  ( USHORT nSet )
      Beschreibung:
  --------------------------------------------------------------------*/
 
-void SvtTabAppearanceCfg::SetScaleFactor ( USHORT nSet )
+void SvtTabAppearanceCfg::SetScaleFactor ( sal_uInt16 nSet )
 {
     nScaleFactor = nSet;
     SetModified();
@@ -185,7 +185,7 @@ void SvtTabAppearanceCfg::SetScaleFactor ( USHORT nSet )
      Beschreibung:
  --------------------------------------------------------------------*/
 
-void SvtTabAppearanceCfg::SetSnapMode ( USHORT nSet )
+void SvtTabAppearanceCfg::SetSnapMode ( sal_uInt16 nSet )
 {
     nSnapMode = nSet;
     SetModified();
@@ -193,7 +193,7 @@ void SvtTabAppearanceCfg::SetSnapMode ( USHORT nSet )
 /*--------------------------------------------------------------------
      Beschreibung:
  --------------------------------------------------------------------*/
-void SvtTabAppearanceCfg::SetMiddleMouseButton ( USHORT nSet )
+void SvtTabAppearanceCfg::SetMiddleMouseButton ( sal_uInt16 nSet )
 {
     nMiddleMouse = nSet;
     SetModified();
@@ -211,7 +211,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     // SetStandard...Styles() resets the UseSystemUIFonts flag,
     // but we don't want to change it now, so save the flag before ...
-    BOOL bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
+    sal_Bool bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
     hAppStyle.SetStandardStyles();
     // and set it here
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
@@ -230,7 +230,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     // Mouse Snap
 
     MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
-    ULONG         nMouseOptions  = hMouseSettings.GetOptions();
+    sal_uLong         nMouseOptions  = hMouseSettings.GetOptions();
 
     nMouseOptions &=  ! (MOUSE_OPTION_AUTOCENTERPOS | MOUSE_OPTION_AUTODEFBTNPOS);
 
@@ -251,7 +251,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 
     // Merge and Publish Settings
 
-    ULONG nFollow = hMouseSettings.GetFollow();
+    sal_uLong nFollow = hMouseSettings.GetFollow();
     if(bMenuMouseFollow)
         nFollow |= MOUSE_FOLLOW_MENU;
     else

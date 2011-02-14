@@ -110,21 +110,21 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         // TODO/LATER: Propbably the graphic should be copied here as well
                         // currently it is handled by the applications
                         utl::TempFile aTmp;
-                        aTmp.EnableKillingFile( TRUE );
+                        aTmp.EnableKillingFile( sal_True );
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
                         if ( xPers.is() )
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
                             ::rtl::OUString aName = ::rtl::OUString::createFromAscii("Dummy");
                             SvStream* pStream = NULL;
-                            BOOL bDeleteStream = FALSE;
+                            sal_Bool bDeleteStream = sal_False;
                             uno::Sequence < beans::PropertyValue > aEmpty;
                             xPers->storeToEntry( xStg, aName, aEmpty, aEmpty );
                             if ( xStg->isStreamElement( aName ) )
                             {
                                 uno::Reference < io::XStream > xStm = xStg->cloneStreamElement( aName );
                                 pStream = utl::UcbStreamHelper::CreateStream( xStm );
-                                bDeleteStream = TRUE;
+                                bDeleteStream = sal_True;
                             }
                             else
                             {
@@ -251,6 +251,6 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     rDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapMode, MapMode( MAP_100TH_MM ) );
     rDesc.maDragStartPos = Point();
     rDesc.maDisplayName = String();
-    rDesc.mbCanLink = FALSE;
+    rDesc.mbCanLink = sal_False;
 }
 

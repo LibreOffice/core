@@ -83,7 +83,7 @@ Hatch::Hatch( const Hatch& rHatch )
 // -----------------------------------------------------------------------
 
 Hatch::Hatch( HatchStyle eStyle, const Color& rColor,
-              long nDistance, USHORT nAngle10 )
+              long nDistance, sal_uInt16 nAngle10 )
 {
     DBG_CTOR( Hatch, NULL );
     mpImplHatch = new ImplHatch;
@@ -120,7 +120,7 @@ Hatch& Hatch::operator=( const Hatch& rHatch )
 
 // -----------------------------------------------------------------------
 
-BOOL Hatch::operator==( const Hatch& rHatch ) const
+sal_Bool Hatch::operator==( const Hatch& rHatch ) const
 {
     DBG_CHKTHIS( Hatch, NULL );
     DBG_CHKOBJ( &rHatch, Hatch, NULL );
@@ -174,7 +174,7 @@ void Hatch::SetDistance( long nDistance )
 
 // -----------------------------------------------------------------------
 
-void Hatch::SetAngle( USHORT nAngle10 )
+void Hatch::SetAngle( sal_uInt16 nAngle10 )
 {
     DBG_CHKTHIS( Hatch, NULL );
     ImplMakeUnique();
@@ -186,7 +186,7 @@ void Hatch::SetAngle( USHORT nAngle10 )
 SvStream& operator>>( SvStream& rIStm, ImplHatch& rImplHatch )
 {
     VersionCompat   aCompat( rIStm, STREAM_READ );
-    UINT16          nTmp16;
+    sal_uInt16          nTmp16;
 
     rIStm >> nTmp16; rImplHatch.meStyle = (HatchStyle) nTmp16;
     rIStm >> rImplHatch.maColor >> rImplHatch.mnDistance >> rImplHatch.mnAngle;
@@ -200,7 +200,7 @@ SvStream& operator<<( SvStream& rOStm, const ImplHatch& rImplHatch )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 1 );
 
-    rOStm << (UINT16) rImplHatch.meStyle << rImplHatch.maColor;
+    rOStm << (sal_uInt16) rImplHatch.meStyle << rImplHatch.maColor;
     rOStm << rImplHatch.mnDistance << rImplHatch.mnAngle;
 
     return rOStm;
