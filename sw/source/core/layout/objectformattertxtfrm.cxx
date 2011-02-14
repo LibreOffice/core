@@ -180,7 +180,7 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
         // wrapping style influence is temporarly considered.
         // #i40147# - consider also anchored objects, for
         // whose the check of a moved forward anchor frame is requested.
-        // #b6449874# - revise decision made for i3317:
+        // revise decision made for i3317:
         // anchored objects, whose wrapping style influence is temporarly considered,
         // have to be considered in method <SwObjectFormatterTxtFrm::DoFormatObjs()>
         if ( bSuccess &&
@@ -359,7 +359,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
         bSuccess = _FormatObjsAtFrm();
     }
 
-    // #b449874#
     // consider anchored objects, whose wrapping style influence are temporarly
     // considered.
     if ( bSuccess &&
@@ -596,7 +595,6 @@ bool SwObjectFormatterTxtFrm::CheckMovedFwdCondition(
         if ( nPageNum > _nFromPageNum )
         {
             _noToPageNum = nPageNum;
-            // #b6443897#
             // Handling of special case:
             // If anchor frame is move forward into a follow flow row,
             // <_noToPageNum> is set to <_nFromPageNum + 1>, because it is
@@ -795,8 +793,6 @@ void SwObjectFormatterTxtFrm::_FormatAnchorFrmForCheckMoveFwd()
 
 /** method to determine if at least one anchored object has state
     <temporarly consider wrapping style influence> set.
-
-    #b6449874#
 */
 bool SwObjectFormatterTxtFrm::_AtLeastOneObjIsTmpConsiderWrapInfluence()
 {

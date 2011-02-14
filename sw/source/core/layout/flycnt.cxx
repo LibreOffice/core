@@ -479,7 +479,6 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     bOsz = aOszCntrl.ChkOsz();
 
-                    // #b6403541#
                     // special loop prevention for dedicated document:
                     if ( bOsz &&
                          HasFixSize() && IsClipped() &&
@@ -551,7 +550,6 @@ void SwFlyAtCntFrm::MakeAll()
             {
                 SetTmpConsiderWrapInfluence( true );
                 SetRestartLayoutProcess( true );
-                // #b6449874#
                 SetTmpConsiderWrapInfluenceOfOtherObjs( true );
             }
             bSetCompletePaintOnInvalidate = FALSE;

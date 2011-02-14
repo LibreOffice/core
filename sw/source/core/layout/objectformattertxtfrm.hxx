@@ -122,8 +122,6 @@ class SwObjectFormatterTxtFrm : public SwObjectFormatter
 
         /** method to determine if at least one anchored object has state
             <temporarly consider wrapping style influence> set.
-
-            #b6449874#
         */
         bool _AtLeastOneObjIsTmpConsiderWrapInfluence();
 
