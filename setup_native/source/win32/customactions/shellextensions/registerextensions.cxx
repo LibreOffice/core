@@ -111,7 +111,7 @@ static std::_tstring createTempFolder()
     std::_tstring cur(szTempName);
     //make a file URL from the path
     std::_tstring ret(TEXT("file:///"));
-    for (std::_tstring::iterator i = cur.begin(); i != cur.end(); i++)
+    for (std::_tstring::iterator i = cur.begin(); i != cur.end(); ++i)
     {
         if (*i == '\\')
             ret.append(TEXT("/"));
@@ -133,7 +133,7 @@ static void deleteTempFolder(const std::_tstring& sTempFolder)
     const std::_tstring path(sTempFolder.substr(8));
     std::_tstring path2;
 //    MessageBox(NULL, path.c_str(), "del1", MB_OK);
-    for (std::_tstring::const_iterator i = path.begin(); i != path.end(); i++)
+    for (std::_tstring::const_iterator i = path.begin(); i != path.end(); ++i)
     {
         if (*i == '/')
             path2.append(TEXT("\\"));
