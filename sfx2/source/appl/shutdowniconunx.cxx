@@ -306,18 +306,6 @@ static gboolean display_menu_cb( GtkWidget *,
     if (event->button == 2)
         return FALSE;
 
-#ifdef TEMPLATE_DIALOG_MORE_POLISHED
-    if (event->button == 1 &&
-        event->type == GDK_2BUTTON_PRESS)
-    {
-        open_template_cb( NULL );
-        return TRUE;
-    }
-    if (event->button == 3)
-    {
-        ... as below ...
-#endif
-
     refresh_menu( pMenu );
 
     gtk_menu_popup( GTK_MENU( pMenu ), NULL, NULL,
