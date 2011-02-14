@@ -147,14 +147,6 @@ BOOL    IsReadOnly( const String &rURL, BOOL *pbExist = 0 );
 // checks if a file with the given URL exists
 BOOL    FileExists( const String &rURL );
 
-#ifdef TL_OUTDATED
-// returns complete file URL for given filename that is to be searched in
-// the specified path
-String  GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName );
-
-String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim = TRUE );
-#endif
-
 ///////////////////////////////////////////////////////////////////////////
 
 ::rtl::OUString     GetDictionaryWriteablePath();

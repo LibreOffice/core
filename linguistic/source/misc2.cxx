@@ -72,69 +72,6 @@ BOOL FileExists( const String &rMainURL )
     return bExists;
 }
 
-
-#ifdef TL_OUTDATED
-
-String GetFileURL( SvtPathOptions::Pathes ePath, const String &rFileName )
-{
-    String aURL;
-    if (rFileName.Len())
-    {
-        INetURLObject aURLObj;
-        aURLObj.SetSmartProtocol( INET_PROT_FILE );
-        aURLObj.SetSmartURL( GetModulePath(ePath) );
-        aURLObj.Append( rFileName );
-        if (aURLObj.HasError())
-        {
-            DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
-        }
-        aURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
-    }
-    return aURL;
-}
-
-
-String  GetModulePath( SvtPathOptions::Pathes ePath, BOOL bAddAccessDelim  )
-{
-    String aRes;
-
-    SvtPathOptions  aPathOpt;
-    switch (ePath)
-    {
-        case SvtPathOptions::PATH_MODULE :
-            aRes = aPathOpt.GetModulePath();
-            break;
-        case SvtPathOptions::PATH_LINGUISTIC :
-        {
-            String aTmp( aPathOpt.GetLinguisticPath() );
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-/*
-        case SvtPathOptions::PATH_USERDICTIONARY :
-        {
-            String aTmp( aPathOpt.GetUserDictionaryPath() );
-            utl::LocalFileHelper::ConvertURLToPhysicalName( aTmp, aRes );
-            break;
-        }
-*/
-        default:
-            DBG_ASSERT( 0, "unexpected argument (path)" );
-    }
-    if (bAddAccessDelim && aRes.Len())
-    {
-#ifdef WNT
-        aRes += '\\';
-#else
-        aRes += '/';
-#endif
-    }
-
-    return aRes;
-}
-
-#endif
-
 ///////////////////////////////////////////////////////////////////////////
 
 rtl::OUString StripTrailingChars( rtl::OUString &rTxt, sal_Unicode cChar )
