@@ -132,8 +132,8 @@ class MSWordExportBase;
 namespace sw { class Frame; }
 
 namespace msword {
-    const BYTE ColumnBreak = 0xE;
-    const BYTE PageBreak   = 0xC;
+    const sal_uInt8 ColumnBreak = 0xE;
+    const sal_uInt8 PageBreak   = 0xC;
 }
 
 class AttributeOutputBase
@@ -198,7 +198,7 @@ public:
     /// Output redlining.
     virtual void Redline( const SwRedlineData* pRedline ) = 0;
 
-    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, USHORT nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) = 0;
+    virtual void FormatDrop( const SwTxtNode& rNode, const SwFmtDrop& rSwFmtDrop, sal_uInt16 nStyle, ww8::WW8TableNodeInfo::Pointer_t pTextNodeInfo, ww8::WW8TableNodeInfoInner::Pointer_t pTextNodeInfoInner ) = 0;
 
     /// Output FKP (Formatted disK Page) - necessary for binary formats only.
     /// FIXME having it in AttributeOutputBase is probably a hack, it
@@ -206,7 +206,7 @@ public:
     virtual void OutputFKP() {}
 
     /// Output style.
-    virtual void ParagraphStyle( USHORT nStyle ) = 0;
+    virtual void ParagraphStyle( sal_uInt16 nStyle ) = 0;
 
     virtual void TableInfoCell( ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfo ) = 0;
 
@@ -240,26 +240,26 @@ public:
     virtual void StartStyles() = 0;
 
     /// End of the styles table.
-    virtual void EndStyles( USHORT nNumberOfStyles ) = 0;
+    virtual void EndStyles( sal_uInt16 nNumberOfStyles ) = 0;
 
     /// Write default style.
-    virtual void DefaultStyle( USHORT nStyle ) = 0;
+    virtual void DefaultStyle( sal_uInt16 nStyle ) = 0;
 
     /// Start of a style in the styles table.
     virtual void StartStyle( const String& rName, bool bPapFmt,
-            USHORT nBase, USHORT nNext, USHORT nWwId, USHORT nId ) = 0;
+            sal_uInt16 nBase, sal_uInt16 nNext, sal_uInt16 nWwId, sal_uInt16 nId ) = 0;
 
     /// End of a style in the styles table.
     virtual void EndStyle() = 0;
 
     /// Start of (paragraph or run) properties of a style.
-    virtual void StartStyleProperties( bool bParProp, USHORT nStyle ) = 0;
+    virtual void StartStyleProperties( bool bParProp, sal_uInt16 nStyle ) = 0;
 
     /// End of (paragraph or run) properties of a style.
     virtual void EndStyleProperties( bool bParProp ) = 0;
 
     /// Numbering rule and Id.
-    virtual void OutlineNumbering( BYTE nLvl, const SwNumFmt& rNFmt, const SwFmt& rFmt ) = 0;
+    virtual void OutlineNumbering( sal_uInt8 nLvl, const SwNumFmt& rNFmt, const SwFmt& rFmt ) = 0;
 
     /// Page break
     /// As a paragraph property - the paragraph should be on the next page.
@@ -267,7 +267,7 @@ public:
 
     /// Write a section break
     /// msword::ColumnBreak or msword::PageBreak
-    virtual void SectionBreak( BYTE nC, const WW8_SepInfo* pSectionInfo = NULL ) = 0;
+    virtual void SectionBreak( sal_uInt8 nC, const WW8_SepInfo* pSectionInfo = NULL ) = 0;
 
     /// Start of the section properties.
     virtual void StartSection() = 0;
@@ -279,7 +279,7 @@ public:
     virtual void SectionFormProtection( bool bProtected ) = 0;
 
     /// Numbering of the lines in the document.
-    virtual void SectionLineNumbering( ULONG nRestartNo, const SwLineNumberInfo& rLnNumInfo ) = 0;
+    virtual void SectionLineNumbering( sal_uLong nRestartNo, const SwLineNumberInfo& rLnNumInfo ) = 0;
 
     /// Has different headers/footers for the title page.
     virtual void SectionTitlePage() = 0;
@@ -293,30 +293,30 @@ public:
     /// The style of the page numbers.
     ///
     /// nPageRestartNumberr being 0 means no restart.
-    virtual void SectionPageNumbering( USHORT nNumType, USHORT nPageRestartNumber ) = 0;
+    virtual void SectionPageNumbering( sal_uInt16 nNumType, sal_uInt16 nPageRestartNumber ) = 0;
 
     /// The type of breaking.
-    virtual void SectionType( BYTE nBreakCode ) = 0;
+    virtual void SectionType( sal_uInt8 nBreakCode ) = 0;
 
     /// Special header/footer flags, needed for old versions only.
-    virtual void SectionWW6HeaderFooterFlags( BYTE /*nHeadFootFlags*/ ) {}
+    virtual void SectionWW6HeaderFooterFlags( sal_uInt8 /*nHeadFootFlags*/ ) {}
 
     /// Definition of a numbering instance.
-    virtual void NumberingDefinition( USHORT nId, const SwNumRule &rRule ) = 0;
+    virtual void NumberingDefinition( sal_uInt16 nId, const SwNumRule &rRule ) = 0;
 
     /// Start of the abstract numbering definition instance.
-    virtual void StartAbstractNumbering( USHORT /*nId*/ ) {}
+    virtual void StartAbstractNumbering( sal_uInt16 /*nId*/ ) {}
 
     /// End of the abstract numbering definition instance.
     virtual void EndAbstractNumbering() {}
 
     /// All the numbering level information.
-    virtual void NumberingLevel( BYTE nLevel,
-        USHORT nStart,
-        USHORT nNumberingType,
+    virtual void NumberingLevel( sal_uInt8 nLevel,
+        sal_uInt16 nStart,
+        sal_uInt16 nNumberingType,
         SvxAdjust eAdjust,
-        const BYTE *pNumLvlPos,
-        BYTE nFollow,
+        const sal_uInt8 *pNumLvlPos,
+        sal_uInt8 nFollow,
         const wwFont *pFont,
         const SfxItemSet *pOutSet,
         sal_Int16 nIndentAt,
@@ -529,7 +529,7 @@ protected:
     /// Sfx item RES_COL
     void FormatColumns( const SwFmtCol& );
 
-    virtual void FormatColumns_Impl( USHORT nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize ) = 0;
+    virtual void FormatColumns_Impl( sal_uInt16 nCols, const SwFmtCol & rCol, bool bEven, SwTwips nPageSize ) = 0;
 
     /// Sfx item RES_KEEP
     virtual void FormatKeep( const SvxFmtKeepItem& ) = 0;
@@ -567,7 +567,7 @@ public:
     void OutputItem( const SfxPoolItem& rHt );
 
     /// Use OutputItem() on an item set - for styles.
-    void OutputStyleItemSet( const SfxItemSet& rSet, BOOL bDeep, BOOL bTestForDefault );
+    void OutputStyleItemSet( const SfxItemSet& rSet, sal_Bool bDeep, sal_Bool bTestForDefault );
 
     /// Output frames.
     void OutputFlyFrame( const sw::Frame& rFmt );

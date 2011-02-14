@@ -67,7 +67,7 @@ class SvxErrorHandler;
 class SmResId : public ResId
 {
 public:
-    SmResId(USHORT nId) :
+    SmResId(sal_uInt16 nId) :
         ResId(nId)
     {
     }
@@ -76,30 +76,5 @@ public:
 
 #endif
 
-#ifndef _DLL_
-class SmDLL;
-
-class SmApplicat: public SfxApplication
-{
-protected:
-    SvxErrorHandler     *pSvxErrorHandler;
-
-    virtual void        OpenClients();
-
-    // initialization / deinitialization
-    virtual void        Init();
-    virtual void        Exit();
-
-public:
-    void Main();
-
-    SmApplicat() :
-        SfxApplication("iso")
-    {
-    }
-
-};
-
-#endif
 #endif
 

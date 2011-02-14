@@ -43,12 +43,12 @@ class SwNodeIndex;
 class WW8GlossaryFib : public WW8Fib
 {
 public:
-    WW8GlossaryFib( SvStream& rStrm, BYTE nWantedVersion ,
+    WW8GlossaryFib( SvStream& rStrm, sal_uInt8 nWantedVersion ,
         SvStream& rTableStrm, const WW8Fib &rFib) : WW8Fib(rStrm,
         nWantedVersion,FindGlossaryFibOffset(rTableStrm,rStrm,rFib)) {}
     bool IsGlossaryFib();
 private:
-    UINT32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
+    sal_uInt32 FindGlossaryFibOffset(SvStream &rTableStrm,SvStream &rStrm,
         const WW8Fib &rFib);
 };
 
@@ -65,18 +65,18 @@ private:
 class WW8Glossary
 {
 public:
-    WW8Glossary( SvStorageStreamRef &refStrm, BYTE nVersion, SvStorage *pStg=0);
+    WW8Glossary( SvStorageStreamRef &refStrm, sal_uInt8 nVersion, SvStorage *pStg=0);
     bool Load( SwTextBlocks &rBlocks, bool bSaveRelFile );
     ~WW8Glossary()                  { delete pGlossary; }
     WW8GlossaryFib *GetFib()        { return pGlossary; }
-    USHORT GetNoStrings() const     { return nStrings; }
+    sal_uInt16 GetNoStrings() const     { return nStrings; }
 
 private:
     WW8GlossaryFib *pGlossary;
     SvStorageStreamRef xTableStream;
     SvStorageStreamRef &rStrm;
     SvStorageRef xStg;
-    USHORT nStrings;
+    sal_uInt16 nStrings;
 
     bool MakeEntries(SwDoc *pD, SwTextBlocks &rBlocks, bool bSaveRelFile,
         const ::std::vector<String>& rStrings,

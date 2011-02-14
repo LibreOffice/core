@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _UNDO_FLY_STR_ATTR_HXX
-#define _UNDO_FLY_STR_ATTR_HXX
+#ifndef SW_UNDO_FLY_STR_ATTR_HXX
+#define SW_UNDO_FLY_STR_ATTR_HXX
 
 #include <undobj.hxx>
 #include <swundo.hxx>
@@ -42,9 +42,8 @@ class SwUndoFlyStrAttr : public SwUndo
                           const String& sNewStr );
         virtual ~SwUndoFlyStrAttr();
 
-        virtual void Undo( SwUndoIter & rIt );
-        virtual void Redo( SwUndoIter & rIt );
-        virtual void Repeat( SwUndoIter & rIt );
+        virtual void UndoImpl( ::sw::UndoRedoContext & );
+        virtual void RedoImpl( ::sw::UndoRedoContext & );
 
         virtual SwRewriter GetRewriter() const;
 
@@ -54,4 +53,4 @@ class SwUndoFlyStrAttr : public SwUndo
         const String msNewStr;
 };
 
-#endif // _UNDO_FLY_STR_ATTR_HXX
+#endif // SW_UNDO_FLY_STR_ATTR_HXX

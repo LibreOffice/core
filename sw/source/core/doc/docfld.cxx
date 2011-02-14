@@ -43,6 +43,7 @@
 #include <unotools/charclass.hxx>
 #include <unotools/transliterationwrapper.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -69,16 +70,14 @@
 #include <authfld.hxx>
 #include <txtinet.hxx>
 #include <fmtcntnt.hxx>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>      // fuer InitFldTypes
-#endif
 
 #include <SwUndoField.hxx>
 
 using namespace ::com::sun::star::uno;
 
-extern BOOL IsFrameBehind( const SwTxtNode& rMyNd, USHORT nMySttPos,
-                        const SwTxtNode& rBehindNd, USHORT nSttPos );
+extern sal_Bool IsFrameBehind( const SwTxtNode& rMyNd, sal_uInt16 nMySttPos,
+                        const SwTxtNode& rBehindNd, sal_uInt16 nSttPos );
 
 SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
@@ -94,10 +93,10 @@ SV_IMPL_OP_PTRARR_SORT( _SetGetExpFlds, _SetGetExpFldPtr )
 
 SwFieldType* SwDoc::InsertFldType(const SwFieldType &rFldTyp)
 {
-    USHORT nSize = pFldTypes->Count(),
+    sal_uInt16 nSize = pFldTypes->Count(),
             nFldWhich = rFldTyp.Which();
 
-    USHORT i = INIT_FLDTYPES;
+    sal_uInt16 i = INIT_FLDTYPES;
 
     switch( nFldWhich )
     {
@@ -174,8 +173,8 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     // - Wird genau der gleiche Typ gefunden, dann muss der geloeschte
     //   einen anderen Namen erhalten.
 
-    USHORT nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
-    USHORT i = INIT_FLDTYPES;
+    sal_uInt16 nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
+    sal_uInt16 i = INIT_FLDTYPES;
 
     ASSERT( RES_SETEXPFLD == nFldWhich ||
             RES_USERFLD == nFldWhich ||
@@ -190,7 +189,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
             rSCmp.isEqual( rFldNm, pFnd->GetName() ) )
         {
             // neuen Namen suchen
-            USHORT nNum = 1;
+            sal_uInt16 nNum = 1;
             do {
                 String sSrch( rFldNm );
                 sSrch.Append( String::CreateFromInt32( nNum ));
@@ -205,7 +204,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
                     break;      // raus aus der While-Schleife
                 }
                 ++nNum;
-            } while( TRUE );
+            } while( sal_True );
             break;
         }
 
@@ -214,13 +213,13 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     switch( nFldWhich )
     {
     case RES_SETEXPFLD:
-        ((SwSetExpFieldType&)rFldTyp).SetDeleted( FALSE );
+        ((SwSetExpFieldType&)rFldTyp).SetDeleted( sal_False );
         break;
     case RES_USERFLD:
-        ((SwUserFieldType&)rFldTyp).SetDeleted( FALSE );
+        ((SwUserFieldType&)rFldTyp).SetDeleted( sal_False );
         break;
     case RES_DDEFLD:
-        ((SwDDEFieldType&)rFldTyp).SetDeleted( FALSE );
+        ((SwDDEFieldType&)rFldTyp).SetDeleted( sal_False );
         break;
     }
 }
@@ -229,19 +228,19 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     Beschreibung: Feldtypen loeschen
  --------------------------------------------------------------------*/
 
-void SwDoc::RemoveFldType(USHORT nFld)
+void SwDoc::RemoveFldType(sal_uInt16 nFld)
 {
     ASSERT( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
     /*
      * Abheangige Felder vorhanden -> ErrRaise
      */
-    USHORT nSize = pFldTypes->Count();
+    sal_uInt16 nSize = pFldTypes->Count();
     if(nFld < nSize)
     {
         SwFieldType* pTmp = (*pFldTypes)[nFld];
 
         // JP 29.07.96: opt. FeldListe fuer den Calculator vorbereiten:
-        USHORT nWhich = pTmp->Which();
+        sal_uInt16 nWhich = pTmp->Which();
         switch( nWhich )
         {
         case RES_SETEXPFLD:
@@ -252,11 +251,11 @@ void SwDoc::RemoveFldType(USHORT nFld)
             if( pTmp->GetDepends() && !IsUsed( *pTmp ) )
             {
                 if( RES_SETEXPFLD == nWhich )
-                    ((SwSetExpFieldType*)pTmp)->SetDeleted( TRUE );
+                    ((SwSetExpFieldType*)pTmp)->SetDeleted( sal_True );
                 else if( RES_USERFLD == nWhich )
-                    ((SwUserFieldType*)pTmp)->SetDeleted( TRUE );
+                    ((SwUserFieldType*)pTmp)->SetDeleted( sal_True );
                 else
-                    ((SwDDEFieldType*)pTmp)->SetDeleted( TRUE );
+                    ((SwDDEFieldType*)pTmp)->SetDeleted( sal_True );
                 nWhich = 0;
             }
             break;
@@ -282,13 +281,13 @@ const SwFldTypes* SwDoc::GetFldTypes() const
     Beschreibung: Den ersten Typen mit ResId und Namen finden
  --------------------------------------------------------------------*/
 
-SwFieldType* SwDoc::GetFldType( USHORT nResId, const String& rName,
+SwFieldType* SwDoc::GetFldType( sal_uInt16 nResId, const String& rName,
          bool bDbFieldMatching // used in some UNO calls for RES_DBFLD
                                    // to use different string matching code
                                    // #i51815#
          ) const
 {
-    USHORT nSize = pFldTypes->Count(), i = 0;
+    sal_uInt16 nSize = pFldTypes->Count(), i = 0;
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
 
     switch( nResId )
@@ -343,7 +342,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     // Modify() fuer jeden Feldtypen rufen,
     // abhaengige SwTxtFld werden benachrichtigt ...
 
-    for( USHORT i=0; i < pFldTypes->Count(); ++i)
+    for( sal_uInt16 i=0; i < pFldTypes->Count(); ++i)
     {
         switch( (*pFldTypes)[i]->Which() )
         {
@@ -380,7 +379,7 @@ void SwDoc::UpdateFlds( SfxPoolItem *pNewHt, bool bCloseDB )
     }
 
     if( !IsExpFldsLocked() )
-        UpdateExpFlds( 0, FALSE );      // Expression-Felder Updaten
+        UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
 
     // Tabellen
     UpdateTblFlds(pNewHt);
@@ -403,7 +402,7 @@ void SwDoc::UpdateUsrFlds()
 {
     SwCalc* pCalc = 0;
     const SwFieldType* pFldType;
-    for( USHORT i = INIT_FLDTYPES; i < pFldTypes->Count(); ++i )
+    for( sal_uInt16 i = INIT_FLDTYPES; i < pFldTypes->Count(); ++i )
         if( RES_USERFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
         {
             if( !pCalc )
@@ -425,7 +424,7 @@ void SwDoc::UpdateUsrFlds()
 void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 {
     SwFieldType* pFldType;
-    for( USHORT i = 0; i < pFldTypes->Count(); ++i )
+    for( sal_uInt16 i = 0; i < pFldTypes->Count(); ++i )
         if( RES_GETREFFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
             pFldType->Modify( 0, pHt );
 }
@@ -437,7 +436,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 
     SwFieldType* pFldType(0);
 
-    for (USHORT i = 0; i < pFldTypes->Count(); ++i)
+    for (sal_uInt16 i = 0; i < pFldTypes->Count(); ++i)
     {
         if( RES_TABLEFLD == ( pFldType = (*pFldTypes)[i] )->Which() )
         {
@@ -470,7 +469,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                             if( nsSwExtendedSubType::SUB_CMD & pFld->GetSubType() )
                                 pFld->PtrToBoxNm( pUpdtFld->pTbl );
                             else
-                                pFld->ChgValid( FALSE );
+                                pFld->ChgValid( sal_False );
                             break;
                         case TBL_BOXNAME:
                             // ist es die gesuchte Tabelle ??
@@ -496,7 +495,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     }
                     else
                         // setze bei allen das Value-Flag zurueck
-                        pFld->ChgValid( FALSE );
+                        pFld->ChgValid( sal_False );
                 }
 
             break;
@@ -696,7 +695,7 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
 {
     SwFieldType* pFldType;
-    for( USHORT i = 0; i < INIT_FLDTYPES; ++i )
+    for( sal_uInt16 i = 0; i < INIT_FLDTYPES; ++i )
         switch( ( pFldType = (*pFldTypes)[ i ] )->Which() )
         {
         case RES_PAGENUMBERFLD:
@@ -719,7 +718,7 @@ void SwDoc::UpdatePageFlds( SfxPoolItem* pMsgHnt )
 // ---- Loesche alle nicht referenzierten FeldTypen eines Dokumentes --
 void SwDoc::GCFieldTypes()
 {
-    for( USHORT n = pFldTypes->Count(); n > INIT_FLDTYPES; )
+    for( sal_uInt16 n = pFldTypes->Count(); n > INIT_FLDTYPES; )
         if( !(*pFldTypes)[ --n ]->GetDepends() )
             RemoveFldType( n );
 }
@@ -912,19 +911,19 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
     }
 }
 
-BOOL _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
+sal_Bool _SetGetExpFld::operator<( const _SetGetExpFld& rFld ) const
 {
     if( nNode < rFld.nNode || ( nNode == rFld.nNode && nCntnt < rFld.nCntnt ))
-        return TRUE;
+        return sal_True;
     else if( nNode != rFld.nNode || nCntnt != rFld.nCntnt )
-        return FALSE;
+        return sal_False;
 
     const SwNode *pFirst = GetNodeFromCntnt(),
                  *pNext = rFld.GetNodeFromCntnt();
 
     // Position gleich: nur weiter wenn beide FeldPointer besetzt sind !!
     if( !pFirst || !pNext )
-        return FALSE;
+        return sal_False;
 
     // gleiche Section ??
     if( pFirst->StartOfSectionNode() != pNext->StartOfSectionNode() )
@@ -1008,7 +1007,7 @@ const SwNode* _SetGetExpFld::GetNodeFromCntnt() const
 
 xub_StrLen _SetGetExpFld::GetCntPosFromCntnt() const
 {
-    USHORT nRet = 0;
+    sal_uInt16 nRet = 0;
     if( CNTNT.pTxtFld )
         switch( eSetGetExpFldType )
         {
@@ -1035,8 +1034,8 @@ _HashStr::_HashStr( const String& rName, const String& rText,
 
 // suche nach dem Namen, ist er vorhanden, returne seinen String, sonst
 // einen LeerString
-void LookString( SwHash** ppTbl, USHORT nSize, const String& rName,
-                    String& rRet, USHORT* pPos )
+void LookString( SwHash** ppTbl, sal_uInt16 nSize, const String& rName,
+                    String& rRet, sal_uInt16* pPos )
 {
     rRet = rName;
     rRet.EraseLeadingChars().EraseTrailingChars();
@@ -1081,7 +1080,7 @@ void lcl_CalcFld( SwDoc& rDoc, SwCalc& rCalc, const _SetGetExpFld& rSGEFld,
         return ;
 
     const SwField* pFld = pTxtFld->GetFld().GetFld();
-    const USHORT nFldWhich = pFld->GetTyp()->Which();
+    const sal_uInt16 nFldWhich = pFld->GetTyp()->Which();
 
     if( RES_SETEXPFLD == nFldWhich )
     {
@@ -1134,38 +1133,38 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, const _SetGetExpFld& rToThisFld )
 {
     // erzeuge die Sortierteliste aller SetFelder
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
-    mbNewFldLst = FALSE;
+    mbNewFldLst = sal_False;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
 
     if( pUpdtFlds->GetSortLst()->Count() )
     {
-        USHORT nLast;
+        sal_uInt16 nLast;
         _SetGetExpFld* pFld = (_SetGetExpFld*)&rToThisFld;
         if( pUpdtFlds->GetSortLst()->Seek_Entry( pFld, &nLast ) )
             ++nLast;
 
         const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
-        for( USHORT n = 0; n < nLast; ++n, ++ppSortLst )
+        for( sal_uInt16 n = 0; n < nLast; ++n, ++ppSortLst )
             lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
     }
 
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
 }
 
-void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt )
+void SwDoc::FldsToCalc( SwCalc& rCalc, sal_uLong nLastNd, sal_uInt16 nLastCnt )
 {
     // erzeuge die Sortierteliste aller SetFelder
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_CALC );
-    mbNewFldLst = FALSE;
+    mbNewFldLst = sal_False;
 
     SwNewDBMgr* pMgr = GetNewDBMgr();
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
 
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
 
-    for( USHORT n = pUpdtFlds->GetSortLst()->Count();
+    for( sal_uInt16 n = pUpdtFlds->GetSortLst()->Count();
         n &&
         ( (*ppSortLst)->GetNode() < nLastNd ||
           ( (*ppSortLst)->GetNode() == nLastNd && (*ppSortLst)->GetCntnt() <= nLastCnt )
@@ -1173,15 +1172,15 @@ void SwDoc::FldsToCalc( SwCalc& rCalc, ULONG nLastNd, sal_uInt16 nLastCnt )
         --n, ++ppSortLst )
         lcl_CalcFld( *this, rCalc, **ppSortLst, pMgr );
 
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
 }
 
-void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
+void SwDoc::FldsToExpand( SwHash**& ppHashTbl, sal_uInt16& rTblSize,
                             const _SetGetExpFld& rToThisFld )
 {
     // erzeuge die Sortierteliste aller SetFelder
     pUpdtFlds->MakeFldList( *this, mbNewFldLst, GETFLD_EXPAND );
-    mbNewFldLst = FALSE;
+    mbNewFldLst = sal_False;
 
     // HashTabelle fuer alle String Ersetzungen, wird "one the fly" gefuellt
     // (versuche eine "ungerade"-Zahl zu erzeugen)
@@ -1189,14 +1188,14 @@ void SwDoc::FldsToExpand( SwHash**& ppHashTbl, USHORT& rTblSize,
     ppHashTbl = new SwHash*[ rTblSize ];
     memset( ppHashTbl, 0, sizeof( _HashStr* ) * rTblSize );
 
-    USHORT nLast;
+    sal_uInt16 nLast;
     {
         _SetGetExpFld* pTmp = (_SetGetExpFld*)&rToThisFld;
         if( pUpdtFlds->GetSortLst()->Seek_Entry( pTmp, &nLast ) )
             ++nLast;
     }
 
-    USHORT nPos;
+    sal_uInt16 nPos;
     SwHash* pFnd;
     String aNew;
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
@@ -1268,11 +1267,11 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     if( IsExpFldsLocked() || IsInReading() )
         return;
 
-    BOOL bOldInUpdateFlds = pUpdtFlds->IsInUpdateFlds();
-    pUpdtFlds->SetInUpdateFlds( TRUE );
+    sal_Bool bOldInUpdateFlds = pUpdtFlds->IsInUpdateFlds();
+    pUpdtFlds->SetInUpdateFlds( sal_True );
 
-    pUpdtFlds->MakeFldList( *this, TRUE, GETFLD_ALL );
-    mbNewFldLst = FALSE;
+    pUpdtFlds->MakeFldList( *this, sal_True, GETFLD_ALL );
+    mbNewFldLst = sal_False;
 
     if( !pUpdtFlds->GetSortLst()->Count() )
     {
@@ -1280,15 +1279,15 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             UpdateRefFlds(NULL);
 
         pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
-        pUpdtFlds->SetFieldsDirty( FALSE );
+        pUpdtFlds->SetFieldsDirty( sal_False );
         return ;
     }
 
-    USHORT nWhich, n;
+    sal_uInt16 nWhich, n;
 
     // HashTabelle fuer alle String Ersetzungen, wird "one the fly" gefuellt
     // (versuche eine "ungerade"-Zahl zu erzeugen)
-    USHORT nStrFmtCnt = (( pFldTypes->Count() / 7 ) + 1 ) * 7;
+    sal_uInt16 nStrFmtCnt = (( pFldTypes->Count() / 7 ) + 1 ) * 7;
     SwHash** pHashStrTbl = new SwHash*[ nStrFmtCnt ];
     memset( pHashStrTbl, 0, sizeof( _HashStr* ) * nStrFmtCnt );
 
@@ -1301,7 +1300,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
             case RES_USERFLD:
                 {
                     // Eintrag vorhanden ?
-                    USHORT nPos;
+                    sal_uInt16 nPos;
                     const String& rNm = pFldType->GetName();
                     String sExpand(((SwUserFieldType*)pFldType)->Expand(nsSwGetSetExpType::GSE_STRING, 0, 0));
                     SwHash* pFnd = Find( rNm, pHashStrTbl, nStrFmtCnt, &nPos );
@@ -1327,9 +1326,9 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
     // aktuelle Datensatznummer schon vorher einstellen
     SwNewDBMgr* pMgr = GetNewDBMgr();
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
 /*
-    if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), FALSE))
+    if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), sal_False))
     {
         if(!pMgr->IsInMerge() )
             pMgr->ToFirstSelectedRecord(DBMGR_STD);
@@ -1419,7 +1418,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
             // Eintrag in den HashTable eintragen
             // Eintrag vorhanden ?
-            USHORT nPos;
+            sal_uInt16 nPos;
             SwHash* pFnd = Find( rName, pHashStrTbl, nStrFmtCnt, &nPos );
             String const value(pFld->ExpandField(IsClipBoard()));
             if( pFnd )
@@ -1469,7 +1468,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
                     // suche den Namen vom Feld
                     aNew = ((SwSetExpFieldType*)pSFld->GetTyp())->GetSetRefName();
                     // Eintrag vorhanden ?
-                    USHORT nPos;
+                    sal_uInt16 nPos;
                     SwHash* pFnd = Find( aNew, pHashStrTbl, nStrFmtCnt, &nPos );
                     if( pFnd )
                         // Eintrag in der HashTabelle aendern
@@ -1511,7 +1510,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
 
                     if( pSFld->IsSequenceFld() )
                     {
-                        const BYTE nLvl = pSFldTyp->GetOutlineLvl();
+                        const sal_uInt8 nLvl = pSFldTyp->GetOutlineLvl();
                         if( MAXLEVEL > nLvl )
                         {
                             // dann teste, ob die Nummer neu aufsetzen muss
@@ -1557,7 +1556,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         }
     }
 
-    pMgr->CloseAll(FALSE);
+    pMgr->CloseAll(sal_False);
     // HashTabelle wieder loeschen
     ::DeleteHashTable( pHashStrTbl, nStrFmtCnt );
 
@@ -1566,7 +1565,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         UpdateRefFlds(NULL);
 
     pUpdtFlds->SetInUpdateFlds( bOldInUpdateFlds );
-    pUpdtFlds->SetFieldsDirty( FALSE );
+    pUpdtFlds->SetFieldsDirty( sal_False );
 }
 
 /*--------------------------------------------------------------------
@@ -1577,9 +1576,9 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 {
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
-    USHORT nFldType = rDBFld.Which();
+    sal_uInt16 nFldType = rDBFld.Which();
 
-    BOOL bPar1 = rCalc.Calculate( rDBFld.GetPar1() ).GetBool();
+    sal_Bool bPar1 = rCalc.Calculate( rDBFld.GetPar1() ).GetBool();
 
     if( RES_DBNEXTSETFLD == nFldType )
         ((SwDBNextSetField&)rDBFld).SetCondValid( bPar1 );
@@ -1613,7 +1612,7 @@ void SwDoc::UpdateDBNumFlds( SwDBNameInfField& rDBFld, SwCalc& rCalc )
 void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
 {
     // Feldtypen
-    USHORT nFldType = 0;
+    sal_uInt16 nFldType = 0;
     pFldTypes->Insert( new SwDateTimeFieldType(this), nFldType++ );
     pFldTypes->Insert( new SwChapterFieldType, nFldType++ );
     pFldTypes->Insert( new SwPageNumberFieldType, nFldType++ );
@@ -1674,11 +1673,11 @@ const SwDBData& SwDoc::GetDBDesc()
 {
     if(!aDBData.sDataSource.getLength())
     {
-        const USHORT nSize = pFldTypes->Count();
-        for(USHORT i = 0; i < nSize && !aDBData.sDataSource.getLength(); ++i)
+        const sal_uInt16 nSize = pFldTypes->Count();
+        for(sal_uInt16 i = 0; i < nSize && !aDBData.sDataSource.getLength(); ++i)
         {
             SwFieldType& rFldType = *((*pFldTypes)[i]);
-            USHORT nWhich = rFldType.Which();
+            sal_uInt16 nWhich = rFldType.Which();
             if(IsUsed(rFldType))
             {
                 switch(nWhich)
@@ -1715,7 +1714,7 @@ const SwDBData& SwDoc::GetDBDesc()
     return aDBData;
 }
 
-void SwDoc::SetInitDBFields( BOOL b )
+void SwDoc::SetInitDBFields( sal_Bool b )
 {
     GetNewDBMgr()->SetInitDBFields( b );
 }
@@ -1745,7 +1744,7 @@ void SwDoc::GetAllUsedDB( SvStringsDtor& rDBNameList,
     }
 
     SwSectionFmts& rArr = GetSections();
-    for (USHORT n = rArr.Count(); n; )
+    for (sal_uInt16 n = rArr.Count(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -1817,7 +1816,7 @@ void SwDoc::GetAllDBNames( SvStringsDtor& rAllDBNames )
     SwNewDBMgr* pMgr = GetNewDBMgr();
 
     const SwDSParamArr& rArr = pMgr->GetDSParamArray();
-    for(USHORT i = 0; i < rArr.Count(); i++)
+    for(sal_uInt16 i = 0; i < rArr.Count(); i++)
     {
         SwDSParam* pParam = rArr[i];
         String* pStr = new String( pParam->sDataSource );
@@ -1842,7 +1841,7 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
 #endif
 
     xub_StrLen nPos;
-    for (USHORT i = 0; i < rAllDBNames.Count(); ++i )
+    for (sal_uInt16 i = 0; i < rAllDBNames.Count(); ++i )
     {
         const String* pStr = rAllDBNames.GetObject(i);
 
@@ -1872,7 +1871,7 @@ SvStringsDtor& SwDoc::FindUsedDBs( const SvStringsDtor& rAllDBNames,
 void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList,
                              const SvStringsDtor& rUsedDBNames )
 {
-    for (USHORT i = 0; i < rUsedDBNames.Count(); i++)
+    for (sal_uInt16 i = 0; i < rUsedDBNames.Count(); i++)
         AddUsedDBToList( rDBNameList, *rUsedDBNames.GetObject(i) );
 }
 
@@ -1886,12 +1885,12 @@ void SwDoc::AddUsedDBToList( SvStringsDtor& rDBNameList, const String& rDBName)
         return;
 
 #ifdef UNX
-    for( USHORT i = 0; i < rDBNameList.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rDBNameList.Count(); ++i )
         if( rDBName == rDBNameList.GetObject(i)->GetToken(0) )
             return;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( USHORT i = 0; i < rDBNameList.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rDBNameList.Count(); ++i )
         if( rSCmp.isEqual( rDBName, rDBNameList.GetObject(i)->GetToken(0) ) )
             return;
 #endif
@@ -1920,7 +1919,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
     String sFormel;
 
     SwSectionFmts& rArr = GetSections();
-    for (USHORT n = rArr.Count(); n; )
+    for (sal_uInt16 n = rArr.Count(); n; )
     {
         SwSection* pSect = rArr[ --n ]->GetSection();
 
@@ -1946,7 +1945,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
             continue;
 
         SwField* pFld = pFmtFld->GetFld();
-        BOOL bExpand = FALSE;
+        sal_Bool bExpand = sal_False;
 
         switch( pFld->GetTyp()->Which() )
         {
@@ -1964,7 +1963,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                     ((SwDBField*)pFld)->ClearInitialized();
                     ((SwDBField*)pFld)->InitContent();
 
-                    bExpand = TRUE;
+                    bExpand = sal_True;
                 }
                 break;
 
@@ -1974,7 +1973,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                                 lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
-                    bExpand = TRUE;
+                    bExpand = sal_True;
                 }
                 break;
 
@@ -1984,7 +1983,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                                 lcl_DBDataToString(((SwDBNameInfField*)pFld)->GetRealDBData())))
                 {
                     ((SwDBNameInfField*)pFld)->SetDBData(aNewDBData);
-                    bExpand = TRUE;
+                    bExpand = sal_True;
                 }
                 // kein break;
             case RES_HIDDENTXTFLD:
@@ -1992,7 +1991,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                 sFormel = pFld->GetPar1();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar1( sFormel );
-                bExpand = TRUE;
+                bExpand = sal_True;
                 break;
 
             case RES_SETEXPFLD:
@@ -2001,7 +2000,7 @@ void SwDoc::ChangeDBFields( const SvStringsDtor& rOldNames,
                 sFormel = pFld->GetFormula();
                 ReplaceUsedDBs( rOldNames, rNewName, sFormel);
                 pFld->SetPar2( sFormel );
-                bExpand = TRUE;
+                bExpand = sal_True;
                 break;
         }
 
@@ -2027,7 +2026,7 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
     String sUpperNewNm( sNewName );
 
 
-    for( USHORT i = 0; i < rUsedDBNames.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rUsedDBNames.Count(); ++i )
     {
         String  sDBName( *rUsedDBNames.GetObject( i ) );
 
@@ -2060,26 +2059,26 @@ void SwDoc::ReplaceUsedDBs( const SvStringsDtor& rUsedDBNames,
      Beschreibung:
  --------------------------------------------------------------------*/
 
-BOOL SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
+sal_Bool SwDoc::IsNameInArray( const SvStringsDtor& rArr, const String& rName )
 {
 #ifdef UNX
-    for( USHORT i = 0; i < rArr.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rArr.Count(); ++i )
         if( rName == *rArr[ i ] )
-            return TRUE;
+            return sal_True;
 #else
     const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
-    for( USHORT i = 0; i < rArr.Count(); ++i )
+    for( sal_uInt16 i = 0; i < rArr.Count(); ++i )
         if( rSCmp.isEqual( rName, *rArr[ i] ))
-            return TRUE;
+            return sal_True;
 #endif
-    return FALSE;
+    return sal_False;
 }
 
 void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
 {
-    BOOL bIsModified = IsModified();
+    sal_Bool bIsModified = IsModified();
 
-    ULONG nDate, nTime;
+    sal_uLong nDate, nTime;
     if( pNewDateTime )
     {
         nDate = pNewDateTime->GetDate();
@@ -2091,14 +2090,14 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
         nTime = Time().GetTime();
     }
 
-    USHORT aTypes[5] = {
+    sal_uInt16 aTypes[5] = {
         /*0*/   RES_DOCINFOFLD,
         /*1*/   RES_AUTHORFLD,
         /*2*/   RES_EXTUSERFLD,
         /*3*/   RES_FILENAMEFLD,
         /*4*/   RES_DATETIMEFLD };  // MUSS am Ende stehen!!
 
-    USHORT nStt = bOnlyTimeDate ? 4 : 0;
+    sal_uInt16 nStt = bOnlyTimeDate ? 4 : 0;
 
     for( ; nStt < 5; ++nStt )
     {
@@ -2110,13 +2109,13 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
         {
             if( pFld && pFld->GetTxtFld() )
             {
-                BOOL bChgd = FALSE;
+                sal_Bool bChgd = sal_False;
                 switch( aTypes[ nStt ] )
                 {
                 case RES_DOCINFOFLD:
                     if( ((SwDocInfoField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = TRUE;
+                        bChgd = sal_True;
                         SwDocInfoField* pDocInfFld = (SwDocInfoField*)pFld->GetFld();
                         pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)
                                     pDocInfFld->GetTyp())->Expand(
@@ -2130,7 +2129,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_AUTHORFLD:
                     if( ((SwAuthorField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = TRUE;
+                        bChgd = sal_True;
                         SwAuthorField* pAuthorFld = (SwAuthorField*)pFld->GetFld();
                         pAuthorFld->SetExpansion( ((SwAuthorFieldType*)
                                     pAuthorFld->GetTyp())->Expand(
@@ -2141,7 +2140,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_EXTUSERFLD:
                     if( ((SwExtUserField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = TRUE;
+                        bChgd = sal_True;
                         SwExtUserField* pExtUserFld = (SwExtUserField*)pFld->GetFld();
                         pExtUserFld->SetExpansion( ((SwExtUserFieldType*)
                                     pExtUserFld->GetTyp())->Expand(
@@ -2153,7 +2152,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_DATETIMEFLD:
                     if( ((SwDateTimeField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = TRUE;
+                        bChgd = sal_True;
                         ((SwDateTimeField*)pFld->GetFld())->SetDateTime(
                                                     DateTime(Date(nDate), Time(nTime)) );
                     }
@@ -2162,7 +2161,7 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
                 case RES_FILENAMEFLD:
                     if( ((SwFileNameField*)pFld->GetFld())->IsFixed() )
                     {
-                        bChgd = TRUE;
+                        bChgd = sal_True;
                         SwFileNameField* pFileNameFld =
                             (SwFileNameField*)pFld->GetFld();
                         pFileNameFld->SetExpansion( ((SwFileNameFieldType*)
@@ -2183,19 +2182,19 @@ void SwDoc::SetFixFields( bool bOnlyTimeDate, const DateTime* pNewDateTime )
         ResetModified();
 }
 
-bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
+bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, sal_uLong nLen )
 {
     // teste ggfs. mal, ob die angegbenen Nodes ueberhaupt Felder beinhalten.
     // wenn nicht, braucht das Flag nicht veraendert werden.
-    BOOL bFldsFnd = FALSE;
+    sal_Bool bFldsFnd = sal_False;
     if( b && pChk && !GetUpdtFlds().IsFieldsDirty() && !IsInDtor()
         // ?? was ist mit Undo, da will man es doch auch haben !!
         /*&& &pChk->GetNodes() == &GetNodes()*/ )
     {
-        b = FALSE;
+        b = sal_False;
         if( !nLen )
             ++nLen;
-        ULONG nStt = pChk->GetIndex();
+        sal_uLong nStt = pChk->GetIndex();
         const SwNodes& rNds = pChk->GetNodes();
         while( nLen-- )
         {
@@ -2206,15 +2205,15 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
                 //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
                     pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
                     // Kapitelfelder aktualisieren
-                    b = TRUE;
+                    b = sal_True;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
-                    for( USHORT n = 0, nEnd = pTNd->GetSwpHints().Count();
+                    for( sal_uInt16 n = 0, nEnd = pTNd->GetSwpHints().Count();
                             n < nEnd; ++n )
                     {
                         const SwTxtAttr* pAttr = pTNd->GetSwpHints()[ n ];
                         if( RES_TXTATR_FIELD == pAttr->Which() )
                         {
-                            b = TRUE;
+                            b = sal_True;
                             break;
                         }
                     }
@@ -2233,9 +2232,9 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
  ---------------------------------------------------------------------------*/
 void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
 {
-    const USHORT nSize = pFldTypes->Count();
+    const sal_uInt16 nSize = pFldTypes->Count();
 
-    for( USHORT i = INIT_FLDTYPES; i < nSize; ++i )
+    for( sal_uInt16 i = INIT_FLDTYPES; i < nSize; ++i )
     {
         SwFieldType* pFldType = (*pFldTypes)[i];
         if( RES_AUTHORITY  == pFldType->Which() )
@@ -2251,9 +2250,9 @@ void SwDoc::ChangeAuthorityData( const SwAuthEntry* pNewData )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
+void SwDocUpdtFld::InsDelFldInFldLst( sal_Bool bIns, const SwTxtFld& rFld )
 {
-    USHORT nWhich = rFld.GetFld().GetFld()->GetTyp()->Which();
+    sal_uInt16 nWhich = rFld.GetFld().GetFld()->GetTyp()->Which();
     switch( nWhich )
     {
     case RES_DBFLD:
@@ -2270,7 +2269,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
         return;
     }
 
-    SetFieldsDirty( TRUE );
+    SetFieldsDirty( sal_True );
     if( !pFldSortLst )
     {
         if( !bIns )             // keine Liste vorhanden und loeschen
@@ -2285,7 +2284,7 @@ void SwDocUpdtFld::InsDelFldInFldLst( BOOL bIns, const SwTxtFld& rFld )
         // ueber den pTxtFld Pointer suchen. Ist zwar eine Sortierte
         // Liste, aber nach Node-Positionen sortiert. Bis dieser
         // bestimmt ist, ist das Suchen nach dem Pointer schon fertig
-        for( USHORT n = 0; n < pFldSortLst->Count(); ++n )
+        for( sal_uInt16 n = 0; n < pFldSortLst->Count(); ++n )
             if( &rFld == (*pFldSortLst)[ n ]->GetPointer() )
                 pFldSortLst->DeleteAndDestroy( n--, 1 );
                 // ein Feld kann mehrfach vorhanden sein!
@@ -2328,17 +2327,17 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         SvULongs aTmpArr;
         SwSectionFmts& rArr = rDoc.GetSections();
         SwSectionNode* pSectNd;
-        USHORT nArrStt = 0;
-        ULONG nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
+        sal_uInt16 nArrStt = 0;
+        sal_uLong nSttCntnt = rDoc.GetNodes().GetEndOfExtras().GetIndex();
 
-        for (USHORT n = rArr.Count(); n; )
+        for (sal_uInt16 n = rArr.Count(); n; )
         {
             SwSection* pSect = rArr[ --n ]->GetSection();
             if( pSect && pSect->IsHidden() && pSect->GetCondition().Len() &&
                 0 != ( pSectNd = pSect->GetFmt()->GetSectionNode() ))
             {
-                ULONG nIdx = pSectNd->GetIndex();
-                USHORT i;
+                sal_uLong nIdx = pSectNd->GetIndex();
+                sal_uInt16 i;
 
                 for( i = 0; i < aTmpArr.Count() && aTmpArr[ i ] < nIdx; ++i )
                     ;
@@ -2351,33 +2350,33 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         // erst alle anzeigen, damit die Frames vorhanden sind. Mit deren
         // Position wird das BodyAnchor ermittelt.
         // Dafuer erst den ContentBereich, dann die Sonderbereiche!!!
-        for (USHORT n = nArrStt; n < aTmpArr.Count(); ++n)
+        for (sal_uInt16 n = nArrStt; n < aTmpArr.Count(); ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             ASSERT( pSectNd, "Wo ist mein SectionNode" );
-            pSectNd->GetSection().SetCondHidden( FALSE );
+            pSectNd->GetSection().SetCondHidden( sal_False );
         }
-        for (USHORT n = 0; n < nArrStt; ++n)
+        for (sal_uInt16 n = 0; n < nArrStt; ++n)
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
             ASSERT( pSectNd, "Wo ist mein SectionNode" );
-            pSectNd->GetSection().SetCondHidden( FALSE );
+            pSectNd->GetSection().SetCondHidden( sal_False );
         }
 
         // so, erst jetzt alle sortiert in die Liste eintragen
-        for (USHORT n = 0; n < aTmpArr.Count(); ++n)
+        for (sal_uInt16 n = 0; n < aTmpArr.Count(); ++n)
         {
             GetBodyNode( *rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode() );
         }
     }
 
     String sTrue( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "TRUE" ))),
+                                    RTL_CONSTASCII_STRINGPARAM( "sal_True" ))),
            sFalse( String::CreateFromAscii(
-                                       RTL_CONSTASCII_STRINGPARAM( "FALSE" )));
+                                       RTL_CONSTASCII_STRINGPARAM( "sal_False" )));
 
-    BOOL bIsDBMgr = 0 != rDoc.GetNewDBMgr();
-    USHORT nWhich, n;
+    sal_Bool bIsDBMgr = 0 != rDoc.GetNewDBMgr();
+    sal_uInt16 nWhich, n;
     const String* pFormel = 0;
     const SfxPoolItem* pItem;
     sal_uInt32 nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
@@ -2430,9 +2429,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     pFormel = &pFld->GetPar1();
                     if( !pFormel->Len() || pFormel->Equals( sFalse ))
-                        ((SwHiddenParaField*)pFld)->SetHidden( FALSE );
+                        ((SwHiddenParaField*)pFld)->SetHidden( sal_False );
                     else if( pFormel->Equals( sTrue ))
-                        ((SwHiddenParaField*)pFld)->SetHidden( TRUE );
+                        ((SwHiddenParaField*)pFld)->SetHidden( sal_True );
                     else
                         break;
 
@@ -2447,9 +2446,9 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 {
                     pFormel = &pFld->GetPar1();
                     if( !pFormel->Len() || pFormel->Equals( sFalse ))
-                        ((SwHiddenTxtField*)pFld)->SetValue( TRUE );
+                        ((SwHiddenTxtField*)pFld)->SetValue( sal_True );
                     else if( pFormel->Equals( sTrue ))
-                        ((SwHiddenTxtField*)pFld)->SetValue( FALSE );
+                        ((SwHiddenTxtField*)pFld)->SetValue( sal_False );
                     else
                         break;
 
@@ -2496,7 +2495,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
             pFormel = 0;
         }
     }
-    nFldLstGetMode = static_cast<BYTE>( eGetMode );
+    nFldLstGetMode = static_cast<sal_uInt8>( eGetMode );
     nNodes = rDoc.GetNodes().Count();
 
 #ifdef JP_DEBUG
@@ -2505,7 +2504,7 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     sOut.Seek( STREAM_SEEK_TO_END );
     sOut << "------------------" << endl;
     const _SetGetExpFldPtr* pSortLst = pFldSortLst->GetData();
-    for( USHORT n = pFldSortLst->Count(); n; --n, ++pSortLst )
+    for( sal_uInt16 n = pFldSortLst->Count(); n; --n, ++pSortLst )
     {
         String sStr( (*pSortLst)->GetNode() );
         sStr += "\t, ";
@@ -2528,17 +2527,17 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
+void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, sal_uInt16 nFldWhich )
 {
     const SwTxtNode& rTxtNd = rTFld.GetTxtNode();
     const SwDoc& rDoc = *rTxtNd.GetDoc();
 
     // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
     Point aPt;
-    const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, FALSE );
+    const SwCntntFrm* pFrm = rTxtNd.GetFrm( &aPt, 0, sal_False );
 
     _SetGetExpFld* pNew = NULL;
-    BOOL bIsInBody = FALSE;
+    sal_Bool bIsInBody = sal_False;
 
     if( !pFrm || pFrm->IsInDocBody() )
     {
@@ -2601,7 +2600,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 
             // immer den ersten !! (in Tab-Headline, Kopf-/Fuss )
             Point aPt;
-            const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, FALSE );
+            const SwCntntFrm* pFrm = pCNd->GetFrm( &aPt, 0, sal_False );
             if( !pFrm )
                 break;
 
@@ -2612,7 +2611,7 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
 #endif
             pNew = new _SetGetExpFld( rSectNd, &aPos );
 
-        } while( FALSE );
+        } while( sal_False );
     }
 
     if( !pNew )
@@ -2639,10 +2638,10 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
 
     if( sFldName.Len() )
     {
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( sal_True );
         // suchen und aus der HashTabelle entfernen
         GetAppCharClass().toLower( sFldName );
-        USHORT n;
+        sal_uInt16 n;
 
         SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );
 
@@ -2670,10 +2669,10 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 
     if( sFldName.Len() )
     {
-        SetFieldsDirty( TRUE );
+        SetFieldsDirty( sal_True );
         // suchen und aus der HashTabelle entfernen
         GetAppCharClass().toLower( sFldName );
-        USHORT n;
+        sal_uInt16 n;
 
         SwHash* pFnd = Find( sFldName, GetFldTypeTable(), TBLSZ, &n );
         if( pFnd )
@@ -2696,7 +2695,7 @@ void SwDocUpdtFld::RemoveFldType( const SwFieldType& rType )
 SwDocUpdtFld::SwDocUpdtFld()
     : pFldSortLst(0),  nFldUpdtPos(LONG_MAX), nFldLstGetMode(0)
 {
-    bInUpdateFlds = bFldsDirty = FALSE;
+    bInUpdateFlds = bFldsDirty = sal_False;
     memset( aFldTypeTable, 0, sizeof( aFldTypeTable ) );
 }
 
@@ -2704,7 +2703,7 @@ SwDocUpdtFld::~SwDocUpdtFld()
 {
     delete pFldSortLst;
 
-    for( USHORT n = 0; n < TBLSZ; ++n )
+    for( sal_uInt16 n = 0; n < TBLSZ; ++n )
         delete aFldTypeTable[n];
 }
 
@@ -2715,23 +2714,24 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 {
     ASSERT(pDstTxtFld, "no field to update!");
 
-    BOOL bTblSelBreak = FALSE;
+    sal_Bool bTblSelBreak = sal_False;
 
     SwFmtFld * pDstFmtFld = (SwFmtFld*)&pDstTxtFld->GetFld();
     SwField * pDstFld = pDstFmtFld->GetFld();
-    USHORT nFldWhich = rSrcFld.GetTyp()->Which();
+    sal_uInt16 nFldWhich = rSrcFld.GetTyp()->Which();
     SwNodeIndex aTblNdIdx(pDstTxtFld->GetTxtNode());
 
     if (pDstFld->GetTyp()->Which() ==
         rSrcFld.GetTyp()->Which())
     {
-        if (DoesUndo())
+        if (GetIDocumentUndoRedo().DoesUndo())
         {
             SwPosition aPosition( pDstTxtFld->GetTxtNode() );
             aPosition.nContent = *pDstTxtFld->GetStart();
 
-            AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
-                                              pMsgHnt, bUpdateFlds));
+            SwUndo *const pUndo( new SwUndoFieldFromDoc(
+                        aPosition, *pDstFld, rSrcFld, pMsgHnt, bUpdateFlds) );
+            GetIDocumentUndoRedo().AppendUndo(pUndo);
         }
 
         // Das gefundene Feld wird angepasst ...
@@ -2764,7 +2764,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                         pNewFld->GetTyp()->Modify(0, &aTblUpdate);
 
                     if (! bUpdateFlds)
-                        bTblSelBreak = TRUE;
+                        bTblSelBreak = sal_True;
                 }
             }
             break;
@@ -2791,7 +2791,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                 //richtig setzt
                 SwDBField* pDBFld = (SwDBField*)pNewFld;
                 if (pDBFld->IsInitialized())
-                    pDBFld->ChgValue( pDBFld->GetValue(), TRUE );
+                    pDBFld->ChgValue( pDBFld->GetValue(), sal_True );
 
                 pDBFld->ClearInitialized();
                 pDBFld->InitContent();
@@ -2812,14 +2812,18 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
 }
 
 bool SwDoc::PutValueToField(const SwPosition & rPos,
-                            const Any& rVal, USHORT nWhich)
+                            const Any& rVal, sal_uInt16 nWhich)
 {
     Any aOldVal;
     SwField * pField = GetField(rPos);
 
 
-    if (DoesUndo() && pField->QueryValue(aOldVal, nWhich))
-        AppendUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
+    if (GetIDocumentUndoRedo().DoesUndo() &&
+        pField->QueryValue(aOldVal, nWhich))
+    {
+        SwUndo *const pUndo(new SwUndoFieldFromAPI(rPos, aOldVal, rVal, nWhich));
+        GetIDocumentUndoRedo().AppendUndo(pUndo);
+    }
 
     return pField->PutValue(rVal, nWhich);
 }

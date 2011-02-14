@@ -230,7 +230,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
 /* -----------------------------30.08.2001 12:38------------------------------
 
  ---------------------------------------------------------------------------*/
-::rtl::OUString SwDbtoolsClient::getValue(
+::rtl::OUString SwDbtoolsClient::getFormattedValue(
         const uno::Reference< beans::XPropertySet>& _rxColumn,
         const uno::Reference< util::XNumberFormatter>& _rxFormatter,
         const lang::Locale& _rLocale,
@@ -242,7 +242,7 @@ sal_Int32 SwDbtoolsClient::getDefaultNumberFormat(
                     getAccessTypeConversion();
     rtl::OUString sRet;
     if(xConversion.is())
-        sRet = xConversion->getValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
+        sRet = xConversion->getFormattedValue(_rxColumn, _rxFormatter, _rLocale, _rNullDate);
     return sRet;
 }
 

@@ -50,6 +50,7 @@
 #include <unocrsr.hxx>
 #include <section.hxx>
 #include <doc.hxx>
+#include <IDocumentUndoRedo.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
 #include <docary.hxx>
@@ -327,7 +328,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     //das muss jetzt sal_True liefern
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
-    pDoc->StartUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
 
     if (!m_pImpl->m_sName.getLength())
     {
@@ -450,13 +451,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         {
             pRet->CreateLink(CREATE_CONNECT);
         }
-        pRet->SetUpdateType( static_cast< USHORT >(
+        pRet->SetUpdateType( static_cast< sal_uInt16 >(
             (m_pImpl->m_pProps->m_bUpdateType) ?
                 sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 
     // Undo-Klammerung hier beenden
-    pDoc->EndUndo( UNDO_INSSECTION, NULL );
+    pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
 }
@@ -560,7 +561,7 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
         {
             rSection.CreateLink(CREATE_CONNECT);
         }
-        rSection.SetUpdateType( static_cast< USHORT >((bLinkUpdateAlways)
+        rSection.SetUpdateType( static_cast< sal_uInt16 >((bLinkUpdateAlways)
             ? sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 }
@@ -1217,11 +1218,11 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 const SwRedlineTbl& rRedTbl =
                     pFmt->GetDoc()->GetRedlineTbl();
-                for (USHORT nRed = 0; nRed < rRedTbl.Count(); nRed++)
+                for (sal_uInt16 nRed = 0; nRed < rRedTbl.Count(); nRed++)
                 {
                     const SwRedline* pRedline = rRedTbl[nRed];
-                    SwNode const*const pRedPointNode = pRedline->GetNode(TRUE);
-                    SwNode const*const pRedMarkNode = pRedline->GetNode(FALSE);
+                    SwNode const*const pRedPointNode = pRedline->GetNode(sal_True);
+                    SwNode const*const pRedMarkNode = pRedline->GetNode(sal_False);
                     if ((pRedPointNode == pSectNode) ||
                         (pRedMarkNode == pSectNode))
                     {

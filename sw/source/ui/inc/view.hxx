@@ -32,7 +32,7 @@
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/objsh.hxx>   // SfxObjectShellRef <-> SV_DECL_REF(SfxObjectShell)
+#include <sfx2/objsh.hxx>
 #include <editeng/svxenum.hxx>
 #include <svx/zoomitem.hxx>
 #include <editeng/editstat.hxx>
@@ -146,15 +146,15 @@ struct SwApplyTemplate
     } aColl;
 
     int eType;
-    USHORT nColor;
+    sal_uInt16 nColor;
     SwFormatClipboard* pFormatClipboard;
-    BOOL bUndo;
+    sal_Bool bUndo;
 
     SwApplyTemplate() :
         eType(0),
         nColor(0),
         pFormatClipboard(0),
-        bUndo(FALSE)
+        bUndo(sal_False)
     {
         aColl.pTxtColl = 0;
     }
@@ -180,16 +180,16 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     static SvxSearchDialog *pSrchDlg;
     static SvxSearchItem   *pSrchItem;
 
-    static USHORT           nInsertCtrlState;
-    static USHORT           nWebInsertCtrlState;
-    static USHORT           nInsertObjectCtrlState;
-    static USHORT           nInsertFieldCtrlState;
-    static USHORT           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
+    static sal_uInt16           nInsertCtrlState;
+    static sal_uInt16           nWebInsertCtrlState;
+    static sal_uInt16           nInsertObjectCtrlState;
+    static sal_uInt16           nInsertFieldCtrlState;
+    static sal_uInt16           nMoveType; // fuer Buttons unter dem Scrollbar (viewmdi)
     static sal_Int32        nActMark; // aktuelle Sprungmarke fuer unbenannte Merker
 
-    static BOOL             bExtra;
-    static BOOL             bFound;
-    static BOOL             bJustOpened;
+    static sal_Bool             bExtra;
+    static sal_Bool             bFound;
+    static sal_Bool             bJustOpened;
 
     static SearchAttrItemList* pSrchList;
     static SearchAttrItemList* pReplList;
@@ -203,7 +203,7 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     //and the new cursor position if the user double click in the PagePreView
                         sNewCrsrPos;
     // to support keyboard the number of the page to go to can be set too
-    USHORT              nNewPage;
+    sal_uInt16              nNewPage;
 
     Point               aTabColFromDocPos;  //Verschieben von Tabellenspalten aus
                                             //aus dem Dokument heraus.
@@ -251,19 +251,19 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     String          aCurrShapeEnumCommand[ MASTERENUMCOMMANDS ];
 
-    USHORT          nPageCnt;
+    sal_uInt16          nPageCnt;
 
     // Aktueller Drawmode
-    USHORT          nDrawSfxId;
+    sal_uInt16          nDrawSfxId;
     String          sDrawCustom; //some drawing types are marked with strings!
-    USHORT          nFormSfxId;
-    USHORT          nLastPasteDestination;
+    sal_uInt16          nFormSfxId;
+    sal_uInt16          nLastPasteDestination;
 
     // save the border distance status from SwView::StateTabWin to re-use it in SwView::ExecTabWin()
-    USHORT          nLeftBorderDistance;
-    USHORT          nRightBorderDistance;
+    sal_uInt16          nLeftBorderDistance;
+    sal_uInt16          nRightBorderDistance;
 
-    BOOL            bCenterCrsr : 1,
+    sal_Bool            bCenterCrsr : 1,
                     bTopCrsr : 1,
                     bAllwaysShowSel : 1,
                     bTabColFromDoc : 1,
@@ -289,14 +289,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
 
     // Methoden fuers Suchen
     // Suchkontext setzen
-    SW_DLLPRIVATE BOOL              SearchAndWrap(BOOL bApi = FALSE);
-    SW_DLLPRIVATE BOOL          SearchAll(USHORT* pFound = 0);
-    SW_DLLPRIVATE ULONG         FUNC_Search( const SwSearchOptions& rOptions );
+    SW_DLLPRIVATE sal_Bool              SearchAndWrap(sal_Bool bApi = sal_False);
+    SW_DLLPRIVATE sal_Bool          SearchAll(sal_uInt16* pFound = 0);
+    SW_DLLPRIVATE sal_uLong         FUNC_Search( const SwSearchOptions& rOptions );
     SW_DLLPRIVATE void          Replace();
 
-    BOOL                                IsDocumentBorder();
+    sal_Bool                                IsDocumentBorder();
 
-    SW_DLLPRIVATE BOOL          IsTextTool() const;
+    SW_DLLPRIVATE sal_Bool          IsTextTool() const;
 
     // Bedienelemente verwalten anlegen
     SW_DLLPRIVATE void          CreateBtns();
@@ -311,31 +311,31 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     inline long     GetYScroll() const;
     SW_DLLPRIVATE  Point    AlignToPixel(const Point& rPt) const;
     SW_DLLPRIVATE   void        CalcPt( Point* pPt,const Rectangle& rRect,
-                            USHORT nRangeX = USHRT_MAX,
-                            USHORT nRangeY = USHRT_MAX);
+                            sal_uInt16 nRangeX = USHRT_MAX,
+                            sal_uInt16 nRangeY = USHRT_MAX);
 
-    SW_DLLPRIVATE BOOL          GetPageScrollUpOffset(SwTwips& rOff) const;
-    SW_DLLPRIVATE BOOL          GetPageScrollDownOffset(SwTwips& rOff) const;
+    SW_DLLPRIVATE sal_Bool          GetPageScrollUpOffset(SwTwips& rOff) const;
+    SW_DLLPRIVATE sal_Bool          GetPageScrollDownOffset(SwTwips& rOff) const;
 
     // Scrollbar Movements
     SW_DLLPRIVATE long          PageUp();
     SW_DLLPRIVATE long          PageDown();
-    SW_DLLPRIVATE long          PageUpCrsr(BOOL bSelect);
-    SW_DLLPRIVATE long          PageDownCrsr(BOOL bSelect);
+    SW_DLLPRIVATE long          PageUpCrsr(sal_Bool bSelect);
+    SW_DLLPRIVATE long          PageDownCrsr(sal_Bool bSelect);
     SW_DLLPRIVATE long          PhyPageUp();
     SW_DLLPRIVATE long          PhyPageDown();
 
-    SW_DLLPRIVATE int               _CreateScrollbar( BOOL bHori );
+    SW_DLLPRIVATE int               _CreateScrollbar( sal_Bool bHori );
     SW_DLLPRIVATE DECL_LINK( ScrollHdl, SwScrollbar * );
     SW_DLLPRIVATE DECL_LINK( EndScrollHdl, SwScrollbar * );
-    SW_DLLPRIVATE BOOL          UpdateScrollbars();
+    SW_DLLPRIVATE sal_Bool          UpdateScrollbars();
     SW_DLLPRIVATE void          CalcVisArea( const Size &rPixelSz );
 
-    SW_DLLPRIVATE void            CreatePageButtons(BOOL bShow);
+    SW_DLLPRIVATE void            CreatePageButtons(sal_Bool bShow);
 
     // Linguistik-Funktionen
     SW_DLLPRIVATE void          HyphenateDocument();
-    SW_DLLPRIVATE BOOL          IsDrawTextHyphenate();
+    SW_DLLPRIVATE sal_Bool          IsDrawTextHyphenate();
     SW_DLLPRIVATE void          HyphenateDrawText();
     SW_DLLPRIVATE void          StartThesaurus();
 
@@ -343,17 +343,17 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          StartTextConversion( LanguageType nSourceLang, LanguageType nTargetLang, const Font *pTargetFont, sal_Int32 nOptions, sal_Bool bIsInteractive );
 
     // used for spell checking and text conversion
-    SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, BOOL bStartDone,
-                                        BOOL bEndDone, SwConversionArgs *pConvArgs = 0 );
+    SW_DLLPRIVATE void          SpellStart( SvxSpellArea eSpell, sal_Bool bStartDone,
+                                        sal_Bool bEndDone, SwConversionArgs *pConvArgs = 0 );
     SW_DLLPRIVATE void          SpellEnd( SwConversionArgs *pConvArgs = 0 );
 
     SW_DLLPRIVATE void          HyphStart( SvxSpellArea eSpell );
-    SW_DLLPRIVATE BOOL          CheckSpecialCntnt();
-    SW_DLLPRIVATE void          SpellKontext(BOOL bOn = TRUE)
+    SW_DLLPRIVATE sal_Bool          CheckSpecialCntnt();
+    SW_DLLPRIVATE void          SpellKontext(sal_Bool bOn = sal_True)
                             { bCenterCrsr = bOn; bAllwaysShowSel = bOn; }
 
     // Methoden fuers Printing
-    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( BOOL bCreate = FALSE );
+    SW_DLLPRIVATE virtual   SfxPrinter*     GetPrinter( sal_Bool bCreate = sal_False );
             SfxTabPage*     CreatePrintOptionsPage( Window* pParent,
                                                     const SfxItemSet& rSet);
     // fuer Readonly-Umschaltung
@@ -367,14 +367,14 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
     SW_DLLPRIVATE void          _SetZoom( const Size &rEditSz,
                               SvxZoomType eZoomType,
                               short nFactor = 100,
-                              BOOL bViewOnly = FALSE);
-    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, BOOL bInner );
+                              sal_Bool bViewOnly = sal_False);
+    SW_DLLPRIVATE void          CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool bInner );
 
     SW_DLLPRIVATE void          ShowAtResize();
 
     SW_DLLPRIVATE virtual void  Move();
 
-    SW_DLLPRIVATE BOOL          InsertGraphicDlg( SfxRequest& );
+    SW_DLLPRIVATE sal_Bool          InsertGraphicDlg( SfxRequest& );
 
 protected:
 
@@ -391,8 +391,8 @@ protected:
 
     virtual void    SelectShell();
 
-    virtual void    Activate(BOOL);
-    virtual void    Deactivate(BOOL);
+    virtual void    Activate(sal_Bool);
+    virtual void    Deactivate(sal_Bool);
     virtual void    InnerResizePixel( const Point &rOfs, const Size &rSize );
     virtual void    OuterResizePixel( const Point &rOfs, const Size &rSize );
     virtual Size    GetOptimalSizePixel() const;
@@ -403,7 +403,7 @@ protected:
     void            SetLastTblFrmFmt(const SwFrmFmt* pSet) {pLastTableFormat = pSet;}
 
     // form letter execution
-    void    GenerateFormLetter(BOOL bUseCurrentDocument);
+    void    GenerateFormLetter(sal_Bool bUseCurrentDocument);
 
     using SfxShell::GetDispatcher;
 
@@ -418,20 +418,20 @@ public:
     void                    GotFocus() const;
     virtual SdrView*        GetDrawView() const;
     virtual sal_Bool        HasUIFeature( sal_uInt32 nFeature );
-    virtual void            ShowCursor( FASTBOOL bOn = TRUE );
+    virtual void            ShowCursor( FASTBOOL bOn = sal_True );
     virtual ErrCode         DoVerb( long nVerb );
 
-    virtual USHORT          SetPrinter( SfxPrinter* pNew,
-                                        USHORT nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
+    virtual sal_uInt16          SetPrinter( SfxPrinter* pNew,
+                                        sal_uInt16 nDiff = SFX_PRINTER_ALL, bool bIsAPI=false);
     ShellModes              GetShellMode();
 
     com::sun::star::view::XSelectionSupplier*       GetUNOObject();
 
-    String                  GetSelectionTextParam( BOOL bCompleteWords,
-                                                   BOOL bEraseTrail );
-    virtual BOOL            HasSelection( BOOL  bText ) const;
-    virtual String          GetSelectionText( BOOL bCompleteWords = FALSE );
-    virtual USHORT          PrepareClose( BOOL bUI = TRUE, BOOL bForBrowsing = FALSE );
+    String                  GetSelectionTextParam( sal_Bool bCompleteWords,
+                                                   sal_Bool bEraseTrail );
+    virtual sal_Bool            HasSelection( sal_Bool  bText ) const;
+    virtual String          GetSelectionText( sal_Bool bCompleteWords = sal_False );
+    virtual sal_uInt16          PrepareClose( sal_Bool bUI = sal_True, sal_Bool bForBrowsing = sal_False );
     virtual void            MarginChanged();
 
     // replace word/selection with text from the thesaurus
@@ -458,58 +458,58 @@ public:
 
     inline const Rectangle& GetVisArea() const { return aVisArea; }
 
-    BOOL            IsScroll(const Rectangle& rRect) const;
+    sal_Bool            IsScroll(const Rectangle& rRect) const;
     void            Scroll( const Rectangle& rRect,
-                            USHORT nRangeX = USHRT_MAX,
-                            USHORT nRangeY = USHRT_MAX);
+                            sal_uInt16 nRangeX = USHRT_MAX,
+                            sal_uInt16 nRangeY = USHRT_MAX);
 
     long        SetVScrollMax(long lMax);
     long        SetHScrollMax(long lMax);
 
     DECL_LINK( SpellError, LanguageType * );
-    BOOL            ExecSpellPopup( const Point& rPt );
-    BOOL            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
+    sal_Bool            ExecSpellPopup( const Point& rPt );
+    sal_Bool            ExecFieldPopup( const Point& rPt, sw::mark::IFieldmark *fieldBM );
     // SMARTTAGS
-    BOOL            ExecSmartTagPopup( const Point& rPt );
+    sal_Bool            ExecSmartTagPopup( const Point& rPt );
 
     DECL_LINK( OnlineSpellCallback, SpellCallbackInfo*);
-    BOOL            ExecDrwTxtSpellPopup(const Point& rPt);
+    sal_Bool            ExecDrwTxtSpellPopup(const Point& rPt);
 
     void            SetTabColFromDocPos( const Point &rPt ) { aTabColFromDocPos = rPt; }
-    void            SetTabColFromDoc( BOOL b ) { bTabColFromDoc = b; }
-    BOOL            IsTabColFromDoc() const    { return bTabColFromDoc; }
-    void            SetTabRowFromDoc( BOOL b ) { bTabRowFromDoc = b; }
-    BOOL            IsTabRowFromDoc() const    { return bTabRowFromDoc; }
+    void            SetTabColFromDoc( sal_Bool b ) { bTabColFromDoc = b; }
+    sal_Bool            IsTabColFromDoc() const    { return bTabColFromDoc; }
+    void            SetTabRowFromDoc( sal_Bool b ) { bTabRowFromDoc = b; }
+    sal_Bool            IsTabRowFromDoc() const    { return bTabRowFromDoc; }
 
     // -> #i23726#
     void            SetNumRuleNodeFromDoc( SwTxtNode * pNumRuleNode )
                     { pNumRuleNodeFromDoc = pNumRuleNode; }
-    void            SetNumIndentFromDoc(BOOL b) { bNumIndentFromDoc = b; }
-    BOOL            IsNumIndentFromDoc() const { return NULL != pNumRuleNodeFromDoc; }
+    void            SetNumIndentFromDoc(sal_Bool b) { bNumIndentFromDoc = b; }
+    sal_Bool            IsNumIndentFromDoc() const { return NULL != pNumRuleNodeFromDoc; }
     // <- #i23726#
 
     void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return aDocSz; }
-    virtual void    SetVisArea( const Rectangle&, BOOL bUpdateScrollbar = TRUE);
-            void    SetVisArea( const Point&, BOOL bUpdateScrollbar = TRUE);
+    virtual void    SetVisArea( const Rectangle&, sal_Bool bUpdateScrollbar = sal_True);
+            void    SetVisArea( const Point&, sal_Bool bUpdateScrollbar = sal_True);
             void    CheckVisArea();
 
     static LAYOUT_NS Dialog* GetSearchDialog();
 
-    static USHORT   GetMoveType();
-    static void     SetMoveType(USHORT nSet);
+    static sal_uInt16   GetMoveType();
+    static void     SetMoveType(sal_uInt16 nSet);
     DECL_STATIC_LINK( SwView, MoveNavigationHdl, bool* ); // #i75416#
     static void     SetActMark(sal_Int32 nSet);
 
-    BOOL            HandleWheelCommands( const CommandEvent& );
+    sal_Bool            HandleWheelCommands( const CommandEvent& );
 
     // Rahmen einfuegen
-    void            InsFrmMode(USHORT nCols);
+    void            InsFrmMode(sal_uInt16 nCols);
 
-    void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, BOOL bViewOnly = FALSE);
+    void            SetZoom( SvxZoomType eZoomType, short nFactor = 100, sal_Bool bViewOnly = sal_False);
     virtual void    SetZoomFactor( const Fraction &rX, const Fraction & );
 
-    void            SetViewLayout( USHORT nColumns, bool bBookMode, BOOL bViewOnly = FALSE );
+    void            SetViewLayout( sal_uInt16 nColumns, bool bBookMode, sal_Bool bViewOnly = sal_False );
 
     void            ShowHScrollbar(sal_Bool bShow);
     sal_Bool        IsHScrollbarVisible()const;
@@ -548,7 +548,7 @@ public:
     void            ExecTabWin(SfxRequest&);
     void            ExecuteStatusLine(SfxRequest&);
     DECL_LINK( ExecRulerClick, Ruler * );
-    void            ExecSearch(SfxRequest&, BOOL bNoMessage = FALSE);
+    void            ExecSearch(SfxRequest&, sal_Bool bNoMessage = sal_False);
     void            ExecViewOptions(SfxRequest &);
 
     void            StateViewOptions(SfxItemSet &);
@@ -559,24 +559,24 @@ public:
 
     // Funktionen fuer Drawing
     void            SetDrawFuncPtr(SwDrawBase* pFuncPtr);
-    inline SwDrawBase* GetDrawFuncPtr(/*BOOL bBuf = FALSE*/) const  { return pDrawActual; }
+    inline SwDrawBase* GetDrawFuncPtr(/*sal_Bool bBuf = sal_False*/) const  { return pDrawActual; }
     void            GetDrawState(SfxItemSet &rSet);
     void            ExitDraw();
-    inline BOOL     IsDrawRotate()      { return bDrawRotate; }
+    inline sal_Bool     IsDrawRotate()      { return bDrawRotate; }
     inline void     FlipDrawRotate()    { bDrawRotate = !bDrawRotate; }
-    inline BOOL     IsDrawSelMode()     { return bDrawSelMode; }
+    inline sal_Bool     IsDrawSelMode()     { return bDrawSelMode; }
     void            SetSelDrawSlot();
     inline void     FlipDrawSelMode()   { bDrawSelMode = !bDrawSelMode; }
     void            NoRotate();     // Rotate-Mode abschalten
-    BOOL            EnterDrawTextMode(const Point& aDocPos);
+    sal_Bool            EnterDrawTextMode(const Point& aDocPos);
     void            LeaveDrawCreate()   { nDrawSfxId = nFormSfxId = USHRT_MAX; sDrawCustom.Erase();}
-    BOOL            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
-    BOOL            IsFormMode() const;
-    BOOL            IsBezierEditMode();
-    BOOL            AreOnlyFormsSelected() const;
-    BOOL            HasDrwObj(SdrObject *pSdrObj) const;
-    BOOL            HasOnlyObj(SdrObject *pSdrObj, UINT32 eObjInventor) const;
-    BOOL            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
+    sal_Bool            IsDrawMode()        { return (nDrawSfxId != USHRT_MAX || nFormSfxId != USHRT_MAX); }
+    sal_Bool            IsFormMode() const;
+    sal_Bool            IsBezierEditMode();
+    sal_Bool            AreOnlyFormsSelected() const;
+    sal_Bool            HasDrwObj(SdrObject *pSdrObj) const;
+    sal_Bool            HasOnlyObj(SdrObject *pSdrObj, sal_uInt32 eObjInventor) const;
+    sal_Bool            BeginTextEdit(  SdrObject* pObj, SdrPageView* pPV=NULL,
                                     Window* pWin=NULL, bool bIsNewObj=false, bool bSetSelectionToStart=false );
 
     void            StateTabWin(SfxItemSet&);
@@ -589,13 +589,13 @@ public:
 
     // Links bearbeiten
     void            EditLinkDlg();
-    void            AutoCaption(const USHORT nType, const SvGlobalName *pOleId = 0);
+    void            AutoCaption(const sal_uInt16 nType, const SvGlobalName *pOleId = 0);
     void            InsertCaption(const InsCaptionOpt *pOpt);
 
     // Async Aufruf durch Core
-    void        UpdatePageNums(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr);
+    void        UpdatePageNums(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
 
-    String      GetPageStr(USHORT nPhyNum, USHORT nVirtNum, const String& rPgStr);
+    String      GetPageStr(sal_uInt16 nPhyNum, sal_uInt16 nVirtNum, const String& rPgStr);
 
     // Shell rausreichen
                  SfxShell       *GetCurShell()  { return pShell; }
@@ -607,32 +607,32 @@ public:
     //damit in DToren der SubShells ggf. pShell zurueckgesetzt werden kann
     void ResetSubShell()    { pShell = 0; }
 
-    virtual void    WriteUserData(String &, BOOL bBrowse = FALSE );
-    virtual void    ReadUserData(const String &, BOOL bBrowse = FALSE );
+    virtual void    WriteUserData(String &, sal_Bool bBrowse = sal_False );
+    virtual void    ReadUserData(const String &, sal_Bool bBrowse = sal_False );
     virtual void    ReadUserDataSequence ( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
     virtual void    WriteUserDataSequence ( com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >&, sal_Bool bBrowse );
 
-    void SetCrsrAtTop( BOOL bFlag, BOOL bCenter = FALSE )
+    void SetCrsrAtTop( sal_Bool bFlag, sal_Bool bCenter = sal_False )
         { bTopCrsr = bFlag, bCenterCrsr = bCenter; }
-    BOOL IsCrsrAtTop() const                    { return bTopCrsr; }
-    BOOL IsCrsrAtCenter() const                 { return bCenterCrsr; }
+    sal_Bool IsCrsrAtTop() const                    { return bTopCrsr; }
+    sal_Bool IsCrsrAtCenter() const                 { return bCenterCrsr; }
 
-    BOOL JumpToSwMark( const String& rMark );
+    sal_Bool JumpToSwMark( const String& rMark );
 
-    long InsertDoc( USHORT nSlotId, const String& rFileName,
-                    const String& rFilterName, INT16 nVersion = 0 );
+    long InsertDoc( sal_uInt16 nSlotId, const String& rFileName,
+                    const String& rFilterName, sal_Int16 nVersion = 0 );
 
     void ExecuteInsertDoc( SfxRequest& rRequest, const SfxPoolItem* pItem );
-    long InsertMedium( USHORT nSlotId, SfxMedium* pMedium, INT16 nVersion );
+    long InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVersion );
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper * );
 
     // status methods for clipboard.
     // Status changes now notified from the clipboard.
-    BOOL IsPasteAllowed();
-    BOOL IsPasteSpecialAllowed();
+    sal_Bool IsPasteAllowed();
+    sal_Bool IsPasteSpecialAllowed();
 
     // Enable mail merge - mail merge field dialog enabled
-    void EnableMailMerge(BOOL bEnable = TRUE);
+    void EnableMailMerge(sal_Bool bEnable = sal_True);
     //apply Accessiblity options
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
@@ -641,8 +641,8 @@ public:
 
     void NotifyDBChanged();
 
-    SfxObjectShellRef & GetTmpSelectionDoc();
-    SfxObjectShellRef & GetOrCreateTmpSelectionDoc();
+    SfxObjectShellLock & GetTmpSelectionDoc();
+    SfxObjectShellLock & GetOrCreateTmpSelectionDoc();
 
     void        AddTransferable(SwTransferable& rTransferable);
 
@@ -658,9 +658,9 @@ public:
 
     //public fuer D&D
     int     InsertGraphic( const String &rPath, const String &rFilter,
-                            BOOL bLink = TRUE, GraphicFilter *pFlt = 0,
+                            sal_Bool bLink = sal_True, GraphicFilter *pFlt = 0,
                             Graphic* pPreviewGrf = 0,
-                            BOOL bRule = FALSE );
+                            sal_Bool bRule = sal_False );
 
     void ExecuteScan( SfxRequest& rReq );
 
@@ -689,7 +689,7 @@ inline const SwDocShell *SwView::GetDocShell() const
 
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                     const SfxItemSet &rOptions,
-                                    BOOL bPreview);
+                                    sal_Bool bPreview);
 
 #endif
 

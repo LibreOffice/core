@@ -42,7 +42,7 @@ char** pPara;
 // Deklarationen
 
 int PrepareConvert( String& rName, String& rOutName, String& rMess );
-int DoConvert( const String& rName, BYTE nVersion );
+int DoConvert( const String& rName, sal_uInt8 nVersion );
 void DeInit();
 
 
@@ -83,7 +83,7 @@ void MyApp::Main()
 {
     SvFactory::Init();
     String aMess, aName, aOutName;
-    BYTE nVersion = 8;
+    sal_uInt8 nVersion = 8;
 
     int nArgs = GetCommandLineParamCount();
     if (nArgs)
@@ -111,7 +111,7 @@ void MyApp::Main()
         }
     }
 
-    BOOL bOk =     !aMess.Len()
+    sal_Bool bOk =     !aMess.Len()
                 && !PrepareConvert( aName, aOutName, aMess )
                 && !DoConvert( aName, nVersion  );
 
