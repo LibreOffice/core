@@ -44,15 +44,15 @@ class SvIdlError
 {
     ByteString  aText;
 public:
-    UINT32  nLine, nColumn;
+    sal_uInt32  nLine, nColumn;
 
             SvIdlError() : nLine(0), nColumn(0) {}
-            SvIdlError( UINT32 nL, UINT32 nC )
+            SvIdlError( sal_uInt32 nL, sal_uInt32 nC )
                 : nLine(nL), nColumn(nC) {}
 
     const ByteString &  GetText() const { return aText; }
     void            SetText( const ByteString & rT ) { aText = rT; }
-    BOOL            IsError() const { return nLine != 0; }
+    sal_Bool            IsError() const { return nLine != 0; }
     void            Clear() { nLine = nColumn = 0; }
     SvIdlError &    operator = ( const SvIdlError & rRef )
     { aText   = rRef.aText;
@@ -66,13 +66,13 @@ public:
 /******************** class SvIdlDataBase ********************************/
 class SvIdlDataBase
 {
-    BOOL                        bExport;
+    sal_Bool                        bExport;
     String                      aExportFile;
     sal_uInt32                  nUniqueId;
     sal_uInt32                  nVerbosity;
     String                      aDataBaseFile;
     SvFileStream *              pStm;
-    BOOL                        bIsModified;
+    sal_Bool                        bIsModified;
     SvPersistStream             aPersStream;
     StringList                  aIdFileList;
     SvStringHashTable *         pIdTable;
@@ -98,10 +98,10 @@ protected:
 public:
                 explicit SvIdlDataBase( const SvCommand& rCmd );
                 ~SvIdlDataBase();
-    static BOOL IsBinaryFormat( SvStream & rInStm );
+    static sal_Bool IsBinaryFormat( SvStream & rInStm );
 
     void        Load( SvStream & rInStm );
-    void        Save( SvStream & rInStm, UINT32 nContextFlags );
+    void        Save( SvStream & rInStm, sal_uInt32 nContextFlags );
 
     SvMetaAttributeMemberList&  GetAttrList() { return aAttrList; }
     SvStringHashTable *       GetIdTable() { return pIdTable; }
@@ -132,11 +132,11 @@ public:
     void                    WriteError( const ByteString & rErrWrn,
                                     const ByteString & rFileName,
                                     const ByteString & rErrorText,
-                                    ULONG nRow = 0, ULONG nColumn = 0 ) const;
+                                    sal_uLong nRow = 0, sal_uLong nColumn = 0 ) const;
     void                    WriteError( SvTokenStream & rInStm );
     void                    SetError( const ByteString & rError, SvToken * pTok );
     void                    Push( SvMetaObject * pObj );
-    BOOL                    Pop( BOOL bOk, SvTokenStream & rInStm, UINT32 nTokPos )
+    sal_Bool                    Pop( sal_Bool bOk, SvTokenStream & rInStm, sal_uInt32 nTokPos )
                             {
                                 GetStack().Pop();
                                 if( bOk )
@@ -146,9 +146,9 @@ public:
                                 return bOk;
                             }
     sal_uInt32              GetUniqueId() { return ++nUniqueId; }
-    BOOL                    FindId( const ByteString & rIdName, ULONG * pVal );
-    BOOL                    InsertId( const ByteString & rIdName, ULONG nVal );
-    BOOL                    ReadIdFile( const String & rFileName );
+    sal_Bool                    FindId( const ByteString & rIdName, sal_uLong * pVal );
+    sal_Bool                    InsertId( const ByteString & rIdName, sal_uLong nVal );
+    sal_Bool                    ReadIdFile( const String & rFileName );
 
     SvMetaType *            FindType( const ByteString & rName );
     static SvMetaType *     FindType( const SvMetaType *, SvMetaTypeMemberList & );
@@ -167,14 +167,14 @@ class SvIdlWorkingBase : public SvIdlDataBase
 public:
                 explicit SvIdlWorkingBase( const SvCommand& rCmd );
 
-    BOOL        ReadSvIdl( SvTokenStream &, BOOL bImported, const String & rPath );
-    BOOL        WriteSvIdl( SvStream & );
+    sal_Bool        ReadSvIdl( SvTokenStream &, sal_Bool bImported, const String & rPath );
+    sal_Bool        WriteSvIdl( SvStream & );
 
-    BOOL        WriteSfx( SvStream & );
-    BOOL        WriteHelpIds( SvStream & );
-    BOOL        WriteSfxItem( SvStream & );
-    BOOL        WriteCSV( SvStream& );
-    BOOL        WriteDocumentation( SvStream& );
+    sal_Bool        WriteSfx( SvStream & );
+    sal_Bool        WriteHelpIds( SvStream & );
+    sal_Bool        WriteSfxItem( SvStream & );
+    sal_Bool        WriteCSV( SvStream& );
+    sal_Bool        WriteDocumentation( SvStream& );
 };
 #endif
 

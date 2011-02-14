@@ -118,13 +118,13 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             if (m_xReferenceFrame == help)
             {
                 m_xHelp   = NULL;
-                m_bIsHelp = TRUE;
+                m_bIsHelp = sal_True;
             }
             else
             if (xOtherFrame == help)
             {
                 m_xHelp   = xOtherFrame;
-                m_bIsHelp = FALSE;
+                m_bIsHelp = sal_False;
             }
             </listing>
 
@@ -144,13 +144,13 @@ class FWE_DLLPUBLIC FrameListAnalyzer
             if (m_xReferenceFrame == backing)
             {
                 m_xBackingComponent   = NULL;
-                m_bIsBackingComponent = TRUE;
+                m_bIsBackingComponent = sal_True;
             }
             else
             if (xOtherFrame == backing)
             {
                 m_xBackingComponent   = xOtherFrame;
-                m_bIsBackingComponent = FALSE      ;
+                m_bIsBackingComponent = sal_False      ;
             }
             </listing>
 

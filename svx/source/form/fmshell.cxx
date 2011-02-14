@@ -868,7 +868,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             rReq.Done();
 
             // initially open the filter navigator, the whole form based filter is pretty useless without it
-            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, TRUE );
+            SfxBoolItem aIdentifierItem( SID_FM_FILTER_NAVIGATOR, sal_True );
             GetViewShell()->GetViewFrame()->GetDispatcher()->Execute( SID_FM_FILTER_NAVIGATOR, SFX_CALLMODE_ASYNCHRON,
                 &aIdentifierItem, NULL );
         }   break;

@@ -29,10 +29,11 @@ package complex.sfx2.tools;
 
 import java.io.File;
 import org.openoffice.test.OfficeFileUrl;
+import org.openoffice.test.Argument;
 
 public final class TestDocument {
     public static String getUrl(String name) {
-        return OfficeFileUrl.getAbsolute(new File("testdocuments", name));
+        return OfficeFileUrl.getAbsolute(new File(Argument.get("tdoc"), name));
     }
 
     private TestDocument() {}

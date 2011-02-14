@@ -511,10 +511,10 @@ SfxSaveGuard::~SfxSaveGuard()
     m_pData->m_bSaving = sal_False;
 
     // m_bSuicide was set e.g. in case somewhere tried to close a document, while it was used for
-    // storing at the same time. Further m_bSuicide was set to TRUE only if close(TRUE) was called.
+    // storing at the same time. Further m_bSuicide was set to sal_True only if close(sal_True) was called.
     // So the owner ship was delegated to the place where a veto exception was thrown.
     // Now we have to call close() again and delegate the owner ship to the next one, which
-    // cant accept that. Close(FALSE) cant work in this case. Because then the document will may be never closed ...
+    // cant accept that. Close(sal_False) cant work in this case. Because then the document will may be never closed ...
 
     if ( m_pData->m_bSuicide )
     {
@@ -1860,7 +1860,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         }
 
         // !TODO: currently not working
-        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
+        //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, sal_False );
         //if( pFrameItem && pFrameItem->GetFrame() )
         //{
         //  SfxFrame* pFrame = pFrameItem->GetFrame();
@@ -1889,7 +1889,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             if ( nError == ERRCODE_IO_BROKENPACKAGE && xHandler.is() )
             {
                 ::rtl::OUString aDocName = pMedium->GetURLObject().getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, sal_False );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
                     RequestPackageReparation aRequest( aDocName );
@@ -1948,12 +1948,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
 
         if ( nError )
         {
-            BOOL bSilent = FALSE;
+            sal_Bool bSilent = sal_False;
             SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSilentItem, SfxBoolItem, SID_SILENT, sal_False);
             if( pSilentItem )
                 bSilent = pSilentItem->GetValue();
 
-              BOOL bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
+              sal_Bool bWarning = ((nError & ERRCODE_WARNING_MASK) == ERRCODE_WARNING_MASK);
             if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
             {
                 // broken package was handled already
@@ -1979,7 +1979,7 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             }
         }
 
-        BOOL bHidden = FALSE;
+        sal_Bool bHidden = sal_False;
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
             bHidden = pHidItem->GetValue();
@@ -2028,7 +2028,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 aDesc.maSize = OutputDevice::LogicToLogic( aSize, aMapUnit, MAP_100TH_MM );
                 aDesc.maDragStartPos = Point();
                 aDesc.maDisplayName = String();
-                aDesc.mbCanLink = FALSE;
+                aDesc.mbCanLink = sal_False;
 
                 SvMemoryStream aMemStm( 1024, 1024 );
                 aMemStm << aDesc;
@@ -2044,7 +2044,7 @@ uno::Any SAL_CALL SfxBaseModel::getTransferData( const DATAFLAVOR& aFlavor )
                 try
                 {
                     utl::TempFile aTmp;
-                    aTmp.EnableKillingFile( TRUE );
+                    aTmp.EnableKillingFile( sal_True );
                     storeToURL( aTmp.GetURL(), uno::Sequence < beans::PropertyValue >() );
                     SvStream* pStream = aTmp.GetStream( STREAM_READ );
                     const sal_uInt32 nLen = pStream->Seek( STREAM_SEEK_TO_END );
@@ -3090,7 +3090,7 @@ uno::Reference < container::XIndexAccess > SAL_CALL SfxBaseModel::getViewData() 
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell ); pFrame;
                 pFrame = SfxViewFrame::GetNext( *pFrame, m_pData->m_pObjectShell ) )
         {
-            BOOL bIsActive = ( pFrame == pActFrame );
+            sal_Bool bIsActive = ( pFrame == pActFrame );
             pFrame->GetViewShell()->WriteUserDataSequence( aSeq );
             aAny <<= aSeq;
             xCont->insertByIndex( bIsActive ? 0 : nCount, aAny );
@@ -3361,7 +3361,7 @@ static void ConvertSlotsToCommands( SfxObjectShell* pDoc, uno::Reference< contai
                     rtl::OUString aSlot( aCommand.copy( 5 ));
 
                     // We have to replace the old "slot-Command" with our new ".uno:-Command"
-                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( USHORT( aSlot.toInt32() ));
+                    const SfxSlot* pSlot = pModule->GetSlotPool()->GetSlot( sal_uInt16( aSlot.toInt32() ));
                     if ( pSlot )
                     {
                         rtl::OUStringBuffer aStrBuf( aUnoCmd );
@@ -3611,12 +3611,12 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
     pMedium->GetItemSet()->Put( aSet );
 
     // allow to use an interactionhandler (if there is one)
-    pMedium->UseInteractionHandler( TRUE );
+    pMedium->UseInteractionHandler( sal_True );
 
     SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-    BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
+    sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
     m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 
     // load document
     if ( !m_pData->m_pObjectShell->DoLoad(pMedium) )
@@ -3669,11 +3669,11 @@ void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xS
 
         // BaseURL is part of the ItemSet
         SfxMedium aMedium( xStorage, String(), &aSet );
-        aMedium.CanDisposeStorage_Impl( FALSE );
+        aMedium.CanDisposeStorage_Impl( sal_False );
         if ( aMedium.GetFilter() )
         {
             // storing without a valid filter will often crash
-            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, TRUE );
+            bSuccess = m_pData->m_pObjectShell->DoSaveObjectAs( aMedium, sal_True );
             m_pData->m_pObjectShell->DoSaveCompleted( NULL );
         }
     }
@@ -3712,7 +3712,7 @@ void SAL_CALL SfxBaseModel::switchToStorage( const uno::Reference< XSTORAGE >& x
                                             nError ? nError : ERRCODE_IO_GENERAL );
     }
 
-    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = FALSE;
+    m_pData->m_pObjectShell->Get_Impl()->bOwnsStorage = sal_False;
 }
 
 uno::Reference< XSTORAGE > SAL_CALL SfxBaseModel::getDocumentStorage()
@@ -4037,9 +4037,9 @@ namespace sfx { namespace intern {
 SfxViewFrame* SfxBaseModel::FindOrCreateViewFrame_Impl( const Reference< XFrame >& i_rFrame, ::sfx::intern::ViewCreationGuard& i_rGuard ) const
 {
     SfxViewFrame* pViewFrame = NULL;
-    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), FALSE );
+    for (   pViewFrame = SfxViewFrame::GetFirst( GetObjectShell(), sal_False );
             pViewFrame;
-            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), FALSE )
+            pViewFrame= SfxViewFrame::GetNext( *pViewFrame, GetObjectShell(), sal_False )
         )
     {
         if ( pViewFrame->GetFrame().GetFrameInterface() == i_rFrame )
@@ -4146,18 +4146,18 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createVie
     // some initial view settings, coming from our most recent attachResource call
     ::comphelper::NamedValueCollection aDocumentLoadArgs( getArgs() );
     if ( aDocumentLoadArgs.getOrDefault( "ViewOnly", false ) )
-        pViewFrame->GetFrame().SetMenuBarOn_Impl( FALSE );
+        pViewFrame->GetFrame().SetMenuBarOn_Impl( sal_False );
 
     const sal_Int16 nPluginMode = aDocumentLoadArgs.getOrDefault( "PluginMode", sal_Int16( 0 ) );
     if ( nPluginMode == 1 )
     {
-        pViewFrame->ForceOuterResize_Impl( FALSE );
-        pViewFrame->GetBindings().HidePopups( TRUE );
+        pViewFrame->ForceOuterResize_Impl( sal_False );
+        pViewFrame->GetBindings().HidePopups( sal_True );
 
         SfxFrame& rFrame = pViewFrame->GetFrame();
         // MBA: layoutmanager of inplace frame starts locked and invisible
-        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( FALSE );
-        rFrame.GetWorkWindow_Impl()->Lock_Impl( TRUE );
+        rFrame.GetWorkWindow_Impl()->MakeVisible_Impl( sal_False );
+        rFrame.GetWorkWindow_Impl()->Lock_Impl( sal_True );
 
         rFrame.GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );
         pViewFrame->GetWindow().SetBorderStyle( WINDOW_BORDER_NOBORDER );

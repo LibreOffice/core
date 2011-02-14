@@ -61,7 +61,7 @@ namespace svxform
     //--------------------------------------------------------------------
     ODbtoolsClient::ODbtoolsClient()
     {
-        m_bCreateAlready = FALSE;
+        m_bCreateAlready = sal_False;
     }
 
     //--------------------------------------------------------------------

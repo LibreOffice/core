@@ -78,7 +78,7 @@ public:
     virtual void DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
 
-    BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    sal_Bool Connect() { return 0 != SvBaseLink::GetRealObject(); }
 };
 
 ImpSdrObjTextLink::~ImpSdrObjTextLink()
@@ -101,7 +101,7 @@ void ImpSdrObjTextLink::Closed()
 void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                                 const ::com::sun::star::uno::Any & /*rValue */)
 {
-    FASTBOOL bForceReload=FALSE;
+    FASTBOOL bForceReload=sal_False;
     SdrModel* pModel = pSdrObj ? pSdrObj->GetModel() : 0;
     sfx2::LinkManager* pLinkManager= pModel ? pModel->GetLinkManager() : 0;
     if( pLinkManager )
@@ -119,7 +119,7 @@ void ImpSdrObjTextLink::DataChanged( const String& /*rMimeType*/,
                 pData->aFileName = aFile;
                 pData->aFilterName = aFilter;
                 pSdrObj->SetChanged();
-                bForceReload = TRUE;
+                bForceReload = sal_True;
             }
         }
     }
@@ -198,8 +198,8 @@ void SdrTextObj::SetTextLink(const String& rFileName, const String& rFilterName,
 void SdrTextObj::ReleaseTextLink()
 {
     ImpLinkAbmeldung();
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT nNum=nAnz; nNum>0;) {
+    sal_uInt16 nAnz=GetUserDataCount();
+    for (sal_uInt16 nNum=nAnz; nNum>0;) {
         nNum--;
         SdrObjUserData* pData=GetUserData(nNum);
         if (pData->GetInventor()==SdrInventor && pData->GetId()==SDRUSERDATA_OBJTEXTLINK) {
@@ -211,17 +211,17 @@ void SdrTextObj::ReleaseTextLink()
 FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
 {
     ImpSdrObjTextLinkUserData*  pData = GetLinkUserData();
-    FASTBOOL                    bRet = TRUE;
+    FASTBOOL                    bRet = sal_True;
 
     if( pData )
     {
         ::ucbhelper::ContentBroker* pBroker = ::ucbhelper::ContentBroker::get();
         DateTime                    aFileDT;
-        BOOL                        bExists = FALSE, bLoad = FALSE;
+        sal_Bool                        bExists = sal_False, bLoad = sal_False;
 
         if( pBroker )
         {
-            bExists = TRUE;
+            bExists = sal_True;
 
             try
             {
@@ -237,14 +237,14 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
             }
             catch( ... )
             {
-                bExists = FALSE;
+                bExists = sal_False;
             }
         }
 
         if( bExists )
         {
             if( bForceLoad )
-                bLoad = TRUE;
+                bLoad = sal_True;
             else
                 bLoad = ( aFileDT > pData->aFileDate0 );
 
@@ -263,7 +263,7 @@ FASTBOOL SdrTextObj::ReloadLinkedText( FASTBOOL bForceLoad)
 FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterName*/, rtl_TextEncoding eCharSet)
 {
     INetURLObject   aFileURL( rFileName );
-    BOOL            bRet = FALSE;
+    sal_Bool            bRet = sal_False;
 
     if( aFileURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
@@ -288,14 +288,14 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterNa
         cRTF[4] = 0;
         pIStm->Read(cRTF, 5);
 
-        BOOL bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
+        sal_Bool bRTF = cRTF[0] == '{' && cRTF[1] == '\\' && cRTF[2] == 'r' && cRTF[3] == 't' && cRTF[4] == 'f';
 
         pIStm->Seek(0);
 
         if( !pIStm->GetError() )
         {
-            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< USHORT >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
-            bRet = TRUE;
+            SetText( *pIStm, aFileURL.GetMainURL( INetURLObject::NO_DECODE ), sal::static_int_cast< sal_uInt16 >( bRTF ? EE_FORMAT_RTF : EE_FORMAT_TEXT ) );
+            bRet = sal_True;
         }
 
         delete pIStm;
@@ -307,8 +307,8 @@ FASTBOOL SdrTextObj::LoadText(const String& rFileName, const String& /*rFilterNa
 ImpSdrObjTextLinkUserData* SdrTextObj::GetLinkUserData() const
 {
     ImpSdrObjTextLinkUserData* pData=NULL;
-    USHORT nAnz=GetUserDataCount();
-    for (USHORT nNum=nAnz; nNum>0 && pData==NULL;) {
+    sal_uInt16 nAnz=GetUserDataCount();
+    for (sal_uInt16 nNum=nAnz; nNum>0 && pData==NULL;) {
         nNum--;
         pData=(ImpSdrObjTextLinkUserData*)GetUserData(nNum);
         if (pData->GetInventor()!=SdrInventor || pData->GetId()!=SDRUSERDATA_OBJTEXTLINK) {

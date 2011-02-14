@@ -180,8 +180,8 @@ private:
 //------------------------------------------------------------------------------
 struct PropertyInfo
 {
-    BOOL    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
-    BOOL    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
+    sal_Bool    bIsTransientOrReadOnly  : 1;    // the property is transient or read-only, thus we need no undo action for it
+    sal_Bool    bIsValueProperty        : 1;    // the property is the special value property, thus it may be handled
                                             // as if it's transient or persistent
 };
 
@@ -190,11 +190,11 @@ struct PropertySetInfo
     DECLARE_STL_USTRINGACCESS_MAP(PropertyInfo, AllProperties);
 
     AllProperties   aProps;                 // all properties of this set which we know so far
-    BOOL            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
+    sal_Bool            bHasEmptyControlSource; // sal_True -> the set has a DataField property, and the current value is an empty string
                                             // sal_False -> the set has _no_ such property or it's value isn't empty
 };
 
-BOOL operator < (const Reference< XPropertySet >& lhs,
+sal_Bool operator < (const Reference< XPropertySet >& lhs,
                  const Reference< XPropertySet >& rhs)
 {
     return lhs.get() < rhs.get();
@@ -671,7 +671,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             PropertyInfo aNewEntry;
 
             // the attributes
-            INT32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
+            sal_Int32 nAttributes = xSet->getPropertySetInfo()->getPropertyByName(evt.PropertyName).Attributes;
             aNewEntry.bIsTransientOrReadOnly = ((nAttributes & PropertyAttribute::READONLY) != 0) || ((nAttributes & PropertyAttribute::TRANSIENT) != 0);
 
             // check if it is the special "DataFieldProperty"

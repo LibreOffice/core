@@ -114,7 +114,7 @@ OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
                 if (pIter)
                 {
                     pEvaluateSet = new OEvaluateSet();
-                    ULONG nRec = pIter->First();
+                    sal_uIntPtr nRec = pIter->First();
                     while (nRec != NODE_NOTFOUND)
                     {
                         (*pEvaluateSet)[nRec] = nRec;

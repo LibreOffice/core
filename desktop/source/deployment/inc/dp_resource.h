@@ -39,12 +39,12 @@
 namespace dp_misc {
 
 //==============================================================================
-ResId getResId( USHORT id );
+ResId getResId( sal_uInt16 id );
 
 //==============================================================================
-DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( USHORT id );
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC String getResourceString( sal_uInt16 id );
 
-template <typename Unique, USHORT id>
+template <typename Unique, sal_uInt16 id>
 struct StaticResourceString :
         public ::rtl::StaticWithInit<const ::rtl::OUString, Unique> {
     const ::rtl::OUString operator () () { return getResourceString(id); }

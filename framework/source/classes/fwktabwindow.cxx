@@ -71,10 +71,10 @@ FwkTabControl::FwkTabControl( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-void FwkTabControl::BroadcastEvent( ULONG nEvent )
+void FwkTabControl::BroadcastEvent( sal_uLong nEvent )
 {
     if ( VCLEVENT_TABPAGE_ACTIVATE == nEvent || VCLEVENT_TABPAGE_DEACTIVATE == nEvent )
-        ImplCallEventListeners( nEvent, (void*)(ULONG)GetCurPageId() );
+        ImplCallEventListeners( nEvent, (void*)(sal_uIntPtr)GetCurPageId() );
     else
     {
         DBG_ERRORFILE( "FwkTabControl::BroadcastEvent(): illegal event" );
@@ -290,7 +290,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 
 IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
 {
-    const USHORT nId = m_aTabCtrl.GetCurPageId();
+    const sal_uInt16 nId = m_aTabCtrl.GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl.GetTabPage( nId ) );
     if ( !pTabPage )
     {
@@ -369,7 +369,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 
     TabEntry* pEntry = new TabEntry( nIndex, sPageURL, xEventHdl );
     m_TabList.push_back( pEntry );
-    USHORT nIdx = static_cast< USHORT >( nIndex );
+    sal_uInt16 nIdx = static_cast< sal_uInt16 >( nIndex );
     m_aTabCtrl.InsertPage( nIdx, sTitle );
     if ( sToolTip.getLength() > 0 )
         m_aTabCtrl.SetHelpText( nIdx, sToolTip );
@@ -385,7 +385,7 @@ FwkTabPage* FwkTabWindow::AddTabPage( sal_Int32 nIndex, const uno::Sequence< bea
 
 void FwkTabWindow::ActivatePage( sal_Int32 nIndex )
 {
-    m_aTabCtrl.SetCurPageId( static_cast< USHORT >( nIndex ) );
+    m_aTabCtrl.SetCurPageId( static_cast< sal_uInt16 >( nIndex ) );
     ActivatePageHdl( &m_aTabCtrl );
 }
 
@@ -396,7 +396,7 @@ void FwkTabWindow::RemovePage( sal_Int32 nIndex )
     TabEntry* pEntry = FindEntry(nIndex);
     if ( pEntry )
     {
-        m_aTabCtrl.RemovePage( static_cast< USHORT >( nIndex ) );
+        m_aTabCtrl.RemovePage( static_cast< sal_uInt16 >( nIndex ) );
         if (RemoveEntry(nIndex))
             delete pEntry;
     }
